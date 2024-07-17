@@ -1,111 +1,173 @@
-Return-Path: <linux-usb+bounces-12239-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12240-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16FEE9334DA
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 02:52:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F3A4933508
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 03:44:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF3791F2334A
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 00:52:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B987283BFC
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 01:43:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABE6DDC7;
-	Wed, 17 Jul 2024 00:51:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007331C20;
+	Wed, 17 Jul 2024 01:43:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IQEtIZwq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ek3sWB3W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B36BA53
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 00:51:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB7117FF;
+	Wed, 17 Jul 2024 01:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721177498; cv=none; b=Lwy8kznUjP/aHlb0Se9fGjz+j+RCi2IF+tZL6hX6OgsHkTWfjo0awfRNKEAYx5K3hqm//zeLSS4y388plWq0awiOTRVf/eQtQADL1wbczaWAkMnBfaXKDDm8O4PfXjXX0cK3uSfLpUdHTMRUDz/C1c8SH6cT7EhC6orHcDD1YDo=
+	t=1721180632; cv=none; b=d/4Bv8dWRsxcOftiKLaywewwdszlgvGCR0KhxCUUProSQMRg4/99BY/LeBAxJtvNFXzBfl1YBoqd4rmp4yQKwnhElDF6nR2jEPL98Z5yTS9XWECpsK3UtvbVzCQBSQBrfq4mXvYkQb9BAHfv6IMtJElBxdVmxS3rnxQutDiCyFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721177498; c=relaxed/simple;
-	bh=TxBuHJK85vkREbw0WLP5ADupaB4b16I7uMojTYknRa8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=hdOVLF+wof0QWQoI+e8ywyEy6tjTD1Rc1A8yC+wFgjx9B7jnJjHSqEpMKct4yjj1+vYhT/7BP3flicmkHeDGmVkp8PaqGnnAgJOcO36RXpFoAisuKrr+svRzFsR7j8doIEXjkhTBvzuF4rXX4alt2hJdkYMkZQNa1ks/w+kRetc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IQEtIZwq; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6511c587946so127336067b3.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2024 17:51:36 -0700 (PDT)
+	s=arc-20240116; t=1721180632; c=relaxed/simple;
+	bh=cmDEuRloobJ18dzvZzxTGqeo3pfTsVhdb8xHIz80QNc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=N32ky5Acbon2oCTfhRjdbENQyRDweDe6CwTfBKC5myIKKpyUxKELWKIMlFvtfiu2dzezjJc1Mav1dvuAVaf7YR/CUdnCejQdaXdlFy50BJw6SaF/yLKEBr/qY2+HcUrx+3kdZawBSJYaNMbQulnjCgqP0Wtx6EHBXNc+iDGjkdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ek3sWB3W; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-708b273b437so3297470a34.0;
+        Tue, 16 Jul 2024 18:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721177495; x=1721782295; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTO1tsJpanrsIXuREfXU+lZcoE2mxE9RW1fzcKxRuPY=;
-        b=IQEtIZwqThfL2tkpbppOAJIWrEBFeGp3JwQsUjLtFGvkKsUrCT2pEDg7MyBBoxyUGt
-         ZxUx4caN1wQfl7C4IqBbD0err8tciyYKAN+fRjlQ0V/0ez+9/DnETUu1YAOkrXOXH/jn
-         8Fg/+yy7AAraMqKS8laXtfRbjiMdBgWsZFn2+DHpJwlmnc74Uav7A8q5+WLs2m4RAkl3
-         88+Y5ECH4bCBGSqBtID+FiQsBaAyskBiKCFBst4Gxzw4Rds1vSrfTNk89/5aUCg0q0eR
-         EX4d0r7RJkPtjJH+KAZNbiq2sN/C6DjhZ1HCSjTmKSkzSlxirdTo/f/gihcOZOuDeMHf
-         M//w==
+        d=gmail.com; s=20230601; t=1721180630; x=1721785430; darn=vger.kernel.org;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RmwDYdeep5GJOFZw/qEgyPPFqrMPZdXrwL7yQulcuSI=;
+        b=ek3sWB3WctLaIX1LHnwwI9AvRSauwk13LE/iS+9CW7K8Z3KR+OfzJi9HvRVjHzoGx3
+         MoIpA7xrxs1pGuCxx3pQ63mkBOJwDoqWddOopS7dPqRlkrBeDC3r71aT7XgIdR0hWtJ3
+         roNDNdypx7s806rDLWrWvdUVqmjac1BNfVILaj9L11QEvV40kFQc70dorihjSbU8O7Aj
+         yISm68c9NOXF+dWyP1W2jMlQ6SbauAU5rNJlJUhTTBuUNofw+lhsb8zJkDEq0mDeLkn9
+         PFOsgvhuAOjeMarjn6BeH8rQITUqYC5Ck8QOLH54v9oo56F6tR4MHKDkJH1OimTsAFCd
+         VBrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721177495; x=1721782295;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTO1tsJpanrsIXuREfXU+lZcoE2mxE9RW1fzcKxRuPY=;
-        b=t0qyUomhNsLy72zKt2yeDA+xJs7vBm9a8b2ucvirATZOu00Z97bChpiG9ZetTUm+eB
-         oTAEEOWu6ZY06SgCT0je6FCUeHOhtjZb+5/S6NCQiPQzIpsH5uXycP+1CrJ5b3zU7OKa
-         Ii0ir3adEW+WrO3mogBVFW/6l401j/s1g5WlPGXXAWrdNruBgLEonCcCEZyQTGeObdSZ
-         OfzU+dyHELp7IqUWPHlkZZQJSG8pT6UOEavD98ff3i4dSGYN15uBQdEspYiBhxaNwVaG
-         7YNWh/qa70YZlJq3EwZ41g6mT4+Le+O+9oGI0Akmigzu5nfjcL36H73tHoYnR/F1Etv8
-         ouig==
-X-Forwarded-Encrypted: i=1; AJvYcCVsJ4neF5hJFSaHy2xK2u1aBtVCPVy6KqEVyRG8XMYwjnDfeBmZsNZadCEkXXHZMA+uj5XGXMu4OCjjx5r9OiF5904W73/O+FqO
-X-Gm-Message-State: AOJu0YxzaF5J09Vwjjkvq8+t4gfNzDXtmEEwY//PEtkpDgwTIr3l0qGy
-	ng6E9kjVnehYTI2gIr3LPcetY9gHNg2RoauGeAvD7bnIW3D4UbHRzhGusvYg1oR2irYnxmG9Vnq
-	VpQ==
-X-Google-Smtp-Source: AGHT+IGg09Ayrrw6aRkughQryryAOlXFSVSJLvjMGLhBlG76jIsoZGI0TJ101PkcfAxrh48DyXAxTN6wUSc=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a05:690c:289:b0:65c:4528:d8ee with SMTP id
- 00721157ae682-664ff0079f7mr6537b3.4.1721177495402; Tue, 16 Jul 2024 17:51:35
- -0700 (PDT)
-Date: Wed, 17 Jul 2024 00:49:49 +0000
-In-Reply-To: <20240717004949.3638557-1-jthies@google.com>
+        d=1e100.net; s=20230601; t=1721180630; x=1721785430;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RmwDYdeep5GJOFZw/qEgyPPFqrMPZdXrwL7yQulcuSI=;
+        b=Rmqpafyguwim9Q9tTLeFf3yIdvAN3/z7YPlNGAP5hCOwqxqMVC+JAlVdOMZWFT4HFw
+         jqrocA83CxUPG2b0oGkWc8betZIusG/4sEGwOjeHg8GUx/Jo6qdJUFdJokTiJXQmc2Bh
+         UP9fmbeDIZdnZUj+1IzThUDmMsJEGwtCCLjmoSauKBaU5wn4FNkKgCqGEAqNnY7JSemC
+         ykMF4z//Y/2C4/2/+W/xjQcBIJa3fv3abutOtYiTI/ng+rUCfive1KKNi4xg6+4Z3QpQ
+         j5rqyMa3Hum5IdWvqMLilCtI76U2lFwEclDioZlEYb9iFbnDqWIR+UqljKWNDhme8wCd
+         lu7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVnQjla57OALVzLaHO48/tNnQAowpRtg9sF7Z2kJHepzqHQXt3VoFuKTq0Cig+FSq9qqdEI4C9uYo29jkRv71PV2/pfVOAKm+rj/SkQ3n4aB+cFfbndIdzEq4t2/NpdaufBvxfOMb1r
+X-Gm-Message-State: AOJu0YyX5HsnUeCvelR0D4yxkbYvu4FUEKf9Rg5hza4ROcJJGKskQLUq
+	isPH07CFL5a2BwEuD1UhXGrNoYTSTQvFkPSz9OuHlWDkDeXIeJjJ
+X-Google-Smtp-Source: AGHT+IExailEPeo6zwb75eK0kxwZxSCnRhpGcfk5hrLTaUErqRNCeQP1p6aR9rrQXpbsQhOlNUOR1w==
+X-Received: by 2002:a05:6830:7199:b0:703:5efa:3ce4 with SMTP id 46e09a7af769-708e376741fmr250464a34.4.1721180629879;
+        Tue, 16 Jul 2024 18:43:49 -0700 (PDT)
+Received: from js-pc.. ([116.162.95.36])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7eca8c12sm7230360b3a.171.2024.07.16.18.43.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jul 2024 18:43:49 -0700 (PDT)
+From: Hongyu Xie <xy521521@gmail.com>
+To: stern@rowland.harvard.edu,
+	xy521521@gmail.com,
+	oneukum@suse.com
+Cc: gregkh@linuxfoundation.org,
+	brauner@kernel.org,
+	jlayton@kernel.org,
+	jack@suse.cz,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	xiehongyu1@kylinos.cn
+Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
+Date: Wed, 17 Jul 2024 09:43:38 +0800
+Message-Id: <6419a4e9-e084-4eb6-8376-9202930ea8be@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <3073c8ce-1923-4816-a442-41b4cc333af9@suse.com>
+References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
+ <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
+ <9ef72886-13b8-46cf-a0aa-54dad36102e9@rowland.harvard.edu>
+ <2a80d11d-029f-4e7e-9a8e-3abae1034add@suse.com>
+ <429eb27a-578a-4208-8ce1-89434b8d739f@rowland.harvard.edu>
+ <3073c8ce-1923-4816-a442-41b4cc333af9@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240717004949.3638557-1-jthies@google.com>
-X-Mailer: git-send-email 2.45.2.1089.g2a221341d9-goog
-Message-ID: <20240717004949.3638557-5-jthies@google.com>
-Subject: [PATCH v1 4/4] usb: typec: ucsi: Fix SET_PDR typo in UCSI header file
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
-Cc: jthies@google.com, bleung@google.com, abhishekpandit@chromium.org, 
-	andersson@kernel.org, dmitry.baryshkov@linaro.org, 
-	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, hdegoede@redhat.com, 
-	neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
+ attachmentreminder=0; deliveryformat=1
+X-Identity-Key: id1
+Fcc: imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-Fix SET_PDR typo in UCSI header file.
+From: Hongyu Xie <xiehongyu1@kylinos.cn>=0D
 
-Signed-off-by: Jameson Thies <jthies@google.com>
----
- drivers/usb/typec/ucsi/ucsi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 57129f3c0814..375f1881c1e2 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -152,7 +152,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_SET_UOR_ROLE(_r_)		(((_r_) == TYPEC_HOST ? 1 : 2) << 23)
- #define UCSI_SET_UOR_ACCEPT_ROLE_SWAPS		BIT(25)
- 
--/* SET_PDF command bits */
-+/* SET_PDR command bits */
- #define UCSI_SET_PDR_ROLE(_r_)		(((_r_) == TYPEC_SOURCE ? 1 : 2) << 23)
- #define UCSI_SET_PDR_ACCEPT_ROLE_SWAPS		BIT(25)
- 
--- 
-2.45.2.1089.g2a221341d9-goog
-
+=0D
+=0D
+On 2024/7/16 20:44, Oliver Neukum wrote:=0D
+> On 15.07.24 16:22, Alan Stern wrote:=0D
+>> On Mon, Jul 15, 2024 at 10:53:14AM +0200, Oliver Neukum wrote:=0D
+>>>=0D
+>>>=0D
+>>> On 11.07.24 16:41, Alan Stern wrote:=0D
+> =0D
+>>>> Agreed, but the solution is pretty simple.=C2=A0 Because the device wa=
+s=0D
+>>>> suspended, the userspace driver must have enabled suspend via the=0D
+>>>> USBDEVFS_ALLOW_SUSPEND ioctl.=0D
+>>>=0D
+>>> The whole system could have been suspended, in particularly to S4.=0D
+>>=0D
+>> You are right.=C2=A0 I was thinking of runtime suspend, not system suspe=
+nd.=0D
+>> My mistake.=0D
+> =0D
+> This is at the intersection of several scenarios. That is a good part of=
+=0D
+> what makes this difficult.=0D
+> In principal I think we could get away with checking for a flag to be set=
+=0D
+> at reset_resume() before each operation. Elegant this is not. Yet, it see=
+ms=0D
+> to me like the race necessarily exists and is unsolvable in user space.=0D
+> =0D
+=0D
+ From what I know, that CONFIG_USB_DEFAULT_PERSIST is enabled by =0D
+default. Then udev->persist_enabled is set to 1 and this causing =0D
+udev->reset_resume set to 1 during init2 in hub_activate.=0D
+During resume,=0D
+usb_resume_both=0D
+   usb_resume_device=0D
+     generic_resume=0D
+       usb_port_resume=0D
+         finish_port_resume=0D
+           usb_reset_and_verify_device (if udev->reset_resume is 1)=0D
+             hub_port_init=0D
+               hub_port_reset=0D
+   usb_resume_interface (udev->reset_resume is 1 but usbfs doesn't have =0D
+reset_resume implementation so set intf->needs_binding to 1, and it will =0D
+be rebind in usb_resume_complete)=0D
+=0D
+Even before usbfs->reset_resume is called (if there is one), the USB =0D
+device has already been reset and in a good state.=0D
+=0D
+After all that thaw_processes is called and user-space application runs =0D
+again.=0D
+=0D
+So I still don't understand why "the race necessarily exists". Can you =0D
+show me an example that usbfs->reset_resume causes race?=0D
+=0D
+> Furthermore in the long run, if we want to use D3cold in runtime power=0D
+> management, it looks to me like we would want a second permission ioctl=0D
+> for that.=0D
+> =0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0Regards=0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Oliver=0D
+> =0D
+Regards=0D
+Hongyu Xie=0D
 
