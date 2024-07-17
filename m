@@ -1,79 +1,88 @@
-Return-Path: <linux-usb+bounces-12241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12242-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBC1E933548
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 04:05:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAC37933596
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 05:13:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72D8B1F23273
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 02:05:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35A311F23C66
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 03:13:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 930A58F6D;
-	Wed, 17 Jul 2024 02:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D359B6FC5;
+	Wed, 17 Jul 2024 03:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="c9jSFFLD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HMUGhkL+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058B019B
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 02:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7BAEC7;
+	Wed, 17 Jul 2024 03:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721181912; cv=none; b=adpS8KdHXBzYV4cJKczSSZFtv9xYqF3Ez/rpJVk/NZpuDAI91NMka2NTfxonog3EG3JTK5dzFKGbiMQyQvjgdct32hBMafzmJS3J7BjS00iB4rwuYGUb9orGBOZU3YzxdxO8aP+9n+l+6qWfmaNSy1jO6bmBeukwdhdfmjN2G5g=
+	t=1721186032; cv=none; b=RbjeU395DEBBXPHqAOBKKAe9y0qTNeUyUMoYXWHoQN968A0LOqcsg5/FYifAmxaUjJ4v6vbzFGSze8UrqOYOUsZI9pYiZM7po7CJXojqxVfjY9gE13fD8j/Arky2iVJvE5iC8/hvgpd8++LxiYRp9pyGenJ5sfqYxQj1h+HldNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721181912; c=relaxed/simple;
-	bh=DVHKqDQLLUUFwbi2Pwk2XnONdO0EgeZERTHVmSdoRrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KYPyn5kEACadZ21APp++WobHkySIkp/l0a6CtMF2n9PX4LdCW43aS984bl+pjV1/77rAq5/K5XnuRbL7fITzvgWew7KjKXO8F2ngZE8/47Ix31wHHzYDHUv/QzqiYG5RdZKj6vVjr4gwwATVPGAWgXn5tKEo0mimX2aXqa7UIps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=c9jSFFLD; arc=none smtp.client-ip=209.85.217.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-48ff6336bbbso155038137.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2024 19:05:09 -0700 (PDT)
+	s=arc-20240116; t=1721186032; c=relaxed/simple;
+	bh=Fcarn7s9rPhpRjAERfo5ik6wtMS0k+cdjjk8r/rhBZc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tcM0O4EL8FEVtPdOdMowDJ7pPGn/3TtFNbQGkNAuMt0vGO96g4NtPmGGxc2vDQT/TaFQyvyOepQV5f8PDHTEWaYKz+bxqcgnE3NKjynH/Q1hzppdQADnwh12gRW6DZikiO56MHLgLP+XigexFBDCjvcFnh+OksZoQt/ThKc2/Ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HMUGhkL+; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2cb4c51fb41so180680a91.0;
+        Tue, 16 Jul 2024 20:13:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1721181909; x=1721786709; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qb98yk6J4SdLGmha0L+RJ3mqUkJWd7sh/FIX4cg2jcw=;
-        b=c9jSFFLDTCDycjZ5GkM+iWwutxu8JdpSHK/bqOyq1nju6Z0MqY8dEu8veDnrjwB6lo
-         JKWELaJZ58ohMiNpshkcoMBZtk1VBZTaP6ocqLkajmDoWMmw8ZFTvct3FvcZC2G5VsQW
-         jxZbqQYqEIlC50IRBcrbZuusaiINEFlusVdkaW4PXdyDcqY0Ti1u+oYTiMIPT7185lX5
-         UX10SudB5SdB9VqmNcIlA4Qh/y5NV+efk2n/+iVF8vBNobTs3rqy/yCvVmsnrjyxlWCR
-         JlkpulCqtjbp2zXdt5Jw5dZ0stgLE1F8vfx85fj7vVXv+n/EbwqDBh9YpJqMYlO5Wvhw
-         VBLQ==
+        d=gmail.com; s=20230601; t=1721186030; x=1721790830; darn=vger.kernel.org;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wBXkKPZ/jalUgSlf5TgPccFoCBM8ukwzJY09wBHIpc4=;
+        b=HMUGhkL+igJETQ10mqh66weSMc5b6wSkHkg29iLPSN7BBdi2rq36vZ4SV9doNnGCca
+         HIfSz5hvu7XVmziXCyvfVNd+UPHjm5IlVkFWPuyE2Ms6i6TE46WPGWYZA/V7wuK/Q71X
+         69SsNtjSxZoOd1vq+hl5oaME2lr4I0QOEQBz61zPfTjuX7fPNWsAzcmm5RWRgaOYon0a
+         MYooOVK4mCpj4fg2cOpSFv/kIk7/M3/Vt0/El1fAXJmpQQAkzusX8IvSlPYyMxJAOOT7
+         cvUE/J3tXMYCsCo2CMTMW9zGOfyfPjgOCXQ7jQ4hZ6j23ycruQ2QojXMjhTnUOkUlLxj
+         HQ8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721181909; x=1721786709;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qb98yk6J4SdLGmha0L+RJ3mqUkJWd7sh/FIX4cg2jcw=;
-        b=IljT+C60Kfk9Q9yL8g3HFy5SLR57KW6tgcLN0dXmIJSxmmW281MwonEWNgnmX3uuYo
-         K394zEo9jPpe9YMnTkYeAui2pLV4+261wCPZM4mP2qHPmJaKmudF9gN6IksECmMyam8Q
-         AgmECWqlcn2rau1lSwDpMH38k5/ZZxUFg9A7qzqDcU2WJbBGSO9APWXY2Tn0YiH5o6Y1
-         jdp2Sbei5rTXD17/fu8t2+VwmtPTx0duUw/mPwbNrpvngIjYGUOBaEEbXVvcTGi8rist
-         NAyCV9mkiLe/4A0v5hrgEFtqWXOFZXq+EeQ0gg9I9NWXVKdEgAuB5TgaTx1hy7I6PKbb
-         +snQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMjrDZmcmL+B1hVJ68RgZerl2QyZRuA3Q7GN9uH4zHhlwe0sV0cy2a8mzNe0mfbcBPovxDReJ2woD83KVO7SXJ/0Le9YORXIhs
-X-Gm-Message-State: AOJu0YxG89gHry98Q0S+fcc8aBweyXiMwb4g7nco+txKY1Ke81miXTFx
-	e8P6U77JDNyBzmFXL4FbQ7KbnPgC30k1LhOj5uy6lon/x252bYlF/y2xDIX0xQ==
-X-Google-Smtp-Source: AGHT+IHursfxKZM9wHq0nNVc6NFooX86xt5HXnxIDXGC6rXDzNqDerEk/vuMH44nPoM2i/0jbbFmpg==
-X-Received: by 2002:a05:6102:3e02:b0:48f:8d1a:ff8c with SMTP id ada2fe7eead31-49159731b59mr557408137.3.1721181908831;
-        Tue, 16 Jul 2024 19:05:08 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::8080])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44f5b7c12b6sm41199391cf.13.2024.07.16.19.05.07
+        d=1e100.net; s=20230601; t=1721186030; x=1721790830;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wBXkKPZ/jalUgSlf5TgPccFoCBM8ukwzJY09wBHIpc4=;
+        b=qVXKcDBhW+RlwqXBzpJAP75XzfZk3pEUp60SDNZIlTQX/YWT4UvM4FYc4RICmezSv4
+         SIljjlPnd9sWOIN8QifcY5WegZwUj6JZM15sJTDOuNgUjZDQJmrc/awaOF4WuFfbS8hh
+         QxqBQzRgmRFP5GQ4zD1clH3IsQZdfzdp3jbi9Saugo4L/gyjs+WMLKlwOrZ7m5kkMOlj
+         yB4bEVKdStv7YcFHQiIn8O6o0xWt14zcr4YnfBY+AfRUJlDrpfbbdizDgiU0IaIKtXhA
+         +bUNBaEkKzzT4CgOPzSnrialSpAKA26f6gr/6jJay0GPr/v7HixwkrNcusszCdXsqioh
+         TUkA==
+X-Forwarded-Encrypted: i=1; AJvYcCWn6muU0uOYxU7xqVi+4jjzPb8iheRP53XbIkE3dyorm5qmSJmoZytSyAjZfZVlpoPaMj92hWCJGILrt6LUSLZwn1ssiFnNsS8umxsiGLuQGxlBFRPDYRAOUd7h8tdVIVDH416dxs2V
+X-Gm-Message-State: AOJu0YyETFf4BVoR5Hj1D/FtG6ZZzgRXQMGXoPGISKTfbNXaZTkSw/iD
+	lpQWF9v3S50uFGqIXf+81hBPb+GUpuEA48rC61L33NO3wBu6IWVu
+X-Google-Smtp-Source: AGHT+IGqP+M0Ee7JY1ExYQ2wwfOpJ2Ifyjg7phZTgR/vqMwjxduSc+thY5pdB4K7kZPRVWVM2+E1Gw==
+X-Received: by 2002:a17:90a:f0d1:b0:2c8:6793:456 with SMTP id 98e67ed59e1d1-2cb51e5f06fmr303594a91.0.1721186030034;
+        Tue, 16 Jul 2024 20:13:50 -0700 (PDT)
+Received: from js-pc.. ([116.162.132.53])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2caedc92d1esm7012247a91.44.2024.07.16.20.13.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 19:05:08 -0700 (PDT)
-Date: Tue, 16 Jul 2024 22:05:05 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Hongyu Xie <xy521521@gmail.com>
-Cc: oneukum@suse.com, gregkh@linuxfoundation.org, brauner@kernel.org,
-	jlayton@kernel.org, jack@suse.cz, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, xiehongyu1@kylinos.cn
+        Tue, 16 Jul 2024 20:13:49 -0700 (PDT)
+From: Hongyu Xie <xy521521@gmail.com>
+To: stern@rowland.harvard.edu,
+	xy521521@gmail.com,
+	oneukum@suse.com
+Cc: gregkh@linuxfoundation.org,
+	brauner@kernel.org,
+	jlayton@kernel.org,
+	jack@suse.cz,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	xiehongyu1@kylinos.cn
 Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
-Message-ID: <ee0a5160-233a-485c-a34b-99d4a1e046c5@rowland.harvard.edu>
+Date: Wed, 17 Jul 2024 11:13:39 +0800
+Message-Id: <45b87923-d256-4c5e-8167-8ef764add1e9@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ee0a5160-233a-485c-a34b-99d4a1e046c5@rowland.harvard.edu>
 References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
  <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
  <9ef72886-13b8-46cf-a0aa-54dad36102e9@rowland.harvard.edu>
@@ -81,36 +90,55 @@ References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
  <429eb27a-578a-4208-8ce1-89434b8d739f@rowland.harvard.edu>
  <3073c8ce-1923-4816-a442-41b4cc333af9@suse.com>
  <6419a4e9-e084-4eb6-8376-9202930ea8be@kylinos.cn>
+ <ee0a5160-233a-485c-a34b-99d4a1e046c5@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6419a4e9-e084-4eb6-8376-9202930ea8be@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
+ attachmentreminder=0; deliveryformat=1
+X-Identity-Key: id1
+Fcc: imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-I'm ignoring most of what you asked Oliver to focus on just one thing:
+From: Hongyu Xie <xiehongyu1@kylinos.cn>=0D
 
-On Wed, Jul 17, 2024 at 09:43:38AM +0800, Hongyu Xie wrote:
-> Even before usbfs->reset_resume is called (if there is one), the USB device
-> has already been reset and in a good state.
-
-You are wrong to think that being reset means the device is in a good 
-state.
-
-The userspace driver may have very carefully put the device into some 
-non-default state with special settings.  All those settings will be 
-lost when the device gets reset, and they will have to be reloaded 
-before the device can function properly.  But the userspace driver won't 
-even know this has happened unless the kernel tells it somehow.
-
-Oliver is pointing out that the kernel has to tell the userspace driver 
-that all the settings have been lost, so the driver will know it needs 
-to load them back into the device.  Currently we have no way to send 
-this information to the driver.  That's why usbfs doesn't have a 
-reset_resume callback now.
-
-Alan Stern
+=0D
+=0D
+On 2024/7/17 10:05, Alan Stern wrote:=0D
+> I'm ignoring most of what you asked Oliver to focus on just one thing:=0D
+> =0D
+> On Wed, Jul 17, 2024 at 09:43:38AM +0800, Hongyu Xie wrote:=0D
+>> Even before usbfs->reset_resume is called (if there is one), the USB dev=
+ice=0D
+>> has already been reset and in a good state.=0D
+> =0D
+> You are wrong to think that being reset means the device is in a good=0D
+> state.=0D
+> =0D
+> The userspace driver may have very carefully put the device into some=0D
+> non-default state with special settings.  All those settings will be=0D
+> lost when the device gets reset, and they will have to be reloaded=0D
+> before the device can function properly.  But the userspace driver won't=
+=0D
+> even know this has happened unless the kernel tells it somehow.=0D
+> =0D
+I was looking the whole thing from kernel's perspective. Thank you for =0D
+pointing it out for me.=0D
+> Oliver is pointing out that the kernel has to tell the userspace driver=0D
+> that all the settings have been lost, so the driver will know it needs=0D
+> to load them back into the device.  Currently we have no way to send=0D
+> this information to the driver.  That's why usbfs doesn't have a=0D
+> reset_resume callback now.=0D
+But I still think that there's no need to rebind for a USB device that =0D
+was using usbfs. Because rebinding doesn't fix settings lost. And it =0D
+looks strange from user-space's perspective.=0D
+What do you think?=0D
+> =0D
+> Alan Stern=0D
 
