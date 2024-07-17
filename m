@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-12243-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12244-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB1DF933828
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 09:42:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26C8B933858
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 09:53:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A709428329B
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 07:42:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 583951C227F9
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 07:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F8E2032D;
-	Wed, 17 Jul 2024 07:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C381CF8A;
+	Wed, 17 Jul 2024 07:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cPMS+Vel"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CvxTVdSP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2DF20DC3
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 07:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77991CA80
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 07:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721202126; cv=none; b=MRan39PxQfesZSyjiJXK1QXmhGN/UfRSwXJrgsfi4ILp+xIO9rBNkCInP+2gvRgRIq+0UCZITtskSVjSMp096JfkP3mDFqJir8xNMBFLqGzW4YCEIRIZFDl0Q9EfymqXP8QdrWOLrNoFApy+UmjXoaR9htbv2QEWKgPw76+IuzQ=
+	t=1721202775; cv=none; b=mOb4s8gdmwkt3X4ZKqujwZyE9gccy0EgJMMHU7pIXJHDYwXhEFcUMdwhUIu5FmDVNkUk0yQHcxauoMogVSsTa27eIZ4NBDvnYVPvvqihr6ifeyeLO5nai8SD9+HMcq4F0v1EB9TiRQGGlnsYNKee7g8QoMElpJCE+623kcoqddI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721202126; c=relaxed/simple;
-	bh=OiffStuUSLh1cS5l+P2QiNDzFgzly7BoWKy89/nhqHs=;
+	s=arc-20240116; t=1721202775; c=relaxed/simple;
+	bh=tmn7dZaZf/63VEF8gNjawg4siNTUl1KUDSGXNI8Zuqo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JJ+/gX+l0qD2qiTUtf3RTSS1kZwS9/5EDWCHtqZ1yYG0+gsnEmorI1T2wlwdmEBw0dKiX0/6cB+kGSYmSYaEQXSL6FRmLuxKtdHcpdX7ygheRGsUMYGDaSINX2X0KVRcix13B2UKYZnNKPOn6v+imuJrxHZ0MR1eSfoP9Ff9Hu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cPMS+Vel; arc=none smtp.client-ip=209.85.221.41
+	 In-Reply-To:Content-Type; b=u2ccs0mEI92d2vqcub2UsCIKzeGrVSMPLo9aVLYy0aaQyxC+kGgWKV5uNe4MaFpbIs7HnrclG5is0VHpK6oDRbCZaQ1LyMCPKKqggEV/u+4Ze/TwQGLdthj1AX23l70Gw/OIq/C1f6xOz2NMAFeKhZCWEblS1WwEBPqsxkuymUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CvxTVdSP; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-36799a67d9cso5053093f8f.0
-        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 00:42:04 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-367a081d1cdso3345471f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 00:52:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1721202123; x=1721806923; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1721202772; x=1721807572; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8O2GqN4Vi7Z9MREfEbIQ23yM5JSotW2UOauCW1qsCXU=;
-        b=cPMS+VellLfsaV8sKmXth6i9o052x3TkiO8S7Owqxzf/jl3TjkW9V6tTznE1aPgEuI
-         8y4cifC2hFr9tgcZmgr/adFSiPxclYQJYcc2523+LE5IMQ+lueIwamIE/APc+NtdOEuG
-         993RVWNbapqCRu92MgkKmJWqwn46zwKacc7ZhpUrivCxHWDTzDD6eJdOJT/m+YNnG1VM
-         BavT5qAR3kACWzvnSDhphneIXu/9sdOblF9YFpQ6ClgmfVZ9rt5W7ql9I1nRPOhIgQGp
-         JV06GzizTvopSVONYSDcpRL6lABZg7u9KzOvmtfdo0Xh1OrLqNVjEcIz5FC8BJD0EOw1
-         VLIg==
+        bh=q7JxP1X9anMugApULpKE/NNH8t1wNvqt4dSmpMOS7bM=;
+        b=CvxTVdSPg81xHQ++BLKV3G/no2sn8ynpkd1R4m6I4nf/z6TlSlLGu8lqIiEKdANfgq
+         bUMrf7mOqShBWpFeQE04pYfQwqVQ6qsydKjkiqKcbGDfggmfFcL7V2fEQ+B4uGqHWO0Y
+         lbIT8RwIWcsZ8U0RtriyknzZhTudiA3+kSVyeU8CH9+OTpcC1kHLJi8kOpiv8ia1jP2O
+         P79JQtjlB9XKCCF+eVQKxLDrLEmQllwCypUMBv1BH7m8uC0i/3qBWIbPPLo/Rs0fBL7f
+         6MKC2BT6Jtpo0kn90HA2Zyqu7XsN6fUHy1frN5+ypQu8odbADkIXIB7knP5sI/O1uYHY
+         8Fzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721202123; x=1721806923;
+        d=1e100.net; s=20230601; t=1721202772; x=1721807572;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8O2GqN4Vi7Z9MREfEbIQ23yM5JSotW2UOauCW1qsCXU=;
-        b=Zf9LuoZok7DI1NxEOZcFwcuy9oqXSm4AECwExrNAJHTnH4XbB4a7QA1IjsM9xDb3ml
-         EmIK5eTDOWt1nSzQKESgFMKaksGF5Do2RNBKmjQ9Opy/0jpy8aC7NOMVDoxXqeYq4OO2
-         SKpvxRUe/cXUD15B8BdYhn5hKTr8goLWP7UU/qjdc5jN6vcx6r3F74y21jX5QWzklwjp
-         /Z3MKiXlephQ6dWsAytKey5M/IGPKkCNEQn7/vcUAbJc9P1LGcnJU5S+ksFVmoY7nQ8w
-         qBFipy2Jn2oJfPltukPKk5wYlJ7zD4Gm22r5v9AfEL9Hl8rezheTeh1jfZ6cm1XQYVWc
-         GFZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVd97dxPm5iRf6fDOki9oQ41Pv1HrwGIUhZm3hnAzdwUa/Lmh0zouMwG4h1m88r/g7zkrIBOCuvFMgu0yHIBihypFz6D5ZEVixn
-X-Gm-Message-State: AOJu0YxVdNLlMj18zJOrGu7olRkKPVkQnzUm+3vgeeU2/le7a1fxXdsC
-	p6Z5c50wfJW10h8vrf7FR8u3te+OOGy4C4L11nP1/dMnZ8yDIqZAzOGQdGXhVYs=
-X-Google-Smtp-Source: AGHT+IHzAG0DLEccG8M5eU2CIZi4PVHwhBeNXTo0q0B0a4qNJC7uN9NoXE53DDedUs1wstSZjx4fxQ==
-X-Received: by 2002:a5d:528a:0:b0:366:ec30:adcd with SMTP id ffacd0b85a97d-368315f2017mr835182f8f.7.1721202122495;
-        Wed, 17 Jul 2024 00:42:02 -0700 (PDT)
+        bh=q7JxP1X9anMugApULpKE/NNH8t1wNvqt4dSmpMOS7bM=;
+        b=QzRgWD1o1utcr1uMkGahIAaxaeJOgiTZBZYIIJ4uNN+/wqCsjeKUQ8uPgooPKjiFmR
+         REGbCog1iKypPGRwbGDIcYNhnIgzuxLaNfkktX8Ccq1ZJWUCXrC4WWgE9tDRihJWC4Bz
+         i2da5evn2zL8cwxM8ZdeD98WflcKgGkpe9Z2eXUdYUKB6hKKT/bxkK/uQ85hxARSuxku
+         YvP87tiz1AquNZgAFu9WnED1PgnsGYjsDxhij8ZIvOLxaeC9rvOx7r0hMv9kSz/o6iul
+         VAUi8h3jTXgjqr80PCsqGVct6hDvl/4Ip6eufZ0C9o6A1BFH5wiaccrNO3GJBI+/W3MT
+         Jtzw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXEDy7VXYCZMzTTy4+0HlRWuYyskxgL/mnfkQehdCa6ORp8MQQZe2C3h6ayg+MBGyFfitGggJI8d1TK8jsUPdEYEZ9nZasMv+0
+X-Gm-Message-State: AOJu0YzJlsbl7S2jnR2YoYE+xdB/d8w+8Ic3TGPc6gmj/SzV7EWmprwe
+	zms0QfICzvyjbeJ41zF/KsVfm48229OqwNXEluuAEjwucp/TxGT+sd9UoJ2udoM=
+X-Google-Smtp-Source: AGHT+IFTDDbi5O+/Lw8G4Rbx40psRglcjVnjshWdv+9mQbxcPrfb0y6tuYnBZuD00ssqlWOSynokpA==
+X-Received: by 2002:a5d:45d2:0:b0:367:83e9:b4a5 with SMTP id ffacd0b85a97d-368316fad85mr507737f8f.49.1721202771882;
+        Wed, 17 Jul 2024 00:52:51 -0700 (PDT)
 Received: from ?IPV6:2001:a61:137b:5001:be5a:c750:b487:ff1b? ([2001:a61:137b:5001:be5a:c750:b487:ff1b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680dafb9aasm10940535f8f.67.2024.07.17.00.42.01
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680db038dbsm10862882f8f.95.2024.07.17.00.52.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 00:42:02 -0700 (PDT)
-Message-ID: <a648a2b3-026a-445c-8154-2da43b641570@suse.com>
-Date: Wed, 17 Jul 2024 09:42:01 +0200
+        Wed, 17 Jul 2024 00:52:51 -0700 (PDT)
+Message-ID: <991f7feb-a5bf-4eb4-9623-a13534a02b98@suse.com>
+Date: Wed, 17 Jul 2024 09:52:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,64 +89,37 @@ References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
  <429eb27a-578a-4208-8ce1-89434b8d739f@rowland.harvard.edu>
  <3073c8ce-1923-4816-a442-41b4cc333af9@suse.com>
  <6419a4e9-e084-4eb6-8376-9202930ea8be@kylinos.cn>
+ <ee0a5160-233a-485c-a34b-99d4a1e046c5@rowland.harvard.edu>
+ <45b87923-d256-4c5e-8167-8ef764add1e9@kylinos.cn>
 Content-Language: en-US
 From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <6419a4e9-e084-4eb6-8376-9202930ea8be@kylinos.cn>
+In-Reply-To: <45b87923-d256-4c5e-8167-8ef764add1e9@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 17.07.24 03:43, Hongyu Xie wrote:
+On 17.07.24 05:13, Hongyu Xie wrote:
 > From: Hongyu Xie <xiehongyu1@kylinos.cn>
 
-Hi,
+> But I still think that there's no need to rebind for a USB device that was using usbfs.
 
-sorry for being incomprehensible. I'll try to do better.
+Technically you are correct. From a conceptual view point the only
+hard requirement we have is that the first operation after reset_resume()
+has to fail with an error code user space can interpret.
 
->  From what I know, that CONFIG_USB_DEFAULT_PERSIST is enabled by default. Then udev->persist_enabled is set to 1 and this causing udev->reset_resume set to 1 during init2 in hub_activate.
-> During resume,
-> usb_resume_both
->    usb_resume_device
->      generic_resume
->        usb_port_resume
->          finish_port_resume
->            usb_reset_and_verify_device (if udev->reset_resume is 1)
->              hub_port_init
->                hub_port_reset
->    usb_resume_interface (udev->reset_resume is 1 but usbfs doesn't have reset_resume implementation so set intf->needs_binding to 1, and it will be rebind in usb_resume_complete)
+> Because rebinding doesn't fix settings lost. And it looks strange from user-space's perspective.
+> What do you think?
 
-That is correct. But even if CONFIG_USB_DEFAULT_PERSIST were not set, losing power
-would just lead to reenumeration by another code path. Devices reset themselves
-when they are power cycled. There is no way around that.
+Only user space can reapply the settings. The kernel, however, must notify
+user space of the need to do so and avoiding a race condition is tricky.
+However, it is the same race that also applies to a disconnected device and that
+problem is solved.
 
-> Even before usbfs->reset_resume is called (if there is one), the USB device has already been reset
+ENODEV clearly is an error that makes clear to user space that settings have
+been lost. User space has to be able to deal with a device being disconnected
+at any time, as we are talking about USB.
+Hence, where is the need to add a special case for reset_resume()?
 
-Yes, it has been reset.
-
-> and in a good state.
-
-No, it is not. Or rather, it is in the wrong state. This is not a question of good and bad.
-It is a question of being in the same state.
-  
-> After all that thaw_processes is called and user-space application runs again.
-
-Yes. And user space does not know what has happened.
-> 
-> So I still don't understand why "the race necessarily exists". Can you show me an example that usbfs->reset_resume causes race?
-
-Sure. Let's look at the example of a scanner attached to the host.
-
-OS			Scanning process (in user space)
-			1. Set a resolution
-2. Going to S4
-3. Returning to S0
-			4. Initiate a scan
-
-As you can see the system would now scan at the wrong resolution. Step#4
-has to fail. As there is no synchronization between S4 and user space, initiating
-the scan can always be the last step.
-For this to work, reset_resume() would have to restore the correct resolution. The kernel
-cannot do so.
-
-	Regards
+	HTH
 		Oliver
+
 
