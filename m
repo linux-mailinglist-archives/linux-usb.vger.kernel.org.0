@@ -1,306 +1,575 @@
-Return-Path: <linux-usb+bounces-12257-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12258-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C9DC934290
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 21:24:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D46C793439F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 23:04:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B87712837ED
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 19:24:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 554CA1F22520
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 21:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BFAA18628D;
-	Wed, 17 Jul 2024 19:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="OrUhHPMJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74231862A8;
+	Wed, 17 Jul 2024 21:04:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2072.outbound.protection.outlook.com [40.107.236.72])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC97185089;
-	Wed, 17 Jul 2024 19:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721244259; cv=fail; b=WieaBuL23lPOEy4RKpnGyW1jW4QFFDRK2T2pXFQkBAuWAmWfbk17KAUySSid0UDKMNj1PLjI1G4UKE/DsnSsFJ3FynPOp04WnfjfaBByLjzoO5H/HR9IzVGYdAnGUSXEiztPeLindmHDe8NALm+xW2yTA5/GSioRP/OYezajykA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721244259; c=relaxed/simple;
-	bh=GCwGmcpoDQv7DvEVQjGMco25zYr/MX1Eqq1Wa8TezKo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zkh7pjXjQBtgxpjrO5inBgOT18oxgeZT+9uP3Hr+Bux0JqWIW1Gzfvzp9AYSeGwxz/eprEPCD4rLXcMODmyxBfOfGYbQtlzSwu4LaVyxuA3CZ6n/ppElB+fYMg7VVx7NNu55AOmDvxY1N9huNuvrjeN1yrj2P75Yck3WOY1Ft5c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=OrUhHPMJ; arc=fail smtp.client-ip=40.107.236.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Zi38X3XNTr0dtXryztBGpt29Va7qNclW1JvxTGLKVmDdcFRF2tAWukJsR9ypso2Pc+5LgFIh2m/N9NjUYQwL3EdQWuq7gWiB0nTxs8Ji3lqfqaTw9GGOsF06WSIKrI17N0B/ckmTKPNyFdoQYuqL16d5BEXZOOAaZHVd6pINp7O+IpTUJZUA0lVouN99PvAqkr/7qdcPVcVtiBsfCNSY/qsI2wxs1TY1nDbb0YlZc6mJe0Twqp6YsPDx43GdZh734WIs0JMWNrwlzQD373Yt00njCZq5ldeBCiDyzkg2K2hd+hIhR8CDgil7JXE/468whxifBjXi0Ulk305ZSDgxTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hkILCyhoEvn4wvQCpUOW648SecjwAzWaeyu2NP166u0=;
- b=ZeRNZ0FNJ75T23JD1VYql8gezyXXpW52PLVEGVijBWZrovjmRR0f8CGl4dvlIm+5oeDCuenYu0+LW4Ek19Jt2r4+damdTyq8jSdIY70Fx9vguR8dvoNUWirDs2n1wpPun727N10TpZbCM63KmcrXGkAbW2IHbRcndPx5rkz6F0/3Ml1KcVXIhpTkQSE4F32FTXU4LRY62bb8VWGL2R9eI6C0VLAeE8ptaiC74WtRRYkHNu/Ly2ZYen3s+v4Ifl6UZ9aSZRhl++xs75zCwUc5SKe4MQub5c2sPt+uWxOkf7jA0+Fl2RK8sR9EhfKJLQzUihzprCI5CkT1ZtBW/2IDjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hkILCyhoEvn4wvQCpUOW648SecjwAzWaeyu2NP166u0=;
- b=OrUhHPMJyF8joaplhkB87FIpoaQv5V6ncgW0h7ii1b5Royert1HsScRq1aynNEiwluv0J94GN+8L/Lg+MTZEltKsVyKVg7TP1k5TMCwhail8U1kSg8saZ8i5UUa3XveHOfXDICwQJukBjlmPJgIX4PMZpVaqAiUlayeet3HidLI=
-Received: from MN2PR08CA0025.namprd08.prod.outlook.com (2603:10b6:208:239::30)
- by IA1PR12MB7709.namprd12.prod.outlook.com (2603:10b6:208:423::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.14; Wed, 17 Jul
- 2024 19:24:12 +0000
-Received: from BL6PEPF00022571.namprd02.prod.outlook.com
- (2603:10b6:208:239:cafe::b6) by MN2PR08CA0025.outlook.office365.com
- (2603:10b6:208:239::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.14 via Frontend
- Transport; Wed, 17 Jul 2024 19:24:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL6PEPF00022571.mail.protection.outlook.com (10.167.249.39) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7784.11 via Frontend Transport; Wed, 17 Jul 2024 19:24:12 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 17 Jul
- 2024 14:24:11 -0500
-Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Wed, 17 Jul 2024 14:24:09 -0500
-From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To: <mka@chromium.org>, <gregkh@linuxfoundation.org>,
-	<javier.carrasco@wolfvision.net>, <benjamin.bara@skidata.com>,
-	<macpaul.lin@mediatek.com>, <linux.amoon@gmail.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH v2 2/2] usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support
-Date: Thu, 18 Jul 2024 00:53:43 +0530
-Message-ID: <1721244223-3194869-3-git-send-email-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1721244223-3194869-1-git-send-email-radhey.shyam.pandey@amd.com>
-References: <1721244223-3194869-1-git-send-email-radhey.shyam.pandey@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82EBB376F5
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 21:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721250244; cv=none; b=X4lLawgZneTyCZDVEWNTSha/Rox3ng9LzfBNgfAIThycM39WmHUODMFkaDKKx6HCnth4phEB8VAEkyKTRG7Rmk5HokMDJsc/F5xC1uu46rs0041+ILxilDdqxIVhcbZEdxzYawh2Zy1jxynjYfzskiokA7tn0zsoRmzwCsadSlg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721250244; c=relaxed/simple;
+	bh=RmobsUKMzVquGAATrJH3V4ORsycNVTX+eIMhQpV8Mjc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g/j9rmDeZsFOQfg6ZDJ1qRjOsOdkuiiBSthGfaB7/D3CWUe+/BdYz1DnmXLPLdOE7G+JBmJnUndt0piRf8mjbAGp2p/us51Y1sIedaewX8zOOyRWCBskPO/Q3Q88AJSGoKajeDqMkdJqwT5uwzI0Y7p/wegV/62QV5bBBCyvVZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1sUBoA-00050z-D9; Wed, 17 Jul 2024 23:03:30 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1sUBo7-000IIE-4X; Wed, 17 Jul 2024 23:03:27 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1sUBo7-002Ebi-01;
+	Wed, 17 Jul 2024 23:03:27 +0200
+Date: Wed, 17 Jul 2024 23:03:26 +0200
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	kernel@pengutronix.de, Jan Luebbe <jlu@pengutronix.de>
+Subject: Re: [PATCH v6 3/3] tools: usb: p9_fwd: add usb gadget packet
+ forwarder script
+Message-ID: <Zpgxnszbsf8_uEzf@pengutronix.de>
+References: <20240116-ml-topic-u9p-v6-0-695977d76dff@pengutronix.de>
+ <20240116-ml-topic-u9p-v6-3-695977d76dff@pengutronix.de>
+ <e6a39148-332d-4bed-900f-f22d131e2b29@collabora.com>
+ <ZnAh-fIAnlFo_a7y@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB03.amd.com: radhey.shyam.pandey@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00022571:EE_|IA1PR12MB7709:EE_
-X-MS-Office365-Filtering-Correlation-Id: bed58de3-06ac-4be0-ffa8-08dca6960a62
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?s9qXGFaJTQn73AAvsIXioBIkqmJ70tX0w12wC7IGgQpQRxI9t33vMknko+bo?=
- =?us-ascii?Q?736xIgh60x7vcGS+l2BH0QuhFCb9r4TJq3iGV6LNZlRbuTCRICE7xa+BOGdK?=
- =?us-ascii?Q?+5e9k2k9/9t05M808gCXeVbBEch9dH+KbkmifXsJp8eArucSYCdtBRaEm0ZD?=
- =?us-ascii?Q?0Jbm47B3imqFbRIkjYdkPYGfQIer2Q6KrcX9Qfku5pwQG/xsbl4bTFtU5v/H?=
- =?us-ascii?Q?OFmXMXK15ZWJ3fDfkS5jkJ67NEXcU0q0QHruLZWy6blGgURr6amey2AZjvho?=
- =?us-ascii?Q?0G5eKTNsoM1UBsJ3OolKEfs38gB3gTcAbObZDdP1K3KxS8TtaGRlYXpnmUX3?=
- =?us-ascii?Q?qv66ZUbXVEe4utcRp9LYu/N7VMBpwKrBc93oNB20Pd1gET4wtC3LwQ1lC2Na?=
- =?us-ascii?Q?QoUrFkO76FrJB7B+oQTCcTBM79xcHCdik5ESHzb2c17ZpTFLqcFDoeB3s18W?=
- =?us-ascii?Q?r/QPPxWDXDzT7H0of94pes3Ot7EULZ2ciljVxQEUCYj3TkFRkZyJtzQ1zY9E?=
- =?us-ascii?Q?9XL8yZhtbErqdijYgmi3dup2tyFs4NQaXYTTW1hbxS9SbAaRVEski3CRobk0?=
- =?us-ascii?Q?vK8QWWUDEcjo1UaMcR9FkLEj1uN6iaqtu/rc7htXN87PSnNV3jERbZfl9H5C?=
- =?us-ascii?Q?qQ+Ql54v1uee6xJCahyWuMhsMLes66h20VXpmQwT6gH3KuI9PdJiTOGD0Xmh?=
- =?us-ascii?Q?6f8HvrIjojAALArJl9YAOs4PQFqo/+el665xGegA66Iq7BD14QSQmEDJHdSZ?=
- =?us-ascii?Q?j+egN9q6W0oQOsQorAcASKO1Eoj/H4xT+Rew9bU/JXkCawBHXmx4BTvZBal1?=
- =?us-ascii?Q?5CJULKGmblv+IC2YJLSuHNj1TtZgpsHblte/Fb8sdpI5//AIAwQa6S1YdKW6?=
- =?us-ascii?Q?m/J5Az2lyySBLw1jFKzwJy6BxLkqPafMdq1M94wwUtI/QOSo++DfxgynH3C5?=
- =?us-ascii?Q?EO4SM5kc2dV7E12Dyo24ByF6d9tRAYCef0JjQTnMq1VToX6yPiXrlQJatQZK?=
- =?us-ascii?Q?aiECsfWdXiA7Rl6nEh4uwrxQ9P/3KdT6Pwg0Qp7oZmZr3R2ujh5jzr4BFgGe?=
- =?us-ascii?Q?8SFHKkn+oBKhA8vdnobAeQauWI2lJtfiwICggjhWrdl5qbzgm8lsL5BriAi1?=
- =?us-ascii?Q?kfIIMdBqwMlcgLmCQpDIp5I+kVn/vgywj39aG7M43pdNMcoJmxBU1LVICVgg?=
- =?us-ascii?Q?LlkKyIwzEdGPHqOlJ16xo5/Hqr89VdhnyQOtmNGoeV7jiL9jiF3bBq7vePfW?=
- =?us-ascii?Q?/VdsNPH3qLo720oGQ3c4NV6MWB1mciwAH+buz8+vehKBYEsnOLFscW4o2Yzk?=
- =?us-ascii?Q?VHSB2hF4oQNh6j/mfitEW2cqUiCRSnusBXdn+6ezaFE27X80PbJxHoZpMmWl?=
- =?us-ascii?Q?4F3t82BkWaL/D4p7iw1iNwOSKeQvZxf8HyJ59zJwQUbYy9ySVbc9nzisUfzW?=
- =?us-ascii?Q?NnVjOAjgcHo2ehvCVCLPWJT0F5ac+Td0?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 19:24:12.8551
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bed58de3-06ac-4be0-ffa8-08dca6960a62
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00022571.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7709
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="N+tWKLrbeVfnjHJc"
+Content-Disposition: inline
+In-Reply-To: <ZnAh-fIAnlFo_a7y@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-usb5744 supports SMBus Configuration and it may be configured via the
-SMBus slave interface during the hub start-up configuration stage.
 
-To program it driver uses i2c-bus phandle (added in commit '02be19e914b8
-dt-bindings: usb: Add support for Microchip usb5744 hub controller') to
-get i2c client device and then based on usb5744 compatible check calls
-usb5744 i2c default initialization sequence.
+--N+tWKLrbeVfnjHJc
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Apart from the USB command attach, prevent the hub from suspend.
-when the USB Attach with SMBus (0xAA56) command is issued to the hub,
-the hub is getting enumerated and then it puts in a suspend mode.
-This causes the hub to NAK any SMBus access made by the SMBus Master
-during this period and not able to see the hub's slave address while
-running the "i2c probe" command.
+Hi Andrzej,
 
-Prevent the MCU from the putting the HUB in suspend mode through
-register write. The BYPASS_UDC_SUSPEND bit (Bit 3) of the RuntimeFlags2
-register at address 0x411D controls this aspect of the hub. The
-BYPASS_UDC_SUSPEND bit in register 0x411Dh must be set to ensure that the
-MCU is always enabled and ready to respond to SMBus runtime commands.
-This register needs to be written before the USB attach command is issued.
+On Mon, Jun 17, 2024 at 01:46:01PM +0200, Michael Grzeschik wrote:
+>On Thu, Jun 06, 2024 at 10:19:33AM +0200, Andrzej Pietrasiewicz wrote:
+>>Hi,
+>>
+>>W dniu 5.06.2024 o=A015:32, Michael Grzeschik pisze:
+>>>This patch is adding an small python tool to forward 9pfs requests
+>>>from the USB gadget to an existing 9pfs TCP server. Since currently all
+>>>9pfs servers lack support for the usb transport this tool is an useful
+>>>helper to get started.
+>>>
+>>>Refer the Documentation section "USBG Example" in
+>>>Documentation/filesystems/9p.rst on how to use it.
+>>>
+>>>Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
+>>>Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>>
+>>
+>>This time --id alone worked for me (as well as --id combined with --path)
+>>but --path alone did not:
+>
+>This is currently right and expected. Why is using path alone of any
+>more use? Since you could then grab any device with two bulk endpoints
+>without even ensuring that it is supposed to behave as expected with
+>this script.
 
-The byte sequence is as follows:
-Slave addr: 0x2d           00 00 05 00 01 41 1D 08
-Slave addr: 0x2d           99 37 00
-Slave addr: 0x2d           AA 56 00
+Ping!
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
----
-Changes for v2:
-- Move power on reset delay to separate patch.
-- Switch to compatible based check for calling usb5755
-  onboard_dev_5744_i2c_init(). This is done to make
-  onboard_dev_5744_i2c_init() as static.
-- Fix subsystem "usb: misc: onboard_usb_dev:..."
-- Use #define for different register bits instead of magic values.
-- Use err_power_off label name.
-- Modified commit description to be in sync with v2 changes.
----
- drivers/usb/misc/onboard_usb_dev.c | 56 ++++++++++++++++++++++++++++++
- drivers/usb/misc/onboard_usb_dev.h | 12 +++++++
- 2 files changed, 68 insertions(+)
+Can this series move on?
 
-diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-index 94d5424841fd..4f3845f35ac4 100644
---- a/drivers/usb/misc/onboard_usb_dev.c
-+++ b/drivers/usb/misc/onboard_usb_dev.c
-@@ -11,6 +11,7 @@
- #include <linux/err.h>
- #include <linux/gpio/consumer.h>
- #include <linux/init.h>
-+#include <linux/i2c.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/module.h>
-@@ -297,10 +298,40 @@ static void onboard_dev_attach_usb_driver(struct work_struct *work)
- 		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
- }
- 
-+static int onboard_dev_5744_i2c_init(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	int ret;
-+
-+	char wr_buf[7] = {USB5744_CREG_MEM_ADDR, USB5744_CREG_MEM_NBYTES,
-+			  USB5744_CREG_WRITE, USB5744_CREG_NBYTES,
-+			  USB5744_CREG_RUNTIMEFLAGS2,
-+			  USB5744_CREG_RUNTIMEFLAGS2_LSB,
-+			  USB5744_CREG_BYPASS_UDC_SUSPEND};
-+
-+	ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "BYPASS_UDC_SUSPEND bit configuration failed\n");
-+
-+	ret = i2c_smbus_write_word_data(client, USB5744_CREG_ACCESS,
-+					USB5744_CREG_ACCESS_LSB);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Configuration Register Access Command failed\n");
-+
-+	/* Send SMBus command to boot hub. */
-+	ret = i2c_smbus_write_word_data(client, USB5744_CMD_ATTACH,
-+					USB5744_CMD_ATTACH_LSB);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "USB Attach with SMBus command failed\n");
-+
-+	return ret;
-+}
-+
- static int onboard_dev_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct onboard_dev *onboard_dev;
-+	struct device_node *i2c_node;
- 	int err;
- 
- 	onboard_dev = devm_kzalloc(dev, sizeof(*onboard_dev), GFP_KERNEL);
-@@ -340,6 +371,27 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
-+	i2c_node = of_parse_phandle(pdev->dev.of_node, "i2c-bus", 0);
-+	if (i2c_node) {
-+		struct i2c_client *client;
-+
-+		client = of_find_i2c_device_by_node(i2c_node);
-+		of_node_put(i2c_node);
-+
-+		if (!client) {
-+			err = -EPROBE_DEFER;
-+			goto err_power_off;
-+		}
-+
-+		if (of_device_is_compatible(pdev->dev.of_node, "usb424,2744") ||
-+		    of_device_is_compatible(pdev->dev.of_node, "usb424,5744"))
-+			err = onboard_dev_5744_i2c_init(client);
-+
-+		put_device(&client->dev);
-+		if (err < 0)
-+			goto err_power_off;
-+	}
-+
- 	/*
- 	 * The USB driver might have been detached from the USB devices by
- 	 * onboard_dev_remove() (e.g. through an 'unbind' by userspace),
-@@ -351,6 +403,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 	schedule_work(&attach_usb_driver_work);
- 
- 	return 0;
-+
-+err_power_off:
-+	onboard_dev_power_off(onboard_dev);
-+	return err;
- }
- 
- static void onboard_dev_remove(struct platform_device *pdev)
-diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
-index 82c76a0b3346..5744c589b90f 100644
---- a/drivers/usb/misc/onboard_usb_dev.h
-+++ b/drivers/usb/misc/onboard_usb_dev.h
-@@ -8,6 +8,18 @@
- 
- #define MAX_SUPPLIES 2
- 
-+#define USB5744_CMD_ATTACH			0xAA
-+#define USB5744_CMD_ATTACH_LSB			0x56
-+#define USB5744_CREG_ACCESS			0x99
-+#define USB5744_CREG_ACCESS_LSB			0x37
-+#define USB5744_CREG_MEM_ADDR			0x00
-+#define USB5744_CREG_MEM_NBYTES			0x05
-+#define USB5744_CREG_WRITE			0x00
-+#define USB5744_CREG_NBYTES			0x01
-+#define USB5744_CREG_RUNTIMEFLAGS2		0x41
-+#define USB5744_CREG_RUNTIMEFLAGS2_LSB		0x1D
-+#define USB5744_CREG_BYPASS_UDC_SUSPEND		BIT(3)
-+
- struct onboard_dev_pdata {
- 	unsigned long reset_us;		/* reset pulse width in us */
- 	unsigned long power_on_delay_us; /* power on pulse width in us */
--- 
-2.34.1
+Regards,
+Michael
 
+>>$ sudo python3 tools/usb/p9_fwd.py --id 0xabcd:0xef01 list
+>>Bus | Addr | Manufacturer     | Product          | ID        | Path
+>>--- | ---- | ---------------- | ---------------- | --------- | ----
+>> 3 |   39 | unknown          | unknown          | abcd:ef01 | 3-1.3.3.5.4
+>>
+>>$ sudo python3 tools/usb/p9_fwd.py --id 0xabcd:0xef01 connect -p 9999
+>>2024-06-06 10:14:45,368 INFO     found device: 3/39 located at 3-1.3.3.5.4
+>>2024-06-06 10:14:45,369 INFO     claiming interface:
+>>   INTERFACE 0: Vendor Specific =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>    bLength            :    0x9 (9 bytes)
+>>    bDescriptorType    :    0x4 Interface
+>>    bInterfaceNumber   :    0x0
+>>    bAlternateSetting  :    0x0
+>>    bNumEndpoints      :    0x2
+>>    bInterfaceClass    :   0xff Vendor Specific
+>>    bInterfaceSubClass :   0xff
+>>    bInterfaceProtocol :    0x9
+>>    iInterface         :    0x1 usb9pfs input to output
+>>     ENDPOINT 0x81: Bulk IN =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>      bLength          :    0x7 (7 bytes)
+>>      bDescriptorType  :    0x5 Endpoint
+>>      bEndpointAddress :   0x81 IN
+>>      bmAttributes     :    0x2 Bulk
+>>      wMaxPacketSize   :  0x200 (512 bytes)
+>>      bInterval        :    0x0
+>>     ENDPOINT 0x1: Bulk OUT =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>      bLength          :    0x7 (7 bytes)
+>>      bDescriptorType  :    0x5 Endpoint
+>>      bEndpointAddress :    0x1 OUT
+>>      bmAttributes     :    0x2 Bulk
+>>      wMaxPacketSize   :  0x200 (512 bytes)
+>>      bInterval        :    0x0
+>>2024-06-06 10:14:45,370 INFO     interface claimed
+>>2024-06-06 10:14:45,370 INFO     connected to server
+>>^C
+>>
+>>$ sudo python3 tools/usb/p9_fwd.py --path 3-1.3.3.5.4 connect -p 9999
+>>Traceback (most recent call last):
+>> File "/home/ap/Collabora/kernel-rk/tools/usb/p9_fwd.py", line 243, in <m=
+odule>
+>>   main()
+>> File "/home/ap/Collabora/kernel-rk/tools/usb/p9_fwd.py", line 239, in ma=
+in
+>>   args.func(args)
+>> File "/home/ap/Collabora/kernel-rk/tools/usb/p9_fwd.py", line 190, in co=
+nnect
+>>   f =3D Forwarder(server=3D(args.server, args.port), vid=3Dvid, pid=3Dpi=
+d, path=3Dargs.path)
+>> File "/home/ap/Collabora/kernel-rk/tools/usb/p9_fwd.py", line 60, in __i=
+nit__
+>>   raise ValueError("Device not found")
+>>ValueError: Device not found
+>>
+>>
+>>>---
+>>>v5 -> v6:
+>>>  - set path parameter to None when unused
+>>>v4 -> v5:
+>>>  - updated documentation for new subcommands list/connect
+>>>  - run ruff format
+>>>  - make vid and pid parameterized
+>>>  - add list as subcommand to scan for devices
+>>>  - move connect to extra subcommand
+>>>v3 -> v4: -
+>>>v2 -> v3: -
+>>>v1 -> v2:
+>>>  - added usbg 9pfs detailed instructions to 9p.rst doc
+>>>---
+>>> Documentation/filesystems/9p.rst |  41 +++++++
+>>> tools/usb/p9_fwd.py              | 243 ++++++++++++++++++++++++++++++++=
++++++++
+>>> 2 files changed, 284 insertions(+)
+>>>
+>>>diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystem=
+s/9p.rst
+>>>index 10cf79dc287f8..2cc85f3e8659f 100644
+>>>--- a/Documentation/filesystems/9p.rst
+>>>+++ b/Documentation/filesystems/9p.rst
+>>>@@ -67,6 +67,47 @@ To mount a 9p FS on a USB Host accessible via the gad=
+get as root filesystem::
+>>> where <device> is the tag associated by the usb gadget transport.
+>>> It is defined by the configfs instance name.
+>>>+USBG Example
+>>>+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>>+
+>>>+The USB host exports a filesystem, while the gadget on the USB device
+>>>+side makes it mountable.
+>>>+
+>>>+Diod (9pfs server) and the forwarder are on the development host, where
+>>>+the root filesystem is actually stored. The gadget is initialized during
+>>>+boot (or later) on the embedded board. Then the forwarder will find it
+>>>+on the USB bus and start forwarding requests.
+>>>+
+>>>+In this case the 9p requests come from the device and are handled by the
+>>>+host. The reason is that USB device ports are normally not available on
+>>>+PCs, so a connection in the other direction would not work.
+>>>+
+>>>+When using the usbg transport, for now there is no native usb host
+>>>+service capable to handle the requests from the gadget driver. For
+>>>+this we have to use the extra python tool p9_fwd.py from tools/usb.
+>>>+
+>>>+Just start the 9pfs capable network server like diod/nfs-ganesha e.g.:
+>>>+
+>>>+        $ diod -f -n -d 0 -S -l 0.0.0.0:9999 -e $PWD
+>>>+
+>>>+Optionaly scan your bus if there are more then one usbg gadgets to find=
+ their path:
+>>>+
+>>>+        $ python $kernel_dir/tools/usb/p9_fwd.py list
+>>>+
+>>>+        Bus | Addr | Manufacturer     | Product          | ID        | =
+Path
+>>>+        --- | ---- | ---------------- | ---------------- | --------- | =
+----
+>>>+          2 |   67 | unknown          | unknown          | 1d6b:0109 | =
+2-1.1.2
+>>>+          2 |   68 | unknown          | unknown          | 1d6b:0109 | =
+2-1.1.3
+>>>+
+>>>+Then start the python transport:
+>>>+
+>>>+        $ python $kernel_dir/tools/usb/p9_fwd.py --path 2-1.1.2 connect=
+ -p 9999
+>>>+
+>>>+After that the gadget driver can be used as described above.
+>>>+
+>>>+One use-case is to use it as an alternative to NFS root booting during
+>>>+the development of embedded Linux devices.
+>>>+
+>>> Options
+>>> =3D=3D=3D=3D=3D=3D=3D
+>>>diff --git a/tools/usb/p9_fwd.py b/tools/usb/p9_fwd.py
+>>>new file mode 100755
+>>>index 0000000000000..12c76cbb046b7
+>>>--- /dev/null
+>>>+++ b/tools/usb/p9_fwd.py
+>>>@@ -0,0 +1,243 @@
+>>>+#!/usr/bin/env python3
+>>>+# SPDX-License-Identifier: GPL-2.0
+>>>+
+>>>+import argparse
+>>>+import errno
+>>>+import logging
+>>>+import socket
+>>>+import struct
+>>>+import time
+>>>+
+>>>+import usb.core
+>>>+import usb.util
+>>>+
+>>>+
+>>>+def path_from_usb_dev(dev):
+>>>+    """Takes a pyUSB device as argument and returns a string.
+>>>+    The string is a Path representation of the position of the USB devi=
+ce on the USB bus tree.
+>>>+
+>>>+    This path is used to find a USB device on the bus or all devices co=
+nnected to a HUB.
+>>>+    The path is made up of the number of the USB controller followed be=
+ the ports of the HUB tree."""
+>>>+    if dev.port_numbers:
+>>>+        dev_path =3D ".".join(str(i) for i in dev.port_numbers)
+>>>+        return f"{dev.bus}-{dev_path}"
+>>>+    return ""
+>>>+
+>>>+
+>>>+HEXDUMP_FILTER =3D "".join(chr(x).isprintable() and chr(x) or "." for x=
+ in range(128)) + "." * 128
+>>>+
+>>>+
+>>>+class Forwarder:
+>>>+    @staticmethod
+>>>+    def _log_hexdump(data):
+>>>+        if not logging.root.isEnabledFor(logging.TRACE):
+>>>+            return
+>>>+        L =3D 16
+>>>+        for c in range(0, len(data), L):
+>>>+            chars =3D data[c : c + L]
+>>>+            dump =3D " ".join(f"{x:02x}" for x in chars)
+>>>+            printable =3D "".join(HEXDUMP_FILTER[x] for x in chars)
+>>>+            line =3D f"{c:08x}  {dump:{L*3}s} |{printable:{L}s}|"
+>>>+            logging.root.log(logging.TRACE, "%s", line)
+>>>+
+>>>+    def __init__(self, server, vid, pid, path):
+>>>+        self.stats =3D {
+>>>+            "c2s packets": 0,
+>>>+            "c2s bytes": 0,
+>>>+            "s2c packets": 0,
+>>>+            "s2c bytes": 0,
+>>>+        }
+>>>+        self.stats_logged =3D time.monotonic()
+>>>+
+>>>+        def find_filter(dev):
+>>>+            dev_path =3D path_from_usb_dev(dev)
+>>>+            if path is not None:
+>>>+                return dev_path =3D=3D path
+>>>+            return True
+>>>+
+>>>+        dev =3D usb.core.find(idVendor=3Dvid, idProduct=3Dpid, custom_m=
+atch=3Dfind_filter)
+>>>+        if dev is None:
+>>>+            raise ValueError("Device not found")
+>>>+
+>>>+        logging.info(f"found device: {dev.bus}/{dev.address} located at=
+ {path_from_usb_dev(dev)}")
+>>>+
+>>>+        # dev.set_configuration() is not necessary since g_multi has on=
+ly one
+>>>+        usb9pfs =3D None
+>>>+        # g_multi adds 9pfs as last interface
+>>>+        cfg =3D dev.get_active_configuration()
+>>>+        for intf in cfg:
+>>>+            # we have to detach the usb-storage driver from multi gadge=
+t since
+>>>+            # stall option could be set, which will lead to spontaneous=
+ port
+>>>+            # resets and our transfers will run dead
+>>>+            if intf.bInterfaceClass =3D=3D 0x08:
+>>>+                if dev.is_kernel_driver_active(intf.bInterfaceNumber):
+>>>+                    dev.detach_kernel_driver(intf.bInterfaceNumber)
+>>>+
+>>>+            if intf.bInterfaceClass =3D=3D 0xFF and intf.bInterfaceSubC=
+lass =3D=3D 0xFF and intf.bInterfaceProtocol =3D=3D 0x09:
+>>>+                usb9pfs =3D intf
+>>>+        if usb9pfs is None:
+>>>+            raise ValueError("Interface not found")
+>>>+
+>>>+        logging.info(f"claiming interface:\n{usb9pfs}")
+>>>+        usb.util.claim_interface(dev, usb9pfs.bInterfaceNumber)
+>>>+        ep_out =3D usb.util.find_descriptor(
+>>>+            usb9pfs,
+>>>+            custom_match=3Dlambda e: usb.util.endpoint_direction(e.bEnd=
+pointAddress) =3D=3D usb.util.ENDPOINT_OUT,
+>>>+        )
+>>>+        assert ep_out is not None
+>>>+        ep_in =3D usb.util.find_descriptor(
+>>>+            usb9pfs,
+>>>+            custom_match=3Dlambda e: usb.util.endpoint_direction(e.bEnd=
+pointAddress) =3D=3D usb.util.ENDPOINT_IN,
+>>>+        )
+>>>+        assert ep_in is not None
+>>>+        logging.info("interface claimed")
+>>>+
+>>>+        self.ep_out =3D ep_out
+>>>+        self.ep_in =3D ep_in
+>>>+        self.dev =3D dev
+>>>+
+>>>+        # create and connect socket
+>>>+        self.s =3D socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+>>>+        self.s.connect(server)
+>>>+
+>>>+        logging.info("connected to server")
+>>>+
+>>>+    def c2s(self):
+>>>+        """forward a request from the USB client to the TCP server"""
+>>>+        data =3D None
+>>>+        while data is None:
+>>>+            try:
+>>>+                logging.log(logging.TRACE, "c2s: reading")
+>>>+                data =3D self.ep_in.read(self.ep_in.wMaxPacketSize)
+>>>+            except usb.core.USBTimeoutError:
+>>>+                logging.log(logging.TRACE, "c2s: reading timed out")
+>>>+                continue
+>>>+            except usb.core.USBError as e:
+>>>+                if e.errno =3D=3D errno.EIO:
+>>>+                    logging.debug("c2s: reading failed with %s, retryin=
+g", repr(e))
+>>>+                    time.sleep(0.5)
+>>>+                    continue
+>>>+                logging.error("c2s: reading failed with %s, aborting", =
+repr(e))
+>>>+                raise
+>>>+        size =3D struct.unpack("<I", data[:4])[0]
+>>>+        while len(data) < size:
+>>>+            data +=3D self.ep_in.read(size - len(data))
+>>>+        logging.log(logging.TRACE, "c2s: writing")
+>>>+        self._log_hexdump(data)
+>>>+        self.s.send(data)
+>>>+        logging.debug("c2s: forwarded %i bytes", size)
+>>>+        self.stats["c2s packets"] +=3D 1
+>>>+        self.stats["c2s bytes"] +=3D size
+>>>+
+>>>+    def s2c(self):
+>>>+        """forward a response from the TCP server to the USB client"""
+>>>+        logging.log(logging.TRACE, "s2c: reading")
+>>>+        data =3D self.s.recv(4)
+>>>+        size =3D struct.unpack("<I", data[:4])[0]
+>>>+        while len(data) < size:
+>>>+            data +=3D self.s.recv(size - len(data))
+>>>+        logging.log(logging.TRACE, "s2c: writing")
+>>>+        self._log_hexdump(data)
+>>>+        while data:
+>>>+            written =3D self.ep_out.write(data)
+>>>+            assert written > 0
+>>>+            data =3D data[written:]
+>>>+        if size % self.ep_out.wMaxPacketSize =3D=3D 0:
+>>>+            logging.log(logging.TRACE, "sending zero length packet")
+>>>+            self.ep_out.write(b"")
+>>>+        logging.debug("s2c: forwarded %i bytes", size)
+>>>+        self.stats["s2c packets"] +=3D 1
+>>>+        self.stats["s2c bytes"] +=3D size
+>>>+
+>>>+    def log_stats(self):
+>>>+        logging.info("statistics:")
+>>>+        for k, v in self.stats.items():
+>>>+            logging.info(f"  {k+':':14s} {v}")
+>>>+
+>>>+    def log_stats_interval(self, interval=3D5):
+>>>+        if (time.monotonic() - self.stats_logged) < interval:
+>>>+            return
+>>>+
+>>>+        self.log_stats()
+>>>+        self.stats_logged =3D time.monotonic()
+>>>+
+>>>+
+>>>+def try_get_usb_str(dev, name):
+>>>+    try:
+>>>+        with open(f"/sys/bus/usb/devices/{dev.bus}-{dev.address}/{name}=
+") as f:
+>>>+            return f.read().strip()
+>>>+    except FileNotFoundError:
+>>>+        return None
+>>>+
+>>>+
+>>>+def list_usb(args):
+>>>+    vid, pid =3D [int(x, 16) for x in args.id.split(":", 1)]
+>>>+
+>>>+    print("Bus | Addr | Manufacturer     | Product          | ID       =
+ | Path")
+>>>+    print("--- | ---- | ---------------- | ---------------- | ---------=
+ | ----")
+>>>+    for dev in usb.core.find(find_all=3DTrue, idVendor=3Dvid, idProduct=
+=3Dpid):
+>>>+        path =3D path_from_usb_dev(dev) or ""
+>>>+        manufacturer =3D try_get_usb_str(dev, "manufacturer") or "unkno=
+wn"
+>>>+        product =3D try_get_usb_str(dev, "product") or "unknown"
+>>>+        print(
+>>>+            f"{dev.bus:3} | {dev.address:4} | {manufacturer:16} | {prod=
+uct:16} | {dev.idVendor:04x}:{dev.idProduct:04x} | {path:18}"
+>>>+        )
+>>>+
+>>>+
+>>>+def connect(args):
+>>>+    vid, pid =3D [int(x, 16) for x in args.id.split(":", 1)]
+>>>+
+>>>+    f =3D Forwarder(server=3D(args.server, args.port), vid=3Dvid, pid=
+=3Dpid, path=3Dargs.path)
+>>>+
+>>>+    try:
+>>>+        while True:
+>>>+            f.c2s()
+>>>+            f.s2c()
+>>>+            f.log_stats_interval()
+>>>+    finally:
+>>>+        f.log_stats()
+>>>+
+>>>+
+>>>+def main():
+>>>+    parser =3D argparse.ArgumentParser(
+>>>+        description=3D"Forward 9PFS requests from USB to TCP",
+>>>+    )
+>>>+
+>>>+    parser.add_argument("--id", type=3Dstr, default=3D"1d6b:0109", help=
+=3D"vid:pid of target device")
+>>>+    parser.add_argument("--path", type=3Dstr, required=3DFalse, help=3D=
+"path of target device")
+>>>+    parser.add_argument("-v", "--verbose", action=3D"count", default=3D=
+0)
+>>>+
+>>>+    subparsers =3D parser.add_subparsers()
+>>>+    subparsers.required =3D True
+>>>+    subparsers.dest =3D "command"
+>>>+
+>>>+    parser_list =3D subparsers.add_parser("list", help=3D"List all conn=
+ected 9p gadgets")
+>>>+    parser_list.set_defaults(func=3Dlist_usb)
+>>>+
+>>>+    parser_connect =3D subparsers.add_parser(
+>>>+        "connect", help=3D"Forward messages between the usb9pfs gadget =
+and the 9p server"
+>>>+    )
+>>>+    parser_connect.set_defaults(func=3Dconnect)
+>>>+    connect_group =3D parser_connect.add_argument_group()
+>>>+    connect_group.required =3D True
+>>>+    parser_connect.add_argument("-s", "--server", type=3Dstr, default=
+=3D"127.0.0.1", help=3D"server hostname")
+>>>+    parser_connect.add_argument("-p", "--port", type=3Dint, default=3D5=
+64, help=3D"server port")
+>>>+
+>>>+    args =3D parser.parse_args()
+>>>+
+>>>+    logging.TRACE =3D logging.DEBUG - 5
+>>>+    logging.addLevelName(logging.TRACE, "TRACE")
+>>>+
+>>>+    if args.verbose >=3D 2:
+>>>+        level =3D logging.TRACE
+>>>+    elif args.verbose:
+>>>+        level =3D logging.DEBUG
+>>>+    else:
+>>>+        level =3D logging.INFO
+>>>+    logging.basicConfig(level=3Dlevel, format=3D"%(asctime)-15s %(level=
+name)-8s %(message)s")
+>>>+
+>>>+    args.func(args)
+>>>+
+>>>+
+>>>+if __name__ =3D=3D "__main__":
+>>>+    main()
+>>>
+>>
+>>
+>
+>--=20
+>Pengutronix e.K.                           |                             |
+>Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+>31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+>Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--N+tWKLrbeVfnjHJc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmaYMZsACgkQC+njFXoe
+LGTg/g//WgJyNpYi4ZzWqVn2uK2hpzpMIldrW/dgI6qtzgmbyTbXWzBufQWJg733
+aarjpMjlPRFtfQRk3Ex1DjFO8WeEya8tqinDAFtzNQEvN93lOnOhuFRQUIklVw+i
+dHvjErdhnE9CeLWuIiMQNxqWCO2QsV/we8wRog5skR+ZzvkLj4mllW0mxG/5kG8G
+LYwcMR3i21723jv1+z+xjyN43tP1kVFSzpei38SzJWvH0SBKn0BdoH3VuoP7vhaI
+ybrTpbT/doPWm7O+eOXGX4hu/NHLGv6HcGgCkEgBY4+NlzkzAdCAr/5Ork7Gqsak
+8R3CGHmhbcgDCEpDQrp1qagU3EkyRljJ0mghU0pFkxLFAHK8M3lv74cpItMnZ2RG
+OWn8Fngh8BqVUIaE6pK5905q7fEf5MOxmvjgX39idQyKplqX0WCmk5nTdpYPrNyp
+jyKXVQ0Tj1yiz8BV+dmng63MxkhxwQDJm9nWhP/ZWrKQ5ylVm4IPfVWri0vjYDHf
++Xw6kbDqD+hMqGccjpjLyzbRVotq3DudDjQcGw2+8fKXCLYFsHuhYkEWzVy3q2si
+i5LgVXJsaSNXLHfAc/KEg4jo/7Yr5MJv8enee3DIjqd/myLjwzr+2bJuZRQkjobm
+DRDHRhh1AidyQk3FLs9EGISuV7Wos+wUsjgVlkLRfBv83w2IVY4=
+=FUPc
+-----END PGP SIGNATURE-----
+
+--N+tWKLrbeVfnjHJc--
 
