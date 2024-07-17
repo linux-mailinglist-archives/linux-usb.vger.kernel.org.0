@@ -1,75 +1,93 @@
-Return-Path: <linux-usb+bounces-12246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12248-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B772933A47
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 11:49:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6E5A933A55
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 11:50:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6F4C1F22687
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 09:49:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CD8028426E
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 09:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC2717E90A;
-	Wed, 17 Jul 2024 09:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D72F17E8E6;
+	Wed, 17 Jul 2024 09:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KIPKWRBD"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="urL8qr4I";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5trr00UR";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="FZUlTtgj";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4mOeTb+T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EC617C200;
-	Wed, 17 Jul 2024 09:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5535C17DE29;
+	Wed, 17 Jul 2024 09:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721209762; cv=none; b=tifSIg27KeK3Cl14gBFyXNF8MlFtvE/XcVVkTJt7R3zMMEobEZ4dGv2kG5tkZFjU1r55LSMOrmhf0u0P25uW4pOXR5fq1bYGAH5hR1PRcJjKrBw6RpTR76ycll4z1enIskIexi0HvSdmqgIRtwh2mp/438dXSY+k/nxk42y0rcM=
+	t=1721209837; cv=none; b=d14kVvGa9IW6IDbNBY+JzZvqFr4g2PMTUXKbEd/ILR4hy859CE1rgG4E6o77Dqxp0ITf0aomktoTiM6OKj3Yio+aDkb1Jk3/mlTJTCkLZoiQT4U+8oR7TI6yRzo+dKRMOFpmRqG2rWKbUbNmgsrKq05L8yXawLOyWBT2jIUryaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721209762; c=relaxed/simple;
-	bh=iWScX31Wls7UK6w8qpu7+dWpq24MD0HgoldyPR/xgsg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KD9pXilMc6l/ZA9p9Bbunn2PZmLum8fdsZGFxvLGg8hnM48hkF9fDglN3OBc2sTUgxgjmLVxXL7eDgjB7+lh4hh8m/QePmvwzJP/QKvibNEV0CWFaAGXoLuhUdqz4sH8H4U0wHkZKFkr9rQOjVS6XbV8rAmDpz0aUp2QWnB/hGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KIPKWRBD; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46H7AFMr012799;
-	Wed, 17 Jul 2024 09:49:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	5kcW79TZgs1dfe247UhERDH3osXIHcDrA3UeYl5r2CY=; b=KIPKWRBDeWQjMiLg
-	J4cIp923ofv6DcJwCqacHDbXiu/wLtVW+wY61ztj7Y6DVAvb+7LFVxxDIEi5E/X5
-	LdAQ4jSBPu2rkQtyI2/qLmFK/kghNZmBcmYZZq1UbFzYLQzBm6UdTyus5MrWhC8o
-	nELMhtaKL/9l0XTNR6/eLid5MiR43zlx+A40NtV2/S0yEF+4ZIhxgkm7HsNunkDJ
-	BuWdRXL5rDo9quc5HZqAXWYtxqTpLioKNNw+/ekjYN1FWVkEoVjPyw8+iREikDw3
-	nP+jUdGqCvFs9hbUarfqo3zU8KhkLY6Z5KS67mBc4KfnL5mDV0jrXEm0NSl8ZdTJ
-	RQOPwA==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40dwfw9vkb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jul 2024 09:49:15 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46H9nEpg010137
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jul 2024 09:49:14 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 17 Jul 2024 02:49:10 -0700
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <quic_wcheng@quicinc.com>,
-        <quic_kriskura@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v2 2/2] arm64: dts: qcom: ipq5332: Fix interrupt trigger type for usb
-Date: Wed, 17 Jul 2024 15:18:48 +0530
-Message-ID: <20240717094848.3536239-2-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240717094848.3536239-1-quic_varada@quicinc.com>
-References: <20240717094848.3536239-1-quic_varada@quicinc.com>
+	s=arc-20240116; t=1721209837; c=relaxed/simple;
+	bh=eQS5RKdfOra5/LpllGCGfQBZ6vDcLxuH49YDFIDyfBE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KpN4uimIUzyGUqtmEe7EpSRAdAP6DGaOfhGuUWvoplbnEPmkVOOMyHBPNewzOUMe7YrLGorahWcJaIiNah0s8PcAxQn0rek5oZEKDll1G7t+15dN8jF+rFP9MQedLdowwUxHGdoGfE9ZtcTIPKA6FqUUAaRfz5KGi93lBWaKJcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=urL8qr4I; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5trr00UR; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=FZUlTtgj; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4mOeTb+T; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 5A0A021B31;
+	Wed, 17 Jul 2024 09:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1721209834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=7xdFaceBDQbQp8VbYkcJwWmrWqwpLj1lSKxadCCPUFI=;
+	b=urL8qr4IybptK1q7AymGok9lDMJkzEAB5Z+gjFa6DxRdARpk8vk/205FfPB12P731aFe8f
+	9BiLmGrrKVf+68TmIpbAwGwQ75nHKwyNQo90v3ooNQAX11wSaGvrVj/LhHFZMU7R8OroKl
+	gYurV+2HmF/u9s1qlQkFBvMiqzskr0g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1721209834;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=7xdFaceBDQbQp8VbYkcJwWmrWqwpLj1lSKxadCCPUFI=;
+	b=5trr00URDkexhuvCuzQ6Pd+SQmMYR1trOmL/HhZCYLCTUu8gCLLv7BECIl4V5RaK8DSTGb
+	3WsFjbHIxJMFoBCA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=FZUlTtgj;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=4mOeTb+T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1721209833; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=7xdFaceBDQbQp8VbYkcJwWmrWqwpLj1lSKxadCCPUFI=;
+	b=FZUlTtgjGAfdXyxuK5GV6YSSvsPxcQ+srw+CS5+DyfX7NXl/9DUqFbnJUOlSDnxLTtzXYr
+	hx5YkAHuETKM7AgPzDHn22rB1cDztW0nVpuWcbtE6fxaQiqOuJSKz2lf9KpNbRgOKvsF0G
+	R6wGHwJLoBb3hUASOsPCySMIu8YQfBE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1721209833;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=7xdFaceBDQbQp8VbYkcJwWmrWqwpLj1lSKxadCCPUFI=;
+	b=4mOeTb+TXyUSU5EwafT7irpO+NjbLWfFjVce0PqdLwum0690vVIKCgFAkETvNEI4RWlMin
+	U+Vr+n2Ee3C7XEDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 33201136E5;
+	Wed, 17 Jul 2024 09:50:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id dEcZC+mTl2ZuLQAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 17 Jul 2024 09:50:33 +0000
+From: Takashi Iwai <tiwai@suse.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-sound@vger.kernel.org
+Subject: [PATCH] usb: gadget: midi2: Fix the response for FB info with block 0xff
+Date: Wed, 17 Jul 2024 11:50:53 +0200
+Message-ID: <20240717095102.10493-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,48 +95,84 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ucybO2nkGTVGl8r20cr3C7wRDFND0yDF
-X-Proofpoint-ORIG-GUID: ucybO2nkGTVGl8r20cr3C7wRDFND0yDF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-17_06,2024-07-16_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxscore=0 mlxlogscore=499 impostorscore=0 priorityscore=1501 bulkscore=0
- spamscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2407170075
+X-Rspamd-Queue-Id: 5A0A021B31
+X-Spam-Flag: NO
+X-Spam-Score: 0.99
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [0.99 / 50.00];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Level: 
+X-Spamd-Bar: /
 
-Trigger type is incorrectly specified as IRQ_TYPE_EDGE_BOTH
-instead of IRQ_TYPE_LEVEL_HIGH. This trigger type is not
-supported for SPIs and results in probe failure with -EINVAL.
+When the block number 0xff is given to Function Block Discovery
+message, the device should return the information of all Function
+Blocks, but currently the gadget driver treats it as an error.
 
-Fixes: 927173bf8a0e ("arm64: dts: qcom: Add missing interrupts for qcs404/ipq5332")
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+Implement the proper behavior for the block 0xff instead.
+
+Fixes: 8b645922b223 ("usb: gadget: Add support for USB MIDI 2.0 function driver")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- arch/arm64/boot/dts/qcom/ipq5332.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/f_midi2.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index f58fd70be826..56304f996dbf 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -322,8 +322,8 @@ usb: usb@8af8800 {
- 			reg = <0x08af8800 0x400>;
- 
- 			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 53 IRQ_TYPE_EDGE_BOTH>,
--				     <GIC_SPI 52 IRQ_TYPE_EDGE_BOTH>;
-+				     <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "pwr_event",
- 					  "dp_hs_phy_irq",
- 					  "dm_hs_phy_irq";
+diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
+index ec8cd7c7bbfc..d8379013a376 100644
+--- a/drivers/usb/gadget/function/f_midi2.c
++++ b/drivers/usb/gadget/function/f_midi2.c
+@@ -640,12 +640,21 @@ static void process_ump_stream_msg(struct f_midi2_ep *ep, const u32 *data)
+ 		if (format)
+ 			return; // invalid
+ 		blk = (*data >> 8) & 0xff;
+-		if (blk >= ep->num_blks)
+-			return;
+-		if (*data & UMP_STREAM_MSG_REQUEST_FB_INFO)
+-			reply_ump_stream_fb_info(ep, blk);
+-		if (*data & UMP_STREAM_MSG_REQUEST_FB_NAME)
+-			reply_ump_stream_fb_name(ep, blk);
++		if (blk == 0xff) {
++			/* inquiry for all blocks */
++			for (blk = 0; blk < ep->num_blks; blk++) {
++				if (*data & UMP_STREAM_MSG_REQUEST_FB_INFO)
++					reply_ump_stream_fb_info(ep, blk);
++				if (*data & UMP_STREAM_MSG_REQUEST_FB_NAME)
++					reply_ump_stream_fb_name(ep, blk);
++			}
++		} else if (blk < ep->num_blks) {
++			/* only the specified block */
++			if (*data & UMP_STREAM_MSG_REQUEST_FB_INFO)
++				reply_ump_stream_fb_info(ep, blk);
++			if (*data & UMP_STREAM_MSG_REQUEST_FB_NAME)
++				reply_ump_stream_fb_name(ep, blk);
++		}
+ 		return;
+ 	}
+ }
 -- 
-2.34.1
+2.43.0
 
 
