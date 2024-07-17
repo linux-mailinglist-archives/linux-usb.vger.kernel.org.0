@@ -1,236 +1,147 @@
-Return-Path: <linux-usb+bounces-12262-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12263-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47F469344BA
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 00:22:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FCD4934512
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 01:33:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0493B284452
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 22:22:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 134EAB224C3
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 23:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F0854BD4;
-	Wed, 17 Jul 2024 22:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39EC26F079;
+	Wed, 17 Jul 2024 23:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/tYahsI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82F6374F6
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 22:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6320018EBF;
+	Wed, 17 Jul 2024 23:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721254932; cv=none; b=MpHOfFec5aCo87iCBMFfXxOp+gHYhZKET6Z8SoJ4OIp9ck20IALTq4NnBGdvtBTYqlikZu0au0dS0OQVJywZe8MStub1NUCD0Tq86Slpx6ttMDc45TgRpEy8kH0ijhNg23z3JNMsWJxk3Xfsn3jlRjJvFr9LUbCWNkye3RvDXSA=
+	t=1721259217; cv=none; b=fRfYZUcdXXi0t3lLUdiTUHeWEDlggNi7Hj14pp00RH70U4Cd13AvA3dHS3EZVN4HvEPG9U0KvVKkYAPfw7nABuESTbU1pu60TjkhvnStESUqh3bRwvuIFRBCbIXJ61Hcu+uHQbConDKW4gS4qdMrhNxpp19mbIWwBlUJOvptN/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721254932; c=relaxed/simple;
-	bh=hT2CjsCd0ZMm0vXf7EP5+KWSv752HwtNJMgWTIAPx20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aWs8hhM0ECOAnMHb4Cptt+YHYgC+ejA9rej4NDiLMF3IRrzQUF1x9PtZM7iOGRrb41J64urrs+WX1wsu+X4tQT/X31MipERRyM0lHWzqeZFBU2BCWUyk3AB7FGfCd5VlKfeGqm0DlXvrn94jYlB12OakV1XXzOjOPJLTsDb/Q3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sUD2A-00025O-J0; Thu, 18 Jul 2024 00:22:02 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sUD2A-000JHN-56; Thu, 18 Jul 2024 00:22:02 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sUD2A-002Fco-0A;
-	Thu, 18 Jul 2024 00:22:02 +0200
-Date: Thu, 18 Jul 2024 00:22:02 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: gadget: uvc: add g_parm and s_parm for frame
- interval
-Message-ID: <ZphEChcy_ftCp86s@pengutronix.de>
-References: <20240403-uvc_request_length_by_interval-v2-0-12690f7a2eff@pengutronix.de>
- <20240403-uvc_request_length_by_interval-v2-2-12690f7a2eff@pengutronix.de>
- <9ad8b7fc-2c5e-4b2e-ba8c-e956171c2893@google.com>
+	s=arc-20240116; t=1721259217; c=relaxed/simple;
+	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=I50lv1Kqj5NSMeWUI/RxfLgvaOT/bjzYxs5YFYqh5viv3r2OTB0xp2uxNR1QGTFPnQh/1nkp4ZMZ274iyQ2DzsJFbhzO+AKWXPUp2/irJIIEtZEbnImKhbuiObOlztCb55V1E6FhPbXGWxuJpcQJwRpVpaKf+l0ldX9EKoG8K/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/tYahsI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59E2C2BD10;
+	Wed, 17 Jul 2024 23:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721259216;
+	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=m/tYahsI7GcAsn0eTT4WF3W3BC90QDmQbipyzN62A8EQrxsGjJuDHvLvxJTe9ClPb
+	 SxfN7qFIZCngz7gztSRBpz2eEzrUCy4jUV1ydb6l65kKp+wAq1QWNBsZy5KABTYVQR
+	 tq+sCrNewY9i6SpEr8eZIOLHRCKt7Ey7NF7M1f0KLVQ+ZcrJeHrDZjeNPd1EsmFr+5
+	 4zTlnoxdZoC9fCxuCKnodh5r8fGggVstFE9nygPb3O0rvXh68bBkRq/sZ9W1kFT6Vp
+	 PNOejeGFpQtHdc4Q11bbXLpU6fBG4A6iIgpFlB92tbnMPPxy5xVe6T52lr0cg39ZBV
+	 sbhS/c+mN45rg==
+Message-ID: <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="OlOZ4YsWels5DESd"
-Content-Disposition: inline
-In-Reply-To: <9ad8b7fc-2c5e-4b2e-ba8c-e956171c2893@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-
-
---OlOZ4YsWels5DESd
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
+References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
+Subject: Re: [PATCH v2] of: remove internal arguments from of_property_for_each_u32()
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Peng Fan (OSS) <peng.fan@oss.nxp.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, Luca Ceresoli <luca.ceresoli@bootlin.com>, Andre Przywara <andre.przywara@arm.com>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, Richard Fitzgerald <rf@opensource.cirrus.com>
+To: Aaro Koskinen <aaro.koskinen@iki.fi>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>, Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai <wens@csie.org>, Chester Lin <chester62515@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Damien Le Moal <dlemoal@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, Doug Berger <opendmb@gmail.com>, Emilio =?utf-8?q?L=C3=B3pez?= <emilio@elopez.com.ar>, Fabio Estevam <festevam@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, Jaroslav Kysela <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, Jiri Slaby
+  <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, Kevin Hilman <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Mark Brown <broonie@kernel.org>, Matthias Brugger <mbrugger@suse.com>, Michael Ellerman <mpe@ellerman.id.au>, Michael Turquette <mturquette@baylibre.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Naveen N. Rao <naveen.n.rao@linux.ibm.com>, Nicholas Piggin <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner <richard.leitner@linux.dev>, Rob Herring <robh@kernel.org>, Roger Quadros <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, Saravana Kannan <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner 
+ <tglx@linutronix.de>, Tony Lindgren <tony@atomide.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Date: Wed, 17 Jul 2024 16:33:34 -0700
+User-Agent: alot/0.10
 
-Hi Avichal,
+Quoting Luca Ceresoli (2024-07-17 09:16:32)
+> diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
+> index 4ce83c5265b8..d4904f59f83f 100644
+> --- a/drivers/clk/clk-si5351.c
+> +++ b/drivers/clk/clk-si5351.c
+> @@ -1175,8 +1175,8 @@ static int si5351_dt_parse(struct i2c_client *clien=
+t,
+>  {
+>         struct device_node *child, *np =3D client->dev.of_node;
+>         struct si5351_platform_data *pdata;
+> -       struct property *prop;
+> -       const __be32 *p;
+> +       u32 array[4];
+> +       int sz, i;
+>         int num =3D 0;
+>         u32 val;
+> =20
+> @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
+ent,
+>          * property silabs,pll-source : <num src>, [<..>]
+>          * allow to selectively set pll source
+>          */
+> -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, num) {
+> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-source=
+", array, 2, 4);
+> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
+> +       if (sz < 0)
+> +               return dev_err_probe(&client->dev, sz, "invalid pll-sourc=
+e");
 
-On Wed, Jun 26, 2024 at 11:30:58AM -0700, Avichal Rakesh wrote:
->On 6/22/24 4:48 PM, Michael Grzeschik wrote:
->> The uvc gadget driver is lacking the information which frame interval
->> was set by the host. We add this information by implementing the g_parm
->> and s_parm callbacks.
->
->This change requires the userspace application (uvc-gagdet equivalent)
->to call s/g_parm when the FPS negotiations are finished. This is fine,
->but we should document that in the commit message here so implementers
->know that something needs to be done to take advantage of the change.
+Needs a newline on the printk message.
 
-Fair point! I will do that for v3.
+> +       if (sz % 2)
+> +               return dev_err_probe(&client->dev, -EINVAL,
+> +                                    "missing pll-source for pll %d\n", a=
+rray[sz - 1]);
+> +
+> +       for (i =3D 0; i < sz; i +=3D 2) {
+> +               num =3D array[i];
+> +               val =3D array[i + 1];
+> +
+>                 if (num >=3D 2) {
+>                         dev_err(&client->dev,
+>                                 "invalid pll %d on pll-source prop\n", nu=
+m);
+>                         return -EINVAL;
+>                 }
+> =20
+> -               p =3D of_prop_next_u32(prop, p, &val);
+> -               if (!p) {
+> -                       dev_err(&client->dev,
+> -                               "missing pll-source for pll %d\n", num);
+> -                       return -EINVAL;
+> -               }
+> -
+>                 switch (val) {
+>                 case 0:
+>                         pdata->pll_src[num] =3D SI5351_PLL_SRC_XTAL;
+> @@ -1232,19 +1236,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
+ent,
+>         pdata->pll_reset[0] =3D true;
+>         pdata->pll_reset[1] =3D true;
+> =20
+> -       of_property_for_each_u32(np, "silabs,pll-reset-mode", prop, p, nu=
+m) {
+> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-reset-=
+mode", array, 2, 4);
+> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
+> +       if (sz < 0)
+> +               return dev_err_probe(&client->dev, sz, "invalid pll-reset=
+-mode");
 
->On a similar note, the reference uvc-gadget should also be updated to
->call the added functions (and apologies if you've already put up a
->patch for it, I was unable find one).
+Needs a newline on the printk message.
 
-Since I am only working with gstreamer with the uvcsink nowadays I
-missed that. The internal v4l2sink does already do everything right. But
-you are absolutely right. I will send an patch for uvc-gadget.
+> +       if (sz % 2)
+> +               return dev_err_probe(&client->dev, -EINVAL,
+> +                                    "missing pll-reset-mode for pll %d\n=
+", array[sz - 1]);
+> +
 
-Regards,
-Michael
+With those fixed
 
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>
->> ---
->> v1 -> v2: -
->> ---
->>  drivers/usb/gadget/function/uvc.h      |  1 +
->>  drivers/usb/gadget/function/uvc_v4l2.c | 52 +++++++++++++++++++++++++++=
-+++++++
->>  2 files changed, 53 insertions(+)
->>
->> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/func=
-tion/uvc.h
->> index cb35687b11e7e..d153bd9e35e31 100644
->> --- a/drivers/usb/gadget/function/uvc.h
->> +++ b/drivers/usb/gadget/function/uvc.h
->> @@ -97,6 +97,7 @@ struct uvc_video {
->>  	unsigned int width;
->>  	unsigned int height;
->>  	unsigned int imagesize;
->> +	unsigned int interval;
->>  	struct mutex mutex;	/* protects frame parameters */
->>
->>  	unsigned int uvc_num_requests;
->> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
-/function/uvc_v4l2.c
->> index a024aecb76dc3..5b579ec1f5040 100644
->> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->> @@ -307,6 +307,56 @@ uvc_v4l2_set_format(struct file *file, void *fh, st=
-ruct v4l2_format *fmt)
->>  	return ret;
->>  }
->>
->> +static int uvc_v4l2_g_parm(struct file *file, void *fh,
->> +			    struct v4l2_streamparm *parm)
->> +{
->> +	struct video_device *vdev =3D video_devdata(file);
->> +	struct uvc_device *uvc =3D video_get_drvdata(vdev);
->> +	struct uvc_video *video =3D &uvc->video;
->> +	struct v4l2_fract timeperframe;
->> +
->> +	if (parm->type =3D=3D V4L2_BUF_TYPE_VIDEO_CAPTURE)
->> +		return -EINVAL;
->> +
->> +	/* Return the actual frame period. */
->> +	timeperframe.numerator =3D video->interval;
->> +	timeperframe.denominator =3D 10000000;
->> +	v4l2_simplify_fraction(&timeperframe.numerator,
->> +		&timeperframe.denominator, 8, 333);
->> +
->> +	uvcg_dbg(&uvc->func, "Getting frame interval of %u/%u (%u)\n",
->> +		timeperframe.numerator, timeperframe.denominator,
->> +		video->interval);
->> +
->> +	parm->parm.output.timeperframe =3D timeperframe;
->> +	parm->parm.output.capability =3D V4L2_CAP_TIMEPERFRAME;
->> +
->> +	return 0;
->> +}
->> +
->> +static int uvc_v4l2_s_parm(struct file *file, void *fh,
->> +			    struct v4l2_streamparm *parm)
->> +{
->> +	struct video_device *vdev =3D video_devdata(file);
->> +	struct uvc_device *uvc =3D video_get_drvdata(vdev);
->> +	struct uvc_video *video =3D &uvc->video;
->> +	struct v4l2_fract timeperframe;
->> +
->> +	if (parm->type =3D=3D V4L2_BUF_TYPE_VIDEO_CAPTURE)
->> +		return -EINVAL;
->> +
->> +	timeperframe =3D parm->parm.output.timeperframe;
->> +
->> +	video->interval =3D v4l2_fraction_to_interval(timeperframe.numerator,
->> +		timeperframe.denominator);
->> +
->> +	uvcg_dbg(&uvc->func, "Setting frame interval to %u/%u (%u)\n",
->> +		timeperframe.numerator, timeperframe.denominator,
->> +		video->interval);
->> +
->> +	return 0;
->> +}
->> +
->>  static int
->>  uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
->>  		struct v4l2_frmivalenum *fival)
->> @@ -577,6 +627,8 @@ const struct v4l2_ioctl_ops uvc_v4l2_ioctl_ops =3D {
->>  	.vidioc_dqbuf =3D uvc_v4l2_dqbuf,
->>  	.vidioc_streamon =3D uvc_v4l2_streamon,
->>  	.vidioc_streamoff =3D uvc_v4l2_streamoff,
->> +	.vidioc_s_parm =3D uvc_v4l2_s_parm,
->> +	.vidioc_g_parm =3D uvc_v4l2_g_parm,
->>  	.vidioc_subscribe_event =3D uvc_v4l2_subscribe_event,
->>  	.vidioc_unsubscribe_event =3D uvc_v4l2_unsubscribe_event,
->>  	.vidioc_default =3D uvc_v4l2_ioctl_default,
->>
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---OlOZ4YsWels5DESd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmaYRAkACgkQC+njFXoe
-LGQGEw//QrjBsWAPagCpV/RN0pRPygEuYoGiXWzw/MbfT3bqNu76eVKdAelv9Fal
-WM4pNl7hz6a+uoo3jOh+RnmLUyIH2X1Be/mVWRTM/C5y/MOcJ1Ns7p8X/gNkI+mx
-z4oY5PYO95BzkP/flpjTrFpCRoWOyRfuWt55UL8ka/5qnoo7mTEMn3gyyuudtEH7
-4wRO4kU9dTKKlqHLZ8han4wTmHuM5vpkN7Po+SN13SJSwT3WESgx7dP+R7Foi4st
-nRK2Pws3zRPKLC5tL71PqaF3UoLrLcBx4zAESUkkZ9ETENrCCB7gIRpjEBHCmMVm
-KIaArN+iFjGHFLbwTy6xS9lnSX5FRWl+B6H4Vy5P6AVbA64Ow3IPXuIyTR12+H0j
-wPtqXBBdEu/mRIIHdutiUzgMzRZEwhZ1LxFToxpYb1h6FbfDodTKwK3BNpdRt0Ow
-d5wclN1qHx5nF5Xy6/qVpldJv6EkYQr2A+lflHgOlEVmcXQtVSBEYNXWW0UPkdrN
-y4V11THzTL5klrQkKPxvh5RBG0obAX8Y+YHWSpUGMR5QqK0R0pZpbKMxe7fT/pZD
-7HKZk7eJR1jfzsf62Fxha3ZlvEc7hlZRIDEKlCF5xLTcB9eGQLp89f+O5A0GtAA4
-DAJ18vkJvtifA/gLwx8JIMURs4QEXP5n9wzcQgyc3myq2xHZUuw=
-=X3cz
------END PGP SIGNATURE-----
-
---OlOZ4YsWels5DESd--
+Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
 
