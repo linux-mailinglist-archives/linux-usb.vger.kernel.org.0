@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-12278-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12279-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B518937053
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 23:57:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4007D9370B6
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 00:35:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10457281E6B
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 21:57:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E32FF281E23
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 22:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E71146016;
-	Thu, 18 Jul 2024 21:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65BF5146591;
+	Thu, 18 Jul 2024 22:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UTAhKufj"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BUyX0VUH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67537145B19
-	for <linux-usb@vger.kernel.org>; Thu, 18 Jul 2024 21:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867B15B1FB
+	for <linux-usb@vger.kernel.org>; Thu, 18 Jul 2024 22:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721339841; cv=none; b=mUl+0UGA79ve5sqKoomz90xakgXln07cF79yQqEr7nu15zriS0ahMdANAfOwyg14ecyurQ1wgivdYOD0HyzrW1X8ZIsXNi6qaJaNpCKTBFg95pcrkS3eIPXDnPAGflA152hQINUGkbjUQmcpty65vXPV5/ltOZa1sQZyZS/vUvQ=
+	t=1721342122; cv=none; b=Sv+TkIAyiRQdnWq1VXdXYMAq964XgvNi3sP+fPTOOdYehxAhKuZFnURGbblmxuW7p9dqUKgxBFXppPhY3V01NScxkIHLhMi84XZXmvwOVybWBaK611R709a2Nj39D2iM8KDVpwfE8KehxqE0bxwOPXA56Lv+3uGxH96Zx1dn+9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721339841; c=relaxed/simple;
-	bh=VkQpN60GcRBqBD4ybwlP2k2+Vn+Caes8BT6nK9Loess=;
+	s=arc-20240116; t=1721342122; c=relaxed/simple;
+	bh=uBrVziKrh9wuW7qZktms0c2SGtYTIAf+915rwmXJe3w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QFSkSkasBm2xsq9WBrryQj7kaBChHrjpG4BCw3V+W3egs+f5ckMRVXy5hGfJw8ogWpgOEi7GA9a2VjFJ+q0ckj84tZ9DTw8DIojBxDDlSZA5MxK6GTi+viNhBY5+l34Pj6xQ+Zh4sCFUQnGyiFbYdDJ7vnFR1A5Q3i9Q4/pQaCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=UTAhKufj; arc=none smtp.client-ip=209.85.166.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=aHjoyfX4UuxwRtNfkT5GvnQaxBQ6UIhWYXbu25+ZMNhwo7ZftA2UMiu1wy8aN5YfbwehdQczxxPedljYdwykso/GNpU4FAkOcFioGFcad1yzDmThKfC879YYPc7b3YZeX+fn1mI9f2V5cfOUED7q8fhGIUZxmx4s1RGyrIz7cbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BUyX0VUH; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7f99d50c1a6so53923939f.0
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jul 2024 14:57:19 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-8111f946f04so49316139f.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jul 2024 15:35:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1721339838; x=1721944638; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1721342119; x=1721946919; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ESReBtfRYbWAFdqZsiENsIRpb4yAg4v5BmBq8aEhHNc=;
-        b=UTAhKufjD+aRC1s/ocxQSEPt7eBXf8t/e2UViV1fFYkJDNe8SJlX9RHjRTxuIJZkuD
-         /jjXRXGrW2B06pklbGUQu4e5Gz21wUB0BFIvlNTxhnrVGpYt712Sce6E011lNeqMCQKw
-         XcWvEDf4wlCx28udFqR/xyclg/HSvV3U/+1og=
+        bh=RHed+P96itcIQNzLtbTOuPRqeg9F31qpRuhm4M1r37w=;
+        b=BUyX0VUHv4e3+msQmonB5kA6JgwKFqACMjMRKZrnfcYYmocq9p5wjlYBHkrqFIobgZ
+         V6jzJUX3YW3+6EkBcRk+rhzdkpm60cjUrhk8pIuLCza51OxLExoaK7vh32YF8HN5Lo9x
+         06/AGuJUGhlGjfPYBAnyUwd6nsOSKt3NpP6gw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721339838; x=1721944638;
+        d=1e100.net; s=20230601; t=1721342119; x=1721946919;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ESReBtfRYbWAFdqZsiENsIRpb4yAg4v5BmBq8aEhHNc=;
-        b=hYbALUD2dVq17boLRfZZPdITXGhYOwgEQ7xaeM0Aeq1be/KcDKcivZRAE4CjKUBoQs
-         UOVohckO6jBIQf6+0vnXiwU9HlOlSn4ouF8GWj5ZTippP9lKkraYu381baf9YYlblUiH
-         ITQEUQ99TNaWD0MrKGmbaXbevePhyBkOe8pCkbqeoGEzp1Y6/Sjgrilu2IzqOFRV+MtK
-         ijJWX22uC7qw/kJI+6URdlESEe/GQW99gy1Y7IfR+N3FBY9FcgClUwolH20skLaHcwjT
-         5DdyOODc9+MVogprIawty/pMPSHNABHvnQt4wRJoJpiECUKWx64X93QWYxYihBSRfeTh
-         Qn9w==
-X-Forwarded-Encrypted: i=1; AJvYcCViEWFVLxJIItkQiQD22Ep7AC5OFPdEZQrLejwclYFkW9kGMkwtn6act+IOkraLpfQSTQMTwplChPoFTtMABJSyCXnAz8rdM9sm
-X-Gm-Message-State: AOJu0YzcnbntwPsjL476dSLg3y+oSLIQ+veaRQMfvlDJVoZyATWj+NLg
-	cevggFhsqTOFTj+uDD1JvFfNDaj2Hhz5k8VvH1MvevcGMjh8pAYV27p1Hkb+Iw==
-X-Google-Smtp-Source: AGHT+IEAXH4Y2cTf5yDjSgxvPlXvU2z3xqhyqDWVlhaZnNGznQBBP9bqXzFNgQppD3BxzBsvfarEwg==
-X-Received: by 2002:a05:6602:6422:b0:7f6:76f2:e359 with SMTP id ca18e2360f4ac-81710040e70mr906632339f.4.1721339838507;
-        Thu, 18 Jul 2024 14:57:18 -0700 (PDT)
+        bh=RHed+P96itcIQNzLtbTOuPRqeg9F31qpRuhm4M1r37w=;
+        b=J5lAWjRI4u1ImMTYfsnUjkrsADn4BsL0ceTmaPz7gYCcJvHtan/ohGufMOVaAepF9b
+         Q3ftNXephFymQJNwaXHDiPh/E/PszNbJ3Q/MYMJ2QSIuTi4XGLLMk5gBQdeyf6CLBxsW
+         TxGN7XEZZx7JvAOdjoUUvGYWuqSnqtUfzz2c96jRQcEAd9rrrGoKUc2lh+onFSv81PaA
+         tRoZrZu7phl5Fe0GSiNdIpOVLP8pNDqTD5nCzcSzC+3sgFn0tAQnmN5mJLZOjINzP5cZ
+         PcoZBkjARJyqaKetkUwldcFmDkrK19t/2rlJDnpTPBo7A7gr7uvDvfv3fUnQFjWHx8N4
+         9KkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtHMNAHcWRpbnm4A2XWpBqKA2F8sZufA4gkA/7iWQmysu4n79nutJkL3V5ViW5CsniqQXyAaRAip46dipmAm0g5+SUNmVVVt2X
+X-Gm-Message-State: AOJu0YwB3iNnIWkULVM3kwtBblJHg0i5t5EFt4CzQQ8lY6SVPaTcs7Rw
+	wrb4upikYJPeF4NLhh3FSC0XGINU2ofMdX5l4I+aHr3wMVRoamKXta4xGPslIg==
+X-Google-Smtp-Source: AGHT+IE7ztAOpPJbMaHRiLmD4M8ceQs8LFBUXdW3Xk37Ryv3IBx0w2NCY6VQZzcxRrDl/CCuXvvQSw==
+X-Received: by 2002:a05:6602:6d86:b0:7ff:cec0:2985 with SMTP id ca18e2360f4ac-81711e17e2bmr905711639f.13.1721342118602;
+        Thu, 18 Jul 2024 15:35:18 -0700 (PDT)
 Received: from localhost (161.74.123.34.bc.googleusercontent.com. [34.123.74.161])
-        by smtp.gmail.com with UTF8SMTPSA id 8926c6da1cb9f-4c2342bf50asm40510173.5.2024.07.18.14.57.18
+        by smtp.gmail.com with UTF8SMTPSA id ca18e2360f4ac-819aba11fd4sm6868639f.4.2024.07.18.15.35.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jul 2024 14:57:18 -0700 (PDT)
-Date: Thu, 18 Jul 2024 21:57:17 +0000
+        Thu, 18 Jul 2024 15:35:18 -0700 (PDT)
+Date: Thu, 18 Jul 2024 22:35:17 +0000
 From: Matthias Kaehlcke <mka@chromium.org>
 To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 Cc: gregkh@linuxfoundation.org, javier.carrasco@wolfvision.net,
 	benjamin.bara@skidata.com, macpaul.lin@mediatek.com,
 	linux.amoon@gmail.com, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org, git@amd.com
-Subject: Re: [PATCH v2 2/2] usb: misc: onboard_usb_dev: add Microchip usb5744
- SMBus programming support
-Message-ID: <ZpmPvaknDw2cGnOQ@google.com>
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_dev: extend platform data to
+ add power on delay field
+Message-ID: <ZpmYpQepfSZDaPew@google.com>
 References: <1721244223-3194869-1-git-send-email-radhey.shyam.pandey@amd.com>
- <1721244223-3194869-3-git-send-email-radhey.shyam.pandey@amd.com>
+ <1721244223-3194869-2-git-send-email-radhey.shyam.pandey@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,198 +83,68 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1721244223-3194869-3-git-send-email-radhey.shyam.pandey@amd.com>
+In-Reply-To: <1721244223-3194869-2-git-send-email-radhey.shyam.pandey@amd.com>
 
-Hi,
-
-On Thu, Jul 18, 2024 at 12:53:43AM +0530, Radhey Shyam Pandey wrote:
-> usb5744 supports SMBus Configuration and it may be configured via the
-> SMBus slave interface during the hub start-up configuration stage.
+On Thu, Jul 18, 2024 at 12:53:42AM +0530, Radhey Shyam Pandey wrote:
+> Introduce dedicated field 'power_on_delay_us' in onboard platform data
+> and update its delay for USB5744 configuration. Hub itself requires some
+> delay after reset to get to state where configuration data is going to
+> be accepted. Without delay upcoming support for configuration via SMBUS
+> is reporting a failure on the first SMBus write.
 > 
-> To program it driver uses i2c-bus phandle (added in commit '02be19e914b8
-> dt-bindings: usb: Add support for Microchip usb5744 hub controller') to
-> get i2c client device and then based on usb5744 compatible check calls
-> usb5744 i2c default initialization sequence.
+> i2c 2-002d: error -ENXIO: BYPASS_UDC_SUSPEND bit configuration failed
 > 
-> Apart from the USB command attach, prevent the hub from suspend.
-> when the USB Attach with SMBus (0xAA56) command is issued to the hub,
-> the hub is getting enumerated and then it puts in a suspend mode.
-> This causes the hub to NAK any SMBus access made by the SMBus Master
-> during this period and not able to see the hub's slave address while
-> running the "i2c probe" command.
-> 
-> Prevent the MCU from the putting the HUB in suspend mode through
-> register write. The BYPASS_UDC_SUSPEND bit (Bit 3) of the RuntimeFlags2
-> register at address 0x411D controls this aspect of the hub. The
-> BYPASS_UDC_SUSPEND bit in register 0x411Dh must be set to ensure that the
-> MCU is always enabled and ready to respond to SMBus runtime commands.
-> This register needs to be written before the USB attach command is issued.
-> 
-> The byte sequence is as follows:
-> Slave addr: 0x2d           00 00 05 00 01 41 1D 08
-> Slave addr: 0x2d           99 37 00
-> Slave addr: 0x2d           AA 56 00
+> Similar delay is likely also required for default configuration but
+> because there is enough time (code execution) between reset and usage
+> of the hub any issue is not visible but it doesn't mean delay shouldn't
+> be reflected.
 > 
 > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> Suggested-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
 > Changes for v2:
-> - Move power on reset delay to separate patch.
-> - Switch to compatible based check for calling usb5755
->   onboard_dev_5744_i2c_init(). This is done to make
->   onboard_dev_5744_i2c_init() as static.
-> - Fix subsystem "usb: misc: onboard_usb_dev:..."
-> - Use #define for different register bits instead of magic values.
-> - Use err_power_off label name.
-> - Modified commit description to be in sync with v2 changes.
+> - New patch
 > ---
->  drivers/usb/misc/onboard_usb_dev.c | 56 ++++++++++++++++++++++++++++++
->  drivers/usb/misc/onboard_usb_dev.h | 12 +++++++
->  2 files changed, 68 insertions(+)
+>  drivers/usb/misc/onboard_usb_dev.c | 1 +
+>  drivers/usb/misc/onboard_usb_dev.h | 2 ++
+>  2 files changed, 3 insertions(+)
 > 
 > diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-> index 94d5424841fd..4f3845f35ac4 100644
+> index f2bcc1a8b95f..94d5424841fd 100644
 > --- a/drivers/usb/misc/onboard_usb_dev.c
 > +++ b/drivers/usb/misc/onboard_usb_dev.c
-> @@ -11,6 +11,7 @@
->  #include <linux/err.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/init.h>
-> +#include <linux/i2c.h>
->  #include <linux/kernel.h>
->  #include <linux/list.h>
->  #include <linux/module.h>
-> @@ -297,10 +298,40 @@ static void onboard_dev_attach_usb_driver(struct work_struct *work)
->  		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
->  }
+> @@ -98,6 +98,7 @@ static int onboard_dev_power_on(struct onboard_dev *onboard_dev)
 >  
-> +static int onboard_dev_5744_i2c_init(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	int ret;
-> +
-
-Please explain what the purpose of this sequence is. It is described
-in the commit message, however that is not directly available to a
-reader of the code.
-
-> +	char wr_buf[7] = {USB5744_CREG_MEM_ADDR, USB5744_CREG_MEM_NBYTES,
-
-IIUC USB5744_CREG_MEM_NBYTES is the number of registers written to the
-configuration register by this specific command, it could be different
-for other commands. If that is correct then I think this shouldn't be
-a constant but a literal plus a comment.
-
-> +			  USB5744_CREG_WRITE, USB5744_CREG_NBYTES,
-
-Similar as above, USB5744_CREG_NBYTES should be a literal + comment, or
-alternatively something like USB5744_CREG_SIZE, assuming the width of
-all registers is one byte.
-
-It would also be an option to add a wrapper onboard_dev_5744_write_creg(),
-that encapsulates writing a configuration register. Not strictly need
-since currently only one register is written.
-
-> +			  USB5744_CREG_RUNTIMEFLAGS2,
-> +			  USB5744_CREG_RUNTIMEFLAGS2_LSB,
-> +			  USB5744_CREG_BYPASS_UDC_SUSPEND};
-> +
-> +	ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "BYPASS_UDC_SUSPEND bit configuration failed\n");
-> +
-> +	ret = i2c_smbus_write_word_data(client, USB5744_CREG_ACCESS,
-> +					USB5744_CREG_ACCESS_LSB);
-
-This is a command ("Configuration Register Access command", this should be
-reflected in the name, as for USB5744_CMD_ATTACH.
-
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Configuration Register Access Command failed\n");
-> +
-> +	/* Send SMBus command to boot hub. */
-> +	ret = i2c_smbus_write_word_data(client, USB5744_CMD_ATTACH,
-> +					USB5744_CMD_ATTACH_LSB);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "USB Attach with SMBus command failed\n");
-> +
-> +	return ret;
-
-	return 0;
-> +}
-> +
->  static int onboard_dev_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct onboard_dev *onboard_dev;	
-> +	struct device_node *i2c_node;
->  	int err;
+>  	fsleep(onboard_dev->pdata->reset_us);
+>  	gpiod_set_value_cansleep(onboard_dev->reset_gpio, 0);
+> +	fsleep(onboard_dev->pdata->power_on_delay_us);
 >  
->  	onboard_dev = devm_kzalloc(dev, sizeof(*onboard_dev), GFP_KERNEL);
-> @@ -340,6 +371,27 @@ static int onboard_dev_probe(struct platform_device *pdev)
->  	if (err)
->  		return err;
+>  	onboard_dev->is_powered_on = true;
 >  
-> +	i2c_node = of_parse_phandle(pdev->dev.of_node, "i2c-bus", 0);
-> +	if (i2c_node) {
-> +		struct i2c_client *client;
-> +
-> +		client = of_find_i2c_device_by_node(i2c_node);
-> +		of_node_put(i2c_node);
-> +
-> +		if (!client) {
-> +			err = -EPROBE_DEFER;
-> +			goto err_power_off;
-> +		}
-> +
-> +		if (of_device_is_compatible(pdev->dev.of_node, "usb424,2744") ||
-> +		    of_device_is_compatible(pdev->dev.of_node, "usb424,5744"))
-> +			err = onboard_dev_5744_i2c_init(client);
-> +
-> +		put_device(&client->dev);
-> +		if (err < 0)
-> +			goto err_power_off;
-> +	}
-> +
->  	/*
->  	 * The USB driver might have been detached from the USB devices by
->  	 * onboard_dev_remove() (e.g. through an 'unbind' by userspace),
-> @@ -351,6 +403,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
->  	schedule_work(&attach_usb_driver_work);
->  
->  	return 0;
-> +
-> +err_power_off:
-> +	onboard_dev_power_off(onboard_dev);
-> +	return err;
->  }
->  
->  static void onboard_dev_remove(struct platform_device *pdev)
 > diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
-> index 82c76a0b3346..5744c589b90f 100644
+> index fbba549c0f47..82c76a0b3346 100644
 > --- a/drivers/usb/misc/onboard_usb_dev.h
 > +++ b/drivers/usb/misc/onboard_usb_dev.h
-> @@ -8,6 +8,18 @@
+> @@ -10,6 +10,7 @@
 >  
->  #define MAX_SUPPLIES 2
+>  struct onboard_dev_pdata {
+>  	unsigned long reset_us;		/* reset pulse width in us */
+> +	unsigned long power_on_delay_us; /* power on pulse width in us */
+
+nit: it isn't really a pulse width, just a simple delay.
+
+>  	unsigned int num_supplies;	/* number of supplies */
+>  	const char * const supply_names[MAX_SUPPLIES];
+>  	bool is_hub;
+> @@ -24,6 +25,7 @@ static const struct onboard_dev_pdata microchip_usb424_data = {
 >  
-> +#define USB5744_CMD_ATTACH			0xAA
-> +#define USB5744_CMD_ATTACH_LSB			0x56
-> +#define USB5744_CREG_ACCESS			0x99
-> +#define USB5744_CREG_ACCESS_LSB			0x37
-> +#define USB5744_CREG_MEM_ADDR			0x00
-> +#define USB5744_CREG_MEM_NBYTES			0x05
-> +#define USB5744_CREG_WRITE			0x00
-> +#define USB5744_CREG_NBYTES			0x01
-> +#define USB5744_CREG_RUNTIMEFLAGS2		0x41
-> +#define USB5744_CREG_RUNTIMEFLAGS2_LSB		0x1D
-> +#define USB5744_CREG_BYPASS_UDC_SUSPEND		BIT(3)
-> +
-
-These defines are specific to the Microchip 5744 hub, there is no need
-for them to be defined in the include of the onboard_usb_dev driver.
-Please move them to the .c file
-
-Thanks
-
-Matthias
+>  static const struct onboard_dev_pdata microchip_usb5744_data = {
+>  	.reset_us = 0,
+> +	.power_on_delay_us = 10000,
+>  	.num_supplies = 2,
+>  	.supply_names = { "vdd", "vdd2" },
+>  	.is_hub = true,
+> -- 
+> 2.34.1
+> 
 
