@@ -1,147 +1,195 @@
-Return-Path: <linux-usb+bounces-12263-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12264-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FCD4934512
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 01:33:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5489A9346AC
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 05:23:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 134EAB224C3
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 23:33:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70F581C223F7
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 03:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39EC26F079;
-	Wed, 17 Jul 2024 23:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA4A2BD05;
+	Thu, 18 Jul 2024 03:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/tYahsI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QD/CBKeb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6320018EBF;
-	Wed, 17 Jul 2024 23:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0817810FA;
+	Thu, 18 Jul 2024 03:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721259217; cv=none; b=fRfYZUcdXXi0t3lLUdiTUHeWEDlggNi7Hj14pp00RH70U4Cd13AvA3dHS3EZVN4HvEPG9U0KvVKkYAPfw7nABuESTbU1pu60TjkhvnStESUqh3bRwvuIFRBCbIXJ61Hcu+uHQbConDKW4gS4qdMrhNxpp19mbIWwBlUJOvptN/k=
+	t=1721272995; cv=none; b=En6amxG3XD8f+G+if74aLpR8jY1v0YAPgYTWZwXmR+TMfVdoE98HouXhX+jFOLaKOXGZvkapVt1WOh24+r2sWv1xUh+exG7Bgn3/qOpkd5M3VjVz5Yq/7F/jg3d5SPN1FXkMay4QayPAcUQInLeyB65FbqCGX1V3RcxGGq5DEvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721259217; c=relaxed/simple;
-	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=I50lv1Kqj5NSMeWUI/RxfLgvaOT/bjzYxs5YFYqh5viv3r2OTB0xp2uxNR1QGTFPnQh/1nkp4ZMZ274iyQ2DzsJFbhzO+AKWXPUp2/irJIIEtZEbnImKhbuiObOlztCb55V1E6FhPbXGWxuJpcQJwRpVpaKf+l0ldX9EKoG8K/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/tYahsI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59E2C2BD10;
-	Wed, 17 Jul 2024 23:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721259216;
-	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=m/tYahsI7GcAsn0eTT4WF3W3BC90QDmQbipyzN62A8EQrxsGjJuDHvLvxJTe9ClPb
-	 SxfN7qFIZCngz7gztSRBpz2eEzrUCy4jUV1ydb6l65kKp+wAq1QWNBsZy5KABTYVQR
-	 tq+sCrNewY9i6SpEr8eZIOLHRCKt7Ey7NF7M1f0KLVQ+ZcrJeHrDZjeNPd1EsmFr+5
-	 4zTlnoxdZoC9fCxuCKnodh5r8fGggVstFE9nygPb3O0rvXh68bBkRq/sZ9W1kFT6Vp
-	 PNOejeGFpQtHdc4Q11bbXLpU6fBG4A6iIgpFlB92tbnMPPxy5xVe6T52lr0cg39ZBV
-	 sbhS/c+mN45rg==
-Message-ID: <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1721272995; c=relaxed/simple;
+	bh=ocC1OTqw3T1wvfygr2ORlqKY0Usj/NrGbAVbjVYPmEc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ULygbqytyhRcqDQWVyYIFEXo13J3Mg0wZEfU3duc4yV2fV5sIvsziPwSMAO2nsQuFskENALfUATkK52UswVhBje678LO+88y4vo4yuYBpmikMzhXkIZmSwBHuOPVnOqBcV54dr3l4qrrnMu27apoRX5Ff593nIJ+cjMJ1G4A9d4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QD/CBKeb; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5ce739c2650so160468eaf.1;
+        Wed, 17 Jul 2024 20:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721272993; x=1721877793; darn=vger.kernel.org;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wmKhCzrI7nozSPGCF6gnN66wwRZauYwlhxHfZZORJFc=;
+        b=QD/CBKeb80jsDVtxlgl0tVW9WPuwmQew4tx/ikpV8GRwz3rw0tycRpx7GVjrybrFib
+         8lcMKkUpqPtjwF03srlCIkGRSrIbnsvXGuUNe11WQ1LJAjxrrYSOus1eLoDKY2sVM3yj
+         vEjR01z/CfRKqE6SQ1INq9ZgHWUfNnOsrTNfAxxw7exu7/RNGzxweJ+hJJEqAVacscUh
+         IeNpZ0LA8I4JHfcWfC2Zvd44rnworybvawdlJ0LmRIrqMi1fgl3D63KhIpwAa+EOoBcN
+         QSWYmu9CJPxsUCrVAKahW7dMDBOIaVsFrNtPwP5GIdkuhEfoytXcHveqMeGknw/FYB43
+         xjZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721272993; x=1721877793;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wmKhCzrI7nozSPGCF6gnN66wwRZauYwlhxHfZZORJFc=;
+        b=nORbwsHSlA7ziVznCQLJOalac8jGtxKlDhTcc6DTxPs7vm9WFgufvNwxIyUU+k4mPO
+         eZTmIkJJ22/Q3MaiPndITfrbXaYgeI22Q+f4Feq788jq2UKNyemCVUZsDCS8/IXmbAel
+         JEkL5S+KH9yzV3BmQO/M8PlicXNX3aOC4u5ur8O+plh+JRSOVqPmcuhJ2iXNCIrIvWvV
+         kVACwe1eiDY1kp45qSuK6R61MHkjJJ6nlaqLJVIB4x0mZC9P1E9VSnQocy8TjDMRHjX+
+         eiGDZCztUb00/d8epWrImpjwxuAeiXGWRDQH6QcaCLHmil6UXMdCtRmTSwMSA2Tx3pXo
+         Qemw==
+X-Forwarded-Encrypted: i=1; AJvYcCXQEOHyE74tVWrv2laN+kuZ+/9OUVPsbLpbrbJpeWp868hx6JO7lhYu2paoKdWKXOOumXlCb/mLMt8GSn7K/dgRR/TnjyLo9aC7ggHmYFO/rdf1EsutzDfJcw9cmdBAe6nsdT6UfciD
+X-Gm-Message-State: AOJu0Ywqji5ZrL+HQpq4VQzkZFClJS2lQsHh60xPlOvcZ2Lh5iUZI7hy
+	ZzV9oeHwdWLC8/xdEiqYYlMuTXsADGCUg1v0LapIvZLdF3RoAnN4
+X-Google-Smtp-Source: AGHT+IG/ulTlPDzfO2E4rJK0ztjEQZSnQyTBptuASu2KXhLvJ6IJ2s+Sef21KtMIdTTu03BpqcXpcg==
+X-Received: by 2002:a05:6870:55d4:b0:254:9501:db80 with SMTP id 586e51a60fabf-260ee7ccf3dmr1221481fac.14.1721272993010;
+        Wed, 17 Jul 2024 20:23:13 -0700 (PDT)
+Received: from js-pc.. ([116.162.132.209])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7eca7794sm9205580b3a.149.2024.07.17.20.23.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jul 2024 20:23:12 -0700 (PDT)
+From: Hongyu Xie <xy521521@gmail.com>
+To: stern@rowland.harvard.edu,
+	oneukum@suse.com,
+	xy521521@gmail.com
+Cc: gregkh@linuxfoundation.org,
+	brauner@kernel.org,
+	jlayton@kernel.org,
+	jack@suse.cz,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	xiehongyu1@kylinos.cn
+Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
+Date: Thu, 18 Jul 2024 11:23:02 +0800
+Message-Id: <987f97f4-293a-42f0-a9f5-9d67b6db2ce5@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <a648a2b3-026a-445c-8154-2da43b641570@suse.com>
+References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
+ <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
+ <9ef72886-13b8-46cf-a0aa-54dad36102e9@rowland.harvard.edu>
+ <2a80d11d-029f-4e7e-9a8e-3abae1034add@suse.com>
+ <429eb27a-578a-4208-8ce1-89434b8d739f@rowland.harvard.edu>
+ <3073c8ce-1923-4816-a442-41b4cc333af9@suse.com>
+ <6419a4e9-e084-4eb6-8376-9202930ea8be@kylinos.cn>
+ <a648a2b3-026a-445c-8154-2da43b641570@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
+ attachmentreminder=0; deliveryformat=1
+X-Identity-Key: id1
+Fcc: imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
-References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
-Subject: Re: [PATCH v2] of: remove internal arguments from of_property_for_each_u32()
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Peng Fan (OSS) <peng.fan@oss.nxp.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, Luca Ceresoli <luca.ceresoli@bootlin.com>, Andre Przywara <andre.przywara@arm.com>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, Richard Fitzgerald <rf@opensource.cirrus.com>
-To: Aaro Koskinen <aaro.koskinen@iki.fi>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>, Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai <wens@csie.org>, Chester Lin <chester62515@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Damien Le Moal <dlemoal@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, Doug Berger <opendmb@gmail.com>, Emilio =?utf-8?q?L=C3=B3pez?= <emilio@elopez.com.ar>, Fabio Estevam <festevam@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, Jaroslav Kysela <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, Jiri Slaby
-  <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, Kevin Hilman <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Mark Brown <broonie@kernel.org>, Matthias Brugger <mbrugger@suse.com>, Michael Ellerman <mpe@ellerman.id.au>, Michael Turquette <mturquette@baylibre.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Naveen N. Rao <naveen.n.rao@linux.ibm.com>, Nicholas Piggin <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner <richard.leitner@linux.dev>, Rob Herring <robh@kernel.org>, Roger Quadros <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, Saravana Kannan <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner 
- <tglx@linutronix.de>, Tony Lindgren <tony@atomide.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-Date: Wed, 17 Jul 2024 16:33:34 -0700
-User-Agent: alot/0.10
 
-Quoting Luca Ceresoli (2024-07-17 09:16:32)
-> diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
-> index 4ce83c5265b8..d4904f59f83f 100644
-> --- a/drivers/clk/clk-si5351.c
-> +++ b/drivers/clk/clk-si5351.c
-> @@ -1175,8 +1175,8 @@ static int si5351_dt_parse(struct i2c_client *clien=
-t,
->  {
->         struct device_node *child, *np =3D client->dev.of_node;
->         struct si5351_platform_data *pdata;
-> -       struct property *prop;
-> -       const __be32 *p;
-> +       u32 array[4];
-> +       int sz, i;
->         int num =3D 0;
->         u32 val;
-> =20
-> @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
-ent,
->          * property silabs,pll-source : <num src>, [<..>]
->          * allow to selectively set pll source
->          */
-> -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, num) {
-> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-source=
-", array, 2, 4);
-> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
-> +       if (sz < 0)
-> +               return dev_err_probe(&client->dev, sz, "invalid pll-sourc=
-e");
+From: Hongyu Xie <xiehongyu1@kylinos.cn>=0D
 
-Needs a newline on the printk message.
-
-> +       if (sz % 2)
-> +               return dev_err_probe(&client->dev, -EINVAL,
-> +                                    "missing pll-source for pll %d\n", a=
-rray[sz - 1]);
-> +
-> +       for (i =3D 0; i < sz; i +=3D 2) {
-> +               num =3D array[i];
-> +               val =3D array[i + 1];
-> +
->                 if (num >=3D 2) {
->                         dev_err(&client->dev,
->                                 "invalid pll %d on pll-source prop\n", nu=
-m);
->                         return -EINVAL;
->                 }
-> =20
-> -               p =3D of_prop_next_u32(prop, p, &val);
-> -               if (!p) {
-> -                       dev_err(&client->dev,
-> -                               "missing pll-source for pll %d\n", num);
-> -                       return -EINVAL;
-> -               }
-> -
->                 switch (val) {
->                 case 0:
->                         pdata->pll_src[num] =3D SI5351_PLL_SRC_XTAL;
-> @@ -1232,19 +1236,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
-ent,
->         pdata->pll_reset[0] =3D true;
->         pdata->pll_reset[1] =3D true;
-> =20
-> -       of_property_for_each_u32(np, "silabs,pll-reset-mode", prop, p, nu=
-m) {
-> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-reset-=
-mode", array, 2, 4);
-> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
-> +       if (sz < 0)
-> +               return dev_err_probe(&client->dev, sz, "invalid pll-reset=
--mode");
-
-Needs a newline on the printk message.
-
-> +       if (sz % 2)
-> +               return dev_err_probe(&client->dev, -EINVAL,
-> +                                    "missing pll-reset-mode for pll %d\n=
-", array[sz - 1]);
-> +
-
-With those fixed
-
-Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
+=0D
+=0D
+On 2024/7/17 15:42, Oliver Neukum wrote:=0D
+> On 17.07.24 03:43, Hongyu Xie wrote:=0D
+>> From: Hongyu Xie <xiehongyu1@kylinos.cn>=0D
+> =0D
+> Hi,=0D
+> =0D
+> sorry for being incomprehensible. I'll try to do better.=0D
+> =0D
+>> =C2=A0From what I know, that CONFIG_USB_DEFAULT_PERSIST is enabled by =0D
+>> default. Then udev->persist_enabled is set to 1 and this causing =0D
+>> udev->reset_resume set to 1 during init2 in hub_activate.=0D
+>> During resume,=0D
+>> usb_resume_both=0D
+>> =C2=A0=C2=A0 usb_resume_device=0D
+>> =C2=A0=C2=A0=C2=A0=C2=A0 generic_resume=0D
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_port_resume=0D
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 finish_port_resume=0D
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_reset_a=
+nd_verify_device (if udev->reset_resume is 1)=0D
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ hub_port_init=0D
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 hub_port_reset=0D
+>> =C2=A0=C2=A0 usb_resume_interface (udev->reset_resume is 1 but usbfs doe=
+sn't =0D
+>> have reset_resume implementation so set intf->needs_binding to 1, and =0D
+>> it will be rebind in usb_resume_complete)=0D
+> =0D
+> That is correct. But even if CONFIG_USB_DEFAULT_PERSIST were not set, =0D
+> losing power=0D
+> would just lead to reenumeration by another code path. Devices reset =0D
+> themselves=0D
+> when they are power cycled. There is no way around that.=0D
+> =0D
+>> Even before usbfs->reset_resume is called (if there is one), the USB =0D
+>> device has already been reset=0D
+> =0D
+> Yes, it has been reset.=0D
+> =0D
+>> and in a good state.=0D
+> =0D
+> No, it is not. Or rather, it is in the wrong state. This is not a =0D
+> question of good and bad.=0D
+> It is a question of being in the same state.=0D
+After resume, it's in USB_STATE_CONFIGURED state. But here I'm guessing =0D
+you mean not in a good state from user-space's point of view, right?=0D
+> =0D
+>> After all that thaw_processes is called and user-space application =0D
+>> runs again.=0D
+> =0D
+> Yes. And user space does not know what has happened.=0D
+>>=0D
+>> So I still don't understand why "the race necessarily exists". Can you =
+=0D
+>> show me an example that usbfs->reset_resume causes race?=0D
+> =0D
+> Sure. Let's look at the example of a scanner attached to the host.=0D
+> =0D
+> OS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Scan=
+ning process (in user space)=0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1. Se=
+t a resolution=0D
+> 2. Going to S4=0D
+> 3. Returning to S0=0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 4. In=
+itiate a scan=0D
+> =0D
+> As you can see the system would now scan at the wrong resolution. Step#4=
+=0D
+> has to fail. As there is no synchronization between S4 and user space, =0D
+> initiating=0D
+> the scan can always be the last step.=0D
+> For this to work, reset_resume() would have to restore the correct =0D
+> resolution. The kernel=0D
+> cannot do so.=0D
+Now I can see your point. And I think with or without =0D
+usbfs->reset_resume right now, Step#4 has to fail.=0D
+> =0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0Regards=0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Oliver=0D
+Regards=0D
+Hongyu Xie=0D
 
