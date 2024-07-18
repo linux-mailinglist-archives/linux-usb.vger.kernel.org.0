@@ -1,166 +1,140 @@
-Return-Path: <linux-usb+bounces-12265-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12266-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D43934809
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 08:23:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 183ED934872
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 08:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A6E01F214EE
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 06:23:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48F2B1C21825
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jul 2024 06:57:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18EA07318A;
-	Thu, 18 Jul 2024 06:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A6E7580C;
+	Thu, 18 Jul 2024 06:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="moQFoqeI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OlB6nsD5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7076F2E2;
-	Thu, 18 Jul 2024 06:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A009F2CCA3;
+	Thu, 18 Jul 2024 06:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721283815; cv=none; b=C3yCOCxnBC19ee184+6uVt6FmBPBo8Yl4RxPcj0hgQYi4ueVr2F+E+gRPi9lYnA5uhaiEW6Uek/cYuZg90yzqW6FHmWuHp/JwV30067DszmMcpPNnaFmj9sT9iT1NTNVH1yCepVXfwf0yu0DCzirZT8mqgxq7dRRTEhXhfjVDP0=
+	t=1721285833; cv=none; b=fNmUaH5/hDAeWsLLvkppIIirgmi1HtbJnuKnYqml9XcyWghm6dQ0du5cbbl9lGMp/uVT21LNCzIcGIFrEPxbQY+muuwMfwitKnnkwLQvTCyb6xuhA0REMgSsgoInLb+0Mq0qvqXOq9oC95A5W0TTZAbZj/VzxzslgLsYebixoxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721283815; c=relaxed/simple;
-	bh=SvVf4UyACVq2ID5CqwMvBFY+DkB1EhPM0jXf/gJ76X4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Cx6+2gMDk9B0FG728OIvCnTzSjDduUT0aa7GY4o4fRyPHxSmGBvbIr2J8IcAsz6HQTjUXcesyXsvHuknishso9ODlZKs/5MVnIH4hdZMIPN0bfidRtbhSkSSvk7FvlBJpvS1OV3H9WXOiZVD0Bt1jptWbURxfwsNKJLpwa3lWgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=moQFoqeI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC46C4AF19;
-	Thu, 18 Jul 2024 06:23:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721283815;
-	bh=SvVf4UyACVq2ID5CqwMvBFY+DkB1EhPM0jXf/gJ76X4=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=moQFoqeIpkzwRvXFhfuhUYtbt5B2waEKoqrHRMbU9x9z9u5ZBX5RRJ2YJFuJ+H7WL
-	 gR1EiTqTKG5ZwolO3Zk6g2ZlnbUB3gaVusYg0jyqzbyP8ZxekB1nWg1WuonZmc7I4G
-	 vIkUH5uW1hwRSuRq790gweTM2Ec3PNBgoe2ODurUb7K+YYEVyizA08fv7FK2qj+R1t
-	 MVGXooiSCBOjAe5Y6HQyXFhOOjW3AMUFqGn5SfAgqDxpLgJWjfoHLyHygDlmW0PSC6
-	 5W1HuXbR7Fa8XNM5cYxsVszMNeqHHYTjcmK+2takYkfTGuF7wAPyP1lIldwqBLT1+M
-	 dOJ83pBxCmNpA==
-Message-ID: <fe83d463-b52a-44bc-b122-ed4fa4c20bf7@kernel.org>
-Date: Thu, 18 Jul 2024 08:23:28 +0200
+	s=arc-20240116; t=1721285833; c=relaxed/simple;
+	bh=z+aCMhKYfdvSH3LqcS7QRiHX5Ygt46joT7nhNjNOLXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=R6V6ocq6oikBjxhzj8+vNfcMiWTu45ZEzHbhFgRHS4+nC6GeFhk81jBnyENm1YSo++iXzaZ1tfBJdxX+Dx2IpYBffxq1vvSDPIikQ1n9+bjxTEe0xWaT6Q7Ooc3L/Myt/6rFktvb5dlU/5RMviYmnc0bsfk8t91KKzRBpzY/tRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OlB6nsD5; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 66B00C0011;
+	Thu, 18 Jul 2024 06:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1721285821;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TgZHkXL2FGs1/bjZPDSboGR72yBe//NfgloPvNTjUQ0=;
+	b=OlB6nsD5RtGZmYjd7bhjEoZx7QMkbbOT8V45YhxxCFz4y2iiCJe+cf2PVPl+VsXD6UUMqk
+	Yc28bGhZQ13OubzP5CW/pjPqqFo91MRM0eVoREVGLvn0MLgNZy6pPxquFKWhNBkv4SbFT2
+	sax9ioW5vC5M5bokQz4XncM9ZdU0GCDemzBwA+l1XJdTnXTEUKHI48dxPqMAjv00+G3aQG
+	rBXI5/ojqb79XSjovNP74Rn6wSf1My85vfzfK9OmlUEoc3d8vGPg+knHhqSD5yHTRQLUcZ
+	BDxiKiWHxBRawYhcLiwX+N2Krj0xmgk4IRTokaqbJaztXMntEG+p6mo1v3ON7A==
+Date: Thu, 18 Jul 2024 08:56:51 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, Broadcom internal
+ kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai
+ <wens@csie.org>, Chester Lin <chester62515@gmail.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Damien Le Moal <dlemoal@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, Doug
+ Berger <opendmb@gmail.com>, Emilio =?UTF-8?Q?L=C3=B3pez?=
+ <emilio@elopez.com.ar>, Fabio Estevam <festevam@gmail.com>, Florian
+ Fainelli <florian.fainelli@broadcom.com>, Ghennadi Procopciuc
+ <ghennadi.procopciuc@oss.nxp.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, Jaroslav Kysela
+ <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, Jiri Slaby 
+ <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, Kevin Hilman
+ <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, Lars-Peter
+ Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood
+ <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Mark Brown
+ <broonie@kernel.org>, Matthias Brugger <mbrugger@suse.com>, Michael
+ Ellerman <mpe@ellerman.id.au>, Michael Turquette <mturquette@baylibre.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Nicholas Piggin
+ <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner
+ <richard.leitner@linux.dev>, Rob Herring <robh@kernel.org>, Roger Quadros
+ <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, Saravana Kannan
+ <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, Takashi Iwai
+ <tiwai@suse.com>, Thomas Gleixner  <tglx@linutronix.de>, Tony Lindgren
+ <tony@atomide.com>, Uwe =?UTF-8?Q?Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, llvm@lists.linux.dev,
+ linux-clk@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, patches@opensource.cirrus.com,
+ linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, Andre Przywara <andre.przywara@arm.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Uwe =?UTF-8?Q?Kleine-K=C3=B6nig?=
+ <u.kleine-koenig@baylibre.com>, Richard Fitzgerald
+ <rf@opensource.cirrus.com>
+Subject: Re: [PATCH v2] of: remove internal arguments from
+ of_property_for_each_u32()
+Message-ID: <20240718085651.63ddfb20@booty>
+In-Reply-To: <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
+References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
+	<1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: qcom,dwc3: Update ipq5332
- interrupt info
-To: Varadarajan Narayanan <quic_varada@quicinc.com>,
- gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
- quic_wcheng@quicinc.com, quic_kriskura@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240717094848.3536239-1-quic_varada@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240717094848.3536239-1-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On 17/07/2024 11:48, Varadarajan Narayanan wrote:
-> IPQ5332 has only three interrupts. Update the constraints
-> to fix the following dt_binding_check errors.
+Hello Stephen,
+
+On Wed, 17 Jul 2024 16:33:34 -0700
+Stephen Boyd <sboyd@kernel.org> wrote:
+
+> > @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client *client,
+> >          * property silabs,pll-source : <num src>, [<..>]
+> >          * allow to selectively set pll source
+> >          */
+> > -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, num) {
+> > +       sz = of_property_read_variable_u32_array(np, "silabs,pll-source", array, 2, 4);
+> > +       sz = (sz == -EINVAL) ? 0 : sz; /* Missing property is OK */
+> > +       if (sz < 0)
+> > +               return dev_err_probe(&client->dev, sz, "invalid pll-source");  
 > 
-> 	interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
-> 
-> Fixes: 53c6d854be4e ("dt-bindings: usb: dwc3: Clean up hs_phy_irq in binding")
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v2: Fix patch version numbering. Incorrectly marked the first version as v0
->     Add interrupts and interrupt-names for ipq5332 instead of clubbing it with
->     qcom,x1e80100-dwc3
-> ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index 6c5f962bbcf9..5e5cc2175526 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -235,6 +235,13 @@ allOf:
->              - const: core
->              - const: sleep
->              - const: mock_utmi
-> +        interrupts:
-> +          maxItems: 3
-> +        interrupt-names:
-> +          items:
-> +            - const: pwr_event
-> +            - const: dp_hs_phy_irq
-> +            - const: dm_hs_phy_irq
+> Needs a newline on the printk message.
 
-Why are you duplicating interrupts for this variant? This is
-qcom,ipq6018-dwc3, not 5332. Read carefully how the file is currently
-organized - there is no entry which has clocks and interrupts at one
-place. You are bringing inconsistency, why?
+Ouch! Fix queued for v3.
 
->  
->    - if:
->        properties:
-> @@ -442,7 +449,6 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> -              - qcom,ipq5332-dwc3
->                - qcom,x1e80100-dwc3
+Thanks,
+Luca
 
-So now 5332 does not have any constraints.
-
->      then:
->        properties:
-
-Best regards,
-Krzysztof
-
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
