@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-12283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93145937450
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 09:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2B4A937481
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 09:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B60701C21F30
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 07:19:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C61BF1C21016
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 07:40:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A41F50A80;
-	Fri, 19 Jul 2024 07:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82CD757C8D;
+	Fri, 19 Jul 2024 07:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="PvaG7+GU"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="bCfowr+u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010062.outbound.protection.outlook.com [52.101.69.62])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012014.outbound.protection.outlook.com [52.101.66.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD5947A4C;
-	Fri, 19 Jul 2024 07:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04096383AE;
+	Fri, 19 Jul 2024 07:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721373557; cv=fail; b=bhS/GTTYkZGVxbSo1AqNI9bthWQce/YGmy59arWp/2ikKMjvqwzLy7gkXiwQqbcDjDo5x27QgFbBjQqGO5x8rv+mPe/prwxQXgDKnAZkHfvk4AphFS4VeOlY2Ao1iIvMwLaf2J03ZtEdRLhkiaYtXLmyZfGkBFIrZDmV1f0kQI0=
+	t=1721374824; cv=fail; b=aUn4iVaAlRs4zqhG1p9cSRra9kdAhpsuyGgnMwR7JwO+JzzXGJUUv8Pihs5Br9XtntvelEkRdVuGLHnuexh8x5Fr0mw/4cltA9JteGtmiYH2mqrz50y3OrGMzFgtBW91sFTDC0fjTGrrFzRLJvlYP30WhTNZC9RJ7tFtSXV6BfA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721373557; c=relaxed/simple;
-	bh=b9S9RjhURR3kvoGpPdD0CT77WBe4dyZ1aqqDc/iao8s=;
+	s=arc-20240116; t=1721374824; c=relaxed/simple;
+	bh=pay4tQmkVWFDZ6ZysdH0k0Lgz9I6F30KJB+n3lOQnQk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Tqy+Rt3CzOarCqAZpdP/fp6alsmmUIGVLlQmlGA0xBfPaS5Z3FpmS/iaskqcTDmHOiGxIjy4pVv26D2ixFOMAuswrhsfhjmfI4j6WSfe4sqYoxWRCHC2VTtjqqYCQ5uACpPhAj7VBJZdYFFGQ4nnKOwUewZg7JXSF/By4HW6lfc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=PvaG7+GU; arc=fail smtp.client-ip=52.101.69.62
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qrPZ3OuxgK1FCLkedYc3Q9EYflBWmvIk3oSKCmaFaUuttw9wQvPu67baqEMGCYGivOtlzQz7lEsnjYOBHM8YKXMc2kQkZlFYFwvzwcIw13LRd6nmww+MPG3tb1dzOMb3EQuSSvrUneFc6def7H724Sex8fk/XHyaI5O1gcxo8po=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=bCfowr+u; arc=fail smtp.client-ip=52.101.66.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mp/FbgZdgOZq2KhkupNI5dcnxr4LMoY4chSop6pX8B2wPEnWxtfISOxpqXIjaw/tQiOsXUQ9Fpxg7I1O0u6FaDan8OJiagjM9OBwYUDe8iZivqwFmxtewTAR0KxQI/z1G65OCREe6udxvXkW1qsDfBdt33Y2RnQhftmywnHhVxNhaurLwf723t+7UG0T5V6zesDM0RMLE4oMCgn0RvmNlcgGXjr9qbegUMgzkYAmaWMNAA+l5igbBBZzbhhoaOgiFQJQKgF1HXYPLPApXCdvsLZcjuN2Ad927o3gZM5s6Jj4k+XFUIfyHsttFUA4MYkc4PUtjZWQXZcniucA7xoMWA==
+ b=gGKYeYQassQqnMtNdGAvBXgguXGGyRMOn6GcTaBE/kUsSoemuk0mRnHztBx4LJUEiUArsZA5Jwihp8upq1CstpJVGSJtqDDsOwlzt8c/9xpRFFMdzFQmgqOIcjVDENh7rZF/9SOX4pmaGlTZvNXtGSwycVhRirhQbpBKm2gGaCiiJ3xpFAxzG77AwoklXWdpmnuCTqqACZ1IchDzOC5GxLALB3Q2xmrIH7CmQ7ZrMi9lpM7+kNkaKBX4+k04CDR/i5c6XYr82cGF9rFEpfLEqAxp9KE3zIRL9akTxwDnhD/NRoITGstipTlPa3PDE1wF7ohz9NHxHEDjeEnZnuv6IA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y/RT/wffTW+MrZ8SE63lSs+pKacIc8eXFwhZnBD45WQ=;
- b=e8KfCIwBQTBrB/6985XYOQt0LEI/Dj0Di1bQvCMfSdZ9Qfa2vNemLAS7sVzQxzocpOD370z+Be1L6lL4+F/YA7lfdiDQGuj4Vk1Z+qG16HtOzWn+fWMZZvvOyhN/NMpGr44k2/wekZqnFgwq+FF4a15Np6J5txeYfbi1b2ibDiAanMMezoyLtFPCh0gvMtJT8F9PUv/nKvBxUq05FM8zILG2AF/+Y3rz2cOmIrn13XFivynZ8lhBIb3VuoBU+X3jcGvIBqAvtksznQBTAWusQlFmpq+1rXobJt7ZsnRF5vL4GZyN0tjoPR4tmZRH6hH/TGzbS9o+lL0KFW2UQ2clHA==
+ bh=zHNmiSYfmrbUy3H9XMSQC9AlAhfz6iTU/kfDi3XwJ2c=;
+ b=pfHhacJjs+YoU//YqEWHQlbXGy3j8bs6QXCMNivWeUvqr0q15X9g0LBWi0FJTLEIcc9QJU1GmB3kJlKsehFF0Xlv+tnTsqxaDCXkTx7h7OklJUV37x1A/br4Kn+da6ZaPWnznzQquBEO5TRl8I2KHVsKbKI1yS7l5LLAfiyIFupq4XRhcSSTCkdojB9jCzCiV2GZOTO1c8r6auIEb2choQ9+vueeiXbOq8VY904U4rKr5AcVmsV/CzxYDJhzSvSg7Kogbr/K75MNverR7bOHNG4NIYCFRJJMj31LuLb6le/X1i92lft7jsiZb0UoDs+Y5F0cSiISsY9Vw0ZWJAriZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y/RT/wffTW+MrZ8SE63lSs+pKacIc8eXFwhZnBD45WQ=;
- b=PvaG7+GU6b4yK2pb1npHElOqUMqx/69lzlaqblJJa++iEpgPC1gZSF+QTENIEehbITDG41sZg4hcrsFxok/PswtGIbk/nWViaMlQ/CG+OhqoPxguuMIkCumTpw1Fg63fbPZCI9UCf2YS92JQfNdtcR0jDwsFjZ6GhX9NnEotA1M=
+ bh=zHNmiSYfmrbUy3H9XMSQC9AlAhfz6iTU/kfDi3XwJ2c=;
+ b=bCfowr+uv+bhN6v2eLqsyZKn821/OOktUU4omgLH3nMX9gh12+XoMxzrKxq6lFFtCZZ5ROr0XepjDgE3NSaHXjkP0L8Wdbkffxi03EqOQA/oVwqbsSOVDRCic9CH7Mx2NsyZKBxD9lPuzbRvxmFNJ5Y5HdIbXPALzcVR2z5LQ9g=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by PAWPR04MB9765.eurprd04.prod.outlook.com (2603:10a6:102:389::6) with
+ by PAXPR04MB8365.eurprd04.prod.outlook.com (2603:10a6:102:1cf::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.18; Fri, 19 Jul
- 2024 07:19:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.16; Fri, 19 Jul
+ 2024 07:40:18 +0000
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::4e24:c2c7:bd58:c5c7%5]) with mapi id 15.20.7784.016; Fri, 19 Jul 2024
- 07:19:11 +0000
-Date: Fri, 19 Jul 2024 15:16:47 +0800
+ 07:40:18 +0000
+Date: Fri, 19 Jul 2024 15:37:52 +0800
 From: Xu Yang <xu.yang_2@nxp.com>
 To: Frank Li <Frank.li@nxp.com>
 Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
@@ -67,17 +67,17 @@ Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
 	devicetree@vger.kernel.org, imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
 	jun.li@nxp.com
-Subject: Re: [PATCH 2/6] usb: phy: mxs: keep USBPHY2's clk always on
-Message-ID: <20240719071647.dwnsrvv5ndtbqhll@hippo>
+Subject: Re: [PATCH 5/6] usb: phy: mxs: enable weak 1p1 regulator for imx6ul
+ during suspend
+Message-ID: <20240719073752.x3fonxhfsdnhwheu@hippo>
 References: <20240718102637.3964232-1-xu.yang_2@nxp.com>
- <20240718102637.3964232-2-xu.yang_2@nxp.com>
- <Zpkt9i0jMsYQ7rx5@lizhi-Precision-Tower-5810>
+ <20240718102637.3964232-5-xu.yang_2@nxp.com>
+ <Zpkw+HLGndoP/0xW@lizhi-Precision-Tower-5810>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zpkt9i0jMsYQ7rx5@lizhi-Precision-Tower-5810>
-X-ClientProxiedBy: SG2PR04CA0192.apcprd04.prod.outlook.com
- (2603:1096:4:14::30) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+In-Reply-To: <Zpkw+HLGndoP/0xW@lizhi-Precision-Tower-5810>
+X-ClientProxiedBy: SGAP274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::21)
+ To DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,226 +85,222 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PAWPR04MB9765:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb1b6743-69d5-4e31-13a1-08dca7c31667
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PAXPR04MB8365:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc7e4553-c8fb-4e95-3fca-08dca7c607da
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|7416014|376014|38350700014;
+	BCL:0;ARA:13230040|376014|366016|1800799024|7416014|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?OiOV61vERyTSXrl15DvLW9N+CiVHAZsUmLzpE9md02vveqRneZ/W6n8nam8R?=
- =?us-ascii?Q?Pr7NbdSkooMuwAOfDu8i6G8SzTZAchlql4LTvUZGUIfJFWhcnKykxpCoxVOE?=
- =?us-ascii?Q?GKpPKnwQldeBH+/9FtWSk1CgJ7m9bOC1pSpfllzeihPlzIynG18wPMekpHnr?=
- =?us-ascii?Q?jsHb8pFe+Id81/C5t3LoADBWwOtWtUFQLxyaxv7NFxL6/kehKCOS0/t5EaSi?=
- =?us-ascii?Q?Sd6GWTmFFDxfIKxlgs8F2muW4eWfLm+FGFI5d+Kaot3sVKVa8M0HYe8I9QNv?=
- =?us-ascii?Q?R2Sep0Zl4+4o2b1051qVOt/L/qNcomUVwEBhM8fatXyqFBLGvEgFIyPxjOI7?=
- =?us-ascii?Q?qzCqo8buhKghQ4bFfce4oiLL3XfKL3U3NGWDP7CgJOw8JHD3gw/9WHd3HF9l?=
- =?us-ascii?Q?nfvbbKTsARrwqIajY5A6rldHEgam/+ZbZXS9xCc/9Kz2svuebnQFuGLU0Y1m?=
- =?us-ascii?Q?1pOOcC0KHogE7aTrXYcUq5iiKB1VPWuT7NeomcJusbbBhSG7PVAAfWFGab6x?=
- =?us-ascii?Q?dllcH/I2Igcjulp9aPWN/SCmy4cQAZvwfPGA4z+1e9QwF8RpDh6ECF4dvdgs?=
- =?us-ascii?Q?WMOcEw+7yziNSWtHNp8D3AbLti8F6PUcHqIrznh/tzR6B+EasgvJZdXFSUTY?=
- =?us-ascii?Q?V7IC6nZywpZcC5jYftZ+5CKQA5y3p3S4vDSD6ycAngkiBnBQhN8FCMxxmfv6?=
- =?us-ascii?Q?WztETjPFyt4h9rwQPS/XUuyqjOiEhR9HbLU+1MUIEbh+1zX9QZiRs8P9RKgp?=
- =?us-ascii?Q?VkLkaT/jaEd3I3rJkd5ayHfGG2mPgKJMUiZYlhIRgsB/rc+EPDyoS1IzLjBR?=
- =?us-ascii?Q?dG8tNsdP8AZPCZoznU3xSpJ+TBe80qje2lyF/WFpDiWs//ne9kLZe/0Y3ml3?=
- =?us-ascii?Q?RZE6ay7/egiPC1Np3Cx7zkAvJTYtZFqgBOewfTVgHBYnAmgsjUiAOp9hT5YS?=
- =?us-ascii?Q?xlKk1ZX89l3o9lSvk/+4F4+8biDBI9PpDkZ6I41ufwlD0RK5yq7GwGBOaGij?=
- =?us-ascii?Q?2BuwPk4yGPq5+x4LQBBscE4f81DpUc6TVmN4RMRkRZG63/d3ZOTLC/rrjY5w?=
- =?us-ascii?Q?L+y3nZldruznaOfWMqxNJDZ3cR+z/Y1wRL52Cu6GCkBPDUu64ngOQKpLxESf?=
- =?us-ascii?Q?PW6U4QeUnbnCzd9HsLok08ivgxM9umfRRfS8jAytSNuHFI5NxYAsaRIQFlzF?=
- =?us-ascii?Q?S6wr/QT5zqku2OVijV5/BTwJBtls7o+BIYPgBe5afXFNB7rP+YXMIfI0ExDL?=
- =?us-ascii?Q?goYwe5caw6KEyBZwIw3/9HXmTQVvgL049dyKDAQLUKLPIjVY5M1UijDIl0oW?=
- =?us-ascii?Q?rzC1AqOSuNGTTJ1GAlqWaajAoBthpV8LU5wVLYMFbUkHYgwZ/0KdSpY+WFR3?=
- =?us-ascii?Q?LjVQ4hGvIcjTwL32r4QabWgzlryXV0jObxAD7rGvOeEwcXOU/g=3D=3D?=
+	=?us-ascii?Q?uOUhrcfeG5iXJcBja8N+CD2sGhEUWRdeaV2GmlyloIEE5yN3KlCBFn2P7Zef?=
+ =?us-ascii?Q?c44Y8+See7wlH/qKhaZWF6VpaFNGmiRolGZOtlnHFnSpRQAxyBnMhHsB2hry?=
+ =?us-ascii?Q?mJLLzQ+w6kyTGY2TtsondurDuIAO5QTtQ2nXmgH/+J53bJcPO1gQbuQFaY2l?=
+ =?us-ascii?Q?ooAG3UXBWaWK6mF2gOwaiAsaRCVZhK8YqKYUm4w9dQugExDYLn1l1qVbZMXX?=
+ =?us-ascii?Q?5R2Nnv/nZwDWYN62bZjcWqIBrrxJIiaGB75hBTruKoSHWYOSf5zkFQkdp0dn?=
+ =?us-ascii?Q?CfEetWDHHWRKJufrltVtGUGIZ8HqdFrH+TmdEpHN6P0rTkqVoBwtERjSnnrz?=
+ =?us-ascii?Q?i9jaj7b2/Ltc88uPFMlpVD1etPOdmcwHYTg1KTqhMZoo9NW6NZX+0RyLL4MU?=
+ =?us-ascii?Q?oJ0+dFyOsZ28ERUx13Hy2yHuc4US3wQcbnNSZomAqa/b8gcm8w+ObhojT7WM?=
+ =?us-ascii?Q?WmfsUeTP77ANniLxTUOEA6cks5TfP5tM1jWNVvm0vgN+AtcgrhB3J2ZJroFV?=
+ =?us-ascii?Q?qMrn5tIS+AVZDGhYg7cpWl09xrQlVEu1ak+bLu7kfrnkKuy/iej7eHnLKjU0?=
+ =?us-ascii?Q?/Om2eCskVi3Yp5auclcrDreZiqzzQFMrTLwEFwU1bnnlUxcotbyU2RmJYsqK?=
+ =?us-ascii?Q?8/w/WANYHsn2M7bTAaogszqCNqLCMDUgVcxaFoGtl9zy3Ys611Gva6cnA2RK?=
+ =?us-ascii?Q?KiX7+bRwnuE3n3vQ2LE2seEd7FTADXmCI9hRkSiqtXBu66sn8U0oGD9+aka+?=
+ =?us-ascii?Q?LYyi1ce1jEwGHlmFhZXIoJ8VAuhWWgLY7GsWkYzQpGv4vKL5fzNMYUs1wDLU?=
+ =?us-ascii?Q?F9bgXU9jMnZvnHzPtJi8susr67yc78PUdCxBP64tHz6qDVyCraILJnHkSUmk?=
+ =?us-ascii?Q?KmQLRaR1rkqDgJWdlRJv1hAglNq/nEq8E3WDbQJ5dTfbmGkuLes1/izDPZN0?=
+ =?us-ascii?Q?J1vX5wNmEESekCucXG1MCRkuLBLph7SJHtEeUO5acxdwMBRmxt0nq8rP9SKE?=
+ =?us-ascii?Q?/UxV2AmsMJL1wmQi+LsdiUQWizIzf+M0ixXmd3J8B02VJ2SwezrBDW1Au9jI?=
+ =?us-ascii?Q?uCs78gg1oyzcJBFlWjZKUCC6lL9PD+BgkDdHFgYV29QfAwpUWqIugb2ARE37?=
+ =?us-ascii?Q?7LIyKttNRt1E6F9MLtsOw/lmawT4dI303sh5aE35xf/oeEVZyrbBS7f8u5r0?=
+ =?us-ascii?Q?V84uMcfjSBoYCuwdFpVTrJXMvKqg8mvIphF/rCMKhMozJNYADNNjIm8KfhTb?=
+ =?us-ascii?Q?adcg442FQunX/3uwotxVQ4gKyaAFTHGB3E0IohSepRCiatLgrh1jHvuSEQOU?=
+ =?us-ascii?Q?3QLlJgIYe7bmhNQXl5Mw3J/yOV++/8TU5XRght05WYQ69Nrgf8dbDz0Jy/Yd?=
+ =?us-ascii?Q?llsgHArDrlciCXxZmLRqC1AX6z6flLJfeDClXcciXFfgQKRAZQ=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?FiYpq+UiJyUVNs4i6KezT0QIXmPcJ0ZZYlRdBFdFjDNXzFfHS/TzcdBduzhj?=
- =?us-ascii?Q?E2+yAkQFkGu5kwkAWrxRvjFfpd5v3L+sNeiKJjglgNWTnz6gTsTvEsPP3sMg?=
- =?us-ascii?Q?TKzKgdiXmrZ8JA8blBaAli1cblGyxFAOQ5waVIYw8utlsc0i+QSH8YsUXITN?=
- =?us-ascii?Q?5JzvB3jT26J7JNoPVwx/+1mpHJkm0+KUSPEHnBzkA5tLMf4G6+mzSEI8A/7f?=
- =?us-ascii?Q?9GJzIYcyRUwjyr7LQbd83Ogl6dWArfSOSizPrYNu0ySZF17XTiWBUdPREnn2?=
- =?us-ascii?Q?28JxQwahoKyCeUbb6oB7FrkWLJ+qcQKxhq1+SdxNOfh9flFCR1lIdYNs++by?=
- =?us-ascii?Q?onbtWlAPhY0PnNSXtZYN/8xqzx1xdNMzkaaUHs0IdV1qhYnv0WPyD45b7C6D?=
- =?us-ascii?Q?TRCqdVhM98EvnMKVz55PEC24n037iOtyXdxdJWVitGSx3dl7YOHEvHknbGmu?=
- =?us-ascii?Q?X4jJ4Fk5ZclPgw2J89I4uElQuJETzlQlsB48Lp0uKVpBu+7h9DKkwaCzujWT?=
- =?us-ascii?Q?O9UI9lHmcOkJxc+1ixP9LjiGvFWZcrQ9ECI4rmxpLHu9ynEjUI9mIEqrWGOc?=
- =?us-ascii?Q?rOSYqM3RDJFkseJzrVZxWwJZdp1YNAfx5WdW3lYknXHpKzQS7MyUmdOwFzrz?=
- =?us-ascii?Q?4MhESmrs6MQlhdK/zO1clLm3PIcKu57fQP+uuzy5ohasHWhWDu7ak9NuKAXY?=
- =?us-ascii?Q?VNBojNhPxzGwqIyA/RqV79MGK/if52wQBt645r5xYUth+a8wKVvhv+kiW8yX?=
- =?us-ascii?Q?j3aN3fYBuG9RSMi5WGnV6tVxM1Gk4ltVNOZI1FVFL8FmG9G7r+6KwLvoq3fV?=
- =?us-ascii?Q?DMQSgAFK9TAc1Ew5ENM6l0W5GZ88aPsDGsFx8DIq4ARuTqydCmlkqn5CbxjX?=
- =?us-ascii?Q?KFVNuv/w0OL5sDcoXxSisPW39RacvhdTPriZP9JjdA/iod4a1IZ6537583m5?=
- =?us-ascii?Q?r9Sos2wy1YTtVnEc2dLQ5//+qgSuMyR7DXGe7BKrTeJ/dV6ULBYKirvPf1e8?=
- =?us-ascii?Q?ZhSklFDnwiWBzDXZcXs0FU3SsB0Kk2tvhismZzrHTf3XAmmjSMtqiXxHSWA0?=
- =?us-ascii?Q?RkP059UJV3mBKyLGv7zrgsT0UBG4P8DN0sd8P9nQ/6HOsRvPAPyyA5IPa/RW?=
- =?us-ascii?Q?HvNE4Llp8hT6o92TuNPDiaOiuiBrXNT+yTTrLPOZBoreU0WYdEtaOWncX2GD?=
- =?us-ascii?Q?HHdP6dzfIiLNGnXxb+VlbqRCsvYK+7n+cuwpofliMb9Ro4WJ3yhP0LHjhxGX?=
- =?us-ascii?Q?AlsbcJcATKcn7wUR/3X5fh2Uy9ksW2qXcv3ixOJO529kOyKxPNXZV0IeXhsD?=
- =?us-ascii?Q?PXCtU5UUT4BBIehwhuO2MpeC3EEgJBpHd+DPJKmmDAaDrpMiRNl9sNEX3A9c?=
- =?us-ascii?Q?BVenQkxXlJmTysfZNR1bWdi2V/Lun6pQVThY/qhagTPLR/s1sOywRoxfwl2+?=
- =?us-ascii?Q?+aiQnBCkGhCPXwdT75fclP+ZitG7rBASHc4FhOiAUgJR788e/J0IXrZx/+Xa?=
- =?us-ascii?Q?8p/MZNOIaT6YHUUYLBT8/4JXpidfPIdyjw+L/sAYmMh0wPjyxpDuH79Pk/Nq?=
- =?us-ascii?Q?Fb3iQrsl7lYXXaoUHHTf2UarU9B1dZEXPOVUp3Qs?=
+	=?us-ascii?Q?YWCa0UFLaK4VZ8Lt2dTCdXDOq28BYugHGHuM2V1Epo8E5QBhzhhsjginV83w?=
+ =?us-ascii?Q?HM/RJ1B0Yv/ky2efpAylu0NkecgMpWTiBtTH0KtEPuSx1gnOL/VxGOwCntPg?=
+ =?us-ascii?Q?CKWJTtxvvAT24vSa0EY1WkpFlILk99q2ctevC4OB6qRU+IHMwFTIndiJYvez?=
+ =?us-ascii?Q?u9GP9gLWeZQnhZcm24zSaIVdp3u6y0IbFT9xIs5fnMm1rBTS4J8Uv2qwQV9Z?=
+ =?us-ascii?Q?fHYClgnc38X0JJlhEU01B2Y+s3MPQE6qdT/YGAZs7eRxBRgxmJTjYk1ZpmtB?=
+ =?us-ascii?Q?bnn1zItxDSJKisGTvVNe1c5A/vj+hKUgLr2mSlfIMa1Dj2REyRmgHfGnEfog?=
+ =?us-ascii?Q?X2G7beghc04WJQ3PeRSAY5ilrLCDckF/+J9wnMi/tCAODCPbbGf6DR5C7kQ9?=
+ =?us-ascii?Q?4Zlt5iEGcSrLhGxHJuVXK3kE0y846cGmI5BojLSKCVn61QqOczKz/IOJ8TYn?=
+ =?us-ascii?Q?UmSuK7Pw449CyogVfGoXhVW3ua5zzVrUDJuXy0Nlqa1x66AXputMtn6/QudN?=
+ =?us-ascii?Q?mf05sLLnH1P91z4zzx5XkHO/6aCp7NwNaoguQIuF3Z73InlGC4MmOlJ9WqD8?=
+ =?us-ascii?Q?2u0cQkuxBGwqZ9jwQJyZurHl3HjvP/NEbcbsUvIguzoymaNODfI/1YiJt0AY?=
+ =?us-ascii?Q?FvJlzGY1VtvyWM/AYQ5lGcLx3s9Y05Rf4SrZVyNEqXX2z9p3RhpFsVbX9Ton?=
+ =?us-ascii?Q?lq/jRgHpm9iIkWaA5RwdPt6U4p8a7N2u5X72JtG1LyTEixgQPQVvgYWUtxmq?=
+ =?us-ascii?Q?0/v84HtsVptriDlYmMy1TvD/hyUN/Xb6MSpvYj86G7CxIEiuMl1AKS+5vGw0?=
+ =?us-ascii?Q?KsCp/LsgR9URsu0gJP4wWpsEyJ98tSqTDDK6xqnbh3vxKrZcV+IeZGfNKMCX?=
+ =?us-ascii?Q?IC7NYVcER02CMgVE0zcvw96iyHMg/p4gMzOCP/kxmkcTKbFlGrrbt27dxDxK?=
+ =?us-ascii?Q?znRzpskTWoKZaMnoRU1mdPzHolPG4lAfCYb1qHSIobkiHMZzI8fRLEOTMuo9?=
+ =?us-ascii?Q?7kTD8s8E7nTEdJ/NKs2T0xoWV9fXUAyAlHaQTKILTdCj9uwGTQX4bPdtgmFX?=
+ =?us-ascii?Q?ifO4YFVoD8606qtsc9mjUFJwnfNkPohJ6XtbPOpkvmZ7T7r8xbbYCBkbIN4C?=
+ =?us-ascii?Q?gK9Dvbckg7WyY56uGPE1Okdr8NmYx/HCy8aKslT2jSkyTirE6cAw94jLPTdG?=
+ =?us-ascii?Q?VuQ+d2yfwpYWfjWeKmMQjso/B0NXQygjV1doG02TA6RJ+oT+EkNd5cgtDaEL?=
+ =?us-ascii?Q?P+gSD4GYS48arHkGPOcS43YW0QZ+3olmp9gfytNNcmaOfBYq6JC9IzpC3LCm?=
+ =?us-ascii?Q?llTL/XkP6x7wnQCeJQspvHDpYKs8mghVreHbmKZw4UM5eFPVLJ6Un/8XxoPt?=
+ =?us-ascii?Q?rPrvAlLZGko/XCjpgXda3uKCUUb4c2JgWt7p0RJQhDVQamA7+Ai8Q39XGkMe?=
+ =?us-ascii?Q?1G9WlQgvSS+ghYIAVBZL+1jJNb61TB2kQu5uc6DVVo2a+hmHMlC9PkFZFybG?=
+ =?us-ascii?Q?c9vHviQ1Xzn1zzPXKj9V7ls+LHuthb1JvWtLayWWsakcGusSVlAwsGz0CWnU?=
+ =?us-ascii?Q?GFCVVjVAgA9TYGXRJeTmZvrwsKYGT9XeVTs8eQCM?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb1b6743-69d5-4e31-13a1-08dca7c31667
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc7e4553-c8fb-4e95-3fca-08dca7c607da
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2024 07:19:11.8794
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2024 07:40:17.9243
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VSyLNYyMmAdJG7gGHYXP4r4UpTdoqI3SALyJFi4Y5hD8kjsomuIqCXpjceMrGsMPPdg3w4Gn1kbHK6B7tdXrtA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB9765
+X-MS-Exchange-CrossTenant-UserPrincipalName: S4gIj9bnZ74Dw+/2ycJZxRS3LupRPC7qPt+SQVT3Lz8ihHBbCdMr9jlIw9hbx0oo5TLCbQQuMyaFYsYAfEF2jQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8365
 
-On Thu, Jul 18, 2024 at 11:00:06AM -0400, Frank Li wrote:
-> On Thu, Jul 18, 2024 at 06:26:33PM +0800, Xu Yang wrote:
-> > Per IC engineer request, we need to keep USBPHY2's clk always on,
+On Thu, Jul 18, 2024 at 11:12:56AM -0400, Frank Li wrote:
+> On Thu, Jul 18, 2024 at 06:26:36PM +0800, Xu Yang wrote:
+> > For imx6ul PHY, when the system enters suspend, its 1p1 is off by default,
+> > that may cause the PHY get inaccurate USB DP/DM value. If the USB wakeup
+> > is enabled at this time, the unexpected wakeup may occur when the system
+> > enters suspend.
 > 
-> "IP require keep keep USBPHY2's clk always on."
-> 
-> Not personal request, even it is IC expert. It should base on the "fact"
-> instead of personal's opinion.
-
-Okay.
-
-> 
-> > in this way, the USBPHY2 (PLL7) power can be controlled by
-> > hardware suspend signal totally. It is benefit of USB remote wakeup
-> > case which needs the resume signal be sent out as soon as
-> > possible (without software interfere). Without this, we may see usb
-> > remote wakeup issue since the host does not send resume in time.
-> 
-> So USBPHY2 (PLL7) power can be controlled by suspend signal. USB remote
-> wakeup needs resume signal be sent out as soon as possible to match
-> 
-> "spec requirement" or some other requirement.
+> 1p1 is off when the system enters suspend at iMX6UL. It cause the PHY get
+> wrong USB DP/DM value, then unexpected wakeup may occur if USB wakeup
+> enabled. 
 
 Will change.
+
+> 
+> > 
+> > In this patch, when the vbus is there, we enable weak 1p1 during the PHY
+> > suspend API, in that case, the USB DP/DM will be accurate for USB PHY,
+> > then unexpected usb wakeup will not be occurred, especially for the USB
+> > charger is connected scenario. The user needs to enable PHY wakeup for
+> > USB wakeup function using below setting.
+> 
+> Avoid use word "this patch", "this commit."
+> 
+> Enable weak 1p1 during PHY suspend if vbus exist. So USB DP/DM is correct
+> when system suspend.
+> 
+> Reproduce step:
+> > 
+> > echo enabled > /sys/devices/platform/soc/2000000.aips-bus/20c9000.usbphy
+> > /power/wakeup
+> 
+> echo mem > /sys/power/state,
+> 
+> 
+> then some error happen. 
+> 
+> Or just remove it.
+
+Okay, will change.
 
 > 
 > > 
 > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > > ---
-> >  drivers/usb/phy/phy-mxs-usb.c | 36 ++++++++++++++++++++++++++++-------
-> >  1 file changed, 29 insertions(+), 7 deletions(-)
+> >  drivers/usb/phy/phy-mxs-usb.c | 32 ++++++++++++++++++++++++++++----
+> >  1 file changed, 28 insertions(+), 4 deletions(-)
 > > 
 > > diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-> > index 42fcc8ad9492..b6868cc22c1e 100644
+> > index 627733a982d1..dcd032678814 100644
 > > --- a/drivers/usb/phy/phy-mxs-usb.c
 > > +++ b/drivers/usb/phy/phy-mxs-usb.c
-> > @@ -150,6 +150,16 @@
-> >  #define MXS_PHY_TX_D_CAL_MIN			79
-> >  #define MXS_PHY_TX_D_CAL_MAX			119
+> > @@ -71,6 +71,9 @@
+> >  #define BM_USBPHY_PLL_EN_USB_CLKS		BIT(6)
 > >  
-> > +/*
-> > + * At some versions, the PHY2's clock is controlled by hardware directly,
-> 
-> It better declear which version, for example, which chip use if no version
-> info in IP.
-
-Okay, will add.
-
-> 
-> > + * eg, according to PHY's suspend status. In these PHYs, we only need to
-> > + * open the clock at the initialization and close it at its shutdown routine.
-> > + * It will be benefit for remote wakeup case which needs to send resume
-> > + * signal as soon as possible, and in this case, the resume signal can be sent
-> > + * out without software interfere.
-> 
-> These PHYs can send resume signal without software interfere if not gate
-> clock.
-
-Will change.
-
-> 
-> > + */
-> > +#define MXS_PHY_HARDWARE_CONTROL_PHY2_CLK	BIT(4)
+> >  /* Anatop Registers */
+> > +#define ANADIG_REG_1P1_SET			0x114
+> > +#define ANADIG_REG_1P1_CLR			0x118
 > > +
-> >  struct mxs_phy_data {
-> >  	unsigned int flags;
-> >  };
-> > @@ -161,12 +171,14 @@ static const struct mxs_phy_data imx23_phy_data = {
-> >  static const struct mxs_phy_data imx6q_phy_data = {
-> >  	.flags = MXS_PHY_SENDING_SOF_TOO_FAST |
-> >  		MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS |
-> > -		MXS_PHY_NEED_IP_FIX,
-> > +		MXS_PHY_NEED_IP_FIX |
-> > +		MXS_PHY_HARDWARE_CONTROL_PHY2_CLK,
+> >  #define ANADIG_ANA_MISC0			0x150
+> >  #define ANADIG_ANA_MISC0_SET			0x154
+> >  #define ANADIG_ANA_MISC0_CLR			0x158
+> > @@ -123,6 +126,9 @@
+> >  
+> >  #define USB_PHY_VLLS_WAKEUP_EN			BIT(0)
+> >  
+> > +#define BM_ANADIG_REG_1P1_ENABLE_WEAK_LINREG	BIT(18)
+> > +#define BM_ANADIG_REG_1P1_TRACK_VDD_SOC_CAP	BIT(19)
+> > +
+> >  #define to_mxs_phy(p) container_of((p), struct mxs_phy, phy)
+> >  
+> >  /* Do disconnection between PHY and controller without vbus */
+> > @@ -197,7 +203,8 @@ static const struct mxs_phy_data imx6sx_phy_data = {
 > >  };
 > >  
-> >  static const struct mxs_phy_data imx6sl_phy_data = {
-> >  	.flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS |
-> > -		MXS_PHY_NEED_IP_FIX,
-> > +		MXS_PHY_NEED_IP_FIX |
-> > +		MXS_PHY_HARDWARE_CONTROL_PHY2_CLK,
-> >  };
-> >  
-> >  static const struct mxs_phy_data vf610_phy_data = {
-> > @@ -175,7 +187,8 @@ static const struct mxs_phy_data vf610_phy_data = {
-> >  };
-> >  
-> >  static const struct mxs_phy_data imx6sx_phy_data = {
+> >  static const struct mxs_phy_data imx6ul_phy_data = {
 > > -	.flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
 > > +	.flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS |
 > > +		MXS_PHY_HARDWARE_CONTROL_PHY2_CLK,
 > >  };
 > >  
-> >  static const struct mxs_phy_data imx6ul_phy_data = {
-> > @@ -206,6 +219,7 @@ struct mxs_phy {
-> >  	u32 tx_reg_set;
-> >  	u32 tx_reg_mask;
-> >  	struct regulator *phy_3p0;
-> > +	bool hardware_control_phy2_clk;
-> 
-> Needn't it. just check MXS_PHY_HARDWARE_CONTROL_PHY2_CLK flag is enough.
-
-Okay.
-
-> 
-> >  };
+> >  static const struct mxs_phy_data imx7ulp_phy_data = {
+> > @@ -243,6 +250,11 @@ static inline bool is_imx7ulp_phy(struct mxs_phy *mxs_phy)
+> >  	return mxs_phy->data == &imx7ulp_phy_data;
+> >  }
 > >  
-> >  static inline bool is_imx6q_phy(struct mxs_phy *mxs_phy)
-> > @@ -518,12 +532,17 @@ static int mxs_phy_suspend(struct usb_phy *x, int suspend)
-> >  		}
-> >  		writel(BM_USBPHY_CTRL_CLKGATE,
-> >  		       x->io_priv + HW_USBPHY_CTRL_SET);
-> > -		clk_disable_unprepare(mxs_phy->clk);
-> > +		if (!(mxs_phy->port_id == 1 &&
-> > +				mxs_phy->hardware_control_phy2_clk))
-> > +			clk_disable_unprepare(mxs_phy->clk);
-> >  	} else {
-> >  		mxs_phy_clock_switch_delay();
-> > -		ret = clk_prepare_enable(mxs_phy->clk);
-> > -		if (ret)
-> > -			return ret;
-> > +		if (!(mxs_phy->port_id == 1 &&
-> > +				mxs_phy->hardware_control_phy2_clk)) {
-> > +			ret = clk_prepare_enable(mxs_phy->clk);
-> > +			if (ret)
-> > +				return ret;
-> > +		}
-> >  		writel(BM_USBPHY_CTRL_CLKGATE,
-> >  		       x->io_priv + HW_USBPHY_CTRL_CLR);
-> >  		writel(0, x->io_priv + HW_USBPHY_PWD);
-> > @@ -819,6 +838,9 @@ static int mxs_phy_probe(struct platform_device *pdev)
-> >  	if (mxs_phy->phy_3p0)
-> >  		regulator_set_voltage(mxs_phy->phy_3p0, 3200000, 3200000);
-> >  
-> > +	if (mxs_phy->data->flags & MXS_PHY_HARDWARE_CONTROL_PHY2_CLK)
-> > +		mxs_phy->hardware_control_phy2_clk = true;
+> > +static inline bool is_imx6ul_phy(struct mxs_phy *mxs_phy)
+> > +{
+> > +	return mxs_phy->data == &imx6ul_phy_data;
+> 
+> You'd better define,  MXS_PHY_POWER_OFF_AT_SUSPEND. 
+> 
+> 	is_phy_power_off_at_suspend(). 
+> 
+> Actually, you just need know if phy power off instead if it is 6ul phy.
+> 
+
+Yes, you are right, but is_imx6ul_phy() may be used in other place and only
+6ul phy has this issue, so I'd prefer to keep this form.
+
+Thanks,
+Xu Yang
+
+
+> > +}
 > > +
-> 
-> Needn't it.
-
-Okay. Will remove this.
-
-> 
-> >  	platform_set_drvdata(pdev, mxs_phy);
+> >  /*
+> >   * PHY needs some 32K cycles to switch from 32K clock to
+> >   * bus (such as AHB/AXI, etc) clock.
+> > @@ -891,18 +903,30 @@ static void mxs_phy_wakeup_enable(struct mxs_phy *mxs_phy, bool on)
 > >  
-> >  	device_set_wakeup_capable(&pdev->dev, true);
+> >  static void mxs_phy_enable_ldo_in_suspend(struct mxs_phy *mxs_phy, bool on)
+> >  {
+> > -	unsigned int reg = on ? ANADIG_ANA_MISC0_SET : ANADIG_ANA_MISC0_CLR;
+> > +	unsigned int reg;
+> > +	u32 value;
+> >  
+> >  	/* If the SoCs don't have anatop, quit */
+> >  	if (!mxs_phy->regmap_anatop)
+> >  		return;
+> >  
+> > -	if (is_imx6q_phy(mxs_phy))
+> > +	if (is_imx6q_phy(mxs_phy)) {
+> > +		reg = on ? ANADIG_ANA_MISC0_SET : ANADIG_ANA_MISC0_CLR;
+> >  		regmap_write(mxs_phy->regmap_anatop, reg,
+> >  			BM_ANADIG_ANA_MISC0_STOP_MODE_CONFIG);
+> > -	else if (is_imx6sl_phy(mxs_phy))
+> > +	} else if (is_imx6sl_phy(mxs_phy)) {
+> > +		reg = on ? ANADIG_ANA_MISC0_SET : ANADIG_ANA_MISC0_CLR;
+> >  		regmap_write(mxs_phy->regmap_anatop,
+> >  			reg, BM_ANADIG_ANA_MISC0_STOP_MODE_CONFIG_SL);
+> > +	} else if (is_imx6ul_phy(mxs_phy)) {
+> > +		reg = on ? ANADIG_REG_1P1_SET : ANADIG_REG_1P1_CLR;
+> > +		value = BM_ANADIG_REG_1P1_ENABLE_WEAK_LINREG |
+> > +			BM_ANADIG_REG_1P1_TRACK_VDD_SOC_CAP;
+> > +		if (mxs_phy_get_vbus_status(mxs_phy) && on)
+> > +			regmap_write(mxs_phy->regmap_anatop, reg, value);
+> > +		else if (!on)
+> > +			regmap_write(mxs_phy->regmap_anatop, reg, value);
+> > +	}
+> >  }
+> >  
+> >  static int mxs_phy_system_suspend(struct device *dev)
 > > -- 
 > > 2.34.1
 > > 
