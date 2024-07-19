@@ -1,103 +1,215 @@
-Return-Path: <linux-usb+bounces-12285-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12286-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FB149375ED
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 11:42:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F259937702
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 13:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F510281218
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 09:42:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE047B20DBA
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2024 11:10:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69E1127B57;
-	Fri, 19 Jul 2024 09:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B3384A32;
+	Fri, 19 Jul 2024 11:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="H5U15b96"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="moKWrtoP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD397F487;
-	Fri, 19 Jul 2024 09:38:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394D486131
+	for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2024 11:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721381917; cv=none; b=I3pmOGHXX4OUvtnwdMlz5yxsMPdLZ4xKqhvoa7dBqp0Db2gj1ynByEhPlZpE5fHdu732wp3bMaOLkmANjcI5QnseCPoiVofvTvHPPB+cWtK48z85CueJrXQeNpA+FnBv4fdkiOqAuj9+vKAMJqx2FWBEO+cq8rT2a76zuSl1vDw=
+	t=1721387440; cv=none; b=UEmYcq8A+V737G4t3JtKvjtagRClQOCcWlyOPK2xbiQ7YgPQQRjbjECSy9ybyz3u8rs6/JKPVgrj1wMTZ+l5he0sOVExhCmKMNVjZ949cX3RhKDPvzePNEKUhvU81TKMvfYGJer+ZRNkqMenixJHgDbsXqOv0z5pyn8YsDLI0xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721381917; c=relaxed/simple;
-	bh=l5EtkbtTmp+QwD/m59M+rHtc9b7+dQo0hYOf5L/2fR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u0K/N8Dqa3nfxiGWNf3tyx1k6lbNffcp8n5gKpEs6g4ngyQ7Zpv8KpMpn6dSmngUd9MPOUQsQ06s5P836ns5S5k8i5ZR3OEHHa9KRiDlFhYfvYNwfhUuzu/kGqCnJHY/Dlb8UTARfNqe54EupnUcwpQ9/qVfcqYBOtTE6dtco78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=H5U15b96; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id CBB8E471;
-	Fri, 19 Jul 2024 11:37:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1721381875;
-	bh=l5EtkbtTmp+QwD/m59M+rHtc9b7+dQo0hYOf5L/2fR4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H5U15b96KUvdWcQKP831UDGXX7yQAmsdbshRTOvwQN8/o7IUio0QYTB7nEN9rmXiI
-	 KBlm5oHiPcCGYwrzlmsO7eAnF5MmHf83t4Ly5EOO7IkVZcuIckWfpDMROA14Qgrilv
-	 q9mOK8uHFKcQoYyjDR6sWuC0XQFEMkFla0FhwgRA=
-Date: Fri, 19 Jul 2024 12:38:19 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: Linux logs error `Failed to query (GET_CUR) UVC control X on
- unit Y: -75 (exp. 1).` (75 == EOVERFLOW?)
-Message-ID: <20240719093819.GE12656@pendragon.ideasonboard.com>
-References: <af462e20-d158-4c5c-8dae-ce48f4192087@molgen.mpg.de>
- <2024071939-wrought-repackage-f3c5@gregkh>
+	s=arc-20240116; t=1721387440; c=relaxed/simple;
+	bh=FLpC8utwEIJQLiEshcqIPSR5PVM/wZvPxXyaAC6uHsc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=CGd1cleHM2t2C7NAQ9B2qPWx1I9BQNbuwEmdxMlo17VNSEJxtITrH+dIK0gTgwS9bEUNt7r4oZzQFH/00dF+i3ddzQEt/IP6KcEjJerQ0xcCjkjVcEvHumfHm4pZ+ujlZ1ecob4b7mfJMLd5a2oAp8bu8icUkFoxWB4bt6i72tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=moKWrtoP; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240719110234epoutp048afdeae7286d3baaef3142ef76744b5d~jmFCTh2BM2888828888epoutp04P
+	for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2024 11:02:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240719110234epoutp048afdeae7286d3baaef3142ef76744b5d~jmFCTh2BM2888828888epoutp04P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1721386954;
+	bh=tcuRRKl9VdtIuqpxCnve4eFVQA4up3PEYahY4FJVRzI=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=moKWrtoPH7Rxg8mbqoMZBa35TA6D5e0xzBFWbXvQj98N7sGTZu+/sleo5x4h+AwT2
+	 SUl3KTnKah/NWdHIqrM4AeIgsSGgxF9wYQqWTcsvcx9sAvWsbsvihmOb2p6U0cZ+D7
+	 tFo0FuEXlGENDOPpySnFAeT5W2Y4YWD1tVqygAAA=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20240719110234epcas5p38d1d74df6ad45f6e034449db901cd3ee~jmFB7KYtE0712207122epcas5p3a;
+	Fri, 19 Jul 2024 11:02:34 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4WQRbD5sMnz4x9Pr; Fri, 19 Jul
+	2024 11:02:32 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	E8.7C.09989.8C74A966; Fri, 19 Jul 2024 20:02:32 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240719110149epcas5p3dd468685a095c094ed2e540279bf3ec2~jmEYmHhz02242422424epcas5p34;
+	Fri, 19 Jul 2024 11:01:49 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240719110149epsmtrp25c08edf6ec93b393aa106dc5111b81b6~jmEYkGekN1989019890epsmtrp2i;
+	Fri, 19 Jul 2024 11:01:49 +0000 (GMT)
+X-AuditID: b6c32a4a-bffff70000002705-0c-669a47c80f32
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	E5.84.07412.D974A966; Fri, 19 Jul 2024 20:01:49 +0900 (KST)
+Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240719110146epsmtip2d040cbc2bf24a38e8310d9f22193ebb0~jmEVwip5h0667406674epsmtip2J;
+	Fri, 19 Jul 2024 11:01:46 +0000 (GMT)
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
+	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
+	Selvarasu Ganesan <selvarasu.g@samsung.com>
+Subject: [PATCH] usb: dwc3: Potential fix of possible dwc3 interrupt storm
+Date: Fri, 19 Jul 2024 16:30:55 +0530
+Message-ID: <20240719110100.329-1-selvarasu.g@samsung.com>
+X-Mailer: git-send-email 2.45.2.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2024071939-wrought-repackage-f3c5@gregkh>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmuu4J91lpBks/qlm8ubqK1eLOgmlM
+	FqeWL2SyaF68ns1i0p6tLBZ3H/5gsbi8aw6bxaJlrcwWn47+Z7VY1TmHxeLI8o9MFpe/72S2
+	mHRQ1GLVggPsDnwe++euYffo27KK0WPL/s+MHp83yQWwRGXbZKQmpqQWKaTmJeenZOal2yp5
+	B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gDdqKRQlphTChQKSCwuVtK3synKLy1JVcjI
+	Ly6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIFKkzIzvh3didzwVTJimvdJ1kbGH8IdTFy
+	ckgImEhMm9DJ2sXIxSEksJtRYuaGxcwQzidGiQuzTjFCON8YJVpXnmKCaZnxsoMdIrGXUeLk
+	3tVQzndGiYstq4BaODjYBAwlnp2wAWkQESiRuPR2IxNIDbNAB5NE57IHrCAJYQEviQ1LNrOD
+	2CwCqhLr1n5kBLF5BawkJrdMZIHYpinxZ8VeFoi4oMTJmU/AbGYBeYnmrbPBbpUQ+Msu0d65
+	gw2iwUVizo41UM3CEq+Ob2GHsKUkPr/bC1VTLbH6zkc2iOYWRonDT75BFdlLPD76iBnkA2ag
+	zet36UOEZSWmnlrHBLGYT6L39xNoUPBK7JgHY6tKnGq8DDVfWuLekmusELaHxKQn21lARgoJ
+	xEq0XtaYwCg/C8k7s5C8Mwth8QJG5lWMkqkFxbnpqcWmBUZ5qeXwmE3Oz93ECE6rWl47GB8+
+	+KB3iJGJg/EQowQHs5IIr9+3mWlCvCmJlVWpRfnxRaU5qcWHGE2BYTyRWUo0OR+Y2PNK4g1N
+	LA1MzMzMTCyNzQyVxHlft85NERJITyxJzU5NLUgtgulj4uCUamCStF3T1OShNuNrX3jLHZOn
+	18Sfct35W+m6aevytetZX+oquH0652tyv9Us1ehGxGPlV/2mHHnpPK/MT05+z7uw69uSXxEr
+	S6ZJ7Swxz40R5OZbpWHnwHG/W1ab2+WIoKMXF7P1lB8az83+lnO5J7k6LX4f+m5Jm0pbC8+0
+	GvcPnTXBiyxfyWefqrHZvT688M3KtBcM198nOdXNnrBY/9jnJ+UPzZTzzetvHqg/3FPt6e83
+	+dzvdt+VJSGVS3+7BNabz7mz4N324k19f2KZWudl9Jcl+YnP2CWQ7v7dK2zlopcWqkIpriGH
+	rM8sm5TdWctYtlqwd5eCglVtvgGbuZ3WmYexUlNCuae1Ok/uUmIpzkg01GIuKk4EAPW+Kss0
+	BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDLMWRmVeSWpSXmKPExsWy7bCSvO5c91lpBot2yFq8ubqK1eLOgmlM
+	FqeWL2SyaF68ns1i0p6tLBZ3H/5gsbi8aw6bxaJlrcwWn47+Z7VY1TmHxeLI8o9MFpe/72S2
+	mHRQ1GLVggPsDnwe++euYffo27KK0WPL/s+MHp83yQWwRHHZpKTmZJalFunbJXBl/Du7k7lg
+	qmTFte6TrA2MP4S6GDk5JARMJGa87GDvYuTiEBLYzSjR/+0eO0RCWuL1rC5GCFtYYuW/51BF
+	Xxklmjs72LoYOTjYBAwlnp2wAakREaiQeLxwBgtIDbPAFCaJBdMOsoAkhAW8JDYs2Qw2lEVA
+	VWLd2o9gQ3kFrCQmt0xkgVigKfFnxV4WiLigxMmZT8BsZgF5ieats5knMPLNQpKahSS1gJFp
+	FaNkakFxbnpusmGBYV5quV5xYm5xaV66XnJ+7iZGcIBraexgvDf/n94hRiYOxkOMEhzMSiK8
+	ft9mpgnxpiRWVqUW5ccXleakFh9ilOZgURLnNZwxO0VIID2xJDU7NbUgtQgmy8TBKdXAFC9Q
+	zCx86t6bo8/0X3syRjbKtCxaUFietyjm+ntei3P7zunXCqr+dVrm+YDBKfHDKs+vuhMe6whF
+	ibxjNp7N8Pzlhc7tvjo7DVp0JYPsl8Ux1HJVZOvVaWdOdri94eTPnUqF0+6/f9Wzp/ii4fOb
+	H1cGKlWVbhQt6+tR09Ff4/Bs5Vt2jf9dPQ/8P4WdnsEuNuNvkOdLMeXJrDsaOS48K/xvfPeU
+	BceqZ4q/O11FvZT0n8zv/sDHuvGu0JqTU2YvN0210wlMPMMklL8zZM4t1c4+/iWV8SVNwVJb
+	uOK2iMcte9ek/v344wr+85IfZ/3t33vm2aoib9tLGuceaIQskXsb8/72WYm5DM+uHF73Qoml
+	OCPRUIu5qDgRAJBasAzfAgAA
+X-CMS-MailID: 20240719110149epcas5p3dd468685a095c094ed2e540279bf3ec2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240719110149epcas5p3dd468685a095c094ed2e540279bf3ec2
+References: <CGME20240719110149epcas5p3dd468685a095c094ed2e540279bf3ec2@epcas5p3.samsung.com>
 
-(CC'ing Ricardo)
+In certain scenarios, there is a chance that the CPU may not be
+scheduled the bottom half of dwc3 interrupt. This is because the CPU
+may hang up where any work queue lockup has happened for the same CPU
+that is trying to schedule the dwc3 thread interrupt. In this scenario,
+the USB can enter runtime suspend as the bus may idle for a longer time
+, or user can reconnect the USB cable. Then, the dwc3 event interrupt
+can be enabled when runtime resume is happening with regardless of the
+previous event status. This can lead to a dwc3 IRQ storm due to the
+return from the interrupt handler by checking only the evt->flags as
+DWC3_EVENT_PENDING, where the same flag was set as DWC3_EVENT_PENDING
+in previous work queue lockup.
+Let's consider the following sequences in this scenario,
 
-On Fri, Jul 19, 2024 at 08:05:35AM +0200, Greg KH wrote:
-> On Fri, Jul 19, 2024 at 07:22:54AM +0200, Paul Menzel wrote:
-> > Dear Linux folks,
-> > 
-> > 
-> > Today, starting the Intel Kaby Lake laptop Dell XPS 13 9360/0596KF, BIOS
-> > 2.21.0 06/02/2022 with
-> > 
-> >     Bus 001 Device 004: ID 0c45:670c Microdia Integrated Webcam HD
-> > 
-> > Linux “6.11-rc0” (v6.10-8070-gcb273eb7c839) logged UVC errors:
-> 
-> Does 6.10-final have the same issue?  If not, can you use 'git bisect'
-> to track down the offending commit?
-> 
-> There have not been any USB changes in Linus's tree yet, but there have
-> been a bunch of media changes, so perhaps something in the uvc driver is
-> causing this?
+Call trace of dwc3 IRQ after workqueue lockup scenario
+======================================================
+IRQ #1:
+->dwc3_interrupt()
+  ->dwc3_check_event_buf()
+        ->if (evt->flags & DWC3_EVENT_PENDING)
+                     return IRQ_HANDLED;
+        ->evt->flags |= DWC3_EVENT_PENDING;
+        ->/* Disable interrupt by setting DWC3_GEVNTSIZ_INTMASK  in
+                                                        DWC3_GEVNTSIZ
+        ->return IRQ_WAKE_THREAD; // No workqueue scheduled for dwc3
+                                     thread_fu due to workqueue lockup
+                                     even after return IRQ_WAKE_THREAD
+                                     from top-half.
 
-We've merged quite a few changes for the uvcvideo driver recently.
-Bisecting the problem would help greatly. It could also be helpful to
-set the uvcvideo module 'trace' parameter to 0xffff (e.g. add
-`uvcvideo.trace=0xffff` to the kernel command line, or unload and reload
-the uvcvideo module with the parameter set to 0xffff) and give us the
-additional messages printed to the kernel log.
+Thread #2:
+->dwc3_runtime_resume()
+ ->dwc3_resume_common()
+   ->dwc3_gadget_resume()
+      ->dwc3_gadget_soft_connect()
+        ->dwc3_event_buffers_setup()
+           ->/*Enable interrupt by clearing  DWC3_GEVNTSIZ_INTMASK in
+                                                        DWC3_GEVNTSIZ*/
 
-Could you also provide the output of `lsusb -v -d 0c45:670c` (running as
-root if possible) ?
+Start IRQ Storming after enable dwc3 event in resume path
+=========================================================
+CPU0: IRQ
+dwc3_interrupt()
+ dwc3_check_event_buf()
+        if (evt->flags & DWC3_EVENT_PENDING)
+         return IRQ_HANDLED;
 
+CPU0: IRQ
+dwc3_interrupt()
+ dwc3_check_event_buf()
+        if (evt->flags & DWC3_EVENT_PENDING)
+         return IRQ_HANDLED;
+..
+..
+
+To fix this issue by avoiding enabling of the dwc3 event interrupt in
+the runtime resume path if dwc3 event processing is in progress.
+
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+---
+ drivers/usb/dwc3/core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index cb82557678dd..610792a70805 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -549,8 +549,12 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+ 			lower_32_bits(evt->dma));
+ 	dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(0),
+ 			upper_32_bits(evt->dma));
+-	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
+-			DWC3_GEVNTSIZ_SIZE(evt->length));
++
++	/* Skip enable dwc3 event interrupt if event is processing in middle */
++	if (!(evt->flags & DWC3_EVENT_PENDING))
++		dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
++				DWC3_GEVNTSIZ_SIZE(evt->length));
++
+ 	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
+ 
+ 	return 0;
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart
 
