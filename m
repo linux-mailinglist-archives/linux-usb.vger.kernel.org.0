@@ -1,79 +1,188 @@
-Return-Path: <linux-usb+bounces-12290-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12291-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34257937E64
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jul 2024 02:07:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B785938014
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jul 2024 11:03:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BDCFB20CA0
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jul 2024 00:07:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 892D6282412
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jul 2024 09:03:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC650DF55;
-	Sat, 20 Jul 2024 00:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7A114D10A;
+	Sat, 20 Jul 2024 09:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTAjGtic"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pswl2GI4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF22B66E;
-	Sat, 20 Jul 2024 00:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8158E8830;
+	Sat, 20 Jul 2024 09:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721433955; cv=none; b=NaYZ2ZyR6XRkrScpM3Q545u42LLQon73tpQFoCi1H/ubzibk0lWR4SKtqFx7SIOlzeMDI+UFrZIW1BhBlg2NrBLcctS9lAGdQ5vDu1Kzf5EyqZGU1BEhwTPH4yuiNF0y34Ai220VD5yA4VeIKY1G2z0cG+0lG/LqZGwkwAyN9VY=
+	t=1721466172; cv=none; b=U/ShDG+H51tNxuZ/kXbwBHT7+C3D+EHSnO6QVDCJekCNgY0zyZcrTcJMWhYfeQBTS7SFAyFMEVEuxquvyu1tcbKTThLVO8lsXmgVF+PE3W2WNk1+JWbVCzn05smwQ1w+hAD36pDYJiVEqjuanAHd3LnWczwLYRpq9nDEn9UedR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721433955; c=relaxed/simple;
-	bh=wkW7T9+wbrfC7qLOj59DHVHicf9Yw+lpNgMEYokv2lg=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=i07OjC3L3715dblWMCsxICIea44OgD8YdLDx1FBNjX28xmKpL9Hs/S1bliUSOh8zy+KrcPXwcBgdj+vGzd0U5ilq5QnjeZP/YhusbBLn1kFgqFA2Nl/KkCFtvS3W4AHsI5Xik9P+4AgpwQXYQSq01khjakuwqqJk0Fv483J+3ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTAjGtic; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 45190C32782;
-	Sat, 20 Jul 2024 00:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721433955;
-	bh=wkW7T9+wbrfC7qLOj59DHVHicf9Yw+lpNgMEYokv2lg=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=aTAjGtic/BL4U9oDlyoOCNpBqogSauq2mmb+JZr3U93TXGLRoDkNkK1OOtNlOzGFJ
-	 P2wmUoCiTiGiR6TTQjZs/FWvV3yX8DAe6wbutXdzsrdrkWH/eRWCeAhrMfuXDYiF72
-	 MUMnQ5R53OhC3Zmpe7gTgzMhsfMy70fMPb13Ujifjfr11Vg1v0XXlplnzT7LmdBvnO
-	 3K7gGlGGToO8UxvEFVsDNA6pQdsNWTPgIUWQEjDlAXmdGBA2DKHZ3QcDNAJiySCAv/
-	 AkqDsYPvXqmedmgl9LS6c2lEhmmgMyDywDWdZ+85JPl6vp9f5wLP5Wy2ygoKUpx04m
-	 7OutNcIKKPs0Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B44AC4332D;
-	Sat, 20 Jul 2024 00:05:55 +0000 (UTC)
-Subject: Re: [GIT PULL] USB/Thunderbolt driver updates for 6.11-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZppbUEfumxaxy2JV@kroah.com>
-References: <ZppbUEfumxaxy2JV@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZppbUEfumxaxy2JV@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc1
-X-PR-Tracked-Commit-Id: b727493011123db329e2901e3abf81a8d146b6fe
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 04d17331ca33744e1426fdeee7ba5e975c4b2239
-Message-Id: <172143395523.25682.16037034023875383258.pr-tracker-bot@kernel.org>
-Date: Sat, 20 Jul 2024 00:05:55 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	s=arc-20240116; t=1721466172; c=relaxed/simple;
+	bh=nEYZaYwiAAQBLiIIm/uuWESTEfm20+ytFKWXjQA0y9Y=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WndEZ/gVGcRIengjGtlfHOqCAc1jtLZOGCg9jCxcgfXeJyvBCmzyrexJwOsQzji8OxU64SZ3j80MKxGD6VnG5N+eH3lbmtbG31bpLWXQz6nw+nIdcFiP3dIs7qrY0AOXbKn2WXuRMpG0W4juWrXb44kjm7MdI7ys5N28jWX9yNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pswl2GI4; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46K8eqt6003233;
+	Sat, 20 Jul 2024 09:02:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=JgbLO+BrfezU7OI5SgmnXSg/
+	fDyYu091fFqsRcz5Nzg=; b=pswl2GI4CzF3IqW6WarEW9V+xmeY28Nwnk85s68r
+	CGib3G7C+iGBRUZF1dgW49fPx6+hYRap/DgmjDFoHo4oc8tdDGDvBDx7awWv3ne9
+	Y8NkEuI3SSuy0eldFnl0MH6o2gTsa26LycfeBYCUWn2BQ3pYUv0UTh5t+LRkeeHL
+	Mip0eMYXRGNiDfAnsmop31HmOERgkHwjQtNBhWl6CHWVwn3sRoXknu2OigqQLSXT
+	9bXnwuJEcPF4L4uAb22489D64apSwrdcYdLNmiKRB02Dq47FlduUIygJMeS7b7QS
+	Ik+z9QNPtR0vBgvP4J+YHHUnANH3mr26JaEqgp8s7vMXnw==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g6djr7gb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 20 Jul 2024 09:02:39 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46K92cI4026188
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 20 Jul 2024 09:02:38 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sat, 20 Jul 2024 02:02:33 -0700
+Date: Sat, 20 Jul 2024 14:32:29 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <konrad.dybcio@linaro.org>,
+        <djakov@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] clk: qcom: ipq5332: Use icc-clk for enabling NoC
+ related clocks
+Message-ID: <Zpt9Jb0aIg96yKN3@hu-varada-blr.qualcomm.com>
+References: <20240711113239.3063546-1-quic_varada@quicinc.com>
+ <20240711113239.3063546-4-quic_varada@quicinc.com>
+ <iwdennlw4njxefulw5e2wofu4pylep65el4hiiso6xqmoaq5fb@i4hrltrn2o6z>
+ <ZpjxobF6LZMMN8A9@hu-varada-blr.qualcomm.com>
+ <CAA8EJpqHrgi-AvfxGxwph0MEs0=ALV_7XWoUcSgGTG3vVj62FA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpqHrgi-AvfxGxwph0MEs0=ALV_7XWoUcSgGTG3vVj62FA@mail.gmail.com>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ndjB3nHq9whzaOwYBUYPtg0OXYz9j96a
+X-Proofpoint-ORIG-GUID: ndjB3nHq9whzaOwYBUYPtg0OXYz9j96a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-20_06,2024-07-18_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 suspectscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 spamscore=0 adultscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407200065
 
-The pull request you sent on Fri, 19 Jul 2024 14:25:52 +0200:
+On Thu, Jul 18, 2024 at 01:47:32PM +0300, Dmitry Baryshkov wrote:
+> On Thu, 18 Jul 2024 at 13:42, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > On Sat, Jul 13, 2024 at 07:21:29PM +0300, Dmitry Baryshkov wrote:
+> > > On Thu, Jul 11, 2024 at 05:02:38PM GMT, Varadarajan Narayanan wrote:
+> > > > Use the icc-clk framework to enable few clocks to be able to
+> > > > create paths and use the peripherals connected on those NoCs.
+> > > >
+> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > ---
+> > > >  drivers/clk/qcom/gcc-ipq5332.c | 36 +++++++++++++++++++++++++++++-----
+> > > >  1 file changed, 31 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+> > > > index f98591148a97..6d7672cae0f7 100644
+> > > > --- a/drivers/clk/qcom/gcc-ipq5332.c
+> > > > +++ b/drivers/clk/qcom/gcc-ipq5332.c
+> > > > @@ -4,12 +4,14 @@
+> > > >   */
+> > > >
+> > > >  #include <linux/clk-provider.h>
+> > > > +#include <linux/interconnect-provider.h>
+> > > >  #include <linux/mod_devicetable.h>
+> > > >  #include <linux/module.h>
+> > > >  #include <linux/platform_device.h>
+> > > >  #include <linux/regmap.h>
+> > > >
+> > > >  #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> > > > +#include <dt-bindings/interconnect/qcom,ipq5332.h>
+> > > >
+> > > >  #include "clk-alpha-pll.h"
+> > > >  #include "clk-branch.h"
+> > > > @@ -131,12 +133,14 @@ static struct clk_alpha_pll gpll4_main = {
+> > > >                      * (will be added soon), so the clock framework
+> > > >                      * disables this source. But some of the clocks
+> > > >                      * initialized by boot loaders uses this source. So we
+> > > > -                    * need to keep this clock ON. Add the
+> > > > -                    * CLK_IGNORE_UNUSED flag so the clock will not be
+> > > > -                    * disabled. Once the consumer in kernel is added, we
+> > > > -                    * can get rid of this flag.
+> > > > +                    * need to keep this clock ON.
+> > > > +                    *
+> > > > +                    * After initial bootup, when the ICC framework turns
+> > > > +                    * off unused paths, as part of the icc-clk dependencies
+> > > > +                    * this clock gets disabled resulting in a hang. Marking
+> > > > +                    * it as critical to ensure it is not turned off.
+> > >
+> > > Previous comment was pretty clear: there are missing consumers, the flag
+> > > will be removed once they are added. Current comment doesn't make sense.
+> > > What is the reason for the device hang if we have all the consumers in
+> > > place?
+> >
+> > Earlier, since there were no consumers for this clock, it got
+> > disabled via clk_disable_unused() and CLK_IGNORE_UNUSED helped
+> > prevent that.
+> >
+> > Now, since this clk is getting used indirectly via icc-clk
+> > framework, it doesn't qualify for being disabled by
+> > clk_disable_unused(). However, when icc_sync_state is called, if
+> > it sees there are no consumers for a path and that path gets
+> > disabled, the relevant clocks get disabled and eventually this
+> > clock also gets disabled. To avoid this have changed 'flags' from
+> > CLK_IGNORE_UNUSED -> CLK_IS_CRITICAL.
+>
+> You don't seem to be answering my question: "What is the reason for
+> the device hang if we have all the consumers in place?"
+> Could you please answer it rather than describing the CCF / icc-clk behaviour?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc1
+Sorry if I hadn't expressed myself clearly. All the consumers are
+not there in place yet.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/04d17331ca33744e1426fdeee7ba5e975c4b2239
+> Are there any actual consumers for GPLL4 at this point? If not, why do
+> you want to keep it running? Usually all PLLs are shut down when there
+> are no consumers and then restarted when required. This is the
+> expected and correct behaviour.
 
-Thank you!
+There are consumers for GPLL4, but they are getting disabled by
+clk_disable_unused (this is expected). There seems to be some
+consumer that got enabled in boot loader itself but not accounted
+in Linux because of which we are relying on CLK_IGNORE_UNUSED.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+If missing consumer(s) is identified, we can do away with this
+flag. Till that is done, was hoping CLK_IS_CRITICAL could help.
+
+Thanks
+Varada
+
 
