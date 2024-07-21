@@ -1,102 +1,125 @@
-Return-Path: <linux-usb+bounces-12296-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12297-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29B579385C5
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2024 20:16:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADD869385E3
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2024 21:21:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FAA01C208EF
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2024 18:16:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44CBBB20B5A
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2024 19:21:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35402167DAC;
-	Sun, 21 Jul 2024 18:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8BE16A94B;
+	Sun, 21 Jul 2024 19:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de header.b="DjIR1hoo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IIkAz73h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shout02.mail.de (shout02.mail.de [62.201.172.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0713F567D
-	for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2024 18:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.201.172.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF1412F365;
+	Sun, 21 Jul 2024 19:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721585759; cv=none; b=t+yN2PEB95W8kptXeOgxSjrRm6zcUdGKpaz47J4elJcUdCc5J5qt7ghl4vstyqqF1+xoBwpsLM8JeRs+IlJwuuOtTzAnu4I6XNVX8wFdY2emSdzwHWhnOoEnpsofaj7hnxqdoR6xU+TMEVxY6ZL56kORkM5tXthJOIRrfG32OH0=
+	t=1721589704; cv=none; b=VZRfsWoE6TaDnbBxY4NYxxw2RB9yy7FkiFA28QNpeCAShxjfpDCkJ0LGHA9mGVpzNMOAR9ahqAPlV7nZsblTFBlJoIG83qDM/NtKRqXc+iXOaHDXBcHvVGYs2bocJQx4dMRgaK/kcUcS9P9Gtb9HaKwqhwv3DstG8x48+tthPdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721585759; c=relaxed/simple;
-	bh=Bba03MPkHtBjDGBFQL8Wa4743qmhJ6F8wmagHR2+Ngw=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=ouf0iO7cNRnkALU8THXd3Es5Jy9uceRzreMYsi1giG2SVg86DaDcyt7Y4svF4wtWCIXb+n3SFA/aDyhp35rt1SWKVN7tIEaTAdM+9cKclrpFLb/9s9LQCDg3uDNKZ1DjwAD6JEaCRybY9yQoONn2YOmlCHeH+eeCxcBD/SiSMcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.de; spf=pass smtp.mailfrom=mail.de; dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de header.b=DjIR1hoo; arc=none smtp.client-ip=62.201.172.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.de
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
-	by shout02.mail.de (Postfix) with ESMTP id C5184240D54
-	for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2024 20:09:13 +0200 (CEST)
-Received: from smtp01.mail.de (smtp04.bt.mail.de [10.0.121.214])
-	by postfix01.mail.de (Postfix) with ESMTP id ADABA801A9
-	for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2024 20:09:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.de;
-	s=mailde202009; t=1721585353;
-	bh=Bba03MPkHtBjDGBFQL8Wa4743qmhJ6F8wmagHR2+Ngw=;
-	h=Message-ID:Date:To:From:Subject:From:To:CC:Subject:Reply-To;
-	b=DjIR1hooo1tFd6vhCFYw8FbpfLFvjHZM/0NlCRCNT4N8HG/DLY1UHVNIJ6B/8j79A
-	 QMm09Jp9t5qYdjY/6sk7ZVgqiwsRJ6B9WZgDXKk/zvpSih03aLt8kvY3itHgVyHu0P
-	 S71tCYjdwysQBIbfPHwBE+fzTLygF9zCNElByy8PCH9l7yxMjZ3vOZbAYb9Fdsx+A3
-	 6DQZ2KI3/r0GHLqtEFDJADShaM3k6vSlUhyvIGO2tHUfjVod259gA+isFDQPk3Kl3u
-	 XyX9tOSYXuHH+gXcTZ+KjmBl/9FWoV+5JgB3OjjzX//dJFF+mfs6dOnYFmDeWCb3+P
-	 5X5hPdbxBbIYw==
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp01.mail.de (Postfix) with ESMTPSA id 798B3240AC3
-	for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2024 20:09:13 +0200 (CEST)
-Message-ID: <fbde5b4b-6640-4cc9-b39a-7eafcc0d29ba@mail.de>
-Date: Sun, 21 Jul 2024 20:09:12 +0200
+	s=arc-20240116; t=1721589704; c=relaxed/simple;
+	bh=4GELLVQrg4Ntcja5OwSVGHIZH1ApO5eJrOSaSjerjbI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dix1qPaQ5AIBnOmTwkgvr8NC6BaTGRtWj8yt0+aK/ARjbt25POvr4he7/gLIfwyN6zGoiK7EkXSWEVgNA2+h/0B+jo14ZcfJsXVkjeIt1nUxWbY0N6Xtu1WNeb3sUWq76wdz6V/CDoWhgfihHLQpmoSuOM3xFPUb2toY6vP+6ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IIkAz73h; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6b7b28442f9so31097946d6.3;
+        Sun, 21 Jul 2024 12:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721589701; x=1722194501; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BW8O7zO4LyicyWVlwS/XaS6Chd2z5rZ+4N2xFS6fnVk=;
+        b=IIkAz73hZXZA2BYKxPJ8/kGjZ4hIYnjj6fhBnjGdr8mLmhHKSewu3R6yr2HBQ5bjON
+         S5h1L/QhzCAVRSoHWcp0PiaEr+yXOthEHZb3Z72cIv3vTKsGidDZDZ3AGvwYH+qAs01w
+         CyOuC7r5/EEwfbtIZPPmgaPGlTIPDXia7bSsoyEADS3w7WRv4s+pQY8IO2LIVb5+vOAP
+         VZqXyvQfODoedYjuQmwmvD5G3qY5Hte//MQ6ZK1Hu0GgljgVCAb1+pFg25Nz16AMBpov
+         9mDfdrabQOfMAqGhdwozY7f5X5ptnVOMpglCZb/Km4XPV2Hf7zNvlRJ7xrmUnaPJlvQn
+         ns0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721589701; x=1722194501;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BW8O7zO4LyicyWVlwS/XaS6Chd2z5rZ+4N2xFS6fnVk=;
+        b=UZpaf6HojJ2evgN2P4Nf9HT7sRggUUGrOmhFTWAcb4ICJlqh4YqQyGrkuM5R5jBARm
+         FLc/n2GYnKIQcVwcZ7ZAkiXvy93GSVtyiQbDZUTGNG7hjCy6PMe4kemNIjnS30nzs+tf
+         YVfMUJh0BlsBLXwoQ5d6WjAO40kfO/WKh2bXwgAd+H/DGxG62JtAA/IZS5zo764y7fnf
+         Ko3/HVNB74Q1fpSQ+QK5UGPrJmlOTivytlzNHpCHaPjqI+cIjXvjJiEbVM2Exn68/GE9
+         BhXaftM7alA5pUSHeBRM0Jx7z6KS9DxMZaCo//7LDYqmV0XfodMDEQn/thQLYtKGUiD9
+         daOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXOs+T6RCyucEUrcmybZhoHuVaM016LcP85m0cXBIFOvYx8xtby2ekfyU+j0I8bhCUKnLhPmt7XTQpS2XSdfVtyBe+qtII6hGRphTVVFHtnEiovtOKljTJmNQ7bo5N2QZudTcmQ
+X-Gm-Message-State: AOJu0Yy+ws7pCu00HUMB0wAMl7oGqS0Kf2gtXgaLxHNxBPKDzNqg8f6J
+	g2T0wvfFgaProdczDVBAwTJwdoCcEO/ZLGQsqV22F/iKMxM2A47yAQiDTE+Z
+X-Google-Smtp-Source: AGHT+IF8619f8ML2OMfKABkan+2zHPgb5pYQtDvaO0+bRB/243L3oM3Z75OsPtq+mPZUin5OHZnkRQ==
+X-Received: by 2002:a05:6214:5096:b0:6b1:e371:99d9 with SMTP id 6a1803df08f44-6b96103ac4amr72881226d6.8.1721589701487;
+        Sun, 21 Jul 2024 12:21:41 -0700 (PDT)
+Received: from localhost.localdomain (syn-104-229-042-148.res.spectrum.com. [104.229.42.148])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b7ac9c447dsm28659926d6.87.2024.07.21.12.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Jul 2024 12:21:41 -0700 (PDT)
+From: crwulff@gmail.com
+To: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Roy Luo <royluo@google.com>,
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	yuan linyu <yuanlinyu@hihonor.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Chris Wulff <crwulff@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: gadget: core: Check for unset descriptor
+Date: Sun, 21 Jul 2024 15:20:49 -0400
+Message-ID: <20240721192048.3530097-2-crwulff@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: de-DE
-To: linux-usb@vger.kernel.org
-From: G4bandit@mail.de
-Subject: cp210x VID and PID of my device are missing allthough the should be
- there
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-purgate-size: 612
-X-purgate-ID: 154282::1721585353-E17EB338-FFACE709/0/0
 
+From: Chris Wulff <crwulff@gmail.com>
 
-Hi
-my device with the
-VID = 0x28e9
-PID = 0x028a
-should be supported by the cp210x driver. But in fact this VID and PID 
-does not appear.
-See the output:
-alias:          usb:v3195pF190d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v2626pEA60d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v2184p0030d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v1FB9p0701d*dc*dsc*dp*ic*isc*ip*in*
+Make sure the descriptor has been set before looking at maxpacket.
+This fixes a null pointer panic in this case.
 
-The manufacturer recommends to use the driver maintained in the linux 
-kernels.
+This may happen if the gadget doesn't properly set up the endpoint
+for the current speed, or the gadget descriptors are malformed and
+the descriptor for the speed/endpoint are not found.
 
-Could you please helps me? Or maybe upgrade the driver?
-My system is a debian12.
+Fixes: 54f83b8c8ea9 ("USB: gadget: Reject endpoints with 0 maxpacket value")
+Cc: stable@vger.kernel.org
+Signed-off-by: Chris Wulff <crwulff@gmail.com>
+---
+ drivers/usb/gadget/udc/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Kr
-Gulam
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 2dfae7a17b3f..36a5d5935889 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -118,7 +118,7 @@ int usb_ep_enable(struct usb_ep *ep)
+ 		goto out;
+ 
+ 	/* UDC drivers can't handle endpoints with maxpacket size 0 */
+-	if (usb_endpoint_maxp(ep->desc) == 0) {
++	if (!ep->desc || usb_endpoint_maxp(ep->desc) == 0) {
+ 		/*
+ 		 * We should log an error message here, but we can't call
+ 		 * dev_err() because there's no way to find the gadget
+-- 
+2.43.0
 
 
