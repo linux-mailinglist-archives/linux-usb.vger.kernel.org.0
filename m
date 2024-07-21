@@ -1,193 +1,200 @@
-Return-Path: <linux-usb+bounces-12298-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12299-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14BD59385E5
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2024 21:24:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D228938664
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 00:09:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89A8D1F21165
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2024 19:24:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F1D2B20C32
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2024 22:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EB7D16A952;
-	Sun, 21 Jul 2024 19:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LbKSq8RN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07BFE16C69A;
+	Sun, 21 Jul 2024 22:08:48 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F103323D;
-	Sun, 21 Jul 2024 19:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAC116B72D
+	for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2024 22:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721589861; cv=none; b=Dj+bmTBgF7r+ubkdCj8oUDqgBoxUSvpTvloYvgJaPiJ8XZF/hbZD/6e/NyRud5e6R+P5Gru2KKVPnkMRFLjt1AGWHpLwvvRbCnWhfaCS6ATmvdPyUsWdcQdZi4TOkTGs2KkRXxNgZlnYfvMS+rhkWs6YyIdQ9/GTmweu99nPmbo=
+	t=1721599727; cv=none; b=lUUi93RPfMqxtqPVXf5oT7LoHUe3mn8aWDCd4X0zGtznBPiVANUhZpPe74ZshV3mOXnfB/RCilaPqVsdpOceyQNZLhjMYNIwxYaGoXDVcHacY1c+DJYWUlkMhIbeb1MUdwTcw6E8aOGCj8EnAnj+ijV+Iyzrm0ypNdADSejPa/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721589861; c=relaxed/simple;
-	bh=AqT35sDXJ0iu6yBNB7r+JGSv/gJJ49DhERq/qxLAwEw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gyETD0FrMyqGwjNaFKvOOLi608sDvQVZRjoS4O3VHIGZM6w9L3Y97xHY1XYPQunkYS1Aj17ZDcLO9r5+UIDuwn1EUtWKcbAidN/W6FEvYwGfNLIwB2mLXi5cxqA/TLBuLiEQPQRqoIhUqH4XPDVm5ufBUhipMFFTZJ2RFsxUOiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LbKSq8RN; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3d9400a1ad9so2077254b6e.1;
-        Sun, 21 Jul 2024 12:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721589858; x=1722194658; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKmyuILTI8ybEcidGG1vAPXbk+2J62QqKdMmKlVKTgo=;
-        b=LbKSq8RNTHkDcUHKuGxf1Yu8NRGI4ZCSpkVQ2Vp1w0hpMjwzomrVrwYXz4Wgsm72oX
-         yB9jY2NeGvIixHuzC+yOs4xIxnZlEka7ID3Ci2sVsTpBvK98yKzJKyVJt/1/OWijjemk
-         tpDkxAPPkzIg/tUarJ8g/oOR3Dft5Meexcvp4j7Bt1M32KTKtTEHG86tRaZWM5dCmuuR
-         EUbF7rz6Ijuqy4k8yG/kMkFrsIEBlXMlUWDkLn+9h6DWRFV2MfMEiYAR7FDNACihkNFv
-         4O+JWxZklQhX9vPUQky7mQ/ZQOWb376PRWI5qIrGRs961hgOlvIoIr7xoHVuuC8jdZN2
-         RQqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721589858; x=1722194658;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tKmyuILTI8ybEcidGG1vAPXbk+2J62QqKdMmKlVKTgo=;
-        b=Vh02Dl0dBTM9E18tP5EI/8Ydoi+Q7hYtSXK04Rb5m5bwIXiZ3i+JqEV8DmM3Qo2Wco
-         HLDKlRNefmhvx32kI1DQ3PC1GmrCnhzMMqvjDN3F4KL0ojG61kbuTXySFtUlir2N1ORh
-         up/1/YCYdKTaa1ZK86kjomNL2VW8BIqcTgHXP8Vm2ESub/WRGsHmrgCZOkSfbe7FXD4V
-         PNJLM7QV2AGmxVrEE4vlBaGLpU+43fUXheOP/mQk3ELVtJacvqsYWSErxWC/+PA/XV3S
-         BziAJdVjJIocOkxhEpBWWBfJ+PZBSzk/1ueQijTXQrS4DMzq7LV43rhh/RUhfjO7t6Gr
-         qLMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVq04wJINDQVJF3bNxCrgNEq39IUJeHXnQsuUfO+1Qrg3qkkaO0FFoKctM1rycmsY3oOwTb+CjvLiqMjqlH35LvRIOFJiXrVTH876ID5U2Xfoi83HyO6e4bCL/TDzdc86ZRiHUX
-X-Gm-Message-State: AOJu0YwN91WmyXSzXD2+JoBIFV4TR/XBDgOGalW60PekxRgjrh9xLo88
-	DwSBll6vu12Vzu9NcPAwSdmQST92NvDxv/yLDqHZM/gn2s6VZfTNE3Nl6Wbu
-X-Google-Smtp-Source: AGHT+IFyEBZY6FF+5xopCKyNITVCA+2JP4WlXSStEt/9clXjNzwlv/2shP7qekz//BAhjmlRhHktow==
-X-Received: by 2002:a05:6808:1483:b0:3d9:2def:21b4 with SMTP id 5614622812f47-3dae5f729f5mr7840495b6e.14.1721589858090;
-        Sun, 21 Jul 2024 12:24:18 -0700 (PDT)
-Received: from localhost.localdomain (syn-104-229-042-148.res.spectrum.com. [104.229.42.148])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44f9cd04062sm27277361cf.40.2024.07.21.12.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jul 2024 12:24:17 -0700 (PDT)
-From: crwulff@gmail.com
-To: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Felipe Balbi <felipe.balbi@linux.intel.com>,
-	Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	linux-kernel@vger.kernel.org,
-	Chris Wulff <crwulff@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: gadget: u_audio: Check return codes from usb_ep_enable and config_ep_by_speed.
-Date: Sun, 21 Jul 2024 15:23:15 -0400
-Message-ID: <20240721192314.3532697-2-crwulff@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1721599727; c=relaxed/simple;
+	bh=3cX0kwDU5b8rcZZ955opofqi6LaYdUQoIbhhqN5BgBg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dl44mIlbzDDaziQtJwsCdAth38ae0V1fozjdg6YB/ox6g73UEKxw+yYyV8EarQoNkkrb4MJbhN7ESC6d+/k+3Auh6Q3qFV7ZsX8QEe9cLHG9uIX3epwYLuXk4NwR/8lD+ZUqmY1eHNAB9DdL++NetcNoCYC58MvFXN1kJkQDpw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1sVejC-00032t-UZ; Mon, 22 Jul 2024 00:08:26 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1sVej8-001EsY-As; Mon, 22 Jul 2024 00:08:22 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1sVej8-00FrrZ-0y;
+	Mon, 22 Jul 2024 00:08:22 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH v7 0/3] usb: gadget: 9pfs transport
+Date: Mon, 22 Jul 2024 00:08:16 +0200
+Message-Id: <20240116-ml-topic-u9p-v7-0-3a1eeef77fbe@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANCGnWYC/33PyW7DIBQF0F+JWJcGHlPoqv9RdcHwiJE8CTtWq
+ sj/XuxtXS8vuu9c8SITlowT+bi8SMElT3noazBvFxIa19+R5lgzAQaSca5p19J5GHOgDzvSm1V
+ gpBIMPSf1xLsJqS+uD8121LVde93b19reCmPBlJ/73td3zU2e5qH87PML317/WVo4ZdTFWxBMJ
+ +skfo7Y3x9zGfr8fI9INm2BMwGq4KUOPikLVsOhIM4EUYWgwQmNIUTHDwV5JsgqGACMcPPMxeN
+ fqDNBVUFhZM5HJTCpQ0GfCboK2iprTDQ6pvRHWNf1Fy3S2EYYAgAA
+To: Eric Van Hensbergen <ericvh@kernel.org>, 
+ Latchesar Ionkov <lucho@ionkov.net>, 
+ Dominique Martinet <asmadeus@codewreck.org>, 
+ Christian Schoenebeck <linux_oss@crudebyte.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>, v9fs@lists.linux.dev, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, kernel@pengutronix.de, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>, 
+ Jan Luebbe <jlu@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5135;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=3cX0kwDU5b8rcZZ955opofqi6LaYdUQoIbhhqN5BgBg=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmnYbR3Uh79e1ZCyJnyO/OFLUPnjQIm0qcam8qJ
+ is/9ERDo8qJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZp2G0QAKCRC/aVhE+XH0
+ q4DCD/96ozjKJyLgTMTB4I6AtbzdKKDqNptoPcCYUSu4kmixGTTeDvSD9tfRH4pCIO7u9A2uCtW
+ DTCJC46AxfLNXs3CIRb+KNz3vtWzpeRdVEY0S4lvMNJ/ONxtCugygfwToBdO3TKNbB7bJqZAzXY
+ fdSUrr4TARcGHsaJSMottN7CzX6TwekEiL+Cm6F2L2ioHWgfpVCVFhLVYlOO1bWtHz3IMUxSE88
+ qJwnlIV70+kbgciH3GKD2stVPKKwZQTAIhHdNaA692Rq05p/kcesTLAYrSVUuOnSDkrbGRbXMdJ
+ +39rhcdULffBrdGsyq2+yKBYUp9/XYZ+z6I6RMqU8g3P94cMUZJAfvhOWFA31RZJY0nD5ERPo1Z
+ 03TEO68mfHD1oBPTuLhZyziEj5AToqDAQ5ys/6AR8BFb0+eNm9pxCaweti6sqd+NkXSwv4RmNXl
+ CI9lCkAs2Ua2kG6osbd8lpXYcS7CmGyjT0DD7cyXfwC6B7PdRKvoVpfqHUuQTHfhFtIa8fJzKVz
+ y0An/ftmzJnKAfykBKOZ+1THeN76Yd2D5VcLna+wWZ0BynBSoQxn+IShNXwgyS914I0JLcpGF0T
+ w9/wd+cGPMqq/2ueaoHQOTD6iEjIlzoGMbQahxVL1wGVIG4a7gMgfKQgcvV7LlGZNoZCWKnelHl
+ kYV54pNBXrNB/9A==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-From: Chris Wulff <crwulff@gmail.com>
+This series is adding support to mount usb hostside exported 9pfs
+filesystems via the usb gadget interface. It also includes a simple tool
+(p9_fwd.py) to translate an tcp 9pfs transport and reuse it via the usb
+interface.
 
-These functions can fail if descriptors are malformed, or missing,
-for the selected USB speed.
+    +--------------------------+    |    +--------------------------+
+    |  9PFS mounting client    |    |    |  9PFS exporting server   |
+ SW |                          |    |    |                          |
+    |   (this:trans_usbg)      |    |    |(e.g. diod or nfs-ganesha)|
+    +-------------^------------+    |    +-------------^------------+
+                  |                 |                  |
+                  |                 |           +------v------+
+                  |                 |           |  p9_fwd.py  |
+                  |                 |           +------^------+
+                  |                 |                  |
+------------------|------------------------------------|-------------
+                  |                 |                  |
+    +-------------v------------+    |    +-------------v------------+
+    |                          |    |    |                          |
+ HW |   USB Device Controller  <--------->   USB Host Controller    |
+    |                          |    |    |                          |
+    +--------------------------+    |    +--------------------------+
 
-Fixes: eb9fecb9e69b ("usb: gadget: f_uac2: split out audio core")
-Fixes: 24f779dac8f3 ("usb: gadget: f_uac2/u_audio: add feedback endpoint support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Chris Wulff <crwulff@gmail.com>
+The USB host exports a filesystem, while the gadget on the USB device
+side makes it mountable.
+
+Diod (9pfs server) and the forwarder are on the development host, where
+the root filesystem is actually stored. The gadget is initialized during
+boot (or later) on the embedded board. Then the forwarder will find it
+on the USB bus and start forwarding requests.
+
+In this case the 9p requests come from the device and are handled by the
+host. The reason is that USB device ports are normally not available on
+PCs, so a connection in the other direction would not work.
+
+One use-case is to use it as an alternative to NFS root booting during
+the development of embedded Linux devices.
+
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 ---
- drivers/usb/gadget/function/u_audio.c | 42 ++++++++++++++++++++++-----
- 1 file changed, 34 insertions(+), 8 deletions(-)
+Changes in v7:
+- added back the req_lock spinlock
+- Link to v6: https://lore.kernel.org/r/20240116-ml-topic-u9p-v6-0-695977d76dff@pengutronix.de
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index 89af0feb7512..24299576972f 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -592,16 +592,25 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 	struct usb_ep *ep, *ep_fback;
- 	struct uac_rtd_params *prm;
- 	struct uac_params *params = &audio_dev->params;
--	int req_len, i;
-+	int req_len, i, ret;
- 
- 	prm = &uac->c_prm;
- 	dev_dbg(dev, "start capture with rate %d\n", prm->srate);
- 	ep = audio_dev->out_ep;
--	config_ep_by_speed(gadget, &audio_dev->func, ep);
-+	ret = config_ep_by_speed(gadget, &audio_dev->func, ep);
-+	if (ret < 0) {
-+		dev_err(dev, "config_ep_by_speed for out_ep failed (%d)\n", ret);
-+		return ret;
-+	}
-+
- 	req_len = ep->maxpacket;
- 
- 	prm->ep_enabled = true;
--	usb_ep_enable(ep);
-+	ret = usb_ep_enable(ep);
-+	if (ret < 0) {
-+		dev_err(dev, "usb_ep_enable failed for out_ep (%d)\n", ret);
-+		return ret;
-+	}
- 
- 	for (i = 0; i < params->req_number; i++) {
- 		if (!prm->reqs[i]) {
-@@ -629,9 +638,18 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 		return 0;
- 
- 	/* Setup feedback endpoint */
--	config_ep_by_speed(gadget, &audio_dev->func, ep_fback);
-+	ret = config_ep_by_speed(gadget, &audio_dev->func, ep_fback);
-+	if (ret < 0) {
-+		dev_err(dev, "config_ep_by_speed in_ep_fback failed (%d)\n", ret);
-+		return ret; // TODO: Clean up out_ep
-+	}
-+
- 	prm->fb_ep_enabled = true;
--	usb_ep_enable(ep_fback);
-+	ret = usb_ep_enable(ep_fback);
-+	if (ret < 0) {
-+		dev_err(dev, "usb_ep_enable failed for in_ep_fback (%d)\n", ret);
-+		return ret; // TODO: Clean up out_ep
-+	}
- 	req_len = ep_fback->maxpacket;
- 
- 	req_fback = usb_ep_alloc_request(ep_fback, GFP_ATOMIC);
-@@ -687,13 +705,17 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	struct uac_params *params = &audio_dev->params;
- 	unsigned int factor;
- 	const struct usb_endpoint_descriptor *ep_desc;
--	int req_len, i;
-+	int req_len, i, ret;
- 	unsigned int p_pktsize;
- 
- 	prm = &uac->p_prm;
- 	dev_dbg(dev, "start playback with rate %d\n", prm->srate);
- 	ep = audio_dev->in_ep;
--	config_ep_by_speed(gadget, &audio_dev->func, ep);
-+	ret = config_ep_by_speed(gadget, &audio_dev->func, ep);
-+	if (ret < 0) {
-+		dev_err(dev, "config_ep_by_speed for in_ep failed (%d)\n", ret);
-+		return ret;
-+	}
- 
- 	ep_desc = ep->desc;
- 	/*
-@@ -720,7 +742,11 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	uac->p_residue_mil = 0;
- 
- 	prm->ep_enabled = true;
--	usb_ep_enable(ep);
-+	ret = usb_ep_enable(ep);
-+	if (ret < 0) {
-+		dev_err(dev, "usb_ep_enable failed for in_ep (%d)\n", ret);
-+		return ret;
-+	}
- 
- 	for (i = 0; i < params->req_number; i++) {
- 		if (!prm->reqs[i]) {
+Changes in v6:
+- fixed the python script not to have path set by default
+- improved the lock init
+- fixed usb9pfs status change to connected
+- Link to v5: https://lore.kernel.org/r/20240116-ml-topic-u9p-v5-0-5ed0abd53ef5@pengutronix.de
+
+Changes in v5:
+- fixed lockup in mount -> remount -> monut scenario
+- improved p9_fwd transport script with more options
+- Link to v4: https://lore.kernel.org/r/20240116-ml-topic-u9p-v4-0-722ed28b0ade@pengutronix.de
+
+Changes in v4:
+- reworked the naming scheme to be set by the configfs instance
+- added conn_cancel function to properly stop the transfers
+- ensured that umount -f will work even when the host side has crahed
+- added all the review feedback from Andrzej Pietrasiewicz
+- Link to v3: https://lore.kernel.org/r/20240116-ml-topic-u9p-v3-0-c62a36eccda1@pengutronix.de
+
+Changes in v3:
+- dropped patch "usb: gadget: legacy: add 9pfs multi gadget" as discussed with gregkh
+- Link to v2: https://lore.kernel.org/r/20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de
+
+Changes in v2:
+- improved the commit messages
+- introduced an patch to move the header u_f.h to include/linux/usb to compile usb gadget functions treewide
+- moved usbg gadget function to net/9p/
+- adderessed several comments in function driver, like the cleanup path and kbuild errors
+- improved the documentation in Documentation/filesystems/9p.rst
+- Link to v1: https://lore.kernel.org/r/20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de
+
+---
+Michael Grzeschik (3):
+      usb: gadget: function: move u_f.h to include/linux/usb/func_utils.h
+      net/9p/usbg: Add new usb gadget function transport
+      tools: usb: p9_fwd: add usb gadget packet forwarder script
+
+ Documentation/filesystems/9p.rst                   |  58 +-
+ drivers/usb/gadget/configfs.c                      |   2 +-
+ drivers/usb/gadget/function/f_fs.c                 |   2 +-
+ drivers/usb/gadget/function/f_hid.c                |   2 +-
+ drivers/usb/gadget/function/f_loopback.c           |   2 +-
+ drivers/usb/gadget/function/f_midi.c               |   2 +-
+ drivers/usb/gadget/function/f_midi2.c              |   2 +-
+ drivers/usb/gadget/function/f_sourcesink.c         |   2 +-
+ drivers/usb/gadget/u_f.c                           |   2 +-
+ .../gadget/u_f.h => include/linux/usb/func_utils.h |   2 +-
+ net/9p/Kconfig                                     |   6 +
+ net/9p/Makefile                                    |   4 +
+ net/9p/trans_usbg.c                                | 985 +++++++++++++++++++++
+ tools/usb/p9_fwd.py                                | 243 +++++
+ 14 files changed, 1304 insertions(+), 10 deletions(-)
+---
+base-commit: 2c9b3512402ed192d1f43f4531fb5da947e72bd0
+change-id: 20240116-ml-topic-u9p-895274530eb1
+
+Best regards,
 -- 
-2.43.0
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 
