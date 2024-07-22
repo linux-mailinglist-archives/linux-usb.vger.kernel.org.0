@@ -1,153 +1,125 @@
-Return-Path: <linux-usb+bounces-12331-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12332-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D6BB93928E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 18:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA12A939295
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 18:33:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 391DF2825FF
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 16:31:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96284281B33
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 16:33:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA15316E886;
-	Mon, 22 Jul 2024 16:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D9E16EB57;
+	Mon, 22 Jul 2024 16:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NgLHbLld"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Webi8DPC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5090726ACD
-	for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2024 16:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A6E26ACD;
+	Mon, 22 Jul 2024 16:32:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721665875; cv=none; b=ei7Wgmv4uASdnxdquNHktY1aVUlafmOOFMA1rxKETYF5Qn0WjMt5r5OQieNTXlxpamY40HNTCreCmFum21p+yqK3sotrAbcH7qHOI9tIq2bGCsws4d7+pLhXzfb172hep/d15Dd39YQ6xVX6Iji3GnZ7h+5OVX/+kYLVGrFHYHY=
+	t=1721665978; cv=none; b=dMIf6cqAZW3ySEAGiVJawDm6t7rJMohUl88Bm8VEDU1UPcSgKzt2KouSElZgGvGVusrJ/6DREPLuDQOVDHypI4H4mZmB1d4l9Y9PplpuhitldmB32nCOgGUq2JHXa0E2ZJppWN6rJwzS687XioBSuHB3Z+gvzepubjag6sB6GJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721665875; c=relaxed/simple;
-	bh=bNE3bDKxb7FLWhqaPbW7aSgauEkphHIZ08lYe/lEQ2g=;
+	s=arc-20240116; t=1721665978; c=relaxed/simple;
+	bh=1M0mxD+ofI58h7xIrBA0625MaIsQLwX633kvF94BbAA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PX4z6pZI+485h9BqnJtdnW0pQe3eFQXf5eF2TZMmXpQisiCRYJJLEzn3z3Kmdi1MqeB0M/cfJeZY+W+t3hWcndarNSefIKXGxpvSiZeO4u0pxJ427owV/RSNTyffvZ7HSzHEQm+3seld7RFmFhSncBKUSoVPHnFPV1lovQ6tdqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NgLHbLld; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D52C116B1;
-	Mon, 22 Jul 2024 16:31:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Asx/yIihE8LvKpTWvPm6Ujj8PQ5/JA1u6Ybta1CMSZo63oAWgqhMlZflmO6EWrO3ZkbXAcyGcKwwq6ql2ZUC7ALf4GesYLzA053bY/lUzy7DI9UYDLBBq8fSg4xCkvO4+oAw/8obPVVxWNLFFt//psQYWgjXiVsDjj8eMIrc1jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Webi8DPC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8461C116B1;
+	Mon, 22 Jul 2024 16:32:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1721665874;
-	bh=bNE3bDKxb7FLWhqaPbW7aSgauEkphHIZ08lYe/lEQ2g=;
+	s=korg; t=1721665978;
+	bh=1M0mxD+ofI58h7xIrBA0625MaIsQLwX633kvF94BbAA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NgLHbLldH+dDkmIOotyfj1+jXz2iFiQW0mirQzwdwYGwfP5eBn2BhV0vztKPY0CN4
-	 HQLaE1m7Hk2EfHWYiPgRWe7lpxsS5YiNggzjsLlZ5u4p7kdUqrQwBWvSXIclfje84B
-	 Lpcme16/6EW9vDX0QU4agCmDmpFtBn8HggoTMzFM=
-Date: Mon, 22 Jul 2024 18:31:12 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1] xhci: dbc: fix handling ClearFeature Halt requests
-Message-ID: <2024072255-grass-monastery-c7db@gregkh>
-References: <20240722150738.61486-1-ukaszb@chromium.org>
+	b=Webi8DPCmkZgw1wCJHxOwfIBke6hMiuFL+GejK9m6v9M21aYb0GLxAxSFZYOBVS2b
+	 HAtFHnDhLGouECdKRv8B2MM8XhWkWeFgqJ79xErEOCVXoqhpJZAqIo0NZADBUAELIb
+	 wX8LXiYxNxDRqFa37vWdTGgDmHXSVhPW4J8FuSn8=
+Date: Mon, 22 Jul 2024 18:32:55 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Aurelio Mannara <aurelio.mannara@gmail.com>
+Cc: johan@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Added support for Silicon Labs Phoenix Contact UPS
+ Device Silicon Labs Phoenix Contact UPS Device VID/PID pair has been added
+ to CP210x driver in order for the OS to properly detect it
+Message-ID: <2024072228-cosmos-portion-f842@gregkh>
+References: <CAM-gfB_v9m3j2v0u+8M8fr54z_ka-3XFQep31uTRtdUre2a8_g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240722150738.61486-1-ukaszb@chromium.org>
+In-Reply-To: <CAM-gfB_v9m3j2v0u+8M8fr54z_ka-3XFQep31uTRtdUre2a8_g@mail.gmail.com>
 
-On Mon, Jul 22, 2024 at 03:07:38PM +0000, Łukasz Bartosik wrote:
-> DbC driver does not handle ClearFeature Halt requests correctly
-> which in turn may lead to dropping packets on the receive path.
-> 
-> Below is a trace capture where due to incorrect handling of
-> ClearFeature Halt packet gets dropped on the receive path.
-> 
-> /sys/kernel/debug/tracing # cat trace
-> 1) kworker/10:3-514   [010] d..1.  2925.601843: xhci_dbc_handle_event:
-> 	EVENT: TRB 000000019588c0e0 status 'Stall Error' len 0 slot 1 ep 2
-> 	type 'Transfer Event' flags e:C
-> 
-> 2) kworker/10:3-514   [010] d..1.  2925.613285: xhci_dbc_handle_event:
-> 	EVENT: TRB 000000019588bc80 status 'Stall Error' len 1024 slot 1
-> 	ep 3 type 'Transfer Event' flags e:C
-> 
-> 3) kworker/10:3-514   [010] d..1.  2925.619024: xhci_dbc_handle_transfer:
-> 	BULK: Buffer 0000000244b49800 length 1024 TD size 0 intr 0 type
-> 	'Normal' flags b:i:I:c:s:i:e:C
-> 
-> 4) kworker/10:3-514   [010] d..1.  2925.619025: xhci_dbc_giveback_request:
-> 	bulk-in: req 00000000a70b5ad2 length 0/1024 ==> -6
-> 
-> 5) kworker/10:3-514   [010] dNs2.  2925.623820: xhci_dbc_gadget_ep_queue:
-> 	BULK: Buffer 0000000244b49800 length 1024 TD size 0 intr 0 type
-> 	'Normal' flags b:i:I:c:s:i:e:c
-> 
-> 6) kworker/10:3-514   [010] dNs1.  2925.623823: xhci_dbc_queue_request:
-> 	bulk-in: req 00000000a70b5ad2 length 0/1024 ==> -115
-> 
-> 7) kworker/10:3-514   [010] d..1.  2925.629865: xhci_dbc_handle_event:
-> 	EVENT: TRB 000000019588bc80 status 'Short Packet' len 1000 slot 1
-> 	ep 3 type 'Transfer Event' flags e:C
-> 
-> 8) kworker/10:3-514   [010] d..1.  2925.635540: xhci_dbc_handle_event:
-> 	EVENT: TRB 000000019588bc90 status 'Short Packet' len 763 slot 1
-> 	ep 3 type 'Transfer Event' flags e:C
-> 
-> 9) kworker/10:3-514   [010] d..1.  2925.635540: xhci_dbc_handle_transfer:
-> 	BULK: Buffer 0000000244b49c00 length 1024 TD size 0 intr 0 type
-> 	'Normal' flags b:i:I:c:s:i:e:C
-> 
-> 10) kworker/10:3-514  [010] d..1.  2925.635541: xhci_dbc_giveback_request:
-> 	bulk-in: req 00000000b4ec77d7 length 261/1024 ==> 0
-> 
-> 11) kworker/10:3-514  [010] dNs2.  2925.635561: xhci_dbc_gadget_ep_queue:
-> 	BULK: Buffer 0000000244b49c00 length 1024 TD size 0 intr 0 type
-> 	'Normal' flags b:i:I:c:s:i:e:c
-> 
-> 12) kworker/10:3-514  [010] dNs1.  2925.635562: xhci_dbc_queue_request:
-> 	bulk-in: req 00000000b4ec77d7 length 0/1024 ==> -115
-> 
-> Lines 1 and 2 are Endpoints OUT and IN responses to receiving ClearFeature
-> Halt requests.
-> 
-> Line 7 notifies of reception of 24 bytes packet.
-> 
-> Line 8 notifies of reception of 261 bytes packet
-> 
-> In Lines [9, 12] 261 bytes packet is being processed.
-> 
-> However 24 bytes packet gets dropped. The kernel log includes entry which
-> is an indication of a packet drop:
-> [  127.651845] xhci_hcd 0000:00:0d.0: no matched request
-> 
-> This fix adds correct handling of ClearFeature Halt requests
-> by restarting an endpoint which received the request.
-> 
-> Fixes: dfba2174dc42 ("usb: xhci: Add DbC support in xHCI driver")
-> Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+On Mon, Jul 22, 2024 at 05:19:51PM +0200, Aurelio Mannara wrote:
 > ---
->  drivers/usb/host/xhci-dbgcap.c | 29 +++++++++++++++++++----------
->  drivers/usb/host/xhci-dbgtty.c |  5 +++++
->  2 files changed, 24 insertions(+), 10 deletions(-)
+>  drivers/usb/serial/cp210x.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-> index 872d9cddbcef..b7af3a5ac98a 100644
-> --- a/drivers/usb/host/xhci-dbgcap.c
-> +++ b/drivers/usb/host/xhci-dbgcap.c
-> @@ -173,7 +173,7 @@ static void xhci_dbc_giveback(struct dbc_request *req, int status)
->  	spin_lock(&dbc->lock);
->  }
->  
-> -static void xhci_dbc_flush_single_request(struct dbc_request *req)
-> +static void xhci_dbc_flush_single_request(struct dbc_request *req, int status)
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index 21fd26609252..a3b931441557 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -254,6 +254,7 @@ static const struct usb_device_id id_table[] = {
+>   { USB_DEVICE(0x3195, 0xF281) }, /* Link Instruments MSO-28 */
+>   { USB_DEVICE(0x3923, 0x7A0B) }, /* National Instruments USB Serial
+> Console */
+>   { USB_DEVICE(0x413C, 0x9500) }, /* DW700 GPS USB interface */
+> + { USB_DEVICE(0x1b93, 0x1013) }, /* Silicon Labs Phoenix Contact UPS
+> Device */
+>   { } /* Terminating Entry */
+>  };
+> 
+> --
 
+Hi,
 
-So now we need to look up what "status" is here for every place this is
-called?  That's going to be a pain, as you didn't even document it :(
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/process/email-clients.rst in order to fix this.
+
+- Your patch does not have a Signed-off-by: line.  Please read the
+  kernel file, Documentation/process/submitting-patches.rst and resend
+  it after adding that line.  Note, the line needs to be in the body of
+  the email, before the patch, not at the bottom of the patch or in the
+  email signature.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
 
