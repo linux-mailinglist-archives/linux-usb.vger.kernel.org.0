@@ -1,194 +1,133 @@
-Return-Path: <linux-usb+bounces-12311-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12312-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1099793887D
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 07:51:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D754393888C
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 07:56:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7BA2FB20D46
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 05:50:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14C7D1C20DA4
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 05:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E88C17993;
-	Mon, 22 Jul 2024 05:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE7D17BD5;
+	Mon, 22 Jul 2024 05:56:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZgM46YTs"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Qw7d1yKV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0E217580
-	for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2024 05:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CC217741;
+	Mon, 22 Jul 2024 05:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721627454; cv=none; b=LfzXGchfHfUHJVcwTccBOeL/kQWLrPh7YX9m9uk2VkHUZwVTDVASXoQrv6Zx0tpIYfwkMm176hxWFPvfexT/tIPa3YzxaKFxIS4e/IbwU1fO3DpdkTgbF6tyvuod6Saftzi2xrlhl14kyuuiEcm3ghcR6TEtHqId/OFf1l1K7xg=
+	t=1721627764; cv=none; b=j/ZoYnETUy1H8w6VHotDL5oypfdNg+I/Lh6wyhwob78mfJ2dGJGV9in79D45gZVGqZ9I8EP9zUbEXVKeQHrnwfSYf6MGvKP5QIclimd4WNuKvREsGoY5K6EoMt13NKsnMrbd1MN5jgjng+7KtJJygdMu7VBvm8ZbrQPK24yII/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721627454; c=relaxed/simple;
-	bh=e6RuvdcL7YUHlWFaq/ivM85WO7SQz7pbAf7sRf1qAMY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rxDjDt4zNglbKJe6zDIVgiMG/QV4htOqqv3i0/q1VhLGRG45/tmsfPYCmNvFnoA0k5LCsYqbP+poSUd86nxRzv8A/A0nhOlwyVvnEZWcJIvIT87T0YXL4/4y9rrWuT9k71z9riM38icmWgW+sO6M1GKGG5B8tiFQIKASMHFJqY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZgM46YTs; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e05f4c63de6so4026986276.0
-        for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2024 22:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721627451; x=1722232251; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v18bjqwEkoyTKT/DsJbDzOqaIOFjuWn/pR1NzBIlEnE=;
-        b=ZgM46YTsPWp+Ld9DaWUPp7RwzleVKLnNtVhd3HTOpErDVtCdc+NRrm7xzRhw41HTOM
-         0iqC1ytWW68IdHp9g8xQ9i1sq3nzzv5m0z1hc+L8l9FXf/5hXXQDYOIXFgvKP8BeaBuJ
-         tZ/xHp/jtXpq3nGFQBTiHh1nRIKpTEoIbqeuZJtUo1I3IQFUky2lHaR+8UcrvOTyp6ur
-         5QReeRhvMKRO4Fy9DWeIezV2jEUX6TqK1P+JsddAqaDC+Itsz/vPni84gNDGJd9lZMc5
-         W4914Wq/oitJoTnO3VkeXR35ntiqyrDgJArJzjDXeqb3vMnI5hrKfIxqhi0RpO/N/y/X
-         kZcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721627451; x=1722232251;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v18bjqwEkoyTKT/DsJbDzOqaIOFjuWn/pR1NzBIlEnE=;
-        b=BWbFgB+QhQLWmGMv35CxNAW1fw4n6c2dctUiLcbSOSA+qgTscP5y/qJxuFf9l6fIf/
-         6V3c7+smVLU7bRcUx39P3YCWMOjo6icBqdNrAQjy80Nm8IzjC5mfierqusVOMeaPIdEV
-         +ei/9kwbUa/btS7u2UOLrfdQaTWTB/N2dRgDijQc9VLcecPY+jAYQbL/5xnEaQp2C08B
-         RY9GI3YaUcQ9vVVPAz9nZdP5HWgb5PG2KMhRDPV9Rd5SfD4tq9r5c+pULVFdh65bo3C1
-         g5l5lWblKpY6TEEIwdvuclaW+MdnOTY2qFz2n6kLuqBQcgNdUt0NtYfaYf/QxWAQ5UJG
-         ghxA==
-X-Gm-Message-State: AOJu0Yxr5fvs8NKFAE6hX5mtH+9vsPej616vM/qB5rdFuAndxSPdA03e
-	6bMmA3yELmGB5wI1ujeLfdkDm/JGJ25/v+gNHbAfXqQF8ekp0C1H
-X-Google-Smtp-Source: AGHT+IFGhBq9hM7PenYVeuheDiV/JbpYpihiOgH1nD0oR8/00If89neQs3Hx9aLrea/2qoDA0Nd5dQ==
-X-Received: by 2002:a05:6902:2311:b0:dff:2ce8:cc1b with SMTP id 3f1490d57ef6-e087067ad91mr7513186276.35.1721627451373;
-        Sun, 21 Jul 2024 22:50:51 -0700 (PDT)
-Received: from [192.168.1.7] ([159.192.85.174])
-        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-79f0a4d3cdbsm4052249a12.9.2024.07.21.22.50.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jul 2024 22:50:51 -0700 (PDT)
-Message-ID: <db42e639-4d7e-4970-903c-0aaf688ba71e@gmail.com>
-Date: Mon, 22 Jul 2024 12:50:47 +0700
+	s=arc-20240116; t=1721627764; c=relaxed/simple;
+	bh=GvHUVkcDZ5st6UVWneAHSfHqxmQbhVZkXZa4ccEPCxY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cnFDFlkxQn9Sa1/V00TaM/dB8e+lz6AOx2uksW+l8kcHogyelM4owHvxaVCrJX6GabQqFQEpxaAG+ABBD6qCvnc7TmFomTDZBClqtGojh69IoAB26p7NPh+YemLZCB1y4bly9emYMP31wHwpKCGbYki4mq+oP17A2bGL0Cv9kZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Qw7d1yKV; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46M0E2CE005349;
+	Mon, 22 Jul 2024 05:55:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=1BlygAZbcT7bdmo5RZY3zO
+	BJJ+hLzSUClx2ySZ8mjbI=; b=Qw7d1yKVj8xWUzPGV/w5IFFBCXC89/PX7vXLLc
+	omslu3J/2FGqhUKT5BIU5EDFPgpVwsxXXCls15/EdDfIG2vGyjHoDqU5cK4ttC55
+	IZsj3IjwYE0Y/wvpKVGaZR9hx4KsnhziGpZRJ/o85Cdb/yPwR5A/4CwdW7hyUB2D
+	fbvoPSfmSDDt/o9b/pIpr4n3ksVC9siVR464NJC2VK4YjAxONNCeMHDLYDhKB7sh
+	Ym5VHUJoFV0cKb6J2VLOZuvy1kqA/9MpvPLNtrn560HlACp/FO47VYr6a/+PrgHK
+	rrsnkSj3obTldNsUotnEXNRMYh9v+PLFPH4JO8T+oCNbF+hg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g2kmtwux-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jul 2024 05:55:58 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46M5tvPG012585
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jul 2024 05:55:57 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sun, 21 Jul 2024 22:55:51 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <konrad.dybcio@linaro.org>,
+        <djakov@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v3 0/5] Add interconnect driver for IPQ5332 SoC
+Date: Mon, 22 Jul 2024 11:25:34 +0530
+Message-ID: <20240722055539.2594434-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: cp210x VID and PID of my device are missing allthough the should
- be there
-To: Greg KH <gregkh@linuxfoundation.org>, G4bandit@mail.de
-Cc: linux-usb@vger.kernel.org
-References: <fbde5b4b-6640-4cc9-b39a-7eafcc0d29ba@mail.de>
- <2024072207-overstay-counting-8e61@gregkh>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <2024072207-overstay-counting-8e61@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _YjLbxYd7hZyukL35LlSs4HjPwjkugMC
+X-Proofpoint-GUID: _YjLbxYd7hZyukL35LlSs4HjPwjkugMC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-22_02,2024-07-18_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ spamscore=0 mlxscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
+ adultscore=0 clxscore=1015 mlxlogscore=675 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407220045
 
-On 2024-07-22 11:48, Greg KH wrote:
-> On Sun, Jul 21, 2024 at 08:09:12PM +0200, G4bandit@mail.de wrote:
->>
->> Hi
->> my device with the
->> VID = 0x28e9
->> PID = 0x028a
->> should be supported by the cp210x driver. But in fact this VID and PID does
->> not appear.
-> 
-> Why do you think this driver should support this device?
-> 
->> See the output:
->> alias:          usb:v3195pF190d*dc*dsc*dp*ic*isc*ip*in*
->> alias:          usb:v2626pEA60d*dc*dsc*dp*ic*isc*ip*in*
->> alias:          usb:v2184p0030d*dc*dsc*dp*ic*isc*ip*in*
->> alias:          usb:v1FB9p0701d*dc*dsc*dp*ic*isc*ip*in*
->>
->> The manufacturer recommends to use the driver maintained in the linux
->> kernels.
-> 
-> Which driver exactly?  Do you have a link to that recommendation?
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Enable icc-clk based interconnect driver for IPQ5332. This is
+similar to IPQ9574's icc-clk based driver.
 
-This device announces itself as a HID device so should
-not be handled by any usb-serial driver.
+dt_bindings_check and dtbs_check passed.
 
-Bus 004 Device 002: ID 28e9:028a          Pulse Oximeter
-Device Descriptor:
-   bLength                18
-   bDescriptorType         1
-   bcdUSB               2.00
-   bDeviceClass            0
-   bDeviceSubClass         0
-   bDeviceProtocol         0
-   bMaxPacketSize0        64
-   idVendor           0x28e9
-   idProduct          0x028a
-   bcdDevice            1.00
-   iManufacturer           1
-   iProduct                2 Pulse Oximeter
-   iSerial                 3 Pulse Oximeter
-   bNumConfigurations      1
-   Configuration Descriptor:
-     bLength                 9
-     bDescriptorType         2
-     wTotalLength       0x0029
-     bNumInterfaces          1
-     bConfigurationValue     1
-     iConfiguration          0
-     bmAttributes         0xc0
-       Self Powered
-     MaxPower              300mA
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        0
-       bAlternateSetting       0
-       bNumEndpoints           2
-       bInterfaceClass         3 Human Interface Device
-       bInterfaceSubClass      0
-       bInterfaceProtocol      0
-       iInterface              0
-         HID Device Descriptor:
-           bLength                 9
-           bDescriptorType        33
-           bcdHID               1.11
-           bCountryCode            0 Not supported
-           bNumDescriptors         1
-           bDescriptorType        34 Report
-           wDescriptorLength      39
-          Report Descriptors:
-            ** UNAVAILABLE **
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x81  EP 1 IN
-         bmAttributes            3
-           Transfer Type            Interrupt
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               1
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x01  EP 1 OUT
-         bmAttributes            3
-           Transfer Type            Interrupt
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               1
-can't get device qualifier: Resource temporarily unavailable
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0000
-   (Bus Powered)
+Ensured that icc_sync_state is called and relevant clocks are
+disabled.
 
-thanks
-Lars
+v3: Not taking Reviewed-By: Krzysztof, due to minor change in file
+
+    Add 'clk: qcom: ipq5332: Register gcc_qdss_tsctr_clk_src' to fix
+    gpll4_main's CLK_IGNORE_UNUSED issue.
+
+v2: Removed dependency as it is merged
+    dt-bindings update to accommodate USB clock names change
+    Use icc-clk for USB also
+
+v1:
+Dependency:
+[1] https://lore.kernel.org/linux-arm-msm/20240430064214.2030013-1-quic_varada@quicinc.com/
+
+
+Varadarajan Narayanan (5):
+  dt-bindings: interconnect: Add Qualcomm IPQ5332 support
+  dt-bindings: usb: qcom,dwc3: Update ipq5332 clock details
+  clk: qcom: ipq5332: Register gcc_qdss_tsctr_clk_src
+  clk: qcom: ipq5332: Use icc-clk for enabling NoC related clocks
+  arm64: dts: qcom: ipq5332: Add icc provider ability to gcc
+
+ .../bindings/clock/qcom,ipq5332-gcc.yaml      |  2 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    | 17 ++++++-
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         |  7 ++-
+ drivers/clk/qcom/gcc-ipq5332.c                | 36 ++++++++++-----
+ .../dt-bindings/interconnect/qcom,ipq5332.h   | 46 +++++++++++++++++++
+ 5 files changed, 94 insertions(+), 14 deletions(-)
+ create mode 100644 include/dt-bindings/interconnect/qcom,ipq5332.h
+
+-- 
+2.34.1
+
 
