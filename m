@@ -1,172 +1,153 @@
-Return-Path: <linux-usb+bounces-12333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12331-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A9C79392E5
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 18:59:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D6BB93928E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 18:31:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B3CE1F2257E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 16:59:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 391DF2825FF
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2024 16:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727C016F0C3;
-	Mon, 22 Jul 2024 16:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA15316E886;
+	Mon, 22 Jul 2024 16:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="I6IWtWxw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NgLHbLld"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318C9C2FD
-	for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2024 16:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5090726ACD
+	for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2024 16:31:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721667554; cv=none; b=LKj8BTN4u1u2uc7xgQvIKdVITuCaCj3FDOLE0ld8rQArvDaWBW97lpoHdb278ZtZzyWCsaM3Pi1UMQJKvqxaHteN0dSPxuGykDdQ+pAqtMQhlMS0rtFVa9nMeWxQZOz/jyGkcx0gERzZ/Zb/BXru+smRiZKVTfohKbUgeygp+Vc=
+	t=1721665875; cv=none; b=ei7Wgmv4uASdnxdquNHktY1aVUlafmOOFMA1rxKETYF5Qn0WjMt5r5OQieNTXlxpamY40HNTCreCmFum21p+yqK3sotrAbcH7qHOI9tIq2bGCsws4d7+pLhXzfb172hep/d15Dd39YQ6xVX6Iji3GnZ7h+5OVX/+kYLVGrFHYHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721667554; c=relaxed/simple;
-	bh=Hl160DELcfUJEMLYmH3MiMDfdMOe+YcPvKAceU+mZZM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=lA0JxzKJOpEzA/mWf9KuyaWG+hhEhyN3G6Wxe7XGyijsNOByF/34SJ9hQHV90TLVmAJN3uIR2MDg4SNll+Sa/8E4wiv9qRA+rkp2yYE1q8NgJ/0Z85GTg2r9PDZIbRIDrYdhcYMjpNOAewizq/8utDy/6KXemwMgwykyX7BPF2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=I6IWtWxw; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240722165902epoutp0395cf6c28137737595a883c383e7ec861~kl4H3jnfW0915209152epoutp03z
-	for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2024 16:59:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240722165902epoutp0395cf6c28137737595a883c383e7ec861~kl4H3jnfW0915209152epoutp03z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1721667542;
-	bh=ZPVHrwf5yEWr0C7HjWIjCbt24ZYiSE/6yR1KmtOSSR4=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=I6IWtWxwy+Gaf5jZcOc7gfJI9+Yyr/nZVvJ/U/QQz9v9X1wF9fy4nLYCeQTAa0QPF
-	 ZqYsjWrbNSKYcgaVVaF+nYQrAFybtoRKxwVoZ+LPQvWrl8S11V3lj1S2WjO88eryh5
-	 QbcqOuDdiGpXqekiJ1O7JVo9aYch6Z7B+1ZZVAO0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20240722165900epcas5p1df85433a84fd194e6df9a77c10e3251c~kl4GiL7BG1862018620epcas5p1F;
-	Mon, 22 Jul 2024 16:59:00 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4WSRM65K3Jz4x9Pp; Mon, 22 Jul
-	2024 16:58:58 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	7C.E0.09642.2DF8E966; Tue, 23 Jul 2024 01:58:58 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20240722145728epcas5p38f8ecf57278b4a89c0b09430518c8599~kkN-kLqeV3092130921epcas5p31;
-	Mon, 22 Jul 2024 14:57:28 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240722145728epsmtrp2a58776e0d6700da884b32054091e25dd~kkN-jZWFR3128031280epsmtrp2a;
-	Mon, 22 Jul 2024 14:57:28 +0000 (GMT)
-X-AuditID: b6c32a4b-613ff700000025aa-a9-669e8fd23886
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	09.DE.19367.8537E966; Mon, 22 Jul 2024 23:57:28 +0900 (KST)
-Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240722145726epsmtip2d6aa1846f9d2ae5955431a91ef56fb52~kkN9e6Mo20575605756epsmtip2E;
-	Mon, 22 Jul 2024 14:57:26 +0000 (GMT)
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
-	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
-	Selvarasu Ganesan <selvarasu.g@samsung.com>
-Subject: [PATCH] usb: dwc3: core: Prevent USB core invalid event buffer
- address access
-Date: Mon, 22 Jul 2024 20:26:09 +0530
-Message-ID: <20240722145617.537-1-selvarasu.g@samsung.com>
-X-Mailer: git-send-email 2.45.2.windows.1
+	s=arc-20240116; t=1721665875; c=relaxed/simple;
+	bh=bNE3bDKxb7FLWhqaPbW7aSgauEkphHIZ08lYe/lEQ2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PX4z6pZI+485h9BqnJtdnW0pQe3eFQXf5eF2TZMmXpQisiCRYJJLEzn3z3Kmdi1MqeB0M/cfJeZY+W+t3hWcndarNSefIKXGxpvSiZeO4u0pxJ427owV/RSNTyffvZ7HSzHEQm+3seld7RFmFhSncBKUSoVPHnFPV1lovQ6tdqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NgLHbLld; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D52C116B1;
+	Mon, 22 Jul 2024 16:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1721665874;
+	bh=bNE3bDKxb7FLWhqaPbW7aSgauEkphHIZ08lYe/lEQ2g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NgLHbLldH+dDkmIOotyfj1+jXz2iFiQW0mirQzwdwYGwfP5eBn2BhV0vztKPY0CN4
+	 HQLaE1m7Hk2EfHWYiPgRWe7lpxsS5YiNggzjsLlZ5u4p7kdUqrQwBWvSXIclfje84B
+	 Lpcme16/6EW9vDX0QU4agCmDmpFtBn8HggoTMzFM=
+Date: Mon, 22 Jul 2024 18:31:12 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1] xhci: dbc: fix handling ClearFeature Halt requests
+Message-ID: <2024072255-grass-monastery-c7db@gregkh>
+References: <20240722150738.61486-1-ukaszb@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmhu6l/nlpBrtmqFu8ubqK1eLOgmlM
-	FqeWL2SyaF68ns1i0p6tLBZ3H/5gsbi8aw6bxaJlrcwWn47+Z7VY1TmHxeLI8o9MFpe/72S2
-	mHRQ1GLVggPsDnwe++euYffo27KK0WPL/s+MHp83yQWwRGXbZKQmpqQWKaTmJeenZOal2yp5
-	B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gDdqKRQlphTChQKSCwuVtK3synKLy1JVcjI
-	Ly6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIFKkzIzpjxMrrgEHfF300JDYxbObsYOTkk
-	BEwkdjcfZexi5OIQEtjNKPF/1z4mkISQwCdGiQMXC+HsbUeFYRo2d12CatjJKHHywF0o5zuj
-	xKk7z9i7GDk42AQMJZ6dsAFpEBEokbj0diMTSA2zQAeTROeyB6wgCWGBCIlXs76B2SwCqhLP
-	jjxmBLF5Bawk/t16zA6xTVPiz4q9LBBxQYmTM5+A2cwC8hLNW2czgwyVEPjILjHvUi9Ug4tE
-	x+r5ULawxKvjW6BsKYnP7/ayQdjVEqvvfGSDaG5hlDj85BtUkb3E46OPmEE+YAbavH6XPkRY
-	VmLqqXVMEIv5JHp/P2GCiPNK7JgHY6tKnGq8DDVfWuLekmusELaHxMrlx1kgwRgr8e/oa5YJ
-	jPKzkPwzC8k/sxA2L2BkXsUomVpQnJueWmxaYJyXWg6P1uT83E2M4ISq5b2D8dGDD3qHGJk4
-	GA8xSnAwK4nwPnk1N02INyWxsiq1KD++qDQntfgQoykwkCcyS4km5wNTel5JvKGJpYGJmZmZ
-	iaWxmaGSOO/r1rkpQgLpiSWp2ampBalFMH1MHJxSDUznpv1M+7v3ocjhB1IyEkdyfY9+DKhn
-	b/6oPnWPwYkrCm9dXa4836zPd6tO0788te+hx3y2s+0uxy00vsyf+EollYsjW3T3Bf1n885o
-	W0y/wK0cuVctqotfef537Vs7362c+Zzt9OoXNiujLH+pZWgc5BT6fVk4tF5NyyPNPVXf8bfO
-	q2zhkLCAT1K//or9uuscG9MdsrzFN/h+e6TPMeEf6Tv4m7p+XT8rwPv511+Dzgxbf/XaFVl3
-	P6wx0ffiYIzuVril47vB0PqYPevqjak8TovFq7fe5z67r0FFSK5hjvG2cKV5fct+zPjOw27L
-	oT5PaVlKp6aStuvxzVnVUxycDn6QYeltCUr4/6D5oRJLcUaioRZzUXEiAHUKVjcxBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGLMWRmVeSWpSXmKPExsWy7bCSvG5E8bw0g1WTtC3eXF3FanFnwTQm
-	i1PLFzJZNC9ez2Yxac9WFou7D3+wWFzeNYfNYtGyVmaLT0f/s1qs6pzDYnFk+Ucmi8vfdzJb
-	TDooarFqwQF2Bz6P/XPXsHv0bVnF6LFl/2dGj8+b5AJYorhsUlJzMstSi/TtErgyZryMLjjE
-	XfF3U0ID41bOLkZODgkBE4nNXZcYuxi5OIQEtjNK3Nr0ixEiIS3xelYXlC0ssfLfc3aIoq+M
-	Eje6OoEcDg42AUOJZydsQGpEBCokHi+cwQJSwywwhUliwbSDLCAJYYEwiZ1bIAaxCKhKPDvy
-	GMzmFbCS+HfrMTvEAk2JPyv2skDEBSVOznwCZjMLyEs0b53NPIGRbxaS1CwkqQWMTKsYRVML
-	inPTc5MLDPWKE3OLS/PS9ZLzczcxgoNaK2gH47L1f/UOMTJxMB5ilOBgVhLhffJqbpoQb0pi
-	ZVVqUX58UWlOavEhRmkOFiVxXuWczhQhgfTEktTs1NSC1CKYLBMHp1QDU/jtuW+DtNvsjKbM
-	d5wq+lXIWyuNt8LCrt60yivzfYnAx9uO8nIciw4nx3+8+Gt2+e/4GTP/CP5is++bvVbQe+Lb
-	aw8m8XepTfIKfXagfn/Npo6GwjU/L5barZKed/5CYZ/DykmXvr56vGj9zBspzN4nXzresEmw
-	kbVrPDU9qM330nSPZva6lSp/gra/CvxlI7a1/MMRd9OnV/iL3r2+MeWRaunBb8EG4lycLGLJ
-	nbM1NGVyGFSXerucsf9oaiqQ/oStdnq/yebS71/8Hp4Sa7OzSqksN599+sTu2l2RCnoZRu8j
-	mBw599vK1D4oNb7Quj1k2sZFa3y4liuue5BQ87WsfNq31TnPXkd5mW6NV2Ipzkg01GIuKk4E
-	ANPHnL7ZAgAA
-X-CMS-MailID: 20240722145728epcas5p38f8ecf57278b4a89c0b09430518c8599
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240722145728epcas5p38f8ecf57278b4a89c0b09430518c8599
-References: <CGME20240722145728epcas5p38f8ecf57278b4a89c0b09430518c8599@epcas5p3.samsung.com>
+In-Reply-To: <20240722150738.61486-1-ukaszb@chromium.org>
 
-This commit addresses an issue where the USB core could access an
-invalid event buffer address during runtime suspend, potentially causing
-SMMU faults and other memory issues. The problem arises from the
-following sequence.
-	1. In dwc3_gadget_suspend, there is a chance of a timeout when
-	moving the USB core to the halt state after clearing the
-	run/stop bit by software.
-	2. In dwc3_core_exit, the event buffer is cleared regardless of
-	the USB core's status, which may lead to an SMMU faults and
-	other memory issues. if the USB core tries to access the event
-	buffer address.
+On Mon, Jul 22, 2024 at 03:07:38PM +0000, Łukasz Bartosik wrote:
+> DbC driver does not handle ClearFeature Halt requests correctly
+> which in turn may lead to dropping packets on the receive path.
+> 
+> Below is a trace capture where due to incorrect handling of
+> ClearFeature Halt packet gets dropped on the receive path.
+> 
+> /sys/kernel/debug/tracing # cat trace
+> 1) kworker/10:3-514   [010] d..1.  2925.601843: xhci_dbc_handle_event:
+> 	EVENT: TRB 000000019588c0e0 status 'Stall Error' len 0 slot 1 ep 2
+> 	type 'Transfer Event' flags e:C
+> 
+> 2) kworker/10:3-514   [010] d..1.  2925.613285: xhci_dbc_handle_event:
+> 	EVENT: TRB 000000019588bc80 status 'Stall Error' len 1024 slot 1
+> 	ep 3 type 'Transfer Event' flags e:C
+> 
+> 3) kworker/10:3-514   [010] d..1.  2925.619024: xhci_dbc_handle_transfer:
+> 	BULK: Buffer 0000000244b49800 length 1024 TD size 0 intr 0 type
+> 	'Normal' flags b:i:I:c:s:i:e:C
+> 
+> 4) kworker/10:3-514   [010] d..1.  2925.619025: xhci_dbc_giveback_request:
+> 	bulk-in: req 00000000a70b5ad2 length 0/1024 ==> -6
+> 
+> 5) kworker/10:3-514   [010] dNs2.  2925.623820: xhci_dbc_gadget_ep_queue:
+> 	BULK: Buffer 0000000244b49800 length 1024 TD size 0 intr 0 type
+> 	'Normal' flags b:i:I:c:s:i:e:c
+> 
+> 6) kworker/10:3-514   [010] dNs1.  2925.623823: xhci_dbc_queue_request:
+> 	bulk-in: req 00000000a70b5ad2 length 0/1024 ==> -115
+> 
+> 7) kworker/10:3-514   [010] d..1.  2925.629865: xhci_dbc_handle_event:
+> 	EVENT: TRB 000000019588bc80 status 'Short Packet' len 1000 slot 1
+> 	ep 3 type 'Transfer Event' flags e:C
+> 
+> 8) kworker/10:3-514   [010] d..1.  2925.635540: xhci_dbc_handle_event:
+> 	EVENT: TRB 000000019588bc90 status 'Short Packet' len 763 slot 1
+> 	ep 3 type 'Transfer Event' flags e:C
+> 
+> 9) kworker/10:3-514   [010] d..1.  2925.635540: xhci_dbc_handle_transfer:
+> 	BULK: Buffer 0000000244b49c00 length 1024 TD size 0 intr 0 type
+> 	'Normal' flags b:i:I:c:s:i:e:C
+> 
+> 10) kworker/10:3-514  [010] d..1.  2925.635541: xhci_dbc_giveback_request:
+> 	bulk-in: req 00000000b4ec77d7 length 261/1024 ==> 0
+> 
+> 11) kworker/10:3-514  [010] dNs2.  2925.635561: xhci_dbc_gadget_ep_queue:
+> 	BULK: Buffer 0000000244b49c00 length 1024 TD size 0 intr 0 type
+> 	'Normal' flags b:i:I:c:s:i:e:c
+> 
+> 12) kworker/10:3-514  [010] dNs1.  2925.635562: xhci_dbc_queue_request:
+> 	bulk-in: req 00000000b4ec77d7 length 0/1024 ==> -115
+> 
+> Lines 1 and 2 are Endpoints OUT and IN responses to receiving ClearFeature
+> Halt requests.
+> 
+> Line 7 notifies of reception of 24 bytes packet.
+> 
+> Line 8 notifies of reception of 261 bytes packet
+> 
+> In Lines [9, 12] 261 bytes packet is being processed.
+> 
+> However 24 bytes packet gets dropped. The kernel log includes entry which
+> is an indication of a packet drop:
+> [  127.651845] xhci_hcd 0000:00:0d.0: no matched request
+> 
+> This fix adds correct handling of ClearFeature Halt requests
+> by restarting an endpoint which received the request.
+> 
+> Fixes: dfba2174dc42 ("usb: xhci: Add DbC support in xHCI driver")
+> Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+> ---
+>  drivers/usb/host/xhci-dbgcap.c | 29 +++++++++++++++++++----------
+>  drivers/usb/host/xhci-dbgtty.c |  5 +++++
+>  2 files changed, 24 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+> index 872d9cddbcef..b7af3a5ac98a 100644
+> --- a/drivers/usb/host/xhci-dbgcap.c
+> +++ b/drivers/usb/host/xhci-dbgcap.c
+> @@ -173,7 +173,7 @@ static void xhci_dbc_giveback(struct dbc_request *req, int status)
+>  	spin_lock(&dbc->lock);
+>  }
+>  
+> -static void xhci_dbc_flush_single_request(struct dbc_request *req)
+> +static void xhci_dbc_flush_single_request(struct dbc_request *req, int status)
 
-To prevent this issue, this commit ensures that the event buffer address
-is not cleared by software  when the USB core is active during runtime
-suspend by checking its status before clearing the buffer address.
 
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
----
- drivers/usb/dwc3/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+So now we need to look up what "status" is here for every place this is
+called?  That's going to be a pain, as you didn't even document it :(
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index cb82557678dd..c7c1a253862e 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -559,8 +559,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
- void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
- {
- 	struct dwc3_event_buffer	*evt;
-+	u32				reg;
- 
--	if (!dwc->ev_buf)
-+	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-+	if (!dwc->ev_buf || !(reg & DWC3_DSTS_DEVCTRLHLT))
- 		return;
- 
- 	evt = dwc->ev_buf;
--- 
-2.17.1
+thanks,
 
+greg k-h
 
