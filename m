@@ -1,164 +1,108 @@
-Return-Path: <linux-usb+bounces-12362-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12363-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE7F693A4F3
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 19:28:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4781393A4FA
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 19:32:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A5EC283BE9
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 17:28:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E49B01F22AC2
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 17:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B6C158874;
-	Tue, 23 Jul 2024 17:28:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8C51586FE;
+	Tue, 23 Jul 2024 17:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Y/KpqwE6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OYdIrLMy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D8F158848;
-	Tue, 23 Jul 2024 17:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA9713BC18;
+	Tue, 23 Jul 2024 17:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721755689; cv=none; b=ZWFyV5cZOJl7sQM8Izw3MECDxoYFuCMdulNxrepJLmgrMumBOL+RSQlPPY1vkMq36qj/X+8wR6LXtbV8tC6wGRShKOkzJnI3g/pJ5IT2I6tQVXc9sJGTgihfxIkfJXQf2LQ8EtQ6LFFCcHV9zY2U5fdJAp4CjTMoXUrZ/RmHxBw=
+	t=1721755952; cv=none; b=Tea7gtIGTCTToQX4I5Z/Q6xwW7yBov4xoroxq07NFozJR8iQ3O5rYXVTwJcS5xzUPYmTdt+4wUn6KdYTF9VTDdtQvZ1WcKn7MRnI8g4yGZm7uXtawHHGXRy/Ld/OIH4u8g6JkocN43JJVfBa4qI/vXvOa5rki6FQoaKLJk+g7VM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721755689; c=relaxed/simple;
-	bh=ejYMhhfHckj+3PtMfK7nop2ITFE6angxRFcmJSSjT0I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CX7X/k34R96sTNtPlP+5dncJ68d681c3zXgRjInjeD98ZadcYA3LYEVSbtt8w9e3SvlM+VVQ88BJNOYfJZmgFCrMoXIL3aHv9oJkP42OBFlxn+P+XmqeQc7v1dB5IVzOemVPRtxRDUEMsWBSpDCqR7duSyAcRFcjLG9I8D1d6as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Y/KpqwE6; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1721755644; x=1722360444; i=wahrenst@gmx.net;
-	bh=80fjjAf9XBmhMPzSq4fA1co69LzROIvpMlHPKGRpFfo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=Y/KpqwE6ibEsV6yVHuH8aRQNyQdjStlltEWXEQjuX6Nd/jrbur0r+XmG3qKnkNsZ
-	 BTvhsCTzT7W0kBbtv/8Lv5zqADvkjQOExyVSDgvURiNe7WSWT9I5AbTie/oZxGDEP
-	 wDv2GAM7so+ZSMDaRmrWlWMbHotwfbAFLYgNK48yTHYc2a4bxukSC73ZA/2ijIbDU
-	 AHaNP+MlB/qLmOdL0T7AYtUfcnMLZIoSwWKqtQtwIpOthT00ZcXUwqdMFR7gcf8Pz
-	 Uo5TpFLjAdk4/sPEV1LZLhPHO0aKQufqK+qiScRimfuKRyq6CntG1snlkCpZQJvMY
-	 jBtoydziH6XXzdqiMA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N79uI-1sFai008ei-00vs3P; Tue, 23
- Jul 2024 19:27:24 +0200
-Message-ID: <7f498dd6-f21e-481c-bff9-1449327ac94a@gmx.net>
-Date: Tue, 23 Jul 2024 19:27:21 +0200
+	s=arc-20240116; t=1721755952; c=relaxed/simple;
+	bh=VeKv1mdM4b2Az2hwXIufGbGyrkqjcYonv0q7odEaJbU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i1hbkSbew2HGTNxUTMAzKlTeLjj9kW+aGZn45371q9F11DOFgbf6CDmDRGuaSy/Hvqcaot81xfh/uSnoH4zKnQp2gZdqNvQavxcV0RLv5Td/RkaGW6CWVxOh41wt+nlVes8csRp6JSW2JcMR9R32mU1Kz8bBkb/d9jDRQLXlPOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OYdIrLMy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B792AC4AF0A;
+	Tue, 23 Jul 2024 17:32:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1721755952;
+	bh=VeKv1mdM4b2Az2hwXIufGbGyrkqjcYonv0q7odEaJbU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OYdIrLMyfCk4J6Tu7KzRzullXgcO5GzZ+dgXmbi+rYKn3AcYr7ZGg8/URI+9ktb39
+	 ryxQMQx/FgIRi7W/z84MQSJsAqiJEaGacoIX8G3z1pd76e7xKrfZ9ayHqvHs/3beJw
+	 3tzlHkssxFZgvyRLlC551eHA508kuzd3ZzcbVNJg=
+Date: Tue, 23 Jul 2024 19:32:29 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ma Ke <make24@iscas.ac.cn>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, liujunliang_ljl@163.com,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB2NET: SR9700: fix uninitialized variable use in
+ sr_mdio_read
+Message-ID: <2024072305-dinner-prize-bb82@gregkh>
+References: <20240723140434.1330255-1-make24@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/11] drm/vc4: hdmi: Handle error case of
- pm_runtime_resume_and_get
-To: Maxime Ripard <mripard@kernel.org>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
- <mcanal@igalia.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Jiri Slaby <jirislaby@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Minas Harutyunyan <hminas@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Scott Branden <sbranden@broadcom.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com,
- Ray Jui <rjui@broadcom.com>, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-7-wahrenst@gmx.net>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20240630153652.318882-7-wahrenst@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Nzd9l7pAHFgSgPujxmJeeQJNfuVnleLtW7GuiqkrRWzJSKop67p
- CkCMyNTcAlgTI6rANC3i6Hr+cwhws5UFKyfxhJYlT+fFiE6H1IKQKNxG30c3ZlcIk8SLEmj
- DiwyUF/125vIN7zUdywBPNMJZf58SsvuGdwiRcWJ9FbzcA9V8CIKdofia2cmgA2Y3PUT+TO
- t8b0OZe6qUAU/9Lo6vaUQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:wpdg22WfDQk=;AKCwxABGI9PRvrQviv1h7ESd+Sp
- o1MZ8bg8S3PJomoQA+DXQ5d+bR0slqcHco8FPUCX5gHvCtYLhYqqimQx9IrVOvaFYr6ZhK+Fu
- Q0d+UQWui6jQfVr6O73GT1zvOJIEYZKED90eo0DgZYPZFw1AYrpreC1gmP05iV8hvdF2ZogHN
- +7mRQZoWKGwOpkL9D/a93huFBvzzuf+qpGKZrEjVM28Gnc2pIEMyFaecMjKCYiLHHeYEkoO6P
- AkSPL9c/z2zPD2Y84gAuDiGoCe7RjIPxLS6ZbhNgPKeCmm+IfBBfbaxesBwxHOOYtLHiPQJ7b
- hdZFeHlP3ydrRtpU0I7isoXu6jJl2E9kLEQB2Y3gIT7UNt79vAdMVvs1vET0U6QqTtK6ssG2u
- EEt9oUWFvcOSCy2dOZEnRL1pDrS3KNMnxizI5c3WGv8K+kVTL8V2IbiLGwLRS4J+za/7sj4XV
- W92kziet+mXRzjRgcwn8o0jnJQF+smk2+arLjtOgeo2u5bHTEFwCNktD+KwBXIHFRg0Lbz+JV
- LrUVR0ri5IaJDVoNOECoTQLhVAUH+GmVb1vp9Az9r6a48N4qr6pDI+7/Em6XcW0n9iT05djGT
- +LTtUyaslE7etrGgLADfvDRwTOoTnHRljG+J2qISrPNHTKBlAcAvMTNq72vecrMF+qEwpAcQf
- aeVf1Q2BKarzFGhxLvGT4WW6MExX/cH065q8CFyiNIUuVxNvxq0suE5RbIHrCl7jpSZTS6u82
- wJuNhGK7fKr9Ti/jCyN50fWRai61FVL+Z2ohG6MH7LeMr34S6kAfv/UUmqmrXhPY9fl+tPg7p
- LkreV75flkZIMi94z3lu7sWA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240723140434.1330255-1-make24@iscas.ac.cn>
 
-Hello,
+On Tue, Jul 23, 2024 at 10:04:34PM +0800, Ma Ke wrote:
+> It could lead to error happen because the variable res is not updated if
+> the call to sr_share_read_word returns an error. In this particular case
+> error code was returned and res stayed uninitialized.
+> 
+> This can be avoided by checking the return value of sr_share_read_word
+> and propagating the error if the read operation failed.
+> 
+> Fixes: c9b37458e956 ("USB2NET : SR9700 : One chip USB 1.1 USB2NET SR9700Device Driver Support")
+> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
 
-Am 30.06.24 um 17:36 schrieb Stefan Wahren:
-> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
-> powered in detect") introduced the necessary power management handling
-> to avoid register access while controller is powered down.
-> Unfortunately it just print a warning if pm_runtime_resume_and_get()
-> fails and proceed anyway.
->
-> This could happen during suspend to idle. So we must assume it is unsafe
-> to access the HDMI register. So bail out properly.
->
-> Fixes: 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is powered=
- in detect")
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+You forgot to document how you found this problem.
+
 > ---
->   drivers/gpu/drm/vc4/vc4_hdmi.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hd=
-mi.c
-> index d57c4a5948c8..b3a42b709718 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -429,6 +429,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_=
-connector *connector,
->   {
->   	struct vc4_hdmi *vc4_hdmi =3D connector_to_vc4_hdmi(connector);
->   	enum drm_connector_status status =3D connector_status_disconnected;
-> +	int ret;
->
->   	/*
->   	 * NOTE: This function should really take vc4_hdmi->mutex, but
-> @@ -441,7 +442,11 @@ static int vc4_hdmi_connector_detect_ctx(struct drm=
-_connector *connector,
->   	 * the lock for now.
->   	 */
->
-> -	WARN_ON(pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev));
-> +	ret =3D pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
-> +	if (ret) {
-> +		DRM_ERROR("Failed to retain HDMI power domain: %d\n", ret);
-> +		return status;
-I noticed today that the enum drm_connector_status also supports
-connector_status_unknown. Wouldn't this be a more appropriate return
-value in this error case?
+>  drivers/net/usb/sr9700.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-Why isn't status initialized with connector_status_unknown at all?
+Hi,
 
-Best regards
-> +	}
->
->   	if (vc4_hdmi->hpd_gpio) {
->   		if (gpiod_get_value_cansleep(vc4_hdmi->hpd_gpio))
-> --
-> 2.34.1
->
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
