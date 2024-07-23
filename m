@@ -1,119 +1,93 @@
-Return-Path: <linux-usb+bounces-12339-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12340-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01D1E93986B
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 04:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3260C939932
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 07:33:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 337CD1C21951
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 02:51:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63B261C21AB4
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 05:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC31C13B599;
-	Tue, 23 Jul 2024 02:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I4bcjXKl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C5213D24E;
+	Tue, 23 Jul 2024 05:33:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D312F32;
-	Tue, 23 Jul 2024 02:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4199013CFB9
+	for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2024 05:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721703073; cv=none; b=hh4/yCTZjiNS8WkI9rnzlSPtJALOG6zERE0Lw6cCInCxXafISWzGWDINfQBLgspD5AFZJHPgiJnEfnMFd4X3iXJmbWyRf67ieeflvfSXRSnALB5ezfKHFV6LMPJ8IlzE48sp4X/oIjWlzWFHEal6j3IdHdyhWAD8YKxlObIemSs=
+	t=1721712785; cv=none; b=Bw9u1fRhZjZ8L6IUjAKND9CgfgTKG/6XiwpMP9fa/Op0RJHMTnJC0tjacdQiCkxlnv7vTX1ZumQB8lziBmjDbnKkHHTAlzGX3ixY6UCWSKWV4TbGnqUWcAfxbTXEQV5PggfymUkVxZIXaFrMsu0TI4LUN7ym6/r81BU1WcJ5Qn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721703073; c=relaxed/simple;
-	bh=8f4JRcrwXHy++9/5/z8Qgm+dkVwDQLC/tLAYNCJRVqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HN9t0DCZQbn2aL+IqsZITpQdHcJOZwiZn8tA58SG54se38BytyKZPY78U7l5BZs3RIMXf7km4sIUZgib3T+4ThsWAuBm+QSscvfU+CgSbGbeKBs+mkQtRtllXJc1rwWnelwhcNCKsYM3yAPmGpKxASV9Rt3u8PCIrPLlr+0qZuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I4bcjXKl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD138C116B1;
-	Tue, 23 Jul 2024 02:51:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721703073;
-	bh=8f4JRcrwXHy++9/5/z8Qgm+dkVwDQLC/tLAYNCJRVqI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I4bcjXKlbq3vK4A9Yxj2HSavSoovc0HlmseEJt4vDSZcNzer0SiJ/s+E9VTqaUbrU
-	 LaLyhBgjeNWPjj3LUSmxQik0aF/cd9dq5919wLw4/zkF8Eu9Ysu0/bOv59SmU6QiVH
-	 453v6jicu2ak8/Bs74njb+yZEFa9g/mLr7Gd6bdBVjiViXztkcgwPI49ZQA96gYLOg
-	 gdtKUzDyjLRSZy8dMXbRB91A8T0VqgsU2jUO512Ze/v8TBsW4rIXXyK79mvQqYmwyx
-	 JdTiOUdOECE+H9EelMvQYBUQMkjJ1f76XM9wzJDhBR18sfLqrgnzERxBV4jkYuk38/
-	 3TSKVzFGpi6qA==
-Date: Mon, 22 Jul 2024 20:51:10 -0600
-From: Rob Herring <robh@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com,
-	gregkh@linuxfoundation.org, peter.chen@kernel.org,
-	herve.codina@bootlin.com, linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-	jun.li@nxp.com
-Subject: Re: [PATCH 3/6] dt-bindings: phy: mxs-usb-phy: add nxp,sim property
-Message-ID: <20240723025110.GA199927-robh@kernel.org>
-References: <20240718102637.3964232-1-xu.yang_2@nxp.com>
- <20240718102637.3964232-3-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1721712785; c=relaxed/simple;
+	bh=Xz44m3j+L46P7S2MMO91l6CGoQ99zGgAJVWIu+b0MzA=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=Yewny3XqIPpdxTY9aoUAYvscrY7OR9zvxLAaUL8kQlB3oMikfrWJ0Zusr7/RvRDTrEP461qCcjsLH4eM2+U895pyvFvBaHRqkBeaiIKW9Vr9Dn3gqvHaONGtF4NXmpEoWLon40sDoiZ9mWuaQzWddO+O3PQrzr7y5pfJOFgk+po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-81d1b92b559so305323639f.0
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2024 22:33:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721712783; x=1722317583;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=07mMm2HTl+CxW+FUdHtY4cD8npz62x8KwHeALxluW4s=;
+        b=ba4ZFaKHE3p/ArZJ7pC9yV5d24qVLVnt7+f0PlMvS0sMpj8FYaiCyegpYNXSDE7+dW
+         CQhcqe7Zlk3BwwsO8veGKV3hzxdZpl0fNro1UInoo3XYO9GWc/DkwSXk1etTg5KXzn+h
+         Zy+hy4WKOuFnMV/iOycnvzaziwVtCf8ul7o1bfyx0LE7XBNax+2v8LoiOA0YjKBWaL8l
+         VaA3SBSnXSFLD/rdqlVxHBJ/7+MvD8akmIzNjIENQbzwLYzGi7PFsW5piOQBXaj6lkDX
+         YpqKItoTVVanJ5cSZVdSUEbe8S8xxMUXf2dybNbYLN66sOhK+hJZhJRLW/kf4o3UI5S5
+         tXRA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4PvNqlDjIIvm1D24oECaXtYmVJxXtR73JFNTsgmDmlJ61aOGtISNyuJxSI8Joc+2MPVDLCXWnUylVqqJy58M/ZDR5gPRLdRZH
+X-Gm-Message-State: AOJu0YzTQmyLeEkHxrb4sH7AiKVrOSHhXgWJKwXLDgUT5vPcdpL+WT6b
+	qhR+WNt9MKwDAy99lca5XKM+Lz8acFpckosXYEetm0zks0aMw2jX3DGc8AzeZsJWEFC4nL0FIv3
+	aBapfRRkMgVDsa1NPmTkpPM4oufX7IJNqiTYDsn1ajzl3tfJZxMRrC74=
+X-Google-Smtp-Source: AGHT+IHGUsJC9VmsmU3cOOtHllIAk7yjZD1XGw3IEHkz1rRt8RwHdENbZCLzfNxhapQPT1mMfdgZ1LUMZ9nXHianD+oLMY/bU37b
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240718102637.3964232-3-xu.yang_2@nxp.com>
+X-Received: by 2002:a05:6638:2187:b0:4bb:624c:5a7f with SMTP id
+ 8926c6da1cb9f-4c23fcbd7b6mr437637173.1.1721712783378; Mon, 22 Jul 2024
+ 22:33:03 -0700 (PDT)
+Date: Mon, 22 Jul 2024 22:33:03 -0700
+In-Reply-To: <0000000000004b841a060e876595@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dbdb25061de37eda@google.com>
+Subject: Re: [syzbot] [input?] [usb?] WARNING in input_unregister_device (2)
+From: syzbot <syzbot+617f4ccb03b9869f6494@syzkaller.appspotmail.com>
+To: dmitry.torokhov@gmail.com, eadavis@qq.com, gregkh@linuxfoundation.org, 
+	jandryuk@gmail.com, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, peter.hutterer@who-t.net, rafael@kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 18, 2024 at 06:26:34PM +0800, Xu Yang wrote:
-> i.MX7ULP need properly set System Integration Module(SIM) module to make
-> usb wakeup work well. This will add a "nxp,sim" property.
-> 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  .../devicetree/bindings/phy/fsl,mxs-usbphy.yaml    | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
-> index f4b1ca2fb562..2141f271f8f1 100644
-> --- a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
-> @@ -87,6 +87,12 @@ properties:
->      maximum: 119
->      default: 100
->  
-> +  nxp,sim:
-> +    description:
-> +      The system integration module (SIM) provides system control and chip
-> +      configuration registers.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
->  required:
->    - compatible
->    - reg
-> @@ -110,6 +116,14 @@ allOf:
->        required:
->          - fsl,anatop
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: fsl,imx7ulp-usbphy
-> +    then:
-> +      required:
-> +        - nxp,sim
+syzbot suspects this issue was fixed by commit:
 
-       else:
-         properties:
-           nxp,sim: false
+commit 0774d19038c496f0c3602fb505c43e1b2d8eed85
+Author: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date:   Mon Apr 29 21:50:41 2024 +0000
 
+    Input: try trimming too long modalias strings
 
-> +
->  additionalProperties: false
->  
->  examples:
-> -- 
-> 2.34.1
-> 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c0adc3980000
+start commit:   1c892cdd8fe0 Merge tag 'vfs-6.8-rc6.fixes' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=eff9f3183d0a20dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=617f4ccb03b9869f6494
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17985b34180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d8d43c180000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: Input: try trimming too long modalias strings
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
