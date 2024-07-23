@@ -1,124 +1,158 @@
-Return-Path: <linux-usb+bounces-12366-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12367-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 689B593A742
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 20:44:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15D6093A85D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 22:55:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBD011F237AD
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 18:44:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3951283BA8
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 20:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA76158A17;
-	Tue, 23 Jul 2024 18:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mdT6sQWM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D20F14389D;
+	Tue, 23 Jul 2024 20:55:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777C1158873;
-	Tue, 23 Jul 2024 18:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CDD143885
+	for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2024 20:55:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721760250; cv=none; b=l5zk0aRLsweZZyAuoGvzFPbXgcR/MBn24uu0Ee+RXBIH58yV9nDOSf/pZYBNDOODBqWeJytNv5stv7nqY5ww6MKidJEZYpQj5zDh7MvQB06hq303UgzN4f86Mouv3TDASUVexvGmVd8bx7z+1+ytunp5+ntaENY40AgEIJeG5NI=
+	t=1721768123; cv=none; b=Rdz3mUrgskP1uMhFsPkPJSFHYafjFFjbuiZ18WXn8FqIt44vBtOQcuLB71Me39aVAj6AQAhrzISSC0bvAYHem7adj+AE3iUCAHeCag4ipd9txQGvvzJVM+f0lNWczUDuoN87CCAV9XcLXtTZM2yqYCuK6NvIujY33nV6uqnZm4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721760250; c=relaxed/simple;
-	bh=GpityV/7iR5+t+2TQIMKZ3ofyVjPPZdiPXgbRKnY9Uc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=f5/DvyolVcWvM/AyCxfdQeotEk+PsyQznwHmgL3RLebU03GugJhTdGnO56cDBuDQgMCvgoXve4KokvVZOveMPMWiJYr8qH7cuw38sQXQuWrt7RlXLTdGPM2lB2d35tvo0NgWpp7ltftasdrt2dOhxzmhMjCcVdvUC6Zd3Iz0nNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mdT6sQWM; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46NApvMm014983;
-	Tue, 23 Jul 2024 18:44:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	AZowfvYhAXkeXT5NOjpoBiLrslsFgacpUQRuPZlreUM=; b=mdT6sQWMcRgB63M8
-	SCvp6m0gozC8IfTYqgfbAy3EGu6oYOX+TR82oQl+5smYAtru/NYYa33ZjPLc5K1M
-	x6lhcm25nSYJqPWMiNB73hj6eb8gq2QkjjVY3Ow3K4mciM+7gtcr/vhVHDXVmPoL
-	CAm495nu+1PlTn4kg5cEFW/2qluuwKJkqX1dp6hspolVBGtZi6JUFLOPftLszz7y
-	j7Rk/yqQ4gNwwOJjuAPGHnks69fa1eaYn5vdoUu0MBhXrQQzlXqZQdwY7NgCgH23
-	Ss1w4ajeKvNCF6M75doDPXwp/2PAOrAHkFIwm5HPtW3SlRUdvjoupiRgGP8AEpau
-	5e7c7Q==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g6djyryw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jul 2024 18:44:06 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46NIi5tO016589
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jul 2024 18:44:05 GMT
-Received: from [10.111.176.36] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 23 Jul
- 2024 11:44:05 -0700
-Message-ID: <108d8399-9b09-4a1d-8424-a6fa69b63d77@quicinc.com>
-Date: Tue, 23 Jul 2024 11:44:05 -0700
+	s=arc-20240116; t=1721768123; c=relaxed/simple;
+	bh=HsvLOBK2mmBYGRBmpFlLUyt7LeOW6RHsU4k1nmmlNts=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=sBjJ38zHBHmzYyDYvmQrYbBGLXFR+msIXThjIcLyyX8BneCqcMoQl/638f9Qp/3Lhz6dJD5XAwQrYwo6iQfc8/2+5WxxuBoAgEFoPBOVkLLsV7ceUSAAunEfI4/bKl+18+a6nyJWHmmIBaVH+H0L2uCleuCWim11mGAhBpmxJ2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-807b123d985so1124937239f.0
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2024 13:55:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721768121; x=1722372921;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W7lAaSmTNN0zGRBsnkxpsKhL9bI5flt6hDAwqoPeP9k=;
+        b=i+T8BaP9iZkjayRmS4AgkJLyAwe039ccIALgpmSKMukYizKqzG7ZlnfFn3Y8WgQE69
+         /HrFaKBy5GmUPED+JPvpzE6sNEZe6bjLOH0YL5dBemmxpUcen/z6Edobu60Cm+hT87gT
+         hDuqdR03GLH5bgcW2tcDJVQJ4vnkeVJa7Fq3VUFskaZRqu9eM+vOYnxzbgKmAY43Fz/+
+         OU74DkANQlaaFGE5kc/vgdQ5v6spAqHP81D2xJhmF7OOyeJEfz8JvRoq5RmfoZmvJl+n
+         fGxn+mLbJ7MpHxhg9KBW6toMWWhOwEzh8WAlGr2Isv8+TvImllRDYQF33FZSOV7zxnV+
+         sBTg==
+X-Forwarded-Encrypted: i=1; AJvYcCW51NCXNnpxmMoYApI3nIWEmrzocOu27V9BgHbm4EYUAAxr2gSg8phQ1sxXvFxe9V5LvyJpY8OkWLajywhCe5bFB7vfyCAYNRnw
+X-Gm-Message-State: AOJu0YyI0XO+YQEUV/TKf7rIQIP1dMo2YKI7bGBHwO31Uz5VZtkQBT6E
+	RvriAmUS+qdykuGJb9B9JyP4x3l/vGV94vwvSaf6jbCEqJlyGIq/yJc7tr05jhcvjBcDKliAK52
+	wgRZVoBQIJbJkBR0WzcNvmIti/7cGyiVAZ7iyBYkCDeKQ1xZ46bHuTtQ=
+X-Google-Smtp-Source: AGHT+IFuOkIyph15440mIkcaG0bPanLLP25Z8ciLSRv8Wx8X9eoXXhFesMOet9ez3rMCy9HG3yYEEvQzZp87wmHYmyJmg/w4AQma
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: add missing MODULE_DESCRIPTION() macros
-Content-Language: en-US
-To: Johan Hovold <johan@kernel.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-References: <20240611-md-drivers-usb-serial-v1-1-c6ada535890a@quicinc.com>
- <ZofajSjhaaZsFRro@hovoldconsulting.com>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <ZofajSjhaaZsFRro@hovoldconsulting.com>
+X-Received: by 2002:a05:6638:8507:b0:4b7:c9b5:6765 with SMTP id
+ 8926c6da1cb9f-4c28a4de736mr64162173.5.1721768121544; Tue, 23 Jul 2024
+ 13:55:21 -0700 (PDT)
+Date: Tue, 23 Jul 2024 13:55:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000045457e061df061c3@google.com>
+Subject: [syzbot] [usb?] KMSAN: kernel-infoleak in raw_ioctl (2)
+From: syzbot <syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com>
+To: andreyknvl@gmail.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -_NOaTg5WBAlzQOiObOjMopQ58pD6C6C
-X-Proofpoint-ORIG-GUID: -_NOaTg5WBAlzQOiObOjMopQ58pD6C6C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-23_09,2024-07-23_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 adultscore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407230130
 
-On 7/5/2024 4:35 AM, Johan Hovold wrote:
-> On Tue, Jun 11, 2024 at 10:52:54AM -0700, Jeff Johnson wrote:
->> With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
->> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/ch341.o
->> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb_debug.o
->> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/mxuport.o
->> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/navman.o
->> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/qcaux.o
->> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb-serial-simple.o
->> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/symbolserial.o
->>
->> Add the missing invocations of the MODULE_DESCRIPTION() macro.
->>
->> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> 
-> I amended the commit message with the (recent) commit that added this
-> W=1 warning (and dropped C=1). I also tweaked three descriptions
-> slightly. End result is here:
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-next&id=9f4dc05107a6db3743e6b9ea4014cbdc3795682d
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    2c9b3512402e Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1197b6b5980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6bfb33a8ad10458f
+dashboard link: https://syzkaller.appspot.com/bug?extid=17ca2339e34a1d863aad
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1626b995980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1572eb21980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f8543636ba6c/disk-2c9b3512.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/403c612b7ac5/vmlinux-2c9b3512.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/88dc686d170a/bzImage-2c9b3512.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+BUG: KMSAN: kernel-infoleak in _copy_to_user+0xbc/0x110 lib/usercopy.c:45
+ instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+ _copy_to_user+0xbc/0x110 lib/usercopy.c:45
+ copy_to_user include/linux/uaccess.h:191 [inline]
+ raw_ioctl_ep0_read drivers/usb/gadget/legacy/raw_gadget.c:786 [inline]
+ raw_ioctl+0x3d2e/0x5440 drivers/usb/gadget/legacy/raw_gadget.c:1315
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:907 [inline]
+ __se_sys_ioctl+0x261/0x450 fs/ioctl.c:893
+ __x64_sys_ioctl+0x96/0xe0 fs/ioctl.c:893
+ x64_sys_call+0x1a06/0x3c10 arch/x86/include/generated/asm/syscalls_64.h:17
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:3985 [inline]
+ slab_alloc_node mm/slub.c:4028 [inline]
+ __do_kmalloc_node mm/slub.c:4148 [inline]
+ __kmalloc_noprof+0x661/0xf30 mm/slub.c:4161
+ kmalloc_noprof include/linux/slab.h:685 [inline]
+ raw_alloc_io_data drivers/usb/gadget/legacy/raw_gadget.c:675 [inline]
+ raw_ioctl_ep0_read drivers/usb/gadget/legacy/raw_gadget.c:778 [inline]
+ raw_ioctl+0x3bcb/0x5440 drivers/usb/gadget/legacy/raw_gadget.c:1315
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:907 [inline]
+ __se_sys_ioctl+0x261/0x450 fs/ioctl.c:893
+ __x64_sys_ioctl+0x96/0xe0 fs/ioctl.c:893
+ x64_sys_call+0x1a06/0x3c10 arch/x86/include/generated/asm/syscalls_64.h:17
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Bytes 0-4095 of 4096 are uninitialized
+Memory access of size 4096 starts at ffff888116edb000
+Data copied to user address 00007ffefdca74d8
+
+CPU: 0 PID: 5057 Comm: syz-executor289 Not tainted 6.10.0-syzkaller-11185-g2c9b3512402e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/27/2024
+=====================================================
 
 
-Hi,
-I see this landed in linux-next, but is not currently in Linus' tree for 6.11.
-Will you be able to have this pulled during the merge window?
-I'm trying to eradicate all of these warnings before 6.11 rc-final.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thanks!
-/jeff
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
