@@ -1,49 +1,50 @@
-Return-Path: <linux-usb+bounces-12356-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12357-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F71993A245
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 16:05:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0E5C93A25C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 16:14:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1506B23625
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 14:05:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0DF71C228B8
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 14:14:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE1ED153BDE;
-	Tue, 23 Jul 2024 14:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243C8153BF8;
+	Tue, 23 Jul 2024 14:14:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB52D15358A;
-	Tue, 23 Jul 2024 14:04:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EFB15216A;
+	Tue, 23 Jul 2024 14:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721743499; cv=none; b=JVTcxxwFVUGg0pcFbLG0K0MzX57UpaBv9zzZXFg9CLEuPLovy4FwkfQcyvwsLM9rjkM/8iMgF9RvcQQqf2PLGDUi0racGZcPqsHmC2dvyrTX+Njo8DpBk41xjpB99Mq9Dbf92PNEJTK19mDnfP7bRYtESo128FkOR05K/NlPXAQ=
+	t=1721744048; cv=none; b=Ek4BQ2K37QASTlEFfAH/GXfAm4VIxBleiK1aBoknfemPzYIDFyqzbaVLwRulfc+ST5WTTRKQhnsz7DM2eBc1tc9cV0MxscMl1hecd9yG+OwfQOB8y0/E/IaaU9cGs+FLqKT6p/mrK84q7jaYMwn/HTPLyvy/EoDfxrJ6JG7iws8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721743499; c=relaxed/simple;
-	bh=gpoIKz3CyyNATjADGveNp10VzH6Ry1z8FkbegxIvs8s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=noQ2r5CkZL9ZyUHTlgjJTq0j1chYVwgalJU7mj4jcKnR6+uikfGNzaGRNrZYVY7lthOnw+FPhmESguTUc/sHs0MOAurMVThdMTPQ3gu06MBO0WwyHzdOM3+BuIt4HtlY/Anj8r6LH8M6cdZPTlW1ucoFpMNDPQRPw21IsPEhz2g=
+	s=arc-20240116; t=1721744048; c=relaxed/simple;
+	bh=Uc1inbA8BXY3BOJ/hOY1tsm17hyR1SxSzZmu8Mj1/cw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kn/Ei0d0kZyyrY+zaWortswFZbbn2tyEIVpKmjeTIY9qxGYLw1OGAI/FXj6LbenOXGUgzsFyzhR3JJhgLH+J6wJ1oKJ2IBfvXYTsn4y3h6YMmc/FV3s6tutwGiBW/DkcvgePWsHYa8iQwk3cBYjCohlX1MFDV6+qqz9ycI5EYj4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
 Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-05 (Coremail) with SMTP id zQCowABXPjl0uJ9mLTORAA--.33853S2;
-	Tue, 23 Jul 2024 22:04:43 +0800 (CST)
+	by APP-05 (Coremail) with SMTP id zQCowAA3ZUGaup9mFoqRAA--.41160S2;
+	Tue, 23 Jul 2024 22:13:54 +0800 (CST)
 From: Ma Ke <make24@iscas.ac.cn>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	utkarsh.h.patel@intel.com,
+	abhishekpandit@chromium.org,
+	andriy.shevchenko@linux.intel.com,
 	make24@iscas.ac.cn,
-	liujunliang_ljl@163.com
+	kyletso@google.com
 Cc: linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] USB2NET: SR9700: fix uninitialized variable use in sr_mdio_read
-Date: Tue, 23 Jul 2024 22:04:34 +0800
-Message-Id: <20240723140434.1330255-1-make24@iscas.ac.cn>
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v2] usb: typec: ucsi: Fix NULL pointer dereference in ucsi_displayport_vdm()
+Date: Tue, 23 Jul 2024 22:13:44 +0800
+Message-Id: <20240723141344.1331641-1-make24@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -52,62 +53,52 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowABXPjl0uJ9mLTORAA--.33853S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF15XFyrCr4kZr4DuF45Jrb_yoW8Jw1xpr
-	4fWa9YyrWUJa42v3ykX3ykW3WF9ws5WFy3Gay8Ww4fZrZ5JFn5C34FgFyUWw1UGrW5Aa4a
-	va1qyFW3Wa1FvaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-	rcIFxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-	WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-	67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-	IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
-	0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-	VjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-TRANSID:zQCowAA3ZUGaup9mFoqRAA--.41160S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw1rXryrCryfCr1DXr43Wrg_yoWDuFb_A3
+	W8uw1kWryjkFyqgr1Ut343urWFkay0v3WxXFn5t3s5CF129r1xXrWUXrZ3XFyrWr45uF9x
+	Cr1jkryxuw4UWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbfAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7V
+	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
+	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU122NtUUUUU==
 X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-It could lead to error happen because the variable res is not updated if
-the call to sr_share_read_word returns an error. In this particular case
-error code was returned and res stayed uninitialized.
+When dp->con->partner is an error, a NULL pointer dereference may occur.
+Add a check for dp->con->partner to avoid dereferencing a NULL pointer.
 
-This can be avoided by checking the return value of sr_share_read_word
-and propagating the error if the read operation failed.
-
-Fixes: c9b37458e956 ("USB2NET : SR9700 : One chip USB 1.1 USB2NET SR9700Device Driver Support")
+Cc: stable@vger.kernel.org
+Fixes: 372adf075a43 ("usb: typec: ucsi: Determine common SVDM Version")
 Signed-off-by: Ma Ke <make24@iscas.ac.cn>
 ---
- drivers/net/usb/sr9700.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Changes in v2:
+- added Cc stable line;
+- fixed a typo.
+---
+ drivers/usb/typec/ucsi/displayport.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 0a662e42ed96..d5bc596f4521 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -179,6 +179,7 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res;
- 	int rc = 0;
-+	int err;
- 
- 	if (phy_id) {
- 		netdev_dbg(netdev, "Only internal phy supported\n");
-@@ -193,7 +194,10 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
- 		if (value & NSR_LINKST)
- 			rc = 1;
- 	}
--	sr_share_read_word(dev, 1, loc, &res);
-+	err = sr_share_read_word(dev, 1, loc, &res);
-+	if (err < 0)
-+		return err;
-+
- 	if (rc == 1)
- 		res = le16_to_cpu(res) | BMSR_LSTATUS;
- 	else
+diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
+index 420af5139c70..ecc706e0800d 100644
+--- a/drivers/usb/typec/ucsi/displayport.c
++++ b/drivers/usb/typec/ucsi/displayport.c
+@@ -222,6 +222,8 @@ static int ucsi_displayport_vdm(struct typec_altmode *alt,
+ 	switch (cmd_type) {
+ 	case CMDT_INIT:
+ 		if (PD_VDO_SVDM_VER(header) < svdm_version) {
++			if (IS_ERR_OR_NULL(dp->con->partner))
++				break;
+ 			typec_partner_set_svdm_version(dp->con->partner, PD_VDO_SVDM_VER(header));
+ 			svdm_version = PD_VDO_SVDM_VER(header);
+ 		}
 -- 
 2.25.1
 
