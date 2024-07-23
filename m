@@ -1,101 +1,114 @@
-Return-Path: <linux-usb+bounces-12355-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12356-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4875693A1D9
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 15:44:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F71993A245
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 16:05:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAE6E1F23567
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 13:44:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1506B23625
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 14:05:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CBF15357D;
-	Tue, 23 Jul 2024 13:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HlXjeGP1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE1ED153BDE;
+	Tue, 23 Jul 2024 14:04:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F9D14D6EE;
-	Tue, 23 Jul 2024 13:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB52D15358A;
+	Tue, 23 Jul 2024 14:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721742289; cv=none; b=PcQnEf73jYJltZBcUF78JtkIlh5Dt4zicGXA/FAXojaxLcakDHeYq6kkyD2NdOpdzUbDlJrPUShboea2ruJAj1WeEgGscMBtGsJVeev+zQ3Kfwhw4ixiOO18HnX41eTYbRr9YY9TYGgOC4T/CFwu3Z0FVkm8Njc89EwestuYGTU=
+	t=1721743499; cv=none; b=JVTcxxwFVUGg0pcFbLG0K0MzX57UpaBv9zzZXFg9CLEuPLovy4FwkfQcyvwsLM9rjkM/8iMgF9RvcQQqf2PLGDUi0racGZcPqsHmC2dvyrTX+Njo8DpBk41xjpB99Mq9Dbf92PNEJTK19mDnfP7bRYtESo128FkOR05K/NlPXAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721742289; c=relaxed/simple;
-	bh=1l39LxJ0o9ueMh/5BoWtbV5B1HGV2nlUkhGauphkz5E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WVG1PnhNFcGCQUnwkCcAMPKnK8u4V24H4TlcQD8rw75mRXJB6HSUTXyIC/2LlhJOGY9JdCDODO6Zns6J2ktvi3M+4Ntg1QVAMQKUvDG8fJtz5dgwHAiI5a4/kncTjbKU9adpbJEQ+6GPMBDipwpJUUQmptEeHMX7S1oK4vs161E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HlXjeGP1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145D2C4AF0A;
-	Tue, 23 Jul 2024 13:44:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1721742288;
-	bh=1l39LxJ0o9ueMh/5BoWtbV5B1HGV2nlUkhGauphkz5E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HlXjeGP14hG7imPL1cjrd2654qMBJvuf/slNtB0Q1LQsw3MGftnNYIfAZjdr8wvBo
-	 e8zuOiFQjkcZRqiu/Z2t8F8wy8aUYgPx78mkYTzAQ4SspCMaXclhUEhRnG+Ogcel3S
-	 nkGJ5jadQq8ZH0DoACqsl5T6mZ1kva6f+Lx6Hwko=
-Date: Tue, 23 Jul 2024 15:44:45 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Ma Ke <make24@iscas.ac.cn>
-Cc: heikki.krogerus@linux.intel.com, dmitry.baryshkov@linaro.org,
-	bleung@chromium.org, utkarsh.h.patel@intel.com,
-	abhishekpandit@chromium.org, kyletso@google.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Fix NULL pointer dereference in
- ucsi_displayport_vdm()
-Message-ID: <2024072333-popcorn-detached-f399@gregkh>
-References: <20240723133230.1325392-1-make24@iscas.ac.cn>
+	s=arc-20240116; t=1721743499; c=relaxed/simple;
+	bh=gpoIKz3CyyNATjADGveNp10VzH6Ry1z8FkbegxIvs8s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=noQ2r5CkZL9ZyUHTlgjJTq0j1chYVwgalJU7mj4jcKnR6+uikfGNzaGRNrZYVY7lthOnw+FPhmESguTUc/sHs0MOAurMVThdMTPQ3gu06MBO0WwyHzdOM3+BuIt4HtlY/Anj8r6LH8M6cdZPTlW1ucoFpMNDPQRPw21IsPEhz2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by APP-05 (Coremail) with SMTP id zQCowABXPjl0uJ9mLTORAA--.33853S2;
+	Tue, 23 Jul 2024 22:04:43 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	make24@iscas.ac.cn,
+	liujunliang_ljl@163.com
+Cc: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] USB2NET: SR9700: fix uninitialized variable use in sr_mdio_read
+Date: Tue, 23 Jul 2024 22:04:34 +0800
+Message-Id: <20240723140434.1330255-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240723133230.1325392-1-make24@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowABXPjl0uJ9mLTORAA--.33853S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CF15XFyrCr4kZr4DuF45Jrb_yoW8Jw1xpr
+	4fWa9YyrWUJa42v3ykX3ykW3WF9ws5WFy3Gay8Ww4fZrZ5JFn5C34FgFyUWw1UGrW5Aa4a
+	va1qyFW3Wa1FvaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+	rcIFxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+	WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+	67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+	IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
+	0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+	VjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-On Tue, Jul 23, 2024 at 09:32:30PM +0800, Ma Ke wrote:
-> When dp->con->partner is an error, a NULL pointer dereference may occur.
-> Add a check for dp->con->partner to avoid dereferencing a NULL pointer.
-> 
-> Fixes: 372adf075a43 ("usb: typec: ucsi: Determine common SVDM Version")
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
-> ---
->  drivers/usb/typec/ucsi/displayport.c | 2 ++
->  1 file changed, 2 insertions(+)
+It could lead to error happen because the variable res is not updated if
+the call to sr_share_read_word returns an error. In this particular case
+error code was returned and res stayed uninitialized.
 
-Hi,
+This can be avoided by checking the return value of sr_share_read_word
+and propagating the error if the read operation failed.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Fixes: c9b37458e956 ("USB2NET : SR9700 : One chip USB 1.1 USB2NET SR9700Device Driver Support")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+ drivers/net/usb/sr9700.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
+index 0a662e42ed96..d5bc596f4521 100644
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -179,6 +179,7 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	__le16 res;
+ 	int rc = 0;
++	int err;
+ 
+ 	if (phy_id) {
+ 		netdev_dbg(netdev, "Only internal phy supported\n");
+@@ -193,7 +194,10 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 		if (value & NSR_LINKST)
+ 			rc = 1;
+ 	}
+-	sr_share_read_word(dev, 1, loc, &res);
++	err = sr_share_read_word(dev, 1, loc, &res);
++	if (err < 0)
++		return err;
++
+ 	if (rc == 1)
+ 		res = le16_to_cpu(res) | BMSR_LSTATUS;
+ 	else
+-- 
+2.25.1
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
