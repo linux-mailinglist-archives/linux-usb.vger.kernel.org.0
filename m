@@ -1,115 +1,133 @@
-Return-Path: <linux-usb+bounces-12396-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12397-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F6DE93B7D5
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 22:13:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 071DA93B84F
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 23:01:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF8C3B247CE
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 20:13:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BE9F1F23240
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 21:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF1416F293;
-	Wed, 24 Jul 2024 20:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YLXHRLuW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6ED513BAE9;
+	Wed, 24 Jul 2024 21:01:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4623716F26D
-	for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 20:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A32113B5AD;
+	Wed, 24 Jul 2024 21:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721851948; cv=none; b=oFAlXaJzPjaByKSena9hvht808UAbzLXntg7zPg9dbz+8+YHR5wuI/slUVv1l91FG7EVSeLf7QjEGRfoyx9lI9cKe408uRXWm1RewWo1RWegi2lEcuGP6WtJXxD7k2FpozKC++DapeRXjhw23cGjVtKj5KFdewTM8OXE1x3Qed4=
+	t=1721854865; cv=none; b=XuaBDTAJgWE8OUinkvpLH2GUEfK91Z//Md4HV4nxJBP78VxbbxT/9qONI2nQdNtbNrXQ9iGjoYFp8/qYJ6kCVkDC/iIOjeyG4n8HxyX/Lm368o29cL02MTnAxSIGN+3JIdwY1S0UNqL8SsJpfOnbQFtsQTvAWqBZJaYBxqOrQI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721851948; c=relaxed/simple;
-	bh=ftKGBViUOgmYn6lD6rKdnKxeD3XcFNArhW8Gz6/ov7g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=UO+UfituS9Z/gP/LoOBw9oIzfWrDftlN8h3MR7xiyMSbH1sEEuQ//ldde4WtP06qWWxu6i1v+GKI6RE7Ppx3XJsTS6olw3e849VB2yWtOjkjf+irJsY+P7PWhoElxtcH5ut9LyhY7760AGgir4deAXfUCEuv2mnOCkSR/anqGM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YLXHRLuW; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e02b5792baaso238530276.2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 13:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721851946; x=1722456746; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9PT/6cjnR+Gnm6WIJzoVk3JaTZqlTM7UT6q82pMzX8=;
-        b=YLXHRLuWDD0xy6ohmfotgN+90XuBk1tBb7fWP+wEPbP0/LwralxlcJxd62hBFFaSWX
-         svuXaKhfVQogTbbKxk6YCLbAtEUKwXQSwnSfgsMUW0XJtR7hhbW1BnVIjMP7rErNd25J
-         LCVq19pdRyrkXqNPE73bTiGPnutJ0+XJGp4fyLmKk3eaYs4ZDz5gA9WcHhLSdBydJmOR
-         7ESiJx/OM6ePVqu36PO6rtWw+EV3/ZLReBsb09yWpet+98jqyKWrkn2oguTOntV97Yhe
-         Zw96oJ9Ev2tVzpt/JLJTUE2eC+1DF1W5e2IslWtdWnXAirckIwPe6BDIJiEUhPoueOGT
-         z9fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721851946; x=1722456746;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9PT/6cjnR+Gnm6WIJzoVk3JaTZqlTM7UT6q82pMzX8=;
-        b=sIhXliz2felRS0kU78Ywtts5i8U4NFDM5uRB6yp8T+vyatkBZRMHy58ACjUyRpD9QM
-         XnpRPDo7zApanRwMkyWA0xzxXmJe0YPq7coNbd7SwKRaZ3pX+MOgqDof8t6D/WY7I5ew
-         MUjgTTNAtqw08TIJfgvDqtgDa70OfLYryBAUoi1gjSQITa7rx5256+x/4fkGp4rEA1/3
-         xzKiJMpF5fZ6Ov/LmZKOJqv//hz8YwUr/Yy1028GYVtgbbEzwYFiqQi6jk9AcrHeJB0K
-         mTUFbhoeWCwpuIY3KoP4QwhpHq/b8jiSBSiGQL7+FB1wUj2BKDToQ/xz5xSpSg7MJHTd
-         mVEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXTm4ApGI/VHn0uJ80b/+NcYexVqOfuTjBMhhIjiYOVG+fEYRqRY7BG6xzwOKeJznG7pyuQrsnMsdqSNavVEMzFluZ+bkWHJVPv
-X-Gm-Message-State: AOJu0YyTU5Mg8zEnVKZDVn5focfrbp0J3Z3+7uhbxl3XIL8kseimUhIf
-	95pNMWUagxB8vDBNmZQgtB6cj37PZPUYeI+j2t1fmSq1v/d65a8ot93jSOSPSqmWUFUWkPQEWDB
-	7WQ==
-X-Google-Smtp-Source: AGHT+IEZtWnLjP/SYhqErAI4vD+nBsv+e3S+tTON9apiX87M2tONY2ATm4vpw94egaaQQU8IqgOAGcYzxBE=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a05:6902:110e:b0:e05:b006:9e12 with SMTP id
- 3f1490d57ef6-e0b23239497mr30065276.11.1721851946331; Wed, 24 Jul 2024
- 13:12:26 -0700 (PDT)
-Date: Wed, 24 Jul 2024 20:11:16 +0000
-In-Reply-To: <20240724201116.2094059-1-jthies@google.com>
+	s=arc-20240116; t=1721854865; c=relaxed/simple;
+	bh=D7vc7wOwIqD6t2vwgWyB3/foYAdWPEJEjuw2hg+H4xE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JWELURm9X9LWogEvxBoSV2GwRmAfAe/6T7B10VGJ8cPYhgguL+zkqR1fZRdh5HCjg90mDgjzak8dm0zeoTvFeBHwE+xJvpMcBMk/q8WUS0bZXOXsIMpghvsllAK3DWkzaPTdBmKdgfyA4bid4uSOgh9f3lHvbLw89t22F0KkEFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.2] (ip5f5af27a.dynamic.kabel-deutschland.de [95.90.242.122])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id EE2B361E5FE06;
+	Wed, 24 Jul 2024 23:00:42 +0200 (CEST)
+Message-ID: <cee9630e-781e-49b1-82c5-9066552f71b1@molgen.mpg.de>
+Date: Wed, 24 Jul 2024 23:00:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240724201116.2094059-1-jthies@google.com>
-X-Mailer: git-send-email 2.45.2.1089.g2a221341d9-goog
-Message-ID: <20240724201116.2094059-5-jthies@google.com>
-Subject: [PATCH v2 4/4] usb: typec: ucsi: Fix SET_PDR typo in UCSI header file
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
-Cc: jthies@google.com, bleung@google.com, abhishekpandit@chromium.org, 
-	andersson@kernel.org, dmitry.baryshkov@linaro.org, 
-	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, hdegoede@redhat.com, 
-	neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: core: hub_port_reset: Remove extra 40 ms reset
+ recovery time
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240724111524.25441-1-pmenzel@molgen.mpg.de>
+ <c7c299e7-605c-4bd6-afad-dfbfe266aa7e@rowland.harvard.edu>
+ <f1e2e2b1-b83c-4105-b62c-a053d18c2985@molgen.mpg.de>
+ <3d3416cd-167f-4c50-972b-0eb376a13fdf@rowland.harvard.edu>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <3d3416cd-167f-4c50-972b-0eb376a13fdf@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Fix SET_PDR typo in UCSI header file.
+Dear Alan,
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Jameson Thies <jthies@google.com>
----
-Changes in V2:
-- None.
 
- drivers/usb/typec/ucsi/ucsi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Am 24.07.24 um 20:52 schrieb Alan Stern:
+> On Wed, Jul 24, 2024 at 08:14:34PM +0200, Paul Menzel wrote:
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 6a958eac5703..a0e91335da80 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -153,7 +153,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_SET_UOR_ROLE(_r_)		(((_r_) == TYPEC_HOST ? 1 : 2) << 23)
- #define UCSI_SET_UOR_ACCEPT_ROLE_SWAPS		BIT(25)
- 
--/* SET_PDF command bits */
-+/* SET_PDR command bits */
- #define UCSI_SET_PDR_ROLE(_r_)		(((_r_) == TYPEC_SOURCE ? 1 : 2) << 23)
- #define UCSI_SET_PDR_ACCEPT_ROLE_SWAPS		BIT(25)
- 
--- 
-2.45.2.1089.g2a221341d9-goog
+[…]
 
+>> Am 24.07.24 um 16:10 schrieb Alan Stern:
+>>> On Wed, Jul 24, 2024 at 01:15:23PM +0200, Paul Menzel wrote:
+>>>> This basically reverts commit b789696af8b4102b7cc26dec30c2c51ce51ee18b
+>>>> ("[PATCH] USB: relax usbcore reset timings") from 2005.
+>>>>
+>>>> This adds unneeded 40 ms during resume from suspend on a majority of
+>>>
+>>> Wrong.  It adds 40 ms to the recovery time from a port reset -- see the
+>>> commit's title.  Suspend and resume do not in general involve port
+>>> resets (although sometimes they do).
+>>
+>> It looks like on my system the ports are reset:
+>>
+>> ```
+>> $ grep suspend-240501-063619/hub_port_reset abreu_mem_ftrace.txt
+>>   6416.257589 |   3)  kworker-9023  |               | hub_port_reset [usbcore]() {
+>>   6416.387182 |   2)  kworker-9023  |   129593.0 us |                  } /* hub_port_reset [usbcore] */
+> 
+>> ```
+> 
+> It depends on the hardware and the kind of suspend.
+
+It is ACPI S3 suspend. Can I find out, why the ports are reset? Not 
+resetting the ports would be even better to reduce the resume time.
+
+>>>> devices, where it’s not needed, like the Dell XPS 13 9360/0596KF, BIOS
+>>>> 2.21.0 06/02/2022 with
+>>>
+>>>> The commit messages unfortunately does not list the devices needing this.
+>>>> Should they surface again, these should be added to the quirk list for
+>>>> USB_QUIRK_HUB_SLOW_RESET.
+>>>
+>>> This quirk applies to hubs that need extra time when one of their ports
+>>> gets reset.  However, it seems likely that the patch you are reverting
+>>> was meant to help the device attached to the port, not the hub itself.
+>>> Which would mean that the adding hubs to the quirk list won't help
+>>> unless every hub is added -- in which case there's no point reverting
+>>> the patch.
+>>>
+>>> Furthermore, should any of these bad hubs or devices still be in use,
+>>> your change would cause them to stop working reliably.  It would be a
+>>> regression.
+>>>
+>>> A better approach would be to add a sysfs boolean attribute to the hub
+>>> driver to enable the 40-ms reset-recovery delay, and make it default to
+>>> True.  Then people who don't need the delay could disable it from
+>>> userspace, say by a udev rule.
+>>
+>> How would you name it?
+> 
+> You could call it "long_reset_recovery".  Anything like that would be
+> okay.
+
+Would it be useful to makes it an integer instead of a boolean, and 
+allow to configure the delay: `extra_reset_recovery_delay_ms`?
+
+
+Kind regards,
+
+Paul
 
