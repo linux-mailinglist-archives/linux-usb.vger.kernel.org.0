@@ -1,142 +1,155 @@
-Return-Path: <linux-usb+bounces-12380-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12381-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329B693B215
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 15:54:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EBBB93B270
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 16:11:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC3FE1F211E3
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 13:54:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAC8B1C23829
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 14:11:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 756E815A87F;
-	Wed, 24 Jul 2024 13:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91D315957D;
+	Wed, 24 Jul 2024 14:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SEaWmgja"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="JQy6XQfu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B991A158D83;
-	Wed, 24 Jul 2024 13:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548461591FC
+	for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 14:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721829230; cv=none; b=LAfs3o48Sgk0lQARumolfiMgvglTTd9QPesUMzf49+R4CiwxtT0kobXEYxG+S6x/l2At1f6PuQ2S0U/8cPaPWidlhC4abBqHeVRwL4LJB3rvpVRfjL1rI9qZJSay17GFX3n/KA0aAywNjvBihoKWeMzpvmODW3fChqd33h3ZdXs=
+	t=1721830255; cv=none; b=tAyYYfOOvVxeBpBVAFoP8UOUnhEe9mI7NWOmZ28bk8mP0GpMBzws1CvAQEZbOWhSl9VeEzq7obzX1RalNd4E9xN89buHSeJTZ/fWnJXKdSYjiiswVTg+ZolwRN5YH4TmflP2m7NtKKhPQF7RrNgJU2I0njJsJ+m6V9wrzeAx0zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721829230; c=relaxed/simple;
-	bh=JHsErZ1Ymd3xIUMEC7/hpzB8p/mlL/O9e+IDU+AKN8I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eq/4iZNentZKFWOohpADHzL50lzVZwsxliJ5ZwDmLA0u6CmxP4mQqgSf3sXdyNeWM6+AgpJEBwV0nIfUIzQUVXTX4pSe8bFWtb99uwxhO7kOodmW3EF5n9eI5t0bLhJph/XEXH8KeiEgY/fE1Z0dIlrwNPZw2XD7WiCmx2fmavo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SEaWmgja; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33282C4AF14;
-	Wed, 24 Jul 2024 13:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721829229;
-	bh=JHsErZ1Ymd3xIUMEC7/hpzB8p/mlL/O9e+IDU+AKN8I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SEaWmgjaMdyUPpB+3WNdnu/Gu9TlKShfVaI3kaPtTDUgi1+yOW7Vw3WRWHs1vW6yC
-	 Y3vEwLQLJbKWWj7Dx4mkYjG+Fx1/bCL3TcivZM6ZsDaDYvp/z9r7LEiiNnP5NYrZkJ
-	 SYAnbs406vjYmOQu2+pBQlU/xloyJFw0x9MXtYErO8Y/t++x+Y1gVMuplBSs0dRN1A
-	 aFLBZLP7F5kEjA3DsPqSbJfUS1DcN6ec3Q2ZQcBVKquPBr0eI+0v6rCG5wVA5SqCn8
-	 HZaFcNq4Nj/FL+NccJEe0+3FebAjkiI31jd7YbrmcZFhm5ZDnSwVEnGW06SIOREjmw
-	 xrF3Btp6K9YPg==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ef2c56d9dcso39539251fa.2;
-        Wed, 24 Jul 2024 06:53:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVaaZbjJYjhHIqupl8vBGkyCEWx3fIX8DGzS1b+8uLkuMt1KfPyzgZ7dpoxC8rJY2vAKrQxjUQtOuV3GonK1AXgrStSN6+jGRdsRnKTe49MQYZgrB3OQKo+ACd48kxwoU7xqBiwWYU8JdQvTm6ju+TfjkaH7nnI7vqnlLAmtSawpQ3LVrNuqFwID2LxJ86iE1yM9ZktYF6hMtUiV+JYCdGeNq1IcHhF8uFG8BBkVgd3CLqtHWEaIijGe8GZpu2FoXEJbZDpe2DWVodGYY8F0ewSmjTtcMrO6O3TF176dny2Ki+cOQ4QsyUiCxoaxMeVHPcSTGnb4UPptXcgD1BfwG8alrSdnrJPn/9ImVSK6k0LzJOB098nA20sdYZaHOeCmf47INa/LL53KokpOdEs9SSy38S0SFqI70+AB2X0OiQ/NV17DNtLdUw3dwZtmFcqmfWwPp2oRxcT0n8IMbleLunhlxOXP/s90LIJMd9zCqXZgWFaOL9OSafFE+xruPbamieQ4FGoP/lM2uE=
-X-Gm-Message-State: AOJu0YzFHhNsC/LtZP3P1oBEd4uWCHuaVYueEwGIGMi2cujgF/otLn4x
-	0by/UuwcoIcftkZn0Qs9LF3HfQ75uDePSxJnJf3MvBJNb409tNRHQu5zge4YlvQlKBlg2YtJJd5
-	sf9fSpzthkKFWqH9VCMI+lVRv/w==
-X-Google-Smtp-Source: AGHT+IEk3YhHLLuWHQez8La65BtnRIR9t5/9BONqzEk5mOwWdTbwESXZpTYF2WmMXYwp6gfL+EkMMSd8FeS9sIIdSCk=
-X-Received: by 2002:a05:6512:3984:b0:51a:f689:b4df with SMTP id
- 2adb3069b0e04-52efb7db65bmr9357884e87.44.1721829216849; Wed, 24 Jul 2024
- 06:53:36 -0700 (PDT)
+	s=arc-20240116; t=1721830255; c=relaxed/simple;
+	bh=WCJyBobz6smTbmKlx36emfO2oVXSkOoGiLvQctDNI5M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ky4rqW75GRQq2kHeah9nlGd9HoiEl1+WZ45FDy1yz/SZ0ZC0Wz4ylWELyXpSjjMV3L6FcCpllDVeGboJssxYuf0SPdts8jQUMCqMU69KeSuZOCgiekk/Unjuq2Z8eOgMzoRoSuP+tn78Vx2m7mAIbL8Ext11UUygKrCzvfXCQUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=JQy6XQfu; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6b5f46191b5so36145596d6.3
+        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 07:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1721830251; x=1722435051; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vycBET30X6TjGJ5PxFXWeaVz1FTniAKOujocO4/MY08=;
+        b=JQy6XQfuPgOtRijMsXOHkDzVLSjHYHANRoaj0NU6A/7AMW2PFHpCITrMnqCWs/2OrB
+         Jt6aCGBuGJR90KvtZm64YXKot57k3cNIgepQHWGVay9KDYTJoWtICFRcacZm33vWPq4q
+         JwhW8T4a6EObAZh2Ixo+Bqk9k6NqwkkPF5RSZKxPOWaBI0WLXpWnOqBHUzM439atQ/7I
+         XlcmHP4G1AsV6G3AzclkrFSPJNUSOVMRIi+uW6LD6W4Uy1zd73ocKH1SEqm+8xU/z/LL
+         t7wnphmTdsC8ffUjVyentszi7bkl8XacqikhV/NovSZKO3vSbzIS0t0g3Tf4+ynnhuCU
+         7dHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721830251; x=1722435051;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vycBET30X6TjGJ5PxFXWeaVz1FTniAKOujocO4/MY08=;
+        b=l5kHnTZ1YUZwos4XsawHok4RJn+ERekTJ6YbCGgiRCS7j2hXAeWMPjYC5Xz18GzW6T
+         kbJtGiDaD3pNGI3/gGTUeEdUCWXJ4c3d0A7xGPMDjMcX1yOWynlSdhvV4DJg3ASU8NDe
+         o4NzWCKKYDnkoh99frk4dbH9hWTQ0ANtZTqXTt9ncNyNCEb5n1blOVBLqNWKNrTtJzKu
+         gsc0ntBxOl9VvOES086URVIr4olbZCHzjHtoBKDtoimMF44El19p0GAG3/bK+Rx9jX9V
+         4HyHcflB3iKwhzNijtnj6ClGYOlVj0NfDF8HnsahlKFBcpXqmLUS4DgSC7ZrXUnZLm0O
+         6jfg==
+X-Forwarded-Encrypted: i=1; AJvYcCXKLPaeMRy8J4c9yKvaSoy11qGCgxHfdWwI+Dpt3fg8a3JRaPkWKm0HAn0HX/6T4DW3KS/cWWYvVU5M6Y+bDVUEkrUU3ESuQLcW
+X-Gm-Message-State: AOJu0Yz/l7SEI+WLPzCJyGuHusSreNDTwi0ZJ8sGd6Y5nlTbixqGWLx8
+	oy0XSjHrL6G9cHbzSxVUj3+9P2SmKApssHNC2hJDLRAY0JJSTRxojbvOeYC9eg==
+X-Google-Smtp-Source: AGHT+IGM3RVQIsmIhKHe+YhNWt5+A1vmr9zp7TqkJna6ypfgkB+6E1J84W5dnHC4XkQwB87beI4ukQ==
+X-Received: by 2002:a05:6214:40e:b0:6b7:a1be:a76a with SMTP id 6a1803df08f44-6b9907f5f34mr24105356d6.57.1721830251109;
+        Wed, 24 Jul 2024 07:10:51 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b7ac7f15c6sm57372646d6.68.2024.07.24.07.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jul 2024 07:10:50 -0700 (PDT)
+Date: Wed, 24 Jul 2024 10:10:48 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	David Brownell <david-b@pacbell.net>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: core: hub_port_reset: Remove extra 40 ms reset
+ recovery time
+Message-ID: <c7c299e7-605c-4bd6-afad-dfbfe266aa7e@rowland.harvard.edu>
+References: <20240724111524.25441-1-pmenzel@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
- <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org> <20240718085651.63ddfb20@booty>
-In-Reply-To: <20240718085651.63ddfb20@booty>
-From: Rob Herring <robh@kernel.org>
-Date: Wed, 24 Jul 2024 08:53:24 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKtOTgoDgfwq9Guvt_LbtnHHGJ+PDt-wgVRHU=oVzwhHw@mail.gmail.com>
-Message-ID: <CAL_JsqKtOTgoDgfwq9Guvt_LbtnHHGJ+PDt-wgVRHU=oVzwhHw@mail.gmail.com>
-Subject: Re: [PATCH v2] of: remove internal arguments from of_property_for_each_u32()
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Stephen Boyd <sboyd@kernel.org>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Bjorn Andersson <andersson@kernel.org>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Chester Lin <chester62515@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Damien Le Moal <dlemoal@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, 
-	Doug Berger <opendmb@gmail.com>, =?UTF-8?Q?Emilio_L=C3=B3pez?= <emilio@elopez.com.ar>, 
-	Fabio Estevam <festevam@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Jiri Slaby <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, 
-	Matthias Brugger <mbrugger@suse.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Michael Turquette <mturquette@baylibre.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Nicholas Piggin <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner <richard.leitner@linux.dev>, 
-	Roger Quadros <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, 
-	Saravana Kannan <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Tony Lindgren <tony@atomide.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, patches@opensource.cirrus.com, 
-	linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, Andre Przywara <andre.przywara@arm.com>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240724111524.25441-1-pmenzel@molgen.mpg.de>
 
-On Thu, Jul 18, 2024 at 1:57=E2=80=AFAM Luca Ceresoli <luca.ceresoli@bootli=
-n.com> wrote:
->
-> Hello Stephen,
->
-> On Wed, 17 Jul 2024 16:33:34 -0700
-> Stephen Boyd <sboyd@kernel.org> wrote:
->
-> > > @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client =
-*client,
-> > >          * property silabs,pll-source : <num src>, [<..>]
-> > >          * allow to selectively set pll source
-> > >          */
-> > > -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, nu=
-m) {
-> > > +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-so=
-urce", array, 2, 4);
-> > > +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is O=
-K */
-> > > +       if (sz < 0)
-> > > +               return dev_err_probe(&client->dev, sz, "invalid pll-s=
-ource");
-> >
-> > Needs a newline on the printk message.
->
-> Ouch! Fix queued for v3.
+On Wed, Jul 24, 2024 at 01:15:23PM +0200, Paul Menzel wrote:
+> This basically reverts commit b789696af8b4102b7cc26dec30c2c51ce51ee18b
+> ("[PATCH] USB: relax usbcore reset timings") from 2005.
+> 
+> This adds unneeded 40 ms during resume from suspend on a majority of
 
-I need v3 like today if I'm going to send it for rc1.
+Wrong.  It adds 40 ms to the recovery time from a port reset -- see the 
+commit's title.  Suspend and resume do not in general involve port 
+resets (although sometimes they do).
 
-Rob
+> devices, where it’s not needed, like the Dell XPS 13 9360/0596KF, BIOS
+> 2.21.0 06/02/2022 with
+
+> The commit messages unfortunately does not list the devices needing this.
+> Should they surface again, these should be added to the quirk list for
+> USB_QUIRK_HUB_SLOW_RESET.
+
+This quirk applies to hubs that need extra time when one of their ports 
+gets reset.  However, it seems likely that the patch you are reverting 
+was meant to help the device attached to the port, not the hub itself.  
+Which would mean that the adding hubs to the quirk list won't help 
+unless every hub is added -- in which case there's no point reverting 
+the patch.
+
+Furthermore, should any of these bad hubs or devices still be in use, 
+your change would cause them to stop working reliably.  It would be a 
+regression.
+
+A better approach would be to add a sysfs boolean attribute to the hub 
+driver to enable the 40-ms reset-recovery delay, and make it default to 
+True.  Then people who don't need the delay could disable it from 
+userspace, say by a udev rule.
+
+Alan Stern
+
+> Fixes: b789696af8b4 ("[PATCH] USB: relax usbcore reset timings")
+> Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: David Brownell <david-b@pacbell.net>
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>  drivers/usb/core/hub.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 4b93c0bd1d4b..487d5fe60f0c 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -3110,7 +3110,7 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+>  			usleep_range(10000, 12000);
+>  		else {
+>  			/* TRSTRCY = 10 ms; plus some extra */
+> -			reset_recovery_time = 10 + 40;
+> +			reset_recovery_time = 10;
+>  
+>  			/* Hub needs extra delay after resetting its port. */
+>  			if (hub->hdev->quirks & USB_QUIRK_HUB_SLOW_RESET)
+> -- 
+> 2.45.2
+> 
+> 
 
