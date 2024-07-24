@@ -1,155 +1,102 @@
-Return-Path: <linux-usb+bounces-12376-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12377-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C3C93B085
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 13:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C2F193B0B7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 13:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD0632843CC
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 11:41:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14FE92886E7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 11:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FB08158853;
-	Wed, 24 Jul 2024 11:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37247158211;
+	Wed, 24 Jul 2024 11:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="D833HqNt"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="o6i4Ba7o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E47157491;
-	Wed, 24 Jul 2024 11:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6395695;
+	Wed, 24 Jul 2024 11:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721821302; cv=none; b=ZvD9blLyoSfIxoJr9t991mfgQi5WWm26PxEhpoWYEGCw7vrP8Non0vvlSSGspw3JNLlISTAeX9yNtpM+HIEu6ep73k4i68xADWo5gUIBvJSI81AnAitertdiHvy9lth9gyvlj3j+AalI1VMVJJXcFLvXZgeyx9CpLYAL6KDs3Gk=
+	t=1721821774; cv=none; b=hasTGAOg2nQ8k0uKzvx1RbhZfom5h3sqf/l4kS2OLiya0CitYAjs9VFeu05gzedz1ripKP0FZuY8luFNKIw2jBvojCm9nP0x3PKj/OKZ3IhwmOQrLjEXO7eDFMvvEtwes1RZdoOSM8S2ainD6XYIaYhshLGnacRh16x4KH5XYdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721821302; c=relaxed/simple;
-	bh=d1Ns+5LkQvsZe/siQ7yuoNSB6lvRMz+MwI0I58Jn1vo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MZVV9JXq0N2XDDdPuq82tSn+n9ESUytHnWn/S9cOqllFRFvdvQikzySfohuP3BFrztVsMZOwQs/v6T4w444Wq4XG/vvTfluqjqrTf4+MekmkcxGYhHCCAH3T5wFeykSfcQ+c/lBtxrM7AaMpkL4HQe+Zp8he/4Kugk+fBCyLsOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=D833HqNt; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46OA1BKX024464;
-	Wed, 24 Jul 2024 11:41:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=KhQqIkeiBaXXkN34/9Ic5EkX
-	2Yz+Ln/4BmYXrH6NppU=; b=D833HqNtNGPwsoFyoBj0m19fSmo3b+ZxEvCIBLxf
-	4qrHalXv5azR/QiVHfRQbN9CMFPLEfYGZXGElJKYmbrY1bx4PlPJJ0igvJVWiqqx
-	JOCUBistfbf6QGiPCDGb43pSKzzE4J+0xcmMZlmFg5iLmVEW7Itj7hPqiA3dpXEX
-	BHsXq319bcYkkjEu0yXDf1tEjlh7upTrN5uBAmdDuMfd5RshYD/ihPdpA9dFWQ/+
-	bCGf4EWZ8BYMqFF/g7M8D2SJRVn9cU+L88AEGdF9r/JhaMKs9pdq4IRgCzJCg7Il
-	VrY8EVCKuSuuqOHGMjcnTpu5zmQ7Ro7NLWYTMkSD6vV4xg==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g487hw3t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 11:41:28 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46OBfRHV005665
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 11:41:27 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 24 Jul 2024 04:41:22 -0700
-Date: Wed, 24 Jul 2024 17:11:18 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <konrad.dybcio@linaro.org>,
-        <djakov@kernel.org>, <quic_wcheng@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] dt-bindings: usb: qcom,dwc3: Update ipq5332 clock
- details
-Message-ID: <ZqDoXu9+Y4+O8M7W@hu-varada-blr.qualcomm.com>
-References: <20240723090304.336428-1-quic_varada@quicinc.com>
- <20240723090304.336428-3-quic_varada@quicinc.com>
- <ac34c454-4800-4057-9a50-e0c5db1d3806@kernel.org>
+	s=arc-20240116; t=1721821774; c=relaxed/simple;
+	bh=yDlumJKmEzhAKRjnL1qUjXcaVNhaH0K7mVcLUeQqiWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BQmQ+F8wFzlekGoWt5KwREh3ENeWrjnGM4kmLNug+AApCwEz0ZNgFnPReucCID4Jmc/fgJ2z7Y3kvHIzQfcpfjoIVmU3UNQZGE3fx7auzBz8n5WcUNQedMGnZ3HGb9tNxb5G5CdEcPtxcFSjK6rbxoGV5GH+s6cla501GYdwk0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=o6i4Ba7o; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=XnfSfb75bly186ZIDAtRd0JeKb7NNesu8aYFDkUskvA=; b=o6i4Ba7oXWczgyVPeJeCBG15IT
+	c2988/t1yHGmz/cToeoN6L4NN/q+7m0q0ABG3WjGwUAp07o0xwz+gQjuHDowPa7pA5InNuBZ2ldIk
+	pOp7wxJ3gW3pFdtbvu9Pi+IQ2A80/IAXQDGLQIRrMzI1dH18n0YZZZto+gSLRzDXavqE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sWaUc-00381H-OR; Wed, 24 Jul 2024 13:49:14 +0200
+Date: Wed, 24 Jul 2024 13:49:14 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
+ module
+Message-ID: <8a85af94-8911-44b8-9516-2f532cee607d@lunn.ch>
+References: <20240724102349.430078-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ac34c454-4800-4057-9a50-e0c5db1d3806@kernel.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AJVnSnLziNAnVkth4RS54Zj9prH9RW5_
-X-Proofpoint-GUID: AJVnSnLziNAnVkth4RS54Zj9prH9RW5_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-24_09,2024-07-23_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 adultscore=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2407240086
+In-Reply-To: <20240724102349.430078-1-jtornosm@redhat.com>
 
-On Wed, Jul 24, 2024 at 08:27:03AM +0200, Krzysztof Kozlowski wrote:
-> On 23/07/2024 11:03, Varadarajan Narayanan wrote:
-> > USB uses icc-clk framework to enable the NoC interface clock.
-> > Hence the 'iface' clock is removed from the list of clocks.
-> > Update the clock-names list accordingly.
->
-> But the clock is still there and is still used by this block. This looks
-> like adjusting hardware per Linux implementation.
->
-> Why suddenly this clock was removed from this hardware?
+On Wed, Jul 24, 2024 at 12:23:44PM +0200, Jose Ignacio Tornos Martinez wrote:
+> The related module for the phy is loaded dynamically depending on the
+> current hardware. In order to keep this behavior and have the phy modules
+> available from initramfs, add a 'weak' dependency with the phy modules to
+> allow user tools, like dracut, get this information.
+> 
+> Include micrel phy module because it is the hardware that I have. Other
+> possible phy modules can be added later.
+> 
+> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> ---
+>  drivers/net/usb/lan78xx.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+> index 8adf77e3557e..c3945aebf94e 100644
+> --- a/drivers/net/usb/lan78xx.c
+> +++ b/drivers/net/usb/lan78xx.c
+> @@ -5074,3 +5074,4 @@ module_usb_driver(lan78xx_driver);
+>  MODULE_AUTHOR(DRIVER_AUTHOR);
+>  MODULE_DESCRIPTION(DRIVER_DESC);
+>  MODULE_LICENSE("GPL");
+> +MODULE_WEAKDEP("micrel");
 
-This clock per se is not used by the USB block. It is needed to
-enable the path for CPU to reach the USB block (and vice versa).
-Hence, we were adviced to use the ICC framework to enable this
-clock and not the clocks/clock-names DT entries.
+~/linux$ grep -r MODULE_WEAKDEP *
+~/linux$ 
 
-Please refer to [1] where similar clocks for IPQ9574 were NAK'ed.
+Is MODULE_WEAKDEP new?
 
-[1] https://lore.kernel.org/linux-arm-msm/CAA8EJppabK8j9T40waMv=t-1aksXfqJibWuS41GhruzLhpatrg@mail.gmail.com/
+It seems like a "Wack a Mole" solution, which is not going to
+scale. Does dracut not have a set of configuration files indicating
+what modules should be included, using wildcards? If you want to have
+NFS root, you need all the network drivers, and so you need all the
+PHY drivers?
 
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  .../devicetree/bindings/usb/qcom,dwc3.yaml      | 17 ++++++++++++++++-
-> >  1 file changed, 16 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > index efde47a5b145..6c5f962bbcf9 100644
-> > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > @@ -220,6 +220,22 @@ allOf:
-> >              - const: sleep
-> >              - const: mock_utmi
-> >
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - qcom,ipq5332-dwc3
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          maxItems: 3
-> > +        clock-names:
-> > +          items:
-> > +            - const: core
-> > +            - const: sleep
-> > +            - const: mock_utmi
->
-> So this is the same as first case. Just put it there. It's your task to
-> check if you are duplicating a case, not reviewer's...
-
-Will fix that.
-
-Thanks
-Varada
+    Andrew
 
