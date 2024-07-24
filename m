@@ -1,51 +1,73 @@
-Return-Path: <linux-usb+bounces-12373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E812693ACB9
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 08:38:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C79693AFC7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 12:24:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84EF8B21A8D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 06:38:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C429284022
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 10:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3BF655888;
-	Wed, 24 Jul 2024 06:38:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AFB1C6A3;
+	Wed, 24 Jul 2024 10:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SxWDYYx6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15C7481CD;
-	Wed, 24 Jul 2024 06:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB9484A3B
+	for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 10:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721803084; cv=none; b=XcNzjn3brahAKWjiPuztCOKMMx2UjK9dbOoKsKnwAS79ATI6PJdYc7GxaV73l8gnK5A/dgukOPxKIZBn9Z1SW9pMrHICi0blScUC4xrbddZuLSMY8jOHPRtDTu3ebNbfg6M+/aewMJYlYWvk0RoOKtpNZqcAseWj2rC2oYdYOnw=
+	t=1721816646; cv=none; b=WY23AQ8RKdqQldhQRXFDo+lOOL2SMhiQZLrXJVk4it3WSsYJIe0GKgudyAnJ1e9FQeEOQQsqpTIKJ+IR73KiccQgFdkvnLdtEazworb0J16dAcWR8LsZOfHJzLfaZrvvQ/3K54wFfp4yP5juKKy6gCs3/UgztaQ5P3V4v5C20cE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721803084; c=relaxed/simple;
-	bh=3vjVBC564vfur4duYDr2L+pfHn61WMoVTgMxs7YsY7g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UBRAp6HviuTUm4WEuO4los/6VSfkECBj15zVt+rLhhXJNIh5FyRrw/1WIG/wj0cCfvzHZhf+jt8/+SJQQ+FgFNUebdRA2dRVwFdeT8oTb59SIQ0Qhcgi5txnGdyCXqnsB+Nqud+6myuuHc9oI1Ku/7gQKfspkYtYjc420QTA2D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-05 (Coremail) with SMTP id zQCowAAH8DotoaBmUTq0AA--.47674S2;
-	Wed, 24 Jul 2024 14:37:46 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: davem@davemloft.net,
+	s=arc-20240116; t=1721816646; c=relaxed/simple;
+	bh=+pBnIWMLOKdXHIqiDIJoSbZQoavTxP0uZ5tx5cA7toY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MLohHyI5P2dfHJyEmNHXo4X0QSpUGjPGVnFbX/CAiDNOcYvUA+H1IDg8XFH0YZWPjo3tgztRpfIMYavGCIVe51Xf6CBQm4Sn1tyNsuxJs4RoZUJjDII22tIdWi70YS2W56/C7cXOaTZDWmu36bwMNHfFLxK+gWLLxcL0XaQvSOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SxWDYYx6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721816643;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=I19PCaLYW4eNdzXEUWKvva5Wbni2AmhEFpSQbjbJzUI=;
+	b=SxWDYYx6aHEh5Qkqgw/nCRqf8jZS8wkHVH7LVOHz8AifoPTS+1bVhpOwNlVATgTRnHSK+F
+	C3gj6U1lszMzXj+Gp1OOh5fkaE/lytaM12q8sx2KARsyRUJrxO+XXjC+Mvix/gpGc46tt+
+	ZC7jp0rz9eaNYFVuIDHfXvuIUXNMK98=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-371-Qva8zKSxO8eZ132Y-ET1CA-1; Wed,
+ 24 Jul 2024 06:24:00 -0400
+X-MC-Unique: Qva8zKSxO8eZ132Y-ET1CA-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0E7BE1955F3B;
+	Wed, 24 Jul 2024 10:23:58 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.143])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 580801955D44;
+	Wed, 24 Jul 2024 10:23:52 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: woojung.huh@microchip.com,
+	UNGLinuxDriver@microchip.com,
+	davem@davemloft.net,
 	edumazet@google.com,
 	kuba@kernel.org,
 	pabeni@redhat.com,
-	make24@iscas.ac.cn,
-	liujunliang_ljl@163.com
-Cc: linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net v3] net: usb: sr9700: fix uninitialized variable use in sr_mdio_read
-Date: Wed, 24 Jul 2024 14:37:31 +0800
-Message-Id: <20240724063731.1489034-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Subject: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy module
+Date: Wed, 24 Jul 2024 12:23:44 +0200
+Message-ID: <20240724102349.430078-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,71 +75,31 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAAH8DotoaBmUTq0AA--.47674S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF15XFyrCr4kZr4DuF45Jrb_yoW8XryUpr
-	47Ga9YyrWUJa47Z3ykXwn7W3WFkws5GFy3GFW8Gw1fZ395Jrn5C34FgFyjgw1UGrW5Ja1j
-	vF4qyFW3Xa1FvaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-	1j6rxdM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
-	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28Icx
-	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-It could lead to error happen because the variable res is not updated if
-the call to sr_share_read_word returns an error. In this particular case
-error code was returned and res stayed uninitialized.
+The related module for the phy is loaded dynamically depending on the
+current hardware. In order to keep this behavior and have the phy modules
+available from initramfs, add a 'weak' dependency with the phy modules to
+allow user tools, like dracut, get this information.
 
-This can be avoided by checking the return value of sr_share_read_word
-and propagating the error if the read operation failed.
+Include micrel phy module because it is the hardware that I have. Other
+possible phy modules can be added later.
 
-Found by code review.
-
-Cc: stable@vger.kernel.org
-Fixes: c9b37458e956 ("USB2NET : SR9700 : One chip USB 1.1 USB2NET SR9700Device Driver Support")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 ---
-Changes in v3:
-- added Cc stable line as suggestions.
-Changes in v2:
-- modified the subject as suggestions.
----
- drivers/net/usb/sr9700.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/usb/lan78xx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 0a662e42ed96..d5bc596f4521 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -179,6 +179,7 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res;
- 	int rc = 0;
-+	int err;
- 
- 	if (phy_id) {
- 		netdev_dbg(netdev, "Only internal phy supported\n");
-@@ -193,7 +194,10 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
- 		if (value & NSR_LINKST)
- 			rc = 1;
- 	}
--	sr_share_read_word(dev, 1, loc, &res);
-+	err = sr_share_read_word(dev, 1, loc, &res);
-+	if (err < 0)
-+		return err;
-+
- 	if (rc == 1)
- 		res = le16_to_cpu(res) | BMSR_LSTATUS;
- 	else
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 8adf77e3557e..c3945aebf94e 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -5074,3 +5074,4 @@ module_usb_driver(lan78xx_driver);
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+ MODULE_DESCRIPTION(DRIVER_DESC);
+ MODULE_LICENSE("GPL");
++MODULE_WEAKDEP("micrel");
 -- 
-2.25.1
+2.45.2
 
 
