@@ -1,106 +1,142 @@
-Return-Path: <linux-usb+bounces-12379-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12380-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E0093B1B4
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 15:36:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 329B693B215
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 15:54:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C727B1C21114
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 13:36:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC3FE1F211E3
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 13:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C698158DD1;
-	Wed, 24 Jul 2024 13:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 756E815A87F;
+	Wed, 24 Jul 2024 13:53:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FQOmzKqO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SEaWmgja"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01E1158DA0;
-	Wed, 24 Jul 2024 13:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B991A158D83;
+	Wed, 24 Jul 2024 13:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721828171; cv=none; b=IyBpufx7U9LXIvZ1jg/1aa4ki7kyn/k2PfGVfDcFcHnUSYsrlIA2Lathqp1Q8sb6Xw/PyDUAvEJdAknNtyihcDvbllnofm1vB9jzpm3w+cVWU1LCoTvxWaNrqAOmg4Qaaz15N4aVszDwdyeWJnRM6dSgT5LqWc5oZqABmykwS7A=
+	t=1721829230; cv=none; b=LAfs3o48Sgk0lQARumolfiMgvglTTd9QPesUMzf49+R4CiwxtT0kobXEYxG+S6x/l2At1f6PuQ2S0U/8cPaPWidlhC4abBqHeVRwL4LJB3rvpVRfjL1rI9qZJSay17GFX3n/KA0aAywNjvBihoKWeMzpvmODW3fChqd33h3ZdXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721828171; c=relaxed/simple;
-	bh=qDPJZ27dnCT+ZblWUcm8KrCxgsFNh1NJtoEY0poztWQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lnDAtjPisoXm8fIdidCkI7WisOQw55jgj9dlm+xVG5lXrarRvm9NoSzpxdhsyJvxfZMgT9X1j8S9q51D74AE+hMOFYYBhqHjPaHbhw498AaVVV8iNuQgY3mghYpQiktodyMd2f584uA9aNmXmH4RTm0lOICVC3WFedChbtK/kyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FQOmzKqO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE208C4AF0C;
-	Wed, 24 Jul 2024 13:36:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1721828171;
-	bh=qDPJZ27dnCT+ZblWUcm8KrCxgsFNh1NJtoEY0poztWQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FQOmzKqOZvSYxe7B79yn2ryRFXJ1z92lFjnTiP1I1NK6RT4DESK3MA2O1L5wMnGtO
-	 HzvvOrrJSy/68NLjaDNG41gGDcq4KDRiKIWOsem9au9gGukt7vQIDdd5vHJezOj0p7
-	 puLYtCRXrT7ocyAheQPQgy6wZpKXAKD96QtdmzlQ=
-Date: Wed, 24 Jul 2024 15:36:08 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
- module
-Message-ID: <2024072430-scorn-pushover-7d8a@gregkh>
-References: <20240724102349.430078-1-jtornosm@redhat.com>
- <8a85af94-8911-44b8-9516-2f532cee607d@lunn.ch>
+	s=arc-20240116; t=1721829230; c=relaxed/simple;
+	bh=JHsErZ1Ymd3xIUMEC7/hpzB8p/mlL/O9e+IDU+AKN8I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eq/4iZNentZKFWOohpADHzL50lzVZwsxliJ5ZwDmLA0u6CmxP4mQqgSf3sXdyNeWM6+AgpJEBwV0nIfUIzQUVXTX4pSe8bFWtb99uwxhO7kOodmW3EF5n9eI5t0bLhJph/XEXH8KeiEgY/fE1Z0dIlrwNPZw2XD7WiCmx2fmavo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SEaWmgja; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33282C4AF14;
+	Wed, 24 Jul 2024 13:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721829229;
+	bh=JHsErZ1Ymd3xIUMEC7/hpzB8p/mlL/O9e+IDU+AKN8I=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SEaWmgjaMdyUPpB+3WNdnu/Gu9TlKShfVaI3kaPtTDUgi1+yOW7Vw3WRWHs1vW6yC
+	 Y3vEwLQLJbKWWj7Dx4mkYjG+Fx1/bCL3TcivZM6ZsDaDYvp/z9r7LEiiNnP5NYrZkJ
+	 SYAnbs406vjYmOQu2+pBQlU/xloyJFw0x9MXtYErO8Y/t++x+Y1gVMuplBSs0dRN1A
+	 aFLBZLP7F5kEjA3DsPqSbJfUS1DcN6ec3Q2ZQcBVKquPBr0eI+0v6rCG5wVA5SqCn8
+	 HZaFcNq4Nj/FL+NccJEe0+3FebAjkiI31jd7YbrmcZFhm5ZDnSwVEnGW06SIOREjmw
+	 xrF3Btp6K9YPg==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ef2c56d9dcso39539251fa.2;
+        Wed, 24 Jul 2024 06:53:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVaaZbjJYjhHIqupl8vBGkyCEWx3fIX8DGzS1b+8uLkuMt1KfPyzgZ7dpoxC8rJY2vAKrQxjUQtOuV3GonK1AXgrStSN6+jGRdsRnKTe49MQYZgrB3OQKo+ACd48kxwoU7xqBiwWYU8JdQvTm6ju+TfjkaH7nnI7vqnlLAmtSawpQ3LVrNuqFwID2LxJ86iE1yM9ZktYF6hMtUiV+JYCdGeNq1IcHhF8uFG8BBkVgd3CLqtHWEaIijGe8GZpu2FoXEJbZDpe2DWVodGYY8F0ewSmjTtcMrO6O3TF176dny2Ki+cOQ4QsyUiCxoaxMeVHPcSTGnb4UPptXcgD1BfwG8alrSdnrJPn/9ImVSK6k0LzJOB098nA20sdYZaHOeCmf47INa/LL53KokpOdEs9SSy38S0SFqI70+AB2X0OiQ/NV17DNtLdUw3dwZtmFcqmfWwPp2oRxcT0n8IMbleLunhlxOXP/s90LIJMd9zCqXZgWFaOL9OSafFE+xruPbamieQ4FGoP/lM2uE=
+X-Gm-Message-State: AOJu0YzFHhNsC/LtZP3P1oBEd4uWCHuaVYueEwGIGMi2cujgF/otLn4x
+	0by/UuwcoIcftkZn0Qs9LF3HfQ75uDePSxJnJf3MvBJNb409tNRHQu5zge4YlvQlKBlg2YtJJd5
+	sf9fSpzthkKFWqH9VCMI+lVRv/w==
+X-Google-Smtp-Source: AGHT+IEk3YhHLLuWHQez8La65BtnRIR9t5/9BONqzEk5mOwWdTbwESXZpTYF2WmMXYwp6gfL+EkMMSd8FeS9sIIdSCk=
+X-Received: by 2002:a05:6512:3984:b0:51a:f689:b4df with SMTP id
+ 2adb3069b0e04-52efb7db65bmr9357884e87.44.1721829216849; Wed, 24 Jul 2024
+ 06:53:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a85af94-8911-44b8-9516-2f532cee607d@lunn.ch>
+References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
+ <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org> <20240718085651.63ddfb20@booty>
+In-Reply-To: <20240718085651.63ddfb20@booty>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 24 Jul 2024 08:53:24 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKtOTgoDgfwq9Guvt_LbtnHHGJ+PDt-wgVRHU=oVzwhHw@mail.gmail.com>
+Message-ID: <CAL_JsqKtOTgoDgfwq9Guvt_LbtnHHGJ+PDt-wgVRHU=oVzwhHw@mail.gmail.com>
+Subject: Re: [PATCH v2] of: remove internal arguments from of_property_for_each_u32()
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Stephen Boyd <sboyd@kernel.org>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Bjorn Andersson <andersson@kernel.org>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Chester Lin <chester62515@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Damien Le Moal <dlemoal@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, 
+	Doug Berger <opendmb@gmail.com>, =?UTF-8?Q?Emilio_L=C3=B3pez?= <emilio@elopez.com.ar>, 
+	Fabio Estevam <festevam@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Jaroslav Kysela <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jiri Slaby <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, 
+	Matthias Brugger <mbrugger@suse.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Michael Turquette <mturquette@baylibre.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+	Nicholas Piggin <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner <richard.leitner@linux.dev>, 
+	Roger Quadros <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, 
+	Saravana Kannan <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Tony Lindgren <tony@atomide.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, patches@opensource.cirrus.com, 
+	linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, Andre Przywara <andre.przywara@arm.com>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 24, 2024 at 01:49:14PM +0200, Andrew Lunn wrote:
-> On Wed, Jul 24, 2024 at 12:23:44PM +0200, Jose Ignacio Tornos Martinez wrote:
-> > The related module for the phy is loaded dynamically depending on the
-> > current hardware. In order to keep this behavior and have the phy modules
-> > available from initramfs, add a 'weak' dependency with the phy modules to
-> > allow user tools, like dracut, get this information.
-> > 
-> > Include micrel phy module because it is the hardware that I have. Other
-> > possible phy modules can be added later.
-> > 
-> > Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-> > ---
-> >  drivers/net/usb/lan78xx.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-> > index 8adf77e3557e..c3945aebf94e 100644
-> > --- a/drivers/net/usb/lan78xx.c
-> > +++ b/drivers/net/usb/lan78xx.c
-> > @@ -5074,3 +5074,4 @@ module_usb_driver(lan78xx_driver);
-> >  MODULE_AUTHOR(DRIVER_AUTHOR);
-> >  MODULE_DESCRIPTION(DRIVER_DESC);
-> >  MODULE_LICENSE("GPL");
-> > +MODULE_WEAKDEP("micrel");
-> 
-> ~/linux$ grep -r MODULE_WEAKDEP *
-> ~/linux$ 
-> 
-> Is MODULE_WEAKDEP new?
-> 
-> It seems like a "Wack a Mole" solution, which is not going to
-> scale. Does dracut not have a set of configuration files indicating
-> what modules should be included, using wildcards? If you want to have
-> NFS root, you need all the network drivers, and so you need all the
-> PHY drivers?
+On Thu, Jul 18, 2024 at 1:57=E2=80=AFAM Luca Ceresoli <luca.ceresoli@bootli=
+n.com> wrote:
+>
+> Hello Stephen,
+>
+> On Wed, 17 Jul 2024 16:33:34 -0700
+> Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> > > @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client =
+*client,
+> > >          * property silabs,pll-source : <num src>, [<..>]
+> > >          * allow to selectively set pll source
+> > >          */
+> > > -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, nu=
+m) {
+> > > +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-so=
+urce", array, 2, 4);
+> > > +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is O=
+K */
+> > > +       if (sz < 0)
+> > > +               return dev_err_probe(&client->dev, sz, "invalid pll-s=
+ource");
+> >
+> > Needs a newline on the printk message.
+>
+> Ouch! Fix queued for v3.
 
-Agree, this isn't ok, if you have a real dependancy, then show it as a
-real one please with the tools that we have to show that.
+I need v3 like today if I'm going to send it for rc1.
 
-thanks,
-
-greg k-h
+Rob
 
