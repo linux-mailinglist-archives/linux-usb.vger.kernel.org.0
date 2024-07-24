@@ -1,91 +1,119 @@
-Return-Path: <linux-usb+bounces-12368-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12369-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 084BE93A8AA
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 23:25:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D69F193AA7E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 03:16:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C04032831C7
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2024 21:25:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59818B23336
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2024 01:16:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5AC146D79;
-	Tue, 23 Jul 2024 21:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qqJvdDdU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D72179F0;
+	Wed, 24 Jul 2024 01:16:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0483C13DDDB;
-	Tue, 23 Jul 2024 21:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C393E23B1;
+	Wed, 24 Jul 2024 01:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721769938; cv=none; b=UI3cI69u5idG0mXwahSN5/knoEGg8BqZnQ6cY+n4DYJrjSg8cAQTH78DGKfX+8maykK0DH6Jj8gvanwBI/0ldecZha9SoyHeEWqQhDesjmOF/7iut+yXqYxFg3w4j/0SUcMcQ/QYizZqxOMeOSV/EkrrwiPI3u1EMOpCGLB583g=
+	t=1721783788; cv=none; b=j3QNzPEfNKdLkUDPsXrHdMO8xu8m/1fre49NTOCmdmX9cO7pRK/Q6bd76iMv1HO94W89sAvCQGS9iX0stbMdszVX9dLIjREGF+cCSqoRuZWyGf2KBBfakVzNpDVqifotMSwy9i1aF23TDBPOQawubLEeq1HlrZIIdN+fZSD3dJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721769938; c=relaxed/simple;
-	bh=eYT6xMzAX8gcrlTaDVXVrz5u37+vK6FlBeXrlV2yLIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CKg65+4q/wDORUiWOLWTUriAtyN41XCCtLPo98GhFN5GArMzrqcNM2StUG9/9ddXbqZmxeiX/iS+oE7QBK/A1pnMA25MRntMvxhwR2+Mph85+Ow9Qq/czBooB0GfpiydYGb/17ifXL25dIy+18XfBXUOpc3z/Wffno+X/jCybgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qqJvdDdU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54590C4AF0A;
-	Tue, 23 Jul 2024 21:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721769937;
-	bh=eYT6xMzAX8gcrlTaDVXVrz5u37+vK6FlBeXrlV2yLIw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qqJvdDdUJDJ/N4+v0K4DykC09Qn5MvXWOYET57v+3KXEcaHSu8jQZSMVuzfFiQWhY
-	 V1XU7ioa6DkUjJVBxQc2oc6vwfa+cUTzP0CdCvNnlHJ33FASWwXtFFw0qM8QdqMFAI
-	 fgVcHpIPmRnHamwj+Od9a+ySOtdUXY77sanxBNfIPaw9pxO6loxlwOxPf1wGoNB+IN
-	 UCnDpLF6+7ksd9upyynm+rMTtq/DV8Uy3DGIC/hSH8VYG/Iq5/JXyIVfODxZBvOiNG
-	 lprhNY9n1BEUy+NFhLTYphQ3xPvt7ump2dWA36+e9AyDvSjxY/M88MeOdcundCC/H7
-	 kP/zhZ25w2oLQ==
-Date: Tue, 23 Jul 2024 16:25:36 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
-	quic_kriskura@quicinc.com, conor+dt@kernel.org,
-	linux-usb@vger.kernel.org, andersson@kernel.org,
-	devicetree@vger.kernel.org, quic_wcheng@quicinc.com,
-	linux-arm-msm@vger.kernel.org, gregkh@linuxfoundation.org,
-	krzk+dt@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: qcom,dwc3: Update ipq5332
- interrupt info
-Message-ID: <172176993521.1129772.4265722303661810586.robh@kernel.org>
-References: <20240723100151.402300-1-quic_varada@quicinc.com>
- <20240723100151.402300-2-quic_varada@quicinc.com>
+	s=arc-20240116; t=1721783788; c=relaxed/simple;
+	bh=NF40QjUIzoD6FOsKo0ZbfmOJMF5vcyagGqDfrmVwfJk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=a/TgNJuw6vknlKcVJrVIom9v797ysIDEFFM44s6fonKbNLBbsInWYh1VFHKtDjgtC0uPcMcFj9iNAaz/mq/2TvWwncET2SmVIiw2J39XQ6OvnGnpkJnw29ux8QwKl7XKMjGvF4lsoxHqn2iNgAGxfM5vTXGd4PcnIKa2xsILHII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by APP-01 (Coremail) with SMTP id qwCowAB3fUnMVaBmBtutAA--.40410S2;
+	Wed, 24 Jul 2024 09:16:05 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	make24@iscas.ac.cn,
+	liujunliang_ljl@163.com
+Cc: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net] net: usb: sr9700: fix uninitialized variable use in sr_mdio_read
+Date: Wed, 24 Jul 2024 09:15:54 +0800
+Message-Id: <20240724011554.1445989-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240723100151.402300-2-quic_varada@quicinc.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowAB3fUnMVaBmBtutAA--.40410S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CF15XFyrCr4kZr4DuF45Jrb_yoW8GF48pr
+	4fWa9YyrWUJa47Z3ykXws7W3WFkwsYgFy3GFW8Gw1fZrZ5JFn5C34FgFyjgw1UGrZ8Jay2
+	va1qyFWfXa1YvaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8JV
+	W8Jr1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+	1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+	AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
+	VjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
+It could lead to error happen because the variable res is not updated if
+the call to sr_share_read_word returns an error. In this particular case
+error code was returned and res stayed uninitialized.
 
-On Tue, 23 Jul 2024 15:31:50 +0530, Varadarajan Narayanan wrote:
-> IPQ5332 has only three interrupts. Update the constraints
-> to fix the following dt_binding_check errors.
-> 
-> 	interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
-> 
-> Fixes: 53c6d854be4e ("dt-bindings: usb: dwc3: Clean up hs_phy_irq in binding")
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v3: In the previous version, the hunk got mixed up while rebasing.
->     Fix that
-> 
-> v2: Fix patch version numbering. Incorrectly marked the first version as v0
->     Add interrupts and interrupt-names for ipq5332 instead of clubbing it with
->     qcom,x1e80100-dwc3
-> ---
->  .../devicetree/bindings/usb/qcom,dwc3.yaml        | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
+This can be avoided by checking the return value of sr_share_read_word
+and propagating the error if the read operation failed.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Found by code review.
+
+Fixes: c9b37458e956 ("USB2NET : SR9700 : One chip USB 1.1 USB2NET SR9700Device Driver Support")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+Changes in v2:
+- modified the subject as suggestions.
+---
+ drivers/net/usb/sr9700.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
+index 0a662e42ed96..d5bc596f4521 100644
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -179,6 +179,7 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	__le16 res;
+ 	int rc = 0;
++	int err;
+ 
+ 	if (phy_id) {
+ 		netdev_dbg(netdev, "Only internal phy supported\n");
+@@ -193,7 +194,10 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 		if (value & NSR_LINKST)
+ 			rc = 1;
+ 	}
+-	sr_share_read_word(dev, 1, loc, &res);
++	err = sr_share_read_word(dev, 1, loc, &res);
++	if (err < 0)
++		return err;
++
+ 	if (rc == 1)
+ 		res = le16_to_cpu(res) | BMSR_LSTATUS;
+ 	else
+-- 
+2.25.1
 
 
