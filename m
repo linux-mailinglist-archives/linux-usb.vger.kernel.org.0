@@ -1,206 +1,150 @@
-Return-Path: <linux-usb+bounces-12430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12431-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88E5D93C82D
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 20:12:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49A3793C84B
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 20:23:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 168651F22AC3
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 18:12:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAB8B283844
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 18:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9108719E7C6;
-	Thu, 25 Jul 2024 18:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 627F52557A;
+	Thu, 25 Jul 2024 18:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="joz9LKTP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD29339A0
-	for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 18:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3612221350
+	for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 18:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721931147; cv=none; b=gpBdBKVBQToqJrZX8hNOx48+vaJF5rl1u+8ItkXRiFSqsfPkO0MASpDgq0c506VTwdC5AqTSALFJd7vE1r8CeKNz07gaIIucXMRxmEsCRKKN6lhDgequQJyd9CT/yCxO4eoaeCOG7TjEmu590QJJnbPh1g+Z6cZYO5YEnSYYGP8=
+	t=1721931810; cv=none; b=CIHgAAnaS+xw+jUqY2QJbk6fGxp/hwbcMYRbiiojFv1SUFx4r5rnMFtDvxdplMesJdENeELYpWlukN+G3vSbjAgxhtrPXUFbCPRv7Oa2+cZn0uk9hc7j82worVPQfn7SUulHmYJvuGNRt4PWQAvkqVn4XKipuBUeMgt6Ns/bmiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721931147; c=relaxed/simple;
-	bh=4JTPn+J6usux6zvE5pJLxvGgaDpqYPpBK8RRL2QmkvY=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=PyK+LcquLVRCxkDjSEtTneZa1Zu3iFYq0L/TOTQhoeqCOMP0BBfo8fnPiY48FmoTaaBdNMKehUei8gdpC2FWoMAGponcu+l6lBgGMzfHv6DurLFZ39JUfem9QmAHxjK9wpA8vY1SgZiMgiuEdjn29vLTcQpBBqk7AEjjFCBWHc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3971269bf67so12649675ab.0
-        for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 11:12:25 -0700 (PDT)
+	s=arc-20240116; t=1721931810; c=relaxed/simple;
+	bh=EgEtuaM1w9SIxRjRrGQqJpo1WaJB9BUCujCEJzAr99M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lhLsDR4p5qp1LFco7bufIsD2oIqeO2ZrAo1OL1KX0XQgOKLCNzIe/doPZmaIN7oykIue4ipoBqTucPggD4Z7u6ceTSB4X75cAdYmXEqP1bix68fT3Yaoa3KVunfXoKPmgDTokPyn6Q2+LWAhXn6bOOTdMNSCjzk4FrVUMnZGe1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=joz9LKTP; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7a1d7a544d0so73014085a.1
+        for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 11:23:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1721931808; x=1722536608; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AyvNjjqobDzo2nVAxqnhjliyH8DNl57hvC/5geRPhII=;
+        b=joz9LKTPe27qKHQmOUzHt34AK2cvzZotNlU/91GswfS+nQxwVMheNF/jNgpitSe/IZ
+         VoW0uh00uqgoITWimH3eB4s4h811fuMrSbXLy65tBooeK0iqnI83z0isxzpHJjUmpTpy
+         gVq35OWEwRUZzU2Nat6Hh47VE0pHfS6RUqTGCVuNOVHQXmi4Rc7QrYPrbqv0u+oShA/w
+         LR0MrwqH/F5heo1OyWVIoSVA9w9uB40uOkPyv2ZztJC1j7zIT54HudNeEty96sr4koi0
+         nX2HH/EUWcic4JwKf+jLYYrdDybzls4eG3tyBH2YnSHi3F21iIMrE0wpWEIlyCrXzv/d
+         OuSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721931145; x=1722535945;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JETA834thd8Jh0rYhOK21d9SQK3wbvER8fne9A9biCs=;
-        b=k84QjeqMx3/g2kgO5ZOSM1HsVLD6CEpQSkK0TwCf2JG3yzxao9yjJ3LumOAyegOKgc
-         42ynl9NQyUYddKXeWn106JBZSpqp8NC8GmnRqMDARxfiLln//tsetp5voOLohQnB6/JM
-         mAp9gbXI6majJOUhLjr6gTu/u+/68SFFepkgCa+xAxPeOnot+2KBncolKzCutz7lZxO1
-         gcb6/i4bHyuKFcMAbSbfQclTLByNKxhYWamfoMdemjQMcBuYVw+bSWnrKKmEEp3o33CF
-         vYcz8pfUetGINVOWRBqwzYdnYL8DzNDeazLJSNFRQubAAa+bkFPLerDpjAHmaS2fRHjo
-         C1kw==
-X-Forwarded-Encrypted: i=1; AJvYcCXCPRTso67JWiqamsklWJZYpf9Gb9L6aeT2PwMmoYs9Wlh3ngtzY9ntaoX9twTNAbD+97oeM5NgDdNUu0bFBJz93Q8sx6vsNXNg
-X-Gm-Message-State: AOJu0Yyjo43wbVclOS2AyfvUyxiBt2S4Aoyny7z+RDhbwU6nGWhVwb0J
-	M0WsK1hT42Vzoc7f7snIg+a8xL5FfMfHve/h8zIRy6oUMCBcv6Zh2UNy5Qan04LMGsVQFVK5cuN
-	ICUs9ffzUXxtM7iTmLqeE7bp0o/NAhpt2beVcIaCN0O0stTJMb+Ip1D0=
-X-Google-Smtp-Source: AGHT+IF98dI2ibOwPmHuRUwYyhpwZzxsaoiRO5QpRK6ndGSXI7/gYLJKqci9azIV7bPslGoVmCU2jmi+cMggmqMd1ilj63zSKcLU
+        d=1e100.net; s=20230601; t=1721931808; x=1722536608;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AyvNjjqobDzo2nVAxqnhjliyH8DNl57hvC/5geRPhII=;
+        b=phS0aZ9nJzUYmm9Mm50p8lZuOzJvhrmZbCuIwzX+/E9A67fVSmrfpydiM8DAa4r2nU
+         CDzGH+PmhENkpW5/fLXvFf5RtbzwXnxGOyTPLpQ4roJptYcwDWf2oOoewYIlZdE79OZD
+         sNXzs8RxcBmfDq+h2TzXHaxkohtu6s+Cx3dzEaVcagwkwgk1d42KWOKqz7uedhuDSB6g
+         l27V3bq1b11SLEY5x+fDbJ4Im61jJCH/eQ3gKxPxPOktkBNqXR0FhLLN6OYWbT9NiI8X
+         XrPvpK6BYD4THBpaTBwcWkSSrAd5mrXPMoTAjZRSj0aJw9I3YqSSCD/+vYxpJ6BoHpbo
+         73Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCWO8E7DXDDjfkrSur4iC4gNcblsiV1x6OgDdQrrdrZtx7F2HwwxolyNurhp5Ln3FYyo7Z9cA8p77QVcTbpB8XL/r1Hj1PDkA4Cv
+X-Gm-Message-State: AOJu0Yx1PozunmvTN0irVlJhSLaB2aUPgevhXCB5Hc3HFOLmw/xMknek
+	9XXP2eqsi6sG5JfXeWtR49c/y12iigNUw9ErrG3XC6Bx7GNAwINcI7Q5qK/yFvPR8OQYHCAokLU
+	=
+X-Google-Smtp-Source: AGHT+IEM5Pm5c6CfZSOAnNl7b0CiQM8WJGV7l2L9UCEWETuR+l2rd0k3fr8sk+NF2+488kFRGVVLKg==
+X-Received: by 2002:a05:620a:1a9f:b0:7a1:d08d:e2fa with SMTP id af79cd13be357-7a1d455dce1mr540124285a.1.1721931808130;
+        Thu, 25 Jul 2024 11:23:28 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a1d73b1e6csm106939985a.32.2024.07.25.11.23.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jul 2024 11:23:27 -0700 (PDT)
+Date: Thu, 25 Jul 2024 14:23:25 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: crwulff@gmail.com, linux-usb@vger.kernel.org,
+	Roy Luo <royluo@google.com>,
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	yuan linyu <yuanlinyu@hihonor.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: core: Check for unset descriptor
+Message-ID: <d24a4b7f-0d3a-4c24-9de3-5f14297b0904@rowland.harvard.edu>
+References: <20240725010419.314430-2-crwulff@gmail.com>
+ <2024072512-arguably-creole-a017@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d0b:b0:380:c34a:df56 with SMTP id
- e9e14a558f8ab-39a218579d0mr3109805ab.6.1721931144955; Thu, 25 Jul 2024
- 11:12:24 -0700 (PDT)
-Date: Thu, 25 Jul 2024 11:12:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000391c1d061e1656a0@google.com>
-Subject: [syzbot] [wireless?] [usb?] KASAN: use-after-free Read in rtw_load_firmware_cb
-From: syzbot <syzbot+6c6c08700f9480c41fe3@syzkaller.appspotmail.com>
-To: kvalo@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, pkshih@realtek.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024072512-arguably-creole-a017@gregkh>
 
-Hello,
+On Thu, Jul 25, 2024 at 06:56:19AM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Jul 24, 2024 at 09:04:20PM -0400, crwulff@gmail.com wrote:
+> > From: Chris Wulff <crwulff@gmail.com>
+> > 
+> > Make sure the descriptor has been set before looking at maxpacket.
+> > This fixes a null pointer panic in this case.
+> > 
+> > This may happen if the gadget doesn't properly set up the endpoint
+> > for the current speed, or the gadget descriptors are malformed and
+> > the descriptor for the speed/endpoint are not found.
+> > 
+> > No current gadget driver is known to have this problem, but this
+> > may cause a hard-to-find bug during development of new gadgets.
+> > 
+> > Fixes: 54f83b8c8ea9 ("USB: gadget: Reject endpoints with 0 maxpacket value")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Chris Wulff <crwulff@gmail.com>
+> > ---
+> > v2: Added WARN_ONCE message & clarification on causes
+> > v1: https://lore.kernel.org/all/20240721192048.3530097-2-crwulff@gmail.com/
+> > ---
+> >  drivers/usb/gadget/udc/core.c | 10 ++++------
+> >  1 file changed, 4 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> > index 2dfae7a17b3f..81f9140f3681 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -118,12 +118,10 @@ int usb_ep_enable(struct usb_ep *ep)
+> >  		goto out;
+> >  
+> >  	/* UDC drivers can't handle endpoints with maxpacket size 0 */
+> > -	if (usb_endpoint_maxp(ep->desc) == 0) {
+> > -		/*
+> > -		 * We should log an error message here, but we can't call
+> > -		 * dev_err() because there's no way to find the gadget
+> > -		 * given only ep.
+> > -		 */
+> > +	if (!ep->desc || usb_endpoint_maxp(ep->desc) == 0) {
+> > +		WARN_ONCE(1, "%s: ep%d (%s) has %s\n", __func__, ep->address, ep->name,
+> > +			  (!ep->desc) ? "NULL descriptor" : "maxpacket 0");
+> 
+> So you just rebooted a machine that hit this, that's not good at all.
+> Please log the error and recover, don't crash a system (remember,
+> panic-on-warn is enabled in billions of Linux systems.)
 
-syzbot found the following issue on:
+That should not be a problem.  This WARN_ONCE is expected never to be 
+triggered except by a buggy gadget driver.  It's a debugging tool; the 
+developer will get an indication in the kernel log of where the problem 
+is instead of just a panic.
 
-HEAD commit:    933069701c1b Merge tag '6.11-rc-smb3-server-fixes' of git:..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=124e2b19980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f828342678294017
-dashboard link: https://syzkaller.appspot.com/bug?extid=6c6c08700f9480c41fe3
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1530a6c9980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114aa9e6980000
+However, if you feel strongly about this, Chris probably won't mind 
+changing it to pr_err() plus dump_stack() instead of WARN_ONCE().
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/22dd51445d03/disk-93306970.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f85f111961d5/vmlinux-93306970.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7971b4814e87/bzImage-93306970.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6c6c08700f9480c41fe3@syzkaller.appspotmail.com
-
-rtw_8822cu 1-1:15.79: Direct firmware load for rtw88/rtw8822c_wow_fw.bin failed with error -2
-==================================================================
-BUG: KASAN: use-after-free in rtw_load_firmware_cb+0x917/0x9f0 drivers/net/wireless/realtek/rtw88/main.c:1764
-Read of size 8 at addr ffff888113598bc0 by task kworker/0:0/8
-
-CPU: 0 UID: 0 PID: 8 Comm: kworker/0:0 Not tainted 6.10.0-syzkaller-g933069701c1b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/27/2024
-Workqueue: events request_firmware_work_func
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:93 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:119
- print_address_description mm/kasan/report.c:377 [inline]
- print_report+0xc3/0x620 mm/kasan/report.c:488
- kasan_report+0xd9/0x110 mm/kasan/report.c:601
- rtw_load_firmware_cb+0x917/0x9f0 drivers/net/wireless/realtek/rtw88/main.c:1764
- request_firmware_work_func+0x13a/0x250 drivers/base/firmware_loader/main.c:1167
- process_one_work+0x9c5/0x1b40 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf20 kernel/workqueue.c:3390
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffff88811359d700 pfn:0x113598
-flags: 0x200000000000000(node=0|zone=2)
-raw: 0200000000000000 0000000000000000 dead000000000122 0000000000000000
-raw: ffff88811359d700 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 4, migratetype Unmovable, gfp_mask 0x40dc0(GFP_KERNEL|__GFP_COMP|__GFP_ZERO), pid 9, tgid 9 (kworker/0:1), ts 54741596219, free_ts 54774261673
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x2d1/0x350 mm/page_alloc.c:1493
- prep_new_page mm/page_alloc.c:1501 [inline]
- get_page_from_freelist+0x1311/0x25f0 mm/page_alloc.c:3438
- __alloc_pages_noprof+0x21e/0x2290 mm/page_alloc.c:4696
- __alloc_pages_node_noprof include/linux/gfp.h:269 [inline]
- alloc_pages_node_noprof include/linux/gfp.h:296 [inline]
- ___kmalloc_large_node+0x7f/0x1a0 mm/slub.c:4103
- __kmalloc_large_node_noprof+0x1c/0x70 mm/slub.c:4130
- __do_kmalloc_node mm/slub.c:4146 [inline]
- __kmalloc_noprof.cold+0xc/0x61 mm/slub.c:4170
- kmalloc_noprof include/linux/slab.h:685 [inline]
- kzalloc_noprof include/linux/slab.h:807 [inline]
- wiphy_new_nm+0x701/0x2120 net/wireless/core.c:477
- ieee80211_alloc_hw_nm+0x1b7a/0x2260 net/mac80211/main.c:828
- ieee80211_alloc_hw include/net/mac80211.h:4857 [inline]
- rtw_usb_probe+0x32/0x1d80 drivers/net/wireless/realtek/rtw88/usb.c:853
- usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:656
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:956
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
-page last free pid 9 tgid 9 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1094 [inline]
- __free_pages_ok+0x5c1/0xba0 mm/page_alloc.c:1214
- __folio_put+0x1dc/0x260 mm/swap.c:128
- device_release+0xa1/0x240 drivers/base/core.c:2581
- kobject_cleanup lib/kobject.c:689 [inline]
- kobject_release lib/kobject.c:720 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1fa/0x5b0 lib/kobject.c:737
- put_device+0x1f/0x30 drivers/base/core.c:3787
- rtw_usb_probe+0x7a4/0x1d80 drivers/net/wireless/realtek/rtw88/usb.c:925
- usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:656
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:956
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
- device_add+0x114b/0x1a70 drivers/base/core.c:3679
- usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
-
-Memory state around the buggy address:
- ffff888113598a80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff888113598b00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff888113598b80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                           ^
- ffff888113598c00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff888113598c80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Alan Stern
 
