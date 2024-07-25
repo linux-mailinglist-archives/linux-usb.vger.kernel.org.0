@@ -1,166 +1,161 @@
-Return-Path: <linux-usb+bounces-12405-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12406-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A429693BB08
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 05:01:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A86F293BB3D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 05:31:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 599F71F213B7
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 03:01:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6769A285072
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 03:31:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 345EB12B72;
-	Thu, 25 Jul 2024 03:01:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C28617550;
+	Thu, 25 Jul 2024 03:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gWcHc9N7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="arYavAvZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104EB1862C
-	for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 03:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D20F1170F
+	for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 03:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721876476; cv=none; b=Xs5hpCEXndafRFNUXR5NLDV0Mn25/IDP0Axy/VbO08x2u9xZ267MmWjfzKegLw4ZE0swWmY8ANC+VzZ20Tb0JfI+XvQi8LQAaeYmQYVXT6N+qk/frn+c9fldAZtFeCuJ4GGm9pzVOLcVkcUkr1bTr8tbnJ8LrC5b3u5pnPQOr8s=
+	t=1721878268; cv=none; b=Pcduy4j+cqO00Q2GGxxOzHF+NxMV7wFDi07cNQZyFg/6zFUIRfCiFok2dqdQlIxHul/cSEDvRvIdLUjsMpY4H6t0J3J6jiKTThB39eOOqN9lTk9ihwKSsOy2buPwfcXpuBpBG+rEgEItG2/hO5/qRIBqjzNH6KvYhkODBD/TW1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721876476; c=relaxed/simple;
-	bh=VF+PXS0cN4+7WGdSUdvB33v2NKJjsMSSiNKGb+niVEI=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=kzRn35d8CrRAehbp83bJGZfuTcfLPvf+WjfVeKT9Hz5VfhgPESncGWYUOSRVWO21HA2zowSuKsWOSw+8yFiIsdjIEGsx8GIC7+J1y0IgNSvy7+eRU0CsnG/3dGkK7AxIBavY+/0m+8Voz61PtQCI5J8nJgnjmSaGU82uNH0xLZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gWcHc9N7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721876474;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WR4C1klarxsCcuevMDPpmoXX3IapIZL76EvSWY9IHig=;
-	b=gWcHc9N7ot/LbSmpNNCtQtDQU1s//D4lllZXQwgFen7IZUmcjA0nEseUX3R71zuwQaHThG
-	bTsVG6w+I/WmdjBBWAMDRf6mYRD7ykOXYH+d9lMUkDaA8RYsCEZdCEs7TDAtdzmVk2hh5P
-	r6gKnbzudMD8mx2pjOevKWcqs8mLVEU=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-680-va4gUHhiN8K8GHoWBBTQVA-1; Wed, 24 Jul 2024 23:01:07 -0400
-X-MC-Unique: va4gUHhiN8K8GHoWBBTQVA-1
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1fc6ac9a4aaso4368485ad.1
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 20:01:07 -0700 (PDT)
+	s=arc-20240116; t=1721878268; c=relaxed/simple;
+	bh=d4Md/pmd9aAH6BP2SJNyitKaq4lM6GrSPXh+qAunH6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uUoq0HBDwFd7et2KpOk7Z+9xxAH8J0NMPy40hh0WaDQHgm1LleofE60e+mueuVvHSfSoHB+duvvgCM8Yguf1GCJL0L0SJNA9FHJigEF7hudAZuwIbGu9OKQPKdvdfmU/U7j4kxAsP3NrANsYcxNK4Fq+adsb26WmfB7ORQ+kcwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=arYavAvZ; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52efc60a6e6so521692e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 20:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721878262; x=1722483062; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yhbT1eQ9YPVhIQslZbZZbHdi4UGZ5NhIA5kAWua5Lkg=;
+        b=arYavAvZnL/vVCTWS9TvqTL7SyHo2HJYo6xsUwOy57I7cahOBK9sH0XNh3ugN74ufY
+         ucz3wjoaOlUEnAlmcA6ykMKwzBoIVG/YKHCAz6hNmIG4qMrnQp4Eu8W5gyCDOVVlCbd9
+         CH55OYeC/2A05N8akgPn/PvANCrx4O1aT7q1YiZT/l/2CsO/tWeVYoEe3FLC3d7Gpupb
+         obW4Z+USMDXZT6SLnWf9Qhtq/YSWpaHZHuhBBewJovTwZv5arHA5JUwzx19BA7gvMA/G
+         4I9qj12ekLW+8nbf2CY028lAzMyaTJt0+ebt6Fqt8MZ5Br90WZxEs/z+TjSfzi2LgV+p
+         +kIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721876466; x=1722481266;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:from
-         :subject:cc:to:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WR4C1klarxsCcuevMDPpmoXX3IapIZL76EvSWY9IHig=;
-        b=LGpMKxwp8w07GGAcImX2nFyVC7oWSwrZ2Ia4ecOfK+ei+38U1Ne4fjRQmG1Tf0SL+i
-         kmgx1++sOOX8ViWT9Y/aDNwh34WTPl7ZaTj4lP3KBAdgysjPj/tfVAHTrurYQEjIRY6f
-         oxzXB1Rv0eFsBYBP1fFiJoaDjJkGaBOzWBInsUaNH8Qewa8Uk2PaR0aFYCX14lT+Q1ew
-         YeQkBXpwoYqxkc1Y0LJtM43qeI5Zkv7uzgFWgKOAHrrE32zvxCXu+kjjJCzDmT6ZuDOx
-         oYRksV7hhs2dZbSubh8flGiwZvYgeuFxjQ86fwgguvv91/GJ4kWKrX2TYce9w4eOm9ZK
-         cEJA==
-X-Forwarded-Encrypted: i=1; AJvYcCVKYjJNPkj6qPak6l/bDy8hgd3N9vofECyObQlfRg4jpxHU6uLpW4r+3PASCZMY5LGh8gzBtpJXSAUz3wWqEO/OhoMEuJ+9LFZ7
-X-Gm-Message-State: AOJu0YzdULDWyoj6uuLzbihpQY9vIZXMliCIzf1YUYQBdDTGRc3swMpx
-	EUXSyjVxAmMU/O0z+raTlcn6LA+gYFtRS8Qg5f5v7xAQ/aPMRLAh6Ga1wfoIwiTpRuNgCO75zhN
-	1d4GMym0pAIWwnHKLFlWnbSdU2gWBYPSFIbRjtp/z6qP5kRNWv75qA5pqUA==
-X-Received: by 2002:a17:902:ea02:b0:1fb:4fa4:d24 with SMTP id d9443c01a7336-1fed3aed403mr18867325ad.50.1721876466421;
-        Wed, 24 Jul 2024 20:01:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFdSwWHgKDpLoPuClxTWTLGgSR81gaWdx9VM+Y30/dTNbwfcdNrSvXE5T5oFpUbysdfWQq5Iw==
-X-Received: by 2002:a17:902:ea02:b0:1fb:4fa4:d24 with SMTP id d9443c01a7336-1fed3aed403mr18867035ad.50.1721876466045;
-        Wed, 24 Jul 2024 20:01:06 -0700 (PDT)
-Received: from localhost ([126.143.164.49])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7fb1accsm2912335ad.261.2024.07.24.20.01.02
+        d=1e100.net; s=20230601; t=1721878262; x=1722483062;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yhbT1eQ9YPVhIQslZbZZbHdi4UGZ5NhIA5kAWua5Lkg=;
+        b=bOXbiqKerGt6BhaByMgUEFDicGmVCoIGbTLFP/uhHw6mAccUxAtijyfTMz1bN5GceM
+         k/klVHA+jSChAkRZlv1lTU/zr1uVzbXdS3hMbmH7inJbB3k44T7nDkANB6EUO8a+hK9u
+         u60wSUehWt2hFe4RrNbvVMgIFMKzRAn8JwWfsVwdoSzq1ysGr3GksvAhVmrqouFli4sJ
+         uAz5eZzKtIhCQH7/i1z1iOFPDU2SCAkMU0bIGrOzPmXpoy365AsnvzDLlqVryaghKR6U
+         ljo2ZfmEocjJ3YfsXdk585cPd7Roeh+GP5Z0MJsOkf1givefIextfDBxPhR0OLyVIxTY
+         oRLg==
+X-Forwarded-Encrypted: i=1; AJvYcCX++B+gV06yCeWu7a93gKKIi2jQ/Ji6zji8R0/ghahQcZxszVm9M3rBtIFZ4cjZpW+IickO3vkpo2tBOItm3zEHkCsh1JYcSBBj
+X-Gm-Message-State: AOJu0YxkJ9I3J/dlHlP8JTEvWZYegaJfT9mAv5aJTNqUzgoGTZiLxzsG
+	Ea4Js/FeS9l08P6yT4lp3P5MazkvskmiTgPSfbiqxr6v17rA5MJsTk57Kyn/WPs=
+X-Google-Smtp-Source: AGHT+IFjMhfs1uKv8o8eDUmQrRbd/e1o4QszP3+4qeKeaqccHoFSZFfQnx4HsVLlt3eN+89oHv6Bbg==
+X-Received: by 2002:a19:f70d:0:b0:52c:e0fb:92c0 with SMTP id 2adb3069b0e04-52fd60439a8mr261657e87.34.1721878262339;
+        Wed, 24 Jul 2024 20:31:02 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5c08248sm63127e87.125.2024.07.24.20.31.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jul 2024 20:01:05 -0700 (PDT)
-Date: Thu, 25 Jul 2024 12:01:00 +0900 (JST)
-Message-Id: <20240725.120100.2041590414991833213.syoshida@redhat.com>
-To: make24@iscas.ac.cn
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, liujunliang_ljl@163.com, andrew@lunn.ch,
- horms@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net v4] net: usb: sr9700: fix uninitialized variable
- use in sr_mdio_read
-From: Shigeru Yoshida <syoshida@redhat.com>
-In-Reply-To: <20240725022942.1720199-1-make24@iscas.ac.cn>
-References: <20240725022942.1720199-1-make24@iscas.ac.cn>
-X-Mailer: Mew version 6.9 on Emacs 29.4
+        Wed, 24 Jul 2024 20:31:01 -0700 (PDT)
+Date: Thu, 25 Jul 2024 06:31:00 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Jameson Thies <jthies@google.com>, Sebastian Reichel <sre@kernel.org>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
+	bleung@google.com, abhishekpandit@chromium.org, andersson@kernel.org, 
+	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, hdegoede@redhat.com, 
+	neil.armstrong@linaro.org, rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] usb: typec: ucsi: Add status to UCSI power supply
+ driver
+Message-ID: <tzljywuym6jsh5q5iuc7rrtq564d3ffl3e4ltuii7xzkd6cf7d@2nmj5qkusbkt>
+References: <20240724201116.2094059-1-jthies@google.com>
+ <20240724201116.2094059-2-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240724201116.2094059-2-jthies@google.com>
 
-On Thu, 25 Jul 2024 10:29:42 +0800, Ma Ke wrote:
-> It could lead to error happen because the variable res is not updated if
-> the call to sr_share_read_word returns an error. In this particular case
-> error code was returned and res stayed uninitialized. Same issue also
-> applies to sr_read_reg.
+On Wed, Jul 24, 2024 at 08:11:13PM GMT, Jameson Thies wrote:
+> Add status to UCSI power supply driver properties based on the port's
+> connection and power direction states.
 > 
-> This can be avoided by checking the return value of sr_share_read_word
-> and sr_read_reg, and propagating the error if the read operation failed.
-> 
-> Found by code review.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: c9b37458e956 ("USB2NET : SR9700 : One chip USB 1.1 USB2NET SR9700Device Driver Support")
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+> Signed-off-by: Jameson Thies <jthies@google.com>
 
-I did a quick check for sr9700.c and there seems to be other
-suspicious usage of sr_read_reg().  But, for sr_mdio_read(), I think
-the patch is sufficient.
+Please CC Power Supply maintainers for this patchset (added to cc).
 
-Reviewed-by: Shigeru Yoshida <syoshida@redhat.com>
+At least per the Documentation/ABI/testing/sysfs-class-power, the status
+property applies to batteries, while UCSI psy device is a charger. This
+is logical, as there might be multiple reasons why the battery is not
+being charging even when the supply is online.
 
 > ---
-> Changes in v4:
-> - added a check for sr_read_reg() as suggestions.
-> Changes in v3:
-> - added Cc stable line as suggestions.
-> Changes in v2:
-> - modified the subject as suggestions.
-> ---
->  drivers/net/usb/sr9700.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
+> Changes in V2:
+> - None.
 > 
-> diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-> index 0a662e42ed96..cb7d2f798fb4 100644
-> --- a/drivers/net/usb/sr9700.c
-> +++ b/drivers/net/usb/sr9700.c
-> @@ -179,6 +179,7 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
->  	struct usbnet *dev = netdev_priv(netdev);
->  	__le16 res;
->  	int rc = 0;
-> +	int err;
+>  drivers/usb/typec/ucsi/psy.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+> index e623d80e177c..d0b52cee41d2 100644
+> --- a/drivers/usb/typec/ucsi/psy.c
+> +++ b/drivers/usb/typec/ucsi/psy.c
+> @@ -29,6 +29,7 @@ static enum power_supply_property ucsi_psy_props[] = {
+>  	POWER_SUPPLY_PROP_CURRENT_MAX,
+>  	POWER_SUPPLY_PROP_CURRENT_NOW,
+>  	POWER_SUPPLY_PROP_SCOPE,
+> +	POWER_SUPPLY_PROP_STATUS,
+>  };
 >  
->  	if (phy_id) {
->  		netdev_dbg(netdev, "Only internal phy supported\n");
-> @@ -189,11 +190,17 @@ static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
->  	if (loc == MII_BMSR) {
->  		u8 value;
+>  static int ucsi_psy_get_scope(struct ucsi_connector *con,
+> @@ -51,6 +52,20 @@ static int ucsi_psy_get_scope(struct ucsi_connector *con,
+>  	return 0;
+>  }
 >  
-> -		sr_read_reg(dev, SR_NSR, &value);
-> +		err = sr_read_reg(dev, SR_NSR, &value);
-> +		if (err < 0)
-> +			return err;
+> +static int ucsi_psy_get_status(struct ucsi_connector *con,
+> +			       union power_supply_propval *val)
+> +{
+> +	val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
+> +		if ((con->status.flags & UCSI_CONSTAT_PWR_DIR) == TYPEC_SINK)
+> +			val->intval = POWER_SUPPLY_STATUS_CHARGING;
+> +		else
+> +			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
+> +	}
 > +
->  		if (value & NSR_LINKST)
->  			rc = 1;
+> +	return 0;
+> +}
+> +
+>  static int ucsi_psy_get_online(struct ucsi_connector *con,
+>  			       union power_supply_propval *val)
+>  {
+> @@ -249,6 +264,8 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
+>  		return ucsi_psy_get_current_now(con, val);
+>  	case POWER_SUPPLY_PROP_SCOPE:
+>  		return ucsi_psy_get_scope(con, val);
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		return ucsi_psy_get_status(con, val);
+>  	default:
+>  		return -EINVAL;
 >  	}
-> -	sr_share_read_word(dev, 1, loc, &res);
-> +	err = sr_share_read_word(dev, 1, loc, &res);
-> +	if (err < 0)
-> +		return err;
-> +
->  	if (rc == 1)
->  		res = le16_to_cpu(res) | BMSR_LSTATUS;
->  	else
 > -- 
-> 2.25.1
+> 2.45.2.1089.g2a221341d9-goog
 > 
 
+-- 
+With best wishes
+Dmitry
 
