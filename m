@@ -1,283 +1,146 @@
-Return-Path: <linux-usb+bounces-12416-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12417-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BAAE93BD54
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 09:49:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81D0393BD6D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 09:56:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F6B41C215BF
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 07:49:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EEDE283D18
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 07:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9E6171E64;
-	Thu, 25 Jul 2024 07:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56AF7172BAA;
+	Thu, 25 Jul 2024 07:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Wbts3rR3"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AD/6i5C9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 411D12746C
-	for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 07:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B10339A0;
+	Thu, 25 Jul 2024 07:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721893752; cv=none; b=KklVw++G10LakHbYCVTLaF2oIEikLg0ViVDXhlDl6AQUiECojh6138WkbStif/1jma/t5Lz7bykb47JiegDaIAvCMnj2SN/CNSChn0S+wcTzDlPeTFkMAxcbF+Exe0q8+VmAeUl9wgZf+YRtYwAfTW62WXAG1iNq9op1v22hK+E=
+	t=1721894153; cv=none; b=cUh+ZaPME5ozN8DEDrQHw+hBMI2rFVl3aMVa4Y6ZJZ9yXd38eIBNqGM94x91awEYdLfC8PoJUW6IzjbTKw5N+dvTxRKMlswJF0jK686zbZ7K46uUKF02NyCve+WNjWDhCNCvRtxp+Qju1UB47oPwxsspaACKWI4mO370NT4eYHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721893752; c=relaxed/simple;
-	bh=f936AIMq5LQ35JeLdOKx7+ljOBseO3MfdB3LW0sqiyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EqhWtrjfDvLHpnVa1JiwP1BCjOPf1ff2yXVW1RmybrVPLPN8Mnb7noXTq6RcacXD+0biDjAl58Lz9vbPAQ+0n04OkltRixNpulKpo7Eu1jrvcpH8u3JLiofjzlaWBFD9B3YqbYnh/LSLx6A837Z36GnZXKR746YHpSJ+8g1rANU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Wbts3rR3; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52efba36802so858611e87.2
-        for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 00:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1721893748; x=1722498548; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2e8lXrN6i5a4Gm1wt2hrkTl7urQ/sUi9XQToyUP1j+0=;
-        b=Wbts3rR3fX4gr9ht7FqTLHcWS0MteeTM/HX4Npy+2E5+3rY41lTjDqvTKN1+nbKW6w
-         ANSrluJtYRL38t+TCa0z3gDZJGbTkD0VOlQwzewYE75pwXKaL06zw312eJwLdzszZcGZ
-         49jhFPgjPBfKnTwHdqhKT1eUy5dtJlUdZFU44=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721893748; x=1722498548;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2e8lXrN6i5a4Gm1wt2hrkTl7urQ/sUi9XQToyUP1j+0=;
-        b=q52I9PPydqieN8LBwBaAk1YTHfAQ4epKHuHRji+0qobzLTwB4LTnGc66OQAE6mCDdu
-         Wy7ZQAR/8EqlOk8yeihZq74O9gXaczutOg9VWsZJ2fvzElSh6TPQ+YxQc1p8/fyw5Ku1
-         i0WxyG20dSbw87F4TzZgAcYDPueCTHDkcK2s/SdvCzR8+cXpV1meOKDZCF2D5q0ul34h
-         c3usmO0NPmMWECKUGCFaIUeG0scIvTZYYcfLWaiVX6miNbe6SPcKsDzv1f1+W+Nrzp6K
-         Kidb9Z0Hk+NoLLvWAW87YDCFhGizV1tPbAkN2MfBqsVSBX6z4hkEN4DkFqVuEA7EGCVe
-         qlZg==
-X-Gm-Message-State: AOJu0YyEwK0pU0uOZWHZ1OIh1fq/JTCbciAf1Q07rLkaWJ7KtmjQ6mAn
-	RKfj9QJqC23C5NIppiQ8+Gq16c4E+kRPpAvUHv1ZB8lS/dS4RLvtirblEd26zK0k+ePgWH4SoQ=
-	=
-X-Google-Smtp-Source: AGHT+IF2Nf2bgsd/ehA7fKtq0K2RQtL2fU/K8mEyuZbYfTS5HYgOw6YPqPohG3SeEaVmufyI42MfxQ==
-X-Received: by 2002:a05:6512:308d:b0:52e:9cf1:a2ae with SMTP id 2adb3069b0e04-52fd6098286mr902943e87.51.1721893748003;
-        Thu, 25 Jul 2024 00:49:08 -0700 (PDT)
-Received: from ukaszb-ng.c.googlers.com.com (61.134.90.34.bc.googleusercontent.com. [34.90.134.61])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab22f9fsm43475066b.6.2024.07.25.00.49.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jul 2024 00:49:07 -0700 (PDT)
-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
-To: Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lu Baolu <baolu.lu@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [PATCH v2] xhci: dbc: fix handling ClearFeature Halt requests
-Date: Thu, 25 Jul 2024 07:48:57 +0000
-Message-ID: <20240725074857.623299-1-ukaszb@chromium.org>
-X-Mailer: git-send-email 2.45.2.1089.g2a221341d9-goog
+	s=arc-20240116; t=1721894153; c=relaxed/simple;
+	bh=chCmIQYabtrZYvk26GkBBhDtyVx5a8TzmOZ1Q+e7BmU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HGLlINXB5mcunuCSHmrnqdllyRjRAMNKav1xaFPPjd4aJWgN4G9AAiLzwvP3aonRYyaf4fSzapYGuAlG+zwYNfmiBn0xqs41sz38OLrC4eiAfBKOWsTqFfxkqaPTfA7TidCaOCGOUq+rBC56c5jndVTOopdv5BxZYq+hwND1mCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AD/6i5C9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46OIA6ax005413;
+	Thu, 25 Jul 2024 07:55:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=chCmIQYabtrZYvk26GkBBhDt
+	yVx5a8TzmOZ1Q+e7BmU=; b=AD/6i5C9RIPqIrJ0aAtD8ggUUQVP3YcWNS5bfq6S
+	eR4uxzsyswDDbmgEpjOzBFi/IeoB/1RFLYJ1ZQAP+4krsCc0+Mw4fKHXLO1q+W6j
+	2txmaEPyuiG/DbBN3FmFaRZP0weOJS1APa1VTjSTakaqYEQ+7cRiFLktd1CfRiq1
+	DmWERtAIqJx7kGu+wBLb+0H1gHhlOtVcqmI3OC2l9fhPkREaFwYfk5/tynHVED2W
+	yZv1azHX+uW6PeN4JETqbPSHp8hD67+Fms5kZqZ8jSaw6UKM+NufRnGkz03GD7J7
+	SUfFcm+25e13Xn8zM8fUL/wsE8Va75e77XqNzTfgQcvv/A==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g487mbxe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jul 2024 07:55:47 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46P7tjbb031582
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jul 2024 07:55:45 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 25 Jul 2024 00:55:40 -0700
+Date: Thu, 25 Jul 2024 13:25:36 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <konrad.dybcio@linaro.org>,
+        <djakov@kernel.org>, <quic_wcheng@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 2/5] dt-bindings: usb: qcom,dwc3: Update ipq5332 clock
+ details
+Message-ID: <ZqIE+JuzLldybKBE@hu-varada-blr.qualcomm.com>
+References: <20240723090304.336428-1-quic_varada@quicinc.com>
+ <20240723090304.336428-3-quic_varada@quicinc.com>
+ <ac34c454-4800-4057-9a50-e0c5db1d3806@kernel.org>
+ <ZqDoXu9+Y4+O8M7W@hu-varada-blr.qualcomm.com>
+ <bc2da461-fd21-44d1-85a7-f89c60e2b207@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <bc2da461-fd21-44d1-85a7-f89c60e2b207@kernel.org>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vOHc3t_mfv5P5DKBlbdKpKqjay9Gdq_3
+X-Proofpoint-GUID: vOHc3t_mfv5P5DKBlbdKpKqjay9Gdq_3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-25_07,2024-07-25_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=863
+ malwarescore=0 adultscore=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2407250050
 
-DbC driver does not handle ClearFeature Halt requests correctly
-which in turn may lead to dropping packets on the receive path.
+On Wed, Jul 24, 2024 at 01:55:41PM +0200, Krzysztof Kozlowski wrote:
+> On 24/07/2024 13:41, Varadarajan Narayanan wrote:
+> > On Wed, Jul 24, 2024 at 08:27:03AM +0200, Krzysztof Kozlowski wrote:
+> >> On 23/07/2024 11:03, Varadarajan Narayanan wrote:
+> >>> USB uses icc-clk framework to enable the NoC interface clock.
+> >>> Hence the 'iface' clock is removed from the list of clocks.
+> >>> Update the clock-names list accordingly.
+> >>
+> >> But the clock is still there and is still used by this block. This looks
+> >> like adjusting hardware per Linux implementation.
+> >>
+> >> Why suddenly this clock was removed from this hardware?
+> >
+> > This clock per se is not used by the USB block. It is needed to
+> > enable the path for CPU to reach the USB block (and vice versa).
+> > Hence, we were adviced to use the ICC framework to enable this
+> > clock and not the clocks/clock-names DT entries.
+> >
+> > Please refer to [1] where similar clocks for IPQ9574 were NAK'ed.
+>
+> So the original submission was not correct?
 
-Below is a trace capture where due to incorrect handling of
-ClearFeature Halt packet gets dropped on the receive path.
+Unlike MSM SoC, IPQ SoC doesn't use RPM to aggregate bandwidth
+requests and scale the NoC frequency. The NoCs are turned on and
+set to a specific frequency at boot time and that is used for the
+lifetime of the system. Hence interconnect was not considered and
+this submission was accepted.
 
-/sys/kernel/debug/tracing # cat trace
-1) kworker/10:3-514   [010] d..1.  2925.601843: xhci_dbc_handle_event:
-	EVENT: TRB 000000019588c0e0 status 'Stall Error' len 0 slot 1 ep 2
-	type 'Transfer Event' flags e:C
+The same approach was used for PCIe and at that point the
+consensus was to move to interconnect. Hence implemented the ICC
+driver and updating the existing USB driver to use the ICC
+driver.
 
-2) kworker/10:3-514   [010] d..1.  2925.613285: xhci_dbc_handle_event:
-	EVENT: TRB 000000019588bc80 status 'Stall Error' len 1024 slot 1
-	ep 3 type 'Transfer Event' flags e:C
+> You really need to stop sending DTS based on current driver support and
+> focus on proper hardware description.
+>
+> Such things pop up from time to time for Qualcomm and I don't see much
+> of improvement. And we do not talk about some ancient code, predating
+> guidelines, but IPQ5332 upstreamed ~1 year ago.
 
-3) kworker/10:3-514   [010] d..1.  2925.619024: xhci_dbc_handle_transfer:
-	BULK: Buffer 0000000244b49800 length 1024 TD size 0 intr 0 type
-	'Normal' flags b:i:I:c:s:i:e:C
+We are trying, but falling short. Hopefully we meet the
+expectations soon.
 
-4) kworker/10:3-514   [010] d..1.  2925.619025: xhci_dbc_giveback_request:
-	bulk-in: req 00000000a70b5ad2 length 0/1024 ==> -6
-
-5) kworker/10:3-514   [010] dNs2.  2925.623820: xhci_dbc_gadget_ep_queue:
-	BULK: Buffer 0000000244b49800 length 1024 TD size 0 intr 0 type
-	'Normal' flags b:i:I:c:s:i:e:c
-
-6) kworker/10:3-514   [010] dNs1.  2925.623823: xhci_dbc_queue_request:
-	bulk-in: req 00000000a70b5ad2 length 0/1024 ==> -115
-
-7) kworker/10:3-514   [010] d..1.  2925.629865: xhci_dbc_handle_event:
-	EVENT: TRB 000000019588bc80 status 'Short Packet' len 1000 slot 1
-	ep 3 type 'Transfer Event' flags e:C
-
-8) kworker/10:3-514   [010] d..1.  2925.635540: xhci_dbc_handle_event:
-	EVENT: TRB 000000019588bc90 status 'Short Packet' len 763 slot 1
-	ep 3 type 'Transfer Event' flags e:C
-
-9) kworker/10:3-514   [010] d..1.  2925.635540: xhci_dbc_handle_transfer:
-	BULK: Buffer 0000000244b49c00 length 1024 TD size 0 intr 0 type
-	'Normal' flags b:i:I:c:s:i:e:C
-
-10) kworker/10:3-514  [010] d..1.  2925.635541: xhci_dbc_giveback_request:
-	bulk-in: req 00000000b4ec77d7 length 261/1024 ==> 0
-
-11) kworker/10:3-514  [010] dNs2.  2925.635561: xhci_dbc_gadget_ep_queue:
-	BULK: Buffer 0000000244b49c00 length 1024 TD size 0 intr 0 type
-	'Normal' flags b:i:I:c:s:i:e:c
-
-12) kworker/10:3-514  [010] dNs1.  2925.635562: xhci_dbc_queue_request:
-	bulk-in: req 00000000b4ec77d7 length 0/1024 ==> -115
-
-Lines 1 and 2 are Endpoints OUT and IN responses to receiving ClearFeature
-Halt requests.
-
-Line 7 notifies of reception of 24 bytes packet.
-
-Line 8 notifies of reception of 261 bytes packet
-
-In Lines [9, 12] 261 bytes packet is being processed.
-
-However 24 bytes packet gets dropped. The kernel log includes entry which
-is an indication of a packet drop:
-[  127.651845] xhci_hcd 0000:00:0d.0: no matched request
-
-This fix adds correct handling of ClearFeature Halt requests
-by restarting an endpoint which received the request.
-
-Fixes: dfba2174dc42 ("usb: xhci: Add DbC support in xHCI driver")
-Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
----
-Changes v2->v1:
-- Documented both xhci_dbc_flush_single_request and 
-xhci_dbc_flush_endpoint_requests functions.
----
- drivers/usb/host/xhci-dbgcap.c | 48 +++++++++++++++++++++++++++-------
- drivers/usb/host/xhci-dbgtty.c |  5 ++++
- 2 files changed, 43 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index 872d9cddbcef..36ec3242e096 100644
---- a/drivers/usb/host/xhci-dbgcap.c
-+++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -173,7 +173,17 @@ static void xhci_dbc_giveback(struct dbc_request *req, int status)
- 	spin_lock(&dbc->lock);
- }
- 
--static void xhci_dbc_flush_single_request(struct dbc_request *req)
-+/**
-+ * xhci_dbc_flush_single_request - flushes single request
-+ * @req: request to flush
-+ * @status: 0 or -ERESTART - after the request is flushed it will be queued
-+ *          back to the endpoint
-+ *
-+ *          -ESHUTDOWN - after the request is flushed it won't be queued back
-+ *          to the endpoint and if it was last endpoint's request the endpoint
-+ *          will stay shut
-+ */
-+static void xhci_dbc_flush_single_request(struct dbc_request *req, int status)
- {
- 	union xhci_trb	*trb = req->trb;
- 
-@@ -183,21 +193,36 @@ static void xhci_dbc_flush_single_request(struct dbc_request *req)
- 	trb->generic.field[3]	&= cpu_to_le32(TRB_CYCLE);
- 	trb->generic.field[3]	|= cpu_to_le32(TRB_TYPE(TRB_TR_NOOP));
- 
--	xhci_dbc_giveback(req, -ESHUTDOWN);
-+	xhci_dbc_giveback(req, status);
- }
- 
--static void xhci_dbc_flush_endpoint_requests(struct dbc_ep *dep)
-+/**
-+ * xhci_dbc_flush_endpoint_requests - flushes endpoint's requests
-+ * @dep: endpoint to flush requests
-+ * @restart: true - after being flushed, the requests will be queued back
-+ *           to the endpoint and its operation will resume
-+ *
-+ *           false - after flushing last endpoint's request the endpoint will
-+ *           stay shut
-+ */
-+static void xhci_dbc_flush_endpoint_requests(struct dbc_ep *dep, bool restart)
- {
-+	struct list_head	*list = &dep->list_pending;
- 	struct dbc_request	*req, *tmp;
-+	int			status = -ESHUTDOWN;
- 
--	list_for_each_entry_safe(req, tmp, &dep->list_pending, list_pending)
--		xhci_dbc_flush_single_request(req);
-+	list_for_each_entry_safe(req, tmp, list, list_pending) {
-+		if (restart && list_is_last(&req->list_pending, list))
-+			status = -ERESTART;
-+
-+		xhci_dbc_flush_single_request(req, status);
-+	}
- }
- 
- static void xhci_dbc_flush_requests(struct xhci_dbc *dbc)
- {
--	xhci_dbc_flush_endpoint_requests(&dbc->eps[BULK_OUT]);
--	xhci_dbc_flush_endpoint_requests(&dbc->eps[BULK_IN]);
-+	xhci_dbc_flush_endpoint_requests(&dbc->eps[BULK_OUT], false);
-+	xhci_dbc_flush_endpoint_requests(&dbc->eps[BULK_IN], false);
- }
- 
- struct dbc_request *
-@@ -718,10 +743,13 @@ static void dbc_handle_xfer_event(struct xhci_dbc *dbc, union xhci_trb *event)
- 	case COMP_TRB_ERROR:
- 	case COMP_BABBLE_DETECTED_ERROR:
- 	case COMP_USB_TRANSACTION_ERROR:
--	case COMP_STALL_ERROR:
- 		dev_warn(dbc->dev, "tx error %d detected\n", comp_code);
- 		status = -comp_code;
- 		break;
-+	case COMP_STALL_ERROR:
-+		/* Restart endpoint */
-+		xhci_dbc_flush_endpoint_requests(dep, true);
-+		return;
- 	default:
- 		dev_err(dbc->dev, "unknown tx error %d\n", comp_code);
- 		status = -comp_code;
-@@ -823,12 +851,12 @@ static enum evtreturn xhci_dbc_do_handle_events(struct xhci_dbc *dbc)
- 
- 			if (ctrl & DBC_CTRL_HALT_IN_TR) {
- 				dep = get_in_ep(dbc);
--				xhci_dbc_flush_endpoint_requests(dep);
-+				xhci_dbc_flush_endpoint_requests(dep, false);
- 			}
- 
- 			if (ctrl & DBC_CTRL_HALT_OUT_TR) {
- 				dep = get_out_ep(dbc);
--				xhci_dbc_flush_endpoint_requests(dep);
-+				xhci_dbc_flush_endpoint_requests(dep, false);
- 			}
- 
- 			return EVT_DONE;
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index b74e98e94393..bdf80aa2b28c 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -121,6 +121,7 @@ static void dbc_write_complete(struct xhci_dbc *dbc, struct dbc_request *req)
- 	list_add(&req->list_pool, &port->write_pool);
- 	switch (req->status) {
- 	case 0:
-+	case -ERESTART:
- 		dbc_start_tx(port);
- 		break;
- 	case -ESHUTDOWN:
-@@ -318,6 +319,10 @@ static void dbc_rx_push(struct tasklet_struct *t)
- 		case -ESHUTDOWN:
- 			disconnect = true;
- 			break;
-+		case -ERESTART:
-+			disconnect = false;
-+			req->actual = 0;
-+			break;
- 		default:
- 			pr_warn("ttyDBC0: unexpected RX status %d\n",
- 				req->status);
--- 
-2.45.2.1089.g2a221341d9-goog
-
+Thanks
+Varada
 
