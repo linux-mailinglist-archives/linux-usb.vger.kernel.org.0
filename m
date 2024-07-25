@@ -1,278 +1,232 @@
-Return-Path: <linux-usb+bounces-12408-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12409-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B65093BB60
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 06:07:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B80C93BBB8
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 06:26:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB25F1C219EC
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 04:07:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEA92B219C5
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2024 04:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C0F18040;
-	Thu, 25 Jul 2024 04:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE2C1BC43;
+	Thu, 25 Jul 2024 04:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C//5/SK5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JvWkQ8Qq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D807017722
-	for <linux-usb@vger.kernel.org>; Thu, 25 Jul 2024 04:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721880453; cv=none; b=OdTYN4SWAwho8MGAqkz6W5QgHC3GawShdLpvlOehRUssLMcEUI/0M/addEGp+Ab84IwsaNcXJKRW8MEPPvGfP2p/vW52Pgb5Y4P4PxppCq5pqsDe8hTVIDZd5cRKEpniQfsvYeTnoTnMe6ShEfUH7xcfsXGM8IBYtrHBgrflRzI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721880453; c=relaxed/simple;
-	bh=tDv9Amv3Prjs4GP6blhpnjCEwe9xbzV1Nq1LBAafEQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oIVYWAzrmh0Gs2fApKdGV2IcNembOZYQ0d6r7zcqmul/6qzl3CKv23LSi0G7azJWlmuJcDoy+e6s7Unjrnp50Glj9spNGOT5No9w+ZKzG73uKcOYlk5mYpFEwxqS8FB+WjqJeMQ+8FcVPq7ermOOpxuv1HBZURdgv0h6xVa3XxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C//5/SK5; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52f008aa351so503597e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2024 21:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721880450; x=1722485250; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wg8KguZ400Lou+tqhNrOW9J9c6tYJhHWQvL5hPbaZB4=;
-        b=C//5/SK5O942CyF3tCoIh41r8C1SA7io1IOG+E/7aJs2JNAqpLLfOtt4TqltaBqy5a
-         GsAynDvwaww0Dg2nThSI6aCsg/txeUhAVK1Sb8osMV4vISpPkwHivJnBN8958ZGkAGhj
-         1w1SNfppV63Hh5mJjxzKZdLzvUZqMz4759fEVL+h88YW5eWajjrePfh8/d/9eU73HHBM
-         EJvLKGF4AJatFewMjf7suwup7bnEpxzXj7F5qyuTYYImcg0uE2uPk9SH9AzyEP5wk4na
-         eK05eijPZmOrZ4B84FyX2MqTfOryIC4tESJIvx0BZD51DdRJdRv59GFqeccr7OXW0Pr1
-         3N+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721880450; x=1722485250;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wg8KguZ400Lou+tqhNrOW9J9c6tYJhHWQvL5hPbaZB4=;
-        b=XVQ59U5SflsrokdOTxs0pI1BVOAo5ikzaxKBfUAkpj2ZDO5cJntzYvZULpKbFNlDy8
-         li36jwh8aj4kBDa5QcJh/flJiWy8UmyUUJfD54+pH6k/ZsZmBTGAah/R1/EX20kxwgh2
-         q7KRao5cD1OjkVMHZwEajxBY1x5UlFJVYK7KPehte87q0x18QsiA7fmrDKd5AR9cmyUL
-         /qPCIHprvsBGnhQgYuzdFtFJ5hwTGz1diaq65d6BwI1bZSnYJRnOSBB/QfJ3dscCfkDO
-         d8kBttsJjDxvBURDrllXNDOd3jgClfHQWREB3LK0+HJg+7TU1kzxgsBU4h4G+KbOcK3D
-         Lb6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVFRyHCT0K2obzHiNBkVP6/xnmzAY6KCh5ijta8LpJYAsa0EtHm/5GvIhHDunT9I+7/4jd/t5H3GQ3ZKZkDdNSzjkfOCS5viKXJ
-X-Gm-Message-State: AOJu0YwH1Coq3NFTCs1i7FPHDIw5K0FmrJF87o62ct3hoQ40bZfGtwWU
-	fqxcsnxNCGGP4Fu2Q6ZigXuLE1BWNdaPGoCBmZbb8d0D4+wyZk+a4nsuO5bbMFI=
-X-Google-Smtp-Source: AGHT+IFMbeszy8ijAPgdau73JqD2oKtivYn8r7aXUNCmhS73K/VW1TAayrYjkDzGxFoXMQRGSKOHAA==
-X-Received: by 2002:a05:6512:238b:b0:52c:db06:ee60 with SMTP id 2adb3069b0e04-52fd6084195mr442998e87.41.1721880449894;
-        Wed, 24 Jul 2024 21:07:29 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5bc42b4sm71680e87.12.2024.07.24.21.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jul 2024 21:07:29 -0700 (PDT)
-Date: Thu, 25 Jul 2024 07:07:27 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Jameson Thies <jthies@google.com>, Sebastian Reichel <sre@kernel.org>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	bleung@google.com, abhishekpandit@chromium.org, andersson@kernel.org, 
-	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, hdegoede@redhat.com, 
-	neil.armstrong@linaro.org, rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] usb: typec: ucsi: Set sink path based on UCSI
- charge control
-Message-ID: <5eloulbppelko7hwyppq4apkuqowe3yv5bd7rlipispetg6aqj@u3mzwubs6xxf>
-References: <20240724201116.2094059-1-jthies@google.com>
- <20240724201116.2094059-4-jthies@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4D6EAC0;
+	Thu, 25 Jul 2024 04:25:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721881554; cv=fail; b=A1dcOB32U8x8UzrWC7zB72iRzTLt+kR0F9fK2xcK1pnQTlUCg1dunf2/qv5wsWQrpT727cWLbPGkOgI+RmcNSCuBvvMqv+Pjmw1fgwsuUU7XwKwSkcqkFRhHYWBLbh9MfO9m7ob/7ZxdGccgc8uGfQw2oTEACmH51+jmuJg3lgg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721881554; c=relaxed/simple;
+	bh=I7hP6wY6GKYYbJLRq21/T2VS1rTD11B2Xjt8dnHvC4g=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=dkrXaT2anDYmBTULkGcMUDt+bcIAOJFhAcsobisE/mR5OMZruPlP8LTtOaArSvtrQzE988OzpMeXLrAyqUBIOxmgMqpa6yUNDTYePMFh1GhydPx67ElLthK73IMW8YrRZYZivXExAFVwG1UUHMERHv1aP5JMPTcFebHdrboFNmM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JvWkQ8Qq; arc=fail smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721881552; x=1753417552;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=I7hP6wY6GKYYbJLRq21/T2VS1rTD11B2Xjt8dnHvC4g=;
+  b=JvWkQ8QqkglkUTKqfV8HMwj3kxqhDFZMycrC/g0EZpoWC4B1BVgOX107
+   98vtveowPlbvI4F8EAGRRyRplS/LuMExnh3H81Tud7x82eyMRJV0cX7sR
+   Dl/BBr8xc7G3+xkz1MUh4UlhOmkNeW4bds5fqlZaoGSM2WYU16ZgNjIzU
+   6/IInYyGCj3xwzPJnSb9XoYoDj/6uHI/eLyokiUIbgsRW2AlldpghmNAL
+   pfTJSyklrKTqrYkic8fL3JBqoint4B6aw1Wy3n9JjeIu0cj40zBphjNh5
+   V+F0aegITJDaz1tUrSDkGXWuUb19WFUaNdIMMKBxFk2sBBnoaXtDt8Cuh
+   g==;
+X-CSE-ConnectionGUID: rWwyZGH3SXGg+FNiqsJkyw==
+X-CSE-MsgGUID: gg2fEH/DQmK4/DxR2Xolsg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="19289446"
+X-IronPort-AV: E=Sophos;i="6.09,234,1716274800"; 
+   d="scan'208";a="19289446"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 21:25:51 -0700
+X-CSE-ConnectionGUID: paH1jujwSR+d68Ud/9AL5g==
+X-CSE-MsgGUID: 4xAtO7bES0m4RL2wYS2dVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,234,1716274800"; 
+   d="scan'208";a="57590887"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Jul 2024 21:25:51 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 24 Jul 2024 21:25:50 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 24 Jul 2024 21:25:49 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Wed, 24 Jul 2024 21:25:49 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 24 Jul 2024 21:25:49 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QUAwSNeGt+4gRHf/sTNYhv+/WJp2E/j2lQ+IZKBypdqOkAJv5RPqXNoWtQiS+yCDhV/bcrJavIDRUwzD6ITJJFiB7Y2vGhAVYHBC2A5/caHBm6NdSUCBJwIzajiZaimkqQQjsonCg+/LzkituNdyrGb4kEjB/cHgOIZOf8wKXbNW6QlT98FrPc/3P+NIoEE/q1bhLBm8MnzvSP8bevrE3YuCxSJ26OI78aFQhXkoz6RUGSIEqPtPOcouyAMkYZwRsL7EfilfsGyP13jEOBY4+4P8QmzGFqhYUiIsH1+lyYrzhiDfRg2WKjRVqHeSit0yTI54+K/7rPRFWsGzPyxZqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ckQRw2jinkF+uWihK7mqquI0kUOB0xkwsEr5NUrRDac=;
+ b=NsTh6wJpwBfz+t+LQSUDMBiitGAEy9VgCZlUSKbtLsGfmvWksi7gcljJuMphIGzyNtrZ1p2utHgMu0e8X6O72wXIhR4OTEgrlt5GTVt3QS1bZe070vQNchw81FQ8gc+b4UY2BNeoKSWuoDluSpftfkJqlHYjmfy/S3O/cj2wbULRqlWmHD85ZHckcU3hYsM1tWrUJu2H5dFpobY5JvidPeHvpDuRChel7IM8wX6Ln4EBT0SylprwxxbA8sC1r7pQytEFneFNFQLPKjhZI6ZqXOry7NZm89TDfr7VcBJVmcKDms0Ujz46iom6kulfAvBgSStWYpzQu9sprKxQT49RMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by IA1PR11MB7890.namprd11.prod.outlook.com (2603:10b6:208:3ff::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.20; Thu, 25 Jul
+ 2024 04:25:42 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%6]) with mapi id 15.20.7784.017; Thu, 25 Jul 2024
+ 04:25:42 +0000
+Date: Wed, 24 Jul 2024 23:25:38 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Andrew Lunn <andrew@lunn.ch>
+CC: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+	<UNGLinuxDriver@microchip.com>, <davem@davemloft.net>, <edumazet@google.com>,
+	<gregkh@linuxfoundation.org>, <kuba@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<mcgrof@kernel.org>, <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+	<woojung.huh@microchip.com>
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
+ module
+Message-ID: <v6uovbn7ld3vlym65twtcvximgudddgvvhsh6heicbprcs5ii3@nernzyc5vu3i>
+References: <20240724145458.440023-1-jtornosm@redhat.com>
+ <20240724161020.442958-1-jtornosm@redhat.com>
+ <8a267e73-1acc-480f-a9b3-6c4517ba317a@lunn.ch>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <8a267e73-1acc-480f-a9b3-6c4517ba317a@lunn.ch>
+X-ClientProxiedBy: MW4PR03CA0274.namprd03.prod.outlook.com
+ (2603:10b6:303:b5::9) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240724201116.2094059-4-jthies@google.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|IA1PR11MB7890:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad0e2fb3-4ede-4a52-8cbe-08dcac61d842
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?5sOKwvR7+YRVr3Lw9iH6fR/Kaf+g2n2JI0+AJ3SMlXCtHV6dhMVWk03GL6+Y?=
+ =?us-ascii?Q?JXp4icZT9fJ/c0mA8KpVxvrxLG5qtVp3aspHRT0F1V6EJHO5FRJlGhrgPwSk?=
+ =?us-ascii?Q?cdkyRO0dYyGL+ZbQ61lfEQ31Zrx5nRRTVfPwEe96xdUgn4pqOKO/Z+brhqcp?=
+ =?us-ascii?Q?qFpAGAYi2IwH4p4PKmH2omGkiZk+Oc6vohfAmqcylhyypuikVgH1DnFw43cY?=
+ =?us-ascii?Q?2h7ym+r02sze+0LuC4xwVjEC2zDSt5qTCdSmPORKkD/w+XxBcpB+e9jnNgYj?=
+ =?us-ascii?Q?Dv0n/M1iWjj6DoFgChExcmWNp3W1PsMtliGMbK7H/iw/3C3WG1meNvyCPdBw?=
+ =?us-ascii?Q?/JuRpJm5qPGTJG7h/hO4b6GKEUMvqvTnR3tIKgtKqG9NTgmg3eGdx1pMSL6S?=
+ =?us-ascii?Q?SJCdiBSScyc0VCNMtesnkGucDIdNMZ7JrJkY516wfFjRY/Tt2DLsKPUFRiaM?=
+ =?us-ascii?Q?qq4G8tzpogppSDmKELQ4SXKxC9Sq94+K0fp5bkpH4+0l/X40XdoF5/5JCTWg?=
+ =?us-ascii?Q?m5vWZ1QwHAVqu7yP4XD3X147N4LDdfJgqW0g7LH6tbhKAuXxDKvutxiqi13g?=
+ =?us-ascii?Q?74TqAWi/vRkOhKVp4y5HYkjSmE10p5MgPjMc1FaF2/bo+O1+ka/odUiBNbW3?=
+ =?us-ascii?Q?/kQ3RoquGDhwMj207oCfMhwULEYQx9Ytj4h83t/k39WbTDO8r5wBgosr97Ue?=
+ =?us-ascii?Q?RhZKBqQ4fhwm3qodjxaNuLO8zPF5MhdnHwWAVhEFulS+fwXJCRe2QbgLgDPs?=
+ =?us-ascii?Q?fMOusOEjjquCioVkInBnbC2agaTzEU4srVqVSFBBuCE5vYBDOR3/0ZIOey0N?=
+ =?us-ascii?Q?G8fLGYRN7wjBSrLvDRCVXT5z4ItRz0RN7EFwyureDSHviIHvArRSL5m3gkxC?=
+ =?us-ascii?Q?3t6jIuvrCYA7yhJAv0gMXfgOQLoCJQ13IzjAD+HscWNZW/mzSFAauZYhVzuQ?=
+ =?us-ascii?Q?zWhFvUi11J9oNJ12eKxDzY5pI+A2AqbaA5Vj6Jmcmclck5YtUwo7iwUOiHwW?=
+ =?us-ascii?Q?oxbwiQhNy8ecdTfWz4vBGTTEhon9O6V3+hDD8FjlzSlmN16ObyF+qvACXnop?=
+ =?us-ascii?Q?twO1U5T3EzAGJB8/s8q5HEKSJ+gHeyR2RSdRSMysPbjx+RLDi+/gzpbMM502?=
+ =?us-ascii?Q?65bYjtWaBTLT2QrTMsJrAruiR+stDpJXYRV2tXBp34nuI0lYSiwc2frYFOH7?=
+ =?us-ascii?Q?A8RKKkmiWroJ83kTwZQqojTNu69n7yjDwJ3M+dnhCTKSrCT6oChL7Bu78Mw7?=
+ =?us-ascii?Q?BzW8x8MSUd7R8FQoyFeTPFo5WTCHEp60Xm3n6dAjLjAy/NiznWRyWbcdmJHc?=
+ =?us-ascii?Q?UMkPTSDHpL14aVt2lDUK56C5Baz5APuAfxbRyYfIGhOiXQ=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SgfyvKlyTwu7Jr9UyELr89hmuul5R9yB4i6KkOT7TPufbquNinBbR22a8Css?=
+ =?us-ascii?Q?fXdcvG+Ueynqx9KCQl6SJiUczl0f7m+G5i2jcl6yrSevzZUC4zZK+BpS/0NW?=
+ =?us-ascii?Q?i864fRPmDFo3G0AgyNNyy09k0r9YiZlUCHj+kQmBFB5dGBbgQ19knMIC/BU+?=
+ =?us-ascii?Q?mR+KfaSizqx2KFcPdcMEzp0xEl0ytJvYpy+i3Nq9J+U/UIGcnnQRR0KmoDdc?=
+ =?us-ascii?Q?dqAVpGyoGQxGP/9ysfQdaozFxkoZkaKulgyKCFlEZxdWJBev33lXx0WOP/Zq?=
+ =?us-ascii?Q?ssLsSfhGcptkOaJexbTEj7S2nCUBtTKAegq6Ibmil3TbBCgi2qgEHUA4+eVa?=
+ =?us-ascii?Q?V4jS+oUcXC3FOV9Hd42tFMdoOWRWZGm3exUht4obpK2hyQnKiS+yU3A//nr9?=
+ =?us-ascii?Q?mYyDWRTKvTS2D7qSIr8bSWWWgn6uKMR8sJoZATNVN9EawulZeoddv7anaAnu?=
+ =?us-ascii?Q?OIxsA9lTnwqZSWZvN6+/GN2TjHXLKcp2FSyAIoUrrPxxl9EH3WsybiCmOANA?=
+ =?us-ascii?Q?6zBY667ZCaiDN49g2RdXLQd3MSta0A9gCroTuXy3Dkh9dQ1dJmteYv+fKCjv?=
+ =?us-ascii?Q?s9DFbA3/jGAY+dUH1WZNwe1Yh8fWPt5hBf6Ps8/uZ/reIHFtbg1LtI4QCZQK?=
+ =?us-ascii?Q?w6x840q+I4Bab7VxXIxdNHCceB7Oh/pSkmM1v2V0dQ+WipQknaw7WpB+G9W/?=
+ =?us-ascii?Q?wapbcVgb4o/I7JZk/6GRzVkOfJv/Kfgc3dPrGHK6ht7W6kxAAxsvVz6iOelK?=
+ =?us-ascii?Q?nYe/lBEWBAxYz9SV2/huWI+KArkEKakJdOUbyZgap26LrPPMqGcVmGysbkD0?=
+ =?us-ascii?Q?7spBEOPiF+0WVgfroALxXcgsc3WwpVA/VB1kBKJmDa/R0HHb1MvpMXtV6S5z?=
+ =?us-ascii?Q?mnU/E9mhLdYX5hoh22fkHt8Sm4ChmsRs0SBppaNTE8obii8ztAOWR2GD5I91?=
+ =?us-ascii?Q?0wApA//vbNnIcnWt/moF+YivwZwIUhmuE4ve/ho8SeZzv9cz3mi7/IFgrj6M?=
+ =?us-ascii?Q?iv6bioodArX6qPF/XxDNhcKBGTWdRaLlLIQGmOnFO53ZJAUIVLKUQzDAbMVO?=
+ =?us-ascii?Q?wfj156FlNxb549wGjlN+rG/29PuJ94V5CzDQzoulnRPqP4Xnba1S+0SxzWkL?=
+ =?us-ascii?Q?GdLqFIFP9YP8oHERQkh8t7h0H0tNIWQP6YlijOQ4bnZ4nS8EPTrVSPoU/glX?=
+ =?us-ascii?Q?Xb5qz5dhfjofAgaOr2FCZjSgSCrNweI1upOQ6VKY1bzXSF1MFbQBFHq6WrmF?=
+ =?us-ascii?Q?TjTtn5qwuOdLG/iJYrHyxaqW3Hh8Uf4zTRmWQ2lbiFvx5uzBgypZtpAQz197?=
+ =?us-ascii?Q?3TYnaztM4NvPabSulbQ6hJ1EdzXht8nGCR+NbfaXj13y/t2UHTDfRhNqWuIs?=
+ =?us-ascii?Q?0x3IOoryK2KC9ZTPOvucULR5+cvegtwFZQcGSnmaDQe49wGKhaEiw03pPzOl?=
+ =?us-ascii?Q?yl4SU+s3tQppY2EKsC244m4fJQ/Et1BFf2DDGs5o/X1FNdgAjA4CYvJ5VAFu?=
+ =?us-ascii?Q?ZzrA7icVYLhHQ+MP/+bmFeDCqwY3iJj3F1hj/qpQ2iAPGGT+Gh9Ui9kO0YI3?=
+ =?us-ascii?Q?h6uvUr4eZoSseg/UIJOwCU++ax4CYzqYNGZ8HnoauCamlFlYhW9UpWe6tTGN?=
+ =?us-ascii?Q?Mg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad0e2fb3-4ede-4a52-8cbe-08dcac61d842
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2024 04:25:42.1908
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AZLWpJ+bA2dgTvnpXiWFap55qXawqI2cVn/YjhoRk1y9bpqFkxn7Ggk7dvSs68F+Gwy2FbJwzjBLaaE4N+jDuprImNijU5ZSBdbWvQQNCyk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7890
+X-OriginatorOrg: intel.com
 
-On Wed, Jul 24, 2024 at 08:11:15PM GMT, Jameson Thies wrote:
-> Add POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX as a property to the UCSI
-> power supply driver. When set to a positive value, enable the
-> connector's sink path. When set to a negative value, disable the
-> connector's sink path.
+On Thu, Jul 25, 2024 at 12:57:05AM GMT, Andrew Lunn wrote:
+>> For the commented case, I have included only one phy because it is the hardware
+>> that I have, but other phy devices (modules) are possible and they can be some.
+>
+>So this the whole whacker a mole problem. It works for you but fails
+>for 99% of users. How is this helping us?
 
-[Also added power supply maintainers to cc]
+no, this is the first instance that was found/added.
 
-This really looks like a hack. As a user I'd expect that if I set the
-charging limit, it really gets applied. In other words, I'd expect to be
-able to limit 60W PSY to provide just 15W by limiting the current. This
-is not the case with this patch.
+if you declare a softdep what happens is that the dep is loaded first
+(needed or not) and your module is loaded after that
 
-Please provide rational for this change, i.e. why using the existing
-typec property isn't enough for your use case.
+if you declare a weakdep, you are just instructing the tools that the
+module may or may not be needed.  Any module today that does a
+request_module("foo") could be a candidate to migrate from
+MODULE_SOFTDEP("pre: foo") to the new weakdep, as long as it handles
+properly the module being loaded ondemand as opposed to using
+request_module() to just synchronize the module being loaded.
 
-> 
-> Signed-off-by: Jameson Thies <jthies@google.com>
-> ---
-> Changes in V2:
-> - Added SET_SINK_PATH call when handling charge_control_limit_max
-> update. Updated commit message.
-> 
->  drivers/usb/typec/ucsi/psy.c  | 52 +++++++++++++++++++++++++++++++++++
->  drivers/usb/typec/ucsi/ucsi.c | 15 ++++++++++
->  drivers/usb/typec/ucsi/ucsi.h |  5 ++++
->  3 files changed, 72 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-> index d708f9eb1654..28265feb9d13 100644
-> --- a/drivers/usb/typec/ucsi/psy.c
-> +++ b/drivers/usb/typec/ucsi/psy.c
-> @@ -30,6 +30,7 @@ static enum power_supply_property ucsi_psy_props[] = {
->  	POWER_SUPPLY_PROP_CURRENT_NOW,
->  	POWER_SUPPLY_PROP_SCOPE,
->  	POWER_SUPPLY_PROP_STATUS,
-> +	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
->  };
->  
->  static int ucsi_psy_get_scope(struct ucsi_connector *con,
-> @@ -275,11 +276,60 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
->  		return ucsi_psy_get_scope(con, val);
->  	case POWER_SUPPLY_PROP_STATUS:
->  		return ucsi_psy_get_status(con, val);
-> +	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX:
-> +		val->intval = 0;
-> +		return 0;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int ucsi_psy_set_charge_control_limit_max(struct ucsi_connector *con,
-> +				 const union power_supply_propval *val)
-> +{
-> +	/*
-> +	 * Writing a negative value to the charge control limit max implies the
-> +	 * port should not accept charge. Disable the sink path for a negative
-> +	 * charge control limit, and enable the sink path for a positive charge
-> +	 * control limit. If the requested charge port is a source, update the
-> +	 * power role.
-> +	 */
-> +	int ret;
-> +	bool sink_path = false;
-> +
-> +	if (val->intval >= 0) {
-> +		sink_path = true;
-> +		if (!con->typec_cap.ops || !con->typec_cap.ops->pr_set)
-> +			return -EINVAL;
-> +
-> +		ret = con->typec_cap.ops->pr_set(con->port, TYPEC_SINK);
+>
+>Maybe a better solution is to first build an initramfs with
+>everything, plus the kitchen sink. Boot it, and then look at what has
+>been loaded in order to get the rootfs mounted. Then update the
+>initramfs with just what is needed? That should be pretty generic,
+>with throw out networking ig NFS root is not used, just load JFFS2 and
+>a NAND driver if it was used for the rootfs, etc.
 
-Should there be a call to pr_set(TYPEC_SOURCE) if the value is negative?
+that works for development systems or if you are fine tuning it for each
+system you have. It doesn't work for a generic distro with the kitchen
+sink of modules and still trying to minimize the initrd without end user
+intervention. So it works for 99% of users.
 
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return ucsi_set_sink_path(con, sink_path);
+Lucas De Marchi
 
-You are calling SET_SINK_PATH uncoditionally, while this command was not
-defined for UCSI 1.x. Also it is an error to call it when device is in
-power source mode or if there is no partner connected.
-
-Last, but not least, the property value survives between PSY reconnects
-(which is expected), however after reconnecting the partner device, the
-value won't be reprogrammed by the UCSI driver, resulting in the
-inconsistency between the sysfs and actual system state.
-
-> +}
-> +
-> +static int ucsi_psy_set_prop(struct power_supply *psy,
-> +			     enum power_supply_property psp,
-> +			     const union power_supply_propval *val)
-> +{
-> +	struct ucsi_connector *con = power_supply_get_drvdata(psy);
-> +
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX:
-> +		return ucsi_psy_set_charge_control_limit_max(con, val);
->  	default:
->  		return -EINVAL;
->  	}
->  }
->  
-> +static int ucsi_psy_prop_is_writeable(struct power_supply *psy,
-> +			     enum power_supply_property psp)
-> +{
-> +	return psp == POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX;
-> +}
-> +
->  static enum power_supply_usb_type ucsi_psy_usb_types[] = {
->  	POWER_SUPPLY_USB_TYPE_C,
->  	POWER_SUPPLY_USB_TYPE_PD,
-> @@ -308,6 +358,8 @@ int ucsi_register_port_psy(struct ucsi_connector *con)
->  	con->psy_desc.properties = ucsi_psy_props;
->  	con->psy_desc.num_properties = ARRAY_SIZE(ucsi_psy_props);
->  	con->psy_desc.get_property = ucsi_psy_get_prop;
-> +	con->psy_desc.set_property = ucsi_psy_set_prop;
-> +	con->psy_desc.property_is_writeable = ucsi_psy_prop_is_writeable;
->  
->  	con->psy = power_supply_register(dev, &con->psy_desc, &psy_cfg);
->  
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index dcd3765cc1f5..02663fdebdd9 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1545,6 +1545,21 @@ static const struct typec_operations ucsi_ops = {
->  	.pr_set = ucsi_pr_swap
->  };
->  
-> +int ucsi_set_sink_path(struct ucsi_connector *con, bool sink_path)
-> +{
-> +	struct ucsi *ucsi = con->ucsi;
-> +	u64 command;
-> +	int ret;
-> +
-> +	command = UCSI_SET_SINK_PATH | UCSI_CONNECTOR_NUMBER(con->num);
-> +	command |= UCSI_SET_SINK_PATH_SINK_PATH(sink_path);
-> +	ret = ucsi_send_command(ucsi, command, NULL, 0);
-> +	if (ret < 0)
-> +		dev_err(con->ucsi->dev, "SET_SINK_PATH failed (%d)\n", ret);
-> +
-> +	return ret;
-> +}
-> +
->  /* Caller must call fwnode_handle_put() after use */
->  static struct fwnode_handle *ucsi_find_fwnode(struct ucsi_connector *con)
->  {
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 57129f3c0814..6a958eac5703 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -114,6 +114,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
->  #define UCSI_GET_CONNECTOR_STATUS	0x12
->  #define UCSI_GET_ERROR_STATUS		0x13
->  #define UCSI_GET_PD_MESSAGE		0x15
-> +#define UCSI_SET_SINK_PATH		0x1c
->  
->  #define UCSI_CONNECTOR_NUMBER(_num_)		((u64)(_num_) << 16)
->  #define UCSI_COMMAND(_cmd_)			((_cmd_) & 0xff)
-> @@ -187,6 +188,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
->  #define   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY	4
->  #define   UCSI_GET_PD_MESSAGE_TYPE_REVISION	5
->  
-> +/* SET_SINK_PATH command bits */
-> +#define UCSI_SET_SINK_PATH_SINK_PATH(_r_)	(((_r_) ? 1 : 0) << 23)
-> +
->  /* -------------------------------------------------------------------------- */
->  
->  /* Error information returned by PPM in response to GET_ERROR_STATUS command. */
-> @@ -492,6 +496,7 @@ int ucsi_send_command(struct ucsi *ucsi, u64 command,
->  
->  void ucsi_altmode_update_active(struct ucsi_connector *con);
->  int ucsi_resume(struct ucsi *ucsi);
-> +int ucsi_set_sink_path(struct ucsi_connector *con, bool sink_path);
->  
->  void ucsi_notify_common(struct ucsi *ucsi, u32 cci);
->  int ucsi_sync_control_common(struct ucsi *ucsi, u64 command);
-> -- 
-> 2.45.2.1089.g2a221341d9-goog
-> 
-
--- 
-With best wishes
-Dmitry
+>
+>	  Andrew
 
