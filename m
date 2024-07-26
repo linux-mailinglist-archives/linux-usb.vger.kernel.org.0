@@ -1,103 +1,209 @@
-Return-Path: <linux-usb+bounces-12478-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12479-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CEF593DA1D
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 23:16:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29BC093DA31
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 23:30:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 563E61C232EC
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 21:16:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D2F81C20843
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 21:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA72143898;
-	Fri, 26 Jul 2024 21:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5103F149E1A;
+	Fri, 26 Jul 2024 21:30:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="LTtkF4sj"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3m/ESuQ7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E375E1CA80;
-	Fri, 26 Jul 2024 21:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAF238DEE;
+	Fri, 26 Jul 2024 21:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722028552; cv=none; b=KpysdNSzvxIItxr1dDGXOKWlKeYjAIJFCSPzXC5tulWMCikqaxruel3gbfXSK7RKzB1N27BodetSLjvsIl9bOIiiwmMcktOn5PrreM6CVfIRWaGck7c2PDz8LDsJ++tDpIptWre7u7QOULK/DwoYrgakYPx0ivIpcelCyaeSe7w=
+	t=1722029443; cv=none; b=QBxb4p1qoWKASiF8lC0cHOUzikefWxyZKHh/0gyyteCub2a7zG3IsJNCGRh+2R2Gm4MxS7/i495zYPovt02dvGzINhoB8cXaVzkyRMOjrNgXFay44GYu1VqswddrFJNhg4BiBYNMQe6Wgjwq7wFq/s2KzGuOKzq0ZP7XuBiqEbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722028552; c=relaxed/simple;
-	bh=kFm1nFe/8mj73uBWAJ1mzHAKbs/jN0UTqZt+QE4QUbg=;
+	s=arc-20240116; t=1722029443; c=relaxed/simple;
+	bh=P0f+aG8YLTqaJQzziKinOzYx/AvYQ071j9jvqmbzf0k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FJ9J86C3+T38CaYx9WaIDkFY2ekEgNKSOW7YNQGPuc9i1IrF5IjEisRfw4BjpxeInBVv0uerWJ57MiQpn5JUnA8epaW7YsQm1pJYRlLpY3uOLMQFUN6cpkSp64oc+4IE+Pi7S53cIXBnEfQVqy9KLqqruQOXIYdShmncPv3zQF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=LTtkF4sj; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=evJaG3qBPauXhpE79CCjKBWlGY0IN5mOJLlNHK9YetM=; b=LTtkF4sj+sf/XzVbP4GIBbZPbQ
-	mpm9oFdxV9VpeUcQYVlA7NoUeDyjHu2wOMLSsBD1DTMxRuokg8b6sn4Dsi1gcn7aWzXC2HEnmMgVu
-	rtWcKdw4CBztJ+0TEbv9jvwfxC/fYxQ6Y+QOzYffG+cghWsNzurSpdiubwlze7w8fOtk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sXSHv-003JDT-Ay; Fri, 26 Jul 2024 23:15:43 +0200
-Date: Fri, 26 Jul 2024 23:15:43 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	UNGLinuxDriver@microchip.com, davem@davemloft.net,
-	edumazet@google.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	lucas.demarchi@intel.com, mcgrof@kernel.org, netdev@vger.kernel.org,
-	pabeni@redhat.com, woojung.huh@microchip.com
-Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
- module
-Message-ID: <fc40244c-b26f-421e-8387-98c7f9f0c8ca@lunn.ch>
-References: <20240724145458.440023-1-jtornosm@redhat.com>
- <20240724161020.442958-1-jtornosm@redhat.com>
- <8a267e73-1acc-480f-a9b3-6c4517ba317a@lunn.ch>
- <20240726074925.1c7df571@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dJFpXGt9MaERuGpq4o45LftTaEpx1nZkQJYboEpmhwfDXWrfyHMe8yJM+gCFlNUv+DrgeEZr1oAXqufbRB42dJU1Hppw/DJfOa2igPFcg2h1W9pj7/t1DFcBHtn/YViWrwu9eSmJNniVfwzC8AoQbxVrm1a1KXzylXy0Jhmz92s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=3m/ESuQ7; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1722029440;
+	bh=P0f+aG8YLTqaJQzziKinOzYx/AvYQ071j9jvqmbzf0k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=3m/ESuQ7CpqiyowL8oOI/ML1V6ite/dxLIaZZpmcnoegbNQ0JVnyLn0Re+SywaqD6
+	 XC9ltiELzCFTvhr6YF1vQtPpTznfSUmJ+H4zoBvqTrz7Wnogs1icgzlXowPwTHPB50
+	 oEGh4K0UOgk6E3AlAzOnhp8jeSln42FGd+rVoY7OGv+VxHNl3ETPNwOCPHjjnzaqCL
+	 8G1IDsiZEz5stqV7wfd8BsCLwcTKGXsyPJnCKP/63GHtWTRI18LGNNPu4cd1smcIKl
+	 06eFN2s+RWCrsjq14SqEE65mjKG8CBQ/X2ZkL1H02HazcCyvlUFAAfpLIq1pxsNg4e
+	 IaCIhYFqGPreA==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3D56537821C0;
+	Fri, 26 Jul 2024 21:30:40 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id A1264106097F; Fri, 26 Jul 2024 23:30:37 +0200 (CEST)
+Date: Fri, 26 Jul 2024 23:30:37 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com, 
+	linux-usb@vger.kernel.org, bleung@google.com, abhishekpandit@chromium.org, 
+	andersson@kernel.org, fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, 
+	hdegoede@redhat.com, neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
+	saranya.gopal@intel.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] usb: typec: ucsi: Add status to UCSI power supply
+ driver
+Message-ID: <up2clptjacrc2n2ibzkpv5od47pky6im3pzzgjuymm4xd7ielu@ulg7lb2u5lih>
+References: <20240724201116.2094059-1-jthies@google.com>
+ <20240724201116.2094059-2-jthies@google.com>
+ <tzljywuym6jsh5q5iuc7rrtq564d3ffl3e4ltuii7xzkd6cf7d@2nmj5qkusbkt>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gxaustdnzg6e6jcp"
+Content-Disposition: inline
+In-Reply-To: <tzljywuym6jsh5q5iuc7rrtq564d3ffl3e4ltuii7xzkd6cf7d@2nmj5qkusbkt>
+
+
+--gxaustdnzg6e6jcp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240726074925.1c7df571@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-> For MDIO are the ID registers too complicated to expose to user space
-> and let it match the drivers using modinfo (avoiding the need to boot
-> a kitchen sink kernel)?
+Hi,
 
-That is how it actually works for MDIO. Mostly.
+On Thu, Jul 25, 2024 at 06:31:00AM GMT, Dmitry Baryshkov wrote:
+> On Wed, Jul 24, 2024 at 08:11:13PM GMT, Jameson Thies wrote:
+> > Add status to UCSI power supply driver properties based on the port's
+> > connection and power direction states.
+> >=20
+> > Signed-off-by: Jameson Thies <jthies@google.com>
+>=20
+> Please CC Power Supply maintainers for this patchset (added to cc).
 
-We read the ID from register 2 and 3. That gives us a 32 bit
-value. That gets turned into a binary string. Which is then matched
-against what is in modules.alias
+Thanks. I guess I should add something like this to MAINTAINERS
+considering the power-supply bits are in its own file for UCSI:
 
-alias mdio:0000000000100010010101010010???? amd
-alias mdio:0011000111000011000111001011???? aquantia
-alias mdio:0011000111000011000111000001???? aquantia
-alias mdio:0011000111000011000111000100???? aquantia
+UCSI POWER-SUPPLY API
+R:	Sebastian Reichel <sre@kernel.org>
+L:	linux-pm@vger.kernel.org
+F:	drivers/usb/typec/ucsi/psy.c
 
-The ? means the value of the bit does not matter. The least
-significant nibble is often the revision of the PHY and the driver can
-driver any revision.
+> At least per the Documentation/ABI/testing/sysfs-class-power, the status
+> property applies to batteries, while UCSI psy device is a charger. This
+> is logical, as there might be multiple reasons why the battery is not
+> being charging even when the supply is online.
 
-The 'mostly' is because some PHYs need help from the driver to enable
-clocks etc before you can read register 2 and 3. A chicken/egg
-problem. So you can put the ID in device tree, and the exact same
-lookup is performed to load the driver.
+Correct. These status bits are not meant for chargers. E.g.
+POWER_SUPPLY_STATUS_NOT_CHARGING has a very specific meaning, that a
+battery is neither charged nor discharged. Since the device is
+running that can only happen when a charger is connected, but not
+charging (or the device has two batteries).
 
-It gets a bit more complex with C45 devices, because they have
-multiple ID registers. But the same basic lookup is performed using
-them one by one until a driver is found.
+For AC the power-supply API has been designed only taking the SINK
+role into account. At some point USB was added and some time later
+people added reverse mode to their USB chargers for OTG mode. So
+far this has been handled by registering a regulator and using that
+to switch the mode. This made sense for OTG, but USB-C PD makes
+things even more complex.
 
-You can also find the C22 ID which matched the driver in
-/sys/bus/mdio_bus/devices/*/phy_id.
+I am open to ideas how to properly handle the source role in the
+power-supply API, but let's not overload the status property for
+it. Please make sure to CC me on any follow-up series.
 
-       Andrew
+-- Sebastian
+
+>=20
+> > ---
+> > Changes in V2:
+> > - None.
+> >=20
+> >  drivers/usb/typec/ucsi/psy.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> >=20
+> > diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+> > index e623d80e177c..d0b52cee41d2 100644
+> > --- a/drivers/usb/typec/ucsi/psy.c
+> > +++ b/drivers/usb/typec/ucsi/psy.c
+> > @@ -29,6 +29,7 @@ static enum power_supply_property ucsi_psy_props[] =
+=3D {
+> >  	POWER_SUPPLY_PROP_CURRENT_MAX,
+> >  	POWER_SUPPLY_PROP_CURRENT_NOW,
+> >  	POWER_SUPPLY_PROP_SCOPE,
+> > +	POWER_SUPPLY_PROP_STATUS,
+> >  };
+> > =20
+> >  static int ucsi_psy_get_scope(struct ucsi_connector *con,
+> > @@ -51,6 +52,20 @@ static int ucsi_psy_get_scope(struct ucsi_connector =
+*con,
+> >  	return 0;
+> >  }
+> > =20
+> > +static int ucsi_psy_get_status(struct ucsi_connector *con,
+> > +			       union power_supply_propval *val)
+> > +{
+> > +	val->intval =3D POWER_SUPPLY_STATUS_NOT_CHARGING;
+> > +	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
+> > +		if ((con->status.flags & UCSI_CONSTAT_PWR_DIR) =3D=3D TYPEC_SINK)
+> > +			val->intval =3D POWER_SUPPLY_STATUS_CHARGING;
+> > +		else
+> > +			val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int ucsi_psy_get_online(struct ucsi_connector *con,
+> >  			       union power_supply_propval *val)
+> >  {
+> > @@ -249,6 +264,8 @@ static int ucsi_psy_get_prop(struct power_supply *p=
+sy,
+> >  		return ucsi_psy_get_current_now(con, val);
+> >  	case POWER_SUPPLY_PROP_SCOPE:
+> >  		return ucsi_psy_get_scope(con, val);
+> > +	case POWER_SUPPLY_PROP_STATUS:
+> > +		return ucsi_psy_get_status(con, val);
+> >  	default:
+> >  		return -EINVAL;
+> >  	}
+> > --=20
+> > 2.45.2.1089.g2a221341d9-goog
+> >=20
+>=20
+> --=20
+> With best wishes
+> Dmitry
+
+--gxaustdnzg6e6jcp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmakFXcACgkQ2O7X88g7
++pr57w/9EBA0L5P8nxUJlgmdL1QGR61UIchbd0Re+ABJCNxJfrMpa/GjOD+trxe+
+mqQcT05CvS2PUjadGvzUFOfisoVA93gIb19Y37spHrSyQED4hcEzz24CEmwgSeGi
+oEdp7JytIKeI+uUZ+1pKHe+eiJbG1dTK/ol5f9ZhziAplbXFJ3E8aWQouPsodknE
+GFPRTj5nroyvVgsIOXdqWIHDyKIMD8m3AfAxWTb5rvKRICmegIlY/hQx8Q+h1+CX
+hvmMprU5ZeFBL2dJmmiH1kth04K437g0bW1OM1wfgcXALYFTXk0/3MWiu2xBUHZN
+SXLTRCVv2fz1cxJlPBbeNZxq3ZWQ5tkfgwEEOL7uSgZHUgJ7kcS15rd2ty80vV8o
+fgITMohtiM1Oclv1HiHgx58TkJyv/LJ0ttz/fzntkCVT5gKff5u97HUhrDm5r1iK
+2X9KcL+jkIouP/e7RM7iQdGxlVd/p3dQmoK3ioxZln05MwEEMjl3rNwnsLa3Bh4/
+FQKOMsY3kV9S3vbN/TLld5n5P+B6HtQ+UEV9ku6OC3ZV4GkACVja+pT3lEj0TXwE
+m4MdQlXjwrd3kIBb8mZzMxXmhjMbmVifkPPZ6ip9jJBg4ZhKtD4hfJM3XzPjWNhd
+dMq1QHhJ3GYXoL17xb7p4CZllvjgZ3WIQL9Mb2pAu6fe5ZCqvLA=
+=kjxQ
+-----END PGP SIGNATURE-----
+
+--gxaustdnzg6e6jcp--
 
