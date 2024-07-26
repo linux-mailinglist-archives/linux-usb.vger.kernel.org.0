@@ -1,175 +1,94 @@
-Return-Path: <linux-usb+bounces-12490-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12491-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22FC693DA97
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 00:05:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD9B493DADE
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 00:57:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1CD4286270
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 22:05:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7474D1F23BC2
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 22:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17B914A0BD;
-	Fri, 26 Jul 2024 22:03:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5111F14EC7D;
+	Fri, 26 Jul 2024 22:57:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15EB15A849
-	for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2024 22:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880E414C5B0
+	for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2024 22:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722031401; cv=none; b=f7k4YDrWN94VnqznNZy01C7Xvoiud0CupS3SgxyUHIEELnzNmepw0BxU6ZKlld7b1X7lC7XGRUS3DqUZms0TE7nex011j8LQZrDecWXfOLLZlUH48B5YR5ZZNz1Y4szPobEULBGPcM9oGXIe9JiA1Zr7LuYtuurZJACqewB9Nh4=
+	t=1722034626; cv=none; b=HDW2euibCFOQg+Yyqoo8OBFwm1LgnDJUUAgiQfOAT9AMAiuNMo53GPLzCY7o0S3YCLNGRSusU0a0PdogJyL4W8Tg3iWjNTjqX4dXI/qppv6rh2kvVghpPSjE2vTQJxgASwCnoW74l0um0/qcO+DDTaXvhm5iwONBg/gQZUqG36M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722031401; c=relaxed/simple;
-	bh=JpVyBCvXbR+bijgysqnCR5c1wnLhUDG1b+V58uqS5S8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Y4V8ymebevr3FTzgKhFEL688ulZu9ldZUKz4O/ptvSWGDuw9kPQ2t24yZWp9PB+Kw23rgpLz4EGm7zQFOfIYlwTsXhc3qMoP6e107fwVTcfoJF2nM68+ALrXOlnpL/qWOA/ElprYu/8QlNd7ocH2iWmRp2PS9xXo3SettzGuycI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sXT1x-0005jI-Dz; Sat, 27 Jul 2024 00:03:17 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sXT1w-002QjR-S1; Sat, 27 Jul 2024 00:03:16 +0200
-Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
-	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sXT1P-00FdLn-2j;
-	Sat, 27 Jul 2024 00:02:43 +0200
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Sat, 27 Jul 2024 00:02:45 +0200
-Subject: [PATCH v3 10/10] usb: gadget: uvc: add min g_ctrl vidioc and set
- min buffs to 4
+	s=arc-20240116; t=1722034626; c=relaxed/simple;
+	bh=UhWI7TcLxejpJoI+IfqhEmkIioV4bu09QRF+kzi+Euk=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=Bq0jeNdm+sRGQyqRnhv+A+HwdjgYcod+SzEJYXv3GXKK2QAl5yQy7lqTeI56nTWz5Ix6glPKMxV+SgxKu7e4mkxyFYmlLuJplV7yo/Ez81GaZgaXwtKCjnva2icVpRN8bkY+Uaf0QOviQeJmanpDuqqeppp0EXZCHA9Qnudf0b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-39862b50109so29891945ab.3
+        for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2024 15:57:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722034624; x=1722639424;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hfHEsQdhoJOdt0CYCZsm++AlvwlAzWoJHsIj6s9Xdbc=;
+        b=Ke1OM+lMpXih2MPcg9X1hjuHQ7oHbEy49Afk/SX1r4sXA+8DmQCFs7pj3P6teAiGSI
+         SBzQ2eWsbcO2ZmBrd+65gipZ+uo+ZXxLxPqOWmsIAnNDgJsCUIOGKOhNowVc2G8jSOKv
+         62+NfTmTF9Wky1r7aF9+EcYk2qtavXcG7/hQcLpwVJtrdQW3N/VhCul86nKqHihKEtS4
+         J7J+NRdcF+2BfBhXhnzK9PJa115d/E9e8uBBeBk8XCRlicgn3oXUpuIvleaGSjEVucCw
+         tMY9w0YPQOSjEbvpIkhb7MTXsE9zlyNbR/oNkCzdhoyJV0oSuQDSj4hl5oDHY5vHFj4w
+         hW/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXDxltYaHbImpaROLRhIHUZ3VZ3PwXVn86ukYKHZYlAcb+WiKXJLPOzXGw7dgWLBICsTQRubhbRkg6wAmKL9CqfrDpZqZeucafM
+X-Gm-Message-State: AOJu0Yx3uGNAosbb3bpieQ1fBCuhEui15tX6tDLbPVt1WRCUqtPOj1kb
+	3szuXAd5X30t/cbeENyWiBao1NNrikp2+Y0IMkidfz5Bofo4UXYrZXUkFT4QIqQ+/jQOn+beVAK
+	6LcmxdGlFbqHIxCrfqra8t0cnfAOCGX4bhzmqdAqvLgBBZlcvPCKHws0=
+X-Google-Smtp-Source: AGHT+IH1IGReWJjnZICMOV9b++BLUObuYL6w4gT4mDFAVD0lxxD2JZLW2qTvQ0IOykja3TBds2LleQamC0YuWT65jexcIA8WcgEY
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240403-uvc_request_length_by_interval-v3-10-4da7033dd488@pengutronix.de>
-References: <20240403-uvc_request_length_by_interval-v3-0-4da7033dd488@pengutronix.de>
-In-Reply-To: <20240403-uvc_request_length_by_interval-v3-0-4da7033dd488@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Daniel Scally <dan.scally@ideasonboard.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Avichal Rakesh <arakesh@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Michael Grzeschik <m.grzeschik@pengutronix.de>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2791;
- i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=JpVyBCvXbR+bijgysqnCR5c1wnLhUDG1b+V58uqS5S8=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmpB0DaYLtFlQJJ8cqaOw5eL/8c9CeyZh/7Kspg
- WKpXQiuoX2JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZqQdAwAKCRC/aVhE+XH0
- qy3MEACSA3D57LqbAuWIHEmcOTPgi2X68CWbXTxMB/LgJtAhHKcu2x97lItkxAeW1tOEIAY+kfv
- RSQ1gaw0i6KIjpgEV+D7BEFzYYD9NHuzdiZD0/QYh6VVH/A86bjvZyultRv39siDNUu/4aXzZxa
- ZQha6G7cvn1HNgzjf4ff8CLcmMWq9LwFTwafeC3eKzrNHPVaf4fHsD6aK8xhOKLp/9YeVTkUXPY
- 7siaaOtJ9DREc+W242Jccc8Z2JvTcxTjME2JmA5O16ECJw60bMEgXXLVXko5oOr+4S8vCL+29yl
- 6Xf0KGxDkuJ/pmsvK4EdJfgKECD4Wzsb31KWKHJvvG7tc3Fpnf4igEe7YE4MrlapP84lRc6ytxT
- +ZINoyJtVwLoP2cPlCF3KUfy6LsPAAUxYWW/1YmcdnvS8K/KJV/XJttYXbPzIzm4VlEt+ZIQb3i
- yKf6LO5xD43gXW5tRgMlAZ8VPznJxhtXZ2OW2rKG+TpGONXxWVN8wRldqpafRtCrkTrkoR2e6Ce
- 6dwirtt/EA4kkMSnpVHd+rgvhplwtYHl61A7IKLLZGR95d/dpHC6aoWhhm70zWOT59o0URl1D4F
- MUHoUnPoQO8qirLqzOixgraYRRHqztkB241z1GhbpNF+3oz5RSeC+IOXwUTWEaNmDaKBmjFEtux
- zlCPoFqpQCuS3Gw==
-X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
- fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Received: by 2002:a05:6e02:1d1d:b0:397:95c7:6f72 with SMTP id
+ e9e14a558f8ab-39aec448e1cmr647105ab.6.1722034623729; Fri, 26 Jul 2024
+ 15:57:03 -0700 (PDT)
+Date: Fri, 26 Jul 2024 15:57:03 -0700
+In-Reply-To: <0000000000002b27c60592b00f38@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000009e19c061e2e6e93@google.com>
+Subject: Re: [syzbot] [input?] [usb?] WARNING in implement
+From: syzbot <syzbot+38e7237add3712479d65@syzkaller.appspotmail.com>
+To: andreyknvl@google.com, benjamin.tissoires@redhat.com, bentiss@kernel.org, 
+	jikos@kernel.org, jkosina@suse.com, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	n.zhandarovich@fintech.ru, rientjes@google.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-We increase the minimum amount of v4l2 buffers that will be possibly
-enqueued into the hardware and allocate at least
-UVCG_STREAMING_MIN_BUFFERS amount of requests. This way the driver has
-also more requests available to prefill the isoc hardware with.
+syzbot suspects this issue was fixed by commit:
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+commit 4aa2dcfbad538adf7becd0034a3754e1bd01b2b5
+Author: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Date:   Fri May 17 14:19:14 2024 +0000
 
----
-v1 -> v3: new patch
----
- drivers/usb/gadget/function/uvc.h       |  2 ++
- drivers/usb/gadget/function/uvc_queue.c |  3 ++-
- drivers/usb/gadget/function/uvc_v4l2.c  | 13 +++++++++++++
- 3 files changed, 17 insertions(+), 1 deletion(-)
+    HID: core: remove unnecessary WARN_ON() in implement()
 
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index f6bc58fb02b84..e0b1f78fdbc65 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -71,6 +71,8 @@ extern unsigned int uvc_gadget_trace_param;
- 
- #define UVCG_REQUEST_HEADER_LEN			12
- 
-+#define UVCG_STREAMING_MIN_BUFFERS		4
-+
- /* ------------------------------------------------------------------------
-  * Structures
-  */
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index e33ce72325031..157e7f7d49c7a 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -21,6 +21,7 @@
- #include <media/videobuf2-vmalloc.h>
- 
- #include "uvc.h"
-+#include "uvc_video.h"
- 
- /* ------------------------------------------------------------------------
-  * Video buffers queue management.
-@@ -86,7 +87,7 @@ static int uvc_queue_setup(struct vb2_queue *vq,
- 	}
- 
- 	video->req_size = req_size;
--	video->uvc_num_requests = nreq;
-+	video->uvc_num_requests = nreq * UVCG_STREAMING_MIN_BUFFERS;
- 
- 	return 0;
- }
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 392fb400aad14..f96074f2c2824 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -357,6 +357,18 @@ static int uvc_v4l2_s_parm(struct file *file, void *fh,
- 	return 0;
- }
- 
-+static int uvc_g_ctrl(struct file *file, void *priv, struct v4l2_control *vc)
-+{
-+	int ret = -EINVAL;
-+
-+	if (vc->id == V4L2_CID_MIN_BUFFERS_FOR_OUTPUT) {
-+		vc->value = UVCG_STREAMING_MIN_BUFFERS;
-+		ret = 0;
-+	}
-+
-+	return ret;
-+}
-+
- static int
- uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
- 		struct v4l2_frmivalenum *fival)
-@@ -629,6 +641,7 @@ const struct v4l2_ioctl_ops uvc_v4l2_ioctl_ops = {
- 	.vidioc_streamoff = uvc_v4l2_streamoff,
- 	.vidioc_s_parm = uvc_v4l2_s_parm,
- 	.vidioc_g_parm = uvc_v4l2_g_parm,
-+	.vidioc_g_ctrl = uvc_g_ctrl,
- 	.vidioc_subscribe_event = uvc_v4l2_subscribe_event,
- 	.vidioc_unsubscribe_event = uvc_v4l2_unsubscribe_event,
- 	.vidioc_default = uvc_v4l2_ioctl_default,
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13a010d3980000
+start commit:   b9ddbb0cde2a Merge tag 'parisc-for-6.6-rc5' of git://git.k..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b89b61abf7449972
+dashboard link: https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15eebef1680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1375f9ce680000
 
--- 
-2.39.2
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: HID: core: remove unnecessary WARN_ON() in implement()
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
