@@ -1,104 +1,122 @@
-Return-Path: <linux-usb+bounces-12472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12475-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D44393D835
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 20:20:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D56D093D8F6
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 21:26:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4835528209C
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 18:20:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 112441C23352
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 19:26:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6B514D431;
-	Fri, 26 Jul 2024 18:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E73558B7;
+	Fri, 26 Jul 2024 19:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A5/P1Rgq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8AXu5MN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7751E493;
-	Fri, 26 Jul 2024 18:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4162C38DEE;
+	Fri, 26 Jul 2024 19:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722017887; cv=none; b=aXXlg8s3YuqTBRVHaLOMiziJP6E5aAHFcSTnkm4B7oZCbZJZ8DRRF4n8Pj9tfQ/93smgoCgdsOvfjcLiB7fyEpu+zVOgu1Xc4Z6SoZ+0y8iA0+ityrft8roY73fSdCU3tHce2dpmz8bo/013qPVI723EsZV6dNv78wq8yQ/MVfQ=
+	t=1722021973; cv=none; b=OguYdvpW2oK5j4QV3WTW14Coy7yOIHI6byNqJ/7+WprIJxNSwuLROZR61QonOo7Awc3RUA+G/Gx8abNVJ8DfEhiJxoDrb0MF9V6Ju4QbaVs08t0MeSS1bCTs4B4K7HRvxcenhrVXML3lITBn41+qRo4vkY4rnlgYMbN1LZg8jpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722017887; c=relaxed/simple;
-	bh=ahpHSbsY5snByWpT+psWqdNXneHz5eR2UhTXSOpSJuo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WrTwSsQiw4djyqoXwD5XFQrbeLB4j+njwfLRHXEJLLG45asIt64Q97fUWqwocvBX90JOrGnJKe9FcR2PY8Q/ZOluoBTkSX7XIFy2L1WadZB1TkoXZPry/4a3AMHKMynaHbtvCnUmjkWy83JddcnWAyzqBuAdyNbZsvCNP8eruOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A5/P1Rgq; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1148BC0011;
-	Fri, 26 Jul 2024 18:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722017883;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nzzwZRIMf3Tzxd7N00x3LQAknBs3IrccO6DEWuel4oQ=;
-	b=A5/P1RgqlIFjF5ttDIOfjWKIeVVj56YVzB3p0s8T2Il7RtaZRahYcaiLSXMpgmmAhPAvLD
-	ip7/SUDvfi30x5DYnHTyAtxyq+wu9Y+a4XlTiCVwrbqegCSy/TrUp5AcM0KIyJ/BcVIZuw
-	ndNENrH4uTdyp0HPps44ihMR6udGO01j/2yzFI8+F3ir+NWplXrlfr4AVwPQqc86b7pupI
-	COXVA5z8Wzy3yOmsns9q2fKRxz2PXIuPmCUqLqWv1OR56LyGuOm0rlFT7jo4RiMR/pon9L
-	Hr6Tq92iXBSQirjgIm3lHBq3wrt3/G2+w1uu748soK3HONgIEcJDrNtd2/c0KA==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Fri, 26 Jul 2024 20:18:00 +0200
-Subject: [PATCH v5 12/12] arm64: dts: ti: k3-am64: add USB fallback
- compatible to J721E
+	s=arc-20240116; t=1722021973; c=relaxed/simple;
+	bh=SZJMrHcMmqY2SUiUlSu9xKKZdsDzO+qcgAmMeSpsinw=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=agZ0eKBK6lIBALzSFwN3+9NcytpLS1Gz4IJAdEZedmGxmI2NTziyp37qRK6kQKYFUJQYHey4/Nz6chfCuQnH7UJLBWf9/7A9XxzH9W7fUqqjyBS4rCXzv21q6eZzfCE/euBWzWJjqKlqwliczEPZeyoiarYut4DMD1FyAXOHmSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8AXu5MN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D05C32782;
+	Fri, 26 Jul 2024 19:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722021972;
+	bh=SZJMrHcMmqY2SUiUlSu9xKKZdsDzO+qcgAmMeSpsinw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=c8AXu5MNC75ERaiY1fEY91nAurQ58HgHjnshtPI2p8GJGT13Vvug7HJSJYUG7ZVNS
+	 /IsUpJPDeqUiHLkg3szrD116IEFTA8gaeKGCd5WlnaVr7c71rptiSpfwQjk+KgE5CB
+	 SwSLpRYD8CfskDKa/RGwCLrLC06mdEyzaszEZWA5259G0u5gw8b9FX3uxj39SvVYH3
+	 Foxaz1sff2sXC+P8jpVgTUiJVOpFSkqp/sg/yMdGRfNfSKsNHPRNAL/X/Bsog5vrOP
+	 Lrqt3RF7vLAexmvBdCyXPyspp2FaF4J/fgjUoQggk0oxiCg7IrcroWjGXkKkdeoX4N
+	 xe8TZu1n+wHBw==
+Date: Fri, 26 Jul 2024 14:26:11 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240726-s2r-cdns-v5-12-8664bfb032ac@bootlin.com>
-References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
-In-Reply-To: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
- Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
- Mathias Nyman <mathias.nyman@intel.com>, Nishanth Menon <nm@ti.com>, 
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- Kevin Hilman <khilman@kernel.org>, 
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Kevin Hilman <khilman@kernel.org>, 
  =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ devicetree@vger.kernel.org, Tero Kristo <kristo@kernel.org>, 
+ linux-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ linux-arm-kernel@lists.infradead.org, Nishanth Menon <nm@ti.com>, 
+ Vignesh Raghavendra <vigneshr@ti.com>, Pawel Laszczak <pawell@cadence.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.14.0
-X-GND-Sasl: theo.lebrun@bootlin.com
+ Roger Quadros <rogerq@kernel.org>, Peter Chen <peter.chen@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+In-Reply-To: <20240726-s2r-cdns-v5-2-8664bfb032ac@bootlin.com>
+References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
+ <20240726-s2r-cdns-v5-2-8664bfb032ac@bootlin.com>
+Message-Id: <172202197161.1924212.4114467370508864411.robh@kernel.org>
+Subject: Re: [PATCH v5 02/12] dt-bindings: usb: ti,j721e-usb: add
+ ti,j7200-usb compatible
 
-USB on AM64 is the same peripheral as on J721E. It has a specific
-compatible for potential integration details. Express this
-relationship, matching what the dt-bindings indicate.
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 26 Jul 2024 20:17:50 +0200, Théo Lebrun wrote:
+> On J7200, the controller & its wrapper are reset on resume. It has the
+> same behavior as ti,j721e-usb with a different SoC integration.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-index f8370dd03350..02c8ed93730f 100644
---- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-@@ -759,7 +759,7 @@ timesync_router: pinctrl@a40000 {
- 	};
- 
- 	usbss0: cdns-usb@f900000 {
--		compatible = "ti,am64-usb";
-+		compatible = "ti,am64-usb", "ti,j721e-usb";
- 		reg = <0x00 0xf900000 0x00 0x100>;
- 		power-domains = <&k3_pds 161 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 161 9>, <&k3_clks 161 1>;
+My bot found errors running 'make dt_binding_check' on your patch:
 
--- 
-2.45.2
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: properties:compatible:oneOf:1:items: 'oneOf' conditional failed, one must be fixed:
+	[{'enum': [{'const': 'ti,am64-usb'}, {'const': 'ti,j7200-usb'}]}, {'const': 'ti,j721e-usb'}] is not of type 'object'
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: properties:compatible:oneOf:1:items:0:enum: 'oneOf' conditional failed, one must be fixed:
+		{'const': 'ti,am64-usb'} is not of type 'integer'
+		{'const': 'ti,am64-usb'} is not of type 'string'
+		{'const': 'ti,j7200-usb'} is not of type 'integer'
+		{'const': 'ti,j7200-usb'} is not of type 'string'
+		hint: "enum" must be an array of either integers or strings
+		from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: properties:compatible:oneOf:1:items: 'oneOf' conditional failed, one must be fixed:
+	[{'enum': [{'const': 'ti,am64-usb'}, {'const': 'ti,j7200-usb'}]}, {'const': 'ti,j721e-usb'}] is not of type 'object'
+	{'const': 'ti,am64-usb'} is not of type 'string'
+	{'const': 'ti,j7200-usb'} is not of type 'string'
+	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240726-s2r-cdns-v5-2-8664bfb032ac@bootlin.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
