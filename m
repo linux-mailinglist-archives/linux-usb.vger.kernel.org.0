@@ -1,209 +1,150 @@
-Return-Path: <linux-usb+bounces-12479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29BC093DA31
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 23:30:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93F4793DA83
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 00:03:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D2F81C20843
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 21:30:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48E601F22127
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 22:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5103F149E1A;
-	Fri, 26 Jul 2024 21:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3m/ESuQ7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9B614E2CC;
+	Fri, 26 Jul 2024 22:02:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAF238DEE;
-	Fri, 26 Jul 2024 21:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC9714A086
+	for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2024 22:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722029443; cv=none; b=QBxb4p1qoWKASiF8lC0cHOUzikefWxyZKHh/0gyyteCub2a7zG3IsJNCGRh+2R2Gm4MxS7/i495zYPovt02dvGzINhoB8cXaVzkyRMOjrNgXFay44GYu1VqswddrFJNhg4BiBYNMQe6Wgjwq7wFq/s2KzGuOKzq0ZP7XuBiqEbI=
+	t=1722031378; cv=none; b=H3oAsNF7nznTAjwTZwnzcd2xd1RyLitmfimAJ1b/b4Q6wUqqR82ZRXk9lzZAk0d1kmvSq/lYxM7Stz5Bb/Ce9J7oEJIVtSYZxAgtMzM943DlSCufbMZbWkFDU/R6Cgm4PRux00EItdZDHrB/S+tLzHsWYJUkgX7nVV82dudkxgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722029443; c=relaxed/simple;
-	bh=P0f+aG8YLTqaJQzziKinOzYx/AvYQ071j9jvqmbzf0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dJFpXGt9MaERuGpq4o45LftTaEpx1nZkQJYboEpmhwfDXWrfyHMe8yJM+gCFlNUv+DrgeEZr1oAXqufbRB42dJU1Hppw/DJfOa2igPFcg2h1W9pj7/t1DFcBHtn/YViWrwu9eSmJNniVfwzC8AoQbxVrm1a1KXzylXy0Jhmz92s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=3m/ESuQ7; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722029440;
-	bh=P0f+aG8YLTqaJQzziKinOzYx/AvYQ071j9jvqmbzf0k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=3m/ESuQ7CpqiyowL8oOI/ML1V6ite/dxLIaZZpmcnoegbNQ0JVnyLn0Re+SywaqD6
-	 XC9ltiELzCFTvhr6YF1vQtPpTznfSUmJ+H4zoBvqTrz7Wnogs1icgzlXowPwTHPB50
-	 oEGh4K0UOgk6E3AlAzOnhp8jeSln42FGd+rVoY7OGv+VxHNl3ETPNwOCPHjjnzaqCL
-	 8G1IDsiZEz5stqV7wfd8BsCLwcTKGXsyPJnCKP/63GHtWTRI18LGNNPu4cd1smcIKl
-	 06eFN2s+RWCrsjq14SqEE65mjKG8CBQ/X2ZkL1H02HazcCyvlUFAAfpLIq1pxsNg4e
-	 IaCIhYFqGPreA==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3D56537821C0;
-	Fri, 26 Jul 2024 21:30:40 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id A1264106097F; Fri, 26 Jul 2024 23:30:37 +0200 (CEST)
-Date: Fri, 26 Jul 2024 23:30:37 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com, 
-	linux-usb@vger.kernel.org, bleung@google.com, abhishekpandit@chromium.org, 
-	andersson@kernel.org, fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] usb: typec: ucsi: Add status to UCSI power supply
- driver
-Message-ID: <up2clptjacrc2n2ibzkpv5od47pky6im3pzzgjuymm4xd7ielu@ulg7lb2u5lih>
-References: <20240724201116.2094059-1-jthies@google.com>
- <20240724201116.2094059-2-jthies@google.com>
- <tzljywuym6jsh5q5iuc7rrtq564d3ffl3e4ltuii7xzkd6cf7d@2nmj5qkusbkt>
+	s=arc-20240116; t=1722031378; c=relaxed/simple;
+	bh=G0BEnwqGJG76k3f/c8zaJ/Nltc1mlmkYFI+LzqJDZEI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=C24LoqINYfGkiSqiyT3RFCJ871ChabRRRKDcl27NBQyQUWT28Xkm71J9n9rdwC6XYSwCPG8aa9tdljP3+xIgTVBbVVgATs+xWx3w+TowfQnL/cWMn9hiRa7Egch9wgrXmApFv5VzhaLnoCVMQo8sSWhmrBi7wI3j0y/gJs33IcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1sXT1Q-0005Mk-RF; Sat, 27 Jul 2024 00:02:44 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1sXT1P-002Qht-SF; Sat, 27 Jul 2024 00:02:43 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1sXT1P-00FdLn-2Z;
+	Sat, 27 Jul 2024 00:02:43 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH v3 00/10] usb: gadget: uvc: effectively fill the udc isoc
+ pipeline with available video buffers
+Date: Sat, 27 Jul 2024 00:02:35 +0200
+Message-Id: <20240403-uvc_request_length_by_interval-v3-0-4da7033dd488@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gxaustdnzg6e6jcp"
-Content-Disposition: inline
-In-Reply-To: <tzljywuym6jsh5q5iuc7rrtq564d3ffl3e4ltuii7xzkd6cf7d@2nmj5qkusbkt>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPscpGYC/5XOQQ6DIBAF0Ks0rEuDYKF21Xs0DUEZlMSgBSQa4
+ 92Lbrtpl/9n8v6sKIC3END9tCIPyQY7uBzY+YSaTrkWsNU5I0poSUrC8JQa6eE9QYiyB9fGTta
+ LtC6CT6rHSoDR15vQFWcoI7UKgGuvXNNlxk19n8vRg7Hzsfp85dzZEAe/HE+kYm9/3ksFJrgqG
+ W9KUXDK2GPMR1P0g7PzRQPa/UT/M2k2C8orYoSiYMyXuW3bB14VQ1M6AQAA
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Daniel Scally <dan.scally@ideasonboard.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Avichal Rakesh <arakesh@google.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2708;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=G0BEnwqGJG76k3f/c8zaJ/Nltc1mlmkYFI+LzqJDZEI=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmpBz97ISPYedwFkDftib2FuKjxHuz95hUW1z6g
+ iCYRZ4U9e2JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZqQc/QAKCRC/aVhE+XH0
+ q5oKD/0WvLY/rwHpHmXuubapFuKETrJES+2dIoDTFRsuUyZBHB5NSqBg2rVNvR0375MxeJPiYEQ
+ hwEhDeO4A9X1OLdQH3FnEGkraZDrP48j1FJ/fnRO71CIzadOStoPzXXYd5noZq5cDZI5uPcJkzt
+ oJ+CGRDFDV6B1BLz6KB4rm/DDwbCI7MXD0sUp1eHPCet6iACZb6WFDkHy9eGwVHnUlTi+qbcECK
+ QUHLIPWEJiE0EGUFL49R+ZZfw8VxbC0SGdvClZbXXyRgmXkqNBM4JtPfP4wZhU2jjCVbzK4+RMP
+ rQZCMP852ZFqHZNZt3E1TWILx4m5w5Te0OqsJky8dkAkXsokLyiMS0e/NQ2uW75bFFBgWeDlXYR
+ gJ3/zRuFTBMjsjZ8YtglfFCLUjh3xzkZcBYRL1cm1XzETNyL81d6Y4hBtXMhlyH46WKGTFKeGqJ
+ TPTmTlNXI+B3VwkYh6a/DwFZ6U9FaMyJMfikkBjFoBLrmZoyNEUMvRMMvOXPJHBi+LsEhiMrMQU
+ BL62SDctv2rPeUWXl8GG6WSOdPqR3kjlQsYK4FH+Bekm8Si0dNphsVCRuhm1JU5TtZiacpCxBGb
+ Fdw1kzD8q0ptVG3WLqXICRk4mdxEYdWfKpxrEy3+ncWXPjLzsirsUiOdoFQ5+Zd1vNNRoimg9YM
+ rj6z0y+inY/EDKQ==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
+This patch series is improving the size calculation and allocation of
+the uvc requests. Using the selected frame duration of the stream it is
+possible to calculate the number of requests based on the interval
+length.
 
---gxaustdnzg6e6jcp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It also precalculates the request length based on the actual per frame
+size for compressed formats.
 
-Hi,
+For this calculations to work it was needed to rework the request
+queueing by moving the encoding to one extra thread (in this case we
+chose the qbuf) context.
 
-On Thu, Jul 25, 2024 at 06:31:00AM GMT, Dmitry Baryshkov wrote:
-> On Wed, Jul 24, 2024 at 08:11:13PM GMT, Jameson Thies wrote:
-> > Add status to UCSI power supply driver properties based on the port's
-> > connection and power direction states.
-> >=20
-> > Signed-off-by: Jameson Thies <jthies@google.com>
->=20
-> Please CC Power Supply maintainers for this patchset (added to cc).
+Next it was needed to move the actual request enqueueing to one extra
+thread which is kept busy to fill the isoc queue in the udc.
 
-Thanks. I guess I should add something like this to MAINTAINERS
-considering the power-supply bits are in its own file for UCSI:
+As a final step the series is increasing the minimum amount of
+v4l2 buffers to 4 and allocates at least the amount of usb_requests
+to store them in the usb gadgte isoc pipeline.
 
-UCSI POWER-SUPPLY API
-R:	Sebastian Reichel <sre@kernel.org>
-L:	linux-pm@vger.kernel.org
-F:	drivers/usb/typec/ucsi/psy.c
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+Changes in v3:
+- Added more patches necessary to properly rework the request queueing
+- Link to v2: https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v2-0-12690f7a2eff@pengutronix.de
 
-> At least per the Documentation/ABI/testing/sysfs-class-power, the status
-> property applies to batteries, while UCSI psy device is a charger. This
-> is logical, as there might be multiple reasons why the battery is not
-> being charging even when the supply is online.
+Changes in v2:
+- added header size into calculation of request size
+- Link to v1: https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v1-0-9436c4716233@pengutronix.de
 
-Correct. These status bits are not meant for chargers. E.g.
-POWER_SUPPLY_STATUS_NOT_CHARGING has a very specific meaning, that a
-battery is neither charged nor discharged. Since the device is
-running that can only happen when a charger is connected, but not
-charging (or the device has two batteries).
+---
+Michael Grzeschik (10):
+      usb: gadget: uvc: always set interrupt on zero length requests
+      usb: gadget: uvc: only enqueue zero length requests in potential underrun
+      usb: gadget: uvc: remove pump worker and enqueue all buffers per frame in qbuf
+      usb: gadget: uvc: rework to enqueue in pump worker from encoded queue
+      usb: gadget: uvc: remove uvc_video_ep_queue_initial_requests
+      usb: gadget: uvc: set req_size once when the vb2 queue is calculated
+      usb: gadget: uvc: add g_parm and s_parm for frame interval
+      usb: gadget: uvc: set req_size and n_requests based on the frame interval
+      usb: gadget: uvc: set req_length based on payload by nreqs instead of req_size
+      usb: gadget: uvc: add min g_ctrl vidioc and set min buffs to 4
 
-For AC the power-supply API has been designed only taking the SINK
-role into account. At some point USB was added and some time later
-people added reverse mode to their USB chargers for OTG mode. So
-far this has been handled by registering a regulator and using that
-to switch the mode. This made sense for OTG, but USB-C PD makes
-things even more complex.
+ drivers/usb/gadget/function/f_uvc.c     |   3 +-
+ drivers/usb/gadget/function/uvc.h       |  14 +-
+ drivers/usb/gadget/function/uvc_queue.c |  52 +++++--
+ drivers/usb/gadget/function/uvc_queue.h |   1 +
+ drivers/usb/gadget/function/uvc_v4l2.c  |  67 ++++++++-
+ drivers/usb/gadget/function/uvc_video.c | 236 +++++++++++++-------------------
+ drivers/usb/gadget/function/uvc_video.h |   1 +
+ 7 files changed, 215 insertions(+), 159 deletions(-)
+---
+base-commit: 1722389b0d863056d78287a120a1d6cadb8d4f7b
+change-id: 20240403-uvc_request_length_by_interval-a7efd587d963
 
-I am open to ideas how to properly handle the source role in the
-power-supply API, but let's not overload the status property for
-it. Please make sure to CC me on any follow-up series.
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
--- Sebastian
-
->=20
-> > ---
-> > Changes in V2:
-> > - None.
-> >=20
-> >  drivers/usb/typec/ucsi/psy.c | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> >=20
-> > diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-> > index e623d80e177c..d0b52cee41d2 100644
-> > --- a/drivers/usb/typec/ucsi/psy.c
-> > +++ b/drivers/usb/typec/ucsi/psy.c
-> > @@ -29,6 +29,7 @@ static enum power_supply_property ucsi_psy_props[] =
-=3D {
-> >  	POWER_SUPPLY_PROP_CURRENT_MAX,
-> >  	POWER_SUPPLY_PROP_CURRENT_NOW,
-> >  	POWER_SUPPLY_PROP_SCOPE,
-> > +	POWER_SUPPLY_PROP_STATUS,
-> >  };
-> > =20
-> >  static int ucsi_psy_get_scope(struct ucsi_connector *con,
-> > @@ -51,6 +52,20 @@ static int ucsi_psy_get_scope(struct ucsi_connector =
-*con,
-> >  	return 0;
-> >  }
-> > =20
-> > +static int ucsi_psy_get_status(struct ucsi_connector *con,
-> > +			       union power_supply_propval *val)
-> > +{
-> > +	val->intval =3D POWER_SUPPLY_STATUS_NOT_CHARGING;
-> > +	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
-> > +		if ((con->status.flags & UCSI_CONSTAT_PWR_DIR) =3D=3D TYPEC_SINK)
-> > +			val->intval =3D POWER_SUPPLY_STATUS_CHARGING;
-> > +		else
-> > +			val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int ucsi_psy_get_online(struct ucsi_connector *con,
-> >  			       union power_supply_propval *val)
-> >  {
-> > @@ -249,6 +264,8 @@ static int ucsi_psy_get_prop(struct power_supply *p=
-sy,
-> >  		return ucsi_psy_get_current_now(con, val);
-> >  	case POWER_SUPPLY_PROP_SCOPE:
-> >  		return ucsi_psy_get_scope(con, val);
-> > +	case POWER_SUPPLY_PROP_STATUS:
-> > +		return ucsi_psy_get_status(con, val);
-> >  	default:
-> >  		return -EINVAL;
-> >  	}
-> > --=20
-> > 2.45.2.1089.g2a221341d9-goog
-> >=20
->=20
-> --=20
-> With best wishes
-> Dmitry
-
---gxaustdnzg6e6jcp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmakFXcACgkQ2O7X88g7
-+pr57w/9EBA0L5P8nxUJlgmdL1QGR61UIchbd0Re+ABJCNxJfrMpa/GjOD+trxe+
-mqQcT05CvS2PUjadGvzUFOfisoVA93gIb19Y37spHrSyQED4hcEzz24CEmwgSeGi
-oEdp7JytIKeI+uUZ+1pKHe+eiJbG1dTK/ol5f9ZhziAplbXFJ3E8aWQouPsodknE
-GFPRTj5nroyvVgsIOXdqWIHDyKIMD8m3AfAxWTb5rvKRICmegIlY/hQx8Q+h1+CX
-hvmMprU5ZeFBL2dJmmiH1kth04K437g0bW1OM1wfgcXALYFTXk0/3MWiu2xBUHZN
-SXLTRCVv2fz1cxJlPBbeNZxq3ZWQ5tkfgwEEOL7uSgZHUgJ7kcS15rd2ty80vV8o
-fgITMohtiM1Oclv1HiHgx58TkJyv/LJ0ttz/fzntkCVT5gKff5u97HUhrDm5r1iK
-2X9KcL+jkIouP/e7RM7iQdGxlVd/p3dQmoK3ioxZln05MwEEMjl3rNwnsLa3Bh4/
-FQKOMsY3kV9S3vbN/TLld5n5P+B6HtQ+UEV9ku6OC3ZV4GkACVja+pT3lEj0TXwE
-m4MdQlXjwrd3kIBb8mZzMxXmhjMbmVifkPPZ6ip9jJBg4ZhKtD4hfJM3XzPjWNhd
-dMq1QHhJ3GYXoL17xb7p4CZllvjgZ3WIQL9Mb2pAu6fe5ZCqvLA=
-=kjxQ
------END PGP SIGNATURE-----
-
---gxaustdnzg6e6jcp--
 
