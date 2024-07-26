@@ -1,109 +1,93 @@
-Return-Path: <linux-usb+bounces-12439-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12440-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42FA93CDF9
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 08:07:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D976293CE5D
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 08:55:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21A791C20DB9
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 06:07:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16DB81C20D73
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 06:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E757E1741C3;
-	Fri, 26 Jul 2024 06:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD6E17622D;
+	Fri, 26 Jul 2024 06:55:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="El49WGRJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ldU7r6Ix"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C3B3BB47;
-	Fri, 26 Jul 2024 06:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5C6173332;
+	Fri, 26 Jul 2024 06:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721974046; cv=none; b=X3Qqq6fgAWKCFGCg3r7lmKOhp+hK0FBHb8hX2IQOeUeQ5dqhD4yox3AikyC0KN0kOFGIATFlh+8EwJ/IrViddk1F+fALELMh95/JCFHS/GKQafZf4WW3a/CbvQCxCW4MAb4Wb8ZUlaA3KfkF0sybntqim8uvovZ1qXGG5lxVEWw=
+	t=1721976953; cv=none; b=RE2TIYCjaNXa01H9rYp3w6e76aHTV1OTQhu37EQItZbwbp74Z03uGWDuZeW71D27w63h89NI0ULSFvOUIaDJwRM1YKaOEJIWzVI306JvCnUOCRVSG5HMh4s1gI0Mz3UdAFnPbIhGdzP6/Yi15E2y4BP8n1dyHwhuc9LwbyAmzW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721974046; c=relaxed/simple;
-	bh=8qS+Fwd0ICFyex9iDNDVCSEocHgv9Bux9McuoOJS/Gs=;
+	s=arc-20240116; t=1721976953; c=relaxed/simple;
+	bh=bdIwJ/4nu4+KCxJe0alUQUJf38MsA69moluw9BRz+lw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b81d8r9Fr8rw/K+h2oDJR/LR1FhsVXFTSVXtxHC8jw32p0Nr0Jp7l0dnMojEObU33JKKtrZnV2ZkK+molX1u5a308VwolUrnGr40mR2vjAHk1YmAKemtVi1btmVhgLZ5XmCrdMRmdav//Q55hVzLoHguP84NSKJlJQjQhyQCxDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=El49WGRJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7805EC32782;
-	Fri, 26 Jul 2024 06:07:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=JhUHkdoum0c820p5V/EYgqrHk+o3e/V4h5DuVYHJwEeJa8d7Y6ez0GLnfqcPBb+xKOJDT4u78b94g3LMbOd7/b7QQ0WHdRWoZ8Pd39SD7sW90hZJQFSSriHHxV8cUrpLXNgktiRLiJ7dTJGs0RdxGdQoqyskK/7eRduBTRMa3Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ldU7r6Ix; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D35FBC32782;
+	Fri, 26 Jul 2024 06:55:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1721974045;
-	bh=8qS+Fwd0ICFyex9iDNDVCSEocHgv9Bux9McuoOJS/Gs=;
+	s=korg; t=1721976952;
+	bh=bdIwJ/4nu4+KCxJe0alUQUJf38MsA69moluw9BRz+lw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=El49WGRJ7P1Rnu7IGUp3dNr7ST1P0k9sLogyxHYGzUphJzKRrwEc9ceca2NgeJtWC
-	 MURStbv79uJieMTby1mR+fzEoI2IaI/y4TFEqMa3FIaodhQ3yIQkW2/XCQIvtprqFr
-	 nyA6HBARv/S9KidaMxq6FLIsL6qn2hVoaI4Qz274=
-Date: Fri, 26 Jul 2024 08:07:22 +0200
+	b=ldU7r6IxYyHdQvPgsui9cjPZ36y6gCclT7KzRjlOQan3mtNbRhCI7MsRbkQSCfsuh
+	 tHDGh8c3KiQ+NtGlGYVgT1cN6cnCr59Ilk0pSdCIl60LbCJlXgWsYKUX9hRSG+/5Op
+	 LqonJE9tNjbh7nBGaOBz1TB+QQgPPCRE3iPFe5OE=
+Date: Fri, 26 Jul 2024 08:55:49 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
-	RD Babiera <rdbabiera@google.com>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm/tcpci_maxim: fix non-contaminant CC
- handling
-Message-ID: <2024072659-movable-fossil-8810@gregkh>
-References: <20240710-max33359-toggling-v1-1-f6dc123f3a0a@linaro.org>
- <1e650f29c2714b5f390a2bf5edf5920c2975fbac.camel@linaro.org>
+To: Shenwei Wang <shenwei.wang@nxp.com>
+Cc: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Roger Quadros <rogerq@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Frank Li <frank.li@nxp.com>,
+	linux-usb@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
+Subject: Re: [PATCH] usb: cdns3: imx: simplify system pm using
+ _force_suspend/_resume
+Message-ID: <2024072635-egging-suffix-92d5@gregkh>
+References: <20240725212811.296307-1-shenwei.wang@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1e650f29c2714b5f390a2bf5edf5920c2975fbac.camel@linaro.org>
+In-Reply-To: <20240725212811.296307-1-shenwei.wang@nxp.com>
 
-On Fri, Jul 26, 2024 at 07:01:13AM +0100, André Draszik wrote:
-> Hi,
+On Thu, Jul 25, 2024 at 04:28:11PM -0500, Shenwei Wang wrote:
+> By utilizing _force_suspend and _force_resume, ensures a more consistent
+> and simple approach to handling system sleep states. It also aligns the
+> driver's PM behavior with the other drivers' common practices.
 > 
-> On Wed, 2024-07-10 at 07:28 +0100, André Draszik wrote:
-> > tcpci_maxim currently never triggers the TCPM state machine when CC
-> > status has not changed due to a contaminant but due to a real
-> > connection event, i.e. a genuine plug event, meaning the system will
-> > stay idle and not notify any subscribers.
-> > 
-> > The reason is that the initial state of the port is 'toggling', which
-> > causes _max_tcpci_irq() to only drive the contamination part of the
-> > TCPM state machine (via tcpm_port_clean()).
-> > 
-> > What should happen instead is that if no contamination was detected,
-> > the TCPM should be notified of the CC change in this case.
-> > 
-> > To fix this, we update ...is_contaminant() to also allow its caller to
-> > determine if more CC processing is required and then call into the TCPM
-> > as required.
-> > 
-> > While at it, add a kernel-doc for max_contaminant_is_contaminant().
-> > 
-> > Note: the code has an issue where I2C errors during contaminant
-> > detection also cause the TCPM state machine to not be updated. This
-> > commit doesn't change this behaviour and should be addressed by
-> > follow-up commit(s).
-> > 
-> > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> > ---
-> >  drivers/usb/typec/tcpm/maxim_contaminant.c |  7 +++++--
-> >  drivers/usb/typec/tcpm/tcpci_maxim.h       | 15 ++++++++++++++-
-> >  drivers/usb/typec/tcpm/tcpci_maxim_core.c  | 12 ++++++++----
-> >  3 files changed, 27 insertions(+), 7 deletions(-)
+> Fixes: db3c4e366287 ("usb: cdns3: imx: Rework system PM to avoid duplicated operations")
+> Reviewed-by: Frank Li <frank.li@nxp.com>
+> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+> ---
+>  drivers/usb/cdns3/cdns3-imx.c | 18 +++++++-----------
+>  1 file changed, 7 insertions(+), 11 deletions(-)
 > 
-> Any comments on this patch?
+> diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
+> index 281de47e2a3b..9051cbe9d68b 100644
+> --- a/drivers/usb/cdns3/cdns3-imx.c
+> +++ b/drivers/usb/cdns3/cdns3-imx.c
+> @@ -360,7 +360,6 @@ static int cdns_imx_suspend(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -
+>  /* Indicate if the controller was power lost before */
+>  static inline bool cdns_imx_is_power_lost(struct cdns_imx *data)
+>  {
 
-It's the middle of the merge window, nothing we can do until -rc1 is
-out...
+Unneeded change here?
 
-thanks,
-
-greg k-h
 
