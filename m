@@ -1,112 +1,310 @@
-Return-Path: <linux-usb+bounces-12452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8DA193D2E0
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 14:16:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8D9893D2EF
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 14:28:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62FC2B2237A
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 12:16:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC9EB1C21B24
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 12:28:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3397D17B4E0;
-	Fri, 26 Jul 2024 12:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC8A17A939;
+	Fri, 26 Jul 2024 12:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NCdlv0Iu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="khNp11hq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6473C179652
-	for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2024 12:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E666149001
+	for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2024 12:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721996150; cv=none; b=LThLv/LhtaMRFZeH5mQv6M5MRHWs3IRIRVjhN4kkCv4YM9GWPhN22yFlzjlZSPg3xJH1DMgx1MT7TENx1lZDTKQ+ylFbkp+nz241YbHZVK9EWCcFibVQI2y+v4fR0rT+E2iKzKqeCnnJ2lqHkAP5IUOaUQmGp7rY2LwY36UHU10=
+	t=1721996905; cv=none; b=n0V9zEVSMP9/xZ+GBc7ug+39oWYtKC/ObWdGXj59FZNZHZ1SUa/0TQiV372C7JduVoO60Q+uQcyvWqoK8fWH0bnoZ5LMWQDhYAWM7rlTobvi5JIK0OQ9y/l1XGg++dMP6S7XbaQr9bss8JHuteYPHFEEx9rVUqWZRsR/2hYsy0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721996150; c=relaxed/simple;
-	bh=zpYoC0bKWO/E8vU/OfmKM5HXzkjJBLVwbnPHaL9Kgtk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SiggbyUlFt/OUTzZMTKnexTLDEJyTQgwIMwbl5k7snF960XPq+mgNWI/CoDRnNdwDb4PkYxT/ILRr6XhXOPmrucO9IYiPpSH+aLeMjihQfOVauIn2iv1wKzWoIY2YMBzPhPtrnDDbb61WZhbBIoBA0QEXntNNw4G2EH8wkwJjpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NCdlv0Iu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721996148;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2Ia6UsEbsS9+W6Fb8WCpi2quyjabb0b4//2sWiMCJBA=;
-	b=NCdlv0Iu6UnnB4SggiudQXLZTnmY438xjgugAWJ6U4jkYlNn8OkPuUzCBOGAmUg+qstTa7
-	aHz8cFu0ANgRP/N1brztH3Qfi/pRc5AT4JiT2dzywPDKGU8P64+nJlYE1dNAFiEFXmy8+s
-	4ppLsjbJs0A4S7P+8sHnJiZudj/N95o=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-351-rheZr8p8M5O7cxbTjh0r_w-1; Fri,
- 26 Jul 2024 08:15:42 -0400
-X-MC-Unique: rheZr8p8M5O7cxbTjh0r_w-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4E10A1955D4E;
-	Fri, 26 Jul 2024 12:15:39 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.105])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C75801955D42;
-	Fri, 26 Jul 2024 12:15:32 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: andrew@lunn.ch
-Cc: UNGLinuxDriver@microchip.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	f.fainelli@gmail.com,
-	gregkh@linuxfoundation.org,
-	jtornosm@redhat.com,
-	kuba@kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	lucas.demarchi@intel.com,
-	masahiroy@kernel.org,
-	mcgrof@kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	woojung.huh@microchip.com
-Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy module
-Date: Fri, 26 Jul 2024 14:15:26 +0200
-Message-ID: <20240726121530.193547-1-jtornosm@redhat.com>
-In-Reply-To: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch>
-References: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch>
+	s=arc-20240116; t=1721996905; c=relaxed/simple;
+	bh=TjL4FuKgEzcXR/oQoRa1LoU+uuqSqazO4fyDUPzGJx8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Bu2tipq4nVIbR4ESY2xs0Zom0fRkzQBr8YnPzQCuBqouPqSwYquW2RsledXb6kl1Hqchlw2IGSqCMYxAGLyVpBnRv89GD4dTGlDFCm1TsM2Z4/0ZYwLD8a//NZz6ZztDuKc7220skKknS1FO4yJyp+FKzQ4PjYzhsd/urpDsKOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=khNp11hq; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-669f8778d6bso55374857b3.0
+        for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2024 05:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1721996903; x=1722601703; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e5hfWIomveSKSbFLIYbxIdGK2baB0bvKEFr0kJ2FhDs=;
+        b=khNp11hqgTvxQJhvu6oB5b1B3cmY3SBiVdzBOVChrZAwgwf+qwdSy3RXXpOF35p1th
+         5EkNR+RasgUYYV7g7eP1/5dAlPrZfVZCS4m3EmnKnkEhbi2WuOiEccMd6GnrX4QfS+Bj
+         l5Xt0PRrxV0Wg4ndGZnyEN+aVWVJhOk2ozB+EF9TNe+9VE/wkesMur1FrxUZddETTucC
+         IFrvw9VCHZVIAFGTPQMZ+fun0k7HkXhqVc+6v/0IdLgs94G3T0FlGB89wqVI8ZRdoSvP
+         dL6x9xaXE4Bwgly6kd4OsYhD3OG/4FnedIde2xMeVds8lTqhCCbcKOVsBRf/rh2t3Tk+
+         RI4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721996903; x=1722601703;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e5hfWIomveSKSbFLIYbxIdGK2baB0bvKEFr0kJ2FhDs=;
+        b=McSMF43l4VqtuBHvq3dlP7lKkNVNU1O0wDdT5WtynqXtFMBGHZulHQHpN0GfzFVNsV
+         tNiSmWqjt3CDS4b/QQhilBMkCk+/Ky+D8x0UfxfeYYqxDewu0AWDx3R1I4EcMpX8nCBs
+         Hs4KUgfUw5p8cElJYvTdnLYLRvdG21BbhVqOkEUH9B9ar+LgI6JyJXZ368y8Pa6Z/wPR
+         WT7oOkq9U8vvlUzstdcjPwV5VYKMwUAEyNZNwtqsZjQBWssTUHIlv1Oe56w+w69niFDL
+         nzDQ/rIhQrV90RYQLWht1PU+BaJWU+Cvum1JV7yTIDqeOV7lN5Dahx0EYtBCGLBNf/Zn
+         z6ww==
+X-Forwarded-Encrypted: i=1; AJvYcCU/xYj09LX5Cwg5oGv4DYUMixD+Eorz9LAH+OisP4rBQ6MREzMhUHlRoUQ6JdWuVAFPS4blDmlx9nRMpT7IE0ZWs/gcdBokWzAP
+X-Gm-Message-State: AOJu0YwTQJ+kNbgyUqxZyzTqXb1uwiD+Xb+18inz3xvic3QX2eymBdgD
+	HNv5k0j/PCvN0jwmzgqvfgnREz+kfzJSgTlKB3UECL4H2ViZBowJbuA68QQVxdwpq1VQ1jM44sW
+	f/ykaZg==
+X-Google-Smtp-Source: AGHT+IH5Ulm8vRlJh5iJ5QC2ZfhQWC6E4sLBU65jLwjlYWjC3ZeJW3trdzoHRikG50LjNLinHJTGLFxj/eZv
+X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:a7:c:ee6b:f81a:350c:ce96])
+ (user=kyletso job=sendgmr) by 2002:a05:690c:6612:b0:64b:3997:8bb4 with SMTP
+ id 00721157ae682-675baec1314mr2730757b3.4.1721996903139; Fri, 26 Jul 2024
+ 05:28:23 -0700 (PDT)
+Date: Fri, 26 Jul 2024 20:28:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
+Message-ID: <20240726122814.729082-1-kyletso@google.com>
+Subject: [PATCH v2] usb: dwc3: Runtime get and put usb power_supply handle
+From: Kyle Tso <kyletso@google.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, raychi@google.com
+Cc: badhri@google.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	royluo@google.com, bvanassche@acm.org, Kyle Tso <kyletso@google.com>, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello Andrew,
+It is possible that the usb power_supply is registered after the probe
+of dwc3. In this case, trying to get the usb power_supply during the
+probe will fail and there is no chance to try again. Also the usb
+power_supply might be unregistered at anytime so that the handle of it
+in dwc3 would become invalid. To fix this, get the handle right before
+calling to power_supply functions and put it afterward.
 
-> What this does appear to do is differentiate between 'pre' which will
-> load the kernel module before it is requested. Since there is no 'pre'
-> for this, it seems pointless whacking this mole.
-Precisely, we need to fix the lan78xx case with micrel phy (and other
-possible phy modules) too, due to the commented issue generating initramfs
-in order to include the phy module. 
+Fixes: 6f0764b5adea ("usb: dwc3: add a power supply for current control")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+v1 -> v2:
+- move power_supply_put out of interrupt context
 
-> What to me make more sense it to look at all the existing 'pre'
-> drivers and determine if they can be converted to use this macro.
-Of course, now that we have the possibility we can do this with other cases
-that have been already detected (and fixed with a softdep pre) and others
-still not detected (if anyone apart from lan78xx).
+ drivers/usb/dwc3/core.c   | 62 ++++++++++++++++++++++++++-------------
+ drivers/usb/dwc3/core.h   | 10 +++++--
+ drivers/usb/dwc3/gadget.c | 10 +------
+ 3 files changed, 51 insertions(+), 31 deletions(-)
 
-Thanks
-
-Best regards
-José Ignacio
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 734de2a8bd21..9978067b7734 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -283,6 +283,38 @@ void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
+ 	queue_work(system_freezable_wq, &dwc->drd_work);
+ }
+ 
++static void __dwc3_set_gadget_vbus_draw(struct work_struct *work)
++{
++	struct dwc3 *dwc = vbus_work_to_dwc(work);
++	struct power_supply *usb_psy;
++	union power_supply_propval val = {};
++	int ret;
++
++	usb_psy = power_supply_get_by_name(dwc->usb_psy_name);
++	if (!usb_psy) {
++		dev_err(dwc->dev, "couldn't get usb power supply\n");
++		return;
++	}
++
++	val.intval = 1000 * READ_ONCE(dwc->vbus_draw_ma);
++	ret = power_supply_set_property(usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
++	if (ret < 0)
++		dev_err(dwc->dev, "failed to set power supply property\n");
++
++	power_supply_put(usb_psy);
++}
++
++int dwc3_set_gadget_vbus_draw(struct dwc3 *dwc, unsigned int mA)
++{
++	if (!dwc->usb_psy_name)
++		return -EOPNOTSUPP;
++
++	WRITE_ONCE(dwc->vbus_draw_ma, mA);
++	queue_work(system_highpri_wq, &dwc->vbus_draw_work);
++
++	return 0;
++}
++
+ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type)
+ {
+ 	struct dwc3		*dwc = dep->dwc;
+@@ -1631,8 +1663,6 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 	u8			tx_thr_num_pkt_prd = 0;
+ 	u8			tx_max_burst_prd = 0;
+ 	u8			tx_fifo_resize_max_num;
+-	const char		*usb_psy_name;
+-	int			ret;
+ 
+ 	/* default to highest possible threshold */
+ 	lpm_nyet_threshold = 0xf;
+@@ -1667,12 +1697,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 
+ 	dwc->sys_wakeup = device_may_wakeup(dwc->sysdev);
+ 
+-	ret = device_property_read_string(dev, "usb-psy-name", &usb_psy_name);
+-	if (ret >= 0) {
+-		dwc->usb_psy = power_supply_get_by_name(usb_psy_name);
+-		if (!dwc->usb_psy)
+-			dev_err(dev, "couldn't get usb power supply\n");
+-	}
++	device_property_read_string(dev, "usb-psy-name", &dwc->usb_psy_name);
+ 
+ 	dwc->has_lpm_erratum = device_property_read_bool(dev,
+ 				"snps,has-lpm-erratum");
+@@ -2130,21 +2155,22 @@ static int dwc3_probe(struct platform_device *pdev)
+ 
+ 	dwc3_get_properties(dwc);
+ 
++	if (dwc->usb_psy_name)
++		INIT_WORK(&dwc->vbus_draw_work, __dwc3_set_gadget_vbus_draw);
++
+ 	dwc3_get_software_properties(dwc);
+ 
+ 	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+-	if (IS_ERR(dwc->reset)) {
+-		ret = PTR_ERR(dwc->reset);
+-		goto err_put_psy;
+-	}
++	if (IS_ERR(dwc->reset))
++		return PTR_ERR(dwc->reset);
+ 
+ 	ret = dwc3_get_clocks(dwc);
+ 	if (ret)
+-		goto err_put_psy;
++		return ret;
+ 
+ 	ret = reset_control_deassert(dwc->reset);
+ 	if (ret)
+-		goto err_put_psy;
++		return ret;
+ 
+ 	ret = dwc3_clk_enable(dwc);
+ 	if (ret)
+@@ -2245,9 +2271,6 @@ static int dwc3_probe(struct platform_device *pdev)
+ 	dwc3_clk_disable(dwc);
+ err_assert_reset:
+ 	reset_control_assert(dwc->reset);
+-err_put_psy:
+-	if (dwc->usb_psy)
+-		power_supply_put(dwc->usb_psy);
+ 
+ 	return ret;
+ }
+@@ -2258,6 +2281,8 @@ static void dwc3_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_get_sync(&pdev->dev);
+ 
++	if (dwc->usb_psy_name)
++		cancel_work_sync(&dwc->vbus_draw_work);
+ 	dwc3_core_exit_mode(dwc);
+ 	dwc3_debugfs_exit(dwc);
+ 
+@@ -2276,9 +2301,6 @@ static void dwc3_remove(struct platform_device *pdev)
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 
+ 	dwc3_free_event_buffers(dwc);
+-
+-	if (dwc->usb_psy)
+-		power_supply_put(dwc->usb_psy);
+ }
+ 
+ #ifdef CONFIG_PM
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 1e561fd8b86e..b82eed4ad2b2 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -993,6 +993,8 @@ struct dwc3_scratchpad_array {
+ /**
+  * struct dwc3 - representation of our controller
+  * @drd_work: workqueue used for role swapping
++ * @vbus_draw_work: work used for setting Vbus current through power_supply
++ * @vbus_draw_ma: Vbus current draw to be set
+  * @ep0_trb: trb which is used for the ctrl_req
+  * @bounce: address of bounce buffer
+  * @setup_buf: used while precessing STD USB requests
+@@ -1045,7 +1047,7 @@ struct dwc3_scratchpad_array {
+  * @role_sw: usb_role_switch handle
+  * @role_switch_default_mode: default operation mode of controller while
+  *			usb role is USB_ROLE_NONE.
+- * @usb_psy: pointer to power supply interface.
++ * @usb_psy_name: name of the usb power supply interface.
+  * @usb2_phy: pointer to USB2 PHY
+  * @usb3_phy: pointer to USB3 PHY
+  * @usb2_generic_phy: pointer to array of USB2 PHYs
+@@ -1163,6 +1165,8 @@ struct dwc3_scratchpad_array {
+  */
+ struct dwc3 {
+ 	struct work_struct	drd_work;
++	struct work_struct	vbus_draw_work;
++	unsigned int		vbus_draw_ma;
+ 	struct dwc3_trb		*ep0_trb;
+ 	void			*bounce;
+ 	u8			*setup_buf;
+@@ -1223,7 +1227,7 @@ struct dwc3 {
+ 	struct usb_role_switch	*role_sw;
+ 	enum usb_dr_mode	role_switch_default_mode;
+ 
+-	struct power_supply	*usb_psy;
++	const char		*usb_psy_name;
+ 
+ 	u32			fladj;
+ 	u32			ref_clk_per;
+@@ -1394,6 +1398,7 @@ struct dwc3 {
+ #define INCRX_UNDEF_LENGTH_BURST_MODE 1
+ 
+ #define work_to_dwc(w)		(container_of((w), struct dwc3, drd_work))
++#define vbus_work_to_dwc(w)	container_of((w), struct dwc3, vbus_draw_work)
+ 
+ /* -------------------------------------------------------------------------- */
+ 
+@@ -1554,6 +1559,7 @@ struct dwc3_gadget_ep_cmd_params {
+ /* prototypes */
+ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode);
+ void dwc3_set_mode(struct dwc3 *dwc, u32 mode);
++int dwc3_set_gadget_vbus_draw(struct dwc3 *dwc, unsigned int mA);
+ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type);
+ 
+ #define DWC3_IP_IS(_ip)							\
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89fc690fdf34..93bf348c24eb 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3050,19 +3050,11 @@ static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
+ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+ {
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+-	union power_supply_propval	val = {0};
+-	int				ret;
+ 
+ 	if (dwc->usb2_phy)
+ 		return usb_phy_set_power(dwc->usb2_phy, mA);
+ 
+-	if (!dwc->usb_psy)
+-		return -EOPNOTSUPP;
+-
+-	val.intval = 1000 * mA;
+-	ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
+-
+-	return ret;
++	return dwc3_set_gadget_vbus_draw(dwc, mA);
+ }
+ 
+ /**
+-- 
+2.46.0.rc1.232.g9752f9e123-goog
 
 
