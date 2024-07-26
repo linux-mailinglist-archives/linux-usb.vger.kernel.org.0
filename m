@@ -1,113 +1,95 @@
-Return-Path: <linux-usb+bounces-12442-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12443-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CD1793D002
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 11:00:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B854293D102
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 12:20:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC1AC284C64
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 09:00:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E78381C20C8D
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 10:20:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC8017799F;
-	Fri, 26 Jul 2024 09:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E77D178CDF;
+	Fri, 26 Jul 2024 10:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/ptK/fF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sfMeHI7Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142922582;
-	Fri, 26 Jul 2024 09:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182922B9C4;
+	Fri, 26 Jul 2024 10:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721984426; cv=none; b=u6+euyaGsWz7K8U+KiybbN7j8y+xmJjwaMo6wXu7pFil1Zo9xpzTMpe0yW5ARMfNBH6kIkEvoaTls6KOSK81D9gJAbZM36ezSQoNIEjrWK/TyETI7sx/SeG1xdt/VPY1Tx6ZgtoMzVoLr0oySmEswf5CAJ95uqcG+9I+0UKZMz8=
+	t=1721989230; cv=none; b=RC2bTICGquIYEi6yFoTxpbmaoC0KUjYiRhgynAHdiwjD/gxQ/PV20L76rvMK3FkG3ztE1Yv73oGtNd3UWhrjH9WpvBobslAHyRbtZ1qC1MQdqz9xBYc16ugsoUV61zmQzsRe+XP8ccuus1NWtsYWmKy+3Rjv7p753vVRm8VLBiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721984426; c=relaxed/simple;
-	bh=mTWmn9F6T8f1TDrrU9JJ/nN7UEzvYIt3exK8cibuYQY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:References:
-	 In-Reply-To:Content-Type; b=YyXQVS2osV/k+s3ei9mATdhN4YFGOR9Fx/kqH9eP/uySutncOH7934IM30srEyuoKtC1L3K8lOm2Fp8NSZWjzA3pWrJ+S5x5/Yhojz6evPoY3jqutecLAu+KlhVAxdJkzms1Q8VOXVezFs4p2VNv6k5ssEMVLNO42ILvnzMtCUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/ptK/fF; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4280812ca01so10215765e9.1;
-        Fri, 26 Jul 2024 02:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721984423; x=1722589223; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V7ExwDaqxbplNlKvaO4A3WJAVxQSbAGokTEdqWh6okk=;
-        b=N/ptK/fFEuMJe2pSC2usAoUsgAYN7iFJORGvIBJ/2YYiwoL5q/D7AmWisUQcQmiUSx
-         DBYkQ3DoAxb1HC5JyApzPiLX8UdSqFEr3t6EINd+N89v6QMu40iEjjtposJfjbQO7gxQ
-         p3MN1EsAJKQMM3etijTMgcrLLWZmjSi3d3Tj/PkzXD2wqV7BVmRBcBqYq5oing1sRu63
-         MTbQ5ONvfwzh4eA3qD5TKDoOFrZcjGifkAqpZkxliw3lXXHR2Ae0eG9q4UheobwBBYqc
-         i7XUjkfKlLNe5sJFj59zW//9vBnNpWlmLbONy+TUmoqZXl/Esu1Q/F+GSdayU89AKoK+
-         SndQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721984423; x=1722589223;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V7ExwDaqxbplNlKvaO4A3WJAVxQSbAGokTEdqWh6okk=;
-        b=v18M3Wyek1FEpDPHcMpt1UGM/pXfHwZz3XaEgFYBY1UDIeo0VkJfYTtj2InNeXC8IF
-         Vf6sTW/mRDWz+P9cFtDma+NJC8FtvIiVRdH9o1pcLMmo0ROBcDKYLi2HbwaebTIjBqfS
-         M9sA1JB/GsNAreVkac3tvc9ZUWWj+yVKD90eLhFR3pTUcRlqDe3Rq/p4ePJcvNR8CAmN
-         7P1AgJWLwTv2XVxySCgiTLKalyVu/G6374UbvjksYkk5ueo0rLHDh0OR+dzo8bu75FRv
-         MBlE0sSQEoI5QUBsof/ISqbtgPSpEfFm7z1akFxvKrNTgKd4PduQyNrfmZblDfPRZAKf
-         OCEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUKYslN8T+M8zuaauOaWZ41eZmpjFyk8V9bRvFYFeO83wDXkXErJuo8e0JQh82b2+uRpX7KUI7wgoIBfS2ZYdK48JXrUP0HQZR5hpdThtBXkaFSVrtOgr6eCK284hI4SsaY3T8aTGMvkVy95GG6ez7XSmcpf0H2g6R6waf3RBkBZn9R1Id5xNog
-X-Gm-Message-State: AOJu0Yxi8urc9pQ3j6YxWe9S26m0kLgKo7akvNn0yTZ45y+OC8iRp7Jo
-	nHIqzsNJ4au8otnQeI+S/yQn8iH0gQcVamglsrJgOpkApSM4mq/S
-X-Google-Smtp-Source: AGHT+IHZoP+/wYwA7WVbZ0aLHIqhcws5Q4w17Lw8VDEzTu3mvC7Q0hy7Xe1o6stzbmJ3Lbr71fKgkA==
-X-Received: by 2002:a05:600c:4511:b0:426:654e:16da with SMTP id 5b1f17b1804b1-428053c1344mr34971195e9.0.1721984422989;
-        Fri, 26 Jul 2024 02:00:22 -0700 (PDT)
-Received: from [85.64.140.6] (85.64.140.6.dynamic.barak-online.net. [85.64.140.6])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-427f93e6871sm112695845e9.30.2024.07.26.02.00.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jul 2024 02:00:22 -0700 (PDT)
-Message-ID: <f30d186c-2924-e708-cc08-e0b9a7f70ca4@gmail.com>
-Date: Fri, 26 Jul 2024 12:00:01 +0300
+	s=arc-20240116; t=1721989230; c=relaxed/simple;
+	bh=dYUL+jP7MFdCrpFd9aiIGMAeKUv3+T7KQF6M/T/RLPs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=W7h/dUgi/fizE4s9uqmWJDi8K8VajSp6hE50c4uwrV9Uk2zXQkaIE7VgQrey3rTAazoE67xj5VDfLTh+f0azyVH7rbQnBxVRRvp20BRIwkt25rYX2gXIhQLRi99tBQinp3ApN516VvAqMpoTURdnmNe77O/IWY0b6e5jfjDSGss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sfMeHI7Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 852E4C4AF07;
+	Fri, 26 Jul 2024 10:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721989229;
+	bh=dYUL+jP7MFdCrpFd9aiIGMAeKUv3+T7KQF6M/T/RLPs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=sfMeHI7Z5ZVZYHRt9rTByIywy4Sn37Yk8cSWT13ExJMQCmpGPo3mc8waU/MekL3kW
+	 O/shYWfzbcnyPFIN35UoUDOAyLucmIGHK5LaGgJTizEqdi4dnTsoezkdMnqOA/Tvc7
+	 j+/cgpXUWmtzM/M7GFZWrfF3RYQzMqCOUTDqlaOTgs5+jUZU2L3Fgz4bn4OME3EQgt
+	 bQOUreTMmYzac1RhQRz2U0yXyBemfCT1Q0UqoVlzzr3mTKeGRzlkRZeFUI2exBi+G4
+	 Vegq8T+fSgRXTittBXFcMla7dgJxojMyz0Qja4+LD2XkJElTupLntdo3BMMmtmCVsS
+	 EE2LEmT3sRFgA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73D79C43443;
+	Fri, 26 Jul 2024 10:20:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From: Eli Billauer <eli.billauer@gmail.com>
-Subject: Re: [syzbot] [bluetooth?] possible deadlock in touch_wq_lockdep_map
-To: syzbot <syzbot+91dbdfecdd3287734d8e@syzkaller.appspotmail.com>,
- arnd@arndb.de, gregkh@linuxfoundation.org, hdanton@sina.com,
- johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- luiz.dentz@gmail.com, marcel@holtmann.org, syzkaller-bugs@googlegroups.com
-References: <0000000000000ab25a061e1dfe9f@google.com>
-Content-Language: en-US
-In-Reply-To: <0000000000000ab25a061e1dfe9f@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v4] net: usb: sr9700: fix uninitialized variable use in
+ sr_mdio_read
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172198922946.6762.1014602508921624498.git-patchwork-notify@kernel.org>
+Date: Fri, 26 Jul 2024 10:20:29 +0000
+References: <20240725022942.1720199-1-make24@iscas.ac.cn>
+In-Reply-To: <20240725022942.1720199-1-make24@iscas.ac.cn>
+To: Ma Ke <make24@iscas.ac.cn>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, liujunliang_ljl@163.com, syoshida@redhat.com,
+ andrew@lunn.ch, horms@kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
 
-On 26/07/2024 6:20, syzbot wrote:
-> WARNING: possible recursive locking detected
-> 6.10.0-syzkaller-g933069701c1b #0 Not tainted
-> --------------------------------------------
-> kworker/1:1H/1247 is trying to acquire lock:
-> ffff888121075948 ((wq_completion)xillyusb){+.+.}-{0:0}, at: touch_wq_lockdep_map+0x6e/0x120 kernel/workqueue.c:3876
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 25 Jul 2024 10:29:42 +0800 you wrote:
+> It could lead to error happen because the variable res is not updated if
+> the call to sr_share_read_word returns an error. In this particular case
+> error code was returned and res stayed uninitialized. Same issue also
+> applies to sr_read_reg.
 > 
-> but task is already holding lock:
-> ffff888121075948 ((wq_completion)xillyusb){+.+.}-{0:0}, at: process_one_work+0x1277/0x1b40 kernel/workqueue.c:3206
+> This can be avoided by checking the return value of sr_share_read_word
+> and sr_read_reg, and propagating the error if the read operation failed.
+> 
+> [...]
 
-This is caused by xillyusb.c: destroy_workqueue() is (potentially) 
-called from within a work item function, wakeup_all(). So the work item 
-may attempt to destroy the work queue it sits on.
+Here is the summary with links:
+  - [net,v4] net: usb: sr9700: fix uninitialized variable use in sr_mdio_read
+    https://git.kernel.org/netdev/net/c/08f3a5c38087
 
-This bug has sneaked through the hardware tests as well as XillyUSB's 
-users for several years, as its scenario is extremely unlikely in real 
-life. It's nevertheless a bug to be fixed -- I'll submit a patch for this.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-   Eli
+
 
