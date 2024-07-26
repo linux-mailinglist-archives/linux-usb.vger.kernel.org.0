@@ -1,122 +1,181 @@
-Return-Path: <linux-usb+bounces-12475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12476-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D56D093D8F6
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 21:26:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FA1593D954
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 21:53:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 112441C23352
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 19:26:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6A921F249EB
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 19:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E73558B7;
-	Fri, 26 Jul 2024 19:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB8D13B5A0;
+	Fri, 26 Jul 2024 19:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8AXu5MN"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WkMmgtEU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4162C38DEE;
-	Fri, 26 Jul 2024 19:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFD921364;
+	Fri, 26 Jul 2024 19:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722021973; cv=none; b=OguYdvpW2oK5j4QV3WTW14Coy7yOIHI6byNqJ/7+WprIJxNSwuLROZR61QonOo7Awc3RUA+G/Gx8abNVJ8DfEhiJxoDrb0MF9V6Ju4QbaVs08t0MeSS1bCTs4B4K7HRvxcenhrVXML3lITBn41+qRo4vkY4rnlgYMbN1LZg8jpY=
+	t=1722023611; cv=none; b=N6A+xs3wNYTliGGglmXrBdG5xfHQi7BfCnN/0ekA3W7+gI7sg/zOH6hreIn86LxIrnXtigV2rTcw7KnxpDI9vr3PclOif3A0zzCCRXzrp6yNcclKyk00E48+SyeD9Ab4ZLLoMfcWOH38DCpnHKPhkiVyGcATt39y3E4ACLR3wOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722021973; c=relaxed/simple;
-	bh=SZJMrHcMmqY2SUiUlSu9xKKZdsDzO+qcgAmMeSpsinw=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=agZ0eKBK6lIBALzSFwN3+9NcytpLS1Gz4IJAdEZedmGxmI2NTziyp37qRK6kQKYFUJQYHey4/Nz6chfCuQnH7UJLBWf9/7A9XxzH9W7fUqqjyBS4rCXzv21q6eZzfCE/euBWzWJjqKlqwliczEPZeyoiarYut4DMD1FyAXOHmSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8AXu5MN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D05C32782;
-	Fri, 26 Jul 2024 19:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722021972;
-	bh=SZJMrHcMmqY2SUiUlSu9xKKZdsDzO+qcgAmMeSpsinw=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=c8AXu5MNC75ERaiY1fEY91nAurQ58HgHjnshtPI2p8GJGT13Vvug7HJSJYUG7ZVNS
-	 /IsUpJPDeqUiHLkg3szrD116IEFTA8gaeKGCd5WlnaVr7c71rptiSpfwQjk+KgE5CB
-	 SwSLpRYD8CfskDKa/RGwCLrLC06mdEyzaszEZWA5259G0u5gw8b9FX3uxj39SvVYH3
-	 Foxaz1sff2sXC+P8jpVgTUiJVOpFSkqp/sg/yMdGRfNfSKsNHPRNAL/X/Bsog5vrOP
-	 Lrqt3RF7vLAexmvBdCyXPyspp2FaF4J/fgjUoQggk0oxiCg7IrcroWjGXkKkdeoX4N
-	 xe8TZu1n+wHBw==
-Date: Fri, 26 Jul 2024 14:26:11 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1722023611; c=relaxed/simple;
+	bh=RItrGGuVLmlSCWHomQhd90T1QLhUEfGxr2jZ5urvIQ4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=mtXJSCz3Ax1qLV97xkhuItl7eorg8SS7h+6cOdy5USRCmi4cqTeTT6SK+yBxQ7AX99SCz0vVsOKtsWsRhbf2+k2Ls1DSS1BoiHMmyCaAhCljBWXek3m5BCeoWdtnBiGwyNsVNG5MPT+lz6aGJmAn1xIUuA5y48eR7KAFIPiMHC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WkMmgtEU; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46QBfuNZ013396;
+	Fri, 26 Jul 2024 19:53:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	RItrGGuVLmlSCWHomQhd90T1QLhUEfGxr2jZ5urvIQ4=; b=WkMmgtEUiak64LIH
+	+TUl60yVMD3b4c/uRJMToOMVLifnQW/BuYeoLfFxynVYz8zzxx4VLRMPy9jS5E5l
+	mNXHMo1A7odzLGq/GX6Zi6RsBqVqzAYn8/I6t/JV+/ZyLy8jG044Gd13E3O5/J7+
+	ckPk49tn5rb0KCs9RoCsXd7/w31RALr1NWPgaDxvoGUWzqvAjOZSEYqvwlq8Fy/3
+	WEUkxRifCq9HTlOkYJNfZK20+ZaRcGfprQIms6U1jwURqCbucEXtNSMP2SfK23lq
+	HM5Mew7XaNL/zAusWifm5CCdqkneyEYyaWg3JZJwQ6XphZXpxSrOJfmS/41HCW7H
+	kUTW0w==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40m2192app-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Jul 2024 19:53:08 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46QJr661016526
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Jul 2024 19:53:07 GMT
+Received: from [10.71.113.104] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 26 Jul
+ 2024 12:53:06 -0700
+Message-ID: <957b3c13-e4ba-45e3-b880-7a313e48c33f@quicinc.com>
+Date: Fri, 26 Jul 2024 12:52:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Kevin Hilman <khilman@kernel.org>, 
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
- devicetree@vger.kernel.org, Tero Kristo <kristo@kernel.org>, 
- linux-kernel@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- linux-arm-kernel@lists.infradead.org, Nishanth Menon <nm@ti.com>, 
- Vignesh Raghavendra <vigneshr@ti.com>, Pawel Laszczak <pawell@cadence.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Roger Quadros <rogerq@kernel.org>, Peter Chen <peter.chen@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-In-Reply-To: <20240726-s2r-cdns-v5-2-8664bfb032ac@bootlin.com>
-References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
- <20240726-s2r-cdns-v5-2-8664bfb032ac@bootlin.com>
-Message-Id: <172202197161.1924212.4114467370508864411.robh@kernel.org>
-Subject: Re: [PATCH v5 02/12] dt-bindings: usb: ti,j721e-usb: add
- ti,j7200-usb compatible
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
+	<amadeuszx.slawinski@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh@kernel.org>, <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
+ <ca1e1063-e1bd-4e03-a7cd-91985e9954e9@linux.intel.com>
+ <096d59a0-5e18-092c-c9ae-d98130226f06@quicinc.com>
+ <368d9019-2c96-468e-b472-7e1127f76213@linux.intel.com>
+ <eb6370ea-47a0-3659-3c10-cb7f95e3e520@quicinc.com>
+ <510468c7-b181-48d0-bf2d-3e478b2f2aca@linux.intel.com>
+ <c7a95157-1b71-1489-3657-8fe67f9acb4e@quicinc.com>
+ <90463a4e-c2e7-4b59-9a79-23533b4acd1e@linux.intel.com>
+ <fd8f1eb0-4b21-4697-8175-a61bc3858852@quicinc.com>
+ <f982842a-1804-420b-a539-a609ecf8fb8a@linux.intel.com>
+ <3c358604-6926-4f90-8fc8-8139c68c3418@quicinc.com>
+ <70bf10a7-7f87-4fd1-bd44-1733d3b2b15e@linux.intel.com>
+ <b1fcef2a-2af9-4985-ae00-f348ca5df3f1@linux.intel.com>
+ <ab734271-58ee-4981-926c-9b57f36b8ac6@linux.intel.com>
+ <ccbf9366-f3de-4a80-bffc-e32a8409e1a7@quicinc.com>
+ <adb4e27b-b328-4eef-87ca-9b8bad6639e6@linux.intel.com>
+ <f9923336-3dd3-4f36-b5f6-f45f4ed09e0c@linux.intel.com>
+ <3634f704-a496-4341-a01d-07182248eccf@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <3634f704-a496-4341-a01d-07182248eccf@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: DuesmGckL6g633jTihSWh-2zcTYsVcDD
+X-Proofpoint-GUID: DuesmGckL6g633jTihSWh-2zcTYsVcDD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-26_12,2024-07-26_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ clxscore=1011 priorityscore=1501 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=962 bulkscore=0 phishscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407260135
+
+Hi Pierre/Amadeusz,
+
+On 7/8/2024 4:16 PM, Wesley Cheng wrote:
+> On 7/4/2024 4:25 AM, Pierre-Louis Bossart wrote:
+>>>> Just so I understand...is it really desired that userspace doesn't
+>>>> have the flexibility to choose which USB device is offloaded?  I know
+>>>> it complicates what needs to be done, but it could be just an
+>>>> additional feature that can be added later on.  Again, by default, we
+>>>> select the last USB headset plugged in to be enabled for offload by
+>>>> default.
+>>> If it chooses endpoint by itself perhaps you can send patch set without
+>>> controls first? This has added benefit of less patches in series, making
+>>> it easier to review and it won't block whole patch set by discussion on
+>>> controls feature. Controls can be added in followup series.
+>> We do need read-only controls for userspace to know that offload is
+>> possible and which card/device to use. That can be done in a first step
+>> assuming there's a single device plugged-in.
+> I agree, some kcontrol need to be present to at least determine:
+>
+> 1. USB SND device is offload capable (ASoC card and PCM index)- Fetches associated (mapped) ASoC platform card and PCM index (read only)
+>
+> 2. ASoC platform card offload status - Current offload status (read only)
+>
+> Those would be the minimum kcontrols we could have at this time.  I will remove the device selection part, and leave that for future discussions.  Does this sound good, Amadeusz/Pierre?
+
+So I reworked the series a bit with respects to the kcontrols that we had, and I simplified it for the next submission.  I went ahead and just have a read only kcontrol residing in the USB SND device and will implement #1 above:
+
+/ # tinymix -D 1 contents
+Number of controls: 9
+ctl     type    num     name                                    value
+0       INT     2       Capture Channel Map                     0, 0 (range 0->36)
+1       INT     2       Playback Channel Map                    0, 0 (range 0->36)
+2       BOOL    1       Headset Capture Switch                  On
+3       INT     1       Headset Capture Volume                  10 (range 0->13)
+4       BOOL    1       Sidetone Playback Switch                On
+5       INT     1       Sidetone Playback Volume                4096 (range 0->8192)
+6       BOOL    1       Headset Playback Switch                 On
+7       INT     2       Headset Playback Volume                 20, 20 (range 0->24)
+8       INT     2       USB Offload Playback Route PCM#0        0, 0 (range -1->255)
+
+If there is an available audio offload path, then the value will show the card and pcm index that it is mapped to.  That way the application will know which card/pcm device to open from there.  In the above example, the offload path is mapped to card#0 pcm#0.  If there is no offload path available, it will show -1, -1.
+
+For now, I removed the control that allows for explicit selection of which USB card and PCM device to offload, and will take this up on a separate series as we see fit.  The codebase I have now will select the last USB headset plugged in for offloading.  Will clean up the changes and submit a new revision with the other feedback included as well.
 
 
-On Fri, 26 Jul 2024 20:17:50 +0200, Théo Lebrun wrote:
-> On J7200, the controller & its wrapper are reset on resume. It has the
-> same behavior as ti,j721e-usb with a different SoC integration.
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+Thanks
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Wesley Cheng
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: properties:compatible:oneOf:1:items: 'oneOf' conditional failed, one must be fixed:
-	[{'enum': [{'const': 'ti,am64-usb'}, {'const': 'ti,j7200-usb'}]}, {'const': 'ti,j721e-usb'}] is not of type 'object'
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: properties:compatible:oneOf:1:items:0:enum: 'oneOf' conditional failed, one must be fixed:
-		{'const': 'ti,am64-usb'} is not of type 'integer'
-		{'const': 'ti,am64-usb'} is not of type 'string'
-		{'const': 'ti,j7200-usb'} is not of type 'integer'
-		{'const': 'ti,j7200-usb'} is not of type 'string'
-		hint: "enum" must be an array of either integers or strings
-		from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: properties:compatible:oneOf:1:items: 'oneOf' conditional failed, one must be fixed:
-	[{'enum': [{'const': 'ti,am64-usb'}, {'const': 'ti,j7200-usb'}]}, {'const': 'ti,j721e-usb'}] is not of type 'object'
-	{'const': 'ti,am64-usb'} is not of type 'string'
-	{'const': 'ti,j7200-usb'} is not of type 'string'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240726-s2r-cdns-v5-2-8664bfb032ac@bootlin.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+>
+>> Dealing with multiple devices and defining rules or configuration
+>> options to select the offloaded device is a second-level problem.
+>>
+>> In most cases the only thing that will be offloaded is a headset
+>> anyways, so the selection could be rather static based on a
+>> vendor/system ID, all other USB devices would be ignored.
+> If the USB SND offload driver (ie qc_audio_offload) isn't compiled in, then it would be disabled.  Do we need some over-arching mechanism to disable the offload functionality?  Although, one thing I can see if I can add is some device classification within the USB offload vendor driver.
+>
+> Thanks
+>
+> Wesley Cheng
+>
 
