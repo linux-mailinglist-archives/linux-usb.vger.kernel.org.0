@@ -1,181 +1,96 @@
-Return-Path: <linux-usb+bounces-12476-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12477-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FA1593D954
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 21:53:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 563AE93DA11
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 22:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6A921F249EB
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 19:53:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2EA91F2463B
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2024 20:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB8D13B5A0;
-	Fri, 26 Jul 2024 19:53:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18CA714A089;
+	Fri, 26 Jul 2024 20:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WkMmgtEU"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="2bRlEyC2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFD921364;
-	Fri, 26 Jul 2024 19:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D5EFC1F;
+	Fri, 26 Jul 2024 20:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722023611; cv=none; b=N6A+xs3wNYTliGGglmXrBdG5xfHQi7BfCnN/0ekA3W7+gI7sg/zOH6hreIn86LxIrnXtigV2rTcw7KnxpDI9vr3PclOif3A0zzCCRXzrp6yNcclKyk00E48+SyeD9Ab4ZLLoMfcWOH38DCpnHKPhkiVyGcATt39y3E4ACLR3wOU=
+	t=1722027578; cv=none; b=my7Qu01u1bpf50KLtuqLPnqtulFuM3XigUL5xsNHAz8oROcEhzKirvMWKDw0lVSS+6y6SjpI23cdrt1gXAAxLVLLOBtQ3485uVc6zG6oQXNzRtV6T44v0VExKmz+UJwq6oe7WiX/brcV5AVRPoJmSP6QY6XgFH26V2eQgZrzfLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722023611; c=relaxed/simple;
-	bh=RItrGGuVLmlSCWHomQhd90T1QLhUEfGxr2jZ5urvIQ4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=mtXJSCz3Ax1qLV97xkhuItl7eorg8SS7h+6cOdy5USRCmi4cqTeTT6SK+yBxQ7AX99SCz0vVsOKtsWsRhbf2+k2Ls1DSS1BoiHMmyCaAhCljBWXek3m5BCeoWdtnBiGwyNsVNG5MPT+lz6aGJmAn1xIUuA5y48eR7KAFIPiMHC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WkMmgtEU; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46QBfuNZ013396;
-	Fri, 26 Jul 2024 19:53:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	RItrGGuVLmlSCWHomQhd90T1QLhUEfGxr2jZ5urvIQ4=; b=WkMmgtEUiak64LIH
-	+TUl60yVMD3b4c/uRJMToOMVLifnQW/BuYeoLfFxynVYz8zzxx4VLRMPy9jS5E5l
-	mNXHMo1A7odzLGq/GX6Zi6RsBqVqzAYn8/I6t/JV+/ZyLy8jG044Gd13E3O5/J7+
-	ckPk49tn5rb0KCs9RoCsXd7/w31RALr1NWPgaDxvoGUWzqvAjOZSEYqvwlq8Fy/3
-	WEUkxRifCq9HTlOkYJNfZK20+ZaRcGfprQIms6U1jwURqCbucEXtNSMP2SfK23lq
-	HM5Mew7XaNL/zAusWifm5CCdqkneyEYyaWg3JZJwQ6XphZXpxSrOJfmS/41HCW7H
-	kUTW0w==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40m2192app-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jul 2024 19:53:08 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46QJr661016526
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jul 2024 19:53:07 GMT
-Received: from [10.71.113.104] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 26 Jul
- 2024 12:53:06 -0700
-Message-ID: <957b3c13-e4ba-45e3-b880-7a313e48c33f@quicinc.com>
-Date: Fri, 26 Jul 2024 12:52:52 -0700
+	s=arc-20240116; t=1722027578; c=relaxed/simple;
+	bh=utTWMDRHbjBrE41ZfyrJAwGAutTPl8oJN/Mb/6ikKYw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jrk622eIuqfXxKmm0eReSQXwoofmyngXRGm/9f8y4qg8SCzg1PqGv2ejDUuJz14FaqkYUTYCQVsyxbVYQNJOWONNqbYXyTMDjj0VxSKNeXT3ku+6xqAdeN/Ceh7VeONiSMIhDp0Dz43HKhowyt7eher3fMN4EfOBM+MRxUnFb10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=2bRlEyC2; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=/j/pudLgRzFr7E806i9zApBDUDWPME45ID1EpjVKzVU=; b=2bRlEyC2ayrY5wMFVAMo4PP9zR
+	n57YVloNpvCenv+VxlRVDYq7UMQ/IWy0xGCIQtalPrdtjQ37fDPLzYBwAYOLuvUFRffi0sHqRQoAS
+	si0i3+6RoYNA9ur/OqPzQWMHDGPiyOGjFp+/eMdRh/m4kgNmw7CtMiuKXAMSEbSwPxpw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sXS23-003JBC-7v; Fri, 26 Jul 2024 22:59:19 +0200
+Date: Fri, 26 Jul 2024 22:59:19 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: UNGLinuxDriver@microchip.com, davem@davemloft.net, edumazet@google.com,
+	f.fainelli@gmail.com, gregkh@linuxfoundation.org, kuba@kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, lucas.demarchi@intel.com,
+	masahiroy@kernel.org, mcgrof@kernel.org, netdev@vger.kernel.org,
+	pabeni@redhat.com, woojung.huh@microchip.com
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
+ module
+Message-ID: <b96d9801-d370-4ddd-97fd-5eac2a2656f4@lunn.ch>
+References: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch>
+ <20240726121530.193547-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
-	<amadeuszx.slawinski@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <robh@kernel.org>, <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
- <ca1e1063-e1bd-4e03-a7cd-91985e9954e9@linux.intel.com>
- <096d59a0-5e18-092c-c9ae-d98130226f06@quicinc.com>
- <368d9019-2c96-468e-b472-7e1127f76213@linux.intel.com>
- <eb6370ea-47a0-3659-3c10-cb7f95e3e520@quicinc.com>
- <510468c7-b181-48d0-bf2d-3e478b2f2aca@linux.intel.com>
- <c7a95157-1b71-1489-3657-8fe67f9acb4e@quicinc.com>
- <90463a4e-c2e7-4b59-9a79-23533b4acd1e@linux.intel.com>
- <fd8f1eb0-4b21-4697-8175-a61bc3858852@quicinc.com>
- <f982842a-1804-420b-a539-a609ecf8fb8a@linux.intel.com>
- <3c358604-6926-4f90-8fc8-8139c68c3418@quicinc.com>
- <70bf10a7-7f87-4fd1-bd44-1733d3b2b15e@linux.intel.com>
- <b1fcef2a-2af9-4985-ae00-f348ca5df3f1@linux.intel.com>
- <ab734271-58ee-4981-926c-9b57f36b8ac6@linux.intel.com>
- <ccbf9366-f3de-4a80-bffc-e32a8409e1a7@quicinc.com>
- <adb4e27b-b328-4eef-87ca-9b8bad6639e6@linux.intel.com>
- <f9923336-3dd3-4f36-b5f6-f45f4ed09e0c@linux.intel.com>
- <3634f704-a496-4341-a01d-07182248eccf@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <3634f704-a496-4341-a01d-07182248eccf@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DuesmGckL6g633jTihSWh-2zcTYsVcDD
-X-Proofpoint-GUID: DuesmGckL6g633jTihSWh-2zcTYsVcDD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-26_12,2024-07-26_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- clxscore=1011 priorityscore=1501 malwarescore=0 suspectscore=0
- lowpriorityscore=0 mlxlogscore=962 bulkscore=0 phishscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407260135
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240726121530.193547-1-jtornosm@redhat.com>
 
-Hi Pierre/Amadeusz,
+On Fri, Jul 26, 2024 at 02:15:26PM +0200, Jose Ignacio Tornos Martinez wrote:
+> Hello Andrew,
+> 
+> > What this does appear to do is differentiate between 'pre' which will
+> > load the kernel module before it is requested. Since there is no 'pre'
+> > for this, it seems pointless whacking this mole.
+> Precisely, we need to fix the lan78xx case with micrel phy (and other
+> possible phy modules) too, due to the commented issue generating initramfs
+> in order to include the phy module. 
 
-On 7/8/2024 4:16 PM, Wesley Cheng wrote:
-> On 7/4/2024 4:25 AM, Pierre-Louis Bossart wrote:
->>>> Just so I understand...is it really desired that userspace doesn't
->>>> have the flexibility to choose which USB device is offloaded?  I know
->>>> it complicates what needs to be done, but it could be just an
->>>> additional feature that can be added later on.  Again, by default, we
->>>> select the last USB headset plugged in to be enabled for offload by
->>>> default.
->>> If it chooses endpoint by itself perhaps you can send patch set without
->>> controls first? This has added benefit of less patches in series, making
->>> it easier to review and it won't block whole patch set by discussion on
->>> controls feature. Controls can be added in followup series.
->> We do need read-only controls for userspace to know that offload is
->> possible and which card/device to use. That can be done in a first step
->> assuming there's a single device plugged-in.
-> I agree, some kcontrol need to be present to at least determine:
->
-> 1. USB SND device is offload capable (ASoC card and PCM index)- Fetches associated (mapped) ASoC platform card and PCM index (read only)
->
-> 2. ASoC platform card offload status - Current offload status (read only)
->
-> Those would be the minimum kcontrols we could have at this time.  I will remove the device selection part, and leave that for future discussions.  Does this sound good, Amadeusz/Pierre?
+I still don't see how this solves any issues with generating the
+initramfs.
 
-So I reworked the series a bit with respects to the kcontrols that we had, and I simplified it for the next submission.  I went ahead and just have a read only kcontrol residing in the USB SND device and will implement #1 above:
+There are more than 200 Ethernet drivers, and around 75 PHY
+drivers. If this patch is merged, you have one MAC driver indicating
+it needs one PHY driver. There is nothing much you can do with that
+information. You need to wait until 99% of the MAC drivers indicate
+which PHY drivers are needed. Then you can use this information leave
+out any PHY which is not needed, and hope you only break a small
+number of devices. But even if you wait 20 years i doubt you will get
+99% of the MAC drivers indicating what PHY drivers you need.  Because
+nothing really uses this information today.
 
-/ # tinymix -D 1 contents
-Number of controls: 9
-ctl     type    num     name                                    value
-0       INT     2       Capture Channel Map                     0, 0 (range 0->36)
-1       INT     2       Playback Channel Map                    0, 0 (range 0->36)
-2       BOOL    1       Headset Capture Switch                  On
-3       INT     1       Headset Capture Volume                  10 (range 0->13)
-4       BOOL    1       Sidetone Playback Switch                On
-5       INT     1       Sidetone Playback Volume                4096 (range 0->8192)
-6       BOOL    1       Headset Playback Switch                 On
-7       INT     2       Headset Playback Volume                 20, 20 (range 0->24)
-8       INT     2       USB Offload Playback Route PCM#0        0, 0 (range -1->255)
+So as far as i see, this has nothing to do with building the
+initramfs.
 
-If there is an available audio offload path, then the value will show the card and pcm index that it is mapped to.  That way the application will know which card/pcm device to open from there.  In the above example, the offload path is mapped to card#0 pcm#0.  If there is no offload path available, it will show -1, -1.
-
-For now, I removed the control that allows for explicit selection of which USB card and PCM device to offload, and will take this up on a separate series as we see fit.  The codebase I have now will select the last USB headset plugged in for offloading.  Will clean up the changes and submit a new revision with the other feedback included as well.
-
-
-Thanks
-
-Wesley Cheng
-
->
->> Dealing with multiple devices and defining rules or configuration
->> options to select the offloaded device is a second-level problem.
->>
->> In most cases the only thing that will be offloaded is a headset
->> anyways, so the selection could be rather static based on a
->> vendor/system ID, all other USB devices would be ignored.
-> If the USB SND offload driver (ie qc_audio_offload) isn't compiled in, then it would be disabled.  Do we need some over-arching mechanism to disable the offload functionality?  Although, one thing I can see if I can add is some device classification within the USB offload vendor driver.
->
-> Thanks
->
-> Wesley Cheng
->
+	Andrew
 
