@@ -1,128 +1,163 @@
-Return-Path: <linux-usb+bounces-12496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12498-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB3B493DF17
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 13:08:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52BB593DF41
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 14:17:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46CE9B24590
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 11:08:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C7371C21474
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 12:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9CF76C76;
-	Sat, 27 Jul 2024 11:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0746F2E3;
+	Sat, 27 Jul 2024 12:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k0uqt+TI"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="SFM9CPl2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26FEF76046
-	for <linux-usb@vger.kernel.org>; Sat, 27 Jul 2024 11:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A6511C83
+	for <linux-usb@vger.kernel.org>; Sat, 27 Jul 2024 12:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722078460; cv=none; b=Yr9Cg+NXHj91heA6dVYhs9twWZbxMlZEKsRe8xiQ888XioY0B7pEHQKrmx5/BkQXTzjt9jH+yo8us4NufawOhfS9oVSNvjXshS20WFdVQ9qNk7FygSCxQIR8alcMofkhNaZwR3SDHzogqDUDL8oiqi8vAYJaxdX2KlDcn1Nka7k=
+	t=1722082653; cv=none; b=cY30L2aUFvNgD9ix1C76qiqHBPewKG2EtwpHMrvKYwg+s8wBWuyPT8cuQabrNwjYCldOs1LDhi+m784jZMgWTwDs2swJjjdPTTMSlI82WdY9SiYcbs2/qsow4fGu5t67ZUmMCwzsS+pgLACTQFXN0DUFi2owd/jTgPZRaY6j2mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722078460; c=relaxed/simple;
-	bh=YUwp0RGlQnxwoOMaiTqHkR8lIkWS3xy4A3f0bl+uA+c=;
+	s=arc-20240116; t=1722082653; c=relaxed/simple;
+	bh=MiOl+8vSPd0uSfmk9/lbESQleLrCM2Aq9o4raMgSAmo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iJkjg3WUvraNAZxaFPADAO9xuIm68wNzSVigrkHAOmYeDJoj/7IiIcRDk9XZTNcBJ46CiGj3HsOphQLG/5nIII25Ev4r4lh83CbyhVlCG1NHj2IAkexruPSC5Pze0bLqUTErmJxnxMuvJDYGt9r70K830/9LH1R5E9VCwN8M1gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k0uqt+TI; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ef27bfd15bso27928811fa.2
-        for <linux-usb@vger.kernel.org>; Sat, 27 Jul 2024 04:07:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722078457; x=1722683257; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1U3X29423c8z5yD/QrqPkOy052ePtHqm9D+QDlwezUk=;
-        b=k0uqt+TI/B8IdXq5e0SfKKPN3DgOx5jdWoTLQ59OyO3ZyualK6IWwKFCY/t3TmAV5I
-         yypotwfCXeZYDczC4Ag4fzGYOTze1W6KafyZ7m5aMrIPdiAW8QXgfXQ0mvwZiQG7Ax3t
-         /9doJ3oWt5CD2c/LyGjKcHY+Ches0pKQMxOcK5EJHi1gX7glA8yif/8Gh6mCEzrKbtpn
-         NcwdlPP4FeLU8nbDGO41aFwDmHKEbhDJ5lS+lGIPFoq1DgUhN/bSl9gKL0NM4fUHXsCV
-         kzf/bNbSB8DslzYAkxD6nxIMp7mOrjc+aPZeQ7OA/3aE2C/v/QT+z/lfp8JRYFqcSp10
-         tpmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722078457; x=1722683257;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1U3X29423c8z5yD/QrqPkOy052ePtHqm9D+QDlwezUk=;
-        b=VVcle4a90CsJyAmsd2LyoxiiYhY0+1LwxSsfBGdQv0pp6eGqVhDl/A6AiQh9fdFOhN
-         W2XftWTjkUZuzGcrqE+dQKAUJ9qQR0qfP5+OLt0BCEfwxNYNgvu2m5TM4LXizQCN9LTf
-         bpfBcWNYuCZaTkeOQX6jSs/qo++04s7HgY9bz7sAQrhDZd/IuKxc9kfziKSYs7fkkz+s
-         R4cXlQiK8ERri5M8loj5/1Ud8tOXNloSI3vqCYAX8uI7zvhG++E1Az1W6mxBtSNFthMK
-         AgCUWir+ZarcLOwoF2yHsB3KHwE/QW8SCNj4EL8TygWcxa01xINwKAeE5Ec6+YlgkQVm
-         DDGw==
-X-Forwarded-Encrypted: i=1; AJvYcCXI0SVvHRpXur+DoLMKTrcwH6tvcu9kI2u/EQz+Q1TK/abpaAcl4H6o0LZ1V0czvIyD5QTF7LlBJV8RZm2ByXNqaQ6Xo4YcjTNE
-X-Gm-Message-State: AOJu0YxDKt7PlkzDGGqOb8YWPA9Qwtax4hRvpy/RmOqa3ILMGxTvkmqU
-	2HHDb5CIxZdXuCuxz5UYQWUt5qqlKfc8OQ96onb70NN44+fn4Tn4Ih5iukj8SmbGfYIqZo1erg3
-	z
-X-Google-Smtp-Source: AGHT+IFUtNEzYvSVB7hdKMvLpCNk72wB5jl9A4vCWm8luVysahZN6DgP+uhGK+yL4UeqsFYV8c3g+A==
-X-Received: by 2002:a05:651c:1714:b0:2ef:2e0e:c888 with SMTP id 38308e7fff4ca-2f12ee6a4a6mr12915331fa.48.1722078457205;
-        Sat, 27 Jul 2024 04:07:37 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f03d09574dsm6600101fa.140.2024.07.27.04.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 04:07:36 -0700 (PDT)
-Date: Sat, 27 Jul 2024 14:07:35 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v2] usb: typec: fsa4480: Check if the chip is really there
-Message-ID: <wescb5qz3ckdns7bhopehz5vst2mffewyng3wq5zzlu2d37cfd@powc5ybrebpn>
-References: <20240726-topic-fs4480_check-v2-1-901ca449db15@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fD1d/XUGjHHzWOBDR2/DSl+kobOf+w4WOw2jut6+G4bjeht6cJNLyj1pUeK17Kw26m0b8sUQbLFCrBuC/RaqBf2OygIwdweqTKCPNr6JCOa7xG1Akdq9vQHOwLBQFyBnIweKTxDcKKE/Of8dIfBa8rdGcfVKUdJiAfocf4ddmug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=SFM9CPl2; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=MLfmt1BeAJQ+aW59n27wrZcivR61VXdsigzyD48WBLs=; b=SFM9CPl2eK/yGcQUtig/vU8BxK
+	fgbOyZs4E8wqZCx0BlmZJhRVUGIP0sFDek5dZoDxdgFz9/bYL9ReqPERBpSEAL/uiWC5BkNqqWVrG
+	Ramw5ETlDZgkvtF4resw34o9nl+791SpYhwq4KNNeo90S1tsAtnB0TXN/pyiFDkM6bDYJ4spl6dAj
+	RElYrmir+nH2Ys7gqnuO30LEEKX4Oex738Dz20MM/r5TUJDE9JWkX0sDv20KO3SSsxO8tYYgtyE3V
+	cqtJuLazTJxLhciTlLaeNsVFASmkeeu8Ni73H/sxCNWfrNtrsLeHqvuFHjeT34r0hNhK+5azV2ueA
+	nL8PDfaw==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.94.2)
+	(envelope-from <kibi@debian.org>)
+	id 1sXg0x-009NqI-3t; Sat, 27 Jul 2024 11:55:07 +0000
+Date: Sat, 27 Jul 2024 13:55:04 +0200
+From: Cyril Brulebois <kibi@debian.org>
+To: Ben Hutchings <ben@decadent.org.uk>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] xhci-pci: Make xhci-pci-renesas a proper modular driver
+Message-ID: <20240727115504.k33hshmf4wrn3us2@mraw.org>
+Organization: Debian
+References: <ZqGeehVxETDl57eT@decadent.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4ydbv2cq5iq4tk7t"
+Content-Disposition: inline
+In-Reply-To: <ZqGeehVxETDl57eT@decadent.org.uk>
+X-Debian-User: kibi
+
+
+--4ydbv2cq5iq4tk7t
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240726-topic-fs4480_check-v2-1-901ca449db15@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 26, 2024 at 01:43:30PM GMT, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Currently, the driver will happily register the switch/mux devices, and
-> so long as the i2c master doesn't complain, the user would never know
-> there's something wrong.
-> 
-> Add a device id check (based on [1]) and return -ENODEV if the read
-> fails or returns nonsense.
-> 
-> Checking the value on a Qualcomm SM6115P-based Lenovo Tab P11 tablet,
-> the ID mentioned in the datasheet does indeed show up:
->  fsa4480 1-0042: Found FSA4480 v1.1 (Vendor ID = 0)
+Ben Hutchings <ben@decadent.org.uk> (2024-07-25):
+> If CONFIG_USB_XHCI_PCI_RENESAS is enabled, xhci-pci conditionally
+> calls into the xhci-pci-renesas module, which means both modules must
+> be loaded to use any xHCI PCI controller.
+>=20
+> The MODULE_FIRMWARE declaration in the base xhci-pci module causes
+> initramfs-tools to check for and warn about missing firmware for the
+> Renesas xHCI controllers, when any xHCI PCI controller is present.
+> And because of the previous oddity, simply moving this declaration to
+> xhci-pci-renesas wouldn't help.
+>=20
+> To fix this, reverse the relationship between the modules:
+>=20
+> - Remove the quirk for the Renesas xHCIs, and the driver_data
+>   structure used only for them
+> - In xhci-pci:
+>   - Rename xhci_pci_probe() to xhci_pci_common_probe()
+>   - Export xhci_pci_common_probe() and xhci_pci_remove()
+>   - Use a new probe function that rejects the Renesas xHCIs and then
+>     calls the common probe function
+> - In xhci-pci-renesas:
+>   - Stop exporting renesas_xhci_check_request_fw()
+>   - Add a probe function that calls renesas_xhci_check_request_fw()
+>     followed by xhci_pci_common_probe()
+>   - Add and register a new pci_driver matching only the Renesas xHCIs
+>     and using its own probe function, but with other operations the
+>     same as in xhci-pci
+> - Make CONFIG_USB_XHCI_PCI_RENESAS depend on CONFIG_USB_XHCI_PCI,
+>   not the other way around
+>=20
+> Finally, move the MODULE_FIRMWARE declaration to xhci-pci-renesas.
+>=20
+> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 
-So wonderful to have 0 Vendor ID (initially assumed that you are showing
-it as an example of an error). But yes, the datasheet has 0 there.
+Tested-by: Cyril Brulebois <cyril@debamax.com>
 
-> 
-> [1] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
-> 
-> Fixes: 1dc246320c6b ("usb: typec: mux: Add On Semi fsa4480 driver")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Konrad Dybcio <konradybcio@kernel.org>
-> ---
-> Changes in v2:
-> - Prepend the new defines with FSA4480_ to make them more obvious
-> - Link to v1: https://lore.kernel.org/r/20240212-topic-fs4480_check-v1-1-d9969e4d6f9a@linaro.org
-> ---
->  drivers/usb/typec/mux/fsa4480.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+On top of 16f3a28cf5f876a7f3550d8f4c870a7b41bcfaef, starting from a
+distribution-oriented .config (Debian's 6.10-1~exp1 arm64 package),
+default answers to oldconfig, adding CONFIG_USB_XHCI_PCI_RENESAS=3Dm
+afterwards.
 
-With the S-o-B tags fixed:
+On the hardware side: Raspberry Pi CM4 Lite on a CM4 IO Board, with two
+(slightly) different Supahub PCIe-to-quad-USB cards (006 and 006S),
+everything is good with the firmware available. Otherwise this happens:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    [    7.965954] xhci-pci-renesas 0000:01:00.0: failed to load firmware r=
+enesas_usb_fw.mem, fallback to ROM
+    [    7.975705] xhci-pci-renesas 0000:01:00.0: xHCI Host Controller
+    [    7.981728] xhci-pci-renesas 0000:01:00.0: new USB bus registered, a=
+ssigned bus number 1
+    [   27.982001] xhci-pci-renesas 0000:01:00.0: can't setup: -110
+    [   27.987787] xhci-pci-renesas 0000:01:00.0: USB bus 1 deregistered
+    [   27.994007] xhci-pci-renesas 0000:01:00.0: init 0000:01:00.0 fail, -=
+110
+    [   28.000742] xhci-pci-renesas 0000:01:00.0: probe with driver xhci-pc=
+i-renesas failed with error -110
 
--- 
-With best wishes
-Dmitry
+(No onboard ROM on those.)
+
+Thanks, Ben!
+
+
+Cheers,
+--=20
+Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+D-I release manager -- Release team member -- Freelance Consultant
+
+--4ydbv2cq5iq4tk7t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmak4BMACgkQ/5FK8MKz
+VSAOFg//fsuSMb8j4DtOLKUWg+YPQ42hLLueyqC9xc/A6b/fNnwzUZ4dk2c4hZU5
+eDcw3UvjX0UAjuwDkvOf+20V+PhkrMzvF2yZaHjHjFbkwIkWNZwkkmP7xyRsVWaB
+oo0tjfA2FStSCgYM7BM2wjc1oV/gRNiAKYsHF36rXfB8VaOqrmqRP5VtAfJwYu2A
+UQB4QcG/wXJ2IVKZiwBW9w1HiOIeVVPiR7Ka7xWu+SSEatpeYwV+HBHTVrMeFVV8
+dPusHXKSJLPK3jO44ZqJGNSit5ZV7R2yf/d86I8slm3j6LcF+d1tKL49JCd3YdC1
+CAst5fyUy2WSrRHrYRPjB3FJLb+ELwjKYidQHXlOrZT9sNLAMpxtYahLAmVvEI2D
+dSMcfxC+OX0rIZbWQ34uchCdrdkJD8eRMoGaVI4IFqHJwKqREmBHYWeJOf3mlSKZ
+iKuS+al6GQPg4Tw7polFaOIrubdhhBdfjaAW/rsx7vZnBmWDAbQ9suk7rIAll76h
+k9MYYFZ0l1WJ7vI2zqq6Fh8+XQmlg1ABfrduXCzhaDl0NZyx5wuPFpiGQ1E2Qrkx
+vhPxAKhODQ/0PKYV+J+uHe9rbAiYMz4/X/hcphD38ZeRJuleJptQb13ysqlX/UNM
+s6BDMxrjH41IQjLBLi+i97Xy6NfKhODUb7t5JQwlzZ+vBnvHr+M=
+=U4sn
+-----END PGP SIGNATURE-----
+
+--4ydbv2cq5iq4tk7t--
 
