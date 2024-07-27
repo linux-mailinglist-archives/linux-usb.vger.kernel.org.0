@@ -1,57 +1,56 @@
-Return-Path: <linux-usb+bounces-12492-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12493-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0706C93DD51
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 06:57:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6521593DD54
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 07:05:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC23B1F23F0D
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 04:57:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BCA21C23030
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 05:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB0B179AD;
-	Sat, 27 Jul 2024 04:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98358182B9;
+	Sat, 27 Jul 2024 05:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HS642L71"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yr49EIWs"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472E015C3;
-	Sat, 27 Jul 2024 04:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D7C197;
+	Sat, 27 Jul 2024 05:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722056253; cv=none; b=Qe45pWkiK01p8Q/J2+tUqch+5mdVkKWlNAwMulVBNZPy8f4TJwzd9CPoC8f3hCH1KNZ+jKUERu6S1BnEsYVccLaNYyid2jbfWXy3+DZ8X+FHv5lgL3QJ9toSzpr8ziwn4WysBW8n2pMN4tdtQzWi2eUCjbdAmsOby84eOcVJ6fI=
+	t=1722056699; cv=none; b=sZTOqXJ7GKAXcNlUlf9UgwwsspKFC3J23fbZZqj41BlyBKSbTYbhaorrXtvMRJeE8tOLV+t7wThTcEGRylMSDRdbqQq4kX3dBzE8ve4QMeK0mEv3LoHyQaGP0zseQU41LQ+K8DvO6fNTyjlDbcnPMNw8PTI2Y0bkIk4ONtC8JI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722056253; c=relaxed/simple;
-	bh=0C4P/1dWeeUrRZ1L5tcWLfqzwHqb9jvhV2GQ3DVrl6I=;
+	s=arc-20240116; t=1722056699; c=relaxed/simple;
+	bh=d3EAV1/TM9SnhNcMMAH4vATidAVtaY+EPOTi1Q9H7tQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tiBPhIZD3Ohfn5qPRtTiz+8uhlXch9YxfTlSkR3sR8heWuBSaUBF8nfEYC43xsKy/5myn53rVfMNGwyHwk7QvSUHA3NYL75xODkkslXrTqV7RMkE0394Ly1ob+hm2iFPqTeuEZnLVTPk3aqYRDeObfyEY+BAueuPOtv/tDLwUWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HS642L71; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC9CC32781;
-	Sat, 27 Jul 2024 04:57:32 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=h8PUie9UG1hFPSt0O7UTjI7aFleAE50LXssDg6mwGXRStHz5bp7qxYbdU8KNubO4WVyFl4hkJhFq323MiUU0fpL0hbR8HKas3iIuEQ8i38K3eYEHLIX3afv76j8cu0wKwOGdV8rCLH7RUZUXED2eZLaHiqn/sFqkhAyNuS75J0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yr49EIWs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE41C32781;
+	Sat, 27 Jul 2024 05:04:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1722056252;
-	bh=0C4P/1dWeeUrRZ1L5tcWLfqzwHqb9jvhV2GQ3DVrl6I=;
+	s=korg; t=1722056698;
+	bh=d3EAV1/TM9SnhNcMMAH4vATidAVtaY+EPOTi1Q9H7tQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HS642L71DJj1yjwJ7W030t6PNInH4W5nJpy0ZYihmAeHVp5rCKK9L8ikI3MU/ihLx
-	 hi60ByXJ9+2nAZAa4KdlI5l1neiRg7qrpzk4owzvlTyvmojWGpuv5iCKTh6d7XnD31
-	 ush9BsjTcdg4lJG1olnZ1sejDOl2+cBxT/PcqOKk=
-Date: Sat, 27 Jul 2024 06:57:29 +0200
+	b=yr49EIWsRWyXo+xM34nDRxokURKLAcK2GsIGjbhiSLeeFOnhAkdAypIw0qMa1+hZN
+	 BTKDpO2XUfN89+iYFCtqzibzh/6tkyiAoMggzAjexk0RsLeMRszcdk7XQOpJq9sGni
+	 F/d7Sz6xVV8/ToZqJo7kc7K17qCS2anQEu1fb/LI=
+Date: Sat, 27 Jul 2024 07:04:55 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Frank Wunderlich <frank-w@public-files.de>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	Chunfeng Yun <chunfeng.yun@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Daniel Golle <daniel@makrotopia.org>,
-	John Crispin <john@phrozen.org>, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: mt7988 usb broken on 6.10
-Message-ID: <2024072712-paralyze-overthrow-ea04@gregkh>
-References: <trinity-c8e0af34-2704-476a-9454-bf5001256eb9-1722013999541@3c-app-gmx-bap12>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2] usb: typec: fsa4480: Check if the chip is really there
+Message-ID: <2024072734-scenic-unwilling-71ea@gregkh>
+References: <20240726-topic-fs4480_check-v2-1-901ca449db15@kernel.org>
+ <2024072615-hassle-enclose-673f@gregkh>
+ <30b6e9eb-a6f5-4238-93fe-4d8a19b31590@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,17 +59,40 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <trinity-c8e0af34-2704-476a-9454-bf5001256eb9-1722013999541@3c-app-gmx-bap12>
+In-Reply-To: <30b6e9eb-a6f5-4238-93fe-4d8a19b31590@kernel.org>
 
-On Fri, Jul 26, 2024 at 07:13:19PM +0200, Frank Wunderlich wrote:
-> Hi,
+On Fri, Jul 26, 2024 at 03:52:22PM +0200, Konrad Dybcio wrote:
 > 
-> i've noticed that usb on mt7988 is broken in 6.10, was working on 6.9 (with some additional patches like
-> for pinctrl and dts as this chipset is not completely supported by mainline yet).
+> 
+> On 26.07.2024 3:12 PM, Greg Kroah-Hartman wrote:
+> > On Fri, Jul 26, 2024 at 01:43:30PM +0200, Konrad Dybcio wrote:
+> >> From: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >>
+> >> Currently, the driver will happily register the switch/mux devices, and
+> >> so long as the i2c master doesn't complain, the user would never know
+> >> there's something wrong.
+> >>
+> >> Add a device id check (based on [1]) and return -ENODEV if the read
+> >> fails or returns nonsense.
+> >>
+> >> Checking the value on a Qualcomm SM6115P-based Lenovo Tab P11 tablet,
+> >> the ID mentioned in the datasheet does indeed show up:
+> >>  fsa4480 1-0042: Found FSA4480 v1.1 (Vendor ID = 0)
+> >>
+> >> [1] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
+> >>
+> >> Fixes: 1dc246320c6b ("usb: typec: mux: Add On Semi fsa4480 driver")
+> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >> Signed-off-by: Konrad Dybcio <konradybcio@kernel.org>
+> > You can't sign off on a patch twice, that makes no sense, sorry.
+> 
+> I'm losing access to the @linaro.org email and want to preserve the
+> authorship there (as this patch was developed during work hours).
+> 
+> Then, the author's email doesn't match the sender's email, so I'm
+> expected to sign off with the sender's one.
+> 
+> Should I assume that the maintainer trusts me to be the same person?
 
-Any chance you can use 'git bisect' to track down the offending commit?
-
-thanks,
-
-greg k-h
+Yes I do :)
 
