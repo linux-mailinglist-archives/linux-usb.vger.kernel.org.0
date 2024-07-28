@@ -1,89 +1,147 @@
-Return-Path: <linux-usb+bounces-12500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7D7193E174
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 01:29:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BB8A93E3F5
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 09:38:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DED96B2162E
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2024 23:29:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3BFFB2130F
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 07:38:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F361517333A;
-	Sat, 27 Jul 2024 23:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75F74DF42;
+	Sun, 28 Jul 2024 07:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="KV+ZTvIq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="de8BkjUQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0F839FD8;
-	Sat, 27 Jul 2024 23:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A348BEE;
+	Sun, 28 Jul 2024 07:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722122977; cv=none; b=O7IO6pOcRBiM1Bz4OfR/CvR2I8lViXIC1SBBGLw4LNObr/02HScwBFIHFAvqAJX1o0JkKzJFsBLE+9JNVNYuqFwuzcnND8cI7HfvF57ibA2HGToU3Rj7N582JyI4UZ7NzFsP2ugqWPZzzwOD0zV4CJbfEEqXiO1GfRSS3S8f3p4=
+	t=1722152275; cv=none; b=Ot+cGDGJAjPsprzDOvMbjTJ8SbQhWI9j4MWqV3q4EqJBVgqi3sCLaKJszF3NR8etanGYT8wBMnAxzYHhkTUTzB9b8JnVeEIJyNTHKLWGQevk9Cg3nkqJOiLtECJq1dPOtyhCjZZqh5fP8UVFOQW/nNz6TeM27E+dkGNCu01xK8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722122977; c=relaxed/simple;
-	bh=dKHmD9TzO61V8LsScNepDdSQuLuFO3Ew+vfL4iPD3xY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f48TV4Nd1r9073cyo9ytSp6hjP7y/R/1PjaFYSpkqN2VFlQh5Rb1vll679g7EG+hLaJot7yTUld3a+rAN6VbfsqiP7QWgLmCTzvJLaopPj3oQ/9kYvSHneKffLZ5rj4iz57jNerA7VoE3AQLJTW3fTPPHbWako1Oq5wTeJCmdbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=KV+ZTvIq; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=HaaAkZs/uXoGFjtpoKrvzxVCk50c7iJVjvXXtxRnZvg=; b=KV+ZTvIqOVoY7I4As9tQv8L1tn
-	819kw6gNFnL7wsEIITH63adMEz5Z+lDzxlnMIqs+OMJZ0ssoDi1PVNt6d0iSKQvwT3mMB/ZBKAbBo
-	OQRDYRZr5Lv23dV/Ztz5kkRkJcn1ubbuIaDHXsWznbC89pTb6oRhnDqKx4FlUoykyPIc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sXqqc-003Mmx-74; Sun, 28 Jul 2024 01:29:10 +0200
-Date: Sun, 28 Jul 2024 01:29:10 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Dragan Simic <dsimic@manjaro.org>
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	UNGLinuxDriver@microchip.com, davem@davemloft.net,
-	edumazet@google.com, f.fainelli@gmail.com,
-	gregkh@linuxfoundation.org, kuba@kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, lucas.demarchi@intel.com,
-	masahiroy@kernel.org, mcgrof@kernel.org, netdev@vger.kernel.org,
-	pabeni@redhat.com, woojung.huh@microchip.com
-Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
- module
-Message-ID: <3e895811-ad23-4687-b440-5375ad2af2ff@lunn.ch>
-References: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch>
- <20240726121530.193547-1-jtornosm@redhat.com>
- <b96d9801-d370-4ddd-97fd-5eac2a2656f4@lunn.ch>
- <931b582808f237aa3746c5b0a96b3665@manjaro.org>
+	s=arc-20240116; t=1722152275; c=relaxed/simple;
+	bh=738Fy8rulOrZe/368/OUV72dszBRYib5pVFz8QyqEXc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PqhtA5Zp+pxLrmDiw43XPQo1KSiS3r5pI6wSPHAd0k8igw30LsbdFyyq58cg1HD3xcva6ExJ3E2n5wEVqkIpuxQljIglY6HkxyaNIoYFhRUPP3XB5ih6itjPD65L+hcoGRsIojLKxPqMm8QbRrBe4uCpUgbGLdppMR5Q2MAHMrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=de8BkjUQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F7EC4AF09;
+	Sun, 28 Jul 2024 07:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722152274;
+	bh=738Fy8rulOrZe/368/OUV72dszBRYib5pVFz8QyqEXc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=de8BkjUQZ4rwasBz0qICUiJYGb/E9tO8pB3eU2zSNIbiwrynkg4rQx6D575jbSQJc
+	 FvaNrpCvW4VWvbp/8YTE1l7L5YCB7gMpDAHllKETapARikxcRfkw1bBS487z68WSr+
+	 geQsMB9CkVw3I1ckDnmcPaimExXgap6j+AS1OJaCF5Iyngb6f4BHwSZE37xQ7FIhSV
+	 kLTczTXSH63JVZXOnHqmwAIIGhEebnTkwCCn7D3moaqt0krdOJFcHyWhv/4qPo6hmx
+	 8nEoOKBdkIVtXmXDS5MT7YO5YAhEdGi5pmIr2HqvJwvkOcKVLpXmDTmKUoSTak+96z
+	 oXakiqkxCc7bQ==
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2eeb1051360so25150461fa.0;
+        Sun, 28 Jul 2024 00:37:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU05RrUNbiC+4C0vVVTnLKja85oNsGcgAredFMgQWDymHk2dtHihK0jetkWCu24jQnLJdMz07AlM1Xpy3ydkxQotWLeyB5ZzAQ7+eOgAzxqo3lx/yKXi9b2ub7i2mLMrAShTTJsrJg/SyUt4ZmpH7IVev4QRVkWZ81A+T/HxxmejByUIEgqYttTDcgGPKaOSZLI7yYtxQnOwyKJaORA
+X-Gm-Message-State: AOJu0YyPLfWTjXwma90FJ9/yfm7xStYn9YpCaEcuJP4+PPKJNal7GZgJ
+	lQjOMPtSsPQX3kQuiaBrlXuKkm+HGPxRrG2xkFBZkPTq5PJ5pVy/vpRGFwY8jEWYroSs2dhZXsc
+	5moCIsuTtiJTEBptYCMNtF7xjtPc=
+X-Google-Smtp-Source: AGHT+IH8UbSBJkWjoGA9ro9kWmmQSy5IgjZHawnk8q5jtJpAbniHZd4Uqo6hKYhbUVl8ucODdr2mh3lNeZVyrfC90IA=
+X-Received: by 2002:a05:6512:2c08:b0:52f:cbce:b9b7 with SMTP id
+ 2adb3069b0e04-5309b1d749emr2557381e87.0.1722152272923; Sun, 28 Jul 2024
+ 00:37:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <931b582808f237aa3746c5b0a96b3665@manjaro.org>
+References: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch> <20240726121530.193547-1-jtornosm@redhat.com>
+In-Reply-To: <20240726121530.193547-1-jtornosm@redhat.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 28 Jul 2024 16:37:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARg-xxm3FecQ654OnxcMGtc8BjsXmZsymaNKnr_6sM=zw@mail.gmail.com>
+Message-ID: <CAK7LNARg-xxm3FecQ654OnxcMGtc8BjsXmZsymaNKnr_6sM=zw@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy module
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: andrew@lunn.ch, UNGLinuxDriver@microchip.com, davem@davemloft.net, 
+	edumazet@google.com, f.fainelli@gmail.com, gregkh@linuxfoundation.org, 
+	kuba@kernel.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, lucas.demarchi@intel.com, mcgrof@kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, woojung.huh@microchip.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Before going into explaining my viewpoint, could someone, please, clarify
-> which LAN78xx USB-to-Ethernet bridge does this apply to?  I already had
-> a look at a few LAN78xx datasheets, and I'm not sure how the external PHY
-> becomes exposed over the USB interface, so it needs a driver.
+On Fri, Jul 26, 2024 at 9:15=E2=80=AFPM Jose Ignacio Tornos Martinez
+<jtornosm@redhat.com> wrote:
+>
+> Hello Andrew,
+>
+> > What this does appear to do is differentiate between 'pre' which will
+> > load the kernel module before it is requested. Since there is no 'pre'
+> > for this, it seems pointless whacking this mole.
+> Precisely, we need to fix the lan78xx case with micrel phy (and other
+> possible phy modules) too, due to the commented issue generating initramf=
+s
+> in order to include the phy module.
+>
+> > What to me make more sense it to look at all the existing 'pre'
+> > drivers and determine if they can be converted to use this macro.
+> Of course, now that we have the possibility we can do this with other cas=
+es
+> that have been already detected (and fixed with a softdep pre) and others
+> still not detected (if anyone apart from lan78xx).
+>
+> Thanks
+>
+> Best regards
+> Jos=C3=A9 Ignacio
+>
 
-https://elixir.bootlin.com/linux/v6.10/source/drivers/net/usb/lan78xx.c#L2049
 
-This is creating an MDIO bus device. The MDIO bus will be scanned and
-PHYs on the bus found. There are then a few calls to phy_find_first()
-which will get the PHY.
 
-The code itself looks pretty broken, it is directly accessing PHY
-registers, which a MAC driver should not do. That is a layering
-violation.
+I am not familiar with MAC/PHY interface, but perhaps the
+situation might be different on internal/external PHYs?
 
-	Andrew
+I do not know if "micrel" is an internal or an external PHY, though.
+
+
+[1] internal PHY
+
+Commit e57cf3639c323eeed05d3725fd82f91b349adca8 moved the
+internal PHY code from drivers/net/usb/lan78xx.c
+to drivers/net/phy/microchip.c
+
+So, lan78xx.ko is likely to use microchip.ko
+
+Perhaps, is the following useful?
+
+  MODULE_WEAKDEP("microchip");    /* internal PHY */
+
+Or, is this the case for MODULE_SOFTDEP()?
+
+
+
+[2] external PHY
+
+When an external PHY device is connected, the MAC/PHY combination is
+pretty much board-specific. We may end up with
+a bunch of MODULE_WEAKDEP().
+
+
+
+
+
+The second question is, is it so important to enable network
+at the initramfs time? Personally, I am fine with having network
+drivers in the root file system.
+
+Is this useful when the root file system is nfs or something?
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
 
