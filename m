@@ -1,63 +1,61 @@
-Return-Path: <linux-usb+bounces-12525-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12526-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDD4B93E797
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 18:12:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A268A93E7B1
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 18:14:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 873E91F211BD
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 16:12:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C7A4B22E03
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 16:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FDDD84A32;
-	Sun, 28 Jul 2024 16:06:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2386B13B2A4;
+	Sun, 28 Jul 2024 16:06:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+6Tpcdy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="utYpxDxp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F419C823D1;
-	Sun, 28 Jul 2024 16:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998E113AD07;
+	Sun, 28 Jul 2024 16:06:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722182760; cv=none; b=CHFK7U2126j3SAF2OUxbt2G9W6ADAh4NEqvBAPu5eAwktKGhMLMz+X9QddY3Fetqs3wHgFyAsneaa6FX1lI9auhXRnfv4sf44K8Qy0A1PRjyX7HXRzdpKsUj737pcEweJKtcesnwzIBaOTSeAFCPayCAtOlWN7a3r5oas6koGIw=
+	t=1722182781; cv=none; b=Skb8K3CLLcw11+EFNsEpV3x4qZ8bFC+oS6PXng6DcLV9Ud9sThNCaOIBJFOeNVSTnZkhia9hz9DKq4KMQsge2DU3RwOJWqmmW3ruJaLBaDojm26kdgquyXWzgsOZJwfjf6OIhMnTn6RbFBoM25f92FYxPloCshBjNDT3Z4H8rfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722182760; c=relaxed/simple;
-	bh=OGVgNZ2EQczDn0ER3TQ3ANEh6AQfLdzJIUHxh3+ZC1U=;
+	s=arc-20240116; t=1722182781; c=relaxed/simple;
+	bh=Tcwwtvo3ZLDBG1U9pzD8XiY8uu586Uga2SiPIeuqrv8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CXKhFqQXWcOQ9ulO7PNsonq5oEG+ZL033sPwJv+ZtyGvEPoBcuui4IZr958RpLT/TDUK3BuWDKZ+LKO38NvNh00Rh9nFhl3s1yytPvte2tIXs3JU8bvQtm8wZhourmBoFH0cd+9kICI2N2DB8iuhZ3ZT5Hz6GNo9KTGsSlKhMpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+6Tpcdy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39309C116B1;
-	Sun, 28 Jul 2024 16:05:58 +0000 (UTC)
+	 MIME-Version; b=cl4otdELkEymLquO6l+Nk7mXsEiC4Nb7BTylIp5ILYWIhXbxpWKosV/Hj5XAZp48MJmhKEWOdrSLF6Asn1kEJg566528T8q19u3yS5Nmg2eT3JCBlglaNoVOQRdudwbaIyYUj6gqe8mStyW4aEsIoNF5Er1DTMJ5A5bUjALgsmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=utYpxDxp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C351FC32782;
+	Sun, 28 Jul 2024 16:06:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722182759;
-	bh=OGVgNZ2EQczDn0ER3TQ3ANEh6AQfLdzJIUHxh3+ZC1U=;
+	s=k20201202; t=1722182781;
+	bh=Tcwwtvo3ZLDBG1U9pzD8XiY8uu586Uga2SiPIeuqrv8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p+6TpcdyzdFMkoJYaRYHkiCTH3vbFaJRNDENgP+z6aliK+0NqqnQPwYumwreHm7Nz
-	 1ogtfhH94WJ3gOZFjJdZQGeRicMNT4E0oxUk/P5oPmbabh6+ExKVst66vBV2yXHAT+
-	 hMFMW9gDZ9GEeGHLnz5YMc68pHw08v+grXR6JQzW8urEuXuH3QLNLLtyq4UxbqMwW1
-	 yXCfTx/8KdPHhsIw/8F/1lw+uCwU5AK9Gxo8OgCC8zRZiC+xJ34ekThiNGI21pRmB7
-	 DjOoEnsjPVrmCYmlGtiaaI0Dix9eGBwXDhThQYXQvwt1BOk0zrNJ42XU0VTWY5GWtu
-	 rVJb6fr1/NROQ==
+	b=utYpxDxpllBgOW4l7Bx+Hmq7oTHTDXmHggZSUXIbEoQRwUG66RfxP4mSE7GvZpR7Z
+	 FwfF1zvrmbqcYKOeDuUShV5OtuRoC9GwNVvrJRtnODf02t1jYAFehjS4Hb8qFATZtQ
+	 L4KK13UUkychZ4T8WVJhNjbiYvzSE8TDF0W8r+3HcrtgR2AbblC+11C2bSd/TueyEu
+	 BAVtNxOqnW+WfkgsTongpSr5AF66LhFbohh3o0WLFvCpKkHieoIV319kkYsIeScQKE
+	 i1Auxp1dh+JGFgW3No1IkLzxdt40ewMg9nqskXPZfTAypgvb1rdCPcp4X7QnES/iRc
+	 MrAb93LQagWhg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Jameson Thies <jthies@google.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+Cc: Ma Ke <make24@iscas.ac.cn>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	pmalani@chromium.org,
-	lk@c--e.de,
-	saranya.gopal@intel.com,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.10 08/23] usb: typec: ucsi: Fix null pointer dereference in trace
-Date: Sun, 28 Jul 2024 12:04:49 -0400
-Message-ID: <20240728160538.2051879-8-sashal@kernel.org>
+	neal_liu@aspeedtech.com,
+	joel@jms.id.au,
+	linux-aspeed@lists.ozlabs.org,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.10 16/23] usb: gadget: aspeed_udc: validate endpoint index for ast udc
+Date: Sun, 28 Jul 2024 12:04:57 -0400
+Message-ID: <20240728160538.2051879-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240728160538.2051879-1-sashal@kernel.org>
 References: <20240728160538.2051879-1-sashal@kernel.org>
@@ -72,42 +70,38 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.10.2
 Content-Transfer-Encoding: 8bit
 
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+From: Ma Ke <make24@iscas.ac.cn>
 
-[ Upstream commit 99516f76db48e1a9d54cdfed63c1babcee4e71a5 ]
+[ Upstream commit ee0d382feb44ec0f445e2ad63786cd7f3f6a8199 ]
 
-ucsi_register_altmode checks IS_ERR for the alt pointer and treats
-NULL as valid. When CONFIG_TYPEC_DP_ALTMODE is not enabled,
-ucsi_register_displayport returns NULL which causes a NULL pointer
-dereference in trace. Rather than return NULL, call
-typec_port_register_altmode to register DisplayPort alternate mode
-as a non-controllable mode when CONFIG_TYPEC_DP_ALTMODE is not enabled.
+We should verify the bound of the array to assure that host
+may not manipulate the index to point past endpoint array.
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Signed-off-by: Jameson Thies <jthies@google.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20240510201244.2968152-2-jthies@google.com
+Found by static analysis.
+
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+Acked-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+Link: https://lore.kernel.org/r/20240625022306.2568122-1-make24@iscas.ac.cn
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/udc/aspeed_udc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index c4d103db9d0f8..f66224a270bc6 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -496,7 +496,7 @@ ucsi_register_displayport(struct ucsi_connector *con,
- 			  bool override, int offset,
- 			  struct typec_altmode_desc *desc)
- {
--	return NULL;
-+	return typec_port_register_altmode(con->port, desc);
- }
- 
- static inline void
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 821a6ab5da56f..f4781e611aaa2 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -1009,6 +1009,8 @@ static void ast_udc_getstatus(struct ast_udc_dev *udc)
+ 		break;
+ 	case USB_RECIP_ENDPOINT:
+ 		epnum = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
++		if (epnum >= AST_UDC_NUM_ENDPOINTS)
++			goto stall;
+ 		status = udc->ep[epnum].stopped;
+ 		break;
+ 	default:
 -- 
 2.43.0
 
