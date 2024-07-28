@@ -1,144 +1,225 @@
-Return-Path: <linux-usb+bounces-12502-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12503-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 878CF93E45D
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 11:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB47993E4CC
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 13:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B67FC1C20C92
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 09:53:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 225AE1C2125A
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 11:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EFB62868D;
-	Sun, 28 Jul 2024 09:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B6853A1BF;
+	Sun, 28 Jul 2024 11:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="rhAwMFsS"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="XXp0k5iw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A7E1B86E5;
-	Sun, 28 Jul 2024 09:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409E921105;
+	Sun, 28 Jul 2024 11:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722160393; cv=none; b=jg5l1IkwTFfjv7FYvbT7p75pVkXe7lfCEd7np3jHOV60R/xddRdRYjaptPf4a9aNVzso76Aje+E9qe+oi8d0B1NasrmZ3q7ZV1f7zpbMSRS6iyabePne7RP4d72es7+MXIIGsL9oQLNVp5j+lN8bO3dvyZ3mScvEgNG3wqE/qDQ=
+	t=1722166981; cv=none; b=iYFspgkG6QiukfFiKb+EBhy7gZwJejmSVNvMJbWYb7Q43nijwEE4+5eVWT62SKNpRS67W0/6+kLfbTblh+GEVJrtcezINsNsaMvItVZcEjTOFK/2kEWnW1UQp6HMKnJpuc7RMvoj9tJG1IW8BqG1vQArAPM9JPZ/zAXe7y4Tcro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722160393; c=relaxed/simple;
-	bh=3AcKYeHStSY26BRXBtN8D7kEzi8OVJl4q/LQdH9NRvw=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=D3us6IshAsLbCot68iHWTMo894K1KRO3+xy6E5N/bczCrSIwAIOS3RfE53lGT0hBzmz1MBD09bgSFWAhiltT52J+bmF1a34mhyke7JW9zraKwKEqDrE0Gu5dsOZCkAB84r7o5Tk3EMSEfbjpJ6CP6VP3eUJiePV21ExueM64fow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=rhAwMFsS; arc=none smtp.client-ip=116.203.91.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
+	s=arc-20240116; t=1722166981; c=relaxed/simple;
+	bh=vqXIF19GM9IUUR5/SalBX3/7jF735N4hJXNd6kuvflY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WAd3113IWc5l0ZpW3q6yl/DkuQl4jeqgxR6hTcJmlZCPQVOPFKpQKSRyRUZBl3erXpVDT+pLq/ixDSdrWYzTNXIY7u2kf/B22buLtELSQFq94autPNfzGVbhVzAH4yoczr7LV0PMDGmdvLRAA2D70K28B4PuhWFpgtZ359zCkAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=XXp0k5iw; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1722166927; x=1722771727; i=wahrenst@gmx.net;
+	bh=t9RUGYIzPmImI5RdyBcGPuYt4Ch3P3xZu5S+hkMDf8o=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=XXp0k5iwZir7n83XQ087VX+4Acj8Dh7Oc+qgMih5geYrDKIcnfyIj3ZXa/GiuBHx
+	 YOiBztY8UCKtHnLEizMh1IOC8W5gfHhJXECtis4z46DC4arFtGJmXPv49T8U56Ur+
+	 qRonJ8oOf5uxSNpkU32ep+vzK/KzkYfAIPapweF1PkPi8uffRq4lf4fJgKkrgkbqv
+	 cgqr5bXzoOv9a+5X/6fA2deVAbgBc5dmwD7FQASC/BdB5I1FlpXNaR4c58K04bP4G
+	 i/GDS4vI4+iDCHeWPxkDHBu7g7W58nuLHG5mNOn9l8h6AIXkdPFdzPhZjvcQxN/t6
+	 VYXCvpf1rJGp8oKGxg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvcG-1slHrT2n32-00N5HR; Sun, 28
+ Jul 2024 13:42:07 +0200
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Lukas Wunner <lukas@wunner.de>,
+	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kernel-list@raspberrypi.com,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V2 00/16] ARM: bcm2835: Implement initial S2Idle for Raspberry Pi
+Date: Sun, 28 Jul 2024 13:41:44 +0200
+Message-Id: <20240728114200.75559-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1722160389;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F44zS9z0DG/3T7ddI7rng0IKCHRFy5Lk6PukoVKvy20=;
-	b=rhAwMFsSRfy4z9PdzOJGA+HV0QRy9hyYbDhbkF9IRZti/4LLrm0CUlPZ1teiFIT5GV+7Cc
-	HAH6Xf77uuFjOyGvJjUuvqqUapNFV45WFiSn9rEe4lwebWRns58Gsv2Ozs8DAmf98yElQc
-	3nLAqmiOeSHYdC5FQpbr6+A3SYZGs6IIOndb+H0Napf0KTijttu9LU5KHXz+vhHhZYAksq
-	7xa6yrWwxyW5Wkw6T2S7esA7Jt7nDWFQItuYXCsNv54nybwQajL37zymSQ+MeGkxfvR4nR
-	GYsN69l3J9UBySJS6Y19Mpbf4NeV5q53JUvw4Zfu3B1OK38aIr52joZSQ76RlA==
-Date: Sun, 28 Jul 2024 11:53:08 +0200
-From: Dragan Simic <dsimic@manjaro.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>, andrew@lunn.ch,
- UNGLinuxDriver@microchip.com, davem@davemloft.net, edumazet@google.com,
- f.fainelli@gmail.com, gregkh@linuxfoundation.org, kuba@kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, lucas.demarchi@intel.com, mcgrof@kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com, woojung.huh@microchip.com
-Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
- module
-In-Reply-To: <CAK7LNARg-xxm3FecQ654OnxcMGtc8BjsXmZsymaNKnr_6sM=zw@mail.gmail.com>
-References: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch>
- <20240726121530.193547-1-jtornosm@redhat.com>
- <CAK7LNARg-xxm3FecQ654OnxcMGtc8BjsXmZsymaNKnr_6sM=zw@mail.gmail.com>
-Message-ID: <fa9fa543c4c8ca4e8ec54744e2e07efb@manjaro.org>
-X-Sender: dsimic@manjaro.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:YNorNR+1omM35M/GKScFU7LvaIEeYUoyTg7TYTYVxeo3HqCms2E
+ dBa0huxhCkBAH10O57ek73gOEy4q2qr7qfZ6U8wUZ6etP2maMxihZhUcCKNNV9a5dM4Cxlf
+ C1sc9GJfzt22UGFKOPHVB6XUr5ce+QvlqfFH2cIYllyOo8h98YLGhlNwcO6Z9FCUyZEiYbL
+ LUXkcX26tvWx2Qk+8w1Uw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:WNzqUOykDu4=;CemkE6JrPK/fmO7QQsIf0PXdrqq
+ jD4X9TBuBB9UTe169GfebsNmSBw73UVxVDTrFAoO8+qDGhu1MKzSDTCxsPhDb9TfaWVs2M2YM
+ dLPPZTuiSkGlFsJ289uwm/BKkdfB5S4kKguffFLqxMAXWpJ4F0eqAjrKcy17BQ0yU50dQaZrB
+ 38KO0+djyJcBNbgNEWeBfqXw6SHiul8QE21dSLYmo30mNSzWPZVWcvk2DU+vQ1IaQxX+da/Vq
+ k88MYUq6yRVVfzMDdrWiV5pKt/tPovi+jrtjMyTa3tsNd1u4qIY02/3fAHfYshb5P46i36rFV
+ PDI2PQQo/eRjLMGiFzEQTO3B2tqiLggsSUsPzs86ECpEUbduisCH3bLxYHA8h/m0o6XAQQOYk
+ Hd+LG7Dg/tl1Bct6MJ8Z3eiwoC+Kf7CzSiA+RcwsI5hn4kA0eYxep2VT1Qj+leFPZwBJuK4NH
+ qF0yXMwSQBRbig/DGyziSiilnE1EIecqavalD1Gl/zjTiMXz0he8pL0vnqFFi1zz3F1tJnKrB
+ vLhUzb1WU+1uIRiYmhjxhJG7BRIsuL/c7jbRXXSVAyZvbfDlZ1g9Z4nduET/i2Ci3eUG1d1i7
+ OOSWwKXXvXky3iRPP2IAZIgyA5TeXGAK1VEaKa0tnVabHaXSz+qcUWD5Udbm3aOdKPKSrptqt
+ iMAOxqoyyH0k7hQsIP/IO4SdpP9KEotg64JzegYLOqFzDKpsWmGUfLhHexl1wZSXqWc4BXXPh
+ OVd/UcmrBy9CIBPdGeHJnhfEHIsL0r5aLNHZBPaLxNw65ox7YV2AcLs+3/PiXTSmCRl3JuyfJ
+ x2mvWOFmCajsBqv/xmNfeYxg==
 
-Hello Masahiro,
+This series implement the initial S2Idle support for
+the Raspberry Pi, which was a long time on my TODO list [1]. The
+changes allow to suspend and resume the Raspberry Pi via debug UART.
+The focus is on the BCM2835 SoC, because it's less complex than its
+successors and have enough documentation.
 
-On 2024-07-28 09:37, Masahiro Yamada wrote:
-> On Fri, Jul 26, 2024 at 9:15 PM Jose Ignacio Tornos Martinez
-> <jtornosm@redhat.com> wrote:
->> > What this does appear to do is differentiate between 'pre' which will
->> > load the kernel module before it is requested. Since there is no 'pre'
->> > for this, it seems pointless whacking this mole.
->> Precisely, we need to fix the lan78xx case with micrel phy (and other
->> possible phy modules) too, due to the commented issue generating 
->> initramfs
->> in order to include the phy module.
->> 
->> > What to me make more sense it to look at all the existing 'pre'
->> > drivers and determine if they can be converted to use this macro.
->> Of course, now that we have the possibility we can do this with other 
->> cases
->> that have been already detected (and fixed with a softdep pre) and 
->> others
->> still not detected (if anyone apart from lan78xx).
-> 
-> I am not familiar with MAC/PHY interface, but perhaps the
-> situation might be different on internal/external PHYs?
-> 
-> I do not know if "micrel" is an internal or an external PHY, though.
-> 
-> [1] internal PHY
-> 
-> Commit e57cf3639c323eeed05d3725fd82f91b349adca8 moved the
-> internal PHY code from drivers/net/usb/lan78xx.c
-> to drivers/net/phy/microchip.c
-> 
-> So, lan78xx.ko is likely to use microchip.ko
-> 
-> Perhaps, is the following useful?
-> 
->   MODULE_WEAKDEP("microchip");    /* internal PHY */
-> 
-> Or, is this the case for MODULE_SOFTDEP()?
-> 
-> [2] external PHY
-> 
-> When an external PHY device is connected, the MAC/PHY combination is
-> pretty much board-specific. We may end up with
-> a bunch of MODULE_WEAKDEP().
-> 
-> The second question is, is it so important to enable network
-> at the initramfs time? Personally, I am fine with having network
-> drivers in the root file system.
-> 
-> Is this useful when the root file system is nfs or something?
+The series can be roughly separated in 3 parts:
+ 1. base patches (1-5, 15, 16) which allows S2Idle support for BCM2835
+ 2. drm vc4 patches which implement S2Idle support (mostly new and not
+    really BCM2835 specific)
+ 3. dwc2 patches which handle BCM2835 specific issues (still in progress,
+    but works fine)
 
-The troubles happen when the driver is probed during the initial
-ramdisk stage, e.g. when a machine is rebooted with a USB adapter
-plugged in.  If the required dependent PHY driver module isn't also
-found in the initial ramdisk, probing the main driver may actually
-fail or (hopefully not) end up in some strange state.
+Cherry-picking of patches should be fine.
 
-If you have time, I'd suggest that you go through the following
-related discussions, which should provide further clarification
-and additional examples of such issues with initial ramdisks and
-additional driver modules:
+Test steps:
+- configure debug console (pl011 or mini UART) as wakeup source
+- send system to idle state
 
-- 
-https://lore.kernel.org/linux-modules/04e0676b0e77c5eb69df6972f41d77cdf061265a.1721906745.git.dsimic@manjaro.org/
-- 
-https://lore.kernel.org/dri-devel/4e1e00422a14db4e2a80870afb704405da16fd1b.1718655077.git.dsimic@manjaro.org/T/#u
-- 
-https://lore.kernel.org/dri-devel/fdaf2e41bb6a0c5118ff9cc21f4f62583208d885.1718655070.git.dsimic@manjaro.org/T/#u
+  echo freeze > /sys/power/state
+
+- wakeup system by console traffic
+
+The DWC2 part of the implementation isn't complete yet (especially patch 1=
+4),
+but much better than the first version. The USB domain is now powered down=
+ and
+the USB devices are still usable after resume. There is still room for
+improvements, but at least the system won't freeze forever as before [2].
+
+Here are some figures for the Raspberry Pi 1 (without any
+devices connected except of a debug UART):
+
+running but CPU idle =3D 1.67 W
+S2Idle               =3D 1.33 W
+
+In comparison with HDMI & USB keyboard connected (but neither active
+nor wakeup source):
+
+running but CPU idle =3D 1.82 W
+S2Idle               =3D 1.33 W
+
+The series has been successfully tested on the following platforms:
+Raspberry Pi 1 B
+Raspberry Pi 3 B+
+
+Changes in V2:
+- rebased against todays mainline
+- added Reviewed-by from Florian
+- added Acked-by from Minas
+- dropped "irqchip/bcm2835: Enable SKIP_SET_WAKE and MASK_ON_SUSPEND"
+  because it has been applied by Thomas Gleixner
+- dropped "pmdomain: raspberrypi-power: Avoid powering down USB"
+  because this workaround has been replaced by patch 14
+- use drm_err_once instead of DRM_ERROR and return connector_status_unknow=
+n
+  in patch 6
+- add new patch in order to clean-up all DRM_ERROR
+- add new patch to improve raspberrypi-power logging
+- add new patch to simplify V3D clock retrieval
+- add new patch 5 to avoid power down of wakeup devices
+- add new patch 12 to avoid confusion about ACPI ID of BCM283x USB
+- add new patch 8 & 10 which address the problem that HDMI
+  is not functional after s2idle
+- add more links and fix typo in patch 13
+- add new WIP patch 14 which recover DWC2 register after power down
+- take care of UART clock in patch 15 as commented by Florian
+- use SYSTEM_SLEEP_PM_OPS in patch 15
+
+[1] - https://github.com/lategoodbye/rpi-zero/issues/9
+[2] - https://bugzilla.redhat.com/show_bug.cgi?id=3D2283978
+
+Stefan Wahren (16):
+  firmware: raspberrypi: Improve timeout warning
+  mailbox: bcm2835: Fix timeout during suspend mode
+  pmdomain: raspberrypi-power: Adjust packet definition
+  pmdomain: raspberrypi-power: Add logging to rpi_firmware_set_power
+  pmdomain: raspberrypi-power: set flag GENPD_FLAG_ACTIVE_WAKEUP
+  drm/vc4: hdmi: Handle error case of pm_runtime_resume_and_get
+  drm/vc4: Get the rid of DRM_ERROR()
+  drm/vc4: hdmi: add PM suspend/resume support
+  drm/vc4: v3d: simplify clock retrieval
+  drm/vc4: v3d: add PM suspend/resume support
+  usb: dwc2: debugfs: Print parameter no_clock_gating
+  usb: dwc2: Add comment about BCM2848 ACPI ID
+  usb: dwc2: Skip clock gating on Broadcom SoCs
+  WIP: usb: dwc2: Implement recovery after PM domain off
+  serial: 8250_bcm2835aux: add PM suspend/resume support
+  ARM: bcm2835_defconfig: Enable SUSPEND
+
+ arch/arm/configs/bcm2835_defconfig        |  2 -
+ drivers/firmware/raspberrypi.c            |  3 +-
+ drivers/gpu/drm/vc4/vc4_bo.c              | 14 ++---
+ drivers/gpu/drm/vc4/vc4_dpi.c             | 14 ++---
+ drivers/gpu/drm/vc4/vc4_dsi.c             | 32 ++++++-----
+ drivers/gpu/drm/vc4/vc4_gem.c             | 11 ++--
+ drivers/gpu/drm/vc4/vc4_hdmi.c            | 70 +++++++++++++++++------
+ drivers/gpu/drm/vc4/vc4_hvs.c             |  4 +-
+ drivers/gpu/drm/vc4/vc4_irq.c             |  2 +-
+ drivers/gpu/drm/vc4/vc4_v3d.c             | 21 +++----
+ drivers/gpu/drm/vc4/vc4_validate.c        |  8 +--
+ drivers/gpu/drm/vc4/vc4_vec.c             | 10 ++--
+ drivers/mailbox/bcm2835-mailbox.c         |  3 +-
+ drivers/pmdomain/bcm/raspberrypi-power.c  | 43 ++++++++------
+ drivers/tty/serial/8250/8250_bcm2835aux.c | 37 ++++++++++++
+ drivers/usb/dwc2/core.c                   | 16 ++++++
+ drivers/usb/dwc2/core.h                   | 17 ++++++
+ drivers/usb/dwc2/debugfs.c                |  1 +
+ drivers/usb/dwc2/gadget.c                 | 49 ++++++++++++++++
+ drivers/usb/dwc2/hcd.c                    | 49 ++++++++++++++++
+ drivers/usb/dwc2/params.c                 |  2 +
+ drivers/usb/dwc2/platform.c               | 32 +++++++++++
+ 22 files changed, 339 insertions(+), 101 deletions(-)
+
+=2D-
+2.34.1
+
 
