@@ -1,137 +1,108 @@
-Return-Path: <linux-usb+bounces-12519-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12520-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35EC893E559
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 15:08:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8692893E59A
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 16:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4DC01F20B68
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 13:08:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4492280F69
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 14:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9904F602;
-	Sun, 28 Jul 2024 13:08:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7835028C;
+	Sun, 28 Jul 2024 14:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="W79Hmsjz"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="PA5jSMxN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877A7482D8;
-	Sun, 28 Jul 2024 13:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8C734545;
+	Sun, 28 Jul 2024 14:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722172117; cv=none; b=DaeI3v+8Y+YWdrExRBZHVhf/XKnTAIsLlD789Xg3QZsvzAAJfk4Yvzp9UI/iyFsETBjAOc+T6+JjjN56sJsx3T0kRhfFpvzC2Qi2K4oK8QethksPDf9JH6Txqx7J0FGpCjmvXAeHRdh5KdZFcuaW15qQlkIxIrsEzoHr5SNWrTw=
+	t=1722175863; cv=none; b=P5Nb2znSEX+OfS6GWe/AY9H3VxqDPjdWPYPqGGxIB/TgNa+qInH1nmtQcclstNxrFyPUp9IFIe0+7y2defbd/sNIaSsjBo+HkGgD6XQ6TIK+oP6d9MSoCKWtFzKwTpCFw4jshqp/bBb9Bdsaz1PAhjDW1ksYT0DVSkfZm5SwqN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722172117; c=relaxed/simple;
-	bh=EIb/0BVQLAIWTGsSf2exEUrI6S97uVc10LsFQOB7HdM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jSyH0kelxLltXBqHvyDAZUEHRPMFPEUM0r9XR4IYy1+2VK7zPUsBmrCYARWjObeEiDs3s/YaWZXXpPD4mmJk5xA1ryFOkJKa6w0Dxyd1vFxi9CB0WNoywKIE+dkijKyDCFqKzdGiiGk1ZShTrvbZhCYT5+fCiaFZTlSeTpI2ZWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=W79Hmsjz; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1722172087; x=1722776887; i=wahrenst@gmx.net;
-	bh=EIb/0BVQLAIWTGsSf2exEUrI6S97uVc10LsFQOB7HdM=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=W79Hmsjz7U7XYrhfikB5fA/d87YEALxts+rMUgHZC7K6YKogcwefVd73Px1ngb20
-	 365JEvCVRYXMhtiEbvA1DyAXJVDqJ1SuUk2mfYuogPsp1OG15PMNTzqM4NP54R0Y4
-	 rco/BWhEqtLn21wNUdabqv28AeJfmp1xOChXBhFSbNnmF0yoagC2wqa7A6Bri2ikx
-	 aKa0DI1+Ta02ohrOjk7IW6adAKbC28vJZyQp4VxyIIaQq1Rew4IlM1HqpAkCo34B0
-	 gS5QEDtNmMJpjkNQB58BsLVzvPBdM0FkqQ996gAfmPFazRgmL3u8pZSMXclP9slo4
-	 53BDO4YPwK/5UoFbPw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M89L1-1scCMG0Qdv-009Dte; Sun, 28
- Jul 2024 15:08:07 +0200
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Lukas Wunner <lukas@wunner.de>,
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	bcm-kernel-feedback-list@broadcom.com,
-	linux-pm@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 16/16] ARM: bcm2835_defconfig: Enable SUSPEND
-Date: Sun, 28 Jul 2024 15:00:29 +0200
-Message-Id: <20240728130029.78279-8-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240728130029.78279-1-wahrenst@gmx.net>
-References: <20240728114200.75559-1-wahrenst@gmx.net>
- <20240728130029.78279-1-wahrenst@gmx.net>
+	s=arc-20240116; t=1722175863; c=relaxed/simple;
+	bh=DqcVSN0XsTJA0Oi0MNZ0teOOtzntOY8OrbnnB6o8vjY=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=rnS+eOhLLN23TthwhE7zL8J7MFc4iy+wNWt9oAZd3I17zR63GW/xV7NDQiNwH199GsdMb2kXxsZuGpkJ1yRBUU74tOdQj+mEpQ3n4hIcwNyVHT7jmT86JlUQsq8WEWsHlcEgy02vICbU3z/WED2nAQXfTJFSeG6ACUMPfDDmEZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=PA5jSMxN; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:VDKN64YJ6p518cmZoBkZcyEycWgxqBiXzFOn7tj34Md65oD5Z+v
- ZyIH2kWrCo7uD/4rinuinIoegUeMNFemd1ZI3kcdichjEYV+XGxQJ0Le6WmlVnI0Zb96mrp
- CrC/znc5FWPOwF+m8fk6KB/L52BwZlWnZJnB6nouviFVAbfZaCVgOgU439aNUNVMIuISRIf
- DTVt762wNfN8J8Lz42eNA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:dM3fOqR1834=;S1pLtaHrDhNPdNkUIa0I15yIguO
- Z4ExTh1CVbI2XAwJU0xnTJM+/EWJOqr0F1e6NMJwleA6TpewGejD2Qx0Jwf9Jo2g+5wjvPFNU
- Iyl6hMNb43S9FYKt651c+jNhfgCCEqf2UbXvdHos6/m2BArgd1/JGTEssBbObpItkRKxIy2BK
- c3VmdVQJ5ZMc7kvxVKmg0CtynjvYUwbBjVUqJ3hmellCsLI2cCJquD15HPE/JT0wMd/9x0Ixg
- RXoMEFKAQDguz5Sb6cprcJyOrjWmrPVM1iNrWc7uJtQOzWMoQWWsYCJoF+5YfbEUC1jIEcuum
- 6H9tKXnjvOpLus+N+pf1BtxuIH+xk2wH/Y4zEb/pnjMKm25yKbeM0gzDHoAQYROdsorX48/46
- DjvLkEWVvMMqEyqr0O6S9OF5/lcVQX7AW4So/EesTHKdesVYYsYn3r7HbRlA8vzZqKtoBpJq6
- g6Z2KYshYwHlqxkbjgDxwz4JHO1CkwUSLMw0BS5ZBHcee23BtjJwVMyFg3Fyl3+zdk2g96vHv
- i5Wzjfe5rghfCDDRRt2IJ7aokGA22Upah8wtrtN90ypv8wm3vgaFbtc8RiTWUUgqfdhb5uH9V
- xyE8xI/b/0EQzz0690FoYI9rzhoyP+raQrW8zO2HbWbu5YLenJsejcfYcaF09DXx3RUWnhexJ
- GwWI75YsJuuZriwPepIFkvx7a14vWdLO5sNtc+/Tq4RL4ibM7hhTCZsbyqka6tdQbHhFA3KdY
- oOuSqF2J01n9R1mjSbzZnD4n5TfSS5gGUs1rIfsMaZzz2a5yf5pKZS4Y4vtIZ3g3xwiCvBWes
- jehdysnWw8gf/IZQgtRodJ4g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1722175858;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=No/YIbGtEUuTgLlMt3RFQBfM5H9ZzhC0++FkOyap0EU=;
+	b=PA5jSMxNXzlUDrvvooYdg3ajy2QWXNbiQtvs2kbu8TaOVaPOPCW5LrOdkUpJvTUfBkP9t1
+	62F9H1t8ClWX/UoPfJ/cozJPlg/zOREkOb01dLfQxL1oTUzZSm4VopwOw1ne2hhtwdu0Vw
+	jOeweUtx03M9PukL4T6FiXuqKcqhd7ZuExd1e0sOGBEm2uA8B9KSVeZEdk4h76zboHY7Sh
+	52+y17P6PfluZSB9eBM3CGpJ6od0d/CwMVXqjfpDEo5L0LZSKwdV+bhVudao3MWS5CKy1/
+	heNUb4eNW5yfb437rCAIFpl2u5MS6dkT8BiAy9RkyhP46+YnAhFEVomR1iK5uA==
+Date: Sun, 28 Jul 2024 16:10:57 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+ UNGLinuxDriver@microchip.com, davem@davemloft.net, edumazet@google.com,
+ f.fainelli@gmail.com, gregkh@linuxfoundation.org, kuba@kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, lucas.demarchi@intel.com, masahiroy@kernel.org,
+ mcgrof@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
+ woojung.huh@microchip.com
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
+ module
+In-Reply-To: <3e895811-ad23-4687-b440-5375ad2af2ff@lunn.ch>
+References: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch>
+ <20240726121530.193547-1-jtornosm@redhat.com>
+ <b96d9801-d370-4ddd-97fd-5eac2a2656f4@lunn.ch>
+ <931b582808f237aa3746c5b0a96b3665@manjaro.org>
+ <3e895811-ad23-4687-b440-5375ad2af2ff@lunn.ch>
+Message-ID: <a520ee4da331c8edb99f2c14d22a3531@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-Since the Raspberry Pi supports Suspend-To-Idle now, this option
-should be enabled. This should make power management testing easier.
+Hello Andrew,
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-=2D--
- arch/arm/configs/bcm2835_defconfig | 2 --
- 1 file changed, 2 deletions(-)
+On 2024-07-28 01:29, Andrew Lunn wrote:
+>> Before going into explaining my viewpoint, could someone, please, 
+>> clarify
+>> which LAN78xx USB-to-Ethernet bridge does this apply to?  I already 
+>> had
+>> a look at a few LAN78xx datasheets, and I'm not sure how the external 
+>> PHY
+>> becomes exposed over the USB interface, so it needs a driver.
+> 
+> https://elixir.bootlin.com/linux/v6.10/source/drivers/net/usb/lan78xx.c#L2049
+> 
+> This is creating an MDIO bus device. The MDIO bus will be scanned and
+> PHYs on the bus found. There are then a few calls to phy_find_first()
+> which will get the PHY.
+> 
+> The code itself looks pretty broken, it is directly accessing PHY
+> registers, which a MAC driver should not do. That is a layering
+> violation.
 
-diff --git a/arch/arm/configs/bcm2835_defconfig b/arch/arm/configs/bcm2835=
-_defconfig
-index b5f0bd8dd536..97632dee1ab3 100644
-=2D-- a/arch/arm/configs/bcm2835_defconfig
-+++ b/arch/arm/configs/bcm2835_defconfig
-@@ -38,8 +38,6 @@ CONFIG_CPU_FREQ_GOV_ONDEMAND=3Dy
- CONFIG_CPUFREQ_DT=3Dy
- CONFIG_ARM_RASPBERRYPI_CPUFREQ=3Dy
- CONFIG_VFP=3Dy
--# CONFIG_SUSPEND is not set
--CONFIG_PM=3Dy
- CONFIG_JUMP_LABEL=3Dy
- CONFIG_MODULES=3Dy
- CONFIG_MODULE_UNLOAD=3Dy
-=2D-
-2.34.1
+Thanks for the clarification.
 
+Basically, the way I see it, weakdeps are the right solution for the
+problem at hand, i.e. for the generation of the initial ramdisk with
+all the possible PHY driver modules.  However, I don't think that some
+automagical generation of the associated MODULE_WEAKDEP() statements
+is the way to go.  Instead, all those statements should be added by
+hand to the lan78xx driver, making sure that each PHY is tested and
+validated beforehand.
 
