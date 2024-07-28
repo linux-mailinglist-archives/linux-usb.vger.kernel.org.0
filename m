@@ -1,108 +1,152 @@
-Return-Path: <linux-usb+bounces-12520-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12521-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8692893E59A
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 16:11:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F0C493E787
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 18:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4492280F69
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 14:11:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACA72B22EB6
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2024 16:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7835028C;
-	Sun, 28 Jul 2024 14:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24A77EEF5;
+	Sun, 28 Jul 2024 16:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="PA5jSMxN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMHp6wXX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8C734545;
-	Sun, 28 Jul 2024 14:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F7C7E0E9;
+	Sun, 28 Jul 2024 16:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722175863; cv=none; b=P5Nb2znSEX+OfS6GWe/AY9H3VxqDPjdWPYPqGGxIB/TgNa+qInH1nmtQcclstNxrFyPUp9IFIe0+7y2defbd/sNIaSsjBo+HkGgD6XQ6TIK+oP6d9MSoCKWtFzKwTpCFw4jshqp/bBb9Bdsaz1PAhjDW1ksYT0DVSkfZm5SwqN8=
+	t=1722182749; cv=none; b=RaT3xDHZvlYuoENcuKRB7jezzkxixV6ks9KIF8P747vmUQenVuOdxUVueAPbAIBKy87YHqUu4D73TgWy6gGM10d1je5524rnHAcbMAzTmvW6KQ8TRnbTWqvxh1vvWiWlD8xeX7SUyAHzfVWIh3xcmGhFzMZt0cih7xGiqe/zz3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722175863; c=relaxed/simple;
-	bh=DqcVSN0XsTJA0Oi0MNZ0teOOtzntOY8OrbnnB6o8vjY=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=rnS+eOhLLN23TthwhE7zL8J7MFc4iy+wNWt9oAZd3I17zR63GW/xV7NDQiNwH199GsdMb2kXxsZuGpkJ1yRBUU74tOdQj+mEpQ3n4hIcwNyVHT7jmT86JlUQsq8WEWsHlcEgy02vICbU3z/WED2nAQXfTJFSeG6ACUMPfDDmEZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=PA5jSMxN; arc=none smtp.client-ip=116.203.91.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
+	s=arc-20240116; t=1722182749; c=relaxed/simple;
+	bh=a8/lOQG2ygBLs+gxW2ifnNKVEh9hog38oEdBdjw2/6s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hPp95rVgmnVqVJ5LUEf4TLi0osL7p4PQGwHe/S59ioc8PdxjkA88iB0JHrHxwjcrwUDz/qgEKyAtx6HqBSx6+dLnYdm1qqZIkyyp8mt+VHfH2j3osyMVafrVeMa3NLyMLk1xyeJ9SUnY6xVo3WtYyQqdcu7w3qfis79cytkuLks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMHp6wXX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C73C116B1;
+	Sun, 28 Jul 2024 16:05:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722182748;
+	bh=a8/lOQG2ygBLs+gxW2ifnNKVEh9hog38oEdBdjw2/6s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LMHp6wXXZPl45a90kZfl34eYm3jDiTRBxCAbrwyjMGJEv9gX1Sx/yTpEFL3wmGn3a
+	 xDJcQjPdDkZxotsLF5sdUmVFULRwmFc6S0NA8WEPkf2V3d1cwKKnIZCy80kJg15lcV
+	 hAoHliT4FB4wnAyfFYVC8W1VRdCfk6YV3/PbF8Dpp13xGCySL0JMYrE9Lv8Vt0Rd7A
+	 iSI9nCuXFqsZxcr84TAcwNf0eOdxd7ydenYaZ5DS4yadfTtpEu6SX+zDS2aSvRjFSB
+	 t+6E2hTrCUaA1MRE3qPS7WtacbbD+G5Upj7bppAhBbpr9FjfSCH4/hJ5NfEffe93CV
+	 vNs5zexF9eq3A==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Roger Quadros <rogerq@kernel.org>,
+	Ravi Gunasekaran <r-gunasekaran@ti.com>,
+	Peter Chen <peter.chen@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	pawell@cadence.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.10 04/23] usb: cdns3: Add quirk flag to enable suspend residency
+Date: Sun, 28 Jul 2024 12:04:45 -0400
+Message-ID: <20240728160538.2051879-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240728160538.2051879-1-sashal@kernel.org>
+References: <20240728160538.2051879-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1722175858;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=No/YIbGtEUuTgLlMt3RFQBfM5H9ZzhC0++FkOyap0EU=;
-	b=PA5jSMxNXzlUDrvvooYdg3ajy2QWXNbiQtvs2kbu8TaOVaPOPCW5LrOdkUpJvTUfBkP9t1
-	62F9H1t8ClWX/UoPfJ/cozJPlg/zOREkOb01dLfQxL1oTUzZSm4VopwOw1ne2hhtwdu0Vw
-	jOeweUtx03M9PukL4T6FiXuqKcqhd7ZuExd1e0sOGBEm2uA8B9KSVeZEdk4h76zboHY7Sh
-	52+y17P6PfluZSB9eBM3CGpJ6od0d/CwMVXqjfpDEo5L0LZSKwdV+bhVudao3MWS5CKy1/
-	heNUb4eNW5yfb437rCAIFpl2u5MS6dkT8BiAy9RkyhP46+YnAhFEVomR1iK5uA==
-Date: Sun, 28 Jul 2024 16:10:57 +0200
-From: Dragan Simic <dsimic@manjaro.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
- UNGLinuxDriver@microchip.com, davem@davemloft.net, edumazet@google.com,
- f.fainelli@gmail.com, gregkh@linuxfoundation.org, kuba@kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, lucas.demarchi@intel.com, masahiroy@kernel.org,
- mcgrof@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
- woojung.huh@microchip.com
-Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
- module
-In-Reply-To: <3e895811-ad23-4687-b440-5375ad2af2ff@lunn.ch>
-References: <bcc81ea0-78e1-476e-928c-b873a064b479@lunn.ch>
- <20240726121530.193547-1-jtornosm@redhat.com>
- <b96d9801-d370-4ddd-97fd-5eac2a2656f4@lunn.ch>
- <931b582808f237aa3746c5b0a96b3665@manjaro.org>
- <3e895811-ad23-4687-b440-5375ad2af2ff@lunn.ch>
-Message-ID: <a520ee4da331c8edb99f2c14d22a3531@manjaro.org>
-X-Sender: dsimic@manjaro.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.2
+Content-Transfer-Encoding: 8bit
 
-Hello Andrew,
+From: Roger Quadros <rogerq@kernel.org>
 
-On 2024-07-28 01:29, Andrew Lunn wrote:
->> Before going into explaining my viewpoint, could someone, please, 
->> clarify
->> which LAN78xx USB-to-Ethernet bridge does this apply to?  I already 
->> had
->> a look at a few LAN78xx datasheets, and I'm not sure how the external 
->> PHY
->> becomes exposed over the USB interface, so it needs a driver.
-> 
-> https://elixir.bootlin.com/linux/v6.10/source/drivers/net/usb/lan78xx.c#L2049
-> 
-> This is creating an MDIO bus device. The MDIO bus will be scanned and
-> PHYs on the bus found. There are then a few calls to phy_find_first()
-> which will get the PHY.
-> 
-> The code itself looks pretty broken, it is directly accessing PHY
-> registers, which a MAC driver should not do. That is a layering
-> violation.
+[ Upstream commit 0aca19e4037a4143273e90f1b44666b78b4dde9b ]
 
-Thanks for the clarification.
+Some platforms (e.g. ti,j721e-usb, ti,am64-usb) require
+this bit to be set to workaround a lockup issue with PHY
+short suspend intervals [1]. Add a platform quirk flag
+to indicate if Suspend Residency should be enabled.
 
-Basically, the way I see it, weakdeps are the right solution for the
-problem at hand, i.e. for the generation of the initial ramdisk with
-all the possible PHY driver modules.  However, I don't think that some
-automagical generation of the associated MODULE_WEAKDEP() statements
-is the way to go.  Instead, all those statements should be added by
-hand to the lan78xx driver, making sure that each PHY is tested and
-validated beforehand.
+[1] - https://www.ti.com/lit/er/sprz457h/sprz457h.pdf
+i2409 - USB: USB2 PHY locks up due to short suspend
+
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://lore.kernel.org/r/20240516044537.16801-2-r-gunasekaran@ti.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/cdns3/core.h |  1 +
+ drivers/usb/cdns3/drd.c  | 10 +++++++++-
+ drivers/usb/cdns3/drd.h  |  3 +++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+index 81a9c9d6be08b..57d47348dc193 100644
+--- a/drivers/usb/cdns3/core.h
++++ b/drivers/usb/cdns3/core.h
+@@ -44,6 +44,7 @@ struct cdns3_platform_data {
+ 			bool suspend, bool wakeup);
+ 	unsigned long quirks;
+ #define CDNS3_DEFAULT_PM_RUNTIME_ALLOW	BIT(0)
++#define CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE	BIT(1)
+ };
+ 
+ /**
+diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+index 8b936a2e93a0d..84fb38a5723a3 100644
+--- a/drivers/usb/cdns3/drd.c
++++ b/drivers/usb/cdns3/drd.c
+@@ -389,7 +389,7 @@ static irqreturn_t cdns_drd_irq(int irq, void *data)
+ int cdns_drd_init(struct cdns *cdns)
+ {
+ 	void __iomem *regs;
+-	u32 state;
++	u32 state, reg;
+ 	int ret;
+ 
+ 	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
+@@ -433,6 +433,14 @@ int cdns_drd_init(struct cdns *cdns)
+ 			cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
+ 					      &cdns->otg_v1_regs->ien;
+ 			writel(1, &cdns->otg_v1_regs->simulate);
++
++			if (cdns->pdata &&
++			    (cdns->pdata->quirks & CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE)) {
++				reg = readl(&cdns->otg_v1_regs->susp_ctrl);
++				reg |= SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE;
++				writel(reg, &cdns->otg_v1_regs->susp_ctrl);
++			}
++
+ 			cdns->version  = CDNS3_CONTROLLER_V1;
+ 		} else {
+ 			dev_err(cdns->dev, "not supported DID=0x%08x\n", state);
+diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
+index d72370c321d39..1e2aee14d6293 100644
+--- a/drivers/usb/cdns3/drd.h
++++ b/drivers/usb/cdns3/drd.h
+@@ -193,6 +193,9 @@ struct cdns_otg_irq_regs {
+ /* OTGREFCLK - bitmasks */
+ #define OTGREFCLK_STB_CLK_SWITCH_EN	BIT(31)
+ 
++/* SUPS_CTRL - bitmasks */
++#define SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE	BIT(17)
++
+ /* OVERRIDE - bitmasks */
+ #define OVERRIDE_IDPULLUP		BIT(0)
+ /* Only for CDNS3_CONTROLLER_V0 version */
+-- 
+2.43.0
+
 
