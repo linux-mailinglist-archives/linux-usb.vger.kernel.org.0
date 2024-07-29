@@ -1,191 +1,182 @@
-Return-Path: <linux-usb+bounces-12568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19C1C93F167
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 11:43:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 315A893F26B
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 12:17:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDBA11C215E1
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 09:43:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A571F1F2231E
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 10:17:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22FB313E032;
-	Mon, 29 Jul 2024 09:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E53143754;
+	Mon, 29 Jul 2024 10:17:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JVzZ9goL"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="U8kvQa7s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188BD78B4E
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 09:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A141E1428FE;
+	Mon, 29 Jul 2024 10:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722246191; cv=none; b=HpzXMgq7b15du5/rqnWnfYGpoPYSo3hZPir3yd3FNhwHuLQUQ7Z/QOio7rUwLgOx5hTuuBHcXEuip0jeOekxAT9TsjEMOqsvR1HsyZl0SVFWT+b7PHM1UI612b4jp6/JncUpuPmaVSFF6x9fS8o7rqB8aIOTBIj0SKOoYXgFJ2M=
+	t=1722248257; cv=none; b=j9F22jKEDeH+/5gWyinpiHepkxrqeQ8KCT3qO6wEMhvlG+AoI4M11YV91EsBxmxvRYSCOk7vpZmJQhMABuJx/RAMqrBNYI3+gSHhxV4ys2rchogGWMCEgScHHHd57MB6fYwLYwy8S7NtOTF8ZzgjAvorm6y0n/1ig3bOY1nzBLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722246191; c=relaxed/simple;
-	bh=RGb56mY821IGOqIZuwq4G1VfEE5nkMUSqk6/TRosDdA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X9DZcYAFolLeWoHm8onLyoHHRIC7OcquA3jP01vrwdkj7C45OlO0o1Zen8sMsKnykdDcLueRB+ZlOdjJutyXa7WiRKD5hyPtixcpLF3JL0MTGPqSytbLgj3tCkpCBaqOZNSy37BaeolMXuBZ9bqcgN8OlepLdcomgDzw8iEpSYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JVzZ9goL; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4928da539c3so230944137.1
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 02:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722246189; x=1722850989; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoJ3ZacNS55oRX7hJpHDUlm+X3SpBJFA/ypVEqbSLQ8=;
-        b=JVzZ9goLKBwgcf/odU8UUyyTjmDv3aPsByygTQewmmi5I1giT74MRhepLQ6ky0rYDu
-         8cJUd7HmQBVsxMjsCwTwD9wiO2VVls8lT9r7MHyobJ6F7EXJRkayrqYD2Mb+vA7Oot19
-         +kneIjKbsH3fgcqg/as/cwjqaTMhbo7ZTzDjUGsJhZOBFQE9mxzweBytAySddKNajvbc
-         9D4V6NrI30jclrgtTfY9VqpmkTJil5/fUFtRUFVe33ytMfxufTINOc2adPuQWEkBggkq
-         sUUInW3U9aVbrR/frD1UY3FTbfBfdMNSON4GgypnJUPAs3G/GZkExrXlJmNXZCbU70VV
-         DIRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722246189; x=1722850989;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZoJ3ZacNS55oRX7hJpHDUlm+X3SpBJFA/ypVEqbSLQ8=;
-        b=Dq1cNQHN27n2Ak+6h6a8Q9VAo43KuGgf1rVKROO+WwpqSodMDH4d2lMGU+42yLRN+z
-         cyrymWrOnLbS9oxLzIYCk72zKDq0WJL8hK+PQvc2bUMRXJJVV010N1qmdsns09I/urVy
-         JDACNhm9zl2KTKOGjyobGh0XD5y2jeV8rLG5ACzF66anp1HXt/deaWW2QxcHLNKhVx4l
-         /ixi1ZwpednjqStXFe6+WJAFx4J7S1KkmMa9lJRXU5gaovctte3SErLbym9im8Jd1tol
-         MV1r7L+X2RuU2cxsbh0+6H488ucDVFkzKqe1J1E+byrC2CAG2Dn9L0DxIEEQCNg945YS
-         LDxw==
-X-Forwarded-Encrypted: i=1; AJvYcCW7tFRyE9J9HhXmx/heWq1HVT1WZ+//GJI2VCxxX+tXIJGJGq/WIZuVe2i/pB6bxrEqTFH34ublml0cMF5sk6AZ2Bt8sJ83NFcA
-X-Gm-Message-State: AOJu0YyszIlnvZF0JMpR//K3nHsKqZy0mguDfq+rdnvyAF2eqrhB9N2b
-	kTZ3zsB/L3+UO3y73vUyqbEo9LTsuyFo6WRMtdrShepfRZVQzn5GxChqaBr6N/XfHo9cIqNO1hu
-	dXLP5OW8Wxgcmdb2T6aEDtQiFvf71pPICvUfI
-X-Google-Smtp-Source: AGHT+IEswDxk0VCMm32cFENqTsoXGj13514gdRwA6aQk9DZX2174YDOKdaN+jZodkccBMjEYKq6GfgKsKv7ISSQQam8=
-X-Received: by 2002:a05:6102:c4e:b0:493:d360:6f58 with SMTP id
- ada2fe7eead31-493fad1515dmr3478038137.20.1722246188837; Mon, 29 Jul 2024
- 02:43:08 -0700 (PDT)
+	s=arc-20240116; t=1722248257; c=relaxed/simple;
+	bh=WfQW0nu+tTflofi5Wm3y2KaGn8nAZ0DqR6ZUsyiPDtY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=McnzhcO9rJUwJnu23bTWmwVVB9mvlF5eZB7PAK9+Ai3gZ2wq8wM0otcv/5dZ7+0IPV25WIs5g2cTGS5q9zEE5ne9ljW3fKdtqpiPQrdNOQLOgp+/CzBCgbd0DMb+sIqip3jXORmUZHFzVPiaJHWDSJ+QOVX8TVhbPFE0K9QKQLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=U8kvQa7s; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46TAGKpd023699;
+	Mon, 29 Jul 2024 10:17:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	2FS8ccFb334bCr0B1cypfRsnHjV37oyh1MM7jBzg3Rw=; b=U8kvQa7sAR66ImAo
+	9wCcMbln2G835w8Oeyn+8krN4QawU6cEtKizOcPbbMk1B1VV9NErD+42lWOCNnQm
+	xxQplXLjOPz2GrYTVW3IOR+NeeXoO43UAS3EOD0UH7Ml4Q3lA7eJEPJlgnRtikce
+	meYxQwPmNE76ly2glpyNzatq0dzRU+Enyn3o9VpqnI12PJNQ/CYFL2Xi3p6r1lBU
+	X3nObNXqHSmTAfYlQTf9kdLEovRR3WXNgW5CpCUxcBDFU0Y3hsYdav0DRktkRPsn
+	Ixafp9nnVU7O11Ik1Vo4PsgUOZpaTnCmcAPkqr97PuzC7oOSkU6BRyMVZbSgoCgG
+	n5GBKA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40mrytuvr4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 29 Jul 2024 10:17:32 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46TAHUSW009566
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 29 Jul 2024 10:17:30 GMT
+Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 29 Jul
+ 2024 03:17:26 -0700
+Message-ID: <5c15c22d-54a4-4184-a75a-ea581eccbc4b@quicinc.com>
+Date: Mon, 29 Jul 2024 18:17:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240729022158.92059-1-andrey.konovalov@linux.dev>
-In-Reply-To: <20240729022158.92059-1-andrey.konovalov@linux.dev>
-From: Marco Elver <elver@google.com>
-Date: Mon, 29 Jul 2024 11:42:30 +0200
-Message-ID: <CANpmjNP6ouX1hSayoeOHu7On1DYtPtydFbEQtxoTbsnaE9j77w@mail.gmail.com>
-Subject: Re: [PATCH] kcov: properly check for softirq context
-To: andrey.konovalov@linux.dev
-Cc: Dmitry Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Aleksandr Nogikh <nogikh@google.com>, 
-	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
-	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Marcello Sylvester Bauer <sylv@sylv.io>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com, stable@vger.kernel.org, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: usb: dwc3: Add QCS9100 compatible
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20240709-document_qcs9100_dwc3_compatible-v2-1-ed543ae02117@quicinc.com>
+From: Tengfei Fan <quic_tengfan@quicinc.com>
+In-Reply-To: <20240709-document_qcs9100_dwc3_compatible-v2-1-ed543ae02117@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: z4dJNTE_oJyiSSrUODzjxS4Qy9Rxdi4c
+X-Proofpoint-GUID: z4dJNTE_oJyiSSrUODzjxS4Qy9Rxdi4c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-29_08,2024-07-26_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 suspectscore=0 bulkscore=0 adultscore=0 spamscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=993
+ mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407290069
 
-On Mon, 29 Jul 2024 at 04:22, <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@gmail.com>
->
-> When collecting coverage from softirqs, KCOV uses in_serving_softirq() to
-> check whether the code is running in the softirq context. Unfortunately,
-> in_serving_softirq() is > 0 even when the code is running in the hardirq
-> or NMI context for hardirqs and NMIs that happened during a softirq.
->
-> As a result, if a softirq handler contains a remote coverage collection
-> section and a hardirq with another remote coverage collection section
-> happens during handling the softirq, KCOV incorrectly detects a nested
-> softirq coverate collection section and prints a WARNING, as reported
-> by syzbot.
->
-> This issue was exposed by commit a7f3813e589f ("usb: gadget: dummy_hcd:
-> Switch to hrtimer transfer scheduler"), which switched dummy_hcd to using
-> hrtimer and made the timer's callback be executed in the hardirq context.
->
-> Change the related checks in KCOV to account for this behavior of
-> in_serving_softirq() and make KCOV ignore remote coverage collection
-> sections in the hardirq and NMI contexts.
->
-> This prevents the WARNING printed by syzbot but does not fix the inability
-> of KCOV to collect coverage from the __usb_hcd_giveback_urb when dummy_hcd
-> is in use (caused by a7f3813e589f); a separate patch is required for that.
->
-> Reported-by: syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=2388cdaeb6b10f0c13ac
-> Fixes: 5ff3b30ab57d ("kcov: collect coverage from interrupts")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+
+
+On 7/9/2024 10:17 PM, Tengfei Fan wrote:
+> Document the QCS9100 dwc3 compatible.
+> QCS9100 is drived from SA8775p. Currently, both the QCS9100 and SA8775p
+> platform use non-SCMI resource. In the future, the SA8775p platform will
+> move to use SCMI resources and it will have new sa8775p-related device
+> tree. Consequently, introduce "qcom,qcs9100-dwc3" to describe non-SCMI
+> based DWC3.
+> 
+> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
 > ---
->  kernel/kcov.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index f0a69d402066e..274b6b7c718de 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -161,6 +161,15 @@ static void kcov_remote_area_put(struct kcov_remote_area *area,
->         kmsan_unpoison_memory(&area->list, sizeof(area->list));
->  }
->
-> +/*
-> + * Unlike in_serving_softirq(), this function returns false when called during
-> + * a hardirq or an NMI that happened in the softirq context.
-> + */
-> +static inline bool in_softirq_really(void)
-> +{
-> +       return in_serving_softirq() && !in_hardirq() && !in_nmi();
-> +}
+> Introduce support for the QCS9100 SoC device tree (DTSI) and the
+> QCS9100 RIDE board DTS. The QCS9100 is a variant of the SA8775p.
+> While the QCS9100 platform is still in the early design stage, the
+> QCS9100 RIDE board is identical to the SA8775p RIDE board, except it
+> mounts the QCS9100 SoC instead of the SA8775p SoC.
+> 
+> The QCS9100 SoC DTSI is directly renamed from the SA8775p SoC DTSI, and
+> all the compatible strings will be updated from "SA8775p" to "QCS9100".
+> The QCS9100 device tree patches will be pushed after all the device tree
+> bindings and device driver patches are reviewed.
+> 
+> The final dtsi will like:
+> https://lore.kernel.org/linux-arm-msm/20240703025850.2172008-3-quic_tengfan@quicinc.com/
+> 
+> The detailed cover letter reference:
+> https://lore.kernel.org/linux-arm-msm/20240703025850.2172008-1-quic_tengfan@quicinc.com/
+> ---
+> Changes in v2:
+>    - Split huge patch series into different patch series according to
+>      subsytems
+>    - Update patch commit message
+> 
+> prevous disscussion here:
+> [1] v1: https://lore.kernel.org/linux-arm-msm/20240703025850.2172008-1-quic_tengfan@quicinc.com/
+> ---
+>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index efde47a5b145..07b0b6530b78 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -26,6 +26,7 @@ properties:
+>             - qcom,msm8998-dwc3
+>             - qcom,qcm2290-dwc3
+>             - qcom,qcs404-dwc3
+> +          - qcom,qcs9100-dwc3
+>             - qcom,qdu1000-dwc3
+>             - qcom,sa8775p-dwc3
+>             - qcom,sc7180-dwc3
+> @@ -199,6 +200,7 @@ allOf:
+>                 - qcom,msm8953-dwc3
+>                 - qcom,msm8996-dwc3
+>                 - qcom,msm8998-dwc3
+> +              - qcom,qcs9100-dwc3
+>                 - qcom,sa8775p-dwc3
+>                 - qcom,sc7180-dwc3
+>                 - qcom,sc7280-dwc3
+> @@ -448,6 +450,7 @@ allOf:
+>                 - qcom,ipq4019-dwc3
+>                 - qcom,ipq8064-dwc3
+>                 - qcom,msm8994-dwc3
+> +              - qcom,qcs9100-dwc3
+>                 - qcom,qdu1000-dwc3
+>                 - qcom,sa8775p-dwc3
+>                 - qcom,sc7180-dwc3
+> 
+> ---
+> base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
+> change-id: 20240709-document_qcs9100_dwc3_compatible-a767738e13c9
+> 
+> Best regards,
 
-Not sure you need this function. Check if just this will give you what you want:
+After considering the feedback provided on the subject, We have decided
+to keep current SA8775p compatible and ABI compatibility in drivers.
+Let's close this session and ignore the current patche here.
+Thank you for your input.
 
-  interrupt_context_level() == 1
-
-I think the below condition could then also just become:
-
-  if (interrupt_context_level() == 1 && t->kcov_softirq)
-
-Although the softirq_count() helper has a special PREEMPT_RT variant,
-and interrupt_context_level() doesn't, so it's not immediately obvious
-to me if that's also ok on PREEMPT_RT kernels.
-
-Maybe some RT folks can help confirm that using
-interrupt_context_level()==1 does what your above function does also
-on RT kernels.
-
->  static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_struct *t)
->  {
->         unsigned int mode;
-> @@ -170,7 +179,7 @@ static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_stru
->          * so we ignore code executed in interrupts, unless we are in a remote
->          * coverage collection section in a softirq.
->          */
-> -       if (!in_task() && !(in_serving_softirq() && t->kcov_softirq))
-> +       if (!in_task() && !(in_softirq_really() && t->kcov_softirq))
->                 return false;
->         mode = READ_ONCE(t->kcov_mode);
->         /*
-> @@ -849,7 +858,7 @@ void kcov_remote_start(u64 handle)
->
->         if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
->                 return;
-> -       if (!in_task() && !in_serving_softirq())
-> +       if (!in_task() && !in_softirq_really())
->                 return;
->
->         local_lock_irqsave(&kcov_percpu_data.lock, flags);
-> @@ -991,7 +1000,7 @@ void kcov_remote_stop(void)
->         int sequence;
->         unsigned long flags;
->
-> -       if (!in_task() && !in_serving_softirq())
-> +       if (!in_task() && !in_softirq_really())
->                 return;
->
->         local_lock_irqsave(&kcov_percpu_data.lock, flags);
-> --
-> 2.25.1
->
+-- 
+Thx and BRs,
+Tengfei Fan
 
