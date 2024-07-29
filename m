@@ -1,104 +1,154 @@
-Return-Path: <linux-usb+bounces-12564-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12565-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97EAC93F001
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 10:38:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D375093F008
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 10:43:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32C21B21DC4
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 08:38:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39875B218AF
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 08:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75F7B13D258;
-	Mon, 29 Jul 2024 08:37:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863C713CF82;
+	Mon, 29 Jul 2024 08:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jRCCFarN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tNdLHdTE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EA51EEE4
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 08:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE541EA91;
+	Mon, 29 Jul 2024 08:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722242276; cv=none; b=VBPfHHXcg8UMiRKHE5H4K4eRaS25lzkBfGLHQq2vMDayBaRct/jPuvM61rEOtlwtzZ01NzFb1uF1oesfhmPA7H6xM5HkPguuVBzbcluZ0UFUJPd3l4UdrWISzV6tNmHhrfyZYaLBLs/gMRDWYDXhh9tAqBpE6szdyvmGnaMHXqg=
+	t=1722242585; cv=none; b=RclpEE7brnmJnek9vlLlK3Bw3UfecoVx1MGhbsfMqEXJAO02mBf7M6qXfGNC1tjZZkoNCtu55qeXXJ9eWmBEEj6DxkKIrO2GcmL0WZQP8cazKtKGTjyVND76AQL66wbaOX04/2HE3ZzwjNiju9IE8flXq7DnYDa7xfgV4iywO7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722242276; c=relaxed/simple;
-	bh=GI3xTCo0pG2dP3L5UUNP9YcWsnxFUDpXFdZJ95t0k38=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Qm88dOD6ZUbvIkYKy11Rk5dO8GiptFZpsKRHW4saVyiW5zQ3Muh0u114CX59NRpw6PvZ+YBarLmm6eifmn0NFJxMv0F6y439UBACWGiEPlmpmVGgqBSXIKMtaE+mrmgumaiLG+lvg2Z/fW6nZ9e3EbpJO30qObJBQloNtCy7Ilg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jRCCFarN; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722242273;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EG8W45Ypb7DOiKwZMCGHslPdEIU08Mt9VFtOVJoxdWk=;
-	b=jRCCFarNqQaN8YL+YuUKaYqxC4DO/7W+4MaMFwNcC4fByTQLLOy1z//T0h5fCK5TzkggHO
-	fBa+w0Rs1RQaQedwXc/8g1N/Snfa0uXGEebsbxzM4EK/QsgC6uwkcXXw+9ppTT5y0nMBNH
-	LB2U0ti9fC7t0XHR/ZzPLEQJmxJpEb0=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-483-PCCetDi_NwygAmM2KFHI6g-1; Mon,
- 29 Jul 2024 04:37:48 -0400
-X-MC-Unique: PCCetDi_NwygAmM2KFHI6g-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF9FA19560A2;
-	Mon, 29 Jul 2024 08:37:46 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.136])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 63C241955D42;
-	Mon, 29 Jul 2024 08:37:41 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: andrew@lunn.ch
-Cc: UNGLinuxDriver@microchip.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	gregkh@linuxfoundation.org,
-	jtornosm@redhat.com,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	lucas.demarchi@intel.com,
-	mcgrof@kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	woojung.huh@microchip.com
-Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy module
-Date: Mon, 29 Jul 2024 10:37:38 +0200
-Message-ID: <20240729083739.11360-1-jtornosm@redhat.com>
-In-Reply-To: <fc40244c-b26f-421e-8387-98c7f9f0c8ca@lunn.ch>
-References: <fc40244c-b26f-421e-8387-98c7f9f0c8ca@lunn.ch>
+	s=arc-20240116; t=1722242585; c=relaxed/simple;
+	bh=fypkPEhNf+inbXHpJqx5hCwkWqrhyK/dOnswq2hYCvg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kKgSrBn0zRCMBRbwfDFERb1sp7iqCGlbEQlOB3NewBX5HGh6Y5rGy1u2XiflA7wWOwg1Y+RCcryd0ZsTCVmBNjJI2K64Fn3R302IY4yAq1KlpCW9yo/6wgubRzHPSk8qCrSWGg8rw11tpRlyyfz/UBwzDtYpyuiFRV5KMcx0IY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tNdLHdTE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18929C32786;
+	Mon, 29 Jul 2024 08:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722242584;
+	bh=fypkPEhNf+inbXHpJqx5hCwkWqrhyK/dOnswq2hYCvg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=tNdLHdTEpwXDqCCjaJnMH/lng+l4Sb8owN0q9FUumyjY5Xy05MrQZF3PLGViuWZp0
+	 3KridpDX1hFxbnBlpsi85hA4BK5p8S1EUbxYYT2e8JHCHfaXYgtRblGtCf9ObK3aV8
+	 ZGoutTFiw4RNr2/jCdYvYba0ZcOPX0HzjVZH2L42lC+TYDhIsHRVa+z8fiIY+yicgb
+	 jr47fLgL9v6IxzZ/By9oLkGSNKD34nKL7bykN1624FOXvIj9K6RsyjSndN35EUCw2v
+	 r5cjVZiMpdG0p/FB5v2uLdxOidLFHnlc9ZRFyA5LYJ3j3oJOR4PC0y6PjFbOGg1nka
+	 T3MgwtKqzJBKw==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Date: Mon, 29 Jul 2024 10:42:58 +0200
+Subject: [PATCH v3] usb: typec: fsa4480: Check if the chip is really there
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240729-topic-fs4480_check-v3-1-f5bf732d3424@kernel.org>
+X-B4-Tracking: v=1; b=H4sIABFWp2YC/32NQQ7CIBQFr9KwFsNHRHHVexhjKP20pA00UBtN0
+ 7tL68KNcTkveTMzSRgdJnIpZhJxcskFn+GwK4hptW+Qujoz4YwLxoHTMQzOUJuEOLO7adF01Gj
+ NQDJbAQOSj5VOSKuovWnz1T/6Po9DROueW+l6y9y6NIb42sITrOvfxgQUaK2UVChqaZUue+d1D
+ PsQG7L6Jv51nLj86eDZoRgYLYSqKziWHUaP/cexLMsbloMdaw4BAAA=
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Bjorn Andersson <andersson@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722242581; l=2844;
+ i=konradybcio@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=yjGaNryhQQJ9sTn9aPk0my2gzcjnpbcxDfSBNsl29XI=;
+ b=jYP20R7PIrLG6ATC0v6rXU+h76xOUyEBRFlJ2TaXNIgjRUE1mMHGDxUmgNcxLfGl98ABHP4m3
+ K2oj43q000vD119mrLViKSNr6X72m2MCa5oFo9VFlJx2KENp6ehboNg
+X-Developer-Key: i=konradybcio@kernel.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Hello Andrew,
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-I like the idea from Jakub, reading the associated phy from the hardware
-in some way, although reading your last comments I don't know if it could
-be possible for all the cases.
-Let me ask you about this to understand better, if present,
-always reading /sys/bus/mdio_bus/devices/*/phy_id,
-could it be enough to get the possible related phy? 
-And after this get the related phy module?
+Currently, the driver will happily register the switch/mux devices, and
+so long as the i2c master doesn't complain, the user would never know
+there's something wrong.
 
-Thanks
+Add a device id check (based on [1]) and return -ENODEV if the read
+fails or returns nonsense.
 
-Best regards
-José Ignacio
+Checking the value on a Qualcomm SM6115P-based Lenovo Tab P11 tablet,
+the ID mentioned in the datasheet does indeed show up:
+ fsa4480 1-0042: Found FSA4480 v1.1 (Vendor ID = 0)
+
+[1] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
+
+Fixes: 1dc246320c6b ("usb: typec: mux: Add On Semi fsa4480 driver")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v3:
+- Don't sign off twice
+- Pick up Dmitry's rb
+- Link to v2: https://lore.kernel.org/r/20240726-topic-fs4480_check-v2-1-901ca449db15@kernel.org
+
+Changes in v2:
+- Prepend the new defines with FSA4480_ to make them more obvious
+- Link to v1: https://lore.kernel.org/r/20240212-topic-fs4480_check-v1-1-d9969e4d6f9a@linaro.org
+---
+ drivers/usb/typec/mux/fsa4480.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+index cb7cdf90cb0a..cd235339834b 100644
+--- a/drivers/usb/typec/mux/fsa4480.c
++++ b/drivers/usb/typec/mux/fsa4480.c
+@@ -13,6 +13,10 @@
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_mux.h>
+ 
++#define FSA4480_DEVICE_ID	0x00
++ #define FSA4480_DEVICE_ID_VENDOR_ID	GENMASK(7, 6)
++ #define FSA4480_DEVICE_ID_VERSION_ID	GENMASK(5, 3)
++ #define FSA4480_DEVICE_ID_REV_ID	GENMASK(2, 0)
+ #define FSA4480_SWITCH_ENABLE	0x04
+ #define FSA4480_SWITCH_SELECT	0x05
+ #define FSA4480_SWITCH_STATUS1	0x07
+@@ -251,6 +255,7 @@ static int fsa4480_probe(struct i2c_client *client)
+ 	struct typec_switch_desc sw_desc = { };
+ 	struct typec_mux_desc mux_desc = { };
+ 	struct fsa4480 *fsa;
++	int val = 0;
+ 	int ret;
+ 
+ 	fsa = devm_kzalloc(dev, sizeof(*fsa), GFP_KERNEL);
+@@ -268,6 +273,15 @@ static int fsa4480_probe(struct i2c_client *client)
+ 	if (IS_ERR(fsa->regmap))
+ 		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
+ 
++	ret = regmap_read(fsa->regmap, FSA4480_DEVICE_ID, &val);
++	if (ret || !val)
++		return dev_err_probe(dev, -ENODEV, "FSA4480 not found\n");
++
++	dev_dbg(dev, "Found FSA4480 v%lu.%lu (Vendor ID = %lu)\n",
++		FIELD_GET(FSA4480_DEVICE_ID_VERSION_ID, val),
++		FIELD_GET(FSA4480_DEVICE_ID_REV_ID, val),
++		FIELD_GET(FSA4480_DEVICE_ID_VENDOR_ID, val));
++
+ 	/* Safe mode */
+ 	fsa->cur_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
+ 	fsa->mode = TYPEC_STATE_SAFE;
+
+---
+base-commit: 2347b4c79f5e6cd3f4996e80c2d3c15f53006bf5
+change-id: 20240212-topic-fs4480_check-caa0160fb101
+
+Best regards,
+-- 
+Konrad Dybcio <konradybcio@kernel.org>
 
 
