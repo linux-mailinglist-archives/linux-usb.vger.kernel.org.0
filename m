@@ -1,125 +1,80 @@
-Return-Path: <linux-usb+bounces-12582-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12583-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17D0093FDCC
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 20:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C9E493FDDF
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 20:57:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C668A282EA5
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 18:53:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB00E283539
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 18:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2675E188CA7;
-	Mon, 29 Jul 2024 18:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B8618784F;
+	Mon, 29 Jul 2024 18:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQKb85Qk"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="mgp53MpS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CBA6187344;
-	Mon, 29 Jul 2024 18:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF73186E46;
+	Mon, 29 Jul 2024 18:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722279177; cv=none; b=YjfWu6c2JaM1aauxfOW7ufhHI9+HoGrz0qM+t2ouWwPLl4pCFMWhbg6OWsAQtZfVHnRoDTJaRaeffnGqilG/FABkbm+Q5M3asYxaS7X8BmHkM9kLE4ELIVwSxGddERp3DI1IcSNHde+IPxryPyHxRLEsYDOVN2hbDUDhcGvAX3U=
+	t=1722279432; cv=none; b=O4/lDX31FhmnPIfn1uVKzyMVPzQ2TEPMyHphP9KsXToMfIE4yTJzs3Pmyhehcmgig3JUyxnKzY1OtRGF/6xgjDknH8B9Hwil2mAtCNtMx3KSKcLbBLvIIOM9Nf8W6fqyHraQ2h4LeZl/Gq4pMVd1z2Ipbh1lOfC3qrpHM9CaPO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722279177; c=relaxed/simple;
-	bh=vsqLLDDZY6D3lJdg9vpCEv/GMhqruvs+fapG3j0a0QU=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=lfhe+79fMoqbPHJNaiKQFVCP0UJvNdROGWCo9CQSoSGZhd/pep7SIU92ZA84EWIdKCaP2zyEWo6s0Rydg9JapWrfCFyOj6a9xpOvW68UZs3JwhnmJRonfyfj6VapTjLvUZCRtLp6npc8i0i8qMocdJuYv8t9nzwqtI7yGp5VWSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQKb85Qk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F75EC4AF0B;
-	Mon, 29 Jul 2024 18:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722279177;
-	bh=vsqLLDDZY6D3lJdg9vpCEv/GMhqruvs+fapG3j0a0QU=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=nQKb85Qkji/RdhYlHQt0ujUtUIMnXbcBi+YRXFaYcfamKcriesDmMyUAD1gt5E9M7
-	 zxo+Gl/0dChFsv8XTvrfb++4x3/LidUl0jC5SrmhVm3xYKCYeg12ugHlz4WGBR72kI
-	 Ny4szV1ulxYzb7zPuskv04jZM4rjbZufKkZupiLHQ/IAAktm3h4SOuYCFyiIrWHLIM
-	 +DQlSX5PqnVdAx/uhtUEJxOTAZG4JoFefvfvANZ9owtmBKXea6lnxaAKMhUP6Gk5Pq
-	 g+tgFietVVs2hsB0/WDz5zuyWaL5dMr0zK7mBHX1LawcIep+VkT1F3+B85sQn+IjYf
-	 bwM9qKc7cJhaA==
-Date: Mon, 29 Jul 2024 12:52:56 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1722279432; c=relaxed/simple;
+	bh=HWIvfvSUieybTAxquZnSLcEhcp0h1rSyfWOqkQZYreI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JF9KXxSpli8KZpQ+IRX5UB+cSyEpXIk2cgX6Ca6qdyKylQeUqXassTEWLZ65MGE/ob3YcTU6b5fr1qY7fKlP7kr9kCuYkTNOihZVexcAz3azkkU8NmwopJ7AB3I1tJ9k8NwKf/thY0nGaik0YdGe2XyZF0B44KYGEplci8+/GNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=mgp53MpS; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=8iZu0JR+FvD990OvDQ81lMQOOGXDWYLftm87w+xQ4QU=; b=mgp53MpSarEZ+YrDWgslFw8QuL
+	UICQportZ0T1jTc3L3ACBK7Y1ftXwHvcfzt8/sRaEtO3IJljYkqyN5+JOLKAuilZ/LNydakfjVKqM
+	m2pOd60yrzHkH86dfdRnT+zcidossRJzt20jE8dp4jjYJjjTnwRjtMumEpAx8feNGK+U=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sYVYC-003Uqo-BB; Mon, 29 Jul 2024 20:56:52 +0200
+Date: Mon, 29 Jul 2024 20:56:52 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: dsimic@manjaro.org, UNGLinuxDriver@microchip.com, davem@davemloft.net,
+	edumazet@google.com, f.fainelli@gmail.com,
+	gregkh@linuxfoundation.org, kuba@kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, lucas.demarchi@intel.com,
+	masahiroy@kernel.org, mcgrof@kernel.org, netdev@vger.kernel.org,
+	pabeni@redhat.com, woojung.huh@microchip.com
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy
+ module
+Message-ID: <c8450f9c-a7f8-4775-8d26-7a070aa68e4d@lunn.ch>
+References: <4db38805936d28fe1578c525a18f7849@manjaro.org>
+ <20240729123244.18780-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: devicetree@vger.kernel.org, andersson@kernel.org, 
- s.hauer@pengutronix.de, krzk+dt@kernel.org, conor+dt@kernel.org, 
- gregkh@linuxfoundation.org, festevam@gmail.com, 
- linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org, 
- linux-usb@vger.kernel.org, imx@lists.linux.dev, kernel@pengutronix.de, 
- jun.li@nxp.com
-In-Reply-To: <20240729081039.3904797-1-xu.yang_2@nxp.com>
-References: <20240729081039.3904797-1-xu.yang_2@nxp.com>
-Message-Id: <172227905062.1346514.6301429778096950851.robh@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: usb: gpio-sbu-mux: Add an entry for
- PTN36043
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240729123244.18780-1-jtornosm@redhat.com>
 
+> Including in the initramfs all the phy modules is an option but I think it
+> would be better to include only the necessary stuff (this is the default
+> behavior for the tools that are used to build the initramfs). This is valid
+> for embedded and not-embedded systems.
 
-On Mon, 29 Jul 2024 16:10:37 +0800, Xu Yang wrote:
-> Add a compatible entry for the NXP PTN36043 GPIO-based mux hardware
-> used for connecting, disconnecting and switching orientation of
-> the SBU lines in USB Type-C applications.
-> 
-> PTN36043 datasheet: https://www.nxp.com/docs/en/data-sheet/PTN36043A.pdf
-> 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+So are you saying current initramfs are broken, because they don't
+include the needed PHY modules? You can fix one example of the lan78xx
+USB dongle, but are going to leave everything else broken?
 
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y freescale/imx8mp-evk.dtb freescale/imx8mq-evk.dtb' for 20240729081039.3904797-1-xu.yang_2@nxp.com:
-
-arch/arm64/boot/dts/freescale/imx8mq-evk.dtb: usb@38100000: role-switch-default-mode:0: 'none' is not one of ['host', 'peripheral']
-	from schema $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mq-evk.dtb: usb@38100000: Unevaluated properties are not allowed ('adp-disable', 'dr_mode', 'hnp-disable', 'role-switch-default-mode', 'srp-disable', 'usb-role-switch' were unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mq-evk.dtb: usb@38100000: role-switch-default-mode:0: 'none' is not one of ['host', 'peripheral']
-	from schema $id: http://devicetree.org/schemas/usb/fsl,imx8mq-dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mq-evk.dtb: usb@38100000: Unevaluated properties are not allowed ('adp-disable', 'dr_mode', 'hnp-disable', 'role-switch-default-mode', 'srp-disable', 'usb-role-switch' were unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/fsl,imx8mq-dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mq-evk.dtb: usb@38100000: Unevaluated properties are not allowed ('adp-disable', 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks', 'clock-names', 'clocks', 'dr_mode', 'hnp-disable', 'interrupts', 'phy-names', 'phys', 'port', 'power-domains', 'reg', 'role-switch-default-mode', 'snps,dis-u1-entry-quirk', 'snps,dis-u2-entry-quirk', 'snps,parkmode-disable-ss-quirk', 'srp-disable', 'usb-role-switch' were unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/fsl,imx8mq-dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mp-evk.dtb: usb-phy@381f0040: 'fsl,pcs-tx-deemph-3p5db', 'fsl,phy-comp-dis-tune', 'fsl,phy-pcs-tx-swing-full', 'fsl,phy-tx-preemp-amp-tune', 'fsl,phy-tx-vboost-level', 'fsl,phy-tx-vref-tune' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/phy/fsl,imx8mq-usb-phy.yaml#
-arch/arm64/boot/dts/freescale/imx8mp-evk.dtb: usb@32f10100: usb@38100000:role-switch-default-mode:0: 'none' is not one of ['host', 'peripheral']
-	from schema $id: http://devicetree.org/schemas/usb/fsl,imx8mp-dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mp-evk.dtb: usb@32f10100: usb@38100000: Unevaluated properties are not allowed ('adp-disable', 'dr_mode', 'hnp-disable', 'role-switch-default-mode', 'srp-disable', 'usb-role-switch' were unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/fsl,imx8mp-dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mp-evk.dtb: usb@38100000: role-switch-default-mode:0: 'none' is not one of ['host', 'peripheral']
-	from schema $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mp-evk.dtb: usb@38100000: Unevaluated properties are not allowed ('adp-disable', 'dr_mode', 'hnp-disable', 'role-switch-default-mode', 'srp-disable', 'usb-role-switch' were unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mp-evk.dtb: usb-phy@382f0040: 'fsl,phy-tx-preemp-amp-tune', 'fsl,phy-tx-vref-tune' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/phy/fsl,imx8mq-usb-phy.yaml#
-
-
-
-
-
+	Andrew
 
