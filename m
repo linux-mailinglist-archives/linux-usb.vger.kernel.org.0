@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-12560-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12561-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBCBB93EFB7
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 10:18:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CBB893EFB9
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 10:18:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64AE6B225A1
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 08:18:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CAD31C21E81
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 08:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D34413B7A9;
-	Mon, 29 Jul 2024 08:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC68F13AD2F;
+	Mon, 29 Jul 2024 08:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l9jFRVPS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/CcB4DS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A000C328B6;
-	Mon, 29 Jul 2024 08:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E3984FAC;
+	Mon, 29 Jul 2024 08:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722241065; cv=none; b=pSgsonq8YUeqWMbkLBmDM9QEg2krG/V6wL5eHbKxSCE0VHLkzsaPmdSkIwgoFiLMMLtL0090CitEvHmtU7piCElDPtbjAE9recc6ESmRvJ55KwDZGKXA/jZ5v4jBtRfxAzzUvw9/ELQQttWsaBvhzKm4QCI2joNqupJUN4zt0Ko=
+	t=1722241085; cv=none; b=WblKR088HN03VHEWQpof9thuTJDRwrsWCJZPsdB9WYHuw++QRuqa5Y4Yp/+sWcMvqCoJnu74MFTNQ4/skCYOjUoPHDmI+PrT0Aa62UoWGoJpVvEsQqxmaf0M3N/ahHphkWXTpcRVH35b98r6Tgs79xXxkzGhKNrhenuACQ6ZtxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722241065; c=relaxed/simple;
-	bh=42adfCIBwyLE/y7ZL0nMg7bFtM8bbR547cCEvIzeNiY=;
+	s=arc-20240116; t=1722241085; c=relaxed/simple;
+	bh=r0AsqZHD+Pt/f0vHxGEFL/gFX4itE/23NNhDyIVhs+Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pjI7BjpJPMObrjUPgQAd2Y46F0ZVtXlLC3UDnFYR6A1XngtL502BgU20jMEugxyTDQQP7agaErlzarDX0m9NkM5kraviIzOQilZToGIAGLZnvETq4+NjpyDz09qfp4HOqHJs7qPzvJzfct1QKrdiYrwHj4TB3MUcK8xx1Y4t3Vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l9jFRVPS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4DB5C4AF0A;
-	Mon, 29 Jul 2024 08:17:39 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=p5zSNbzHD832HQnu1HkVVB5dVR4OeFZTjqPS+JEcyZf476q6A91QNtltPP7v8TmU+PDeyQTciHUN03+xyfj0zEjBm/emJR7+WRMzVkv9GUn97aSJwldhVucDV71XgCCeFPunDMZMN4kMiUskOteaqMB+56cSd/+S20M1FvtcPT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/CcB4DS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 214FAC32786;
+	Mon, 29 Jul 2024 08:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722241065;
-	bh=42adfCIBwyLE/y7ZL0nMg7bFtM8bbR547cCEvIzeNiY=;
+	s=k20201202; t=1722241084;
+	bh=r0AsqZHD+Pt/f0vHxGEFL/gFX4itE/23NNhDyIVhs+Q=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l9jFRVPSSFPjtyhdz3R6CBHGxKhbaNTReBCdSeUnfv8qH1ZGq/qBeF+7XppE5WFAk
-	 F42vipB+SAfJGiLAuEG23li9ELhhgheL50/tDRS+PmBsf+ITw6zlafODx7aIOEmxzn
-	 m8zjUD+GL0F+Oui/KBRP7pHVOHSmpTbWxugP9eGN0qk0JEQIUrJJguq5oAcopxuAnO
-	 iGhZtaxgZjKzXqpnrDegJ/sH6R5LJLFIzLQj1RiMH4JUYmnKjZmBlHmes52MxzZ650
-	 0gybUa5viceznO4vndm/0vaxXAaMty0UVAnRX1SYB2qN0Zn5t83STtjgSk87Ys/8aB
-	 BUFeEvw+WFS9Q==
-Message-ID: <f3645df4-b7dc-45da-8a9a-ea72162d1b0d@kernel.org>
-Date: Mon, 29 Jul 2024 10:17:37 +0200
+	b=s/CcB4DS4xtaFXp/ACIDnO7AHuawbHid/7mZwFwwQuJq+tQMG7H5BH9YT1zDb5gdh
+	 PYUY8Yr1+ASm6Rh3Fuq+5l++pDBv3MyT+6pqLmUgzoPgypTDEApLf98kTwVu2opPzj
+	 IauW55DH5BstzJS6+4c7OqjgiXRgaL/RMEUb5A6XNk2vflpxB6Iq3UsIJSkkOG5jRS
+	 q2ltkH2+s0C/mERbDSpGxdDfFg/cdTp8pPCa2YMCjTGvobtkZktjc2PcGxxW4B6K60
+	 RCH6KjAoLRwXPsYkl+ZixxZWgXIBkKo81Pkqe+LmATeM5G74vkEbe/OXzK4Nr+9bHK
+	 +8FEhnx7KjJZA==
+Message-ID: <77db90b7-66a7-4faf-9296-8667af35feb6@kernel.org>
+Date: Mon, 29 Jul 2024 10:17:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] arm64: dts: imx8mp-evk: add typec node
+Subject: Re: [PATCH 1/3] dt-bindings: usb: gpio-sbu-mux: Add an entry for
+ PTN36043
 To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
  s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
@@ -58,7 +59,6 @@ Cc: andersson@kernel.org, linux-usb@vger.kernel.org,
  devicetree@vger.kernel.org, imx@lists.linux.dev,
  linux-arm-kernel@lists.infradead.org, jun.li@nxp.com
 References: <20240729081039.3904797-1-xu.yang_2@nxp.com>
- <20240729081039.3904797-2-xu.yang_2@nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,44 +104,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240729081039.3904797-2-xu.yang_2@nxp.com>
+In-Reply-To: <20240729081039.3904797-1-xu.yang_2@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/07/2024 10:10, Xu Yang wrote:
-> The first port of USB with type-C connector, which has dual data
-> role and dual power role.
+> Add a compatible entry for the NXP PTN36043 GPIO-based mux hardware
+> used for connecting, disconnecting and switching orientation of
+> the SBU lines in USB Type-C applications.
+> 
+> PTN36043 datasheet: https://www.nxp.com/docs/en/data-sheet/PTN36043A.pdf
 > 
 > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > ---
->  arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 104 +++++++++++++++++++
->  1 file changed, 104 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> index 938347704136..e38b59af5f33 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> @@ -6,6 +6,7 @@
->  /dts-v1/;
->  
->  #include <dt-bindings/phy/phy-imx8-pcie.h>
-> +#include <dt-bindings/usb/pd.h>
->  #include "imx8mp.dtsi"
->  
->  / {
-> @@ -26,6 +27,20 @@ backlight_lvds: backlight-lvds {
->  		status = "disabled";
->  	};
->  
-> +	cbdtu02043: typec-mux {
-> +		compatible = "nxp,cbdtu02043", "gpio-sbu-mux";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_typec_mux>;
-> +		select-gpios =<&gpio4 20 GPIO_ACTIVE_HIGH>;
 
-Missing space after =
-
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
