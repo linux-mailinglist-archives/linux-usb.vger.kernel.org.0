@@ -1,257 +1,127 @@
-Return-Path: <linux-usb+bounces-12562-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12563-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ED2F93EFDD
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 10:26:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F148B93EFF6
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 10:34:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED2DF1F22BF5
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 08:26:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A55FF281306
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 08:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4379A13BACC;
-	Mon, 29 Jul 2024 08:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88D5513C811;
+	Mon, 29 Jul 2024 08:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sylv.io header.i=@sylv.io header.b="DU9eH44o"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DarfRhBy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816B613B293;
-	Mon, 29 Jul 2024 08:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8603E13B299
+	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 08:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722241578; cv=none; b=FU9fpdLHBTsbzyy16RiDBdj7S1AmxwhIqpWaGMD+DEKN4nSZUkJi3Gl2QQCY2UUrWY8F/FNHESFV7nIoBsRJKvjyH1I2HB2/ehCQJA0OsQZtUk1RgTjpgCEPeple+lZTJBzvY+P9i7XO2u2yDQbqLGwF+VcqsHJM8f+qcXjJi9o=
+	t=1722242082; cv=none; b=mwOXZpUX5tbAU1CzR64CMVnIReCLDK6haMZNYsnERHnSbvtsjCkVoGoKCiFM7STwyE7iTqmJ3Df96xMZOY5AkF82JlMJSGPoJgsd13gzbmM6TciUSvT4L2bPkY2AnZOrsJiYAN2DlKoXf2bRulueb+h2zxp3tsDa6fnMz0fspGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722241578; c=relaxed/simple;
-	bh=K7fnqw37rhxeqjvTfmqBdiz93kBqO/8jFv9TVqAzuSI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F9GK09BQ99swN24e+IfDVRF7xrB2K4Cdnjsh6BdjutJiqU/oCt3a9cGs9CvZ6K7sj1lA4ZfjFqrmEDCwRflIpMm03FEx4SpanaBzPo8V1U8WeMXmKdrIlk/wUJ585qeD2wUWpDj8E0bb0FI/RZw1UC1I7Bze3ePB5SlJpYjTUi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sylv.io; spf=pass smtp.mailfrom=sylv.io; dkim=pass (2048-bit key) header.d=sylv.io header.i=@sylv.io header.b=DU9eH44o; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sylv.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sylv.io
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4WXWf55JDkz9tJ5;
-	Mon, 29 Jul 2024 10:26:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-	t=1722241565;
+	s=arc-20240116; t=1722242082; c=relaxed/simple;
+	bh=nuG/4vNf+Xo0PuptBC7376G+xBvvSdFJWnxk+gys6MQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kcNLBJhLHPDg7c0wZZnikBmAdfrt9zRQSvkR4MmK3Ejq+CniTg2Rq2dbrKmeZ6fmsjAc8HcBtvqYBcuMPE1xbh27qE42KsKXyZZ/Fs1FZ4vIyPrdnql9B0xCWq3CoKvnqxbxRRhdkKBDhQwGwKlj+5iZCjRxoRtKON2XUIShugs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DarfRhBy; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722242079;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=K7fnqw37rhxeqjvTfmqBdiz93kBqO/8jFv9TVqAzuSI=;
-	b=DU9eH44oPtmAdluEEyoP/E2jdGbDnTyb0fWZoUp2ydRTSvXP48q5Kogbg8Kvc+6aKF9J7G
-	BAKm+xjIcnB+yj4naC11+QetJRSB/1hNVsHBa8Heew8gwYwnVTlr10gJfqL6UwoZNMwJsM
-	2OQDcb5y1GGva32HzKEeph3CmwkrNFAJPdFlI6o9V/xFX8Q/0ViZvfCEsoItnWTIhGn9R/
-	CFGk1Wb7gX9iQuPABQhoZKTxIUMal9D6X+u96jPpk/FLradT1yK1rFD/30IvR+6dbPJCfi
-	i+cvTvKBYVWrGprU4wKelXEHSXWJxDWKP8ggMZ+YnauHcjvIin7N/oNapgM63A==
-Message-ID: <baae33f5602d8bcd38b48cd6ea4617c8e17d8650.camel@sylv.io>
-Subject: Re: [PATCH] usb: gadget: dummy_hcd: execute hrtimer callback in
- softirq context
-From: Marcello Sylvester Bauer <sylv@sylv.io>
-To: andrey.konovalov@linux.dev, Alan Stern <stern@rowland.harvard.edu>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov
- <dvyukov@google.com>,  Aleksandr Nogikh <nogikh@google.com>, Marco Elver
- <elver@google.com>, Alexander Potapenko <glider@google.com>,
- kasan-dev@googlegroups.com, Andrew Morton <akpm@linux-foundation.org>,
- linux-mm@kvack.org, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com, 
- syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com,
- stable@vger.kernel.org
-Date: Mon, 29 Jul 2024 10:25:56 +0200
-In-Reply-To: <20240729022316.92219-1-andrey.konovalov@linux.dev>
-References: <20240729022316.92219-1-andrey.konovalov@linux.dev>
-Autocrypt: addr=sylv@sylv.io; prefer-encrypt=mutual;
- keydata=mDMEX4a2/RYJKwYBBAHaRw8BAQdAgPh7hXqL35bMLhbhZbzNFhQslzLjFA/nooSPkjfwp
- 1y0J01hcmNlbGxvIFN5bHZlc3RlciBCYXVlciA8c3lsdkBzeWx2LmlvPoiRBBMWCgA5AhsBBAsJCA
- cEFQoJCAUWAgMBAAIeAQIXgBYhBAzRGzXUX6FMlUr5GUv0FpMH/RIkBQJfhrn3AhkBAAoJEEv0FpM
- H/RIk+XAA/2uYBupPaP7oiwvwRjhAnO5wAZzQh8guHu3CDiLTUnXNAQDjeHY1ES/IXN6W+gVfGPFa
- rtzmGeRUQk1lSQL7SfhwCbQvTWFyY2VsbG8gU3lsdmVzdGVyIEJhdWVyIDxtZUBtYXJjZWxsb2Jhd
- WVyLmNvbT6IjgQTFgoANhYhBAzRGzXUX6FMlUr5GUv0FpMH/RIkBQJfhrlYAhsBBAsJCAcEFQoJCA
- UWAgMBAAIeAQIXgAAKCRBL9BaTB/0SJOHbAQCp2E6WRbY3U7nxxfEt8lOq3pCi0VeUAWu93CnWZX0
- X9wEArZ6h9wCGHhlGBTaB/U7BRHlgftCcEuxeCuMZEa8rqwC0MU1hcmNlbGxvIFN5bHZlc3RlciBC
- YXVlciA8aW5mb0BtYXJjZWxsb2JhdWVyLmNvbT6IjgQTFgoANhYhBAzRGzXUX6FMlUr5GUv0FpMH/
- RIkBQJfhrmFAhsBBAsJCAcEFQoJCAUWAgMBAAIeAQIXgAAKCRBL9BaTB/0SJLF/AQDwn+Oiv2Zf2o
- ZxGttQl/oQNR3YJZuGt8k+JTSWS98xxwEAiBULaSCQ4JaVq5VdOXwb0tPsfQuYbBQjbAK9WI3QmwM=
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-LWyd7UgxwvTeqjduYLti"
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iQiICJ5lL4LLRuRe82xJT7UDszv9VsNI9xZ/zp+jqc8=;
+	b=DarfRhByDTa0FqqkGL4d4m1D5ha6gB75Wzrw0NaUTbyhRXir7iuKPBGAFuIp+S5ojQifNO
+	fddselFguq3qB5TNGOY/hAfcJU15IhOM4Ny84WqVxjlovBAGGu/NESporDD43JGe72jlmk
+	muxxLFmDxczFzoqL38pxQI+nSz4lZdI=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-317-fp6fsfEAMraFMdT2FWJpgA-1; Mon,
+ 29 Jul 2024 04:34:33 -0400
+X-MC-Unique: fp6fsfEAMraFMdT2FWJpgA-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 46EC61955BED;
+	Mon, 29 Jul 2024 08:34:30 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.136])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 599B71955D48;
+	Mon, 29 Jul 2024 08:34:22 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: dsimic@manjaro.org
+Cc: UNGLinuxDriver@microchip.com,
+	andrew@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	f.fainelli@gmail.com,
+	gregkh@linuxfoundation.org,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	lucas.demarchi@intel.com,
+	masahiroy@kernel.org,
+	mcgrof@kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	woojung.huh@microchip.com
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy module
+Date: Mon, 29 Jul 2024 10:34:19 +0200
+Message-ID: <20240729083421.11203-1-jtornosm@redhat.com>
+In-Reply-To: <b8a2831c4f2d49469d5af04c03bb1a5b@manjaro.org>
+References: <b8a2831c4f2d49469d5af04c03bb1a5b@manjaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 4WXWf55JDkz9tJ5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
+Hello Dragan,
 
---=-LWyd7UgxwvTeqjduYLti
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> Quite frankly, all this makes me wonder why weakdeps were merged into
+> the mainline kernel [1] with no real consumers?  Perhaps this is good
+> time for Jose and Luis to chime in.
+Well, I requested this commenting as an example the case of lan78xx and
+the possible phy modules,  becasue it is clearly failing when initramfs
+is generated due to the dynamic phy module loading process.
+In my opinion this example was enough good because I found it difficult get
+an automatic way to get this information in advance for all the cases and
+becasue I need to fix this initramfs issue.
 
-Hi Andrey,
+But with a first glance, I also found several examples (not phy related),
+in which it seems the suitable softdep was added to solve the initramfs
+missing module issue:
+80f4e62730a9 drm/panfrost: Mark simple_ondemand governor as softdep
+0c94f58cef31 drm/lima: Mark simple_ondemand governor as softdep
+2ebe16155dc8 scsi: ufs: core: Add soft dependency on governor_simpleondemand
+dfe085d8dcd0 crypto: xts - Add softdep on ecb
+...
 
-On Mon, 2024-07-29 at 04:23 +0200, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@gmail.com>
->=20
-> Commit a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer
-> transfer
-> scheduler") switched dummy_hcd to use hrtimer and made the timer's
-> callback be executed in the hardirq context.
->=20
-> With that change, __usb_hcd_giveback_urb now gets executed in the
-> hardirq
-> context, which causes problems for KCOV and KMSAN.
->=20
-> One problem is that KCOV now is unable to collect coverage from
-> the USB code that gets executed from the dummy_hcd's timer callback,
-> as KCOV cannot collect coverage in the hardirq context.
->=20
-> Another problem is that the dummy_hcd hrtimer might get triggered in
-> the
-> middle of a softirq with KCOV remote coverage collection enabled, and
-> that
-> causes a WARNING in KCOV, as reported by syzbot. (I sent a separate
-> patch
-> to shut down this WARNING, but that doesn't fix the other two
-> issues.)
->=20
-> Finally, KMSAN appears to ignore tracking memory copying operations
-> that happen in the hardirq context, which causes false positive
-> kernel-infoleaks, as reported by syzbot.
->=20
-> Change the hrtimer in dummy_hcd to execute the callback in the
-> softirq
-> context.
->=20
-> Reported-by: syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D2388cdaeb6b10f0c13ac
-> Reported-by: syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D17ca2339e34a1d863aad
-> Fixes: a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer
-> transfer scheduler")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
->=20
-> ---
->=20
-> Marcello, would this change be acceptable for your use case?
+Therefore, I requested to provide this  kind of new dependency (weakdep)
+first in general, becasue I thought it could be useful for a lot of cases
+not only for the unkown (for initramfs) phy modules (i.e. lan78xx).
+That is, in spite of the initial usage has been rejected, I think it can
+still be considered by the other commented examples (or new ones).
+I would like to confirm some example(s) to have some usage, but this will
+need to be from September after my holidays.
 
-Thanks for investigating and finding the cause of this problem. I have
-already submitted an identical patch to change the hrtimer to softirq:
-https://lkml.org/lkml/2024/6/26/969
+Thanks
 
-However, your commit messages contain more useful information about the
-problem at hand. So I'm happy to drop my patch in favor of yours.
+Best regards
+José Ignacio
 
-Btw, the same problem has also been reported by the intel kernel test
-robot. So we should add additional tags to mark this patch as the fix.
-
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes:
-https://lore.kernel.org/oe-lkp/202406141323.413a90d2-lkp@intel.com
-Acked-by: Marcello Sylvester Bauer <sylv@sylv.io>
-
-Thanks,
-Marcello
-
-> If we wanted to keep the hardirq hrtimer, we would need teach KCOV to
-> collect coverage in the hardirq context (or disable it, which would
-> be
-> unfortunate) and also fix whatever is wrong with KMSAN, but all that
-> requires some work.
-> ---
-> =C2=A0drivers/usb/gadget/udc/dummy_hcd.c | 14 ++++++++------
-> =C2=A01 file changed, 8 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c
-> b/drivers/usb/gadget/udc/dummy_hcd.c
-> index f37b0d8386c1a..ff7bee78bcc49 100644
-> --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> @@ -1304,7 +1304,8 @@ static int dummy_urb_enqueue(
-> =C2=A0
-> =C2=A0 /* kick the scheduler, it'll do the rest */
-> =C2=A0 if (!hrtimer_active(&dum_hcd->timer))
-> - hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
-> HRTIMER_MODE_REL);
-> + hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
-> + HRTIMER_MODE_REL_SOFT);
-> =C2=A0
-> =C2=A0 done:
-> =C2=A0 spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
-> @@ -1325,7 +1326,7 @@ static int dummy_urb_dequeue(struct usb_hcd
-> *hcd, struct urb *urb, int status)
-> =C2=A0 rc =3D usb_hcd_check_unlink_urb(hcd, urb, status);
-> =C2=A0 if (!rc && dum_hcd->rh_state !=3D DUMMY_RH_RUNNING &&
-> =C2=A0 !list_empty(&dum_hcd->urbp_list))
-> - hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
-> + hrtimer_start(&dum_hcd->timer, ns_to_ktime(0),
-> HRTIMER_MODE_REL_SOFT);
-> =C2=A0
-> =C2=A0 spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
-> =C2=A0 return rc;
-> @@ -1995,7 +1996,8 @@ static enum hrtimer_restart dummy_timer(struct
-> hrtimer *t)
-> =C2=A0 dum_hcd->udev =3D NULL;
-> =C2=A0 } else if (dum_hcd->rh_state =3D=3D DUMMY_RH_RUNNING) {
-> =C2=A0 /* want a 1 msec delay here */
-> - hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
-> HRTIMER_MODE_REL);
-> + hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
-> + HRTIMER_MODE_REL_SOFT);
-> =C2=A0 }
-> =C2=A0
-> =C2=A0 spin_unlock_irqrestore(&dum->lock, flags);
-> @@ -2389,7 +2391,7 @@ static int dummy_bus_resume(struct usb_hcd
-> *hcd)
-> =C2=A0 dum_hcd->rh_state =3D DUMMY_RH_RUNNING;
-> =C2=A0 set_link_state(dum_hcd);
-> =C2=A0 if (!list_empty(&dum_hcd->urbp_list))
-> - hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
-> + hrtimer_start(&dum_hcd->timer, ns_to_ktime(0),
-> HRTIMER_MODE_REL_SOFT);
-> =C2=A0 hcd->state =3D HC_STATE_RUNNING;
-> =C2=A0 }
-> =C2=A0 spin_unlock_irq(&dum_hcd->dum->lock);
-> @@ -2467,7 +2469,7 @@ static DEVICE_ATTR_RO(urbs);
-> =C2=A0
-> =C2=A0static int dummy_start_ss(struct dummy_hcd *dum_hcd)
-> =C2=A0{
-> - hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> + hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC,
-> HRTIMER_MODE_REL_SOFT);
-> =C2=A0 dum_hcd->timer.function =3D dummy_timer;
-> =C2=A0 dum_hcd->rh_state =3D DUMMY_RH_RUNNING;
-> =C2=A0 dum_hcd->stream_en_ep =3D 0;
-> @@ -2497,7 +2499,7 @@ static int dummy_start(struct usb_hcd *hcd)
-> =C2=A0 return dummy_start_ss(dum_hcd);
-> =C2=A0
-> =C2=A0 spin_lock_init(&dum_hcd->dum->lock);
-> - hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> + hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC,
-> HRTIMER_MODE_REL_SOFT);
-> =C2=A0 dum_hcd->timer.function =3D dummy_timer;
-> =C2=A0 dum_hcd->rh_state =3D DUMMY_RH_RUNNING;
-> =C2=A0
-
-
---=-LWyd7UgxwvTeqjduYLti
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iIMEABYKACsWIQR81eCeIFvseLvKEUNWslSZtA36GQUCZqdSFA0cc3lsdkBzeWx2
-LmlvAAoJEFayVJm0DfoZT9wA/0cbEIRrGeccZCTVN5CQK6Nx31rSKXTIDsobIdO0
-9cG/AQDGFJq2QwpbDTAe4HN2gmybrc3qqnu5zQ/qym81WTu1BA==
-=hqtW
------END PGP SIGNATURE-----
-
---=-LWyd7UgxwvTeqjduYLti--
 
