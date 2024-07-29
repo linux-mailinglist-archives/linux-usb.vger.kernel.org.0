@@ -1,201 +1,129 @@
-Return-Path: <linux-usb+bounces-12574-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12575-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC5D293F8B1
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 16:50:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E94C93F92D
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 17:13:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D715B23392
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 14:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E82DD1C2201C
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 15:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C98155A39;
-	Mon, 29 Jul 2024 14:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117D3156F28;
+	Mon, 29 Jul 2024 15:13:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4iGqQY8h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLvLepuk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F8A154444
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 14:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7156F15624C;
+	Mon, 29 Jul 2024 15:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722264602; cv=none; b=LuesmB6gjIlI8FxP/GWZVeTRf5pld95rvKD8Do1c68CswRMJQF5zl/xr0xh+GElJw1lME0Aua/trfuOeGJrOmECD9r7a4u7VsLaJ5YDkijVbzveizOdc+RoysOyLAn74QwtID3tQ2g41v40eFK4/z1FG5R+NJd3YI1lixSSnP7o=
+	t=1722265990; cv=none; b=dfkT2mbSiFD/EmATLnWaYPuUvs9kf5vgKWGq4OuG0ohE6o55iis8IoHsYwGEPI5Jx4E5+oXBThO1HU1uUk8yyyoQVRmfaUcMGpsPfILOmBYSLBOVF0clSkzfhDS9rxwt2SXPS3dFKwG+aWBJYVChMCgELqhHKQIpBN7fjGXonyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722264602; c=relaxed/simple;
-	bh=woLQBPacf7DTDxtXPvYGoMG7Uok2hCJqM57wPvFxsxc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YpN3tXW1j0/rVae1JKyBo27k9apJ9v3dY2No/9saxEJWqt+ZYbGF8AXIn1KP/L9zasGnIjCZOryc9YA7dQruJHVr3+ldMBDgLaV+PxutmQdJ0vXbPslSPGv5EgWbZbuiyMk6GbPwn7F30SK3Z+sRzm0UA2y/Sw6wmESjy/WGuOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4iGqQY8h; arc=none smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-4f51e80f894so1486612e0c.1
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 07:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722264599; x=1722869399; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dc5OnpQkO4GI5cUSMqWm8aEGW3XO5gfb3sMJB+82c8A=;
-        b=4iGqQY8hcJFqrjfF6+a+YsZqO90WvprJ3hC0RKaUX9aeEGJNBUIOH50i8K/Y6WhhWL
-         7CkPvEv/CoADTm715FI3XRYOBAyUdWWOoTwoZoWxP29OV2Oyw+NLOeexykE8ZP6exC/a
-         +vLPYqwmAusLXHY5FaaRbE4T/MfY4dG0agp1NjD4EBt3d8wXITSV0yjh8ozTlQOvjocc
-         MQR++4sEQLzKFlpeoLHRf+EZ4fUIaDYSovkBs6WBSARyR/InsYIqFeec40hUyHcivpnI
-         KOVKKITW7I+/FqTFGlBugrDMNT+XmiC7B8d26Fj2nVpCwHi2eSqm5dDfjey7b64exs4e
-         0BBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722264599; x=1722869399;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dc5OnpQkO4GI5cUSMqWm8aEGW3XO5gfb3sMJB+82c8A=;
-        b=ArVlYCpCatsYOIuQg+LXe2Eep3Csr/76HlWEETE/rvNjb9fu4zkw/zQeIc6nYQMidM
-         oZmc6JmjFmSU8WBoU+dAk4Dn2IqDAbHg95Qx80JH9/X8ePMdLQ7iIHCSnDY1P8Q9051v
-         /2w791JoO7+jm8BZVrWkmKHfoUk7DSVShgdMRgxV/lcsjjLRsBC1DawrION5CS4wd7eY
-         E164HuDthwqWNTA2PZDaH/WGtdcwZZ0F02YjYCO6K7Y3Zm3qRbcU0B1qLyJm4MeGlmAp
-         df4EFV95d67iyF7ROCvlbOSUT67c31ycZ4TgGCnfVes44JwSaTi4Oyza3NnA+3pSVeku
-         NjHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8LHLNAhseAAO2DGVSZvPRhWbkQ9ucj7Ih/rfCEMoZmdlKsoxsgFwIl9eVuZIK8IPKVaZxRxneTJGGMSqsZEKCKu/VJJ2bYQNa
-X-Gm-Message-State: AOJu0YxFSwEmFXMy5tiZCZVI5CN3B9fmDu9MYcBwfJlues5zmMfIKWuH
-	+r7ntObrWHuqYnOeMuSYhf+3jNAeAP0MBhAhKI+M/mvURYtRlaWuWye9ufpghD1kfCAVZwdSJzo
-	Y+XI2m/wm7IXbV2K/hAzkdxo3qLMWWMtNYaOx
-X-Google-Smtp-Source: AGHT+IHFMADPLpMiCf0PtUHwwXP9ydcCss5DHpj4/ujsEVhBsMJ/f20LMGXqV2SAf4576Qb9p5SV9/SHngSzxzrhnsQ=
-X-Received: by 2002:a05:6122:310a:b0:4f6:a5ed:eb11 with SMTP id
- 71dfb90a1353d-4f6e68f714amr9340551e0c.8.1722264599389; Mon, 29 Jul 2024
- 07:49:59 -0700 (PDT)
+	s=arc-20240116; t=1722265990; c=relaxed/simple;
+	bh=lqnvlkLMFozm2wwc3+7Pn5KfGkqDgWA8zFqYfPHqMwQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Css49ERYqDan5eWg6jymVf5KQPfnE68wZU3w6oY5W+UryMo4mn/6KcB5YvNRF6D2y18QhsKotuxgLuJ84f6QyzoiUYhIFMwIjgiGGAXvnG/brkOh/ux6tIoY9pz5WYA74P63zx2rT2NOL9zKvOqovigTy4Z2WI6nqgDhjCzJ+QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLvLepuk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABC0C32786;
+	Mon, 29 Jul 2024 15:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722265990;
+	bh=lqnvlkLMFozm2wwc3+7Pn5KfGkqDgWA8zFqYfPHqMwQ=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=TLvLepukpOP2F8N4Dv4txfPbezkREc1aTC3uvBFwEDV5tE4x1gElGfjR5w5kC3xSx
+	 K9sXgiz7DfMLspa5ukpOZfGV0BifdQ+hRa82/ztEgH3J3e3LumgoFPRG9WyaeM/j11
+	 xRHWF+l4FHdnDnHrsQVcGBuiX8zR/1wQo6SSH9HozZ/TtkBk1R3qtoiTfkpsVrWp0l
+	 r6JD54awGqwgiievGjLW8M1NeWodfxSjRcRLSlCnomS11IQLI7mcOIWjEtfx7Ze0dS
+	 X+ESMgT/JhnycQuec66WIEutrV2w+yD8c1PirvlSgYig13ffh7CxQo/HFI1JqSVQPF
+	 E8s8F2CgSd+3Q==
+Message-ID: <3ae2671d-d8ff-426d-8cc8-c1603e616f8c@kernel.org>
+Date: Mon, 29 Jul 2024 17:13:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240729022158.92059-1-andrey.konovalov@linux.dev> <CANpmjNP6ouX1hSayoeOHu7On1DYtPtydFbEQtxoTbsnaE9j77w@mail.gmail.com>
-In-Reply-To: <CANpmjNP6ouX1hSayoeOHu7On1DYtPtydFbEQtxoTbsnaE9j77w@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Mon, 29 Jul 2024 16:49:20 +0200
-Message-ID: <CANpmjNOTnYUZDNG0z64rY7fOd2f2ZPW9qV6Gaz1=n_NWmHjAZA@mail.gmail.com>
-Subject: Re: [PATCH] kcov: properly check for softirq context
-To: andrey.konovalov@linux.dev
-Cc: Dmitry Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Aleksandr Nogikh <nogikh@google.com>, 
-	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
-	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Marcello Sylvester Bauer <sylv@sylv.io>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com, stable@vger.kernel.org, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/5] dt-bindings: usb: qcom,dwc3: Update ipq5332 clock
+ details
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org,
+ konrad.dybcio@linaro.org, djakov@kernel.org, quic_wcheng@quicinc.com,
+ quic_kathirav@quicinc.com, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240725104528.3504967-1-quic_varada@quicinc.com>
+ <20240725104528.3504967-3-quic_varada@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240725104528.3504967-3-quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 29 Jul 2024 at 11:42, Marco Elver <elver@google.com> wrote:
->
-> On Mon, 29 Jul 2024 at 04:22, <andrey.konovalov@linux.dev> wrote:
-> >
-> > From: Andrey Konovalov <andreyknvl@gmail.com>
-> >
-> > When collecting coverage from softirqs, KCOV uses in_serving_softirq() to
-> > check whether the code is running in the softirq context. Unfortunately,
-> > in_serving_softirq() is > 0 even when the code is running in the hardirq
-> > or NMI context for hardirqs and NMIs that happened during a softirq.
-> >
-> > As a result, if a softirq handler contains a remote coverage collection
-> > section and a hardirq with another remote coverage collection section
-> > happens during handling the softirq, KCOV incorrectly detects a nested
-> > softirq coverate collection section and prints a WARNING, as reported
-> > by syzbot.
-> >
-> > This issue was exposed by commit a7f3813e589f ("usb: gadget: dummy_hcd:
-> > Switch to hrtimer transfer scheduler"), which switched dummy_hcd to using
-> > hrtimer and made the timer's callback be executed in the hardirq context.
-> >
-> > Change the related checks in KCOV to account for this behavior of
-> > in_serving_softirq() and make KCOV ignore remote coverage collection
-> > sections in the hardirq and NMI contexts.
-> >
-> > This prevents the WARNING printed by syzbot but does not fix the inability
-> > of KCOV to collect coverage from the __usb_hcd_giveback_urb when dummy_hcd
-> > is in use (caused by a7f3813e589f); a separate patch is required for that.
-> >
-> > Reported-by: syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=2388cdaeb6b10f0c13ac
-> > Fixes: 5ff3b30ab57d ("kcov: collect coverage from interrupts")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
-> > ---
-> >  kernel/kcov.c | 15 ++++++++++++---
-> >  1 file changed, 12 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/kcov.c b/kernel/kcov.c
-> > index f0a69d402066e..274b6b7c718de 100644
-> > --- a/kernel/kcov.c
-> > +++ b/kernel/kcov.c
-> > @@ -161,6 +161,15 @@ static void kcov_remote_area_put(struct kcov_remote_area *area,
-> >         kmsan_unpoison_memory(&area->list, sizeof(area->list));
-> >  }
-> >
-> > +/*
-> > + * Unlike in_serving_softirq(), this function returns false when called during
-> > + * a hardirq or an NMI that happened in the softirq context.
-> > + */
-> > +static inline bool in_softirq_really(void)
-> > +{
-> > +       return in_serving_softirq() && !in_hardirq() && !in_nmi();
-> > +}
->
-> Not sure you need this function. Check if just this will give you what you want:
->
->   interrupt_context_level() == 1
->
-> I think the below condition could then also just become:
->
->   if (interrupt_context_level() == 1 && t->kcov_softirq)
->
-> Although the softirq_count() helper has a special PREEMPT_RT variant,
-> and interrupt_context_level() doesn't, so it's not immediately obvious
-> to me if that's also ok on PREEMPT_RT kernels.
->
-> Maybe some RT folks can help confirm that using
-> interrupt_context_level()==1 does what your above function does also
-> on RT kernels.
+On 25/07/2024 12:45, Varadarajan Narayanan wrote:
+> USB uses icc-clk framework to enable the NoC interface clock.
+> Hence the 'iface' clock is removed from the list of clocks.
+> Update the clock-names list accordingly.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
 
-Hmm, so Thomas just told me that softirqs always run in threaded
-context on RT and because there's no nesting,
-interrupt_context_level() won't work for what I had imagined here.
+Explanation you gave in v4 should be in the commit msg.
 
-So your current solution is fine.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Acked-by: Marco Elver <elver@google.com>
+Best regards,
+Krzysztof
 
-> >  static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_struct *t)
-> >  {
-> >         unsigned int mode;
-> > @@ -170,7 +179,7 @@ static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_stru
-> >          * so we ignore code executed in interrupts, unless we are in a remote
-> >          * coverage collection section in a softirq.
-> >          */
-> > -       if (!in_task() && !(in_serving_softirq() && t->kcov_softirq))
-> > +       if (!in_task() && !(in_softirq_really() && t->kcov_softirq))
-> >                 return false;
-> >         mode = READ_ONCE(t->kcov_mode);
-> >         /*
-> > @@ -849,7 +858,7 @@ void kcov_remote_start(u64 handle)
-> >
-> >         if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
-> >                 return;
-> > -       if (!in_task() && !in_serving_softirq())
-> > +       if (!in_task() && !in_softirq_really())
-> >                 return;
-> >
-> >         local_lock_irqsave(&kcov_percpu_data.lock, flags);
-> > @@ -991,7 +1000,7 @@ void kcov_remote_stop(void)
-> >         int sequence;
-> >         unsigned long flags;
-> >
-> > -       if (!in_task() && !in_serving_softirq())
-> > +       if (!in_task() && !in_softirq_really())
-> >                 return;
-> >
-> >         local_lock_irqsave(&kcov_percpu_data.lock, flags);
-> > --
-> > 2.25.1
-> >
 
