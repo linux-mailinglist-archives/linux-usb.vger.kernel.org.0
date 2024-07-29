@@ -1,64 +1,65 @@
-Return-Path: <linux-usb+bounces-12549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CB4693EB27
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 04:22:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD9593EB31
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 04:23:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CE34B20FD3
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 02:22:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E3DF1F2115A
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 02:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C50F7F48A;
-	Mon, 29 Jul 2024 02:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42EEC7A702;
+	Mon, 29 Jul 2024 02:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="htsvdPzt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qdROVfdd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B427C6CE
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 02:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A448F76EEA
+	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 02:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722219728; cv=none; b=mKUIjlhCrQG/ctEwdOQ9louAhpoXUHoJSjGmOmKTrQFeJcoKZuNUi0bMmera1eJpb9GhNwRH7hpgw2S6rQLEsXqNDJG6LS6fngdYlzPK0livbhJ9Kc40YpjoAyx0kf70ShrYHD3zwONKdeNERW6Vh/kHTxJkqFLunMT7ySrVg2o=
+	t=1722219806; cv=none; b=DCsbxD6CqSYuYR0Op36sR7NyuybI1ZNFBqmqGaz3+yqDH3bFRXiNBIt/OYBAnrLKFsmfFvve2IU0iaZTF7PxVq5ZCS4SPIscm921wj7wMINoCMZnYCWCgmovXh1tfY6wWQ+daC3HpG2FCy2nuEOsnitEx8xhU3bQShCJxK5lVNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722219728; c=relaxed/simple;
-	bh=JDn57jWP9FtwzbMF7WdN/nye9zvaQzfWbI2rDDZA6HE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZFgBpCegKbeTzw1c7h3OLn+wfuscwqe8vvB/mA+0AigYjeeykNvWTxAzS1ehxrmLDIkzM1v/Vb56KdDwYHc8VUejCXV25d2R6vD2CDsZ9UE+gCStUPTdKqn3cl09PJB8FAVUAtHB8sY3Z7livTJ5m7r+N9E/BfBRFj2xhPixKFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=htsvdPzt; arc=none smtp.client-ip=95.215.58.175
+	s=arc-20240116; t=1722219806; c=relaxed/simple;
+	bh=in6mmUEEDNm0ZtmuyYxbDccw0X4iHObSqfRhzEFipNU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IJdRH6XxXZ0wC3noBFLGJEPmO/gLSeE15yy0G3nXaxRS8T3wQiiFg5Gh/2RwrxdJ8lofI5TeBD95hw+bSviqtn0mg9d8FN/cLhO6zvr/EV8wvmnyEr/d2nWiVSRNhLVHxS/FpjBFPYPt5SCvxgpDKc3vz+XStVqLixYoWSse/LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qdROVfdd; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1722219723;
+	t=1722219801;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=LsRQ18TXosCV7Zr1JLjd4CYqcPz8tKyiBF4C+fLmLDs=;
-	b=htsvdPztIF2VBaEHJS0GKwyJigWRbUzeMGL2rUhSOgsqkALXSnbz73zJesuuqwlWngTseA
-	D3N9M+ptlbThvav7arA5zZ0y7fw3NCh+nmFOexeGT0m75SpxU4zw81qQFJK6GnpUJuZH1t
-	+sZpP0x8gpe4Fp6GHA+TdAm5rwWPlLI=
+	bh=gCwEWY47GPr6v18PXrGNgbZC2X9ZT/ev75yXbrOMQ20=;
+	b=qdROVfddxjaSGO7YDWE0he2haKUbf/739Cf9hegW3cM2ojd/US9Iy1w2rcY6y83lWa+rMX
+	38f+ZDw/E86rTU1tkM/MC+MhJf45x+bQ9h/BsigqjhEsT4km/ov5ze8XagSBmpljMQF7gL
+	6IWsyrK5DR4S8ZmZX7QgHJCST/tL6/o=
 From: andrey.konovalov@linux.dev
-To: Dmitry Vyukov <dvyukov@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Marcello Sylvester Bauer <sylv@sylv.io>
 Cc: Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
 	Aleksandr Nogikh <nogikh@google.com>,
 	Marco Elver <elver@google.com>,
 	Alexander Potapenko <glider@google.com>,
 	kasan-dev@googlegroups.com,
+	Andrew Morton <akpm@linux-foundation.org>,
 	linux-mm@kvack.org,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Marcello Sylvester Bauer <sylv@sylv.io>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com,
+	syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com,
 	stable@vger.kernel.org
-Subject: [PATCH] kcov: properly check for softirq context
-Date: Mon, 29 Jul 2024 04:21:58 +0200
-Message-Id: <20240729022158.92059-1-andrey.konovalov@linux.dev>
+Subject: [PATCH] usb: gadget: dummy_hcd: execute hrtimer callback in softirq context
+Date: Mon, 29 Jul 2024 04:23:16 +0200
+Message-Id: <20240729022316.92219-1-andrey.konovalov@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -70,85 +71,109 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Andrey Konovalov <andreyknvl@gmail.com>
 
-When collecting coverage from softirqs, KCOV uses in_serving_softirq() to
-check whether the code is running in the softirq context. Unfortunately,
-in_serving_softirq() is > 0 even when the code is running in the hardirq
-or NMI context for hardirqs and NMIs that happened during a softirq.
+Commit a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer
+scheduler") switched dummy_hcd to use hrtimer and made the timer's
+callback be executed in the hardirq context.
 
-As a result, if a softirq handler contains a remote coverage collection
-section and a hardirq with another remote coverage collection section
-happens during handling the softirq, KCOV incorrectly detects a nested
-softirq coverate collection section and prints a WARNING, as reported
-by syzbot.
+With that change, __usb_hcd_giveback_urb now gets executed in the hardirq
+context, which causes problems for KCOV and KMSAN.
 
-This issue was exposed by commit a7f3813e589f ("usb: gadget: dummy_hcd:
-Switch to hrtimer transfer scheduler"), which switched dummy_hcd to using
-hrtimer and made the timer's callback be executed in the hardirq context.
+One problem is that KCOV now is unable to collect coverage from
+the USB code that gets executed from the dummy_hcd's timer callback,
+as KCOV cannot collect coverage in the hardirq context.
 
-Change the related checks in KCOV to account for this behavior of
-in_serving_softirq() and make KCOV ignore remote coverage collection
-sections in the hardirq and NMI contexts.
+Another problem is that the dummy_hcd hrtimer might get triggered in the
+middle of a softirq with KCOV remote coverage collection enabled, and that
+causes a WARNING in KCOV, as reported by syzbot. (I sent a separate patch
+to shut down this WARNING, but that doesn't fix the other two issues.)
 
-This prevents the WARNING printed by syzbot but does not fix the inability
-of KCOV to collect coverage from the __usb_hcd_giveback_urb when dummy_hcd
-is in use (caused by a7f3813e589f); a separate patch is required for that.
+Finally, KMSAN appears to ignore tracking memory copying operations
+that happen in the hardirq context, which causes false positive
+kernel-infoleaks, as reported by syzbot.
+
+Change the hrtimer in dummy_hcd to execute the callback in the softirq
+context.
 
 Reported-by: syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com
 Closes: https://syzkaller.appspot.com/bug?extid=2388cdaeb6b10f0c13ac
-Fixes: 5ff3b30ab57d ("kcov: collect coverage from interrupts")
+Reported-by: syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=17ca2339e34a1d863aad
+Fixes: a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler")
 Cc: stable@vger.kernel.org
 Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
----
- kernel/kcov.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index f0a69d402066e..274b6b7c718de 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -161,6 +161,15 @@ static void kcov_remote_area_put(struct kcov_remote_area *area,
- 	kmsan_unpoison_memory(&area->list, sizeof(area->list));
- }
+---
+
+Marcello, would this change be acceptable for your use case?
+
+If we wanted to keep the hardirq hrtimer, we would need teach KCOV to
+collect coverage in the hardirq context (or disable it, which would be
+unfortunate) and also fix whatever is wrong with KMSAN, but all that
+requires some work.
+---
+ drivers/usb/gadget/udc/dummy_hcd.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index f37b0d8386c1a..ff7bee78bcc49 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -1304,7 +1304,8 @@ static int dummy_urb_enqueue(
  
-+/*
-+ * Unlike in_serving_softirq(), this function returns false when called during
-+ * a hardirq or an NMI that happened in the softirq context.
-+ */
-+static inline bool in_softirq_really(void)
-+{
-+	return in_serving_softirq() && !in_hardirq() && !in_nmi();
-+}
-+
- static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_struct *t)
+ 	/* kick the scheduler, it'll do the rest */
+ 	if (!hrtimer_active(&dum_hcd->timer))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS), HRTIMER_MODE_REL);
++		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
++				HRTIMER_MODE_REL_SOFT);
+ 
+  done:
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+@@ -1325,7 +1326,7 @@ static int dummy_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
+ 	rc = usb_hcd_check_unlink_urb(hcd, urb, status);
+ 	if (!rc && dum_hcd->rh_state != DUMMY_RH_RUNNING &&
+ 			!list_empty(&dum_hcd->urbp_list))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
++		hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL_SOFT);
+ 
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+ 	return rc;
+@@ -1995,7 +1996,8 @@ static enum hrtimer_restart dummy_timer(struct hrtimer *t)
+ 		dum_hcd->udev = NULL;
+ 	} else if (dum_hcd->rh_state == DUMMY_RH_RUNNING) {
+ 		/* want a 1 msec delay here */
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS), HRTIMER_MODE_REL);
++		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
++				HRTIMER_MODE_REL_SOFT);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&dum->lock, flags);
+@@ -2389,7 +2391,7 @@ static int dummy_bus_resume(struct usb_hcd *hcd)
+ 		dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 		set_link_state(dum_hcd);
+ 		if (!list_empty(&dum_hcd->urbp_list))
+-			hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
++			hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL_SOFT);
+ 		hcd->state = HC_STATE_RUNNING;
+ 	}
+ 	spin_unlock_irq(&dum_hcd->dum->lock);
+@@ -2467,7 +2469,7 @@ static DEVICE_ATTR_RO(urbs);
+ 
+ static int dummy_start_ss(struct dummy_hcd *dum_hcd)
  {
- 	unsigned int mode;
-@@ -170,7 +179,7 @@ static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_stru
- 	 * so we ignore code executed in interrupts, unless we are in a remote
- 	 * coverage collection section in a softirq.
- 	 */
--	if (!in_task() && !(in_serving_softirq() && t->kcov_softirq))
-+	if (!in_task() && !(in_softirq_really() && t->kcov_softirq))
- 		return false;
- 	mode = READ_ONCE(t->kcov_mode);
- 	/*
-@@ -849,7 +858,7 @@ void kcov_remote_start(u64 handle)
+-	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
+ 	dum_hcd->timer.function = dummy_timer;
+ 	dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 	dum_hcd->stream_en_ep = 0;
+@@ -2497,7 +2499,7 @@ static int dummy_start(struct usb_hcd *hcd)
+ 		return dummy_start_ss(dum_hcd);
  
- 	if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
- 		return;
--	if (!in_task() && !in_serving_softirq())
-+	if (!in_task() && !in_softirq_really())
- 		return;
+ 	spin_lock_init(&dum_hcd->dum->lock);
+-	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
+ 	dum_hcd->timer.function = dummy_timer;
+ 	dum_hcd->rh_state = DUMMY_RH_RUNNING;
  
- 	local_lock_irqsave(&kcov_percpu_data.lock, flags);
-@@ -991,7 +1000,7 @@ void kcov_remote_stop(void)
- 	int sequence;
- 	unsigned long flags;
- 
--	if (!in_task() && !in_serving_softirq())
-+	if (!in_task() && !in_softirq_really())
- 		return;
- 
- 	local_lock_irqsave(&kcov_percpu_data.lock, flags);
 -- 
 2.25.1
 
