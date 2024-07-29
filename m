@@ -1,118 +1,178 @@
-Return-Path: <linux-usb+bounces-12580-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12581-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C8AC93FD66
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 20:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BDB293FDB9
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 20:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CC4F1F22E11
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 18:35:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EA221F22B50
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 18:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2E2187335;
-	Mon, 29 Jul 2024 18:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="bse18pC/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5178187325;
+	Mon, 29 Jul 2024 18:50:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED66187326
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 18:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3395157E6C
+	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 18:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722278093; cv=none; b=idD8K33owty2bZQNJH58B2Q38SWZ0KhLHBPASvX0k7mrfyJQMX9PXeDKMCvPgWoauSVwA77HQBNenn4GDgv1X2BokN7ZB9aYwtUcLOAQRLnWb5hn4VHAb6rRWWnYImVedUVGUknd1aRquS7NZXwPYogDiXtSuG1HrGapFOTpcq0=
+	t=1722279030; cv=none; b=A1HhLRBLyLGMP+9PbZUbfES8EJYmD7H1BMTx8CDoX5HJrD/AKnl75XmC7XH6AqSjDXUt2H/L1/FLyPJwmU4ouh6EvF2Y2rt7KBWH6Amw9gEPiqC/NBv/5CzaKEk4oBoLDyOmQ4Lzz4A0IVjrqyxLUO8oDCKdkJLm/2GHH2773fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722278093; c=relaxed/simple;
-	bh=c/mwNpz4IjBPv3QCDjMFypfQNm0qufjOWYAErXQm1sg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BiYZxjfexaHl0Te87grB5br9shmje0gbjkj9v0xK8A251pG40vACN/IuKaW43eLzOovFXx3GKvCpOSuMkh0NuKe0SM8GSuB6Xqglf2H+7vxi8xfMJsvG3HuqjzToKfAQcYsIG7wwuGbvQSsUhrm376EPU5ZDNvdMxvEwDpxoEMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=bse18pC/; arc=none smtp.client-ip=209.85.161.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5c6661bca43so2329812eaf.0
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 11:34:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1722278091; x=1722882891; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=imNjbcelp3B6lXsHYN7XqqAWMw2+xVAXpWIJw514jNs=;
-        b=bse18pC/Do+25jDX0s0qGeJ+/449XRoeD286HvatGp5jxbjD0FW6BTu0qkNCxTtH1i
-         2avIgTk3t3iu9gD6TYjIZjTVmIpBYSFSafyPZsLuu9YvtaJhj1pzSea/eXqE/I/eIbKB
-         yMKoIYC4TlCeXn8ry8QXHmfFyhPln2bhpSyqp3KE/HDXsoLQF2lBhgckfqUjuZhLjqSH
-         oCegRaK/zrdwktzztXkYpMACxKeBGlcDp8Fl/4kO4lXk/w5Xu3mFDX6yblAERJ2wNUfH
-         Q5DlnHirDjPtzIZUXALo/sAfUcUXz8fKl09bvOrzWB2dDoh/oWE2EHW6ml8t1TfevpTq
-         N/lg==
+	s=arc-20240116; t=1722279030; c=relaxed/simple;
+	bh=eY4ugEDb6jRzq/pexxxehLVeNuXwCCtl5z9EorIXf/4=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Zwq7L3ZuntXPKmNrkzvSeja7PwAaVwGLzNmY2kOhuHZCey0FXaGckeKh2pu12uH8oJ5f2WUfvAKgW4+JlX+fxZQe8IVMzaUq+HrGzt9LQf6oXbfRuSUqqPOYMSXOgI9NY4sHiX0wd4on0z0Y7xR4r0/xQRpuSb7LlFL75dON8pY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-81f8edd731cso527252339f.0
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 11:50:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722278091; x=1722882891;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=imNjbcelp3B6lXsHYN7XqqAWMw2+xVAXpWIJw514jNs=;
-        b=g40+B1HDUEPM6arX3HCG3cvmrW1GAP1hANZ3ZRoLUthHphywlcUs4JMaZoyX6v0qXx
-         e1USWokPtcTjO4zSmANHcmkJIegXm+m+uDoefzMw4OCFpUbUffDWFWk3Oc5EX7nXr9Kf
-         VoeZlZpGoa0iYhnvNQVk0oTdfnoMHMHpE8Zoj6Wc8aEZ+mMn6REVVGRWQlu15W1W3sC6
-         hgeR90KnNjPqHnOpEzBmxcg0VAKxRYOCw9P4ZDlMDhhVSxNnktBUog7PJt+fpP3j22kt
-         RLb1vfYqYTfrb/K38kg5VHjrTxIDwSn9DxmWnnU3BCCrozXSyQHppOUChbGOSGIjAShn
-         XwEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpBYgq4v94DqN+Hqorfyy0b6KXsm81Imoh117u4KTAKAMF5cGryr+cok6UyYj1dNr7fvo8QPFMmfwVlObrF1y/EbXu/ZNLYtON
-X-Gm-Message-State: AOJu0YzOZQ19PFnKqUL8BuItysohGdiPSUrm9J7Hm9ahczP4bNQky9uD
-	R8undRGIfuZxF0FqXgsIASGYHbGR9SmxxST5FVmFwCbRnkGLbyeAuRtEgF2MFQ==
-X-Google-Smtp-Source: AGHT+IHDvNtdaAkP2OQ2xtY4UQLx6a1DPFIKYg0qRReFTzv6WHCfzOj611JnSF7iRNyfCz8VicFWDQ==
-X-Received: by 2002:a05:6358:e924:b0:19e:fa9c:5ec9 with SMTP id e5c5f4694b2df-1adc0665bfdmr914934655d.9.1722278090607;
-        Mon, 29 Jul 2024 11:34:50 -0700 (PDT)
-Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bb3f8fb75esm55530016d6.37.2024.07.29.11.34.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 11:34:50 -0700 (PDT)
-Date: Mon, 29 Jul 2024 14:34:47 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Abhishek Tamboli <abhishektamboli9@gmail.com>
-Cc: gregkh@linuxfoundation.org, usb-storage@lists.one-eyed-alien.net,
-	linux-usb@vger.kernel.org, skhan@linuxfoundation.org,
-	dan.carpenter@linaro.org, rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: storage: ene_ub6250: Fix right shift warnings
-Message-ID: <040f84a0-f299-4165-b261-636f8c9c2060@rowland.harvard.edu>
-References: <20240729182348.451436-1-abhishektamboli9@gmail.com>
+        d=1e100.net; s=20230601; t=1722279028; x=1722883828;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4HdwkffihZ+EwPucL3qbfXXPnxbwonIAqD5Z4x1q1uo=;
+        b=cOubSzagshnM1cfnJMej1gJWuZH99Hhga5HenTweyKn6Vmv7yikVddVw/fklJuqHlr
+         z1b35NBLNdb6zMSBUZojxvwFnh5l+Hd++0Ap1uHijAVnpBoEO9MKZtbGnQl2JPwFQg7u
+         DX/YFYT1eKC04SzAlhwe4HDCd2Blgen0ONZFQEFd21i+ctCFJai2hfydw2bjzsKVUPhd
+         ZEmqIZxJk+bga8bCeAFIBhm3LarsE8HclkefusaHOrHQ1VZ1t3Mul08RWfBxp6ilaB8Z
+         TyuyMRY8FmvoykzbEb7HauyYmiKKAOPdNwv6SmMjmVvy3uS7USJg6IbBVFRUIV7/CtW2
+         TdCw==
+X-Forwarded-Encrypted: i=1; AJvYcCU7K/oYr4MKAKgtro7g3tbE1O2a1neMP+nvaoJXjBuLK/PKLo9ShZigr6clpRNPb6EmuQqqhv5fT9N7eHVUvwU6m+ReJE1XiIXq
+X-Gm-Message-State: AOJu0YweMRAz7Kc/GQuhsbOgMibaTiyiKAomFGFzi8y9KQgIwyr+pv2P
+	Yqt2NtkkB2m7tkN//WpGOoHqGtiivpkoRjXI2ptaMYUGUMdTIA9xWcVhNfMVz37wBvd3Gmo0gTX
+	C55grRY3KCAbpYRgneeqkwgqByR1KUDsrcJVEs6s+c9UKlfUzpBUZKm8=
+X-Google-Smtp-Source: AGHT+IFvoN+itrC2YNMnV/kLznBYA9SKUsPbIpvfu6ywevT+cqAAWOHCiqDTZp9Sor1ce36bj8KsGn3jsftcBWEmKbLQmQKngVX7
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729182348.451436-1-abhishektamboli9@gmail.com>
+X-Received: by 2002:a05:6638:4118:b0:4c2:8a0c:380d with SMTP id
+ 8926c6da1cb9f-4c64a5d960bmr708206173.3.1722279028080; Mon, 29 Jul 2024
+ 11:50:28 -0700 (PDT)
+Date: Mon, 29 Jul 2024 11:50:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ac553b061e675573@google.com>
+Subject: [syzbot] [wireless?] WARNING in plfxlc_mac_release
+From: syzbot <syzbot+51a42f7c2e399392ea82@syzkaller.appspotmail.com>
+To: kvalo@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
+	srini.raju@purelifi.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jul 29, 2024 at 11:53:48PM +0530, Abhishek Tamboli wrote:
-> Change bl_len from u16 to u32 to accommodate the necessary bit shifts.
-> 
-> Fix the following smatch warnings:
-> 
-> drivers/usb/storage/ene_ub6250.c:1509 ms_scsi_read_capacity() warn: right shifting more than type allows 16 vs 24
-> drivers/usb/storage/ene_ub6250.c:1510 ms_scsi_read_capacity() warn: right shifting more than type allows 16 vs 16
-> 
-> Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
-> ---
->  drivers/usb/storage/ene_ub6250.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
-> index 97c66c0d91f4..ab6718dc874f 100644
-> --- a/drivers/usb/storage/ene_ub6250.c
-> +++ b/drivers/usb/storage/ene_ub6250.c
-> @@ -1484,7 +1484,7 @@ static int ms_scsi_mode_sense(struct us_data *us, struct scsi_cmnd *srb)
->  static int ms_scsi_read_capacity(struct us_data *us, struct scsi_cmnd *srb)
->  {
->  	u32   bl_num;
-> -	u16    bl_len;
-> +	u32    bl_len;
->  	unsigned int offset = 0;
->  	unsigned char    buf[8];
->  	struct scatterlist *sg = NULL;
+Hello,
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+syzbot found the following issue on:
+
+HEAD commit:    933069701c1b Merge tag '6.11-rc-smb3-server-fixes' of git:..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=14faa9e6980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f828342678294017
+dashboard link: https://syzkaller.appspot.com/bug?extid=51a42f7c2e399392ea82
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d80965980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ccfd3d980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/22dd51445d03/disk-93306970.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f85f111961d5/vmlinux-93306970.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7971b4814e87/bzImage-93306970.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+51a42f7c2e399392ea82@syzkaller.appspotmail.com
+
+usb 1-1: New USB device found, idVendor=2ef5, idProduct=000a, bcdDevice=21.c2
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+plfxlc 1-1:1.167: Firmware Version: 0
+plfxlc 1-1:1.167: Unit type is station
+plfxlc 1-1:1.167: vendor command failed (-71)
+plfxlc 1-1:1.167: FPGA download failed (-22)
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 41 at drivers/net/wireless/purelifi/plfxlc/mac.c:105 plfxlc_mac_release+0x89/0xb0 drivers/net/wireless/purelifi/plfxlc/mac.c:105
+Modules linked in:
+CPU: 0 UID: 0 PID: 41 Comm: kworker/0:2 Not tainted 6.10.0-syzkaller-g933069701c1b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/27/2024
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:plfxlc_mac_release+0x89/0xb0 drivers/net/wireless/purelifi/plfxlc/mac.c:105
+Code: 3d f8 66 fd 48 8d bb 08 33 00 00 be ff ff ff ff e8 5c 61 f5 02 31 ff 89 c3 89 c6 e8 21 f3 66 fd 85 db 75 d4 e8 18 f8 66 fd 90 <0f> 0b 90 5b 5d e9 0d f8 66 fd 48 c7 c7 d8 9e 32 8a e8 21 f1 bb fd
+RSP: 0018:ffffc900004c6f50 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff83ec60bf
+RDX: ffff888105ab3a00 RSI: ffffffff83ec60c8 RDI: 0000000000000005
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000098df1
+R13: ffff88810f6eb000 R14: ffff8881137eb080 R15: ffff88810f6eb078
+FS:  0000000000000000(0000) GS:ffff8881f6200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055993fa01a80 CR3: 000000010d7ae000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ probe+0x84a/0xba0 drivers/net/wireless/purelifi/plfxlc/usb.c:694
+ usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
+ call_driver_probe drivers/base/dd.c:578 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:656
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:956
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
+ device_add+0x114b/0x1a70 drivers/base/core.c:3679
+ usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:254
+ usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:294
+ call_driver_probe drivers/base/dd.c:578 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:656
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:956
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
+ device_add+0x114b/0x1a70 drivers/base/core.c:3679
+ usb_new_device+0xd90/0x1a10 drivers/usb/core/hub.c:2651
+ hub_port_connect drivers/usb/core/hub.c:5521 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
+ port_event drivers/usb/core/hub.c:5821 [inline]
+ hub_event+0x2e66/0x4f50 drivers/usb/core/hub.c:5903
+ process_one_work+0x9c5/0x1b40 kernel/workqueue.c:3231
+ process_scheduled_works kernel/workqueue.c:3312 [inline]
+ worker_thread+0x6c8/0xf20 kernel/workqueue.c:3390
+ kthread+0x2c1/0x3a0 kernel/kthread.c:389
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
