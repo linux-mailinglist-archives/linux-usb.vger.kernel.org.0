@@ -1,153 +1,150 @@
-Return-Path: <linux-usb+bounces-12577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12578-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 521CB93FC96
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 19:47:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE6A793FCFA
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 20:01:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E34D28121F
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 17:47:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A78D4282DCC
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2024 18:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF73216F0E7;
-	Mon, 29 Jul 2024 17:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0DC1741C6;
+	Mon, 29 Jul 2024 18:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PK8gALIu"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Gi8Xq6OP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDAA15ECCD;
-	Mon, 29 Jul 2024 17:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCB415FA66
+	for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 18:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722275211; cv=none; b=aJf6GyBndIqoCsB711ImTnd2HOIZ9rXFMXxJnGAWlT5CiVMvKk0iJcRiHN/VswHgeyp07T0+6j70asmHTrH4YBNhjGXrHD0I0mBuf1/+hJMCIxUAxO202NY8l5xZSpKkgBjnmtI3FJmxLYj3ZbePlgI4fZV5LribwYMaQ1c0Sx0=
+	t=1722276089; cv=none; b=EjeQKONh9UGbpOD0Wa91mqstqk36D0XPR3smwUgQRFalAgg8s80MgOyJnbjPg+2e825xgbs927UK9RaG7b1Zk1I7UHXlfdRpW0tl5Or9duRPV5xjhc/4HLu2gwmzH219g2nCvJVwMYqPJH0WHoBOWy6O/yQ9bID/Z46uuKVaKOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722275211; c=relaxed/simple;
-	bh=NHpWIQMM4KnFG3Grot6gzP7D8MYKTYzIjdAEdp8aiCU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Lma0TO8HwKo2qFV9yJhd4jqNSggaCwfEGUd197Fk6y1EZX2nEogXrv0+hXM/f0CKnpLQBG6UzQNHdP/kvQGhzSPYoIKnObQanZGfi2axy+4/rf3wC3fkQqR9YhMJ3ga+JYdZVL2/Njw1Mlw7ApC0Vu5Je0UCb99XRfjnBJphm9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PK8gALIu; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fc611a0f8cso21576165ad.2;
-        Mon, 29 Jul 2024 10:46:49 -0700 (PDT)
+	s=arc-20240116; t=1722276089; c=relaxed/simple;
+	bh=NxPxTGwFiATU9I0paB9I5SPNOKKKTOqx+SBrETwxHTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tyClXoPHGTvuj7+zg/kkKeys/8Km9/nT8k1Xk4sveQ+7zbSJcYtf76yKILGAWFh1W7yd2V+88VPZX9pG4XH9TEvhLq0X3C8ylw+/SRL9V7diUzliIJ6I3jvhIgTzZUHdTBxMSSpMgwXcuLnT3BDgYgCxFJ/v/1FNqjYS9gQ1+MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Gi8Xq6OP; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-44ff50affc5so21031361cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2024 11:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722275209; x=1722880009; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iDMRENFOTmb9Quk1ZGoV/8u9O28UUgs55EcrP9/qbI0=;
-        b=PK8gALIufO64Gz7K85iPw7Dd5rzk7h+CzonqHFJM6MjW7fkoqzTvJIU/touuZurXqX
-         oKfpM9oYAqoZIiQKQgjiHvv8xdazlojccfDQeNRnHmxPviylLr9QFhnZOKKdpjK/YX/P
-         6a184OWkKgfpRdGeedfJalJk0DWipLC+hYl6gaxah1yrNw+ILvg9Z7o6IdXYNnjD9h3O
-         AvceEU0jW8rl3KsSz7eaxewQoiVC6Ev4PuyjTxp7BIZ/zZGycBbOSDs9vNV+nCCv3J6y
-         HCYyxrL9EmyK8yaD0irxZ7AC46MBA+rT2lmsToAd12G5JZlxYEscMtt8Ben1bknYrT4v
-         /88A==
+        d=rowland.harvard.edu; s=google; t=1722276086; x=1722880886; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Nd1WXiUiTtwYxOMtFvVlG67gP5owuM6QDVES/bBhfKI=;
+        b=Gi8Xq6OPZ4Y3aMQLojrKDSxIDgSOe3RPI6xt4MjEYVDrVCyhOOoNFouAJLjg3YFO46
+         d4lnr1SQGaEbAIWHXtOegwYeJhL4OiWlqqSXBgoU1/AlUODDcR9poUDNNKVF47f8rdqX
+         vC0FDp/1JtrnO75hsBrhKp9ITGPIjZzMFx+nlVScvfnwl+OyEEiXsQk9z5dqP8xHPZal
+         D89XqyayNSW1Qdk0KPH5jxzjPe1EEjXWhC9RKbwyXG3Xn4VQaYHefeKmn2+L1YXgWaqH
+         pUS1BZyH/VIZ78eyd3SQy0e3VyVAoCj/SNG0+pub3v1RGPgyr3N+xazZ7ptk9R76X7vm
+         xYFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722275209; x=1722880009;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iDMRENFOTmb9Quk1ZGoV/8u9O28UUgs55EcrP9/qbI0=;
-        b=Cfc6Vc1Ju8bYvKoEUCJSGMGrwWnLuETqv70nrBhl+23lnSscTs7Zch7qLXTVHGL0Kk
-         SBzGnZGTEdrQYvvHPZIZdq7GzGm531Jez8diF9h4K0+JD6L04n3u6fuScwv9pDODHDC1
-         5FCDYsV09HgWVWwFgReL7j9qaZ3on5u0++F3j4fn2OzDsPl1cLmcoF9q3SAgwENrjei/
-         /2XqZhTmxpQUpE/aIe/2IEko9jHOesNr55WIY1pPBb7Z1Rj/tVIDaM9oVWTXry89hity
-         iRI1tRap8+vBX2+bvf6yja/kyAK0Di9T7JYggYDnMxGfffTTTYIXZEJqah0lHPVAAn2A
-         0rVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVy77yG3kESoZ7jNrQRHeoEublOReKt4UcVci+q7UZyJM1EBRnItvjlHy0Mah1RK4wjdCPxrl1+UYh8IftV20aWcEMUcyISARYx+P5lQnLX3bIXPSvptZXGnR5qC1R9fphz7m3GLrgR
-X-Gm-Message-State: AOJu0YxFF7dJ4QIptiy/Y4u+8Ur2QoqR8+9H6fsPGf5t7oI1ISGEaP+T
-	nphiKt8DSGsk5WSP+03HTt3zAWo8ZrNsQJ8FYBnuS9ht0Qgld/vI
-X-Google-Smtp-Source: AGHT+IEPbuRb9okWNmz2XKujzM6ZvOBYpgEojc8nnMdhbjBvhCURiHt9M80et6ldWMjh9rgb8Vlw2Q==
-X-Received: by 2002:a17:903:2446:b0:1fd:6848:bc2d with SMTP id d9443c01a7336-1ff04810ffcmr65874485ad.20.1722275209046;
-        Mon, 29 Jul 2024 10:46:49 -0700 (PDT)
-Received: from embed-PC.. ([106.205.109.112])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7d28d4dsm85991045ad.101.2024.07.29.10.46.44
+        d=1e100.net; s=20230601; t=1722276086; x=1722880886;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nd1WXiUiTtwYxOMtFvVlG67gP5owuM6QDVES/bBhfKI=;
+        b=BhHtl62rS2nNc7gsj5QAMRFC65HolnGz/fppc4MjxktlY27ayi0oPiKaA2QFETOVhi
+         E2NA2lCytXkf/A52AKAABqQlKRA8TTZhR3TlCuKx7dDs6t2O9X2Blq4Pfz82SCFewi1R
+         ioYtTHnHIMcC6F37e7rZY9ZBbM06bOpA/QjL1PSshtSe+wGCWhu6fLDeBEfu0KNICqb5
+         0mXDcwcs6t0q4+6qoFZPX8w+/Is1lkjQH8F+pFTm/CHZVVeqRSZnGkL+WAJHUIi0vbNq
+         GCvJVJKq077ahMrsusAGw57b6MVGxMJ4TS3nLDvQJckXPqjj27+xUADc25/Fo/EENwP4
+         DpNg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrYIawx78FsSb6lE8viqWskiHBXK99PJTnlhoN9g4FVoPJ5c91feUhfGqjAw1v/gDCIzWQDbQCPXx/vUpN3T6IhHCGqv7+LQdT
+X-Gm-Message-State: AOJu0YwgEPJxX/zAds9p5Tk6xeYeZCGG/paXzHhsTXr3czvPx1MQYVLr
+	0kOoasosM7q5r6U7NLl4Zm3zuLDXVsELes4c3gnNrQF1lp1mY3uUWDAPF9GMug==
+X-Google-Smtp-Source: AGHT+IGVjAt2ihyHs5zn4xEcJd29SKFy9xWmbX66Bk6IjnJc3rfCed+UL/M7vTEtzJwl7uv6mxhVxQ==
+X-Received: by 2002:a05:622a:1791:b0:43f:fc16:6b3f with SMTP id d75a77b69052e-45004f1378dmr135514091cf.34.1722276086083;
+        Mon, 29 Jul 2024 11:01:26 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44fe8147635sm44235931cf.31.2024.07.29.11.01.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 10:46:48 -0700 (PDT)
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: skhan@linuxfoundation.org,
-	dan.carpenter@linaro.org,
-	rbmarliere@gmail.com,
-	christophe.jaillet@wanadoo.fr,
-	Chris.Wulff@biamp.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: u_audio: Use C99 syntax for array initializers
-Date: Mon, 29 Jul 2024 23:16:39 +0530
-Message-Id: <20240729174639.446105-1-abhishektamboli9@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 29 Jul 2024 11:01:25 -0700 (PDT)
+Date: Mon, 29 Jul 2024 14:01:22 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Marcello Sylvester Bauer <sylv@sylv.io>, andrey.konovalov@linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Aleksandr Nogikh <nogikh@google.com>,
+	Marco Elver <elver@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com,
+	syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: dummy_hcd: execute hrtimer callback in
+ softirq context
+Message-ID: <d4ed3fb2-0d59-4376-af12-de4cd2167b18@rowland.harvard.edu>
+References: <20240729022316.92219-1-andrey.konovalov@linux.dev>
+ <baae33f5602d8bcd38b48cd6ea4617c8e17d8650.camel@sylv.io>
+ <CA+fCnZcWvtnTrST3PrORdPwmo0m2rrE+S-hWD74ZU_4RD6mSPA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+fCnZcWvtnTrST3PrORdPwmo0m2rrE+S-hWD74ZU_4RD6mSPA@mail.gmail.com>
 
-Convert array initializers to C99 syntax by adding the '=' after each
-designated initializer. This change resolves warnings from smatch
-about obsolete array initializers.
+On Mon, Jul 29, 2024 at 06:14:30PM +0200, Andrey Konovalov wrote:
+> On Mon, Jul 29, 2024 at 10:26 AM Marcello Sylvester Bauer <sylv@sylv.io> wrote:
+> >
+> > Hi Andrey,
+> 
+> Hi Marcello,
+> 
+> > Thanks for investigating and finding the cause of this problem. I have
+> > already submitted an identical patch to change the hrtimer to softirq:
+> > https://lkml.org/lkml/2024/6/26/969
+> 
+> Ah, I missed that, that's great!
+> 
+> > However, your commit messages contain more useful information about the
+> > problem at hand. So I'm happy to drop my patch in favor of yours.
+> 
+> That's very considerate, thank you. I'll leave this up to Greg - I
+> don't mind using either patch.
+> 
+> > Btw, the same problem has also been reported by the intel kernel test
+> > robot. So we should add additional tags to mark this patch as the fix.
+> >
+> >
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > Closes:
+> > https://lore.kernel.org/oe-lkp/202406141323.413a90d2-lkp@intel.com
+> > Acked-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> 
+> Let's also add the syzbot reports mentioned in your patch:
+> 
+> Reported-by: syzbot+c793a7eca38803212c61@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=c793a7eca38803212c61
+> Reported-by: syzbot+1e6e0b916b211bee1bd6@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=1e6e0b916b211bee1bd6
+> 
+> And I also found one more:
+> 
+> Reported-by: syzbot+edd9fe0d3a65b14588d5@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=edd9fe0d3a65b14588d5
 
-drivers/usb/gadget/function/u_audio.c:1117:20:warning: obsolete array initializer, use C99 syntax
-drivers/usb/gadget/function/u_audio.c:1124:28:warning: obsolete array initializer, use C99 syntax
-drivers/usb/gadget/function/u_audio.c:1131:19:warning: obsolete array initializer, use C99 syntax
-drivers/usb/gadget/function/u_audio.c:1138:27:warning: obsolete array initializer, use C99 syntax
-drivers/usb/gadget/function/u_audio.c:1145:25:warning: obsolete array initializer, use C99 syntax
+You need to be careful about claiming that this patch will fix those bug 
+reports.  At least one of them (the last one above) still fails with the 
+patch applied.  See:
 
-Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
----
- drivers/usb/gadget/function/u_audio.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+https://lore.kernel.org/linux-usb/ade15714-6aa3-4988-8b45-719fc9d74727@rowland.harvard.edu/
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index 89af0feb7512..47a1990743d8 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -1114,35 +1114,35 @@ static int u_audio_rate_get(struct snd_kcontrol *kcontrol,
- }
- 
- static struct snd_kcontrol_new u_audio_controls[]  = {
--  [UAC_FBACK_CTRL] {
-+[UAC_FBACK_CTRL] = {
-     .iface =        SNDRV_CTL_ELEM_IFACE_PCM,
-     .name =         "Capture Pitch 1000000",
-     .info =         u_audio_pitch_info,
-     .get =          u_audio_pitch_get,
-     .put =          u_audio_pitch_put,
-   },
--	[UAC_P_PITCH_CTRL] {
-+	[UAC_P_PITCH_CTRL] = {
- 		.iface =        SNDRV_CTL_ELEM_IFACE_PCM,
- 		.name =         "Playback Pitch 1000000",
- 		.info =         u_audio_pitch_info,
- 		.get =          u_audio_pitch_get,
- 		.put =          u_audio_pitch_put,
- 	},
--  [UAC_MUTE_CTRL] {
-+[UAC_MUTE_CTRL] = {
- 		.iface =	SNDRV_CTL_ELEM_IFACE_MIXER,
- 		.name =		"", /* will be filled later */
- 		.info =		u_audio_mute_info,
- 		.get =		u_audio_mute_get,
- 		.put =		u_audio_mute_put,
- 	},
--	[UAC_VOLUME_CTRL] {
-+	[UAC_VOLUME_CTRL] = {
- 		.iface =	SNDRV_CTL_ELEM_IFACE_MIXER,
- 		.name =		"", /* will be filled later */
- 		.info =		u_audio_volume_info,
- 		.get =		u_audio_volume_get,
- 		.put =		u_audio_volume_put,
- 	},
--	[UAC_RATE_CTRL] {
-+	[UAC_RATE_CTRL] = {
- 		.iface =	SNDRV_CTL_ELEM_IFACE_PCM,
- 		.name =		"", /* will be filled later */
- 		.access =	SNDRV_CTL_ELEM_ACCESS_READ | SNDRV_CTL_ELEM_ACCESS_VOLATILE,
--- 
-2.34.1
+and the following response.
 
+Alan Stern
 
