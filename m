@@ -1,145 +1,101 @@
-Return-Path: <linux-usb+bounces-12637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB4499410B2
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8922F941135
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:53:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB2382869B6
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 11:38:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4530C282CB1
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 11:53:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4409F19EED8;
-	Tue, 30 Jul 2024 11:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78248199236;
+	Tue, 30 Jul 2024 11:53:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="UJkpbcTZ"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="ugf7IYCj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0528519B3F9;
-	Tue, 30 Jul 2024 11:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA81166316;
+	Tue, 30 Jul 2024 11:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722339502; cv=none; b=F4Rkx8p7SCFN/zGSHjqBsEQEgiNqN+Re94QMYjJpQ7wLyQb5gHHwLIqluHIRziJel7TehvAikFKMK6sAN3C5rnUt316nvR1BLPTyVgcAnitlOc/ieGSGHlMW3UB6blzbPDJRh4r/+eP2NBwKIKv3UDuqaIyK0I8yp46bu8TgJLU=
+	t=1722340381; cv=none; b=G2NQ53NDX4dt8ggdcaffQ/AOwD9Q7QpOLpf5S7SDvr6HpbAVO8N/KB14Loxg1TsYcuoQXwmvVDXD1Pcz6sGOssPR9U3/Fk4er0SZWgziZtF1AaVsJ6wlYfHzGeYxNXtCVmL11tWuRZrJWZZpoQNWjdIT2dtzxJvUvAKqhdT9j78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722339502; c=relaxed/simple;
-	bh=TiJNm9C+6IUH432PuhDQhEwXYsUueLlQfTMMK0FDgD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UEumghNV2uQXgu4buIiC+3r1NcKKs64qbcyGQPcAst1tDImIp+pABsdUCHPqYISCBxijemXsY4TdhqDjRM+Fa9wu0uqEOO967FcafPF1TQMoa5oGwrp8HmCkzFKCz8G7/dWShMaoz00VnLzF25A8QuQJ4Pa2JuwIgknpzZUXr4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=UJkpbcTZ; arc=none smtp.client-ip=178.60.130.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=5L/gocOQMZe6co0EPVC+ZcjsICkcAhqhaliJGAeQue4=; b=UJkpbcTZkH/f2Y9iKX2AR9YDXe
-	Yc2W0yr9smfZobMe5fgLRV4lu5RjQoaNzasyRKgZhfZZkD1x7aZtj6Bc5DpgQMzN6+TroABgL61Y5
-	9VRRbtR1rvMd38F1S0ARnaLU/pKM4EyCt4QpTxpP45o0YZ89bkx3D8hLx6g2J8pIyjBXDvCq+4B/2
-	tHr5bW8/zoU5YPLUAU9OA4GkpBca9aHDIrrO+eG06OPOowR1qPr2z5UQ2Muxw91miMF7Qc+4T8IPj
-	FWCtsHBEjMIAyp2VCwhCCFOYGfp2ujZfMCZI9Pjqba37xEzuVyHYWWT5b8m/Kj8jaWDcCEM1TuTZv
-	FJtkwujg==;
-Received: from [187.36.213.55] (helo=[192.168.1.212])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1sYlB6-005Zgc-5O; Tue, 30 Jul 2024 13:38:04 +0200
-Message-ID: <0a680c00-f5b7-49f3-9b6e-852d147a5383@igalia.com>
-Date: Tue, 30 Jul 2024 08:37:52 -0300
+	s=arc-20240116; t=1722340381; c=relaxed/simple;
+	bh=3U2t4PjSm3nGE8tUHltVJ/FufrtRhfcNuKwP2zsJLvE=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=hmdCz+rOJcujNqNUJ3zSdO2fqvH7fSCR2rx81FsS2jHt3S6Ydrlyd7ozoP0TgLKF2MwAgq1GHX7DNnvHh0c4nr5aZ9fZpfx0qhwucqAsz3eVt29y7kEN1WEzuuuR7ovDXz2L98AHYGYz+zmh9Bv5TuFXGLNrrMbQu7FYZrad92w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=ugf7IYCj; arc=none smtp.client-ip=203.205.221.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1722340374; bh=rfuhs/Z+9bw5iQ2Bo/tcqR1/U5bKvoVkGTLb5omlojc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ugf7IYCjSzDJh/zWUzxMmY5bqU1VFwUqNyY7c6MmXLQUindOXi3E8lzqMY6q2epqC
+	 gK73xVYHQNfriLyvFuKJ9Fya2+JP5Zvv+SUZUCAoQIlFerBTV27pdwfmGokxjYV1LO
+	 OncFn+YpgGEYd+HNkgIPZdvcg0rzxiATJdhBe6uY=
+Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
+	by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
+	id BB1A7E97; Tue, 30 Jul 2024 19:46:49 +0800
+X-QQ-mid: xmsmtpt1722340009t3xxspdre
+Message-ID: <tencent_48A8AECCEEC30C8EE7C8C6F692C2064D4906@qq.com>
+X-QQ-XMAILINFO: OOPJ7pYMv25ttYYXMSLL7LDhJwHo7h14cxc7k5mpeuZwgYP8Mgv1XHhcsz0T9b
+	 7TwKBMYlbE/WcyWEdhBLspwEWyduLVLQ9sL1c7Y8ktRrqr9ckpBOBZ9YhP/ctFYI9iVT0nI6s/uq
+	 0GE6DMKC+DECxAxzO4G3bp02TFcLFaeHQ5Qw9mmheAZyWH42X4gtztPQjPuu6JlP3OZ3WKqh37mn
+	 tN7gey74LGv+D+j7bnCI1DREyy+zsJPLoBXCVT9sCdJd2CIVjHIYFfcSG2ea7XrHZlCgGUYEJkPK
+	 Rta2CchhEQqgrBYl0htASiWroGERVje13kIS4xdhNCsNt7+QmmR23+p1pxacHQs+fosNYAkQuEvu
+	 8Zi37Euz6c+fADGzWMyBYHBF9ffeCr+UGJKkTrIxgq3nRfX11W5yZMnPxs/sWJK9ZrLS/dEk8MxB
+	 RWjjtrrucIwa1Q0MtSZImZnePJElsJdKQZe2wyiqfgVQ/MQvrAy+cUm7da+w1s94bbE6Z2ncpCsb
+	 4Y2CLfvG2leTzmbmYmW5Db9M6XZsX6002O16yjNZhVcCt4jvQ20vazRqerVo8KhEl4rD/JMBDkFX
+	 zogRkkzWGy4C1HVh0m/OrYTLwXyL0Vr1XMxW3/4dvFJsDJ3v394dvGQeAfoukTe8LK69bRuKZS3W
+	 UL/GCnFEF5X3skDiUO5HSu3jOHsmviKsp6boWxddLNbIjBg850ay1xlHWSosusVTKFiMRMtV0yu9
+	 vpVmhKQLP/2r4hbcq2h1BThb86vXp5waYKlHT05eq9XiZC9RzRm6f+C/xvm7KHJrOiUHs/8chpOY
+	 aP+rLt6AsiKtFMDSzMc8dd89vy95ahoKFs1ml+OvYfHPn/gUVvVE07cJzk/wI+JdVSK6EhZEHx4h
+	 yFDvxHN7Iwc3MdYWz+QGCemrDvqAr3MVnKTRTP6IIFv8DDg3EaLws5Lpmyudw1t4ufqlOpIqtaUW
+	 n7SfZN0ZQ=
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+From: Edward Adam Davis <eadavis@qq.com>
+To: kvalo@kernel.org
+Cc: eadavis@qq.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	srini.raju@purelifi.com,
+	syzbot+51a42f7c2e399392ea82@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] wifi: plfxlc: remove assert for mac->lock
+Date: Tue, 30 Jul 2024 19:46:50 +0800
+X-OQ-MSGID: <20240730114649.498184-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <877cd39nhg.fsf@kernel.org>
+References: <877cd39nhg.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 06/16] drm/vc4: hdmi: Handle error case of
- pm_runtime_resume_and_get
-To: Stefan Wahren <wahrenst@gmx.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
- Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-References: <20240728114200.75559-1-wahrenst@gmx.net>
- <20240728114200.75559-7-wahrenst@gmx.net>
-Content-Language: en-US
-From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
-Autocrypt: addr=mcanal@igalia.com; keydata=
- xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
- H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
- hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
- GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
- rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
- s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
- GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
- pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
-In-Reply-To: <20240728114200.75559-7-wahrenst@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/28/24 08:41, Stefan Wahren wrote:
-> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
-> powered in detect") introduced the necessary power management handling
-> to avoid register access while controller is powered down.
-> Unfortunately it just print a warning if pm_runtime_resume_and_get()
-> fails and proceed anyway.
+On Tue, 30 Jul 2024 13:35:07 +0300, Kalle Valo wrote:
+> > syzbot report WARNING in plfxlc_mac_release, according to the context,
+> > there is not need assert for mac->lock.
 > 
-> This could happen during suspend to idle. So we must assume it is unsafe
-> to access the HDMI register. So bail out properly.
-> 
-> Fixes: 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is powered in detect")
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> The commit message should explain _why_ the assert is not needed.
+> Otherwise it looks that you are randomly removing it to get rid of the
+> warning.
+mac->lock is used to protect mac data, but after calling plfxlc_mac_release(), 
+there are two functions:ieee80211_unregister_hw() and ieee80211_free_hw(),
+there is no action to operate on mac data in these two functions, so mac->lock
+is not required.
 
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
+On the other hand, there is no holding action for mac->lock before calling plfxlc_mac_release.
 
-Best Regards,
-- Maíra
+--
+Edward
 
-> ---
->   drivers/gpu/drm/vc4/vc4_hdmi.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> index d57c4a5948c8..cb424604484f 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -429,6 +429,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
->   {
->   	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
->   	enum drm_connector_status status = connector_status_disconnected;
-> +	int ret;
-> 
->   	/*
->   	 * NOTE: This function should really take vc4_hdmi->mutex, but
-> @@ -441,7 +442,12 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
->   	 * the lock for now.
->   	 */
-> 
-> -	WARN_ON(pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev));
-> +	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
-> +	if (ret) {
-> +		drm_err_once(connector->dev, "Failed to retain HDMI power domain: %d\n",
-> +			     ret);
-> +		return connector_status_unknown;
-> +	}
-> 
->   	if (vc4_hdmi->hpd_gpio) {
->   		if (gpiod_get_value_cansleep(vc4_hdmi->hpd_gpio))
-> --
-> 2.34.1
-> 
 
