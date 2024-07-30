@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-12648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D516941F4E
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 20:13:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD1C2941F4F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 20:14:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41A961F24C42
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 18:13:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD7041C224C2
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 18:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76D918A6C5;
-	Tue, 30 Jul 2024 18:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCB6918A6AE;
+	Tue, 30 Jul 2024 18:14:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDnJwIs/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tLFkkqC+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707201A76CA
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 18:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644DE1A76CA
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 18:14:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722363215; cv=none; b=sSQTGi2mtguPOeakVvOfSs2HTZXCYt7H+RnDOcyf124rXVI6mkIPNfdBXM3nXc0TgPyWWGx7Ozr6YokbEYr0uVi9xHLF7IYPxXSdDtOllWcgZIUEjgNnp6QyTkTvlrzktlY4S6GtpeU5TFJnslElTgwBowGZJ/IXiN8yK3MS6zM=
+	t=1722363259; cv=none; b=OXEY770oAxYyz8QYBH8NTBQ5A3+TMHA1JJijINC4g8nSi/rvHb+QFu4eecAJNG6wzRAMF5+My8jX9W2aiQdtHUgpmRXXHYz9EPxuugOEG5/+6pCo9nu9PoeOy3CPOqJf9mfPTrZdiS/DJBO4CnA75xgrJUdnTu78fDqY/w4ejss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722363215; c=relaxed/simple;
-	bh=EIt9K6HINIBwY0UDIAPZxmTobdvqT1R/V4VZRozom8I=;
+	s=arc-20240116; t=1722363259; c=relaxed/simple;
+	bh=sGrsTaE/ddlaXQkbqVjO8G8Coqx9bpSN44PMkDoAn1E=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Di1QnfRT1LLut77qCcDHCtYRSZbwAqpcn7L02o87qxuCz3ER86CdmoGNf5ogbd/WHFJNgD9Gi1v2mGzW+9hxmIddfuzn1rKOaULUJl/dJu7KNscqK3fcVfCGEoZfsRJQEGdm+amFU7OJh/5zPTpVXKgi/nbtZAVIcrmge5F4xUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDnJwIs/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 049AFC4AF0A
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 18:13:35 +0000 (UTC)
+	 Content-Type:MIME-Version; b=SYE9KW4iquSHCXV7eHPN2Dj6+lrTxJFY0IbdX8z2XaHl1G4zdcFLwn+IQBfxY2bvr41OP7veXMa4D4x5jPJojqs0UF1gFP2BjmsSrawgKIOGMfFpiKwUR8cxzJCaI9UJwitoMvWRQOBHfhp6kB5jHRUKV9tbz8weKZNx4tkLV+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tLFkkqC+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ED25EC4AF0A
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 18:14:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722363215;
-	bh=EIt9K6HINIBwY0UDIAPZxmTobdvqT1R/V4VZRozom8I=;
+	s=k20201202; t=1722363259;
+	bh=sGrsTaE/ddlaXQkbqVjO8G8Coqx9bpSN44PMkDoAn1E=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=nDnJwIs/Pgv6QvyTy0l8U0hGiBM1YOS98YTT8fXksg8huhKSFgLIEVc9EdwCw1YmP
-	 agqx5OnNVYnQF9pnY9K7tsxjQhqgy9l9DqtXey4v+WLOQYC9Pjc1AjOHQYMgpliZrB
-	 /sFOHiTfwtxghp/YopAdR6NjCLY7z8Zsa9qE9XXDFdmdPiR4J6hkjya2WBxaLQnELx
-	 RaD8bYwiebmio0OONxMN7tAYcWUxLQPdKWJR8ku5v5yLVEJ7oYYvcb0UCgflCGgDKs
-	 wuobXolK6jHjMMOs5yr0DaL4YaWeFKRLA0/tu0Zmt03ootgsyMly0qMLmlOSc2YhVQ
-	 nT85/VWIbutHg==
+	b=tLFkkqC+K3QRUJthUn3kIOMwRqECWf1BuPPnA+nPY7gZ6JCQLhZr5ipPqbpN0jhog
+	 E67FIAU0dZZWDlhN3+AqZCcUmdOV277mXSbo/ITtr4nI+A2gzBEdLpaCcYFtypXpfa
+	 ufoJAMFOHoghLrNzU5CrtVcuy4bi2mAVAZgmO1wyEMhXU6yt7MRzHOPBioqGENPc+z
+	 KxHwTUbO+q6xL5TKOAmAFabl+48xTZvaYV4Ip8RYaI8xg6/fV/fqcQVNlthqk1W61u
+	 /QqH6DZk+wZ+2lzp//ct8dSuhn2zC93GBlrtYxp+dbdVJIXjHe/N0m4T8GCe2B7eip
+	 XjBxdfHhnTimQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EF779C53B73; Tue, 30 Jul 2024 18:13:34 +0000 (UTC)
+	id E2DEBC53B73; Tue, 30 Jul 2024 18:14:18 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
-Date: Tue, 30 Jul 2024 18:13:34 +0000
+Date: Tue, 30 Jul 2024 18:14:18 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,7 +62,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219111-208809-VIxUYEIuD7@https.bugzilla.kernel.org/>
+Message-ID: <bug-219111-208809-N16WHMgKJ1@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
 References: <bug-219111-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,12 +78,12 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
 
---- Comment #1 from CH (com+bugzilla-kernel@c-henry.fr) ---
-Created attachment 306639
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306639&action=3Dedit
-journalctl -f
+--- Comment #2 from CH (com+bugzilla-kernel@c-henry.fr) ---
+Created attachment 306640
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306640&action=3Dedit
+cat /sys/kernel/debug/usb/usbmon/1u
 
-journalctl -f produce when the deviced it plugged
+result of `cat /sys/kernel/debug/usb/usbmon/1u` after device is plugged.
 
 --=20
 You may reply to this email to add a comment.
