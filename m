@@ -1,93 +1,139 @@
-Return-Path: <linux-usb+bounces-12651-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3387F941F54
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 20:16:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F25DA9420C0
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 21:39:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64F9E1C2285A
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 18:16:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9A5C285E1B
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 19:39:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E5DD189535;
-	Tue, 30 Jul 2024 18:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA2318CC14;
+	Tue, 30 Jul 2024 19:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDtbLjDa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MDJ0cQxz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3CB1667F1
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 18:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB52018CC09;
+	Tue, 30 Jul 2024 19:38:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722363390; cv=none; b=q7XNRNHiDTtdQ1ViFqCOh+d1wTeDlUm49ubYpAiZtkW7MPUMdRYC7+IMPUPsw6cQTAnbSaleW2YHucGXxcMHdQ5ZKx9TMpYsCHAFFdCpIFoyuHDOK2ooGrruCp15XrlKCFK9Kgu3N3i7rFWmlG1Y1CbLxNfXtBYdXGxkqW374ms=
+	t=1722368335; cv=none; b=NDfpU883s2xz2CtEjdNW+gQ7KDbemG73NZ/kqTGxg5ZYPf0yCjrEPZcurZWNwMt0LptXYMph+JPk6F1BRHKGAZ+1Xfk8maIz9vNmaOGhv3KYJL18LS6qr/J7bwc5pzECK6wVevKmSMjugEfJmDRLlXnjkGI0oa8UrqAwgcYMJmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722363390; c=relaxed/simple;
-	bh=Je4d0r3AmcwF9AJnUhd9JBlAFXPgmTpbOk6na9EZ+cI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UWz4J1KYWtskDT2JpoVBaeAF9DzURpnTAgJxhUv2OTkSX2xBJnanSSV91KcY+2cAsU08dkqZ5+ReiBtYDnCZ3O6LSx+SQHTOGLVN5VeXl31Xyf9j2SMSBcIZCbI2IXsEvjfd4nxsYtQB9N5/Yl4hFAVCSkkbw/x1OFcbrzTapwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDtbLjDa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C68A8C32782
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 18:16:29 +0000 (UTC)
+	s=arc-20240116; t=1722368335; c=relaxed/simple;
+	bh=5lpKaUgX4LewI+2gJzXQuBzlVZD7Vurrl6h6fEr9DDs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UHtdDjcXYz4d+X4juCIykxv404jwXCK0adGJdF6sbGBs06QyogR9z75h8sS2MGeo7Em7hWXYaikcIkbCOKv/n2WPk/EMDCRgVvrNq3TG5QcWNBRVXnqmXJ3a0xI48PXfp49yjiLgs3qC7WHJel1w1j/xaY6odHSJlZmn9/xK8Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MDJ0cQxz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50248C4AF0F;
+	Tue, 30 Jul 2024 19:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722363389;
-	bh=Je4d0r3AmcwF9AJnUhd9JBlAFXPgmTpbOk6na9EZ+cI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=oDtbLjDawy7q01Yzc4bLfoTIKo1j+axPnbYc8jQmoqyHLiAf4ZnSX4r06LmbZ3ZMy
-	 WeGgUbEr+xkdRryIico+mLrJkmop9k3J4ZBkZtrnmdmJ+Ot7jui+Uub6tbIoBMy91l
-	 miieob87LrBIcTso5x5ryCGF8wvrqlZkVE/cr0nfRWg3my3p8mzm3nxdDXG9A5SSB2
-	 jYSjXNmWCb7jAspqDsNURjhiQBMGtCoj8U8DICP3hzOetH+PI5+5NwvtzyX4ss5RIO
-	 j4kbI22eDSEMwilZD3467M3ojl/gUWADszuULz8aj5nZEECTOXszkUcBEddj3ii5M2
-	 s9nSjGHTq2nqQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BC4C3C53B50; Tue, 30 Jul 2024 18:16:29 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
-Date: Tue, 30 Jul 2024 18:16:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: com+bugzilla-kernel@c-henry.fr
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219111-208809-5LakgQzNdr@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
-References: <bug-219111-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1722368335;
+	bh=5lpKaUgX4LewI+2gJzXQuBzlVZD7Vurrl6h6fEr9DDs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MDJ0cQxz//BRJPcyL0nrwk9o6pH0odNZ2Bz/RvGfk8pwZq4b91O3Q2DOZ8B5tJ9Ve
+	 YIUFkbUBz44fXGfe9cSNX7638tkrsmZ0UUV/Fx+UG2JAY3AJ0JTjdp2k+hezcnNTh8
+	 nuXiGUbgaXRAqNqCW3LAsg8tX7TuEgKNQVRdPpUmEG59hDLTUssTws7Zr7wvSzSor9
+	 R/ha4if0Z0Xi14R9Wyn1jVptQyAczsc5fsGZYOMa1RI5sSn9/kwwJGJFM9VrWCpKk8
+	 nUBSpcb0H1TMd7uo0w+S2AXuYa+cP7J6ovgyufMqZ55WjMGF+FDPE1iMVY2QD8B6g4
+	 Q/kjMuNSYpXxw==
+From: Michael Walle <mwalle@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Michael Walle <mwalle@kernel.org>
+Subject: [PATCH] usb: gadget: u_serial: add .get_icount() support
+Date: Tue, 30 Jul 2024 21:38:40 +0200
+Message-Id: <20240730193840.2580358-1-mwalle@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
+Add icount support for the transmitting and receiving characters. This
+will make the tty LED trigger work with the ttyGS devices.
 
---- Comment #4 from CH (com+bugzilla-kernel@c-henry.fr) ---
-Note: I also tried the `echo Y
->/sys/module/usbcore/parameters/old_scheme_first`, unplugged the deviced,
-restarted the device and restarted the computer but the device still appear=
-s as
-a 1 stereo in/1 stereo out.
+Signed-off-by: Michael Walle <mwalle@kernel.org>
+---
+ drivers/usb/gadget/function/u_serial.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
---=20
-You may reply to this email to add a comment.
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index eec7f7a2e40f..bbc5f7617a13 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -28,6 +28,7 @@
+ #include <linux/kthread.h>
+ #include <linux/workqueue.h>
+ #include <linux/kfifo.h>
++#include <linux/serial.h>
+ 
+ #include "u_serial.h"
+ 
+@@ -126,6 +127,7 @@ struct gs_port {
+ 	wait_queue_head_t	close_wait;
+ 	bool			suspended;	/* port suspended */
+ 	bool			start_delayed;	/* delay start when suspended */
++	struct async_icount	icount;
+ 
+ 	/* REVISIT this state ... */
+ 	struct usb_cdc_line_coding port_line_coding;	/* 8-N-1 etc */
+@@ -257,6 +259,7 @@ __acquires(&port->port_lock)
+ 			break;
+ 		}
+ 		do_tty_wake = true;
++		port->icount.tx += len;
+ 
+ 		req->length = len;
+ 		list_del(&req->list);
+@@ -408,6 +411,7 @@ static void gs_rx_push(struct work_struct *work)
+ 				size -= n;
+ 			}
+ 
++			port->icount.rx += size;
+ 			count = tty_insert_flip_string(&port->port, packet,
+ 					size);
+ 			if (count)
+@@ -851,6 +855,23 @@ static int gs_break_ctl(struct tty_struct *tty, int duration)
+ 	return status;
+ }
+ 
++static int gs_get_icount(struct tty_struct *tty,
++			 struct serial_icounter_struct *icount)
++{
++	struct gs_port *port = tty->driver_data;
++	struct async_icount cnow;
++	unsigned long flags;
++
++	spin_lock_irqsave(&port->port_lock, flags);
++	cnow = port->icount;
++	spin_unlock_irqrestore(&port->port_lock, flags);
++
++	icount->rx = cnow.rx;
++	icount->tx = cnow.tx;
++
++	return 0;
++}
++
+ static const struct tty_operations gs_tty_ops = {
+ 	.open =			gs_open,
+ 	.close =		gs_close,
+@@ -861,6 +882,7 @@ static const struct tty_operations gs_tty_ops = {
+ 	.chars_in_buffer =	gs_chars_in_buffer,
+ 	.unthrottle =		gs_unthrottle,
+ 	.break_ctl =		gs_break_ctl,
++	.get_icount =		gs_get_icount,
+ };
+ 
+ /*-------------------------------------------------------------------------*/
+-- 
+2.39.2
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
