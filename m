@@ -1,78 +1,70 @@
-Return-Path: <linux-usb+bounces-12638-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12639-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8922F941135
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:53:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40234941288
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 14:52:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4530C282CB1
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 11:53:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F8841C22D44
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 12:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78248199236;
-	Tue, 30 Jul 2024 11:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEAC11A08C8;
+	Tue, 30 Jul 2024 12:48:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="ugf7IYCj"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MaK778k6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA81166316;
-	Tue, 30 Jul 2024 11:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FAF1A08BC;
+	Tue, 30 Jul 2024 12:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722340381; cv=none; b=G2NQ53NDX4dt8ggdcaffQ/AOwD9Q7QpOLpf5S7SDvr6HpbAVO8N/KB14Loxg1TsYcuoQXwmvVDXD1Pcz6sGOssPR9U3/Fk4er0SZWgziZtF1AaVsJ6wlYfHzGeYxNXtCVmL11tWuRZrJWZZpoQNWjdIT2dtzxJvUvAKqhdT9j78=
+	t=1722343681; cv=none; b=CVteKnfzrSczEhV1p7WcLulaFDRWf0+abuJjrY+Q3oC2q1zWuKrZRxLif5GeDFhvhyRYl+gAEsV30dn/zj1UWxZgA6NXmkQjUTTgJe1T2Ghu6PI044YjWMvndhazaLIBifBmxDooT6NQs+zDKStCgFgLgZqtKKQi81IodvVhW8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722340381; c=relaxed/simple;
-	bh=3U2t4PjSm3nGE8tUHltVJ/FufrtRhfcNuKwP2zsJLvE=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=hmdCz+rOJcujNqNUJ3zSdO2fqvH7fSCR2rx81FsS2jHt3S6Ydrlyd7ozoP0TgLKF2MwAgq1GHX7DNnvHh0c4nr5aZ9fZpfx0qhwucqAsz3eVt29y7kEN1WEzuuuR7ovDXz2L98AHYGYz+zmh9Bv5TuFXGLNrrMbQu7FYZrad92w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=ugf7IYCj; arc=none smtp.client-ip=203.205.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1722340374; bh=rfuhs/Z+9bw5iQ2Bo/tcqR1/U5bKvoVkGTLb5omlojc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ugf7IYCjSzDJh/zWUzxMmY5bqU1VFwUqNyY7c6MmXLQUindOXi3E8lzqMY6q2epqC
-	 gK73xVYHQNfriLyvFuKJ9Fya2+JP5Zvv+SUZUCAoQIlFerBTV27pdwfmGokxjYV1LO
-	 OncFn+YpgGEYd+HNkgIPZdvcg0rzxiATJdhBe6uY=
-Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
-	by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
-	id BB1A7E97; Tue, 30 Jul 2024 19:46:49 +0800
-X-QQ-mid: xmsmtpt1722340009t3xxspdre
-Message-ID: <tencent_48A8AECCEEC30C8EE7C8C6F692C2064D4906@qq.com>
-X-QQ-XMAILINFO: OOPJ7pYMv25ttYYXMSLL7LDhJwHo7h14cxc7k5mpeuZwgYP8Mgv1XHhcsz0T9b
-	 7TwKBMYlbE/WcyWEdhBLspwEWyduLVLQ9sL1c7Y8ktRrqr9ckpBOBZ9YhP/ctFYI9iVT0nI6s/uq
-	 0GE6DMKC+DECxAxzO4G3bp02TFcLFaeHQ5Qw9mmheAZyWH42X4gtztPQjPuu6JlP3OZ3WKqh37mn
-	 tN7gey74LGv+D+j7bnCI1DREyy+zsJPLoBXCVT9sCdJd2CIVjHIYFfcSG2ea7XrHZlCgGUYEJkPK
-	 Rta2CchhEQqgrBYl0htASiWroGERVje13kIS4xdhNCsNt7+QmmR23+p1pxacHQs+fosNYAkQuEvu
-	 8Zi37Euz6c+fADGzWMyBYHBF9ffeCr+UGJKkTrIxgq3nRfX11W5yZMnPxs/sWJK9ZrLS/dEk8MxB
-	 RWjjtrrucIwa1Q0MtSZImZnePJElsJdKQZe2wyiqfgVQ/MQvrAy+cUm7da+w1s94bbE6Z2ncpCsb
-	 4Y2CLfvG2leTzmbmYmW5Db9M6XZsX6002O16yjNZhVcCt4jvQ20vazRqerVo8KhEl4rD/JMBDkFX
-	 zogRkkzWGy4C1HVh0m/OrYTLwXyL0Vr1XMxW3/4dvFJsDJ3v394dvGQeAfoukTe8LK69bRuKZS3W
-	 UL/GCnFEF5X3skDiUO5HSu3jOHsmviKsp6boWxddLNbIjBg850ay1xlHWSosusVTKFiMRMtV0yu9
-	 vpVmhKQLP/2r4hbcq2h1BThb86vXp5waYKlHT05eq9XiZC9RzRm6f+C/xvm7KHJrOiUHs/8chpOY
-	 aP+rLt6AsiKtFMDSzMc8dd89vy95ahoKFs1ml+OvYfHPn/gUVvVE07cJzk/wI+JdVSK6EhZEHx4h
-	 yFDvxHN7Iwc3MdYWz+QGCemrDvqAr3MVnKTRTP6IIFv8DDg3EaLws5Lpmyudw1t4ufqlOpIqtaUW
-	 n7SfZN0ZQ=
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-From: Edward Adam Davis <eadavis@qq.com>
-To: kvalo@kernel.org
-Cc: eadavis@qq.com,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
-	srini.raju@purelifi.com,
-	syzbot+51a42f7c2e399392ea82@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] wifi: plfxlc: remove assert for mac->lock
-Date: Tue, 30 Jul 2024 19:46:50 +0800
-X-OQ-MSGID: <20240730114649.498184-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <877cd39nhg.fsf@kernel.org>
-References: <877cd39nhg.fsf@kernel.org>
+	s=arc-20240116; t=1722343681; c=relaxed/simple;
+	bh=TH14SZVKEQYd33hCGU2MbRZHy86J+QbddqBKiFIxfMI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Egm6TbybtmjBwc683yO+pnRRrxFSXWGLdVeQ1alQT7p8F4suIEmTeiXqgavaVNStT3CSlkpO4VbGybzLim2J8tH6FsmKf/zUTXvmSLWPN2lRqSkm9S9sM5Q2Dt/qMXxMNw3tk2NTF6Q27Zl+KEW3GGhz7B/YoXUa5SDlI2gVWTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MaK778k6; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46UA0XXJ014432;
+	Tue, 30 Jul 2024 12:47:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=90Im+Dj/0aVNIvCzFKCmXT
+	yf0WUls8JPX3+qap19Q9o=; b=MaK778k6VR5pp0JMAnQJ/+v0rmJKfRtILafcH1
+	YPJJsMsQIQ1SEWEJ6ML8YnKlv+soOO23+5M6n1IVoc18GXxCNYwIDoESD4m6+Od4
+	0XP3vGgNoOkCH+KMu5etm/btqfvQsZll54Ht7QG/FoLVI47bpnNzpc5QYo8dRp5M
+	RXV20iCOH17qgeVhwoSBdE81hvfQPWZyEpnEqF7/wAwEx/PS2ijUXJ9TBx/nmS34
+	1nShnxPeOS9Nx49PIL69825dr4b1Z+aesczTFaQfejjQILXaV+gT4kE3lHFQvMQk
+	FId2IO69kWj1wru3Ua+KARUiaBTwMxXlLubq1z36CA+HOHcw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40mqurqdhy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Jul 2024 12:47:55 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46UClsMm003087
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Jul 2024 12:47:54 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 30 Jul 2024 05:47:52 -0700
+From: Prashanth K <quic_prashk@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Prashanth K
+	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: dwc3: Fix latency of DSTS while receiving wakeup event
+Date: Tue, 30 Jul 2024 18:17:42 +0530
+Message-ID: <20240730124742.561408-1-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,22 +72,101 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3rgcpzxn7SdzM362vH93kMVILUpmx3IW
+X-Proofpoint-ORIG-GUID: 3rgcpzxn7SdzM362vH93kMVILUpmx3IW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-30_11,2024-07-30_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=649 spamscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1011 bulkscore=0 malwarescore=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407300089
 
-On Tue, 30 Jul 2024 13:35:07 +0300, Kalle Valo wrote:
-> > syzbot report WARNING in plfxlc_mac_release, according to the context,
-> > there is not need assert for mac->lock.
-> 
-> The commit message should explain _why_ the assert is not needed.
-> Otherwise it looks that you are randomly removing it to get rid of the
-> warning.
-mac->lock is used to protect mac data, but after calling plfxlc_mac_release(), 
-there are two functions:ieee80211_unregister_hw() and ieee80211_free_hw(),
-there is no action to operate on mac data in these two functions, so mac->lock
-is not required.
+When operating in High-Speed, it is observed that DSTS[USBLNKST] doesn't
+update link state immediately after receiving the wakeup interrupt. Since
+wakeup event handler calls the resume callbacks, there is a chance that
+function drivers can perform an ep queue. Which in turn tries to perform
+remote wakeup from send_gadget_ep_cmd(), this happens because DSTS[[21:18]
+wasn't updated to U0 yet. It is observed that the latency of DSTS can be
+in order of milli-seconds. Hence update the dwc->link_state from evtinfo,
+and use this variable to prevent calling remote wakup unnecessarily.
 
-On the other hand, there is no holding action for mac->lock before calling plfxlc_mac_release.
+Fixes: ecba9bc9946b ("usb: dwc3: gadget: Check for L1/L2/U3 for Start Transfer")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
---
-Edward
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89fc690fdf34..3b55285118b0 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -328,7 +328,8 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 	}
+ 
+ 	if (DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_STARTTRANSFER) {
+-		int link_state;
++		int	link_state;
++		bool	remote_wakeup = false;
+ 
+ 		/*
+ 		 * Initiate remote wakeup if the link state is in U3 when
+@@ -339,15 +340,26 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 		link_state = dwc3_gadget_get_link_state(dwc);
+ 		switch (link_state) {
+ 		case DWC3_LINK_STATE_U2:
+-			if (dwc->gadget->speed >= USB_SPEED_SUPER)
++			if (dwc->gadget->speed < USB_SPEED_SUPER)
++				remote_wakeup = true;
++			break;
++		case DWC3_LINK_STATE_U3:
++			/*
++			 * In HS, DSTS can take few milliseconds to update linkstate bits,
++			 * so rely on dwc->link_state to identify whether gadget woke up.
++			 * Don't issue remote wakuep again if link is already in U0.
++			 */
++			if (dwc->link_state == DWC3_LINK_STATE_U0)
+ 				break;
+ 
+-			fallthrough;
+-		case DWC3_LINK_STATE_U3:
++			remote_wakeup = true;
++			break;
++		}
++
++		if (remote_wakeup) {
+ 			ret = __dwc3_gadget_wakeup(dwc, false);
+ 			dev_WARN_ONCE(dwc->dev, ret, "wakeup failed --> %d\n",
+ 					ret);
+-			break;
+ 		}
+ 	}
+ 
+@@ -4214,6 +4226,7 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc, unsigned int evtinfo)
+ {
+ 	dwc->suspended = false;
++	dwc->link_state = evtinfo & DWC3_LINK_STATE_MASK;
+ 
+ 	/*
+ 	 * TODO take core out of low power mode when that's
+@@ -4225,8 +4238,6 @@ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc, unsigned int evtinfo)
+ 		dwc->gadget_driver->resume(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+ 	}
+-
+-	dwc->link_state = evtinfo & DWC3_LINK_STATE_MASK;
+ }
+ 
+ static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
+-- 
+2.25.1
 
 
