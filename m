@@ -1,108 +1,125 @@
-Return-Path: <linux-usb+bounces-12619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56A6E940914
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 09:09:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9EFC940A75
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 09:56:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8837F1C2269F
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 07:09:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65C2A2841B2
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 07:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE0418FDA2;
-	Tue, 30 Jul 2024 07:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352731922D5;
+	Tue, 30 Jul 2024 07:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Q+oyKM7U"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="heURljBQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C981741D1
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 07:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEE0191F7B
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 07:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722323353; cv=none; b=Yzh6XHjCJJ6ZnT5LxFyDnNRiXEsO9rAiql3WTgv3tJTC5Rhlf4OpUrXlWJ2n8vJUejSq1FcsdHhpOjMXNwdIDD1QN5RApNbFm6JdGkZ7RrRsGXWKgJ4cRBrhg6Zi7vhnMNAI2L5PGQnqhFlFxG5NI/cI8kk1SH6h8tTslztqTTU=
+	t=1722326154; cv=none; b=QFKn0/OTsMW4N3LQ+4OTGskZuzrizjawx0nJa1Qar3WOFbJiGAOer6r+SkW1fNRKqgtrOcdEg6Bn2qqEX1z4cg2ECcGIn3oxlzo/K5YPv3CWfe0osLq3Eud8dqwowIgMhnyOMdjqB1bi5vgfnEkUFg3CMbmlFYGFJZS4VAmQIvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722323353; c=relaxed/simple;
-	bh=aUXBVwEuXvr8ZvqtozeYi9Lu0ovEhgcBBeJw/0xKvnE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z1nCqm+pUqmOJgqE5xEzwfnT6990TIRvgLRHxVa0PvQ9PVh9O7Mg2v+0BnZWwoPwO82df2cxhSaKOdU2YIrJqGVuUp6GqkBNuEZn1prFEkVeyaWmTX68soImQkhikanyBao+supolcFCxsGCGb0F4LZq6enx2v2ibHOF8mAk7Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Q+oyKM7U; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ef32fea28dso50333891fa.2
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 00:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1722323347; x=1722928147; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lVMhYxj4qNnzwO4iqD+18Ai3QfZ1Axvw0kbd5FN9fVs=;
-        b=Q+oyKM7U4B/GrfxqheftuquRC7eUPVm9NHH3PdgulVBGsCmyzMDGKbT27jSVQ0yQwx
-         7SsQ5YNwu2sgkJhD/POc8jWqcgX5GvexiYukMMS9hCLMRHMOo5inb1UqOgId2Z/AA0UZ
-         tek+LTDQ6IRYmYlxe37SwAKVpBXuPrbaaz+mK5hS1eyel5ppDkCuxuNoyhEg7q43gGnm
-         N1jVRipxXr6z2nQlueOh6B6ZDU2mCZojCCz+UnHBs05UC4rfl2c3Z6c6G7dxtXzr93Cn
-         by2XzwjtJPyt0LnRhZkowzZbmyP9X0TEQo5zIAJokHVmDrDXvMIMRzr3m1YMPGRQvprj
-         Ocxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722323347; x=1722928147;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lVMhYxj4qNnzwO4iqD+18Ai3QfZ1Axvw0kbd5FN9fVs=;
-        b=Cs4k5hGjAAZT0uN7eVYjHsTlSe5azV9zsH6NVFL8IXhrsciHclZui9Fk5oLjozxNOu
-         sANMfkbzNbFpfrhvvO+qOwD0jFECu+xINEvPDJgAYMDT72wS27HCFoENlPnfWc4XKngw
-         z8Iw12Rv1Vf2ULlEjVs9VzYDlkYS/WtK4F+HzY+jThafYnBiKRqrbsWoQwO9gfXFFwCf
-         Re8MGWGm+4MI8qEMOxBuygQe+scEdxcywx9m3VGUScBE57F4Lkk83nnzYeWVG0nWc4UU
-         A/toMi4aJijhgMuZl1TatPIVrEbn8lbwS8MnwbKT2sQa72SJDHCDZFuKFoVBza31GP1g
-         WJew==
-X-Forwarded-Encrypted: i=1; AJvYcCXWHU5XcU46jmeMM/a5Q8Isp+fICMTgDrdsuHcQL4hXBN1OgqD131zhCf+ghcihSPIQqtZW1LesPsp7U4DY+DjwLcsec7co3AaM
-X-Gm-Message-State: AOJu0YwoHDeepjswG3CZY9lKXucGS8YHh5Zys3MlNCQ79VcfmUGJDj6S
-	A6dmjGE4tCmvc5bKdNH52zAOhgaX/ETks5uUDrSOwRiBUbpL/R2JNGi5RNzJ9lg=
-X-Google-Smtp-Source: AGHT+IFeNNsOEIsAWFdV4yWL2SghnTx8Z1eLwgdOiT5AgajQW3bsdyzMbPjzTwMNqrHkz03C42ZeVg==
-X-Received: by 2002:a2e:7c02:0:b0:2ef:2e8f:73e9 with SMTP id 38308e7fff4ca-2f12ee1bd2dmr64461041fa.37.1722323346904;
-        Tue, 30 Jul 2024 00:09:06 -0700 (PDT)
-Received: from ?IPV6:2001:a61:137b:5001:be5a:c750:b487:ff1b? ([2001:a61:137b:5001:be5a:c750:b487:ff1b])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5afb9422c41sm5153828a12.82.2024.07.30.00.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jul 2024 00:09:06 -0700 (PDT)
-Message-ID: <e72cc56a-3066-4cb8-848d-bfe27a48c095@suse.com>
-Date: Tue, 30 Jul 2024 09:09:05 +0200
+	s=arc-20240116; t=1722326154; c=relaxed/simple;
+	bh=pUneXqc1tawiKl8hOSNTSHjlMaasizdprX1F4ta/+GU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dYHFg8M0hFTIYuH2w7DlHZIiQUc0Vhm4Z6lyEBWEqh744oe5eNx2JWNaLIOjIVCEN1YCR8iJifLKGV4PsoAyt9yQFK55ptXUNscGL/j4/jhaowtl2cUN9aILZXEGwxAv8xDwhG+vsfCKIHtWSrlwCFpbL0Yf4EMKIe5oPy7PYsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=heURljBQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722326152;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VeZf4S2zN1755hAgpbxKY28IpphydX1J+Zavqe1s4gs=;
+	b=heURljBQzJJtuTIReUb+snaWCEEV5kyTKS+Z1qKkvWf1AGJHpYsXpZ9z+K8B2EGJSPA54n
+	XbSa+AirhnQjFbSZTyJBcvpY+1pHT0/VSEWHBLSP+1JhaOPL+J3xAvkl1WlzpWLHzdD051
+	WZG/dt+UONpS182WmHU9ql85rWTbp/0=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-322-sCGQKRjSPciPX4Akn3WraQ-1; Tue,
+ 30 Jul 2024 03:55:41 -0400
+X-MC-Unique: sCGQKRjSPciPX4Akn3WraQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D82481955D45;
+	Tue, 30 Jul 2024 07:55:38 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.141])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 64D5119560AA;
+	Tue, 30 Jul 2024 07:55:31 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: andrew@lunn.ch
+Cc: UNGLinuxDriver@microchip.com,
+	davem@davemloft.net,
+	dsimic@manjaro.org,
+	edumazet@google.com,
+	f.fainelli@gmail.com,
+	gregkh@linuxfoundation.org,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	lucas.demarchi@intel.com,
+	masahiroy@kernel.org,
+	mcgrof@kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	woojung.huh@microchip.com
+Subject: Re: [PATCH] net: usb: lan78xx: add weak dependency with micrel phy module
+Date: Tue, 30 Jul 2024 09:55:28 +0200
+Message-ID: <20240730075529.8263-1-jtornosm@redhat.com>
+In-Reply-To: <c8450f9c-a7f8-4775-8d26-7a070aa68e4d@lunn.ch>
+References: <c8450f9c-a7f8-4775-8d26-7a070aa68e4d@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: storage: ene_ub6250: Fix right shift warnings
-To: Abhishek Tamboli <abhishektamboli9@gmail.com>, stern@rowland.harvard.edu
-Cc: gregkh@linuxfoundation.org, usb-storage@lists.one-eyed-alien.net,
- linux-usb@vger.kernel.org, skhan@linuxfoundation.org,
- dan.carpenter@linaro.org, rbmarliere@gmail.com,
- linux-kernel-mentees@lists.linuxfoundation.org, linux-kernel@vger.kernel.org
-References: <20240729182348.451436-1-abhishektamboli9@gmail.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20240729182348.451436-1-abhishektamboli9@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
+Hello Andrew,
 
+> So are you saying current initramfs are broken, because they don't
+> include the needed PHY modules?
+I am just saying that the default initramfs including the current lan78xx
+driver is broken because in this case there is no information to collect
+the possible phy modules. And as I commented, after the complete boot, the
+only solution is to unload and load lan78xx to get the phy module from
+rootfs.
+ 
+> You can fix one example of the lan78xx
+> USB dongle, but are going to leave everything else broken?
+My intention was to fix the case for lan78xx because it is the one that I
+have detected that does not work. Others are already working, for example
+r8169, by means of a softdep with realtek phy. And my idea was to do the
+same for the other detected/needed, if any (I am not aware of other similar
+reported issues).
+I see that you prefer to fix all the cases and always including all the phy
+modules would solve the problem for lan78xx and for other possible ones.
+But take into account that we should also try to avoid creating large
+initramfs if not necessary, at least, if there is anyway to solve this.  
+Indeed, if I am not wrong, only some phy modules are possible for
+a driver and these are known.
+Anyway, as it was suggested, we can explore some automatic procedure to
+identify the hardware and with that, select the phy module or at least,
+reduce the number of phy modules to introduce.
 
-On 29.07.24 20:23, Abhishek Tamboli wrote:
-> Change bl_len from u16 to u32 to accommodate the necessary bit shifts.
+Thanks
 
-Hi,
-
-while this patch is technically correct, it papers over the issue.
-Could you please
-
-1. use a constant, where a constant is used
-2. use the macros for converting endianness
-
-	Regards
-		Oliver
+Best regards
+José Ignacio
 
 
