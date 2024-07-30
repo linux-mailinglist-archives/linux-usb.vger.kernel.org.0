@@ -1,119 +1,81 @@
-Return-Path: <linux-usb+bounces-12640-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12641-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9386C9412AF
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 14:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AEED4941327
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 15:32:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D4971F24C5A
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 12:58:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 594F81F248C6
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D498C19EEAA;
-	Tue, 30 Jul 2024 12:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF3719EEA7;
+	Tue, 30 Jul 2024 13:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fvoNIAOg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tfZhJT6D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0C8442C;
-	Tue, 30 Jul 2024 12:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EDDD63D;
+	Tue, 30 Jul 2024 13:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722344291; cv=none; b=tI1aQtG9Ll8tdRL/sVhOQ7/gAfqr6WPD24ZK7KDUZyucUzS9oSUpdKIgWU0Cb5zynOEWIsozzi90uu9SDSnLkAfPRIhjfFQxArOEe8i9PjYs4C0slPQspKCYP9nUtf/GThYHkzIx8N3yBirgdoAAC95s3QE0gnOXf4Ani2ITK7c=
+	t=1722346337; cv=none; b=Yz2JHPI3jpNBlUBSADvu/gTfqs5K8ux10KBiIBBdZ7g3bip+9ipm7PqPg09jujqrzM2cdN4O7+loxHmyD1tmjTTGUPjhJlBf0WN6VnQHJheXrcSnfu+tOc+l521uvldcsjIeqXopRSZd4JiqDF1bdV6pNJDYc94ieFi4a7Mscaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722344291; c=relaxed/simple;
-	bh=RQBJKoskUKzpFj6PGr8szjBFffKz+3SsoTGNet8lQ7o=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=q72SF3OY6zca2IjYDsu8l+N+Di/V4koQSWq1RkIdQ2MylgcmdF1g29f0WoFlTLfjGp83JKkdOmkVc+F8HFyHgcV0YMPrWt7CK851CsOI4G0W1FXzsvARWatBWTavd68mcGb5Pv28N44VY0s+gnEmWfCKl5vpmUagkLO/ubqzQBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fvoNIAOg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46U9Y2ET023699;
-	Tue, 30 Jul 2024 12:58:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=oAhBaZHNfR8JhfcemRsRdo
-	aMewxSIn3JrfT6P0v+VDg=; b=fvoNIAOgCn98T+3aBWkGj3xBkqcuVSClXeF/1e
-	JntGOCxRKtXGf8R/MYJHkX6ThsxQ15hwXoqrhDmP/YG6GTj4aDRf3xliUjpmjVNm
-	q2xfe0Ds867+XVEdJ4AyB24e6By9SemCCA1ODaIUYFd91jHR5hvkOJ8U5zxjfIBb
-	TrCMsN6+6j5AMrR6BSw95LgTqQpu/DwNUz4spJu3PGyjFogDynB8f/WDQ0slA/sr
-	pXLGEEZERmWIKHyPWxViWeDpFUptM3HdKwIjt4hzHWXLMjLgzTPkhKgHMZqQ6iu4
-	uU08WmDkBCopj7Byx2KbrY8ujipofVxIP77ixCZJEWd7tjzg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40mrytyepr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jul 2024 12:58:08 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46UCw61Y020448
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jul 2024 12:58:06 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 30 Jul 2024 05:58:04 -0700
-From: Prashanth K <quic_prashk@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Prashanth K
-	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: gadget: u_serial: Set start_delayed during suspend
-Date: Tue, 30 Jul 2024 18:27:54 +0530
-Message-ID: <20240730125754.576326-1-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1722346337; c=relaxed/simple;
+	bh=/SYPq5kzaJCWlXFJH/J2536byhSWwshx5r1swTz714g=;
+	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:Cc; b=d9AAkzCBM7iu/ozK7OXkD50NtvtCcOlJQk+YnVIkXRscg5VMd3I9pEFwxCrtsNx6to40eX8UP47dcJVe5aXD8PNfN3U45YZQAZm4St1YFmUp5b9GQoGVjqxtSplNyErpQUXTESjRVDp/m4YfTw0eUiocUhUl5oSzpulpUl1tuXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tfZhJT6D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E01C32782;
+	Tue, 30 Jul 2024 13:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722346336;
+	bh=/SYPq5kzaJCWlXFJH/J2536byhSWwshx5r1swTz714g=;
+	h=Date:From:To:Subject:In-Reply-To:References:Cc:From;
+	b=tfZhJT6D/wUZ0ckLDQgQWKQkkP7BhnjJqAlRf4eGkUi+geNzdkfMyFOs/4d/hJXNY
+	 ORwgcKkMvCW3HDV1Av0afni2CHFZFM6gUySKQJBzP9BB6+wHTDzBihy08+LEvz8hRk
+	 AojUASUHCPbx9PH0q1lu4xUVjhSchsjLFd6bsp4Ip+jMwxGkUa0Ja5Bq0e+AWjsU/r
+	 75z4hOaHj0Ss38RHwsRPbYHQIW5So0LuKDWUkDq0bhcRo5aLmaCyG+KZVY1iTe0VxE
+	 gIkrj3BNHae4nUkP5gEN9ilVGMFESRZDsZXOLEYhc7l4EYtoC/QMyFnRlkeLiVp+Ai
+	 HukSuAMey4nEw==
+Message-ID: <0dd8ca7c0c0800b21120bbf3cf177d1e@kernel.org>
+Date: Tue, 30 Jul 2024 13:32:14 +0000
+From: "Maxime Ripard" <mripard@kernel.org>
+To: "Stefan Wahren" <wahrenst@gmx.net>
+Subject: Re: [PATCH V2 06/16] drm/vc4: hdmi: Handle error case of
+ pm_runtime_resume_and_get
+In-Reply-To: <20240728114200.75559-7-wahrenst@gmx.net>
+References: <20240728114200.75559-7-wahrenst@gmx.net>
+Cc: bcm-kernel-feedback-list@broadcom.com, dri-devel@lists.freedesktop.org, kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, "Artur
+ Petrosyan" <Arthur.Petrosyan@synopsys.com>, "Daniel Vetter" <daniel@ffwll.ch>, "Dave
+ Stevenson" <dave.stevenson@raspberrypi.com>, "David Airlie" <airlied@gmail.com>, "Florian
+ Fainelli" <florian.fainelli@broadcom.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Jassi
+ Brar" <jassisinghbrar@gmail.com>, "Jiri Slaby" <jirislaby@kernel.org>, "Lukas
+ Wunner" <lukas@wunner.de>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime
+ Ripard" <mripard@kernel.org>, =?utf-8?b?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, "Minas
+ Harutyunyan" <hminas@synopsys.com>, "Peter Robinson" <pbrobinson@gmail.com>, "Ray
+ Jui" <rjui@broadcom.com>, "Scott Branden" <sbranden@broadcom.com>, "Thomas
+ Zimmermann" <tzimmermann@suse.de>, "Ulf Hansson" <ulf.hansson@linaro.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: S53PUg33R01bo6JvTuiu9FrmpRalREvJ
-X-Proofpoint-GUID: S53PUg33R01bo6JvTuiu9FrmpRalREvJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-30_11,2024-07-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 suspectscore=0 bulkscore=0 adultscore=0 spamscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=980
- mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407300090
 
-Upstream commit aba3a8d01d62 ("usb: gadget: u_serial: add suspend
-resume callbacks") added started_delayed flag, so that new ports
-which are opened after USB suspend can start IO while resuming.
-But if the port was already opened, and gadget suspend kicks in
-afterwards, start_delayed will never be set. This causes resume
-to bail out before calling gs_start_io(). Fix this by setting
-start_delayed during suspend.
+On Sun, 28 Jul 2024 13:41:50 +0200, Stefan Wahren wrote:
+> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
+> powered in detect") introduced the necessary power management handling
+> to avoid register access while controller is powered down.
+> Unfortunately it just print a warning if pm_runtime_resume_and_get()
+> fails and proceed anyway.
+> 
+> [ ... ]
 
-Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
- drivers/usb/gadget/function/u_serial.c | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Maxime Ripard <mripard@kernel.org>
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index eec7f7a2e40f..b394105e55d6 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1441,6 +1441,7 @@ void gserial_suspend(struct gserial *gser)
- 	spin_lock(&port->port_lock);
- 	spin_unlock(&serial_port_lock);
- 	port->suspended = true;
-+	port->start_delayed = true;
- 	spin_unlock_irqrestore(&port->port_lock, flags);
- }
- EXPORT_SYMBOL_GPL(gserial_suspend);
--- 
-2.25.1
-
+Thanks!
+Maxime
 
