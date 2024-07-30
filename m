@@ -1,80 +1,121 @@
-Return-Path: <linux-usb+bounces-12642-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12643-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6803594132B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 15:32:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2C8594136F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 15:44:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 999001C23169
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:32:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B7A01F21885
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:44:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF3519EEDC;
-	Tue, 30 Jul 2024 13:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50BA1A0704;
+	Tue, 30 Jul 2024 13:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DKkNToPS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gy24zIJP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A9563D;
-	Tue, 30 Jul 2024 13:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D656419FA9D;
+	Tue, 30 Jul 2024 13:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722346352; cv=none; b=qDvhtLRQw1Oyugk5RW52ZgtT5NGSQn3FqmRhC3bhWqd+HYL4/SZlFZStj9h9QljQb58aPZRUjXODQCotmJf5afdS5rqeYZ7hUrnFObrwE6FmsbjXYj/4iiJc2GBxUCmm2Zmhgu7FDN3Zo6T3emBDgvK6mfkRLpGhLBmfEkNMMUE=
+	t=1722347029; cv=none; b=RpkXPqdl/mYoqAgrFbBeQQ6NeVxtVRnNU+4S/gO8U1FKvu8Nzf3SnU8QV4Gq+Sw6wvgNeAtSe2oqC4Y9M+L8cgiKVbUOB48eWORW3dcvcLa8eyxglrz9BJ2io++sOzhva8AOqg/3Csw+nsddr40/vR0G5JCICpIWlV25CJR9FtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722346352; c=relaxed/simple;
-	bh=Ww/3YfXLpMTtcse++NJb5y4ZU/aN97sPUvyeSo23DdI=;
-	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:Cc; b=T0CUJY3T0VhGarIXBOaB/bUQCpSVVcQ84y9ZIM1OSgNtyfNZ/oxPRlP7irWjRIRS2PBG4aTHv4z8654KqOw3aleB0VTjisEyZPPZ1J81TGR7xOPdFORnRx85ZMGjyjXc+sbX0LCjKiOUuj3o2HodBONJiRRPanOSHnF4eSdIr7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DKkNToPS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F77C4AF0A;
-	Tue, 30 Jul 2024 13:32:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722346350;
-	bh=Ww/3YfXLpMTtcse++NJb5y4ZU/aN97sPUvyeSo23DdI=;
-	h=Date:From:To:Subject:In-Reply-To:References:Cc:From;
-	b=DKkNToPSLS8T7sk+M5aux4vSCiJUoWztVWWYIqp+bn2ZSH/grzDx9NoII3CBNmiPd
-	 gkG2/N0kGhTZBnrTKmECYFTu2VE4hgFB/njzoBXrMcFA6HM3zqTALjphMSd+1fnNPF
-	 o7MjFhJSf9EiXy9e9RN9TuhHm2aWw8BbScyDsBTZhG04tlgL3vf34kE0cuaq2kYdqz
-	 zcVsVEg1vdJ/pKlr7KKD4IaIbEmXEfLGT8kMMHPV12bynt3HCrcyaYg48fWgrkjjg5
-	 g+9UEuYesyoBplAznq+bhkoORpx26BiZcwTYanfY6Lwa5o0E9QSp8NdY3MV9KrD2vA
-	 ynz8GyBkqogcQ==
-Message-ID: <218e3904b3f78d72cdbb7c9bf17db4ac@kernel.org>
-Date: Tue, 30 Jul 2024 13:32:28 +0000
-From: "Maxime Ripard" <mripard@kernel.org>
-To: "Stefan Wahren" <wahrenst@gmx.net>
-Subject: Re: [PATCH V2 08/16] drm/vc4: hdmi: add PM suspend/resume support
-In-Reply-To: <20240728114200.75559-9-wahrenst@gmx.net>
-References: <20240728114200.75559-9-wahrenst@gmx.net>
-Cc: bcm-kernel-feedback-list@broadcom.com, dri-devel@lists.freedesktop.org, kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, "Artur
- Petrosyan" <Arthur.Petrosyan@synopsys.com>, "Daniel Vetter" <daniel@ffwll.ch>, "Dave
- Stevenson" <dave.stevenson@raspberrypi.com>, "David Airlie" <airlied@gmail.com>, "Florian
- Fainelli" <florian.fainelli@broadcom.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Jassi
- Brar" <jassisinghbrar@gmail.com>, "Jiri Slaby" <jirislaby@kernel.org>, "Lukas
- Wunner" <lukas@wunner.de>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime
- Ripard" <mripard@kernel.org>, =?utf-8?b?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, "Minas
- Harutyunyan" <hminas@synopsys.com>, "Peter Robinson" <pbrobinson@gmail.com>, "Ray
- Jui" <rjui@broadcom.com>, "Scott Branden" <sbranden@broadcom.com>, "Thomas
- Zimmermann" <tzimmermann@suse.de>, "Ulf Hansson" <ulf.hansson@linaro.org>
-Content-Transfer-Encoding: 7bit
+	s=arc-20240116; t=1722347029; c=relaxed/simple;
+	bh=luHvXeKnY/PrZwEP44sNc3lYYJs11kxHZzy1zyXTx/U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TBEGfFkA4AvY8YzFM6jeiowtfMbzduxh1IxDT2b5nLGbBuFD9bRWWiIs5YARnRRKJRq8QWNYr+5j+33x1TR/UjHXzlsm0S5axH85ggXFxZ8jqiwwHe8j94Y30JbUQskmTrN+ZLNXzVbCuXrM21pz4TSUWjWt1/GsBh9zAcbMw7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gy24zIJP; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3687fb526b9so2108356f8f.0;
+        Tue, 30 Jul 2024 06:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722347026; x=1722951826; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gtgxA2PssDFaogYfTQNLJ3b/Lh3FbXzi+L0/39/oBQ0=;
+        b=gy24zIJPfSuk99gtX1KUqOJLJCWsycC3VFFC5T9wsgUbI4+uoMVX/v8Qyf505FJYY+
+         ZKDGv58ZMy20J5E5QdKJ3l5Iuy9QN0eyxhLnt5HvrWNdIRVuHoRqBNEkpIiZQToPoKSl
+         NJyooZfPyPwP0hwSEU6joZedI7F2R/kqmFM0Iw3ytcvSBpOnR4EzGrzBrAl9ZjHPGz63
+         +BEUaD5/ltMqxgY+VEBedbkj2Doq0wlg4fVL3U35cI+wCy/rvTujCcH/Nwe1FIyT+reu
+         q505cgE5kc9BVlF+GNQeBdL09F1wI0uCigocYXlvw1bwNuWysjOKTWQkBWdQHln+hDZM
+         mliQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722347026; x=1722951826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gtgxA2PssDFaogYfTQNLJ3b/Lh3FbXzi+L0/39/oBQ0=;
+        b=su8ANDVOHq8tD70Dz1G/MH0xFoI6KFOC/5j6MDi4H0S8RFewIjIE6mGUVhs/1jt9VW
+         RGgCDcaM+1c4vxnzJtcmY/OWNMeOu/N+Z2r9E1oJzST/t0frmJp/2QcrtqRFXv1M4VAS
+         g6atCQ28mduh7ZbBELIZ2E0RJBGTLmRiXeoChOzKp+Q1Jtt6hT4t6nNiXw7yZy8yKste
+         SS6r/iPouFGTBzR2RfzVlzWExbnJdrYtsCCGRdC7mNz9nTGYVXJR2wgZYqBPlmFaIsxg
+         q1rIRFheWx/8AXWehUtE7xNSvTM7rf3R+n7oVTB1JvpCpCV2nTjyhnMnr6Rd4uIn4Azc
+         A3fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqozKYPKYkjUxUmNEC76ZESihLTxUOjCIlisMlItXnPPSYt14Nqh2XK7izTf4ThZ7CVM+7TwPi5NOLQiGYSNNn3rN8dMJK67Gg+xHlGu9pPHL+CyFAixqzvsQOa+t4BaG27vOzQEww+2RM71E6Fjs2yVzCfGw2TktFD0gMjbUv
+X-Gm-Message-State: AOJu0YyzWtVaISwKc4FZkJi0L47Ve8FfcOJKhYu8dYeogkooz6XNd0dI
+	jOs8L7SyAXwGZNGcOs3o4ocuoPRu6s41JnSKnPryjSU8rVfI/Mw8knr57L8n5exIsJL1PoN5WQV
+	8+oFopXpflBjo5AM1L+AZHKS2YKA=
+X-Google-Smtp-Source: AGHT+IF/IGsg58iKG3GnfQw+6W1bKQo6nzfvGP/3nOOGv8qkaWDadLz8++6LC/scQFwOoZMV4Hgy5eSjT7gI5UTPQr0=
+X-Received: by 2002:a5d:59a8:0:b0:368:747c:5a05 with SMTP id
+ ffacd0b85a97d-36b5cf2534emr8775942f8f.36.1722347025779; Tue, 30 Jul 2024
+ 06:43:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240729022316.92219-1-andrey.konovalov@linux.dev>
+ <baae33f5602d8bcd38b48cd6ea4617c8e17d8650.camel@sylv.io> <CA+fCnZcWvtnTrST3PrORdPwmo0m2rrE+S-hWD74ZU_4RD6mSPA@mail.gmail.com>
+ <d4ed3fb2-0d59-4376-af12-de4cd2167b18@rowland.harvard.edu>
+In-Reply-To: <d4ed3fb2-0d59-4376-af12-de4cd2167b18@rowland.harvard.edu>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Tue, 30 Jul 2024 15:43:34 +0200
+Message-ID: <CA+fCnZebutAq7dfzutMhp-KO0vwM67PC7r4FRHPUcY1eg5rW3Q@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: dummy_hcd: execute hrtimer callback in
+ softirq context
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Marcello Sylvester Bauer <sylv@sylv.io>, andrey.konovalov@linux.dev, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Aleksandr Nogikh <nogikh@google.com>, Marco Elver <elver@google.com>, 
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com, 
+	syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 28 Jul 2024 13:41:52 +0200, Stefan Wahren wrote:
-> Add suspend/resume support for the VC4 HDMI component in order
-> to handle suspend to idle properly. Since the HDMI power domain
-> is powered down during suspend, this makes connector status polling
-> pointless.
-> 
-> 
-> [ ... ]
+On Mon, Jul 29, 2024 at 8:01=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> > And I also found one more:
+> >
+> > Reported-by: syzbot+edd9fe0d3a65b14588d5@syzkaller.appspotmail.com
+> > Closes: https://syzkaller.appspot.com/bug?extid=3Dedd9fe0d3a65b14588d5
+>
+> You need to be careful about claiming that this patch will fix those bug
+> reports.  At least one of them (the last one above) still fails with the
+> patch applied.  See:
+>
+> https://lore.kernel.org/linux-usb/ade15714-6aa3-4988-8b45-719fc9d74727@ro=
+wland.harvard.edu/
+>
+> and the following response.
 
-Acked-by: Maxime Ripard <mripard@kernel.org>
+Ah, right, that one is something else, so let's not add those last
+Reported-by/Closes.
 
-Thanks!
-Maxime
+However, that crash was bisected to the same guilty patch, so the
+issue is somehow related. Even if we were to mark it as to be fixed
+with the patch I sent, this wouldn't be critical: syzbot would just
+rereport it, and with fresher stack traces.
+
+Thank you!
 
