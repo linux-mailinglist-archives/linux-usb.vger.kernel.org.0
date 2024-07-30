@@ -1,147 +1,672 @@
-Return-Path: <linux-usb+bounces-12633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44C61941045
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:12:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCA8A941062
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 13:20:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 714691C22902
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 11:12:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39E371F21807
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2024 11:20:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29761990BE;
-	Tue, 30 Jul 2024 11:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F48F19DF73;
+	Tue, 30 Jul 2024 11:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T62cmI0G"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="TM7oe+2L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB733195F3A
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 11:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDB018C336;
+	Tue, 30 Jul 2024 11:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722337959; cv=none; b=d2ioEHqCUX+PJzpgX2DfeSabyf5RryxVxoi/EHjwRkhQRAqwkaTjMawC2p7uC7pEKL0xtlToOU1Cb4g8uge9Ng1tCtPTzKnlN6aPmCdtIU+VLycyE5PbcGs3BqCtP453gLGcu+YNNO/oBBcSX2TSbLFZK66c7sq5Z79nk0WNVvY=
+	t=1722338427; cv=none; b=hgI5M3TWDMpIkE2WpGo7yN97Cm5nVtzma2x1ZHOfWs4uJSRDmftYyz8Yp6EGojYRbgd/UbSwWp4nlcfCUDJD+vnO/phM7r2l5KOlsuLVAYo918BaxJeuA+aK702hc4OrJD7pMXuinGtYZ7Xyl8GI7/voIAa2+5Ry5176XlwoxWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722337959; c=relaxed/simple;
-	bh=N7lqSf5AO0WbYGPFlk+06BHDm4ESUR4XJgtnxoK2O70=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RwxNi5CpuPbDSZ7ovYgthqMUfrzrJpYLHqYrcFoi7GIophT+Kfm5xqcHuJiJAAfCkAgnLbRCiqhraa6yTgL43m/4ofchREmErbSdl/HAwfzc7Cslmp1eAtOp4rUlDwzU2BtTG+DaW2OrbtxXedQD8EEiNmz3RbiYF+UYJbFUQ5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T62cmI0G; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52efdf02d13so7094835e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2024 04:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722337955; x=1722942755; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3HozFc70ppioaxUQeurqe5EazU/NJguJmDUXHTU07LQ=;
-        b=T62cmI0GgxckjugsjcF9kDGQmOjO0rCt5VXm13VBqHrPzrDCpjkX+IUHbAVEK8B91X
-         ceXsebNBonQxtXF+H8V7A2t1hq6Tf8L+lhHlMZtXduo09HKC9CPsUe0TQbVBbtpmxe37
-         gEXqBLWzzj2zLi57Z9Ikh+xd6Zl0SzRPdSNJpXvalA5Erv/lXCYKDAzw1wLhw2XcI7wi
-         EUERhxzbURpJU+EcKJCkotLhonW3VcgvV88gLKQ8A8Zfnu+k2MAbtraE8JKqNIgj3cV+
-         tL0u5hOMvhfy0hqg66HpqrDpmTVwqImWwkKMRdHe37YyemAUrC12FTsFB79tqtb+Bdf7
-         x1vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722337955; x=1722942755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3HozFc70ppioaxUQeurqe5EazU/NJguJmDUXHTU07LQ=;
-        b=RrEcAAjM+IBiF7SWqp7zRfGAfNkgad/9+jCQiRi2dFQtsyEEt6hT0MijwErAnGfKVp
-         zZsz7McOsifyx/ovWNlI2EEYpaDni6ET3a5pyG2Yy77sijRXcnk12Ot38JJ3zhzV2kWb
-         zbg79RHjniFr4xY+YOO9L0RhBCtKz8PGt0SEytKM0ntNRkfaCGRp6mpkCa/xUtWPfCnf
-         yaTxPrFU+HO6k7x/0PLIf81fAT9Bs3p6Htd3HnoO4aIjzvhTaTGYanX0XuFm+Ljdk2Su
-         f/Jwqre6Ktzr6FbgDI6vgEu7lqtm1cwfFHD9h35srBjRYAbHJ1QT9okUVMOZsujJ68GC
-         tmHg==
-X-Forwarded-Encrypted: i=1; AJvYcCXSxXU93XtkmLj6cLFQuHmFPl/5/tbCj01FsBOaLpXiThsc//fPpRmCV42JvDaXdpJLPxApuvms0AiMxE3xTkqmdRqE8NZuXXYI
-X-Gm-Message-State: AOJu0YzjXItJC6XwJUQs8qjIU0neI96BLtk/VRhxfqeJAlYi8ASAXHsK
-	guJG54QPUBoL14wTDqil1po9ysUMYlnho2FaBctAzlqL1C/PjKK8tSxUS+VJZVs=
-X-Google-Smtp-Source: AGHT+IETyOU+BVaq0nxGbsyKgG83TJMfWwawfhmuw27Fu8otQEXo4m3r5dLoEMYAGXZwPrSqaMrXcg==
-X-Received: by 2002:a05:6512:39c1:b0:52e:fa5f:b6a7 with SMTP id 2adb3069b0e04-5309b2706eamr11020166e87.13.1722337954674;
-        Tue, 30 Jul 2024 04:12:34 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5bc414esm1848644e87.22.2024.07.30.04.12.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jul 2024 04:12:34 -0700 (PDT)
-Date: Tue, 30 Jul 2024 14:12:32 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
-	kernel@pengutronix.de, festevam@gmail.com, andersson@kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, jun.li@nxp.com
-Subject: Re: [PATCH 1/3] dt-bindings: usb: gpio-sbu-mux: Add an entry for
- PTN36043
-Message-ID: <7gojzjkcpq753x2eb67osvvwfzxytqkm6sxm5qyank4qpdmdnb@mdunl7yq5wd6>
-References: <20240729081039.3904797-1-xu.yang_2@nxp.com>
- <a3trxkx2fue2oahscjkc4silnfhesrws5xn7brjefjmke5emci@dn3cbb7yzmux>
- <20240730025844.b647xuoolg6zq6f5@hippo>
+	s=arc-20240116; t=1722338427; c=relaxed/simple;
+	bh=OivLP6kuQI8sD8agpFwhRuJ/zlJNdalWXtkduAIy0yg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HWdsT/nVetG3Sv1oYfsTDxdMlh4/B8uNH2PIeIhibFuvdILhHyh4/2D13O0cOfvO0wf5i+Nd4D/4c8vGGRLxcS5pM+bbq/U9DZvHq/XU50RFqqYjFvuv1S00z7C9K0dJyhOlbNDNB6Na9f06uUuX3YXsNjtlGyq/yKJ+1esSusw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=TM7oe+2L; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ZPIqiewoj5ckZraGHVlhj75MrQ8sm3KK8FSwkoocLFc=; b=TM7oe+2LyBqzPEX37upoW9Ult7
+	DpVHnBNPWgYrv6EmGGjRnkfK8cY3L6gyfH67Jqk/NyOLstCCgjxv3nqZv/H+u6cUZVeS87Y6KMTb5
+	zJy9Q3XYljnmMD0MHi+Yc4rRWUldb6V5aI3RvdzRZT4YPBp/akJh898O5Q3ZvOjuBEF5+nAqCQXeG
+	gf2NUzdXhi/xGsN1/KgZnIT/ezJnzWKsSiLcRUDWi2ssjwZvFoRB6D+F3gk+jBZ4e/jUi8uy+vjdy
+	G9mCoVEeFkgxrIloh7Nx7L0JjlYSZz8YbAdJVM0kri2sjkMuNlKeUf/ch8P7v9kF7YtSGxctbn9gk
+	xpWqBZPQ==;
+Received: from [187.36.213.55] (helo=[192.168.1.212])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1sYktF-005ZLx-Pi; Tue, 30 Jul 2024 13:19:38 +0200
+Message-ID: <fc64b60b-d47b-4d46-a3d0-a8d689559b8c@igalia.com>
+Date: Tue, 30 Jul 2024 08:19:26 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240730025844.b647xuoolg6zq6f5@hippo>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 07/16] drm/vc4: Get the rid of DRM_ERROR()
+To: Stefan Wahren <wahrenst@gmx.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240728114200.75559-1-wahrenst@gmx.net>
+ <20240728114200.75559-8-wahrenst@gmx.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
+Autocrypt: addr=mcanal@igalia.com; keydata=
+ xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
+ H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
+ hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
+ GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
+ rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
+ s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
+ GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
+ pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
+In-Reply-To: <20240728114200.75559-8-wahrenst@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 30, 2024 at 10:58:44AM GMT, Xu Yang wrote:
-> On Mon, Jul 29, 2024 at 10:57:33PM +0300, Dmitry Baryshkov wrote:
-> > On Mon, Jul 29, 2024 at 04:10:37PM GMT, Xu Yang wrote:
-> > > Add a compatible entry for the NXP PTN36043 GPIO-based mux hardware
-> > > used for connecting, disconnecting and switching orientation of
-> > > the SBU lines in USB Type-C applications.
-> > 
-> > NAK, this is not correct. PTN36043 switchies SuperSpeed lines and not
-> > SBU.
+On 7/28/24 08:41, Stefan Wahren wrote:
+> DRM_ERROR() has been deprecated in favor of pr_err(). However, we
+> should prefer to use drm_err() whenever possible so we get device-
+> specific output with the error message. In error case of kcalloc,
+> we can simply drop DRM_ERROR(), because kcalloc already logs errors.
 > 
-> Yes. Since this gpio mux is able to switch both sbu line and ss line,
-> I will change SBU to SuperSpeed in next version in commit message to avoid
-> confusion.
+> Suggested-by: Maíra Canal <mcanal@igalia.com>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 
-Ack. This needs new compatible and probably more schema (and driver)
-changes. I think you can't just terminate SS lanes in the mux, they
-should go to the actual SoC part (like the SS controller or PHY).
+I'd just double-check this patch with checkpatch.sh, as I feel a couple
+of lines are not aligned to the parenthesis. That check, you can add my:
 
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
+
+Best Regards,
+- Maíra
+
+> ---
+>   drivers/gpu/drm/vc4/vc4_bo.c       | 14 ++++++------
+>   drivers/gpu/drm/vc4/vc4_dpi.c      | 14 ++++++------
+>   drivers/gpu/drm/vc4/vc4_dsi.c      | 32 ++++++++++++++------------
+>   drivers/gpu/drm/vc4/vc4_gem.c      | 11 +++++----
+>   drivers/gpu/drm/vc4/vc4_hdmi.c     | 36 +++++++++++++++---------------
+>   drivers/gpu/drm/vc4/vc4_hvs.c      |  4 ++--
+>   drivers/gpu/drm/vc4/vc4_irq.c      |  2 +-
+>   drivers/gpu/drm/vc4/vc4_v3d.c      |  6 ++---
+>   drivers/gpu/drm/vc4/vc4_validate.c |  8 +++----
+>   drivers/gpu/drm/vc4/vc4_vec.c      | 10 ++++-----
+>   10 files changed, 70 insertions(+), 67 deletions(-)
 > 
-> Thanks,
-> Xu Yang
+> diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
+> index 86d629e45307..952953b4cdf8 100644
+> --- a/drivers/gpu/drm/vc4/vc4_bo.c
+> +++ b/drivers/gpu/drm/vc4/vc4_bo.c
+> @@ -469,7 +469,7 @@ struct vc4_bo *vc4_bo_create(struct drm_device *dev, size_t unaligned_size,
 > 
-> > 
-> > > 
-> > > PTN36043 datasheet: https://www.nxp.com/docs/en/data-sheet/PTN36043A.pdf
-> > > 
-> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> > > index 8a5f837eff94..152849f744c1 100644
-> > > --- a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> > > @@ -20,6 +20,7 @@ properties:
-> > >      items:
-> > >        - enum:
-> > >            - nxp,cbdtu02043
-> > > +          - nxp,ptn36043
-> > >            - onnn,fsusb43l10x
-> > >            - pericom,pi3usb102
-> > >            - ti,tmuxhs4212
-> > > -- 
-> > > 2.34.1
-> > > 
-> > 
-> > -- 
-> > With best wishes
-> > Dmitry
-
--- 
-With best wishes
-Dmitry
+>   	if (IS_ERR(dma_obj)) {
+>   		struct drm_printer p = drm_info_printer(vc4->base.dev);
+> -		DRM_ERROR("Failed to allocate from GEM DMA helper:\n");
+> +		drm_err(dev, "Failed to allocate from GEM DMA helper:\n");
+>   		vc4_bo_stats_print(&p, vc4);
+>   		return ERR_PTR(-ENOMEM);
+>   	}
+> @@ -702,7 +702,7 @@ static struct dma_buf *vc4_prime_export(struct drm_gem_object *obj, int flags)
+>   	 */
+>   	ret = vc4_bo_inc_usecnt(bo);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to increment BO usecnt\n");
+> +		drm_err(obj->dev, "Failed to increment BO usecnt\n");
+>   		return ERR_PTR(ret);
+>   	}
+> 
+> @@ -1050,10 +1050,10 @@ static void vc4_bo_cache_destroy(struct drm_device *dev, void *unused)
+> 
+>   	for (i = 0; i < vc4->num_labels; i++) {
+>   		if (vc4->bo_labels[i].num_allocated) {
+> -			DRM_ERROR("Destroying BO cache with %d %s "
+> -				  "BOs still allocated\n",
+> -				  vc4->bo_labels[i].num_allocated,
+> -				  vc4->bo_labels[i].name);
+> +			drm_err(dev, "Destroying BO cache with %d %s "
+> +				     "BOs still allocated\n",
+> +				     vc4->bo_labels[i].num_allocated,
+> +				     vc4->bo_labels[i].name);
+>   		}
+> 
+>   		if (is_user_label(i))
+> @@ -1083,7 +1083,7 @@ int vc4_label_bo_ioctl(struct drm_device *dev, void *data,
+> 
+>   	gem_obj = drm_gem_object_lookup(file_priv, args->handle);
+>   	if (!gem_obj) {
+> -		DRM_ERROR("Failed to look up GEM BO %d\n", args->handle);
+> +		drm_err(dev, "Failed to look up GEM BO %d\n", args->handle);
+>   		kfree(name);
+>   		return -ENOENT;
+>   	}
+> diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
+> index 39152e755a13..688bfddbfb8f 100644
+> --- a/drivers/gpu/drm/vc4/vc4_dpi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_dpi.c
+> @@ -199,8 +199,8 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
+>   						       DPI_FORMAT);
+>   				break;
+>   			default:
+> -				DRM_ERROR("Unknown media bus format %d\n",
+> -					  bus_format);
+> +				drm_err(dev, "Unknown media bus format %d\n",
+> +					     bus_format);
+>   				break;
+>   			}
+>   		}
+> @@ -236,11 +236,11 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
+> 
+>   	ret = clk_set_rate(dpi->pixel_clock, mode->clock * 1000);
+>   	if (ret)
+> -		DRM_ERROR("Failed to set clock rate: %d\n", ret);
+> +		drm_err(dev, "Failed to set clock rate: %d\n", ret);
+> 
+>   	ret = clk_prepare_enable(dpi->pixel_clock);
+>   	if (ret)
+> -		DRM_ERROR("Failed to set clock rate: %d\n", ret);
+> +		drm_err(dev, "Failed to set clock rate: %d\n", ret);
+> 
+>   	drm_dev_exit(idx);
+>   }
+> @@ -339,7 +339,7 @@ static int vc4_dpi_bind(struct device *dev, struct device *master, void *data)
+>   	if (IS_ERR(dpi->core_clock)) {
+>   		ret = PTR_ERR(dpi->core_clock);
+>   		if (ret != -EPROBE_DEFER)
+> -			DRM_ERROR("Failed to get core clock: %d\n", ret);
+> +			drm_err(drm, "Failed to get core clock: %d\n", ret);
+>   		return ret;
+>   	}
+> 
+> @@ -347,13 +347,13 @@ static int vc4_dpi_bind(struct device *dev, struct device *master, void *data)
+>   	if (IS_ERR(dpi->pixel_clock)) {
+>   		ret = PTR_ERR(dpi->pixel_clock);
+>   		if (ret != -EPROBE_DEFER)
+> -			DRM_ERROR("Failed to get pixel clock: %d\n", ret);
+> +			drm_err(drm, "Failed to get pixel clock: %d\n", ret);
+>   		return ret;
+>   	}
+> 
+>   	ret = clk_prepare_enable(dpi->core_clock);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to turn on core clock: %d\n", ret);
+> +		drm_err(drm, "Failed to turn on core clock: %d\n", ret);
+>   		return ret;
+>   	}
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
+> index 46f6c4ce61c5..b5f61da199c9 100644
+> --- a/drivers/gpu/drm/vc4/vc4_dsi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_dsi.c
+> @@ -613,6 +613,7 @@ struct vc4_dsi {
+>   static inline void
+>   dsi_dma_workaround_write(struct vc4_dsi *dsi, u32 offset, u32 val)
+>   {
+> +	struct drm_device *drm = dsi->bridge.dev;
+>   	struct dma_chan *chan = dsi->reg_dma_chan;
+>   	struct dma_async_tx_descriptor *tx;
+>   	dma_cookie_t cookie;
+> @@ -633,19 +634,19 @@ dsi_dma_workaround_write(struct vc4_dsi *dsi, u32 offset, u32 val)
+>   						  dsi->reg_dma_paddr,
+>   						  4, 0);
+>   	if (!tx) {
+> -		DRM_ERROR("Failed to set up DMA register write\n");
+> +		drm_err(drm, "Failed to set up DMA register write\n");
+>   		return;
+>   	}
+> 
+>   	cookie = tx->tx_submit(tx);
+>   	ret = dma_submit_error(cookie);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to submit DMA: %d\n", ret);
+> +		drm_err(drm, "Failed to submit DMA: %d\n", ret);
+>   		return;
+>   	}
+>   	ret = dma_sync_wait(chan, cookie);
+>   	if (ret)
+> -		DRM_ERROR("Failed to wait for DMA: %d\n", ret);
+> +		drm_err(drm, "Failed to wait for DMA: %d\n", ret);
+>   }
+> 
+>   #define DSI_READ(offset)								\
+> @@ -893,7 +894,7 @@ static void vc4_dsi_bridge_pre_enable(struct drm_bridge *bridge,
+> 
+>   	ret = pm_runtime_resume_and_get(dev);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to runtime PM enable on DSI%d\n", dsi->variant->port);
+> +		drm_err(bridge->dev, "Failed to runtime PM enable on DSI%d\n", dsi->variant->port);
+>   		return;
+>   	}
+> 
+> @@ -986,13 +987,14 @@ static void vc4_dsi_bridge_pre_enable(struct drm_bridge *bridge,
+> 
+>   	ret = clk_prepare_enable(dsi->escape_clock);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to turn on DSI escape clock: %d\n", ret);
+> +		drm_err(bridge->dev, "Failed to turn on DSI escape clock: %d\n",
+> +				     ret);
+>   		return;
+>   	}
+> 
+>   	ret = clk_prepare_enable(dsi->pll_phy_clock);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to turn on DSI PLL: %d\n", ret);
+> +		drm_err(bridge->dev, "Failed to turn on DSI PLL: %d\n", ret);
+>   		return;
+>   	}
+> 
+> @@ -1014,7 +1016,7 @@ static void vc4_dsi_bridge_pre_enable(struct drm_bridge *bridge,
+> 
+>   	ret = clk_prepare_enable(dsi->pixel_clock);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to turn on DSI pixel clock: %d\n", ret);
+> +		drm_err(bridge->dev, "Failed to turn on DSI pixel clock: %d\n", ret);
+>   		return;
+>   	}
+> 
+> @@ -1172,6 +1174,7 @@ static ssize_t vc4_dsi_host_transfer(struct mipi_dsi_host *host,
+>   				     const struct mipi_dsi_msg *msg)
+>   {
+>   	struct vc4_dsi *dsi = host_to_dsi(host);
+> +	struct drm_device *drm = dsi->bridge.dev;
+>   	struct mipi_dsi_packet packet;
+>   	u32 pkth = 0, pktc = 0;
+>   	int i, ret;
+> @@ -1303,8 +1306,8 @@ static ssize_t vc4_dsi_host_transfer(struct mipi_dsi_host *host,
+>   						  DSI_RXPKT1H_BC_PARAM);
+> 
+>   			if (rxlen != msg->rx_len) {
+> -				DRM_ERROR("DSI returned %db, expecting %db\n",
+> -					  rxlen, (int)msg->rx_len);
+> +				drm_err(drm, "DSI returned %db, expecting %db\n",
+> +					     rxlen, (int)msg->rx_len);
+>   				ret = -ENXIO;
+>   				goto reset_fifo_and_return;
+>   			}
+> @@ -1326,7 +1329,7 @@ static ssize_t vc4_dsi_host_transfer(struct mipi_dsi_host *host,
+>   	return ret;
+> 
+>   reset_fifo_and_return:
+> -	DRM_ERROR("DSI transfer failed, resetting: %d\n", ret);
+> +	drm_err(drm, "DSI transfer failed, resetting: %d\n", ret);
+> 
+>   	DSI_PORT_WRITE(TXPKT1C, DSI_PORT_READ(TXPKT1C) & ~DSI_TXPKT1C_CMD_EN);
+>   	udelay(1);
+> @@ -1468,7 +1471,8 @@ static void dsi_handle_error(struct vc4_dsi *dsi,
+>   	if (!(stat & bit))
+>   		return;
+> 
+> -	DRM_ERROR("DSI%d: %s error\n", dsi->variant->port, type);
+> +	drm_err(dsi->bridge.dev, "DSI%d: %s error\n", dsi->variant->port,
+> +		type);
+>   	*ret = IRQ_HANDLED;
+>   }
+> 
+> @@ -1687,7 +1691,7 @@ static int vc4_dsi_bind(struct device *dev, struct device *master, void *data)
+>   						      &dsi->reg_dma_paddr,
+>   						      GFP_KERNEL);
+>   		if (!dsi->reg_dma_mem) {
+> -			DRM_ERROR("Failed to get DMA memory\n");
+> +			drm_err(drm, "Failed to get DMA memory\n");
+>   			return -ENOMEM;
+>   		}
+> 
+> @@ -1702,8 +1706,8 @@ static int vc4_dsi_bind(struct device *dev, struct device *master, void *data)
+>   		if (IS_ERR(dsi->reg_dma_chan)) {
+>   			ret = PTR_ERR(dsi->reg_dma_chan);
+>   			if (ret != -EPROBE_DEFER)
+> -				DRM_ERROR("Failed to get DMA channel: %d\n",
+> -					  ret);
+> +				drm_err(drm, "Failed to get DMA channel: %d\n",
+> +					     ret);
+>   			return ret;
+>   		}
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_gem.c b/drivers/gpu/drm/vc4/vc4_gem.c
+> index 03648f954985..f12d572287f0 100644
+> --- a/drivers/gpu/drm/vc4/vc4_gem.c
+> +++ b/drivers/gpu/drm/vc4/vc4_gem.c
+> @@ -832,8 +832,8 @@ vc4_get_bcl(struct drm_device *dev, struct vc4_exec_info *exec)
+>   	 */
+>   	temp = kvmalloc_array(temp_size, 1, GFP_KERNEL);
+>   	if (!temp) {
+> -		DRM_ERROR("Failed to allocate storage for copying "
+> -			  "in bin/render CLs.\n");
+> +		drm_err(dev, "Failed to allocate storage for copying "
+> +			     "in bin/render CLs.\n");
+>   		ret = -ENOMEM;
+>   		goto fail;
+>   	}
+> @@ -866,7 +866,7 @@ vc4_get_bcl(struct drm_device *dev, struct vc4_exec_info *exec)
+> 
+>   	bo = vc4_bo_create(dev, exec_size, true, VC4_BO_TYPE_BCL);
+>   	if (IS_ERR(bo)) {
+> -		DRM_ERROR("Couldn't allocate BO for binning\n");
+> +		drm_err(dev, "Couldn't allocate BO for binning\n");
+>   		ret = PTR_ERR(bo);
+>   		goto fail;
+>   	}
+> @@ -1153,10 +1153,9 @@ vc4_submit_cl_ioctl(struct drm_device *dev, void *data,
+>   	}
+> 
+>   	exec = kcalloc(1, sizeof(*exec), GFP_KERNEL);
+> -	if (!exec) {
+> -		DRM_ERROR("malloc failure on exec struct\n");
+> +	if (!exec)
+>   		return -ENOMEM;
+> -	}
+> +
+>   	exec->dev = vc4;
+> 
+>   	ret = vc4_v3d_pm_get(vc4);
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> index cb424604484f..6611ab7c26a6 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -704,7 +704,7 @@ static int vc4_hdmi_write_infoframe(struct drm_connector *connector,
+> 
+>   	ret = vc4_hdmi_stop_packet(vc4_hdmi, type, true);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to wait for infoframe to go idle: %d\n", ret);
+> +		drm_err(drm, "Failed to wait for infoframe to go idle: %d\n", ret);
+>   		goto out;
+>   	}
+> 
+> @@ -740,7 +740,7 @@ static int vc4_hdmi_write_infoframe(struct drm_connector *connector,
+>   	ret = wait_for((HDMI_READ(HDMI_RAM_PACKET_STATUS) &
+>   			BIT(packet_id)), 100);
+>   	if (ret)
+> -		DRM_ERROR("Failed to wait for infoframe to start: %d\n", ret);
+> +		drm_err(drm, "Failed to wait for infoframe to start: %d\n", ret);
+> 
+>   out:
+>   	drm_dev_exit(idx);
+> @@ -901,7 +901,7 @@ static void vc4_hdmi_encoder_post_crtc_powerdown(struct drm_encoder *encoder,
+> 
+>   	ret = pm_runtime_put(&vc4_hdmi->pdev->dev);
+>   	if (ret < 0)
+> -		DRM_ERROR("Failed to release power domain: %d\n", ret);
+> +		drm_err(drm, "Failed to release power domain: %d\n", ret);
+> 
+>   	drm_dev_exit(idx);
+> 
+> @@ -1443,7 +1443,7 @@ static void vc4_hdmi_encoder_pre_crtc_configure(struct drm_encoder *encoder,
+> 
+>   	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+>   	if (ret < 0) {
+> -		DRM_ERROR("Failed to retain power domain: %d\n", ret);
+> +		drm_err(drm, "Failed to retain power domain: %d\n", ret);
+>   		goto err_dev_exit;
+>   	}
+> 
+> @@ -1468,19 +1468,19 @@ static void vc4_hdmi_encoder_pre_crtc_configure(struct drm_encoder *encoder,
+>   			 div_u64(tmds_char_rate, 100) * 101);
+>   	ret = clk_set_min_rate(vc4_hdmi->hsm_clock, hsm_rate);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to set HSM clock rate: %d\n", ret);
+> +		drm_err(drm, "Failed to set HSM clock rate: %d\n", ret);
+>   		goto err_put_runtime_pm;
+>   	}
+> 
+>   	ret = clk_set_rate(vc4_hdmi->pixel_clock, tmds_char_rate);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to set pixel clock rate: %d\n", ret);
+> +		drm_err(drm, "Failed to set pixel clock rate: %d\n", ret);
+>   		goto err_put_runtime_pm;
+>   	}
+> 
+>   	ret = clk_prepare_enable(vc4_hdmi->pixel_clock);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to turn on pixel clock: %d\n", ret);
+> +		drm_err(drm, "Failed to turn on pixel clock: %d\n", ret);
+>   		goto err_put_runtime_pm;
+>   	}
+> 
+> @@ -1496,13 +1496,13 @@ static void vc4_hdmi_encoder_pre_crtc_configure(struct drm_encoder *encoder,
+> 
+>   	ret = clk_set_min_rate(vc4_hdmi->pixel_bvb_clock, bvb_rate);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to set pixel bvb clock rate: %d\n", ret);
+> +		drm_err(drm, "Failed to set pixel bvb clock rate: %d\n", ret);
+>   		goto err_disable_pixel_clock;
+>   	}
+> 
+>   	ret = clk_prepare_enable(vc4_hdmi->pixel_bvb_clock);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to turn on pixel bvb clock: %d\n", ret);
+> +		drm_err(drm, "Failed to turn on pixel bvb clock: %d\n", ret);
+>   		goto err_disable_pixel_clock;
+>   	}
+> 
+> @@ -2951,13 +2951,13 @@ static int vc4_hdmi_init_resources(struct drm_device *drm,
+>   	if (IS_ERR(vc4_hdmi->pixel_clock)) {
+>   		ret = PTR_ERR(vc4_hdmi->pixel_clock);
+>   		if (ret != -EPROBE_DEFER)
+> -			DRM_ERROR("Failed to get pixel clock\n");
+> +			drm_err(drm, "Failed to get pixel clock\n");
+>   		return ret;
+>   	}
+> 
+>   	vc4_hdmi->hsm_clock = devm_clk_get(dev, "hdmi");
+>   	if (IS_ERR(vc4_hdmi->hsm_clock)) {
+> -		DRM_ERROR("Failed to get HDMI state machine clock\n");
+> +		drm_err(drm, "Failed to get HDMI state machine clock\n");
+>   		return PTR_ERR(vc4_hdmi->hsm_clock);
+>   	}
+>   	vc4_hdmi->audio_clock = vc4_hdmi->hsm_clock;
+> @@ -3041,31 +3041,31 @@ static int vc5_hdmi_init_resources(struct drm_device *drm,
+> 
+>   	vc4_hdmi->hsm_clock = devm_clk_get(dev, "hdmi");
+>   	if (IS_ERR(vc4_hdmi->hsm_clock)) {
+> -		DRM_ERROR("Failed to get HDMI state machine clock\n");
+> +		drm_err(drm, "Failed to get HDMI state machine clock\n");
+>   		return PTR_ERR(vc4_hdmi->hsm_clock);
+>   	}
+> 
+>   	vc4_hdmi->pixel_bvb_clock = devm_clk_get(dev, "bvb");
+>   	if (IS_ERR(vc4_hdmi->pixel_bvb_clock)) {
+> -		DRM_ERROR("Failed to get pixel bvb clock\n");
+> +		drm_err(drm, "Failed to get pixel bvb clock\n");
+>   		return PTR_ERR(vc4_hdmi->pixel_bvb_clock);
+>   	}
+> 
+>   	vc4_hdmi->audio_clock = devm_clk_get(dev, "audio");
+>   	if (IS_ERR(vc4_hdmi->audio_clock)) {
+> -		DRM_ERROR("Failed to get audio clock\n");
+> +		drm_err(drm, "Failed to get audio clock\n");
+>   		return PTR_ERR(vc4_hdmi->audio_clock);
+>   	}
+> 
+>   	vc4_hdmi->cec_clock = devm_clk_get(dev, "cec");
+>   	if (IS_ERR(vc4_hdmi->cec_clock)) {
+> -		DRM_ERROR("Failed to get CEC clock\n");
+> +		drm_err(drm, "Failed to get CEC clock\n");
+>   		return PTR_ERR(vc4_hdmi->cec_clock);
+>   	}
+> 
+>   	vc4_hdmi->reset = devm_reset_control_get(dev, NULL);
+>   	if (IS_ERR(vc4_hdmi->reset)) {
+> -		DRM_ERROR("Failed to get HDMI reset line\n");
+> +		drm_err(drm, "Failed to get HDMI reset line\n");
+>   		return PTR_ERR(vc4_hdmi->reset);
+>   	}
+> 
+> @@ -3221,14 +3221,14 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
+> 
+>   	ddc_node = of_parse_phandle(dev->of_node, "ddc", 0);
+>   	if (!ddc_node) {
+> -		DRM_ERROR("Failed to find ddc node in device tree\n");
+> +		drm_err(drm, "Failed to find ddc node in device tree\n");
+>   		return -ENODEV;
+>   	}
+> 
+>   	vc4_hdmi->ddc = of_find_i2c_adapter_by_node(ddc_node);
+>   	of_node_put(ddc_node);
+>   	if (!vc4_hdmi->ddc) {
+> -		DRM_DEBUG("Failed to get ddc i2c adapter by node\n");
+> +		drm_err(drm, "Failed to get ddc i2c adapter by node\n");
+>   		return -EPROBE_DEFER;
+>   	}
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
+> index 04af672caacb..3f13ff692c28 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hvs.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hvs.c
+> @@ -191,8 +191,8 @@ static int vc4_hvs_upload_linear_kernel(struct vc4_hvs *hvs,
+> 
+>   	ret = drm_mm_insert_node(&hvs->dlist_mm, space, VC4_KERNEL_DWORDS);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to allocate space for filter kernel: %d\n",
+> -			  ret);
+> +		drm_err(&hvs->vc4->base, "Failed to allocate space for filter kernel: %d\n",
+> +					 ret);
+>   		return ret;
+>   	}
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_irq.c b/drivers/gpu/drm/vc4/vc4_irq.c
+> index 563b3dfeb9b9..ef93d8e22a35 100644
+> --- a/drivers/gpu/drm/vc4/vc4_irq.c
+> +++ b/drivers/gpu/drm/vc4/vc4_irq.c
+> @@ -76,7 +76,7 @@ vc4_overflow_mem_work(struct work_struct *work)
+> 
+>   	bin_bo_slot = vc4_v3d_get_bin_slot(vc4);
+>   	if (bin_bo_slot < 0) {
+> -		DRM_ERROR("Couldn't allocate binner overflow mem\n");
+> +		drm_err(&vc4->base, "Couldn't allocate binner overflow mem\n");
+>   		goto complete;
+>   	}
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c b/drivers/gpu/drm/vc4/vc4_v3d.c
+> index 04ac7805e6d5..1ede508a67d3 100644
+> --- a/drivers/gpu/drm/vc4/vc4_v3d.c
+> +++ b/drivers/gpu/drm/vc4/vc4_v3d.c
+> @@ -471,8 +471,8 @@ static int vc4_v3d_bind(struct device *dev, struct device *master, void *data)
+>   		return ret;
+> 
+>   	if (V3D_READ(V3D_IDENT0) != V3D_EXPECTED_IDENT0) {
+> -		DRM_ERROR("V3D_IDENT0 read 0x%08x instead of 0x%08x\n",
+> -			  V3D_READ(V3D_IDENT0), V3D_EXPECTED_IDENT0);
+> +		drm_err(drm, "V3D_IDENT0 read 0x%08x instead of 0x%08x\n",
+> +			     V3D_READ(V3D_IDENT0), V3D_EXPECTED_IDENT0);
+>   		ret = -EINVAL;
+>   		goto err_put_runtime_pm;
+>   	}
+> @@ -485,7 +485,7 @@ static int vc4_v3d_bind(struct device *dev, struct device *master, void *data)
+> 
+>   	ret = vc4_irq_install(drm, vc4->irq);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to install IRQ handler\n");
+> +		drm_err(drm, "Failed to install IRQ handler\n");
+>   		goto err_put_runtime_pm;
+>   	}
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_validate.c b/drivers/gpu/drm/vc4/vc4_validate.c
+> index 7dff3ca5af6b..5474a36c5c9d 100644
+> --- a/drivers/gpu/drm/vc4/vc4_validate.c
+> +++ b/drivers/gpu/drm/vc4/vc4_validate.c
+> @@ -65,7 +65,7 @@ utile_width(int cpp)
+>   	case 8:
+>   		return 2;
+>   	default:
+> -		DRM_ERROR("unknown cpp: %d\n", cpp);
+> +		pr_err("unknown cpp: %d\n", cpp);
+>   		return 1;
+>   	}
+>   }
+> @@ -82,7 +82,7 @@ utile_height(int cpp)
+>   	case 8:
+>   		return 4;
+>   	default:
+> -		DRM_ERROR("unknown cpp: %d\n", cpp);
+> +		pr_err("unknown cpp: %d\n", cpp);
+>   		return 1;
+>   	}
+>   }
+> @@ -390,8 +390,8 @@ validate_tile_binning_config(VALIDATE_ARGS)
+>   	bin_slot = vc4_v3d_get_bin_slot(vc4);
+>   	if (bin_slot < 0) {
+>   		if (bin_slot != -EINTR && bin_slot != -ERESTARTSYS) {
+> -			DRM_ERROR("Failed to allocate binner memory: %d\n",
+> -				  bin_slot);
+> +			drm_err(dev, "Failed to allocate binner memory: %d\n",
+> +				     bin_slot);
+>   		}
+>   		return bin_slot;
+>   	}
+> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
+> index 070813b8aff8..eb64e881051e 100644
+> --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> @@ -557,7 +557,7 @@ static void vc4_vec_encoder_disable(struct drm_encoder *encoder,
+> 
+>   	ret = pm_runtime_put(&vec->pdev->dev);
+>   	if (ret < 0) {
+> -		DRM_ERROR("Failed to release power domain: %d\n", ret);
+> +		drm_err(drm, "Failed to release power domain: %d\n", ret);
+>   		goto err_dev_exit;
+>   	}
+> 
+> @@ -591,7 +591,7 @@ static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
+> 
+>   	ret = pm_runtime_resume_and_get(&vec->pdev->dev);
+>   	if (ret < 0) {
+> -		DRM_ERROR("Failed to retain power domain: %d\n", ret);
+> +		drm_err(drm, "Failed to retain power domain: %d\n", ret);
+>   		goto err_dev_exit;
+>   	}
+> 
+> @@ -604,13 +604,13 @@ static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
+>   	 */
+>   	ret = clk_set_rate(vec->clock, 108000000);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to set clock rate: %d\n", ret);
+> +		drm_err(drm, "Failed to set clock rate: %d\n", ret);
+>   		goto err_put_runtime_pm;
+>   	}
+> 
+>   	ret = clk_prepare_enable(vec->clock);
+>   	if (ret) {
+> -		DRM_ERROR("Failed to turn on core clock: %d\n", ret);
+> +		drm_err(drm, "Failed to turn on core clock: %d\n", ret);
+>   		goto err_put_runtime_pm;
+>   	}
+> 
+> @@ -806,7 +806,7 @@ static int vc4_vec_bind(struct device *dev, struct device *master, void *data)
+>   	if (IS_ERR(vec->clock)) {
+>   		ret = PTR_ERR(vec->clock);
+>   		if (ret != -EPROBE_DEFER)
+> -			DRM_ERROR("Failed to get clock: %d\n", ret);
+> +			drm_err(drm, "Failed to get clock: %d\n", ret);
+>   		return ret;
+>   	}
+> 
+> --
+> 2.34.1
+> 
 
