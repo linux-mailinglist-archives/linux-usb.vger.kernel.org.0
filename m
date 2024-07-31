@@ -1,107 +1,114 @@
-Return-Path: <linux-usb+bounces-12687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3F69942943
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:34:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8D0C94296F
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:45:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62B58283E78
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:34:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F6361F23735
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:45:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B3F1A8BE9;
-	Wed, 31 Jul 2024 08:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47C3D4D108;
+	Wed, 31 Jul 2024 08:45:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cBiaV14n"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wMQtgiPN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2C41A7F86;
-	Wed, 31 Jul 2024 08:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B0D1B95B
+	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 08:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722414858; cv=none; b=tP0mvJQ4Wm38yStuLDh45Qgqo2sBexq0e7I3f+XHssZuyxay/f+DxlCbOvXXcB0cjc5bmyT+ik83HaYA/bDQEkONCrlp3r7ZdwWQDEREmv/Q6YAVp8sOnpATPcpUYjAbbYhj6u0d+YpVu1jzXVQwdzaAz6875KNxQVViyxc1xJA=
+	t=1722415518; cv=none; b=ryqhyBlfxdOCiZPIRx11fdhn4M0lWWAjn2ZcynoEqutkFQS/p7U+GpDjzZ/7A5qR4MjjwEscD4cX0uC6ejBkRvEsLZGNdaqP2W+ORq65BRFSLJ6tpsmIy5LWwjqVqatf2IoDkOJtmv6E9mDiWkyTlxsBkSJ/nSokI3G5K0AGpSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722414858; c=relaxed/simple;
-	bh=8+E4Mx6nsvQdhnv7jB7tqDc4lCt4yb/9UOa+s297XNE=;
+	s=arc-20240116; t=1722415518; c=relaxed/simple;
+	bh=T0hgZzxcbycjDKArSUhUrQawZWOQS7uVUzRD35sHWog=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QPjoGzq3Ej9PUlhdNn2KdhktLOCEs4qh5AAjC03940umsh/vBDP/Cy1pdQR0Bp/xJF2nJNvCSvODs1tYvEFwImFndVJeXMVR7GpDu14bxfbSLQyRPF63voM1p4wJmwXh40UYE/aeOIekxCoPAOqsIXMLcOSg23583WNBQCCmcVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cBiaV14n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74327C4AF09;
-	Wed, 31 Jul 2024 08:34:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ikw7NEs4Nf2U4BFXYyU68Oinxfwk2TyKUWhT3RO2+N2jXUiLeraXt5sg1mQgsANIBxVApY0Wci1RpPDjH+ysBJDLMGpRv3XL5svycJbRHrpTMEkYawd3TdL7vBlFTRgSgiI3cPP2oQS71FxVeHW12crgNcIYgqBpPNkv6L7muQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wMQtgiPN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC33CC4AF09;
+	Wed, 31 Jul 2024 08:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1722414857;
-	bh=8+E4Mx6nsvQdhnv7jB7tqDc4lCt4yb/9UOa+s297XNE=;
+	s=korg; t=1722415518;
+	bh=T0hgZzxcbycjDKArSUhUrQawZWOQS7uVUzRD35sHWog=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cBiaV14nHYc6s6VsYITJu5KaTaND7A+yUt2pxHnlCgrctD+bEyovKK9gh54uvDbM1
-	 4FMo5eAGQaRxD7vm1F7ydwm47jxYymyheech1ZO1L3JW00kI0cGBWMA0xTkjQ9Eq2h
-	 BF/QLpsFT1TB/AT86cO551Ppvn2JpU5fd/+E3bEs=
-Date: Wed, 31 Jul 2024 10:34:14 +0200
+	b=wMQtgiPNwxbQ6Slz2sxTBQwHHytdI1i3h+MBNR5Pm7esOlkP5ypmCLS0lSGZO5XKT
+	 B4ZibOe/M/hwb5QwQzma7M47fVbGa+8e+ImpZzdv5Q84KceTeYbjN8FLwvph6B7P1p
+	 hvtI34dYTfiR7BMycNTXuMX1EYGEDjcjJD2wXcP0=
+Date: Wed, 31 Jul 2024 10:45:15 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Abhishek Tamboli <abhishektamboli9@gmail.com>
-Cc: skhan@linuxfoundation.org, dan.carpenter@linaro.org,
-	rbmarliere@gmail.com, christophe.jaillet@wanadoo.fr,
-	Chris.Wulff@biamp.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_audio: Use C99 syntax for array
- initializers
-Message-ID: <2024073102-calculate-disabled-8700@gregkh>
-References: <20240729174639.446105-1-abhishektamboli9@gmail.com>
+To: Ben Hutchings <ben@decadent.org.uk>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	Cyril Brulebois <kibi@debian.org>
+Subject: Re: [PATCH] xhci-pci: Make xhci-pci-renesas a proper modular driver
+Message-ID: <2024073145-curdle-bronco-b9ca@gregkh>
+References: <ZqGeehVxETDl57eT@decadent.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240729174639.446105-1-abhishektamboli9@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZqGeehVxETDl57eT@decadent.org.uk>
 
-On Mon, Jul 29, 2024 at 11:16:39PM +0530, Abhishek Tamboli wrote:
-> Convert array initializers to C99 syntax by adding the '=' after each
-> designated initializer. This change resolves warnings from smatch
-> about obsolete array initializers.
+On Thu, Jul 25, 2024 at 02:38:18AM +0200, Ben Hutchings wrote:
+> If CONFIG_USB_XHCI_PCI_RENESAS is enabled, xhci-pci conditionally
+> calls into the xhci-pci-renesas module, which means both modules must
+> be loaded to use any xHCI PCI controller.
 > 
-> drivers/usb/gadget/function/u_audio.c:1117:20:warning: obsolete array initializer, use C99 syntax
-> drivers/usb/gadget/function/u_audio.c:1124:28:warning: obsolete array initializer, use C99 syntax
-> drivers/usb/gadget/function/u_audio.c:1131:19:warning: obsolete array initializer, use C99 syntax
-> drivers/usb/gadget/function/u_audio.c:1138:27:warning: obsolete array initializer, use C99 syntax
-> drivers/usb/gadget/function/u_audio.c:1145:25:warning: obsolete array initializer, use C99 syntax
+> The MODULE_FIRMWARE declaration in the base xhci-pci module causes
+> initramfs-tools to check for and warn about missing firmware for the
+> Renesas xHCI controllers, when any xHCI PCI controller is present.
+> And because of the previous oddity, simply moving this declaration to
+> xhci-pci-renesas wouldn't help.
 > 
-> Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
+> To fix this, reverse the relationship between the modules:
+> 
+> - Remove the quirk for the Renesas xHCIs, and the driver_data
+>   structure used only for them
+> - In xhci-pci:
+>   - Rename xhci_pci_probe() to xhci_pci_common_probe()
+>   - Export xhci_pci_common_probe() and xhci_pci_remove()
+>   - Use a new probe function that rejects the Renesas xHCIs and then
+>     calls the common probe function
+> - In xhci-pci-renesas:
+>   - Stop exporting renesas_xhci_check_request_fw()
+>   - Add a probe function that calls renesas_xhci_check_request_fw()
+>     followed by xhci_pci_common_probe()
+>   - Add and register a new pci_driver matching only the Renesas xHCIs
+>     and using its own probe function, but with other operations the
+>     same as in xhci-pci
+> - Make CONFIG_USB_XHCI_PCI_RENESAS depend on CONFIG_USB_XHCI_PCI,
+>   not the other way around
+> 
+> Finally, move the MODULE_FIRMWARE declaration to xhci-pci-renesas.
+> 
+> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 > ---
->  drivers/usb/gadget/function/u_audio.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  drivers/usb/host/Kconfig            |  2 +-
+>  drivers/usb/host/xhci-pci-renesas.c | 47 +++++++++++++++++++++---
+>  drivers/usb/host/xhci-pci.c         | 57 ++++++++++-------------------
+>  drivers/usb/host/xhci-pci.h         | 19 +---------
+>  drivers/usb/host/xhci.h             |  2 +-
+>  5 files changed, 64 insertions(+), 63 deletions(-)
 > 
 
-Hi,
+I get the following error when building:
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+drivers/usb/host/xhci-pci.c:646:5: error: no previous prototype for ‘xhci_pci_probe’ [-Werror=missing-prototypes]
+  646 | int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+      |     ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Can you rebase against 6.11-rc1 and fix up and resend?
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
 
