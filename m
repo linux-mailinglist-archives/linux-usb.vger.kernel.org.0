@@ -1,108 +1,109 @@
-Return-Path: <linux-usb+bounces-12757-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12758-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B61D943775
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 22:59:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 182289437B6
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 23:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83012B23274
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 20:59:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48EFB1C221BE
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 21:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398B416B723;
-	Wed, 31 Jul 2024 20:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECAAB16C872;
+	Wed, 31 Jul 2024 21:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Os33bYZC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qnuKSyzX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0BE1684A7;
-	Wed, 31 Jul 2024 20:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719A916D31B
+	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 21:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722459556; cv=none; b=f+wwJb5n2r2CJTES+3hYbuuFWkXtUoEVU65p7AYm+qiAhbyUjC1L+wcAdhkdmzX5gtMecML5AiIh2dV5Fs/2ia6caiWdMgZhLpMNvyYCqaRd6MH+1NuXrZcGWnpbJ4IdCm/HYOEmTiPalip0xXJp/tMp5MC+/z+aQlO/1FL0WKI=
+	t=1722460774; cv=none; b=NpDyp/wPbrh0t5bhJJ7XlIq0KHYzQG9he60haUG9WreCIqMD19r0KLP0WxS7kZ8iTmeokZ8IbZAJl9NkyGgN7V7ISIwqF9klIhWF9MLweoai5Zvpe5jpkXgLk69KLGGVHD8RxM8/RAVZa+HXUAM2gvbXgPSvuvTJi3IBkoD/TPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722459556; c=relaxed/simple;
-	bh=0VFVovUWiKyGr+ZpPTlc/w3FnYuRud1fQaL+qzHy/Uc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t6I60fOzqiOSidESC1IawWobIJ8lQTIEr+S0DEEGb451X+VUG7iyIZ7dM9XnEJ4SUEYUuB8DSFev8ecDy5iQmKmxRZPGFwRXu9Vg+7akLzDp36ybFVEIK60N/xWbh0DSgJloofb7vkVq6vHg30MDqvzxVgadZ7TcQYfbxkR9RN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Os33bYZC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32895C116B1;
-	Wed, 31 Jul 2024 20:59:16 +0000 (UTC)
+	s=arc-20240116; t=1722460774; c=relaxed/simple;
+	bh=mEh9oTuY6cpEK+uHqAEZ7MOYj+4XB6AG9CH+QobD02I=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QbCQFHpjrWYIW8ivYXeOgBMptTdDQu6w9IFP43yUeI/2UFMilDAgqRCrnEOvqcYmvExJXWR6D68Yq7lZ6MYbI1EB3OghCfOrEMqRWbXY7xaCwo3r5jp/htEuJb7m3rt5rb4nRZagwZAVs/5UDOclaSjrrJLK5nWOxREGIgdP91Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qnuKSyzX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E5BEEC4AF0E
+	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 21:19:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722459556;
-	bh=0VFVovUWiKyGr+ZpPTlc/w3FnYuRud1fQaL+qzHy/Uc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Os33bYZCw6H6Mue7Gd6lIbSbseYXcrd/HYJhvOSutjEyHky0nW7Dyw2CQi85+lUma
-	 OnQDJ2nBZE3NA5Wh9sPzBjY+aDuwX8wGuKw9+4ySdeBMUYZUxaWm/SckN9uAa2Ktba
-	 oI0S0KIQGpqtnkzmPsFVaxZpc6Uko7i/eLBrEh9j1oWPEH7SLjhZ5udez01TmshTKw
-	 O7m5gQfOEwbXbC4Jip6G94Y6njWZ1/ifQxlCj8TuVJ/z9oWSSxTbGO3hXnN4HofXvx
-	 QI70z+v+ri/REvpz0XWLSTc5+Beu1iZWZmD6MEFyb3CbSvRbzR5dc8bt/BhYS1ghSJ
-	 Le7Y6FawrQyVw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1sZGPi-00H7em-8I;
-	Wed, 31 Jul 2024 21:59:14 +0100
-From: Marc Zyngier <maz@kernel.org>
-To: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] usb: xhci: Check for xhci->interrupters being allocated in xhci_mem_clearup()
-Date: Wed, 31 Jul 2024 21:59:10 +0100
-Message-Id: <20240731205910.2060752-1-maz@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	s=k20201202; t=1722460773;
+	bh=mEh9oTuY6cpEK+uHqAEZ7MOYj+4XB6AG9CH+QobD02I=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=qnuKSyzXokBhA8KEWI5+ft7/voFndSVH+bahTg917p2xt381cvT+PnULgcPzxmbTO
+	 0lUIrDeeL4ABDURf8Nj+/4ma0BZvEVbAgZDyI7pkjNIku3/JM+ZiDdKi7KNYDXyi39
+	 qEWicD5x9rH+Ck9+J02j+g96dpZqMD0Hhw7yiz1hvI4j25Q6SnoBgWUmqZvTT5u+5J
+	 Lu8dG0uSO4uRWlgzo2bLkVEEVMHOUSn1RkneoygZxu1XiO/qH43/6eoZ3azuVD7ZYD
+	 b+bBqJTQBNuaJ4dDf7X7WTwfovYi4r9+h+ftVjyzLIBR9S133ajLhgkc+s1YVTe4P5
+	 X6uoa6/xnLgsw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D07B4C433E5; Wed, 31 Jul 2024 21:19:33 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219113] I/O-errors freezing the system [sd 0:0:0:0: [sda]
+ tag#11 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD OUT]
+Date: Wed, 31 Jul 2024 21:19:33 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-219113-208809-HL0vlCq0SM@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219113-208809@https.bugzilla.kernel.org/>
+References: <bug-219113-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, mathias.nyman@linux.intel.com, quic_wcheng@quicinc.com, gregkh@linuxfoundation.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-If xhci_mem_init() fails, it calls into xhci_mem_cleanup() to mop
-up the damage. If it fails early enough, before xhci->interrupters
-is allocated but after xhci->max_interrupters has been set, which
-happens in most (all?) cases, things get uglier, as xhci_mem_cleanup()
-unconditionally derefences xhci->interrupters. With prejudice.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219113
 
-Gate the interrupt freeing loop with a check on xhci->interrupters
-being non-NULL.
+Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
 
-Found while debugging a DMA allocation issue that led the XHCI driver
-on this exact path.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |michal.pecio@gmail.com
 
-Fixes: c99b38c41234 ("xhci: add support to allocate several interrupters")
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/usb/host/xhci-mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #4 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Disabling UAS should be enough if you need this disk to start working right
+now, albeit not with maximum performance.
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index d7654f475daf..937ce5fd5809 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1872,7 +1872,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
- 
- 	cancel_delayed_work_sync(&xhci->cmd_timer);
- 
--	for (i = 0; i < xhci->max_interrupters; i++) {
-+	for (i = 0; xhci->interrupters && i < xhci->max_interrupters; i++) {
- 		if (xhci->interrupters[i]) {
- 			xhci_remove_interrupter(xhci, xhci->interrupters[i]);
- 			xhci_free_interrupter(xhci, xhci->interrupters[i]);
--- 
-2.39.2
+A quick glance at xHCI spec 4.12.2.1 suggests that your USB host controller
+believes that the USB device or the kernel has given it a wrong stream inde=
+x.
+This could be a bug in the device, in the kernel xhci driver, or in the host
+controller itself.
 
+Do you know any kernel version which doesn't have this problem?
+
+Upgrading host controller or device firmware may help in case it's a hardwa=
+re
+bug already patched by the respective vendor.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
