@@ -1,52 +1,50 @@
-Return-Path: <linux-usb+bounces-12685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12686-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB1E1942935
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:31:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA1A94293A
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:32:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 558FE1F215A6
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:31:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BCC61C2147D
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:32:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA8E1A7F6B;
-	Wed, 31 Jul 2024 08:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2802B1A7F68;
+	Wed, 31 Jul 2024 08:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jG8VQcFR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fl96kmJ6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725F018DF92;
-	Wed, 31 Jul 2024 08:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4C41A76CE;
+	Wed, 31 Jul 2024 08:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722414657; cv=none; b=ErWzpmf8MEqe+psCP0alLhqaPrtBfegXUNRuEVdOY6he2WcEpOtZEVL6c7ef1A3lEmw3lKLsFdZn7Oy805q5h8puH4A45w8brfgDi2nEyDG5NWRI2wMu07rQkWIItTY5nrYKvDgq5+2eIgGCUmr+MlhkB/P8PuSsIVEVQuKpbxE=
+	t=1722414760; cv=none; b=HZSbjtJCJX15r+P7wCcSbsOYeAG/zw5PX5U2n/RVt9jjs2TcxgP5U/XDKE9pr/RlBciotHNaPeTbehmJbTBRDFUOTBl6Skk5G+O7q/euZbMglLkGKGzhXssJjXNiiD3qhyItq9DJSdfmZH74OfNuOaV0QbFOFYVU6FuSGUJJKkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722414657; c=relaxed/simple;
-	bh=9noKt1gXJuh8lgzIR1ZC4PKp4tydTmDjkcAQeRQaFls=;
+	s=arc-20240116; t=1722414760; c=relaxed/simple;
+	bh=iNJDaDDKfsib5G/MiRJlhu8tCyRetr4xDCI8p/x+Hcs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UnOKtEd8hUoPXqPGVQ7GZqcgTvhUN2yoLqRO4C8XSVMSbFZ39BFN/BfmpdrVYxfqwAFeF17UtsNuvFwa2HYnvH66agef7eol82ot8LHvhfP2dx5pns6DiEWHAeH7qTX1Xb+TO0ZCSm0trhWmIgrjTDSQgFhEqE7WrfkIudgHrl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jG8VQcFR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE15C116B1;
-	Wed, 31 Jul 2024 08:30:56 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uv7zaOOias4UpJFo6qYOXNq7EIAtp2MSgjB8Yr0JAIFRf8aAziV3FSj+PnUS/GyFtKOM6p7WAXvysPHXC2iI3Wal3AZhHsmzXABlD0UrsZtM6XVzk0md96fOFqtuG4I/JiNwDdIaN3ZCg4L2CpeIEyDbxaZH3DSd/MaZ1W4nulU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fl96kmJ6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD100C116B1;
+	Wed, 31 Jul 2024 08:32:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1722414657;
-	bh=9noKt1gXJuh8lgzIR1ZC4PKp4tydTmDjkcAQeRQaFls=;
+	s=korg; t=1722414760;
+	bh=iNJDaDDKfsib5G/MiRJlhu8tCyRetr4xDCI8p/x+Hcs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jG8VQcFRh39D93U1KZoPssouQGDco1vkfbe2zgQuTIHiZ9c+HUssC3PX5iBpDdOEk
-	 IBBiYcgFxJtpO/lSnfyzY+U2w7Vga6J0yRmP1NyWgBa3ds/SA/PgVup5cs0xYkI4lh
-	 D5iCMhcNeCEocdUKXDTbwJCC3ttGsE4s1AN4XZ2E=
-Date: Wed, 31 Jul 2024 10:30:54 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, jun.li@nxp.com,
-	imx@lists.linux.dev
-Subject: Re: [PATCH v2] usb: dwc3: core: remove spin_lock/unlock_* to avoid
- deadlock when suspend gadget
-Message-ID: <2024073141-demeanor-amniotic-8f01@gregkh>
-References: <20240527170413.1107831-1-xu.yang_2@nxp.com>
+	b=fl96kmJ65fILRKODJA6GX7PRFfHKSkME5B36JTzB+5878ReJf9jT5sNMaSOlGg0x2
+	 ybQ7FLNfxsWI+qp4mXwRxyHWTY/A3boJ7J9uuZqsvsWXBrK9zM20thkG0VgelC+rCb
+	 lpWhPh3vfaRjRuiGsaMBKStQNSZSp39VNFRK7j80=
+Date: Wed, 31 Jul 2024 10:32:37 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Michael Walle <mwalle@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_acm: make bInterfaceProtocol configurable
+Message-ID: <2024073151-violator-unskilled-6866@gregkh>
+References: <20240730194337.2583784-1-mwalle@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,33 +53,21 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240527170413.1107831-1-xu.yang_2@nxp.com>
+In-Reply-To: <20240730194337.2583784-1-mwalle@kernel.org>
 
-On Tue, May 28, 2024 at 01:04:13AM +0800, Xu Yang wrote:
-> In current design, spin_lock_irqsave() will run twice when suspend gadget
-> device if the controller is using OTG block:
-> 
-> dwc3_suspend_common()
->   spin_lock_irqsave(&dwc->lock, flags);      <-- 1st
->   dwc3_gadget_suspend(dwc);
->     dwc3_gadget_soft_disconnect(dwc);
->       spin_lock_irqsave(&dwc->lock, flags);  <-- 2nd
-> 
-> This will cause deadlock on the suspend path. To let it work, just remove
-> spin_lock/unlock_* in dwc3_suspend_common() since they are redundant.
-> 
-> Fixes: 5265397f9442 ("usb: dwc3: Remove DWC3 locking during gadget suspend/resume")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
-> ---
-> Changes in v2:
->  - add fix tag and stable list
-> ---
->  drivers/usb/dwc3/core.c | 3 ---
->  1 file changed, 3 deletions(-)
+On Tue, Jul 30, 2024 at 09:43:37PM +0200, Michael Walle wrote:
+>  struct f_serial_opts {
+>  	struct usb_function_instance func_inst;
+>  	u8 port_num;
+> +	u8 protocol;
+> +
+> +	struct mutex lock;
+> +	int refcnt;
 
-Is this still needed?  if so, can you rebase and resubmit?
+Attempting to "roll your own" reference count is almost never a good
+idea.  If you really need one, please use the proper in-kernel apis for
+this.  But you need to justify it as well, I didn't see why this was
+needed at all.
 
 thanks,
 
