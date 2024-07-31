@@ -1,134 +1,143 @@
-Return-Path: <linux-usb+bounces-12703-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12704-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB96F942CFC
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 13:12:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9998942D03
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 13:14:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDE041C235F9
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 11:12:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FA881F24C91
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 11:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17171AD3F9;
-	Wed, 31 Jul 2024 11:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E7D1AD417;
+	Wed, 31 Jul 2024 11:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OBsUbzxW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IqAYGOpX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04971AB52E;
-	Wed, 31 Jul 2024 11:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571C41AC44A
+	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 11:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722424358; cv=none; b=i2gRGg4EBJ5CFM/u+YxCQGRTjYAP2fAT7MPtQB7zFQbrK4CI0U/hLqx/IJ28NY4xZ7apuTDNWyrKwTSucJKzaj2UBCu2rU69psLcWaUmdC3WSkMO0JOsZwi2CgTCJy2AwBuMBROFiMfofQr0pXKmt0nbJVHGt1qqXv5fsLl3LLY=
+	t=1722424433; cv=none; b=QPyM/B+AdlV4muR6r79hktyJtXDGMifPkLA5YR3nmtqDwGWkZlUhdwtefWEInzvrQdvcWSpqD8MtEi29uCkvLfU4tjHLUIbFFA+Wn2bDDdIxqwV6VFRsJSOBGt6KDbWiC+vJHYdCz1tCe0W1y13L0Yd4fL/fEnakvVnEigyOiOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722424358; c=relaxed/simple;
-	bh=G+Zpz6SvXzu6f4JKhaVaaYDOnPvcxPO1X6/kJAHyN/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VtnnLpthk9wfoQvM02czPBz/QnGfZg5UxoSSyKtS2VYvj/SNgqJZrfSUrFl0IMu0SylQKt1U1ntDXI8QlhcR0BmD41oQBe86mJvge8KeKBNO/mLsJBszthQJPLUEhgh3q0iiLAk9QqYUHkIYPDBMPEJCWWgWmPIjqEoGxmNZYqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OBsUbzxW; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722424357; x=1753960357;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=G+Zpz6SvXzu6f4JKhaVaaYDOnPvcxPO1X6/kJAHyN/U=;
-  b=OBsUbzxWgCptOsgDMVqydsPUWdxo9adzgPkzEPi4A29UqguT5U7z2910
-   +oUJvii9zRuS5C/fSx9xMPTdm0g7fHmbn4jRD6SMprNZD/M8BGMMw5d8v
-   ZOcnKXUTB+dFTKLvNK4UdUQlgA0O7c7PDmzaVgc3hU109znRkzuWIooi3
-   Vwi0qeBKR/cV0qtqnBqsQhWzeACVEcT+ONfSBChkBpkeqhD0kPEd+z05B
-   ah8IDN38kie/xZ/Q1sMTQ1/v8Ybxigttp5iNX8/TH6oTjnXvMF53N1wUd
-   hh1PB0sJaspZSQnDv087/MN39y1UUj19Qrz27u9J3tzGSzcCI3JOi7AWm
-   g==;
-X-CSE-ConnectionGUID: yuiqsuVaQjGw0FWdfGiilQ==
-X-CSE-MsgGUID: ow6DHgrcSpGDzkWK/HcAHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="31445150"
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="31445150"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 04:12:36 -0700
-X-CSE-ConnectionGUID: am95G9WIR/KXaeH3jJvrEQ==
-X-CSE-MsgGUID: cTQXCV2PR4Ktsn8OtMxmkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="85290213"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa002.jf.intel.com with SMTP; 31 Jul 2024 04:12:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 14:12:31 +0300
-Date: Wed, 31 Jul 2024 14:12:31 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Will McVicker <willmcvicker@google.com>,
-	Badhri Jagan Sridharan <badhri@google.com>, kernel-team@android.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/15] usb: typec: tcpm/tcpci_maxim: simplify clearing of
- TCPC_ALERT_RX_BUF_OVF
-Message-ID: <ZqocH1QlwUnvN00n@kuha.fi.intel.com>
-References: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
- <20240710-tcpc-cleanup-v1-9-0ec1f41f4263@linaro.org>
+	s=arc-20240116; t=1722424433; c=relaxed/simple;
+	bh=k85fIEDQsiqzt/RqUNSYKo+/sV4yzirvaADWzzxO5Lg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CGh36IuaNUcP0MgrISS8QDqQwU6DDZRonhkW2dz+oQEJ5+INa4FIAkyPz+XEj4oN4xHqNS9faApfyTEPuprD5nHtE7CG0ScOgG7z9qkaxGwo9NAiUXxMPjejNAmuZH2TOj/XkufhwmEC5VwvGb0r0GwbulhCJChFJLPSSXjQwSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IqAYGOpX; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a7abf92f57bso724526966b.2
+        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 04:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722424430; x=1723029230; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OlLQXU1YYTz38Qbe2t9ZiljMXVGAE2UwbufdyYLNy6A=;
+        b=IqAYGOpXOaCP9qYaPuQM6sZhAx0eq2hFGtZGAvbBxp4mTSrxH7dEK8BFcbpvoKF26Y
+         ecwVwtnEfDDh5Gl+X1GdEvLxmHvO8EoqPH6TdWAbJymnb2S/87eO2RAQ8GQbbPT5aigT
+         YJ29Hd9nZtypqv85TEA5IM6Y89PuSnM1FBgWJlLPeX1maTJ8CYjRN4/TqB+CZMQP/wM3
+         xCBlYIB7MJlq2pNbmGwFFTOIcjzdKbs9fX8yTJI5I5m9BzAJqIrsozWnG1ftS259vGdz
+         RaVbyrRV1JzpBPjs3Qx+cX+R+Ev7VFHyXQzMPnAAavdjDl8yD/rDhnV0tfdHjodAn3dI
+         sbaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722424430; x=1723029230;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OlLQXU1YYTz38Qbe2t9ZiljMXVGAE2UwbufdyYLNy6A=;
+        b=ZrofXqAF+rA3w+vJ+3gjVjN0zll9qtFiWLp9GixCWhPdsTNi3lQ3aVN0OjQXOiJkaO
+         d03xIqGrSQhCJytndK51MyHjmdXuENxBMOrXvC2dq9cnO4wN48/PuiGGVwNWvhN1DC6P
+         vOLF6aJIOzR3JfstCom3VkstO2Mo71BAQTUnv2G0RGO4i7o8uWS3Y1KQs5hX/3IuJ5ZE
+         zpAflJmjioEwEf9RbTjzi570GSp2zk1Kzt5fgUCKpwkfWqHFAtwa4g7Q2ePa1G6PbmtX
+         xv+e+XR6t3303vSWgGLO/WD3WmuL76M/e3UW9j2qerF9TDrjZ6TfKnfm+n686KwOE4Vl
+         SnVw==
+X-Forwarded-Encrypted: i=1; AJvYcCWENKiXMpaxNBT0AWOxUWoF52dq2iIjWuXFPtGm9Xrht9BNBMcTg7gSphJzle/4UrekVigp5DyN8DVGgOk3ofxSum3K4Zpksulv
+X-Gm-Message-State: AOJu0Yw8d23OJgsU0TiUzNp52iUB4eGXYpS4PAeanihsj52XFM0JOhr8
+	wgDM4iZn+1lHImHMMt2VlnqJpeX8leQqj6y4TzAl25GMoon3ENy/nCd2fc0NZOg=
+X-Google-Smtp-Source: AGHT+IHGjJTeTxJqEgwE71cEFYOEfZQxduOvoGQx3kI/0iNz9R/KYl4BEutWT+YryytsPXhOaeT02g==
+X-Received: by 2002:a17:907:7205:b0:a7a:9144:e23a with SMTP id a640c23a62f3a-a7d40129016mr1005259366b.43.1722424429589;
+        Wed, 31 Jul 2024 04:13:49 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:aa0d:be00::7424? ([2a02:8109:aa0d:be00::7424])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acadb9819sm752741466b.205.2024.07.31.04.13.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Jul 2024 04:13:49 -0700 (PDT)
+Message-ID: <023d4ea8-635d-435f-bae2-87284f70123b@linaro.org>
+Date: Wed, 31 Jul 2024 13:13:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240710-tcpc-cleanup-v1-9-0ec1f41f4263@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/8] Enable EUD on Qualcomm sm8450 SoC
+To: Elson Roy Serrao <quic_eserrao@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, gregkh@linuxfoundation.org
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
+Content-Language: en-US
+From: Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20240730222439.3469-1-quic_eserrao@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 10, 2024 at 11:36:16AM +0100, André Draszik wrote:
-> There is no need for using the ternary if/else here, simply mask
-> TCPC_ALERT_RX_BUF_OVF as necessary, which arguably makes the code
-> easier to read.
-> 
-> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+Hi,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On 31/07/2024 00:24, Elson Roy Serrao wrote:
+> The Embedded USB Debugger (EUD) is a mini High-Speed USB on-chip hub to
+> support the USB-based debug and trace capabilities on Qualcomm devices.
+> The current implementation lacks in below aspects that are needed for
+> proper EUD functionality.
+> 
+> 1.) HS-Phy control: EUD being a HS hub needs HS-Phy support for it's
+>      operation. Hence EUD module should enable/disable HS-phy
+>      accordingly.
+> 	
+> 2.) Proper routing of USB role switch notifications: EUD hub is physically
+>      present in between the USB connector and the USB controller. So the
+>      usb role switch notifications originating from the connector should
+>      route through EUD. EUD also relies on role switch notifications to
+>      communicate with the USB, regarding EUD attach/detach events.
+> 
+> This series aims at implementing the above aspects to enable EUD on
+> Qualcomm sm8450 SoC.
 
-> ---
->  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
+Are there any plans to make this feature available for folks outside of 
+Qualcomm / an NDA?
+
+There is an openOCD fork on CodeLinaro but it still requires some 
+proprietary library which is only available to folks with a quicinc 
+email as I understand it.
+
+Kind regards,
+
+~ someone eager for JTAG access
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> index ad9bb61fd9e0..5b5441db7047 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> @@ -193,9 +193,8 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
->  	 * Read complete, clear RX status alert bit.
->  	 * Clear overflow as well if set.
->  	 */
-> -	ret = max_tcpci_write16(chip, TCPC_ALERT, status & TCPC_ALERT_RX_BUF_OVF ?
-> -				TCPC_ALERT_RX_STATUS | TCPC_ALERT_RX_BUF_OVF :
-> -				TCPC_ALERT_RX_STATUS);
-> +	ret = max_tcpci_write16(chip, TCPC_ALERT,
-> +				TCPC_ALERT_RX_STATUS | (status & TCPC_ALERT_RX_BUF_OVF));
->  	if (ret < 0)
->  		return;
->  
-> @@ -297,9 +296,8 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
->  	 * be cleared until we have successfully retrieved message.
->  	 */
->  	if (status & ~TCPC_ALERT_RX_STATUS) {
-> -		mask = status & TCPC_ALERT_RX_BUF_OVF ?
-> -			status & ~(TCPC_ALERT_RX_STATUS | TCPC_ALERT_RX_BUF_OVF) :
-> -			status & ~TCPC_ALERT_RX_STATUS;
-> +		mask = status & ~(TCPC_ALERT_RX_STATUS
-> +				  | (status & TCPC_ALERT_RX_BUF_OVF));
->  		ret = max_tcpci_write16(chip, TCPC_ALERT, mask);
->  		if (ret < 0) {
->  			dev_err(chip->dev, "ALERT clear failed\n");
+> Elson Roy Serrao (8):
+>    dt-bindings: soc: qcom: eud: Add phy related bindings
+>    dt-bindings: soc: qcom: eud: Add usb role switch property
+>    dt-bindings: soc: qcom: eud: Add compatible for sm8450
+>    arm64: dts: qcom: sm8450: Add EUD node
+>    arm64: dts: qcom: Enable EUD on sm8450 hdk
+>    usb: misc: eud: Add High-Speed Phy control for EUD operations
+>    usb: misc: eud: Handle usb role switch notifications
+>    usb: misc: eud: Add compatible for sm8450
 > 
-> -- 
-> 2.45.2.803.g4e1b14247a-goog
+>   .../bindings/soc/qcom/qcom,eud.yaml           |  17 +++
+>   arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |  15 ++-
+>   arch/arm64/boot/dts/qcom/sm8450.dtsi          |  29 ++++
+>   drivers/usb/misc/qcom_eud.c                   | 125 +++++++++++++++---
+>   4 files changed, 164 insertions(+), 22 deletions(-)
+> 
 
 -- 
-heikki
+// Caleb (they/them)
 
