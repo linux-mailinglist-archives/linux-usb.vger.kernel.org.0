@@ -1,136 +1,160 @@
-Return-Path: <linux-usb+bounces-12759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F52C943896
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 00:06:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC849438C5
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 00:23:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81771B2125A
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 22:06:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B908A1F227CF
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 22:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF8716D306;
-	Wed, 31 Jul 2024 22:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB1216D9A0;
+	Wed, 31 Jul 2024 22:23:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="NjFKwqiM"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="O67F40qK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A450160860
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 22:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F6914B097;
+	Wed, 31 Jul 2024 22:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722463596; cv=none; b=C8CR/IYCq1O6f67FNw+30qQyBcWRSPRJ4xzTGH6gWwOaUYZzAbDv/1nyuRoI8/6gRzdkxeQRTZmhlEdkLRjbobgp6tufQ8ExQ/Xurj0siuHSh1hCsJpZYFYBaje3cSifKvruKuSG1xcEmrVT/XCsvoGiY9qAZW8UZlh9TJIHHWY=
+	t=1722464627; cv=none; b=OXH6rxcjbJoMGyYU51zxc4puzJeYkxi4hkPsR77g6HuckBYzWrKtOMIoXhRw+WNCRGPq88kHvtRqKzGfDQiQ+nzLTQyp8n232YTRFcw85PinwAHrLAq9/4f7HHZbK3vt4F0V++uX+bmMCJafdyLESm67Y/pZN7bFYF2QaVTuc0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722463596; c=relaxed/simple;
-	bh=4e1ibNxz18HdrbD261xViMv+ZXOEo2yBY/zjy/xepNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wiy7oyu9TXj0RfTOlOH2HkE7r11df+G1nV2QsmFWG53G6fnHLz8kQu4V1z9oniI0tmg+FfU1a7FvPE6oxJ7o5pad1IheF1Vr4m4+Ijy9n6U5DqVtmhISNrPQCM/Ct13AlUqjla5nCofQss5J1iniBlDOuJ7Agrn7TwOn5jNJWwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=NjFKwqiM; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=k4zP5egedQTvJD9ozuAOE9DebhgTotwy5f+reJwXWHs=; b=NjFKwqiMBfLHFcuTjEa140zEKw
-	IWFkdFHSRrUl6GTZVbS6lvdVBOXGIYsRwNtfrSXjFd963e9HIdssIvfUm51nY6VZLYyfplxlJsy4E
-	prhdCFahZtw8kgIntymHksO64WtzEWAdK2HlHOV+wowelcSTalVjUR0g1GoIZSvgUPPXfKxSVQYUu
-	FE4ncQZlxkjHoOVGsL808VjRmGmheNYV3gRZWMHPChPEmxjyzMS/c6JTSJYaHelgPo/OuZPUPRtO1
-	G2Ok8pxnH5HsR9qdN9Vvancz9NUEUnOCoo58p2RbnQSXW1zNhX2vsuMDqvhX2ZsIpwK2HxzL+TBJW
-	XhpYkNGQ==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <kibi@debian.org>)
-	id 1sZHSh-00DE7Q-1r; Wed, 31 Jul 2024 22:06:23 +0000
-Date: Thu, 1 Aug 2024 00:06:20 +0200
-From: Cyril Brulebois <kibi@debian.org>
-To: Ben Hutchings <ben@decadent.org.uk>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] xhci-pci: Make xhci-pci-renesas a proper modular
- driver
-Message-ID: <20240731220620.sdammhk7t7od3mil@mraw.org>
-Organization: Debian
-References: <2024073145-curdle-bronco-b9ca@gregkh>
- <ZqqfXYRJf7kGaqus@decadent.org.uk>
+	s=arc-20240116; t=1722464627; c=relaxed/simple;
+	bh=z6H5tFh1Aufazvx/eFbP7xt7kaAfNxBzeV6eYKOelBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gA9zFAtMWkOJub0uinfLSG9KT7fTZB5BhPgetV+LD/ScQleaeinyFO+ove87oqnHfOcvWr1ZNU3buD8HKGZrkXUKDzH+ujzQZFRqRTA6kaMN4WUG+Uz4UUaIHbWpqrpv9rsHGBiuAxqHMiVCOKxrKR9it2hzT9ZhMy7vO4ADYO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=O67F40qK; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46VF2WXw021468;
+	Wed, 31 Jul 2024 22:23:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ddH6laZ2pexW5QiM4y38joJdoWY6zPfghYfEPEbMvOg=; b=O67F40qK7Rfo9thi
+	EcyJlgzc/6fWFFATkATutOS2TYREteSMem8VPXiKukLGH3PihvpZAWlnARV/+HbU
+	bl/BGZiDHsHaT7RdLP045ZYlp8dJx52kz1Ttqr1y/YAtNyxQBeU/Ngp6ekucrF3h
+	Br6bWfkIlDEp/f/nldYYGFnNMODuIxsjR884VZA1byGmiTxKzndjLrWJN4bDZ+OP
+	apLBz8jNxH57F5Vrv2pxM3Slne0v+usPWewA69nKAXdS5/GpiH0ImDj9yEBbelg9
+	f2QjuqlQFFlsyOj+U+0R9iD7oWBRaDi9MGvldw7LgybTxCZWqOb8aXOP+W7/cgqx
+	mdQ1kA==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40ms43ckyv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 31 Jul 2024 22:23:41 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46VMNeLx002440
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 31 Jul 2024 22:23:40 GMT
+Received: from [10.110.31.235] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 31 Jul
+ 2024 15:23:39 -0700
+Message-ID: <5275651f-4075-4dac-bba0-da88f5836459@quicinc.com>
+Date: Wed, 31 Jul 2024 15:23:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jwm6p3gaobkce5a7"
-Content-Disposition: inline
-In-Reply-To: <ZqqfXYRJf7kGaqus@decadent.org.uk>
-X-Debian-User: kibi
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/8] dt-bindings: soc: qcom: eud: Add phy related bindings
+To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>
+CC: <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
+ <20240730222439.3469-2-quic_eserrao@quicinc.com>
+ <63cf3198-fb79-466f-b80a-024e970e400a@kernel.org>
+Content-Language: en-US
+From: Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <63cf3198-fb79-466f-b80a-024e970e400a@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oBS6PGTghsTYn5rh5NLrxG9hCW6HQ4K0
+X-Proofpoint-ORIG-GUID: oBS6PGTghsTYn5rh5NLrxG9hCW6HQ4K0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-31_10,2024-07-31_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 phishscore=0 priorityscore=1501
+ clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407310157
 
 
---jwm6p3gaobkce5a7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Ben Hutchings <ben@decadent.org.uk> (2024-07-31):
-> v2:
-> - Fix definition of xhci_pci_probe() to remain static
-> - Rebase onto v6.11-rc1
+On 7/30/2024 10:33 PM, Krzysztof Kozlowski wrote:
+> On 31/07/2024 00:24, Elson Roy Serrao wrote:
+>> Embedded USB Debugger(EUD) being a High-Speed USB  hub needs
+>> HS-Phy support for it's operation. Hence document phy bindings
+>> to support this.
+>>
+>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+> 
+> A nit, subject: drop second/last, redundant "bindings". The
+> "dt-bindings" prefix is already stating that these are bindings.
+> See also:
+> https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+> 
+Ack
+>> ---
+>>  .../devicetree/bindings/soc/qcom/qcom,eud.yaml       | 12 ++++++++++++
+>>  1 file changed, 12 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>> index f2c5ec7e6437..fca5b608ec63 100644
+>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>> @@ -29,6 +29,14 @@ properties:
+>>      description: EUD interrupt
+>>      maxItems: 1
+>>  
+>> +  phys:
+>> +    items:
+>> +      - description: USB2/HS PHY needed for EUD functionality
+>> +
+>> +  phy-names:
+>> +    items:
+>> +      - const: usb2-phy
+>> +
+>>    ports:
+>>      $ref: /schemas/graph.yaml#/properties/ports
+>>      description:
+>> @@ -48,6 +56,8 @@ properties:
+>>  required:
+>>    - compatible
+>>    - reg
+>> +  - phys
+>> +  - phy-names
+> 
+> That's an ABI break and nothing in commit msg justified it.
+> 
 
-Tested-by: Cyril Brulebois <cyril@debamax.com>
+Hi Krzysztof
 
-On top of 21b136cc63d2a9ddd60d4699552b69c214b32964, starting from a
-distribution-oriented .config (Debian's 6.10-1~exp1 arm64 package),
-default answers to oldconfig, adding CONFIG_USB_XHCI_PCI_RENESAS=3Dm
-afterwards.
+Thank you for the review.
+I see that the only user for EUD as of now is QC sc7280 SoC where phy property
+is missing and EUD node is disabled. As described in my cover letter, HS phy
+support is needed for EUD functionality and this is applicable to all SoCs
+where EUD is to be enabled. Hence phy would be a required property.
+Given that the changes in this series are directly applicable to sc7280 as well,
+I will re-enable/rectify EUD feature on sc7280 SoC first, by adhering it to this binding
+requirement. That would address the ABI break. 
+Once the base framework is set I shall extend it to sm8450 SoC.
 
-On the hardware side: Raspberry Pi CM4 Lite on a CM4 IO Board, with two
-(slightly) different Supahub PCIe-to-quad-USB cards (006 and 006S),
-everything is good with the firmware available. Otherwise this happens:
-
-[    8.037155] xhci-pci-renesas 0000:01:00.0: failed to load firmware renes=
-as_usb_fw.mem, fallback to ROM
-[    8.046687] xhci-pci-renesas 0000:01:00.0: xHCI Host Controller
-[    8.052712] xhci-pci-renesas 0000:01:00.0: new USB bus registered, assig=
-ned bus number 1
-[   27.944117] xhci-pci-renesas 0000:01:00.0: can't setup: -110
-[   27.949903] xhci-pci-renesas 0000:01:00.0: USB bus 1 deregistered
-[   27.956121] xhci-pci-renesas 0000:01:00.0: init 0000:01:00.0 fail, -110
-[   27.962837] xhci-pci-renesas 0000:01:00.0: probe with driver xhci-pci-re=
-nesas failed with error -110
-
-(No onboard ROM on those.)
-
-Thanks, Ben!
-
-
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
-
---jwm6p3gaobkce5a7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmaqtVgACgkQ/5FK8MKz
-VSC2LxAAgqtEReWk6rdhyb2S7dFm2zC5TJVKWaeVgP7dhMNo58Tw4T7Jg7m8dOnm
-sDdOpfETFoUNpi4rPOD6lTk2PMv0IEeddrTKq7pBxCbtwuhkWUwcYQ1+ClOgPJKm
-jz5Cng3p3cEAh/802AUHTeHuQOby0BFq5CIbRsGBJ5Miw0K5HrZ6ddFvSarm3Ji6
-XIGeReeY44mtGr6+Zwdx4Md0cg0jdy4vxG0UMuCZdXacEtgPnK1stG+cXbVUVO3t
-4d1YyHB9CoSOFCk9NkqRe8FW3kxAANXjqRUQ2pmtztFj3T89lLH8bvzVE5BqgfUh
-wC4Fum39CjCutseXQEDpAzCBzJahBywXUVMu/hy6GL7M/X4kA2NlawyF8qWCBsgt
-7LyWtvJ26/OD89ux8shLWAiUtCFBgDVRo/NKYSWIxNej4hpu/3IMdnccvXPTGvsh
-aTOPHu79UmEnnMslqPieOliawlsOrH5AafMSnofF5sFsGnbHHD0jjIlFLb4WU4A+
-f+RW0zJr8Yrmqiubl5jRC0iZ5KcqyniSApAESu2Fh6QxWVswcwxY/BLnViI8zr9X
-fxi3TBqBKsT65x2McbPY841wwk1f1IfyJ/ZlInKCUu8RS9BHn3mQ6QIK6KTbB2qR
-ufesPhVcdpOJOkSK1ZLebO90HdHhqWwUVBafWXJ5sL6mw7iSc1E=
-=Ckck
------END PGP SIGNATURE-----
-
---jwm6p3gaobkce5a7--
+Regards
+Elson 
 
