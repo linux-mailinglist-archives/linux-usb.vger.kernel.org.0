@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-12717-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12718-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31ACD942EC3
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 14:40:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45A4A942EDE
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 14:44:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62B441C2109A
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:40:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73DCA1C21A2D
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 168991AED40;
-	Wed, 31 Jul 2024 12:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C504C1B0106;
+	Wed, 31 Jul 2024 12:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PtOH50iZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cS9EDuNb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125BB193072;
-	Wed, 31 Jul 2024 12:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB0E1AD9E2;
+	Wed, 31 Jul 2024 12:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722429616; cv=none; b=XiF819noTzF+/3q5u8v0MbkYFECAxlSVmG0bMq2fB9zuRi6OlH08Kzm07KgTzD2+RDfoXuIyIwf4T3SDKWFMeAewgOPeVVtCNkXwwByzqrV+/3IAFsf8PtzJBfVwdYh2IBEVnbfDvsvJ2RZ0XqxQYkQPSSSeG6lPPEWOEL5YAQo=
+	t=1722429880; cv=none; b=XYpuIE7tU07YOTXqELmrePkdKzc8FykcEHoYDXrtrcpXo8j2wgm2gFHA620hpdoCovk0P3n9nKEayyeZwNw+Qve+6osJdTHPMH8dZuKw1GfnQNex/cqrHbYArP6ZkcMmJogaLVyCfrv9qBRHfSpRrshUw4ux8htpg7mdhEShSfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722429616; c=relaxed/simple;
-	bh=FxnlBgihM1imi374ks+zuT2HnkmBCvGd1ZVIuKGBOGs=;
+	s=arc-20240116; t=1722429880; c=relaxed/simple;
+	bh=Cwz+QtLftS/QkuafeTQUXUhEuELNtJHVS/tIfm+Fg8o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=icemep5OyyL7wwPdzFBgnDiNBLCTnuqMdAfOHjM3XtJn1AUxP1nHADBIMBu5vhfdvuLMHJ29pB675h1p+E6zFLxqECq+lWUKI0JFsfCYjv1vSWAnwf1wvzxK/Hv2u07cLmQBkfsA7MyjIzxU1oIv0jscnbrIDmhvYkY1etEOO10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PtOH50iZ; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=BclPCIw34XRaB7Z5Gs4h4F8PFfjaZ+wgvvVDAzEgVdL5IehgXTXVHXcihha3/swJxFiTxSUmLMVOOzPG2/gcx0Peyuldje0N1KfHNXyHgyCyYuABHxFGcWCztyvGDzWa6h8tmRZksX2ib72PEcw3104nfHTMiULybO3zwtOBi0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cS9EDuNb; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722429615; x=1753965615;
+  t=1722429879; x=1753965879;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=FxnlBgihM1imi374ks+zuT2HnkmBCvGd1ZVIuKGBOGs=;
-  b=PtOH50iZ+hmuaNfAzMnpW2gOPCOJ0vHq+IfzYzTQcc+cTJUdd3733KJE
-   +BVbw/Gi1nxUzcLPKp30TWMMDGVRq8Qs+zJD6xHeBviKwLHpspQ+/Ybdg
-   qARX9/Fx4AFuJ2rHygWbKlVndOAamevCWu95p29nMU5zMu4RXAQWuYbkM
-   zNsMFok3CVQYE+AF+/+4lZKmO61ppCFpl9tZauZeIfFk3/bHnMTWymg7v
-   dxK2c97KEL1V9XVUk+lg8Bk4wLgCZ9QE5OvVQe0W2K1LUSb0T1Tc5aSAH
-   ymi/WVgoN9POkTE1wzpbCHnAJ+x+5zFWTCOZSJTOF1wrP8lmJHvetHJAj
-   Q==;
-X-CSE-ConnectionGUID: zSmxhF/bTMG3nnNsAouwgQ==
-X-CSE-MsgGUID: Lumhl1aiR9aXKe1y0pUeKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="19997297"
+  bh=Cwz+QtLftS/QkuafeTQUXUhEuELNtJHVS/tIfm+Fg8o=;
+  b=cS9EDuNbyg8S92v3kRXdZv5lFJ6G08ZM/uYqfeiQo5le7o9b0ily9Jdw
+   gdfgrqXyC42ywYIKy/JBCO63LZp99Uhny9mS0mNO3Dtu6iV+l8A0oJ/cq
+   zUYotGTYrTQFyWRvqGLULl3qJu2SQzUwSAAFEPh6Pra/Bnes1oSoPBx1I
+   VE8gY/C5MD8sTDCUwmdeswKxB7xO33W7HT2wQg9T/Mt4AZvjPB6dabQ76
+   OXWj6oAiib+DBj3XJiK8ISyeCYtSjDwGmIkz9yADmxRLYZJA/fuwogRfm
+   3x19QLmqbDljcJLE13CUigmkdc6NhESbPBDbpFzDq/IYh04LwY2HAs/k6
+   A==;
+X-CSE-ConnectionGUID: VbAYOG2PS8qmey8IZloz1Q==
+X-CSE-MsgGUID: ebyyrAbSQOKpdmXHAltgfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="24066509"
 X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="19997297"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 05:40:14 -0700
-X-CSE-ConnectionGUID: m5w0EDkCSUeFWTlspJ8+Vg==
-X-CSE-MsgGUID: 58Ks5F4tR1KTLrlu2NYIzQ==
+   d="scan'208";a="24066509"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 05:44:38 -0700
+X-CSE-ConnectionGUID: vspoSkLWQTKnr+FRvi7VPg==
+X-CSE-MsgGUID: LjB2yxjURumhSnPj0/x0nA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="58997853"
+   d="scan'208";a="59736602"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa005.fm.intel.com with SMTP; 31 Jul 2024 05:40:11 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 15:40:10 +0300
-Date: Wed, 31 Jul 2024 15:40:10 +0300
+  by orviesa004.jf.intel.com with SMTP; 31 Jul 2024 05:44:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 15:44:33 +0300
+Date: Wed, 31 Jul 2024 15:44:33 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,11 +68,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Will McVicker <willmcvicker@google.com>,
 	Badhri Jagan Sridharan <badhri@google.com>, kernel-team@android.com,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/15] usb: typec: tcpm/tcpci_maxim: use GENMASK() for
- TCPC_VENDOR_ADC_CTRL1 register
-Message-ID: <Zqowqn5hkkZucJ8r@kuha.fi.intel.com>
+Subject: Re: [PATCH 14/15] usb: typec: tcpm/tcpci_maxim: convert to
+ dev_err_probe()
+Message-ID: <Zqoxse2smUiQjcUy@kuha.fi.intel.com>
 References: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
- <20240710-tcpc-cleanup-v1-13-0ec1f41f4263@linaro.org>
+ <20240710-tcpc-cleanup-v1-14-0ec1f41f4263@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,61 +82,75 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240710-tcpc-cleanup-v1-13-0ec1f41f4263@linaro.org>
+In-Reply-To: <20240710-tcpc-cleanup-v1-14-0ec1f41f4263@linaro.org>
 
-On Wed, Jul 10, 2024 at 11:36:20AM +0100, André Draszik wrote:
-> Convert register TCPC_VENDOR_ADC_CTRL1 to using GENMASK() and
-> FIELD_PREP() so as to keep using a similar approach throughout the code
-> base and make it arguably easier to read.
+On Wed, Jul 10, 2024 at 11:36:21AM +0100, André Draszik wrote:
+> dev_err_probe() exists as a useful helper ensuring standardized
+> error messages during .probe() and using it also helps to make
+> the code more legible.
+> 
+> Use it.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/maxim_contaminant.c | 7 ++++---
->  drivers/usb/typec/tcpm/tcpci_maxim.h       | 3 +--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 21 +++++++++++----------
+>  1 file changed, 11 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> index cf9887de96c9..7bfec45e8f4f 100644
-> --- a/drivers/usb/typec/tcpm/maxim_contaminant.c
-> +++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> @@ -76,8 +76,8 @@ static int max_contaminant_read_adc_mv(struct max_tcpci_chip *chip, enum fladc_s
->  	int ret;
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> index 5b5441db7047..ee3e86797f17 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> @@ -484,17 +484,17 @@ static int max_tcpci_probe(struct i2c_client *client)
 >  
->  	/* Channel & scale select */
-> -	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCINSEL_MASK,
-> -				 channel << ADC_CHANNEL_OFFSET);
-> +	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCINSEL,
-> +				 FIELD_PREP(ADCINSEL, channel));
+>  	chip->client = client;
+>  	chip->data.regmap = devm_regmap_init_i2c(client, &max_tcpci_regmap_config);
+> -	if (IS_ERR(chip->data.regmap)) {
+> -		dev_err(&client->dev, "Regmap init failed\n");
+> -		return PTR_ERR(chip->data.regmap);
+> -	}
+> +	if (IS_ERR(chip->data.regmap))
+> +		return dev_err_probe(&client->dev, PTR_ERR(chip->data.regmap),
+> +				     "Regmap init failed\n");
+>  
+>  	chip->dev = &client->dev;
+>  	i2c_set_clientdata(client, chip);
+>  
+>  	ret = max_tcpci_read8(chip, TCPC_POWER_STATUS, &power_status);
 >  	if (ret < 0)
->  		return ret;
+> -		return ret;
+> +		return dev_err_probe(&client->dev, ret,
+> +				     "Failed to read TCPC_POWER_STATUS\n");
 >  
-> @@ -96,7 +96,8 @@ static int max_contaminant_read_adc_mv(struct max_tcpci_chip *chip, enum fladc_s
+>  	/* Chip level tcpci callbacks */
+>  	chip->data.set_vbus = max_tcpci_set_vbus;
+> @@ -511,10 +511,10 @@ static int max_tcpci_probe(struct i2c_client *client)
+>  
+>  	max_tcpci_init_regs(chip);
+>  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
+> -	if (IS_ERR(chip->tcpci)) {
+> -		dev_err(&client->dev, "TCPCI port registration failed\n");
+> -		return PTR_ERR(chip->tcpci);
+> -	}
+> +	if (IS_ERR(chip->tcpci))
+> +		return dev_err_probe(&client->dev, PTR_ERR(chip->tcpci),
+> +				     "TCPCI port registration failed\n");
+> +
+>  	chip->port = tcpci_get_tcpm_port(chip->tcpci);
+>  	ret = max_tcpci_init_alert(chip, client);
 >  	if (ret < 0)
->  		return ret;
+> @@ -526,7 +526,8 @@ static int max_tcpci_probe(struct i2c_client *client)
+>  unreg_port:
+>  	tcpci_unregister_port(chip->tcpci);
 >  
-> -	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCINSEL_MASK, 0);
-> +	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCINSEL,
-> +				 FIELD_PREP(ADCINSEL, 0));
->  	if (ret < 0)
->  		return ret;
+> -	return ret;
+> +	return dev_err_probe(&client->dev, ret,
+> +			     "Maxim TCPCI driver initialization failed\n");
+>  }
 >  
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> index 34076069444f..a41ca9e7ad08 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> @@ -37,8 +37,7 @@
->  #define WTRCYCLE_4_8_S                          1
->  
->  #define TCPC_VENDOR_ADC_CTRL1                   0x91
-> -#define ADCINSEL_MASK                           GENMASK(7, 5)
-> -#define ADC_CHANNEL_OFFSET                      5
-> +#define ADCINSEL                                GENMASK(7, 5)
->  #define ADCEN                                   BIT(0)
->  
->  enum contamiant_state {
+>  static void max_tcpci_remove(struct i2c_client *client)
 > 
 > -- 
 > 2.45.2.803.g4e1b14247a-goog
