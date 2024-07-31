@@ -1,171 +1,138 @@
-Return-Path: <linux-usb+bounces-12741-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12742-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E1C9943449
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 18:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C5C0943508
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 19:30:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 028B21F21F78
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 16:43:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 430111F237A9
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 17:30:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D161E1BC09A;
-	Wed, 31 Jul 2024 16:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D3721BE227;
+	Wed, 31 Jul 2024 17:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="c8RvytmD"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="SoPRarwM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E761773A;
-	Wed, 31 Jul 2024 16:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653341BD50B
+	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 17:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722444213; cv=none; b=nP30SM80k5HY6BB2HRjIqOIERS/pGT0EKGj1gfgc0G802iRZXDBsR9zSlN0sYdJjUCUN9sSJ+tEUV8w5JrAhi8R53QyrRWIHKd9Sr3tf9B4XT33aj+93X4YGiXUx2/C1ijKkHYq3VakE/nv6+7DLBuvmPo95IwgPgGZRBcLsz+w=
+	t=1722447000; cv=none; b=JPw/qmJQCc6vc7i2R1rAzvssinzErz2Ko9+lUBx547jbt1hAcSAma2HJ7luCaH0E1cXMnP4VESHSPn65FVhMbvdm7bO9X1ot+dA1QfH88ThSDBnZZaALKaSFgmT/RNn/CEQPLEXmUDzdQUHw/AxhLokNskZwRxusSn+/CwFNNO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722444213; c=relaxed/simple;
-	bh=8ZYpBCvt2i0jwH+07fKHzqh9A/o3rs6M3lytTmw64OU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bWFZFTh2/6rMmO1WWraIV0kPNpAcn0n5S9AI5/OPueVZaxYnpgRpXl8xTqySmfaxnumALiQdHM4Ge5lT378gUHlNlUeqrNP+Yhul+qYwcqvzZLtJxJCoxFKbDHtnmtMvyPqG5em1XjBbCFSFB+JJCLalggk8sbi6V2D4X6uchOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=c8RvytmD; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1722444124; x=1723048924; i=wahrenst@gmx.net;
-	bh=8ZYpBCvt2i0jwH+07fKHzqh9A/o3rs6M3lytTmw64OU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=c8RvytmDsuGD1qMoRMvDVm7e/fkbnBmjPE6iU0f5DDrSFYq3l2taEY9LlZx9C0+d
-	 bWH23DxMuUoEg7H5tW2VvFFkfACu7O4iySXegxMLRuXScPlaHSwvxF/QzuT910sKb
-	 csYmZA+bQOW7YySAW9tn7lcOoe4nieXY6ZySeI+H0R1NhIr0/SxfGTV7Qege+9+gM
-	 2FC21m3U3QA2KF9+Ox1Cu4r3qCO4lIglILnHGQMgqiKKa0kyRV/aat1xZstBfO0va
-	 Mm2cpBAvBKsav5VcGhG0WRQ4x3Ts5QZt9CWjsqFloR1wfeufCeAGUM1wMINqDqFQC
-	 TZXbmWmLaVNSPWDLtA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTmO-1smru941VG-00OdA3; Wed, 31
- Jul 2024 18:42:04 +0200
-Message-ID: <b34cc73c-721f-48b6-a7a3-da8190d80dd8@gmx.net>
-Date: Wed, 31 Jul 2024 18:41:59 +0200
+	s=arc-20240116; t=1722447000; c=relaxed/simple;
+	bh=+WdOgppIBKd/amkMUnID1lOCik4HxEEkZwGvDDT4SBo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xgv8RgPybF8VkpiLIwCo1MXOzhc5JWIVjKGXzSq2DWEPmxPjkx8GjWg3Ax9zo9ME8zYYMTD6oggK6IziGrElnRnGcDFrYnnLxhRj8ZkqNsd9qyYvOmr8lJoWFWdT3TsuA79mN7RA/2vE6m50+mjJXjFnjYcQwCHKQ6JyggmAMPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=SoPRarwM; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-44ff7cc5432so41220261cf.3
+        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 10:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1722446997; x=1723051797; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m4KY8JEtInRy5xm4RIX3PTL4BAr3AAklSLy+uBqX6QE=;
+        b=SoPRarwMMxZgi7l3FVWylgo9zRI5oLCS7VRAbcQD3kuThwXVX/M02UUXBsLSGFdJXo
+         /r60f54al+3JcnfRj6XV59v3BfHAt4qkMR/gL8aDx1N6Pg2W/L5C9yRBkWi2Tp5RuVY3
+         uEPVTmKQCNC4sKTIJ0f/7be8dWJoHoen4y5sSyPmM0PXd/dZ9GrsvQSjWolLkb4C5HGV
+         Rbx8N6Me0J6bHm0bsD7TX8hAg69hi9n4bgZzqQKws6IxywfNluj+838Ycbd+M/ZzIUAd
+         NjMKoY9hCP6okkKA8Pim5pROLfja0kWA9sL6Y5LJKhXEykqjoXfVLJy62E5+rkfzWLZw
+         sOag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722446997; x=1723051797;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m4KY8JEtInRy5xm4RIX3PTL4BAr3AAklSLy+uBqX6QE=;
+        b=dG4iSWhiU00RnkHHq82ikyhcESTWf9g5WtvtcNQIvz65KPwkOwEKYYP+JRMeqvM4ZS
+         OJk95l9EbfHp1BBEw/9QEaNIVA1Z136UeZRarxiE5dZr9uMgrtvg6W2Be2o/KE69exUs
+         xbChpct5W8RCbjr8zUequ0IZH8DrDs3RKmZyMBmn7b/Si8B5F6w7MJgc7BQPPOi/YIrN
+         VNYISc4pvMUMAMmRcLXkcRmWNTzC1BulNB02H9NDoADEanO4E1hzgXstSm1jWRsKQ1Pn
+         nCyu1C4e7YzMXiVo7zqVjFX6taFap1gkUwT15IIrfHUBdETXDGl883+/s4lgIvQQY4k7
+         1JLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPUlq64USHJufV8JSiU9iU3sijNtNtEVjrEBmL68kzLoQUjLlXW8WA2FqviktNvjPkoDnXjnczl4GuCG+RQuNFnGVEDuEuvLAD
+X-Gm-Message-State: AOJu0YxoC7yDKKBe+qd4fCfoxZjz5qfOZ4n7eH8WymnMX2n0M3G/90Nn
+	exfwJXFaAI/xluK4GTmZBRwqHO1iF8ix7REiQtbbi8B41L3PhSWKiJ5uTuljxA==
+X-Google-Smtp-Source: AGHT+IFaLcLGhecfBpoLsXZxMwB3zjexCVb6+nQ4dHeejbB6qTpegfp5KXyGkHY31WGe4ABCodgceQ==
+X-Received: by 2002:a05:622a:19a0:b0:446:5787:875f with SMTP id d75a77b69052e-45004f1995amr192443891cf.38.1722446997206;
+        Wed, 31 Jul 2024 10:29:57 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44fe812350bsm61884421cf.9.2024.07.31.10.29.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jul 2024 10:29:56 -0700 (PDT)
+Date: Wed, 31 Jul 2024 13:29:54 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	syzbot <syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com>,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: [PATCH] media/usb/siano: Fix endpoint type checking in smsusb
+Message-ID: <51b854da-f031-4a25-a19f-dac442d7bee2@rowland.harvard.edu>
+References: <4442a354-87f1-4f7c-a2b0-96fbb29191d1@rowland.harvard.edu>
+ <0000000000009f6f85061e684e92@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 09/16] drm/vc4: v3d: simplify clock retrieval
-To: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
- Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-References: <20240728114200.75559-1-wahrenst@gmx.net>
- <20240728130029.78279-1-wahrenst@gmx.net>
- <581726ae-dd9c-476f-817d-4140f7217ec7@igalia.com>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <581726ae-dd9c-476f-817d-4140f7217ec7@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1XEsTB1Yz6QIrPhgICNBxgzWJsapsjgGiS8Z3LpAw8WaXEwOW8H
- TY9xd1Y3Gt7tRm7ZGLMeLmOzROUaIxpwJt5gUHRfyXmwKOwiWqOrIFF5feu4mDDpvkJ/WFT
- WBzaxf23DzYY/PwV5nRzoVuxFOniucW/r9qeA3IfdEfg38XlseYE+FAgSpvZt0Z92jsC05A
- ppO3hoEETMjbrYrWmgnBA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:0t+rf2WRA2Y=;g0vn5Zpq/535/wKbDqIMoQuhU4y
- Ugr6e6bL6utv6BqL127QxAh0QZZABiONwtJO1ZBk6Bt8ZoHiVzoDnvObxOxayOnHmXiqN2eI2
- An5IBhQkmy4iKB6LqZacKC5yjPZoOFLEpE/O8Rot9lNLj+yBldRNHhyPfrGjtQdsLpZtCShwL
- 3iKOsCTcWg3X5wWmOWvNlMl4SRYyEk0GOsyaiJ/beY33Q5e47o+6Z3mT97KVIeF7aR4rCRy9s
- hB0hOd9gtobYLuSeLFN2lf5mnVWnGdyKCF1a8q64GFk6F+/BJh5Nzd2VSeCLkG2AoJiW8dP/W
- 58Cy0F72IzBhpLQg/+DaadLHqePdvPx81lTB7Vu7jWIqDbaFGz/2w+aiCiBGOR7+rprYbFoRB
- oVhZCm6gXQoDwEie8AiPDT3DCrtz7/e8hTllEbKHWcdGoT/5Bq7MrOlkAiGi4pH08RvDxGn/y
- dMW/AWFGbVjaw4lVrVqjaevaDKLVN9A+WbV+jMCNsURJ6oAmxRNp9P6NyRA00+d90+M+QcqvJ
- P0fJbhCkoOeHQspJy/3sUEnPX1bEp2GNf4++0q8GMSvIghhJPvm58M9NBpH+uBgw7TPCuq2yP
- vqLFbH+l2NUeWCoQiQp4ZmXhdXzbm/n1ZtiXkbpNheSSkKD1pkR3qQB09dpiZtUNqhrz7drmv
- kU1nNHud2/HNIYLekf+tOsnJP8R/nPAHXbQrySkyMSjFUPITGFcyygwbwDn5iYR8a5IjuTRG/
- fxfNHwkr6o6wa76enkzqyEIy19WXCJ5ubjCW134abbyna8z4hR7Xr5GL5pmB/2Rt/FoNk/wu8
- 57E9E2fz8d9Gf7fLVcPGOEFg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000009f6f85061e684e92@google.com>
 
-Hi Ma=C3=ADra,
+The syzbot fuzzer reports that the smsusb driver doesn't check whether
+the endpoints it uses are actually Bulk:
 
-Am 30.07.24 um 13:23 schrieb Ma=C3=ADra Canal:
-> On 7/28/24 10:00, Stefan Wahren wrote:
->> Common pattern of handling deferred probe can be simplified with
->> dev_err_probe() and devm_clk_get_optional(). This results in much
->> less code.
->>
->> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
->> ---
->> =C2=A0 drivers/gpu/drm/vc4/vc4_v3d.c | 13 ++-----------
->> =C2=A0 1 file changed, 2 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c
->> b/drivers/gpu/drm/vc4/vc4_v3d.c
->> index 1ede508a67d3..4bf3a8d24770 100644
->> --- a/drivers/gpu/drm/vc4/vc4_v3d.c
->> +++ b/drivers/gpu/drm/vc4/vc4_v3d.c
->> @@ -441,20 +441,11 @@ static int vc4_v3d_bind(struct device *dev,
->> struct device *master, void *data)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vc4->v3d =3D v3d;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v3d->vc4 =3D vc4;
->>
->> -=C2=A0=C2=A0=C2=A0 v3d->clk =3D devm_clk_get(dev, NULL);
->> +=C2=A0=C2=A0=C2=A0 v3d->clk =3D devm_clk_get_optional(dev, NULL);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(v3d->clk)) {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret =3D PTR_=
-ERR(v3d->clk);
->>
->
-> Super nit: you could delete this line ^
-Can you please explain? ret is required for dev_err_probe or do you mean
-the empty line after the declaration?
->
-> Reviewed-by: Ma=C3=ADra Canal <mcanal@igalia.com>
->
-> Best Regards,
-> - Ma=C3=ADra
->
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret =3D=3D -ENOENT) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* =
-bcm2835 didn't have a clock reference in the DT. */
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret=
- =3D 0;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v3d=
-->clk =3D NULL;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if =
-(ret !=3D -EPROBE_DEFER)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 dev_err(dev, "Failed to get V3D clock: %d\n",
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret=
-urn ret;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return dev_err_probe(dev, r=
-et, "Failed to get V3D clock\n");
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D platform_get_irq(pdev, 0);
->> --
->> 2.34.1
->>
->
+smsusb:smsusb_probe: board id=15, interface number 6
+smsusb:siano_media_device_register: media controller created
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 42 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
+...
+Call Trace:
+ <TASK>
+ smsusb_submit_urb+0x288/0x410 drivers/media/usb/siano/smsusb.c:173
+ smsusb_start_streaming drivers/media/usb/siano/smsusb.c:197 [inline]
+ smsusb_init_device+0x856/0xe10 drivers/media/usb/siano/smsusb.c:477
+ smsusb_probe+0x5e2/0x10b0 drivers/media/usb/siano/smsusb.c:575
 
+The problem can be fixed by checking the endpoints' types along with
+their directions.
+
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-by: syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com
+Tested-by: syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/linux-usb/000000000000e45551061e558c37@google.com/
+Fixes: 31e0456de5be ("media: usb: siano: Fix general protection fault in smsusb")
+Cc: <stable@vger.kernel.org>
+
+---
+
+ drivers/media/usb/siano/smsusb.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Index: usb-devel/drivers/media/usb/siano/smsusb.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/siano/smsusb.c
++++ usb-devel/drivers/media/usb/siano/smsusb.c
+@@ -410,10 +410,10 @@ static int smsusb_init_device(struct usb
+ 		struct usb_endpoint_descriptor *desc =
+ 				&intf->cur_altsetting->endpoint[i].desc;
+ 
+-		if (desc->bEndpointAddress & USB_DIR_IN) {
++		if (usb_endpoint_is_bulk_in(desc)) {
+ 			dev->in_ep = desc->bEndpointAddress;
+ 			align = usb_endpoint_maxp(desc) - sizeof(struct sms_msg_hdr);
+-		} else {
++		} else if (usb_endpoint_is_bulk_out(desc)) {
+ 			dev->out_ep = desc->bEndpointAddress;
+ 		}
+ 	}
 
