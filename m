@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-12674-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12675-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DE2A9427E2
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 09:28:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65BD1942804
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 09:33:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF3041C22892
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 07:28:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DA3A1F2224A
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 07:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2D21A71FE;
-	Wed, 31 Jul 2024 07:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B751A721C;
+	Wed, 31 Jul 2024 07:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSmHMtv0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R3aGfT5d"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E212E7406D;
-	Wed, 31 Jul 2024 07:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B5F17580;
+	Wed, 31 Jul 2024 07:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722410881; cv=none; b=oJM9KHiDrizP6lGaoKfwE2ZAPn0ijyGnHu3NKnCDejtwU0tHXGxAJ6N9HGC55uwQOWq5jOJqmTITgisiiWVG7hUwAzqJifJpmpas5TgTWRePgWcvc3sMS/oYWkN33riegNSxcjGNSmBXtPjJXoFhYKX9MFiZPV2Zr3gb8CkZBgk=
+	t=1722411170; cv=none; b=uOJf7ubIsoTOeXNwk82WUbLybyopslScF3LpQk1tq5uFtM1Y813iHNIFuB3DaiN5HC1DVCkMH5oAFuPCmWXH+G19/q83kEULrBbuhZCulz2N3mpSCQ7Bg9xX4ibymvYBG1H+2L2kfvltYE/7xmMLZWZPBOcb4C2VNqSp6Jni16U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722410881; c=relaxed/simple;
-	bh=uzncT1fWeDYv8VW/YJfRWtlMzKkw0uvIIvubFjMgUtw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dBQ8uMEiZv1UBrPOyLY+0uyVX27mRZkYwI5B/Hzy76cbiE2gAnwP6osRLGPfAoRfPc2orD8sypPmCw/PN0BWDkP2h8h330uZOTWfHDIkpCXKwQMzsRBVbbkSEsrWLtsc9yptA44wBN5esI/8QESGdL5DMEDzAaWZsgYQ4nGMK8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSmHMtv0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6EFC116B1;
-	Wed, 31 Jul 2024 07:27:57 +0000 (UTC)
+	s=arc-20240116; t=1722411170; c=relaxed/simple;
+	bh=tEAJ+RxFDnmJrb00ivNy8MJ5AJq4LCNF9FtEx90iKis=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=b493DoC1x+CMtKrjUYHZUn3lvlh+xbWLhW54SXJ2CO6kXmQWzFoPzIySXfEF0rqb0hGXNZLoNbeKl9MunTAwtvghsX/kE70PuhGmE04jLT4WRYImRp5cUWEu7bGn8iuITBkFPo5dxKjd0VBUiF9Hbza69z6pnnH5wi163NXSKI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R3aGfT5d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4176AC4AF0C;
+	Wed, 31 Jul 2024 07:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722410880;
-	bh=uzncT1fWeDYv8VW/YJfRWtlMzKkw0uvIIvubFjMgUtw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lSmHMtv0Ib0GunLsVqDQGsPKaBp9N9cX3d7JwMHwr8FKyBdFS/LT515XheZYf08dy
-	 +Gh3q5HqiRdnRvE9gggUYcuCVvgnkhyie4Kwu1d0XdYB3zIUt2DqfgNcmaw7Q8JxQl
-	 xXOtORYGDBJjCg6dlhb2YxnfXsnbQsT4gHmOULyyr75Dok3DSD2tisSTI8kNgWerYq
-	 mknSplGXr8cfLXerlbYkTboGKQsdayzRz+JbCGwmClpzSfpKNvymIG6aFdnrKtcxAv
-	 2yXHTCX9H1s5TatNs+MoWl1UeEWANAywqBwbJF6Ps/2xL/m5mIexgs+geS0ErNT+G9
-	 k8dVJBZ7Lp3iw==
-Message-ID: <6728a670-84aa-4b1c-8aa5-1cde84b97adf@kernel.org>
-Date: Wed, 31 Jul 2024 09:27:54 +0200
+	s=k20201202; t=1722411169;
+	bh=tEAJ+RxFDnmJrb00ivNy8MJ5AJq4LCNF9FtEx90iKis=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=R3aGfT5d3jx0PQs5XzsVJ75+grDPjIZOBvMixjTFJ7refBpfOfUp3z+Zq7zsooxFE
+	 inoKCmfJmRW6/Axc9V2PFUTx3wU7Why5Jer5Zg1Q5GzOdcYMlJWPVJ9NihzgyCoZtH
+	 RwfSZ4aOGFfvkre0TOc8NCu7hoplI9a++YxEv2Fbas4wlAldIHZ1U/BygSi5wUZCzL
+	 R2QGrqQ8tjXh+0PwgXsmh1us2rIKdjjE0unEyOkjAEDrnn4uJKIVF5SFRuXF3I7CSJ
+	 FqkLWJxfG7jk11Yn+fJWnulZHCh90jITOucDx2xHQ7yJOSpBlZ07ZRHrNDRvtY5+wu
+	 WAZgk03yKoH4w==
+Message-ID: <54a4f7a5-6c56-48da-bc28-d01f39d9ec5b@kernel.org>
+Date: Wed, 31 Jul 2024 09:32:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,6 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/1] dt-bindings: usb: microchip,usb2514: Add USB2517
  compatible
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Alexander Stein <alexander.stein@ew.tq-group.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -59,7 +60,7 @@ To: Alexander Stein <alexander.stein@ew.tq-group.com>,
 Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240731071950.989113-1-alexander.stein@ew.tq-group.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <6728a670-84aa-4b1c-8aa5-1cde84b97adf@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -104,17 +105,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240731071950.989113-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <6728a670-84aa-4b1c-8aa5-1cde84b97adf@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 31/07/2024 09:19, Alexander Stein wrote:
-> USB2517 is a 7-port variant of this USB hub. Add an USB compatible
-> based on USB vendor & product ID.
+On 31/07/2024 09:27, Krzysztof Kozlowski wrote:
+> On 31/07/2024 09:19, Alexander Stein wrote:
+>> USB2517 is a 7-port variant of this USB hub. Add an USB compatible
+>> based on USB vendor & product ID.
+>>
+>> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 > 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Of course assuming there is some user? If so, where?
 
 Best regards,
 Krzysztof
