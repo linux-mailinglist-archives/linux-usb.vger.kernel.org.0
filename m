@@ -1,173 +1,129 @@
-Return-Path: <linux-usb+bounces-12713-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12714-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F1F1942E6B
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 14:29:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10CB0942E6C
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 14:29:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1961928AB70
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:29:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFC711F26E6F
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C471AED5A;
-	Wed, 31 Jul 2024 12:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28361B0103;
+	Wed, 31 Jul 2024 12:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EvhkjTlY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AvozGt9Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978A41AB53D
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 12:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996EA1AD410;
+	Wed, 31 Jul 2024 12:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722428943; cv=none; b=GjKGHtXe6vA34NscOy+rQMnc2VltIiFT+cyNMsLI2Q1vt8sPc47NIizLVW5pFHmTaZOjRaQxCGfQKFAAx/79KonDFyr3Q/3i3sifZbRVfKnBOqeyZJFOuD81aj89oDRO7pjfbGQ12lM08gPrH8PW+VUAvxjGDCznx55h1rIMqLw=
+	t=1722428949; cv=none; b=DUOvmy9L8IDcSmtcz26LKOEsca8b8TiXngGtf2RMaO5zRCdlIUeEM2azhTY0ECJgIetp/P7KEe5uFzWgLZSurwbz1aohxtkYEWe1Ge8qNSD540VCMGoVGrPXS87QM8kwU+8+0EvA4NqOcpcuEzdLsV2Shi5elSJKVTiAjJEFWx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722428943; c=relaxed/simple;
-	bh=7SImBkPzwBvPH1KTt848yOLO+/PGhbaK7RRtqvT4ezQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RnEjKdbib8CxEtLjkWbXEYdMSL01bZMbcLHnYLITWKF9Re4glmH7X09HeZEzKl/5IGFxMzBxJD9QV/Q25b9GKaelJI2g70XG3jRJFqcK7jkXUlzszBVne3+eW+mC4u1ycmGITS73cHcuOHryQMH5r3k+mi08KW2I1LjkdThT1ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EvhkjTlY; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52efdf02d13so9207881e87.2
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 05:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1722428940; x=1723033740; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7SImBkPzwBvPH1KTt848yOLO+/PGhbaK7RRtqvT4ezQ=;
-        b=EvhkjTlYgP0Wzs28P8vKHYiyuGhsAREnAdYYoDjtp1fW4STaxDiZ82ZNy4inCWqKgx
-         KrFKC/Ig5F1Wu47u9k626jQjcY/pVsd0xbGeH4ocFjIPqJzxC9X5/GdZzHceuVzlrwqF
-         AH6WD4Sm1Lqi+S0WYv0QmzK4/n7dnCmmPXGJY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722428940; x=1723033740;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7SImBkPzwBvPH1KTt848yOLO+/PGhbaK7RRtqvT4ezQ=;
-        b=QEAp+55OxghUH2uWT6Fc17n3fDB2MXYGP41HojgLLxVO9UrIYSL/M2IKMuqUm/uRbR
-         Vyshf/3GNuR7U/NaT68WJtm5d+pzoE5RC1yp8ydp6rXdCbTk9i2qHzFr38SPlDE3mjc0
-         65hfLCiUyp7bPo5tdjutgf/t5FnZtvBk2RKQ0Dzki2LSU/agjv7SYFnoOH1PWwYzEoZ0
-         6jna7zonHY7JRrnMdwGaGdXDtKzbLrHlA3ZM1siRqzrdZN8AttZEHcn8T4+lMoP1I0nq
-         tqMSj/VOBMDTgsz/wMdLChyoMTrYleDxBRwqoFkNZTk63sAHq/y5w+ZRTrLycbS92KYW
-         afmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV217J0HrBvnG3e9VW5oTSVcsHAUBIlLqARdvRBhJ6b7CidfmLARrg1bkSf6wmHu695dRTt8wShnaqsc8wTRk3HN2X5L+dCNxSE
-X-Gm-Message-State: AOJu0Yw4uKNa8fmU9RZDr9KdbH5twWCqeq1XDS34nowy/ixQI5Jf5cP1
-	Nr8CeMEBMuPegvu5pHyEDHaDU6e9zAJ1pI+QigwwYdxa8lUigO7PpFoqYAXid7kmIvbEsw8DSj8
-	XWyuRUEt5/l02YbTS/UEwLthrzMGOn3KS/ac=
-X-Google-Smtp-Source: AGHT+IHKDZw4UHavgEP4WJc7yu6+M7HKDPYQR7MyYwvbKTWQB83Zv1HddT1enWQhAhG93VlGKiB/lP+tVHQLWatfbHs=
-X-Received: by 2002:a05:6512:3484:b0:52e:716a:1898 with SMTP id
- 2adb3069b0e04-5309b2d8c35mr9954332e87.58.1722428939569; Wed, 31 Jul 2024
- 05:28:59 -0700 (PDT)
+	s=arc-20240116; t=1722428949; c=relaxed/simple;
+	bh=Mapy/o2+Q1rlGdMpUO0g9AAfTmFz2LFYRFwRxo4DL5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tuU9Jm5Mx007KM2IQw8SE6+dEXUIq9CkNmuePbMNAaZdG05RyTONeOoxJ8daQYIqEAGn2vAnOgLzxB4L4tuPVxl0jwBehKU67tsltlEXEJDBMiBj0mnFT394YrqalyR/TmL0wHtuIKsCKMh5aR++uZ9abkMltYFjs6zjvkydZcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AvozGt9Z; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722428947; x=1753964947;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Mapy/o2+Q1rlGdMpUO0g9AAfTmFz2LFYRFwRxo4DL5w=;
+  b=AvozGt9ZTusHpYbJH4gNDWZ9Or06p8w9GjyDADCmWXALTdQwp/qo3xm4
+   YUNJRk/lfIgmGWt93GWqoBKdNAMlQyjNGqaTFJyk+XdKTy+pPy338uDZB
+   SszovRAnQj4dtTdk1vanytZ08GAh9wvLBQhl6Dv+ahaD/m1k9Xpdg3kqM
+   aCOVqegcb6C1dMaFwoQ1aNpTBT5307GobUe4+5fUj2SsXenxAkV0y2uLH
+   Qyqw63mJUAh4DDVAV1Bm2fi4Eyedi4xriR84ULK1L5LRx6bcRrpZ3NNgC
+   qFUGhPV4VuTHY1vmd4uqe8QksAMw83HZCpz+mcUTKlUKw3pkGxkMCHM3S
+   Q==;
+X-CSE-ConnectionGUID: oIB6Y9YxSnOLOLbfnUMkrQ==
+X-CSE-MsgGUID: b5e+0usyRaa+8j+X0UcFnA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="20149980"
+X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
+   d="scan'208";a="20149980"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 05:29:06 -0700
+X-CSE-ConnectionGUID: IUCW0VopQq2Dli9EgPpbPA==
+X-CSE-MsgGUID: DHGZRiAkRCGud3xp8OujDg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
+   d="scan'208";a="58995736"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa005.fm.intel.com with SMTP; 31 Jul 2024 05:29:03 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 15:29:02 +0300
+Date: Wed, 31 Jul 2024 15:29:02 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Will McVicker <willmcvicker@google.com>,
+	Badhri Jagan Sridharan <badhri@google.com>, kernel-team@android.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/15] usb: typec: tcpm/tcpci_maxim: drop STATUS_CHECK()
+Message-ID: <ZqouDgCTPrQX4B+9@kuha.fi.intel.com>
+References: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
+ <20240710-tcpc-cleanup-v1-10-0ec1f41f4263@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240725074857.623299-1-ukaszb@chromium.org> <121d85fe-976a-43c4-95d2-1a066234a758@linux.intel.com>
- <CALwA+Na218B0PK3QG20_XFovJMfB4ud7B9Z=4kX=xwu8bjAvHA@mail.gmail.com> <115eb4be-e336-4a29-84d2-bdafb84a0f9f@linux.intel.com>
-In-Reply-To: <115eb4be-e336-4a29-84d2-bdafb84a0f9f@linux.intel.com>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Wed, 31 Jul 2024 14:28:48 +0200
-Message-ID: <CALwA+NbLsg2qfmaHagMNimN0mvU6vNP-rsY31O-9X6oZovAOJQ@mail.gmail.com>
-Subject: Re: [PATCH v2] xhci: dbc: fix handling ClearFeature Halt requests
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lu Baolu <baolu.lu@linux.intel.com>, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240710-tcpc-cleanup-v1-10-0ec1f41f4263@linaro.org>
 
-On Tue, Jul 30, 2024 at 5:45=E2=80=AFPM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 30.7.2024 3.17, =C5=81ukasz Bartosik wrote:
-> > On Mon, Jul 29, 2024 at 4:11=E2=80=AFPM Mathias Nyman
-> > <mathias.nyman@linux.intel.com> wrote:
-> >>
-> >> Hi
-> >>
-> >> On 25.7.2024 10.48, =C5=81ukasz Bartosik wrote:
-> >>> DbC driver does not handle ClearFeature Halt requests correctly
-> >>> which in turn may lead to dropping packets on the receive path.
-> >>
-> >> Nice catch.
-> >> Looks like a halted endpoint is treated almost as a disconnect.
-> >>
->
-> ...
->
+On Wed, Jul 10, 2024 at 11:36:17AM +0100, André Draszik wrote:
+> Only one user of STATUS_CHECK() remains, and the code can actually be
+> made more legible by simply avoiding the use of that wrapper macro,
+> allowing to also drop the macro altogether.
+> 
+> Do so.
+> 
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
 
-Sorry I didn't get that ?
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> >>
-> >> Hmm, I need to dig into this.
-> >>
-> >> I don't think we should push this problem up to the request completion=
- handler.
-> >> Maybe we are flushing requests that should not be flushed?
-> >>
-> >
-> > Section 7.6.4.3 "Halted DbC Endpoints" in Intel's xHCI specification
-> > says the endpoint can
-> > be halted by HW in case of error. Also it can be halted by software
-> > through HIT or HOT flags for DbC.
-> > I wonder how to recover properly from the Halted state caused by HW
-> > error ? Does it make sense to continue with
-> > the requests or just restart the endpoint (flush all requests) as this
-> > patch does ?
->
-> DbC should respond with STALL packets to host if HIT or HOT is set.
-> Host side should react to this by sending a ClearFeature(HALT) request to=
- DbC,
-> which should clear the halted endpoint and HIT/HOT flags.
->
+> ---
+>  drivers/usb/typec/tcpm/maxim_contaminant.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/typec/tcpm/maxim_contaminant.c
+> index e7687aeb69c0..8ac8eeade277 100644
+> --- a/drivers/usb/typec/tcpm/maxim_contaminant.c
+> +++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
+> @@ -46,8 +46,6 @@ enum fladc_select {
+>  #define READ1_SLEEP_MS			10
+>  #define READ2_SLEEP_MS			5
+>  
+> -#define STATUS_CHECK(reg, mask, val)	(((reg) & (mask)) == (val))
+> -
+>  #define IS_CC_OPEN(cc_status) \
+>  	(FIELD_GET(TCPC_CC_STATUS_CC1, cc_status) == TCPC_CC_STATE_SRC_OPEN \
+>  	 && FIELD_GET(TCPC_CC_STATUS_CC2, cc_status) == TCPC_CC_STATE_SRC_OPEN)
+> @@ -368,7 +366,7 @@ bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect
+>  		}
+>  		return false;
+>  	} else if (chip->contaminant_state == DETECTED) {
+> -		if (STATUS_CHECK(cc_status, TCPC_CC_STATUS_TOGGLING, 0)) {
+> +		if (!(cc_status & TCPC_CC_STATUS_TOGGLING)) {
+>  			chip->contaminant_state = max_contaminant_detect_contaminant(chip);
+>  			if (chip->contaminant_state == DETECTED) {
+>  				max_contaminant_enable_dry_detection(chip);
+> 
+> -- 
+> 2.45.2.803.g4e1b14247a-goog
 
-Based on that I wonder when the DbC endpoint is not halted and it
-receives the ClearFeature(Halt) request
-whether this is correct behavior for the DbC endpoint to report a
-STALL error in such a case ?
-
-> I think we may lose more data in DbC bulk-out stall cases (data from DbC =
-to host)
-> when flushing the requests.
-> Data is copied from kfifo to the requests while queuing them, if we then =
-flush them
-> we will never send that data to host.
->
-> >
-> >> Do you have an easy way to reproduce the stall error case?
-> >>
-> >
-> > Yes I can easily reproduce the case with the stall errors.
-> > Would you like me to run any specific scenarios ?
->
-> I pushed my thoughts to a "fix_dbc_halted_ep" branch, it compiles but is =
-not complete.
-> It mostly focuses on getting the STALL case for bulk-in working which thi=
-s report was
-> about.
->
-> I think the code itself best describes what I'm trying to do.
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_dbc_hal=
-ted_ep
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=
-=3Dfix_dbc_halted_ep&id=3D8532b621314e93336535528d5d45e41974c75e01
->
-> If you can try it out it would be great.
->
-
-Sure I will test your patch and get back with the result.
-
-Thanks,
-Lukasz
-
-> Thanks
-> -Mathias
->
+-- 
+heikki
 
