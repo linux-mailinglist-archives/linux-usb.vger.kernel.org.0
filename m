@@ -1,129 +1,170 @@
-Return-Path: <linux-usb+bounces-12720-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12721-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B38942F07
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 14:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACB01942F7B
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 15:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62A1E288BEA
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:49:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61F60283C99
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 13:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DACA1B3757;
-	Wed, 31 Jul 2024 12:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C6A1B5800;
+	Wed, 31 Jul 2024 12:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lyIpd5WZ"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vjaTU0fW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2CB1B3740
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 12:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D6D1AC43E;
+	Wed, 31 Jul 2024 12:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722430071; cv=none; b=gUw9iHb/Lg7c2L1IYXCYVTpLbwPtuDFIGeWmxd282nzrHPiY/ul/ibpM7VPg5RgoiIhYd6He81/kLuYQwU2tjeVETPWNFzeS8eo9rE9gox5/um1evU1gqg7Jrg4xnuCjy1Hz7boT8lhhbE4YMt98NUBVqraGwchp9xewpOPn+pc=
+	t=1722430509; cv=none; b=PV4Zjb/fzcHMGrgI95X9Vmr5GWmbfpqVF/Fe0R/adq9SL4cDaWWPTDm5TYfFakw1Ms739/VJTbW+7qqpy/4vw5wRPYkyYILBl4+rWT31CMAfb/n559JvbxEiCPig5O/Zqkx6Ww5tWCuM3AiwqA4KAB5nDniw9H5i25bTXVlTotc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722430071; c=relaxed/simple;
-	bh=gWr2nyQGDHBwWGUKjEi0LGgN8dYkjGhnBDLo7yXwImE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rlzrnR6uJ4Vc6jwIV7+P6THKt5lYSTwbqHsaQU+LL/AgUoCiTRV1aVTHIrIfaMPDLxIdaG7sBnh6VmjGnhyVWsf+ijwqkj69NipSKanqJxo6Wcw1QP4xezc3wro/Kbv2p8aLVEwBt94uIvA3cE/QeBMTTHJwyXLJr2G96NCcf70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lyIpd5WZ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722430070; x=1753966070;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gWr2nyQGDHBwWGUKjEi0LGgN8dYkjGhnBDLo7yXwImE=;
-  b=lyIpd5WZsmYtdvdfXwM+6Fb1NsOjLSetzjvdSvidm2INJphMl0KdG/Hp
-   FpZ/bO0X72tsATkWNTEILqz1Sz20cLRH52gf0JqhUGurFM8YpaWphcRbV
-   71LoSvHx5GG9veTX7zeu8Ub4qXrNck+sR9oRJDjqLuw5WaberIyKZsNi5
-   0JTiXRJO+ld/bYg7eOTZy9IXTNNQH/mt7qpxTKXkJI4bg/qXYN6qUvyqV
-   wmh3ZFgmuaNC2xMm6Su28tPQAO7JkQbKyiDfJ3/LL/whoKOJHsbD+akjv
-   rW9zY+XNXkitBuGSwFDbqw02ohRqHRuT/xIgDZFdjyHXX0GMCoS3/P3uX
-   g==;
-X-CSE-ConnectionGUID: m6FlA+fMT8mGvG0pP5Aqmg==
-X-CSE-MsgGUID: w8CAyfoNRRCi+iXgU52tcw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="19894855"
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="19894855"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 05:47:38 -0700
-X-CSE-ConnectionGUID: +oHYUcE+RSSGVkRctqb9/g==
-X-CSE-MsgGUID: vRmNihODRlOvbeQDcS6V+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="54372719"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa006.fm.intel.com with ESMTP; 31 Jul 2024 05:47:37 -0700
-Message-ID: <8cc19d0a-80f3-48a4-9fd2-0cc42b8ed1f4@linux.intel.com>
-Date: Wed, 31 Jul 2024 15:49:39 +0300
+	s=arc-20240116; t=1722430509; c=relaxed/simple;
+	bh=lTq7S21kjmzc4xVHxfjpvVAF+NSW7/VHXNsHCO59Kgw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gIYKbsGdVL8VGYSQEhVQtZKBugSov13rE1e6JVIdsZ/BVQ2z+E+3MwjmFlZFIQlPOCP7PQE7iIO3EaIULG7QRVuJtErJ7hy4zA3fg+Md8fCjsurm9dApEpvwUK2Oyl1LXjcJDVsjaJb5tKlzRnqLF1xY/8LKvpn1fOCZXkuZKIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=vjaTU0fW; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 93DB9268;
+	Wed, 31 Jul 2024 14:54:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1722430457;
+	bh=lTq7S21kjmzc4xVHxfjpvVAF+NSW7/VHXNsHCO59Kgw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vjaTU0fWRpOtDnaS28JyH8m7hqg3wnahs+Iap3znqY/IwAbRqlNrF9TzfoUElmC3F
+	 5dnsJurORTIIjbNtM7hWz+buP+bfwIFQHyyrGWtLPzsErp/33G1L7z+KPt3tThfP1H
+	 cgH4quPhaZmlEBp7jIrpB3z7VRAro1YHGSlcofv4=
+Date: Wed, 31 Jul 2024 15:54:44 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
+Cc: gregkh@linuxfoundation.org, dan.scally@ideasonboard.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org, opensource.kernel@vivo.com
+Subject: Re: [PATCH v2] usb: gadget: uvc: Fixes the abnormal enumeration
+ problem of mobile phone as UVC camera.
+Message-ID: <20240731125444.GX8146@pendragon.ideasonboard.com>
+References: <TYUPR06MB62175899DECC7A9B0DA0DF01D2B12@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <20240731122351.GU8146@pendragon.ideasonboard.com>
+ <TYUPR06MB6217EF08BA3F758EB20C833DD2B12@TYUPR06MB6217.apcprd06.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] xhci: dbc: fix handling ClearFeature Halt requests
-To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Lu Baolu <baolu.lu@linux.intel.com>, linux-usb@vger.kernel.org
-References: <20240725074857.623299-1-ukaszb@chromium.org>
- <121d85fe-976a-43c4-95d2-1a066234a758@linux.intel.com>
- <CALwA+Na218B0PK3QG20_XFovJMfB4ud7B9Z=4kX=xwu8bjAvHA@mail.gmail.com>
- <115eb4be-e336-4a29-84d2-bdafb84a0f9f@linux.intel.com>
- <CALwA+NbLsg2qfmaHagMNimN0mvU6vNP-rsY31O-9X6oZovAOJQ@mail.gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <CALwA+NbLsg2qfmaHagMNimN0mvU6vNP-rsY31O-9X6oZovAOJQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYUPR06MB6217EF08BA3F758EB20C833DD2B12@TYUPR06MB6217.apcprd06.prod.outlook.com>
 
-On 31.7.2024 15.28, Łukasz Bartosik wrote:
-> On Tue, Jul 30, 2024 at 5:45 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> On 30.7.2024 3.17, Łukasz Bartosik wrote:
->>> On Mon, Jul 29, 2024 at 4:11 PM Mathias Nyman
->>> <mathias.nyman@linux.intel.com> wrote:
->>>>
->>>> Hi
->>>>
->>>> On 25.7.2024 10.48, Łukasz Bartosik wrote:
->>>>> DbC driver does not handle ClearFeature Halt requests correctly
->>>>> which in turn may lead to dropping packets on the receive path.
->>>>
->>>> Nice catch.
->>>> Looks like a halted endpoint is treated almost as a disconnect.
->>>>
->>
->>
->> I pushed my thoughts to a "fix_dbc_halted_ep" branch, it compiles but is not complete.
->> It mostly focuses on getting the STALL case for bulk-in working which this report was
->> about.
->>
->> I think the code itself best describes what I'm trying to do.
->>
->> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_dbc_halted_ep
->> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=fix_dbc_halted_ep&id=8532b621314e93336535528d5d45e41974c75e01
->>
->> If you can try it out it would be great.
->>
+Hello 胡,
+
+When replying, please don't drop the CC list unless you need to discuss
+confidential topics. Your question, and the answers you will get, can
+help other people facing the same problem, so it's important to keep
+them on public mailing lists.
+
+On Wed, Jul 31, 2024 at 12:46:27PM +0000, 胡连勤 wrote:
+> Hello linux community expert:
 > 
-> Sure I will test your patch and get back with the result.
+> Which kernel interface does the user space program call to modify bind_deactivated to false?
+> I traced the kernel code and have not found where to modify this value.
 
-Thanks, that patch was missing a "ctrl = readl(&dbc->regs->control);" line
+In this very specific case, the function is activated by a call to
+usb_function_activate() in uvc_function_connect(), itself called from
+uvc_v4l2_subscribe_event() in response to the application calling the
+VIDIOC_SUBSCRIBE_EVENT ioctl on the video device to subscribe to the
+UVC_EVENT_SETUP event.
 
-It's now fixed here:
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=fix_dbc_halted_ep&id=cf99b473a1477c1b3510af0021877197a039c43f
+You can find a sample userspace application meant to work with this
+driver at https://gitlab.freedesktop.org/camera/uvc-gadget. Note that I
+haven't used it personally for a few years, so I may not be able to
+easily provide detailed technical support.
 
-Can you try that instead
+> -----邮件原件-----
+> 发件人: Laurent Pinchart <laurent.pinchart@ideasonboard.com> 
+> 发送时间: 2024年7月31日 20:24
+> 收件人: 胡连勤 <hulianqin@vivo.com>
+> 抄送: gregkh@linuxfoundation.org; dan.scally@ideasonboard.com; linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; akpm@linux-foundation.org; opensource.kernel <opensource.kernel@vivo.com>
+> 主题: Re: 答复: [PATCH v2] usb: gadget: uvc: Fixes the abnormal enumeration problem of mobile phone as UVC camera.
+> 
+> On Wed, Jul 31, 2024 at 11:49:11AM +0000, 胡连勤 wrote:
+> > When the phone is connected to the computer to use the webcam 
+> > function, the phone needs to be enumerated as a uvc camera function.
+> > 
+> > Because uvc->func.bind_deactivated is configured as true in the f_uvc 
+> > driver uvc_alloc function, the usb_gadget_deactivate function is 
+> > called during the execution of the configfs_composite_bind function to 
+> > set gadget->deactivated to true, which in turn causes the 
+> > usb_gadget_connect_locked function to fail to call the corresponding 
+> > controller pullup operation (such as: dwc3_gadget_pullup, 
+> > mtu3_gadget_pullup), and the USB cannot be enumerated normally under 
+> > the uvc function combination.
+> > 
+> > After applying this patch, we measured that under the uvc function, 
+> > the dwc3 controller and the mtu3 controller can be enumerated 
+> > normally, and the webcam function is normal.
+> > 
+> > Fixes this by removing the setting of uvc->func.bind_deactivated to true.
+> > 
+> > Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
+> > ---
+> > v2:
+> >   - Add "Fixes:" tag on the commit
+> >   - Modify description information.
+> > ---
+> >  drivers/usb/gadget/function/f_uvc.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_uvc.c 
+> > b/drivers/usb/gadget/function/f_uvc.c
+> > index 40187b7112e7..6d63bea14211 100644
+> > --- a/drivers/usb/gadget/function/f_uvc.c
+> > +++ b/drivers/usb/gadget/function/f_uvc.c
+> > @@ -1107,7 +1107,6 @@ static struct usb_function *uvc_alloc(struct usb_function_instance *fi)
+> >  	uvc->func.disable = uvc_function_disable;
+> >  	uvc->func.setup = uvc_function_setup;
+> >  	uvc->func.free_func = uvc_free;
+> > -	uvc->func.bind_deactivated = true;
+> 
+> This is done on purpose. The UVC function requires a userspace control
+> application, so the function is deactivated by default at bind time,
+> and gets activated when the application is ready.
+> 
+> This patch isn't right.
+> 
+> >  	return &uvc->func;
+> >  
+> > -----邮件原件-----
+> > 发件人: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> > 发送时间: 2024年7月31日 19:13
+> > 收件人: 胡连勤 <hulianqin@vivo.com>
+> > 抄送: akpm@linux-foundation.org; linux-kernel@vger.kernel.org; 
+> > opensource.kernel <opensource.kernel@vivo.com>
+> > 主题: Re: [PATCH v1] usb: gadget: uvc: Fixed the abnormal enumeration problem of mobile phone as UVC camera.
+> > 
+> > On Wed, Jul 31, 2024 at 08:45:31AM +0000, 胡连勤 wrote:
+> > > When the phone is connected to the computer to use the webcam 
+> > > function, the phone needs to be enumerated as a uvc camera function.
+> > 
+> > <snip>
+> > 
+> > Note, why aren't you using scripts/get_maintainer.pl to find the
+> > proper mailing list and developers for this change?  Please do so.
+> > 
+> > thanks,
+> > 
+> > greg k-h
 
-Thanks
-Mathias
+-- 
+Regards,
 
+Laurent Pinchart
 
