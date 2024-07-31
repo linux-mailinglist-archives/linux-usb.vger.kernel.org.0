@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-12700-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12701-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 114E5942C1C
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:40:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BA21942CA7
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 13:02:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4325A1C22EEC
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:40:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21B6B2835C1
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 11:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 524F91AC435;
-	Wed, 31 Jul 2024 10:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA4E1AB51B;
+	Wed, 31 Jul 2024 11:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b32Mh6Lf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Det0uVEC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437D61A7F83;
-	Wed, 31 Jul 2024 10:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE023145FEF;
+	Wed, 31 Jul 2024 11:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722422399; cv=none; b=sW3Gr9s6IBUz8T81awad/OROYa/NZpXmem9FQ+Io66O+QHT3Amz59qoD7ZjMcS/sx+d7tclz9vHAei0LL/9KZdsv3TIxiZEiJlPLuBrgQcgncrRvLlwcoAw7AFCObXFKx4gaeSjzqhl6tC/IhsUljPD/lmqdxuXpvJDjK9gDDR8=
+	t=1722423731; cv=none; b=QSCe5e6TyBTlkhRjkXD0aObwUOedpr6rWlX9ZpmzA2TPKdx6cK4Yk87T5jI8m2DF3oy2oDauQVc6/S+Cwy5nqEUQKjuYfgYmI8uT7h/VtnyUULBWAyEaxbabA5M9iMCLyi8hSbZ2CXO4eav6VPdS0djyMcUm8sMx2V2XmN38Bos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722422399; c=relaxed/simple;
-	bh=yh4Wgn9OCMi+xMJQto59Y2nDFX4DyCknHujYmApgkzY=;
+	s=arc-20240116; t=1722423731; c=relaxed/simple;
+	bh=JOqfqwu552ErS4arcscKszrGQQdQrUqWAJP/x8QhsRM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O0vcQcYmLUl6Qa9708LjRY78TapmpzYqat8ybsnhuvmEhPNjWmcdamSXITX/M5b+K7AgWsabnPyzXrH5BqfZJEKD2q6SUnCqgXNwi0UdF+NiMlqqqSmBhLa6+JrorewD21CT9lzCQZljUBnxx/LrGIA3jfNek09ZStLPvh+Z+HE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b32Mh6Lf; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=nJut8QagKgqW6sc1cYcAkcwfSH6SFVWWNAdsn3nzpMI+IUSc0pim/5PZMox+0FX4EW4tfIxNbW9bHSv0QOgtmWAUkxOXoI2jsiTTPAEhi4g29s8YUe6/TBao581UAOl7sx3mcWjqyYub+6nw7JYjDeyEWTENJ9h0JnRH91o6Jpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Det0uVEC; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722422398; x=1753958398;
+  t=1722423730; x=1753959730;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=yh4Wgn9OCMi+xMJQto59Y2nDFX4DyCknHujYmApgkzY=;
-  b=b32Mh6LfvJmxRv3fY4Tdo9t+kYw1jmzWnBapWczyVuJeDSPP1YDu8oD+
-   IuN/lG0XsJyGTMTt/0Y5BG10Wbh6SKYemWe92Zw+yms0beIMUN9FbJ+nD
-   EHXgU700CiSmOd/xfpcIxCS7L3ntM9+mlQ6QvNx+xIMaOUTHEfM6dUm95
-   L11Xa+BZF2hy5BKGnhRYmYaUHW1sLJrCIsKjT3aTnDscVzMKJO80Y+2q9
-   EcOhe7f2KnQ/ZPlcVz1mEZaRc63pWOu9fcJ8d+zr0zuoBVSNfgfLuTAKA
-   gI2OLzM8ioNr5FXgUoGxxNQlIv3aEIFg4o/3vK3J+OoCUUc08DkPvKTca
-   A==;
-X-CSE-ConnectionGUID: S1a+3VqpSMuAMkk5Lv2thw==
-X-CSE-MsgGUID: v/i4S+oNRLuN9/5nH9oxfw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="20430947"
+  bh=JOqfqwu552ErS4arcscKszrGQQdQrUqWAJP/x8QhsRM=;
+  b=Det0uVECodwwt9MNBGNYCGqFEUcc1lwKMTZlHkmgxyfRlWEEJEeZ1kHP
+   0icKoAHpwUh0R85wgrOPo7qDiqyOcj4jPTQG0nt/3PsEcWT/GOTw0zrEi
+   oUkR48hX0C7NmQmqdIONtaw7QaDWf2Q0DbBumrsZKPSkeJKFoo/aFaVNd
+   B4Jbcql8Ua/fdJOU05TrYNPHtYF+PY8PtBtHzvVjhFCPV9m0m5XO/xOBC
+   RSLPrFfkHIL0BDUtRNzyirX4DBYkJuOk2OjkorxpVkq5Rr7iiUGTImXfM
+   SJv88eB0TkpBU+XvaBVb9VpozvgQ6hlrCkjCAw9KlAldHtIniBLRjIp5Y
+   g==;
+X-CSE-ConnectionGUID: IXrM96z4QAGMR12KFP0SIQ==
+X-CSE-MsgGUID: GY75+SPCRDirL7cCMHaYjg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="42824058"
 X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="20430947"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 03:39:57 -0700
-X-CSE-ConnectionGUID: 7GKWHkENRfuLqKQTX1rvVw==
-X-CSE-MsgGUID: 5zgMHsPfTASGwes6tawrMg==
+   d="scan'208";a="42824058"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 04:02:09 -0700
+X-CSE-ConnectionGUID: OuAcWI4qQpyKkAAwhBADAw==
+X-CSE-MsgGUID: siziB5eXS7ebOyv84UT52A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="54885706"
+   d="scan'208";a="92172464"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa006.jf.intel.com with SMTP; 31 Jul 2024 03:39:54 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 13:39:53 +0300
-Date: Wed, 31 Jul 2024 13:39:53 +0300
+  by orviesa001.jf.intel.com with SMTP; 31 Jul 2024 04:01:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 14:01:54 +0300
+Date: Wed, 31 Jul 2024 14:01:54 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,11 +68,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Will McVicker <willmcvicker@google.com>,
 	Badhri Jagan Sridharan <badhri@google.com>, kernel-team@android.com,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/15] usb: typec: tcpci: use GENMASK() for
- TCPC_MSG_HDR_INFO_REV
-Message-ID: <ZqoUeUN96bnXO7qB@kuha.fi.intel.com>
+Subject: Re: [PATCH 07/15] usb: typec: tcpci: use GENMASK() for TCPC_TRANSMIT
+ register fields
+Message-ID: <ZqoZogC9vYg6vSOS@kuha.fi.intel.com>
 References: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
- <20240710-tcpc-cleanup-v1-6-0ec1f41f4263@linaro.org>
+ <20240710-tcpc-cleanup-v1-7-0ec1f41f4263@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,50 +82,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240710-tcpc-cleanup-v1-6-0ec1f41f4263@linaro.org>
+In-Reply-To: <20240710-tcpc-cleanup-v1-7-0ec1f41f4263@linaro.org>
 
-On Wed, Jul 10, 2024 at 11:36:13AM +0100, André Draszik wrote:
-> Convert field TCPC_MSG_HDR_INFO_REV from register TCPC_MSG_HDR_INFO to
-> using GENMASK() and FIELD_PREP() so as to keep using a similar approach
-> for all fields.
+On Wed, Jul 10, 2024 at 11:36:14AM +0100, André Draszik wrote:
+> Convert all fields from register TCPC_TRANSMIT to using GENMASK() and
+> FIELD_PREP() so as to keep using a similar approach throughout the code
+> base and make it arguably easier to read.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci.c | 2 +-
->  include/linux/usb/tcpci.h      | 3 +--
->  2 files changed, 2 insertions(+), 3 deletions(-)
+>  drivers/usb/typec/tcpm/tcpci.c | 7 +++++--
+>  include/linux/usb/tcpci.h      | 6 ++----
+>  2 files changed, 7 insertions(+), 6 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 5ad05a5bbbd1..ad5c9d5bf6a9 100644
+> index ad5c9d5bf6a9..b9ee9ccff99b 100644
 > --- a/drivers/usb/typec/tcpm/tcpci.c
 > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -456,7 +456,7 @@ static int tcpci_set_roles(struct tcpc_dev *tcpc, bool attached,
->  	unsigned int reg;
->  	int ret;
+> @@ -607,8 +607,11 @@ static int tcpci_pd_transmit(struct tcpc_dev *tcpc, enum tcpm_transmit_type type
+>  	}
 >  
-> -	reg = PD_REV20 << TCPC_MSG_HDR_INFO_REV_SHIFT;
-> +	reg = FIELD_PREP(TCPC_MSG_HDR_INFO_REV, PD_REV20);
->  	if (role == TYPEC_SOURCE)
->  		reg |= TCPC_MSG_HDR_INFO_PWR_ROLE;
->  	if (data == TYPEC_HOST)
+>  	/* nRetryCount is 3 in PD2.0 spec where 2 in PD3.0 spec */
+> -	reg = ((negotiated_rev > PD_REV20 ? PD_RETRY_COUNT_3_0_OR_HIGHER : PD_RETRY_COUNT_DEFAULT)
+> -	       << TCPC_TRANSMIT_RETRY_SHIFT) | (type << TCPC_TRANSMIT_TYPE_SHIFT);
+> +	reg = FIELD_PREP(TCPC_TRANSMIT_RETRY,
+> +			 (negotiated_rev > PD_REV20
+> +			  ? PD_RETRY_COUNT_3_0_OR_HIGHER
+> +			  : PD_RETRY_COUNT_DEFAULT));
+> +	reg |= FIELD_PREP(TCPC_TRANSMIT_TYPE, type);
+>  	ret = regmap_write(tcpci->regmap, TCPC_TRANSMIT, reg);
+>  	if (ret < 0)
+>  		return ret;
 > diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> index 80652d4f722e..3cd61e9f73b3 100644
+> index 3cd61e9f73b3..f7f5cfbdef12 100644
 > --- a/include/linux/usb/tcpci.h
 > +++ b/include/linux/usb/tcpci.h
-> @@ -129,9 +129,8 @@
+> @@ -148,10 +148,8 @@
+>  #define TCPC_RX_DATA			0x34 /* through 0x4f */
 >  
->  #define TCPC_MSG_HDR_INFO		0x2e
->  #define TCPC_MSG_HDR_INFO_DATA_ROLE	BIT(3)
-> +#define TCPC_MSG_HDR_INFO_REV		GENMASK(2, 1)
->  #define TCPC_MSG_HDR_INFO_PWR_ROLE	BIT(0)
-> -#define TCPC_MSG_HDR_INFO_REV_SHIFT	1
-> -#define TCPC_MSG_HDR_INFO_REV_MASK	0x3
+>  #define TCPC_TRANSMIT			0x50
+> -#define TCPC_TRANSMIT_RETRY_SHIFT	4
+> -#define TCPC_TRANSMIT_RETRY_MASK	0x3
+> -#define TCPC_TRANSMIT_TYPE_SHIFT	0
+> -#define TCPC_TRANSMIT_TYPE_MASK		0x7
+> +#define TCPC_TRANSMIT_RETRY		GENMASK(5, 4)
+> +#define TCPC_TRANSMIT_TYPE		GENMASK(2, 0)
 >  
->  #define TCPC_RX_DETECT			0x2f
->  #define TCPC_RX_DETECT_HARD_RESET	BIT(5)
+>  #define TCPC_TX_BYTE_CNT		0x51
+>  #define TCPC_TX_HDR			0x52
 > 
 > -- 
 > 2.45.2.803.g4e1b14247a-goog
