@@ -1,50 +1,55 @@
-Return-Path: <linux-usb+bounces-12686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12687-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AA1A94293A
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:32:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3F69942943
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:34:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BCC61C2147D
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:32:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62B58283E78
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2802B1A7F68;
-	Wed, 31 Jul 2024 08:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B3F1A8BE9;
+	Wed, 31 Jul 2024 08:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fl96kmJ6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cBiaV14n"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4C41A76CE;
-	Wed, 31 Jul 2024 08:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2C41A7F86;
+	Wed, 31 Jul 2024 08:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722414760; cv=none; b=HZSbjtJCJX15r+P7wCcSbsOYeAG/zw5PX5U2n/RVt9jjs2TcxgP5U/XDKE9pr/RlBciotHNaPeTbehmJbTBRDFUOTBl6Skk5G+O7q/euZbMglLkGKGzhXssJjXNiiD3qhyItq9DJSdfmZH74OfNuOaV0QbFOFYVU6FuSGUJJKkk=
+	t=1722414858; cv=none; b=tP0mvJQ4Wm38yStuLDh45Qgqo2sBexq0e7I3f+XHssZuyxay/f+DxlCbOvXXcB0cjc5bmyT+ik83HaYA/bDQEkONCrlp3r7ZdwWQDEREmv/Q6YAVp8sOnpATPcpUYjAbbYhj6u0d+YpVu1jzXVQwdzaAz6875KNxQVViyxc1xJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722414760; c=relaxed/simple;
-	bh=iNJDaDDKfsib5G/MiRJlhu8tCyRetr4xDCI8p/x+Hcs=;
+	s=arc-20240116; t=1722414858; c=relaxed/simple;
+	bh=8+E4Mx6nsvQdhnv7jB7tqDc4lCt4yb/9UOa+s297XNE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uv7zaOOias4UpJFo6qYOXNq7EIAtp2MSgjB8Yr0JAIFRf8aAziV3FSj+PnUS/GyFtKOM6p7WAXvysPHXC2iI3Wal3AZhHsmzXABlD0UrsZtM6XVzk0md96fOFqtuG4I/JiNwDdIaN3ZCg4L2CpeIEyDbxaZH3DSd/MaZ1W4nulU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fl96kmJ6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD100C116B1;
-	Wed, 31 Jul 2024 08:32:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QPjoGzq3Ej9PUlhdNn2KdhktLOCEs4qh5AAjC03940umsh/vBDP/Cy1pdQR0Bp/xJF2nJNvCSvODs1tYvEFwImFndVJeXMVR7GpDu14bxfbSLQyRPF63voM1p4wJmwXh40UYE/aeOIekxCoPAOqsIXMLcOSg23583WNBQCCmcVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cBiaV14n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74327C4AF09;
+	Wed, 31 Jul 2024 08:34:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1722414760;
-	bh=iNJDaDDKfsib5G/MiRJlhu8tCyRetr4xDCI8p/x+Hcs=;
+	s=korg; t=1722414857;
+	bh=8+E4Mx6nsvQdhnv7jB7tqDc4lCt4yb/9UOa+s297XNE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fl96kmJ65fILRKODJA6GX7PRFfHKSkME5B36JTzB+5878ReJf9jT5sNMaSOlGg0x2
-	 ybQ7FLNfxsWI+qp4mXwRxyHWTY/A3boJ7J9uuZqsvsWXBrK9zM20thkG0VgelC+rCb
-	 lpWhPh3vfaRjRuiGsaMBKStQNSZSp39VNFRK7j80=
-Date: Wed, 31 Jul 2024 10:32:37 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Walle <mwalle@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_acm: make bInterfaceProtocol configurable
-Message-ID: <2024073151-violator-unskilled-6866@gregkh>
-References: <20240730194337.2583784-1-mwalle@kernel.org>
+	b=cBiaV14nHYc6s6VsYITJu5KaTaND7A+yUt2pxHnlCgrctD+bEyovKK9gh54uvDbM1
+	 4FMo5eAGQaRxD7vm1F7ydwm47jxYymyheech1ZO1L3JW00kI0cGBWMA0xTkjQ9Eq2h
+	 BF/QLpsFT1TB/AT86cO551Ppvn2JpU5fd/+E3bEs=
+Date: Wed, 31 Jul 2024 10:34:14 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Abhishek Tamboli <abhishektamboli9@gmail.com>
+Cc: skhan@linuxfoundation.org, dan.carpenter@linaro.org,
+	rbmarliere@gmail.com, christophe.jaillet@wanadoo.fr,
+	Chris.Wulff@biamp.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: u_audio: Use C99 syntax for array
+ initializers
+Message-ID: <2024073102-calculate-disabled-8700@gregkh>
+References: <20240729174639.446105-1-abhishektamboli9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,23 +58,50 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240730194337.2583784-1-mwalle@kernel.org>
+In-Reply-To: <20240729174639.446105-1-abhishektamboli9@gmail.com>
 
-On Tue, Jul 30, 2024 at 09:43:37PM +0200, Michael Walle wrote:
->  struct f_serial_opts {
->  	struct usb_function_instance func_inst;
->  	u8 port_num;
-> +	u8 protocol;
-> +
-> +	struct mutex lock;
-> +	int refcnt;
+On Mon, Jul 29, 2024 at 11:16:39PM +0530, Abhishek Tamboli wrote:
+> Convert array initializers to C99 syntax by adding the '=' after each
+> designated initializer. This change resolves warnings from smatch
+> about obsolete array initializers.
+> 
+> drivers/usb/gadget/function/u_audio.c:1117:20:warning: obsolete array initializer, use C99 syntax
+> drivers/usb/gadget/function/u_audio.c:1124:28:warning: obsolete array initializer, use C99 syntax
+> drivers/usb/gadget/function/u_audio.c:1131:19:warning: obsolete array initializer, use C99 syntax
+> drivers/usb/gadget/function/u_audio.c:1138:27:warning: obsolete array initializer, use C99 syntax
+> drivers/usb/gadget/function/u_audio.c:1145:25:warning: obsolete array initializer, use C99 syntax
+> 
+> Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
+> ---
+>  drivers/usb/gadget/function/u_audio.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
 
-Attempting to "roll your own" reference count is almost never a good
-idea.  If you really need one, please use the proper in-kernel apis for
-this.  But you need to justify it as well, I didn't see why this was
-needed at all.
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
 
