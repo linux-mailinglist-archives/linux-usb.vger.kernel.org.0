@@ -1,92 +1,112 @@
-Return-Path: <linux-usb+bounces-12671-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12672-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EEB5942789
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 09:09:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 818B79427BD
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 09:20:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19AE9B244CC
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 07:09:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2BF31C21887
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 07:20:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3361A4F10;
-	Wed, 31 Jul 2024 07:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D131A71E3;
+	Wed, 31 Jul 2024 07:20:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wujbfw0/"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="AqX0cvza";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="I39Jr0B9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C2B1A4B4E;
-	Wed, 31 Jul 2024 07:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9B434CDE;
+	Wed, 31 Jul 2024 07:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722409734; cv=none; b=drPnK2NO9ClzXCM4v4+X8jo0EfW4p7kLxt5TfqELOQTg3lxKV0ZuteVadEXp62Brj/ynuu6QTWRxoOcBqyf2uXufo+SqVRg0dLmxokRLaPMq5aVyU4hR5WkScTr3b2kq7buo9jS5FoO0H6JsrcB8AJ1WoD8QCiGejnVsQxXb//I=
+	t=1722410410; cv=none; b=Qq8U65/3dvoi3BglZFnIJmJ39CfKrBH21B66zdAdLGzCqUeLsOomkc0VOPj+k3xxfbOW5TIyU2GzNRqD2ALQfSpgsyBB6Dl48psNss5ALH6N4wCy3PH+2CkgTzXPEwt1az4c0qKpjLPdT3/nKt+5JMA+LGhM9Moh1c5WLGDWXGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722409734; c=relaxed/simple;
-	bh=2MX7GHrNYF5W+EsUv+5JVXvYh4j11z3ERZSW2hX9cw8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HeonUwFeGQiwN+isjdf9/IL5bChNxfhkuVWSbygbj5haEpACZtrd4j4jernpXtejq55Zil0AEy5SvLMJH1I3Ex7rAEHXZhW1T9f4SnKRbjDiqSdWXBUbOjld3Sde6cgWaWeKadmxAqSmnzjZNX++ZNwh29uyPkLQyxq0drPuLEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wujbfw0/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3EA4C4AF0B;
-	Wed, 31 Jul 2024 07:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722409733;
-	bh=2MX7GHrNYF5W+EsUv+5JVXvYh4j11z3ERZSW2hX9cw8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wujbfw0/9Pm9LtY5beVc3KzuOQ3Doql+C7juuV+tlR92dGsiP1j0S2CrDVubXXJ7Q
-	 YG86+R62JN7f5UTnyIXE0gAvLUxNYZyttv+ITnbBAzN3al3iD4QUXcSDQyqZa3BZno
-	 JdPkynZgf1v2IHrj2RXpqpTgOMwdhTcNhQZlz0gXkG53aVWC9itfYPxc7dOmsgLork
-	 ZMDrhAIvbxi0G6eJoEiRbQH3aQD4DNFgV79ae/VW2+eAmAkxSloeGuKai8LpfkS+Um
-	 uEFM24CKSiRiSEVFLjLTJwmZXmYbJ1M/oLMfBbC3yBsFVzNkg8C8B0PzydbXvJLv0/
-	 MJFpFOmHZgTyw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sZ3SJ-00000000474-3ukw;
-	Wed, 31 Jul 2024 09:09:03 +0200
-Date: Wed, 31 Jul 2024 09:09:03 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] USB: store owner from modules with
- usb_serial_register_drivers()
-Message-ID: <ZqnjD9cLJ6WlwAMq@hovoldconsulting.com>
-References: <20240503-module-owner-usb-serial-v2-0-7887769dbeff@linaro.org>
+	s=arc-20240116; t=1722410410; c=relaxed/simple;
+	bh=QpL/YgxQJegTmDER58F2/t40tDGvdCMM9m02r8+UT1s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gc5PP4BgzUmCabY7fD3/P2cO2EknYAITqhu2exEls4riZrmwCi+ZKggDAg2+Mox4UnoA2oLOihF9FKhOrNs+fpxVoU40xyDUPkHjjIT35ZmrZR28UlssPCwer6q4GRV16T4nJd7IG+5r/8E4TiWhSCoENO+X/bAKPbObnXFyPi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=AqX0cvza; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=I39Jr0B9 reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1722410406; x=1753946406;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=32HV7F5x+LICt0dvmQbJ9jvBOdbWt13lmSd8DKdvO/M=;
+  b=AqX0cvzaTlreMzvPvskpfX/fZfteNQcD7oNRQ7lt3MZwnq2RAPT/mnq8
+   o7YiTxiigMIskBhJFu7iLwldn9Fg4oE4q9oOLXR1PyK1wZyRp1G8PxFyk
+   FnYNLEmxrGcZT9FGIopeEfDfYbR54ybX+EtYRgm+4HIJSEELL9/FF1EYa
+   VqGfZnumD3Qs4NVkGJWJCAVNCnuGPA1o7E3KrFIcF7ky40I2dfOAtl/we
+   e5StQm0HLA+hwgbM/kh2iu8KLPd67qHUgVp5dJEb5kKFCB+bxiSJ/C0F5
+   Fn6hJy1OIi9T6GrIKpgml1BcNTwrlFAQECMn37+6UiDXiW2aO4kdjYypt
+   Q==;
+X-CSE-ConnectionGUID: aadykCT/Qz+AieFWE9bmkA==
+X-CSE-MsgGUID: t5uwBNypQxiiF2i0yOfV1Q==
+X-IronPort-AV: E=Sophos;i="6.09,250,1716242400"; 
+   d="scan'208";a="38163428"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 31 Jul 2024 09:20:03 +0200
+X-CheckPoint: {66A9E5A3-2E-CA1431AC-CF855369}
+X-MAIL-CPID: 5C52B82C244FACA95267ECB603E921C2_1
+X-Control-Analysis: str=0001.0A782F18.66A9E5A3.017B,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B7F291654B3;
+	Wed, 31 Jul 2024 09:19:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1722410399; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=32HV7F5x+LICt0dvmQbJ9jvBOdbWt13lmSd8DKdvO/M=;
+	b=I39Jr0B93VCU8esj4X+3gTrCQ3fcwp3OeEwQpIppbb9HYzXKJ8XUaC2CuqPVobry+x+dJC
+	RaWXbHfxiI5hvAWmUtghaRAC74aZFmUWIwsrBRRdv3m54TO3ygyvZpWtyqpA3jUaPHtcJZ
+	fEGLdv5hlY89YupqijU/dfzXmIy3DjqLqQdLo8+7vL3dik0SAXAR2c4HvnO+qC/qgC5swx
+	sKUTHrqIlMKsZSIT62JU+Qh9e1BzMqE3TbR0DTYh12qeVIy4OR1lLe8ZWfNPEQve3J/3gv
+	AUBhiO7+ZndcDXtjyoVAB2DEJ2khvX5BV3nB+jD1PmJYnRbfa18Ywy3x+mrKtw==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] dt-bindings: usb: microchip,usb2514: Add USB2517 compatible
+Date: Wed, 31 Jul 2024 09:19:50 +0200
+Message-Id: <20240731071950.989113-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240503-module-owner-usb-serial-v2-0-7887769dbeff@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, May 03, 2024 at 12:10:51PM +0200, Krzysztof Kozlowski wrote:
-> Changes in v2:
-> - Squash .owner removalr patches into one (Johan)
-> - Drop owner from f81534 driver
-> - kerneldoc "module/owner" -> module (Johan)
-> - Fix amba->usb copypasta
-> - Link to v1: https://lore.kernel.org/r/20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org
-> 
-> Description
-> ===========
-> Modules registering driver with usb_serial_register_drivers() might
-> forget to set .owner field.
-> 
-> Solve the problem by moving this task away from the drivers to the core
-> USB code, just like we did for platform_driver in commit
-> 9447057eaff8 ("platform_device: use a macro instead of
-> platform_driver_register").
+USB2517 is a 7-port variant of this USB hub. Add an USB compatible
+based on USB vendor & product ID.
 
-> Krzysztof Kozlowski (2):
->       USB: serial: store owner from modules with usb_serial_register_drivers()
->       USB: serial: drop driver owner initialization
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ Documentation/devicetree/bindings/usb/microchip,usb2514.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sorry about the delay. Now applied.
+diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+index 783c27591e564..245e8c3ce6699 100644
+--- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
++++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+@@ -18,6 +18,7 @@ properties:
+       - usb424,2412
+       - usb424,2417
+       - usb424,2514
++      - usb424,2517
+ 
+   reg: true
+ 
+-- 
+2.34.1
 
-Johan
 
