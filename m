@@ -1,111 +1,130 @@
-Return-Path: <linux-usb+bounces-12689-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415099429C0
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDC52942A05
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 11:15:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE20528465A
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:57:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7954E284F2F
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 09:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDE01A6166;
-	Wed, 31 Jul 2024 08:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC40D1AAE35;
+	Wed, 31 Jul 2024 09:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F58miuXf"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KDCHm3PX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C511A8BF7;
-	Wed, 31 Jul 2024 08:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF8618CC19
+	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 09:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722416229; cv=none; b=ppVY/TRGzraRWLbpHizvCPtXxyNl8jS52tsVkYr5GF632eos6zz4PV2hOGG6GAN1LQP7CsJ7WcwcGpJNLa/qQZJKt6bO9EJEvKReYOp+hJAbEHYA3lNBT0HOkTxuO9VYe9zC8kJBDHS5fWBC6oSPu4rRMpfQkje7Qz9jRZZK6Ug=
+	t=1722417334; cv=none; b=p6bCYtLSUlAj6IiwL5B5MO6BD4hr0LmUMIwHUg3chOyqUmrmTFVOnzYl9jRDm7OjEWLMBp9l8Id7hOPkMN20IT6tl0SUpMyo5+tf9KBVr1BR9Cd25tVpvDmLgTQ/8V/qJOFtFbLtAaP6SfFqvR/Eh0gjzZFdY5TdU9T58dMV/68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722416229; c=relaxed/simple;
-	bh=WuX9Hh+nd6fFDxrD3P7RjEZtEtMoWKCvvFiRe3dKksM=;
-	h=Content-Type:Date:Message-Id:From:To:Subject:Cc:References:
-	 In-Reply-To; b=Zt/r6yL/026ZLYKqvBUmgxnobsxe7lrLxNe4S90s4JwJX3FJAOjpgkh6GjBGgozF8LraA/kVk8VZL0aVo2+8vMXh0KJbyqZBl95ipHJwZg543X8nNRcohnJx+T0bhqfa13KbBwBq9OTJg/yi5VviukX3p4ZDA4EDoU+dCpE7C6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F58miuXf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C35C116B1;
-	Wed, 31 Jul 2024 08:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722416229;
-	bh=WuX9Hh+nd6fFDxrD3P7RjEZtEtMoWKCvvFiRe3dKksM=;
-	h=Date:From:To:Subject:Cc:References:In-Reply-To:From;
-	b=F58miuXfPdH3ZgBcRfjit0jAxCWO/JV+4VZLxm0DgRajGQN2/P0t0bdrRTIxVtSN2
-	 guZE2f+PO9NWo4/paz0trEGBrJw0c84ZjfmUrpp6CjEOrDNfCJlVYNE44Cvtxm3RLV
-	 Aa8rKBC3jWlL+O2y4qSldOa9NKi17FolGduLYbf7rgX0pfoAv6MDRU3BX6007EaRFO
-	 jpfgHF8cF0fTjtFmC0bicHCoO4pWJBLh0lBC2RBrN0T4dfY4QoarjJSRkqEsh1PwHA
-	 Mhr3wvu6c6OHMQHLoa7URtfdxGAmXW0NVbjqt9Qc6hoSTeXHHbZGxJYlWZ6oN97maV
-	 zshxuhgfxvTIQ==
-Content-Type: multipart/signed;
- boundary=a278cb899e5ffd9b3580bbe7a8320b9336286ac50c0dd6fece958aadcd6a;
- micalg=pgp-sha384; protocol="application/pgp-signature"
-Date: Wed, 31 Jul 2024 10:57:04 +0200
-Message-Id: <D33LLE6K8QGH.1BCZM42INRVEX@kernel.org>
-From: "Michael Walle" <mwalle@kernel.org>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] usb: gadget: f_acm: make bInterfaceProtocol
- configurable
-Cc: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.16.0
-References: <20240730194337.2583784-1-mwalle@kernel.org>
- <2024073151-violator-unskilled-6866@gregkh>
-In-Reply-To: <2024073151-violator-unskilled-6866@gregkh>
+	s=arc-20240116; t=1722417334; c=relaxed/simple;
+	bh=83W9xNyEhrhj9qUBBB3tEuegHbX2AuriMDdh+0vXiuQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iE6IrOlmGxagXRvw+RfujdTj7o54ZFSSqaaVMa4Rp9nE+kW3+7HhA/BRtkfSGVzwrs619hMBGI02uAyRmEqNPw9kPt2qzNDwJH1CqoIofG/H/ZwGGXnf4ZpHMNpkB2kzvti5TFmk6Uu130tWi/ehy5R77MYlGVzfxmdif1HGN6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KDCHm3PX; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f029e9c9cfso86581221fa.2
+        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 02:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1722417330; x=1723022130; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GSGg8nbzE43rNqdiDkmvX9VXw5/3C+7aRCNi7MLm7Wg=;
+        b=KDCHm3PX9vovyS1B2HOeIwAoC2fmlWK/tJcRHQCXaZZKE6w1su0LwfHVu+a8D13DSU
+         qLl5Z4KmwwpRX2Tr6mdHoaWH4c04gDN9PveBngC+GedGQ8c8GJytSGxuiT73S5LHL8dO
+         jZMP2Pf17hSp6fveutYqbuX4h38xvM3CDbKfsCxIZ/OeD65DPDqT0LI3fC2ci80u3DKm
+         76liWPdcflVc6JuGcHm0BMydc4hLNz20rwPdRWYbfKy4sH4qkZjHBSdV9CL9pAurmGq8
+         456YNgJocCXQScibG2XE41tq1RgLihz+vFe/kQJRRUn+d2eROfzirG1d/cO2TKY3qGKd
+         RaDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722417330; x=1723022130;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GSGg8nbzE43rNqdiDkmvX9VXw5/3C+7aRCNi7MLm7Wg=;
+        b=BKVl8pIVz9gZF9YeEIab+Mz1V1bGFF1D99/t8FKZsr44FfB8y2jGMJDuMcUe09iMp/
+         fMiahTdWUYuXO88UVBgxhHy8Yg8VEb0WnoU9ypb6iuPT84T6RkfYa6l/a9LykhQoZVbQ
+         E6gNl6+55b7J4Oru8hNEhYHZcHi8ksF4zAyS6QeMK/Lsh45eB2zv61q/O3ln/2BsbWNY
+         0nQDAiHNslkR72ahvVaq+7Mvav6lFposzw/ljf3m1c6oHKyIdSH6SJQISenH5AyMELQ5
+         RRwEyv4qFJPApculCEFWHK6+OQBqeMR93m7BmVNwKAEAK6s4PVhwrOAknkKWx62a+SZw
+         OP1w==
+X-Forwarded-Encrypted: i=1; AJvYcCXuJZQOuigTltYSUfoR2r2gG2VyqujD6KBq9kwussCnToCBGn+eF5HmMi9/nLYlRWHkKQJceDrsA0uHPBLGzPXWYdTGSQofg3Hm
+X-Gm-Message-State: AOJu0Yw60ze1jxy7hVaO1koukqA2DslL0POBMo/k1Cu7TiqGYcBEg/as
+	hn13rymQdvdKpf4G0fIrDPKWp9jv6pUcAClt9mjGjyQcQL5M9j/PFvwEbAWzvfw=
+X-Google-Smtp-Source: AGHT+IEQ44GksC7yt9tVPJqo9jRk2fLB26LDnjNmJ4RZUywVQidrbsVIjFt6auqVfRzB22Hd0YCyhQ==
+X-Received: by 2002:a2e:880c:0:b0:2ef:c8a1:ff4 with SMTP id 38308e7fff4ca-2f12edfef3amr117885781fa.7.1722417329932;
+        Wed, 31 Jul 2024 02:15:29 -0700 (PDT)
+Received: from ?IPV6:2001:a61:137b:5001:be5a:c750:b487:ff1b? ([2001:a61:137b:5001:be5a:c750:b487:ff1b])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acad4aaa3sm748177766b.138.2024.07.31.02.15.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Jul 2024 02:15:29 -0700 (PDT)
+Message-ID: <5d7870b0-6b63-430b-8885-2509b33dc78a@suse.com>
+Date: Wed, 31 Jul 2024 11:15:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: storage: ene_ub6250: Fix right shift warnings
+To: Abhishek Tamboli <abhishektamboli9@gmail.com>,
+ Oliver Neukum <oneukum@suse.com>
+Cc: stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+ usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org,
+ skhan@linuxfoundation.org, dan.carpenter@linaro.org, rbmarliere@gmail.com,
+ linux-kernel-mentees@lists.linuxfoundation.org, linux-kernel@vger.kernel.org
+References: <20240729182348.451436-1-abhishektamboli9@gmail.com>
+ <e72cc56a-3066-4cb8-848d-bfe27a48c095@suse.com>
+ <ZqkpOQIjcBSAg8rC@embed-PC.myguest.virtualbox.org>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <ZqkpOQIjcBSAg8rC@embed-PC.myguest.virtualbox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---a278cb899e5ffd9b3580bbe7a8320b9336286ac50c0dd6fece958aadcd6a
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+Hi,
 
-Hi Greg,
+On 30.07.24 19:56, Abhishek Tamboli wrote:
+> On Tue, Jul 30, 2024 at 09:09:05AM +0200, Oliver Neukum wrote:
 
-On Wed Jul 31, 2024 at 10:32 AM CEST, Greg Kroah-Hartman wrote:
-> On Tue, Jul 30, 2024 at 09:43:37PM +0200, Michael Walle wrote:
-> >  struct f_serial_opts {
-> >  	struct usb_function_instance func_inst;
-> >  	u8 port_num;
-> > +	u8 protocol;
-> > +
-> > +	struct mutex lock;
-> > +	int refcnt;
->
-> Attempting to "roll your own" reference count is almost never a good
-> idea.  If you really need one, please use the proper in-kernel apis for
-> this.  But you need to justify it as well, I didn't see why this was
-> needed at all.
+>> 1. use a constant, where a constant is used
+> I think you are suggesting that I should replace hard-coded values like the
+> buffer size with named constants. For example:
+> 
+> #define BUF_SIZE 8
+> unsigned char buf[BUF_SIZE];
 
-Honestly, I couldn't grok all that usb gadget magic, so I've looked
-at similar gadgets and took that from there:
-  grep refcnt drivers/usb/gadget/function/ -r
+Yes, but the constant we need to look at here is bl_len.
+This is a variable needlessly.
 
-They are all doing the same, so maybe that code is old or didn't use
-the proper APIs back then.
+>> 2. use the macros for converting endianness
+> Can I use macros like cpu_to_le32 for converting the bl_num and bl_len values.
+> Should I replace all instances of manual bitwise shifts with these macros?
 
-The refcnt will prevent changing the options (the protocol here)
-while a gadget is still in use/bound.
+Yes.
 
--michael
+> For example:
+> 
+>      u32 bl_len = 0x200;
+>      buf[0] = cpu_to_le32(bl_num) >> 24;
+>      buf[4] = cpu_to_le32(bl_len) >> 24;
+> 
+> Is using cpu_to_le32 appropriate for the data format required by this
+> device?
 
---a278cb899e5ffd9b3580bbe7a8320b9336286ac50c0dd6fece958aadcd6a
-Content-Type: application/pgp-signature; name="signature.asc"
+Well, the format is big endian. So, cpu_to_be32() will be required.
 
------BEGIN PGP SIGNATURE-----
+	Regards
+		Oliver
 
-iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCZqn8YRIcbXdhbGxlQGtl
-cm5lbC5vcmcACgkQEic87j4CH/h1tAF+OTXTi9KQMmLqtPm8xGWK616McmKTMRUM
-i7dFuk3aHdKr/IyBXnGxlaqnLLj3n7ecAX94j2sIOIxhJXk5f3oqB+W9PXIhCExp
-+L9hITypnd0thm4LfsZvB+VuLLDJkbMLM8c=
-=USbP
------END PGP SIGNATURE-----
-
---a278cb899e5ffd9b3580bbe7a8320b9336286ac50c0dd6fece958aadcd6a--
 
