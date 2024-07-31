@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-12715-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12716-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F3B0942EAF
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 14:36:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E06A942EBF
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 14:38:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C524D1F25E48
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:36:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09F6828CEEA
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 12:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E544E1AE869;
-	Wed, 31 Jul 2024 12:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F9971AED59;
+	Wed, 31 Jul 2024 12:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mX2yAiTI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ouyw8sLu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5361A8BED;
-	Wed, 31 Jul 2024 12:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC4F1AE869;
+	Wed, 31 Jul 2024 12:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722429402; cv=none; b=Rml+RHzQVb1g7p3fcq0z3yO10T0O09/2B+IzqVr+qnZXu5ltNZdT5Vt5gbPpSHFZJ35h5Ma9fjSCnc2E4rdX+vtZFucdkNYIK8piFEcMWNeqxNUGTjKBt02QUGLPCNEyIaTxYNS6VKOJy07QUUyOfOebZpYaf8AXd6KDQVWBI5E=
+	t=1722429523; cv=none; b=FYQa6LPe1gd+756dGXama+NoPLrPXa38YA8sYY2PwVsiXeG4IyTKe3ydrM7eqRof0oS6q7/Bzs1NJm8jSZY4l7NPGdX0dqNwx0MjjEtyA94f1WHG/tuKu0oGhUjHgguVcFHTANRpLiCJqE/HmKS8xQCVa5pU/+QH2Cp5wzJl2b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722429402; c=relaxed/simple;
-	bh=SEcUI8JtPnuzuLd77dWkUBzPD+0GWOA3rL4w76reUP8=;
+	s=arc-20240116; t=1722429523; c=relaxed/simple;
+	bh=H3n+i4UwBjFtCGKD1tha9bJSAZ4cY9bih8IUa9yvJ3Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ggXggtb3Lt/6ev4iSur0ajGT2272d64Cd3zOHIobE0/P352UD8BAB0SI/j9aFQaoHIhyfV6CD5mVzBBR1Xb71SfnBrssOfDpy57uHuBcxOYEnhlGRmSmHY1IDEcdaC30ikBaFLGft8vGChsbzU915xZN5Wg9Jcvi6allZJ8fo/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mX2yAiTI; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=PNTjtUOyQA/yBHj548UnWzAoS1wFRHgcy1plBx8GwE1E3KWEiEkm6c5WvcQSFEPcCSQ9BoudExlCJ57UsD0gEeU+WQMxJNqB5HRcSzDpusqAXygn01onRNADYQDa9fzQGf9pVyegx0MbZ5FwocYYz9Tq6vNMnW6CjHp+jPpDgnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ouyw8sLu; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722429401; x=1753965401;
+  t=1722429521; x=1753965521;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=SEcUI8JtPnuzuLd77dWkUBzPD+0GWOA3rL4w76reUP8=;
-  b=mX2yAiTIKibjuBafOG4U3vkWgzOT7mZ31piZMNBrxx0kDB3rUEw8UZui
-   CnCa5ceIdn3jUoMRiC6Ml5yETttBbIynMqmIlVDYDPJCmYaWE9WwE7bDV
-   ELCSSbOxjYPKsvvHYwLrESA78yeT4StL4j+1SjzoKChdsoGN1gqCc9Q1Z
-   FZwJSNQWcV1uD/gnxylAj/giG6RHEeRiOxceYY+YXNeyGuTm5peKPnS39
-   K14VjwQLUq/wmgs6ZdEWlpXDji/oS+Z4NFD99yxQqYY+yMO0UfgwX3sHq
-   seUtxVP6fkZWyGJJRQ9DJMSDQkS9mDVrgRtuYh7YDEwOzkRQe+uC3xgRE
+  bh=H3n+i4UwBjFtCGKD1tha9bJSAZ4cY9bih8IUa9yvJ3Y=;
+  b=Ouyw8sLuygLEaw3hGk5P4IvW4kD4B0ja4Y/LEDzj88pCFLK/NJlVvacn
+   9i+PfVk14FwvQrV+bJwipvFDFQ6ePFQpJ1rh98M+MqZUBoUSGBi3ld+Ru
+   cI0iRqT4iSv+SUlK8REoxaOLm4jkpndCSWNGvd1KcItzfN6jaOnsSyqBI
+   hdfC12gJXDJZi+bqWD/vof37gT/7bYydK0jSnc1KMlUKEX+zKqfdsSDVW
+   W+zf7wz2trY6BndyY/jfMVsDasBTH1tCRqA9ek/4iElVQV+AMfoVT2Ihv
+   QB1XimauxfEV/yX1pkKPBBcVksc4Y0RXOxxDSIar5gKm5AKSJtRgiobgf
    A==;
-X-CSE-ConnectionGUID: jCp2djKnT5ysOW062iaH8Q==
-X-CSE-MsgGUID: HAOtlO2xRhmpQoc810hRNw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="42834911"
+X-CSE-ConnectionGUID: P5DY/s5/RJqw5e0eV+MnLQ==
+X-CSE-MsgGUID: N2IBo9d6Q+uwT2S002T6mA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="42835102"
 X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="42834911"
+   d="scan'208";a="42835102"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 05:36:40 -0700
-X-CSE-ConnectionGUID: sacR2TFbQO6bYV3DL124zg==
-X-CSE-MsgGUID: YUfOL5iFQy2akmg+OycpUw==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 05:38:41 -0700
+X-CSE-ConnectionGUID: eSLGD3LbRTOj1kj2lKfKqg==
+X-CSE-MsgGUID: fC8kL5nqQfarnicfDIeaIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="55471318"
+   d="scan'208";a="55471437"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa008.jf.intel.com with SMTP; 31 Jul 2024 05:36:36 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 15:36:35 +0300
-Date: Wed, 31 Jul 2024 15:36:35 +0300
+  by orviesa008.jf.intel.com with SMTP; 31 Jul 2024 05:38:38 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 15:38:37 +0300
+Date: Wed, 31 Jul 2024 15:38:36 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,11 +68,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Will McVicker <willmcvicker@google.com>,
 	Badhri Jagan Sridharan <badhri@google.com>, kernel-team@android.com,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/15] usb: typec: tcpm/tcpci_maxim: use GENMASK() for
- TCPC_VENDOR_CC_CTRL2 register
-Message-ID: <Zqov06zsAQOiy4Zt@kuha.fi.intel.com>
+Subject: Re: [PATCH 12/15] usb: typec: tcpm/tcpci_maxim: use GENMASK() for
+ TCPC_VENDOR_CC_CTRL3 register
+Message-ID: <ZqowTIgSpSm9rwyP@kuha.fi.intel.com>
 References: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
- <20240710-tcpc-cleanup-v1-11-0ec1f41f4263@linaro.org>
+ <20240710-tcpc-cleanup-v1-12-0ec1f41f4263@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,92 +82,64 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240710-tcpc-cleanup-v1-11-0ec1f41f4263@linaro.org>
+In-Reply-To: <20240710-tcpc-cleanup-v1-12-0ec1f41f4263@linaro.org>
 
-On Wed, Jul 10, 2024 at 11:36:18AM +0100, André Draszik wrote:
-> Convert register TCPC_VENDOR_CC_CTRL2 to using GENMASK() and
-> FIELD_PREP() so as to keep using a similar approach throughout the code
-> base and make it arguably easier to read.
+On Wed, Jul 10, 2024 at 11:36:19AM +0100, André Draszik wrote:
+> Convert register TCPC_VENDOR_CC_CTRL3 to using GENMASK() so as to keep
+> using a similar approach throughout the code base and make it arguably
+> easier to read.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/maxim_contaminant.c | 18 +++++++++++-------
->  drivers/usb/typec/tcpm/tcpci_maxim.h       |  6 +++---
->  2 files changed, 14 insertions(+), 10 deletions(-)
+>  drivers/usb/typec/tcpm/maxim_contaminant.c | 9 +++++----
+>  drivers/usb/typec/tcpm/tcpci_maxim.h       | 9 +++------
+>  2 files changed, 8 insertions(+), 10 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> index 8ac8eeade277..f7acaa42329f 100644
+> index f7acaa42329f..cf9887de96c9 100644
 > --- a/drivers/usb/typec/tcpm/maxim_contaminant.c
 > +++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> @@ -116,13 +116,14 @@ static int max_contaminant_read_resistance_kohm(struct max_tcpci_chip *chip,
->  	if (channel == CC1_SCALE1 || channel == CC2_SCALE1 || channel == CC1_SCALE2 ||
->  	    channel == CC2_SCALE2) {
->  		/* Enable 1uA current source */
-> -		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCLPMODESEL_MASK,
-> -					 ULTRA_LOW_POWER_MODE);
-> +		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCLPMODESEL,
-> +					 FIELD_PREP(CCLPMODESEL, ULTRA_LOW_POWER_MODE));
->  		if (ret < 0)
->  			return ret;
->  
->  		/* Enable 1uA current source */
-> -		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL_MASK, UA_1_SRC);
-> +		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL,
-> +					 FIELD_PREP(CCRPCTRL, UA_1_SRC));
->  		if (ret < 0)
->  			return ret;
->  
-> @@ -176,7 +177,8 @@ static int max_contaminant_read_comparators(struct max_tcpci_chip *chip, u8 *ven
+> @@ -283,10 +283,11 @@ static int max_contaminant_enable_dry_detection(struct max_tcpci_chip *chip)
+>  	u8 temp;
 >  	int ret;
 >  
->  	/* Enable 80uA source */
-> -	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL_MASK, UA_80_SRC);
-> +	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL,
-> +				 FIELD_PREP(CCRPCTRL, UA_80_SRC));
+> -	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL3, CCWTRDEB_MASK | CCWTRSEL_MASK
+> -				    | WTRCYCLE_MASK, CCWTRDEB_1MS << CCWTRDEB_SHIFT |
+> -				    CCWTRSEL_1V << CCWTRSEL_SHIFT | WTRCYCLE_4_8_S <<
+> -				    WTRCYCLE_SHIFT);
+> +	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL3,
+> +				 CCWTRDEB | CCWTRSEL | WTRCYCLE,
+> +				 FIELD_PREP(CCWTRDEB, CCWTRDEB_1MS)
+> +				 | FIELD_PREP(CCWTRSEL, CCWTRSEL_1V)
+> +				 | FIELD_PREP(WTRCYCLE, WTRCYCLE_4_8_S));
 >  	if (ret < 0)
 >  		return ret;
 >  
-> @@ -209,7 +211,8 @@ static int max_contaminant_read_comparators(struct max_tcpci_chip *chip, u8 *ven
->  	if (ret < 0)
->  		return ret;
->  
-> -	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL_MASK, 0);
-> +	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL,
-> +				 FIELD_PREP(CCRPCTRL, 0));
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -298,8 +301,9 @@ static int max_contaminant_enable_dry_detection(struct max_tcpci_chip *chip)
->  	if (ret < 0)
->  		return ret;
->  
-> -	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCLPMODESEL_MASK,
-> -				 ULTRA_LOW_POWER_MODE);
-> +	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCLPMODESEL,
-> +				 FIELD_PREP(CCLPMODESEL,
-> +					    ULTRA_LOW_POWER_MODE));
->  	if (ret < 0)
->  		return ret;
->  	ret = max_tcpci_read8(chip, TCPC_VENDOR_CC_CTRL2, &temp);
 > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> index 78ff3b73ee7e..92c9a628ebe1 100644
+> index 92c9a628ebe1..34076069444f 100644
 > --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
 > +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> @@ -20,9 +20,9 @@
->  #define SBUOVPDIS                               BIT(7)
->  #define CCOVPDIS                                BIT(6)
->  #define SBURPCTRL                               BIT(5)
-> -#define CCLPMODESEL_MASK                        GENMASK(4, 3)
-> -#define ULTRA_LOW_POWER_MODE                    BIT(3)
-> -#define CCRPCTRL_MASK                           GENMASK(2, 0)
-> +#define CCLPMODESEL                             GENMASK(4, 3)
-> +#define ULTRA_LOW_POWER_MODE                    1
-> +#define CCRPCTRL                                GENMASK(2, 0)
->  #define UA_1_SRC                                1
+> @@ -27,15 +27,12 @@
 >  #define UA_80_SRC                               3
+>  
+>  #define TCPC_VENDOR_CC_CTRL3                    0x8e
+> -#define CCWTRDEB_MASK                           GENMASK(7, 6)
+> -#define CCWTRDEB_SHIFT                          6
+> +#define CCWTRDEB                                GENMASK(7, 6)
+>  #define CCWTRDEB_1MS                            1
+> -#define CCWTRSEL_MASK                           GENMASK(5, 3)
+> -#define CCWTRSEL_SHIFT                          3
+> +#define CCWTRSEL                                GENMASK(5, 3)
+>  #define CCWTRSEL_1V                             0x4
+>  #define CCLADDERDIS                             BIT(2)
+> -#define WTRCYCLE_MASK                           BIT(0)
+> -#define WTRCYCLE_SHIFT                          0
+> +#define WTRCYCLE                                GENMASK(0, 0)
+>  #define WTRCYCLE_2_4_S                          0
+>  #define WTRCYCLE_4_8_S                          1
 >  
 > 
 > -- 
