@@ -1,301 +1,274 @@
-Return-Path: <linux-usb+bounces-12722-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12723-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80359942FB1
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 15:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70E04942FC0
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 15:10:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86DE51C216A4
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 13:06:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94B971C213B0
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 13:10:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28DD71B0139;
-	Wed, 31 Jul 2024 13:06:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7949F1B0114;
+	Wed, 31 Jul 2024 13:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WvNeu6ZJ"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="TsGyTaTH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from HK3PR03CU002.outbound.protection.outlook.com (mail-eastasiaazon11011014.outbound.protection.outlook.com [52.101.129.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50622209F
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 13:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722431206; cv=none; b=ZLgoipAxfHvDZgyItcOwg4CmdUqco2fEPdI1kVSXfnWP55rDFMZ+12G8Dh4RFlkA/4ZG8SVutW1YpRuVWqt5+3ZBJnql1Se8C4EoUgYdRAVEXieaJwdv+DTAukLdJXywCo5yr+gs18dRWElrwe9HzMH5UmgQjnyGtgW17Rpicnw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722431206; c=relaxed/simple;
-	bh=kSiCcIMu6C9gTC+NlQ1+jJI4DSv9cM5ShY0D5/L2hc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FgVUavUyh6PdtYSeiRgALnJHiOzqVPX55be5fpW5kKt1dDhH196/8O3d9bAa9di+58UahdYjayWa2x11WN+3CCsrNbk1J8wrp46OvpbFu9kSV8IEVUsv1ldbA2mSmeIxLFnmWqPtPlh59oIAFbJLOq359l9r30SzWOLNrBs/EkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WvNeu6ZJ; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52f04c29588so10160565e87.3
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 06:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722431203; x=1723036003; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KoH56SRwf8/TxoOHLTNrcELy8rHdgIrfzwiLwN+XWLI=;
-        b=WvNeu6ZJF3ygUjwVthtzoLQjJdnXKMhl9EsvhMa9yy6MrslWlIX50ETWljin5w4J8D
-         TG7qt4cs2xqLog+tfyweKcnowoFat605Cir0rWq/BKwnyVZ33Ew5KKpAMLSogmA7jV9Q
-         1cB17InUDqmHFY4/Kg5Kg9KSZjGQQDXRPiRxIGgiwN14bqg6V52G8BFMmPLa+03kyWIL
-         ZsQY8g0jqdTMTAp1KPwEcPmqLCHSnOleldik12RbLgkarLJz0KBOm9ilpk3qrknz2Oom
-         8/qgIsUOkyTlvXloFTS1e0L+s19bCbXEh2eOZmE3eZHP40PbG8ZJOgLIBFTjx0TzqP5x
-         Xl5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722431203; x=1723036003;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KoH56SRwf8/TxoOHLTNrcELy8rHdgIrfzwiLwN+XWLI=;
-        b=YzOmdEVGSsfWaZ5bne+2o1Ub2joX8V615LrOvr3zN3zea8t13kL4JHO93iWYs8Gi9/
-         zytSVVJWQU/NsW4f5CdAh/dkNwBEfNDYKRJPv1DVq3okKOn7D3SepFsmNGXco++1KU2z
-         tG5g8j/sm2OltF2OvR8VRc8guY9U5Xkd3a6VmTqbr3EHvdBHK3+46cNaXB79kjzse5NQ
-         NjwBK582IWvemJJsYkK9V5ZIY7xSioa2wDMBp2qD4y/Y59wsY7zhXNd8lrzRaxRbeSQf
-         xHNzWtl6A5zKrcT93W1vpjiNEB3x2JLHpHSOI3ZidcGgRyk+UVxrJroFHIV6koDWsHHs
-         88Lw==
-X-Forwarded-Encrypted: i=1; AJvYcCUihrhCEcfEY2mX6XGAgDcZT55zIEimYibfTKXSex698x6JtbAw6gq1AC6peukyQOrd9+qqnBDAE3jb4/TX1sCE9hxCO7QaUj4t
-X-Gm-Message-State: AOJu0YxS5vasjKFk82zXtKWqwdkIUiiLChtTQmYFOtt+almnG/lMNeGz
-	DONydHd0jyEsIYoCKXPTDlT71mRmTwBZ4Cf5HRJEVtAgc8X1yJkfqub3Y0Lm+Uk=
-X-Google-Smtp-Source: AGHT+IHbuHd0d81j2oiFIcHNWF/Ai0JWQIg6X7IoOnNHD4z0+TMXZ41pg9PLSCtNerN21URRnZJdqA==
-X-Received: by 2002:a19:770c:0:b0:52c:d626:77aa with SMTP id 2adb3069b0e04-5309b2d9aa9mr7801251e87.58.1722431202745;
-        Wed, 31 Jul 2024 06:06:42 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5bd16f8sm2216692e87.118.2024.07.31.06.06.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 06:06:42 -0700 (PDT)
-Date: Wed, 31 Jul 2024 16:06:40 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Elson Roy Serrao <quic_eserrao@quicinc.com>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 7/8] usb: misc: eud: Handle usb role switch notifications
-Message-ID: <5nsextq3khhku3xfdwwj74wmx5ajyqhjyarfpnpa6i2tjx76ix@z7lpip6pi6re>
-References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
- <20240730222439.3469-8-quic_eserrao@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24811AD9C3;
+	Wed, 31 Jul 2024 13:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.129.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722431442; cv=fail; b=dc5C9RHoqpdIV97hSOvuEdD/BvRmEm5Gu5grcaapcT2KEW0Y63QD5nvbEQL1IFfNtNcbLyYz6BI1LB5ovMgJhVkMA8076+8Z9wTm6n83fhJFqV/uVbnffoAATmbgV6F9oqs00HjmTmGDnRkDurp6NJ90pZk2yLQmN0oAoPSrinM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722431442; c=relaxed/simple;
+	bh=3pEBR5YbiCTCH2u21TMF9s72X+GAsPJmWoiHcbgxnkc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=AXWoe5kpKPXeuh1FkH6dhYz05e7vFe9H/hvhXUIQV6InAtTp5AQxk+b5ovs8t3QgFrskMxjCEQbfkQvO+WDBdMYbOuFi+ayZY+cM18jU3w86SGeBZvaOhDhjHu/jOtye/Gqa1nvpUuoqsvO05pjmtNYFL8fz1g8vwnL2FkWRu98=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=TsGyTaTH; arc=fail smtp.client-ip=52.101.129.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZIUDvT34BymWQ/Wjg7oJ4F3WT1FykFgMMUTYW4yskWttFIAREOABK/Rb/aUviNZ3HpfYTPQdHnU/QfNc0wZB6Vuk+Nm5Pfzja7QaDjPOCxGIgF8VWIMg97hxkIp7rj4r1m38bdxpUC+xusS/D/S6C6C9au5FdhfHQ7uxBTiwTixje/4yEcFh+aPkFshBaFXtIdpB3P16Yz4z+a1UrzIc6voRQ3luBTBYYlIzkUdlHdIZXqiteuNUcHjyYTbkqbfHv1sr6wx1WKlDk1NosWOLBwp0bc3xJniopXn4dE7HIXnsHeeSUouu+mBX6iRtLZ7dAS916P/XGOq68lTOEg1iFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3pEBR5YbiCTCH2u21TMF9s72X+GAsPJmWoiHcbgxnkc=;
+ b=WkTC0vo5z1zAQWvv6thPm3rG5r37wK12x/tZNhbC5nyqrT/I4DgaoQb2gmQhBUa74zDqevCtuJb586cZ5WUI2HEhh9uyoNmjOYv+9t7dKTk1X/bLqheTf4TibleiibX/sqBFmFaXXlPVnMdbMZKcoO+VkGQOrNgnKAqaci6G3p5QtXaUc7puKVNayWPj8q9Dn6GjLPxYQf07I0QWJEUw6Xr/WiQqtMuvxb8bR7FPBzrCWCkEWTpuL++qD9bfE8XHpKLbOXfsRh02PPBll+ideDxiNavTxxGBQiBVl1HyGrZhy3c3E8gr//Iixx/icnTyQeX1BPvtK60fqOzpeDLpEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3pEBR5YbiCTCH2u21TMF9s72X+GAsPJmWoiHcbgxnkc=;
+ b=TsGyTaTHdxoKg468hcLtxNi/HMAaZv6g6O5pEZGU8Yy7OXUPWHVs+j9FHk+ni7dG80kPb4LdMvfvRw/aUiqCC6kr8Drbl7BLQdZE8FHfrB4197EumuypUKkXGz3TfyhpxYstWIQ2DuLp6iHu5uAZiGc1UIZrOwomB0Fm00cGiK9rY7PwJ0FZagI+rXLx9OcDXBidurUHV66bHyGk5ADSOkYG5KJ3kYG7ls3ytR++GkIWTJABDv/FEHR0ylsBwGIRAMaQ7XlFmCb7/3OM9vrCVSW9lev3WKbL+f00g93PJ9SXP9dLj6PpcWN1/Qw0pa7rjKYiPj0YsU0Ytq6NWtuXzg==
+Received: from TYUPR06MB6217.apcprd06.prod.outlook.com (2603:1096:400:358::7)
+ by TY0PR06MB5706.apcprd06.prod.outlook.com (2603:1096:400:272::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.21; Wed, 31 Jul
+ 2024 13:10:36 +0000
+Received: from TYUPR06MB6217.apcprd06.prod.outlook.com
+ ([fe80::c18d:f7c6:7590:64fe]) by TYUPR06MB6217.apcprd06.prod.outlook.com
+ ([fe80::c18d:f7c6:7590:64fe%4]) with mapi id 15.20.7807.026; Wed, 31 Jul 2024
+ 13:10:36 +0000
+From: =?gb2312?B?uvrBrMfa?= <hulianqin@vivo.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, opensource.kernel
+	<opensource.kernel@vivo.com>
+Subject:
+ =?gb2312?B?tPC4tDogW1BBVENIIHYyXSB1c2I6IGdhZGdldDogdXZjOiBGaXhlcyB0aGUg?=
+ =?gb2312?B?YWJub3JtYWwgZW51bWVyYXRpb24gcHJvYmxlbSBvZiBtb2JpbGUgcGhvbmUg?=
+ =?gb2312?Q?as_UVC_camera.?=
+Thread-Topic: [PATCH v2] usb: gadget: uvc: Fixes the abnormal enumeration
+ problem of mobile phone as UVC camera.
+Thread-Index: AQHa40jh6qpqVz84x0eDoslRI8aWWLIQz0PA
+Date: Wed, 31 Jul 2024 13:10:36 +0000
+Message-ID:
+ <TYUPR06MB62176AEF282BCEF750F094DBD2B12@TYUPR06MB6217.apcprd06.prod.outlook.com>
+References:
+ <TYUPR06MB62175899DECC7A9B0DA0DF01D2B12@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <20240731122351.GU8146@pendragon.ideasonboard.com>
+ <TYUPR06MB6217EF08BA3F758EB20C833DD2B12@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <20240731125444.GX8146@pendragon.ideasonboard.com>
+In-Reply-To: <20240731125444.GX8146@pendragon.ideasonboard.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYUPR06MB6217:EE_|TY0PR06MB5706:EE_
+x-ms-office365-filtering-correlation-id: 47953ea3-de85-4fbe-a980-08dcb1622aca
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?gb2312?B?TDhFZ053d1NRWWxTQm1zZW85c2JHQndHbnZiN05ua0RwcEE2M09ZR1VNL25B?=
+ =?gb2312?B?ekVqL1lkSms4cU5wSDJXOXVCN2xjN3ZYNVl4SzVsd2MrOHlNbENaTHpRQzFK?=
+ =?gb2312?B?R1FQYXFQTnFBRTRuUXlkbkVzVUE4K0dEdmRvaTc1T2VjMWJSRE1kU0NFRnZw?=
+ =?gb2312?B?YWo5UG80UnIxM3ZTYkFBNnFWOTNiblppblZja3d3UG5wSG1HMi90YllCWU4w?=
+ =?gb2312?B?RCt3VGhHWWVqc2RhMzF4RTNPZVR4WEd1M2dwYmgxdFNOcVlTZHR4RERBL1dV?=
+ =?gb2312?B?RHR1QTFiSlhZdUJhK0gzR296cEI4L2hwOEMwQVdocXlGM1VTaTFZTDg2NCtU?=
+ =?gb2312?B?UnVLcUxkajFGMVcydU9GVUpOeHBFdVN2ejg4cDhQWHNibHhKeXlaWE56ZTBT?=
+ =?gb2312?B?UEJCZzBYVldxM09YV1hqQVFTd05MQk5hUkR1Nm5HUDE3c0h5R0xqU2ZVajlQ?=
+ =?gb2312?B?ZUV6VEppV0tpdmJCNkVBdThFRHZqYzJjcFRadkxuWnIydXgwYno4em5mUnNW?=
+ =?gb2312?B?QnVFdGtYdnNNdHY4NTBuUlJZQ0hTUzhadnJNMy82N3VJWDc1R282d09SU1ND?=
+ =?gb2312?B?MVJEU1hrVzc0aTI1am5nQlVXTFlIZGNOK1RtUzBQbGpoQS9XQkRyb1RkTDJj?=
+ =?gb2312?B?eE0wbUVzdm9XY1NKcXRlbEVPL2hpQ2NNWWRvQjRWTXQxaVFubTB4MDExR1JB?=
+ =?gb2312?B?OW1MUlFORnNMK0t4RkdJbnZxTEQwMVBINjFsQUZKd3BrZTUrSnphK0ZDUjFN?=
+ =?gb2312?B?cUFXRzV5cWhSeUVKOUNqZU5MaUN0Q1ZjQ1RzbWZYWVpreGZVemEyUnQ1ajZv?=
+ =?gb2312?B?YTZZZ3VYbFFOSVNQNkNjZFhtZjRObDhFZit2RVZjSHpqTGFKZ1huNzJKenk3?=
+ =?gb2312?B?MjJGMVNZdytZUEpDUVh4d3ZqQXR2ZVlwd1hsSVhLQ1pmVmpJL1BvQjVuaTdV?=
+ =?gb2312?B?aVpMYnlraDFTcTBXK08xWlNwMEYyNXlodDc5VXhzQ2piVU5BNjM3a3RjOGU5?=
+ =?gb2312?B?WUZLMktNdzh6U2I3SVgxbmJLb3BkN0YycDVqdFRIemlBOGxaU3VmdWRuL2dU?=
+ =?gb2312?B?MkhHMWJVcXVCbnNaZm01MXdsSkU4T25oblNGUlVCcWsxUlNDU0tuTlFQZzVp?=
+ =?gb2312?B?Z0VpNlVTUFdYbklxRHpLNXJEYU1nUXllLzROeVBNNTdBd2JBV21KaGxHNG02?=
+ =?gb2312?B?eXlkbUs5UmNaMnowNWtLMmUwUktKcTl1U1V2dk1mUWc3aVFaUTZ5Z3pNMFZD?=
+ =?gb2312?B?Q3RwOVNpQjcwZnpYUzd2a3BPaitzamJHNFNPZC9reTRUU0pXaFQxZ3l1eUdh?=
+ =?gb2312?B?K3RodjA4eVdKaVBJRTZ5blRQOEx5MXNURGdta3paN0pKbURTeXp0VFNldzNN?=
+ =?gb2312?B?QWdkWTZFK0R2c0o5SjBtaWdaaVVFWk93QUpEdGsxeE5IcjhQWTQyOU8weVBv?=
+ =?gb2312?B?Q24zd2U2QVBDUzRNTWY1UHJzdmVKU1FWcWJFamUyNCttNS9ITTNsTi9Lb3lB?=
+ =?gb2312?B?QmRLSU41QTl4cEVESTJTdVE1cHpnVXRoTzhwUnkwR0llMGZtc3FHOGJtMHRZ?=
+ =?gb2312?B?VjFkV21mRHF1ZzczWm12a0FZYVlFQVUzMU9zK0cyWHZGVGUvaFhDbGp5OC83?=
+ =?gb2312?B?eG16dWozWEVqWkxzMjdyc1dtU0g2WE1ldGlkRHBsQTVRZEFlNVplWGdDc2I0?=
+ =?gb2312?B?SVNTN2xWaW1kRVlaUy9xWnNZbGI3cUo0cDhJYzhETzlwOHluUytpZFhOQVha?=
+ =?gb2312?B?S2hVTEpjUnAvWjFPakRudUN4T3VPeXBZZHZGdjN1c1MxWUVIRUtnUXdqMTZo?=
+ =?gb2312?Q?0ReG7sxKWJL5znCC08YQqlmgMb9aSWmJcXCXs=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYUPR06MB6217.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?gb2312?B?a0NzN0hiSXI1NVdHVUJRNkJ6Zk9yU0FmRHpVRW4vZVlteGpkQUVtZi9UK1oz?=
+ =?gb2312?B?Tm5EVDZ3RTUrMDZmaWMwbkhRdHhtVlhLU0V4RVhjeXVmNUtZSnk3SkJKOU8w?=
+ =?gb2312?B?L0NMVlNDSHpSRjVQZkQvMmJoTWFoRzdCeEp4QXBNdkZwZFJiZ2I5NmE1ZDcv?=
+ =?gb2312?B?bi9PNGtRZ0JBamtxRmtUcWMzeUp6aWZ0UnZZZWhYVXNPK2lKMmdCaGNZWHpx?=
+ =?gb2312?B?bmVmK2s4WUtiNlFxTDNuVCt1T01QdytpY2NaNnlpbm1aaXl2UTdvSnEva1d4?=
+ =?gb2312?B?MHpKVGZMeEplYUtmZHplUDR3eXIyNG51UWpzekJsREVrcHM4REszUFZzMUc4?=
+ =?gb2312?B?YWxIb3hyT21tWTArTmdCclBzVDJLYlRvdElTNlZ5aVdiQ3FpdVl3QzZqTWQ2?=
+ =?gb2312?B?M0hUNHB4bjVmL3BYa1JCTDh2djdlRlY0VURMdU5WeVRyT05QQWwwbkxaRmp2?=
+ =?gb2312?B?eGgyRU5GYm5PTHl2b3UyaldoZjFQaldZSzQrWDUwclR3dUE4NEJXUDZtRjFV?=
+ =?gb2312?B?Qi9Pc0VIdFNtQ0tKa2Q4MUhlQ2hnbnZ4K1EzbVRwR1RzSnRialFSZjhBdmNr?=
+ =?gb2312?B?ODJkL1pEL3ZhUE1KcjluaElDUk1TcHVMTXRrWHYrUklUeGRmbjdxS1RGR2NV?=
+ =?gb2312?B?djd6Z3pVaU1rR2Y4a2JiOFo5d3JSS3pPeFNBMEFBT0E3ZVU0WWVNbGF5WG5D?=
+ =?gb2312?B?SmJUWmVSTmVtMThZbHQ1YmlRb2pRYTZrU0EvNW1zZElZbTVYeDZKOUtsVVhw?=
+ =?gb2312?B?MEVHRzdIcklFaFhMdWtLR2Vpd2E1bWV0REZ2b2JRcHo4ZDJNRVJZaUhOWXVW?=
+ =?gb2312?B?Y0I5eThjaG1ET0drbmgxTXRUTnlRcmdQZmFHdjRMSTROSlNrWS9YR3dQcVZa?=
+ =?gb2312?B?TXNEZkJKQUo4WnFBMkd2dEptZWdxZlgrTlpUOGszV0FvVThTcEpyZU9jNlhq?=
+ =?gb2312?B?UjB6VkFJd1l6OE80TmtPOWxIV2J0eThJK1ZWSUxKd3NpcEQvdkcxeHI1emlZ?=
+ =?gb2312?B?dTd3R1JMYnY0aDdCeGZha2lmczRXSjk4QXcvdExuTzI4b2Q5WXl1R05FL25Z?=
+ =?gb2312?B?OEVhZmpPb1A0V3VOVTY3eVZERE1pcE9GdlZ6VEkyditENUovYk1mY2lGbEhU?=
+ =?gb2312?B?YkdsZDJMYkVQUUtaMEhCTFBiZ05RbEZqZnR2c3RONDlIUDBmSUxHNVFsYjYz?=
+ =?gb2312?B?UVpWdjFOSHdOUHM5UXk2Sy9mbVgzVXZ2ZDZ5QStNM3NDTkNDYU5XaVZQNVlE?=
+ =?gb2312?B?TUFvY2psSGVwQkVpcnpVeVNQeFNPbS9JRjdzK2J3anBjR3RzbjM0eUlBc3B0?=
+ =?gb2312?B?NUNwWGdiMTJ4YWdmQU9zQ3orVTFwNzN2QVdsRTMyS28vMDgwaEF0T2JMampi?=
+ =?gb2312?B?M1ZuTXJYQWhQb1BJS0FvT2ZvRUlSbUFadS9TN2c0Ui9yd29yby9xMHBQK0Jr?=
+ =?gb2312?B?ZnAyQ0ZGMmI5bmNJVjBDSFhaSDdVaW5nME1JYi9EVE4zWkk4Si9LcDhLRzNk?=
+ =?gb2312?B?ek1kU1RYVlF5OVRLNFJ4Nmd3WlNGRmxDKzJGbWJRcy9QeXh5ZWlOM2d5UHd3?=
+ =?gb2312?B?ZE4rSmE4NnlZUVBWRXhIeklnYlJ3WmNXNEkzU1cyT2hmd2RpcGNsZ01uNTdV?=
+ =?gb2312?B?bU9RU09HaHM1YWl4WU9oK2llSlhiUWl0M0tObGdIZDN0UG1zOGdNeUIyWndX?=
+ =?gb2312?B?NVk1Nk9SR0RXcm52ellRTWtOQ0h4ZHRwaGV6VEJ0dFgxQnR0bGJyaS9Xa1M4?=
+ =?gb2312?B?Y3VvajJ4RlB6Wkt3TE84ZTB5WXNpaU1GcGpiSklPNWRJRzJZNTNTR3NOY3NZ?=
+ =?gb2312?B?STNJL2oyMU45WTdRb3EwOUZKODY1YVlFUTBtRlU2ZUcyU2JTNVRvUTVjS2Fr?=
+ =?gb2312?B?enFTTWxYVEFPOCtKblliRnA0VVIzQmFjclE2cjB5VG5hVlVQMUhRdXhxVjRG?=
+ =?gb2312?B?ZW95cVhxUFdsQ2dOOXVBaHdDdW1Wbi9ZZWVQVjB6a2pHcWVUTlFqZVg3cWFC?=
+ =?gb2312?B?T1JEYUhsKzdRNkg0RXg0WThGakRoQU5vT2crVlYzVlZyRzVXeDVYYUk0R1Uv?=
+ =?gb2312?B?Ly9Ec2JaMEJkSHF6aHUxWCtKM3BtR2hVL2dhNTgvcUNVcVQvSzZXOEJyUmIz?=
+ =?gb2312?Q?uZTY=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240730222439.3469-8-quic_eserrao@quicinc.com>
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYUPR06MB6217.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47953ea3-de85-4fbe-a980-08dcb1622aca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2024 13:10:36.2547
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9aEcCiNMm8mmSJ60q2VAU1KtAsmExgDv7BIpyvjMdFRJmi3Qg28XAHX/rFg7yOMvXbN1tSqK9JJ0EteLoM1k/g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5706
 
-On Tue, Jul 30, 2024 at 03:24:38PM GMT, Elson Roy Serrao wrote:
-> Since EUD is physically present between the USB connector and
-> the USB controller, it should relay the usb role notifications
-> from the connector. Hence register a role switch handler to
-> process and relay these roles to the USB controller. This results
-> in a common framework to send both connector related events
-> and eud attach/detach events to the USB controller.
-> 
-> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
-> ---
->  drivers/usb/misc/qcom_eud.c | 91 ++++++++++++++++++++++++++++---------
->  1 file changed, 69 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 3de7d465912c..9a49c934e8cf 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -10,6 +10,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/mutex.h>
->  #include <linux/of.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
-> @@ -35,12 +36,16 @@ struct eud_chip {
->  	struct device			*dev;
->  	struct usb_role_switch		*role_sw;
->  	struct phy			*usb2_phy;
-> +
-> +	/* mode lock */
-> +	struct mutex			mutex;
->  	void __iomem			*base;
->  	void __iomem			*mode_mgr;
->  	unsigned int			int_status;
->  	int				irq;
->  	bool				enabled;
->  	bool				usb_attached;
-> +	enum usb_role			current_role;
->  };
->  
->  static int eud_phy_enable(struct eud_chip *chip)
-> @@ -64,6 +69,38 @@ static void eud_phy_disable(struct eud_chip *chip)
->  	phy_exit(chip->usb2_phy);
->  }
->  
-> +static int eud_usb_role_set(struct eud_chip *chip, enum usb_role role)
-> +{
-> +	struct usb_role_switch *sw;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&chip->mutex);
-> +
-> +	/* Avoid duplicate role handling */
-> +	if (role == chip->current_role)
-> +		goto err;
-> +
-> +	sw = usb_role_switch_get(chip->dev);
-
-Why isn't chip->role_sw good enough? Why do you need to get it each
-time?
-
-> +	if (IS_ERR_OR_NULL(sw)) {
-> +		dev_err(chip->dev, "failed to get usb switch\n");
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +
-> +	ret = usb_role_switch_set_role(sw, role);
-> +	usb_role_switch_put(sw);
-> +
-> +	if (ret) {
-> +		dev_err(chip->dev, "failed to set role\n");
-> +		goto err;
-> +	}
-> +	chip->current_role = role;
-> +err:
-> +	mutex_unlock(&chip->mutex);
-> +
-> +	return ret;
-> +}
-> +
->  static int enable_eud(struct eud_chip *priv)
->  {
->  	int ret;
-> @@ -77,7 +114,7 @@ static int enable_eud(struct eud_chip *priv)
->  			priv->base + EUD_REG_INT1_EN_MASK);
->  	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
->  
-> -	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
-> +	return ret;
->  }
->  
->  static void disable_eud(struct eud_chip *priv)
-> @@ -106,15 +143,20 @@ static ssize_t enable_store(struct device *dev,
->  	if (kstrtobool(buf, &enable))
->  		return -EINVAL;
->  
-> +	/* EUD enable is applicable only in DEVICE mode */
-> +	if (enable && chip->current_role != USB_ROLE_DEVICE)
-> +		return -EINVAL;
-> +
->  	if (enable) {
->  		ret = enable_eud(chip);
-> -		if (!ret)
-> -			chip->enabled = enable;
-> -		else
-> -			disable_eud(chip);
-> +		if (ret) {
-> +			dev_err(chip->dev, "failed to enable eud\n");
-> +			return count;
-> +		}
->  	} else {
->  		disable_eud(chip);
->  	}
-> +	chip->enabled = enable;
->  
->  	return count;
->  }
-> @@ -185,11 +227,9 @@ static irqreturn_t handle_eud_irq_thread(int irq, void *data)
->  	int ret;
->  
->  	if (chip->usb_attached)
-> -		ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_DEVICE);
-> +		ret = eud_usb_role_set(chip, USB_ROLE_DEVICE);
->  	else
-> -		ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_HOST);
-> -	if (ret)
-> -		dev_err(chip->dev, "failed to set role switch\n");
-> +		ret = eud_usb_role_set(chip, USB_ROLE_HOST);
->  
->  	/* set and clear vbus_int_clr[0] to clear interrupt */
->  	writel(BIT(0), chip->base + EUD_REG_VBUS_INT_CLR);
-> @@ -198,16 +238,18 @@ static irqreturn_t handle_eud_irq_thread(int irq, void *data)
->  	return IRQ_HANDLED;
->  }
->  
-> -static void eud_role_switch_release(void *data)
-> +static int eud_usb_role_switch_set(struct usb_role_switch *sw,
-> +				   enum usb_role role)
->  {
-> -	struct eud_chip *chip = data;
-> +	struct eud_chip *chip = usb_role_switch_get_drvdata(sw);
->  
-> -	usb_role_switch_put(chip->role_sw);
-> +	return eud_usb_role_set(chip, role);
->  }
->  
->  static int eud_probe(struct platform_device *pdev)
->  {
->  	struct eud_chip *chip;
-> +	struct usb_role_switch_desc eud_role_switch = {NULL};
->  	int ret;
->  
->  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> @@ -221,16 +263,6 @@ static int eud_probe(struct platform_device *pdev)
->  		return dev_err_probe(chip->dev, PTR_ERR(chip->usb2_phy),
->  				     "no usb2 phy configured\n");
->  
-> -	chip->role_sw = usb_role_switch_get(&pdev->dev);
-> -	if (IS_ERR(chip->role_sw))
-> -		return dev_err_probe(chip->dev, PTR_ERR(chip->role_sw),
-> -					"failed to get role switch\n");
-> -
-> -	ret = devm_add_action_or_reset(chip->dev, eud_role_switch_release, chip);
-> -	if (ret)
-> -		return dev_err_probe(chip->dev, ret,
-> -				"failed to add role switch release action\n");
-> -
->  	chip->base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(chip->base))
->  		return PTR_ERR(chip->base);
-> @@ -248,6 +280,18 @@ static int eud_probe(struct platform_device *pdev)
->  	if (ret)
->  		return dev_err_probe(chip->dev, ret, "failed to allocate irq\n");
->  
-> +	eud_role_switch.fwnode = dev_fwnode(chip->dev);
-> +	eud_role_switch.set = eud_usb_role_switch_set;
-> +	eud_role_switch.get = NULL;
-> +	eud_role_switch.driver_data = chip;
-> +	chip->role_sw = usb_role_switch_register(chip->dev, &eud_role_switch);
-> +
-> +	if (IS_ERR(chip->role_sw))
-> +		return dev_err_probe(chip->dev, PTR_ERR(chip->role_sw),
-> +				"failed to register role switch\n");
-> +
-> +	mutex_init(&chip->mutex);
-
-please move mutex_init earlier.
-
-> +
->  	enable_irq_wake(chip->irq);
->  
->  	platform_set_drvdata(pdev, chip);
-> @@ -262,6 +306,9 @@ static void eud_remove(struct platform_device *pdev)
->  	if (chip->enabled)
->  		disable_eud(chip);
->  
-> +	if (chip->role_sw)
-> +		usb_role_switch_unregister(chip->role_sw);
-> +
->  	device_init_wakeup(&pdev->dev, false);
->  	disable_irq_wake(chip->irq);
->  }
-> -- 
-> 2.17.1
-> 
-
--- 
-With best wishes
-Dmitry
+SGVsbG8gbGludXggY29tbXVuaXR5IGV4cGVydDoNCg0KVGhhbmsgeW91IHZlcnkgbXVjaCBmb3Ig
+dGhlIExpbnV4IGNvbW11bml0eSBleHBlcnRzIGFuc3dlcmluZyBteSBxdWVzdGlvbnMuDQoNClRo
+YW5rcw0KDQotLS0tLdPKvP7Urbz+LS0tLS0NCreivP7IyzogTGF1cmVudCBQaW5jaGFydCA8bGF1
+cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tPg0Kt6LLzcqxvOQ6IDIwMjTE6jfUwjMxyNUg
+MjA6NTUNCsrVvP7IyzoguvrBrMfaIDxodWxpYW5xaW5Adml2by5jb20+DQqzrcvNOiBncmVna2hA
+bGludXhmb3VuZGF0aW9uLm9yZzsgZGFuLnNjYWxseUBpZGVhc29uYm9hcmQuY29tOyBsaW51eC11
+c2JAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBha3BtQGxp
+bnV4LWZvdW5kYXRpb24ub3JnOyBvcGVuc291cmNlLmtlcm5lbCA8b3BlbnNvdXJjZS5rZXJuZWxA
+dml2by5jb20+DQrW98ziOiBSZTogW1BBVENIIHYyXSB1c2I6IGdhZGdldDogdXZjOiBGaXhlcyB0
+aGUgYWJub3JtYWwgZW51bWVyYXRpb24gcHJvYmxlbSBvZiBtb2JpbGUgcGhvbmUgYXMgVVZDIGNh
+bWVyYS4NCg0KSGVsbG8guvosDQoNCldoZW4gcmVwbHlpbmcsIHBsZWFzZSBkb24ndCBkcm9wIHRo
+ZSBDQyBsaXN0IHVubGVzcyB5b3UgbmVlZCB0byBkaXNjdXNzIGNvbmZpZGVudGlhbCB0b3BpY3Mu
+IFlvdXIgcXVlc3Rpb24sIGFuZCB0aGUgYW5zd2VycyB5b3Ugd2lsbCBnZXQsIGNhbiBoZWxwIG90
+aGVyIHBlb3BsZSBmYWNpbmcgdGhlIHNhbWUgcHJvYmxlbSwgc28gaXQncyBpbXBvcnRhbnQgdG8g
+a2VlcCB0aGVtIG9uIHB1YmxpYyBtYWlsaW5nIGxpc3RzLg0KDQpPbiBXZWQsIEp1bCAzMSwgMjAy
+NCBhdCAxMjo0NjoyN1BNICswMDAwLCC6+sGsx9ogd3JvdGU6DQo+IEhlbGxvIGxpbnV4IGNvbW11
+bml0eSBleHBlcnQ6DQo+DQo+IFdoaWNoIGtlcm5lbCBpbnRlcmZhY2UgZG9lcyB0aGUgdXNlciBz
+cGFjZSBwcm9ncmFtIGNhbGwgdG8gbW9kaWZ5IGJpbmRfZGVhY3RpdmF0ZWQgdG8gZmFsc2U/DQo+
+IEkgdHJhY2VkIHRoZSBrZXJuZWwgY29kZSBhbmQgaGF2ZSBub3QgZm91bmQgd2hlcmUgdG8gbW9k
+aWZ5IHRoaXMgdmFsdWUuDQoNCkluIHRoaXMgdmVyeSBzcGVjaWZpYyBjYXNlLCB0aGUgZnVuY3Rp
+b24gaXMgYWN0aXZhdGVkIGJ5IGEgY2FsbCB0bw0KdXNiX2Z1bmN0aW9uX2FjdGl2YXRlKCkgaW4g
+dXZjX2Z1bmN0aW9uX2Nvbm5lY3QoKSwgaXRzZWxmIGNhbGxlZCBmcm9tDQp1dmNfdjRsMl9zdWJz
+Y3JpYmVfZXZlbnQoKSBpbiByZXNwb25zZSB0byB0aGUgYXBwbGljYXRpb24gY2FsbGluZyB0aGUg
+VklESU9DX1NVQlNDUklCRV9FVkVOVCBpb2N0bCBvbiB0aGUgdmlkZW8gZGV2aWNlIHRvIHN1YnNj
+cmliZSB0byB0aGUgVVZDX0VWRU5UX1NFVFVQIGV2ZW50Lg0KDQpZb3UgY2FuIGZpbmQgYSBzYW1w
+bGUgdXNlcnNwYWNlIGFwcGxpY2F0aW9uIG1lYW50IHRvIHdvcmsgd2l0aCB0aGlzIGRyaXZlciBh
+dCBodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcvY2FtZXJhL3V2Yy1nYWRnZXQuIE5vdGUg
+dGhhdCBJIGhhdmVuJ3QgdXNlZCBpdCBwZXJzb25hbGx5IGZvciBhIGZldyB5ZWFycywgc28gSSBt
+YXkgbm90IGJlIGFibGUgdG8gZWFzaWx5IHByb3ZpZGUgZGV0YWlsZWQgdGVjaG5pY2FsIHN1cHBv
+cnQuDQoNCj4gLS0tLS3Tyrz+1K28/i0tLS0tDQo+ILeivP7IyzogTGF1cmVudCBQaW5jaGFydCA8
+bGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tPg0KPiC3osvNyrG85DogMjAyNMTqN9TC
+MzHI1SAyMDoyNA0KPiDK1bz+yMs6ILr6wazH2iA8aHVsaWFucWluQHZpdm8uY29tPg0KPiCzrcvN
+OiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZzsgZGFuLnNjYWxseUBpZGVhc29uYm9hcmQuY29t
+Ow0KPiBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
+b3JnOw0KPiBha3BtQGxpbnV4LWZvdW5kYXRpb24ub3JnOyBvcGVuc291cmNlLmtlcm5lbA0KPiA8
+b3BlbnNvdXJjZS5rZXJuZWxAdml2by5jb20+DQo+INb3zOI6IFJlOiC08Li0OiBbUEFUQ0ggdjJd
+IHVzYjogZ2FkZ2V0OiB1dmM6IEZpeGVzIHRoZSBhYm5vcm1hbCBlbnVtZXJhdGlvbiBwcm9ibGVt
+IG9mIG1vYmlsZSBwaG9uZSBhcyBVVkMgY2FtZXJhLg0KPg0KPiBPbiBXZWQsIEp1bCAzMSwgMjAy
+NCBhdCAxMTo0OToxMUFNICswMDAwLCC6+sGsx9ogd3JvdGU6DQo+ID4gV2hlbiB0aGUgcGhvbmUg
+aXMgY29ubmVjdGVkIHRvIHRoZSBjb21wdXRlciB0byB1c2UgdGhlIHdlYmNhbQ0KPiA+IGZ1bmN0
+aW9uLCB0aGUgcGhvbmUgbmVlZHMgdG8gYmUgZW51bWVyYXRlZCBhcyBhIHV2YyBjYW1lcmEgZnVu
+Y3Rpb24uDQo+ID4NCj4gPiBCZWNhdXNlIHV2Yy0+ZnVuYy5iaW5kX2RlYWN0aXZhdGVkIGlzIGNv
+bmZpZ3VyZWQgYXMgdHJ1ZSBpbiB0aGUNCj4gPiBmX3V2YyBkcml2ZXIgdXZjX2FsbG9jIGZ1bmN0
+aW9uLCB0aGUgdXNiX2dhZGdldF9kZWFjdGl2YXRlIGZ1bmN0aW9uDQo+ID4gaXMgY2FsbGVkIGR1
+cmluZyB0aGUgZXhlY3V0aW9uIG9mIHRoZSBjb25maWdmc19jb21wb3NpdGVfYmluZA0KPiA+IGZ1
+bmN0aW9uIHRvIHNldCBnYWRnZXQtPmRlYWN0aXZhdGVkIHRvIHRydWUsIHdoaWNoIGluIHR1cm4g
+Y2F1c2VzDQo+ID4gdGhlIHVzYl9nYWRnZXRfY29ubmVjdF9sb2NrZWQgZnVuY3Rpb24gdG8gZmFp
+bCB0byBjYWxsIHRoZQ0KPiA+IGNvcnJlc3BvbmRpbmcgY29udHJvbGxlciBwdWxsdXAgb3BlcmF0
+aW9uIChzdWNoIGFzOg0KPiA+IGR3YzNfZ2FkZ2V0X3B1bGx1cCwgbXR1M19nYWRnZXRfcHVsbHVw
+KSwgYW5kIHRoZSBVU0IgY2Fubm90IGJlDQo+ID4gZW51bWVyYXRlZCBub3JtYWxseSB1bmRlciB0
+aGUgdXZjIGZ1bmN0aW9uIGNvbWJpbmF0aW9uLg0KPiA+DQo+ID4gQWZ0ZXIgYXBwbHlpbmcgdGhp
+cyBwYXRjaCwgd2UgbWVhc3VyZWQgdGhhdCB1bmRlciB0aGUgdXZjIGZ1bmN0aW9uLA0KPiA+IHRo
+ZSBkd2MzIGNvbnRyb2xsZXIgYW5kIHRoZSBtdHUzIGNvbnRyb2xsZXIgY2FuIGJlIGVudW1lcmF0
+ZWQNCj4gPiBub3JtYWxseSwgYW5kIHRoZSB3ZWJjYW0gZnVuY3Rpb24gaXMgbm9ybWFsLg0KPiA+
+DQo+ID4gRml4ZXMgdGhpcyBieSByZW1vdmluZyB0aGUgc2V0dGluZyBvZiB1dmMtPmZ1bmMuYmlu
+ZF9kZWFjdGl2YXRlZCB0byB0cnVlLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTGlhbnFpbiBI
+dSA8aHVsaWFucWluQHZpdm8uY29tPg0KPiA+IC0tLQ0KPiA+IHYyOg0KPiA+ICAgLSBBZGQgIkZp
+eGVzOiIgdGFnIG9uIHRoZSBjb21taXQNCj4gPiAgIC0gTW9kaWZ5IGRlc2NyaXB0aW9uIGluZm9y
+bWF0aW9uLg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl91dmMu
+YyB8IDEgLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPiA+DQo+ID4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX3V2Yy5jDQo+ID4gYi9kcml2
+ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl91dmMuYw0KPiA+IGluZGV4IDQwMTg3YjcxMTJlNy4u
+NmQ2M2JlYTE0MjExIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlv
+bi9mX3V2Yy5jDQo+ID4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfdXZjLmMN
+Cj4gPiBAQCAtMTEwNyw3ICsxMTA3LDYgQEAgc3RhdGljIHN0cnVjdCB1c2JfZnVuY3Rpb24gKnV2
+Y19hbGxvYyhzdHJ1Y3QgdXNiX2Z1bmN0aW9uX2luc3RhbmNlICpmaSkNCj4gPiAgICAgdXZjLT5m
+dW5jLmRpc2FibGUgPSB1dmNfZnVuY3Rpb25fZGlzYWJsZTsNCj4gPiAgICAgdXZjLT5mdW5jLnNl
+dHVwID0gdXZjX2Z1bmN0aW9uX3NldHVwOw0KPiA+ICAgICB1dmMtPmZ1bmMuZnJlZV9mdW5jID0g
+dXZjX2ZyZWU7DQo+ID4gLSAgIHV2Yy0+ZnVuYy5iaW5kX2RlYWN0aXZhdGVkID0gdHJ1ZTsNCj4N
+Cj4gVGhpcyBpcyBkb25lIG9uIHB1cnBvc2UuIFRoZSBVVkMgZnVuY3Rpb24gcmVxdWlyZXMgYSB1
+c2Vyc3BhY2UgY29udHJvbA0KPiBhcHBsaWNhdGlvbiwgc28gdGhlIGZ1bmN0aW9uIGlzIGRlYWN0
+aXZhdGVkIGJ5IGRlZmF1bHQgYXQgYmluZCB0aW1lLA0KPiBhbmQgZ2V0cyBhY3RpdmF0ZWQgd2hl
+biB0aGUgYXBwbGljYXRpb24gaXMgcmVhZHkuDQo+DQo+IFRoaXMgcGF0Y2ggaXNuJ3QgcmlnaHQu
+DQo+DQo+ID4gICAgIHJldHVybiAmdXZjLT5mdW5jOw0KPiA+DQo+ID4gLS0tLS3Tyrz+1K28/i0t
+LS0tDQo+ID4gt6K8/sjLOiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZyA8Z3JlZ2toQGxpbnV4
+Zm91bmRhdGlvbi5vcmc+DQo+ID4gt6LLzcqxvOQ6IDIwMjTE6jfUwjMxyNUgMTk6MTMNCj4gPiDK
+1bz+yMs6ILr6wazH2iA8aHVsaWFucWluQHZpdm8uY29tPg0KPiA+ILOty806IGFrcG1AbGludXgt
+Zm91bmRhdGlvbi5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+ID4gb3BlbnNv
+dXJjZS5rZXJuZWwgPG9wZW5zb3VyY2Uua2VybmVsQHZpdm8uY29tPg0KPiA+INb3zOI6IFJlOiBb
+UEFUQ0ggdjFdIHVzYjogZ2FkZ2V0OiB1dmM6IEZpeGVkIHRoZSBhYm5vcm1hbCBlbnVtZXJhdGlv
+biBwcm9ibGVtIG9mIG1vYmlsZSBwaG9uZSBhcyBVVkMgY2FtZXJhLg0KPiA+DQo+ID4gT24gV2Vk
+LCBKdWwgMzEsIDIwMjQgYXQgMDg6NDU6MzFBTSArMDAwMCwguvrBrMfaIHdyb3RlOg0KPiA+ID4g
+V2hlbiB0aGUgcGhvbmUgaXMgY29ubmVjdGVkIHRvIHRoZSBjb21wdXRlciB0byB1c2UgdGhlIHdl
+YmNhbQ0KPiA+ID4gZnVuY3Rpb24sIHRoZSBwaG9uZSBuZWVkcyB0byBiZSBlbnVtZXJhdGVkIGFz
+IGEgdXZjIGNhbWVyYSBmdW5jdGlvbi4NCj4gPg0KPiA+IDxzbmlwPg0KPiA+DQo+ID4gTm90ZSwg
+d2h5IGFyZW4ndCB5b3UgdXNpbmcgc2NyaXB0cy9nZXRfbWFpbnRhaW5lci5wbCB0byBmaW5kIHRo
+ZQ0KPiA+IHByb3BlciBtYWlsaW5nIGxpc3QgYW5kIGRldmVsb3BlcnMgZm9yIHRoaXMgY2hhbmdl
+PyAgUGxlYXNlIGRvIHNvLg0KPiA+DQo+ID4gdGhhbmtzLA0KPiA+DQo+ID4gZ3JlZyBrLWgNCg0K
+LS0NClJlZ2FyZHMsDQoNCkxhdXJlbnQgUGluY2hhcnQNCg==
 
