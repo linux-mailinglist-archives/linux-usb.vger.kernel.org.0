@@ -1,90 +1,116 @@
-Return-Path: <linux-usb+bounces-12693-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12694-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBB3D942A09
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 11:16:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03248942B1E
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 11:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49D4DB2355E
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 09:16:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2AA2283966
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 09:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F8461AAE13;
-	Wed, 31 Jul 2024 09:16:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87881A8C12;
+	Wed, 31 Jul 2024 09:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TiAOzygM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aSIk9tdP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196FA208A4;
-	Wed, 31 Jul 2024 09:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6BC16B395;
+	Wed, 31 Jul 2024 09:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722417364; cv=none; b=GqA827/lnCEl+9BsFejgMi5lh3lm0pgbQRpJZ/0d0d5T0WBcgU6+nVzjooohM0qN/LXc+13I92PuMoeSZTQTDr5SgPWYyVS21E+ABASnpXEHuWBf+leVLW06rjQJHerERQubrX1E93xfYqmOmtvSPuhZa3fpHmqtkz0E2M+mpG8=
+	t=1722419247; cv=none; b=RbIRlzBtLj9Nu1wqRcwJiH9CX6sTtB+LMvz2zPGsl8vnWoPT1jUeJepuZkasfOXHFdzabkihqT0iHbTN61lV7ekrf1RFwwxLwhp3OQVU/94BJqrEvqnbPU74CvpRfM7p/dCkRT04WOLCZOI7orOkIZsqppichkflKzdunen2bQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722417364; c=relaxed/simple;
-	bh=1wXm1tgv630aV3t24QKYlgh3plzTR57ziQAjqnef2rc=;
+	s=arc-20240116; t=1722419247; c=relaxed/simple;
+	bh=AGXgFWGPvCkQywQFuD8KV4/KxjstWINHIpS7W9YsYhU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E9zZdpvCf/Dl3XC98F4mm4XUSBm13nZvfCwb0j4PIe2nF+ch0n7fUOs0yS1ohk7hkdkfo8UdoXrUeW6TmLpVv5BI3TDW2k3d1kAGxMOFiZ9YUguy4X5OTHXa50j3wBkrLwrWnnTXkZyUSiQtUq/Dq72DE5Y5WudsRpH8+wLy6OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TiAOzygM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDF6C116B1;
-	Wed, 31 Jul 2024 09:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1722417363;
-	bh=1wXm1tgv630aV3t24QKYlgh3plzTR57ziQAjqnef2rc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TiAOzygMFPJcREx6wkfkFlQRb36HOOjSH+Yh4ODJiWxOf+UPszzcU8KnHFSrf+p+3
-	 WLG6DVYlcWhSkxCyvgKEFS3KoZfgOBswgiq/E3/ISqNzGIlcWOpHejfjUkpBhxE1dO
-	 bdD0UH0HTrfZWbCGiSmFBqclnd3aZyLJrtCVERGA=
-Date: Wed, 31 Jul 2024 11:16:00 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Walle <mwalle@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_acm: make bInterfaceProtocol configurable
-Message-ID: <2024073145-treat-winnings-3bb4@gregkh>
-References: <20240730194337.2583784-1-mwalle@kernel.org>
- <2024073151-violator-unskilled-6866@gregkh>
- <D33LLE6K8QGH.1BCZM42INRVEX@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HyKE6ByHVSmlW4r7Hi366gFPHodBlkBzOmxf99vDDq2UUDqZgS9T/a/JqfKs7j9ss/12v7yVZGyPIFfGKcE9485/juGRZjST4ncQv+FNPZa9jVcg2JkH7C4DUYoCAlh/3JvCNqQpJKD2Fue292y7xmDru3wDEk8Ku70rEamcmRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aSIk9tdP; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722419246; x=1753955246;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=AGXgFWGPvCkQywQFuD8KV4/KxjstWINHIpS7W9YsYhU=;
+  b=aSIk9tdP30aGhkE2uLX9oRQAzWRxBlE0saASdT7AgYRmSIC3d36EX2vo
+   677yTL2YG/qifVnHN/Uu8Wj1gaDnCO/AeH/fWWs+QBB3Ev2S9gChpeEtu
+   biJlhBeRAH2qnL8A9EH7hXH38jRHddRRIIVt0wIggzdn57YgIz/4dOOrK
+   8d3ECsSEuhwGZPk1J7MCW1u2ykXEn7TBAuaY2YLx7FvaO/pZxsFs0hvkm
+   KvukgMsOVyxRBFVZLbQPzHToc23+U2l3uERn81Aw82W3t86oJ7gNaFizu
+   gYBeAk4ufNE/hYuvLz7JZaWtjVmMEJAKw5VN0HkWBI2W5WqzEx9TkRxx8
+   A==;
+X-CSE-ConnectionGUID: Zglfi/kjT++FpY3O65/UhQ==
+X-CSE-MsgGUID: MJ+5zBv+TGuP2/W0kym+aQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="19876878"
+X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
+   d="scan'208";a="19876878"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 02:47:25 -0700
+X-CSE-ConnectionGUID: 5f0OupZTTFm3hSPIojK+pA==
+X-CSE-MsgGUID: SnWXh8EgRV+pkCAph7Or6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
+   d="scan'208";a="59481339"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa003.jf.intel.com with SMTP; 31 Jul 2024 02:47:21 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2024 12:47:20 +0300
+Date: Wed, 31 Jul 2024 12:47:20 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Will McVicker <willmcvicker@google.com>,
+	Badhri Jagan Sridharan <badhri@google.com>, kernel-team@android.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/15] usb: typec: tcpci: fix a comment typo
+Message-ID: <ZqoIKCTYIaHYoMXe@kuha.fi.intel.com>
+References: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
+ <20240710-tcpc-cleanup-v1-1-0ec1f41f4263@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <D33LLE6K8QGH.1BCZM42INRVEX@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240710-tcpc-cleanup-v1-1-0ec1f41f4263@linaro.org>
 
-On Wed, Jul 31, 2024 at 10:57:04AM +0200, Michael Walle wrote:
-> Hi Greg,
+On Wed, Jul 10, 2024 at 11:36:08AM +0100, André Draszik wrote:
+> autonously -> autonomously
 > 
-> On Wed Jul 31, 2024 at 10:32 AM CEST, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 30, 2024 at 09:43:37PM +0200, Michael Walle wrote:
-> > >  struct f_serial_opts {
-> > >  	struct usb_function_instance func_inst;
-> > >  	u8 port_num;
-> > > +	u8 protocol;
-> > > +
-> > > +	struct mutex lock;
-> > > +	int refcnt;
-> >
-> > Attempting to "roll your own" reference count is almost never a good
-> > idea.  If you really need one, please use the proper in-kernel apis for
-> > this.  But you need to justify it as well, I didn't see why this was
-> > needed at all.
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  include/linux/usb/tcpci.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Honestly, I couldn't grok all that usb gadget magic, so I've looked
-> at similar gadgets and took that from there:
->   grep refcnt drivers/usb/gadget/function/ -r
+> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
+> index 0ab39b6ea205..d27fe0c22a8b 100644
+> --- a/include/linux/usb/tcpci.h
+> +++ b/include/linux/usb/tcpci.h
+> @@ -190,7 +190,7 @@ struct tcpci;
+>   *		Optional; Callback to perform chip specific operations when FRS
+>   *		is sourcing vbus.
+>   * @auto_discharge_disconnect:
+> - *		Optional; Enables TCPC to autonously discharge vbus on disconnect.
+> + *		Optional; Enables TCPC to autonomously discharge vbus on disconnect.
+>   * @vbus_vsafe0v:
+>   *		optional; Set when TCPC can detect whether vbus is at VSAFE0V.
+>   * @set_partner_usb_comm_capable:
 > 
-> They are all doing the same, so maybe that code is old or didn't use
-> the proper APIs back then.
+> -- 
+> 2.45.2.803.g4e1b14247a-goog
 
-It's old code, please do things properly.
-
-thanks,
-
-greg k-h
+-- 
+heikki
 
