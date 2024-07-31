@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-12684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12685-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94990942931
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:31:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB1E1942935
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 10:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B578B212D6
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:30:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 558FE1F215A6
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 08:31:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0488A1A7F9E;
-	Wed, 31 Jul 2024 08:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA8E1A7F6B;
+	Wed, 31 Jul 2024 08:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Va2XUVvS"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jG8VQcFR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3641A7F68;
-	Wed, 31 Jul 2024 08:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725F018DF92;
+	Wed, 31 Jul 2024 08:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722414635; cv=none; b=o79evoT1/miQT4QMSFVmC5mZmwP/WDorVU51ibLx7lR7yPckw2BvMA9VFFiq0i951jxvxJZAD1C6JoVW8lQ2w9m+P8iFTJrfLUPoc0MRa7znrWM+MRgjMQK/7DdXi4ZcYusjzWG1Uhjh8cI7ahlubhiLkW6axeeeA+Pa3+TyssY=
+	t=1722414657; cv=none; b=ErWzpmf8MEqe+psCP0alLhqaPrtBfegXUNRuEVdOY6he2WcEpOtZEVL6c7ef1A3lEmw3lKLsFdZn7Oy805q5h8puH4A45w8brfgDi2nEyDG5NWRI2wMu07rQkWIItTY5nrYKvDgq5+2eIgGCUmr+MlhkB/P8PuSsIVEVQuKpbxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722414635; c=relaxed/simple;
-	bh=83tdkFTvpxeNWsYDJk5FXBclyqEpGP5v1+TSNN8ARpU=;
+	s=arc-20240116; t=1722414657; c=relaxed/simple;
+	bh=9noKt1gXJuh8lgzIR1ZC4PKp4tydTmDjkcAQeRQaFls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tQhGEwxulRX7r+0QsFeRtImDtiIh4/Xf0oT7pqye8CuBhMNkRBtEcr77gPEDOUJVJlzGnup8J2tZfh+Jp4e6ZGwwu0wCncq3FNcqMYez7NaLkDGA1Rdx+Nb/EPQ5Z57yeVuChHVXWlMI9UW9+uaow7wz+WGScMyAZDHozE99LYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Va2XUVvS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDDBC116B1;
-	Wed, 31 Jul 2024 08:30:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=UnOKtEd8hUoPXqPGVQ7GZqcgTvhUN2yoLqRO4C8XSVMSbFZ39BFN/BfmpdrVYxfqwAFeF17UtsNuvFwa2HYnvH66agef7eol82ot8LHvhfP2dx5pns6DiEWHAeH7qTX1Xb+TO0ZCSm0trhWmIgrjTDSQgFhEqE7WrfkIudgHrl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jG8VQcFR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE15C116B1;
+	Wed, 31 Jul 2024 08:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1722414635;
-	bh=83tdkFTvpxeNWsYDJk5FXBclyqEpGP5v1+TSNN8ARpU=;
+	s=korg; t=1722414657;
+	bh=9noKt1gXJuh8lgzIR1ZC4PKp4tydTmDjkcAQeRQaFls=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Va2XUVvSfqlIJj6AwPaTzk2hTukSHAjkHmMVg/0NI559w1qKvqq1RB+L3pW3LjmBp
-	 VlzI3ic4Yr/2EQsKa8RRWAqE4Ssz+Q1qgd5Ns2Yc0G5MjT2v8Jr2oOU/B5DlaKtAEn
-	 Al8dUsjVjhmyRMczbIAVlHbJM3f4uBLXW/ffg4+c=
-Date: Wed, 31 Jul 2024 10:30:32 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: uvc: Improve error checking and tagging
-Message-ID: <2024073119-turbine-subscript-e19a@gregkh>
-References: <20240324-uvc-gadget-errorcheck-v2-1-f141b13ade0e@pengutronix.de>
+	b=jG8VQcFRh39D93U1KZoPssouQGDco1vkfbe2zgQuTIHiZ9c+HUssC3PX5iBpDdOEk
+	 IBBiYcgFxJtpO/lSnfyzY+U2w7Vga6J0yRmP1NyWgBa3ds/SA/PgVup5cs0xYkI4lh
+	 D5iCMhcNeCEocdUKXDTbwJCC3ttGsE4s1AN4XZ2E=
+Date: Wed, 31 Jul 2024 10:30:54 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, jun.li@nxp.com,
+	imx@lists.linux.dev
+Subject: Re: [PATCH v2] usb: dwc3: core: remove spin_lock/unlock_* to avoid
+ deadlock when suspend gadget
+Message-ID: <2024073141-demeanor-amniotic-8f01@gregkh>
+References: <20240527170413.1107831-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,40 +55,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240324-uvc-gadget-errorcheck-v2-1-f141b13ade0e@pengutronix.de>
+In-Reply-To: <20240527170413.1107831-1-xu.yang_2@nxp.com>
 
-On Fri, Apr 05, 2024 at 09:44:56AM +0200, Michael Grzeschik wrote:
-> Right now after one transfer was completed with EXDEV the currently
-> encoded frame will get the UVC_STREAM_ERR tag attached. Since the
-> complete and encode path are handling separate requests from different
-> threads, there is no direct correspondence between the missed transfer
-> of one request and the currently encoded request which might already
-> belong to an completely different frame.
+On Tue, May 28, 2024 at 01:04:13AM +0800, Xu Yang wrote:
+> In current design, spin_lock_irqsave() will run twice when suspend gadget
+> device if the controller is using OTG block:
 > 
-> When queueing requests into the hardware by calling ep_queue the
-> underlying ringbuffer of the usb driver will be filled. However when
-> one of these requests will have some issue while transfer the hardware
-> will trigger an interrupt but will continue transferring the pending
-> requests in the ringbuffer. This interrupt-latency will make it
-> impossible to react in time to tag the fully enqueued frame with the
-> UVC_STREAM_ERR in the header.
+> dwc3_suspend_common()
+>   spin_lock_irqsave(&dwc->lock, flags);      <-- 1st
+>   dwc3_gadget_suspend(dwc);
+>     dwc3_gadget_soft_disconnect(dwc);
+>       spin_lock_irqsave(&dwc->lock, flags);  <-- 2nd
 > 
-> This patch is also addressing this particular issue by delaying the
-> transmit of the EOF/ERR tagged header by waiting for the last enqueued
-> buffer of the frame to be completed. This way it is possible to react to
-> send the EOF/ERR tag depending on the whole frame transfer status.
+> This will cause deadlock on the suspend path. To let it work, just remove
+> spin_lock/unlock_* in dwc3_suspend_common() since they are redundant.
 > 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Fixes: 5265397f9442 ("usb: dwc3: Remove DWC3 locking during gadget suspend/resume")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
 > ---
 > Changes in v2:
-> - removed unnecessary uvc_gadget_errorcheck_param module parameter
-> - Link to v1: https://lore.kernel.org/r/20240324-uvc-gadget-errorcheck-v1-1-5538c57bbeba@pengutronix.de
+>  - add fix tag and stable list
 > ---
->  drivers/usb/gadget/function/uvc.h       |  2 +
->  drivers/usb/gadget/function/uvc_video.c | 69 ++++++++++++++++++++++++++++-----
->  2 files changed, 61 insertions(+), 10 deletions(-)
+>  drivers/usb/dwc3/core.c | 3 ---
+>  1 file changed, 3 deletions(-)
 
-Same here, can you rebase and resubmit if still needed?
+Is this still needed?  if so, can you rebase and resubmit?
 
 thanks,
 
