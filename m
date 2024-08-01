@@ -1,177 +1,198 @@
-Return-Path: <linux-usb+bounces-12811-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12812-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E35449443A3
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 08:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A847944453
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 08:22:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 126BA1C2196A
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 06:15:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EA1D1C221D7
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 06:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53623184524;
-	Thu,  1 Aug 2024 06:11:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F62157481;
+	Thu,  1 Aug 2024 06:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TSfb759i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5F916DC2E
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 06:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4A713F456;
+	Thu,  1 Aug 2024 06:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722492687; cv=none; b=ZsMoBh/YEvKyG2hUw5x85tfdogvvrNgcaLJ9X1hcEsrU4lXdLRyydLqNKXT01B1a1BoqdO3fvfcI99soV/9Cpfo1qgrsjVnWqGapWoGbymwwfAAnEThoQZfYD+lUQ8PEEsBpGDz/DVKcwyNXN/sAh04Dgws5WxRbs9XH48c6seI=
+	t=1722492939; cv=none; b=rCJedX93GXHWtzyYhSrXDM47d7y+qEzlABXlWnjq4KAmgaV1eEUF90hmjS1gbpEjn9GFrWwp8c8U3zv5s0itSNk42mYZjoKoDop0gA7jhXfBVuxiys4gUkeOFeA9vUAsBdA3M0wHDBl8WT9rOkKr6dF7BAHFLloz3Nwh3M1XerI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722492687; c=relaxed/simple;
-	bh=TmVbMhXiLmTeoD9N4OuEuRD9H7Rc5Vut8F90dAAd9jM=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=KmINx8CxPa1y6mhGT4teaAmo8/WeaV3YC3AbDZqMnxakmGCA6R8EEna86zVInKoQbOYC4I+CXI0897FcHj/Epi8hQAnOfvwJE7/oJ9fLznsSD+PCsu7vhQgTM6psQAqWu5aaovb/VEOdQSDlIJ5ov/AMfCYntW4P9jLloFOm8ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-81f8edd7370so938316139f.1
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2024 23:11:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722492684; x=1723097484;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KTp/HXLZJNQkU65Etniqvk0Blau2IcJzy01HL1UhCpg=;
-        b=FNd64KPukUwxN58mMygywV1z+HTrtr1OVkVYAOqduznP1ZaJu1WZjVZRnL9otsNmRP
-         wxl0/YIaiZ5BVELA101WXbTq1zTo/6jJ90VSVkPk/WCEB/u+yiDPHR9K5nNl3Uk+LqNb
-         WOGxFaeSK4B9/sC+viDZ+Vz5h8zYbEeSIasg6E4K/ipja6jrLwTFIvdSBiMVE5cJZ8sE
-         uGvseZGq3DbVfV6LNJ8WeaV4Blthf5odRCCOOgfj0fS+fWiRaEpd3XGVny6l9vfIhg79
-         BSDB/OlEwAQs999W8px9szOiJUwKaPcWhmjjWJcQy7RrqoUYuKAO0OEkPZtAh312k3lE
-         nkSA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6/cKobru4uf4jAPbjDH8X/HzciTz87/QEgYHvBlg2ovPXN2Oh/bC5C7aPfXrEc8s+oMGyWaKX4/ey3vtSN7GFC40n5RYUwh5J
-X-Gm-Message-State: AOJu0YwnZ0o5w8DEgKPn0RverzyPheHrmOStsV11hmT0017XEAAwwHMJ
-	2K4h+bccQW2HKOWe3hKBV/4rZ0liqRyBeZSuuDbhcsbcxf2qYlR0+qIbeTNNiFlUv6+NCox2Jmu
-	RbqMLG39WSOqC4qTlij93t2NfTW1X8Ox8KW/nSgAu2WGbx24cWrUPTaA=
-X-Google-Smtp-Source: AGHT+IG/kojLvRQfNSDwZVbWTcmC2tSP+HbH5brmjUDLobYoZ81nj0mzgSPuHvtF8Eehq08YzMy/43bnIV1Dn5x2dONb1kqM/sZM
+	s=arc-20240116; t=1722492939; c=relaxed/simple;
+	bh=UsUWr/4WbD2jnKP/Vn46wHrKb89vFqivDWjJvtbLhjk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=t4nnFDH4U8zGL4jNV7YdTiqR6HzWHGEBlfcYH5US+2Ts8KPH8BlSgybYoQrfdW+SEKXERxSjoZik2paCg2Tn9zWwwkgM/F0n1+UHnX86duSly0mzfm6cA8Ka23JP579RiGF/FA6G24MwJde7wZAn3vWwv1HmNui1OYm5CjPE6Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TSfb759i; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46VNohPd024782;
+	Thu, 1 Aug 2024 06:15:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	YhrdK/Kb4g25+74l2tEHOzdEyNnQXoJu08Wq8JCuAmU=; b=TSfb759iMCzNpia+
+	pawV1m63tBbYp8EJmVFVNs6fAbPS2+UCF0we8PKiZVFvXwdbbqMajVioFQ6Tu7Wx
+	tfhx+leqVuIMYTZSov0ceBW+G8tha+LmskZOhbXWacvVSfsByik2iQqL4tw38cog
+	EoqwzgUzEHApzyRz0SWretivkRXl7OPyd4h76mDFfDGwdqKzam/V4Htrc11G+RgB
+	7tuy4EZO4gDSbss54MgU063AzqwhOeRLd6n2T2c8L1vL49APx0U2Yg3/ED+/XqSU
+	jq+88RoBZLug22k13sySYBpNg2gpd+7PWGD9vuInXzlr7ve3OrEoNvck3uXf9a3L
+	fG/KZA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40pw457501-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Aug 2024 06:15:30 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4716FT3O031914
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 1 Aug 2024 06:15:29 GMT
+Received: from [10.217.219.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 31 Jul
+ 2024 23:15:22 -0700
+Message-ID: <07d9e1f4-201f-47dc-b692-b1aa14511420@quicinc.com>
+Date: Thu, 1 Aug 2024 11:45:01 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2115:b0:4c0:a8a5:81cc with SMTP id
- 8926c6da1cb9f-4c8c9c6bb20mr91477173.3.1722492684523; Wed, 31 Jul 2024
- 23:11:24 -0700 (PDT)
-Date: Wed, 31 Jul 2024 23:11:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000096ee8f061e991433@google.com>
-Subject: [syzbot] [wireless?] [usb?] WARNING in ath6kl_bmi_get_target_info (2)
-From: syzbot <syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com>
-To: kvalo@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: gadget: uvc: Add H264 frame format support
+Content-Language: en-US
+From: AKASH KUMAR <quic_akakum@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>,
+        Vijayavardhan Vennapusa
+	<quic_vvreddy@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240711082304.1363-1-quic_akakum@quicinc.com>
+ <2024071126-napped-cobbler-4693@gregkh>
+ <0f3fe4b4-5451-480e-a9e4-11ee921521b9@quicinc.com>
+In-Reply-To: <0f3fe4b4-5451-480e-a9e4-11ee921521b9@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: BAwODJNQtGnJyC7Wj_LReSDoNDxxDp_r
+X-Proofpoint-ORIG-GUID: BAwODJNQtGnJyC7Wj_LReSDoNDxxDp_r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-01_03,2024-07-31_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 adultscore=0 clxscore=1015 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 mlxlogscore=910 phishscore=0 bulkscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408010035
 
-Hello,
+Hi Greg,Daniel,Laurent,
 
-syzbot found the following issue on:
+On 7/11/2024 3:13 PM, AKASH KUMAR wrote:
+>
+> On 7/11/2024 2:37 PM, Greg Kroah-Hartman wrote:
+>> On Thu, Jul 11, 2024 at 01:53:04PM +0530, Akash Kumar wrote:
+>>> Add support for framebased frame format which can be used to support
+>>> multiple formats like H264 or H265 other than mjpeg and YUV frames.
+>>>
+>>> Framebased format is set to H264 by default, which can be updated to
+>>> other formats by updating the GUID through guid configfs attribute.
+>>> Using Different structures for all 3 formats as H264 has different
+>>> structure than mjpeg and uncompressed which will be paased to
+>>> frame make func based on active format instead of common frame
+>>> structure, have updated all apis in driver accordingly.
+>>> h264 is not recognized by hosts machine during enumeration
+>>> with common frame structure, so we need to pass h264 frame
+>>> structure separately.
+>>>
+>>> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+>>> ---
+>>>   .../ABI/testing/configfs-usb-gadget-uvc       |  88 ++-
+>>>   drivers/usb/gadget/function/uvc_configfs.c    | 570 
+>>> +++++++++++++++---
+>>>   drivers/usb/gadget/function/uvc_configfs.h    |  34 +-
+>>>   drivers/usb/gadget/function/uvc_v4l2.c        |  80 ++-
+>>>   include/uapi/linux/usb/video.h                |  62 ++
+>>>   5 files changed, 714 insertions(+), 120 deletions(-)
+>>>
+>>> Changes for v2:
+>>> - Added H264 frame format Details in Documentation/ABI/
+>>>    and new configsfs attribute path for mjpeg and
+>>>    uncompresseed formats.
+>>>
+>>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc 
+>>> b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>> index 4feb692c4c1d..2580083cdcc5 100644
+>>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>> @@ -224,13 +224,13 @@ Description:    Additional color matching 
+>>> descriptors
+>>>                         white
+>>>           ======================== 
+>>> ======================================
+>>>   -What: /config/usb-gadget/gadget/functions/uvc.name/streaming/mjpeg
+>>> -Date:        Dec 2014
+>>> +What: 
+>>> /config/usb-gadget/gadget/functions/uvc.name/streaming/mjpeg/name
+>> You are changing an existing api, how will all existing code handle 
+>> this? Will it not break? What is ensuring that this will work as-is ok?
+>> I have modified all existing apis in kernel and have handled it and 
+>> all existing formats
+> are working along with H264 in this change. Only user needs to change 
+> configfs parameter
+> path according to updated path in documentation in Userspace.Currently 
+> H264 doesn't work with same
+> structure and we need add it differently as a result these configfs 
+> paths are getting updated.
+> Daniel and Laurent can you suggest if it ok?
+>>> -#define UVCG_FRAME_ATTR(cname, aname, bits) \
+>>> -static ssize_t uvcg_frame_##cname##_show(struct config_item *item, 
+>>> char *page)\
+>>> +#define UVCG_FRAME_ATTR(cname, fname, bits) \
+>>> +static ssize_t uvcg_frame_##fname##_##cname##_show(struct 
+>>> config_item *item, char *page)\
+>>>   {                                    \
+>>>       struct uvcg_frame *f = to_uvcg_frame(item);            \
+>>>       struct f_uvc_opts *opts;                    \
+>>> @@ -1936,14 +1941,14 @@ static ssize_t 
+>>> uvcg_frame_##cname##_show(struct config_item *item, char *page)\
+>>>       opts = to_f_uvc_opts(opts_item);                \
+>>>                                       \
+>>>       mutex_lock(&opts->lock);                    \
+>>> -    result = sprintf(page, "%u\n", f->frame.cname);            \
+>>> +    result = scnprintf(page, PAGE_SIZE, "%u\n", 
+>>> f->frame.fname.cname);\
+>> sysfs_emit() is made for this.
+>
+> Sure, will change.
+>
+>
+can you suggest how to support H264 format without changing userspace nodes,
+as H264 format structure is different from mjpeg and uncompressed format 
+and
+using same structure show issue as host is not able to recognize H264 
+format frames.
 
-HEAD commit:    1722389b0d86 Merge tag 'net-6.11-rc1' of git://git.kernel...
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1467299d980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e3044dca4d5f6dbe
-dashboard link: https://syzkaller.appspot.com/bug?extid=92c6dd14aaa230be6855
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166a0275980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13552c6d980000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/78a5695ed7e2/disk-1722389b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1507b4c5000d/vmlinux-1722389b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/449aa9e94d6b/bzImage-1722389b.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com
-
-usb 1-1: new high-speed USB device number 2 using dummy_hcd
-usb 1-1: New USB device found, idVendor=0cf3, idProduct=9375, bcdDevice=1a.9e
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 2343 at drivers/net/wireless/ath/ath6kl/bmi.c:90 ath6kl_bmi_get_target_info+0x4f5/0x5b0 drivers/net/wireless/ath/ath6kl/bmi.c:90
-Modules linked in:
-CPU: 0 UID: 0 PID: 2343 Comm: kworker/0:2 Not tainted 6.10.0-syzkaller-g1722389b0d86 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/27/2024
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:ath6kl_bmi_get_target_info+0x4f5/0x5b0 drivers/net/wireless/ath/ath6kl/bmi.c:90
-Code: 77 fc ff ff e8 4c fa b1 fd be 08 00 00 00 bd f3 ff ff ff 48 c7 c7 20 db 7f 87 e8 26 42 fe ff e9 5c fd ff ff e8 2c fa b1 fd 90 <0f> 0b 90 bd ea ff ff ff e9 49 fd ff ff e8 79 ec 06 fe e9 e7 fb ff
-RSP: 0018:ffffc900042eef48 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8881135c0e20 RCX: ffffffff83a15e8a
-RDX: ffff88811394d700 RSI: ffffffff83a16014 RDI: 0000000000000005
-RBP: 0000000000000000 R08: 0000000000000005 R09: 000000000000000c
-R10: 0000000000000000 R11: ffffffff81004e0a R12: ffffc900042ef058
-R13: 1ffff9200085ddeb R14: ffff8881135c0e50 R15: ffffc900042ef05c
-FS:  0000000000000000(0000) GS:ffff8881f6200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055ea8cfc1b18 CR3: 0000000115c00000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ath6kl_core_init+0x1a0/0x11a0 drivers/net/wireless/ath/ath6kl/core.c:101
- ath6kl_usb_probe+0xcd2/0x1450 drivers/net/wireless/ath/ath6kl/usb.c:1168
- usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
- device_add+0x114b/0x1a70 drivers/base/core.c:3679
- usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:254
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:294
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
- device_add+0x114b/0x1a70 drivers/base/core.c:3679
- usb_new_device+0xd90/0x1a10 drivers/usb/core/hub.c:2651
- hub_port_connect drivers/usb/core/hub.c:5521 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x2e66/0x4f50 drivers/usb/core/hub.c:5903
- process_one_work+0x9c5/0x1b40 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf20 kernel/workqueue.c:3390
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Thanks,
+Akash
 
