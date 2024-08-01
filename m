@@ -1,112 +1,117 @@
-Return-Path: <linux-usb+bounces-12807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12808-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4578E944113
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 04:26:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BDC0944225
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 06:13:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF24F1F2127B
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 02:26:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0D1EB216D8
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 04:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9236FD272;
-	Thu,  1 Aug 2024 02:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9675113D624;
+	Thu,  1 Aug 2024 04:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g0NGMFz1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+5nEbkQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F151210E0;
-	Thu,  1 Aug 2024 02:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0751EB491
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 04:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722478933; cv=none; b=PBz8SnWJim5cPpoeZSuHnQvwXgHAOX1eozuAnlQxugsJwGchZTzkGZdIo+Nl2O+6n93aXpfGH8v60RzHqgNYRnO1ohitZjEACKXKioRat4dHeOtyp7MWJ80FYuFZ2xyTbYtAMkBdIQapM8NpdaEXPx9nrHtYbVoVrgwnOGWaoq0=
+	t=1722485584; cv=none; b=Cpo7NgQ0GIbbi00SetrQglzfkvrCeTJrGwwEcpYzLOXMokzVKI3J+GliS59hsv4Sb1v4OyaZrYVFP39Q/2BracTIaCeNYypUMwChPE56CtALIXl0ZCa7r08rNPdtaFjYaQ9NXiDZUrv0jPpEyRq0iZ4ehuTuLvhtBevljc3A6O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722478933; c=relaxed/simple;
-	bh=cgxg4rbo4fUOa9zSmibfWqsv00PQFdhsSeKcX4HAPjg=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=RkzC5IkxQSimb3+/2li3tiijvMReY6TVbgS/R5sCsu1tUyj9PKrZ6QEmoGDHWvASoXP+yJuSyva83v+rmj4XGlMDGUGgzaegR9A2dtkDXwx2sIdWPqtJdKjihSLpojWSRDDrz4VyHWYvx+h6Cif83YlvkLRag0m3dI82bo/em0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g0NGMFz1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24934C116B1;
-	Thu,  1 Aug 2024 02:22:11 +0000 (UTC)
+	s=arc-20240116; t=1722485584; c=relaxed/simple;
+	bh=LQBv2+FmcX6RarJD4O+li63SlqvkQVGbYcSeO+tBMIc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=h95xoEc5/uDZs9AlfatqC6ZdwxYZIhQxT5WzhGF+xDsjtLfstM8xxkcQlSyJ8v44l7w4ynzWX1eItiRjZQa0VQG5Y2Zih7LYDhK1z8Y4Dy+SpRrVu5XHtUQHrXZi1B17oKUhu8UvgRkET0SK8aIvgV7F0BCHpjMv7HR4PFtcW+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+5nEbkQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F15DC4AF0A
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 04:13:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722478932;
-	bh=cgxg4rbo4fUOa9zSmibfWqsv00PQFdhsSeKcX4HAPjg=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=g0NGMFz1HOD7/T0s35VIIArFp5yKZQqK2zn5bgOKLqFQWsYd2iG92tRhhtE2CpZQF
-	 QBuD9G/910Q7Mw1q+xOpDWtVsZ4sszv644qjVVhmFSml9jrzsiCclJE25xEyWcDc/W
-	 SHfoGtCNOu/yzzmspyvZOkdZN9+ockI+hBATMnlbH2aszcTagPa1fHk/Wr6X05VvgQ
-	 h9ToZZi1ciswwXnPVXqurmNQFmlwQzwRE7FgzaiyAkcQRK6d+h6WdzlTs73VNxDx9l
-	 pm1zKgvDDqkWBF5H/iUyc6pJ3msqajhP+PoFAptHCJkmRki/JKN1Cm2NsjlT3cxxnY
-	 0VUev0OBhuy5g==
-Date: Wed, 31 Jul 2024 20:22:10 -0600
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+	s=k20201202; t=1722485583;
+	bh=LQBv2+FmcX6RarJD4O+li63SlqvkQVGbYcSeO+tBMIc=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=s+5nEbkQQctiYXRl+flb9yf9kgzyS9amppwBOy6mby5fyLv0oQ/vb/xfC6Qr1y2k1
+	 56g+o1cXNSu+JcCtPx6BPq1UgNTPisOSzCzzpzh8jWh4u7NU2A1mZUmqs5PGKW34vu
+	 YeUf7UDB6IX1y7wfDF+HiXR0XPypaa4AMBRt5cqtED8Wv86u7UCeICWer4I9laPGNY
+	 C8/CWTd/Gp5YqBbHOz20acm8+oWpYHLu+ON2w6t9Lw6Lz8oRmKRlB8aDHtMG1iHhhb
+	 XffBmPW8O9SW1Vq0L2B3GgWET5u49+tCb2y6V7IruLcgwDMhDRcx45B++b5HjNPCUq
+	 cKEI+WuWO6IjQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 8B964C53BB7; Thu,  1 Aug 2024 04:13:03 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219113] I/O-errors freezing the system [sd 0:0:0:0: [sda]
+ tag#11 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD OUT]
+Date: Thu, 01 Aug 2024 04:13:03 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ijaaskelainen@outlook.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219113-208809-oQT7XbafgO@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219113-208809@https.bugzilla.kernel.org/>
+References: <bug-219113-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org, 
- Thinh.Nguyen@synopsys.com, krzk+dt@kernel.org, 
- srinivas.kandagatla@linaro.org, linux-doc@vger.kernel.org, 
- bgoswami@quicinc.com, linux-arm-msm@vger.kernel.org, tiwai@suse.com, 
- lgirdwood@gmail.com, alsa-devel@alsa-project.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, corbet@lwn.net, 
- perex@perex.cz, gregkh@linuxfoundation.org, conor+dt@kernel.org, 
- linux-sound@vger.kernel.org, broonie@kernel.org
-In-Reply-To: <20240801011730.4797-14-quic_wcheng@quicinc.com>
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-14-quic_wcheng@quicinc.com>
-Message-Id: <172247893082.2670643.17763625549296585780.robh@kernel.org>
-Subject: Re: [PATCH v24 13/34] ASoC: dt-bindings: Update example for
- enabling USB offload on SM8250
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219113
 
-On Wed, 31 Jul 2024 18:17:09 -0700, Wesley Cheng wrote:
-> Add an example on enabling of USB offload for the Q6DSP.  The routing can
-> be done by the mixer, which can pass the multimedia stream to the USB
-> backend.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  .../devicetree/bindings/sound/qcom,sm8250.yaml    | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
+--- Comment #5 from Ilari J=C3=A4=C3=A4skel=C3=A4inen (ijaaskelainen@outloo=
+k.com) ---
+Comment on attachment 306644
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306644
+dmesg
 
-My bot found errors running 'make dt_binding_check' on your patch:
+> Could you try mainline 6.10.2?
 
-yamllint warnings/errors:
+No Sir, not at all. Debian GNU/Linux supports only 6.1.x and the new kernels
+are also buggy. I don't want to play hangman.
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/sound/qcom,sm8250.example.dts:97.44-45 syntax error
-FATAL ERROR: Unable to parse input tree
-make[2]: *** [scripts/Makefile.lib:427: Documentation/devicetree/bindings/sound/qcom,sm8250.example.dtb] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1430: dt_binding_check] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
+> Add to kernel boot arguments: iommu=3Dpt amd_iommu=3Don
 
-doc reference errors (make refcheckdocs):
+Butt I am on Intel Atom platform.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240801011730.4797-14-quic_wcheng@quicinc.com
+> Do you know any kernel version which doesn't have this problem?
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+No Sir, this is a new platform for me.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+> Disabling UAS should be enough if you need this disk to start working rig=
+ht
+now, albeit not with maximum performance.
 
-pip3 install dtschema --upgrade
+Sounds like an idea to me, the hangs itself=20
+cause a terrible loss in performance so I think it could actually increase
+performance  and stability. How do I disable UAS?
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Besides there are no new bioses for this certain Intel Compute Stick Cherry
+Trail.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
