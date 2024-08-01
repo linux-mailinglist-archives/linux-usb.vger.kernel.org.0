@@ -1,225 +1,132 @@
-Return-Path: <linux-usb+bounces-12823-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12824-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDAB29446B2
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 10:35:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B54029446B7
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 10:36:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F171C1C23B1D
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 08:35:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6B041C240BB
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 08:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0460816EB5B;
-	Thu,  1 Aug 2024 08:35:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41A1D16DC12;
+	Thu,  1 Aug 2024 08:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="haQEDJOg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VLrhxaOX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A8316E86E;
-	Thu,  1 Aug 2024 08:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9530145BEC;
+	Thu,  1 Aug 2024 08:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722501333; cv=none; b=kAf4s2sd2lsmeo+4kd2LRp9QQ2B298rfP3bEw1tBUgHLlYdQTN1UgntPk0+SoZFcAWJ6zwxTcBCPT/0gT4EqlBNXN78qCWBKJMKE3NydVqbmQiC/IDP0goxH8SyPPkXUSEBS9JvjgU1GG9F2SoNf+XBo3zcLrL6sLw4ns3nZTE4=
+	t=1722501372; cv=none; b=piPH8wwmamlqQgiF52wg9d0BMme1OPXIUMvNqLpzGzxS6Bh9Ozo2jwZ1FbXMYq5/rieKLbRa5D3b9I71MiAnwE2ddsnjD8H2lJ3yKOuSBRyBjzDUMKwKZ3i7hhujoakLua5CnZDejuEi1TGJpHeJ5MR7od7KTjncH4v8HbpwSxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722501333; c=relaxed/simple;
-	bh=eYp09Enzo5RdanBOF4Cu0/t6tpG469XR13eaMGptRHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bxESR7k046DbHoF0JTcIoqXQLpvbjDuCVESk0VGlsceTIDgDjBXA2CqYwIgcKjzzkby/oQuj7M/U3+LIZgkyaGn22OB/mjNIsfsR3zILJpqVI9ZESy5NJxDpc4QvMRBMMtYSB9J7oEKhZunHw77prwpUIKrPNTY+yEgP1laHxZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=haQEDJOg; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722501332; x=1754037332;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=eYp09Enzo5RdanBOF4Cu0/t6tpG469XR13eaMGptRHM=;
-  b=haQEDJOg6b+lX/9hh/Xh1l6ZBWlbIw8mc4blpe3OebjEaAYX0XIdu7+E
-   pZcu7jdhsGEdpGSX24dPfiUYj6J0g19ROI85bcuGERtagxYOLvrnPP43K
-   5ArvvIwAf80S1IXxIfqZBDlJnKjWyi1t/bQkv1zlgkqIFQJ2R9oIFzBSb
-   1JSzDwFZbG6SK4B93vtNVnfaCZWtrUe6hBsy9X/8rKSNfIC7NWyxxU+zG
-   0uOZCmaA9y87hu3Zyp3XLWPiGZcxvTpGFrVVrs/9PBgEUihZAb+osBgBx
-   LSAmPNWZVvCjrO3dVqQq9kyra4Thc0WrkSngRgoAwPf5MBrC+GUCYr9lf
-   A==;
-X-CSE-ConnectionGUID: 8CDw//LPQ4u5padJdLZvyg==
-X-CSE-MsgGUID: Ws/Aj1XNStucVMHZNwCNqw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="24202505"
-X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="24202505"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 01:35:31 -0700
-X-CSE-ConnectionGUID: mfGR6wxpQ4+QXFhjc+0XbA==
-X-CSE-MsgGUID: 8KDhH2y9RJ+dGPlwuyVuEw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="59287697"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa005.fm.intel.com with SMTP; 01 Aug 2024 01:35:27 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 01 Aug 2024 11:35:26 +0300
-Date: Thu, 1 Aug 2024 11:35:26 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
-	RD Babiera <rdbabiera@google.com>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm/tcpci_maxim: fix non-contaminant CC
- handling
-Message-ID: <ZqtIztzIS/M+duYT@kuha.fi.intel.com>
-References: <20240710-max33359-toggling-v1-1-f6dc123f3a0a@linaro.org>
+	s=arc-20240116; t=1722501372; c=relaxed/simple;
+	bh=kToZ6DZN3bFkEWpJg2KNEaPPOHmkG/700tM2Y/uwC+0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E+olWtx5G2y4PCY3kYeON1Po24MAPLh2MYp3aypNIlaah5yTcZoOfEZ6SKEPBNGg4n0diSq4hAt+HEVSZweW1F1lOMQK0yv1kaKc9GmydaIpRDO9TgFx7LbIfCBVR3JTYeXDI730z1ZLIQli6TFTGg+onC00J/s3w93PtmEXg/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VLrhxaOX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2022C4AF0A;
+	Thu,  1 Aug 2024 08:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722501372;
+	bh=kToZ6DZN3bFkEWpJg2KNEaPPOHmkG/700tM2Y/uwC+0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VLrhxaOX4PX/0DIu6qpOcie50YWnPC8GTK+YPBX9WKJrXecs7MOCGPBJj4jZIh+6o
+	 DYrvpQYAGKbe7W+9oFtz9lkMCnAg2kzp3XkGCs2xgKoEf39T29WVr7pWhyxqUgiMWa
+	 fYvhEHtA43AcyUJTL3X/WMm1ZCGGfP8gtzKcM4lS+3/9qc8LPvlzBnI2DJfOC4Thhw
+	 2VIw+J5Ur5OwpBsXKpoC0CKRAUcK6s5ZMEJYTAlVDJlesl9t18Q5NZarzQfLIVDhS9
+	 jHbfnIg0jea9Q7wFA69Rh2mvmmOGTyoAktXok6FvSYg1mHsuz0ECQxcjkY2mzz+l1r
+	 Z5ViKhMzv4AJQ==
+Message-ID: <0b86676e-0750-46dd-815b-8959a77d4f2d@kernel.org>
+Date: Thu, 1 Aug 2024 10:36:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240710-max33359-toggling-v1-1-f6dc123f3a0a@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v24 00/34] Introduce QC USB SND audio offloading support
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
+ Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
+ gregkh@linuxfoundation.org, robh@kernel.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org
+References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240801011730.4797-1-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi André,
-
-On Wed, Jul 10, 2024 at 07:28:32AM +0100, André Draszik wrote:
-> tcpci_maxim currently never triggers the TCPM state machine when CC
-> status has not changed due to a contaminant but due to a real
-> connection event, i.e. a genuine plug event, meaning the system will
-> stay idle and not notify any subscribers.
+On 01/08/2024 03:16, Wesley Cheng wrote:
+> Requesting to see if we can get some Acked-By tags, and merge on usb-next.
 > 
-> The reason is that the initial state of the port is 'toggling', which
-> causes _max_tcpci_irq() to only drive the contamination part of the
-> TCPM state machine (via tcpm_port_clean()).
-> 
-> What should happen instead is that if no contamination was detected,
-> the TCPM should be notified of the CC change in this case.
-> 
-> To fix this, we update ...is_contaminant() to also allow its caller to
-> determine if more CC processing is required and then call into the TCPM
-> as required.
-> 
-> While at it, add a kernel-doc for max_contaminant_is_contaminant().
-> 
-> Note: the code has an issue where I2C errors during contaminant
-> detection also cause the TCPM state machine to not be updated. This
-> commit doesn't change this behaviour and should be addressed by
-> follow-up commit(s).
+> Several Qualcomm based chipsets can support USB audio offloading to a
+> dedicated audio DSP, which can take over issuing transfers to the USB
+> host controller.  The intention is to reduce the load on the main
+> processors in the SoC, and allow them to be placed into lower power modes.
+> There are several parts to this design:
+>   1. Adding ASoC binding layer
+>   2. Create a USB backend for Q6DSP
+>   3. Introduce XHCI interrupter support
 
-This looks okay to me, but just in case, let's wait for comments from
-Badhri, or maybe RD can take a look at this. One nitpick below.
+Your patchset is not bisectable. It's v24 and such issues should not pop
+up... So please wait a week for reviews and then post v25 fixing all
+bisectability issues and any other comments.
 
-> Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> ---
->  drivers/usb/typec/tcpm/maxim_contaminant.c |  7 +++++--
->  drivers/usb/typec/tcpm/tcpci_maxim.h       | 15 ++++++++++++++-
->  drivers/usb/typec/tcpm/tcpci_maxim_core.c  | 12 ++++++++----
->  3 files changed, 27 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> index f8504a90da26..e7fa3e36f8ae 100644
-> --- a/drivers/usb/typec/tcpm/maxim_contaminant.c
-> +++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> @@ -322,11 +322,14 @@ static int max_contaminant_enable_dry_detection(struct max_tcpci_chip *chip)
->  	return 0;
->  }
->  
-> -bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect_while_debounce)
-> +bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect_while_debounce,
-> +				    bool *cc_handled)
->  {
->  	u8 cc_status, pwr_cntl;
->  	int ret;
->  
-> +	*cc_handled = true;
-> +
->  	ret = max_tcpci_read8(chip, TCPC_CC_STATUS, &cc_status);
->  	if (ret < 0)
->  		return false;
-> @@ -368,7 +371,6 @@ bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect
->  				return true;
->  			}
->  		}
-> -		return false;
->  	} else if (chip->contaminant_state == DETECTED) {
->  		if (STATUS_CHECK(cc_status, TCPC_CC_STATUS_TOGGLING, 0)) {
->  			chip->contaminant_state = max_contaminant_detect_contaminant(chip);
-> @@ -379,6 +381,7 @@ bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect
->  		}
->  	}
->  
-> +	*cc_handled = false;
->  	return false;
->  }
->  
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> index 78ff3b73ee7e..9c7f714d2c21 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> @@ -85,6 +85,19 @@ static inline int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg
->  	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8));
->  }
->  
-> -bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect_while_debounce);
-> +/**
-> + * max_contaminant_is_contaminant - Test if CC was toggled due to contaminant
-> + *
-> + * @chip: Handle to a struct max_tcpci_chip
-> + * @disconnect_while_debounce: Whether or not to sleep as debouncing measure
-> + * @cc_handled: Returns whether or not CC toggling was handled here
-> + *
-> + * Determine if a contaminant was detected.
-> + *
-> + * Returns: true if a contaminant was detected, false otherwise. cc_handled
-> + * is updated to reflect whether or not further CC handling is required.
-> + */
-> +bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect_while_debounce,
-> +				    bool *cc_handled);
->  
->  #endif  // TCPCI_MAXIM_H_
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> index eec3bcec119c..55d931672ecd 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> @@ -357,12 +357,15 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
->  		tcpm_vbus_change(chip->port);
->  
->  	if (status & TCPC_ALERT_CC_STATUS) {
-> +		bool cc_handled = false; /* CC toggle handled by contaminant detection */
-> +
->  		if (chip->contaminant_state == DETECTED || tcpm_port_is_toggling(chip->port)) {
-> -			if (!max_contaminant_is_contaminant(chip, false))
-> +			if (!max_contaminant_is_contaminant(chip, false,
-> +							    &cc_handled))
+Best regards,
+Krzysztof
 
-One line is enough for that.
-
->  				tcpm_port_clean(chip->port);
-> -		} else {
-> -			tcpm_cc_change(chip->port);
->  		}
-> +		if (!cc_handled)
-> +			tcpm_cc_change(chip->port);
->  	}
->  
->  	if (status & TCPC_ALERT_POWER_STATUS)
-> @@ -455,8 +458,9 @@ static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
->  static void max_tcpci_check_contaminant(struct tcpci *tcpci, struct tcpci_data *tdata)
->  {
->  	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
-> +	bool cc_handled;
->  
-> -	if (!max_contaminant_is_contaminant(chip, true))
-> +	if (!max_contaminant_is_contaminant(chip, true, &cc_handled))
->  		tcpm_port_clean(chip->port);
->  }
-
-thanks,
-
--- 
-heikki
 
