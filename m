@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-12766-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12767-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A932943D87
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 03:01:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65EAE943E1C
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 03:17:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C070B286F36
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 01:01:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04C9B1F2265B
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 01:17:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32FE41C9DF6;
-	Thu,  1 Aug 2024 00:25:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559CC19EED2;
+	Thu,  1 Aug 2024 00:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NV1Wj4CQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BePpeLE3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35191C9DE1;
-	Thu,  1 Aug 2024 00:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C417B1D54F6;
+	Thu,  1 Aug 2024 00:31:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722471930; cv=none; b=IILYEyRMr99cfhhGEXpZnNdePBy8Bd9L7/iTt4PLyZxXHFD3fzjHmS8PDqrxIWNm6ZeuW7P50VIQQMM1mKGuvvWjdd8s0qMOj3ofq0X7Z2VN4+CBUn3qO2en6HMHZr/gdDIcfE8dDe+tDutdvMw8f7JyWvdq5ztRbegDMuggls8=
+	t=1722472262; cv=none; b=InnL7rL89H66DN2eVbsP7SEbSOnyqcTeUQgrv9IF+fXKtvWamFX6ygmVo3k/WWyxgAMjzbCwQp4nN4tXvrX5/R/dUngrPgzhoz5vCpLQeNNB8CYgROu4g1CXdPg28qSwIp7WvoRPgeo65ERqPeTAtY5k3rUQnHgzgUhHK2fPEno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722471930; c=relaxed/simple;
-	bh=v3ZmhvwoRxOca8R0n0ipeDTKy50TAw5w+XASHSJRXDk=;
+	s=arc-20240116; t=1722472262; c=relaxed/simple;
+	bh=slbQIJeOsIAtF8UdUwokvnCwoq5kMnxfqZVWBpxtkuA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WewFIpv/PzScHHM7k+tdm8iVC2I5j44DonhpBG13FhMD6ApkSUVhJI2PD561CFRg0uK0aeBAMd5pyZcOE0UYQ24Ep7se9NJjeJAfsouJ7ok8s7MJysuto2BzbrCBx49DebjJVwMssF8F2ovPrpeLEXSi0eImvvdpcNm94b6pGzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NV1Wj4CQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53498C4AF0C;
-	Thu,  1 Aug 2024 00:25:29 +0000 (UTC)
+	 MIME-Version; b=FqVSrF8Kpv14BkcadazEzdGHs2uHBeX5xdVtmk/DBGO5ULOSSc/KsR1ZP+p68lPok85Anr8WFfedH1523FyEuwuxp0vWqY2W4S1cTbeCm1nUJFvO5dFX8m3zV2gInBhpbqVkJTBxDspRNGdw4gfDTBkgjttuwhyt3E/gkL3GSM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BePpeLE3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A5FC4AF0E;
+	Thu,  1 Aug 2024 00:31:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722471930;
-	bh=v3ZmhvwoRxOca8R0n0ipeDTKy50TAw5w+XASHSJRXDk=;
+	s=k20201202; t=1722472262;
+	bh=slbQIJeOsIAtF8UdUwokvnCwoq5kMnxfqZVWBpxtkuA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NV1Wj4CQDqT32CcfdGaMMwglLCyp6PvNZdW5uCL1oImKvQTTwYoJST+zy+FqUrXKu
-	 MjQ5eSPsLYcCQje2FC8gk+tBhIVI5/sDg1JCp68nivFkGAoGIFDaKJlf6OMlO8vU8Z
-	 1dmeITgAVcZCb/wxHu8TmzVohtLnOXqebUg4/ypLvShsWnI6p38UmYWpogsMs+sLS5
-	 952XCzOPIaTsYvx1w225yMAJqULYNdxsKH1LRAGRnx70DfCqDfSzLcQzuX6/0NCpO/
-	 DW9lxfafM/px08GcY0PRrnjGrnoPrjCjd05U2+JPSgKTnvxZdDyGspCXbEvrEfozMl
-	 ORPsnEe+KrQ4w==
+	b=BePpeLE3jtR79QIVhahXy0EW9FUw/pI2ufcGqRLldrKEvQsFuEn1SKleoX0SsyrUH
+	 u+2+44JxqWgvTJwGrSRwQQ+/SnwT6UtaGQIpXNP3B6D3C78fCklFvxvj+1nclL8RzH
+	 K2N0B5c3zOQjhHD7EkC723SosKLlofES9yeym34sUOAxwnJZZ+zrGKdVlCb4SoEEPI
+	 nhcmGStBfrBlZG/vKZE6fCgxPbmDzLs1U3UQ7UHCZ3zpnRkezINGq+s/vj/h2WUCl8
+	 u3pPpeIgNtVwDfSTs05BhPl2TYbZuTD5M8OjYcaLB+bBjjyZdkjdDC3ByW866TRBoe
+	 vFP3gL5XHIFjg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Shantanu Goel <sgoel01@yahoo.com>,
 	linux-usb@vger.kernel.org,
 	linux-scsi@vger.kernel.org,
 	usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH AUTOSEL 6.6 66/83] usb: uas: set host status byte on data completion error
-Date: Wed, 31 Jul 2024 20:18:21 -0400
-Message-ID: <20240801002107.3934037-66-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 48/61] usb: uas: set host status byte on data completion error
+Date: Wed, 31 Jul 2024 20:26:06 -0400
+Message-ID: <20240801002803.3935985-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240801002107.3934037-1-sashal@kernel.org>
-References: <20240801002107.3934037-1-sashal@kernel.org>
+In-Reply-To: <20240801002803.3935985-1-sashal@kernel.org>
+References: <20240801002803.3935985-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.43
+X-stable-base: Linux 6.1.102
 Content-Transfer-Encoding: 8bit
 
 From: Shantanu Goel <sgoel01@yahoo.com>
@@ -91,7 +91,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 451d9569163a7..f794cb39cc313 100644
+index af619efe8eabf..b565c1eb84b3b 100644
 --- a/drivers/usb/storage/uas.c
 +++ b/drivers/usb/storage/uas.c
 @@ -422,6 +422,7 @@ static void uas_data_cmplt(struct urb *urb)
