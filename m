@@ -1,131 +1,108 @@
-Return-Path: <linux-usb+bounces-12761-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12765-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A73794390C
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 00:38:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8636943C81
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 02:38:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1580228556D
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2024 22:38:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44269B27248
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 00:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F16B16D9C4;
-	Wed, 31 Jul 2024 22:38:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 411DD139E;
+	Thu,  1 Aug 2024 00:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="i5v/+86I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P8e5OJzI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E36135280;
-	Wed, 31 Jul 2024 22:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06891C230A;
+	Thu,  1 Aug 2024 00:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722465508; cv=none; b=KIn0FtDJHtfQwId1VW7K6crGMFmBzYZTEU9lMzfxkIx6uAtHKYJZu3UjmoMjOil3NJD91FnobfYkMg8X5hfiUklUKl+SJeQAjn5dFTi/uMd4fO9vmwwTY6WxDqApQgi74e+vsnI/5ffOV4laSP57KzXDge+pSDfSI4ttgByXFU0=
+	t=1722471431; cv=none; b=EcvEbJnWPaTWEqQZjuVovxa5NxodKakcjHg3jaUC/i7qKjTe+ER3uQGxrWnpNxzgBIWeQbTQftdVh1wW76ivfefMy8QMqsWtIh85TQdsUMCypxUaYyhfpW+5NDD5DwukKJaHvlWHVBSiPXl6sGMcR1vGGRTJzDWh7qoDMsE0Zc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722465508; c=relaxed/simple;
-	bh=PldbjTm3myb40ZJfjU8jMnVIBncYA81UDAQXR+o+Mws=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Ozj1KLO3/9Xk75RUArYeIxvegFoOY4PpKsdvTweF968eVfDoqzPhdAPciYNKXmZ0nhVcpdhqsGpdMvXA2MlGNVwpZQ+L0kLk19xVLSKZ7KVWLjeKxiutetTg085u6/wbJ9Vl/2YKFYZud34Qikdknd55gwa0WXREL5gpAgln/QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=i5v/+86I; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46VIkhKl005319;
-	Wed, 31 Jul 2024 22:38:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	unPAnDAwhbhRPpFBmuuyf/vcTyTk5Q1IxUM/QINemDg=; b=i5v/+86IVL+2vGXN
-	5cs1zLX85hPvm4Fwaadt+kVkUziJcNwE3/dov+gtdC5cp8d6010z9xjF1ln68VKY
-	3HHOgT7g9RqXSkKuMi0iNMnELzId2xzj/OZBHRvBiER28IMElOsWPhzyHPwfUcbC
-	L8VkqkT+s6dYijSQLBI/3zoAfwDhAaQ1Hi6oldQbIyPEBH7YAlf4okLbtemQbNQc
-	npcYr4BMDES+Lja9FCp2D1kr8yQiHUWln/g8G4vCI2lD/EdvOIMIAjx2nTy8hJRZ
-	uAR5l9SYpJ7sTpAboV3ItRq30jzSggSzQjgZAIDEGZJS4srU13CewLqN1bPlS/Ps
-	wDcIKQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40qjpja4ac-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jul 2024 22:38:22 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46VMcLMe006103
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jul 2024 22:38:21 GMT
-Received: from [10.110.31.235] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 31 Jul
- 2024 15:38:20 -0700
-Message-ID: <240305c2-54d3-4b75-a938-7b40abedddc9@quicinc.com>
-Date: Wed, 31 Jul 2024 15:38:20 -0700
+	s=arc-20240116; t=1722471431; c=relaxed/simple;
+	bh=CNNF/6ywk2hpMzWfvqOQwk8sZAMv5WzoKzHP9LesKEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tRzyf3sC04NuWT4pkMklMtxcaumBAoRVZ6/8lm8Xcm7fQLka5+vy4Rn1zdlZ1p0QguLrMBu+uQrub9ybpXW1f2Hl9Y1WpPuX51N+31JcudeU3Zu9QafvzkDyy3q9CJC8U7FysTxLMLYN3DZTpPy/unI48gsVd8xxanZXao1ARpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P8e5OJzI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4C2C116B1;
+	Thu,  1 Aug 2024 00:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722471431;
+	bh=CNNF/6ywk2hpMzWfvqOQwk8sZAMv5WzoKzHP9LesKEc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=P8e5OJzIPB2pIQNg/GSCi4O6xQSoEwQWT/gdvyu/Ng9yPkO/2sSPUVuH5k71vFo9t
+	 UIx+8uU2cinWnA0f8ZBwXuvuqw6Oggv22t6boaUDkNsisMP8UekM51aToj39XsI0bj
+	 K2N6s0dpl0/ontZtprQF1EkP/u7pTE/jBOxkkfdXBtZYhFcbo/zlhGKI1lelIlcu4q
+	 Dawpr5L/fhAcr48CC0ECkqdkzIK7Hy5bGSBI8T4wyzzoPK8x6ZvLKsafQfQTVZ00dT
+	 E3dJztFEEBLDa9rA8wwosU3s4bSJiQVFm6PxkpG3ZOiXMJhvlfvtaKNnJtA/t/WUEW
+	 7pcJAx9VNK6mQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Shantanu Goel <sgoel01@yahoo.com>,
+	Oliver Neukum <oneukum@suse.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net
+Subject: [PATCH AUTOSEL 6.10 096/121] usb: uas: set host status byte on data completion error
+Date: Wed, 31 Jul 2024 20:00:34 -0400
+Message-ID: <20240801000834.3930818-96-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240801000834.3930818-1-sashal@kernel.org>
+References: <20240801000834.3930818-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] usb: misc: eud: Add High-Speed Phy control for EUD
- operations
-To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>
-CC: <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
- <20240730222439.3469-7-quic_eserrao@quicinc.com>
- <a2460e27-697c-495f-9106-bdb9109d674b@kernel.org>
-Content-Language: en-US
-From: Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <a2460e27-697c-495f-9106-bdb9109d674b@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CTDJsBCJNzVEjVpjnRinAeCeXtERbfxr
-X-Proofpoint-ORIG-GUID: CTDJsBCJNzVEjVpjnRinAeCeXtERbfxr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-31_10,2024-07-31_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
- spamscore=0 malwarescore=0 bulkscore=0 phishscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407310159
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.2
+Content-Transfer-Encoding: 8bit
 
+From: Shantanu Goel <sgoel01@yahoo.com>
 
+[ Upstream commit 9d32685a251a754f1823d287df233716aa23bcb9 ]
 
-On 7/30/2024 10:39 PM, Krzysztof Kozlowski wrote:
-> On 31/07/2024 00:24, Elson Roy Serrao wrote:
->> The Embedded USB Debugger(EUD) is a HS-USB on-chip hub to support the
->> debug and trace capabilities on Qualcomm devices. It is physically
->> present in between the usb connector and the usb controller. Being a
->> HS USB hub, it relies on HS Phy for its functionality. Add HS phy
->> support in the eud driver and control the phy during eud enable/disable
->> operations.
->>
-> 
-> ...
->>  static ssize_t enable_show(struct device *dev,
->> @@ -186,6 +216,11 @@ static int eud_probe(struct platform_device *pdev)
->>  
->>  	chip->dev = &pdev->dev;
->>  
->> +	chip->usb2_phy = devm_phy_get(chip->dev, "usb2-phy");
->> +	if (IS_ERR(chip->usb2_phy))
->> +		return dev_err_probe(chip->dev, PTR_ERR(chip->usb2_phy),
->> +				     "no usb2 phy configured\n");
-> 
-> This nicely breaks all users.
-> 
-> NAK
-> 
+Set the host status byte when a data completion error is encountered
+otherwise the upper layer may end up using the invalid zero'ed data.
+The following output was observed from scsi/sd.c prior to this fix.
 
-As per my comment in [patch 1/8], phy would be a required property and hence I will first modify
-and enable EUD on the existing user (sc7280 SoC) and then extend this to other users.
+[   11.872824] sd 0:0:0:1: [sdf] tag#9 data cmplt err -75 uas-tag 1 inflight:
+[   11.872826] sd 0:0:0:1: [sdf] tag#9 CDB: Read capacity(16) 9e 10 00 00 00 00 00 00 00 00 00 00 00 20 00 00
+[   11.872830] sd 0:0:0:1: [sdf] Sector size 0 reported, assuming 512.
 
-Thanks
-Elson
+Signed-off-by: Shantanu Goel <sgoel01@yahoo.com>
+Acked-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/87msnx4ec6.fsf@yahoo.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/storage/uas.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index b610a2de4ae5d..a04b4cb1382d5 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -423,6 +423,7 @@ static void uas_data_cmplt(struct urb *urb)
+ 			uas_log_cmd_state(cmnd, "data cmplt err", status);
+ 		/* error: no data transfered */
+ 		scsi_set_resid(cmnd, sdb->length);
++		set_host_byte(cmnd, DID_ERROR);
+ 	} else {
+ 		scsi_set_resid(cmnd, sdb->length - urb->actual_length);
+ 	}
+-- 
+2.43.0
+
 
