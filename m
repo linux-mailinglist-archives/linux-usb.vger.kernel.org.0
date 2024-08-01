@@ -1,135 +1,102 @@
-Return-Path: <linux-usb+bounces-12809-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12810-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D222F9442B8
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 07:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5041F944330
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 08:10:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D2B0284688
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 05:31:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BBE5283B44
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 06:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D1413D538;
-	Thu,  1 Aug 2024 05:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8124158522;
+	Thu,  1 Aug 2024 06:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BanuGsq1"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="QhDBPT5I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBEC2744E;
-	Thu,  1 Aug 2024 05:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82050158856
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 06:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722490281; cv=none; b=Y28VSAC5BIEU4LqRKVqqo9anfwKRvSwVsuP9cYI1e0oPtWROcFU+e9BKRBsggiNPTGpVkpGb6QN/d9X0Y5tjiPS6xZ6v2Ef7+lb+3XEn0LXVBYY/argfCAnfsZ1Fu040/QZmd2cWJusF/HvzcLfTHoRG7aT1YQXAarmq3LGXwgQ=
+	t=1722492566; cv=none; b=m1OTK/+yYsOt1m1GJVcyqgS3FUiflEccHsbr+dsVgzXriYvcFokEZvwBxjrMErFFYlbhO7ptTZycIEAvtgYaHRJu/nG57m7Z+hlk8XMrS7W3ilKw7ToY/3Rq8Q+aAY049YuqXm4kbMn7fbQHKt4zG4z1yMQlTIJfKQWx+jXlDyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722490281; c=relaxed/simple;
-	bh=r+dH3tnTDJQpi8X8pE4bNLRxm4x9qSvqVTXiJGce7jU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YPizy0CPiwK66NS/urLEVeGhvrLmmM4Y54a357kDx0oiqIk0M8x1HebnazzfH4axnQ//8YgxDonMaMijhuigM6BYpqsGh4khOK/lAqPBRyhBtYxYN6wuz8zwsvVWcdnFOgwQkPC8yYWTaMlOaCY7TT1KAxxhK1iDs6V5LMGyYxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=BanuGsq1; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46VMRpRY020552;
-	Thu, 1 Aug 2024 05:31:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:message-id:mime-version:subject:to; s=
-	qcppdkim1; bh=QFEJaSAxgxgPNWxAYtoc8e8qb12Q/0iYNTyO3gpgrDs=; b=Ba
-	nuGsq1gNJQgCmUqk+mbPY8Gu6TPR7ncEPjQZ7zY3IrHd8GV+Ym/DTrVhUPXGItvC
-	O1HC49ADQZGIxDAlRr/rhA8LRLgDznzY/mKAD4525LYOYu+OwquWkIRM7MHLES1O
-	ybqS/5IsVfyUo2t4nHlr1tZ7AKAQTYH9qIljPzMMCTTuipgdVHvwDXU1PE5ikXtg
-	HemGPeiWMRNSgZ5vdn2Dri+YsQ/9kruxRha1wa+c668C+6+V9xsk/PjWDHNmMjdO
-	fBSGJaZoJX9N+v2OVpWpu2DKJW+xk7ix/AtF/pqQyj7N045apKf82m/9UUFWk8bb
-	3yTZ7EEWK1X6oeKEf+hQ==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40qkv0tq4b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 01 Aug 2024 05:31:11 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4715VBA7023300
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 1 Aug 2024 05:31:11 GMT
-Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 31 Jul 2024 22:31:03 -0700
-From: Akash Kumar <quic_akakum@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Jing Leng <jleng@ambarella.com>, Felipe Balbi
-	<balbi@kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>,
-        Daniel Scally
-	<dan.scally@ideasonboard.com>
-CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Akash Kumar <quic_akakum@quicinc.com>
-Subject: [PATCH v2] usb: gadget: Increase max configuration interface to 32
-Date: Thu, 1 Aug 2024 11:00:03 +0530
-Message-ID: <20240801053003.15153-1-quic_akakum@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1722492566; c=relaxed/simple;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	h=Mime-Version:Subject:From:To:Message-ID:Date:Content-Type:
+	 References; b=WG4ap6JbU17oOCj/D0N7fqhL6Vfe3KU0nvU4Z//BSCOwuNHPKXVuXIUq/jB8djPX5Oufo+Y0kidTElO/uA9Od7Snm4zQ/7xn08qgba8NF722BNfISaDbA4fouTKePtK0CKUksJZWxJyV6QQyc56Y8ELeFWy9G1WfrI8T8vkSeoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=QhDBPT5I; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240801060921epoutp0282c1ac55da52f45f865658ea74137d15~nhdvAMQiG2464224642epoutp022
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 06:09:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240801060921epoutp0282c1ac55da52f45f865658ea74137d15~nhdvAMQiG2464224642epoutp022
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1722492561;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	h=Subject:Reply-To:From:To:Date:References:From;
+	b=QhDBPT5IZ3pLgYEj1LrGseGsd3ZxRJ8IF7tPTOsUFEjcwDByyT78NYCd7oFTCUBlU
+	 jFS3OxfADx9P7cjGbPDwGEBc2IdWT62/RIRSxhFGJBFHA7nBvkitv3NU/JQ24CtFv7
+	 Qj3yAgV/2FC/JKnf8gzEK4/Owv+715UReoh35juI=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20240801060921epcas5p11f0e77fe0e5453c0a267178e298ed635~nhdu0yuT22475224752epcas5p1w
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 06:09:21 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4WZJSw3tcsz4x9QB for
+	<linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 06:09:20 +0000 (GMT)
+X-AuditID: b6c32a4a-14fff7000000260f-bd-66ab268f95a5
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	DE.3B.09743.F862BA66; Thu,  1 Aug 2024 15:09:19 +0900 (KST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pRNg6HCfHJJSe3ysMV00W7nkeL1p9JS1
-X-Proofpoint-GUID: pRNg6HCfHJJSe3ysMV00W7nkeL1p9JS1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-01_02,2024-07-31_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=799 clxscore=1011
- adultscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 suspectscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408010030
-
-Currently, max configuration interfaces are limited to 16, which fails
-for compositions containing 10 UVC configurations with interrupt ep
-disabled along with other configurations , and we see bind failures
-while allocating interface ID in uvc bind.
-
-Increase max configuration interface to 32 to support any large
-compositions limited to same size as usb device endpoints as
-interfaces cannot be more than endpoints.
-
-Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
----
- include/linux/usb/composite.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Changes for v2:
-Removed comment '/* arbitrary; max 255 */' as per review as it was
-confusing as MAX_CONFIG_INTERFACES cannot go beyond 32 due to usb
-ep limitation.
-
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 2040696d75b6..d6d4fbfb6d0e 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -255,7 +255,7 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g, struct usb_function *f,
- int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
- 			struct usb_ep *_ep);
- 
--#define	MAX_CONFIG_INTERFACES		16	/* arbitrary; max 255 */
-+#define	MAX_CONFIG_INTERFACES		32
- 
- /**
-  * struct usb_configuration - represents one gadget configuration
--- 
-2.17.1
+Mime-Version: 1.0
+Subject: Subscribe linux-usb
+Reply-To: selvarasu.g@samsung.com
+Sender: Selvarasu G <selvarasu.g@samsung.com>
+From: Selvarasu G <selvarasu.g@samsung.com>
+To: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20240801060904epcms5p573d3e979a38c94e73a24f714fd576837@epcms5p5>
+Date: Thu, 01 Aug 2024 15:09:04 +0900
+X-CMS-MailID: 20240801060904epcms5p573d3e979a38c94e73a24f714fd576837
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNKsWRmVeSWpSXmKPExsWy7bCmlm6/2uo0g50vRC0WLWtldmD0+LxJ
+	LoAxKtsmIzUxJbVIITUvOT8lMy/dVsk7ON453tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB2io
+	kkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafApECvODG3uDQvXS8vtcTK0MDAyBSo
+	MCE7o2f3BbYChgoQ1cDI0MXIwSEhYCLx55RQFyMXh5DAbkaJf4sns4PEeQUEJf7uEO5i5OQQ
+	FpCRONzWwQpiCwkoSkye+IMRIq4rcffrd2YQm01AW6JpTSdYjYiAtcSkB5+YQGwJAV6JGe1P
+	WSBsaYnty7cyQtiiEjdXv2WHsd8fmw8VF5FovXeWGcIWlHjwczdUXEri8t0GqDnVElcX3mMB
+	uVlCoIVRYt/d44wQv5hLrL8tClLDK+Ar0XtyBRuIzSKgKvF8+XKomS4S8zdtAZvJLCAvsf3t
+	HGaQVmYBTYn1u/QhSmQlpp5axwRRwifR+/sJ3Cs75sHYqhKnGi+zwbx1b8k1VgjbQ+JBxyMm
+	kJFCAoEShy97T2CUm4UIz1lI9s5C2LuAkXkVo2RqQXFuemqxaYFRXmo5PAqT83M3MYJTkZbX
+	DsaHDz7oHWJk4mA8xCjBwawkwit0cmWaEG9KYmVValF+fFFpTmrxIUZToKcnMkuJJucDk2Fe
+	SbyhiaWBiZmZmYmlsZmhkjjv69a5KUIC6YklqdmpqQWpRTB9TBycUg1M8VO9TJ8v3rFd++9z
+	4dy6gtLvN+TftE43Zcw4v/NH9fSFdqZ2fGIV6/5GSVnxKGn5lHIdengosfui1seZU2YlXZs3
+	Zdu59fXN7a52J57ZRQhqJ/NsiJq75pa+r/PEZN20iS1ftYIeLOG9pX27de+T2c4qe8/efB3w
+	cse0+t49lnfCNrnnh5yeeFboXeqNUt/KFcwc84+v++fx9VdubeubiuSMrSeer7Wqa9gZc140
+	dUV9htXhA/ufGHhmO3kKM77njjLUC8z8vnIN97K6J4ezjm70c5Z2PjFdfkFlC9PLGOEiFYPl
+	Ab+0vT8tyJZ7a7wkahPvCe+N3hX7zq5a+OLwbv0j8/2Pr/rxyyhWPdN+uhJLcUaioRZzUXEi
+	AMVziQ7OAwAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240801060904epcms5p573d3e979a38c94e73a24f714fd576837
+References: <CGME20240801060904epcms5p573d3e979a38c94e73a24f714fd576837@epcms5p5>
 
 
