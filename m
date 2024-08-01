@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-12839-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12840-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 610D79448A1
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 11:40:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C09839448A5
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 11:41:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1704A286845
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:40:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E5081F29094
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF89A16E861;
-	Thu,  1 Aug 2024 09:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D88F16FF39;
+	Thu,  1 Aug 2024 09:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q6asj+N1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lgile9nR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDD8EEB3
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 09:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D6AEEB3
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 09:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722505230; cv=none; b=cM2niyiUmAhs/rqyYDeDSTx+IDfkCNeVIP3ru+EEDkKUazYa8Uj/ulD2J1U5PwbceDkm4cvs4vtkauaCUWnXvAJ0J9L/8QWlkhtCI2onrUsQ2E+stE0E2c+xNdNJHpOS1/d++ChHN47WqA5BsfzjCzLChI9xgn8WmjHWnQNnNXw=
+	t=1722505289; cv=none; b=LDftskXRPkOtpL45/AHLGe9915Nes/puNlaeY9UOJyc3O8MIjJTSTkR+Uz8pA6rsCyJ3bgWcQBJP573+UfvwP93bzRXkwgut3xJGAM41qiD6xuh8V6q3cBcrI7mmuujCAg3il3oEsd4/Z86e3sRcrRgILghL4E9cXXrWsExmQJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722505230; c=relaxed/simple;
-	bh=xTF3apHnccYbSC+Sl1ZCvR19oURNiB4++elYFFhNxdw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=cqzZ1m8PJn/ovgWiK46/5TjmKeZIWSFErEURlBYe1tcm/QKRDWMA2+hXaQKrK2t/Q4kcO9Ciw4pVqWtLjede/0C8cPJr30pd7/k2ER75WxLYHrwMtPqiEUp5PVZ9eDn9ISUtSQourHi4sLwKaHXMlRmXwFxomPaPMB1N2ucf/hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q6asj+N1; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1722505289; c=relaxed/simple;
+	bh=qgRCw1fcxwm62V7QEQWthn0FhZL/5tKb3HufKI9l6T8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=URDGbYU+Brl+FQm1p+qYdMzyoUCDOpmiCOmLZqzyUG+dlOQhp82R/b1y0ZhcENLFL+evTyrjsMN0deXnPle1C2nwFDhJomIGhYyoPgRFMwE0Teqj3fYi2rQWLxI7kknHXrTn9wG0sIEwA/MG2PcvaiCP71Q/obC0h84idyGuYCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lgile9nR; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722505228; x=1754041228;
+  t=1722505287; x=1754041287;
   h=date:from:to:cc:subject:message-id;
-  bh=xTF3apHnccYbSC+Sl1ZCvR19oURNiB4++elYFFhNxdw=;
-  b=Q6asj+N1x8cRX3glM4/IjR9JS+J6Hl/nkcV6tX5KkNaHC6YhH9qMVnok
-   Cg9bteRhSW6c1l8viapl02U4MDRYzsVHEmrzoq53Jb2rSQBpuPB/r/eqS
-   E01Smxb6RaoULIsyYX+FrbP3ghcFPrKcXSgVwOOJZgQmph5+B6nBGuejQ
-   HtUbxW/6EjYwledsuXLcd8FydmXOGVb4eOPiZjwsg6yKVv1UZcNdT1ZeV
-   igbjAObhJxSPYolx+ZF2alqIrPkd64yI34dwTm+X17HNB86fA7DBtwhdr
-   iVi2BrVZi3feDy/3cBJ7f9DKoI1WkkZhtgsFCExVeTziqpTxj3qSIKRJu
-   g==;
-X-CSE-ConnectionGUID: si2H5ZeNReW54K4n3KCmGw==
-X-CSE-MsgGUID: 1Ta7zr6nSn2VA1f0nSpOJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="12825308"
+  bh=qgRCw1fcxwm62V7QEQWthn0FhZL/5tKb3HufKI9l6T8=;
+  b=Lgile9nRnKqwnzeSjPdVaTajcgz6FjwyvAISHqzvzCdzXFTGZ058sYSu
+   F+w7UuOlPUlE4WUBXjZviQbKzOyT+diHjFUoiBRLmoWv+pLiwrXbKIGMo
+   kEV2MOgZgG8OnTK0skw8HvzeVj8GwOQfMISkARMb9qlmnrItCyAMk6M7E
+   /G64YUnq7xYne6DE1HYwwUXan0Q3jNEBYMq4y7AFNZtWoDyS2F6C0z/dQ
+   YUEwTpRHK7bDvdGpA9+AInhuz8yraK46bY7GMi6oTi5bd219kpOPlOAZa
+   md5iaPuhlTvDPneZ2KcjI4V9UDjzAFmOVOtl7RujR/+jzMB5xYkayK7mf
+   A==;
+X-CSE-ConnectionGUID: OlpCmP0bR5SBei9ZGrSR0w==
+X-CSE-MsgGUID: vBG4vOS3RBeousTAatjw+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="20131583"
 X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="12825308"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:40:27 -0700
-X-CSE-ConnectionGUID: Ird3ApKtR/uxV1ZUT/rXkA==
-X-CSE-MsgGUID: q5p6NfDcRZqyKNKAe6tCww==
+   d="scan'208";a="20131583"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:41:27 -0700
+X-CSE-ConnectionGUID: C7qPDYT2SPy6G15NuYqGkQ==
+X-CSE-MsgGUID: ab0M08/zSn+RvV2cMRXAFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="60013966"
+   d="scan'208";a="54954456"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 01 Aug 2024 02:40:25 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 01 Aug 2024 02:41:25 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sZSIJ-000vQK-0W;
-	Thu, 01 Aug 2024 09:40:23 +0000
-Date: Thu, 01 Aug 2024 17:40:22 +0800
+	id 1sZSJH-000vQR-0k;
+	Thu, 01 Aug 2024 09:41:23 +0000
+Date: Thu, 01 Aug 2024 17:41:06 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- d483f034f03261c8c8450d106aa243837122b5f0
-Message-ID: <202408011716.Vbmnrvpd-lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ b1dad2f091382b0049c72dab8153779248fa8016
+Message-ID: <202408011703.8LLYDtg3-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,66 +74,10 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: d483f034f03261c8c8450d106aa243837122b5f0  usb: dwc2: Skip clock gating on Broadcom SoCs
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: b1dad2f091382b0049c72dab8153779248fa8016  usb: typec: tipd: Delete extra semi-colon
 
-Unverified Warning (likely false positive, please contact us if interested):
-
-arch/arm64/boot/dts/qcom/ipq5332-rdp441.dtb: usb@8af8800: clock-names: ['core', 'iface', 'sleep', 'mock_utmi'] is too long
-arch/arm64/boot/dts/qcom/ipq5332-rdp441.dtb: usb@8af8800: clock-names:1: 'sleep' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp441.dtb: usb@8af8800: clock-names:2: 'mock_utmi' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp441.dtb: usb@8af8800: clocks: [[8, 140], [8, 126], [8, 147], [8, 142]] is too long
-arch/arm64/boot/dts/qcom/ipq5332-rdp442.dtb: usb@8af8800: clock-names: ['core', 'iface', 'sleep', 'mock_utmi'] is too long
-arch/arm64/boot/dts/qcom/ipq5332-rdp442.dtb: usb@8af8800: clock-names:1: 'sleep' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp442.dtb: usb@8af8800: clock-names:2: 'mock_utmi' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp442.dtb: usb@8af8800: clocks: [[8, 140], [8, 126], [8, 147], [8, 142]] is too long
-arch/arm64/boot/dts/qcom/ipq5332-rdp468.dtb: usb@8af8800: clock-names: ['core', 'iface', 'sleep', 'mock_utmi'] is too long
-arch/arm64/boot/dts/qcom/ipq5332-rdp468.dtb: usb@8af8800: clock-names:1: 'sleep' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp468.dtb: usb@8af8800: clock-names:2: 'mock_utmi' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp468.dtb: usb@8af8800: clocks: [[8, 140], [8, 126], [8, 147], [8, 142]] is too long
-arch/arm64/boot/dts/qcom/ipq5332-rdp474.dtb: usb@8af8800: clock-names: ['core', 'iface', 'sleep', 'mock_utmi'] is too long
-arch/arm64/boot/dts/qcom/ipq5332-rdp474.dtb: usb@8af8800: clock-names:1: 'sleep' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp474.dtb: usb@8af8800: clock-names:2: 'mock_utmi' was expected
-arch/arm64/boot/dts/qcom/ipq5332-rdp474.dtb: usb@8af8800: clocks: [[8, 140], [8, 126], [8, 147], [8, 142]] is too long
-arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/arm64/boot/dts/ti/k3-am642-evm.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/arm64/boot/dts/ti/k3-am642-hummingboard-t-pcie.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/arm64/boot/dts/ti/k3-am642-hummingboard-t-usb3.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/arm64/boot/dts/ti/k3-am642-hummingboard-t.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/arm64/boot/dts/ti/k3-am642-sk.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/arm64/boot/dts/ti/k3-am642-tqma64xxl-mbax4xxl.dtb: cdns-usb@f900000: compatible: 'oneOf' conditional failed, one must be fixed:
-
-Warning ids grouped by kconfigs:
-
-recent_errors
-`-- arm64-randconfig-051-20240731
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clock-names:sleep-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clocks:is-too-long
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clock-names:sleep-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clocks:is-too-long
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clock-names:sleep-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clocks:is-too-long
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clock-names:sleep-was-expected
-    |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clocks:is-too-long
-    |-- arch-arm64-boot-dts-ti-k3-am642-evm-nand.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-arm64-boot-dts-ti-k3-am642-evm.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-arm64-boot-dts-ti-k3-am642-hummingboard-t-pcie.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-arm64-boot-dts-ti-k3-am642-hummingboard-t-usb3.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-arm64-boot-dts-ti-k3-am642-hummingboard-t.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-arm64-boot-dts-ti-k3-am642-phyboard-electra-rdk.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-arm64-boot-dts-ti-k3-am642-sk.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    `-- arch-arm64-boot-dts-ti-k3-am642-tqma64xxl-mbax4xxl.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
-
-elapsed time: 1451m
+elapsed time: 1452m
 
 configs tested: 221
 configs skipped: 7
