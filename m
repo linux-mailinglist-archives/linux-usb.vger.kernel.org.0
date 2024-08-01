@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-12836-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12837-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D82899447D3
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 11:16:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63FE99447DE
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 11:17:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83FB71F2876A
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:16:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E62DA1F28E3A
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:17:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4AD9170826;
-	Thu,  1 Aug 2024 09:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4B219F48D;
+	Thu,  1 Aug 2024 09:12:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BK0PFaeo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KXUJfgKW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F114B18E059;
-	Thu,  1 Aug 2024 09:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58ABD19E7E3;
+	Thu,  1 Aug 2024 09:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722503531; cv=none; b=Rxed/kcDTGmfX7/ZA5znKYivDKrJtwVfCRJXmXo70gyOrq1/nCVIKuNMkgT+VA3hoJx4Yr2EAQ0TBC9wQIX/ILH8XZVmh0EAs2ovTUvuwdmbt+sRERMU6xN+menzEjRCq9mxw7a9sDl5BrF81LvK2zh/Oh57uhqLzRbj6qPTE8A=
+	t=1722503537; cv=none; b=mPsqAJd+lJ4rrYkf6KLSj7LL2iorzVEGCm/qE1ouCgf4qc3zlfqjabPtIYSHqVXJTSCbjUyx8BKjLZJpmKS3O3ffwoHDF2Dn3JISDJ72tUQZVLQRRUx6eHIQWAUYevfFXW4dGtgIIXcxS+rGqTXGS4zsxU+l2nv/cTbhPWegJ8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722503531; c=relaxed/simple;
-	bh=N/O38cSPMC8Lgjj4zxdXeCxlRhlPgDYWQiNhJMimuAc=;
+	s=arc-20240116; t=1722503537; c=relaxed/simple;
+	bh=hlG5dmxzgBQ8QYdl97vTifyi/3aA4LNWtHjoLyb36DE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mzz2JEw9/3bWnoKEeqTHsiIihVQfS4FmFeI1710tFXpUsuLnYlRFQI/FeL/8GOcQy4riaxe08Dd4La8lxZfC66aAiNYdHN5lbtrL1Xjre4DkfpU1Cmk8lGaN9y2LXKYORkntTbGhKXXfx4V9PbHcgyIURaoCGHxTrS52Vz3wVs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BK0PFaeo; arc=none smtp.client-ip=198.175.65.21
+	 In-Reply-To:Content-Type; b=IjKqT5vsTgAyNd1n68XHPUivfU7wlmXTakn/t1K79w7Zz15D6lnx5pNl+6pMlz0TCDiNZ3NNM9VQbt9r59OWkEMGO9XOdoZeDwmo0R05PEudV+1CfVKLKIm6OFXI5cydIaSF91wWroDue/8C5NOx6n7h+WHbOqCAxwnJup4BOH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KXUJfgKW; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722503531; x=1754039531;
+  t=1722503537; x=1754039537;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=N/O38cSPMC8Lgjj4zxdXeCxlRhlPgDYWQiNhJMimuAc=;
-  b=BK0PFaeonQpHCaM6/LzNLXHCKkmK2uJtFCXingfO+sIfrJIYn6rTbhoF
-   WXty/rFrOlIc6s83s3Lh9twPse/pCV5nL395Fawz2PNOEfUi+FA2YUz/W
-   qh+i4WCimEY/lx/+7aH9qjH70+y98XCppcc7HW6mBT9RbIwWBf+PIFF6B
-   wyf+aqq8WYyPOVSbHiYWZcasEJ0Jd0VzE51ZMz5NZ8LFgjdg14wcAEPuY
-   Mee9yve9uRPg9LRXgbwek5ke2wLJvjeIrVWTWX2K1wb8jHfJERZbwvxqS
-   un0yk3BT5CnmhScJSabbTeS4NbsHTru6anAldYOASqpL+XVn6Xu7VB0ij
+  bh=hlG5dmxzgBQ8QYdl97vTifyi/3aA4LNWtHjoLyb36DE=;
+  b=KXUJfgKWoOEfFByV2rhbtJe9TbUq6DkE8ZWcvaUhxf6ZEdKkDIEKy70A
+   OPdg3L3kzpAtgBG3xcf8cGyMCv2okkJcMJNFZvgf+H+CfFCxY/TFsZ3eO
+   0inHlU7jdOlznPlofZAO0SQw6az+Vw464lrELJC+9Wvkn6pLrBPNOACzq
+   3REdCteyIWf5Si1zfUsOWvlecLkEthmkIYW6fkxnCa++tR6ui3lSIEiqu
+   qQ/FFo3pkNDwVTYh/kWV15I9pR10iaq446bjJfGG0KmHqGjU9+jefTjRU
+   28dJJxfmV1VfijVHir2HCNWPcy/mihKlBnsCI1qjnx3AkogEuqNust4YC
    Q==;
-X-CSE-ConnectionGUID: V+DRZ2BuSg2hlYR8H8XEMw==
-X-CSE-MsgGUID: 7enpbqYbShKyeo9z0AI83A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="20383656"
+X-CSE-ConnectionGUID: KuOPl7lDTD+2/78Q//cjDA==
+X-CSE-MsgGUID: 1+9KjdwUSmunaba3aYz9ag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="20383695"
 X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="20383656"
+   d="scan'208";a="20383695"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:12:10 -0700
-X-CSE-ConnectionGUID: ppEKMHUATh6ElntSYpl8FQ==
-X-CSE-MsgGUID: 3Lh38z4lTkG8C3M6/pNUTQ==
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:12:16 -0700
+X-CSE-ConnectionGUID: as0uoOqLRVyGfgF+j/kEug==
+X-CSE-MsgGUID: YgCYS42HRumVFZ5NUqy/dA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="59090171"
+   d="scan'208";a="59090227"
 Received: from lfiedoro-mobl.ger.corp.intel.com (HELO [10.245.246.220]) ([10.245.246.220])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:12:04 -0700
-Message-ID: <c2ab91ed-a2e5-437e-bbdb-84988a052778@linux.intel.com>
-Date: Thu, 1 Aug 2024 10:57:28 +0200
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:12:10 -0700
+Message-ID: <4d5fe3f8-d7ba-4647-8dd7-22656ec2fde5@linux.intel.com>
+Date: Thu, 1 Aug 2024 11:02:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 26/34] ALSA: usb-audio: qcom: Don't allow USB offload
- path if PCM device is in use
+Subject: Re: [PATCH v24 29/34] ALSA: usb-audio: qcom: Add USB offload route
+ kcontrol
 To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
  mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
  corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
@@ -79,76 +79,133 @@ Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
  alsa-devel@alsa-project.org
 References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-27-quic_wcheng@quicinc.com>
+ <20240801011730.4797-30-quic_wcheng@quicinc.com>
 Content-Language: en-US
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20240801011730.4797-27-quic_wcheng@quicinc.com>
+In-Reply-To: <20240801011730.4797-30-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 8/1/24 03:17, Wesley Cheng wrote:
-> Add proper checks and updates to the USB substream once receiving a USB QMI
-> stream enable request.  If the substream is already in use from the non
-> offload path, reject the stream enable request.  In addition, update the
-> USB substream opened parameter when enabling the offload path, so the
-> non offload path can be blocked.
+> +ifneq ($(CONFIG_SND_USB_QC_OFFLOAD_MIXER),)
+> +snd-usb-audio-qmi-objs += mixer_usb_offload.o
+> +endif
+> \ No newline at end of file
 
-It's a bit weird that the mutual exclusion between the standard path and
-the offloaded path is handled at the vendor level. I would think this
-needs to be handled in the soc_usb framework, no?
+add one?
 
-
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  sound/usb/qcom/qc_audio_offload.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-> index 8b0913b7256b..3b46d05f1421 100644
-> --- a/sound/usb/qcom/qc_audio_offload.c
-> +++ b/sound/usb/qcom/qc_audio_offload.c
-> @@ -1460,12 +1460,17 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  		goto response;
->  	}
->  
-> +	mutex_lock(&chip->mutex);
->  	if (req_msg->enable) {
-> -		if (info_idx < 0 || chip->system_suspend) {
-> +		if (info_idx < 0 || chip->system_suspend || subs->opened) {
->  			ret = -EBUSY;
-> +			mutex_unlock(&chip->mutex);
+> diff --git a/sound/usb/qcom/mixer_usb_offload.c b/sound/usb/qcom/mixer_usb_offload.c
+> new file mode 100644
+> index 000000000000..c00770400c67
+> --- /dev/null
+> +++ b/sound/usb/qcom/mixer_usb_offload.c
+> @@ -0,0 +1,101 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
 > +
->  			goto response;
->  		}
-> +		subs->opened = 1;
->  	}
-> +	mutex_unlock(&chip->mutex);
->  
->  	if (req_msg->service_interval_valid) {
->  		ret = get_data_interval_from_si(subs,
-> @@ -1487,6 +1492,11 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  		if (!ret)
->  			ret = prepare_qmi_response(subs, req_msg, &resp,
->  					info_idx);
-> +		if (ret < 0) {
-> +			mutex_lock(&chip->mutex);
-> +			subs->opened = 0;
-> +			mutex_unlock(&chip->mutex);
-> +		}
->  	} else {
->  		info = &uadev[pcm_card_num].info[info_idx];
->  		if (info->data_ep_pipe) {
-> @@ -1510,6 +1520,9 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  		}
->  
->  		disable_audio_stream(subs);
-> +		mutex_lock(&chip->mutex);
-> +		subs->opened = 0;
-> +		mutex_unlock(&chip->mutex);
->  	}
->  
->  response:
+> +#include <linux/usb.h>
+> +
+> +#include <sound/core.h>
+> +#include <sound/control.h>
+> +#include <sound/soc-usb.h>
+> +
+> +#include "../card.h"
+> +#include "../mixer.h"
+> +#include "../usbaudio.h"
+> +
+> +#include "mixer_usb_offload.h"
+> +
+> +#define PCM_IDX(n)  (n & 0xffff)
+> +#define CARD_IDX(n) (n >> 16)
+> +
+> +static int
+> +snd_usb_offload_route_get(struct snd_kcontrol *kcontrol,
+> +		      struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct device *sysdev = snd_kcontrol_chip(kcontrol);
+> +	int card;
+> +	int pcm;
+> +
+> +	card = soc_usb_get_offload_device(sysdev, CARD_IDX(kcontrol->private_value),
+> +					  PCM_IDX(kcontrol->private_value),
+> +					  SND_SOC_USB_KCTL_CARD_ROUTE);
+> +
+> +	pcm = soc_usb_get_offload_device(sysdev, CARD_IDX(kcontrol->private_value),
+> +					 PCM_IDX(kcontrol->private_value),
+> +					 SND_SOC_USB_KCTL_PCM_ROUTE);
+> +	if (card < 0 || pcm < 0) {
+> +		card = -1;
+> +		pcm = -1;
+> +	}
+> +
+> +	ucontrol->value.integer.value[0] = card;
+> +	ucontrol->value.integer.value[1] = pcm;
+> +
+> +	return 0;
+> +}
 
+see my earlier comment, should those two calls be collapsed to return
+all the information in one shot?
+
+> +
+> +static int snd_usb_offload_route_info(struct snd_kcontrol *kcontrol,
+> +			      struct snd_ctl_elem_info *uinfo)
+> +{
+> +	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
+> +	uinfo->count = 2;
+> +	uinfo->value.integer.min = -1;
+> +	/* Arbitrary max value, as there is no 'limit' on number of PCM devices */
+> +	uinfo->value.integer.max = 0xff;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct snd_kcontrol_new snd_usb_offload_mapped_ctl = {
+> +	.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+> +	.access = SNDRV_CTL_ELEM_ACCESS_READ,
+> +	.info = snd_usb_offload_route_info,
+> +	.get = snd_usb_offload_route_get,
+> +};
+> +
+> +/**
+> + * snd_usb_offload_create_ctl() - Add USB offload bounded mixer
+> + * @chip - USB SND chip device
+> + *
+> + * Creates a sound control for a USB audio device, so that applications can
+> + * query for if there is an available USB audio offload path, and which
+> + * card is managing it.
+> + */
+> +int snd_usb_offload_create_ctl(struct snd_usb_audio *chip)
+> +{
+> +	struct usb_device *udev = chip->dev;
+> +	struct snd_kcontrol_new *chip_kctl;
+> +	struct snd_usb_stream *as;
+> +	char ctl_name[37];
+> +	int ret;
+> +
+> +	list_for_each_entry(as, &chip->pcm_list, list) {
+> +		chip_kctl = &snd_usb_offload_mapped_ctl;
+> +		chip_kctl->count = 1;
+> +		/*
+> +		 * Store the associated USB SND card number and PCM index for
+> +		 * the kctl.
+> +		 */
+> +		chip_kctl->private_value = as->pcm_index |
+> +					  chip->card->number << 16;
+> +		sprintf(ctl_name, "USB Offload Playback Route PCM#%d",
+> +			as->pcm_index);
+> +		chip_kctl->name = ctl_name;
+> +		ret = snd_ctl_add(chip->card, snd_ctl_new1(chip_kctl,
+> +				  udev->bus->sysdev));
+> +		if (ret < 0)
+> +			break;
+> +	}
+> +
+> +	return ret;
+
+None of this looks Qualcomm-specific, shouldn't this be part of the
+soc_usb framework instead of being added in the qcom/ stuff?
 
