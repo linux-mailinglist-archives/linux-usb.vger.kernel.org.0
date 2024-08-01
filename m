@@ -1,104 +1,126 @@
-Return-Path: <linux-usb+bounces-12855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12856-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED1FA944E1F
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 16:34:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8111C944E7D
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 16:51:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AEAB1C259AC
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 14:34:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D8AA281542
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 14:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1D21A57DC;
-	Thu,  1 Aug 2024 14:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D2071A8C0A;
+	Thu,  1 Aug 2024 14:51:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="VW3UvCf9"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ubdr++Sm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4791A4F31;
-	Thu,  1 Aug 2024 14:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC4A1A7210
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 14:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722522842; cv=none; b=SHTBeLEa2eN1qsuNn6olMfxiR9MVayxX8pgiYdb/8r76F1I1M3dtCCiHQCIloQYw1vy8aBPgYawNcxf5Ngj5xK8jffcSRsbNtErugarDU+NUV5SqfrmtYjt5H5kepcdG9hGxZMIvPWPmdsHZiOyh7De35k9tLyFp4xHyJ3R8m9o=
+	t=1722523900; cv=none; b=QF7jKSjeBzzWt53PjOFI1iBG/c9456a3ZPxMIBPo1tBLRuMeluoTVF5G7gC2UY+5dBjBC9uZv1QP3KU5SsgxeXLzssu/zHkLXShgqubqSofTTzJHiWbnq2ELWngrfH6miv1WNzZTmbUmaIxwWxhy2CtgwGtKdbDy7GSMQngG+hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722522842; c=relaxed/simple;
-	bh=EtgsdD/tcXlI7IywHG7B6PRD/S4LEQyLuNotAoyg6r8=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=JGO2CSVludPzDM+7PRNnNxcr2LDZ19/4kqYQdzrwSnhA0uIeGIjBl6gJCHKhebo7xtuLOmwo1pfGKxutW1iCB3RqDt7UCL0XT+9DrnsCVzSuKqHopNM6qoeVSw2mmbguyB4CcHiyigMSrO6qKO9+gYXdKiRIRmNsOLXE/ztZIpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=VW3UvCf9; arc=none smtp.client-ip=65.108.154.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
-	(authenticated bits=0)
-	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 471EXKTV1466366
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Thu, 1 Aug 2024 15:33:21 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-	t=1722522800; bh=Y5HqFnY3u2zASuOrSmY/8h+acG0+jNsTNe/DPcSw8xg=;
-	h=From:To:Cc:Subject:References:Date:Message-ID:From;
-	b=VW3UvCf9p2R5DB6AwCQq3qcItIs36Mn8ZxMfw6U1msRcXPsolur2UesvWeJ1hDegw
-	 ImylfR4FSDSBXsRVj6hLZfP+YNuftDTYAcdLlGqZsp5W3D3XXwJiXqMuB8eb7tGh5M
-	 fohZxPD+ZlXQBv6EyWe+2BBhjRfasJbMsymWILTw=
-Received: from miraculix.mork.no ([IPv6:2a01:799:10da:690a:d43d:737:5289:b66f])
-	(authenticated bits=0)
-	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 471EXKBT374820
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Thu, 1 Aug 2024 16:33:20 +0200
-Received: (nullmailer pid 559368 invoked by uid 1000);
-	Thu, 01 Aug 2024 14:33:20 -0000
-From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To: Daniele Palmas <dnlplm@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH net 1/1] net: usb: qmi_wwan: fix memory leak for not ip
- packets
-Organization: m
-References: <20240801135512.296897-1-dnlplm@gmail.com>
-Date: Thu, 01 Aug 2024 16:33:20 +0200
-In-Reply-To: <20240801135512.296897-1-dnlplm@gmail.com> (Daniele Palmas's
-	message of "Thu, 1 Aug 2024 15:55:12 +0200")
-Message-ID: <87ttg4gvnz.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1722523900; c=relaxed/simple;
+	bh=nn9LkWIhnh3vLamC+TAfbe6VpAJDcd4OQsBnnLx771o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iUD+6ofsJgDL/15QD6pACxLhnC4WLHu9DcHeuYNqjByn/t70b3GJjpsjAtmjUW+1SUrek6SUjyqHrc4A3shuDttCNn2y598ikdN7YF8OfZWgvPpr4Hkg9YrW3bivXCgCuqp5vkN6+C/Wug78rz5kpyYuizOhKl4N8ScvkJmz92g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ubdr++Sm; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-70949118d26so4338379a34.0
+        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2024 07:51:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1722523898; x=1723128698; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eg0bXkfAj/+Bepz1s51Vu2b4PmWBXCOAEfolPp84uSo=;
+        b=ubdr++SmdOYo2WqzodztaU7dc8ozX0ayIX+L0ldKpegzFlLr0wQwBOKrK7NwWiOZ3t
+         WGlnAUMPgQtNgFHZzD95frdOR2wMbRYbVmx5tyeWXoqQrmkWG6rXJuhTwj712q6kcaf5
+         98yBItbXEeeembV7pDXM7Qs0Eg3XVekFnxplJr9yVXT6Q3epUQw71m+bhbQypS+382Yj
+         GWB9AwJsbeINmHQWAgb9457tbeogSgFOOAQo//4LToOfq+ABs4Bxvc4z4M0H3Kc4pybL
+         fX/2wuUXX5wlWjihCfz0b2GzetvmWeupjTZjn6sIbQFOAYnMvi8W4OWyVzYIuV8amYu9
+         xEFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722523898; x=1723128698;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eg0bXkfAj/+Bepz1s51Vu2b4PmWBXCOAEfolPp84uSo=;
+        b=oFdsNOuwHP9WiVTmQDvK6fzUhvt07eQbRCBZRzekPPys2QC08gxtOPJT9/syI3bblJ
+         HkS0M0GCbI0qo+0bi14NBHOg2WGj/ZglxNbudba05P1urmp1V/xIW+XZ7mF4yiEMgA9X
+         0asnvuX+95SEmiz16CIHhN3/meZCA8Bdql9As5YZ085bGMO53/ErWqiekKABYcgkKfjc
+         RlOzLl0M42KGglitI2PCGYq7K/mJq53xIf3t4OlesD87Lw8HIOjg5NqGDMPAS2HZqEjn
+         nICg7icFOs/1eiSOeqM0k7PsEw0K0Q5Ae/tOTv+EY1Xs69+d7Jg0K0m0DHs4fCD2/R5n
+         h91A==
+X-Forwarded-Encrypted: i=1; AJvYcCWJIuDl52xlLrr5uK6MpUnFeu04Ngufj7ACYL+ZqppLrx6N14tKjT2OqeORcJmchvcdKEjkc4o7NR9sN7d2TlyW6H1HBsDNtRh5
+X-Gm-Message-State: AOJu0YzBPiWWU7ynjOpFu2DajZU8gGeBuvn+yhu3HspOnTlbwEeSIySR
+	lf9urkcc9E4gDX1UmFodZ/R3hNpiIQue+3OgMiCRGJ7NgvrM6zAM+7Zy+v7rdQ==
+X-Google-Smtp-Source: AGHT+IGvTWg2xLo8ers9vXVYlOj18rTUnVG5OWnVAexPis43OnNwricIwWWqflTqxwAsnRfQesQt3A==
+X-Received: by 2002:a05:6830:628a:b0:709:2677:3435 with SMTP id 46e09a7af769-709b321d108mr403607a34.15.1722523898211;
+        Thu, 01 Aug 2024 07:51:38 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a20d6426f4sm159025485a.8.2024.08.01.07.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Aug 2024 07:51:37 -0700 (PDT)
+Date: Thu, 1 Aug 2024 10:51:35 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: Abhishek Tamboli <abhishektamboli9@gmail.com>,
+	gregkh@linuxfoundation.org, usb-storage@lists.one-eyed-alien.net,
+	linux-usb@vger.kernel.org, skhan@linuxfoundation.org,
+	dan.carpenter@linaro.org, rbmarliere@gmail.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: storage: ene_ub6250: Fix right shift warnings
+Message-ID: <890e0ed1-25c3-414e-9e8e-f5925fe8c778@rowland.harvard.edu>
+References: <20240729182348.451436-1-abhishektamboli9@gmail.com>
+ <e72cc56a-3066-4cb8-848d-bfe27a48c095@suse.com>
+ <ZqkpOQIjcBSAg8rC@embed-PC.myguest.virtualbox.org>
+ <5d7870b0-6b63-430b-8885-2509b33dc78a@suse.com>
+ <804a6d40-73a4-4af6-944b-95e9324d7429@rowland.harvard.edu>
+ <Zqp8vbbIC8E/XrQY@embed-PC.myguest.virtualbox.org>
+ <b35a344a-018b-44ae-975a-7767a3d5b6ec@rowland.harvard.edu>
+ <f5d4711f-9b4a-457c-b68c-c2e9aefbe4a8@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 1.0.5 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f5d4711f-9b4a-457c-b68c-c2e9aefbe4a8@suse.com>
 
-Daniele Palmas <dnlplm@gmail.com> writes:
+On Thu, Aug 01, 2024 at 08:54:18AM +0200, 'Oliver Neukum' via USB Mass Storage on Linux wrote:
+> 
+> 
+> On 31.07.24 20:19, Alan Stern wrote:
+> > On Wed, Jul 31, 2024 at 11:34:45PM +0530, Abhishek Tamboli wrote:
+> > > On Wed, Jul 31, 2024 at 10:04:33AM -0400, Alan Stern wrote:
+> 
+> Hi,
+> 
+> I should make my reasoning clearer.
+> 
+> > > > Replacing the variable with a constant won't make much difference.  The
+> > > > compiler will realize that bl_len has a constant value and will generate
+> > > > appropriate code anyway.  I think just changing the type is a fine fix.
+> 
+> While that is absolutely true, it kind of removes the reason for the patch
+> in the first place. The code gcc generates is unlikely to be changed.
+> 
+> We are reacting to a warning an automatic tool generates. That is a good thing.
+> We should have clean code. The question is how we react to such a report.
+> It just seems to me that if we fix such a warning, the code should really be clean
+> after that. Just doing the minimum that will make the checker shut up is
+> no good.
 
-> Free the unused skb when not ip packets arrive.
->
-> Fixes: c6adf77953bc ("net: usb: qmi_wwan: add qmap mux protocol support")
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-> ---
->  drivers/net/usb/qmi_wwan.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 386d62769ded..cfda32047cff 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -201,6 +201,7 @@ static int qmimux_rx_fixup(struct usbnet *dev, struct=
- sk_buff *skb)
->  			break;
->  		default:
->  			/* not ip - do not know what to do */
-> +			kfree_skb(skbn);
->  			goto skip;
->  		}
+With this fix, the code seems clean to me.  It may not be as short as 
+possible, but it's clean.
 
-
-Makes sense.
-
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+Alan Stern
 
