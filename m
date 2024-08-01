@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-12820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD9DC9445CB
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:46:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F11179445ED
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:55:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F2E61F2329A
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 07:46:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7CB86B23078
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 07:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01EEC158529;
-	Thu,  1 Aug 2024 07:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D72161306;
+	Thu,  1 Aug 2024 07:55:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOrnxS/F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IrUME9yR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B60F101EE;
-	Thu,  1 Aug 2024 07:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864AE19478;
+	Thu,  1 Aug 2024 07:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722498382; cv=none; b=uF2O9+R4a3u/uEywEfagyWATrGhTmGkK1nH6Sx8RfcoGgr9Gfb8BNCzzfVSTLZcYok6PscL0ZKR5+IiPzSNWSpSXB7+FQICpuTTRugslZA3Z+u4UcQOMaHKVbg3yta6bo3hgr87eekDCWTTnCBDtCxm1dqnwENIFt6gwZ27gTPQ=
+	t=1722498938; cv=none; b=Xiaw3Lc3vzXDkPSQMNsAVR28X5KwygH4pU/Pet4oo2CyCyKSE0m51ftpcWPYULTBkFmJUSYl+iKjA72idsvj0q1iAu8lp5tVwuUUGNaNxgmZp1cuGgd322pTQsjgVix4Ch39Z9u5C1LqNFpMX7vyfzb8+q8AfYEB1JBMhi7O2UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722498382; c=relaxed/simple;
-	bh=eYAveCiRlZEPhVPBUUypSgw8cet8BJ1xjTZb33ozQnM=;
+	s=arc-20240116; t=1722498938; c=relaxed/simple;
+	bh=oHsKddBumXQe2GlEI9c6/XDB5ivTgd7edUCnfNg4qBk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d3nZdT6tvZDBOvwrGSdlK/5DhGfkK6vS6KUdgbJQY+Tz398qnxGVC3DDlP8dSEbwpGrseQDp9H2Hgq8AVRhBmlQmlRIDVtXHHTLB26iJiqhjhbg73Ehu7JcDwYsYN5NzeTwxVKRjMbqZav+UovSravz8Gh+QXZVqjjtBPoeGt+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOrnxS/F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69B8DC4AF0C;
-	Thu,  1 Aug 2024 07:46:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=QNbgP5ynXfyXDRYEFOxzbOhOQMxFuFVWcmK02J+MSrtyIv/GxnKjpYxtqUPRjrGveUVZDGuaM/wHFf6wRPsNpqpeF4xok+OL6q3xYpxxDDGF0KhD2nkDXNoZ7qb6/tw6pf1H1KBW+v0zS0rC2AMrQwT162zwJKi9xf2W/GavZkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IrUME9yR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD6AC4AF0A;
+	Thu,  1 Aug 2024 07:55:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722498382;
-	bh=eYAveCiRlZEPhVPBUUypSgw8cet8BJ1xjTZb33ozQnM=;
+	s=k20201202; t=1722498938;
+	bh=oHsKddBumXQe2GlEI9c6/XDB5ivTgd7edUCnfNg4qBk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fOrnxS/FT3kHFblVlWj41FiBqXkofZ8ouqgNuFqGFa8txXPksQvCz9Y1GeqIxoH8S
-	 tEpMDiCoi6dqVl3ZB8fbExnmsxfZ/K8vOi4Sj2NX7PN5L9gy3RkRtygQ4rwuf+1JGV
-	 dc4WmGeML7P9VWP3SKlhq4VcaPZn3vhTc6Jj4yu4nSYrTaWMjb1quymVfgI2QmShgW
-	 mST+UF4MG+an5w0cA3jk6uL2TpYNquP+5dKuvUWV2w3PrtHsDelyEzf2vfcU9fFE2q
-	 3NnXJ0bT3TnlJJb66xcc420m2ZjaoSoOD9B69vwYVAIdzH9J9pnnHXpKEgF63+9Ylx
-	 az9x2BURlR5jQ==
-Message-ID: <41a8e42b-69d7-49ef-97bf-84f260e2e709@kernel.org>
-Date: Thu, 1 Aug 2024 09:46:17 +0200
+	b=IrUME9yRh9ELjslkXcV2vx2VPCi3ogRZYL+VXDQqHPPXwbuaKlgk5xAfS7HIbaoqt
+	 VvTL/uicSYtnZQQ9Nq93azzE83oJ5P1tcUKrnRznWnvCCsgIhAOH29v6njIv34mKIe
+	 dVC9DcH1+XE3v6eb3oHYYbpVoJrNveu9WZcvBk2maWb9BLkzmT5B1kC1CESQWN9h/V
+	 xJyMs4siR09MFcO3adU8VmrUiIcYG+0RSX+HMIHWGS9Ci1mFeBVAAkI/JrPJcRTh5T
+	 lFE7/FPhrvBWa3HtxYk1EhUpdQ/w+gEHhiv6OcDxPuLghdbTF/DSDF2VETWqo6Zu6d
+	 Jthl5mwcUxZZA==
+Message-ID: <1fcace72-a886-49bc-a30a-fde5a1de7a25@kernel.org>
+Date: Thu, 1 Aug 2024 09:55:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,17 +50,15 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/8] dt-bindings: soc: qcom: eud: Add usb role switch
- property
-To: Elson Serrao <quic_eserrao@quicinc.com>, andersson@kernel.org,
+Subject: Re: [PATCH 0/8] Enable EUD on Qualcomm sm8450 SoC
+To: Caleb Connolly <caleb.connolly@linaro.org>,
+ Elson Roy Serrao <quic_eserrao@quicinc.com>, andersson@kernel.org,
  konrad.dybcio@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, gregkh@linuxfoundation.org
 Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
- <20240730222439.3469-3-quic_eserrao@quicinc.com>
- <7aec2a72-3276-4837-87fb-ac974588fd53@kernel.org>
- <cc02dc38-3986-4b28-a167-30150ea4cc6c@quicinc.com>
+ <023d4ea8-635d-435f-bae2-87284f70123b@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,45 +104,41 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <cc02dc38-3986-4b28-a167-30150ea4cc6c@quicinc.com>
+In-Reply-To: <023d4ea8-635d-435f-bae2-87284f70123b@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01/08/2024 02:16, Elson Serrao wrote:
+On 31/07/2024 13:13, Caleb Connolly wrote:
+> Hi,
 > 
-> 
-> On 7/30/2024 10:36 PM, Krzysztof Kozlowski wrote:
->> On 31/07/2024 00:24, Elson Roy Serrao wrote:
->>> EUD hub is physically present in between the USB connector and the
->>> USB controller. So the role switch notifications originating from
->>> the connector should route through EUD. Hence to interpret the usb
->>> role assigned by the connector, role switch property is needed.
->>>
->>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>> ---
->>>  Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>> index fca5b608ec63..0fa4608568d0 100644
->>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>> @@ -37,6 +37,10 @@ properties:
->>>      items:
->>>        - const: usb2-phy
->>>  
->>> +  usb-role-switch:
->>> +    $ref: /schemas/types.yaml#/definitions/flag
->>> +    description: Support role switch.
+> On 31/07/2024 00:24, Elson Roy Serrao wrote:
+>> The Embedded USB Debugger (EUD) is a mini High-Speed USB on-chip hub to
+>> support the USB-based debug and trace capabilities on Qualcomm devices.
+>> The current implementation lacks in below aspects that are needed for
+>> proper EUD functionality.
 >>
->> So both EUD and DWC3 controller (as this binding states) are role switching?
+>> 1.) HS-Phy control: EUD being a HS hub needs HS-Phy support for it's
+>>      operation. Hence EUD module should enable/disable HS-phy
+>>      accordingly.
+>> 	
+>> 2.) Proper routing of USB role switch notifications: EUD hub is physically
+>>      present in between the USB connector and the USB controller. So the
+>>      usb role switch notifications originating from the connector should
+>>      route through EUD. EUD also relies on role switch notifications to
+>>      communicate with the USB, regarding EUD attach/detach events.
 >>
+>> This series aims at implementing the above aspects to enable EUD on
+>> Qualcomm sm8450 SoC.
 > 
-> Yes. EUD would receive roles from the connector and relay it to the DWC3 controller. In addition to these roles, the DWC3 controller
-> would also receive roles from EUD itself (related to USB attach/detach events).
+> Are there any plans to make this feature available for folks outside of 
+> Qualcomm / an NDA?
+> 
+> There is an openOCD fork on CodeLinaro but it still requires some 
+> proprietary library which is only available to folks with a quicinc 
+> email as I understand it.
 
-Does not look right. Seems like you add something because it is easier
-to code in drivers.
+Are you saying that there is no fully open and available user-space
+which is necessary to use EUD?
 
 Best regards,
 Krzysztof
