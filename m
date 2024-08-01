@@ -1,95 +1,112 @@
-Return-Path: <linux-usb+bounces-12851-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12852-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5645F944B3C
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 14:26:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C8C6944D90
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 16:01:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 079E41F22155
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 12:26:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBFC71C22619
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 14:01:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF4419E7E0;
-	Thu,  1 Aug 2024 12:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2381A3BDC;
+	Thu,  1 Aug 2024 14:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+XWxGJE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UvCGCirj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6542D17084F
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 12:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3C516F267;
+	Thu,  1 Aug 2024 14:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722515199; cv=none; b=Iik9uJRN/DhABLQYpq3lrHoXsyYuuf+nvqINXKl6D3EBKiohmFd4dUhz/lt5FDYLuJBieuD78skStUEIxxzbZTMYrhbXKPbqoyUT11jR2gEUW61/5bWLPtssdXcFGPtf3zonOjbDRVtt9zsUpO4fmjQAfDqwz5X1Qhzve1eHVlM=
+	t=1722520898; cv=none; b=qpJeeNpZqn/BS+wRjfxwlxaUBHj3ndMpo8NwL5dFL9SLLgUXxAQ1D3jclFWlw3iXfocL3xWt+Ahmw1gr5ZWkuPT6pBWWaFsoVUOCk2B4U6Dh3TcjtVZO6oDG1vwtSXcpFWvwaIr2E2HGjPErp8Q6Y5TzS8+ooN0RzROeElPZoJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722515199; c=relaxed/simple;
-	bh=Nc1UwaeBOqlutVsVrtbcssZvle/lXgbv0X2BimTcAoo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nf20O85svACCfiSRmMYSJLIimvoKCYw5dtVR85A+zCN2h4skgr66jCdc1icYSr/d/X8kuiA/bw5mbhCleCAmQS5AhDDKrJW+MFept9xCln29BOcEwW4mFL7j+Sx7/8Bwjhcl75tIHXosNG6w18MOT+Q6mqmqpEoHBn/3ogGN8DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+XWxGJE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF314C4AF09
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 12:26:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722515198;
-	bh=Nc1UwaeBOqlutVsVrtbcssZvle/lXgbv0X2BimTcAoo=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=t+XWxGJElHiwNREe2nOPjE+SikAruXar/rvI9y9z0O7lTOCWSELbZVOnghdU6xKLk
-	 u7kPMZYM1suQ+0fCkJghYlJaAX21Zc6Wz66/4Tl/6kIGbNrNIHnHhjnPX1nAfxiMsN
-	 vmYXvX/jH7FeTn3uU3MMMafhb3+fcXBj/MUDyo8yhyw/FnEeg5uyn/4MhM3ayTGn1v
-	 CY+auD6ysnr6xP+3QYhiEwA/uGnB02amWGP4iv/Hu+aznHtMs1jaPr/sLMv2EjRWg1
-	 KfZ7/cgNGdAE++sYioAuqjPCNkjsTfQ7U8cOwZu5HQcMKGPjvBX6BLJ8/k8F4cnNTu
-	 u2joJXtWsM/cg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D37F5C53B50; Thu,  1 Aug 2024 12:26:37 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219113] I/O-errors freezing the system [sd 0:0:0:0: [sda]
- tag#11 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD OUT]
-Date: Thu, 01 Aug 2024 12:26:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219113-208809-47KWKH4zvw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219113-208809@https.bugzilla.kernel.org/>
-References: <bug-219113-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1722520898; c=relaxed/simple;
+	bh=zc3fmwf7uam/V7MXE/k9UtioS2NVM6p9a5PBtxHgZ2k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TG/zABroKGAlhg9YVnycp3zf0fRiwRG3/rA18pASaxGG0CNOsGuBPpwfWpUDI/suKf305SMaogwMRjwk9qLz7ktVClY4Cve8rh19IoixvfMU8rwTOsoDPOLdgEN4b7SSOt+cYUsjMfJaRAWgZvabRLurCZaMj1UEPo+v2XiPHyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UvCGCirj; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a7a8caef11fso817463966b.0;
+        Thu, 01 Aug 2024 07:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722520895; x=1723125695; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H10mZqEzOx4R7FeQ2dtZavYhrnIDzbwG4r7Wgi27o4w=;
+        b=UvCGCirj1awxbRW8lBwp37O16QOJ7QWBUBMkk9cOUlTpyJknXuYrBTZuQbw7kksJ7a
+         WWGvrJdCFwZ1oY5P/ZWGXocCav7LkO0QaGBL+IqPEij7phWWqchCSmUoRTilaPo7NNwX
+         l90PPajKAWEKdhCbh5jqec4LoYqHXnyOHbMJJSBQfq36ZteDxWqCRgQLjog2r56cPBV+
+         s/Vvq2uMHuDCbCiboXCLR32pKoU5mto+/5RLyEfnobJoGBGTq+RLBFOHiqgqEFKLL2M7
+         TE4f1XM8FCnfF1dHD+YENFTX3Io9yUMtz2mrX5TXKU7lFyL/tdDCOeSk+Z/++pe58WwA
+         r4Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722520895; x=1723125695;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H10mZqEzOx4R7FeQ2dtZavYhrnIDzbwG4r7Wgi27o4w=;
+        b=YwkttZNhaew4qT3RRjzXNKgZsVNgOTIlYR3peEODQd0fpWBnawGUCEqFI/JHoHJjAa
+         CqHGJGqV2Mgjy+NuH4d0F3ruoxPCQ6O+X2e1mydEGQrCUuHXlQ+18tW/DFUgPLHtOdyN
+         BXlboweKY6oP03rJDGIytPRBSUhDP8PJW8HRu55jvYD+zcZvAgVTQV/4KJdrl0L0Mdpq
+         khQstmlGNomcyf6iW37el2buPjqU+VJYfvi587aZMUvcE/FaFsk8a3wACVUevFHvo8nP
+         l5QnCNszLqX1TI0SulUAsemDJaSvbD4Hds+R4pbOQOPv4tju8unqyOojcwaIBSDGKIgi
+         fvmA==
+X-Forwarded-Encrypted: i=1; AJvYcCVvZcHXgcGADi1/uCMPTixPCQ74hQbiHqDBOImifxc9Z4SorVTamsorBLn6C24naC63s35vrsz4LuWMNZ/YV3GqXK2l+3ETmBE3
+X-Gm-Message-State: AOJu0YyUGQODKuoYq9TVsHTkXksrXh9ccSEGmoW1w8HYMWliF+OlxfBk
+	r2fwnNYS/Vy0Hj3okeCfqLOJAPPXgYZw6WHHiRnuwXXzx80bDWCDSVsd47wg
+X-Google-Smtp-Source: AGHT+IEoD2t9DB48Tvfk36MbHboQ5U4hDU2tMQr1NDZWvHmJWBHkumulozDgfkSYtOMGmnPhjlQSxA==
+X-Received: by 2002:a17:906:fe4b:b0:a77:db34:42ca with SMTP id a640c23a62f3a-a7dc50a3777mr17724766b.49.1722520894273;
+        Thu, 01 Aug 2024 07:01:34 -0700 (PDT)
+Received: from ThinkStation-P340.tmt.telital.com ([2a01:7d0:4800:7:5620:85dc:e603:93e5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab4de47sm905748366b.67.2024.08.01.07.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Aug 2024 07:01:34 -0700 (PDT)
+From: Daniele Palmas <dnlplm@gmail.com>
+To: =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>
+Cc: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Daniele Palmas <dnlplm@gmail.com>
+Subject: [PATCH net 1/1] net: usb: qmi_wwan: fix memory leak for not ip packets
+Date: Thu,  1 Aug 2024 15:55:12 +0200
+Message-Id: <20240801135512.296897-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219113
+Free the unused skb when not ip packets arrive.
 
---- Comment #8 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Looks like it was added to 6.1.95 stable
-Commit Id for the 6.1 stable backport is 633f72cb6124ecda97b641fbc119340bd8=
-8d51
+Fixes: c6adf77953bc ("net: usb: qmi_wwan: add qmap mux protocol support")
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-git describe --contains 633f72cb6124ecda97b641fbc119340bd88d51
-v6.1.95~123
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 386d62769ded..cfda32047cff 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -201,6 +201,7 @@ static int qmimux_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 			break;
+ 		default:
+ 			/* not ip - do not know what to do */
++			kfree_skb(skbn);
+ 			goto skip;
+ 		}
+ 
+-- 
+2.37.1
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
