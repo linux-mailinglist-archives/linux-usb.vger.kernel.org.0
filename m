@@ -1,176 +1,274 @@
-Return-Path: <linux-usb+bounces-12822-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12830-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4074994465C
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 10:19:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05DD69447A3
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 11:13:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF9C21F23A12
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 08:19:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 874401F23B64
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89BFC16DEAE;
-	Thu,  1 Aug 2024 08:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438F4187FF4;
+	Thu,  1 Aug 2024 09:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pGeZCFcj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gnr0dSXO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495DD16C87B
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 08:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE86B1741FA;
+	Thu,  1 Aug 2024 09:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722500374; cv=none; b=PwTgLWpxvMHc7sxfJGe8VB3UW8au4Zu7Kar15gdfDy1lJANwRiXttW3e2kOv9wDMBzDbcugbYaFNfKlO+4CSYLrpW4atiDuh+DoEhLDE+sPPUo3BqfVcTU34z0GFaz677KZo9rCWAwuZ6klWcw4Je+hAv0Wyiteqwt0LzJDsJqE=
+	t=1722503521; cv=none; b=R6joXZjS4VkpDOHTR7SSyC+eb0xl5i2c0mnVKIjpatii4yA+pbtgZjiehuowsqPpFNS9IAok2Y+xdO0/WLCC4twySdO9JSmF0Eqh6/MUldJ5QcUd5aCEyjPQ7omoTroEUL+I5z3CU8YSfh2LtXUrPlW8beN3qHXYEfMahX2klng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722500374; c=relaxed/simple;
-	bh=sO5RzlUWFQWyLYtQT51QAOWQdgDxj1VtrkS2YOt8ONs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AWem+TbfTFsNJTtbH1RsI2nD6iHwpLuyv+xVB2j1UIObBaE8tCPkRKR5L8C9/Oy14djXoDiGjvKB4lD1V/z4YAj/C1qMCXITBOMNdbGqJaKdMCxsiWnW02pv6urA6v27uwWBi10WPhURFidFGSK78wQZL6YIQuNvTeeNYsI/61c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pGeZCFcj; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-52ef95ec938so8020909e87.3
-        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2024 01:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722500370; x=1723105170; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HieJqVdMzMx3NEhnjcblA0j7rcIYuxfissUP0SJYQIQ=;
-        b=pGeZCFcjSj6k1tNYxHnvtN8D6ooWNflm19CCduv3KMEdjGOYk9inrf7hvyRWfbFUkl
-         sbJBUIjokHos1QUHnkC4rnIuCO2dTooM+NqbmmxAD35GOjJpWO7+r/iaTnWilo2nEfdw
-         4Q9m/ucCNxlW7YWuEkBXy/fBkPVXVyv93ECBiX+6+l5voaa2rTZVvZp1c0E2nlWG3wFf
-         RS/ELp8mVfhM5m/TaWGkB56SkRPco+pLtNakWiWJ32dpnKy9JuFAUHupU8z4rHs7OWdl
-         MICXK79hNhhG6Nq5TO9wnY/vPP3D1iOdiDmRaiT790K1X+zMfV5qsfCtTxKHVx66Lal0
-         S0NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722500370; x=1723105170;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HieJqVdMzMx3NEhnjcblA0j7rcIYuxfissUP0SJYQIQ=;
-        b=C6Pff7E4R5TyHmXs9CyuF74ej/rrBKO+I6BjA5dFYHoRFYrEWO4e66CEyl2ksxielB
-         TXYUyqDZNvKwFUqLASaPlMnLeBYlyjbV/iddddp9Lr/4GRNaSjNfQR5FOcAoCL/SvQAq
-         arpJ3FlLo2jpv7bQ7YlqzfdmnNL2MrI8XsSuGVUk40UpbIwQhRWiAAcEy59XJI7FT3s2
-         pJKCrBZlTAzX5sEPCRMWsZvnx/lJ1TdBOdcS4zRA3M76vaOYQky+fmZWme4FQFVBcApi
-         d49VKGE+2mRKZhHwZWrntC9fawRNGkArZsD7BjGaTZtXY+GB9DxC270aUIef3N6Z0adA
-         h07w==
-X-Forwarded-Encrypted: i=1; AJvYcCXPRIuRFkkRYEyqP7Jh24lXuxZ8RoN/n3hw1taWPOuwL5uScVsD7KgbLLXb/hGRlraesxh3oOqFLQfC2zqYwH97315eox5j7CmE
-X-Gm-Message-State: AOJu0Yxs3Y2JUd4L2+kjWmmLMimhKpXCU/Cl9vwR9q6CFgl4f8t0FCoW
-	mRGKkk6NWYrQTmZ1k9Tbvds5jMra3ftxYZmor9GxoGc7l7fIG0Ph23kiBEJHz7Q=
-X-Google-Smtp-Source: AGHT+IHxwDRo4bANeGwuRF2uqlCxOH1WiG0myhUGRgNk9KvigLXA58tyO2IFTgWT4iS9vwJonFHhhA==
-X-Received: by 2002:a19:ca1b:0:b0:52c:d5b3:1a6a with SMTP id 2adb3069b0e04-530b61bc63dmr789459e87.28.1722500370111;
-        Thu, 01 Aug 2024 01:19:30 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5bc4331sm2522097e87.21.2024.08.01.01.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Aug 2024 01:19:29 -0700 (PDT)
-Date: Thu, 1 Aug 2024 11:19:28 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Elson Serrao <quic_eserrao@quicinc.com>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 7/8] usb: misc: eud: Handle usb role switch notifications
-Message-ID: <dhdxb4kiwsnsyqjhcfj2iglwwlubf5wajg4jggu35zq7hxm54p@tj2snlcnejdg>
-References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
- <20240730222439.3469-8-quic_eserrao@quicinc.com>
- <5nsextq3khhku3xfdwwj74wmx5ajyqhjyarfpnpa6i2tjx76ix@z7lpip6pi6re>
- <0c769a55-0fb7-4734-86b1-9469b4cc7b8c@quicinc.com>
+	s=arc-20240116; t=1722503521; c=relaxed/simple;
+	bh=5p1oyYO6u1shRaRU1kQj5x9fnU5Q6DlYMq5LOgbkvZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FGRLo+RiuLXCtSFNRmo5USXFaAa0QyDt77vCrujwwbRXaiNlc7tfDnR0F/R8abg4WYO/ap7fX79GkbdTVVmvRDnzQnQpWjID1d5EQNNsPVKfe/jzGkJQ7EdjV/arlHqTKwvUhJl3yZVyuXM70zfln6EsTBYBVxzlDuVOgKM7B0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gnr0dSXO; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722503521; x=1754039521;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5p1oyYO6u1shRaRU1kQj5x9fnU5Q6DlYMq5LOgbkvZo=;
+  b=Gnr0dSXOAqYsV7fyemXJ2zoVid8R/K0ziBJQe0b/oWs5279qmyJREkv8
+   9Q2UZBBFCeqpjUVoQ3Uu0A+TXoCBPe8LmOtDMyzCtddFx5VUPYO5dmwOq
+   vdV8xUIt24PFWxvzs13nt0z4bCOR6yXUsT2vVz9HA/++aEW0sC3KaL5/k
+   F+reCRhdGVtEBqrn9SYGpYXiV2/eSBH0ezIeWiTahnJE2SNsL7oFej8q/
+   n1ou5ngVqhtXr40SHnNA2l0MkO89QdE8Jl2rZWaD/IvpSl4O95q/tFvei
+   qFzs6Mcd6SQ40nonSEOGWaMNFdE5YlXe5tP9AvNHuvyqioy9Nzibz1Dag
+   A==;
+X-CSE-ConnectionGUID: 20lgqVv/T32ZXmygIdhimQ==
+X-CSE-MsgGUID: +mCx9gZqTFKiORDGDXgErA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="20383499"
+X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
+   d="scan'208";a="20383499"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:11:27 -0700
+X-CSE-ConnectionGUID: HjVKERAITIC28FpFzogoxA==
+X-CSE-MsgGUID: /6WLYwWXRqOt446s4lkJIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
+   d="scan'208";a="59089859"
+Received: from lfiedoro-mobl.ger.corp.intel.com (HELO [10.245.246.220]) ([10.245.246.220])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:11:21 -0700
+Message-ID: <57c5af3e-3299-47ae-9e13-bfce077f5e23@linux.intel.com>
+Date: Thu, 1 Aug 2024 10:26:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c769a55-0fb7-4734-86b1-9469b4cc7b8c@quicinc.com>
-
-On Wed, Jul 31, 2024 at 05:51:17PM GMT, Elson Serrao wrote:
-> 
-> 
-> On 7/31/2024 6:06 AM, Dmitry Baryshkov wrote:
-> > On Tue, Jul 30, 2024 at 03:24:38PM GMT, Elson Roy Serrao wrote:
-> >> Since EUD is physically present between the USB connector and
-> >> the USB controller, it should relay the usb role notifications
-> >> from the connector. Hence register a role switch handler to
-> >> process and relay these roles to the USB controller. This results
-> >> in a common framework to send both connector related events
-> >> and eud attach/detach events to the USB controller.
-> >>
-> >> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
-> >> ---
-> >>  drivers/usb/misc/qcom_eud.c | 91 ++++++++++++++++++++++++++++---------
-> >>  1 file changed, 69 insertions(+), 22 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> >> index 3de7d465912c..9a49c934e8cf 100644
-> >> --- a/drivers/usb/misc/qcom_eud.c
-> >> +++ b/drivers/usb/misc/qcom_eud.c
-> >> @@ -10,6 +10,7 @@
-> >>  #include <linux/iopoll.h>
-> >>  #include <linux/kernel.h>
-> >>  #include <linux/module.h>
-> >> +#include <linux/mutex.h>
-> >>  #include <linux/of.h>
-> >>  #include <linux/phy/phy.h>
-> >>  #include <linux/platform_device.h>
-> >> @@ -35,12 +36,16 @@ struct eud_chip {
-> >>  	struct device			*dev;
-> >>  	struct usb_role_switch		*role_sw;
-> >>  	struct phy			*usb2_phy;
-> >> +
-> >> +	/* mode lock */
-> >> +	struct mutex			mutex;
-> >>  	void __iomem			*base;
-> >>  	void __iomem			*mode_mgr;
-> >>  	unsigned int			int_status;
-> >>  	int				irq;
-> >>  	bool				enabled;
-> >>  	bool				usb_attached;
-> >> +	enum usb_role			current_role;
-> >>  };
-> >>  
-> >>  static int eud_phy_enable(struct eud_chip *chip)
-> >> @@ -64,6 +69,38 @@ static void eud_phy_disable(struct eud_chip *chip)
-> >>  	phy_exit(chip->usb2_phy);
-> >>  }
-> >>  
-> >> +static int eud_usb_role_set(struct eud_chip *chip, enum usb_role role)
-> >> +{
-> >> +	struct usb_role_switch *sw;
-> >> +	int ret = 0;
-> >> +
-> >> +	mutex_lock(&chip->mutex);
-> >> +
-> >> +	/* Avoid duplicate role handling */
-> >> +	if (role == chip->current_role)
-> >> +		goto err;
-> >> +
-> >> +	sw = usb_role_switch_get(chip->dev);
-> > 
-> > Why isn't chip->role_sw good enough? Why do you need to get it each
-> > time?
-> >
-> 
-> Hi Dmitry
-> 
-> chip->role_sw is the eud role switch handler to receive role switch notifications from the
-> USB connector. The 'sw' I am getting above is the role switch handler of the USB controller.
-> As per this design, EUD receives role switch notification from the connector 
-> (via chip->role_sw) and then relays it to the 'sw' switch handler of the USB controller.
-
-The fact that you have repurposed existing structure field is not a
-waiver for the inefficiency.
-
-So what about keeping chip->role_sw as is and adding _new_ field for the
-self-provided role switch?
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v24 12/34] ASoC: doc: Add documentation for SOC USB
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
+ Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
+ gregkh@linuxfoundation.org, robh@kernel.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org
+References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
+ <20240801011730.4797-13-quic_wcheng@quicinc.com>
+Content-Language: en-US
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20240801011730.4797-13-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
--- 
-With best wishes
-Dmitry
+> +
+> +::
+> +
+> +               USB                   |            ASoC
+> +                                     |  _________________________
+> +                                     | |   ASoC Platform card    |
+> +                                     | |_________________________|
+> +                                     |         |           |
+> +                                     |      ___V____   ____V____
+> +                                     |     |ASoC BE | |ASoC FE  |
+> +                                     |     |DAI LNK | |DAI LNK  |
+> +                                     |     |________| |_________|
+> +                                     |         ^  ^        ^
+> +                                     |         |  |________|
+> +                                     |      ___V____    |
+> +                                     |     |SOC-USB |   |
+> +     ________       ________               |        |   |
+> +    |USB SND |<--->|USBSND  |<------------>|________|   |
+> +    |(card.c)|     |offld   |<----------                |
+> +    |________|     |________|___     | |                |
+> +        ^               ^       |    | |    ____________V_________
+> +        |               |       |    | |   |IPC                   |
+> +     __ V_______________V_____  |    | |   |______________________|
+> +    |USB SND (endpoint.c)     | |    | |              ^
+> +    |_________________________| |    | |              |
+> +                ^               |    | |   ___________V___________
+> +                |               |    | |->|audio DSP              |
+> +     ___________V_____________  |    |    |_______________________|
+> +    |XHCI HCD                 |<-    |
+> +    |_________________________|      |
+> +
+
+It wouldn't hurt to describe what you mean by 'port' in this diagram...
+
+
+> +SOC USB driver
+> +==============
+> +Structures
+> +----------
+> +``struct snd_soc_usb``
+> +
+> +  - ``list``: list head for SND SOC struct list
+> +  - ``component``: reference to ASoC component
+> +  - ``num_supported_streams``: number of supported concurrent sessions
+> +  - ``connection_status_cb``: callback to notify connection events
+> +  - ``get_offload_dev``: callback to fetch selected USB sound card/PCM device
+
+I think you meant fetch offloaded sound card and PCM device information
+for a given USB card:device pair?
+
+
+> +Functions
+> +---------
+> +.. code-block:: rst
+> +
+> +	const char *snd_soc_usb_get_components_tag(bool playback);
+> +..
+> +
+> +  - ``playback``: direction of audio stream
+
+why not use the usual direction 0: playback and 1: capture?
+
+> +
+> +**snd_soc_usb_get_components_tag()** returns the tag used for describing if USB
+> +offloading is supported for appending to a sound card's components string.
+
+How does this work if the ASoC part is probe after the USB card? The
+component string would be modified after the creation of the card?
+
+A control is more dynamic by nature, not sure about this component
+string. Jaroslav?
+
+>
+> +**snd_soc_usb_add_port()** add an allocated SOC USB device to the SOC USB framework.
+> +Once added, this device can be referenced by further operations.
+> +
+> +.. code-block:: rst
+> +
+> +	void snd_soc_usb_remove_port(struct snd_soc_usb *usb);
+> +..
+> +
+> +  - ``usb``: SOC USB device to remove
+> +
+> +**snd_soc_usb_remove_port()** removes a SOC USB device from the SOC USB framework.
+> +After removing a device, any SOC USB operations would not be able to reference the
+> +device removed.
+
+Not clear to me if the notion of 'port' helps, why not just
+snd_soc_usb_add_device() and remove_device()?
+
+
+> +
+> +USB Offload Related Kcontrols
+> +=============================
+> +Details
+> +-------
+> +A set of kcontrols can be utilized by applications to help select the proper sound
+> +devices to enable USB audio offloading.  SOC USB exposes the get_offload_dev()
+> +callback that designs can use to ensure that the proper indices are returned to the
+> +application.
+> +
+> +Implementation
+> +--------------
+> +
+> +**Example:**
+> +
+> +  **Sound Cards**:
+> +
+> +	::
+> +
+> +	  0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+> +						SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+> +	  1 [Seri           ]: USB-Audio - Plantronics Blackwire 3225 Seri
+> +						Plantronics Plantronics Blackwire 3225 Seri at usb-xhci-hcd.1.auto-1.1, full sp
+> +	  2 [C320M          ]: USB-Audio - Plantronics C320-M
+> +                      Plantronics Plantronics C320-M at usb-xhci-hcd.1.auto-1.2, full speed
+> +
+> +  **USB Sound Card** - card#1:
+> +
+> +	::
+> +
+> +	  USB Offload Playback Route PCM#0        -1, -1 (range -1->255)
+> +
+> +  **USB Sound Card** - card#2:
+> +
+> +	::
+> +
+> +	  USB Offload Playback Route PCM#0        0, 1 (range -1->255)
+> +
+> +The above example shows a scenario where the system has one ASoC platform card
+> +(card#0) and two USB sound devices connected (card#1 and card#2).  When reading
+> +the available kcontrols for each USB audio device, the following kcontrol lists
+> +the mapped offload path for the specific device:
+> +
+> +	"USB Offload Playback Route#*"
+> +
+> +The kcontrol is indexed, because a USB audio device could potentially have
+> +several PCM devices.  The above kcontrols are defined as:
+> +
+> +  - ``USB Offload Playback Route PCM`` **(R)**: Returns the ASoC platform sound
+> +	card and PCM device index.  The output "0, 1" (card index, PCM device index)
+> +	signifies that there is an available offload path for the USB SND device
+> +	through card#0-PCM device#1.  If "-1, -1" is seen, then no offload path is
+> +	available for the USB SND device.
+> +
+> +USB Offload Playback Route Kcontrol
+> +-----------------------------------
+> +In order to allow for vendor specific implementations on audio offloading device
+> +selection, the SOC USB layer exposes the following:
+> +
+> +.. code-block:: rst
+> +
+> +	int (*get_offload_dev)(struct snd_kcontrol *kcontrol,
+> +			      struct snd_ctl_elem_value *ucontrol);
+> +..
+> +
+> +These are specific for the **USB Offload Playback Route PCM#** kcontrol.
+> +
+> +When users issue get calls to the kcontrol, the registered SOC USB callbacks will
+> +execute the registered function calls to the DPCM BE DAI link.
+
+Oh man, now I get what 'get_offload_dev" means: it really means
+"update_offload_info' or 'update_info_kcontrol".
+The 'get' routines usually provide a handle on something to another part
+of the kernel.
+Not here, it's an update of something to be looked-up by userspace...
+
+
+> +**Callback Registration:**
+> +
+> +.. code-block:: rst
+> +
+> +	static int q6usb_component_probe(struct snd_soc_component *component)
+> +	{
+> +	...
+> +	usb = snd_soc_usb_allocate_port(component, 1, &data->priv);
+> +	if (IS_ERR(usb))
+> +		return -ENOMEM;
+> +
+> +	usb->connection_status_cb = q6usb_alsa_connection_cb;
+> +	usb->get_offload_dev = q6usb_get_offload_dev;
+> +
+> +	ret = snd_soc_usb_add_port(usb);
+> +..
+
 
