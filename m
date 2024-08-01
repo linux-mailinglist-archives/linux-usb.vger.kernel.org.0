@@ -1,109 +1,244 @@
-Return-Path: <linux-usb+bounces-12865-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12866-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 248D5945377
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 21:42:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED9CE945433
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 23:44:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A56ADB23BE7
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 19:42:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A2DF1F23A1E
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 21:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5C1914A4C7;
-	Thu,  1 Aug 2024 19:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA31F14B976;
+	Thu,  1 Aug 2024 21:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="EmMRP9QF"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iScD1N2T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from qs51p00im-qukt01080301.me.com (qs51p00im-qukt01080301.me.com [17.57.155.20])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCD3132139
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 19:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.155.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C5519478;
+	Thu,  1 Aug 2024 21:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722541330; cv=none; b=Mvx7ipB4O07zBs11RmwRkxiF0KhtvqLvr9e8SJAFG7J6upXCisKBPU2fMcpk5PbLpB3CQEFXwvpfC2Jrqk1wSr91vbbtkp4gelxxgJutTc8bY8TngqLBne9Fhoww1jIvolZHJzLNPXBHfw2o5TQNytz6a/JdJNN/oS0jUmIKOto=
+	t=1722548650; cv=none; b=HRZLOIuEd0xd6S8L3nRt/hQK2+siyGTrFNjrBnr16Sm9C8tS3CrkxkbYmoqjVlaKBts9QwQRMHsP1neq74YgRBJh9B9ABxVuskHUeKSA/ddLZRnafcPgrBp2ljbRGH5l26Ke86eTZN0lUI2kaJ+zxaGMgLNaclC/SRlIbbb+7ZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722541330; c=relaxed/simple;
-	bh=4xvpP5bdfMQ5GOEkRNM+dz5UfEAriwmhpHzKBkfcC24=;
-	h=Message-ID:Date:MIME-Version:To:References:Cc:From:Subject:
-	 In-Reply-To:Content-Type; b=gYMHxB6eG/FsxhNs+1+ySiTGoiV2nOg2MLm+Qw6perlw4qGp9sYQBy4b8cDZCzsXbki9GmIQtqzEJBNitrNw+5jvITkugxlPPW5ahQiLg+j3U2hdbTQxwFrWpqRt6HvVj9xOUh1Pn6GqXbSCLjnzsAZe2jP61LRUYxOfwKOGfqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=EmMRP9QF; arc=none smtp.client-ip=17.57.155.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-	t=1722541327; bh=INZG3DG2qyYReJmibjtxl31nFV4lK0LyiqavhTlXh28=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-	b=EmMRP9QF5dY2j4t5zSahoLr/xisJ0fMLp8vcXgtDOllo5QBvhaESXX1kYc62nyw8c
-	 SuB68pGmrH4Dqot7RHugeq3B52Z5z97xDG1YJQxGqR25ll9MPkO84/+QKPBQ0NNxHO
-	 siS+7Ahmnl88S0s+sbmmJeZKUUIXYMfXH0EFnE7TKpwEtpSjYMrAi03b8MQ0avbTcs
-	 jWY8RG0k0orjJctchgqKEmYlGyH5Y9BehTXBhrKTgDNA4bHf5/NEtOxy8hNXihyyUO
-	 ATaRbb5t78vFHm8GrVxv+Ryr2e6JvfWy/YWdSOqmechzGI8Y1M5yc4sr66TMBlLXxN
-	 vbz13LX+hh32w==
-Received: from [192.168.40.3] (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-	by qs51p00im-qukt01080301.me.com (Postfix) with ESMTPSA id 008365F0022C;
-	Thu,  1 Aug 2024 19:42:05 +0000 (UTC)
-Message-ID: <40b8002c-927c-434f-a82c-73443e0207f7@pen.gy>
-Date: Thu, 1 Aug 2024 21:42:02 +0200
+	s=arc-20240116; t=1722548650; c=relaxed/simple;
+	bh=rT3d2Z/qIlmnt+W7HtPuU/e8Cq65jWz1fSQ42lBAXjo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=OFtRXj+eFi4GWw7Nq9p26ZcvDC0KpPrEq8gyR4YPLhy3VYD73Kz/1z7EWpRmgGPbFE9G49+xP/9xxvDWYxG8BPuVMjRIv4nDqYprvoHEhTb5CDZCEOMgXxpZiVXnLm1h2v9HwicWk/nbikRrHWkfcLJQUPQujtcsXe0M2K5XmDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iScD1N2T; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 471LdMGq013149;
+	Thu, 1 Aug 2024 21:43:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	BX82SsFcwSGZlTYIkpFjHO9Gx5qKaee7nFQyUrj5jng=; b=iScD1N2T8zX3odgX
+	Vqeo4RDlBnEkPT2hra6KMoHgT2W03XmNoWV18i9cMgNogYy8y6S4g2uEl1p7zeX4
+	GPQ1pq4R+ev7+UrISNpVowrAYvs92hSOM/7X+qWiygGKKl87HqAwbhle6U9pDEV0
+	xCDVNKzOyemrEpEpR4IUgI10SPY8BlGgazkmG5Gsow/2e3WFnM9FD9tMazi3ZqyS
+	yT8ghpbjifVjgn7dSucXx1/zOKNvg2gtxuyNV16g0xH5Or0fv8ooqLz3HWqnP/lZ
+	AESOz6oOB4Vkgv7z7KwrrKav56K826CQUIaHtgyM0tljCfkkPoEuU8lsq5tU/VS4
+	iqXuiQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40rje6g0b7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Aug 2024 21:43:03 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 471Lh215031028
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 1 Aug 2024 21:43:02 GMT
+Received: from [10.71.115.74] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 1 Aug 2024
+ 14:43:01 -0700
+Message-ID: <f761530c-a49b-4dd5-b01c-97d08931e0ab@quicinc.com>
+Date: Thu, 1 Aug 2024 14:43:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-To: Oliver Neukum <oneukum@suse.com>
-References: <0E5elkMIg5-dqmrTakb-xo6Yx_VnD_6Fc1Wud6LijP3iooYsrIjbLHxx2m9MVKe1conEc0Tjke_LjHS4mToF0A==@protonmail.internalid>
- <20231121144330.3990-1-oneukum@suse.com>
-Content-Language: en-GB
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, gvalkov@gmail.com
-From: Foster Snowhill <forst@pen.gy>
-Autocrypt: addr=forst@pen.gy; keydata=
- xjMEYB86GRYJKwYBBAHaRw8BAQdAx9dMHkOUP+X9nop8IPJ1RNiEzf20Tw4HQCV4bFSITB7N
- G2ZvcnN0QHBlbi5neSA8Zm9yc3RAcGVuLmd5PsKPBBAWCgAgBQJgHzoZBgsJBwgDAgQVCAoC
- BBYCAQACGQECGwMCHgEAIQkQfZTG0T8MQtgWIQTYzKaDAhzR7WvpGD59lMbRPwxC2EQWAP9M
- XyO82yS1VO/DWKLlwOH4I87JE1wyUoNuYSLdATuWvwD8DRbeVIaCiSPZtnwDKmqMLC5sAddw
- 1kDc4FtMJ5R88w7OOARgHzoZEgorBgEEAZdVAQUBAQdARX7DpC/YwQVQLTUGBaN0QuMwx9/W
- 0WFYWmLGrrm6CioDAQgHwngEGBYIAAkFAmAfOhkCGwwAIQkQfZTG0T8MQtgWIQTYzKaDAhzR
- 7WvpGD59lMbRPwxC2BqxAQDWMSnhYyJTji9Twic7n+vnady9mQIy3hdB8Dy1yDj0MgEA0DZf
- OsjaMQ1hmGPmss4e3lOGsmfmJ49io6ornUzJTQ0=
-Subject: Re: [RFC] USB: ipeth: race between ipeth_close and error handling
-In-Reply-To: <20231121144330.3990-1-oneukum@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: bOdPM5MyC2msYG0k2XkbsNdLGoCLHmS2
-X-Proofpoint-ORIG-GUID: bOdPM5MyC2msYG0k2XkbsNdLGoCLHmS2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v24 09/34] ASoC: Add SOC USB APIs for adding an USB
+ backend
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <gregkh@linuxfoundation.org>, <robh@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
+ <20240801011730.4797-10-quic_wcheng@quicinc.com>
+ <09fde4e6-c3be-484d-a7a5-bd653dc42094@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <09fde4e6-c3be-484d-a7a5-bd653dc42094@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CfWY8kppifJfoJ291RGWUqr5ddtbrbnw
+X-Proofpoint-ORIG-GUID: CfWY8kppifJfoJ291RGWUqr5ddtbrbnw
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-01_18,2024-08-01_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=652 bulkscore=0 suspectscore=0 clxscore=1030 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2408010130
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-01_20,2024-08-01_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ mlxscore=0 impostorscore=0 clxscore=1015 adultscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408010144
 
-Hello Oliver,
+Hi Pierre,
 
-Thank you for the patch and patience!
+On 8/1/2024 1:02 AM, Pierre-Louis Bossart wrote:
+>
+>
+>> +/**
+>> + * struct snd_soc_usb_device
+>> + * @card_idx - sound card index associated with USB device
+>> + * @pcm_idx - PCM device index associated with USB device
+>> + * @chip_idx - USB sound chip array index
+>> + * @num_playback - number of playback streams
+>> + * @num_capture - number of capture streams
+> so here we have a clear separation between playback and capture...
 
-> ipheth_sndbulk_callback() can submit carrier_work
-> as a part of its error handling. That means that
-> the driver must make sure that the work is cancelled
-> after it has made sure that no more URB can terminate
-> with an error condition.
-> 
-> Hence the order of actions in ipeth_close() needs
-> to be inverted.
+Thanks for the quick review of the series, I know that its a lot of work, so its much appreciated.
 
-The change looks reasonable to me. It's been a while, but do you perhaps
-recall how you stumbled upon this? Was that a proactive fix, or was it
-in response to an issue you (or someone else) encountered? Basically
-wondering if this is something I could test/reproduce.
+I guess in the past revisions there was some discussions that highlighted on the fact that, currently, in our QC USB offload implementation we're supporting playback only, and maybe it should be considered to also expand on the capture path.  I went ahead and added some sprinkles of that throughout the SOC USB layer, since its vendor agnostic, and some vendors may potentially have that type of support.  Is it safe to assume that this is the right thinking?  If so, I will go and review some of the spots that may need to consider both playback and capture paths ONLY for soc-usb. (as you highlighted one below)  Else, I can note an assumption somewhere that soc-usb supports playback only and add the capture path when implemented.
 
-I'm planning to submit a few patches for ipheth shortly, would it be
-alright with you if I included yours in the series as well? If so, I'll
-fix ipeth -> ipheth spelling if you don't mind.
+>> + * @list - list head for SoC USB devices
+>> + **/
+>> +struct snd_soc_usb_device {
+>> +	int card_idx;
+>> +	int pcm_idx;
+>> +	int chip_idx;
+>> +	int num_playback;
+>> +	int num_capture;
+>> +	struct list_head list;
+>> +};
+>> +
+>> +/**
+>> + * struct snd_soc_usb
+>> + * @list - list head for SND SOC struct list
+>> + * @component - reference to ASoC component
+>> + * @num_supported_streams - number of supported concurrent sessions
+> ... but here we don't. And it's not clear what the working 'sessions'
+> means in the comment.
+>
+>> + * @connection_status_cb - callback to notify connection events
+>> + * @priv_data - driver data
+>> + **/
+>> +struct snd_soc_usb {
+>> +	struct list_head list;
+>> +	struct snd_soc_component *component;
+>> +	unsigned int num_supported_streams;
+>> +	int (*connection_status_cb)(struct snd_soc_usb *usb,
+>> +			struct snd_soc_usb_device *sdev, bool connected);
+>> +	void *priv_data;
+>> +};
+>> +/**
+>> + * snd_soc_usb_allocate_port() - allocate a SOC USB device
+> USB port?
+Noted, refer to the last comment.
+>> + * @component: USB DPCM backend DAI component
+>> + * @num_streams: number of offloading sessions supported
+> same comment, is this direction-specific or not?
+Depending on what you think about my first comment above, I'll also fix or remove the concept of direction entirely.
+>> + * @data: private data
+>> + *
+>> + * Allocate and initialize a SOC USB device.  This will populate parameters that
+>> + * are used in subsequent sequences.
+>> + *
+>> + */
+>> +struct snd_soc_usb *snd_soc_usb_allocate_port(struct snd_soc_component *component,
+>> +					      int num_streams, void *data)
+>> +{
+>> +	struct snd_soc_usb *usb;
+>> +
+>> +	usb = kzalloc(sizeof(*usb), GFP_KERNEL);
+>> +	if (!usb)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	usb->component = component;
+>> +	usb->priv_data = data;
+>> +	usb->num_supported_streams = num_streams;
+>> +
+>> +	return usb;
+>> +}
+>> +EXPORT_SYMBOL_GPL(snd_soc_usb_allocate_port);
+>> +
+>> +/**
+>> + * snd_soc_usb_free_port() - free a SOC USB device
+>> + * @usb: allocated SOC USB device
+>> +
+>> + * Free and remove the SOC USB device from the available list of devices.
+> Now I am lost again on the device:port relationship. I am sure you've
+> explained this before but I forget things and the code isn't
+> self-explanatory.
+>
+Ok, I think the problem is that I'm interchanging the port and device terminology, because from the USB perspective its one device connected to a USB port, so its a one-to-one relation.  Removing that mindset, I think the proper term here would still be "port," because in the end SOC USB is always only servicing a port.  If this is the case, do you have any objections using this terminology in the Q6AFE as well as ASoC?  I will use consistent wording throughout SOC USB if so.
 
-Cheers,
-Foster
+Thanks
 
+Wesley Cheng
+
+>> + *
+>> + */
+>> +void snd_soc_usb_free_port(struct snd_soc_usb *usb)
+>> +{
+>> +	snd_soc_usb_remove_port(usb);
+>> +	kfree(usb);
+>> +}
+>> +EXPORT_SYMBOL_GPL(snd_soc_usb_free_port);
+>> +
+>> +/**
+>> + * snd_soc_usb_add_port() - Add a USB backend port
+>> + * @usb: soc usb device to add
+>> + *
+>> + * Register a USB backend device to the SND USB SOC framework.  Memory is
+>> + * allocated as part of the USB backend device.
+>> + *
+>> + */
+>> +void snd_soc_usb_add_port(struct snd_soc_usb *usb)
+>> +{
+>> +	mutex_lock(&ctx_mutex);
+>> +	list_add_tail(&usb->list, &usb_ctx_list);
+>> +	mutex_unlock(&ctx_mutex);
+>> +}
+>> +EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
+>> +
+>> +/**
+>> + * snd_soc_usb_remove_port() - Remove a USB backend port
+>> + * @usb: soc usb device to remove
+>> + *
+>> + * Remove a USB backend device from USB SND SOC.  Memory is freed when USB
+>> + * backend is removed.
+>> + *
+>> + */
+>> +void snd_soc_usb_remove_port(struct snd_soc_usb *usb)
+>> +{
+>> +	struct snd_soc_usb *ctx, *tmp;
+>> +
+>> +	mutex_lock(&ctx_mutex);
+>> +	list_for_each_entry_safe(ctx, tmp, &usb_ctx_list, list) {
+>> +		if (ctx == usb) {
+>> +			list_del(&ctx->list);
+>> +			break;
+>> +		}
+>> +	}
+>> +	mutex_unlock(&ctx_mutex);
+>> +}
+>> +EXPORT_SYMBOL_GPL(snd_soc_usb_remove_port);
 
