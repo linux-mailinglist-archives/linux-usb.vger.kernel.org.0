@@ -1,117 +1,135 @@
-Return-Path: <linux-usb+bounces-12808-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12809-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BDC0944225
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 06:13:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D222F9442B8
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 07:31:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0D1EB216D8
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 04:13:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D2B0284688
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 05:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9675113D624;
-	Thu,  1 Aug 2024 04:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D1413D538;
+	Thu,  1 Aug 2024 05:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+5nEbkQ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BanuGsq1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0751EB491
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 04:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBEC2744E;
+	Thu,  1 Aug 2024 05:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722485584; cv=none; b=Cpo7NgQ0GIbbi00SetrQglzfkvrCeTJrGwwEcpYzLOXMokzVKI3J+GliS59hsv4Sb1v4OyaZrYVFP39Q/2BracTIaCeNYypUMwChPE56CtALIXl0ZCa7r08rNPdtaFjYaQ9NXiDZUrv0jPpEyRq0iZ4ehuTuLvhtBevljc3A6O4=
+	t=1722490281; cv=none; b=Y28VSAC5BIEU4LqRKVqqo9anfwKRvSwVsuP9cYI1e0oPtWROcFU+e9BKRBsggiNPTGpVkpGb6QN/d9X0Y5tjiPS6xZ6v2Ef7+lb+3XEn0LXVBYY/argfCAnfsZ1Fu040/QZmd2cWJusF/HvzcLfTHoRG7aT1YQXAarmq3LGXwgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722485584; c=relaxed/simple;
-	bh=LQBv2+FmcX6RarJD4O+li63SlqvkQVGbYcSeO+tBMIc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=h95xoEc5/uDZs9AlfatqC6ZdwxYZIhQxT5WzhGF+xDsjtLfstM8xxkcQlSyJ8v44l7w4ynzWX1eItiRjZQa0VQG5Y2Zih7LYDhK1z8Y4Dy+SpRrVu5XHtUQHrXZi1B17oKUhu8UvgRkET0SK8aIvgV7F0BCHpjMv7HR4PFtcW+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+5nEbkQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F15DC4AF0A
-	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 04:13:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722485583;
-	bh=LQBv2+FmcX6RarJD4O+li63SlqvkQVGbYcSeO+tBMIc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=s+5nEbkQQctiYXRl+flb9yf9kgzyS9amppwBOy6mby5fyLv0oQ/vb/xfC6Qr1y2k1
-	 56g+o1cXNSu+JcCtPx6BPq1UgNTPisOSzCzzpzh8jWh4u7NU2A1mZUmqs5PGKW34vu
-	 YeUf7UDB6IX1y7wfDF+HiXR0XPypaa4AMBRt5cqtED8Wv86u7UCeICWer4I9laPGNY
-	 C8/CWTd/Gp5YqBbHOz20acm8+oWpYHLu+ON2w6t9Lw6Lz8oRmKRlB8aDHtMG1iHhhb
-	 XffBmPW8O9SW1Vq0L2B3GgWET5u49+tCb2y6V7IruLcgwDMhDRcx45B++b5HjNPCUq
-	 cKEI+WuWO6IjQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8B964C53BB7; Thu,  1 Aug 2024 04:13:03 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219113] I/O-errors freezing the system [sd 0:0:0:0: [sda]
- tag#11 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD OUT]
-Date: Thu, 01 Aug 2024 04:13:03 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ijaaskelainen@outlook.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219113-208809-oQT7XbafgO@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219113-208809@https.bugzilla.kernel.org/>
-References: <bug-219113-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1722490281; c=relaxed/simple;
+	bh=r+dH3tnTDJQpi8X8pE4bNLRxm4x9qSvqVTXiJGce7jU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YPizy0CPiwK66NS/urLEVeGhvrLmmM4Y54a357kDx0oiqIk0M8x1HebnazzfH4axnQ//8YgxDonMaMijhuigM6BYpqsGh4khOK/lAqPBRyhBtYxYN6wuz8zwsvVWcdnFOgwQkPC8yYWTaMlOaCY7TT1KAxxhK1iDs6V5LMGyYxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=BanuGsq1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46VMRpRY020552;
+	Thu, 1 Aug 2024 05:31:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=QFEJaSAxgxgPNWxAYtoc8e8qb12Q/0iYNTyO3gpgrDs=; b=Ba
+	nuGsq1gNJQgCmUqk+mbPY8Gu6TPR7ncEPjQZ7zY3IrHd8GV+Ym/DTrVhUPXGItvC
+	O1HC49ADQZGIxDAlRr/rhA8LRLgDznzY/mKAD4525LYOYu+OwquWkIRM7MHLES1O
+	ybqS/5IsVfyUo2t4nHlr1tZ7AKAQTYH9qIljPzMMCTTuipgdVHvwDXU1PE5ikXtg
+	HemGPeiWMRNSgZ5vdn2Dri+YsQ/9kruxRha1wa+c668C+6+V9xsk/PjWDHNmMjdO
+	fBSGJaZoJX9N+v2OVpWpu2DKJW+xk7ix/AtF/pqQyj7N045apKf82m/9UUFWk8bb
+	3yTZ7EEWK1X6oeKEf+hQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40qkv0tq4b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Aug 2024 05:31:11 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4715VBA7023300
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 1 Aug 2024 05:31:11 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 31 Jul 2024 22:31:03 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Jing Leng <jleng@ambarella.com>, Felipe Balbi
+	<balbi@kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>
+CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar <quic_akakum@quicinc.com>
+Subject: [PATCH v2] usb: gadget: Increase max configuration interface to 32
+Date: Thu, 1 Aug 2024 11:00:03 +0530
+Message-ID: <20240801053003.15153-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pRNg6HCfHJJSe3ysMV00W7nkeL1p9JS1
+X-Proofpoint-GUID: pRNg6HCfHJJSe3ysMV00W7nkeL1p9JS1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-01_02,2024-07-31_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=799 clxscore=1011
+ adultscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 phishscore=0 suspectscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408010030
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219113
+Currently, max configuration interfaces are limited to 16, which fails
+for compositions containing 10 UVC configurations with interrupt ep
+disabled along with other configurations , and we see bind failures
+while allocating interface ID in uvc bind.
 
---- Comment #5 from Ilari J=C3=A4=C3=A4skel=C3=A4inen (ijaaskelainen@outloo=
-k.com) ---
-Comment on attachment 306644
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306644
-dmesg
+Increase max configuration interface to 32 to support any large
+compositions limited to same size as usb device endpoints as
+interfaces cannot be more than endpoints.
 
-> Could you try mainline 6.10.2?
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+---
+ include/linux/usb/composite.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No Sir, not at all. Debian GNU/Linux supports only 6.1.x and the new kernels
-are also buggy. I don't want to play hangman.
+Changes for v2:
+Removed comment '/* arbitrary; max 255 */' as per review as it was
+confusing as MAX_CONFIG_INTERFACES cannot go beyond 32 due to usb
+ep limitation.
 
-> Add to kernel boot arguments: iommu=3Dpt amd_iommu=3Don
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 2040696d75b6..d6d4fbfb6d0e 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -255,7 +255,7 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g, struct usb_function *f,
+ int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
+ 			struct usb_ep *_ep);
+ 
+-#define	MAX_CONFIG_INTERFACES		16	/* arbitrary; max 255 */
++#define	MAX_CONFIG_INTERFACES		32
+ 
+ /**
+  * struct usb_configuration - represents one gadget configuration
+-- 
+2.17.1
 
-Butt I am on Intel Atom platform.
-
-> Do you know any kernel version which doesn't have this problem?
-
-No Sir, this is a new platform for me.
-
-> Disabling UAS should be enough if you need this disk to start working rig=
-ht
-now, albeit not with maximum performance.
-
-Sounds like an idea to me, the hangs itself=20
-cause a terrible loss in performance so I think it could actually increase
-performance  and stability. How do I disable UAS?
-
-Besides there are no new bioses for this certain Intel Compute Stick Cherry
-Trail.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
