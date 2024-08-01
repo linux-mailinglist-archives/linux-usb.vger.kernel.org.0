@@ -1,207 +1,176 @@
-Return-Path: <linux-usb+bounces-12829-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12822-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E9094479B
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 11:13:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4074994465C
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 10:19:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC27D1C21D21
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 09:13:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF9C21F23A12
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 08:19:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2964C18452D;
-	Thu,  1 Aug 2024 09:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89BFC16DEAE;
+	Thu,  1 Aug 2024 08:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O9imaoEt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pGeZCFcj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3DF170A34;
-	Thu,  1 Aug 2024 09:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495DD16C87B
+	for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2024 08:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722503520; cv=none; b=Y0JejNcru6HTqRjanqVx7nvmxsN9fQQG3xFZFq7IsnIFNLYoDRmydyulCP3hToD8vTwasCgczqwpeaTV6XSuWlmmgSG0U9igc1FEybpwWP1ObkTTGSSNcKsM+dmjfv+A/RqmvhhMAjkvdUOR2+PwaYT6R9QFU3bEox79ExHx9sQ=
+	t=1722500374; cv=none; b=PwTgLWpxvMHc7sxfJGe8VB3UW8au4Zu7Kar15gdfDy1lJANwRiXttW3e2kOv9wDMBzDbcugbYaFNfKlO+4CSYLrpW4atiDuh+DoEhLDE+sPPUo3BqfVcTU34z0GFaz677KZo9rCWAwuZ6klWcw4Je+hAv0Wyiteqwt0LzJDsJqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722503520; c=relaxed/simple;
-	bh=YyMMtwwfLvF7XbN3Hd27FU6gmaTz5OzC5jyQFcvLAO4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pH6//PXD/3dYsZFRAbzeItcXx2lcmGI+vtriw2gVImVv5fFwHTzL+XeMeP32CQ1O/vJhpbDYt2W9YlqmuTEfzjWu/4L2FFBpGaXTrsl5r0BUUSQ5N/VC4aJXYFDMJ/TUe0X0cBXz3G3GINUKDZTXma8WgH3/cbhNbjhWwzOWQCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O9imaoEt; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722503519; x=1754039519;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YyMMtwwfLvF7XbN3Hd27FU6gmaTz5OzC5jyQFcvLAO4=;
-  b=O9imaoEtsvrnILyp4ZsiMg3UAccO//SL7xjzq7HKgx88PHeFOatLHSDw
-   fIV7tfnrKCG6gJER4JQUUn8uAsi2tbtltbGJocohONUuBatoC0xjt/zjB
-   8JyRFN+MrO/th8vNlUS6wiv0CrwCLHDR8rUWcH8mlT7HVhk59E8umVP3A
-   0SiAnykYLksxs1MgEm8zkB94CGAqVCLOBjWflk5CflET1E46LwKQhm+VM
-   6gtG0QqLUfejXSU82oumWNMAGuRDWojmdHGSgLZA/Io8AzcRyLQ1D2qFU
-   Ji3JIk/Du2U6g/KihmrScFwtP4Ym4J7Cr0uxE7nqExaFb7JOyF2UEShUt
-   w==;
-X-CSE-ConnectionGUID: 0usLmvSVTKeoU76GHYtmpw==
-X-CSE-MsgGUID: yxNdqo/8Tu6uDuYoegDxxg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="20383480"
-X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="20383480"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:11:21 -0700
-X-CSE-ConnectionGUID: ELbweMuJSkOz6l0VdhQiCQ==
-X-CSE-MsgGUID: BARAQ/IiRXWsmTikx+x+nA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="59089817"
-Received: from lfiedoro-mobl.ger.corp.intel.com (HELO [10.245.246.220]) ([10.245.246.220])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 02:11:15 -0700
-Message-ID: <63c20e7a-f62a-4b6c-8ea1-1608e06e5b58@linux.intel.com>
-Date: Thu, 1 Aug 2024 10:11:43 +0200
+	s=arc-20240116; t=1722500374; c=relaxed/simple;
+	bh=sO5RzlUWFQWyLYtQT51QAOWQdgDxj1VtrkS2YOt8ONs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AWem+TbfTFsNJTtbH1RsI2nD6iHwpLuyv+xVB2j1UIObBaE8tCPkRKR5L8C9/Oy14djXoDiGjvKB4lD1V/z4YAj/C1qMCXITBOMNdbGqJaKdMCxsiWnW02pv6urA6v27uwWBi10WPhURFidFGSK78wQZL6YIQuNvTeeNYsI/61c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pGeZCFcj; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-52ef95ec938so8020909e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2024 01:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722500370; x=1723105170; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HieJqVdMzMx3NEhnjcblA0j7rcIYuxfissUP0SJYQIQ=;
+        b=pGeZCFcjSj6k1tNYxHnvtN8D6ooWNflm19CCduv3KMEdjGOYk9inrf7hvyRWfbFUkl
+         sbJBUIjokHos1QUHnkC4rnIuCO2dTooM+NqbmmxAD35GOjJpWO7+r/iaTnWilo2nEfdw
+         4Q9m/ucCNxlW7YWuEkBXy/fBkPVXVyv93ECBiX+6+l5voaa2rTZVvZp1c0E2nlWG3wFf
+         RS/ELp8mVfhM5m/TaWGkB56SkRPco+pLtNakWiWJ32dpnKy9JuFAUHupU8z4rHs7OWdl
+         MICXK79hNhhG6Nq5TO9wnY/vPP3D1iOdiDmRaiT790K1X+zMfV5qsfCtTxKHVx66Lal0
+         S0NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722500370; x=1723105170;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HieJqVdMzMx3NEhnjcblA0j7rcIYuxfissUP0SJYQIQ=;
+        b=C6Pff7E4R5TyHmXs9CyuF74ej/rrBKO+I6BjA5dFYHoRFYrEWO4e66CEyl2ksxielB
+         TXYUyqDZNvKwFUqLASaPlMnLeBYlyjbV/iddddp9Lr/4GRNaSjNfQR5FOcAoCL/SvQAq
+         arpJ3FlLo2jpv7bQ7YlqzfdmnNL2MrI8XsSuGVUk40UpbIwQhRWiAAcEy59XJI7FT3s2
+         pJKCrBZlTAzX5sEPCRMWsZvnx/lJ1TdBOdcS4zRA3M76vaOYQky+fmZWme4FQFVBcApi
+         d49VKGE+2mRKZhHwZWrntC9fawRNGkArZsD7BjGaTZtXY+GB9DxC270aUIef3N6Z0adA
+         h07w==
+X-Forwarded-Encrypted: i=1; AJvYcCXPRIuRFkkRYEyqP7Jh24lXuxZ8RoN/n3hw1taWPOuwL5uScVsD7KgbLLXb/hGRlraesxh3oOqFLQfC2zqYwH97315eox5j7CmE
+X-Gm-Message-State: AOJu0Yxs3Y2JUd4L2+kjWmmLMimhKpXCU/Cl9vwR9q6CFgl4f8t0FCoW
+	mRGKkk6NWYrQTmZ1k9Tbvds5jMra3ftxYZmor9GxoGc7l7fIG0Ph23kiBEJHz7Q=
+X-Google-Smtp-Source: AGHT+IHxwDRo4bANeGwuRF2uqlCxOH1WiG0myhUGRgNk9KvigLXA58tyO2IFTgWT4iS9vwJonFHhhA==
+X-Received: by 2002:a19:ca1b:0:b0:52c:d5b3:1a6a with SMTP id 2adb3069b0e04-530b61bc63dmr789459e87.28.1722500370111;
+        Thu, 01 Aug 2024 01:19:30 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5bc4331sm2522097e87.21.2024.08.01.01.19.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Aug 2024 01:19:29 -0700 (PDT)
+Date: Thu, 1 Aug 2024 11:19:28 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Elson Serrao <quic_eserrao@quicinc.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 7/8] usb: misc: eud: Handle usb role switch notifications
+Message-ID: <dhdxb4kiwsnsyqjhcfj2iglwwlubf5wajg4jggu35zq7hxm54p@tj2snlcnejdg>
+References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
+ <20240730222439.3469-8-quic_eserrao@quicinc.com>
+ <5nsextq3khhku3xfdwwj74wmx5ajyqhjyarfpnpa6i2tjx76ix@z7lpip6pi6re>
+ <0c769a55-0fb7-4734-86b1-9469b4cc7b8c@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 11/34] ASoC: usb: Fetch ASoC card and pcm device
- information
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
- gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-12-quic_wcheng@quicinc.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20240801011730.4797-12-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c769a55-0fb7-4734-86b1-9469b4cc7b8c@quicinc.com>
 
-
-
-On 8/1/24 03:17, Wesley Cheng wrote:
-> USB SND needs to know how the USB offload path is being routed.  This would
-> allow for applications to open the corresponding sound card and pcm device
-> when it wants to take the audio offload path.  This callback should return
-> the mapped indexes based on the USB SND device information.
+On Wed, Jul 31, 2024 at 05:51:17PM GMT, Elson Serrao wrote:
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  include/sound/soc-usb.h | 16 ++++++++++++++++
->  sound/soc/soc-usb.c     | 28 ++++++++++++++++++++++++++++
->  2 files changed, 44 insertions(+)
 > 
-> diff --git a/include/sound/soc-usb.h b/include/sound/soc-usb.h
-> index d6b576f971ae..a167e3de0a78 100644
-> --- a/include/sound/soc-usb.h
-> +++ b/include/sound/soc-usb.h
-> @@ -8,6 +8,11 @@
->  
->  #include <sound/soc.h>
->  
-> +enum snd_soc_usb_kctl {
-> +	SND_SOC_USB_KCTL_CARD_ROUTE,
-> +	SND_SOC_USB_KCTL_PCM_ROUTE,
-> +};
-> +
->  /**
->   * struct snd_soc_usb_device
->   * @card_idx - sound card index associated with USB device
-> @@ -32,6 +37,7 @@ struct snd_soc_usb_device {
->   * @component - reference to ASoC component
->   * @num_supported_streams - number of supported concurrent sessions
->   * @connection_status_cb - callback to notify connection events
-> + * @get_offload_dev - callback to fetch mapped ASoC device
->   * @priv_data - driver data
->   **/
->  struct snd_soc_usb {
-> @@ -40,6 +46,8 @@ struct snd_soc_usb {
->  	unsigned int num_supported_streams;
->  	int (*connection_status_cb)(struct snd_soc_usb *usb,
->  			struct snd_soc_usb_device *sdev, bool connected);
-> +	int (*get_offload_dev)(struct snd_soc_component *component,
-> +				int card, int pcm, enum snd_soc_usb_kctl route);
->  	void *priv_data;
->  };
->  
-> @@ -51,6 +59,8 @@ void *snd_soc_usb_find_priv_data(struct device *dev);
->  int snd_soc_usb_setup_offload_jack(struct snd_soc_component *component,
->  					struct snd_soc_jack *jack);
->  int snd_soc_usb_disable_offload_jack(struct snd_soc_component *component);
-> +int soc_usb_get_offload_device(struct device *dev, int card, int pcm,
-> +				enum snd_soc_usb_kctl route);
->  
->  struct snd_soc_usb *snd_soc_usb_allocate_port(struct snd_soc_component *component,
->  					      int num_streams, void *data);
-> @@ -86,6 +96,12 @@ static inline int snd_soc_usb_disable_offload_jack(struct snd_soc_component *com
->  	return -ENODEV;
->  }
->  
-> +static int soc_usb_get_offload_device(struct device *dev, int card, int pcm,
-> +					enum snd_soc_usb_kctl route)
-> +{
-> +	return -ENODEV;
-> +}
-> +
->  static inline struct snd_soc_usb *snd_soc_usb_allocate_port(
->  					      struct snd_soc_component *component,
->  					      int num_streams, void *data)
-> diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
-> index fe2a75a28af4..3c217ac67c57 100644
-> --- a/sound/soc/soc-usb.c
-> +++ b/sound/soc/soc-usb.c
-> @@ -117,6 +117,34 @@ int snd_soc_usb_disable_offload_jack(struct snd_soc_component *component)
->  }
->  EXPORT_SYMBOL_GPL(snd_soc_usb_disable_offload_jack);
->  
-> +/**
-> + * soc_usb_get_offload_device - Set active USB offload path
+> On 7/31/2024 6:06 AM, Dmitry Baryshkov wrote:
+> > On Tue, Jul 30, 2024 at 03:24:38PM GMT, Elson Roy Serrao wrote:
+> >> Since EUD is physically present between the USB connector and
+> >> the USB controller, it should relay the usb role notifications
+> >> from the connector. Hence register a role switch handler to
+> >> process and relay these roles to the USB controller. This results
+> >> in a common framework to send both connector related events
+> >> and eud attach/detach events to the USB controller.
+> >>
+> >> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+> >> ---
+> >>  drivers/usb/misc/qcom_eud.c | 91 ++++++++++++++++++++++++++++---------
+> >>  1 file changed, 69 insertions(+), 22 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> >> index 3de7d465912c..9a49c934e8cf 100644
+> >> --- a/drivers/usb/misc/qcom_eud.c
+> >> +++ b/drivers/usb/misc/qcom_eud.c
+> >> @@ -10,6 +10,7 @@
+> >>  #include <linux/iopoll.h>
+> >>  #include <linux/kernel.h>
+> >>  #include <linux/module.h>
+> >> +#include <linux/mutex.h>
+> >>  #include <linux/of.h>
+> >>  #include <linux/phy/phy.h>
+> >>  #include <linux/platform_device.h>
+> >> @@ -35,12 +36,16 @@ struct eud_chip {
+> >>  	struct device			*dev;
+> >>  	struct usb_role_switch		*role_sw;
+> >>  	struct phy			*usb2_phy;
+> >> +
+> >> +	/* mode lock */
+> >> +	struct mutex			mutex;
+> >>  	void __iomem			*base;
+> >>  	void __iomem			*mode_mgr;
+> >>  	unsigned int			int_status;
+> >>  	int				irq;
+> >>  	bool				enabled;
+> >>  	bool				usb_attached;
+> >> +	enum usb_role			current_role;
+> >>  };
+> >>  
+> >>  static int eud_phy_enable(struct eud_chip *chip)
+> >> @@ -64,6 +69,38 @@ static void eud_phy_disable(struct eud_chip *chip)
+> >>  	phy_exit(chip->usb2_phy);
+> >>  }
+> >>  
+> >> +static int eud_usb_role_set(struct eud_chip *chip, enum usb_role role)
+> >> +{
+> >> +	struct usb_role_switch *sw;
+> >> +	int ret = 0;
+> >> +
+> >> +	mutex_lock(&chip->mutex);
+> >> +
+> >> +	/* Avoid duplicate role handling */
+> >> +	if (role == chip->current_role)
+> >> +		goto err;
+> >> +
+> >> +	sw = usb_role_switch_get(chip->dev);
+> > 
+> > Why isn't chip->role_sw good enough? Why do you need to get it each
+> > time?
+> >
+> 
+> Hi Dmitry
+> 
+> chip->role_sw is the eud role switch handler to receive role switch notifications from the
+> USB connector. The 'sw' I am getting above is the role switch handler of the USB controller.
+> As per this design, EUD receives role switch notification from the connector 
+> (via chip->role_sw) and then relays it to the 'sw' switch handler of the USB controller.
 
-get or set?
+The fact that you have repurposed existing structure field is not a
+waiver for the inefficiency.
 
-> + * @dev - USB device to get offload status
-> + * @card - USB card index
-> + * @pcm - USB PCM device index
-> + *> + * Fetch the current status for the USB SND card and PCM device
-indexes
-> + * specified.
+So what about keeping chip->role_sw as is and adding _new_ field for the
+self-provided role switch?
 
-the function returns an integer, how does this return the 'mapped indices"?
 
-> + */
-> +int soc_usb_get_offload_device(struct device *dev, int card, int pcm,
-> +				enum snd_soc_usb_kctl route)
-
-missing route in kernel doc.
-
-> +{
-> +	struct snd_soc_usb *ctx;
-> +	int ret;
-> +
-> +	ctx = snd_soc_find_usb_ctx(dev);
-> +	if (!ctx)
-> +		return -ENODEV;
-> +
-> +	mutex_lock(&ctx_mutex);
-> +	if (ctx && ctx->get_offload_dev)
-> +		ret = ctx->get_offload_dev(ctx->component, card, pcm, route);
-> +	mutex_unlock(&ctx_mutex);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(soc_usb_get_offload_device);
-> +
->  /**
->   * snd_soc_usb_find_priv_data() - Retrieve private data stored
->   * @dev: device reference
-
+-- 
+With best wishes
+Dmitry
 
