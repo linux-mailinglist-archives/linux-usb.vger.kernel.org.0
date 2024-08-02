@@ -1,151 +1,132 @@
-Return-Path: <linux-usb+bounces-12894-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12895-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E02E09460B5
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 17:44:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 391D49462D2
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 20:03:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D7AE1C21016
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 15:44:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF6681F218B2
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 18:03:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB70A1537B8;
-	Fri,  2 Aug 2024 15:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E5815C12D;
+	Fri,  2 Aug 2024 18:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1RTrc407"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWvaPVq0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7388D136330
-	for <linux-usb@vger.kernel.org>; Fri,  2 Aug 2024 15:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D71F1AE030;
+	Fri,  2 Aug 2024 18:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722613424; cv=none; b=kgoEjFilltA5Ftt3yd2M6m56FFN05RFPEJDc2+DCBbspZTYokkiMQ3wqxPvyqNd5jU4/i/8FB+ICEFQsvZqUtaBhCNZbjwhuvt1a2ZOMbLbbHtZC4jLgsN34kJiAuhjXIyyBMFrg/CQefVBugMXrj9yL4kzBfCmgZu/syMnq3k0=
+	t=1722621778; cv=none; b=PNuL70wxyBO7PWxmvqDn3wzQLGu88brO6xML/XCPLOVxEV36jeBQJHggQOZuRD0wlPBYxqNxOWN4yG+khnPSlT3wTktkY0g/i3ud8ayvdlioH11dTXix4euCROouGzXzHO4UJoRnpxheDOVO0CDGyFFsOYYnZ7TQD+cRjlu/lV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722613424; c=relaxed/simple;
-	bh=yIGm2BQpu2T9isCJI3xoo5saFoIz2B6ZKFy1laVtVXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sybvuU8XBo9VmqoUptxkKYMopzck615jKMGfc/6avGdARrL0adU921mpNBbj9SUnHlV/LuF/yowyloze8+KX6Zcci8GZXXaza983zImnWfWWlCegd+dnuujKACV2XxfKqykoGQdc8GBmXIKHyrjauUl5tbpLEGqrCiJIFnjiFgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1RTrc407; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722613420;
-	bh=yIGm2BQpu2T9isCJI3xoo5saFoIz2B6ZKFy1laVtVXo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1RTrc407fFbb/t1qDtHec/xsgynpI/G4ehN675sXZFhqcSJwibiVKgzMydYuLJwTQ
-	 BPHHySKXJmH4+Rj4d/CIbVKeFv1p+oQGnObkkYRfamglfAdb2lQC4VsWwkZmrF6mWZ
-	 1jsyI7ALgo59k313EefXMw3FmUQJatSZGa2QhGDyk4rfzU/doexGCwxus/AFrNAHj5
-	 dtMsbgjOiExaPfGCT/pE8GZUG7a91Cmb3IYoBsVr6QwDvMFepVtRg89kA1lAnx9zno
-	 z7+8sYrUt7BZpJ0fHw8FWZrmoA4a/ATuIbXwRSN5/UOIupyczOOEl13EWTqNYY7FYM
-	 chGY9JPyXAV8Q==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A56BA3782212;
-	Fri,  2 Aug 2024 15:43:40 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 41CF71060929; Fri, 02 Aug 2024 17:43:40 +0200 (CEST)
-Date: Fri, 2 Aug 2024 17:43:40 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	rdbabiera@google.com, linux@roeck-us.net, badhri@google.com, kyletso@google.com, 
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: typec: tcpm: avoid sink goto SNK_UNATTACHED state
- if not received source capability message
-Message-ID: <qo452qwsquqfumcsvlczotdjvyqu2y6itufglldxrlxjv3ganm@6rvhfye7mobv>
-References: <20240802064156.1846768-1-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1722621778; c=relaxed/simple;
+	bh=6hvbMe9SheGBFUFKV6yIecTRBlDtV2orfIV7/7UFeio=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fR9bzCIeH23aLVZHGRDMggZI887uxZ9MMyfk/YojvRlbaD2Q5I74oD7cefM+nd6pyP35L9CkGDdpHgyXn6C76Vk+VvlElE7UYXPESlZtkfH8AHoU7FTdcMc6Y7PAzgew6LdX9+c5tAERCbBiLXbg6OeyOZAJ5Dh9uzKBufBaj8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BWvaPVq0; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1fd78c165eeso73586005ad.2;
+        Fri, 02 Aug 2024 11:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722621777; x=1723226577; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPYuykDQTpLV0QVmWDRVRbfOLAntW1izmGLDn5w1M+Y=;
+        b=BWvaPVq0GXXra9+l1izn4cmzEgOMXPuUJHlNzmn/CpO4k6gIlmkEjmTMEJGKK6hU2Z
+         IJfr1qQiGJk3EnTvgdGe2z8o1pqF/NUUTP8AgbVZwjWqs8rvX95WJRw3Wfjz9oVXd7lO
+         B5kSI5pFWDPuzTiM0HtqwizPs8HmnaeSc7AMKpeHq00z3Iyshi5gQ4zBsfmPWZux9EAd
+         ZdD2mzvWDME1EOYHHx92ny5XbSH83y/2Na9G/m1YkArlk2sptr0qHY5flOKqLoL4Gguj
+         fOYvnLUM1FzlxDsaXTUhf+TsHVx8R7bu3KO6mG6Z0jV5/BMbQd9i8Y6302ORMRR7O6NF
+         Ycsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722621777; x=1723226577;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TPYuykDQTpLV0QVmWDRVRbfOLAntW1izmGLDn5w1M+Y=;
+        b=W31Env6rmj60JzJdTxjJ5DhcWtKSR7/Eo9OEUTsvZlBkIIKVP9lJce2pPNKcwpBqDR
+         8wpj7TMlRtamjSCAv3G9AZAGmwxbMEybSdekLJ6bMoHfZ0wGplgMEjQJbYYIeoLKGBl7
+         w2g7OeA94gtCHJmYxEavAZXrG1kD7FqWc6eAzQ510ZMpsHAEnAu5NLtF2twdRuczb022
+         wD0d99hjZur9sLv+ayKNgl+TLbtqtEMMgvRwHJURb2YssKk+suodUa4p3Vr3sWkKKgPB
+         gBw/2hfcxO13N65gZIIvl+85qTBSDHpKTJAYacQqGTksVpkaQcyW/YfVP464dupnL8jB
+         wXtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWUTIrZr/VztmDrbqXBWDwis8yDczNF8UIk0uH2S+uX3wiVwAqpq1YUDgwzBlSLzQLDRV7Ry9MZfgYar419PiU7SKJ6EGDLn057ncZBDzdGQWBbzu6aUlarCHkFuM4Z+lCeZ1vAYP00
+X-Gm-Message-State: AOJu0YwbZNxQkJeBmB96IDJzQ2yDSFcQTgVlXpR/4t3tFQAqiYqmv3so
+	CbJVBXUAOSxBw4EHEZ/gl6NzIp0TeXIL2PJ7GYDeQ51MISmKpr3o
+X-Google-Smtp-Source: AGHT+IEmbXzRbqA4Dm+Dxp5Q8sQ1FoKhxrnpwm3+tkLRLaaAjRfENRwciTj6Hpe7OoQfEyQiMj3I0g==
+X-Received: by 2002:a17:903:1245:b0:1fb:3ce5:122d with SMTP id d9443c01a7336-1ff573bfe4amr59659145ad.41.1722621776519;
+        Fri, 02 Aug 2024 11:02:56 -0700 (PDT)
+Received: from embed-PC.. ([106.205.109.112])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff592979d7sm20082015ad.259.2024.08.02.11.02.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 11:02:56 -0700 (PDT)
+From: Abhishek Tamboli <abhishektamboli9@gmail.com>
+To: laurent.pinchart@ideasonboard.com,
+	dan.scally@ideasonboard.com
+Cc: gregkh@linuxfoundation.org,
+	skhan@linuxfoundation.org,
+	dan.carpenter@linaro.org,
+	rbmarliere@gmail.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
+Date: Fri,  2 Aug 2024 23:32:47 +0530
+Message-Id: <20240802180247.519273-1-abhishektamboli9@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xdre7bjtvphpkror"
-Content-Disposition: inline
-In-Reply-To: <20240802064156.1846768-1-xu.yang_2@nxp.com>
+Content-Transfer-Encoding: 8bit
 
+Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
+and uvc_v4l2_enum_format().
 
---xdre7bjtvphpkror
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix the following smatch errors:
 
-Hi,
+drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
+drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
 
-On Fri, Aug 02, 2024 at 02:41:56PM GMT, Xu Yang wrote:
-> Since commit (122968f8dda8 usb: typec: tcpm: avoid resets for missing
-> source capability messages), state will change from SNK_WAIT_CAPABILITIES
-> to SNK_WAIT_CAPABILITIES_TIMEOUT. We need to change SNK_WAIT_CAPABILITIES
-> -> SNK_READY path to SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_READY
-> accordingly. Otherwise, the sink port will never change to SNK_READY state
-> if the source does't have PD capability.
->=20
-> [  503.547183] pending state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAP=
-ABILITIES_TIMEOUT @ 310 ms [rev3 NONE_AMS]
-> [  503.857239] state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIE=
-S_TIMEOUT [delayed 310 ms]
-> [  503.857254] PD TX, header: 0x87
-> [  503.862440] PD TX complete, status: 2
-> [  503.862484] state change SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_UNATTACH=
-ED [rev3 NONE_AMS]
->=20
-> Fixes: 122968f8dda8 ("usb: typec: tcpm: avoid resets for missing source c=
-apability messages")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
+Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
+---
+ drivers/usb/gadget/function/uvc_v4l2.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index a024aecb76dc..9dd602a742c4 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
+ 	list_for_each_entry(format, &uvc->header->formats, entry) {
+ 		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
 
--- Sebastian
++		if (IS_ERR(fmtdesc))
++			continue;
++
+ 		if (fmtdesc->fcc == pixelformat) {
+ 			uformat = format->fmt;
+ 			break;
+@@ -389,6 +392,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+ 		return -EINVAL;
 
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 26f9006e95e1..cce39818e99a 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4515,7 +4515,7 @@ static inline enum tcpm_state hard_reset_state(stru=
-ct tcpm_port *port)
->  		return ERROR_RECOVERY;
->  	if (port->pwr_role =3D=3D TYPEC_SOURCE)
->  		return SRC_UNATTACHED;
-> -	if (port->state =3D=3D SNK_WAIT_CAPABILITIES)
-> +	if (port->state =3D=3D SNK_WAIT_CAPABILITIES_TIMEOUT)
->  		return SNK_READY;
->  	return SNK_UNATTACHED;
->  }
-> --=20
-> 2.34.1
->=20
+ 	fmtdesc = to_uvc_format(uformat);
++	if (IS_ERR(fmtdesc))
++		return -EINVAL;
++
+ 	f->pixelformat = fmtdesc->fcc;
 
---xdre7bjtvphpkror
-Content-Type: application/pgp-signature; name="signature.asc"
+ 	return 0;
+--
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmas/pAACgkQ2O7X88g7
-+pqHRg//e8sk4hIopBO3ivUJbsltt8010iXDzs8ZODpe/Ooc4NXeOZpiqaIzwbSy
-T8JwCwVLEiHLrWtICseVC0358U+iCUD2Z+DLXi2+vr//o1cb6Pdb1j8HkSWfQGf1
-nFuE0Kbn1icdRjDDNpoVaZGvxaoHw/BjOZA6V/gwE7PjRYTp0qJ5NhE7wK1wHGTm
-UeBQ5qWAA4o00yLTc6boGBWsZbSKrK66OfvH31hXJFnRpp3nXIaoOdvwPObWnyY/
-l9rGLiFS7AEAbbAvyHHeQbfm0C54bVj0Kle23hxME9ESimPHXJl3XscErlD4gSbu
-Kus5bH0Wo26cncwjsd9hugHdbI8Q+jrq38+ty8db5qlYnKYiR2+MvXVD6TFUHE+j
-R8Wo3DIqa3/tF32W8LwamEdvEKSCdB42hmuzl3okTqyRR25f49i+Y7bLem1b1k0f
-i1ZNuvrJ9IoCP8N5cxYioNvXcosK4rBOCC1Xm18hATsd1NhF64vc2VoeZYDWZIro
-a8ZqoPcOQMYbHa5/BfhWRaqZRIf75Y4EVTbyxy9h/7R4okfmVMCH4Rx9E88GntEs
-yLvOqxTPtjjVqeuLDB2arsf+I44L+fmKNzriR12eEMYmonrhVymuGkpaB4vEiQpl
-JFaTmS3u0WewKLz93efr0WPrCYXhL58V6G2e+WAelYKJIg9e3Es=
-=hDoO
------END PGP SIGNATURE-----
-
---xdre7bjtvphpkror--
 
