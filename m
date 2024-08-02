@@ -1,65 +1,54 @@
-Return-Path: <linux-usb+bounces-12885-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12886-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EE1C945DB1
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 14:11:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CE34945E32
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 14:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7DE71C22238
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 12:11:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48D752843E3
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 12:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E344E1E3CC8;
-	Fri,  2 Aug 2024 12:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0923F1E3CD8;
+	Fri,  2 Aug 2024 12:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+aYgezj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="e7UhOL0k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A270114A4C8;
-	Fri,  2 Aug 2024 12:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661FD1E3CC3;
+	Fri,  2 Aug 2024 12:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722600656; cv=none; b=Aw3qVwWEr7hlRWQdoIzzhlESNqJ7cnYL5KnQT05cPfm+sJbG5akEXNcEhNgFfEhsnGSAiAIoU9fPY4z2j5/DvJlixECL8UQ6nRc11p8BTlY2YRuHOadexn9feazSZYK8z9gfCYo2WK8eZ7DASeailkdl+NrnGgmjFjeX12/pEew=
+	t=1722603459; cv=none; b=VxHUgUGJofBcqSpD7yEBkhGcPwaTnnwNaGcf8HoM6khItTqzAqycLhU8hwBr22WA98elbdSY9myI/YQY1rHnkY/WIE7djAvHNfA5Dt2RAUAnCphtpI9dGnE/71zx62l9BH2YS23AE7f4a7j6Dv28JxHLikC2PDb0XdnEXj4pZxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722600656; c=relaxed/simple;
-	bh=KEYXx/jAB3vyQ6OMi4gTqUazWDOQK45pIkjybNC7SuQ=;
+	s=arc-20240116; t=1722603459; c=relaxed/simple;
+	bh=zN4LruB2WW9fYu0lzSWZcQ/G13AK+ac0vqzyQpNeGww=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W0ixrjS16z7r3o067+7/1JXiuoPCy/ZGq6jyvitE46vsmSTgDKkN+GNJ5nrtwKnJlHtD4Ryshwo8xA/xu7Ut0KH3Rjv6NU1gJDb8c/COfjFicghHQKMCVkZRYstC3ghglOEAgRd53qCU4VWETpYBeuSZpRp+sSrCNmh+FNlJydE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+aYgezj; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722600653; x=1754136653;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KEYXx/jAB3vyQ6OMi4gTqUazWDOQK45pIkjybNC7SuQ=;
-  b=Y+aYgezjFqv+K5AaTC4vZGcAh5hr2dQwe9wm9pi4K3h0Yz24cUe+d3H9
-   ZsqbKBkwhHNZc+7OtZ0lDfh8wDGYvnp5h2Ecwagae2cWQzviJIh8hZLb/
-   VLja1EpZGQdbrnB/DWdAKtdjgY3yqY1ka63zpxvjBzohWs1l8tFY6JAIN
-   fxmTJv+pxr4H5ZVuQetR9jYG60Q42WYoIqi5LUXYPHj/G3sftzD34n49+
-   ltFwKxKv0qx184oJS3CzJLMWzUYialY6SJZx3xynsE4nd9klZCq5FNH00
-   KEpbbbtZQzWIjGoUr1zIcbSGhlmEkEPb37Xpz8nyE4eX0VjODfZ0jkAoP
-   w==;
-X-CSE-ConnectionGUID: ZapiAaSiQsKXTYMnVIxb0g==
-X-CSE-MsgGUID: Ey9/KvnNTiCDawbkGRz3gA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11151"; a="24484218"
-X-IronPort-AV: E=Sophos;i="6.09,257,1716274800"; 
-   d="scan'208";a="24484218"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 05:10:53 -0700
-X-CSE-ConnectionGUID: eze3z9pvRdWNf/nfC0oIGw==
-X-CSE-MsgGUID: nX2dhYZKTa2IYxh8hBSGJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,257,1716274800"; 
-   d="scan'208";a="55978928"
-Received: from ltuz-desk.ger.corp.intel.com (HELO [10.245.246.89]) ([10.245.246.89])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 05:10:48 -0700
-Message-ID: <1a2d0962-405d-4ccf-a0da-00a624c0f3e8@linux.intel.com>
-Date: Fri, 2 Aug 2024 08:32:30 +0200
+	 In-Reply-To:Content-Type; b=ZbgKx51lPVPAxyXzJsrOh3/s0za4+1q8YiNy7z7VxqSqcXmjMsEL6eX6cWegErF4lH03+u5wfiC/ic7lKYwa9TAkbBsBL0sp9vsL2iHqMRsacWcZISpLfIfHmi56xLEMoEVXT0tXqP4tHf93QavA0G7NWEEzDfFpX4ZSjWO7Hug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=e7UhOL0k; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=WGiVdLtGzbRUhaAOKkQ2ZU2TyB4J4l9CoKO/GNZ2cyg=; b=e7UhOL0kpsNbyNjnABPXe4xMym
+	G4KnsuM3lqj/YSH0+S0yAiTzAXSxfztJmQELIFcaoYUTcZXveyZPjtk6a2769r5Gedg7i/C1pLoht
+	UrS56A7Gub0FIhhOXUqCClTOluIQGysmIfr9oGHnSojcnGomuvj5ex8Gskrt6epN6bqHsQFpuizeS
+	J3UlF93lgmOvKfsSgACUEXkE5Kp5qS/1WlGSNKayoqSvEQqPxaG4YikMRfhS3Q0vgrnqmJWBnAadq
+	dMQMrNBL0ha8eTrqIdDtoarMOUkIIgisysSk7NYweLVCbBM2cYnx64J3HdIfT25HXZ4oipc62M/7Q
+	057oLRXw==;
+Received: from [187.36.213.55] (helo=[192.168.1.212])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1sZrq1-006sbI-Bf; Fri, 02 Aug 2024 14:56:53 +0200
+Message-ID: <6047643f-e1f5-4be4-b55d-f59576999d91@igalia.com>
+Date: Fri, 2 Aug 2024 09:56:42 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,83 +56,107 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 17/34] ASoC: qcom: qdsp6: Add USB backend ASoC driver
- for Q6
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
- gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-18-quic_wcheng@quicinc.com>
- <5f37c04d-f564-40b9-a9f3-d071ea0a6f19@linux.intel.com>
- <1a284449-204a-4d01-90c9-ec6b1ed56e30@quicinc.com>
+Subject: Re: [PATCH V2 09/16] drm/vc4: v3d: simplify clock retrieval
+To: Stefan Wahren <wahrenst@gmx.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240728114200.75559-1-wahrenst@gmx.net>
+ <20240728130029.78279-1-wahrenst@gmx.net>
+ <581726ae-dd9c-476f-817d-4140f7217ec7@igalia.com>
+ <b34cc73c-721f-48b6-a7a3-da8190d80dd8@gmx.net>
 Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <1a284449-204a-4d01-90c9-ec6b1ed56e30@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
+Autocrypt: addr=mcanal@igalia.com; keydata=
+ xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
+ H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
+ hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
+ GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
+ rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
+ s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
+ GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
+ pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
+In-Reply-To: <b34cc73c-721f-48b6-a7a3-da8190d80dd8@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Hi Stefan,
 
-
-On 8/2/24 01:10, Wesley Cheng wrote:
-> Hi Pierre,
+On 7/31/24 13:41, Stefan Wahren wrote:
+> Hi Maíra,
 > 
-> On 8/1/2024 1:40 AM, Pierre-Louis Bossart wrote:
+> Am 30.07.24 um 13:23 schrieb Maíra Canal:
+>> On 7/28/24 10:00, Stefan Wahren wrote:
+>>> Common pattern of handling deferred probe can be simplified with
+>>> dev_err_probe() and devm_clk_get_optional(). This results in much
+>>> less code.
+>>>
+>>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>>> ---
+>>>   drivers/gpu/drm/vc4/vc4_v3d.c | 13 ++-----------
+>>>   1 file changed, 2 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> b/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> index 1ede508a67d3..4bf3a8d24770 100644
+>>> --- a/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> +++ b/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> @@ -441,20 +441,11 @@ static int vc4_v3d_bind(struct device *dev,
+>>> struct device *master, void *data)
+>>>       vc4->v3d = v3d;
+>>>       v3d->vc4 = vc4;
+>>>
+>>> -    v3d->clk = devm_clk_get(dev, NULL);
+>>> +    v3d->clk = devm_clk_get_optional(dev, NULL);
+>>>       if (IS_ERR(v3d->clk)) {
+>>>           int ret = PTR_ERR(v3d->clk);
+>>>
 >>
->>
->>> +static int q6usb_hw_params(struct snd_pcm_substream *substream,
->>> +			   struct snd_pcm_hw_params *params,
->>> +			   struct snd_soc_dai *dai)
->>> +{
->>> +	struct q6usb_port_data *data = dev_get_drvdata(dai->dev);
->>> +	struct snd_soc_pcm_runtime *rtd = substream->private_data;
->>> +	struct snd_soc_dai *cpu_dai = snd_soc_rtd_to_cpu(rtd, 0);
->>> +	struct q6afe_port *q6usb_afe;
->>> +	struct snd_soc_usb_device *sdev;
->>> +	int ret;
->>> +
->>> +	/* No active chip index */
->>> +	if (list_empty(&data->devices))
->>> +		return -EINVAL;
->>> +
->>> +	mutex_lock(&data->mutex);
->>> +	sdev = list_last_entry(&data->devices, struct snd_soc_usb_device, list);
->>> +
->>> +	q6usb_afe = q6afe_port_get_from_id(cpu_dai->dev, USB_RX);
->>> +	if (IS_ERR(q6usb_afe))
->>> +		goto out;
->>> +
->>> +	/* Notify audio DSP about the devices being offloaded */
->>> +	ret = afe_port_send_usb_dev_param(q6usb_afe, sdev->card_idx,
->>> +						sdev->pcm_idx);
->>> +
->>> +out:
->>> +	mutex_unlock(&data->mutex);
->>> +
->>> +	return ret;
->>> +}
->> Humm, multiple questions here
->>
->> a) is this intentional that the params are not used in a hw_params routine?
-> Think this was answered in patch#34.
+>> Super nit: you could delete this line ^
+> Can you please explain? ret is required for dev_err_probe or do you mean
+> the empty line after the declaration?
 
-yes, but that really begs the question if the format check shouldn't be
-added here.
+Just deleting the empty line after the declaration. It is a super small
+nit indeed.
 
->> b) if yes, could this be replaced by a .prepare callback
+Best Regards,
+- Maíra
+
 >>
->> c) along the same lines as b), is suspend-resume during playback
->> supported? Usually this is handled with a .prepare callback to restore
->> connections.
+>> Reviewed-by: Maíra Canal <mcanal@igalia.com>
+>>
+>> Best Regards,
+>> - Maíra
+>>
+>>> -        if (ret == -ENOENT) {
+>>> -            /* bcm2835 didn't have a clock reference in the DT. */
+>>> -            ret = 0;
+>>> -            v3d->clk = NULL;
+>>> -        } else {
+>>> -            if (ret != -EPROBE_DEFER)
+>>> -                dev_err(dev, "Failed to get V3D clock: %d\n",
+>>> -                    ret);
+>>> -            return ret;
+>>> -        }
+>>> +        return dev_err_probe(dev, ret, "Failed to get V3D clock\n");
+>>>       }
+>>>
+>>>       ret = platform_get_irq(pdev, 0);
+>>> -- 
+>>> 2.34.1
+>>>
+>>
 > 
-> I don't see us supporting that throughout any of the QC based DAI drivers, so this probably isn't implemented yet.  In terms of supporting system PM suspend for this USB offload path, we're going to explicitly stop the audio stream from the USB offload driver (qc_audio_offload) before we suspend the usb device. (refer to qc_usb_audio_offload_suspend()
-
-The system suspend-resume during playback is not enabled in all
-platforms indeed, it mostly depends on what userspace does. IIRC this is
-required for Chrome/CRAS and it's supported by aplay.
 
