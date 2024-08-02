@@ -1,287 +1,195 @@
-Return-Path: <linux-usb+bounces-12872-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12873-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2437945503
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 01:51:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E94F94581A
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 08:41:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FE0B1C2234F
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2024 23:51:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABA311C229F3
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 06:41:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D456314E2FA;
-	Thu,  1 Aug 2024 23:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1314046B91;
+	Fri,  2 Aug 2024 06:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YAJq9/uq"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="As8E9WBW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2050.outbound.protection.outlook.com [40.107.241.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1BC13E04C;
-	Thu,  1 Aug 2024 23:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722556273; cv=none; b=pToqZkq7w8u1V+QVWKLXnEtzeqWkr/IJCecX6736B+eNJ7iUcH+BnlHk1N/rJpePio+qNjoAMp0E2Izp/7IqIehGcYWH7PneWYFDWXbagU8ZBd2ya3sZtd+68po4N3AYUcbZTZJwNYscRgKyIAv94YEBBGFXB+h0jgjjuFlrgOA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722556273; c=relaxed/simple;
-	bh=SRe+HOduI9I/TTc5kqhaTutON7QjmRIiDJcjmvowtzA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QbEs1ujZsoXKJBkL7fQTImjDvPv15s7PRtdnYL9OIdgfj8Db0O6CZ+FUC+5egloR6T0tHbPMDiNQ1uGl6UU5e+kIpW5E522mDDv1P2IZFlo9mWRnujujVISa4q8r8QIKnVqLbJ7Gm7Sbhtcs7NeXjrDe4T/pqgkCaYb+cAUwWQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YAJq9/uq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 471Lbj5X028809;
-	Thu, 1 Aug 2024 23:50:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	t+jSJ/zbzuWb9fsjty1sUBSDZFvEM1ajNsop565+wIE=; b=YAJq9/uqMKhHRCFo
-	ZooUxgXjmrpO/Ux9ieZ4HcN5AMR//EI9F1OvSxLL6LpSHJN0iULFFp5D+WTt6izt
-	RJhZ6Qn2r7OgTdqjJNCLdVCWRTe0oEDMVIiMVoX9gZQFNaYkn49w+GSWv2oBGU7Y
-	wZvWQ496CuCv3WFJ/rrIFySIMSoau5d8ai7tVGUIwLnbGGaN7CTDCBxFIEoPf7Ut
-	z71SUGm/zlc7GhD7qgXh66PqcR6R9r08ns+IjGsqhOI0zNFe745bX26VRNZ5CxSY
-	JrAoIPotkVJgbylWZsr1nuXDmG/4Uxzk6am58Ugcu/r04ZvhGHxhSF3W01h6YFr/
-	6T57Ew==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40rjefr6wx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 01 Aug 2024 23:50:34 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 471NoDKl004700
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 1 Aug 2024 23:50:13 GMT
-Received: from [10.71.115.74] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 1 Aug 2024
- 16:50:12 -0700
-Message-ID: <f621ae59-7a78-4cd2-8eb7-eb02432e4828@quicinc.com>
-Date: Thu, 1 Aug 2024 16:50:11 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552262C9D
+	for <linux-usb@vger.kernel.org>; Fri,  2 Aug 2024 06:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722580900; cv=fail; b=Rd5YvV/ZDUI9HZsMLD6+XNT4GKPEUTcgMmE/EwpNTBeE3CPbfKOoK0wV07FsSqVVrad5CBJvNbxz4iICsMun+9ARO6/rZ6KlsxHsoeHt4/Vy6xLsc353ozwNaHCAv2y2sJO1CcOltf/Mf02oYcc67w89kw5yq9AczfM51qJsjF0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722580900; c=relaxed/simple;
+	bh=TQclZveqVPecEc/y277pfyqqYWyKPDrypt4vCALTAEE=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=jWWpfdS+UpWUvD0kJynPPY7wbLWzhMNeVNxfoQZ2DAEvN+e6V0huhU0GKzduc9IMBKpKDeNsTWSjt9tSfI0mZcx8NtXs62S59O94gAr0JMUi4AxpJ0Mxovwht22+quDe7uYw+BqDYJuXB6qPzqd8IlpmmEWcLKEtKUNA9yuEC4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=As8E9WBW; arc=fail smtp.client-ip=40.107.241.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TGH4VCegNliYnKtI+MpwS+kCLYUC2YrC/JkwKOwWqEli7Oz/evahQE4PeDRdUc2bq5VobdhjOBOByTcQ6cQuAj0AfLGyXwj8B9GdCe08EOLWZyPn5OTrANxBi4u91/Vf2qgFkXn/mbppAjYPPZNNqt5rcPiVim6EWEWkMF6Xnw8k4mPJf9Wnx6cwPhmG38N0sGDeleU9wWz9yuewFM59gOJUytxJVh8vqSusxJogKnUmibCQOMXJLd/ypaYy2zgx3sOcWg7mqSSRQp4jUXdgAGt498Ym87KAXCqSsceBxPEIH+aE+zD1oK8OX+SsxAB8xr0wv2hWrj/GrXfI4/FQQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ItpeDekfNvrLKLD+YESZthM0WBsbldC7HQ0hJocnjZY=;
+ b=Fuf00aDVHdMFPX25aBrJM52R2FPz/FWCSk7Akvko1QOUGAO4wjreHisyT+mCmn9dcDMmrrVdT+VaruDvUOb4wcjPH4VgXa9jjxrLv2x65o/IZxyKi6S2Zgg+iH+C/cfQZVMR+rxJE3fBnSKL6UPzEAbkyIV4AElTkjBwV7e+ZWR3QSfLN80HSXgk7k021/Eg8LWhAe+fSv0ugpD8qK4K76HX7mq7dnkEqp9w8yyCZA+2FI/h4B7Tv4/2YtcEpYQDlXu2LpM/29Yd/6+Lq1lMRTWJiZ+ipC8bjbN4oKDrzJQ9TjCDzfiKvT9zmBzTUT9bSg7Hbmxnl+W0EbI4eAuujg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ItpeDekfNvrLKLD+YESZthM0WBsbldC7HQ0hJocnjZY=;
+ b=As8E9WBWmZZZpuoJzI8p3zU5jXqvaU/4WK25xnGZ9NBshueHl3rdpM/p4eXSTNNRLrCMibnrjNoeTnuA9TCrsV4sMqRYBwo4YoE0zxWLmP4Fgf0U1BOfETj2+CitawfVNZ2xPl+BV523TZxIqibW2zKfqNbgULTCwkS6va1oFzWoZnzvR9oMr/aAYTKOsDRWmpex7rHYPJc0HivTZJOY29/24ajcD7cMFZEDAn09CM1AG77Mc1//35PJyRfkzYKlNrJf8OvF/BeYBEqaOdYBAGGFPC5VkIFgJAdY9ZUJiSpCljegPVYjhK7IO8PQHEgi1Lfoj2z93CZk/7Gh5Bu6Ng==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AM0PR04MB7171.eurprd04.prod.outlook.com (2603:10a6:208:19c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.23; Fri, 2 Aug
+ 2024 06:41:34 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%5]) with mapi id 15.20.7784.016; Fri, 2 Aug 2024
+ 06:41:34 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	rdbabiera@google.com,
+	linux@roeck-us.net,
+	badhri@google.com,
+	kyletso@google.com,
+	sebastian.reichel@collabora.com
+Cc: linux-usb@vger.kernel.org,
+	imx@lists.linux.dev,
+	jun.li@nxp.com
+Subject: [PATCH] usb: typec: tcpm: avoid sink goto SNK_UNATTACHED state if not received source capability message
+Date: Fri,  2 Aug 2024 14:41:56 +0800
+Message-Id: <20240802064156.1846768-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0017.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::10) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 12/34] ASoC: doc: Add documentation for SOC USB
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <gregkh@linuxfoundation.org>, <robh@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-13-quic_wcheng@quicinc.com>
- <57c5af3e-3299-47ae-9e13-bfce077f5e23@linux.intel.com>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <57c5af3e-3299-47ae-9e13-bfce077f5e23@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zEn_n7EfQwr72h4zIsLzjWracdp5xdRR
-X-Proofpoint-ORIG-GUID: zEn_n7EfQwr72h4zIsLzjWracdp5xdRR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-01_22,2024-08-01_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- suspectscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
- mlxscore=0 priorityscore=1501 clxscore=1015 spamscore=0 mlxlogscore=579
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408010160
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM0PR04MB7171:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8582a565-9d84-4543-9d65-08dcb2be26b7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?9jg2CurhfVRNTEmA4eRQgOhfXiIueYEU7NNY3vH1lMe3RQGqoRw15LrNRLOk?=
+ =?us-ascii?Q?KztSF/DCrueEGfwReLJT/gVaXh4O6IJlnSPtQ6s9iqWU2GPksZiCYh8BGRqW?=
+ =?us-ascii?Q?R5l7kE1AaR8DMIEZED0pAFGxmTUOYUoSA9oyrmV0X4cGXGEiajapt0jS2EeP?=
+ =?us-ascii?Q?5VIZNZqCKqF1qGwBERt7umwUSHsGkWbsRGEI5mhEVOoUx4aAJEfc1IypHiZm?=
+ =?us-ascii?Q?z4l+vMRwNttSmXHX63hmbPTssjyFKyPp7jxRwhxaasDCwOngXbljAYmQrQBi?=
+ =?us-ascii?Q?lJhhfQM0EU4axJhPQgSTlqGQdsX36qWWczII5YJ9hVUA8E9GSIYCq0ssQjcV?=
+ =?us-ascii?Q?OqxgXPgYGLLJ6rCfbvT2DcWdUKGLKKDwvRsQ6xMsi641rG82nAoIcIZKblyr?=
+ =?us-ascii?Q?UN847SrntjltUIsv5P+R+L30mD8GQD2+8KfMzMlV+0omxweghXcx46F9Bixn?=
+ =?us-ascii?Q?Vu8rLSUx37Fjg1FoBCf6R8AFKNSfWzhFovr5zhGH/uDSSlSbRx538Z7oGt4i?=
+ =?us-ascii?Q?dQDi3UvREar/K0302cPKRd4XAB+ZqkS/JIHpIzj7emDoaA7u52evFxGkDUeP?=
+ =?us-ascii?Q?FlUlsLRGzKi9frBCdTuwzj7U4xYJFd2lLnHeofnIv8ESNzFizjlCJyjqTenf?=
+ =?us-ascii?Q?MRq7tXJ2VyaH/AZ1wx6jJbuP0SelFrpesLmTHSnYW844LmG7FtrDGYg4p8OU?=
+ =?us-ascii?Q?o3KvIP4NCAm7IBgvRjotftTzZ0p33FJulrrtxd6pb6nmwUFPT6W67RwxNR8I?=
+ =?us-ascii?Q?7cXaRCE+KQ8/tkxM2ChhDrCtTBJfgWvYOjJdiSns11rjYWbnyoELEjz7PnE1?=
+ =?us-ascii?Q?4ya6cqcgyphmb4Tnsmzn0/UxnsD8kWW/xG2aAjBkj+Q6CVlrayAEEpwoGcpn?=
+ =?us-ascii?Q?ciGa3pa3O/nxmV5Xa3dLFY6RQ/VS1b1+oqhaVrxy/vSJ9bLJY50ZMDDm4VaW?=
+ =?us-ascii?Q?BQJ6yOlXkGc4x311hHD7dwPs7+qvQSRW/7fGD3vdPvoQefIRd0PMTVQEGXdp?=
+ =?us-ascii?Q?OUV+W45HzBNGz69kUyCMFKfnxKQrPr4Bzkf1Nlh6GfSgBgoyZZMTKB3nIluS?=
+ =?us-ascii?Q?v8D/YluYQBlAjkiw7lf6iL0v69bPTu2+rLHu641PnPkC7WEu8EzYpwNaZGlk?=
+ =?us-ascii?Q?IWUxikNxTQ2XSV1Ybb9Q50MAov21UjNT/Zpc9S2p4XpYK88t1uOOEJZmeoNX?=
+ =?us-ascii?Q?aVETwoM4J5Fv3arrqUUTYy2VrZdIY3naJmtHdDcJZjaV2KoyYsuuO4TMB/49?=
+ =?us-ascii?Q?EbMbQHgVIFJnE0ILhEGP6yyrBtidQ9yoLF63aheK+/mdoi5vIRANGmEL3fAq?=
+ =?us-ascii?Q?DxUHeuHaYjwcIpaAXLMmUV+37tY4hjZBhNjMB2zliUx6HO5ZbhtVA+I+kRKL?=
+ =?us-ascii?Q?kFDEDwGbA2NPTFoThIUVxhWeyJ6wu9Fqb7BE0R0cwvPzTN22/A=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?5kNBuNQR6X+a3B6jTO04jiQtwtVTVskh/iqQVlqugEJwLHIIZOHewHVKhVpj?=
+ =?us-ascii?Q?+tm/4v6U+p/KOhvS8M40+nZM5+5VpAh8oscNCfmKKHXeN4jUlt7QuoPZ6RaX?=
+ =?us-ascii?Q?W59+TpmDMF2x46cZE57KaEKhKcSStV8OEhpyxZZD5LArG7V1tPMdiNauYke2?=
+ =?us-ascii?Q?679+chp7hrFVZ/YTlLAEez6wte+fHUn6l3iDV4RWqzfhspV7z1xf6kbvwbGj?=
+ =?us-ascii?Q?i3wnS9N8dtVz7undRCqBJaia0XAqLJQF+9V81weOzGGfxJ+oBo3k5BitGkzF?=
+ =?us-ascii?Q?tejeP8oL8Sc+qzd+EwgSynVJydJETDYKDpBcVNSMiEYN5jgqDk3AUT20EZtC?=
+ =?us-ascii?Q?ckDCBcwO4QYEzIpfigLhpgJN32O5HbQ9TM4Dd6d5imvOeWvsYmDZgpeIgGlf?=
+ =?us-ascii?Q?hhv5kA4towSBnBt8O4EZpJfV6wJKHAjP1SfQMQiDH4ndcGBYXwttFXoLBy0A?=
+ =?us-ascii?Q?Wrf2aIMP/VoPSgT9zAM6QyP3skDnJJtjYs4Lp+j4RZXjqz0RWO5108LaW6F4?=
+ =?us-ascii?Q?nnQSBO4+8oHlq7lGHSUkzIGZsQJo5DRiciw9YoLgYKCKoQ/qfCRB+VSIDKyA?=
+ =?us-ascii?Q?GYRWpO4w7h75aVdWXdOf8ImE9INWB5ScVutsnvBzA7aTwRSwLle2OsDHMS8n?=
+ =?us-ascii?Q?VDsdAQyffE9aGfSGQAuVYt//ZLQt4VxgQ/e3krCZhYq6CPctAPM9Q0OkGagq?=
+ =?us-ascii?Q?hx5JCgEkSzn0LyQJRl6GoBgfRaGPTg8tlqFDzVTWcDVvvCp6j2WUsHCyl6CL?=
+ =?us-ascii?Q?20IJEpihQox+mBZrhj0WiAlRW7Z3OYkG4hhBx/R5N9BXP8UuQ2sec+d4V7BE?=
+ =?us-ascii?Q?+Hb9X/4IJ+fVqXGQjq+cgQKCwh7DX9ArK21eSjei44cXwIit9pbiqEGhLxVv?=
+ =?us-ascii?Q?pWQO6dVwvWNrMgqRfkNfH85h65KI4Qc2QCtLe42pAccb1NYDGLKdidMSFWk7?=
+ =?us-ascii?Q?7U/8whPQsCTY1VyNjMN94rGxFfNnX90/7utth6u6lHpgmovJItJAdMW+ggle?=
+ =?us-ascii?Q?zYu2t+8264Z5Rb5EftcD2cr8KpnkGN+/cLgUwrSY7tbqbW/qYuItdn7053us?=
+ =?us-ascii?Q?FACaNXcnnOLCl1XlmpZIeVqEq6pfG+eDVrD+YYPaWECjEynAp/Xa73P6NdZ4?=
+ =?us-ascii?Q?T+Dcs57W/0nlD+pXTKeAgT5GLrtvulibiF2QrMFa31QpkpYOySPh2C/0fzIp?=
+ =?us-ascii?Q?gujZNjEcTwf88erhuN8XI+Okyzp+HqHSRsV36yCtk6eMcYlu/AyRSyZJENfi?=
+ =?us-ascii?Q?xQHkwfVSdNlR5OqSnVdXxUlxalH3wRu1aDVGG/NGcxSa1upoCWRhxCtJRi+N?=
+ =?us-ascii?Q?rIepYNzDNv26jGUflZTlTq3d8jPTfwAT3Ul4McnK9FsWgCFP6xdBgLAJ46Yk?=
+ =?us-ascii?Q?9IgrICSuWM9VHJXh9UFAWtX4Nv9Q6sDyadzj7e0Ni7lWMaNszre8XMSgpsB1?=
+ =?us-ascii?Q?X/1GIVz99vrRbpatFxrOlNiq4htomeaRsjoqgyON2rhDpcsJth93HmByreB5?=
+ =?us-ascii?Q?84f0bSMEPYrJGV2ChmmIw9b6LHQ0Hi82zhQnC1+T2NrO3JGZM9ljKeJWv6/0?=
+ =?us-ascii?Q?MeFV3E+8qAWYNtSXylHyhgU634pb3mUr9mLRDOhK?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8582a565-9d84-4543-9d65-08dcb2be26b7
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2024 06:41:34.4569
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 55trJsdIFe/91jX0Yocc1QNt3BtQq8fogeeNEeZEnZRCIRUzgVBaMSEFEvnQlZi7b5DbxNL6Ky+nv3G1dTrwDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7171
 
-Hi Pierre,
+Since commit (122968f8dda8 usb: typec: tcpm: avoid resets for missing
+source capability messages), state will change from SNK_WAIT_CAPABILITIES
+to SNK_WAIT_CAPABILITIES_TIMEOUT. We need to change SNK_WAIT_CAPABILITIES
+-> SNK_READY path to SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_READY
+accordingly. Otherwise, the sink port will never change to SNK_READY state
+if the source does't have PD capability.
 
-On 8/1/2024 1:26 AM, Pierre-Louis Bossart wrote:
->> +
->> +::
->> +
->> +               USB                   |            ASoC
->> +                                     |  _________________________
->> +                                     | |   ASoC Platform card    |
->> +                                     | |_________________________|
->> +                                     |         |           |
->> +                                     |      ___V____   ____V____
->> +                                     |     |ASoC BE | |ASoC FE  |
->> +                                     |     |DAI LNK | |DAI LNK  |
->> +                                     |     |________| |_________|
->> +                                     |         ^  ^        ^
->> +                                     |         |  |________|
->> +                                     |      ___V____    |
->> +                                     |     |SOC-USB |   |
->> +     ________       ________               |        |   |
->> +    |USB SND |<--->|USBSND  |<------------>|________|   |
->> +    |(card.c)|     |offld   |<----------                |
->> +    |________|     |________|___     | |                |
->> +        ^               ^       |    | |    ____________V_________
->> +        |               |       |    | |   |IPC                   |
->> +     __ V_______________V_____  |    | |   |______________________|
->> +    |USB SND (endpoint.c)     | |    | |              ^
->> +    |_________________________| |    | |              |
->> +                ^               |    | |   ___________V___________
->> +                |               |    | |->|audio DSP              |
->> +     ___________V_____________  |    |    |_______________________|
->> +    |XHCI HCD                 |<-    |
->> +    |_________________________|      |
->> +
-> It wouldn't hurt to describe what you mean by 'port' in this diagram...
-Sure, as mentioned in my earlier comments, in the USB world, port and device is kind of interchangeable, at least IMO.  I'd like to stick with the "port" term, but if you see otherwise, let me know. 
->
->> +SOC USB driver
->> +==============
->> +Structures
->> +----------
->> +``struct snd_soc_usb``
->> +
->> +  - ``list``: list head for SND SOC struct list
->> +  - ``component``: reference to ASoC component
->> +  - ``num_supported_streams``: number of supported concurrent sessions
->> +  - ``connection_status_cb``: callback to notify connection events
->> +  - ``get_offload_dev``: callback to fetch selected USB sound card/PCM device
-> I think you meant fetch offloaded sound card and PCM device information
-> for a given USB card:device pair?
-Correct, will change.
->
->> +Functions
->> +---------
->> +.. code-block:: rst
->> +
->> +	const char *snd_soc_usb_get_components_tag(bool playback);
->> +..
->> +
->> +  - ``playback``: direction of audio stream
-> why not use the usual direction 0: playback and 1: capture?
->
->> +
->> +**snd_soc_usb_get_components_tag()** returns the tag used for describing if USB
->> +offloading is supported for appending to a sound card's components string.
-> How does this work if the ASoC part is probe after the USB card? The
-> component string would be modified after the creation of the card?
->
-> A control is more dynamic by nature, not sure about this component
-> string. Jaroslav?
-Do we actually need to add this?  I think just having the kcontrol is sufficient.
->> +**snd_soc_usb_add_port()** add an allocated SOC USB device to the SOC USB framework.
->> +Once added, this device can be referenced by further operations.
->> +
->> +.. code-block:: rst
->> +
->> +	void snd_soc_usb_remove_port(struct snd_soc_usb *usb);
->> +..
->> +
->> +  - ``usb``: SOC USB device to remove
->> +
->> +**snd_soc_usb_remove_port()** removes a SOC USB device from the SOC USB framework.
->> +After removing a device, any SOC USB operations would not be able to reference the
->> +device removed.
-> Not clear to me if the notion of 'port' helps, why not just
-> snd_soc_usb_add_device() and remove_device()?
-I'm open to either terms, since both mean the same to me :).
->
->> +
->> +USB Offload Related Kcontrols
->> +=============================
->> +Details
->> +-------
->> +A set of kcontrols can be utilized by applications to help select the proper sound
->> +devices to enable USB audio offloading.  SOC USB exposes the get_offload_dev()
->> +callback that designs can use to ensure that the proper indices are returned to the
->> +application.
->> +
->> +Implementation
->> +--------------
->> +
->> +**Example:**
->> +
->> +  **Sound Cards**:
->> +
->> +	::
->> +
->> +	  0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
->> +						SM8250-MTP-WCD9380-WSA8810-VA-DMIC
->> +	  1 [Seri           ]: USB-Audio - Plantronics Blackwire 3225 Seri
->> +						Plantronics Plantronics Blackwire 3225 Seri at usb-xhci-hcd.1.auto-1.1, full sp
->> +	  2 [C320M          ]: USB-Audio - Plantronics C320-M
->> +                      Plantronics Plantronics C320-M at usb-xhci-hcd.1.auto-1.2, full speed
->> +
->> +  **USB Sound Card** - card#1:
->> +
->> +	::
->> +
->> +	  USB Offload Playback Route PCM#0        -1, -1 (range -1->255)
->> +
->> +  **USB Sound Card** - card#2:
->> +
->> +	::
->> +
->> +	  USB Offload Playback Route PCM#0        0, 1 (range -1->255)
->> +
->> +The above example shows a scenario where the system has one ASoC platform card
->> +(card#0) and two USB sound devices connected (card#1 and card#2).  When reading
->> +the available kcontrols for each USB audio device, the following kcontrol lists
->> +the mapped offload path for the specific device:
->> +
->> +	"USB Offload Playback Route#*"
->> +
->> +The kcontrol is indexed, because a USB audio device could potentially have
->> +several PCM devices.  The above kcontrols are defined as:
->> +
->> +  - ``USB Offload Playback Route PCM`` **(R)**: Returns the ASoC platform sound
->> +	card and PCM device index.  The output "0, 1" (card index, PCM device index)
->> +	signifies that there is an available offload path for the USB SND device
->> +	through card#0-PCM device#1.  If "-1, -1" is seen, then no offload path is
->> +	available for the USB SND device.
->> +
->> +USB Offload Playback Route Kcontrol
->> +-----------------------------------
->> +In order to allow for vendor specific implementations on audio offloading device
->> +selection, the SOC USB layer exposes the following:
->> +
->> +.. code-block:: rst
->> +
->> +	int (*get_offload_dev)(struct snd_kcontrol *kcontrol,
->> +			      struct snd_ctl_elem_value *ucontrol);
->> +..
->> +
->> +These are specific for the **USB Offload Playback Route PCM#** kcontrol.
->> +
->> +When users issue get calls to the kcontrol, the registered SOC USB callbacks will
->> +execute the registered function calls to the DPCM BE DAI link.
-> Oh man, now I get what 'get_offload_dev" means: it really means
-> "update_offload_info' or 'update_info_kcontrol".
-> The 'get' routines usually provide a handle on something to another part
-> of the kernel.
-> Not here, it's an update of something to be looked-up by userspace...
->
-I can change the naming for this if its not the right terms used.  As long as you understand how the concept works then the name changing isn't a problem.
+[  503.547183] pending state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT @ 310 ms [rev3 NONE_AMS]
+[  503.857239] state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT [delayed 310 ms]
+[  503.857254] PD TX, header: 0x87
+[  503.862440] PD TX complete, status: 2
+[  503.862484] state change SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_UNATTACHED [rev3 NONE_AMS]
 
-Thanks
+Fixes: 122968f8dda8 ("usb: typec: tcpm: avoid resets for missing source capability messages")
+Cc: stable@vger.kernel.org
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Wesley Cheng
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 26f9006e95e1..cce39818e99a 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4515,7 +4515,7 @@ static inline enum tcpm_state hard_reset_state(struct tcpm_port *port)
+ 		return ERROR_RECOVERY;
+ 	if (port->pwr_role == TYPEC_SOURCE)
+ 		return SRC_UNATTACHED;
+-	if (port->state == SNK_WAIT_CAPABILITIES)
++	if (port->state == SNK_WAIT_CAPABILITIES_TIMEOUT)
+ 		return SNK_READY;
+ 	return SNK_UNATTACHED;
+ }
+-- 
+2.34.1
 
->> +**Callback Registration:**
->> +
->> +.. code-block:: rst
->> +
->> +	static int q6usb_component_probe(struct snd_soc_component *component)
->> +	{
->> +	...
->> +	usb = snd_soc_usb_allocate_port(component, 1, &data->priv);
->> +	if (IS_ERR(usb))
->> +		return -ENOMEM;
->> +
->> +	usb->connection_status_cb = q6usb_alsa_connection_cb;
->> +	usb->get_offload_dev = q6usb_get_offload_dev;
->> +
->> +	ret = snd_soc_usb_add_port(usb);
->> +..
 
