@@ -1,57 +1,81 @@
-Return-Path: <linux-usb+bounces-12896-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12897-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F8FB9462E6
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 20:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 070EC946350
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 20:41:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A3CD282B08
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 18:19:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A90A283109
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2024 18:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F0F6136356;
-	Fri,  2 Aug 2024 18:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6449F136359;
+	Fri,  2 Aug 2024 18:40:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="r4Nfx163"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SOR7Q6qD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDA11AE02D;
-	Fri,  2 Aug 2024 18:19:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363C125632
+	for <linux-usb@vger.kernel.org>; Fri,  2 Aug 2024 18:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722622754; cv=none; b=P8IATEQpUYl7hh0Cct2Cptw4cwNMMtfF0eCpcpfu/J6Y1warTzaQqBfowBlR8eZ7CSN/pcggr3ZCdmmKBqiqFTmGPD39Ic2eYKqp2mMnnDRqHne9328HDQQr9i2akcoQKjkMhSaX3LshYgHlmaIi3Q6UH25oHCr9jDU6JOTtV6s=
+	t=1722624053; cv=none; b=as2jRgNJWD/c+hszBgOZCm0/u3iesIqlc89MhVjs2VY7i+V34ADyq/PoeN6uvo51mR/w1PNV1u52nt/YfSAbu1wovYJmUSoNNTt5iE0a7WmGaCt1tKTmkLhbyH2oIuAGkNWovMgKAg4Mcy/t2rRD7IkZama/ohKFZPKtmZ6te9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722622754; c=relaxed/simple;
-	bh=zON6RjPTf5MmxXUFZfGeVjEEpkp2eWNiZ+51r8kW1qU=;
+	s=arc-20240116; t=1722624053; c=relaxed/simple;
+	bh=soaWkkvxMuF/KL4j9NvlZDNMnUsdIhZ7s8k20vjq8Fg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kUGjXmV4UHhuWllc1CC3v3DtpgpUzZdqFKyyB4nRDGy/kBxrfZjnW91/u7JC5J+k+RLb5eX/YLx8pekL0DOqjkXfna7mj70g6TiHOnfobdGpxjqFWHdc5gqjE5c1GdjKOMs+L62MKMqVhhJkqLJlW2fjdEUoMcD2gGL1y74tLJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=r4Nfx163; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id B9142496;
-	Fri,  2 Aug 2024 20:18:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1722622694;
-	bh=zON6RjPTf5MmxXUFZfGeVjEEpkp2eWNiZ+51r8kW1qU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r4Nfx163YkaYMr/xLWiOvqsD+iE0uj/YrfS2NTL5ebnKMOkghmTQst3xVmpGhbPqK
-	 roZHoSE1wdrpl8WdxdGCM4DOU04S2AKyUcWmADG52fPDHNkSEhcdXaPYCpGNMiEHRz
-	 briRU5UGeuKkwFyIkzvnzZGXY+3LxY8ihUYQEEB4=
-Date: Fri, 2 Aug 2024 21:18:41 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bOTSpuM/S3MN49GbnwiZ+8GZr7m/8UQRulbKCuX6ZS8OtanZrYFF2ORVFrWsrmUCDwxLaZDJ+xmAOqahAs5SNfFc77X7I7QKRwMw6lNfbjFa0BBXLbvy3IY7RJq1bYfzfNWcb5EbENfpU3wWcRHgqgH30nTvy6oN7WkbtqiXvNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SOR7Q6qD; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3db1956643bso5297051b6e.3
+        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2024 11:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722624051; x=1723228851; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2MgDSbbqQmpy8ctPauIiw6bFDpeTQHQdACe1c0ZfrU=;
+        b=SOR7Q6qDV2kY4RdoTrVv3SCeiTJcqxN0xRtQ2dmVwKoZntX7vbAZ0U5yAaBFkapG1z
+         ptf6rUnrRBrpuXJ2SbNaq2yoYd5Ee9wN1wkt61BFGHhIiPEjOVIITwhgv/D4wyDGpUXO
+         oaPFTCo0QoTQs5ZshN3ksUc/DNtrXJ5IpDIai6EiCWAbb3tadv0k8RdlFUJA9ajHdJg8
+         mFR/sEI5RrTvtGEXVa59id3WW16RuEe+6WXEtWBXuPaIrAPKI/ZzXTQ1Drnp5OKyj3mY
+         YSOt//o53UxGq0cgT9/eYY1Y0LENq2pq9GyFNgyvD1bHnfmupn01oXSrfMlAoab8gMJC
+         ZuVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722624051; x=1723228851;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e2MgDSbbqQmpy8ctPauIiw6bFDpeTQHQdACe1c0ZfrU=;
+        b=qTNKubymYD69vqBxluKoVnIiIl8EEe3mr1AAERUnKF0C+PtD1PFAJp/fK+1yDpudNg
+         tEre0YyhX2NNqI+L42Nr91DVzD/bU4qwz8G3TRUVcUKUFMYnU+NbCBApoDBvKYceJZYP
+         RUXYi+sl72QnpbvwK4PUshlPkqkDnoh0CWB7ulWDUXi8lDUwKyzcTiuYO8lLxSCj/zfH
+         8it27DkGzuYVVsapzthKpL6TbCk4+6NCgF8xBNdj4SWl71jFV5I/NVoTO+sSoBVwoNiI
+         0+3K56Hjobli9i1snHzNLIA3IHDKysOw7+XQs8sFnu6apLncSqCbD4rtLhBGj7Ud+Gd7
+         zFwg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmDZ5ahtOxr2UCc1FqMc2j4dtnhUR/oMIf7YluopL9SZ1Yjoaxm6AMADjquXQjucFalXyXLSF9YOSx2fbJTGQ2CXBganwzxxYk
+X-Gm-Message-State: AOJu0YzBKq3NVPT3dhOxttn5j9GY9TAU1xpUJ7FBGU20hghHxSv8E7VX
+	ZBC4FVPS0JIszGG1lAXgr8+JcnmUTXIWhAKWC9421JYnWTTKH9BYJ5zSvN7+0io=
+X-Google-Smtp-Source: AGHT+IEbOLxLULZE+aqsPWXdEEIDOBEB5UNl3N8Whqj1J3sEeVgdjd/tswCl5f1XStLJ5RnuoLGyCA==
+X-Received: by 2002:a05:6808:158c:b0:3d9:2348:6d94 with SMTP id 5614622812f47-3db558486e7mr4949302b6e.46.1722624051319;
+        Fri, 02 Aug 2024 11:40:51 -0700 (PDT)
+Received: from localhost ([2603:8080:b800:f700::17c0])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3db5637af3fsm572507b6e.28.2024.08.02.11.40.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 11:40:50 -0700 (PDT)
+Date: Fri, 2 Aug 2024 13:40:48 -0500
+From: Dan Carpenter <dan.carpenter@linaro.org>
 To: Abhishek Tamboli <abhishektamboli9@gmail.com>
-Cc: dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
-	skhan@linuxfoundation.org, dan.carpenter@linaro.org,
+Cc: laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com,
+	gregkh@linuxfoundation.org, skhan@linuxfoundation.org,
 	rbmarliere@gmail.com,
 	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
-Message-ID: <20240802181841.GA21917@pendragon.ideasonboard.com>
+Message-ID: <a779ee26-fe93-47ac-a25c-b842534e0317@suswa.mountain>
 References: <20240802180247.519273-1-abhishektamboli9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -59,15 +83,9 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240802180247.519273-1-abhishektamboli9@gmail.com>
-
-Hi Abhishek,
-
-(CC'ing Michael Grzeschik)
-
-Thank you for the patch.
 
 On Fri, Aug 02, 2024 at 11:32:47PM +0530, Abhishek Tamboli wrote:
 > Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
@@ -81,40 +99,31 @@ On Fri, Aug 02, 2024 at 11:32:47PM +0530, Abhishek Tamboli wrote:
 > error: 'fmtdesc' dereferencing possible ERR_PTR()
 > 
 > Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
-> ---
->  drivers/usb/gadget/function/uvc_v4l2.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> index a024aecb76dc..9dd602a742c4 100644
-> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> @@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
->  	list_for_each_entry(format, &uvc->header->formats, entry) {
->  		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
-> 
-> +		if (IS_ERR(fmtdesc))
-> +			continue;
-> +
->  		if (fmtdesc->fcc == pixelformat) {
->  			uformat = format->fmt;
->  			break;
-> @@ -389,6 +392,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
->  		return -EINVAL;
-> 
->  	fmtdesc = to_uvc_format(uformat);
-> +	if (IS_ERR(fmtdesc))
-> +		return -EINVAL;
-> +
->  	f->pixelformat = fmtdesc->fcc;
-> 
->  	return 0;
 
-Michael, you authored this, I'll let you review the patch and decide if
-this is a false positive.
+When I reviewed these warnings in 2022, I assumed that the error
+checking was left out deliberately because it couldn't fail so I didn't
+report these warnings.
 
--- 
-Regards,
+Almost all old Smatch warnings are false positives.  That doesn't mean
+Smatch is bad, it's just how it's going to be when you fix all the real
+bugs.  In this case, I just decided it was a false positive.  It's
+possible I was wrong.  Other times, I report the bug and the maintainers
+say that it's a false positive.
 
-Laurent Pinchart
+There are some old bugs which are real.  Sometimes I report a bug but
+the maintainer doesn't see the email because they go on vacation or
+something.  Or someone sends a patch but it doesn't get merged.  Another
+thing is that if a bug is over five years old and minor then I might not
+bother reporting it.  These days kernel developers are very good at
+fixing static checker bugs and these kinds of things are pretty rare.
+
+I don't review old warnings in a systematic way.  If I fix a bug in a
+file, then I'll re-review all the old warnings.
+
+If we decide to merge this code, it needs a Fixes tag.
+
+regards,
+dan carpenter
+
+
 
