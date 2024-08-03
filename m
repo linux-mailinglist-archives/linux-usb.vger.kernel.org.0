@@ -1,164 +1,158 @@
-Return-Path: <linux-usb+bounces-12904-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12905-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1AFC946989
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 13:49:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFE4B9469EC
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 15:56:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 296111F21795
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 11:49:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62FAC281D35
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 13:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FE4514E2E8;
-	Sat,  3 Aug 2024 11:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53A414F9F7;
+	Sat,  3 Aug 2024 13:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="THo2CXuV"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tl+Fj6uv";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pOHyjtjN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D13E1396
-	for <linux-usb@vger.kernel.org>; Sat,  3 Aug 2024 11:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1571649659;
+	Sat,  3 Aug 2024 13:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722685778; cv=none; b=WfcKW21z0onHifiLx538XZN6Vl2VdMa1/Evvdd+WCp4cVuRYSMui9JJcmX/7uhsSc2GqLQ0necfo1f/+sELQFO1rgF7fm9q8WsBgfxWveNWujEartgchrhyvhdHa5XIgJD/Cyre/CRHKS3yXoU54LBy1LFntJ4vr67tqOq3GNQw=
+	t=1722693367; cv=none; b=TnbdvOdhTIlP3Fc59uMkuHZfTJ4043XCw+HFE0M3K5KsFAmzTLMkI9d+vNEHfY7/KvoYAzTi1Nr7UyiKBUAgUfdu7vkSOlzqmMra3Vx7dJtFTLXeNemBNPeZdn4Faua+/VMYHr5MmDShMmtVTI4+BEXZYV/nNm7Pou2LpMETGc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722685778; c=relaxed/simple;
-	bh=xChawDyNjps7BwfBiDb3xThISkvg55WURaxCoOEvZrQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=tebnGjy17cGBotfJgYJwG6cbCTGP9fNLz+XCVp9SRe2UeA6dsLCr9can3euU/CpU0j8Gr3CpkFQ4OwJOQYQj+fE7Xc5+PYquPThnVg6DiUsU1MUMR8PDGRNrYRH4cr1RZ0DtP8VmNeWzpdqzfGr8SD5/am/TEuNWlZOODPkqnuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=THo2CXuV; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-664ccd158b0so74193507b3.1
-        for <linux-usb@vger.kernel.org>; Sat, 03 Aug 2024 04:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722685776; x=1723290576; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7aRN7R9twvJ6vd0/Lmm2Qaf7LPNHeebQiNqdE65Cqo4=;
-        b=THo2CXuVH7lhs/ZjT37qNgkJqUrQ9liqlE7gY73FccKjCHQd8PerPCaxdA//GgjuHJ
-         ZROzr7tVdcXn8LQbV13jwiSTnBPKCvTrc+0xf+/3lXuyVOzJ5/m4J18d/YlxCTw1T1XA
-         fwRoCZ0q8d+zLVA9n3+cFaYA5ZFmOQ8XKdE28z77csmIxovYODAy6CfWNMGHGkMY6Dm3
-         1Ga3kvAYBIXsXGeFP+OllnYI2Ja6YavwPuA35YlVSoJq/GQWG9EeW9VBQd1goNofo8KH
-         6O/qx7e+pOcqqcuXbTLW6/26smD3VDM93mO4hy9pT7ZjtwWE2V5avlk3sqZqEKMLAu4x
-         Toaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722685776; x=1723290576;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7aRN7R9twvJ6vd0/Lmm2Qaf7LPNHeebQiNqdE65Cqo4=;
-        b=WreI0xcjXATsBM/DXnurtIXEQ1ZtKT8fraVTdgJxwHEyvHs3Jl182l94OBBQ4oUkOe
-         XAGInPr0qiyyj48yLfhmgu+qrmeprtSmMPQnM6BC0H9LUl43CCgwanzDZoRrFurbKqH7
-         ip1db9isR/KjZpeLBDBsttFRZMEvZHMUL09fOnR6fWwbZcShHW6XNgaG2Cxc98FupSlC
-         HRdE9lM8n3xF+hXuCLr9yk7uF6FMGTW6KxtyXQJ5jZxstkwyE45o8i5scpFqoDB8yQU/
-         Sj4zYSRiv1natxESEokLpq8mkwdPCxHsf9eH6ScaoPFVrDUFbi0kiK5+9WrmUfgh6dqA
-         3p9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUXdNJS6qJfmevG1fGYNNqlo4hbjAwy+XptcYqQ8jXsgXWyQkkX8PL2F/P6sGz2bNOjBG7ZaQ8UTGx00go5Hjfg84TKsKXOZlGi
-X-Gm-Message-State: AOJu0Ywl68zTLLW0S+Gmh4Sg70Q8RnYz2L8r66wzHTwmxYXrsEUJCfKs
-	2aX8nrj6FPxpQGGy9ZVaYvGFhq7jfLtrk4FTfHO66RIf+FysJHpDinLmboki
-X-Google-Smtp-Source: AGHT+IFklOAqf0FBKdukyrRwiTFm4UJ6AyTUPc3s/44etYkO526PzdD7aiQHl2vx5AED8MisNt9Vnw==
-X-Received: by 2002:a05:6902:2702:b0:dff:3028:4631 with SMTP id 3f1490d57ef6-e0bde35d7b1mr7038830276.33.1722685776067;
-        Sat, 03 Aug 2024 04:49:36 -0700 (PDT)
-Received: from [192.168.1.7] ([159.192.81.65])
-        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-7b7654befd3sm2616363a12.85.2024.08.03.04.49.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Aug 2024 04:49:35 -0700 (PDT)
-Message-ID: <4333b4d0-281f-439d-9944-5570cbc4971d@gmail.com>
-Date: Sat, 3 Aug 2024 18:49:32 +0700
+	s=arc-20240116; t=1722693367; c=relaxed/simple;
+	bh=sQNvDj66koO4Eh6ZdtymFhAZsCA0muFCyeA6lU/MHsA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d1x1YydONY6JfSVsPsSgP9fmz9WlS5rk1oNye+d7M16/R/3QpCl5UhrFhcoexnJGGXf/GmK/baukLbi470cFEVNhoem1pewGgenXvfHPrKlw1emLlTioPIYYx/UYQ1QvUR8sjrWulf+CgFW0v0pPOdOwNJIYgeIeFh09JGw9Xqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tl+Fj6uv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pOHyjtjN; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Sat, 3 Aug 2024 15:55:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1722693361;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WTqRgmwBooyFJ0l4CO4MsQ+u1B5cCeBn3LflPJpgLKA=;
+	b=tl+Fj6uv5skQ7Gk3COjTSNnSvqrm/M69Wx/4ldpVaFSD+Ely9S163m8W3N/Kof7hgTl+ej
+	VTpiPH/utIaICxHRGD7BIa7Myyx8T6rObBAPj3gMyahn5V200PIJ3zQtm8zfWfs08FNJgX
+	JxOXpOS0zcQgX1d0tuNvXh7Yu1a7oVyYlXmoUK1gnegUguEE3hk6Sz+cKkzWR64WhH6Wyn
+	sj7gDdo1t9uelqKgka0nhuiWw0agS8rTXGzi442LBBSWN4PZI7HsFTPMkqpzRg3QA2Av7d
+	P753ZA0xdeP1LkCRMQk1HJaDwf2U/jdzLXY2Sk9GPPNinsCJ/VqHFxRSpoccQA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1722693361;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WTqRgmwBooyFJ0l4CO4MsQ+u1B5cCeBn3LflPJpgLKA=;
+	b=pOHyjtjNI7M4iypHHTu3eM0lJakidHJnfTGWQNjl3C8IzmTR9HCupUDl8TAozv9lZUeKM1
+	mFNLqkIx15cykrBQ==
+From: Nam Cao <namcao@linutronix.de>
+To: syzbot <syzbot+ca2eaaadab55de6a5a42@syzkaller.appspotmail.com>
+Cc: florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [staging?] [usb?] WARNING in
+ r8712_usb_write_mem/usb_submit_urb (2)
+Message-ID: <20240803135554.DxjC41K7@linutronix.de>
+References: <00000000000095a6be061ebea91f@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: option: add MeiG Smart SRM825L
-To: ZHANG Yuntian <yt@radxa.com>, linux-usb@vger.kernel.org
-References: <0041DFA5200EFB1B+20240803074619.563116-1-yt@radxa.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <0041DFA5200EFB1B+20240803074619.563116-1-yt@radxa.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000095a6be061ebea91f@google.com>
 
-On 2024-08-03 14:46, ZHANG Yuntian wrote:
-> Add support for MeiG Smart SRM825L which is based on Qualcomm 315 chip.
-> 
-> T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=2dee ProdID=4d22 Rev= 4.14
-> S:  Manufacturer=MEIG
-> S:  Product=LTE-A Module
-> S:  SerialNumber=6f345e48
-> C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=896mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-> E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> 
+On Fri, Aug 02, 2024 at 08:01:38PM -0700, syzbot wrote:
+> usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+> WARNING: CPU: 0 PID: 2583 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
+...
+> Call Trace:
+>  <TASK>
+>  r8712_usb_write_mem+0x2e4/0x3f0 drivers/staging/rtl8712/usb_ops_linux.c:170
+>  rtl8712_dl_fw+0x7ab/0xfe0 drivers/staging/rtl8712/hal_init.c:203
+>  rtl8712_hal_init drivers/staging/rtl8712/hal_init.c:330 [inline]
+>  rtl871x_hal_init+0xb3/0x190 drivers/staging/rtl8712/hal_init.c:394
+>  netdev_open+0xea/0x800 drivers/staging/rtl8712/os_intfs.c:397
 
-That ProdID is already used by MeiG SR815 which has the same composition 
-but different Protocol values.
-Is MeiG really that short of ProductID's that they have to cannibalize 
-on an already used one?
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 1722389b0d86
 
-lsusb for SR815:
-
-T: Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 2 Spd=5000 MxCh= 0	
-D: Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs= 1	
-P: Vendor=2dee ProdID=4d22 Rev= 4.14	
-S: Manufacturer=MEIG	
-S: Product=LTE-A Module	
-S: SerialNumber=123456	
-C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=896mA	
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)	
-E: Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-E: Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)	
-E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms	
-E: Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-E: Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)	
-E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms	
-E: Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-E: Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)	
-E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms	
-E: Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-E: Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)	
-E: Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-E: Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)	
-E: Ad=89(I) Atr=03(Int.) MxPS= 8 Ivl=32ms	
-E: Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms	
-E: Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-
-
-thanks
-Lars
-
-
+diff --git a/drivers/staging/rtl8712/hal_init.c b/drivers/staging/rtl8712/hal_init.c
+index 1148075f0cd6..80d8c462fafa 100644
+--- a/drivers/staging/rtl8712/hal_init.c
++++ b/drivers/staging/rtl8712/hal_init.c
+@@ -152,6 +152,10 @@ static u8 chk_fwhdr(struct fw_hdr *pfwhdr, u32 ulfilelength)
+ 	return _SUCCESS;
+ }
+ 
++static const int pipetypes[4] = {
++	PIPE_CONTROL, PIPE_ISOCHRONOUS, PIPE_BULK, PIPE_INTERRUPT
++};
++
+ static u8 rtl8712_dl_fw(struct _adapter *adapter)
+ {
+ 	sint i;
+@@ -167,6 +171,29 @@ static u8 rtl8712_dl_fw(struct _adapter *adapter)
+ 	u32 txdscp_sz = sizeof(struct tx_desc);
+ 	u8 ret = _FAIL;
+ 
++	struct intf_hdl *hdl = &adapter->pio_queue->intf;
++	struct intf_priv *pintfpriv = hdl->pintfpriv;
++	struct dvobj_priv *pdvobj = (struct dvobj_priv *)pintfpriv->intf_dev;
++	struct usb_device *pusbd = pdvobj->pusbdev;
++
++	for (int i = 0; i < 16; ++i) {
++		struct usb_host_endpoint *ep = pusbd->ep_in[i];
++		if (!ep)
++			continue;
++		int xfertype = usb_endpoint_type(&ep->desc);
++		int type = pipetypes[xfertype];
++		pr_err("ep_in[%d] type=%d\n", i, type);
++	}
++
++	for (int i = 0; i < 16; ++i) {
++		struct usb_host_endpoint *ep = pusbd->ep_out[i];
++		if (!ep)
++			continue;
++		int xfertype = usb_endpoint_type(&ep->desc);
++		int type = pipetypes[xfertype];
++		pr_err("ep_out[%d] type=%d\n", i, type);
++	}
++
+ 	ulfilelength = rtl871x_open_fw(adapter, &mappedfw);
+ 	if (mappedfw && (ulfilelength > 0)) {
+ 		update_fwhdr(&fwhdr, mappedfw);
+@@ -200,6 +227,7 @@ static u8 rtl8712_dl_fw(struct _adapter *adapter)
+ 			txdesc->txdw0 |= cpu_to_le32(dump_imem_sz &
+ 						       0x0000ffff);
+ 			memcpy(payload, ptr, dump_imem_sz);
++			pr_err("%s:%d\n", __func__, __LINE__);
+ 			r8712_write_mem(adapter, RTL8712_DMA_VOQ,
+ 					dump_imem_sz + TXDESC_SIZE,
+ 					(u8 *)txdesc);
+@@ -229,6 +257,7 @@ static u8 rtl8712_dl_fw(struct _adapter *adapter)
+ 			txdesc->txdw0 |= cpu_to_le32(dump_emem_sz &
+ 						       0x0000ffff);
+ 			memcpy(payload, ptr, dump_emem_sz);
++			pr_err("%s:%d\n", __func__, __LINE__);
+ 			r8712_write_mem(adapter, RTL8712_DMA_VOQ,
+ 					dump_emem_sz + TXDESC_SIZE,
+ 					(u8 *)txdesc);
+@@ -282,6 +311,7 @@ static u8 rtl8712_dl_fw(struct _adapter *adapter)
+ 		txdesc->txdw0 |= cpu_to_le32(fwhdr.fw_priv_sz & 0x0000ffff);
+ 		txdesc->txdw0 |= cpu_to_le32(BIT(28));
+ 		memcpy(payload, &fwhdr.fwpriv, fwhdr.fw_priv_sz);
++		pr_err("%s:%d\n", __func__, __LINE__);
+ 		r8712_write_mem(adapter, RTL8712_DMA_VOQ,
+ 				fwhdr.fw_priv_sz + TXDESC_SIZE, (u8 *)txdesc);
+ 
 
