@@ -1,213 +1,105 @@
-Return-Path: <linux-usb+bounces-12910-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12911-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CA80946A50
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 17:14:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BD9C946A6B
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 17:41:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9F331C20B46
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 15:14:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22DBEB211E6
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 15:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 594761547CA;
-	Sat,  3 Aug 2024 15:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85DC51553A6;
+	Sat,  3 Aug 2024 15:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KequMzCI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LswNW+9X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6281EA73;
-	Sat,  3 Aug 2024 15:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12F21ABEA7;
+	Sat,  3 Aug 2024 15:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722698058; cv=none; b=CpNEuwC/Ty1EGSnxX5y2DUP0kbHwN92vYYyLQA5wOW4QIy+FyJtgjAp7qCW+qs/C30lm96WLspKdcC5mQHW1AM/1RT6knXTQxXwDHP2uCLDPBu+KsfcGM+OtKBJUFwX7z9wpJqHDhDCuxoxp3LCJqywnhCqmgTFdNL5qbk8bpyU=
+	t=1722699670; cv=none; b=KHIq77PltZjecQc+dP6j1umU6d40250xriupK7u00puMlVLlbZd6lZwQmRJ0xECgMzxNCgBxG2WOR5Ck9SnUJqGIuIt6bWlH8z93CJtPP2wFAsh6UQCrkPaaJHoZ13Vh4o//q7g8O7SfuCySsk3e/ykMmw2Ti5mA1oakea/OxMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722698058; c=relaxed/simple;
-	bh=cwCCGZI2Vd0oUzsSHQwvBk+JNtPxWz1ngmqZB+vVGIU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RotnDdPHQN/0EhYE9t7hpkmpjXbWn35c0XCKyEZ5NtRkEJ//0x1u+qBH3xZaj5yINtjUjxx2MyX6iIoDhUMmhFZAQQ8Q+F77CQU10S4+owAPIdor4aWvUVgO1DZwIi3rT4dGnqb+HDPKQ81jyYZXbAkFqNMJ6UB6uzhSnga0dfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KequMzCI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF51C116B1;
-	Sat,  3 Aug 2024 15:14:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722698058;
-	bh=cwCCGZI2Vd0oUzsSHQwvBk+JNtPxWz1ngmqZB+vVGIU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KequMzCIQjXj/O/yRk0GjPW8aiRKXJ5i5UItEcb6jIKf5m4Q0TLviOjKcMITUc4r9
-	 BhDJGF9uh6K1DyJXt/oINs1lvvNhc6Z0F4RVKmtpIYXMW9OIYGg/raOXGzSDbdC5GF
-	 8QdDTLeUVOfzaPTQgbHJHieA8a6CZ0Bm3g//4oo485/muEl3PIo7YS9s64ymksocxe
-	 pPW3bR+CO+EWCTY0XP9VcxtibZ1PG0Ubr1MWkcdz6UbP8GnsSPOnVfcCOW9JP9AUwO
-	 VsnP053P8yZHLEPZX/wOmSnIjlUJlJ0VwnMGGG11FS42MgcFVyXnFQbnt6Kn0KCck1
-	 JUVAlA6C0wq+g==
-Message-ID: <37760e53-4e0d-4275-8497-1b51dcf72d5a@kernel.org>
-Date: Sat, 3 Aug 2024 18:14:11 +0300
+	s=arc-20240116; t=1722699670; c=relaxed/simple;
+	bh=1Q3f3wAAfLeMS66M4Cd3loRGbCYGAcv/pxfi6hE+cjE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ZKYobNwK8tvWofaEHpVlBwANiLNX5RplwoIIVp5PCKKJnmPrGBSIpc1LoYlyJ5prnhBOoFkfFOV1bbHH9kXsqSQqnQl+EmpjAh4C+N3EZLuJLJUOqwPi04l6lwTHDsX5lOvAVZzORz5sA0a1EWWfO+GRu61njBVyvXRUlJUnG6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LswNW+9X; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ef2cb7d562so114339711fa.3;
+        Sat, 03 Aug 2024 08:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722699667; x=1723304467; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zpyY9ulRSc+ysG0wEaIajPO4aps8FLYRKBJNQ6wWV9g=;
+        b=LswNW+9Xhy0py8pmEt38S1ejS2E4cIM8taoDuLnfX/uTuFKMuHE7mzAO2Exw1iPjlL
+         mHSTfmOl/WXQFd8J3tPPzRfrkYc+GbnKABvtwj6GoW6n9SzMhVcLgBTq/DV256ecv4YC
+         eRvc/xsMqg/QXXU1l7kJCtOhhZdS/2n1FF02ZcuKU4HmEBcWUlu+ZMqmIGgxrWr3lJpW
+         wSSq9Me+0nwE2kUEA7TYj0Dk89S3+exUUwWbHtkg70yE/gUbaUns85wlMjIPVRBE39Qh
+         rok/F6iTAt3aObyS4rNEQThG04m64J3xAOxE75NRlScj9wE2SYQo58YvAIXutWgsigmg
+         zwrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722699667; x=1723304467;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zpyY9ulRSc+ysG0wEaIajPO4aps8FLYRKBJNQ6wWV9g=;
+        b=m1RCvj0aVoTcg8Nhf63FyfZKTJlrRZRIdcOMpS7HpL+XtY5/R7dkWnAo3aWGDyd5rE
+         cELPsLzEgYmCtZb1bbPmpSiyTz6GaCw/daBW1/S5piQEmeNRoSfVbm1OuJ393lkDYlrK
+         No2D5xzplhP7ea3smFd0T1hUqsbvzkv/XL9SC88k/D7b92nJ0/ZQndaoflIYQJ2BjasL
+         MBVEoQk0Jp4PMiaVMERqsgaDfmVZcS4rmDgNw1BP0tu0RRqiaRQBvqgJ+vf5P2Ci+g0X
+         RVrW5rJ9jQb1zoYP2t4oy94hlnOiu07UXdcgPxNaMM/XfX9d2WDOh6UC9l7oYDLfEmRS
+         RJxw==
+X-Forwarded-Encrypted: i=1; AJvYcCXZeINKSQDT0YxwIPpJ0HYIm1D5gm0uLrcK9zDdbBQh1hYrXWzAvTZCwtJda4lUTZA+koxVRi9qU+ge1+auzJPaGGqbo5HbGViWM4yPCosSXhosDEFZ1L7fLhRKRWtJFalDRwsLtR32
+X-Gm-Message-State: AOJu0YwgPIsQ9FeWYh6N75tSPdkW3X8n+ombJW57mDp5rm+fhYH0l2xF
+	sMknXkYmLAEj9Idu/YkvobNTTUnyZTq0QLyqYxuq5AhEZopMRrY62RWe6Q==
+X-Google-Smtp-Source: AGHT+IHPCcQeLBzMwEA83rzwuJVJ6VJgDsq58DxK5LHY0YtltBQdhoBHkjzNBXE1VC7JYxAoykSJLA==
+X-Received: by 2002:a05:6512:130c:b0:52e:8141:1b27 with SMTP id 2adb3069b0e04-530bb39b079mr4696932e87.43.1722699666294;
+        Sat, 03 Aug 2024 08:41:06 -0700 (PDT)
+Received: from [85.64.140.6] (85.64.140.6.dynamic.barak-online.net. [85.64.140.6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36bbd01eff1sm4596684f8f.44.2024.08.03.08.41.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Aug 2024 08:41:05 -0700 (PDT)
+Message-ID: <81ef75a3-d884-9a0e-9fe8-a3e73d6b6bae@gmail.com>
+Date: Sat, 3 Aug 2024 18:40:42 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/12] Fix USB suspend on TI J7200 (cdns3-ti, cdns3,
- xhci)
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
- Pawel Laszczak <pawell@cadence.com>, Mathias Nyman
- <mathias.nyman@intel.com>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Kevin Hilman <khilman@kernel.org>,
- =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+From: Eli Billauer <eli.billauer@gmail.com>
+Subject: Re: [PATCH] char: xillybus: Don't destroy workqueue from work item
+ running on it
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: arnd@arndb.de, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240801121126.60183-1-eli.billauer@gmail.com>
+ <2024080311-legwarmer-ricotta-d4fd@gregkh>
 Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <2024080311-legwarmer-ricotta-d4fd@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 03/08/2024 9:56, Greg KH wrote:
+> What commit id does this fix?  Should it also go to stable kernels?
 
-On 26/07/2024 21:17, Théo Lebrun wrote:
-> Currently, system-wide suspend is broken on J7200 because of a
-> controller reset. The TI wrapper does not get re-initialised at resume
-> and the first register access from cdns core fails.
-> 
-> We address that in a few ways:
->  - In cdns3-ti, if a reset has occured at resume, we reconfigure the HW.
->  - We pass the XHCI_RESET_ON_RESUME quirk, meaning the XHCI core expects
->    a resume.
+The bug was there from the very beginning. The fixed commit ID is 
+a53d1202aef1 ("char: xillybus: Add driver for XillyUSB (Xillybus variant 
+for USB)").
 
-OK.
->  - We add a xhci->lost_power flag.
+So yes, the fix is relevant for stable kernels as well.
 
-Why?
+Apologies for omitting the Fixes tag. I wasn't aware of it until now.
 
-> 
-> The previous revision had one big issue: we had to know if
-> reset-on-resume was true, at probe-time. This is where the main
-
-Don't we already know this at probe-time? why not just rely on the existing
-XHCI_RESET_ON_RESUME qurik, than add a new mechanism?
-
-> difference with previous revisions is. We now pass the information from
-> wrapper devices back up into XHCI. The xhci->lost_power flag gets its
-> default value from the XHCI_RESET_ON_RESUME quirk. It however allows
-> wrappers to signal *at resume* if they still expect a reset.
-> 
-> That means wrappers that are unsure if they will reset should:
->  - (1) set the quirk at probe and,
->  - (2) potentially set xhci->lost_power to false at resume.
-> 
-> We implement that for cdns3, by piggybacking on the host role ->resume()
-> callback already receives the information from its caller.
-> 
-> Have a nice day,
-> Théo
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
-> Changes in v5:
-> - dt-bindings: take Reviewed-by Rob and Conor for the first
->   patch: "dt-bindings: usb: ti,j721e-usb: fix compatible list".
-> - cdns3-ti:
->   - We now do have HW init code inside cdns_ti_reset_and_init_hw().
->   - It gets called at probe unconditionally and from ->runtime_resume()
->     if a reset is detected (using the W1 register).
->   - Auxdata patches have been reworked now that there is default auxdata
->     since commit b50a2da03bd9 ("usb: cdns3-ti: Add workaround for
->     Errata i2409"). We now have a patch that moves auxdata to match
->     data: "usb: cdns3-ti: grab auxdata from match data".
-> - cdns3/xhci: those are three new patches.
->   - First, we rename "hibernated" to "lost_power" in arguments to
->     the role ->resume() callbacks.
->   - Then we add the xhci->lost_power flag, and only have it always copy
->     the value from XHCI_RESET_ON_RESUME.
->   - Finally, we set the flag from the host role driver.
-> - Link to v4: https://lore.kernel.org/lkml/20240307-j7200-usb-suspend-v4-0-5ec7615431f3@bootlin.com/
-> 
-> Changes in v4:
-> - dt-bindings: usb: ti,j721e-usb:
->   - Remove ti,am64-usb single compatible entry.
->   - Reverse ordering of compatible pair j721e + am64
->     (becoming am64 + j721e).
->   - Add j7200 + j721e compatible pair (versus only j7200). It is the
->     same thing as am64: only the integration differs with base j721e
->     compatible.
->   - NOT taking trailers from Conor as patches changed substantially.
-> - arm64: dts: ti: j3-j7200:
->   - Use j7200 + j721e compatible pair (versus only j7200 previously).
-> - arm64: dts: ti: j3-am64:
->   - Fix to use am64 + j721e compatible pair (versus only am64).
->     This is a new patch.
-> - Link to v3: https://lore.kernel.org/r/20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com
-> 
-> Changes in v3:
-> - dt-bindings: use an enum to list compatibles instead of the previous
->   odd construct. This is done in a separate patch from the one adding
->   J7200 compatible.
-> - dt-bindings: dropped Acked-by Conor as the changes were modified a lot.
-> - Add runtime PM back. Put the init sequence in ->runtime_resume(). It
->   gets called at probe for all compatibles and at resume for J7200.
-> - Introduce a cdns_ti_match_data struct rather than rely on compatible
->   from code.
-> - Reorder code changes. Add infrastructure based on match data THEN add
->   compatible and its match data.
-> - DTSI: use only J7200 compatible rather than both J7200 then J721E.
-> - Link to v2: https://lore.kernel.org/r/20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com
-> 
-> Changes in v2:
-> - Remove runtime PM from cdns3-ti; it brings nothing. That means our
->   cdns3-ti suspend/resume patch is simpler; there is no need to handle
->   runtime PM at suspend/resume.
-> - Do not add cdns3 host role suspend/resume callbacks; they are not
->   needed as core detects reset on resume & calls cdns_drd_host_on when
->   needed.
-> - cdns3-ti: Move usb2_refclk_rate_code assignment closer to the value
->   computation.
-> - cdns3/host.c: do not pass XHCI_SUSPEND_RESUME_CLKS quirk to xHCI; it
->   is unneeded on our platform.
-> - Link to v1: https://lore.kernel.org/r/20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com
-> 
-> ---
-> Théo Lebrun (12):
->       dt-bindings: usb: ti,j721e-usb: fix compatible list
->       dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb compatible
->       usb: cdns3-ti: move reg writes to separate function
->       usb: cdns3-ti: run HW init at resume() if HW was reset
->       usb: cdns3: add quirk to platform data for reset-on-resume
->       usb: cdns3-ti: grab auxdata from match data
->       usb: cdns3-ti: add J7200 support with reset-on-resume behavior
->       usb: cdns3: rename hibernated argument of role->resume() to lost_power
->       xhci: introduce xhci->lost_power flag
->       usb: cdns3: host: transmit lost_power signal from wrapper to XHCI
->       arm64: dts: ti: k3-j7200: use J7200-specific USB compatible
->       arm64: dts: ti: k3-am64: add USB fallback compatible to J721E
-> 
->  .../devicetree/bindings/usb/ti,j721e-usb.yaml      |   5 +-
->  arch/arm64/boot/dts/ti/k3-am64-main.dtsi           |   2 +-
->  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          |   2 +-
->  drivers/usb/cdns3/cdns3-gadget.c                   |   4 +-
->  drivers/usb/cdns3/cdns3-ti.c                       | 151 ++++++++++++++-------
->  drivers/usb/cdns3/cdnsp-gadget.c                   |   2 +-
->  drivers/usb/cdns3/core.h                           |   3 +-
->  drivers/usb/cdns3/host.c                           |  13 ++
->  drivers/usb/host/xhci.c                            |   8 +-
->  drivers/usb/host/xhci.h                            |   6 +
->  10 files changed, 136 insertions(+), 60 deletions(-)
-> ---
-> base-commit: c33ffdb70cc6df4105160f991288e7d2567d7ffa
-> change-id: 20240726-s2r-cdns-4b180cd960ff
-> 
-> Best regards,
-
--- 
-cheers,
--roger
+Thanks,
+    Eli
 
