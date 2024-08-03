@@ -1,105 +1,260 @@
-Return-Path: <linux-usb+bounces-12911-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12912-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BD9C946A6B
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 17:41:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17B66946A75
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 17:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22DBEB211E6
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 15:41:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2247281AC1
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2024 15:52:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85DC51553A6;
-	Sat,  3 Aug 2024 15:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1FB1547FB;
+	Sat,  3 Aug 2024 15:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LswNW+9X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B79fXtZ5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12F21ABEA7;
-	Sat,  3 Aug 2024 15:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D725212C486;
+	Sat,  3 Aug 2024 15:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722699670; cv=none; b=KHIq77PltZjecQc+dP6j1umU6d40250xriupK7u00puMlVLlbZd6lZwQmRJ0xECgMzxNCgBxG2WOR5Ck9SnUJqGIuIt6bWlH8z93CJtPP2wFAsh6UQCrkPaaJHoZ13Vh4o//q7g8O7SfuCySsk3e/ykMmw2Ti5mA1oakea/OxMM=
+	t=1722700370; cv=none; b=uAHag8owAjHCWnih6M1MtGxBdO6Dknj6ug4FfAdSVkOgBGWh+Fyu+iprxLUgA5MucyUgtKqN0oM8JAUV8E8bHvl/SBUMINyP0gEIoY9iAydCPh6Hv6gnbBXwMLUKA2mqfKf9tDjhb+PtvnuC+X+NHFLD7KV2VHoOed8owHzqFOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722699670; c=relaxed/simple;
-	bh=1Q3f3wAAfLeMS66M4Cd3loRGbCYGAcv/pxfi6hE+cjE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ZKYobNwK8tvWofaEHpVlBwANiLNX5RplwoIIVp5PCKKJnmPrGBSIpc1LoYlyJ5prnhBOoFkfFOV1bbHH9kXsqSQqnQl+EmpjAh4C+N3EZLuJLJUOqwPi04l6lwTHDsX5lOvAVZzORz5sA0a1EWWfO+GRu61njBVyvXRUlJUnG6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LswNW+9X; arc=none smtp.client-ip=209.85.208.178
+	s=arc-20240116; t=1722700370; c=relaxed/simple;
+	bh=QCo6DJOh0XVew2hy4ZdA2XI7aEGm3XiEvn2Enw5x1F8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L6HRLUMf1uV1+y/cXnZifJ8NNaBv2iS0LSELWskyaSiEZPxhIyrHssX1ULlz/IGIN5h7hF7yqFJ6Onfn3McwnStXza+EM2dt1fokIWoM7ztc1W3vvh6iB/AZFGvKHZ2Y0eMy/VLjXiU3k8jjqMKwXQmDMugzdBOXf8pTkd9YY7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B79fXtZ5; arc=none smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ef2cb7d562so114339711fa.3;
-        Sat, 03 Aug 2024 08:41:08 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7a1df0a93eeso509811285a.1;
+        Sat, 03 Aug 2024 08:52:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722699667; x=1723304467; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zpyY9ulRSc+ysG0wEaIajPO4aps8FLYRKBJNQ6wWV9g=;
-        b=LswNW+9Xhy0py8pmEt38S1ejS2E4cIM8taoDuLnfX/uTuFKMuHE7mzAO2Exw1iPjlL
-         mHSTfmOl/WXQFd8J3tPPzRfrkYc+GbnKABvtwj6GoW6n9SzMhVcLgBTq/DV256ecv4YC
-         eRvc/xsMqg/QXXU1l7kJCtOhhZdS/2n1FF02ZcuKU4HmEBcWUlu+ZMqmIGgxrWr3lJpW
-         wSSq9Me+0nwE2kUEA7TYj0Dk89S3+exUUwWbHtkg70yE/gUbaUns85wlMjIPVRBE39Qh
-         rok/F6iTAt3aObyS4rNEQThG04m64J3xAOxE75NRlScj9wE2SYQo58YvAIXutWgsigmg
-         zwrw==
+        d=gmail.com; s=20230601; t=1722700367; x=1723305167; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7ogw+NxKj0NGUdKahZJHWHKokxgMy9a+B39dL2benM=;
+        b=B79fXtZ5J9+oHP6NT68BzG+1FYFctBlFrYvZ7eRrPdQZNcp3a4iH0GoHcERWM4wYNw
+         NYBePbNYEplm5FhyJs6WoIYAXx4+fL7KhIrCtmoXk3udLu9qMT4P6eIT33n2dQadjRjp
+         3e+89vzodTm6qTfcse/jlon2QiZunmWVGCSPWZWchxB0s4TurXhu5iJj8MsU/+DNedDw
+         4pbc5TIJITVeG1+P+IxSIjiy2OOwWCFxEinEj5rGYdY63NCqFowfPLDNLMgsE4tLcVpd
+         1doknieKoPiYMbLjugvN8EVuMdmsF6AvoxmGuvh7H8XF5+KW8gZfZ/4IyXTS3Wi7TLOo
+         mPBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722699667; x=1723304467;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zpyY9ulRSc+ysG0wEaIajPO4aps8FLYRKBJNQ6wWV9g=;
-        b=m1RCvj0aVoTcg8Nhf63FyfZKTJlrRZRIdcOMpS7HpL+XtY5/R7dkWnAo3aWGDyd5rE
-         cELPsLzEgYmCtZb1bbPmpSiyTz6GaCw/daBW1/S5piQEmeNRoSfVbm1OuJ393lkDYlrK
-         No2D5xzplhP7ea3smFd0T1hUqsbvzkv/XL9SC88k/D7b92nJ0/ZQndaoflIYQJ2BjasL
-         MBVEoQk0Jp4PMiaVMERqsgaDfmVZcS4rmDgNw1BP0tu0RRqiaRQBvqgJ+vf5P2Ci+g0X
-         RVrW5rJ9jQb1zoYP2t4oy94hlnOiu07UXdcgPxNaMM/XfX9d2WDOh6UC9l7oYDLfEmRS
-         RJxw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZeINKSQDT0YxwIPpJ0HYIm1D5gm0uLrcK9zDdbBQh1hYrXWzAvTZCwtJda4lUTZA+koxVRi9qU+ge1+auzJPaGGqbo5HbGViWM4yPCosSXhosDEFZ1L7fLhRKRWtJFalDRwsLtR32
-X-Gm-Message-State: AOJu0YwgPIsQ9FeWYh6N75tSPdkW3X8n+ombJW57mDp5rm+fhYH0l2xF
-	sMknXkYmLAEj9Idu/YkvobNTTUnyZTq0QLyqYxuq5AhEZopMRrY62RWe6Q==
-X-Google-Smtp-Source: AGHT+IHPCcQeLBzMwEA83rzwuJVJ6VJgDsq58DxK5LHY0YtltBQdhoBHkjzNBXE1VC7JYxAoykSJLA==
-X-Received: by 2002:a05:6512:130c:b0:52e:8141:1b27 with SMTP id 2adb3069b0e04-530bb39b079mr4696932e87.43.1722699666294;
-        Sat, 03 Aug 2024 08:41:06 -0700 (PDT)
-Received: from [85.64.140.6] (85.64.140.6.dynamic.barak-online.net. [85.64.140.6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36bbd01eff1sm4596684f8f.44.2024.08.03.08.41.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Aug 2024 08:41:05 -0700 (PDT)
-Message-ID: <81ef75a3-d884-9a0e-9fe8-a3e73d6b6bae@gmail.com>
-Date: Sat, 3 Aug 2024 18:40:42 +0300
+        d=1e100.net; s=20230601; t=1722700367; x=1723305167;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b7ogw+NxKj0NGUdKahZJHWHKokxgMy9a+B39dL2benM=;
+        b=OpcJoElulW94Ne1WdNY4yPALTC9wR/3Vlx2vmFB8Z/SYw7moYI6IXG7Wo/dgF56Trw
+         ejzKKqRXFjmJR6WDnsbPjqaXm/vGpJYvvq/KUWoOYjxtFxuNsK33+2COPTBkkKxuG71c
+         vgeCmpn5hoC2yGrMTOWFiU4/RXNS9kuuceYp/esHIi5rpyqaO774cRNL4f1+QjWmfsI/
+         QdvGNWX2ZKOs1LDUBnD0Kb6uCak0cb3tvCPZVUzJ8ynjBkzbyFdMIafbnddl4QCQV9F0
+         g2krttnm4yuE1KepBv/KqpfitklYw5A9z0vh/4+11KdV5xSucI7jO5zSQL0HmpGbp7tZ
+         edsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXlyotClg7/sf7fEkPRg5xRZk8fcDSP17dKt3EOnWouJXA5wvH0ofs0bNVwvbEokLQjDUKC+p1aHYH6t4fo3E7reiGodZAaOO+maqn7
+X-Gm-Message-State: AOJu0Yy7Y9txRVr4GHK22sU4RlysNzIj5zSfX428nnBNiupgS5a2ND8f
+	bbZ6kAM18pD95qGH4vY24bO9Ljf++8QzKwoEPLEwcxdjD0hhay+x1kKYOw==
+X-Google-Smtp-Source: AGHT+IFS6oEOYSwIZhBzdGwoQ1u+EN/ku/VAdLPwmjM4kUmI2bQC7SB94xt23mOrM2UJ8qZOEx9Lpg==
+X-Received: by 2002:a05:620a:1aa1:b0:79e:ff18:b4f7 with SMTP id af79cd13be357-7a34efac0d2mr870086085a.50.1722700367328;
+        Sat, 03 Aug 2024 08:52:47 -0700 (PDT)
+Received: from localhost.localdomain (syn-104-229-042-148.res.spectrum.com. [104.229.42.148])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a34f798193sm184190385a.136.2024.08.03.08.52.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Aug 2024 08:52:46 -0700 (PDT)
+From: crwulff@gmail.com
+To: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
+	Perr Zhang <perr@usb7.net>,
+	Pavel Hofman <pavel.hofman@ivitera.com>,
+	linux-kernel@vger.kernel.org,
+	Chris Wulff <crwulff@gmail.com>
+Subject: [PATCH] usb: gadget: f_uac1: Change volume name and remove alt names
+Date: Sat,  3 Aug 2024 11:52:16 -0400
+Message-ID: <20240803155215.2746444-2-crwulff@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From: Eli Billauer <eli.billauer@gmail.com>
-Subject: Re: [PATCH] char: xillybus: Don't destroy workqueue from work item
- running on it
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: arnd@arndb.de, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240801121126.60183-1-eli.billauer@gmail.com>
- <2024080311-legwarmer-ricotta-d4fd@gregkh>
-Content-Language: en-US
-In-Reply-To: <2024080311-legwarmer-ricotta-d4fd@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 03/08/2024 9:56, Greg KH wrote:
-> What commit id does this fix?  Should it also go to stable kernels?
+From: Chris Wulff <crwulff@gmail.com>
 
-The bug was there from the very beginning. The fixed commit ID is 
-a53d1202aef1 ("char: xillybus: Add driver for XillyUSB (Xillybus variant 
-for USB)").
+This changes the UAPI to align with disussion of alt settings work.
 
-So yes, the fix is relevant for stable kernels as well.
+fu_name is renamed to fu_vol_name, and alt settings mode names
+are removed for now in favor of future work where they will be
+settable in subdirectories for each alt mode.
 
-Apologies for omitting the Fixes tag. I wasn't aware of it until now.
+Signed-off-by: Chris Wulff <crwulff@gmail.com>
+---
+discussion thread for api changes for alt mode settings:
+https://lore.kernel.org/linux-usb/35be4668-58d3-894a-72cf-de1afaacae45@ivitera.com/T/
+---
+ .../ABI/testing/configfs-usb-gadget-uac1      |  8 ++---
+ Documentation/usb/gadget-testing.rst          |  8 ++---
+ drivers/usb/gadget/function/f_uac1.c          | 36 +++++++------------
+ drivers/usb/gadget/function/u_uac1.h          |  8 ++---
+ 4 files changed, 18 insertions(+), 42 deletions(-)
 
-Thanks,
-    Eli
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac1 b/Documentation/ABI/testing/configfs-usb-gadget-uac1
+index cf93b98b274d..64188a85592b 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uac1
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uac1
+@@ -33,13 +33,9 @@ Description:
+ 		p_it_name		playback input terminal name
+ 		p_it_ch_name		playback channels name
+ 		p_ot_name		playback output terminal name
+-		p_fu_name		playback functional unit name
+-		p_alt0_name		playback alt mode 0 name
+-		p_alt1_name		playback alt mode 1 name
++		p_fu_vol_name		playback mute/volume functional unit name
+ 		c_it_name		capture input terminal name
+ 		c_it_ch_name		capture channels name
+ 		c_ot_name		capture output terminal name
+-		c_fu_name		capture functional unit name
+-		c_alt0_name		capture alt mode 0 name
+-		c_alt1_name		capture alt mode 1 name
++		c_fu_vol_name		capture mute/volume functional unit name
+ 		=====================	=======================================
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index a89b49e639c3..7a94490fb2fd 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -960,15 +960,11 @@ The uac1 function provides these attributes in its function directory:
+ 	p_it_name        playback input terminal name
+ 	p_it_ch_name     playback channels name
+ 	p_ot_name        playback output terminal name
+-	p_fu_name        playback functional unit name
+-	p_alt0_name      playback alt mode 0 name
+-	p_alt1_name      playback alt mode 1 name
++	p_fu_vol_name    playback mute/volume functional unit name
+ 	c_it_name        capture input terminal name
+ 	c_it_ch_name     capture channels name
+ 	c_ot_name        capture output terminal name
+-	c_fu_name        capture functional unit name
+-	c_alt0_name      capture alt mode 0 name
+-	c_alt1_name      capture alt mode 1 name
++	c_fu_vol_name    capture mute/volume functional unit name
+ 	================ ====================================================
+ 
+ The attributes have sane default values.
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 06a220fb7a87..bb36ce2be569 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -1254,16 +1254,16 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 	strings_uac1[STR_USB_OUT_IT].s = audio_opts->p_it_name;
+ 	strings_uac1[STR_USB_OUT_IT_CH_NAMES].s = audio_opts->p_it_ch_name;
+ 	strings_uac1[STR_IO_OUT_OT].s = audio_opts->p_ot_name;
+-	strings_uac1[STR_FU_OUT].s = audio_opts->p_fu_name;
+-	strings_uac1[STR_AS_OUT_IF_ALT0].s = audio_opts->p_alt0_name;
+-	strings_uac1[STR_AS_OUT_IF_ALT1].s = audio_opts->p_alt1_name;
++	strings_uac1[STR_FU_OUT].s = audio_opts->p_fu_vol_name;
++	strings_uac1[STR_AS_OUT_IF_ALT0].s = "Playback Inactive";
++	strings_uac1[STR_AS_OUT_IF_ALT1].s = "Playback Active";
+ 
+ 	strings_uac1[STR_IO_IN_IT].s = audio_opts->c_it_name;
+ 	strings_uac1[STR_IO_IN_IT_CH_NAMES].s = audio_opts->c_it_ch_name;
+ 	strings_uac1[STR_USB_IN_OT].s = audio_opts->c_ot_name;
+-	strings_uac1[STR_FU_IN].s = audio_opts->c_fu_name;
+-	strings_uac1[STR_AS_IN_IF_ALT0].s = audio_opts->c_alt0_name;
+-	strings_uac1[STR_AS_IN_IF_ALT1].s = audio_opts->c_alt1_name;
++	strings_uac1[STR_FU_IN].s = audio_opts->c_fu_vol_name;
++	strings_uac1[STR_AS_IN_IF_ALT0].s = "Capture Inactive";
++	strings_uac1[STR_AS_IN_IF_ALT1].s = "Capture Active";
+ 
+ 	us = usb_gstrings_attach(cdev, uac1_strings, ARRAY_SIZE(strings_uac1));
+ 	if (IS_ERR(us))
+@@ -1687,16 +1687,12 @@ UAC1_ATTRIBUTE_STRING(function_name);
+ UAC1_ATTRIBUTE_STRING(p_it_name);
+ UAC1_ATTRIBUTE_STRING(p_it_ch_name);
+ UAC1_ATTRIBUTE_STRING(p_ot_name);
+-UAC1_ATTRIBUTE_STRING(p_fu_name);
+-UAC1_ATTRIBUTE_STRING(p_alt0_name);
+-UAC1_ATTRIBUTE_STRING(p_alt1_name);
++UAC1_ATTRIBUTE_STRING(p_fu_vol_name);
+ 
+ UAC1_ATTRIBUTE_STRING(c_it_name);
+ UAC1_ATTRIBUTE_STRING(c_it_ch_name);
+ UAC1_ATTRIBUTE_STRING(c_ot_name);
+-UAC1_ATTRIBUTE_STRING(c_fu_name);
+-UAC1_ATTRIBUTE_STRING(c_alt0_name);
+-UAC1_ATTRIBUTE_STRING(c_alt1_name);
++UAC1_ATTRIBUTE_STRING(c_fu_vol_name);
+ 
+ static struct configfs_attribute *f_uac1_attrs[] = {
+ 	&f_uac1_opts_attr_c_chmask,
+@@ -1724,16 +1720,12 @@ static struct configfs_attribute *f_uac1_attrs[] = {
+ 	&f_uac1_opts_attr_p_it_name,
+ 	&f_uac1_opts_attr_p_it_ch_name,
+ 	&f_uac1_opts_attr_p_ot_name,
+-	&f_uac1_opts_attr_p_fu_name,
+-	&f_uac1_opts_attr_p_alt0_name,
+-	&f_uac1_opts_attr_p_alt1_name,
++	&f_uac1_opts_attr_p_fu_vol_name,
+ 
+ 	&f_uac1_opts_attr_c_it_name,
+ 	&f_uac1_opts_attr_c_it_ch_name,
+ 	&f_uac1_opts_attr_c_ot_name,
+-	&f_uac1_opts_attr_c_fu_name,
+-	&f_uac1_opts_attr_c_alt0_name,
+-	&f_uac1_opts_attr_c_alt1_name,
++	&f_uac1_opts_attr_c_fu_vol_name,
+ 
+ 	NULL,
+ };
+@@ -1792,16 +1784,12 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
+ 	scnprintf(opts->p_it_name, sizeof(opts->p_it_name), "Playback Input terminal");
+ 	scnprintf(opts->p_it_ch_name, sizeof(opts->p_it_ch_name), "Playback Channels");
+ 	scnprintf(opts->p_ot_name, sizeof(opts->p_ot_name), "Playback Output terminal");
+-	scnprintf(opts->p_fu_name, sizeof(opts->p_fu_name), "Playback Volume");
+-	scnprintf(opts->p_alt0_name, sizeof(opts->p_alt0_name), "Playback Inactive");
+-	scnprintf(opts->p_alt1_name, sizeof(opts->p_alt1_name), "Playback Active");
++	scnprintf(opts->p_fu_vol_name, sizeof(opts->p_fu_vol_name), "Playback Volume");
+ 
+ 	scnprintf(opts->c_it_name, sizeof(opts->c_it_name), "Capture Input terminal");
+ 	scnprintf(opts->c_it_ch_name, sizeof(opts->c_it_ch_name), "Capture Channels");
+ 	scnprintf(opts->c_ot_name, sizeof(opts->c_ot_name), "Capture Output terminal");
+-	scnprintf(opts->c_fu_name, sizeof(opts->c_fu_name), "Capture Volume");
+-	scnprintf(opts->c_alt0_name, sizeof(opts->c_alt0_name), "Capture Inactive");
+-	scnprintf(opts->c_alt1_name, sizeof(opts->c_alt1_name), "Capture Active");
++	scnprintf(opts->c_fu_vol_name, sizeof(opts->c_fu_vol_name), "Capture Volume");
+ 
+ 	return &opts->func_inst;
+ }
+diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
+index 67784de9782b..feb6eb76462f 100644
+--- a/drivers/usb/gadget/function/u_uac1.h
++++ b/drivers/usb/gadget/function/u_uac1.h
+@@ -57,16 +57,12 @@ struct f_uac1_opts {
+ 	char			p_it_name[USB_MAX_STRING_LEN];
+ 	char			p_it_ch_name[USB_MAX_STRING_LEN];
+ 	char			p_ot_name[USB_MAX_STRING_LEN];
+-	char			p_fu_name[USB_MAX_STRING_LEN];
+-	char			p_alt0_name[USB_MAX_STRING_LEN];
+-	char			p_alt1_name[USB_MAX_STRING_LEN];
++	char			p_fu_vol_name[USB_MAX_STRING_LEN];
+ 
+ 	char			c_it_name[USB_MAX_STRING_LEN];
+ 	char			c_it_ch_name[USB_MAX_STRING_LEN];
+ 	char			c_ot_name[USB_MAX_STRING_LEN];
+-	char			c_fu_name[USB_MAX_STRING_LEN];
+-	char			c_alt0_name[USB_MAX_STRING_LEN];
+-	char			c_alt1_name[USB_MAX_STRING_LEN];
++	char			c_fu_vol_name[USB_MAX_STRING_LEN];
+ 
+ 	struct mutex			lock;
+ 	int				refcnt;
+-- 
+2.43.0
+
 
