@@ -1,265 +1,156 @@
-Return-Path: <linux-usb+bounces-12932-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12933-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B165C946FC4
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 18:13:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF640946FEB
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 19:02:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 344E21F21304
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 16:13:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CD4D1F2144A
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 17:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D7D50269;
-	Sun,  4 Aug 2024 16:13:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16226BFA5;
+	Sun,  4 Aug 2024 17:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p/5p4RUH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0D4wKAgy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D819F1DFE8
-	for <linux-usb@vger.kernel.org>; Sun,  4 Aug 2024 16:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76D32AC29
+	for <linux-usb@vger.kernel.org>; Sun,  4 Aug 2024 17:02:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722788023; cv=none; b=KkOI+ZKMAZQHGj644vEHV6akG6ntE+8hehxiwXgs8uSseeHjSrOJDMhs4iP9aoNfXboO3aZYLWwc3HqgoVDm5R2PpATAxelhqB2lK4/W1TyMw5So7aHOsidtuW4QZYx7a4CZadiexwXFyCEtQqF+EQ11lnF4cKsLeLPrim88bGE=
+	t=1722790922; cv=none; b=MU35QLQaUYDJ8VqhUK3dvPC72Q/Z3uCBzRE8jPH6/VdkWNDfukTnNjNeTBWNttRmQ7xaWuDj3SEB/0Wd1Rci9MODaE47JC29n0Jj6KmA7rRInpi5kIgW2C7hSZyax4iRJhgVS8v31hW/uvdptWnRLFtXViyupi+H4j9iicDUEOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722788023; c=relaxed/simple;
-	bh=zCav4P04PzaVNPTcrP6X0WthzUIwL6ZygkpC+kiCuio=;
+	s=arc-20240116; t=1722790922; c=relaxed/simple;
+	bh=kpQlaEdhAW7vK2ragtpelAvJnomK5FZAbYvv0t68cZ8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OGCsP7WLZIej13V1Y1nYN9TC3AcpOwYDBL9zjYCvcbG4aFOae6la/cWEid8/H8IvzgofrNdkqKTsTU26LnGvJvyLCkywnQ8yvNy+fFreTaBkU0vfsPd4T0vgMKF8ReMBvZ8Kf9MlSW2pSLiQh9nQOE38jt/lf90JiaV75FYG7p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p/5p4RUH; arc=none smtp.client-ip=209.85.216.54
+	 To:Cc:Content-Type; b=bMUkHaDXDnyYaYxTsRwlkkm2vw+peDFbrM25HHo56ssLlyf5BbZskv12Y2uF3DSaplK+Z247H1b1R9S3N+qAEPxBBaBKd/fecPUKmq7q49Mw1sLom7vUbq4AfKiPLivrpd9xO72uf73LdBFz+U5X7QC6XJ0BgHlXr+f3hK+09+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0D4wKAgy; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2cb5787b4a5so6316419a91.2
-        for <linux-usb@vger.kernel.org>; Sun, 04 Aug 2024 09:13:41 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2cd2f89825fso6631659a91.1
+        for <linux-usb@vger.kernel.org>; Sun, 04 Aug 2024 10:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722788021; x=1723392821; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722790920; x=1723395720; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8yMZewbMifmbe0Qa3oRDl7x/yrBUgKL17MTl/9FiQ/U=;
-        b=p/5p4RUHfcMDXxfm/E2MKrjG7uaDjnM3QirMyutqQ6aRLm5DsttTG7DmqC0GuWMHEW
-         7c4ifcxxwJxDb0LqznT7qBI18gigUOcROumBSoYIWst/0jURkfy6uvfXaQxXNtAGAtnA
-         OHpUPY67c0P90PagwppA7uSEEf6fQAJPNOc6BSUetk51Y+aKPkxDohsjDwPccyrJ4BxY
-         7ZUTTo//j/suIll58MNQDjUBV+aqtMthkehE39Uao3Tn2oR6FXxGmH7pfn/SK2/9y6lR
-         weF5ZGFp1q+ySK7K5/3pfgRc4hZzUN6uoLq81U7bZHMAff2Mdg357+u0X0wvfRD7a1uY
-         gCkA==
+        bh=Pyg7jDsFcnKSN08nIcoqB8ycLlfubfs0gLDzgt2d1jE=;
+        b=0D4wKAgy0GCGlYj/u1hbpP/FQ+wttWaKuASqGNjG5Psa+2TnATrzmgbzCdDoqp7kpZ
+         6vkFUs0mffuwMTEPr0L5CjvixiSnGoXuVRKh/sB3BB7XhrWbUeSmvQnsFNTBpFnoZngV
+         4PoF/ZM8AsNcMdODXNf20cHvUWrSXOCFxhETuhUo7hWk4WF98xJ1XpjwZYaGZXwH577/
+         5dtmSpC/p5LsiXxNTfdlDYoMX0oUHzXx0pF1gGutpbCVUQiIN5GA2PFBZMOowhl4wEg/
+         TgLn/sDrYq2EpuoPQjvPwk//42KSpIr4sprQnKRJN8XHG84bLxHoRP48PSwj7xMBsot9
+         e2ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722788021; x=1723392821;
+        d=1e100.net; s=20230601; t=1722790920; x=1723395720;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8yMZewbMifmbe0Qa3oRDl7x/yrBUgKL17MTl/9FiQ/U=;
-        b=XsAEKvkf33E4GEkra/OLkm5vL0OKWASTBnI0wejHU6GHqk80w3FtzLitcZEnFJUqH6
-         Tgg3GcM+fWM1FrD5f6NhTeEIuCxXxnt0jYGdIsMMB8Xzu18hjmc9v5NI2GQtbkZOW6zu
-         YG8k4OgCaAdnLFP52VZ4gXe/uynuKSQ6TYFCr0B7aJpkBcJKt3ZkhCzhH/XVlQ8vX0pe
-         Rq11kL93+5uAUDVL2pjg3+UUrMHA7r+yZXIb5FZmKGW3XhyPMLhAPPdYW1Yszzi9DH/q
-         cIG5YtpNrCGlNOkGUKpZlthVa7nLz9rZQyvBW1djToidRBJZoyNbsBsD29bwCU47fiWW
-         QHVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVX6nnMhfkEp4SUQO+yHJwoyGea2MNokHPf/3irD4EHVZAhESW7fj3lbY4LJqacbgdkvLnyxbNx+Yt7NDXdSZKfkmJGh5IxX2ZP
-X-Gm-Message-State: AOJu0Yx/tmiYgRiHfsRxQISVmcn42M0RpHGIoV/03rR+8YKXTiSPwvD2
-	S0SuWA5AF0H/7CWKBr5zbdJvAZ7Jw2oD6r2Jn4er5Ru5ZAw8zjeXtEsGkUsTKwTnEftP3RFkTUE
-	Zuh3+WLUpuVSPD+Cd61Y0YY7cYE8kAmGt4Ted
-X-Google-Smtp-Source: AGHT+IGPofaSNk6aSPLiL/tJCLTIXHoHy/UIkcJ/HiY2qCTBrKYHhpac7S76LIb8WeaPrxsNMe4b5Td3KVsxcZR3Skw=
-X-Received: by 2002:a17:90a:a784:b0:2cd:3331:ebc7 with SMTP id
- 98e67ed59e1d1-2cff93db999mr8180884a91.2.1722788020742; Sun, 04 Aug 2024
- 09:13:40 -0700 (PDT)
+        bh=Pyg7jDsFcnKSN08nIcoqB8ycLlfubfs0gLDzgt2d1jE=;
+        b=H23zfNIoWWT8yiOkuxqs5n+RlXj1WpL7KmErPkLrH3FcxlZBVjfPEofsDBCqN8wPul
+         NrZU5XTXy9QJs5j7W8HeC/IFyGYuwdbwu2LA+tzuAqajk+WXsDkmkPIhNeujcXbKcoVe
+         dZHiwipmHbnXhK3Uwbgr5+V7uHjbsZyji1tO4UJiAMcnVBaJQR5n/s28HWpgcHWyQQdY
+         z/LxAffjAGu14eQEjX2BrAMOkXHTiD2wC3sVPGyaXQbat83eReW5DZJq13uZF899J4/k
+         9fTNlDnKXa1LUJHhKPIl5Rbwcoq80t0Hb2gcCA7nhBgCUDbsHAGqtzMSWFhKrcDGYRIb
+         aIvg==
+X-Forwarded-Encrypted: i=1; AJvYcCU02YFOYkNj9YTUt8F1VMRLVkSNh/beiEOgrTpFL5/jGl4OJqEvq9hPE4TOGicWubygvFFoyE2m+G8NMOTliQ28dd43q4V/G4+S
+X-Gm-Message-State: AOJu0YzzteYoyyPMF5RMPFQ8m+MuGL3HFaLMNJNJfEgsxdFTpwWKCOda
+	vOIqzkBc1l2kY1RbSilFaMovIJBH+MsgyPKQLS7UlxJnWstKhFECcekGUmqoTU6tsDOMnttIVdF
+	0WkB7UIIRH5WDh5R0F8Qt8W63NSN5Bty27Psh
+X-Google-Smtp-Source: AGHT+IG2LqNbcRbg55j/WaygkTsf3QKobNF91cU62zTQA4AWUL9aEIDR4n3Ue6ihWo4DJ9n0K7R2IwfrdFEzsMhFxC4=
+X-Received: by 2002:a17:90a:714b:b0:2c9:74f2:3b24 with SMTP id
+ 98e67ed59e1d1-2cff94142f7mr8483195a91.12.1722790919752; Sun, 04 Aug 2024
+ 10:01:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240710-max33359-toggling-v1-1-f6dc123f3a0a@linaro.org> <ZqtIztzIS/M+duYT@kuha.fi.intel.com>
-In-Reply-To: <ZqtIztzIS/M+duYT@kuha.fi.intel.com>
+References: <20240802064156.1846768-1-xu.yang_2@nxp.com> <qo452qwsquqfumcsvlczotdjvyqu2y6itufglldxrlxjv3ganm@6rvhfye7mobv>
+In-Reply-To: <qo452qwsquqfumcsvlczotdjvyqu2y6itufglldxrlxjv3ganm@6rvhfye7mobv>
 From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Sun, 4 Aug 2024 09:13:03 -0700
-Message-ID: <CAPTae5KNQUk2_x_P+i+M+KQvFxu9uugBD=jcLwdMj3sHUmfWzA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm/tcpci_maxim: fix non-contaminant CC handling
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Peter Griffin <peter.griffin@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, 
-	kernel-team@android.com, RD Babiera <rdbabiera@google.com>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Sun, 4 Aug 2024 10:01:22 -0700
+Message-ID: <CAPTae5LAwsVugb0dxuKLHFqncjeZeJ785nkY4Jfd+M-tCjHSnQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: avoid sink goto SNK_UNATTACHED state if
+ not received source capability message
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org, rdbabiera@google.com, linux@roeck-us.net, 
+	kyletso@google.com, linux-usb@vger.kernel.org, imx@lists.linux.dev, 
+	jun.li@nxp.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 1, 2024 at 1:35=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Fri, Aug 2, 2024 at 8:43=E2=80=AFAM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 >
-> Hi Andr=C3=A9,
+> Hi,
 >
-> On Wed, Jul 10, 2024 at 07:28:32AM +0100, Andr=C3=A9 Draszik wrote:
-> > tcpci_maxim currently never triggers the TCPM state machine when CC
-> > status has not changed due to a contaminant but due to a real
-> > connection event, i.e. a genuine plug event, meaning the system will
-> > stay idle and not notify any subscribers.
+> On Fri, Aug 02, 2024 at 02:41:56PM GMT, Xu Yang wrote:
+> > Since commit (122968f8dda8 usb: typec: tcpm: avoid resets for missing
+> > source capability messages), state will change from SNK_WAIT_CAPABILITI=
+ES
+> > to SNK_WAIT_CAPABILITIES_TIMEOUT. We need to change SNK_WAIT_CAPABILITI=
+ES
+> > -> SNK_READY path to SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_READY
+> > accordingly. Otherwise, the sink port will never change to SNK_READY st=
+ate
+> > if the source does't have PD capability.
 > >
-> > The reason is that the initial state of the port is 'toggling', which
-> > causes _max_tcpci_irq() to only drive the contamination part of the
-> > TCPM state machine (via tcpm_port_clean()).
+> > [  503.547183] pending state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_C=
+APABILITIES_TIMEOUT @ 310 ms [rev3 NONE_AMS]
+> > [  503.857239] state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILIT=
+IES_TIMEOUT [delayed 310 ms]
+> > [  503.857254] PD TX, header: 0x87
+> > [  503.862440] PD TX complete, status: 2
+> > [  503.862484] state change SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_UNATTA=
+CHED [rev3 NONE_AMS]
 > >
-> > What should happen instead is that if no contamination was detected,
-> > the TCPM should be notified of the CC change in this case.
-> >
-> > To fix this, we update ...is_contaminant() to also allow its caller to
-> > determine if more CC processing is required and then call into the TCPM
-> > as required.
-> >
-> > While at it, add a kernel-doc for max_contaminant_is_contaminant().
-> >
-> > Note: the code has an issue where I2C errors during contaminant
-> > detection also cause the TCPM state machine to not be updated. This
-> > commit doesn't change this behaviour and should be addressed by
-> > follow-up commit(s).
->
-> This looks okay to me, but just in case, let's wait for comments from
-> Badhri, or maybe RD can take a look at this. One nitpick below.
->
-> > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+> > Fixes: 122968f8dda8 ("usb: typec: tcpm: avoid resets for missing source=
+ capability messages")
+
+This patch looks OK. However, the original patch 122968f8dda8 might be
+regressing compliance
+(https://www.usb.org/document-library/usb-power-delivery-compliance-test-sp=
+ecification-0)
+behavior.
+Will send a follow up patch if we notice any.
+
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > > ---
-> >  drivers/usb/typec/tcpm/maxim_contaminant.c |  7 +++++--
-> >  drivers/usb/typec/tcpm/tcpci_maxim.h       | 15 ++++++++++++++-
-> >  drivers/usb/typec/tcpm/tcpci_maxim_core.c  | 12 ++++++++----
-> >  3 files changed, 27 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/t=
-ypec/tcpm/maxim_contaminant.c
-> > index f8504a90da26..e7fa3e36f8ae 100644
-> > --- a/drivers/usb/typec/tcpm/maxim_contaminant.c
-> > +++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> > @@ -322,11 +322,14 @@ static int max_contaminant_enable_dry_detection(s=
-truct max_tcpci_chip *chip)
-> >       return 0;
-> >  }
-> >
-> > -bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool =
-disconnect_while_debounce)
-> > +bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool =
-disconnect_while_debounce,
-> > +                                 bool *cc_handled)
-> >  {
-> >       u8 cc_status, pwr_cntl;
-> >       int ret;
-> >
-> > +     *cc_handled =3D true;
-> > +
-> >       ret =3D max_tcpci_read8(chip, TCPC_CC_STATUS, &cc_status);
-> >       if (ret < 0)
-> >               return false;
-> > @@ -368,7 +371,6 @@ bool max_contaminant_is_contaminant(struct max_tcpc=
-i_chip *chip, bool disconnect
-> >                               return true;
-> >                       }
-> >               }
-> > -             return false;
-> >       } else if (chip->contaminant_state =3D=3D DETECTED) {
-> >               if (STATUS_CHECK(cc_status, TCPC_CC_STATUS_TOGGLING, 0)) =
-{
-> >                       chip->contaminant_state =3D max_contaminant_detec=
-t_contaminant(chip);
-> > @@ -379,6 +381,7 @@ bool max_contaminant_is_contaminant(struct max_tcpc=
-i_chip *chip, bool disconnect
-> >               }
-> >       }
-> >
-> > +     *cc_handled =3D false;
-> >       return false;
-> >  }
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/t=
-cpm/tcpci_maxim.h
-> > index 78ff3b73ee7e..9c7f714d2c21 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-> > +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> > @@ -85,6 +85,19 @@ static inline int max_tcpci_write8(struct max_tcpci_=
-chip *chip, unsigned int reg
-> >       return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8))=
-;
-> >  }
-> >
-> > -bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool =
-disconnect_while_debounce);
-> > +/**
-> > + * max_contaminant_is_contaminant - Test if CC was toggled due to cont=
-aminant
-> > + *
-> > + * @chip: Handle to a struct max_tcpci_chip
-> > + * @disconnect_while_debounce: Whether or not to sleep as debouncing m=
-easure
-
-The description should rather be "Whether the disconnect was detected
-when CC pins were debouncing".
-
-> > + * @cc_handled: Returns whether or not CC toggling was handled here
-
-Can we name it cc_update_handled  and update the description to
-"Returns whether or not update to CC status was handled here" as it
-more accurately describes what you are doing here.
-
-> > + *
-> > + * Determine if a contaminant was detected.
-> > + *
-> > + * Returns: true if a contaminant was detected, false otherwise. cc_ha=
-ndled
-> > + * is updated to reflect whether or not further CC handling is require=
-d.
-> > + */
-> > +bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool =
-disconnect_while_debounce,
-> > +                                 bool *cc_handled);
-> >
-> >  #endif  // TCPCI_MAXIM_H_
-> > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/ty=
-pec/tcpm/tcpci_maxim_core.c
-> > index eec3bcec119c..55d931672ecd 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> > @@ -357,12 +357,15 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpc=
-i_chip *chip, u16 status)
-> >               tcpm_vbus_change(chip->port);
-> >
-> >       if (status & TCPC_ALERT_CC_STATUS) {
-> > +             bool cc_handled =3D false; /* CC toggle handled by contam=
-inant detection */
-> > +
-> >               if (chip->contaminant_state =3D=3D DETECTED || tcpm_port_=
-is_toggling(chip->port)) {
-> > -                     if (!max_contaminant_is_contaminant(chip, false))
-> > +                     if (!max_contaminant_is_contaminant(chip, false,
-> > +                                                         &cc_handled))
 >
-> One line is enough for that.
->
-> >                               tcpm_port_clean(chip->port);
-> > -             } else {
-> > -                     tcpm_cc_change(chip->port);
-> >               }
-> > +             if (!cc_handled)
-> > +                     tcpm_cc_change(chip->port);
-> >       }
-> >
-> >       if (status & TCPC_ALERT_POWER_STATUS)
-> > @@ -455,8 +458,9 @@ static int tcpci_init(struct tcpci *tcpci, struct t=
-cpci_data *data)
-> >  static void max_tcpci_check_contaminant(struct tcpci *tcpci, struct tc=
-pci_data *tdata)
-> >  {
-> >       struct max_tcpci_chip *chip =3D tdata_to_max_tcpci(tdata);
-> > +     bool cc_handled;
-> >
-> > -     if (!max_contaminant_is_contaminant(chip, true))
-> > +     if (!max_contaminant_is_contaminant(chip, true, &cc_handled))
-> >               tcpm_port_clean(chip->port);
-> >  }
->
-> thanks,
->
-> --
-> heikki
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Thanks,
-Badhri
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+
+>
+> -- Sebastian
+>
+> >  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcp=
+m.c
+> > index 26f9006e95e1..cce39818e99a 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -4515,7 +4515,7 @@ static inline enum tcpm_state hard_reset_state(st=
+ruct tcpm_port *port)
+> >               return ERROR_RECOVERY;
+> >       if (port->pwr_role =3D=3D TYPEC_SOURCE)
+> >               return SRC_UNATTACHED;
+> > -     if (port->state =3D=3D SNK_WAIT_CAPABILITIES)
+> > +     if (port->state =3D=3D SNK_WAIT_CAPABILITIES_TIMEOUT)
+> >               return SNK_READY;
+> >       return SNK_UNATTACHED;
+> >  }
+> > --
+> > 2.34.1
+> >
 
