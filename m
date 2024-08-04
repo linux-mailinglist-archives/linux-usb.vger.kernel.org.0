@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-12928-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12929-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E87E946F42
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 16:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 60DA7946F45
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 16:17:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B67501F21635
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 14:16:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C15C1F21B1A
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 14:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F8574D8B9;
-	Sun,  4 Aug 2024 14:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ABD44F881;
+	Sun,  4 Aug 2024 14:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqtjtW/f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G6p0KwNr"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A39C1CA9F;
-	Sun,  4 Aug 2024 14:16:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB2E1CA9F;
+	Sun,  4 Aug 2024 14:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722781004; cv=none; b=GKcQ/77X1fRiJG5v7c+o6wBeOwdb2x6GXvb3VhACK5Pb50cZ74h9hQelRgbe7cP6LgWdy2iuklxowG7RhFZ7Mc2eFQVHVaxzLLCi6Qf6W9/hA7ff8cdE3wVegbW9hsOd8ezD7jd4tqERIikBnpW4zyBUjRjkflMsZcs0rjxW8Zg=
+	t=1722781038; cv=none; b=LsLxK9ZFXhvCQz4+BNsLGXcuuwiE5h0ziFWF/HqnePYfKFgq7vw1wIHUP9811OrvZdrIz9m6kWcmukKwSBUIwhaBoH8PMwawLmieMnhV9ZxWF4hWV1PHIQ4bIMbQbI04kCCHRvhi72/qGZauHxVUHE2yw8IpuYTz8l9LjAHYi5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722781004; c=relaxed/simple;
-	bh=+yrDRlrOYDFtWrAPd7APp27cogwl15HKJx4AENWPh9U=;
+	s=arc-20240116; t=1722781038; c=relaxed/simple;
+	bh=5L15IZLezpo71+FrtTDwECzrZ/wJ7q95MB/hD53PSDI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rcvPPcoYv1PUsIsVvfr6F1WPSTF485T4fGix71ZX9eGP8EH2gQNsOlt3o/EfCgYCy7oQXbQ1ux8yhpUyixqYK4NSNNzB6Mu+811BEndcn5V7QVNd+81el026avqRMHAmi0BAZYR5uB+0A9rUteO92ssBJua3+fbDOnHioOsD6nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqtjtW/f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E6FC32786;
-	Sun,  4 Aug 2024 14:16:36 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ozdpH3mk+64Aqo3TZSQ/neRrX7ddC1VtdUPpYEWIeEWfzZaqWKhS2cUad2GaEh+IVqaDl7nma1ByKppsoIA+pWbJnexjWjpupIxWfxWLbEzShOgi0DvDhMvlti5IKOcshD3ajzCVVdPjocWE0YLMjNkojYhqIV8we7NyhNDhZl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G6p0KwNr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 395ABC32786;
+	Sun,  4 Aug 2024 14:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722781003;
-	bh=+yrDRlrOYDFtWrAPd7APp27cogwl15HKJx4AENWPh9U=;
+	s=k20201202; t=1722781038;
+	bh=5L15IZLezpo71+FrtTDwECzrZ/wJ7q95MB/hD53PSDI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CqtjtW/fYJtZKbWrdXYbDbVDA70a1eRNhXn3bCZSu6bEO1KOlT0aXmBq5pfX/aRQp
-	 hQxJnUaLu9fzFY506j5P0ZDrv6VKIX52OeKXrmW+x7i/bMXg2el2i1AnXBRgPjKGNn
-	 pjQWAuZZrYrXzUk73aJLDbbilYHoYKq+WjdRUJIK9pGcLC1Kox61a4Q2Z3BfiPNw54
-	 1iFbAx+OMD2rFTWVsyzWDoQiJ/22tmAX19hk0gorvKq2O77KB6mjhEIklw+VTLyO4o
-	 zN2+ygG9auqOwS37118DfQE3axh68aIRRjmOcGmdkhQkQdYhi1L7ixmnAyhQPu78RU
-	 pM3OwpylLRbmA==
-Message-ID: <21557eac-44f0-451d-a194-c5d545cacbee@kernel.org>
-Date: Sun, 4 Aug 2024 16:16:34 +0200
+	b=G6p0KwNr080Q1JRpIazlx9cqz7LAZ+zQV17Lx8jzTrfjxVO6e1x/Qo7Hblx6zQjKs
+	 0TAdJcHA4Rq3TldPoEYgnU6xLzK9WaVl/B/oIS6OFuXyw6fFpzzsnaz+El+uTQcYex
+	 WA7eR3WfsO76u4+yKM3Ipw6Cg5pUsL1D/pey0gDV+UhAsUz0/C+RbHhSNqHG/hA85y
+	 D9FmgmmeZMMq4q/3e443h8srzLb0Or8VhfcJobLKg6AY+eVb6umfIX/WBec2bsEhvW
+	 dqQ48BSiDE40VuvDZhxhn8nOA/i0Fj0F+hakT8XYELAD2x4PGviFfusNjkNWpLy9+N
+	 v+dJsUxr4W+Cw==
+Message-ID: <a7ba4577-40e8-46d5-bde2-442e7100dc9b@kernel.org>
+Date: Sun, 4 Aug 2024 16:17:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: phy: imx8mq-usb: add compatible
- "fsl,imx95-usb-phy"
+Subject: Re: [PATCH 2/5] dt-bindings: usb: dwc3-imx8mp: add compatible string
+ for imx95
 To: Xu Yang <xu.yang_2@nxp.com>, vkoul@kernel.org, kishon@kernel.org,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
@@ -62,6 +62,7 @@ Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
  imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
  linux-usb@vger.kernel.org
 References: <20240802091702.2057294-1-xu.yang_2@nxp.com>
+ <20240802091702.2057294-2-xu.yang_2@nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,91 +108,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240802091702.2057294-1-xu.yang_2@nxp.com>
+In-Reply-To: <20240802091702.2057294-2-xu.yang_2@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/08/2024 11:16, Xu Yang wrote:
-> The usb phy in i.MX95 is compatible with i.MX8MP's, this will add a
-> compatible "fsl,imx95-usb-phy" for i.MX95. Also change reg maxItems
-> to 2 since i.MX95 needs another regmap to control Type-C Assist (TCA)
-> block. Since i.MX95 usb phy is able to switch SS lanes, this will also
-> add orientation-switch and port property to the file.
+> The i.MX95 is compatible with i.MX8MP's usb controller. This will add a
+> compatible string "fsl,imx95-dwc3" for i.MX95.
 > 
 > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > ---
->  .../bindings/phy/fsl,imx8mq-usb-phy.yaml      | 40 +++++++++++++++++--
->  1 file changed, 36 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
-> index dc3a3f709fea..b0a614a9556d 100644
-> --- a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
-> @@ -11,12 +11,17 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - fsl,imx8mq-usb-phy
-> -      - fsl,imx8mp-usb-phy
-> +    oneOf:
-> +      - enum:
-> +          - fsl,imx8mq-usb-phy
-> +          - fsl,imx8mp-usb-phy
-> +      - items:
-> +          - const: fsl,imx95-usb-phy
-> +          - const: fsl,imx8mp-usb-phy
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->  
->    "#phy-cells":
->      const: 0
-> @@ -28,6 +33,17 @@ properties:
->      items:
->        - const: phy
->  
-> +  orientation-switch:
-> +    description:
-> +      Flag the PHY as possible handler of USB Type-C orientation switching
-
-No need to duplicate definitions of properties.
-
-> +    type: boolean
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      A port node to link the PHY to a TypeC controller for the purpose of
-> +      handling orientation switching.
-
-Same here. You probably miss reference to usb-switch.
-
-> +
->    power-domains:
->      maxItems: 1
->  
-> @@ -89,6 +105,22 @@ required:
->    - clocks
->    - clock-names
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - fsl,imx95-usb-phy
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-
-list and describe the items here, instead.
 
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
 Krzysztof
 
 
