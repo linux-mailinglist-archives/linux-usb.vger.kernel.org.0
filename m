@@ -1,285 +1,176 @@
-Return-Path: <linux-usb+bounces-12919-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12920-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AB93946B91
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 02:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BAF64946CA9
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 08:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39A7928214A
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 00:30:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 757B62824C8
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 06:17:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97EE53D69;
-	Sun,  4 Aug 2024 00:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="czSPOoqs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDFDF21103;
+	Sun,  4 Aug 2024 06:16:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D05A3D;
-	Sun,  4 Aug 2024 00:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8985010A3D
+	for <linux-usb@vger.kernel.org>; Sun,  4 Aug 2024 06:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722731402; cv=none; b=aAJDgQjb7aTEQ2EtvKIlEXA3cJVMt3VDgs70nOq26JtDzy02rIUkpVNdYbIwmPLozSEbEX0F7lhHKgV0LvJgmdeqACaU9RrhvJd6vHUh9+NmFfWGFSPz9ZbE8p0XrVFpzLeTh0sA5hPTYxcPFHsAI9U9fvvhvYEqn3NRRMKf5+I=
+	t=1722752184; cv=none; b=A414uYNgsoELUiJRj1rH38MZiYuj6dbiP7DUyGBnxdrX3nAb5D3KpiB3GaRkQI+bFAGfHu3mEY8YRHs3X9swCzE+8573QQdkDPQTjT/vP1DPuauWzhqNh+RRi8NfJxpG6k7tsBfn4CPdVGWfTFZYSzv/UXh27DSewwrZ3Wg3g50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722731402; c=relaxed/simple;
-	bh=QZP6fXatbjy0UA+pBTY8AjBzO08DWSXSVlfbpZOen6o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HSILkDLLffI96dev5HCKgw+5TSOZI5WqW66QZ/e+DpIPZyLKUYbd2+4l2l79IwQKdQk90NcjnRlziz/CYIDrMYEebXk6VAXdCc9pwTaztgYJjtfrx+qfF33uV1nM7HG6fIaNOx/Ujey3ect6LmGLWv0FNg0IFJ2ThJlBHWQQIrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=czSPOoqs; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6b797234b09so39610366d6.0;
-        Sat, 03 Aug 2024 17:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722731399; x=1723336199; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7psPIO64HcfKCFgvdxP3NwRKcQSQNJW1hN8CEMUfmPo=;
-        b=czSPOoqsQphhNcCssxPm62jmTemdQOBlaxQXaytzpBQJI1s5pjZJxRJcRbZztEIA0L
-         ffItluZrIcUWlpFA7YivADERAt8G/7m66FUtb3Dzq60zO5DT0vck564McQ2JSXHYTwk4
-         i2ejTJg+MP9n6Vi3W++u9UGXQEJyufptSlSKkiUDghGtGJV3v5ZTZG6/p+HKwfVFUVpe
-         NuvwaAM0ybyrsAYPS2t8rlmGIv15YlWtV85Q7HkosphWB9EN8lyg1k+52I80myzcPHPW
-         cJCf9d7+IjCg9mhbOAmwSqthh5MUGoNOuWcq1jJvSiKyGBTwrBxl6an3QRSCJsZeEXUA
-         BjaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722731399; x=1723336199;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7psPIO64HcfKCFgvdxP3NwRKcQSQNJW1hN8CEMUfmPo=;
-        b=nuHH8DdBMlyhNjknXj+nN9SjUHVspzVB3latIMUj6Vy29K+0AyMiCKUpPHf2ZgHwEM
-         aM6NuKyCA2wRs/YZFQ8/d+PQK3qIoqjjvBstLmARMeGbdIuRe906s+jyM/JOJmpMIEfV
-         vR7ngxROKv2SGw3Cd40vnoUWRTtshbSHkIdbgMrt/SFzU4ggCc1ECg3TFVXjU+1UReJk
-         5rRA1F3A2Om0oFPC7LS2SPjQkvBhaQUvhltCPr3A3joqpgBCbK69okz45Z9S0J+9t6Rs
-         0fXW/wdVlDd4x7Abm0Ekx14EBBNhWZgjhWxFJSKQvSbtADQJ8QUax2f7nYkQKgz7anZ1
-         RQAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXvQ+UYG22D1v2h/GmerC0Uh4VQXMF4TJyaUl6m8MPwIbT36q4RvD86TBj2qVFIz1cJyKyekkZyGqCSbYV/uigu8f1I6QDLFO7dMAuS
-X-Gm-Message-State: AOJu0Yw7oXHlYvKw2v9z8U9WxUJM+DYMHv5y9MeQ3byeBghoAOBWoH7Q
-	bM+NjvH9DLIx/8BR25FbxeA8A1fxgpTpML37vTSWonoDipXPglywqYED9g==
-X-Google-Smtp-Source: AGHT+IFvfxta/3TaaA37SRbHufoPJhiqMRhgFWO0leCBV5bwI56yi237WDEiF9/yU67iQPDEUt4IBw==
-X-Received: by 2002:ad4:46d9:0:b0:6b7:923c:e0b7 with SMTP id 6a1803df08f44-6bb91e7112cmr176340936d6.21.1722731398882;
-        Sat, 03 Aug 2024 17:29:58 -0700 (PDT)
-Received: from localhost.localdomain (syn-104-229-042-148.res.spectrum.com. [104.229.42.148])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bb9c761595sm20857486d6.10.2024.08.03.17.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Aug 2024 17:29:58 -0700 (PDT)
-From: crwulff@gmail.com
-To: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lee Jones <lee@kernel.org>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Perr Zhang <perr@usb7.net>,
-	Pavel Hofman <pavel.hofman@ivitera.com>,
-	linux-kernel@vger.kernel.org,
-	Chris Wulff <crwulff@gmail.com>
-Subject: [PATCH v3] usb: gadget: f_uac1: Change volume name and remove alt names
-Date: Sat,  3 Aug 2024 20:29:13 -0400
-Message-ID: <20240804002912.3293177-2-crwulff@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1722752184; c=relaxed/simple;
+	bh=W6zvdBGcaX5upb1CxEHNRU8rYoZhXOPqYwX/SYt3AXg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=kvITxd00g0gahtpxwzzBpM4HU6+vYxWlzCqUuVBiNUd4d51+Kwfupvc1z64FzjIMcvG/zLR+UxaRWzn29Glx3fymiu+dzHiNBdQ8uqYmOzY4pcOyuDpCdpwdgj7tTFe/RYgQ5DP2V+TvTZJDGzsmIPbFbv/BGkQQO3cZbCIYYOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com; spf=pass smtp.mailfrom=radxa.com; arc=none smtp.client-ip=18.194.254.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=radxa.com
+X-QQ-mid: bizesmtpsz8t1722752152tbn106l
+X-QQ-Originating-IP: GASrj9PFvOM7QcwKRD17RmxCl/ADsoFLy8gwvnORosc=
+Received: from [192.168.2.20] ( [183.15.206.190])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Sun, 04 Aug 2024 14:15:50 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 9749360959036494741
+Message-ID: <42534B0B4B3429F6+e90a78ec-66c1-4688-ac01-ccd465f17c34@radxa.com>
+Date: Sun, 4 Aug 2024 14:15:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: serial: option: add MeiG Smart SRM825L
+To: Lars Melin <larsm17@gmail.com>
+References: <0041DFA5200EFB1B+20240803074619.563116-1-yt@radxa.com>
+ <4333b4d0-281f-439d-9944-5570cbc4971d@gmail.com>
+Content-Language: en-US
+From: ZHANG Yuntian <yt@radxa.com>
+Organization: Radxa Computer Co., Ltd
+Cc: linux-usb@vger.kernel.org
+In-Reply-To: <4333b4d0-281f-439d-9944-5570cbc4971d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpsz:radxa.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-From: Chris Wulff <crwulff@gmail.com>
+Hi Lars,
 
-This changes the UAPI to align with disussion of alt settings work.
+On 2024/8/3 19:49, Lars Melin wrote:
+> On 2024-08-03 14:46, ZHANG Yuntian wrote:
+>> Add support for MeiG Smart SRM825L which is based on Qualcomm 315 chip.
+>>
+>> T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+>> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+>> P:  Vendor=2dee ProdID=4d22 Rev= 4.14
+>> S:  Manufacturer=MEIG
+>> S:  Product=LTE-A Module
+>> S:  SerialNumber=6f345e48
+>> C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=896mA
+>> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+>> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+>> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+>> E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+>> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+>> E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+>> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+>> E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+>> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+>> E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+>> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+>>
+> 
+> That ProdID is already used by MeiG SR815 which has the same composition 
+> but different Protocol values.
+> Is MeiG really that short of ProductID's that they have to cannibalize 
+> on an already used one?
 
-fu_name is renamed to fu_vol_name, and alt settings mode names
-are removed for now in favor of future work where they will be
-settable in subdirectories for each alt mode.
+Unfortunately I think this is the case. In fact, my initial research is 
+actually based on this SRM815 discussion thread:
 
-discussion thread for api changes for alt mode settings:
-https://lore.kernel.org/linux-usb/35be4668-58d3-894a-72cf-de1afaacae45@ivitera.com/T/
+https://whrl.pl/Rgk1Lv
 
-Signed-off-by: Chris Wulff <crwulff@gmail.com>
----
-v3: Corrected semantics of c_/p_ strings to match other c_/p_ settings.
-v2: Moved discussion thread tidbit into commit message
-https://lore.kernel.org/all/20240803232722.3220995-2-crwulff@gmail.com/
-v1: https://lore.kernel.org/all/20240803155215.2746444-2-crwulff@gmail.com/
----
- .../ABI/testing/configfs-usb-gadget-uac1      |  8 +--
- Documentation/usb/gadget-testing.rst          |  8 +--
- drivers/usb/gadget/function/f_uac1.c          | 64 ++++++++-----------
- drivers/usb/gadget/function/u_uac1.h          |  8 +--
- 4 files changed, 32 insertions(+), 56 deletions(-)
+I'm currently using this exact command sequence (supposedly for SRM815) 
+on my OpenWrt router to get the card working. The patch is separately 
+tested on a ROCK 4SE since it is easier for me to build Debian kernel 
+than OpenWrt kernel.
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac1 b/Documentation/ABI/testing/configfs-usb-gadget-uac1
-index cf93b98b274d..64188a85592b 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uac1
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uac1
-@@ -33,13 +33,9 @@ Description:
- 		p_it_name		playback input terminal name
- 		p_it_ch_name		playback channels name
- 		p_ot_name		playback output terminal name
--		p_fu_name		playback functional unit name
--		p_alt0_name		playback alt mode 0 name
--		p_alt1_name		playback alt mode 1 name
-+		p_fu_vol_name		playback mute/volume functional unit name
- 		c_it_name		capture input terminal name
- 		c_it_ch_name		capture channels name
- 		c_ot_name		capture output terminal name
--		c_fu_name		capture functional unit name
--		c_alt0_name		capture alt mode 0 name
--		c_alt1_name		capture alt mode 1 name
-+		c_fu_vol_name		capture mute/volume functional unit name
- 		=====================	=======================================
-diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index a89b49e639c3..7a94490fb2fd 100644
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -960,15 +960,11 @@ The uac1 function provides these attributes in its function directory:
- 	p_it_name        playback input terminal name
- 	p_it_ch_name     playback channels name
- 	p_ot_name        playback output terminal name
--	p_fu_name        playback functional unit name
--	p_alt0_name      playback alt mode 0 name
--	p_alt1_name      playback alt mode 1 name
-+	p_fu_vol_name    playback mute/volume functional unit name
- 	c_it_name        capture input terminal name
- 	c_it_ch_name     capture channels name
- 	c_ot_name        capture output terminal name
--	c_fu_name        capture functional unit name
--	c_alt0_name      capture alt mode 0 name
--	c_alt1_name      capture alt mode 1 name
-+	c_fu_vol_name    capture mute/volume functional unit name
- 	================ ====================================================
- 
- The attributes have sane default values.
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 06a220fb7a87..c87e74afc881 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -1251,19 +1251,19 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	strings_uac1[STR_AC_IF].s = audio_opts->function_name;
- 
--	strings_uac1[STR_USB_OUT_IT].s = audio_opts->p_it_name;
--	strings_uac1[STR_USB_OUT_IT_CH_NAMES].s = audio_opts->p_it_ch_name;
--	strings_uac1[STR_IO_OUT_OT].s = audio_opts->p_ot_name;
--	strings_uac1[STR_FU_OUT].s = audio_opts->p_fu_name;
--	strings_uac1[STR_AS_OUT_IF_ALT0].s = audio_opts->p_alt0_name;
--	strings_uac1[STR_AS_OUT_IF_ALT1].s = audio_opts->p_alt1_name;
--
--	strings_uac1[STR_IO_IN_IT].s = audio_opts->c_it_name;
--	strings_uac1[STR_IO_IN_IT_CH_NAMES].s = audio_opts->c_it_ch_name;
--	strings_uac1[STR_USB_IN_OT].s = audio_opts->c_ot_name;
--	strings_uac1[STR_FU_IN].s = audio_opts->c_fu_name;
--	strings_uac1[STR_AS_IN_IF_ALT0].s = audio_opts->c_alt0_name;
--	strings_uac1[STR_AS_IN_IF_ALT1].s = audio_opts->c_alt1_name;
-+	strings_uac1[STR_USB_OUT_IT].s = audio_opts->c_it_name;
-+	strings_uac1[STR_USB_OUT_IT_CH_NAMES].s = audio_opts->c_it_ch_name;
-+	strings_uac1[STR_IO_OUT_OT].s = audio_opts->c_ot_name;
-+	strings_uac1[STR_FU_OUT].s = audio_opts->c_fu_vol_name;
-+	strings_uac1[STR_AS_OUT_IF_ALT0].s = "Playback Inactive";
-+	strings_uac1[STR_AS_OUT_IF_ALT1].s = "Playback Active";
-+
-+	strings_uac1[STR_IO_IN_IT].s = audio_opts->p_it_name;
-+	strings_uac1[STR_IO_IN_IT_CH_NAMES].s = audio_opts->p_it_ch_name;
-+	strings_uac1[STR_USB_IN_OT].s = audio_opts->p_ot_name;
-+	strings_uac1[STR_FU_IN].s = audio_opts->p_fu_vol_name;
-+	strings_uac1[STR_AS_IN_IF_ALT0].s = "Capture Inactive";
-+	strings_uac1[STR_AS_IN_IF_ALT1].s = "Capture Active";
- 
- 	us = usb_gstrings_attach(cdev, uac1_strings, ARRAY_SIZE(strings_uac1));
- 	if (IS_ERR(us))
-@@ -1687,16 +1687,12 @@ UAC1_ATTRIBUTE_STRING(function_name);
- UAC1_ATTRIBUTE_STRING(p_it_name);
- UAC1_ATTRIBUTE_STRING(p_it_ch_name);
- UAC1_ATTRIBUTE_STRING(p_ot_name);
--UAC1_ATTRIBUTE_STRING(p_fu_name);
--UAC1_ATTRIBUTE_STRING(p_alt0_name);
--UAC1_ATTRIBUTE_STRING(p_alt1_name);
-+UAC1_ATTRIBUTE_STRING(p_fu_vol_name);
- 
- UAC1_ATTRIBUTE_STRING(c_it_name);
- UAC1_ATTRIBUTE_STRING(c_it_ch_name);
- UAC1_ATTRIBUTE_STRING(c_ot_name);
--UAC1_ATTRIBUTE_STRING(c_fu_name);
--UAC1_ATTRIBUTE_STRING(c_alt0_name);
--UAC1_ATTRIBUTE_STRING(c_alt1_name);
-+UAC1_ATTRIBUTE_STRING(c_fu_vol_name);
- 
- static struct configfs_attribute *f_uac1_attrs[] = {
- 	&f_uac1_opts_attr_c_chmask,
-@@ -1724,16 +1720,12 @@ static struct configfs_attribute *f_uac1_attrs[] = {
- 	&f_uac1_opts_attr_p_it_name,
- 	&f_uac1_opts_attr_p_it_ch_name,
- 	&f_uac1_opts_attr_p_ot_name,
--	&f_uac1_opts_attr_p_fu_name,
--	&f_uac1_opts_attr_p_alt0_name,
--	&f_uac1_opts_attr_p_alt1_name,
-+	&f_uac1_opts_attr_p_fu_vol_name,
- 
- 	&f_uac1_opts_attr_c_it_name,
- 	&f_uac1_opts_attr_c_it_ch_name,
- 	&f_uac1_opts_attr_c_ot_name,
--	&f_uac1_opts_attr_c_fu_name,
--	&f_uac1_opts_attr_c_alt0_name,
--	&f_uac1_opts_attr_c_alt1_name,
-+	&f_uac1_opts_attr_c_fu_vol_name,
- 
- 	NULL,
- };
-@@ -1789,19 +1781,15 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
- 
- 	scnprintf(opts->function_name, sizeof(opts->function_name), "AC Interface");
- 
--	scnprintf(opts->p_it_name, sizeof(opts->p_it_name), "Playback Input terminal");
--	scnprintf(opts->p_it_ch_name, sizeof(opts->p_it_ch_name), "Playback Channels");
--	scnprintf(opts->p_ot_name, sizeof(opts->p_ot_name), "Playback Output terminal");
--	scnprintf(opts->p_fu_name, sizeof(opts->p_fu_name), "Playback Volume");
--	scnprintf(opts->p_alt0_name, sizeof(opts->p_alt0_name), "Playback Inactive");
--	scnprintf(opts->p_alt1_name, sizeof(opts->p_alt1_name), "Playback Active");
--
--	scnprintf(opts->c_it_name, sizeof(opts->c_it_name), "Capture Input terminal");
--	scnprintf(opts->c_it_ch_name, sizeof(opts->c_it_ch_name), "Capture Channels");
--	scnprintf(opts->c_ot_name, sizeof(opts->c_ot_name), "Capture Output terminal");
--	scnprintf(opts->c_fu_name, sizeof(opts->c_fu_name), "Capture Volume");
--	scnprintf(opts->c_alt0_name, sizeof(opts->c_alt0_name), "Capture Inactive");
--	scnprintf(opts->c_alt1_name, sizeof(opts->c_alt1_name), "Capture Active");
-+	scnprintf(opts->p_it_name, sizeof(opts->p_it_name), "Capture Input terminal");
-+	scnprintf(opts->p_it_ch_name, sizeof(opts->p_it_ch_name), "Capture Channels");
-+	scnprintf(opts->p_ot_name, sizeof(opts->p_ot_name), "Capture Output terminal");
-+	scnprintf(opts->p_fu_vol_name, sizeof(opts->p_fu_vol_name), "Capture Volume");
-+
-+	scnprintf(opts->c_it_name, sizeof(opts->c_it_name), "Playback Input terminal");
-+	scnprintf(opts->c_it_ch_name, sizeof(opts->c_it_ch_name), "Playback Channels");
-+	scnprintf(opts->c_ot_name, sizeof(opts->c_ot_name), "Playback Output terminal");
-+	scnprintf(opts->c_fu_vol_name, sizeof(opts->c_fu_vol_name), "Playback Volume");
- 
- 	return &opts->func_inst;
- }
-diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
-index 67784de9782b..feb6eb76462f 100644
---- a/drivers/usb/gadget/function/u_uac1.h
-+++ b/drivers/usb/gadget/function/u_uac1.h
-@@ -57,16 +57,12 @@ struct f_uac1_opts {
- 	char			p_it_name[USB_MAX_STRING_LEN];
- 	char			p_it_ch_name[USB_MAX_STRING_LEN];
- 	char			p_ot_name[USB_MAX_STRING_LEN];
--	char			p_fu_name[USB_MAX_STRING_LEN];
--	char			p_alt0_name[USB_MAX_STRING_LEN];
--	char			p_alt1_name[USB_MAX_STRING_LEN];
-+	char			p_fu_vol_name[USB_MAX_STRING_LEN];
- 
- 	char			c_it_name[USB_MAX_STRING_LEN];
- 	char			c_it_ch_name[USB_MAX_STRING_LEN];
- 	char			c_ot_name[USB_MAX_STRING_LEN];
--	char			c_fu_name[USB_MAX_STRING_LEN];
--	char			c_alt0_name[USB_MAX_STRING_LEN];
--	char			c_alt1_name[USB_MAX_STRING_LEN];
-+	char			c_fu_vol_name[USB_MAX_STRING_LEN];
- 
- 	struct mutex			lock;
- 	int				refcnt;
+Here is the ATI output from my card, which confirms that it is indeed a 
+different model:
+
+Manufacturer: MEIG INCORPORATED
+Model: SRM825L
+Revision: SRM825L_6.0.5_EQ100
+IMEI: [REDACTED]
++GCAP: +CGSM
+
+I did not add SRM815 support (despite the Protocol values are also 
+available on that thread) because I don't have the device to test, and I 
+don't know if there are more such devices.
+
+> 
+> lsusb for SR815:
+> 
+> T: Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 2 Spd=5000 MxCh= 0
+> D: Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs= 1
+> P: Vendor=2dee ProdID=4d22 Rev= 4.14
+> S: Manufacturer=MEIG
+> S: Product=LTE-A Module
+> S: SerialNumber=123456
+> C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=896mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+> E: Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
+> E: Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
+> E: Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
+> E: Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+> E: Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> E: Ad=89(I) Atr=03(Int.) MxPS= 8 Ivl=32ms
+> E: Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> 
+> 
+> thanks
+> Lars
+> 
+> 
+> 
+
 -- 
-2.43.0
+Best regards,
 
+ZHANG, Yuntian
+
+Operating System Developer
+Radxa Computer Co., Ltd
+Shenzhen, China
 
