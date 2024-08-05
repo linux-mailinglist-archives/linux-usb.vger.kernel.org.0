@@ -1,103 +1,88 @@
-Return-Path: <linux-usb+bounces-12948-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12949-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EBEC94710D
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 23:59:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2EBD9471E0
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 02:16:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0BF61C20CBA
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Aug 2024 21:59:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E9541F211EC
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 00:16:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9E813CABC;
-	Sun,  4 Aug 2024 21:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE8015C9;
+	Mon,  5 Aug 2024 00:15:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="chCriVGo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWUmon6G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBDC13CA93;
-	Sun,  4 Aug 2024 21:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FC019E;
+	Mon,  5 Aug 2024 00:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722808573; cv=none; b=Qm0ZyYIMW6sK7PwndQalIn6rr9P82qlCfu+RdxQvqXZIMaEjvFvxo9LG1K6XU8RadAF6Daqfdk1r4jBRlosstFMVygqTyDw9z9ZAjo+nF4xN2qn6KQXzf0Wmqw4Sa9xcLh2dkjFA+KUj4VA/XHACbPpasgBvGEFWJQ8En9ELJJQ=
+	t=1722816955; cv=none; b=JyIIfLUeEMT2cKPEnd0MEx739bLhySK4kNlmyP+bfonAVX0ysFKgUzPmO9AijoVsF8Bvy6/KaB2uS+dD7ncuf1kldUOpM7NTYbpP6BvlbTyb1wLazuv6Pv5YU1ehAqJlIzOlgyQdBZ1tFgQ+ZYZ0n7M3S5S3vjEeEuRq6N7sqRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722808573; c=relaxed/simple;
-	bh=TP7X/omtcHtBfHRPIrG0hq0mQdX8zrTcBzIFqmw3S6Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iMlUxopbjbk3p0aWyzJ11ryYKkF11Yhp5keCV7RbueMEOKoJUgDrBC4BrVvGXfRhqx6KPD53TZhMaYSZsRwf4l2fqGu7xQ02Dww93N2fvjahXCqMUBg3ZvEYfQ0sw/XQgVs9+LH0UltPjHNgzcDIoQ+aTptR6YQM0nZuy/2hf6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=chCriVGo; arc=none smtp.client-ip=209.85.208.47
+	s=arc-20240116; t=1722816955; c=relaxed/simple;
+	bh=gz0B23fUUHPjcaUv2MaGLIyA3vGJZuK0je8BcordKDI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s/VkG1GIN+aZjNNV5RvR4ilPqT+sz03uIpmUETSzANwEeOYRCKAFFmXz1kx5TX/IQYAI7V3A+9V9AUrewcDbd/PGYQ6DxEXwj8duiCiYr0YOVa70yRmZbNjeiOor1xU1ufk1i9bvfUsii0NWN1u2ZIk9lhZMwa5PfVuxZ+US0tA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IWUmon6G; arc=none smtp.client-ip=209.85.219.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5ab2baf13d9so13522420a12.2;
-        Sun, 04 Aug 2024 14:56:11 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6b79b93a4c9so43528986d6.1;
+        Sun, 04 Aug 2024 17:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722808570; x=1723413370; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2+/p7MgZYWM5kh+9ECMA6cWE3o9ZU9hqg6eDjlHC2ns=;
-        b=chCriVGoctm521fo51edOl3ETgiVR5TgJhbkFHdxhdJgnYfcTpmkyzkXy76DfzqQf+
-         KnAi9OTkeWQr3u1Y7E41GVFQBCw8OKrE8v0dVU263QgUrntCwUnF5vnpQipy+gmhV4Jm
-         nktPlQ5UvQxLSAdBQiK4rd5eBmJcwpTpza29fNApl2kveMbTzL52m19U0I5WGlQQBHeX
-         pMkWQZ0ZiFz2hLecDsDUZld81/BXHlIc7SNOnwAScnXmQ4O/4oZk0tNsMl6+VCAysgky
-         YFwUeAbxS5IhUjeySxKi0bw6EH9g5dZlY2cLmz8SaiiskGguO2I1bppxL700xXwpiakm
-         btNg==
+        d=gmail.com; s=20230601; t=1722816952; x=1723421752; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VhLN8uECkwRqPw38h8IiXspwBGvbvvcothYP3DCCl3I=;
+        b=IWUmon6GpbHi61fim8Sar0VmX+iy/KZVUpc5tinM84jcHB7Xbe06lE0aigOQjQG04q
+         /rcoEwQnMX3/tAX10OmqOKHiHHeOU2YCUwJywy3UD48Z/HdV5GQowLCgNJwxS5cA5di8
+         zRp+R42PcJqqiBrfteMHWyPU+WVc0EhmvROAEYsT9SfuJm+6SPV5aPtPdKXoqxjjN0M0
+         8s1bYYQWLopsZLLt7ZsVw6FcUmbUYviezEROvFG3bc/K0eV2AfmpofxAqdhdDN4Ks1pI
+         6Sbf0+lb6CE58qstZkmfac7JHZ1wWNkMw9+WuBDYEebp3agqyRFDZbK7eyv0kkufHE84
+         1Rww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722808570; x=1723413370;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2+/p7MgZYWM5kh+9ECMA6cWE3o9ZU9hqg6eDjlHC2ns=;
-        b=uLhRJeIA7tDVyT6Tq3Mj1qPiqGiVGM44A5ZKMzeb2yep7qauJHrO6Tu4lQdsN1OsZH
-         Gk3IpTcT3XMJ8xKauAxiLHycIWh5IsZhtHTYqnur5cb7eSk1XRbfY3C1mA+a0cwlP0wn
-         +SzAJ7PRTfWjQXW0lTwxzQGjy9kOrVeav8pPlE0oQffaph3iZnRdKWlN9vDMS5hLi5MO
-         ahnFl2uFNz6cTcFldqimqj9pR7Vok6zGZi/FwAQQQHt8u6mx1ihr6VKN5gYlEbZBD0md
-         tzHH9MQWSbiduAR8EV3TwxHKDELvKDOA7NC1qG5f7WNmEpk9LRbSxldMhmRwYr/jFLbJ
-         dqFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2gfO43xkeQLeM+lRoV2RLk8+brwkn//BneP8jWvKnB9FuJeTy8j5MyW/sG3EGCvrhzVMY39A8NW4Uyiao6gheprPg7v/j17GVeIb/c0YGh6NZceiW+mlBa4PBtrQTcIAszTZsNoP0/T1AMAAUOnwj3TlmsNgilMUi48CZnzuA27sWYbjORuVRfeu8jk74myx4RoFcoPr8ft7YiHLiC9sRgj2RpMGRrtXg3zfs/bIGBQgYxXciiXvrnpnWwhQ+IrIM
-X-Gm-Message-State: AOJu0YyKMOPYFqN1DmD0woDfmPCJqqVF+4cAoYuXUYF+eqZwe4mUop2v
-	izZvkN3NIK5LlJfVRd8MoewOiP0XMcflZqSumWa+G0AT1DEg+ZKE
-X-Google-Smtp-Source: AGHT+IH8zoNedZrAXYOj7WYBa3ZkPcxPBBxBMYkykvUuk74jILXSIRAvBgxRPdz930MQzYMKOYCdgA==
-X-Received: by 2002:a17:907:3f13:b0:a77:cc6f:e791 with SMTP id a640c23a62f3a-a7dc4ff1addmr811525166b.38.1722808570071;
-        Sun, 04 Aug 2024 14:56:10 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:ab88:3711:c80:e7a7:e025:f1a5:ef78])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a7dc9d45452sm370485066b.111.2024.08.04.14.56.09
+        d=1e100.net; s=20230601; t=1722816952; x=1723421752;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VhLN8uECkwRqPw38h8IiXspwBGvbvvcothYP3DCCl3I=;
+        b=QE6yL18iiBWvPERfagIVCro/16qHMLKZa3OuIGiD/VwZN2pluxH2bZbBTtBcUpyzKk
+         mcK2jZoP5dpLqMqEC60ybRdwJHTCKSPxjx5NaG/xSzT0pdIcnsQ5Q9Nx5dwo48K3nEMl
+         kjaFP2EMG2d7PiJ397N9EbFq49qUQPoAEYLsTNgf4UVCuvYZM8ey0j67a3lid6S+lvZM
+         3vTMB+aAlxqTZyith/9qxfb9kRAgjERPZAjJhsAsQ/FcIBt5FBzwui6Q6GQVHnts+MCt
+         T0747hJX4foVrT1TaBVaqG0t8/NX0qKng6fm/ti0S+mN8Xu4lbng5d3EH2yHGdLAAkqC
+         QfZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVIoKwwXt8Cwtw1e7CLeo6EPMlG10Gh2DvSfkKKasab9/5dlICL6HUkvVnnzetxNyY6N6MgwXrE7KbkvlIVSDszEy4zVfOi7IBnPjWxoN5UGHf2h8J7vWFx0NE47VTfdsfJkX51EHr4
+X-Gm-Message-State: AOJu0YxtZzfz7/xXn4s6tL5E5xJqsiAJJWQGXPv+DHdEEaLWGN6RoNjJ
+	YqHwYl8r4LWyXeHWiXisOkEoKT4ky6jjTZ1cM5x0zTK70mOYLQlTW+zTLdAP
+X-Google-Smtp-Source: AGHT+IHV//JZnLnfAkG9TIXs7r0sGd1uERG/Gt6dMxAlFjf98bEx76Y6b/QfXwJsn7EyngIu3ZwJLw==
+X-Received: by 2002:a05:6214:2af:b0:6b5:2062:dd5c with SMTP id 6a1803df08f44-6bb91d619e2mr218884426d6.8.1722816951888;
+        Sun, 04 Aug 2024 17:15:51 -0700 (PDT)
+Received: from localhost.localdomain (syn-104-229-042-148.res.spectrum.com. [104.229.42.148])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bb9c76b93asm30041276d6.28.2024.08.04.17.15.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Aug 2024 14:56:09 -0700 (PDT)
-From: David Virag <virag.david003@gmail.com>
-To: Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	=?UTF-8?q?Andr=C3=A9=20Draszik?= <andre.draszik@linaro.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	David Virag <virag.david003@gmail.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org,
+        Sun, 04 Aug 2024 17:15:51 -0700 (PDT)
+From: crwulff@gmail.com
+To: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Christian Brauner <brauner@kernel.org>,
+	Eric Farman <farman@linux.ibm.com>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	Jeff Layton <jlayton@kernel.org>,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org
-Subject: [PATCH 13/13] arm64: dts: exynos: exynos7885-jackpotlte: Enable USB support
-Date: Sun,  4 Aug 2024 23:53:58 +0200
-Message-ID: <20240804215458.404085-14-virag.david003@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240804215458.404085-1-virag.david003@gmail.com>
-References: <20240804215458.404085-1-virag.david003@gmail.com>
+	David Sands <david.sands@biamp.com>,
+	Chris Wulff <crwulff@gmail.com>
+Subject: [PATCH v4] usb: gadget: f_fs: add capability for dfu run-time descriptor
+Date: Sun,  4 Aug 2024 20:06:40 -0400
+Message-ID: <20240805000639.619232-2-crwulff@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -106,54 +91,200 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Samsung Galaxy A8 (2018) has an USB-C port capable of USB 2.0
-speeds, used both as host and device, and is used for charging the
-phone.
+From: David Sands <david.sands@biamp.com>
 
-The physical port is directly connected to an S2MU004 IC, but until we
-have support for it, we can still use the USB device funtionality.
+From: David Sands <david.sands@biamp.com>
 
-Signed-off-by: David Virag <virag.david003@gmail.com>
+Add the ability for FunctionFS driver to be able to create DFU Run-Time
+descriptors.
+
+Signed-off-by: David Sands <david.sands@biamp.com>
+Co-developed-by: Chris Wulff <crwulff@gmail.com>
+Signed-off-by: Chris Wulff <crwulff@gmail.com>
 ---
- .../boot/dts/exynos/exynos7885-jackpotlte.dts | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+v4: Clean up unneeded change, switch to BIT macros, more documentation
+v3: Documentation, additional constants and constant order fixed
+https://lore.kernel.org/all/CO1PR17MB54197F118CBC8783D289B97DE1102@CO1PR17MB5419.namprd17.prod.outlook.com/
+v2: https://lore.kernel.org/linux-usb/CO1PR17MB54198D086B61F7392FA9075FE10E2@CO1PR17MB5419.namprd17.prod.outlook.com/
+v1: https://lore.kernel.org/linux-usb/CO1PR17MB5419AC3907C74E28D80C5021E1082@CO1PR17MB5419.namprd17.prod.outlook.com/
+---
+ Documentation/usb/functionfs-desc.rst | 22 ++++++++++++++++++++++
+ Documentation/usb/functionfs.rst      |  2 ++
+ Documentation/usb/index.rst           |  1 +
+ drivers/usb/gadget/function/f_fs.c    | 12 ++++++++++--
+ include/uapi/linux/usb/ch9.h          |  8 ++++++--
+ include/uapi/linux/usb/functionfs.h   | 25 +++++++++++++++++++++++++
+ 6 files changed, 66 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/usb/functionfs-desc.rst
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts b/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
-index 47a389d9ff7d..c1902d2f57cf 100644
---- a/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
-+++ b/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
-@@ -59,6 +59,12 @@ power-key {
- 			wakeup-source;
- 		};
- 	};
+diff --git a/Documentation/usb/functionfs-desc.rst b/Documentation/usb/functionfs-desc.rst
+new file mode 100644
+index 000000000000..73d2b8a3f02c
+--- /dev/null
++++ b/Documentation/usb/functionfs-desc.rst
+@@ -0,0 +1,22 @@
++======================
++FunctionFS Descriptors
++======================
 +
-+	/* TODO: Remove this once PMIC is implemented  */
-+	reg_dummy: regulator-0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "dummy_reg";
-+	};
- };
++Interface Descriptors
++---------------------
++
++Standard USB interface descriptors may be added. The class/subclass of the
++most recent interface descriptor determines what type of class-specific
++descriptors are accepted.
++
++Class-Specific Descriptors
++--------------------------
++
++DFU Functional Descriptor
++~~~~~~~~~~~~~~~~~~~~~~~~~
++
++When the interface class is USB_CLASS_APP_SPEC and  the interface subclass
++is USB_SUBCLASS_DFU, a DFU functional descriptor can be provided.
++
++.. kernel-doc:: include/uapi/linux/usb/functionfs.h
++   :doc: usb_dfu_functional_descriptor
+diff --git a/Documentation/usb/functionfs.rst b/Documentation/usb/functionfs.rst
+index d05a775bc45b..4f96e4b93d7b 100644
+--- a/Documentation/usb/functionfs.rst
++++ b/Documentation/usb/functionfs.rst
+@@ -70,6 +70,8 @@ have been written to their ep0's.
+ Conversely, the gadget is unregistered after the first USB function
+ closes its endpoints.
  
- &mmc_0 {
-@@ -111,3 +117,17 @@ key_power: key-power-pins {
- &serial_2 {
- 	status = "okay";
- };
++For more information about FunctionFS descriptors see :doc:`functionfs-desc`
 +
-+&usbdrd {
-+	status = "okay";
-+	vdd10-supply = <&reg_dummy>;
-+	vdd33-supply = <&reg_dummy>;
-+};
+ DMABUF interface
+ ================
+ 
+diff --git a/Documentation/usb/index.rst b/Documentation/usb/index.rst
+index 27955dad95e1..826492c813ac 100644
+--- a/Documentation/usb/index.rst
++++ b/Documentation/usb/index.rst
+@@ -11,6 +11,7 @@ USB support
+     dwc3
+     ehci
+     functionfs
++    functionfs-desc
+     gadget_configfs
+     gadget_hid
+     gadget_multi
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index d8b096859337..ba5c6e4827ba 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2478,7 +2478,7 @@ typedef int (*ffs_os_desc_callback)(enum ffs_os_desc_type entity,
+ 
+ static int __must_check ffs_do_single_desc(char *data, unsigned len,
+ 					   ffs_entity_callback entity,
+-					   void *priv, int *current_class)
++					   void *priv, int *current_class, int *current_subclass)
+ {
+ 	struct usb_descriptor_header *_ds = (void *)data;
+ 	u8 length;
+@@ -2535,6 +2535,7 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
+ 		if (ds->iInterface)
+ 			__entity(STRING, ds->iInterface);
+ 		*current_class = ds->bInterfaceClass;
++		*current_subclass = ds->bInterfaceSubClass;
+ 	}
+ 		break;
+ 
+@@ -2559,6 +2560,12 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
+ 			if (length != sizeof(struct ccid_descriptor))
+ 				goto inv_length;
+ 			break;
++		} else if (*current_class == USB_CLASS_APP_SPEC &&
++			   *current_subclass == USB_SUBCLASS_DFU) {
++			pr_vdebug("dfu functional descriptor\n");
++			if (length != sizeof(struct usb_dfu_functional_descriptor))
++				goto inv_length;
++			break;
+ 		} else {
+ 			pr_vdebug("unknown descriptor: %d for class %d\n",
+ 			      _ds->bDescriptorType, *current_class);
+@@ -2621,6 +2628,7 @@ static int __must_check ffs_do_descs(unsigned count, char *data, unsigned len,
+ 	const unsigned _len = len;
+ 	unsigned long num = 0;
+ 	int current_class = -1;
++	int current_subclass = -1;
+ 
+ 	for (;;) {
+ 		int ret;
+@@ -2640,7 +2648,7 @@ static int __must_check ffs_do_descs(unsigned count, char *data, unsigned len,
+ 			return _len - len;
+ 
+ 		ret = ffs_do_single_desc(data, len, entity, priv,
+-			&current_class);
++			&current_class, &current_subclass);
+ 		if (ret < 0) {
+ 			pr_debug("%s returns %d\n", __func__, ret);
+ 			return ret;
+diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+index 44d73ba8788d..91f0f7e214a5 100644
+--- a/include/uapi/linux/usb/ch9.h
++++ b/include/uapi/linux/usb/ch9.h
+@@ -254,6 +254,9 @@ struct usb_ctrlrequest {
+ #define USB_DT_DEVICE_CAPABILITY	0x10
+ #define USB_DT_WIRELESS_ENDPOINT_COMP	0x11
+ #define USB_DT_WIRE_ADAPTER		0x21
++/* From USB Device Firmware Upgrade Specification, Revision 1.1 */
++#define USB_DT_DFU_FUNCTIONAL		0x21
++/* these are from the Wireless USB spec */
+ #define USB_DT_RPIPE			0x22
+ #define USB_DT_CS_RADIO_CONTROL		0x23
+ /* From the T10 UAS specification */
+@@ -329,9 +332,10 @@ struct usb_device_descriptor {
+ #define USB_CLASS_USB_TYPE_C_BRIDGE	0x12
+ #define USB_CLASS_MISC			0xef
+ #define USB_CLASS_APP_SPEC		0xfe
+-#define USB_CLASS_VENDOR_SPEC		0xff
++#define USB_SUBCLASS_DFU			0x01
+ 
+-#define USB_SUBCLASS_VENDOR_SPEC	0xff
++#define USB_CLASS_VENDOR_SPEC		0xff
++#define USB_SUBCLASS_VENDOR_SPEC		0xff
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
+index 9f88de9c3d66..40f87cbabf7a 100644
+--- a/include/uapi/linux/usb/functionfs.h
++++ b/include/uapi/linux/usb/functionfs.h
+@@ -37,6 +37,31 @@ struct usb_endpoint_descriptor_no_audio {
+ 	__u8  bInterval;
+ } __attribute__((packed));
+ 
++/**
++ * struct usb_dfu_functional_descriptor - DFU Functional descriptor
++ * @bLength:		Size of the descriptor (bytes)
++ * @bDescriptorType:	USB_DT_DFU_FUNCTIONAL
++ * @bmAttributes:	DFU attributes
++ * @wDetachTimeOut:	Maximum time to wait after DFU_DETACH (ms, le16)
++ * @wTransferSize:	Maximum number of bytes per control-write (le16)
++ * @bcdDFUVersion:	DFU Spec version (BCD, le16)
++ */
++struct usb_dfu_functional_descriptor {
++	__u8  bLength;
++	__u8  bDescriptorType;
++	__u8  bmAttributes;
++	__le16 wDetachTimeOut;
++	__le16 wTransferSize;
++	__le16 bcdDFUVersion;
++} __attribute__ ((packed));
 +
-+&usbdrd_dwc3 {
-+	dr_mode = "peripheral"; /* Force to peripheral until we have Type-C working */
-+};
++/* from DFU functional descriptor bmAttributes */
++#define DFU_FUNC_ATT_CAN_DOWNLOAD	BIT(0)
++#define DFU_FUNC_ATT_CAN_UPLOAD		BIT(1)
++#define DFU_FUNC_ATT_MANIFEST_TOLERANT	BIT(2)
++#define DFU_FUNC_ATT_WILL_DETACH	BIT(3)
 +
-+&usbdrd_phy {
-+	status = "okay";
-+};
++
+ struct usb_functionfs_descs_head_v2 {
+ 	__le32 magic;
+ 	__le32 length;
 -- 
-2.46.0
+2.43.0
 
 
