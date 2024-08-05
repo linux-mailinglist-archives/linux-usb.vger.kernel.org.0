@@ -1,190 +1,125 @@
-Return-Path: <linux-usb+bounces-13080-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13081-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E03A9475ED
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 09:22:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 568CD9476E5
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 10:08:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F9AA1C20C2F
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 07:22:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11066281087
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 08:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 826521494C4;
-	Mon,  5 Aug 2024 07:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE8513C906;
+	Mon,  5 Aug 2024 08:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GrfMdLxb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PARZU8+a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B314D8B6;
-	Mon,  5 Aug 2024 07:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D365B2AD04
+	for <linux-usb@vger.kernel.org>; Mon,  5 Aug 2024 08:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722842548; cv=none; b=roFQsObWhg8k53BXQo9VlSD0jzkEFjWZXfhjDPEZ7y2IQ8wYUIlTl310DlDIRyXrvTb+OBGXxqVc3/uV5ZSsJ3cNds5KNnL+93KRE6B4YQZ+RaVeeOcXanPMGhiQDZ7C5r4sfkJ9q9+osbnlsf/dVwjrd2Yl/a37FAUOx+V1m7A=
+	t=1722845299; cv=none; b=lPzpbEnKj8xtTuciKCwxYHcZkTAVwPkMgZaJZQA7CydrCXcdm0Fjp5gzdE+4Hzgp6JoiZiMczoWK5cBv1I48QqCx2/TDpO00p4M7G0c2r139JQm5Fa8+oEqwPK9CzFY4oXm/JzVWLb6zAyfetN4g8t+7CUuZI8STXysmMhwHUkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722842548; c=relaxed/simple;
-	bh=gkzU71gwV9NOWBEDhdykWzyAwPSJx6HCNBlYUDmMQ4k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nLSMM6VQVIG9F5hkBhhbfOEokkhxqhV7dTQBKxGdBUXtDeY7TireclW0crmbXaA/5R9UttqqgziMMzxfk29bv83csj8dGcQKB6gf7CaV/K1xvfiNWLutZ7AokzK2w85rpHnElcqrGLjVEQyY+V+fCtmDG9UpbxrcCibHZ2/ROhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GrfMdLxb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8BECC4AF0D;
-	Mon,  5 Aug 2024 07:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722842547;
-	bh=gkzU71gwV9NOWBEDhdykWzyAwPSJx6HCNBlYUDmMQ4k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GrfMdLxbUWEzrOxUZrAMduOAYLiUS+Q95Ab9qziw+lcD+cidKYOCo+lowJyBx70T9
-	 KAehLRGEYjZM9d6vS0p6JKS3m82oi/wvdnya/Z4XinGd8Hc4UKut2f32j1HSvDzXrd
-	 +hO8ZAg9/t8rkFLhlMvFhO9apl9X5b2Pezs+o34xTWD+CJzRcT3xLjfz6NTDKek/eU
-	 sVbYieHAiHSOp9eXnhB4IYmaJ4TUnh1DUv/k+jFzm7vZdi1vvwxDS/9ppuRDV9Dlhb
-	 jeOPNFmV0sgYpYWP/a51srYgnaZmvGX8b7OMfnF0kR8qywamk+3N9g1o/CjChhwGEl
-	 tqD5Faf6E1dXA==
-Message-ID: <0e1b0f11-152e-402c-97ea-788c7830267f@kernel.org>
-Date: Mon, 5 Aug 2024 09:22:18 +0200
+	s=arc-20240116; t=1722845299; c=relaxed/simple;
+	bh=+r+kKRi+x1IgWghgOPsM2zdoxic28I7lwNebXkalWO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VWxyKuawf1kJYZMTyXjs3IbQSUcz/HFUJV+LZ1/6HrBCk/o+sbJICpCAuQi7DKgIlV1NVoDVJ3D4jdcIESTQRzu+nsVRHa35TbI6NsMPkfVxFDhcFH2L0bVJlXcWFw890OddDp+4jqPxO0C9qU6O/7U0/redMf8A0vbh4lQ6hxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PARZU8+a; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722845298; x=1754381298;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+r+kKRi+x1IgWghgOPsM2zdoxic28I7lwNebXkalWO8=;
+  b=PARZU8+aUzaZMaMIwwoZJnkY9B9sU7r+bnt1RDWfPhVmenCDNVQs9v8o
+   8KwDIRJr4CC9p/lArD7FBzeTZDR3nt6dEYFWsqY759FU7tSQ0mn8Erlbx
+   hpKw8MWsF3fmykIU1YYAIJbWr0FBYeJtNpOYEfwYF4Sq7D7lVQz86sAiJ
+   41HYeIdtEc4NQJilYvMY2T12H8960JW6kduIkv23Q6ccFxwn3wXZsCbSW
+   v1eIExRVBkmxiWo3m73Bah9V1ufOoAnAjdK9xNf32iZRs/N/0qGaXR4Dl
+   vQcdwS0eWssfiEDaleqPx0TAvgQoyp7CTdB29tPjCpMlCatWMkZ3JcF7U
+   Q==;
+X-CSE-ConnectionGUID: 5m0eAvZjSMyhqOeMMlHXjw==
+X-CSE-MsgGUID: Tww/41YIRmO+qRgop9WxFA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="24560335"
+X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
+   d="scan'208";a="24560335"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 01:08:15 -0700
+X-CSE-ConnectionGUID: YcSsq8HqRBOiGdVeYKuoWw==
+X-CSE-MsgGUID: ONbFGdw/SNqOtJDoSqOpog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
+   d="scan'208";a="56002536"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa009.jf.intel.com with SMTP; 05 Aug 2024 01:08:12 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 05 Aug 2024 11:08:10 +0300
+Date: Mon, 5 Aug 2024 11:08:10 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, rdbabiera@google.com, linux@roeck-us.net,
+	badhri@google.com, kyletso@google.com,
+	sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH] usb: typec: tcpm: avoid sink goto SNK_UNATTACHED state
+ if not received source capability message
+Message-ID: <ZrCIakdGq42n44Wg@kuha.fi.intel.com>
+References: <20240802064156.1846768-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: phy: imx8mq-usb: add compatible
- "fsl,imx95-usb-phy"
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
- kernel@pengutronix.de, festevam@gmail.com, gregkh@linuxfoundation.org,
- Frank.Li@nxp.com, jun.li@nxp.com, l.stach@pengutronix.de,
- aford173@gmail.com, hongxing.zhu@nxp.com, alexander.stein@ew.tq-group.com,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-usb@vger.kernel.org
-References: <20240802091702.2057294-1-xu.yang_2@nxp.com>
- <21557eac-44f0-451d-a194-c5d545cacbee@kernel.org>
- <20240805070429.rqykjd3ap5swd5vl@hippo>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240805070429.rqykjd3ap5swd5vl@hippo>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240802064156.1846768-1-xu.yang_2@nxp.com>
 
-On 05/08/2024 09:04, Xu Yang wrote:
-> On Sun, Aug 04, 2024 at 04:16:34PM +0200, Krzysztof Kozlowski wrote:
->> On 02/08/2024 11:16, Xu Yang wrote:
->>> The usb phy in i.MX95 is compatible with i.MX8MP's, this will add a
->>> compatible "fsl,imx95-usb-phy" for i.MX95. Also change reg maxItems
->>> to 2 since i.MX95 needs another regmap to control Type-C Assist (TCA)
->>> block. Since i.MX95 usb phy is able to switch SS lanes, this will also
->>> add orientation-switch and port property to the file.
->>>
->>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
->>> ---
->>>  .../bindings/phy/fsl,imx8mq-usb-phy.yaml      | 40 +++++++++++++++++--
->>>  1 file changed, 36 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
->>> index dc3a3f709fea..b0a614a9556d 100644
->>> --- a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
->>> +++ b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
->>> @@ -11,12 +11,17 @@ maintainers:
->>>  
->>>  properties:
->>>    compatible:
->>> -    enum:
->>> -      - fsl,imx8mq-usb-phy
->>> -      - fsl,imx8mp-usb-phy
->>> +    oneOf:
->>> +      - enum:
->>> +          - fsl,imx8mq-usb-phy
->>> +          - fsl,imx8mp-usb-phy
->>> +      - items:
->>> +          - const: fsl,imx95-usb-phy
->>> +          - const: fsl,imx8mp-usb-phy
->>>  
->>>    reg:
->>> -    maxItems: 1
->>> +    minItems: 1
->>> +    maxItems: 2
->>>  
->>>    "#phy-cells":
->>>      const: 0
->>> @@ -28,6 +33,17 @@ properties:
->>>      items:
->>>        - const: phy
->>>  
->>> +  orientation-switch:
->>> +    description:
->>> +      Flag the PHY as possible handler of USB Type-C orientation switching
->>
->> No need to duplicate definitions of properties.
+On Fri, Aug 02, 2024 at 02:41:56PM +0800, Xu Yang wrote:
+> Since commit (122968f8dda8 usb: typec: tcpm: avoid resets for missing
+> source capability messages), state will change from SNK_WAIT_CAPABILITIES
+> to SNK_WAIT_CAPABILITIES_TIMEOUT. We need to change SNK_WAIT_CAPABILITIES
+> -> SNK_READY path to SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_READY
+> accordingly. Otherwise, the sink port will never change to SNK_READY state
+> if the source does't have PD capability.
 > 
-> I replace it with "orientation-switch: true".
+> [  503.547183] pending state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT @ 310 ms [rev3 NONE_AMS]
+> [  503.857239] state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT [delayed 310 ms]
+> [  503.857254] PD TX, header: 0x87
+> [  503.862440] PD TX complete, status: 2
+> [  503.862484] state change SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_UNATTACHED [rev3 NONE_AMS]
 > 
->>
->>> +    type: boolean
->>> +
->>> +  port:
->>> +    $ref: /schemas/graph.yaml#/properties/port
->>> +    description:
->>> +      A port node to link the PHY to a TypeC controller for the purpose of
->>> +      handling orientation switching.
->>
->> Same here. You probably miss reference to usb-switch.
-> 
-> How about port? Should I replace it with "port: true" or
-> 
-> "port:"
-> "  $ref: /schemas/usb/usb-switch.yaml#/properties/port"
+> Fixes: 122968f8dda8 ("usb: typec: tcpm: avoid resets for missing source capability messages")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-You can drop both if you add ref to usb-switch and use
-unevaluatedProperties.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Best regards,
-Krzysztof
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 26f9006e95e1..cce39818e99a 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4515,7 +4515,7 @@ static inline enum tcpm_state hard_reset_state(struct tcpm_port *port)
+>  		return ERROR_RECOVERY;
+>  	if (port->pwr_role == TYPEC_SOURCE)
+>  		return SRC_UNATTACHED;
+> -	if (port->state == SNK_WAIT_CAPABILITIES)
+> +	if (port->state == SNK_WAIT_CAPABILITIES_TIMEOUT)
+>  		return SNK_READY;
+>  	return SNK_UNATTACHED;
+>  }
+> -- 
+> 2.34.1
 
+-- 
+heikki
 
