@@ -1,97 +1,138 @@
-Return-Path: <linux-usb+bounces-13090-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13091-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F92A947A01
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 12:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE59947B26
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 14:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDF3AB212D4
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 10:43:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24E5DB21897
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 12:43:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586C8154BE2;
-	Mon,  5 Aug 2024 10:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AC4915AD99;
+	Mon,  5 Aug 2024 12:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j68zn0ij"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fGoICLhP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D161513AD11;
-	Mon,  5 Aug 2024 10:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4F618026;
+	Mon,  5 Aug 2024 12:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722854588; cv=none; b=F+A+NjGtmyTABPleNTzDjINwKpL43Pv1wywFWiulNAqNEwh+Io+CQ9e+2dgLft8iYrr0jGlnVNIh7S3NOL68pTzsmS/AuEmWsp/p87K+Fb1mKGZi4F7JGNA4J50/EwmNSSI0TE6GBzP2umOuo19cEqL2vpyjV2wglrAX2D+XNeE=
+	t=1722861783; cv=none; b=byIIb2Fgba6E5pI6wXV/oho2HmA0Jj+dyCyaSDUyIpjwvXP28KywqmFmN5yYTNLRYiI1qLnGAGL2fhATiCBcfDD3uNHGNdMir6gB00rohA4X9qrQNijApl5nGgceAd4pBsWlT77psqAbYj2pMZYSYEDQtGxISxpqzu8/G19nptI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722854588; c=relaxed/simple;
-	bh=9BMNAe8AQGch6QfXhgjEJH61vOGani0bKSdAc5nQTtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dVQqdMU1xMoP3CAh2hT0veIUdnMypb0dje2pgOezXeTfkzbvITvfsoD1YS6UB5W95VFqZCsSrg6jlwbh42p6GwDraz0ODxKpAkqly1vI4pvFtEhdxToVmQ5hNNDR9L6G69YzozZiA9sHGblSPqg7UC6/RiLWObZBQlM4bl7nZAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j68zn0ij; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C512C32782;
-	Mon,  5 Aug 2024 10:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722854588;
-	bh=9BMNAe8AQGch6QfXhgjEJH61vOGani0bKSdAc5nQTtQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=j68zn0ijTzW/PEHDREz6JEnLp1ljRhD1cSR/K+vwZXnTGQ5wsoK29scXrURc60Hxe
-	 MGDHqItscaWhN7enOD/mvFxbSSImeeXsHAbnGvYJ5sTOASjMOgFDjEJMtLkGKi1H3Q
-	 G+UqsX6tQP7T90DSwHcwIHMFQ52Qq7R5oXaOGEgtBjR5CUtq0umEZsFDgQnFbxPkcu
-	 ILDRojuuhZ9mlC78j7bU9AII3N/ZU3X7TiLDRAleKDJ0jIVvovHhIQVYviXG/q1Kn6
-	 9Wrv+3eu31FVuxn/oAs/8MlcrVEx03oRjeJQALAnMQAjV3MC9L89ZtzUD0BD+7JokN
-	 /rzIu/4/GVF+w==
-Date: Mon, 5 Aug 2024 11:43:04 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-staging@lists.linux.dev,
-	Linux-ALSA <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 000/113] ALSA: add snd_pcm_is_playback/capture() macro
-Message-ID: <8a4d449b-0748-45e9-b313-9af0d349a776@sirena.org.uk>
-References: <874j7z3j1a.wl-kuninori.morimoto.gx@renesas.com>
+	s=arc-20240116; t=1722861783; c=relaxed/simple;
+	bh=YW/qg94iZPhUR0tp0hVHRnEk+cNH6Dflx/IRgbrrdEg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=agVf64gKrH7TvG+noxxKa3hVFRRtEbb4s/yudJ0rbznLGxLGtwGsmuYe6K+vp6mtov4A17e5auaMr0kdiITcAQqT8bXrOfBb/G0zV/7m9l4DdW58xGGOQuqBxVRNmQyMSnT7tfhXVha0Y34SaZDv8+QLJ0v9RD8YkZjX4xRoRtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fGoICLhP; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-530ae4ef29dso10828713e87.3;
+        Mon, 05 Aug 2024 05:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722861780; x=1723466580; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YW/qg94iZPhUR0tp0hVHRnEk+cNH6Dflx/IRgbrrdEg=;
+        b=fGoICLhPyAVMHwnKk9iRx+P9eQ1vjUYwJxG/VMA+KWNuLFpjzxh9OQtPuM776EK7Cv
+         Lu1vS2ITPcAViLqRwo/llvfkjf0kJ3RWOvvbPTx/ppFbdNoxobq0zQiitE2wxh++6Qni
+         iTj79S4NLtwW8cZCfc2BS52r+FMxQXkY2RmgyzJb3sG93pS43Na/+QCUnAXxA3HEHuUU
+         ngeb59o3W3fY6vfuK+N4bg0/rYQJ1bYQ97yR4HVzzhyGVaMeP8l83GNFjcRtfXstMY+9
+         N4werS22uPi5m9P6X3NVXglIsCZ3uXpqk1WRapeQyA45lJWkay3zkNBganXN0tesxcWy
+         Yrlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722861780; x=1723466580;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YW/qg94iZPhUR0tp0hVHRnEk+cNH6Dflx/IRgbrrdEg=;
+        b=NokhRQYsBbMkjJEckYHbiEs3iGj0giPIateWtZdMxzO41KjvwxAil/CcnB1A97jf/e
+         vIgudV5DLKs5eVFDv2cJejhaCunoGO34eVmnBLcCBGM4RBQiLaI8kcgFJX+nh0mhfGBk
+         a7c98WlhGllNYQbx4p28unD817ErFetv8+EIU03KtLdj25YB9ERvkVMRc76yRbTqcJNx
+         MQYHHXv/Z4qGDptI15rB250z2wPrkYN+hn7IqmpTBN6eDFFhSZjDRRBCmOm157JZUSS5
+         8ZZpkpM3s52zufYxipZt+Q1xYJplEwg3ML+0D1baKHAfCtujLXpk4emOCz8DJujLOnBY
+         ypgA==
+X-Forwarded-Encrypted: i=1; AJvYcCVDKOtlymDJRrpcU4F/ABlMDWpabHjxJQ/uaUe3L+u73maK3E+bhmAyzFJkevZxhfbRdwgzcPEWnQJFjUWxCA3A9yijeY712uEFF4B2q7BXUgizcEFbbb9103E5FSAPhZ1t91mt20I10oPDvLpDLvG+V0JHpdvyE/PE57ieaShEWggFTBC/rX+mIFMWO3YxVNDcM3mJXGmv/CtXEKaqCEAo0rTdRPkcdQ1wvle/dwWDDwwiQS8gWQvz2XkBbQlfGMNe
+X-Gm-Message-State: AOJu0YwkBHO9UdV4CuMDfFu3ZfOoH1sVwS/IIqe4tw8pCoVFE80cH7ot
+	uHCgsXN5wqITKkHrvx9BWZ9OLc70PH+cyy++iG/UGWIcndMR9bC0
+X-Google-Smtp-Source: AGHT+IGrn/fiiMQfSHP2zwcfkB4NJ3UgsNTVBkuKqly9QoxA5DBgXyicWcuWmKSOBQoaeHciBly7ag==
+X-Received: by 2002:a05:6512:398a:b0:52c:df83:a740 with SMTP id 2adb3069b0e04-530bb38cfc7mr9005249e87.30.1722861779774;
+        Mon, 05 Aug 2024 05:42:59 -0700 (PDT)
+Received: from ?IPv6:2a02:ab88:3711:c80:e7a7:e025:f1a5:ef78? ([2a02:ab88:3711:c80:e7a7:e025:f1a5:ef78])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9bc3d14sm447805066b.22.2024.08.05.05.42.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 05:42:59 -0700 (PDT)
+Message-ID: <5af8048741215bdafa5d8f7bf6ab8dec3cd7aed0.camel@gmail.com>
+Subject: Re: [PATCH 06/13] clk: samsung: exynos7885: Update CLKS_NR_FSYS
+ after bindings fix
+From: David Virag <virag.david003@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>,  Sylwester Nawrocki
+ <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Michael
+ Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Thinh
+ Nguyen <Thinh.Nguyen@synopsys.com>, =?ISO-8859-1?Q?Andr=E9?= Draszik
+ <andre.draszik@linaro.org>, Peter Griffin <peter.griffin@linaro.org>, Sam
+ Protsenko <semen.protsenko@linaro.org>, Marek Szyprowski
+ <m.szyprowski@samsung.com>
+Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org
+Date: Mon, 05 Aug 2024 14:44:01 +0200
+In-Reply-To: <bd7c76a6-b7a5-4f8d-8081-95b6cdb39186@kernel.org>
+References: <20240804215458.404085-1-virag.david003@gmail.com>
+	 <20240804215458.404085-7-virag.david003@gmail.com>
+	 <bd7c76a6-b7a5-4f8d-8081-95b6cdb39186@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="R+fjNSCnhNXUq53X"
-Content-Disposition: inline
-In-Reply-To: <874j7z3j1a.wl-kuninori.morimoto.gx@renesas.com>
-X-Cookie: Goodbye, cool world.
 
+Hi Krzysztof,
 
---R+fjNSCnhNXUq53X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Aug 05, 2024 at 12:33:38AM +0000, Kuninori Morimoto wrote:
-
-> Many drivers are using below code to know the Sound direction.
+On Mon, 2024-08-05 at 07:49 +0200, Krzysztof Kozlowski wrote:
+> On 04/08/2024 23:53, David Virag wrote:
+> > Update CLKS_NR_FSYS to the proper value after a fix in DT bindings.
+> > This should always be the last clock in a CMU + 1.
+> >=20
+> > Signed-off-by: David Virag <virag.david003@gmail.com>
+> > ---
+> > =C2=A0drivers/clk/samsung/clk-exynos7885.c | 2 +-
 >=20
-> 	if (direction =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
+> This needs fixes and Cc-stable tag, same as the binding.
+
+Would it fix ef4923c8e052 ("clk: samsung: exynos7885: do not define number =
+of clocks in bindings")?
+Or would it fix cd268e309c29 ("dt-bindings: clock: Add bindings for Exynos7=
+885 CMU_FSYS")?
+
+I'm guessing the former, but technically the latter introduced
+the problem and the former transferred it to the clk driver.
+
+For kernel 6.1, this fix wouldn't work, as we'd need a fix in the
+dt-bindings instead (perhaps the dt-bindings fix should include
+this fix there).
+
+How would this work?
+
 >=20
-> This patch-set add snd_pcm_is_playback/capture() macro to handle it.
+> Best regards,
+> Krzysztof
+>=20
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---R+fjNSCnhNXUq53X
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmawrLcACgkQJNaLcl1U
-h9AcgQf9Fn7Ei9EEes+luzQ6AqPvwv4Lu+O5M76EWwCcdI5FZWwjJyaPiyC4gK8v
-0sWrOVgmAopHSqmjhvznqNdnGXW6imWz/lGjvVwWpl1FBWocTcjoVbUF7H9y2Kx/
-Ie7k1gpkvljD777PPDOo1ZXhcOeiFCPSsQh3H5w5U+qS6n6X7xi9KsPjPeV37TDN
-TFzr0Jrv+zgPCmJaii0ruRUiCCWuVK35MdNqYHwpMurA9/0Rb55yTVSGQ3G+XDzd
-YPxZ4DfvmHWWbHTtoRFjihjki0maZcwEEWAgk5N81pY+d3ZYaULDxeQACzXloZ3k
-4Kw9mDfIWMdHNtaez+0RGqsikTuPgw==
-=vRs4
------END PGP SIGNATURE-----
-
---R+fjNSCnhNXUq53X--
+Best regards,
+David
 
