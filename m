@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-13100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13101-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3731B947C42
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 15:54:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE575947C5A
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 16:01:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 691821C21CCF
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 13:54:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E08251C21D2F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 14:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8BA7868B;
-	Mon,  5 Aug 2024 13:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7F113A3F0;
+	Mon,  5 Aug 2024 14:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="claQdTGS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nOCjf571"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A59355E73;
-	Mon,  5 Aug 2024 13:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1D717C64;
+	Mon,  5 Aug 2024 14:01:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722866071; cv=none; b=fe4slpVp067hiDpNM3BS05mYbA1hKL4LmNWF07P42n4EKbZ4/MegnYj3Bml6f9O7pZIOLKxIo3CWMC0xbi9XmlW/iwLS9pRJAaaWJ9bPQ7CR/ft2elfQeLXWwWiPuBplogZPPLLkxBpbCG3Hi6ZetKmPPenixq2/1XjH1/p1CWo=
+	t=1722866476; cv=none; b=nz28F01bsklXU1pdaaSJzQSGexUXYOR+QhXuaKQDT0JU1/Szj1TozEs++parlW0lfvE4No7hfRTrxdO0j6LRHYqp+u2nDQ9V8YDuf2RRxdjd3ZzH9AFZYdUchT9U3JbD7YbETienelXTe++mvBxbO3Hp+7e7mWYVkUlaJi/YPgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722866071; c=relaxed/simple;
-	bh=BncnyQonmJ5+HmLoE7oS88pIgg0LaOFqG5VcpwZrO4E=;
+	s=arc-20240116; t=1722866476; c=relaxed/simple;
+	bh=xeW3BFg1rRXSSiFrEPt3V/qUAtk3sB6WPkxk77Ds2VU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q5uaIe7YOPE+8ldV/il6hBQBWGGaRJqjhUFlIZ7ou3RcDqTmQk2fY4wDJMCbxbbJPdPos20vglAZPZv7u9LsOpMM95T9tCqyHsr4G6wMaWzcgUgV04uV0NKBB51zNx/96fLRtpk8gIjyfaLgmOyCehUQ8F/7yx7Qx2JlrouSCUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=claQdTGS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA264C32782;
-	Mon,  5 Aug 2024 13:54:26 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mnEaQ8v7kyTup5pRW2o3+HzZvtE/l8HrVYVNUB/GEhYJxmLeiclM0ED6PowhMr5DE/K3FHWo+cQMnzt5hdfGP6BRoQZa3tDMwJE+GgDDxKwOSfKNmCvUU7FNZ5Dj88NBd24I5XJBa2spY9AEsW1+HQeek0jLtMu81bZEPip5u10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nOCjf571; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC1C1C32782;
+	Mon,  5 Aug 2024 14:01:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722866071;
-	bh=BncnyQonmJ5+HmLoE7oS88pIgg0LaOFqG5VcpwZrO4E=;
+	s=k20201202; t=1722866476;
+	bh=xeW3BFg1rRXSSiFrEPt3V/qUAtk3sB6WPkxk77Ds2VU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=claQdTGSpGAqM40GuXdBs1yWHEy4DZz79ft29R6GbokVsZ8F4XOHs18Q3ipoTQW7e
-	 oKWS8tgz1jwbs4lZAPqGvd3ZdySBQ63wMCp0t1c5YsYDOTkflkDJ+FZ/zO3WOdSmi9
-	 fMXflvuwb9Y46/u7kLpn9wlXuOdHblrj1a+kf/fhz3jXC0r/BYRT8p9CBXr2aUGP1Q
-	 Fn9SL24zBYBQNJr2deVfGnkeM8YWBS0g0QeKRoHkkhkFx3+KWc4jIjNDfyaaVjW2uj
-	 6MKfhha5LUxY0Hcg0s7LRVlccttt25IYLNmQt/36D+I4ha+ykur8DGaIqYfJAnLaAa
-	 t9bB3is/N0FBg==
-Message-ID: <0a634553-023c-4a46-8743-28357021c689@kernel.org>
-Date: Mon, 5 Aug 2024 16:54:24 +0300
+	b=nOCjf571dA5qd+ea4EQBuw9Z3KxslRDSOi+6l1QKD4BPPTsrqhbPtbOa/Tw/brAr/
+	 Ray+f3MFmZrFNo0T26yT/FNnB027HjfuiuxRl3tpfMcveGI6F6iK+iUmJaHT0rcPy8
+	 3ZR0wIkDTi0J4pfy9GtjHsM5Ymi0rd6heAIDjcU2kUf8VKGkjexjqvnX7XsaSgKfV5
+	 I+FZKHyD9Vu86GnmTtOzgQ9PcRwoQv0Jh4m5TuLZSUyun6yCPI8a4Ie+z2L8l4EY9E
+	 mZwNXxicKzHtsBSoUz2t/k6TXwJsq3TL1CZvwLp1lyj/iK1wJ8UxAGGoVEZJJ7tQa5
+	 7kVnYMTb7I6CQ==
+Message-ID: <2bf38b29-6aac-4c08-837f-a43683a54b56@kernel.org>
+Date: Mon, 5 Aug 2024 17:01:09 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,78 +50,100 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 07/12] usb: cdns3-ti: add J7200 support with
- reset-on-resume behavior
+Subject: Re: [PATCH v5 00/12] Fix USB suspend on TI J7200 (cdns3-ti, cdns3,
+ xhci)
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
  Pawel Laszczak <pawell@cadence.com>, Mathias Nyman
  <mathias.nyman@intel.com>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+ "Vardhan, Vibhore" <vibhore@ti.com>, Vishal Mahaveer <vishalm@ti.com>
 Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  Kevin Hilman <khilman@kernel.org>,
  =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Conor Dooley <conor.dooley@microchip.com>
 References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
- <20240726-s2r-cdns-v5-7-8664bfb032ac@bootlin.com>
+ <37760e53-4e0d-4275-8497-1b51dcf72d5a@kernel.org>
+ <D37UREKS0WIL.194M8MD5LEN2T@bootlin.com>
 Content-Language: en-US
 From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20240726-s2r-cdns-v5-7-8664bfb032ac@bootlin.com>
+In-Reply-To: <D37UREKS0WIL.194M8MD5LEN2T@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
++Vibhore & Vishal
 
-
-On 26/07/2024 21:17, Théo Lebrun wrote:
-> Add ti,j7200-usb compatible. Match data indicates the controller resets
-> on resume which tells that to the cdns3 core. This in turn silences a
-> xHCI warning visible in cases of unexpected resets.
+On 05/08/2024 11:58, Théo Lebrun wrote:
+> Hello Roger,
 > 
-> We also inherit the errata quirk CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE from
-> the default `cdns_ti_auxdata` configuration.
+> On Sat Aug 3, 2024 at 5:14 PM CEST, Roger Quadros wrote:
+>> On 26/07/2024 21:17, Théo Lebrun wrote:
+>>> Currently, system-wide suspend is broken on J7200 because of a
+>>> controller reset. The TI wrapper does not get re-initialised at resume
+>>> and the first register access from cdns core fails.
+>>>
+>>> We address that in a few ways:
+>>>  - In cdns3-ti, if a reset has occured at resume, we reconfigure the HW.
+>>>  - We pass the XHCI_RESET_ON_RESUME quirk, meaning the XHCI core expects
+>>>    a resume.
+>>
+>> OK.
+>>>  - We add a xhci->lost_power flag.
+>>
+>> Why?
+>>
+>>>
+>>> The previous revision had one big issue: we had to know if
+>>> reset-on-resume was true, at probe-time. This is where the main
+>>
+>> Don't we already know this at probe-time? why not just rely on the existing
+>> XHCI_RESET_ON_RESUME qurik, than add a new mechanism?
 > 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  drivers/usb/cdns3/cdns3-ti.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> Some TI platforms cannot tell, before going to suspend, if their USB
+> controller will reset. Suspend behavior is defined by (at least) two
+> features:
 > 
-> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
-> index 159814dfc856..65b8b6f4c654 100644
-> --- a/drivers/usb/cdns3/cdns3-ti.c
-> +++ b/drivers/usb/cdns3/cdns3-ti.c
-> @@ -258,7 +258,21 @@ static const struct of_dev_auxdata cdns_ti_auxdata[] = {
->  	{},
->  };
->  
-> +static struct cdns3_platform_data cdns_ti_j7200_pdata = {
-> +	.quirks = CDNS3_RESET_ON_RESUME |
+>  - Power domains. See arch/arm64/boot/dts/ti/k3-j7200-main.dtsi:
+> 
+>    usbss0: cdns-usb@4104000 {
+>       compatible = "ti,j7200-usb", "ti,j721e-usb";
+>       // ...
+>       power-domains = <&k3_pds 288 TI_SCI_PD_EXCLUSIVE>;
+>       // ...
+>    };
+> 
+>    This `power-domains` property implies that even s2idle will reset
+>    the controller.
 
-But you mentioned that the behavior can be different based on which
-idle state the system went into.
-Setting this flag will means Reset is required on every resume.
+I'm not so sure. All K3 platforms have the power-domains property for
+the USB wrapper nodes.
 
+> 
+>  - Deep suspend. The type of suspend defines what will happen to various
+>    controllers. Currently deep suspend is suspend-to-RAM, with the SoC
+>    being turned off.
+> 
+>    This might evolve over time with more complex rules: the chosen
+>    suspend behavior could depend on wakeup source and/or wakeup target
+>    latencies. That information might not be available to Linux, being
+>    decided upon by firmwares. We need to be able to resume successfully
+>    without being surprised by a reset.
+> 
 
-Instead, you just need to rely on the runtime check and set the xhci->lost_power flag at resume.
+Got it. Might be worth to mention this in the patch description.
 
-
-> +		  CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE,   /* Errata i2409 */
-> +};
-> +
-> +static const struct of_dev_auxdata cdns_ti_j7200_auxdata[] = {
-> +	{
-> +		.compatible = "cdns,usb3",
-> +		.platform_data = &cdns_ti_j7200_pdata,
-> +	},
-> +	{},
-> +};
-> +
->  static const struct of_device_id cdns_ti_of_match[] = {
-> +	{ .compatible = "ti,j7200-usb", .data = cdns_ti_j7200_auxdata },
->  	{ .compatible = "ti,j721e-usb", .data = cdns_ti_auxdata },
->  	{ .compatible = "ti,am64-usb", .data = cdns_ti_auxdata },
->  	{},
+> I am sorry the precise usecase wasn't clear from the get-go.
+> 
+> Thanks,
+> 
+> --
+> Théo Lebrun, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 > 
 
 -- 
