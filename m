@@ -1,284 +1,258 @@
-Return-Path: <linux-usb+bounces-13078-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13079-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D71BC9475A8
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 09:02:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E65F9475B7
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 09:05:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47A8EB20CEA
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 07:02:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A23C51C20D8F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 07:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFED1145FE2;
-	Mon,  5 Aug 2024 07:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E4E71494C4;
+	Mon,  5 Aug 2024 07:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0buGd8nR"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="GzbHQ0vL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2084.outbound.protection.outlook.com [40.107.21.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469C41109;
-	Mon,  5 Aug 2024 07:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722841316; cv=none; b=S3CWpcNjAxhUrFigi5ggl7FJX0p4+4EivEYyh/kIG3awlbDj8bkBKIzNHLjYbS8GotcFRHdeKceJec5S9PQTjGhG1dxsGsTj7Sd/6mlgNDmatnTUBPm6hkt3bpIXCTleAT6Rr7CZL0A3UPwxj4SrUEn/g8HpP0RDzR5o+38m36A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722841316; c=relaxed/simple;
-	bh=4QoMugMLw5W2gcbxvuUgAl8QFQMNiCPWsKLkbOyrOLw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c3U5i5vL4jdvNYrcVsdACDTNO8tD8LAnlV98SrHzoAZrvJFwE2iKBnA1C+fvMNsh2OyfexjnmpEeutzke4QZjqPDyFHqCyL8p7ybpJgVoy3BtCrycSK6MbR8VHeehyVsyoqJ39as342xWmGM6Ku4TI5c3qhIAf+3cCCmO/b65eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0buGd8nR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C649C32782;
-	Mon,  5 Aug 2024 07:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1722841315;
-	bh=4QoMugMLw5W2gcbxvuUgAl8QFQMNiCPWsKLkbOyrOLw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0buGd8nRim4xJJhU+SHdKlM4+iHzqXu31nY2OG4VJIJzXv5bWLETiaXS0EjKKZXfr
-	 iyRHzEJq2x+xdkvQPTQrOe/mVGp4ctLU81iiBG28BaJ1Ygr8I+6WUlHB6xOSxrfug3
-	 0bbNGBVHxFZ/LY/vRh095nwXhtMyuK8/UYjQeW2U=
-Date: Mon, 5 Aug 2024 09:01:52 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: crwulff@gmail.com
-Cc: linux-usb@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Christian Brauner <brauner@kernel.org>,
-	Eric Farman <farman@linux.ibm.com>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Dmitry Antipov <dmantipov@yandex.ru>,
-	Jeff Layton <jlayton@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, David Sands <david.sands@biamp.com>
-Subject: Re: [PATCH v4] usb: gadget: f_fs: add capability for dfu run-time
- descriptor
-Message-ID: <2024080516-flatness-humorous-03ca@gregkh>
-References: <20240805000639.619232-2-crwulff@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF18C149002;
+	Mon,  5 Aug 2024 07:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722841515; cv=fail; b=rYtb2/wFJP4yOq3ZuwG1Toj4r5qitIW+v7MMInSNEBYuETKT7Vej10DFN49SIG/YTZXP0q91Ouzmn43cqkEFF46z+BZphLF/vCt3jou2wfdXBrT+JpHypF69Xi2f/krnfvQhLuV8XTgfSScNQOCAF9OEJ1QrYo3Opp5p13K22kU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722841515; c=relaxed/simple;
+	bh=6fhEmsWgtUGP0o0hMyTFlLe/4cotFROLyUoL38KnPXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=jlnS2ghpfsKHVjs8F/G9/BwEvyKJL8MUKl89RlxM+pOMZtqjxDTOkBqstDR2phWeYyusPnS1M1aK8IHGvP7l9geqaDTlOSgnJsqrkXj7EymanOLsgBqWRCvoQY/CbNqas8DZFCJj77VW/sqPqXCcj+eO9OttgQQJJDeOzAqrFW4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=GzbHQ0vL; arc=fail smtp.client-ip=40.107.21.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=L4pZMFt8J2HJjUrYWN1wAqx3NWQR3BF97Ds/mWHKlJoL9ZJyl9pasHRXccNUnqQ5PvRHJBhAcmqjtt4oRVUjUqgIAJRiZAlEsCBUYjN4+djHORJuo2rKu+NvSIYHgRq3uta1l9FTkfQCS62A1+99iA+Gs/zmcBO+hMea3wlkMfaGRsDmYH3og80EXMs5I8hgNaHzMCBqIzjVT8fGKiGuQGwDw+Me9iC0B2q0w57pFgxv2iQXCbXrJIu7WH8Vw8utAUNHqx4JmJXKXrq8H1e8KtYGfdc0WOaRxvd7Jwl7yyMi4xkPLY4cC0t8L9DhMq33eWkWJueBNwfQsesY3P1ilQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MxPgtEScUnYcXde+J4IB9st15xQit8HI15ognSduwe0=;
+ b=ShEvo774HG94B5qrFsLgybcA+QCtGaFftnDWVhgHiHlufgn4PuqdP7vcg7EYWKb58nZNZjWD5t4gH3G0gj3jugAWkv4eRw0jFMYJ6LGrk4pOR4pGRiRYrePWo6QgnCExRegHXGk/3Gzw9YaR6k4wjVfMnoRpFe4gVOMB5O/QnhxU9u4vbKnq7Fj7l/XHO1Oi8AsBbrfLdHgrBN4md6A4jGKNJ8SkluK1pszK5iUUIH9yYdvqoFEWK6gNtzBsQOH5DrP/4xf36yQqbmahuZ/Hx0g6e8plq6uq7vlajBF5SZXop6G7Cmemah3isJhqRPL++5k3dpZuWXFpK/7o/DdCZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MxPgtEScUnYcXde+J4IB9st15xQit8HI15ognSduwe0=;
+ b=GzbHQ0vL6VdjVyvEb+V40YNpEl2C9XNjhSSQQSkkFDS0Ej8Itj0Cl8UmxcbZ93EKz4aQxaeX4jaftoNQErdsG309CN8+INzs6GXMC7kMd7iyvVQMy5H3EX0ltPYMsvnQtBcf+m9FOfbRXclXAUoNNCxdlSDyWODyQoc5iVgAc0EfXGV5GuBz+1vj/PPNbTc+BKrRq4q+lgjhXCpt6S1oawhbxA2yHScby1iWClIo4sBLavhglvWCjywelZnlzFMafnsLoYDcm19e/rs+UR1wT1TFGewFC4rwrq/qTrqiWhKZKbXPBm7ErLEQMWwuDnz9c4KGa43qKF4qYi4hiZN2oA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AS8PR04MB8690.eurprd04.prod.outlook.com (2603:10a6:20b:429::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.25; Mon, 5 Aug
+ 2024 07:05:10 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%5]) with mapi id 15.20.7828.024; Mon, 5 Aug 2024
+ 07:05:09 +0000
+Date: Mon, 5 Aug 2024 15:04:29 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	gregkh@linuxfoundation.org, Frank.Li@nxp.com, jun.li@nxp.com,
+	l.stach@pengutronix.de, aford173@gmail.com, hongxing.zhu@nxp.com,
+	alexander.stein@ew.tq-group.com, linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: phy: imx8mq-usb: add compatible
+ "fsl,imx95-usb-phy"
+Message-ID: <20240805070429.rqykjd3ap5swd5vl@hippo>
+References: <20240802091702.2057294-1-xu.yang_2@nxp.com>
+ <21557eac-44f0-451d-a194-c5d545cacbee@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <21557eac-44f0-451d-a194-c5d545cacbee@kernel.org>
+X-ClientProxiedBy: SI1PR02CA0006.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::11) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240805000639.619232-2-crwulff@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AS8PR04MB8690:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62f38549-4429-4e74-42a9-08dcb51cf193
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|7416014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?q0VP5+85Kk5XMXNJyix9ABOx51tbbQ+9V6pooXXM5upl3HVeeuRecNl2nDb/?=
+ =?us-ascii?Q?w9qJTqFS2bj/SfTknjDvISNwzEN1L+rBe54H0OCnO84LU2LpDeLV5eyzGonq?=
+ =?us-ascii?Q?zdOh5b6QBvAYU3FtpmV1ltcWjPSdLyYzqVe8XbXHUN/3IyLSQXL6DY+gykkM?=
+ =?us-ascii?Q?AUdbDe2+FrBy2A4gfmInXeeOkgeGNGR/Uei5Zv2eXosX+nJkBXmXWHp9wSZ8?=
+ =?us-ascii?Q?bOosb1z3WyuZ6yaXyF2lpRRufFbm5Sxz37qMygy40jXObgr7bJV16/blMB4p?=
+ =?us-ascii?Q?PQXVosYea/zF1NJVCbOaMbgwR3gY9+Rrq3xTtQEWA8ixfDGoIesfdT2SZRLv?=
+ =?us-ascii?Q?1TDwdQexq/NVEMVTrbkPQBrCdLqcwy4tYflBThJ/R9uQa5gBOsuIuIBy1o6e?=
+ =?us-ascii?Q?2zHxaaXp/r+WP2xr43dSEyDi6UQGBZdkRrt9vBadm0VCaNQ0lAo5iSajDiEr?=
+ =?us-ascii?Q?qz3GLC2B2E9mfPbshF26D9/vw0j4SblJqQJFsB1o113dkJ4giM9upFIgESkH?=
+ =?us-ascii?Q?3DiJtQY1IqppA9ILCKg8jS+0vqS046I5IYg3yZ75Vjqa/GpS4SC+hB8h0zKy?=
+ =?us-ascii?Q?cbPdWykwlwrSX2w7WHBsQyQzOQfLrHIPScW53r7rDX/5r4zOOnDxURDUQLnH?=
+ =?us-ascii?Q?uDLXoH2/XWDYy6dA4st4hhHduQP88Q5Pjw7VgjaP7zHGu3u+dcxaFWMczTVp?=
+ =?us-ascii?Q?2sUMhfJrwr4ZuRYIylxxRp7vrTAzkRcvpq0BmsxTOufgpHJ5Aw/HqYeoXnsW?=
+ =?us-ascii?Q?xKqhgzwzXTQM/ot2gn1JS71CiDDkLIJfhkLIewIZ/2mN8n1aqVt/WRhD/8Pb?=
+ =?us-ascii?Q?+Ru7w3XEVmaTUct5wBfruAJXi9s1ZCAi72R00wY+Q4qypFWguqgekTgLyNlJ?=
+ =?us-ascii?Q?oJF3RW/dpQwuJGWHCmfZPEBzwM3Yx03opesY3P+HZiZBFqEV/GygjiTvLZbt?=
+ =?us-ascii?Q?0UNWhz0EXZBlyCa0z71Bxh9SROt/WVpmF1ee555ZltmgaFe7rJBUymGoU/Bd?=
+ =?us-ascii?Q?7BnTTPhk0W+Go2cJW1ojKJXIytYeiBasLcDyrvqpde1PkArJEnaCNVZTNnLr?=
+ =?us-ascii?Q?U7ePZrubk9X/aFtisoiv+4gPef2RVTVOG5bc7B0jMZy4lGvKTwzVcsNefq+O?=
+ =?us-ascii?Q?IJYsOBVcECZas1XCwErsiHlULgSFSIZqJrJzkMODriBxIZeOUlJn/N2ElD5T?=
+ =?us-ascii?Q?GQtU76AEaviwvHYChes9zzftj+pPKwNrjft6S1YVvZkeJEd1ROJWZzq24whc?=
+ =?us-ascii?Q?WbvD9h4UMEvP4tr2EpiMyEnNnjYKiGEpC5QVj3U5WlhImkTCO2RNmBlCitAF?=
+ =?us-ascii?Q?IXqCOt+ZakLzpvFcQ8M21kjjIRcZHE5UXI5V+OY0nwtuIojUKfBqzLGaG0uj?=
+ =?us-ascii?Q?sw8OIR+0Olweb9Wi/liewdyXr9Cl0+8P6TNlmghAGbIiPeYz9w=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?XutqoMVe3DsfGb5GggVT6VjkVm0ldCh3jNiOZtTojKWSaV5hp7dHkTqLuedb?=
+ =?us-ascii?Q?xX5smZRzX4fuBt3dunvtmlUgjSct+5d5O3WTWw7oRHkslL88IO4XvSeKG3/9?=
+ =?us-ascii?Q?mk20hiEE1WYZd8n8W0JLU8WWGIPXp0mij0ETQmKcH7j6B8m33YKwE9k0iNAP?=
+ =?us-ascii?Q?cD6flL8cckxKcdao7/fWfqtlR6cviThGfmJNS3uw4sWV+vWGxhOJkD3qQhLh?=
+ =?us-ascii?Q?EYqzJmbrmYKLpMu5LVc/K4HCkPQlOQUQhF1ka2M7wbkgfVkhvTbEhHMuIN4C?=
+ =?us-ascii?Q?SxP7T6htmV8N7WfZ0EdvLCE/g2scDpFC0/evCsfZW4qzGJ4Ih0W//dY3DHgo?=
+ =?us-ascii?Q?egXqrR2Fy2OPicn1jtWyvwe+WcxiwY2NYOBG3QdcW+auk8Z+PtpD5I9hprUY?=
+ =?us-ascii?Q?mJNV4yO2jXixJm9aSAPHQE8GiB9LzHMI/aPhVTRH5n+a/l2CTQA3DQVV93Vy?=
+ =?us-ascii?Q?LC9WJ/A4zKlf+ZpaqknbnxrG8U6WdSknplf6dsBuajKkitCEGR3EckjCoVxB?=
+ =?us-ascii?Q?HxXvbzQaoDoK3q3W7DeoscySZGwrhQODhsTszwIe02RoYSsl1e0e1pHJh4tM?=
+ =?us-ascii?Q?fOPvgFXq9ZwBzjUAP+u8cdw6/kAuJ3XK84FP4X/OLp2dzVTMlj06Fhvgoysw?=
+ =?us-ascii?Q?Uo2FSpptIrOqmuz67mv9X1P/osuxJUVk97DvGb0cBNDHiMVxyD2ueZzQpfQr?=
+ =?us-ascii?Q?nooFV8cuAfXgl6UqEeRYdrqn5x43D7Y0ECdiSffxeZgeTe5DrTcJLZpVG8bE?=
+ =?us-ascii?Q?h0L969gX47WXx7ma2krWwHmcMRPKrNJEV5MYaiEHd02qkNOyfN5bMW2gObIl?=
+ =?us-ascii?Q?1eTTcWnQd75rlUmxoXqpdORhcv1L4zFYJRje0/Xuo7Q4NRoZyJOo54If5USZ?=
+ =?us-ascii?Q?zx+/t+SotmIe+DGRbt8dfdgmQxVdKctAfSioFGC8FqT2fdOEFUQDJN8FtGUF?=
+ =?us-ascii?Q?nne3ReDU5mgU+66MA/uikOVVc/5fR3QpsomMzUzmVgONn9huLonzz9brJTgb?=
+ =?us-ascii?Q?IfHUUv6tomFMvYx/CwD+0mCMgekNLp/YJCvJst7XEgZBahYwcTAKx5WNa7dT?=
+ =?us-ascii?Q?7zeu3uJpmTqGxjIWLF34+0xGVZooHlpO1WrJl1AgDt6gIn2rtyeI5pfEgJTK?=
+ =?us-ascii?Q?GDog6ehnUg/X6zNoSrx29bn11vmPqxqLvcnA/ia/pERxQN0gB0Y4yj49SDol?=
+ =?us-ascii?Q?IVJhe7S+QpEzqC3fH17dhdYqOyYgf7eRuy/1qANgHlvplIJxRZGbSn3NgHs6?=
+ =?us-ascii?Q?eJg4osbE0Off7xEZMGNaNGW6yrtlgp7sgQ3DRz6bvZXkMARjIaF1HtRRat5R?=
+ =?us-ascii?Q?IBtd+pzS4848ksSAfTHqA2abj7FvYOKQ/EkzC2pT/GpkM88w8DQVq/aCAKzr?=
+ =?us-ascii?Q?N2Uihb+OvSuUEmIWwLuh7qhjqr4sDDqK0Weowjaea1RUi/g+fcjuBzsWDYWx?=
+ =?us-ascii?Q?H36Y7sGvsGw25UJx9sdLMkE6mGPBNvn72dZSxVB3ryeHEHWn2XIsXf2Ld5Qg?=
+ =?us-ascii?Q?A8LkCQ6Te4NRdq2in7zvLAeniHdl0JxmwDZfjECm5AgLMdy7K4etGxix1NZj?=
+ =?us-ascii?Q?yiDZEoywpEB3RC5agHom1lYRNYEHBqp1qSqHaK05?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62f38549-4429-4e74-42a9-08dcb51cf193
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2024 07:05:09.8233
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5/9jzcA9LYoqDG/0+W2fALAXADYGgg36co8wBIviM5+SkFrTocnth7+lGf844jYbP/zELOCOtCD2onaFgxUVTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8690
 
-On Sun, Aug 04, 2024 at 08:06:40PM -0400, crwulff@gmail.com wrote:
-> From: David Sands <david.sands@biamp.com>
+On Sun, Aug 04, 2024 at 04:16:34PM +0200, Krzysztof Kozlowski wrote:
+> On 02/08/2024 11:16, Xu Yang wrote:
+> > The usb phy in i.MX95 is compatible with i.MX8MP's, this will add a
+> > compatible "fsl,imx95-usb-phy" for i.MX95. Also change reg maxItems
+> > to 2 since i.MX95 needs another regmap to control Type-C Assist (TCA)
+> > block. Since i.MX95 usb phy is able to switch SS lanes, this will also
+> > add orientation-switch and port property to the file.
+> > 
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > ---
+> >  .../bindings/phy/fsl,imx8mq-usb-phy.yaml      | 40 +++++++++++++++++--
+> >  1 file changed, 36 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+> > index dc3a3f709fea..b0a614a9556d 100644
+> > --- a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+> > +++ b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+> > @@ -11,12 +11,17 @@ maintainers:
+> >  
+> >  properties:
+> >    compatible:
+> > -    enum:
+> > -      - fsl,imx8mq-usb-phy
+> > -      - fsl,imx8mp-usb-phy
+> > +    oneOf:
+> > +      - enum:
+> > +          - fsl,imx8mq-usb-phy
+> > +          - fsl,imx8mp-usb-phy
+> > +      - items:
+> > +          - const: fsl,imx95-usb-phy
+> > +          - const: fsl,imx8mp-usb-phy
+> >  
+> >    reg:
+> > -    maxItems: 1
+> > +    minItems: 1
+> > +    maxItems: 2
+> >  
+> >    "#phy-cells":
+> >      const: 0
+> > @@ -28,6 +33,17 @@ properties:
+> >      items:
+> >        - const: phy
+> >  
+> > +  orientation-switch:
+> > +    description:
+> > +      Flag the PHY as possible handler of USB Type-C orientation switching
 > 
-> From: David Sands <david.sands@biamp.com>
+> No need to duplicate definitions of properties.
 
-Twice?
-
-> Add the ability for FunctionFS driver to be able to create DFU Run-Time
-> descriptors.
-
-As others said, please spell out "DFU" and I do not think that
-"Run-Time" needs Capital letters, or a '-', right?
-
-Also include here a lot more description of how this is to be used.
+I replace it with "orientation-switch: true".
 
 > 
-> Signed-off-by: David Sands <david.sands@biamp.com>
-> Co-developed-by: Chris Wulff <crwulff@gmail.com>
-> Signed-off-by: Chris Wulff <crwulff@gmail.com>
-> ---
-> v4: Clean up unneeded change, switch to BIT macros, more documentation
-> v3: Documentation, additional constants and constant order fixed
-> https://lore.kernel.org/all/CO1PR17MB54197F118CBC8783D289B97DE1102@CO1PR17MB5419.namprd17.prod.outlook.com/
-> v2: https://lore.kernel.org/linux-usb/CO1PR17MB54198D086B61F7392FA9075FE10E2@CO1PR17MB5419.namprd17.prod.outlook.com/
-> v1: https://lore.kernel.org/linux-usb/CO1PR17MB5419AC3907C74E28D80C5021E1082@CO1PR17MB5419.namprd17.prod.outlook.com/
-> ---
->  Documentation/usb/functionfs-desc.rst | 22 ++++++++++++++++++++++
->  Documentation/usb/functionfs.rst      |  2 ++
->  Documentation/usb/index.rst           |  1 +
->  drivers/usb/gadget/function/f_fs.c    | 12 ++++++++++--
->  include/uapi/linux/usb/ch9.h          |  8 ++++++--
->  include/uapi/linux/usb/functionfs.h   | 25 +++++++++++++++++++++++++
->  6 files changed, 66 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/usb/functionfs-desc.rst
+> > +    type: boolean
+> > +
+> > +  port:
+> > +    $ref: /schemas/graph.yaml#/properties/port
+> > +    description:
+> > +      A port node to link the PHY to a TypeC controller for the purpose of
+> > +      handling orientation switching.
 > 
-> diff --git a/Documentation/usb/functionfs-desc.rst b/Documentation/usb/functionfs-desc.rst
-> new file mode 100644
-> index 000000000000..73d2b8a3f02c
-> --- /dev/null
-> +++ b/Documentation/usb/functionfs-desc.rst
-> @@ -0,0 +1,22 @@
-> +======================
-> +FunctionFS Descriptors
-> +======================
-> +
-> +Interface Descriptors
-> +---------------------
-> +
-> +Standard USB interface descriptors may be added. The class/subclass of the
-> +most recent interface descriptor determines what type of class-specific
-> +descriptors are accepted.
-> +
-> +Class-Specific Descriptors
-> +--------------------------
-> +
+> Same here. You probably miss reference to usb-switch.
 
-Why an empty section?
+How about port? Should I replace it with "port: true" or
 
-> +DFU Functional Descriptor
-> +~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +When the interface class is USB_CLASS_APP_SPEC and  the interface subclass
+"port:"
+"  $ref: /schemas/usb/usb-switch.yaml#/properties/port"
 
-Extra space?
+Thanks,
+Xu Yang
 
-
-> +is USB_SUBCLASS_DFU, a DFU functional descriptor can be provided.
-
-Provided how?
-
-> +
-> +.. kernel-doc:: include/uapi/linux/usb/functionfs.h
-> +   :doc: usb_dfu_functional_descriptor
-> diff --git a/Documentation/usb/functionfs.rst b/Documentation/usb/functionfs.rst
-> index d05a775bc45b..4f96e4b93d7b 100644
-> --- a/Documentation/usb/functionfs.rst
-> +++ b/Documentation/usb/functionfs.rst
-> @@ -70,6 +70,8 @@ have been written to their ep0's.
->  Conversely, the gadget is unregistered after the first USB function
->  closes its endpoints.
->  
-> +For more information about FunctionFS descriptors see :doc:`functionfs-desc`
-> +
->  DMABUF interface
->  ================
->  
-> diff --git a/Documentation/usb/index.rst b/Documentation/usb/index.rst
-> index 27955dad95e1..826492c813ac 100644
-> --- a/Documentation/usb/index.rst
-> +++ b/Documentation/usb/index.rst
-> @@ -11,6 +11,7 @@ USB support
->      dwc3
->      ehci
->      functionfs
-> +    functionfs-desc
-
-That's an odd name for a DFU-specific file, right?
-
-Where are the Documentation/ABI/ entries?
-
->      gadget_configfs
->      gadget_hid
->      gadget_multi
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index d8b096859337..ba5c6e4827ba 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -2478,7 +2478,7 @@ typedef int (*ffs_os_desc_callback)(enum ffs_os_desc_type entity,
->  
->  static int __must_check ffs_do_single_desc(char *data, unsigned len,
->  					   ffs_entity_callback entity,
-> -					   void *priv, int *current_class)
-> +					   void *priv, int *current_class, int *current_subclass)
->  {
->  	struct usb_descriptor_header *_ds = (void *)data;
->  	u8 length;
-> @@ -2535,6 +2535,7 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
->  		if (ds->iInterface)
->  			__entity(STRING, ds->iInterface);
->  		*current_class = ds->bInterfaceClass;
-> +		*current_subclass = ds->bInterfaceSubClass;
->  	}
->  		break;
->  
-> @@ -2559,6 +2560,12 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
->  			if (length != sizeof(struct ccid_descriptor))
->  				goto inv_length;
->  			break;
-> +		} else if (*current_class == USB_CLASS_APP_SPEC &&
-> +			   *current_subclass == USB_SUBCLASS_DFU) {
-> +			pr_vdebug("dfu functional descriptor\n");
-> +			if (length != sizeof(struct usb_dfu_functional_descriptor))
-> +				goto inv_length;
-> +			break;
->  		} else {
->  			pr_vdebug("unknown descriptor: %d for class %d\n",
->  			      _ds->bDescriptorType, *current_class);
-> @@ -2621,6 +2628,7 @@ static int __must_check ffs_do_descs(unsigned count, char *data, unsigned len,
->  	const unsigned _len = len;
->  	unsigned long num = 0;
->  	int current_class = -1;
-> +	int current_subclass = -1;
->  
->  	for (;;) {
->  		int ret;
-> @@ -2640,7 +2648,7 @@ static int __must_check ffs_do_descs(unsigned count, char *data, unsigned len,
->  			return _len - len;
->  
->  		ret = ffs_do_single_desc(data, len, entity, priv,
-> -			&current_class);
-> +			&current_class, &current_subclass);
->  		if (ret < 0) {
->  			pr_debug("%s returns %d\n", __func__, ret);
->  			return ret;
-> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-> index 44d73ba8788d..91f0f7e214a5 100644
-> --- a/include/uapi/linux/usb/ch9.h
-> +++ b/include/uapi/linux/usb/ch9.h
-> @@ -254,6 +254,9 @@ struct usb_ctrlrequest {
->  #define USB_DT_DEVICE_CAPABILITY	0x10
->  #define USB_DT_WIRELESS_ENDPOINT_COMP	0x11
->  #define USB_DT_WIRE_ADAPTER		0x21
-> +/* From USB Device Firmware Upgrade Specification, Revision 1.1 */
-> +#define USB_DT_DFU_FUNCTIONAL		0x21
-> +/* these are from the Wireless USB spec */
->  #define USB_DT_RPIPE			0x22
->  #define USB_DT_CS_RADIO_CONTROL		0x23
->  /* From the T10 UAS specification */
-> @@ -329,9 +332,10 @@ struct usb_device_descriptor {
->  #define USB_CLASS_USB_TYPE_C_BRIDGE	0x12
->  #define USB_CLASS_MISC			0xef
->  #define USB_CLASS_APP_SPEC		0xfe
-> -#define USB_CLASS_VENDOR_SPEC		0xff
-> +#define USB_SUBCLASS_DFU			0x01
->  
-> -#define USB_SUBCLASS_VENDOR_SPEC	0xff
-> +#define USB_CLASS_VENDOR_SPEC		0xff
-> +#define USB_SUBCLASS_VENDOR_SPEC		0xff
->  
->  /*-------------------------------------------------------------------------*/
->  
-> diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
-> index 9f88de9c3d66..40f87cbabf7a 100644
-> --- a/include/uapi/linux/usb/functionfs.h
-> +++ b/include/uapi/linux/usb/functionfs.h
-> @@ -37,6 +37,31 @@ struct usb_endpoint_descriptor_no_audio {
->  	__u8  bInterval;
->  } __attribute__((packed));
->  
-> +/**
-> + * struct usb_dfu_functional_descriptor - DFU Functional descriptor
-> + * @bLength:		Size of the descriptor (bytes)
-> + * @bDescriptorType:	USB_DT_DFU_FUNCTIONAL
-> + * @bmAttributes:	DFU attributes
-> + * @wDetachTimeOut:	Maximum time to wait after DFU_DETACH (ms, le16)
-> + * @wTransferSize:	Maximum number of bytes per control-write (le16)
-> + * @bcdDFUVersion:	DFU Spec version (BCD, le16)
-> + */
-> +struct usb_dfu_functional_descriptor {
-> +	__u8  bLength;
-> +	__u8  bDescriptorType;
-> +	__u8  bmAttributes;
-> +	__le16 wDetachTimeOut;
-> +	__le16 wTransferSize;
-> +	__le16 bcdDFUVersion;
-> +} __attribute__ ((packed));
-> +
-> +/* from DFU functional descriptor bmAttributes */
-> +#define DFU_FUNC_ATT_CAN_DOWNLOAD	BIT(0)
-> +#define DFU_FUNC_ATT_CAN_UPLOAD		BIT(1)
-> +#define DFU_FUNC_ATT_MANIFEST_TOLERANT	BIT(2)
-> +#define DFU_FUNC_ATT_WILL_DETACH	BIT(3)
-
-Wrong macro for bit fields for uapi .h files :(
-
-thanks,
-
-greg k-h
+> 
+> > +
+> >    power-domains:
+> >      maxItems: 1
+> >  
+> > @@ -89,6 +105,22 @@ required:
+> >    - clocks
+> >    - clock-names
+> >  
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - fsl,imx95-usb-phy
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 2
+> 
+> list and describe the items here, instead.
+> 
+> 
+> Krzysztof
+> 
 
