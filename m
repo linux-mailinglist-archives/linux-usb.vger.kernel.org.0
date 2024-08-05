@@ -1,48 +1,65 @@
-Return-Path: <linux-usb+bounces-13075-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13076-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D202B9474E6
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 07:53:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD13194758E
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 08:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 890B42814F1
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 05:53:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48A60B20A07
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 06:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D963CD53B;
-	Mon,  5 Aug 2024 05:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E5913F43B;
+	Mon,  5 Aug 2024 06:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SEtKm0zI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jtY+tD3O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496B0143C41;
-	Mon,  5 Aug 2024 05:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61281422D8
+	for <linux-usb@vger.kernel.org>; Mon,  5 Aug 2024 06:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722837188; cv=none; b=D2NovEzWOTG0OJhzGInBbaTq5MB9hkcNV9N/avB8FvTWCrsniK6+ZnAhxZpQi6S8i2UBh4DYE0Qj9EDCSFt+KAjwer4A8S7KnLDFLwm+uWc0XSAH59t6ETEUJcaBqCD8TCci0vQuVPUGHGWDhogUQXmUZGhZK/gquNuTPTULSfw=
+	t=1722840472; cv=none; b=mSMneGTJj0q/oyzientKjm8b4cu3Sjy4Vscz1yZfMdPgR+/bb9VTVv1R/7MBPdQPbGLt57geEV2eG5c5P7G/J3QMH6Ayxzyz6ba5J8ucIr9gZWfoLHXu00Zl71JEbStguzzSmLa5yEWLHRli99J/n58Y0s1W9u3CjQnc7j5Mht4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722837188; c=relaxed/simple;
-	bh=6fI3BFOTIGTzYg//O5lLuo/uj0wTMTOT0xK83qAJsXY=;
+	s=arc-20240116; t=1722840472; c=relaxed/simple;
+	bh=P0KR6mYALOpSYqhh9VceWNxneuD7zTni6YQ4TALZTNg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=szOt3RnjAKjCmmRTTVaVrh+2odI4qyTpoF8zmxbDvHTeuqCHFfLWXjZoilTsLj+uy4ZCwT9xYhEIgzMAEGMR73vKKWpapCxIx75BBX4XQLe4uqrdTzoFqZ23+u6flOg88dke/N+MYs+njhQrjfpKyEvbLgeimoSwIVyXdcn/dTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SEtKm0zI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775BAC32782;
-	Mon,  5 Aug 2024 05:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722837188;
-	bh=6fI3BFOTIGTzYg//O5lLuo/uj0wTMTOT0xK83qAJsXY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SEtKm0zIgpDbCRKdgzYsycRcly7i0iks9ktsgpuWWMQg3n4bQfqb9UKVehWkdqvPp
-	 UqmzGUxcbSdJb3HY1YMbSYFQtOzNOMyHOjdO5jo42auPgy4epb5GFQd4Dfl3Cgtzei
-	 ejt26hZLJW2RSV8cCDWwcLjuqpDb2j4QOuy5AJzxMCYuVK2abbGw+F8zdRNfgAA++w
-	 P6sHlcQO7q6o+MKRWxb5ThKp9zVjIcTomNd4brYpjzFP7bxmeeg8NEtNd6K8M+zkIE
-	 h6JQFurMQcuKGfoOFxK4cpkCgCjbtDZtJEWjOAunSNNN3WEqidzsrlWkicMOiRoku/
-	 SYTk2wVhWOkOA==
-Message-ID: <fe9931ac-4b20-4fe8-aa91-9d9cca7e9770@kernel.org>
-Date: Mon, 5 Aug 2024 07:52:58 +0200
+	 In-Reply-To:Content-Type; b=Rnc3Cg2W6p8elk1KYDx4xRa3g73HLOM6KKioS1J1gcQZxOZnRXJlouMi86ZHPY62uf9kbgJdqLVIi0Ir0Zghw9+OCjgAKoaVQufqNoFvxcbv4FrCxzfPopFua0c0t0AalkI/UCRHNV/z5qsTBt6/2smgD14A65P859Ar+oQhGCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jtY+tD3O; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722840471; x=1754376471;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=P0KR6mYALOpSYqhh9VceWNxneuD7zTni6YQ4TALZTNg=;
+  b=jtY+tD3OGQ+tIGQCTEKPscQi9cbpLj0lr6sBWwUgC6PlpKh8UAAEzWXD
+   7V9j1P/kfNorw2Ij70QObLaK8WjJklSYu3T7PYzRIK4YA1JJP45WBj5hB
+   QdkZcF+zX74vTvrl91/0EDUWC0kVhxaPu5huRKuE4IomqtVKGOJrsXqkZ
+   QovOsSzBhrFUE8qODmrSsmRN4qrKMAQsFeKWAEWMeJkII9KPnDQiLY6xp
+   /DmO1yRv8OoBdKmVKmmW0FJT12Vm2USS3Hx7hOSWTEkvi7cdhh+CbakDQ
+   pomqoQOlxKdm15nFnvJVLzT2HJmm+RTqVlryP6HeLXALZoq+6YYkmmZOn
+   A==;
+X-CSE-ConnectionGUID: ZciUwk0ZTuKluQ2gzjhVqA==
+X-CSE-MsgGUID: KeD/PloBTP+7MDn/81eLwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="24577395"
+X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
+   d="scan'208";a="24577395"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2024 23:47:48 -0700
+X-CSE-ConnectionGUID: RUXeBKbATje/2JZp0dDHUg==
+X-CSE-MsgGUID: XpdFm9dgTqyEW13S+zEI1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
+   d="scan'208";a="87012326"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Aug 2024 23:47:46 -0700
+Message-ID: <f803fe92-5b52-4c11-a35b-8cc4759f9a7e@linux.intel.com>
+Date: Mon, 5 Aug 2024 09:49:49 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,128 +67,102 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/13] arm64: dts: exynos: Enable USB in Exynos7885
-To: David Virag <virag.david003@gmail.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sam Protsenko <semen.protsenko@linaro.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org
-References: <20240804215458.404085-1-virag.david003@gmail.com>
- <20240804215458.404085-13-virag.david003@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2] xhci: dbc: fix handling ClearFeature Halt requests
+To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Lu Baolu <baolu.lu@linux.intel.com>, linux-usb@vger.kernel.org
+References: <20240725074857.623299-1-ukaszb@chromium.org>
+ <121d85fe-976a-43c4-95d2-1a066234a758@linux.intel.com>
+ <CALwA+Na218B0PK3QG20_XFovJMfB4ud7B9Z=4kX=xwu8bjAvHA@mail.gmail.com>
+ <115eb4be-e336-4a29-84d2-bdafb84a0f9f@linux.intel.com>
+ <CALwA+NbLsg2qfmaHagMNimN0mvU6vNP-rsY31O-9X6oZovAOJQ@mail.gmail.com>
+ <8cc19d0a-80f3-48a4-9fd2-0cc42b8ed1f4@linux.intel.com>
+ <CALwA+Na_SORXHFr-GZJtPu_HySd9dwo+UAUsv0sYanrH501o4Q@mail.gmail.com>
+ <CALwA+NbUJowv3yKnSoY5e4MBi1kZg=ezE0btB5xnTC=k9+VaQg@mail.gmail.com>
+ <CALwA+NbLZ7cm_pSc7Bgh-q7YOr3Ez5_AsG-dyqSzoDyOF=E_JQ@mail.gmail.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240804215458.404085-13-virag.david003@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <CALwA+NbLZ7cm_pSc7Bgh-q7YOr3Ez5_AsG-dyqSzoDyOF=E_JQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 04/08/2024 23:53, David Virag wrote:
-> Add USB controller and USB PHY controller nodes to Exynos7885 SoC DTSI
-> 
-> The SoC theoretically supports USB3 SuperSpeed, but is not implemented
-> in any known device. The vendor kernel also stubs out USB3 functions, so
-> we do not support it.
-> 
-> It is though, perfectly capable of USB 2.0 high-speed mode, both as host
-> and device.
-> 
-> Signed-off-by: David Virag <virag.david003@gmail.com>
-> ---
->  arch/arm64/boot/dts/exynos/exynos7885.dtsi | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
-> index 008228fb319a..1352c64d132e 100644
-> --- a/arch/arm64/boot/dts/exynos/exynos7885.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
-> @@ -463,6 +463,41 @@ i2c_7: i2c@11cd0000 {
->  			clock-names = "i2c";
->  			status = "disabled";
->  		};
-> +
-> +		usbdrd: usb@13600000 {
-> +			compatible = "samsung,exynos7885-dwusb3";
-> +			ranges = <0x0 0x13600000 0x10000>;
-> +			clocks = <&cmu_fsys CLK_FSYS_USB30DRD_BUS_CLK_EARLY>,
-> +				 <&cmu_fsys CLK_FSYS_USB30DRD_REF_CLK>;
-> +			clock-names = "bus_early", "ref";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			status = "disabled";
-> +
-> +			usbdrd_dwc3: usb@0 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0x0 0x10000>;
-> +				interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>;
-> +				phys = <&usbdrd_phy 0>;
-> +				phy-names = "usb2-phy";
-> +				/*
-> +				 * SoC in theory supports SS but no device has it.
-> +				 * Actual capabilities unknown.
-> +				 */
-> +				maximum-speed = "high-speed";
-> +			};
-> +		};
-> +
-> +		usbdrd_phy: phy@135d0000 {
+On 4.8.2024 0.51, Łukasz Bartosik wrote:
+> On Thu, Aug 1, 2024 at 5:02 PM Łukasz Bartosik <ukaszb@chromium.org> wrote:
+>>
+>> [  103.707882] xhci_hcd 0000:00:0d.0: Stall error at bulk TRB
+>> 1943ad000, remaining 1024, ep deq 1943ad001
+>>
+>>
+>>> DbC should respond with STALL packets to host if HIT or HOT is set.
+>>> Host side should react to this by sending a ClearFeature(HALT) request to DbC,
+>>> which should clear the halted endpoint and HIT/HOT flags.
+>>>
+>>
+>> I would like to ask you about it again because I wonder when the DbC
+>> endpoint is not halted and it
+>> receives the ClearFeature(Halt) request whether this is correct
+>> behavior for the DbC endpoint to report a
+>> STALL error in such a case ?
+>>
 
-Keep the nodes ordered by unit address.
+Ok, Setup was unclear to me, I assumed the STALL transfer error was due to an
+actual transfer issue on a bulk endpoint.
 
-Best regards,
-Krzysztof
+I don't think xHCI DbC should send STALL error transfer events for non existing
+bulk transfers as a response to ClearFeature(ENDPOINT_HALT) control request.
 
+Especially as it seems not a single byte was transferred on either bulk endpoint.
+
+But we need to handle it in the driver properly
+
+
+>> Thanks,
+>> Lukasz
+>>
+> 
+> Hi Mathias,
+> 
+> One more thing which I would like to add to the previous is the observation
+> which I made during debugging the issue. Looking at the above trace
+> there is stall
+> on IN endpoint:
+> xhci_dbc_handle_event: EVENT: TRB 00000001943ad000 status 'Stall
+> Error' len 1024 slot 1 ep 3 type 'Transfer Event' flags e:C
+> 
+> And then when 24 bytes packet arrives
+> xhci_dbc_handle_event: EVENT: TRB 00000001943ad000 status 'Short
+> Packet' len 1000 slot 1 ep 3 type 'Transfer Event' flags e:C
+> 
+> the same TRB is being used 00000001943ad000 but the DbC driver already
+> moved forward and the IN endpoint's pending list does not include a
+> dbc_request pointing
+> to the TRB 00000001943ad000 which results in "no matched request"
+> error and dropping
+> of the packet.
+> 
+
+I noticed yes, this is why the patch compared the TRB pointed to by the
+STALL transfer event with the one in the endpoint context.
+If they match the patch attempts to turn that TRB to no-op, forcing xHC
+hardware to move to the next TRB.
+
+The check did however not work as it didn't mask out the cycle bit.
+Lops show we compare  1943ad000 with 1943ad001
+
+[  103.707882] xhci_hcd 0000:00:0d.0: Stall error at bulk TRB 1943ad000, remaining 1024, ep deq 1943ad001
+
+Code in patch:
++if (ep_ctx->deq == event->trans_event.buffer) { // FIXME do we need to worry about cycle bit?
++			dev_warn(dbc->dev, "Stall error TRB matches ep_ctx->deq, clear it\n");
++			trb_to_noop(req->trb);
+
+With the new information that the STALL transfer event can be completely
+spurious and not related to any actual bytes being transmitted on bulk
+endpoints I think we shouldn't give back he transfer req in those cases.
+
+I'll make another patch
+
+Thanks
+Mathias
 
