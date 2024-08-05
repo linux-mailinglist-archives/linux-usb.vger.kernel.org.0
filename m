@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-13102-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13103-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7860E947C60
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 16:02:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA052947C6D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 16:03:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 229C31F233F9
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 14:02:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6ABF28620D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 14:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A82139CFF;
-	Mon,  5 Aug 2024 14:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B856412C484;
+	Mon,  5 Aug 2024 14:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SI/UNlST"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oWz4XYWF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FB180C09;
-	Mon,  5 Aug 2024 14:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D8B3F9D2;
+	Mon,  5 Aug 2024 14:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722866508; cv=none; b=slRbGSc9b12lLWNo8YeOSVeDc1JYnoFqCh3dYlM6dZ2/i+PLpmlrCn1yR0Z0GMGYft353uAZT5EWpSoQ9INL3K+U/TcdqljoBI66e1X42H+y6UlcWLbhHDnaa5VvfBOvcT0NV2/Ys+Z5DHZNWBitY3VKH0pkuJvVIpvCDojfDBM=
+	t=1722866598; cv=none; b=saHEKBwxQjhH17HWwPpELSuLCDclfYnKw1m/sCIKMjQkMfUobsqA1GSju2uQnTfiIBGo8ntATZSpdAhvlna6Y4g0RQ6U6UPv2m2mfNK6jDFmuh8tPH1T9aSJ6LrtMwRp+XrbPGofJl18FULkdnh1u4nERgMQOkFsCe6rkstll4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722866508; c=relaxed/simple;
-	bh=BfoqN7QidM/rp0pulyq5M6kPvpxbpQ+/CSdIbHdBDJs=;
+	s=arc-20240116; t=1722866598; c=relaxed/simple;
+	bh=XWE4Ujd4LxMs1wfEcUWg4L8EicQJ4/0b/Ibqs6hpNrk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ccy22OG3vPliGW7GBlLvn9Ca/vezo18m0K+9WLzmXlGYoS5LAkvK6H5F6oiYcMwAehdDmqaMUcdbdn+Am3mhepKgnYlLeJrSkvYdrqlKG8WQ+mbCv/Ui+rdIdKOhEh3IsNp//GH81gNI2Rz4LL7vDvR0cOSeCCSIDH7f3RC3ncM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SI/UNlST; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CD4C32782;
-	Mon,  5 Aug 2024 14:01:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=JTD+KYDfKHj+lZ/jPaeTsA/mL4qFe/AMnGoSAiN+1cM/fq4IecLV+B5WUcaUS2JWV0X5VRn+c/4mBkLhQtUEe2V+HEy3YQW1ZysuPIYGm+1iD1Qc3043sxTc+kCXJUo9BOrmuYksx8WzMf7XXSzkuTuWPCX1rVO+DiEuS8BR6oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oWz4XYWF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D01C1C4AF0B;
+	Mon,  5 Aug 2024 14:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722866507;
-	bh=BfoqN7QidM/rp0pulyq5M6kPvpxbpQ+/CSdIbHdBDJs=;
+	s=k20201202; t=1722866597;
+	bh=XWE4Ujd4LxMs1wfEcUWg4L8EicQJ4/0b/Ibqs6hpNrk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SI/UNlST5Tg7I5fdVrcWYpNtNcxUpq41a1OaCMz1kR4y4hvtzNpyfPqHadl0y6+Jo
-	 IOjXShnj//r/igMqCNuhqWnzlnVuKUy2n3cAuiWRyPnCEDnndQrEpfzvcpdATux67P
-	 kFYkka0Zk3wSJjeK6bn6BsiVjvQGZRrnwIgNexAmPIGjs8LXm2LSziIPQ8rdufvIcM
-	 lqTDscL6dwwhALaTHkicm8RTLtQSk0VLdNaK3SJqs+iDu9UhhVdApnNJJ637vZNOZN
-	 ihxbXRcclG21mvP4iE/IFpxzGovjCoD25dUp16agMF4w650qw3C9lDGY15IWSgrf4A
-	 3vTt8Eu7193MQ==
-Message-ID: <3dc5ecad-2381-46c1-8be0-888d56e892f5@kernel.org>
-Date: Mon, 5 Aug 2024 17:01:40 +0300
+	b=oWz4XYWFmmx2ZZbYjcqfNRxMFREGcezipXPzd8I09Qao+Cc+w0lipliRWPDnXJhCB
+	 UeTR4Nx6KZ+1pyKfJsrawrwr0/ms3UGDNBDnIIriZOeUDO8ivbDn177NsFdhdFmHgr
+	 fZNnTPiUZRIh/mWJizHS264cfCDVMc6u/LGkwrkIDHpwUXJitGraBqZ4i8AaHyxnET
+	 KwdguKazyXhoIO12Mj48EFmQOohsLisCyqEqnnAlecUCpzBhbNu/z1wBHe2yKVOoGO
+	 bYZkB9BHZjjs4y/RbpOLSb5geDaDzhr+X9uEujxZ1+6HwznkFdIDe/1Jq6/SRBp+PZ
+	 BLyAPVk0TpaNw==
+Message-ID: <3ae0e4d4-32c5-4fa4-a384-62ad8f42cf8d@kernel.org>
+Date: Mon, 5 Aug 2024 17:03:11 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 11/12] arm64: dts: ti: k3-j7200: use J7200-specific USB
- compatible
+Subject: Re: [PATCH v5 12/12] arm64: dts: ti: k3-am64: add USB fallback
+ compatible to J721E
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -65,20 +65,21 @@ Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
- <20240726-s2r-cdns-v5-11-8664bfb032ac@bootlin.com>
+ <20240726-s2r-cdns-v5-12-8664bfb032ac@bootlin.com>
 Content-Language: en-US
 From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20240726-s2r-cdns-v5-11-8664bfb032ac@bootlin.com>
+In-Reply-To: <20240726-s2r-cdns-v5-12-8664bfb032ac@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 
 
-On 26/07/2024 21:17, Théo Lebrun wrote:
-> On our platform, suspend-to-idle or suspend-to-RAM turn the controller
-> off. This compatible triggers reset-on-resume behavior to reconfigure
-> the hardware.
+On 26/07/2024 21:18, Théo Lebrun wrote:
+> USB on AM64 is the same peripheral as on J721E. It has a specific
+> compatible for potential integration details. Express this
+> relationship, matching what the dt-bindings indicate.
 > 
 > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+
 Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
