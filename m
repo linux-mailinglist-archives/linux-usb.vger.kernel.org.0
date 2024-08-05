@@ -1,125 +1,208 @@
-Return-Path: <linux-usb+bounces-13081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13082-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 568CD9476E5
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 10:08:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA53294770E
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 10:19:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11066281087
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 08:08:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08FC51C20FD6
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 08:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE8513C906;
-	Mon,  5 Aug 2024 08:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PARZU8+a"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A46F14BF8D;
+	Mon,  5 Aug 2024 08:19:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D365B2AD04
-	for <linux-usb@vger.kernel.org>; Mon,  5 Aug 2024 08:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A39814AD10;
+	Mon,  5 Aug 2024 08:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722845299; cv=none; b=lPzpbEnKj8xtTuciKCwxYHcZkTAVwPkMgZaJZQA7CydrCXcdm0Fjp5gzdE+4Hzgp6JoiZiMczoWK5cBv1I48QqCx2/TDpO00p4M7G0c2r139JQm5Fa8+oEqwPK9CzFY4oXm/JzVWLb6zAyfetN4g8t+7CUuZI8STXysmMhwHUkY=
+	t=1722845990; cv=none; b=XSxOaAS0O8+HnS+2avKg03/neCFxQs55OdcOFPCWlarr+bImz0T6JX204uIvCPlCtwalumUxtgPyZLFgRdtjZMawKH/4EpWinxO4sMCA2pLPXwardcYRPlDJxf7ir8VrW1msVFWaFF2aeMwuPT1ER/rzY8HT2dnkyy3Yl3ZTeaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722845299; c=relaxed/simple;
-	bh=+r+kKRi+x1IgWghgOPsM2zdoxic28I7lwNebXkalWO8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VWxyKuawf1kJYZMTyXjs3IbQSUcz/HFUJV+LZ1/6HrBCk/o+sbJICpCAuQi7DKgIlV1NVoDVJ3D4jdcIESTQRzu+nsVRHa35TbI6NsMPkfVxFDhcFH2L0bVJlXcWFw890OddDp+4jqPxO0C9qU6O/7U0/redMf8A0vbh4lQ6hxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PARZU8+a; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722845298; x=1754381298;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+r+kKRi+x1IgWghgOPsM2zdoxic28I7lwNebXkalWO8=;
-  b=PARZU8+aUzaZMaMIwwoZJnkY9B9sU7r+bnt1RDWfPhVmenCDNVQs9v8o
-   8KwDIRJr4CC9p/lArD7FBzeTZDR3nt6dEYFWsqY759FU7tSQ0mn8Erlbx
-   hpKw8MWsF3fmykIU1YYAIJbWr0FBYeJtNpOYEfwYF4Sq7D7lVQz86sAiJ
-   41HYeIdtEc4NQJilYvMY2T12H8960JW6kduIkv23Q6ccFxwn3wXZsCbSW
-   v1eIExRVBkmxiWo3m73Bah9V1ufOoAnAjdK9xNf32iZRs/N/0qGaXR4Dl
-   vQcdwS0eWssfiEDaleqPx0TAvgQoyp7CTdB29tPjCpMlCatWMkZ3JcF7U
-   Q==;
-X-CSE-ConnectionGUID: 5m0eAvZjSMyhqOeMMlHXjw==
-X-CSE-MsgGUID: Tww/41YIRmO+qRgop9WxFA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="24560335"
-X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
-   d="scan'208";a="24560335"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 01:08:15 -0700
-X-CSE-ConnectionGUID: YcSsq8HqRBOiGdVeYKuoWw==
-X-CSE-MsgGUID: ONbFGdw/SNqOtJDoSqOpog==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
-   d="scan'208";a="56002536"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa009.jf.intel.com with SMTP; 05 Aug 2024 01:08:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 05 Aug 2024 11:08:10 +0300
-Date: Mon, 5 Aug 2024 11:08:10 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, rdbabiera@google.com, linux@roeck-us.net,
-	badhri@google.com, kyletso@google.com,
-	sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: typec: tcpm: avoid sink goto SNK_UNATTACHED state
- if not received source capability message
-Message-ID: <ZrCIakdGq42n44Wg@kuha.fi.intel.com>
-References: <20240802064156.1846768-1-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1722845990; c=relaxed/simple;
+	bh=IIfmNDKo2Co1Mn/8N5ntMyacDCWZYQAxUOR2ChZg02M=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KFzR2Wj4Chyod8aTToThW3qpKjXD2xYsHiCwgMkjPSHwYbvlUFpHTKDA+kVzdZbsBH6pLzLYplmEkhmDJPnZOYCOuLOO4+35yKehtv9PGKFJPumVW/eySM75T5tyxQ4HRCcNenT6oOopO6m3/eJhKL0PHVyNntRHxbsPeAadJ40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.224] (ip5f5aeb3c.dynamic.kabel-deutschland.de [95.90.235.60])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5BB1461E5FE01;
+	Mon,  5 Aug 2024 10:19:18 +0200 (CEST)
+Message-ID: <7eef194d-17df-4681-95aa-be6ec09b5929@molgen.mpg.de>
+Date: Mon, 5 Aug 2024 10:19:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240802064156.1846768-1-xu.yang_2@nxp.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: core: hub_port_reset: Remove extra 40 ms reset
+ recovery time
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Alan Stern <stern@rowland.harvard.edu>,
+ Nicolas Boichat <drinkcat@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240724111524.25441-1-pmenzel@molgen.mpg.de>
+ <c7c299e7-605c-4bd6-afad-dfbfe266aa7e@rowland.harvard.edu>
+ <f1e2e2b1-b83c-4105-b62c-a053d18c2985@molgen.mpg.de>
+ <3d3416cd-167f-4c50-972b-0eb376a13fdf@rowland.harvard.edu>
+ <cee9630e-781e-49b1-82c5-9066552f71b1@molgen.mpg.de>
+ <8e300b0b-91f8-4003-a1b9-0f22869ae6e1@rowland.harvard.edu>
+ <712dee24-e939-4b1b-b2ea-0c0c12891a62@molgen.mpg.de>
+Content-Language: en-US
+In-Reply-To: <712dee24-e939-4b1b-b2ea-0c0c12891a62@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 02, 2024 at 02:41:56PM +0800, Xu Yang wrote:
-> Since commit (122968f8dda8 usb: typec: tcpm: avoid resets for missing
-> source capability messages), state will change from SNK_WAIT_CAPABILITIES
-> to SNK_WAIT_CAPABILITIES_TIMEOUT. We need to change SNK_WAIT_CAPABILITIES
-> -> SNK_READY path to SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_READY
-> accordingly. Otherwise, the sink port will never change to SNK_READY state
-> if the source does't have PD capability.
+[To: +Nicolas, Cc: -Heikki]
+
+
+Dear Alan, dear Nicolas,
+
+
+Am 04.08.24 um 09:15 schrieb Paul Menzel:
+
+> Am 26.07.24 um 19:48 schrieb Alan Stern:
+>> On Wed, Jul 24, 2024 at 11:00:42PM +0200, Paul Menzel wrote:
 > 
-> [  503.547183] pending state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT @ 310 ms [rev3 NONE_AMS]
-> [  503.857239] state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT [delayed 310 ms]
-> [  503.857254] PD TX, header: 0x87
-> [  503.862440] PD TX complete, status: 2
-> [  503.862484] state change SNK_WAIT_CAPABILITIES_TIMEOUT -> SNK_UNATTACHED [rev3 NONE_AMS]
+>>> Am 24.07.24 um 20:52 schrieb Alan Stern:
+>>>> On Wed, Jul 24, 2024 at 08:14:34PM +0200, Paul Menzel wrote:
+>>>
+>>> […]
+>>>
+>>>>> Am 24.07.24 um 16:10 schrieb Alan Stern:
+>>>>>> On Wed, Jul 24, 2024 at 01:15:23PM +0200, Paul Menzel wrote:
+>>>>>>> This basically reverts commit b789696af8b4102b7cc26dec30c2c51ce51ee18b
+>>>>>>> ("[PATCH] USB: relax usbcore reset timings") from 2005.
+>>>>>>>
+>>>>>>> This adds unneeded 40 ms during resume from suspend on a majority of
+>>>>>>
+>>>>>> Wrong.  It adds 40 ms to the recovery time from a port reset -- see the
+>>>>>> commit's title.  Suspend and resume do not in general involve port
+>>>>>> resets (although sometimes they do).
+
+[…]
+
+>>>>>>> devices, where it’s not needed, like the Dell XPS 13 9360/0596KF, 
+>>>>>>> BIOS 2.21.0 06/02/2022 with
+>>>>>>
+>>>>>>> The commit messages unfortunately does not list the devices 
+>>>>>>> needing this.
+>>>>>>> Should they surface again, these should be added to the quirk 
+>>>>>>> list for
+>>>>>>> USB_QUIRK_HUB_SLOW_RESET.
+>>>>>>
+>>>>>> This quirk applies to hubs that need extra time when one of their 
+>>>>>> ports
+>>>>>> gets reset.  However, it seems likely that the patch you are 
+>>>>>> reverting
+>>>>>> was meant to help the device attached to the port, not the hub 
+>>>>>> itself.
+>>>>>> Which would mean that the adding hubs to the quirk list won't help
+>>>>>> unless every hub is added -- in which case there's no point reverting
+>>>>>> the patch.
+>>>>>>
+>>>>>> Furthermore, should any of these bad hubs or devices still be in use,
+>>>>>> your change would cause them to stop working reliably.  It would be a
+>>>>>> regression.
+>>>>>>
+>>>>>> A better approach would be to add a sysfs boolean attribute to the 
+>>>>>> hub
+>>>>>> driver to enable the 40-ms reset-recovery delay, and make it 
+>>>>>> default to
+>>>>>> True.  Then people who don't need the delay could disable it from
+>>>>>> userspace, say by a udev rule.
+>>>>>
+>>>>> How would you name it?
+>>>>
+>>>> You could call it "long_reset_recovery".  Anything like that would be
+>>>> okay.
+>>>
+>>> Would it be useful to makes it an integer instead of a boolean, and 
+>>> allow to configure the delay: `extra_reset_recovery_delay_ms`?
+>>
+>> Sure, why not?  Just so long as the default value matches the current
+>> behavior.
 > 
-> Fixes: 122968f8dda8 ("usb: typec: tcpm: avoid resets for missing source capability messages")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> I hope, I am going to find time to take a stab at it.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 4b93c0bd1d4b..72dd16eaa73a 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -120,9 +120,16 @@ MODULE_PARM_DESC(use_both_schemes,
+                 "try the other device initialization scheme if the "
+                 "first one fails");
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
++static int extra_reset_recovery_delay_ms = 40;
++module_param(extra_reset_recovery_delay_ms, int, S_IRUGO | S_IWUSR);
++MODULE_PARM_DESC(extra_reset_recovery_delay_ms,
++               "extra recovery delay for USB devices after reset in 
+milliseconds "
++               "(default 40 ms");
++
+  /* Mutual exclusion for EHCI CF initialization.  This interferes with
+   * port reset on some companion controllers.
+   */
++
+  DECLARE_RWSEM(ehci_cf_port_reset_rwsem);
+  EXPORT_SYMBOL_GPL(ehci_cf_port_reset_rwsem);
+
+@@ -3110,7 +3117,7 @@ static int hub_port_reset(struct usb_hub *hub, int 
+port1,
+                         usleep_range(10000, 12000);
+                 else {
+                         /* TRSTRCY = 10 ms; plus some extra */
+-                       reset_recovery_time = 10 + 40;
++                       reset_recovery_time = 10 + 
+extra_reset_recovery_delay_ms;
+
+                         /* Hub needs extra delay after resetting its 
+port. */
+                         if (hub->hdev->quirks & USB_QUIRK_HUB_SLOW_RESET)
+
+The if condition above
+
+		if (port_dev->quirks & USB_PORT_QUIRK_FAST_ENUM)
+			usleep_range(10000, 12000);
+
+is from Nicholas’ commit aa071a92bbf0 (usb: hub: Per-port setting to 
+reduce TRSTRCY to 10 ms) from 2018 [2] adding the port quirk 
+`USB_PORT_QUIRK_FAST_ENUM`.
+
+> urrently, the USB hub core waits for 50 ms after enumerating the
+> device. This was added to help "some high speed devices" to
+> enumerate (b789696af8 "[PATCH] USB: relax usbcore reset timings").
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 26f9006e95e1..cce39818e99a 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4515,7 +4515,7 @@ static inline enum tcpm_state hard_reset_state(struct tcpm_port *port)
->  		return ERROR_RECOVERY;
->  	if (port->pwr_role == TYPEC_SOURCE)
->  		return SRC_UNATTACHED;
-> -	if (port->state == SNK_WAIT_CAPABILITIES)
-> +	if (port->state == SNK_WAIT_CAPABILITIES_TIMEOUT)
->  		return SNK_READY;
->  	return SNK_UNATTACHED;
->  }
-> -- 
-> 2.34.1
+> On some devices, the time-to-active is important, so we provide
+> a per-port option to reduce the time to what the USB specification
+> requires: 10 ms.
 
--- 
-heikki
+Nicholas, do you have field data from ChromeOS if the 40 ms delay is 
+needed, and do you apply the quirk to all ports?
+
+Being ignorant about USB in general, does this quirk make my patch 
+obsolete, or should I just send a patch with the diff above?
+
+
+Kind regards,
+
+Paul
+
+
+> [1]: https://lore.kernel.org/all/f1e2e2b1-b83c-4105-b62c-a053d18c2985@molgen.mpg.de/
+[2]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aa071a92bbf09d993ff0dbf3b1f2b53ac93ad654
 
