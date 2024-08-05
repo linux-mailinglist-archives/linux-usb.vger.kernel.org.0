@@ -1,163 +1,142 @@
-Return-Path: <linux-usb+bounces-13093-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13094-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C664947BFD
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 15:39:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2291947C00
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 15:39:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5052C1C20DEA
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 13:39:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89CA61F2242D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 13:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B05F28366;
-	Mon,  5 Aug 2024 13:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C02C13D0AD;
+	Mon,  5 Aug 2024 13:39:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuBWbuxz"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="OFb1tukG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABFE2C6BD;
-	Mon,  5 Aug 2024 13:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4BB3B1AC
+	for <linux-usb@vger.kernel.org>; Mon,  5 Aug 2024 13:39:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722865138; cv=none; b=qJs0lIX/lIUaBIgoDG6Tpl4LBnAxZgP5nnxtu3emLril6pxVrwye9A4BYLO+ZITzGSOhQ21DlxOJRLP7vK6KEcaKFOoUb8nnvB5VweWSdVv3crBaSFZUZ3KViwiXFPGok+xnrqJKtz+EihqgIEPtqYwnORP+V0Ycv3etIXbqL5w=
+	t=1722865143; cv=none; b=b0lahfeDEnOdDMIYzSwIQYMPdgzT6rWrYYWrD1rziZdn+iEtQ94YOaRPflpMzFow0Mb6DTrzOPclA6ma+Xn0IA0A2w9mz1SoVqBvJ7ShHemTrO1Sw13VzSKOgEmHh/rW768htfD/sc6iXVbxShKhihH5zXFTFDw6xMhvhA9mxo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722865138; c=relaxed/simple;
-	bh=g1dCieRZT/8ioAasjt6NPS4q5QhCHkiqp7M3N96vvNY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XPA4sn7Ia8+R03XYUA2kFs8JWFqajJTuJjB3JDNyG3mK7fiiNbuqamrYStXFQZVnD0ZU5V/vHKeXj3/LmzKczKS7+BgqNT39dDdfo+3gEzcbCs94vzT1HxSgYsiXoLc2sWN0bP6JmL5nHzx2P9Z/Rw8nUmxrjVa6W7ZcArS8m2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuBWbuxz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE86C32782;
-	Mon,  5 Aug 2024 13:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722865138;
-	bh=g1dCieRZT/8ioAasjt6NPS4q5QhCHkiqp7M3N96vvNY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EuBWbuxzrkE37dkjRsoxMicV/Pg0+voGCSQuF3Cb5+bfyuLHgCjJRjhBtrJ49FBD3
-	 Km2Zty1izzASV3xEcqzoxIqffNWW7TcR5ZDWYlVymlwx0WCLvUN15a06aU6JZ0wm3M
-	 Ff68eRRrgst1XU8B3pGKVyM479Dx2k9e9A4k7jHDianG1lxl+mpmpZyB3diCL3oC2L
-	 2EAYZt30KaX5KLVvvw6pvIUuxArpzaBWNR7u9bCOIzMmU9fKNJYioeh3ob5tTPGrx1
-	 Ro/fIj67qNWd4cKJ9Qgm/2JutT502irCYnbs3ppR+RqT1+t6czww6H7SqJtvkV/sLK
-	 IQCWAwGPdkmoQ==
-Message-ID: <df81f36d-ca61-4fbd-8399-ac97a7fa898f@kernel.org>
-Date: Mon, 5 Aug 2024 15:38:49 +0200
+	s=arc-20240116; t=1722865143; c=relaxed/simple;
+	bh=gbQ+jMJAD5sj8duWQJ3Kwg5JnBV26mTB9+LVTMbYGZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QlxTN2+UNl6ytYcGRYJcQ31pYJbh5nygHJXfpAkHmKhizm+VH2Z5eAFQmgyyLZ55OszChaQw9L0X95S2wl4I/8ZEKLRfciz0qqrxPfGB0hbYD8l+PMTsH7Pv3JYepZX4CLh7AEGl5BcoYRYnWXvR99KOy530R7uSoOozao590ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=OFb1tukG; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7a1dd2004e1so663254285a.3
+        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2024 06:39:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1722865140; x=1723469940; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=U8macHAiM5m9R0JEiyIq2Lz6WrfRpygRAxLQsH7F45I=;
+        b=OFb1tukGVJTBIQLI96v2SMEZOOSyPLYongMAdDfByC+lRCwUiCXUupdvpzpGATJh31
+         u2Raz7DohT9QidMpJukM8Ro0fnI+WRl1ygIBuf6oSJgOd6RC9Um++B4gl7XOVuS0fnLC
+         xgOTu1CWbCR15Um/KkAPXsX1bkDhTBTlwA9io6FBLmhjEt7laHvw4RvQfh1jr+LuREnf
+         kgq+gmLvBdcDEjhoruLrk7lwUDK2slQvQsd1Dwpc1A2Z9/OZatSb35MJetX4y9uE1UnM
+         g4aFIi2uRVj8xQwM/rczYkgmSjfxV/2Y6Vl4QZTH2PwW6/roHNMNVZY6XbgRE7+8Zl2e
+         I7ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722865140; x=1723469940;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U8macHAiM5m9R0JEiyIq2Lz6WrfRpygRAxLQsH7F45I=;
+        b=KQHpQivS8a79vAmdI7lv27T2gLb8kIvmJB7CxjJ/NeQowebD8WF2Duh8rlvtU0OZOx
+         p8gAT2D3zwt+zq3IUFy4zVVfDn38Gpwmkn/wZdjmPfP3Ruwv+t3mb8Jq1/IkZGDcHLdA
+         e/b5x9XLy4/RK4uzWrOz0S4qfFErprVDbBKyUfPSxgcQM3wtMPsJmxKCNTeikhJPVfZR
+         WF1wqDAlCBBc9oWTKVGBv/iJshKkdEDJpGCQP73cFarYsSvNHkjXZtzrZuKW2cpsanjo
+         Hosmmt3uyPMrhELiDw7TP9fIYg7hNDR61aWPmgKRCNMgrvDN1PBUxkgfCT1mYwLtKfJ1
+         ruhg==
+X-Forwarded-Encrypted: i=1; AJvYcCW0i7YsQ0mZi0Mg53a5w2uIV16c1uCxv4llMDNp1xW3ksI7kJEgDzrYFgcPahekNdSSlg0MxZYzY2bIhIRLvPtj9djAShUzRTyR
+X-Gm-Message-State: AOJu0YyGXgWyrtubRtJs0S4ZErkzQvnDB+XK70YCysgaNJliNDNpW/tD
+	OhPadzbftP9/Yk3Tb0DmdUP1bv+bPeXTk+HxbexitHpN+xhZcTSyv4h/1K+GRw==
+X-Google-Smtp-Source: AGHT+IGwcJnnVolHqIHl/PLBvGhdpuQKEabkjHVeMeMNQwnwyA+CGsL/UDaOAmH0C2fraA4jqEed1g==
+X-Received: by 2002:a05:620a:2682:b0:79f:498:2a67 with SMTP id af79cd13be357-7a34eed3c80mr1377167085a.21.1722865140407;
+        Mon, 05 Aug 2024 06:39:00 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a34f624219sm354231085a.0.2024.08.05.06.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 06:39:00 -0700 (PDT)
+Date: Mon, 5 Aug 2024 09:38:57 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Nicolas Boichat <drinkcat@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: core: hub_port_reset: Remove extra 40 ms reset
+ recovery time
+Message-ID: <5b1d4bea-8d39-4f29-85e6-bd36c12510ce@rowland.harvard.edu>
+References: <20240724111524.25441-1-pmenzel@molgen.mpg.de>
+ <c7c299e7-605c-4bd6-afad-dfbfe266aa7e@rowland.harvard.edu>
+ <f1e2e2b1-b83c-4105-b62c-a053d18c2985@molgen.mpg.de>
+ <3d3416cd-167f-4c50-972b-0eb376a13fdf@rowland.harvard.edu>
+ <cee9630e-781e-49b1-82c5-9066552f71b1@molgen.mpg.de>
+ <8e300b0b-91f8-4003-a1b9-0f22869ae6e1@rowland.harvard.edu>
+ <712dee24-e939-4b1b-b2ea-0c0c12891a62@molgen.mpg.de>
+ <7eef194d-17df-4681-95aa-be6ec09b5929@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/13] clk: samsung: exynos7885: Update CLKS_NR_FSYS after
- bindings fix
-To: David Virag <virag.david003@gmail.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Peter Griffin <peter.griffin@linaro.org>,
- Sam Protsenko <semen.protsenko@linaro.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org
-References: <20240804215458.404085-1-virag.david003@gmail.com>
- <20240804215458.404085-7-virag.david003@gmail.com>
- <bd7c76a6-b7a5-4f8d-8081-95b6cdb39186@kernel.org>
- <5af8048741215bdafa5d8f7bf6ab8dec3cd7aed0.camel@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <5af8048741215bdafa5d8f7bf6ab8dec3cd7aed0.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <7eef194d-17df-4681-95aa-be6ec09b5929@molgen.mpg.de>
 
-On 05/08/2024 14:44, David Virag wrote:
-> Hi Krzysztof,
+On Mon, Aug 05, 2024 at 10:19:17AM +0200, Paul Menzel wrote:
+> > > > > > > A better approach would be to add a sysfs boolean
+> > > > > > > attribute to the hub
+> > > > > > > driver to enable the 40-ms reset-recovery delay, and
+> > > > > > > make it default to
+> > > > > > > True.  Then people who don't need the delay could disable it from
+> > > > > > > userspace, say by a udev rule.
+> > > > > > 
+> > > > > > How would you name it?
+> > > > > 
+> > > > > You could call it "long_reset_recovery".  Anything like that would be
+> > > > > okay.
+> > > > 
+> > > > Would it be useful to makes it an integer instead of a boolean,
+> > > > and allow to configure the delay:
+> > > > `extra_reset_recovery_delay_ms`?
+> > > 
+> > > Sure, why not?  Just so long as the default value matches the current
+> > > behavior.
+> > 
+> > I hope, I am going to find time to take a stab at it.
 > 
-> On Mon, 2024-08-05 at 07:49 +0200, Krzysztof Kozlowski wrote:
->> On 04/08/2024 23:53, David Virag wrote:
->>> Update CLKS_NR_FSYS to the proper value after a fix in DT bindings.
->>> This should always be the last clock in a CMU + 1.
->>>
->>> Signed-off-by: David Virag <virag.david003@gmail.com>
->>> ---
->>> Â drivers/clk/samsung/clk-exynos7885.c | 2 +-
->>
->> This needs fixes and Cc-stable tag, same as the binding.
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 4b93c0bd1d4b..72dd16eaa73a 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -120,9 +120,16 @@ MODULE_PARM_DESC(use_both_schemes,
+>                 "try the other device initialization scheme if the "
+>                 "first one fails");
 > 
-> Would it fix ef4923c8e052 ("clk: samsung: exynos7885: do not define number of clocks in bindings")?
-> Or would it fix cd268e309c29 ("dt-bindings: clock: Add bindings for Exynos7885 CMU_FSYS")?
-> 
-> I'm guessing the former, but technically the latter introduced
-> the problem and the former transferred it to the clk driver.
-> 
-> For kernel 6.1, this fix wouldn't work, as we'd need a fix in the
-> dt-bindings instead (perhaps the dt-bindings fix should include
-> this fix there).
-> 
-> How would this work?
+> +static int extra_reset_recovery_delay_ms = 40;
+> +module_param(extra_reset_recovery_delay_ms, int, S_IRUGO | S_IWUSR);
+> +MODULE_PARM_DESC(extra_reset_recovery_delay_ms,
+> +               "extra recovery delay for USB devices after reset in
+> milliseconds "
+> +               "(default 40 ms");
 
-I would say this fixes the latter - bindings commit which introduced
-duplicated ID. If your bindings patch is backported, then the number of
-IDs do not match anymore number of clocks.
+This is a module parameter, not a sysfs attribute.  Module parameters 
+should be avoided if possible, because they are much less flexible than 
+sysfs attributes.
 
-Without your bindings fix, everything matches even though it is not
-technically correct.
-
-The bindings fix also needs Cc-stable.
-
-Best regards,
-Krzysztof
-
+Alan Stern
 
