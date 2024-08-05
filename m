@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-13099-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13100-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 831A4947C34
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 15:51:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3731B947C42
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 15:54:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 374BF1F2324D
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 13:51:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 691821C21CCF
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2024 13:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571683A8CB;
-	Mon,  5 Aug 2024 13:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8BA7868B;
+	Mon,  5 Aug 2024 13:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dUhBfZAI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="claQdTGS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6662C684;
-	Mon,  5 Aug 2024 13:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A59355E73;
+	Mon,  5 Aug 2024 13:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722865886; cv=none; b=Dju4ZrIXk9Gvw3XdXufUXVacaBulv1Yij7O7Jfv0+ArpknRozdZtRQXQ2pszzlcPn/L3PJGYCFkx2P5k50PHoDVmwRtSDitgIf8yDOD22vn/pGbYp3yZQ53++OA4nolXIiG+/JOO94wuykm8pVa1cBqh0Cjd+8tAs8Zwip8Jxts=
+	t=1722866071; cv=none; b=fe4slpVp067hiDpNM3BS05mYbA1hKL4LmNWF07P42n4EKbZ4/MegnYj3Bml6f9O7pZIOLKxIo3CWMC0xbi9XmlW/iwLS9pRJAaaWJ9bPQ7CR/ft2elfQeLXWwWiPuBplogZPPLLkxBpbCG3Hi6ZetKmPPenixq2/1XjH1/p1CWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722865886; c=relaxed/simple;
-	bh=njtwpWxIF6PT6t/P1Xo146a+8v2Brgo+D7t9IcjqQVE=;
+	s=arc-20240116; t=1722866071; c=relaxed/simple;
+	bh=BncnyQonmJ5+HmLoE7oS88pIgg0LaOFqG5VcpwZrO4E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X7RKYdqYtN0rktbFtPPOhyEmVgM6wDQmKCi9R8pwX78UCl1Ch5MX3T0RMHTE08Uum+z1sLsnH/9ECQHwjvYQ5bYXGHCFR1Sv/Mk39bPePjWJxOwmlQxjDyXvNWLF/73wUmotTHqg3ArAeTm4mmou14DGaVE5yTJRB8ho5Ehu3lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dUhBfZAI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F39C32782;
-	Mon,  5 Aug 2024 13:51:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Q5uaIe7YOPE+8ldV/il6hBQBWGGaRJqjhUFlIZ7ou3RcDqTmQk2fY4wDJMCbxbbJPdPos20vglAZPZv7u9LsOpMM95T9tCqyHsr4G6wMaWzcgUgV04uV0NKBB51zNx/96fLRtpk8gIjyfaLgmOyCehUQ8F/7yx7Qx2JlrouSCUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=claQdTGS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA264C32782;
+	Mon,  5 Aug 2024 13:54:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722865886;
-	bh=njtwpWxIF6PT6t/P1Xo146a+8v2Brgo+D7t9IcjqQVE=;
+	s=k20201202; t=1722866071;
+	bh=BncnyQonmJ5+HmLoE7oS88pIgg0LaOFqG5VcpwZrO4E=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dUhBfZAIP99i9hBH3GdyTu1aWK/dr7S8VXyep9pdvAqZYSlaccuIdCvRB9nLOXyYi
-	 5czdqfTnDkYE2tYtHRyNdTR+iOKKnkE2n1g/3vs9t57U9Euu7/dGGlve+1UD8lNIfv
-	 o4btOwWr8n1oOhjWKKtykPs+TJ6VeFFmoxS+64ujCuYcZ971ZT+3rbD7f+3xKrAnNU
-	 +9OrcWXrL4JoAjXVXnJ/DMRcvdD21Wn3XLqvBOW+o00wQkOUTA0s/dKZ5lvFDPZGCt
-	 D7OWOhaWYREpErQLYQcYuqtQBvYcEdMNL37MneQuuufNTkN8//hEBK8V30TnY6WvKL
-	 SHmNoy7QQsKjQ==
-Message-ID: <a3bbcd4f-5618-45e6-a849-279fddf569b1@kernel.org>
-Date: Mon, 5 Aug 2024 16:51:19 +0300
+	b=claQdTGSpGAqM40GuXdBs1yWHEy4DZz79ft29R6GbokVsZ8F4XOHs18Q3ipoTQW7e
+	 oKWS8tgz1jwbs4lZAPqGvd3ZdySBQ63wMCp0t1c5YsYDOTkflkDJ+FZ/zO3WOdSmi9
+	 fMXflvuwb9Y46/u7kLpn9wlXuOdHblrj1a+kf/fhz3jXC0r/BYRT8p9CBXr2aUGP1Q
+	 Fn9SL24zBYBQNJr2deVfGnkeM8YWBS0g0QeKRoHkkhkFx3+KWc4jIjNDfyaaVjW2uj
+	 6MKfhha5LUxY0Hcg0s7LRVlccttt25IYLNmQt/36D+I4ha+ykur8DGaIqYfJAnLaAa
+	 t9bB3is/N0FBg==
+Message-ID: <0a634553-023c-4a46-8743-28357021c689@kernel.org>
+Date: Mon, 5 Aug 2024 16:54:24 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/12] usb: cdns3-ti: grab auxdata from match data
+Subject: Re: [PATCH v5 07/12] usb: cdns3-ti: add J7200 support with
+ reset-on-resume behavior
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -64,24 +65,66 @@ Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
- <20240726-s2r-cdns-v5-6-8664bfb032ac@bootlin.com>
+ <20240726-s2r-cdns-v5-7-8664bfb032ac@bootlin.com>
 Content-Language: en-US
 From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20240726-s2r-cdns-v5-6-8664bfb032ac@bootlin.com>
+In-Reply-To: <20240726-s2r-cdns-v5-7-8664bfb032ac@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 
 
 On 26/07/2024 21:17, Théo Lebrun wrote:
-> Current code uses the global `cdns_ti_auxdata` variable as auxiliary
-> data passed to of_platform_populate(). Use match data to store a
-> pointer to auxdata.
+> Add ti,j7200-usb compatible. Match data indicates the controller resets
+> on resume which tells that to the cdns3 core. This in turn silences a
+> xHCI warning visible in cases of unexpected resets.
 > 
-> Current behavior is not changed; it allows future compatibles to provide
-> different auxiliary data.
+> We also inherit the errata quirk CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE from
+> the default `cdns_ti_auxdata` configuration.
 > 
 > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ti.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+> index 159814dfc856..65b8b6f4c654 100644
+> --- a/drivers/usb/cdns3/cdns3-ti.c
+> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> @@ -258,7 +258,21 @@ static const struct of_dev_auxdata cdns_ti_auxdata[] = {
+>  	{},
+>  };
+>  
+> +static struct cdns3_platform_data cdns_ti_j7200_pdata = {
+> +	.quirks = CDNS3_RESET_ON_RESUME |
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+But you mentioned that the behavior can be different based on which
+idle state the system went into.
+Setting this flag will means Reset is required on every resume.
+
+
+Instead, you just need to rely on the runtime check and set the xhci->lost_power flag at resume.
+
+
+> +		  CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE,   /* Errata i2409 */
+> +};
+> +
+> +static const struct of_dev_auxdata cdns_ti_j7200_auxdata[] = {
+> +	{
+> +		.compatible = "cdns,usb3",
+> +		.platform_data = &cdns_ti_j7200_pdata,
+> +	},
+> +	{},
+> +};
+> +
+>  static const struct of_device_id cdns_ti_of_match[] = {
+> +	{ .compatible = "ti,j7200-usb", .data = cdns_ti_j7200_auxdata },
+>  	{ .compatible = "ti,j721e-usb", .data = cdns_ti_auxdata },
+>  	{ .compatible = "ti,am64-usb", .data = cdns_ti_auxdata },
+>  	{},
+> 
+
+-- 
+cheers,
+-roger
 
