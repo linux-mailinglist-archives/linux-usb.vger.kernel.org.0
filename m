@@ -1,103 +1,91 @@
-Return-Path: <linux-usb+bounces-13145-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13146-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C3C39493D7
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 16:54:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 511609494D2
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 17:49:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06A0B1F27B4C
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 14:54:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA695B24B12
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 15:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0FEA2101B6;
-	Tue,  6 Aug 2024 14:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A812AF15;
+	Tue,  6 Aug 2024 15:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J1gyXILH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0rEZ1M9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9528210190;
-	Tue,  6 Aug 2024 14:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D00C18D63D
+	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 15:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722955932; cv=none; b=eRvbce2f8iwakb24Q/K7eWh7V5oYmQQqpQfucMc9yHCuukCk1BXaTiWrOnpX485GNECTinUG2qC95LAKQZVCdfKkkeptWlXaL5smoQ3ZeCyUWnYcWT+jr50V+FoBi75z0A/jDT0cPAk4z27dKxbvuBola0I1Wpc6lZGdlFWl2EU=
+	t=1722959207; cv=none; b=YMbFEAyuff3qsghGnlnmU7aiFfF+E5jZ/mWKfkkUHU+k1Xa+1ivvZdNC6GMlSreMdy+rYPUKXGyM9Gdow4kKcIANm7DR2UkP8vfkcDgZXh7WxMVNC2Evu/QR6iNMFa/1wuJ2rhVkdEN6uF+UFxprTsq86pgltM5YIFZD+F7xask=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722955932; c=relaxed/simple;
-	bh=ulhVGtEPKBdoyHz0l9ezBsABeAF4IDtYxjCyDs4xjzE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XviYqBpEJvm4l8ff3L2XWSic1RNMr2es3gMaBlFwZLiN6w9+Z2ocYCYG7qC1kC3OGq8mXHSPRAB1h2hMfA3Dt8KOS+5dE76TAcx+u0W4+4L9z8oFLnsca+RuCtcgyj3JbTX1XR0+op7+0hTV14luUA9ikIREV4YM+lxwpJvdz7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J1gyXILH; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722955931; x=1754491931;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ulhVGtEPKBdoyHz0l9ezBsABeAF4IDtYxjCyDs4xjzE=;
-  b=J1gyXILH5Hy10QTy9+i/v3C0PFMbwIUuS7p57nJgtIY3aDySErih81eT
-   upW9yEk+EFmh1PSBgibaBU0wfjhO34P3Tn6ijprxtG9iXhdk5529XTsbT
-   /x4O/FXRWR4T4Nqsm3tCFybLyV6lzTGtGi4r0LO7qb+PtSrMNmy3q/J+1
-   6VIdTdTiQPn36Wq0hva4xvy3711++wkukvqy1QjSrxp7Haroymc8M9Ary
-   +3jU/kq7gCRHdCS6L/EYS+o7bEVPjQdBidBJNl2BOexVPjpa4IRy6ck1J
-   y4GLJzFSFWdweqwoHP2q+04tUg+d5RaByRDlA/EE1ZWPVvWI5Mfyy8pLm
-   g==;
-X-CSE-ConnectionGUID: LLunlwrKQGuc4zUy7GuwDQ==
-X-CSE-MsgGUID: mbhwuqlZRjW6sGIJMtR95w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="21102049"
-X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
-   d="scan'208";a="21102049"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 07:52:03 -0700
-X-CSE-ConnectionGUID: cJPN9FP4TuWrzG0YHOubYw==
-X-CSE-MsgGUID: Y9MkFWawRqaVopuvdK1S7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
-   d="scan'208";a="87476718"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.94.0.53]) ([10.94.0.53])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 07:51:57 -0700
-Message-ID: <186ae30f-678c-423a-a56f-74510a184f99@linux.intel.com>
-Date: Tue, 6 Aug 2024 16:51:57 +0200
+	s=arc-20240116; t=1722959207; c=relaxed/simple;
+	bh=EfUl/Qg6+G4X7aMivZwP8+7WpyqEwTj2D5hs4t6njkA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=niJMEEvq/9ewnQlJ0XSP33nKuM2jwDFloqpVZpFmZFsGWc6WfKPd+Zeoq9uo8jAu3ezZTiZgfyC5D6Q6rUL4AlsnNUb+j1Sb6Xvy+B1a/UNuB8CTICCz9O0zGSRnDi4jxqRWWga861aT5b6gXJBqYxS+sh4UkmDG/wd4wCKlY24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0rEZ1M9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1ECDEC32786
+	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 15:46:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722959207;
+	bh=EfUl/Qg6+G4X7aMivZwP8+7WpyqEwTj2D5hs4t6njkA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=c0rEZ1M9S6QhnvL6Aw5AwaQUQ7IieKSPTPYAfMK/YGSslJtnM+f4hgeNV4al9A6lg
+	 rrqqaEuH+EIIMVtjFXmmZD6FWDsnEdhCcJF9U7xtziSlKwLcwDr7tiDjBLlWAt2nW4
+	 v8Z9KtdzNSPluw8NV/9BjcO0abr2l9mZPyUQkW0MMr+1WzY6pcwDpfPnWNnYua0y6S
+	 JR4dLK7iQM7/9JnDKY6zteMtKZ38Gr+uFH1fjk74ldWBlTbMis2iykfz00Zgxd1i2b
+	 nn9qy1qs1SVWJMSsUgbgospdXQAKJ5cm8Y/3jqvS+flNUfRDwYvRI8vAOy2icenHsi
+	 dOfscVzMFFFGQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 039D2C53B50; Tue,  6 Aug 2024 15:46:46 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
+Date: Tue, 06 Aug 2024 15:46:46 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: com+bugzilla-kernel@c-henry.fr
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-219111-208809-eusmnhF5yh@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
+References: <bug-219111-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 23/34] ALSA: usb-audio: Prevent starting of audio
- stream if in use
-Content-Language: en-US
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
- gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-24-quic_wcheng@quicinc.com>
-From: =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
- <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20240801011730.4797-24-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 8/1/2024 3:17 AM, Wesley Cheng wrote:
-> With USB audio offloading, an audio session is started from the ASoC
-> platform sound card and PCM devices.  Likewise, the USB SND path is still
-> readily available for use, in case the non-offload path is desired.  In
-> order to prevent the two entities from attempting to use the USB bus,
-> introduce a flag that determines when either paths are in use.
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
 
-How can this happen? Can you provide some example with list of devices 
-and which one should block the other? If I recall correctly devices are 
-already exclusive unless you support substreams which ASoC does not at 
-the moment.
+--- Comment #29 from CH (com+bugzilla-kernel@c-henry.fr) ---
+Created attachment 306676
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306676&action=3Dedit
+lsusb -v -d 22f0:0008 with old_scheme_first set to Y
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
