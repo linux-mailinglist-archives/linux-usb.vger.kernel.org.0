@@ -1,116 +1,147 @@
-Return-Path: <linux-usb+bounces-13155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13156-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC1D94979D
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 20:37:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 693339497E1
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 20:58:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE521283D3F
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 18:37:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 922B71C227B0
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 18:58:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07BB37C6D4;
-	Tue,  6 Aug 2024 18:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC155143C46;
+	Tue,  6 Aug 2024 18:58:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qzUBASle"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Gc7Z832/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253E55B1FB
-	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 18:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868838F77;
+	Tue,  6 Aug 2024 18:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722969412; cv=none; b=cb6gBm+7yhgTdP0pQFt8i4q2Q9o+XCLk0LPSCz3PJbgUfhuOckSlZhKyXO6fzTTxSVTepYez/5MFMDNB4i75Hu1g7zJ86TtZ9U7i4n5RsunAVAueGTJoDluWq/uXbyxwl6BCQh2s7UV1MlaFT6JqVP0MGransgOk8SEamytDE0c=
+	t=1722970692; cv=none; b=NZGA2rtQ1nSkx6/55ShtG225Gxiy6iffuKVN2CHJMaimz6dLHC39ioxNDP0qvzxTyCQwUkWEEuetpmEadFfslWIhrlCmM2OnfbxONMXUjwApRn3VsBnlMD+inigpNGpsTgLAWf2Dtw4R63uSMtSg50ERJUCmjyq0ZOdYcxibZj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722969412; c=relaxed/simple;
-	bh=lD1CXg8ewgeFDdS9UW1qlnYh29XhmwAyYiYoddDl1pk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dg3VrPyq1latqD2qpUXeQvtWJ3nminjEuELxx5AEl/kWjICH/sYbAkRfzB3AwBn2ko/tqUxMCKK1G0YRYEkMcpp4lu9iY0FmR8eljNtYq+4mC1FLR1C1rQuQi70jl+r6dm3DR7iX4AQtKJ/r1qf9FElnQcXDMqaTpdAnnCroL+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qzUBASle; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7093ba310b0so416213a34.2
-        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2024 11:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1722969410; x=1723574210; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QmTu6CdLhKUuviA48G6Tr36ATMsK0k+PUHlqmhgRePo=;
-        b=qzUBASleLVMeuDgJdBnHQSKRSdof+rpyEn4HitKx6cemRHfIUxFUoZQB3Uc/siFsiu
-         I1+H8CIEqueYd10anqrTJU1Wclg2Q9lsP5noZC7+DI1oX7aA/Yeo8pRBauEeTsCPaDFX
-         caVDDXbe97jFztqft2ndoeAKfd+llmkeZ62AJlJ0Qu3ZOzrb+8Rdpq+yO7mn4TEpoFPw
-         USRt+BrxyEat72fyJUafnJSFux+2Plt4mH0yJiWlOOzR0/AIQU4sN2ikZLFN8eBjnRp7
-         yMm3tJXucXmKwMhcKTyitnniwphBGCYkAa2o2V1mQQU5ABuaoG/r2oHVjQFLCyGtwZ/2
-         mGeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722969410; x=1723574210;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QmTu6CdLhKUuviA48G6Tr36ATMsK0k+PUHlqmhgRePo=;
-        b=OzRIfh8lgpPol9Zi4biO50Rvw4mYv/UcSGMXQ8z4TtAkpKFi7zrj7mkVNQIVgk3sAB
-         vUTRFXeh7Y0CSH7ahxtEFGp9viHCJD5O9Z/pbZsOjkgHbfu+LxY359WysPILG7ZfGtTx
-         PRf6E2LvljXIaPvq9cbX8B7Ogvw5Tcu81MCw5uOt+jYSmfn22xy1+1o4bpjvGjLL6ha7
-         0AAn8UFggbRi/uKaVtWKp0nwfH6hwUkao6Egd/3dE6jyGEL4kZTck7mLLlGJFIvX9KMl
-         OGAdrZtB7s9Lr7bPhxKI6TTr7YCPK5onNDlWZ6TsZcwg9s1G9Ub9yD600dJlkCtOnmJu
-         lgmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+kc22sAE37ZSEhDRvuvg9DOqVnjILH3G0XPfatkQmtU0OQKAdSXtPsDj99BqPDJZA191CMoU723wK/kS7cSPeZtS7i9HLpwsR
-X-Gm-Message-State: AOJu0YyHW2DzCYqBeFMes626Ivu4bAXsJUL6637iaT9KkmkKSxy+jK2J
-	CTgvl5friNhtXMipdyTnlWUQ5qUN+kyPhuHoiTO1Q/QEcF7Mg5ybE6fDwqB1Hw==
-X-Google-Smtp-Source: AGHT+IEnkJ7Z2uIaGOQDKmaJUB8KkdOaHVtwQNHPo7SWgBve6YLjfN5VB16mdbxnI9tcxLO7BTyxxA==
-X-Received: by 2002:a05:6830:4882:b0:703:7842:6c00 with SMTP id 46e09a7af769-709b323a22amr19236323a34.15.1722969410083;
-        Tue, 06 Aug 2024 11:36:50 -0700 (PDT)
-Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4518a76f863sm40057131cf.82.2024.08.06.11.36.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 11:36:49 -0700 (PDT)
-Date: Tue, 6 Aug 2024 14:36:47 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: color Ice <wirelessdonghack@gmail.com>
-Cc: gregkh@linuxfoundation.org, kvalo@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, mark.esler@canonical.com,
-	stf_xl@wp.pl
-Subject: Re: Ubuntu RT2X00 WIFI USB Driver Kernel NULL pointer
- Dereference&Use-After-Free Vulnerability
-Message-ID: <ffc826fe-4753-4e7b-92aa-080f58b73c39@rowland.harvard.edu>
-References: <2024080359-getaway-concave-623e@gregkh>
- <20240806015904.1004435-1-wirelessdonghack@gmail.com>
- <bc57c8b3-4334-4595-8b5a-5233316edcfb@rowland.harvard.edu>
- <CAOV16XF8cEg7+HAFQiCUrt9-Dp4M+-TANjQqRXH87AAdgzmNMg@mail.gmail.com>
+	s=arc-20240116; t=1722970692; c=relaxed/simple;
+	bh=CxyhdiqFzs0KCYLIqZCch2rfpOd55xLPflf6rfNePOM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=MsXGh0jN2nVpqT77OY7z5Y37InpBBUehO+zj0eikb1yfSuSjWZGieOUHbX0SmieJbRdRBF9qhZdjsqoaR+ITXg+8/y2jtxKbc0g1XGJTFTsY1yVp1Mr9htfIe+ken20sae0oo8x/ktno/WGVyAfKEE7pV8l/UXtq7xBHWKdo4h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Gc7Z832/; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 476H6Unw013589;
+	Tue, 6 Aug 2024 18:58:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	fNhD6pIC+oLP/zfHBFA5xgjXKbH5MKc03edOBncHJOI=; b=Gc7Z832/QOIKaCIp
+	y4kNKx5pRPhqRhfxeOjQyqgY55L9QM/SnJKD7xX3ymlV//pON+kai/qbCctEZMRL
+	23DkD/80y+ovLhecS6piy97dXq7QsWzaEhdLtyu0qfqZc0zBZxmWjGcEVUS7WJSN
+	h+hTtOi1YxELp6rwDe23tZ0UWpgED5xORreOvmm5xsD4nSogrwEygp7z1+9fKdzm
+	16l4hZx94yaSviYL3q1yZ1kplndR7dOijSpuPabseKNIYZhOP+pR45s3F0Rhwpwg
+	W9+vB6n790mfUPafs/3cLuLcNR5e9AYPF4uA/DaIbNLLRnd5Bq93m8s2UwG7uk9x
+	MkvF3w==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40sa8f0j6u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 06 Aug 2024 18:58:05 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 476Iw4no011042
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 6 Aug 2024 18:58:04 GMT
+Received: from [10.110.113.181] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 6 Aug 2024
+ 11:58:03 -0700
+Message-ID: <622c0fd6-e4e2-6597-d0a2-ff449d7d2f59@quicinc.com>
+Date: Tue, 6 Aug 2024 11:58:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOV16XF8cEg7+HAFQiCUrt9-Dp4M+-TANjQqRXH87AAdgzmNMg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 0/8] Enable EUD on Qualcomm sm8450 SoC
+Content-Language: en-US
+To: Caleb Connolly <caleb.connolly@linaro.org>,
+        Elson Roy Serrao
+	<quic_eserrao@quicinc.com>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>
+CC: <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
+ <023d4ea8-635d-435f-bae2-87284f70123b@linaro.org>
+ <2a17eaca-54af-d1fa-304d-c7e0afd85b33@quicinc.com>
+ <32f23133-c494-46c1-a1f7-cabddb6331a8@linaro.org>
+From: Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <32f23133-c494-46c1-a1f7-cabddb6331a8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: D3ARgBR9vxUPoXwXnrhNoEDelUJZiaYf
+X-Proofpoint-ORIG-GUID: D3ARgBR9vxUPoXwXnrhNoEDelUJZiaYf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_15,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 clxscore=1015 adultscore=0 malwarescore=0 mlxlogscore=792
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408060133
 
-On Wed, Aug 07, 2024 at 12:47:26AM +0800, color Ice wrote:
-> Hi,
+On 8/1/2024 3:52 AM, Caleb Connolly wrote:
+> Hi Trilok,
 > 
-> I'm glad that you can address this issue. I believe that this is indeed a
-> vulnerability because the issue is caused by the rt2x00 driver's failure to
-> properly shut down its async queues. While it requires sudo to execute, it
-> is still a problem as it can trigger a kernel system exception. We can
-> imagine that this vulnerability could be executed without root permissions
-> in certain scenarios. For instance, in many embedded systems, configuring
-> udev rules might be necessary to ensure automated operations, and in such
-> scenarios, it can be triggered without root permissions.
+> On 31/07/2024 21:58, Trilok Soni wrote:
+>> On 7/31/2024 4:13 AM, Caleb Connolly wrote:
+>>>>      2.) Proper routing of USB role switch notifications: EUD hub is physically
+>>>>       present in between the USB connector and the USB controller. So the
+>>>>       usb role switch notifications originating from the connector should
+>>>>       route through EUD. EUD also relies on role switch notifications to
+>>>>       communicate with the USB, regarding EUD attach/detach events.
+>>>>
+>>>> This series aims at implementing the above aspects to enable EUD on
+>>>> Qualcomm sm8450 SoC.
+>>>
+>>> Are there any plans to make this feature available for folks outside of Qualcomm / an NDA?
+>>>
+>>> There is an openOCD fork on CodeLinaro but it still requires some proprietary library which is only available to folks with a quicinc email as I understand it.
+>>>
+>>
+>> Which codelinaro link are you referring here?
 > 
-> Therefore, I believe that from a vulnerability perspective, it should
-> indeed be eligible for a CVE, as it can be fixed and it is indeed a flaw.
-> If this vulnerability is not addressed, future driver processing and
-> adaptation may encounter robustness and security issues. I believe security
-> issues should be handled with the corresponding seriousness.
+> That would be https://git.codelinaro.org/clo/la/openocd-org/openocd/-/blob/qcom_changes/README_QCOM?ref_type=heads
 > 
-> Thank you.
+> Which says:
+> 
+> Qualcomm specific tools:
+> - Login to qpm.qualcomm.com
+> - QUTS: 1.64.1.39 (version & above)
+> - Qualcomm Host USB Product Suite - QUD QC only : 1.00.63 (supported version)
+> - EUD QC : 2.1.1 (supported version)
+> 
+> I believe the specific versions of QUD and EUD are only available to Qualcomm engineers and not even to OEMs, though I might be mistaken.
 
-You didn't answer my question.  Are you able to test patches?
+Thanks. So are we okay w/ one of the following option? (trying to understand the need here properly before I relay it internally). 
 
-Alan Stern
+Options:
+
+(1) Provide EUD library and tools - proprietary w/o any login requirement. 
+(2) Provide open-source EUD library and tools w/o any login requirement. 
+
+Is Option (1) fine to begin with or option 2 is must? 
+
+
+-- 
+---Trilok Soni
+
 
