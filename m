@@ -1,298 +1,118 @@
-Return-Path: <linux-usb+bounces-13134-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13135-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30912948FD6
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 15:01:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C1C9491B9
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 15:39:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA9281C233B8
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 13:01:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F317282F8A
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 13:38:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB8E1C57A8;
-	Tue,  6 Aug 2024 13:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1621D2F60;
+	Tue,  6 Aug 2024 13:38:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="hiepdJHM"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="m6BU9HvT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CC31BF311;
-	Tue,  6 Aug 2024 13:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECBB1D27BE
+	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 13:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722949279; cv=none; b=uGnQcbBcB9l/8CqugnKXW1MFyFxUq3pvicDR2IvKA5p5QCi2doX2rZz+A7R2r7poFR0hbZkqr7Y9+7mZuWAUfzlxP7cv+t7sNGm1h5CxefXVnFA3+mIq4Tmbk9/qka3474XnamnAYrWtPju+/rEv+FKjZjYBRTAyjO4+Nejd/tk=
+	t=1722951531; cv=none; b=Jmmq7rA0hDic+MTPUNzqudn6Xr5khe2kzwMHzzYiGe0dWyvMESylvFHZ5KPYpZiODT3nu6pf3d5j+6mjYh4xIKd0YStHhSM9Z4kwxY0api5lnWW+dU4fFJmwfZeA75YkXcCsvKsPw2K+QjJOs3hSSieSPJ+ILvPTV7lIUTXNz4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722949279; c=relaxed/simple;
-	bh=rkmgOQl8py7qDrXITLdHSVEmk/LLPYkUA7Pt/ny9N3g=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lTvEzYmvniyfsbmL23l1anxdVcEo6t8ucbHuthGj22Sr9e0Be2nYNGwyRvJ6iTV1ANhDdDK1VhGHpZD/rQtnpr12n0ma6Hwzf2wPOmECB59gWMwb34uYfFrt87z5Njb2hAay7NVrH0jVLztdDZN5IoDsXewwcrE4VBymOsbSWK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=hiepdJHM; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1722949275; x=1754485275;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rkmgOQl8py7qDrXITLdHSVEmk/LLPYkUA7Pt/ny9N3g=;
-  b=hiepdJHMH2ZaXhRA8CK1J6PbKNLQQpsM8gXfN8FwPLIYXIRxINo201b/
-   603NJGxAFc2dxQ+KGcCEdBGw/lH457lFNgTKM9sB5OlGNeW9Y+5pp0n5j
-   HujqA6/zJFGw7HxkALfVtHgy8hK7KZsaAOI5y91+NOB6lPcOwy7Eg2Mar
-   IBqwuIXm5NBPp2c850D/MABwMP9fUZfZ4VPxDeekIrkB4xLcSRss/vRW2
-   CrRdw30grN12UuMH0NPO+Lv9+2ILM9wbY1KYY+BlsBCttLOWMTYAb4Lz8
-   A4IUSn+neoqOU8oTFKWqo7B7Nid3Ap5IWmJ7aAQYukq48oIMeM6Le8P8C
-   Q==;
-X-CSE-ConnectionGUID: 35PzH48ZQt27K00Yyxlz1w==
-X-CSE-MsgGUID: k16G+AKURLKjaYeL/9QOog==
-X-IronPort-AV: E=Sophos;i="6.09,267,1716274800"; 
-   d="scan'208";a="197573430"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Aug 2024 06:01:14 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 6 Aug 2024 06:01:01 -0700
-Received: from valentina.microchip.com (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Tue, 6 Aug 2024 06:01:00 -0700
-From: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
-To: <linux-usb@vger.kernel.org>
-CC: <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
-	<valentina.fernandezalanis@microchip.com>, <gregkh@linuxfoundation.org>,
-	<b-liu@ti.com>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v1] usb: musb: poll ID pin status in dual-role mode in mpfs glue layer
-Date: Tue, 6 Aug 2024 14:14:07 +0100
-Message-ID: <20240806131407.1542306-1-valentina.fernandezalanis@microchip.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1722951531; c=relaxed/simple;
+	bh=XDJwCo/h/M/ZmSG3Xc/DIm9ivwODOk2659C8kTOffJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c62MUjyho8+LGH6FPt6QpY/5GHXALH7h77Jd/zHyg+QPzZjkteLxQDJkk084GPhR33dMqVwwquddF6/ZGj7fv+20e5B9jLoWmdNYlSw+bZLa+cnfg+wQKbeLBCqdVcqkHywtaZYuV7nzR/3/g5GsXZpJ4CubrvoCid9yzmQeZCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=m6BU9HvT; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7a1d436c95fso31832885a.3
+        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2024 06:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1722951529; x=1723556329; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dLrcx4hTpQ0PboOrNReCi2rK8G3ZQu70WmtPK6NfNrk=;
+        b=m6BU9HvTppCqqHApsqso4sj4+MzGK+JPo+ydSkb1Wwb+SR+oKG6yVYDgEx8gfTQ1WL
+         EI50QUvIFg9GyjytlPgqYDZ0zcOQlylk7P9zIIhImibw/D65DCZpSd0EYoVJplU5iR7O
+         SDpdGL8ixZ/6d3ETvTqOE+tnPlV0gHTMT9TTfUM0NmmGiI0ohuOncFRal1jzOYlTkKg3
+         MftoA6VDuqk+QnImTFweODtFPFuLJUDAtgkicdQVqOKL0Fq8mulY59sXKhiMB//WaGr8
+         OFqLBCKgJo2QRORtv4aqP+vZCgkypxrgfdA2Nhwx2BGYVgQ8yWhYNZRKtpOIowu+1Hcp
+         y0hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722951529; x=1723556329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dLrcx4hTpQ0PboOrNReCi2rK8G3ZQu70WmtPK6NfNrk=;
+        b=hYbgiCzgXunh0zSNzejiGW4kiBiamASKlk319/Scvugz5+dfNt8RbCq+D7aUinHfep
+         Giaqjiy6LSKNc+QoUnvyuFLostUyw0hswlEfbUwby6gNuh7R38iopM4M5wKkugcVcDoB
+         EWEr3ybxTlGvCOu+GjF1tpxIAjPD17LpWS+y+XetyhWzqpZw8USYvf79rE7m4j37Zpbl
+         vzJYzJ6HO2dy5O4GpxQAWa9sr2+3SvAXBIYJbSVuIAyndzLtfGTc9vJRnocnBOFlsW1c
+         eitMqQs3Yg7/zwB/mbaN+GHTwPA5uEW8BcWiCSBmhflr7hTqZHCaMxGRjWpuIfxBDGwd
+         1fcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrlJzlkRPPscNojIqaMoDtv7sX53OzpSpg5NoL9sPaA5wahXWCXBI/C+Kjdr//cOffE23PXgC0M5dKgV9ZQ1lUvXsAsQtxh4C+
+X-Gm-Message-State: AOJu0YwvGU+36j58G2EylFMss9IT3Ug36IKKJbZ8bNJSDys36yGLZi8A
+	u4rpk1rw2+CdPLqzb/HU6OtN1OpjsNq6sHUKSWC/2HT/DORUWw+lBLJxfmMw5Q==
+X-Google-Smtp-Source: AGHT+IFxdSCruZKlRJfn8gDEDSSUyxF700rIX9BIcCRtb+/pa+qm0TY54qO4RzYMbEBlxSb5Fkaq9g==
+X-Received: by 2002:a05:620a:2910:b0:7a3:4946:d483 with SMTP id af79cd13be357-7a34eefe5e6mr1917592685a.16.1722951528976;
+        Tue, 06 Aug 2024 06:38:48 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a34f798193sm451544885a.136.2024.08.06.06.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 06:38:48 -0700 (PDT)
+Date: Tue, 6 Aug 2024 09:38:46 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: LidongLI <wirelessdonghack@gmail.com>
+Cc: gregkh@linuxfoundation.org, kvalo@kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org, mark.esler@canonical.com,
+	stf_xl@wp.pl
+Subject: Re: Ubuntu RT2X00 WIFI USB Driver Kernel NULL pointer
+ Dereference&Use-After-Free Vulnerability
+Message-ID: <bc57c8b3-4334-4595-8b5a-5233316edcfb@rowland.harvard.edu>
+References: <2024080359-getaway-concave-623e@gregkh>
+ <20240806015904.1004435-1-wirelessdonghack@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240806015904.1004435-1-wirelessdonghack@gmail.com>
 
-Similar to other platforms using the MUSB driver, PolarFire SoC lacks
-an ID pin interrupt event, preventing several OTG-critical status
-change events from being exposed. We need to rely on polling to detect
-USB attach events for the dual-role port.
+On Tue, Aug 06, 2024 at 09:59:04AM +0800, LidongLI wrote:
+> 
+> Dear Greg,
+> 
+> Thank you, Greg!
+> 
+> 
+> Yes, as you mentioned, it requires users to create their own udev 
+> rules, which is not common among Ubuntu personal users. However, in 
+> some non-personal user scenarios, they must pre-add udev rules to meet 
+> their needs. A simple example: in some Ubuntu embedded Linux 
+> scenarios, we found that when starting a wireless hotspot, developers 
+> must configure udev rules to ensure a stable connection, enable 
+> auto-loading of drivers, or auto-run or write USB-based 
+> auto-configuration scripts.
+> 
+> Alright, thank you for your fix. We will proceed to the email you 
+> specified to request a CVE.
 
-The otg state machine implementation is based on Texas Instruments
-DA8xx/OMAP-L1x glue layer.
+LidongLI, are you able to test patches?
 
-This has been tested on BeagleV-Fire with couple of devices in host mode
-and with the Ethernet gadget driver in peripheral mode, in a wide
-variety of plug orders.
+It looks like the driver does not properly shut down its async queues 
+when it unbinds.  The best person to address this problem is the 
+driver's maintainer, Stanislaw Gruszka.  Nevertheless, I can help by 
+suggesting things to test.
 
-Signed-off-by: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
----
- drivers/usb/musb/mpfs.c | 160 ++++++++++++++++++++++++++++++++++------
- 1 file changed, 136 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/usb/musb/mpfs.c b/drivers/usb/musb/mpfs.c
-index 29c7e5cdb230..00e13214aa76 100644
---- a/drivers/usb/musb/mpfs.c
-+++ b/drivers/usb/musb/mpfs.c
-@@ -49,30 +49,6 @@ static const struct musb_hdrc_config mpfs_musb_hdrc_config = {
- 	.ram_bits = MPFS_MUSB_RAM_BITS,
- };
- 
--static irqreturn_t mpfs_musb_interrupt(int irq, void *__hci)
--{
--	unsigned long flags;
--	irqreturn_t ret = IRQ_NONE;
--	struct musb *musb = __hci;
--
--	spin_lock_irqsave(&musb->lock, flags);
--
--	musb->int_usb = musb_readb(musb->mregs, MUSB_INTRUSB);
--	musb->int_tx = musb_readw(musb->mregs, MUSB_INTRTX);
--	musb->int_rx = musb_readw(musb->mregs, MUSB_INTRRX);
--
--	if (musb->int_usb || musb->int_tx || musb->int_rx) {
--		musb_writeb(musb->mregs, MUSB_INTRUSB, musb->int_usb);
--		musb_writew(musb->mregs, MUSB_INTRTX, musb->int_tx);
--		musb_writew(musb->mregs, MUSB_INTRRX, musb->int_rx);
--		ret = musb_interrupt(musb);
--	}
--
--	spin_unlock_irqrestore(&musb->lock, flags);
--
--	return ret;
--}
--
- static void mpfs_musb_set_vbus(struct musb *musb, int is_on)
- {
- 	u8 devctl;
-@@ -111,6 +87,129 @@ static void mpfs_musb_set_vbus(struct musb *musb, int is_on)
- 		musb_readb(musb->mregs, MUSB_DEVCTL));
- }
- 
-+#define	POLL_SECONDS	2
-+
-+static void otg_timer(struct timer_list *t)
-+{
-+	struct musb		*musb = from_timer(musb, t, dev_timer);
-+	void __iomem		*mregs = musb->mregs;
-+	u8			devctl;
-+	unsigned long		flags;
-+
-+	/*
-+	 * We poll because PolarFire SoC won't expose several OTG-critical
-+	 * status change events (from the transceiver) otherwise.
-+	 */
-+	devctl = musb_readb(mregs, MUSB_DEVCTL);
-+	dev_dbg(musb->controller, "Poll devctl %02x (%s)\n", devctl,
-+		usb_otg_state_string(musb->xceiv->otg->state));
-+
-+	spin_lock_irqsave(&musb->lock, flags);
-+	switch (musb->xceiv->otg->state) {
-+	case OTG_STATE_A_WAIT_BCON:
-+		devctl &= ~MUSB_DEVCTL_SESSION;
-+		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
-+
-+		devctl = musb_readb(musb->mregs, MUSB_DEVCTL);
-+		if (devctl & MUSB_DEVCTL_BDEVICE) {
-+			musb->xceiv->otg->state = OTG_STATE_B_IDLE;
-+			MUSB_DEV_MODE(musb);
-+			mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
-+		} else {
-+			musb->xceiv->otg->state = OTG_STATE_A_IDLE;
-+			MUSB_HST_MODE(musb);
-+		}
-+		break;
-+	case OTG_STATE_A_WAIT_VFALL:
-+		if (devctl & MUSB_DEVCTL_VBUS) {
-+			mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
-+			break;
-+		}
-+		musb->xceiv->otg->state = OTG_STATE_A_WAIT_VRISE;
-+		break;
-+	case OTG_STATE_B_IDLE:
-+		/*
-+		 * There's no ID-changed IRQ, so we have no good way to tell
-+		 * when to switch to the A-Default state machine (by setting
-+		 * the DEVCTL.Session bit).
-+		 *
-+		 * Workaround:  whenever we're in B_IDLE, try setting the
-+		 * session flag every few seconds.  If it works, ID was
-+		 * grounded and we're now in the A-Default state machine.
-+		 *
-+		 * NOTE: setting the session flag is _supposed_ to trigger
-+		 * SRP but clearly it doesn't.
-+		 */
-+		musb_writeb(mregs, MUSB_DEVCTL, devctl | MUSB_DEVCTL_SESSION);
-+		devctl = musb_readb(mregs, MUSB_DEVCTL);
-+		if (devctl & MUSB_DEVCTL_BDEVICE)
-+			mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
-+		else
-+			musb->xceiv->otg->state = OTG_STATE_A_IDLE;
-+		break;
-+	default:
-+		break;
-+	}
-+	spin_unlock_irqrestore(&musb->lock, flags);
-+}
-+
-+static void __maybe_unused mpfs_musb_try_idle(struct musb *musb, unsigned long timeout)
-+{
-+	static unsigned long last_timer;
-+
-+	if (timeout == 0)
-+		timeout = jiffies + msecs_to_jiffies(3);
-+
-+	/* Never idle if active, or when VBUS timeout is not set as host */
-+	if (musb->is_active || (musb->a_wait_bcon == 0 &&
-+				musb->xceiv->otg->state == OTG_STATE_A_WAIT_BCON)) {
-+		dev_dbg(musb->controller, "%s active, deleting timer\n",
-+			usb_otg_state_string(musb->xceiv->otg->state));
-+		del_timer(&musb->dev_timer);
-+		last_timer = jiffies;
-+		return;
-+	}
-+
-+	if (time_after(last_timer, timeout) && timer_pending(&musb->dev_timer)) {
-+		dev_dbg(musb->controller, "Longer idle timer already pending, ignoring...\n");
-+		return;
-+	}
-+	last_timer = timeout;
-+
-+	dev_dbg(musb->controller, "%s inactive, starting idle timer for %u ms\n",
-+		usb_otg_state_string(musb->xceiv->otg->state),
-+		jiffies_to_msecs(timeout - jiffies));
-+	mod_timer(&musb->dev_timer, timeout);
-+}
-+
-+static irqreturn_t mpfs_musb_interrupt(int irq, void *__hci)
-+{
-+	unsigned long flags;
-+	irqreturn_t ret = IRQ_NONE;
-+	struct musb *musb = __hci;
-+
-+	spin_lock_irqsave(&musb->lock, flags);
-+
-+	musb->int_usb = musb_readb(musb->mregs, MUSB_INTRUSB);
-+	musb->int_tx = musb_readw(musb->mregs, MUSB_INTRTX);
-+	musb->int_rx = musb_readw(musb->mregs, MUSB_INTRRX);
-+
-+	if (musb->int_usb || musb->int_tx || musb->int_rx) {
-+		musb_writeb(musb->mregs, MUSB_INTRUSB, musb->int_usb);
-+		musb_writew(musb->mregs, MUSB_INTRTX, musb->int_tx);
-+		musb_writew(musb->mregs, MUSB_INTRRX, musb->int_rx);
-+		ret = musb_interrupt(musb);
-+	}
-+
-+	/* Poll for ID change */
-+	if (musb->xceiv->otg->state == OTG_STATE_B_IDLE)
-+		mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
-+
-+	spin_unlock_irqrestore(&musb->lock, flags);
-+
-+	return ret;
-+}
-+
- static int mpfs_musb_init(struct musb *musb)
- {
- 	struct device *dev = musb->controller;
-@@ -121,6 +220,8 @@ static int mpfs_musb_init(struct musb *musb)
- 		return PTR_ERR(musb->xceiv);
- 	}
- 
-+	timer_setup(&musb->dev_timer, otg_timer, 0);
-+
- 	musb->dyn_fifo = true;
- 	musb->isr = mpfs_musb_interrupt;
- 
-@@ -129,13 +230,24 @@ static int mpfs_musb_init(struct musb *musb)
- 	return 0;
- }
- 
-+static int mpfs_musb_exit(struct musb *musb)
-+{
-+	del_timer_sync(&musb->dev_timer);
-+
-+	return 0;
-+}
-+
- static const struct musb_platform_ops mpfs_ops = {
- 	.quirks		= MUSB_DMA_INVENTRA,
- 	.init		= mpfs_musb_init,
-+	.exit		= mpfs_musb_exit,
- 	.fifo_mode	= 2,
- #ifdef CONFIG_USB_INVENTRA_DMA
- 	.dma_init	= musbhs_dma_controller_create,
- 	.dma_exit	= musbhs_dma_controller_destroy,
-+#endif
-+#ifndef CONFIG_USB_MUSB_HOST
-+	.try_idle	= mpfs_musb_try_idle,
- #endif
- 	.set_vbus	= mpfs_musb_set_vbus
- };
--- 
-2.34.1
-
+Alan Stern
 
