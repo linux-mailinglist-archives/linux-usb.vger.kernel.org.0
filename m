@@ -1,197 +1,114 @@
-Return-Path: <linux-usb+bounces-13129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 180D9948B54
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 10:30:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C59D0948D8F
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 13:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C3871C22458
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 08:30:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D8171F24F9C
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 11:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24651BD4F0;
-	Tue,  6 Aug 2024 08:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3DAA1C0DCF;
+	Tue,  6 Aug 2024 11:20:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uU6poAhm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d4P4WFNi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1E31BD03B;
-	Tue,  6 Aug 2024 08:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1ED113B2AC;
+	Tue,  6 Aug 2024 11:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722932997; cv=none; b=M9i/BDTa/2xNI/fZnVm+5kz+G8uYeP/sgakitkcSEjmiRsiP8JopJaINurHqx99m0VeRZRRT0OjrzJtc7U36rJSJtDmahgfHa7qUnykC8nDFzkS414CgflxJXUoo6N9MU+jvtSDajZoDRD7x20grZcuXF0b4Cyu0dp/aV1iu9GQ=
+	t=1722943234; cv=none; b=nSimS6wQlp0DP1lb2bZPPm45vDP8CU6pvuSynwsdSL1oncJkEiaAuN3XyuHKqGhe67pIXu4nmIg4RLiEXUigQ6Yd4K5fe6Zagtml1DnFGGv+DMOYzUEGyMZrA/B6jPbTONw/1xq1xLewN0qLTbB6tuDVDqS1rqcTYlJngqIjpgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722932997; c=relaxed/simple;
-	bh=V3ZjsddvnL87rui7jg1kIK4OozC/swgwbkag97WdbJE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cTIzPbsApzstVtDqhuc9wuURd8YADouNfY155AzEVobOsmHN71IykV9HipGNt3f5iXrAF4301NNqcQbODnTFp9NRRO9mRfIS2xCHyBwAI03ozLQvKQBwo85/V8nRGXXd+lw5rjTMsSdm6hW6wBbUCvULw9TYg/NQjyV+akB9vY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uU6poAhm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02DBCC32786;
-	Tue,  6 Aug 2024 08:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722932996;
-	bh=V3ZjsddvnL87rui7jg1kIK4OozC/swgwbkag97WdbJE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uU6poAhm9A18Gz0+3whTJ3YsEVDmU7LmclB05UDqyuQ0HG64Xz1oCJE5kiD+mLh9w
-	 q9vIBiGNlXK9k45kfrCuonnOfibF0mr7bn7cKT4ecAQ9FSnpOe+/WqCv8ysFXigjAL
-	 SdfUQ4zfL3WInFZ3UaVbqX3nAvXQWSmqPQtX89oqLt9jc/kuvIyQ7+bYgtbPu4T5DD
-	 ngRYm+AMJwdNbb3nCflwK9Nl1hStcYb7i06C0gR6sO6swoNVwiXBvaxy9RfigWi91o
-	 PnNxj0BBRWqWejG4BCdwFLOO06/pac8msaLaN44vITxJmH9yIFfsDBpcaQ0UxUzq2O
-	 lCJlV5m/mCHuw==
-Message-ID: <160dd5fc-83ba-4311-a173-44521342a3d8@kernel.org>
-Date: Tue, 6 Aug 2024 10:29:47 +0200
+	s=arc-20240116; t=1722943234; c=relaxed/simple;
+	bh=7TIBgK+dNhJiyWA3QNNIyIX543Wff4gjFDCPn9FEUKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wm8iQ1zgH3u5Ixcfo1KoxVJuwywKwW5LDNrUXaaf8npgcPfASn3zPE3/9du9nT6AZeYZdaEGRj2qZ9tQwOJnvtpEij4V6+U4DidFnOYQj2icdvPQhM/V+NLf+a811xJZiYeCza6kDRBQN40aE4VCXC0PLLoxUpXyi4PN2dHXH6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d4P4WFNi; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722943233; x=1754479233;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7TIBgK+dNhJiyWA3QNNIyIX543Wff4gjFDCPn9FEUKs=;
+  b=d4P4WFNiUyzlPsDmeVCDm21SRD7rPb1sXbxlNMJHBdwtpAxyp10Y3iDN
+   4u7W7kjh3Sy1j36T7WxRzzWbxo4VmjaBR2NLfDwHM2KbDvaTsY3ZIwnTO
+   VJ3jLrecK09HE9Hpap9+XwI+YfhfYgDlbSJAFF8J7h7STB0IqeS59DVcZ
+   OeZm145l+RjwTzJgUKF/bI+pevIRD4MQQR0yYtbNjh9BWuYQxFhzcThrI
+   CfG1n0I6y0o3i5+LIVZpfovlZ9TrYEGHPGmPsDRKNUJfDtHBhFD4/wAlv
+   lk+d0Ul6tiLCpFwymlBoE8xirgmmYoo3O170RYCylgt63cnQxsoRjuxG7
+   A==;
+X-CSE-ConnectionGUID: iU+nlmsPRuG/Yw2ZUS+MQQ==
+X-CSE-MsgGUID: i2yJHgpVR86oGgyOLyVcDg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="46355734"
+X-IronPort-AV: E=Sophos;i="6.09,267,1716274800"; 
+   d="scan'208";a="46355734"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 04:20:32 -0700
+X-CSE-ConnectionGUID: 1MAd7I74TDWhkvagvGp9iA==
+X-CSE-MsgGUID: Y8df3/3FQ6Ojr0gnxwUYtw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,267,1716274800"; 
+   d="scan'208";a="56180075"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Aug 2024 04:20:30 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-usb@vger.kernel.org,
+	Luciano Coelho <luciano.coelho@intel.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: Fix a deadlock in ucsi_send_command_common()
+Date: Tue,  6 Aug 2024 14:20:29 +0300
+Message-ID: <20240806112029.2984319-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: phy: imx8mq-usb: add compatible
- "fsl,imx95-usb-phy"
-To: Xu Yang <xu.yang_2@nxp.com>, vkoul@kernel.org, kishon@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, gregkh@linuxfoundation.org, Frank.Li@nxp.com,
- jun.li@nxp.com, l.stach@pengutronix.de, aford173@gmail.com,
- hongxing.zhu@nxp.com, alexander.stein@ew.tq-group.com
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-usb@vger.kernel.org
-References: <20240806050639.1013152-1-xu.yang_2@nxp.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240806050639.1013152-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 06/08/2024 07:06, Xu Yang wrote:
-> The usb phy in i.MX95 is compatible with i.MX8MP's, this will add a
-> compatible "fsl,imx95-usb-phy" for i.MX95. Also change reg maxItems
-> to 2 since i.MX95 needs another regmap to control Type-C Assist (TCA)
-> block. Since i.MX95 usb phy is able to switch SS lanes, this will also
-> add orientation-switch and port property to the file.
-> 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
-> ---
-> Changes in v2:
->  - replace minItems with description in reg property
->  - remove orientation-switch and port
->  - refer to usb-switch.yaml
->  - use unevaluatedProperties
-> ---
->  .../bindings/phy/fsl,imx8mq-usb-phy.yaml      | 42 ++++++++++++++++---
->  1 file changed, 37 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
-> index dc3a3f709fea..6d6d211883ae 100644
-> --- a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
-> @@ -11,12 +11,17 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - fsl,imx8mq-usb-phy
-> -      - fsl,imx8mp-usb-phy
-> +    oneOf:
-> +      - enum:
-> +          - fsl,imx8mq-usb-phy
-> +          - fsl,imx8mp-usb-phy
-> +      - items:
-> +          - const: fsl,imx95-usb-phy
-> +          - const: fsl,imx8mp-usb-phy
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->  
->    "#phy-cells":
->      const: 0
-> @@ -89,7 +94,34 @@ required:
->    - clocks
->    - clock-names
->  
-> -additionalProperties: false
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - fsl,imx95-usb-phy
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - description: USB PHY Control range
-> +            - description: USB PHY TCA Block range
-> +    else:
-> +      properties:
-> +        reg:
-> +          maxItems: 1
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - fsl,imx95-usb-phy
-> +    then:
-> +      $ref: /schemas/usb/usb-switch.yaml#
+The function returns with the ppm_lock held if the PPM is
+busy or there's an error.
 
-ref should be rather in top-level. You can always disallow certain
-properties for devices, if they are really not applicable.
+Reported-and-tested-by: Luciano Coelho <luciano.coelho@intel.com>
+Fixes: 5e9c1662a89b ("usb: typec: ucsi: rework command execution functions")
+Cc: stable@vger.kernel.org
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index dcd3765cc1f5..432a2d6266d7 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -238,13 +238,10 @@ static int ucsi_send_command_common(struct ucsi *ucsi, u64 cmd,
+ 	mutex_lock(&ucsi->ppm_lock);
+ 
+ 	ret = ucsi_run_command(ucsi, cmd, &cci, data, size, conn_ack);
+-	if (cci & UCSI_CCI_BUSY) {
+-		ret = ucsi_run_command(ucsi, UCSI_CANCEL, &cci, NULL, 0, false);
+-		return ret ? ret : -EBUSY;
+-	}
+-
+-	if (cci & UCSI_CCI_ERROR)
+-		return ucsi_read_error(ucsi, connector_num);
++	if (cci & UCSI_CCI_BUSY)
++		ret = ucsi_run_command(ucsi, UCSI_CANCEL, &cci, NULL, 0, false) ?: -EBUSY;
++	else if (cci & UCSI_CCI_ERROR)
++		ret = ucsi_read_error(ucsi, connector_num);
+ 
+ 	mutex_unlock(&ucsi->ppm_lock);
+ 	return ret;
+-- 
+2.43.0
 
 
