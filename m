@@ -1,128 +1,188 @@
-Return-Path: <linux-usb+bounces-13131-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13132-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EBE7948DB4
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 13:30:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DF8B948E07
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 13:43:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B00741C22798
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 11:30:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9117F1C232EF
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 11:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C5C1C3795;
-	Tue,  6 Aug 2024 11:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F7E1C37A5;
+	Tue,  6 Aug 2024 11:43:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OF+Vycns"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tw9X1Irb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415B41BD015;
-	Tue,  6 Aug 2024 11:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2AF1BD015
+	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 11:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722943836; cv=none; b=DEorPImABkM0/pdk3/pTAVigBEEGsMyIUnM0GUeV6DeIlqdKB0m8WGkeQ3o7MUWfyNrYRmNFGtRKxn1XolQqP4X2SP8Z4BdRKxMFcA7QEH50+1bATOJgFdv+IfDaL1vInyOin4jHN3WwB1FoiqO15Sbvu/SGwY7WsGSkZpluOYs=
+	t=1722944588; cv=none; b=kcgZMoTAEiyy+6KPvAd4d7EZDRapc5bZH41asWKty8CmYomQCKSs39VL+y8dOYgY+k7RPCyBV2cg/jgNBzfqPvOw1oRcvxlJ8il6ndh1j6emzytwiPiz4dgQoYZkywW5h+nH0RA6pNvNBfTnGCCJKMTBFGdDghFwPap1DNg2bRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722943836; c=relaxed/simple;
-	bh=IwL2QjC0w8fShIeDbhbbpIeCelIOZ+vlqPl9bgGH2Mo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qssKONkndyED4LFTQUhJPEnlRFhxUaqWU4cZA+nJYBZdw3rW70VO2ByhhhCO758YXFiqtSfqZHeOyIsWPctR49mGQhA322CFXXHEvxsmBZQhKdNMCJADyz2XX+t4EBtxlEPRNA6b7j9na0H+tt+2tPay2Co+A29TzrHyJ9fUT9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OF+Vycns; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722943834; x=1754479834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IwL2QjC0w8fShIeDbhbbpIeCelIOZ+vlqPl9bgGH2Mo=;
-  b=OF+Vycns1kBAF1YFSVFBzUBv7pOb9LH9HBMe+7jvs3AJimrH8JmBA3wI
-   iY2mpUEleX8mdxH7zAlIRt/vz48tDmiTfkkQ77DQWxROeaL52Gvdupe17
-   CxVFXpvL0IhMVgE8GWYrwrcEjRA9rwLhbkfw+/MDVA75XN5zEkO0zwERM
-   nYm9PYMHkgDPZBq5QF30VhyMwyKnP9qXZExOmXv9m8p2ZXjXLqb3c2w3w
-   Wj9D4czJiCsKUCHZ3FdCF0BKZrALiTGGSPd66QcUKF1kKkjeAq23DoSpT
-   NlmJuIIfxEQHCs204mXU0EMJm8QeTjtfsWmopXdYKyMTZbDHSsWKkmiBp
-   A==;
-X-CSE-ConnectionGUID: O6xVGt5nTOCzC0NjdNkgdg==
-X-CSE-MsgGUID: jxQ2IQ9GRuWre3RCb9HXxw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="21075053"
-X-IronPort-AV: E=Sophos;i="6.09,267,1716274800"; 
-   d="scan'208";a="21075053"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 04:30:02 -0700
-X-CSE-ConnectionGUID: CSgCT9V9Qnqp6JT5Tcl4jA==
-X-CSE-MsgGUID: cbpHyyRoQ+K/JsHD1l2kLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,267,1716274800"; 
-   d="scan'208";a="61109552"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa004.fm.intel.com with SMTP; 06 Aug 2024 04:29:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 06 Aug 2024 14:29:58 +0300
-Date: Tue, 6 Aug 2024 14:29:58 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	s=arc-20240116; t=1722944588; c=relaxed/simple;
+	bh=Z6xlId7q0Vfm+FeJ3zQeLCCXzCKiMho5wSh4gtbswc0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Nf6rwwQVWdpmcW0x6KY237Q4U8zD9SgdlpjkGHbMZFZAwUVuMCAMlD6vmrOtbbLClXCUc4YChnakZ3zP7Sommw+CROUhh/lp0U9Ngl5OT1PGuCOP9f/h5q0they0j123AS+2q0IB87T3Jwlboipl1fyQCWsXbwmwKWrNGD/1htk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tw9X1Irb; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2cd46049d2bso169039a91.3
+        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2024 04:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722944586; x=1723549386; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pH/NKRMVdwEmIgLR7UulwVxQzWNz1LIelnNAG0aSToQ=;
+        b=Tw9X1IrbiegfbK6BJd94xZx0SqyFXnaUJP0l5Np6iIonVrBhLid2dxxMdUd+9BVhMR
+         AyUtrYZx1kk6sQ1PEfifi2IsN0JBz60WPyD/ZcxHF8fUddFqQQsGUpnBiJMBqX/F714i
+         SU4Y4Ur4fxWZq+DJd5RnFvbFy8GrTVUl0FfSoKznSN+22QaPiPvJLyv3FykFfWFnK9Ot
+         io9uGodUFjhufD1pbx6QhvKE8TDivWK8MW/oQa3my71CUFP6QHgTvQVPAT8s4SEwFEMM
+         czyEi32poPtEz5j3bF+xGWvVJsOyGsONzu5+/fBJTdk/9pjM53b8hi6yT+F969vg7WV6
+         GhUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722944586; x=1723549386;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pH/NKRMVdwEmIgLR7UulwVxQzWNz1LIelnNAG0aSToQ=;
+        b=VMuaSBiu1mMkoZnI58ph4tlgI9cxkbVtLd9mwQ6WDiJkK2J/xgEH9sgd7bPRExPFlQ
+         iL33XWbfJSPfFMg4kwrI+Dk+KhRqrgiHlmvC+XTNGl+pLT3V426UkW5Z80zaaAXwkY1K
+         6vWfaYCLNdwOlTG0e3gAhqBRxIsgkcBPYCMTitXtox2Qc30n1ssvKZDyFaExhJaaNTpx
+         qJXei0kEw/05Wj7jD5d1hBGYV156EMXNKKiLee8m1ZGqIZVWSqsutUHWik9MKvV2PIyE
+         6O5UtUB8D/avJYrAl0KQJyb2BtxefEkujscL2J47XShC5ZafQWUddP/rIWPhR87YTtZY
+         q9gA==
+X-Forwarded-Encrypted: i=1; AJvYcCX685vVCa0S5JgL03/XIu+h/prxju3sb5sVYZxJjJofd648udCB86TiXyMXtLhD6QMXWWWF8Y8H0vM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznzagDZ6FEQ1pHf4NMA4tezuYji4j65cce+XfhNlQx2TQDPS1z
+	YZyQ++Vz2C0W42MimMEZSWRrOSAxs2yzT2v85dI82hbhXGH+hEQ5
+X-Google-Smtp-Source: AGHT+IFgvhOHFRNvB5yg48uIGUBXXpWCcGVIkdqI3DQEmLQNwk7SE1SYo72hNTyEEkGV82QRW8043Q==
+X-Received: by 2002:a17:90a:c68b:b0:2cb:4382:668f with SMTP id 98e67ed59e1d1-2cff958fd7amr10079172a91.5.1722944585723;
+        Tue, 06 Aug 2024 04:43:05 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:3668:14ca:30e:638f])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cffaf96996sm9007938a91.16.2024.08.06.04.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 04:43:05 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: Thinh.Nguyen@synopsys.com,
 	linux-usb@vger.kernel.org,
-	Luciano Coelho <luciano.coelho@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Fix a deadlock in
- ucsi_send_command_common()
-Message-ID: <ZrIJNjHYTdMsXeno@kuha.fi.intel.com>
-References: <20240806112029.2984319-1-heikki.krogerus@linux.intel.com>
+	imx@lists.linux.dev,
+	Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] usb: dwc3: imx8mp: Switch to RUNTIME/SYSTEM_SLEEP_PM_OPS()
+Date: Tue,  6 Aug 2024 08:42:31 -0300
+Message-Id: <20240806114231.2603055-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240806112029.2984319-1-heikki.krogerus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 06, 2024 at 02:20:29PM +0300, Heikki Krogerus wrote:
-> The function returns with the ppm_lock held if the PPM is
-> busy or there's an error.
-> 
-> Reported-and-tested-by: Luciano Coelho <luciano.coelho@intel.com>
-> Fixes: 5e9c1662a89b ("usb: typec: ucsi: rework command execution functions")
-> Cc: stable@vger.kernel.org
+From: Fabio Estevam <festevam@denx.de>
 
-This does not go to the stable trees after all. The regression is in
-v6.11-rc1.
+Replace SET_RUNTIME_PM_OPS()/SET SYSTEM_SLEEP_PM_OPS() with their modern
+RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() alternatives.
 
-I'm sorry about that.
+The combined usage of pm_ptr() and RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
+allows the compiler to evaluate if the runtime suspend/resume() functions
+are used at build time or are simply dead code.
 
+This allows removing the __maybe_unused notation from the runtime
+suspend/resume() functions.
 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index dcd3765cc1f5..432a2d6266d7 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -238,13 +238,10 @@ static int ucsi_send_command_common(struct ucsi *ucsi, u64 cmd,
->  	mutex_lock(&ucsi->ppm_lock);
->  
->  	ret = ucsi_run_command(ucsi, cmd, &cci, data, size, conn_ack);
-> -	if (cci & UCSI_CCI_BUSY) {
-> -		ret = ucsi_run_command(ucsi, UCSI_CANCEL, &cci, NULL, 0, false);
-> -		return ret ? ret : -EBUSY;
-> -	}
-> -
-> -	if (cci & UCSI_CCI_ERROR)
-> -		return ucsi_read_error(ucsi, connector_num);
-> +	if (cci & UCSI_CCI_BUSY)
-> +		ret = ucsi_run_command(ucsi, UCSI_CANCEL, &cci, NULL, 0, false) ?: -EBUSY;
-> +	else if (cci & UCSI_CCI_ERROR)
-> +		ret = ucsi_read_error(ucsi, connector_num);
->  
->  	mutex_unlock(&ucsi->ppm_lock);
->  	return ret;
-> -- 
-> 2.43.0
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ drivers/usb/dwc3/dwc3-imx8mp.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
+index 8ee448068503..a8bd0850a873 100644
+--- a/drivers/usb/dwc3/dwc3-imx8mp.c
++++ b/drivers/usb/dwc3/dwc3-imx8mp.c
+@@ -282,8 +282,7 @@ static void dwc3_imx8mp_remove(struct platform_device *pdev)
+ 	pm_runtime_put_noidle(dev);
+ }
+ 
+-static int __maybe_unused dwc3_imx8mp_suspend(struct dwc3_imx8mp *dwc3_imx,
+-					      pm_message_t msg)
++static int dwc3_imx8mp_suspend(struct dwc3_imx8mp *dwc3_imx, pm_message_t msg)
+ {
+ 	if (dwc3_imx->pm_suspended)
+ 		return 0;
+@@ -297,8 +296,7 @@ static int __maybe_unused dwc3_imx8mp_suspend(struct dwc3_imx8mp *dwc3_imx,
+ 	return 0;
+ }
+ 
+-static int __maybe_unused dwc3_imx8mp_resume(struct dwc3_imx8mp *dwc3_imx,
+-					     pm_message_t msg)
++static int dwc3_imx8mp_resume(struct dwc3_imx8mp *dwc3_imx, pm_message_t msg)
+ {
+ 	struct dwc3	*dwc = platform_get_drvdata(dwc3_imx->dwc3);
+ 	int ret = 0;
+@@ -331,7 +329,7 @@ static int __maybe_unused dwc3_imx8mp_resume(struct dwc3_imx8mp *dwc3_imx,
+ 	return ret;
+ }
+ 
+-static int __maybe_unused dwc3_imx8mp_pm_suspend(struct device *dev)
++static int dwc3_imx8mp_pm_suspend(struct device *dev)
+ {
+ 	struct dwc3_imx8mp *dwc3_imx = dev_get_drvdata(dev);
+ 	int ret;
+@@ -349,7 +347,7 @@ static int __maybe_unused dwc3_imx8mp_pm_suspend(struct device *dev)
+ 	return ret;
+ }
+ 
+-static int __maybe_unused dwc3_imx8mp_pm_resume(struct device *dev)
++static int dwc3_imx8mp_pm_resume(struct device *dev)
+ {
+ 	struct dwc3_imx8mp *dwc3_imx = dev_get_drvdata(dev);
+ 	int ret;
+@@ -379,7 +377,7 @@ static int __maybe_unused dwc3_imx8mp_pm_resume(struct device *dev)
+ 	return ret;
+ }
+ 
+-static int __maybe_unused dwc3_imx8mp_runtime_suspend(struct device *dev)
++static int dwc3_imx8mp_runtime_suspend(struct device *dev)
+ {
+ 	struct dwc3_imx8mp *dwc3_imx = dev_get_drvdata(dev);
+ 
+@@ -388,7 +386,7 @@ static int __maybe_unused dwc3_imx8mp_runtime_suspend(struct device *dev)
+ 	return dwc3_imx8mp_suspend(dwc3_imx, PMSG_AUTO_SUSPEND);
+ }
+ 
+-static int __maybe_unused dwc3_imx8mp_runtime_resume(struct device *dev)
++static int dwc3_imx8mp_runtime_resume(struct device *dev)
+ {
+ 	struct dwc3_imx8mp *dwc3_imx = dev_get_drvdata(dev);
+ 
+@@ -398,9 +396,9 @@ static int __maybe_unused dwc3_imx8mp_runtime_resume(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops dwc3_imx8mp_dev_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(dwc3_imx8mp_pm_suspend, dwc3_imx8mp_pm_resume)
+-	SET_RUNTIME_PM_OPS(dwc3_imx8mp_runtime_suspend,
+-			   dwc3_imx8mp_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(dwc3_imx8mp_pm_suspend, dwc3_imx8mp_pm_resume)
++	RUNTIME_PM_OPS(dwc3_imx8mp_runtime_suspend, dwc3_imx8mp_runtime_resume,
++		       NULL)
+ };
+ 
+ static const struct of_device_id dwc3_imx8mp_of_match[] = {
+@@ -414,7 +412,7 @@ static struct platform_driver dwc3_imx8mp_driver = {
+ 	.remove_new	= dwc3_imx8mp_remove,
+ 	.driver		= {
+ 		.name	= "imx8mp-dwc3",
+-		.pm	= &dwc3_imx8mp_dev_pm_ops,
++		.pm	= pm_ptr(&dwc3_imx8mp_dev_pm_ops),
+ 		.of_match_table	= dwc3_imx8mp_of_match,
+ 	},
+ };
 -- 
-heikki
+2.34.1
+
 
