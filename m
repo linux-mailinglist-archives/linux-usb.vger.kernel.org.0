@@ -1,112 +1,91 @@
-Return-Path: <linux-usb+bounces-13138-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13139-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DB2994936D
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 16:43:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37D83949371
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 16:43:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABEF91F25178
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 14:43:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7E76287A11
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 14:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00C1201264;
-	Tue,  6 Aug 2024 14:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6B71D47B5;
+	Tue,  6 Aug 2024 14:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/tiBK7T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t5QlAkhZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7708A20012C
-	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 14:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2BF1C37AA;
+	Tue,  6 Aug 2024 14:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722955267; cv=none; b=jnGbURyqCYqBd0hLsytkKPYoBDz+f73Sk+SH36Hi1RQLFvdhtbIFyEs5W7quBkfYIqYQ8MY3ruJgIBGk3CtL9b3prRM+RL7xf/bCvdPMfDoBT2yqzob9VIrPnVey+eGdbxAWzpjNL8Qtx0qHsyt5dOE3DH/dFOCH7PpJb90t2D4=
+	t=1722955331; cv=none; b=E07vccdV5QrPpz+OGxpK0ou1qX9srqbNLh9cZuVayucEL39WQB2SVqy2dAvfPHYc1TjzFMQOPW/RbDiI2Jp2cTqyFaPQcVSDyCWuYFcJvf6o3BWYHT/0qEu4CY4XgIKJJd+YDas+80iPFIm/6Xsmx6jJxiKU9ZTU0ahvFXVNFxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722955267; c=relaxed/simple;
-	bh=vi6gKGVEJT8tBLg6amBxzIK45RQuUSxhYHHpxbaRd2w=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=c+rMxQV17irgsqZ5ytKUk4lbeGNoXve7v4NV5vSufuGfP/SI3I46TPkeY3bzcXiFDstvRepW+w3o9/D4d7Q7rDlBSGKgcwiPPiKyL508Vlj4xJcXNXxYZIuw6hvt208tH727NfRcpVQg7hOD3xQYEsM3Rst56rh+jhYYLXFM3cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/tiBK7T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A516C4AF0D
-	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 14:41:07 +0000 (UTC)
+	s=arc-20240116; t=1722955331; c=relaxed/simple;
+	bh=HjNMR+ty9GrU7p91fTdn6RMgP4z5+pj5CYoj3Tjy3wg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bg+7GJqocOtsOOCVIuKLsR/Qv60rQGBqV96TZAzDH2RG/pw2I8sIRwFMCzENaCZs0bBkxAMDjFJ1psbPMyFipcuHgxJ0CegvHUv6aqwsRljuaXXOuSrNDQntCA2nz0jF4WO7G/9Mh9jrcsnvOIutJerFzYOfHxP40ZZ3Mxit9LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t5QlAkhZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09FA0C32786;
+	Tue,  6 Aug 2024 14:42:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722955267;
-	bh=vi6gKGVEJT8tBLg6amBxzIK45RQuUSxhYHHpxbaRd2w=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=J/tiBK7T/mXpPFg+sLVr1nl0E15kf7fcPbT66tahpxwfA75kKJScOaHit4C0nrLVs
-	 TlqNRWfWhaWg1rW+GPChYMBENvAdffm0IImhg/w+Q8rJfCSRManpH2mSNuo1DaSw7v
-	 M1QvG4WtaVwYZFlkbhpqPoRn55ZBPb+HKDN8iBlb/XosfX/2rTWh2ULAPqjeiu/aej
-	 wQBeL8QeS/8YuBkfW+7GHZU3NzelqfWrpXToKbQRx8Korb1RqrBoKDR7xR6nYkXDGq
-	 iSQpyQXxMnruO6C7AYQ6NE6Taa0tYJjax1KkRraFMQGXMkDd/24rVTcTLm6a0gfzRE
-	 9Q4LrVThYhftg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 0497AC53B73; Tue,  6 Aug 2024 14:41:06 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
-Date: Tue, 06 Aug 2024 14:41:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219111-208809-zuLiOu55UY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
-References: <bug-219111-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1722955330;
+	bh=HjNMR+ty9GrU7p91fTdn6RMgP4z5+pj5CYoj3Tjy3wg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t5QlAkhZN/pFf1OS2fZT/gSbT5rVivKV5wJtyry/nI/WY26l1sfg/XmFMS4vdqWx6
+	 ptzucE4dHpvJPvE7F+/GLdKcNhMMezQoSMV51h7QmbghNSK5worifm/AB2joFM2fKS
+	 HIvR/x++dJ5Bbq+kJYBGupDrhKo8zynq8TR17f/jI8I1SwxZ48Rev9D7O0IqAK3K+g
+	 wrQve/W2KMWETkhylrH4HshfPYn6RWlsASbNwdE4M+qXGTBOauGvUmcD0fwOHTDaqY
+	 +IAiESng8KuP8C25ZY835oit827T6fdVH+YSFcFlwY/ZmKq05WHzUD8IwGB5/F3NDq
+	 BCtpHH/WA3kLQ==
+Date: Tue, 6 Aug 2024 08:42:08 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Danila Tikhonov <danila@jiaxyga.com>
+Cc: krzk+dt@kernel.org, quic_rjendra@quicinc.com, viresh.kumar@linaro.org,
+	quic_kriskura@quicinc.com, devicetree@vger.kernel.org,
+	heiko.stuebner@cherry.de, linux@mainlining.org,
+	linux-usb@vger.kernel.org, ulf.hansson@linaro.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	macromorgan@hotmail.com, davidwronek@gmail.com,
+	johan+linaro@kernel.org, javier.carrasco.cruz@gmail.com,
+	linux-hardening@vger.kernel.org, fekz115@gmail.com,
+	tony.luck@intel.com, andre.przywara@arm.com, kees@kernel.org,
+	andersson@kernel.org, lpieralisi@kernel.org,
+	dmitry.baryshkov@linaro.org, linus.walleij@linaro.org,
+	conor+dt@kernel.org, rafal@milecki.pl,
+	heikki.krogerus@linux.intel.com, gpiccoli@igalia.com,
+	neil.armstrong@linaro.org, sudeep.holla@arm.com, rafael@kernel.org,
+	gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
+	konrad.dybcio@linaro.org
+Subject: Re: [PATCH 05/11] dt-bindings: soc: qcom: qcom,pmic-glink: Document
+ SM7325 compatible
+Message-ID: <172295532809.1490946.6805112460436096246.robh@kernel.org>
+References: <20240729201843.142918-1-danila@jiaxyga.com>
+ <20240729201843.142918-6-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240729201843.142918-6-danila@jiaxyga.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
 
---- Comment #28 from Alan Stern (stern@rowland.harvard.edu) ---
-As I understand it, each audio channel gets transported over its own USB
-endpoint.  (This is true for both mono channels and stereo channels.)  So t=
-wo
-stereo-in channels require two endpoints, and two stereo-out channels would
-require an additional two endpoints.  Similarly, four in channels would req=
-uire
-four endpoints.
+On Mon, 29 Jul 2024 23:18:12 +0300, Danila Tikhonov wrote:
+> Document the SM7325 compatible used to describe the pmic glink on this
+> platform.
+> 
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Maybe my understanding is wrong; I'll have to read through the USB Audio Cl=
-ass
-specification to make sure.
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-The usbmon trace and the Wireshark log you attached both mention only two
-endpoints.
-
-Can you get a Wireshark trace showing what happens when you transmit or rec=
-eive
-data over two in channels and two out channels (so using four endpoints) al=
-l at
-the same time?
-
-Also, can you attach a copy of the "lsusb -v" output for the device when it=
- is
-attached with old_scheme_first set to Y?
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
