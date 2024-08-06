@@ -1,147 +1,116 @@
-Return-Path: <linux-usb+bounces-13154-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13155-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71B979496C8
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 19:30:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AC1D94979D
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 20:37:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2AD41C21A11
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 17:30:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE521283D3F
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2024 18:37:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC3913F431;
-	Tue,  6 Aug 2024 17:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07BB37C6D4;
+	Tue,  6 Aug 2024 18:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="GgLoChU3"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qzUBASle"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from qs51p00im-qukt01072501.me.com (qs51p00im-qukt01072501.me.com [17.57.155.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC1A6F076
-	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 17:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.155.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253E55B1FB
+	for <linux-usb@vger.kernel.org>; Tue,  6 Aug 2024 18:36:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722965342; cv=none; b=OIwZV1acZiriAYkatKjDAsuzj0mabXbmF21KUucgrazZWJUh3/TvFsEO7bFXZXXQe4a3k43ujUvad/9eDC5fF8K3fZlubptlsBGfWrARDZJbSegrikxq+igeuxxiFM4ofVBfKi9PWarp+Q7LlFSVGV6qN4GXG9eya137OQjXWaI=
+	t=1722969412; cv=none; b=cb6gBm+7yhgTdP0pQFt8i4q2Q9o+XCLk0LPSCz3PJbgUfhuOckSlZhKyXO6fzTTxSVTepYez/5MFMDNB4i75Hu1g7zJ86TtZ9U7i4n5RsunAVAueGTJoDluWq/uXbyxwl6BCQh2s7UV1MlaFT6JqVP0MGransgOk8SEamytDE0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722965342; c=relaxed/simple;
-	bh=HyXhN5Oq9+XkjKdLjBy4TdzJZ6j/ftELzMKQNXAsgMo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LoJejr1gm84LRup/E6MeLToCiy6SdzX/k0+UXnsCJW5N4Z96S9T9EHQlpmE2gBKKVjDdj8wy7+1Uy7vUMVfymx4/xZsY2PBeX2rHxd71c2k2ntqqSDGHjA7qj26v+aJIFgjY7HWkVe3D7ZEbBZAOthQsd5cHrBxzUFCW86kIcKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=GgLoChU3; arc=none smtp.client-ip=17.57.155.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-	t=1722965339; bh=LQj4fNq3AjfFWvm1KyFJr4g623c+mzg/R005U5xgbCQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=GgLoChU35++XkkN3GrbT/kFEPqn0+lF1348CnCZKB3Eykr9KXn/sFabZsAPv1dvWi
-	 B3HaGziTQsnMKWOlGgwyJ+poXf1KIdF4OKt/Xwd6bAs3of4CHUKywGenIlkB9aUaGu
-	 z4L+sPGZxtR0nSQjtzw0atHUFKa2/jhabv9cUuX/gbUTOuTMwz/zgHTJ7zSv6w0ZJk
-	 QntofCX8B97QpiEFdUZyvKFybkIm+j3p6mFrAFgQyMmBFkyo5PJrMJjHsCW1bVryp3
-	 IHrR3h9TJMSVFG8aIweC8XFXmHfs8yk+dBk77N7/tOK7oZBdetLHfur3RfPrCPFGbI
-	 jSPLgYy7Ow+Gw==
-Received: from fossa.se1.pen.gy (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-	by qs51p00im-qukt01072501.me.com (Postfix) with ESMTPSA id E8EDD440377;
-	Tue,  6 Aug 2024 17:28:56 +0000 (UTC)
-From: Foster Snowhill <forst@pen.gy>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Georgi Valkov <gvalkov@gmail.com>,
-	Oliver Neukum <oneukum@suse.com>,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH net-next 5/5] usbnet: ipheth: fix carrier detection in modes 1 and 4
-Date: Tue,  6 Aug 2024 19:28:09 +0200
-Message-ID: <20240806172809.675044-5-forst@pen.gy>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240806172809.675044-1-forst@pen.gy>
-References: <20240806172809.675044-1-forst@pen.gy>
+	s=arc-20240116; t=1722969412; c=relaxed/simple;
+	bh=lD1CXg8ewgeFDdS9UW1qlnYh29XhmwAyYiYoddDl1pk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dg3VrPyq1latqD2qpUXeQvtWJ3nminjEuELxx5AEl/kWjICH/sYbAkRfzB3AwBn2ko/tqUxMCKK1G0YRYEkMcpp4lu9iY0FmR8eljNtYq+4mC1FLR1C1rQuQi70jl+r6dm3DR7iX4AQtKJ/r1qf9FElnQcXDMqaTpdAnnCroL+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qzUBASle; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7093ba310b0so416213a34.2
+        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2024 11:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1722969410; x=1723574210; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QmTu6CdLhKUuviA48G6Tr36ATMsK0k+PUHlqmhgRePo=;
+        b=qzUBASleLVMeuDgJdBnHQSKRSdof+rpyEn4HitKx6cemRHfIUxFUoZQB3Uc/siFsiu
+         I1+H8CIEqueYd10anqrTJU1Wclg2Q9lsP5noZC7+DI1oX7aA/Yeo8pRBauEeTsCPaDFX
+         caVDDXbe97jFztqft2ndoeAKfd+llmkeZ62AJlJ0Qu3ZOzrb+8Rdpq+yO7mn4TEpoFPw
+         USRt+BrxyEat72fyJUafnJSFux+2Plt4mH0yJiWlOOzR0/AIQU4sN2ikZLFN8eBjnRp7
+         yMm3tJXucXmKwMhcKTyitnniwphBGCYkAa2o2V1mQQU5ABuaoG/r2oHVjQFLCyGtwZ/2
+         mGeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722969410; x=1723574210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QmTu6CdLhKUuviA48G6Tr36ATMsK0k+PUHlqmhgRePo=;
+        b=OzRIfh8lgpPol9Zi4biO50Rvw4mYv/UcSGMXQ8z4TtAkpKFi7zrj7mkVNQIVgk3sAB
+         vUTRFXeh7Y0CSH7ahxtEFGp9viHCJD5O9Z/pbZsOjkgHbfu+LxY359WysPILG7ZfGtTx
+         PRf6E2LvljXIaPvq9cbX8B7Ogvw5Tcu81MCw5uOt+jYSmfn22xy1+1o4bpjvGjLL6ha7
+         0AAn8UFggbRi/uKaVtWKp0nwfH6hwUkao6Egd/3dE6jyGEL4kZTck7mLLlGJFIvX9KMl
+         OGAdrZtB7s9Lr7bPhxKI6TTr7YCPK5onNDlWZ6TsZcwg9s1G9Ub9yD600dJlkCtOnmJu
+         lgmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+kc22sAE37ZSEhDRvuvg9DOqVnjILH3G0XPfatkQmtU0OQKAdSXtPsDj99BqPDJZA191CMoU723wK/kS7cSPeZtS7i9HLpwsR
+X-Gm-Message-State: AOJu0YyHW2DzCYqBeFMes626Ivu4bAXsJUL6637iaT9KkmkKSxy+jK2J
+	CTgvl5friNhtXMipdyTnlWUQ5qUN+kyPhuHoiTO1Q/QEcF7Mg5ybE6fDwqB1Hw==
+X-Google-Smtp-Source: AGHT+IEnkJ7Z2uIaGOQDKmaJUB8KkdOaHVtwQNHPo7SWgBve6YLjfN5VB16mdbxnI9tcxLO7BTyxxA==
+X-Received: by 2002:a05:6830:4882:b0:703:7842:6c00 with SMTP id 46e09a7af769-709b323a22amr19236323a34.15.1722969410083;
+        Tue, 06 Aug 2024 11:36:50 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4518a76f863sm40057131cf.82.2024.08.06.11.36.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 11:36:49 -0700 (PDT)
+Date: Tue, 6 Aug 2024 14:36:47 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: color Ice <wirelessdonghack@gmail.com>
+Cc: gregkh@linuxfoundation.org, kvalo@kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org, mark.esler@canonical.com,
+	stf_xl@wp.pl
+Subject: Re: Ubuntu RT2X00 WIFI USB Driver Kernel NULL pointer
+ Dereference&Use-After-Free Vulnerability
+Message-ID: <ffc826fe-4753-4e7b-92aa-080f58b73c39@rowland.harvard.edu>
+References: <2024080359-getaway-concave-623e@gregkh>
+ <20240806015904.1004435-1-wirelessdonghack@gmail.com>
+ <bc57c8b3-4334-4595-8b5a-5233316edcfb@rowland.harvard.edu>
+ <CAOV16XF8cEg7+HAFQiCUrt9-Dp4M+-TANjQqRXH87AAdgzmNMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 9ZlTGVy62X3C_iXbE3MKDXxwY5igPsOQ
-X-Proofpoint-ORIG-GUID: 9ZlTGVy62X3C_iXbE3MKDXxwY5igPsOQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-06_14,2024-08-06_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1030 mlxscore=0 suspectscore=0
- adultscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2408060123
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOV16XF8cEg7+HAFQiCUrt9-Dp4M+-TANjQqRXH87AAdgzmNMg@mail.gmail.com>
 
-Apart from the standard "configurations", "interfaces" and "alternate
-interface settings" in USB, iOS devices also have a notion of
-"modes". In different modes, the device exposes a different set of
-available configurations.
+On Wed, Aug 07, 2024 at 12:47:26AM +0800, color Ice wrote:
+> Hi,
+> 
+> I'm glad that you can address this issue. I believe that this is indeed a
+> vulnerability because the issue is caused by the rt2x00 driver's failure to
+> properly shut down its async queues. While it requires sudo to execute, it
+> is still a problem as it can trigger a kernel system exception. We can
+> imagine that this vulnerability could be executed without root permissions
+> in certain scenarios. For instance, in many embedded systems, configuring
+> udev rules might be necessary to ensure automated operations, and in such
+> scenarios, it can be triggered without root permissions.
+> 
+> Therefore, I believe that from a vulnerability perspective, it should
+> indeed be eligible for a CVE, as it can be fixed and it is indeed a flaw.
+> If this vulnerability is not addressed, future driver processing and
+> adaptation may encounter robustness and security issues. I believe security
+> issues should be handled with the corresponding seriousness.
+> 
+> Thank you.
 
-Depending on the iOS version, and depending on the current mode, the
-length and contents of the carrier state control message differs:
+You didn't answer my question.  Are you able to test patches?
 
-* 1 byte (seen on iOS 4.2.1, 8.4):
-    * 03: carrier off (mode 0)
-    * 04: carrier on (mode 0)
-* 3 bytes (seen on iOS 10.3.4, 15.7.6):
-    * 03 03 03: carrier off (mode 0)
-    * 04 04 03: carrier on (mode 0)
-* 4 bytes (seen on iOS 16.5, 17.6):
-    * 03 03 03 00: carrier off (mode 0)
-    * 04 03 03 00: carrier off (mode 1)
-    * 06 03 03 00: carrier off (mode 4)
-    * 04 04 03 04: carrier on (mode 0 and 1)
-    * 06 04 03 04: carrier on (mode 4)
-
-Before this change, the driver always used the first byte of the
-response to determine carrier state.
-
-From this larger sample, the first byte seems to indicate the number of
-available USB configurations in the current mode (with the exception of
-the default mode 0), and in some cases (namely mode 1 and 4) does not
-correlate with the carrier state.
-
-Previous logic erroneously counted `04 03 03 00` as "carrier on" and
-`06 04 03 04` as "carrier off" on iOS versions that support mode 1 and
-mode 4 respectively.
-
-Only modes 0, 1 and 4 expose the USB Ethernet interfaces necessary for
-the ipheth driver.
-
-Check the second byte of the control message where possible, and fall
-back to checking the first byte on older iOS versions.
-
-Signed-off-by: Foster Snowhill <forst@pen.gy>
-Tested-by: Georgi Valkov <gvalkov@gmail.com>
----
- drivers/net/usb/ipheth.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index cdc72559790a..46afb95ffabe 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -355,13 +355,14 @@ static int ipheth_carrier_set(struct ipheth_device *dev)
- 			0x02, /* index */
- 			dev->ctrl_buf, IPHETH_CTRL_BUF_SIZE,
- 			IPHETH_CTRL_TIMEOUT);
--	if (retval < 0) {
-+	if (retval <= 0) {
- 		dev_err(&dev->intf->dev, "%s: usb_control_msg: %d\n",
- 			__func__, retval);
- 		return retval;
- 	}
- 
--	if (dev->ctrl_buf[0] == IPHETH_CARRIER_ON) {
-+	if ((retval == 1 && dev->ctrl_buf[0] == IPHETH_CARRIER_ON) ||
-+	    (retval >= 2 && dev->ctrl_buf[1] == IPHETH_CARRIER_ON)) {
- 		netif_carrier_on(dev->net);
- 		if (dev->tx_urb->status != -EINPROGRESS)
- 			netif_wake_queue(dev->net);
--- 
-2.45.1
-
+Alan Stern
 
