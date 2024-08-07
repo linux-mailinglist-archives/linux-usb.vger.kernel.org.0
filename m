@@ -1,260 +1,227 @@
-Return-Path: <linux-usb+bounces-13181-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13182-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A6B3949FD3
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 08:31:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2A0994A16A
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 09:12:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2CB3284704
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 06:31:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DE04B26B86
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 07:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18301B5800;
-	Wed,  7 Aug 2024 06:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5081F1C461B;
+	Wed,  7 Aug 2024 07:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="X5lnk/+x"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="aLoeoiEL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013050.outbound.protection.outlook.com [52.101.67.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1974AEE6
-	for <linux-usb@vger.kernel.org>; Wed,  7 Aug 2024 06:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723012276; cv=none; b=fvMeMKxEVsMZ3GjnXnjcqELDUqDMov53DGK5xmNKsiqTy/ZIp6OQ8IddRYld07cnho1+1ft0E1UV/D8BtSasJpg+jKkSQ9xJWgKyuzp0q6IRhjCHdOd7U6pei+/EBG+30k0NhEO66ymVUys4YFkse4wAQ7Am4s0tPRbChcX+l78=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723012276; c=relaxed/simple;
-	bh=S+lqcxp/TLkYYSF+8pmWifOBXbfRfybPzjD0OhqAiQA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=K5BkTPwdP3H8s2jL4QOf4wiCHs/HaMnMVfa+a0wpd1bk0HuFab2VTuYympUjpnJtNfGlQVkXwIET+DvnUZNYtGM8RL65NRute9TQG1u7wwqPJ4KGzQgUOlcPamzt71sQg0l4ubGd5T7ARhx15bhKYRhQNv1PE/Xhuf2JsDbDGqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=X5lnk/+x; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240807063110epoutp04240bbac7107ece6dcd3418e5fe58ccb6~pXogQySlP0851708517epoutp04m
-	for <linux-usb@vger.kernel.org>; Wed,  7 Aug 2024 06:31:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240807063110epoutp04240bbac7107ece6dcd3418e5fe58ccb6~pXogQySlP0851708517epoutp04m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1723012270;
-	bh=K1HzqGY3pX/2lGXokj+MO8jq16e2RSo1fF7SOq9N4XE=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=X5lnk/+x5Qvb8bCYgYZP2CzYEaOsDKG/xRnRtuEBFbgZdUcWElWRPWyFWTvGFu5GI
-	 GKJcvHGteD1FETboasvNpka6Cp12cwjOs9xkTVf7HGKTCYa93V7J+Sh36RAJEg6REB
-	 /4DzJFcKnQcskmQQZHsuL2m/IO9CjDLNB71/oW5M=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20240807063110epcas5p412c14312df1b7f260f1b91a9b2712679~pXofxED7D0475204752epcas5p4C;
-	Wed,  7 Aug 2024 06:31:10 +0000 (GMT)
-Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.174]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4Wf0gK1Lgrz4x9Pp; Wed,  7 Aug
-	2024 06:31:09 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	31.AD.08855.DA413B66; Wed,  7 Aug 2024 15:31:09 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20240807062015epcas5p3309ab63eef653eabd72a9ea6afaa0d5e~pXe909NVB1787917879epcas5p35;
-	Wed,  7 Aug 2024 06:20:15 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240807062015epsmtrp1f5c00e3e24f0b8ded272b5818a4d7fd1~pXe9z-Izb0489804898epsmtrp1a;
-	Wed,  7 Aug 2024 06:20:15 +0000 (GMT)
-X-AuditID: b6c32a44-15fb870000002297-e3-66b314ad575c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	3F.09.19367.F1213B66; Wed,  7 Aug 2024 15:20:15 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240807062013epsmtip25bcd662953baa5f93467049014ef531c~pXe78Kv_Y0401604016epsmtip2d;
-	Wed,  7 Aug 2024 06:20:13 +0000 (GMT)
-Message-ID: <b6baeb45-1684-4fcb-8c71-392cb4788c85@samsung.com>
-Date: Wed, 7 Aug 2024 11:50:12 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672B01C3F35;
+	Wed,  7 Aug 2024 07:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723014752; cv=fail; b=HBAwurqkt5NmzPXvRRel2298yEhCqfe7iWgIi25p5B/Eu5yFdjzXESUlkNWBw4+eXJ4kWIhGDpeW7nadqXk5Lc1FLTSeHkESQveWG82/RmC5UkH97jr+RUFg5YsJf92RsufWonUIxfTRBToFo1ReKz0UsnLGW9MUu8J8EjgXuVo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723014752; c=relaxed/simple;
+	bh=2g+n79OBrrWAimAvE/7JlSYO8Pp+taqlpseGOsrL50w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=tozFKxTXV9AISDaDFqQb7eJoBfQ0b7koBamZ3GTsm0t36CgKvM3d1M7C0wWu2GrDUG2ZfX03AKPLldyo6DNTbp/HVEynPmLfyYTxO1uhCPhM5vnLhzZ0bk60guXWHk/xkkMm/Br/f1Trz8+uBETw/CIt5FG/v7AvUdTyOCif7jA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=aLoeoiEL; arc=fail smtp.client-ip=52.101.67.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=w0Ou7lb+aqI4FtMU1vg+ctnzY3V2DuEsq+K5HL4tJ1qBCAs9n3ykMXaLWNM+mQFPnECxV9X9gH9vSm8EVR5QUX+ES7CKjVuLtQfvD1n2ZHfP8bT2TpHzJJmjWB45/vMxUWugz5YgF4nxOtAEPMiH+WR8fM2UK1OFzEVCPl4p5gUMJ2Rj3Ku92N+XeXY5AFcX/pp3eqBopL9com4Lqhsun4+Qe2NVXZ4mWhG5GOqSCO7kNYLIvCVO1Dg18y0kG1sU9xaMEb26OTaFOZXVsNKMu/aY46azveH5qps7G+9a+L5iMGd23rBB0xxFtM1YebWzy3yIWXTduECFt494nfHOZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5sU0ZSgrKRq862i8WjDiHViP4+YUaMvfQmoZirSv/lk=;
+ b=KgXy0HP99v5CC5mYo6+wQFdKYfNvdrTHPjoMtKUfnePduOWpYSfyxZqQxeqmHbQRgV9yDNbrJTy4oSoUiXfK6vO1ucu3BJM7mLO5vuov5ZzrDVqO2uDWZPQ5HDpvroobUiSPZRG+i64QO/ANW2O47BsNr9Msu3tuP0jfs7ul6OqsLu9akap3R79eLnuZ7igzi9sktglQoPpG1MAQ9tLs9xNPsKIj3kGWcwYvKeYi/wdAM7n0c9YJH8T418RT2nVgU3VzCLabGd5FK1ArOclbVTGWVgqT8cxKpcwIXnjYihgd/+Eh6zanIE+klb82+Ped4bkQC+haWGUwVhOdz5XPqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5sU0ZSgrKRq862i8WjDiHViP4+YUaMvfQmoZirSv/lk=;
+ b=aLoeoiEL6dgFOQF20jerpfNoQL1wW8SL0MCT4PUmPTOWUjfOunGI0RwilTianUNoup5s7dCNyf5xzm6n+8URpk/z2PcV405ss0wPANq6ShpD/FvLiVprxpuq5O/0NXgAVihYJuPUSnmQuJhw3L2HtJ29fHhFkHN5RyK37eZEfMAUntgLJRJgEy6zlX+F4cNrYD4iqpeUoNUysiMGj9suaGUxHGiCT2547p4xtQC66RD8rigGrQo1PLZFDcdfUKZbSrb2xT//81IHmhXN2LAXzd7c4VeTh6skNEOFRf/GIdP2EpU0XavMHNINiuXHRgVh6Z3c9tTaH27bNJKcD76iag==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by GVXPR04MB10201.eurprd04.prod.outlook.com (2603:10a6:150:1b7::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.26; Wed, 7 Aug
+ 2024 07:12:27 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%5]) with mapi id 15.20.7828.023; Wed, 7 Aug 2024
+ 07:12:26 +0000
+Date: Wed, 7 Aug 2024 15:11:43 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Frank Li <Frank.li@nxp.com>, vkoul@kernel.org, kishon@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
+	l.stach@pengutronix.de, aford173@gmail.com, hongxing.zhu@nxp.com,
+	alexander.stein@ew.tq-group.com, linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] dt-bindings: phy: imx8mq-usb: add compatible
+ "fsl,imx95-usb-phy"
+Message-ID: <20240807071143.6njojidi75xsjkxr@hippo>
+References: <20240806050639.1013152-1-xu.yang_2@nxp.com>
+ <160dd5fc-83ba-4311-a173-44521342a3d8@kernel.org>
+ <ZrJLS37GFmvkQpml@lizhi-Precision-Tower-5810>
+ <bfe6430c-a022-4e8f-ab7f-8d8e8cb10fca@kernel.org>
+ <20240807055701.o7fo43efvv3jxlhv@hippo>
+ <9127e97e-64ad-47df-aa4f-03feafafdbb1@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9127e97e-64ad-47df-aa4f-03feafafdbb1@kernel.org>
+X-ClientProxiedBy: SGBP274CA0003.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::15)
+ To DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: Potential fix of possible dwc3 interrupt
- storm
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
-	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
-	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
-	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
-	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"shijie.cai@samsung.com" <shijie.cai@samsung.com>
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <20240807003806.5owtgwgw2lczg4u5@synopsys.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMJsWRmVeSWpSXmKPExsWy7bCmuu5akc1pBi/7WSzeXF3FanFnwTQm
-	i1PLFzJZNC9ez2Yxac9WFou7D3+wWFzeNYfNYtGyVmaLT0f/s1qs6pwDFPu+k9li0kFRi1UL
-	DrA78Hrsn7uG3aNvyypGjy37PzN6fN4kF8ASlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pm
-	YKhraGlhrqSQl5ibaqvk4hOg65aZA3SekkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUg
-	JafApECvODG3uDQvXS8vtcTK0MDAyBSoMCE748KmLUwFx9UrVl66zNbAuEGui5GTQ0LARGLp
-	hO/sXYxcHEICuxklpj3+xgLhfGKU6Pk8hx3OubxmN2MXIwdYy9ppWhDxnYwSf0/PYIJw3jJK
-	zGu6xgxSxCtgJ3FhkwjIChYBFYn3vy4yg9i8AoISJ2c+YQGxRQXkJe7fmsEOYgsLBEhcWTKD
-	EcQWEdCROHDiPNhMZoEOVokF3W1MIAlmAXGJW0/mM4HMZxMwlHh2wgYkzClgLbH+aBMLRIm8
-	RPPW2cwgvRICWzgkLr5YyQLxp4vEhR9X2CBsYYlXx7ewQ9hSEi/726DsaonVdz6yQTS3MEoc
-	fvINKmEv8fjoI7DHmAU0Jdbv0ocIy0pMPbUO6jY+id7fT5gg4rwSO+bB2KoSpxovQ+2Vlri3
-	5BorhO0hMenJdpYJjIqzkMJlFpI3ZyH5ZxbC5gWMLKsYJVMLinPTU5NNCwzzUsvhEZ6cn7uJ
-	EZx6tVx2MN6Y/0/vECMTB+MhRgkOZiUR3ubwTWlCvCmJlVWpRfnxRaU5qcWHGE2BETSRWUo0
-	OR+Y/PNK4g1NLA1MzMzMTCyNzQyVxHlft85NERJITyxJzU5NLUgtgulj4uCUamBSC8vbE3Xu
-	6o1rWfInG9T7jj+z/DBvfkfS2t5plwUkt2X0rHyeOve/iKTaP35nl+w399LXb19bOSfASGRR
-	4fOYaU+ioq6vsX//6rzGpMCLep6T+/ZMyuKWT+ldl2yZJpvM/2P+WumON5ckfY41zorJzGFU
-	aT2s+/fU3nWW6zbO229zImL254dfklwe/560I8RnymPVSq4NaxWe7uteWxSxj/VkgNsWrYcm
-	RWq3fjielpwdLzjzzrXmbonTIlWxLF7F9xL+alz46bhWzUic1Tf6cXJTE8/SorzpK174FJ74
-	wPDP/+h8E7eH7sUcjLZy7tU8gbktvyUuuO9ia0ndHZ1zst/286KMo1kqHfma98uUWIozEg21
-	mIuKEwEpGHSKRgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupikeLIzCtJLcpLzFFi42LZdlhJXldeaHOawfzJYhZvrq5itbizYBqT
-	xanlC5ksmhevZ7OYtGcri8Xdhz9YLC7vmsNmsWhZK7PFp6P/WS1Wdc4Bin3fyWwx6aCoxaoF
-	B9gdeD32z13D7tG3ZRWjx5b9nxk9Pm+SC2CJ4rJJSc3JLEst0rdL4Mq4sGkLU8Fx9YqVly6z
-	NTBukOti5OCQEDCRWDtNq4uRi0NIYDujRF/jC/YuRk6guLTE61ldjBC2sMTKf8/ZIYpeM0os
-	m7WQEaSZV8BO4sImEZAaFgEVife/LjKD2LwCghInZz5hAbFFBeQl7t+aATZTWMBPYvqbE2Az
-	RQR0JA6cOM8EMpNZoIdV4svXjywQC/YzSmybOh2sg1lAXOLWk/lMIMvYBAwlnp2wAQlzClhL
-	rD/axAJRYibRtRXiUGagZc1bZzNPYBSaheSOWUgmzULSMgtJywJGllWMoqkFxbnpuckFhnrF
-	ibnFpXnpesn5uZsYwdGlFbSDcdn6v3qHGJk4GA8xSnAwK4nwNodvShPiTUmsrEotyo8vKs1J
-	LT7EKM3BoiTOq5zTmSIkkJ5YkpqdmlqQWgSTZeLglGpg6vh/ur7p+f4CO8/nLxI++gcvLjCf
-	vPnPwvbIE057khddCHrhveVOZbUiz/zu2qvGu37Iry+W9HMz0jl+8VhL03OmSbseeHSU799+
-	vXNjQ7fuPI3bU5Z8YXsw6RPXF6dX6StWyH35+r7Zkctj79UKteoYu2tPc2yqv++bnPZp/vfW
-	XPMbV56telI0+Yd2WcstXr6VnSf4gjninZ24TsrvEq93jXa9+nD92fJn2ekJ140i/m7e82+x
-	3hd9gdsRwhb7o9T4VyatD+LqenvA8vQRkWnbF1su1bS5wf7jpfrxGRvWtKwUlLwrYydf9lpo
-	/6H7d50iDwQY/OitzDrw//zlU4czT58sep/8dqHslzLtM7uVWIozEg21mIuKEwEaLD1IHQMA
-	AA==
-X-CMS-MailID: 20240807062015epcas5p3309ab63eef653eabd72a9ea6afaa0d5e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240719110149epcas5p3dd468685a095c094ed2e540279bf3ec2
-References: <CGME20240719110149epcas5p3dd468685a095c094ed2e540279bf3ec2@epcas5p3.samsung.com>
-	<20240719110100.329-1-selvarasu.g@samsung.com>
-	<20240807003806.5owtgwgw2lczg4u5@synopsys.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|GVXPR04MB10201:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18e3e088-740a-4152-2486-08dcb6b04ab3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|366016|7416014|376014|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?YoEcVRVYlXb6XCCsOSek8PjF+DgDo7ESrKwjq4WTL/pRYXja1UgehbC4ur4s?=
+ =?us-ascii?Q?RrWV4YRhTgdVRdrEGsHFpYxd6Kf99u+pSI392gWVFDpOrNN7j/Mc7d5mrQsw?=
+ =?us-ascii?Q?OJW2umRfseVEQsoEoa1IK18xmqTsWOOWJhz4I/ZygxYXqUd7ajKTpggDYVWg?=
+ =?us-ascii?Q?6/bczoGFv8vN39sFQ8caVCFDdz+3hm5qg0YRPMj9/roEBr/5v9ooz2WrRVKn?=
+ =?us-ascii?Q?KpA+vuKKJPmlnWLrW5AAsQRQcwMTWQabAeYLLlQ0jkr63IoOWgmoX2qVSRTp?=
+ =?us-ascii?Q?S+zaTcRA3oSQWt7MdtYUIMC8g3a4JzBOmHSZ8/XqpzWqu4c4Wt2RxYWBgAhy?=
+ =?us-ascii?Q?7liuDTfYhc7d/lIxrhVnK9wVR38SdJivz4lj0Bl9JrzZzgtJnkC9q5AairAS?=
+ =?us-ascii?Q?hSg5NulFHkCmL9xihvJsBXCZB3iIvvk/yGReMtVCtr6Yf9ZRqUmFSIcsYp3I?=
+ =?us-ascii?Q?qLDQpQg1Y36SrgxZ/hRi6Qd1vBhn24pFveGCQyHkpJTlfETN3UNDaYlbvP4C?=
+ =?us-ascii?Q?jCsgL3YZU7agQYbzquJ9OXnxwNhADGu/XzVWgKYz0jn3jIWgzfUYTF1CfxON?=
+ =?us-ascii?Q?Icrz1In8NeqVpeXncKTzRx6mlHWdtbcTIWpyUPg01vXO0LV2But0Gx0DGtfL?=
+ =?us-ascii?Q?wOXyIeHKNDZkHkff7e1LujWw+P6/nOeaadawlUILQZ7WMpyotUbuhKQxRMaT?=
+ =?us-ascii?Q?Um69wMMWagWvkP4GdH+FrrM1wPSghKfCs3jVeXgAkLAVCfUXA31DPko8SUoD?=
+ =?us-ascii?Q?ztg4z+00Ye+VxMDn7HnOKLlP6KON2p1Bs2i9flXug4ppZ4mEU3CxDhHPwLrI?=
+ =?us-ascii?Q?Z8GtKEhsbVAikanc9d3DJqrj++8A6yoAShZ2NWupOvQsE1yR10mVLbIEVpr4?=
+ =?us-ascii?Q?kzKWrpH9NG2MYh+4aV2UVNQE5r0LVNcH51wnoxptVb/zyHTPQxITvOcX/tOJ?=
+ =?us-ascii?Q?U3WqtcVOJo3bN3VqsBaJqCB5i5NO9ktoVUFLoJsEQASdIvwQEnlscYJX/5zG?=
+ =?us-ascii?Q?/0dDKVCj4eX9od0vQR9r5z+lsahYA1M5VgriFoaP5Ir+OGKuwot7GlkeYoFp?=
+ =?us-ascii?Q?ryt+AC57/7hCJlA87QboCRf+MjWGby55Kg0ddRerXKYQV29RAN7oQtlRkLO9?=
+ =?us-ascii?Q?+2xg8BDU0iy77R6nMA6OorlWIQ6cDZ5uC9NkNIQWBA1BE4PieFIDVZEkP0pX?=
+ =?us-ascii?Q?EPBrzxZRKLr6FDY7lIoRDJbAUDkN8DbvY9LhJf4xp66Qjj6LsmUrVNKQO05R?=
+ =?us-ascii?Q?8lV+bpgQWIgEATkMP5kYFJZgrZEMk6G9ceXRhLxx2KengrS16AyG26a9A+ft?=
+ =?us-ascii?Q?S7d48Xrb7qVsFeh045sLQR8leB9Et+rZgqhhKtm8gFgdejwSiBknfFf+hPMR?=
+ =?us-ascii?Q?5Zxwzkg=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(366016)(7416014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?JDN6KO7bIYZAbNU0H6VWZESAHDlnxfVjz7XViGg94f9WGFpljsrkGfF5+QXI?=
+ =?us-ascii?Q?C+yIWUTYhCXLHr/UQMAiuBh0nM7tAJkJYN6u7XIkKnkjoAZEfhKkeBhg7a4O?=
+ =?us-ascii?Q?se3uI3v6KVMstKBJBG4unW0M+wzvTxNIhfcppNjeHRM0MaOKgK3e1BYY7pbW?=
+ =?us-ascii?Q?mTxIjxwf1oGgsMVSdB4Iw2n6LKSOcPOBAi14Dv2UUcMEBhUfPk4jh/ux58Ld?=
+ =?us-ascii?Q?NqMJ2K2I/9W2KWw0H07Sj9vK9at349djJ8Ny+hkl/AeIpj4RGFN+8W/lkmKm?=
+ =?us-ascii?Q?9Docs46R8DuQnGsZXdtisKd4oLEd2k2PFk3apcwONihd+reutw2U0w4yaR/P?=
+ =?us-ascii?Q?q8plwEzYcn9UILlwrZf+bTLlEsp1vTmd2N5LWUKwATkAfT/J5z25+/VUssd9?=
+ =?us-ascii?Q?5RMAlJ2iH+JSD4dSr60ZjzQOpVAHZ57AqM7edW6V2OX6LT7+dgBhlP/MAV90?=
+ =?us-ascii?Q?gEEo74GO6Ut4rBgsZ/+iDMiJBDcpmSMV0/XHCoPf9khs2/NIc0NozgRutTAb?=
+ =?us-ascii?Q?N5McxxByh14D1AOw8URZe8rBG7dHb2xvQ8vUlbElB4yT6xDh4mzjM2LC2dKh?=
+ =?us-ascii?Q?LgL0/CfVuKhLTyOycTXwDG/1V0ESKIv/xaPZPrl5DZIvXHTxBNkL16XtwuzT?=
+ =?us-ascii?Q?sd81/bT9325KI/Pf5ljX3Dof7U2gebPBzS9tBQMUuzyT5Bw1DamjGf8ukRFf?=
+ =?us-ascii?Q?LjEH+oiABAD+pNmR8c1j8clDXyr3yf3ywxeTfqzv+W+p9nBbbF7XvGTwhtcx?=
+ =?us-ascii?Q?RD2MddesmDGn6UfNGsP1A5Zk/pIrhSDOsLPWFy/OYyHWcsIpQ7nh287pq7Mw?=
+ =?us-ascii?Q?8guYxtmbz5Ik5mHEaCOP/xw8g7KNKfIHvXJi8DmpeWA9A1jD5KCcRpKAhXOp?=
+ =?us-ascii?Q?w8WbceDjPDSdQJouf7b9wf2JnZd50s3qiorl2GgzrZkBb505EIEHuq5p7Tcj?=
+ =?us-ascii?Q?fFDyA25yEJw/hO+tWvCuqCVlZ9f+c6YDFu5mCO8/E/dApdA0lGJxIEAFCVah?=
+ =?us-ascii?Q?HW/sFnwMFncD9Cd8wN4m3Y8gN4ohyO6sheTC3TCI7xkrLzrLontaAAkWUu58?=
+ =?us-ascii?Q?3COmXDycamdcQ7KsRhp5r1gxzh0kAPESzqyIrtI1B8h0Zxwno+qeAurKaHCv?=
+ =?us-ascii?Q?r9ULVXWlJL0emgfzeWwwS6gYG8UxG3T2wkG0kZsHQExpymlagpFcolYQRsRO?=
+ =?us-ascii?Q?P2s9yXIrIutB1wiRfTwqswfWzD/FwgCw/v354oUsP7GUzNHep7ljxlofhVm6?=
+ =?us-ascii?Q?DXiPuKL9f3VapXoL6tDFQCbJZ8SLRKdOhbNVMTY9gtdnJgIrAkA4+DSQ4OZP?=
+ =?us-ascii?Q?eGgexB3379GA85FKq4n0VlNnPOFwG88vIVRioosQTp8YZzU5mVlP9MuSP5te?=
+ =?us-ascii?Q?aU3cnq0eV68vVlGk0BKABiDbTOiaXUGUNOq3wTDxBqLc0sqMV2vwRzCTTaP1?=
+ =?us-ascii?Q?12vp7WFRjL5e4LQ3FI1YEMo1dH5gp6h0QCx/5sd6gJsizsziniQ9E/kGA1S5?=
+ =?us-ascii?Q?7LjzqYn08E6anFnGJQwWMU2hLy18BRa1EvCMU3E6LrBEDv/ObayxZiSYAnkg?=
+ =?us-ascii?Q?5DHiaaWYX98Do/iuESsdRbDt1l5l41MkwGEBUds4?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18e3e088-740a-4152-2486-08dcb6b04ab3
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2024 07:12:26.7048
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KGGyY9x2lPwIFOvgpkmdMncdYGwwdMZfZKN1LotdBLAJQpn6zKzUiBdvY7oz0K3JtZ0JjEXLabEJalXOH9LDsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10201
 
+On Wed, Aug 07, 2024 at 07:59:02AM +0200, Krzysztof Kozlowski wrote:
+> On 07/08/2024 07:57, Xu Yang wrote:
+> > On Wed, Aug 07, 2024 at 07:48:43AM +0200, Krzysztof Kozlowski wrote:
+> >> On 06/08/2024 18:11, Frank Li wrote:
+> >>> On Tue, Aug 06, 2024 at 10:29:47AM +0200, Krzysztof Kozlowski wrote:
+> >>>> On 06/08/2024 07:06, Xu Yang wrote:
+> >>>>> The usb phy in i.MX95 is compatible with i.MX8MP's, this will add a
+> >>>>> compatible "fsl,imx95-usb-phy" for i.MX95. Also change reg maxItems
+> >>>>> to 2 since i.MX95 needs another regmap to control Type-C Assist (TCA)
+> >>>>> block. Since i.MX95 usb phy is able to switch SS lanes, this will also
+> >>>>> add orientation-switch and port property to the file.
+> >>>>>
+> >>>>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> >>>>>
+> >>>>> ---
+> >>>>> Changes in v2:
+> >>>>>  - replace minItems with description in reg property
+> >>>>>  - remove orientation-switch and port
+> >>>>>  - refer to usb-switch.yaml
+> >>>>>  - use unevaluatedProperties
+> >>>>>
+[...]
+> >>>>
+> >>>> ref should be rather in top-level. You can always disallow certain
+> >>>> properties for devices, if they are really not applicable.
+> >>>
+> >>> There are some "required" in usb-switch.yaml,
+> >>>
+> >>> oneOf:
+> >>>   - required:
+> >>>       - port
+> >>>   - required:
+> >>>       - ports
+> >>>
+> >>> If put on the top, it may cause DTB check warning for other compatible
+> >>> strings, which have not support usb-switch.
+> >>
+> >> Hm, indeed, that's unusual case to have such different devices in one
+> >> schema. Did you test that above $ref in if: actually works?
+> > 
+> > Yes, it works and this yaml pass dt_binding_check and dtbs_check. 
+> 
+> I know it passes, I am asking whether it actually works. Is the $ref
+> actually effective? Is it properly applied?
 
-On 8/7/2024 6:08 AM, Thinh Nguyen wrote:
-> On Fri, Jul 19, 2024, Selvarasu Ganesan wrote:
->> In certain scenarios, there is a chance that the CPU may not be
->> scheduled the bottom half of dwc3 interrupt. This is because the CPU
->> may hang up where any work queue lockup has happened for the same CPU
->> that is trying to schedule the dwc3 thread interrupt. In this scenario,
->> the USB can enter runtime suspend as the bus may idle for a longer time
->> , or user can reconnect the USB cable. Then, the dwc3 event interrupt
->> can be enabled when runtime resume is happening with regardless of the
->> previous event status. This can lead to a dwc3 IRQ storm due to the
->> return from the interrupt handler by checking only the evt->flags as
->> DWC3_EVENT_PENDING, where the same flag was set as DWC3_EVENT_PENDING
->> in previous work queue lockup.
->> Let's consider the following sequences in this scenario,
->>
->> Call trace of dwc3 IRQ after workqueue lockup scenario
->> ======================================================
->> IRQ #1:
->> ->dwc3_interrupt()
->>    ->dwc3_check_event_buf()
->>          ->if (evt->flags & DWC3_EVENT_PENDING)
->>                       return IRQ_HANDLED;
->>          ->evt->flags |= DWC3_EVENT_PENDING;
->>          ->/* Disable interrupt by setting DWC3_GEVNTSIZ_INTMASK  in
->>                                                          DWC3_GEVNTSIZ
->>          ->return IRQ_WAKE_THREAD; // No workqueue scheduled for dwc3
->>                                       thread_fu due to workqueue lockup
->>                                       even after return IRQ_WAKE_THREAD
->>                                       from top-half.
->>
->> Thread #2:
->> ->dwc3_runtime_resume()
->>   ->dwc3_resume_common()
->>     ->dwc3_gadget_resume()
->>        ->dwc3_gadget_soft_connect()
->>          ->dwc3_event_buffers_setup()
->>             ->/*Enable interrupt by clearing  DWC3_GEVNTSIZ_INTMASK in
->>                                                          DWC3_GEVNTSIZ*/
->>
->> Start IRQ Storming after enable dwc3 event in resume path
->> =========================================================
->> CPU0: IRQ
->> dwc3_interrupt()
->>   dwc3_check_event_buf()
->>          if (evt->flags & DWC3_EVENT_PENDING)
->>           return IRQ_HANDLED;
->>
->> CPU0: IRQ
->> dwc3_interrupt()
->>   dwc3_check_event_buf()
->>          if (evt->flags & DWC3_EVENT_PENDING)
->>           return IRQ_HANDLED;
->> ..
->> ..
->>
->> To fix this issue by avoiding enabling of the dwc3 event interrupt in
->> the runtime resume path if dwc3 event processing is in progress.
->>
->> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
->> ---
->>   drivers/usb/dwc3/core.c | 8 ++++++--
->>   1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index cb82557678dd..610792a70805 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -549,8 +549,12 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
->>   			lower_32_bits(evt->dma));
->>   	dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(0),
->>   			upper_32_bits(evt->dma));
->> -	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
->> -			DWC3_GEVNTSIZ_SIZE(evt->length));
->> +
->> +	/* Skip enable dwc3 event interrupt if event is processing in middle */
->> +	if (!(evt->flags & DWC3_EVENT_PENDING))
->> +		dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
->> +				DWC3_GEVNTSIZ_SIZE(evt->length));
->> +
->>   	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
->>   
->>   	return 0;
->> -- 
->> 2.17.1
->>
-> We're not waking up from a hibernation. So after a soft-reset and
-> resume, the events that weren't processed are stale. They should be
-> processed prior to entering suspend or be discarded before resume.
->
-> The synchronize_irq() during suspend() was not sufficient to prevent
-> this? What are we missing here.
->
-> Thanks,
-> Thinh
-I don’t think the triggering of interrupt would not be stopped even if 
-do soft reset. It's because of event count is may be valid .
-Let consider the scenarios where SW is not acknowledge the event count 
-after getting a interrupt with disable GEVNTSIZ_INTMASK =0. It will 
-triggering the spurious interrupts until enable GEVNTSIZ_INTMASK=1 or 
-acknowledge the event count by SW. This is happening here because of We 
-just return from interrupt handler by checking if evt->flags as 
-DWC3_EVENT_PENDING. Clearing of DWC3_EVENT_PENDING flag is done in 
-dwc3_thread_interrupt. In some scenario it's not happening due to cpu 
-hangup or work queue lockup.
+If imx95 usb phy node doesn't contain "orientation-switch" and "port", dtb check will
+show below error:
 
-The same issue was reported earlier and not derived actual root cause 
-from USB dwc3 driver point of view, and somehow we managing fix with our 
-vendor kernel by using kretprobe.
+usb/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dtb: phy@4c1f0040: 'oneOf' conditional failed, one must be fixed:
+        'port' is a required property
+        'ports' is a required property
+        from schema $id: http://devicetree.org/schemas/phy/fsl,imx8mq-usb-phy.yaml#
 
-To fix this issue, We have to reset the evt->flags or stop disable  
-GEVNTSIZ_INTMASK=0
-https://lore.kernel.org/linux-usb/20230102050831.105499-1-jh0801.jung@samsung.com/
-https://lore.kernel.org/linux-usb/1646630679-121585-1-git-send-email-jh0801.jung@samsung.com/
+Do you want other test results?
 
-Thanks
-Selva
+Thanks,
+Xu Yang
+
+> 
+> Best regards,
+> Krzysztof
+> 
 
