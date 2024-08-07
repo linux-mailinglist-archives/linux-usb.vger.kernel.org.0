@@ -1,55 +1,50 @@
-Return-Path: <linux-usb+bounces-13188-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13189-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46EB394A610
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 12:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EA7694A63A
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 12:49:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00504284EF0
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 10:46:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22F4B283B3B
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 10:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13ED61E2139;
-	Wed,  7 Aug 2024 10:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DA31DD3B4;
+	Wed,  7 Aug 2024 10:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UQ9ru8tv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bFSKkPmJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5C21DF688;
-	Wed,  7 Aug 2024 10:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2E21B8EA8;
+	Wed,  7 Aug 2024 10:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723027407; cv=none; b=DeDs+AITqW2dSSOQEotXVqVixJcHVqGbMdvxIQSYainkCcd9ploDOssNokoqbKgr769BKe/B39lR1cpjH/Lb/fcWuI6RZrOK9HnX3OtXp68hjUcjH7sa7gxWNsGYXgis+basM91PSpws+1xXuNTqvyIn+kkluPk5Fnhr9LWoB3g=
+	t=1723027739; cv=none; b=TwegzNE++BEjVZssRH3HVATefFLwkx2zSVAnBW/d+K9M7uAEVKqDDI3uuaIw4ui5nEEglXpyOKGNoRmE1S/StNFE5lBrphJwzGcUpujU+3GSTzxNbcSt9rdgYRK7SsGuvOHggu/oBAWkDxDU4A1/FnczAEYsrQfIQdbZYhevM5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723027407; c=relaxed/simple;
-	bh=HC/Y/n0iKEk+gLSvVDUxrUtqy4vm76/f73ULGTDYXJI=;
+	s=arc-20240116; t=1723027739; c=relaxed/simple;
+	bh=0nJiNsMtRqtiZBkFoOne0DiY/XfVAZ4pWQwMn8S5eCw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K6+e9yhWcCNGOAL5xIpSiF9SLeeVgPHlz6MG4aqbhlfODhNtmlwGs7VV3N2WU+Z+R1pCqfe2ygsRcHTUGHkTxmhOaUJ/JJvDJ5/cSWHZr7+C9I9s+CT0UQ5dqh8KZWQeRs1Cpa7PLpot64OQhb7kfD2TCFA+Ho+7ZPKx4LytK3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UQ9ru8tv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B532AC4AF0E;
-	Wed,  7 Aug 2024 10:43:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VxjMnC1OIvU8NEFd9DfKVj3Y8ALvBry8vy1hFkAsyRVEu5UcJViz//aDKMkoAsks54YtA9tmJeg3MnCCfmD66q48wxFEsZ1bJZLCx6rksvfxI9m+HaPK0wGjmv3iICcth3YBUOZJYo6DuTczZDH1amHVs7jUnuhS/AMCPMboO64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bFSKkPmJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C05CC32782;
+	Wed,  7 Aug 2024 10:48:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1723027407;
-	bh=HC/Y/n0iKEk+gLSvVDUxrUtqy4vm76/f73ULGTDYXJI=;
+	s=korg; t=1723027738;
+	bh=0nJiNsMtRqtiZBkFoOne0DiY/XfVAZ4pWQwMn8S5eCw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UQ9ru8tvqdjWmvqChsSNLF/ne8mvItMA4PDlj56ug4dCemYj4qZCu8jnOokvOXi9D
-	 nIAycVIwccIFf2JgPNkTyk9hg+R++Yzi/r2jt9eD4Nlww7hkPH57HPGEMdSg4BbiZ8
-	 yiYk8DM+EecTuPTjaXLFyAwqSF5HmAVLpx3Z14lg=
-Date: Wed, 7 Aug 2024 12:43:24 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: mka@chromium.org, javier.carrasco@wolfvision.net,
-	macpaul.lin@mediatek.com, jbrunet@baylibre.com,
-	stefan.eichenberger@toradex.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, git@amd.com
-Subject: Re: [PATCH v3 1/2] usb: misc: onboard_dev: extend platform data to
- add power on delay field
-Message-ID: <2024080751-mule-ladder-cc99@gregkh>
-References: <1722440548-107682-1-git-send-email-radhey.shyam.pandey@amd.com>
- <1722440548-107682-2-git-send-email-radhey.shyam.pandey@amd.com>
+	b=bFSKkPmJJ/qURXcxgl6DLV6isriSh8HL/ESfL+M3Nmh7ZqnLI8ECAotUeA5TuIyq9
+	 g30E5eptVOqvfhq3Evxjh917Ihr9ocZ8mQzpZwpHNPtM6Wk+ZLI1xUih4xSbZDjRQO
+	 kI7UmHG1/8EQTFmcXJ8vowsTJAmfHR2hx8OG2hNY=
+Date: Wed, 7 Aug 2024 12:48:56 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fix for 6.11-rc2
+Message-ID: <2024080749-corrode-displace-d9bd@gregkh>
+References: <Zqzlq_8Cg8KnUwL_@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,30 +53,18 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1722440548-107682-2-git-send-email-radhey.shyam.pandey@amd.com>
+In-Reply-To: <Zqzlq_8Cg8KnUwL_@hovoldconsulting.com>
 
-On Wed, Jul 31, 2024 at 09:12:27PM +0530, Radhey Shyam Pandey wrote:
-> Introduce dedicated field 'power_on_delay_us' in onboard platform data
-> and update its delay for USB5744 configuration. Hub itself requires some
-> delay after reset to get to state where configuration data is going to
-> be accepted. Without delay upcoming support for configuration via SMBUS
-> is reporting a failure on the first SMBus write.
+On Fri, Aug 02, 2024 at 03:56:59PM +0200, Johan Hovold wrote:
+> The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 > 
-> i2c 2-002d: error -ENXIO: BYPASS_UDC_SUSPEND bit configuration failed
+>   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
 > 
-> Similar delay is likely also required for default configuration but
-> because there is enough time (code execution) between reset and usage
-> of the hub any issue is not visible but it doesn't mean delay shouldn't
-> be reflected.
+> are available in the Git repository at:
 > 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> Suggested-by: Matthias Kaehlcke <mka@chromium.org>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.11-rc2
 
-This constant addition of "platform data" seems to be duplicating what
-we did before with device tree, right?  Why can't this information be
-there instead?
-
-thanks,
+Pulled and pushed out, thanks.
 
 greg k-h
 
