@@ -1,208 +1,188 @@
-Return-Path: <linux-usb+bounces-13201-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13202-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2AD494AA7A
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 16:41:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2AB194AA9F
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 16:50:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51837B2B781
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 14:38:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00EFE1C203D6
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 14:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C2085285;
-	Wed,  7 Aug 2024 14:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1574B80638;
+	Wed,  7 Aug 2024 14:50:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="BOnDnU0Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074A784A4D
-	for <linux-usb@vger.kernel.org>; Wed,  7 Aug 2024 14:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7C72B9A1;
+	Wed,  7 Aug 2024 14:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723041433; cv=none; b=Uqj5OlpwoheswcKk+8CaUpnNxloCoU72O2twyd5Ym9LSGRjcxI1niWHLOJKrVFCjlzxmZBhfDGnXZkSFiWb7VvHuS4TSSdsfXr6B3cDTiKxRcRtcKOG7rk5lT/uSjEvgn00Zs3m6MnnE/IHs5TvVdmVHJzTz+z/IlDG3pB0+NYM=
+	t=1723042231; cv=none; b=UstchGq7VJbD1P5lTcBUjPgpLzP5FOT61uur+h5rV5cunuSnUTUkOWFLaUwxTHO4iFyg5pOoPEpwmmd5vCh6CvisWKMekzAefACHQS/I1VC3vyRzSjNO0sWotXwk02DOSU5RHDfzk59IMxjmbfuoGcw9Ba+Eo0R/zF78ENRuDEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723041433; c=relaxed/simple;
-	bh=6Ex9JBBQeeumu+5bfMADPiTKVhDkyAOukkLhCDuwNR8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AYzz/BSaYObXDO1q3GxDvZVHf0jM77iqjSv6LA06IP9KOhjlmyMm4yLQz1MQqyIab/jurg9sAVUExFzU7a7xVZSeBvfd14VdIxRpvKjpMXDGQObTeXr2c0GSNIY8RrY6mmfHGMaC0XfZqToodImmewUEfWEAW8+F1CULcgMX5qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <m.felsch@pengutronix.de>)
-	id 1sbhme-0004Iv-Nh; Wed, 07 Aug 2024 16:37:00 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-Date: Wed, 07 Aug 2024 16:36:53 +0200
-Subject: [PATCH 3/3] usb: misc: onboard_dev: add ext-vbus-supply handling
+	s=arc-20240116; t=1723042231; c=relaxed/simple;
+	bh=rMx76zKxMOPzp24PguqX0jeCjn4OlHKA2gs/welMniI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NsifsRgunScFtOh+f2uadNYPgSKMB82LiiQqB8C4VBwcPwGdPNWfBM3Gg3tYb1n0S1PnvWStOUjcUo7yY7vWxN5jb2uUbRYHYX4+pq+cv5tcdYYxrqCtvnS1A3FzboC8yZhd2eGqKWNrrunGt6Ug7nvrRH0aMAu3K8u3hkJichQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=BOnDnU0Z; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1723042193; x=1723646993; i=wahrenst@gmx.net;
+	bh=rMx76zKxMOPzp24PguqX0jeCjn4OlHKA2gs/welMniI=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=BOnDnU0ZzrskIWsS+4bDgrPJzSR9TjYckwhb8JorHJJH3eMu6f7FYQW3HzdAhexb
+	 Z868n7nH+Gma3EfPTnbN2IKQO+dc/niQ2FjEu+Db0gg4kP8uG5481A64Tv/oDPXeX
+	 CbPsWS0W7iFjyiiUi4BoP8ew/X0wnR7KOMwsAeT16B8FVWebP6Q5u2pW9sQxkQ88b
+	 lO9RQH5OSc8vmIZumJAeXlt2JPHEZFEg5CCuhK0+VFvbecXqCHLghOaOE29EoTA8G
+	 1cBDHpcL9PS9kxJOmyPOpcCdyVESZ6kyupLkXOzkQOOwb9i/SsdY0Z7AK5TCrqmmT
+	 uvbRTnc9Qz5q+M57NQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MysRu-1sF6tH1vWs-011VX2; Wed, 07
+ Aug 2024 16:49:53 +0200
+Message-ID: <993211b6-0f82-4a2a-8945-1f639420cc9a@gmx.net>
+Date: Wed, 7 Aug 2024 16:49:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240807-b4-v6-10-topic-usb-onboard-dev-v1-3-f33ce21353c9@pengutronix.de>
-References: <20240807-b4-v6-10-topic-usb-onboard-dev-v1-0-f33ce21353c9@pengutronix.de>
-In-Reply-To: <20240807-b4-v6-10-topic-usb-onboard-dev-v1-0-f33ce21353c9@pengutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Matthias Kaehlcke <mka@chromium.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
-Cc: kernel@pengutronix.de, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- Marco Felsch <m.felsch@pengutronix.de>
-X-Mailer: b4 0.14.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: m.felsch@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 09/16] drm/vc4: v3d: simplify clock retrieval
+To: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240728114200.75559-1-wahrenst@gmx.net>
+ <20240728130029.78279-1-wahrenst@gmx.net>
+ <581726ae-dd9c-476f-817d-4140f7217ec7@igalia.com>
+ <b34cc73c-721f-48b6-a7a3-da8190d80dd8@gmx.net>
+ <6047643f-e1f5-4be4-b55d-f59576999d91@igalia.com>
+ <a19767c3-c457-4e52-bc66-8f1898a83193@gmx.net>
+ <c67738d6-9c52-45e3-8053-e7c0b415895d@igalia.com>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <c67738d6-9c52-45e3-8053-e7c0b415895d@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:CYwNydeHeq0V98558uKEvLQMPHhjIzHWuz6zqvcltEd6g/VSUVW
+ 8/R4X4gsmOTbbbzv+zttJPfgHbnpg8qBe8n1GJf68eRz2xnxXKbQBI5KHBh1bnpIC3dLG/g
+ k0N+eNKXlgrID4LLCQN5Ht2QOVmuI209zSH/53kfJ5ZJXmOk+BxsHpyU0SUyESom9r0MY2U
+ L0sF0kFbfu8bnuE7JcLNg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4f6cE+rhEzo=;yhm4aalApDxwJIoZSxtjXzJvchX
+ cIZa4djERQ88OmNdQdgqnLeqHoz+a6LrVLal2VqRiczFl9+7S8epl3MnZWbvmVZV9H5fUp4NC
+ n9su8D1xZv5R+XnrmpPQESXsoGYz6IEjwhBgR6g0kaeSVCPT/rrEhBur1uVj2w0RKCyZiBJqH
+ 1B3uDTbhpVyWPTtK+uO9IuOStfSaNCtvcurt2XmxAENp/MjUKkfknTWLT2PjepRaf2nYEjfxG
+ bzFReuep76RU7XyNv2D8Ciz+1jiI2ONX8WlTQUzfctiY3rhTM/dTZ++RpjCeoemso8inYG4A6
+ xNnx5jjt6ERhA6/roqSbHOWxSQ5YjvbsaF8XWvZsXTNGhKvqnhST+7qCuHHkBPw4rLDSHyiN8
+ ka/+ugVH9z21EUH2ZXVZngqKg9sUrBuzrNBFjLTTWSagvOZg3SPlZmydeaFFeh5JPuAC3Fw0o
+ s6mhMvPsg6rwmB4SkpnxHzYIow5BAertaxdtktuVSOdWkb1km+zkr5h/+pTyaPKZnenBtzjVp
+ KjOAB3ubN0CcqumjUu2fBbWyseMADl/l1V0ODlUvX5I9/Mnd5uQl8fv7da+UhIWsTAPA/YC42
+ yctqVuSP7cBmqXmhiuZAhLqdOMWXiYgSAaUpyWl2RUVkpUGg47m6r764QjE8jXU0mdTzG/Cg8
+ i6UNnglvKRfSycpVaEDArZh1vhMg0aqADxTdrLMO7bxQIpA49BC1iFx9VeXGaliSugg8OzXvi
+ 8lLlmyRAmuG+0FaqQPHDar4z/5mIWikMOJky38vWPsVkzJm3xuFB2cTbYoh9CuNyHR/CVNZO3
+ mFCTswuR5GQt64u0Lsk89/KA==
 
-Add support to power the port VBUS via host controlled regulators since
-some embedded hub PCB designs don't connect the dedicated USB hub port
-power GPIO accordingly.
+Hi Ma=C3=ADra,
 
-To support the above use-case the USB_PORT_FEAT_POWER port feature
-handling must be added. At the moment this feature is limited to the
-following hubs:
-  - usb424,2412
-  - usb424,2414
-  - usb424,2417.
+Am 07.08.24 um 16:31 schrieb Ma=C3=ADra Canal:
+> Hi Stefan,
+>
+> On 8/2/24 10:00, Stefan Wahren wrote:
+>> Hi Ma=C3=ADra,
+>>
+>> Am 02.08.24 um 14:56 schrieb Ma=C3=ADra Canal:
+>>> Hi Stefan,
+>>>
+>>> On 7/31/24 13:41, Stefan Wahren wrote:
+>>>> Hi Ma=C3=ADra,
+>>>>
+>>>> Am 30.07.24 um 13:23 schrieb Ma=C3=ADra Canal:
+>>>>> On 7/28/24 10:00, Stefan Wahren wrote:
+>>>>>> Common pattern of handling deferred probe can be simplified with
+>>>>>> dev_err_probe() and devm_clk_get_optional(). This results in much
+>>>>>> less code.
+>>>>>>
+>>>>>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>>>>>> ---
+>>>>>> =C2=A0 drivers/gpu/drm/vc4/vc4_v3d.c | 13 ++-----------
+>>>>>> =C2=A0 1 file changed, 2 insertions(+), 11 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c
+>>>>>> b/drivers/gpu/drm/vc4/vc4_v3d.c
+>>>>>> index 1ede508a67d3..4bf3a8d24770 100644
+>>>>>> --- a/drivers/gpu/drm/vc4/vc4_v3d.c
+>>>>>> +++ b/drivers/gpu/drm/vc4/vc4_v3d.c
+>>>>>> @@ -441,20 +441,11 @@ static int vc4_v3d_bind(struct device *dev,
+>>>>>> struct device *master, void *data)
+>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vc4->v3d =3D v3d;
+>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v3d->vc4 =3D vc4;
+>>>>>>
+>>>>>> -=C2=A0=C2=A0=C2=A0 v3d->clk =3D devm_clk_get(dev, NULL);
+>>>>>> +=C2=A0=C2=A0=C2=A0 v3d->clk =3D devm_clk_get_optional(dev, NULL);
+>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(v3d->clk)) {
+>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret =3D =
+PTR_ERR(v3d->clk);
+>>>>>>
+>>>>>
+>>>>> Super nit: you could delete this line ^
+>>>> Can you please explain? ret is required for dev_err_probe or do you
+>>>> mean
+>>>> the empty line after the declaration?
+>>>
+>>> Just deleting the empty line after the declaration. It is a super smal=
+l
+>>> nit indeed.
+>> AFAIK an empty line after a declaration is part of the coding style. Or
+>> is different in drm?
+>
+> TBH I just checked the result of `git grep "dev_err_probe"` and I
+> noticed that most of the times, we don't add an empty line after the
+> declaration in this case or we don't even create a variable, something
+> like:
+>
+> return dev_err_probe(dev, PTR_ERR(v3d->clk), "Failed to get V3D clock\n"=
+);
+i will go for the latter variant.
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/usb/misc/onboard_usb_dev.c | 63 ++++++++++++++++++++++++++++++++++++++
- drivers/usb/misc/onboard_usb_dev.h |  2 ++
- 2 files changed, 65 insertions(+)
+I will send a new version which also addresses your comments regarding
+patch 7, so they can be applied at once.
 
-diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-index f61de2c353d0..f8ca6ef9956b 100644
---- a/drivers/usb/misc/onboard_usb_dev.c
-+++ b/drivers/usb/misc/onboard_usb_dev.c
-@@ -36,6 +36,8 @@ static DECLARE_WORK(attach_usb_driver_work, onboard_dev_attach_usb_driver);
- 
- /************************** Platform driver **************************/
- 
-+#define MAX_DOWNSTREAM_PORTS	7
-+
- struct usbdev_node {
- 	struct usb_device *udev;
- 	struct list_head list;
-@@ -52,6 +54,7 @@ struct onboard_dev {
- 	struct list_head udev_list;
- 	struct mutex lock;
- 	struct clk *clk;
-+	struct regulator *ext_vbus_supplies[MAX_DOWNSTREAM_PORTS];
- };
- 
- static int onboard_dev_get_regulators(struct onboard_dev *onboard_dev)
-@@ -212,6 +215,48 @@ static int onboard_dev_add_usbdev(struct onboard_dev *onboard_dev,
- 	return err;
- }
- 
-+static int onboard_dev_port_power(struct onboard_dev *onboard_dev, int port1,
-+				  bool enable)
-+{
-+	struct regulator *vbus_supply;
-+
-+	vbus_supply = onboard_dev->ext_vbus_supplies[port1 - 1];
-+
-+	/* External supplies are optional */
-+	if (!vbus_supply)
-+		return 0;
-+
-+	if (enable)
-+		return regulator_enable(vbus_supply);
-+
-+	return regulator_disable(vbus_supply);
-+}
-+
-+static int onboard_dev_add_ext_vbus_supplies(struct onboard_dev *onboard_dev)
-+{
-+	struct device *dev = onboard_dev->dev;
-+	unsigned int i;
-+
-+	if (!onboard_dev->pdata->support_ext_vbus_supplies)
-+		return 0;
-+
-+	for (i = 0; i < MAX_DOWNSTREAM_PORTS; i++) {
-+		char *supply_name = "portX-vbus";
-+		struct regulator *reg;
-+
-+		sprintf(supply_name, "port%u-vbus", i + 1);
-+		reg = devm_regulator_get_optional(dev, supply_name);
-+		if (!IS_ERR(reg)) {
-+			onboard_dev->ext_vbus_supplies[i] = reg;
-+		} else {
-+			if (PTR_ERR(reg) != -ENODEV)
-+				return PTR_ERR(reg);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static void onboard_dev_remove_usbdev(struct onboard_dev *onboard_dev,
- 				      const struct usb_device *udev)
- {
-@@ -339,6 +384,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
-+	err = onboard_dev_add_ext_vbus_supplies(onboard_dev);
-+	if (err)
-+		return err;
-+
- 	/*
- 	 * The USB driver might have been detached from the USB devices by
- 	 * onboard_dev_remove() (e.g. through an 'unbind' by userspace),
-@@ -525,7 +574,21 @@ static struct usb_device_driver onboard_dev_usbdev_driver = {
- int onboard_dev_port_feature(struct usb_device *udev, bool set,
- 			     int feature, int port1)
- {
-+	struct device *dev = &udev->dev;
-+	struct onboard_dev *onboard_dev;
-+
-+	if (!dev->of_node)
-+		return 0;
-+
-+	onboard_dev = _find_onboard_dev(dev);
-+	if (IS_ERR(onboard_dev))
-+		return 0;
-+
- 	switch (feature) {
-+	case USB_PORT_FEAT_POWER:
-+		if (!onboard_dev->pdata->is_hub)
-+			return -EINVAL;
-+		return onboard_dev_port_power(onboard_dev, port1, set);
- 	default:
- 		return 0;
- 	}
-diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
-index fbba549c0f47..e828bfe006ba 100644
---- a/drivers/usb/misc/onboard_usb_dev.h
-+++ b/drivers/usb/misc/onboard_usb_dev.h
-@@ -13,6 +13,7 @@ struct onboard_dev_pdata {
- 	unsigned int num_supplies;	/* number of supplies */
- 	const char * const supply_names[MAX_SUPPLIES];
- 	bool is_hub;
-+	bool support_ext_vbus_supplies;
- };
- 
- static const struct onboard_dev_pdata microchip_usb424_data = {
-@@ -20,6 +21,7 @@ static const struct onboard_dev_pdata microchip_usb424_data = {
- 	.num_supplies = 1,
- 	.supply_names = { "vdd" },
- 	.is_hub = true,
-+	.support_ext_vbus_supplies = true,
- };
- 
- static const struct onboard_dev_pdata microchip_usb5744_data = {
+But i still need to wait for some feedback for patch 14 before sending
+v3, which is the most important part of the series. But I also hope that
+some of the firmware/mailbox/pmdomain patches at the beginning are also
+applied before.
 
--- 
-2.39.2
+>
+> But it is a pretty small nit. Feel free to ignore it.
+>
+> Also, let me know if you need me to apply any patches to drm-misc-next.
 
+Yes, this would be nice to apply the vc4/v3d stuff in the next version,
+so the series becomes shorter and easier to handle.
+
+Best regards
 
