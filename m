@@ -1,188 +1,122 @@
-Return-Path: <linux-usb+bounces-13202-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13203-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2AB194AA9F
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 16:50:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B7B94AFD4
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 20:32:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00EFE1C203D6
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 14:50:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12AE91F242DD
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 18:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1574B80638;
-	Wed,  7 Aug 2024 14:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7805E1422A6;
+	Wed,  7 Aug 2024 18:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="BOnDnU0Z"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SgbxKxNc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7C72B9A1;
-	Wed,  7 Aug 2024 14:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B04770E5;
+	Wed,  7 Aug 2024 18:32:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723042231; cv=none; b=UstchGq7VJbD1P5lTcBUjPgpLzP5FOT61uur+h5rV5cunuSnUTUkOWFLaUwxTHO4iFyg5pOoPEpwmmd5vCh6CvisWKMekzAefACHQS/I1VC3vyRzSjNO0sWotXwk02DOSU5RHDfzk59IMxjmbfuoGcw9Ba+Eo0R/zF78ENRuDEc=
+	t=1723055563; cv=none; b=B9c8MJzXSi7y9Ir3H25keyTFYMy/bMFAM4X62PtF931l1Dv4D1we+l1T4q+FSi3fAX5QHS1ZUYJmQFAS5ODSbkddfz47qSEDRs8cRUVuTa+iZGIEpYadxeqLtn2N6ukjl2hWu+YNsEI+dSHUOja8E+68Y/s/wSQy9BEhFm7QP8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723042231; c=relaxed/simple;
-	bh=rMx76zKxMOPzp24PguqX0jeCjn4OlHKA2gs/welMniI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NsifsRgunScFtOh+f2uadNYPgSKMB82LiiQqB8C4VBwcPwGdPNWfBM3Gg3tYb1n0S1PnvWStOUjcUo7yY7vWxN5jb2uUbRYHYX4+pq+cv5tcdYYxrqCtvnS1A3FzboC8yZhd2eGqKWNrrunGt6Ug7nvrRH0aMAu3K8u3hkJichQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=BOnDnU0Z; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1723042193; x=1723646993; i=wahrenst@gmx.net;
-	bh=rMx76zKxMOPzp24PguqX0jeCjn4OlHKA2gs/welMniI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=BOnDnU0ZzrskIWsS+4bDgrPJzSR9TjYckwhb8JorHJJH3eMu6f7FYQW3HzdAhexb
-	 Z868n7nH+Gma3EfPTnbN2IKQO+dc/niQ2FjEu+Db0gg4kP8uG5481A64Tv/oDPXeX
-	 CbPsWS0W7iFjyiiUi4BoP8ew/X0wnR7KOMwsAeT16B8FVWebP6Q5u2pW9sQxkQ88b
-	 lO9RQH5OSc8vmIZumJAeXlt2JPHEZFEg5CCuhK0+VFvbecXqCHLghOaOE29EoTA8G
-	 1cBDHpcL9PS9kxJOmyPOpcCdyVESZ6kyupLkXOzkQOOwb9i/SsdY0Z7AK5TCrqmmT
-	 uvbRTnc9Qz5q+M57NQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MysRu-1sF6tH1vWs-011VX2; Wed, 07
- Aug 2024 16:49:53 +0200
-Message-ID: <993211b6-0f82-4a2a-8945-1f639420cc9a@gmx.net>
-Date: Wed, 7 Aug 2024 16:49:50 +0200
+	s=arc-20240116; t=1723055563; c=relaxed/simple;
+	bh=mAZF9hJBxlL+Q+k497cMEU6Qd8BNtvFVhN451k/8wsM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SRzU2lgQcJZLR812QpI4Ian8sxPoKyHvY2Cw1YDYdF+k3kEWCU+yX7sFV6krytyu6fMzM3xb/MII85BqfLikzOv8xWbYkKE3g3dZuS5iI4EjidZOU/e5fQEAABBMJSJd+BN46YmXwoE5NVHsIKcqG7EE9TxPY87CKS8dm7mPMB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SgbxKxNc; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 477HlfjM007563;
+	Wed, 7 Aug 2024 18:32:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=D9LJa+iN7fVtZK95lH10UC
+	tEuBWaIx4ZevFAf+8wv0k=; b=SgbxKxNchp1Uot5fLhWD5dq6laImA1WkguIkZL
+	lWrNpBWH0kciS3aH48VfDY/L0jqHzeODhfpCIsRkg7WSxFcbp1B5f49kALf+X3A7
+	zJ4Pg84H34qy6m43CEaVd6Wu7M+tJzKbg4aLvTm7d3N0QC6gmBJA71pyven57EMg
+	lZtHHW9xDKq8je14Om49lJk5dNG1HoXIywfaMlSrKRnO2i56yHE0Zy/gw7g18q1R
+	rq20SxkIcEVArHKGhzy/o9imc83BP1tJzaHVGOX3hAKOvRS40HHLRL1KvD8L5ZAf
+	hnYJeYW4EYqJLP6af6KB51qa7ZO+d/gJChZ+Hw8K4ZP88u1w==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40scx6ur5m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 Aug 2024 18:32:36 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 477IWZ7I004630
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 7 Aug 2024 18:32:35 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 7 Aug 2024 11:32:34 -0700
+From: Melody Olvera <quic_molvera@quicinc.com>
+To: Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        Elson Serrao <quic_eserrao@quicinc.com>
+CC: <cros-qcom-dts-watchers@chromium.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v1 0/3] Add compatibles for different eud access modes
+Date: Wed, 7 Aug 2024 11:32:01 -0700
+Message-ID: <20240807183205.803847-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 09/16] drm/vc4: v3d: simplify clock retrieval
-To: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
- Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-References: <20240728114200.75559-1-wahrenst@gmx.net>
- <20240728130029.78279-1-wahrenst@gmx.net>
- <581726ae-dd9c-476f-817d-4140f7217ec7@igalia.com>
- <b34cc73c-721f-48b6-a7a3-da8190d80dd8@gmx.net>
- <6047643f-e1f5-4be4-b55d-f59576999d91@igalia.com>
- <a19767c3-c457-4e52-bc66-8f1898a83193@gmx.net>
- <c67738d6-9c52-45e3-8053-e7c0b415895d@igalia.com>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <c67738d6-9c52-45e3-8053-e7c0b415895d@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CYwNydeHeq0V98558uKEvLQMPHhjIzHWuz6zqvcltEd6g/VSUVW
- 8/R4X4gsmOTbbbzv+zttJPfgHbnpg8qBe8n1GJf68eRz2xnxXKbQBI5KHBh1bnpIC3dLG/g
- k0N+eNKXlgrID4LLCQN5Ht2QOVmuI209zSH/53kfJ5ZJXmOk+BxsHpyU0SUyESom9r0MY2U
- L0sF0kFbfu8bnuE7JcLNg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:4f6cE+rhEzo=;yhm4aalApDxwJIoZSxtjXzJvchX
- cIZa4djERQ88OmNdQdgqnLeqHoz+a6LrVLal2VqRiczFl9+7S8epl3MnZWbvmVZV9H5fUp4NC
- n9su8D1xZv5R+XnrmpPQESXsoGYz6IEjwhBgR6g0kaeSVCPT/rrEhBur1uVj2w0RKCyZiBJqH
- 1B3uDTbhpVyWPTtK+uO9IuOStfSaNCtvcurt2XmxAENp/MjUKkfknTWLT2PjepRaf2nYEjfxG
- bzFReuep76RU7XyNv2D8Ciz+1jiI2ONX8WlTQUzfctiY3rhTM/dTZ++RpjCeoemso8inYG4A6
- xNnx5jjt6ERhA6/roqSbHOWxSQ5YjvbsaF8XWvZsXTNGhKvqnhST+7qCuHHkBPw4rLDSHyiN8
- ka/+ugVH9z21EUH2ZXVZngqKg9sUrBuzrNBFjLTTWSagvOZg3SPlZmydeaFFeh5JPuAC3Fw0o
- s6mhMvPsg6rwmB4SkpnxHzYIow5BAertaxdtktuVSOdWkb1km+zkr5h/+pTyaPKZnenBtzjVp
- KjOAB3ubN0CcqumjUu2fBbWyseMADl/l1V0ODlUvX5I9/Mnd5uQl8fv7da+UhIWsTAPA/YC42
- yctqVuSP7cBmqXmhiuZAhLqdOMWXiYgSAaUpyWl2RUVkpUGg47m6r764QjE8jXU0mdTzG/Cg8
- i6UNnglvKRfSycpVaEDArZh1vhMg0aqADxTdrLMO7bxQIpA49BC1iFx9VeXGaliSugg8OzXvi
- 8lLlmyRAmuG+0FaqQPHDar4z/5mIWikMOJky38vWPsVkzJm3xuFB2cTbYoh9CuNyHR/CVNZO3
- mFCTswuR5GQt64u0Lsk89/KA==
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Jc0T6VvmBWIYgQ-DzQRqmIDiV4L_ECa0
+X-Proofpoint-GUID: Jc0T6VvmBWIYgQ-DzQRqmIDiV4L_ECa0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-07_11,2024-08-07_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 bulkscore=0 clxscore=1011 suspectscore=0 phishscore=0
+ spamscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=532 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408070129
 
-Hi Ma=C3=ADra,
+When enabling eud on some devices, a crash can happen when trying to
+access mode manager registers, since some devices require that these
+be accessed securely. To support this usecase, update the compatible
+strings and add driver functionality to distinguish between secure
+and non-secure euds and avert these kinds of crashes.
 
-Am 07.08.24 um 16:31 schrieb Ma=C3=ADra Canal:
-> Hi Stefan,
->
-> On 8/2/24 10:00, Stefan Wahren wrote:
->> Hi Ma=C3=ADra,
->>
->> Am 02.08.24 um 14:56 schrieb Ma=C3=ADra Canal:
->>> Hi Stefan,
->>>
->>> On 7/31/24 13:41, Stefan Wahren wrote:
->>>> Hi Ma=C3=ADra,
->>>>
->>>> Am 30.07.24 um 13:23 schrieb Ma=C3=ADra Canal:
->>>>> On 7/28/24 10:00, Stefan Wahren wrote:
->>>>>> Common pattern of handling deferred probe can be simplified with
->>>>>> dev_err_probe() and devm_clk_get_optional(). This results in much
->>>>>> less code.
->>>>>>
->>>>>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
->>>>>> ---
->>>>>> =C2=A0 drivers/gpu/drm/vc4/vc4_v3d.c | 13 ++-----------
->>>>>> =C2=A0 1 file changed, 2 insertions(+), 11 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c
->>>>>> b/drivers/gpu/drm/vc4/vc4_v3d.c
->>>>>> index 1ede508a67d3..4bf3a8d24770 100644
->>>>>> --- a/drivers/gpu/drm/vc4/vc4_v3d.c
->>>>>> +++ b/drivers/gpu/drm/vc4/vc4_v3d.c
->>>>>> @@ -441,20 +441,11 @@ static int vc4_v3d_bind(struct device *dev,
->>>>>> struct device *master, void *data)
->>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vc4->v3d =3D v3d;
->>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v3d->vc4 =3D vc4;
->>>>>>
->>>>>> -=C2=A0=C2=A0=C2=A0 v3d->clk =3D devm_clk_get(dev, NULL);
->>>>>> +=C2=A0=C2=A0=C2=A0 v3d->clk =3D devm_clk_get_optional(dev, NULL);
->>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(v3d->clk)) {
->>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret =3D =
-PTR_ERR(v3d->clk);
->>>>>>
->>>>>
->>>>> Super nit: you could delete this line ^
->>>> Can you please explain? ret is required for dev_err_probe or do you
->>>> mean
->>>> the empty line after the declaration?
->>>
->>> Just deleting the empty line after the declaration. It is a super smal=
-l
->>> nit indeed.
->> AFAIK an empty line after a declaration is part of the coding style. Or
->> is different in drm?
->
-> TBH I just checked the result of `git grep "dev_err_probe"` and I
-> noticed that most of the times, we don't add an empty line after the
-> declaration in this case or we don't even create a variable, something
-> like:
->
-> return dev_err_probe(dev, PTR_ERR(v3d->clk), "Failed to get V3D clock\n"=
-);
-i will go for the latter variant.
+Melody Olvera (3):
+  dt-bindings: soc: qcom: eud: Update compatible strings for eud
+  usb: misc: qcom_eud: Access mode manager through secure calls
+  arm64: dts: qcom: sc7280: Update eud compatible string
 
-I will send a new version which also addresses your comments regarding
-patch 7, so they can be applied at once.
+ .../bindings/soc/qcom/qcom,eud.yaml           |  6 +--
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |  2 +-
+ drivers/usb/misc/qcom_eud.c                   | 53 ++++++++++++++++---
+ 3 files changed, 51 insertions(+), 10 deletions(-)
 
-But i still need to wait for some feedback for patch 14 before sending
-v3, which is the most important part of the series. But I also hope that
-some of the firmware/mailbox/pmdomain patches at the beginning are also
-applied before.
 
->
-> But it is a pretty small nit. Feel free to ignore it.
->
-> Also, let me know if you need me to apply any patches to drm-misc-next.
+base-commit: eec5d86d5bac6b3e972eb9c1898af3c08303c52d
+-- 
+2.45.2
 
-Yes, this would be nice to apply the vc4/v3d stuff in the next version,
-so the series becomes shorter and easier to handle.
-
-Best regards
 
