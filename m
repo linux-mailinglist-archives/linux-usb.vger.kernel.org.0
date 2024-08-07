@@ -1,75 +1,48 @@
-Return-Path: <linux-usb+bounces-13177-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13178-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FACE949EE9
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 06:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EA96949F5D
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 07:49:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01B0C1F23274
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 04:49:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F00721F217D6
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 05:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EFC3190049;
-	Wed,  7 Aug 2024 04:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 897CA197A9A;
+	Wed,  7 Aug 2024 05:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="kYjO8dv9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6RndzNe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1A71C3D
-	for <linux-usb@vger.kernel.org>; Wed,  7 Aug 2024 04:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F283538F91;
+	Wed,  7 Aug 2024 05:48:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723006170; cv=none; b=SdtU/AzvF1V8mwcpyWEnFg6hJ31waimUDP1CsU5WSCmns33nJhrBtT3Mi8duvQoNgvXkHkWMtyips63Az2KMTfuKE2NpJr84AintqO93UCOaDCgqIPbjxKua0EXcgeu+Pn6Bx6hySDZfdP6AbpJgldCfLjXaLCMelf54lHE7XnY=
+	t=1723009732; cv=none; b=ZnYA+cdBMx1yPW8aC+fs1Sc6d9DtI9HzX9vHfT5PgtnK5rRrd8Kgz8AGc9/rxbGBFWM2FKNOITjkpJHmaIO+UL48+odiOyr9eTNDSH/rca7i4MCB64EN9c3im8QbU3kdSCX1ergg48nHgT3+GVYp2cTf+vqjWCcCUG4m8HQEdNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723006170; c=relaxed/simple;
-	bh=vTMGwzGllpI593MOBh2U/WE/MfImFLidc2MEQMU95Xg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=LtfhMEKl38XpfaVGDotCyebKJO8/fX24qsyn0RAoYwrQl9cLe8zrgSxnolQHtDcN1Lt8T66eie3hKmBorA8s2Rm07yKI7kAOrcFkUYz+mMxdfDByHzQA3WxwzX/+wBWrvuEpN0T+iPDJNXrHoI6meo/xfWY61OOh8abH/PRorAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=kYjO8dv9; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240807044925epoutp043fa5584eb8f0388cbcf09681bc482d0d~pWPqcINNS0504005040epoutp04S
-	for <linux-usb@vger.kernel.org>; Wed,  7 Aug 2024 04:49:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240807044925epoutp043fa5584eb8f0388cbcf09681bc482d0d~pWPqcINNS0504005040epoutp04S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1723006165;
-	bh=L7tmfLCS2WLXes2uX9zlMzkZDW8XcCZBHwgW5D8IXU4=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=kYjO8dv9tYqi2/7ZLqMM53QksUqEjefTZvy4LYlEwF+I/pN5zj6X9shth84Af8W1n
-	 vp8XOgij6Cct5gRox5zBthzl+EOu6F/Bv8GW5IZUE5CV0MpN5c7bEnkdFD1fO+eK2W
-	 kVGGQNH6kfYY7WAAGV6w+NufEIn8NAwOu9DPANk4=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20240807044925epcas5p2689c423ed2ce767c04388535190206fb~pWPp9HeBI1333813338epcas5p20;
-	Wed,  7 Aug 2024 04:49:25 +0000 (GMT)
-Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.176]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4WdyPv0xwJz4x9QK; Wed,  7 Aug
-	2024 04:49:23 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	F2.E6.08855.DCCF2B66; Wed,  7 Aug 2024 13:49:18 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240807044659epcas5p1a34295c510f27fcef81e6b2856d72803~pWNiJ3nYk0564305643epcas5p1h;
-	Wed,  7 Aug 2024 04:46:59 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240807044659epsmtrp2181001bd68b851a88ff859886762fa94~pWNiIwmc71759417594epsmtrp2h;
-	Wed,  7 Aug 2024 04:46:59 +0000 (GMT)
-X-AuditID: b6c32a44-107ff70000002297-a7-66b2fccdb2f4
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	25.ED.08456.34CF2B66; Wed,  7 Aug 2024 13:46:59 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240807044657epsmtip2832d2d6321d83d84cb10a01c650f5bf4~pWNgIVl5P1159211592epsmtip2-;
-	Wed,  7 Aug 2024 04:46:57 +0000 (GMT)
-Message-ID: <0b985241-31a4-4d12-80be-4e211d21dfd6@samsung.com>
-Date: Wed, 7 Aug 2024 10:16:56 +0530
+	s=arc-20240116; t=1723009732; c=relaxed/simple;
+	bh=7TOy/TGX7VYmu/wSfP6QxOUeNZrbY4x1S85hALiXO+8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FL/duBzPYTGwU1rL+gANBYjvPc/A/5kapyJE0tQnqd6hOpCGTyCOjMpqYu6JaFmEZotNEOXubqEhOF3+lzPrJaQLkpluWVbkTLmgPXtTvce6Akd+hLJ4eSn/QruUDkMpq2UHyL7c8rKsVbYVDZeAPN34eUH/CWVAx6/Q/hd+W/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6RndzNe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD96CC32782;
+	Wed,  7 Aug 2024 05:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723009731;
+	bh=7TOy/TGX7VYmu/wSfP6QxOUeNZrbY4x1S85hALiXO+8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=M6RndzNeQcxllWw9gQpD/pGRPhF5ceywT9a0uhA2XgozMkn7Nb8N5LjdaAiyGm92i
+	 h1jk4khpwi6XsHE5VKuYErHSkKDDFb2dUuNvX17mB8Grfx0v1hvreyfguxXJwLcTDg
+	 y5nTdbSWId2ImSs798jloU/u/40YvzfsRdAn3WOZzZqYv0K80kUgC9Yhxc/jdaZZpW
+	 YvbLCRgqu3W7wYc07vlV6Et3OqOd7tD5iSE1WjKxG9JZ/WRvGEYjDxU+vnfqW7DkyZ
+	 ezhV5bBjFWJn0/oUYMUi/NdU4eboexdn/eFG0ufuBUaJtfhQnHs+7nZfQ1tmy+CjW2
+	 bKlJ/TGVgTwSQ==
+Message-ID: <bfe6430c-a022-4e8f-ab7f-8d8e8cb10fca@kernel.org>
+Date: Wed, 7 Aug 2024 07:48:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,128 +50,166 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: core: Prevent USB core invalid event buffer
- address access
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
-	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
-	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
-	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
-	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"shijie.cai@samsung.com" <shijie.cai@samsung.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: phy: imx8mq-usb: add compatible
+ "fsl,imx95-usb-phy"
+To: Frank Li <Frank.li@nxp.com>
+Cc: Xu Yang <xu.yang_2@nxp.com>, vkoul@kernel.org, kishon@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
+ l.stach@pengutronix.de, aford173@gmail.com, hongxing.zhu@nxp.com,
+ alexander.stein@ew.tq-group.com, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+References: <20240806050639.1013152-1-xu.yang_2@nxp.com>
+ <160dd5fc-83ba-4311-a173-44521342a3d8@kernel.org>
+ <ZrJLS37GFmvkQpml@lizhi-Precision-Tower-5810>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <20240807001408.fby2mjug3jym2lqs@synopsys.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <ZrJLS37GFmvkQpml@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmpu65P5vSDK5cZ7J4c3UVq8WdBdOY
-	LE4tX8hk0bx4PZvFpD1bWSzuPvzBYnF51xw2i0XLWpktPh39z2qxqnMOUOz7TmaLSQdFLVYt
-	OMDuwOuxf+4ado++LasYPbbs/8zo8XmTXABLVLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZ
-	gaGuoaWFuZJCXmJuqq2Si0+ArltmDtB5SgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSC
-	lJwCkwK94sTc4tK8dL281BIrQwMDI1OgwoTsjB//LrAUNAhWtGzcztLAeIC3i5GTQ0LARGJ5
-	617GLkYuDiGB3YwSmz/fZoVwPjFKPHjyjAXC+cYocX7aHSaYlpkPT0El9jJKPP01BywhJPCW
-	UaL3qAqIzStgJ/G9qZUFxGYRUJFY2fCCCSIuKHFy5hOwuKiAvMT9WzPYQWxhgRiJB+2NbCC2
-	iICOxIET55lAFjALdLBKLOhuA2tmFhCXuPVkPpDNwcEmYCjx7IQNSJhTwFri+voGVogSeYnt
-	b+cwg/RKCKzlkDg6eRojxNUuEp+arrBC2MISr45vYYewpSQ+v9vLBmFXS6y+85ENormFUeLw
-	k29QRfYSj48+YgZZzCygKbF+lz5EWFZi6ql1ULfxSfT+fgINIV6JHfNgbFWJU42XoeZLS9xb
-	cg3qBg+JlcuPs0xgVJyFFC6zkLw5C8k/sxA2L2BkWcUomVpQnJuemmxaYJiXWg6P8eT83E2M
-	4OSr5bKD8cb8f3qHGJk4GA8xSnAwK4nwNodvShPiTUmsrEotyo8vKs1JLT7EaAqMoInMUqLJ
-	+cD0n1cSb2hiaWBiZmZmYmlsZqgkzvu6dW6KkEB6YklqdmpqQWoRTB8TB6dUA5O08c7dEXvr
-	Mlmf9e/4HmOUr2gp/9TEXT+rp8/Aa6HIWZ2yKa0bYlt2e1zg3L3Vce7vYkullHQZpneHu3e+
-	Uq5kX7b/k9HkD1rOB513v/Plk6yWSVsR+Fv9+OKzqTt9M5SPvQxS3r7w05U1b5YZeWzx5ggQ
-	Wd0vV3FS/lbHp3ORjxdujYzTuvhi1Y2FB6a6v1pqW+D2/1PJe/VdC6XNlztUL19ic9Zukr4m
-	t085m1LO+qOrU28Y7l7O4RZ/b9HF5oka9Ruk1lSIPE07mWml/Ngq00os32OBWMjvhTfmmqct
-	U1nV0/vnusobdc0Mu+m7LWI99IKeMj2x2L7eaePnKUxnLWdEt0f2TOoQffoyTl6JpTgj0VCL
-	uag4EQDVSu1SRwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnkeLIzCtJLcpLzFFi42LZdlhJXtf5z6Y0g9c7xSzeXF3FanFnwTQm
-	i1PLFzJZNC9ez2Yxac9WFou7D3+wWFzeNYfNYtGyVmaLT0f/s1qs6pwDFPu+k9li0kFRi1UL
-	DrA78Hrsn7uG3aNvyypGjy37PzN6fN4kF8ASxWWTkpqTWZZapG+XwJXx498FloIGwYqWjdtZ
-	GhgP8HYxcnJICJhIzHx4igXEFhLYzShx+HksRFxa4vWsLkYIW1hi5b/n7F2MXEA1rxklFrb3
-	MoEkeAXsJL43tYI1swioSKxseAEVF5Q4OfMJWFxUQF7i/q0Z7CC2sECMxIP2RjYQW0RAR+LA
-	ifNMIEOZBXpYJb58/cgCsWE/o8TDJZPAupkFxCVuPZkPVMXBwSZgKPHshA1ImFPAWuL6+gZW
-	iBIzia6tEJcyAy3b/nYO8wRGoVlI7piFZNIsJC2zkLQsYGRZxSiZWlCcm55bbFhglJdarlec
-	mFtcmpeul5yfu4kRHGdaWjsY96z6oHeIkYmD8RCjBAezkghvc/imNCHelMTKqtSi/Pii0pzU
-	4kOM0hwsSuK83173pggJpCeWpGanphakFsFkmTg4pRqYTDjTeCWFpPkmbomc1B6z/ejrb9Ii
-	s1McrhqJOyTeq25sFDu9ZMXZDOE8tQWPpsY9nX1ZsdpRe2vG5vnepa8+3Fd+puyVeTBn2hO2
-	Z3NkeZl+KDoHXuLkaJ2T9H6nLc99h0sLTvkd6E15ob5ly7pufbPdKowvFdOcNx29JnDNS0TP
-	f1bVh4oSnjSZt41LrGKtf8U++PLxYaj86oe7O6xOPje1mXf34ZWJRjE181UXM1/t/r1HVi6e
-	Rzq0tEV6WUJ7WJfkk+dPHa7JfFHkObr1f0pP1eKOVfWpS52W8zay7/xzqPbyU/c13xoWiFu+
-	0HParxoVZnN0uRLrlP21s+KPnCnh7T+78uIs+2b2jjtmSizFGYmGWsxFxYkA11E9uyIDAAA=
-X-CMS-MailID: 20240807044659epcas5p1a34295c510f27fcef81e6b2856d72803
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240722145728epcas5p38f8ecf57278b4a89c0b09430518c8599
-References: <CGME20240722145728epcas5p38f8ecf57278b4a89c0b09430518c8599@epcas5p3.samsung.com>
-	<20240722145617.537-1-selvarasu.g@samsung.com>
-	<20240807001408.fby2mjug3jym2lqs@synopsys.com>
 
-
-On 8/7/2024 5:44 AM, Thinh Nguyen wrote:
-> On Mon, Jul 22, 2024, Selvarasu Ganesan wrote:
->> This commit addresses an issue where the USB core could access an
->> invalid event buffer address during runtime suspend, potentially causing
->> SMMU faults and other memory issues. The problem arises from the
->> following sequence.
->> 	1. In dwc3_gadget_suspend, there is a chance of a timeout when
->> 	moving the USB core to the halt state after clearing the
->> 	run/stop bit by software.
->> 	2. In dwc3_core_exit, the event buffer is cleared regardless of
->> 	the USB core's status, which may lead to an SMMU faults and
->> 	other memory issues. if the USB core tries to access the event
->> 	buffer address.
+On 06/08/2024 18:11, Frank Li wrote:
+> On Tue, Aug 06, 2024 at 10:29:47AM +0200, Krzysztof Kozlowski wrote:
+>> On 06/08/2024 07:06, Xu Yang wrote:
+>>> The usb phy in i.MX95 is compatible with i.MX8MP's, this will add a
+>>> compatible "fsl,imx95-usb-phy" for i.MX95. Also change reg maxItems
+>>> to 2 since i.MX95 needs another regmap to control Type-C Assist (TCA)
+>>> block. Since i.MX95 usb phy is able to switch SS lanes, this will also
+>>> add orientation-switch and port property to the file.
+>>>
+>>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+>>>
+>>> ---
+>>> Changes in v2:
+>>>  - replace minItems with description in reg property
+>>>  - remove orientation-switch and port
+>>>  - refer to usb-switch.yaml
+>>>  - use unevaluatedProperties
+>>> ---
+>>>  .../bindings/phy/fsl,imx8mq-usb-phy.yaml      | 42 ++++++++++++++++---
+>>>  1 file changed, 37 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+>>> index dc3a3f709fea..6d6d211883ae 100644
+>>> --- a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+>>> +++ b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+>>> @@ -11,12 +11,17 @@ maintainers:
+>>>
+>>>  properties:
+>>>    compatible:
+>>> -    enum:
+>>> -      - fsl,imx8mq-usb-phy
+>>> -      - fsl,imx8mp-usb-phy
+>>> +    oneOf:
+>>> +      - enum:
+>>> +          - fsl,imx8mq-usb-phy
+>>> +          - fsl,imx8mp-usb-phy
+>>> +      - items:
+>>> +          - const: fsl,imx95-usb-phy
+>>> +          - const: fsl,imx8mp-usb-phy
+>>>
+>>>    reg:
+>>> -    maxItems: 1
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>>
+>>>    "#phy-cells":
+>>>      const: 0
+>>> @@ -89,7 +94,34 @@ required:
+>>>    - clocks
+>>>    - clock-names
+>>>
+>>> -additionalProperties: false
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - fsl,imx95-usb-phy
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          items:
+>>> +            - description: USB PHY Control range
+>>> +            - description: USB PHY TCA Block range
+>>> +    else:
+>>> +      properties:
+>>> +        reg:
+>>> +          maxItems: 1
+>>> +
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - fsl,imx95-usb-phy
+>>> +    then:
+>>> +      $ref: /schemas/usb/usb-switch.yaml#
 >>
->> To prevent this issue, this commit ensures that the event buffer address
->> is not cleared by software  when the USB core is active during runtime
->> suspend by checking its status before clearing the buffer address.
-> What happen after adding this check? Can the device resume and function
-> properly afterward? If not, do you know if a soft-reset will recover the
-> issue?
->
-> Thanks,
-> Thinh
+>> ref should be rather in top-level. You can always disallow certain
+>> properties for devices, if they are really not applicable.
+> 
+> There are some "required" in usb-switch.yaml,
+> 
+> oneOf:
+>   - required:
+>       - port
+>   - required:
+>       - ports
+> 
+> If put on the top, it may cause DTB check warning for other compatible
+> strings, which have not support usb-switch.
 
-Yes, we can see the proper resume with this fix even if the USB IP core 
-not entered into halted during suspend.
+Hm, indeed, that's unusual case to have such different devices in one
+schema. Did you test that above $ref in if: actually works?
 
-And we not tried soft reset as this fix is working fine.
+Best regards,
+Krzysztof
 
-Anyway soft reset is part of resume sequence and it will reset or 
-recover the USB IP state machine.
-
-
-Thanks,
-
-Selva
-
->
->> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
->> ---
->>   drivers/usb/dwc3/core.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index cb82557678dd..c7c1a253862e 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -559,8 +559,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
->>   void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
->>   {
->>   	struct dwc3_event_buffer	*evt;
->> +	u32				reg;
->>   
->> -	if (!dwc->ev_buf)
->> +	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
->> +	if (!dwc->ev_buf || !(reg & DWC3_DSTS_DEVCTRLHLT))
->>   		return;
->>   
->>   	evt = dwc->ev_buf;
->> -- 
->> 2.17.1
 
