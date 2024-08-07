@@ -1,98 +1,56 @@
-Return-Path: <linux-usb+bounces-13186-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13187-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A661F94A543
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 12:18:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1F694A5D2
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 12:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2060FB23BAD
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 10:18:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAD38281AC4
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2024 10:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDB11DD389;
-	Wed,  7 Aug 2024 10:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC4A1DD3B6;
+	Wed,  7 Aug 2024 10:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="DKDLLKiB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XCdt3K5w"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="seCxJTGH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C31F1D363F;
-	Wed,  7 Aug 2024 10:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C3B1D6DD9;
+	Wed,  7 Aug 2024 10:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723025923; cv=none; b=GLN95MNnXo9YeSm6t88zzbE8lLzEUFbxKDbb+ZPqmUUHMd7Ow3USvwtNHVMWDST1C0K0a8whxaPFGgGY7Z71pjmez9pVrAqQz+KzDil7EJAeCqadjV8MlFowyWYH+K7G2+n9MaLtVtrh4tkBr/o66aODR+PZ9czUtcUT2zs0m9E=
+	t=1723027213; cv=none; b=Eo9mwUevNIn2466HohBfPAxQO0vfoT4yNq2cUox/GaddY56IEDJlW2CX1hUXgl8HKwvi/NbT0wa+mODPND12uCmFkK8DAMT/K8VrYMHOoKPuGHSw3XstWiDeT9mQx74lb3gnBD5RrrMn3Y7nL6yJZ+aNFsPUR5D0I5QkaR3HzY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723025923; c=relaxed/simple;
-	bh=X0HeSAtzmsjESSKMcmxnTmFKNCAPomDKOxgSsDBnavU=;
+	s=arc-20240116; t=1723027213; c=relaxed/simple;
+	bh=PTLeRXFWgE3Eo577ykjeu8qqsQfwG6wdG3Ko3EDsRVk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YGSTY6WF50hPhAZTmaGOioOLz7xNL+aG6SvMolHHWy/9vMEeSViZEgOjEfBk7FgAjB5V7xS+zceQ7nWRZi8KrH2VW8EAlBTz/P9z6HX6UtMirKYWEq3NxvxyczL5Ra0OiSkcxFWfZWK+/KyZp30Nte9p0zenilnlHNPlgCwYQkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=DKDLLKiB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XCdt3K5w; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 6B9C41151AE5;
-	Wed,  7 Aug 2024 06:18:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 07 Aug 2024 06:18:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1723025920; x=1723112320; bh=QbAgmVgVp0
-	hFDTgUq0qc7ahe7ZcxYiE4fZDH0BN/XlQ=; b=DKDLLKiBWa6yd3lhxf9b1sNLlR
-	1kSgtOex2pafyHTWkOAG/rser/YG7BYW+O4R6PaKrOR1BK81CRclaGEuflHOwzy2
-	IFzVkro1six68WtUvLGDriwUODHGhbLQ5b3rwYySSmO41iaKXC268BGuirIsMR0/
-	zVZghFJ1qCUu3KpaOpcoLTFSea2DUiEwZH+jS0i8BB6GVq9JzUWGX9TGnSZzVwqz
-	S/FJHycZvEBfaowNkyEzh6YQsreLTXppNu7JdCgw6R2qpGj26eF54KOrQpMzI/J6
-	dwzeaj1nxaNjVJl5Yui6JYytdRmsWJjOu60I/o3uHcV7fquFg8Tdv1OJB0nQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1723025920; x=1723112320; bh=QbAgmVgVp0hFDTgUq0qc7ahe7Zcx
-	YiE4fZDH0BN/XlQ=; b=XCdt3K5wHu+skkEXVu0Xq2zUCV6njAWYJdVisdUIM9ZJ
-	Whu52d9iRPAoH+DxuAW7TphKVF4fmVGYJ2h/bJcFYPIcsx62imrRI/U94JZ0LuDc
-	IGJyQabQXEAHD0sRqft/FtGfJjaoRrYQIDJyliMn8UXsyardm2L3gpbVzfwcQA8r
-	7xbJpAGbIDmltH17Z+nozGELQSpD560Tzb8a12G2jYHxRlQdHZyeLN89HotPzmzK
-	2xlWfgqohWtpyRFGsWrsJrZw21dPGQA7kwT4jLHRvoNiCU+I6pW5NuX1vBS5DccJ
-	HZi1gpKzcnD38hthYQMrkkmV/vfHvG47gMHspbeCvA==
-X-ME-Sender: <xms:AEqzZm_PKx9xknBeIgCtHCE5g1nH_6UlNTOB_VSJA4_bIdKbh5itRw>
-    <xme:AEqzZmsoT2aqFoP_0aFud4FJcMYhIaHEl0nQGLJz_1IxQ_eVz06a1F5QEgWBhSXY-
-    RI4BVa7jqnF2g>
-X-ME-Received: <xmr:AEqzZsCvCLKB6muEr3G4yW5nIBJUa1iL3X-xcAw3GnymRa_q8tUvUcr18bzK98h0Fd1k-q0uXGLLbBOHVPGSokn_R6VwC-MVKAGqDA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrledtgddviecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomhdpnhgspghrtghpthhtoheptd
-X-ME-Proxy: <xmx:AEqzZufAfGW3q0ZtIAiz4d1-QYo7wP91o9KMDLMq8DTL8kyUyikHWw>
-    <xmx:AEqzZrNwpa5TfpgZy8NUN85LqyvNwft0z792QWFIYxPfREUzG_tgUw>
-    <xmx:AEqzZolqnJ9HPWGN1SV9rBKgg0IzFbo23xRI7qOm7bUrGpktiDcOWA>
-    <xmx:AEqzZtsDOvRjqAF6eLMuIbaRhuPhYIJ5T5Edi6b6YrLzVwhlmaZ8Jg>
-    <xmx:AEqzZsGVZWT7b0xrJ9117RrJMy7lgX9MKFbvF2vCHKpry-1AIq8s1r-x>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Aug 2024 06:18:39 -0400 (EDT)
-Date: Wed, 7 Aug 2024 12:18:38 +0200
-From: Greg KH <greg@kroah.com>
-To: Chris Wulff <crwulff@gmail.com>
-Cc: Chris Wulff <Chris.Wulff@biamp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	David Sands <David.Sands@biamp.com>
-Subject: Re: [PATCH v2 1/1] USB: gadget: f_hid: Add GET_REPORT via userspace
- IOCTL
-Message-ID: <2024080733-guileless-t-shirt-c4ff@gregkh>
-References: <CO1PR17MB541952864266039BAA7BBBD3E10F2@CO1PR17MB5419.namprd17.prod.outlook.com>
- <2024073114-singular-stream-1dd9@gregkh>
- <CAB0kiB+tzV2JPc2X_WKr5yMJ5sy7QO2o0mcqUdD8CMd68EGmhw@mail.gmail.com>
- <CAB0kiBKpzQjcH02ckCFH0Uxv4QGVLEwVUE_ZtE8L9zd7H0Ow-w@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ht0l2admzUgoeYVesrbcyxwB6TZ+70ZSsvhbRgENIPn5SPObTZTlCF00sGjiCAyn3GCuN1pseipA0m1VPfGViAAZ9SZb6eqkQQoV+YUZM61zcI8OCLWwScD+PoYyuHjtqs75BKbveNMHzIER8eF6QdlqqlRPcksZLgBd5SqtciE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=seCxJTGH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 609EAC32782;
+	Wed,  7 Aug 2024 10:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1723027212;
+	bh=PTLeRXFWgE3Eo577ykjeu8qqsQfwG6wdG3Ko3EDsRVk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=seCxJTGHkogOpySAbMM5Q5AK3qKZXNjoEDkf6YStY2dQwFTRdoGl5oOZTP9mOSzFt
+	 bYNwq2EEQ/EZM9Wjsa60zcnP3zRlIL5SsCBkcjr+WlRFL5MRPeEPnPx2rMdBQe6YXM
+	 2z1YKY3c4CR9CE3dRextAt/exL//JWMm4CBe8hos=
+Date: Wed, 7 Aug 2024 12:40:10 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: hgajjar@de.adit-jv.com, willmcvicker@google.com, paul@crapouillou.net,
+	brauner@kernel.org, christian.koenig@amd.com, jlayton@kernel.org,
+	kees@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, andre.draszik@linaro.org,
+	peter.griffin@linaro.org
+Subject: Re: [PATCH 1/2] usb: gadget: f_fs: restore ffs_func_disable()
+ functionality
+Message-ID: <2024080701-driveway-majorette-d1d5@gregkh>
+References: <20240802140428.2000312-1-tudor.ambarus@linaro.org>
+ <20240802140428.2000312-2-tudor.ambarus@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -101,13 +59,79 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB0kiBKpzQjcH02ckCFH0Uxv4QGVLEwVUE_ZtE8L9zd7H0Ow-w@mail.gmail.com>
+In-Reply-To: <20240802140428.2000312-2-tudor.ambarus@linaro.org>
 
-On Sun, Aug 04, 2024 at 10:19:03AM -0400, Chris Wulff wrote:
-> Greg,
+On Fri, Aug 02, 2024 at 02:04:27PM +0000, Tudor Ambarus wrote:
+> The blamed commit made ffs_func_disable() always return -EINVAL as the
+> method calls ffs_func_set_alt() with the ``alt`` argument being
+> ``(unsigned)-1``, which is always greater than MAX_ALT_SETTINGS.
+> Use the MAX_ALT_SETTINGS check just in the f->set_alt() code path,
+> f->disable() doesn't care about the ``alt`` parameter.
 > 
->   It looks like this still applies clean with no changes to the diff
->   on the latest usb-next. Do you still want me to re-post it?
+> Make a surgical fix, but really the f->disable() code shall be pulled
+> out from ffs_func_set_alt(), the code will become clearer. A patch will
+> follow.
+> 
+> Note that ffs_func_disable() always returning -EINVAL made pixel6 crash
+> on USB disconnect.
+> 
+> Fixes: 2f550553e23c ("usb: gadget: f_fs: Add the missing get_alt callback")
+> Reported-by: William McVicker <willmcvicker@google.com>
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index d8b096859337..0bfed1741b3e 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -3731,10 +3731,10 @@ static int ffs_func_set_alt(struct usb_function *f,
+>  	struct ffs_data *ffs = func->ffs;
+>  	int ret = 0, intf;
+>  
+> -	if (alt > MAX_ALT_SETTINGS)
+> -		return -EINVAL;
+> -
+>  	if (alt != (unsigned)-1) {
+> +		if (alt > MAX_ALT_SETTINGS)
+> +			return -EINVAL;
+> +
+>  		intf = ffs_func_revmap_intf(func, interface);
+>  		if (intf < 0)
+>  			return intf;
+> -- 
+> 2.46.0.rc2.264.g509ed76dc8-goog
+> 
+> 
 
-Yes please.
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
