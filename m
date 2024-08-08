@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-13230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C22B894BBDB
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 13:01:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D443E94BBE0
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 13:03:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C5B7B23C5F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 11:01:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68B5F1F22290
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 11:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFA818B472;
-	Thu,  8 Aug 2024 11:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E97818B488;
+	Thu,  8 Aug 2024 11:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gd/gDLN2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlaJqq+o"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641FE184101;
-	Thu,  8 Aug 2024 11:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822D2187FE4;
+	Thu,  8 Aug 2024 11:03:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723114856; cv=none; b=qgY99OGTndnouDgeolLf6UWtBLWpCe39OnYSaDc5hsOsOGf5FPdn2+NRjWOtpJobUw9dq6heAyGJT/jBSbL8ZL/QqPn1+zol94mMH1rFaLRJ0EgxHisY+TDGR78OkPUbonArilH7Wz8V0bgArA+82Iqfu4yoO+NgoN4RBeB0OJU=
+	t=1723114996; cv=none; b=AbTfavmCUWz00h4GtCmK5SD0oZjKxLYo0Z+bQ7arvdFpCp89T0B7Ocqzpha7WhrJtwFt50PiJVRxr6ciOQSgs7ZXTXInV1cnDg8JBXi8KaGR4ox9BC3E4syYU1eqyXDncl6vmjTOeiE6HVzlXptLWT8IlKQV929NqhyE8/edpe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723114856; c=relaxed/simple;
-	bh=5USObAvXtuPCQ+JBHlK2fVtTqulpzIRS5fvm/dhv0fg=;
+	s=arc-20240116; t=1723114996; c=relaxed/simple;
+	bh=SFDPvVYf95/MN/cm6i+bg8LO/YkCJsxyLszpn+IdMAc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dfg9wV8W01022TQjm9rNQqBg4ikWLajgV/463ZgQPDYTLtJ1vGpbj2AGQ1WQ9yBW2DDjzEL7MFuiyuskVgOxkGUhV+X6OXatXmcyr0SJlxM/RWSagubpL3j4ZowzOST7hFMwFFlZDR5XPVIJpI06P0moKtA7FKHh7vrANobyBDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gd/gDLN2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5189C32782;
-	Thu,  8 Aug 2024 11:00:50 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=T87SRMo7Q2m+NQUF5TQ32vovBpQq2hn0xTujB2u9m+LLWSRXmw4xWqbkB9AUTAolZIZVyobU8aXdJ4vFIgYkhiflguMJnM15SK2uQ6BW7B8HoZvFxqrHE6WyfX8bJk9ai6sIpaGd+8Tw2cRGB3aSzdehX+0NiotydYDBxvYiPAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlaJqq+o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D8D6C32782;
+	Thu,  8 Aug 2024 11:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723114855;
-	bh=5USObAvXtuPCQ+JBHlK2fVtTqulpzIRS5fvm/dhv0fg=;
+	s=k20201202; t=1723114996;
+	bh=SFDPvVYf95/MN/cm6i+bg8LO/YkCJsxyLszpn+IdMAc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gd/gDLN2bQH7gzBibdUSbjxJFa9vNWz+Wg+lFghgP8F+9qz6iQs2ZDRf5ucJDKunI
-	 JQ9ZtMG7Cs9tnTToZ4eKoZC66tfeF1fOacRRuObreo3X+B/Iso/i7m4fspLD4ZaH+8
-	 n25KS7VfJsJqZmESaRrJpRTzGuGsSn+dPPl/2lp1c9CNTzYM1DfY0uq4iW5kQnLRDn
-	 +AT8ICZE4ZRti+WXzJEm4lsF+d+mfyRNjvQ6EVkd7qZHffKjfzZ4R0ygmWJpQgiIHy
-	 orARbc+oUXrUc2grjQWAuwPiNe8AMRtejh99paYSL/rIUKUxyYmtAcBDsW1eRmO7T7
-	 ZcgwvQL9Z75nQ==
-Message-ID: <dfb1ac84-f011-45ea-9fb1-b8c6bc36cabc@kernel.org>
-Date: Thu, 8 Aug 2024 13:00:48 +0200
+	b=YlaJqq+oJhrZySTXV2ACMauaqmVf7GOGEUvLZZOb4acgWpZIZODozkepMI5ja3yvI
+	 ysVbnBntaKq7OY4ojMUY9fj/0//+GLYWQOrbCqtyshsdHTIUTmbBnML7VSnJarFYnd
+	 BqV5o3UJKkfA9mmvRiDp/H9w7iSoRjCXvYAk7etad6Llyjp0/MPLuBLHjLOAmZQcpO
+	 gVvexaJRxFE9OCX5V+Yl/uPehFMsKwj6FK0hl+MnQD7yVinzX/XeNjFjEFBoX2LDO8
+	 D5FWROAjdhxqFbwK7j6ifYyeLIqNWCxwxwuVedGpAVSnFr4PaCAMLphCT8kOBPFgBn
+	 LOl1TTgeUPfYQ==
+Message-ID: <b0058c31-d416-48b5-b6da-5bbdf493febd@kernel.org>
+Date: Thu, 8 Aug 2024 13:03:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] dt-bindings: soc: qcom: eud: Update compatible
- strings for eud
+Subject: Re: [PATCH v1 3/3] arm64: dts: qcom: sc7280: Update eud compatible
+ string
 To: Melody Olvera <quic_molvera@quicinc.com>,
  Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -65,7 +65,7 @@ Cc: cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-usb@vger.kernel.org
 References: <20240807183205.803847-1-quic_molvera@quicinc.com>
- <20240807183205.803847-2-quic_molvera@quicinc.com>
+ <20240807183205.803847-4-quic_molvera@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,42 +111,15 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240807183205.803847-2-quic_molvera@quicinc.com>
+In-Reply-To: <20240807183205.803847-4-quic_molvera@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/08/2024 20:32, Melody Olvera wrote:
-> The EUD can more accurately be divided into two types; a secure type
-> which requires that certain registers be updated via scm call and a
-> nonsecure type which must access registers nonsecurely. Thus, change
-> the compatible strings to reflect secure and nonsecure eud usage.
-> 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> index f2c5ec7e6437..476f92768610 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> @@ -17,8 +17,8 @@ properties:
->    compatible:
->      items:
->        - enum:
-> -          - qcom,sc7280-eud
-> -      - const: qcom,eud
-> +          - qcom,secure-eud
-> +          - qcom,eud
+> Update eud compatible string to reflect use of non-secure eud.
 
-Commit msg did not explain me why DT bindings rules are avoided here and
-you drop existing SoC specific compatible.
-
-This really does not look like having any sense at all, I cannot come up
-with logic behind dropping existing users. You could deprecate it, but
-then why exactly this device should have exception from generic bindings
-rule?
-
+This does not match diff at all. You say here something but do something
+entirely else. Sorry, that's a NAK.
 
 Best regards,
 Krzysztof
