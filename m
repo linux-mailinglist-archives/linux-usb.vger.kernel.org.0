@@ -1,187 +1,154 @@
-Return-Path: <linux-usb+bounces-13249-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13250-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0D7C94C5F7
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 22:51:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B617994C741
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 01:14:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E4CD2865F6
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 20:51:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6082E1F22CD6
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 23:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5D21553B7;
-	Thu,  8 Aug 2024 20:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B92415F404;
+	Thu,  8 Aug 2024 23:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R7UiW+vG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363DF1442E8
-	for <linux-usb@vger.kernel.org>; Thu,  8 Aug 2024 20:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E0D15F303
+	for <linux-usb@vger.kernel.org>; Thu,  8 Aug 2024 23:14:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723150300; cv=none; b=PLZ7YU0S6U4ZZ8MSYZbSohOdi4t2gzg028s6R5y84Rwt1HmCBfxThk/xS3qDBrdJUTg4RbRomfJyg6c+Jgqv+3hFn5eJP4GxhmZ0Mqosfp2qCliSUC0dsr1+Yc8bocZtcuecHLwx++ltDqL4ueojq/bp8QLMIrNk6wGZLy2Pp34=
+	t=1723158876; cv=none; b=rjOx6Jkrr32ZZHeukxVME7qlWxlyJqdBuFUZsWQiseDQr4aoOeEqZKph++rxBPw+5wtzrHrmAdGKyRiQh1HnUX0wYzo+pM1LAYrSksA6KIY+4XHV3Tbiwl88fOsKlk7hTunOkZRFR73UgxWOEArEmjTNHb/p0RHL3udsJX99rX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723150300; c=relaxed/simple;
-	bh=llIU06gfKtRDoG9fpLNU1I/0OHT2gP9IjHJJSoxWUQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JeaFqH6dOjhAyF5jLDfX/vLxH88L3AAKK8SClZmdWF0j/CYESUAge1p9WalOMo1tBLrKpEfEXgjONdsHaSlUqScRUtnw9Z3/QQPL7RMGunhiNeAkBA5BGcelOm9iSDkMhXDVCgyWJ/VgOgZQ3tS+9eDVFfQF02pe3fibkM+mVWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1scA6d-0005Hr-33; Thu, 08 Aug 2024 22:51:31 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1scA6c-005VXW-FQ; Thu, 08 Aug 2024 22:51:30 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1scA6c-008xqo-19;
-	Thu, 08 Aug 2024 22:51:30 +0200
-Date: Thu, 8 Aug 2024 22:51:30 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Abhishek Tamboli <abhishektamboli9@gmail.com>,
-	dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
-	skhan@linuxfoundation.org, dan.carpenter@linaro.org,
-	rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
-Message-ID: <ZrUv0tX7r0RuWLW2@pengutronix.de>
-References: <20240802180247.519273-1-abhishektamboli9@gmail.com>
- <20240802181841.GA21917@pendragon.ideasonboard.com>
+	s=arc-20240116; t=1723158876; c=relaxed/simple;
+	bh=+j26Pq03xPtEY/N0a1hoZ7bDghSj/EIn7I1VMji0gyk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=b00dv/lsID8fFuP83lUBdDCjoPxCREGhp3Qbdb4ghQF6nXGGS67ZvQEsv300icJ2ybT9APd1ceXrVt4xfzdAZysHy1mWY3IX4a6X74JdO4yA3Yvnitbam7ew9eZtfU3hPu7Ei7ZCrM9MDL/DEr93hQcbM4sNYuA6i8SnCj/x1SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R7UiW+vG; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723158875; x=1754694875;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+j26Pq03xPtEY/N0a1hoZ7bDghSj/EIn7I1VMji0gyk=;
+  b=R7UiW+vGPY+H0PTqXk2EV9XONYygK9jbg1phc5bWOqALmhmgSXWjhBLg
+   uKKVaS6X7usneWXrDTP45dE/jihoaTutKrwlTT8JovUvlVJuL3RTmJpVl
+   Jv+yIxRblAtPcm4Fub6ns8ytEriF2ZfpC9/+qkfvu9lrBXZirjdMGxV1M
+   OTmaMSz7E9MAAAffEsbKGBDWNtZZ1UW6WxOfsXA/XKQethfFrookbfGGQ
+   aktnVSpddGKfYQaQ/tZbB4z7ulLwCqZNOwMr77tlQIMjCw6Ekt0UmBbru
+   ARgiKrA1cl32l1Cq92YG6etOdNuvsAOXuaA5lpZCljYsWtEvnOMwtDVUC
+   A==;
+X-CSE-ConnectionGUID: 4Nm78DevRoKjldmRqG8YTw==
+X-CSE-MsgGUID: 06IHKVmOQvOM5pNO/WiZMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="21439897"
+X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
+   d="scan'208";a="21439897"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 16:14:34 -0700
+X-CSE-ConnectionGUID: THMjQWVkR8C1XvgMJZVU+w==
+X-CSE-MsgGUID: 9JfHMNiRTharX78M5zDMcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
+   d="scan'208";a="57037944"
+Received: from venkat-lin-vm.fm.intel.com ([10.80.128.171])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Aug 2024 16:14:33 -0700
+From: Venkat Jayaraman <venkat.jayaraman@intel.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	venkat.jayaraman@intel.com,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Subject: [PATCH] usb: typec: ucsi: Add DATA_RESET option of Connector Reset command
+Date: Thu,  8 Aug 2024 16:14:43 -0700
+Message-Id: <20240808231443.1772374-1-venkat.jayaraman@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xso69ZZn0vzq1Akv"
-Content-Disposition: inline
-In-Reply-To: <20240802181841.GA21917@pendragon.ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+Modify CONNECTOR_RESET command implementation to accommodate
+DATA_RESET reset type as defined in UCSI spec v2.0 and later.
 
---xso69ZZn0vzq1Akv
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hard Reset bit field was defined with value 1 in UCSI spec version 1.0.
+Starting with spec version 1.1, Hard Reset bit field was removed from the
+CONNECTOR_RESET command, until spec 2.0 reintroduced it with value 0, so, 
+the value to pass in to the command for a Hard Reset is different depending
+on the UCSI version supported by the LPM.
 
-Hi Laurent,
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Signed-off-by: Venkat Jayaraman <venkat.jayaraman@intel.com>
+---
 
-On Fri, Aug 02, 2024 at 09:18:41PM +0300, Laurent Pinchart wrote:
->Hi Abhishek,
->
->(CC'ing Michael Grzeschik)
->
->Thank you for the patch.
->
->On Fri, Aug 02, 2024 at 11:32:47PM +0530, Abhishek Tamboli wrote:
->> Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
->> and uvc_v4l2_enum_format().
->>
->> Fix the following smatch errors:
->>
->> drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
->> error: 'fmtdesc' dereferencing possible ERR_PTR()
->> drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
->> error: 'fmtdesc' dereferencing possible ERR_PTR()
->>
->> Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
->> ---
->>  drivers/usb/gadget/function/uvc_v4l2.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
-/function/uvc_v4l2.c
->> index a024aecb76dc..9dd602a742c4 100644
->> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->> @@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct=
- uvc_device *uvc,
->>  	list_for_each_entry(format, &uvc->header->formats, entry) {
->>  		const struct uvc_format_desc *fmtdesc =3D to_uvc_format(format->fmt);
->>
->> +		if (IS_ERR(fmtdesc))
->> +			continue;
->> +
->>  		if (fmtdesc->fcc =3D=3D pixelformat) {
->>  			uformat =3D format->fmt;
->>  			break;
->> @@ -389,6 +392,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, st=
-ruct v4l2_fmtdesc *f)
->>  		return -EINVAL;
->>
->>  	fmtdesc =3D to_uvc_format(uformat);
->> +	if (IS_ERR(fmtdesc))
->> +		return -EINVAL;
->> +
->>  	f->pixelformat =3D fmtdesc->fcc;
->>
->>  	return 0;
->
->Michael, you authored this, I'll let you review the patch and decide if
->this is a false positive.
+ drivers/usb/typec/ucsi/ucsi.c | 16 +++++++++++++++-
+ drivers/usb/typec/ucsi/ucsi.h |  5 ++++-
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
-Since the following patch was applied,
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index dcd3765cc1f5..7482baec36f8 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1343,12 +1343,26 @@ EXPORT_SYMBOL_GPL(ucsi_connector_change);
+ 
+ /* -------------------------------------------------------------------------- */
+ 
++/**
++ * Hard Reset bit field was defined with value 1 in UCSI spec version 1.0.
++ * Starting with spec version 1.1, Hard Reset bit field was removed from the
++ * CONNECTOR_RESET command, until spec 2.0 reintroduced it with value 0, so, in effect,
++ * the value to pass in to the command for a Hard Reset is different depending
++ * on the supported UCSI version by the LPM.
++ *
++ * For performing a Data Reset on LPMs supporting version 2.0 and greater,
++ * this function needs to be called with the second argument set to 0.
++ */
+ static int ucsi_reset_connector(struct ucsi_connector *con, bool hard)
+ {
+ 	u64 command;
+ 
+ 	command = UCSI_CONNECTOR_RESET | UCSI_CONNECTOR_NUMBER(con->num);
+-	command |= hard ? UCSI_CONNECTOR_RESET_HARD : 0;
++
++	if (con->ucsi->version < UCSI_VERSION_1_1)
++		command |= hard ? UCSI_CONNECTOR_RESET_HARD_VER_1_0 : 0;
++	else if (con->ucsi->version >= UCSI_VERSION_2_0)
++		command |= hard ? 0 : UCSI_CONNECTOR_RESET_DATA_VER_2_0;
+ 
+ 	return ucsi_send_command(con->ucsi, command, NULL, 0);
+ }
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 57129f3c0814..06c642e2838f 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -29,6 +29,7 @@ struct dentry;
+ #define UCSIv2_MESSAGE_OUT		272
+ 
+ /* UCSI versions */
++#define UCSI_VERSION_1_1	0x0110
+ #define UCSI_VERSION_1_2	0x0120
+ #define UCSI_VERSION_2_0	0x0200
+ #define UCSI_VERSION_2_1	0x0210
+@@ -122,7 +123,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define UCSI_DEFAULT_GET_CONNECTOR_NUMBER(_cmd_)	(((_cmd_) >> 16) & GENMASK(6, 0))
+ 
+ /* CONNECTOR_RESET command bits */
+-#define UCSI_CONNECTOR_RESET_HARD		BIT(23) /* Deprecated in v1.1 */
++#define UCSI_CONNECTOR_RESET_HARD_VER_1_0	BIT(23) /* Deprecated in v1.1 */
++#define UCSI_CONNECTOR_RESET_DATA_VER_2_0	BIT(23) /* Redefined in v2.0 */
++
+ 
+ /* ACK_CC_CI bits */
+ #define UCSI_ACK_CONNECTOR_CHANGE		BIT(16)
+-- 
+2.34.1
 
-https://lore.kernel.org/all/20240221-uvc-gadget-configfs-guid-v1-1-f0678ca6=
-2ebb@pengutronix.de/
-
-the issue is technically impossible to happen.
-
-However the patch I mentioned was only applied recently and in all older
-kernels someone could add a format into configfs that is not part of
-uvc_format_desc from drivers/media/common/uvc.c and therefor can run
-into the issue.
-
-As this will also not hurt the current kernel I would like the patch
-to be applied with the Tag:
-
-Fixes: 588b9e8560 (usb: gadget: uvc: add v4l2 enumeration api calls)
-
-Thanks,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---xso69ZZn0vzq1Akv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAma1L88ACgkQC+njFXoe
-LGQvWxAAzqq9SXBuTDZV+u1WYwC2A4U48+AdS9D9DskUf5r1GRxNg2cH65cieEIa
-czj7t5zNQjjimIEbiltd8MHVgySPfmQZnbcLPk1XTG1g7Il7gco34zZnGVnj6lA6
-+A7+bm34yjYJ4hKkFzaao1r4Nlp1wDEGxH1vmFp9VRvoTp6eszXpluyHWccqOuVA
-2UvkBab1a6VUJ9Q2Wdf/7MzShrW2QfWoTAodUm9avrRHcHq8Tc1ia1WW5hyS++82
-BFE9AmCKNnc94N6aBodi2xSQbTAD8xgCa33kM5veHao2C3W+mc0nygVPF/D+UzER
-ZkQNY6+P3XTV7GoJv408W68marWmNunBxCgaRYgdafJNrUOBm7eI7CElSQzshcZH
-7wWlfji7W4cFyUheHimFCEuoAZzAgYJhr5GwaL9F0xNqHU7rI70eR2/iYYcyE29z
-SlLb1+VOXKiPBvgp4Musx2UL7qNL/XnhS8+0huPRPGq+WV4SZGeow2oPqxLYqnd1
-ArBX8WTR5+Q01FhHU7IG5KlO81UxgOmB5RwQEaOFrEK0TSW2qaM8mhVbU4PTcN5x
-IM/txaXUIy4wyA1ZpQTTCcthptKdudAwW/cLr1Xr9pFFO5qcvjRFZP24/fTNJr7G
-ElhgJETM1HeeItvGkk7mAi51W+yAIBGqu0KQi5B4qOLlqpJlsHo=
-=drdN
------END PGP SIGNATURE-----
-
---xso69ZZn0vzq1Akv--
 
