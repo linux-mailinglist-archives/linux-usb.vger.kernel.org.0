@@ -1,140 +1,116 @@
-Return-Path: <linux-usb+bounces-13240-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13241-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1C3394C148
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 17:28:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C7A694C280
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 18:20:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4674286F28
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 15:28:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E6A61C24FCA
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 16:20:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528A718F2EB;
-	Thu,  8 Aug 2024 15:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13309190477;
+	Thu,  8 Aug 2024 16:19:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L7kOaz7O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pXMlN5SB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C76118C355;
-	Thu,  8 Aug 2024 15:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B81319006A
+	for <linux-usb@vger.kernel.org>; Thu,  8 Aug 2024 16:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723130860; cv=none; b=iKs9KsC9fFiZBhzDpyKRHhBahfAxt2N7ZjUqkAbpoRghKnSik6rpr7OaPoKm6RDC0W6DGXPj8AgUSSKi+rTQ21zSXg8gULADiir0VFMtiTZD3h6y6GQ2WtkNQ739z+rJeZ9KbwCQlHvlX0tlMt7Me7bhq9el/mEgODgZlcgLg5U=
+	t=1723133982; cv=none; b=aZapm4kfN79dA5avmd3g8oHV60fguHpyGuLeVxmu1m9cVTxzb/NNQzzbP3b0vDEejWmx0+7LSQW8WEc66yAYV6NMXepwuEzov98GvZ2/U0nvMaVmUVH80hwdC8754vPYHmxawwwcy/Qk185Xva6Lfw5mGVqfnExQVZt47bDeUqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723130860; c=relaxed/simple;
-	bh=PfWOmOcV9l9z+70Q55rh3PrGhzM5r3yXLVKW8y5Tnj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hndmEJaq/d5lzrUzL+vSnfQoSpqcE2zoz1wY5ER3zn7Q8TQ5H+FxfSugJLKkfTOqEu7Zu+Mi5FHzuhK8F67lwLS+n4pmGmK+z+IxXQuTnUUd7q8s8erAusd3yVvRMZKfIE2lth8Yu1h5u+wuPpRxKqJRpl3fBL3J6HYF4rV/a7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L7kOaz7O; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2caff99b1c9so948519a91.3;
-        Thu, 08 Aug 2024 08:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723130859; x=1723735659; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0qrVoz2J1yx28Dbm2oNk/ENgURyNTgPZNBRNbJticAY=;
-        b=L7kOaz7Odvc7AAaMWul6jP6G8mxH6+5EuYXcrprGXhkx3J6HGiQzxZ4rgIihbJepQG
-         VG0ihGhihUCCUgeMDb//55q19i8SnPyZQE9UxMrlOqqXltxr+vwRokOcqymXaqk51bUh
-         OuD3+2e0EdfG3gvMVYfUBvWjWjimD4F07ZaTe2Qw/FjBXnA/oQVOBtPgFhdWO23KRAYt
-         H2dIIqN3mbmD+9paaYk5rqrU1v98qQY2LBHK6HxY0dZw16//aMiL0myQBnyih0KICWN1
-         v7os6C4ngRapE61YNtQuzmHDVZe3zWpZCUgZOkRMU/dbBElrOrLByZFHNjewINQ/WsQv
-         dnTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723130859; x=1723735659;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0qrVoz2J1yx28Dbm2oNk/ENgURyNTgPZNBRNbJticAY=;
-        b=JUaqTB4msjo1ny24voHpdPl7zwwDwdzEA0W9oOJmfOMCuXfSP9rMSQtVuiKXqGy0Vz
-         y6COPtfOTDIXyYgeiHhnQ0z/B2PLfio3myWIIugTP3G9QdJo2usKXctu2RflHsVpVYCI
-         Hetc29dX+QvnSsogG3etEWDPEYMGBVL/O1iWS/L0KmYjCVfJpsWJ113y22dqn7Kw/W4Y
-         0b4LyMX03CBuvNllyHA9ZHP7s1CW7xJpQfE+M2waChiqd8t39ic9F7dWVOXXeqe5FRi6
-         M/3JJ4HBAWZsC4P6P/6XF1ff8MS3IBPc/cvbPm6uRJETvwaquTs5OWNDP81IuLJL/vwu
-         Ls/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWr/HgtWLap/1VgjTNDE6oTslqLx3+70PnCyP7VDulv0r49VOp7YnMEm4GJaFSuRiWbATakdgqeP5IAhH4V0bec9ojV4UbJuvdaxIE93qtm4ksA7Fi8/HTL5MlXpgHZa3jFb05bODbU
-X-Gm-Message-State: AOJu0Yza1JSx/SwaZXWyRxNkbkKZvp16x+YLRE3v0SgcN3+t0vOgtZ0k
-	L9mPWTPRYierotuzEcJsUrU+8flEAJh+cvtOsOL/7FHa7nJiTZfoQ6UGXdeJ
-X-Google-Smtp-Source: AGHT+IHiHgWTjm1UfRszbp9Jh6b8RCgOFoPHnf4exHKRez7qVshr+dQ3WXNglY3HdV5YdG84WbdkhA==
-X-Received: by 2002:a17:90b:3a8b:b0:2ca:7e87:15ea with SMTP id 98e67ed59e1d1-2d1c3459459mr2644200a91.34.1723130858508;
-        Thu, 08 Aug 2024 08:27:38 -0700 (PDT)
-Received: from embed-PC.myguest.virtualbox.org ([110.225.178.109])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1b3ab9b3fsm3638895a91.20.2024.08.08.08.27.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 08:27:37 -0700 (PDT)
-Date: Thu, 8 Aug 2024 20:55:42 +0530
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: laurent.pinchart@ideasonboard.com, dan.carpenter@linaro.org,
-	m.grzeschik@pengutronix.de
-Cc: dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
-	skhan@linuxfoundation.org, rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
-Message-ID: <ZrTjdoa66eQxOTqM@embed-PC.myguest.virtualbox.org>
-References: <20240802180247.519273-1-abhishektamboli9@gmail.com>
- <a779ee26-fe93-47ac-a25c-b842534e0317@suswa.mountain>
+	s=arc-20240116; t=1723133982; c=relaxed/simple;
+	bh=pyj7P7FjSm14SjmAHGGkUnB9MRUE/Mq72T32TJXKito=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=A+L1KrSk+xqzh6F+RekzKroHSobdUP0xt6q6ESf1aiKrSmGWn/HUhMZaH7HE2jecpCDoUDZg/M547snHmjVz3xsd6/ioN8upLyBIu1V6TD9PZL0vv78ZDiddDnoWBcLFIUzWYz9U26zAOiw7xgua1TEfvpyzEPQEUzlahf4E04k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pXMlN5SB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 20448C4AF09
+	for <linux-usb@vger.kernel.org>; Thu,  8 Aug 2024 16:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723133981;
+	bh=pyj7P7FjSm14SjmAHGGkUnB9MRUE/Mq72T32TJXKito=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=pXMlN5SBRPb/oZpBEkRTqjEtHT5JmtdggHyfQTmLv9S9SOEEqI5pK4yuyzReiNmEh
+	 CbA6Ef9mdhHgtZwwTnuIIwCNnAgz/wGsfLlAZ0eNwVg7Ol/QkQuk7CaZIzvM4psgrr
+	 i0zc+X9fu0Nr6GQ+sX5WRDvIwX7D60EwydtVWJUPU+ZtihnTe1FFs7JXu1mL3TuiXf
+	 /ymeJimPzY/YZMz+BbOX9koZADMk+0/yUzRShhNbsIJvchXEYNWmRVpflFg6usg/qb
+	 1Jqw04vjjyIXuYEaTY/Heug9Q+73OyDqE1pMFL5Zex/2CBiXbIakBvbeVhPUWqcO1R
+	 cFty0ZheJBHnQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 07157C53B73; Thu,  8 Aug 2024 16:19:41 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
+Date: Thu, 08 Aug 2024 16:19:40 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219111-208809-xkX6zPswjf@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
+References: <bug-219111-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a779ee26-fe93-47ac-a25c-b842534e0317@suswa.mountain>
 
-On Fri, Aug 02, 2024 at 01:40:48PM -0500, Dan Carpenter wrote:
-> On Fri, Aug 02, 2024 at 11:32:47PM +0530, Abhishek Tamboli wrote:
-> > Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
-> > and uvc_v4l2_enum_format().
-> > 
-> > Fix the following smatch errors:
-> > 
-> > drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
-> > error: 'fmtdesc' dereferencing possible ERR_PTR()
-> > drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
-> > error: 'fmtdesc' dereferencing possible ERR_PTR()
-> > 
-> > Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
-> 
-> When I reviewed these warnings in 2022, I assumed that the error
-> checking was left out deliberately because it couldn't fail so I didn't
-> report these warnings.
-> 
-> Almost all old Smatch warnings are false positives.  That doesn't mean
-> Smatch is bad, it's just how it's going to be when you fix all the real
-> bugs.  In this case, I just decided it was a false positive.  It's
-> possible I was wrong.  Other times, I report the bug and the maintainers
-> say that it's a false positive.
-> 
-> There are some old bugs which are real.  Sometimes I report a bug but
-> the maintainer doesn't see the email because they go on vacation or
-> something.  Or someone sends a patch but it doesn't get merged.  Another
-> thing is that if a bug is over five years old and minor then I might not
-> bother reporting it.  These days kernel developers are very good at
-> fixing static checker bugs and these kinds of things are pretty rare.
-> 
-> I don't review old warnings in a systematic way.  If I fix a bug in a
-> file, then I'll re-review all the old warnings.
-> 
-> If we decide to merge this code, it needs a Fixes tag.
-> 
-Hi,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
 
-I wanted to follow up on the patch I submitted to address a Smatch warning.
-While I understand that this warning might be a false positive, as mentioned in your
-reviews, I would greatly appreciate your guidance on whether this patch should be
-merged or if any further adjustments are needed.
+--- Comment #36 from Alan Stern (stern@rowland.harvard.edu) ---
+It looks like the Xone:23C can operate in two different modes, and it decid=
+es
+during the initial startup which mode it will use.  The first mode (what you
+get with old_scheme_first=3DN) exposes a single configuration, which has a =
+USB
+audio class 1 interface and 2-channel stereo in/out.
 
-If we determine that the patch resolves a real issue, I am prepared to
-include the Fixes tag.
+The second mode (what you get with old_scheme_first=3DY) exposes two
+configurations.  The first config is the same as the one described above, b=
+ut
+the second config has a USB audio class 2 interface with 4-channel "stereo"
+in/out.
 
-Regards,
-Abhishek
+The problem is how to make the device go into its second mode.  Your Windows
+packet captures don't show this happening.  In fact, they do show the devic=
+e in
+its first mode, using the only configuration in that mode, so it shouldn't =
+be
+doing 4-channel I/O at all!  I don't understand that.
 
+The only way we know to put the device into the second mode is to set
+old_scheme_first to Y.  Maybe this doesn't have to be done before the device
+initially starts up; you may find that resetting the device while
+old_scheme_first is Y will cause it to go into the second mode, even if it =
+was
+in the first mode before.  You could try that to see if it works.  If it do=
+es,
+the kernel could be changed to make this happen automatically.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
