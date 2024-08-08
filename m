@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-13239-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13240-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 786F594C0E9
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 17:22:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C3394C148
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 17:28:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E50AD1F212F0
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 15:22:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4674286F28
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 15:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15EFB19004D;
-	Thu,  8 Aug 2024 15:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528A718F2EB;
+	Thu,  8 Aug 2024 15:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KnVCfP3W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L7kOaz7O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8FB18F2CA;
-	Thu,  8 Aug 2024 15:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C76118C355;
+	Thu,  8 Aug 2024 15:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723130490; cv=none; b=ZX8+f3LjonWWx0j2smkUehg12kvkpDQVU6b2G6xG/m5/fjSrtj2rV4DNUEDKWSvW3/qMwKPk2vPHJLi0391IBDEVbQizO62KhjTn0LLH1lCd30YYFUPxpJTPnqbVePChzCOJP50Fb/bHlGdHKl0nKqysZrkA8ZklHDxnzsawBAo=
+	t=1723130860; cv=none; b=iKs9KsC9fFiZBhzDpyKRHhBahfAxt2N7ZjUqkAbpoRghKnSik6rpr7OaPoKm6RDC0W6DGXPj8AgUSSKi+rTQ21zSXg8gULADiir0VFMtiTZD3h6y6GQ2WtkNQ739z+rJeZ9KbwCQlHvlX0tlMt7Me7bhq9el/mEgODgZlcgLg5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723130490; c=relaxed/simple;
-	bh=LLGMog3ghLftfvDRa/wahzoGWmeO97Nond6HOcgHgRQ=;
+	s=arc-20240116; t=1723130860; c=relaxed/simple;
+	bh=PfWOmOcV9l9z+70Q55rh3PrGhzM5r3yXLVKW8y5Tnj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S9NL51aaVXF4YOFR8ROn2vJpKhe7xANxen2/jBbnLRCKYUB+CsD3eYRKx2H2gfhdIziqxF8X20AdEPVBlBg3GJY46Kmg9q8FVRp6Gbq90TsKIp/FkrDOmeYJbQfK4PU9EQNds3F4Ue8eym8oVfb3F4KW9JJdMsHB70D3SHBiN9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KnVCfP3W; arc=none smtp.client-ip=209.85.166.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=hndmEJaq/d5lzrUzL+vSnfQoSpqcE2zoz1wY5ER3zn7Q8TQ5H+FxfSugJLKkfTOqEu7Zu+Mi5FHzuhK8F67lwLS+n4pmGmK+z+IxXQuTnUUd7q8s8erAusd3yVvRMZKfIE2lth8Yu1h5u+wuPpRxKqJRpl3fBL3J6HYF4rV/a7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L7kOaz7O; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-81fbbd4775bso36285839f.3;
-        Thu, 08 Aug 2024 08:21:28 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2caff99b1c9so948519a91.3;
+        Thu, 08 Aug 2024 08:27:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723130488; x=1723735288; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723130859; x=1723735659; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
         bh=0qrVoz2J1yx28Dbm2oNk/ENgURyNTgPZNBRNbJticAY=;
-        b=KnVCfP3Wfea+1+HXozAqvzp+ZZW/HPQc0umDyTX4a/X8CteLoLPuycM0n7TilOePBK
-         xJjRZDGArEPmhRrfB9peBdxDtoqrqwx/3T/vbyLyOwFPPgJvWC1MGquh5btIM0MBNXH4
-         Fi0F7PGi3rrb10/4ENp4l6u2Akr0qP1DHWtQGaYWBbPlWHRFth6Ff7X5lG1S1Fz6wp22
-         ozfTlBGwqHVAzqMYKHoEgBuCFEM2RbByer+0qnyyHtGgahljAZ9WD/gxeaR6Lbz+6Iak
-         7rHf7MMtIJUBPWlkp2Zl2SzP06L/nqrOApOhWdgK/Bt0k7oOQcyuyTUfQFkolrfTTgPl
-         KHUA==
+        b=L7kOaz7Odvc7AAaMWul6jP6G8mxH6+5EuYXcrprGXhkx3J6HGiQzxZ4rgIihbJepQG
+         VG0ihGhihUCCUgeMDb//55q19i8SnPyZQE9UxMrlOqqXltxr+vwRokOcqymXaqk51bUh
+         OuD3+2e0EdfG3gvMVYfUBvWjWjimD4F07ZaTe2Qw/FjBXnA/oQVOBtPgFhdWO23KRAYt
+         H2dIIqN3mbmD+9paaYk5rqrU1v98qQY2LBHK6HxY0dZw16//aMiL0myQBnyih0KICWN1
+         v7os6C4ngRapE61YNtQuzmHDVZe3zWpZCUgZOkRMU/dbBElrOrLByZFHNjewINQ/WsQv
+         dnTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723130488; x=1723735288;
+        d=1e100.net; s=20230601; t=1723130859; x=1723735659;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
         bh=0qrVoz2J1yx28Dbm2oNk/ENgURyNTgPZNBRNbJticAY=;
-        b=X4/4RUHZ0F0KkTq7kQLvyEhAvTkZUEtHo+4cRJex9PxItVhGrvKG+DN83b4GnCCTon
-         UeL/Hkc5kuOrypdjTa022enZj2FotTF9csqC7fmO07cYqHjTuKZgEziwiTKZaq78e1Qf
-         U/FbWhmWN5FDL/WR4dfM3mZDqTdknWjN/rIuVNFWH3ErcZwmJR9cm7hy0QwdiABULF0b
-         +28BthVqRSLaomDrp0fcUaO6I2xCxoc1Q9NpTMyofnG7xsQeF7R7lgELs2yzQKCqgNIY
-         RLth01U7OWXC0vm1VzNwkGZe6xzmmkZY9aAKrb5R9YH2EFGwXhGtOK/91cqpdpW0IXsE
-         qEqg==
-X-Forwarded-Encrypted: i=1; AJvYcCVEKvYZJt+GD9fF9PyJB43NzNYuu5Pn4skPjI0Xy03Ib9z1DnRhu/c80cNVOnQMfDTquOhYXvwFVqu9FcINWBG0w7o9iQUAu/Hh0UMZ/avzuOst+nAOt+lnw7X9LfK5uY3SRatjc+6e
-X-Gm-Message-State: AOJu0YzGL2zsqx5+sE43e91OT1D1dYia+dX3FaDPm3lwGxwjtkh2+YAv
-	9pUlnwHfWxqhNwbKbZZFMdJUxfZhiweTR/b7Uosu/p8p6HhnLs0iRKXUlLrJ
-X-Google-Smtp-Source: AGHT+IEs8tUVdKoi2mlhhy5URJvruIz2li73IDosmzzBsr5cpVJfDlDP8mmFYdDbcMsYsd+UzYor9Q==
-X-Received: by 2002:a05:6602:2ccb:b0:81f:9468:7c3c with SMTP id ca18e2360f4ac-82253855ad4mr253501139f.12.1723130488078;
-        Thu, 08 Aug 2024 08:21:28 -0700 (PDT)
+        b=JUaqTB4msjo1ny24voHpdPl7zwwDwdzEA0W9oOJmfOMCuXfSP9rMSQtVuiKXqGy0Vz
+         y6COPtfOTDIXyYgeiHhnQ0z/B2PLfio3myWIIugTP3G9QdJo2usKXctu2RflHsVpVYCI
+         Hetc29dX+QvnSsogG3etEWDPEYMGBVL/O1iWS/L0KmYjCVfJpsWJ113y22dqn7Kw/W4Y
+         0b4LyMX03CBuvNllyHA9ZHP7s1CW7xJpQfE+M2waChiqd8t39ic9F7dWVOXXeqe5FRi6
+         M/3JJ4HBAWZsC4P6P/6XF1ff8MS3IBPc/cvbPm6uRJETvwaquTs5OWNDP81IuLJL/vwu
+         Ls/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWr/HgtWLap/1VgjTNDE6oTslqLx3+70PnCyP7VDulv0r49VOp7YnMEm4GJaFSuRiWbATakdgqeP5IAhH4V0bec9ojV4UbJuvdaxIE93qtm4ksA7Fi8/HTL5MlXpgHZa3jFb05bODbU
+X-Gm-Message-State: AOJu0Yza1JSx/SwaZXWyRxNkbkKZvp16x+YLRE3v0SgcN3+t0vOgtZ0k
+	L9mPWTPRYierotuzEcJsUrU+8flEAJh+cvtOsOL/7FHa7nJiTZfoQ6UGXdeJ
+X-Google-Smtp-Source: AGHT+IHiHgWTjm1UfRszbp9Jh6b8RCgOFoPHnf4exHKRez7qVshr+dQ3WXNglY3HdV5YdG84WbdkhA==
+X-Received: by 2002:a17:90b:3a8b:b0:2ca:7e87:15ea with SMTP id 98e67ed59e1d1-2d1c3459459mr2644200a91.34.1723130858508;
+        Thu, 08 Aug 2024 08:27:38 -0700 (PDT)
 Received: from embed-PC.myguest.virtualbox.org ([110.225.178.109])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7b76346af44sm10032073a12.30.2024.08.08.08.21.24
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1b3ab9b3fsm3638895a91.20.2024.08.08.08.27.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 08:21:27 -0700 (PDT)
-Date: Thu, 8 Aug 2024 20:49:31 +0530
+        Thu, 08 Aug 2024 08:27:37 -0700 (PDT)
+Date: Thu, 8 Aug 2024 20:55:42 +0530
 From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: laurent.pinchart@ideasonboard.comdan, dan.carpenter@linaro.org,
+To: laurent.pinchart@ideasonboard.com, dan.carpenter@linaro.org,
 	m.grzeschik@pengutronix.de
 Cc: dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
 	skhan@linuxfoundation.org, rbmarliere@gmail.com,
 	linux-kernel-mentees@lists.linuxfoundation.org,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
-Message-ID: <ZrTiA8vpsHyGWp72@embed-PC.myguest.virtualbox.org>
+Message-ID: <ZrTjdoa66eQxOTqM@embed-PC.myguest.virtualbox.org>
 References: <20240802180247.519273-1-abhishektamboli9@gmail.com>
  <a779ee26-fe93-47ac-a25c-b842534e0317@suswa.mountain>
 Precedence: bulk
@@ -126,14 +126,15 @@ On Fri, Aug 02, 2024 at 01:40:48PM -0500, Dan Carpenter wrote:
 > 
 Hi,
 
-I wanted to follow up on the patch I submitted to address a Smatch warning. 
-While I understand that this warning might be a false positive, as mentioned in your 
-reviews, I would greatly appreciate your guidance on whether this patch should be 
-merged or if any further adjustments are needed. 
+I wanted to follow up on the patch I submitted to address a Smatch warning.
+While I understand that this warning might be a false positive, as mentioned in your
+reviews, I would greatly appreciate your guidance on whether this patch should be
+merged or if any further adjustments are needed.
 
-If we determine that the patch resolves a real issue, I am prepared to 
+If we determine that the patch resolves a real issue, I am prepared to
 include the Fixes tag.
 
 Regards,
 Abhishek
+
 
