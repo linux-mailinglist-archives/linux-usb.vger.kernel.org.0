@@ -1,294 +1,499 @@
-Return-Path: <linux-usb+bounces-13216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC9F894B4AF
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 03:38:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC84994B5F4
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 06:38:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1EE3FB237AE
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 01:38:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B7B01C21219
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2024 04:38:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1CE9454;
-	Thu,  8 Aug 2024 01:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A3883A17;
+	Thu,  8 Aug 2024 04:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="ltPl1DBj";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="RSYeiQ4E";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="cuhLjYQO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ES1EfYZ5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350DD2F23;
-	Thu,  8 Aug 2024 01:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723081090; cv=fail; b=MyjCbKrpboOIc1MyKnMoTybFQA9/5Zs4JvwgIo6mGyox4MG9e5SCj8WsXLlyQQGrQ1jJmQtQVdlQxlWBD0DNeRlbjzpn0+dol87HDrxVbwAC9X5LwJWnGrfIKFbz2nau6Uv2EGEnZWfd/hPza3qhv/ouAanUEAA68NKaXoFs5yk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723081090; c=relaxed/simple;
-	bh=vY1a0UwEUDlkW47d6bo8UfLYVYbnoqXDcgELYQddXN4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=D9HYj6sXOKTd/GIrzTYRa1sJ9TWijjScKlDtzQifMuqAw0FCq1WGACuxbullzcT4f+2vrLyAOdmijNPmY/TMZCn/eV7lEa4riq3ag/jc2234874PS66Z8npolG3CvfSOM6HETms4xNCw0SzMmlbPrx/9JQQqHrt8SZxBFTmirGU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=ltPl1DBj; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=RSYeiQ4E; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=cuhLjYQO reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 477MmfYL008843;
-	Wed, 7 Aug 2024 18:37:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	cc:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	pfptdkimsnps; bh=vY1a0UwEUDlkW47d6bo8UfLYVYbnoqXDcgELYQddXN4=; b=
-	ltPl1DBjTXvqowGVI1+y/EUBefgbpsAir4g95GYJLhXr/J1768QVhVtaHd8vbu6x
-	0qg3U8g5ogy075Qd9YFKaEzzUubslRC1oRBGibOfb/HECTsRlDiZKGnVQv2GjgDs
-	MV/m09mhhyRkgiJEa5Y4i4L1hgdF+PMWphQfLxA14+5NRh7CdqvhDVh828S9/OIv
-	w9DjH2teLblM2NWBuVYBhyuQOEsG7jRd+Q2Y9snM9hhSBhyOMQdk8BiAg06KuRvH
-	jnSCOBysVlf2mFLftXqvXjHvDd7SoxyvgO2M1N3X2EacPYF9E8qnIiaQ6B1gK5yR
-	ghTCftWXx5Tv9l8YX8ebAg==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 40uujberyn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Aug 2024 18:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1723081071; bh=vY1a0UwEUDlkW47d6bo8UfLYVYbnoqXDcgELYQddXN4=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=RSYeiQ4EADDtuB/1+Ded5cn6qSHOf5T8MFBgxjrzNi6bzX+CvNiAKIWu2OQ7bYtcm
-	 VxbBuaBpumBXcPizEEdEOsRc/XV8gzfLeCpaBobRB6Mt7t2K8SQ2FAlhbQw5RRGHHk
-	 osmfrL2KBDgTbY+gcmHvi/DYsRjHTKV58JuQMLISmPrlnfib48zJ019dhQGWVDx9Fo
-	 zuTolTNhjowpHKgvKxuMmiwWcUVdnh/ifCu1GjK70kd1p62ONaUWkhJ5VvwDJKuXN/
-	 cjpboJLovnTtxqlSr/e9PBVGsdfo6VywjUbwFX4/z7nuXLUYNYlVJw0gAMvIGX3JBV
-	 A5/Cvu9y76KSA==
-Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 79C1A40130;
-	Thu,  8 Aug 2024 01:37:51 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id 29C12A0266;
-	Thu,  8 Aug 2024 01:37:51 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=cuhLjYQO;
-	dkim-atps=neutral
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2041.outbound.protection.outlook.com [104.47.56.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id 74BF540235;
-	Thu,  8 Aug 2024 01:37:50 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fY2k+X6MCp6/4CCYC2TjhpqMv8RDIezDcjyqjSlWlM/oHqFQqfljpQnSl/FOtDfVyR/DY0a8bs5auKny1MpHbBB/eA8zsQ4C5GMtE52xnbOTlpBKtqXpjJ6V+wPTX8oHEjvKLS9GwIvY+rjchQWWzbz3oTWvg1N83IuUDca6yKR61rpAZMfO0HMpOLK60HsdjNbHgCqsTtFXz6YRr8Dpti0JKvvw2rrZT+PcAXB7XdUsXC8Od7gFfLUpZV9z7m0DSYkMEIj6vSesNcusSQt43BQWjUTgMU93GyWA/2H2p/4EjSId3nwX4fr4Xl1gHqWnHJlArPL5i2gMZUCl3hahjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vY1a0UwEUDlkW47d6bo8UfLYVYbnoqXDcgELYQddXN4=;
- b=L9vLPukiOjc2fQt7kBYB6ic2UpgdahfC2VGn0aaKgvFXHuj4tldggKTEM6X/VgtQ3Vd5SwRpHcrvC8KnFDoTiF84+rdpE0fBmwS3htOy88XT+1fDaXRbZaQD2FN2qJRJAgD/K5RqosaQ7CRv0diXVgsffPpBxOTqdQBhnkt+F89+e3zoTpdW+73FSw/WRUkMyOZ9v2ppaRyYjoaoZw2xIKLOjXm11b6WjSHubjqtZL9fICO5mRkJPSolxU8WxJzH4rwA/v4qqy9yr5AXTg1ug+VEpjd2loOUmKbKI02J+0xLEQrPEYlj2xd+gafj7ma5c+VcaOBdup1vYDiVozQ0+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vY1a0UwEUDlkW47d6bo8UfLYVYbnoqXDcgELYQddXN4=;
- b=cuhLjYQOTWbET3ZoMDzEC6AMOhmals4oTGrqbC9iqYRVjgvIRfLhp1+kLErBj2Itet1EIs1bHcon+KT16Z4nzcUNlsMFEB8SKcvOXB9Hx+OxTPPeuuHd5tvgRSMBIQCytGq+OBUY5wgx2lt3Wt4sc9gagTcq8+plbbjWZOqbtfM=
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
- by BL3PR12MB6451.namprd12.prod.outlook.com (2603:10b6:208:3ba::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.26; Thu, 8 Aug
- 2024 01:37:47 +0000
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::3d09:f15f:d888:33a8]) by LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::3d09:f15f:d888:33a8%5]) with mapi id 15.20.7828.023; Thu, 8 Aug 2024
- 01:37:47 +0000
-X-SNPS-Relay: synopsys.com
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: Kyle Tso <kyletso@google.com>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "raychi@google.com" <raychi@google.com>,
-        "badhri@google.com" <badhri@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "royluo@google.com" <royluo@google.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: dwc3: Runtime get and put usb power_supply handle
-Thread-Topic: [PATCH v3] usb: dwc3: Runtime get and put usb power_supply
- handle
-Thread-Index: AQHa5krbJOjr5sXVeUWyTPcKNhufO7Ia5CIAgABVFgCAAWFSgA==
-Date: Thu, 8 Aug 2024 01:37:47 +0000
-Message-ID: <20240808013743.tgvfjqgdtxluz52i@synopsys.com>
-References: <20240804084612.2561230-1-kyletso@google.com>
- <20240806232836.52rkn7u3g5uiotn3@synopsys.com>
- <CAGZ6i=1v6+Jt3Jecd3euNnumVK781U9DQvRz7cHWnxi8Ga6W=g@mail.gmail.com>
-In-Reply-To:
- <CAGZ6i=1v6+Jt3Jecd3euNnumVK781U9DQvRz7cHWnxi8Ga6W=g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|BL3PR12MB6451:EE_
-x-ms-office365-filtering-correlation-id: 06fcd06e-ce9c-4fd1-c5fb-08dcb74ab502
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?Y3lGVmRleEJKWE5iejk0cU96T0hlN1ZuY1lrZGYyaCtDMTRDQ2R5eTJYNmNU?=
- =?utf-8?B?MHpmdUJRRHk0U3RGZjVES29UamJkRUlDYStLT1RMN3dXV1hKL2VQaXJGclFk?=
- =?utf-8?B?ZzQvL2hpMk1WdGNRSDRrZlo1S2dFUWo5RmNJVnduNFhLTCs3dmU5Tk03VzJj?=
- =?utf-8?B?dTB3Mk9yb2FxT1ZuTnNMclF5TEhNSStqYUJUTjVHdnl4Rld4c204TURWSDl1?=
- =?utf-8?B?Z3BuS0FkcnpNdjF4Z04xamZieGM4K0hHZTBjTzJBdGlFVDlqZnRzL1cwUGZj?=
- =?utf-8?B?VE5MWGNlUmowZWR1VDhISTd6NlNVV2ZPdTA0THZVSDBHcXBMT2djcDFlT1l4?=
- =?utf-8?B?VVFhTUtDQklhRjkwYzh3ODRjRXFpaThVNnR2ZitmZUh0R1F6WmYrU2VLUWFV?=
- =?utf-8?B?RlQvci92YlVKWVA2cVhKWElIbHNvaGthWlN3NVdXcitlYkE4MXJPQ0lKNzhj?=
- =?utf-8?B?eE1ma0tvQzZSZnM2VjRvWTkra1gyMm8xSTNwcDNrQjBxd2hvMGo1VWh2WllX?=
- =?utf-8?B?Q0VXMmNMbnlxZWpzVmFUS1ZzNXB3K2NOWlJXZ1UvaGdoQnRIQXlNMWNXNi9a?=
- =?utf-8?B?aHFYYitFeE5MRTZyVG1Yc1NvR01pTW5udk4vbU40OHJtQ3pXWVE4a3BmR1hi?=
- =?utf-8?B?dGVpMG9XMXVteEZVWll1a1FqdGdXQ1JJOFRCZVRUZWU0UHdZRUJoanBHa1Bp?=
- =?utf-8?B?eFkvMmROM3Q4UE8wOVlNcDJrRVRqZCtJeDNXdWxYbGZZZDBOa1oyZk92TU40?=
- =?utf-8?B?QlIyU1RERm9UVGtjTmxPbnVSRElsSEM5YW1zRDVqditjR0NaTDV3aGRkc2gx?=
- =?utf-8?B?UEhTa3o4OFRVMmFEMGpjSVNha2IvS2o3MXpiQWdQUHR1YkZPU2o3dlR0QlYx?=
- =?utf-8?B?L1V3Umt3K25HaERaRlZOWkEvY1ZGeXdQOVdvQzllWjg3UGFzbnNCaStXbk1C?=
- =?utf-8?B?NWhOb1A2cm0yeTRZUUw1Rnk1ZVR6Z3I5TXBpY3pCRXJBRFFzeEoyd0pheUFJ?=
- =?utf-8?B?R2tubGJDRnBlcGZicXZPdlZKSnJrZ285MmdQVm9UZThOSFMrQS9UNi9oSUc2?=
- =?utf-8?B?Rk0zdmxHY1crYmlURHFFWkFkU0lrZXJSaWFqWnNEY3hlelIrQmdHWmhXVE9F?=
- =?utf-8?B?UzRxK25HSVJXeWF0V2lvVjk4MlpUeXlIa1VMWGx3dmR0WWtQaTZGWjVnRm04?=
- =?utf-8?B?eXU0U25CK2loTkJ0WWdUczZhY1BmZzVWa2tqZmZjSVlFUHdYOVhsaHhHRWhy?=
- =?utf-8?B?VTFIbklSbEpzNWl4WTlOOWxEcVNqZlMxdG1saVBVV3dVNzlRaExUaS9PVTht?=
- =?utf-8?B?dk5vQm84dTE3VU9wcDlIUzJ1RTh6aVlmb3Rnb1lMTDVtR3l2Q0YvR0c0WkJZ?=
- =?utf-8?B?eU40QmUxMThZdTNoYm5qTlhVMVFTdUpaV3JaajZMbG8rUHpVVGJtYlJCV2c4?=
- =?utf-8?B?MmVTd3c1ZThWVkxObkUwbVgyNmJla0ZOOXNKZFU3WGNlOGd4cFljKy9ReFdt?=
- =?utf-8?B?elNMbTFCcHVJb0d3M1VJcm5nc3hjaFo3MkgzaWZUM0p0UkI5bG1HZ1dIZUg5?=
- =?utf-8?B?VVg5clB4V0RYZFlEWTdFaDlIdmsrM3RLYXA5SmwxMnRBTjdyQkZ4TUlJKzF0?=
- =?utf-8?B?NnNtT3pxdUMvd0paRzVvREFIUkpKZ1UzQ1Iyc2c3L3dhOHVjSFBsek8zaW9K?=
- =?utf-8?B?ZmNOWW9ENnUyQVN3SlVzaGw0M3JYY205WWZmendxQXJOR1cvQ2N0MENvdmpE?=
- =?utf-8?B?TzdUNVVwWTZFVHZVclFpWTF0S3VzQTFReVZ5aC9hRVZ3VW9hcy9qUDV4dTUz?=
- =?utf-8?B?ditvWkZiUkNtZS80MG05UzZDM1lQKzFGanVYS1RMUkJDUk4xWTczLzlPa0RW?=
- =?utf-8?B?ZU5VWC9FcUtFODQyU2MzanVIYmtDZmhYaGpUMzJpSDZqS2c9PQ==?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?eHUwV0s0dmpIRk9ud0p5Y0t6UnJVU21OTEhLL2lGVlNDM09NTjNNN0tLR1l1?=
- =?utf-8?B?aU1tOE1kd3puRjYwb3JQZXZNcXllL1lQd3RWditlTUgxTUhsaEF1K2dJOC9t?=
- =?utf-8?B?bHhqdmVPRDNlZlljZHV0emtzT051ZnNrazNCNjBtam10OStyOUJmRldWQnNT?=
- =?utf-8?B?ZHFURC9kMlVqaWt1Q3VGQzV2YjBjUkphRW5Lb1ZTSUQ0N09nRW51S2Z5Vyta?=
- =?utf-8?B?VHpKcnoyeXJRb3FIZ0dhYkhLK1EyT0pjMEhEYWNFS1A2WXV4SkhwaS82c0lH?=
- =?utf-8?B?a2J6MWRXeE80Wnhla29BSzdSOFMwUkg2VUFJNzVqTmQwd0FaM01zaVpySzhE?=
- =?utf-8?B?Yi9iamZmUnNvSGI2Mm4vYnJuM3BLRG42L0JGM01KYVk1R0dxR3pUa2lWYkF3?=
- =?utf-8?B?bXhDb0k5Y2g3TE9HcmFYcUJVYnk2NFg3bTFBSFg0bHc4Y0JHQmY1c0VnVklI?=
- =?utf-8?B?U3VoSkk1Qkd2dS9tN0k1UGY0Q2pmSEtpL3MzdVp2VjRESXVwY3ErUmVVeTgr?=
- =?utf-8?B?YmR6QlZCeHVWc2VKSWhNbm9ubVNtVUJncWdYbncvM1licE5RblVUMFRHVHky?=
- =?utf-8?B?MTViMlc3dzVPbW00c3BjcG00UXp5bXVHS1ZGOXdUZERjWTYzZDM1bHRaK0JG?=
- =?utf-8?B?UlRnbVp0UjFvdXg0emRuMHZKWVcrUGI1dDJLcktVZVJUWGFHL0VBaWV3N2JZ?=
- =?utf-8?B?TUJKamVwbEdCdnl6empWemkxbXN4Z0ZJWlJhT3pCazRYQmhnWTdjTmtvMHJ4?=
- =?utf-8?B?SENBbDVLbFdJUm04MFNBVVlPcFM4OC9iSUcxQ2haZTJwNWdOaTRiV0c5OHpI?=
- =?utf-8?B?Y3cxYS8weHNqMzhIMEdsQW5aZnlvdlI5bndITVFyc3EreFF5REJGVktRY2ZF?=
- =?utf-8?B?azVFNEZtZk9NWTZ4aWZxL0RYL29rZ3FQdGpNWVlFUllXdCtFLzVSSGdrQzBn?=
- =?utf-8?B?cEVDV3U2S1FESTZUWTlnYmUvb0lidmlWWlM3Tm9BZHl4RU9hWE5qVXBmTnlo?=
- =?utf-8?B?eE5veTg1dHUrVVpmMVZTM1V2TzlpQ0JnTVFCenFDTFBld0Z2dFovV3MrVXhS?=
- =?utf-8?B?eGZpbEthbDRHSHlaMHBmclkrQ3pqa1ZSNm1DQmw0Z08yRTArZ0haMXYwaHQ1?=
- =?utf-8?B?czBwTDJjRjFOVEx1RndIWTJCRStGVzg4OWhUTWVvbFhRVkw0NFlxcDB2VTI1?=
- =?utf-8?B?Ny8zMnZ1N2ZWMllNVkFWQkU0TytrOXJXZGdPajlhWm5hdE1YcUdvcjV3Mkhn?=
- =?utf-8?B?ZGZ2V0IvbWlucDErcnBUQjRTWEw4NEhlVGZvZ2lVWlZiWVF6bU12VXhXbzNs?=
- =?utf-8?B?Uzg2V2prMm5rZHlZUWFnbkJUeXFDTWNtUG9WSWc5TFpoZVF3czBteVdqb04w?=
- =?utf-8?B?U21WK0cwVHltUkJzTkZQZjl2SWU1dmJHeVBPREY2eGk4M1puVVZtbFB6WSta?=
- =?utf-8?B?eEFkcGtIeGk1MlBkTTYvbFo2S01Bb1F1MGxoMm1iYStGTGVlanJKSWh0RCtO?=
- =?utf-8?B?YkYrQVpFUnZQRVlVY3FnWFZ5aTBwM1A0NVNjR3dkdG1sMEg4TFNFMisvdTV2?=
- =?utf-8?B?WndnendrenFocUdCNCtwUm9ob0hycFphYm8vNFgzS0E4S2xaR21wVDkvU2RU?=
- =?utf-8?B?b09QQjRWN3FGV1VXWjJPTmdaOGxBd2VOVU5XTzA2aFk0VHpMWTVBcDJUeXNx?=
- =?utf-8?B?b0l4SnkreHZmNEY0QUhLYWRJWXAvUVdUWGVkY1YvbEtEVVNmaEJDKzFrb1B3?=
- =?utf-8?B?Q2JLanpPRU5kNDAvZTlJYnpRUVZQZUUwaWdWMWJBanBMMDlFMWUrSThMRi9C?=
- =?utf-8?B?U1lFODhOZldLdnJGOS93VjZkSjRta0tvbVlMd3E3REhqMU9rd0dVSFhRbE9x?=
- =?utf-8?B?QkMwU1Nad2hPNVVwb2g3aUJlR3A5Z2FPSXlDN2JGeGVmakpYWkhWSEZGM01l?=
- =?utf-8?B?bG13THNzVU9md2ZDQmtFNWFReThoUkxWL2lEbk9yVDF0alk0Sm9LREMvRm5W?=
- =?utf-8?B?SGtUa05saW82T3YxK3o3blRJWEdqSHpSaFc0MUFPbHR6MHo1dVVtTzZQZUtu?=
- =?utf-8?B?ejNwUXBYeWxYRDhsanZJUThWOGxTdHR5Z0JCanIvc2xuNUtzZWoxYjl5S28v?=
- =?utf-8?Q?AjrgTLVRyaFzi9GfZk5uTI5lk?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2DE73374270BAE41850E9C3BB5AF4AC6@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0F633F7
+	for <linux-usb@vger.kernel.org>; Thu,  8 Aug 2024 04:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723091914; cv=none; b=okJg2Qq5KIUXLvjRfiyB6rFE8yS68qCc6YsdoUTfOCh0zM1rYg+jxrn1NZUKXdasi4qLe6F00EtIbLzYUCuCCN8ltcygyBUw/MkxzJlPqVxAe3GWgX/5n6MspTsTW4szCO8kMGhgKrdzfsVNohXxNnC2ZPqFEJJ4czY/YeSZG80=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723091914; c=relaxed/simple;
+	bh=B2esHlfLEmnM6Lwsv/7z3Zn1L6ipdenO8iHp/X7U8rU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=EBK2z1/H81HKeAi59E38IR33QablfXrZfvz/O8pid6cnFGEIbM8wlrJIwe71x4Keaf/8WFFcKPBNQnVECNQ+MlgKLcczQ227CHcpsKBwpmeVunRIQ5u3gfc0BuI/VUdAy+ePTQ5I+JehU0GhjSx7+Lz6YngKFb04o4iGPClkMAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ES1EfYZ5; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723091911; x=1754627911;
+  h=date:from:to:cc:subject:message-id;
+  bh=B2esHlfLEmnM6Lwsv/7z3Zn1L6ipdenO8iHp/X7U8rU=;
+  b=ES1EfYZ50GCm3CLlRHBJQ7aVP03Gb2kvhSu/QztSSZ5zFMHXlUNB+33a
+   MGcYn3vDMPYMLBs0M6E438PoEUWB8Jd0Umi3Ru64LOs2T07uEzY/umSIq
+   XZz1B0ZWf3YzrIvfA+U9deBvofJORNcOLfUdQaNuCYIwxtqqe8KO7t7am
+   LdowxAdeIlJXgnstPW9FZ9cSZKq3EDsciiF7NyRb1EFg8wUBvt6BxZAaH
+   eW9PxujrsGuh57ZyXwenzUjnEjnAoW86OJhZPHiI3WrlVjqRSXyNMxP2e
+   y/X/nrWIj+SdG1ZGckmGSfOTyPDgyWDavg3qypcoNafxTXZ27WlGxPfE+
+   Q==;
+X-CSE-ConnectionGUID: r0T5wSq5Tl+sfo9qKGZzuA==
+X-CSE-MsgGUID: 2CaP3GkaQQmixUiGJPSuWQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11157"; a="43716356"
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="43716356"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 21:38:30 -0700
+X-CSE-ConnectionGUID: zy+jc8HPTQyeHsB5LqZ7Xg==
+X-CSE-MsgGUID: os1TqRn7TmyfEWHwdwal5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="87747356"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 07 Aug 2024 21:38:29 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sbuto-0005wE-20;
+	Thu, 08 Aug 2024 04:37:44 +0000
+Date: Thu, 08 Aug 2024 12:36:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 25f51b76f90f10f9bf2fbc05fc51cf685da7ccad
+Message-ID: <202408081220.nb7t6LJE-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	lGJFW1gNkWchzkl8pCW3oAlq0v/O8Smy0YfyqiyI3MuOnCytDengzmf4A3v3hl1dYcKv/5l3zz+YXI0rM7NwzFd9Wu08UlBBq01teMSCWlWOghbvQEM/pNZ6+jK7lGgeB8djInVZbOJiiXiUNN11Quc79nTOq9hCVqJkLIc/xWBNJnVFvxW6hGABP+CmsjSnhed5++R+6qYW9TlIQ9mmTuvqJTErRknGmcbQml7VonjQlcqkAiZTS0gEsAPDMwkG2UJV0vi+gimf7sFdE/0jb2Qk+iyvGhzdlpMpYN0X+3QOUhvADzCarIdj7pnOoMlg6IZUGN3Kfk/1PehIMPaIMtgGUpd1Y/TAeh+GWWXBo+QV5263YGI6auspHdmq1T88OPgx4MCDW42QfHZpL0sm/KfIWlpGexBf6yK6aiITl9OR1BjL09atxEyceF6xOMW+5L1j9M9PYxKSEKznFyKQj340f11khsr8cnaa9jnsB07PedB5o8KGyM3N4WGByIze9Y9i8W3jSu3WdHOqzrsfEElFpNJUHTpWuEmtNn8zMbB9JwQYjlSaWSMPw1ZvMH7iXVB5a2ss7smNMPX9R2oS01ThbjORepzexcpi8aRUdjP0Ns76emvWxivDpAW0bsVLSE75bxqlNkjJe804ewH2hA==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06fcd06e-ce9c-4fd1-c5fb-08dcb74ab502
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2024 01:37:47.1882
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1HpVOkmSmx+Juk4611bmNbQ2hxBHtN0bm6yTAW4PpgySEk2KieKIdJo7GkIvkPr/XeuKr8t3U0ovU+i+UYO3Cg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6451
-X-Proofpoint-GUID: sJ4RLeLVU_xMIHsz3kdLmKrYhJtPKnCv
-X-Proofpoint-ORIG-GUID: sJ4RLeLVU_xMIHsz3kdLmKrYhJtPKnCv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-07_15,2024-08-07_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- mlxscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=858 clxscore=1015 suspectscore=0 phishscore=0 spamscore=0
- bulkscore=0 impostorscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408080010
 
-T24gV2VkLCBBdWcgMDcsIDIwMjQsIEt5bGUgVHNvIHdyb3RlOg0KPiBPbiBXZWQsIEF1ZyA3LCAy
-MDI0IGF0IDc6MjnigK9BTSBUaGluaCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+
-IHdyb3RlOg0KPiA+DQo+ID4gT24gU3VuLCBBdWcgMDQsIDIwMjQsIEt5bGUgVHNvIHdyb3RlOg0K
-PiA+ID4gSXQgaXMgcG9zc2libGUgdGhhdCB0aGUgdXNiIHBvd2VyX3N1cHBseSBpcyByZWdpc3Rl
-cmVkIGFmdGVyIHRoZSBwcm9iZQ0KPiA+DQo+ID4gU2hvdWxkIHdlIGRlZmVyIHRoZSBkd2MzIHBy
-b2JlIHVudGlsIHRoZSBwb3dlcl9zdXBwbHkgaXMgcmVnaXN0ZXJlZA0KPiA+IHRoZW4/DQo+ID4N
-Cj4gDQo+IFdlIGNhbiBkbyB0aGF0LCBidXQgZ2V0dGluZyB0aGUgcG93ZXJfc3VwcGx5IHJlZmVy
-ZW5jZSBqdXN0IGJlZm9yZQ0KPiB1c2luZyB0aGUgcG93ZXJfc3VwcGx5IEFQSXMgaXMgc2FmZXIg
-YmVjYXVzZSB3ZSBkb24ndCByaXNrIHdhaXRpbmcgZm9yDQo+IHRoZSByZWdpc3RyYXRpb24gb2Yg
-dGhlIHVzYiBwb3dlcl9zdXBwbHkuIElmIHZidXNfZHJhdyBpcyBiZWluZyBjYWxsZWQNCg0KSSdt
-IGEgYml0IGNvbmZ1c2VkLCB3b3VsZG4ndCB3ZSBuZWVkIHRoZSBwb3dlcl9zdXBwbHkgdG8gYmUg
-cmVnaXN0ZXJlZA0KYmVmb3JlIHlvdSBjYW4gZ2V0IHRoZSByZWZlcmVuY2UuIENhbiB5b3UgY2xh
-cmlmeSB0aGUgcmlzayBoZXJlPw0KDQo+IGJ1dCB0aGUgdXNiIHBvd2VyX3N1cHBseSBpcyBzdGls
-bCBub3QgcmVhZHksIGp1c3QgbGV0IGl0IGZhaWwgd2l0aG91dA0KPiBkb2luZyBhbnl0aGluZyAo
-b25seSBwcmludCB0aGUgZXJyb3IgbG9ncykuIFRoZSB1c2IgZ2FkZ2V0IGZ1bmN0aW9uDQo+IHN0
-aWxsIHdvcmtzLiBBbmQgb25jZSB0aGUgdXNiIHBvd2VyX3N1cHBseSBpcyByZWFkeSwgdGhlIHZi
-dXNfZHJhdw0KPiB3aWxsIGJlIGZpbmUgaW4gZm9sbG93aW5nIHVzYiBzdGF0ZSBjaGFuZ2VzLg0K
-PiANCj4gTW9yZW92ZXIsIGFsbCBkcml2ZXJzIHVzaW5nIHBvd2VyX3N1cHBseV9nZXRfYnlfbmFt
-ZSBpbiB0aGUgc291cmNlDQo+IHRyZWUgYWRvcHQgdGhpcyB3YXkuIElNTyBpdCBzaG91bGQgYmUg
-b2theS4NCj4gDQo+ID4gPiBvZiBkd2MzLiBJbiB0aGlzIGNhc2UsIHRyeWluZyB0byBnZXQgdGhl
-IHVzYiBwb3dlcl9zdXBwbHkgZHVyaW5nIHRoZQ0KPiA+ID4gcHJvYmUgd2lsbCBmYWlsIGFuZCB0
-aGVyZSBpcyBubyBjaGFuY2UgdG8gdHJ5IGFnYWluLiBBbHNvIHRoZSB1c2INCj4gPiA+IHBvd2Vy
-X3N1cHBseSBtaWdodCBiZSB1bnJlZ2lzdGVyZWQgYXQgYW55dGltZSBzbyB0aGF0IHRoZSBoYW5k
-bGUgb2YgaXQNCj4gPg0KPiA+IFRoaXMgaXMgcHJvYmxlbWF0aWMuLi4gSWYgdGhlIHBvd2VyX3N1
-cHBseSBpcyB1bnJlZ2lzdGVyZWQsIHRoZSBkZXZpY2UNCj4gPiBpcyBubyBsb25nZXIgdXNhYmxl
-Lg0KPiA+DQo+ID4gPiBpbiBkd2MzIHdvdWxkIGJlY29tZSBpbnZhbGlkLiBUbyBmaXggdGhpcywg
-Z2V0IHRoZSBoYW5kbGUgcmlnaHQgYmVmb3JlDQo+ID4gPiBjYWxsaW5nIHRvIHBvd2VyX3N1cHBs
-eSBmdW5jdGlvbnMgYW5kIHB1dCBpdCBhZnRlcndhcmQuDQo+ID4NCj4gPiBTaG91bGRuJ3QgdGhl
-IGxpZmUtY3ljbGUgb2YgdGhlIGR3YzMgbWF0Y2ggd2l0aCB0aGUgcG93ZXJfc3VwcGx5PyBIb3cN
-Cj4gPiBjYW4gd2UgbWFpbnRhaW4gZnVuY3Rpb24gd2l0aG91dCB0aGUgcHJvcGVyIHBvd2VyX3N1
-cHBseT8NCj4gPg0KPiA+IEJSLA0KPiA+IFRoaW5oDQo+ID4NCj4gDQo+IHVzYiBwb3dlcl9zdXBw
-bHkgaXMgY29udHJvbGxlZCBieSAiYW5vdGhlciIgZHJpdmVyIHdoaWNoIGNhbiBiZQ0KPiB1bmxv
-YWRlZCB3aXRob3V0IG5vdGlmeWluZyBvdGhlciBkcml2ZXJzIHVzaW5nIGl0IChzdWNoIGFzIGR3
-YzMpLg0KPiBVbmxlc3MgdGhlcmUgaXMgYSBub3RpZmljYXRpb24gbWVjaGFuaXNtIGZvciB0aGUg
-KHVuKXJlZ2lzdHJhdGlvbiBvZg0KPiB0aGUgcG93ZXJfc3VwcGx5IGNsYXNzLCBnZXR0aW5nL3B1
-dHRpbmcgdGhlIHJlZmVyZW5jZSByaWdodA0KPiBiZWZvcmUvYWZ0ZXIgY2FsbGluZyB0aGUgcG93
-ZXJfc3VwcGx5IGFwaSBpcyB0aGUgYmVzdCB3ZSBjYW4gZG8gZm9yDQo+IG5vdy4NCj4gDQoNClRo
-ZSBwb3dlcl9zdXBwbHkgZHJpdmVyIHNob3VsZCBub3QgYmUgYWJsZSB0byB1bmxvYWQgd2hpbGUg
-dGhlIGR3YzMNCmhvbGRzIHRoZSBwb3dlcl9zdXBwbHkgaGFuZGxlIGR1ZSB0byBkZXBlbmRlbmN5
-IGJldHdlZW4gdGhlIHR3by4gV2h5DQp3b3VsZCB3ZSB3YW50IHRvIHJlbGVhc2UgdGhlIGhhbmRs
-ZSB3aGlsZSBkd2MzIHN0aWxsIG5lZWRzIGl0Lg0KDQpUaGlzIGNyZWF0ZXMgYW4gdW5wcmVkaWN0
-YWJsZSBiZWhhdmlvciB3aGVyZSBzb21ldGltZSB2YnVzIGNhbiBiZSBkcmF3bg0KYW5kIHNvbWV0
-aW1lIGl0IGNhbid0LiBZb3VyIHNwZWNpZmljIGdhZGdldCBmdW5jdGlvbiBtYXkgd29yayBmb3Ig
-aXRzDQpzcGVjaWZpYyBwdXJwb3NlLCBzb21lIG90aGVyIG1heSBub3QgYXMgaXRzIHZidXNfZHJh
-dyBtYXkgYmUgZXNzZW50aWFsDQpmb3IgaXRzIGFwcGxpY2F0aW9uLg0KDQpCUiwNClRoaW5o
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 25f51b76f90f10f9bf2fbc05fc51cf685da7ccad  xhci-pci: Make xhci-pci-renesas a proper modular driver
+
+Warning ids grouped by kconfigs:
+
+recent_errors
+|-- arm64-randconfig-051-20240807
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clock-names:sleep-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp441.dtb:usb-8af8800:clocks:is-too-long
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clock-names:sleep-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp442.dtb:usb-8af8800:clocks:is-too-long
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clock-names:sleep-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp468.dtb:usb-8af8800:clocks:is-too-long
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clock-names:core-iface-sleep-mock_utmi-is-too-long
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clock-names:mock_utmi-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clock-names:sleep-was-expected
+|   |-- arch-arm64-boot-dts-qcom-ipq5332-rdp474.dtb:usb-8af8800:clocks:is-too-long
+|   |-- arch-arm64-boot-dts-ti-k3-am642-evm-nand.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-ti-k3-am642-evm.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-ti-k3-am642-hummingboard-t-pcie.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-ti-k3-am642-hummingboard-t-usb3.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-ti-k3-am642-hummingboard-t.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-ti-k3-am642-phyboard-electra-rdk.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-ti-k3-am642-sk.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   `-- arch-arm64-boot-dts-ti-k3-am642-tqma64xxl-mbax4xxl.dtb:cdns-usb-f900000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+`-- powerpc-randconfig-051-20240807
+    |-- arch-powerpc-boot-dts-asp834x-redboot.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-b4420qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-b4420qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-b4860qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-b4860qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-bsc9131rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-bsc9131rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-bsc9132qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-bsc9132qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-cyrus_p5020.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-cyrus_p5020.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-ge_imp3a.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-ge_imp3a.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-kmcent2.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-kmcoge4.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds.dtb:usb-2b000:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds.dtb:usb-2b000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds_36b.dtb:usb-2b000:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds_36b.dtb:usb-2b000:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-mpc8536ds_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-mvme2500.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-mvme2500.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-oca4080.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_32b.dtb:usb:phy_type-is-a-required-property
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_36b.dtb:usb:phy_type-is-a-required-property
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core0.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core0.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core0.dtb:usb:phy_type-is-a-required-property
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core1.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core1.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core1.dtb:usb:phy_type-is-a-required-property
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pd.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pd.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pd.dtb:usb:phy_type-is-a-required-property
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020rdb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1021mds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1021mds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1022ds_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1022ds_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1022ds_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1022ds_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1022rdk.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1022rdk.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1023rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1023rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1024rdb_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1024rdb_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1024rdb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1024rdb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1025rdb_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1025rdb_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1025rdb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1025rdb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p1025twr.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p1025twr.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p2020ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p2020ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p2020rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p2020rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p2041rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p2041rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p3041ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p3041ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p4080ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p4080ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p5020ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p5020ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-p5040ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-p5040ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1023rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1023rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1023rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1024qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1024qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1024qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1024rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1024rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1024rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1040d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040d4rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1040qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1040rdb-rev-a.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040rdb-rev-a.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040rdb-rev-a.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1040rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1040rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1042d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042d4rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1042qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1042rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t1042rdb_pi.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042rdb_pi.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t1042rdb_pi.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t2080qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t2080qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t2080qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t2080rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t2080rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t2080rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t2081qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t2081qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t2081qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t4240qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t4240qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t4240qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-fsl-t4240rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t4240rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-fsl-t4240rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-powerpc-boot-dts-mpc8308_p1m.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8308rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8313erdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-sleep-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8315erdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8349emitx.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8349emitxgp.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8377_rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-sleep-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8377_wlan.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-sleep-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8378_rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-sleep-were-unexpected)
+    |-- arch-powerpc-boot-dts-mpc8379_rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-sleep-were-unexpected)
+    |-- arch-powerpc-boot-dts-turris1x.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
+    `-- arch-powerpc-boot-dts-turris1x.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+
+elapsed time: 992m
+
+configs tested: 213
+configs skipped: 9
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc-13.2.0
+alpha                             allnoconfig   gcc-13.3.0
+alpha                            allyesconfig   gcc-13.3.0
+alpha                               defconfig   gcc-13.2.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                          axs101_defconfig   gcc-13.2.0
+arc                                 defconfig   gcc-13.2.0
+arc                   randconfig-001-20240808   gcc-13.2.0
+arc                   randconfig-002-20240808   gcc-13.2.0
+arm                              allmodconfig   gcc-13.2.0
+arm                              allmodconfig   gcc-14.1.0
+arm                               allnoconfig   clang-20
+arm                               allnoconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-14.1.0
+arm                                 defconfig   gcc-13.2.0
+arm                          moxart_defconfig   gcc-14.1.0
+arm                        neponset_defconfig   gcc-13.2.0
+arm                   randconfig-001-20240808   gcc-13.2.0
+arm                   randconfig-002-20240808   gcc-13.2.0
+arm                   randconfig-003-20240808   gcc-13.2.0
+arm                   randconfig-004-20240808   gcc-13.2.0
+arm                             rpc_defconfig   gcc-13.2.0
+arm                         s3c6400_defconfig   gcc-13.2.0
+arm                           stm32_defconfig   gcc-13.2.0
+arm64                            allmodconfig   clang-20
+arm64                            allmodconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-14.1.0
+arm64                               defconfig   gcc-13.2.0
+arm64                 randconfig-001-20240808   gcc-13.2.0
+arm64                 randconfig-002-20240808   gcc-13.2.0
+arm64                 randconfig-003-20240808   gcc-13.2.0
+arm64                 randconfig-004-20240808   gcc-13.2.0
+csky                              allnoconfig   gcc-13.2.0
+csky                              allnoconfig   gcc-14.1.0
+csky                                defconfig   gcc-13.2.0
+csky                                defconfig   gcc-14.1.0
+csky                  randconfig-001-20240808   gcc-13.2.0
+csky                  randconfig-002-20240808   gcc-13.2.0
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   clang-20
+hexagon                          allyesconfig   clang-20
+i386                             alldefconfig   gcc-14.1.0
+i386                             allmodconfig   clang-18
+i386                             allmodconfig   gcc-12
+i386                              allnoconfig   clang-18
+i386                              allnoconfig   gcc-12
+i386                             allyesconfig   clang-18
+i386                             allyesconfig   gcc-12
+i386         buildonly-randconfig-001-20240808   clang-18
+i386         buildonly-randconfig-002-20240808   clang-18
+i386         buildonly-randconfig-002-20240808   gcc-12
+i386         buildonly-randconfig-003-20240808   clang-18
+i386         buildonly-randconfig-004-20240808   clang-18
+i386         buildonly-randconfig-005-20240808   clang-18
+i386         buildonly-randconfig-006-20240808   clang-18
+i386         buildonly-randconfig-006-20240808   gcc-12
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240808   clang-18
+i386                  randconfig-001-20240808   gcc-12
+i386                  randconfig-002-20240808   clang-18
+i386                  randconfig-002-20240808   gcc-12
+i386                  randconfig-003-20240808   clang-18
+i386                  randconfig-004-20240808   clang-18
+i386                  randconfig-004-20240808   gcc-12
+i386                  randconfig-005-20240808   clang-18
+i386                  randconfig-005-20240808   gcc-12
+i386                  randconfig-006-20240808   clang-18
+i386                  randconfig-006-20240808   gcc-12
+i386                  randconfig-011-20240808   clang-18
+i386                  randconfig-012-20240808   clang-18
+i386                  randconfig-012-20240808   gcc-11
+i386                  randconfig-013-20240808   clang-18
+i386                  randconfig-014-20240808   clang-18
+i386                  randconfig-014-20240808   gcc-11
+i386                  randconfig-015-20240808   clang-18
+i386                  randconfig-015-20240808   gcc-12
+i386                  randconfig-016-20240808   clang-18
+i386                  randconfig-016-20240808   gcc-12
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-13.2.0
+loongarch                         allnoconfig   gcc-14.1.0
+loongarch                           defconfig   gcc-13.2.0
+loongarch             randconfig-001-20240808   gcc-13.2.0
+loongarch             randconfig-002-20240808   gcc-13.2.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-13.2.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                         apollo_defconfig   gcc-14.1.0
+m68k                                defconfig   gcc-13.2.0
+m68k                       m5275evb_defconfig   gcc-14.1.0
+m68k                       m5475evb_defconfig   gcc-13.2.0
+m68k                        mvme16x_defconfig   gcc-14.1.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-13.2.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-14.1.0
+mips                        bcm47xx_defconfig   gcc-13.2.0
+mips                         db1xxx_defconfig   gcc-14.1.0
+mips                     decstation_defconfig   gcc-14.1.0
+mips                     loongson1b_defconfig   gcc-14.1.0
+mips                         rt305x_defconfig   gcc-14.1.0
+mips                   sb1250_swarm_defconfig   gcc-13.2.0
+nios2                             allnoconfig   gcc-13.2.0
+nios2                             allnoconfig   gcc-14.1.0
+nios2                               defconfig   gcc-13.2.0
+nios2                 randconfig-001-20240808   gcc-13.2.0
+nios2                 randconfig-002-20240808   gcc-13.2.0
+openrisc                          allnoconfig   gcc-14.1.0
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-14.1.0
+openrisc                       virt_defconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   gcc-14.1.0
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-14.1.0
+parisc                generic-32bit_defconfig   gcc-13.2.0
+parisc                randconfig-001-20240808   gcc-13.2.0
+parisc                randconfig-002-20240808   gcc-13.2.0
+parisc64                            defconfig   gcc-13.2.0
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   gcc-14.1.0
+powerpc                          allyesconfig   clang-20
+powerpc                          allyesconfig   gcc-14.1.0
+powerpc                      chrp32_defconfig   gcc-14.1.0
+powerpc               randconfig-001-20240808   gcc-13.2.0
+powerpc               randconfig-002-20240808   gcc-13.2.0
+powerpc                     skiroot_defconfig   gcc-13.2.0
+powerpc64             randconfig-001-20240808   gcc-13.2.0
+powerpc64             randconfig-002-20240808   gcc-13.2.0
+riscv                            allmodconfig   clang-20
+riscv                            allmodconfig   gcc-14.1.0
+riscv                             allnoconfig   gcc-14.1.0
+riscv                            allyesconfig   clang-20
+riscv                            allyesconfig   gcc-14.1.0
+riscv                               defconfig   gcc-14.1.0
+riscv                    nommu_virt_defconfig   gcc-14.1.0
+riscv                 randconfig-001-20240808   gcc-13.2.0
+riscv                 randconfig-002-20240808   gcc-13.2.0
+s390                             allmodconfig   clang-20
+s390                              allnoconfig   clang-20
+s390                              allnoconfig   gcc-14.1.0
+s390                             allyesconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   gcc-14.1.0
+s390                  randconfig-001-20240808   gcc-13.2.0
+s390                  randconfig-002-20240808   gcc-13.2.0
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-13.2.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-14.1.0
+sh                    randconfig-001-20240808   gcc-13.2.0
+sh                    randconfig-002-20240808   gcc-13.2.0
+sh                      rts7751r2d1_defconfig   gcc-14.1.0
+sh                           se7705_defconfig   gcc-14.1.0
+sh                           se7721_defconfig   gcc-13.2.0
+sh                        sh7757lcr_defconfig   gcc-14.1.0
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-14.1.0
+sparc64               randconfig-001-20240808   gcc-13.2.0
+sparc64               randconfig-002-20240808   gcc-13.2.0
+um                               allmodconfig   clang-20
+um                               allmodconfig   gcc-13.3.0
+um                                allnoconfig   clang-17
+um                                allnoconfig   gcc-14.1.0
+um                               allyesconfig   gcc-12
+um                               allyesconfig   gcc-13.3.0
+um                                  defconfig   gcc-14.1.0
+um                             i386_defconfig   gcc-14.1.0
+um                    randconfig-001-20240808   gcc-13.2.0
+um                    randconfig-002-20240808   gcc-13.2.0
+um                           x86_64_defconfig   gcc-14.1.0
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240808   gcc-12
+x86_64       buildonly-randconfig-002-20240808   gcc-12
+x86_64       buildonly-randconfig-003-20240808   gcc-12
+x86_64       buildonly-randconfig-004-20240808   gcc-12
+x86_64       buildonly-randconfig-005-20240808   gcc-12
+x86_64       buildonly-randconfig-006-20240808   gcc-12
+x86_64                              defconfig   clang-18
+x86_64                              defconfig   gcc-11
+x86_64                randconfig-001-20240808   gcc-12
+x86_64                randconfig-002-20240808   gcc-12
+x86_64                randconfig-003-20240808   gcc-12
+x86_64                randconfig-004-20240808   gcc-12
+x86_64                randconfig-005-20240808   gcc-12
+x86_64                randconfig-006-20240808   gcc-12
+x86_64                randconfig-011-20240808   gcc-12
+x86_64                randconfig-012-20240808   gcc-12
+x86_64                randconfig-013-20240808   gcc-12
+x86_64                randconfig-014-20240808   gcc-12
+x86_64                randconfig-015-20240808   gcc-12
+x86_64                randconfig-016-20240808   gcc-12
+x86_64                randconfig-071-20240808   gcc-12
+x86_64                randconfig-072-20240808   gcc-12
+x86_64                randconfig-073-20240808   gcc-12
+x86_64                randconfig-074-20240808   gcc-12
+x86_64                randconfig-075-20240808   gcc-12
+x86_64                randconfig-076-20240808   gcc-12
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-13.2.0
+xtensa                            allnoconfig   gcc-14.1.0
+xtensa                randconfig-001-20240808   gcc-13.2.0
+xtensa                randconfig-002-20240808   gcc-13.2.0
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
