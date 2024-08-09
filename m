@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-13255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13256-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D479B94C811
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 03:33:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE19194C814
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 03:35:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11E891C21E8D
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 01:33:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6860D1F23967
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 01:35:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18AC18F6B;
-	Fri,  9 Aug 2024 01:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A078F6B;
+	Fri,  9 Aug 2024 01:35:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kBc+/6Kq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqL85Yk3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894CD46B5;
-	Fri,  9 Aug 2024 01:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3761D12E4D;
+	Fri,  9 Aug 2024 01:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723167215; cv=none; b=AvSVl6CO1mhfySWEBtdjuluPQwUJWeiONz/EMK/beydivvEC/a+bL+WhyJn/zmAvHJrpyViL2dRdw0RaGAu8jVgV+Ovay9/ejnzjgW1Zlet7hR9sMBENPNWz+401PQAgpo3dh8f2h+3xcl3WGa7BLUXRWKDNCWCPPZBu2A06/Sk=
+	t=1723167307; cv=none; b=JJZD2/roEz+wHgidT4oigyElWi34heE2eXzKNMA65+E/2WTOsF9mkb4vFpYcyBGEWJalwe25eG9zdMPLiSmp8QbpJKqGiF4AhnMcNjokMKnUSW025Dh9zmWj+B+SrrgGaNH/isIM0/QzdkQUt8m2C53dYYhKW0KqGGiRDgkuN1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723167215; c=relaxed/simple;
-	bh=jM04DU9PwiRiXmlRYkEKsDYtOW/V6HmVi1GnllNw9DA=;
+	s=arc-20240116; t=1723167307; c=relaxed/simple;
+	bh=LFEgXJKSyt4qNIs+K9NqPr2CeVGDWds1sfYfazW1BTQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KQtl3Yboxr3cGHFHQAwKtC1/MOoinUY49MRe4mmALFRPIlvzqY5Mv9k44Z5O0LYiPnjI1dIpVz2doL2osPF+r4akmelZK7mFKDQmisX06p8sruUlh5QSkqFZ2A4jTKV0FSVSIs9dCBg5LE2j+U5kVI1mpyoCUduE62wqTxiEaMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kBc+/6Kq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68CE6C32782;
-	Fri,  9 Aug 2024 01:33:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=NZtqBZ75B9aaIYUbfW9mmidNlrx7tVVE8r3BAfiy3N20rJgcalWPuA9jQlUA3vqzTkCvX95o3FnkacobgOaKOFkGcPy3Ws4LmyErpIeBKd6TmnkCSux4nsc9Uuqtc//fhbrEg9sGr08kax9llDIzrghQ7/8AJkO45CDBlq4HAW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KqL85Yk3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965C2C32782;
+	Fri,  9 Aug 2024 01:35:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723167215;
-	bh=jM04DU9PwiRiXmlRYkEKsDYtOW/V6HmVi1GnllNw9DA=;
+	s=k20201202; t=1723167306;
+	bh=LFEgXJKSyt4qNIs+K9NqPr2CeVGDWds1sfYfazW1BTQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kBc+/6KqlqCmZu3H4y1PnTsBK9UuqqrSMUAOXcF310+tBWQ6Zcw1v6bel69bRi9c/
-	 49VGLYjWggxVyvq/FzO2SToILVkFljvNPP5UopswrHma8bS07B//hM0ccEWwNkH2K6
-	 fZp5Wd13KMle+6RWDavu3m5f2adELNuBPwvNET//Rn+AFZdPsOKZwFYfue+CZdYztz
-	 HOhbYxPmumLDwsVlDsCyi13tdr90ANLN18ivJm6vN0d7ljDpk4j7UnMe0CQAppDRPW
-	 +p1TYjddvg1CHlJq8aHeRpyEwRvBcf/extXBPG3Ewyg9azzl+3PNG2t1k+ajyflr4x
-	 teEyNnQZxqmoQ==
-Date: Fri, 9 Aug 2024 09:33:25 +0800
+	b=KqL85Yk3ejYMz8Cra0kodYqHmbn4RRx2NUY3Xg8grpIYaLBIRb3xadrdtF1VfTwD8
+	 +eMEm8zqkzE8umViToR2Whe/HGGN/M5s84rlPR3TZjsTRc7JdtvSheqLIc0pPiArRk
+	 edFvIyBpLm1qfJr2uwE6d6aOKqytpYA7gsrnG8F2QSVPYWaT4TEljz3Wkgbo19mJWJ
+	 lao+Qdf4mB0dXFbNRM+QU3Bzv5kZpYkIwdQk7MtacSBCI4IJ6I7VMFAJoUOEXCvfS2
+	 VOCnPr7J/VUGeb5kSrIkPebKTuZ+vMIpbG6c9tqR7t24jQBHYMLuGTwwAbFAGX0VNW
+	 96H1UN1ZKgBrw==
+Date: Fri, 9 Aug 2024 09:34:58 +0800
 From: Peter Chen <peter.chen@kernel.org>
 To: Xu Yang <xu.yang_2@nxp.com>
 Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
@@ -51,11 +51,10 @@ Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
 	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
 	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
 	linux-usb@vger.kernel.org, jun.li@nxp.com
-Subject: Re: [PATCH v2 5/6] usb: phy: mxs: enable weak 1p1 regulator for
- imx6ul during suspend
-Message-ID: <20240809013325.GD2673490@nchen-desktop>
+Subject: Re: [PATCH v2 4/6] usb: phy: mxs: add wakeup enable for imx7ulp
+Message-ID: <20240809013458.GE2673490@nchen-desktop>
 References: <20240726113207.3393247-1-xu.yang_2@nxp.com>
- <20240726113207.3393247-5-xu.yang_2@nxp.com>
+ <20240726113207.3393247-4-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,108 +63,112 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240726113207.3393247-5-xu.yang_2@nxp.com>
+In-Reply-To: <20240726113207.3393247-4-xu.yang_2@nxp.com>
 
-On 24-07-26 19:32:06, Xu Yang wrote:
-> 1p1 is off when the system enters suspend at i.MX6UL. It cause the PHY
-> get wrong USB DP/DM value, then unexpected wakeup may occur if USB wakeup
-> enabled. This will enable weak 1p1 during PHY suspend if vbus exist. So
-> USB DP/DM is correct when system suspend.
+On 24-07-26 19:32:05, Xu Yang wrote:
+> This wakeup setting can enable USB wakeup function even the
+> controller's power is lost, and both A7 and M4 are in VLLS mode.
 > 
 > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 > 
 > ---
 > Changes in v2:
->  - modify commit message
+>  - no changes
 > ---
->  drivers/usb/phy/phy-mxs-usb.c | 32 ++++++++++++++++++++++++++++----
->  1 file changed, 28 insertions(+), 4 deletions(-)
+>  drivers/usb/phy/phy-mxs-usb.c | 41 +++++++++++++++++++++++++++++++++--
+>  1 file changed, 39 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-> index acaae22df3ba..cc4156c1b148 100644
+> index e172af75f602..acaae22df3ba 100644
 > --- a/drivers/usb/phy/phy-mxs-usb.c
 > +++ b/drivers/usb/phy/phy-mxs-usb.c
-> @@ -71,6 +71,9 @@
->  #define BM_USBPHY_PLL_EN_USB_CLKS		BIT(6)
+> @@ -118,6 +118,11 @@
+>  #define BM_ANADIG_USB2_MISC_RX_VPIN_FS		BIT(29)
+>  #define BM_ANADIG_USB2_MISC_RX_VMIN_FS		BIT(28)
 >  
->  /* Anatop Registers */
-> +#define ANADIG_REG_1P1_SET			0x114
-> +#define ANADIG_REG_1P1_CLR			0x118
+> +/* System Integration Module (SIM) Registers */
+> +#define SIM_GPR1				0x30
 > +
->  #define ANADIG_ANA_MISC0			0x150
->  #define ANADIG_ANA_MISC0_SET			0x154
->  #define ANADIG_ANA_MISC0_CLR			0x158
-> @@ -123,6 +126,9 @@
->  
->  #define USB_PHY_VLLS_WAKEUP_EN			BIT(0)
->  
-> +#define BM_ANADIG_REG_1P1_ENABLE_WEAK_LINREG	BIT(18)
-> +#define BM_ANADIG_REG_1P1_TRACK_VDD_SOC_CAP	BIT(19)
+> +#define USB_PHY_VLLS_WAKEUP_EN			BIT(0)
 > +
 >  #define to_mxs_phy(p) container_of((p), struct mxs_phy, phy)
 >  
 >  /* Do disconnection between PHY and controller without vbus */
-> @@ -196,7 +202,8 @@ static const struct mxs_phy_data imx6sx_phy_data = {
->  };
+> @@ -214,6 +219,7 @@ struct mxs_phy {
+>  	struct clk *clk;
+>  	const struct mxs_phy_data *data;
+>  	struct regmap *regmap_anatop;
+> +	struct regmap *regmap_sim;
+>  	int port_id;
+>  	u32 tx_reg_set;
+>  	u32 tx_reg_mask;
+> @@ -772,6 +778,17 @@ static int mxs_phy_probe(struct platform_device *pdev)
+>  		}
+>  	}
 >  
->  static const struct mxs_phy_data imx6ul_phy_data = {
-> -	.flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
-> +	.flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS |
-> +		MXS_PHY_HARDWARE_CONTROL_PHY2_CLK,
->  };
->  
->  static const struct mxs_phy_data imx7ulp_phy_data = {
-> @@ -241,6 +248,11 @@ static inline bool is_imx7ulp_phy(struct mxs_phy *mxs_phy)
->  	return mxs_phy->data == &imx7ulp_phy_data;
+> +	/* Currently, only imx7ulp has SIM module */
+> +	if (of_get_property(np, "nxp,sim", NULL)) {
+> +		mxs_phy->regmap_sim = syscon_regmap_lookup_by_phandle
+> +			(np, "nxp,sim");
+> +		if (IS_ERR(mxs_phy->regmap_sim)) {
+> +			dev_dbg(&pdev->dev,
+> +				"failed to find regmap for sim\n");
+> +			return PTR_ERR(mxs_phy->regmap_sim);
+> +		}
+> +	}
+> +
+>  	/* Precompute which bits of the TX register are to be updated, if any */
+>  	if (!of_property_read_u32(np, "fsl,tx-cal-45-dn-ohms", &val) &&
+>  	    val >= MXS_PHY_TX_CAL45_MIN && val <= MXS_PHY_TX_CAL45_MAX) {
+> @@ -849,6 +866,22 @@ static void mxs_phy_remove(struct platform_device *pdev)
 >  }
 >  
-> +static inline bool is_imx6ul_phy(struct mxs_phy *mxs_phy)
+>  #ifdef CONFIG_PM_SLEEP
+> +static void mxs_phy_wakeup_enable(struct mxs_phy *mxs_phy, bool on)
 > +{
-> +	return mxs_phy->data == &imx6ul_phy_data;
+> +	u32 mask = USB_PHY_VLLS_WAKEUP_EN;
+> +
+> +	/* If the SoCs don't have SIM, quit */
+> +	if (!mxs_phy->regmap_sim)
+> +		return;
+> +
+> +	if (on) {
+> +		regmap_update_bits(mxs_phy->regmap_sim, SIM_GPR1, mask, mask);
+> +		udelay(500);
+> +	} else {
+> +		regmap_update_bits(mxs_phy->regmap_sim, SIM_GPR1, mask, 0);
+> +	}
 > +}
 > +
->  /*
->   * PHY needs some 32K cycles to switch from 32K clock to
->   * bus (such as AHB/AXI, etc) clock.
-> @@ -884,18 +896,30 @@ static void mxs_phy_wakeup_enable(struct mxs_phy *mxs_phy, bool on)
->  
 >  static void mxs_phy_enable_ldo_in_suspend(struct mxs_phy *mxs_phy, bool on)
 >  {
-> -	unsigned int reg = on ? ANADIG_ANA_MISC0_SET : ANADIG_ANA_MISC0_CLR;
-> +	unsigned int reg;
-> +	u32 value;
+>  	unsigned int reg = on ? ANADIG_ANA_MISC0_SET : ANADIG_ANA_MISC0_CLR;
+> @@ -869,8 +902,10 @@ static int mxs_phy_system_suspend(struct device *dev)
+>  {
+>  	struct mxs_phy *mxs_phy = dev_get_drvdata(dev);
 >  
->  	/* If the SoCs don't have anatop, quit */
->  	if (!mxs_phy->regmap_anatop)
->  		return;
->  
-> -	if (is_imx6q_phy(mxs_phy))
-> +	if (is_imx6q_phy(mxs_phy)) {
-> +		reg = on ? ANADIG_ANA_MISC0_SET : ANADIG_ANA_MISC0_CLR;
->  		regmap_write(mxs_phy->regmap_anatop, reg,
->  			BM_ANADIG_ANA_MISC0_STOP_MODE_CONFIG);
-> -	else if (is_imx6sl_phy(mxs_phy))
-> +	} else if (is_imx6sl_phy(mxs_phy)) {
-> +		reg = on ? ANADIG_ANA_MISC0_SET : ANADIG_ANA_MISC0_CLR;
->  		regmap_write(mxs_phy->regmap_anatop,
->  			reg, BM_ANADIG_ANA_MISC0_STOP_MODE_CONFIG_SL);
-> +	} else if (is_imx6ul_phy(mxs_phy)) {
-> +		reg = on ? ANADIG_REG_1P1_SET : ANADIG_REG_1P1_CLR;
-> +		value = BM_ANADIG_REG_1P1_ENABLE_WEAK_LINREG |
-> +			BM_ANADIG_REG_1P1_TRACK_VDD_SOC_CAP;
-> +		if (mxs_phy_get_vbus_status(mxs_phy) && on)
-> +			regmap_write(mxs_phy->regmap_anatop, reg, value);
-> +		else if (!on)
-> +			regmap_write(mxs_phy->regmap_anatop, reg, value);
-
-Please check if vbus is not there but wakeup is enabled, and see the
-behaviour is expected or not.
-
-Peter
+> -	if (device_may_wakeup(dev))
+> +	if (device_may_wakeup(dev)) {
+>  		mxs_phy_enable_ldo_in_suspend(mxs_phy, true);
+> +		mxs_phy_wakeup_enable(mxs_phy, true);
 > +	}
->  }
 >  
->  static int mxs_phy_system_suspend(struct device *dev)
+>  	return 0;
+>  }
+> @@ -879,8 +914,10 @@ static int mxs_phy_system_resume(struct device *dev)
+>  {
+>  	struct mxs_phy *mxs_phy = dev_get_drvdata(dev);
+>  
+> -	if (device_may_wakeup(dev))
+> +	if (device_may_wakeup(dev)) {
+>  		mxs_phy_enable_ldo_in_suspend(mxs_phy, false);
+> +		mxs_phy_wakeup_enable(mxs_phy, false);
+> +	}
+>  
+>  	return 0;
+>  }
 > -- 
 > 2.34.1
 > 
