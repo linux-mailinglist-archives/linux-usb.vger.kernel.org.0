@@ -1,280 +1,120 @@
-Return-Path: <linux-usb+bounces-13275-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13276-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 839BB94D112
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 15:19:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0939B94D1A2
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 15:53:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCF77B2358C
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 13:19:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B88EE280E8C
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 13:53:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FC941974FE;
-	Fri,  9 Aug 2024 13:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A3E195962;
+	Fri,  9 Aug 2024 13:53:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fWW5dEMd"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="OgOEtCmS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95705194C7A;
-	Fri,  9 Aug 2024 13:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6023196C86
+	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 13:53:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723209522; cv=none; b=gBz3S44FTa8sKjukRVKro1bjSOLXJ1TBnKA6Js4pG5Zm+ijL+L53Z1l7zx42U4ItW+Ha/9RdxU2qJagr6M8FkskiFqqj+49MsbpCuX1nudMsGwxosSd6oiqKqiVQd1m0km/UwGBD9QUeJuc3lBibtULH3KN9YE2XOdy5TTIfjrs=
+	t=1723211623; cv=none; b=WuuqDloaDgOfyc6hmNocjGfTUuW31L5P86eclWWO69GCqlqYLZoZfYLZmVY0ygbnyk6wLzeNzMYSbROerYQSlN1vXVVumoyeOo1zyaQkt1pByBGrD7LxM8AjIZuKKKZNJJEnaC7rXnhIhLZyp2Oip6WED7PHOVqQ8NQOaSTxXgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723209522; c=relaxed/simple;
-	bh=0gYAAUpeD7IVOB7psAkyGAyVO8jJGFsQpUhMUndedv0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E6dho9VqIiaNewExZfJV5BnK+GJkOb71uRkm688kiCQ0YVWJOCHTm4rWd3HYTwPwVWpZ+rXBdQbOw1/5rPLO1YuhT8kQw846RT3+vdkJV2L6x8vIjJlyHnVQ+F7nyBVu9Kl6ud0DYgXseVoy5em4sJVd+pb2tdFF7TroSe2ECsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fWW5dEMd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D89EC32782;
-	Fri,  9 Aug 2024 13:18:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723209522;
-	bh=0gYAAUpeD7IVOB7psAkyGAyVO8jJGFsQpUhMUndedv0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fWW5dEMdi7Wv6eSInxFEwggeLslkOJHrA18qZXljmtHBzF9jJTZzK6gppR83OOzZw
-	 3T5G1KIS8SCyyG3USOZf3eRSDMjp+2e9NFQUTAq8+sPQZ4lfSmNDVKTYrj8R2KqMzn
-	 L0CqgWl6LIxAXX19EH7f+UvkUmbLxJEsdGy7BGcG16NjTJlkfVzBggjKbjwuVpVjq8
-	 OuQl4Vhr1TG6EXHwoc+pjkpZpCuSnPbpWS5CyH1z2T9eqCVbaL226u5m/WwzgGKQu3
-	 SDrwE8VpcKM51CepXeIwXL0gqQ8jFNsDekolU8kTC6xO8dm+r7V0GvJv6Zwns32Kr4
-	 Wr6rc+FNU1Yyg==
-From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Fri, 09 Aug 2024 15:18:22 +0200
-Subject: [PATCH 2/2] arm64: dts: qcom: x1e80100: Add USB Multiport
- controller
+	s=arc-20240116; t=1723211623; c=relaxed/simple;
+	bh=7n2T+P4ANvqZeOut5RpDHTSbQ3lR9jXWePNGBFM9qVc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n/Nht3YQOBVWpRxlq182KuN545UUKLav6/L3T8G1htg+BPkp/7ih+PJdG19IKcVSXEtJJkq9iQubk/k11/RRFBK6oF4NxOdgcqQt9NJNJrCOndYt791h72iAaZLypd6sASCyYMLxGvqzHcu7KzR2D8WRrfqrC4h1eCAZmVM+qb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=OgOEtCmS; arc=none smtp.client-ip=209.85.128.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-67b709024bfso23005637b3.3
+        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2024 06:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1723211621; x=1723816421; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SX0OzF7OzHWR9wIp5+Pbjk636WCu/tB3mDHpQATUaPk=;
+        b=OgOEtCmSKb1eCnGA9jCPqFwEhzO8S7BoW35usMG9xaiNUKB1tNGFniQuJVpQ35p9pH
+         lKm6AnIdVFcuExX7vpEbcAJzbjYI3E7cWv4mHg6B6g/RzNaC8UxK9NxWeiY3fyz3cyn5
+         QiUi9n2ilNY05Cntv0CzLgaIPg3UXnVavhwACzdpbfDMNdlkgoaMIrpUCTlHW29p7m0l
+         9ThbGXSi3Uycf/eJkQUWogrbf8rR/Tvd+Tlbn+laK9KF0i4DU0YYjwjw9ej1lkNq7D25
+         GD1VRu5KDtsKIGhFmaZZNwlJACzIvlOHfjZkmcYxx7wwj1ZV3XBZAAxbrMQdkte5kOzN
+         OGCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723211621; x=1723816421;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SX0OzF7OzHWR9wIp5+Pbjk636WCu/tB3mDHpQATUaPk=;
+        b=Jm4WvfAlhHDhQ/RX/fZ7iH21rbkQoTkkTn+/yHgZBl1aJny/3HCCYcI8jQycxdqHQ7
+         6yLIiuF8Axs74/SvCaCYkEQtqHYx7+ctCRZawrVSwUxdHU4LwhffetAOGNqGT0hgSYLR
+         CYo/EXmoSROoXGrjJwIUHAHHgQH9+hHZdmZX0DNLsp1QLAIDi0/rHusbz73RGWHYKS+q
+         91IThLibWuHrhcvluRNbBtCgKaoY6ihO56+0CEqT2GAXuessRAaciHFSbLy6WGXkP7tW
+         RRgTnhWRVOzLvluPQKcZedgzH5i1MhcdohCPWj4DfZDt7TANk0pTdzcuujmimiS/32Zy
+         pHJw==
+X-Gm-Message-State: AOJu0Yzxz74R7uOFQVc3kkZihM/GTC2UuDaHelnlzrEQAb1jACr6ohN0
+	FEYBu8pNhFjrSo/vMNfPZX8SpHfIguyeSMXKxAWw0K9eGeC1OCGY9CwvQXmXtGe3HNpHpx51ntN
+	yCEy+
+X-Google-Smtp-Source: AGHT+IHYedQIBYR4d6jTh7SOrxohUj3rqXC1Z2qE+fLAS+V4yRqsz6jPTt0amCoRCDp84Jvv/lomHg==
+X-Received: by 2002:a05:690c:4e0b:b0:63b:d242:4fa0 with SMTP id 00721157ae682-69ec6037746mr14829227b3.21.1723211620864;
+        Fri, 09 Aug 2024 06:53:40 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a3785d4709sm263051385a.9.2024.08.09.06.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Aug 2024 06:53:40 -0700 (PDT)
+Date: Fri, 9 Aug 2024 09:53:38 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Forcing re-enumeration of a chosen USB device from userspace?
+Message-ID: <4256543b-b834-4051-a962-0020f0180537@rowland.harvard.edu>
+References: <20240808083921.0400af26@foxbook>
+ <f46dc174-2f23-4a19-a9f6-5ae6e4e2d304@rowland.harvard.edu>
+ <20240809110206.4b43c1f2@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240809-topic-h_mp-v1-2-3c5f468566d8@quicinc.com>
-References: <20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com>
-In-Reply-To: <20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Krishna Kurapati <quic_kriskura@quicinc.com>, 
- Konrad Dybcio <quic_kdybcio@quicinc.com>, 
- Konrad Dybcio <konradybcio@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723209509; l=5806;
- i=quic_kdybcio@quicinc.com; s=20230215; h=from:subject:message-id;
- bh=0gYAAUpeD7IVOB7psAkyGAyVO8jJGFsQpUhMUndedv0=;
- b=fYgEJ6SXNZBtDiLNkxyUOhy53YHezNx5m1HKWj46dnOP4t2+qcmM3YUj5Q2rC/xMBU2DjToYj
- U6Xk+4/l1b/CGJ5GH00Jb7pF4ZqtowhHQNftbjNApIQFBcWPGeMvAbP
-X-Developer-Key: i=quic_kdybcio@quicinc.com; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240809110206.4b43c1f2@foxbook>
 
-X1E80100 has a multiport controller with 2 HS (eUSB) and 2 SS PHYs
-attached to it. It's commonly used for USB-A ports and internally
-routed devices. Configure it to support such functionality.
+On Fri, Aug 09, 2024 at 11:02:06AM +0200, Michał Pecio wrote:
+> > You can reset the device by using the usbreset program, which is part
+> > of the usbutils package.  Some distributions (such as Ubuntu) include
+> > it whereas others (such as Fedora) don't.  But if you don't have it,
+> > you can get the source code from https://github.com/gregkh/usbutils/
+> > and build it yourself.
+> > 
+> > If the reset causes some descriptors to change, the kernel will 
+> > re-enumerate the device.
+> 
+> Thanks for the suggestion. I compiled the tool fom Greg's repository
+> and ran it 100 times in a loop, but the descriptors remained unchanged.
+> 
+> I only got "reset USB device" messages in dmesg and class driver noise.
+> 
+> 
+> I had no luck playing with sysfs entries of the device, but I found
+> that the parent hub allows me to disable/enable individual ports. There
+> is some subtlely in USB 3.0 as the associated 2.0 port must be disabled
+> first to prevent downgrading to high speed, but it works.
+> 
+> Curiously though, it doesn't have the same effect as reloading the host
+> driver. My buggy device randomly comes back with good descriptors, with
+> the same bad descriptors, or most often it doesn't come back at all.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/x1e80100.dtsi | 170 +++++++++++++++++++++++++++++++++
- 1 file changed, 170 insertions(+)
+I would guess that the difference has to do with whether or not power to 
+the USB port is turned off.  But that doesn't explain why the device 
+fails to enumerate properly the first time it gets plugged in.
 
-diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-index 326283822aee..b6dd2f47341b 100644
---- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-+++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-@@ -3842,6 +3842,90 @@ usb_2_hsphy: phy@88e0000 {
- 			status = "disabled";
- 		};
- 
-+		usb_mp_hsphy0: phy@88e1000 {
-+			compatible = "qcom,x1e80100-snps-eusb2-phy",
-+				     "qcom,sm8550-snps-eusb2-phy";
-+			reg = <0 0x088e1000 0 0x154>;
-+			#phy-cells = <0>;
-+
-+			clocks = <&tcsr TCSR_USB3_MP0_CLKREF_EN>;
-+			clock-names = "ref";
-+
-+			resets = <&gcc GCC_QUSB2PHY_HS0_MP_BCR>;
-+
-+			status = "disabled";
-+		};
-+
-+		usb_mp_hsphy1: phy@88e2000 {
-+			compatible = "qcom,x1e80100-snps-eusb2-phy",
-+				     "qcom,sm8550-snps-eusb2-phy";
-+			reg = <0 0x088e2000 0 0x154>;
-+			#phy-cells = <0>;
-+
-+			clocks = <&tcsr TCSR_USB3_MP1_CLKREF_EN>;
-+			clock-names = "ref";
-+
-+			resets = <&gcc GCC_QUSB2PHY_HS1_MP_BCR>;
-+
-+			status = "disabled";
-+		};
-+
-+		usb_mp_qmpphy0: phy@88e3000 {
-+			compatible = "qcom,x1e80100-qmp-usb3-uni-phy";
-+			reg = <0 0x088e3000 0 0x2000>;
-+
-+			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
-+				 <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
-+			clock-names = "aux",
-+				      "ref",
-+				      "com_aux",
-+				      "pipe";
-+
-+			resets = <&gcc GCC_USB3_UNIPHY_MP0_BCR>,
-+				 <&gcc GCC_USB3UNIPHY_PHY_MP0_BCR>;
-+			reset-names = "phy",
-+				      "phy_phy";
-+
-+			power-domains = <&gcc GCC_USB3_MP_SS0_PHY_GDSC>;
-+
-+			#clock-cells = <0>;
-+			clock-output-names = "usb_mp_phy0_pipe_clk";
-+
-+			#phy-cells = <0>;
-+
-+			status = "disabled";
-+		};
-+
-+		usb_mp_qmpphy1: phy@88e5000 {
-+			compatible = "qcom,x1e80100-qmp-usb3-uni-phy";
-+			reg = <0 0x088e5000 0 0x2000>;
-+
-+			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
-+				 <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
-+			clock-names = "aux",
-+				      "ref",
-+				      "com_aux",
-+				      "pipe";
-+
-+			resets = <&gcc GCC_USB3_UNIPHY_MP1_BCR>,
-+				 <&gcc GCC_USB3UNIPHY_PHY_MP1_BCR>;
-+			reset-names = "phy",
-+				      "phy_phy";
-+
-+			power-domains = <&gcc GCC_USB3_MP_SS1_PHY_GDSC>;
-+
-+			#clock-cells = <0>;
-+			clock-output-names = "usb_mp_phy1_pipe_clk";
-+
-+			#phy-cells = <0>;
-+
-+			status = "disabled";
-+		};
-+
- 		usb_1_ss2: usb@a0f8800 {
- 			compatible = "qcom,x1e80100-dwc3", "qcom,dwc3";
- 			reg = <0 0x0a0f8800 0 0x400>;
-@@ -4016,6 +4100,92 @@ usb_2_dwc3_hs: endpoint {
- 			};
- 		};
- 
-+		usb_mp: usb@a4f8800 {
-+			compatible = "qcom,x1e80100-dwc3-mp", "qcom,dwc3";
-+			reg = <0 0x0a4f8800 0 0x400>;
-+
-+			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
-+				 <&gcc GCC_USB30_MP_MASTER_CLK>,
-+				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
-+				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
-+				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-+				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_USB_NORTH_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_USB_SOUTH_AXI_CLK>,
-+				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
-+			clock-names = "cfg_noc",
-+				      "core",
-+				      "iface",
-+				      "sleep",
-+				      "mock_utmi",
-+				      "noc_aggr",
-+				      "noc_aggr_north",
-+				      "noc_aggr_south",
-+				      "noc_sys";
-+
-+			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-+					  <&gcc GCC_USB30_MP_MASTER_CLK>;
-+			assigned-clock-rates = <19200000>,
-+					       <200000000>;
-+
-+			interrupts-extended = <&intc GIC_SPI 313 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&intc GIC_SPI 314 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&intc GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&intc GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&pdc 52 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 51 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 54 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 53 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 55 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&pdc 56 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "pwr_event_1", "pwr_event_2",
-+					  "hs_phy_1",	 "hs_phy_2",
-+					  "dp_hs_phy_1", "dm_hs_phy_1",
-+					  "dp_hs_phy_2", "dm_hs_phy_2",
-+					  "ss_phy_1",	 "ss_phy_2";
-+
-+			power-domains = <&gcc GCC_USB30_MP_GDSC>;
-+			required-opps = <&rpmhpd_opp_nom>;
-+
-+			resets = <&gcc GCC_USB30_MP_BCR>;
-+
-+			interconnects = <&usb_north_anoc MASTER_USB3_MP QCOM_ICC_TAG_ALWAYS
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>,
-+					<&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ALWAYS
-+					 &config_noc SLAVE_USB3_MP QCOM_ICC_TAG_ALWAYS>;
-+			interconnect-names = "usb-ddr",
-+					     "apps-usb";
-+
-+			wakeup-source;
-+
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			status = "disabled";
-+
-+			usb_mp_dwc3: usb@a400000 {
-+				compatible = "snps,dwc3";
-+				reg = <0 0x0a400000 0 0xcd00>;
-+
-+				interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
-+
-+				iommus = <&apps_smmu 0x1400 0x0>;
-+
-+				phys = <&usb_mp_hsphy0>, <&usb_mp_qmpphy0>,
-+				       <&usb_mp_hsphy1>, <&usb_mp_qmpphy1>;
-+				phy-names = "usb2-0", "usb3-0",
-+					    "usb2-1", "usb3-1";
-+				dr_mode = "host";
-+
-+				snps,dis_u2_susphy_quirk;
-+				snps,dis_enblslpm_quirk;
-+				snps,usb3_lpm_capable;
-+
-+				dma-coherent;
-+			};
-+		};
-+
- 		usb_1_ss0: usb@a6f8800 {
- 			compatible = "qcom,x1e80100-dwc3", "qcom,dwc3";
- 			reg = <0 0x0a6f8800 0 0x400>;
-
--- 
-2.46.0
-
+Alan Stern
 
