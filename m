@@ -1,104 +1,112 @@
-Return-Path: <linux-usb+bounces-13279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13280-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8B0B94D2E3
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 17:03:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58A1C94D347
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 17:20:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7492C280F31
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 15:03:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D01D4B224CA
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 15:20:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD31B197A65;
-	Fri,  9 Aug 2024 15:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CDEE1957FC;
+	Fri,  9 Aug 2024 15:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ir2J1chd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9iXYPxM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1812155A25
-	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 15:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79D0197A66
+	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 15:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723215827; cv=none; b=YfsVnFWbkhJBjeOeCGX2CTHzjuiVHMHaVdrwnf2IypC5ACquIwjRfoCV+ZYW/i1m1TXGUxq0cpIu9ZZcPMGpEoQvRBW5XxDhd2w7fi+hy87fEBGrD36GQZ8c7XGPpZxvdDCphfJrFj8SfnxIRZL8/7lhexTEBOujFsPRX18VdmA=
+	t=1723216847; cv=none; b=AmRRuY1gfNFiZXPrvwbwn91OAfACZtnWYwpqrc0EWvfSLKS4UDozXMK98SovHKiONoiaTG3fnd1sl/qIwtsp9p2MBSMUXM5D4Kgk+2nukLG9ndlFWQR1PKyG0piYAmeEl5IYFHRrH35+b/cwFAqQg6oiH5k1jZWp3eVhbmk77vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723215827; c=relaxed/simple;
-	bh=0x23mSruJ+hJVpt/Nx1b8zoMBMluJRNoW6Fqis0dPFI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sndw0k4qI2QnNvEEOEtBvXWJhYcORSn3+0d7RIEm1rKPalGC1mHE9cdLizaYXhQqsouRuNGsZS/Hm0v2jrAdRxJp4DQUkGLQl+fiKIdq0ZwiNClf/93ym8N8TW6yD2JY2MYh5g9Nt1VH3bwAxbcud5bsUJig94we7R3Rt7lkWSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ir2J1chd; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723215826; x=1754751826;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0x23mSruJ+hJVpt/Nx1b8zoMBMluJRNoW6Fqis0dPFI=;
-  b=ir2J1chdk1evUsIOyV4P+JfMlK6ktnt4U9aM10IksoVXz9SwJ0Y1gZTO
-   5oxO30Yrmi36NZ2g9TP65cClb4I2hfL7ziiUGQm4XD1Qj+RahApo7j5pr
-   st06vcwSKGNU+f4tWcB6/nwI98e8si7CI2MI/JRAdfefcYtnwP3jns1Xh
-   9DqpWJHr1QhhVASNJiXYBUbfbM21st95J2SyJQoGL6MoY5JqA108JVddJ
-   23JMZhYKKz3RXHhO398fNaSebTbDQZihm1vUgLKMZDp9bX4YcMlXnkNod
-   BNKkHA0TPmaxsuiT1c00vz8eg0uJjj/LdUDfvv9/k8bLXcIfY5AUBjmnQ
-   A==;
-X-CSE-ConnectionGUID: /sjux4YAQcqnpFiuQ6IgCg==
-X-CSE-MsgGUID: u9m1e7UST4GKhUoQ+xIZtg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11159"; a="32072803"
-X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
-   d="scan'208";a="32072803"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 08:03:45 -0700
-X-CSE-ConnectionGUID: Xg4bSNi3SLayAitc4CSMYg==
-X-CSE-MsgGUID: bPHcFUa7T+qoy4zh7SWA3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
-   d="scan'208";a="88460423"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmviesa001.fm.intel.com with ESMTP; 09 Aug 2024 08:03:44 -0700
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: Fix the return value of ucsi_run_command()
-Date: Fri,  9 Aug 2024 18:03:43 +0300
-Message-ID: <20240809150343.286942-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1723216847; c=relaxed/simple;
+	bh=aQIqa9+BihDnHLqi0jCjEyOX/dpE5iQGSIjI52+3BgE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Dat6yhWurObw6ryS9SQe43NK2Xpct3OAVP29PkozQ2fjgasQ0AjPsyS7KxYNe1ZwcOGFzdgK+B2EswnOaqvqV6WHmqthRiI6pEArSxqxUA7S5vIhFMrp/B9qh/nsGF9vldwDEOHJ2uM1K3g2sERu/pvhBM7YWK0z73Op/N10saY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9iXYPxM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 25CC0C32782
+	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 15:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723216847;
+	bh=aQIqa9+BihDnHLqi0jCjEyOX/dpE5iQGSIjI52+3BgE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=f9iXYPxMBUDMDAjJsHYSyE4If6lmF01M1UIUNnk+y5CxlenQgQ2CS/t/0cf1A0hxb
+	 1nu5xHxoD7mRjLMm713tKvuN7uDTXBQ+y6AaNrXcrLjkQWlRxAJR507/hprK6lSgaN
+	 VA9J6RSYqaa+0t5yz+c41Uy6zZfLmTHq0f1BW1AWyLBz2mEHgDXlE7Jcn6bx0fLxR0
+	 ppGhngNbS7Srz7z7EsGFEptNU1nB0iTZBE1oDzlR+ErObdBUm70wYbiMAxy+lcp4U5
+	 YwLR2RwDt6XQqAbNKIDTfOHVpKG/oXJ/U9YIQogkNT8yscHYcQwVhoLFiSYg/I6Svl
+	 ghpTlISTI6Lkg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 1D2BBC53B7F; Fri,  9 Aug 2024 15:20:47 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
+Date: Fri, 09 Aug 2024 15:20:46 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219111-208809-hqZiWlBlHR@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
+References: <bug-219111-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The command execution routines need to return the amount of
-data that was transferred when succesful.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
 
-This fixes an issue where the alternate modes and the power
-delivery capabilities are not getting registered.
+--- Comment #47 from Alan Stern (stern@rowland.harvard.edu) ---
+The two schemes are methods for initializing the device.  This happens befo=
+re
+the configuration information is transferred, because the kernel can't
+communicate with the device until it has been initialized.
 
-Fixes: 5e9c1662a89b ("usb: typec: ucsi: rework command execution functions")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The scheme works if the kernel is able to communicate without getting any
+errors.  If the device then says it has only one configuration, the kernel =
+will
+believe it.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 432a2d6266d7..4039851551c1 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -137,7 +137,7 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
- 	if (ret)
- 		return ret;
- 
--	return err;
-+	return err ?: UCSI_CCI_LENGTH(*cci);
- }
- 
- static int ucsi_read_error(struct ucsi *ucsi, u8 connector_num)
--- 
-2.43.0
+While it is possible in theory to replicate the initialization schemes
+manually, in practice it would be very difficult and it would require a lar=
+ge
+amount of programming.  If you want to experiment with the schemes, by far =
+the
+easiest way is to patch the kernel to make it do what you want.
 
+For example, you could change the kernel so that when it encounters a device
+with the Xone:23C's vendor and product IDs, it sets the number of
+configurations to 2.  Then it would ask the device to transfer the informat=
+ion
+for both configs.  But most likely the device would refuse to send the
+information for the second config, because it is still in its
+single-configuration mode.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
