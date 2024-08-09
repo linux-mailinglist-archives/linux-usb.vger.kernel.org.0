@@ -1,102 +1,98 @@
-Return-Path: <linux-usb+bounces-13271-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13273-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DE5A94D0BE
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 15:00:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DE5194D10B
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 15:18:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9122F1C21B00
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 13:00:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F152B22E8C
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 13:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53057194A45;
-	Fri,  9 Aug 2024 13:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF3F194C8D;
+	Fri,  9 Aug 2024 13:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dviP5eN6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RKp6A0eZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4CD17BBF;
-	Fri,  9 Aug 2024 13:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D766919046B;
+	Fri,  9 Aug 2024 13:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723208441; cv=none; b=RP2vEw2nYF33jx4oy00tU6U/RKacgKbiSRKQThv+ShP2Nn6sHGXLdibaQePnTSa+LGf+woiPCxpTfKfBui37kECNvjSQ1G9Ye5kGf3e563gACS2822nqDVTssf+wsbGUQN3v4UKl2w+sn5hZPgYnLbPdzkd9JNQ6QlMMXIqJm84=
+	t=1723209514; cv=none; b=J05wsyU/pPVtnx9TO+yAITAIcERZvDq0hhkFDW+sbRM7Fm16s8oalhL10MFulkUjZ403Z9hNtn7ZMnoujtItz1D4Kmgq7oZlOVPFtDjsqwfTurA1CHTkv5QvHX2fS+zeQio3wq80tjsz6DrFLG8U4aq7Fw9HCPKlb8EgkCgoaBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723208441; c=relaxed/simple;
-	bh=21VXCce4FRAD2HtdIALdsNGQGA+8k5cDrPR7TjMlA94=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GDC4WPEI6J0SKwA0si39RMvMDNJjxf0M5r2kb7Imotj8t7s6TsfvPIr9kFOxhgIxPhPhLxOPLT5/3vgUPDzDU3e04yDPp2+EuPVZtW05t1md5VHy4JOqLpXzWBrakVwDPeIkgPJPiNDLlUahWSweYwTT5cOXFUfvMcqXRlYNAKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dviP5eN6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D957C32782;
-	Fri,  9 Aug 2024 13:00:41 +0000 (UTC)
+	s=arc-20240116; t=1723209514; c=relaxed/simple;
+	bh=ubYam9Esqdt0mTjK0h87GkQKMgw4IPMjM/DAi1xFtlQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=X98R7grn9vF0yajPadIt1K5Ph/sEsOIZRn0AHczvW3G10rc+8xmo7Q7JZp8DSfMfa7FNjpABah8wZGbQiWJ/uyZ954k7SV+JAon4REA15wKDLPqr8br6+ZbY7EoTPpVC0f/2ETwtAZMSTrSHBfXox7HOS68iWKKBEXiVU/INS4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RKp6A0eZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7356DC32782;
+	Fri,  9 Aug 2024 13:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723208441;
-	bh=21VXCce4FRAD2HtdIALdsNGQGA+8k5cDrPR7TjMlA94=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=dviP5eN699ugLTjmIE0ZjJ9dyMQchKlK5TW2rxvPnnmW4c/7Yz9RT9paPU9b4KK4u
-	 wMq15niT073Zan6buPaTlXKkL9RLE4/p+fzapGKXlOQr93Ht3CKDbWmkGSxGHB01Mi
-	 hl+X/WmJCkv4xXXXMQ6PK53e4MNoQK0ZpjF3JcXMYlf9aXAyZqnaJTBYOdQoK+UfDR
-	 L1biV78RARx8IdkwHn9gapMpU5O8TsDxa+s1YUHqrXT3r+3aZQnfLM+I1DGRIibe5J
-	 r4/cxd8tpJEMhINIJmKCbO2aOhlo7ldB8ODGZONHO3hGlZbKjIP4lrtmcoY/Jjqn8e
-	 J/szlDEAssMvQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 71594382333D;
-	Fri,  9 Aug 2024 13:00:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1723209513;
+	bh=ubYam9Esqdt0mTjK0h87GkQKMgw4IPMjM/DAi1xFtlQ=;
+	h=From:Subject:Date:To:Cc:From;
+	b=RKp6A0eZwdEvktFb46x1Pah1kHHDE1Ikvjvk0RKlFt+o2zvg6U9OQ61VRRNf37iNa
+	 hWoJJYneXTavcNOpLr07QUvwYr9WuS8oUn51pcSVMpx1pLpSmGSqddnOptbwi2HH95
+	 jHPdBQlG6EtSnGr9+ptBH7BZ8IIdC5CJEwHLQmR802ufbCcEDG8XNX2ZzJGlgMNPfJ
+	 0AnQR/lhDUOP/DeuhhjG4tEkRKiFK+QsOjEuQH1CMBv7XVp/HjGca9UkgvD1Df9F/Q
+	 ocPhF80MkXZ4R5jMzA93gs6jGWcw7UlDBwRMmqfBwZlD+agbVCVqOZgORo5KwvHERg
+	 RVFFggPA4WiOA==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Subject: [PATCH 0/2] X1E80100 multiport USB controller
+Date: Fri, 09 Aug 2024 15:18:20 +0200
+Message-Id: <20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 1/5] usbnet: ipheth: race between ipheth_close and
- error handling
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172320844026.3782387.2037318141249570355.git-patchwork-notify@kernel.org>
-Date: Fri, 09 Aug 2024 13:00:40 +0000
-References: <20240806172809.675044-1-forst@pen.gy>
-In-Reply-To: <20240806172809.675044-1-forst@pen.gy>
-To: Foster Snowhill <forst@pen.gy>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, gvalkov@gmail.com, oneukum@suse.com,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABwXtmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDCwNL3ZL8gsxk3Yz43AJdUyMLY8sUC0sTU2MDJaCGgqLUtMwKsGHRsbW
+ 1AMGOhnNcAAAA
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Krishna Kurapati <quic_kriskura@quicinc.com>, 
+ Konrad Dybcio <quic_kdybcio@quicinc.com>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723209509; l=698;
+ i=quic_kdybcio@quicinc.com; s=20230215; h=from:subject:message-id;
+ bh=ubYam9Esqdt0mTjK0h87GkQKMgw4IPMjM/DAi1xFtlQ=;
+ b=SaX3UMr3H1Lm93bm13DtvN33UqHLlPg4MGdmpC0o1Ji/VM6TVVtrR6xQgOrcfcTQ1YugoE8Mf
+ o9I9D5De3kJBcjEemv+CDBGWykC7cEiZON68NKf9TDe01XOBpfLh8EP
+X-Developer-Key: i=quic_kdybcio@quicinc.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Hello:
+This series configures the multiport USB controller on X Elite. No
+driver changes seem necessary, tested on the Surface Laptop 7.
 
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+Signed-off-by: Konrad Dybcio <quic_kdybcio@quicinc.com>
+---
+Konrad Dybcio (2):
+      dt-bindings: usb: qcom,dwc3: Document X1E80100 MP controller
+      arm64: dts: qcom: x1e80100: Add USB Multiport controller
 
-On Tue,  6 Aug 2024 19:28:05 +0200 you wrote:
-> From: Oliver Neukum <oneukum@suse.com>
-> 
-> ipheth_sndbulk_callback() can submit carrier_work
-> as a part of its error handling. That means that
-> the driver must make sure that the work is cancelled
-> after it has made sure that no more URB can terminate
-> with an error condition.
-> 
-> [...]
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 170 +++++++++++++++++++++
+ 2 files changed, 173 insertions(+)
+---
+base-commit: 1e391b34f6aa043c7afa40a2103163a0ef06d179
+change-id: 20240809-topic-h_mp-52839d894530
 
-Here is the summary with links:
-  - [net-next,1/5] usbnet: ipheth: race between ipheth_close and error handling
-    https://git.kernel.org/netdev/net/c/e5876b088ba0
-  - [net-next,2/5] usbnet: ipheth: remove extraneous rx URB length check
-    https://git.kernel.org/netdev/net/c/655b46d7a39a
-  - [net-next,3/5] usbnet: ipheth: drop RX URBs with no payload
-    https://git.kernel.org/netdev/net/c/94d7eeb6c0ef
-  - [net-next,4/5] usbnet: ipheth: do not stop RX on failing RX callback
-    https://git.kernel.org/netdev/net/c/74efed51e0a4
-  - [net-next,5/5] usbnet: ipheth: fix carrier detection in modes 1 and 4
-    https://git.kernel.org/netdev/net/c/67927a1b255d
-
-You are awesome, thank you!
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Konrad Dybcio <quic_kdybcio@quicinc.com>
 
 
