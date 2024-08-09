@@ -1,65 +1,59 @@
-Return-Path: <linux-usb+bounces-13265-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13266-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DC4E94CD65
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 11:33:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D32E94CE69
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 12:16:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B917A1F222C7
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 09:33:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06FCE283553
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 10:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0DED190470;
-	Fri,  9 Aug 2024 09:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87DD9191F8D;
+	Fri,  9 Aug 2024 10:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="luUztuZJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CBD16C698
-	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 09:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A54F17BBF;
+	Fri,  9 Aug 2024 10:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723196010; cv=none; b=iZcaspocL/GpHuekR13uwloYL0Xib7Am+QT/pi56zSDqE7qyLrqzAJ0qTOfYykmCtApJjM9TrYmSMbv73laiYZAr7RyVaP9kUtHkzPLviZQlWBG0g1kiJss+fmReygwwqcX3fVQULHrCh/leQneE8y7TuHcoXFbJZSd9HCIIkAM=
+	t=1723198577; cv=none; b=QY4A94h2GbZM1F+eWLv1egQcXCH7wWaVemJfr+LuteslNkXELLtP31XIosbIQUyzKHkj9cH5OlGP/e1w7ovpRmBbtxEMi5YoG95bicMfWDXam7LruWmu1JSiproBSIDWI6fWbSDM8pMUfPKJju6+TNvPVW15aKY1B9UtASwXZ60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723196010; c=relaxed/simple;
-	bh=Jo1QAopdRGkAg1qTnVNcj32JKUPDLDyrOzFVHb1ZNEk=;
+	s=arc-20240116; t=1723198577; c=relaxed/simple;
+	bh=/4yHL3Ff4I9Wn8sXPTVtpcTghEGf/AxD7mHtkI/OQ3o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LrkxbbDkozaydw7fR+ey5/oGzs4nOHS9MFJ0MkPO0JU0FAAuYsP329CRVpsYDjffHD899YKMp+a80sQaTbZok8VhKa+9Md0izxN1h27i6uMBaf8fEYHLc3WXb0JUxVHGmO7pff8bTiaY1aM/L/rut82SHykWyBzqFYoB7NB/jSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1scLzn-0004XE-8g; Fri, 09 Aug 2024 11:33:15 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1scLzm-005dKS-09; Fri, 09 Aug 2024 11:33:14 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1scLzl-00Aljg-2r;
-	Fri, 09 Aug 2024 11:33:13 +0200
-Date: Fri, 9 Aug 2024 11:33:13 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matthias Kaehlcke <mka@chromium.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, oe-kbuild-all@lists.linux.dev,
-	kernel@pengutronix.de, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/3] usb: hub: add infrastructure to pass onboard_dev
- port features
-Message-ID: <20240809093313.xn3x2p3st2b32g27@pengutronix.de>
-References: <20240807-b4-v6-10-topic-usb-onboard-dev-v1-1-f33ce21353c9@pengutronix.de>
- <202408081557.FiEe9Tzz-lkp@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GpUGArLIuDrGF1U1BvvEVbXpFoEc+DHJ2KSWm8felH7fTHJK2gI3eDLLVjWnvp59aczvqAk234u7UwnEK4MCuJYrypyDOtxnE4l6JMcByDq9KW4bqHlLVj+777y272/18khnZl8Mc68BuROrnqTGiqPrfNrcaqAwWF6KnKHHW9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=luUztuZJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9417AC32782;
+	Fri,  9 Aug 2024 10:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723198576;
+	bh=/4yHL3Ff4I9Wn8sXPTVtpcTghEGf/AxD7mHtkI/OQ3o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=luUztuZJa9RA4bGErPWjmMzxsmrns1HYkDToPYOq5QtSsL5x8i7IxEBREP54bF9/v
+	 DX0CWKoR8NyYSrbxOr6aZnPUKyHqFO3XZK05tC3QBMQt6CyPk87zFFzizDn3T1cpz2
+	 dxdsj66AdNwf0C2U6qB2CKwDqTnW7LLjCvk1Df1lXUA3UGAzz4T6bXUl2Sl+hqHeKk
+	 /cp/yysCsfc4A0Ct9jz5ZzMOwDVQaRcDJipLqDIbVeDMX6hMdIFTXqCzz5eWAErOdA
+	 Sm7R7A0f+U1MrDM7uFQZNhOv/9AC4fhrKpRDwgtdCGxja7WUPfsQxMIJkYhk8oQlGM
+	 L39lABwggcqeA==
+Date: Fri, 9 Aug 2024 11:16:12 +0100
+From: Simon Horman <horms@kernel.org>
+To: Foster Snowhill <forst@pen.gy>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Georgi Valkov <gvalkov@gmail.com>, Oliver Neukum <oneukum@suse.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH net-next 2/5] usbnet: ipheth: remove extraneous rx URB
+ length check
+Message-ID: <20240809101612.GJ3075665@kernel.org>
+References: <20240806172809.675044-1-forst@pen.gy>
+ <20240806172809.675044-2-forst@pen.gy>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,117 +62,64 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202408081557.FiEe9Tzz-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20240806172809.675044-2-forst@pen.gy>
 
-Hi all,
-
-On 24-08-08, kernel test robot wrote:
-> Hi Marco,
+On Tue, Aug 06, 2024 at 07:28:06PM +0200, Foster Snowhill wrote:
+> Rx URB length was already checked in ipheth_rcvbulk_callback_legacy()
+> and ipheth_rcvbulk_callback_ncm(), depending on the current mode.
+> The check in ipheth_rcvbulk_callback() was thus mostly a duplicate.
 > 
-> kernel test robot noticed the following build errors:
+> The only place in ipheth_rcvbulk_callback() where we care about the URB
+> length is for the initial control frame. These frames are always 4 bytes
+> long. This has been checked as far back as iOS 4.2.1 on iPhone 3G.
 > 
-> [auto build test ERROR on 0c3836482481200ead7b416ca80c68a29cfdaabd]
+> Remove the extraneous URB length check. For control frames, check for
+> the specific 4-byte length instead.
+
+Hi Foster,
+
+I am slightly concerned what happens if a frame that does not match the
+slightly stricter check in this patch, is now passed to
+dev->rcvbulk_callback().
+
+I see that observations have been made that this does not happen.  But is
+there no was to inject malicious packets, or for something to malfunction?
+
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Marco-Felsch/usb-hub-add-infrastructure-to-pass-onboard_dev-port-features/20240807-224100
-> base:   0c3836482481200ead7b416ca80c68a29cfdaabd
-> patch link:    https://lore.kernel.org/r/20240807-b4-v6-10-topic-usb-onboard-dev-v1-1-f33ce21353c9%40pengutronix.de
-> patch subject: [PATCH 1/3] usb: hub: add infrastructure to pass onboard_dev port features
-> config: i386-randconfig-141-20240808 (https://download.01.org/0day-ci/archive/20240808/202408081557.FiEe9Tzz-lkp@intel.com/config)
-> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408081557.FiEe9Tzz-lkp@intel.com/reproduce)
+> Signed-off-by: Foster Snowhill <forst@pen.gy>
+> Tested-by: Georgi Valkov <gvalkov@gmail.com>
+> ---
+>  drivers/net/usb/ipheth.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408081557.FiEe9Tzz-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    ld: drivers/usb/core/hub.o: in function `set_port_feature':
-> >> drivers/usb/core/hub.c:481: undefined reference to `onboard_dev_port_feature'
->    ld: drivers/usb/core/hub.o: in function `usb_clear_port_feature':
->    drivers/usb/core/hub.c:462: undefined reference to `onboard_dev_port_feature'
-
-I understood the isse but have a few questions. Before continue the work
-on this topic I would like to ask if the patchset is okay in general?
-I'm open for alternatives if the patchset approach is not okay.
-
-I have a few ideas in mind (see below) to fix the 0day build issue which
-was caused by the Kconfig selection:
-
- - CONFIG_USB=y
- - CONFIG_USB_ONBOARD_DEV=m.
-
-Idea-1:
--------
-
-Dropping the module support for CONFIG_USB_ONBOARD_DEV.
-
-Idea-2:
--------
-
-CONFIG_USB_ONBOARD_DEV follows CONFIG_USB:
-
-CONFIG_USB=y -> CONFIG_USB_ONBOARD_DEV=y,
-CONFIG_USB=m -> CONFIG_USB_ONBOARD_DEV=m.
-
-and exporting usb_clear_port_feature().
-
-I don't know to add such Kconfig dependency and also this idea require
-that the usbcore have to load the usb_onboard_dev module always,
-regardless if used.
-
-So this idea is rather suboptimal.
-
-Idea-3:
--------
-
-Adding a function to the hub.c usbcore which can be used by the
-usb-onboard-dev driver to register this function as hook. This removes
-the dependency from the core and the usb-onboard-dev module is only
-pulled if really required. Of course this require that the hub.c usbcore
-driver allows custom hooks.
-
-Idea-X:
--------
-
-I'm open for your input :)
-
-
-Regards,
-  Marco
-
-PS: My favourite is Idea-3 followed by Idea-1.
-
-> vim +481 drivers/usb/core/hub.c
-> 
->    466	
->    467	/*
->    468	 * USB 2.0 spec Section 11.24.2.13
->    469	 */
->    470	static int set_port_feature(struct usb_device *hdev, int port1, int feature)
->    471	{
->    472		int ret;
->    473	
->    474		ret = usb_control_msg(hdev, usb_sndctrlpipe(hdev, 0),
->    475			USB_REQ_SET_FEATURE, USB_RT_PORT, feature, port1,
->    476			NULL, 0, 1000);
->    477		if (ret)
->    478			return ret;
->    479	
->    480		if (!is_root_hub(hdev))
->  > 481			ret = onboard_dev_port_feature(hdev, true, feature, port1);
->    482	
->    483		return ret;
->    484	}
->    485	
-> 
+> diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+> index 6eeef10edada..017255615508 100644
+> --- a/drivers/net/usb/ipheth.c
+> +++ b/drivers/net/usb/ipheth.c
+> @@ -286,11 +286,6 @@ static void ipheth_rcvbulk_callback(struct urb *urb)
+>  		return;
+>  	}
+>  
+> -	if (urb->actual_length <= IPHETH_IP_ALIGN) {
+> -		dev->net->stats.rx_length_errors++;
+> -		return;
+> -	}
+> -
+>  	/* RX URBs starting with 0x00 0x01 do not encapsulate Ethernet frames,
+>  	 * but rather are control frames. Their purpose is not documented, and
+>  	 * they don't affect driver functionality, okay to drop them.
+> @@ -298,7 +293,8 @@ static void ipheth_rcvbulk_callback(struct urb *urb)
+>  	 * URB received from the bulk IN endpoint.
+>  	 */
+>  	if (unlikely
+> -		(((char *)urb->transfer_buffer)[0] == 0 &&
+> +		(urb->actual_length == 4 &&
+> +		 ((char *)urb->transfer_buffer)[0] == 0 &&
+>  		 ((char *)urb->transfer_buffer)[1] == 1))
+>  		goto rx_submit;
+>  
 > -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+> 2.45.1
+> 
 > 
 
