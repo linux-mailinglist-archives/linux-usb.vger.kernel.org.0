@@ -1,103 +1,103 @@
-Return-Path: <linux-usb+bounces-13261-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13262-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2F1E94CBF9
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 10:14:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA53C94CC6F
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 10:40:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BD771F25014
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 08:14:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC1231F23D95
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2024 08:40:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7472718C93F;
-	Fri,  9 Aug 2024 08:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sUAhw8uX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01E418E028;
+	Fri,  9 Aug 2024 08:39:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FB018CC0B
-	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 08:14:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C9915AD86
+	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 08:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723191243; cv=none; b=OizOBlgwRMoU5fvuZoOHF6Z91bDH7Od9pCfm9F7JuYebXENaYBPnJ34gRYdFpsWLJmO2emfNaNYJ4ip+WQI2IMSueijwCnRZ+cgsXTGzWjYNfJs9troI6Y+q9NFuePjyMY5Q/hO2axT90r+MAHhXnhgU6t4ln+tXxWWbKH7rXnM=
+	t=1723192797; cv=none; b=oxDnzzQxXhkzlPAbyc8+rXBIqO4QQ747hiBtuuMTzY/vvt+rhWfy8jDEn/+oFAw5R4F25sJGZG2uw+6LBpV6SjTh1qZxQVm2LQ9zmeDlRhrjp7kzwyJ0CSIRABAOg83TBD3iKH47guIKYKUTGuPElwC3o45qCT3hXO4eTwJhbkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723191243; c=relaxed/simple;
-	bh=o6vZ0T2v+wk3sUy4K0/B5WZ/jW2YDzi41MEwGcTBGAc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ongT90f3NBjz2i7Mt6nVkU2vJahM5ArhvOI5ILkj67HEvUu4WDriqRjPTSVo57Qk4drG/0mjODgIDGSUd1qqzJ8w+HXQ85iPXH0JFQMfXYkPkU9LvNHNyt9NCpgumwl/HWLegxXL5v7HEoeZ/sZKd592XxIwxyYgW2nKkvLDDs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sUAhw8uX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11806C32782
-	for <linux-usb@vger.kernel.org>; Fri,  9 Aug 2024 08:14:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723191243;
-	bh=o6vZ0T2v+wk3sUy4K0/B5WZ/jW2YDzi41MEwGcTBGAc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=sUAhw8uX79iaVEyiijcJwsy8jJOBM5XiPQ6aGdilZ5IKy2f/DnrNgCBoiu4modhZS
-	 SPXw0PH07w9AYAJtZieRVfzjlgmPyYtCfM/4bvZsdtNO/2Y44t+iPCpcOPCKmWPoQ4
-	 /mNyDckADLsyzOuJG8if7ZQpH1/+t2pqbRBszJ9x8at7ZhwAUzWY3JPWAmgUbkNlMK
-	 kHNAsCRH+ekwg+OpBRmE1+MEDmYH1zWr52AY1HtqrcuE0OHp8HpcqRcqUNfRAsKNWT
-	 gMYYflNWwXXvhBzJm+PWkKqpJMQCXOfjoZqZ49hH9pA7MJI7dGfxgoQyUHvPkTOfBY
-	 ULh1NluLwYyDw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id ECB25C433E5; Fri,  9 Aug 2024 08:14:02 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
-Date: Fri, 09 Aug 2024 08:14:02 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: com+bugzilla-kernel@c-henry.fr
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219111-208809-FfxSD9unvW@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
-References: <bug-219111-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1723192797; c=relaxed/simple;
+	bh=SuMtRTSSUFHlF59kJ+EUS5iSgqX4XqsP+8c3EC8mW3A=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p22+wY8LXymVQ/2PgaeNw/OoXusSibsGDBR+dOCjvW4W9ltzHtVbvrQooMoOy46HHdwRYpe/j8DcQGlPloNffBhmDiAl9z66o1riV528oX3uZhPdy2M8B9Qy3ypk51d53ZBrppjGS/9FWYkuJqxFUvUwHh7mc5yDh/6XNunOcwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WgHQk2P8GzcdP1;
+	Fri,  9 Aug 2024 16:39:42 +0800 (CST)
+Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
+	by mail.maildlp.com (Postfix) with ESMTPS id A916F1400C9;
+	Fri,  9 Aug 2024 16:39:51 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemf500003.china.huawei.com
+ (7.202.181.241) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 9 Aug
+ 2024 16:39:51 +0800
+From: Zhang Zekun <zhangzekun11@huawei.com>
+To: <gregkh@linuxfoundation.org>, <quic_jjohnson@quicinc.com>,
+	<linux-usb@vger.kernel.org>
+CC: <zhangzekun11@huawei.com>
+Subject: [PATCH] usb: common: Use helper function for_each_node_with_property()
+Date: Fri, 9 Aug 2024 16:27:11 +0800
+Message-ID: <20240809082711.99085-1-zhangzekun11@huawei.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemf500003.china.huawei.com (7.202.181.241)
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
+for_each_node_with_property() can iterate through the device_node
+with a given property name, and we don't need to find the device_node
+in the while loop. Since of_device_is_available() will return false if
+the "controller" is NULL and break the while loop, there is no functional
+change with such conversion.
 
---- Comment #43 from CH (com+bugzilla-kernel@c-henry.fr) ---
-By restarting I mean turning off and on again, using the power button.
+Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
+---
+ drivers/usb/common/common.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-> What happens if you restart the device while old_scheme_first is N?
+diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+index 59b55d6cf490..84ec00b7966c 100644
+--- a/drivers/usb/common/common.c
++++ b/drivers/usb/common/common.c
+@@ -276,14 +276,13 @@ EXPORT_SYMBOL_GPL(usb_decode_interval);
+  */
+ enum usb_dr_mode of_usb_get_dr_mode_by_phy(struct device_node *np, int arg0)
+ {
+-	struct device_node *controller = NULL;
++	struct device_node *controller;
+ 	struct of_phandle_args args;
+ 	const char *dr_mode;
+ 	int index;
+ 	int err;
+ 
+-	do {
+-		controller = of_find_node_with_property(controller, "phys");
++	for_each_node_with_property(controller, "phys") {
+ 		if (!of_device_is_available(controller))
+ 			continue;
+ 		index = 0;
+@@ -306,7 +305,7 @@ enum usb_dr_mode of_usb_get_dr_mode_by_phy(struct device_node *np, int arg0)
+ 				goto finish;
+ 			index++;
+ 		} while (args.np);
+-	} while (controller);
++	}
+ 
+ finish:
+ 	err = of_property_read_string(controller, "dr_mode", &dr_mode);
+-- 
+2.17.1
 
-Not much:
-
-  # echo N >/sys/module/usbcore/parameters/old_scheme_first
-  # cat /sys/module/usbcore/parameters/old_scheme_first
-  N
-  # lsusb -v -d 22f0:0008~ | grep bConfiguration
-  # lsusb -v -d 22f0:0008~ | grep bConfiguration
-      bConfigurationValue     1
-  ## Here I turn offf and on again
-  # lsusb -v -d 22f0:0008~ | grep bConfiguration
-      bConfigurationValue     1
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
