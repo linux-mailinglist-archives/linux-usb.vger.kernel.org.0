@@ -1,130 +1,171 @@
-Return-Path: <linux-usb+bounces-13296-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13297-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B05594DCF7
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 14:48:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 217AE94DD1E
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 15:50:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2BD01F2206A
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 12:48:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 490881C20E0B
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 13:50:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56CA9158858;
-	Sat, 10 Aug 2024 12:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h4hDE24l"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A02158A3D;
+	Sat, 10 Aug 2024 13:50:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CF2157E61;
-	Sat, 10 Aug 2024 12:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6532B9A4
+	for <linux-usb@vger.kernel.org>; Sat, 10 Aug 2024 13:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723294097; cv=none; b=Gwx7GGHdzQvz80VkSbpL2uewZ2WoBBm/c5rFRnI0q97euvIIwvL6amTgeUXtYwZEsDYLeXleyJbumoAZ4Sxhu/8ZB2JO+roMebX/0EF9dLNxU3ukN0YOK58KoIJs9kX/Hzng3KAYyF4vlHtLSUuILPGGmvw9rghu73Ym6Qn6F7A=
+	t=1723297820; cv=none; b=nhcLapZElDenywGUqoI3FAv9lmUW1SvEStn6QiLcPxGsmmwvwa9MjyMjZ7e4gmCQMn9pRHVz0KLWjKMG1JnlyTHEMpNBKmF/Cf1nS3oX0aCet9oTrY2PZQ6csHPtvas3D/8vZTAzeoEJsErGbCGssPlPBICVRtGojer1aBXL8w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723294097; c=relaxed/simple;
-	bh=K72N+bvYVGEFOyhe+LWxiFVuR7StmCDF0j76w/W4rEc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JXv2W2kR7SjDEMzX9FDo6Ib7moKE4w186hKfGlYHXaWD4GDg7le7QdRhtuiUrJyBASSVKMAIx+2rm2w5NmRRNojmm7WaiTT75kBNTS1ntaZ3q7/BbdB/mz4Lu5bGhFZfQHZc63iRRwuPJ6Fa6Dl0o2K3CdIbVrgzEa2rdWKcmEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4hDE24l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BF8C32781;
-	Sat, 10 Aug 2024 12:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723294097;
-	bh=K72N+bvYVGEFOyhe+LWxiFVuR7StmCDF0j76w/W4rEc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=h4hDE24lXHg4IED/1LeOaUtTI/8mMt1oDKXKffjox/4W2WrG0S7cgwmMea/0dOeNr
-	 imoQTYqDnZoyfnUA6wzP+WTttXZhWAelk+nvft7tGBa5beljU9KbbIgAeOZluk0Lgb
-	 L1iJ0w5cJiMTQ+P1iyx8hWu2U8R+VVYoRObbvDFrEtU1V6ncLgkWo+ZuOZjKuKPMv5
-	 GPBv7q6kCkPKhGAkLiy8c66J68nbWh/sTuZh5YsHR8vRq5zBzDZb4T6PVl6yjGPmPI
-	 kdSRWG+dqbU6CzOmuQ3NqytGOQA3HiSDDVG2DA2vdnNaPkco0QxjPj3qwlu0ROT+Li
-	 KxWDHLAgYCxhw==
-Message-ID: <b37b3c8e-902f-4a62-8a6a-ab9b8cb6cadb@kernel.org>
-Date: Sat, 10 Aug 2024 14:48:10 +0200
+	s=arc-20240116; t=1723297820; c=relaxed/simple;
+	bh=lwb3aTcQtfFKv0UJt74kSXVIVWnGVAvk1pk+N2J4+kg=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AVD8uYEzao6HEuxUZ1M763qetoGs+y4FtPdQxLwQfY56F5jgru9dczEtuFoi0bC27Fg3teL6kQo8EKgLLt/LF0/NapO/naDSxR4d6KMs71JVDuennGrJt4XYwUw3XBzOph9qk7Y5zfSadyCAEZKNyRZCJ70v/F0tERKE99vUEt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-81f8c78cc66so369312239f.2
+        for <linux-usb@vger.kernel.org>; Sat, 10 Aug 2024 06:50:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723297818; x=1723902618;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6D3jhuhNYD4UqfJJiAUES3eK1Zy6ubaESxPy0rW0eG4=;
+        b=Fmr1EdAeaWilHLiZ02Z06zHuvANDv9xJICcCVK3mvvgWMl0ZZS7sS5IBj16xcWf9vN
+         r/2YanzUpCbK2QTYfU3xzga42QBRthRX7+2iKu4rntoum3qIlBI3/FMUFwVhh+um+oXW
+         hm+SEe/QcIg26yYHFiNFe03J+3qxg+Yz9zITVPrq2NrA/b55fBA2ZK9rgD9FpOzCvtQX
+         cfTOEb1/4et/xob/5mIM1kSPiMyUqV9L5trNR6hrhPQmfLiIH3BFnQHfZ0y2lujBt6nd
+         JCg32QqqH5sQnMRZaC9qwc7nB7nyL37MIZYiJK1m7lcrz8HYcjpaxJf3Yap0Vc4XRMKz
+         9keg==
+X-Forwarded-Encrypted: i=1; AJvYcCXRBVVCS0WPmZMZ7dNLN/iJASyxf+6RKso6Oz51GNSKJrm/eJ8hc8tQJ9C+B8osogLIRzHg+VG//52Pli8kKS9LXlwc3hNOyWlt
+X-Gm-Message-State: AOJu0YygfvTjwu4NI1Q8X4+QvDzB50J1gojvayzSbg7SnBHrj9ar1+1l
+	nEdsU7PHkaxvlpY50NOmm2uL+aTtTqkdrlRYlfsxipLw9HyMnKH5fxtqYC9kdyze4+Q9L/iiNjB
+	l3HwCwYXq2m/cqEwhIJNgj2jnNdXgiGiMLGB9QKZAFs4IndQ3VI427wA=
+X-Google-Smtp-Source: AGHT+IFHQYLjt/fcJ+3dxYIAUaSzylPUjgfgrICf1obOnTyXBeTS5Lmum47SC0EaVIvCUdp+qIcMgxR4/0gGaMBcUXdGllsqLd6H
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: x1e80100: Add USB Multiport
- controller
-To: Konrad Dybcio <konradybcio@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Krishna Kurapati <quic_kriskura@quicinc.com>,
- Konrad Dybcio <quic_kdybcio@quicinc.com>
-References: <20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com>
- <20240809-topic-h_mp-v1-2-3c5f468566d8@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240809-topic-h_mp-v1-2-3c5f468566d8@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6638:2726:b0:4c0:9a3e:c259 with SMTP id
+ 8926c6da1cb9f-4ca6edc901cmr223439173.5.1723297817714; Sat, 10 Aug 2024
+ 06:50:17 -0700 (PDT)
+Date: Sat, 10 Aug 2024 06:50:17 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004475f6061f548a43@google.com>
+Subject: [syzbot] [usb?] possible deadlock in __flush_workqueue (2)
+From: syzbot <syzbot+e528c9aad0fb5383ec83@syzkaller.appspotmail.com>
+To: arnd@arndb.de, eli.billauer@gmail.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 09/08/2024 15:18, Konrad Dybcio wrote:
-> X1E80100 has a multiport controller with 2 HS (eUSB) and 2 SS PHYs
-> attached to it. It's commonly used for USB-A ports and internally
-> routed devices. Configure it to support such functionality.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Hello,
 
-You have from and SoB mismatch. This was sent some odd way, because both
-b4 and git send-email would produce correct From field.
+syzbot found the following issue on:
+
+HEAD commit:    b446a2dae984 Merge tag 'linux_kselftest-fixes-6.11-rc3' of..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1253e123980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e8a2eef9745ade09
+dashboard link: https://syzkaller.appspot.com/bug?extid=e528c9aad0fb5383ec83
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a6bd23980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b175e3980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/dfb1bb3422ba/disk-b446a2da.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/af839611c6d9/vmlinux-b446a2da.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b99bed56482e/bzImage-b446a2da.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e528c9aad0fb5383ec83@syzkaller.appspotmail.com
+
+============================================
+WARNING: possible recursive locking detected
+6.11.0-rc2-syzkaller-00004-gb446a2dae984 #0 Not tainted
+--------------------------------------------
+kworker/0:1H/58 is trying to acquire lock:
+ffff88802c60a148 ((wq_completion)xillyusb){+.+.}-{0:0}, at: touch_wq_lockdep_map kernel/workqueue.c:3876 [inline]
+ffff88802c60a148 ((wq_completion)xillyusb){+.+.}-{0:0}, at: __flush_workqueue+0x1b0/0x1710 kernel/workqueue.c:3918
+
+but task is already holding lock:
+ffff88802c60a148 ((wq_completion)xillyusb){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3206 [inline]
+ffff88802c60a148 ((wq_completion)xillyusb){+.+.}-{0:0}, at: process_scheduled_works+0x90a/0x1830 kernel/workqueue.c:3312
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock((wq_completion)xillyusb);
+  lock((wq_completion)xillyusb);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+2 locks held by kworker/0:1H/58:
+ #0: ffff88802c60a148 ((wq_completion)xillyusb){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3206 [inline]
+ #0: ffff88802c60a148 ((wq_completion)xillyusb){+.+.}-{0:0}, at: process_scheduled_works+0x90a/0x1830 kernel/workqueue.c:3312
+ #1: ffffc9000133fd00 ((work_completion)(&xdev->wakeup_workitem)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3207 [inline]
+ #1: ffffc9000133fd00 ((work_completion)(&xdev->wakeup_workitem)){+.+.}-{0:0}, at: process_scheduled_works+0x945/0x1830 kernel/workqueue.c:3312
+
+stack backtrace:
+CPU: 0 UID: 0 PID: 58 Comm: kworker/0:1H Not tainted 6.11.0-rc2-syzkaller-00004-gb446a2dae984 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/27/2024
+Workqueue: xillyusb wakeup_all
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:93 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:119
+ check_deadlock kernel/locking/lockdep.c:3061 [inline]
+ validate_chain+0x15d3/0x5900 kernel/locking/lockdep.c:3855
+ __lock_acquire+0x137a/0x2040 kernel/locking/lockdep.c:5142
+ lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
+ touch_wq_lockdep_map kernel/workqueue.c:3876 [inline]
+ __flush_workqueue+0x1c9/0x1710 kernel/workqueue.c:3918
+ drain_workqueue+0xc9/0x3a0 kernel/workqueue.c:4082
+ destroy_workqueue+0xba/0xc40 kernel/workqueue.c:5781
+ cleanup_dev drivers/char/xillybus/xillyusb.c:558 [inline]
+ kref_put+0x104/0x180 include/linux/kref.h:65
+ process_one_work kernel/workqueue.c:3231 [inline]
+ process_scheduled_works+0xa2c/0x1830 kernel/workqueue.c:3312
+ worker_thread+0x86d/0xd40 kernel/workqueue.c:3390
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
