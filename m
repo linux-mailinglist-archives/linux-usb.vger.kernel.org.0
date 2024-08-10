@@ -1,90 +1,131 @@
-Return-Path: <linux-usb+bounces-13294-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13295-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C578E94DC9A
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 13:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B37E94DCF4
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 14:47:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 628E9B21C35
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 11:48:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B1FFB21493
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2024 12:47:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AEB157E78;
-	Sat, 10 Aug 2024 11:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9187F1586F6;
+	Sat, 10 Aug 2024 12:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiadL2vw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUruoKzB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A74E14A605
-	for <linux-usb@vger.kernel.org>; Sat, 10 Aug 2024 11:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BF6157E61;
+	Sat, 10 Aug 2024 12:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723290515; cv=none; b=XPm8Z2Fad9HXhvkGk+Bt6V1fxGZ2gf6d4wUBfHkTWDWdp2aidrDCB+7IBQNsDl283bklUbE9ZEQT82X8nZhzFK1h0m4HO1rj1/O4i/5Ye8gqI9cEljCXZv2ohu/KHjdmaz2E5+Vmkjw/cDUWPpPQnQjB0n8R97B58+oVY5xNGx8=
+	t=1723294047; cv=none; b=ubjizGsKvyxKAGU5FezaCLviPxlJrbkGf2JFfMcmXMKuw811LfSKYRb0BEwL5iVt+azZxO6evHAyQMC5AgqOUeaOQe6D6zPMBdexEetESOgr3HSWgN01tKpxRNTbjghTTpNFMABvgtPQWI6tj6LVOJOCqNxllMMjzmhXiIe8jGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723290515; c=relaxed/simple;
-	bh=KUo1SFpASIPZnQKwtdwvigcPNcAs3cUXjnIrt4Cg+s8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=M9535w1G/SJ0ySk3rG44oQhqDCopgYTk8ABD2jlAkn2+aYUc6nLnSwqpGiZvYGPgoKPsT1Lf/q575bnI7bq763DGPIUQ8Xiz4Y+IXadEfuXXWJIYAlKjvT8OOD946uiTXnM1t3SeAThFe89G8JzWl5aLKD5UPyk4zKJvC3Tcte8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiadL2vw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DED1EC32781
-	for <linux-usb@vger.kernel.org>; Sat, 10 Aug 2024 11:48:34 +0000 (UTC)
+	s=arc-20240116; t=1723294047; c=relaxed/simple;
+	bh=UYNanTe8yKRGFA3LMyPhTHncmqZ6LPNnPkib7v6wSu8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=moPjPz/8p7IZBrBF190wJjVGy6zhgEnZHI/7MhZuOrUMwLk93pXebOnxurD8spKvsrU2CDObXawzoxFdb4N2EFTFYJsSVEwjJcKSQs42Iw1HytUIsodxFZwvSzRzTuraxSR6b7Yp8pqciSShMZUpJkMheC+dmwKAdO8YjjyTltY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUruoKzB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AC7C32781;
+	Sat, 10 Aug 2024 12:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723290514;
-	bh=KUo1SFpASIPZnQKwtdwvigcPNcAs3cUXjnIrt4Cg+s8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=XiadL2vw3v4no9UoqhIyl/MqXDk2e4MtjKFVjHbAsdDdVn5c9WPum89hEPiepwTAU
-	 oQdBfJAJDYZ0G+J2/VXF7DJUV6dIZCbMjSoKp6Va6T9b/uzaS8J3C4Vh4G1G9CIQaa
-	 yLs6XV3eTe5KKReBaoCOgMgsjSO99RsfNjFdV5AKF0jr4g0MyXcjz/hwThN78XUopH
-	 ga3vh+o4iKSgJf5nuLa65GOJXGu2BR5ol/iPV/8CMt1FgWkdWq3cG+rxZ30S+UH3mI
-	 PXXD/6WiiurOr2cBFo9BbOW0XdwCQ9Dxmh8Zg5YcWW0LKpRg/iSz3a7oUSwMd6PAfR
-	 6lnly5M2VLDDw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BF98EC53B73; Sat, 10 Aug 2024 11:48:34 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219111] Xone:23C mixer not recognized as a 2in/2out device
-Date: Sat, 10 Aug 2024 11:48:34 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: com+bugzilla-kernel@c-henry.fr
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219111-208809-GAIwSpK7K9@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219111-208809@https.bugzilla.kernel.org/>
-References: <bug-219111-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1723294046;
+	bh=UYNanTe8yKRGFA3LMyPhTHncmqZ6LPNnPkib7v6wSu8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=gUruoKzBrlo4Hzycz/JVC0Tp5I137jbLrQGSUDSShikdTfWxdISTSu90/vrOWfueJ
+	 HdADFSlrmREseoVy0w66Acw4ClQOZit8U4griK2pesvrzmpxFPGEmuEYkLclNUP2P7
+	 EAMWfsUEdikrbOCojE11kHGM+im8XGeLYlq/9DLYaJiU7a7lW2BcayyAVUGVhHvItE
+	 FeQBwNMDYf5UF9GmpGYhoNixAzZoE7j8KWlekvaPQTPfxzNL9TjUxDQNo4y9CcSZGX
+	 JegnS+yygbzxA5cCCE/Kr7DgJvqTKQZ71ye1IXNrXlxMdxg4FrsYSfG0dBCJwd+BHA
+	 ytqcNQpjeu1QA==
+Message-ID: <27874bb8-d1e3-445c-bc09-054a2d6af2d1@kernel.org>
+Date: Sat, 10 Aug 2024 14:47:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: usb: qcom,dwc3: Document X1E80100 MP
+ controller
+To: Konrad Dybcio <konradybcio@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Konrad Dybcio <quic_kdybcio@quicinc.com>
+References: <20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com>
+ <20240809-topic-h_mp-v1-1-3c5f468566d8@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240809-topic-h_mp-v1-1-3c5f468566d8@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219111
+On 09/08/2024 15:18, Konrad Dybcio wrote:
+> From: Konrad Dybcio <quic_kdybcio@quicinc.com>
+> 
+> The X1E80100, just like its predecessors, has a Multiport controller.
+> This time around, 2 HS (eUSB) and 2 SS PHYs are attached.
+> 
+> Document it.
+> 
+> Signed-off-by: Konrad Dybcio <quic_kdybcio@quicinc.com>
 
---- Comment #51 from CH (com+bugzilla-kernel@c-henry.fr) ---
-(Working means it detects the correct number of possible configurations with
-new scheme but that code breaks the USB protocol on my computer)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---=20
-You may reply to this email to add a comment.
+Best regards,
+Krzysztof
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
