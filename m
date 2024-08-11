@@ -1,162 +1,252 @@
-Return-Path: <linux-usb+bounces-13310-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13311-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8377794E16B
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Aug 2024 15:25:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E978A94E1C3
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Aug 2024 17:16:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F302B2120C
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Aug 2024 13:24:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E679E1C20AC2
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Aug 2024 15:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C620E14A4E5;
-	Sun, 11 Aug 2024 13:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ru0Wcn2K"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB60814A602;
+	Sun, 11 Aug 2024 15:16:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF8014A0A0;
-	Sun, 11 Aug 2024 13:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3C5D29E
+	for <linux-usb@vger.kernel.org>; Sun, 11 Aug 2024 15:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723382664; cv=none; b=NoFEsBi+Y6p6bHbmg9r20Kxj8NL60m4COzF+SUBPlC572Ive2dIFqGBUSXoPzYBXd3s3slPrPKIjDPmRJMIZhoxvTrh7EwLPUQ140sDQrdmSquK3UkSB3AU4zUcxbriS6gYOa2DEdhBd46+EgYmmVLPKImDtwkKqNNdq9VQxfOU=
+	t=1723389380; cv=none; b=gHELXE6N6qkQAHAGW9AEyGoz+RqAM5ow+Unumtw0EGGTKBuIMNakMXdBE9HX6R7u4mfr4phmppUZU+jnFRQyIcyBgFxgnsVvTzSzjAyrdTLj038NPAUeRy/ru+0LjNvgxchf1f/iN94yjfSLsXwqBTn2ILt8BjdGy7USTmLGA3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723382664; c=relaxed/simple;
-	bh=zFkf5A0SCILJybBzNgZN7vOViti+xx2JoLKzkJ4gsQk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=arRNZnukWq3H4aaq0lSonvK/Rh48C7B5h1UOueN+SCsAYHAp74uez+hxuLpTPd+ZzdpbxOL/myfb7MrTE3yVEdERcjS9/09xbRjooVer+Aim/YVOK8CBfB/8tmKWNY2yMW/0PM9/y0C3FMbxSGl89wmn/j6VETMQRafM6d9Ns0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ru0Wcn2K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EE1C4AF0E;
-	Sun, 11 Aug 2024 13:24:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1723382663;
-	bh=zFkf5A0SCILJybBzNgZN7vOViti+xx2JoLKzkJ4gsQk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Ru0Wcn2K4oYhLkw54tTkjMHvuEYyoNljeFQH437r8YF6fjd4hbmvijM0fxWk72pW/
-	 7qvgtrkEcr+THj0dOLHTowKj5a+wNMM/8B8aBiYl8teYCrCJn0kAwEW8Yn35oHk1JB
-	 Zl4lQ0n6jPTASZdIp7XhsPxe+H0hq/KWO2y29Jps=
-Date: Sun, 11 Aug 2024 15:24:20 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.11-rc3
-Message-ID: <Zri7hMbzgp6fZeAa@kroah.com>
+	s=arc-20240116; t=1723389380; c=relaxed/simple;
+	bh=PX2Qyk2sj2YaPRE4vAlMIG+yD1O2x+23AfU91/Rmmzc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JuAUeUZXq/itfqLE1bH0KNjXK7QEPmsyEMBuV8vfrc9Mwb1hJ903KHzKXLr8KVbsRsu74tFDXDgRpkaJkSrafGw0Pm/jPrC+XQpPPDZQhNAiFTQ5HSeeEPxLFkWa4c6xnqboakTCPntXrnmFELw2VGcoTjmvBNDzSr1XzCzu1ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-81d1b92b559so469434039f.0
+        for <linux-usb@vger.kernel.org>; Sun, 11 Aug 2024 08:16:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723389378; x=1723994178;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GpqsDr7Fcpr/7oyJ3XUVZU4wjeRME0LvNsxEkl7xmII=;
+        b=ojEcUtmZelHmFExO/LQeBD7+DXWdLRXYnw8d7ezIwhKoOtj++FNSzUUw0bt9yotRAU
+         U1fNyc4/7TNxFnvkPrslKdKmHJjraMUStX8vVz6xGQNezIUISTSumYFQLfBu4iFiKuCH
+         iaANewv/9jUziST3xc0NH6N+MmrtlzfnxPNUuPCpozH8BmC7DJ0hcQSbaT6t3+S4c0hq
+         7uJ+LpLekGdBLSL1xWjpkk4apAi4fvg11RDp5f5Zvv4FCM5gRp495KvHHzQCQDcaxvYG
+         AgsMG4OOE2SbJesuna6BunQMGoVQ0f9LLby7MffQKjmwfJ+gCdEwTeWIOIdAHiZAa/FG
+         yVGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbRuDLsuVI493maV3CzAFz58APD+eDrqTtUG/dLNPJNpJaFQv/rfRK20x3WNgR2yVo90Xw5X4Yk2K2HYJME8mPw/iMVc8L+kNa
+X-Gm-Message-State: AOJu0YzMuJA05h6GAO9TPCOJt8cOtDKcBufelmrGKy0XXUKcxD59n/Uc
+	hIp4jqEfC4JLSRI0tHNaSOPWYFyWMMbnY/2Jtk56beFEHHCKLp51lClVUiGR3Zc2mca56h5fnmZ
+	n3HL0Zi47B5RFdbLXTfSdNvWTcRP2eslU9tmsMv2M8cc10W8zQpPKBSw=
+X-Google-Smtp-Source: AGHT+IHmHGGs5LmOfUwYNaTLMuPRKQUdmKFj6p7TiMr30uCvMxNr/7J2hDeOgjBG80mju7GweKZbi5GIsEczl83tezpx/VIYPVhV
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:c24a:0:b0:397:ca8e:d377 with SMTP id
+ e9e14a558f8ab-39b6c11b447mr6284165ab.0.1723389378217; Sun, 11 Aug 2024
+ 08:16:18 -0700 (PDT)
+Date: Sun, 11 Aug 2024 08:16:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b2d765061f69db06@google.com>
+Subject: [syzbot] [input?] possible deadlock in __input_unregister_device
+From: syzbot <syzbot+3f4bf5c599ee9b16d704@syzkaller.appspotmail.com>
+To: dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+Hello,
 
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+syzbot found the following issue on:
 
-are available in the Git repository at:
+HEAD commit:    25f51b76f90f xhci-pci: Make xhci-pci-renesas a proper modu..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=11831703980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=10d86428d89226d6
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f4bf5c599ee9b16d704
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc3
+Unfortunately, I don't have any reproducer for this issue yet.
 
-for you to fetch changes up to 65ba8cef0416816b912c04850fc2468329994353:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c1824302a322/disk-25f51b76.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9f387ec15c0a/vmlinux-25f51b76.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/58ba53ce9979/bzImage-25f51b76.xz
 
-  usb: typec: ucsi: Fix a deadlock in ucsi_send_command_common() (2024-08-07 12:48:30 +0200)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3f4bf5c599ee9b16d704@syzkaller.appspotmail.com
 
-----------------------------------------------------------------
-USB fixes for 6.11-rc3
+UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+misc raw-gadget: fail, usb_gadget_register_driver returned -16
+UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+misc raw-gadget: fail, usb_gadget_register_driver returned -16
+======================================================
+WARNING: possible circular locking dependency detected
+6.11.0-rc1-syzkaller-00033-g25f51b76f90f #0 Not tainted
+------------------------------------------------------
+syz.2.38/5056 is trying to acquire lock:
+ffff8881177d42c0 (&dev->mutex#2){+.+.}-{3:3}, at: input_disconnect_device drivers/input/input.c:724 [inline]
+ffff8881177d42c0 (&dev->mutex#2){+.+.}-{3:3}, at: __input_unregister_device+0x24/0x450 drivers/input/input.c:2273
 
-Here are a number of small USB driver fixes for reported issues for
-6.11-rc3.  Included in here are:
-  - usb serial driver MODULE_DESCRIPTION() updates
-  - usb serial driver fixes
-  - typec driver fixes
-  - usb-ip driver fix
-  - gadget driver fixes
-  - dt binding update
+but task is already holding lock:
+ffff8881131b5e20 (&hdev->ll_open_lock){+.+.}-{3:3}, at: hid_hw_open+0x25/0x170 drivers/hid/hid-core.c:2361
 
-All of these have been in linux-next with no reported issues.
+which lock already depends on the new lock.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-----------------------------------------------------------------
-Alexander Stein (1):
-      dt-bindings: usb: microchip,usb2514: Add USB2517 compatible
+the existing dependency chain (in reverse order) is:
 
-Chris Wulff (2):
-      usb: gadget: u_audio: Check return codes from usb_ep_enable and config_ep_by_speed.
-      usb: gadget: core: Check for unset descriptor
+-> #1 (&hdev->ll_open_lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+       __mutex_lock+0x175/0x9c0 kernel/locking/mutex.c:752
+       hid_hw_open+0x25/0x170 drivers/hid/hid-core.c:2361
+       input_open_device+0x1c9/0x320 drivers/input/input.c:617
+       evdev_open_device drivers/input/evdev.c:391 [inline]
+       evdev_open+0x533/0x6a0 drivers/input/evdev.c:478
+       chrdev_open+0x26d/0x6f0 fs/char_dev.c:414
+       do_dentry_open+0x957/0x1490 fs/open.c:959
+       vfs_open+0x82/0x3f0 fs/open.c:1089
+       do_open fs/namei.c:3727 [inline]
+       path_openat+0x2141/0x2d20 fs/namei.c:3886
+       do_filp_open+0x1dc/0x430 fs/namei.c:3913
+       do_sys_openat2+0x17a/0x1e0 fs/open.c:1416
+       do_sys_open fs/open.c:1431 [inline]
+       __do_sys_openat fs/open.c:1447 [inline]
+       __se_sys_openat fs/open.c:1442 [inline]
+       __x64_sys_openat+0x175/0x210 fs/open.c:1442
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-Dan Carpenter (1):
-      usb: typec: tcpci: Fix error code in tcpci_check_std_output_cap()
+-> #0 (&dev->mutex#2){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3133 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3252 [inline]
+       validate_chain kernel/locking/lockdep.c:3868 [inline]
+       __lock_acquire+0x24ed/0x3cb0 kernel/locking/lockdep.c:5142
+       lock_acquire kernel/locking/lockdep.c:5759 [inline]
+       lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5724
+       __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+       __mutex_lock+0x175/0x9c0 kernel/locking/mutex.c:752
+       input_disconnect_device drivers/input/input.c:724 [inline]
+       __input_unregister_device+0x24/0x450 drivers/input/input.c:2273
+       input_unregister_device+0xb9/0x100 drivers/input/input.c:2514
+       steam_input_unregister+0x10c/0x2c0 drivers/hid/hid-steam.c:917
+       steam_client_ll_open+0xc9/0x100 drivers/hid/hid-steam.c:1121
+       hid_hw_open+0xe2/0x170 drivers/hid/hid-core.c:2366
+       hidraw_open+0x274/0x7e0 drivers/hid/hidraw.c:296
+       chrdev_open+0x26d/0x6f0 fs/char_dev.c:414
+       do_dentry_open+0x957/0x1490 fs/open.c:959
+       vfs_open+0x82/0x3f0 fs/open.c:1089
+       do_open fs/namei.c:3727 [inline]
+       path_openat+0x2141/0x2d20 fs/namei.c:3886
+       do_filp_open+0x1dc/0x430 fs/namei.c:3913
+       do_sys_openat2+0x17a/0x1e0 fs/open.c:1416
+       do_sys_open fs/open.c:1431 [inline]
+       __do_sys_openat fs/open.c:1447 [inline]
+       __se_sys_openat fs/open.c:1442 [inline]
+       __x64_sys_openat+0x175/0x210 fs/open.c:1442
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-Dr. David Alan Gilbert (1):
-      USB: serial: spcp8x5: remove unused struct 'spcp8x5_usb_ctrl_arg'
+other info that might help us debug this:
 
-Greg Kroah-Hartman (2):
-      Merge tag 'usb-serial-6.11-rc1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-      Merge tag 'usb-serial-6.11-rc2' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+ Possible unsafe locking scenario:
 
-Harshit Mogalapalli (2):
-      usb: typec: tipd: Fix dereferencing freeing memory in tps6598x_apply_patch()
-      usb: typec: tipd: Delete extra semi-colon
+       CPU0                    CPU1
+       ----                    ----
+  lock(&hdev->ll_open_lock);
+                               lock(&dev->mutex#2);
+                               lock(&hdev->ll_open_lock);
+  lock(&dev->mutex#2);
 
-Heikki Krogerus (1):
-      usb: typec: ucsi: Fix a deadlock in ucsi_send_command_common()
+ *** DEADLOCK ***
 
-Javier Carrasco (2):
-      USB: serial: garmin_gps: annotate struct garmin_packet with __counted_by
-      USB: serial: garmin_gps: use struct_size() to allocate pkt
+2 locks held by syz.2.38/5056:
+ #0: ffffffff89d34790 (minors_rwsem){+.+.}-{3:3}, at: hidraw_open+0xa6/0x7e0 drivers/hid/hidraw.c:282
+ #1: ffff8881131b5e20 (&hdev->ll_open_lock){+.+.}-{3:3}, at: hid_hw_open+0x25/0x170 drivers/hid/hid-core.c:2361
 
-Jeff Johnson (1):
-      USB: serial: add missing MODULE_DESCRIPTION() macros
+stack backtrace:
+CPU: 1 UID: 0 PID: 5056 Comm: syz.2.38 Not tainted 6.11.0-rc1-syzkaller-00033-g25f51b76f90f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/27/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:93 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:119
+ check_noncircular+0x31a/0x400 kernel/locking/lockdep.c:2186
+ check_prev_add kernel/locking/lockdep.c:3133 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3252 [inline]
+ validate_chain kernel/locking/lockdep.c:3868 [inline]
+ __lock_acquire+0x24ed/0x3cb0 kernel/locking/lockdep.c:5142
+ lock_acquire kernel/locking/lockdep.c:5759 [inline]
+ lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5724
+ __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+ __mutex_lock+0x175/0x9c0 kernel/locking/mutex.c:752
+ input_disconnect_device drivers/input/input.c:724 [inline]
+ __input_unregister_device+0x24/0x450 drivers/input/input.c:2273
+ input_unregister_device+0xb9/0x100 drivers/input/input.c:2514
+ steam_input_unregister+0x10c/0x2c0 drivers/hid/hid-steam.c:917
+ steam_client_ll_open+0xc9/0x100 drivers/hid/hid-steam.c:1121
+ hid_hw_open+0xe2/0x170 drivers/hid/hid-core.c:2366
+ hidraw_open+0x274/0x7e0 drivers/hid/hidraw.c:296
+ chrdev_open+0x26d/0x6f0 fs/char_dev.c:414
+ do_dentry_open+0x957/0x1490 fs/open.c:959
+ vfs_open+0x82/0x3f0 fs/open.c:1089
+ do_open fs/namei.c:3727 [inline]
+ path_openat+0x2141/0x2d20 fs/namei.c:3886
+ do_filp_open+0x1dc/0x430 fs/namei.c:3913
+ do_sys_openat2+0x17a/0x1e0 fs/open.c:1416
+ do_sys_open fs/open.c:1431 [inline]
+ __do_sys_openat fs/open.c:1447 [inline]
+ __se_sys_openat fs/open.c:1442 [inline]
+ __x64_sys_openat+0x175/0x210 fs/open.c:1442
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f4c34136390
+Code: 48 89 44 24 20 75 93 44 89 54 24 0c e8 19 8e 02 00 44 8b 54 24 0c 89 da 48 89 ee 41 89 c0 bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 38 44 89 c7 89 44 24 0c e8 6c 8e 02 00 8b 44
+RSP: 002b:00007f4c32db6b70 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 000000000014a042 RCX: 00007f4c34136390
+RDX: 000000000014a042 RSI: 00007f4c32db6c10 RDI: 00000000ffffff9c
+RBP: 00007f4c32db6c10 R08: 0000000000000000 R09: 0023776172646968
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+R13: 0000000000000000 R14: 00007f4c342c5f80 R15: 00007ffd273fd598
+ </TASK>
+UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+misc raw-gadget: fail, usb_gadget_register_driver returned -16
+UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+misc raw-gadget: fail, usb_gadget_register_driver returned -16
 
-Konrad Dybcio (1):
-      usb: typec: fsa4480: Check if the chip is really there
 
-Marek Marczykowski-Górecki (1):
-      USB: serial: debug: do not echo input by default
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Oliver Neukum (1):
-      usb: vhci-hcd: Do not drop references before new references are gained
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Prashanth K (1):
-      usb: gadget: u_serial: Set start_delayed during suspend
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Takashi Iwai (1):
-      usb: gadget: midi2: Fix the response for FB info with block 0xff
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Tudor Ambarus (2):
-      usb: gadget: f_fs: restore ffs_func_disable() functionality
-      usb: gadget: f_fs: pull out f->disable() from ffs_func_set_alt()
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-Xu Yang (1):
-      usb: typec: tcpm: avoid sink goto SNK_UNATTACHED state if not received source capability message
-
- .../devicetree/bindings/usb/microchip,usb2514.yaml |  1 +
- drivers/usb/gadget/function/f_fs.c                 | 32 ++++++++++-------
- drivers/usb/gadget/function/f_midi2.c              | 21 +++++++----
- drivers/usb/gadget/function/u_audio.c              | 42 +++++++++++++++++-----
- drivers/usb/gadget/function/u_serial.c             |  1 +
- drivers/usb/gadget/udc/core.c                      | 10 +++---
- drivers/usb/serial/ch341.c                         |  1 +
- drivers/usb/serial/garmin_gps.c                    |  5 ++-
- drivers/usb/serial/mxuport.c                       |  1 +
- drivers/usb/serial/navman.c                        |  1 +
- drivers/usb/serial/qcaux.c                         |  1 +
- drivers/usb/serial/spcp8x5.c                       | 10 ------
- drivers/usb/serial/symbolserial.c                  |  1 +
- drivers/usb/serial/usb-serial-simple.c             |  1 +
- drivers/usb/serial/usb_debug.c                     |  8 +++++
- drivers/usb/typec/mux/fsa4480.c                    | 14 ++++++++
- drivers/usb/typec/tcpm/tcpci.c                     |  2 +-
- drivers/usb/typec/tcpm/tcpm.c                      |  2 +-
- drivers/usb/typec/tipd/core.c                      |  4 +--
- drivers/usb/typec/ucsi/ucsi.c                      | 11 +++---
- drivers/usb/usbip/vhci_hcd.c                       |  9 +++--
- 21 files changed, 119 insertions(+), 59 deletions(-)
+If you want to undo deduplication, reply with:
+#syz undup
 
