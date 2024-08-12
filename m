@@ -1,124 +1,146 @@
-Return-Path: <linux-usb+bounces-13331-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13332-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9699394F82E
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 22:24:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B44694F89B
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 22:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 287CEB21CCD
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 20:24:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB866280FEE
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 20:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC15019414A;
-	Mon, 12 Aug 2024 20:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 726C919AA57;
+	Mon, 12 Aug 2024 20:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDWIz29g"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Sjom9alj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F71183CA5;
-	Mon, 12 Aug 2024 20:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B110B1953B9;
+	Mon, 12 Aug 2024 20:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723494277; cv=none; b=jiFI9gm/r7/IkaC6ySfIP9FTGOV43qB15I5QX6q9Hx5859luJP+FnAjg5TYQKNkF11tKL9fuELh0Fpetln6NCrT2kIiejmkZqG/hW6RFwOGwwMu8LyEbdETqZ2OAYVwSbiobxD6zcenB1HCxD3FWyW2lSysUsx7zdsKCXbxeQTs=
+	t=1723495954; cv=none; b=R+YLDByUQVHGbmAMUvRUtctodGsVRjKBUHPGTtotzs7dB5GBy+r6veGC7y2zW/P1YD4nFkEOL3w1rSsbJ6QWR4CK3o5PeTZIjYnHKYCpFPJtz4tM3brodlB2+wGiLj2gGzJwiF+KSKsoknK0nqCkV6dNM3aS7HZmXYpD88v8qLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723494277; c=relaxed/simple;
-	bh=qeVfUIcoWdhpUtM/u3eGhXh18DwBT5NJk6teiyVCXc4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hAHU5s3ooE55jwgOeC3PDu+V0Nvd5P994+pnU9LylAwyAGW9LkuvkShWAjt+yI5kP+Frwnx/T8h0D+doi3xIvxIDHPBxvWxV30EWZ6xHqDQGgO6wOpLgRRWa3OXOoaydQFLbXs7sFb8uCDVZ8CA30kzaloAHJBkvaOY2OajNBg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDWIz29g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0F0C4AF0C;
-	Mon, 12 Aug 2024 20:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723494276;
-	bh=qeVfUIcoWdhpUtM/u3eGhXh18DwBT5NJk6teiyVCXc4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TDWIz29gbxn0i5R6I7puBRaIoL3mzVtHfge3jmD7Bsdl3aA5lfTapvLI3sMAXGPEw
-	 PI4GsEzrPlM8Ns4P6qianppIkWh8+Dw53KpogQqRp0GiPxLV0wz9bfmaiyGK9aeA4J
-	 0wHmRyxqpjUkviQ79xQxWgVBAivlwnOLyoFAbdh6TyxV3Cj6TFdRrpUktNYK0ZPfKv
-	 QR5KHRgCrwSTozdRPZkaDW8ury1FcURRHSZNCQF1XCKrLdonefIRnCOxRMorqS5IgT
-	 z+WDAExPR+Ot+WgS1SvmZHOXxiDCppd7b0bcPVOGBzfFILVpwkV0toG2ewbkBOPzyy
-	 HI805Zb1oYUtQ==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ef2d96164aso51768011fa.3;
-        Mon, 12 Aug 2024 13:24:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXhHdw7hH3qr99YE6yqC8o16OcwZZJ+oHgx3GFRPHDsi7f/UyIlBePUtrOHhCVtCJTT49OT5fTrwGpvTPB2KFiL8gnodji/jIAesK270n4WpZYeIU+96AThWww/BH4XJbpeByQgprBOVn7uv3l+8tWnMht475O87d+0zr4zQXGR6oRgjmS1RFfMeifD1ApWtYg1Yoi6oT4kXiCF1SObmflP06g=
-X-Gm-Message-State: AOJu0Yx3guwvjllQ8cxW8aVScWDq476AQm+t76ilfXJ+KBCakBAmpDWX
-	YfHNTLNKka0giVs0Is+r5TLGYVpCTFQ3b7Bxw7euZLG17XrNY1O8i2N9peO7fDXcJAGV70tOJYs
-	sSvf7UP8MoVss/fU6Fwe8eSgyjg==
-X-Google-Smtp-Source: AGHT+IHjxVfCOndn+b47XGHH72cKUiyoILGnoGfWC8XZdmZexSAAw/YL/bL1WxJ+jTMixEgHzL/lZim6CTMEs11wsSY=
-X-Received: by 2002:a2e:461a:0:b0:2ef:22e6:233f with SMTP id
- 38308e7fff4ca-2f2b7155856mr8169011fa.21.1723494274886; Mon, 12 Aug 2024
- 13:24:34 -0700 (PDT)
+	s=arc-20240116; t=1723495954; c=relaxed/simple;
+	bh=5S3wsxJNYF65jYK51oDnSpWPl4BwJZWS6p0vqfXi54U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RjHSJrWK5ueC8dXGs6IWsV1vv3mdASO4Du3YbGwN670JDeJDK8MxwCwpWiUIBI6eks5WdOxgO2sxmMwBYAs0GrOBPncgKEKrYTB96kpbAybucwrhTRTUvLfkw1W9XNVqpXpWGIkFBY0lKW9T8v5m51EzNpWQKgkG2/voECoYn14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Sjom9alj; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1723495921; x=1724100721; i=wahrenst@gmx.net;
+	bh=GvKCeLBsyOIB8oIBg+Q6t3zEGAuc8wQHMxIvLCTbwTI=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Sjom9aljNiYSXt4/TV7FudxctU39/Tq2W74NPg4PYxF2kDjaU9OI+BC7xOiXlzzV
+	 iWq0FxysnId4FFG9QWFS3sLEphqCHsr5P0z/rK9m+CugtuzzJJ3wdLKrj1pBW2Hcf
+	 Wnf7psK+fYzNjkhxpFoQfCsBBFZ2jhVqOp0YPZ23aYjexU2FAEytCN8yxcoUlKf5H
+	 X5Qog1k1BTvrflXb/Z9fhyJmhzNGBb49cHxfidzHPp+0F3mEGlVmLontiHMwRVfUs
+	 b+D+Zx99UO5+VKpGPXstOevQd64Zod2frROPRigwsxPUDtEdl9HSOjesZzTvyORef
+	 S6SUKDyfIS+4o4RuHg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MD9T1-1sV3IW31Xt-009GBI; Mon, 12
+ Aug 2024 22:52:01 +0200
+Message-ID: <d4f111e2-9695-412d-9993-8f5d31c8a545@gmx.net>
+Date: Mon, 12 Aug 2024 22:51:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com> <20240811-dwc3-refactor-v2-3-91f370d61ad2@quicinc.com>
-In-Reply-To: <20240811-dwc3-refactor-v2-3-91f370d61ad2@quicinc.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 12 Aug 2024 14:24:21 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+0pX7P70OE8suhCpSsffPcqQffLEUqc3+LSX7ocf-iXg@mail.gmail.com>
-Message-ID: <CAL_Jsq+0pX7P70OE8suhCpSsffPcqQffLEUqc3+LSX7ocf-iXg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] of: dynamic: Don't discard children upon node attach
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, Bjorn Andersson <quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 01/16] firmware: raspberrypi: Improve timeout warning
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
+ <mcanal@igalia.com>, Jiri Slaby <jirislaby@kernel.org>,
+ Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240728114200.75559-1-wahrenst@gmx.net>
+ <20240728114200.75559-2-wahrenst@gmx.net>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20240728114200.75559-2-wahrenst@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:ZfNPP2zjk2FxGLvWamEJ65EQOEHr/+kJILjZGfdpf87+gGx5/C3
+ 64V1HtPFKiFRkZVlVx5iVKl9HgMhRU2I9im9qQoG56Af8h70c4JuH5HOWxJGLmSGFl+fCuz
+ 3Oq0mxvwqX/IEB9L2w3qr0bc30x11suNvAUSsPhQGcw3O0Fdjl6x/svM5cPwcfnqLhU0k/C
+ tDwrcWM2zA55RjyVtr1JA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:QxCy4izLLjY=;VF0kReEZPhZaLGTrfcaQty/QKj7
+ UifCvvx+SLuDS3BGH/JKVmzvbgxjfYMTuiaoiGK5ryEFzhcYD1W4kxp0xttxQgmwC6L5cECWp
+ YnjEvCvFvuhu0Fpq5G8NtGB+3IFsOiqQ5pz5Abbyvc2B0cRAHxl73b+A8UdKAz//PbdhqoMzi
+ 2UQhPxU3LgqZXXGGwwi6zYlsBsFv67U2ciIUB7iKcBWbwv0WK1XuAfmgIPjdDwS/p9mC48hEH
+ ijEGD6bBKXmtUPUW0VHSMfPF3KcRskrHg5GFaztguP/XKg6lR8PVwhqJwwHwYDi4t0ZXTwc8B
+ /WdDsOKDWrWrD0c8cQUYvghNckD5OTt5OsLZcewSOpQ6CiY80Mcjg8vZpkb/OICg9/z2TaIb7
+ lLx+k/HnJZCG27LHhGw0KSH8ELFD3BsYRzn5/Cf+/2tZlSs0+PcIJBBfGLQACm1yjlmjGuYyU
+ MGPkmbwyxnlHeCTgr9WGN0I2LP5n27BMQzr/nvmxbh6mrFpU6nDTiBiIj7rhOHn2v6E12rJ1H
+ HPCLxP9TC5HfJyKg1nkinWxUuFvzr+FgXHyhV23C0JLw+SGKxF7QTcQVfrHE/yXTjoAMn9wxs
+ 5ehFhzAGR01x91r9GuJzTstArcoTP+uVGcwXxnUXAgpQC6ov14e70lhN5zydwcWo0bhsWiUBN
+ sh8YsNcyrRGliwu3k9TfcgJQlvyFmT6b0viXzPSNIWaBecUWJOkdGXlO8nXq8Wf5SO4zgcqB6
+ B18i0+SNEyXIdyKAPI0PmynEDFo3j7xspJvpav8uRCSm3ttxugQ3IpeCCgEuP9V3Q+9fTsC6y
+ m76aGkNl/8GkkRbtl2mlunOQ==
 
-On Sun, Aug 11, 2024 at 9:07=E2=80=AFPM Bjorn Andersson <andersson@kernel.o=
-rg> wrote:
->
-> From: Bjorn Andersson <quic_bjorande@quicinc.com>
->
-> When dynamically modifying DeviceTree it's useful to be able to reparent
-> nodes, but of_attach_node() clear the child pointer and hence discards
-> any child nodes.
+Hi Florian,
 
-of_attach_node() is kind of the legacy API. You should be using
-changeset API. But I guess you really mean __of_attach_node() here
-which both use.
+Am 28.07.24 um 13:41 schrieb Stefan Wahren:
+> Recent work on raspberry-power driver showed that even the
+> stacktrace on firmware property timeout doesn't provide
+> enough information. So add the first tag name to the warning
+> to be in line with a status error.
+>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Are there any concerns, because i assumed this patch would go via your tree?
 
-> Retain the child pointer upon attach, so that the client code doesn't
-> need to manually rebuild the tree.
->
-> Current users of of_attach_node() either avoids attaching nodes with
-> children or explicitly attaches nodes without children, so no impact is
-> expected to current users.
->
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Best regards
 > ---
->  drivers/of/dynamic.c | 1 -
->  1 file changed, 1 deletion(-)
+>   drivers/firmware/raspberrypi.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-> index 110104a936d9..32e1dffd9f96 100644
-> --- a/drivers/of/dynamic.c
-> +++ b/drivers/of/dynamic.c
-> @@ -221,7 +221,6 @@ static void __of_attach_node(struct device_node *np)
->                         np->phandle =3D 0;
->         }
+> diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberrypi.c
+> index ac34876a97f8..18cc34987108 100644
+> --- a/drivers/firmware/raspberrypi.c
+> +++ b/drivers/firmware/raspberrypi.c
+> @@ -62,7 +62,6 @@ rpi_firmware_transaction(struct rpi_firmware *fw, u32 chan, u32 data)
+>   			ret = 0;
+>   		} else {
+>   			ret = -ETIMEDOUT;
+> -			WARN_ONCE(1, "Firmware transaction timeout");
+>   		}
+>   	} else {
+>   		dev_err(fw->cl.dev, "mbox_send_message returned %d\n", ret);
+> @@ -125,6 +124,8 @@ int rpi_firmware_property_list(struct rpi_firmware *fw,
+>   		dev_err(fw->cl.dev, "Request 0x%08x returned status 0x%08x\n",
+>   			buf[2], buf[1]);
+>   		ret = -EINVAL;
+> +	} else if (ret == -ETIMEDOUT) {
+> +		WARN_ONCE(1, "Firmware transaction 0x%08x timeout", buf[2]);
+>   	}
 >
-> -       np->child =3D NULL;
->         np->sibling =3D np->parent->child;
->         np->parent->child =3D np;
->         of_node_clear_flag(np, OF_DETACHED);
+>   	dma_free_coherent(fw->chan->mbox->dev, PAGE_ALIGN(size), buf, bus_addr);
+> --
+> 2.34.1
+>
 
-Before OF_DETACHED had a clear meaning. Now, are child nodes detached
-or not? If it means not attached to the root tree, then it is
-redundant having it per node. If it means parent and sibling aren't
-set, then what's the point as we can just check for NULL ptrs.
-
-This all seems fragile on top of what's already fragile.
-
-Rob
 
