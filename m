@@ -1,68 +1,68 @@
-Return-Path: <linux-usb+bounces-13326-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13328-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCCEA94ECD0
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 14:22:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5753694EE4D
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 15:34:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 683281F22013
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 12:22:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E731C21F38
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 13:34:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F4217ADEB;
-	Mon, 12 Aug 2024 12:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444D417D895;
+	Mon, 12 Aug 2024 13:33:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NGv8S8N7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i2rBjxwk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E672178378;
-	Mon, 12 Aug 2024 12:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF8217C9F1;
+	Mon, 12 Aug 2024 13:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723465327; cv=none; b=G2m1comORgmRnAH4IrwWOv1kvI4pS84Vhf6b509yF3TMdmQzonFXGzu60eb3SGrcCXxrNpCMmHgduEc+sC1J8C5YwyDWL8y460Hv4aXtQ+lhglJHsmDlisfTDOK1RJ/mgsBXovZoiAu+3KzWe0NugrXOJEimGkOIm6OQbJiZNS8=
+	t=1723469632; cv=none; b=WLwgGupQty6tkFsDoOTtUHHuuepVkfJ+2v4d38XBVvYVGHhOioMhRRRq4mSCQ05i4WY4FvrAtkuKyazewUKy/i2Azi68l1zAYDA9+B0FCrRDhd+DdOFdgE/7orA116piJ8N22yxC0WjbDaaGP3SBxeXtfowz8OeUuzK0a7Dk1nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723465327; c=relaxed/simple;
-	bh=HFV7316f8OL34MS0ZCpJOtEvzcKpfHA6eGe3X0LdvaM=;
+	s=arc-20240116; t=1723469632; c=relaxed/simple;
+	bh=svcb61qn8AxKiXVDKBeXBAH0VVejCzMPT1CCJAMUGFI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UclsJ1bScacyCaNZMniVMnmPeWx+0mfpVXr7c7kmNZsVJbHbDtMFl1fmZ+R4OS1J1Eii8lFNpPLdoMIwtUu2iXdkCQ159KNn7EijQ3qafWeHrqJ7xoy5Z5JFGiWXX8ZJr2YB21DvuErb+etdOQE50r06rgUvQkb9iwHktYjLwXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NGv8S8N7; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=iF+HMtbUj8lMSw9xAmZQyldsEKp6Yu5FlnCXLrVCNbZtDl8gG38UF3EBq3kJ2mnwtrqgcVeox0Id7kwDW5VCo2W6vjgEFJttRnSd7v/p1zad6s56NB13lIpUX47QMWIgWUp5EDj3JB89c2HgkxdTfYn8RtW43RMXHIp7s78kc3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i2rBjxwk; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723465325; x=1755001325;
+  t=1723469631; x=1755005631;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HFV7316f8OL34MS0ZCpJOtEvzcKpfHA6eGe3X0LdvaM=;
-  b=NGv8S8N71s1LAkFkLH+RanhmO341MgDXtBLuU/Tt7dYr6yp9e3tjRyfc
-   fMXFZ8tm+LIiQZoTuXsd0ghTxyiSoJFvkcsgUJbqpzSmael/qNGGvPvAY
-   y97ewxE4CX1uStfY42gxiakzLpDBYcSt17i4rDB7tvMZhVFee1nWSY8el
-   xan1g3y0m3dmWFtu+M5FTMRncJjebvJQdiAMYdDm8JqzRskbB0vE9DJ2P
-   q3eW5+K9pfMVn6XRnq9+SkQO0NPP5SQaUuIqgUj0lTMwihw4HvkeDFLuO
-   6dmv9gQBP4LwgXuGut/FZeaXjX2HKOWd/hL659c5C+H694+CkTQcMmbJ1
+  bh=svcb61qn8AxKiXVDKBeXBAH0VVejCzMPT1CCJAMUGFI=;
+  b=i2rBjxwkIKMPuel9doBjdIcZbIWCNeGIgsTtIdvIpeghUk8F3jL2wnSB
+   genB9BPgImDqNcKmM3RURHAMCBeZxHljtT3icr/fdSTtFCO5+8FjwW1D8
+   7K6e+CZ46orAL2o9WBzs/tTPn+KyzC9PWP3dOSdyPAM7V6SclvCuurMBx
+   AxyJfvxbPBCxd5RWvk8bQczA0dx5ZA5SxQ3usQTKK00U0oDyqwnoscqYF
+   6VY5YJeKKQQPXClKP3QVTHl3u6Tbrz+JUkGZiccDG5gsFZPuAT44ziNAM
+   iR4QnFzHGF4asV9moRic/QL+HhXK84AodbdECUF492Avbwj54HrJhlTQ9
    g==;
-X-CSE-ConnectionGUID: N3abWAumQbGNQ1+FYdZaWw==
-X-CSE-MsgGUID: 73VYVRm7SSyaA9qfuFeISA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="32722577"
-X-IronPort-AV: E=Sophos;i="6.09,282,1716274800"; 
-   d="scan'208";a="32722577"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 05:22:04 -0700
-X-CSE-ConnectionGUID: p2VOziQARoKW5YRCpafS5g==
-X-CSE-MsgGUID: G9AlV4ecRfuAnFZxlFm4gg==
+X-CSE-ConnectionGUID: xja2chZJRbKeGykZCH51+w==
+X-CSE-MsgGUID: qb6Dd3MRSSqZq6MU0Ify7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="12963955"
+X-IronPort-AV: E=Sophos;i="6.09,283,1716274800"; 
+   d="scan'208";a="12963955"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 06:33:50 -0700
+X-CSE-ConnectionGUID: zCoNAwmISMu73RPe9ooqcQ==
+X-CSE-MsgGUID: 6xzCFAvQRWu5p+ijHJzn7g==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,282,1716274800"; 
-   d="scan'208";a="81490099"
+X-IronPort-AV: E=Sophos;i="6.09,283,1716274800"; 
+   d="scan'208";a="63197764"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 12 Aug 2024 05:22:00 -0700
+  by orviesa004.jf.intel.com with ESMTP; 12 Aug 2024 06:33:47 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sdU3i-000BkD-1C;
-	Mon, 12 Aug 2024 12:21:58 +0000
-Date: Mon, 12 Aug 2024 20:21:55 +0800
+	id 1sdVB9-000Bpv-2w;
+	Mon, 12 Aug 2024 13:33:43 +0000
+Date: Mon, 12 Aug 2024 21:33:15 +0800
 From: kernel test robot <lkp@intel.com>
 To: Bjorn Andersson <andersson@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -77,9 +77,9 @@ To: Bjorn Andersson <andersson@kernel.org>,
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] usb: dwc3: core: Expose core driver as library
-Message-ID: <202408122054.h09BWBT2-lkp@intel.com>
-References: <20240811-dwc3-refactor-v2-4-91f370d61ad2@quicinc.com>
+Subject: Re: [PATCH v2 6/7] usb: dwc3: qcom: Transition to flattened model
+Message-ID: <202408122114.xvZqrjZ7-lkp@intel.com>
+References: <20240811-dwc3-refactor-v2-6-91f370d61ad2@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -88,7 +88,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240811-dwc3-refactor-v2-4-91f370d61ad2@quicinc.com>
+In-Reply-To: <20240811-dwc3-refactor-v2-6-91f370d61ad2@quicinc.com>
 
 Hi Bjorn,
 
@@ -98,33 +98,29 @@ kernel test robot noticed the following build errors:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Andersson/dt-bindings-usb-snps-dwc3-Split-core-description/20240812-111102
 base:   864b1099d16fc7e332c3ad7823058c65f890486c
-patch link:    https://lore.kernel.org/r/20240811-dwc3-refactor-v2-4-91f370d61ad2%40quicinc.com
-patch subject: [PATCH v2 4/7] usb: dwc3: core: Expose core driver as library
-config: i386-buildonly-randconfig-002-20240812 (https://download.01.org/0day-ci/archive/20240812/202408122054.h09BWBT2-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20240811-dwc3-refactor-v2-6-91f370d61ad2%40quicinc.com
+patch subject: [PATCH v2 6/7] usb: dwc3: qcom: Transition to flattened model
+config: i386-buildonly-randconfig-002-20240812 (https://download.01.org/0day-ci/archive/20240812/202408122114.xvZqrjZ7-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240812/202408122054.h09BWBT2-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240812/202408122114.xvZqrjZ7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408122054.h09BWBT2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408122114.xvZqrjZ7-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/usb/dwc3/core.c:39:10: fatal error: 'glue.h' file not found
-      39 | #include "glue.h"
+>> drivers/usb/dwc3/dwc3-qcom.c:28:10: fatal error: 'glue.h' file not found
+      28 | #include "glue.h"
          |          ^~~~~~~~
    1 error generated.
 
 
-vim +39 drivers/usb/dwc3/core.c
+vim +28 drivers/usb/dwc3/dwc3-qcom.c
 
-    36	
-    37	#include "core.h"
-    38	#include "gadget.h"
-  > 39	#include "glue.h"
-    40	#include "io.h"
-    41	
+  > 28	#include "glue.h"
+    29	
 
 -- 
 0-DAY CI Kernel Test Service
