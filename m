@@ -1,115 +1,124 @@
-Return-Path: <linux-usb+bounces-13330-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13331-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A63E94F700
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 20:56:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9699394F82E
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 22:24:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D50A1C21B49
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 18:56:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 287CEB21CCD
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2024 20:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50F4E18DF85;
-	Mon, 12 Aug 2024 18:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC15019414A;
+	Mon, 12 Aug 2024 20:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XB3oATZZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDWIz29g"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96E6191F87;
-	Mon, 12 Aug 2024 18:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F71183CA5;
+	Mon, 12 Aug 2024 20:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723488949; cv=none; b=YAkCJ5bP+VddBDpvZGNAA694dO7S4JBTC+nhTm5hdCFYBo3rr4ZQv/ymkcdWx4vmMBHjeCHPHMqtYhHOfVpc2Sn8RL8IEK6uLbtz6595iccInbF8c+nGrLupheHkjWRB0qR9mWbzvmZBc3QzfthOwui5iTzIUpQwytdeL/iosX8=
+	t=1723494277; cv=none; b=jiFI9gm/r7/IkaC6ySfIP9FTGOV43qB15I5QX6q9Hx5859luJP+FnAjg5TYQKNkF11tKL9fuELh0Fpetln6NCrT2kIiejmkZqG/hW6RFwOGwwMu8LyEbdETqZ2OAYVwSbiobxD6zcenB1HCxD3FWyW2lSysUsx7zdsKCXbxeQTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723488949; c=relaxed/simple;
-	bh=B5BEooWbXns9FqM7SphnSy2fTJ6k8eGrtOclcI7lgiM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AsxyVsyr0omMGx5/IHkt0fWFbWf8NOVYdhEoKVV+382vSS7rVtAAxZByul/Ma1Og02CCUayPAELun830V5erbDsxYc9Di4ojBVq9uHWJtBDJMVUUWE1qY1XbJbf5P9AvoAEEDboQFovK1iDcXPx/KOE9BGK8gZH0cs6wXVUSh1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XB3oATZZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1787DC4AF11;
-	Mon, 12 Aug 2024 18:55:48 +0000 (UTC)
+	s=arc-20240116; t=1723494277; c=relaxed/simple;
+	bh=qeVfUIcoWdhpUtM/u3eGhXh18DwBT5NJk6teiyVCXc4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hAHU5s3ooE55jwgOeC3PDu+V0Nvd5P994+pnU9LylAwyAGW9LkuvkShWAjt+yI5kP+Frwnx/T8h0D+doi3xIvxIDHPBxvWxV30EWZ6xHqDQGgO6wOpLgRRWa3OXOoaydQFLbXs7sFb8uCDVZ8CA30kzaloAHJBkvaOY2OajNBg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDWIz29g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0F0C4AF0C;
+	Mon, 12 Aug 2024 20:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723488949;
-	bh=B5BEooWbXns9FqM7SphnSy2fTJ6k8eGrtOclcI7lgiM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XB3oATZZq/HVwy3getzobhmfKDZGNXrFpNepiFYAIqlUjEFKqt+4V6RwwPUtwZ9W+
-	 b1ms3Tj8ArDRybPqIGszJxuB5ioaMJNimQotOprxiDpijYFrsssQUZrbqzyZcGPvQ7
-	 vszd69VkHrHwkX0GVKctOI+ze/+Oa/5kUnFhez4eHnYZBeweiHg9arDhqtamvC5OHW
-	 hS+OqE6bDTC30Zl7GpKrWPfbmb+R/ut9HiwbpvNpHy+PJDpWdciUtTGjR63nVvyoZ8
-	 1Geb4WtinZgapHY80eYVwNle6l1OXS2S4iZpc/ahGYAVc3BFUjhMNkdqUcbuN/QF4p
-	 zw7XPQLy5HMvg==
-Date: Mon, 12 Aug 2024 12:00:08 -0700
-From: Bjorn Andersson <andersson@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] usb: dwc3: core: Expose core driver as library
-Message-ID: <ilm5yfvrlabfe45d6cf2zazzdxw3qcknrthbgzroi764jhh2wo@qcn2ozt6mer3>
-References: <20240811-dwc3-refactor-v2-4-91f370d61ad2@quicinc.com>
- <202408122011.adSQGOUp-lkp@intel.com>
+	s=k20201202; t=1723494276;
+	bh=qeVfUIcoWdhpUtM/u3eGhXh18DwBT5NJk6teiyVCXc4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TDWIz29gbxn0i5R6I7puBRaIoL3mzVtHfge3jmD7Bsdl3aA5lfTapvLI3sMAXGPEw
+	 PI4GsEzrPlM8Ns4P6qianppIkWh8+Dw53KpogQqRp0GiPxLV0wz9bfmaiyGK9aeA4J
+	 0wHmRyxqpjUkviQ79xQxWgVBAivlwnOLyoFAbdh6TyxV3Cj6TFdRrpUktNYK0ZPfKv
+	 QR5KHRgCrwSTozdRPZkaDW8ury1FcURRHSZNCQF1XCKrLdonefIRnCOxRMorqS5IgT
+	 z+WDAExPR+Ot+WgS1SvmZHOXxiDCppd7b0bcPVOGBzfFILVpwkV0toG2ewbkBOPzyy
+	 HI805Zb1oYUtQ==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ef2d96164aso51768011fa.3;
+        Mon, 12 Aug 2024 13:24:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXhHdw7hH3qr99YE6yqC8o16OcwZZJ+oHgx3GFRPHDsi7f/UyIlBePUtrOHhCVtCJTT49OT5fTrwGpvTPB2KFiL8gnodji/jIAesK270n4WpZYeIU+96AThWww/BH4XJbpeByQgprBOVn7uv3l+8tWnMht475O87d+0zr4zQXGR6oRgjmS1RFfMeifD1ApWtYg1Yoi6oT4kXiCF1SObmflP06g=
+X-Gm-Message-State: AOJu0Yx3guwvjllQ8cxW8aVScWDq476AQm+t76ilfXJ+KBCakBAmpDWX
+	YfHNTLNKka0giVs0Is+r5TLGYVpCTFQ3b7Bxw7euZLG17XrNY1O8i2N9peO7fDXcJAGV70tOJYs
+	sSvf7UP8MoVss/fU6Fwe8eSgyjg==
+X-Google-Smtp-Source: AGHT+IHjxVfCOndn+b47XGHH72cKUiyoILGnoGfWC8XZdmZexSAAw/YL/bL1WxJ+jTMixEgHzL/lZim6CTMEs11wsSY=
+X-Received: by 2002:a2e:461a:0:b0:2ef:22e6:233f with SMTP id
+ 38308e7fff4ca-2f2b7155856mr8169011fa.21.1723494274886; Mon, 12 Aug 2024
+ 13:24:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202408122011.adSQGOUp-lkp@intel.com>
+References: <20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com> <20240811-dwc3-refactor-v2-3-91f370d61ad2@quicinc.com>
+In-Reply-To: <20240811-dwc3-refactor-v2-3-91f370d61ad2@quicinc.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 12 Aug 2024 14:24:21 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+0pX7P70OE8suhCpSsffPcqQffLEUqc3+LSX7ocf-iXg@mail.gmail.com>
+Message-ID: <CAL_Jsq+0pX7P70OE8suhCpSsffPcqQffLEUqc3+LSX7ocf-iXg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] of: dynamic: Don't discard children upon node attach
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, Bjorn Andersson <quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 12, 2024 at 08:21:54PM GMT, kernel test robot wrote:
-> Hi Bjorn,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on 864b1099d16fc7e332c3ad7823058c65f890486c]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Andersson/dt-bindings-usb-snps-dwc3-Split-core-description/20240812-111102
-> base:   864b1099d16fc7e332c3ad7823058c65f890486c
-> patch link:    https://lore.kernel.org/r/20240811-dwc3-refactor-v2-4-91f370d61ad2%40quicinc.com
-> patch subject: [PATCH v2 4/7] usb: dwc3: core: Expose core driver as library
-> config: i386-buildonly-randconfig-005-20240812 (https://download.01.org/0day-ci/archive/20240812/202408122011.adSQGOUp-lkp@intel.com/config)
-> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240812/202408122011.adSQGOUp-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408122011.adSQGOUp-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/usb/dwc3/core.c:39:10: fatal error: glue.h: No such file or directory
->       39 | #include "glue.h"
->          |          ^~~~~~~~
->    compilation terminated.
+On Sun, Aug 11, 2024 at 9:07=E2=80=AFPM Bjorn Andersson <andersson@kernel.o=
+rg> wrote:
+>
+> From: Bjorn Andersson <quic_bjorande@quicinc.com>
+>
+> When dynamically modifying DeviceTree it's useful to be able to reparent
+> nodes, but of_attach_node() clear the child pointer and hence discards
+> any child nodes.
 
-Sorry about that, seems I missed the git add on the header file where I
-declare the exported symbols.
+of_attach_node() is kind of the legacy API. You should be using
+changeset API. But I guess you really mean __of_attach_node() here
+which both use.
 
-Regards,
-Bjorn
+> Retain the child pointer upon attach, so that the client code doesn't
+> need to manually rebuild the tree.
+>
+> Current users of of_attach_node() either avoids attaching nodes with
+> children or explicitly attaches nodes without children, so no impact is
+> expected to current users.
+>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  drivers/of/dynamic.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 110104a936d9..32e1dffd9f96 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -221,7 +221,6 @@ static void __of_attach_node(struct device_node *np)
+>                         np->phandle =3D 0;
+>         }
+>
+> -       np->child =3D NULL;
+>         np->sibling =3D np->parent->child;
+>         np->parent->child =3D np;
+>         of_node_clear_flag(np, OF_DETACHED);
 
-> 
-> 
-> vim +39 drivers/usb/dwc3/core.c
-> 
->     36	
->     37	#include "core.h"
->     38	#include "gadget.h"
->   > 39	#include "glue.h"
->     40	#include "io.h"
->     41	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Before OF_DETACHED had a clear meaning. Now, are child nodes detached
+or not? If it means not attached to the root tree, then it is
+redundant having it per node. If it means parent and sibling aren't
+set, then what's the point as we can just check for NULL ptrs.
+
+This all seems fragile on top of what's already fragile.
+
+Rob
 
