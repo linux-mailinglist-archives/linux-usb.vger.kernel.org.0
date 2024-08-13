@@ -1,137 +1,214 @@
-Return-Path: <linux-usb+bounces-13374-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13375-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1022E950408
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 13:48:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F22AC95057C
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 14:47:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4250A1C2243D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:47:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EE131F24630
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 12:47:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFBB1991C6;
-	Tue, 13 Aug 2024 11:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB681199E94;
+	Tue, 13 Aug 2024 12:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d1AY8Z3Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RxPI8Gxm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752E8442F
-	for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2024 11:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD33119923D;
+	Tue, 13 Aug 2024 12:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723549641; cv=none; b=XvXCX3mgTlzAJXgFRYMT5RUngMfTY1lZbQ+Su2Mcmb/0tdbiOdBA/S72PtDtGnyXBubbbk83vZ4i4kFGznafNppwOW5qr954ZUw+x/f1KCxq2bSYcZNW1XY6+WNLFj9YqONE51XSOaVGlrUTTcvRkJLWlUxM+8+RdT11FXvFpBc=
+	t=1723553257; cv=none; b=TQF7NDybbuK+LhDs2YUt+OBZQQ7y+QeFXC+aOzph7T5+LsVDfoTH2fJTYZgU+ZQmDe5t1YsNdvBe+cO4InzpdcGpP8MFksspQyZTNNx+gHhkhBP8mBRMlROVJuzAmrOFqSuC/nEiCgyUAM9qsvOn2msQbZIxsjPxENsdoRXRB80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723549641; c=relaxed/simple;
-	bh=gXKDcmOuHi09tsAsjcsH2xHsQiBWEudqw/ZHT2UpPaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=i6qRQneqDYrDE4vlxUAUloL87rulGHKOAY1Oe1yyerzBhZKfEyg292K92xK1665WGwnC5tZkG0++ETyrcbk8y4UQoTW25UV0F9uwgpcLsNF1zrexAfahxMXKXJRs9kUIA4G5MPoiPfbloVvLq7BjEOXt8TVB4Scphlmia59dLRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d1AY8Z3Z; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723549640; x=1755085640;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=gXKDcmOuHi09tsAsjcsH2xHsQiBWEudqw/ZHT2UpPaI=;
-  b=d1AY8Z3ZnSRQ3QSoWlsC5FIflhU7psm0Ov/itgj+z4FdOJVt4QvWF1TP
-   RRRpBIZRIV2174t26Z8vahsCcDjhg6lVA98UTdZmo42uKoO0hAlKy2+bX
-   hBCSzqb6LxqDR0Y6RQ66biqU6dI92f71j7aFq4rG+Mx9dcXGROeaRwls9
-   YU9OC8+xUcRZw8vdc1Y8MqXn+IL/q83KIaRCbfSiErtLEdDfN49m3j6Cp
-   zek6J3v0RzmXR3io7FuZtQK5aED1XXuXyiz+aFSPbYnE2xJ6qpVDY60um
-   epLKv5/u8ZnKKvljWwtQ2Kx3JfEN7lsVAo+C8FfbxLvCNMHOnnl2tClXf
-   A==;
-X-CSE-ConnectionGUID: tdkMW1dLShKCu6th0FM/6A==
-X-CSE-MsgGUID: /ckqk2mbSxykAeQBRLAHKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21523322"
-X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="21523322"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:47:20 -0700
-X-CSE-ConnectionGUID: pzeqEaNfS8KIcL8Asf465Q==
-X-CSE-MsgGUID: jt82eWjKSnaQrcPEMqEoSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="63037952"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Aug 2024 04:47:18 -0700
-Message-ID: <9f3d0886-51cb-4ec4-a060-ed0f52f7e656@linux.intel.com>
-Date: Tue, 13 Aug 2024 14:49:22 +0300
+	s=arc-20240116; t=1723553257; c=relaxed/simple;
+	bh=GL60/f0x8nLlf4rRbjhMMEOGzUva4JtyUO5LqYKHngA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Agb9PspO7GZb6GazpDsEc4di3Uuv3foz+P/OwAG8sN7y4mbf2W5uTjHsa8gffZkgnziXwg/uPj6rEFbUPvGjtzkqz/+kbJ/76uQhHJ4qSIH8ZmntRa4585KzrX3nlZHIVJx37xXPUglEigbNuzMkTKSgWs6MjfFAP3SSRBanG+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RxPI8Gxm; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3683f56b9bdso3633957f8f.1;
+        Tue, 13 Aug 2024 05:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723553254; x=1724158054; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cR/LJ57uXe124SDBRg+5DschuuIRzlJDV50Pw4SHJsc=;
+        b=RxPI8GxmOGshCyjucGrEJ1VJiPHReNYo5YTUiKVxNNcwGBM3f24pW2Vo7nzJOApftI
+         nAQllgdKzzN9I45IjQyiNLeR3S3Q1faiYt/JNTQZzbbZs2C5drJuCtUYLD6vLo9a1uQl
+         hVoZr+8S2gOvcOQl+YjIRl81jCsz3UhlkXwdxgnNGnE9VVWOsONLKuD4z1dkExQd5sw/
+         JWZt+ZpCaqT4b7grL6F6AG6mOoo2C+5T5HZupQBNHiUbLuBl0jGBlPmsUYvfXwutqw4E
+         m9LdpEJ3w2cg7Lu9jdBkg7SWNoV7ypIvsD4J0zF5MBPpT6jyPhL4OnbGdtVHgEuvJiiP
+         oSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723553254; x=1724158054;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cR/LJ57uXe124SDBRg+5DschuuIRzlJDV50Pw4SHJsc=;
+        b=N8V0Sccl+CB2racyHehMc37eKE4a8DNn8ZwINtfF1l60i7sqaPbHvW/FPg1oys7eQW
+         rdYpwlG3R3dk4hq9urE3Y7UTVsY7Hkyz1kScm8HzMtR5tWayw7cOfrMf+EE87dRWE2xy
+         SCqm8wEU2Jpdy49nnxdDATkfxWauhJwO2a6a+vZr3rWmjKPozAyKBdqYMqPSuw315pDn
+         /ZjASTA7vpuYTYopYCR9Fy4xYgltLxLC+Wdgpc2QNqZ4NABRoiyZVRaeVMDTJqAm6jJI
+         pQrCFyGcGB2K0ht4MMDIWSvSOnxjcGplcVQCGZj4VofF9C83glvT0sLO7rdaFa/ArOT8
+         n/WA==
+X-Forwarded-Encrypted: i=1; AJvYcCXDOwnWTkgDIDTeZ8CLCFNFOSYm9b3AUVMj/5cGv+AzCG7QPdfeRBI/KeknX+/HgpgyXSqzG/3Vll8nmSMJVT7zjprwUUEW4d3hlUEW
+X-Gm-Message-State: AOJu0YzKml98uxgXPy7b1yFRsOnE7Q6mo507RLXQD+q4IEluD7HgQ1oU
+	sQW5jOUV+RC8hbVWLh79miKm2ythtPUB50hYcI22rwfscqSp0/QMV6jvWQQrumiidSaUqF2nxcr
+	uCpoJYau1UIRWl1lN6JZIeCezgYE=
+X-Google-Smtp-Source: AGHT+IFNbc7860j78hScCdMHJgd97CHbmn5gFg3mms/D4ru1Fw1gV72PWQglosq3cxQIkm2FW3carFdWjl2YVC/gtHg=
+X-Received: by 2002:adf:e7cf:0:b0:368:3f5b:2ae4 with SMTP id
+ ffacd0b85a97d-3716cd01f67mr2117986f8f.36.1723553253599; Tue, 13 Aug 2024
+ 05:47:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] USB xHCI driver NULL pointer dereference
-To: Karel Balej <balejk@matfyz.cz>, linux-usb@vger.kernel.org
-References: <D3CKQQAETH47.1MUO22RTCH2O3@matfyz.cz>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <D3CKQQAETH47.1MUO22RTCH2O3@matfyz.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240810141834.640887-2-crwulff@gmail.com> <2024081345-emerald-subarctic-cb5f@gregkh>
+In-Reply-To: <2024081345-emerald-subarctic-cb5f@gregkh>
+From: Chris Wulff <crwulff@gmail.com>
+Date: Tue, 13 Aug 2024 08:47:21 -0400
+Message-ID: <CAB0kiBLTmybSJH-KDMaYc=DQBatQBf=UeZkE1PGGGuEEgTkObg@mail.gmail.com>
+Subject: Re: [PATCH v3] USB: gadget: f_hid: Add GET_REPORT via userspace IOCTL
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Konstantin Aladyshev <aladyshev22@gmail.com>, 
+	David Sands <david.sands@biamp.com>, Jeff Johnson <quic_jjohnson@quicinc.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, linux-kernel@vger.kernel.org, 
+	Chris Wulff <Chris.Wulff@biamp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11.8.2024 1.11, Karel Balej wrote:
-> Hello,
-> 
-> my machine crashed twice in the past week, the second time I have been
-> able to recover the log output (including the stack trace run through
-> scripts/decode_stacktrace.sh) which seems to suggest a bug in the xHCI
-> driver:
-> 
-> 	[44193.556677] usb 2-1-port5: disabled by hub (EMI?), re-enabling...
-> 	[44193.556692] usb 2-1.5: USB disconnect, device number 6
-> 	[44193.558532] cdc_ncm 2-1.5:1.0 enp0s29u1u5: unregister 'cdc_ncm' usb-0000:00:1d.0-1.5, CDC NCM (NO ZLP)
-> 	[44193.739545] usb 2-1.5: new high-speed USB device number 7 using ehci-pci
-> 	[44193.819628] usb 2-1.5: New USB device found, idVendor=18d1, idProduct=d001, bcdDevice= 6.10
-> 	[44193.819637] usb 2-1.5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> 	[44193.819641] usb 2-1.5: Product: Samsung Galaxy Core Prime VE LTE
-> 	[44193.819644] usb 2-1.5: Manufacturer: Samsung
-> 	[44193.819646] usb 2-1.5: SerialNumber: postmarketOS
-> 	[44193.842472] cdc_ncm 2-1.5:1.0: MAC-Address: [...]
-> 	[44193.842770] cdc_ncm 2-1.5:1.0 usb0: register 'cdc_ncm' at usb-0000:00:1d.0-1.5, CDC NCM (NO ZLP), [...]
-> 	[44193.845829] cdc_ncm 2-1.5:1.0 enp0s29u1u5: renamed from usb0
-> 	[46253.017991] perf: interrupt took too long (2506 > 2500), lowering kernel.perf_event_max_sample_rate to 79000
-> 	[46709.344533] usb 3-1: new full-speed USB device number 3 using xhci_hcd
-> 	[46709.458560] usb 3-1: device descriptor read/64, error -71
-> 	[46709.679562] usb 3-1: device descriptor read/64, error -71
-> 	[46709.895544] usb 3-1: new full-speed USB device number 4 using xhci_hcd
-> 	[46710.009563] usb 3-1: device descriptor read/64, error -71
-> 	[46710.231579] usb 3-1: device descriptor read/64, error -71
-> 	[46710.333629] usb usb3-port1: attempt power cycle
-> 	[46710.713538] usb 3-1: new full-speed USB device number 5 using xhci_hcd
-> 	[46710.713699] usb 3-1: Device not responding to setup address.
-> 	[46710.917684] usb 3-1: Device not responding to setup address.
-> 	[46711.125536] usb 3-1: device not accepting address 5, error -71
-> 	[46711.125594] BUG: kernel NULL pointer dereference, address: 0000000000000008
-> 	[46711.125600] #PF: supervisor read access in kernel mode
-> 	[46711.125603] #PF: error_code(0x0000) - not-present page
-> 	[46711.125606] PGD 0 P4D 0
-> 	[46711.125610] Oops: Oops: 0000 [#1] PREEMPT SMP PTI
-> 	[46711.125615] CPU: 1 PID: 25760 Comm: kworker/1:2 Not tainted 6.10.3_2 #1
-> 	[46711.125620] Hardware name: Gigabyte Technology Co., Ltd. To be filled by O.E.M./Z77-D3H, BIOS F18 08/21/2012
-> 	[46711.125623] Workqueue: usb_hub_wq hub_event [usbcore]
-> 	[46711.125668] RIP: 0010:xhci_reserve_bandwidth (drivers/usb/host/xhci.c:2392 drivers/usb/host/xhci.c:2758) xhci_hcd
+On Tue, Aug 13, 2024 at 4:38=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sat, Aug 10, 2024 at 10:18:35AM -0400, crwulff@gmail.com wrote:
+> > From: Chris Wulff <Chris.Wulff@biamp.com>
+> >
+> > While supporting GET_REPORT is a mandatory request per the HID
+> > specification the current implementation of the GET_REPORT request resp=
+onds
+> > to the USB Host with an empty reply of the request length. However, som=
+e
+> > USB Hosts will request the contents of feature reports via the GET_REPO=
+RT
+> > request. In addition, some proprietary HID 'protocols' will expect
+> > different data, for the same report ID, to be to become available in th=
+e
+> > feature report by sending a preceding SET_REPORT to the USB Device that
+> > defines what data is to be presented when that feature report is
+> > subsequently retrieved via GET_REPORT (with a very fast < 5ms turn arou=
+nd
+> > between the SET_REPORT and the GET_REPORT).
+> >
+> > There are two other patch sets already submitted for adding GET_REPORT
+> > support. The first [1] allows for pre-priming a list of reports via IOC=
+TLs
+> > which then allows the USB Host to perform the request, with no further
+> > userspace interaction possible during the GET_REPORT request. And anoth=
+er
+> > [2] which allows for a single report to be setup by userspace via IOCTL=
+,
+> > which will be fetched and returned by the kernel for subsequent GET_REP=
+ORT
+> > requests by the USB Host, also with no further userspace interaction
+> > possible.
+> >
+> > This patch, while loosely based on both the patch sets, differs by allo=
+wing
+> > the option for userspace to respond to each GET_REPORT request by setti=
+ng
+> > up a poll to notify userspace that a new GET_REPORT request has arrived=
+. To
+> > support this, two extra IOCTLs are supplied. The first of which is used=
+ to
+> > retrieve the report ID of the GET_REPORT request (in the case of having
+> > non-zero report IDs in the HID descriptor). The second IOCTL allows for
+> > storing report responses in a list for responding to requests.
+> >
+> > The report responses are stored in a list (it will be either added if i=
+t
+> > does not exist or updated if it exists already). A flag (userspace_req)=
+ can
+> > be set to whether subsequent requests notify userspace or not.
+> >
+> > Basic operation when a GET_REPORT request arrives from USB Host:
+> >
+> > - If the report ID exists in the list and it is set for immediate retur=
+n
+> >   (i.e. userspace_req =3D=3D false) then response is sent immediately,
+> > userspace is not notified
+> >
+> > - The report ID does not exist, or exists but is set to notify userspac=
+e
+> >   (i.e. userspace_req =3D=3D true) then notify userspace via poll:
+> >
+> >       - If userspace responds, and either adds or update the response i=
+n
+> >         the list and respond to the host with the contents
+> >
+> >       - If userspace does not respond within the fixed timeout (2500ms)
+> >         but the report has been set prevously, then send 'old' report
+> >         contents
+> >
+> >       - If userspace does not respond within the fixed timeout (2500ms)
+> >         and the report does not exist in the list then send an empty
+> >         report
+> >
+> > Note that userspace could 'prime' the report list at any other time.
+> >
+> > While this patch allows for flexibility in how the system responds to
+> > requests, and therefore the HID 'protocols' that could be supported, a
+> > drawback is the time it takes to service the requests and therefore the
+> > maximum throughput that would be achievable. The USB HID Specification
+> > v1.11 itself states that GET_REPORT is not intended for periodic data
+> > polling, so this limitation is not severe.
+> >
+> > Testing on an iMX8M Nano Ultra Lite with a heavy multi-core CPU loading
+> > showed that userspace can typically respond to the GET_REPORT request
+> > within 1200ms - which is well within the 5000ms most operating systems =
+seem
+> > to allow, and within the 2500ms set by this patch.
+> >
+> > [1] https://lore.kernel.org/all/20220805070507.123151-2-sunil@amarulaso=
+lutions.com/
+> > [2] https://lore.kernel.org/all/20220726005824.2817646-1-vi@endrift.com=
+/
+> >
+> > Signed-off-by: David Sands <david.sands@biamp.com>
+> > Signed-off-by: Chris Wulff <chris.wulff@biamp.com>
+> > ---
+> > v3: rebased to usb-next, checkpatch cleanup (formatting, lore.kernel.or=
+g links)
+> > v2: https://lore.kernel.org/all/CO1PR17MB541952864266039BAA7BBBD3E10F2@=
+CO1PR17MB5419.namprd17.prod.outlook.com/
+> > v1: https://lore.kernel.org/all/20230215231529.2513236-1-david.sands@bi=
+amp.com/
+> > ---
+> >  drivers/usb/gadget/function/f_hid.c | 272 +++++++++++++++++++++++++++-
+> >  include/uapi/linux/usb/g_hid.h      |  40 ++++
+> >  include/uapi/linux/usb/gadgetfs.h   |   2 +-
+> >  3 files changed, 306 insertions(+), 8 deletions(-)
+> >  create mode 100644 include/uapi/linux/usb/g_hid.h
+>
+> Breaks the build:
+>
+> drivers/usb/gadget/function/f_hid.c:567:6: error: no previous prototype f=
+or =E2=80=98get_report_workqueue_handler=E2=80=99 [-Werror=3Dmissing-protot=
+ypes]
+>   567 | void get_report_workqueue_handler(struct work_struct *work)
+>       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+>
 
-Thanks for the report.
+I must not have warnings-as-errors enabled. I didn't notice the warning
+when I last built it. I will clean that up and make a new patch.
 
-You have a unlucky setup here.
-This could only happen when a full speed device fails enumeration while connected to a
-Pantherpoint xHC.
-
-Only Pantherpoint xHC (PCI_ID 0x1e31) does bandwidth calculation in software and
-calls xhci_reserve_bandwidth(). In this case we unintentionally end up calling it
-after a failed  address device attempt when usb core re-inits endpoint 0 before retry.
-At this point the xhci side of the device isn't properly allocated or set up so
-we hit a NULL pointer dereference.
-
-I'll look into it more.
-
-Thanks
-Mathias
+  -- Chris Wulff
 
