@@ -1,169 +1,204 @@
-Return-Path: <linux-usb+bounces-13360-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13361-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13100950164
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:41:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA2F69501B5
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:54:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C45D7282F11
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 09:41:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB991C22031
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 09:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC47187327;
-	Tue, 13 Aug 2024 09:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F3CD187552;
+	Tue, 13 Aug 2024 09:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JqVRHKIM"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WOX88y6a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B091D17C235;
-	Tue, 13 Aug 2024 09:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA6E13BADF;
+	Tue, 13 Aug 2024 09:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723542097; cv=none; b=KV25aeWQVenSDni+H6RB0BwZSVMg6HnxICgR5CSPqalSkgj7dS0yr+qK81o2KqGWDegngjM/BFz7noowWviDKfJ0dTzK6uox+GMGOYxBsivSA+jT+P0kbtBFbCOZ3f/2/XkWt/rgPYT0F5buaBJ9xaviTA6P90VtZUo4YqcUZ+c=
+	t=1723542822; cv=none; b=pWNGNNrcWu20Fe/xRyQXZij4isU2xG7NOaGOE7gvRfSb6KvDqNctj/Bqwgb8jAqsS6VgYGoBNzTfcRp/hbmMIDcLQ4JPCxX/r4P5AmBE7XGG73l1zBx4rByATIRpxnFT4ZGixjdNqJsUqMdXPxCD/KGJsZlkHNiZaWvhAfib7j8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723542097; c=relaxed/simple;
-	bh=RMcpIOQ0ymYnoKkcNFMupgiGlXhWnCIh0k47zr/oHzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dpwMQNdS1D7l4gcUui56+1NVl3o5R7wGTeCLd5rIwieHToqu2Ex+TCr+V+nUz/YBuWrD+5uyp2lq6juT2gFHHaVERgDiHZ5v1NGSeRHujbSkcv5/pLJ7hhGUgGuR5HsaKaZ1G+Vn1gj+TSluEoO8kM6Sdzaz2KmurRSUse/txkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=JqVRHKIM; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 35FBEE4;
-	Tue, 13 Aug 2024 11:40:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1723542037;
-	bh=RMcpIOQ0ymYnoKkcNFMupgiGlXhWnCIh0k47zr/oHzA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JqVRHKIMdfEBO8t1x/twlV46Ap/qBgRaZWeEMhY6FcL0i21E2vdNvMxLlKxu7L86E
-	 HimxcLH9/au4q9Nkw/2mKJyesw0zdLA22juy4mH3tasaxI9QsSNEJaJ/TtdrS0AdV9
-	 2Z2S7wPYUuF49BQ9yKHc9WSDoGNT82zcSd2w+j5U=
-Date: Tue, 13 Aug 2024 12:41:10 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Avichal Rakesh <arakesh@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 06/10] usb: gadget: uvc: set req_size once when the
- vb2 queue is calculated
-Message-ID: <20240813094110.GE19716@pendragon.ideasonboard.com>
-References: <20240403-uvc_request_length_by_interval-v4-0-ca22f334226e@pengutronix.de>
- <20240403-uvc_request_length_by_interval-v4-6-ca22f334226e@pengutronix.de>
+	s=arc-20240116; t=1723542822; c=relaxed/simple;
+	bh=rIa5jRwpylk0EMqGKYR8X5flL4X7ACahtZ8KgByVmoQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WEO7zMjH2H3FgTEh3sI7oyU+C6HQWyKdCzZxIeRrGi9Tgr6GpyBDFnKJK8lDsh3jscVH7dvDZJfKycyDGEB+T9MqF5n3lXATXFwYnFpTbWZb85yUywcH+taDbkDcdzVg408hUhAxYV8y1VOT//N3i/b3VhGwp7tpeedc1EaGJKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WOX88y6a; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47D4bCjA003151;
+	Tue, 13 Aug 2024 09:53:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	gWH0Feu6jKBdpXoGLqXF0SgT6nH7BExsqXP2hvhKh/Y=; b=WOX88y6aLTqGVN98
+	PfjSJ6bFKBON9dVW1rzgBtsPbhhFTZ64aXSNAxY3JJ2V7oTWh90hs3NZ0nDGjgjJ
+	3CnR568bCAvYRSmE4vs3YiwQNNC6fBME8ZfuW8KMDjUZHjtcmvOh25QU6FNqpRoX
+	rSKXuvMJQgzK6upHEZYrt1O0W+YgxQwg0ta5j+9y3IJDdcvkNcEvyWxSoHRJPvd/
+	IBhcWkR+sVRpXMRBu/d43bwQqV4heG0hr5Y8f5n3OSKO1pOo9MIyXSrgikFF35U8
+	8EDUwYgOZ4tvdQATJBeY0oM9grSOMX+6WPXpw6goLLLbbipe5HrwL97dHFv71i9w
+	pqR+Fg==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40x17sf41u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Aug 2024 09:53:37 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47D9raLE030080
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Aug 2024 09:53:36 GMT
+Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 13 Aug
+ 2024 02:53:35 -0700
+Message-ID: <a89b5098-f9d6-4758-52b4-29d24244a09b@quicinc.com>
+Date: Tue, 13 Aug 2024 15:23:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240403-uvc_request_length_by_interval-v4-6-ca22f334226e@pengutronix.de>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: Fix latency of DSTS while receiving wakeup
+ event
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20240730124742.561408-1-quic_prashk@quicinc.com>
+ <20240806235142.cem5f635wmds4bt4@synopsys.com>
+ <ec99fcdc-9404-8cd9-6a30-95e4f5c1edcd@quicinc.com>
+ <20240808000604.quk6rheiqt6ghjhv@synopsys.com>
+From: Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <20240808000604.quk6rheiqt6ghjhv@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: i1n7NIYdppHzqbXviOY2Nhfbzqg6anu_
+X-Proofpoint-ORIG-GUID: i1n7NIYdppHzqbXviOY2Nhfbzqg6anu_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-13_02,2024-08-13_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ mlxscore=0 phishscore=0 malwarescore=0 adultscore=0 suspectscore=0
+ spamscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408130070
 
-On Tue, Aug 13, 2024 at 11:09:30AM +0200, Michael Grzeschik wrote:
-> The uvc gadget driver is calculating the req_size on every
-> video_enable/alloc_request and is based on the fixed configfs parameters
-> maxpacket, maxburst and mult.
+
+
+On 08-08-24 05:36 am, Thinh Nguyen wrote:
+
+
+>> And turns out, retries 1500 to 15000 (worst case), which can range from 3ms
+>> to 30ms. By this time, control can reach startXfer, where it tries to
+>> perform remote-wakeup even if host just resumed the gadget.
 > 
-> As those parameters can not be changed once the gadget is started and
-> the same calculation is done already early on the
-> vb2_streamon/queue_setup path its save to remove one extra calculation
-> and reuse the calculation from uvc_queue_setup for the allocation step.
-
-Avoiding double calculations is good, but then don't compute the value
-in uvc_queue_setup(). That will also be called multiple times, and its
-timing will be controlled by userspace. Move it to a better location.
-
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Polling for 20K time is a bit much, and this will vary depending on
+> different setup. This is something that I want to fix in the wakeup()
+> ops and keep everything async.
 > 
-> ---
-> v3 -> v4: -
-> v2 -> v3: -
-> v1 -> v2: -
-> ---
->  drivers/usb/gadget/function/uvc_queue.c |  2 ++
->  drivers/usb/gadget/function/uvc_video.c | 15 ++-------------
->  2 files changed, 4 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-> index 7995dd3fef184..2414d78b031f4 100644
-> --- a/drivers/usb/gadget/function/uvc_queue.c
-> +++ b/drivers/usb/gadget/function/uvc_queue.c
-> @@ -63,6 +63,8 @@ static int uvc_queue_setup(struct vb2_queue *vq,
->  	 */
->  	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
->  	nreq = clamp(nreq, 4U, 64U);
-> +
-> +	video->req_size = req_size;
->  	video->uvc_num_requests = nreq;
->  
->  	return 0;
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index 259920ae36843..a6786beef91ad 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -480,7 +480,6 @@ uvc_video_free_requests(struct uvc_video *video)
->  	INIT_LIST_HEAD(&video->ureqs);
->  	INIT_LIST_HEAD(&video->req_free);
->  	INIT_LIST_HEAD(&video->req_ready);
-> -	video->req_size = 0;
->  	return 0;
->  }
->  
-> @@ -488,16 +487,9 @@ static int
->  uvc_video_alloc_requests(struct uvc_video *video)
->  {
->  	struct uvc_request *ureq;
-> -	unsigned int req_size;
->  	unsigned int i;
->  	int ret = -ENOMEM;
->  
-> -	BUG_ON(video->req_size);
-> -
-> -	req_size = video->ep->maxpacket
-> -		 * max_t(unsigned int, video->ep->maxburst, 1)
-> -		 * (video->ep->mult);
-> -
->  	for (i = 0; i < video->uvc_num_requests; i++) {
->  		ureq = kzalloc(sizeof(struct uvc_request), GFP_KERNEL);
->  		if (ureq == NULL)
-> @@ -507,7 +499,7 @@ uvc_video_alloc_requests(struct uvc_video *video)
->  
->  		list_add_tail(&ureq->list, &video->ureqs);
->  
-> -		ureq->req_buffer = kmalloc(req_size, GFP_KERNEL);
-> +		ureq->req_buffer = kmalloc(video->req_size, GFP_KERNEL);
->  		if (ureq->req_buffer == NULL)
->  			goto error;
->  
-> @@ -525,12 +517,10 @@ uvc_video_alloc_requests(struct uvc_video *video)
->  		list_add_tail(&ureq->req->list, &video->req_free);
->  		/* req_size/PAGE_SIZE + 1 for overruns and + 1 for header */
->  		sg_alloc_table(&ureq->sgt,
-> -			       DIV_ROUND_UP(req_size - UVCG_REQUEST_HEADER_LEN,
-> +			       DIV_ROUND_UP(video->req_size - UVCG_REQUEST_HEADER_LEN,
->  					    PAGE_SIZE) + 2, GFP_KERNEL);
->  	}
->  
-> -	video->req_size = req_size;
-> -
->  	return 0;
->  
->  error:
-> @@ -663,7 +653,6 @@ uvcg_video_disable(struct uvc_video *video)
->  	INIT_LIST_HEAD(&video->ureqs);
->  	INIT_LIST_HEAD(&video->req_free);
->  	INIT_LIST_HEAD(&video->req_ready);
-> -	video->req_size = 0;
->  	spin_unlock_irqrestore(&video->req_lock, flags);
->  
->  	/*
+This was done as part of experiment, just to determine the latency in 
+DSTS. And it was around 3-30ms. Saw rhis same behaviour when polling 
+DSTS in __dwc3_gadget_wakeup(sync)
 
--- 
+>>
+>> For SS case, this retries count was consistently 1, it was passing in first
+>> try itself. But unfortunately doesn't behave the same way in HS.
+>>
+>>> GUSB2PHYCFG.suspendusb2 turns on the signal required to complete a
+>>> command within 50us. This happens within the timeout required for an
+>>> endpoint command. As a result, there's no need to perform remote wakeup.
+>>>
+>>> For usb3 speed, if it's in U3, the gadget is in suspend anyway. There
+>>> will be no ep_queue to trigger the Start Transfer command.
+>>>
+>>> You can just remove the whole Start Transfer check for remote wakeup
+>>> completely.
+>>>
+>> Sorry, i didnt understand your suggestion. The startxfer check is needed as
+>> per databook, but we also need to handle the latency seen in DSTS when
+>> operating in HS.
+>>
+> 
+> usb_ep_queue should not trigger remote wakeup; it should be done by
+> wakeup() ops. The programming guide just noted that the Start Transfer
+> command should not be issued while in L1/L2/U3. It suggested to wake up
+> the host to bring it out of L1/L2/U3 state so the command can go
+> through.
+> 
+> My suggestion is to remove the L1/L2/U3 check in
+> dwc3_send_gadget_ep_cmd(), and it will still work fine with reasons
+> noted previously. So, just do this:
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 0ea2ca0f0d28..6ef6c4ef2a7b 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -411,30 +411,6 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+>                          dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+>          }
+> 
+> -       if (DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_STARTTRANSFER) {
+> -               int link_state;
+> -
+> -               /*
+> -                * Initiate remote wakeup if the link state is in U3 when
+> -                * operating in SS/SSP or L1/L2 when operating in HS/FS. If the
+> -                * link state is in U1/U2, no remote wakeup is needed. The Start
+> -                * Transfer command will initiate the link recovery.
+> -                */
+> -               link_state = dwc3_gadget_get_link_state(dwc);
+> -               switch (link_state) {
+> -               case DWC3_LINK_STATE_U2:
+> -                       if (dwc->gadget->speed >= USB_SPEED_SUPER)
+> -                               break;
+> -
+> -                       fallthrough;
+> -               case DWC3_LINK_STATE_U3:
+> -                       ret = __dwc3_gadget_wakeup(dwc, false);
+> -                       dev_WARN_ONCE(dwc->dev, ret, "wakeup failed --> %d\n",
+> -                                       ret);
+> -                       break;
+> -               }
+> -       }
+> -
+>          /*
+>           * For some commands such as Update Transfer command, DEPCMDPARn
+>           * registers are reserved. Since the driver often sends Update Transfer
+> 
+> When we receive the wakeup event, then the device is no longer in
+> L1/L2/U3. The Start Tranfer command should go through. >
+Ok will do this, I hope there won't be any corner cases where the link 
+is down when start_xfer happens. I was not really sure about the 
+history, thats why tried to incorporate my fix into the above IF check.
+
+> We do have an issue where if the function driver issues remote wakeup,
+> the link may not transition before ep_queue() because wakeup() can be
+> async. In that case, you probably want to keep the usb_requests in the
+> pending_list until the link_state transitions out of low power.
+> 
+> The other thing that I noted previously is that I want to fix is the
+> wakeup() ops. Currently it can be async or synchronous. We should keep
+> it consistent and make it async throughout.
+> 
+Sounds like a good idea, we can move the req to pending list, then issue 
+async wakeup, and queue it back once linksts_change interrupt indicates 
+L0/U0. Special care is needed in dwc3_gadget_func_wakeup() when making 
+it async.
+
 Regards,
-
-Laurent Pinchart
+Prashanth K
 
