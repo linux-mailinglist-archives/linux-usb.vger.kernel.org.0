@@ -1,586 +1,148 @@
-Return-Path: <linux-usb+bounces-13371-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13372-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6002D950330
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 13:02:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9F60950347
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 13:07:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84FF31C21F12
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:02:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D81C1F23C59
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A60619883C;
-	Tue, 13 Aug 2024 11:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D89E198A24;
+	Tue, 13 Aug 2024 11:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GDyTKqJf"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FmjpXsPN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF37198A0E
-	for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2024 11:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E21921345;
+	Tue, 13 Aug 2024 11:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723546909; cv=none; b=QlYSmF+FqmZMU1m/O+Ikl503MQIHGYzAYQxldMGEz5p4FrCrmE9a46KSCyE6CVAnZPdynTDlMxDLxSlvLpk1cgADvTGgdewmZGmw6aF00qXK2I6Pk51aj5dhY65KVch5IA/L0XPX08qUu5Klj5LDjperP+8sA3ec235FXrviYYA=
+	t=1723547251; cv=none; b=mPGgXx2IgaiZBdp7E9U2cQvkVX7aOsxuG1G33Mn3qcXUGqITsjGO1Gu079vfMioZVqVESm8nSnAYcgEzc2u8pR9X7C279tR+Zsep2RkR2zg1ijx8mHsu2F812YpxfEJIc19gsVh6XgAemjPniabgW8kBbSHOV5QF82X0K8y19x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723546909; c=relaxed/simple;
-	bh=djSi0FtKZyQ2o6GyJ5Hrx5NEmKgRCwIcimw6pKFUG2o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dbZSNxC5MoGZU5C2pFTGRE4MzIXzBzTug9WXVV6zqp8T5pUSpED9BswwoXZh3Imfp+E0Vxrjd7JQnWjJQdhFGIvEGYbH7MhzQJkLiz56Ff//lTGE0CBg/fkC8Dy/WaFUlIW7vxQlUQRqvGseKXLqLd1KCN0W/BDlh8GLBhCm34g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GDyTKqJf; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723546908; x=1755082908;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=djSi0FtKZyQ2o6GyJ5Hrx5NEmKgRCwIcimw6pKFUG2o=;
-  b=GDyTKqJfyNjfWfVSlwoY0pL4S1c3XVMjdVyitD4EqCWxwQ+0mwzCNZfX
-   yRDacSeocXuaUd7f6AudATAYHfmEI+y3R4r3nnYsALjVZrTslkn8gL99Q
-   yx9rvnL1CmZGhS6zkSXrNHa7WLmNfV6wCWox3FfXs3/8kLsBImdXvSlk+
-   yoPvhbEhEUzbYnOtMF6GwSJXcM/YiT9RbS9H9bqkaiCVud7DVS8NpNNZR
-   43W+/6QKDZcHyf7qmBPOIhcUxZum6nzVP+505GcOhuPyvlqN3eCAnKqCO
-   nbsIvoNATsPLOp5FOhEKbnqYF6n3XPffME9+q3KZrvwKTNMaO0CX4cajt
-   w==;
-X-CSE-ConnectionGUID: NQ1H00ERRuKZVCpjxs2FdA==
-X-CSE-MsgGUID: Vles+Oh+QTOekjnLCVr/bQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="25492564"
-X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="25492564"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:01:41 -0700
-X-CSE-ConnectionGUID: QkaZ4hy+QZa1dGESys7C8Q==
-X-CSE-MsgGUID: vbHj+8YxTS+lUWo0cD2Yfg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="62791038"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 13 Aug 2024 04:01:37 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id D21954FE; Tue, 13 Aug 2024 14:01:35 +0300 (EEST)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Cc: linux-usb@vger.kernel.org,
-	Aapo Vienamo <aapo.vienamo@linux.intel.com>,
-	Rene Sapiens <rene.sapiens@intel.com>,
-	R Kannappan <r.kannappan@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 4/4] thunderbolt: Improve software receiver lane margining
-Date: Tue, 13 Aug 2024 14:01:35 +0300
-Message-ID: <20240813110135.2178900-5-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240813110135.2178900-1-mika.westerberg@linux.intel.com>
-References: <20240813110135.2178900-1-mika.westerberg@linux.intel.com>
+	s=arc-20240116; t=1723547251; c=relaxed/simple;
+	bh=uugB4eTDuGQJnFKfIFPjwiieP1yYLYGEZ5iU7r3LsJI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fqCcgCV124N9MFkl15VaxJU/2bfin/AEh1HT7hIt2USq39X5h3NnMoNMsmG6aaK7Lk8Mjv5IldLLTkCRbdVS3/dnipZgfADFPtBsX+W04DAuddizzwJNX4imdmkTS3XJmxqT/aX0xInMlt63ag+/BBTd4N0GGqKwHy03TmGOR1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=FmjpXsPN; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A79F4AB;
+	Tue, 13 Aug 2024 13:06:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1723547191;
+	bh=uugB4eTDuGQJnFKfIFPjwiieP1yYLYGEZ5iU7r3LsJI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FmjpXsPNxgAZsJdy702YFvpUd9tgOOpQu9v+ztsPkipMYA6T/GAIMcmwPvyMg1gkE
+	 fZyeNrspr36V86TW2soCct++smDDlflnQlxWk/NxgWy62TTpBrgzLzpXjGa4aurUuk
+	 CBNkv87hiFX2pOvl/Is9b36k0RxkAKJ++i4Ap9iU=
+Message-ID: <694f66f1-1b38-4d14-b52b-4610b619b517@ideasonboard.com>
+Date: Tue, 13 Aug 2024 12:07:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MAINTAINERS: Mark UVC gadget driver as orphan
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ linux-kernel@vger.kernel.org
+Cc: Michael Grzeschik <mgr@pengutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Avichal Rakesh <arakesh@google.com>, linux-usb@vger.kernel.org,
+ linux-media@vger.kernel.org
+References: <20240813104447.25821-1-laurent.pinchart@ideasonboard.com>
+Content-Language: en-US
+From: Dan Scally <dan.scally@ideasonboard.com>
+Autocrypt: addr=dan.scally@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <20240813104447.25821-1-laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: R Kannappan <r.kannappan@intel.com>
 
-USB4 specification defines the metadata needed to perform software
-margining, as well as the necessary steps which include waiting for
-dwell time.
-
-- Add dwell_time attribute to set the wait time while performing
-  margining and checking for link errors.
-- Add error_counter attribute to configure error counter prior to
-  margining test.
-- Add voltage_time_offset attribute to set the voltage or time offset
-  steps before performing the software margining test.
-- Perform software margining test for dwell duration, break if there are
-  link errors, stop the clocks and provide results.
-
-Below is a minimalistic example how this can be used. Note these values
-are just examples. The exact values in practice depend on host specific
-capabilities and the type of measurement to be performed.
-
-  # cd /sys/kernel/debug/thunderbolt/ROUTER/portX/margining/
-  # echo software > mode
-  # echo 400 > dwell_time
-  # echo 1 > run
-
-As usual the results attribute contains the results of a succesfull run.
-
-Signed-off-by: R Kannappan <r.kannappan@intel.com>
-Co-developed-by: Rene Sapiens <rene.sapiens@intel.com>
-Signed-off-by: Rene Sapiens <rene.sapiens@intel.com>
-Co-developed-by: Aapo Vienamo <aapo.vienamo@linux.intel.com>
-Signed-off-by: Aapo Vienamo <aapo.vienamo@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/debugfs.c | 294 ++++++++++++++++++++++++++++++++--
- drivers/thunderbolt/sb_regs.h |   8 +
- drivers/thunderbolt/tb.h      |   2 +
- drivers/thunderbolt/usb4.c    |   1 +
- 4 files changed, 289 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
-index 9defa69ef3a7..208a95c475c2 100644
---- a/drivers/thunderbolt/debugfs.c
-+++ b/drivers/thunderbolt/debugfs.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/bitfield.h>
- #include <linux/debugfs.h>
-+#include <linux/delay.h>
- #include <linux/pm_runtime.h>
- #include <linux/uaccess.h>
- 
-@@ -34,6 +35,14 @@
- 
- #define COUNTER_SET_LEN		3
- 
-+/*
-+ * USB4 spec doesn't specify dwell range, the range of 100 ms to 500 ms
-+ * probed to give good results.
-+ */
-+#define MIN_DWELL_TIME		100 /* ms */
-+#define MAX_DWELL_TIME		500 /* ms */
-+#define DWELL_SAMPLE_INTERVAL	10
-+
- /* Sideband registers and their sizes as defined in the USB4 spec */
- struct sb_reg {
- 	unsigned int reg;
-@@ -399,6 +408,9 @@ static ssize_t retimer_sb_regs_write(struct file *file,
-  *					range (in mV).
-  * @time_steps: Number of time margin steps
-  * @max_time_offset: Maximum time margin offset (in mUI)
-+ * @voltage_time_offset: Offset for voltage / time for software margining
-+ * @dwell_time: Dwell time for software margining (in ms)
-+ * @error_counter: Error counter operation for software margining
-  * @optional_voltage_offset_range: Enable optional extended voltage range
-  * @software: %true if software margining is used instead of hardware
-  * @time: %true if time margining is used instead of voltage
-@@ -422,12 +434,33 @@ struct tb_margining {
- 	unsigned int max_voltage_offset_optional_range;
- 	unsigned int time_steps;
- 	unsigned int max_time_offset;
-+	unsigned int voltage_time_offset;
-+	unsigned int dwell_time;
-+	enum usb4_margin_sw_error_counter error_counter;
- 	bool optional_voltage_offset_range;
- 	bool software;
- 	bool time;
- 	bool right_high;
- };
- 
-+static int margining_modify_error_counter(struct tb_margining *margining,
-+	u32 lanes, enum usb4_margin_sw_error_counter error_counter)
-+{
-+	struct usb4_port_margining_params params = { 0 };
-+	struct tb_port *port = margining->port;
-+	u32 result;
-+
-+	if (error_counter != USB4_MARGIN_SW_ERROR_COUNTER_CLEAR &&
-+	    error_counter != USB4_MARGIN_SW_ERROR_COUNTER_STOP)
-+		return -EOPNOTSUPP;
-+
-+	params.error_counter = error_counter;
-+	params.lanes = lanes;
-+
-+	return usb4_port_sw_margin(port, margining->target, margining->index,
-+				   &params, &result);
-+}
-+
- static bool supports_software(const struct tb_margining *margining)
- {
- 	return margining->caps[0] & USB4_MARGIN_CAP_0_MODES_SW;
-@@ -689,9 +722,165 @@ static int margining_lanes_show(struct seq_file *s, void *not_used)
- DEBUGFS_ATTR_RW(margining_lanes);
- 
- static ssize_t
--margining_optional_voltage_offset_write(struct file *file,
--				   const char __user *user_buf,
--				   size_t count, loff_t *ppos)
-+margining_voltage_time_offset_write(struct file *file,
-+				    const char __user *user_buf,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct seq_file *s = file->private_data;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
-+	unsigned int max_margin;
-+	unsigned int val;
-+	int ret;
-+
-+	ret = kstrtouint_from_user(user_buf, count, 10, &val);
-+	if (ret)
-+		return ret;
-+
-+	scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &tb->lock) {
-+		if (!margining->software)
-+			return -EOPNOTSUPP;
-+
-+		if (margining->time)
-+			max_margin = margining->time_steps;
-+		else
-+			if (margining->optional_voltage_offset_range)
-+				max_margin = margining->voltage_steps_optional_range;
-+			else
-+				max_margin = margining->voltage_steps;
-+
-+		margining->voltage_time_offset = clamp(val, 0, max_margin);
-+	}
-+
-+	return count;
-+}
-+
-+static int margining_voltage_time_offset_show(struct seq_file *s,
-+					      void *not_used)
-+{
-+	const struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
-+
-+	scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &tb->lock) {
-+		if (!margining->software)
-+			return -EOPNOTSUPP;
-+
-+		seq_printf(s, "%d\n", margining->voltage_time_offset);
-+	}
-+
-+	return 0;
-+}
-+DEBUGFS_ATTR_RW(margining_voltage_time_offset);
-+
-+static ssize_t
-+margining_error_counter_write(struct file *file, const char __user *user_buf,
-+			      size_t count, loff_t *ppos)
-+{
-+	enum usb4_margin_sw_error_counter error_counter;
-+	struct seq_file *s = file->private_data;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
-+	char *buf;
-+
-+	buf = validate_and_copy_from_user(user_buf, &count);
-+	if (IS_ERR(buf))
-+		return PTR_ERR(buf);
-+
-+	buf[count - 1] = '\0';
-+
-+	if (!strcmp(buf, "nop"))
-+		error_counter = USB4_MARGIN_SW_ERROR_COUNTER_NOP;
-+	else if (!strcmp(buf, "clear"))
-+		error_counter = USB4_MARGIN_SW_ERROR_COUNTER_CLEAR;
-+	else if (!strcmp(buf, "start"))
-+		error_counter = USB4_MARGIN_SW_ERROR_COUNTER_START;
-+	else if (!strcmp(buf, "stop"))
-+		error_counter = USB4_MARGIN_SW_ERROR_COUNTER_STOP;
-+	else
-+		return -EINVAL;
-+
-+	scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &tb->lock) {
-+		if (!margining->software)
-+			return -EOPNOTSUPP;
-+
-+		margining->error_counter = error_counter;
-+	}
-+
-+	return count;
-+}
-+
-+static int margining_error_counter_show(struct seq_file *s, void *not_used)
-+{
-+	const struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
-+
-+	scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &tb->lock) {
-+		if (!margining->software)
-+			return -EOPNOTSUPP;
-+
-+		switch (margining->error_counter) {
-+		case USB4_MARGIN_SW_ERROR_COUNTER_NOP:
-+			seq_puts(s, "[nop] clear start stop\n");
-+			break;
-+		case USB4_MARGIN_SW_ERROR_COUNTER_CLEAR:
-+			seq_puts(s, "nop [clear] start stop\n");
-+			break;
-+		case USB4_MARGIN_SW_ERROR_COUNTER_START:
-+			seq_puts(s, "nop clear [start] stop\n");
-+			break;
-+		case USB4_MARGIN_SW_ERROR_COUNTER_STOP:
-+			seq_puts(s, "nop clear start [stop]\n");
-+			break;
-+		}
-+	}
-+
-+	return 0;
-+}
-+DEBUGFS_ATTR_RW(margining_error_counter);
-+
-+static ssize_t
-+margining_dwell_time_write(struct file *file, const char __user *user_buf,
-+			   size_t count, loff_t *ppos)
-+{
-+	struct seq_file *s = file->private_data;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
-+	unsigned int val;
-+	int ret;
-+
-+	ret = kstrtouint_from_user(user_buf, count, 10, &val);
-+	if (ret)
-+		return ret;
-+
-+	scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &tb->lock) {
-+		if (!margining->software)
-+			return -EOPNOTSUPP;
-+
-+		margining->dwell_time = clamp(val, MIN_DWELL_TIME, MAX_DWELL_TIME);
-+	}
-+
-+	return count;
-+}
-+
-+static int margining_dwell_time_show(struct seq_file *s, void *not_used)
-+{
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
-+
-+	scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &tb->lock) {
-+		if (!margining->software)
-+			return -EOPNOTSUPP;
-+
-+		seq_printf(s, "%d\n", margining->dwell_time);
-+	}
-+
-+	return 0;
-+}
-+DEBUGFS_ATTR_RW(margining_dwell_time);
-+
-+static ssize_t
-+margining_optional_voltage_offset_write(struct file *file, const char __user *user_buf,
-+					size_t count, loff_t *ppos)
- {
- 	struct seq_file *s = file->private_data;
- 	struct tb_margining *margining = s->private;
-@@ -796,6 +985,50 @@ static int margining_mode_show(struct seq_file *s, void *not_used)
- }
- DEBUGFS_ATTR_RW(margining_mode);
- 
-+static int margining_run_sw(struct tb_margining *margining,
-+			    struct usb4_port_margining_params *params)
-+{
-+	u32 nsamples = margining->dwell_time / DWELL_SAMPLE_INTERVAL;
-+	u32 errors;
-+	int ret, i;
-+
-+	ret = usb4_port_sw_margin(margining->port, margining->target, margining->index,
-+				  params, margining->results);
-+	if (ret)
-+		goto out_stop;
-+
-+	for (i = 0; i <= nsamples; i++) {
-+		ret = usb4_port_sw_margin_errors(margining->port, margining->target,
-+						 margining->index, &margining->results[1]);
-+		if (ret)
-+			break;
-+
-+		if (margining->lanes == USB4_MARGIN_SW_LANE_0)
-+			errors = FIELD_GET(USB4_MARGIN_SW_ERR_COUNTER_LANE_0_MASK,
-+					   margining->results[1]);
-+		else if (margining->lanes == USB4_MARGIN_SW_LANE_1)
-+			errors = FIELD_GET(USB4_MARGIN_SW_ERR_COUNTER_LANE_1_MASK,
-+					   margining->results[1]);
-+		else if (margining->lanes == USB4_MARGIN_SW_ALL_LANES)
-+			errors = margining->results[1];
-+
-+		/* Any errors stop the test */
-+		if (errors)
-+			break;
-+
-+		fsleep(DWELL_SAMPLE_INTERVAL * USEC_PER_MSEC);
-+	}
-+
-+out_stop:
-+	/*
-+	 * Stop the counters but don't clear them to allow the
-+	 * different error counter configurations.
-+	 */
-+	margining_modify_error_counter(margining, margining->lanes,
-+				       USB4_MARGIN_SW_ERROR_COUNTER_STOP);
-+	return ret;
-+}
-+
- static int margining_run_write(void *data, u64 val)
- {
- 	struct tb_margining *margining = data;
-@@ -836,11 +1069,15 @@ static int margining_run_write(void *data, u64 val)
- 		clx = ret;
- 	}
- 
-+	/* Clear the results */
-+	memset(margining->results, 0, sizeof(margining->results));
-+
- 	if (margining->software) {
- 		struct usb4_port_margining_params params = {
- 			.error_counter = USB4_MARGIN_SW_ERROR_COUNTER_CLEAR,
- 			.lanes = margining->lanes,
- 			.time = margining->time,
-+			.voltage_time_offset = margining->voltage_time_offset,
- 			.right_high = margining->right_high,
- 			.optional_voltage_offset_range = margining->optional_voltage_offset_range,
- 		};
-@@ -850,14 +1087,7 @@ static int margining_run_write(void *data, u64 val)
- 			    margining->time ? "time" : "voltage", dev_name(dev),
- 			    margining->lanes);
- 
--		ret = usb4_port_sw_margin(port, margining->target, margining->index, &params,
--					  &margining->results[0]);
--		if (ret)
--			goto out_clx;
--
--		ret = usb4_port_sw_margin_errors(port, margining->target,
--						 margining->index,
--						 &margining->results[0]);
-+		ret = margining_run_sw(margining, &params);
- 	} else {
- 		struct usb4_port_margining_params params = {
- 			.ber_level = margining->ber_level,
-@@ -867,10 +1097,6 @@ static int margining_run_write(void *data, u64 val)
- 			.optional_voltage_offset_range = margining->optional_voltage_offset_range,
- 		};
- 
--		/* Clear the results */
--		margining->results[0] = 0;
--		margining->results[1] = 0;
--
- 		tb_port_dbg(port,
- 			    "running hardware %s lane margining for %s lanes %u\n",
- 			    margining->time ? "time" : "voltage", dev_name(dev),
-@@ -880,7 +1106,6 @@ static int margining_run_write(void *data, u64 val)
- 					  margining->results);
- 	}
- 
--out_clx:
- 	if (down_sw)
- 		tb_switch_clx_enable(down_sw, clx);
- out_unlock:
-@@ -909,6 +1134,13 @@ static ssize_t margining_results_write(struct file *file,
- 	margining->results[0] = 0;
- 	margining->results[1] = 0;
- 
-+	if (margining->software) {
-+		/* Clear the error counters */
-+		margining_modify_error_counter(margining,
-+					       USB4_MARGIN_SW_ALL_LANES,
-+					       USB4_MARGIN_SW_ERROR_COUNTER_CLEAR);
-+	}
-+
- 	mutex_unlock(&tb->lock);
- 	return count;
- }
-@@ -998,6 +1230,24 @@ static int margining_results_show(struct seq_file *s, void *not_used)
- 				voltage_margin_show(s, margining, val);
- 			}
- 		}
-+	} else {
-+		u32 lane_errors, result;
-+
-+		seq_printf(s, "0x%08x\n", margining->results[1]);
-+		result = FIELD_GET(USB4_MARGIN_SW_LANES_MASK, margining->results[0]);
-+
-+		if (result == USB4_MARGIN_SW_LANE_0 ||
-+		    result == USB4_MARGIN_SW_ALL_LANES) {
-+			lane_errors = FIELD_GET(USB4_MARGIN_SW_ERR_COUNTER_LANE_0_MASK,
-+						margining->results[1]);
-+			seq_printf(s, "# lane 0 errors: %u\n", lane_errors);
-+		}
-+		if (result == USB4_MARGIN_SW_LANE_1 ||
-+		    result == USB4_MARGIN_SW_ALL_LANES) {
-+			lane_errors = FIELD_GET(USB4_MARGIN_SW_ERR_COUNTER_LANE_1_MASK,
-+						margining->results[1]);
-+			seq_printf(s, "# lane 1 errors: %u\n", lane_errors);
-+		}
- 	}
- 
- 	mutex_unlock(&tb->lock);
-@@ -1211,9 +1461,21 @@ static struct tb_margining *margining_alloc(struct tb_port *port,
- 		debugfs_create_file("margin", 0600, dir, margining,
- 				    &margining_margin_fops);
- 
-+	margining->error_counter = USB4_MARGIN_SW_ERROR_COUNTER_CLEAR;
-+	margining->dwell_time = MIN_DWELL_TIME;
-+
- 	if (supports_optional_voltage_offset_range(margining))
- 		debugfs_create_file("optional_voltage_offset", DEBUGFS_MODE, dir, margining,
- 				    &margining_optional_voltage_offset_fops);
-+
-+	if (supports_software(margining)) {
-+		debugfs_create_file("voltage_time_offset", DEBUGFS_MODE, dir, margining,
-+				    &margining_voltage_time_offset_fops);
-+		debugfs_create_file("error_counter", DEBUGFS_MODE, dir, margining,
-+				    &margining_error_counter_fops);
-+		debugfs_create_file("dwell_time", DEBUGFS_MODE, dir, margining,
-+				    &margining_dwell_time_fops);
-+	}
- 	return margining;
- }
- 
-diff --git a/drivers/thunderbolt/sb_regs.h b/drivers/thunderbolt/sb_regs.h
-index 8bff0740222c..dbcad25ead50 100644
---- a/drivers/thunderbolt/sb_regs.h
-+++ b/drivers/thunderbolt/sb_regs.h
-@@ -86,9 +86,17 @@ enum usb4_sb_opcode {
- #define USB4_MARGIN_HW_RES_1_L1_LL_MARGIN_SHIFT	24
- 
- /* USB4_SB_OPCODE_RUN_SW_LANE_MARGINING */
-+#define USB4_MARGIN_SW_LANES_MASK		GENMASK(2, 0)
-+#define USB4_MARGIN_SW_LANE_0			0x0
-+#define USB4_MARGIN_SW_LANE_1			0x1
-+#define USB4_MARGIN_SW_ALL_LANES		0x7
- #define USB4_MARGIN_SW_TIME			BIT(3)
- #define USB4_MARGIN_SW_RH			BIT(4)
- #define USB4_MARGIN_SW_OPT_VOLTAGE		BIT(5)
-+#define USB4_MARGIN_SW_VT_MASK			GENMASK(12, 6)
- #define USB4_MARGIN_SW_COUNTER_MASK		GENMASK(14, 13)
- 
-+#define USB4_MARGIN_SW_ERR_COUNTER_LANE_0_MASK	GENMASK(3, 0)
-+#define USB4_MARGIN_SW_ERR_COUNTER_LANE_1_MASK	GENMASK(7, 4)
-+
- #endif
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 262c333924b8..6737188f2581 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1372,6 +1372,7 @@ enum usb4_margin_sw_error_counter {
-  * @error_counter: Error counter operation for software margining
-  * @ber_level: Current BER level contour value
-  * @lanes: %0, %1 or %7 (all)
-+ * @voltage_time_offset: Offset for voltage / time for software margining
-  * @optional_voltage_offset_range: Enable optional extended voltage range
-  * @right_high: %false if left/low margin test is performed, %true if right/high
-  * @time: %true if time margining is used instead of voltage
-@@ -1380,6 +1381,7 @@ struct usb4_port_margining_params {
- 	enum usb4_margin_sw_error_counter error_counter;
- 	u32 ber_level;
- 	u32 lanes;
-+	u32 voltage_time_offset;
- 	bool optional_voltage_offset_range;
- 	bool right_high;
- 	bool time;
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index a2f81e17ad8d..0a9b4aeb3fa1 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -1723,6 +1723,7 @@ int usb4_port_sw_margin(struct tb_port *port, enum usb4_sb_target target,
- 	if (params->right_high)
- 		val |= USB4_MARGIN_SW_RH;
- 	val |= FIELD_PREP(USB4_MARGIN_SW_COUNTER_MASK, params->error_counter);
-+	val |= FIELD_PREP(USB4_MARGIN_SW_VT_MASK, params->voltage_time_offset);
- 
- 	ret = usb4_port_sb_write(port, target, index, USB4_SB_METADATA, &val,
- 				 sizeof(val));
--- 
-2.43.0
-
+On 13/08/2024 11:44, Laurent Pinchart wrote:
+> I haven't had time to maintain the UVC gadget driver for a long while.
+> Dan Scally confirmed he is also in a similar -ENOTIME situation with no
+> short term hope of fixing that. Being listed as maintainers doesn't help
+> progress, so mark the driver as orphan to reflect the current state.
+>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+Acked-by: Daniel Scally <dan.scally@ideasonboard.com>
+> Dan, could you please ack this patch ?
+>
+> Michael, feel free to take over if you want. You have been active on the
+> code base recently, so that makes you the best candidate, even if I
+> disagree with most of your technical decisions. I'm a bit sad to leave a
+> driver I cared about without trust in its future, hopefully the future
+> will prove I was wrong.
+> ---
+>   MAINTAINERS | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8766f3e5e87e..e6df197f1a58 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -23819,10 +23819,8 @@ F:	drivers/media/usb/uvc/
+>   F:	include/uapi/linux/uvcvideo.h
+>   
+>   USB WEBCAM GADGET
+> -M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> -M:	Daniel Scally <dan.scally@ideasonboard.com>
+>   L:	linux-usb@vger.kernel.org
+> -S:	Maintained
+> +S:	Orphan
+>   F:	drivers/usb/gadget/function/*uvc*
+>   F:	drivers/usb/gadget/legacy/webcam.c
+>   F:	include/uapi/linux/usb/g_uvc.h
+>
 
