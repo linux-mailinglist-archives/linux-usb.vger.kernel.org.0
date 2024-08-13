@@ -1,184 +1,157 @@
-Return-Path: <linux-usb+bounces-13393-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13391-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EEE9950D8D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 22:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBC38950D83
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 22:04:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4DAD1F217B1
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 20:05:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7476F1F215D0
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 20:04:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD3531A3BD4;
-	Tue, 13 Aug 2024 20:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013641A4F2D;
+	Tue, 13 Aug 2024 20:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ix40BMqF"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VljHwBeh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6A7A953
-	for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2024 20:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA7E1A3BAC;
+	Tue, 13 Aug 2024 20:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723579522; cv=none; b=XZr/LkbBYHpV+ku2eHyn+gkSfM2YS9xyAXT5p73D/SwHTuISnUAsm2YngyuNiMU4wmqX+vOc5xIGnFCupkm5EqRC982uL5XnkCuIktU+7SDMAadfSX5XdOd09I3zlX03fH7tgH0W9vKhUgPzL2bO4gSP9VawX+g1hlC3VR08XmE=
+	t=1723579445; cv=none; b=gt1HoHdM1nbBuHHXlrwcTF4lhASzRvdm8cuJ1vjTXmqV02rSCuoePW8fQRI4RszdLW9UjzL9yCjcTojX+naJF0fy+5hXc2m4cO7LLxsPwm0xvgVJyQgZu2hwPQ/FCikFB+LSW3pJSeHcvkjRko5F4/fCDxW/nLAf7Jw35tNH8gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723579522; c=relaxed/simple;
-	bh=HY47OI6qgPGV0/QE09FI/k+0tj+UYHuJ+dL5B1JuDSE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ub6NR1NBxoerLAlTDdmL5wkPo+lOqL/vpeWt3PYgYaXmnIQqeGudEnc5YvrDlmrdHcckgm3oWXjd2/ra+LrOqVp15X6VifHo6BBsiOKl7PK47Po043iPQ2vqvBEhNpgGK2lPPcVMyT1AOs1MwPjJb/5rEp14F/8O2ca6qNm0pjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ix40BMqF; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a7ac469e4c4so41869966b.0
-        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2024 13:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723579519; x=1724184319; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HY47OI6qgPGV0/QE09FI/k+0tj+UYHuJ+dL5B1JuDSE=;
-        b=Ix40BMqFqpEMUx2L2H5loAtxXvkh0y2loERE2VomMIyMaSOi2KOC54X9+L8C0+jPsF
-         S707dI+48cYLOmzKqMwKkDLs/xgQWRnmId8erbxj+QI8Z1qD6sjnpgYGbL0mkOpG0pMk
-         uTCh+IzbeaNTFXSYqf+rv4QnpU/rVheMjXHhg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723579519; x=1724184319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HY47OI6qgPGV0/QE09FI/k+0tj+UYHuJ+dL5B1JuDSE=;
-        b=WPlwUNFYDwofe4J4Xq1lo9QV139deuXjS21rDVcRyhCweZCO4oWfcuyrieW/RkGXwk
-         6SwPN1Hvi59SDer4MnRgJbgnODprO9tEYvrpOqQ9433XhBcBQ7lvSO8c/dojsfGvPIeJ
-         xfa/y8sFiM2DyJsgtEcZxAsfgP3EpDFQZwpHOCsVSyIU+zhSOLScQOo2Sklgapo+hvEa
-         0Lm9rHzt0ziIthic9HxA3u/6if0a1mOGIoCae0dI+Cz0tWPjShXrWADtLBjXRoOx6cLk
-         iYiWpKrCmAvxNlthLSxb/F4sRfb5iA/SyJy5XIG84WgopR8MLg4wQzBUfcg3gUEw58S+
-         X/ww==
-X-Forwarded-Encrypted: i=1; AJvYcCWlEzhi/JgZ1VjJPsi9E7sZszUGidBS9DqQfAUOYt9IJA9fIP8zmExJkRoaH86yJNKRUsJtp67BqS6f5jH9O1rtEXEV72LqQdZP
-X-Gm-Message-State: AOJu0YzOF1nVnJkzbta1Zv0nlqsdZru/5roRq5q23gkMwVOozbDrr7Da
-	7FGIT20N/idgSjtBmXewJRLvkMcpUNXq664kGDHwbFTA99PTDPtasPtA56BWJEzE+7VFW/GMAMq
-	27oAz
-X-Google-Smtp-Source: AGHT+IFOKIETF/NcfnTZAMau4jPOgQg6c4xr57c6j/wZ8WJMqxRWXj7PqLOum+RClRVHov4ui2ujog==
-X-Received: by 2002:a17:906:730d:b0:a77:afd5:62aa with SMTP id a640c23a62f3a-a80f0c1c04emr413521266b.23.1723579518547;
-        Tue, 13 Aug 2024 13:05:18 -0700 (PDT)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80f418260esm94406166b.197.2024.08.13.13.05.18
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Aug 2024 13:05:18 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5b9d48d1456so355616a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2024 13:05:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWvMHpK3ZFGNFNtolL+VVjXhW9V1oEPvWqc6g0y5lmaKNnvyYoO8eNKd6BLL8AV4Img//22dOzvjfRlbPrchQ3tKSWyluYM0A45
-X-Received: by 2002:a05:6000:1e98:b0:367:8f89:f7c9 with SMTP id
- ffacd0b85a97d-371775d5820mr524329f8f.33.1723579053293; Tue, 13 Aug 2024
- 12:57:33 -0700 (PDT)
+	s=arc-20240116; t=1723579445; c=relaxed/simple;
+	bh=+Npvfp8NSzv6+BWy9xk5foyIWDSG9LTmA1VnFOsrxew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gvHJSv/+LdbVREDcr7FXHDPjUKb6DxZ4KdiN5ICDw/SxeHyboOmk2dV3tbykk1Edrlq0ndS0LTOF3+rd1LCU+pWuvZmxjRAmB2cFEAj2pdm4EpaAO9idg2mRUwWYe6QFPB/goaTDdS12ow5R23bHMyrPU8Khjj3fDGS4R4EYwL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VljHwBeh; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47DCGalM005644;
+	Tue, 13 Aug 2024 20:03:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Al0COlWtxPvz9k7iEu0xiRFveGatmDKFzjD4MOn3VBc=; b=VljHwBeh+p8Wh4VN
+	BxhCgnSt6Tjb4LI9LsQZejNJtZySOPDBJ8hY6S1pTwnoMewwlDba/DyQ4CO03ihp
+	91FTqe6kx47JA1w0GyR+9Bt8Cr/c9+kYMojC584BLXfGUtCHbxasP64H2Fgdgio6
+	LbA+ZRcSoDML+gFzD1p2zpec7j/7rrFq5Uuy/LhRcfGpEr4QTK6KXH4ChMDPny2J
+	H4lcEQ9+6JdO5aeEw8zt0bzsV0jFc05iDRPUQvfX7WmPs4GPgEzhh9RsHtxzVycy
+	xTI8BpUQHJYPgv+zglym/GpO6AOQEnAnE0MxTSrWc9xDCviMeP5QBtxHwAgYOE06
+	J3unGw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40x18y12dd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Aug 2024 20:03:59 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47DK3vWG009675
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Aug 2024 20:03:57 GMT
+Received: from [10.71.108.157] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 13 Aug
+ 2024 13:03:57 -0700
+Message-ID: <46d0627d-877b-41f3-83f6-4c33b562f460@quicinc.com>
+Date: Tue, 13 Aug 2024 13:03:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240728114200.75559-1-wahrenst@gmx.net> <20240728130029.78279-1-wahrenst@gmx.net>
- <20240728130029.78279-6-wahrenst@gmx.net> <65de7db8-4f81-4c31-be8d-3a03c9aee989@gmx.net>
-In-Reply-To: <65de7db8-4f81-4c31-be8d-3a03c9aee989@gmx.net>
-From: Doug Anderson <dianders@chromium.org>
-Date: Tue, 13 Aug 2024 12:57:16 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W7sdi1+SHfhY6RrjK32r8iAGe4w+O_u5Sp982vgBU6EQ@mail.gmail.com>
-Message-ID: <CAD=FV=W7sdi1+SHfhY6RrjK32r8iAGe4w+O_u5Sp982vgBU6EQ@mail.gmail.com>
-Subject: Re: [PATCH V2 14/16] WIP: usb: dwc2: Implement recovery after PM
- domain off
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
-	Minas Harutyunyan <hminas@synopsys.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>, 
-	Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>, Peter Robinson <pbrobinson@gmail.com>, 
-	dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com, 
-	linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kernel-list@raspberrypi.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Maxime Ripard <mripard@kernel.org>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/3] dt-bindings: soc: qcom: eud: Update compatible
+ strings for eud
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Souradeep Chowdhury
+	<quic_schowdhu@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        Elson Serrao <quic_eserrao@quicinc.com>
+CC: <cros-qcom-dts-watchers@chromium.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20240807183205.803847-1-quic_molvera@quicinc.com>
+ <20240807183205.803847-2-quic_molvera@quicinc.com>
+ <dfb1ac84-f011-45ea-9fb1-b8c6bc36cabc@kernel.org>
+Content-Language: en-US
+From: Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <dfb1ac84-f011-45ea-9fb1-b8c6bc36cabc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4hqBSQeGN_q9JJfpmTe-YaTcStwpTx-e
+X-Proofpoint-ORIG-GUID: 4hqBSQeGN_q9JJfpmTe-YaTcStwpTx-e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-13_10,2024-08-13_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=957
+ suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408130144
 
-Hi,
 
-On Mon, Aug 12, 2024 at 4:48=E2=80=AFPM Stefan Wahren <wahrenst@gmx.net> wr=
-ote:
+
+On 8/8/2024 4:00 AM, Krzysztof Kozlowski wrote:
+> On 07/08/2024 20:32, Melody Olvera wrote:
+>> The EUD can more accurately be divided into two types; a secure type
+>> which requires that certain registers be updated via scm call and a
+>> nonsecure type which must access registers nonsecurely. Thus, change
+>> the compatible strings to reflect secure and nonsecure eud usage.
+>>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>   Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>> index f2c5ec7e6437..476f92768610 100644
+>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>> @@ -17,8 +17,8 @@ properties:
+>>     compatible:
+>>       items:
+>>         - enum:
+>> -          - qcom,sc7280-eud
+>> -      - const: qcom,eud
+>> +          - qcom,secure-eud
+>> +          - qcom,eud
+> Commit msg did not explain me why DT bindings rules are avoided here and
+> you drop existing SoC specific compatible.
 >
-> Hi Doug,
+> This really does not look like having any sense at all, I cannot come up
+> with logic behind dropping existing users. You could deprecate it, but
+> then why exactly this device should have exception from generic bindings
+> rule?
+
+Understood. I won't drop this compatible string. Is alright to add the 
+additional compatible as is?
+
+Thanks,
+Melody
 >
-> Am 28.07.24 um 15:00 schrieb Stefan Wahren:
-> > DO NOT MERGE
-> >
-> > According to the dt-bindings there are some platforms, which have a
-> > dedicated USB power domain for DWC2 IP core supply. If the power domain
-> > is switched off during system suspend then all USB register will lose
-> > their settings.
-> >
-> > So use the power on/off notifier in order to save & restore the USB
-> > registers during system suspend.
-> sorry for bothering you with this DWC2 stuff, but it would great if you
-> can gave some feedback about this patch.
-
-Boy, it's been _ages_ since I looked at anything to do with dwc2, but
-I still have some fondness in my heart for the crufty old driver :-P I
-know I was involved with some of the patches to get
-wakeup-from-suspend working on dwc2 host controllers in the past but,
-if I remember correctly, I mostly shepherded / fixed patches from
-Rockchip. Not sure I can spend the days trawling through the driver
-and testing things with printk that really answering properly would
-need, but let's see...
-
-
-> I was working a lot to get
-> suspend to idle working on Raspberry Pi. And this patch is the most
-> complex part of the series.
+> Best regards,
+> Krzysztof
 >
-> Would you agree with this approach or did i miss something?
->
-> The problem is that the power domain driver acts independent from dwc2,
-> so we cannot prevent the USB domain power down except declaring a USB
-> device as wakeup source. So i decided to use the notifier approach. This
-> has been successful tested on some older Raspberry Pi boards.
 
-My genpd knowledge is probably not as good as it should be. Don't tell
-anyone (aside from all the people and lists CCed here). ;-)
-
-...so I guess you're relying on the fact that
-dev_pm_genpd_add_notifier() will return an error if a power-domain
-wasn't specified for dwc2 in the device tree, then you ignore that
-error and your callback will never happen. You assume that the power
-domain isn't specified then the dwc2 registers will be saved?
-
-I guess one thing is that I'd wonder if that's really reliable. Maybe
-some dwc2 controllers lose their registers over system suspend but
-_don't_ specify a power domain? Maybe the USB controller just gets its
-power yanked as part of system suspend. Maybe that's why the functions
-for saving / restoring registers are already there? It looks like
-there are ways for various platforms to specify that registers are
-lost in some cases...
-
-...but I guess you can't use the existing ways to say that registers
-are lost because you're trying to be dynamic. You're saying that your
-registers get saved _unless_ the power domain gets turned off, right?
-...and the device core keeps power domains on for suspended devices if
-they are wakeup sources, which makes sense.
-
-So with that, your patch sounds like a plausible way to do it. I guess
-one other way to do it would be some sort of "canary" approach. You
-could _always_ save registers and then, at resume time, you could
-detect if some "canary" register had reset to its power-on default. If
-you see this then you can assume power was lost and re-init all the
-registers. This could be pretty much any register that you know won't
-be its power on default. In some ways a "canary" approach is uglier
-but it also might be more reliable across more configurations?
-
-I guess those would be my main thoughts on the topic. Is that roughly
-the feedback you were looking for?
-
--Doug
 
