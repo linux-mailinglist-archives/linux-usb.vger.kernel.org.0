@@ -1,145 +1,106 @@
-Return-Path: <linux-usb+bounces-13354-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13355-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 212559500FE
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:12:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88628950116
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:17:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB45B1F244E9
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 09:12:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45238283718
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 09:17:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F0E17BB34;
-	Tue, 13 Aug 2024 09:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5688B183CA6;
+	Tue, 13 Aug 2024 09:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="kfyH5I+y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6452186E5C
-	for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2024 09:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326F5339A1;
+	Tue, 13 Aug 2024 09:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723540256; cv=none; b=IJsWOedjvO8CfKEaUEJ/pRyvcJG5tRfNoaRGc4OOtqC1ODH6IqcT4RRJPxdChSNOqYSPu5QdUuqeVNgZPepcPcSqT1vKHJ0Ze5RBa+E6O0KUn1gL1az49IwielEae+Jou9U82+fARoNkH9VeBzImnsBU6NTfNoAs7Sxj+CwXfpc=
+	t=1723540661; cv=none; b=t7RhHEYlAMJnWtYtYA+vFgtntrnqxNxkwAOxjlD/FWJMkThzp688Cd+L6/1HC3D0SMaLNlHbvNdZvLotg9O9ebOwiDo7jF6yt2zWIcqh3tmJbpp/GUARm1eDfgZNMxEPQTUKiulUUGnrY8EMq0jGmhXG1wgYTAfRZOFZCqAs4rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723540256; c=relaxed/simple;
-	bh=uq+T3EINNxRTXSs8/aHYthjMxmBKRzZAf7Kll6Pufg0=;
+	s=arc-20240116; t=1723540661; c=relaxed/simple;
+	bh=PhEhqK/WoPT5oxW0wo4BhgDQ5PM+ThHLGT3xQ1Fq6c8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uVygTpiuDS0x83S10bWBGDxzNHiHaR12nWOe4mlNskrcXi5oas6L2ZW9IJH5UvdtqRyXnBsyRyU0UAysmOdv9DGa28mcikC33LXm2KhQDFnPW7xoJaA+N+qGhvCh3HXhJPh6/N22Q/T/4iPHchcNuR0lCRnh7fWuLIROecjqGA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sdnYK-0002Q5-1M; Tue, 13 Aug 2024 11:10:52 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sdnYJ-0005pK-KQ; Tue, 13 Aug 2024 11:10:51 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sdnYJ-000cGA-1b;
-	Tue, 13 Aug 2024 11:10:51 +0200
-Date: Tue, 13 Aug 2024 11:10:51 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=HaoVZzGW69ikvx2F48/07FC1ZbPXopjMwWfLFShOGO57Miq+2df8qJGr2vBpOyiJPF1m4VkWEbai2SjvErjiWQxvzPi/8Ubhli3gK2OlJr2SyvwzB3uvW4n6XVDzYMCrB9D+WS+UkqrFiKIw0HGAJBrMeMN9Zj5BIxL5u56YEGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=kfyH5I+y; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 30F0FA1A;
+	Tue, 13 Aug 2024 11:16:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1723540601;
+	bh=PhEhqK/WoPT5oxW0wo4BhgDQ5PM+ThHLGT3xQ1Fq6c8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kfyH5I+yi1G3wAU7xUOEFibMiP5CjuZaTpY0z4fECjZqolmTq+QBSpw29TYf5+wa8
+	 9L1tRArJ988dILlzjsTksDej+GZMwNaDExAIOvuIhv2jQzI8UThv4sYc8Mg6WOVMqE
+	 dOhDAF6aowQpsvK8RLGSHRBA6X8M1sh7KKSfSdz4=
+Date: Tue, 13 Aug 2024 12:17:14 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc: Daniel Scally <dan.scally@ideasonboard.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Avichal Rakesh <arakesh@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/10] usb: gadget: uvc: remove pump worker and
- enqueue all buffers per frame in qbuf
-Message-ID: <ZrsjG0b3XFeSRefH@pengutronix.de>
-References: <20240403-uvc_request_length_by_interval-v3-0-4da7033dd488@pengutronix.de>
- <20240403-uvc_request_length_by_interval-v3-3-4da7033dd488@pengutronix.de>
+	Avichal Rakesh <arakesh@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 01/10] usb: gadget: uvc: always set interrupt on zero
+ length requests
+Message-ID: <20240813091714.GA19716@pendragon.ideasonboard.com>
+References: <20240403-uvc_request_length_by_interval-v4-0-ca22f334226e@pengutronix.de>
+ <20240403-uvc_request_length_by_interval-v4-1-ca22f334226e@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8j8oXWU2QAY203fW"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240403-uvc_request_length_by_interval-v3-3-4da7033dd488@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20240403-uvc_request_length_by_interval-v4-1-ca22f334226e@pengutronix.de>
 
+Hi Michael,
 
---8j8oXWU2QAY203fW
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch.
 
-Hi Greg,
+On Tue, Aug 13, 2024 at 11:09:25AM +0200, Michael Grzeschik wrote:
+> Since the uvc gadget is depending on the completion handler to
+> properly enqueue new data, we have to ensure that the requeue mechanism
+> is always working. To be safe we always create an interrupt
+> on zero length requests.
 
-On Sat, Jul 27, 2024 at 12:02:38AM +0200, Michael Grzeschik wrote:
->Since we now have at least the amount of requests to fill every frame
->into the isoc queue that is requested with the REQBUFS ioctl, we can
->directly encode all incoming frames into the available requests.
->
->Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->
->---
->v1 -> v3: new patch
->---
-> drivers/usb/gadget/function/f_uvc.c     |  4 ---
-> drivers/usb/gadget/function/uvc.h       |  5 +---
-> drivers/usb/gadget/function/uvc_queue.c |  3 +++
-> drivers/usb/gadget/function/uvc_v4l2.c  |  3 ---
-> drivers/usb/gadget/function/uvc_video.c | 46 +++++-----------------------=
------
-> drivers/usb/gadget/function/uvc_video.h |  1 +
-> 6 files changed, 12 insertions(+), 50 deletions(-)
->
+What do you mean "to be safe" ? Either there's an issue, and then the
+commit message should describe it, or there's no issue, and this isn't
+needed.
 
-This patch is introducing a bug that I have queued in the next series.
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> 
+> ---
+> v3 -> v4: -
+> v1 -> v3: new patch
+> ---
+>  drivers/usb/gadget/function/uvc_video.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index d41f5f31dadd5..03bff39cd4902 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -303,6 +303,7 @@ static int uvcg_video_usb_req_queue(struct uvc_video *video,
+>  		 *   between latency and interrupt load.
+>  		 */
+>  		if (list_empty(&video->req_free) || ureq->last_buf ||
+> +				!req->length ||
+>  			!(video->req_int_count %
+>  			DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+>  			video->req_int_count = 0;
 
-I just saw that you picked this series. Could you please drop it and
-pick v4 instead? I will just send it out now.
-
-https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v4-0-ca22=
-f334226e@pengutronix.de
-
-Besid the mentioned fix, the series is identical.
-
+-- 
 Regards,
-Michael
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---8j8oXWU2QAY203fW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAma7IxgACgkQC+njFXoe
-LGTXGg//RXAC8POR52MgotKY/b2f79a4B9XRIJCOFtcK5H+xRJ/ZUEzNyagprS5B
-b8GptQ4iu+fXOK3p/V9oJ+ywiOsJK4Qq/3JGtgntEr+WCsK/Yat7/xa1WrB4PstD
-gGri0S0DARZgu+J/w4WLR5NO8wcqr/2b8KXe6U+jjJ7NRqeP67mV+RTFbCkKdZ/G
-ylnf/sWWJ/ZoKXKsKGb53bKufClgiBU8qxes8mfZueauvmUpsEzTYf2sNXFW1iSO
-9kmC5RzI1XrzG5bmw88Btp1U2tyYZqnaKq+X99bs+th7Qa2cy1IvzBQ9SgPrLAbB
-mJIPpDHcIJHyDtljmnO7Cl+8PdUmXReV561PtEpcI7v5UlQisP4EAHoXp69pDRQZ
-xjznDO7ej0M5NBRIzsZ1d/fNmDj0ODTIUy7Q3o9H97Fw4+1ZtAyENrU3lPL4F5PJ
-poAfSodkR0tjq4hjKlPzuJU/m+5MgB27g+UtbOSt0LGxSygLKvCM4Ee2u7re43yZ
-C2lwC6SYH5e2BFWFcu38SHZZAqOvks6I5zpep9Z5FXwopzH19oX5iqYryM5bXJue
-qrEx6tw5hl5C3C1issTTOLBi0Zgccv8/bxt6k587XXxz00wPpYvkRF5ZRZINI9r5
-DmR44iWywWSdeGyFFfaTQpj9XA2et8XAo5YY8qnlIZFLNHa9OT0=
-=X5Qu
------END PGP SIGNATURE-----
-
---8j8oXWU2QAY203fW--
+Laurent Pinchart
 
