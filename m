@@ -1,31 +1,31 @@
-Return-Path: <linux-usb+bounces-13348-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13347-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF8189500F1
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EDE49500F0
 	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 11:10:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D27E1F21AAA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 09:10:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD582B24DC6
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2024 09:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587BF18B47A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462E818A951;
 	Tue, 13 Aug 2024 09:09:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DE217BB2F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F6717B4FA
 	for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2024 09:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723540183; cv=none; b=sh+08R5egSrd/cL9t5xgGpTs5dkZkt+an9qZBePGVmdgYjw0QfL4Ns4saR0hmrCmNTw/CSRJGnY4Eh3Lbak4mvZuVRtS9glrAYCrER5e2BBO1Jjem7TtSVVwaFLPqu5r5n3B45wsa0dZ4t5LtyqdgBfZh2ZzVTduEwleR2PkM9s=
+	t=1723540182; cv=none; b=U0Cox5A9FLwolXAccehpA2t7V+K8Ypyh98PA97Nt7zFo7IKJDyDSf0mjA56m00kub34IY08oaULv6LXlZKaE+efOPKhJw2Bcos92C7oY9ynx0r4f8mJ21B4+jPQjXspj1BsUqp42S1tlBWt5WpgeLEtI7W0vUkfm7I3FEDZCdkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723540183; c=relaxed/simple;
-	bh=TlNFmUlB6A1ZL6sefujk/ACyJS6GxVDK0ModATmG4xw=;
+	s=arc-20240116; t=1723540182; c=relaxed/simple;
+	bh=SkZsPxCbDN43LHxyvk94Y4g+KqeuNu68KsIeoOP6vGM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hdL6pUkZMa2VweCT4LQPH8yzOirY+JHU0IxBvqfQVdf/uXzvvrynQyZwv9oWb/twgT0HtG3kFIsVwBJ+Dj5khqriQbN1TY0yXY6LMXdbpbcGhOJ6DDBjTXIZvwiKI3LCnaQAnKmrxsnhQlbk/8G9amdqWicEJITD/il8PAzsmzE=
+	 In-Reply-To:To:Cc; b=A164+t26kRvq/9PgH6gP06FfOrF9XqgR8+dzCH8YJZawS8u5X95gfVbNPVQFJmQsdilCGuWKoYo5Ah/EMMCkekVsuJSJ81a4frlEjSqvR+svb/f+RfGypDrLD8U65GRb6LuDJHUe7n9DGelcsEINMVAVecd16F9eK4IUCyNvC3k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,21 +33,21 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sdnX4-0002CO-SE; Tue, 13 Aug 2024 11:09:34 +0200
+	id 1sdnX4-0002CN-SE; Tue, 13 Aug 2024 11:09:34 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sdnX4-0005oh-7S; Tue, 13 Aug 2024 11:09:34 +0200
+	id 1sdnX4-0005oi-7a; Tue, 13 Aug 2024 11:09:34 +0200
 Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
 	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sdnX4-00G1eS-0I;
+	id 1sdnX4-00G1eS-0J;
 	Tue, 13 Aug 2024 11:09:34 +0200
 From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Tue, 13 Aug 2024 11:09:27 +0200
-Subject: [PATCH v4 03/10] usb: gadget: uvc: remove pump worker and enqueue
- all buffers per frame in qbuf
+Date: Tue, 13 Aug 2024 11:09:28 +0200
+Subject: [PATCH v4 04/10] usb: gadget: uvc: rework to enqueue in pump
+ worker from encoded queue
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240403-uvc_request_length_by_interval-v4-3-ca22f334226e@pengutronix.de>
+Message-Id: <20240403-uvc_request_length_by_interval-v4-4-ca22f334226e@pengutronix.de>
 References: <20240403-uvc_request_length_by_interval-v4-0-ca22f334226e@pengutronix.de>
 In-Reply-To: <20240403-uvc_request_length_by_interval-v4-0-ca22f334226e@pengutronix.de>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
@@ -66,21 +66,21 @@ To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Michael Grzeschik <m.grzeschik@pengutronix.de>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8659;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8172;
  i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=TlNFmUlB6A1ZL6sefujk/ACyJS6GxVDK0ModATmG4xw=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmuyLL4YCrloiQa9JdeEqNWEKqiSExnx2Ad8RDt
- h2XJO6sCLSJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZrsiywAKCRC/aVhE+XH0
- q5CWEAC4DGfBfHfTLGeAttOBlcufOMR/OjFvFxs7bTfrA7K9vGt9j8lyHmc6REzK8n1j5FkyOwv
- ij05nMypboPvJWDlTIi56qqTtLzyGDHqAmiU98p8U4xjc3G2he7b/N2j8AT6zVwHEvY/vueULwO
- F3gEIpyb3iakJItPb+uUw7LKlM3NvVjmMwi7UVEuBrpwRfH7Ef0fKJNPpYjAi0CAo+Puzww9rAe
- 0fNSpuWB+mORFr/AVNc0pLSx87NbLbRO1Dyy9dXK7rjgv4YX7ClZkRDgok5Fv8gJh3o9Wai5jrT
- FNJWKpj6CBgpCPG7aaWT5AlvEnLgNMnJFfwfTpCk1dyV4UQP118aQdJBRKqexIyytcHBcjAC01V
- x0SkomC57e5JAGsMgfAFY9FsreR7MrqhE4A5SrPDxrnpmUinQrMu9mvFnh42ffOOswlXb57sbsX
- 9l+yLNY4GRYMOCqYoITJTpPWHKysgRr639erA9xUkHjBSetbFuwkPVDpJku/qr5IXOfKlCg7iI4
- /tmFOs4NZ1mnHlgYKET44+Iv3E6FMpq5TxGIrIPg3qELILAWWCPox4aK7t7XO/GFp/Yp23iuUte
- GwLGFnfN3r5C5MpjC9sAS8UIFGllg87a+lxWnq0wEMv+4t/V8nTMNg2Kp4upBx9YyBGGBmwZltP
- M62DAM6zvniVczA==
+ bh=SkZsPxCbDN43LHxyvk94Y4g+KqeuNu68KsIeoOP6vGM=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmuyLLLQ+WRpi7mVeN6VsERbrrfYXqlJ37Ck25d
+ d3p6cd9Cw6JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZrsiywAKCRC/aVhE+XH0
+ qw9oEACynR6NT41ltfX2ipnDFkcOH0Ik4WVCrEvYvnziPQOaJhQhODs45BiG0iOtXvV7y23WeNI
+ bPIesIXgXbipv1Lv7qEUzI+jLAHlk+xx03B4WUOETfSt8an9sNNmhryo16Jn7DCBU6A6+k4eKgw
+ ZvBfCiqvhyXSClZPQp1cRle5ODZoQkFDGpViGtRJksOkWbpL4oqZtgNVQCi6JIdexgydQGygOn0
+ UiXGs2ha3yQGYtu2ypmkHxXwzBsUxSUQemLVEvV/k+Q22N0zDdXkYE+yjzUjDgCETV/haAfNlnJ
+ ypMEgN9GpM+VvOiGZE4PEnjxXumyhnZmHNGLhnREJNx0odm2w74/oYFTs6BEfB6kxqEma6yWhK+
+ lAW/430MogLawfyKeJlU1pmUCqkSR73OdkejfKspA1vMLpY/0+tYznWgm736GeVffpqlexAncQn
+ CvQaNkdhfqrDWvZZy/BlvD965yrMi2mNhRUv4GVFy5sxIExE7XGRKJWDn/FtrseWEjurFmzYSGU
+ 0J/AC+sG7q2DbQC/Tp1DSEQuEKUxUfxocvCpyjTRkvGZPiTn3/eb7gz9xaasNAuPmr3ilDrc5df
+ 8n/s+zs/QEOylrk4OXVwtnbDMSFa6BK7Rvb76KO+L4Z9iHiI0x1QDTscIrXUd/MfcA5chitRHdf
+ 5+7A3sTAkVFWrQw==
 X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
  fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -88,242 +88,226 @@ X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Since we now have at least the amount of requests to fill every frame
-into the isoc queue that is requested with the REQBUFS ioctl, we can
-directly encode all incoming frames into the available requests.
+We install an kthread with pfifo prioroity that is iterating over all
+prepared requests and keeps the isoc queue busy. It also watches the
+theshold to enqueue zero length requests if needed. This way it will be
+scheduled with the same priority as the interrupt handler.
+
+But the interrupt handler will not be running into the time consuming
+and eventually locking work of actually enqueueing the requests back
+into its own pipeline. This work can now even can be scheduled on
+another cpu.
 
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 ---
-v3 -> v4: fixed exit path in uvc_enqueue_buffer by exceptionally call cleanup code on break
+v3 -> v4: -
 v1 -> v3: new patch
 ---
- drivers/usb/gadget/function/f_uvc.c     |  4 ---
- drivers/usb/gadget/function/uvc.h       |  5 +---
- drivers/usb/gadget/function/uvc_queue.c |  3 ++
- drivers/usb/gadget/function/uvc_v4l2.c  |  3 --
- drivers/usb/gadget/function/uvc_video.c | 53 ++++++++-------------------------
- drivers/usb/gadget/function/uvc_video.h |  1 +
- 6 files changed, 18 insertions(+), 51 deletions(-)
+ drivers/usb/gadget/function/f_uvc.c     |   3 +
+ drivers/usb/gadget/function/uvc.h       |   3 +
+ drivers/usb/gadget/function/uvc_v4l2.c  |   3 +
+ drivers/usb/gadget/function/uvc_video.c | 118 ++++++++++++++++++++------------
+ 4 files changed, 84 insertions(+), 43 deletions(-)
 
 diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 40187b7112e79..aeaf355a86eb3 100644
+index aeaf355a86eb3..1609daf85a258 100644
 --- a/drivers/usb/gadget/function/f_uvc.c
 +++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -986,14 +986,10 @@ static void uvc_function_unbind(struct usb_configuration *c,
+@@ -986,10 +986,13 @@ static void uvc_function_unbind(struct usb_configuration *c,
  {
  	struct usb_composite_dev *cdev = c->cdev;
  	struct uvc_device *uvc = to_uvc(f);
--	struct uvc_video *video = &uvc->video;
++	struct uvc_video *video = &uvc->video;
  	long wait_ret = 1;
  
  	uvcg_info(f, "%s()\n", __func__);
  
--	if (video->async_wq)
--		destroy_workqueue(video->async_wq);
--
++	kthread_cancel_work_sync(&video->pump);
++
  	/*
  	 * If we know we're connected via v4l2, then there should be a cleanup
  	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
 diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 646f1c01c5101..e252c3db73072 100644
+index e252c3db73072..b3a5165ac70ec 100644
 --- a/drivers/usb/gadget/function/uvc.h
 +++ b/drivers/usb/gadget/function/uvc.h
-@@ -88,9 +88,6 @@ struct uvc_video {
+@@ -88,6 +88,9 @@ struct uvc_video {
  	struct uvc_device *uvc;
  	struct usb_ep *ep;
  
--	struct work_struct pump;
--	struct workqueue_struct *async_wq;
--
++	struct kthread_worker	*kworker;
++	struct kthread_work	pump;
++
  	int enqueued;
  	int dequeued;
  
-@@ -113,7 +110,7 @@ struct uvc_video {
- 	struct list_head req_free;
- 
- 	/*
--	 * USB requests video pump thread has already encoded into. These are
-+	 * USB requests video qbuf thread has already encoded into. These are
- 	 * ready to be queued to the endpoint.
- 	 */
- 	struct list_head req_ready;
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index 0aa3d7e1f3cc3..7995dd3fef184 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -102,6 +102,7 @@ static int uvc_buffer_prepare(struct vb2_buffer *vb)
- static void uvc_buffer_queue(struct vb2_buffer *vb)
- {
- 	struct uvc_video_queue *queue = vb2_get_drv_priv(vb->vb2_queue);
-+	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
- 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
- 	struct uvc_buffer *buf = container_of(vbuf, struct uvc_buffer, buf);
- 	unsigned long flags;
-@@ -120,6 +121,8 @@ static void uvc_buffer_queue(struct vb2_buffer *vb)
- 	}
- 
- 	spin_unlock_irqrestore(&queue->irqlock, flags);
-+
-+	uvc_enqueue_buffer(video, buf);
- }
- 
- static const struct vb2_ops uvc_queue_qops = {
 diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index a024aecb76dc3..4085f459c3c70 100644
+index 4085f459c3c70..de41519ce9aa0 100644
 --- a/drivers/usb/gadget/function/uvc_v4l2.c
 +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -429,9 +429,6 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+@@ -429,6 +429,9 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
  	if (ret < 0)
  		return ret;
  
--	if (uvc->state == UVC_STATE_STREAMING)
--		queue_work(video->async_wq, &video->pump);
--
++	if (uvc->state == UVC_STATE_STREAMING)
++		kthread_queue_work(video->kworker, &video->pump);
++
  	return ret;
  }
  
 diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index d47ddd674f457..5b0bf8069d48f 100644
+index 5b0bf8069d48f..a51e95e3b717c 100644
 --- a/drivers/usb/gadget/function/uvc_video.c
 +++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -445,7 +445,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	/*
- 	 * Here we check whether any request is available in the ready
- 	 * list. If it is, queue it to the ep and add the current
--	 * usb_request to the req_free list - for video_pump to fill in.
-+	 * usb_request to the req_free list - for qbuf to fill in.
- 	 * Otherwise, just use the current usb_request to queue a 0
- 	 * length request to the ep. Since we always add to the req_free
- 	 * list if we dequeue from the ready list, there will never
-@@ -469,7 +469,6 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 		 * dequeue -> queue -> dequeue flow of uvc buffers will not
- 		 * happen.
- 		 */
--		queue_work(video->async_wq, &video->pump);
- 	} else if ((video->enqueued - video->dequeued) > 32) {
- 		spin_unlock_irqrestore(&video->req_lock, flags);
- 
-@@ -566,27 +565,15 @@ uvc_video_alloc_requests(struct uvc_video *video)
-  * Video streaming
-  */
- 
--/*
-- * uvcg_video_pump - Pump video data into the USB requests
-- *
-- * This function fills the available USB requests (listed in req_free) with
-- * video data from the queued buffers.
-- */
--static void uvcg_video_pump(struct work_struct *work)
-+int uvc_enqueue_buffer(struct uvc_video *video, struct uvc_buffer *buf)
- {
--	struct uvc_video *video = container_of(work, struct uvc_video, pump);
+@@ -376,10 +376,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 	struct uvc_video *video = ureq->video;
  	struct uvc_video_queue *queue = &video->queue;
--	/* video->max_payload_size is only set when using bulk transfer */
--	bool is_bulk = video->max_payload_size;
- 	struct usb_request *req = NULL;
--	struct uvc_buffer *buf;
-+	bool is_bulk = video->max_payload_size;
+ 	struct uvc_buffer *last_buf;
+-	struct usb_request *to_queue = req;
  	unsigned long flags;
- 	int ret = 0;
+-	bool is_bulk = video->max_payload_size;
+-	int ret = 0;
  
--	while (true) {
--		if (!video->ep->enabled)
--			return;
--
-+	while (buf->state != UVC_BUF_STATE_DONE) {
- 		/*
- 		 * Check is_enabled and retrieve the first available USB
- 		 * request, protected by the request lock.
-@@ -594,7 +581,7 @@ static void uvcg_video_pump(struct work_struct *work)
- 		spin_lock_irqsave(&video->req_lock, flags);
- 		if (!video->is_enabled || list_empty(&video->req_free)) {
- 			spin_unlock_irqrestore(&video->req_lock, flags);
--			return;
-+			return -ENOENT;
- 		}
- 		req = list_first_entry(&video->req_free, struct usb_request,
- 					list);
-@@ -605,22 +592,8 @@ static void uvcg_video_pump(struct work_struct *work)
- 		 * Retrieve the first available video buffer and fill the
- 		 * request, protected by the video queue irqlock.
- 		 */
--		spin_lock_irqsave(&queue->irqlock, flags);
--		buf = uvcg_queue_head(queue);
--		if (!buf) {
--			/*
--			 * Either the queue has been disconnected or no video buffer
--			 * available for bulk transfer. Either way, stop processing
--			 * further.
--			 */
--			spin_unlock_irqrestore(&queue->irqlock, flags);
--			break;
--		}
--
- 		video->encode(req, video, buf);
- 
--		spin_unlock_irqrestore(&queue->irqlock, flags);
--
- 		spin_lock_irqsave(&video->req_lock, flags);
- 		/* For bulk end points we queue from the worker thread
- 		 * since we would preferably not want to wait on requests
-@@ -633,15 +606,22 @@ static void uvcg_video_pump(struct work_struct *work)
- 
- 		if (ret < 0) {
- 			uvcg_queue_cancel(queue, 0);
--			break;
-+			goto cleanup;
- 		}
- 	}
-+
-+	return 0;
-+
-+cleanup:
-+
  	spin_lock_irqsave(&video->req_lock, flags);
- 	if (video->is_enabled)
- 		list_add_tail(&req->list, &video->req_free);
- 	else
- 		uvc_video_free_request(req->context, video->ep);
- 	spin_unlock_irqrestore(&video->req_lock, flags);
+ 	video->dequeued++;
+@@ -442,54 +439,78 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 		return;
+ 	}
+ 
++	list_add_tail(&req->list, &video->req_free);
 +
-+	return 0;
++	spin_unlock_irqrestore(&video->req_lock, flags);
++
+ 	/*
+-	 * Here we check whether any request is available in the ready
+-	 * list. If it is, queue it to the ep and add the current
+-	 * usb_request to the req_free list - for qbuf to fill in.
+-	 * Otherwise, just use the current usb_request to queue a 0
+-	 * length request to the ep. Since we always add to the req_free
+-	 * list if we dequeue from the ready list, there will never
+-	 * be a situation where the req_free list is completely out of
+-	 * requests and cannot recover.
++	 * Queue work to the wq as well since it is possible that a
++	 * buffer may not have been completely encoded with the set of
++	 * in-flight usb requests for whih the complete callbacks are
++	 * firing.
++	 * In that case, if we do not queue work to the worker thread,
++	 * the buffer will never be marked as complete - and therefore
++	 * not be returned to userpsace. As a result,
++	 * dequeue -> queue -> dequeue flow of uvc buffers will not
++	 * happen.
+ 	 */
+-	to_queue->length = 0;
+-	if (!list_empty(&video->req_ready)) {
+-		to_queue = list_first_entry(&video->req_ready,
+-			struct usb_request, list);
+-		list_del(&to_queue->list);
+-		list_add_tail(&req->list, &video->req_free);
++	kthread_queue_work(video->kworker, &video->pump);
++}
++
++static void uvcg_video_pump(struct kthread_work *work)
++{
++	struct uvc_video *video = container_of(work, struct uvc_video, pump);
++	bool is_bulk = video->max_payload_size;
++	unsigned long flags;
++	struct usb_request *req;
++	int ret = 0;
++
++	while (true) {
++		if (!video->ep->enabled)
++			return;
++		spin_lock_irqsave(&video->req_lock, flags);
+ 		/*
+-		 * Queue work to the wq as well since it is possible that a
+-		 * buffer may not have been completely encoded with the set of
+-		 * in-flight usb requests for whih the complete callbacks are
+-		 * firing.
+-		 * In that case, if we do not queue work to the worker thread,
+-		 * the buffer will never be marked as complete - and therefore
+-		 * not be returned to userpsace. As a result,
+-		 * dequeue -> queue -> dequeue flow of uvc buffers will not
+-		 * happen.
++		 * Here we check whether any request is available in the ready
++		 * list. If it is, queue it to the ep and add the current
++		 * usb_request to the req_free list - for video_pump to fill in.
++		 * Otherwise, just use the current usb_request to queue a 0
++		 * length request to the ep. Since we always add to the req_free
++		 * list if we dequeue from the ready list, there will never
++		 * be a situation where the req_free list is completely out of
++		 * requests and cannot recover.
+ 		 */
+-	} else if ((video->enqueued - video->dequeued) > 32) {
+-		spin_unlock_irqrestore(&video->req_lock, flags);
++		if (!list_empty(&video->req_ready)) {
++			req = list_first_entry(&video->req_ready,
++					       struct usb_request, list);
++		} else {
++			if (list_empty(&video->req_free) || (video->enqueued - video->dequeued) > 32) {
++				spin_unlock_irqrestore(&video->req_lock, flags);
++
++				return;
++			}
++			req = list_first_entry(&video->req_free, struct usb_request,
++					       list);
++			req->length = 0;
++		}
++		list_del(&req->list);
+ 
+-		return;
+-	}
+-	/*
+-	 * Queue to the endpoint. The actual queueing to ep will
+-	 * only happen on one thread - the async_wq for bulk endpoints
+-	 * and this thread for isoc endpoints.
+-	 */
+-	ret = uvcg_video_usb_req_queue(video, to_queue, !is_bulk);
+-	if (ret < 0) {
+ 		/*
+-		 * Endpoint error, but the stream is still enabled.
+-		 * Put request back in req_free for it to be cleaned
+-		 * up later.
++		 * Queue to the endpoint. The actual queueing to ep will
++		 * only happen on one thread - the async_wq for bulk endpoints
++		 * and this thread for isoc endpoints.
+ 		 */
+-		list_add_tail(&to_queue->list, &video->req_free);
+-	}
++		ret = uvcg_video_usb_req_queue(video, req, !is_bulk);
++		if (ret < 0) {
++			/*
++			 * Endpoint error, but the stream is still enabled.
++			 * Put request back in req_free for it to be cleaned
++			 * up later.
++			 */
++			list_add_tail(&req->list, &video->req_free);
++		}
+ 
+-	spin_unlock_irqrestore(&video->req_lock, flags);
++		spin_unlock_irqrestore(&video->req_lock, flags);
++	}
  }
  
- /*
-@@ -681,7 +661,6 @@ uvcg_video_disable(struct uvc_video *video)
- 	}
- 	spin_unlock_irqrestore(&video->req_lock, flags);
- 
--	cancel_work_sync(&video->pump);
- 	uvcg_queue_cancel(&video->queue, 0);
- 
- 	spin_lock_irqsave(&video->req_lock, flags);
-@@ -775,12 +754,6 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 	INIT_LIST_HEAD(&video->req_free);
+ static int
+@@ -755,6 +776,17 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
  	INIT_LIST_HEAD(&video->req_ready);
  	spin_lock_init(&video->req_lock);
--	INIT_WORK(&video->pump, uvcg_video_pump);
--
--	/* Allocate a work queue for asynchronous video pump handler. */
--	video->async_wq = alloc_workqueue("uvcgadget", WQ_UNBOUND | WQ_HIGHPRI, 0);
--	if (!video->async_wq)
--		return -EINVAL;
  
++	/* Allocate a work queue for asynchronous video pump handler. */
++	video->kworker = kthread_create_worker(0, "UVCG");
++	if (IS_ERR(video->kworker)) {
++		uvcg_err(&video->uvc->func, "failed to create message pump kworker\n");
++		return PTR_ERR(video->kworker);
++	}
++
++	kthread_init_work(&video->pump, uvcg_video_pump);
++
++	sched_set_fifo(video->kworker->task);
++
  	video->uvc = uvc;
  	video->fcc = V4L2_PIX_FMT_YUYV;
-diff --git a/drivers/usb/gadget/function/uvc_video.h b/drivers/usb/gadget/function/uvc_video.h
-index 8ef6259741f13..2f30ebd05fefb 100644
---- a/drivers/usb/gadget/function/uvc_video.h
-+++ b/drivers/usb/gadget/function/uvc_video.h
-@@ -17,6 +17,7 @@ struct uvc_video;
- int uvcg_video_enable(struct uvc_video *video);
- int uvcg_video_disable(struct uvc_video *video);
- 
-+int uvc_enqueue_buffer(struct uvc_video *video, struct uvc_buffer *buf);
- int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc);
- 
- #endif /* __UVC_VIDEO_H__ */
+ 	video->bpp = 16;
 
 -- 
 2.39.2
