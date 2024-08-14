@@ -1,91 +1,89 @@
-Return-Path: <linux-usb+bounces-13427-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13428-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6E609517E3
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 11:40:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3002A95187F
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 12:19:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81C191F22D15
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 09:40:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 638491C21810
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 10:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1061C16BE37;
-	Wed, 14 Aug 2024 09:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E331AAE38;
+	Wed, 14 Aug 2024 10:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ojVUnHrf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RYPRlP3b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A47166F01
-	for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 09:40:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55D01AD9C0
+	for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 10:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723628407; cv=none; b=F6QLLkgun7dY8fLs2JruejHTNQ9QrCjhSUAzi1qIFsBjrsyGk1MzqXpPy4IFf2DfKICwLfHNNPt2by6sxmWc/l5uP2aVEyGukiTwJDQvlc04jhLPkvYgOskyCDEFobKEzHtMNNnpQZzlZVUVZt7eK2NEoaiUv5UxvtGrEWQiIpQ=
+	t=1723630735; cv=none; b=hZWDMIyez5xXGhExNH9WU/V4++Oz1jrXky5t6YW9qlaArfkONPXwG5aQhcLEHHKSJxjrrSDYUIa2u59nTvUegcPgAt6HQqHR92AOc9Nd4UH5s8Zb7nGi1MN4eF3xO8xmBFu0PBb1cjQ3M4LcJCH3ahY/8vJmSNAi6zVAv2RV49Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723628407; c=relaxed/simple;
-	bh=6Hu1M4Pivk4SN1qDKdBZUfJZLXx91ytTpMSmo2rqxTs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W2d+zJnqeNsvIDY/jfj3P/lJ03Ji3uAaMT+SxQ5uFgJr6ru0RTXZX7ueO5JXSr7alsPBR671Nm2r7TQvhW93l7ONGbOLGPtUq9LACzubPO1aovnJXVnhgXhQ6IaMcs2KnTOxncNIjUvwsZYSKooZC0MupMTa4YdrROrIZviFQFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ojVUnHrf; arc=none smtp.client-ip=209.85.208.179
+	s=arc-20240116; t=1723630735; c=relaxed/simple;
+	bh=VoIUTKlyGldU32MZSlDYD6KmvPIa8tx53ppKsKBdjS0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SOjqMRmIQxq54b68dkFQyjh+SEj7bMWVZ8Bn+v3S+J8F9+FsHxESo2mn4lyLqtJhu4hNu+Wovm9VWWJCA5zPg2ESrldgsxqmHE2FXCTXbsIHo9E6DLFNuPlhBj9SyuMsb4/ZymZ4WppYfrPZHmlswlLSrDJDX7xwfrgptxMZZD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RYPRlP3b; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2f0271b0ae9so69452151fa.1
-        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 02:40:04 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-368313809a4so408300f8f.0
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 03:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723628403; x=1724233203; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MGrgEwiDQnCrsN02sqw6lNl+tSbCrY1oNE/v488RmdI=;
-        b=ojVUnHrfmF4XdE15A5Un/GZflOgRBS5yfflbArLX0XThGkVXbb/F8Ed5tGE4a3kPzQ
-         XJFSVvR5xxzgWO1jI8AqNC6S4Dq18gc2Io0mDNVS1YPhd8AgziOILYOTu/fBgm03Apzn
-         S3P5NrrmmQUDgAEBWuAgLj+p2TWcYNYMUjXGqZOLICF3TC1K39C1D248B9f5PsZHmMFi
-         4Shs8L8YmnzehATM8jnACeEZ2ilKdnWIBnXYHZjX0q6/Py+XgBEDrdK3yKDW86VbLFe8
-         RdW3Dovr9dwHUECoeyhrxJW5XzG+4wcRwzCjBkv8COJEO6ZeyFJzCyJRQApYJdBspFHa
-         G/bA==
+        d=linaro.org; s=google; t=1723630732; x=1724235532; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VniZOaq6gdFHYm/HVi9M3gxl2wi+7Y1v4x6YyCs0zik=;
+        b=RYPRlP3bIeCcooS0wEtOREffAgAk5yDUxoREPDTFFnL9XcB9yBsDAnX9Nb9k9oU1/6
+         CkVFNRB0F+kfs7/kSRp9BzjiqeMj+G4EkqtagAoBFr07WPOHdRq9HNUiN9q1JvmY7ogM
+         cWV9l4ibd2n2SE/vF1KH28ia4MOzlL6O7Etyd3lK7pLJpQt6yZioDB+Lfur/6+mVtc2t
+         mft3iNx48/fIX8FkMY/eO6cVP7Vbtc1UD/ELQdU0iiLSOKbWA59PFKacxfZTUq1i6xwt
+         DPP3NWh1xzon3b0cS0FlVirT1TJ5X2m8fiLV+gtwNfdZl5PONhKacDDb1xtStCuV9+Wg
+         E4Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723628403; x=1724233203;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MGrgEwiDQnCrsN02sqw6lNl+tSbCrY1oNE/v488RmdI=;
-        b=Jodwgi8CxHQ2v81KavUs1bANl0hyIrfy90r9oMX1h8T7TlU4nv2TIu3xz3BNNDJihf
-         3UCmLah4RqDc4cx0vsJxoabFT4Cx9XHkHObvIHBsBgXQ6rUjHHPivSkwfUFgvibWRNV5
-         8hpOsavYlmTWe+BqUHr24FVvut4H7PduZg/8DvMmN1sdDAIE9AJhNg38uSRXCiUoDlza
-         Pelq7jz65cvfc8EAjZUz3KKd/H961NzITY5gmfCwwXwDpgnq3QToYi3g2O9f2iyAh2uk
-         wNcHCkvw2GFsnqUqu9oLmrMs4Z8/PrP/KpMN4XKJVcDvo63fxmDemooS+zE9UUwp+yna
-         230A==
-X-Forwarded-Encrypted: i=1; AJvYcCXo/rIubjPNnrOL8vUsYgFtRb+hZC34ugKzlG3DBXo9To8nxZ3qwfrqQNrXHVPvTpL4kkrdb1n4qUk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxfUHtUhzHD+CENLQnGp3yPWH0paMzpePHGJ60pUTiX3pGs8Oe
-	SjgGCRIkjZ4e3JjhCmmv+L6yFbBz+rooHoXiiwJozZ8zCQoZdgcYz/oeAZUdUDs=
-X-Google-Smtp-Source: AGHT+IHrsSXMDzPW+YC1yMSEObvTKIKA03QKkD9vhWlsmxjtI4DSdraFVWhJ0pwmrnCg1VCCTAW2Bw==
-X-Received: by 2002:a2e:e0a:0:b0:2f0:1c7d:1ee2 with SMTP id 38308e7fff4ca-2f3aa1f99e7mr10852261fa.41.1723628402703;
-        Wed, 14 Aug 2024 02:40:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723630732; x=1724235532;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VniZOaq6gdFHYm/HVi9M3gxl2wi+7Y1v4x6YyCs0zik=;
+        b=JjE8MlU/B0UkjpvLp139lUrW2AppHvesbYOWHBa59g9AEQs8Uf4Ix4V+kk+Y58WSs9
+         1vV3b7kFIFfNrIa9g6z1+erQiG7uGIGInmPlaN3pWIqculw+PDoougONwuhXqcC0dlm5
+         i7nNW4I+jnEFSAiCL+s9VeP3oXpQAq8n5fiuegaq6gv24K4hyGTwJCUUd0hzAm+fp2Dr
+         hlH1kbSxIZasuulQtt+PH0MtIrggh5tqXif6vYrpituuS0YDbVNZ/DZ1Q/LZyLaeyzlm
+         M4cMNP3yk3sZ2aV3uTLLfaIX2jAw0koNRdHTk+q27PAyQ6qcngrLUFv/niUKoiOgOteh
+         11oA==
+X-Forwarded-Encrypted: i=1; AJvYcCXehJfEHO85gltiEPSxGnJhrAOyc1RFnxVNhaTl94vG0cDfsNc/SvBIOIWZ827Mc5U3mVU/1D3zSVs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdTXB6dv2CpFa9CL69XGewYkCC5PM4DvsI1njDNNkhkG/sOVS4
+	F6xmxbx1TfN8ylnt+Z0IyQSJZpu/wahSykem0fEq01rDKBEi0KcIi0zfta0HCCU=
+X-Google-Smtp-Source: AGHT+IFtDsJPyLphAshdk30vTR0Sl8aU6sagYCDNH5sXB4NQUBZ21n39kniHa9yrRYMarUHR64R6JA==
+X-Received: by 2002:adf:fc86:0:b0:367:8418:fde4 with SMTP id ffacd0b85a97d-3717960863fmr1393954f8f.7.1723630732067;
+        Wed, 14 Aug 2024 03:18:52 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ded28cdasm14195615e9.16.2024.08.14.02.40.01
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4e51ebcdsm12487737f8f.78.2024.08.14.03.18.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 02:40:01 -0700 (PDT)
+        Wed, 14 Aug 2024 03:18:51 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Patrice Chotard <patrice.chotard@foss.st.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <balbi@ti.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Lee Jones <lee@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <michal.simek@amd.com>,
+	Grygorii Strashko <grygorii.strashko@ti.com>,
+	Vignesh R <vigneshr@ti.com>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+	Piyush Mehta <piyush.mehta@amd.com>,
 	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+	linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	stable@vger.kernel.org
-Subject: [PATCH 2/2] usb: dwc3: st: add missing depopulate in probe error path
-Date: Wed, 14 Aug 2024 11:39:57 +0200
-Message-ID: <20240814093957.37940-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] usb: dwc3: omap: add missing depopulate in probe error path
+Date: Wed, 14 Aug 2024 12:18:47 +0200
+Message-ID: <20240814101848.67501-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240814093957.37940-1-krzysztof.kozlowski@linaro.org>
-References: <20240814093957.37940-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,48 +95,32 @@ Content-Transfer-Encoding: 8bit
 Depopulate device in probe error paths to fix leak of children
 resources.
 
-Fixes: f83fca0707c6 ("usb: dwc3: add ST dwc3 glue layer to manage dwc3 HC")
+Fixes: ee249b455494 ("usb: dwc3: omap: remove IRQ_NOAUTOEN used with shared irq")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
 ---
+ drivers/usb/dwc3/dwc3-omap.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Context of my other cleanup patches (separate series to be sent soon)
-will depend on this.
----
- drivers/usb/dwc3/dwc3-st.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-index a9cb04043f08..c8c7cd0c1796 100644
---- a/drivers/usb/dwc3/dwc3-st.c
-+++ b/drivers/usb/dwc3/dwc3-st.c
-@@ -266,7 +266,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 	if (!child_pdev) {
- 		dev_err(dev, "failed to find dwc3 core device\n");
- 		ret = -ENODEV;
--		goto err_node_put;
-+		goto depopulate;
- 	}
- 
- 	dwc3_data->dr_mode = usb_get_dr_mode(&child_pdev->dev);
-@@ -282,6 +282,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 	ret = st_dwc3_drd_init(dwc3_data);
+diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
+index d5c77db4daa9..2a11fc0ee84f 100644
+--- a/drivers/usb/dwc3/dwc3-omap.c
++++ b/drivers/usb/dwc3/dwc3-omap.c
+@@ -522,11 +522,13 @@ static int dwc3_omap_probe(struct platform_device *pdev)
  	if (ret) {
- 		dev_err(dev, "drd initialisation failed\n");
-+		of_platform_depopulate(dev);
- 		goto undo_softreset;
+ 		dev_err(dev, "failed to request IRQ #%d --> %d\n",
+ 			omap->irq, ret);
+-		goto err1;
++		goto err2;
  	}
- 
-@@ -291,6 +292,8 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, dwc3_data);
+ 	dwc3_omap_enable_irqs(omap);
  	return 0;
  
-+depopulate:
++err2:
 +	of_platform_depopulate(dev);
- err_node_put:
- 	of_node_put(child);
- undo_softreset:
+ err1:
+ 	pm_runtime_put_sync(dev);
+ 	pm_runtime_disable(dev);
 -- 
 2.43.0
 
