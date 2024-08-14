@@ -1,124 +1,146 @@
-Return-Path: <linux-usb+bounces-13425-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13426-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D73F95178E
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 11:21:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18F939517DE
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 11:40:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE8741F23A6D
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 09:21:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AB9E1C21569
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 09:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317CE149C61;
-	Wed, 14 Aug 2024 09:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3360815FA7E;
+	Wed, 14 Aug 2024 09:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JRjvPLh5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dukT9She"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6F6146A8A;
-	Wed, 14 Aug 2024 09:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B3016133C
+	for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 09:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723627271; cv=none; b=BwGZoCd0oJjCRlFMOBSgaNGNeel/PdgNPEVha1sIsyB6uL3oIZFZ5aBJQWLKIImT/u5pIstkMQr10jlxcx27pDeGC00YE3SBmDNjReKsXm5wUyXRFNrYNbwzogef8YCjp+EnwlRs8leDOe0ay8g3wHmyKGsAYyf6xQCS6bI/JVk=
+	t=1723628404; cv=none; b=gYbXnD6w/aE5YXru+dvw2kY6P46q1GiiI2F76O961sj0BlaMid1XCOh9NcU5HMipaLoXdBbxVrgC+UCIkYZSDjcs8tE0uHFdW0AjIyBbxcmbqtsEZ6qab7T/8YEdsxfIX+TfhveRI0jMFFiHnBxlnbRWiVsN7+fzYL7aV+gGJ5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723627271; c=relaxed/simple;
-	bh=wj88B6BBi8tG04+C5SWDMso/uHUJfPvBpn1JpU98qQI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L5cBA/XQhrtPLSuMhjekz8fwgin6mdk06gphJ66w73UdSp40LwUp5MhPKS7kanf9RJZbe/K7q2LHPyj3tn/vaIa1jKPl6flOxBzGIv19ab/CIYJn5l+fy7Pe+1wf/eGBy8RX6KLCGyrSyDfvgUZLKwjfkVHXokSkscNRLUgyLCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JRjvPLh5; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723627269; x=1755163269;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wj88B6BBi8tG04+C5SWDMso/uHUJfPvBpn1JpU98qQI=;
-  b=JRjvPLh5PVvg0WmFEUiIK7nEES0sc3caL281T3nyD8uLeQpvHUsHJSQM
-   Lnj1zkjzyRvGqcFX3jU2OtHl3IyCc1ifsWVJPmN8CCJ5x2u61VzJdZjX/
-   WN2Pea7wuPRB87CMZGZPogKdZSZxwFs7b54YDp8VZZkUnD98BR1jUQDhw
-   GxJ0RAwbGmnIFDDMdojeCx90nyCadkKSv0bzEP9WUmJa7XtAq+45fBooS
-   h/TJHhMebE1szuJa8yiIACAMZUemC+vHNeMKrlZfowkYirS0vDCRWrdPH
-   uWeO092ECqEouUL4Xh5ha5phsvuT2TckSutTTPxrjrLv2FXNb46tiJ7wQ
-   g==;
-X-CSE-ConnectionGUID: kVvTUd/4Q9212FpsPgb7Og==
-X-CSE-MsgGUID: rR44qeteSzKXBudqIv/ihQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11163"; a="39282578"
-X-IronPort-AV: E=Sophos;i="6.09,288,1716274800"; 
-   d="scan'208";a="39282578"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 02:21:08 -0700
-X-CSE-ConnectionGUID: C5GMpR9eT82uHlsNZHJFaQ==
-X-CSE-MsgGUID: MS7yrPWQTkWJMZoDPeQKUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,288,1716274800"; 
-   d="scan'208";a="58655845"
-Received: from slindbla-desk.ger.corp.intel.com (HELO [10.245.246.67]) ([10.245.246.67])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 02:21:03 -0700
-Message-ID: <74d413f3-45ab-405d-8dff-122785ae7da5@linux.intel.com>
-Date: Wed, 14 Aug 2024 11:20:59 +0200
+	s=arc-20240116; t=1723628404; c=relaxed/simple;
+	bh=K7a0LCBXq6OZZ3B7ZT3AYD2E1d/U39ngdeL5y8O277s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N0qTz8hrrkPC533uyzBTGr1vQwzOvCMCXGZtRxp+LBAeIOt+VoXeO16dkoLKzLM9666IQlRAt81pDgnQw7ug9mGo84Zfc0hGYLBvWXzAY02tchoy5zv3sOxS9aevD5VdogkIHtRuq5TJNd2XfgUPSlB4BoLxLuigJdRUTKDBLeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dukT9She; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42816ca797fso46899085e9.2
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 02:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1723628401; x=1724233201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JmXmcga/zjb6ahfiHPXOSzwplx1CZRP7/PHn0u7sCk0=;
+        b=dukT9SheX7TvEIR5S+jpcr94AZUkvlsmvl3MbErWvJyM5j62080PdspnaMT7pJ9bQx
+         9zsL6Kyo7TAuNjYSh7BK6zr1PPAB95Ef3t+SfsKaf5fwxTQdm5uP9DAQsZ8+OllOkYi7
+         zzwEaYA9lTxA9ptAbz7QT70RpGCsb0adDacca1843junx1eTYV6frc7BjxfKFM5frd3p
+         u6fICjQDefWWZgE+HY6PQay+XcsbpZTtiJeupppd0l7Dg0ix9OTWfmXQkTFh2dL/9WN1
+         OOLnaMoLctG8P7XbEBsufkYhgRwQWp/gODwAUxJJDlHMy7Eie752sx+SZ84tV5NAZmNt
+         XVlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723628401; x=1724233201;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JmXmcga/zjb6ahfiHPXOSzwplx1CZRP7/PHn0u7sCk0=;
+        b=ezrQRDf0rh4et7hbLBU8DlqYh6w968qIw6dqoQeB1VT8dcbbyFf2y6hRxN/zXfp6fC
+         8ECtuFFlW7Z/bHrXrYi8cgnk21xowQAJTe6JUs1wZk4cud++TXpcMPWVDEgKoWdpwYVP
+         wM71pkHwabZhu2QNvYawWNH0jkuNET4tZIYTDRXeZ8Oezzw+Ud+UjONIWSZ1a76p1fuC
+         1haov0rcLbL/7g6YK5/7JOkypV2N3je4VzTD2BGk05KoFZpOYvmvV1kU1v+RBMFpaSLm
+         N8fegzzIX0Q/NFxo3NEooLO+zYFNiyQtrhjuCaPg1RO83mXJK5qDWwZCBi19UsdSvZ1a
+         VDFg==
+X-Forwarded-Encrypted: i=1; AJvYcCXOuyXABc4tq/YW/2eZ9X+eJvYzpYpDHNHlyhvALi5WimS864IF+0RE8tz9xYa8RaiN83SIFyuXjO9Eg5dmrH4l7cyZI2Tm69xK
+X-Gm-Message-State: AOJu0YzQKX1wHOzwqW41NXsCDn3mA/KTar403mqytLtFt4Wd6ZgfTvku
+	+IrCsU2T9b95kdq0vqBZpPsDYrIZUdYuziO+KvcaexDYgzzy9JQBm3dkG0/BTmU=
+X-Google-Smtp-Source: AGHT+IF/bJMKfHmeWBSdbtMjSNM/VzBYMVOeE4F12fOKUYhXLXD2wvGqLv30n/W4um8EnKsh44iMBg==
+X-Received: by 2002:a05:600c:3c96:b0:426:6eae:6596 with SMTP id 5b1f17b1804b1-429dd264983mr13645925e9.25.1723628400773;
+        Wed, 14 Aug 2024 02:40:00 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ded28cdasm14195615e9.16.2024.08.14.02.39.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Aug 2024 02:40:00 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Patrice Chotard <patrice.chotard@foss.st.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <balbi@ti.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Lee Jones <lee@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] usb: dwc3: st: fix probed platform device ref count on probe error path
+Date: Wed, 14 Aug 2024 11:39:56 +0200
+Message-ID: <20240814093957.37940-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 09/34] ASoC: Add SOC USB APIs for adding an USB
- backend
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
- gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-10-quic_wcheng@quicinc.com>
- <09fde4e6-c3be-484d-a7a5-bd653dc42094@linux.intel.com>
- <f761530c-a49b-4dd5-b01c-97d08931e0ab@quicinc.com>
- <acf4de1d-d551-4539-8353-3c85aa3d965c@linux.intel.com>
- <6855763c-0230-4535-a603-343059de5202@quicinc.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <6855763c-0230-4535-a603-343059de5202@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+The probe function never performs any paltform device allocation, thus
+error path "undo_platform_dev_alloc" is entirely bogus.  It drops the
+reference count from the platform device being probed.  If error path is
+triggered, this will lead to unbalanced device reference counts and
+premature release of device resources, thus possible use-after-free when
+releasing remaining devm-managed resources.
 
->>>>> + * @list - list head for SoC USB devices
->>>>> + **/
->>>>> +struct snd_soc_usb_device {
->>>>> +	int card_idx;
->>>>> +	int pcm_idx;
->>>>> +	int chip_idx;
->>>>> +	int num_playback;
->>>>> +	int num_capture;
->>>>> +	struct list_head list;
->>>>> +};
->>>>> +
->>>>> +/**
->>>>> + * struct snd_soc_usb
->>>>> + * @list - list head for SND SOC struct list
->>>>> + * @component - reference to ASoC component
->>>>> + * @num_supported_streams - number of supported concurrent sessions
->>>> ... but here we don't. And it's not clear what the working 'sessions'
->>>> means in the comment.
-> 
-> After taking a look at this "num_supported_streams" naming a bit more, I wanted to check with you to see adds to the complexity of the terminology being used across soc-usb.
-> 
-> The intention of this is to define how many concurrent USB devices the USB backend can support.  So for example, if the audio DSP did support multiple USB devices at the same time, this would denote that.  This is where I wanted to make sure the terminology was right....  So in this case, to me, it makes more sense if num_supported_streams --> num_supported_devices, because it determines how many USB devices the ASoC USB backend DAI can manage/support.  This adds a bit to the reason why I think using the term "port" for explaining the SOC USB context is reasonable.
+Fixes: f83fca0707c6 ("usb: dwc3: add ST dwc3 glue layer to manage dwc3 HC")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/usb/dwc3/dwc3-st.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-IIRC the USB specs define a hierarchy of device/interface/endpoint
-concepts. For streaming the only thing that really matters is the number
-of data endpoints, isn't it? If you have two devices with a single
-endpoint each or one device with two endpoints it should be the same
-complexity at the DSP level?
-
+diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+index 211360eee95a..a9cb04043f08 100644
+--- a/drivers/usb/dwc3/dwc3-st.c
++++ b/drivers/usb/dwc3/dwc3-st.c
+@@ -219,10 +219,8 @@ static int st_dwc3_probe(struct platform_device *pdev)
+ 	dwc3_data->regmap = regmap;
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "syscfg-reg");
+-	if (!res) {
+-		ret = -ENXIO;
+-		goto undo_platform_dev_alloc;
+-	}
++	if (!res)
++		return -ENXIO;
+ 
+ 	dwc3_data->syscfg_reg_off = res->start;
+ 
+@@ -233,8 +231,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+ 		devm_reset_control_get_exclusive(dev, "powerdown");
+ 	if (IS_ERR(dwc3_data->rstc_pwrdn)) {
+ 		dev_err(&pdev->dev, "could not get power controller\n");
+-		ret = PTR_ERR(dwc3_data->rstc_pwrdn);
+-		goto undo_platform_dev_alloc;
++		return PTR_ERR(dwc3_data->rstc_pwrdn);
+ 	}
+ 
+ 	/* Manage PowerDown */
+@@ -300,8 +297,6 @@ static int st_dwc3_probe(struct platform_device *pdev)
+ 	reset_control_assert(dwc3_data->rstc_rst);
+ undo_powerdown:
+ 	reset_control_assert(dwc3_data->rstc_pwrdn);
+-undo_platform_dev_alloc:
+-	platform_device_put(pdev);
+ 	return ret;
+ }
+ 
+-- 
+2.43.0
 
 
