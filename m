@@ -1,195 +1,197 @@
-Return-Path: <linux-usb+bounces-13446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 205A09519AF
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 13:12:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EC699519D5
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 13:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A08B11F242B0
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 11:12:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42E6A1C2125C
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 11:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5481AED24;
-	Wed, 14 Aug 2024 11:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B961AE878;
+	Wed, 14 Aug 2024 11:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Kn/9MsqP"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="he8ZgWVd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11011006.outbound.protection.outlook.com [52.101.65.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135B01AE851;
-	Wed, 14 Aug 2024 11:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723633943; cv=none; b=pfEIIf5hwcD12cOIgpBIiPi6Y7FUBtcdoR9KNImzrBJ0k1V1K8ix0g1jNkklhoDOa+DLrFQe4b1oQChiRnWGfWnT7uiPPvrhLNIUVAU7Xxc8Sy3WOzG0VB54OYdGQJrL/cSPSeV0JA3SaguxMv+BExD+Vf6+sexFXsiFKSPSa38=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723633943; c=relaxed/simple;
-	bh=w8FGOf6XoIorTPA0onCSDNz0YqeAb5+N618grpFo2H4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=URPCm27k2A+oqtbUxzaOpcgQMcXtva0ORC2BTx6aMCM39v3Wd0hXB3kOa7OGEHgZ++nr/6marocjMywDJHqkYCMAA0wxtBPNRw8b6zAcHGp+MWaCDPf9w+78qPq/BsbJqN1Aqd5BjHTyP/yIBo4Xkdt7AffOsWUxeFEyNr+KpvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Kn/9MsqP; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47EB5k2J031804;
-	Wed, 14 Aug 2024 11:12:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	UtlVxWbaUSDeOBQ6P4YT+7imLbtS4jYLDQtPJRL0bEs=; b=Kn/9MsqPZAq9S0Cc
-	LImMK64clfApyJtqyMp7/lva+N6IMCx/+EFquo+iVNH0Hhph396fm9Ye1GeIuf82
-	LOh958o1z3vzTelnRV1PBYD1tQ3xI1tBlLrVXInYZ29qX+awIPJ+fr7gJD2hajao
-	jE5TCsxQeB0Z0xCwMhPILxAKWfWYDt2+gi0UHIfxpqkDp0JnquDNmAz3Xg4TAMHo
-	ZCq0wOE5U+4P3dxPjbrggk4DTjyxxS5DRE1yJxMLi27bZLUs1SFzjFW0S5FmF+pS
-	/uGeIdgna+F0f7n64A69G/nOxZoXDa7Jyf0xSwKrCPcXh7+NsU3IPeQSsx50kCup
-	mgdAYQ==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41082wk08n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Aug 2024 11:12:19 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47EBCIcp005745
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Aug 2024 11:12:18 GMT
-Received: from [10.218.38.222] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 14 Aug
- 2024 04:12:15 -0700
-Message-ID: <48651728-a4bb-4bef-81d7-6100a6c2a1fe@quicinc.com>
-Date: Wed, 14 Aug 2024 16:42:12 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C9A33D8
+	for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 11:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723634709; cv=fail; b=JNPh3tqnVttHePhNYnQOAFRtzbwa6GvfGn/gopM13SCo9zCrB1DTfmlISwRO/Nzt9jA97n5fYy8QU95QCfJ11zzAEH0eMKbgLQWEObZJO9LDugRs4T7fJHz4WTzWqmvS7GkJN8IuCLcpHhhGAAWv4xIC0Esb2PfdPmAGXwtcd0s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723634709; c=relaxed/simple;
+	bh=SOoO+7X5m/QXTawtrUzRut/WY+LuA6cjN12J4r3C4ss=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=p9Ql9iRqLwdNX9tLw9s2zq3N5ZORM68eRQMLE7opdQalQQF+GhH9mPeZTFFyOqsFqf4vlC/gq2RhnicigQzDT0eCxIcJdYBgSOvif0TCUGSRhWvZumi+B49PHwMbJsMsD4PVKr2ocWqDAxO54jY95FNIuFRetMAUFGqKrG82gFo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=he8ZgWVd; arc=fail smtp.client-ip=52.101.65.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jhDjLNMAKPQm7JuGoQAqf27T5yw+BxTZ/uQobsMORkrhArPBGOP7/DjJyN6INBDpC1QzHUQwsG3swwei9mH/eDVzGbRSNc2J0y7mJhx9MewSvKA0KRHMZu7tBWYuvGBg823I8BX3aDX/vYTVrugwncfk03vXF7YJnZOPeqUgzcFLX/tfx2/1SfhX9qWhjOjHGDiyPAoEbYQAv924n64+1wiW4aoF8dtwSGV/7G5JPe75lRD/oLbv4PCArThvtHb2EGUY+N2mMdC391XfUHAzJVANZy8FMamY1c3enDEhzxeNE1vg2s3KS+7AU289GE7o4J94e4PdBF4JoqpQMahHXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zEWs4GX0bfY5H7USpplqUaN8rXVmhi54r+BJNdfdd7Q=;
+ b=FFDuKWkRIZLmH02iGjdc2JsGvr6AruOhoNNiyB+LktpWsY5tVh5K/xG5pU9Zfz5EHP1NNcKgRk+VAj45QnVHMjuDY7XC8M0QGLtsvqrcT1pMw8GnWyY++QQROA29dzIc1+p7IZafEYECq6HWDFVwoj4YQr2y7Wp59OuOW66PIeIu/0M22y4H/CUG8+usooXOntMKIpYU+u9H6CeQUdLPJo+qDy0jvQ/fzOryzDh3QJ9Fcveg8RloosPJUwrCma8MBf4czvtsUkmwBEDQHv2E7pNKT5D6sdKS26lecy71WncFGJQ73thzhILaNqV92xfJDDpfiE1id+9+7DqUbkmdgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zEWs4GX0bfY5H7USpplqUaN8rXVmhi54r+BJNdfdd7Q=;
+ b=he8ZgWVdO6ThO5Mmps+LBPr9f/K86Mvh+DDaunsW00h0N48RIaTc81lUo7VkAhm+uMnEg+Vh4VoII1/7bXph939VtS2otQWXP4lx+g4Q57nxR0G976eu3fLB1+hyco8fmgxOx+IKDIzxyI1AWP3OuNDNH9IBaTwtIa24wFuUnD9NoA4LdCNMRpUlQrc5JFqReK/0U2E7rPKFFxMZF8M1biHbebHY8SOsJooltJOnlNGC1JjO0OIduRk1RcZbOM5zx95vIwJ0AMNocvA3qD3rFPHZk9QsDIjKIcxXYMerYVy0Hu5CYfDPzJ3XcfGmEcJzXHAaYIWX514fCRPuK+9BZA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by VI1PR04MB10052.eurprd04.prod.outlook.com (2603:10a6:800:1db::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.20; Wed, 14 Aug
+ 2024 11:25:04 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%5]) with mapi id 15.20.7849.021; Wed, 14 Aug 2024
+ 11:25:03 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: laurent.pinchart@ideasonboard.com,
+	dan.scally@ideasonboard.com,
+	gregkh@linuxfoundation.org,
+	m.grzeschik@pengutronix.de
+Cc: jun.li@nxp.com,
+	imx@lists.linux.dev,
+	linux-usb@vger.kernel.org
+Subject: [RESEND] usb: gadget: uvc: queue pump work in uvcg_video_enable()
+Date: Wed, 14 Aug 2024 19:25:37 +0800
+Message-Id: <20240814112537.2608949-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0024.apcprd02.prod.outlook.com
+ (2603:1096:4:195::18) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: qcom: fix NULL pointer dereference on
- dwc3_qcom_read_usb2_speed
-To: Prashanth K <quic_prashk@quicinc.com>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20240813111847.31062-1-quic_faisalh@quicinc.com>
- <20240814001739.ml6czxo6ok67pihz@synopsys.com>
- <ec3a918a-df09-9245-318e-422f517ccf68@quicinc.com>
-Content-Language: en-US
-From: Faisal Hassan <quic_faisalh@quicinc.com>
-In-Reply-To: <ec3a918a-df09-9245-318e-422f517ccf68@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: F7p3xsx2rAk5bAra8m9sgzB7zj2kD7Fm
-X-Proofpoint-GUID: F7p3xsx2rAk5bAra8m9sgzB7zj2kD7Fm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-14_08,2024-08-13_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=961 clxscore=1015 mlxscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408140078
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|VI1PR04MB10052:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26b3a33b-d603-40f8-115b-08dcbc53be10
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|1800799024|376014|52116014|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+ =?us-ascii?Q?diwEVjxvgSklZAxXkce0bsrXSJRy45SnyQ1fqeyHnCURGU4ddb8p8UKrk0wq?=
+ =?us-ascii?Q?k0OhBhZ1PCGzm2WcNQudeIwC6p1rBZh7E0wXrpNsX2zxziRYaKR6HFYZeDLY?=
+ =?us-ascii?Q?KoEcB4txVm/x1CAXgOsrnDJ3//1711Ck8NFehYgdmc1OXprCVn2d6URtUeJ3?=
+ =?us-ascii?Q?qFQyHDd5W/CPWy/xfOZLq7aeqwIvPmQHaakBQV5Bkke8nq9cnTpK2UVtfYr5?=
+ =?us-ascii?Q?awIPiRxkc4artpK8jUSNjq4EK+dgWnWEY4BHzBlRlEgXg4P0FWyad8Ec3PVf?=
+ =?us-ascii?Q?5uAuVuTr5Hl1jtcYakrKCFHUQI6Fy/vVEK7chFjaOsLdyUSC1kJFHZbvAyLQ?=
+ =?us-ascii?Q?FeKgj/xvHLRAUGTDs+B2uGDPaXUhIlXrjJHPE+V0zI9pfRtJ2eg5YEqDNdMJ?=
+ =?us-ascii?Q?7/cZDgdbVt+RKQcz4j5HGuOE4qhYr2RYPtTIRMO5rU+oaVZsBwaJClInmOmX?=
+ =?us-ascii?Q?5iuV13n4keES0ck+Mw/rk8ZQcWk4bAN7DK6eJ0ZBo3kU81iHEqDzo+X16ecX?=
+ =?us-ascii?Q?/uoSSw0dKao/seq0+Z9x+JgNdMoQKTqeo/12QGNrjCj+ptFhDB+Ivfp51NRp?=
+ =?us-ascii?Q?BAkChEclRgoVn8RzATgMWne4OUkh5j5EdLTZWUpxsuWq+GW06uUVkejYVDep?=
+ =?us-ascii?Q?yoYyfqNWJwdOiLTxKgQFmUeZgM6mk6Kqq+AGDjzu95WY7BdjTyWqBQDaSA5H?=
+ =?us-ascii?Q?YFXCgJiX6TW9yBoscwXLOv7BVXfno6eG14hCgEbGgt7kp4GNq27DlhBKCgwO?=
+ =?us-ascii?Q?WmPlNE4nUrofYmhqRmrCQu8XXofoY9VBlcRTk2MdkGOys/NGDPiF/RP/Ji4z?=
+ =?us-ascii?Q?0NhosANZ42neqtC0/9qMQyobWA2oi8YfVHI4Fy6bKlr2WLDhSol3NC9OBz4a?=
+ =?us-ascii?Q?cgOV2Vs6DmZjQSQk+2jtt78EpGIyvwmpBTbmPl/DeBhhzr6UGD/dlVzAT3/9?=
+ =?us-ascii?Q?0ucy2Sx3qzLdM8BEND/MVPS+TytTZXK4YffGR9odPrWQazNytR543fxjTTtJ?=
+ =?us-ascii?Q?3Veo0j3TAVUMXpIxyjtNzd8f1biKAusWBVIOJ9xxhHr6R8KpbguB3U8cS1Vf?=
+ =?us-ascii?Q?YZUMIVhCpv6X1SDft65wn8tzXlvP1K3fb7oi+FlQz6hv4Cv3eYSFfU5JqAQR?=
+ =?us-ascii?Q?AYEMV5CC5sglMz+nq6WxRQcqPvYTh24gWiMOwJrfmA2U6nPopt4I+A1HkPcn?=
+ =?us-ascii?Q?pZF3Evbl8TdND0X4ht+O1Z0kRcqaZsASQg0pFrXD+fZqIgGVMhvKYGLj8jyS?=
+ =?us-ascii?Q?02MHBMva/pwLmwBGN+7FcGtpsAERuEtJ/J/UWgZJt9TyoHJt2w4DJrUf4Z3H?=
+ =?us-ascii?Q?z+WOSP7lEX5E8zuyz/Ja4buiyhJXh/V0/sCxWX5lkE9upIy5pcVPaCaijG0r?=
+ =?us-ascii?Q?iKwvRsyhFjNYcwJ+OV/f/mqT+8cyATexXsqDXBl3TqTy2iDPMQ=3D=3D?=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?us-ascii?Q?FdHFYWLjFkkfiGC1NFNGhCL4LS8WPZKVdPbUoowhkof+0VT4vk2iW2QRAoXd?=
+ =?us-ascii?Q?tlbZ8cmTo0Q1Rnu7FYid/42fY/Yd8stDBpFhJ04msc69d2JCjsh+QP3m841K?=
+ =?us-ascii?Q?wp3nonDXAm//nbeASfuY3AFM7YLpAQwpSOMUpaAHUw5G6XoiVJIfsffhaWZ3?=
+ =?us-ascii?Q?7eXMnMKeBJmFFGPZcc1sZKVGMiNB0D6McWKIb7F6Sm9HOBm9+l4FEIE8CbuR?=
+ =?us-ascii?Q?BupJKuuoP/Vjy45BwsFmhJRxGDSBahjjJGerSxKPUzs3gdimc+iBxaxl6Aa9?=
+ =?us-ascii?Q?FjAIpyzjkkYOaFNZNqeeW1IZNClcfNYHQditfj2uw5d4ng+IlABIZcVowa2O?=
+ =?us-ascii?Q?idhf/x2DiK945dpcMkuX6x3sYw/r/tV/eA4xitVDWRVuJNORhQ2EmcRxPsK6?=
+ =?us-ascii?Q?du5Cgf06jWROnH1QuH0FUnP7fuF+Jz8mb7g9E9ypn2JkCuFUKqwYFi5hx6Bd?=
+ =?us-ascii?Q?jYaOdDWey6X2ITjYi3QyxC32xxijEJPajr1jshBxmdgFLMx0rcvjHVk1E25f?=
+ =?us-ascii?Q?6oI4rqfRG9/QnmmwMEQdRsFC1kYO8ddTMhKxbUBGoIN7AeJAecDTk2ADNFZ6?=
+ =?us-ascii?Q?owII+JBQy/Y7T7RxHNgqGCUgJCf+mqzmGm4MktUcfaVX9SAmoMMxcwtgayEp?=
+ =?us-ascii?Q?wQkgs33j/MCdLlUd+bT/PTwTcgOfUGAClTeCO7ucdBqrKmwR+hMT+lro2HPo?=
+ =?us-ascii?Q?Ywmy0By1N0cgQiq+dE25JnZvKBb3o3Objkilkn8Bivj0UhrUAGka7mpClPiW?=
+ =?us-ascii?Q?6IVGFGYtwgOPU1dbo3BgUMA7DDXwxul/Ghufb/gBqUkkhdthZ2q37bFrayzn?=
+ =?us-ascii?Q?44q7XQj0k8Upt3ovglQ7myXjCI4psav+BEAKgWB3w/CPNau6TfF4lfyR2+Ie?=
+ =?us-ascii?Q?nX0cMKgoh7mqcDA+TknnSeNCqj08F5YM19Of8eyGIRaXQAzFoH0e3HHI6wk7?=
+ =?us-ascii?Q?43BsLYG0wpixA7BAVzLsvzN6pXJ0nP8qxd/keNvjP0xAZLQpVKsVXpzhy/oR?=
+ =?us-ascii?Q?vb0mEz6eabh4Vg2WOI7BhpeP9J7ZlNUml8ilqP4JEY8zkSAs7yXzTJVgCwix?=
+ =?us-ascii?Q?iuRsQ1QGpKwYlE6j9pT9fgEI4RGNfMg+m4EqsUBG6Q6FVTfQvcB9mpq+8OYJ?=
+ =?us-ascii?Q?aF4sNicGpWehVATx03DwFt3AgTDMX9DgLdK+xTkeTnBpMAfQQJrbHKlOAeRg?=
+ =?us-ascii?Q?dJ0yL00BTMMOeRhWoZss3w9IaswGopNj6fx0T5Olby4P5US6TezWq3UNcmtJ?=
+ =?us-ascii?Q?uDtIr2e9ouWYzT3CReaLzUC93orQfq/3a8eBoEOInrQOyHM57pMQeHxDAO8C?=
+ =?us-ascii?Q?Q4Qtvsmn7i5/K1Vh4+eRmu1txJoCQmiAr2qoM2OWUVFa4TxA4NdqAN17dnp+?=
+ =?us-ascii?Q?/n8stu39RH9lMLhhfSSegIBkpPE7TCkhC6xBgHZAY4dRYHcKuo1x6AeXC7S3?=
+ =?us-ascii?Q?oOKf2PdfirXBHdCc/77EZm3km/ALvtbGouLDyFr/k9HI2ONTxzenFHGsViFG?=
+ =?us-ascii?Q?g5B2fx1YceblV1TP/w6gzwf6B+IjAdq3xg49Y2h7QAxzEB0tT3EN8TIfOxQ/?=
+ =?us-ascii?Q?kUlYsGmAVALq3MiDArK3ujiMWeBQXbgoCoyzainM?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26b3a33b-d603-40f8-115b-08dcbc53be10
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2024 11:25:03.8568
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RaUxmXOeolo2zOW7O++26KWQEYqgd702GhVQj7D77PqEbHxcw85M9UEYYifXlbwNIelGtat375WFAcDoTYDtiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB10052
 
+Since commit "6acba0345b68 usb:gadget:uvc Do not use worker thread to pump
+isoc usb requests", pump work could only be queued in uvc_video_complete()
+and uvc_v4l2_qbuf(). If VIDIOC_QBUF is executed before VIDIOC_STREAMON,
+we can only depend on uvc_video_complete() to queue pump work. However,
+this requires some free requests in req_ready list. If req_ready list is
+empty all the time, pump work will never be queued and video datas will
+never be pumped to usb controller. Actually, this situation could happen
+when run uvc-gadget with static image:
 
+$ ./uvc-gadget -i 1080p.jpg uvc.0
 
-On 8/14/2024 11:05 AM, Prashanth K wrote:
-> 
-> 
-> On 14-08-24 05:47 am, Thinh Nguyen wrote:
->> On Tue, Aug 13, 2024, Faisal Hassan wrote:
->>> Null pointer dereference occurs when accessing 'hcd' to detect speed
->>> from dwc3_qcom_suspend after the xhci-hcd is unbound.
->>> To avoid this issue, ensure to check for NULL in
->>> dwc3_qcom_read_usb2_speed.
->>>
->>> echo xhci-hcd.0.auto > /sys/bus/platform/drivers/xhci-hcd/unbind
->>>    xhci_plat_remove() -> usb_put_hcd() -> hcd_release() -> kfree(hcd)
->>>
->>>    Unable to handle kernel NULL pointer dereference at virtual address
->>>    0000000000000060
->>>    Call trace:
->>>     dwc3_qcom_suspend.part.0+0x17c/0x2d0 [dwc3_qcom]
->>>     dwc3_qcom_runtime_suspend+0x2c/0x40 [dwc3_qcom]
->>>     pm_generic_runtime_suspend+0x30/0x44
->>>     __rpm_callback+0x4c/0x190
->>>     rpm_callback+0x6c/0x80
->>>     rpm_suspend+0x10c/0x620
->>>     pm_runtime_work+0xc8/0xe0
->>>     process_one_work+0x1e4/0x4f4
->>>     worker_thread+0x64/0x43c
->>>     kthread+0xec/0x100
->>>     ret_from_fork+0x10/0x20
->>>
->>> Fixes: c5f14abeb52b ("usb: dwc3: qcom: fix peripheral and OTG suspend")
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
->>> ---
->>>   drivers/usb/dwc3/dwc3-qcom.c | 4 +++-
->>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->>> index 88fb6706a18d..0c7846478655 100644
->>> --- a/drivers/usb/dwc3/dwc3-qcom.c
->>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->>> @@ -319,13 +319,15 @@ static bool dwc3_qcom_is_host(struct dwc3_qcom
->>> *qcom)
->>>   static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct
->>> dwc3_qcom *qcom, int port_index)
->>>   {
->>>       struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
->>
->> What if dwc is not available?
-> 
-> Thats unlikely, dwc3_qcom_suspend() -> dwc3_qcom_is_host() checks for
-> dwc, calls dwc3_qcom_read_usb2_speed() only if dwc is valid. But adding
-> an extra check shouldn't cause harm.
+When capture image from this device, the user app will always block there.
 
-Thanks Thinh and Prashanth for reviewing the patch.
-Since the caller is validating 'dwc', I think there is no need to recheck.
+The issue is uvc driver has queued video buffer before streamon, but the
+req_ready list is empty all the time after streamon. This will queue pump
+work in uvcg_video_enable() to fill some request to req_ready list so the
+uvc device could work properly.
 
->>
->>> -    struct usb_device *udev;
->>> +    struct usb_device __maybe_unused *udev;
->>
->> This is odd.... Is there a scenario where you don't want to set
->> CONFIG_USB if dwc3_qcom is in use?
->>
-> AFAIK this function is used to get the speeds of each ports, so that
-> wakeup interrupts (dp/dm/ss irqs) can be configured accordingly before
-> going to suspend, which is done during host mode only. So there
-> shouldn't be any scenarios where CONFIG_USB isnt set when this is called.
+Fixes: 6acba0345b68 ("usb:gadget:uvc Do not use worker thread to pump isoc usb requests")
+Cc: stable@vger.kernel.org
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+---
+ drivers/usb/gadget/function/uvc_video.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-From history I see CONFIG_USB was added to fix build issues for gadget
-only configuration. So configuration without CONFIG_USB also exists.
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index d41f5f31dadd..a9edd60fbbf7 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -753,6 +753,7 @@ int uvcg_video_enable(struct uvc_video *video)
+ 	video->req_int_count = 0;
+ 
+ 	uvc_video_ep_queue_initial_requests(video);
++	queue_work(video->async_wq, &video->pump);
+ 
+ 	return ret;
+ }
+-- 
+2.34.1
 
->>>       struct usb_hcd __maybe_unused *hcd;
->>>         /*
->>>        * FIXME: Fix this layering violation.
->>>        */
->>>       hcd = platform_get_drvdata(dwc->xhci);
->>> +    if (!hcd)
->>> +        return USB_SPEED_UNKNOWN;
->>>     #ifdef CONFIG_USB
->>
->> Perhaps this #ifdef shouldn't only be checking this. But that's for
->> another patch >>       udev = usb_hub_find_child(hcd->self.root_hub,
->> port_index + 1);
->>> -- 
->>> 2.17.1
->>>
->>
->> BR,
->> Thinh
-> Thanks,
-> Prashanth K
-Thanks,
-Faisal
 
