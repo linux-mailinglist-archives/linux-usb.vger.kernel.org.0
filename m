@@ -1,650 +1,155 @@
-Return-Path: <linux-usb+bounces-13454-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13455-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49C1D951B3D
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 14:56:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAD3C951B9D
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 15:13:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DD641C22F8D
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 12:55:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9227C1F23E3E
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 13:13:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AC611B1407;
-	Wed, 14 Aug 2024 12:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AF131B1503;
+	Wed, 14 Aug 2024 13:13:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfbpsWXk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RdmrIZX9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1751B0132;
-	Wed, 14 Aug 2024 12:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923361B14EC;
+	Wed, 14 Aug 2024 13:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723640154; cv=none; b=bX8zw7vR9rgKKvt3e9BsieImwlniXOqJKRV9OdNQQh8OS7OLHkWf6CRgp1UivCT4s0w5bzoDwFTAlsxi0VlgF+m4Z1I7V7lVe6b3YGkM50hx5TcSGwMxyE8r8NozWN8svLNw+cf4Xu/h2QChxMUlc+sJIeJdzCpb6oLWqJzRD9I=
+	t=1723641200; cv=none; b=Ne6AaKIjRTRarekA31C2094xpJst4XmPu6aP56TGetNusAjrFW+p4dh9EsxZjxnLZJzlX6bOp+hIQZ6+TMdFN38uL9FgBAKAlAGuHy+dCjCDG+LvvGnzI4cRHm6SP3TR9UZe53PTX/BtXMstyrfSiM0j86gy3p/CVxOz9VreI2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723640154; c=relaxed/simple;
-	bh=AKHoInAiNpz4W0qL5uvAdqdHUclP257FAwWuWak7qYg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MxaFRRWBbNnLmlQ8yS/Wylyu0GpJsJRHw9+yqCwN+dlVZjEIeG+C7qldnP4Qn8yEdbvujCybtToHpKv7uBl1LONwCGTDVhkbL/9N2Bv2DrzeP4ifltdZvz1PjRimVy3a4y24dZtufHhkxznhwdQB96yNnVwi4VPZ6pFiLEJXwNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfbpsWXk; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6b7a8cada97so36765596d6.3;
-        Wed, 14 Aug 2024 05:55:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723640151; x=1724244951; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+vcx1v9d+WEL1YiI/v8FPLPy17w3cjEaZK5ipMASS+A=;
-        b=jfbpsWXkkB3g8431M6ng2uME5PaB6B8s9hR6fsjBtwc4vP/N5UCdvPnaAEvuajeJPY
-         XCdaIYvRf0SSqj4FxbjJ50p+1fup2rmS0n0JIwYmfdVuznDAMfArNI1hj+ACeGJTJiSo
-         nvsjpVGJEkKqSZ5l0V25L9uz8CNAeFVyuN1VDSOe+i8trI1XNUJm9LicdY12+3w0GAd8
-         idxe+7mAQJo9a4B99qF0mj1C7cR+7xiZomTMFk8imt9E3IuoVVyIjx0QEYYmFhmLfsjH
-         OzL6RKVIcTtkfUIdKnBlA/q+/w782uEX3tRLPwvRPN+ns9rM11+AQqlIvdpo8uzVYzbr
-         RuIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723640151; x=1724244951;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+vcx1v9d+WEL1YiI/v8FPLPy17w3cjEaZK5ipMASS+A=;
-        b=j74ugupfeV7r9FLjsRdHhapC3V9GinFchGYhZ7UN7QucK4ErNeR4eeCxPAq1DGsVY4
-         /rfuJHiGYJI+oS7/PvQdqg5kSfTNHt90AYuDlLEt+B6cGN72bfTGvR6md5w+5xNJO7Ek
-         02XrUX/leMgkTm3cLMG0lQGa/gWLclVv8BTuHSpjVx9iQgEdi/vLjLugiNOm9xUkv2Yh
-         nrrw6Bt8btinvOr4DVfKXHNr8Vd5WYnoCwdak3CXCdzKDbBSNqFawAcH2gMV+xpwXcad
-         FLqA9hC76YS1hTOfSG9O+4h24/7x/OswZ/lZpyTGWQm7WWoTWrWhtnm4KN8h6wVvCI9J
-         j58Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWSOF5XYmNCSMqc3cPQXn7T1ZZ2wFowo+eNxKpVxMPabON2aB5eZ5INOVl2n5EisVOByr0lFBSYOuO5zP9Clf7DXl+qH6HSMhhNpCiY
-X-Gm-Message-State: AOJu0YzZmrYq8cvmtganW2DKQMsw2/Wb+jQJEBafOy6q9LgUOt5yvjek
-	jcXM4//apon85wA9m2jnMfG+kwgJILj58fZ3kLbR279VDCtICYVw/tUGYA==
-X-Google-Smtp-Source: AGHT+IGz44YSr6FREIpfWEduR6SJEiL3k+drhZvfCwNQjF/NvIg/F3bslGC0kpljla9fufnVw5IV5Q==
-X-Received: by 2002:a05:6214:2c03:b0:6b5:46bf:be2c with SMTP id 6a1803df08f44-6bf5d1e8030mr28448606d6.27.1723640150744;
-        Wed, 14 Aug 2024 05:55:50 -0700 (PDT)
-Received: from localhost.localdomain (syn-104-229-042-148.res.spectrum.com. [104.229.42.148])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bd82c62119sm43461676d6.4.2024.08.14.05.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 05:55:49 -0700 (PDT)
-From: crwulff@gmail.com
-To: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Konstantin Aladyshev <aladyshev22@gmail.com>,
-	David Sands <david.sands@biamp.com>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-kernel@vger.kernel.org,
-	Chris Wulff <Chris.Wulff@biamp.com>,
-	Chris Wulff <chris.wulff@biamp.com>
-Subject: [PATCH v4] USB: gadget: f_hid: Add GET_REPORT via userspace IOCTL
-Date: Wed, 14 Aug 2024 08:55:26 -0400
-Message-ID: <20240814125525.3917130-2-crwulff@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1723641200; c=relaxed/simple;
+	bh=z4zj2gVInaFRovuPzHpW5WczQueqOkq8LRPT/A7HIAg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CX/57lz5xoBAU75H/fnDnnWR6fR+2zzYqoScqsHKbS6WPjBcl5FwYORpYqzlsX922yGvQ5KeQNJnUfbBVkePTTZMQvTtmrvdIpFWZb1qAaPSZqKDUJ/cKT2xrK18mwlY+i2ywbWqplfiym7WVn5IONPfXoiomM+y23uXjYDAza8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RdmrIZX9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE326C32786;
+	Wed, 14 Aug 2024 13:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723641200;
+	bh=z4zj2gVInaFRovuPzHpW5WczQueqOkq8LRPT/A7HIAg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RdmrIZX9Dbd9oAWkYV+K8KMtc1D3ZbjCxSECey3Tq261qxTxo95Rhnx3BHgwcxGLe
+	 F4pMd5NpJ9d6UuyVnBxmt/YAs3ecuFh0N2Fiqhe5lMuuZYVIyufYhwo2yRBZbT4+nl
+	 tU6FhSYDS+XZUJExQSiO6mr0f7SNV2sIwYEgaK7/NVM8mHPQe8A5Q8b0c6miyCj6HU
+	 9mHZsXIbEGx4VFbJbdVVxfAELr8XPFOVMeuXjGYJ1xCidPBaDffWHnrfhivNaPxSkW
+	 oQmh3M70OLbBL0FLmwJ8EwxzjrWaapF74IEVTWGpnwyUGI/GzI+vZf1DMhDTa2J5T6
+	 t696RrqE8RHyw==
+Message-ID: <9934151a-ab63-48cd-b868-f715dd1e870a@kernel.org>
+Date: Wed, 14 Aug 2024 15:13:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] dt-bindings: usb: microchip,usb2514: Fix reference
+ USB device schema
+To: Alexander Stein <alexander.stein@ew.tq-group.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240814065833.36372-1-alexander.stein@ew.tq-group.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240814065833.36372-1-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Chris Wulff <Chris.Wulff@biamp.com>
+On 14/08/2024 08:58, Alexander Stein wrote:
+> An USB hub is not a HCD, but an USB device. Fix the referenced schema
+> accordingly. Adjust example to keep it aligned to other schemas.
+> 
+> Fixes: bfbf2e4b77e27 ("dt-bindings: usb: Document the Microchip USB2514 hub")
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> As this USB hub also can contain an USB (ethernet) sub device, I copied
+> the subdevice part from usb-hcd.yaml.
+> 
+> I had to add 'additionalProperties: true' as well, because I got that warning
+> upon dt_binding_check otherwise:
 
-While supporting GET_REPORT is a mandatory request per the HID
-specification the current implementation of the GET_REPORT request responds
-to the USB Host with an empty reply of the request length. However, some
-USB Hosts will request the contents of feature reports via the GET_REPORT
-request. In addition, some proprietary HID 'protocols' will expect
-different data, for the same report ID, to be to become available in the
-feature report by sending a preceding SET_REPORT to the USB Device that
-defines what data is to be presented when that feature report is
-subsequently retrieved via GET_REPORT (with a very fast < 5ms turn around
-between the SET_REPORT and the GET_REPORT).
 
-There are two other patch sets already submitted for adding GET_REPORT
-support. The first [1] allows for pre-priming a list of reports via IOCTLs
-which then allows the USB Host to perform the request, with no further
-userspace interaction possible during the GET_REPORT request. And another
-[2] which allows for a single report to be setup by userspace via IOCTL,
-which will be fetched and returned by the kernel for subsequent GET_REPORT
-requests by the USB Host, also with no further userspace interaction
-possible.
+Thanks for fixing this.
 
-This patch, while loosely based on both the patch sets, differs by allowing
-the option for userspace to respond to each GET_REPORT request by setting
-up a poll to notify userspace that a new GET_REPORT request has arrived. To
-support this, two extra IOCTLs are supplied. The first of which is used to
-retrieve the report ID of the GET_REPORT request (in the case of having
-non-zero report IDs in the HID descriptor). The second IOCTL allows for
-storing report responses in a list for responding to requests.
+>  
+> +patternProperties:
+> +  "^.*@[0-9a-f]{1,2}$":
+> +    description: The hard wired USB devices
+> +    type: object
+> +    $ref: /schemas/usb/usb-device.yaml
+> +    additionalProperties: true
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> @@ -47,7 +54,7 @@ examples:
+>          #address-cells = <1>;
+>          #size-cells = <0>;
+>  
+> -        usb-hub@1 {
+> +        hub@1 {
 
-The report responses are stored in a list (it will be either added if it
-does not exist or updated if it exists already). A flag (userspace_req) can
-be set to whether subsequent requests notify userspace or not.
+This is not needed. Both are correct - usb-hub and hub. I prefer not to
+rename all "phy" nodes to "usb-phy" and vice versa.
 
-Basic operation when a GET_REPORT request arrives from USB Host:
+Rest is good, so with dropping this renaming hunk:
 
-- If the report ID exists in the list and it is set for immediate return
-  (i.e. userspace_req == false) then response is sent immediately,
-userspace is not notified
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-- The report ID does not exist, or exists but is set to notify userspace
-  (i.e. userspace_req == true) then notify userspace via poll:
-
-	- If userspace responds, and either adds or update the response in
-	  the list and respond to the host with the contents
-
-	- If userspace does not respond within the fixed timeout (2500ms)
-	  but the report has been set prevously, then send 'old' report
-	  contents
-
-	- If userspace does not respond within the fixed timeout (2500ms)
-	  and the report does not exist in the list then send an empty
-	  report
-
-Note that userspace could 'prime' the report list at any other time.
-
-While this patch allows for flexibility in how the system responds to
-requests, and therefore the HID 'protocols' that could be supported, a
-drawback is the time it takes to service the requests and therefore the
-maximum throughput that would be achievable. The USB HID Specification
-v1.11 itself states that GET_REPORT is not intended for periodic data
-polling, so this limitation is not severe.
-
-Testing on an iMX8M Nano Ultra Lite with a heavy multi-core CPU loading
-showed that userspace can typically respond to the GET_REPORT request
-within 1200ms - which is well within the 5000ms most operating systems seem
-to allow, and within the 2500ms set by this patch.
-
-[1] https://lore.kernel.org/all/20220805070507.123151-2-sunil@amarulasolutions.com/
-[2] https://lore.kernel.org/all/20220726005824.2817646-1-vi@endrift.com/
-
-Signed-off-by: David Sands <david.sands@biamp.com>
-Signed-off-by: Chris Wulff <chris.wulff@biamp.com>
----
-v4: cleaned up a warning
-v3: rebased to usb-next, checkpatch cleanup (formatting, lore.kernel.org links)
-https://lore.kernel.org/all/20240810141834.640887-2-crwulff@gmail.com/
-v2: https://lore.kernel.org/all/CO1PR17MB541952864266039BAA7BBBD3E10F2@CO1PR17MB5419.namprd17.prod.outlook.com/
-v1: https://lore.kernel.org/all/20230215231529.2513236-1-david.sands@biamp.com/
----
- drivers/usb/gadget/function/f_hid.c | 272 +++++++++++++++++++++++++++-
- include/uapi/linux/usb/g_hid.h      |  40 ++++
- include/uapi/linux/usb/gadgetfs.h   |   2 +-
- 3 files changed, 306 insertions(+), 8 deletions(-)
- create mode 100644 include/uapi/linux/usb/g_hid.h
-
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index 93dae017ae45..997837369e3d 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -15,13 +15,21 @@
- #include <linux/uaccess.h>
- #include <linux/wait.h>
- #include <linux/sched.h>
-+#include <linux/workqueue.h>
- #include <linux/usb/g_hid.h>
-+#include <uapi/linux/usb/g_hid.h>
- 
- #include "u_f.h"
- #include "u_hid.h"
- 
- #define HIDG_MINORS	4
- 
-+/*
-+ * Most operating systems seem to allow for 5000ms timeout, we will allow
-+ * userspace half that time to respond before we return an empty report.
-+ */
-+#define GET_REPORT_TIMEOUT_MS 2500
-+
- static int major, minors;
- 
- static const struct class hidg_class = {
-@@ -31,6 +39,11 @@ static const struct class hidg_class = {
- static DEFINE_IDA(hidg_ida);
- static DEFINE_MUTEX(hidg_ida_lock); /* protects access to hidg_ida */
- 
-+struct report_entry {
-+	struct usb_hidg_report report_data;
-+	struct list_head node;
-+};
-+
- /*-------------------------------------------------------------------------*/
- /*                            HID gadget struct                            */
- 
-@@ -75,6 +88,19 @@ struct f_hidg {
- 	wait_queue_head_t		write_queue;
- 	struct usb_request		*req;
- 
-+	/* get report */
-+	struct usb_request		*get_req;
-+	struct usb_hidg_report		get_report;
-+	bool				get_report_returned;
-+	int				get_report_req_report_id;
-+	int				get_report_req_report_length;
-+	spinlock_t			get_report_spinlock;
-+	wait_queue_head_t		get_queue;    /* Waiting for userspace response */
-+	wait_queue_head_t		get_id_queue; /* Get ID came in */
-+	struct work_struct		work;
-+	struct workqueue_struct		*workqueue;
-+	struct list_head		report_list;
-+
- 	struct device			dev;
- 	struct cdev			cdev;
- 	struct usb_function		func;
-@@ -524,6 +550,173 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
- 	return status;
- }
- 
-+static struct report_entry *f_hidg_search_for_report(struct f_hidg *hidg, u8 report_id)
-+{
-+	struct list_head	*ptr;
-+	struct report_entry	*entry;
-+
-+	list_for_each(ptr, &hidg->report_list) {
-+		entry = list_entry(ptr, struct report_entry, node);
-+		if (entry->report_data.report_id == report_id)
-+			return entry;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void get_report_workqueue_handler(struct work_struct *work)
-+{
-+	struct f_hidg *hidg = container_of(work, struct f_hidg, work);
-+	struct usb_composite_dev *cdev = hidg->func.config->cdev;
-+	struct usb_request		*req;
-+	struct report_entry *ptr;
-+	unsigned long	flags;
-+
-+	int status = 0;
-+
-+	spin_lock_irqsave(&hidg->get_report_spinlock, flags);
-+	req = hidg->get_req;
-+	if (!req) {
-+		spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+		return;
-+	}
-+
-+	req->zero = 0;
-+	req->length = min_t(unsigned int, min_t(unsigned int, hidg->get_report_req_report_length,
-+							      hidg->report_length),
-+					  MAX_REPORT_LENGTH);
-+
-+	/* Check if there is a response available for immediate response */
-+	ptr = f_hidg_search_for_report(hidg, hidg->get_report_req_report_id);
-+	if (ptr && !ptr->report_data.userspace_req) {
-+		/* Report exists in list and it is to be used for immediate response */
-+		req->buf = ptr->report_data.data;
-+		status = usb_ep_queue(cdev->gadget->ep0, req, GFP_ATOMIC);
-+		hidg->get_report_returned = true;
-+		spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+	} else {
-+		/*
-+		 * Report does not exist in list or should not be immediately sent
-+		 * i.e. give userspace time to respond
-+		 */
-+		hidg->get_report_returned = false;
-+		spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+		wake_up(&hidg->get_id_queue);
-+#define GET_REPORT_COND (!hidg->get_report_returned)
-+		/* Wait until userspace has responded or timeout */
-+		status = wait_event_interruptible_timeout(hidg->get_queue, !GET_REPORT_COND,
-+					msecs_to_jiffies(GET_REPORT_TIMEOUT_MS));
-+		spin_lock_irqsave(&hidg->get_report_spinlock, flags);
-+		req = hidg->get_req;
-+		if (!req) {
-+			spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+			return;
-+		}
-+		if (status == 0 && !hidg->get_report_returned) {
-+			/* GET_REPORT request was not serviced by userspace within timeout period */
-+			VDBG(cdev, "get_report : userspace timeout.\n");
-+			hidg->get_report_returned = true;
-+		}
-+
-+		/* Search again for report ID in list and respond to GET_REPORT request */
-+		ptr = f_hidg_search_for_report(hidg, hidg->get_report_req_report_id);
-+		if (ptr) {
-+			/*
-+			 * Either get an updated response just serviced by userspace
-+			 * or send the latest response in the list
-+			 */
-+			req->buf = ptr->report_data.data;
-+		} else {
-+			/* If there are no prevoiusly sent reports send empty report */
-+			req->buf = hidg->get_report.data;
-+			memset(req->buf, 0x0, req->length);
-+		}
-+
-+		status = usb_ep_queue(cdev->gadget->ep0, req, GFP_ATOMIC);
-+		spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+	}
-+
-+	if (status < 0)
-+		VDBG(cdev, "usb_ep_queue error on ep0 responding to GET_REPORT\n");
-+}
-+
-+static int f_hidg_get_report_id(struct file *file, __u8 __user *buffer)
-+{
-+	struct f_hidg			*hidg = file->private_data;
-+	int ret = 0;
-+
-+	ret = put_user(hidg->get_report_req_report_id, buffer);
-+
-+	return ret;
-+}
-+
-+static int f_hidg_get_report(struct file *file, struct usb_hidg_report __user *buffer)
-+{
-+	struct f_hidg			*hidg = file->private_data;
-+	struct usb_composite_dev	*cdev = hidg->func.config->cdev;
-+	unsigned long	flags;
-+	struct report_entry *entry;
-+	struct report_entry *ptr;
-+	__u8 report_id;
-+
-+	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	if (copy_from_user(&entry->report_data, buffer,
-+				sizeof(struct usb_hidg_report))) {
-+		ERROR(cdev, "copy_from_user error\n");
-+		kfree(entry);
-+		return -EINVAL;
-+	}
-+
-+	report_id = entry->report_data.report_id;
-+
-+	spin_lock_irqsave(&hidg->get_report_spinlock, flags);
-+	ptr = f_hidg_search_for_report(hidg, report_id);
-+
-+	if (ptr) {
-+		/* Report already exists in list - update it */
-+		if (copy_from_user(&ptr->report_data, buffer,
-+				sizeof(struct usb_hidg_report))) {
-+			ERROR(cdev, "copy_from_user error\n");
-+			kfree(entry);
-+			return -EINVAL;
-+		}
-+		kfree(entry);
-+	} else {
-+		/* Report does not exist in list - add it */
-+		list_add_tail(&entry->node, &hidg->report_list);
-+	}
-+
-+	/* If there is no response pending then do nothing further */
-+	if (hidg->get_report_returned) {
-+		spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+		return 0;
-+	}
-+
-+	/* If this userspace response serves the current pending report */
-+	if (hidg->get_report_req_report_id == report_id) {
-+		hidg->get_report_returned = true;
-+		wake_up(&hidg->get_queue);
-+	}
-+
-+	spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+	return 0;
-+}
-+
-+static long f_hidg_ioctl(struct file *file, unsigned int code, unsigned long arg)
-+{
-+	switch (code) {
-+	case GADGET_HID_READ_GET_REPORT_ID:
-+		return f_hidg_get_report_id(file, (__u8 __user *)arg);
-+	case GADGET_HID_WRITE_GET_REPORT:
-+		return f_hidg_get_report(file, (struct usb_hidg_report __user *)arg);
-+	default:
-+		return -ENOTTY;
-+	}
-+}
-+
- static __poll_t f_hidg_poll(struct file *file, poll_table *wait)
- {
- 	struct f_hidg	*hidg  = file->private_data;
-@@ -531,6 +724,8 @@ static __poll_t f_hidg_poll(struct file *file, poll_table *wait)
- 
- 	poll_wait(file, &hidg->read_queue, wait);
- 	poll_wait(file, &hidg->write_queue, wait);
-+	poll_wait(file, &hidg->get_queue, wait);
-+	poll_wait(file, &hidg->get_id_queue, wait);
- 
- 	if (WRITE_COND)
- 		ret |= EPOLLOUT | EPOLLWRNORM;
-@@ -543,12 +738,16 @@ static __poll_t f_hidg_poll(struct file *file, poll_table *wait)
- 			ret |= EPOLLIN | EPOLLRDNORM;
- 	}
- 
-+	if (GET_REPORT_COND)
-+		ret |= EPOLLPRI;
-+
- 	return ret;
- }
- 
- #undef WRITE_COND
- #undef READ_COND_SSREPORT
- #undef READ_COND_INTOUT
-+#undef GET_REPORT_COND
- 
- static int f_hidg_release(struct inode *inode, struct file *fd)
- {
-@@ -641,6 +840,10 @@ static void hidg_ssreport_complete(struct usb_ep *ep, struct usb_request *req)
- 	wake_up(&hidg->read_queue);
- }
- 
-+static void hidg_get_report_complete(struct usb_ep *ep, struct usb_request *req)
-+{
-+}
-+
- static int hidg_setup(struct usb_function *f,
- 		const struct usb_ctrlrequest *ctrl)
- {
-@@ -649,6 +852,7 @@ static int hidg_setup(struct usb_function *f,
- 	struct usb_request		*req  = cdev->req;
- 	int status = 0;
- 	__u16 value, length;
-+	unsigned long	flags;
- 
- 	value	= __le16_to_cpu(ctrl->wValue);
- 	length	= __le16_to_cpu(ctrl->wLength);
-@@ -660,14 +864,20 @@ static int hidg_setup(struct usb_function *f,
- 	switch ((ctrl->bRequestType << 8) | ctrl->bRequest) {
- 	case ((USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
- 		  | HID_REQ_GET_REPORT):
--		VDBG(cdev, "get_report\n");
-+		VDBG(cdev, "get_report | wLength=%d\n", ctrl->wLength);
- 
--		/* send an empty report */
--		length = min_t(unsigned, length, hidg->report_length);
--		memset(req->buf, 0x0, length);
-+		/*
-+		 * Update GET_REPORT ID so that an ioctl can be used to determine what
-+		 * GET_REPORT the request was actually for.
-+		 */
-+		spin_lock_irqsave(&hidg->get_report_spinlock, flags);
-+		hidg->get_report_req_report_id = value & 0xff;
-+		hidg->get_report_req_report_length = length;
-+		spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
- 
--		goto respond;
--		break;
-+		queue_work(hidg->workqueue, &hidg->work);
-+
-+		return status;
- 
- 	case ((USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
- 		  | HID_REQ_GET_PROTOCOL):
-@@ -793,6 +1003,14 @@ static void hidg_disable(struct usb_function *f)
- 		spin_unlock_irqrestore(&hidg->read_spinlock, flags);
- 	}
- 
-+	spin_lock_irqsave(&hidg->get_report_spinlock, flags);
-+	if (!hidg->get_report_returned) {
-+		usb_ep_free_request(f->config->cdev->gadget->ep0, hidg->get_req);
-+		hidg->get_req = NULL;
-+		hidg->get_report_returned = true;
-+	}
-+	spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
-+
- 	spin_lock_irqsave(&hidg->write_spinlock, flags);
- 	if (!hidg->write_pending) {
- 		free_ep_req(hidg->in_ep, hidg->req);
-@@ -902,6 +1120,14 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 	return status;
- }
- 
-+#ifdef CONFIG_COMPAT
-+static long f_hidg_compat_ioctl(struct file *file, unsigned int code,
-+		unsigned long value)
-+{
-+	return f_hidg_ioctl(file, code, value);
-+}
-+#endif
-+
- static const struct file_operations f_hidg_fops = {
- 	.owner		= THIS_MODULE,
- 	.open		= f_hidg_open,
-@@ -909,6 +1135,10 @@ static const struct file_operations f_hidg_fops = {
- 	.write		= f_hidg_write,
- 	.read		= f_hidg_read,
- 	.poll		= f_hidg_poll,
-+	.unlocked_ioctl	= f_hidg_ioctl,
-+#ifdef CONFIG_COMPAT
-+	.compat_ioctl = f_hidg_compat_ioctl,
-+#endif
- 	.llseek		= noop_llseek,
- };
- 
-@@ -919,6 +1149,15 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 	struct usb_string	*us;
- 	int			status;
- 
-+	hidg->get_req = usb_ep_alloc_request(c->cdev->gadget->ep0, GFP_ATOMIC);
-+	if (!hidg->get_req)
-+		return -ENOMEM;
-+
-+	hidg->get_req->zero = 0;
-+	hidg->get_req->complete = hidg_get_report_complete;
-+	hidg->get_req->context = hidg;
-+	hidg->get_report_returned = true;
-+
- 	/* maybe allocate device-global string IDs, and patch descriptors */
- 	us = usb_gstrings_attach(c->cdev, ct_func_strings,
- 				 ARRAY_SIZE(ct_func_string_defs));
-@@ -1004,9 +1243,24 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 	hidg->write_pending = 1;
- 	hidg->req = NULL;
- 	spin_lock_init(&hidg->read_spinlock);
-+	spin_lock_init(&hidg->get_report_spinlock);
- 	init_waitqueue_head(&hidg->write_queue);
- 	init_waitqueue_head(&hidg->read_queue);
-+	init_waitqueue_head(&hidg->get_queue);
-+	init_waitqueue_head(&hidg->get_id_queue);
- 	INIT_LIST_HEAD(&hidg->completed_out_req);
-+	INIT_LIST_HEAD(&hidg->report_list);
-+
-+	INIT_WORK(&hidg->work, get_report_workqueue_handler);
-+	hidg->workqueue = alloc_workqueue("report_work",
-+					  WQ_FREEZABLE |
-+					  WQ_MEM_RECLAIM,
-+					  1);
-+
-+	if (!hidg->workqueue) {
-+		status = -ENOMEM;
-+		goto fail;
-+	}
- 
- 	/* create char device */
- 	cdev_init(&hidg->cdev, &f_hidg_fops);
-@@ -1016,12 +1270,16 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	return 0;
- fail_free_descs:
-+	destroy_workqueue(hidg->workqueue);
- 	usb_free_all_descriptors(f);
- fail:
- 	ERROR(f->config->cdev, "hidg_bind FAILED\n");
- 	if (hidg->req != NULL)
- 		free_ep_req(hidg->in_ep, hidg->req);
- 
-+	usb_ep_free_request(c->cdev->gadget->ep0, hidg->get_req);
-+	hidg->get_req = NULL;
-+
- 	return status;
- }
- 
-@@ -1256,7 +1514,7 @@ static void hidg_unbind(struct usb_configuration *c, struct usb_function *f)
- 	struct f_hidg *hidg = func_to_hidg(f);
- 
- 	cdev_device_del(&hidg->cdev, &hidg->dev);
--
-+	destroy_workqueue(hidg->workqueue);
- 	usb_free_all_descriptors(f);
- }
- 
-diff --git a/include/uapi/linux/usb/g_hid.h b/include/uapi/linux/usb/g_hid.h
-new file mode 100644
-index 000000000000..b965092db476
---- /dev/null
-+++ b/include/uapi/linux/usb/g_hid.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-+
-+#ifndef __UAPI_LINUX_USB_G_HID_H
-+#define __UAPI_LINUX_USB_G_HID_H
-+
-+#include <linux/types.h>
-+
-+/* Maximum HID report length for High-Speed USB (i.e. USB 2.0) */
-+#define MAX_REPORT_LENGTH 64
-+
-+/**
-+ * struct usb_hidg_report - response to GET_REPORT
-+ * @report_id: report ID that this is a response for
-+ * @userspace_req:
-+ *    !0 this report is used for any pending GET_REPORT request
-+ *       but wait on userspace to issue a new report on future requests
-+ *    0  this report is to be used for any future GET_REPORT requests
-+ * @length: length of the report response
-+ * @data: report response
-+ * @padding: padding for 32/64 bit compatibility
-+ *
-+ * Structure used by GADGET_HID_WRITE_GET_REPORT ioctl on /dev/hidg*.
-+ */
-+struct usb_hidg_report {
-+	__u8 report_id;
-+	__u8 userspace_req;
-+	__u16 length;
-+	__u8 data[MAX_REPORT_LENGTH];
-+	__u8 padding[4];
-+};
-+
-+/* The 'g' code is used by gadgetfs and hid gadget ioctl requests.
-+ * Don't add any colliding codes to either driver, and keep
-+ * them in unique ranges.
-+ */
-+
-+#define GADGET_HID_READ_GET_REPORT_ID   _IOR('g', 0x41, __u8)
-+#define GADGET_HID_WRITE_GET_REPORT     _IOW('g', 0x42, struct usb_hidg_report)
-+
-+#endif /* __UAPI_LINUX_USB_G_HID_H */
-diff --git a/include/uapi/linux/usb/gadgetfs.h b/include/uapi/linux/usb/gadgetfs.h
-index 835473910a49..9754822b2a40 100644
---- a/include/uapi/linux/usb/gadgetfs.h
-+++ b/include/uapi/linux/usb/gadgetfs.h
-@@ -62,7 +62,7 @@ struct usb_gadgetfs_event {
- };
- 
- 
--/* The 'g' code is also used by printer gadget ioctl requests.
-+/* The 'g' code is also used by printer and hid gadget ioctl requests.
-  * Don't add any colliding codes to either driver, and keep
-  * them in unique ranges (size 0x20 for now).
-  */
--- 
-2.43.0
+Best regards,
+Krzysztof
 
 
