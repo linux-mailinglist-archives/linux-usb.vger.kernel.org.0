@@ -1,172 +1,130 @@
-Return-Path: <linux-usb+bounces-13471-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13472-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FFC895214F
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 19:34:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30E54952169
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 19:39:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BEA3281D34
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 17:34:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF5E11F24385
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 17:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674D71BE863;
-	Wed, 14 Aug 2024 17:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="enix922Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B31E1BC075;
+	Wed, 14 Aug 2024 17:39:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C991BBBF5;
-	Wed, 14 Aug 2024 17:33:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD521BCA19
+	for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 17:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723656821; cv=none; b=hSlm54uQ24N+sFvICXBQL/BW7AF3hSD5PIrqik1awjhrCPX7b+VFUg/xARu7HOr17U2FzVjvFDgq0aGIdNKUfmAzyq4LNDwtrNa9kgIWw21fYOgWSsM2T26zxiX4NpEaT/XRXOfOx/mgPNT6DlmWY/1MJGd1w6KPJPy0Paex+K8=
+	t=1723657159; cv=none; b=OMwQk2MsN6ggx5ZHzvgmJevi0miVT2hLDO5d0VIatVpiUTLd8RFuf/b5UVHv8Bn4pCCIWO8D1FIkb+xwLiRxFaYzCRFlACbtM4KJL63v4bN+5Y+czP5C88mfuGeAsOGMiRaW2YBLYZVmH8nz87r+K5fhRh6+t9Su5H6nsAMNtSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723656821; c=relaxed/simple;
-	bh=qW313UBQGR3gEXNLUX8gvtIdZKYgGqiIZ9ytYY4uhGw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Pelyji0FqMotNw7wylmjTReBTmFRN2jd0e/C7x0bwMg3dad+RusZGvxAjraorjvh7W8hUKaS8Pa6paG6TkRdE6pB0vCZn8hLPC/ZsjwU/gtinP9EJ/FKkdTlcIXVq9bK4AfjQYarOhNncls2BHVI36omCIe8mfnL1qxwnOoBxgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=enix922Y; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47EAIOaQ027669;
-	Wed, 14 Aug 2024 17:33:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	0CSchhOZBCnI007wjWG8xfaij950P5dZODlWFqceWqo=; b=enix922YMp2OpEPE
-	T0/HmoBawNQgV4Taf6a4WL/8rpmLI44juk6Ng68UyUwXMFitA0CMQ9n2AW/kt3Ky
-	XdTqcYlMNToqHU0H/wQgkKSP2gZ2vIPZs1PUa3imFzpCGsGX8/h6BTT+0W8DQVLh
-	Ww2CHpPxgqg633CdiJMjOR5+abaOC+gqPKTYzWoEDWziKXkOh6qUDuyM9uGwu30C
-	TYt5NwR35XROEiY8vCKjJw2t7aAkWxf7EETiA8AtGr5n14zxnlAfjddOXK84gW0W
-	Bf2lztbV2ABW/oik/wFhjF1DedmrIxN4c6qyfPyxRmcLS7Y8vf0ndSB6iA8rtZ1p
-	NuQMVA==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40x3etbx4q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Aug 2024 17:33:35 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47EHXYD2009140
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Aug 2024 17:33:34 GMT
-Received: from [10.71.108.157] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 14 Aug
- 2024 10:33:33 -0700
-Message-ID: <8bb412f8-4fe1-40ca-8414-bb77c66899ae@quicinc.com>
-Date: Wed, 14 Aug 2024 10:33:33 -0700
+	s=arc-20240116; t=1723657159; c=relaxed/simple;
+	bh=1RJxAnIQpaDu9oVTDIha64CMAfqUSWeUABz0wPFGVSY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HJ6w6GrDblrOdBxeFVAyk7lJYM3TXWEzORNL5OD68wfuHvnmsBnpidKHf80jGm/gDpuRBfRHx/OYIQ8nw3R7u42PaRHlk6HufV7nGtrN4WkR764fDh6DQvgbYHumhkf7wf18YGnGh7B08yh4FedLLMr69zYLm5iyUNLjTAgQTJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1seHxj-0007OG-5I; Wed, 14 Aug 2024 19:39:07 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1seHxh-000PVL-Ve; Wed, 14 Aug 2024 19:39:05 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1seHxh-000cAQ-2y;
+	Wed, 14 Aug 2024 19:39:05 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Date: Wed, 14 Aug 2024 19:39:05 +0200
+Subject: [PATCH] usb: dwc3: ep0: Don't reset resource alloc flag (including
+ ep0)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] dt-bindings: soc: qcom: eud: Update compatible
- strings for eud
-To: Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk@kernel.org>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        "Bjorn
- Andersson" <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Trilok Soni
-	<quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        Elson Serrao <quic_eserrao@quicinc.com>
-CC: <cros-qcom-dts-watchers@chromium.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20240807183205.803847-1-quic_molvera@quicinc.com>
- <20240807183205.803847-2-quic_molvera@quicinc.com>
- <dfb1ac84-f011-45ea-9fb1-b8c6bc36cabc@kernel.org>
- <46d0627d-877b-41f3-83f6-4c33b562f460@quicinc.com>
- <0ebb1ca3-722d-422f-9f71-fcc61c3470b0@kernel.org>
- <2b118a49-2229-4346-ab21-0aa5377d7a4e@kernel.org>
-Content-Language: en-US
-From: Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <2b118a49-2229-4346-ab21-0aa5377d7a4e@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nxuzAiGod5w_q4PCUjqp3vfgpmeOsAhf
-X-Proofpoint-ORIG-GUID: nxuzAiGod5w_q4PCUjqp3vfgpmeOsAhf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-14_13,2024-08-13_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- suspectscore=0 impostorscore=0 phishscore=0 clxscore=1015 mlxlogscore=775
- lowpriorityscore=0 priorityscore=1501 spamscore=0 adultscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408140120
+Message-Id: <20240814-dwc3hwep0reset-v1-1-087b0d26f3d0@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIALjrvGYC/1WNywrCMBAAf6Xs2UDSLLT6K+Ihj9XsJZZdMYXSf
+ 2/qzePADLOBkjAp3IYNhL6s/K4d3GWAVEJ9keHcGUY7op0dmtySL40WK6T0MRGzn9w8ebwi9Cg
+ GJRMl1FTO7N8+hUXoyevveH/s+wF1au72gQAAAA==
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1563;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=1RJxAnIQpaDu9oVTDIha64CMAfqUSWeUABz0wPFGVSY=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmvOu5mBfDcjeMxKuEZekeZqKaUwz96+1rXbJcX
+ frL+prpAa+JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZrzruQAKCRC/aVhE+XH0
+ q2ROD/9xFI1rhYDInPnQInL2xUj3WRWjN1OsS3j6V5IJ+6Krkbz+g+Rm6YiVv/0pMJDYykBmScb
+ v+XHVTQBvo8krfMbajRTUDkSkIM1XMucJ8IlTuKC3r05tAOBx5P7KwUmklOEDXaQOzKB3xo6N46
+ Sp8UJN88h6+Um/+jX9mkxraNbmB3aTDG1/ZBHDxWs5FX9R0pQxYrYRhh2DFjRAqNKEelDtdsUSJ
+ i18B6RZvJIHIBRFM8G3KJH2eQJUb8yH3G0kIEq1YKITcR2grxpOyguyha+l6du926XvoOBqT/tx
+ L2Y8PuNmjYrsXuVwkTzFqfb71asYTwY0q2U6KDqk7Kqc4lAQCraQP5vbtNjpWj+Dxa3kx/iMp8w
+ kpAMwmxcWq4P3ty2uuWDTbERKNEiZoxSTMmQ9YyNMnXMClakMXAHUWkdg2nzA3FtrPYUsswbQAJ
+ 1dg8FniOnEjwQ28+fUTQhQMqb/cveConcpn6IMipiIuUs86Tzjt2hQVfPD0sNoi0SKOjLC5sIWT
+ wFCufIL2WjR93VXjqGNcIKEqWhC4qJbE2umISOt+NmhicVZxXl6UYc6eJUynjvU642XZqq4E/AO
+ bfSIt35Qygd/OTEeS8t8XAQmMjsac5LyyIgOl2ppLI79RuZ7wtrg0JQlYp6KI6vdoIdKGIiNb8C
+ 1BvOQ3pwo0k0tIA==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
+The DWC3_EP_RESOURCE_ALLOCATED flag ensures that the resource of an
+endpoint is only assigned once. Unless the endpoint is reset, don't
+clear this flag. Otherwise we may set endpoint resource again, which
+prevents the driver from initiate transfer after handling a STALL or
+endpoint halt to the control endpoint.
 
+Commit f2e0eee47038 (usb: dwc3: ep0: Don't reset resource alloc flag)
+was fixing the initial issue, but did this only for physical ep1. Since
+the function dwc3_ep0_stall_and_restart is resetting the flags for both
+physical endpoints, this also has to be done for ep0.
 
-On 8/14/2024 3:30 AM, Konrad Dybcio wrote:
-> On 14.08.2024 8:15 AM, Krzysztof Kozlowski wrote:
->> On 13/08/2024 22:03, Melody Olvera wrote:
->>>
->>> On 8/8/2024 4:00 AM, Krzysztof Kozlowski wrote:
->>>> On 07/08/2024 20:32, Melody Olvera wrote:
->>>>> The EUD can more accurately be divided into two types; a secure type
->>>>> which requires that certain registers be updated via scm call and a
->>>>> nonsecure type which must access registers nonsecurely. Thus, change
->>>>> the compatible strings to reflect secure and nonsecure eud usage.
->>>>>
->>>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>>>> ---
->>>>>    Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml | 6 +++---
->>>>>    1 file changed, 3 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>>>> index f2c5ec7e6437..476f92768610 100644
->>>>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>>>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>>>> @@ -17,8 +17,8 @@ properties:
->>>>>      compatible:
->>>>>        items:
->>>>>          - enum:
->>>>> -          - qcom,sc7280-eud
->>>>> -      - const: qcom,eud
->>>>> +          - qcom,secure-eud
->>>>> +          - qcom,eud
->>>> Commit msg did not explain me why DT bindings rules are avoided here and
->>>> you drop existing SoC specific compatible.
->>>>
->>>> This really does not look like having any sense at all, I cannot come up
->>>> with logic behind dropping existing users. You could deprecate it, but
->>>> then why exactly this device should have exception from generic bindings
->>>> rule?
->>> Understood. I won't drop this compatible string. Is alright to add the
->>> additional compatible as is?
->> You always need SoC specific compatible.
-> Melody, is there any way to discover (that won't crash the board if we
-> guess wrong) whether secure accessors are needed?
->
+Cc: stable@vger.kernel.org
+Fixes: b311048c174d ("usb: dwc3: gadget: Rewrite endpoint allocation flow")
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+ drivers/usb/dwc3/ep0.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Unfortunately, no. We considered several options, but none guarantee 
-that we will avoid
-a crash if we try non-securely. The secure call also won't give a 
-specific error if it fails either
-(for security reasons) so we can't know if a secure access failed 
-because it's supposed to be
-accessed non-securely or for another reason; hence this approach. If there's
-another way to achieve this functionality that might be better, I'm all 
-ears.
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index d96ffbe520397..c9533a99e47c8 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -232,7 +232,8 @@ void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+ 	/* stall is always issued on EP0 */
+ 	dep = dwc->eps[0];
+ 	__dwc3_gadget_ep_set_halt(dep, 1, false);
+-	dep->flags = DWC3_EP_ENABLED;
++	dep->flags &= DWC3_EP_RESOURCE_ALLOCATED;
++	dep->flags |= DWC3_EP_ENABLED;
+ 	dwc->delayed_status = false;
+ 
+ 	if (!list_empty(&dep->pending_list)) {
 
-Thanks,
-Melody
+---
+base-commit: 38343be0bf9a7d7ef0d160da5f2db887a0e29b62
+change-id: 20240814-dwc3hwep0reset-b4d371873494
+
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
+
 
