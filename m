@@ -1,107 +1,163 @@
-Return-Path: <linux-usb+bounces-13419-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13420-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BBE2951414
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 07:58:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 768EC951457
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 08:16:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F41C9B21AA4
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 05:58:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F28FA1F220D4
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 06:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41BC474424;
-	Wed, 14 Aug 2024 05:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2504713C9D4;
+	Wed, 14 Aug 2024 06:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LrZThKw7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sbfs3sQ2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4D3481B9;
-	Wed, 14 Aug 2024 05:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2A31F94D;
+	Wed, 14 Aug 2024 06:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723615108; cv=none; b=X3t/sI9JboHZE57Y6V6DAADB0Jrz2KE4ZgBdg79ST7IHH15t8UqjsCH1wlYRT+QVvWpzzSwjOu+5YwNmGRPf6LGCF0c6obNFFgB7vSb7ImGsHD6El7GzNRtzn4Gt1vzcIsGKLKOWmMm5YuyMV7QMAbRuq6iR6Ni7+c7e0TRlTk8=
+	t=1723616114; cv=none; b=XwbIJLxe1BuDfRClLjUsu6CUAZmC75k0IBpTBW1H25l/g1heqMs5ZW7o1y8ZB4rGTD2EWi2clUOUU1sNbO03d6XSfDTsT9Ino0Sr4n5qEekk5tqQjoNbu51+2OXV6SuDuxrfer/FxXsMx3qjfCnKGEEIz+gubmHIDfPel144rMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723615108; c=relaxed/simple;
-	bh=5tXHn0K5SkAJ+jgWL6wJ7H8EVkfSAfNHrxLXNufvRSA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=euYpRrPf+x/OtPcfDRzQfN/7G8jMPgqLHGRIrmrBiWJppY4u0KfUWjMGKFH26stPu7vjyHI6qNdrhcDHrVmhiRyQdJ3+yBR+QoOS0iYEjbJyQVHQ+CIF/r44Dkyu8GIoiEVYAdY7n41dZSk9lsvKHv5f+9QrbnZHWc7llugUkws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LrZThKw7; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-70943b07c2cso3900931a34.1;
-        Tue, 13 Aug 2024 22:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723615106; x=1724219906; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OOGwqfLdO1LRJs7tntcM+ssKA5Nit4pcjRhwD+QLbGw=;
-        b=LrZThKw7oWcMrq7PPnupJ8TnA7eS8ifJawoEttkPQ3wkKD/yKjkde/7ghFJgp1+mN/
-         XohdKgedjNV1gaH7lzqOz5B4DJpwEsIPZkj2B6HufpQxNoFScqzQwBDebQdzNwEXmWoZ
-         6Awt0smWZC2W90cr11mn31c6L4d6hFD/xl+q9aZHvtRQ4CZIOT952DYhmtSV4uUy49hv
-         1MickQoBuBvuUpf1oXKsCFjIVWwrZgSwSaE4QlEA7VxQ7ncnwIlQ372c58b3YIArH2Qc
-         rdLVvg8cmyiQkvj6RIbXEBZU36G0XG560DLLlqDSH9AgzM9JUlFY0fgsirk+LdrCpo48
-         sqFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723615106; x=1724219906;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OOGwqfLdO1LRJs7tntcM+ssKA5Nit4pcjRhwD+QLbGw=;
-        b=j0dwL1aOec0Pf1IbVfSWVWZ0pBO73+Z+2IkCwPyRoIxCl4IU61qEE8dnSYR626TMJZ
-         bfNeZNsFodP8bVq1z637rdUZKOlT/URXPUKPHHQbwANlFvvE/KdFFoMnha+WFzWX863B
-         bHcnPPBXO7n4npzFoYhDJm7C/NFqEefyehTdLuxR0kKO/DDPXuCbPV/jiEsf9r2iMOuM
-         rO8M0j3PHTS5+FjVldWflSwy1FcjoBIGBOauaBEYI74vNxXaF/+43X/WEHaj9WtzySlI
-         UV7zANs9Tv6v6GbLDZqjFuQH6DmloRCJv0/8zEPEkIRiAsU5zd3hjquM+atjupJsv3R4
-         8ocg==
-X-Forwarded-Encrypted: i=1; AJvYcCUuHv4AJxlfUSDOHqGnF0Oc2W+OQMyaPWZRDACziTjs6rmh+F3fyqBb15Tg69nu6BRnRt+0Qxj3qhfggTTkrC8jWGgdD5lSPenyDwemz+i+9mzUUBS394OuLrIyzIskNawZG6O862GZzWcJ4aIJ3GoU+TDpMlpPLnF4ZJBUaoOsYaS4HCmAELE=
-X-Gm-Message-State: AOJu0YznNa4VZI8ALtNwqkw+JwYIlNmimJ3ViS52PELc+zHdp1yiJuA8
-	ZOcUPeZT28lzuRXaun/ScXay2euB+ylxCMlukokaIZOcYJWSRlU=
-X-Google-Smtp-Source: AGHT+IGoKwhar7NlMl2apZUwCOXmcqLKM6ZBxJnDLCv9X+cK9Yfd5D28VbDOZGaOKZdXxk5Hv9Qk2A==
-X-Received: by 2002:a05:6830:700a:b0:709:396c:f295 with SMTP id 46e09a7af769-70c9da20784mr2698574a34.32.1723615106398;
-        Tue, 13 Aug 2024 22:58:26 -0700 (PDT)
-Received: from swift.. ([123.113.248.90])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c697a06d90sm2433129a12.43.2024.08.13.22.58.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 22:58:26 -0700 (PDT)
-From: LidongLI <wirelessdonghack@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: kvalo@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	mark.esler@canonical.com,
-	stf_xl@wp.pl,
-	wirelessdonghack@gmail.com,
-	tytso@mit.edu,
-	stern@rowland.harvard.edu
-Subject: Re: Ubuntu RT2X00 WIFI USB Driver Kernel NULL pointer Dereference&Use-After-Free Vulnerability
-Date: Wed, 14 Aug 2024 13:58:16 +0800
-Message-Id: <20240814055816.2786467-1-wirelessdonghack@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2024080359-getaway-concave-623e@gregkh>
-References: <2024080359-getaway-concave-623e@gregkh>
+	s=arc-20240116; t=1723616114; c=relaxed/simple;
+	bh=eFATB+IVTP9/D9IoVFDR56zxC7beyXosd5YkDb9+JxY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DfpV5bfrbgJTzpk87bYW/74ynWTMKajm6FJFUBLWEYTVsYgkSdptkCK5+OYN+eCt/kjMrLkMSfdo63dOs42ZdRR/rq0tn7ZLqPj5/lkfnDjVY3xLk92U47fjjArU+qpOV/8aYWw5YvWpiciQsXkW0ODRb0ZliyzGkw+DThAH330=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sbfs3sQ2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B08AC4AF0B;
+	Wed, 14 Aug 2024 06:15:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723616114;
+	bh=eFATB+IVTP9/D9IoVFDR56zxC7beyXosd5YkDb9+JxY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sbfs3sQ2Md725dWGWkDgfswlHwlxn3roNzP28QJ4ByGUrYUN1RPrgPV0H1hZq5nLr
+	 y387KGYR14lT6fRpXCD9UHjhCshOVPxcj0bowKa4T5kVUxX58grgS7fD0hvjlL5ean
+	 Z741s3gCGTs6cugotFgIbzIADo5BNZqQARNaBmP3AY+qgt4aWFzisi0XKfNjRs6Rwu
+	 Sliysl+eSs1rH0ATPkccdk1J72+9U5yCzRzsKUgYfmqG6kAEPisvMCyjSzAAcqxu5w
+	 XTDt3vF67dM4ukEBF5JRTbkLOV0ebCsKi3Uo14uDV1A7O5n6O1bSWcx1A307KEvWR+
+	 MbDCpwdMHFO6Q==
+Message-ID: <0ebb1ca3-722d-422f-9f71-fcc61c3470b0@kernel.org>
+Date: Wed, 14 Aug 2024 08:15:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/3] dt-bindings: soc: qcom: eud: Update compatible
+ strings for eud
+To: Melody Olvera <quic_molvera@quicinc.com>,
+ Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Trilok Soni <quic_tsoni@quicinc.com>,
+ Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+ Elson Serrao <quic_eserrao@quicinc.com>
+Cc: cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20240807183205.803847-1-quic_molvera@quicinc.com>
+ <20240807183205.803847-2-quic_molvera@quicinc.com>
+ <dfb1ac84-f011-45ea-9fb1-b8c6bc36cabc@kernel.org>
+ <46d0627d-877b-41f3-83f6-4c33b562f460@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <46d0627d-877b-41f3-83f6-4c33b562f460@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 13/08/2024 22:03, Melody Olvera wrote:
+> 
+> 
+> On 8/8/2024 4:00 AM, Krzysztof Kozlowski wrote:
+>> On 07/08/2024 20:32, Melody Olvera wrote:
+>>> The EUD can more accurately be divided into two types; a secure type
+>>> which requires that certain registers be updated via scm call and a
+>>> nonsecure type which must access registers nonsecurely. Thus, change
+>>> the compatible strings to reflect secure and nonsecure eud usage.
+>>>
+>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml | 6 +++---
+>>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>>> index f2c5ec7e6437..476f92768610 100644
+>>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>>> @@ -17,8 +17,8 @@ properties:
+>>>     compatible:
+>>>       items:
+>>>         - enum:
+>>> -          - qcom,sc7280-eud
+>>> -      - const: qcom,eud
+>>> +          - qcom,secure-eud
+>>> +          - qcom,eud
+>> Commit msg did not explain me why DT bindings rules are avoided here and
+>> you drop existing SoC specific compatible.
+>>
+>> This really does not look like having any sense at all, I cannot come up
+>> with logic behind dropping existing users. You could deprecate it, but
+>> then why exactly this device should have exception from generic bindings
+>> rule?
+> 
+> Understood. I won't drop this compatible string. Is alright to add the 
+> additional compatible as is?
 
-Dear 
+You always need SoC specific compatible.
 
-
-
-When will the patch be released? We are waiting to test it.
-
-
-
-
-Best regards
+Best regards,
+Krzysztof
 
 
