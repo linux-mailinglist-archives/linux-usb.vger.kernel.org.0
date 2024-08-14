@@ -1,111 +1,195 @@
-Return-Path: <linux-usb+bounces-13445-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13446-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A05995199A
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 13:08:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205A09519AF
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 13:12:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 568541C21781
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 11:08:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A08B11F242B0
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 11:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10DF219FA66;
-	Wed, 14 Aug 2024 11:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5481AED24;
+	Wed, 14 Aug 2024 11:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="YBRgd9UM"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Kn/9MsqP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mr85p00im-hyfv06021301.me.com (mr85p00im-hyfv06021301.me.com [17.58.23.188])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8488B1AE84A
-	for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 11:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135B01AE851;
+	Wed, 14 Aug 2024 11:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723633672; cv=none; b=J3dASSkWDi9epLr0QlV30g0tOHtukMp8EYmQpuLZ+PvSQxP3Z5CRTz56y2nlLd22P5y7sykn/Z2y4HRQuFScnObdkv7obH7C4Pc2k5N7qeCktlW4h/4kZual4OzAUW2gKuGYVh+13wGTXdhScAt6466kbJbdx8V36FQlzF/ln5s=
+	t=1723633943; cv=none; b=pfEIIf5hwcD12cOIgpBIiPi6Y7FUBtcdoR9KNImzrBJ0k1V1K8ix0g1jNkklhoDOa+DLrFQe4b1oQChiRnWGfWnT7uiPPvrhLNIUVAU7Xxc8Sy3WOzG0VB54OYdGQJrL/cSPSeV0JA3SaguxMv+BExD+Vf6+sexFXsiFKSPSa38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723633672; c=relaxed/simple;
-	bh=yVxtCLTGgQjGhk74i6g7e4YI385bKUtyaU9n2k1GCyU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=o6eleng2gQjTicUObEGQTiUL6ygbXqpCtspOuQMGSZaxgPAAHDBcsknoPpDeAvpNszB4ilwmp8erkvpTOoIe/ObZU6J179NraYK1bqIzq3pmIncq0O3TVo6g+JtZaVyFlNaVkvcDKtraiLt52O2Vng0UQuIREN2HswvCr7xGdDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=YBRgd9UM; arc=none smtp.client-ip=17.58.23.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1723633670;
-	bh=kQllxqwSlax4y60Q/SIAbtg0dy4MqxrZ7h0xytB4dvc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To;
-	b=YBRgd9UMOyXt52n2H0i/a0Jd4EMuhQYZVGJ7v7zrcQOxw6x0f4NKZt0aJTYhv/MPj
-	 enFX764NMsVk6mDmCOaT/ywDnjzrxwFkg5NZuFQw5dBkhMd7sBNj/I+5/GKdhNn5Hx
-	 eD7AXqyXEeP0JyPgF0m6kq+53MZXPFP9KLDCa3ebBpygG6hvl7uaHRPIVOWHJVV6Zm
-	 ji9GHxQNT07p/7mySTk+VaFYwNZ6rpBUB92m5hjSHHo4CUK/05e9XsVkc3FDqkDIrs
-	 YiIHqKenfKbKoDEdoAkHurGo0gwY7FXa9S+XbqnbmMKOk7+m3EfL6/BU4hbHbvJ1M/
-	 xpCQP8nRynLBQ==
-Received: from [192.168.1.26] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-hyfv06021301.me.com (Postfix) with ESMTPSA id DDB022150D07;
-	Wed, 14 Aug 2024 11:07:47 +0000 (UTC)
-From: Zijun Hu <zijun_hu@icloud.com>
-Date: Wed, 14 Aug 2024 19:07:34 +0800
-Subject: [PATCH] usb: core: sysfs: Unmerge @usb3_hardware_lpm_attr_group in
- remove_power_attributes()
+	s=arc-20240116; t=1723633943; c=relaxed/simple;
+	bh=w8FGOf6XoIorTPA0onCSDNz0YqeAb5+N618grpFo2H4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=URPCm27k2A+oqtbUxzaOpcgQMcXtva0ORC2BTx6aMCM39v3Wd0hXB3kOa7OGEHgZ++nr/6marocjMywDJHqkYCMAA0wxtBPNRw8b6zAcHGp+MWaCDPf9w+78qPq/BsbJqN1Aqd5BjHTyP/yIBo4Xkdt7AffOsWUxeFEyNr+KpvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Kn/9MsqP; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47EB5k2J031804;
+	Wed, 14 Aug 2024 11:12:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	UtlVxWbaUSDeOBQ6P4YT+7imLbtS4jYLDQtPJRL0bEs=; b=Kn/9MsqPZAq9S0Cc
+	LImMK64clfApyJtqyMp7/lva+N6IMCx/+EFquo+iVNH0Hhph396fm9Ye1GeIuf82
+	LOh958o1z3vzTelnRV1PBYD1tQ3xI1tBlLrVXInYZ29qX+awIPJ+fr7gJD2hajao
+	jE5TCsxQeB0Z0xCwMhPILxAKWfWYDt2+gi0UHIfxpqkDp0JnquDNmAz3Xg4TAMHo
+	ZCq0wOE5U+4P3dxPjbrggk4DTjyxxS5DRE1yJxMLi27bZLUs1SFzjFW0S5FmF+pS
+	/uGeIdgna+F0f7n64A69G/nOxZoXDa7Jyf0xSwKrCPcXh7+NsU3IPeQSsx50kCup
+	mgdAYQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41082wk08n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Aug 2024 11:12:19 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47EBCIcp005745
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Aug 2024 11:12:18 GMT
+Received: from [10.218.38.222] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 14 Aug
+ 2024 04:12:15 -0700
+Message-ID: <48651728-a4bb-4bef-81d7-6100a6c2a1fe@quicinc.com>
+Date: Wed, 14 Aug 2024 16:42:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240814-sysfs_fix-v1-1-2224a29a259b@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAPWPvGYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDC0MT3eLK4rTi+LTMCl0jIwOzlFTLJANDc0sloPqColSgMNis6NjaWgC
- scZnJWwAAAA==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Kevin Strasser <kevin.strasser@linux.intel.com>
-Cc: Zijun Hu <zijun_hu@icloud.com>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-X-Mailer: b4 0.14.1
-X-Proofpoint-GUID: W73DaKZkeAHcuJAlEft6q5b5S4Zskhgi
-X-Proofpoint-ORIG-GUID: W73DaKZkeAHcuJAlEft6q5b5S4Zskhgi
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: qcom: fix NULL pointer dereference on
+ dwc3_qcom_read_usb2_speed
+To: Prashanth K <quic_prashk@quicinc.com>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20240813111847.31062-1-quic_faisalh@quicinc.com>
+ <20240814001739.ml6czxo6ok67pihz@synopsys.com>
+ <ec3a918a-df09-9245-318e-422f517ccf68@quicinc.com>
+Content-Language: en-US
+From: Faisal Hassan <quic_faisalh@quicinc.com>
+In-Reply-To: <ec3a918a-df09-9245-318e-422f517ccf68@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: F7p3xsx2rAk5bAra8m9sgzB7zj2kD7Fm
+X-Proofpoint-GUID: F7p3xsx2rAk5bAra8m9sgzB7zj2kD7Fm
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-14_08,2024-08-13_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- clxscore=1011 phishscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2308100000 definitions=main-2408140077
-X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=961 clxscore=1015 mlxscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408140078
 
-From: Zijun Hu <quic_zijuhu@quicinc.com>
 
-Device attribute group @usb3_hardware_lpm_attr_group is merged by
-add_power_attributes(), but it is not unmerged explicitly, fixed by
-unmerging it in remove_power_attributes().
 
-Fixes: 655fe4effe0f ("usbcore: add sysfs support to xHCI usb3 hardware LPM")
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
- drivers/usb/core/sysfs.c | 1 +
- 1 file changed, 1 insertion(+)
+On 8/14/2024 11:05 AM, Prashanth K wrote:
+> 
+> 
+> On 14-08-24 05:47 am, Thinh Nguyen wrote:
+>> On Tue, Aug 13, 2024, Faisal Hassan wrote:
+>>> Null pointer dereference occurs when accessing 'hcd' to detect speed
+>>> from dwc3_qcom_suspend after the xhci-hcd is unbound.
+>>> To avoid this issue, ensure to check for NULL in
+>>> dwc3_qcom_read_usb2_speed.
+>>>
+>>> echo xhci-hcd.0.auto > /sys/bus/platform/drivers/xhci-hcd/unbind
+>>>    xhci_plat_remove() -> usb_put_hcd() -> hcd_release() -> kfree(hcd)
+>>>
+>>>    Unable to handle kernel NULL pointer dereference at virtual address
+>>>    0000000000000060
+>>>    Call trace:
+>>>     dwc3_qcom_suspend.part.0+0x17c/0x2d0 [dwc3_qcom]
+>>>     dwc3_qcom_runtime_suspend+0x2c/0x40 [dwc3_qcom]
+>>>     pm_generic_runtime_suspend+0x30/0x44
+>>>     __rpm_callback+0x4c/0x190
+>>>     rpm_callback+0x6c/0x80
+>>>     rpm_suspend+0x10c/0x620
+>>>     pm_runtime_work+0xc8/0xe0
+>>>     process_one_work+0x1e4/0x4f4
+>>>     worker_thread+0x64/0x43c
+>>>     kthread+0xec/0x100
+>>>     ret_from_fork+0x10/0x20
+>>>
+>>> Fixes: c5f14abeb52b ("usb: dwc3: qcom: fix peripheral and OTG suspend")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
+>>> ---
+>>>   drivers/usb/dwc3/dwc3-qcom.c | 4 +++-
+>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>>> index 88fb6706a18d..0c7846478655 100644
+>>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>>> @@ -319,13 +319,15 @@ static bool dwc3_qcom_is_host(struct dwc3_qcom
+>>> *qcom)
+>>>   static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct
+>>> dwc3_qcom *qcom, int port_index)
+>>>   {
+>>>       struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+>>
+>> What if dwc is not available?
+> 
+> Thats unlikely, dwc3_qcom_suspend() -> dwc3_qcom_is_host() checks for
+> dwc, calls dwc3_qcom_read_usb2_speed() only if dwc is valid. But adding
+> an extra check shouldn't cause harm.
 
-diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
-index d83231d6736a..61b6d978892c 100644
---- a/drivers/usb/core/sysfs.c
-+++ b/drivers/usb/core/sysfs.c
-@@ -670,6 +670,7 @@ static int add_power_attributes(struct device *dev)
- 
- static void remove_power_attributes(struct device *dev)
- {
-+	sysfs_unmerge_group(&dev->kobj, &usb3_hardware_lpm_attr_group);
- 	sysfs_unmerge_group(&dev->kobj, &usb2_hardware_lpm_attr_group);
- 	sysfs_unmerge_group(&dev->kobj, &power_attr_group);
- }
+Thanks Thinh and Prashanth for reviewing the patch.
+Since the caller is validating 'dwc', I think there is no need to recheck.
 
----
-base-commit: 82313624b2ae5a943d16475a566b65c873989e9f
-change-id: 20240814-sysfs_fix-2206de9b0179
+>>
+>>> -    struct usb_device *udev;
+>>> +    struct usb_device __maybe_unused *udev;
+>>
+>> This is odd.... Is there a scenario where you don't want to set
+>> CONFIG_USB if dwc3_qcom is in use?
+>>
+> AFAIK this function is used to get the speeds of each ports, so that
+> wakeup interrupts (dp/dm/ss irqs) can be configured accordingly before
+> going to suspend, which is done during host mode only. So there
+> shouldn't be any scenarios where CONFIG_USB isnt set when this is called.
 
-Best regards,
--- 
-Zijun Hu <quic_zijuhu@quicinc.com>
+From history I see CONFIG_USB was added to fix build issues for gadget
+only configuration. So configuration without CONFIG_USB also exists.
 
+>>>       struct usb_hcd __maybe_unused *hcd;
+>>>         /*
+>>>        * FIXME: Fix this layering violation.
+>>>        */
+>>>       hcd = platform_get_drvdata(dwc->xhci);
+>>> +    if (!hcd)
+>>> +        return USB_SPEED_UNKNOWN;
+>>>     #ifdef CONFIG_USB
+>>
+>> Perhaps this #ifdef shouldn't only be checking this. But that's for
+>> another patch >>       udev = usb_hub_find_child(hcd->self.root_hub,
+>> port_index + 1);
+>>> -- 
+>>> 2.17.1
+>>>
+>>
+>> BR,
+>> Thinh
+> Thanks,
+> Prashanth K
+Thanks,
+Faisal
 
