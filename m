@@ -1,59 +1,66 @@
-Return-Path: <linux-usb+bounces-13457-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13458-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F18A951BEF
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 15:34:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86DD3951C0B
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 15:41:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 363041F2533B
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 13:34:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0E5A1C24806
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2024 13:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D97D1B142B;
-	Wed, 14 Aug 2024 13:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKQKtCNm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A40C1B142C;
+	Wed, 14 Aug 2024 13:41:18 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5D41D52D;
-	Wed, 14 Aug 2024 13:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3E71AED35
+	for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2024 13:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723642439; cv=none; b=LAOKwz2ThrTX4hf8ztDWmo9zma5eBR7kBtDGzoOcFToBMXlU1FPLROpPFcYI4Lhkuo7E73bIT+6WySpHBIfG0YVgOT8K+kiPP1lPDA/8bGdpw2n1Yf9u9d62sNCCa94ahFQdc6YQLmTX3avxsO3aB/Gdm0WMyHYv1tyYP5W+YD8=
+	t=1723642878; cv=none; b=ZxjyNVnnSIWzAPc2XJW1dfal5qbhRYg03bZkpiCNq57+Owj8qYHR34jXXuQJdASdFfpb0ZHlYbEy1GN0UZjAmv62MLsROodDBrdOVQf6QiV4wO4G9r7Ak7pIQMCLOncErPK1//KQGq0xx4rc1Jlw91cN/tahHSah1a+Q47stGOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723642439; c=relaxed/simple;
-	bh=5juxU2YKzXwhGtHHkMqjJHdVpaJe0GNBTkafUmGuu/Y=;
+	s=arc-20240116; t=1723642878; c=relaxed/simple;
+	bh=zOjk6hGGDth6yc75Nnd1oYyWL8+rID/sW43+5mDPxXI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cdlnP4bFR4H4SC/2oAPXkUt2m9b/SDGO3zpuOMhD0cyX1u2NyRE9gOIQhoVohPHM8C7gnD692oZhkhMnuBMQ/sUfRyGJPpQXmbHLhj1KusnBWZhcMl+BZsnZHnnYNoRhlvrluVmh9NLvnXUDJbJpj+TcJlbG8CLBA6Av7dlrLO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKQKtCNm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E6FC4AF09;
-	Wed, 14 Aug 2024 13:33:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723642438;
-	bh=5juxU2YKzXwhGtHHkMqjJHdVpaJe0GNBTkafUmGuu/Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jKQKtCNmHmWQR/BbAijgeoeYd+lmNDixeVH81LMj5fJw7vf0/5M3rJ5Oty+9wAxgP
-	 lEuYK10my2zB326zE/OXcEjjCICi9xLuYook3Q0P5EscET1o9G1s0YkzAo5JHKWK/m
-	 AoQFWjGUaOSrhFvWXykkBAcyxXMlGx7kABt93yNqrld8PKwuS2NK4q/r5Z2xDSCAdL
-	 7F6xmhhjKs1Zv1biMVeD8Orr75ENrzi0qNYZPIcwAT1J+USmI26cuGre0V7jlzS0ud
-	 WdiKT7bfYf7k13gJT3QD7XgiIq2rCTcRhVLCB4nXdwNF5GAGy/Ze1TCMlKkoVTsXFf
-	 JhZglLE7VusmQ==
-Date: Wed, 14 Aug 2024 07:33:56 -0600
-From: Rob Herring <robh@kernel.org>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s7ajguN/sqAiL1Q46br8G0IaAFmtUD6UVfkYo+FtyNU6BOYG2d7Ut0KzWCssim8GdSGdZCueAOes3clEvYtzqk2AKclW3GsybGA8uNj6iNs32WGsxcMHg5MqhEfWq/OOnUWX0Yk4i6ipDP35yqv8gyEbUm7aQpiU9G6d9iCFVe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1seEFL-00064z-Vs; Wed, 14 Aug 2024 15:41:04 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1seEFL-000N7l-8p; Wed, 14 Aug 2024 15:41:03 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1seEFL-002ZXT-0V;
+	Wed, 14 Aug 2024 15:41:03 +0200
+Date: Wed, 14 Aug 2024 15:41:03 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Rob Herring <robh@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] dt-bindings: usb: microchip,usb2514: Fix reference
- USB device schema
-Message-ID: <20240814133356.GA2292842-robh@kernel.org>
-References: <20240814065833.36372-1-alexander.stein@ew.tq-group.com>
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: usb: microchip,usb2514: add support for
+ port vbus-supply
+Message-ID: <20240814134103.esnt6niyu36adtgp@pengutronix.de>
+References: <20240807-b4-v6-10-topic-usb-onboard-dev-v1-0-f33ce21353c9@pengutronix.de>
+ <20240807-b4-v6-10-topic-usb-onboard-dev-v1-2-f33ce21353c9@pengutronix.de>
+ <20240813185752.GA1423091-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,13 +69,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240814065833.36372-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20240813185752.GA1423091-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Wed, Aug 14, 2024 at 08:58:32AM +0200, Alexander Stein wrote:
-> An USB hub is not a HCD, but an USB device. Fix the referenced schema
-> accordingly. Adjust example to keep it aligned to other schemas.
+Hi Rob,
+
+On 24-08-13, Rob Herring wrote:
+> On Wed, Aug 07, 2024 at 04:36:52PM +0200, Marco Felsch wrote:
+> > Some PCB designs don't connect the USB hub port power control GPIO and
+> > instead make use of an host controllable regulator. Add support for this
+> > use-case by introducing an portX-vbus-supply property.
+> > 
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  Documentation/devicetree/bindings/usb/microchip,usb2514.yaml | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+> > index 783c27591e56..51d02c4b8f2d 100644
+> > --- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+> > @@ -35,6 +35,13 @@ required:
+> >    - compatible
+> >    - reg
+> >  
+> > +patternProperties:
+> > +  "^port[1-7]-vbus-supply$"
+> > +    type: object
+> > +    description:
+> > +      Regulator controlling the USB VBUS on portX. Only required if the host
+> > +      controls the portX VBUS.
 > 
-> Fixes: bfbf2e4b77e27 ("dt-bindings: usb: Document the Microchip USB2514 hub")
+> This is completely external to the Microchip part, right?
+> 
+> I think each port node should have a 'vbus-supply' property instead.
 
-checkpatch.pl complains the hash is 13 chars rather than 12.
+This was my first approach but the problem is that we currently don't
+support such use-case:
+
+	parent-node {
+		/* Parent controlling the supply of the child node */
+
+		child-node {
+			vbus-supply = <&reg>;
+		};
+	};
+
+at least I didn't found such use-case. I'm happy for pointers if you
+know more :) At the moment *-supply properties and device-nodes are
+bound together:
+	
+	parent-node {
+		vbus-supply = <&reg>;
+	};
+
+Regards,
+  Marco
+
+> 
+> Rob
+> 
 
