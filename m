@@ -1,44 +1,44 @@
-Return-Path: <linux-usb+bounces-13500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCCA0952A44
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 10:00:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A60B8952A83
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 10:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B5C51C20FAB
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 08:00:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B8C3283141
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 08:31:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C03DC18CBE1;
-	Thu, 15 Aug 2024 07:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840A519F482;
+	Thu, 15 Aug 2024 08:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="s3B6z3IO"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N+KNAyA4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C901EB31;
-	Thu, 15 Aug 2024 07:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A66219E7C8;
+	Thu, 15 Aug 2024 08:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723708789; cv=none; b=pR8FLvITRI8mqcTpE/AmL1HzMf+QEnnszkGCfizpjEPB/2rqbOEP0eZ8bYCLltwwMhHL0IXf9xgAYzeYKHZJ2hCAA9PhWQ5pVnKGBl7/5HgJ7unnOxjnuhUOcHE01/DqypwjjSMERcA68o06FV8qgCONPJUHRssQKP8LTLxMfv0=
+	t=1723708832; cv=none; b=uNYlmWUXFcUVC0GXNrdvLLC2VNJUrZFo2emC+9acAKp2yQgy0cRKPGUB0UcvfpCCPoWAwBCMR/dghjEC6m0Oe+AL/Z1520aApq6r5BM9Abdkmgp/eCD6xOhfDr5iySJ+HKUmP52F0CHCDt60/WQxjgQrTxDwvW4Lr2RU6p+g/MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723708789; c=relaxed/simple;
-	bh=Zod0gbsi9YzsV+5+kT02BUtMJKBboJ3kJnWsCc2wn3g=;
+	s=arc-20240116; t=1723708832; c=relaxed/simple;
+	bh=DQJzm3EzhbhaybFUp7o+vMcVN/96TcrgKrTc4d6ffMU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XuiNrlOtegGZgCanGz0r95uCfz8fJdwzOF23sKHEsfoyyS0VRBsOblLAKOD31+QsBbjGVaX5h0PkD4VI9BSosV9TLvfmEnPCDIsF6rGULBTFYZCMhyugFDlZc/RCa4DxRz3h396/Y5Q/TwxdWQGDUKY6C3gjc6CHZh8Qs724rU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=s3B6z3IO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A74A6C32786;
-	Thu, 15 Aug 2024 07:59:48 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=g6rHJIQVMa4qQq7rbNavcBOVJokG7KQa1y5BwsQwqkIJcUX6kpDD7YqL/Qlpchk9gRmkqmmTci8PDy6JPoU/QbpmywWcc86e5f5C4mQ3Mk0ZwXnq4y2/ylYMXBNBcTy57zRnIoSY8kNsa441nEfW3ePWDqyehqEFjOC/4mfirLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N+KNAyA4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B05FAC4AF09;
+	Thu, 15 Aug 2024 08:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1723708789;
-	bh=Zod0gbsi9YzsV+5+kT02BUtMJKBboJ3kJnWsCc2wn3g=;
+	s=korg; t=1723708831;
+	bh=DQJzm3EzhbhaybFUp7o+vMcVN/96TcrgKrTc4d6ffMU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s3B6z3IOyBjkUzRYQ6V2qwyhaKEBSs1nUDqThOEasMyXrkFHKxE2hArjmUBhSzMpc
-	 O2/tF6VjbgkU9lIXCbx2Brtq1Wwx3xJBzNE4jk48nHYEOYbg5g7cBZamndgALMgMjn
-	 qKdujhaOfOsU0jIVtE0zC+uyfNu0bbs7o/RJof+0=
-Date: Thu, 15 Aug 2024 09:59:45 +0200
+	b=N+KNAyA4rxZOaW1YZVQQXEydEEIf0zOwT63OIt3zb1e2K7CZNZ3qbCsLuNB9fn0BH
+	 SuBxrQe6VouB1vblnjjzCklxyEL7rebm328FrtVcA5oEt8jwMR/Se8gBUOYpc1HHwl
+	 CYUi/+Our8myjeugTzRkLELq2D/Eile15/YvSLsQ=
+Date: Thu, 15 Aug 2024 10:00:27 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Abhishek Tamboli <abhishektamboli9@gmail.com>
 Cc: dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
@@ -48,7 +48,7 @@ Cc: dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] usb: gadget: uvc: Fix ERR_PTR dereference in
  uvc_v4l2.c
-Message-ID: <2024081536-unfrozen-childless-9139@gregkh>
+Message-ID: <2024081508-okay-underpaid-5029@gregkh>
 References: <20240815071416.585559-1-abhishektamboli9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -115,6 +115,9 @@ On Thu, Aug 15, 2024 at 12:44:16PM +0530, Abhishek Tamboli wrote:
 > +		fmtdesc = to_uvc_format(uformat);
 > +		if (IS_ERR(fmtdesc))
 > +			return -EINVAL;
+
+Why not return the error given to you?
+
 > +		fmt->fmt.pix.pixelformat = fmtdesc->fcc;
 >  	}
 >  	fmt->fmt.pix.field = V4L2_FIELD_NONE;
@@ -125,42 +128,10 @@ On Thu, Aug 15, 2024 at 12:44:16PM +0530, Abhishek Tamboli wrote:
 >  	fmtdesc = to_uvc_format(uformat);
 > +	if (IS_ERR(fmtdesc))
 > +		return -EINVAL;
-> +
->  	f->pixelformat = fmtdesc->fcc;
-> 
->  	return 0;
-> --
-> 2.34.1
-> 
-> 
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Same here.
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
 
