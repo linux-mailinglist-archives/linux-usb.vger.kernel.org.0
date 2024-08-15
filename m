@@ -1,163 +1,201 @@
-Return-Path: <linux-usb+bounces-13512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13513-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DA30952CAC
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 12:45:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97977952D43
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 13:13:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69AD281C05
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 10:45:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD4BE1C2289A
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 11:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4BD1D0DD3;
-	Thu, 15 Aug 2024 10:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F038A1AC8B0;
+	Thu, 15 Aug 2024 11:13:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBBU+GYY"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="SdkgwD72"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9421BE22B;
-	Thu, 15 Aug 2024 10:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CCC7DA63
+	for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 11:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723717437; cv=none; b=Fi2v38kvD9Y3CPwiPGXj8ugaoQZuTTLxx0UfCdgCHwD5Xjl+A47QgDg0Fkeg2/m0VLaum/37/W1OAA/wY67XviFLTNbHKyWUchv0/4DkeLgez3PzLPcj3JsyXCtJf+4F3Ag32CWeWBIEU58yBPbqOVRM8Zwwcmd5CWuDniOe8vw=
+	t=1723720398; cv=none; b=QxNAdpwpQ9cEFjksclcwXaE8VNr9ClXYPmRoweayJ7ovC/Y1cag964x/RhYD7C3ZNk6t7XYF0TLQ46tRuZhHOAWN1z3VH4Yrm29PT6bvqGrbJP+z7QButwep3REumwd86CLzDDI1ixOCf5Cl4da8ItBPtPr0JlL+fLiaz2NGCHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723717437; c=relaxed/simple;
-	bh=vaO2bQL+x+qVSEjpB5J2V0P2pQYy5iaElBnUbnLPXko=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PINHV6+Uh4A3JQUhWCjrXko4rkxgyG/DukAaSV1AjwUYawbCARSJ0YwihMdC8d8ismON2UWWaE7NwwooCZrsoS5aNIQnjpLaJEDT+ZEulB6gAYNMTDveGJYAzibcmKrdAbvcF2L4uX2CU6y1UNgaeoiG/BrswWeoOZ4xft7z01I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBBU+GYY; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1fd70ba6a15so6766265ad.0;
-        Thu, 15 Aug 2024 03:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723717435; x=1724322235; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iq7fbg1eOsvG0ItPF//0IwrkFyZmuk5NQdbvO/TCh44=;
-        b=hBBU+GYYPb1UcBQnA2PGbFiCwLvijoRE4eCGcEZ2t6iHvE+EvHykoF28+b1LCVP1SI
-         PVOxx+FG97pga1syBDNyGEPSKdETq/u9KwKSA0msd8hUHyxzBEziwYaCPdq9AX/ivNC9
-         fOC16nKysEXFtiE6Vee3hzTqbzi8kmKh0gqMTdOnhHZRCHoFmo7TQg3ya3tt0toTpCoU
-         YcNJJVd9uOixIcxv19d0fFRQUEePKAccNHcoJl9mWZrTx7UXcyo1YNjdxHjMCdsH0ocm
-         YPN0apUaQyS5kcuwlFTxHZrVQy4qV3z+5/f2QwzhLkvBD4qSrUAPUc1jucGHFtILADEn
-         o3Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723717435; x=1724322235;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iq7fbg1eOsvG0ItPF//0IwrkFyZmuk5NQdbvO/TCh44=;
-        b=h/4dNderS3vYHZtb0uSlRdz6QAbqCc+gQtDQm8PvY8i1KSgoBDLSgsXpsBF6MzqVGP
-         kAL2lOEaMlNRkd1MwuNaK8N0l1QzlRcmocIV4rzi0r6C/bH+W4/strNz3x80uExfcTcV
-         fw8lmZ5IgHQbAP7j1e/Ci6iMsYioavlGl/tZQSJ/8XRdnwIiXtShHWkiqk0xbwPm+FLc
-         3n1Vup/3tJrt9Rb7h1aGm0IkGffTS/h7ozV3zbvpCAYpDgoezmVoDgRT/l9hspsJzmxR
-         jCeVVGKOWPMkZM+9tyVq2BSHmLIiKG6DkT2IJU9RFLvRmhAIAgZY1hNn2/Eo+/nWo1Yu
-         LEyw==
-X-Forwarded-Encrypted: i=1; AJvYcCUrWxZu+XROX6efrdVkE1AD3UXv9L8k8R0TRDjIK1AjJ783ooqJAfGxvztHVB0Vdi9gwvqzGXD2lCcM+kCGVmYHN6A48auMNWz3C8sKQck4XYnfBtnF1r33VdCcBBkoh6VJAPlACD2J
-X-Gm-Message-State: AOJu0Yy3WLoI1KN/QB0QOD8LfdcjNVyNm99vPv3gFF5IOsCL6NE3pSo2
-	LpiIEYMJ7SJvI+zeAA3rIRTAgHNP1vIFpqUHXpA92ObaJ4lL4UbZ
-X-Google-Smtp-Source: AGHT+IF65Vk0UJTrOg0O0JsLoJ7hNz2P7gEInAhGTSB5ssnKOUPkBDzbHJf6OrSiEYHxKyNqi53Ylw==
-X-Received: by 2002:a17:902:f68b:b0:201:f6e6:c7cf with SMTP id d9443c01a7336-201f6e6d26bmr10889685ad.45.1723717435098;
-        Thu, 15 Aug 2024 03:23:55 -0700 (PDT)
-Received: from embed-PC.. ([106.222.235.192])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f038b303sm7892025ad.192.2024.08.15.03.23.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2024 03:23:54 -0700 (PDT)
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: dan.scally@ideasonboard.com,
-	laurent.pinchart@ideasonboard.com
-Cc: gregkh@linuxfoundation.org,
-	dan.carpenter@linaro.org,
-	linux-usb@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
-Date: Thu, 15 Aug 2024 15:52:02 +0530
-Message-Id: <20240815102202.594812-1-abhishektamboli9@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1723720398; c=relaxed/simple;
+	bh=mPkoqERZHJFYnQt0rUvmWi2CCBxzatnp4aFeT34szJE=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HggQ+TytOmIXucezEcAVN+tkmu/mcbj1C0kQ0o+Ysc3fvkq5SBnikDPH/Klf0QElU3YP54IOkR95g/1tR5S6GWLi4tX95VbhQGaiZF7D+1a6pmAR8IiPM25mmV/IInSITHm5NaX+gxbDfM6Ocjq2dSJSn22PdSMLVrwuYvwqxpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=SdkgwD72; arc=none smtp.client-ip=185.70.43.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1723720393; x=1723979593;
+	bh=FsbMCg+dDDJxYSgu2kRGR7XQ/jxNE9sgaAaItpQM44M=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=SdkgwD72NSYGSh3KKNb8de13CJN8mYPjAQncbesPa5ewV3xw+VV6Z33g1c23d9GZ4
+	 PyTBqUBNegXyEsP6AIKr6Wvf05Rm3CWAp3bdm96fxmR1o9S5TuljNNpH0e0zNkF5Hy
+	 K//qSpieHd2r7V4spJJSFpGqmK2+ZfgV297wbApGALQIBC29V/vDvbyVoMgD3H9+Ow
+	 ktUteMbHzmd5t8Ohkb2v0rU4gXaeXjJSSBcn4qdakN0kzeqJ5vW+iibbYOJOgI7JTU
+	 yS+AgvHuUWYWnfBucb5Y9Aw0CFIJpZ94TGqZxM0NnKz4/t0u0U2ZQ3WuYGo1NW7JMS
+	 GR1k+Y5BodyTg==
+Date: Thu, 15 Aug 2024 11:13:11 +0000
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Masanori Ogino <omasanori@proton.me>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, Masanori Ogino <mogino@acm.org>
+Subject: [PATCH] Documentation: msm-hsusb.txt: remove
+Message-ID: <20240815111107.10561-1-omasanori@proton.me>
+Feedback-ID: 82490182:user:proton
+X-Pm-Message-ID: 6e83495661d2c5360ca705ee6c6970bb52f61e47
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
-and uvc_v4l2_enum_format().
+From: Masanori Ogino <mogino@acm.org>
 
-Fix the following smatch errors:
+Commit a170a1e9ccc5 ("usb: phy: remove phy-msm-usb.c") removed the
+device driver but left the corresponding documentation, delete it.
 
-drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
-error: 'fmtdesc' dereferencing possible ERR_PTR()
-
-drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
-error: 'fmtdesc' dereferencing possible ERR_PTR()
-
-Also, fix similar issue in uvc_v4l2_try_format() for potential
-dereferencing of ERR_PTR().
-
-Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
+Signed-off-by: Masanori Ogino <mogino@acm.org>
 ---
-Changes in v3:
-- Return the error code using PTR_ERR() in uvc_v4l2_try_format()
-and uvc_v4l2_enum_format() instead of directly returning -EINVAL.
+ .../devicetree/bindings/usb/msm-hsusb.txt     | 110 ------------------
+ 1 file changed, 110 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/msm-hsusb.txt
 
-Changes in v2:
-- Add check for dereferencing of ERR_PTR() in uvc_v4l2_try_format().
+diff --git a/Documentation/devicetree/bindings/usb/msm-hsusb.txt b/Document=
+ation/devicetree/bindings/usb/msm-hsusb.txt
+deleted file mode 100644
+index afc30e98b123..000000000000
+--- a/Documentation/devicetree/bindings/usb/msm-hsusb.txt
++++ /dev/null
+@@ -1,110 +0,0 @@
+-MSM SoC HSUSB controllers
+-
+-EHCI
+-
+-Required properties:
+-- compatible:=09Should contain "qcom,ehci-host"
+-- regs:=09=09=09offset and length of the register set in the memory map
+-- usb-phy:=09=09phandle for the PHY device
+-
+-Example EHCI controller device node:
+-
+-=09ehci: ehci@f9a55000 {
+-=09=09compatible =3D "qcom,ehci-host";
+-=09=09reg =3D <0xf9a55000 0x400>;
+-=09=09usb-phy =3D <&usb_otg>;
+-=09};
+-
+-USB PHY with optional OTG:
+-
+-Required properties:
+-- compatible:   Should contain:
+-  "qcom,usb-otg-ci" for chipsets with ChipIdea 45nm PHY
+-  "qcom,usb-otg-snps" for chipsets with Synopsys 28nm PHY
+-
+-- regs:         Offset and length of the register set in the memory map
+-- interrupts:   interrupt-specifier for the OTG interrupt.
+-
+-- clocks:       A list of phandle + clock-specifier pairs for the
+-                clocks listed in clock-names
+-- clock-names:  Should contain the following:
+-  "phy"         USB PHY reference clock
+-  "core"        Protocol engine clock
+-  "iface"       Interface bus clock
+-  "alt_core"    Protocol engine clock for targets with asynchronous
+-                reset methodology. (optional)
+-
+-- vdccx-supply: phandle to the regulator for the vdd supply for
+-                digital circuit operation.
+-- v1p8-supply:  phandle to the regulator for the 1.8V supply
+-- v3p3-supply:  phandle to the regulator for the 3.3V supply
+-
+-- resets:       A list of phandle + reset-specifier pairs for the
+-                resets listed in reset-names
+-- reset-names:  Should contain the following:
+-  "phy"         USB PHY controller reset
+-  "link"        USB LINK controller reset
+-
+-- qcom,otg-control: OTG control (VBUS and ID notifications) can be one of
+-                1 - PHY control
+-                2 - PMIC control
+-
+-Optional properties:
+-- dr_mode:      One of "host", "peripheral" or "otg". Defaults to "otg"
+-
+-- switch-gpio:  A phandle + gpio-specifier pair. Some boards are using Dua=
+l
+-                SPDT USB Switch, witch is controlled by GPIO to de/multipl=
+ex
+-                D+/D- USB lines between connectors.
+-
+-- qcom,phy-init-sequence: PHY configuration sequence values. This is relat=
+ed to Device
+-                Mode Eye Diagram test. Start address at which these values=
+ will be
+-                written is ULPI_EXT_VENDOR_SPECIFIC. Value of -1 is reserv=
+ed as
+-                "do not overwrite default value at this address".
+-                For example: qcom,phy-init-sequence =3D < -1 0x63 >;
+-                Will update only value at address ULPI_EXT_VENDOR_SPECIFIC=
+ + 1.
+-
+-- qcom,phy-num: Select number of pyco-phy to use, can be one of
+-                0 - PHY one, default
+-                1 - Second PHY
+-                Some platforms may have configuration to allow USB
+-                controller work with any of the two HSPHYs present.
+-
+-- qcom,vdd-levels: This property must be a list of three integer values
+-                (no, min, max) where each value represents either a voltag=
+e
+-                in microvolts or a value corresponding to voltage corner.
+-
+-- qcom,manual-pullup: If present, vbus is not routed to USB controller/phy
+-                and controller driver therefore enables pull-up explicitly
+-                before starting controller using usbcmd run/stop bit.
+-
+-- extcon:       phandles to external connector devices. First phandle
+-                should point to external connector, which provide "USB"
+-                cable events, the second should point to external connecto=
+r
+-                device, which provide "USB-HOST" cable events. If one of
+-                the external connector devices is not required empty <0>
+-                phandle should be specified.
+-
+-Example HSUSB OTG controller device node:
+-
+-    usb@f9a55000 {
+-        compatible =3D "qcom,usb-otg-snps";
+-        reg =3D <0xf9a55000 0x400>;
+-        interrupts =3D <0 134 0>;
+-        dr_mode =3D "peripheral";
+-
+-        clocks =3D <&gcc GCC_XO_CLK>, <&gcc GCC_USB_HS_SYSTEM_CLK>,
+-                <&gcc GCC_USB_HS_AHB_CLK>;
+-
+-        clock-names =3D "phy", "core", "iface";
+-
+-        vddcx-supply =3D <&pm8841_s2_corner>;
+-        v1p8-supply =3D <&pm8941_l6>;
+-        v3p3-supply =3D <&pm8941_l24>;
+-
+-        resets =3D <&gcc GCC_USB2A_PHY_BCR>, <&gcc GCC_USB_HS_BCR>;
+-        reset-names =3D "phy", "link";
+-
+-        qcom,otg-control =3D <1>;
+-        qcom,phy-init-sequence =3D < -1 0x63 >;
+-        qcom,vdd-levels =3D <1 5 7>;
+-=09};
+--=20
+2.46.0
 
- drivers/usb/gadget/function/uvc_v4l2.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index a024aecb76dc..de1736f834e6 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
- 	list_for_each_entry(format, &uvc->header->formats, entry) {
- 		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
-
-+		if (IS_ERR(fmtdesc))
-+			continue;
-+
- 		if (fmtdesc->fcc == pixelformat) {
- 			uformat = format->fmt;
- 			break;
-@@ -240,6 +243,7 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	struct uvc_video *video = &uvc->video;
- 	struct uvcg_format *uformat;
- 	struct uvcg_frame *uframe;
-+	const struct uvc_format_desc *fmtdesc;
- 	u8 *fcc;
-
- 	if (fmt->type != video->queue.queue.type)
-@@ -277,7 +281,10 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 		fmt->fmt.pix.height = uframe->frame.w_height;
- 		fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
- 		fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
--		fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
-+		fmtdesc = to_uvc_format(uformat);
-+		if (IS_ERR(fmtdesc))
-+			return PTR_ERR(fmtdesc);
-+		fmt->fmt.pix.pixelformat = fmtdesc->fcc;
- 	}
- 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
- 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-@@ -389,6 +396,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- 		return -EINVAL;
-
- 	fmtdesc = to_uvc_format(uformat);
-+	if (IS_ERR(fmtdesc))
-+		return PTR_ERR(fmtdesc);
-+
- 	f->pixelformat = fmtdesc->fcc;
-
- 	return 0;
---
-2.34.1
 
 
