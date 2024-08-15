@@ -1,230 +1,156 @@
-Return-Path: <linux-usb+bounces-13521-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13522-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C35D953706
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 17:22:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1331B953B08
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 21:45:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9655528CEA5
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 15:22:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B07801F2635A
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 19:45:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F297C1AD3EE;
-	Thu, 15 Aug 2024 15:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193AA4AEEA;
+	Thu, 15 Aug 2024 19:45:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="UxZcRqAh"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Zr3D8/nm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2085.outbound.protection.outlook.com [40.107.22.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB361ABEBC;
-	Thu, 15 Aug 2024 15:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723735340; cv=fail; b=nABNgCQnlJoKtfCcr8mE/NEmqbiw6nttK+xBiVYn2qqyOBiCu9DuQK90BiIEWH/jTg0TM70gkQOM/tTIWErT1OgoG1Nn4VSsopAJcg7ZveU2mWCopiarbVpNkc/s0jb8sWBCqrALIf0Ktdc/tqotbzuZwAJG4LEMzse8cpYQRpA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723735340; c=relaxed/simple;
-	bh=DuQvaMJKxVvC1xvSvHgx1N6PIU6W5AT/8j9ua78ESxI=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=glUjvRkiGwaH9YKfF4Imzos1DRlGFs8dm6mZBjEO5tyf68m3qaX6kehI3ISViOiohLwRqIRvluFbsMAWNf8fpFz0L3gSsJ3RQzqOsHNZqpUS75cahQhgIktDJyQuK38dm6p/muqg50cKUpvPXf/elZ5JpG0Y8bherD8A/dPHmec=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=UxZcRqAh; arc=fail smtp.client-ip=40.107.22.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XP7lbE/giuPAaoAN4FSmdvh3d+GFh1jHH7QFCxrkYVffhsQI3Lwvoq0sMAZkepcLTB3qW+7D3roY1W1H7l6hJKNG0pt70/J0zOLuXCe3paxeZqAV2pjGkSE6bx8H7Pr7JjFoDNvO69WQN3iLHY3sldZGYrTBYwrJhHZxpQCqs4VOi1dnSmqNdpF5gIqr4t8QB/j93PeQYrvZqFUqO6NtyZsMZBAszmr2Mm5b3vdJyucZLJ4FOCVa4NpMeW3oM1gdHdtb0l36H44jOJkFq3pvOmEPdKsR3Ntk6/ov/i/J9uxZpkQFlqCKoNkRf1EY+TLVbL/7PzVLX8ikeIlQ7mMaMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tXqUAhCkkFo/6ANdxtPZFi/EmJBngkMm9MtlsoQ5+3s=;
- b=L6l/UHRqOA7BzlwtdlzMap2nu3IUQAHGvYCipvdmsJZXgqKAHnRnEDnHTO822wrrpL8a29sEZGiq5Im7jtcnd24Taux7Yolh3n8mN5WnhcKGKyOxwAEUnEuIJrAAdJH6X6iOo9PkRSf5nU3lkgGz7z5n1HhHgPJDFJdsdpBY4aLzpOftNuQi2Kmsje1zpv5WV/sDAa7t4ZSoicUkPnJBu3m2iIu69e5jvPuYGnhYDqzrbDU7JJoC6I6LBRSUCHaYn1C6U24ipxUG5lfBuxAbckKUE0jNDKmRyrx3/uAJWO4l3/ANFDFzYfc+uBBmvFh/fFBdmdFmSAJzmhjeio5lBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tXqUAhCkkFo/6ANdxtPZFi/EmJBngkMm9MtlsoQ5+3s=;
- b=UxZcRqAhKJu9dFBPwcMdXluVpM7RgTF0rI8XqisGUVJJwEzIn9+RT9d/lts9YazNn129CaCifDNF4CqK+UX229HKoCQ7yUP3TTmEArgoh2BwG96WHdUIHD+H/W8E/9e/I2OcoRObWU1dpB4eg+6nQhZgPzOVauN/mcSfM4cw7NyeBKqbuxVAGGLR0AJrGQAoCLFB85JjdHyoxAFY9CKzGW0aztN4OnyzcvXBOaI7e6aatTVV4S4jvAyC0EZPr5AdmeRdnquMC1NP2D4VsVbbKrhzkGSXdQvm1gvGkry6oSO9vWcwxb5Q9gojh229izHOWOSQK3gSpLOD1HV5HKep5w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by VI0PR04MB10212.eurprd04.prod.outlook.com (2603:10a6:800:243::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.22; Thu, 15 Aug
- 2024 15:22:15 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%3]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
- 15:22:15 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH 1/1] dt-bindings: usb: add layerscape super speed usb support
-Date: Thu, 15 Aug 2024 11:21:58 -0400
-Message-Id: <20240815152159.4177782-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY3PR05CA0055.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::30) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250E56CDCC
+	for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 19:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723751122; cv=none; b=N2JYXW9BBXfxcL3rdjaprr2Hf2PvTlQ3B0poLgDnDsyq3GIjYm0GbJjvl2GHSrihs/L3eCm2490WuQC0IZ/slDQ2g6K9hLxwHC57vISVb7QKO4HVj94g5FBdJcNhrYWE9MXp0ldJ2M9fTUC+RHZfuQsvalaL0MBxpOOSVfCNUks=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723751122; c=relaxed/simple;
+	bh=WgHv8qIghW/XGbfA3/inME7zpGlhOrWspJ9Qn/7HUik=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MlxpS+0DP1Sv/B2PXey8gsqWR2zBrv/rE4ZCnf88Ul9i3tS58JlXl6fyGrLhwUwiIa/pagL/vuhZIxHLpum7ZTIvwqvq1YAG5T5BRTsegspgvuDsE7Jw1d8VPy055VTv7KtPLOtnp3O/bPlMHzFsV11y/a29/ptDeDfBq/4NNOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Zr3D8/nm; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-6bce380eb96so888019a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 12:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1723751120; x=1724355920; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WgHv8qIghW/XGbfA3/inME7zpGlhOrWspJ9Qn/7HUik=;
+        b=Zr3D8/nmrZ+rpW8xdMFjeNv8vFYbPz5r08VvM1V4DAf4wWgSYKzDmcRgKCbwOt6kKp
+         srDmGreauozlU896N4v4VG7Z+rWserOQlQ39uydgSaaJ9ae7uOJtqkMYCJWQcMzF3MjZ
+         /KQCY5SD7SY1aTst6rWCFe1pTcZ+f4xT5qxcs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723751120; x=1724355920;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WgHv8qIghW/XGbfA3/inME7zpGlhOrWspJ9Qn/7HUik=;
+        b=IrB31DwmBPd6YceBv7w4X7UQV60YRl8f+5oKEcEwPBIrhAqx2jQjNoVQgVqbaklVUa
+         fCCod84KrYDVt+dwNfZO54ux63yn2Slb8koSfSVV70kAvnm09FElv5nDPz+TTS0kwEWS
+         eiLLe33ysD2nahctWVaG2W4xq39+D3HzBz8p+0+P2G0Ay/LHs/056/tZw0jF6tvBcBPd
+         +p+BLbf17sJsuUsKip1TWeicp3Z+ogVeWC4DnkqE49pGvWLLFngmQJwzqa9GffDo/P19
+         rpYPZ2W8UU4HnVUCKiMbYIL0Y1oSx8ue8ncA8wSE6dBdWUANnJBeeJBE0uGJP+K08VX3
+         K3xA==
+X-Forwarded-Encrypted: i=1; AJvYcCWT7zppUm/z01/bdo7BiDWHlGAuet++fe74F2JwETP3ZkUSDL85Gtwq7KINJItMnDckF/UmVGIWzWxqxWtU/+z3ax5QNWJ++2iZ
+X-Gm-Message-State: AOJu0YzEnkRH9Hq5MuqNMZ0MZyIcydG52M4Bg0nZpi5QYYMrDpiiLiy5
+	FXg7elRN2Qv9hqCL0jDWikuY0IAnixxGzzdMIZlrWrVjj3fIQLsx4wlhsgv2eMVjrWDGMS8ucLo
+	=
+X-Google-Smtp-Source: AGHT+IGnWAdlXDtKT8Hde22AhyCWe0/jPFBQFMdTeG76sKjVn3SCJLmOqAMgt+wT19Id4BuDUGz9vg==
+X-Received: by 2002:a05:6a20:e68d:b0:1c3:ff89:1fc6 with SMTP id adf61e73a8af0-1c9050586f7mr761584637.53.1723751119802;
+        Thu, 15 Aug 2024 12:45:19 -0700 (PDT)
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com. [209.85.214.180])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127add6898sm1349840b3a.21.2024.08.15.12.45.19
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Aug 2024 12:45:19 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-201fba05363so5748585ad.3
+        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 12:45:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU7zKt36inZh6MZJQopy6Ykp7SIsefJCyZsoUC+e/ZOrmub615sTccYMKTSjVeV5fGn6ccgfF8iVNGSrUSPadHdzCZi86T9pYBK
+X-Received: by 2002:a05:6214:3186:b0:6bf:66e6:4754 with SMTP id
+ 6a1803df08f44-6bf7ce7c3efmr5290586d6.48.1723750663162; Thu, 15 Aug 2024
+ 12:37:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI0PR04MB10212:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95ab00d0-63de-427d-605d-08dcbd3e0b1f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?SLt/sTSXh64s2mZwMyjKR5pEFDkPsw1wN6ymOfYBIRk7PFayIoVnWW15BfQd?=
- =?us-ascii?Q?3/xcbXmAcExuHfpcfw8S6cuasFkEfLpOn6U+R12peTd6o8rogw3bR3IWLh8H?=
- =?us-ascii?Q?NtykbsmcGf9cLPmao51kmYpoOpM2pImaWMnpaUQcWteQuGaewdciy0TruDgS?=
- =?us-ascii?Q?zCBpcmljcai3NmSvWzkFN1D5Pq86pRm2l+V547JadVSVxn4T4dpRP7oUNk9a?=
- =?us-ascii?Q?kPsTPauCCA7/LOuxxna/yBSBSBOa6WwaUblvC28kOiHG/hZ5XEh0Y+yCeAAe?=
- =?us-ascii?Q?EZQH/qfNHBaBablZLxGdq73VDVknWF4enEw114PUs3+AQCPBl9WunvMKwXNz?=
- =?us-ascii?Q?P8Eq7aYTnROkQghO84Fu5+mI/lQcR0alHkTXy0dDVvG1zNUFGAKa2SHduAd3?=
- =?us-ascii?Q?lfv70LuoJ2w1hAwIYQr65HmsIVh0HckDYmWWZNjvugDQyDrNdKaHE+i7fCG6?=
- =?us-ascii?Q?hXZVIbENgXXiciMs/wTZTi+fQwjTlyKbdoMxVBtmNfJLh5KgcHU8Gx3LKWnn?=
- =?us-ascii?Q?EJI3LUoDNcKTTd/BRMxiRTKDeS4eR+OM5zDw8Oy89h/zbxf4uCpwhRWpHxRJ?=
- =?us-ascii?Q?i6FAv4MTgfuhkR4Zofp2GHhK+9Q4ySeHe5V9Dgl/QKps1Dfl84lgWeyaAKSz?=
- =?us-ascii?Q?QeTgGjENRpFpQSXp0jmjQmH0seia3mArj4BUNfjRMeDBSRWtetdBki/u0kwv?=
- =?us-ascii?Q?6zJrVM8/sRazec/3tpDujgSkdoVAfI9e1au1gLEy0D/22AfbfsOreCNSiaOF?=
- =?us-ascii?Q?6dpR79BX/1N/OaxrwOwcNOITqzNVRoxBdhjSPd7izEPYiwM0hDZ5Lt3pW9Hv?=
- =?us-ascii?Q?+34uACt4CvjbeBtkc61CXw3gskpj+1JFtbSBw2+ZraB2JUt1k1qPeEIDGXkm?=
- =?us-ascii?Q?lxRqWmCt2JztQqqfQMTc4hIz0BQnExbap4nvw/4ih7VHYX2GxMf0pACCR7IM?=
- =?us-ascii?Q?sHqdW3yXw73h6v/f8UupJOc3O5oD2RpHwDPGKSYiyvZwRWPSC5tF7/dl6u+7?=
- =?us-ascii?Q?JatRQPx6rFRFuQ2spwkiwMnLegakrSKekWkEvVUIJmhvyI1TEeTbVomNNSdw?=
- =?us-ascii?Q?l6dAaIRmq8IMmSEj6zmCWeM8Dh2D4ccXrDxohqkIbbdgd2iGI0K4jeBPlhRh?=
- =?us-ascii?Q?P4FWjmxCPareFvA6TGIjbzQd9q3Oj45i6s24G0wpYCJPaIvnw5r5x/SEKLIt?=
- =?us-ascii?Q?zPWiAD9xrbML3+n+3mLXes/IE+UzlmjzyeVw3AcT33je28O1NAIPohVb+3HV?=
- =?us-ascii?Q?jlfbNlg3h7Garm19yhLF+7sSfM/8+u1QzakiuLxeQ7rBKmEXkyH3Kxf70IiG?=
- =?us-ascii?Q?Dpm3Y5uArN1vwnMNbpnM5pIYD9LYGc4JQxL7V909MbQePJbtzSkWksYR4P7j?=
- =?us-ascii?Q?vUh9n0I=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?iXLkVw3fGKEAIW5w9EFsgKD5nxIHqj7uVGCkUjbSuQ+wK7WY4TvnCI/iQl0T?=
- =?us-ascii?Q?xuIgisfgDq7InubaN7Tl9FND8/XM1oBzi0vk34jSrZ4Q+4R3pvFTlQZifB7t?=
- =?us-ascii?Q?Y/8PVYBUk5dv7Yk9InnxIj5nSkJj3ISiKm1upNlJopeUwci+KjnyyAKCWM+P?=
- =?us-ascii?Q?bs51myTdBBHW6fgWjtlvICY+xksKgraLM/XTJNZfTbtba93RSs5DWm3QoRaX?=
- =?us-ascii?Q?Sgy1W4Qz3GwAp9wU7Nm5rithcWnSnGPEBUzYXJzrthMv2ATDhDEICatpZlZk?=
- =?us-ascii?Q?2YIW/N1GB7sjPBFBNVu2t4tQ/Sg14MPmTFWgflpjGs73gbwEzeGQ8n78brJO?=
- =?us-ascii?Q?AqLLLQTsS2aZj3yO7mF1SdmIQdOMhkjTaKgnANvhx5PbYezZy0zLhNw2iw+d?=
- =?us-ascii?Q?cO+kfvOdrip3hmw1O8cnNQrFkkG60xIibfXB2Mx/rxri4shS5MyljdA0goQG?=
- =?us-ascii?Q?sRypyAXMgp2bUnt9fdkm4eRBESHbf9ciR99upja8z/bgNmQw/GjGZXQ1qyWa?=
- =?us-ascii?Q?g0uCmtaqYVLwOUAAziYPfcZ4hLn0n3+esKogJO5Vh7iMPe3j+t9KNZOTO7Ae?=
- =?us-ascii?Q?+qqquVGTKvOya9W0nhk5b5dfCFsSoJFzMMZIrCD2DnDY2GfG/uyN77OeVT1c?=
- =?us-ascii?Q?MX4uBnT2CGDyKGIORgq+l166+u5Q17eat47hUqdsYbCMB0XomCw/F6Lb8Kps?=
- =?us-ascii?Q?Hc/1PLQwV7V3NbiQ5O7HLnqmWcg1CbRo56JTDCnNNWUK+93ls8Uincxl1Bd3?=
- =?us-ascii?Q?ok2qvB0VLxwrhxLLhKddoz0UVfT1kJHxlPsWtYO0ckBVVaWcSiV4AUHpN4T8?=
- =?us-ascii?Q?GmcBU2gawDUkAYYLj+Ap+MVffSxkHzL/QE8AVCZMXpWZColzC22RNLvmtpEZ?=
- =?us-ascii?Q?qtY6kVEeRp/iKvJo+Gm09mDECaFncJzoadk7JENV+Oh6bEoDLNp63Ozda6Bu?=
- =?us-ascii?Q?JcKhrHmn5cuPWYHrkYGJNReP+MEB9NRHYUTRBejvmPKARa7hS7b1X85f9jnk?=
- =?us-ascii?Q?QrZIH9K9EP28mMsmfSJ4Wez+HCcZT7LwZTeV+q5LyaacBupHQ1GA4KebhmHf?=
- =?us-ascii?Q?VksVdDMNweG8q5lYK651reOxCYKoANY/fBYn7ZXkWeqA+BUtxxdASt0+Qg4R?=
- =?us-ascii?Q?R0ha3GbmXdSallOAtS1R8DDw2vGHGuYZbl07lp9yR/TX1yRvnZvUhHS8MUGd?=
- =?us-ascii?Q?ZOXlUev9eZ5fE6dRhIIyLcKzKUdzIcHD092PnaE3QL3miNZJEUgvI6v5Wb2K?=
- =?us-ascii?Q?ygIGqb7p1tkEjXK2cTsxDk0u8D2Yr0vqoT2WOOA6nsYE/qQqEH71HzNAt0mW?=
- =?us-ascii?Q?u5OyBOc1QWprnXg/Vl4r/rqfpiS1BPyU9DcmgWLzs7asE0iKeLHOWL5TZ1QU?=
- =?us-ascii?Q?a/Nx6p8ibo+8gUxUqJnZQ8RWvwU7xZ+RHS4qOZqOJUSJ2dhF5XHauiCcbFnP?=
- =?us-ascii?Q?MB4uElMLugXFH62ZhbOq8Om9T9mLp2vTgqOEz9OUXXUHZD5q6rRDU/wMohRH?=
- =?us-ascii?Q?nKvxB5dhO1yDkSqI7gtl/8yr8Un/rUy3+fp43k9BCZjdp73g3CeajtqvBlL0?=
- =?us-ascii?Q?H7L8UsfONqrJhVzd4h/q03ACJ7fcKFwhjVL1xpVy?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95ab00d0-63de-427d-605d-08dcbd3e0b1f
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 15:22:15.3294
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vD1qkLMtE//UMrfHkb6rnIHBlprmeIJ5IQ8JdI5yDUAKTW5/016ISM3SY1s67zviSRcfPLRbNseur+Au5F9VIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10212
+References: <20240728114200.75559-1-wahrenst@gmx.net> <20240728130029.78279-1-wahrenst@gmx.net>
+ <20240728130029.78279-6-wahrenst@gmx.net> <65de7db8-4f81-4c31-be8d-3a03c9aee989@gmx.net>
+ <CAD=FV=W7sdi1+SHfhY6RrjK32r8iAGe4w+O_u5Sp982vgBU6EQ@mail.gmail.com>
+ <CAPDyKFpj0C1Bifmx=4zH3r8YooOrNfn_iDB+1sfRb0gTaKnT2Q@mail.gmail.com> <51b63ea5-808e-41e4-92a9-50e20afd155b@gmx.net>
+In-Reply-To: <51b63ea5-808e-41e4-92a9-50e20afd155b@gmx.net>
+From: Doug Anderson <dianders@chromium.org>
+Date: Thu, 15 Aug 2024 12:37:31 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XHnKJT4ubmV8EPRYi-qPFH21tNFzWEWMezY2PGEFEKrw@mail.gmail.com>
+Message-ID: <CAD=FV=XHnKJT4ubmV8EPRYi-qPFH21tNFzWEWMezY2PGEFEKrw@mail.gmail.com>
+Subject: Re: [PATCH V2 14/16] WIP: usb: dwc2: Implement recovery after PM
+ domain off
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	Minas Harutyunyan <hminas@synopsys.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>, 
+	Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
+	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>, Peter Robinson <pbrobinson@gmail.com>, 
+	dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com, 
+	linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kernel-list@raspberrypi.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Maxime Ripard <mripard@kernel.org>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Jiri Slaby <jirislaby@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add missed binding doc for layerscape dwc3 usb controller.
+Hi,
 
-Fix below warning:
-arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb: /soc/usb@3100000:
-	failed to match any schema with compatible: ['fsl,ls1028a-dwc3', 'snps,dwc3']
+On Wed, Aug 14, 2024 at 2:48=E2=80=AFPM Stefan Wahren <wahrenst@gmx.net> wr=
+ote:
+>
+> >> You're saying that your
+> >> registers get saved _unless_ the power domain gets turned off, right?
+> On BCM2835 there is no need to store the registers because there is no
+> power management supported by USB core except of the power domain. So
+> DWC2 don't expect a register loss.
+> >> ...and the device core keeps power domains on for suspended devices if
+> >> they are wakeup sources, which makes sense.
+> >>
+> >> So with that, your patch sounds like a plausible way to do it. I guess
+> >> one other way to do it would be some sort of "canary" approach. You
+> >> could _always_ save registers and then, at resume time, you could
+> >> detect if some "canary" register had reset to its power-on default. If
+> >> you see this then you can assume power was lost and re-init all the
+> >> registers. This could be pretty much any register that you know won't
+> >> be its power on default. In some ways a "canary" approach is uglier
+> >> but it also might be more reliable across more configurations?
+> I don't have enough knowledge about DWC2 and i also don't have the
+> databook to figure out if there is a magic register which could be used
+> for the canary approach. But all these different platforms, host vs
+> gadget role, different low modes let me think the resulting solution
+> would be also fragile and ugly.
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- .../devicetree/bindings/usb/fsl,ls1028a.yaml  | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/fsl,ls1028a.yaml
+I won't admit to having a DWC2 databook. ;-)
 
-diff --git a/Documentation/devicetree/bindings/usb/fsl,ls1028a.yaml b/Documentation/devicetree/bindings/usb/fsl,ls1028a.yaml
-new file mode 100644
-index 0000000000000..a44bdf391887f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/fsl,ls1028a.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/fsl,ls1028a.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale layerscape SuperSpeed DWC3 USB SoC controller
-+
-+maintainers:
-+  - Frank Li <Frank.Li@nxp.com>
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - fsl,ls1028a-dwc3
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - fsl,ls1028a-dwc3
-+      - const: snps,dwc3
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+allOf:
-+  - $ref: snps,dwc3.yaml#
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb@fe800000 {
-+        compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
-+        reg = <0xfe800000 0x100000>;
-+        interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-+    };
--- 
-2.34.1
+...but don't think it's too hard to find a good canary. What about
+"GAHBCFG_GLBL_INTR_EN" ? From a quick glance it looks like the driver
+seems to set that bit during driver startup and then it stays on until
+driver shutdown. The databook that I definitely won't admit to having
+almost certainly says that this register resets to 0 on all hardware
+and it's applicable to both host and device. I think you could say
+that if the register is 0 at resume time that registers must have been
+lost and you can restore them.
 
+I guess if that doesn't work then "GUSBCFG_TOUTCAL" could be used (I
+think that resets to 0 but must be initted to non-0 by the driver).
+
+Yet another register that could probably work as a canary would be
+"GINTMSK". I believe that inits to all 0 (everything is masked) and
+obviously to use the device we've got to unmask _some_ interrupts.
+
+I can look for more, if need be.
+
+-Doug
 
