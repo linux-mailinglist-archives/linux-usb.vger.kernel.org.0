@@ -1,150 +1,129 @@
-Return-Path: <linux-usb+bounces-13514-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13515-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEC17952D88
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 13:32:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD14952EDB
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 15:13:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CC521C2506F
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 11:32:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2826A2858C0
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 13:13:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952211714C4;
-	Thu, 15 Aug 2024 11:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239C819DF9A;
+	Thu, 15 Aug 2024 13:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="L4TRYGFU";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Owek4JWF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y3OumTHi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687E21AC88A;
-	Thu, 15 Aug 2024 11:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294791714A2
+	for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 13:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723721512; cv=none; b=INOPIVr6dsRYTGbpkB0yUhu2JL3DMgWDXFSY0afm91tLGfjx9Ev1sSKdmX1shFApSA+8LZprtsRYgOnOnHuszll0yIYw6+wXbM9gWujvjMdHRFZfTrjY2IkA29BYV4PQbOXkqzRay6h8K8q1br/opzunGyqF2qlNRgjCydDMIU0=
+	t=1723727619; cv=none; b=GonqK9ll3mj0pU2/gUEoMugZfFjIXOOHvx2WefMhV9C1hxDNvp3hMp3QTbnhxLt1H9bBYXXWZ0PsSlmMr0uNBZlUSFd5zw2N0GgCxKByrDtRqWiHbwI6N7hpefBUi2zs5l2elmUGtI2v1hj4B3TJZxUPVTJkJ5wjuX+VgC3P28c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723721512; c=relaxed/simple;
-	bh=uOEvmvvUbvKcClHIfC2V4ruUmucz8oRd24FDQKXeHrI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=V5SmAWuYqWqLmgIVliJRPm/k95g6I/Vxtv3pkdMOoayLzEPbP1rsOFscP6i23uddB8hVJWa2Snv5CTLOYMefG9YAUrRwrPAFkv25dxh8qgvaVcVpe2BbhaXZF3ABlc8JOzqHLx69W6bigocmFmKuXYa+0rd5lTiME03aQWrdKdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=L4TRYGFU; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Owek4JWF reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1723721508; x=1755257508;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ipxO4CjLCNJ0T17K5ElKb2AAs0WxMTRpNsXk8lsFmRo=;
-  b=L4TRYGFUAh/MtaIoFClVPC57yOt78Tutcz8LXvcfW46FJyHmbcTsQ7kM
-   +5yHnZzNHP0vFubmOQ8vsWcWFWq0rprzTX+zjZQ+Gczv5dHlO9hlYic3v
-   /kfJq/hpklqzsGPjlxpEOOoWoUd7g8//PJoTEOvu3aW0RTNhgp520oDvE
-   FMZrfs6+kJZYsUjL9nUuzdB+Li3GRmlnK3OM2hHPsJW/da9v4RXJ4fcKK
-   ORDLnyTGCIe7iS+6hz5zBEO9FTtWb/51p8524G2rqYlOpYLD+nDKUnFUM
-   7Zh+fZQgZH6m9MSga/1OcjmgEjyVGMsAJ2AKsi0FCgb+ASHaP0wqLLBeR
+	s=arc-20240116; t=1723727619; c=relaxed/simple;
+	bh=RF7pxv1/Jo+n9yBNJdQCbrL2EKwdNKXfVcRALJcbqMg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
+	 In-Reply-To:Content-Type; b=Do24UkxU4MWtacE3EMG1Fj9HlKaN5iuz7ZiYDodc2QBfVNjBoAfzZAFbKX4TuV+m7cSgfm79NrcNSUE0g9ndSYsNFe8Ofp1jZG5t7g4e5YeLET/ON4YFcDyqkgXPMhWwPa8dSRZN2zuOC7gUtiWkurxZe6fwb8Iuys83uXxIpD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y3OumTHi; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723727618; x=1755263618;
+  h=message-id:date:mime-version:subject:from:to:references:
+   in-reply-to:content-transfer-encoding;
+  bh=RF7pxv1/Jo+n9yBNJdQCbrL2EKwdNKXfVcRALJcbqMg=;
+  b=Y3OumTHiYvTV6PxiTgZzZZ8un+atF1KYw0pyziu8AzHm+eogh+6nWulH
+   gWJdPMVGM7mY4ws3T0OK5ik++qDykqnST2za2TJKHgQTrKvuGkOt/v5Xv
+   VWOe7vZMzfgX1nHJ1Xz/OnoH7MJy6fel8OTS6zBCgfqW1DiaD4M+tRC68
+   pcfrNyCejMIdWAgU55zC51Y+0mxE25JlnWlbFdZn87TTE2ltEHQQ/gEsH
+   uYByXEq/ulMHH/dh6gbF/TJnmEUV0NOM5SXijp0nm4xMYoFBu5B2Vj7ko
+   CwQ1/YzXZqmrYkmR2EiiVyY3h5P4qA35BpiOrF1xsqSjGwc4AHB+H5AWk
    w==;
-X-CSE-ConnectionGUID: 3M0w8/i5SMaYbleX3oto2A==
-X-CSE-MsgGUID: DWT8JmWgQGCQD8/f7Il2fg==
-X-IronPort-AV: E=Sophos;i="6.10,148,1719871200"; 
-   d="scan'208";a="38423597"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 15 Aug 2024 13:31:39 +0200
-X-CheckPoint: {66BDE71B-5-751552D8-F91D2344}
-X-MAIL-CPID: 5C950045BAB5983D9B9414A56A745C26_4
-X-Control-Analysis: str=0001.0A782F19.66BDE71B.00A7,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6E7AE160A50;
-	Thu, 15 Aug 2024 13:31:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1723721495; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=ipxO4CjLCNJ0T17K5ElKb2AAs0WxMTRpNsXk8lsFmRo=;
-	b=Owek4JWFkDG+oFWcBGXkKxn13h27rAOOcNAFK5p9I13RlZtgYCIyITM2iYIfmEvfI3tFMn
-	yuO6KxmaoHd0SSxXo+r1vyTpbPd8+gQEmr6R0kkowwNVSzSuwrb7WVdcaR0VAvvvgIGP3T
-	+9XQsPgnIcWcONdE/8Fbw/7ccX5lDnefufZWLmvyY7wCNOYpe56ebtM22PqXSs/f3DakuF
-	+8cUun3aQqL0rqiYDkfmMSSdSw/8fEW1X3Y6eFBUxAofxfo84FFY5UWXeHnEKrVKmU1hsS
-	BNVwNa3OetbH6aCSYqTgWmgPDwz2GbyIvIsxtjjletTX1yOFgdZtxMkD14u9jw==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	stable@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] dt-bindings: usb: microchip,usb2514: Fix reference USB device schema
-Date: Thu, 15 Aug 2024 13:31:31 +0200
-Message-Id: <20240815113132.372542-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+X-CSE-ConnectionGUID: 5slO1vffTquoAdTTOW2c3w==
+X-CSE-MsgGUID: iq/w7Jm0RJa6vDsfGh30hQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="33134923"
+X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
+   d="scan'208";a="33134923"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 06:08:31 -0700
+X-CSE-ConnectionGUID: 6lH3zHexQly5+/N7rrMM4Q==
+X-CSE-MsgGUID: NBrc+ywhRa2vceN5TmdDqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
+   d="scan'208";a="59909045"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa007.jf.intel.com with ESMTP; 15 Aug 2024 06:08:29 -0700
+Message-ID: <b481b087-2c47-4168-b33f-3ced69662ee3@linux.intel.com>
+Date: Thu, 15 Aug 2024 16:10:32 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] USB xHCI driver NULL pointer dereference
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: Karel Balej <balejk@matfyz.cz>, linux-usb@vger.kernel.org
+References: <D3CKQQAETH47.1MUO22RTCH2O3@matfyz.cz>
+ <9f3d0886-51cb-4ec4-a060-ed0f52f7e656@linux.intel.com>
+ <bb8ca342-a975-4e87-ae8d-7c0d703a89af@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <bb8ca342-a975-4e87-ae8d-7c0d703a89af@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-An USB hub is not a HCD, but an USB device. Fix the referenced schema
-accordingly.
+On 14.8.2024 16.28, Mathias Nyman wrote:
+> On 13.8.2024 14.49, Mathias Nyman wrote:
+>> On 11.8.2024 1.11, Karel Balej wrote:
+>>> Hello,
+>>>
+>>> my machine crashed twice in the past week, the second time I have been
+>>> able to recover the log output (including the stack trace run through
+>>> scripts/decode_stacktrace.sh) which seems to suggest a bug in the xHCI
+>>> driver:
+>
+>>
+>> You have a unlucky setup here.
+>> This could only happen when a full speed device fails enumeration while connected to a
+>> Pantherpoint xHC.
+>>
+>> Only Pantherpoint xHC (PCI_ID 0x1e31) does bandwidth calculation in software and
+>> calls xhci_reserve_bandwidth(). In this case we unintentionally end up calling it
+>> after a failed  address device attempt when usb core re-inits endpoint 0 before retry.
+>> At this point the xhci side of the device isn't properly allocated or set up so
+>> we hit a NULL pointer dereference.
+>>
+>> I'll look into it more.
+> 
+> The following code should resolve this issue, any chance you could try it out?
 
-Fixes: bfbf2e4b77e2 ("dt-bindings: usb: Document the Microchip USB2514 hub")
-Cc: stable@vger.kernel.org
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-As this USB hub also can contain an USB (ethernet) sub device, I copied
-the subdevice part from usb-hcd.yaml.
+I was able to trigger this myself by forcing XHCI_SW_BW_CHECKING and faking failure on
+address device command:
 
-I had to add 'additionalProperties: true' as well, because I got that warning
-upon dt_binding_check otherwise:
-> Documentation/devicetree/bindings/usb/microchip,usb2514.yaml: 
->   ^.*@[0-9a-f]{1,2}$: Missing additionalProperties/unevaluatedProperties constraint
+[  270.538134] usb 3-6: new full-speed USB device number 3 using xhci_hcd
+[  270.670313] xhci_hcd 0000:00:14.0: Faking a Device not respoinding to setup address
+[  270.886142] usb 3-6: device not accepting address 3, error -71
+[  270.892091] BUG: kernel NULL pointer dereference, address: 0000000000000008
+[  270.899034] #PF: supervisor read access in kernel mode
+[  270.904150] #PF: error_code(0x0000) - not-present page
+[  270.909267] PGD 0 P4D 0
+[  270.911799] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  270.916660] CPU: 3 UID: 0 PID: 301 Comm: kworker/3:2 Tainted: G        W          6.11.0-rc1+ #4291
+[  270.925651] Tainted: [W]=WARN
+[  270.928615] Workqueue: usb_hub_wq hub_event
+[  270.932787] RIP: 0010:xhci_reserve_bandwidth+0x243/0x6d0 [xhci_hcd]
 
-I added a Fixes tag to keep this schema aligned in v6.10 stable tree.
+The codesnippet I suggested did fix the null pointer dereference.
 
-Changes in v2:
-* Do not update the example
-* Adjust comit message accordingly
-* Add Cc for stable
-* Collected Krzysztof's R-b
-* Shorten the SHA1 of the Fixes tag
+I'll turn it into a proper patch
 
- .../devicetree/bindings/usb/microchip,usb2514.yaml       | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-index 245e8c3ce6699..b14e6f37b2987 100644
---- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-+++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Fabio Estevam <festevam@gmail.com>
- 
- allOf:
--  - $ref: usb-hcd.yaml#
-+  - $ref: usb-device.yaml#
- 
- properties:
-   compatible:
-@@ -36,6 +36,13 @@ required:
-   - compatible
-   - reg
- 
-+patternProperties:
-+  "^.*@[0-9a-f]{1,2}$":
-+    description: The hard wired USB devices
-+    type: object
-+    $ref: /schemas/usb/usb-device.yaml
-+    additionalProperties: true
-+
- unevaluatedProperties: false
- 
- examples:
--- 
-2.34.1
+Thanks
+Mathias
 
 
