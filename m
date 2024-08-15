@@ -1,201 +1,150 @@
-Return-Path: <linux-usb+bounces-13513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97977952D43
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 13:13:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEC17952D88
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 13:32:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD4BE1C2289A
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 11:13:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CC521C2506F
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 11:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F038A1AC8B0;
-	Thu, 15 Aug 2024 11:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952211714C4;
+	Thu, 15 Aug 2024 11:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="SdkgwD72"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="L4TRYGFU";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Owek4JWF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CCC7DA63
-	for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 11:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687E21AC88A;
+	Thu, 15 Aug 2024 11:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723720398; cv=none; b=QxNAdpwpQ9cEFjksclcwXaE8VNr9ClXYPmRoweayJ7ovC/Y1cag964x/RhYD7C3ZNk6t7XYF0TLQ46tRuZhHOAWN1z3VH4Yrm29PT6bvqGrbJP+z7QButwep3REumwd86CLzDDI1ixOCf5Cl4da8ItBPtPr0JlL+fLiaz2NGCHk=
+	t=1723721512; cv=none; b=INOPIVr6dsRYTGbpkB0yUhu2JL3DMgWDXFSY0afm91tLGfjx9Ev1sSKdmX1shFApSA+8LZprtsRYgOnOnHuszll0yIYw6+wXbM9gWujvjMdHRFZfTrjY2IkA29BYV4PQbOXkqzRay6h8K8q1br/opzunGyqF2qlNRgjCydDMIU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723720398; c=relaxed/simple;
-	bh=mPkoqERZHJFYnQt0rUvmWi2CCBxzatnp4aFeT34szJE=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HggQ+TytOmIXucezEcAVN+tkmu/mcbj1C0kQ0o+Ysc3fvkq5SBnikDPH/Klf0QElU3YP54IOkR95g/1tR5S6GWLi4tX95VbhQGaiZF7D+1a6pmAR8IiPM25mmV/IInSITHm5NaX+gxbDfM6Ocjq2dSJSn22PdSMLVrwuYvwqxpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=SdkgwD72; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1723720393; x=1723979593;
-	bh=FsbMCg+dDDJxYSgu2kRGR7XQ/jxNE9sgaAaItpQM44M=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=SdkgwD72NSYGSh3KKNb8de13CJN8mYPjAQncbesPa5ewV3xw+VV6Z33g1c23d9GZ4
-	 PyTBqUBNegXyEsP6AIKr6Wvf05Rm3CWAp3bdm96fxmR1o9S5TuljNNpH0e0zNkF5Hy
-	 K//qSpieHd2r7V4spJJSFpGqmK2+ZfgV297wbApGALQIBC29V/vDvbyVoMgD3H9+Ow
-	 ktUteMbHzmd5t8Ohkb2v0rU4gXaeXjJSSBcn4qdakN0kzeqJ5vW+iibbYOJOgI7JTU
-	 yS+AgvHuUWYWnfBucb5Y9Aw0CFIJpZ94TGqZxM0NnKz4/t0u0U2ZQ3WuYGo1NW7JMS
-	 GR1k+Y5BodyTg==
-Date: Thu, 15 Aug 2024 11:13:11 +0000
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From: Masanori Ogino <omasanori@proton.me>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, Masanori Ogino <mogino@acm.org>
-Subject: [PATCH] Documentation: msm-hsusb.txt: remove
-Message-ID: <20240815111107.10561-1-omasanori@proton.me>
-Feedback-ID: 82490182:user:proton
-X-Pm-Message-ID: 6e83495661d2c5360ca705ee6c6970bb52f61e47
+	s=arc-20240116; t=1723721512; c=relaxed/simple;
+	bh=uOEvmvvUbvKcClHIfC2V4ruUmucz8oRd24FDQKXeHrI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=V5SmAWuYqWqLmgIVliJRPm/k95g6I/Vxtv3pkdMOoayLzEPbP1rsOFscP6i23uddB8hVJWa2Snv5CTLOYMefG9YAUrRwrPAFkv25dxh8qgvaVcVpe2BbhaXZF3ABlc8JOzqHLx69W6bigocmFmKuXYa+0rd5lTiME03aQWrdKdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=L4TRYGFU; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Owek4JWF reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1723721508; x=1755257508;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ipxO4CjLCNJ0T17K5ElKb2AAs0WxMTRpNsXk8lsFmRo=;
+  b=L4TRYGFUAh/MtaIoFClVPC57yOt78Tutcz8LXvcfW46FJyHmbcTsQ7kM
+   +5yHnZzNHP0vFubmOQ8vsWcWFWq0rprzTX+zjZQ+Gczv5dHlO9hlYic3v
+   /kfJq/hpklqzsGPjlxpEOOoWoUd7g8//PJoTEOvu3aW0RTNhgp520oDvE
+   FMZrfs6+kJZYsUjL9nUuzdB+Li3GRmlnK3OM2hHPsJW/da9v4RXJ4fcKK
+   ORDLnyTGCIe7iS+6hz5zBEO9FTtWb/51p8524G2rqYlOpYLD+nDKUnFUM
+   7Zh+fZQgZH6m9MSga/1OcjmgEjyVGMsAJ2AKsi0FCgb+ASHaP0wqLLBeR
+   w==;
+X-CSE-ConnectionGUID: 3M0w8/i5SMaYbleX3oto2A==
+X-CSE-MsgGUID: DWT8JmWgQGCQD8/f7Il2fg==
+X-IronPort-AV: E=Sophos;i="6.10,148,1719871200"; 
+   d="scan'208";a="38423597"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 15 Aug 2024 13:31:39 +0200
+X-CheckPoint: {66BDE71B-5-751552D8-F91D2344}
+X-MAIL-CPID: 5C950045BAB5983D9B9414A56A745C26_4
+X-Control-Analysis: str=0001.0A782F19.66BDE71B.00A7,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6E7AE160A50;
+	Thu, 15 Aug 2024 13:31:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1723721495; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=ipxO4CjLCNJ0T17K5ElKb2AAs0WxMTRpNsXk8lsFmRo=;
+	b=Owek4JWFkDG+oFWcBGXkKxn13h27rAOOcNAFK5p9I13RlZtgYCIyITM2iYIfmEvfI3tFMn
+	yuO6KxmaoHd0SSxXo+r1vyTpbPd8+gQEmr6R0kkowwNVSzSuwrb7WVdcaR0VAvvvgIGP3T
+	+9XQsPgnIcWcONdE/8Fbw/7ccX5lDnefufZWLmvyY7wCNOYpe56ebtM22PqXSs/f3DakuF
+	+8cUun3aQqL0rqiYDkfmMSSdSw/8fEW1X3Y6eFBUxAofxfo84FFY5UWXeHnEKrVKmU1hsS
+	BNVwNa3OetbH6aCSYqTgWmgPDwz2GbyIvIsxtjjletTX1yOFgdZtxMkD14u9jw==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	stable@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/1] dt-bindings: usb: microchip,usb2514: Fix reference USB device schema
+Date: Thu, 15 Aug 2024 13:31:31 +0200
+Message-Id: <20240815113132.372542-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-From: Masanori Ogino <mogino@acm.org>
+An USB hub is not a HCD, but an USB device. Fix the referenced schema
+accordingly.
 
-Commit a170a1e9ccc5 ("usb: phy: remove phy-msm-usb.c") removed the
-device driver but left the corresponding documentation, delete it.
-
-Signed-off-by: Masanori Ogino <mogino@acm.org>
+Fixes: bfbf2e4b77e2 ("dt-bindings: usb: Document the Microchip USB2514 hub")
+Cc: stable@vger.kernel.org
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
- .../devicetree/bindings/usb/msm-hsusb.txt     | 110 ------------------
- 1 file changed, 110 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/msm-hsusb.txt
+As this USB hub also can contain an USB (ethernet) sub device, I copied
+the subdevice part from usb-hcd.yaml.
 
-diff --git a/Documentation/devicetree/bindings/usb/msm-hsusb.txt b/Document=
-ation/devicetree/bindings/usb/msm-hsusb.txt
-deleted file mode 100644
-index afc30e98b123..000000000000
---- a/Documentation/devicetree/bindings/usb/msm-hsusb.txt
-+++ /dev/null
-@@ -1,110 +0,0 @@
--MSM SoC HSUSB controllers
--
--EHCI
--
--Required properties:
--- compatible:=09Should contain "qcom,ehci-host"
--- regs:=09=09=09offset and length of the register set in the memory map
--- usb-phy:=09=09phandle for the PHY device
--
--Example EHCI controller device node:
--
--=09ehci: ehci@f9a55000 {
--=09=09compatible =3D "qcom,ehci-host";
--=09=09reg =3D <0xf9a55000 0x400>;
--=09=09usb-phy =3D <&usb_otg>;
--=09};
--
--USB PHY with optional OTG:
--
--Required properties:
--- compatible:   Should contain:
--  "qcom,usb-otg-ci" for chipsets with ChipIdea 45nm PHY
--  "qcom,usb-otg-snps" for chipsets with Synopsys 28nm PHY
--
--- regs:         Offset and length of the register set in the memory map
--- interrupts:   interrupt-specifier for the OTG interrupt.
--
--- clocks:       A list of phandle + clock-specifier pairs for the
--                clocks listed in clock-names
--- clock-names:  Should contain the following:
--  "phy"         USB PHY reference clock
--  "core"        Protocol engine clock
--  "iface"       Interface bus clock
--  "alt_core"    Protocol engine clock for targets with asynchronous
--                reset methodology. (optional)
--
--- vdccx-supply: phandle to the regulator for the vdd supply for
--                digital circuit operation.
--- v1p8-supply:  phandle to the regulator for the 1.8V supply
--- v3p3-supply:  phandle to the regulator for the 3.3V supply
--
--- resets:       A list of phandle + reset-specifier pairs for the
--                resets listed in reset-names
--- reset-names:  Should contain the following:
--  "phy"         USB PHY controller reset
--  "link"        USB LINK controller reset
--
--- qcom,otg-control: OTG control (VBUS and ID notifications) can be one of
--                1 - PHY control
--                2 - PMIC control
--
--Optional properties:
--- dr_mode:      One of "host", "peripheral" or "otg". Defaults to "otg"
--
--- switch-gpio:  A phandle + gpio-specifier pair. Some boards are using Dua=
-l
--                SPDT USB Switch, witch is controlled by GPIO to de/multipl=
-ex
--                D+/D- USB lines between connectors.
--
--- qcom,phy-init-sequence: PHY configuration sequence values. This is relat=
-ed to Device
--                Mode Eye Diagram test. Start address at which these values=
- will be
--                written is ULPI_EXT_VENDOR_SPECIFIC. Value of -1 is reserv=
-ed as
--                "do not overwrite default value at this address".
--                For example: qcom,phy-init-sequence =3D < -1 0x63 >;
--                Will update only value at address ULPI_EXT_VENDOR_SPECIFIC=
- + 1.
--
--- qcom,phy-num: Select number of pyco-phy to use, can be one of
--                0 - PHY one, default
--                1 - Second PHY
--                Some platforms may have configuration to allow USB
--                controller work with any of the two HSPHYs present.
--
--- qcom,vdd-levels: This property must be a list of three integer values
--                (no, min, max) where each value represents either a voltag=
-e
--                in microvolts or a value corresponding to voltage corner.
--
--- qcom,manual-pullup: If present, vbus is not routed to USB controller/phy
--                and controller driver therefore enables pull-up explicitly
--                before starting controller using usbcmd run/stop bit.
--
--- extcon:       phandles to external connector devices. First phandle
--                should point to external connector, which provide "USB"
--                cable events, the second should point to external connecto=
-r
--                device, which provide "USB-HOST" cable events. If one of
--                the external connector devices is not required empty <0>
--                phandle should be specified.
--
--Example HSUSB OTG controller device node:
--
--    usb@f9a55000 {
--        compatible =3D "qcom,usb-otg-snps";
--        reg =3D <0xf9a55000 0x400>;
--        interrupts =3D <0 134 0>;
--        dr_mode =3D "peripheral";
--
--        clocks =3D <&gcc GCC_XO_CLK>, <&gcc GCC_USB_HS_SYSTEM_CLK>,
--                <&gcc GCC_USB_HS_AHB_CLK>;
--
--        clock-names =3D "phy", "core", "iface";
--
--        vddcx-supply =3D <&pm8841_s2_corner>;
--        v1p8-supply =3D <&pm8941_l6>;
--        v3p3-supply =3D <&pm8941_l24>;
--
--        resets =3D <&gcc GCC_USB2A_PHY_BCR>, <&gcc GCC_USB_HS_BCR>;
--        reset-names =3D "phy", "link";
--
--        qcom,otg-control =3D <1>;
--        qcom,phy-init-sequence =3D < -1 0x63 >;
--        qcom,vdd-levels =3D <1 5 7>;
--=09};
---=20
-2.46.0
+I had to add 'additionalProperties: true' as well, because I got that warning
+upon dt_binding_check otherwise:
+> Documentation/devicetree/bindings/usb/microchip,usb2514.yaml: 
+>   ^.*@[0-9a-f]{1,2}$: Missing additionalProperties/unevaluatedProperties constraint
 
+I added a Fixes tag to keep this schema aligned in v6.10 stable tree.
+
+Changes in v2:
+* Do not update the example
+* Adjust comit message accordingly
+* Add Cc for stable
+* Collected Krzysztof's R-b
+* Shorten the SHA1 of the Fixes tag
+
+ .../devicetree/bindings/usb/microchip,usb2514.yaml       | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+index 245e8c3ce6699..b14e6f37b2987 100644
+--- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
++++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Fabio Estevam <festevam@gmail.com>
+ 
+ allOf:
+-  - $ref: usb-hcd.yaml#
++  - $ref: usb-device.yaml#
+ 
+ properties:
+   compatible:
+@@ -36,6 +36,13 @@ required:
+   - compatible
+   - reg
+ 
++patternProperties:
++  "^.*@[0-9a-f]{1,2}$":
++    description: The hard wired USB devices
++    type: object
++    $ref: /schemas/usb/usb-device.yaml
++    additionalProperties: true
++
+ unevaluatedProperties: false
+ 
+ examples:
+-- 
+2.34.1
 
 
