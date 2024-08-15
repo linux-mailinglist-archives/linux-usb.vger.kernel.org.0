@@ -1,157 +1,112 @@
-Return-Path: <linux-usb+bounces-13517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 281349532F3
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 16:12:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8707953640
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 16:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B29FB24471
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 14:12:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 886E5B237C4
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 14:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60B0F1B3756;
-	Thu, 15 Aug 2024 14:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D725B1A01B6;
+	Thu, 15 Aug 2024 14:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TPnBVXbs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a6SDnmaE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD3A1AD9E8;
-	Thu, 15 Aug 2024 14:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8721AC8BE
+	for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 14:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723730960; cv=none; b=NxonH8KO8My749bPgq4v8Q3e+mw9im8r+Y7vwEGuBqz4nOYXvhhTNFdUR7/Uk7QqqudC2z1yUYekiHLMIWIaMQ6V45yvLOO9Aqq7Pl/k2klnJHxhTlAgIYw/+iEV/KwtQpBKtpirKokmB1InEBrwP7t5QjWwPOWgZQwARpnZY5E=
+	t=1723733487; cv=none; b=jVeWOEefC2CtGoMH7Ok8YWjiJMGsNAJ2f5xfXhZHEIPBgtFVcsnhKuOz8ifTSaenCvAcuScBtNQjirrT6qJnEUZgT7BaYctOb0GODSkREV2noqU68qoi+/EA6t907q3XP/H1QTz9ufS3Mbdargm+BEHQjALdDNRJxWaTJB0+tK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723730960; c=relaxed/simple;
-	bh=R//JYXLLg67ii2SoH3h/7/uUd8NJdeUOHDDJ8l2oIIQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lYzLeKSEzkPfbfnZRPyHbtq3P7j3uIN27KwOXxJQ3TSqBh8JQydhiN2nBnegrKbZuC0rAlc3WLtlp5Pd4ixrLYjHCuHJV12yyaYyZQGDrM5KrVCj3LyzOmL0l/KhKF95LnOV0zV9G9wKQnuSXQKlQyfaekDvkksowUjEiLSeJUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TPnBVXbs; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1723733487; c=relaxed/simple;
+	bh=wOJ4fdL1yxQ/hsrG00nhDaep8bVQ9Oyj88x+6CUjMdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iNl2nOlOUNgGasiX8WIM43Zk8dBh9+2r5zK6MrsFW0WVUBZjgefBfXGM6deHdxIg7M4NsdFBqQ0JCz7I4V2q9paFdjCfSilCQa49jBE9TeDMnHWH93paebKbr7ytnHPzVZJK89eYBMDhihqKVaatJ4/H2RCHHGOrt3LpeKyk73U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a6SDnmaE; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723730959; x=1755266959;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R//JYXLLg67ii2SoH3h/7/uUd8NJdeUOHDDJ8l2oIIQ=;
-  b=TPnBVXbsckgWdCaYQSkIpmIDzmwfojRO324vDND9nbGChn5jMIPEdnhu
-   aNLNCCEE+6f6J3NHIxvLQEEgX/Iey3x4/9x73X+aymRxgbxp1Z1S27b8Q
-   ojKxtcoxTMpSqbpcyiUqX+Oynz4NUCFfSL+cZlG3IZmL8d0kZOwzy1HaU
-   t2cYven2tWzt1mU2qXGZcPxR/W48qpE3HnP1XOvipSQBVDsYuUVBg1FiT
-   fIt8XrvO5LhYhADFkTK9VCxGNI72EMoIVRK/YeTClNlqt4gClmw0uihl+
-   Q4JzX7FhQ22PMqFOe0kS7TGksnKa+PI64PfZSXzI4IFIYCfdkvj6LDyXg
+  t=1723733486; x=1755269486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wOJ4fdL1yxQ/hsrG00nhDaep8bVQ9Oyj88x+6CUjMdE=;
+  b=a6SDnmaEEsFqPQN3Lec4CmbrLnC4YchfK3fUIWwyyYaafjDt8i1pfQTH
+   1Celwcz4XUAktQ6kXVOSZaka1KPxJzJcFaVfqsgvRsx4eK9rFZjPDF2RB
+   HxYtOL4GWGq1y+ZtBrWeqmgivW/Uk0VVHcLb9shdigzVE+5GIIf2m+NgV
+   LzxQSBV1iFZeoTV6FhvlUtE6hhJjAldOqDEWouO14bAWtAOaM3DDpxDKL
+   cUnl20mjyMJZo2SU9x4xUkzLjkEAR+TxnAMUfDnht87jp1fGwmKL689IM
+   nzG2awhrdFIesvJkixuBHZn4hUykk1L8vblWfez824PvEw8uMpvRbNcB1
    Q==;
-X-CSE-ConnectionGUID: f0YGwTZGTaumYBWEFahJkw==
-X-CSE-MsgGUID: KikZN7egRgath8IA6/9JQg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="25852517"
+X-CSE-ConnectionGUID: nPUSWKhaSTevN95eqOBTSA==
+X-CSE-MsgGUID: 3WLfkw+HTx+Ldrj6mxN7Sg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="22142159"
 X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="25852517"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 07:09:18 -0700
-X-CSE-ConnectionGUID: jvvbB3RiS3SDmRn0xnVgMw==
-X-CSE-MsgGUID: pGv6Tp4ISeOstApqUB+KbA==
+   d="scan'208";a="22142159"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 07:51:08 -0700
+X-CSE-ConnectionGUID: h+wqZCvDQ8O4J+bkOPd99Q==
+X-CSE-MsgGUID: t8IkX5T6TAyLBEdax0CSiw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="64022926"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa004.fm.intel.com with ESMTP; 15 Aug 2024 07:09:16 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <linux-usb@vger.kernel.org>,
-	<gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Karel Balej <balejk@matfyz.cz>,
-	stable@vger.kernel.org
-Subject: [PATCH 1/1] xhci: Fix Panther point NULL pointer deref at full-speed re-enumeration
-Date: Thu, 15 Aug 2024 17:11:17 +0300
-Message-Id: <20240815141117.2702314-2-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240815141117.2702314-1-mathias.nyman@linux.intel.com>
-References: <20240815141117.2702314-1-mathias.nyman@linux.intel.com>
+   d="scan'208";a="90159410"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa001.fm.intel.com with SMTP; 15 Aug 2024 07:51:04 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 15 Aug 2024 17:51:03 +0300
+Date: Thu, 15 Aug 2024 17:51:03 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jameson Thies <jthies@google.com>, Benson Leung <bleung@chromium.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/5] usb: typec: ucsi: Minor improvements
+Message-ID: <Zr4V13mBemOZz2rU@kuha.fi.intel.com>
+References: <20240815085726.2865482-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240815085726.2865482-1-heikki.krogerus@linux.intel.com>
 
-re-enumerating full-speed devices after a failed address device command
-can trigger a NULL pointer dereference.
+On Thu, Aug 15, 2024 at 11:57:21AM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> The two first patches prevent potential issues. The rest are just
+> cleanups - removing duplicated or otherwise useless code.
+> 
+> James, can you test these? I'm changing the handling of the identity
+> discovery in patch 3/5. It would be great if you (or somebody else)
+> could confirm that it continues to work as expected.
+> 
+> thanks,
+> 
+> Heikki Krogerus (5):
+>   usb: typec: ucsi: Don't truncate the reads
+>   usb: typec: ucsi: Only assign the identity structure if the PPM
+>     supports it
+>   usb: typec: ucsi: Common function for the GET_PD_MESSAGE command
+>   usb: typec: ucsi: Call CANCEL from single location
+>   usb: typec: ucsi: Remove useless error check from ucsi_read_error()
+> 
+>  drivers/usb/typec/ucsi/ucsi.c | 126 ++++++++++------------------------
+>  drivers/usb/typec/ucsi/ucsi.h |  14 +---
+>  2 files changed, 39 insertions(+), 101 deletions(-)
 
-Full-speed devices may need to reconfigure the endpoint 0 Max Packet Size
-value during enumeration. Usb core calls usb_ep0_reinit() in this case,
-which ends up calling xhci_configure_endpoint().
+These are in wrong order. They break bisectability. I'll prepare v2.
 
-On Panther point xHC the xhci_configure_endpoint() function will
-additionally check and reserve bandwidth in software. Other hosts do
-this in hardware
+thanks,
 
-If xHC address device command fails then a new xhci_virt_device structure
-is allocated as part of re-enabling the slot, but the bandwidth table
-pointers are not set up properly here.
-This triggers the NULL pointer dereference the next time usb_ep0_reinit()
-is called and xhci_configure_endpoint() tries to check and reserve
-bandwidth
-
-[46710.713538] usb 3-1: new full-speed USB device number 5 using xhci_hcd
-[46710.713699] usb 3-1: Device not responding to setup address.
-[46710.917684] usb 3-1: Device not responding to setup address.
-[46711.125536] usb 3-1: device not accepting address 5, error -71
-[46711.125594] BUG: kernel NULL pointer dereference, address: 0000000000000008
-[46711.125600] #PF: supervisor read access in kernel mode
-[46711.125603] #PF: error_code(0x0000) - not-present page
-[46711.125606] PGD 0 P4D 0
-[46711.125610] Oops: Oops: 0000 [#1] PREEMPT SMP PTI
-[46711.125615] CPU: 1 PID: 25760 Comm: kworker/1:2 Not tainted 6.10.3_2 #1
-[46711.125620] Hardware name: Gigabyte Technology Co., Ltd.
-[46711.125623] Workqueue: usb_hub_wq hub_event [usbcore]
-[46711.125668] RIP: 0010:xhci_reserve_bandwidth (drivers/usb/host/xhci.c
-
-Fix this by making sure bandwidth table pointers are set up correctly
-after a failed address device command, and additionally by avoiding
-checking for bandwidth in cases like this where no actual endpoints are
-added or removed, i.e. only context for default control endpoint 0 is
-evaluated.
-
-Reported-by: Karel Balej <balejk@matfyz.cz>
-Closes: https://lore.kernel.org/linux-usb/D3CKQQAETH47.1MUO22RTCH2O3@matfyz.cz/
-Cc: stable@vger.kernel.org
-Fixes: 651aaf36a7d7 ("usb: xhci: Handle USB transaction error on address command")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 0a8cf6c17f82..efdf4c228b8c 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -2837,7 +2837,7 @@ static int xhci_configure_endpoint(struct xhci_hcd *xhci,
- 				xhci->num_active_eps);
- 		return -ENOMEM;
- 	}
--	if ((xhci->quirks & XHCI_SW_BW_CHECKING) &&
-+	if ((xhci->quirks & XHCI_SW_BW_CHECKING) && !ctx_change &&
- 	    xhci_reserve_bandwidth(xhci, virt_dev, command->in_ctx)) {
- 		if ((xhci->quirks & XHCI_EP_LIMIT_QUIRK))
- 			xhci_free_host_resources(xhci, ctrl_ctx);
-@@ -4200,8 +4200,10 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
- 		mutex_unlock(&xhci->mutex);
- 		ret = xhci_disable_slot(xhci, udev->slot_id);
- 		xhci_free_virt_device(xhci, udev->slot_id);
--		if (!ret)
--			xhci_alloc_dev(hcd, udev);
-+		if (!ret) {
-+			if (xhci_alloc_dev(hcd, udev) == 1)
-+				xhci_setup_addressable_virt_dev(xhci, udev);
-+		}
- 		kfree(command->completion);
- 		kfree(command);
- 		return -EPROTO;
 -- 
-2.25.1
-
+heikki
 
