@@ -1,145 +1,163 @@
-Return-Path: <linux-usb+bounces-13511-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13512-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A35C952C2E
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 12:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DA30952CAC
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 12:45:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C91B281C65
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 10:32:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69AD281C05
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 10:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 541991C3F2D;
-	Thu, 15 Aug 2024 09:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4BD1D0DD3;
+	Thu, 15 Aug 2024 10:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="b5w9JmZO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBBU+GYY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B7B54FAD;
-	Thu, 15 Aug 2024 09:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9421BE22B;
+	Thu, 15 Aug 2024 10:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723714336; cv=none; b=TGQpOgcqEGg15q++m0uDHlnrfGSTNo5t9FpTuhjTS6nbAB+NGF+Y5JEDTG2+GEkMw8sDoxiE90WH2+zHE82WiU+hhenAlF8bQJT0HMcu4Pm+S4cFKfzsz7MBJh+ZZOwBEl6dLv02K9gi2ZuPxRrtwtSMPP3XG3q1vRSLuPDwrMc=
+	t=1723717437; cv=none; b=Fi2v38kvD9Y3CPwiPGXj8ugaoQZuTTLxx0UfCdgCHwD5Xjl+A47QgDg0Fkeg2/m0VLaum/37/W1OAA/wY67XviFLTNbHKyWUchv0/4DkeLgez3PzLPcj3JsyXCtJf+4F3Ag32CWeWBIEU58yBPbqOVRM8Zwwcmd5CWuDniOe8vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723714336; c=relaxed/simple;
-	bh=jZHRHvaX/IzmII2xnKjKwDcMo3fvzr76zrIGPbhbC5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OOjNBLByQ45U2ktc18kvu1VPDq+xyEs9zQn4+oiQbk6XO+6urL8ADIOkv0zrmhk6+EJnrMYkPdvReRxzeHuGsNa5ruTvjwJ+MBFXNFxpWH2RrI9XNvAhvsfFP62s/Mr8bE9TFPsAcWO+N7EZPFp2cxq+4HjNO/jeLcvp69RbUoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=b5w9JmZO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9612C32786;
-	Thu, 15 Aug 2024 09:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1723714336;
-	bh=jZHRHvaX/IzmII2xnKjKwDcMo3fvzr76zrIGPbhbC5A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b5w9JmZO/0uLOLEI8W1JTlJCPEZvnb/z+af2l63C499M15qf3Ln68iyBnE5JwtbCK
-	 /t88TdX5gUgqjNptY7VMOtjDZr2mv+hE1d565m065Z6gaVEr5hkrY79Jukc9ruWLjR
-	 5t/asageQLqEJTB/PsmVoiXyTfwBiblkCnzFs1Gg=
-Date: Thu, 15 Aug 2024 11:32:13 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Abhishek Tamboli <abhishektamboli9@gmail.com>
-Cc: dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-	dan.carpenter@linaro.org, linux-usb@vger.kernel.org,
-	skhan@linuxfoundation.org, rbmarliere@gmail.com,
+	s=arc-20240116; t=1723717437; c=relaxed/simple;
+	bh=vaO2bQL+x+qVSEjpB5J2V0P2pQYy5iaElBnUbnLPXko=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PINHV6+Uh4A3JQUhWCjrXko4rkxgyG/DukAaSV1AjwUYawbCARSJ0YwihMdC8d8ismON2UWWaE7NwwooCZrsoS5aNIQnjpLaJEDT+ZEulB6gAYNMTDveGJYAzibcmKrdAbvcF2L4uX2CU6y1UNgaeoiG/BrswWeoOZ4xft7z01I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBBU+GYY; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1fd70ba6a15so6766265ad.0;
+        Thu, 15 Aug 2024 03:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723717435; x=1724322235; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iq7fbg1eOsvG0ItPF//0IwrkFyZmuk5NQdbvO/TCh44=;
+        b=hBBU+GYYPb1UcBQnA2PGbFiCwLvijoRE4eCGcEZ2t6iHvE+EvHykoF28+b1LCVP1SI
+         PVOxx+FG97pga1syBDNyGEPSKdETq/u9KwKSA0msd8hUHyxzBEziwYaCPdq9AX/ivNC9
+         fOC16nKysEXFtiE6Vee3hzTqbzi8kmKh0gqMTdOnhHZRCHoFmo7TQg3ya3tt0toTpCoU
+         YcNJJVd9uOixIcxv19d0fFRQUEePKAccNHcoJl9mWZrTx7UXcyo1YNjdxHjMCdsH0ocm
+         YPN0apUaQyS5kcuwlFTxHZrVQy4qV3z+5/f2QwzhLkvBD4qSrUAPUc1jucGHFtILADEn
+         o3Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723717435; x=1724322235;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iq7fbg1eOsvG0ItPF//0IwrkFyZmuk5NQdbvO/TCh44=;
+        b=h/4dNderS3vYHZtb0uSlRdz6QAbqCc+gQtDQm8PvY8i1KSgoBDLSgsXpsBF6MzqVGP
+         kAL2lOEaMlNRkd1MwuNaK8N0l1QzlRcmocIV4rzi0r6C/bH+W4/strNz3x80uExfcTcV
+         fw8lmZ5IgHQbAP7j1e/Ci6iMsYioavlGl/tZQSJ/8XRdnwIiXtShHWkiqk0xbwPm+FLc
+         3n1Vup/3tJrt9Rb7h1aGm0IkGffTS/h7ozV3zbvpCAYpDgoezmVoDgRT/l9hspsJzmxR
+         jCeVVGKOWPMkZM+9tyVq2BSHmLIiKG6DkT2IJU9RFLvRmhAIAgZY1hNn2/Eo+/nWo1Yu
+         LEyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrWxZu+XROX6efrdVkE1AD3UXv9L8k8R0TRDjIK1AjJ783ooqJAfGxvztHVB0Vdi9gwvqzGXD2lCcM+kCGVmYHN6A48auMNWz3C8sKQck4XYnfBtnF1r33VdCcBBkoh6VJAPlACD2J
+X-Gm-Message-State: AOJu0Yy3WLoI1KN/QB0QOD8LfdcjNVyNm99vPv3gFF5IOsCL6NE3pSo2
+	LpiIEYMJ7SJvI+zeAA3rIRTAgHNP1vIFpqUHXpA92ObaJ4lL4UbZ
+X-Google-Smtp-Source: AGHT+IF65Vk0UJTrOg0O0JsLoJ7hNz2P7gEInAhGTSB5ssnKOUPkBDzbHJf6OrSiEYHxKyNqi53Ylw==
+X-Received: by 2002:a17:902:f68b:b0:201:f6e6:c7cf with SMTP id d9443c01a7336-201f6e6d26bmr10889685ad.45.1723717435098;
+        Thu, 15 Aug 2024 03:23:55 -0700 (PDT)
+Received: from embed-PC.. ([106.222.235.192])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f038b303sm7892025ad.192.2024.08.15.03.23.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2024 03:23:54 -0700 (PDT)
+From: Abhishek Tamboli <abhishektamboli9@gmail.com>
+To: dan.scally@ideasonboard.com,
+	laurent.pinchart@ideasonboard.com
+Cc: gregkh@linuxfoundation.org,
+	dan.carpenter@linaro.org,
+	linux-usb@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	rbmarliere@gmail.com,
 	linux-kernel-mentees@lists.linuxfoundation.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: uvc: Fix ERR_PTR dereference in
- uvc_v4l2.c
-Message-ID: <2024081508-swinger-arrange-02dd@gregkh>
-References: <20240815071416.585559-1-abhishektamboli9@gmail.com>
- <2024081508-okay-underpaid-5029@gregkh>
- <Zr3IKD4LCrlke+8H@embed-PC.myguest.virtualbox.org>
+Subject: [PATCH v3] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
+Date: Thu, 15 Aug 2024 15:52:02 +0530
+Message-Id: <20240815102202.594812-1-abhishektamboli9@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zr3IKD4LCrlke+8H@embed-PC.myguest.virtualbox.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 15, 2024 at 02:49:36PM +0530, Abhishek Tamboli wrote:
-> Hi Greg,
-> Thank you for the feedback.
-> 
-> On Thu, Aug 15, 2024 at 10:00:27AM +0200, Greg KH wrote:
-> > On Thu, Aug 15, 2024 at 12:44:16PM +0530, Abhishek Tamboli wrote:
-> > > Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
-> > > and uvc_v4l2_enum_format().
-> > > 
-> > > Fix the following smatch errors:
-> > > 
-> > > drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
-> > > error: 'fmtdesc' dereferencing possible ERR_PTR()
-> > > 
-> > > drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
-> > > error: 'fmtdesc' dereferencing possible ERR_PTR()
-> > > 
-> > > Also, fix similar issue in uvc_v4l2_try_format() for potential
-> > > dereferencing of ERR_PTR().
-> > > 
-> > > Fixes: 588b9e85609b ("usb: gadget: uvc: add v4l2 enumeration api calls")
-> > > Fixes: e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
-> > > Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
-> > > ---
-> > > Changes in v2:
-> > > - Add check for dereferencing of ERR_PTR() in uvc_v4l2_try_format()
-> > > 
-> > >  drivers/usb/gadget/function/uvc_v4l2.c | 12 +++++++++++-
-> > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> > > index a024aecb76dc..8bb88c864b60 100644
-> > > --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> > > +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> > > @@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
-> > >  	list_for_each_entry(format, &uvc->header->formats, entry) {
-> > >  		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
-> > > 
-> > > +		if (IS_ERR(fmtdesc))
-> > > +			continue;
-> > > +
-> > >  		if (fmtdesc->fcc == pixelformat) {
-> > >  			uformat = format->fmt;
-> > >  			break;
-> > > @@ -240,6 +243,7 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
-> > >  	struct uvc_video *video = &uvc->video;
-> > >  	struct uvcg_format *uformat;
-> > >  	struct uvcg_frame *uframe;
-> > > +	const struct uvc_format_desc *fmtdesc;
-> > >  	u8 *fcc;
-> > > 
-> > >  	if (fmt->type != video->queue.queue.type)
-> > > @@ -277,7 +281,10 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
-> > >  		fmt->fmt.pix.height = uframe->frame.w_height;
-> > >  		fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
-> > >  		fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
-> > > -		fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
-> > > +		fmtdesc = to_uvc_format(uformat);
-> > > +		if (IS_ERR(fmtdesc))
-> > > +			return -EINVAL;
-> > 
-> > Why not return the error given to you?
-> Returning -EINVAL directly was based on the current implementation of to_uvc_format(), 
-> which only returns ERR_PTR(-EINVAL) in case of error.
-> > 
-> > > +		fmt->fmt.pix.pixelformat = fmtdesc->fcc;
-> > >  	}
-> > >  	fmt->fmt.pix.field = V4L2_FIELD_NONE;
-> > >  	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-> > > @@ -389,6 +396,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
-> > >  		return -EINVAL;
-> > > 
-> > >  	fmtdesc = to_uvc_format(uformat);
-> > > +	if (IS_ERR(fmtdesc))
-> > > +		return -EINVAL;
-> > 
-> > Same here.
-> If you'd like me to make the changes to use PTR_ERR()? 
+Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
+and uvc_v4l2_enum_format().
 
-Yes please.
+Fix the following smatch errors:
+
+drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
+
+drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
+
+Also, fix similar issue in uvc_v4l2_try_format() for potential
+dereferencing of ERR_PTR().
+
+Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
+---
+Changes in v3:
+- Return the error code using PTR_ERR() in uvc_v4l2_try_format()
+and uvc_v4l2_enum_format() instead of directly returning -EINVAL.
+
+Changes in v2:
+- Add check for dereferencing of ERR_PTR() in uvc_v4l2_try_format().
+
+ drivers/usb/gadget/function/uvc_v4l2.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index a024aecb76dc..de1736f834e6 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
+ 	list_for_each_entry(format, &uvc->header->formats, entry) {
+ 		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
+
++		if (IS_ERR(fmtdesc))
++			continue;
++
+ 		if (fmtdesc->fcc == pixelformat) {
+ 			uformat = format->fmt;
+ 			break;
+@@ -240,6 +243,7 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
+ 	struct uvc_video *video = &uvc->video;
+ 	struct uvcg_format *uformat;
+ 	struct uvcg_frame *uframe;
++	const struct uvc_format_desc *fmtdesc;
+ 	u8 *fcc;
+
+ 	if (fmt->type != video->queue.queue.type)
+@@ -277,7 +281,10 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
+ 		fmt->fmt.pix.height = uframe->frame.w_height;
+ 		fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
+ 		fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
+-		fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
++		fmtdesc = to_uvc_format(uformat);
++		if (IS_ERR(fmtdesc))
++			return PTR_ERR(fmtdesc);
++		fmt->fmt.pix.pixelformat = fmtdesc->fcc;
+ 	}
+ 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
+ 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
+@@ -389,6 +396,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+ 		return -EINVAL;
+
+ 	fmtdesc = to_uvc_format(uformat);
++	if (IS_ERR(fmtdesc))
++		return PTR_ERR(fmtdesc);
++
+ 	f->pixelformat = fmtdesc->fcc;
+
+ 	return 0;
+--
+2.34.1
+
 
