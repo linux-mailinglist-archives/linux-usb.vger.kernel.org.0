@@ -1,136 +1,160 @@
-Return-Path: <linux-usb+bounces-13496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13497-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34636952972
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 08:41:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 043E49529A9
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 09:13:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5F5B287324
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 06:41:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CCED1C21B0E
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2024 07:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A7217A5A4;
-	Thu, 15 Aug 2024 06:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7DD17A597;
+	Thu, 15 Aug 2024 07:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bo3VukFF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D46D179965
-	for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2024 06:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECA8BA20;
+	Thu, 15 Aug 2024 07:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723704043; cv=none; b=f8Kq0brJTElrcF2K0/zFOTlqJPHumsvh8cuYEgln7RJeNRzM0GnrtoOb/5Io4WI45eHsLlAkXYxbOJtpJS8a/H669VJKZVokuy0xts6KAZtipUUVzQ2dtzXWV50o25DkQUZOHN/n5fUsAIw6velLdrHxyd8DkKZITHU2MbW2t7s=
+	t=1723706004; cv=none; b=vC3bvwB3WI/3f+Y4Hla3X6yYZTofZU8FHFXJYPTkQE+an83UlUPW1Fpy8TU3pLbdt35Um29u92pxsw0ASwdkF/+SSxK4D0xUDRyjcGjz2dBNQTjfBTwpdEjJjkuUCww/91XqyKWUdkZRX/Lsqjox76FGJbj3Pf4EzjOxzq6iph8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723704043; c=relaxed/simple;
-	bh=Vy2YoRP3WMBL9Q0m0cvv2z3doL40ax72V/J2g22sdOI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lEXBGgCOHw8iuTWz6q5c6TkEkQchlwBUQrszlqQ1IusIpY0/lSM9O2QI1Gd13Iv0NHUlUFJUOprlQ4+GMYu+3rPBeUkRDIOITfS2LxjGFbxa0jz/Z1zBNN/c8woyeB0wLAPMmh2qrUE6wLfW/jlQCOKtWBdCj52QSNz+Q0Fk+yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1seU9u-0002L8-Ty; Thu, 15 Aug 2024 08:40:30 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1seU9t-000XGZ-Oj; Thu, 15 Aug 2024 08:40:29 +0200
-Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
-	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1seU9t-002CsL-2H;
-	Thu, 15 Aug 2024 08:40:29 +0200
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Thu, 15 Aug 2024 08:40:29 +0200
-Subject: [PATCH v2] usb: dwc3: ep0: Don't reset resource alloc flag
- (including ep0)
+	s=arc-20240116; t=1723706004; c=relaxed/simple;
+	bh=aaFDd5ISb84lhCJFQsTbHtxY5uuIzKwhP/XKSewykcU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LkUgw5tw92r3l/p/ehAMHP1hUsh6LIYfzBSMnvhm15PBh4Vrvdv5KNjuJWNpt5lLImMMCAHGFR1/upn3j+kY3Jd9JeXTgFQTXPW0ne9yoNzyPz9XGDySz2LaLERFSCMllJigDbRoDcugNxE7XXcVExpUee0sTjxKGRzgvJHienc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bo3VukFF; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-70f5ef740b7so550914b3a.2;
+        Thu, 15 Aug 2024 00:13:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723706002; x=1724310802; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jvruj7SsdqsHY133idfzMsgdOO/tE81N6D79Gm7sQSA=;
+        b=Bo3VukFFkyEhbysKZ0qdTBb69nVsENhO9taa6YWKiC6r3GCGPuOTCTKHP/Ti1iV8VQ
+         qNab2bfEGEh0cNLXP+SaLMAgAw0qqjfauzOGYGgNDC+B3SOmK0AEXnOdG8cFH+m3yRG5
+         YI8CYD+da0S/i5DDrBTF2EfHhjA1Se7g98sM0rcU29zh+SpMErbaIEvbC+kvppUf1Fbq
+         HrKxwSEBVICfGIig/4SnLr95E7pCPOBV/9GMF+UB2IZH7accmaz4vYqCGtuBMtfPd43f
+         WRarGG+R5D+DdzO+3pUIQ3M1JYCMLIunAPrJmlwanutBhdM7aoI3i2VI2hGR0sqbWPw3
+         yWPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723706002; x=1724310802;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jvruj7SsdqsHY133idfzMsgdOO/tE81N6D79Gm7sQSA=;
+        b=ru+wEDw64iyly0RvXgPeY1J8MICFz4iMq9DN7Pugs4xAsQGG6wePJ8rHQXiLXpmv37
+         xgCjprK2FcrwldhUaVUg9usmfNth2ZX0T6idN24kz2dZFQb7FmCvIMhHvLtUMINBa2R2
+         xKPoOb6O2ClFf4SKP1ACEpVEklsyuP5jo9cwUMOL42HoVt6HqG1+XnrBpkAnDUCdacYm
+         wj29soQomyKHvzpX1Dc1XNFbdW8czTm0PzHK80cY+/qPVJ4jZeDDYD8jD4N7Uovc9Tap
+         MCcczGD1JpQyTC7dy/+rjEjCWzPXMYecN7CZ/6b9U+e2JFfljxbLmpSrazObSLv1XUN6
+         0NQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVM5zn4a4jJAGIVQg8btUFUmGKtG22GLvJ9Bb/sd9QR2BhN0HsKNRrtVixokCJaQOUT6gJyfN45YfqdbPZ4Xxh4eBJgXglHmvt6h574p38MwGQY7LgAXSKzW7BMZfi55eeLZtQiL31C
+X-Gm-Message-State: AOJu0YwhevAYWHM2zZ2MdUYep+f/7nyDXE8e0kDDSORcK5rx1WedxoaD
+	G7TUkrEcwu+LZuPfTlypgP5d+qR0syD6fEeHGWSoPJs/o96YYLBLu3ESzniH
+X-Google-Smtp-Source: AGHT+IH+IvT/Oj9VfFCVJHaRTlcxTgxmWb/kFvuImwpkR1wygBW0AcrPrsKQKoyntPTmuxV9TaWaJg==
+X-Received: by 2002:a05:6a00:1996:b0:705:b6d3:4f15 with SMTP id d2e1a72fcca58-712673ea24fmr7223501b3a.25.1723706002330;
+        Thu, 15 Aug 2024 00:13:22 -0700 (PDT)
+Received: from embed-PC.. ([117.99.192.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c6b60a1122sm612431a12.0.2024.08.15.00.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2024 00:13:21 -0700 (PDT)
+From: Abhishek Tamboli <abhishektamboli9@gmail.com>
+To: dan.scally@ideasonboard.com
+Cc: gregkh@linuxfoundation.org,
+	dan.carpenter@linaro.org,
+	linux-usb@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	rbmarliere@gmail.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
+Date: Thu, 15 Aug 2024 12:41:51 +0530
+Message-Id: <20240815071151.585297-1-abhishektamboli9@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240814-dwc3hwep0reset-v2-1-29e1d7d923ea@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIANyivWYC/3WOOw6DMBBEr4K2jiP/FEiq3COiwHjB2xi0JkCEu
- HsMXYqUbzRPMxskZMIEj2IDxpkSDTGDvhTQhib2KMhnBi21lZWywi+tCQuOkjHhJJz1plRVaez
- dQpZck1A4bmIbDu23fRRGxo7Wc/FVZw6UpoE/54FZHenfrVkJJWRVOun1rTNePkeM/XviIdJ69
- Qj1vu9fEiwMaNIAAAA=
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Michael Grzeschik <m.grzeschik@pengutronix.de>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1784;
- i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=Vy2YoRP3WMBL9Q0m0cvv2z3doL40ax72V/J2g22sdOI=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmvaLd76WjuTzBse4a1zQhSPCx4BbCb63ZKWekQ
- 78y4MU4I5mJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZr2i3QAKCRC/aVhE+XH0
- q/F6D/9egYIhDfTzbtMWhwhK6deKJS363ZTXV5Xq9R8Bt6wjqDfp8yz9StX0LewcdFcKBPbb/NC
- LiJPB1yWimhY8ENM+KLjb63lzgvkiYR0fLC2Ruzo9ZpCBSflWy4xAPLiPICVr3ghxaT7wxQs+Ha
- qGJnp1dsIbuhtATkniT6HtAtFHsNEu8jamCuHy8r9+94C1R1CUcOvf0RXbq/fftGJOZgaOLe3GE
- 8gFUo8PRG6gsArFmU0+lUyN+HHIpOKAsi1xl3bUyhwLGuwdonUrdpYFjCm0RVFEHMCAObC7GeCI
- 6WzLPiCNP1aUB0b99AxUC3tIb0/Pi7DEudPOYKw2iZwJoGuv0ZZjuiIKK2Wt01K3R2XaAQIWSIo
- Y0L3YpzJ7l4k0DaFNWKhPVeZHRrxkYmT88INiACI/ICsCAcD3SdbQLe3PuBGybpVaX/coEnrS7p
- xWWYQlLGZ7pt4gqKDT2QwwEKQzWaWb5UAkWRu8XOVsYvAQ1h3yeum5+zApVhHrnn1M3woRvoFDV
- q7RhUCfdU5ubUq6O3l8uioR5DsRKzboitMEDpQ3StXrNpB88cm7MqJvy3o0mnd4shM6duI3m/V8
- BSqlmXWLxEFQariB6S2CCuH5vuOmOSc0w31IAPvnV52h7wbOprmk1N+GnDLx9xTiwne+H2zRaCE
- 0992l7kkJRLM5ag==
-X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
- fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
-The DWC3_EP_RESOURCE_ALLOCATED flag ensures that the resource of an
-endpoint is only assigned once. Unless the endpoint is reset, don't
-clear this flag. Otherwise we may set endpoint resource again, which
-prevents the driver from initiate transfer after handling a STALL or
-endpoint halt to the control endpoint.
+Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
+and uvc_v4l2_enum_format().
 
-Commit f2e0eee47038 ("usb: dwc3: ep0: Don't reset resource alloc flag")
-was fixing the initial issue, but did this only for physical ep1. Since
-the function dwc3_ep0_stall_and_restart is resetting the flags for both
-physical endpoints, this also has to be done for ep0.
+Fix the following smatch errors:
 
-Cc: stable@vger.kernel.org
-Fixes: b311048c174d ("usb: dwc3: gadget: Rewrite endpoint allocation flow")
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
+
+drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
+
+Also, fix similar issue in uvc_v4l2_try_format() for potential
+dereferencing of ERR_PTR().
+
+Fixes: 588b9e85609b ("usb: gadget: uvc: add v4l2 enumeration api calls")
+Fixes: e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
+Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
 ---
-v2: Added missing double quotes in the referenced patch name
+Changes in v2:
+- Add check for dereferencing of ERR_PTR() in uvc_v4l2_try_format()
 
-- Link to v1: https://lore.kernel.org/r/20240814-dwc3hwep0reset-v1-1-087b0d26f3d0@pengutronix.de
----
- drivers/usb/dwc3/ep0.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/uvc_v4l2.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index d96ffbe520397..c9533a99e47c8 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -232,7 +232,8 @@ void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
- 	/* stall is always issued on EP0 */
- 	dep = dwc->eps[0];
- 	__dwc3_gadget_ep_set_halt(dep, 1, false);
--	dep->flags = DWC3_EP_ENABLED;
-+	dep->flags &= DWC3_EP_RESOURCE_ALLOCATED;
-+	dep->flags |= DWC3_EP_ENABLED;
- 	dwc->delayed_status = false;
- 
- 	if (!list_empty(&dep->pending_list)) {
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index a024aecb76dc..8bb88c864b60 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
+ 	list_for_each_entry(format, &uvc->header->formats, entry) {
+ 		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
 
----
-base-commit: 38343be0bf9a7d7ef0d160da5f2db887a0e29b62
-change-id: 20240814-dwc3hwep0reset-b4d371873494
++		if (IS_ERR(fmtdesc))
++			continue;
++
+ 		if (fmtdesc->fcc == pixelformat) {
+ 			uformat = format->fmt;
+ 			break;
+@@ -240,6 +243,7 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
+ 	struct uvc_video *video = &uvc->video;
+ 	struct uvcg_format *uformat;
+ 	struct uvcg_frame *uframe;
++	const struct uvc_format_desc *fmtdesc;
+ 	u8 *fcc;
 
-Best regards,
--- 
-Michael Grzeschik <m.grzeschik@pengutronix.de>
+ 	if (fmt->type != video->queue.queue.type)
+@@ -277,7 +281,10 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
+ 		fmt->fmt.pix.height = uframe->frame.w_height;
+ 		fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
+ 		fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
+-		fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
++		fmtdesc = to_uvc_format(uformat);
++		if (IS_ERR(fmtdesc))
++			return -EINVAL;
++		fmt->fmt.pix.pixelformat = fmtdesc->fcc;
+ 	}
+ 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
+ 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
+@@ -389,6 +396,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+ 		return -EINVAL;
+
+ 	fmtdesc = to_uvc_format(uformat);
++	if (IS_ERR(fmtdesc))
++		return -EINVAL;
++
+ 	f->pixelformat = fmtdesc->fcc;
+
+ 	return 0;
+--
+2.34.1
 
 
