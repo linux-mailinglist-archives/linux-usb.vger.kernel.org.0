@@ -1,63 +1,63 @@
-Return-Path: <linux-usb+bounces-13553-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13554-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7333954B90
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 15:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E96C954B94
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 15:59:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39271B20E17
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 13:59:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE445B213D5
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 13:59:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F121E1A7056;
-	Fri, 16 Aug 2024 13:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6D41BC9F9;
+	Fri, 16 Aug 2024 13:59:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OkJKf5so"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eTebGpIy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53241B8E92
-	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 13:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1971BC9E7
+	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 13:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723816756; cv=none; b=R4Dg7yZwIQEJcw+UZgcTTnWV6YOPLPzFr3Nxvg9vwEyJhTt2FTfzdP2hYH/k4KcT8d3KhPrcJCaFM5AGZIe5aRLO5h0WG1MWnmtUJCV7HFOECXIWar2CyQm+4fyH0GyCb+qW7c1yrQlpnqvdorWMsfDWhvR6r7cBZT0BIPla0h4=
+	t=1723816759; cv=none; b=lfJr4X+uNdThEsOPjbdNz3QQCm8osDw5r3FwhjsMVMP+bSCCX8LeJ4yK8nSRYBRMmCjClJTZ1PQj7mni8V9xDFqI1plNpo0lG4RAlvpL6tbHuuEEQL+uZibskNMnE/W5hWgHGNx+ZwPaVgysr9LWctP83z/y/flJLJVlT0fi8tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723816756; c=relaxed/simple;
-	bh=qSfcfmHFtu7sDRNkOEXrsuJWELUORsyxr9IPc8iJcSU=;
+	s=arc-20240116; t=1723816759; c=relaxed/simple;
+	bh=3R2pm5Kuk4wEYjoyM3jFKb/ppgX0RodA/DTz5vhow0A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b3tkOQPGHr2dLw8FAP22F/MovyAImh+cTwAoIuFI6bGzfqkb0yz+y61ur2aWjdlUev3rzvtP2XbpAiJitUOAJ5x4siuDNFpYWWwA5uI8YX8jAfxxVpEZIdFc7CA6V4JFaJnfT9lFKYzRpSaPkMKQLXHKHEzlwkYbJkwCWHHXOt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OkJKf5so; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=rw6mR3MRRm8E2PfCUOx0O6ZgO+slodeC/cqQsymGRgAWROYOYIiIHRVO15+byoYlX3A+3RAezOiINKAAFOnR3O9+V6fkpXSIsLX9eWENgfLBv2OX3X6L0F/hMnXuK74n5DJwl1ShzvU78xslXhXQBMy6jBrcm9mpqOlyz3LLKrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eTebGpIy; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723816755; x=1755352755;
+  t=1723816758; x=1755352758;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qSfcfmHFtu7sDRNkOEXrsuJWELUORsyxr9IPc8iJcSU=;
-  b=OkJKf5somJn6/ENOxZbwO2tRKjlaYQtOZ+zmFm5HCYJ7V7feeGKea8qM
-   Zf3dj3DcA2S+uAQ2/J7tpeVGevNGHe2etjvSL7/PdzzvWRb0WNMDJ4Ksm
-   bKnZE1q6B5uM+4dnwuQ/04K+weS806ZfNvmEEgc9Nv25vgOPLol/KHJuB
-   VX/1U8g1DW7rMqMnqOy3w9zSAeOebfy7A3kd8Ox/t77RJeHWTVcn1qgCR
-   DJP75Nsp6afd841Eo8xffd8EPSdHz/vq09ba7qNciOw0DaoF3HnNMmpr+
-   tilKPqO2akxNf+RN+E1AMei7ViNxteER5VjpE2VqBAbWDIb5L2+75xUp9
-   w==;
-X-CSE-ConnectionGUID: h1F1kMnqQiaX5VUrCqk7HQ==
-X-CSE-MsgGUID: OJjxujQ9SsC8Eyj9p7uoKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="21660088"
+  bh=3R2pm5Kuk4wEYjoyM3jFKb/ppgX0RodA/DTz5vhow0A=;
+  b=eTebGpIyw4l/22gdZFNssp7oP3Paqv/bT5o3Wk6u/sWFbwXOhYZ7y2NL
+   RC1QSUjvuKFHJveMh3XvgY/t2PapiSaBltkTqJUnD4NKanGm5ZQJX5FEG
+   mSAd6ODSM+7FBa3bveOu0cRxirTVdQTzbVL4LqcSArE05MN3hETVPfxEL
+   pZHxzu92M9HbI2VJoKhqMgMpH5kxhz8S6NLbpPGCD2icUaa6A3g3KHgvv
+   JCHG3dT9dIa9cmp+Zln2kOhYWPmfFL6jFLSyQyKjukq6RSRgttXD7GlZj
+   I7fjEDiKMKALL1SXwHDShRuVo/G7Qv3Vzoxue94Lq+XWsvFWbQNT+kJsF
+   Q==;
+X-CSE-ConnectionGUID: sTcRM6/hRSSKaJ8yKbWxGQ==
+X-CSE-MsgGUID: Pef7i8DUQe6+voHCCv0V6A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="21660095"
 X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
-   d="scan'208";a="21660088"
+   d="scan'208";a="21660095"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 06:59:15 -0700
-X-CSE-ConnectionGUID: rDbz6wrCREKLidMYgj7MzA==
-X-CSE-MsgGUID: Hq7UU75iQAm5vB55IXAlNg==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 06:59:18 -0700
+X-CSE-ConnectionGUID: 8JkX4/GVT0yW2ne8ZcHTjA==
+X-CSE-MsgGUID: bjVewc46RwGZP7Kp+tSJEA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
-   d="scan'208";a="97192418"
+   d="scan'208";a="97192425"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 16 Aug 2024 06:59:12 -0700
+  by orviesa001.jf.intel.com with ESMTP; 16 Aug 2024 06:59:15 -0700
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jameson Thies <jthies@google.com>,
@@ -68,9 +68,9 @@ Cc: Jameson Thies <jthies@google.com>,
 	"Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>,
 	Abhishek Pandit-Subedi <abhishekpandit@google.com>,
 	Bartosz Szpila <bszpila@google.com>
-Subject: [PATCH v2 4/6] usb: typec: ucsi: Common function for the GET_PD_MESSAGE command
-Date: Fri, 16 Aug 2024 16:58:57 +0300
-Message-ID: <20240816135859.3499351-5-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v2 5/6] usb: typec: ucsi: Call CANCEL from single location
+Date: Fri, 16 Aug 2024 16:58:58 +0300
+Message-ID: <20240816135859.3499351-6-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
 References: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
@@ -82,178 +82,57 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-So far that command was only used to read the response to
-the Discover Identity Request, but it is handled with two
-separate functions, which is not really necessary. Squashing
-the command execution into a single function. That function
-can now also be used to read other messages on top of the
-Request Identity response.
+The command cancellation can be done right after detecting
+that the PPM is busy. There is no need to do it separately
+in ucsi_read_error() and ucsi_send_command_common().
 
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 92 ++++++++++-------------------------
- drivers/usb/typec/ucsi/ucsi.h | 12 -----
- 2 files changed, 27 insertions(+), 77 deletions(-)
+ drivers/usb/typec/ucsi/ucsi.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 1f6e3f0d25c1..470c9532b4f2 100644
+index 470c9532b4f2..64fe59e05b4f 100644
 --- a/drivers/usb/typec/ucsi/ucsi.c
 +++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -748,104 +748,66 @@ static struct usb_power_delivery_capabilities *ucsi_get_pd_caps(struct ucsi_conn
- 							&pd_caps);
- }
+@@ -111,7 +111,7 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+ 		return ret;
  
--static int ucsi_read_identity(struct ucsi_connector *con, u8 recipient,
--			      u8 offset, u8 bytes, void *resp)
-+static int ucsi_get_pd_message(struct ucsi_connector *con, u8 recipient,
-+			       size_t bytes, void *data, u8 type)
- {
--	struct ucsi *ucsi = con->ucsi;
-+	size_t len = min(bytes, UCSI_MAX_DATA_LENGTH(con->ucsi));
- 	u64 command;
-+	u8 offset;
+ 	if (*cci & UCSI_CCI_BUSY)
+-		return -EBUSY;
++		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
+ 
+ 	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
+ 		return -EIO;
+@@ -144,15 +144,7 @@ static int ucsi_read_error(struct ucsi *ucsi, u8 connector_num)
  	int ret;
  
--	command = UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
--	    UCSI_CONNECTOR_NUMBER(con->num);
--	command |= UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
--	command |= UCSI_GET_PD_MESSAGE_OFFSET(offset);
--	command |= UCSI_GET_PD_MESSAGE_BYTES(bytes);
--	command |= UCSI_GET_PD_MESSAGE_TYPE(UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
+ 	command = UCSI_GET_ERROR_STATUS | UCSI_CONNECTOR_NUMBER(connector_num);
+-	ret = ucsi_run_command(ucsi, command, &cci,
+-			       &error, sizeof(error), false);
 -
--	ret = ucsi_send_command(ucsi, command, resp, bytes);
--	if (ret < 0)
--		dev_err(ucsi->dev, "UCSI_GET_PD_MESSAGE failed (%d)\n", ret);
+-	if (cci & UCSI_CCI_BUSY) {
+-		ret = ucsi_run_command(ucsi, UCSI_CANCEL, &cci, NULL, 0, false);
 -
--	return ret;
--}
+-		return ret ? ret : -EBUSY;
+-	}
 -
--static int ucsi_get_identity(struct ucsi_connector *con, u8 recipient,
--			      struct usb_pd_identity *id)
--{
--	struct ucsi *ucsi = con->ucsi;
--	struct ucsi_pd_message_disc_id resp = {};
--	int ret;
--
--	if (ucsi->version < UCSI_VERSION_2_0) {
--		/*
--		 * Before UCSI v2.0, MESSAGE_IN is 16 bytes which cannot fit
--		 * the 28 byte identity response including the VDM header.
--		 * First request the VDM header, ID Header VDO, Cert Stat VDO
--		 * and Product VDO.
--		 */
--		ret = ucsi_read_identity(con, recipient, 0, 0x10, &resp);
--		if (ret < 0)
--			return ret;
-+	for (offset = 0; offset < bytes; offset += len) {
-+		len = min(len, bytes - offset);
- 
-+		command = UCSI_COMMAND(UCSI_GET_PD_MESSAGE) | UCSI_CONNECTOR_NUMBER(con->num);
-+		command |= UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
-+		command |= UCSI_GET_PD_MESSAGE_OFFSET(offset);
-+		command |= UCSI_GET_PD_MESSAGE_BYTES(len);
-+		command |= UCSI_GET_PD_MESSAGE_TYPE(type);
- 
--		/* Then request Product Type VDO1 through Product Type VDO3. */
--		ret = ucsi_read_identity(con, recipient, 0x10, 0xc,
--					 &resp.vdo[0]);
--		if (ret < 0)
--			return ret;
--
--	} else {
--		/*
--		 * In UCSI v2.0 and after, MESSAGE_IN is large enough to request
--		 * the large enough to request the full Discover Identity
--		 * response at once.
--		 */
--		ret = ucsi_read_identity(con, recipient, 0x0, 0x1c, &resp);
-+		ret = ucsi_send_command(con->ucsi, command, data + offset, len);
- 		if (ret < 0)
- 			return ret;
- 	}
- 
--	id->id_header = resp.id_header;
--	id->cert_stat = resp.cert_stat;
--	id->product = resp.product;
--	id->vdo[0] = resp.vdo[0];
--	id->vdo[1] = resp.vdo[1];
--	id->vdo[2] = resp.vdo[2];
- 	return 0;
- }
- 
- static int ucsi_get_partner_identity(struct ucsi_connector *con)
- {
-+	u32 vdo[7] = {};
- 	int ret;
- 
--	ret = ucsi_get_identity(con, UCSI_RECIPIENT_SOP,
--				 &con->partner_identity);
-+	ret = ucsi_get_pd_message(con, UCSI_RECIPIENT_SOP, sizeof(vdo), vdo,
-+				  UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
++	ret = ucsi_run_command(ucsi, command, &cci, &error, sizeof(error), false);
  	if (ret < 0)
  		return ret;
  
-+	/* VDM Header is not part of struct usb_pd_identity, so dropping it. */
-+	con->partner_identity = *(struct usb_pd_identity *)&vdo[1];
+@@ -234,9 +226,8 @@ static int ucsi_send_command_common(struct ucsi *ucsi, u64 cmd,
+ 	mutex_lock(&ucsi->ppm_lock);
+ 
+ 	ret = ucsi_run_command(ucsi, cmd, &cci, data, size, conn_ack);
+-	if (cci & UCSI_CCI_BUSY)
+-		ret = ucsi_run_command(ucsi, UCSI_CANCEL, &cci, NULL, 0, false) ?: -EBUSY;
+-	else if (cci & UCSI_CCI_ERROR)
 +
- 	ret = typec_partner_set_identity(con->partner);
--	if (ret < 0) {
--		dev_err(con->ucsi->dev, "Failed to set partner identity (%d)\n",
--			ret);
--	}
-+	if (ret < 0)
-+		dev_err(con->ucsi->dev, "Failed to set partner identity (%d)\n", ret);
++	if (cci & UCSI_CCI_ERROR)
+ 		ret = ucsi_read_error(ucsi, connector_num);
  
- 	return ret;
- }
- 
- static int ucsi_get_cable_identity(struct ucsi_connector *con)
- {
-+	u32 vdo[7] = {};
- 	int ret;
- 
--	ret = ucsi_get_identity(con, UCSI_RECIPIENT_SOP_P,
--				 &con->cable_identity);
-+	ret = ucsi_get_pd_message(con, UCSI_RECIPIENT_SOP_P, sizeof(vdo), vdo,
-+				  UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
- 	if (ret < 0)
- 		return ret;
- 
-+	con->cable_identity = *(struct usb_pd_identity *)&vdo[1];
-+
- 	ret = typec_cable_set_identity(con->cable);
--	if (ret < 0) {
--		dev_err(con->ucsi->dev, "Failed to set cable identity (%d)\n",
--			ret);
--	}
-+	if (ret < 0)
-+		dev_err(con->ucsi->dev, "Failed to set cable identity (%d)\n", ret);
- 
- 	return ret;
- }
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 5e3c6cb822c8..c8c87377909d 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -352,18 +352,6 @@ struct ucsi_connector_status {
- #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
- } __packed;
- 
--/*
-- * Data structure filled by PPM in response to GET_PD_MESSAGE command with the
-- * Response Message Type set to Discover Identity Response.
-- */
--struct ucsi_pd_message_disc_id {
--	u32 vdm_header;
--	u32 id_header;
--	u32 cert_stat;
--	u32 product;
--	u32 vdo[3];
--} __packed;
--
- /* -------------------------------------------------------------------------- */
- 
- struct ucsi_debugfs_entry {
+ 	mutex_unlock(&ucsi->ppm_lock);
 -- 
 2.43.0
 
