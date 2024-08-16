@@ -1,219 +1,176 @@
-Return-Path: <linux-usb+bounces-13558-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13559-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0CE5954D7F
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 17:18:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44031954EF9
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 18:37:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F4AE1F25D84
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 15:18:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 680B11C227A8
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 16:37:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750DF1BD510;
-	Fri, 16 Aug 2024 15:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9C9E1BDA9C;
+	Fri, 16 Aug 2024 16:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="TpPZHELI"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ePcj1LDH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2055.outbound.protection.outlook.com [40.107.255.55])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0C01BC9F6;
-	Fri, 16 Aug 2024 15:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723821471; cv=fail; b=lWmxD1ZcZlrpnQpWnfpuONajnm+WXiG8YyEsXYGBFfZkRc2+H+pAdOFm//Mh+Ht6OiXVlgzKQAda7XTgn3oJD83wZID4gpcqwAOTLvbmJcQ1ISOmPplDVZS6+K8psbnUoqcBhO8qv7LpvaG1OXL6zOJIXaLaD8+xOdJb6b+NpTg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723821471; c=relaxed/simple;
-	bh=nfGfy9s832ccDLBtM/YbyBk4Toqlv45eREVrtFQJ7NA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=mHmXn31i04RqDinAkuHGTUlXIk0UaSaQH0QvetJ7bt9T515CTszk53EQ23ixyff62F9G4HCxGIF4dtS+yiQufd4uuaSKwNidrvjNIEJEVJe78SMX9lPJ5fO38vBn7DUndiWWhAizxQBpXbklIsfzObFS3fdtRiZkHKnwtwV3b8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=TpPZHELI; arc=fail smtp.client-ip=40.107.255.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T+tVRDfeI8h6dCXwHX20oe3XvggUXsC3Or4ERVdoB1kyXJ4Motrs1uwOZolkzl9lKBxgYW1gt60HSMYdhz1n3HqYuguziEt9B7W1tU2SspPk5C0f2l+wq0CizVQLc1HN+x9LsznREZmrbU+WimcT7Rt+coE3tT4sGjmzdEmtucD/RbvKfBiBb5NWiGnttPDoqL4OsMEHPeCxkuE18sNZnF08DSMV6iuRQIDZ4ecfaQO58dDgJ0PmPqx7akG5ksZYJyYEBac2mOrd5L+AtTMRNyZv3EyDKanKxZONoVqckFF1ZPutw+02Q5cGdgKTCARHCnrQP9CTWd+5LLd/pPL8vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nfGfy9s832ccDLBtM/YbyBk4Toqlv45eREVrtFQJ7NA=;
- b=A2rkpPAwmBmqaliUfxvQeyAuTQ6NfKLY4AaJL0EcpDO6lNNjILMf3QEnfWDP8iTNzaDOJLDp5nPDDXNKM0iEAMq4GF1kGlIga/SXYcfQDH/e5yJPhUjMd53S/4Q741XlzacfAX1dauHY5je6V8w689KiUhxDmxpNk34koY5kRNULGOlzO2hz3cqWJsPm3shb5mQFdo0FL8lLcJ/AbA7GZNDzsXJZIdThKZ6efeQ3Eckn6mkMSd8yJfKPYN8JcPbgGBV7aCAzw+VV6EBtwiKJF78SaKktg8LjTQSMHc4dqZMrXpQOvBrusH8T91zlDAcR1/RN8BfLkBxMnsBGfjwFew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nfGfy9s832ccDLBtM/YbyBk4Toqlv45eREVrtFQJ7NA=;
- b=TpPZHELIa5Cjd+3dXcMA+xIGs1/vMiesqtFmvOOBGmbn3ojEj/19Dd+9HWBSMXj2+ciDNT2RU7UUSvGnpKslb/bVR7gG84FvlJsFSuvGYEacHJhSg/lQj4Vbxo38Ljc1d9ttG3PNw+f0TBqbClVSfCuTJv9oGZQX661b65huUhUdv92LzUa/FvqDszpPLN+n4Zt77ja3s/nieBJm4OQpRhhjreITN8OmaSbbPXMOeyY4XRcJFKPtAOdGlpE6MvIAF8FlbAHLs9s+OWVWCHGBshh16zaqChdtsMXjdPjBS9VDEJTIYbaygI9zecjciMD3VWvkxVmev+g3Go7YRUTnhQ==
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com (2603:1096:400:358::7)
- by SEZPR06MB5271.apcprd06.prod.outlook.com (2603:1096:101:7a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.20; Fri, 16 Aug
- 2024 15:17:43 +0000
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe]) by TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe%4]) with mapi id 15.20.7875.016; Fri, 16 Aug 2024
- 15:17:43 +0000
-From: =?gb2312?B?uvrBrMfa?= <hulianqin@vivo.com>
-To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
-	"quic_prashk@quicinc.com" <quic_prashk@quicinc.com>,
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	opensource.kernel <opensource.kernel@vivo.com>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>
-Subject:
- =?gb2312?B?tPC4tDogtPC4tDogW1BBVENIIHYxXSB1c2I6IGdhZGdldDogdV9zZXJpYWw6?=
- =?gb2312?Q?_check_Null_pointer_in_EP_callback?=
-Thread-Topic:
- =?gb2312?B?tPC4tDogW1BBVENIIHYxXSB1c2I6IGdhZGdldDogdV9zZXJpYWw6IGNoZWNr?=
- =?gb2312?Q?_Null_pointer_in_EP_callback?=
-Thread-Index:
- AdrvzihtFNSOcxRwTAOIHI6tveAOMAABV00AAACqLAAAAoTOwAAAUcYAAAD4WnAAAUYXgAAAwgzw
-Date: Fri, 16 Aug 2024 15:17:43 +0000
-Message-ID:
- <TYUPR06MB6217D1798DBC41C7DB2A1DEDD2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
-References:
- <TYUPR06MB62177737F0054278B489962BD2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024081608-punch-coherent-d29e@gregkh>
- <CAOf5uwnsgcJjp1=RLa7qx9ScQY5rZvwX-Zu6BOqxBBhBCz+CFQ@mail.gmail.com>
- <TYUPR06MB62177BCD4AB43C19E38990D3D2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <CAOf5uwm65Cw-V+td_=6QAGUF+Uisueqcm0z=1zFaNTisAJnSFQ@mail.gmail.com>
- <TYUPR06MB6217877B31A08356241CAB38D2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024081652-unify-unlucky-28d2@gregkh>
-In-Reply-To: <2024081652-unify-unlucky-28d2@gregkh>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYUPR06MB6217:EE_|SEZPR06MB5271:EE_
-x-ms-office365-filtering-correlation-id: b3d4f15b-f495-448f-3a6f-08dcbe069388
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?gb2312?B?RFR4WGlSQmVkOHdkUGtJdXZXOEhJL1ZaUCt2SFd5SVk4WXNWYmpTNFpqcUhv?=
- =?gb2312?B?TnRXK2UvWVZYOTFDRmlzREtkUWp4NWJVNkY2d1J3cDlpZkdEaVJzdWZDOUpO?=
- =?gb2312?B?aEhQVmM1OXFuTDRsWERLcmZXdjFOclI5Z1hCNmo0WEVxWG5ta0dBWHBobjY3?=
- =?gb2312?B?N0RvTEY1RVVoM25RUVlzNXdZaWxkYnV1VDl5ZHdKWEN5b05MV29SNGUvNHE3?=
- =?gb2312?B?WmlvakJCS29jRlhkU0NNc1h3SG1xWUUzZVFibTBLZEluLzh4cTlHYWpLM0NN?=
- =?gb2312?B?cHlpeHR3NWg5OHNrdHBva0dzc3N4YkorQkNUVko3R0NZZnJQOEhMRXJWM0JU?=
- =?gb2312?B?Y0h2amR2ZURnK3JnK0xBUlkyd0s2WkgvQUJLcGJUbi9RL3NhVUZhODdYaHJX?=
- =?gb2312?B?SnlFT0plNUVxQUhnc0I2ZUJkLzdoWW1kb2FoSXFEQVlLTnZXWEJtUEM5QUVj?=
- =?gb2312?B?OWZhTzJCQkcyNjJoVm5qKzhDTDQ1NlRLK3E0YTNydUNKUkRGeXA0aG1nV1h3?=
- =?gb2312?B?QUd3QlFMY2tJSDVaV2pXWTYzRVNDQkxzZ2x1RjJqNFlFbTBvSVpGcndZb3I2?=
- =?gb2312?B?b1F2OHJkclc0Ry81QzRyREM2K0srVlNGMFlOejBpUDQ1dUc1MXlDcmFKOGJk?=
- =?gb2312?B?ZGtZcGlYL2ZJUHo0K3JaVTg5ZjU0UFdwSTBxV0V1VU1HMHBoMWorYzVVOHhu?=
- =?gb2312?B?blM4TnlPeTFUanNraVBzdVc2RGRKQm4wcjhmVEllRUh1bEpOaDJMZEFzakZj?=
- =?gb2312?B?YmllTFRiSklnSG1nVGhoUzBncmJCSXR5ckZwakpSV3hxeDV3TGhWOU5vUita?=
- =?gb2312?B?allnOW5ONHNEbkp6VlFCcmExc3R3U1J2YmhUczZhUVJnNWRZZEVXbG1SV05r?=
- =?gb2312?B?VVpsd1hvQm5Ic2FPZFNlMmNSWWpaY3NLbVlZNjBWUis2Z3Nub3ZMVFFjR0Iw?=
- =?gb2312?B?V3RUY29vakpRMWdNbmtqbm41Vk1NcDlCa0JxNG0vd05aOEdKMU9FdWpwUXN3?=
- =?gb2312?B?YlJpL2RqaWNjRm8vcm54c0ZyVFpLRTBueXVwdjgvZlVTVS9rNGhBVEoydmVz?=
- =?gb2312?B?Y3Z3ZDc1WHR2RUVJeUNFdkp1V2lTRkJadVVUYm1CT05INGlIbk9JVDdnb2d0?=
- =?gb2312?B?ZnBBRlBDZldvS0dHRDloWWtEeERlNjM5ckg0V0tKZWI1SHR5a3VJVUd4bktQ?=
- =?gb2312?B?emZmRzF1a25WWUJocDFPa0ZWdTFucXFoT0pNSy9qRFhZSEdnWklhb05rVFhL?=
- =?gb2312?B?ZEkwTzdTVXIyZkFwSWJScEZiem1iejV2eHYrcjlyK2FTN0xCaUp0NFBqNklj?=
- =?gb2312?B?VXJKcXMvZHN6ODVpdHJNam92a05ZVHZBNzZkZzNteDdxYW8xWWE2TUFtckV2?=
- =?gb2312?B?WW9NZ3hhbXVXWmduQmFHVjBFQ1cwMnYwM3hKVG1CWXN5U2RlT2dsc1RsR1RS?=
- =?gb2312?B?VllrTTMrMGpPRXVZZng1TzNwVnFtUXJUZ0lWK1IveU5VdDhTOEd2MUVXOVV4?=
- =?gb2312?B?eFcwbm1xWi9jcmVGRXhxRitrZVNkdGdEVmgzQmJ0bUpwYzkwclFhemlIWFVH?=
- =?gb2312?B?bFRPOUNnZmNSRmIveU5YbXBTMDZ1QTFaUjFEMllTU29zYUdyZDZseFVsd3Jj?=
- =?gb2312?B?eFRLck9mdXVnYmN6WURkUXd4SURYMWZSZDFrY1RHODZrWWdDUG91bWw4OW0r?=
- =?gb2312?B?K2xXQi8vY2VPQ2YyV0dINEFJMzI0ZkwzNS9zODlEVWlWZkxPT2tsTTRVZkdB?=
- =?gb2312?B?dE4reFdybW5POW5DNWFVL2Z0OHV4OVg3RmtvMzVaNlNBUVYwS2RsMG9JUS9o?=
- =?gb2312?B?QzA2TkgrSXFwM3M1bHExVE1ocTRQZWhEcnlzakRFWlN4REk2dTJ4akxoano1?=
- =?gb2312?B?dVQ3NFJLMUxraEVrUTdBZll5SVl1NmVXSjJFamZYNFU2c3c9PQ==?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYUPR06MB6217.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?gb2312?B?M2t5Y2MreENGQ3FtbjhvV01CKzRXTWhEdDFPR0k0SU5uQkRWalU0R3pwS09Z?=
- =?gb2312?B?T2ZYbHRqNmFxTk5HVFJmbUpoUHNlTzJzMXp4RW5CdHBXOUtqSkVlZkRIK2tY?=
- =?gb2312?B?NE9HTXNmUG02bTVLN28zbkZKYmtqY3VxMDRwT2xiV1g0cW9DWm4zVmh4cEhh?=
- =?gb2312?B?ZmRjVm56MnlJVjlRMmEvbE1obUFVYVl0Tkx0RDFYRzhDbXFzMnpWL3lBVzM3?=
- =?gb2312?B?TGthVWhWMVA4SHlNUi9xdldWUlJwdVg5QTc0Zm84UnVhT1ZMRHNGOERCWU9W?=
- =?gb2312?B?RFE4SUtWcEFDMmpXL1ZXZk85clNXNm13U1JBR0ZRN1o2MUhxTzV6QTF2YmFv?=
- =?gb2312?B?M3NYYzduS0VINnFNT2gwNkZyRjNPM0Y2NWFoaGhnSmdZdGkvZ1JWSlJNZzBY?=
- =?gb2312?B?R0F6V0N4Lzh4cVRjOFlPRWE4V0c0VDVsQ0o5UXBNM1lNTytvczBIYnFmQ1g2?=
- =?gb2312?B?eTc2cjJla25SM0FkMmFSUzdreC9zWDhjQ1crYU9CYzBETzNVVndudGtSem5J?=
- =?gb2312?B?T3RQMDNYVXBGUVRRS3Q3bVNWclpPWWVaTjBpMmxtUHQ2eEc2RXBNdlUrVUF5?=
- =?gb2312?B?OSsxclNNUGNFOVl6UFk3d1o4ZmIzYTJvZ3R4TEtxQ1RsL25tRVVmNGVyYjNZ?=
- =?gb2312?B?bHNCc1F5aUhFc21kTjhRK2dHOVNwdWt0Y09RNTBDaCtyY0t1QW9walA3VzU4?=
- =?gb2312?B?RDVqVEMzQ0l4TlR4Z3hJYTJxb2NLTXlUMUcrSzJnR0dZTTdzWHhhbmZWbzUx?=
- =?gb2312?B?Tkt0Y1Z6K244OHV1SmZkcjYvVkhsMmIwV0NYZndiTGNXVFZ4RmMvNE5FM0Fh?=
- =?gb2312?B?M2NORnk1SkIreHpjZFkrNGEwSHBjQXlVRVFPaTRpN01Zdk9taVVaVGdlU1l2?=
- =?gb2312?B?WXpTemFwYS92UkRTTkdUVkZEYm1OZmFLanRLRHViVkNXaUNEVmFHMEg0MGVW?=
- =?gb2312?B?L1AxWXYwbWI0Y3ZPOHVQQXJCODVBMWUwR0hGUHR4eDhuRFR2RG9HRWM5RDhP?=
- =?gb2312?B?WGpKTE1oUExqaTdEVlkwN2pEZzJJV0NuSmRqaWNpKzgrUGF2YlFyWWxzTlk2?=
- =?gb2312?B?dmxhYThvb3A3cThONmtVVXp1NlRTUFRIelUyRUhDVzR3cVFTZmVONTNUVDI1?=
- =?gb2312?B?NU4vQVYwaW5qWHpKTGY0cmxEa0JyajJLSmRBV1FuTXFiV2NkNm4xZ3lBVHln?=
- =?gb2312?B?S3RuQTc2M0RjYXk4OUJJd1RnOThhSVFndnpjbGY5SndibnNURGwwMEttdzNZ?=
- =?gb2312?B?Sk1QZ0FITGJtUUIrUjJ1TTNhZ2RBU28yd1FXaEU5emhwRFBrWlFKTHZtTWt6?=
- =?gb2312?B?QXdYcldCRUNVM1Q0aWNoaHg4eWZrd0ltbGo1UlIzVWdrWnZrMVJhbXM1SXNP?=
- =?gb2312?B?NE5UYVRBN2dHcnZUZFAybXcrRzM0SEpFRnlMTE5TV3RyOFBjYU1zeko0WnFv?=
- =?gb2312?B?ZVppUmFqN1JsQSs0QUxkZHJtWDJzbi9rTjZYd1NlS3Q0a295cTc2UDZOdzh4?=
- =?gb2312?B?dWcvSCs2YkRqdkJVVU0rblBmZFpKV0lQM0hxTVpsbTNDUEo3MzBGbXRjTENq?=
- =?gb2312?B?TC8vWnNqWFhoTDNOQk4rRUV5dEN0RXJEaHI3c0hEQkErMXJZdmdnTW5ub21L?=
- =?gb2312?B?eXZhQllLK0Vmc1k1OW9zZFcrT2tYR1NoUHJ1QUU3dk5mNnVLSGx3ekFQYXV6?=
- =?gb2312?B?WFFiQkN0dHFCNDFWNWNnclhaU0k4VEJJRlRnVGdDQ1NHbjFpZ0NYWFdMdU1q?=
- =?gb2312?B?S0c4L2QzMndIRXBPZ25aMkFTSDV3bEdCbUZiWmh5aGFWT3VKRmFVUXYzbE5j?=
- =?gb2312?B?c2E1VlpjbkV5TGxtdGpxV2RFN2dWYnNxN3NQejFlalgzUEJTT2FRc3FLU2s0?=
- =?gb2312?B?cW9mbi9hNmlQdE15QmtwZmpGNFdPR09Pa1ZPemlMTFhJMCszTk14b0lEWTZK?=
- =?gb2312?B?dm16NDIrdnJaOU1neDBPZVVUb0hyeWRjZ2RRaFgzUzNyeU5WbmhYZVFSSG1l?=
- =?gb2312?B?d3dqc0d5TFFYdmxrekRZU09zNW9mT0FZMUoxbXdRaWtGYWRNcjFYajlwS0p0?=
- =?gb2312?B?K0ZPM3k2M05ETmRNMDhHdXJtMnlzeGJDVzNuNnZ2QnR4MWw3SFNRbm4xTGJy?=
- =?gb2312?Q?rqiY=3D?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9451B8EA0
+	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 16:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723826225; cv=none; b=Dz9JP8lk5H3m13h2He5C8HD+9QL1sykq2ZtvUM9rx9vJYPzVryHToLCwtVhvAglI0Zhh5ZeOU+CUklm/okQAwMPlp2s6Yayk6H9ljqNpfB5N47d41Xpn7UzMUVxT7HkTH4RTmLX5pPwI25wFjwHXgRCHE3/2QnrskWOVZVsoFK0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723826225; c=relaxed/simple;
+	bh=cZSUAWeDd5rCM+qAD/LVzIvs5CQlQpQNp66n+o3c3Q4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=RGHJYhp7SksO+i4TCh53Ngz3cPQUfNaX3h7adbk2lD1D99xEeA+nBYujPpVtgAMRSbKcF9SLw5di3EuWwKbo9RvDs8hZwgjL/pKd4aggYD9wdiLKLTdeDT6r+mH1Axh75oupyKVnqgzC7lVzhxoAHTxMEw5wKz7gEwaFgCsFJJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ePcj1LDH; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240816163700epoutp03c466933bdb9ebe512d6989e9ce632bbc~sQtB8MIvH1453614536epoutp03W
+	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 16:37:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240816163700epoutp03c466933bdb9ebe512d6989e9ce632bbc~sQtB8MIvH1453614536epoutp03W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1723826220;
+	bh=TqPPlQaKUArbuhJTxVDgQq9zqm+9VIp3Ca3AX7bpk+o=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=ePcj1LDHj7HvJ9EzsJG0px2h/UlkKoI4+wiLRbS/0HdBnjnECj6eDCH4yRNB/+DA3
+	 MPvrsa1CoRn2YgjDu2MEmTiTiizJSmi0deiHW4Rn4NFuZI9XUsq0uMRXMICHWn7/Fi
+	 5o9QJg0bwFBz9/lVp4yrBVgJqgWTW1IBzRx5gQnU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+	20240816163700epcas5p433ca7d63b0a9f4c98750499f1d36e4e8~sQtBlrTuc2435224352epcas5p4o;
+	Fri, 16 Aug 2024 16:37:00 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.181]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4WlnhB45rJz4x9Pp; Fri, 16 Aug
+	2024 16:36:58 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	01.75.09743.A208FB66; Sat, 17 Aug 2024 01:36:58 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240816154312epcas5p3b282d7cba06fe54e1aa9be216452b143~sP_DdiH5h0211602116epcas5p3R;
+	Fri, 16 Aug 2024 15:43:12 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240816154312epsmtrp2c964e674b29bcb79c77d561a0c4c8cf4~sP_Dcsv9x0744807448epsmtrp2E;
+	Fri, 16 Aug 2024 15:43:12 +0000 (GMT)
+X-AuditID: b6c32a4a-14fff7000000260f-12-66bf802ada82
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	A4.04.19367.0937FB66; Sat, 17 Aug 2024 00:43:12 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240816154310epsmtip19c177cdfece7ba449e0946e137a2b101~sP_BeXm3l2660326603epsmtip1P;
+	Fri, 16 Aug 2024 15:43:10 +0000 (GMT)
+Message-ID: <4f286780-89a2-496d-9007-d35559f26a21@samsung.com>
+Date: Fri, 16 Aug 2024 21:13:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYUPR06MB6217.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3d4f15b-f495-448f-3a6f-08dcbe069388
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2024 15:17:43.3778
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: c3IqLOIiir/l/euNEYrz3XZNnYRB3gBPcKK0OQxTuguZ8BTMnsAfof3AibKiIDozq/52RA92kO3lzJki1ZgSwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5271
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: dwc3: core: Prevent USB core invalid event
+ buffer address access
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, stable@vger.kernel.org
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <2024081618-singing-marlin-2b05@gregkh>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmlq5Ww/40g7bJshZvrq5itbizYBqT
+	xanlC5ksmhevZ7OYtGcri8Xdhz9YLC7vmsNmsWhZK7PFp6P/WS1Wdc4Bin3fyWyxYOMjRotJ
+	B0UtVi04wO7A57F/7hp2j74tqxg9tuz/zOjxeZNcAEtUtk1GamJKapFCal5yfkpmXrqtkndw
+	vHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0I1KCmWJOaVAoYDE4mIlfTubovzSklSFjPzi
+	Elul1IKUnAKTAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMCWeusxTM4q7Yfn8lWwPjPo4uRk4O
+	CQETic1rtrF1MXJxCAnsZpQ40LmfGcL5xChx9PlHVjhn+45WdpiWj1/aWCASOxklmuc/gqp6
+	yyjx7Pp3FpAqXgE7iad/1gPN4uBgEVCVaNjnDBEWlDg58wlYiaiAvMT9WzPAhgoLxEscub2U
+	FcQWEdCQeHn0FtgCZoGTTBJXly5jAkkwC4hL3HoynwlkJpuAocSzEzYgYU6gg9a032KHKJGX
+	2P52DjPEoWs5JKZszAUplxBwkTh4KxUiLCzx6vgWqF+kJD6/28sGYVdLrL7zERwUEgItjBKH
+	n3yDKrKXeHz0EdgrzAKaEut36UOEZSWmnloHdRmfRO/vJ0wQcV6JHfNgbFWJU42XoeZLS9xb
+	co0VwvaQmPxiC/MERsVZSKEyC8mTs5B8Mwth8wJGllWMkqkFxbnpqcWmBUZ5qeXw+E7Oz93E
+	CE7BWl47GB8++KB3iJGJg/EQowQHs5II79Mve9OEeFMSK6tSi/Lji0pzUosPMZoCY2cis5Ro
+	cj4wC+SVxBuaWBqYmJmZmVgamxkqifO+bp2bIiSQnliSmp2aWpBaBNPHxMEp1cDksDrxnGNZ
+	mw+zwWIP+d9b1SasYuSYfuxXG39Z6NWXgX6fTOcF2YlMscy+ue3WooqY//bskZJ/i56sLLVT
+	sGfm7stqFdWa08v2idPgU8niV3u015ZVTxCN5VghY/x+6UkG5oLf7SEr79+/XN6REu7upnvR
+	LbPRb2mduaq4oKazBePE7dFtf/s4psX0vP3fbncurnRD9KVSZmEZu8/buc/UXRAsnF6tWKW1
+	NSJpRejh2CcMj+UT/M9ven/Z/miEptsFlZrfj/Tzb4kJflDxqeuV2H5CTWPB9JZTuRI3jpTZ
+	n09+UndJZf5Kv+aHny+ZFmzc7/DqlP5qIYuJmUmLXWS0UnMknvxs9z4ZZinEp8RSnJFoqMVc
+	VJwIABHmJ/NKBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSnO6E4v1pBpPf8Fq8ubqK1eLOgmlM
+	FqeWL2SyaF68ns1i0p6tLBZ3H/5gsbi8aw6bxaJlrcwWn47+Z7VY1TkHKPZ9J7PFgo2PGC0m
+	HRS1WLXgALsDn8f+uWvYPfq2rGL02LL/M6PH501yASxRXDYpqTmZZalF+nYJXBkTzlxnKZjF
+	XbH9/kq2BsZ9HF2MnBwSAiYSH7+0sXQxcnEICWxnlJj3+SIrREJa4vWsLkYIW1hi5b/n7BBF
+	rxkl9u/sACviFbCTePpnPXMXIwcHi4CqRMM+Z4iwoMTJmU9YQGxRAXmJ+7dmsIPYwgLxEs2T
+	9zOB2CICGhIvj94CW8wscJJJYt+VPmaIBTsZJbof7gHrYBYQl7j1ZD4TyAI2AUOJZydsQMKc
+	QFevab8FVWIm0bUV4lBmoGXb385hnsAoNAvJHbOQTJqFpGUWkpYFjCyrGEVTC4pz03OTCwz1
+	ihNzi0vz0vWS83M3MYIjTStoB+Oy9X/1DjEycTAeYpTgYFYS4X36ZW+aEG9KYmVValF+fFFp
+	TmrxIUZpDhYlcV7lnM4UIYH0xJLU7NTUgtQimCwTB6dUA1NuQyxjo889uexmpZwYD7/pBSK1
+	Nl8VMpYJ2Ldq7LN5Ilict6zW9SfviQtvDTZGGz9h5TxwTD44KoIj/vDirif33bb/kPRIq2L6
+	vkTVyPpF1V4prt1M7SHhFYGnVD03RU82cctZrKnrLBp/XFnqxdzzKz0Of2hcJnlq+rZFGfxO
+	JqwrJiZcnnHzifT16K4jC8+bLDjoLWvHULBQxTgq2P5I5GEtJT3P3XeuHpK9U7Xm4dJVqbcc
+	C2aezOrx/dIbU2Sbo2mvEW68YOc5363feoLLbrWVu0unrq7z7997Tzq3StjtX6qQQF1NkaJ8
+	tMPN033WXQv+nsvO2ajZ9tVO3Kbn6ulb+5Y/+mJy/lSaEktxRqKhFnNRcSIAG2kT3SMDAAA=
+X-CMS-MailID: 20240816154312epcas5p3b282d7cba06fe54e1aa9be216452b143
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240815064918epcas5p1248e4f9084d33fdb11a25fa34e66cdbe
+References: <CGME20240815064918epcas5p1248e4f9084d33fdb11a25fa34e66cdbe@epcas5p1.samsung.com>
+	<20240815064836.1491-1-selvarasu.g@samsung.com>
+	<2024081618-singing-marlin-2b05@gregkh>
 
-SGVsbG8gbGludXggY29tbXVuaXR5IGV4cGVydDoNCg0KPj4gPiA+IFE6IEFyZSB5b3UgcnVubmlu
-ZyBhIG1haW5saW5lIGtlcm5lbD8NCj4+ID4gPiBBOiBZZXMuDQo+PiA+DQo+PiA+IFlvdSBzaG91
-bGQgcmVwbHkgd2l0aG91dCB0b3AgcG9zdGluZyAocmVmZXIgdG8gWzFdKS4gSSdtIHRyeWluZyB0
-bw0KPj4gPiBiZSBoZWxwZnVsIHRvIHlvdSBidXQgaXQncyBub3QgZWFzeS4gVGhlIHF1ZXN0aW9u
-IHdhcyBpZiB5b3VyIG9uDQo+PiA+IHNvbWUgNi4xMC55IG9yIG9sZGVyIHZlcnNpb24gb2YgdGhl
-IGtlcm5lbCwgdGhlIHN0ZXAgdG8gcmVwcm9kdWNlDQo+PiA+IGl0LCBhbmQgaWYgeW91IGhhdmUg
-YW55IGF1dG9tYXRpb24gdG8gdGVzdCBpdA0KPj4gICBUaGUga2VybmVsIHZlcnNpb24gdGhhdCBo
-YXMgdGhlIHByb2JsZW0gaXMgNS4xNS4NCg0KPldoaWNoIHNwZWNpZmljIDUuMTUga2VybmVsPyAg
-VGhlIGxhdGVzdCBvbmUgb3Igc29tZSByYW5kb20gQW5kcm9pZC1wcm92aWRlZCA1LjE1IGtlcm5l
-bD8NCiBBbmRyb2lkIDEzLTUuMTUuDQogVGhlIHByb2JsZW0gb2NjdXJzIHJhbmRvbWx5IG9uIGtl
-cm5lbCA1LjE1Lg0KDQo+RG9lcyB0aGlzIGFsc28gc2hvdyB1cCBvbiA2LjExLXJjMz8NCiBLZXJu
-ZWwgNi4xMSBpcyBzdGlsbCB1bmRlciBkZXZlbG9wbWVudCBhbmQgaGFzIG5vdCB5ZXQgYmVlbiB0
-ZXN0ZWQgb24gYSBsYXJnZSBzY2FsZSwgc28gdGhpcyBwcm9ibGVtIGhhcyBub3QgeWV0IGJlZW4g
-ZW5jb3VudGVyZWQuDQoNCj4+ICAgVG8gcmVwcm9kdWNlLCB0dXJuIG9uIHRoZSBjb21iaW5hdGlv
-biBtb2RlIG9mIHRoZSBtb2JpbGUgcGhvbmUgVVNCLCBzdWNoIGFzIGFkYitkaWFnK3NlcmlhbF90
-dHkrcm1uZXRfaXBhK3NlcmlhbF9jZGV2IHdoZW4gcnVubmluZyB0aGUgbW9ua2V5IHRlc3QuDQoN
-Cj5XaGF0IGlzICJtb25rZXkgdGVzdCI/DQogUnVuIHRoZSBhcGssIGFuZCBhZnRlciBpdCBydW5z
-LCBjbGljayByYW5kb21seSBvbiB0aGUgbW9iaWxlIHBob25lIGludGVyZmFjZSB3aXRob3V0IGFu
-eSBwYXR0ZXJuLCBkZWZhdWx0IHVzZXIgdXNhZ2Ugc2NlbmFyaW8uDQoNCj5JIHRoaW5rIHRoaXMg
-aGFzIGJlZW4gcmVwb3J0ZWQgcHJldmlvdXNseSwgYW5kIGRpZmZlcmVudCBwYXRjaGVzIGhhdmUg
-YmVlbiBwcm9wb3NlZCwgaGF2ZSB5b3Ugc2VhcmNoZWQgdGhlIGFyY2hpdmVzPw0KIEkgaGF2ZW4n
-dCBzZWVuIHRoZSBwYXRjaCBnaXZlbiBiZWxvdyBiZWZvcmUsIEkgd2lsbCByZWFkIGl0IGNhcmVm
-dWxseS4NCiBJIHNlYXJjaGVkIGZvciBMaW51eCBtYWlubGluZSBjb21taXRzIGJlZm9yZSBzdWJt
-aXR0aW5nLCBidXQgSSBvbmx5IGNvbXBhcmVkIHRoZW0gYWNjb3JkaW5nIHRvIHRoZSBjcmFzaCBz
-dGFjayBpbmZvcm1hdGlvbiBhbmQgZGlkIG5vdCBub3RpY2UgdGhlIGZvbGxvd2luZyBjb21taXQu
-DQoNCj5TcGVjaWZpY2FsbHksIHRha2UgYSBsb29rIGF0Og0KPiAgICAgICBodHRwczovL2xvcmUu
-a2VybmVsLm9yZy9yLzIwMjQwMTE2MTQxODAxLjM5NjM5OC0xLWtodHNhaUBnb29nbGUuY29tDQoN
-ClRoYW5rcw0K
+
+On 8/16/2024 3:25 PM, Greg KH wrote:
+> On Thu, Aug 15, 2024 at 12:18:31PM +0530, Selvarasu Ganesan wrote:
+>> This commit addresses an issue where the USB core could access an
+>> invalid event buffer address during runtime suspend, potentially causing
+>> SMMU faults and other memory issues in Exynos platforms. The problem
+>> arises from the following sequence.
+>>          1. In dwc3_gadget_suspend, there is a chance of a timeout when
+>>          moving the USB core to the halt state after clearing the
+>>          run/stop bit by software.
+>>          2. In dwc3_core_exit, the event buffer is cleared regardless of
+>>          the USB core's status, which may lead to an SMMU faults and
+>>          other memory issues. if the USB core tries to access the event
+>>          buffer address.
+>>
+>> To prevent this hardware quirk on Exynos platforms, this commit ensures
+>> that the event buffer address is not cleared by software  when the USB
+>> core is active during runtime suspend by checking its status before
+>> clearing the buffer address.
+>>
+>> Cc: stable@vger.kernel.org # v6.1+
+> Any hint as to what commit id this fixes?
+>
+> thanks,
+>
+> greg k-h
+
+
+Hi Greg,
+
+This issue is not related to any particular commit. The given fix is 
+address a hardware quirk on the Exynos platform. And we require it to be 
+backported on stable kernel 6.1 and above all stable kernel.
+
+Thanks,
+Selva
+
+
+>
 
