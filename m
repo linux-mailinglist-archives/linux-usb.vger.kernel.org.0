@@ -1,148 +1,128 @@
-Return-Path: <linux-usb+bounces-13526-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13527-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B54C09541A0
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 08:20:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0C6954241
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 09:02:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F03F282471
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 06:20:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 662F3B2464B
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 07:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF0281AD7;
-	Fri, 16 Aug 2024 06:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B81C129A78;
+	Fri, 16 Aug 2024 07:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XGXHU2gE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l48LXP++"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF74034CD8;
-	Fri, 16 Aug 2024 06:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC5C85626;
+	Fri, 16 Aug 2024 07:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723789241; cv=none; b=UTEnPsoxTJVXY85MF1ZdW+IGPWB2y0ByNE4yFwX/FT0rmji9EGseLMUz026Ifuzv7mX2TgqhWaOgz/UXU6mdFtD/gxIDPKc6WEMZRpmqbdBs+1eMILgTHlPeH76PMOLHZ+2lsoqLdi02drVGtko9NvBrYxlp9p6mKB6KZcGNhsQ=
+	t=1723791744; cv=none; b=HgPVUQzIoaR8V+q1bAC5f3uTJiH/XufAFN9Qim1QCd3MAmuGGgSJDxEBzo5sdgvsebzPIPEGdyMDSjbJpWduvt2T8QRxa34xyZPvZJOjI21EJ9EvT4EyJBUX/MCQFJNBIKYFWUZUvYBR0Uvg6SHTxRvyx7uAqXka9VP6g5svKDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723789241; c=relaxed/simple;
-	bh=kVuTMKHMeIFr5A7ZvDLmKBOh3Us/hBW2O7R11SpOyVw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pa9hDe9270sAR/tFw/sdVNjOXIR3fZUZYQTstw+d+xOGO9aD6E63iOJnMIWGvqZ8NtN8DaILOnB5x0tMiHg2IUyWZKGOo4KoMSC4fyZsid5rEOb9/baZVMlvtA//mO+sFWSZt2leaDDXFPU9cVIDj+T92EFE1dLw2gaZ6Vz/vNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XGXHU2gE; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47FKwO39026844;
-	Fri, 16 Aug 2024 06:20:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=GU4RTXFaRm7bLUEgi7WuOl
-	0ugb1/6wDQmyPMD5AVWnA=; b=XGXHU2gEG/+ko4w0PJoVeoQf4FAUSWV5h5Kfkb
-	33GZxLdB9eXUg1tHgvrNL3W1L4AKWKOD8gpVNfGPs7URPw30C+Q1zjmd1z31NyTY
-	qlBCx4WQAh9LN9q3iCRX34s3FJqxSf6sNlGoUV72OAwuIIhGoFzhgBxe/HELINSr
-	9z+41PlVxKVft1b92HwAqg8LtqSSzT0h2FkeiqDR89v54LSojRhIBM0vAFoxpTOE
-	j8/8shcuzUaTuKDG3ExmyjcU/t0THBwustio1Yp++rhD+kokizkNGcmOoLXjRupQ
-	CdAldVMblA2/uz3TnLxuF36DlzfyOajlrEmQsIZf4ijE/qsw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 411s5pgvjf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 06:20:36 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47G6KZad024646
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 06:20:35 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 15 Aug 2024 23:20:32 -0700
-From: Prashanth K <quic_prashk@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Prashanth K
-	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
-Subject: [v2] usb: dwc3: Avoid waking up gadget during startxfer
-Date: Fri, 16 Aug 2024 11:50:17 +0530
-Message-ID: <20240816062017.970364-1-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1723791744; c=relaxed/simple;
+	bh=ZJas41ppseSW2EpIGy/CPYlNdVZswpcnnaanve53xsA=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=gBbLr7OKVcCabBV/AaIyC7550zvWoQ2c3e2exjY2QxXI4gTOxiIMYcZmNiZSFATxGHT5zyfzJZuxofbQsSCaDj1xFFtm46IrhfF3tOnFHGuzZ/y2uS6vEX/kAwayPPzXjn2adbkB5J/iukrgCDCXRlu02dkOpY5FOBHFAm6917s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l48LXP++; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5bec4e00978so1175197a12.0;
+        Fri, 16 Aug 2024 00:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723791741; x=1724396541; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lzev+Mzi7834P4z5pu8ad44NPYLLbytP5rCZIlHC56I=;
+        b=l48LXP++B4cHV14m71/7aC1gX8cuJ+FvGhN9+2JmbsTmaOGdMnz6I6M8n6XWG2eDHI
+         H26l7IE//XGoas5/mUxGprtZswcdkhkZjyzlwgC9qHldUyW6t3fdg9zHrxJUUAReK6Oh
+         fKXuV/KXiZoOnsijP4n2CwK0zkTQbzhzohl8BOVlQmmMiUbZsdE3L1c7sv8hI7YZ62LN
+         2I5CcZh9AfseWN3DJ5r89s5tCKd4VwYBDMy/1DemYi6aNOgaflJpRhyS9QTF8/DAeb8m
+         1bzfvsUrNkr1vDBKBXB68jwLVapIo2tzrwJYMfqbb4vQ4VNsrjp1B1+yYPT15WMX0Ag7
+         nKdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723791741; x=1724396541;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lzev+Mzi7834P4z5pu8ad44NPYLLbytP5rCZIlHC56I=;
+        b=MPB1EJHDa/YjQnADJneW8vXwqpHzAQT+SdCacj0xcEMhMw9nE8fp2flkLWggd9kwhe
+         kX1d//81NAagb+/LwD5bwlIa8lTZ8wg1mUIbR2oGRFO8LWIh/Snlih/j1nbYsGnSg0bG
+         eH5HXFVpWFl0jC29QXhbplQp/nRq913COFxeTPcVkleeECK8rfIOft83DNokAtxZ4/y+
+         dbH9/HY5EDgaZlmfsSgi6a37dESrE9Xr4GeCkWI41wywzG7uIM60W0Ajo737m6MG2MEL
+         8x2cQLHufH7cOR5/fru+4rV6cP+ZvsUC1ZZAV/zQq9TlJ25rpTQNS2TSW/EazRm0h36c
+         CNHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCULahNAUJOJLW352QGNrNJ8Ev52degaslJZQQ4v5DIq0xC+Ew4yceSc2n061FZ2z4qOnjldqzP/hfPhxXCQ2ckkwxd5JB1P07fLM+DHA+EulsEFOKGPq2Ao+zoIlnYnD38mzEJz+SkZ
+X-Gm-Message-State: AOJu0YzADZvXcLYlx8QE2UxQvwsYP8dmWsrVzSCqynH6ZrZIGhoi29N9
+	/iInrI1yWjTwovZG6nCVnawqXNXoExesxD51uSPz2jBYllltgR0lHxcsKPTL
+X-Google-Smtp-Source: AGHT+IEXmA1eKlUggNe9Hxgxrj3Q4KATYAc2SIw05ICsYmkvrCeRG137tY7DydonojO5UnUZDm4MrA==
+X-Received: by 2002:a17:907:1c22:b0:a77:b516:3023 with SMTP id a640c23a62f3a-a83928a6444mr134157766b.4.1723791740476;
+        Fri, 16 Aug 2024 00:02:20 -0700 (PDT)
+Received: from localhost (85.64.140.6.dynamic.barak-online.net. [85.64.140.6])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838c6a58sm214392166b.17.2024.08.16.00.02.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 16 Aug 2024 00:02:20 -0700 (PDT)
+From: Eli Billauer <eli.billauer@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: arnd@arndb.de,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Eli Billauer <eli.billauer@gmail.com>
+Subject: [PATCH 1/2] char: xillybus: Refine workqueue handling
+Date: Fri, 16 Aug 2024 10:01:59 +0300
+Message-Id: <20240816070200.50695-1-eli.billauer@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6zPB1cE4UgM3yPjRWYQk81sQzaXci-sR
-X-Proofpoint-ORIG-GUID: 6zPB1cE4UgM3yPjRWYQk81sQzaXci-sR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-15_18,2024-08-15_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- mlxlogscore=299 suspectscore=0 lowpriorityscore=0 clxscore=1015
- bulkscore=0 phishscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408160044
 
-When operating in High-Speed, it is observed that DSTS[USBLNKST] doesn't
-update link state immediately after receiving the wakeup interrupt. Since
-wakeup event handler calls the resume callbacks, there is a chance that
-function drivers can perform an ep queue, which in turn tries to perform
-remote wakeup from send_gadget_ep_cmd(STARTXFER). This happens because
-DSTS[[21:18] wasn't updated to U0 yet, it's observed that the latency of
-DSTS can be in order of milli-seconds. Hence avoid calling gadget_wakeup
-during startxfer to prevent unnecessarily issuing remote wakeup to host.
+As the wakeup work item now runs on a separate workqueue, it needs to be
+flushed separately along with flushing the device's workqueue.
 
-Fixes: c36d8e947a56 ("usb: dwc3: gadget: put link to U0 before Start Transfer")
-Cc: <stable@vger.kernel.org>
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+Also, move the destroy_workqueue() call to the end of the exit method,
+so that deinitialization is done in the opposite order of
+initialization.
+
+Fixes: ccbde4b128ef ("char: xillybus: Don't destroy workqueue from work item running on it")
+Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
 ---
-v2:  Refactored the patch as suggested in v1 discussion.
+ drivers/char/xillybus/xillyusb.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- drivers/usb/dwc3/gadget.c | 24 ------------------------
- 1 file changed, 24 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 89fc690fdf34..3f634209c5b8 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -327,30 +327,6 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
- 			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
- 	}
+diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
+index 33ca0f4af390..e12d359194f8 100644
+--- a/drivers/char/xillybus/xillyusb.c
++++ b/drivers/char/xillybus/xillyusb.c
+@@ -2093,9 +2093,11 @@ static int xillyusb_discovery(struct usb_interface *interface)
+ 	 * just after responding with the IDT, there is no reason for any
+ 	 * work item to be running now. To be sure that xdev->channels
+ 	 * is updated on anything that might run in parallel, flush the
+-	 * workqueue, which rarely does anything.
++	 * device's workqueue and the wakeup work item. This rarely
++	 * does anything.
+ 	 */
+ 	flush_workqueue(xdev->workq);
++	flush_work(&xdev->wakeup_workitem);
  
--	if (DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_STARTTRANSFER) {
--		int link_state;
+ 	xdev->num_channels = num_channels;
+ 
+@@ -2274,9 +2276,9 @@ static int __init xillyusb_init(void)
+ 
+ static void __exit xillyusb_exit(void)
+ {
+-	destroy_workqueue(wakeup_wq);
 -
--		/*
--		 * Initiate remote wakeup if the link state is in U3 when
--		 * operating in SS/SSP or L1/L2 when operating in HS/FS. If the
--		 * link state is in U1/U2, no remote wakeup is needed. The Start
--		 * Transfer command will initiate the link recovery.
--		 */
--		link_state = dwc3_gadget_get_link_state(dwc);
--		switch (link_state) {
--		case DWC3_LINK_STATE_U2:
--			if (dwc->gadget->speed >= USB_SPEED_SUPER)
--				break;
--
--			fallthrough;
--		case DWC3_LINK_STATE_U3:
--			ret = __dwc3_gadget_wakeup(dwc, false);
--			dev_WARN_ONCE(dwc->dev, ret, "wakeup failed --> %d\n",
--					ret);
--			break;
--		}
--	}
--
- 	/*
- 	 * For some commands such as Update Transfer command, DEPCMDPARn
- 	 * registers are reserved. Since the driver often sends Update Transfer
+ 	usb_deregister(&xillyusb_driver);
++
++	destroy_workqueue(wakeup_wq);
+ }
+ 
+ module_init(xillyusb_init);
 -- 
-2.25.1
+2.17.1
 
 
