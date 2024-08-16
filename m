@@ -1,176 +1,132 @@
-Return-Path: <linux-usb+bounces-13544-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13545-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FECF954892
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 14:17:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BD879548F4
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 14:42:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 351BD2831E1
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 12:17:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DA6A1C23E2D
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 12:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1841B012B;
-	Fri, 16 Aug 2024 12:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10041B86C0;
+	Fri, 16 Aug 2024 12:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="qiP+UVf2"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=phytec.de header.i=@phytec.de header.b="NVr6JfYf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65DA156C5F
-	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 12:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364A618D648
+	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 12:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.26.50.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723810630; cv=none; b=EFzxg9aTXyJcKzuj1iFtEHG653sTIV1oT78vwGqix7hSaXPffme/fM4tnPygBMKJFykgt36ACe7yQZcSRrtIU1duHcL1ZFu75Z5YKAwGdL+oy1oI4KHLxPeCZ0mP5at+kO3XulF5TcQYRqEeDdPkDtmctf1FguHwOjmj7TYX+I4=
+	t=1723812138; cv=none; b=WXL9TxWjri7kuiWn+gfos/V8i+3lGdEsttG4webR4PGsYtIvKrhTBlPYkDBNVFCboAeaKNTq1WBXyOV+19oPuVUegxWqeiw9uOPCznQnUKjqbPjtlxmXidUqQ9wL/PIGR5I1pMx6tN8nUYzICxRCCFG1f7ZLBlFKUm2zN2DELac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723810630; c=relaxed/simple;
-	bh=8EU799ei68CoKIZqdtSo/a+H89MPF5foH6vgKKKIh+o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mP3pj/Y2UwJ6u7awegFd9/7zZ5Vwt7BZRfxT2wHNuEMf/0VZYAp4EzLPuuBq//YRD/wHaeQywemXWMnE878VKHfd2sH6dT9S6CN8b6qHfasJmkhejih+aoTHDmip9aru67QWaKi60gcOYO33mV9I0vYI037pjO5sR6MHC4Mldkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=qiP+UVf2; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a7a9cf7d3f3so250163066b.1
-        for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 05:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1723810626; x=1724415426; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wPRwfrSooDRx9c1YQ60wUHqZBmSWFNZI1yGMvcPp51U=;
-        b=qiP+UVf2eGieSdjF6mDcu558I1fKfon09ClkBGHKhyPYNssEvSVxwQZNecuPhayBuk
-         6sm32n8nRcit3dUFPWSptG/DWxpbBfgeGW/OyRAstr4zpfmyfk2zyFNraP6KyzyIDPWR
-         WjSkuNkVLwH45MeFCl6tzAXfY+iLQGOxfoNsI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723810626; x=1724415426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wPRwfrSooDRx9c1YQ60wUHqZBmSWFNZI1yGMvcPp51U=;
-        b=sOKBG2Kp44QYKkUA+7NcBBwnkai0b6ab/6rcBhBlvL8tI44Iaz0BfJtuevZbiEFD/u
-         Nz8/BhP3oy4eO/qPxof4Ppv4FGDJQiJprJL+bqL4SZxAvTYrIrl2+dUfxgCRqdVpXUYK
-         yWHZxii24vsQyv7vXWfgOrWsHP1sbtJhn9QpHWrkoGFyvBMqBH5QawtxLhRep2mmYqc5
-         fhPGhOi60WAY6gXFLEiFcYHKCCeUPpfpBm8NDkXjDqJ0iFeawLbuvBjrpomb5lDr+fwr
-         j+9XUVF+2vQX5OpP89P07s7DS8MhyBJmr5NxWRugvVnU4jHykY/B24qoWnaYf7W0znaY
-         lm6g==
-X-Forwarded-Encrypted: i=1; AJvYcCX348cSDCPj3PEU65eBMzuIQEz3MimXGgLs+ZWEjVGT9b9WD137yxRAXDgRINdP9JiVv4DBUMryiCTfC9xQliHm5NRQtK7H+QGt
-X-Gm-Message-State: AOJu0Yx0l0Nt7jhFglzOpP7OAIb11a94Jagl3QmfuCPe/JON0a12kkZ5
-	oY9e3vTs7LNCDAJbjGkCIcHvXDHG2w1sG3cxD1UH7ro+Mi6dpvNPs5IMQbvfDpHCs1D2jmPkHr5
-	X4+3rxjVHAAijNNrhWhSd4ueH0GvxMvUduArv/w==
-X-Google-Smtp-Source: AGHT+IG8jMhlf8o6NwqmmGkfRlnWGnP4SJ0hc1r114kJFMVJYo26Lg45pfhyhHKtBt6nUBeLXh8Drr5zN2/rGI7Fu9s=
-X-Received: by 2002:a17:907:d848:b0:a77:cd51:3b32 with SMTP id
- a640c23a62f3a-a8392a650dfmr224291566b.62.1723810625574; Fri, 16 Aug 2024
- 05:17:05 -0700 (PDT)
+	s=arc-20240116; t=1723812138; c=relaxed/simple;
+	bh=sF0dNzfSIqtPCamjjg4ICQJcK0LPVhHebOf5ZflD/uM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=W77kJtSva57zxcQdcble+a9KlDdgyctVRpCi/112gPOoen0XGOoGc8ki7eIfx0rM6JZkeguCX8x4MXk2jYaqvJ9rrcyDI2QZrNDOE3QoDrzp7rliYwS2Q8rCOJ+nVfs8PA1WPHVuDKNySXA8H8EgbiRbEdDhL8xuLGU8bshIO6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytec.de; spf=pass smtp.mailfrom=phytec.de; dkim=pass (1024-bit key) header.d=phytec.de header.i=@phytec.de header.b=NVr6JfYf; arc=none smtp.client-ip=91.26.50.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytec.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytec.de
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+	q=dns/txt; i=@phytec.de; t=1723812119; x=1726404119;
+	h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=sF0dNzfSIqtPCamjjg4ICQJcK0LPVhHebOf5ZflD/uM=;
+	b=NVr6JfYfnr+7nlk6pHbl79ehkJx5e1GgvoXS4t430vE6qjPLaUizGbSWF9zKWrgx
+	7yWEmKUDgbm6/uVT/I/XO3CpE1WH3SUN/Uxmrxc0991beUoMIT/4xHV4oSYlsZFd
+	F0aB1H/EFuSWgBGQRT2y1SEPfFJHLmnXY8N7N+DG7Kk=;
+X-AuditID: ac14000a-03251700000021bc-70-66bf49175b97
+Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
+	(using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(Client did not present a certificate)
+	by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 1E.21.08636.7194FB66; Fri, 16 Aug 2024 14:41:59 +0200 (CEST)
+Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
+ (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Fri, 16 Aug
+ 2024 14:41:59 +0200
+From: Wadim Egorov <w.egorov@phytec.de>
+To: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC: <upstream@lists.phytec.de>, <heikki.krogerus@linux.intel.com>,
+	<gregkh@linuxfoundation.org>, <javier.carrasco@wolfvision.net>,
+	<abdelalkuor@geotab.com>, <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH] usb: typec: tipd: Free IRQ only if it was requested before
+Date: Fri, 16 Aug 2024 14:41:50 +0200
+Message-ID: <20240816124150.608125-1-w.egorov@phytec.de>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <TYUPR06MB62177737F0054278B489962BD2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024081608-punch-coherent-d29e@gregkh>
-In-Reply-To: <2024081608-punch-coherent-d29e@gregkh>
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Fri, 16 Aug 2024 14:16:54 +0200
-Message-ID: <CAOf5uwnsgcJjp1=RLa7qx9ScQY5rZvwX-Zu6BOqxBBhBCz+CFQ@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: gadget: u_serial: check Null pointer in EP callback
-To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>, 
-	"quic_prashk@quicinc.com" <quic_prashk@quicinc.com>, 
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"opensource.kernel" <opensource.kernel@vivo.com>, 
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
+ (172.25.0.12)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGLMWRmVeSWpSXmKPExsWyRpKBR1fcc3+awbyX2hanzu1ltmhevJ7N
+	4v7JDUwWXat3slj8bTa1uLxrDpvFomWtzBbd79QdODwmLLrK7DHvZKDH/rlr2D36u1tYPT4+
+	vcXi8XmTnMf8348ZA9ijuGxSUnMyy1KL9O0SuDK6Z1xlLpjMU3GkYR1TA+Nmri5GTg4JAROJ
+	w/v3soLYQgJLmCRWNPF0MXIB2Y8ZJdYvvcMIkmATUJe4s+EbWJGIgL3ElclfWECKmAUOM0pc
+	3dzI3MXIwSEs4C3x+7IPSA2LgKrE+6vXWEBsXgELiWl9C9kglslLzLz0nR0iLihxcuYTsBpm
+	oHjz1tnMELaExMEXL5ghDpKXeHFpOQtM77Rzr5kh7FCJrV+2M01gFJiFZNQsJKNmIRm1gJF5
+	FaNQbmZydmpRZrZeQUZlSWqyXkrqJkZQ2IswcO1g7JvjcYiRiYPxEKMEB7OSCO/TL3vThHhT
+	EiurUovy44tKc1KLDzFKc7AoifOu7ghOFRJITyxJzU5NLUgtgskycXBKNTAuNDvIvt7kwz3V
+	g2n8bt8DLl7Lu6GlP0mhzCqnQ7HFhGVx9FahqEa7mm53drX87YU1W7a1cz/y3CL/p6dXalHU
+	rB67X6f1npfpMYuvvLl6h255dGRnwQG1JamNlc33T/W+l1Pc1My07MUmrR/Pwqz07j80Dai1
+	Ofe5cVPFrROZcXef3ReoMFBiKc5INNRiLipOBACbb3VsaQIAAA==
 
-Hi Lianqin Hu
+In polling mode, if no IRQ was requested there is no need to free it.
+Call devm_free_irq() only if client->irq is set. This fixes the warning
+caused by the tps6598x module removal:
 
-On Fri, Aug 16, 2024 at 1:58=E2=80=AFPM gregkh@linuxfoundation.org
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Aug 16, 2024 at 11:21:24AM +0000, =E8=83=A1=E8=BF=9E=E5=8B=A4 wro=
-te:
-> > From: Lianqin Hu <hulianqin@vivo.com>
-> >
-> > Added null pointer check to avoid system crash.
-> >
-> > Unable to handle kernel NULL pointer dereference at
-> > virtual address 00000000000001a8
-> > pc : gs_read_complete+0x58/0x240
-> > lr : usb_gadget_giveback_request+0x40/0x160
-> > sp : ffffffc00f1539c0
-> > x29: ffffffc00f1539c0 x28: ffffff8002a30000 x27: 0000000000000000
-> > x26: ffffff8002a30000 x25: 0000000000000000 x24: ffffff8002a30000
-> > x23: ffffff8002ff9a70 x22: ffffff898e7a7b00 x21: ffffff803c9af9d8
-> > x20: ffffff898e7a7b00 x19: 00000000000001a8 x18: ffffffc0099fd098
-> > x17: 0000000000001000 x16: 0000000080000000 x15: 0000000ac1200000
-> > x14: 0000000000000003 x13: 000000000000d5e8 x12: 0000000355c314ac
-> > x11: 0000000000000015 x10: 0000000000000012 x9 : 0000000000000008
-> > x8 : 0000000000000000 x7 : 0000000000000000 x6 : ffffff887cd12000
-> > x5 : 0000000000000002 x4 : ffffffc00f9b07f0 x3 : ffffffc00f1538d0
-> > x2 : 0000000000000001 x1 : 0000000000000000 x0 : 00000000000001a8
-> > Call trace:
-> > gs_read_complete+0x58/0x240
-> > usb_gadget_giveback_request+0x40/0x160
-> > dwc3_remove_requests+0x170/0x484
-> > dwc3_ep0_out_start+0xb0/0x1d4
-> > __dwc3_gadget_start+0x25c/0x720
-> > kretprobe_trampoline.cfi_jt+0x0/0x8
-> > kretprobe_trampoline.cfi_jt+0x0/0x8
-> > udc_bind_to_driver+0x1d8/0x300
-> > usb_gadget_probe_driver+0xa8/0x1dc
+WARNING: CPU: 2 PID: 333 at kernel/irq/devres.c:144 devm_free_irq+0x80/0x8c
+...
+...
+Call trace:
+  devm_free_irq+0x80/0x8c
+  tps6598x_remove+0x28/0x88 [tps6598x]
+  i2c_device_remove+0x2c/0x9c
+  device_remove+0x4c/0x80
+  device_release_driver_internal+0x1cc/0x228
+  driver_detach+0x50/0x98
+  bus_remove_driver+0x6c/0xbc
+  driver_unregister+0x30/0x60
+  i2c_del_driver+0x54/0x64
+  tps6598x_i2c_driver_exit+0x18/0xc3c [tps6598x]
+  __arm64_sys_delete_module+0x184/0x264
+  invoke_syscall+0x48/0x110
+  el0_svc_common.constprop.0+0xc8/0xe8
+  do_el0_svc+0x20/0x2c
+  el0_svc+0x28/0x98
+  el0t_64_sync_handler+0x13c/0x158
+  el0t_64_sync+0x190/0x194
 
-Are you running a mainline kernel?
+Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+---
+ drivers/usb/typec/tipd/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Michael
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index dd51a25480bf..256b0c054e9a 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -1465,8 +1465,9 @@ static void tps6598x_remove(struct i2c_client *client)
+ 
+ 	if (!client->irq)
+ 		cancel_delayed_work_sync(&tps->wq_poll);
++	else
++		devm_free_irq(tps->dev, client->irq, tps);
+ 
+-	devm_free_irq(tps->dev, client->irq, tps);
+ 	tps6598x_disconnect(tps, 0);
+ 	typec_unregister_port(tps->port);
+ 	usb_role_switch_put(tps->role_sw);
+-- 
+2.34.1
 
-> > gadget_dev_desc_UDC_store+0x13c/0x188
-> > configfs_write_iter+0x160/0x1f4
-> > vfs_write+0x2d0/0x40c
-> > ksys_write+0x7c/0xf0
-> > __arm64_sys_write+0x20/0x30
-> > invoke_syscall+0x60/0x150
-> > el0_svc_common+0x8c/0xf8
-> > do_el0_svc+0x28/0xa0
-> > el0_svc+0x24/0x84
-> > el0t_64_sync_handler+0x88/0xec
-> > el0t_64_sync+0x1b4/0x1b8
-> > Code: aa1f03e1 aa1303e0 52800022 2a0103e8 (88e87e62)
-> > ---[ end trace 938847327a739172 ]---
-> > Kernel panic - not syncing: Oops: Fatal exception
-> >
-> > Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
-> > ---
-> > v1:
-> >   - Optimize code comments, delete log printing
->
-> This is "v2" not "v1".
->
-> Also, same comment as before, what:
->   - causes port to be NULL
->   - prevents it from changing to NULL right after you check it
->
-> Both need to be answered before we can take this change.
->
-> thanks,
->
-> greg k-h
->
-
-
---=20
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
 
