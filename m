@@ -1,62 +1,63 @@
-Return-Path: <linux-usb+bounces-13549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3818A954B89
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 15:59:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76215954B8A
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 15:59:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4EF6C1C2422C
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 13:59:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F0D92818FB
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 13:59:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269D31B8EBD;
-	Fri, 16 Aug 2024 13:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35811BC072;
+	Fri, 16 Aug 2024 13:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D5aHfCSD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nhJpKq2x"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049581AC8B8
-	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 13:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131CA1B8E92
+	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 13:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723816745; cv=none; b=PGJkiCqlcoP1kmCZp4LSr/SzRXpREDSpa0OW0Z6OeNIs8PN4dydvRHlts1K6AvBge8RtQOF5xMvt642pHZBUi2TJFusYC/vhQoO7VgmRjFVFLiKCa8AKqqbnUfd3WEDLbL16kZ1GLLHzufkA41i70FGtZmjO8iUsE5sE5XOhPsM=
+	t=1723816747; cv=none; b=Ua2GlqjK2eITBmALZcAyyLst725gN27E4n6QFUcbI/tyHndB/iwO3egfjW7YZZ7T2orOOB3D86bIkNey6MOiXPWA0FYiNH4wk+NhPT4DAsJ6+v2TGX+IJ1FfWV/rf3SVMDCWGHMgTBunQ+iiHiw8uLCK6YUxDZzKB/faTCivSIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723816745; c=relaxed/simple;
-	bh=L7h7Ckq31EYTfIUhygBoq936KlBUkVRBhyCp/mDei+U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WZtaC/oBGDSNhnRHe69+9CCoXTKrqjK+m5R3JuUNZieRO1FqBP/gT1Kmmy8u/Ux+kHkyAYcqroP6Bev1uLmjwZTjbH3kel/UhLZTwoCVsQFkhY/oO8x1t3jcKOcww7oUH71hg/IPIr8eEzABuDZi8MTJCl/foeaYEx5cb+K6ty8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D5aHfCSD; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1723816747; c=relaxed/simple;
+	bh=EjArrNWVZAsibljlpj4C3taslIyLaRX4F290EmCjBfs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mUtJweoJgKNgUB2ecj6PyHV3jne1pXV3OEHsSbwhmsJMQtWkQ3QLEL/kvM6kojltabH2qyjlB2VxpDsvmWb5FjVlKV9eG7l6Kuooqkng9VrZbyDUizPuL8Ms9P9oSEk7m+p4Y7vUM2AK2K3+KsgDg+0LK9d4k5QAbMnCnJ6bPLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nhJpKq2x; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723816744; x=1755352744;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=L7h7Ckq31EYTfIUhygBoq936KlBUkVRBhyCp/mDei+U=;
-  b=D5aHfCSDHATeSPiWQ45thYXUKCydLmtGtlZDTzLX6E0wGQpMNjARg6XB
-   0aoTGyCEKhjGkdwAplrAgqG8gGsvzYc5PFPT0cOaoOSN/NC5PloFZdVnc
-   12mz8E56gDPab9ai4QQxFC9iramrDCnoW+H7xc2LBv7lXGVL1ot48KDnA
-   uOJoFNOeR9Swulif4dQJ2ePN5gfcjXDnPmFT7dUOTyI6L9j/mlaM3q/k3
-   Y1V5jqepxTN4DcIpf1cPP9pGHyWmhKBuWQrpxYo4ULyNtYCxMxI3LenN4
-   Vp1BRAy/fv9kUAZ4aclvJ8N7QdOQj+YTg0594iwSNqj6ia1Ow1naXOP0K
-   g==;
-X-CSE-ConnectionGUID: 8gVNas4ES6+gLaeQhekqQQ==
-X-CSE-MsgGUID: kP7vcbqKSEG5MGkjULPydg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="21660055"
+  t=1723816746; x=1755352746;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=EjArrNWVZAsibljlpj4C3taslIyLaRX4F290EmCjBfs=;
+  b=nhJpKq2x7dIh6fsftPEWq0zehkkRYZ/SWt8Kta5FGhyo0R8Es/E8LBZ5
+   5tPwGbD/pHP5UOhZmSb5NpqT/Z4pqm113V75hYq2g8SGJ7AwgMXwor3t8
+   GVTMj6OsJJXwmbnkTsMFEJiabjj62gty48ISimRHwQNW4NWENzpQaoZdI
+   szmYk8ZT4y6LzgMWBRwtwAG8QO02PPT3t57iHe1MciVWDs7Aut2/5umOq
+   Ghwd1fJVhXPpefWxLHaCz6XtNsFHntPI/YkxEapG3Rp3HOmuv2gzK4hsr
+   PwtLso9BBHOwY0pdihZymp3RVOcW6ayZ7XWS+3yfrGMgxjeugThORnBrO
+   A==;
+X-CSE-ConnectionGUID: EI7AcdphTfWnwE9Y+VQwIw==
+X-CSE-MsgGUID: a2N9f8vSQ86GAtxV4o6CSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="21660066"
 X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
-   d="scan'208";a="21660055"
+   d="scan'208";a="21660066"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 06:59:03 -0700
-X-CSE-ConnectionGUID: MzMFSkn5Qe+mO96lGrquWQ==
-X-CSE-MsgGUID: LJBFQoQLRlWEY7PxfyFApg==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 06:59:06 -0700
+X-CSE-ConnectionGUID: qryt0gEPSmWeJVyKhF94nA==
+X-CSE-MsgGUID: 58yXjVgrS2OmfikSyx4llA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
-   d="scan'208";a="97192376"
+   d="scan'208";a="97192388"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 16 Aug 2024 06:59:00 -0700
+  by orviesa001.jf.intel.com with ESMTP; 16 Aug 2024 06:59:03 -0700
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jameson Thies <jthies@google.com>,
@@ -67,10 +68,12 @@ Cc: Jameson Thies <jthies@google.com>,
 	"Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>,
 	Abhishek Pandit-Subedi <abhishekpandit@google.com>,
 	Bartosz Szpila <bszpila@google.com>
-Subject: [PATCH v2 0/6] usb: typec: ucsi: Minor improvements
-Date: Fri, 16 Aug 2024 16:58:53 +0300
-Message-ID: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v2 1/6] usb: typec: ucsi: Remove unused fields from struct ucsi_connector_status
+Date: Fri, 16 Aug 2024 16:58:54 +0300
+Message-ID: <20240816135859.3499351-2-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
+References: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,46 +82,59 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The new fields are valid only with the new UCSI versions.
+They are at offsets that go beyond the MAX_DATA_LENGTH (16
+bytes) with the older UCSI versions. That has not caused any
+problems before because nothing uses those new fields yet.
+Because they are not used yet, dropping them for now.
 
-The first three patches remove potential problems. I prepared
-especially the second one as a protection against similar issues that
-I had to fix earlier. The rest is just cleanups.
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.h | 27 ++-------------------------
+ 1 file changed, 2 insertions(+), 25 deletions(-)
 
-What changed since v1:
-
-In this version I refactored the code so that UCSI_MAX_DATA_LENGTH()
-is introduced in the first patch where it is used.
-
-I also added one more patch, the first one, where I remove the unused
-fields from struct ucsi_connector_status. Those fields are beyond the
-MAX_DATA_LENGTH (16 bytes) with the older UCSI versions, so without
-removing them, the code would fail on older systems after the read
-truncation is removed in the second patch. Thanks for reporting that
-Siva.
-
-So please test these if you have time.
-
-The first version of these patches:
-https://lore.kernel.org/linux-usb/20240815085726.2865482-1-heikki.krogerus@linux.intel.com/
-
-thanks,
-
-
-Heikki Krogerus (6):
-  usb: typec: ucsi: Remove unused fields from struct
-    ucsi_connector_status
-  usb: typec: ucsi: Don't truncate the reads
-  usb: typec: ucsi: Only assign the identity structure if the PPM
-    supports it
-  usb: typec: ucsi: Common function for the GET_PD_MESSAGE command
-  usb: typec: ucsi: Call CANCEL from single location
-  usb: typec: ucsi: Remove useless error check from ucsi_read_error()
-
- drivers/usb/typec/ucsi/ucsi.c | 126 ++++++++++------------------------
- drivers/usb/typec/ucsi/ucsi.h |  41 ++---------
- 2 files changed, 41 insertions(+), 126 deletions(-)
-
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 57129f3c0814..7bc132b59027 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -344,35 +344,12 @@ struct ucsi_connector_status {
+ #define   UCSI_CONSTAT_PARTNER_TYPE_AUDIO	6
+ 	u32 request_data_obj;
+ 
+-	u8 pwr_status[3];
+-#define UCSI_CONSTAT_BC_STATUS(_p_)		((_p_[0]) & GENMASK(1, 0))
++	u8 pwr_status;
++#define UCSI_CONSTAT_BC_STATUS(_p_)		((_p_) & GENMASK(1, 0))
+ #define   UCSI_CONSTAT_BC_NOT_CHARGING		0
+ #define   UCSI_CONSTAT_BC_NOMINAL_CHARGING	1
+ #define   UCSI_CONSTAT_BC_SLOW_CHARGING		2
+ #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
+-#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)	(((_p_[0]) & GENMASK(5, 2)) >> 2)
+-#define   UCSI_CONSTAT_CAP_PWR_LOWERED		0
+-#define   UCSI_CONSTAT_CAP_PWR_BUDGET_LIMIT	1
+-#define UCSI_CONSTAT_PROVIDER_PD_VERSION_OPER_MODE(_p_)	\
+-	((get_unaligned_le32(_p_) & GENMASK(21, 6)) >> 6)
+-#define UCSI_CONSTAT_ORIENTATION(_p_)		(((_p_[2]) & GENMASK(6, 6)) >> 6)
+-#define   UCSI_CONSTAT_ORIENTATION_DIRECT	0
+-#define   UCSI_CONSTAT_ORIENTATION_FLIPPED	1
+-#define UCSI_CONSTAT_SINK_PATH_STATUS(_p_)	(((_p_[2]) & GENMASK(7, 7)) >> 7)
+-#define   UCSI_CONSTAT_SINK_PATH_DISABLED	0
+-#define   UCSI_CONSTAT_SINK_PATH_ENABLED	1
+-	u8 pwr_readings[9];
+-#define UCSI_CONSTAT_REV_CURR_PROT_STATUS(_p_)	((_p_[0]) & 0x1)
+-#define UCSI_CONSTAT_PWR_READING_VALID(_p_)	(((_p_[0]) & GENMASK(1, 1)) >> 1)
+-#define UCSI_CONSTAT_CURRENT_SCALE(_p_)		(((_p_[0]) & GENMASK(4, 2)) >> 2)
+-#define UCSI_CONSTAT_PEAK_CURRENT(_p_) \
+-	((get_unaligned_le32(_p_) & GENMASK(20, 5)) >> 5)
+-#define UCSI_CONSTAT_AVG_CURRENT(_p_) \
+-	((get_unaligned_le32(&(_p_)[2]) & GENMASK(20, 5)) >> 5)
+-#define UCSI_CONSTAT_VOLTAGE_SCALE(_p_) \
+-	((get_unaligned_le16(&(_p_)[4]) & GENMASK(8, 5)) >> 5)
+-#define UCSI_CONSTAT_VOLTAGE_READING(_p_) \
+-	((get_unaligned_le32(&(_p_)[5]) & GENMASK(16, 1)) >> 1)
+ } __packed;
+ 
+ /*
 -- 
 2.43.0
 
