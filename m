@@ -1,171 +1,141 @@
-Return-Path: <linux-usb+bounces-13528-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13529-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A54DD954243
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 09:02:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 105E29542CF
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 09:35:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA39F1C23DDC
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 07:02:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 494BBB264EA
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2024 07:35:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0126812CD96;
-	Fri, 16 Aug 2024 07:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FFF976056;
+	Fri, 16 Aug 2024 07:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UNzz7w8O"
+	dkim=pass (2048-bit key) header.d=mff.cuni.cz header.i=@mff.cuni.cz header.b="oLiYl703"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp1.ms.mff.cuni.cz (smtp-in1.ms.mff.cuni.cz [195.113.20.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D599884DE0;
-	Fri, 16 Aug 2024 07:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFAA53373
+	for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2024 07:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.113.20.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723791753; cv=none; b=f9kfxu6ZSKX1Y98hxKzGuL5jIuk5tK+UzOh1JSLnjsG3tfggvuV16YQJRaHXkllmNrU+eDAZno9zZ5tWr1mJanV2NAzdApFNxnlN2Ra0EVvoq8EXjtYVzURikIDnj6U/Ly+kV8sp2ltDkTrfdOtY0/8LR6eyyUrL/jOTAcDvbVo=
+	t=1723793733; cv=none; b=XH6XAOQFNpF3Az5dN1YJrRfrG+Su1GE4w7Orx8oZ2v7QkJgnCGWC1vd/qf2GsY3LnFlzGpHYXHq8B4FjOzX5sUYbIUtPwVLwoP31CKk2ewLqqH2N+XYBUxD7H12JvK+yCEQiol5z1vwoXtIvUlsWaZAK2dpf1iQx8u/jPQAqt9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723791753; c=relaxed/simple;
-	bh=+w3tRthZvWrQuTTEoJc8T4rZ0JkdZdeQr+FlQQMqwVQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=KwvWeBL53YhknR8fZFKjIQjPSFG6Ilfrbc72wOu51P7lUGNPmxLdARnuSHPPw1TTRERK4UQ9TrxutRXeP6znM0JzaK9tt902jdZwUnKQVr12RXSCIz6NLYQ/bCh5PPLrI6ITo90stmP3pHCnYUZ28u6HYZvC0o2e9lOcle3GY/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UNzz7w8O; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a7d2a9a23d9so204651466b.3;
-        Fri, 16 Aug 2024 00:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723791749; x=1724396549; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GZMDCEhoVOuknhSdiXjCTkP9a56QRYdberqLBhqK2gs=;
-        b=UNzz7w8OzHMHT5fbMbIbQM+/oZFdMn6sWo3WT32KRtV2wvoYqq+CsxhtUUtGfL4FQV
-         +OjTYmdgtxD5DYogX3ShCwWEOVeo+jX3F1j1O4qukjou+iIVq6bZlDYkWUXEQdxGUqVR
-         Sjo32wPTw7ObMgl2tEQT6FaTOr/5z2H81WLBSTYDG7ZH5MrVTjKYbTZ845InzUFa3TLx
-         i5kH7GKSk/93/bMTzYm0aDEwbCJLHA8oaiS9QQ8dbSqn65bza64ebG1gz/+V0Owi5mCK
-         b6iWsjz8jxH8qGprNsfyz9BMc35W7pZzgDw+nTmkJTjAuozQP8316n7Zb960jrMpSdGl
-         /Z1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723791749; x=1724396549;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZMDCEhoVOuknhSdiXjCTkP9a56QRYdberqLBhqK2gs=;
-        b=WC3xfasM99ucEagiIxNXYfps3GlyOUBB6naVyFAPjiX7Po3LhZy/B7CTvahZbtF5rJ
-         xUh6FL5Nwjnu5AtUeYfrpXlO0twy6kwz+uzq08Yhb1vx8v8xod1cjyIbmQD07R3m9duk
-         paO7Q2pBycDGiP01M8DW7Tc2vSWdOc5zbG2hrEjdyeaoj5WpdEItXwu6LV/veJnVmme/
-         RfV0DNWUGDzVtnnkqrFhw3L/OW+DziC8c1oAl+cFOApLVToVLGzh5933Op/k5QSUWRU2
-         p8cGHE4xxCwzryHpLC02Uh15PqRDSNLgNyu8wPD8aYe4hEGPaFWFZKie4NJ4/IRsHi7Z
-         r0OQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVrt3H7RpmsmZMxfUEMLXp+itMLZbMolWIEu/O2ISrar43t1KG5JEPJ/GsxYW2WVhic5jh0/Tk1cWCC9FKZK1SY9F5JKqpvK+BbJiEJVVAOc8Jvyg0qqWOkq2fv+8xn53ZnyXWqd/1v
-X-Gm-Message-State: AOJu0YyUuHcuRrnrsg2saRbtOQFV0oHpJLs7tECSu7kRy7vF0Yo2GyPj
-	ylYTCufR+IZob+sehxfdHG+EZUJSLIM+X6N0AQbjddAmiJbxfJcq
-X-Google-Smtp-Source: AGHT+IHuKHZL6Q60fzk/5S9Wx9QG+3SjjigqZzGnpXC6yZ/4Upm7Fc6nLcw90WH0PMEILuX40qhDwQ==
-X-Received: by 2002:a17:907:c7dc:b0:a6f:8265:8f2 with SMTP id a640c23a62f3a-a8392955fcemr153297166b.37.1723791748773;
-        Fri, 16 Aug 2024 00:02:28 -0700 (PDT)
-Received: from localhost (85.64.140.6.dynamic.barak-online.net. [85.64.140.6])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83839471cbsm210163166b.180.2024.08.16.00.02.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 16 Aug 2024 00:02:28 -0700 (PDT)
-From: Eli Billauer <eli.billauer@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: arnd@arndb.de,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Eli Billauer <eli.billauer@gmail.com>
-Subject: [PATCH 2/2] char: xillybus: Check USB endpoints when probing device
-Date: Fri, 16 Aug 2024 10:02:00 +0300
-Message-Id: <20240816070200.50695-2-eli.billauer@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240816070200.50695-1-eli.billauer@gmail.com>
-References: <20240816070200.50695-1-eli.billauer@gmail.com>
+	s=arc-20240116; t=1723793733; c=relaxed/simple;
+	bh=iVXp+4sAB6nzy5Ah82JailgckrARfpLDPFc5k0ijcaw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:To:From:
+	 References:In-Reply-To; b=aj3uEua1YpV/En9cZVYYkc019AE2zi9zUzrH1Bqy1MXBYqLnPfMOUUz9qtuIWRkNn+/OjejE2347oY+NvkDXh12Uvl5CLzfHYrFjKQaiKYfqTh/WGhSKI9OtD6iPY1mopIjtF//FUYPnL+60b149rlmCc90JMTw13J62dC/pHw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz; spf=pass smtp.mailfrom=matfyz.cz; dkim=pass (2048-bit key) header.d=mff.cuni.cz header.i=@mff.cuni.cz header.b=oLiYl703; arc=none smtp.client-ip=195.113.20.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=matfyz.cz
+X-SubmittedBy: id balejk@matfyz.cz subject /postalCode=110+2000/O=Univerzita+20Karlova/street=Ovocn+5CxC3+5CxBD+20trh+20560/5/ST=Praha,+20Hlavn+5CxC3+5CxAD+20m+5CxC4+5Cx9Bsto/C=CZ/CN=Karel+20Balej/emailAddress=balejk@matfyz.cz
+	serial F5FD910E8FE2121B897F7E55B84E351D
+	issued by /C=NL/O=GEANT+20Vereniging/CN=GEANT+20Personal+20CA+204
+	auth type TLS.CUNI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mff.cuni.cz;
+	s=submission; t=1723793715; x=1725093715;
+	bh=AJ1mYnM5BQuvFesPgK8TVyNw70XO0806lIjYxKing8s=; h=From;
+	b=oLiYl70312eS0qobe8aiY3wCwLXCIcA/MaTYIa4tol7nO8KZXJ4ba+JgtJMRBi02I
+	 AFdRCUebGWqbrA6kt5tR1St+BDK2q/pdbtpAb50qRQq9SRPmmEBr3/m3bIQ8Q89a9F
+	 fBLJvCPTWxhA3LwOuqupP2UzAvZdKuLGuvXF/C3U3UKXatm8m3oxFv7llsLioPuZ7y
+	 e7OKYKknPuqS4Jqtmry0ZS/FpBBueolor+k0S485mraTleEztb0XlWBYQMUasujKbp
+	 yLRAwPLXpk8QlomHbKeBkXK7g7XYYfg45M+gTjjONVyfwRrBzePw81hzCZRxRbe/ht
+	 VeqnqiiIleSOg==
+Received: from localhost (internet5.mraknet.com [185.200.108.250])
+	(authenticated)
+	by smtp1.ms.mff.cuni.cz (8.16.1/8.16.1) with ESMTPS id 47G7ZDuG074762
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Fri, 16 Aug 2024 09:35:15 +0200 (CEST)
+	(envelope-from balejk@matfyz.cz)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 16 Aug 2024 09:35:13 +0200
+Message-Id: <D3H5VFRK9ILB.2ILZSGS2ZNK4X@matfyz.cz>
+Cc: <linux-usb@vger.kernel.org>
+Subject: Re: [BUG] USB xHCI driver NULL pointer dereference
+To: "Mathias Nyman" <mathias.nyman@linux.intel.com>
+From: "Karel Balej" <balejk@matfyz.cz>
+References: <D3CKQQAETH47.1MUO22RTCH2O3@matfyz.cz>
+ <9f3d0886-51cb-4ec4-a060-ed0f52f7e656@linux.intel.com>
+ <bb8ca342-a975-4e87-ae8d-7c0d703a89af@linux.intel.com>
+ <b481b087-2c47-4168-b33f-3ced69662ee3@linux.intel.com>
+In-Reply-To: <b481b087-2c47-4168-b33f-3ced69662ee3@linux.intel.com>
 
-Ensure, as the driver probes the device, that all endpoints that the
-driver may attempt to access exist and are of the correct type.
+Mathias Nyman, 2024-08-15T16:10:32+03:00:
+> On 14.8.2024 16.28, Mathias Nyman wrote:
+> > On 13.8.2024 14.49, Mathias Nyman wrote:
+> >> On 11.8.2024 1.11, Karel Balej wrote:
+> >>> Hello,
+> >>>
+> >>> my machine crashed twice in the past week, the second time I have bee=
+n
+> >>> able to recover the log output (including the stack trace run through
+> >>> scripts/decode_stacktrace.sh) which seems to suggest a bug in the xHC=
+I
+> >>> driver:
+> >
+> >>
+> >> You have a unlucky setup here.
+> >> This could only happen when a full speed device fails enumeration whil=
+e connected to a
+> >> Pantherpoint xHC.
+> >>
+> >> Only Pantherpoint xHC (PCI_ID 0x1e31) does bandwidth calculation in so=
+ftware and
+> >> calls xhci_reserve_bandwidth(). In this case we unintentionally end up=
+ calling it
+> >> after a failed=C2=A0 address device attempt when usb core re-inits end=
+point 0 before retry.
+> >> At this point the xhci side of the device isn't properly allocated or =
+set up so
+> >> we hit a NULL pointer dereference.
+> >>
+> >> I'll look into it more.
+> >=20
+> > The following code should resolve this issue, any chance you could try =
+it out?
+>
+> I was able to trigger this myself by forcing XHCI_SW_BW_CHECKING and faki=
+ng failure on
+> address device command:
+>
+> [  270.538134] usb 3-6: new full-speed USB device number 3 using xhci_hcd
+> [  270.670313] xhci_hcd 0000:00:14.0: Faking a Device not respoinding to =
+setup address
+> [  270.886142] usb 3-6: device not accepting address 3, error -71
+> [  270.892091] BUG: kernel NULL pointer dereference, address: 00000000000=
+00008
+> [  270.899034] #PF: supervisor read access in kernel mode
+> [  270.904150] #PF: error_code(0x0000) - not-present page
+> [  270.909267] PGD 0 P4D 0
+> [  270.911799] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+> [  270.916660] CPU: 3 UID: 0 PID: 301 Comm: kworker/3:2 Tainted: G       =
+ W          6.11.0-rc1+ #4291
+> [  270.925651] Tainted: [W]=3DWARN
+> [  270.928615] Workqueue: usb_hub_wq hub_event
+> [  270.932787] RIP: 0010:xhci_reserve_bandwidth+0x243/0x6d0 [xhci_hcd]
+>
+> The codesnippet I suggested did fix the null pointer dereference.
+>
+> I'll turn it into a proper patch
 
-All XillyUSB devices must have a Bulk IN and Bulk OUT endpoint at
-address 1. This is verified in xillyusb_setup_base_eps().
+It seems that I'm too late with a Tested-by tag but for what it's worth,
+I have been running the machine with your patch the whole day yesterday
+and didn't observe any regression. I have not been able to verify if it
+fixed the issue as I haven't found a way to deliberately trigger it, but
+it seems that you were able to do that.
 
-On top of that, a XillyUSB device may have additional Bulk OUT
-endpoints. The information about these endpoints' addresses is deduced
-from a data structure (the IDT) that the driver fetches from the device
-while probing it. These endpoints are checked in setup_channels().
+Thank you very much for looking into this.
 
-A XillyUSB device never has more than one IN endpoint, as all data
-towards the host is multiplexed in this single Bulk IN endpoint. This is
-why setup_channels() only checks OUT endpoints.
-
-Reported-by: syzbot+eac39cba052f2e750dbe@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/0000000000001d44a6061f7a54ee@google.com/T/
-Fixes: a53d1202aef1 ("char: xillybus: Add driver for XillyUSB (Xillybus variant for USB)").
-Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
----
- drivers/char/xillybus/xillyusb.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
-index e12d359194f8..45771b1a3716 100644
---- a/drivers/char/xillybus/xillyusb.c
-+++ b/drivers/char/xillybus/xillyusb.c
-@@ -1903,6 +1903,13 @@ static const struct file_operations xillyusb_fops = {
- 
- static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
- {
-+	struct usb_device *udev = xdev->udev;
-+
-+	/* Verify that device has the two fundamental bulk in/out endpoints */
-+	if (usb_pipe_type_check(udev, usb_sndbulkpipe(udev, MSG_EP_NUM)) ||
-+	    usb_pipe_type_check(udev, usb_rcvbulkpipe(udev, IN_EP_NUM)))
-+		return -ENODEV;
-+
- 	xdev->msg_ep = endpoint_alloc(xdev, MSG_EP_NUM | USB_DIR_OUT,
- 				      bulk_out_work, 1, 2);
- 	if (!xdev->msg_ep)
-@@ -1932,14 +1939,15 @@ static int setup_channels(struct xillyusb_dev *xdev,
- 			  __le16 *chandesc,
- 			  int num_channels)
- {
--	struct xillyusb_channel *chan;
-+	struct usb_device *udev = xdev->udev;
-+	struct xillyusb_channel *chan, *new_channels;
- 	int i;
- 
- 	chan = kcalloc(num_channels, sizeof(*chan), GFP_KERNEL);
- 	if (!chan)
- 		return -ENOMEM;
- 
--	xdev->channels = chan;
-+	new_channels = chan;
- 
- 	for (i = 0; i < num_channels; i++, chan++) {
- 		unsigned int in_desc = le16_to_cpu(*chandesc++);
-@@ -1968,6 +1976,15 @@ static int setup_channels(struct xillyusb_dev *xdev,
- 		 */
- 
- 		if ((out_desc & 0x80) && i < 14) { /* Entry is valid */
-+			if (usb_pipe_type_check(udev,
-+						usb_sndbulkpipe(udev, i + 2))) {
-+				dev_err(xdev->dev,
-+					"Missing BULK OUT endpoint %d\n",
-+					i + 2);
-+				kfree(new_channels);
-+				return -ENODEV;
-+			}
-+
- 			chan->writable = 1;
- 			chan->out_synchronous = !!(out_desc & 0x40);
- 			chan->out_seekable = !!(out_desc & 0x20);
-@@ -1977,6 +1994,7 @@ static int setup_channels(struct xillyusb_dev *xdev,
- 		}
- 	}
- 
-+	xdev->channels = new_channels;
- 	return 0;
- }
- 
--- 
-2.17.1
-
+Kind regards,
+K. B.
 
