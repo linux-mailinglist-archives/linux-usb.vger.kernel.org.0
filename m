@@ -1,74 +1,135 @@
-Return-Path: <linux-usb+bounces-13570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04EDA9556A8
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 11:11:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A326955772
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 13:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37F551C20E87
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 09:11:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54EED282ED7
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 11:32:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 734BC146A7B;
-	Sat, 17 Aug 2024 09:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7159D14A62F;
+	Sat, 17 Aug 2024 11:32:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EydyHkwG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MxOeo0/b"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80AB146A62;
-	Sat, 17 Aug 2024 09:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7001C32;
+	Sat, 17 Aug 2024 11:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723885869; cv=none; b=chBeL+Z80G3CJeCBzmm6hZvPHTQXXKrIxuMApnbz8iPg08tmpY93un8vpfI0VCyoT20RTA7lj8Ze9iWssT/qHdzK8A9ECvub0Lt+jEWVA70aGh699Anbq6+UxtGsdLn4ZQyiYQ6fpQO4jc7rW1NUKjFn/uujvrjxvI8XZFkl5lE=
+	t=1723894340; cv=none; b=M2B+I+RlVVhXJ2+9oQdKGjYu+LOwehlvncGAMIfgsNp9GlYImmWUtKBn7qBOV5xaZiKC2bVC/u/+altxlQgXrsHtZGJ2RvXWJAs3H7N3dvgu+THLMgeNgWwkixN1GPXJ9z4iuOmSRdjzRNUfY6wU8fmOeajHJ4v63kBZ9vwdXTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723885869; c=relaxed/simple;
-	bh=eD49Bz72iqX22IdPxS5VMho4CW98DYllXdfyURbFN2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=anupRNXUfvdK0OsG7RM/R5v+LSmMwGI7X8rRDcypes/fA79yWpWoGi8q1q7CDgEJlPOb8XREtYq6Q0Ea89zLGcCyUPSCydhjKO+eI2s6OATemtsU754csWJxQ78y7P6Bns12ZOWP/Vo6AttPUXY7mjIjVJmv+kauyyifSASbgW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EydyHkwG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1147CC4AF0C;
-	Sat, 17 Aug 2024 09:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1723885868;
-	bh=eD49Bz72iqX22IdPxS5VMho4CW98DYllXdfyURbFN2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EydyHkwG8qtbP8XnvVh+VwWEYEQl98J8kazUvNcOu57nHCJNY/R01M+V7sfB1qbI1
-	 JRwiZzd+RzpO0bnlBsNKyWHmpteUdfJeR99Tb2mTTs15ftlIpHWdgqDZrFjQEKcm1M
-	 ngFkZ1RHudBBn6RK4m2mutaaYR4nylUMLqDwo4cI=
-Date: Sat, 17 Aug 2024 11:11:05 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: ZHANG Yuntian <yt@radxa.com>
-Cc: Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add MeiG Smart SRM825L
-Message-ID: <2024081718-outdated-surreal-b931@gregkh>
-References: <0041DFA5200EFB1B+20240803074619.563116-1-yt@radxa.com>
- <D2E5D3206EC74463+e6e4d3ab-67f2-42e5-93c6-30feb63c7d78@radxa.com>
+	s=arc-20240116; t=1723894340; c=relaxed/simple;
+	bh=WPi/0xKBeUVZfXJccLvpi5U+6P6UdVWcEVoeDHhgO7k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dNtLMh7dFN+SnEZgk81yBEqKVHOKrTZ4wf50RmYW9reyLb2zswWCHMXzundPobfkS3X9cqRExfkwqwIpahk41AJpFfym0sMlGqIqAV6ufJ7jx88TlVGuubI+WdqMRQgJSTsbjSC+fI9Nih9lAa0SoWTu0/m4Dp2Pbct5DjAdbSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MxOeo0/b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E54C116B1;
+	Sat, 17 Aug 2024 11:32:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723894339;
+	bh=WPi/0xKBeUVZfXJccLvpi5U+6P6UdVWcEVoeDHhgO7k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MxOeo0/bxo8xsivJgCM4DVofw/hjy7d079G+29OSWivJctC7s4byJjcskgfcLbAYp
+	 cceorbq6LpNYvaMjriPMbb2/DaMR95twWKDxgS177ka+zIQBOFD9jzHtRNqcuN8hcZ
+	 ndqJ/RtXHs/AQo2NW52Z4tPm5ega4Uenm8AkdQGhVXp1bLigHP+Zh2sSud+z/YKez2
+	 PKrLc8H2otLba8Uqu20Lt/Su9yuiM9CxRuCWXQt9Du0InXSC6MThn+36Bs5qMZueKG
+	 nO3lYmXPYe4nh9gKeufwyHFK9KWocCaIUMEejPQrqhVxVUl+xEanfhxB2v0Nkfrgjm
+	 ce6tIzxp4qZIg==
+Message-ID: <9c731c93-772e-409e-b7e5-ae36af402c76@kernel.org>
+Date: Sat, 17 Aug 2024 13:32:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D2E5D3206EC74463+e6e4d3ab-67f2-42e5-93c6-30feb63c7d78@radxa.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: x1e80100: Add USB Multiport
+ controller
+To: Song Xue <quic_songxue@quicinc.com>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Konrad Dybcio <quic_kdybcio@quicinc.com>
+References: <20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com>
+ <20240809-topic-h_mp-v1-2-3c5f468566d8@quicinc.com>
+ <21fffb71-d559-4973-8028-d9c9b9f67001@quicinc.com>
+ <3077d600-c570-407a-87eb-6926a67636f9@gmail.com>
+ <81b60725-f744-4b40-9450-e881397c2ddf@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <81b60725-f744-4b40-9450-e881397c2ddf@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 17, 2024 at 04:58:24PM +0800, ZHANG Yuntian wrote:
-> This was my first submitted patch so I forgot to run get_maintainer.pl and
-> collect the CC list, so I'm sending this out as a reminder.
+On 14.08.2024 1:56 PM, Song Xue wrote:
 > 
-> qmi_wwan part was accepted a while ago:
 > 
-> https://git.kernel.org/netdev/net/c/1ca645a2f74a
+> On 8/14/2024 6:24 PM, Konrad Dybcio wrote:
+>> On 14.08.2024 12:08 PM, Song Xue wrote:
+>>>
+>>> On 8/9/2024 9:18 PM, Konrad Dybcio wrote:
+>>>> X1E80100 has a multiport controller with 2 HS (eUSB) and 2 SS PHYs
+>>>> attached to it. It's commonly used for USB-A ports and internally
+>>>> routed devices. Configure it to support such functionality.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio<konrad.dybcio@linaro.org>
+>>>> ---
+>>
+>> [...]
+>>
+>>>> +
+>>>> +                phys = <&usb_mp_hsphy0>, <&usb_mp_qmpphy0>,
+>>>> +                       <&usb_mp_hsphy1>, <&usb_mp_qmpphy1>;
+>>>> +                phy-names = "usb2-0", "usb3-0",
+>>>> +                        "usb2-1", "usb3-1";
+>>>> +                dr_mode = "host";
+>>>
+>>> Why do we add the dr_mode definition in dtsi file rather than in corresponding board dts file?  Could we follow the node "usb_1_ss1_dwc3"  in x1e80100-crd.dtsi?
+>>
+>> That is because the MP controller is host-only and it doesn't make sense
+>> to ensure the OS of that in each board file separately. That's also how
+>> it's done on other platforms with a MP controller description.
+>>
+>>>
+>>> BTW, how do we verify the function of  multiport controller？From my test on x1e80100-crd,  the eusb6 which is from usb_mp_hsphy1 attaches the third-party repeater, do we need a new repeater node/driver to verify the function of eusb6?
+>>
+>> I have a X1E Surface Laptop 7 with a USB-A port with a NXP PTN3222 in
+>> front of it. Tested with a smoke test, with both SS and HS USB-A devices.
+>>
+> What is detailed information on smoke test.
+> From my end, I also have two questions.
+> 1. I found the usb_mp_hsphy1 is using the driver "phy-qcom-snps-eusb2". However, the driver requires a repeater node from DT. At present, we don't have the node or driver for NXP repeater and it is not working on eusb6 to detect the NXP repeater. So, is it possible for us to have complete function involving with MP DT and repeater node for CRD board, and then we push patches together?
 
-It is vacation time in Europe for many of us, please give us a few weeks
-to get back and catch up with things like this.
+I believe you're a bit confused about the upstreaming process. Describing
+hardware in Device Tree vs doing the same plus enabling it on some upstream
+board are of equal value, and this patch is very much in the spirit of
+"release early, release often".
 
-thanks,
+There's no need to delay patches that are correct within their own
+confinement (which they should be [1]) just so that the series is bigger.
+That may even be discouraged by some folks..
 
-greg k-h
+> 2. The usb_mp_dwc3 node has four phys. When enabling the driver for the node, we must need enable all four phys in borad's DT. Howerver, if the board is only using one phy like eusb6, is it suitable to enable other three phys?
+
+Yes, they will simply be registered, configured and since there won't
+be any interrupts (as the pins are N/C, it will not do much). But
+these PHYs are physically on the SoC regardless of them being
+connected, so I see no issue.
+
+[1] https://www.kernel.org/doc/html/latest/process/submitting-patches.html#separate-your-changes
+
+Konrad
 
