@@ -1,48 +1,75 @@
-Return-Path: <linux-usb+bounces-13571-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13572-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A326955772
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 13:32:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B24F295582E
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 15:49:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54EED282ED7
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 11:32:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F4AB1C20D64
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 13:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7159D14A62F;
-	Sat, 17 Aug 2024 11:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E51E1EEE6;
+	Sat, 17 Aug 2024 13:49:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MxOeo0/b"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nUOdgm0k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7001C32;
-	Sat, 17 Aug 2024 11:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89018F507
+	for <linux-usb@vger.kernel.org>; Sat, 17 Aug 2024 13:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723894340; cv=none; b=M2B+I+RlVVhXJ2+9oQdKGjYu+LOwehlvncGAMIfgsNp9GlYImmWUtKBn7qBOV5xaZiKC2bVC/u/+altxlQgXrsHtZGJ2RvXWJAs3H7N3dvgu+THLMgeNgWwkixN1GPXJ9z4iuOmSRdjzRNUfY6wU8fmOeajHJ4v63kBZ9vwdXTk=
+	t=1723902569; cv=none; b=aivHO2vh5YZ/ys/Bexi+h2Kt6GTmu1kL0WeVRs/gBse9YZEdY3Hn/viq9WCXMt6OJ82PFCQ3tw7pZNqPP2jMWKXwVUgQLT4yf9vvbC8x0/kElzstlztJM3utbFzTltLub1l02lyj7qkbzMUyH1OQWsrE1WT2IdrZSVsqjX0MK0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723894340; c=relaxed/simple;
-	bh=WPi/0xKBeUVZfXJccLvpi5U+6P6UdVWcEVoeDHhgO7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dNtLMh7dFN+SnEZgk81yBEqKVHOKrTZ4wf50RmYW9reyLb2zswWCHMXzundPobfkS3X9cqRExfkwqwIpahk41AJpFfym0sMlGqIqAV6ufJ7jx88TlVGuubI+WdqMRQgJSTsbjSC+fI9Nih9lAa0SoWTu0/m4Dp2Pbct5DjAdbSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MxOeo0/b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E54C116B1;
-	Sat, 17 Aug 2024 11:32:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723894339;
-	bh=WPi/0xKBeUVZfXJccLvpi5U+6P6UdVWcEVoeDHhgO7k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MxOeo0/bxo8xsivJgCM4DVofw/hjy7d079G+29OSWivJctC7s4byJjcskgfcLbAYp
-	 cceorbq6LpNYvaMjriPMbb2/DaMR95twWKDxgS177ka+zIQBOFD9jzHtRNqcuN8hcZ
-	 ndqJ/RtXHs/AQo2NW52Z4tPm5ega4Uenm8AkdQGhVXp1bLigHP+Zh2sSud+z/YKez2
-	 PKrLc8H2otLba8Uqu20Lt/Su9yuiM9CxRuCWXQt9Du0InXSC6MThn+36Bs5qMZueKG
-	 nO3lYmXPYe4nh9gKeufwyHFK9KWocCaIUMEejPQrqhVxVUl+xEanfhxB2v0Nkfrgjm
-	 ce6tIzxp4qZIg==
-Message-ID: <9c731c93-772e-409e-b7e5-ae36af402c76@kernel.org>
-Date: Sat, 17 Aug 2024 13:32:11 +0200
+	s=arc-20240116; t=1723902569; c=relaxed/simple;
+	bh=Z37x7P3OUwQ57VOk02zwVc2udz2b1U+xIPjklLd4zCo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=rbu5xFKdmAp7O9/Am0fOqaBs8gIUnfxfEFi8wfHQP02zkrUh+lTsTJCO3BnCr/HWkVp109T3Xkx75YLDi0/RseDZZlcZ9SFwDCoYYKTxESjF0WOhuaRTGzXh1xF1GS8S2o0BfVeuc3yUmhYQiBqMit0Q503vxNXCEtI52xFryEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nUOdgm0k; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240817134919epoutp04d206dfdd8618b8018481546cbb990c91~siD56q6pR3036730367epoutp04O
+	for <linux-usb@vger.kernel.org>; Sat, 17 Aug 2024 13:49:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240817134919epoutp04d206dfdd8618b8018481546cbb990c91~siD56q6pR3036730367epoutp04O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1723902559;
+	bh=6OdAAhY1jmDD/qNc8iBhpCFMfmOZJ5vdix/d/18DDPQ=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=nUOdgm0ktl34B2s0pKxb3UkUK88B4KLP1hctKHgmNtvkc/V1CHVUJakkdkU+oiNwW
+	 ZhzWrCxOideaD9sI+xT3pO3FN91BhRWUqOLihsW1gznNBKxUxUlg/6/P5DkvFvc0gu
+	 vluUXMvs1QpeIqkl0iFqCCuaXWz/Bs8Ucx5UHySg=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+	20240817134918epcas5p4b81041e43428e2ab9c9ce40d2c919282~siD5lhkIw0893208932epcas5p4H;
+	Sat, 17 Aug 2024 13:49:18 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4WmKwF2pmjz4x9Pp; Sat, 17 Aug
+	2024 13:49:17 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	87.D4.09743.D5AA0C66; Sat, 17 Aug 2024 22:49:17 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240817134356epcas5p311b04d9ba86b537c871a55ae7f2e4261~sh-NkFcK82016620166epcas5p3p;
+	Sat, 17 Aug 2024 13:43:56 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240817134356epsmtrp2ad3aba442d71ae211fca8898de870bbd~sh-NjSmU20363203632epsmtrp2C;
+	Sat, 17 Aug 2024 13:43:56 +0000 (GMT)
+X-AuditID: b6c32a4a-14fff7000000260f-b2-66c0aa5d535c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	56.6A.07567.C19A0C66; Sat, 17 Aug 2024 22:43:56 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240817134354epsmtip130a4c32a2f80ebb9ac325ba1b7b421d5~sh-LnkTaY0574705747epsmtip1P;
+	Sat, 17 Aug 2024 13:43:54 +0000 (GMT)
+Message-ID: <c477fdb2-a92a-4551-b6c8-38ada06914c6@samsung.com>
+Date: Sat, 17 Aug 2024 19:13:53 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,86 +77,118 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: x1e80100: Add USB Multiport
- controller
-To: Song Xue <quic_songxue@quicinc.com>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Krishna Kurapati <quic_kriskura@quicinc.com>,
- Konrad Dybcio <quic_kdybcio@quicinc.com>
-References: <20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com>
- <20240809-topic-h_mp-v1-2-3c5f468566d8@quicinc.com>
- <21fffb71-d559-4973-8028-d9c9b9f67001@quicinc.com>
- <3077d600-c570-407a-87eb-6926a67636f9@gmail.com>
- <81b60725-f744-4b40-9450-e881397c2ddf@quicinc.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: Prevent USB core invalid event
+ buffer address access
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, stable@vger.kernel.org
 Content-Language: en-US
-From: Konrad Dybcio <konradybcio@kernel.org>
-In-Reply-To: <81b60725-f744-4b40-9450-e881397c2ddf@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <2024081700-skittle-lethargy-9567@gregkh>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmum7sqgNpBs0LhS3eXF3FanFnwTQm
+	i1PLFzJZNC9ez2Yxac9WFou7D3+wWFzeNYfNYtGyVmaLT0f/s1qs6pwDFPu+k9liwcZHjBaT
+	DoparFpwgN2Bz2P/3DXsHn1bVjF6bNn/mdHj8ya5AJaobJuM1MSU1CKF1Lzk/JTMvHRbJe/g
+	eOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoBuVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
+	JbZKqQUpOQUmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZa3fZF2wSrHi49DBTA+Nm3i5GTg4J
+	AROJpsUT2LsYuTiEBHYzSpxe8BTK+cQoMen+YSYI5xujxLoFN9hhWqYu384GkdjLKNF+ajUL
+	hPOWUWLu3BusIFW8AnYSf/dOZu5i5OBgEVCVONuRDBEWlDg58wkLiC0qIC9x/9YMsKHCAvES
+	R24vBWsVEdCQeHn0FthMZoGTTBJXly5jAkkwC4hL3HoynwlkJpuAocSzEzYgYU4BM4mptxcx
+	QpTIS2x/O4cZpFdCYA+HxL4TDUwQV7tIdLbfYoawhSVeHd8C9Y2UxOd3e9kg7GqJ1Xc+skE0
+	tzBKHH7yDarIXuLx0UdgzzALaEqs36UPEZaVmHpqHdRtfBK9v59A7eKV2DEPxlaVONV4GWq+
+	tMS9JddYIWwPickvtjBPYFSchRQus5C8OQvJP7MQNi9gZFnFKJlaUJybnlpsWmCUl1oOj/Dk
+	/NxNjOAkrOW1g/Hhgw96hxiZOBgPMUpwMCuJ8D79sjdNiDclsbIqtSg/vqg0J7X4EKMpMH4m
+	MkuJJucD80BeSbyhiaWBiZmZmYmlsZmhkjjv69a5KUIC6YklqdmpqQWpRTB9TBycUg1M3tZX
+	C5Zemrb6QcRaK/f4pXlhFp1L1aQEvRVtTirdWe776MtvJaGO3Y1vxee4Pu2ws5217NCzN3tD
+	kgI9Z895Em0rU6O5XnRiRGLbp6s/JNK1uJ2v3RXeu3n58vU218QCRLeGlbPOy3z3NH0x84Jj
+	9Zqv9abKVzBZ9lovmLenpF1E4tHGOrWFZ0qWf5nEbuL+NeZYe8D7iGjefV2vNae7nBKYt9j0
+	1Uaj+70LRT9PUJVNrGKqnLtvTXMz17Iij63fH6aEmSudeL2gXPXnXN6S1hvdQXveXF0i+2iN
+	sOHmPsXlRkb3TyraCR3NvCDz5oqAY7fUfua+6a2RbCcqk+M0rk9bz6Vy8enOez+LV3x1U2Ip
+	zkg01GIuKk4EAGET9E9LBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSnK7MygNpBt83aFq8ubqK1eLOgmlM
+	FqeWL2SyaF68ns1i0p6tLBZ3H/5gsbi8aw6bxaJlrcwWn47+Z7VY1TkHKPZ9J7PFgo2PGC0m
+	HRS1WLXgALsDn8f+uWvYPfq2rGL02LL/M6PH501yASxRXDYpqTmZZalF+nYJXBlrd9kXbBKs
+	eLj0MFMD42beLkZODgkBE4mpy7ezgdhCArsZJeZMroWIS0u8ntXFCGELS6z895y9i5ELqOY1
+	o8SBYyfYQRK8AnYSf/dOZu5i5OBgEVCVONuRDBEWlDg58wkLiC0qIC9x/9YMsHJhgXiJ5sn7
+	mUBsEQENiZdHb7GAzGQWOMkkse9KHzPEgllMEtcnzGMFqWIWEJe49WQ+E8gCNgFDiWcnbEDC
+	nAJmElNvL2KEKDGT6NraBWXLS2x/O4d5AqPQLCR3zEIyaRaSlllIWhYwsqxilEwtKM5Nz002
+	LDDMSy3XK07MLS7NS9dLzs/dxAiONi2NHYz35v/TO8TIxMF4iFGCg1lJhPfpl71pQrwpiZVV
+	qUX58UWlOanFhxilOViUxHkNZ8xOERJITyxJzU5NLUgtgskycXBKNTDJCB9K+Bt87vlJZu3D
+	0+cq/bTf+YPLasLvU584IvKnL9+69VWw7E/n2/w+5iw1uj8qqrfHf0n/Fid9Ye++GVdklhx1
+	ODi3bTnXCvEHU5kOOShaSVZEXVr8JGe/dl7VTecahd7grzEbY2xNw+Jrt3PkKT4z1Nn0aFth
+	gbqHeOe6aZGMZ0T3lbnon3bmbHRjkvm+7CvD5cPnbBhm79v10MPvilTd8ZPGLEq2C977lTgm
+	yu+Mqrp34OGhzWtTZgf8msNwZteO72t8xF6L7RZqv2kdtStOSoCXU3JKXK1G7cIzyoveva+I
+	qfl+fvlcdtZdEhufsk06f0vGkvfaCg0u2+YPF89b2v+U5Hp6PlRzQn+PEktxRqKhFnNRcSIA
+	OkdZfCUDAAA=
+X-CMS-MailID: 20240817134356epcas5p311b04d9ba86b537c871a55ae7f2e4261
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240815064918epcas5p1248e4f9084d33fdb11a25fa34e66cdbe
+References: <CGME20240815064918epcas5p1248e4f9084d33fdb11a25fa34e66cdbe@epcas5p1.samsung.com>
+	<20240815064836.1491-1-selvarasu.g@samsung.com>
+	<2024081618-singing-marlin-2b05@gregkh>
+	<4f286780-89a2-496d-9007-d35559f26a21@samsung.com>
+	<2024081700-skittle-lethargy-9567@gregkh>
 
-On 14.08.2024 1:56 PM, Song Xue wrote:
-> 
-> 
-> On 8/14/2024 6:24 PM, Konrad Dybcio wrote:
->> On 14.08.2024 12:08 PM, Song Xue wrote:
->>>
->>> On 8/9/2024 9:18 PM, Konrad Dybcio wrote:
->>>> X1E80100 has a multiport controller with 2 HS (eUSB) and 2 SS PHYs
->>>> attached to it. It's commonly used for USB-A ports and internally
->>>> routed devices. Configure it to support such functionality.
+
+On 8/17/2024 10:47 AM, Greg KH wrote:
+> On Fri, Aug 16, 2024 at 09:13:09PM +0530, Selvarasu Ganesan wrote:
+>> On 8/16/2024 3:25 PM, Greg KH wrote:
+>>> On Thu, Aug 15, 2024 at 12:18:31PM +0530, Selvarasu Ganesan wrote:
+>>>> This commit addresses an issue where the USB core could access an
+>>>> invalid event buffer address during runtime suspend, potentially causing
+>>>> SMMU faults and other memory issues in Exynos platforms. The problem
+>>>> arises from the following sequence.
+>>>>           1. In dwc3_gadget_suspend, there is a chance of a timeout when
+>>>>           moving the USB core to the halt state after clearing the
+>>>>           run/stop bit by software.
+>>>>           2. In dwc3_core_exit, the event buffer is cleared regardless of
+>>>>           the USB core's status, which may lead to an SMMU faults and
+>>>>           other memory issues. if the USB core tries to access the event
+>>>>           buffer address.
 >>>>
->>>> Signed-off-by: Konrad Dybcio<konrad.dybcio@linaro.org>
->>>> ---
->>
->> [...]
->>
->>>> +
->>>> +                phys = <&usb_mp_hsphy0>, <&usb_mp_qmpphy0>,
->>>> +                       <&usb_mp_hsphy1>, <&usb_mp_qmpphy1>;
->>>> +                phy-names = "usb2-0", "usb3-0",
->>>> +                        "usb2-1", "usb3-1";
->>>> +                dr_mode = "host";
+>>>> To prevent this hardware quirk on Exynos platforms, this commit ensures
+>>>> that the event buffer address is not cleared by software  when the USB
+>>>> core is active during runtime suspend by checking its status before
+>>>> clearing the buffer address.
+>>>>
+>>>> Cc: stable@vger.kernel.org # v6.1+
+>>> Any hint as to what commit id this fixes?
 >>>
->>> Why do we add the dr_mode definition in dtsi file rather than in corresponding board dts file?  Could we follow the node "usb_1_ss1_dwc3"  in x1e80100-crd.dtsi?
->>
->> That is because the MP controller is host-only and it doesn't make sense
->> to ensure the OS of that in each board file separately. That's also how
->> it's done on other platforms with a MP controller description.
->>
+>>> thanks,
 >>>
->>> BTW, how do we verify the function of  multiport controller？From my test on x1e80100-crd,  the eusb6 which is from usb_mp_hsphy1 attaches the third-party repeater, do we need a new repeater node/driver to verify the function of eusb6?
+>>> greg k-h
 >>
->> I have a X1E Surface Laptop 7 with a USB-A port with a NXP PTN3222 in
->> front of it. Tested with a smoke test, with both SS and HS USB-A devices.
+>> Hi Greg,
 >>
-> What is detailed information on smoke test.
-> From my end, I also have two questions.
-> 1. I found the usb_mp_hsphy1 is using the driver "phy-qcom-snps-eusb2". However, the driver requires a repeater node from DT. At present, we don't have the node or driver for NXP repeater and it is not working on eusb6 to detect the NXP repeater. So, is it possible for us to have complete function involving with MP DT and repeater node for CRD board, and then we push patches together?
+>> This issue is not related to any particular commit. The given fix is
+>> address a hardware quirk on the Exynos platform. And we require it to be
+>> backported on stable kernel 6.1 and above all stable kernel.
+> If it's a hardware quirk issue, why are you restricting it to a specific
+> kernel release and not a specific kernel commit?  Why not 5.15?  5.4?
 
-I believe you're a bit confused about the upstreaming process. Describing
-hardware in Device Tree vs doing the same plus enabling it on some upstream
-board are of equal value, and this patch is very much in the spirit of
-"release early, release often".
+Hi Greg,
 
-There's no need to delay patches that are correct within their own
-confinement (which they should be [1]) just so that the series is bigger.
-That may even be discouraged by some folks..
+I mentioned a specific kernel because our platform is set to be tested 
+and functioning with kernels 6.1 and above, and the issue was reported 
+with these kernel versions. However, we would be fine if all stable 
+kernels, such as 5.4 and 5.15, were backported. In this case, if you 
+need a new patch version to update the Cc tag for all stable kernels, 
+please suggest the Cc tag to avoid confusion in next version.
 
-> 2. The usb_mp_dwc3 node has four phys. When enabling the driver for the node, we must need enable all four phys in borad's DT. Howerver, if the board is only using one phy like eusb6, is it suitable to enable other three phys?
-
-Yes, they will simply be registered, configured and since there won't
-be any interrupts (as the pins are N/C, it will not do much). But
-these PHYs are physically on the SoC regardless of them being
-connected, so I see no issue.
-
-[1] https://www.kernel.org/doc/html/latest/process/submitting-patches.html#separate-your-changes
-
-Konrad
+Thanks,
+Selva
+>
+> thanks,
+>
+> greg k-h
+>
+>
 
