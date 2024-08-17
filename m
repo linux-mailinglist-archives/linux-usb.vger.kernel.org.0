@@ -1,194 +1,220 @@
-Return-Path: <linux-usb+bounces-13572-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13573-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B24F295582E
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 15:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FAC2955855
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 16:24:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F4AB1C20D64
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 13:49:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 734C01C21249
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2024 14:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E51E1EEE6;
-	Sat, 17 Aug 2024 13:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B4EB15444E;
+	Sat, 17 Aug 2024 14:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nUOdgm0k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ki/w9fTr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89018F507
-	for <linux-usb@vger.kernel.org>; Sat, 17 Aug 2024 13:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0136146596;
+	Sat, 17 Aug 2024 14:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723902569; cv=none; b=aivHO2vh5YZ/ys/Bexi+h2Kt6GTmu1kL0WeVRs/gBse9YZEdY3Hn/viq9WCXMt6OJ82PFCQ3tw7pZNqPP2jMWKXwVUgQLT4yf9vvbC8x0/kElzstlztJM3utbFzTltLub1l02lyj7qkbzMUyH1OQWsrE1WT2IdrZSVsqjX0MK0I=
+	t=1723904676; cv=none; b=t0R5HY/uzsf2tkJ7P/GyAmF8PUVtyyjPBJS+tpGWOAq3R4BUqnKlLYpkPzGoRPxwcTZRy3Jf9nUW8Fw1Cc25TFJnTei29B4TMWoWgoWA+Q0RuuqOf5VuHwngs3yRPBZtLUEEH1Y6p+J6pzLKbWBOVjI2oYsYlzFciNiyjJ8XHhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723902569; c=relaxed/simple;
-	bh=Z37x7P3OUwQ57VOk02zwVc2udz2b1U+xIPjklLd4zCo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=rbu5xFKdmAp7O9/Am0fOqaBs8gIUnfxfEFi8wfHQP02zkrUh+lTsTJCO3BnCr/HWkVp109T3Xkx75YLDi0/RseDZZlcZ9SFwDCoYYKTxESjF0WOhuaRTGzXh1xF1GS8S2o0BfVeuc3yUmhYQiBqMit0Q503vxNXCEtI52xFryEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nUOdgm0k; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240817134919epoutp04d206dfdd8618b8018481546cbb990c91~siD56q6pR3036730367epoutp04O
-	for <linux-usb@vger.kernel.org>; Sat, 17 Aug 2024 13:49:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240817134919epoutp04d206dfdd8618b8018481546cbb990c91~siD56q6pR3036730367epoutp04O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1723902559;
-	bh=6OdAAhY1jmDD/qNc8iBhpCFMfmOZJ5vdix/d/18DDPQ=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=nUOdgm0ktl34B2s0pKxb3UkUK88B4KLP1hctKHgmNtvkc/V1CHVUJakkdkU+oiNwW
-	 ZhzWrCxOideaD9sI+xT3pO3FN91BhRWUqOLihsW1gznNBKxUxUlg/6/P5DkvFvc0gu
-	 vluUXMvs1QpeIqkl0iFqCCuaXWz/Bs8Ucx5UHySg=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20240817134918epcas5p4b81041e43428e2ab9c9ce40d2c919282~siD5lhkIw0893208932epcas5p4H;
-	Sat, 17 Aug 2024 13:49:18 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.179]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4WmKwF2pmjz4x9Pp; Sat, 17 Aug
-	2024 13:49:17 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	87.D4.09743.D5AA0C66; Sat, 17 Aug 2024 22:49:17 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20240817134356epcas5p311b04d9ba86b537c871a55ae7f2e4261~sh-NkFcK82016620166epcas5p3p;
-	Sat, 17 Aug 2024 13:43:56 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240817134356epsmtrp2ad3aba442d71ae211fca8898de870bbd~sh-NjSmU20363203632epsmtrp2C;
-	Sat, 17 Aug 2024 13:43:56 +0000 (GMT)
-X-AuditID: b6c32a4a-14fff7000000260f-b2-66c0aa5d535c
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	56.6A.07567.C19A0C66; Sat, 17 Aug 2024 22:43:56 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240817134354epsmtip130a4c32a2f80ebb9ac325ba1b7b421d5~sh-LnkTaY0574705747epsmtip1P;
-	Sat, 17 Aug 2024 13:43:54 +0000 (GMT)
-Message-ID: <c477fdb2-a92a-4551-b6c8-38ada06914c6@samsung.com>
-Date: Sat, 17 Aug 2024 19:13:53 +0530
+	s=arc-20240116; t=1723904676; c=relaxed/simple;
+	bh=V36+5U+Rf6AlMUR5aRKGPesWGPSbPaMZ5KL23zwiIKE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CpMYuOqv14SGiRpgQ/wfG4aJEn0Lazk7EIxyPuUtg2tFgcCKuswFSBLIK/7BM/p4zYJOTWOR8rSmiviHwjqkuRNA/UId8EIw/bEixlUYNdEBym02P7Z+mQHlA/wAAqAJ1qOqdvTYl8VdI62BpfMEXix2vOjPDQPQdOOnNyvuEIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ki/w9fTr; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3717de33d58so1702847f8f.1;
+        Sat, 17 Aug 2024 07:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723904673; x=1724509473; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N2ylZGda1UbKFev/Hg4IvXMUgiJFczD/6TSHLJ0QRZU=;
+        b=ki/w9fTrV99b4UlLrDceDo7zbpr2JkGs8MzVkoi1wXrJFAUNrMB5xLdqDNKVl9nFVU
+         FQkkLZzShQ4P8aFYSdtYsjEKTJ6DWlenj9gj82bZkmmBAT80BYfmMT6YKbDs/R8loYqA
+         ZTFqJSW3daNSN4kzbkHZEOBeRJ2E0qU+r41RWjENY1+qTl4xA8hJfEBI7eEEgj/cxZyo
+         xYt70b6gBF08G1O1Uq75CYGqDw+w2hs0mWfToxFnAAhEZ/p1w58fHXgYugTCWPket3aM
+         sy2TAvNeSWajiV93LFJ+l1SoTHGNo6OByGf2KToKvUfyt9VSGZL5o8H6+C6JfpAf/TrP
+         OuqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723904673; x=1724509473;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N2ylZGda1UbKFev/Hg4IvXMUgiJFczD/6TSHLJ0QRZU=;
+        b=kdGuyZGxX0g0+GwtCs2IHKY6AE15PNSTi+gUoEgA8RXg+7etIWfXwGJBCqbl48BlE2
+         SktV22C/uVJybxvcbRNIPw7ky5kK2b+k8bB/MDmzfgz8Ezq+YOqzAliXS1+wrOF+NrPO
+         oLv/7H47eefJIUkz7jhm27rwYSE/+u7WAoGAGfFI6+ER04/tGkm6ru7Ap5U7ufdDGeCp
+         BeFO/tPw7rvK/pC0WBMQn/uhe8EuvnHcNwh7iAtgpraJVrJicRfF1fx3tb0BmlAJHulw
+         rpFHTyiEMSH2MJ60e//7Kw5/BaWLMVRcPc6ETWQ8gaJHs6wZQs5a6bLYQmIVxcLU9bCd
+         AvEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWlzpRQBGqFd4t36ru8R1M/Y5+759zKHP4+EjXZbgGyaworjGuV5m0VCCgujBu56e+qFZnUYA6zpXMBSA7d/FofE0T9wQncW/tLa7qoFgSI7mW7E7XyMajrgjlnIzfSzg0zcLI4kYO+
+X-Gm-Message-State: AOJu0YyjTrfAKl071wiXjWeUWU/iKKLjsubVwCYMtqk2FsW7OzDadHcF
+	8OtOLZ59KEovEgJjwo/x8r3ho9Ue4Dbj1pO7OWpCLWpkhyzvf+SLKGV9ELwgxkMJ4K/YKJgwbRg
+	FRgoI4lP1yWuzjCvXEqslr6zfH4s=
+X-Google-Smtp-Source: AGHT+IF7RwnVwpW0z165xK7DTXOlfNsz1aeKMZU3huOOoqNGMVoAt+/OBTyKpWWj89IGnwJkhUhihXY3NCtj49gxpvA=
+X-Received: by 2002:adf:e907:0:b0:371:8ae3:2941 with SMTP id
+ ffacd0b85a97d-371946a44d3mr3306154f8f.58.1723904672745; Sat, 17 Aug 2024
+ 07:24:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: core: Prevent USB core invalid event
- buffer address access
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
-	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
-	eomji.oh@samsung.com, shijie.cai@samsung.com, stable@vger.kernel.org
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <2024081700-skittle-lethargy-9567@gregkh>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmum7sqgNpBs0LhS3eXF3FanFnwTQm
-	i1PLFzJZNC9ez2Yxac9WFou7D3+wWFzeNYfNYtGyVmaLT0f/s1qs6pwDFPu+k9liwcZHjBaT
-	DoparFpwgN2Bz2P/3DXsHn1bVjF6bNn/mdHj8ya5AJaobJuM1MSU1CKF1Lzk/JTMvHRbJe/g
-	eOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoBuVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
-	JbZKqQUpOQUmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZa3fZF2wSrHi49DBTA+Nm3i5GTg4J
-	AROJpsUT2LsYuTiEBHYzSpxe8BTK+cQoMen+YSYI5xujxLoFN9hhWqYu384GkdjLKNF+ajUL
-	hPOWUWLu3BusIFW8AnYSf/dOZu5i5OBgEVCVONuRDBEWlDg58wkLiC0qIC9x/9YMsKHCAvES
-	R24vBWsVEdCQeHn0FthMZoGTTBJXly5jAkkwC4hL3HoynwlkJpuAocSzEzYgYU4BM4mptxcx
-	QpTIS2x/O4cZpFdCYA+HxL4TDUwQV7tIdLbfYoawhSVeHd8C9Y2UxOd3e9kg7GqJ1Xc+skE0
-	tzBKHH7yDarIXuLx0UdgzzALaEqs36UPEZaVmHpqHdRtfBK9v59A7eKV2DEPxlaVONV4GWq+
-	tMS9JddYIWwPickvtjBPYFSchRQus5C8OQvJP7MQNi9gZFnFKJlaUJybnlpsWmCUl1oOj/Dk
-	/NxNjOAkrOW1g/Hhgw96hxiZOBgPMUpwMCuJ8D79sjdNiDclsbIqtSg/vqg0J7X4EKMpMH4m
-	MkuJJucD80BeSbyhiaWBiZmZmYmlsZmhkjjv69a5KUIC6YklqdmpqQWpRTB9TBycUg1M3tZX
-	C5Zemrb6QcRaK/f4pXlhFp1L1aQEvRVtTirdWe776MtvJaGO3Y1vxee4Pu2ws5217NCzN3tD
-	kgI9Z895Em0rU6O5XnRiRGLbp6s/JNK1uJ2v3RXeu3n58vU218QCRLeGlbPOy3z3NH0x84Jj
-	9Zqv9abKVzBZ9lovmLenpF1E4tHGOrWFZ0qWf5nEbuL+NeZYe8D7iGjefV2vNae7nBKYt9j0
-	1Uaj+70LRT9PUJVNrGKqnLtvTXMz17Iij63fH6aEmSudeL2gXPXnXN6S1hvdQXveXF0i+2iN
-	sOHmPsXlRkb3TyraCR3NvCDz5oqAY7fUfua+6a2RbCcqk+M0rk9bz6Vy8enOez+LV3x1U2Ip
-	zkg01GIuKk4EAGET9E9LBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSnK7MygNpBt83aFq8ubqK1eLOgmlM
-	FqeWL2SyaF68ns1i0p6tLBZ3H/5gsbi8aw6bxaJlrcwWn47+Z7VY1TkHKPZ9J7PFgo2PGC0m
-	HRS1WLXgALsDn8f+uWvYPfq2rGL02LL/M6PH501yASxRXDYpqTmZZalF+nYJXBlrd9kXbBKs
-	eLj0MFMD42beLkZODgkBE4mpy7ezgdhCArsZJeZMroWIS0u8ntXFCGELS6z895y9i5ELqOY1
-	o8SBYyfYQRK8AnYSf/dOZu5i5OBgEVCVONuRDBEWlDg58wkLiC0qIC9x/9YMsHJhgXiJ5sn7
-	mUBsEQENiZdHb7GAzGQWOMkkse9KHzPEgllMEtcnzGMFqWIWEJe49WQ+E8gCNgFDiWcnbEDC
-	nAJmElNvL2KEKDGT6NraBWXLS2x/O4d5AqPQLCR3zEIyaRaSlllIWhYwsqxilEwtKM5Nz002
-	LDDMSy3XK07MLS7NS9dLzs/dxAiONi2NHYz35v/TO8TIxMF4iFGCg1lJhPfpl71pQrwpiZVV
-	qUX58UWlOanFhxilOViUxHkNZ8xOERJITyxJzU5NLUgtgskycXBKNTDJCB9K+Bt87vlJZu3D
-	0+cq/bTf+YPLasLvU584IvKnL9+69VWw7E/n2/w+5iw1uj8qqrfHf0n/Fid9Ye++GVdklhx1
-	ODi3bTnXCvEHU5kOOShaSVZEXVr8JGe/dl7VTecahd7grzEbY2xNw+Jrt3PkKT4z1Nn0aFth
-	gbqHeOe6aZGMZ0T3lbnon3bmbHRjkvm+7CvD5cPnbBhm79v10MPvilTd8ZPGLEq2C977lTgm
-	yu+Mqrp34OGhzWtTZgf8msNwZteO72t8xF6L7RZqv2kdtStOSoCXU3JKXK1G7cIzyoveva+I
-	qfl+fvlcdtZdEhufsk06f0vGkvfaCg0u2+YPF89b2v+U5Hp6PlRzQn+PEktxRqKhFnNRcSIA
-	OkdZfCUDAAA=
-X-CMS-MailID: 20240817134356epcas5p311b04d9ba86b537c871a55ae7f2e4261
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240815064918epcas5p1248e4f9084d33fdb11a25fa34e66cdbe
-References: <CGME20240815064918epcas5p1248e4f9084d33fdb11a25fa34e66cdbe@epcas5p1.samsung.com>
-	<20240815064836.1491-1-selvarasu.g@samsung.com>
-	<2024081618-singing-marlin-2b05@gregkh>
-	<4f286780-89a2-496d-9007-d35559f26a21@samsung.com>
-	<2024081700-skittle-lethargy-9567@gregkh>
+References: <20240814125525.3917130-2-crwulff@gmail.com> <294f091e-aa0c-4f1d-b827-db3339a0a8af@stanley.mountain>
+In-Reply-To: <294f091e-aa0c-4f1d-b827-db3339a0a8af@stanley.mountain>
+From: Chris Wulff <crwulff@gmail.com>
+Date: Sat, 17 Aug 2024 10:24:21 -0400
+Message-ID: <CAB0kiBKeBwHNm1B7RCYTK1KTUrWS4=NzTdLRV6sdDH1wqCFJHQ@mail.gmail.com>
+Subject: Re: [PATCH v4] USB: gadget: f_hid: Add GET_REPORT via userspace IOCTL
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: oe-kbuild@lists.linux.dev, linux-usb@vger.kernel.org, lkp@intel.com, 
+	oe-kbuild-all@lists.linux.dev, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konstantin Aladyshev <aladyshev22@gmail.com>, 
+	David Sands <david.sands@biamp.com>, Jeff Johnson <quic_jjohnson@quicinc.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, linux-kernel@vger.kernel.org, 
+	Chris Wulff <Chris.Wulff@biamp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 8/17/2024 10:47 AM, Greg KH wrote:
-> On Fri, Aug 16, 2024 at 09:13:09PM +0530, Selvarasu Ganesan wrote:
->> On 8/16/2024 3:25 PM, Greg KH wrote:
->>> On Thu, Aug 15, 2024 at 12:18:31PM +0530, Selvarasu Ganesan wrote:
->>>> This commit addresses an issue where the USB core could access an
->>>> invalid event buffer address during runtime suspend, potentially causing
->>>> SMMU faults and other memory issues in Exynos platforms. The problem
->>>> arises from the following sequence.
->>>>           1. In dwc3_gadget_suspend, there is a chance of a timeout when
->>>>           moving the USB core to the halt state after clearing the
->>>>           run/stop bit by software.
->>>>           2. In dwc3_core_exit, the event buffer is cleared regardless of
->>>>           the USB core's status, which may lead to an SMMU faults and
->>>>           other memory issues. if the USB core tries to access the event
->>>>           buffer address.
->>>>
->>>> To prevent this hardware quirk on Exynos platforms, this commit ensures
->>>> that the event buffer address is not cleared by software  when the USB
->>>> core is active during runtime suspend by checking its status before
->>>> clearing the buffer address.
->>>>
->>>> Cc: stable@vger.kernel.org # v6.1+
->>> Any hint as to what commit id this fixes?
->>>
->>> thanks,
->>>
->>> greg k-h
->>
->> Hi Greg,
->>
->> This issue is not related to any particular commit. The given fix is
->> address a hardware quirk on the Exynos platform. And we require it to be
->> backported on stable kernel 6.1 and above all stable kernel.
-> If it's a hardware quirk issue, why are you restricting it to a specific
-> kernel release and not a specific kernel commit?  Why not 5.15?  5.4?
-
-Hi Greg,
-
-I mentioned a specific kernel because our platform is set to be tested 
-and functioning with kernels 6.1 and above, and the issue was reported 
-with these kernel versions. However, we would be fine if all stable 
-kernels, such as 5.4 and 5.15, were backported. In this case, if you 
-need a new patch version to update the Cc tag for all stable kernels, 
-please suggest the Cc tag to avoid confusion in next version.
-
-Thanks,
-Selva
+On Sat, Aug 17, 2024 at 2:49=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
 >
-> thanks,
+> Hi,
 >
-> greg k-h
+> kernel test robot noticed the following build warnings:
 >
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/crwulff-gmail-com/=
+USB-gadget-f_hid-Add-GET_REPORT-via-userspace-IOCTL/20240814-225520
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git us=
+b-testing
+> patch link:    https://lore.kernel.org/r/20240814125525.3917130-2-crwulff=
+%40gmail.com
+> patch subject: [PATCH v4] USB: gadget: f_hid: Add GET_REPORT via userspac=
+e IOCTL
+> config: x86_64-randconfig-161-20240817 (https://download.01.org/0day-ci/a=
+rchive/20240817/202408171146.0RjWnTq8-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a=
+15a9eac96088ae5e9134248d8236e34b91b1)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> | Closes: https://lore.kernel.org/r/202408171146.0RjWnTq8-lkp@intel.com/
+>
+> smatch warnings:
+> drivers/usb/gadget/function/f_hid.c:705 f_hidg_get_report() warn: inconsi=
+stent returns '&hidg->get_report_spinlock'.
+> drivers/usb/gadget/function/f_hid.c:705 f_hidg_get_report() warn: inconsi=
+stent returns 'flags'.
+>
+> vim +705 drivers/usb/gadget/function/f_hid.c
+>
+> fce51fb916013b Chris Wulff 2024-08-14  653  static int f_hidg_get_report(=
+struct file *file, struct usb_hidg_report __user *buffer)
+> fce51fb916013b Chris Wulff 2024-08-14  654  {
+> fce51fb916013b Chris Wulff 2024-08-14  655      struct f_hidg            =
+       *hidg =3D file->private_data;
+> fce51fb916013b Chris Wulff 2024-08-14  656      struct usb_composite_dev =
+       *cdev =3D hidg->func.config->cdev;
+> fce51fb916013b Chris Wulff 2024-08-14  657      unsigned long   flags;
+> fce51fb916013b Chris Wulff 2024-08-14  658      struct report_entry *entr=
+y;
+> fce51fb916013b Chris Wulff 2024-08-14  659      struct report_entry *ptr;
+> fce51fb916013b Chris Wulff 2024-08-14  660      __u8 report_id;
+> fce51fb916013b Chris Wulff 2024-08-14  661
+> fce51fb916013b Chris Wulff 2024-08-14  662      entry =3D kmalloc(sizeof(=
+*entry), GFP_KERNEL);
+> fce51fb916013b Chris Wulff 2024-08-14  663      if (!entry)
+> fce51fb916013b Chris Wulff 2024-08-14  664              return -ENOMEM;
+> fce51fb916013b Chris Wulff 2024-08-14  665
+> fce51fb916013b Chris Wulff 2024-08-14  666      if (copy_from_user(&entry=
+->report_data, buffer,
+> fce51fb916013b Chris Wulff 2024-08-14  667                              s=
+izeof(struct usb_hidg_report))) {
+> fce51fb916013b Chris Wulff 2024-08-14  668              ERROR(cdev, "copy=
+_from_user error\n");
+> fce51fb916013b Chris Wulff 2024-08-14  669              kfree(entry);
+> fce51fb916013b Chris Wulff 2024-08-14  670              return -EINVAL;
+> fce51fb916013b Chris Wulff 2024-08-14  671      }
+> fce51fb916013b Chris Wulff 2024-08-14  672
+> fce51fb916013b Chris Wulff 2024-08-14  673      report_id =3D entry->repo=
+rt_data.report_id;
+> fce51fb916013b Chris Wulff 2024-08-14  674
+> fce51fb916013b Chris Wulff 2024-08-14  675      spin_lock_irqsave(&hidg->=
+get_report_spinlock, flags);
+> fce51fb916013b Chris Wulff 2024-08-14  676      ptr =3D f_hidg_search_for=
+_report(hidg, report_id);
+> fce51fb916013b Chris Wulff 2024-08-14  677
+> fce51fb916013b Chris Wulff 2024-08-14  678      if (ptr) {
+> fce51fb916013b Chris Wulff 2024-08-14  679              /* Report already=
+ exists in list - update it */
+> fce51fb916013b Chris Wulff 2024-08-14  680              if (copy_from_use=
+r(&ptr->report_data, buffer,
+> fce51fb916013b Chris Wulff 2024-08-14  681                              s=
+izeof(struct usb_hidg_report))) {
+> fce51fb916013b Chris Wulff 2024-08-14  682                      ERROR(cde=
+v, "copy_from_user error\n");
+> fce51fb916013b Chris Wulff 2024-08-14  683                      kfree(ent=
+ry);
+> fce51fb916013b Chris Wulff 2024-08-14  684                      return -E=
+INVAL;
+>
+> spin_unlock_irqrestore(&hidg->get_report_spinlock, flags);
+
+This does appear to be legitimate. I will make sure the spinlock is
+released on that error path and post a new version.
+
+>
+> fce51fb916013b Chris Wulff 2024-08-14  685              }
+> fce51fb916013b Chris Wulff 2024-08-14  686              kfree(entry);
+> fce51fb916013b Chris Wulff 2024-08-14  687      } else {
+> fce51fb916013b Chris Wulff 2024-08-14  688              /* Report does no=
+t exist in list - add it */
+> fce51fb916013b Chris Wulff 2024-08-14  689              list_add_tail(&en=
+try->node, &hidg->report_list);
+> fce51fb916013b Chris Wulff 2024-08-14  690      }
+> fce51fb916013b Chris Wulff 2024-08-14  691
+> fce51fb916013b Chris Wulff 2024-08-14  692      /* If there is no respons=
+e pending then do nothing further */
+> fce51fb916013b Chris Wulff 2024-08-14  693      if (hidg->get_report_retu=
+rned) {
+> fce51fb916013b Chris Wulff 2024-08-14  694              spin_unlock_irqre=
+store(&hidg->get_report_spinlock, flags);
+> fce51fb916013b Chris Wulff 2024-08-14  695              return 0;
+> fce51fb916013b Chris Wulff 2024-08-14  696      }
+> fce51fb916013b Chris Wulff 2024-08-14  697
+> fce51fb916013b Chris Wulff 2024-08-14  698      /* If this userspace resp=
+onse serves the current pending report */
+> fce51fb916013b Chris Wulff 2024-08-14  699      if (hidg->get_report_req_=
+report_id =3D=3D report_id) {
+> fce51fb916013b Chris Wulff 2024-08-14  700              hidg->get_report_=
+returned =3D true;
+> fce51fb916013b Chris Wulff 2024-08-14  701              wake_up(&hidg->ge=
+t_queue);
+> fce51fb916013b Chris Wulff 2024-08-14  702      }
+> fce51fb916013b Chris Wulff 2024-08-14  703
+> fce51fb916013b Chris Wulff 2024-08-14  704      spin_unlock_irqrestore(&h=
+idg->get_report_spinlock, flags);
+> fce51fb916013b Chris Wulff 2024-08-14 @705      return 0;
+> fce51fb916013b Chris Wulff 2024-08-14  706  }
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 >
 
