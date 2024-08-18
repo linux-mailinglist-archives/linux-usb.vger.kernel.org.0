@@ -1,83 +1,79 @@
-Return-Path: <linux-usb+bounces-13578-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E550D955D4E
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Aug 2024 17:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0506D955DDC
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Aug 2024 19:23:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1A3E281943
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Aug 2024 15:53:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B591C28141A
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Aug 2024 17:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7718A1442F2;
-	Sun, 18 Aug 2024 15:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B647514A61A;
+	Sun, 18 Aug 2024 17:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gj51q9Ay"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Peoq4uvt"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0FB433D5;
-	Sun, 18 Aug 2024 15:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA04748F;
+	Sun, 18 Aug 2024 17:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723996421; cv=none; b=uC6dZRQ+OdsfwirGc5iVsLNaPwKzsNJPPnIka4lBLfqu/SJp2EhXDQySApr05na0uLzuMKR7Fnp6m8dmtxsDZ21oJGZ34Sxfd7wplgYSbPveGY50KnxvjiaNEfvdoHV41Gqcd2/l78CRAPuQ3v8LUEhk+dbHNKpay06I+RecMws=
+	t=1724001806; cv=none; b=h3o6nsyrJmJ2AuUeq0rFdASg0E6OTdFAsIz4f3HHp2TiinkQOHomqITY7TDF2WiAxkyk0L8ykg1XMIm9AQDOPfdYLrixU05BEJf8rzKDulGUrRY8Q0nuWRDtaJXd3ifdHdjCYxmPk3sSUCm/8ItJt7sCWJJX8ZlHA35F6qg5pp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723996421; c=relaxed/simple;
-	bh=Tbt+j8CdukwgaYMQtYP6W1t8oyGm7GmGMhbCKDGo68Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g/z4tpEexIL6p6iIdZo5ez+XwXga6yCsxdnxoZEmEifHGwbxBflV3fyRT4hnV1L0uH6uywzgHXet6PqmlAlm2XoL6H5C3sFWv6zkApu1Y72vQzlRx69gw77ODzbwjSrNK7sWUyH1/tQ6//nF+daT22krH3iOxJKGPsPwknwh7Co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gj51q9Ay; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 062C3C32786;
-	Sun, 18 Aug 2024 15:53:39 +0000 (UTC)
+	s=arc-20240116; t=1724001806; c=relaxed/simple;
+	bh=EaU9ZIq9S1SYp+5jalBKb03YJIqr7nzt9Yfnawu0/wY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=t4PIn2H1w5SwNOYIaEcBJcggeLRB+dCUiINA7FBhM/nalLnhtUGxP48EE+gKa+6PHTlYQwoPVhNQB4i7KhmYk9oJQKcnywzWlSbqNY7LF8Ksn2CGpwUMFmw9Cw8pu2R3CRoKDgJzO+vUYOJAPFk+OZTwv1u+4JyuIl6MuEVF3MA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Peoq4uvt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3176C32786;
+	Sun, 18 Aug 2024 17:23:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723996420;
-	bh=Tbt+j8CdukwgaYMQtYP6W1t8oyGm7GmGMhbCKDGo68Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gj51q9AyJIgvOeP9kYc4J3DyS36ZWdwHjedvBn3XsMz1oH1kpSMXoJpMeUQhC6jKE
-	 vFv3NHgqRquBnAXA/bPtLE/VgmFVZd4mud9RVLxGfqJfrpNpS/jbDi6YC6ZqbroY4U
-	 Y3riU+BxmnPYT+RRJvegpFIDS54jWYB4SP0ppvgyh3SBRCPPira+7Uqa+72XLSvfhs
-	 jiZjZuPKB3aCowSrHV/bU5Gd/l/linsCOsm2lfxkwpug4T0/KMZWJFki5EZcZb6EVT
-	 MiAZkVjyMnuejsFi04tCpkLoBtEjpIut3mLHx3UlevKBYMRt0bGVhxGDSsfbAAfxT0
-	 LYexSrQ0761iw==
-Date: Sun, 18 Aug 2024 09:53:38 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Conor Dooley <conor+dt@kernel.org>, imx@lists.linux.dev,
-	linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/1] dt-bindings: usb: add layerscape super speed usb
- support
-Message-ID: <172399641766.147408.13216803408020032216.robh@kernel.org>
-References: <20240815152159.4177782-1-Frank.Li@nxp.com>
+	s=k20201202; t=1724001805;
+	bh=EaU9ZIq9S1SYp+5jalBKb03YJIqr7nzt9Yfnawu0/wY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Peoq4uvtOWyYeXSTzD1nvFf1WvS8+pP7LAbZ7pyuaLRQNEpdcwdBbWs/CHOMaAxI8
+	 /au3jrLSJT7qxqDwwPq+j+I6yCkXcG9kGyKaq9bDyPH2SK1kBRGeiRbLkZDL5vIaqc
+	 vwV9tmPvJLJjDXCA35M2oZcBu8nBBJovbstcAcamqnH9OyUQGRwaqjFpjiAXfwA5eu
+	 p8scGUpnXsjY2pK8UWdHkkhq0mbyxpkAem/caZSnlpKPc4ubYLO+rAI2cdTDrFv12f
+	 TPuwiGoL+iQ4K2ry4enU/uUPT3bbIfrCp+4GINKGoS8zr0LGLFUcwzCdYzuvKMdV0O
+	 Xl+dQbG1xUERA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DD738231F8;
+	Sun, 18 Aug 2024 17:23:26 +0000 (UTC)
+Subject: Re: [GIT PULL] USB / Thunderbolt driver fixes for 6.11-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZsIVd2smm0EX27rL@kroah.com>
+References: <ZsIVd2smm0EX27rL@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZsIVd2smm0EX27rL@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc4
+X-PR-Tracked-Commit-Id: af8e119f52e9c13e556be9e03f27957554a84656
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3d9061d22bef282dfd993f9481a1f0cb755bd7f6
+Message-Id: <172400180502.3949564.4798834681059342898.pr-tracker-bot@kernel.org>
+Date: Sun, 18 Aug 2024 17:23:25 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240815152159.4177782-1-Frank.Li@nxp.com>
 
+The pull request you sent on Sun, 18 Aug 2024 17:38:31 +0200:
 
-On Thu, 15 Aug 2024 11:21:58 -0400, Frank Li wrote:
-> Add missed binding doc for layerscape dwc3 usb controller.
-> 
-> Fix below warning:
-> arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb: /soc/usb@3100000:
-> 	failed to match any schema with compatible: ['fsl,ls1028a-dwc3', 'snps,dwc3']
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  .../devicetree/bindings/usb/fsl,ls1028a.yaml  | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/fsl,ls1028a.yaml
-> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc4
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3d9061d22bef282dfd993f9481a1f0cb755bd7f6
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
