@@ -1,57 +1,82 @@
-Return-Path: <linux-usb+bounces-13617-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13618-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B8D39568CA
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 12:57:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76118956911
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 13:11:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FF541F2227C
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 10:57:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE4FBB22AF2
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:11:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C50165EF9;
-	Mon, 19 Aug 2024 10:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C989F16631D;
+	Mon, 19 Aug 2024 11:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cT4kPh8T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hWbSFn6Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7325416193C;
-	Mon, 19 Aug 2024 10:56:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1531662E5
+	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 11:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724065012; cv=none; b=uwdj1dNYs7wNzDEPvxEmzvr+IFq5gGUNCXsJ7erhf+TZIVxLolfHyZksHvKhPjp3eVGMZ5S7ahaZmXsAljzc+cgSSPxhzF3mNcDRr0tazNln4hsNeKIxyhE8APsrYrktE7rYH8JaEQXV8PBTrWZpjbExYM88hqd4w1EmVYM3ugQ=
+	t=1724065880; cv=none; b=c4dC+wQ5HvYLHQ7Cgbz1BNA8xAd/QDNxfCgZ4Rus4AzwWwuizTajqeVt3C1U/epau8QoI8SHgvIxjQJAamSOyP02R+BRKsxDw1nmlQE3/H2TU9y5aV00jpKxnGFI+os/OhspqpktD79Je7+uvuS+GhcXN0E7+za1GaX1p2zdimc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724065012; c=relaxed/simple;
-	bh=krKWk/uvZl/f9E5k+1tVWHW21F0jEo8yrBSRmeEula4=;
+	s=arc-20240116; t=1724065880; c=relaxed/simple;
+	bh=ms3udCEx1G1PsdNR2ldsCJfbBlMrOq2WuSZq4F3T7jo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rKv9n5yyhWbIa4zc8vxuRCb29YG+RcZISWv4BwJVDznQqaF+tiYsOoguxi8VUXpcga5yy9SnZ4mCVGH2b3CinGrJ2X+gGtcQc5w4b5KchcC+fDznDObSds+G0/FzSsorL4DP6axV6S+jSbbKTh2ARpkvjFKCR6ffYiArfGXZkVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cT4kPh8T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4AB0C32782;
-	Mon, 19 Aug 2024 10:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724065012;
-	bh=krKWk/uvZl/f9E5k+1tVWHW21F0jEo8yrBSRmeEula4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cT4kPh8TnX9XyRByVl/mUHDsFPZvFkprXy+bsorPtN0xzO3SPzlppd2OQXHslzKJC
-	 rwSI818ar17gxJT6mZQSorQnyr5OWOlxQCef4J9N+DX/iV9K61S/1rrmszWkOxCCKY
-	 4ridjtw1PohcZggP5idfAj1i97TQdFVi+Fk9Pi84=
-Date: Mon, 19 Aug 2024 12:56:43 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: color Ice <wirelessdonghack@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, kvalo@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, mark.esler@canonical.com,
-	stf_xl@wp.pl, tytso@mit.edu
-Subject: Re: Ubuntu RT2X00 WIFI USB Driver Kernel NULL pointer
- Dereference&Use-After-Free Vulnerability
-Message-ID: <2024081946-designate-dioxide-c59d@gregkh>
-References: <2024080359-getaway-concave-623e@gregkh>
- <20240814055816.2786467-1-wirelessdonghack@gmail.com>
- <91e19cf3-216b-48ac-a93d-f920dd2a7668@rowland.harvard.edu>
- <CAOV16XEsgkLWz3rOQsAdve-qKsPEDw-QxJNoo4hJfXdLnowHfw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=k398YJmSnP5OM8fdGUskapqnvuUk5u0GSBGBxPf+zLp9Zr3cnwd1fmTPVdckOS0vmiJHaoaNWf6t1vNEwSOFi+NPrUf82EccAAJeGnO7rrsfL7ey7o0B4e0/Y4jzcX5uY+5qHus1PDgxSIiWJBVgml00Hl5LkeFwCAVmnmA1ZkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hWbSFn6Q; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724065879; x=1755601879;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ms3udCEx1G1PsdNR2ldsCJfbBlMrOq2WuSZq4F3T7jo=;
+  b=hWbSFn6QajdYfH5miNLOdUDJMTUJiSGa6jUzO3bECu3cseFHp0hNHWvR
+   /R5gwkEy1fkq67b2ensUDRdQvpWx5dJTNqhiuu5CH0WK7vCyV7hWkYQak
+   QCKtRDFYjV5cgbHVs54gnyJPakP88PHmocFytsGUE5dXXlsZiOBDytl6l
+   n3+xgfJ4YSPc0a7AnZPUcr6FzTDmiW4Md5z99+Ru8EEuAF9m13LCWOPzB
+   NCsBCxnJNXF7RhqMuXtqrAP1SjnteD6MGGzf/hLugMNiR47AlEO6h7jvN
+   moBLTv9WU4K+xFnIrTWt6ogiLx3fkOVeDFgKLJLPTSbr/T+FsM7d2BkM3
+   w==;
+X-CSE-ConnectionGUID: 0QTcVKClQwqIr6qkrF5qRg==
+X-CSE-MsgGUID: bO9ukZ3+RGGJDZAwjTMVag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11168"; a="26172632"
+X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
+   d="scan'208";a="26172632"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 04:11:18 -0700
+X-CSE-ConnectionGUID: UMaNn2KAS3+b3K+rf3Impw==
+X-CSE-MsgGUID: ObYQbGfRQT6q7jk7gs4s2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
+   d="scan'208";a="60181041"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa010.jf.intel.com with SMTP; 19 Aug 2024 04:11:15 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Aug 2024 14:11:13 +0300
+Date: Mon, 19 Aug 2024 14:11:13 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jameson Thies <jthies@google.com>,
+	Benson Leung <bleung@chromium.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-usb@vger.kernel.org,
+	"Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+	Bartosz Szpila <bszpila@google.com>
+Subject: Re: [PATCH v2 1/6] usb: typec: ucsi: Remove unused fields from
+ struct ucsi_connector_status
+Message-ID: <ZsMoUWSMtaxteBBf@kuha.fi.intel.com>
+References: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
+ <20240816135859.3499351-2-heikki.krogerus@linux.intel.com>
+ <CANFp7mUDm9Ya9Gjv9Bv_neL22SuDocmz_8HCGVbnd8y-0gd7tA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,24 +86,102 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOV16XEsgkLWz3rOQsAdve-qKsPEDw-QxJNoo4hJfXdLnowHfw@mail.gmail.com>
+In-Reply-To: <CANFp7mUDm9Ya9Gjv9Bv_neL22SuDocmz_8HCGVbnd8y-0gd7tA@mail.gmail.com>
 
-On Mon, Aug 19, 2024 at 06:49:42PM +0800, color Ice wrote:
-> How is the patch development progressing? We would like to conduct a
-> full verification test. It’s possible that many drivers have this
-> issue, so you could try a simple fix, and we’ll see how it works.
+Hi Abhishek,
 
-This should be unique to this driver, but please, test others.
+On Sun, Aug 18, 2024 at 05:02:28PM -0700, Abhishek Pandit-Subedi wrote:
+> On Fri, Aug 16, 2024 at 6:59 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > The new fields are valid only with the new UCSI versions.
+> > They are at offsets that go beyond the MAX_DATA_LENGTH (16
+> > bytes) with the older UCSI versions. That has not caused any
+> > problems before because nothing uses those new fields yet.
+> > Because they are not used yet, dropping them for now.
+> >
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >  drivers/usb/typec/ucsi/ucsi.h | 27 ++-------------------------
+> >  1 file changed, 2 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> > index 57129f3c0814..7bc132b59027 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.h
+> > +++ b/drivers/usb/typec/ucsi/ucsi.h
+> > @@ -344,35 +344,12 @@ struct ucsi_connector_status {
+> >  #define   UCSI_CONSTAT_PARTNER_TYPE_AUDIO      6
+> >         u32 request_data_obj;
+> >
+> > -       u8 pwr_status[3];
+> > -#define UCSI_CONSTAT_BC_STATUS(_p_)            ((_p_[0]) & GENMASK(1, 0))
+> > +       u8 pwr_status;
+> > +#define UCSI_CONSTAT_BC_STATUS(_p_)            ((_p_) & GENMASK(1, 0))
+> >  #define   UCSI_CONSTAT_BC_NOT_CHARGING         0
+> >  #define   UCSI_CONSTAT_BC_NOMINAL_CHARGING     1
+> >  #define   UCSI_CONSTAT_BC_SLOW_CHARGING                2
+> >  #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING     3
+> > -#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)   (((_p_[0]) & GENMASK(5, 2)) >> 2)
+> > -#define   UCSI_CONSTAT_CAP_PWR_LOWERED         0
+> > -#define   UCSI_CONSTAT_CAP_PWR_BUDGET_LIMIT    1
+> > -#define UCSI_CONSTAT_PROVIDER_PD_VERSION_OPER_MODE(_p_)        \
+> > -       ((get_unaligned_le32(_p_) & GENMASK(21, 6)) >> 6)
+> > -#define UCSI_CONSTAT_ORIENTATION(_p_)          (((_p_[2]) & GENMASK(6, 6)) >> 6)
+> > -#define   UCSI_CONSTAT_ORIENTATION_DIRECT      0
+> > -#define   UCSI_CONSTAT_ORIENTATION_FLIPPED     1
+> > -#define UCSI_CONSTAT_SINK_PATH_STATUS(_p_)     (((_p_[2]) & GENMASK(7, 7)) >> 7)
+> > -#define   UCSI_CONSTAT_SINK_PATH_DISABLED      0
+> > -#define   UCSI_CONSTAT_SINK_PATH_ENABLED       1
+> > -       u8 pwr_readings[9];
+> > -#define UCSI_CONSTAT_REV_CURR_PROT_STATUS(_p_) ((_p_[0]) & 0x1)
+> > -#define UCSI_CONSTAT_PWR_READING_VALID(_p_)    (((_p_[0]) & GENMASK(1, 1)) >> 1)
+> > -#define UCSI_CONSTAT_CURRENT_SCALE(_p_)                (((_p_[0]) & GENMASK(4, 2)) >> 2)
+> > -#define UCSI_CONSTAT_PEAK_CURRENT(_p_) \
+> > -       ((get_unaligned_le32(_p_) & GENMASK(20, 5)) >> 5)
+> > -#define UCSI_CONSTAT_AVG_CURRENT(_p_) \
+> > -       ((get_unaligned_le32(&(_p_)[2]) & GENMASK(20, 5)) >> 5)
+> > -#define UCSI_CONSTAT_VOLTAGE_SCALE(_p_) \
+> > -       ((get_unaligned_le16(&(_p_)[4]) & GENMASK(8, 5)) >> 5)
+> > -#define UCSI_CONSTAT_VOLTAGE_READING(_p_) \
+> > -       ((get_unaligned_le32(&(_p_)[5]) & GENMASK(16, 1)) >> 1)
+> >  } __packed;
+> >
+> >  /*
+> > --
+> > 2.43.0
+> >
+> >
+> 
+> I'm working on a patch series that depends on the sink path status so
+> I would prefer we don't remove it:
+> https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/5784952
+> 
+> Since GET_CONNECTOR_STATUS is the only command that exceeds 16 bytes
+> for MESSAGE_IN, can we just add a wrapper that checks the UCSI version
+> for that command only and limits the size sent to ucsi_run_command?
 
-> Recently, we tested some embedded devices where the operating systems,
-> due to automated operations involving WiFi drivers, had UDEV rules
-> built-in or granted significant permissions to USB. This allows the
-> PoC to cause a kernel crash without needing root or sudo.
+It's always "just this one command" :). It's actually not only the
+GET_CONNECTOR_STATUS command in this case - at least GET_PD_MESSAGE
+can also exceed 16 bytes - but even if it was, it would still not be
+okay to simply guard the read. You would also have to check the
+version with every access of those extended fields, and that's where
+it's basically guaranteed to fail. Somebody will access those extended
+fields unconditionally without anybody noticing sooner or later, and
+that's why they can't be part of this data structure.
 
-But how are you allowed to run local programs on systems that have those
-types of permissions?
+So there needs to be a completely separate data structure for the
+extended version.
+
+struct ucsi_connector_status_extended {
+        u8 status[16];
+        u8 extended[3];
+} __packed;
+
+Something like that. But that of course should not be introduced
+before there is an actual user for it.
 
 thanks,
 
-greg k-h
+-- 
+heikki
 
