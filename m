@@ -1,219 +1,344 @@
-Return-Path: <linux-usb+bounces-13606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E523956633
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:00:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D53D495668F
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:15:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93ADB1F25893
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:00:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 036771C219C6
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0D03398E;
-	Mon, 19 Aug 2024 09:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8F215CD42;
+	Mon, 19 Aug 2024 09:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="ZeTEwCtr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gfbcVoDO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from HK2PR02CU002.outbound.protection.outlook.com (mail-eastasiaazon11010007.outbound.protection.outlook.com [52.101.128.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BEF15B98E;
-	Mon, 19 Aug 2024 09:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.128.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724058022; cv=fail; b=MB7UMaMBDLhbmcMgKYEEBL1bTdDtv/FwNIvvtN6v6F51/wyy3SzQvSTBu+EbKWyvRuYC29uDYyAkWoqm0NIEYyFVLSOc76ZuglZV5FRr5H7mvtILNwsZUIxHKQCA+OcnGIPlouZb0GMl105GUUve9EqkrKTRqBVAcHGZt+hpHhw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724058022; c=relaxed/simple;
-	bh=huYgos6VsnkEslVMRHzv94Fz0HJFYgkz0mVU89qrpGg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=dU8wd6UTis1N8wUM8oaWahu0wp45FCNZLm2JjEEGerGRp7UNYdxEc6sC1E70NPwi4q0JFR220GWAq5gcC5uTFbs5AhOuNl9IDnxeag40WDekoE+sMPPL13JeArLefi/kbvAcPHg/D0Zyjdb5HQzIqXhH9ITRhYUFN5lc1LD3gYw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=ZeTEwCtr; arc=fail smtp.client-ip=52.101.128.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=u6I7yXud+fpovB24/958AI8pg29X0ff4wU3aaiW54wYE8xPs+msDTuW28IwoNSHZ6QK259LNYalis3h4R2sagt8KU8kmyBZ1J2cG6FUFCP8FF91a2FiuVbkSXR4IAd6SnXxhBWSdpkmmwKQOD2A68kfJhHL58SjIVs0aeQKUiN2GGe+n9Kdn0G1bpRqssgW5E5NqcLdm31++egi9RB5bckhi21iJhhkqbprH93bHGbUsOwmPcTTUAyzO0R5PqYGKep8ADo/ujt5tQ4CRigZcONK9tWEpz7yIeni5Yf7RRgXCjcFeVUwRjNfyC9mVDCZU5l/Fhppr9hjNSU25bE/E+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=huYgos6VsnkEslVMRHzv94Fz0HJFYgkz0mVU89qrpGg=;
- b=ZNoQtPWhS23BzSwLVpJMhRCxsjyYBVmhRTvWRLecdzZHlc4J/jrycyeJrEjB55l3O5WbZScweG8KbdOBoMvfxXWUOy+SzajBCA2HUktukVsk65vN+uhxKjnVlbK8kMi5NQJkcGkW32ngajxtyivMwnZAFdPqaY7hJkWtxOgprrIqzv8dafqRrqGMOXcYgdcTTGSMYpK14Fhs32bS3tpLFbcezb6iKqlQsHDiwyWsc34PhvwjsN2ORZDFo17eo3Y3pg4p8Rg2XN/ITQlZdeRoi9JGUrDa3hei1vF/krjQTUFg/nmYLwC+jKCnvDbCSO5ig9e/tBkNhw55QRbRbCObsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=huYgos6VsnkEslVMRHzv94Fz0HJFYgkz0mVU89qrpGg=;
- b=ZeTEwCtr3HMwuIqUezqIP20Tz7XjaCwJKhm66KuGl4i6q/01H+6XR5W/zCj3z9/eNFH7Bj6DuBcCxghciqjDlqhpiPBE56ryrjYHkXl9uw1UxmszMxDClsrLsXfKOMZRuKSq28i9rsaA6cnDeVk3g9i9ykDgMLXzjC5nkU7hER+y2QttVYKLcgDvE+WZzbeUCNuH4dmG0TxDnnL/CMNK1byb8gi5dEaEtra+3XTft6NCBktcUMZDBbvKb+kRwXiKfpFE+ZTrb/yRIAN0u0LHcbubBBuXwKJfO9dEsc4O4oGYiIqJb+zyL3O5AuiMVinS2w/+rttdyp6Sww2UfLjJbA==
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com (2603:1096:400:358::7)
- by SEZPR06MB6599.apcprd06.prod.outlook.com (2603:1096:101:17e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Mon, 19 Aug
- 2024 09:00:13 +0000
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe]) by TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe%4]) with mapi id 15.20.7875.019; Mon, 19 Aug 2024
- 09:00:13 +0000
-From: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
-To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"quic_prashk@quicinc.com" <quic_prashk@quicinc.com>,
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	opensource.kernel <opensource.kernel@vivo.com>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>
-Subject:
- =?utf-8?B?562U5aSNOiDnrZTlpI06IFtQQVRDSCB2MV0gdXNiOiBnYWRnZXQ6IHVfc2Vy?=
- =?utf-8?Q?ial:_check_Null_pointer_in_EP_callback?=
-Thread-Topic:
- =?utf-8?B?562U5aSNOiBbUEFUQ0ggdjFdIHVzYjogZ2FkZ2V0OiB1X3NlcmlhbDogY2hl?=
- =?utf-8?Q?ck_Null_pointer_in_EP_callback?=
-Thread-Index:
- AdrvzihtFNSOcxRwTAOIHI6tveAOMAABV00AAACqLAAAAoTOwAAAUcYAAAD4WnAAAUYXgAAAwgzwAIjopbAAAJpGAAAAFMjQAABYSwAAABYTYA==
-Date: Mon, 19 Aug 2024 09:00:13 +0000
-Message-ID:
- <TYUPR06MB62175889B121F542869856E4D28C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
-References:
- <TYUPR06MB62177737F0054278B489962BD2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024081608-punch-coherent-d29e@gregkh>
- <CAOf5uwnsgcJjp1=RLa7qx9ScQY5rZvwX-Zu6BOqxBBhBCz+CFQ@mail.gmail.com>
- <TYUPR06MB62177BCD4AB43C19E38990D3D2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <CAOf5uwm65Cw-V+td_=6QAGUF+Uisueqcm0z=1zFaNTisAJnSFQ@mail.gmail.com>
- <TYUPR06MB6217877B31A08356241CAB38D2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024081652-unify-unlucky-28d2@gregkh>
- <TYUPR06MB6217D1798DBC41C7DB2A1DEDD2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <TYUPR06MB6217AEF9DD73C9424C7C1D07D28C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <CAOf5uwmdf+Vxes6+BQyghbiKByVC_i1RhmTE81_iix99U7HMmA@mail.gmail.com>
- <TYUPR06MB62171FA07658FE6500DB855FD28C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <CAOf5uwk-De+dCaL-xZMByFoMoxD7X1_KnOriq1MKAz5s+mOFiw@mail.gmail.com>
-In-Reply-To:
- <CAOf5uwk-De+dCaL-xZMByFoMoxD7X1_KnOriq1MKAz5s+mOFiw@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYUPR06MB6217:EE_|SEZPR06MB6599:EE_
-x-ms-office365-filtering-correlation-id: 1c1c9886-950b-4c70-1fae-08dcc02d5665
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?SVZzRjVybS9jTjgrSjR6QWVkN1VWcEVXazk1clRsNlhydVorNmR3cnVicTU4?=
- =?utf-8?B?NVVGazNselBwNGlPcHNURHJRaS9YR2FkMmhacjhNelpmN1FGdC96R29EUWMz?=
- =?utf-8?B?SC9NUEMwajJlMHg1a2FoNWdDRVY5aFk0ZUtTNndtMS81U3cwRmtUWGg5ZW5x?=
- =?utf-8?B?VTJ2YkdwRzlxY2Uxb2VJQkl4TkFRbXpCdHI3TWVjMkdnQWxaMVZQQzIxRGVl?=
- =?utf-8?B?WjVxZkRHTC9NWGVUcHRCV3lmM3lJN0NmaUkvMVdnSWJiKzd1WjVJekpZN0lT?=
- =?utf-8?B?Z0Y3U0lRdlpuVmcrKzlpbjFzMmFVQzdsc0k2citKSW9KUDJuL2R0c0gvRXpW?=
- =?utf-8?B?WmFwVnpKQUJsRG9XdmxQcDV2VDNDUm5jQWhZclZiaDlGOU9QamJJcklVTHFa?=
- =?utf-8?B?K2hlVVpic2tLSXM4UStreVlscDRoYXdXYTV3cExpRVdUUHdFSFZRUmdvS1pR?=
- =?utf-8?B?Y0h3a3hWQ3ZqTWdlb0Q5ZEQrckpZZGxob0hoUW54c3hCeTNjS09XQ05yYmlI?=
- =?utf-8?B?YUlxMytZWkRWeEZtS0EwUG5WTFRqVEVQOCtMUElpdVVZRWFvZFhuY3BnY3dU?=
- =?utf-8?B?TU0vbXgveFNZSEY5b2s5SjI2REo3QjRFa3N6RXFDT2lkVnpTZU8wVDM5S1NL?=
- =?utf-8?B?Z3BNeUZwdk0rVFVDNXNpSXhoU3UvRHRxQTZQZ2xTQmxBWUxwVkQzZlVvbTVi?=
- =?utf-8?B?N1B2c1pITW53MzFJNGY5eHFFV3Y5TEpIaDVJSzNsQ25oWHdFOURSMHBGcnNQ?=
- =?utf-8?B?bzlpQzFSZlBmL2VlOFFpSUd1QUZ5TE5zNDMyd2JBcXA0QTlVTGRGeHN4Y01E?=
- =?utf-8?B?VHJqSWFtd0w5ck9CTEowNFhRTTRtS2NOaWF1VTdzMHBxL3BaNVhpWXFYaWY0?=
- =?utf-8?B?bWxMTDlsRkh4V2xET3JlUTNEb0xNWDhFV08yVlpmMXhNajNVcjEzOVZWaHdZ?=
- =?utf-8?B?RFAvZnAvTERqQkVlQS9zdmZrRWVOeklGaDdlQ1lYL0pneDVoZDZEUkNrVjRE?=
- =?utf-8?B?ak1RUDlIZm1kVVNhSE5WYjVPTURHRi9vQ2ZZT3dzRndSRGlYZ0dXa0ppdTJH?=
- =?utf-8?B?UnFMdFJVU1puMjhQQXFMK1dVenNRQ0IvSk1pSUlaaitWZ3N6M0xPUHFtcHVm?=
- =?utf-8?B?Ym9LN1doaUtJRXQzY09nMjFEWXJmOVVlZWpFYlkzVC8rOEdaNVFiVnNhQ2NM?=
- =?utf-8?B?VS9QT3J6R1JRVUJmUzZocFdUMDRFMFhVcjlQbVBzekJUZUdrQ2FyRE83M21x?=
- =?utf-8?B?Rnl1cjJzMUx2Wk5jQXY5dlpxVHlYUHhneGg0akxDSE4zb0c3ajcvNjRIRFli?=
- =?utf-8?B?cmpRamUzVGJrN2NUQjRGMHRVcDhKV3V6Nm9jdFh0d2kzOWRPRkdNSXpxVTBV?=
- =?utf-8?B?WUxJWWRyc21UNm5WNU9ZSFJ2Rk0ya2UyQlV4aXBzMGYzUUxrQml3R2cyWEVa?=
- =?utf-8?B?VHFWZG53WGFSaEp0czlpYzdlNlZEbjZhaDF3Rk1abWVDdFhZL3dLMkUxalB5?=
- =?utf-8?B?QjBqbGRZcmlGOWRsNXgwaU1xS2YwaEpNSVVsUEx3TGR6WE8vS2JMVWZNamdn?=
- =?utf-8?B?RThueWM1aEZZZDVOOVBlYmpOSm5NbnNTcHhBbjdhRjY1eVJkU2dpMGhXc21w?=
- =?utf-8?B?aWFQYW1QcWo2eEl4OTFnQjFnNEpkKzNOaTdYWDNMWDNrTEtTWVRxeTFDZkpj?=
- =?utf-8?B?U2ZzNkdqSVJxTzR4Wk1HcXlVdVdXRGhWcitUL3h6SEVpWWRJNTVLN1lERjVH?=
- =?utf-8?B?TGptWFRaK21WYmgvVVNkam54NVd4cWlveUNsRy9EdGFGTEplelJqVTI2dnNS?=
- =?utf-8?B?SUcxUVc0bDJxc29saE9RVEVkbFJOVnA3clV5bkRDOGpHMURIVjhUYXVtZnRV?=
- =?utf-8?B?aGdqQ0VLSGRKdUM3UXUyNXYxWTM5VE9EbnZxcXliTnFKekE9PQ==?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYUPR06MB6217.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?OGtLQlVJZFFKME5vOHVVNWNGd0h1NCtUWEsweHp0UmlDd3FtemdhbndZUTUy?=
- =?utf-8?B?b010UzNUR0pqM3YySXN3dVBtSWc0S3Z3ZFREZ1ZURzJJNzZHMTNPMytxR3cr?=
- =?utf-8?B?dkdpeHJlRkRnZ1FIY2FNTXNVQWIweDBWMVBxMGhjSlQ3cTVjSHMrOW1FMmdW?=
- =?utf-8?B?V0hHRUJWazljUTJqemNHcmlEVllEMDBLZkUyOU5ISjcreHF0UlVZZ2JoaUxx?=
- =?utf-8?B?RkZydFowbkJCbU1rSnN5cUhoTUlJRHFOUnpuODBhenZabnQyK1lCQzlPcXlh?=
- =?utf-8?B?S0h6L0loVVZTNC9RUzYrdllqWjk0Q2tvaUR3RTBZcU8yL1JUZmpFWkVPWDRj?=
- =?utf-8?B?ZVJuYWkzOEdXMkpqMkdwMkRZUjdPRXdFSmJDVlR1M2J1U3k0RElaUEpUSWhh?=
- =?utf-8?B?b2wrZFNJYUJXRnVEb1lZRFFCL0VjZ1EwN1RaWm9yOXQxZDdzdFM1eFNjWUtH?=
- =?utf-8?B?SXNKMGdTd2tLdzliMUNJblVoNUNubzFoRjlHWEEzSU8vVWE4YlZicUNHTWNu?=
- =?utf-8?B?eEdzQkVZZFpVNm1zSXBzN0lWRXM2SUtBeEJxSjBxWmNzcjFVYzNYaGtzTkhq?=
- =?utf-8?B?d2tuazRMR25WYXNPSktLVkZEMGZ1YzZkd0NoTCtZL2RTUHpkdU5HZDQvQUtP?=
- =?utf-8?B?MVgzRGt1dWtXeDRPVmo2K1lYR2Z2QVBtaFgvQkFaTzEzY3hHV0dUYTZ6SDJp?=
- =?utf-8?B?ejdLOGoyd0owRmkxOXJMMXpSbG1XUDlrQXdnTDBUTlNnZkxudHFwa2J2eGZM?=
- =?utf-8?B?dzRRWnZTRExPRWtOL2V2VzdnQVhUMkhpdzkyMEtlNWpCYXdRMHV0Wk1iL083?=
- =?utf-8?B?enppZnB0WStWaS9ZN04yN2EvOWNRem5HSllaRlVQMXp0NFFOY25BTU1CZmRa?=
- =?utf-8?B?Mk56Nm1OMTM2c2d4cXZucUNrQVZLczRZdWI0NXo4dk1teUNuSkJGV0ZQSjIy?=
- =?utf-8?B?Zk0zdHNBMTgzLzZCS1gzeFdKN2VUSzBxMTUzY2tsNGRFejcvZnNJN05QdzRZ?=
- =?utf-8?B?TU5Od0tZNTJWaVBkL28xcVR6NTNRZ0Jxcm9vUTdacGV2eTdBM3lTV1lwMlVa?=
- =?utf-8?B?L2UzQ0NJOGZwSmhaM1pNamVvbmpyVWdsczdTd0JNQUdNOEpBdURMaFhOOThq?=
- =?utf-8?B?V0Y3Qlcvc1RmMzNjd2VqNzZteGxBTTR2SzNUSzZPU3BsbVI1Yk1zVXJ1L1Nv?=
- =?utf-8?B?Q3BjM0wxNytZd0liWkF2ZjJLT3lHM1lrZWdpRnFRVnpKQldNbmFwVExNQWJ1?=
- =?utf-8?B?STBzWGh4bGZ0RmE3ZXRibmdkQW9uaFpSb1MrSFdXekZUc1NLZE9wcHNvc3Fv?=
- =?utf-8?B?WG42QXB0ckg5cUp1OGNhK0ZXQk9SQTNMbjhmQktnYkM4dE5VV2ROVG1JajQv?=
- =?utf-8?B?RzRXeFdDOWNFMVpzQWVpWFp3Z0VKMmhNTjZoUThwS2V6bWpITHlqclF1VFJj?=
- =?utf-8?B?T01nZ29pQ0k5ZHpJR1Zwak15SHc0Wk1weFp2cXlBSjBhUFZ6NjhRSUg1c2FQ?=
- =?utf-8?B?ODRBZWVrSGliWFdJTWk1Wm5HQ2Y5emVTYWF6UzRMNXJMSE81N1hXanFQZllv?=
- =?utf-8?B?U0gyN1Y2VnZobU1sS01HeG5pL0RrdUx6S2grN0FIRXNYcm96aUIrT3Z2VHd3?=
- =?utf-8?B?ajAvSGRxY004cm85SDVFY3RzSEg2cVNOcXNQR0V3REFIb1o1dnMrUEM3Q0Uw?=
- =?utf-8?B?WVVNakRHN2V6TGhpUE85U2xZc1c4Qi9vNzAxVzdkQXI2by91RFZsTWY3UnJI?=
- =?utf-8?B?bXVzdlo0UTc3SHFybEIvTTZVSDM5QXp0OFhmM3ppTER1dlE1akM3UXZ5aVRI?=
- =?utf-8?B?QlZ1Vm1YdmlIdGpZREJwbGVrajFkZ2pxVU0vZUtqV3dSK2MzaFFxcXkveHNi?=
- =?utf-8?B?MFNZUTIrWlMyUmZxN3VoU245bWt2aU5qTnQyMklFVGtmaUoyUG9OR3ZjMlBG?=
- =?utf-8?B?d0x2bHo1eDNZbkpxRThocmVPejRCTzZuL2ZZMDlFaXFqOENpbnU4TEZBcUNn?=
- =?utf-8?B?NXJxZnRoTE5MamZnSnArb3JxS0xTV2tMSWlxdzNLRFQwVElySXU0aDBpSXhu?=
- =?utf-8?B?WFN5aGFmYlN5RDlycTUzS3FNbzU0VXRhV3N5bjFHaVhxcHd5UHEwbzF4RVFp?=
- =?utf-8?Q?2Dso=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C8C157A5A
+	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 09:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724058938; cv=none; b=CgKjn9471aHbmalvtzCOEDPVK6xXa74RYAe/j1fbxx2ICWx6wtt1UjCHoSN1AFf6WCn4AyQCImVlItvD4dAS1LdkkrGKsAnIa9zrw7pHA0x0UKv8MV6Fbfu7SnU7iDX8PZ3b+Hpbsy825kBK9u+xc9zJZnJqETtdTx6mnMGqxVI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724058938; c=relaxed/simple;
+	bh=3q+GIOIELSHXV7WlVyAxrFLrS7xx1dFZLFmfG3Cl82E=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=I9bu4dmhorNMf2VMuXNlN/gUFfBYgX9MFdbzgWHGCn65Gb6TZ1mU1wmFtqYsIU0DJotJEgPwFQrnss2ugjMvqY6uAj8QTo9DNFDpEcnjD+Mpw3TIkNEgAQWB2CL+o5cd3Uwapvv3aTcc33GiPyPqhFF0+57ZsNIjLDaWl/lKmNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gfbcVoDO; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-429d2d7be1eso20933455e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 02:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724058935; x=1724663735; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oXtnlW4Sq7mW/JKowxl/ZIPyqcaCGK4EvBTc/Fe9nUs=;
+        b=gfbcVoDOPRm8IH81Bh9W0mKSoc9z6uk+K0fNlbEuFHcMFWgIO7HmUvWrO4jcDRnP9c
+         nQM/abr7z2+0Ibexhd2xb2SCRlZz0UptJyIAg/dF+YdkweXAggHoKygW37IBsNJlKO62
+         MfUyixkYeJ7haJ269Cgk1V7vLvQqkJsz0tLYqGHkbv3+OgNQd2lbLX+YVYV1DybWuqak
+         YUxTTBDSTUn6XQ6LB6p8sy1brVOlpoPeaBmGXYg1oT8YGHcPdG2bXIlmdTS9C3KvbHCs
+         9oprrjhWWLRJvTEvY8ADfzn2f1lX358HrnVjF46QM0bd9tl//XuiPI3/0lXHCZPWUNZy
+         r1Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724058935; x=1724663735;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oXtnlW4Sq7mW/JKowxl/ZIPyqcaCGK4EvBTc/Fe9nUs=;
+        b=CDANbrd3cceO/Hl2tKw0eeXhi/AABei5pFPqPTh9YlEMlc2ezwu+D8EJqbdN72CPQJ
+         MK5pDXK1k8A8Cd8zHQQBWDqgsWYKfoxdKCVUmxeku3d8Im6bqCCdXb6qBm/NA1tH7vku
+         +RaQAZwbqnZ5xAhjXfr37k9MKiT6tyS+x2OjUTnyJvPU4nkEmRw0kR9rvYCM8a9cl9iF
+         R/ADI8q8XNy6gTO7mkOEfL9vPsLpR3l7TQ62h3YXDcWoaH7wLf3Kc5h/sIqb+u4/y37j
+         4TzLM3dgq+o5s0I13bOflDkBwzIPhA/wraynYBGxRV8bSlhZa+t4OcOxAdUc96dyVpFJ
+         3SGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVa3xZ1fr581lPtC69Ej4/rs9wvFolqnmZPiwuRkLqpQMBQB7keUjQn5b9ALGbIqAIORwCt8MGTC/c+jaCI7F3kEiJBrubteukQ
+X-Gm-Message-State: AOJu0YxIDjVaql3fsCzyOwctXOHzUxFhEyV3hNAAZ/y9ejqq8M2ysBBJ
+	LQmPPJTCgS9prg7585W992eD3tqOGdqQNlvUkTa3vJ65MezTrFAjOuzIWoOjeLo=
+X-Google-Smtp-Source: AGHT+IH+/bJh5xJJ+QT2txt2YE0xVYC102Lva0vs73xa+niumknhArjUDAYCwhN9wbWJfLDux7fhNg==
+X-Received: by 2002:a05:600c:3581:b0:428:6ac:426e with SMTP id 5b1f17b1804b1-429e232bae5mr97082815e9.5.1724058934212;
+        Mon, 19 Aug 2024 02:15:34 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f54e:4b0a:5175:5727? ([2a01:e0a:982:cbb0:f54e:4b0a:5175:5727])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ed650735sm101794465e9.12.2024.08.19.02.15.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Aug 2024 02:15:33 -0700 (PDT)
+Message-ID: <30dc4254-ff2b-4bd3-aea8-1be8da11fb8e@linaro.org>
+Date: Mon, 19 Aug 2024 11:15:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYUPR06MB6217.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c1c9886-950b-4c70-1fae-08dcc02d5665
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2024 09:00:13.5184
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gqoBZmnqhP49DQ/IhfiYQ3OZvJ6E8eHXSbCGQvZnKcvSnupWLOc4Ncsm7YEGIbCiMmdYLW9TeOJkuk2KNUHKeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6599
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/3] soc: qcom: pmic_glink: Fix race during initialization
+To: Bjorn Andersson <quic_bjorande@quicinc.com>,
+ Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Johan Hovold <johan+linaro@kernel.org>, Chris Lew
+ <quic_clew@quicinc.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Stephen Boyd <swboyd@chromium.org>, Amit Pundir <amit.pundir@linaro.org>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
+ <20240818-pmic-glink-v6-11-races-v1-1-f87c577e0bc9@quicinc.com>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-1-f87c577e0bc9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-SGVsbG8gbGludXggY29tbXVuaXR5IGV4cGVydDoNCg0KPj4gPj4gPj5JIHRoaW5rIHRoaXMgaGFz
-IGJlZW4gcmVwb3J0ZWQgcHJldmlvdXNseSwgYW5kIGRpZmZlcmVudCBwYXRjaGVzIGhhdmUgYmVl
-biBwcm9wb3NlZCwgaGF2ZSB5b3Ugc2VhcmNoZWQgdGhlIGFyY2hpdmVzPw0KPj4gPj4gPiBJIGhh
-dmVuJ3Qgc2VlbiB0aGUgcGF0Y2ggZ2l2ZW4gYmVsb3cgYmVmb3JlLCBJIHdpbGwgcmVhZCBpdCBj
-YXJlZnVsbHkuDQo+PiA+PiA+IEkgc2VhcmNoZWQgZm9yIExpbnV4IG1haW5saW5lIGNvbW1pdHMg
-YmVmb3JlIHN1Ym1pdHRpbmcsIGJ1dCBJIG9ubHkgY29tcGFyZWQgdGhlbSBhY2NvcmRpbmcgdG8g
-dGhlIGNyYXNoIHN0YWNrIGluZm9ybWF0aW9uIGFuZCBkaWQgbm90IG5vdGljZSB0aGUgZm9sbG93
-aW5nIGNvbW1pdC4NCj4+ID4+ICBJIGNoZWNrZWQgdGhlIHN0YWNrIHRyYWNlIGFnYWluLiBUaGUg
-cHJvYmxlbSB3ZSBlbmNvdW50ZXJlZCBzZWVtcyBkaWZmZXJlbnQgZnJvbSB0aGUgcHJvYmxlbSBy
-ZXBvcnRlZCBpbiB0aGUgbGluayBiZWxvdywgYW5kIHRoZXkgYXJlIG5vdCBjYXVzZWQgYnkgdGhl
-IHNhbWUgcmVhc29uLg0KPj4gPj4NCj4+DQo+PiA+RGlkIHlvdSBhcHBseSB0aGUgcGF0Y2g/IGFz
-IHN1Z2dlc3RlZCwgaXMgdGhlIHRlc3QgbW92aW5nIGZyb20gb25lIGdhZGdldCB0byB0aGUgb3Ro
-ZXI/DQo+PiAgV2UgYXBwbHkgdGhlIHBhdGNoIGludG8ga2VybmVsIDUuMTUgYW5kIHJhbiBhIHN0
-cmVzcyB0ZXN0LCBhbmQgdGhlIHByb2JsZW0gZGlkIG5vdCByZWN1ci4NCg0KPkl0IG1lYW5zIHRo
-YXQgZG9lcyBub3QgaGFwcGVuIGFnYWluPw0KIFllcy4NCg0KPj4gIENvbm5lY3QgdGhlIHBob25l
-IHRvIHRoZSBQQyB2aWEgYSBVU0IgY2FibGUgYW5kIHJ1biB0aGUgbW9ua2V5IHRlc3QgKHJ1biBh
-biBhcGsgYW5kIGNsaWNrIG9uIGl0IGF0IHdpbGwgb24gdGhlIHBob25lIGludGVyZmFjZSkuDQoN
-Cj5ZZXMgSSBrbm93IGJ1dCB0aGlzIG1vbmtleSB0ZXN0IGlzIHJ1bm5pbmcgYSBzdHJlc3MgdGVz
-dCBtb3ZpbmcgZnJvbSB1c2Igc3RvcmFnZSwgdG8gb3RoZXIgY29uZmlnZnMgcmlnaHQ/DQogRnJv
-bSB0aGUgY3Jhc2ggaW5mb3JtYXRpb24sIGl0IGNhbiBiZSBzZWVuIHRoYXQgdGhlIHN3aXRjaCBp
-cyBmcm9tIG10cCBtb2RlIHRvIHZpdm8gaW5kdXN0cmlhbCBtb2RlIHBvcnQgKGFkYitkaWFnK2Nz
-ZXJfdHR5K2dzZXJfdHR5K3JtbmV0KQ0KDQpUaGFua3MNCg==
+On 19/08/2024 01:17, Bjorn Andersson wrote:
+> As pointed out by Stephen Boyd it is possible that during initialization
+> of the pmic_glink child drivers, the protection-domain notifiers fires,
+> and the associated work is scheduled, before the client registration
+> returns and as a result the local "client" pointer has been initialized.
+> 
+> The outcome of this is a NULL pointer dereference as the "client"
+> pointer is blindly dereferenced.
+> 
+> Timeline provided by Stephen:
+>   CPU0                               CPU1
+>   ----                               ----
+>   ucsi->client = NULL;
+>   devm_pmic_glink_register_client()
+>    client->pdr_notify(client->priv, pg->client_state)
+>     pmic_glink_ucsi_pdr_notify()
+>      schedule_work(&ucsi->register_work)
+>      <schedule away>
+>                                      pmic_glink_ucsi_register()
+>                                       ucsi_register()
+>                                        pmic_glink_ucsi_read_version()
+>                                         pmic_glink_ucsi_read()
+>                                          pmic_glink_ucsi_read()
+>                                           pmic_glink_send(ucsi->client)
+>                                           <client is NULL BAD>
+>   ucsi->client = client // Too late!
+> 
+> This code is identical across the altmode, battery manager and usci
+> child drivers.
+> 
+> Resolve this by splitting the allocation of the "client" object and the
+> registration thereof into two operations.
+> 
+> This only happens if the protection domain registry is populated at the
+> time of registration, which by the introduction of commit '1ebcde047c54
+> ("soc: qcom: add pd-mapper implementation")' became much more likely.
+> 
+> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+> Closes: https://lore.kernel.org/all/CAMi1Hd2_a7TjA7J9ShrAbNOd_CoZ3D87twmO5t+nZxC9sX18tA@mail.gmail.com/
+> Reported-by: Johan Hovold <johan@kernel.org>
+> Closes: https://lore.kernel.org/all/ZqiyLvP0gkBnuekL@hovoldconsulting.com/
+> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> Closes: https://lore.kernel.org/all/CAE-0n52JgfCBWiFQyQWPji8cq_rCsviBpW-m72YitgNfdaEhQg@mail.gmail.com/
+> Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>   drivers/power/supply/qcom_battmgr.c   | 16 ++++++++++------
+>   drivers/soc/qcom/pmic_glink.c         | 28 ++++++++++++++++++----------
+>   drivers/soc/qcom/pmic_glink_altmode.c | 17 +++++++++++------
+>   drivers/usb/typec/ucsi/ucsi_glink.c   | 16 ++++++++++------
+>   include/linux/soc/qcom/pmic_glink.h   | 11 ++++++-----
+>   5 files changed, 55 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+> index 49bef4a5ac3f..df90a470c51a 100644
+> --- a/drivers/power/supply/qcom_battmgr.c
+> +++ b/drivers/power/supply/qcom_battmgr.c
+> @@ -1387,12 +1387,16 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+>   					     "failed to register wireless charing power supply\n");
+>   	}
+>   
+> -	battmgr->client = devm_pmic_glink_register_client(dev,
+> -							  PMIC_GLINK_OWNER_BATTMGR,
+> -							  qcom_battmgr_callback,
+> -							  qcom_battmgr_pdr_notify,
+> -							  battmgr);
+> -	return PTR_ERR_OR_ZERO(battmgr->client);
+> +	battmgr->client = devm_pmic_glink_new_client(dev, PMIC_GLINK_OWNER_BATTMGR,
+> +						     qcom_battmgr_callback,
+> +						     qcom_battmgr_pdr_notify,
+> +						     battmgr);
+> +	if (IS_ERR(battmgr->client))
+> +		return PTR_ERR(battmgr->client);
+> +
+> +	pmic_glink_register_client(battmgr->client);
+> +
+> +	return 0;
+>   }
+>   
+>   static const struct auxiliary_device_id qcom_battmgr_id_table[] = {
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> index 9ebc0ba35947..58ec91767d79 100644
+> --- a/drivers/soc/qcom/pmic_glink.c
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -66,15 +66,14 @@ static void _devm_pmic_glink_release_client(struct device *dev, void *res)
+>   	spin_unlock_irqrestore(&pg->client_lock, flags);
+>   }
+>   
+> -struct pmic_glink_client *devm_pmic_glink_register_client(struct device *dev,
+> -							  unsigned int id,
+> -							  void (*cb)(const void *, size_t, void *),
+> -							  void (*pdr)(void *, int),
+> -							  void *priv)
+> +struct pmic_glink_client *devm_pmic_glink_new_client(struct device *dev,
+> +						     unsigned int id,
+> +						     void (*cb)(const void *, size_t, void *),
+> +						     void (*pdr)(void *, int),
+> +						     void *priv)
+>   {
+>   	struct pmic_glink_client *client;
+>   	struct pmic_glink *pg = dev_get_drvdata(dev->parent);
+> -	unsigned long flags;
+>   
+>   	client = devres_alloc(_devm_pmic_glink_release_client, sizeof(*client), GFP_KERNEL);
+>   	if (!client)
+> @@ -85,6 +84,18 @@ struct pmic_glink_client *devm_pmic_glink_register_client(struct device *dev,
+>   	client->cb = cb;
+>   	client->pdr_notify = pdr;
+>   	client->priv = priv;
+> +	INIT_LIST_HEAD(&client->node);
+> +
+> +	devres_add(dev, client);
+> +
+> +	return client;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_pmic_glink_new_client);
+> +
+> +void pmic_glink_register_client(struct pmic_glink_client *client)
+> +{
+> +	struct pmic_glink *pg = client->pg;
+> +	unsigned long flags;
+>   
+>   	mutex_lock(&pg->state_lock);
+>   	spin_lock_irqsave(&pg->client_lock, flags);
+> @@ -95,11 +106,8 @@ struct pmic_glink_client *devm_pmic_glink_register_client(struct device *dev,
+>   	spin_unlock_irqrestore(&pg->client_lock, flags);
+>   	mutex_unlock(&pg->state_lock);
+>   
+> -	devres_add(dev, client);
+> -
+> -	return client;
+>   }
+> -EXPORT_SYMBOL_GPL(devm_pmic_glink_register_client);
+> +EXPORT_SYMBOL_GPL(pmic_glink_register_client);
+>   
+>   int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t len)
+>   {
+> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
+> index 1e0808b3cb93..e4f5059256e5 100644
+> --- a/drivers/soc/qcom/pmic_glink_altmode.c
+> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
+> @@ -520,12 +520,17 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+>   			return ret;
+>   	}
+>   
+> -	altmode->client = devm_pmic_glink_register_client(dev,
+> -							  altmode->owner_id,
+> -							  pmic_glink_altmode_callback,
+> -							  pmic_glink_altmode_pdr_notify,
+> -							  altmode);
+> -	return PTR_ERR_OR_ZERO(altmode->client);
+> +	altmode->client = devm_pmic_glink_new_client(dev,
+> +						     altmode->owner_id,
+> +						     pmic_glink_altmode_callback,
+> +						     pmic_glink_altmode_pdr_notify,
+> +						     altmode);
+> +	if (IS_ERR(altmode->client))
+> +		return PTR_ERR(altmode->client);
+> +
+> +	pmic_glink_register_client(altmode->client);
+> +
+> +	return 0;
+>   }
+>   
+>   static const struct auxiliary_device_id pmic_glink_altmode_id_table[] = {
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index 16c328497e0b..ac53a81c2a81 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -367,12 +367,16 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+>   		ucsi->port_orientation[port] = desc;
+>   	}
+>   
+> -	ucsi->client = devm_pmic_glink_register_client(dev,
+> -						       PMIC_GLINK_OWNER_USBC,
+> -						       pmic_glink_ucsi_callback,
+> -						       pmic_glink_ucsi_pdr_notify,
+> -						       ucsi);
+> -	return PTR_ERR_OR_ZERO(ucsi->client);
+> +	ucsi->client = devm_pmic_glink_new_client(dev, PMIC_GLINK_OWNER_USBC,
+> +						  pmic_glink_ucsi_callback,
+> +						  pmic_glink_ucsi_pdr_notify,
+> +						  ucsi);
+> +	if (IS_ERR(ucsi->client))
+> +		return PTR_ERR(ucsi->client);
+> +
+> +	pmic_glink_register_client(ucsi->client);
+> +
+> +	return 0;
+>   }
+>   
+>   static void pmic_glink_ucsi_remove(struct auxiliary_device *adev)
+> diff --git a/include/linux/soc/qcom/pmic_glink.h b/include/linux/soc/qcom/pmic_glink.h
+> index fd124aa18c81..aedde76d7e13 100644
+> --- a/include/linux/soc/qcom/pmic_glink.h
+> +++ b/include/linux/soc/qcom/pmic_glink.h
+> @@ -23,10 +23,11 @@ struct pmic_glink_hdr {
+>   
+>   int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t len);
+>   
+> -struct pmic_glink_client *devm_pmic_glink_register_client(struct device *dev,
+> -							  unsigned int id,
+> -							  void (*cb)(const void *, size_t, void *),
+> -							  void (*pdr)(void *, int),
+> -							  void *priv);
+> +struct pmic_glink_client *devm_pmic_glink_new_client(struct device *dev,
+> +						     unsigned int id,
+> +						     void (*cb)(const void *, size_t, void *),
+> +						     void (*pdr)(void *, int),
+> +						     void *priv);
+> +void pmic_glink_register_client(struct pmic_glink_client *client);
+>   
+>   #endif
+> 
+
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
