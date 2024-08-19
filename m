@@ -1,186 +1,137 @@
-Return-Path: <linux-usb+bounces-13618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76118956911
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 13:11:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CBC795691C
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 13:14:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE4FBB22AF2
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:11:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43A0E2830CD
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C989F16631D;
-	Mon, 19 Aug 2024 11:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DD811662E7;
+	Mon, 19 Aug 2024 11:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hWbSFn6Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EYq4SbkH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1531662E5
-	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 11:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4ED715B995;
+	Mon, 19 Aug 2024 11:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724065880; cv=none; b=c4dC+wQ5HvYLHQ7Cgbz1BNA8xAd/QDNxfCgZ4Rus4AzwWwuizTajqeVt3C1U/epau8QoI8SHgvIxjQJAamSOyP02R+BRKsxDw1nmlQE3/H2TU9y5aV00jpKxnGFI+os/OhspqpktD79Je7+uvuS+GhcXN0E7+za1GaX1p2zdimc=
+	t=1724066045; cv=none; b=rfycDWiWU/uRQtVmxsXeVrGTaXbRnp7jP0vhVWiPXuVka8jYm4ZtTJYVvrRJOzsrGx5Z/byTnwj403CTLlNn+YC09Uk81HWpVhLR5XL+GLrfZYXS5YCOfgd6xlVXaYUvP7+/sI+SEQwy7KuJoKo30sPIVKO0fXeCo+mtvdhhWh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724065880; c=relaxed/simple;
-	bh=ms3udCEx1G1PsdNR2ldsCJfbBlMrOq2WuSZq4F3T7jo=;
+	s=arc-20240116; t=1724066045; c=relaxed/simple;
+	bh=wqivuAtMCQV/XAC/sCYbD+dHR6ZzqWzi5UCasd6w21w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k398YJmSnP5OM8fdGUskapqnvuUk5u0GSBGBxPf+zLp9Zr3cnwd1fmTPVdckOS0vmiJHaoaNWf6t1vNEwSOFi+NPrUf82EccAAJeGnO7rrsfL7ey7o0B4e0/Y4jzcX5uY+5qHus1PDgxSIiWJBVgml00Hl5LkeFwCAVmnmA1ZkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hWbSFn6Q; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=rvmBQL4qZTNkQk4TBRBbh1cHFiXm5Issv9sNS0xQrzQ3uI54T6zr4V42tUaqIOJ5refsIiwkulspKtYXzbpD7jHLpxYqV0RAHBUKSiDbmPcGp6NL1p4r6Mkz6qtkE3nf/nj0rZv3rBVSDGdW0yANZDKC2lnp/K9nX5R0AwYTq/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EYq4SbkH; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724065879; x=1755601879;
+  t=1724066044; x=1755602044;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ms3udCEx1G1PsdNR2ldsCJfbBlMrOq2WuSZq4F3T7jo=;
-  b=hWbSFn6QajdYfH5miNLOdUDJMTUJiSGa6jUzO3bECu3cseFHp0hNHWvR
-   /R5gwkEy1fkq67b2ensUDRdQvpWx5dJTNqhiuu5CH0WK7vCyV7hWkYQak
-   QCKtRDFYjV5cgbHVs54gnyJPakP88PHmocFytsGUE5dXXlsZiOBDytl6l
-   n3+xgfJ4YSPc0a7AnZPUcr6FzTDmiW4Md5z99+Ru8EEuAF9m13LCWOPzB
-   NCsBCxnJNXF7RhqMuXtqrAP1SjnteD6MGGzf/hLugMNiR47AlEO6h7jvN
-   moBLTv9WU4K+xFnIrTWt6ogiLx3fkOVeDFgKLJLPTSbr/T+FsM7d2BkM3
-   w==;
-X-CSE-ConnectionGUID: 0QTcVKClQwqIr6qkrF5qRg==
-X-CSE-MsgGUID: bO9ukZ3+RGGJDZAwjTMVag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11168"; a="26172632"
+   mime-version:in-reply-to;
+  bh=wqivuAtMCQV/XAC/sCYbD+dHR6ZzqWzi5UCasd6w21w=;
+  b=EYq4SbkHcuxCzbZ8PfjWvNkdH1K3ekW/r6OoBLqG+OF7GD2O2zKg1Uxi
+   YsO/ltDu93M2tZbUTYEnIANyXRKBVdm34C1I6xGPfhVXfzQKa2W5swT9x
+   0vfNxwIF8hms03WoSIfvtA1lFmhbzY9agxqQ+nQVyCyw3Gx+AuZKpC7rs
+   xeoqdBY33D3NgNO2Yb7OFI4kONuUs3czMYfSd49orbbDHlTiTKc4afA5I
+   EyN7yZFkmy1irBB3VXyDcs8o1Tn8DjpjUOX4j8xHgzFGsb7LjHLpoojYk
+   1ZWIUp7YHKWURrVL4YehzPoNR1hQSKdDdSOExdgwmVdde2V1wb1MuLrJB
+   Q==;
+X-CSE-ConnectionGUID: tsLUPSMLQnydc9o9LPQx5Q==
+X-CSE-MsgGUID: BXUN3QJGS0KEOmM5WXVRxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11168"; a="22121708"
 X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
-   d="scan'208";a="26172632"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 04:11:18 -0700
-X-CSE-ConnectionGUID: UMaNn2KAS3+b3K+rf3Impw==
-X-CSE-MsgGUID: ObYQbGfRQT6q7jk7gs4s2g==
+   d="scan'208";a="22121708"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 04:14:04 -0700
+X-CSE-ConnectionGUID: xq145QvITm+zArgykmlpzQ==
+X-CSE-MsgGUID: jkVcxC44TX23GqI2nLmI8A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
-   d="scan'208";a="60181041"
+   d="scan'208";a="65173107"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa010.jf.intel.com with SMTP; 19 Aug 2024 04:11:15 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Aug 2024 14:11:13 +0300
-Date: Mon, 19 Aug 2024 14:11:13 +0300
+  by orviesa003.jf.intel.com with SMTP; 19 Aug 2024 04:14:00 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Aug 2024 14:13:59 +0300
+Date: Mon, 19 Aug 2024 14:13:59 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jameson Thies <jthies@google.com>,
-	Benson Leung <bleung@chromium.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-usb@vger.kernel.org,
-	"Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-	Bartosz Szpila <bszpila@google.com>
-Subject: Re: [PATCH v2 1/6] usb: typec: ucsi: Remove unused fields from
- struct ucsi_connector_status
-Message-ID: <ZsMoUWSMtaxteBBf@kuha.fi.intel.com>
-References: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
- <20240816135859.3499351-2-heikki.krogerus@linux.intel.com>
- <CANFp7mUDm9Ya9Gjv9Bv_neL22SuDocmz_8HCGVbnd8y-0gd7tA@mail.gmail.com>
+To: Wadim Egorov <w.egorov@phytec.de>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	upstream@lists.phytec.de, gregkh@linuxfoundation.org,
+	javier.carrasco@wolfvision.net, abdelalkuor@geotab.com,
+	harshit.m.mogalapalli@oracle.com
+Subject: Re: [PATCH] usb: typec: tipd: Free IRQ only if it was requested
+ before
+Message-ID: <ZsMo9/sqiQ8kHhZj@kuha.fi.intel.com>
+References: <20240816124150.608125-1-w.egorov@phytec.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANFp7mUDm9Ya9Gjv9Bv_neL22SuDocmz_8HCGVbnd8y-0gd7tA@mail.gmail.com>
+In-Reply-To: <20240816124150.608125-1-w.egorov@phytec.de>
 
-Hi Abhishek,
-
-On Sun, Aug 18, 2024 at 05:02:28PM -0700, Abhishek Pandit-Subedi wrote:
-> On Fri, Aug 16, 2024 at 6:59 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > The new fields are valid only with the new UCSI versions.
-> > They are at offsets that go beyond the MAX_DATA_LENGTH (16
-> > bytes) with the older UCSI versions. That has not caused any
-> > problems before because nothing uses those new fields yet.
-> > Because they are not used yet, dropping them for now.
-> >
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi.h | 27 ++-------------------------
-> >  1 file changed, 2 insertions(+), 25 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> > index 57129f3c0814..7bc132b59027 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.h
-> > +++ b/drivers/usb/typec/ucsi/ucsi.h
-> > @@ -344,35 +344,12 @@ struct ucsi_connector_status {
-> >  #define   UCSI_CONSTAT_PARTNER_TYPE_AUDIO      6
-> >         u32 request_data_obj;
-> >
-> > -       u8 pwr_status[3];
-> > -#define UCSI_CONSTAT_BC_STATUS(_p_)            ((_p_[0]) & GENMASK(1, 0))
-> > +       u8 pwr_status;
-> > +#define UCSI_CONSTAT_BC_STATUS(_p_)            ((_p_) & GENMASK(1, 0))
-> >  #define   UCSI_CONSTAT_BC_NOT_CHARGING         0
-> >  #define   UCSI_CONSTAT_BC_NOMINAL_CHARGING     1
-> >  #define   UCSI_CONSTAT_BC_SLOW_CHARGING                2
-> >  #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING     3
-> > -#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)   (((_p_[0]) & GENMASK(5, 2)) >> 2)
-> > -#define   UCSI_CONSTAT_CAP_PWR_LOWERED         0
-> > -#define   UCSI_CONSTAT_CAP_PWR_BUDGET_LIMIT    1
-> > -#define UCSI_CONSTAT_PROVIDER_PD_VERSION_OPER_MODE(_p_)        \
-> > -       ((get_unaligned_le32(_p_) & GENMASK(21, 6)) >> 6)
-> > -#define UCSI_CONSTAT_ORIENTATION(_p_)          (((_p_[2]) & GENMASK(6, 6)) >> 6)
-> > -#define   UCSI_CONSTAT_ORIENTATION_DIRECT      0
-> > -#define   UCSI_CONSTAT_ORIENTATION_FLIPPED     1
-> > -#define UCSI_CONSTAT_SINK_PATH_STATUS(_p_)     (((_p_[2]) & GENMASK(7, 7)) >> 7)
-> > -#define   UCSI_CONSTAT_SINK_PATH_DISABLED      0
-> > -#define   UCSI_CONSTAT_SINK_PATH_ENABLED       1
-> > -       u8 pwr_readings[9];
-> > -#define UCSI_CONSTAT_REV_CURR_PROT_STATUS(_p_) ((_p_[0]) & 0x1)
-> > -#define UCSI_CONSTAT_PWR_READING_VALID(_p_)    (((_p_[0]) & GENMASK(1, 1)) >> 1)
-> > -#define UCSI_CONSTAT_CURRENT_SCALE(_p_)                (((_p_[0]) & GENMASK(4, 2)) >> 2)
-> > -#define UCSI_CONSTAT_PEAK_CURRENT(_p_) \
-> > -       ((get_unaligned_le32(_p_) & GENMASK(20, 5)) >> 5)
-> > -#define UCSI_CONSTAT_AVG_CURRENT(_p_) \
-> > -       ((get_unaligned_le32(&(_p_)[2]) & GENMASK(20, 5)) >> 5)
-> > -#define UCSI_CONSTAT_VOLTAGE_SCALE(_p_) \
-> > -       ((get_unaligned_le16(&(_p_)[4]) & GENMASK(8, 5)) >> 5)
-> > -#define UCSI_CONSTAT_VOLTAGE_READING(_p_) \
-> > -       ((get_unaligned_le32(&(_p_)[5]) & GENMASK(16, 1)) >> 1)
-> >  } __packed;
-> >
-> >  /*
-> > --
-> > 2.43.0
-> >
-> >
+On Fri, Aug 16, 2024 at 02:41:50PM +0200, Wadim Egorov wrote:
+> In polling mode, if no IRQ was requested there is no need to free it.
+> Call devm_free_irq() only if client->irq is set. This fixes the warning
+> caused by the tps6598x module removal:
 > 
-> I'm working on a patch series that depends on the sink path status so
-> I would prefer we don't remove it:
-> https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/5784952
+> WARNING: CPU: 2 PID: 333 at kernel/irq/devres.c:144 devm_free_irq+0x80/0x8c
+> ...
+> ...
+> Call trace:
+>   devm_free_irq+0x80/0x8c
+>   tps6598x_remove+0x28/0x88 [tps6598x]
+>   i2c_device_remove+0x2c/0x9c
+>   device_remove+0x4c/0x80
+>   device_release_driver_internal+0x1cc/0x228
+>   driver_detach+0x50/0x98
+>   bus_remove_driver+0x6c/0xbc
+>   driver_unregister+0x30/0x60
+>   i2c_del_driver+0x54/0x64
+>   tps6598x_i2c_driver_exit+0x18/0xc3c [tps6598x]
+>   __arm64_sys_delete_module+0x184/0x264
+>   invoke_syscall+0x48/0x110
+>   el0_svc_common.constprop.0+0xc8/0xe8
+>   do_el0_svc+0x20/0x2c
+>   el0_svc+0x28/0x98
+>   el0t_64_sync_handler+0x13c/0x158
+>   el0t_64_sync+0x190/0x194
 > 
-> Since GET_CONNECTOR_STATUS is the only command that exceeds 16 bytes
-> for MESSAGE_IN, can we just add a wrapper that checks the UCSI version
-> for that command only and limits the size sent to ucsi_run_command?
+> Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
 
-It's always "just this one command" :). It's actually not only the
-GET_CONNECTOR_STATUS command in this case - at least GET_PD_MESSAGE
-can also exceed 16 bytes - but even if it was, it would still not be
-okay to simply guard the read. You would also have to check the
-version with every access of those extended fields, and that's where
-it's basically guaranteed to fail. Somebody will access those extended
-fields unconditionally without anybody noticing sooner or later, and
-that's why they can't be part of this data structure.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-So there needs to be a completely separate data structure for the
-extended version.
-
-struct ucsi_connector_status_extended {
-        u8 status[16];
-        u8 extended[3];
-} __packed;
-
-Something like that. But that of course should not be introduced
-before there is an actual user for it.
-
-thanks,
+> ---
+>  drivers/usb/typec/tipd/core.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index dd51a25480bf..256b0c054e9a 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -1465,8 +1465,9 @@ static void tps6598x_remove(struct i2c_client *client)
+>  
+>  	if (!client->irq)
+>  		cancel_delayed_work_sync(&tps->wq_poll);
+> +	else
+> +		devm_free_irq(tps->dev, client->irq, tps);
+>  
+> -	devm_free_irq(tps->dev, client->irq, tps);
+>  	tps6598x_disconnect(tps, 0);
+>  	typec_unregister_port(tps->port);
+>  	usb_role_switch_put(tps->role_sw);
+> -- 
+> 2.34.1
 
 -- 
 heikki
