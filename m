@@ -1,364 +1,226 @@
-Return-Path: <linux-usb+bounces-13676-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13677-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D170F957791
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 00:36:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C98695779A
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 00:38:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C6B31F23AD5
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 22:36:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A93661C2258B
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 22:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1D21E211E;
-	Mon, 19 Aug 2024 22:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7F51DD39F;
+	Mon, 19 Aug 2024 22:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="GkS0QsGb"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RkH99alf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984211DF668;
-	Mon, 19 Aug 2024 22:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724106981; cv=pass; b=tL34+KKVwHT/rOCF2UzoEmFp9rJXtXgwP8WfaXcyS/AR9ks2XNThO4rOqZbLM4n+TkDR1/KhsIssv+/jKtcdIYvHIW6c6xPdx+NbhNa3Bcgy6oo6Jc+ECpBWt2De+IPAyTUGPGpRzy/NVt8qx0/WaHWmMjZ9Qx5f4MIS85zi1IU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724106981; c=relaxed/simple;
-	bh=vVYRPMUXwoivmYXruiuClAV2tguKLgXsozynlJt1HEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rqOEMd0bVjY+F0Znac3oJaGdZVaL2qFJFEGVJ6G8Yejpw4uN1yOcEtI5vA1a2SENKiNjCbDsW/Uox0d/6Y14MMjvha4PKC8e09kdKaN9Xw3cnzszvDVEjC9A0tHi1d0LeccAiYutVo0QpRQ5R7R5YKAIIAPVzBFysQxEb3+hM3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=GkS0QsGb; arc=pass smtp.client-ip=136.143.188.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724106968; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=NlWzJXf1IR7ENfgteAZtiAc4MTwl2PMke+2plZH6lKu9iKJcvLgZt7sfc6V/+EHbOpEl/ZblcFglBg9UXqQ8k82XK0+zx7RZZF9pu+fiW1/ujs2CZtv62gEdAtsy+xEXSVyizNvu3wHpTFLPoTKpSVNMUpuuemXNf9ljHVn33zw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724106968; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=84R4bvv7IZLyjELsDi3Ih0SAs9c0fPyp02siqdBkv0U=; 
-	b=R4C/ysIzn+ZhhRDCih+ARRnICUKtPGvr5dxkjB0kF0jnab9vobmbLgqKU6S9IAF6zRrgi50Ccd0ubkdRwn3Ldyv4Aec12ZyfSJGeVKIcjxZNVQvUJ/+ZTIyt5W72eHZK333heHdrwvcrX9xlWS5YwZIQjqC1kczS/s8DKmMTys0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724106968;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=84R4bvv7IZLyjELsDi3Ih0SAs9c0fPyp02siqdBkv0U=;
-	b=GkS0QsGbFt2tIfjK7M5BAhnoVRSTqrQen1IkYxiaHeXjUHOeDeFxi2fI/2HiSEHP
-	fKbW2RsZT8zhhJGPapL0kMM99agq4LMZCcG64BsJAkAYqa+grGzvYy8ycwlUsiHzJV5
-	jyOIEyKqwp8uVxbMjtHSh5oCPZYzKKCVh9xoWkBg=
-Received: by mx.zohomail.com with SMTPS id 1724106967349278.4839605441748;
-	Mon, 19 Aug 2024 15:36:07 -0700 (PDT)
-Received: by mercury (Postfix, from userid 1000)
-	id 4D966106045A; Tue, 20 Aug 2024 00:36:01 +0200 (CEST)
-Date: Tue, 20 Aug 2024 00:36:01 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Johan Hovold <johan+linaro@kernel.org>, Chris Lew <quic_clew@quicinc.com>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Stephen Boyd <swboyd@chromium.org>, 
-	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] soc: qcom: pmic_glink: Fix race during
- initialization
-Message-ID: <m7vc5zw2yxswrxnbyqxsq7hj3spz5or26p6ze7x477ggur3vmz@mm24cmj5vran>
-References: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
- <20240819-pmic-glink-v6-11-races-v2-1-88fe3ab1f0e2@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FC914B945
+	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 22:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724107121; cv=none; b=m4BF5NcrQPeuR2oqEqLIThYbiH1uSaLX7CnSi8zedCI1Ab9GSWOL9p3urCtj6RGwh6mD7qkXvsW6PRVfDqRSmtI6OXsoxb7w0rh+U2hRqVx7A7oclSuvDqZEC35nidySNNMRVLTATCL3OK33y5EiwYsheabxbdACBGV7lDaZ1J0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724107121; c=relaxed/simple;
+	bh=QsFhJr+Mi50WviHZp89d1dhCotm3INj2CPs+HkvFqHg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BzteCZkNSY3Hz/7nNhx14XvchbabphuvKT5ULkmcl4KdklLBtqGFZY8vlL5q8ATgZ+VSK7xvCTlm07ch7ECs4HCuvfnUGXzuO1HBQLqJI6pm2pGDM0yVHS5UzKFWq50tu0sEfLeuYn3gLiSS57lja8moTeX/26NJPVt0Ow4GTIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RkH99alf; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-26ff21d82e4so2513006fac.2
+        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 15:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1724107117; x=1724711917; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=egAdoVbV7ERufO80VgquGHc5WhyUKfKkzhFmhTHzm2Y=;
+        b=RkH99alf0SHf+1yqzid/868Gh2P9NZGUbEzyfDkXBcL30oXNNZbdPR3rU8mFSxVQyT
+         nASf5Y2zO8xsaMQGvSiuKzCGoWaiQkSeu9EhyjYhUaWnhRBKk92wz2nXos+Jy/byKwh5
+         aNCyNp3GtUvH4a8aAc+qXJVdv51FCvIicUGW4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724107117; x=1724711917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=egAdoVbV7ERufO80VgquGHc5WhyUKfKkzhFmhTHzm2Y=;
+        b=oZBG9DaNYNGFxBNf5djmItKsMdikO1MmrQIucV+IHbf768kwZSAQZe6x4IKQzbeq/V
+         Tlulb/5Cj+KustZjebbHnf89G8PqyPwZwGrmRknT334wU8x+V77Xgoj463umALxzhYZH
+         zZQGu5yxmVcDkDA8XfTP/G1w2h23aQdaixuuKfvur9A1GsnoHNSFueOVXeGPVZJMaqv8
+         Dj6HxB+mRxxsM2ylXMN0pls6GOY8+08NKVqUzq0c0UwyqgoZF/y0yf8Qxbw3YD4178C3
+         IRmfpfafR9Gw+9qbkdSJrxP5ijnF5d+SACwkXPrAh4/XzNSI8GXgfgj3sgr8eLCe3niJ
+         Cuyw==
+X-Forwarded-Encrypted: i=1; AJvYcCVqVrFBEU1cpVj0FdOj3yKihmJ8HOH6+mcyeeMM9XTSdAC5S1jG3NCWhwQ9W+HxLx3Clxoh6dUW4fo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjChS84T+0I0bpsP6P8jBj+fmm/LgpmVMWC4iJkI8Q/+GEPBhA
+	kFzO/kUec/B6ZHgI9/HY9GIOc9zlNTe2mLjIvDAl5BFmHq+1cL7UlWsv0PMLhg==
+X-Google-Smtp-Source: AGHT+IFAcbhHFe8aOSpI2piH+wrMiBNFMeaVyEVhtEX5wNgd3YUCRbcPot5Saf5/lMntwLHP0R5X3g==
+X-Received: by 2002:a05:6871:723:b0:25e:fb:af8c with SMTP id 586e51a60fabf-2708136ae73mr506166fac.18.1724107117189;
+        Mon, 19 Aug 2024 15:38:37 -0700 (PDT)
+Received: from localhost (210.73.125.34.bc.googleusercontent.com. [34.125.73.210])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-7cc41530bc0sm2722444a12.63.2024.08.19.15.38.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Aug 2024 15:38:36 -0700 (PDT)
+From: Stephen Boyd <swboyd@chromium.org>
+To: chrome-platform@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Pin-yen Lin <treapking@chromium.org>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Benson Leung <bleung@chromium.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	David Airlie <airlied@gmail.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	dri-devel@lists.freedesktop.org,
+	Guenter Roeck <groeck@chromium.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Lee Jones <lee@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	linux-acpi@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH v3 00/17] platform/chrome: Add DT USB/DP muxing/topology support
+Date: Mon, 19 Aug 2024 15:38:14 -0700
+Message-ID: <20240819223834.2049862-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.46.0.184.g6999bdac58-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="knpdcbbcaewcpyeo"
-Content-Disposition: inline
-In-Reply-To: <20240819-pmic-glink-v6-11-races-v2-1-88fe3ab1f0e2@quicinc.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/224.60.1
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+
+This series adds support for fully describing the USB/DP topology on
+ChromeOS Trogdor devices in DT. Trogdor devices have a single DP phy in
+the AP that is muxed to one of two usb type-c connectors depending on
+which port asserts HPD first to the EC. We'd like to know which port is
+connected to an external monitor to provide a better experience to the
+user about things like which type-c port is displaying DP or which
+type-c hub is acting up, etc. Describing the connection all the way from
+the source to the connector will allow us to do this.
+
+DRM core patches: These are used to implement lane assignment for DP
+altmode configurations through the drm_bridge code. The typec code will
+use this to tell the DP phy how many lanes of DP to drive and which
+lanes to drive out to the USB type-c connector. Adding support for lane
+assignment allows us to implement DP muxing as well, physically
+splitting the DP lanes on the DP phy so that hardware doesn't have to
+use an analog mux to steer two DP lanes to one or the other type-c port.
+
+Type-c core patches: These add some devm helpers so that the next
+patches in the series can skip open-coding devres helpers for
+unregistering typec switches and muxes.
+
+DRM aux hpd patches: These implement an auxiliary device for USB type-c
+DP alternate mode. I took Dmitry's suggestion and moved the code that
+does the remapping into this driver. The existing hpd bridge is wrapped
+so as to avoid changing the current users. It also registers a typec mux
+and switch (if applicable) so that the DP altmode pin assignment and
+port orientation can be passed to the switch callbacks. We'll still need
+to implement logic in the phy layer to handle configuration.
+
+Cros EC typec patches: This ties together everything that comes before it in
+this series. The EC typec driver registers the drm_dp_typec_bridge that
+can signal HPD from the type-c connector through the bridge chain, mux
+the DP phy in software so that we don't have to use an analog mux, and
+implement orientation control for boards like Kukui that directly
+connect the DP phy to the type-c port, necessitating lane assignment to
+flip the lanes to match the cable orientation.
+
+Changes from v2: https://lore.kernel.org/r/20240815003417.1175506-1-swboyd@chromium.org
+ * Move most of the binding bits to usb-switch.yaml
+ * Move google,cros-ec-typec binding to usb/
+ * Implement mode-switch and orientation-switch typec controls in
+   drm_dp_typec_bridge driver
+ * Get rid of public APIs that would be used to assign pins or
+   orientation of the port
+ * Add devm helpers for typec mux and switch registration
+ * Add a way to match fwnodes while walking the graph based on the
+   endpoint
+
+Changes from v1: https://lore.kernel.org/r/20240210070934.2549994-1-swboyd@chromium.org
+ * Too many to count!
+ * Split out the DRM bits into this series
+ * Moved the logic into dp-aux-hpd bridge driver
+ * Drive the bridge from cros_ec_typec driver instead of globbing onto
+   the ACPI centric cros-typec-switch driver
+ * During that process drop a lot of patches that aren't needed anymore
+ * Move the DT graph and other properties to the cros-ec-typec binding
+ * Skip mode-switch/orientation-switch properties because we're not
+   registering typec structs anymore
+
+Stephen Boyd (17):
+  drm/atomic-helper: Introduce lane remapping support to bridges
+  drm/bridge: Verify lane assignment is going to work during
+    atomic_check
+  usb: typec: Stub out typec_switch APIs when CONFIG_TYPEC=n
+  usb: typec: Add device managed typec_mux_register()
+  usb: typec: Add device managed typec_switch_register()
+  drm/bridge: aux-hpd: Support USB Type-C DP altmodes via DRM lane
+    assignment
+  drm/bridge: dp_typec: Support USB Type-C orientation
+  drm/bridge: dp_typec: Add "no-hpd" support
+  drm/bridge: dp_typec: Allow users to hook hpd notify path
+  device property: Add remote endpoint to devcon matcher
+  dt-bindings: usb-switch: Extract endpoints to defs
+  dt-bindings: usb-switch: Extend for DisplayPort altmode
+  dt-bindings: Move google,cros-ec-typec binding to usb
+  dt-bindings: usb: Add ports to google,cros-ec-typec for DP altmode
+  platform/chrome: cros_ec_typec: Add support for signaling DP HPD via
+    drm_bridge
+  platform/chrome: cros_ec_typec: Support DP muxing
+  platform/chrome: cros_ec_typec: Handle lack of HPD information
+
+ .../bindings/chrome/google,cros-ec-typec.yaml |  66 --
+ .../bindings/mfd/google,cros-ec.yaml          |   7 +-
+ .../bindings/usb/google,cros-ec-typec.yaml    | 295 +++++++++
+ .../devicetree/bindings/usb/usb-switch.yaml   | 164 ++++-
+ drivers/base/property.c                       |   7 +-
+ drivers/gpu/drm/bridge/aux-hpd-bridge.c       | 564 +++++++++++++++++-
+ drivers/gpu/drm/drm_atomic_state_helper.c     |   2 +
+ drivers/gpu/drm/drm_bridge.c                  |  50 ++
+ drivers/platform/chrome/Kconfig               |   1 +
+ drivers/platform/chrome/cros_ec_typec.c       | 149 ++++-
+ drivers/platform/chrome/cros_ec_typec.h       |   3 +
+ drivers/usb/roles/class.c                     |   4 +-
+ drivers/usb/typec/mux.c                       |  72 +++
+ drivers/usb/typec/retimer.c                   |   7 +-
+ include/drm/bridge/aux-bridge.h               |  26 +
+ include/drm/drm_atomic.h                      |  31 +
+ include/drm/drm_bridge.h                      |   4 +
+ include/linux/property.h                      |   5 +-
+ include/linux/usb/typec_mux.h                 |  58 +-
+ 19 files changed, 1408 insertions(+), 107 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/google,cros-ec-typec.yaml
 
 
---knpdcbbcaewcpyeo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
+-- 
+https://chromeos.dev
 
-Hi,
-
-On Mon, Aug 19, 2024 at 01:07:45PM GMT, Bjorn Andersson wrote:
-> As pointed out by Stephen Boyd it is possible that during initialization
-> of the pmic_glink child drivers, the protection-domain notifiers fires,
-> and the associated work is scheduled, before the client registration
-> returns and as a result the local "client" pointer has been initialized.
->=20
-> The outcome of this is a NULL pointer dereference as the "client"
-> pointer is blindly dereferenced.
->=20
-> Timeline provided by Stephen:
->  CPU0                               CPU1
->  ----                               ----
->  ucsi->client =3D NULL;
->  devm_pmic_glink_register_client()
->   client->pdr_notify(client->priv, pg->client_state)
->    pmic_glink_ucsi_pdr_notify()
->     schedule_work(&ucsi->register_work)
->     <schedule away>
->                                     pmic_glink_ucsi_register()
->                                      ucsi_register()
->                                       pmic_glink_ucsi_read_version()
->                                        pmic_glink_ucsi_read()
->                                         pmic_glink_ucsi_read()
->                                          pmic_glink_send(ucsi->client)
->                                          <client is NULL BAD>
->  ucsi->client =3D client // Too late!
->=20
-> This code is identical across the altmode, battery manager and usci
-> child drivers.
->=20
-> Resolve this by splitting the allocation of the "client" object and the
-> registration thereof into two operations.
->=20
-> This only happens if the protection domain registry is populated at the
-> time of registration, which by the introduction of commit '1ebcde047c54
-> ("soc: qcom: add pd-mapper implementation")' became much more likely.
->=20
-> Reported-by: Amit Pundir <amit.pundir@linaro.org>
-> Closes: https://lore.kernel.org/all/CAMi1Hd2_a7TjA7J9ShrAbNOd_CoZ3D87twmO=
-5t+nZxC9sX18tA@mail.gmail.com/
-> Reported-by: Johan Hovold <johan@kernel.org>
-> Closes: https://lore.kernel.org/all/ZqiyLvP0gkBnuekL@hovoldconsulting.com/
-> Reported-by: Stephen Boyd <swboyd@chromium.org>
-> Closes: https://lore.kernel.org/all/CAE-0n52JgfCBWiFQyQWPji8cq_rCsviBpW-m=
-72YitgNfdaEhQg@mail.gmail.com/
-> Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK dr=
-iver")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Tested-by: Amit Pundir <amit.pundir@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-
-I expect this to go through SOC tree:
-
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/power/supply/qcom_battmgr.c   | 16 ++++++++++------
->  drivers/soc/qcom/pmic_glink.c         | 28 ++++++++++++++++++----------
->  drivers/soc/qcom/pmic_glink_altmode.c | 17 +++++++++++------
->  drivers/usb/typec/ucsi/ucsi_glink.c   | 16 ++++++++++------
->  include/linux/soc/qcom/pmic_glink.h   | 11 ++++++-----
->  5 files changed, 55 insertions(+), 33 deletions(-)
->=20
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/q=
-com_battmgr.c
-> index 49bef4a5ac3f..df90a470c51a 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -1387,12 +1387,16 @@ static int qcom_battmgr_probe(struct auxiliary_de=
-vice *adev,
->  					     "failed to register wireless charing power supply\n");
->  	}
-> =20
-> -	battmgr->client =3D devm_pmic_glink_register_client(dev,
-> -							  PMIC_GLINK_OWNER_BATTMGR,
-> -							  qcom_battmgr_callback,
-> -							  qcom_battmgr_pdr_notify,
-> -							  battmgr);
-> -	return PTR_ERR_OR_ZERO(battmgr->client);
-> +	battmgr->client =3D devm_pmic_glink_new_client(dev, PMIC_GLINK_OWNER_BA=
-TTMGR,
-> +						     qcom_battmgr_callback,
-> +						     qcom_battmgr_pdr_notify,
-> +						     battmgr);
-> +	if (IS_ERR(battmgr->client))
-> +		return PTR_ERR(battmgr->client);
-> +
-> +	pmic_glink_register_client(battmgr->client);
-> +
-> +	return 0;
->  }
-> =20
->  static const struct auxiliary_device_id qcom_battmgr_id_table[] =3D {
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index 9ebc0ba35947..58ec91767d79 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -66,15 +66,14 @@ static void _devm_pmic_glink_release_client(struct de=
-vice *dev, void *res)
->  	spin_unlock_irqrestore(&pg->client_lock, flags);
->  }
-> =20
-> -struct pmic_glink_client *devm_pmic_glink_register_client(struct device =
-*dev,
-> -							  unsigned int id,
-> -							  void (*cb)(const void *, size_t, void *),
-> -							  void (*pdr)(void *, int),
-> -							  void *priv)
-> +struct pmic_glink_client *devm_pmic_glink_new_client(struct device *dev,
-> +						     unsigned int id,
-> +						     void (*cb)(const void *, size_t, void *),
-> +						     void (*pdr)(void *, int),
-> +						     void *priv)
->  {
->  	struct pmic_glink_client *client;
->  	struct pmic_glink *pg =3D dev_get_drvdata(dev->parent);
-> -	unsigned long flags;
-> =20
->  	client =3D devres_alloc(_devm_pmic_glink_release_client, sizeof(*client=
-), GFP_KERNEL);
->  	if (!client)
-> @@ -85,6 +84,18 @@ struct pmic_glink_client *devm_pmic_glink_register_cli=
-ent(struct device *dev,
->  	client->cb =3D cb;
->  	client->pdr_notify =3D pdr;
->  	client->priv =3D priv;
-> +	INIT_LIST_HEAD(&client->node);
-> +
-> +	devres_add(dev, client);
-> +
-> +	return client;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pmic_glink_new_client);
-> +
-> +void pmic_glink_register_client(struct pmic_glink_client *client)
-> +{
-> +	struct pmic_glink *pg =3D client->pg;
-> +	unsigned long flags;
-> =20
->  	mutex_lock(&pg->state_lock);
->  	spin_lock_irqsave(&pg->client_lock, flags);
-> @@ -95,11 +106,8 @@ struct pmic_glink_client *devm_pmic_glink_register_cl=
-ient(struct device *dev,
->  	spin_unlock_irqrestore(&pg->client_lock, flags);
->  	mutex_unlock(&pg->state_lock);
-> =20
-> -	devres_add(dev, client);
-> -
-> -	return client;
->  }
-> -EXPORT_SYMBOL_GPL(devm_pmic_glink_register_client);
-> +EXPORT_SYMBOL_GPL(pmic_glink_register_client);
-> =20
->  int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t=
- len)
->  {
-> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmi=
-c_glink_altmode.c
-> index 1e0808b3cb93..e4f5059256e5 100644
-> --- a/drivers/soc/qcom/pmic_glink_altmode.c
-> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
-> @@ -520,12 +520,17 @@ static int pmic_glink_altmode_probe(struct auxiliar=
-y_device *adev,
->  			return ret;
->  	}
-> =20
-> -	altmode->client =3D devm_pmic_glink_register_client(dev,
-> -							  altmode->owner_id,
-> -							  pmic_glink_altmode_callback,
-> -							  pmic_glink_altmode_pdr_notify,
-> -							  altmode);
-> -	return PTR_ERR_OR_ZERO(altmode->client);
-> +	altmode->client =3D devm_pmic_glink_new_client(dev,
-> +						     altmode->owner_id,
-> +						     pmic_glink_altmode_callback,
-> +						     pmic_glink_altmode_pdr_notify,
-> +						     altmode);
-> +	if (IS_ERR(altmode->client))
-> +		return PTR_ERR(altmode->client);
-> +
-> +	pmic_glink_register_client(altmode->client);
-> +
-> +	return 0;
->  }
-> =20
->  static const struct auxiliary_device_id pmic_glink_altmode_id_table[] =
-=3D {
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi=
-/ucsi_glink.c
-> index 16c328497e0b..ac53a81c2a81 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -367,12 +367,16 @@ static int pmic_glink_ucsi_probe(struct auxiliary_d=
-evice *adev,
->  		ucsi->port_orientation[port] =3D desc;
->  	}
-> =20
-> -	ucsi->client =3D devm_pmic_glink_register_client(dev,
-> -						       PMIC_GLINK_OWNER_USBC,
-> -						       pmic_glink_ucsi_callback,
-> -						       pmic_glink_ucsi_pdr_notify,
-> -						       ucsi);
-> -	return PTR_ERR_OR_ZERO(ucsi->client);
-> +	ucsi->client =3D devm_pmic_glink_new_client(dev, PMIC_GLINK_OWNER_USBC,
-> +						  pmic_glink_ucsi_callback,
-> +						  pmic_glink_ucsi_pdr_notify,
-> +						  ucsi);
-> +	if (IS_ERR(ucsi->client))
-> +		return PTR_ERR(ucsi->client);
-> +
-> +	pmic_glink_register_client(ucsi->client);
-> +
-> +	return 0;
->  }
-> =20
->  static void pmic_glink_ucsi_remove(struct auxiliary_device *adev)
-> diff --git a/include/linux/soc/qcom/pmic_glink.h b/include/linux/soc/qcom=
-/pmic_glink.h
-> index fd124aa18c81..aedde76d7e13 100644
-> --- a/include/linux/soc/qcom/pmic_glink.h
-> +++ b/include/linux/soc/qcom/pmic_glink.h
-> @@ -23,10 +23,11 @@ struct pmic_glink_hdr {
-> =20
->  int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t=
- len);
-> =20
-> -struct pmic_glink_client *devm_pmic_glink_register_client(struct device =
-*dev,
-> -							  unsigned int id,
-> -							  void (*cb)(const void *, size_t, void *),
-> -							  void (*pdr)(void *, int),
-> -							  void *priv);
-> +struct pmic_glink_client *devm_pmic_glink_new_client(struct device *dev,
-> +						     unsigned int id,
-> +						     void (*cb)(const void *, size_t, void *),
-> +						     void (*pdr)(void *, int),
-> +						     void *priv);
-> +void pmic_glink_register_client(struct pmic_glink_client *client);
-> =20
->  #endif
->=20
-> --=20
-> 2.34.1
->=20
-
---knpdcbbcaewcpyeo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmbDyMkACgkQ2O7X88g7
-+pp5Nw//Uv13QigZP+EGQ5BD0t2vMaiDNi3taRY7bU4yE8WKk2k7GmVRi5Rpgm2F
-kpR+f4tZnXCD6U+xv8dK4sYQ0qK49m4NN7EoxTmblWsCz9/czyu3SzUbTTJqf7kI
-P9ilSWAxEi4K89vZvTOEwrBF8gvCpNpKE1MvNx0W9K+qQlu3heXQpRWjM+22uQyA
-IOWVtvA4+RJUc7skpRxYtmA6OwEMhIOvWGklEUXAl8qqxSrHCy5gWYTMoiLq15cB
-qrdMMqnVd0evBesZeglYTo5AHt5/wflWtIyUDQ38Md4QNHNlT/N+NoMhPYVOetV4
-wBf0Q4dYW1NIhERqow1Ks/ATveZijf0l4d5pBqLo2hfuC3FL8W28U/jGyWRWi1zq
-/2YefcGTYwfRZ273pzimgeZR3MiG9UZk4OgRukZ6ETpsm/v+ZgwEGPddoZSDme1V
-h3Qs9fLW22+mqIPka3GSvevYf8Y/4dhJTmNhDT6elepNs9leB+jxsluI2b+2Fvni
-dKVuNLMRRgJJ+2T5ANBzWAVxYentv1uSpyiqpXbw0A99kNEC6CNZB5Uf+muExHHV
-G5nWNOXi76GER2qFcOkk03qEGpqX4+zaFfz+/CeIMFvN7MpWzAG9NhUMT5eduOnj
-PZFvHWOHvKjpaHvxpZFkEqS93KrRO46mu6bL+4SpZNRvZ7ZFXeA=
-=T2J1
------END PGP SIGNATURE-----
-
---knpdcbbcaewcpyeo--
 
