@@ -1,161 +1,143 @@
-Return-Path: <linux-usb+bounces-13612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13613-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 196C79566E7
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:29:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDDBD9567E3
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 12:12:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90FA81F225EB
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:29:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B1451C21935
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 10:12:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BFED15ECD9;
-	Mon, 19 Aug 2024 09:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7407615F3E8;
+	Mon, 19 Aug 2024 10:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bdyDEa3r"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BmR8pEPU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09BA15ECC2;
-	Mon, 19 Aug 2024 09:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C3E15F336
+	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 10:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724059744; cv=none; b=Y5iE9EB6uvly7NuCbOcu9XpgYIHlJx+gLvz+gPFJaDydSS+Scre0ei3VG/kgJVLz6jcIiCgj62nGWCG0ZVeOBVq2U2AKluiZjBC8Kg2fvN2nkzROk4sYQIYZPKBhH0is0PhnV/U5mjuvajZ9pDImRr226gtARhqr5jwuO615kPw=
+	t=1724062361; cv=none; b=EPBReL/7T9JAi8r0eM+gOR5X7//jkWPwJ8rfMJwVR1v9duFy+OgUSO/JBrY57M1M2qh6ikEuneau7/Bui/QAXp6QFUNGXdbetmDY8ZfflDd7ctJyBsgnIE/jLAdmObhb5J8ZsRBPJTm5yoXd7PXLAH4CLzCVK2RMpVIHKA0zCp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724059744; c=relaxed/simple;
-	bh=O3anHyxZGKI47++zGmsoUsfSAf8M8dwURXdMCZnQxTc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SHTQjtSI8yCunoGQ585vvodVhHoQCEptUeP1zdMeV/wvAT9XdA9pTGgz1FJUF9zHQh6QFwesOQvOUuZA0jZyE73XhXNsHTOgARKwg2Yy9pnCyeurN5+v0VPeJC3KwuzGj4n6sJyREq0H+BrPzyZcTLH2mbaV7I1EVIVGG0UpaiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bdyDEa3r; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47INk1Za002536;
-	Mon, 19 Aug 2024 09:28:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	5oqXScjibZQjsUj+JfXXMkmZzpjNKCj5FEqv1WndicE=; b=bdyDEa3rWCYoBwEl
-	kdtWwVQpvFKkm4rNx+SF8eSnUw5ft/DEhg/Pqz1f9SRXIa3JuBJ1KLT40WJ2vKDq
-	HlJoIuDzFrLLSEaLv4t2ERoI9Bys3+Jau1l7bOiAL3IRwDlefgt5VC7340XU9PbB
-	+CvjJiJp+YCCc8RJa/KYkkYZv8azZZCjtttW8QRE4GB7wkeBP5eVxZtd7JbH/XOP
-	vCZF+Ay399uwx6beyVFgsvQBtnefzQTcFY16fkCuuaOFcs5BMSJqFn2KiAP8go6X
-	9Fz77EZzDxy5sCgHbUlmnFga11TPbpeHSVVappFMTmJYEcDyR2C2BGlJyVfKt7Cr
-	gUMcGQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412key3pdu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 09:28:55 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47J9Ssmb013173
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 09:28:54 GMT
-Received: from [10.216.31.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 19 Aug
- 2024 02:28:49 -0700
-Message-ID: <9de9be29-2f75-41a1-931b-f8cf0a9904ac@quicinc.com>
-Date: Mon, 19 Aug 2024 14:58:46 +0530
+	s=arc-20240116; t=1724062361; c=relaxed/simple;
+	bh=vZo2/t11CLRtBFZBAyg1Zxki1cpdcGREz6Qnn+hDfcE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vEIcN7dF9/HywM3Afh/nGVVEu/E1VIsydTYazDMYj0GRrR66/ecj2eKVSKFARAxUH5soGvBWfcEuE8+XDVP9rRYK//4SssoRkIqWOV0GXd/073RAQwwPcsUlVmO2oBoA7uBShLyHBi2WWtlCuUe5f5EaDPaVhv44YqnYctDVp5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BmR8pEPU; arc=none smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-4f51551695cso1496164e0c.3
+        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 03:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724062358; x=1724667158; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kEt0b7cjq1QrC31R8bsvHblz1HFMuMei5OYtb8lQy+o=;
+        b=BmR8pEPU1VaogzGC6Z/pQ6JpGZ9grHlNGOh48Ws5+Cs45ynNNrPLJfDjNt8co34Uh5
+         FslywdTU02UImtBCBv8kNDr6bJd2jda48BPHpz4ribqqZ/9XMcwoX69WmU468mql7GIe
+         GZzb716s7J6VDricJch7X5gYOqLirnirpX7MtfmjCICxOUR5rmYuwdbdlTibKTb0z10X
+         uzgSJrF8W2+Rs5fwuMD8k2g/nPyminamEOiH2zuH8dzZEKjCyJLRQKGSEy52NXmhU2iA
+         imfyHDUnhoOohxwOJbojOHI8JEWKQ7dcxfS43duPAn1v4KANgblHtPxODU6RZturkAwG
+         mhtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724062358; x=1724667158;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kEt0b7cjq1QrC31R8bsvHblz1HFMuMei5OYtb8lQy+o=;
+        b=peSBatRA76dSQYnDuB5/YiH9R05HuWUiLkqrhBCnUj7WGLghkM/NmUWgg8WqWokuyC
+         8nK0+zNtdcCFYlGCOVZcIhkCWakyxZBa9U9MkiOETqZgIMLvNW+KXOKTRzxtjL+w/UT9
+         8tpV3pcs3U4xyVML6xJc0n+qyFUVtrnepq4wqElm0ZRjVomPz6NI9a8dAECwQDsAnmDs
+         qS5YHlcks4yL7Gby8914cHzlN9rml1B/Y0Vnx+50rOR5wNA8xK5pFoUeFxuvYoYsErGo
+         Y771XYGDOlSXh7h3Nsb/xUCoK43I3lcISiMo3+ViH3nHIgH1e9Sm1f5n+/uOry/3m2r4
+         KW6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVNptPUSwWCBbAOLcN5hWbiBM/0PxpNanjCo2QhVRL019uw+E3/FdStfpBXGPUgZ/v6SudM4zDxuYQ3JvTLBjKNqIw+bjIea3m0
+X-Gm-Message-State: AOJu0YzVvoAoCBUhCmByqHh0KAw7gmpkgn45pgenYyXE2ryNnOvoEOSF
+	/CDWq6/tDvB9mLWXl+2aWS03dzJseuVSUaFcfvSMfhO2vDUk13RE1NQGuDmOwWOXc50GJ9m4IV/
+	jic4gKdaVlQ4a83SxyTEpfWNa6JM8H88uTDdLXiuJ46e14V5iYvU=
+X-Google-Smtp-Source: AGHT+IF2X6KST38O2iXNOkEv4ma2f5ghfmUPtcGSPzix+b5Pd5uLiS8hzIqnRvab+YafaLZfxCL8wAqGZ+nvTGAWzos=
+X-Received: by 2002:a05:6122:4129:b0:4ef:5744:46a with SMTP id
+ 71dfb90a1353d-4fc84ad5a54mr8021886e0c.1.1724062358099; Mon, 19 Aug 2024
+ 03:12:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: core: Prevent USB core invalid event buffer
- address access
-To: Selvarasu Ganesan <selvarasu.g@samsung.com>, <Thinh.Nguyen@synopsys.com>,
-        <gregkh@linuxfoundation.org>
-CC: <jh0801.jung@samsung.com>, <dh10.jung@samsung.com>, <naushad@samsung.com>,
-        <akash.m5@samsung.com>, <rc93.raju@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <taehyun.cho@samsung.com>, <hongpooh.kim@samsung.com>,
-        <eomji.oh@samsung.com>, <shijie.cai@samsung.com>,
-        <stable@vger.kernel.org>
-References: <CGME20240808120605epcas5p2c9164533413706da5f7fa2ed624318cd@epcas5p2.samsung.com>
- <20240808120507.1464-1-selvarasu.g@samsung.com>
-Content-Language: en-US
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-In-Reply-To: <20240808120507.1464-1-selvarasu.g@samsung.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xDRjhdP30BnRxcaFntPhAlO8_h_fcSGR
-X-Proofpoint-GUID: xDRjhdP30BnRxcaFntPhAlO8_h_fcSGR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_08,2024-08-19_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 adultscore=0 clxscore=1011 impostorscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 spamscore=0
- mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2408190065
+References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
+In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
+From: Amit Pundir <amit.pundir@linaro.org>
+Date: Mon, 19 Aug 2024 15:42:02 +0530
+Message-ID: <CAMi1Hd29PWjsS_kxPpFgpW23xpSq6n6uqL5KKFBvQwe7df0W-w@mail.gmail.com>
+Subject: Re: [PATCH 0/3] soc: qcom: pmic_glink: v6.11-rc bug fixes
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Johan Hovold <johan+linaro@kernel.org>, Chris Lew <quic_clew@quicinc.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Stephen Boyd <swboyd@chromium.org>, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, 19 Aug 2024 at 04:47, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+>
+> Amit and Johan both reported a NULL pointer dereference in the
+> pmic_glink client code during initialization, and Stephen Boyd pointed
+> out the problem (race condition).
+>
+> While investigating, and writing the fix, I noticed that
+> ucsi_unregister() is called in atomic context but tries to sleep, and I
+> also noticed that the condition for when to inform the pmic_glink client
+> drivers when the remote has gone down is just wrong.
+>
+> So, let's fix all three.
+>
+> As mentioned in the commit message for the UCSI fix, I have a series in
+> the works that makes the GLINK callback happen in a sleepable context,
+> which would remove the need for the clients list to be protected by a
+> spinlock, and removing the work scheduling. This is however not -rc
+> material...
+>
+> In addition to the NULL pointer dereference, there is the -ECANCELED
+> issue reported here:
+> https://lore.kernel.org/all/Zqet8iInnDhnxkT9@hovoldconsulting.com/
+> I have not yet been able to either reproduce this or convince myself
+> that this is the same issue.
+>
 
+Thank you for the fixes Bjorn. I'm not able to reproduce that
+pmic_glink kernel panic on SM8550-HDK anymore.
 
-On 8/8/2024 5:35 PM, Selvarasu Ganesan wrote:
-> This commit addresses an issue where the USB core could access an
-> invalid event buffer address during runtime suspend, potentially causing
-> SMMU faults and other memory issues. The problem arises from the
-> following sequence.
->          1. In dwc3_gadget_suspend, there is a chance of a timeout when
->          moving the USB core to the halt state after clearing the
->          run/stop bit by software.
->          2. In dwc3_core_exit, the event buffer is cleared regardless of
->          the USB core's status, which may lead to an SMMU faults and
->          other memory issues. if the USB core tries to access the event
->          buffer address.
-> 
-> To prevent this issue, this commit ensures that the event buffer address
-> is not cleared by software  when the USB core is active during runtime
-> suspend by checking its status before clearing the buffer address.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 89d7f9629946 ("usb: dwc3: core: Skip setting event buffers for host only controllers")
+Tested-by: Amit Pundir <amit.pundir@linaro.org>
 
-I don't think the fixes tag is right.
-
-This fix is independent of whether controller is host only capable or 
-not. This is fixing the original commit that introduced the cleanup call.
-
-Regards,
-Krishna,
-
-> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
-> 
-> Changes in v2:
-> - Added separate check for USB controller status before cleaning the
->    event buffer.
-> - Link to v1: https://lore.kernel.org/lkml/20240722145617.537-1-selvarasu.g@samsung.com/
+> Bjorn Andersson (3):
+>       soc: qcom: pmic_glink: Fix race during initialization
+>       usb: typec: ucsi: Move unregister out of atomic section
+>       soc: qcom: pmic_glink: Actually communicate with remote goes down
+>
+>  drivers/power/supply/qcom_battmgr.c   | 16 ++++++++-----
+>  drivers/soc/qcom/pmic_glink.c         | 40 +++++++++++++++++++++----------
+>  drivers/soc/qcom/pmic_glink_altmode.c | 17 +++++++++-----
+>  drivers/usb/typec/ucsi/ucsi_glink.c   | 44 ++++++++++++++++++++++++++---------
+>  include/linux/soc/qcom/pmic_glink.h   | 11 +++++----
+>  5 files changed, 88 insertions(+), 40 deletions(-)
 > ---
->   drivers/usb/dwc3/core.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 734de2a8bd21..5b67d9bca71b 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -564,10 +564,15 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
->   void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
->   {
->   	struct dwc3_event_buffer	*evt;
-> +	u32				reg;
->   
->   	if (!dwc->ev_buf)
->   		return;
->   
-> +	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-> +	if (!(reg & DWC3_DSTS_DEVCTRLHLT))
-> +		return;
-> +
->   	evt = dwc->ev_buf;
->   
->   	evt->lpos = 0;
+> base-commit: 296c871d2904cff2b4742702ef94512ab467a8e3
+> change-id: 20240818-pmic-glink-v6-11-races-363f5964c339
+>
+> Best regards,
+> --
+> Bjorn Andersson <quic_bjorande@quicinc.com>
+>
 
