@@ -1,267 +1,111 @@
-Return-Path: <linux-usb+bounces-13597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13599-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF2B49564BA
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:33:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 365DF95655B
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 10:16:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F395B1C20F51
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 07:33:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E79672831BA
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 08:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247A8157E99;
-	Mon, 19 Aug 2024 07:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E389415B119;
+	Mon, 19 Aug 2024 08:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RY5C4ZbR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jr/xWu/4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014F6450E2
-	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 07:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB5D158538;
+	Mon, 19 Aug 2024 08:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724052781; cv=none; b=fJrh6kK/shwZvRZG7QBsQnEHH7BUO/zESzibPO3Pf1M1tvIlAiJXbR8ulduPCRCTvWq7Nqo1jhrEafGyzS9iT21YQHz+Z4IyoWje7SHFDpvZxL3z3IScr8dWiej623OGwZWVV7fNOv46zbSWzWcPtP57iRgzgaZmpClNzNvY0y4=
+	t=1724055317; cv=none; b=fVG4y65zwJlhVEhwMiXKwVw2izEubCRF4dUwoTJejUGUXk3Na8TyuuGCXPbsk5RCjhWfVo8uJVDiyFJyQBFirnXpTk9cwnaMoUSFTthIWCvN7X5hloelsOv0cV+EI9jHT1YT4zRDD9F/nYH3ZEKNeZOErOzZVxcjpLUKsBkLwNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724052781; c=relaxed/simple;
-	bh=lqG59gpccqoJniQbhLyFTrxHLnQRRH2XLMNU6pCm0bc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Ia/nw+05LQbQSrpOp0VDNDdf/LkmuohhOaXawV2mOxZcy3lYaC9o0pkHgJYCu0/i0/VWStASEDBHQJNQnu/GiQ1fDLlbaUZjA6eF49P5DNdrbiuNEKBkvYSXthA7t5ffbb8zx/+R+CVcoCLDz3Zw6hToAAum+Q0GYaE4ESQ9khM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RY5C4ZbR; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-710ffaf921fso2552460b3a.1
-        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 00:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724052779; x=1724657579; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bVF+vaplgIfDeqn8Jo/FGo4c3zDJgnAYKY22inJTgUE=;
-        b=RY5C4ZbRSr/qdLgu8HKFVmN4ewPDru+AGNit5VwvKAv2yzJ5q/1Cn2JD4O0PoDzNrg
-         n4Y17grSMdalKiNcQRoGY1BotaeUwRikPBKihx1dg8/kOI8cFFQ7cOINwIcQcwPz6OUe
-         JNHcgWqnG+vI0WGZTfC1te5jTgr/+qvUVyEATPyvbOQGd2Y8MIy076rdQCJELXEDZaEl
-         AhvDkVIut86r7ZILIBCWT9YqXW6hPQkuDOqNNRV8BCl6ppyolhV+DCukv+7kG1dJzlx1
-         ClnUL3F4dioS4qYew83d7I4Hns6b9mVujnudIg2oIyPPq0kpxc2NDFIapVoLxFCmEsRb
-         E10g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724052779; x=1724657579;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bVF+vaplgIfDeqn8Jo/FGo4c3zDJgnAYKY22inJTgUE=;
-        b=gr7QNAO5lINgvHmXlSWULmKmKalSR1b7SIjBnsNp+SmpjCzv3oKE3u06RjosVwmFbx
-         BBI2GzpaF9eIAU6PkAq9LLC/ptJPhbtJdVMbJFnZak1Zmqx8jzsPSzd7WrcOe09N6yGA
-         XBz9OjLIS3+ap4gI7llExEDqiVI/52EYmuCiJBOmWGH1CbMChpkuEFslH+l9HOpuVTGs
-         SADVJfpwDKRGmne4uaMXty7NgQpfr4nNp3r1pAULdMZR5rI6S2X67mH41guc7gxCw3CF
-         lSVbAqarTXMzu2udVZxUgusTS9n7Ebef9kEU+aGt82AW88wVI3pCTgAzt2SHhVxKUpge
-         sJSw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIduaNGnQYOFcHwblld5oM/+vFZCO1gzzR6Z5+PWg2JdCyYMjEZUaAEZbuxal34jwDIAsKHtwMJlokM6JcJbfc1jsFFQ2kHCcN
-X-Gm-Message-State: AOJu0YzyK9oqtp5KSjdp6A2WXcaT5xg/vtMEkVaZcB6Z7G7kKcIvE+7f
-	lHjrZY8sz0iFEa4epLBnZcO47i+G1jCjLama8J40a9W9rZVqZpumhdFgNJzvjjs=
-X-Google-Smtp-Source: AGHT+IFfm2w3BSOecH3ZgllW9SAhYMQsRd/FMRvM7RHDXRP2ro3rXfQFvLQQyRy2k8EZr/AD4ObC6g==
-X-Received: by 2002:a05:6a00:17a7:b0:70e:98e2:c76e with SMTP id d2e1a72fcca58-713c66515f1mr15127310b3a.6.1724052779034;
-        Mon, 19 Aug 2024 00:32:59 -0700 (PDT)
-Received: from ?IPv6:::1? ([2405:9800:b900:a564:77f2:b46a:c9f8:ca95])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127aef5787sm6111501b3a.120.2024.08.19.00.32.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Aug 2024 00:32:58 -0700 (PDT)
-Date: Mon, 19 Aug 2024 14:32:53 +0700
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-CC: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Johan Hovold <johan+linaro@kernel.org>, Chris Lew <quic_clew@quicinc.com>,
- Stephen Boyd <swboyd@chromium.org>, Amit Pundir <amit.pundir@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_2/3=5D_usb=3A_typec=3A_ucsi=3A_M?=
- =?US-ASCII?Q?ove_unregister_out_of_atomic_section?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ZsK2jSheqBlCW7OC@hu-bjorande-lv.qualcomm.com>
-References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com> <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com> <4F313FA4-C2C7-4BD8-8E42-64F98EACCBA2@linaro.org> <ZsK2jSheqBlCW7OC@hu-bjorande-lv.qualcomm.com>
-Message-ID: <A366AFBC-1775-421A-BEAC-274741DF3192@linaro.org>
+	s=arc-20240116; t=1724055317; c=relaxed/simple;
+	bh=uUjOUhqNuYQkT3tijVkTub3u4TjTMOVy0LCez1Ku3fY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b3otyARxehfbvaJ/z2g3sw9iv5b2A1/V133/HXf0CeQKD1e7tIDaQEmKjec1NnvW7+/Y7Hq+n0lN4J6rW0wBT9c/cSOlDc67Vku6rwOX1WfMTfVnn4Z+aeIDjojNglaiO7wH9UcOx5EPhMqpC7sqw6sl2CpcPdlP4x27DjDJjgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jr/xWu/4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC9D5C32782;
+	Mon, 19 Aug 2024 08:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724055316;
+	bh=uUjOUhqNuYQkT3tijVkTub3u4TjTMOVy0LCez1Ku3fY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Jr/xWu/4BSgH7i41+5/IDArM500AJbEw5UKqKN7F4WwZRBAlUrN4pVNqYW4reJSF2
+	 rAl/TWDnpULY4JvtTPRipAY6OUv+IThFFX0FfLFRJACJqje/Kqqrw4oJnmdX/7ly+4
+	 +P8lnwS8s7sJ1SG7sovGX5KM/fWZOOVIWaNpY+4T3D2+W54/Lm4asxhS2Nh6DLKVMq
+	 9qj351TTO5xb05bG7RFRec0GfZLfSPdHfaszFPHUQoIKiH+mgjE7utq1JLwWRd2HpZ
+	 C73r+tjtMBAvla3bjh1LAvvthGIZS4aLrNy/UBJpuJ2TV3gCN/OAhYaDqt/YivXbUE
+	 Pv+Qd1vaSTpbg==
+Date: Mon, 19 Aug 2024 10:15:11 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, syzbot
+ <syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] media/usb/siano: Fix endpoint type checking in smsusb
+Message-ID: <20240819101358.77aea582@foz.lan>
+In-Reply-To: <2024081909-afar-trolling-2a67@gregkh>
+References: <4442a354-87f1-4f7c-a2b0-96fbb29191d1@rowland.harvard.edu>
+	<0000000000009f6f85061e684e92@google.com>
+	<51b854da-f031-4a25-a19f-dac442d7bee2@rowland.harvard.edu>
+	<1959a4fb-8bf2-456b-83b8-ea28d517debf@rowland.harvard.edu>
+	<2024081909-afar-trolling-2a67@gregkh>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 19 August 2024 10:05:49 GMT+07:00, Bjorn Andersson <quic_bjorande@quicin=
-c=2Ecom> wrote:
->On Mon, Aug 19, 2024 at 08:16:25AM +0700, Dmitry Baryshkov wrote:
->> On 19 August 2024 06:17:38 GMT+07:00, Bjorn Andersson <quic_bjorande@qu=
-icinc=2Ecom> wrote:
->> >Commit 'caa855189104 ("soc: qcom: pmic_glink: Fix race during
->> >initialization")' moved the pmic_glink client list under a spinlock, a=
-s
->> >it is accessed by the rpmsg/glink callback, which in turn is invoked
->> >from IRQ context=2E
->> >
->> >This means that ucsi_unregister() is now called from IRQ context, whic=
-h
->> >isn't feasible as it's expecting a sleepable context=2E An effort is u=
-nder
->> >way to get GLINK to invoke its callbacks in a sleepable context, but
->> >until then lets schedule the unregistration=2E
->> >
->> >A side effect of this is that ucsi_unregister() can now happen
->> >after the remote processor, and thereby the communication link with it=
-, is
->> >gone=2E pmic_glink_send() is amended with a check to avoid the resulti=
-ng
->> >NULL pointer dereference, but it becomes expecting to see a failing se=
-nd
->> >upon shutting down the remote processor (e=2Eg=2E during a restart fol=
-lowing
->> >a firmware crash):
->> >
->> >  ucsi_glink=2Epmic_glink_ucsi pmic_glink=2Eucsi=2E0: failed to send U=
-CSI write request: -5
->> >
->> >Fixes: caa855189104 ("soc: qcom: pmic_glink: Fix race during initializ=
-ation")
->> >Cc: stable@vger=2Ekernel=2Eorg
->> >Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc=2Ecom>
->> >---
->> > drivers/soc/qcom/pmic_glink=2Ec       | 10 +++++++++-
->> > drivers/usb/typec/ucsi/ucsi_glink=2Ec | 28 +++++++++++++++++++++++---=
---
->> > 2 files changed, 32 insertions(+), 6 deletions(-)
->> >
->> >diff --git a/drivers/soc/qcom/pmic_glink=2Ec b/drivers/soc/qcom/pmic_g=
-link=2Ec
->> >index 58ec91767d79=2E=2Ee4747f1d3da5 100644
->> >--- a/drivers/soc/qcom/pmic_glink=2Ec
->> >+++ b/drivers/soc/qcom/pmic_glink=2Ec
->> >@@ -112,8 +112,16 @@ EXPORT_SYMBOL_GPL(pmic_glink_register_client);
->> > int pmic_glink_send(struct pmic_glink_client *client, void *data, siz=
-e_t len)
->> > {
->> > 	struct pmic_glink *pg =3D client->pg;
->> >+	int ret;
->> >=20
->> >-	return rpmsg_send(pg->ept, data, len);
->> >+	mutex_lock(&pg->state_lock);
->> >+	if (!pg->ept)
->> >+		ret =3D -ECONNRESET;
->> >+	else
->> >+		ret =3D rpmsg_send(pg->ept, data, len);
->> >+	mutex_unlock(&pg->state_lock);
->> >+
->> >+	return ret;
->> > }
->> > EXPORT_SYMBOL_GPL(pmic_glink_send);
->> >=20
->> >diff --git a/drivers/usb/typec/ucsi/ucsi_glink=2Ec b/drivers/usb/typec=
-/ucsi/ucsi_glink=2Ec
->> >index ac53a81c2a81=2E=2Ea33056eec83d 100644
->> >--- a/drivers/usb/typec/ucsi/ucsi_glink=2Ec
->> >+++ b/drivers/usb/typec/ucsi/ucsi_glink=2Ec
->> >@@ -68,6 +68,9 @@ struct pmic_glink_ucsi {
->> >=20
->> > 	struct work_struct notify_work;
->> > 	struct work_struct register_work;
->> >+	spinlock_t state_lock;
->> >+	unsigned int pdr_state;
->> >+	unsigned int new_pdr_state;
->> >=20
->> > 	u8 read_buf[UCSI_BUF_SIZE];
->> > };
->> >@@ -244,8 +247,22 @@ static void pmic_glink_ucsi_notify(struct work_st=
-ruct *work)
->> > static void pmic_glink_ucsi_register(struct work_struct *work)
->> > {
->> > 	struct pmic_glink_ucsi *ucsi =3D container_of(work, struct pmic_glin=
-k_ucsi, register_work);
->> >+	unsigned long flags;
->> >+	unsigned int new_state;
->> >+
->> >+	spin_lock_irqsave(&ucsi->state_lock, flags);
->> >+	new_state =3D ucsi->new_pdr_state;
->> >+	spin_unlock_irqrestore(&ucsi->state_lock, flags);
->> >+
->> >+	if (ucsi->pdr_state !=3D SERVREG_SERVICE_STATE_UP) {
->> >+		if (new_state =3D=3D SERVREG_SERVICE_STATE_UP)
->> >+			ucsi_register(ucsi->ucsi);
->> >+	} else {
->> >+		if (new_state =3D=3D SERVREG_SERVICE_STATE_DOWN)
->> >+			ucsi_unregister(ucsi->ucsi);
->> >+	}
->> >=20
->> >-	ucsi_register(ucsi->ucsi);
->> >+	ucsi->pdr_state =3D new_state;
->> > }
->>=20
->> Is there a chance if a race condition if the firmware is restarted quic=
-kly, but the system is under heavy mist:=20
->> - the driver gets DOWN event, updates the state and schedules the work,
->> - the work starts to execute, reads the state,
->> - the driver gets UP event, updates the state, but the work is not resc=
-heduled as it is still executing=20
->> - the worker finishes unregistering the UCSI=2E
->>=20
->
->I was under the impression that if we reach the point where we start
->executing the worker, then a second schedule_work() would cause the
->worker to run again=2E But I might be mistaken here=2E
+Em Mon, 19 Aug 2024 05:11:47 +0200
+Greg KH <gregkh@linuxfoundation.org> escreveu:
 
-I don't have full source code at hand and the docs only speak about being =
-queued, so it is perfectly possible that I am mistaken here=2E
+> On Sun, Aug 18, 2024 at 02:20:44PM -0400, Alan Stern wrote:
+> > Greg and Mauro:
+> > 
+> > Was this patch ever applied?  It doesn't appear in the current -rc 
+> > kernel.  Was there some confusion about which tree it should be merged 
+> > through?
+> > 
+> > Here's a link to the original submission:
+> > 
+> > https://lore.kernel.org/all/51b854da-f031-4a25-a19f-dac442d7bee2@rowland.harvard.edu/  
+> 
+> I never took it as it was touching a file that I'm not the maintainer
+> of.  But I will be glad to do so if Mauro doesn't want to take it
+> through his tree, just let me know.
 
->
->What I do expect though is that if we for some reason don't start
->executing the work before the state becomes UP again, the UCSI core
->wouldn't know that the firmware has been reset=2E
->
->
->My proposal is to accept this risk for v6=2E11 (and get the benefit of
->things actually working) and then take a new swing at getting rid of all
->these workers for v6=2E12/13=2E Does that sound reasonable?
+This patch is duplicated of this one:
 
+https://patchwork.linuxtv.org/project/linux-media/patch/20240409143634.33230-1-n.zhandarovich@fintech.ru/
 
-Yes, makes sense to me=2E=20
+The part I didn't like with such approach is that it checks only for
+bulk endpoints. Most media devices have also isoc. Now, I'm not sure
+about Siano devices. There are 3 different major chipsets supported
+by this driver (sm1000, sm11xx, sm2xxx). Among them, sm1000 has one
+USB ID for cold boot, and, once firmware is loaded, it gains another
+USB ID for a a warm boot.
 
-Reviewed-by: Dmitry Baryshkov <dmitry=2Ebaryshkov@linaro=2Eorg>
+Your patch and the previously submitted one are not only checking
+for the direction, but it is also discarding isoc endpoints.
+Applying a change like that without testing with real hardware of
+those three types just to make fuzz testing happy, sounded a little 
+bit risky to my taste.
 
+I would be more willing to pick it if the check would either be
+tested on real hardware or if the logic would be changed to
+accept either bulk or isoc endpoints, just like the current code.
 
->
->Regards,
->Bjorn
->
->>=20
->>=20
->> >=20
->> > static void pmic_glink_ucsi_callback(const void *data, size_t len, vo=
-id *priv)
->> >@@ -269,11 +286,12 @@ static void pmic_glink_ucsi_callback(const void =
-*data, size_t len, void *priv)
->> > static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
->> > {
->> > 	struct pmic_glink_ucsi *ucsi =3D priv;
->> >+	unsigned long flags;
->> >=20
->> >-	if (state =3D=3D SERVREG_SERVICE_STATE_UP)
->> >-		schedule_work(&ucsi->register_work);
->> >-	else if (state =3D=3D SERVREG_SERVICE_STATE_DOWN)
->> >-		ucsi_unregister(ucsi->ucsi);
->> >+	spin_lock_irqsave(&ucsi->state_lock, flags);
->> >+	ucsi->new_pdr_state =3D state;
->> >+	spin_unlock_irqrestore(&ucsi->state_lock, flags);
->> >+	schedule_work(&ucsi->register_work);
->> > }
->> >=20
->> > static void pmic_glink_ucsi_destroy(void *data)
->> >
->>=20
-
+Thanks,
+Mauro
 
