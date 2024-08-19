@@ -1,76 +1,63 @@
-Return-Path: <linux-usb+bounces-13611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 092709566AE
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:18:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 196C79566E7
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:29:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DB321C21958
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:18:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90FA81F225EB
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:29:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB7E15CD6E;
-	Mon, 19 Aug 2024 09:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BFED15ECD9;
+	Mon, 19 Aug 2024 09:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NtWpKnkS"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bdyDEa3r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E3015ECDA
-	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 09:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09BA15ECC2;
+	Mon, 19 Aug 2024 09:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724059066; cv=none; b=PsqKqFF27lcUmsBRVvm/yLqvLbdeIlNyUZzSewv+qlHFx7UVcYxgFMIjD3VJEdIJV5wC6NzjAXkuaKTyxXNYgMeNHVeIHYVsqg3GdnKCRMpcZBKwZ7ZrE/VkPusb7HUrms6rCN+ANeFId12z9bV35LQXQ1uK9rUbfComq8/z2DA=
+	t=1724059744; cv=none; b=Y5iE9EB6uvly7NuCbOcu9XpgYIHlJx+gLvz+gPFJaDydSS+Scre0ei3VG/kgJVLz6jcIiCgj62nGWCG0ZVeOBVq2U2AKluiZjBC8Kg2fvN2nkzROk4sYQIYZPKBhH0is0PhnV/U5mjuvajZ9pDImRr226gtARhqr5jwuO615kPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724059066; c=relaxed/simple;
-	bh=DeAh7OCINJlaVMH/2MJ/n7OJVs6+3KRocWQLIJZn7NY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=eLgMQN8HzX29Rs+2Dn3S/yrbs20dWeiZN7AGjqPI36xMq4nIq5Kgb8M/MjCTOnF/RGqPyajSb7ktn3A8FjOx3sW3+2DzfYBn05yf6qQzGjmox98HTcvPBzCrewLsEpl/qIjynDUx8t64zkNac3Y1LMC0StbzAhganRvkNH+KjgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NtWpKnkS; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-371941bbfb0so1865883f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 02:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724059063; x=1724663863; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jW5htLOExcm7TmNKkHH5JrpafKHBGU3xH9gtLbh6Kuc=;
-        b=NtWpKnkSACj4C18GLXAsrPSNTFKq0ZLWlRj/TZQNNIu9h4OQwtPPDaQ4rtQXJPnL4y
-         k379MViAidVQFcaKFjVpMrBtKBa5FZ+dpIyXsAjHdF9/k1WC9BBvInuw0Qjuw7po/Kzf
-         WwwOpSJ/EyXnF6bk+REO3mZ3IAu715v9xP7MyylQuPU7hWDs8iK4Qw3UqZvAffx6g+WT
-         kfXxNKjyS/Fz/gm6l5i+faVJOAiyDXTuzjmo+0Zfid9rhm0P0I36MasPXVe25/pKQMWP
-         NulDSI9XC6/tuDU5YAVcLSaZH9f2lVsazH7WM52G0IHAoE1V3YhW5i+VkjQSqRJRI7J4
-         xBRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724059063; x=1724663863;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jW5htLOExcm7TmNKkHH5JrpafKHBGU3xH9gtLbh6Kuc=;
-        b=kqyzFQXZJOI+O2VDZK+J2Hz+PiPiMUJYmFVwM72atJTy0wNqeZtcRPFFQMVsJUBb1P
-         BzhqtPh3+CbPCA//moxgyeuveRA6NTta+ZduYgo6QUn3EQJ64Chw/fR+i7Cwu0lpIQFY
-         Id8fnk0mprWUnTivsQ3tdovzQAIVRXFpyhns1syPqU2i8KeRIcFItDCSBZwhYBKkpsMM
-         xfIlkdyec7Xtdx9I/BT165WTWtfu7j8C03/mflJM9RMyVhkmGPNVuNIJhMMCQbA1UFAi
-         4HSAiyzd4QKBV+ES4GQf89ik9+CYfFeLsQ9e1I1LYLEqzieDoWGSByPzWxBzEUlhrlnF
-         fbgw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0HLw9wQhYekVJcBENyimx44GzWLwfbLpUsfJWIWpnLJry1rvH7no5By1gbVP0VTBV5zIDNcIzeuPH6E0RAoO16k83oNRQJCQF
-X-Gm-Message-State: AOJu0Yyu8GOy/oTUwgp+LxWlhwQEQb8Tw76PT8KaloBLMMnNQ8ZFX5Bx
-	R9yoM5E5mDWvBDHV+tcTDLR1vtBRf1xlamTrkS4dxVc5IWZVecGG168ncABLjlg=
-X-Google-Smtp-Source: AGHT+IEAH3Kw9cWP0lRWspZIIbJnS+xNyPa9dFVtb1/yX70W1/SVJnGw2FZ8bD+/7UjVDQogk1CDVw==
-X-Received: by 2002:adf:ee8f:0:b0:371:869e:d24e with SMTP id ffacd0b85a97d-37194688e87mr7226712f8f.49.1724059062973;
-        Mon, 19 Aug 2024 02:17:42 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:f54e:4b0a:5175:5727? ([2a01:e0a:982:cbb0:f54e:4b0a:5175:5727])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37189849a05sm9935848f8f.26.2024.08.19.02.17.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Aug 2024 02:17:42 -0700 (PDT)
-Message-ID: <c6494803-fff7-4348-b797-8bde5ed57fcd@linaro.org>
-Date: Mon, 19 Aug 2024 11:17:41 +0200
+	s=arc-20240116; t=1724059744; c=relaxed/simple;
+	bh=O3anHyxZGKI47++zGmsoUsfSAf8M8dwURXdMCZnQxTc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SHTQjtSI8yCunoGQ585vvodVhHoQCEptUeP1zdMeV/wvAT9XdA9pTGgz1FJUF9zHQh6QFwesOQvOUuZA0jZyE73XhXNsHTOgARKwg2Yy9pnCyeurN5+v0VPeJC3KwuzGj4n6sJyREq0H+BrPzyZcTLH2mbaV7I1EVIVGG0UpaiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bdyDEa3r; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47INk1Za002536;
+	Mon, 19 Aug 2024 09:28:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	5oqXScjibZQjsUj+JfXXMkmZzpjNKCj5FEqv1WndicE=; b=bdyDEa3rWCYoBwEl
+	kdtWwVQpvFKkm4rNx+SF8eSnUw5ft/DEhg/Pqz1f9SRXIa3JuBJ1KLT40WJ2vKDq
+	HlJoIuDzFrLLSEaLv4t2ERoI9Bys3+Jau1l7bOiAL3IRwDlefgt5VC7340XU9PbB
+	+CvjJiJp+YCCc8RJa/KYkkYZv8azZZCjtttW8QRE4GB7wkeBP5eVxZtd7JbH/XOP
+	vCZF+Ay399uwx6beyVFgsvQBtnefzQTcFY16fkCuuaOFcs5BMSJqFn2KiAP8go6X
+	9Fz77EZzDxy5sCgHbUlmnFga11TPbpeHSVVappFMTmJYEcDyR2C2BGlJyVfKt7Cr
+	gUMcGQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412key3pdu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Aug 2024 09:28:55 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47J9Ssmb013173
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Aug 2024 09:28:54 GMT
+Received: from [10.216.31.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 19 Aug
+ 2024 02:28:49 -0700
+Message-ID: <9de9be29-2f75-41a1-931b-f8cf0a9904ac@quicinc.com>
+Date: Mon, 19 Aug 2024 14:58:46 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,84 +65,97 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] usb: typec: fsa4480: Relax CHIP_ID check
-To: Luca Weiss <luca.weiss@fairphone.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Caleb Connolly <caleb.connolly@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, stable@vger.kernel.org
-References: <20240818-fsa4480-chipid-fix-v1-1-17c239435cf7@fairphone.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20240818-fsa4480-chipid-fix-v1-1-17c239435cf7@fairphone.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2] usb: dwc3: core: Prevent USB core invalid event buffer
+ address access
+To: Selvarasu Ganesan <selvarasu.g@samsung.com>, <Thinh.Nguyen@synopsys.com>,
+        <gregkh@linuxfoundation.org>
+CC: <jh0801.jung@samsung.com>, <dh10.jung@samsung.com>, <naushad@samsung.com>,
+        <akash.m5@samsung.com>, <rc93.raju@samsung.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <taehyun.cho@samsung.com>, <hongpooh.kim@samsung.com>,
+        <eomji.oh@samsung.com>, <shijie.cai@samsung.com>,
+        <stable@vger.kernel.org>
+References: <CGME20240808120605epcas5p2c9164533413706da5f7fa2ed624318cd@epcas5p2.samsung.com>
+ <20240808120507.1464-1-selvarasu.g@samsung.com>
+Content-Language: en-US
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+In-Reply-To: <20240808120507.1464-1-selvarasu.g@samsung.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xDRjhdP30BnRxcaFntPhAlO8_h_fcSGR
+X-Proofpoint-GUID: xDRjhdP30BnRxcaFntPhAlO8_h_fcSGR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-19_08,2024-08-19_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 mlxscore=0 adultscore=0 clxscore=1011 impostorscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408190065
 
-On 18/08/2024 22:21, Luca Weiss wrote:
-> Some FSA4480-compatible chips like the OCP96011 used on Fairphone 5
-> return 0x00 from the CHIP_ID register. Handle that gracefully and only
-> fail probe when the I2C read has failed.
+
+
+On 8/8/2024 5:35 PM, Selvarasu Ganesan wrote:
+> This commit addresses an issue where the USB core could access an
+> invalid event buffer address during runtime suspend, potentially causing
+> SMMU faults and other memory issues. The problem arises from the
+> following sequence.
+>          1. In dwc3_gadget_suspend, there is a chance of a timeout when
+>          moving the USB core to the halt state after clearing the
+>          run/stop bit by software.
+>          2. In dwc3_core_exit, the event buffer is cleared regardless of
+>          the USB core's status, which may lead to an SMMU faults and
+>          other memory issues. if the USB core tries to access the event
+>          buffer address.
 > 
-> With this the dev_dbg will print 0 but otherwise continue working.
-> 
->    [    0.251581] fsa4480 1-0042: Found FSA4480 v0.0 (Vendor ID = 0)
+> To prevent this issue, this commit ensures that the event buffer address
+> is not cleared by software  when the USB core is active during runtime
+> suspend by checking its status before clearing the buffer address.
 > 
 > Cc: stable@vger.kernel.org
-> Fixes: e885f5f1f2b4 ("usb: typec: fsa4480: Check if the chip is really there")
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->   drivers/usb/typec/mux/fsa4480.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-> index cd235339834b..f71dba8bf07c 100644
-> --- a/drivers/usb/typec/mux/fsa4480.c
-> +++ b/drivers/usb/typec/mux/fsa4480.c
-> @@ -274,7 +274,7 @@ static int fsa4480_probe(struct i2c_client *client)
->   		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
->   
->   	ret = regmap_read(fsa->regmap, FSA4480_DEVICE_ID, &val);
-> -	if (ret || !val)
-> +	if (ret)
->   		return dev_err_probe(dev, -ENODEV, "FSA4480 not found\n");
->   
->   	dev_dbg(dev, "Found FSA4480 v%lu.%lu (Vendor ID = %lu)\n",
-> 
-> ---
-> base-commit: ccdbf91fdf5a71881ef32b41797382c4edd6f670
-> change-id: 20240818-fsa4480-chipid-fix-2c7cf5810135
-> 
-> Best regards,
+> Fixes: 89d7f9629946 ("usb: dwc3: core: Skip setting event buffers for host only controllers")
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+I don't think the fixes tag is right.
+
+This fix is independent of whether controller is host only capable or 
+not. This is fixing the original commit that introduced the cleanup call.
+
+Regards,
+Krishna,
+
+> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+> ---
+> 
+> Changes in v2:
+> - Added separate check for USB controller status before cleaning the
+>    event buffer.
+> - Link to v1: https://lore.kernel.org/lkml/20240722145617.537-1-selvarasu.g@samsung.com/
+> ---
+>   drivers/usb/dwc3/core.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 734de2a8bd21..5b67d9bca71b 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -564,10 +564,15 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>   void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
+>   {
+>   	struct dwc3_event_buffer	*evt;
+> +	u32				reg;
+>   
+>   	if (!dwc->ev_buf)
+>   		return;
+>   
+> +	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+> +	if (!(reg & DWC3_DSTS_DEVCTRLHLT))
+> +		return;
+> +
+>   	evt = dwc->ev_buf;
+>   
+>   	evt->lpos = 0;
 
