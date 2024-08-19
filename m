@@ -1,162 +1,156 @@
-Return-Path: <linux-usb+bounces-13609-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13610-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60C739566A0
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:17:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED7F69566A3
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 11:17:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F0571C20C06
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:17:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DF961C21916
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2024 09:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1EEA15CD46;
-	Mon, 19 Aug 2024 09:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADE715CD7C;
+	Mon, 19 Aug 2024 09:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jC9Wn8vf"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="ktJHHSpV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E01815E5CE
-	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 09:16:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC5B15CD6E
+	for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 09:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724058992; cv=none; b=Cpn4ElUD5A2oajmTD6JNC6l0u2oqpLhkqFhKhLKkO3JPI/bDM7vJ5Ac3/MtMyDKmNiVd60+Tw9hKO/u9LVWiiY7Pxg8foqEDQbTIfNDaNA7OZfhnxzqEU4tZ/F11eV9xjs7nHo8AtSJG7lgYIFSa+mStr4N7qD+SRp1w6urVyoQ=
+	t=1724059041; cv=none; b=In4xhOUeb3uIew9LH/k7g0UKKolx3l5zOXoyDgqbUiwAT+SXGg8S5VoHMWtioN0E59Da0aMVLisPEWQwOBhMA2w0ND9kBYM4ZIczbaD4DcH5od08MOYSSg616sjnwmj0vEz5w5/Ha/rrgmh4ofgG+TWoIuovh8PIsMHkcA4Tkc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724058992; c=relaxed/simple;
-	bh=M4HxD41AxnpTCiLQTaEKtdJBVGPgtoEks/DEOhlXdr8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=t06Bsetivfk7xnWW5hyaj1eMeTB+1WvuKQekk6s0Z184sPRGh5Z4owrwViQHucHqlIcPmI1R7VmVUv1sLpmXTs7i37hRn4HnZC25L6/cGBXzF8kRwViWD6f7I3tTfdqd6oQwKNbZPG2MO2+QzSsX3zqAD8WWo3qf+oTIYGbxZ4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jC9Wn8vf; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-371b015572cso1345452f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 02:16:30 -0700 (PDT)
+	s=arc-20240116; t=1724059041; c=relaxed/simple;
+	bh=2WOXquNPI9lTCv0oFnVGz9A1cxRJez8OulMExUZpWVU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ols6sDNfrJog+Midcu7w9PIOWts2eWw9wq20TpnceR9YDDEQ8mg9GU33fDr96wrCYCMubPoab5SYcks+nJk11kUhlp5x+OY9PU1ISyFJ+kUhmzyaQgIIEAwX4D6yKeIJlMURwFQVU8OEwySUEshSYQWTePxIdVK2n5NsTUUifEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=ktJHHSpV; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a8384008482so418606666b.2
+        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2024 02:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724058989; x=1724663789; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lhdgRPhROCnX5bLFVFYvhFCrgNIlRk5KqPEmPhOey3g=;
-        b=jC9Wn8vfgzlHlFTqIUo8CQFm0rsu0NK2cdKUlRtgkZzh/dKc+JDgjczkmkSMOmT0fu
-         vZuue28vw+giHI4xr6zFRr9+kOw1XMCR35fDE/u2FPdbfK8iu72PYcY4f33qICOVDR2s
-         jkSasE/6kpW9ue9DkDymAH3SgSfIBMCHPzo9WBDz5TyKqF4nAORfjhHR3PaClqbRF2AC
-         rAKsCBsm+QTWMFdFdNr5QEbk1zfntiWvtUEh41q9/px1y03tvVdS2fiZc7gvZiugQ/yD
-         nRhH25FVm/wBHpFvd/9Ut0KrV9Mk1oiColmI/eZN91C3XHlGL4b+mX9C8Qcnf6/7Yb5V
-         itSQ==
+        d=amarulasolutions.com; s=google; t=1724059038; x=1724663838; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ALicRhMbFic729p1B+Q3KjvAzvfvgE5+pIP6YQqtG8M=;
+        b=ktJHHSpVoLsxwTvKY0ZoxguVXAsJLZbyOMFiOex6kPdPhjTqzOiYgnd0GQn/wg1Vns
+         W7CEwU13OtWqD2qxWqPhAb5dzcflez1m24m/DIEQFe+h7baU7TN1Md9hwpHoT4EJQbDm
+         kt+0qPIVB6qqbxcf3Xdk0dtHPKu/FzHQpT268=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724058989; x=1724663789;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lhdgRPhROCnX5bLFVFYvhFCrgNIlRk5KqPEmPhOey3g=;
-        b=AFhMf1nSAI4hs9k2fdduUm85msqhdyCjiJXuFV+avva/cARMQZX/DWyCWqc6F2e+ov
-         X3pk+ZFTCdhinJjDpcI3ak/GJcxgY7bYnwOWrHtWo6tjhyoQAqTgP6WwFXw/VlcWzfCR
-         rG5LHaPRnqwoUgeJvcsdLLRBzusy5l/iGlvECpbDa5Q9Ghyc3IiXlpe9MY7d0Oj+O2+7
-         6f/B+lEJX5Dnbf3Z7k4Y26qIVE2CroqJriXk7hACuIeSgYUFutyqzNi5UW/OPX7hFzxl
-         oGvh0EdcXLdC1jMVcidGaS9vik4/hfUuXBQj2qdRX0ebuTBGBaY+UEsljUNwwOaAMzjn
-         yV2w==
-X-Forwarded-Encrypted: i=1; AJvYcCU36wgsyx37cDlRV+VMSGIHed/127kMNAqFBeHYhg6PVEAU6cU/69FZEVnQpq1KOID9N117+EQXHz2IEUxtkDIRskETIXl7GKxe
-X-Gm-Message-State: AOJu0Yxuqqb+Ue9AqLwIJiHCQkTFYiKp2Pr8Q74erwP3GVCK4JC0bt8H
-	PfiLitubimkoHCMQzb3zfJNNGKhFYitliHlDWRXHbLuzw+dtFkysyvEOKBiItR8=
-X-Google-Smtp-Source: AGHT+IGlLNnWnVua3EpqWORlOr9KVT/7tXvAlVwexe5VlvrIqMwXSW6fc2+//ghkrLZ4/+R2Z9303w==
-X-Received: by 2002:a5d:4e42:0:b0:371:8eea:24b7 with SMTP id ffacd0b85a97d-371946a04e6mr7617699f8f.50.1724058988631;
-        Mon, 19 Aug 2024 02:16:28 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:f54e:4b0a:5175:5727? ([2a01:e0a:982:cbb0:f54e:4b0a:5175:5727])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3718983a397sm9970491f8f.24.2024.08.19.02.16.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Aug 2024 02:16:28 -0700 (PDT)
-Message-ID: <d84c8f87-5f7c-4f6d-bcc6-d20b05b1755a@linaro.org>
-Date: Mon, 19 Aug 2024 11:16:27 +0200
+        d=1e100.net; s=20230601; t=1724059038; x=1724663838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ALicRhMbFic729p1B+Q3KjvAzvfvgE5+pIP6YQqtG8M=;
+        b=cuCKZ6PL0b0Xndxc5eaM5qpq0FZtumObOhJGdaYA4FErly3AULXGpfMcnNQChKgcYw
+         xKLobwgvDLePQd95F1WrTgaY96CjWLMs+d902RuCVtZFwM8Mb+QrGA/BEcscyAop72p3
+         e/hZowLjkAd1j1ueDAYdhHsbjDevb9dTy25lpEvaPvFBDvh6LSviy3TYSI5Z7hMfKb5x
+         Fk22gkxymJXYQhQX9nv+OtMPow5eR1nZDHmQNTVEHMaI6DzzTIvL/MlkKxQAQ8Fu6DJ6
+         3c3Md/w/PPbLq2d6NwUtOoVJT64zqdIKdXtHkvnLOUlneQXxbblv1gzqdctt5VYeWnUB
+         1onQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXHZQSpBu94ct7Aym4xf1i+FVJKQ5L/ovXjEjDLWGZf3gjcAqAajOtKbu81gH6x7Vft083DBWEhcquXTvricpYiTUmHpSdVIqmz
+X-Gm-Message-State: AOJu0YyBFwSESvJRiYcvEh7KLk4zPhevwuKlnVSnC8HgNnbnNQaYZZLT
+	Hv4fX+ltjggXeRsQshFp0fmqZVk/8fzrZ5oonSsCjADxHupjkN+8aPOVJDpwLFlIn5CJM36X/g9
+	aiC4VGBkCyuFxVnU9qhYFNUIDND6mrIhigCZELg==
+X-Google-Smtp-Source: AGHT+IHkFS7t0pMEcZTmWcFNiXZnTxP50r3dEYP+Lc+1dDkfS72kHuuFmzUBowJ9bJ1uLg6pEGqMrVdzqxN+rT+EITY=
+X-Received: by 2002:a17:907:9408:b0:a7a:a892:8e07 with SMTP id
+ a640c23a62f3a-a83aa01c90amr369946366b.31.1724059038094; Mon, 19 Aug 2024
+ 02:17:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 3/3] soc: qcom: pmic_glink: Actually communicate with
- remote goes down
-To: Bjorn Andersson <quic_bjorande@quicinc.com>,
- Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>, Chris Lew
- <quic_clew@quicinc.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Stephen Boyd <swboyd@chromium.org>, Amit Pundir <amit.pundir@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org
-References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
- <20240818-pmic-glink-v6-11-races-v1-3-f87c577e0bc9@quicinc.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-3-f87c577e0bc9@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <TYUPR06MB62177737F0054278B489962BD2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <2024081608-punch-coherent-d29e@gregkh> <CAOf5uwnsgcJjp1=RLa7qx9ScQY5rZvwX-Zu6BOqxBBhBCz+CFQ@mail.gmail.com>
+ <TYUPR06MB62177BCD4AB43C19E38990D3D2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <CAOf5uwm65Cw-V+td_=6QAGUF+Uisueqcm0z=1zFaNTisAJnSFQ@mail.gmail.com>
+ <TYUPR06MB6217877B31A08356241CAB38D2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <2024081652-unify-unlucky-28d2@gregkh> <TYUPR06MB6217D1798DBC41C7DB2A1DEDD2812@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <TYUPR06MB6217AEF9DD73C9424C7C1D07D28C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <CAOf5uwmdf+Vxes6+BQyghbiKByVC_i1RhmTE81_iix99U7HMmA@mail.gmail.com>
+ <TYUPR06MB62171FA07658FE6500DB855FD28C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <CAOf5uwk-De+dCaL-xZMByFoMoxD7X1_KnOriq1MKAz5s+mOFiw@mail.gmail.com> <TYUPR06MB62175889B121F542869856E4D28C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+In-Reply-To: <TYUPR06MB62175889B121F542869856E4D28C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Mon, 19 Aug 2024 11:17:07 +0200
+Message-ID: <CAOf5uw=Cuubyh1m_biK=A43ZhdP5696s9kebXw4i9pdj-9g4dw@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=E7=AD=94=E5=A4=8D=3A_=5BPATCH_v1=5D_usb=3A_gadget=3A_u=5Fserial=3A_check_?=
+	=?UTF-8?Q?Null_pointer_in_EP_callback?=
+To: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"quic_prashk@quicinc.com" <quic_prashk@quicinc.com>, 
+	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"opensource.kernel" <opensource.kernel@vivo.com>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 19/08/2024 01:17, Bjorn Andersson wrote:
-> When the pmic_glink state is UP and we either receive a protection-
-> domain (PD) notifcation indicating that the PD is going down, or that
-> the whole remoteproc is going down, it's expected that the pmic_glink
-> client instances are notified that their function has gone DOWN.
-> 
-> This is not what the code does, which results in the client state either
-> not updating, or being wrong in many cases. So let's fix the conditions.
-> 
-> Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->   drivers/soc/qcom/pmic_glink.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index e4747f1d3da5..cb202a37e8ab 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -191,7 +191,7 @@ static void pmic_glink_state_notify_clients(struct pmic_glink *pg)
->   		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
->   			new_state = SERVREG_SERVICE_STATE_UP;
->   	} else {
-> -		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
-> +		if (pg->pdr_state == SERVREG_SERVICE_STATE_DOWN || !pg->ept)
->   			new_state = SERVREG_SERVICE_STATE_DOWN;
->   	}
->   
-> 
+HI
 
-Good catch!
+On Mon, Aug 19, 2024 at 11:00=E2=80=AFAM =E8=83=A1=E8=BF=9E=E5=8B=A4 <hulia=
+nqin@vivo.com> wrote:
+>
+> Hello linux community expert:
+>
+> >> >> >>I think this has been reported previously, and different patches =
+have been proposed, have you searched the archives?
+> >> >> > I haven't seen the patch given below before, I will read it caref=
+ully.
+> >> >> > I searched for Linux mainline commits before submitting, but I on=
+ly compared them according to the crash stack information and did not notic=
+e the following commit.
+> >> >>  I checked the stack trace again. The problem we encountered seems =
+different from the problem reported in the link below, and they are not cau=
+sed by the same reason.
+> >> >>
+> >>
+> >> >Did you apply the patch? as suggested, is the test moving from one ga=
+dget to the other?
+> >>  We apply the patch into kernel 5.15 and ran a stress test, and the pr=
+oblem did not recur.
+>
+> >It means that does not happen again?
+>  Yes.
+>
+> >>  Connect the phone to the PC via a USB cable and run the monkey test (=
+run an apk and click on it at will on the phone interface).
+>
+> >Yes I know but this monkey test is running a stress test moving from usb=
+ storage, to other configfs right?
+>  From the crash information, it can be seen that the switch is from mtp m=
+ode to vivo industrial mode port (adb+diag+cser_tty+gser_tty+rmnet)
+>
+If the patch applied fix your problem, I think you are ok. I suggest
+even you have an android
+kernel to try to be more close to lts version of your kernel in Android
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Michael
+
+
+> Thanks
+
+
+
+--=20
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
 
