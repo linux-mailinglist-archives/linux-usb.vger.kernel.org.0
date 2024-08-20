@@ -1,117 +1,129 @@
-Return-Path: <linux-usb+bounces-13724-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13725-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0527D958550
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 13:01:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACC4F958553
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 13:02:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3640D1C241B9
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 11:01:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 692C3283CCF
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 11:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B08A18DF6B;
-	Tue, 20 Aug 2024 11:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF3B18B497;
+	Tue, 20 Aug 2024 11:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="QLOODk1E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gY6pOvk3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pv50p00im-zteg10011401.me.com (pv50p00im-zteg10011401.me.com [17.58.6.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC8D1598EC
-	for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 11:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8B3158D8F
+	for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 11:02:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724151707; cv=none; b=iXExhPvofCpawJmjdUKy465KHIwK5gPgs2QQBE+GJhNwpqkhzqRdbOx4U+reoQkNWAxd1jbgZlbRD0R0njqejChIpmlidnN+lRorVLrwdpiu3P7HMsGzRMkm8sP/LyM79d9ipW4Fp2tqvHb4u+2bIjuVxzTAd3XNrkTLKTgVul4=
+	t=1724151728; cv=none; b=Hytmgv3XSfeacBbumLvHPHyB6ruFU1HPWISo4JIUsvMVx0pz7g2+nVK2yctWXhodrcTBmE3LV6re/SB2+w+0KBiyo5WLwDXnpI5fVt/ov0ma6O/iQJS6pSHgIx2yJZu4SS2//c2AVAStA1VnJ+x69vLKI9xBD6Oo7yvalRFPvEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724151707; c=relaxed/simple;
-	bh=3BOMc/I6AUvlSUOZTCgwNCSKreLKSM1oEQRQEXAPTDM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XZtXMGtZvQKDQv58VWRa0cVdFM49+aqXUpSdK8K0ZvO1/Gv64ylBg56HnQOZlErAI26ZlUD4shhtHKCoPTiMzvCF5jiCQKnGAko+GaoC0Wcp5Kos8FPoHrhsDw5hS8RQQP/cpgdjvbpxFTmbaQp76lxw6cmi18lV1deINJEBbvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=QLOODk1E; arc=none smtp.client-ip=17.58.6.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1724151705;
-	bh=UqkixdU7N5QLZDvZfiyEeqXZZrKl/m9LryM3N8LoHa0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To;
-	b=QLOODk1EGMIkHi/M4LxeZ8kNvPDI0FMVgmQBOib1tx6zGiWVA8CdIwdwkYaKBY1bo
-	 TY/7uSLEqHR4MbJMo04wvCuDDCUsFYWgPLHgn6e3aYxDWQf8hN/d7BUKBP3ssj11kx
-	 E5NZkc75sIA1HU65k3464Qq1gK/GzuLQoVELCcEnRTeYi0jBfar0P1wwUlNUntxjjg
-	 m20FpS1ATKpF7+lgzx7FA8H6k6SumZN0wNUh3oy+3RgenHbNVlU4lcK22B2rTZZlQ9
-	 iFHOMEaLfUW0qIFMm642bzY0YIwzjo+5HT75ZiNlh1PtdaRip7fONwkrT+8Sd1DPI7
-	 sUYYzWdg1yY2Q==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-zteg10011401.me.com (Postfix) with ESMTPSA id 7E5E3DC02FD;
-	Tue, 20 Aug 2024 11:01:41 +0000 (UTC)
-From: Zijun Hu <zijun_hu@icloud.com>
-Date: Tue, 20 Aug 2024 19:01:27 +0800
-Subject: [PATCH v2] usb: core: sysfs: Unmerge @usb3_hardware_lpm_attr_group
- in remove_power_attributes()
+	s=arc-20240116; t=1724151728; c=relaxed/simple;
+	bh=R8eqTAsyNbEdNAd4MQYKwZBnMmMVIm/ciWPbck58jLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=Ea5VbCAxjWk5e2x8881IMUo8bAyBFP6gxxHXQ6wEGJJ7ueMVySiZRET8XP8sJGTYoepf0+HG848ZlKxUTLtiFz+2k37TFceADvafXB2xUrFbt0xSlXsFq9qzdsomVtMvEnEA6Ly2QRZDzOJbPolNNQ34T8FTy5FAfUmJGW+WH7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gY6pOvk3; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f3f25a1713so2162431fa.2
+        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 04:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724151724; x=1724756524; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R8eqTAsyNbEdNAd4MQYKwZBnMmMVIm/ciWPbck58jLY=;
+        b=gY6pOvk3KASS+pYA+NihlRfsSBo9S+LygJ4+tVPj+GFAbJCcRRu8O6eQYzv/HWxKTs
+         B0L+KllrpFXUpnhN+L2j1AiEeSZqhj1XN7qozVd3i3jERWbmr/hfP1yd6C0OhaZdilDd
+         kH7TbdvgxraxlW/I7E1ZiyY3AC8+XvAyLXd1ssJ6dwv2oxeUwt5bxzxvdARh0nb3Qzr+
+         /bNK08Vk30+72pqYkUQ62S7NdhzMUjoQyg0fYPYxHEtM+VWieBmeBnL2jZ++JzjzplF+
+         pFiUiTLVmV2nQ1Vcm16vLeMHHovlhAPPSYHFLaJYcOWk0va6n5Cj9EUsWVx++7lpT7gS
+         PPbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724151724; x=1724756524;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R8eqTAsyNbEdNAd4MQYKwZBnMmMVIm/ciWPbck58jLY=;
+        b=L2sb519AUh9MfYAnSHjKbxbd6hay3PLNvqrS2aqYmkOmK/aYV12hPSGAavxh9xJv71
+         laqroExvjbtjWp1sj5NP/ljvAAurY+DWoDLYYB86Wz88byffKLbekmXXHDKqnJ+wu7pv
+         ePTCcQ4/l6kmq5rKX1tN6Dksvdn7vmGNrXOu4CaffTa72Hhk/YEXtazgz36ziPS3/EqF
+         WEaOZnRMWm6lniOg1oqY4CcTEzXD8fgACXZnJdBT37II4jfagTUUNWf3uLlrtB8H3HUD
+         nzTtw+quqQs2x5vQy+eujw62TnU9xyuJPrmWFezacTyxx6sdeXHmZZzv8s63vVJla6WV
+         MB1w==
+X-Gm-Message-State: AOJu0YxEFN+X4Mlx1ei1u78GDHu7TgNOuA09DT5zo2RpSUepYhwRdjSg
+	VsWDzg9Q+nybdh0twVG8Eghxsj7iMvpEX56DWIzYGMf4z3MkSZZJ/yvrGw==
+X-Google-Smtp-Source: AGHT+IHrwCOCpIcN8dEhqMR7XoXtm83cIggZ+4IA1Csh0BrfmESd8TO2ZwitmAHNATgn29hycyr3Pw==
+X-Received: by 2002:a05:651c:2209:b0:2f3:bfcc:245f with SMTP id 38308e7fff4ca-2f3bfcc27dfmr94235051fa.32.1724151723866;
+        Tue, 20 Aug 2024 04:02:03 -0700 (PDT)
+Received: from foxbook (bfh246.neoplus.adsl.tpnet.pl. [83.28.45.246])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bebc08140csm6640220a12.83.2024.08.20.04.02.02
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 20 Aug 2024 04:02:03 -0700 (PDT)
+Date: Tue, 20 Aug 2024 13:01:58 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: mista.tapas@gmx.net
+Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
+Subject: Re: Misbehaving Alder Lake-N PCH USB 3.2 xHCI Host Controller
+Message-ID: <20240820130158.339b4d87@foxbook>
+In-Reply-To: <a3bcbff4-1e68-4856-bf27-aea3e71298a2@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240820-sysfs_fix-v2-1-a9441487077e@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAIZ3xGYC/23Myw7CIBCF4VdpZi0GJnjBle9hGkMptbOQKqPEp
- uHdHbt2+Z+cfAtwzBQZTs0CORZimpIEbhoIo0+3qKiXBtRo9dFYxTMPfB3ooxD1vo+u0+bgQP6
- PHGVerUsrPRK/pjyvdDG/9Z9SjDJCofXoPO5cd36+KVAK2zDdoa21fgFpzvKNpAAAAA==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Kevin Strasser <kevin.strasser@linux.intel.com>
-Cc: Zijun Hu <zijun_hu@icloud.com>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>, 
- stable@vger.kernel.org
-X-Mailer: b4 0.14.1
-X-Proofpoint-ORIG-GUID: 6ZI_q_dh1mFYLwigoPRy9l_i9NesIjNz
-X-Proofpoint-GUID: 6ZI_q_dh1mFYLwigoPRy9l_i9NesIjNz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-20_09,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 spamscore=0
- clxscore=1011 mlxlogscore=991 phishscore=0 suspectscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2408200082
-X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-From: Zijun Hu <quic_zijuhu@quicinc.com>
+Hi,
 
-Device attribute group @usb3_hardware_lpm_attr_group is merged by
-add_power_attributes(), but it is not unmerged explicitly, fixed by
-unmerging it in remove_power_attributes().
 
-Fixes: 655fe4effe0f ("usbcore: add sysfs support to xHCI usb3 hardware LPM")
-Cc: stable@vger.kernel.org
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
-Changes in v2:
-- Add stable tag
-- Link to v1: https://lore.kernel.org/r/20240814-sysfs_fix-v1-1-2224a29a259b@quicinc.com
----
- drivers/usb/core/sysfs.c | 1 +
- 1 file changed, 1 insertion(+)
+I can offer a few quick suggestions:
 
-diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
-index d83231d6736a..61b6d978892c 100644
---- a/drivers/usb/core/sysfs.c
-+++ b/drivers/usb/core/sysfs.c
-@@ -670,6 +670,7 @@ static int add_power_attributes(struct device *dev)
- 
- static void remove_power_attributes(struct device *dev)
- {
-+	sysfs_unmerge_group(&dev->kobj, &usb3_hardware_lpm_attr_group);
- 	sysfs_unmerge_group(&dev->kobj, &usb2_hardware_lpm_attr_group);
- 	sysfs_unmerge_group(&dev->kobj, &power_attr_group);
- }
+1. When kernel bugs are suspected, try other kernels offered by your
+distribution. See if there is any chance that -rt paches are causing
+issues.
 
----
-base-commit: ca7df2c7bb5f83fe46aa9ce998b7352c6b28f3a1
-change-id: 20240814-sysfs_fix-2206de9b0179
+2. Does any of that go away when ALSA buffer size is increased or is it
+always there on this machine?
 
-Best regards,
--- 
-Zijun Hu <quic_zijuhu@quicinc.com>
+3. When posting wall of text errors, start at the beginning because it
+may offer clues about what originally went wrong ('dmesg -W' helps).
 
+4. Playing a tiny file with 'aplay --period-size=48 --buffer-size=96'
+is a simpler way to reproduce the problem and generates a shorter log.
+
+
+> I have to note that these "WARN Event TRB for slot 18 ep 1 with no TDs
+> queued?" were there before enabling this dynamic debug feature, I just
+> forgot to mention them in my original mail.
+
+This particular part is probably caused by our failure to properly
+handle the preceding condition ("underrun event still with TDs queued").
+I can't know for sure, but assuming no hardware bugs, it appears that a
+new transfer descriptor is queued after the hardware reports a ring
+underrun but before we actually process the report. While processing
+the underrun we are surprised by this unexpected TD, then we see that
+skip flag is set so we erronously report all TDs (most likely including
+the new one) as failed to the audio driver. Meanwhile the hardware may
+execute this transfer and report its completion later, at which point
+we have already forgotten about it.
+
+*Maybe* this creates enough chaos that some sort of infinite loop of
+cascading errors is established as a result of one recoverable error.
+Or maybe your problem is elsewhere and this bug is only a side effect.
+
+Are you able to test kernel patches?
+
+
+Mathias may have other ideas to try.
+
+Regards,
+Michal
 
