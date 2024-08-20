@@ -1,242 +1,270 @@
-Return-Path: <linux-usb+bounces-13757-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13758-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BA91958F67
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 23:04:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8F85959039
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 00:06:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE42D1F2316F
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 21:04:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6F491C20B98
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 22:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86F3F163A97;
-	Tue, 20 Aug 2024 21:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383031C7B6A;
+	Tue, 20 Aug 2024 22:06:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b="FQnthI/P"
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="RMoQUfht";
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="aeBtxAj1";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="Ooy9we1w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4477B49626
-	for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 21:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724187874; cv=none; b=QIN05U16ckTsrI6SuMgFknaeALAvaSmgT5yiHsPohH41shFMhEb5zVFbByCvRiXAAg0V8gQmPnu4JpqA6c5BZMukqrvmut6Tnoo4rs8pAH7jBoRc9g2wdkR+m/evbGiP+d6wTZvx0TWJDnfdHK1lgw6NZ/FldKnnJEGXtApO3RA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724187874; c=relaxed/simple;
-	bh=RvcnOfMjIGYlNTHO//w5RdndqvxOClR5gidRyVaw3Gk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J//a6fhl+qF50r+khaFIAj49hFWJ6cbB339bgncMsU1GBAHqMzI2fCKhWyHatmpgOA8MwX9eW6/noLw43b6lyhc9AwWGEkukO7s9Z4JXSVrnRfF2RTFIS83AoINagGNDS2nsWaKdmOYqMDHfYAp3W1Og/Znn0m2+8DZGLYNGOAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b=FQnthI/P; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1724187866; x=1724792666; i=mista.tapas@gmx.net;
-	bh=w2OK5z/kOefD6n5cEG0VDsczwsTom4cZ86aE5oJvpgk=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=FQnthI/Pjd6CeATrLlNkR8h6SJfNC57oVibOZ00DEbuiT80NG9hGrVkVPv3m080v
-	 b3dJqdMLImiXOdsRDHtboJKId/VfnNgAkxVWSWjA6j8VE0wWHw3JwXuqMVUY6xEx+
-	 sJhZcW7sO88bUcC0Ao0OOWdYghmHvMYRTOf+bsQz+KoqTUetp82OuFmDmLwK2/SoE
-	 qGOwjWBmIW93ie5x79c8yqn57WWcGNg21XtLNsDrQHzxxfNZ9HffUkAY0pJ56Tew+
-	 nyhBeAqs8pD36d6kQNiye09CJnOjKRCgbBZdxLJlZugHWWINtYD93WWeENO2FbwxG
-	 nHhhj0RsWafVTRPVFg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.178.77] ([178.208.121.172]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mzyuc-1rtmzE2BNe-00zYEN; Tue, 20
- Aug 2024 23:04:26 +0200
-Message-ID: <bb565e29-10e9-4211-a854-fdd9771149b4@gmx.net>
-Date: Tue, 20 Aug 2024 23:04:24 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62921C68AA;
+	Tue, 20 Aug 2024 22:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724191566; cv=fail; b=sYiiWdTLmxLqvlY3mOeyYOYu3eWaZATAWW75iMVULa2wJzqa0vFkn84sMXY4ujsjFls71n4zNELna7tFzxq0i7kOv5XPZLFL7Qb+YdevirGUXq1fFWozOHta/rlOXt5uREzHWPcqmtGVmok2fpLhLB1v17MGZYYDbhGCQ2W3CpA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724191566; c=relaxed/simple;
+	bh=OXQqZda2rDh2vMH13pRvM1VX7LhPXbsnnf+F7TbkR7k=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=X0OhzfvLONtotCvdzDXRzHbeAlJ0SOvnQGh/RJcovaBwNkhLjWsM51qCDy+E5uDFktVCUEX9rfl11ur3fUl5AqN7Povo5egPkitfLXGNsGGNd3tWmPxBhkPona/jD+yy9AYzOrmApxzWQweung9JtQX7DE9H4jrVkLYAqR1bsco=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=RMoQUfht; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=aeBtxAj1; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=Ooy9we1w reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47KL0bY0013619;
+	Tue, 20 Aug 2024 15:05:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
+	cc:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	pfptdkimsnps; bh=OXQqZda2rDh2vMH13pRvM1VX7LhPXbsnnf+F7TbkR7k=; b=
+	RMoQUfhtPJ5fDy73NNSj3K8iG97CkwqqBsQtPQKK8KJWyRT+EUtnjTViUAclqMTN
+	hTLubjQvbGQQFM58DhkklA5n/8z+2FWfyf1i3wd2m8q0SqJpXtevtMbWjUwn78bT
+	3a054rXQ0h/fM9/9c2eOl4V3UEnzULwfN+kw9IRNy2OXqdyg1iQ6vSMvcLKfjrDC
+	sIo7SGk4emeHbccahvwvZ7zyqbfAbefSWz/GuLiQ+BCWFCTB33Kw6tYMrRRp6tYV
+	Il1YYvW34FJWyZCFAjgxX0G7Yn9aUqWNrAZi4IfLxCrnFQ/NVxwAOR+whtJLdVqP
+	ySheIZ8aVNknR0/4/jhdIg==
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 414g8kw75k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Aug 2024 15:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+	t=1724191550; bh=OXQqZda2rDh2vMH13pRvM1VX7LhPXbsnnf+F7TbkR7k=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=aeBtxAj1jeHvkP89MRKtgopvRqwJ3YXarPStbalX2CvPr7ACEOupW4Dow8YnRKLWw
+	 5gNsTNamH4A+939ewbfGZUafRku+ZTsK9PtgQSmPRN2Or9wh1si8LrvDFuZEX3Vj03
+	 MEF6iWRiiZEjNiyGkkWtVCZ0zcW9LRgThEQonXHFkfEg+9xVRaJMo5DM5lPPhCheq1
+	 yV/P7KU0I9Yz4Xi/M7lcRf4BPuWjtCwNFli3FB9+3lGqabOvTktkFryVfhb1JR4a+e
+	 RKrd89lGENc4OxGCIentSs8Z0+VJZgijw5Dh5C3o//nzGyxqD2JQzpreg1fIdQf6qp
+	 hjdTu2YAl1WPQ==
+Received: from mailhost.synopsys.com (badc-mailhost3.synopsys.com [10.192.0.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
+	 client-signature RSA-PSS (2048 bits))
+	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 195AC40235;
+	Tue, 20 Aug 2024 22:05:49 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+	by mailhost.synopsys.com (Postfix) with ESMTPS id 979BBA00B5;
+	Tue, 20 Aug 2024 22:05:49 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=Ooy9we1w;
+	dkim-atps=neutral
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+	by o365relay-in.synopsys.com (Postfix) with ESMTPS id AD2AB4028D;
+	Tue, 20 Aug 2024 22:05:48 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xFcUWnbENi6rogYrahH9YKYTGphzpOzCZ8MJSdXR/eGr/iJJxUspWJV88IzZQZuvuu4/YZ6RjkUmQFKdRs3qBcT+zk9I2IJYCbWIMzxzXEF8Uyc/a411cG6lAzsmxCnBDaZNq5QYeqBX0lm6wLjvIrZ2YQsS/frxWnIIxSA0HOZd1U/eS0GSKGBxV1fWP1AB4aeCRgTM8VxACLsYSSXwEyrOxjAN2oBVl/mf9npjWZtX5LmpS9bfUP8XssiL/SMWdvQqRihGOKyQikRwzJUhOWB2xLoxtqbXl0F5xW4H/BG8lQLYDtaflu2wz3R4Mwp7hUEzJ5V8/g91uVEwN3qZoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OXQqZda2rDh2vMH13pRvM1VX7LhPXbsnnf+F7TbkR7k=;
+ b=xdnVMC9WYW25K3ceKTlffofH3i8oV+0acnoWHNZHZmZqkMTtR7P4jlfShM1k1oxMHcvw4V4mqfM1xS3YU/+jX70MwG9nnWgCXIWKjnQQXNLSziiE53A3qIMG7mf+bDKlFSB50BncDLzn6mfIpE1t9W6SkEyldoBUkdY0FhkJnc/hccy7kbWnl1qvEYGCVPRW/UN3KEgnCoIVvJBASVVoNm5Gu9HibV2yjFIaJLpEFecaCxNgI8doQC0sfPk+a/QTZ+tHF9XLNj5fyOC/IKbgHY/vmAkXvmzb2JHoQWneqSuESZpBaA/f/4JAP2vk8mFbD8K92FeUA7jTqkrvpOBvmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OXQqZda2rDh2vMH13pRvM1VX7LhPXbsnnf+F7TbkR7k=;
+ b=Ooy9we1whcX5gX7Enjm+wtzzsySXI9wRNLesg3EAJ0cmSDIBbRao6lEUa0+tO7nOwAXR4x741AwXiYDx9DPPfn0CDfYKX6suZvj1NeI5HI9Mho0hYkWdWYOIjQ7OYU8Z20vaMII8CbIxmbwPoRusRaJHIQeWOYosKahT4U4qLBU=
+Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
+ by IA0PR12MB7577.namprd12.prod.outlook.com (2603:10b6:208:43e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Tue, 20 Aug
+ 2024 22:05:41 +0000
+Received: from LV2PR12MB5990.namprd12.prod.outlook.com
+ ([fe80::3d09:f15f:d888:33a8]) by LV2PR12MB5990.namprd12.prod.outlook.com
+ ([fe80::3d09:f15f:d888:33a8%5]) with mapi id 15.20.7875.019; Tue, 20 Aug 2024
+ 22:05:41 +0000
+X-SNPS-Relay: synopsys.com
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To: Zhongqiu Han <quic_zhonhan@quicinc.com>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] usb: dwc3: core: Call cpu_relax() in registers
+ polling busy loops
+Thread-Topic: [PATCH 1/2] usb: dwc3: core: Call cpu_relax() in registers
+ polling busy loops
+Thread-Index: AQHa8vquRd5MnaF4v0u9WVpe/56vVLIwtDUA
+Date: Tue, 20 Aug 2024 22:05:41 +0000
+Message-ID: <20240820220536.lgxvvbfboheknyll@synopsys.com>
+References: <20240820121501.3593245-1-quic_zhonhan@quicinc.com>
+ <20240820121501.3593245-2-quic_zhonhan@quicinc.com>
+In-Reply-To: <20240820121501.3593245-2-quic_zhonhan@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|IA0PR12MB7577:EE_
+x-ms-office365-filtering-correlation-id: 53d92d0e-5b35-408b-b3e2-08dcc1643b09
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?aEVxOFI3SkFEYUlobFllTjA4ckg3ajZuc2tpM2pEU1BKTjhHRTlsbTM0WU0w?=
+ =?utf-8?B?dUFBSFhSVktMcm9vQzVNNDNkQWlXeGdqMVN5Z0NVU3g5U1BXa3hpKzR2b3Zv?=
+ =?utf-8?B?bnQrekZOUU9jU1p5N3N1NythNy9LSUtkOThjLytZbzhUTmY4MXU4VEY2RTVo?=
+ =?utf-8?B?UTRMbUQrR0dubkFXYUFmMXdXME92Z1JwaWJvYVY3enZlMnRzNmFSQWlMMDlB?=
+ =?utf-8?B?Vy9yYTVtN0YxTENBYTBsVEpoWXNibEJPVDJSRkZCTU04OE5PajI2U2puK0tj?=
+ =?utf-8?B?YU84QWNsaWtrL3FmQkdVdUYwM3FZSVEzYzFoTzNOUmtWMjBIeEx0dWxlZ1FQ?=
+ =?utf-8?B?aml2ZE5xTEJKenk4dWJndEFMSm5VL1JWd0pNdEl3bTd2bkZwMHJKUi8zZGo3?=
+ =?utf-8?B?VVJQdGs2QjZYUDhlRU90dkVUa2ROSGdRRGlIQ0NDS1NiM2UvQ3kzUEFsV09o?=
+ =?utf-8?B?ZmpDbDd1M0tqYnVSSUpYcC95WWs4VGxLN1lrYnJSZkp0bEFueHlUaHR0dUZO?=
+ =?utf-8?B?QmR6d0ZKUVNDQ2ZjM21YS3hHdDBzbjVmYW1hMFRIRkk1NTBBOGZSNzZ0YWNh?=
+ =?utf-8?B?L05BZ3VHT0lWOHoreXhKSWtzY2k1ZzJxOVdDSnFPd2xFYjJFbDBkOHFWT2xG?=
+ =?utf-8?B?WmtrYWpjcmZSV2FLamwzVEwraWtrZ2lHYVBoT3JLVzFOdW5VY3RzUlcxREFQ?=
+ =?utf-8?B?LzIrRFd6TmxPaHRYSll6ZmNxRDNuZS92U1RxV3JFdjViT2tDUEYrMXlNU0tk?=
+ =?utf-8?B?R2Y0UDVCMWlzOGt5SE1JNDFzMU9hUWFyeHBZelltdkl2MHQ1Rkh1dE1Cc0JU?=
+ =?utf-8?B?dzJVazIveFppQTcveHp1NnVnV1V5R1NaM05FaHV2OUVOay9Da1BRV1NVZmd0?=
+ =?utf-8?B?WmpaZkhtRUhEamoydUdJbUJQRTdoazZwK3AwRjNVQ0lNZnR2UEtuSGpUQ3A5?=
+ =?utf-8?B?UENjUDNJNVJSQnc5dFBwQUc4VTNpZFU1VThnUllNRDEyVEFoTlB3T3hqUW5o?=
+ =?utf-8?B?L2tiZTFUQmFzUXlHZDU0SjRBWXhRbW9iYXFJaG0wVnpGUE02RWVVRnh5UWZW?=
+ =?utf-8?B?TE4wRk9ORVhXRXREU1NUT0w1ZzZ3L3Z4TFlQWFo4Z01PdmYxWnJjOFNyclZ0?=
+ =?utf-8?B?bTQxdWtwVnczTVdtZEM3QkdUMC96U0xjLzlqNjc4eEFCY2VmZFVGaEZaWEln?=
+ =?utf-8?B?a25sWHFTT0RkYmF3eVdjMkRUNUl3NTZpbThERzFmakVwQXUzcHRhS0FFbXJB?=
+ =?utf-8?B?T0dBZnBzbzExQWtDUjVlVi9NbXE3dUlCV3V4MnlPbEU3ZVlnTHcxK2ZmZllr?=
+ =?utf-8?B?aVlsYlV6V1pad3Q1SHZkTThQc3RWV0wxb3FDTVM3aTlRcWF6WkdXUVArSUdz?=
+ =?utf-8?B?U3VjVyt0YnpBOG1zUVpHeWFURTRBMTlqbDY4YnFHeFhXNDhFRVN5NHQ4Slo3?=
+ =?utf-8?B?Rm5WUzN1TUlwaHNVSGU1TUdFR2xTK3A1SE8vWCt1RmRRYW0vcE5tV0wxaFJM?=
+ =?utf-8?B?WVc2UDZ1TFZHSkRzb1F0UWdQWm8xSG5lNkNudHA2cWFwOURoUHk0cVZMeC8z?=
+ =?utf-8?B?Qm5OT3U1WDRBMURCVUozT2QxN3VyT1NCaHRlOHYxRVZwYlFXcE8xMmF1SnpN?=
+ =?utf-8?B?bzl1YWxYaFEyNzZ1SnhQam40K1lDVW5rRnp0NXQrTHc1VHkrb1BpT1NnSEtU?=
+ =?utf-8?B?OFFVY3pXRmpxK0ZXbWZHd3dPM0NjdWM0WVJsL2ZocnFVbDRQZEJla2ZnMHpp?=
+ =?utf-8?B?UEEvUGZ4SU53aHFGbVBDNW1nZS9GRG1BNGNCVTEvc1BjbWF6ZFhBMVFFVzRx?=
+ =?utf-8?B?eXJVNG1tVVNUcWpxb2ZQWnFGUGtwUEhYVmJ5Nmhzb0VyTHpVZGtZc2o1SGVz?=
+ =?utf-8?B?TTU0QXc3U1pSbmFJZzBmRzNVWkd2RGVteWFwL1BjZGFsWlE9PQ==?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?WVFWZDVUWWh4dEsyUDdFZStWRkVidzFVd2F2TTNhY00rRzNlTXB4VGw5NHho?=
+ =?utf-8?B?dWlZbmVPQThmeEtxcE9FSUNPYWlOOTd4QUZrS2xqRUpyK0RESkIvTmlJVEw1?=
+ =?utf-8?B?K2FKTGJXUXBCMmJ2anBodW0vY0pTUGwyRVBORk5xaU1nZzN1eHdRZjBMWFBn?=
+ =?utf-8?B?NlVvU1NVeDVyTi9TbFJWdjdJeGs0VzNUbHU1QlFDZ3pNdnVqditScmhVME1Z?=
+ =?utf-8?B?aXp4N0dEbGdYdkc5amlhSUMrdCtKUkt4RDhpRTVZcGxuOTl1d2xHbDFCVi9T?=
+ =?utf-8?B?bmhUbmRMcjdSTEk3bFIyYkp5eXp6dVhxNm5wOHlHS2JkbzlQdi9aSThBQ3ln?=
+ =?utf-8?B?U3hxUDVEWWxYK3gwUGliRU1YenNzbG1ZeGlRTUM5WW40SnpJeHQyMWZrU2J3?=
+ =?utf-8?B?a0xBN1lpdnIxVlN3enR4aEc5TXYvM3Y3RFZLcWVUSzFCWmVmWHl0a00rbHhZ?=
+ =?utf-8?B?Qjg3M3FZWURTVHpHaTFwZlRXVkk1ZHUxbjkzakdtbFNDR0tEM3NaQ05aazk0?=
+ =?utf-8?B?dlllaXZ1eHhLWW5WSU5JbWYzUHNUdk81aGt2eDJBSlA2NVVTVWgydzk0K3RT?=
+ =?utf-8?B?MHAzS29FcmR6dFFQVnVaY0NwS2FxZGM3UGpOaWQvNW4yS3NxUitxNG1xN1hP?=
+ =?utf-8?B?NHdZOWlCSzQ2aG0reVNUOEtGdlVrM1I5eVNlUm9jWmtxZ1NEWXYzQ0liV2dy?=
+ =?utf-8?B?NTFzT3ZRcFVtSTFPRDJQNEh2RitPdEpCM0JBY3ZmU0pjbVFORXh4U3lmbmxK?=
+ =?utf-8?B?QTJGOFJpbVVVUjNIblNtaGxtWnZFc0pvNzh6QnhKeFA4bzJMbk9YSk1GbmZw?=
+ =?utf-8?B?MURHRGN6Q0VVR1EwRGlzQnlQNjQ5UUhEenBhWUtGOHpjZVNpaXVabXhZemIw?=
+ =?utf-8?B?T0UyYkJtTGRtY1VUU3p1M21WT0hQb3VCbllBSEltUFZpL3Z0OW8xYlRlOE42?=
+ =?utf-8?B?eEJZRENEL0VSbEplMVJxYUJNeEVxK1NRWHBUNDhOZ1VIWGo4Z1JmUG9Pd1h5?=
+ =?utf-8?B?MXVROERId0hJWWhIUXV2Znk2N0lMTU9lbTcrUUNIbUpMN1BPUC9OU0paQ0VL?=
+ =?utf-8?B?ZHZtOU9qakFZb2pJZTJyajQ1WkRsSHpGMkQ4YkNZTytPemlyWmVjOVNkS0py?=
+ =?utf-8?B?Uk9EQjMyWXVaYUI3dDBydG9VQy9TeElHc3o4MnhuMTh1czBwTU9uR3d0d1dh?=
+ =?utf-8?B?Y0NKNGNpakZBOGxiM1JwQ1ROWFBFa3pRTXl2dWlnR0RsVW1QUDJJeXl3aTYr?=
+ =?utf-8?B?cW8rWEFMczh3RDk3ZEFrdVZIZG9GRW52YllINHBrUEo4d2VOL3lIYjBBU1Js?=
+ =?utf-8?B?YkZqc3VzVXE1ZENCODN2SXhsNkhuSWtIMFhpcHBocFpqZGU5Y2hhcjRERTlN?=
+ =?utf-8?B?MTk3dWlBYWtEU0haMVF0UzFwOWI3amNvc3dsSnNUaXJhbGtpK3Vxb3hWZVpZ?=
+ =?utf-8?B?SFFqMzR1SnFwYjQzV0JHWFVTTjd6M2hQdlZVbHdLc1JsZzdPeWVmRDN2c2VV?=
+ =?utf-8?B?YzI2c2RqZWdVSUpxR3NzQTNmYWRzMlB6ZktjdmdhOVJueUJZNXk5R0l4dHlS?=
+ =?utf-8?B?bjRWSmlYU0MreVU0T2dnTXEzd0NpQUVMay85NjU5aG1rK2ZUam5vN3ZYNE9I?=
+ =?utf-8?B?WnJxb3VCaVNEYi8ya013R1ptRHk5UGVCN2hxSmxUQ0N0RmZHOG02RmdjRGF3?=
+ =?utf-8?B?YVF6cWc4MkRRUUhTS0kwTGQ4SHZKMXltVitqT1hLRmdHNHZ2VHZDVVh5RWxa?=
+ =?utf-8?B?WXRqeW1VckRIcTF4TGl1RDFGN2xPdjdMR0xtY1krNGdjTlpLZ2xjQ2ttNHJI?=
+ =?utf-8?B?RmdzaThOL29lejFBSEY1VDZIT0hadXlLOXRBTUYzL3ZsUmZDUDFXNzNWMXhW?=
+ =?utf-8?B?MVozcmYramorTWlld2xWbmFRNTlWWkcvbG5NWTFjVXE4NFM5d1dXQkp0eXg0?=
+ =?utf-8?B?RnpLY29VRy9tdXJLMGRjY2s2ZVUxUTJwOGprR3hvZm1iR2F6eXdDRTFyVHJ0?=
+ =?utf-8?B?eUdOUHBPTk9RV3V4SHc4MDQxMHZCVktGMDZzOUJoU3ZndFZnTzVzYzk1Q3NX?=
+ =?utf-8?B?M25HOGg0bVlEalFPb3VrVFBxOU1XYWR3L0FSS2d2RktpdGFwVmhObHU2bEJ2?=
+ =?utf-8?Q?gT53SddDz8mzmU/nrYHv+28hV?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6005DC798B88774AB14AFBD711A46917@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Misbehaving Alder Lake-N PCH USB 3.2 xHCI Host Controller
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
-References: <20240820130158.339b4d87@foxbook>
-Content-Language: en-US
-From: FPS <mista.tapas@gmx.net>
-In-Reply-To: <20240820130158.339b4d87@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4VRSwBUqBDVLMBuw5azIEcBQTTtQPDShIkIQL92j23F36AQZ1bM
- dfubPLA8XTysciOUi9NLrmArOhvJFc2FWJ/cOqXPq/Po/Z4y3eg2DDAY/8FZheeToD7aY/3
- vlf5SNP/6lAcezbnZijjfdJHdNiaLbhgAhJWzgfmr+o9U4XktdYYVXmsnY5WcvLNW7rnvlC
- iS2U6RJz6kx8RmIbYP7dw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:vvjkwwPy4eM=;czCEzbOnr+LNPAcRpXblMSpuKyF
- sP553/p0ZuFqg+AzmeLve4jq99ihblkcHQBHd0Ed8ZbJwVebMR7StK3NW/XjmcS2BYDGUKPiq
- E7vO5WDqM3Y78BvaC4XQsivydPBaO10PbAm8VapoLIHOWUsbezlKEzxCkFYcHmS2SEAtD6XKp
- YrToDNwKPNT4N5s2zGVPh0s0HdtGTO2Nj7XfMrM79t7I9ZOl9/U6nuERAfjo837qhRA5duho1
- VC+53jOrRUHlFqD7Nhm8LuaP492jHdNT7MEExoxCBCTDYc51U9VvrcE6B03Ti+FWrY0W4ORol
- iGlDQMK6sgJIrB7RxeMUeUf/oHbvxxhD6+DNF2CMhGKJi2MyO6nVhDp8ZXdFwkaCsWFAALNdc
- PuKB9eh7IHNLqUl2rXQiHXQOZIztfkK4i4JL7c3Os/E1HA1pARnD2+etKB87fBTY+vyR5SGeO
- JBfNkcbjUJSuutiJ738j6RxhQ9LcRwfNwOBX1RCcTcF44flKl55VbIanGRA7JYtsLfyFhM3lq
- Ku6KvJVRmyZqjO9SXEwURlNtG3EV9AWXrr0DbVIZXBNpje9cgptEuCZzd8VxReerUOdFEFGnT
- 8CF660iJFspZMe3DMJpArNz9hZ6/HDkRDPXaWrrcIbv3u9hkE941ROlPAWEpLGCd8CNxzEHF+
- 1CTotqlv8Y1HLwZ45fkGCw4yiGkcWnsNvra1N4MsDHfLl2vTj5e/x/HZxuFDhCr15zPFzR2tx
- 0NHwFvbiKal5LWTJZuAOurigjBmQfJAZGkraWdBV4t0CVbOU9UMjyt6DEuGv2dRXpP00c3tN2
- iSfXTXo00Q4qxKhoY/GbSGXQ==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	s3vBPWCkmWDdbPPRterUx5lxy6xF8EKwfOIRYdeTqAgn4smLxjYjVB6KndlxAkrI2ES9WGgD6HUIyNRLC/MW3JaL8iFN6vl9QYR+ytAjFEAsju68NXluBX9egXiwsgft+7L1nuFDz9d67/X9QniTHpSIq/tez/6rbxjyRZLa6CMWkwZ8Aqj4ucUNT2EcbyFfULtSP88A0B1FyvKNcADRwS9BE11FZ+eoTRpHTRA0yb8joO/BQHqo0Ng1g6DVp1esNhV0y1GnFDUQyLez+7A1mwxnnc7GLcyXDRKrrwihWCN3B6OQ0/ZU2LuoDwhTjcI736ST5W8cojOsBHj5DuVPUFEJUmZml/3JmdMl53+N3R34AVSa+ezWcBzbBfMlAxpljwLIblbuRacsW4Y4vhDPCBT5ZqaG65lvPQH5Vtdv7fWa1StsKN4jaQwCJRFV50oKkfpjuPfHwP86YZoN2yC6swBJwqQJjFz4OX68IPHvW/oDktv+O/oQoAqwtnJ+ALGVqc3J4Ba4MZTdxui9emzTsFV336iRaKwW+zMDmx42aMM5S0k2K+dbKLLcOv6yyUYzzwpWTysr46VIQyCIC5HvascDxPVGF/u+n9PPBBN2UGNPPcxot/XVxFEXzvMFdiLY0enBCkH9um4pbNgqG2WXuw==
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53d92d0e-5b35-408b-b3e2-08dcc1643b09
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2024 22:05:41.0626
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6iWaZfB9gyTIc95C+9Lz0lwtUqF/4oyQGs2dNM+n+Ic0H1WLSCcWSmVHMhLGNOmqnDqMLtxrr0I0FdQle0l3Dg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7577
+X-Proofpoint-GUID: 09n4z0Tk5-Ny-TyBnRVa6kyDqHn7ZWce
+X-Authority-Analysis: v=2.4 cv=T4TeTOKQ c=1 sm=1 tr=0 ts=66c5133e cx=c_pps a=8EbXvwLXkpGsT4ql/pYRAw==:117 a=8EbXvwLXkpGsT4ql/pYRAw==:17 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=yoJbH4e0A30A:10 a=nEwiWwFL_bsA:10
+ a=COk6AnOGAAAA:8 a=5znjJJcOrfHczkz4pwcA:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 09n4z0Tk5-Ny-TyBnRVa6kyDqHn7ZWce
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-20_17,2024-08-19_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ malwarescore=0 bulkscore=0 clxscore=1011 spamscore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=671 impostorscore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408200162
 
-On 8/20/24 13:01, Micha=C5=82 Pecio wrote:
-> I can offer a few quick suggestions:
->
-> 1. When kernel bugs are suspected, try other kernels offered by your
-> distribution. See if there is any chance that -rt paches are causing
-> issues.
-
-I have tried other kernels, including 4.19.319, 5.15.163-rt78 and
-6.6.45. They all show the same behaviour of the audio device not
-operating correctly at all with settings like 48 frames, 2 periods.
-
-I have another Alder Lake system with an N100 CPU which has a similar
-xHCI and it also shows problem 1 (see my answer to your question 2
-below) but not problem 2 (see below as well):
-
-00:14.0 USB controller: Intel Corporation Alder Lake-N PCH USB 3.2 xHCI
-Host Controller (prog-if 30 [XHCI])
-	Subsystem: ASRock Incorporation Device 54ed
-	Flags: bus master, medium devsel, latency 0, IRQ 126
-	Memory at 6001100000 (64-bit, non-prefetchable) [size=3D64K]
-	Capabilities: [70] Power Management version 2
-	Capabilities: [80] MSI: Enable+ Count=3D1/8 Maskable- 64bit+
-	Capabilities: [90] Vendor Specific Information: Len=3D14 <?>
-	Capabilities: [b0] Vendor Specific Information: Len=3D00 <?>
-	Kernel driver in use: xhci_hcd
-	Kernel modules: xhci_pci
-
-I guess it's the same chip but integrated somewhat differently.
-
-In that system I also have a PCIE usb controller:
-
-01:00.0 USB controller: Renesas Technology Corp. uPD720201 USB 3.0 Host
-Controller (rev 03) (prog-if 30 [XHCI])
-	Flags: bus master, fast devsel, latency 0, IRQ 16
-	Memory at 80a00000 (64-bit, non-prefetchable) [size=3D8K]
-	Capabilities: [50] Power Management version 3
-	Capabilities: [70] MSI: Enable- Count=3D1/8 Maskable- 64bit+
-	Capabilities: [90] MSI-X: Enable+ Count=3D8 Masked-
-	Capabilities: [a0] Express Endpoint, IntMsgNum 0
-	Capabilities: [100] Advanced Error Reporting
-	Capabilities: [150] Latency Tolerance Reporting
-	Kernel driver in use: xhci_hcd
-	Kernel modules: xhci_pci
-
-And that one just works perfectly with full duplex operation even down
-to buffer sizes of 12 frames / 2 buffers:
-
-$ jackd -R -P 70 -d alsa -d hw:USB -n 2 -p 12
-
-$ ./jack_wakeup -n 2000
-min: 0.236729 ms; mean: 0.249978ms;  max: 0.258432 ms
-
-0.25 ms would be perfect (2 USB microframes.)
-
-So the -rt kernel is not to fault here per se.
-
-(see note below on jack_wakeup)
-
-
-> 2. Does any of that go away when ALSA buffer size is increased or is it
-> always there on this machine?
-
-Very good question! I suppose my initial report was a little unclear on
-this. On this specific system there are two problems:
-
-1. Certain combinations of buffer size and number of buffers do not work
-reliably at all (i.e. xruns). These are basically all combinations of
-buffer sizes < 128 and 2 buffers. I tested buffer sizes of 64 frames, 48
-frames and 24 frames.
-
-2. For those combinations that do seem to work (for example buffer size
-64 with 3 buffers or buffer size of 128 and 2 buffers and up from there)
-there are sporadic (about every 2-10 seconds or so) extra delays of
-about 2 - 4 ms and they seem to be not randomly distributed at all but
-rather always pretty close to full milliseconds.
-
-Buffer sizes above 4 ms seem to work reliably with the light load I
-tested but that is expected since the extra delay is then just masked by
-the large buffers.
-
-About problem 2: On the 4.19.319 kernel I tried problem 2 went away. It
-also has not resurfaced after I rebooted into 6.6.44-rt39. I will do a
-full power cycle and see if it resurfaces.
-
-> 3. When posting wall of text errors, start at the beginning because it
-> may offer clues about what originally went wrong ('dmesg -W' helps).
-
-Sure!
-
-> 4. Playing a tiny file with 'aplay --period-size=3D48 --buffer-size=3D96=
-'
-> is a simpler way to reproduce the problem and generates a shorter log.
-
-Good point! But I played around some more and it seems that the problem
-actually manifests in this precise way only if I actually do full duplex
-audio processing. aplay would just use the playback direction, and also
-it does not really do correct realtime scheduling.
-
-If I just use the capture direction buffer sizes like 24 or 48 with 2
-buffers appear to work and give me expected jitter. E.g for 48:
-
-$ jackd -R -P 70 -d alsa -d hw:USB -n 2 -p 48 -C
-
-$ ./src/jack_wakeup/jack_wakeup
-min: 0.993217 ms; mean: 1.00002ms;  max: 1.00574 ms
-
-Or for buffer size 24:
-
-$ jackd -R -P 70 -d alsa -d hw:USB -n 2 -p 24 -C
-
-$ ./src/jack_wakeup/jack_wakeup
-min: 0.488788 ms; mean: 0.499921ms;  max: 0.510261 ms
-
-For buffer size 12 things break though.
-
-Note: jack_wakeup is just a small utility I wrote that measures the
-interval between consecutive process callbacks which, in an unloaded
-jack graph is useful to measure jitter in the system.
-
-If you do not like the complexity that jack (jack1 in this case)
-introduces I can probably cook up a small C program that just sets up
-SCHED_FIFO, mlockall, etc, and does either simplex or full duplex
-operations on the audio interface.
-
->> I have to note that these "WARN Event TRB for slot 18 ep 1 with no TDs
->> queued?" were there before enabling this dynamic debug feature, I just
->> forgot to mention them in my original mail.
->
-> This particular part is probably caused by our failure to properly
-> handle the preceding condition ("underrun event still with TDs queued").
-> I can't know for sure, but assuming no hardware bugs, it appears that a
-> new transfer descriptor is queued after the hardware reports a ring
-> underrun but before we actually process the report. While processing
-> the underrun we are surprised by this unexpected TD, then we see that
-> skip flag is set so we erronously report all TDs (most likely including
-> the new one) as failed to the audio driver. Meanwhile the hardware may
-> execute this transfer and report its completion later, at which point
-> we have already forgotten about it.
->
-> *Maybe* this creates enough chaos that some sort of infinite loop of
-> cascading errors is established as a result of one recoverable error.
-> Or maybe your problem is elsewhere and this bug is only a side effect.
->
-> Are you able to test kernel patches?
-
-Yes, of course. It's been a couple of years since I did the whole
-menuconfig, patch, rebuild, reboot, test - dance. I did this quite often
-when Ingo posted early versions of the realtime preemption patches. E.g.
-
-https://lkml.org/lkml/2004/11/21/184
-
-Kind regards and thanks for your suggestions,
-FPS
+T24gVHVlLCBBdWcgMjAsIDIwMjQsIFpob25ncWl1IEhhbiB3cm90ZToNCj4gQnVzeSBsb29wcyB0
+aGF0IHBvbGwgb24gYSByZWdpc3RlciBzaG91bGQgY2FsbCBjcHVfcmVsYXgoKS4gT24gc29tZQ0K
+PiBhcmNoaXRlY3R1cmVzLCBpdCBjYW4gbG93ZXIgQ1BVIHBvd2VyIGNvbnN1bXB0aW9uIG9yIHlp
+ZWxkIHRvIGENCj4gaHlwZXJ0aHJlYWRlZCB0d2luIHByb2Nlc3Nvci4gSXQgYWxzbyBzZXJ2ZXMg
+YXMgYSBjb21waWxlciBiYXJyaWVyLA0KPiBzZWUgRG9jdW1lbnRhdGlvbi9wcm9jZXNzL3ZvbGF0
+aWxlLWNvbnNpZGVyZWQtaGFybWZ1bC5yc3QuIEluIGFkZGl0aW9uLA0KPiBpZiBzb21ldGhpbmcg
+Z29lcyB3cm9uZyBpbiB0aGUgYnVzeSBsb29wIGF0IGxlYXN0IGl0IGNhbiBwcmV2ZW50IHRoaW5n
+cw0KPiBmcm9tIGdldHRpbmcgd29yc2UuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBaaG9uZ3FpdSBI
+YW4gPHF1aWNfemhvbmhhbkBxdWljaW5jLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL3VzYi9kd2Mz
+L2NvcmUuYyB8IDIgKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gDQo+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBiL2RyaXZlcnMvdXNiL2R3YzMv
+Y29yZS5jDQo+IGluZGV4IDczNGRlMmE4YmQyMS4uNDk4ZjA4ZGJiZGI1IDEwMDY0NA0KPiAtLS0g
+YS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUu
+Yw0KPiBAQCAtMjA1MCw2ICsyMDUwLDggQEAgc3RhdGljIGludCBkd2MzX2dldF9udW1fcG9ydHMo
+c3RydWN0IGR3YzMgKmR3YykNCj4gIAkJaWYgKCFvZmZzZXQpDQo+ICAJCQlicmVhazsNCj4gIA0K
+PiArCQljcHVfcmVsYXgoKTsNCj4gKw0KPiAgCQl2YWwgPSByZWFkbChiYXNlICsgb2Zmc2V0KTsN
+Cj4gIAkJbWFqb3JfcmV2aXNpb24gPSBYSENJX0VYVF9QT1JUX01BSk9SKHZhbCk7DQo+ICANCj4g
+LS0gDQo+IDIuMjUuMQ0KPiANCg0KV2UncmUgbm90IHBvbGxpbmcgb24gYSByZWdpc3RlciBoZXJl
+LiBXZSdyZSBqdXN0IHRyYXZlcnNpbmcgYW5kIHJlYWRpbmcNCnRoZSBuZXh0IHBvcnQgY2FwYWJp
+bGl0eS4gVGhlIGxvb3AgaW4gZHdjM19nZXRfbnVtX3BvcnRzKCkgc2hvdWxkIG5vdCBiZQ0KbW9y
+ZSB0aGFuIERXQzNfVVNCMl9NQVhfUE9SVFMgKyBEV0MzX1VTQjNfTUFYX1BPUlRTLg0KDQpXaGF0
+J3MgcmVhbGx5IGNhdXNpbmcgdGhpcyBidXN5IGxvb3AgeW91IGZvdW5kPw0KDQpJZiBwb2xsaW5n
+IGZvciBhIHJlZ2lzdGVyIGlzIHJlYWxseSBhIHByb2JsZW0sIHRoZW4gd2Ugd291bGQgaGF2ZSB0
+aGF0DQpwcm9ibGVtIGV2ZXJ5d2hlcmUgZWxzZSBpbiBkd2MzLiBCdXQgd2h5IGhlcmU/DQoNClRo
+YW5rcywNClRoaW5o
 
