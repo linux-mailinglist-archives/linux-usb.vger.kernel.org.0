@@ -1,156 +1,110 @@
-Return-Path: <linux-usb+bounces-13704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13706-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60C36957E9B
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 08:49:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38B3C957F07
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 09:07:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18E5D1F24E83
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 06:49:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7135B22018
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 07:07:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 833A93F9C5;
-	Tue, 20 Aug 2024 06:49:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133C218C005;
+	Tue, 20 Aug 2024 07:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qYMm+1BR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF3F18E36B;
-	Tue, 20 Aug 2024 06:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9FE4084E;
+	Tue, 20 Aug 2024 07:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724136564; cv=none; b=khLmNfy5mN41K6Y/iZ2hhAuZxDEnPuuVowbyrbVmbxUWBSN+39V8yzfAMxrjfaYy1QA15WAoCZS8e7kDnmgX8qXhyasjAGfW3N0kpE6IVFxSq4UNuZ5X/qvyJ2i1a+pehA5z+m9czLX2b+kL8tosGaCfHJjPMY9/ldMyDPaJC0k=
+	t=1724137632; cv=none; b=OxIj1oSCgejvw6TDQZnritcNyez8xaJvYzPujCdKqmwEL7tlcwzv6jGuxyatCelQEXfGaqqqJa4NjUL5J+ZoxkeG/bs1tlkBLupJo5j/sIJMpP5jOc6iGdpWq162g6nWJqcC7EsoSUkTt82JcEsRz0ya8KZr+yLX+eWh3pmAo4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724136564; c=relaxed/simple;
-	bh=hlhdFi5V1f0wXOwX08iasKeQHCJ0GHrGJirf5kJpTfM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HwCumMof44k1dDHZ07wCNdClSf4f6pJdsiDYVElYEKD6O/6D072VJwtWckId4oaLq+JfZTuUR1WwJ9wR4tln6hru08RSZQxpGCHavZe14fgHTx48M+1vm17Ck9z8E6jZFp/q8FrYMKQJn216XXSwCoRhuSdH4Wct4kK/zeCJesg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Wp0QX3blKzpTHd;
-	Tue, 20 Aug 2024 14:47:48 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1C4B914037B;
-	Tue, 20 Aug 2024 14:49:18 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
- (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 20 Aug
- 2024 14:49:17 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-	<krzk@kernel.org>, <alim.akhtar@samsung.com>, <linux-usb@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH -next RESEND] usb: xhci: Simplify with scoped for each OF child loop
-Date: Tue, 20 Aug 2024 14:56:35 +0800
-Message-ID: <20240820065635.560427-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1724137632; c=relaxed/simple;
+	bh=Vh6MSMRStnW33q5+dD+Us/r1QXXTp4gSRyZS7k149cY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pem/ESC78y4YXh0OVByHp8GCSXI8iG5Do/7+dZwnMKI3y3zAgyRx1+gqiJccCHC40c4blcrOUNdvD0Uqk5/ID+x8BRsswtlnHNS0a1vJ1vsqEgTorUYJGCuZeBDH+UdVTWSklZL3IytBNRq7LhjqoDTgkxNU4ZBJSmlkKEdBhZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qYMm+1BR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C13C4AF10;
+	Tue, 20 Aug 2024 07:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724137632;
+	bh=Vh6MSMRStnW33q5+dD+Us/r1QXXTp4gSRyZS7k149cY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qYMm+1BREzRTVXtFN3XKXPxAN7VMeYrYc5xpmGBl8X2sK0zrMmER8Pq60YpDRzfGr
+	 Isk7MujL2y125VuDHL+yuJ00ztDg+Ry/zGf+F5U49lMH5zRgATfD1WEfydJATk+K7b
+	 tm4Kd+bHtAtV2RpU0TEo4xhMo4kvLBTSTMKC3sC62zQIBmPZpisewfZ+NLYWyL0Gpi
+	 GUSbcvoz1x1t+spqKidtx0+cNkRFXnlCc5l2tLAklbmAAiAbEwHGgk1N4CH3/Jujs8
+	 SwYgVyuK5SrIeGYG7G6SIAbSm9BroZ9WbzrLO1rWVMwKVhPXjxxKIOtjLbtm9ve2XV
+	 vcu0rVjQfGCTA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sgIxR-000000002iP-2RXK;
+	Tue, 20 Aug 2024 09:07:10 +0200
+Date: Tue, 20 Aug 2024 09:07:09 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Chris Lew <quic_clew@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] soc: qcom: pmic_glink: Actually communicate with
+ remote goes down
+Message-ID: <ZsRAnWgsoSHmrFE5@hovoldconsulting.com>
+References: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
+ <20240819-pmic-glink-v6-11-races-v2-3-88fe3ab1f0e2@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemh500013.china.huawei.com (7.202.181.146)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819-pmic-glink-v6-11-races-v2-3-88fe3ab1f0e2@quicinc.com>
 
-Use scoped for_each_available_child_of_node_scoped() when iterating over
-device nodes to make code a bit simpler.
+On Mon, Aug 19, 2024 at 01:07:47PM -0700, Bjorn Andersson wrote:
+> When the pmic_glink state is UP and we either receive a protection-
+> domain (PD) notification indicating that the PD is going down, or that
+> the whole remoteproc is going down, it's expected that the pmic_glink
+> client instances are notified that their function has gone DOWN.
+> 
+> This is not what the code does, which results in the client state either
+> not updating, or being wrong in many cases. So let's fix the conditions.
 
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- drivers/usb/host/ehci-exynos.c | 9 ++-------
- drivers/usb/host/ohci-exynos.c | 9 ++-------
- 2 files changed, 4 insertions(+), 14 deletions(-)
+> @@ -191,7 +191,7 @@ static void pmic_glink_state_notify_clients(struct pmic_glink *pg)
+>  		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
+>  			new_state = SERVREG_SERVICE_STATE_UP;
+>  	} else {
+> -		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
+> +		if (pg->pdr_state == SERVREG_SERVICE_STATE_DOWN || !pg->ept)
+>  			new_state = SERVREG_SERVICE_STATE_DOWN;
+>  	}
 
-diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-index f40bc2a7a124..e3a961d3f5fc 100644
---- a/drivers/usb/host/ehci-exynos.c
-+++ b/drivers/usb/host/ehci-exynos.c
-@@ -48,7 +48,6 @@ struct exynos_ehci_hcd {
- static int exynos_ehci_get_phy(struct device *dev,
- 				struct exynos_ehci_hcd *exynos_ehci)
- {
--	struct device_node *child;
- 	struct phy *phy;
- 	int phy_number, num_phys;
- 	int ret;
-@@ -66,26 +65,22 @@ static int exynos_ehci_get_phy(struct device *dev,
- 		return 0;
- 
- 	/* Get PHYs using legacy bindings */
--	for_each_available_child_of_node(dev->of_node, child) {
-+	for_each_available_child_of_node_scoped(dev->of_node, child) {
- 		ret = of_property_read_u32(child, "reg", &phy_number);
- 		if (ret) {
- 			dev_err(dev, "Failed to parse device tree\n");
--			of_node_put(child);
- 			return ret;
- 		}
- 
- 		if (phy_number >= PHY_NUMBER) {
- 			dev_err(dev, "Invalid number of PHYs\n");
--			of_node_put(child);
- 			return -EINVAL;
- 		}
- 
- 		phy = devm_of_phy_optional_get(dev, child, NULL);
- 		exynos_ehci->phy[phy_number] = phy;
--		if (IS_ERR(phy)) {
--			of_node_put(child);
-+		if (IS_ERR(phy))
- 			return PTR_ERR(phy);
--		}
- 	}
- 
- 	exynos_ehci->legacy_phy = true;
-diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-index bfa2eba4e3a7..1379e03644b2 100644
---- a/drivers/usb/host/ohci-exynos.c
-+++ b/drivers/usb/host/ohci-exynos.c
-@@ -37,7 +37,6 @@ struct exynos_ohci_hcd {
- static int exynos_ohci_get_phy(struct device *dev,
- 				struct exynos_ohci_hcd *exynos_ohci)
- {
--	struct device_node *child;
- 	struct phy *phy;
- 	int phy_number, num_phys;
- 	int ret;
-@@ -55,26 +54,22 @@ static int exynos_ohci_get_phy(struct device *dev,
- 		return 0;
- 
- 	/* Get PHYs using legacy bindings */
--	for_each_available_child_of_node(dev->of_node, child) {
-+	for_each_available_child_of_node_scoped(dev->of_node, child) {
- 		ret = of_property_read_u32(child, "reg", &phy_number);
- 		if (ret) {
- 			dev_err(dev, "Failed to parse device tree\n");
--			of_node_put(child);
- 			return ret;
- 		}
- 
- 		if (phy_number >= PHY_NUMBER) {
- 			dev_err(dev, "Invalid number of PHYs\n");
--			of_node_put(child);
- 			return -EINVAL;
- 		}
- 
- 		phy = devm_of_phy_optional_get(dev, child, NULL);
- 		exynos_ohci->phy[phy_number] = phy;
--		if (IS_ERR(phy)) {
--			of_node_put(child);
-+		if (IS_ERR(phy))
- 			return PTR_ERR(phy);
--		}
- 	}
- 
- 	exynos_ohci->legacy_phy = true;
--- 
-2.34.1
+I guess you could drop the outer conditional
 
+	if (pg->client_state != SERVREG_SERVICE_STATE_UP) {
+
+	} else {
+
+	}
+
+here to make this a bit more readable, but that's for a separate patch.
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+
+Johan
 
