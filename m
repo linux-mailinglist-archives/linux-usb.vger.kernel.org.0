@@ -1,155 +1,168 @@
-Return-Path: <linux-usb+bounces-13703-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3053D957E97
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 08:46:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 485A4957EB3
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 08:54:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAA761F2493E
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 06:46:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BB7C1C23EC1
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 06:54:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063B41A29A;
-	Tue, 20 Aug 2024 06:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD6F7149C4F;
+	Tue, 20 Aug 2024 06:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hhZzymRT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A15A1849;
-	Tue, 20 Aug 2024 06:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1372718E36D;
+	Tue, 20 Aug 2024 06:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724136370; cv=none; b=IhZNY2HRtIrplztU11phZdWnLpfZaoCZsJuUsPGP5uXVoNcMk14SZ0fD987l7Go5L2RSmxnZRLIuUGSxKNtsunmMzdHpz0Z8Le4GCXgq8sU1EENlW9VFId63C1hvZr36mRUKqkR6YG7jDFY2yESV/qzR7PKwR6IR74RcArDsxYQ=
+	t=1724136833; cv=none; b=YSG3v/oa8jW+Uf7c4Wsj0+wvrvSA9ueyqb+QsiyR+BGYvz/uudbTDPOz+hOZCmjBY+J8b9tOs/oYwlbaD8J0+d+cpdAkLBVxQfbv/7Rxb3odQe6gb6E6ZENlkyJdg1alC1RZBpxzTCcTcDprd4jVJjj95qiFPRQpYbKNn2J1FTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724136370; c=relaxed/simple;
-	bh=hlhdFi5V1f0wXOwX08iasKeQHCJ0GHrGJirf5kJpTfM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=c1+Mc02qRqWOi1jFLTUv8PLQuMOpr/eqdr+7z3TICAu4DNLFV1jyhn5ul5M8hqPlaTsIR48J07Pa8gtH7JlpsrBULacmB3mhF1e2D3OhzFrr9EtJ0u9+tSU6vWPUzwqmqd78PS2dyxg75K0V/uVPPandWl5LmZssonA9aJcQbao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Wp0LD0b31zfbdL;
-	Tue, 20 Aug 2024 14:44:04 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1084F180105;
-	Tue, 20 Aug 2024 14:46:04 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
- (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 20 Aug
- 2024 14:46:03 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-	<krzk@kernel.org>, <alim.akhtar@samsung.com>, <linux-usb@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] usb: xhci: Simplify with scoped for each OF child loop
-Date: Tue, 20 Aug 2024 14:53:03 +0800
-Message-ID: <20240820065303.560125-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1724136833; c=relaxed/simple;
+	bh=x/QLEd4EJGxD7KAIK7G6x29L4+g4QBuvv0SgFktpjQI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bvKze281Ebt29KSzbzcrgOPxTf02QD5AZk/iWhlcBIvyiX2r/qdMU+O2NE8uFfOk/mlE/TsZpcUbkFCM1Rx+W85c9V1FXY5tsawBXRgcnqlu1z43bTY4MCRKx9ph8m7/RrMGHPObO4jIG3RaDq/IjD/zsk7Zn2Sawtf9aGZViWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hhZzymRT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94064C4AF09;
+	Tue, 20 Aug 2024 06:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724136832;
+	bh=x/QLEd4EJGxD7KAIK7G6x29L4+g4QBuvv0SgFktpjQI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hhZzymRT8fi7SIrI2uhE6+JyoSLWNAnzfbIcCjUqimFY0YvBUNJTS0vNL3zsBLMAm
+	 UBJo4i9QofUqMS326HAUSEoexl7hnhJm8U6U0yi4A8QP9pMn1LgyrQgNw6JIEJEpUZ
+	 1Vqiv4uRfcAwAyIF2xbAxrG9nAamXzE74+rTXwAXaIEWRMyurW2deQWwoyk005OXPZ
+	 hV1JMQp9xqMjc91pN2nZ4WjCe7JTwzh7gsgnG3G5Yx+CmkpqE8d8tJCznTxTsXG/sh
+	 LYDknKcQlHzxPbfKBMnR0abXWzVRFtFgzMCxy+JUxtNbq/LWDI7TMUIbkEIcxGM7ga
+	 tkOXbYl8qYwdg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sgIkY-000000002Wr-07ht;
+	Tue, 20 Aug 2024 08:53:50 +0200
+Date: Tue, 20 Aug 2024 08:53:50 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Chris Lew <quic_clew@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] soc: qcom: pmic_glink: Fix race during
+ initialization
+Message-ID: <ZsQ9fhX98yfVXAxi@hovoldconsulting.com>
+References: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
+ <20240819-pmic-glink-v6-11-races-v2-1-88fe3ab1f0e2@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemh500013.china.huawei.com (7.202.181.146)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819-pmic-glink-v6-11-races-v2-1-88fe3ab1f0e2@quicinc.com>
 
-Use scoped for_each_available_child_of_node_scoped() when iterating over
-device nodes to make code a bit simpler.
+On Mon, Aug 19, 2024 at 01:07:45PM -0700, Bjorn Andersson wrote:
+> As pointed out by Stephen Boyd it is possible that during initialization
+> of the pmic_glink child drivers, the protection-domain notifiers fires,
+> and the associated work is scheduled, before the client registration
+> returns and as a result the local "client" pointer has been initialized.
+> 
+> The outcome of this is a NULL pointer dereference as the "client"
+> pointer is blindly dereferenced.
+> 
+> Timeline provided by Stephen:
+>  CPU0                               CPU1
+>  ----                               ----
+>  ucsi->client = NULL;
+>  devm_pmic_glink_register_client()
+>   client->pdr_notify(client->priv, pg->client_state)
+>    pmic_glink_ucsi_pdr_notify()
+>     schedule_work(&ucsi->register_work)
+>     <schedule away>
+>                                     pmic_glink_ucsi_register()
+>                                      ucsi_register()
+>                                       pmic_glink_ucsi_read_version()
+>                                        pmic_glink_ucsi_read()
+>                                         pmic_glink_ucsi_read()
+>                                          pmic_glink_send(ucsi->client)
+>                                          <client is NULL BAD>
+>  ucsi->client = client // Too late!
+> 
+> This code is identical across the altmode, battery manager and usci
+> child drivers.
+> 
+> Resolve this by splitting the allocation of the "client" object and the
+> registration thereof into two operations.
+> 
+> This only happens if the protection domain registry is populated at the
+> time of registration, which by the introduction of commit '1ebcde047c54
+> ("soc: qcom: add pd-mapper implementation")' became much more likely.
+> 
+> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+> Closes: https://lore.kernel.org/all/CAMi1Hd2_a7TjA7J9ShrAbNOd_CoZ3D87twmO5t+nZxC9sX18tA@mail.gmail.com/
+> Reported-by: Johan Hovold <johan@kernel.org>
+> Closes: https://lore.kernel.org/all/ZqiyLvP0gkBnuekL@hovoldconsulting.com/
+> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> Closes: https://lore.kernel.org/all/CAE-0n52JgfCBWiFQyQWPji8cq_rCsviBpW-m72YitgNfdaEhQg@mail.gmail.com/
+> Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK driver")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Tested-by: Amit Pundir <amit.pundir@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- drivers/usb/host/ehci-exynos.c | 9 ++-------
- drivers/usb/host/ohci-exynos.c | 9 ++-------
- 2 files changed, 4 insertions(+), 14 deletions(-)
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> index 9ebc0ba35947..58ec91767d79 100644
+> --- a/drivers/soc/qcom/pmic_glink.c
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -66,15 +66,14 @@ static void _devm_pmic_glink_release_client(struct device *dev, void *res)
+>  	spin_unlock_irqrestore(&pg->client_lock, flags);
+>  }
+>  
+> -struct pmic_glink_client *devm_pmic_glink_register_client(struct device *dev,
+> -							  unsigned int id,
+> -							  void (*cb)(const void *, size_t, void *),
+> -							  void (*pdr)(void *, int),
+> -							  void *priv)
+> +struct pmic_glink_client *devm_pmic_glink_new_client(struct device *dev,
 
-diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-index f40bc2a7a124..e3a961d3f5fc 100644
---- a/drivers/usb/host/ehci-exynos.c
-+++ b/drivers/usb/host/ehci-exynos.c
-@@ -48,7 +48,6 @@ struct exynos_ehci_hcd {
- static int exynos_ehci_get_phy(struct device *dev,
- 				struct exynos_ehci_hcd *exynos_ehci)
- {
--	struct device_node *child;
- 	struct phy *phy;
- 	int phy_number, num_phys;
- 	int ret;
-@@ -66,26 +65,22 @@ static int exynos_ehci_get_phy(struct device *dev,
- 		return 0;
- 
- 	/* Get PHYs using legacy bindings */
--	for_each_available_child_of_node(dev->of_node, child) {
-+	for_each_available_child_of_node_scoped(dev->of_node, child) {
- 		ret = of_property_read_u32(child, "reg", &phy_number);
- 		if (ret) {
- 			dev_err(dev, "Failed to parse device tree\n");
--			of_node_put(child);
- 			return ret;
- 		}
- 
- 		if (phy_number >= PHY_NUMBER) {
- 			dev_err(dev, "Invalid number of PHYs\n");
--			of_node_put(child);
- 			return -EINVAL;
- 		}
- 
- 		phy = devm_of_phy_optional_get(dev, child, NULL);
- 		exynos_ehci->phy[phy_number] = phy;
--		if (IS_ERR(phy)) {
--			of_node_put(child);
-+		if (IS_ERR(phy))
- 			return PTR_ERR(phy);
--		}
- 	}
- 
- 	exynos_ehci->legacy_phy = true;
-diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-index bfa2eba4e3a7..1379e03644b2 100644
---- a/drivers/usb/host/ohci-exynos.c
-+++ b/drivers/usb/host/ohci-exynos.c
-@@ -37,7 +37,6 @@ struct exynos_ohci_hcd {
- static int exynos_ohci_get_phy(struct device *dev,
- 				struct exynos_ohci_hcd *exynos_ohci)
- {
--	struct device_node *child;
- 	struct phy *phy;
- 	int phy_number, num_phys;
- 	int ret;
-@@ -55,26 +54,22 @@ static int exynos_ohci_get_phy(struct device *dev,
- 		return 0;
- 
- 	/* Get PHYs using legacy bindings */
--	for_each_available_child_of_node(dev->of_node, child) {
-+	for_each_available_child_of_node_scoped(dev->of_node, child) {
- 		ret = of_property_read_u32(child, "reg", &phy_number);
- 		if (ret) {
- 			dev_err(dev, "Failed to parse device tree\n");
--			of_node_put(child);
- 			return ret;
- 		}
- 
- 		if (phy_number >= PHY_NUMBER) {
- 			dev_err(dev, "Invalid number of PHYs\n");
--			of_node_put(child);
- 			return -EINVAL;
- 		}
- 
- 		phy = devm_of_phy_optional_get(dev, child, NULL);
- 		exynos_ohci->phy[phy_number] = phy;
--		if (IS_ERR(phy)) {
--			of_node_put(child);
-+		if (IS_ERR(phy))
- 			return PTR_ERR(phy);
--		}
- 	}
- 
- 	exynos_ohci->legacy_phy = true;
--- 
-2.34.1
+Please consider renaming this one
 
+	devm_pmic_glink_alloc_client()
+
+(or devm_pmic_glink_client_alloc()) which is more conventional for
+kernel code than using "new".
+
+> +						     unsigned int id,
+> +						     void (*cb)(const void *, size_t, void *),
+> +						     void (*pdr)(void *, int),
+> +						     void *priv)
+>  {
+>  	struct pmic_glink_client *client;
+>  	struct pmic_glink *pg = dev_get_drvdata(dev->parent);
+> -	unsigned long flags;
+>  
+>  	client = devres_alloc(_devm_pmic_glink_release_client, sizeof(*client), GFP_KERNEL);
+>  	if (!client)
+
+Looks good otherwise:
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+
+Johan
 
