@@ -1,238 +1,125 @@
-Return-Path: <linux-usb+bounces-13699-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13700-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56D98957B76
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 04:34:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E555C957E63
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 08:39:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16B65283FA5
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 02:34:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82A45B21D97
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 06:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4B13F9C5;
-	Tue, 20 Aug 2024 02:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0AEF1E7A50;
+	Tue, 20 Aug 2024 06:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dDiqdbHN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V86hWq6S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F79749622;
-	Tue, 20 Aug 2024 02:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C69B1E7A2F;
+	Tue, 20 Aug 2024 06:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724121259; cv=none; b=tEviD8PJhSuJbokAq1eC0BLwsy2qDgOrzaEGEWUzhXWLdM3tTvHQnLEYxVOVp38h62RZ41SLK11TSos5i/OXXgFAWlQODUdSj8T0MQAAbuoyUY7c02nwiyn4PsS4YrhzA7OTU109YZ8arbMciZ/0MYR6JSig9cVOd+2r6dcV/tc=
+	t=1724135681; cv=none; b=o3+pFwjLu0XWJPRgceENIEYNBLrBOoKAQsIRN9a2N1Fx4C5aqlSh7M2mWHSG2Fvr2x/nGnXtIqbP2rqB9GfUQdLA8EsTvb+gEJ6o5XDNwYxPEof0xJQBIrfCVFFV41Xs7sHlRz1BUblb2SICm3Snqp33YppI+KEi7EDMq3rmJnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724121259; c=relaxed/simple;
-	bh=EX7m7E4uVFpmQxuytLHn8Izj+uT6XzL1vKALGH1360A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=icS9o40H89OHJ8Bdd22Jg7d2hu8wLeja399HGNwS3MaUyEQVyWFMTjNKYZ+y4GJ+NV3nOIl68ZSNu99CtdUqVj3TnaJ4n0bQwGqg8AVixG4M37OGPnpSR81vZqBNGk0CajRHF0YMC13GXr9yNikIA7o+SrgYAjavrZbK8/xoc0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dDiqdbHN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47K2C282012421;
-	Tue, 20 Aug 2024 02:33:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	NdvKqTI0IYHL1eLLYyhx4z9hi6k3a2+Z/kg0NhcHBQQ=; b=dDiqdbHNDfh0A2B2
-	7lcKjF3MXhfcotG6OaBzKeZoe7WZxVfzkm79PzCip8UaoCzPB9YLLlydhq7ZhFOU
-	xhgdFt8cipELYl7AaoRAT7wRs8y4xYjXdNmXVNzcfOK9d6evn2ejqfrfvj6ugDl8
-	jGiFdwxeNPgQs24oWUKuLRULkxucJDdBnJFub23pNnAuoSoa2h6eb0iTwflXrwlY
-	cpysxvpIFaGTZKiJZ06/YUekpzMq16Wq5CD43hniELuKbiuqKhd57R96+mQGr308
-	NYNy7RTmP4oAzOgpI4eMAtuIXsmOcIerUif6sdc/z5y8NguzGWc0RuoWojG/nozR
-	2/dpog==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414j5701bh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 02:33:50 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47K2Xmw2030765
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 02:33:48 GMT
-Received: from [10.110.70.123] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 19 Aug
- 2024 19:33:47 -0700
-Message-ID: <58043166-c494-42db-b7d3-575991e43e8b@quicinc.com>
-Date: Mon, 19 Aug 2024 19:33:47 -0700
+	s=arc-20240116; t=1724135681; c=relaxed/simple;
+	bh=VYm9fAL+Q+/V8SYgqp/PLQTB8NVxzo9tKEdJNZio6Sw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OMtoo31i8SKt6fw77bwqarrfaLXBTLBRMmCQ+PcjpkFg0YNez+IC+enh8oEMW+8XHWyqvAphB2OEe9ct7M1ndtVH5AfHKoD8xTO3d4cMPJ0Hg35FXmUhI0p165l1QOKO3ClTh1KRqfeCx7MHM89//WC79TFYPboKxXPS6pnPui0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V86hWq6S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D66C4AF09;
+	Tue, 20 Aug 2024 06:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724135680;
+	bh=VYm9fAL+Q+/V8SYgqp/PLQTB8NVxzo9tKEdJNZio6Sw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V86hWq6SYbgFePOxGJc1NOOq+AOy+A7HPeQRr2JIaHo817TJAFqli3mIFEAFeGnLb
+	 KvNe2iOK6gZGR6td9Rzrkj9fSVlUAp7QdNT7CvMTRgmVXnBl2EtUCRAu6aF4TTKT6G
+	 6/rkLuxhdaI5oEoShiY3XBHkOHbdUy+JYAlTyvf8DuTAic79TvP7hR1agTfmf4KQAq
+	 Ij8FJnm/OqIeAgzyfBwgFhRTXF56ChXd/8xAAaxH5ELvGVEzSdph64gnXu8YPHDzom
+	 p9sGmyqvaOynyPDTqpM4DxUZhlCOH2fWy+21abTy+NH/BFHI7Cc2bl8i+mrCyPJdb/
+	 FKPwfvFc+7t5g==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sgIRy-000000002Fl-19mi;
+	Tue, 20 Aug 2024 08:34:38 +0200
+Date: Tue, 20 Aug 2024 08:34:38 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Chris Lew <quic_clew@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: ucsi: Move unregister out of atomic
+ section
+Message-ID: <ZsQ4_viDxMVu3Mho@hovoldconsulting.com>
+References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
+ <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
+ <ZsNfkuiRK9VqBSLT@hovoldconsulting.com>
+ <ZsN2qR3tuXylb2qK@hu-bjorande-lv.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 29/34] ALSA: usb-audio: qcom: Add USB offload route
- kcontrol
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <gregkh@linuxfoundation.org>, <robh@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-30-quic_wcheng@quicinc.com>
- <4d5fe3f8-d7ba-4647-8dd7-22656ec2fde5@linux.intel.com>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <4d5fe3f8-d7ba-4647-8dd7-22656ec2fde5@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kHPYq0DIRqcezxG483IwCovOPnBE9jat
-X-Proofpoint-GUID: kHPYq0DIRqcezxG483IwCovOPnBE9jat
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_16,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 clxscore=1015 bulkscore=0 phishscore=0 impostorscore=0
- adultscore=0 suspectscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408200018
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZsN2qR3tuXylb2qK@hu-bjorande-lv.qualcomm.com>
 
-Hi Pierre,
+On Mon, Aug 19, 2024 at 09:45:29AM -0700, Bjorn Andersson wrote:
+> On Mon, Aug 19, 2024 at 05:06:58PM +0200, Johan Hovold wrote:
+> > On Sun, Aug 18, 2024 at 04:17:38PM -0700, Bjorn Andersson wrote:
+> > > Commit 'caa855189104 ("soc: qcom: pmic_glink: Fix race during
+> > > initialization")' 
+> > 
+> > This commit does not exist, but I think you really meant to refer to
+> > 
+> > 	9329933699b3 ("soc: qcom: pmic_glink: Make client-lock non-sleeping")
+> > 
+> > and possibly also
+> > 
+> > 	635ce0db8956 ("soc: qcom: pmic_glink: don't traverse clients list without a lock")
+> > 
+> > here.
+> > 
+> 
+> Yeah, I copy-pasted the wrong SHA1. Prior to commit 9329933699b3 ("soc:
+> qcom: pmic_glink: Make client-lock non-sleeping") the PDR notification
+> happened from a worker with only mutexes held.
+> 
+> > > moved the pmic_glink client list under a spinlock, as
+> > > it is accessed by the rpmsg/glink callback, which in turn is invoked
+> > > from IRQ context.
+> > > 
+> > > This means that ucsi_unregister() is now called from IRQ context, which
+                                                           ^^^^^^^^^^^
 
-On 8/1/2024 2:02 AM, Pierre-Louis Bossart wrote:
->
->> +ifneq ($(CONFIG_SND_USB_QC_OFFLOAD_MIXER),)
->> +snd-usb-audio-qmi-objs += mixer_usb_offload.o
->> +endif
->> \ No newline at end of file
-> add one?
->
->> diff --git a/sound/usb/qcom/mixer_usb_offload.c b/sound/usb/qcom/mixer_usb_offload.c
->> new file mode 100644
->> index 000000000000..c00770400c67
->> --- /dev/null
->> +++ b/sound/usb/qcom/mixer_usb_offload.c
->> @@ -0,0 +1,101 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/usb.h>
->> +
->> +#include <sound/core.h>
->> +#include <sound/control.h>
->> +#include <sound/soc-usb.h>
->> +
->> +#include "../card.h"
->> +#include "../mixer.h"
->> +#include "../usbaudio.h"
->> +
->> +#include "mixer_usb_offload.h"
->> +
->> +#define PCM_IDX(n)  (n & 0xffff)
->> +#define CARD_IDX(n) (n >> 16)
->> +
->> +static int
->> +snd_usb_offload_route_get(struct snd_kcontrol *kcontrol,
->> +		      struct snd_ctl_elem_value *ucontrol)
->> +{
->> +	struct device *sysdev = snd_kcontrol_chip(kcontrol);
->> +	int card;
->> +	int pcm;
->> +
->> +	card = soc_usb_get_offload_device(sysdev, CARD_IDX(kcontrol->private_value),
->> +					  PCM_IDX(kcontrol->private_value),
->> +					  SND_SOC_USB_KCTL_CARD_ROUTE);
->> +
->> +	pcm = soc_usb_get_offload_device(sysdev, CARD_IDX(kcontrol->private_value),
->> +					 PCM_IDX(kcontrol->private_value),
->> +					 SND_SOC_USB_KCTL_PCM_ROUTE);
->> +	if (card < 0 || pcm < 0) {
->> +		card = -1;
->> +		pcm = -1;
->> +	}
->> +
->> +	ucontrol->value.integer.value[0] = card;
->> +	ucontrol->value.integer.value[1] = pcm;
->> +
->> +	return 0;
->> +}
-> see my earlier comment, should those two calls be collapsed to return
-> all the information in one shot?
->
->> +
->> +static int snd_usb_offload_route_info(struct snd_kcontrol *kcontrol,
->> +			      struct snd_ctl_elem_info *uinfo)
->> +{
->> +	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
->> +	uinfo->count = 2;
->> +	uinfo->value.integer.min = -1;
->> +	/* Arbitrary max value, as there is no 'limit' on number of PCM devices */
->> +	uinfo->value.integer.max = 0xff;
->> +
->> +	return 0;
->> +}
->> +
->> +static struct snd_kcontrol_new snd_usb_offload_mapped_ctl = {
->> +	.iface = SNDRV_CTL_ELEM_IFACE_CARD,
->> +	.access = SNDRV_CTL_ELEM_ACCESS_READ,
->> +	.info = snd_usb_offload_route_info,
->> +	.get = snd_usb_offload_route_get,
->> +};
->> +
->> +/**
->> + * snd_usb_offload_create_ctl() - Add USB offload bounded mixer
->> + * @chip - USB SND chip device
->> + *
->> + * Creates a sound control for a USB audio device, so that applications can
->> + * query for if there is an available USB audio offload path, and which
->> + * card is managing it.
->> + */
->> +int snd_usb_offload_create_ctl(struct snd_usb_audio *chip)
->> +{
->> +	struct usb_device *udev = chip->dev;
->> +	struct snd_kcontrol_new *chip_kctl;
->> +	struct snd_usb_stream *as;
->> +	char ctl_name[37];
->> +	int ret;
->> +
->> +	list_for_each_entry(as, &chip->pcm_list, list) {
->> +		chip_kctl = &snd_usb_offload_mapped_ctl;
->> +		chip_kctl->count = 1;
->> +		/*
->> +		 * Store the associated USB SND card number and PCM index for
->> +		 * the kctl.
->> +		 */
->> +		chip_kctl->private_value = as->pcm_index |
->> +					  chip->card->number << 16;
->> +		sprintf(ctl_name, "USB Offload Playback Route PCM#%d",
->> +			as->pcm_index);
->> +		chip_kctl->name = ctl_name;
->> +		ret = snd_ctl_add(chip->card, snd_ctl_new1(chip_kctl,
->> +				  udev->bus->sysdev));
->> +		if (ret < 0)
->> +			break;
->> +	}
->> +
->> +	return ret;
-Hi Pierre,
-> None of this looks Qualcomm-specific, shouldn't this be part of the
-> soc_usb framework instead of being added in the qcom/ stuff?
+> > > isn't feasible as it's expecting a sleepable context.
+> > 
+> > But this is not correct as you say above that the callback has always
+> > been made in IRQ context. Then this bug has been there since the
+> > introduction of the UCSI driver by commit
+> > 
+> 
+> No, I'm stating that commit 9329933699b3 ("soc: qcom: pmic_glink: Make
+> client-lock non-sleeping") was needed because the client list is
+> traversed under the separate glink callback, which has always been made
+> in IRQ context.
 
-Started working on this particular comment, and there are some things that needs to be considered if we moved this into SOC USB:
+Ok, got it. But then you meant "atomic context", not "IRQ context", in
+the paragraph above.
 
-1.  We do save the reference to the USB BE DAI link within the USB DT node, which can be fetched/referenced based on sysdev.  However, I'm not sure if everyone would potentially follow that way.
-
-2.  I tried a few implementations of adding a new SOC USB API, and the argument list was a bit long, because I didn't want to directly reference the usb_chip.
-
-Sorry for the delay, but I wanted to give a good stab at implementing this before bringing up the implications.  It is possible, but definitely not as clean as how we have it now IMO.
-
-Thanks
-
-Wesley Cheng
-
+Johan
 
