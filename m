@@ -1,155 +1,155 @@
-Return-Path: <linux-usb+bounces-13702-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13703-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ADAF957E92
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 08:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3053D957E97
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 08:46:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BF231F24F7E
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 06:43:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAA761F2493E
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 06:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACDA18E37C;
-	Tue, 20 Aug 2024 06:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfGfqWTx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063B41A29A;
+	Tue, 20 Aug 2024 06:46:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE8118E367;
-	Tue, 20 Aug 2024 06:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A15A1849;
+	Tue, 20 Aug 2024 06:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724136186; cv=none; b=ix8r7w77T9Hy8Y4kf33WjFVlEcysFsTZosO8K2Jo1tVlYfNDBWfjF/4kLuFazgx7F7hdHmkggjqUSrb3ImuQYcqI9g6Z+M5t78vxINFeGcKG03rjpdTZ+YszLyJ/RhDFyU1iZOo3o7AlUpG0VePzAZN5XOXWC0sUQVv7CdEsums=
+	t=1724136370; cv=none; b=IhZNY2HRtIrplztU11phZdWnLpfZaoCZsJuUsPGP5uXVoNcMk14SZ0fD987l7Go5L2RSmxnZRLIuUGSxKNtsunmMzdHpz0Z8Le4GCXgq8sU1EENlW9VFId63C1hvZr36mRUKqkR6YG7jDFY2yESV/qzR7PKwR6IR74RcArDsxYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724136186; c=relaxed/simple;
-	bh=w6EyYXc3Ndy/Jh0CvsxJfvu+nAOW2WtZ+hmTnufK72I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pzMDgPuEDG5FKzMim+j5TPMcODDwi2n3n2Jc302XrMbQRc82ac7U6cjBLMShJjVW0EyH8OCOiTqIPb/2qN9R+LqfF8gPoYi3XbY4QwiGfP74szktxHPzhYyMvPqCPBMq9LG8hPJX74khxhFatvuvYihY/ECRUa6FY4WUgoTadVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfGfqWTx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E43C4AF09;
-	Tue, 20 Aug 2024 06:43:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724136186;
-	bh=w6EyYXc3Ndy/Jh0CvsxJfvu+nAOW2WtZ+hmTnufK72I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GfGfqWTxv6nVsr6Z26gFvWerB7LKCwvv/HP778VS0+1IR2OM4V4rAqOz17kgy1XfK
-	 kS18eVUt6gQwF6xoJK0q2H01eKDyspu4U4eJ1bbV6bOeBPgW2EVsK+bWXAvO8rNYVE
-	 Cq+drnxMqt4p55HMQGR1c2209bemomaQ/+Hfmm2OATt+TTy5mnwlvu4sQ9bMe4llUk
-	 UEQM25FaRkAsRONsloJszOK49wHp6fznTKyI/UQTWbO5sY5hehkTtXEWbywUCos+6O
-	 V23hrmYldcdq0Tgd/2QyFw8Eh+Fd80KSJzaiRPvtjnFgWRiglWlQ3wX+2sH/iVlB0O
-	 ONLVL38Ol/5xA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sgIa7-000000002N9-38hD;
-	Tue, 20 Aug 2024 08:43:04 +0200
-Date: Tue, 20 Aug 2024 08:43:03 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Chris Lew <quic_clew@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Move unregister out of atomic
- section
-Message-ID: <ZsQ696Jq5aO8IMKG@hovoldconsulting.com>
-References: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
- <20240819-pmic-glink-v6-11-races-v2-2-88fe3ab1f0e2@quicinc.com>
+	s=arc-20240116; t=1724136370; c=relaxed/simple;
+	bh=hlhdFi5V1f0wXOwX08iasKeQHCJ0GHrGJirf5kJpTfM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=c1+Mc02qRqWOi1jFLTUv8PLQuMOpr/eqdr+7z3TICAu4DNLFV1jyhn5ul5M8hqPlaTsIR48J07Pa8gtH7JlpsrBULacmB3mhF1e2D3OhzFrr9EtJ0u9+tSU6vWPUzwqmqd78PS2dyxg75K0V/uVPPandWl5LmZssonA9aJcQbao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Wp0LD0b31zfbdL;
+	Tue, 20 Aug 2024 14:44:04 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1084F180105;
+	Tue, 20 Aug 2024 14:46:04 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
+ (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 20 Aug
+ 2024 14:46:03 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+	<krzk@kernel.org>, <alim.akhtar@samsung.com>, <linux-usb@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] usb: xhci: Simplify with scoped for each OF child loop
+Date: Tue, 20 Aug 2024 14:53:03 +0800
+Message-ID: <20240820065303.560125-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240819-pmic-glink-v6-11-races-v2-2-88fe3ab1f0e2@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
-On Mon, Aug 19, 2024 at 01:07:46PM -0700, Bjorn Andersson wrote:
-> Commit '635ce0db8956 ("soc: qcom: pmic_glink: don't traverse clients
+Use scoped for_each_available_child_of_node_scoped() when iterating over
+device nodes to make code a bit simpler.
 
-Looks like you copied the wrong SHA again. This should be
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ drivers/usb/host/ehci-exynos.c | 9 ++-------
+ drivers/usb/host/ohci-exynos.c | 9 ++-------
+ 2 files changed, 4 insertions(+), 14 deletions(-)
 
-	9329933699b3 ("soc: qcom: pmic_glink: Make client-lock non-sleeping")
+diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+index f40bc2a7a124..e3a961d3f5fc 100644
+--- a/drivers/usb/host/ehci-exynos.c
++++ b/drivers/usb/host/ehci-exynos.c
+@@ -48,7 +48,6 @@ struct exynos_ehci_hcd {
+ static int exynos_ehci_get_phy(struct device *dev,
+ 				struct exynos_ehci_hcd *exynos_ehci)
+ {
+-	struct device_node *child;
+ 	struct phy *phy;
+ 	int phy_number, num_phys;
+ 	int ret;
+@@ -66,26 +65,22 @@ static int exynos_ehci_get_phy(struct device *dev,
+ 		return 0;
+ 
+ 	/* Get PHYs using legacy bindings */
+-	for_each_available_child_of_node(dev->of_node, child) {
++	for_each_available_child_of_node_scoped(dev->of_node, child) {
+ 		ret = of_property_read_u32(child, "reg", &phy_number);
+ 		if (ret) {
+ 			dev_err(dev, "Failed to parse device tree\n");
+-			of_node_put(child);
+ 			return ret;
+ 		}
+ 
+ 		if (phy_number >= PHY_NUMBER) {
+ 			dev_err(dev, "Invalid number of PHYs\n");
+-			of_node_put(child);
+ 			return -EINVAL;
+ 		}
+ 
+ 		phy = devm_of_phy_optional_get(dev, child, NULL);
+ 		exynos_ehci->phy[phy_number] = phy;
+-		if (IS_ERR(phy)) {
+-			of_node_put(child);
++		if (IS_ERR(phy))
+ 			return PTR_ERR(phy);
+-		}
+ 	}
+ 
+ 	exynos_ehci->legacy_phy = true;
+diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+index bfa2eba4e3a7..1379e03644b2 100644
+--- a/drivers/usb/host/ohci-exynos.c
++++ b/drivers/usb/host/ohci-exynos.c
+@@ -37,7 +37,6 @@ struct exynos_ohci_hcd {
+ static int exynos_ohci_get_phy(struct device *dev,
+ 				struct exynos_ohci_hcd *exynos_ohci)
+ {
+-	struct device_node *child;
+ 	struct phy *phy;
+ 	int phy_number, num_phys;
+ 	int ret;
+@@ -55,26 +54,22 @@ static int exynos_ohci_get_phy(struct device *dev,
+ 		return 0;
+ 
+ 	/* Get PHYs using legacy bindings */
+-	for_each_available_child_of_node(dev->of_node, child) {
++	for_each_available_child_of_node_scoped(dev->of_node, child) {
+ 		ret = of_property_read_u32(child, "reg", &phy_number);
+ 		if (ret) {
+ 			dev_err(dev, "Failed to parse device tree\n");
+-			of_node_put(child);
+ 			return ret;
+ 		}
+ 
+ 		if (phy_number >= PHY_NUMBER) {
+ 			dev_err(dev, "Invalid number of PHYs\n");
+-			of_node_put(child);
+ 			return -EINVAL;
+ 		}
+ 
+ 		phy = devm_of_phy_optional_get(dev, child, NULL);
+ 		exynos_ohci->phy[phy_number] = phy;
+-		if (IS_ERR(phy)) {
+-			of_node_put(child);
++		if (IS_ERR(phy))
+ 			return PTR_ERR(phy);
+-		}
+ 	}
+ 
+ 	exynos_ohci->legacy_phy = true;
+-- 
+2.34.1
 
-as we discussed.
-
-> list without a lock")' moved the pmic_glink client list under a
-> spinlock, as it is accessed by the rpmsg/glink callback, which in turn
-> is invoked from IRQ context.
-> 
-> This means that ucsi_unregister() is now called from IRQ context, which
-
-And this should be "atomic context" as pdr notifications are done from
-a worker thread.
-
-> isn't feasible as it's expecting a sleepable context. An effort is under
-> way to get GLINK to invoke its callbacks in a sleepable context, but
-> until then lets schedule the unregistration.
-> 
-> A side effect of this is that ucsi_unregister() can now happen
-> after the remote processor, and thereby the communication link with it, is
-> gone. pmic_glink_send() is amended with a check to avoid the resulting NULL
-> pointer dereference.
-> This does however result in the user being informed about this error by
-> the following entry in the kernel log:
-> 
->   ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: failed to send UCSI write request: -5
-> 
-> Fixes: 635ce0db8956 ("soc: qcom: pmic_glink: don't traverse clients list without a lock")
-
-Fixes: 9329933699b3 ("soc: qcom: pmic_glink: Make client-lock non-sleeping")
-
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Tested-by: Amit Pundir <amit.pundir@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-
-> @@ -269,11 +284,12 @@ static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
->  static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
->  {
->  	struct pmic_glink_ucsi *ucsi = priv;
-> +	unsigned long flags;
->  
-> -	if (state == SERVREG_SERVICE_STATE_UP)
-> -		schedule_work(&ucsi->register_work);
-> -	else if (state == SERVREG_SERVICE_STATE_DOWN)
-> -		ucsi_unregister(ucsi->ucsi);
-> +	spin_lock_irqsave(&ucsi->state_lock, flags);
-> +	ucsi->pd_running = state == SERVREG_SERVICE_STATE_UP;
-
-Add parentheses for readability?
-
-> +	spin_unlock_irqrestore(&ucsi->state_lock, flags);
-> +	schedule_work(&ucsi->register_work);
->  }
->  
->  static void pmic_glink_ucsi_destroy(void *data)
-> @@ -320,6 +336,7 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
->  	INIT_WORK(&ucsi->register_work, pmic_glink_ucsi_register);
->  	init_completion(&ucsi->read_ack);
->  	init_completion(&ucsi->write_ack);
-> +	spin_lock_init(&ucsi->state_lock);
->  	mutex_init(&ucsi->lock);
->  
->  	ucsi->ucsi = ucsi_create(dev, &pmic_glink_ucsi_ops);
-
-Looks good otherwise:
-
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-
-Johan
 
