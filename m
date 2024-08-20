@@ -1,163 +1,98 @@
-Return-Path: <linux-usb+bounces-13735-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13736-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 997369586B5
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 14:16:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCFD0958736
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 14:41:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DA9FB28A18
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 12:16:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8906E282114
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 12:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B8918FDAC;
-	Tue, 20 Aug 2024 12:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE54918FDB9;
+	Tue, 20 Aug 2024 12:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XWRDMqKH"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HStJNNPz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD2318FC9D;
-	Tue, 20 Aug 2024 12:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E094D18B47F
+	for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 12:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724156149; cv=none; b=ShF1DMNzMagF8sK5I0lxO7j7IeG6sRFvI/t3DokASlqGFSlJC9tIuUVNORP1pY7yvT8G472LpUTn8G1ALorRTsWK9CgE+g7EBoP+pmIIxPSf/J0ooCY0bGD8OHH/9+FA+k33xbT+io81fCnzTzBaIHGKb7GHmgnahUGnZZ3qZ50=
+	t=1724157667; cv=none; b=M+IjNXY4Er069+zbr9tZjMTvrXmFstvm6aJ1QCIVV6dOkqX/7hc944Dxgli7wPd9stZrBgALG9tCprw8mtmDmnUUklo0kQL2eNnZU9zCFilzCsGxBsXgQstFdc3D1rI8AEZbixbFqgc3d/x6JYav2IKBlgxIr4opVvxsT6Z39RY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724156149; c=relaxed/simple;
-	bh=E8GL/aqCh5O1CsiCNm6aKgAsh+4+sSOKXFJjkFpdfrw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nztXC+W8/+klTmmyhISow70cY0NsebnxCneNqXg5JUCD03Qpwk6QuPY4dblxZRqXEEqRAj5kxeWvSMFc8V1togcLec+iDMvqUM8Bkvs1sjC+eDihkjJPWrAsDqnduKgn2WXlY/h5qvqV4GMF6+tJkFK3EbVGu7RhEqVF22dJS7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XWRDMqKH; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47K9EHap019635;
-	Tue, 20 Aug 2024 12:15:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=ZFLDc/m7PT3C3d+KxaBTQK
-	APMhFH4U00e8Mb6tWMps4=; b=XWRDMqKHovkuGWdrQSC8QGHmuZz8VSovXD55sa
-	/o6VcuItEUIxqocTLIXvtRjuhyn6jtDrZbUK1EeZQsjT3RX0/38SaP/Ep6dHd5nK
-	eKB2eCiaLlrhd/lTkLGdjJ4qu9t80wyZ4aRLnLR0cRCdQhm4TRPt9NYPPAZ744Xs
-	QHENNOn8pLJCxZQUaDdmbnZ99CwG3lUj1zvtMNsc5xIJVYP+Xk3x4m+4w/iuDCqm
-	6QZf75lruLU0WPMDPJxvLkDodEIVbUsFUU1cRWJKZM7J1Xdp0rq1PoscrW9orYIX
-	w44LynB/uM4E39znxws2n871U5mBbOZp5+tp/gLBQyrGZplw==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412m32qqg9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 12:15:44 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47KCFhSi000797
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 12:15:43 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 20 Aug 2024 05:15:41 -0700
-From: Prashanth K <quic_prashk@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Prashanth K
-	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
-Subject: [v3] usb: dwc3: Avoid waking up gadget during startxfer
-Date: Tue, 20 Aug 2024 17:45:24 +0530
-Message-ID: <20240820121524.1084983-1-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1724157667; c=relaxed/simple;
+	bh=PGSEQAyIi9jI9oBqITOqFC8xkaLtciX6Fdb8rojnYRo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cBJUmv1ioe8T2rhnhvPIc6hyIypSrDSqtiz56QEPwPxGpIbAE2lcmEULkK66V3/b7HaVX+AX3HwUCcvnZnus1UtSZk4948Lupx2hT0RTNgKefiL7yNE8bbfeKik4nokZs9fkX3+UNLSnx7sWSeOP0m4FTs+vQ0XxhPbMnF2Mwp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HStJNNPz; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5333b2fbedaso2572789e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 05:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1724157662; x=1724762462; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=th9bq7VQDRijrIGlbRpXI4kxULxr9Qo0oEmRThChA6U=;
+        b=HStJNNPzuu0/AI3Ca29alwvbcRKL1K+FehVrwMhE4P5VDiEv4I3gmdd3B1x9QRaYiZ
+         ZpmigPqQv9iwo1AcorgXhtId9GsqBHxqxtnthrxC1FQIytt82URK/hffaA70Cw2XkWJU
+         0Pkd1ZHPXMXZJ/ichO20V17OrZcnNWOjPc/4OKffE7LJSfqW5NV3NnGYCy6DRfTeYmSu
+         CanOdhaL58fM6x3+De2Ssbo0MBj74woov03m8hf2Yycb0imA/0idsWhA/jPDGxbgzF2L
+         xCxAUEPzaB72gaa3MnlrwnFamN6yLiZEavHYL6YG+tlMA+95r+fjiN+rsLv1eDL984aZ
+         59vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724157662; x=1724762462;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=th9bq7VQDRijrIGlbRpXI4kxULxr9Qo0oEmRThChA6U=;
+        b=UIw2ICpOy+LtFM5MEgyBw3zDNq6qaknkD5EfCm2aLqT19F82ucQvxdXGqHS5j6881h
+         w2+/BVe3OICTY0/gzMmw16GfjwYtCzEN4bUs/P1Mo3kJu+Pj7R608YaxM9dNwwZ+Rnk2
+         J1FBlxbsr2IW/3KiBz/OeX8xUBkYkpfR/9ULCwHlS6UNmkLqhVuUt8cMBydMdus8CXYw
+         LyrlFGIstu3ZynZUCeMx8XvCwz/kn3917trxXPbJIUoFx78vbNauRnXhn2dKTmoe/9n5
+         l8ufcc0/nnUevHdL/USnCbY1cR/UJMmGLCi2NXRPk6fpN4kTvKzIWn5EPKGURAhFFGBi
+         CkaQ==
+X-Gm-Message-State: AOJu0Yw8G+HdW+JYzkWWQLFCkY8jbii8FRu/QhTn2692VvZ19eeZBSpY
+	768ysFVZgvrv1DSnV2DdBGZUEC8XyK1otue8QqbmW1s38SON17ionHyBtYuOaC4=
+X-Google-Smtp-Source: AGHT+IFNYgoQNngidsNHNA8R7CTMeA6kfVvv/tq+qTTtkoOL0vjEXyJyslyeRT0dXztU8fTH3SUt5g==
+X-Received: by 2002:a05:6512:6303:b0:533:44e7:1b2a with SMTP id 2adb3069b0e04-53344e71c63mr623283e87.40.1724157661251;
+        Tue, 20 Aug 2024 05:41:01 -0700 (PDT)
+Received: from ?IPV6:2a02:3033:209:8a31:69e4:f574:e675:7754? ([2a02:3033:209:8a31:69e4:f574:e675:7754])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a838393598fsm758618966b.133.2024.08.20.05.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Aug 2024 05:41:00 -0700 (PDT)
+Message-ID: <f0155b49-f940-471b-834c-62254afc52d3@suse.com>
+Date: Tue, 20 Aug 2024 14:40:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jgTIpnwW84HZFp_fK_rUHGNczyWr2Hcb
-X-Proofpoint-ORIG-GUID: jgTIpnwW84HZFp_fK_rUHGNczyWr2Hcb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-20_09,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- suspectscore=0 priorityscore=1501 phishscore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxlogscore=534
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408200091
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cdc-acm: Add DISABLE_ECHO quirk for GE HealthCare UI
+ Controller
+To: Ian Ray <ian.ray@gehealthcare.com>, Oliver Neukum <oneukum@suse.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240814072905.2501-1-ian.ray@gehealthcare.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20240814072905.2501-1-ian.ray@gehealthcare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-When operating in High-Speed, it is observed that DSTS[USBLNKST] doesn't
-update link state immediately after receiving the wakeup interrupt. Since
-wakeup event handler calls the resume callbacks, there is a chance that
-function drivers can perform an ep queue, which in turn tries to perform
-remote wakeup from send_gadget_ep_cmd(STARTXFER). This happens because
-DSTS[[21:18] wasn't updated to U0 yet, it's observed that the latency of
-DSTS can be in order of milli-seconds. Hence avoid calling gadget_wakeup
-during startxfer to prevent unnecessarily issuing remote wakeup to host.
 
-Fixes: c36d8e947a56 ("usb: dwc3: gadget: put link to U0 before Start Transfer")
-Cc: <stable@vger.kernel.org>
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
-v3: Added notes on top the function definition.
-v2: Refactored the patch as suggested in v1 discussion.
 
- drivers/usb/dwc3/gadget.c | 31 +++++++------------------------
- 1 file changed, 7 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 89fc690fdf34..d4f2f0e1f031 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -287,6 +287,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async);
-  *
-  * Caller should handle locking. This function will issue @cmd with given
-  * @params to @dep and wait for its completion.
-+ *
-+ * According to databook, if the link is in L1/L2/U3 while issuing StartXfer command,
-+ * software must bring the link back to L0/U0 by performing remote wakeup. But we don't
-+ * expect ep_queue to trigger a remote wakeup; instead it should be done by wakeup ops.
-+ *
-+ * After receiving wakeup event, device should no longer be in U3, and any link
-+ * transition afterwards needs to be adressed with wakeup ops.
-  */
- int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
- 		struct dwc3_gadget_ep_cmd_params *params)
-@@ -327,30 +334,6 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
- 			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
- 	}
- 
--	if (DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_STARTTRANSFER) {
--		int link_state;
--
--		/*
--		 * Initiate remote wakeup if the link state is in U3 when
--		 * operating in SS/SSP or L1/L2 when operating in HS/FS. If the
--		 * link state is in U1/U2, no remote wakeup is needed. The Start
--		 * Transfer command will initiate the link recovery.
--		 */
--		link_state = dwc3_gadget_get_link_state(dwc);
--		switch (link_state) {
--		case DWC3_LINK_STATE_U2:
--			if (dwc->gadget->speed >= USB_SPEED_SUPER)
--				break;
--
--			fallthrough;
--		case DWC3_LINK_STATE_U3:
--			ret = __dwc3_gadget_wakeup(dwc, false);
--			dev_WARN_ONCE(dwc->dev, ret, "wakeup failed --> %d\n",
--					ret);
--			break;
--		}
--	}
--
- 	/*
- 	 * For some commands such as Update Transfer command, DEPCMDPARn
- 	 * registers are reserved. Since the driver often sends Update Transfer
--- 
-2.25.1
-
+On 14.08.24 09:29, Ian Ray wrote:
+> USB_DEVICE(0x1901, 0x0006) may send data before cdc_acm is ready, which
+> may be misinterpreted in the default N_TTY line discipline.
+> 
+> Signed-off-by: Ian Ray <ian.ray@gehealthcare.com>
+Acked-by: Oliver Neuku <oneukum@suse.com>
 
