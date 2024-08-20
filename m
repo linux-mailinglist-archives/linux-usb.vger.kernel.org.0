@@ -1,129 +1,106 @@
-Return-Path: <linux-usb+bounces-13725-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13726-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACC4F958553
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 13:02:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D7C79585EA
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 13:34:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 692C3283CCF
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 11:02:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E95B4287469
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 11:34:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF3B18B497;
-	Tue, 20 Aug 2024 11:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E37918E75D;
+	Tue, 20 Aug 2024 11:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gY6pOvk3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n3z7TcFI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8B3158D8F
-	for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 11:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81E118DF9F;
+	Tue, 20 Aug 2024 11:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724151728; cv=none; b=Hytmgv3XSfeacBbumLvHPHyB6ruFU1HPWISo4JIUsvMVx0pz7g2+nVK2yctWXhodrcTBmE3LV6re/SB2+w+0KBiyo5WLwDXnpI5fVt/ov0ma6O/iQJS6pSHgIx2yJZu4SS2//c2AVAStA1VnJ+x69vLKI9xBD6Oo7yvalRFPvEk=
+	t=1724153680; cv=none; b=YyMbPt8B8sTkKkLPkLfPCwfxwIUBGzMyeXjYxNmBt87JRaVZh4HI+B5z0us39XlryuS/WVdfNZWEXqSiaPtH/mA7+M5yoyP5UsPju43R7SDe65YJwYB0qmo4D5/JvQrAqHwrmE9abgvrWbqSDLCJAuW0//sO1klCMUgT2id0fJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724151728; c=relaxed/simple;
-	bh=R8eqTAsyNbEdNAd4MQYKwZBnMmMVIm/ciWPbck58jLY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=Ea5VbCAxjWk5e2x8881IMUo8bAyBFP6gxxHXQ6wEGJJ7ueMVySiZRET8XP8sJGTYoepf0+HG848ZlKxUTLtiFz+2k37TFceADvafXB2xUrFbt0xSlXsFq9qzdsomVtMvEnEA6Ly2QRZDzOJbPolNNQ34T8FTy5FAfUmJGW+WH7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gY6pOvk3; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f3f25a1713so2162431fa.2
-        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 04:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724151724; x=1724756524; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8eqTAsyNbEdNAd4MQYKwZBnMmMVIm/ciWPbck58jLY=;
-        b=gY6pOvk3KASS+pYA+NihlRfsSBo9S+LygJ4+tVPj+GFAbJCcRRu8O6eQYzv/HWxKTs
-         B0L+KllrpFXUpnhN+L2j1AiEeSZqhj1XN7qozVd3i3jERWbmr/hfP1yd6C0OhaZdilDd
-         kH7TbdvgxraxlW/I7E1ZiyY3AC8+XvAyLXd1ssJ6dwv2oxeUwt5bxzxvdARh0nb3Qzr+
-         /bNK08Vk30+72pqYkUQ62S7NdhzMUjoQyg0fYPYxHEtM+VWieBmeBnL2jZ++JzjzplF+
-         pFiUiTLVmV2nQ1Vcm16vLeMHHovlhAPPSYHFLaJYcOWk0va6n5Cj9EUsWVx++7lpT7gS
-         PPbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724151724; x=1724756524;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R8eqTAsyNbEdNAd4MQYKwZBnMmMVIm/ciWPbck58jLY=;
-        b=L2sb519AUh9MfYAnSHjKbxbd6hay3PLNvqrS2aqYmkOmK/aYV12hPSGAavxh9xJv71
-         laqroExvjbtjWp1sj5NP/ljvAAurY+DWoDLYYB86Wz88byffKLbekmXXHDKqnJ+wu7pv
-         ePTCcQ4/l6kmq5rKX1tN6Dksvdn7vmGNrXOu4CaffTa72Hhk/YEXtazgz36ziPS3/EqF
-         WEaOZnRMWm6lniOg1oqY4CcTEzXD8fgACXZnJdBT37II4jfagTUUNWf3uLlrtB8H3HUD
-         nzTtw+quqQs2x5vQy+eujw62TnU9xyuJPrmWFezacTyxx6sdeXHmZZzv8s63vVJla6WV
-         MB1w==
-X-Gm-Message-State: AOJu0YxEFN+X4Mlx1ei1u78GDHu7TgNOuA09DT5zo2RpSUepYhwRdjSg
-	VsWDzg9Q+nybdh0twVG8Eghxsj7iMvpEX56DWIzYGMf4z3MkSZZJ/yvrGw==
-X-Google-Smtp-Source: AGHT+IHrwCOCpIcN8dEhqMR7XoXtm83cIggZ+4IA1Csh0BrfmESd8TO2ZwitmAHNATgn29hycyr3Pw==
-X-Received: by 2002:a05:651c:2209:b0:2f3:bfcc:245f with SMTP id 38308e7fff4ca-2f3bfcc27dfmr94235051fa.32.1724151723866;
-        Tue, 20 Aug 2024 04:02:03 -0700 (PDT)
-Received: from foxbook (bfh246.neoplus.adsl.tpnet.pl. [83.28.45.246])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bebc08140csm6640220a12.83.2024.08.20.04.02.02
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 20 Aug 2024 04:02:03 -0700 (PDT)
-Date: Tue, 20 Aug 2024 13:01:58 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: mista.tapas@gmx.net
-Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
-Subject: Re: Misbehaving Alder Lake-N PCH USB 3.2 xHCI Host Controller
-Message-ID: <20240820130158.339b4d87@foxbook>
-In-Reply-To: <a3bcbff4-1e68-4856-bf27-aea3e71298a2@gmx.net>
+	s=arc-20240116; t=1724153680; c=relaxed/simple;
+	bh=ANtOJyH0JV4o+Vunwy/aTAJ4hHjalojLyLOaxtkYHnM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hLjIBXJ9a2ORSYy169+q/DLfKQiXBjoXHU8q0pIK9ZP7y9rUYSdNruAQkVfzAdXGjGdlf675QxzeqsvGkkbXTiSkStZrcD8S3ZaCBuq0z8fqSxSnz1dVrHVC74aJBe1TRXJ5sUzrcJxRSZuF2JEfOtXcYlGFeBgni8UAk1Y6FlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n3z7TcFI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEFC5C4AF0B;
+	Tue, 20 Aug 2024 11:34:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724153680;
+	bh=ANtOJyH0JV4o+Vunwy/aTAJ4hHjalojLyLOaxtkYHnM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=n3z7TcFIHPL8iXLzTlpTVWyhqqVoiF9iQqDZYpnVXsKMfCECigZ7bv+l+0N6aHuV3
+	 a08JM+h0lfPfQFXO03a/B0nPpDhG3PRxs6MvNXXxEO4QkJTbCGugRxb20Zsc1swGtP
+	 igW4d8mu38ZEg1J4UNnmPQJ3HyJ07lkynfG5GRrQL9xJVJg8EddNyV5J2U9dGryQzp
+	 UOuFSeLHq7tKnLnnJBtRXn1nAN+nmg9rucjqrZ/hHZ+QNGEM6I/SZLHO5c0PDdJvMc
+	 1slCSmIbvDmSgA3HiIDU8fKfygzeWJZsps6JmxamMf/by60J/bWgVEcxL7LxeZxGUa
+	 2SY/y8dGmqUrw==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Subject: [PATCH v2 0/2] X1E80100 multiport USB controller
+Date: Tue, 20 Aug 2024 13:34:21 +0200
+Message-Id: <20240820-topic-h_mp-v2-0-d88518066372@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAD1/xGYC/23MQQ7CIBCF4as0sxZDaWnAlfcwjTFTKrMoUKhE0
+ 3B3sWuX/0vet0MykUyCS7NDNJkSeVdDnBpA+3BPw2iqDYKLniuu2eYDIbP3JTApVKcnpXvZcai
+ HEM1M7wO7jbUtpc3Hz2Hn9rf+ZXLLOOtQzv2g5DBM6rq+CMnhGf0CYynlCxPz35+mAAAA
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Krishna Kurapati <quic_kriskura@quicinc.com>, 
+ Konrad Dybcio <quic_kdybcio@quicinc.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724153674; l=945;
+ i=quic_kdybcio@quicinc.com; s=20230215; h=from:subject:message-id;
+ bh=ANtOJyH0JV4o+Vunwy/aTAJ4hHjalojLyLOaxtkYHnM=;
+ b=K3bAl5PJMv9ZN1iDgh7XLgtzoKbG9FJwTpjVu9oR3uuopmboqbu44hYSdEiIEy921RhSlf1Sh
+ uMg/YJP73GhAZP7wbIVr4j2Kp9xysicOPA3rt1ccglXDyhtBX/B8NlU
+X-Developer-Key: i=quic_kdybcio@quicinc.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Hi,
+This series configures the multiport USB controller on X Elite. No
+driver changes seem necessary, tested on the Surface Laptop 7.
 
+Signed-off-by: Konrad Dybcio <quic_kdybcio@quicinc.com>
+---
+Changes in v2:
+- Work around git pulling incorrect author address from mailmap (base
+  commit in the cover letter is now screwed)
+- Pick up tags
+- Link to v1: https://lore.kernel.org/r/20240809-topic-h_mp-v1-0-3c5f468566d8@quicinc.com
 
-I can offer a few quick suggestions:
+---
+Konrad Dybcio (2):
+      dt-bindings: usb: qcom,dwc3: Document X1E80100 MP controller
+      arm64: dts: qcom: x1e80100: Add USB Multiport controller
 
-1. When kernel bugs are suspected, try other kernels offered by your
-distribution. See if there is any chance that -rt paches are causing
-issues.
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 170 +++++++++++++++++++++
+ 2 files changed, 173 insertions(+)
+---
+base-commit: 96ecf94c28e732cd5f576ed0906398cf0b1a67a6
+change-id: 20240809-topic-h_mp-52839d894530
 
-2. Does any of that go away when ALSA buffer size is increased or is it
-always there on this machine?
+Best regards,
+-- 
+Konrad Dybcio <quic_kdybcio@quicinc.com>
 
-3. When posting wall of text errors, start at the beginning because it
-may offer clues about what originally went wrong ('dmesg -W' helps).
-
-4. Playing a tiny file with 'aplay --period-size=48 --buffer-size=96'
-is a simpler way to reproduce the problem and generates a shorter log.
-
-
-> I have to note that these "WARN Event TRB for slot 18 ep 1 with no TDs
-> queued?" were there before enabling this dynamic debug feature, I just
-> forgot to mention them in my original mail.
-
-This particular part is probably caused by our failure to properly
-handle the preceding condition ("underrun event still with TDs queued").
-I can't know for sure, but assuming no hardware bugs, it appears that a
-new transfer descriptor is queued after the hardware reports a ring
-underrun but before we actually process the report. While processing
-the underrun we are surprised by this unexpected TD, then we see that
-skip flag is set so we erronously report all TDs (most likely including
-the new one) as failed to the audio driver. Meanwhile the hardware may
-execute this transfer and report its completion later, at which point
-we have already forgotten about it.
-
-*Maybe* this creates enough chaos that some sort of infinite loop of
-cascading errors is established as a result of one recoverable error.
-Or maybe your problem is elsewhere and this bug is only a side effect.
-
-Are you able to test kernel patches?
-
-
-Mathias may have other ideas to try.
-
-Regards,
-Michal
 
