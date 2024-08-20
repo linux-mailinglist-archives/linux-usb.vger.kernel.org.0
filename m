@@ -1,239 +1,191 @@
-Return-Path: <linux-usb+bounces-13737-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13738-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8544E9587A1
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 15:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E2E4958839
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 15:47:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FE2D1F228EF
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 13:12:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B61D1F231F3
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2024 13:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED4D190064;
-	Tue, 20 Aug 2024 13:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E796319066D;
+	Tue, 20 Aug 2024 13:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kHQaRC2J"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="PAMGYst3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB502745C
-	for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 13:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A776190462
+	for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 13:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724159529; cv=none; b=NXPy2EPXhJQLKa0TshBJLUZUaKZmpvNqlK7gwsrSdGDSWa/ze3TScJoPJC048sYmxcM9OTPdILu/K4pnohkFMDXMbuvbZmx/6bvR29/gne1yQoaXyIBSfnYqnwwngQl8tU3Veot5ZQyY5+xWyTukrWzAF33oeNPOf0ay4fcxiBc=
+	t=1724161619; cv=none; b=BjpWtnZe3u6tmFGlmug1DwHWlHesPmNWktBnWVgrrkl4+gztznmyHKIWCjIzt4bmPyMK9u4gZbjwzenFCNACcrLy23wjFOo5AJNmGjv5nYWREUaHDmNy1YesMVDmLfd1CdiBHWpu2FEUyF2BqvDBwKQ8wflCuwW8VBFKe+pvKPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724159529; c=relaxed/simple;
-	bh=/5ABYsmfvceLJLtqvGgugVq6NKWA6RuyJW7ky1Vbi58=;
+	s=arc-20240116; t=1724161619; c=relaxed/simple;
+	bh=DGs+YQ/MemHzCI0cJ+pHenoa+Ft3gJVm3OGIx/wVAbo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U/W5fF6Zlnoz2rRNdsi8ZJlfETDHm/MvXjRoFHFeqgcBaCpRCDL6UdHhC1k6VgtwzZnP8cObZtbBme3gzvo8ui0F15W2DuVn//gXnuokTbXeuE4VnU8W7weoJE0kmQduUsbnF7aZ2E6ApHmPFhxXpHQeugoe25jP0rtAF9c8uQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kHQaRC2J; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724159527; x=1755695527;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/5ABYsmfvceLJLtqvGgugVq6NKWA6RuyJW7ky1Vbi58=;
-  b=kHQaRC2JntemhtEX0IjZcdJ8TcpMS1fNCh3AfvqQ8sRBhFobisB6ZZws
-   gu+VTO8h59XXId06IsmRSrTpDaD6NtIaReyA0PeYorwI/hlu1TfsOzwPd
-   tchuc6jK++qUeNlJ4Evo/z59DB5pYDoL/EsGWFkupjobjEmmIu4irUi7m
-   DrSVjlNcfAUJ/WO0GoO4npg8YHowOSHaCIcVpZZHB6xaTNZboqYWHvaOG
-   QGoDAiE08knCmHtIiTDYtvg5YtbNa72HOvF5sneM+t816CYZckqkd6lF+
-   ki5a2sv/FM+yq99OgdfAzExmqXD/HWUnSqXHij1gV+fDXBUGpm83nwT89
-   Q==;
-X-CSE-ConnectionGUID: vaFjesHEQkOWdDPcj0Ri8Q==
-X-CSE-MsgGUID: P0/ET9yPQyG0YijbyLTAEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="13113620"
-X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
-   d="scan'208";a="13113620"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 06:12:06 -0700
-X-CSE-ConnectionGUID: EcGzWlcAShWwz1y7Grv3DQ==
-X-CSE-MsgGUID: +VNvz7UIR/WX6kd3miVV+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
-   d="scan'208";a="83925876"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa002.fm.intel.com with SMTP; 20 Aug 2024 06:12:03 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 20 Aug 2024 16:12:01 +0300
-Date: Tue, 20 Aug 2024 16:12:01 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jameson Thies <jthies@google.com>,
-	Benson Leung <bleung@chromium.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-usb@vger.kernel.org,
-	"Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-	Bartosz Szpila <bszpila@google.com>
-Subject: Re: [PATCH v2 1/6] usb: typec: ucsi: Remove unused fields from
- struct ucsi_connector_status
-Message-ID: <ZsSWIQ7sMAeF9v9Y@kuha.fi.intel.com>
-References: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
- <20240816135859.3499351-2-heikki.krogerus@linux.intel.com>
- <CANFp7mUDm9Ya9Gjv9Bv_neL22SuDocmz_8HCGVbnd8y-0gd7tA@mail.gmail.com>
- <ZsMoUWSMtaxteBBf@kuha.fi.intel.com>
- <CANFp7mU69-4_v5JaycrPjt3ZnfyRa8PypFa=_gbuW9qW6_z9dw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DXV60eBqpYiLpa+RQHvYSGnJ0yYwzqQ3G8AbBCWErgRKdb+aNe4tSrHADZihP4m2g1GRgxpJy0k/B0JEk20c+9qJTsiL7yKPrcHGNtJI09al4ZMtATHKQhmDIkIqfqZPv5YrO4hVVjgd9YIRLElT8WVFUgQtMVWf8QBDF0RRV6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=PAMGYst3; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7a35eff1d06so17047685a.0
+        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2024 06:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1724161616; x=1724766416; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I830akbhhKKwI8d91ZRK8IKM+grDVk/w+Lt2TLToceE=;
+        b=PAMGYst3Nj/JhGJ71MXqkUV/SIynbVvumC+1lXIwIt2QPhKYPAol+A+gfYYfnuTK/I
+         FAFFw/UIONRPTxfPbw1oGNS2HV0gdVljp7R13dgbBUtQvMTmckNPdp17iXzp7gG3WgN0
+         ca45ayelOQKnKlf7l/+Kq+2qUjmv1oqwsxi0WLn+IpSOKl5X8yw+L+OS8ASnP47wIYIA
+         fdTYkbj0Q6Eg7pV2DPXo/F7iYE9FkBy/C2jY5niDtmOvLtH3EgGlnxtQPXYHtMoDig96
+         lKNR+ggoa0DerzY/ZV6jw4+IyGUj5q6HpJaRKtZYHHKhUqPoXstb+fSFMQQibYbxFylI
+         kLmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724161616; x=1724766416;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I830akbhhKKwI8d91ZRK8IKM+grDVk/w+Lt2TLToceE=;
+        b=tTy9nOkOD7DaqQgm590bFdcKq7EPQiqlu9bZTFih5LpUeQab+/V6oeTvXr5bCACcgR
+         O9B6Yfo8aMCV1Z4ermjg6WJ+fEskwUOeUgVI8sQzgf+mFThA3fjFWAzqPrZcOnsL3jrA
+         ZsgMhTDqqaQsR0Elz9mZYNPVk3oj7KWw/Xmy+S2fs8/u4zqANMt1yHZVqsicFI6OxVmY
+         2k8PDB1WEWdsIfHSu8UdCasckt4u9wjzz29F7Coo42ZXahXEYi4Bnc38jx26s1PtfL8P
+         XEtGfOhD1kfHQ1IJksnOuYvqkJ2eGwJwipOZ7erHzZ/kCgHRu5Xdtl7wMrcV7Qdwesed
+         L7BA==
+X-Forwarded-Encrypted: i=1; AJvYcCVWMtCk1GRT8ccP5HUd7zW2Ttn7YqKhWV+6nQfRLTY6pCs6864E9JDkSiZZkgVtQMFg3krWpf1iHvx72bXJQ4DG6KgBDLc/1lpF
+X-Gm-Message-State: AOJu0YzsfAJDGEWtVvbXlCPjPvBaf/KCZ5GnzCOZfZKjMkk1vGJTbIyM
+	Ht9GHU4ECvYmHkkUd65TakFOiMWAWWu/L25YBi+XdhDODFVRKHy6AXPRSnX6AQ==
+X-Google-Smtp-Source: AGHT+IEI4p59YOvtEm63+a/jQKuInzhxdbxB8AjFcSMqvIayjz8ztlKu6vsDqXATlGHaKRjS/mRyUQ==
+X-Received: by 2002:a05:620a:1a12:b0:7a6:6b98:8e36 with SMTP id af79cd13be357-7a66b988f33mr163494185a.16.1724161615865;
+        Tue, 20 Aug 2024 06:46:55 -0700 (PDT)
+Received: from rowland.harvard.edu (wrls-249-137-8.wrls-client.fas.harvard.edu. [140.247.12.8])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a4ff112b45sm527883485a.125.2024.08.20.06.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 06:46:55 -0700 (PDT)
+Date: Tue, 20 Aug 2024 09:46:53 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: gregkh@linuxfoundation.org, krzk@kernel.org, alim.akhtar@samsung.com,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next RESEND] usb: xhci: Simplify with scoped for each OF
+ child loop
+Message-ID: <435bde54-aa08-47d1-8fe0-980bcc577803@rowland.harvard.edu>
+References: <20240820065635.560427-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANFp7mU69-4_v5JaycrPjt3ZnfyRa8PypFa=_gbuW9qW6_z9dw@mail.gmail.com>
+In-Reply-To: <20240820065635.560427-1-ruanjinjie@huawei.com>
 
-On Mon, Aug 19, 2024 at 04:23:56PM -0700, Abhishek Pandit-Subedi wrote:
-> On Mon, Aug 19, 2024 at 4:11 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Hi Abhishek,
-> >
-> > On Sun, Aug 18, 2024 at 05:02:28PM -0700, Abhishek Pandit-Subedi wrote:
-> > > On Fri, Aug 16, 2024 at 6:59 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > The new fields are valid only with the new UCSI versions.
-> > > > They are at offsets that go beyond the MAX_DATA_LENGTH (16
-> > > > bytes) with the older UCSI versions. That has not caused any
-> > > > problems before because nothing uses those new fields yet.
-> > > > Because they are not used yet, dropping them for now.
-> > > >
-> > > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > ---
-> > > >  drivers/usb/typec/ucsi/ucsi.h | 27 ++-------------------------
-> > > >  1 file changed, 2 insertions(+), 25 deletions(-)
-> > > >
-> > > > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> > > > index 57129f3c0814..7bc132b59027 100644
-> > > > --- a/drivers/usb/typec/ucsi/ucsi.h
-> > > > +++ b/drivers/usb/typec/ucsi/ucsi.h
-> > > > @@ -344,35 +344,12 @@ struct ucsi_connector_status {
-> > > >  #define   UCSI_CONSTAT_PARTNER_TYPE_AUDIO      6
-> > > >         u32 request_data_obj;
-> > > >
-> > > > -       u8 pwr_status[3];
-> > > > -#define UCSI_CONSTAT_BC_STATUS(_p_)            ((_p_[0]) & GENMASK(1, 0))
-> > > > +       u8 pwr_status;
-> > > > +#define UCSI_CONSTAT_BC_STATUS(_p_)            ((_p_) & GENMASK(1, 0))
-> > > >  #define   UCSI_CONSTAT_BC_NOT_CHARGING         0
-> > > >  #define   UCSI_CONSTAT_BC_NOMINAL_CHARGING     1
-> > > >  #define   UCSI_CONSTAT_BC_SLOW_CHARGING                2
-> > > >  #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING     3
-> > > > -#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)   (((_p_[0]) & GENMASK(5, 2)) >> 2)
-> > > > -#define   UCSI_CONSTAT_CAP_PWR_LOWERED         0
-> > > > -#define   UCSI_CONSTAT_CAP_PWR_BUDGET_LIMIT    1
-> > > > -#define UCSI_CONSTAT_PROVIDER_PD_VERSION_OPER_MODE(_p_)        \
-> > > > -       ((get_unaligned_le32(_p_) & GENMASK(21, 6)) >> 6)
-> > > > -#define UCSI_CONSTAT_ORIENTATION(_p_)          (((_p_[2]) & GENMASK(6, 6)) >> 6)
-> > > > -#define   UCSI_CONSTAT_ORIENTATION_DIRECT      0
-> > > > -#define   UCSI_CONSTAT_ORIENTATION_FLIPPED     1
-> > > > -#define UCSI_CONSTAT_SINK_PATH_STATUS(_p_)     (((_p_[2]) & GENMASK(7, 7)) >> 7)
-> > > > -#define   UCSI_CONSTAT_SINK_PATH_DISABLED      0
-> > > > -#define   UCSI_CONSTAT_SINK_PATH_ENABLED       1
-> > > > -       u8 pwr_readings[9];
-> > > > -#define UCSI_CONSTAT_REV_CURR_PROT_STATUS(_p_) ((_p_[0]) & 0x1)
-> > > > -#define UCSI_CONSTAT_PWR_READING_VALID(_p_)    (((_p_[0]) & GENMASK(1, 1)) >> 1)
-> > > > -#define UCSI_CONSTAT_CURRENT_SCALE(_p_)                (((_p_[0]) & GENMASK(4, 2)) >> 2)
-> > > > -#define UCSI_CONSTAT_PEAK_CURRENT(_p_) \
-> > > > -       ((get_unaligned_le32(_p_) & GENMASK(20, 5)) >> 5)
-> > > > -#define UCSI_CONSTAT_AVG_CURRENT(_p_) \
-> > > > -       ((get_unaligned_le32(&(_p_)[2]) & GENMASK(20, 5)) >> 5)
-> > > > -#define UCSI_CONSTAT_VOLTAGE_SCALE(_p_) \
-> > > > -       ((get_unaligned_le16(&(_p_)[4]) & GENMASK(8, 5)) >> 5)
-> > > > -#define UCSI_CONSTAT_VOLTAGE_READING(_p_) \
-> > > > -       ((get_unaligned_le32(&(_p_)[5]) & GENMASK(16, 1)) >> 1)
-> > > >  } __packed;
-> > > >
-> > > >  /*
-> > > > --
-> > > > 2.43.0
-> > > >
-> > > >
-> > >
-> > > I'm working on a patch series that depends on the sink path status so
-> > > I would prefer we don't remove it:
-> > > https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/5784952
-> > >
-> > > Since GET_CONNECTOR_STATUS is the only command that exceeds 16 bytes
-> > > for MESSAGE_IN, can we just add a wrapper that checks the UCSI version
-> > > for that command only and limits the size sent to ucsi_run_command?
-> >
-> > It's always "just this one command" :). It's actually not only the
-> > GET_CONNECTOR_STATUS command in this case - at least GET_PD_MESSAGE
-> > can also exceed 16 bytes - but even if it was, it would still not be
-> > okay to simply guard the read. You would also have to check the
-> > version with every access of those extended fields, and that's where
-> > it's basically guaranteed to fail. Somebody will access those extended
-> > fields unconditionally without anybody noticing sooner or later, and
-> > that's why they can't be part of this data structure.
+On Tue, Aug 20, 2024 at 02:56:35PM +0800, Jinjie Ruan wrote:
+> Use scoped for_each_available_child_of_node_scoped() when iterating over
+> device nodes to make code a bit simpler.
 > 
-> So this kind of points out a fundamental question to UCSI 1.2 vs
-> UCSI2+ in this driver: should we be doing a single driver that checks
-> the UCSI version before doing things or have two separate drivers?
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>  drivers/usb/host/ehci-exynos.c | 9 ++-------
+>  drivers/usb/host/ohci-exynos.c | 9 ++-------
+>  2 files changed, 4 insertions(+), 14 deletions(-)
 
-Nobody is proposing a driver split.
+The patch changes ehci-exynos.c and ohci-exynos.c.  So then why does the 
+Subject: line say "xhci"?
 
-> I'm in favor of a single driver approach as I think there are a lot of
-> commonalities between the different UCSI versions. I think zero-ing
-> out the extended data on reads should be sufficient to support both
-> versions from the same code-base.
+The contents of the patch look okay.
 
-Unfortunately 0 is a valid value also in this case.
+Alan Stern
 
-> The alternative of creating a separate driver comes with more problems
-> -- do we fork for ucsi2 AND ucsi3? ucsi3 adds additional commands
-> (i.e. set_usb) and, in the case of get_pd_message, adds additional
-> behavior to existing commands (Get_Revision).
-
-Again, nobody is proposing a driver split. I don't know where did you
-get this idea.
-
-> If your main worry is that people will unconditionally use the new
-> bits, why don't we simply change the macros from UCSI_CONSTAT to
-> UCSI_CONSTAT_v2 to indicate they need a revision bump? We can make
-> similar changes to other macros + enums to indicate the minimum UCSI
-> version that added those values.
-
-Simply naming a macro is not enough. A macro is fine, but it must have
-the means to check the version and fail if it does not match.
-
-We have a golden opportunity here to do exactly that. In most cases
-only fields are extended, which is much more difficult situation, but
-in this case we actually have completely new fields that extend the
-data structure. That makes it possible to use the size like I'm doing
-in patch 3/5 which guarantees that driver fails if those extended
-fields are accessed when they are not available. That is exactly what
-we want.
-
-Otherwise accessing those fields when they are not available will
-create the issues silently, most likely in form of a horrible user
-experience: the cable works only if you plug it one way but not the
-other because something thinks the orientation field is valid, or the
-screen may simply be black. There are no error messages in dmesg, so
-from kernel PoW everything seems to be working as it should. This is
-not what we want. What we want is a spectacular failure if something
-like that happens.
-
-That failure will give us these two things:
-
-1. It pin points the root cause of these issues.
-2. If forces us to actually fix the issue (these are usually not
-   considered as critical issues unfortunately).
-
-These "silent" issues are really common and they always take a lot of
-time to debug. I'm not going to waste this opportunity to make them a
-bit less "silent" in this case.
-
-thanks,
-
--- 
-heikki
+> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+> index f40bc2a7a124..e3a961d3f5fc 100644
+> --- a/drivers/usb/host/ehci-exynos.c
+> +++ b/drivers/usb/host/ehci-exynos.c
+> @@ -48,7 +48,6 @@ struct exynos_ehci_hcd {
+>  static int exynos_ehci_get_phy(struct device *dev,
+>  				struct exynos_ehci_hcd *exynos_ehci)
+>  {
+> -	struct device_node *child;
+>  	struct phy *phy;
+>  	int phy_number, num_phys;
+>  	int ret;
+> @@ -66,26 +65,22 @@ static int exynos_ehci_get_phy(struct device *dev,
+>  		return 0;
+>  
+>  	/* Get PHYs using legacy bindings */
+> -	for_each_available_child_of_node(dev->of_node, child) {
+> +	for_each_available_child_of_node_scoped(dev->of_node, child) {
+>  		ret = of_property_read_u32(child, "reg", &phy_number);
+>  		if (ret) {
+>  			dev_err(dev, "Failed to parse device tree\n");
+> -			of_node_put(child);
+>  			return ret;
+>  		}
+>  
+>  		if (phy_number >= PHY_NUMBER) {
+>  			dev_err(dev, "Invalid number of PHYs\n");
+> -			of_node_put(child);
+>  			return -EINVAL;
+>  		}
+>  
+>  		phy = devm_of_phy_optional_get(dev, child, NULL);
+>  		exynos_ehci->phy[phy_number] = phy;
+> -		if (IS_ERR(phy)) {
+> -			of_node_put(child);
+> +		if (IS_ERR(phy))
+>  			return PTR_ERR(phy);
+> -		}
+>  	}
+>  
+>  	exynos_ehci->legacy_phy = true;
+> diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+> index bfa2eba4e3a7..1379e03644b2 100644
+> --- a/drivers/usb/host/ohci-exynos.c
+> +++ b/drivers/usb/host/ohci-exynos.c
+> @@ -37,7 +37,6 @@ struct exynos_ohci_hcd {
+>  static int exynos_ohci_get_phy(struct device *dev,
+>  				struct exynos_ohci_hcd *exynos_ohci)
+>  {
+> -	struct device_node *child;
+>  	struct phy *phy;
+>  	int phy_number, num_phys;
+>  	int ret;
+> @@ -55,26 +54,22 @@ static int exynos_ohci_get_phy(struct device *dev,
+>  		return 0;
+>  
+>  	/* Get PHYs using legacy bindings */
+> -	for_each_available_child_of_node(dev->of_node, child) {
+> +	for_each_available_child_of_node_scoped(dev->of_node, child) {
+>  		ret = of_property_read_u32(child, "reg", &phy_number);
+>  		if (ret) {
+>  			dev_err(dev, "Failed to parse device tree\n");
+> -			of_node_put(child);
+>  			return ret;
+>  		}
+>  
+>  		if (phy_number >= PHY_NUMBER) {
+>  			dev_err(dev, "Invalid number of PHYs\n");
+> -			of_node_put(child);
+>  			return -EINVAL;
+>  		}
+>  
+>  		phy = devm_of_phy_optional_get(dev, child, NULL);
+>  		exynos_ohci->phy[phy_number] = phy;
+> -		if (IS_ERR(phy)) {
+> -			of_node_put(child);
+> +		if (IS_ERR(phy))
+>  			return PTR_ERR(phy);
+> -		}
+>  	}
+>  
+>  	exynos_ohci->legacy_phy = true;
+> -- 
+> 2.34.1
+> 
 
