@@ -1,229 +1,217 @@
-Return-Path: <linux-usb+bounces-13779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13780-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CEBE9596FF
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 11:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5501895975C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 11:47:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C6BAB224EA
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:06:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC052B22528
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:47:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588771CBE96;
-	Wed, 21 Aug 2024 08:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC921ACDE3;
+	Wed, 21 Aug 2024 08:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rs8Pmv5Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C8B1CB14D;
-	Wed, 21 Aug 2024 08:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F6E1CDFB3;
+	Wed, 21 Aug 2024 08:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724228465; cv=none; b=YA0aaZyqnE0kw5jmfxuxfJniLGDPIsMFp9Xir0taAy23UA2tcB7w21PT+5OrZ4WcqKAp2K89QRD6cEDXS++inXftaz6JaXLKg0IlujXWPcNS38L4NgCdy8LGHFcWH27ihBg60SZac72YT9JjBD/nkrrQRndKCdUQmvhdXMvOGLI=
+	t=1724228750; cv=none; b=LwozO8TyVj1vvb4fTfK2ZETEojKfE57L3+MFgdDyn7Fwh7Rddrzho8eHBLvVu9ivoDXZfnJSHQQ76gIRHeGekDXoSy1WE07pxRuSkYLYLQSgtgKVh0q3UDUIW2QBqOMx5FlUu/0iQrVBq3U9XzL1944vZD8xlZx4CPBmAO8ey6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724228465; c=relaxed/simple;
-	bh=DyeQTiVLIwnKP7nDbihUPIy5GAmQ7YvIMEcNM/HThdc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qjEyE/Tx/nH3rV5I5gH0s6/N/Ouk92p1lj+gY7aSLveoQLE7o7X+Zm2oBbbE36m9HXuZF3QIZwJtztfscECjXvegxoq6hRkamZWc9NcPrcS8uh/EYByHsu+TTe95d4rIFfOWY3IAoUPakF/MbAUQ1w4ogIamRohT2CZRUd/NrRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.2] (ip5f5af269.dynamic.kabel-deutschland.de [95.90.242.105])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id A93C661E5FE05;
-	Wed, 21 Aug 2024 10:20:13 +0200 (CEST)
-Message-ID: <1cf78f6f-af21-48bc-a9d8-755dd7bf8503@molgen.mpg.de>
-Date: Wed, 21 Aug 2024 10:20:13 +0200
+	s=arc-20240116; t=1724228750; c=relaxed/simple;
+	bh=EdzeupSGGvl1TZEs83iqfDc4cvZFxHBoh8FJ0Eh1G8Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W7CdjZ7YUEOt+qVSS9tPuaje8mS3lg2mQCXmqejM0MRFBdMF+FG19BFWIDyB3WqyXKbAnHHHhULMZ53lUo8mUn8lvcO1y1nbQGX+5RMZaw7B2gWW8RQC/31w5J/k2rrIsR+k3rQkwNsN68i/eug8hVZVmBc5qpQjtpONMTJWFRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rs8Pmv5Z; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-81f96eaa02aso347970939f.2;
+        Wed, 21 Aug 2024 01:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724228748; x=1724833548; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QtDQjm8iV4cdUO+HD94R4GQWnETA3Pr7CL8RG8TNuww=;
+        b=Rs8Pmv5ZBd/m3E9MjSiZ0w+iix2i1fFTIsNAJ0nPBbPJIjAGDqBM7yJnIzsk3StPsy
+         5H7D5laxFNDP9sZFq998T7/ewMc2bOjWzMUywH12/kJhbXUPm48yCo1bBupWdDTI1Gvc
+         4M3ZijYaFdi1wbpmdxqUSiJiGukcs//J4Uk8SuPrOdZjA+yVJdhMG8I4mAJSfW327i9m
+         EPD5Npee3OzkRmuHvtB4dBa3FuqCdpu3IJ+V+74mvYjwkqo1t0vrfm2XAEpI5BhFIGS6
+         0whZz6rBKWs7By8VHCZkaMDAl5WqjQwkRP87/BUSSoRqkI+EuM3TpaZaZeyNtFBqtMDe
+         lU2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724228748; x=1724833548;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QtDQjm8iV4cdUO+HD94R4GQWnETA3Pr7CL8RG8TNuww=;
+        b=k0S4OUevo1ABLFVbckLUl+Kzu5oE/TScTdo3R9KJz2nWzpKMVYVxygWoZDse+/GTC2
+         BxiJusVCCgwIjX2oXUF6yDetXBy/zXNN313Ef1I+95a1xN7DUgSHAmFj7sDLrf4LATaj
+         DmCZtzalWbvBD9T7xAAlMwaa3WeyTVISvr5KNdm/3IRX4orh5WgcYssXPgymWHGeEqtH
+         mCy2hFG0smoJF0q2azbD+M8fRHEBGqU4OjzzK231XpP63XNP/SrMhyiTyguiJybc9chw
+         XYHWUoxldvqgeQba8Co1xFLqKH/Y6HcTxHhWbgxw1v5OEr5aTpOFgyeX1ZDaVT2NkOf0
+         rLXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUPnJi4mPQtdIitTnCuc//7WKmn+SWdxyZaOFLwIxbiNno8uxHK/ZZvwyY9fHc4RToT165/6XLUgfbFXTI=@vger.kernel.org, AJvYcCW3YASVtJh4BnNMgYxOxZPxgtgg7p+1leZl8D+ujxlgZ0ImlfiCAgZ5WewxTEMNSMadpoEQR3jrJlqfk2CM/zA=@vger.kernel.org, AJvYcCXgDqk9kt4xJOhWW4vJ0unuep91Fd8zJynibqWT75ZfYWp0jLUTU535DCWCMZKHIdB6p6SNnbxDkhzt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzge4nBl01Ar8nYLjHJ3ll+7TUgVwImUF58sofeLQY59qJQwEBy
+	5HQDOLr9HKXXXyXs/pevkcH8R2PwVeC92oOtKeG6Iga9RANqEowcXhhorkaTSGeAv4Byx7ou2/Y
+	72I+/MN7663wBUpKpIga1gbMUoA==
+X-Google-Smtp-Source: AGHT+IFZ7B3clZToa0llT69FQPt3YfkKJq6le9aPzsukagic2r195jKWwzuhWEAszXEMwA2BFpru2eSaWeSwWE/qbaA=
+X-Received: by 2002:a05:6602:14d5:b0:81f:9df7:40d with SMTP id
+ ca18e2360f4ac-82531a2bb22mr166091439f.17.1724228747366; Wed, 21 Aug 2024
+ 01:25:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar
- <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
- <87o7ak411y.fsf@somnus> <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
- <87sezv7ytw.fsf@somnus>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <87sezv7ytw.fsf@somnus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <2024080359-getaway-concave-623e@gregkh> <20240814055816.2786467-1-wirelessdonghack@gmail.com>
+ <91e19cf3-216b-48ac-a93d-f920dd2a7668@rowland.harvard.edu>
+ <CAOV16XEsgkLWz3rOQsAdve-qKsPEDw-QxJNoo4hJfXdLnowHfw@mail.gmail.com>
+ <2024081946-designate-dioxide-c59d@gregkh> <CAOV16XFYeWdT4tSpLWoE+pCVsNERXKJQCJvJovrfsgMn1PMzbA@mail.gmail.com>
+ <2024081904-encircle-crayon-8d16@gregkh>
+In-Reply-To: <2024081904-encircle-crayon-8d16@gregkh>
+From: color Ice <wirelessdonghack@gmail.com>
+Date: Wed, 21 Aug 2024 16:25:36 +0800
+Message-ID: <CAOV16XEjJT6Oe7PX7HjqEaT5tpX0MqTOZy6=akEKFhtk0emOzg@mail.gmail.com>
+Subject: Re: Ubuntu RT2X00 WIFI USB Driver Kernel NULL pointer
+ Dereference&Use-After-Free Vulnerability
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, kvalo@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, mark.esler@canonical.com, stf_xl@wp.pl, 
+	tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dear Anna-Maria,
+Dear Ubuntu Team,
 
+We have analyzed the issue, but due to our limited time and ability to
+create a fix, we are unable to submit a patch directly. However, we
+can provide some ideas to assist you in generating a fix that we can
+then test.
 
-Thank you very much for the support. I was finally able to collect the 
-data you asked for.
+I have encountered a race condition issue in the RT2X00 driver,
+specifically related to the function rt2x00usb_work_rxdone. The issue
+manifests as a kernel NULL pointer dereference, which causes the
+system to crash. Below is the detailed analysis and my suggestions for
+addressing the issue.
 
-Am 09.04.24 um 09:57 schrieb Anna-Maria Behnsen:
-> Paul Menzel writes:
+Problem Analysis
 
-[…]
+The kernel panic log indicates that the crash occurs due to a NULL
+pointer dereference at the following location:
 
->> Am 08.04.24 um 12:10 schrieb Anna-Maria Behnsen:
->>
->>> Paul Menzel writes:
->>
->>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9-rc2+
->>>> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of
->>>> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 stopped
->>>> working (only the Ethernet port was used). Linux logged:
->>>
->>> thanks for the report. Can you please provide a trace beside the dmesg
->>> output? The following trace events should be enabled (via kernel command
->>> line):
->>>
->>> trace_event=timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit
->> Unfortunately I haven’t been able to reproduce it until now. Should it
->> happen again, I am going to try your suggestion.
-> 
-> Thanks for letting me know.
+[ 371.258315] BUG: kernel NULL pointer dereference, address: 00000000000000=
+38
+[ 371.258339] CPU: 8 PID: 144 Comm: kworker/u40:2 Not tainted
+6.8.0-40-generic #40~22.04.2-Ubuntu
+[ 371.258346] Workqueue: phy23 rt2x00usb_work_rxdone [rt2x00usb]
 
-I wanted to configure that in the running system, but wasn’t able to set 
-all of these at once with `set_event`:
+The root cause appears to be a race condition where multiple threads
+may simultaneously access and modify shared resources without proper
+synchronization. Specifically, it seems that the pointer being
+accessed in rt2x00usb_work_rxdone is not consistently initialized
+before being used, leading to the NULL pointer dereference.
 
-     echo 
-'timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit' 
-| sudo tee /sys/kernel/tracing/set_event
+Suggestions for Fix
 
-For some reason setting them individually also did *not* work:
+Introduce Locking Mechanisms: To prevent concurrent access to shared
+resources, I recommend introducing locking mechanisms such as spinlock
+or mutex. This would ensure that only one thread can access the
+critical section at a time, thereby avoiding race conditions.
 
-     for e in timer:* timer_migration:* sched:sched_switch 
-sched:sched_wakeup sched:sched_process_hang irq:softirq_entry 
-irq:softirq_raise irq:softirq_exit'; do echo "$e" | sudo tee -a 
-/sys/kernel/tracing/set_event; done
+Pointer Validity Check: Before dereferencing any pointer, it's
+essential to check whether the pointer is valid (i.e., not NULL). If
+the pointer is invalid, the function should safely return without
+proceeding further.
 
-I then used
+Retry and Delay Mechanism: If a critical resource is not yet
+initialized or is in an unexpected state, implementing a retry
+mechanism with delays could help avoid crashes. Additionally, more
+debug information should be logged in case of failure to assist in
+diagnosing the issue.
 
-     echo 1 | sudo tee /sys/kernel/tracing/events/timer/enable
-     echo 1 | sudo tee /sys/kernel/tracing/events/timer_migration/enable
-     echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_switch/enable
-     echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_wakeup/enable
-     echo 1 | sudo tee 
-/sys/kernel/tracing/events/sched/sched_process_hang/enable
-     echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_entry/enable
-     echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_raise/enable
-     echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_exit/enable
+Code Review: A comprehensive code review focusing on areas where
+hardware resources and multithreading operations intersect could
+reveal other potential race conditions. Identifying and addressing
+these issues proactively would enhance the driver=E2=80=99s robustness.
 
-and also had to increase the buffer to bridge the gap between the event 
-and me noticing it:
+Example Code Snippet
 
-     echo 96000 | sudo tee /sys/kernel/tracing/buffer_size_kb
-
-Then, with Linux v6.11-rc4-11-g521b1e7f4cf0b, I was able to get the 
-trace for the event below:
-
-     [ 7542.706299] NOHZ tick-stop error: local softirq work is pending, 
-handler #08!!!
-
-$ sudo cat /sys/kernel/tracing/trace
-[…]
-  MediaPD~der #28-14000   [000] d..1.  7542.703768: hrtimer_cancel: 
-hrtimer=000000008d2c9f3f
-  MediaPD~der #28-14000   [000] .....  7542.703810: hrtimer_init: 
-hrtimer=00000000c6f259e7 clockid=CLOCK_MONOTONIC mode=ABS
-  MediaPD~der #28-14000   [000] d..1.  7542.703812: hrtimer_start: 
-hrtimer=00000000c6f259e7 function=hrtimer_wakeup expires=7602581538204 
-softexpires=7602581488204 mode=ABS
-  MediaPD~der #28-14000   [000] d..2.  7542.703821: sched_switch: 
-prev_comm=MediaPD~der #28 prev_pid=14000 prev_prio=120 prev_state=S ==> 
-next_comm=swapper/0 next_pid=0 next_prio=120
-           <idle>-0       [000] dN.2.  7542.703931: sched_wakeup: 
-comm=ImageBridgeChld pid=6041 prio=120 target_cpu=000
-           <idle>-0       [000] d..2.  7542.703937: sched_switch: 
-prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
-next_comm=ImageBridgeChld next_pid=6041 next_prio=120
-  ImageBridgeChld-6041    [000] d..2.  7542.704041: sched_switch: 
-prev_comm=ImageBridgeChld prev_pid=6041 prev_prio=120 prev_state=S ==> 
-next_comm=swapper/0 next_pid=0 next_prio=120
-           <idle>-0       [000] dN.2.  7542.704174: sched_wakeup: 
-comm=Renderer pid=4113 prio=120 target_cpu=000
-           <idle>-0       [000] d..2.  7542.704179: sched_switch: 
-prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
-next_comm=Renderer next_pid=4113 next_prio=120
-         Renderer-4113    [000] d..2.  7542.704245: sched_switch: 
-prev_comm=Renderer prev_pid=4113 prev_prio=120 prev_state=S ==> 
-next_comm=swapper/0 next_pid=0 next_prio=120
-           <idle>-0       [000] dNh2.  7542.704260: sched_wakeup: 
-comm=IPC I/O Child pid=6029 prio=120 target_cpu=000
-           <idle>-0       [000] d..2.  7542.704267: sched_switch: 
-prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
-next_comm=IPC I/O Child next_pid=6029 next_prio=120
-    IPC I/O Child-6029    [000] d..2.  7542.704340: sched_switch: 
-prev_comm=IPC I/O Child prev_pid=6029 prev_prio=120 prev_state=S ==> 
-next_comm=swapper/0 next_pid=0 next_prio=120
-           <idle>-0       [000] dN.2.  7542.704786: sched_wakeup: 
-comm=Compositor pid=4123 prio=120 target_cpu=000
-           <idle>-0       [000] d..2.  7542.704791: sched_switch: 
-prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
-next_comm=Compositor next_pid=4123 next_prio=120
-       Compositor-4123    [000] d..2.  7542.704944: sched_switch: 
-prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> 
-next_comm=swapper/0 next_pid=0 next_prio=120
-           <idle>-0       [000] dN.2.  7542.705943: sched_wakeup: 
-comm=Compositor pid=4123 prio=120 target_cpu=000
-           <idle>-0       [000] d..2.  7542.705950: sched_switch: 
-prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
-next_comm=Compositor next_pid=4123 next_prio=120
-       Compositor-4123    [000] d..2.  7542.706105: sched_switch: 
-prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> 
-next_comm=swapper/0 next_pid=0 next_prio=120
-           <idle>-0       [000] d.h2.  7542.706328: hrtimer_cancel: 
-hrtimer=000000009bbda66a
-           <idle>-0       [000] d.h1.  7542.706329: 
-hrtimer_expire_entry: hrtimer=000000009bbda66a 
-function=tick_nohz_handler now=7542584007490
-           <idle>-0       [000] d.h1.  7542.706333: softirq_raise: vec=9 
-[action=RCU]
-           <idle>-0       [000] d.h1.  7542.706338: softirq_raise: vec=7 
-[action=SCHED]
-           <idle>-0       [000] d.h1.  7542.706339: hrtimer_expire_exit: 
-hrtimer=000000009bbda66a
-           <idle>-0       [000] d.h2.  7542.706340: hrtimer_start: 
-hrtimer=000000009bbda66a function=tick_nohz_handler 
-expires=7542588000000 softexpires=7542588000000 mode=ABS
-           <idle>-0       [000] ..s1.  7542.706345: softirq_entry: vec=7 
-[action=SCHED]
-           <idle>-0       [000] ..s1.  7542.706359: softirq_exit: vec=7 
-[action=SCHED]
-           <idle>-0       [000] ..s1.  7542.706360: softirq_entry: vec=9 
-[action=RCU]
-           <idle>-0       [000] ..s1.  7542.706362: softirq_exit: vec=9 
-[action=RCU]
-           <idle>-0       [000] dNh4.  7542.707672: sched_wakeup: 
-comm=irq/51-DLL075B: pid=194 prio=49 target_cpu=000
-           <idle>-0       [000] d..2.  7542.707685: sched_switch: 
-prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
-next_comm=irq/51-DLL075B: next_pid=194 next_prio=49
-  irq/51-DLL075B:-194     [000] .....  7542.707708: timer_init: 
-timer=00000000630ae178
-  irq/51-DLL075B:-194     [000] d..1.  7542.707710: timer_start: 
-timer=00000000630ae178 function=process_timeout expires=4296778179 
-[timeout=250] bucket_expiry=4296778184 cpu=0 idx=121 flags=
-  irq/51-DLL075B:-194     [000] d..2.  7542.707718: sched_switch: 
-prev_comm=irq/51-DLL075B: prev_pid=194 prev_prio=49 prev_state=D ==> 
-next_comm=swapper/0 next_pid=0 next_prio=120
-           <idle>-0       [000] dN.2.  7542.709072: sched_wakeup: 
-comm=AudioIP~ent RPC pid=6671 prio=120 target_cpu=000
-[…]
-
-The trace file is 320 MB big. If you need the full trace and log, please 
-tell me, and I’ll upload it somewhere.
+While I cannot provide a complete patch, here is an example of how the
+suggested changes could be implemented:
 
 
-Kind regards,
+void rt2x00usb_work_rxdone(struct work_struct *work)
+{
+    struct rt2x00_dev *rt2x00dev =3D container_of(work, struct
+rt2x00_dev, rxdone_work);
+    unsigned long flags;
+    void *data;
 
-Paul
+    // Lock to protect shared resources
+    spin_lock_irqsave(&rt2x00dev->irq_lock, flags);
+
+    data =3D rt2x00usb_get_rx_data(rt2x00dev);
+    if (!data) {
+        // Unlock and return if data is not valid
+        spin_unlock_irqrestore(&rt2x00dev->irq_lock, flags);
+        return;
+    }
+
+    // Process the data
+    ...
+
+    // Unlock after processing
+    spin_unlock_irqrestore(&rt2x00dev->irq_lock, flags);
+}
+
+
+This snippet shows how to introduce a spinlock to protect shared
+resources and ensure that the pointer is valid before dereferencing
+it.
+
+Conclusion
+
+In conclusion, the race condition in the RT2X00 driver is likely
+caused by insufficient synchronization between threads. By adding
+proper locking mechanisms, pointer validity checks, and retry
+mechanisms, this issue can be mitigated. I hope these suggestions will
+assist in resolving the problem. If you require further assistance or
+additional information
+
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2024=E5=B9=B48=E6=9C=8820=E6=
+=97=A5=E5=91=A8=E4=BA=8C 01:43=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, Aug 19, 2024 at 11:11:10PM +0800, color Ice wrote:
+> > On some TP-Link routers or routers running OpenWrt, as well as Raspberr=
+y Pi
+> > devices with a headless setup and BeagleBone boards, certain USB
+> > configurations are required by default. These devices typically grant
+> > higher permissions to USB by default. Therefore, on certain devices, I =
+can
+> > run a PoC without using sudo. This explains why there are some inherent
+> > risk scenarios when declaring this vulnerability, as there are many Lin=
+ux
+> > distributions applied to different embedded devices.
+>
+> I suggest filing bugs with those distros/system images so that they
+> properly remove the ability for users to reset any random USB device
+> this way.  If any user can disconnect any driver from any device, that's
+> not a good system...
+>
+> Also, why not dig into the code and try to come up with a fix while
+> waiting?  The code is all there for everyone to read and resolve, that
+> way you get the proper credit for fixing the issue as well.
+>
+> thanks,
+>
+> greg k-h
 
