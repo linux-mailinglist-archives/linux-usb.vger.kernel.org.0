@@ -1,174 +1,120 @@
-Return-Path: <linux-usb+bounces-13775-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13776-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CD70959541
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:03:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49737959562
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BAEA1C20FB6
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 07:03:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E967D1F218E7
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 07:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0FC16DC18;
-	Wed, 21 Aug 2024 07:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YY1g8XpH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7FD134AC;
+	Wed, 21 Aug 2024 07:10:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06171192D6A;
-	Wed, 21 Aug 2024 07:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A591A2840;
+	Wed, 21 Aug 2024 07:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724223767; cv=none; b=qKDsCipmg2z7Hn7pCJRYxz0mA6fCwkglbpV7UWvRJamgNFxazpbRRbS1sMLdmXgs808SDePHDjS8/Zh4UK14R2TFU4qlPUZ+cRLAxiwyJxGGZc8VPD7rD+qLTVlxG+7JIohO6ipNxNrZzyNGcTusDkCIqpCFVId+feerN7KXmVU=
+	t=1724224231; cv=none; b=K/pVKMNb3q867CtFCMcUixmo77OzsCaUiVZ6ioFfXvOCqOGA4pBbOMBZQTErrtghDLhOJZUL4ugxUwoo82FdlBcqSJrDEVhm5NTXhSVArfb6lV7fw/boEbHhQ92QTdlPevG+NFjU1TQvaMSZF88G5TWWxcTWMgrCL41jsj/pXA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724223767; c=relaxed/simple;
-	bh=8rUm72MnGLmHQNl/Pyxx0EYzyXtHSorMLOIHmsjfdMk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HxwHumIdFonq2SoDL71KjbqDo4KV4j2brhRkBDHnS2kOLANbgSkGwvEtD2EVE+OFb0aX6X2GFibJjKt4v5gfJyxxTeNxQhI5uaO9+kxw2WgwW/FmsbFRAWZXb1EGonXsFv7QGuuBIgHSfK6KFS+vO48u/9p5TQVX6ufYC1BZ6Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YY1g8XpH; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724223766; x=1755759766;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8rUm72MnGLmHQNl/Pyxx0EYzyXtHSorMLOIHmsjfdMk=;
-  b=YY1g8XpHLdE595GK51tnrBrNO/HM5rr8j+FEc1APx3Ifcx+tH0VLnkr1
-   PWovQjs+6o5WGEgDTCnMkBUbIXUe+K4/x3cEdjntn+ibtEiW0AoyemxgU
-   kHtXkELsiWDlcD0aCUIz23Lht+MYyuVDjBdDOwfXqQYBnhSXrC94v9f0O
-   LANXScKrbZEnTtolgYBfj7vAL5PfbWR0ISOKVPA4BxzlOjoDbQ6dL6ArF
-   s8C+drAMjOY59JRwxRCvtmMFGsT2uDFpfJyD+eDX2eirm6xqmjXgVhsE0
-   +ZzYnIABT4XV7xVVbp1ejs+/k3cw8H3x5ZMvYV/gsk61a5h0XSLfmntfz
-   A==;
-X-CSE-ConnectionGUID: Hhs8JmD/QsW33kpH3E9nCw==
-X-CSE-MsgGUID: DGFSXacyTGqSOOjiLVDqZA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="22706002"
-X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
-   d="scan'208";a="22706002"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 00:02:46 -0700
-X-CSE-ConnectionGUID: r7X2J0LrR8ub329AoQ8R8g==
-X-CSE-MsgGUID: fYBNYWdMTGy2tKnZxPcjmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
-   d="scan'208";a="65871786"
-Received: from kniemiec-mobl1.ger.corp.intel.com (HELO [10.245.246.16]) ([10.245.246.16])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 00:02:39 -0700
-Message-ID: <7b3421f5-8d57-4138-9456-1bf0eb4662c0@linux.intel.com>
-Date: Wed, 21 Aug 2024 09:02:37 +0200
+	s=arc-20240116; t=1724224231; c=relaxed/simple;
+	bh=cb2jBBQr+hQBucll/2Ogw0WC3vLVQWyTkSUrMv80Twg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YcbjC8vkt58Y82VHZbWK3WILZkEjk8WFdoL+ilgTrXu1/pTL/nEOxgVoTD3VLjL6D1Jsv6ohRkLO/GCd6TVDmV/cq4Ye3D5y54/0PbrVKdR8H5z84sD+k9DnsDDBiHJ9RjVxOs5wZAWROcq3qwXB8eXePp43MCeVGeiEQ00GsoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WpcpS45Q9z1HGvX;
+	Wed, 21 Aug 2024 15:07:12 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id 73CD71400C9;
+	Wed, 21 Aug 2024 15:10:24 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
+ (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 21 Aug
+ 2024 15:10:23 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+	<krzk@kernel.org>, <alim.akhtar@samsung.com>, <linux-usb@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH -next v2] usb: ohci-exynos: Simplify with scoped for each OF child loop
+Date: Wed, 21 Aug 2024 15:17:52 +0800
+Message-ID: <20240821071752.2335406-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 29/34] ALSA: usb-audio: qcom: Add USB offload route
- kcontrol
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
- gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
- <20240801011730.4797-30-quic_wcheng@quicinc.com>
- <4d5fe3f8-d7ba-4647-8dd7-22656ec2fde5@linux.intel.com>
- <58043166-c494-42db-b7d3-575991e43e8b@quicinc.com>
- <f507a228-4865-4df5-9215-bc59e330a82f@linux.intel.com>
- <88d5ed6f-1429-4381-8014-d5824ec7866e@quicinc.com>
- <56ebd11e-9522-406b-9ca4-5e284eaac409@quicinc.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <56ebd11e-9522-406b-9ca4-5e284eaac409@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
+Use scoped for_each_available_child_of_node_scoped() when iterating over
+device nodes to make code a bit simpler.
 
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+v2:
+- Update the commit subject.
+- Spilit into 2 patches.
+- Add Reviewed-by.
+---
+ drivers/usb/host/ohci-exynos.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+index bfa2eba4e3a7..1379e03644b2 100644
+--- a/drivers/usb/host/ohci-exynos.c
++++ b/drivers/usb/host/ohci-exynos.c
+@@ -37,7 +37,6 @@ struct exynos_ohci_hcd {
+ static int exynos_ohci_get_phy(struct device *dev,
+ 				struct exynos_ohci_hcd *exynos_ohci)
+ {
+-	struct device_node *child;
+ 	struct phy *phy;
+ 	int phy_number, num_phys;
+ 	int ret;
+@@ -55,26 +54,22 @@ static int exynos_ohci_get_phy(struct device *dev,
+ 		return 0;
+ 
+ 	/* Get PHYs using legacy bindings */
+-	for_each_available_child_of_node(dev->of_node, child) {
++	for_each_available_child_of_node_scoped(dev->of_node, child) {
+ 		ret = of_property_read_u32(child, "reg", &phy_number);
+ 		if (ret) {
+ 			dev_err(dev, "Failed to parse device tree\n");
+-			of_node_put(child);
+ 			return ret;
+ 		}
+ 
+ 		if (phy_number >= PHY_NUMBER) {
+ 			dev_err(dev, "Invalid number of PHYs\n");
+-			of_node_put(child);
+ 			return -EINVAL;
+ 		}
+ 
+ 		phy = devm_of_phy_optional_get(dev, child, NULL);
+ 		exynos_ohci->phy[phy_number] = phy;
+-		if (IS_ERR(phy)) {
+-			of_node_put(child);
++		if (IS_ERR(phy))
+ 			return PTR_ERR(phy);
+-		}
+ 	}
+ 
+ 	exynos_ohci->legacy_phy = true;
+-- 
+2.34.1
 
->>>>>> +/**
->>>>>> + * snd_usb_offload_create_ctl() - Add USB offload bounded mixer
->>>>>> + * @chip - USB SND chip device
->>>>>> + *
->>>>>> + * Creates a sound control for a USB audio device, so that applications can
->>>>>> + * query for if there is an available USB audio offload path, and which
->>>>>> + * card is managing it.
->>>>>> + */
->>>>>> +int snd_usb_offload_create_ctl(struct snd_usb_audio *chip)
->>>>>> +{
->>>>>> +	struct usb_device *udev = chip->dev;
->>>>>> +	struct snd_kcontrol_new *chip_kctl;
->>>>>> +	struct snd_usb_stream *as;
->>>>>> +	char ctl_name[37];
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	list_for_each_entry(as, &chip->pcm_list, list) {
->>>>>> +		chip_kctl = &snd_usb_offload_mapped_ctl;
->>>>>> +		chip_kctl->count = 1;
->>>>>> +		/*
->>>>>> +		 * Store the associated USB SND card number and PCM index for
->>>>>> +		 * the kctl.
->>>>>> +		 */
->>>>>> +		chip_kctl->private_value = as->pcm_index |
->>>>>> +					  chip->card->number << 16;
->>>>>> +		sprintf(ctl_name, "USB Offload Playback Route PCM#%d",
->>>>>> +			as->pcm_index);
->>>>>> +		chip_kctl->name = ctl_name;
->>>>>> +		ret = snd_ctl_add(chip->card, snd_ctl_new1(chip_kctl,
->>>>>> +				  udev->bus->sysdev));
->>>>>> +		if (ret < 0)
->>>>>> +			break;
->>>>>> +	}
->>>>>> +
->>>>>> +	return ret;
->>>> Hi Pierre,
->>>>> None of this looks Qualcomm-specific, shouldn't this be part of the
->>>>> soc_usb framework instead of being added in the qcom/ stuff?
->>>> Started working on this particular comment, and there are some things that needs to be considered if we moved this into SOC USB:
->>>>
->>>> 1.  We do save the reference to the USB BE DAI link within the USB DT node, which can be fetched/referenced based on sysdev.  However, I'm not sure if everyone would potentially follow that way.
->>>>
->>>> 2.  I tried a few implementations of adding a new SOC USB API, and the argument list was a bit long, because I didn't want to directly reference the usb_chip.
->>>>
->>>> Sorry for the delay, but I wanted to give a good stab at implementing this before bringing up the implications.  It is possible, but definitely not as clean as how we have it now IMO.
->>> My comment was only referring to the location of the code, it's now in
->>> sound/usb/qcom/mixer_usb_offload.c but does not contain anything
->>> specific to Qualcomm. I was not asking for any encapsulation inside of
->>> soc-usb, I was only suggesting a move of the code to a shared helper
->>> library so that this code can be reused as is and not duplicated if the
->>> QCOM parts are not compiled in.
->> Ah, great, thanks for the clarification.  Let me take a look with that perspective.
->>
-> Going back on the history behind moving it into qcom/ was based off feedback that Takashi pointed out in v14[1].  It was mainly due to the fact that we would be adding another hard dependency between USB SND and the offloading components.  Hence the reason for moving it to within the QCOM offloading package. 
-> 
-> Thanks
-> 
-> Wesley Cheng
-> 
-> [1]: https://lore.kernel.org/linux-usb/87y1bt2acg.wl-tiwai@suse.de/
-
-I don't see anything wrong with the initial proposal
-
-
- +config SND_USB_OFFLOAD_MIXER
- +	bool
- +
-  config SND_USB_AUDIO_QMI
-  	tristate "Qualcomm Audio Offload driver"
-  	depends on QCOM_QMI_HELPERS && SND_USB_AUDIO && USB_XHCI_SIDEBAND
-  	select SND_PCM
- +	select SND_USB_OFFLOAD_MIXER
-
-
-That would allows the SND_USB_OFFLOAD_MIXER to be build as a module, and
-it would allow other non-QCON solutions to use the module.
-Maybe just make it a tristate?
 
