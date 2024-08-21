@@ -1,106 +1,188 @@
-Return-Path: <linux-usb+bounces-13793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13794-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDCC0959BCA
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 14:28:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE328959C07
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 14:38:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68BEAB226A3
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 12:28:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A5DF285FA2
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 12:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5CE0188A33;
-	Wed, 21 Aug 2024 12:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCCA188A3E;
+	Wed, 21 Aug 2024 12:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3D9gUb4"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aIEGSlQe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1C21D1303;
-	Wed, 21 Aug 2024 12:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B051885BF;
+	Wed, 21 Aug 2024 12:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724243314; cv=none; b=BTFmrCL1Wq9dH5fcQx8M0czgVpkVEdnoQt/4z4JvN5ksIV6TpjR44UeCD4Au7aglyTpEcVZ0CG6ZRB7kxRl5Z+67eqFTLFzsOtGT1Vhg3Aijzt1DY3CF5RC8x0dfOwQq018gGyxh+Fgcqev+dVH944Mufb8dBTumS1dTz1UT1EI=
+	t=1724243902; cv=none; b=ma6np1yhiq7Y7LVeXbCRZRImsh2W1iRVwC5rZGLPznczDVo58IYpHX5QvaML9eDoNX7sJky53GGS1Dsum1UXlWe44UQ7SmR/bV8P4FKyxlN3WEmCoG7xmrpmkk3KMzj94zwKFWosMehJjjrDGmoc05N5BSI9f5S7eDMofJYowiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724243314; c=relaxed/simple;
-	bh=NnoJ4qFOrxmlo0aB7R44FT9bZ5SZQaWEJ6peEjE3zZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iW3Khb7/Y5C3ChONojGJAQK5BH6BTNCudbU1I3c/vPeJx8sCGfD0XLrXNBP0R8QKKJPFjF3WOmzQc02Pkbl30QrkpxSTdylDS0bBFikq3ht0cmit4MuvhEtuU9SZC3wB2GURXcWpcb/ZyhSXEStiVhTjIrxccsqqIm+yltSW/GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3D9gUb4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FDE6C32782;
-	Wed, 21 Aug 2024 12:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724243313;
-	bh=NnoJ4qFOrxmlo0aB7R44FT9bZ5SZQaWEJ6peEjE3zZA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E3D9gUb4B/GUKB3QWBW1JB559Sq93PNeppTYu3VmOASkkCKChnf6IPAfkMLkSiiyy
-	 f9ylMtMjtQqmzjIUffkPJHWLC1zhXrtGoAZRDmCuGWDqIyoNAAwmc4gpCL+K++jA4N
-	 Zw1oGxNmXsN4NP049XdRR5hN0r0heueyPOpbxHk9bRdxxPnnT8ZJBCnMQQU+tH3g0E
-	 Xob5sf7o5JrAqRfg34C+PxKtN1GSsGFNP3a2jFLYekuAMXvmPv2C1IReuf8a5I7uKK
-	 GJoCI/bHY9haMVIReHdKh0fDR8DfzHjYLrEBs72sHQ2qew4ntWiPTGg+rD/jMFGJOd
-	 AUEqp1CEvkvzg==
-Date: Wed, 21 Aug 2024 13:28:28 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Lei Liu <liulei.rjpt@vivo.com>
-Cc: Neal Liu <neal_liu@aspeedtech.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Bin Liu <b-liu@ti.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH 4/5] usb: mpfs: Use devm_clk_get_enabled() helpers
-Message-ID: <20240821-velocity-tribune-726bb3546ba8@spud>
-References: <20240821121048.31566-1-liulei.rjpt@vivo.com>
- <20240821121048.31566-5-liulei.rjpt@vivo.com>
+	s=arc-20240116; t=1724243902; c=relaxed/simple;
+	bh=//RxV0U/4Gz6Q96cnCAeQNniwMPQX/5AXHwMAzAzoeI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hkvqP13v3TbwigSG9Kil0zmvBv9EZqPikXgbfz0gh6z5iUIAnDif7upCok2OPoV+9iMPW5b2hBisPcRXD22OrLe4gbDxtCTeGPoaQeEm80PH7QnDwEaLCiRoeekcYtjzHYFmImCyGpERdlKenB8AsdOBO5ASWb3H2VnI49dZWiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aIEGSlQe; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47L6IBXa012828;
+	Wed, 21 Aug 2024 12:38:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	m99oEZYNIzUFDu2lrPYQyIAdVDwvlNz2UyXWFUN5PvA=; b=aIEGSlQewmtvnT3C
+	zbEULJP6FOSkLoor7ECzSkBKHf98IDh93nAU2MoxGuhNQIz0hVpl33HyYHbJtAD2
+	CWEtHdpKKJfbu1l+o8RpM1bBnXHENGRqMEZ43zAx25j2IJW6hj2brPFLJcIgUi8c
+	4CvvHbgm3KYmG2bbUyhSsj6Ne7qfskJniBl9a6JMISl0J5Y/R28tkMfomLgHpLWL
+	gD39T0otUXya5x0jW6d1ND8BlGQuX4qDi/nmb6fFacNOfkrXvZPAsVrbqZ+xWsEM
+	WqqEWZEswx0OSKhn8CJ5Rp6ZD1hCQM9N3kLbSKAeudIKb46f1DEDqxQs4UNpDlYa
+	ZiAo2w==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414pe5mnqh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Aug 2024 12:38:17 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47LCcGri001080
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Aug 2024 12:38:16 GMT
+Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 21 Aug
+ 2024 05:38:14 -0700
+Message-ID: <e31f0796-7163-a36c-486f-0f8e0a613661@quicinc.com>
+Date: Wed, 21 Aug 2024 18:08:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="bcJo4N/CZuvGrFHi"
-Content-Disposition: inline
-In-Reply-To: <20240821121048.31566-5-liulei.rjpt@vivo.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [v3] usb: dwc3: Avoid waking up gadget during startxfer
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20240820121524.1084983-1-quic_prashk@quicinc.com>
+ <20240820223800.zt52jaxedijbvskt@synopsys.com>
+From: Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <20240820223800.zt52jaxedijbvskt@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: W1gldy00z9CmcvFqcxjktCfeRKQ6Qsnr
+X-Proofpoint-GUID: W1gldy00z9CmcvFqcxjktCfeRKQ6Qsnr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-21_09,2024-08-19_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 spamscore=0 mlxlogscore=999 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408210092
 
 
---bcJo4N/CZuvGrFHi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 21, 2024 at 08:10:42PM +0800, Lei Liu wrote:
-> The devm_clk_get_enabled() helpers:
->     - call devm_clk_get()
->     - call clk_prepare_enable() and register what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
->=20
-> This simplifies the code and avoids calls to clk_disable_unprepare().
->=20
-> Signed-off-by: Lei Liu <liulei.rjpt@vivo.com>
+On 21-08-24 04:08 am, Thinh Nguyen wrote:
+> On Tue, Aug 20, 2024, Prashanth K wrote:
+>> When operating in High-Speed, it is observed that DSTS[USBLNKST] doesn't
+>> update link state immediately after receiving the wakeup interrupt. Since
+>> wakeup event handler calls the resume callbacks, there is a chance that
+>> function drivers can perform an ep queue, which in turn tries to perform
+>> remote wakeup from send_gadget_ep_cmd(STARTXFER). This happens because
+>> DSTS[[21:18] wasn't updated to U0 yet, it's observed that the latency of
+>> DSTS can be in order of milli-seconds. Hence avoid calling gadget_wakeup
+>> during startxfer to prevent unnecessarily issuing remote wakeup to host.
+>>
+>> Fixes: c36d8e947a56 ("usb: dwc3: gadget: put link to U0 before Start Transfer")
+>> Cc: <stable@vger.kernel.org>
+>> Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>> ---
+>> v3: Added notes on top the function definition.
+>> v2: Refactored the patch as suggested in v1 discussion.
+>>
+>>  drivers/usb/dwc3/gadget.c | 31 +++++++------------------------
+>>  1 file changed, 7 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 89fc690fdf34..d4f2f0e1f031 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -287,6 +287,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async);
+>>   *
+>>   * Caller should handle locking. This function will issue @cmd with given
+>>   * @params to @dep and wait for its completion.
+>> + *
+>> + * According to databook, if the link is in L1/L2/U3 while issuing StartXfer command,
+>> + * software must bring the link back to L0/U0 by performing remote wakeup. But we don't
+> 
+> Change "L0" -> "On" state
+> 
+>> + * expect ep_queue to trigger a remote wakeup; instead it should be done by wakeup ops.
+>> + *
+>> + * After receiving wakeup event, device should no longer be in U3, and any link
+>> + * transition afterwards needs to be adressed with wakeup ops.
+>>   */
+> 
+> You're missing the explanation for the case of L1. Please incorporate
+> this snippet (reword as necessary to fit in the rest of your comment):
+> 
+> While operating in usb2 speed, if the device is in low power link state
+> (L1/L2), the Start Transfer command may not complete and timeout. The
+> programming guide suggested to initiate remote wakeup to bring the
+> device to ON state, allowing the command to go through. However, since
+> issuing a command in usb2 speed requires the clearing of
+> GUSB2PHYCFG.suspendusb2, this turns on the signal required (in 50us) to
+> complete a command. This should happen within the command timeout set by
+> the driver. No extra handling is needed.
+> 
+> Special note: if wakeup() ops is triggered for remote wakeup, care
+> should be taken should the Start Transfer command needs to be sent soon
+> after. The wakeup() ops is asynchronous and the link state may not
+> transition to U0 link state yet.
+> 
+> 
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Does this sound good? (Didnt want to spam with new patches)
 
---bcJo4N/CZuvGrFHi
-Content-Type: application/pgp-signature; name="signature.asc"
+"According to databook, while issuing StartXfer command if the link is
+in L1/L2/U3,
+then the command may not complete and timeout, hence software must bring
+the link
+back to ON state by performing remote wakeup. However, since issuing a
+command in
+USB2 speeds requires the clearing of GUSB2PHYCFG.suspendusb2, which
+turns on the
+signal required to complete the given command (usually within 50us).
+This should
+happen within the command timeout set by driver. Hence we don't expect
+to trigger
+a remote wakeup from here; instead it should be done by wakeup ops.
 
------BEGIN PGP SIGNATURE-----
+Special note: If wakeup() ops is triggered for remote wakeup, care
+should be taken
+if StartXfer command needs to be sent soon after. The wakeup() ops is
+asynchronous
+and the link state may not transition to U0 link state yet. After
+receiving wakeup
+event, device would no longer be in U3, and any link transition
+afterwards needs
+to be adressed with wakeup ops."
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsXdbAAKCRB4tDGHoIJi
-0vQXAPsFPWs5/bU//KkusZ+fex1LjVZZPj1iKD46J4gSjA3/IgEAmb8f82SYq0M7
-5hCZmy+8jLkn5UKZOkLGj2pA+UNHXw0=
-=TKQo
------END PGP SIGNATURE-----
-
---bcJo4N/CZuvGrFHi--
+Thanks,
+Prashanth K
 
