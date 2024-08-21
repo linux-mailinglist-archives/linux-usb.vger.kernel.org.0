@@ -1,188 +1,218 @@
-Return-Path: <linux-usb+bounces-13794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE328959C07
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 14:38:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03732959CAF
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 15:02:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A5DF285FA2
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 12:38:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 873862820D1
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 13:02:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCCA188A3E;
-	Wed, 21 Aug 2024 12:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A76190472;
+	Wed, 21 Aug 2024 13:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aIEGSlQe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I6MQdlqG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B051885BF;
-	Wed, 21 Aug 2024 12:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D660161936
+	for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2024 13:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724243902; cv=none; b=ma6np1yhiq7Y7LVeXbCRZRImsh2W1iRVwC5rZGLPznczDVo58IYpHX5QvaML9eDoNX7sJky53GGS1Dsum1UXlWe44UQ7SmR/bV8P4FKyxlN3WEmCoG7xmrpmkk3KMzj94zwKFWosMehJjjrDGmoc05N5BSI9f5S7eDMofJYowiM=
+	t=1724245364; cv=none; b=b/qsWm4M5gl9Idpu6OVey8hQZ+Jd1bdbXnAxACCi/g6nejMBISOy67al6hkiXnmDeGRVjO6e3mFNpKTH/n0lToF4ksjpDR/cGxKOizyllaNieQ7EshDOW8SjdRt+F0cBXCG+f8nd0/u7lnC1Vbmkc6n/KdUH3bbeQLnOm/+Eh6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724243902; c=relaxed/simple;
-	bh=//RxV0U/4Gz6Q96cnCAeQNniwMPQX/5AXHwMAzAzoeI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=hkvqP13v3TbwigSG9Kil0zmvBv9EZqPikXgbfz0gh6z5iUIAnDif7upCok2OPoV+9iMPW5b2hBisPcRXD22OrLe4gbDxtCTeGPoaQeEm80PH7QnDwEaLCiRoeekcYtjzHYFmImCyGpERdlKenB8AsdOBO5ASWb3H2VnI49dZWiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aIEGSlQe; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47L6IBXa012828;
-	Wed, 21 Aug 2024 12:38:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	m99oEZYNIzUFDu2lrPYQyIAdVDwvlNz2UyXWFUN5PvA=; b=aIEGSlQewmtvnT3C
-	zbEULJP6FOSkLoor7ECzSkBKHf98IDh93nAU2MoxGuhNQIz0hVpl33HyYHbJtAD2
-	CWEtHdpKKJfbu1l+o8RpM1bBnXHENGRqMEZ43zAx25j2IJW6hj2brPFLJcIgUi8c
-	4CvvHbgm3KYmG2bbUyhSsj6Ne7qfskJniBl9a6JMISl0J5Y/R28tkMfomLgHpLWL
-	gD39T0otUXya5x0jW6d1ND8BlGQuX4qDi/nmb6fFacNOfkrXvZPAsVrbqZ+xWsEM
-	WqqEWZEswx0OSKhn8CJ5Rp6ZD1hCQM9N3kLbSKAeudIKb46f1DEDqxQs4UNpDlYa
-	ZiAo2w==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414pe5mnqh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Aug 2024 12:38:17 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47LCcGri001080
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Aug 2024 12:38:16 GMT
-Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 21 Aug
- 2024 05:38:14 -0700
-Message-ID: <e31f0796-7163-a36c-486f-0f8e0a613661@quicinc.com>
-Date: Wed, 21 Aug 2024 18:08:11 +0530
+	s=arc-20240116; t=1724245364; c=relaxed/simple;
+	bh=akhq/CdT+L0Vh/+Pm264J1J45oVAHfo3szEuMlJfWv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UGxIlPp3wlLJwRhSy0dCZkmbtChtT2qWgKP0y3UMar+ez0GJ7gTwDSFNelYlRL3qi2gAyxFi9zB/ytIHVRzhTCShUUwSL0qpyCGfC9zCql5FAuka9bU5GS5ikUF4AzqI9uuRvHrL9hkBTCGBePqxdfRCI0jU44W7TZql1Lc6KSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I6MQdlqG; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5334adf7249so567313e87.3
+        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2024 06:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724245360; x=1724850160; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJ6cBCrys9GNQbW6UJcQz24fc8KJmNbuT4O7q7oXbEo=;
+        b=I6MQdlqGiFZA0bvbUWN+Ne0VlNZu6cuNVyjQUb8tnU1XFH5RnHVhUp3B0nRatBulMv
+         btwFUfERMx2FOt3UfTawacWIGnPHJAvWOHfBxDYfAXRAJh6K7ZVXIrEo8KX+qjD9VmVY
+         lnbYO1w+9uiMcOBHXWjiPeiQXOr4DKGLl7clSzD2Bzw0UWAVBDfxVRbB0modhe30QFxl
+         Ejnj4FZVh8HdqZdfBoXAHA6DyAErnAfAjwdsK84Jwo2AN1gcSdPQ3cQo/4YhrT3UxP2X
+         6DDeo99SJvi7IaOaVLsMDfLjuyYvVYdwRUUOqnA6ISuI5uco78cKc18a1sqNggpIdBjI
+         5fyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724245360; x=1724850160;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJ6cBCrys9GNQbW6UJcQz24fc8KJmNbuT4O7q7oXbEo=;
+        b=Xav2IEygjzm1brsC6pUyd7a0mde6aktLiVpjWYhvkpGCcc8+HPC/HtPwyYAEIEZ9Jr
+         FyxVY/DR/Q7majn4jaJfK9veBK2HVbirQJ3D/wHaT5fO6/Fsc4d0LUGLkduP3z+6pH8k
+         HjeuDexyRPSjBPYf/dKKK0j8RqHsKjBUm8+My7D2T3lqldy8q0WPyXuIT9WDXvICaPkL
+         Jjm9uaAVQrnITbkrszE+BQC7j+AzDSfc+wRXcMZkxKbAtOl9R0PBEvrmoctKfRz1Yn4M
+         CRvVTiCI/YerJ+3USA2rOtuXs4rj7bEIQC6GzJxhTsTZ6ziiVRur563C81R5IUgv1SXp
+         MWzQ==
+X-Gm-Message-State: AOJu0YxK8PY8UUTERghzOjHK2Kf6Qfpzbm2WW36lMKKN1G7ti5Cw7DHQ
+	RRqgDyCq1NJh99Gsci+LlC+Rh6vNf+i6u8j9w1CpUHXEZ1K5nrC1
+X-Google-Smtp-Source: AGHT+IHaKZe/Klom8Cxezt2LHTE/mQY248f+vEPUmy2QIC7S9piKGVULTrwClMXRdO35bT9CPrcXGQ==
+X-Received: by 2002:a05:6512:39c7:b0:52c:d76f:7f61 with SMTP id 2adb3069b0e04-53348602056mr1636296e87.56.1724245359757;
+        Wed, 21 Aug 2024 06:02:39 -0700 (PDT)
+Received: from foxbook (bfh246.neoplus.adsl.tpnet.pl. [83.28.45.246])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5330d420fb9sm2022438e87.243.2024.08.21.06.02.38
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 21 Aug 2024 06:02:39 -0700 (PDT)
+Date: Wed, 21 Aug 2024 15:02:33 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: FPS <mista.tapas@gmx.net>
+Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
+Subject: Re: Misbehaving Alder Lake-N PCH USB 3.2 xHCI Host Controller
+Message-ID: <20240821150233.4f8f66ef@foxbook>
+In-Reply-To: <bb565e29-10e9-4211-a854-fdd9771149b4@gmx.net>
+References: <20240820130158.339b4d87@foxbook>
+	<bb565e29-10e9-4211-a854-fdd9771149b4@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [v3] usb: dwc3: Avoid waking up gadget during startxfer
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20240820121524.1084983-1-quic_prashk@quicinc.com>
- <20240820223800.zt52jaxedijbvskt@synopsys.com>
-From: Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <20240820223800.zt52jaxedijbvskt@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="MP_/kFZhkHQc0cQiWe0r0J9unMN"
+
+--MP_/kFZhkHQc0cQiWe0r0J9unMN
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: W1gldy00z9CmcvFqcxjktCfeRKQ6Qsnr
-X-Proofpoint-GUID: W1gldy00z9CmcvFqcxjktCfeRKQ6Qsnr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-21_09,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- mlxscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 clxscore=1015 spamscore=0 mlxlogscore=999 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408210092
+Content-Disposition: inline
+
+The reason I suggested aplay is only because it terminates after a
+finite time, reducing the amount of output produced.
+
+Today I found that I have similar issues if I plug my audio dongle into
+one particular Asmedia USB 3.1 controller. I quickly confirmed your
+finding that aplay has different symptoms - audio is slowed down and
+distorted, but no errors in dmesg. Same for Jack in playback only mode.
+I need to use Jack in full duplex to reproduce your symptoms.
+
+I automatically stop Jack with timeout to control dmesg pollution:
+timeout -s KILL 0.1 jackd -d alsa -d hw:3 -p 48 -n 2
 
 
+The root cause appears to be that there are those "missed service" and
+"underrun" errors in the first place. One means that the controller
+failed to execute a transfer in its scheduled (micro)frame for internal
+reasons or that the transfer was queued too late by software, the other
+means that the controller ran out of queued data to send.
 
-On 21-08-24 04:08 am, Thinh Nguyen wrote:
-> On Tue, Aug 20, 2024, Prashanth K wrote:
->> When operating in High-Speed, it is observed that DSTS[USBLNKST] doesn't
->> update link state immediately after receiving the wakeup interrupt. Since
->> wakeup event handler calls the resume callbacks, there is a chance that
->> function drivers can perform an ep queue, which in turn tries to perform
->> remote wakeup from send_gadget_ep_cmd(STARTXFER). This happens because
->> DSTS[[21:18] wasn't updated to U0 yet, it's observed that the latency of
->> DSTS can be in order of milli-seconds. Hence avoid calling gadget_wakeup
->> during startxfer to prevent unnecessarily issuing remote wakeup to host.
->>
->> Fixes: c36d8e947a56 ("usb: dwc3: gadget: put link to U0 before Start Transfer")
->> Cc: <stable@vger.kernel.org>
->> Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
->> ---
->> v3: Added notes on top the function definition.
->> v2: Refactored the patch as suggested in v1 discussion.
->>
->>  drivers/usb/dwc3/gadget.c | 31 +++++++------------------------
->>  1 file changed, 7 insertions(+), 24 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 89fc690fdf34..d4f2f0e1f031 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -287,6 +287,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async);
->>   *
->>   * Caller should handle locking. This function will issue @cmd with given
->>   * @params to @dep and wait for its completion.
->> + *
->> + * According to databook, if the link is in L1/L2/U3 while issuing StartXfer command,
->> + * software must bring the link back to L0/U0 by performing remote wakeup. But we don't
-> 
-> Change "L0" -> "On" state
-> 
->> + * expect ep_queue to trigger a remote wakeup; instead it should be done by wakeup ops.
->> + *
->> + * After receiving wakeup event, device should no longer be in U3, and any link
->> + * transition afterwards needs to be adressed with wakeup ops.
->>   */
-> 
-> You're missing the explanation for the case of L1. Please incorporate
-> this snippet (reword as necessary to fit in the rest of your comment):
-> 
-> While operating in usb2 speed, if the device is in low power link state
-> (L1/L2), the Start Transfer command may not complete and timeout. The
-> programming guide suggested to initiate remote wakeup to bring the
-> device to ON state, allowing the command to go through. However, since
-> issuing a command in usb2 speed requires the clearing of
-> GUSB2PHYCFG.suspendusb2, this turns on the signal required (in 50us) to
-> complete a command. This should happen within the command timeout set by
-> the driver. No extra handling is needed.
-> 
-> Special note: if wakeup() ops is triggered for remote wakeup, care
-> should be taken should the Start Transfer command needs to be sent soon
-> after. The wakeup() ops is asynchronous and the link state may not
-> transition to U0 link state yet.
-> 
-> 
+I could believe that maybe we are scheduling transfers too late,
+causing these problems, but no idea why it only happens on particular
+"bad" host controller, while othres are OK even on the same machine.
 
-Does this sound good? (Didnt want to spam with new patches)
 
-"According to databook, while issuing StartXfer command if the link is
-in L1/L2/U3,
-then the command may not complete and timeout, hence software must bring
-the link
-back to ON state by performing remote wakeup. However, since issuing a
-command in
-USB2 speeds requires the clearing of GUSB2PHYCFG.suspendusb2, which
-turns on the
-signal required to complete the given command (usually within 50us).
-This should
-happen within the command timeout set by driver. Hence we don't expect
-to trigger
-a remote wakeup from here; instead it should be done by wakeup ops.
+In my case, I don't observe the sequence of "missed service" followed
+by "underrun" and I don't see the subsequent "WARNs" either. However,
+I produced a patch which should fix this problem.
 
-Special note: If wakeup() ops is triggered for remote wakeup, care
-should be taken
-if StartXfer command needs to be sent soon after. The wakeup() ops is
-asynchronous
-and the link state may not transition to U0 link state yet. After
-receiving wakeup
-event, device would no longer be in U3, and any link transition
-afterwards needs
-to be adressed with wakeup ops."
+I produced a second patch which improves handling of "missed service"
+errors, by reporting them faster to the audio driver. My hope was that
+*maybe* this would speed up recovery from such condition and reduce the
+disruption created, but it frankly doesn't seem to make much difference.
 
-Thanks,
-Prashanth K
+
+If you would like to play with the patches, I recommend using the
+distribution's kernel config (/lib/modules/`uname -r`/build/.config)
+because doing 'make menuconfig' from scratch takes a while nowadays.
+
+Regards,
+Michal
+
+--MP_/kFZhkHQc0cQiWe0r0J9unMN
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=0001-xhci-don-t-skip-on-isoc-overrun-underrun.patch
+
+From 22be329f3276f98f71a485b6d8ed1063246f0efc Mon Sep 17 00:00:00 2001
+From: Michal Pecio <michal.pecio@gmail.com>
+Date: Wed, 21 Aug 2024 14:14:47 +0200
+Subject: [PATCH 1/2] xhci: don't skip on isoc overrun / underrun
+
+---
+ drivers/usb/host/xhci-ring.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index a7d343b78557..376bcbe7b6e9 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2978,6 +2978,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ cleanup:
+ 		handling_skipped_tds = ep->skip &&
+ 			trb_comp_code != COMP_MISSED_SERVICE_ERROR &&
++			trb_comp_code != COMP_RING_UNDERRUN &&
++			trb_comp_code != COMP_RING_OVERRUN &&
+ 			trb_comp_code != COMP_NO_PING_RESPONSE_ERROR;
+ 
+ 		/*
+-- 
+2.43.0
+
+
+--MP_/kFZhkHQc0cQiWe0r0J9unMN
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=0002-xhci-process-isoc-Missed-Service-faster-on-modern-ho.patch
+
+From adf5386fa4eba9d12f51db74162760b852d90034 Mon Sep 17 00:00:00 2001
+From: Michal Pecio <michal.pecio@gmail.com>
+Date: Wed, 21 Aug 2024 14:15:30 +0200
+Subject: [PATCH 2/2] xhci: process isoc Missed Service faster on modern hosts
+
+---
+ drivers/usb/host/xhci-ring.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 376bcbe7b6e9..7b3a466705ab 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2451,6 +2451,14 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		if (ep_trb != td->last_trb)
+ 			td->error_mid_td = true;
+ 		break;
++	case COMP_MISSED_SERVICE_ERROR:
++		/* seen in hosts conforming to xHCI revision 1.1 and later */
++		xhci_info(xhci, "Handling Missed Service Error\n");
++		frame->status = -EXDEV;
++		sum_trbs_for_length = true;
++		if (ep_trb != td->last_trb)
++			td->error_mid_td = true;
++		break;
+ 	case COMP_INCOMPATIBLE_DEVICE_ERROR:
+ 	case COMP_STALL_ERROR:
+ 		frame->status = -EPROTO;
+@@ -2781,6 +2789,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		 * short transfer when process the ep_ring next time.
+ 		 */
+ 		ep->skip = true;
++		td_num = list_count_nodes(&ep_ring->td_list);
+ 		xhci_dbg(xhci,
+ 			 "Miss service interval error for slot %u ep %u, set skip flag\n",
+ 			 slot_id, ep_index);
+@@ -2977,7 +2986,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 			process_bulk_intr_td(xhci, ep, ep_ring, td, ep_trb, event);
+ cleanup:
+ 		handling_skipped_tds = ep->skip &&
+-			trb_comp_code != COMP_MISSED_SERVICE_ERROR &&
++			(trb_comp_code != COMP_MISSED_SERVICE_ERROR || ep_trb_dma) &&
+ 			trb_comp_code != COMP_RING_UNDERRUN &&
+ 			trb_comp_code != COMP_RING_OVERRUN &&
+ 			trb_comp_code != COMP_NO_PING_RESPONSE_ERROR;
+-- 
+2.43.0
+
+
+--MP_/kFZhkHQc0cQiWe0r0J9unMN--
 
