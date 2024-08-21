@@ -1,148 +1,177 @@
-Return-Path: <linux-usb+bounces-13768-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13769-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 670EB9592AC
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 04:18:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E4BB959347
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 05:20:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BED41C21241
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 02:18:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01FD11F25B7C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 03:20:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA6774040;
-	Wed, 21 Aug 2024 02:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZjVqYzt7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE70215572D;
+	Wed, 21 Aug 2024 03:19:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF2E1C683
-	for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2024 02:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE0C3FD4;
+	Wed, 21 Aug 2024 03:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724206692; cv=none; b=fY8VZziVRvBVsOmxCw9NtG/Z4rcy7QjzR4KPQ2mk3jmShZU742RqW6/9rg6+OlfGUwZbyTpPqIZxsGIPKmoDPtr7ShSfUpIX1fj7c0ExmjxyQ74sUV1RsVMmOd2J4MXaFynFfbSyjRhGpQwB2twuExwccfQe+Hh+7XRdhaCx5jI=
+	t=1724210398; cv=none; b=MEOZh/G5iobPh/ZX7dDH9mJajmaRemgCF2MWl/H1VRZ8Jqed0pjtbzzemd4E7iI9gXEgPwKyxdeqewGJHAkQTas5eEmnpz4xTE+6XVM7o+YkDZMQuuo/U/oe9yiWM8tG6cSK5dpK6bOyDSoR5u2AZAS1h6g00sGhtT+lY13DVuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724206692; c=relaxed/simple;
-	bh=mICq+MmhjDxX4+Qi+aCUDHMlziDzjY5HbRr2P78tQ/Y=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dHu8UGj+YwWk9mP8wa0fHFIaF4q/yDQT70RorvrCY8ZqhJcM2rZsr6Jrl18+2IVRx2jBuIDqD30+zG77+ewKB57EA1XcYL2OIbGFq+D4e/6Y/3K8++WIGBRLEGCWfynOwMpyYR2qF+kVCFmNZ5gI1NIu3g2kbLriGn9ynTKHA3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZjVqYzt7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27685C4AF09
-	for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2024 02:18:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724206692;
-	bh=mICq+MmhjDxX4+Qi+aCUDHMlziDzjY5HbRr2P78tQ/Y=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ZjVqYzt7rEa7cCvUaj7mgbgc1A94RuSqIJ31oyuXwDNoDAU8fbRtqS78s4KlosLRq
-	 VaUPqwPjRoKgTfWmEmr8455HubGJc54Oos8sr+7E/EBxjl7dSw9qBd5UbhLSZqk/Xa
-	 +5PzARqF/ZiVIzpcgG3OgOtSbL4Lwqeu8516dOuTgL7RJU+/8tu5l3zOT6GG/ls5Jw
-	 5rJdxhbZGbaBwGQegsE92S5lvqw/EGaTkuGc1oy0ed2l0wYWnx7mkGVGABOIQaEltt
-	 eXPonYNLt6YB8mOypmMLO9PbpTMPlwmc+WDvsrmknrCABIqze82NVscUZzw1UNh/gH
-	 2FwxngdC6beAQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 14ED7C53B50; Wed, 21 Aug 2024 02:18:12 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 217511] HP Pavilion x2 12-b020nr - Charging over USB-C not
- working
-Date: Wed, 21 Aug 2024 02:18:11 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gabrielbarros+k@gmail.com
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217511-208809-B7hYMQYGAr@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217511-208809@https.bugzilla.kernel.org/>
-References: <bug-217511-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1724210398; c=relaxed/simple;
+	bh=ekc4UKG/naBvDE7oIUAwIWugkmXwGjS/9YxfRmEW5/c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=n5w342UT1hPj3o+TOSqs1H8AJYB70NkKc804X3YxPWmf/T/SHi/v87mwjVGsiaTZyXk7+TcUc4m92iwarbzxYGF3uU7etxYHZ9Bp86V7yKK7e52CZD0G8n3ThF9yDH6a+rDCXGpPd4N36bsTFZ1FQ/Hh5YkxNehSrFPDT/7ZyRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WpWm618MCz1j6jw;
+	Wed, 21 Aug 2024 11:19:50 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id D75211400CA;
+	Wed, 21 Aug 2024 11:19:51 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ kwepemh500013.china.huawei.com (7.202.181.146) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 21 Aug 2024 11:19:51 +0800
+Message-ID: <83c57ee0-b1e4-7232-ac74-e910b5db12a5@huawei.com>
+Date: Wed, 21 Aug 2024 11:19:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH -next RESEND] usb: xhci: Simplify with scoped for each OF
+ child loop
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: <gregkh@linuxfoundation.org>, <krzk@kernel.org>,
+	<alim.akhtar@samsung.com>, <linux-usb@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+References: <20240820065635.560427-1-ruanjinjie@huawei.com>
+ <435bde54-aa08-47d1-8fe0-980bcc577803@rowland.harvard.edu>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <435bde54-aa08-47d1-8fe0-980bcc577803@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217511
 
-gabriel barros (gabrielbarros+k@gmail.com) changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |gabrielbarros+k@gmail.com
+On 2024/8/20 21:46, Alan Stern wrote:
+> On Tue, Aug 20, 2024 at 02:56:35PM +0800, Jinjie Ruan wrote:
+>> Use scoped for_each_available_child_of_node_scoped() when iterating over
+>> device nodes to make code a bit simpler.
+>>
+>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+>> ---
+>>  drivers/usb/host/ehci-exynos.c | 9 ++-------
+>>  drivers/usb/host/ohci-exynos.c | 9 ++-------
+>>  2 files changed, 4 insertions(+), 14 deletions(-)
+> 
+> The patch changes ehci-exynos.c and ohci-exynos.c.  So then why does the 
+> Subject: line say "xhci"?
 
---- Comment #4 from gabriel barros (gabrielbarros+k@gmail.com) ---
-I had this happen to me today, also with an Elitebook, but different model.
+git log --oneline drivers/usb/host/* shows this subject a lot, so adopt it.
 
-Computer bat>95%, plugged to a charger that provides AT LEAST 40W. It charg=
-es
-normally. I never see the Unknown event_id messages.
-
-Computer bat>95%, plugged to a charger that provides UP TO 40W. Computer do
-charge, but at random times:
-- `acpi` will alternate between "Battery 0: Not charging, 95%" and "Battery=
- 0:
-Discharging, 95%", never "charging"
-- KDE or any other battery watcher besides `acpi` command, would just show
-"charging" at all times, no variation.
-- virtualbox guest (win10enterprise ltsc) would sound the "charger unplugge=
-d"
-immediately followed by "charger plugged" notification sound.
-- kernel would log "kernel: hp_wmi: Unknown event_id - 131073 - 0x0" (never=
- see
-the 0x1 event, not once)
-- the kernel messages and the windows virtualbox guest sounds were in perfe=
-ct
-sync.
-
-In both cases my battery is indeed charging (the percentage always go up no
-matter what of those things are happening). Can't say for speed/healthy to =
-the
-battery.
-
-My guess is that is a low power charging mode event that the linux driver
-doesn't know. And I don't know how much raw information the virtualbox driv=
-ers
-do forward, but that old version (2021?) of windows' drivers was clearly se=
-eing
-it as a power cable disconnect.
-
-Linux 6.10.4-arch2-1 #1 SMP PREEMPT_DYNAMIC Sun, 11 Aug 2024 16:19:06 +0000
-x86_64 GNU/Linux
-
-relevant parts of lshw:
-
-   capabilities: smbios-3.4.0 dmi-3.4.0 smp vsyscall32
-
-     *-firmware
-          description: BIOS
-          vendor: HP
-          physical id: 10
-          version: U82 Ver. 01.07.00
-          date: 10/05/2023
-          size: 64KiB
-          capacity: 32MiB
-          capabilities: pci pcmcia upgrade shadowing cdboot bootselect edd
-int5printscreen int9keyboard int14serial int17printer acpi
-biosbootspecification netboot uefi
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> 
+> The contents of the patch look okay.
+> 
+> Alan Stern
+> 
+>> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+>> index f40bc2a7a124..e3a961d3f5fc 100644
+>> --- a/drivers/usb/host/ehci-exynos.c
+>> +++ b/drivers/usb/host/ehci-exynos.c
+>> @@ -48,7 +48,6 @@ struct exynos_ehci_hcd {
+>>  static int exynos_ehci_get_phy(struct device *dev,
+>>  				struct exynos_ehci_hcd *exynos_ehci)
+>>  {
+>> -	struct device_node *child;
+>>  	struct phy *phy;
+>>  	int phy_number, num_phys;
+>>  	int ret;
+>> @@ -66,26 +65,22 @@ static int exynos_ehci_get_phy(struct device *dev,
+>>  		return 0;
+>>  
+>>  	/* Get PHYs using legacy bindings */
+>> -	for_each_available_child_of_node(dev->of_node, child) {
+>> +	for_each_available_child_of_node_scoped(dev->of_node, child) {
+>>  		ret = of_property_read_u32(child, "reg", &phy_number);
+>>  		if (ret) {
+>>  			dev_err(dev, "Failed to parse device tree\n");
+>> -			of_node_put(child);
+>>  			return ret;
+>>  		}
+>>  
+>>  		if (phy_number >= PHY_NUMBER) {
+>>  			dev_err(dev, "Invalid number of PHYs\n");
+>> -			of_node_put(child);
+>>  			return -EINVAL;
+>>  		}
+>>  
+>>  		phy = devm_of_phy_optional_get(dev, child, NULL);
+>>  		exynos_ehci->phy[phy_number] = phy;
+>> -		if (IS_ERR(phy)) {
+>> -			of_node_put(child);
+>> +		if (IS_ERR(phy))
+>>  			return PTR_ERR(phy);
+>> -		}
+>>  	}
+>>  
+>>  	exynos_ehci->legacy_phy = true;
+>> diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+>> index bfa2eba4e3a7..1379e03644b2 100644
+>> --- a/drivers/usb/host/ohci-exynos.c
+>> +++ b/drivers/usb/host/ohci-exynos.c
+>> @@ -37,7 +37,6 @@ struct exynos_ohci_hcd {
+>>  static int exynos_ohci_get_phy(struct device *dev,
+>>  				struct exynos_ohci_hcd *exynos_ohci)
+>>  {
+>> -	struct device_node *child;
+>>  	struct phy *phy;
+>>  	int phy_number, num_phys;
+>>  	int ret;
+>> @@ -55,26 +54,22 @@ static int exynos_ohci_get_phy(struct device *dev,
+>>  		return 0;
+>>  
+>>  	/* Get PHYs using legacy bindings */
+>> -	for_each_available_child_of_node(dev->of_node, child) {
+>> +	for_each_available_child_of_node_scoped(dev->of_node, child) {
+>>  		ret = of_property_read_u32(child, "reg", &phy_number);
+>>  		if (ret) {
+>>  			dev_err(dev, "Failed to parse device tree\n");
+>> -			of_node_put(child);
+>>  			return ret;
+>>  		}
+>>  
+>>  		if (phy_number >= PHY_NUMBER) {
+>>  			dev_err(dev, "Invalid number of PHYs\n");
+>> -			of_node_put(child);
+>>  			return -EINVAL;
+>>  		}
+>>  
+>>  		phy = devm_of_phy_optional_get(dev, child, NULL);
+>>  		exynos_ohci->phy[phy_number] = phy;
+>> -		if (IS_ERR(phy)) {
+>> -			of_node_put(child);
+>> +		if (IS_ERR(phy))
+>>  			return PTR_ERR(phy);
+>> -		}
+>>  	}
+>>  
+>>  	exynos_ohci->legacy_phy = true;
+>> -- 
+>> 2.34.1
+>>
 
