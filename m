@@ -1,144 +1,96 @@
-Return-Path: <linux-usb+bounces-13798-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13799-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6EF5959F40
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 16:05:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 844B0959F46
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 16:06:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 043701C21374
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 14:05:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B6D1B23F36
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 14:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90EB1AF4F0;
-	Wed, 21 Aug 2024 14:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A3F1B1D40;
+	Wed, 21 Aug 2024 14:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iwLn4bcY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KdGfy99k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D46199FC6;
-	Wed, 21 Aug 2024 14:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127711AF4D3;
+	Wed, 21 Aug 2024 14:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724249111; cv=none; b=ONScMIL+a1+nuUCiOiWd6gKxhB1mPIN/zMHJI9a/miJlaBYGK1m5wKBBoPT2M+Hm3q3XS3djMQwSV+kbKMox8PP0cADGDrzULHbNUKOiXRl1XQ8IVHM1f6i8mkDyIv4Mmdw+Kq2SmAppUpGwWcRJKM1EHgFVSJFO9yUUR4WMLDo=
+	t=1724249164; cv=none; b=dRA1LVpQh7P8LFndfIh7iKGetzMP79JO19BDQy1VNMA/NqWk8LVJtztN333u1++EKYEe2HSO5eqYmuamb3YgZ5u5ZyMYYkKJt26rR/o6UEgibeI+OUgc4e0LFOVZGge6Z1mH5v3pIE97Wd1evNr8P/71yR+roWeJsSzID9Ow2Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724249111; c=relaxed/simple;
-	bh=L8fub+mYsQhj+lVmbRK8xHTNCb+gtWl6pWQHrECpObQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qa+82DGhCi1adQzgOL4G++s17XDw5IoBi9qb3oowU/LIXI7/j+YRPN8e1iU+q3yNwn1sROY9EzJvJEynTETsWY0lGCZapOhMUUs/RenNjM6jHPeqayLO2grx9WzZE0ZJaHtnn7oZtjTeBhWIjNrE31Zgc/cxbXHgF/OY/+jlVvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iwLn4bcY; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47LBkdKv024590;
-	Wed, 21 Aug 2024 14:05:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	1xlMv2ynVfIv2mD8mK6DVP/T6SS2H5LuAkFF6cS5f5A=; b=iwLn4bcYnrfU5iXL
-	qvmc/Yc4MevrjfnYY95q70nKy1KTTMsMV2gmwXb32ZpOTmvRHJeGmccwFyVcQH7l
-	+O1H3/oubjkfM+Lj2aG94j0ZAHj/3bI4BiffT3kyBxJWuL+jOJcNgCsdwb2YFtCp
-	FgOdkaRLj9R0lBCugDlNwN2qsmCyIZyeGg6YF3ts03bpcXDwBJc7eKOHbEypgc0l
-	6k0FCeo5aEWkvzDDNXrpOn9HuT9IyZHttcTrHhFCFSpVpV5bETBw6VedCbVJt61s
-	xUH18iuSUm6an+S+3ZnpGP55s6DR8Au7xrYGDHOwdz7Vu0S34sHhq9s1cyDvQdoA
-	p9m1/w==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414pdmw0jp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Aug 2024 14:05:00 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47LE4wAN017946
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Aug 2024 14:04:58 GMT
-Received: from [10.239.133.66] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 21 Aug
- 2024 07:04:57 -0700
-Message-ID: <2b38828b-ebb0-4602-9320-9adc5deb76f6@quicinc.com>
-Date: Wed, 21 Aug 2024 22:04:54 +0800
+	s=arc-20240116; t=1724249164; c=relaxed/simple;
+	bh=OupUKgDix1Aqr3zi3FS/NJ/qh5GuwXL1qcjGy7ucROc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PPb5j7Gx6IH4hN862wrBt8uxiX6u9Ct2wVNXc7Sy04/8p37P0fvyoS84v/oejfnhmoUKW4NFLR0Oon+RuRnF1pVXVY452PlwyACvpx8l1q8BkkBmZ0/r9OVxJAEIjU3KTK6MCH+yousqcOCZVXQL0veIyWkyf0Ln+rt8K12Fb/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KdGfy99k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19848C32781;
+	Wed, 21 Aug 2024 14:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1724249163;
+	bh=OupUKgDix1Aqr3zi3FS/NJ/qh5GuwXL1qcjGy7ucROc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KdGfy99kVEc5kLY88y0BjKR7uoOnoihZLogWULGzyhcMjrDxUKN6MUJ3HltR9/9af
+	 IGVFQxQ+zXp9SRQihUjVKPpHubWm6zEo6e1tX0hsmVo7X53u/wjrn/O5i9uAcyV5/i
+	 k+kJP3OityZyhIGgFqUnyFFn4YF9NceoMub0eWWo=
+Date: Wed, 21 Aug 2024 22:06:00 +0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: color Ice <wirelessdonghack@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, kvalo@kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org, mark.esler@canonical.com,
+	stf_xl@wp.pl, tytso@mit.edu
+Subject: Re: Ubuntu RT2X00 WIFI USB Driver Kernel NULL pointer
+ Dereference&Use-After-Free Vulnerability
+Message-ID: <2024082106-flagman-plausible-cb40@gregkh>
+References: <2024080359-getaway-concave-623e@gregkh>
+ <20240814055816.2786467-1-wirelessdonghack@gmail.com>
+ <91e19cf3-216b-48ac-a93d-f920dd2a7668@rowland.harvard.edu>
+ <CAOV16XEsgkLWz3rOQsAdve-qKsPEDw-QxJNoo4hJfXdLnowHfw@mail.gmail.com>
+ <2024081946-designate-dioxide-c59d@gregkh>
+ <CAOV16XFYeWdT4tSpLWoE+pCVsNERXKJQCJvJovrfsgMn1PMzbA@mail.gmail.com>
+ <2024081904-encircle-crayon-8d16@gregkh>
+ <CAOV16XEjJT6Oe7PX7HjqEaT5tpX0MqTOZy6=akEKFhtk0emOzg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: xhci: ext-caps: Use cpu_relax() when polling
- registers
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zhongqiu Han
-	<quic_zhonhan@quicinc.com>
-References: <20240820121501.3593245-1-quic_zhonhan@quicinc.com>
- <20240820121501.3593245-3-quic_zhonhan@quicinc.com>
- <cd0cc5d1-0776-4d5f-9f3f-8261deb0e3bb@linux.intel.com>
-Content-Language: en-US
-From: Zhongqiu Han <quic_zhonhan@quicinc.com>
-In-Reply-To: <cd0cc5d1-0776-4d5f-9f3f-8261deb0e3bb@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bm-M6hf3pvMDddTFHzxovYc5eyt6lswa
-X-Proofpoint-GUID: bm-M6hf3pvMDddTFHzxovYc5eyt6lswa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-21_11,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 adultscore=0 mlxlogscore=414 bulkscore=0 mlxscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 clxscore=1011
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408210102
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOV16XEjJT6Oe7PX7HjqEaT5tpX0MqTOZy6=akEKFhtk0emOzg@mail.gmail.com>
 
-On 8/21/2024 5:40 PM, Mathias Nyman wrote:
-> On 20.8.2024 15.15, Zhongqiu Han wrote:
->> It is considered good practice to call cpu_relax() in busy loops, see
->> Documentation/process/volatile-considered-harmful.rst. This can lower
->> CPU power consumption or yield to a hyperthreaded twin processor and
->> also serve as a compiler barrier. In addition, if something goes wrong
->> in the busy loop at least it can prevent things from getting worse.
->>
->> Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
->> ---
->>   drivers/usb/host/xhci-ext-caps.h | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-ext-caps.h b/drivers/usb/host/xhci- 
->> ext-caps.h
->> index 96eb36a58738..25d148d60ab0 100644
->> --- a/drivers/usb/host/xhci-ext-caps.h
->> +++ b/drivers/usb/host/xhci-ext-caps.h
->> @@ -144,6 +144,8 @@ static inline int xhci_find_next_ext_cap(void 
->> __iomem *base, u32 start, int id)
->>           if (offset != start && (id == 0 || XHCI_EXT_CAPS_ID(val) == 
->> id))
->>               return offset;
->> +        cpu_relax();
->> +
->>           next = XHCI_EXT_CAPS_NEXT(val);
->>           offset += next << 2;
->>       } while (next);
-> 
-> Similar case as with PATCH 1/2
-> 
-> This isn't a busy loop polling for some value.
-> We traverse xhci extended capabilities until the one we are looking for 
-> is found.
-> 
-> Thanks
-> Mathias
-> 
-Hi Mathias,
-Thanks a lot for the review, yes, it is similar case as with PATCH 1/2
-there is not a busy loop polling, sorry for this and i will careful for
-similar case next time, and thanks for the discussion as well.
+On Wed, Aug 21, 2024 at 04:25:36PM +0800, color Ice wrote:
+> Dear Ubuntu Team,
 
--- 
-Thx and BRs,
-Zhongqiu Han
+We are not affiliated with Ubuntu at all, sorry.  Please be kind.
+
+> I have encountered a race condition issue in the RT2X00 driver,
+> specifically related to the function rt2x00usb_work_rxdone. The issue
+> manifests as a kernel NULL pointer dereference, which causes the
+> system to crash. Below is the detailed analysis and my suggestions for
+> addressing the issue.
+> 
+> Problem Analysis
+
+<snip>
+
+This mostly looks like it was created with chatgpt or something like
+that, please do not send us things like that.
+
+Again, work with your professor at school who has assigned you this task
+to complete it, don't force us to do the work for you :)
+
+If we get a chance, we'll look at it, but note it's way down the
+priority list for most of us.
+
+thanks,
+
+greg k-h
 
