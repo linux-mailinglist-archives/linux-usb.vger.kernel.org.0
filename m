@@ -1,116 +1,229 @@
-Return-Path: <linux-usb+bounces-13778-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13779-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79DA3959610
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CEBE9596FF
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 11:06:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 070E0B264CF
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 07:27:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C6BAB224EA
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:06:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B8B1B81D6;
-	Wed, 21 Aug 2024 07:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588771CBE96;
+	Wed, 21 Aug 2024 08:21:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E2F1B81DA
-	for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2024 07:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C8B1CB14D;
+	Wed, 21 Aug 2024 08:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724225173; cv=none; b=eS7rRmuBwrewo/IoHVPpHO0rTWn4eZLwRIdOyeGRzUtky5EXIw4s1cnLVuIswgigzkRf493IVQXPDRi7fyzCfjC+Q/cBApPlaItuKOqQT10t8Z5SsF2GojD34Bg2YjVe6QAU4vxDwCCb2dizygh2MoPTEnYS6LzIOMAz51S2mLc=
+	t=1724228465; cv=none; b=YA0aaZyqnE0kw5jmfxuxfJniLGDPIsMFp9Xir0taAy23UA2tcB7w21PT+5OrZ4WcqKAp2K89QRD6cEDXS++inXftaz6JaXLKg0IlujXWPcNS38L4NgCdy8LGHFcWH27ihBg60SZac72YT9JjBD/nkrrQRndKCdUQmvhdXMvOGLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724225173; c=relaxed/simple;
-	bh=i4givOFpoIFYH4oJJeUES8CCDV6YYBw1Dn8HLriMbKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cid/uhCarSN4Yh3TP5Lvf09sR0L1ukiJZjKmpsGZkQKqtHPvKhDO54TIec2NfeQgHRLgmDGg91chGDJ9whSwdb0K+VwglAqAAVvreAnuR/5QSVzEPjJbKD3A1xcKdbCzMPdMnG2yKKZeH2hLKiSK3z6yEO0aL8dCdVUR0XwGfb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sgfjD-0007np-PK; Wed, 21 Aug 2024 09:25:59 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sgfjD-001xSa-9d; Wed, 21 Aug 2024 09:25:59 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sgfjD-00FPfV-0b;
-	Wed, 21 Aug 2024 09:25:59 +0200
-Date: Wed, 21 Aug 2024 09:25:59 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Rob Herring <robh@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/3] serdev: ttyport: make use of tty_kopen_exclusive
-Message-ID: <20240821072559.lh5lt3mnhrit5gmp@pengutronix.de>
-References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
- <20240807-v6-10-topic-usb-serial-serdev-v1-1-ed2cc5da591f@pengutronix.de>
- <c7a710ec-f391-4726-910e-d7bedbfc6a6f@kernel.org>
+	s=arc-20240116; t=1724228465; c=relaxed/simple;
+	bh=DyeQTiVLIwnKP7nDbihUPIy5GAmQ7YvIMEcNM/HThdc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qjEyE/Tx/nH3rV5I5gH0s6/N/Ouk92p1lj+gY7aSLveoQLE7o7X+Zm2oBbbE36m9HXuZF3QIZwJtztfscECjXvegxoq6hRkamZWc9NcPrcS8uh/EYByHsu+TTe95d4rIFfOWY3IAoUPakF/MbAUQ1w4ogIamRohT2CZRUd/NrRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.2] (ip5f5af269.dynamic.kabel-deutschland.de [95.90.242.105])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id A93C661E5FE05;
+	Wed, 21 Aug 2024 10:20:13 +0200 (CEST)
+Message-ID: <1cf78f6f-af21-48bc-a9d8-755dd7bf8503@molgen.mpg.de>
+Date: Wed, 21 Aug 2024 10:20:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7a710ec-f391-4726-910e-d7bedbfc6a6f@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
+ #08!!! on Dell XPS 13 9360
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
+ <87o7ak411y.fsf@somnus> <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
+ <87sezv7ytw.fsf@somnus>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <87sezv7ytw.fsf@somnus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 24-08-08, Jiri Slaby wrote:
-> On 07. 08. 24, 16:08, Marco Felsch wrote:
-> > The purpose of serdev is to provide kernel drivers for particular serial
-> > device, serdev-ttyport is no exception here. Make use of the
-> > tty_kopen_exclusive() funciton to mark this tty device as kernel
-> > internal device.
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> >   drivers/tty/serdev/serdev-ttyport.c | 9 ++++++---
-> >   1 file changed, 6 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
-> > index 3d7ae7fa5018..94c43d25ddbe 100644
-> > --- a/drivers/tty/serdev/serdev-ttyport.c
-> > +++ b/drivers/tty/serdev/serdev-ttyport.c
-> > @@ -103,11 +103,14 @@ static int ttyport_write_room(struct serdev_controller *ctrl)
-> >   static int ttyport_open(struct serdev_controller *ctrl)
-> >   {
-> >   	struct serport *serport = serdev_controller_get_drvdata(ctrl);
-> > +	struct tty_driver *tty_drv = serport->tty_drv;
-> >   	struct tty_struct *tty;
-> >   	struct ktermios ktermios;
-> > +	dev_t dev;
-> >   	int ret;
-> > -	tty = tty_init_dev(serport->tty_drv, serport->tty_idx);
-> > +	dev = MKDEV(tty_drv->major, tty_drv->minor_start + serport->tty_idx);
-> > +	tty = tty_kopen_exclusive(dev);
-> 
-> I believe that the now added tty_lookup_driver() has negligible impact in
-> this anyway slow path, right?
+Dear Anna-Maria,
 
-Any other comments, suggestions apart this one?
 
-Regards,
-  Marco
+Thank you very much for the support. I was finally able to collect the 
+data you asked for.
 
+Am 09.04.24 um 09:57 schrieb Anna-Maria Behnsen:
+> Paul Menzel writes:
+
+[…]
+
+>> Am 08.04.24 um 12:10 schrieb Anna-Maria Behnsen:
+>>
+>>> Paul Menzel writes:
+>>
+>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9-rc2+
+>>>> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of
+>>>> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 stopped
+>>>> working (only the Ethernet port was used). Linux logged:
+>>>
+>>> thanks for the report. Can you please provide a trace beside the dmesg
+>>> output? The following trace events should be enabled (via kernel command
+>>> line):
+>>>
+>>> trace_event=timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit
+>> Unfortunately I haven’t been able to reproduce it until now. Should it
+>> happen again, I am going to try your suggestion.
 > 
-> thanks,
-> -- 
-> js
-> suse labs
-> 
-> 
+> Thanks for letting me know.
+
+I wanted to configure that in the running system, but wasn’t able to set 
+all of these at once with `set_event`:
+
+     echo 
+'timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit' 
+| sudo tee /sys/kernel/tracing/set_event
+
+For some reason setting them individually also did *not* work:
+
+     for e in timer:* timer_migration:* sched:sched_switch 
+sched:sched_wakeup sched:sched_process_hang irq:softirq_entry 
+irq:softirq_raise irq:softirq_exit'; do echo "$e" | sudo tee -a 
+/sys/kernel/tracing/set_event; done
+
+I then used
+
+     echo 1 | sudo tee /sys/kernel/tracing/events/timer/enable
+     echo 1 | sudo tee /sys/kernel/tracing/events/timer_migration/enable
+     echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_switch/enable
+     echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_wakeup/enable
+     echo 1 | sudo tee 
+/sys/kernel/tracing/events/sched/sched_process_hang/enable
+     echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_entry/enable
+     echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_raise/enable
+     echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_exit/enable
+
+and also had to increase the buffer to bridge the gap between the event 
+and me noticing it:
+
+     echo 96000 | sudo tee /sys/kernel/tracing/buffer_size_kb
+
+Then, with Linux v6.11-rc4-11-g521b1e7f4cf0b, I was able to get the 
+trace for the event below:
+
+     [ 7542.706299] NOHZ tick-stop error: local softirq work is pending, 
+handler #08!!!
+
+$ sudo cat /sys/kernel/tracing/trace
+[…]
+  MediaPD~der #28-14000   [000] d..1.  7542.703768: hrtimer_cancel: 
+hrtimer=000000008d2c9f3f
+  MediaPD~der #28-14000   [000] .....  7542.703810: hrtimer_init: 
+hrtimer=00000000c6f259e7 clockid=CLOCK_MONOTONIC mode=ABS
+  MediaPD~der #28-14000   [000] d..1.  7542.703812: hrtimer_start: 
+hrtimer=00000000c6f259e7 function=hrtimer_wakeup expires=7602581538204 
+softexpires=7602581488204 mode=ABS
+  MediaPD~der #28-14000   [000] d..2.  7542.703821: sched_switch: 
+prev_comm=MediaPD~der #28 prev_pid=14000 prev_prio=120 prev_state=S ==> 
+next_comm=swapper/0 next_pid=0 next_prio=120
+           <idle>-0       [000] dN.2.  7542.703931: sched_wakeup: 
+comm=ImageBridgeChld pid=6041 prio=120 target_cpu=000
+           <idle>-0       [000] d..2.  7542.703937: sched_switch: 
+prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
+next_comm=ImageBridgeChld next_pid=6041 next_prio=120
+  ImageBridgeChld-6041    [000] d..2.  7542.704041: sched_switch: 
+prev_comm=ImageBridgeChld prev_pid=6041 prev_prio=120 prev_state=S ==> 
+next_comm=swapper/0 next_pid=0 next_prio=120
+           <idle>-0       [000] dN.2.  7542.704174: sched_wakeup: 
+comm=Renderer pid=4113 prio=120 target_cpu=000
+           <idle>-0       [000] d..2.  7542.704179: sched_switch: 
+prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
+next_comm=Renderer next_pid=4113 next_prio=120
+         Renderer-4113    [000] d..2.  7542.704245: sched_switch: 
+prev_comm=Renderer prev_pid=4113 prev_prio=120 prev_state=S ==> 
+next_comm=swapper/0 next_pid=0 next_prio=120
+           <idle>-0       [000] dNh2.  7542.704260: sched_wakeup: 
+comm=IPC I/O Child pid=6029 prio=120 target_cpu=000
+           <idle>-0       [000] d..2.  7542.704267: sched_switch: 
+prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
+next_comm=IPC I/O Child next_pid=6029 next_prio=120
+    IPC I/O Child-6029    [000] d..2.  7542.704340: sched_switch: 
+prev_comm=IPC I/O Child prev_pid=6029 prev_prio=120 prev_state=S ==> 
+next_comm=swapper/0 next_pid=0 next_prio=120
+           <idle>-0       [000] dN.2.  7542.704786: sched_wakeup: 
+comm=Compositor pid=4123 prio=120 target_cpu=000
+           <idle>-0       [000] d..2.  7542.704791: sched_switch: 
+prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
+next_comm=Compositor next_pid=4123 next_prio=120
+       Compositor-4123    [000] d..2.  7542.704944: sched_switch: 
+prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> 
+next_comm=swapper/0 next_pid=0 next_prio=120
+           <idle>-0       [000] dN.2.  7542.705943: sched_wakeup: 
+comm=Compositor pid=4123 prio=120 target_cpu=000
+           <idle>-0       [000] d..2.  7542.705950: sched_switch: 
+prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
+next_comm=Compositor next_pid=4123 next_prio=120
+       Compositor-4123    [000] d..2.  7542.706105: sched_switch: 
+prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> 
+next_comm=swapper/0 next_pid=0 next_prio=120
+           <idle>-0       [000] d.h2.  7542.706328: hrtimer_cancel: 
+hrtimer=000000009bbda66a
+           <idle>-0       [000] d.h1.  7542.706329: 
+hrtimer_expire_entry: hrtimer=000000009bbda66a 
+function=tick_nohz_handler now=7542584007490
+           <idle>-0       [000] d.h1.  7542.706333: softirq_raise: vec=9 
+[action=RCU]
+           <idle>-0       [000] d.h1.  7542.706338: softirq_raise: vec=7 
+[action=SCHED]
+           <idle>-0       [000] d.h1.  7542.706339: hrtimer_expire_exit: 
+hrtimer=000000009bbda66a
+           <idle>-0       [000] d.h2.  7542.706340: hrtimer_start: 
+hrtimer=000000009bbda66a function=tick_nohz_handler 
+expires=7542588000000 softexpires=7542588000000 mode=ABS
+           <idle>-0       [000] ..s1.  7542.706345: softirq_entry: vec=7 
+[action=SCHED]
+           <idle>-0       [000] ..s1.  7542.706359: softirq_exit: vec=7 
+[action=SCHED]
+           <idle>-0       [000] ..s1.  7542.706360: softirq_entry: vec=9 
+[action=RCU]
+           <idle>-0       [000] ..s1.  7542.706362: softirq_exit: vec=9 
+[action=RCU]
+           <idle>-0       [000] dNh4.  7542.707672: sched_wakeup: 
+comm=irq/51-DLL075B: pid=194 prio=49 target_cpu=000
+           <idle>-0       [000] d..2.  7542.707685: sched_switch: 
+prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> 
+next_comm=irq/51-DLL075B: next_pid=194 next_prio=49
+  irq/51-DLL075B:-194     [000] .....  7542.707708: timer_init: 
+timer=00000000630ae178
+  irq/51-DLL075B:-194     [000] d..1.  7542.707710: timer_start: 
+timer=00000000630ae178 function=process_timeout expires=4296778179 
+[timeout=250] bucket_expiry=4296778184 cpu=0 idx=121 flags=
+  irq/51-DLL075B:-194     [000] d..2.  7542.707718: sched_switch: 
+prev_comm=irq/51-DLL075B: prev_pid=194 prev_prio=49 prev_state=D ==> 
+next_comm=swapper/0 next_pid=0 next_prio=120
+           <idle>-0       [000] dN.2.  7542.709072: sched_wakeup: 
+comm=AudioIP~ent RPC pid=6671 prio=120 target_cpu=000
+[…]
+
+The trace file is 320 MB big. If you need the full trace and log, please 
+tell me, and I’ll upload it somewhere.
+
+
+Kind regards,
+
+Paul
 
