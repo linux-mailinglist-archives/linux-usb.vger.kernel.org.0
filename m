@@ -1,83 +1,83 @@
-Return-Path: <linux-usb+bounces-13819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1B3295A65C
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 23:16:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2078995A665
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 23:18:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FD3C1C22088
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 21:16:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6D201F2187D
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 21:18:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE844170A36;
-	Wed, 21 Aug 2024 21:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2151417108A;
+	Wed, 21 Aug 2024 21:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b0mOBeC+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UEOnz/9W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA02286AFA;
-	Wed, 21 Aug 2024 21:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193E3170A1D;
+	Wed, 21 Aug 2024 21:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724274993; cv=none; b=d2MKG5L9d2nVZZR0ST8yjrJ2fYCCF4sG9C5l10wVUSnPAX8woJnGtgoknTyr2dnFED5wo38oNNcughWixVJufnUPVA7RlMiOy0pDLHqlECfojtVPqz2Oh02BeQoOPwOF1HDkjPCB/1j/SRuKtctzMaCa/y9Y/zTxg8b8ytP2aj0=
+	t=1724275121; cv=none; b=HlWaDgCImUxsjEYJlYWzQOOja8oIcxO+veOLMvBtn1CZNwIssfrzYbM6OD9J9YlTenr0zwltoFAyLOlNx6vRo19cM1aGnCkZFX9nWRa6a7DytMzPBwU7o2p5pgzoAZR5RX/z8qT+k4bZATnghp3yxPciqgp+bUouKPe4u6AcnzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724274993; c=relaxed/simple;
-	bh=TiUGC2plqsju+PIKUdlgp4dVJIOBq73ZHtfCj5+GMVM=;
+	s=arc-20240116; t=1724275121; c=relaxed/simple;
+	bh=9Ieq89fKSBVTEvc+D8hBKOSACthGVLaFkrxnq1bQ9W8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gLEcLYX0ZmD9YE3L4D71wbixGqMJUMAX6gdKt10Zl/OyNMu+l50hXfOnLz0e8AM1RcBH4o0NaOa6AWk7GG34pTK1fJxjx4Xvgxsp4ugGAveRWqCiw3kmbvlKBnhkMlpmuYApk18OBHtCzhQ25P3E7aXwz9buw8hNR82GIxQhJKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b0mOBeC+; arc=none smtp.client-ip=209.85.208.181
+	 To:Cc:Content-Type; b=exeWN7qoH4lQzSxXgJqws1/Rrn/A3FKk2fQcrwh+WwDStuQH2YmBP2j/G1tCCjhU2tnxlKd66GCes3HGhmoclqaFeE8Wg+tgIQFU8uxuH22FDewDnc6xq8G3X4Hj8G++RS0sG+hwPf28FGFapOnqunWn9pIuuy2Ms0TJICs+mSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UEOnz/9W; arc=none smtp.client-ip=209.85.208.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f3f25a1713so1403401fa.2;
-        Wed, 21 Aug 2024 14:16:31 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f3ce5bc6adso1173551fa.1;
+        Wed, 21 Aug 2024 14:18:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724274990; x=1724879790; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724275118; x=1724879918; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TiUGC2plqsju+PIKUdlgp4dVJIOBq73ZHtfCj5+GMVM=;
-        b=b0mOBeC+iUbWr6DURzUE/RJpvfRFPUdUZNVCTzbSf9sOLqEXQN6nPIitV83iWT0QDS
-         5a0Zx+omFZV5ootU0N97sha1aYkok6kIPvXVy35KTk0Tzu4k6l+LkFK/6oPLX/8kjD5k
-         ulko7FuVUPr7Xym3Tao4OEXBefj3GpB7eb6EVXhCX+APnWEYruQgEHwBOADP8uzadol6
-         wX8qoKi9tQS0PscWGkLrp/PS8HKaTPHZVeB4rluWtJDnu8kmcyI/BZh/polqwcZTvsaB
-         WO4ECAF6aqNCAVaGlQ96WlbglKgbeoB8Q9hht9JH/YXPWG/Ra3Cxshrl6xiktJP32F48
-         qOFQ==
+        bh=9Ieq89fKSBVTEvc+D8hBKOSACthGVLaFkrxnq1bQ9W8=;
+        b=UEOnz/9WB0m4s9g9ePGsymkD1TJIDQT++bddfpocw5+elyawGlTk14+UVDaYM+iIFm
+         eqHBBcHD0Ww9VkR1+cDWn8H4PbNnShKjVCbScTv62fCzfcaljBn7uELOS6QZorOh5hNu
+         0BS9N9c9AhymItbxxST0IFYqvakIqk6FkxH84BEr2Ag6XKcvmwMUCmOJMu37FDxSyQWX
+         uQLI/zsOx2eWWagI6djjPXO7IV2zUIhnEmlbhs4f0ZoFWw66KIC24llA/+Q6aWnm8UDR
+         uO8bKrSEF/NwslqsbZwGO81EWnZilZM2uiBjSV1kOgGk9sKe8LqPe/eP4WEX67TwnzM7
+         TqDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724274990; x=1724879790;
+        d=1e100.net; s=20230601; t=1724275118; x=1724879918;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TiUGC2plqsju+PIKUdlgp4dVJIOBq73ZHtfCj5+GMVM=;
-        b=gjMimV+2Za9+6+uTCc7s9qZoqcWigCoYcDZa5xQ7hDcMgYohuePP5kkk/YKiD9wL06
-         vdzkMLUcdCybWICsMcR10z7cORSUxuPmvs+m+9J1iEEdF2zb5JgIsTecJcCD5fibIj7C
-         ldI8oIuaI3zVWNhhOrZjRC11t6STMlJWqwnjDA6AO7AqrnNnZvr2U6sRdj29tq70en6x
-         zjsTbSh2bbfpCAz4TM3TKg7BVOc4azjXnSlD6kurmCCnXuUQWK3Vf856dObj7lfcl+f9
-         BAjZNGqxD83XJAxoTFspf9i2LFs9e3xyEaNRdaupiw/XD//bGRDX+u+yPMjplKTXS9Hr
-         R8ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVWrNw8CBDHnQ8XZiXQL/Bx7P5kqSi9vWig/f2wUbHRXQJuEEeicoos6+/9q4WSYuAZJu+QANLJETRKPbo=@vger.kernel.org, AJvYcCX5SXwdCc/pJzrR2SeirEgQh99ob2EwDafCeyWJF9PWPJcYW2ltvV+ZMmbI5iTnsKlhQ8cxzt01Ndky@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4XdgaPV+ZQOynrX/OUaS6B2tEIaZni6rhAsSYrAUCc/o259hT
-	AZpRJh8LrkWUGE0xGFQ76hnnVSKQxKXoFlzeEJLOhtWJy+Qmz9ohRRASLLLj63xBQsr0pj824pE
-	s9rCn/QfXxJ5U3DxuJNMW6DEqWoIC6Q==
-X-Google-Smtp-Source: AGHT+IEbvnYernfbaPui1I8nfs8or7e/vZuuYr7xXOntlaLltoQcnHV5tFfpUmsarL5GBVzxBFqU5Ef5XzVrlzWd/Aw=
-X-Received: by 2002:a2e:f12:0:b0:2f3:cd4e:b929 with SMTP id
- 38308e7fff4ca-2f3f8953813mr21761351fa.34.1724274989525; Wed, 21 Aug 2024
- 14:16:29 -0700 (PDT)
+        bh=9Ieq89fKSBVTEvc+D8hBKOSACthGVLaFkrxnq1bQ9W8=;
+        b=PAUGF96Nb9f1NHRLMmgcFgsP9ed3wOYK36EUgeYSUX08h0ePY8gQOZ3czsrM+XbZTi
+         I4zavDFaQeWygk6DM7Lsx5KWXyvUB3BBVzPfx/Ykv3TubGpWz3mc0mSXuUYpIw+rHmU6
+         kzr3gvZW4Weu8q2yAHA9JfPOEf7FkIxZmVeaJASAlBeZ5DCeVivN7QD204Qspj1m2zna
+         +TfkNp42ThorRd6IN/88cd6VFtPsu0xEP8TQNpdoYPkOf3GkfFqGedN4QQs8kMIM5A+J
+         8CRtCHE+oNAu1wZ47FgKPg74UoI/y8fEZiU7CZotvLq7qeKn2qZlBVV0fnrxZ/eKpYTY
+         DKNA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6I0z9kzbNiVxTfZ7sGdj9AVcI6QcUPD4saw/0bWS2rAQiZ82IqUOZLsZpXYUNvYAW5Bz4oCglIw+T@vger.kernel.org, AJvYcCUViSEFsOs/JtM80x+esuIoMT6Khcu0AdXX/kb71SsIVEA9tUQXC1nyAp0hIOluefTECOq7lbtwOn6LKmg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo6i0/W/rco8CIqnOaLtNoutMoaLn49BLHaNXXMjZJReYtrVoI
+	LEL/EPtZKdD6twqROYe+zjrqKZSnZ4QXCWe9v3ySE5gS8ri4bAqiXeXCpp65ngcM9ktBpW0AuEQ
+	1paPz4+eVfNoTiO7mCIrhw89wxNk=
+X-Google-Smtp-Source: AGHT+IF4A7L+53ZaTf2fExGKqcZZk+WWzGG1SGAa79vRdOnrxfpve6MYoUmDpikZKNIKs12zBAuH1wiPI4qxB86GMfw=
+X-Received: by 2002:a05:651c:1502:b0:2ef:22ef:a24e with SMTP id
+ 38308e7fff4ca-2f3f881e268mr26168671fa.10.1724275117923; Wed, 21 Aug 2024
+ 14:18:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821-dwc-mp-v2-0-2a29b6a5c2f4@nxp.com> <20240821-dwc-mp-v2-1-2a29b6a5c2f4@nxp.com>
-In-Reply-To: <20240821-dwc-mp-v2-1-2a29b6a5c2f4@nxp.com>
+References: <20240821-dwc-mp-v2-0-2a29b6a5c2f4@nxp.com> <20240821-dwc-mp-v2-2-2a29b6a5c2f4@nxp.com>
+In-Reply-To: <20240821-dwc-mp-v2-2-2a29b6a5c2f4@nxp.com>
 From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 21 Aug 2024 18:16:18 -0300
-Message-ID: <CAOMZO5DNndao-kU9s9F_1XGMdTP-sgComD9UoaSOQpfkErBEXw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] usb: host: xhci-plat: Parse xhci-missing_cas_quirk
- and apply quirk
+Date: Wed, 21 Aug 2024 18:18:26 -0300
+Message-ID: <CAOMZO5BcTyuSxqyBEESyjVy07RhA8YtkHqByfCgEfMgYqVbVjA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] usb: dwc3: imx8mp: add 2 software managed quirk
+ properties for host mode
 To: Frank Li <Frank.Li@nxp.com>
 Cc: Mathias Nyman <mathias.nyman@intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
@@ -88,16 +88,11 @@ Cc: Mathias Nyman <mathias.nyman@intel.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Frank,
-
 On Wed, Aug 21, 2024 at 1:19=E2=80=AFPM Frank Li <Frank.Li@nxp.com> wrote:
 >
-> Parse software managed property 'xhci-skip-phy-init-quirk' and
-> 'xhci-skip-phy-init-quirk' to apply related quirk. It allows usb glue lay=
-er
-> driver apply these quirk.
+> Add 2 software manage quirk properites (xhci-missing-cas-quirk and
 
-Please explain the reason in the commit log.
+Typo in 'properties'. Please improve the commit log.
 
-What does it fix? Why do we need these quirks? Or what does it improve?
+Why are you adding these quirks?
 
