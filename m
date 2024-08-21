@@ -1,160 +1,180 @@
-Return-Path: <linux-usb+bounces-13785-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13786-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C87609599FA
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 13:32:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A3D0959AB9
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 13:51:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06A541C20BA0
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 11:32:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E045B2A6E2
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 11:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBE0192D9C;
-	Wed, 21 Aug 2024 10:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA53B1531F6;
+	Wed, 21 Aug 2024 11:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bR7B+FAo"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TY9TxHBI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1261531CF;
-	Wed, 21 Aug 2024 10:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889511531F1;
+	Wed, 21 Aug 2024 11:32:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724236996; cv=none; b=DG1l24nSxsVf3AbZJbHy1WdPEOQzuxHnHdPBvmDFuEyparIrmVunBKLAwYKkSCTXys7yEb7vF5TgluJePbjsvWsNlSYMR2TsRvVWE7HLehdGxhKnh0kniGf2a3jJ2y4oTBSpwzYhWn/EI/Q5k52vjYpJ5CQllFbdjicqIOtfuSs=
+	t=1724239979; cv=none; b=OcGnq2hpef9jtDPfk6jNw0WSYPmKIKIDC//zdDuU60tqf2ENpDvas3L21okpA1fFeiF9Ripzkz7zgUFQTgzYpPP3FrGSQA+h/O9NVLr1gAL0v79PzY2zvR43bfDN4zywGozHRXwzp6DQoaAk2CDsAGn+21FMT/WwF3njrKnZbKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724236996; c=relaxed/simple;
-	bh=dpMJmjks5mr2og5tU8dXwUueg+OMt9vvp2I+Pg377Ow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ae0tbsgwaNEEOA5aSrxOl9ZrJ0Yru86g1aNLO2ugB3pwHcY7r2EtKbSFL57ct9lxU6trwHOqBtzZjksPR2ZUL3eBqhVXaYaAsvEW6bdMBHWmBAhkx1leVtQ8SpvemhKLHhWV7mZv/aeVjeZRUneGy68m32+7f6v99k3YuyvFraw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bR7B+FAo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 478C9C4AF09;
-	Wed, 21 Aug 2024 10:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724236996;
-	bh=dpMJmjks5mr2og5tU8dXwUueg+OMt9vvp2I+Pg377Ow=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bR7B+FAoX7Rm5Qng94wfqY1lphuv9falVbzT8Gmry6lKTw+5XVHA8+hUuISGRWiT2
-	 aO6Dm128vRmRFAhj0EjFJUD8x1AhHEaNa44ofH/qfJWufENNGv+g8Y3YA5OPY2+7rk
-	 wUR2cd9srcir9Hil8Z5iqhuOBlOBPxQiQyC9ChkCCd6Xu6SCqGazCDq9jYxJDmBbsU
-	 jrnGcLOtqJgltqD393Hkc6Jc1dE5c41aI/rFCAOHSfdJipm8pO06oQu2k6D7eyOLI3
-	 cPgxvuYDosx2Ugf/rIqiwh2GOKOy1qABIIQ1gSHPyaZ8L7t5EIBDxBHLu6jXYTgApO
-	 3+ihPzYzQXsdg==
-Date: Wed, 21 Aug 2024 18:43:08 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdnsp: fix for Link TRB with TC
-Message-ID: <20240821104308.GB652432@nchen-desktop>
-References: <20240821060426.84380-1-pawell@cadence.com>
- <PH7PR07MB953878279F375CCCE6C6F40FDD8E2@PH7PR07MB9538.namprd07.prod.outlook.com>
+	s=arc-20240116; t=1724239979; c=relaxed/simple;
+	bh=p+4ioSkhsSo7DEZToVE5UONpMdDEqou4FVH4CZerBYY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=oyKz5ft57ThT7hmh4xEfsXHw+xy8m3eSZFEu4/N4RiuCr913mtE0Av2mWUzVT0onyAF9XgLstgHMzArnljie0lYFd7v0j/UKqXfG0xmlrVvC6edoX0pEsCiGjakAANk/zaADrk4w9ZTOJEYxFMIbththTuEUGZCNgPxIaRpqR/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TY9TxHBI; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47L6HnMI026072;
+	Wed, 21 Aug 2024 11:32:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Y1EF7iQw5Bh2mrid4cNrPlOuDjEMq4+PGZp/6a7D6jY=; b=TY9TxHBIJJGBINBl
+	KctuAOO1Qu7dqlQLKUj6KSURkhdr/W2RIoBXZM5sN9mqD//XU7mFczIWPduOmhAe
+	moRYR/d07Jh0vOA66W6S3J0pbn27sroWQkFUwUKCW48cMN+4OtXhRU2/TKJkcvNZ
+	7IiJAXnprNvfLSr6KWiHsuMYHQ0Q8Ig5axwCsJyb6MgxhhuTepDf7F4fKRqzeEr0
+	cWiGiMLE7Z2H3WeD0/XLP8o2OcvQdcCGlRdKsgxThpPpZc8Vm+mxdGHWibzySE20
+	uhTmRWnCbRy0fxGIiq4lUiF2tbj9Bg1x0L28vNkkKGZOtuoeMAJ1ebNSZZ79f2Zb
+	XGRQMw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414xb9jvku-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Aug 2024 11:32:54 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47LBWrqE016392
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Aug 2024 11:32:53 GMT
+Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 21 Aug
+ 2024 04:32:50 -0700
+Message-ID: <971ae3e9-a991-7649-dfa1-a7156e7200d4@quicinc.com>
+Date: Wed, 21 Aug 2024 17:02:47 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR07MB953878279F375CCCE6C6F40FDD8E2@PH7PR07MB9538.namprd07.prod.outlook.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] usb: gadget: u_serial: check Null pointer in EP
+ callback
+Content-Language: en-US
+To: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC: "quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        opensource.kernel <opensource.kernel@vivo.com>,
+        "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>,
+        Michael Nazzareno Trimarchi
+	<michael@amarulasolutions.com>
+References: <TYUPR06MB62175A4C6BC97FBAAC9DA72CD28D2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+From: Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <TYUPR06MB62175A4C6BC97FBAAC9DA72CD28D2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: XE114qPBBdWNjLqejL4wOb2okf7B5dQT
+X-Proofpoint-ORIG-GUID: XE114qPBBdWNjLqejL4wOb2okf7B5dQT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-21_09,2024-08-19_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 mlxlogscore=770 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408210084
 
-On 24-08-21 06:07:42, Pawel Laszczak wrote:
-> Stop Endpoint command on LINK TRB with TC bit set to 1 causes that
-> internal cycle bit can have incorrect state after command complete.
 
-You mean this issue is: the transfer ring is on the LINK TRB
-when stop endpoint command is going to execute?
 
-What's the use case we could find this issue?
-
-Peter
-
-> In consequence empty transfer ring can be incorrectly detected
-> when EP is resumed.
-> NOP TRB before LINK TRB avoid such scenario. Stop Endpoint command
-> is then on NOP TRB and internal cycle bit is not changed and have
-> correct value.
+On 20-08-24 08:04 pm, 胡连勤 wrote:
+> From: Lianqin Hu <hulianqin@vivo.com>
 > 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Added null pointer check to avoid system crash.
+> Still didn't update the commit text with reason for null pointer crash.
+Please mention about the race between gser_disconnect and read/write
+complete callbacks, and how the port can become Null.
+
+> Unable to handle kernel NULL pointer dereference at
+> virtual address 00000000000001a8
+> pc : gs_read_complete+0x58/0x240
+> lr : usb_gadget_giveback_request+0x40/0x160
+> sp : ffffffc00f1539c0
+> x29: ffffffc00f1539c0 x28: ffffff8002a30000 x27: 0000000000000000
+> x26: ffffff8002a30000 x25: 0000000000000000 x24: ffffff8002a30000
+> x23: ffffff8002ff9a70 x22: ffffff898e7a7b00 x21: ffffff803c9af9d8
+> x20: ffffff898e7a7b00 x19: 00000000000001a8 x18: ffffffc0099fd098
+> x17: 0000000000001000 x16: 0000000080000000 x15: 0000000ac1200000
+> x14: 0000000000000003 x13: 000000000000d5e8 x12: 0000000355c314ac
+> x11: 0000000000000015 x10: 0000000000000012 x9 : 0000000000000008
+> x8 : 0000000000000000 x7 : 0000000000000000 x6 : ffffff887cd12000
+> x5 : 0000000000000002 x4 : ffffffc00f9b07f0 x3 : ffffffc00f1538d0
+> x2 : 0000000000000001 x1 : 0000000000000000 x0 : 00000000000001a8
+> Call trace:
+> gs_read_complete+0x58/0x240
+> usb_gadget_giveback_request+0x40/0x160
+> dwc3_remove_requests+0x170/0x484
+> dwc3_ep0_out_start+0xb0/0x1d4
+> __dwc3_gadget_start+0x25c/0x720
+> kretprobe_trampoline.cfi_jt+0x0/0x8
+> kretprobe_trampoline.cfi_jt+0x0/0x8
+> udc_bind_to_driver+0x1d8/0x300
+> usb_gadget_probe_driver+0xa8/0x1dc
+> gadget_dev_desc_UDC_store+0x13c/0x188
+> configfs_write_iter+0x160/0x1f4
+> vfs_write+0x2d0/0x40c
+> ksys_write+0x7c/0xf0
+> __arm64_sys_write+0x20/0x30
+> invoke_syscall+0x60/0x150
+> el0_svc_common+0x8c/0xf8
+> do_el0_svc+0x28/0xa0
+> el0_svc+0x24/0x84
+> el0t_64_sync_handler+0x88/0xec
+> el0t_64_sync+0x1b4/0x1b8
+> Code: aa1f03e1 aa1303e0 52800022 2a0103e8 (88e87e62)
+> ---[ end trace 938847327a739172 ]---
+> Kernel panic - not syncing: Oops: Fatal exception
+> 
+You can also add the Fixes tag and CC stable kernel, so that it can be
+backported to older kernels (such as 5.15) also.
+
+https://www.kernel.org/doc/html/v4.10/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
+
+Please refer other commits for reference.
+> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
 > ---
->  drivers/usb/cdns3/cdnsp-gadget.h |  3 +++
->  drivers/usb/cdns3/cdnsp-ring.c   | 28 ++++++++++++++++++++++++++++
->  2 files changed, 31 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-> index e1b5801fdddf..9a5577a772af 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.h
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
-> @@ -811,6 +811,7 @@ struct cdnsp_stream_info {
->   *        generate Missed Service Error Event.
->   *        Set skip flag when receive a Missed Service Error Event and
->   *        process the missed tds on the endpoint ring.
-> + * @wa1_nop_trb: hold pointer to NOP trb.
->   */
->  struct cdnsp_ep {
->  	struct usb_ep endpoint;
-> @@ -838,6 +839,8 @@ struct cdnsp_ep {
->  #define EP_UNCONFIGURED		BIT(7)
+> v3:
+>   - Add serial_port_lock protection when checking port pointer
+>   - Optimize code comments
+>   - Delete log printing
+> ---
+
+[...]
 >  
->  	bool skip;
-> +	union cdnsp_trb	 *wa1_nop_trb;
-> +
->  };
->  
->  /**
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 275a6a2fa671..75724e60653c 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -1904,6 +1904,23 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->  	if (ret)
->  		return ret;
->  
-> +	/*
-> +	 * workaround 1: STOP EP command on LINK TRB with TC bit set to 1
-> +	 * causes that internal cycle bit can have incorrect state after
-> +	 * command complete. In consequence empty transfer ring can be
-> +	 * incorrectly detected when EP is resumed.
-> +	 * NOP TRB before LINK TRB avoid such scenario. STOP EP command is
-> +	 * then on NOP TRB and internal cycle bit is not changed and have
-> +	 * correct value.
-> +	 */
-> +	if (pep->wa1_nop_trb) {
-> +		field = le32_to_cpu(pep->wa1_nop_trb->trans_event.flags);
-> +		field ^= TRB_CYCLE;
-> +
-> +		pep->wa1_nop_trb->trans_event.flags = cpu_to_le32(field);
-> +		pep->wa1_nop_trb = NULL;
-> +	}
-> +
->  	/*
->  	 * Don't give the first TRB to the hardware (by toggling the cycle bit)
->  	 * until we've finished creating all the other TRBs. The ring's cycle
-> @@ -1999,6 +2016,17 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->  		send_addr = addr;
+> @@ -486,7 +509,7 @@ static void gs_write_complete(struct usb_ep *ep, struct usb_request *req)
+>  		break;
 >  	}
 >  
-> +	if (cdnsp_trb_is_link(ring->enqueue + 1)) {
-> +		field = TRB_TYPE(TRB_TR_NOOP) | TRB_IOC;
-> +		if (!ring->cycle_state)
-> +			field |= TRB_CYCLE;
-> +
-> +		pep->wa1_nop_trb = ring->enqueue;
-> +
-> +		cdnsp_queue_trb(pdev, ring, 0, 0x0, 0x0,
-> +				TRB_INTR_TARGET(0), field);
-> +	}
-> +
->  	cdnsp_check_trb_math(preq, enqd_len);
->  	ret = cdnsp_giveback_first_trb(pdev, pep, preq->request.stream_id,
->  				       start_cycle, start_trb);
-> -- 
-> 2.43.0
-> 
+> -	spin_unlock(&port->port_lock);
+> +	spin_unlock_irqrestore(&port->port_lock, flags);
+>  }
+>  
+>  static void gs_free_requests(struct usb_ep *ep, struct list_head *head,
+
+Regards,
+Prashanth K
 
