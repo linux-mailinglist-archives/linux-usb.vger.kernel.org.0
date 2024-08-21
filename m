@@ -1,120 +1,116 @@
-Return-Path: <linux-usb+bounces-13777-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13778-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F06B095956E
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:11:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79DA3959610
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:27:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F42D1C225D9
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 07:11:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 070E0B264CF
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 07:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BC214D2A8;
-	Wed, 21 Aug 2024 07:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B8B1B81D6;
+	Wed, 21 Aug 2024 07:26:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF491A2857;
-	Wed, 21 Aug 2024 07:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E2F1B81DA
+	for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2024 07:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724224294; cv=none; b=CPVfk0Fc85BAKFp9w7BQBWubPbUeADEb3IqlLd9gDE6iS3aJHvAkyN6AlGriF38xaAjbK/mB00Rlab9Nhp6YTBZc4MUw5cH6wB1fA42oB3XMBosg2s9MD01q9zf9apFT4CN9M+OYrjNJkCj/7fG7u2+P6eh5XqJlGGIjf8/Eio8=
+	t=1724225173; cv=none; b=eS7rRmuBwrewo/IoHVPpHO0rTWn4eZLwRIdOyeGRzUtky5EXIw4s1cnLVuIswgigzkRf493IVQXPDRi7fyzCfjC+Q/cBApPlaItuKOqQT10t8Z5SsF2GojD34Bg2YjVe6QAU4vxDwCCb2dizygh2MoPTEnYS6LzIOMAz51S2mLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724224294; c=relaxed/simple;
-	bh=5Lv2XgdhWWT8SKyDbubnYK67QobQT9NUGseIhseS/W8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pggIqWx8uWnpwtygzUyqXxOeHqRtN5zhpgIBkBkpmWAKhkpPH/+X0o+NbzD96hS5wqkvsUGGJvvvz1iwpOtFeDQ1kqeeUbCn30ex1stuFiPo9LHfYHWqfwxJaZKeR1RB4kEpPU4apGCCN7aGpTPL9Pa4oR5vNdXG0JU8l2z8Cdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Wpcny6b84z609Q;
-	Wed, 21 Aug 2024 15:06:46 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id D0B2E1401E0;
-	Wed, 21 Aug 2024 15:11:28 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
- (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 21 Aug
- 2024 15:11:28 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-	<krzk@kernel.org>, <alim.akhtar@samsung.com>, <linux-usb@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH -next v2] usb: ehci-exynos: Simplify with scoped for each OF child loop
-Date: Wed, 21 Aug 2024 15:18:56 +0800
-Message-ID: <20240821071856.2335529-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1724225173; c=relaxed/simple;
+	bh=i4givOFpoIFYH4oJJeUES8CCDV6YYBw1Dn8HLriMbKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cid/uhCarSN4Yh3TP5Lvf09sR0L1ukiJZjKmpsGZkQKqtHPvKhDO54TIec2NfeQgHRLgmDGg91chGDJ9whSwdb0K+VwglAqAAVvreAnuR/5QSVzEPjJbKD3A1xcKdbCzMPdMnG2yKKZeH2hLKiSK3z6yEO0aL8dCdVUR0XwGfb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1sgfjD-0007np-PK; Wed, 21 Aug 2024 09:25:59 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1sgfjD-001xSa-9d; Wed, 21 Aug 2024 09:25:59 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1sgfjD-00FPfV-0b;
+	Wed, 21 Aug 2024 09:25:59 +0200
+Date: Wed, 21 Aug 2024 09:25:59 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/3] serdev: ttyport: make use of tty_kopen_exclusive
+Message-ID: <20240821072559.lh5lt3mnhrit5gmp@pengutronix.de>
+References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
+ <20240807-v6-10-topic-usb-serial-serdev-v1-1-ed2cc5da591f@pengutronix.de>
+ <c7a710ec-f391-4726-910e-d7bedbfc6a6f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemh500013.china.huawei.com (7.202.181.146)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7a710ec-f391-4726-910e-d7bedbfc6a6f@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Use scoped for_each_available_child_of_node_scoped() when iterating over
-device nodes to make code a bit simpler.
+On 24-08-08, Jiri Slaby wrote:
+> On 07. 08. 24, 16:08, Marco Felsch wrote:
+> > The purpose of serdev is to provide kernel drivers for particular serial
+> > device, serdev-ttyport is no exception here. Make use of the
+> > tty_kopen_exclusive() funciton to mark this tty device as kernel
+> > internal device.
+> > 
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >   drivers/tty/serdev/serdev-ttyport.c | 9 ++++++---
+> >   1 file changed, 6 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
+> > index 3d7ae7fa5018..94c43d25ddbe 100644
+> > --- a/drivers/tty/serdev/serdev-ttyport.c
+> > +++ b/drivers/tty/serdev/serdev-ttyport.c
+> > @@ -103,11 +103,14 @@ static int ttyport_write_room(struct serdev_controller *ctrl)
+> >   static int ttyport_open(struct serdev_controller *ctrl)
+> >   {
+> >   	struct serport *serport = serdev_controller_get_drvdata(ctrl);
+> > +	struct tty_driver *tty_drv = serport->tty_drv;
+> >   	struct tty_struct *tty;
+> >   	struct ktermios ktermios;
+> > +	dev_t dev;
+> >   	int ret;
+> > -	tty = tty_init_dev(serport->tty_drv, serport->tty_idx);
+> > +	dev = MKDEV(tty_drv->major, tty_drv->minor_start + serport->tty_idx);
+> > +	tty = tty_kopen_exclusive(dev);
+> 
+> I believe that the now added tty_lookup_driver() has negligible impact in
+> this anyway slow path, right?
 
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-v2:
-- Update the commit subject.
-- Spilit into 2 patches.
-- Add Reviewed-by.
----
- drivers/usb/host/ehci-exynos.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Any other comments, suggestions apart this one?
 
-diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-index f40bc2a7a124..e3a961d3f5fc 100644
---- a/drivers/usb/host/ehci-exynos.c
-+++ b/drivers/usb/host/ehci-exynos.c
-@@ -48,7 +48,6 @@ struct exynos_ehci_hcd {
- static int exynos_ehci_get_phy(struct device *dev,
- 				struct exynos_ehci_hcd *exynos_ehci)
- {
--	struct device_node *child;
- 	struct phy *phy;
- 	int phy_number, num_phys;
- 	int ret;
-@@ -66,26 +65,22 @@ static int exynos_ehci_get_phy(struct device *dev,
- 		return 0;
- 
- 	/* Get PHYs using legacy bindings */
--	for_each_available_child_of_node(dev->of_node, child) {
-+	for_each_available_child_of_node_scoped(dev->of_node, child) {
- 		ret = of_property_read_u32(child, "reg", &phy_number);
- 		if (ret) {
- 			dev_err(dev, "Failed to parse device tree\n");
--			of_node_put(child);
- 			return ret;
- 		}
- 
- 		if (phy_number >= PHY_NUMBER) {
- 			dev_err(dev, "Invalid number of PHYs\n");
--			of_node_put(child);
- 			return -EINVAL;
- 		}
- 
- 		phy = devm_of_phy_optional_get(dev, child, NULL);
- 		exynos_ehci->phy[phy_number] = phy;
--		if (IS_ERR(phy)) {
--			of_node_put(child);
-+		if (IS_ERR(phy))
- 			return PTR_ERR(phy);
--		}
- 	}
- 
- 	exynos_ehci->legacy_phy = true;
--- 
-2.34.1
+Regards,
+  Marco
 
+> 
+> thanks,
+> -- 
+> js
+> suse labs
+> 
+> 
 
