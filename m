@@ -1,48 +1,65 @@
-Return-Path: <linux-usb+bounces-13774-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13775-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CA4D9594FB
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 08:48:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD70959541
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 09:03:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7895285DCA
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 06:48:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BAEA1C20FB6
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 07:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E96421C16F;
-	Wed, 21 Aug 2024 06:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0FC16DC18;
+	Wed, 21 Aug 2024 07:02:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OLtyZU3U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YY1g8XpH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19BE42139B6;
-	Wed, 21 Aug 2024 06:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06171192D6A;
+	Wed, 21 Aug 2024 07:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724222889; cv=none; b=GCyVQEUQzhHvFocGb4ifpE2x8tskfYVmZU1CIpbmwxm7uxZThD0BsI/GRC85C9RpjYqGkjJofTpuhgF5tKxA9SdcvPEbzswCdH5NMtYm5gut03duzv+P7MXkR49PsrAkMcEuceNVP/Y3CDrgNJhGlzeMEwBiQuXOWxW7fKwb8vQ=
+	t=1724223767; cv=none; b=qKDsCipmg2z7Hn7pCJRYxz0mA6fCwkglbpV7UWvRJamgNFxazpbRRbS1sMLdmXgs808SDePHDjS8/Zh4UK14R2TFU4qlPUZ+cRLAxiwyJxGGZc8VPD7rD+qLTVlxG+7JIohO6ipNxNrZzyNGcTusDkCIqpCFVId+feerN7KXmVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724222889; c=relaxed/simple;
-	bh=KnyKptH5XM79KZ+C1EQSJLGrGtVSPFQ5nOZWireWwZM=;
+	s=arc-20240116; t=1724223767; c=relaxed/simple;
+	bh=8rUm72MnGLmHQNl/Pyxx0EYzyXtHSorMLOIHmsjfdMk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OoCQwZqcfaciFcmm4kbaqWseP8yWDMUQGf1Z3bJEafpjY4jmlFvzBR5WQl6xDS90kprUhh9fnRg/4Y1hm3hpLKqC5Qm5GG/DZoJfVDYwbb7QcbOqvsbHyL6o+R1hu7CsLGfAo7Jl+F+9Mscd4EkqE9/EpG5Kl41YfF1hnYDjjZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OLtyZU3U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C706DC32782;
-	Wed, 21 Aug 2024 06:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724222888;
-	bh=KnyKptH5XM79KZ+C1EQSJLGrGtVSPFQ5nOZWireWwZM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OLtyZU3UnOXLPgnRcroAuwGR1i4uYqC0wBm2yr/fBIbtThb7bhbFQp8uk1gPM8mcb
-	 hZqZ7sZSyJZSU3gFM0tI1SaMJh0aeU5EiHT0KOKdiGh5jzweOfjWt1spclCLdQ9tua
-	 es7sneCvw4vGSjckr2hGnAsezRbz3TFvcaPC3ssWO56zYWl2+aXbI+/iQ5BpdRuGry
-	 KYdV5EETL1MvHC0qPAwRbUhTyJjYENU8enUhnFqk0N15GN04BkaNswLe24Dp0xCzL/
-	 o3R/fWspusNYk/PtOUvY50SCCg+V3bXrJuIHAOzaR3BtJPVijCCn/wtTLQc+BUOMLo
-	 O2+Wmx+O5YjsA==
-Message-ID: <11ca366c-7788-41d0-bf47-4f31c1ee2626@kernel.org>
-Date: Wed, 21 Aug 2024 08:48:00 +0200
+	 In-Reply-To:Content-Type; b=HxwHumIdFonq2SoDL71KjbqDo4KV4j2brhRkBDHnS2kOLANbgSkGwvEtD2EVE+OFb0aX6X2GFibJjKt4v5gfJyxxTeNxQhI5uaO9+kxw2WgwW/FmsbFRAWZXb1EGonXsFv7QGuuBIgHSfK6KFS+vO48u/9p5TQVX6ufYC1BZ6Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YY1g8XpH; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724223766; x=1755759766;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8rUm72MnGLmHQNl/Pyxx0EYzyXtHSorMLOIHmsjfdMk=;
+  b=YY1g8XpHLdE595GK51tnrBrNO/HM5rr8j+FEc1APx3Ifcx+tH0VLnkr1
+   PWovQjs+6o5WGEgDTCnMkBUbIXUe+K4/x3cEdjntn+ibtEiW0AoyemxgU
+   kHtXkELsiWDlcD0aCUIz23Lht+MYyuVDjBdDOwfXqQYBnhSXrC94v9f0O
+   LANXScKrbZEnTtolgYBfj7vAL5PfbWR0ISOKVPA4BxzlOjoDbQ6dL6ArF
+   s8C+drAMjOY59JRwxRCvtmMFGsT2uDFpfJyD+eDX2eirm6xqmjXgVhsE0
+   +ZzYnIABT4XV7xVVbp1ejs+/k3cw8H3x5ZMvYV/gsk61a5h0XSLfmntfz
+   A==;
+X-CSE-ConnectionGUID: Hhs8JmD/QsW33kpH3E9nCw==
+X-CSE-MsgGUID: DGFSXacyTGqSOOjiLVDqZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="22706002"
+X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
+   d="scan'208";a="22706002"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 00:02:46 -0700
+X-CSE-ConnectionGUID: r7X2J0LrR8ub329AoQ8R8g==
+X-CSE-MsgGUID: fYBNYWdMTGy2tKnZxPcjmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
+   d="scan'208";a="65871786"
+Received: from kniemiec-mobl1.ger.corp.intel.com (HELO [10.245.246.16]) ([10.245.246.16])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 00:02:39 -0700
+Message-ID: <7b3421f5-8d57-4138-9456-1bf0eb4662c0@linux.intel.com>
+Date: Wed, 21 Aug 2024 09:02:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,113 +67,108 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] dt-bindings: soc: qcom: eud: Update compatible
- strings for eud
-To: Konrad Dybcio <konradybcio@kernel.org>,
- Melody Olvera <quic_molvera@quicinc.com>,
- Trilok Soni <quic_tsoni@quicinc.com>,
- Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
- Elson Serrao <quic_eserrao@quicinc.com>
-Cc: cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20240807183205.803847-1-quic_molvera@quicinc.com>
- <20240807183205.803847-2-quic_molvera@quicinc.com>
- <dfb1ac84-f011-45ea-9fb1-b8c6bc36cabc@kernel.org>
- <46d0627d-877b-41f3-83f6-4c33b562f460@quicinc.com>
- <0ebb1ca3-722d-422f-9f71-fcc61c3470b0@kernel.org>
- <2b118a49-2229-4346-ab21-0aa5377d7a4e@kernel.org>
- <8bb412f8-4fe1-40ca-8414-bb77c66899ae@quicinc.com>
- <0eca6755-a2ec-404f-b98c-ee6c9f6fb55f@gmail.com>
- <f8caa9aa-7fc4-4d42-9011-21ca40eb106d@quicinc.com>
- <81ec34a6-8627-4a59-8fc7-87eee4625b2d@quicinc.com>
- <e663d19a-0ad1-4dfc-903b-ff2012796d84@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v24 29/34] ALSA: usb-audio: qcom: Add USB offload route
+ kcontrol
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
+ Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
+ gregkh@linuxfoundation.org, robh@kernel.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org
+References: <20240801011730.4797-1-quic_wcheng@quicinc.com>
+ <20240801011730.4797-30-quic_wcheng@quicinc.com>
+ <4d5fe3f8-d7ba-4647-8dd7-22656ec2fde5@linux.intel.com>
+ <58043166-c494-42db-b7d3-575991e43e8b@quicinc.com>
+ <f507a228-4865-4df5-9215-bc59e330a82f@linux.intel.com>
+ <88d5ed6f-1429-4381-8014-d5824ec7866e@quicinc.com>
+ <56ebd11e-9522-406b-9ca4-5e284eaac409@quicinc.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <e663d19a-0ad1-4dfc-903b-ff2012796d84@kernel.org>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <56ebd11e-9522-406b-9ca4-5e284eaac409@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 20/08/2024 21:19, Konrad Dybcio wrote:
-> On 20.08.2024 8:21 PM, Melody Olvera wrote:
+
+
+
+>>>>>> +/**
+>>>>>> + * snd_usb_offload_create_ctl() - Add USB offload bounded mixer
+>>>>>> + * @chip - USB SND chip device
+>>>>>> + *
+>>>>>> + * Creates a sound control for a USB audio device, so that applications can
+>>>>>> + * query for if there is an available USB audio offload path, and which
+>>>>>> + * card is managing it.
+>>>>>> + */
+>>>>>> +int snd_usb_offload_create_ctl(struct snd_usb_audio *chip)
+>>>>>> +{
+>>>>>> +	struct usb_device *udev = chip->dev;
+>>>>>> +	struct snd_kcontrol_new *chip_kctl;
+>>>>>> +	struct snd_usb_stream *as;
+>>>>>> +	char ctl_name[37];
+>>>>>> +	int ret;
+>>>>>> +
+>>>>>> +	list_for_each_entry(as, &chip->pcm_list, list) {
+>>>>>> +		chip_kctl = &snd_usb_offload_mapped_ctl;
+>>>>>> +		chip_kctl->count = 1;
+>>>>>> +		/*
+>>>>>> +		 * Store the associated USB SND card number and PCM index for
+>>>>>> +		 * the kctl.
+>>>>>> +		 */
+>>>>>> +		chip_kctl->private_value = as->pcm_index |
+>>>>>> +					  chip->card->number << 16;
+>>>>>> +		sprintf(ctl_name, "USB Offload Playback Route PCM#%d",
+>>>>>> +			as->pcm_index);
+>>>>>> +		chip_kctl->name = ctl_name;
+>>>>>> +		ret = snd_ctl_add(chip->card, snd_ctl_new1(chip_kctl,
+>>>>>> +				  udev->bus->sysdev));
+>>>>>> +		if (ret < 0)
+>>>>>> +			break;
+>>>>>> +	}
+>>>>>> +
+>>>>>> +	return ret;
+>>>> Hi Pierre,
+>>>>> None of this looks Qualcomm-specific, shouldn't this be part of the
+>>>>> soc_usb framework instead of being added in the qcom/ stuff?
+>>>> Started working on this particular comment, and there are some things that needs to be considered if we moved this into SOC USB:
+>>>>
+>>>> 1.  We do save the reference to the USB BE DAI link within the USB DT node, which can be fetched/referenced based on sysdev.  However, I'm not sure if everyone would potentially follow that way.
+>>>>
+>>>> 2.  I tried a few implementations of adding a new SOC USB API, and the argument list was a bit long, because I didn't want to directly reference the usb_chip.
+>>>>
+>>>> Sorry for the delay, but I wanted to give a good stab at implementing this before bringing up the implications.  It is possible, but definitely not as clean as how we have it now IMO.
+>>> My comment was only referring to the location of the code, it's now in
+>>> sound/usb/qcom/mixer_usb_offload.c but does not contain anything
+>>> specific to Qualcomm. I was not asking for any encapsulation inside of
+>>> soc-usb, I was only suggesting a move of the code to a shared helper
+>>> library so that this code can be reused as is and not duplicated if the
+>>> QCOM parts are not compiled in.
+>> Ah, great, thanks for the clarification.  Let me take a look with that perspective.
 >>
->>
->> On 8/14/2024 3:09 PM, Trilok Soni wrote:
->>> On 8/14/2024 1:25 PM, Konrad Dybcio wrote:
->>>>> Unfortunately, no. We considered several options, but none guarantee that we will avoid
->>>>> a crash if we try non-securely. The secure call also won't give a specific error if it fails either
->>>>> (for security reasons) so we can't know if a secure access failed because it's supposed to be
->>>>> accessed non-securely or for another reason; hence this approach. If there's
->>>>> another way to achieve this functionality that might be better, I'm all ears.
->>>> Can we read some fuse values and decide based on that?
->>> In most of the cases, these fuse values are not allowed to be read
->>> from the Linux, so that will be another problem. Melody can check
->>> if there is any fuse values around here and possible to read them
->>> through Linux.
->>>
->>
->> I double-checked, but there really isn't any kind of fuse or anything we can read to determine
->> how we need to access these registers. I remembered checking before authoring these patches,
->> but I wanted to just make sure before responding here.
+> Going back on the history behind moving it into qcom/ was based off feedback that Takashi pointed out in v14[1].  It was mainly due to the fact that we would be adding another hard dependency between USB SND and the offloading components.  Hence the reason for moving it to within the QCOM offloading package. 
 > 
-> Well in that case I suppose a new compatible / property (please voice
-> your opinion Krzysztof) is necessary after all.. Thanks for making sure
+> Thanks
+> 
+> Wesley Cheng
+> 
+> [1]: https://lore.kernel.org/linux-usb/87y1bt2acg.wl-tiwai@suse.de/
 
-You mean the "secure" part? Sure, I don't object that, although
-(repeating as usual) I am not in favor of it in the first place, be
-cause you should use only SoC compatibles.
+I don't see anything wrong with the initial proposal
 
-The objection here was for dropping specific front compatible, without
-any relevant explanation.
 
-Best regards,
-Krzysztof
+ +config SND_USB_OFFLOAD_MIXER
+ +	bool
+ +
+  config SND_USB_AUDIO_QMI
+  	tristate "Qualcomm Audio Offload driver"
+  	depends on QCOM_QMI_HELPERS && SND_USB_AUDIO && USB_XHCI_SIDEBAND
+  	select SND_PCM
+ +	select SND_USB_OFFLOAD_MIXER
 
+
+That would allows the SND_USB_OFFLOAD_MIXER to be build as a module, and
+it would allow other non-QCON solutions to use the module.
+Maybe just make it a tristate?
 
