@@ -1,179 +1,103 @@
-Return-Path: <linux-usb+bounces-13818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A03F95A645
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 23:02:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B3295A65C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 23:16:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6645BB209BB
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 21:02:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FD3C1C22088
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2024 21:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41DB8170A2E;
-	Wed, 21 Aug 2024 21:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE844170A36;
+	Wed, 21 Aug 2024 21:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b0mOBeC+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54AAD7405A;
-	Wed, 21 Aug 2024 21:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA02286AFA;
+	Wed, 21 Aug 2024 21:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724274119; cv=none; b=bCRnpziRH2o4a39Geiu9blBWiSzbskYAwedHKlYEBNFcY96N24t4qNvm8XcoMCYrr0S2ycdb33y9WF3EexA7MtgOhwBAiAe+WlILWxQfLy6JGAwKwAUqVApZ7k/XbP8qN2RumHsDmDw8lIWCJIrNEK1o+SoIqJLOVnUU6o08jSs=
+	t=1724274993; cv=none; b=d2MKG5L9d2nVZZR0ST8yjrJ2fYCCF4sG9C5l10wVUSnPAX8woJnGtgoknTyr2dnFED5wo38oNNcughWixVJufnUPVA7RlMiOy0pDLHqlECfojtVPqz2Oh02BeQoOPwOF1HDkjPCB/1j/SRuKtctzMaCa/y9Y/zTxg8b8ytP2aj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724274119; c=relaxed/simple;
-	bh=axJBu3CUhWokrQ9Xfcw1QiyMu4W37gK/cV9/3xY2h24=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=r9mia5XSJRfGPkKnEYse/mnfG1dLE41XlsNmSyvNHc2D/mTA9NG1GQOLnqsCLtNPI1ZBCHU+zpjC26rBi0ICmO7lGigr6hQHch2gEX+lpKTY6TWb1yVaul60SRbnSIAfXvxA/oyFEwl5aXBvdeMWaZRp00O0kNaPRjHTqfDqheM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.2] (ip5f5af4d2.dynamic.kabel-deutschland.de [95.90.244.210])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 68D1661E5FE05;
-	Wed, 21 Aug 2024 23:01:39 +0200 (CEST)
-Message-ID: <9de8ebd1-53fc-48d7-af11-b5c1ed828b3d@molgen.mpg.de>
-Date: Wed, 21 Aug 2024 23:01:38 +0200
+	s=arc-20240116; t=1724274993; c=relaxed/simple;
+	bh=TiUGC2plqsju+PIKUdlgp4dVJIOBq73ZHtfCj5+GMVM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gLEcLYX0ZmD9YE3L4D71wbixGqMJUMAX6gdKt10Zl/OyNMu+l50hXfOnLz0e8AM1RcBH4o0NaOa6AWk7GG34pTK1fJxjx4Xvgxsp4ugGAveRWqCiw3kmbvlKBnhkMlpmuYApk18OBHtCzhQ25P3E7aXwz9buw8hNR82GIxQhJKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b0mOBeC+; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f3f25a1713so1403401fa.2;
+        Wed, 21 Aug 2024 14:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724274990; x=1724879790; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TiUGC2plqsju+PIKUdlgp4dVJIOBq73ZHtfCj5+GMVM=;
+        b=b0mOBeC+iUbWr6DURzUE/RJpvfRFPUdUZNVCTzbSf9sOLqEXQN6nPIitV83iWT0QDS
+         5a0Zx+omFZV5ootU0N97sha1aYkok6kIPvXVy35KTk0Tzu4k6l+LkFK/6oPLX/8kjD5k
+         ulko7FuVUPr7Xym3Tao4OEXBefj3GpB7eb6EVXhCX+APnWEYruQgEHwBOADP8uzadol6
+         wX8qoKi9tQS0PscWGkLrp/PS8HKaTPHZVeB4rluWtJDnu8kmcyI/BZh/polqwcZTvsaB
+         WO4ECAF6aqNCAVaGlQ96WlbglKgbeoB8Q9hht9JH/YXPWG/Ra3Cxshrl6xiktJP32F48
+         qOFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724274990; x=1724879790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TiUGC2plqsju+PIKUdlgp4dVJIOBq73ZHtfCj5+GMVM=;
+        b=gjMimV+2Za9+6+uTCc7s9qZoqcWigCoYcDZa5xQ7hDcMgYohuePP5kkk/YKiD9wL06
+         vdzkMLUcdCybWICsMcR10z7cORSUxuPmvs+m+9J1iEEdF2zb5JgIsTecJcCD5fibIj7C
+         ldI8oIuaI3zVWNhhOrZjRC11t6STMlJWqwnjDA6AO7AqrnNnZvr2U6sRdj29tq70en6x
+         zjsTbSh2bbfpCAz4TM3TKg7BVOc4azjXnSlD6kurmCCnXuUQWK3Vf856dObj7lfcl+f9
+         BAjZNGqxD83XJAxoTFspf9i2LFs9e3xyEaNRdaupiw/XD//bGRDX+u+yPMjplKTXS9Hr
+         R8ng==
+X-Forwarded-Encrypted: i=1; AJvYcCVWrNw8CBDHnQ8XZiXQL/Bx7P5kqSi9vWig/f2wUbHRXQJuEEeicoos6+/9q4WSYuAZJu+QANLJETRKPbo=@vger.kernel.org, AJvYcCX5SXwdCc/pJzrR2SeirEgQh99ob2EwDafCeyWJF9PWPJcYW2ltvV+ZMmbI5iTnsKlhQ8cxzt01Ndky@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4XdgaPV+ZQOynrX/OUaS6B2tEIaZni6rhAsSYrAUCc/o259hT
+	AZpRJh8LrkWUGE0xGFQ76hnnVSKQxKXoFlzeEJLOhtWJy+Qmz9ohRRASLLLj63xBQsr0pj824pE
+	s9rCn/QfXxJ5U3DxuJNMW6DEqWoIC6Q==
+X-Google-Smtp-Source: AGHT+IEbvnYernfbaPui1I8nfs8or7e/vZuuYr7xXOntlaLltoQcnHV5tFfpUmsarL5GBVzxBFqU5Ef5XzVrlzWd/Aw=
+X-Received: by 2002:a2e:f12:0:b0:2f3:cd4e:b929 with SMTP id
+ 38308e7fff4ca-2f3f8953813mr21761351fa.34.1724274989525; Wed, 21 Aug 2024
+ 14:16:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar
- <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
- <87o7ak411y.fsf@somnus> <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
- <87sezv7ytw.fsf@somnus> <1cf78f6f-af21-48bc-a9d8-755dd7bf8503@molgen.mpg.de>
-Content-Language: en-US
-In-Reply-To: <1cf78f6f-af21-48bc-a9d8-755dd7bf8503@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240821-dwc-mp-v2-0-2a29b6a5c2f4@nxp.com> <20240821-dwc-mp-v2-1-2a29b6a5c2f4@nxp.com>
+In-Reply-To: <20240821-dwc-mp-v2-1-2a29b6a5c2f4@nxp.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 21 Aug 2024 18:16:18 -0300
+Message-ID: <CAOMZO5DNndao-kU9s9F_1XGMdTP-sgComD9UoaSOQpfkErBEXw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] usb: host: xhci-plat: Parse xhci-missing_cas_quirk
+ and apply quirk
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, jun.li@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[Added URLs for files.]
+Hi Frank,
 
-Am 21.08.24 um 10:20 schrieb Paul Menzel:
-> Dear Anna-Maria,
-> 
-> 
-> Thank you very much for the support. I was finally able to collect the 
-> data you asked for.
-> 
-> Am 09.04.24 um 09:57 schrieb Anna-Maria Behnsen:
->> Paul Menzel writes:
-> 
-> […]
-> 
->>> Am 08.04.24 um 12:10 schrieb Anna-Maria Behnsen:
->>>
->>>> Paul Menzel writes:
->>>
->>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9- 
->>>>> rc2+
->>>>> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of
->>>>> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 stopped
->>>>> working (only the Ethernet port was used). Linux logged:
->>>>
->>>> thanks for the report. Can you please provide a trace beside the dmesg
->>>> output? The following trace events should be enabled (via kernel 
->>>> command
->>>> line):
->>>>
->>>> trace_event=timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit
->>> Unfortunately I haven’t been able to reproduce it until now. Should it
->>> happen again, I am going to try your suggestion.
->>
->> Thanks for letting me know.
-> 
-> I wanted to configure that in the running system, but wasn’t able to set 
-> all of these at once with `set_event`:
-> 
->      echo 'timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit' | sudo tee /sys/kernel/tracing/set_event
-> 
-> For some reason setting them individually also did *not* work:
-> 
->      for e in timer:* timer_migration:* sched:sched_switch sched:sched_wakeup sched:sched_process_hang irq:softirq_entry irq:softirq_raise irq:softirq_exit'; do echo "$e" | sudo tee -a /sys/kernel/tracing/set_event; done
-> 
-> I then used
-> 
->      echo 1 | sudo tee /sys/kernel/tracing/events/timer/enable
->      echo 1 | sudo tee /sys/kernel/tracing/events/timer_migration/enable
->      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_switch/enable
->      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_wakeup/enable
->      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_process_hang/enable
->      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_entry/enable
->      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_raise/enable
->      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_exit/enable
-> 
-> and also had to increase the buffer to bridge the gap between the event 
-> and me noticing it:
-> 
->      echo 96000 | sudo tee /sys/kernel/tracing/buffer_size_kb
-> 
-> Then, with Linux v6.11-rc4-11-g521b1e7f4cf0b, I was able to get the 
-> trace for the event below:
-> 
->      [ 7542.706299] NOHZ tick-stop error: local softirq work is pending, handler #08!!!
-> 
-> $ sudo cat /sys/kernel/tracing/trace
-> […]
->   MediaPD~der #28-14000   [000] d..1.  7542.703768: hrtimer_cancel: hrtimer=000000008d2c9f3f
->   MediaPD~der #28-14000   [000] .....  7542.703810: hrtimer_init: hrtimer=00000000c6f259e7 clockid=CLOCK_MONOTONIC mode=ABS
->   MediaPD~der #28-14000   [000] d..1.  7542.703812: hrtimer_start: hrtimer=00000000c6f259e7 function=hrtimer_wakeup expires=7602581538204 softexpires=7602581488204 mode=ABS
->   MediaPD~der #28-14000   [000] d..2.  7542.703821: sched_switch: prev_comm=MediaPD~der #28 prev_pid=14000 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->            <idle>-0       [000] dN.2.  7542.703931: sched_wakeup: comm=ImageBridgeChld pid=6041 prio=120 target_cpu=000
->            <idle>-0       [000] d..2.  7542.703937: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ImageBridgeChld next_pid=6041 next_prio=120
->   ImageBridgeChld-6041    [000] d..2.  7542.704041: sched_switch: prev_comm=ImageBridgeChld prev_pid=6041 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->            <idle>-0       [000] dN.2.  7542.704174: sched_wakeup: comm=Renderer pid=4113 prio=120 target_cpu=000
->            <idle>-0       [000] d..2.  7542.704179: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Renderer next_pid=4113 next_prio=120
->          Renderer-4113    [000] d..2.  7542.704245: sched_switch: prev_comm=Renderer prev_pid=4113 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->            <idle>-0       [000] dNh2.  7542.704260: sched_wakeup: comm=IPC I/O Child pid=6029 prio=120 target_cpu=000
->            <idle>-0       [000] d..2.  7542.704267: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=IPC I/O Child next_pid=6029 next_prio=120
->     IPC I/O Child-6029    [000] d..2.  7542.704340: sched_switch: prev_comm=IPC I/O Child prev_pid=6029 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->            <idle>-0       [000] dN.2.  7542.704786: sched_wakeup: comm=Compositor pid=4123 prio=120 target_cpu=000
->            <idle>-0       [000] d..2.  7542.704791: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Compositor next_pid=4123 next_prio=120
->        Compositor-4123    [000] d..2.  7542.704944: sched_switch: prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->            <idle>-0       [000] dN.2.  7542.705943: sched_wakeup: comm=Compositor pid=4123 prio=120 target_cpu=000
->            <idle>-0       [000] d..2.  7542.705950: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Compositor next_pid=4123 next_prio=120
->        Compositor-4123    [000] d..2.  7542.706105: sched_switch: prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->            <idle>-0       [000] d.h2.  7542.706328: hrtimer_cancel: hrtimer=000000009bbda66a
->            <idle>-0       [000] d.h1.  7542.706329: hrtimer_expire_entry: hrtimer=000000009bbda66a function=tick_nohz_handler now=7542584007490
->            <idle>-0       [000] d.h1.  7542.706333: softirq_raise: vec=9 [action=RCU]
->            <idle>-0       [000] d.h1.  7542.706338: softirq_raise: vec=7 [action=SCHED]
->            <idle>-0       [000] d.h1.  7542.706339: hrtimer_expire_exit: hrtimer=000000009bbda66a
->            <idle>-0       [000] d.h2.  7542.706340: hrtimer_start: hrtimer=000000009bbda66a function=tick_nohz_handler expires=7542588000000 softexpires=7542588000000 mode=ABS
->            <idle>-0       [000] ..s1.  7542.706345: softirq_entry: vec=7 [action=SCHED]
->            <idle>-0       [000] ..s1.  7542.706359: softirq_exit: vec=7 [action=SCHED]
->            <idle>-0       [000] ..s1.  7542.706360: softirq_entry: vec=9 [action=RCU]
->            <idle>-0       [000] ..s1.  7542.706362: softirq_exit: vec=9 [action=RCU]
->            <idle>-0       [000] dNh4.  7542.707672: sched_wakeup: comm=irq/51-DLL075B: pid=194 prio=49 target_cpu=000
->            <idle>-0       [000] d..2.  7542.707685: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=irq/51-DLL075B: next_pid=194 next_prio=49
->   irq/51-DLL075B:-194     [000] .....  7542.707708: timer_init: timer=00000000630ae178
->   irq/51-DLL075B:-194     [000] d..1.  7542.707710: timer_start: timer=00000000630ae178 function=process_timeout expires=4296778179 [timeout=250] bucket_expiry=4296778184 cpu=0 idx=121 flags=
->   irq/51-DLL075B:-194     [000] d..2.  7542.707718: sched_switch: prev_comm=irq/51-DLL075B: prev_pid=194 prev_prio=49 prev_state=D ==> next_comm=swapper/0 next_pid=0 next_prio=120
->            <idle>-0       [000] dN.2.  7542.709072: sched_wakeup: comm=AudioIP~ent RPC pid=6671 prio=120 target_cpu=000
-> […]
-> 
-> The trace file is 320 MB big. If you need the full trace and log, please 
-> tell me, and I’ll upload it somewhere.
+On Wed, Aug 21, 2024 at 1:19=E2=80=AFPM Frank Li <Frank.Li@nxp.com> wrote:
+>
+> Parse software managed property 'xhci-skip-phy-init-quirk' and
+> 'xhci-skip-phy-init-quirk' to apply related quirk. It allows usb glue lay=
+er
+> driver apply these quirk.
 
-https://owww.molgen.mpg.de/~pmenzel/20240821--linux-6.10-rc4+.txt
-https://owww.molgen.mpg.de/~pmenzel/20240821--soft-irq--trace.7z
+Please explain the reason in the commit log.
 
-
-> Kind regards,
-> 
-> Paul
-
+What does it fix? Why do we need these quirks? Or what does it improve?
 
