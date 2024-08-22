@@ -1,135 +1,145 @@
-Return-Path: <linux-usb+bounces-13900-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C877195BA76
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 17:33:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1386A95BA0F
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 17:26:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 737B91F24170
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 15:33:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8FB4B231FC
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 15:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD601D1F6D;
-	Thu, 22 Aug 2024 15:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 000F81CB301;
+	Thu, 22 Aug 2024 15:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="eNET13nc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gtI1o/sG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DE81D1F43
-	for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 15:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153E418EAB;
+	Thu, 22 Aug 2024 15:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724340532; cv=none; b=XySXtbBTOq7K4m2M469aTYcpOxNCJuZBRTgPBSo7ju/Sx3yPdCpzyoMSv21kLuupgdnnvy3kLPQWtbNq7bC/iQM7j7AIFF54QE4MnctboxdbjeyD4Qtac+W/cJUAbJNBsRku4zztlr491q83uVh+EN+VGMroSQnJYjTU7+YeNhU=
+	t=1724340393; cv=none; b=kukZJScfFjZJ1v7lNs46wNxTsGs3ZiCxVM/dpdocgiIVnKOkACaOa07ILGuSk4b0pR9/2wCGtnhILyuoPp55mt/O58QCpb7E00Uo06bjhBB3qFDI3ti1/khrmnhP8h4nttja9Q1U+4QddhpclyPLOva0avk+y4Cfh+YA1NmRMzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724340532; c=relaxed/simple;
-	bh=EuKZSKvEQCXDCZNoMj0d43yKeS+Y83/X3kJnCx6rqMY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BKlL1nflk7wQFLnqYy99KxFzCS7mRZLH+MVYj2LmfrtaKQB6nKbCMph3oE2rUe3Qa/LAJ9ERK1hR1+IrGOHlkYeRZDAaFf6hu72btVkHfJUpzFXNmNIQe2ewar/VuSKGp6ZIO4Cmwuvuv/Bts4O+WQSSh++p00HOnbCAOcqJ24M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=eNET13nc; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42ab99fb45dso9504755e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 08:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724340530; x=1724945330; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YzzVJZseYqmAj3uluQhRMecpWI1dTsj4zEH1FZKD0d4=;
-        b=eNET13ncH98OLgbcdG0m6G74QdeBkl8ixJZo/ljhZqeBccGQmKVF2xjxOfTCK9JqF6
-         jskjXJaLSX7pARiTsCNZstW3xjf2GH+X03ldyAeJjGcAc5nUkmOy/mBnGw1utLurYAkS
-         du7Rt4CBkpic6xozXZ6BCihFhHIHyfzVGS2u3PZghi9I7RI9OUHy8hAxENHmVmwZFFNC
-         wpCTHMj97ffi4DP6tpXp34qtdAke1+gnCtc88qDa+74iGJCcSqaXI32t/7PDWlkTJIaG
-         Qt2Px8RBAoaWVk72CUoWckj5vp6z5z0m1AE37fhec+fuSEdOy8R8oTCIfy31Tb/bF1Kw
-         3uFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724340530; x=1724945330;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YzzVJZseYqmAj3uluQhRMecpWI1dTsj4zEH1FZKD0d4=;
-        b=LIhgASNorjzYhxM4pTuSMWHJWzIzXyAn7861cakrmXMYzV16NTvPrPsqilx1EzzAys
-         VBrUD+2+UcYBRhYu+WV7XnxQE0BAI9CEliAFxpzO0r7vNc9JDncFJc1Dm6ZBHYgVzdUl
-         Qxv/1iAXPXl54nCzVYIKhCJe+5bJEW2pOEhP0lmBWvYmj6y/AwvV4vAPJklzsgS2zIxu
-         XQB4+EhzFY+oomizMB0pG8zlKwNx+0Dg55ypkcS5vJkQNROLX+h/G7j7/fqA0IIu2eog
-         v3B6mKUEor8brczSS7lrqasT+g3iuWqadOKUU+dgVKEKHhu90SHmOOY5FkE/y9UzoeJn
-         JisA==
-X-Forwarded-Encrypted: i=1; AJvYcCWYJYzPWu918dr1mf4H5L83mAHK4ZlRWwLwDk/kO3FtryzhksPqMBwqRhi2k7euJwBCqZYFRR0N7k8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzXTiNpS35KbMkjMZ83bOgreQbxPf3gCwdNV06wTyTT0RfpJjP
-	aKyElKvVdN6e4JiKoIl2/E5xYDsnVkX/m1IUqERZFpzV1pYjKMrDxhILhxxeVL8=
-X-Google-Smtp-Source: AGHT+IHCUCn+biQIAnOUlxWOCjXAVeKX8ey9d7uY1NWlOsuugSxvOZNpC2pcgsn0KfGk8KOYuf8lZQ==
-X-Received: by 2002:adf:a416:0:b0:36b:3395:5363 with SMTP id ffacd0b85a97d-37308c1826emr1937317f8f.16.1724340529907;
-        Thu, 22 Aug 2024 08:28:49 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f484dc5sm134189166b.171.2024.08.22.08.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2024 08:28:49 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: vkoul@kernel.org,
-	kishon@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	p.zabel@pengutronix.de,
-	geert+renesas@glider.be,
-	magnus.damm@gmail.com,
-	gregkh@linuxfoundation.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	yoshihiro.shimoda.uh@renesas.com,
-	biju.das.jz@bp.renesas.com,
-	ulf.hansson@linaro.org
-Cc: linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 16/16] arm64: defconfig: Enable RZ/G3S SYSC reset driver
-Date: Thu, 22 Aug 2024 18:28:01 +0300
-Message-Id: <20240822152801.602318-17-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1724340393; c=relaxed/simple;
+	bh=6YjPGB/euod+io2A3d4H4RTlTfhzeuaae2zluY6iaf8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uFCNe2SIA0SYBG9ZkGv8GrjypIZ6UTul6WCo+PuhYwVs9a1FmzRP5om9HJD5WNRjX9jufavqWLfXTb3dJtkRoTckbnDG5n+ksL+bp+jikIRChmYvUhNQZfAlNxxvMVK+GSIoOC61+aQX2iAR6V48LGZKLhfGs+Vkxfv7qAranTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gtI1o/sG; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724340393; x=1755876393;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6YjPGB/euod+io2A3d4H4RTlTfhzeuaae2zluY6iaf8=;
+  b=gtI1o/sGknWTkgzgp4a7fqQifYzUEjcBGdgVTqFV+dvaa+m4YFUyiUbu
+   sWEk2VLOEeczMbI8tNS8BHLvTKOzHSbrTEGsatAVb8xmgiBMHDfaFKosk
+   lXCmlvEdEh5hRU+ohePcIUUUAeWfZVUBUZq//TBhlUoFTuxlBsLsRDL7w
+   0VDXhZT8fjRM+mwSQQzWfND5gsFgxBvhToDFrYAyZ0Qi99syKcFcyxEX4
+   K7KrIwsd00ZXqaLeb4wG4a4L33ISHgN4zhUX87IgjEvj6qyDt5vQu9/8x
+   mdZ04/qWk1I7lhwIYyjezLA+Pj6t80mIRnzfAlmbFyS0MV0qgAoFdAa8r
+   A==;
+X-CSE-ConnectionGUID: /lj4CKjXRtS6cTogn5EOyg==
+X-CSE-MsgGUID: UBor0OTkQCqKECIK15x/tw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="33332873"
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="33332873"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 08:26:32 -0700
+X-CSE-ConnectionGUID: TzgC5e1IS1KLlqME+k1zHw==
+X-CSE-MsgGUID: Usd3LV/9TnKpmTgPKrYQMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="62187114"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa008.jf.intel.com with ESMTP; 22 Aug 2024 08:26:29 -0700
+Message-ID: <060bf2de-d231-4ed6-b7cc-cda40bfd397a@linux.intel.com>
+Date: Thu, 22 Aug 2024 18:28:33 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] xhci: pci: Put XHCI controllers into D3hot at
+ shutdown
+To: superm1@kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ mika.westerberg@linux.intel.com,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20240712185418.937087-1-superm1@kernel.org>
+ <20240712185418.937087-3-superm1@kernel.org>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20240712185418.937087-3-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On 12.7.2024 21.54, superm1@kernel.org wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> A workaround was put in place for Haswell systems with spurious events
+> to put XHCI controllers into D3hot at shutdown.  This solution actually
+> makes sense for all XHCI controllers though because XHCI controllers
+> left in D0 by the OS may remain in D0 when the SoC goes into S5.
+> 
+> Explicitly put all XHCI controllers into D3hot at shutdown and when
+> module is unloaded.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>   drivers/usb/host/xhci-pci.c | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 4408d4caf66d2..dde5e4a210719 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -667,9 +667,7 @@ static void xhci_pci_remove(struct pci_dev *dev)
+>   		xhci->shared_hcd = NULL;
+>   	}
+>   
+> -	/* Workaround for spurious wakeups at shutdown with HSW */
+> -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+> -		pci_set_power_state(dev, PCI_D3hot);
+> +	pci_set_power_state(dev, PCI_D3hot);
+>   
+>   	usb_hcd_pci_remove(dev);
 
-Enable RZ/G3S SYSC reset driver. This exports the control to 2 signals
-(one for USB, one for PCI).
+Just noticed these have been the wrong way around for a while (impacting HSW).
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+We should first call usb_hcd_pci_remove() and then pci_set_power_state(D3),
+otherwise we force a fully running xHC into D3.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d32fca64996..4720367a41ea 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1510,6 +1510,7 @@ CONFIG_RESET_IMX7=y
- CONFIG_RESET_QCOM_AOSS=y
- CONFIG_RESET_QCOM_PDC=m
- CONFIG_RESET_RZG2L_USBPHY_CTRL=y
-+CONFIG_RESET_RZG3S_SYSC=y
- CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
- CONFIG_PHY_CAN_TRANSCEIVER=m
--- 
-2.39.2
+Note, with this change we end up first calling
+pci_disable_device(), then pci_set_power_state(D3)
+
+>   }
+> @@ -882,9 +880,7 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+>   	xhci_shutdown(hcd);
+>   	xhci_cleanup_msix(xhci);
+>   
+> -	/* Yet another workaround for spurious wakeups at shutdown with HSW */
+> -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+> -		pci_set_power_state(pdev, PCI_D3hot);
+> +	pci_set_power_state(pdev, PCI_D3hot);
+
+Looks good
+
+Note that we now end up first calling pci_set_power_state(D3) and then
+pci_disable_device(). The other way around than the remove case above.
+I don't know if it matters.
+
+Thanks
+Mathias
 
 
