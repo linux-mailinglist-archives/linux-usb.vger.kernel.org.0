@@ -1,282 +1,232 @@
-Return-Path: <linux-usb+bounces-13837-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13838-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A723A95AC06
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 05:36:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEB3D95AC4C
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 05:56:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A8FB1F21F79
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 03:36:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E364E1C2154A
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 03:56:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5259249F9;
-	Thu, 22 Aug 2024 03:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F7D364A4;
+	Thu, 22 Aug 2024 03:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WGHuMK+8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kJyCvNd7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5558C24205
-	for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 03:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75D41CFB9;
+	Thu, 22 Aug 2024 03:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724297752; cv=none; b=gyPrV0IUJo8qtulCNP7/UVMkT76yW1kLrgDJ8ENHI36B+DOKDRVQu0ABunTaVxgtWJODRYP00EggtUjiVFr6XCRD0leoKwqUWt2SqFTWVFXkMY/ak1GgDZ/xB9984kQGJ8rwJGmYGO+s4wmBSRAOnD4Hn83JxRRGX2rm2FWjT6o=
+	t=1724298988; cv=none; b=gZZsjXa5sH6QtmQbKj5gwsSbJNUOn1tFY74LTq25qFlxQXz3JVxXURIzv6T4btDdwVKDFvljmlpHQhdxWwWnRkG+AW/LUCc/TOfIMYwsUWTvqUbgZB9G3GscTwIv2Dw+pT1aFQViW4tI6UjcsJIh7ERZ0ajohUQq3OBnwbXxlQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724297752; c=relaxed/simple;
-	bh=zZo7CK71DsyAHgNX6qZQdVDYSkWgUTK8Muh4eKSUtAU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HQ3zUnlZy2SDdNLXoFiAQr9vNyprDba6PmtmbWrGTTu8iJ7iw3xkSGpGb/KFijuUlz+jg14T1XregZfpASKW6hj+1N6C9IvMf8W/GgaZ8Bf7HklkSXBykGTKIGqtE1amJ36GkrIRhYpgMgiMjo0DZePIvBSrTmw5tequdnbrx3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WGHuMK+8; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5320d8155b4so343597e87.3
-        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2024 20:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724297748; x=1724902548; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=koFChdZKi+s587yBpsHEVZdtL5nd67l55Fy/Eyb6xqA=;
-        b=WGHuMK+8uQxUb0m+bf3vL9R4QvEytzRAnLgXX4cNCNKaNlzHZ9A11UFy/k8ecTI2UJ
-         QLT+gbMkSm5Gh9OvRuugyTLJEwjINeQyvJONZWwL6Qjm3u3hlZRJhXrwoazXm5INnixC
-         Dz3eB+HLn72lOEedwkGK32MTd0EtNkNitp4mc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724297748; x=1724902548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=koFChdZKi+s587yBpsHEVZdtL5nd67l55Fy/Eyb6xqA=;
-        b=CUO0b+yy5fRTrCr8y5lJUZ1GwyzAz4fL2j+3GTaruOVem8HsBF0luOPeLxdfpQ4bDx
-         hGfMw0SVjY8G1bhe/j+8Sq1hSNrYfykUImT1hL/pHMhA9OXYFka+v40wJjQSiDsQsIoN
-         mbg6b+0rtfrJSjolo3/vNC6255aViws51Q7ySmrmc1ccc4M7ccjD3iZI3xnJo7gFqAb8
-         Aq30gxOn85mtnXMUiiSJ8PqE2fmftXp9qsCGm0UrtHqXh3OF17SmWcs1S3MxmqiTDKkS
-         gyM6tqyTjtigE5YqvqJYa3EKkwN8wiagvLr+KcaalmClK2tkw1SO1qEGXnhOcYTp+Gg2
-         ns/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUPvn286ICh5N6pKmqiExR6kLYLi3ukYxMMroEbxduMAqwyZnfiCsxZ176GbWNBY6wZ/o1sRz6miMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfLHNHJN//DLhJvA1M+inL97MC0lR6V8mJFalJNc7vU/jy3zRt
-	iDIvzH+wWpmDqS7bz35ZAdR5HopWhgyIsO2EE+s7zIwmoWhDlYu6M6Xh1QKUHbBeauZFMyLqNB+
-	vNzOE+Ua87F+R1iLM84Sqk+o6B39F3crYROSELH0gW6WsjDDUpfQ=
-X-Google-Smtp-Source: AGHT+IHrJ3Vf3ZG8vW2S/kO9QLGvVgbawnx/JJcj2I5vxTmoyCVu2NpMtK5x4MJTycvTfaLX/iXW5iKTI2NWzNrIqdI=
-X-Received: by 2002:a05:6512:2204:b0:530:ab72:25ea with SMTP id
- 2adb3069b0e04-5334fd03e94mr212929e87.28.1724297747707; Wed, 21 Aug 2024
- 20:35:47 -0700 (PDT)
+	s=arc-20240116; t=1724298988; c=relaxed/simple;
+	bh=67Bel21jv6hBWlgoQQSJs1O2C0veB/Hwe5bH9yClc8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Eoirn3kfE2uAfjBUm7MQvrRNTnojps3wfo5oSH6OdIo99Z81abF/LA7oF65M5T1bMmY5ueDzKgDHdpj5prvMa4Rh5F8Kl/w8nZzH2SmvphMI/aseNajjjVeM7cxFxvPLBaTqWMV5RVmqpYaSlbwpK4uagOCpPNIYYKCdFWKzDE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kJyCvNd7; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724298986; x=1755834986;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=67Bel21jv6hBWlgoQQSJs1O2C0veB/Hwe5bH9yClc8k=;
+  b=kJyCvNd7DORtD8BgHaGnnMgHd6mo1Bv9VAAOTcw9iIV0q92TasndHTLA
+   h53vwZLof3Av1Ys4eifln+1AifUgk7dWCTWxRcYhC4h77Aftpdqe5Nkzx
+   mjS0Siq3y50jmhA4UUWR8V5LnWQGkoO3A4Dov11syAHePNMCA88d/jIHk
+   4ZZOe+WM/3aaaqs+FtFuBmCCY2qa4rQVG4QB/xJKcVimWRGJs1A/z+/0C
+   KmY8XYM0Gu5U2SGFadhP0bZZWB3fiMva9Tuokxhyu1kGBontJkC4UEQif
+   pLebltSkHj1J5SusE4w8GSDgHOltkGnKz7y1pFrq02lRLkhRkrElY4Qsr
+   Q==;
+X-CSE-ConnectionGUID: ZKYq2Vm3TXONVjoGDwgN+A==
+X-CSE-MsgGUID: 4u/UOii+Tx+ni3r+5vq7TA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="25586267"
+X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
+   d="scan'208";a="25586267"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 20:56:25 -0700
+X-CSE-ConnectionGUID: 953bsQieS0uirvWSphoJ2w==
+X-CSE-MsgGUID: W5kDMKzfRiixYZMrvLsMHQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
+   d="scan'208";a="60971752"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 21 Aug 2024 20:56:21 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgyvr-000CGW-0t;
+	Thu, 22 Aug 2024 03:56:19 +0000
+Date: Thu, 22 Aug 2024 11:55:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lei Liu <liulei.rjpt@vivo.com>, Neal Liu <neal_liu@aspeedtech.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Bin Liu <b-liu@ti.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: oe-kbuild-all@lists.linux.dev, opensource.kernel@vivo.com
+Subject: Re: [PATCH 2/5] usb: pxa27x_udc: Use devm_clk_get_enabled() helpers
+Message-ID: <202408221155.UveHbLu0-lkp@intel.com>
+References: <20240821121048.31566-3-liulei.rjpt@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240725074857.623299-1-ukaszb@chromium.org> <121d85fe-976a-43c4-95d2-1a066234a758@linux.intel.com>
- <CALwA+Na218B0PK3QG20_XFovJMfB4ud7B9Z=4kX=xwu8bjAvHA@mail.gmail.com>
- <115eb4be-e336-4a29-84d2-bdafb84a0f9f@linux.intel.com> <CALwA+NbLsg2qfmaHagMNimN0mvU6vNP-rsY31O-9X6oZovAOJQ@mail.gmail.com>
- <8cc19d0a-80f3-48a4-9fd2-0cc42b8ed1f4@linux.intel.com> <CALwA+Na_SORXHFr-GZJtPu_HySd9dwo+UAUsv0sYanrH501o4Q@mail.gmail.com>
- <CALwA+NbUJowv3yKnSoY5e4MBi1kZg=ezE0btB5xnTC=k9+VaQg@mail.gmail.com>
- <CALwA+NbLZ7cm_pSc7Bgh-q7YOr3Ez5_AsG-dyqSzoDyOF=E_JQ@mail.gmail.com>
- <f803fe92-5b52-4c11-a35b-8cc4759f9a7e@linux.intel.com> <0f1a54a6-7a7c-429e-8134-88ea3e1e67ec@linux.intel.com>
-In-Reply-To: <0f1a54a6-7a7c-429e-8134-88ea3e1e67ec@linux.intel.com>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Thu, 22 Aug 2024 05:35:26 +0200
-Message-ID: <CALwA+NaH7VC5SjnbQRyXt2NXugZkXyZJa70u9Cw7vdPYe53KqQ@mail.gmail.com>
-Subject: Re: [PATCH v2] xhci: dbc: fix handling ClearFeature Halt requests
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lu Baolu <baolu.lu@linux.intel.com>, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240821121048.31566-3-liulei.rjpt@vivo.com>
 
-On Mon, Aug 5, 2024 at 5:50=E2=80=AFPM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 5.8.2024 9.49, Mathias Nyman wrote:
-> > On 4.8.2024 0.51, =C5=81ukasz Bartosik wrote:
-> >> On Thu, Aug 1, 2024 at 5:02=E2=80=AFPM =C5=81ukasz Bartosik <ukaszb@ch=
-romium.org> wrote:
-> >>>
-> >>> [  103.707882] xhci_hcd 0000:00:0d.0: Stall error at bulk TRB
-> >>> 1943ad000, remaining 1024, ep deq 1943ad001
-> >>>
-> >>>
-> >>>> DbC should respond with STALL packets to host if HIT or HOT is set.
-> >>>> Host side should react to this by sending a ClearFeature(HALT) reque=
-st to DbC,
-> >>>> which should clear the halted endpoint and HIT/HOT flags.
-> >>>>
-> >>>
-> >>> I would like to ask you about it again because I wonder when the DbC
-> >>> endpoint is not halted and it
-> >>> receives the ClearFeature(Halt) request whether this is correct
-> >>> behavior for the DbC endpoint to report a
-> >>> STALL error in such a case ?
-> >>>
-> >
-> > Ok, Setup was unclear to me, I assumed the STALL transfer error was due=
- to an
-> > actual transfer issue on a bulk endpoint.
-> >
-> > I don't think xHCI DbC should send STALL error transfer events for non =
-existing
-> > bulk transfers as a response to ClearFeature(ENDPOINT_HALT) control req=
-uest.
-> >
-> > Especially as it seems not a single byte was transferred on either bulk=
- endpoint.
-> >
-> > But we need to handle it in the driver properly
-> >
-> >
-> >>> Thanks,
-> >>> Lukasz
-> >>>
-> >>
-> >> Hi Mathias,
-> >>
-> >> One more thing which I would like to add to the previous is the observ=
-ation
-> >> which I made during debugging the issue. Looking at the above trace
-> >> there is stall
-> >> on IN endpoint:
-> >> xhci_dbc_handle_event: EVENT: TRB 00000001943ad000 status 'Stall
-> >> Error' len 1024 slot 1 ep 3 type 'Transfer Event' flags e:C
-> >>
-> >> And then when 24 bytes packet arrives
-> >> xhci_dbc_handle_event: EVENT: TRB 00000001943ad000 status 'Short
-> >> Packet' len 1000 slot 1 ep 3 type 'Transfer Event' flags e:C
-> >>
-> >> the same TRB is being used 00000001943ad000 but the DbC driver already
-> >> moved forward and the IN endpoint's pending list does not include a
-> >> dbc_request pointing
-> >> to the TRB 00000001943ad000 which results in "no matched request"
-> >> error and dropping
-> >> of the packet.
-> >>
-> >
-> > I noticed yes, this is why the patch compared the TRB pointed to by the
-> > STALL transfer event with the one in the endpoint context.
-> > If they match the patch attempts to turn that TRB to no-op, forcing xHC
-> > hardware to move to the next TRB.
-> >
-> > The check did however not work as it didn't mask out the cycle bit.
-> > Lops show we compare  1943ad000 with 1943ad001
-> >
-> > [  103.707882] xhci_hcd 0000:00:0d.0: Stall error at bulk TRB 1943ad000=
-, remaining 1024, ep deq 1943ad001
-> >
-> > Code in patch:
-> > +if (ep_ctx->deq =3D=3D event->trans_event.buffer) { // FIXME do we nee=
-d to worry about cycle bit?
-> > +            dev_warn(dbc->dev, "Stall error TRB matches ep_ctx->deq, c=
-lear it\n");
-> > +            trb_to_noop(req->trb);
-> >
-> > With the new information that the STALL transfer event can be completel=
-y
-> > spurious and not related to any actual bytes being transmitted on bulk
-> > endpoints I think we shouldn't give back he transfer req in those cases=
-.
-> >
-> > I'll make another patch
->
-> New patch ready for testing:
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=
-=3Dfix_dbc_halted_ep&id=3D96cd909cc8115b3d2dff1bdcf265171bb0fdab18
->
+Hi Lei,
 
-Hi Mathias,
+kernel test robot noticed the following build errors:
 
-I finally tested your latest patch 96cd909cc8115b3d2dff1bdcf265171bb0fdab18=
-.
-It resolves the issue.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.11-rc4 next-20240821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here are trace logs from one of the runs:
-# entries-in-buffer/entries-written: 23/23   #P:12
-#
-#                                _-----=3D> irqs-off/BH-disabled
-#                               / _----=3D> need-resched
-#                              | / _---=3D> hardirq/softirq
-#                              || / _--=3D> preempt-depth
-#                              ||| / _-=3D> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-     kworker/4:0-30      [004] d..1.   427.334578:
-xhci_dbc_handle_event: EVENT: TRB 000000019dbcaaa0 status 'Stall
-Error' len 0 slot 1 ep 2 type 'Transfer Event' flags e:c
-     kworker/4:0-30      [004] d..1.   427.340272:
-xhci_dbc_handle_event: EVENT: TRB 000000019aef5960 status 'Stall
-Error' len 1024 slot 1 ep 3 type 'Transfer Event' flags e:c
-     kworker/4:0-30      [004] d..1.   427.340273:
-xhci_dbc_handle_transfer: BULK: Buffer 000000017255a000 length 1024 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:C
-     kworker/4:0-30      [004] d..1.   427.382584:
-xhci_dbc_handle_event: EVENT: TRB 000000019aef5960 status 'Short
-Packet' len 1000 slot 1 ep 3 type 'Transfer Event' flags e:c
-     kworker/4:0-30      [004] d..1.   427.382586:
-xhci_dbc_handle_transfer: BULK: Buffer 000000017255a000 length 1024 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:C
-     kworker/4:0-30      [004] d..1.   427.382587:
-xhci_dbc_giveback_request: bulk-in: req 000000005c9bd064 length
-24/1024 =3D=3D> -6
-     kworker/4:0-30      [004] d..1.   427.382592:
-xhci_dbc_handle_event: EVENT: TRB 000000019aef5970 status 'Short
-Packet' len 763 slot 1 ep 3 type 'Transfer Event' flags e:c
-     kworker/4:0-30      [004] d..1.   427.382592:
-xhci_dbc_handle_transfer: BULK: Buffer 000000017255c000 length 1024 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:C
-     kworker/4:0-30      [004] d..1.   427.382592:
-xhci_dbc_giveback_request: bulk-in: req 00000000f836aa56 length
-261/1024 =3D=3D> 0
-     ksoftirqd/4-29      [004] d.s1.   427.387396:
-xhci_dbc_gadget_ep_queue: BULK: Buffer 000000017255c000 length 1024 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:c
-     ksoftirqd/4-29      [004] d.s..   427.387397:
-xhci_dbc_queue_request: bulk-in: req 00000000f836aa56 length 0/1024
-=3D=3D> -115
-     ksoftirqd/4-29      [004] d.s1.   427.387397:
-xhci_dbc_gadget_ep_queue: BULK: Buffer 000000017255a000 length 1024 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:c
-     ksoftirqd/4-29      [004] d.s..   427.387398:
-xhci_dbc_queue_request: bulk-in: req 000000005c9bd064 length 0/1024
-=3D=3D> -115
-       sock->usb-4089    [004] d..1.   427.388796:
-xhci_dbc_gadget_ep_queue: BULK: Buffer 000000017255d400 length 24 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:c
-       sock->usb-4089    [004] d....   427.388801:
-xhci_dbc_queue_request: bulk-out: req 00000000653a50a0 length 0/24 =3D=3D>
--115
-       sock->usb-4089    [004] d..1.   427.388857:
-xhci_dbc_gadget_ep_queue: BULK: Buffer 000000017255d000 length 371 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:c
-       sock->usb-4089    [004] d....   427.388858:
-xhci_dbc_queue_request: bulk-out: req 000000006de24797 length 0/371
-=3D=3D> -115
-     kworker/4:0-30      [004] d..1.   427.388869:
-xhci_dbc_handle_event: EVENT: TRB 000000019dbcaaa0 status 'Success'
-len 0 slot 1 ep 2 type 'Transfer Event' flags e:c
-     kworker/4:0-30      [004] d..1.   427.388870:
-xhci_dbc_handle_transfer: BULK: Buffer 000000017255d400 length 24 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:C
-     kworker/4:0-30      [004] d..1.   427.388870:
-xhci_dbc_giveback_request: bulk-out: req 00000000653a50a0 length 24/24
-=3D=3D> 0
-     kworker/4:0-30      [004] d..1.   427.394600:
-xhci_dbc_handle_event: EVENT: TRB 000000019dbcaab0 status 'Success'
-len 0 slot 1 ep 2 type 'Transfer Event' flags e:c
-     kworker/4:0-30      [004] d..1.   427.394601:
-xhci_dbc_handle_transfer: BULK: Buffer 000000017255d000 length 371 TD
-size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:C
-     kworker/4:0-30      [004] d..1.   427.394603:
-xhci_dbc_giveback_request: bulk-out: req 000000006de24797 length
-371/371 =3D=3D> 0
+url:    https://github.com/intel-lab-lkp/linux/commits/Lei-Liu/usb-aspeed_udc-Use-devm_clk_get_enabled-helpers/20240821-201358
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240821121048.31566-3-liulei.rjpt%40vivo.com
+patch subject: [PATCH 2/5] usb: pxa27x_udc: Use devm_clk_get_enabled() helpers
+config: x86_64-randconfig-161-20240822 (https://download.01.org/0day-ci/archive/20240822/202408221155.UveHbLu0-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221155.UveHbLu0-lkp@intel.com/reproduce)
 
-Short packet was processed instead of being dropped as it happened
-previously without your fix.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408221155.UveHbLu0-lkp@intel.com/
 
-Thanks,
-Lukasz
+All errors (new ones prefixed by >>):
 
-> Thanks
-> Mathias
+>> drivers/usb/gadget/udc/pxa27x_udc.c:2401:44: error: too many arguments to function call, expected single argument 'clk', have 2 arguments
+    2401 |         udc->clk = clk_prepare_enable(&pdev->dev, NULL);
+         |                    ~~~~~~~~~~~~~~~~~~             ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   include/linux/clk.h:1107:19: note: 'clk_prepare_enable' declared here
+    1107 | static inline int clk_prepare_enable(struct clk *clk)
+         |                   ^                  ~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +/clk +2401 drivers/usb/gadget/udc/pxa27x_udc.c
+
+  2345	
+  2346	/**
+  2347	 * pxa_udc_probe - probes the udc device
+  2348	 * @pdev: platform device
+  2349	 *
+  2350	 * Perform basic init : allocates udc clock, creates sysfs files, requests
+  2351	 * irq.
+  2352	 */
+  2353	static int pxa_udc_probe(struct platform_device *pdev)
+  2354	{
+  2355		struct pxa_udc *udc = &memory;
+  2356		int retval = 0, gpio;
+  2357		struct pxa2xx_udc_mach_info *mach = dev_get_platdata(&pdev->dev);
+  2358		unsigned long gpio_flags;
+  2359	
+  2360		if (mach) {
+  2361			gpio_flags = mach->gpio_pullup_inverted ? GPIOF_ACTIVE_LOW : 0;
+  2362			gpio = mach->gpio_pullup;
+  2363			if (gpio_is_valid(gpio)) {
+  2364				retval = devm_gpio_request_one(&pdev->dev, gpio,
+  2365							       gpio_flags,
+  2366							       "USB D+ pullup");
+  2367				if (retval)
+  2368					return retval;
+  2369				udc->gpiod = gpio_to_desc(mach->gpio_pullup);
+  2370			}
+  2371			udc->udc_command = mach->udc_command;
+  2372		} else {
+  2373			udc->gpiod = devm_gpiod_get(&pdev->dev, NULL, GPIOD_ASIS);
+  2374		}
+  2375	
+  2376		udc->regs = devm_platform_ioremap_resource(pdev, 0);
+  2377		if (IS_ERR(udc->regs))
+  2378			return PTR_ERR(udc->regs);
+  2379		udc->irq = platform_get_irq(pdev, 0);
+  2380		if (udc->irq < 0)
+  2381			return udc->irq;
+  2382	
+  2383		udc->dev = &pdev->dev;
+  2384		if (of_have_populated_dt()) {
+  2385			udc->transceiver =
+  2386				devm_usb_get_phy_by_phandle(udc->dev, "phys", 0);
+  2387			if (IS_ERR(udc->transceiver))
+  2388				return PTR_ERR(udc->transceiver);
+  2389		} else {
+  2390			udc->transceiver = usb_get_phy(USB_PHY_TYPE_USB2);
+  2391		}
+  2392	
+  2393		if (IS_ERR(udc->gpiod)) {
+  2394			dev_err(&pdev->dev, "Couldn't find or request D+ gpio : %ld\n",
+  2395				PTR_ERR(udc->gpiod));
+  2396			return PTR_ERR(udc->gpiod);
+  2397		}
+  2398		if (udc->gpiod)
+  2399			gpiod_direction_output(udc->gpiod, 0);
+  2400	
+> 2401		udc->clk = clk_prepare_enable(&pdev->dev, NULL);
+  2402		if (IS_ERR(udc->clk))
+  2403			return PTR_ERR(udc->clk);
+  2404	
+  2405		udc->vbus_sensed = 0;
+  2406	
+  2407		the_controller = udc;
+  2408		platform_set_drvdata(pdev, udc);
+  2409		udc_init_data(udc);
+  2410	
+  2411		/* irq setup after old hardware state is cleaned up */
+  2412		retval = devm_request_irq(&pdev->dev, udc->irq, pxa_udc_irq,
+  2413					  IRQF_SHARED, driver_name, udc);
+  2414		if (retval != 0) {
+  2415			dev_err(udc->dev, "%s: can't get irq %i, err %d\n",
+  2416				driver_name, udc->irq, retval);
+  2417			goto err;
+  2418		}
+  2419	
+  2420		if (!IS_ERR_OR_NULL(udc->transceiver))
+  2421			usb_register_notifier(udc->transceiver, &pxa27x_udc_phy);
+  2422		retval = usb_add_gadget_udc(&pdev->dev, &udc->gadget);
+  2423		if (retval)
+  2424			goto err_add_gadget;
+  2425	
+  2426		pxa_init_debugfs(udc);
+  2427		if (should_enable_udc(udc))
+  2428			udc_enable(udc);
+  2429		return 0;
+  2430	
+  2431	err_add_gadget:
+  2432		if (!IS_ERR_OR_NULL(udc->transceiver))
+  2433			usb_unregister_notifier(udc->transceiver, &pxa27x_udc_phy);
+  2434	err:
+  2435		clk_unprepare(udc->clk);
+  2436		return retval;
+  2437	}
+  2438	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
