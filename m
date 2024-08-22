@@ -1,126 +1,166 @@
-Return-Path: <linux-usb+bounces-13867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13868-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69DA395B40D
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 13:41:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D2DB95B4BB
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 14:11:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C8481C2268F
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 11:41:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 597892846F1
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 12:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD161C93DA;
-	Thu, 22 Aug 2024 11:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 581D51C943F;
+	Thu, 22 Aug 2024 12:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFToW+5i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ioZcH+WU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C310117A584;
-	Thu, 22 Aug 2024 11:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8E11AAE36;
+	Thu, 22 Aug 2024 12:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724326871; cv=none; b=cWdTMUg+IDUdj+ptvw6NvWHYW4Nix+MDcGYNqbMNmbP61huCNIKUEgcWABtHFgSRRlIveoF1n4r3ao8PMtudaohKt2CUnqlz4moNpP9EtIngR6dSgYPbUdwXpu/lGL7ATKuOZIAZhODR1cJKP8mddkvuQxYJKt27KZT/1Eu1ADc=
+	t=1724328674; cv=none; b=Eqf0TydPJA/NwplahAgISjCGaO1zOoAtOzzSQx31XnOd9gTwzGh3KV9ig8cfiNztz8gXk1C3qaVcebyfECAYC/6HWO3IaVYao28OW8Llz1aXIJpZ/cZGFSkXhMGT2ZH9MaiwwGKgoXAFSkXKYvEq/0OU4ZO4mZlxCGc4w24V/nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724326871; c=relaxed/simple;
-	bh=7bkCARdi1VmnQkUmpWAJUfPzTKWAbsevARXH+QvJhck=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=igEGT8fUJ04oqmQanK70zTLbljp/XFA3OE8+vh/mQT6ipZ5nFWQqpFveglf4xdielvmQldY8d1AORftFN3f6yrwcWyZ8DUEIBYT19P5iznSFcKU/YfihtyJCn4VgRZnUqJr2zLLTdDnX5/bYB2lhUcIkAYc1IeWAdrQNohBLo0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFToW+5i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4751C32782;
-	Thu, 22 Aug 2024 11:41:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724326871;
-	bh=7bkCARdi1VmnQkUmpWAJUfPzTKWAbsevARXH+QvJhck=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lFToW+5ibhCK9zVfe4kzGVgGoX7fCpft0SB6/H/FQzi0vu0O5/HsWxC9Eb+IKRXlJ
-	 hDR+iNIE9C5p5VeDWmiSFN4lTFluJDgMByCIUyEDKfO15aY3ltiptJYMxz0kpcsxB/
-	 G6UGlWlXHpotzfWMaGr4cpnDSVa0vXDRSvK9wM1iBcukffSc2QlT8HUKCVaZkKGSSV
-	 YmvkkAhfT/WoJsVc303u9QkhhJnOmHoq2PBBpcBd/VOi/K66b3c+6KQUduoWsjzzNU
-	 AT4xFJ+evj+/GFGdcBaJ10+mORRwoNpnchZDm17EtxPiCO7RL4Lv1t6/zAW7MwhWI9
-	 elweLubsVZkRg==
-Message-ID: <b95e461b-d3aa-41e4-bf93-f14f853f3f03@kernel.org>
-Date: Thu, 22 Aug 2024 13:41:02 +0200
+	s=arc-20240116; t=1724328674; c=relaxed/simple;
+	bh=wBl1r1iyvYDMVZtv8y/QM6cGPiMA+r+kJ9USad8vmoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HgcIwOjatvAnkpQ0uDqkgqNdQyRdMOxpnAvE3mFMBX1RyOdixixcIuG3m95+gF+LsLg0y9ToUGdoKRtJ6e7oRpzB8M412fZWtLOlJz/pLwol3wfBkwbMM2NuAvDsVQ3g9I/juFXpcdIzCAFNVnlZkBKkqPE4hXk5URJmCYwWQvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioZcH+WU; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724328672; x=1755864672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wBl1r1iyvYDMVZtv8y/QM6cGPiMA+r+kJ9USad8vmoA=;
+  b=ioZcH+WUR+NDHscS7T2iCzRPkYvGnDvFZqwZhGs32/QJBGGvNPf/2oVM
+   eNjzw/pJv5/Jf2S5gjSelv190PpFQoyL7KqapAO+ppWuyfQ7h6ix2qNRl
+   7/W58/P3tjZZpD2VDVxMNT7lu9lgeIZg0UkIQMRIZP9oZGjrmLDCywsNx
+   0xS6I/sjsPrb3OaPRGxvgr90spgabTk5PxWDbwNKkT4e0AkJ86A2hmV+H
+   dE1wkwz/8lAljboET8Vz7/lxxGpzgIMHgmipENTHELfZ2JKsCGUsUTQSC
+   JRPMPCWzqF11E8cY0gfkhkL/v1ZK+ksa7IKCuEcURLUAjQ/wiXmVLLaqT
+   A==;
+X-CSE-ConnectionGUID: XT1TkJ+1QBea9Q3962+k4w==
+X-CSE-MsgGUID: tspb34sWT/yEnGo7PdXHjw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="45260381"
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="45260381"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 05:11:11 -0700
+X-CSE-ConnectionGUID: /PjncfjhS2K+vMx1/qUUeg==
+X-CSE-MsgGUID: Fv/q/DKJQ4WtGUg+Dfv/uA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="61089547"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 22 Aug 2024 05:11:05 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sh6ed-000Cjg-0x;
+	Thu, 22 Aug 2024 12:11:03 +0000
+Date: Thu, 22 Aug 2024 20:10:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Wahren <wahrenst@gmx.net>, Russell King <linux@armlinux.org.uk>,
+	Doug Anderson <dianders@chromium.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Minas Harutyunyan <hminas@synopsys.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Lukas Wunner <lukas@wunner.de>,
+	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kernel-list@raspberrypi.com, Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH V3 4/9] drm/vc4: hdmi: add PM suspend/resume support
+Message-ID: <202408221940.t4pWjzvz-lkp@intel.com>
+References: <20240821214052.6800-5-wahrenst@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/6] dt-bindings: phy: mxs-usb-phy: add nxp,sim
- property
-To: Xu Yang <xu.yang_2@nxp.com>, vkoul@kernel.org, kishon@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, gregkh@linuxfoundation.org, peter.chen@kernel.org,
- herve.codina@bootlin.com
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-usb@vger.kernel.org, jun.li@nxp.com
-References: <20240726113207.3393247-1-xu.yang_2@nxp.com>
- <20240726113207.3393247-3-xu.yang_2@nxp.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240726113207.3393247-3-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240821214052.6800-5-wahrenst@gmx.net>
 
-On 26/07/2024 13:32, Xu Yang wrote:
-> i.MX7ULP need properly set System Integration Module(SIM) module to make
-> usb wakeup work well. This will add a "nxp,sim" property.
-> 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
+Hi Stefan,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+kernel test robot noticed the following build warnings:
 
-Best regards,
-Krzysztof
+[auto build test WARNING on linus/master]
+[also build test WARNING on arm/for-next arm/fixes v6.11-rc4 next-20240822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Wahren/mailbox-bcm2835-Fix-timeout-during-suspend-mode/20240822-063725
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240821214052.6800-5-wahrenst%40gmx.net
+patch subject: [PATCH V3 4/9] drm/vc4: hdmi: add PM suspend/resume support
+config: arc-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408221940.t4pWjzvz-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221940.t4pWjzvz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408221940.t4pWjzvz-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/vc4/vc4_hdmi.c:3118:12: warning: 'vc4_hdmi_resume' defined but not used [-Wunused-function]
+    3118 | static int vc4_hdmi_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~
+>> drivers/gpu/drm/vc4/vc4_hdmi.c:3107:12: warning: 'vc4_hdmi_suspend' defined but not used [-Wunused-function]
+    3107 | static int vc4_hdmi_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~
+
+
+vim +/vc4_hdmi_resume +3118 drivers/gpu/drm/vc4/vc4_hdmi.c
+
+  3106	
+> 3107	static int vc4_hdmi_suspend(struct device *dev)
+  3108	{
+  3109		struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
+  3110		struct drm_device *drm = vc4_hdmi->connector.dev;
+  3111	
+  3112		if (drm && drm->mode_config.poll_enabled)
+  3113			drm_kms_helper_poll_disable(drm);
+  3114	
+  3115		return pm_runtime_force_suspend(dev);
+  3116	}
+  3117	
+> 3118	static int vc4_hdmi_resume(struct device *dev)
+  3119	{
+  3120		struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
+  3121		struct drm_device *drm = vc4_hdmi->connector.dev;
+  3122		int ret;
+  3123	
+  3124		ret = pm_runtime_force_resume(dev);
+  3125	
+  3126		if (drm && drm->mode_config.poll_enabled)
+  3127			drm_kms_helper_poll_enable(drm);
+  3128	
+  3129		return ret;
+  3130	}
+  3131	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
