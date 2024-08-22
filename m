@@ -1,166 +1,192 @@
-Return-Path: <linux-usb+bounces-13868-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13869-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D2DB95B4BB
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 14:11:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43CFA95B569
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 14:48:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 597892846F1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 12:11:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E251E1F24CEA
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 12:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 581D51C943F;
-	Thu, 22 Aug 2024 12:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8811C9DE4;
+	Thu, 22 Aug 2024 12:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ioZcH+WU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Otn0M57H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8E11AAE36;
-	Thu, 22 Aug 2024 12:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D111181B87
+	for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 12:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724328674; cv=none; b=Eqf0TydPJA/NwplahAgISjCGaO1zOoAtOzzSQx31XnOd9gTwzGh3KV9ig8cfiNztz8gXk1C3qaVcebyfECAYC/6HWO3IaVYao28OW8Llz1aXIJpZ/cZGFSkXhMGT2ZH9MaiwwGKgoXAFSkXKYvEq/0OU4ZO4mZlxCGc4w24V/nM=
+	t=1724330886; cv=none; b=rxgkA89aoJ7vdIhKsI0dL3O0k6XI4y1+8W0dwAYdZakvRZgY0LavVwJmmqYTEAQTzPXyTSD2zePjhDD9DnX0hhBSj3gTMIV5YXq4VLQBlehUkHCfZPE2zvSf46OduhiZIjYC+4rNiY98nsDD1mvtRYA9WhCDyWgKbKCFYW/JnfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724328674; c=relaxed/simple;
-	bh=wBl1r1iyvYDMVZtv8y/QM6cGPiMA+r+kJ9USad8vmoA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HgcIwOjatvAnkpQ0uDqkgqNdQyRdMOxpnAvE3mFMBX1RyOdixixcIuG3m95+gF+LsLg0y9ToUGdoKRtJ6e7oRpzB8M412fZWtLOlJz/pLwol3wfBkwbMM2NuAvDsVQ3g9I/juFXpcdIzCAFNVnlZkBKkqPE4hXk5URJmCYwWQvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioZcH+WU; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724330886; c=relaxed/simple;
+	bh=BZiB5Pc3cQCV3Mu3+qQ12ezr664u0/maNCQCu9F8nQM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mNzWkHd2aTBppcdzaLqu27FOyGCcz507MkQw2IqAGj5f5+Rb3vMeof6C+Im1XlKq6LBIyx6YCAX5gRzfflBEiiyFZ9BAi49kH44RH6UficJaBnTAsASOAATT9THQKVEMCJDM2E/rg6ZTd9o6O1KQv4YUHZZtxFZZd4+pEKSwWR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Otn0M57H; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724328672; x=1755864672;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wBl1r1iyvYDMVZtv8y/QM6cGPiMA+r+kJ9USad8vmoA=;
-  b=ioZcH+WUR+NDHscS7T2iCzRPkYvGnDvFZqwZhGs32/QJBGGvNPf/2oVM
-   eNjzw/pJv5/Jf2S5gjSelv190PpFQoyL7KqapAO+ppWuyfQ7h6ix2qNRl
-   7/W58/P3tjZZpD2VDVxMNT7lu9lgeIZg0UkIQMRIZP9oZGjrmLDCywsNx
-   0xS6I/sjsPrb3OaPRGxvgr90spgabTk5PxWDbwNKkT4e0AkJ86A2hmV+H
-   dE1wkwz/8lAljboET8Vz7/lxxGpzgIMHgmipENTHELfZ2JKsCGUsUTQSC
-   JRPMPCWzqF11E8cY0gfkhkL/v1ZK+ksa7IKCuEcURLUAjQ/wiXmVLLaqT
-   A==;
-X-CSE-ConnectionGUID: XT1TkJ+1QBea9Q3962+k4w==
-X-CSE-MsgGUID: tspb34sWT/yEnGo7PdXHjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="45260381"
+  t=1724330885; x=1755866885;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BZiB5Pc3cQCV3Mu3+qQ12ezr664u0/maNCQCu9F8nQM=;
+  b=Otn0M57HynjkKXrdQophirVnZs+GAveu8qYpUpA1LOUlbbCnkbW7eTiB
+   /u8mcQcrZqgUKPRi7yQkInlrGYWNMks4GjKoW4Z2ewmb79gNOoH9kAMe/
+   Kkrjv2bglQpPiD0vt6TS8DWPu3T0JMjv8f0zWA/Zc7NePNNeaSUqflNXO
+   11UbtBd2hDoCVFh/hnqUsP34G0uJphOYTbDLGwSCTq/iTJ73rclhPVGIh
+   fwQWyvwHFaY1Mxnl6UfQd2ApRTXOnfp5R/qlHHWVGQMcxr+3yDuy7ogth
+   L31OQxZBey8RKKOhJy83uuC6OwnJQctHCdFxsj7OIPurM8PHuBx+csvnP
+   g==;
+X-CSE-ConnectionGUID: +XopvFJXSlmn2fkcO816CA==
+X-CSE-MsgGUID: oqcvFIaWQOK0c1cmd5OFgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22708460"
 X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="45260381"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 05:11:11 -0700
-X-CSE-ConnectionGUID: /PjncfjhS2K+vMx1/qUUeg==
-X-CSE-MsgGUID: Fv/q/DKJQ4WtGUg+Dfv/uA==
+   d="scan'208";a="22708460"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 05:48:04 -0700
+X-CSE-ConnectionGUID: 6fYf48tmR0Sp62qhAiPTMQ==
+X-CSE-MsgGUID: eIvWq4KwQcyt/nKzxui0Ug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="61089547"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 22 Aug 2024 05:11:05 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sh6ed-000Cjg-0x;
-	Thu, 22 Aug 2024 12:11:03 +0000
-Date: Thu, 22 Aug 2024 20:10:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefan Wahren <wahrenst@gmx.net>, Russell King <linux@armlinux.org.uk>,
-	Doug Anderson <dianders@chromium.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Minas Harutyunyan <hminas@synopsys.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Lukas Wunner <lukas@wunner.de>,
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com, Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH V3 4/9] drm/vc4: hdmi: add PM suspend/resume support
-Message-ID: <202408221940.t4pWjzvz-lkp@intel.com>
-References: <20240821214052.6800-5-wahrenst@gmx.net>
+   d="scan'208";a="66258251"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa003.jf.intel.com with ESMTP; 22 Aug 2024 05:48:01 -0700
+Message-ID: <9373388b-01e1-49b1-8fab-7724aa6454ab@linux.intel.com>
+Date: Thu, 22 Aug 2024 15:50:06 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240821214052.6800-5-wahrenst@gmx.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] xhci: dbc: fix handling ClearFeature Halt requests
+To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Lu Baolu <baolu.lu@linux.intel.com>, linux-usb@vger.kernel.org
+References: <20240725074857.623299-1-ukaszb@chromium.org>
+ <121d85fe-976a-43c4-95d2-1a066234a758@linux.intel.com>
+ <CALwA+Na218B0PK3QG20_XFovJMfB4ud7B9Z=4kX=xwu8bjAvHA@mail.gmail.com>
+ <115eb4be-e336-4a29-84d2-bdafb84a0f9f@linux.intel.com>
+ <CALwA+NbLsg2qfmaHagMNimN0mvU6vNP-rsY31O-9X6oZovAOJQ@mail.gmail.com>
+ <8cc19d0a-80f3-48a4-9fd2-0cc42b8ed1f4@linux.intel.com>
+ <CALwA+Na_SORXHFr-GZJtPu_HySd9dwo+UAUsv0sYanrH501o4Q@mail.gmail.com>
+ <CALwA+NbUJowv3yKnSoY5e4MBi1kZg=ezE0btB5xnTC=k9+VaQg@mail.gmail.com>
+ <CALwA+NbLZ7cm_pSc7Bgh-q7YOr3Ez5_AsG-dyqSzoDyOF=E_JQ@mail.gmail.com>
+ <f803fe92-5b52-4c11-a35b-8cc4759f9a7e@linux.intel.com>
+ <0f1a54a6-7a7c-429e-8134-88ea3e1e67ec@linux.intel.com>
+ <CALwA+NaH7VC5SjnbQRyXt2NXugZkXyZJa70u9Cw7vdPYe53KqQ@mail.gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <CALwA+NaH7VC5SjnbQRyXt2NXugZkXyZJa70u9Cw7vdPYe53KqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Stefan,
+On 22.8.2024 6.35, Łukasz Bartosik wrote:
+> On Mon, Aug 5, 2024 at 5:50 PM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+>>
+>> On 5.8.2024 9.49, Mathias Nyman wrote:
+>>> On 4.8.2024 0.51, Łukasz Bartosik wrote:
+>>>> On Thu, Aug 1, 2024 at 5:02 PM Łukasz Bartosik <ukaszb@chromium.org> wrote:
+>>>>>
+>>>>> [  103.707882] xhci_hcd 0000:00:0d.0: Stall error at bulk TRB
+>>>>> 1943ad000, remaining 1024, ep deq 1943ad001
+>>>>>
+>>>>>
+>>>>>> DbC should respond with STALL packets to host if HIT or HOT is set.
+>>>>>> Host side should react to this by sending a ClearFeature(HALT) request to DbC,
+>>>>>> which should clear the halted endpoint and HIT/HOT flags.
+>>>>>>
+>>>>>
+>>>>> I would like to ask you about it again because I wonder when the DbC
+>>>>> endpoint is not halted and it
+>>>>> receives the ClearFeature(Halt) request whether this is correct
+>>>>> behavior for the DbC endpoint to report a
+>>>>> STALL error in such a case ?
+>>>>>
+>>>
+>>> Ok, Setup was unclear to me, I assumed the STALL transfer error was due to an
+>>> actual transfer issue on a bulk endpoint.
+>>>
+>>> I don't think xHCI DbC should send STALL error transfer events for non existing
+>>> bulk transfers as a response to ClearFeature(ENDPOINT_HALT) control request.
+>>>
+>>> Especially as it seems not a single byte was transferred on either bulk endpoint.
+>>>
+>>> But we need to handle it in the driver properly
+>>>
+>>>
+>>>>> Thanks,
+>>>>> Lukasz
+>>>>>
+>>>>
+>>>> Hi Mathias,
+>>>>
+>>>> One more thing which I would like to add to the previous is the observation
+>>>> which I made during debugging the issue. Looking at the above trace
+>>>> there is stall
+>>>> on IN endpoint:
+>>>> xhci_dbc_handle_event: EVENT: TRB 00000001943ad000 status 'Stall
+>>>> Error' len 1024 slot 1 ep 3 type 'Transfer Event' flags e:C
+>>>>
+>>>> And then when 24 bytes packet arrives
+>>>> xhci_dbc_handle_event: EVENT: TRB 00000001943ad000 status 'Short
+>>>> Packet' len 1000 slot 1 ep 3 type 'Transfer Event' flags e:C
+>>>>
+>>>> the same TRB is being used 00000001943ad000 but the DbC driver already
+>>>> moved forward and the IN endpoint's pending list does not include a
+>>>> dbc_request pointing
+>>>> to the TRB 00000001943ad000 which results in "no matched request"
+>>>> error and dropping
+>>>> of the packet.
+>>>>
+>>>
+>>> I noticed yes, this is why the patch compared the TRB pointed to by the
+>>> STALL transfer event with the one in the endpoint context.
+>>> If they match the patch attempts to turn that TRB to no-op, forcing xHC
+>>> hardware to move to the next TRB.
+>>>
+>>> The check did however not work as it didn't mask out the cycle bit.
+>>> Lops show we compare  1943ad000 with 1943ad001
+>>>
+>>> [  103.707882] xhci_hcd 0000:00:0d.0: Stall error at bulk TRB 1943ad000, remaining 1024, ep deq 1943ad001
+>>>
+>>> Code in patch:
+>>> +if (ep_ctx->deq == event->trans_event.buffer) { // FIXME do we need to worry about cycle bit?
+>>> +            dev_warn(dbc->dev, "Stall error TRB matches ep_ctx->deq, clear it\n");
+>>> +            trb_to_noop(req->trb);
+>>>
+>>> With the new information that the STALL transfer event can be completely
+>>> spurious and not related to any actual bytes being transmitted on bulk
+>>> endpoints I think we shouldn't give back he transfer req in those cases.
+>>>
+>>> I'll make another patch
+>>
+>> New patch ready for testing:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=fix_dbc_halted_ep&id=96cd909cc8115b3d2dff1bdcf265171bb0fdab18
+>>
+> 
+> Hi Mathias,
+> 
+> I finally tested your latest patch 96cd909cc8115b3d2dff1bdcf265171bb0fdab18.
+> It resolves the issue.
 
-kernel test robot noticed the following build warnings:
+Thanks for testing.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on arm/for-next arm/fixes v6.11-rc4 next-20240822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I did some minor additional cleanups to it.
+I'll post it as a proper patch. can I ask you to give it one last run,
+just to make sure everything still works.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Wahren/mailbox-bcm2835-Fix-timeout-during-suspend-mode/20240822-063725
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240821214052.6800-5-wahrenst%40gmx.net
-patch subject: [PATCH V3 4/9] drm/vc4: hdmi: add PM suspend/resume support
-config: arc-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408221940.t4pWjzvz-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221940.t4pWjzvz-lkp@intel.com/reproduce)
+Thanks
+Mathias
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408221940.t4pWjzvz-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/vc4/vc4_hdmi.c:3118:12: warning: 'vc4_hdmi_resume' defined but not used [-Wunused-function]
-    3118 | static int vc4_hdmi_resume(struct device *dev)
-         |            ^~~~~~~~~~~~~~~
->> drivers/gpu/drm/vc4/vc4_hdmi.c:3107:12: warning: 'vc4_hdmi_suspend' defined but not used [-Wunused-function]
-    3107 | static int vc4_hdmi_suspend(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~
-
-
-vim +/vc4_hdmi_resume +3118 drivers/gpu/drm/vc4/vc4_hdmi.c
-
-  3106	
-> 3107	static int vc4_hdmi_suspend(struct device *dev)
-  3108	{
-  3109		struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
-  3110		struct drm_device *drm = vc4_hdmi->connector.dev;
-  3111	
-  3112		if (drm && drm->mode_config.poll_enabled)
-  3113			drm_kms_helper_poll_disable(drm);
-  3114	
-  3115		return pm_runtime_force_suspend(dev);
-  3116	}
-  3117	
-> 3118	static int vc4_hdmi_resume(struct device *dev)
-  3119	{
-  3120		struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
-  3121		struct drm_device *drm = vc4_hdmi->connector.dev;
-  3122		int ret;
-  3123	
-  3124		ret = pm_runtime_force_resume(dev);
-  3125	
-  3126		if (drm && drm->mode_config.poll_enabled)
-  3127			drm_kms_helper_poll_enable(drm);
-  3128	
-  3129		return ret;
-  3130	}
-  3131	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
