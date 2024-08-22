@@ -1,203 +1,117 @@
-Return-Path: <linux-usb+bounces-13856-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13857-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04B2A95AFD3
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 10:02:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59AAA95B008
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 10:17:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DE4FB21034
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 08:02:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15E57281E7E
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 08:17:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2086716A955;
-	Thu, 22 Aug 2024 08:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DBD916DED5;
+	Thu, 22 Aug 2024 08:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wNANmtRL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aM1f98vz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A82019470;
-	Thu, 22 Aug 2024 08:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB7A13C3DD;
+	Thu, 22 Aug 2024 08:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724313767; cv=none; b=taCyMxXg5lSX6Fu3tiurjcsRqGt+Ugg5IQfAH+IR0CzK7HUMZ/Oe5xLb826TALPO4uQAlma73dQguILUY8Q70ele8PMDnKuRKVcSaGiPfKQyMhhPI6/zqfdzJt9aJnFLEM2ymyiO79yqb60pEzR2HoNOV/qsEEM1CZMc6paJmes=
+	t=1724314668; cv=none; b=CF/ZQ/Sge0XGNW9Y3htWQklqjGvm2Xrm4HPEijskep3FD4QLYCxRToUwAJfjRlbYsjW0uGkOUiMjyv2mBRsscHYkSoOmCRSaLu3DsME40BFFpSyGXnO2kXaAGf5UueKP7r4qMWnmiR/MAVj6WEYz6kV79kEnyKO65zE0Czl7nAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724313767; c=relaxed/simple;
-	bh=RkefZNrQirlUY7AaUT07nuSkCcS3AOBxotcAP12aurM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TSJKzQmaOl3+kTdh/0BbOguZmXLLAmpnVNt8/3lWOHcHweZQOxoUQvDST/3w5P4UUugyh2m14NjvdXnYfcptrciKQsom05Ni0s1FG68xDC78tSe3wTY+FbOKVi5l4n5hgmm/ieMhyqCziSkma1xelguCxrhwQcHzTUVol7vhuO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wNANmtRL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90AAC4AF09;
-	Thu, 22 Aug 2024 08:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724313767;
-	bh=RkefZNrQirlUY7AaUT07nuSkCcS3AOBxotcAP12aurM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wNANmtRL0kgxdvVBwmJ9I4shPJN8feQ28XYLkei1beJv3t3HEeyea+QccTgkuDf5j
-	 vePCUzuHbgc5G9SyJmKMYwWjUaS+uwKicUmY14S7F4KnOf5yEw3c143pIi7cOQ2gkp
-	 Cmf540TDZNLPlXYHDDf0lPqJ+AznccpxvKLQu6sw=
-Date: Thu, 22 Aug 2024 16:02:44 +0800
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
-Cc: Prashanth K <quic_prashk@quicinc.com>,
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"opensource.kernel" <opensource.kernel@vivo.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Subject: Re: [PATCH v6] usb: gadget: u_serial: Add null pointer check in
- gs_read_complete & gs_write_complete
-Message-ID: <2024082251-grief-profanity-b0da@gregkh>
-References: <TYUPR06MB62171A7BF25AB6963CBA07FED28F2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	s=arc-20240116; t=1724314668; c=relaxed/simple;
+	bh=i9+RZMgNXDfIKM6AWUP3aKBMFAEeLFnrjodDLj6ekIY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RAi1hyDR1uGPgvHhnDiyw4ZmVY9O0obI9YcUZewR1+LUerUbr5RmbJQKGw05PQOZsdgIkSkYyLnMB1GCsXfdPb2/KYforcZzVrpfisr7ilta8gHeieLdBpZy3iy3PKtEeKWhsltr+ohfZV85BASQrB00UiZfXNtKQfV2Fym6omY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aM1f98vz; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2f43de7ad5eso435751fa.1;
+        Thu, 22 Aug 2024 01:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724314664; x=1724919464; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vPKMD2ynTcsQDN/WlLeg4f9d/2wCVzNZpD/3xY7a2os=;
+        b=aM1f98vzfiOdyw2ly6CMyUAqEb9ljDHAKmsUcX6FEOadBGuTw4f4CmAC0o+YlkEHlX
+         6AhXbAhf0zih7b+2LjYLFKeVwexeBJ38yK3ger3LQLb8Am1n8PLkIVHqKzR/V7CuoXjL
+         BDTBn11IKVO/GqQH0HuvFWY2SD/44aW/IpbzqZWUrbmP7TCYTGxceoAJYfTZb/nOdJ54
+         uVTP46CRvmv0WOGfKwdEL3Gv33xnCWIbJEhsSkDqRkg4nxXXahMVsHKt0heK/VftO8Ak
+         3+U2yz3lsy588qBLdy67LViuSidL/8RmLzukVrw565MpuZPkbJsPm2ayioXGBfWFGRUB
+         TYJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724314664; x=1724919464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vPKMD2ynTcsQDN/WlLeg4f9d/2wCVzNZpD/3xY7a2os=;
+        b=Lir5iTwNJeeaNf60Pm6t+EPUamMyi6LU4wXAvgeqrBiqRRcEkjGyscFndjNgB3pJdU
+         OrgtXB8PsP9/8peECxyqrp+X4iA0+yC5h9nu37l/V4m9IaQXafcciKvthI3jvg76+q2c
+         IPFlF9pwGJt155eN1gX9ELN8aRT3BngcoTPjiwZXNNocqV0IN+GjND55FBMoqWwVe/qn
+         F4hwxpa8+6DGBS/xMEleo2ntHARuDkr0NeL16OpACEuU/Qioz54pVjjxVlk0PouUD6NK
+         A6YwUjmM/EKQ8/SQ22U/Lm41PoLHoew5S9zrcBEZG8Kl5pJNYIyJQZ9UcnyVspCPOfXm
+         rs8A==
+X-Forwarded-Encrypted: i=1; AJvYcCVKJxKQvV+qlfsmmdq5z0fQA2V3Co016UGbCNqjxtOhnuFypCb2KTc693MuvjwggjrRUjgpmK5UtI4v298=@vger.kernel.org, AJvYcCVWJ3Af5CCSDTgnks4oXRMBmAs8UnkboDmKWVmjGj/IpEA7AumvKEnxUXPieOKInoPj4ZjQMaqtAZg=@vger.kernel.org, AJvYcCXWDkc9/YTg16dYceO35wn+Ddk3CWumdVBmQ2kCsFS8CYq3aoGI/yKwJwlqu4vC8HbZMF9gpevD/vlo@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH18lYgcrDZEk9pI4mi/wwqhb96h2IAmMit2CqUvhKCa5Z/Dgo
+	gBFWDEGUTe8aH3fZdfN1nysxb3YBjQyiF1yFuzsmxkApzX+pXe8aLrhGtLs2lTUDyPiydtZw87K
+	+6gkCQ9In5abOTOnSNpK9Fw4wKwyaSANsbXnS1A==
+X-Google-Smtp-Source: AGHT+IFFMGVRKgodSsQZ7JSSR15ua0Tg42BukRvBOfUO2Xk2QpPePWxJVVeKAvvMzHma4Pa7V0RNd2iezTpeFWy8aJY=
+X-Received: by 2002:a2e:b5c2:0:b0:2ef:2061:8bf5 with SMTP id
+ 38308e7fff4ca-2f3f8b56c39mr24729761fa.40.1724314663665; Thu, 22 Aug 2024
+ 01:17:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYUPR06MB62171A7BF25AB6963CBA07FED28F2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+References: <38b871f7-8583-4b9a-940b-ee33a1b6206d@molgen.mpg.de>
+ <2024082207-foothill-swirl-0ad0@gregkh> <8092403e-cc8a-45ce-982a-c954e7428c32@molgen.mpg.de>
+In-Reply-To: <8092403e-cc8a-45ce-982a-c954e7428c32@molgen.mpg.de>
+From: Rajaram R <rajaram.officemail@gmail.com>
+Date: Thu, 22 Aug 2024 13:47:31 +0530
+Message-ID: <CAOiXhaKr9jctG0qUg3zqitUo7ZCTq9CB6Huc1NO5B2ArjCGjBQ@mail.gmail.com>
+Subject: Re: USB-C adapter like Dell DA300 using > 5 W
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mathias Nyman <mathias.nyman@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 22, 2024 at 02:34:11AM +0000, 胡连勤 wrote:
-> From: Lianqin Hu <hulianqin@vivo.com>
-> 
-> Considering that in some extreme cases, when the unbind operation
-> is being executed, gserial_disconnect has already cleared gser->ioport,
-> and the controller has not stopped & pullup 0, sys.usb.config is reset
-> and the bind operation will be re-executed, calling gs_read_complete,
-> which will result in accessing gser->iport, resulting in a null pointer
-> dereference, add a null pointer check to prevent this situation.
-> 
-> Added a static spinlock to prevent gser->ioport from becoming
-> null after the newly added check.
-> 
-> Unable to handle kernel NULL pointer dereference at
-> virtual address 00000000000001a8
-> pc : gs_read_complete+0x58/0x240
-> lr : usb_gadget_giveback_request+0x40/0x160
-> sp : ffffffc00f1539c0
-> x29: ffffffc00f1539c0 x28: ffffff8002a30000 x27: 0000000000000000
-> x26: ffffff8002a30000 x25: 0000000000000000 x24: ffffff8002a30000
-> x23: ffffff8002ff9a70 x22: ffffff898e7a7b00 x21: ffffff803c9af9d8
-> x20: ffffff898e7a7b00 x19: 00000000000001a8 x18: ffffffc0099fd098
-> x17: 0000000000001000 x16: 0000000080000000 x15: 0000000ac1200000
-> x14: 0000000000000003 x13: 000000000000d5e8 x12: 0000000355c314ac
-> x11: 0000000000000015 x10: 0000000000000012 x9 : 0000000000000008
-> x8 : 0000000000000000 x7 : 0000000000000000 x6 : ffffff887cd12000
-> x5 : 0000000000000002 x4 : ffffffc00f9b07f0 x3 : ffffffc00f1538d0
-> x2 : 0000000000000001 x1 : 0000000000000000 x0 : 00000000000001a8
-> Call trace:
-> gs_read_complete+0x58/0x240
-> usb_gadget_giveback_request+0x40/0x160
-> dwc3_remove_requests+0x170/0x484
-> dwc3_ep0_out_start+0xb0/0x1d4
-> __dwc3_gadget_start+0x25c/0x720
-> kretprobe_trampoline.cfi_jt+0x0/0x8
-> kretprobe_trampoline.cfi_jt+0x0/0x8
-> udc_bind_to_driver+0x1d8/0x300
-> usb_gadget_probe_driver+0xa8/0x1dc
-> gadget_dev_desc_UDC_store+0x13c/0x188
-> configfs_write_iter+0x160/0x1f4
-> vfs_write+0x2d0/0x40c
-> ksys_write+0x7c/0xf0
-> __arm64_sys_write+0x20/0x30
-> invoke_syscall+0x60/0x150
-> el0_svc_common+0x8c/0xf8
-> do_el0_svc+0x28/0xa0
-> el0_svc+0x24/0x84
-> el0t_64_sync_handler+0x88/0xec
-> el0t_64_sync+0x1b4/0x1b8
-> Code: aa1f03e1 aa1303e0 52800022 2a0103e8 (88e87e62)
-> ---[ end trace 938847327a739172 ]---
-> Kernel panic - not syncing: Oops: Fatal exception
-> 
-> Fixes: c1dca562be8a ("usb gadget: split out serial core")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
-> ---
-> v6:
->   - Update the commit text
->   - Add the Fixes tag
->   - CC stable kernel
->   - Add serial_port_lock protection when checking port pointer
->   - Optimize code comments
->   - Delete log printing
+On Thu, Aug 22, 2024 at 12:36=E2=80=AFPM Paul Menzel <pmenzel@molgen.mpg.de=
+> wrote:
+>
+> Dear Greg,
+>
+>
+> Thank you for your quick response.
+>
+> Am 22.08.24 um 01:31 schrieb Greg KH:
+> > On Wed, Aug 21, 2024 at 11:32:04PM +0200, Paul Menzel wrote:
+>
+> >> On the Intel Kaby Lake laptop Dell XPS 13 9360 with Debian sid/unstabl=
+e and
+> >> *powertop* 2.15-3, connecting a USB-C adapter like Dell DA300 or LMP U=
+SB-C
+> >> The heat of the USB-C adapter might suggest, that it draws that much p=
+ower.
+> >> What is your experience? Can you suggest something?
+> >
+> > Buy a different adapter?  That seems like something is really wrong wit=
+h
+> > it.  Does other devices also suck that much power from that port on the
+> > laptop?
+>
+> It happens with two Dell DA300 adapters and two LMP USB-C mini Dock (P/N
+> 15954, 12-22 Rev. 3):
 
-You need to list ALL of the versions here, I seem to have missed v4 and
-v5 somewhere so I don't know what changed there.
-
-
-
-> ---
->  drivers/usb/gadget/function/u_serial.c | 33 ++++++++++++++++++++++----
->  1 file changed, 28 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-> index b394105e55d6..e43d8065f7ec 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -452,20 +452,43 @@ static void gs_rx_push(struct work_struct *work)
->  
->  static void gs_read_complete(struct usb_ep *ep, struct usb_request *req)
->  {
-> -	struct gs_port	*port = ep->driver_data;
-> +	struct gs_port	*port;
-> +	unsigned long  flags;
-> +
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-> +	port = ep->driver_data;
-> +
-> +	/* When port is NULL, return to avoid panic. */
-
-This comment is not needed, it's obvious that you check before
-dereference.
-
-BUT you can mention that you are trying to check with the race somewhere
-else, right?  Please do that, and document here where that race is at
-that you are doing this extra locking for.
-
-> +	if (!port) {
-> +		spin_unlock_irqrestore(&serial_port_lock, flags);
-> +		return;
-> +	}
->  
-> -	/* Queue all received data until the tty layer is ready for it. */
->  	spin_lock(&port->port_lock);
-> +	spin_unlock(&serial_port_lock);
-
-nested spinlocks, why?  Did you run this with lockdep enabled to verify
-you aren't hitting a different bug now?
-
-And why is one irqsave and one not?  That feels odd, it might be right,
-but you need to document here why the difference.
-
-> +
-> +	/* Queue all received data until the tty layer is ready for it. */
->  	list_add_tail(&req->list, &port->read_queue);
->  	schedule_delayed_work(&port->push, 0);
-> -	spin_unlock(&port->port_lock);
-> +	spin_unlock_irqrestore(&port->port_lock, flags);
->  }
->  
->  static void gs_write_complete(struct usb_ep *ep, struct usb_request *req)
->  {
-> -	struct gs_port	*port = ep->driver_data;
-> +	struct gs_port	*port;
-> +	unsigned long  flags;
-> +
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-> +	port = ep->driver_data;
-> +
-> +	/* When port is NULL, return to avoid panic. */
-
-Same comments as above.
-
-thanks,
-
-greg k-h
+ Is this behaviour only when the ethernet is active ? Could you please
+share the behaviour with no ethernet connection ?
 
