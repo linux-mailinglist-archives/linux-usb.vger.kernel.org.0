@@ -1,244 +1,151 @@
-Return-Path: <linux-usb+bounces-13851-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13852-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3AC395AE6B
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 09:06:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 199A295AF22
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 09:22:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67788B20C9B
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 07:06:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D11B1C22B62
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 07:22:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B6914A086;
-	Thu, 22 Aug 2024 07:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 098AD16EBED;
+	Thu, 22 Aug 2024 07:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="eiRY1gSD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9AA13A3FD;
-	Thu, 22 Aug 2024 07:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4ABA14EC59
+	for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 07:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724310390; cv=none; b=jtryaIEF2nA6PmYtB26plqFqN1OcNAkrzLUzRe4P4lVRh4NAk6VCejxdnJBHQB9a/MQ3+5yhzSRFCoPN33cMVu0RBA7g7KUjwXezyqU5zItsw5AWHT+n9unlJgeyIhhnaieMUisW0N/dg8S3Nu6rB5VqW/fO1oyFFuwWDOU5bXE=
+	t=1724310944; cv=none; b=LkmmE3cqosyzSQAdKwz/HHzCDmH6AvaKL/fvrU6t11T3zkN1ktnSb2vj66hZZtLVGPkCaliiZBR+pe5jzbIP8f2DhGetksxVl3GWWazUw7bg11m5mw+cGH6MqrKMRN1z1zalayH3e9Om5v/kyxPREH0Go60dNFPIW+GpZbWko7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724310390; c=relaxed/simple;
-	bh=FLilspV2tZ+qW+2d8uObAeKfCmFZIti9Wu0nFfRYwgs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KckoehFEaEb4eDzx0EHzLtH/N7EhNivSIl7W6fr2Q8uk5IzhVFtepCsKgHDo2MasQCABXbwulcwVqynGswg6UQrRvN3mO6HUeuqe0mxMbWvbzWP7lk4hkqLm5HPjmBnhiGSUzPJD9olkDbyHZnrG54bgTrHAuLz0CGKJlEDOcU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.3] (ip5f5af532.dynamic.kabel-deutschland.de [95.90.245.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	s=arc-20240116; t=1724310944; c=relaxed/simple;
+	bh=GHMKK28P5WFG9CY73l5UrXowcCT9+qJTTq73QMMe2o8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=enQBI2veBHfP4HF79Shi3Gokuj46hY0xrX9cJG17KsvjH39WhonKiqzCubSq0dS5DsPkupk6xEq+FnQtaASOjbBkyHfg7mnzdHqWe0KaLHkuZqLLdUxjEzLqLDP9Cep1ed+1nXZHpcLTP4+Q4dU3orNXjFPbiMvT1YevoRbgof4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=eiRY1gSD; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D9E2E61E5FE05;
-	Thu, 22 Aug 2024 09:06:12 +0200 (CEST)
-Message-ID: <8092403e-cc8a-45ce-982a-c954e7428c32@molgen.mpg.de>
-Date: Thu, 22 Aug 2024 09:06:12 +0200
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 383E63F335
+	for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 07:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1724310934;
+	bh=1x5Vq9E8qun2g1cNXzLviVdr7wWOjdbEml0Dxvdx+jE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=eiRY1gSDEw2Y5KyT751pTv+a7RH94I7OrOQfBRuJAivZ3hAuz5EaNkeLcHh7M3Ltu
+	 CMWZ0TbZkzwSKoc9olqewkN4cbcLbfFe1XIT7tKNRhVqLA7yNlqCwAi1DE7eYd3ozC
+	 y6VdpX5FlYMcKWpXEfE5d44qtTUlGdbGRIZSxZuPwXSodmNIwnOKN+DgOCcjDkWYi3
+	 F4XLOzzsoF6p6PbojcuxXt7Cf5MBAGUWkUm7zVWvZWFy9wUONetBX+c9seMc/zCnNB
+	 UnW5vNWQn7lallekTQxMk0rCpUWm4Fu8OGTD6OFgizIeKKsfUnZ8Tv/LoBjaNw0nhj
+	 ospnhyUyDC0cg==
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-7cd98f27becso569740a12.3
+        for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 00:15:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724310933; x=1724915733;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1x5Vq9E8qun2g1cNXzLviVdr7wWOjdbEml0Dxvdx+jE=;
+        b=qk9q6uMS7MgjLPdRwLkoa8U2JVpN23k6bx9bK5iIClL5FBHZ/TcHuKSmEnXCWHI0OI
+         2rNuulbapzEjpYCpHyPaUA55GUcGEaWw+e5UsFswIaiY7JGn/0kFWR6Vn750ofNB6TN3
+         5H2XCdaZ1teExX0HT1FIagu9ih9txHSdYDGl9x4ImftvjpUwyv4reNsBRtBpqF17BR0A
+         nfQsVxGg8wMDYSIFAKssHpNpgA2KSh0T+zmKURpiTMSoBI8rml6Mk3SXnTBdLDcVbXP/
+         IGCAXZpwAX+ktMmuxlpVyKXrBpuW3DGlS2347vf2Q0lFj9zrJjs2h+3h86iNwOidGMVj
+         Hb1g==
+X-Forwarded-Encrypted: i=1; AJvYcCWpj6zjgX9m0fIbf9H8rG1IzvjH5ln1dfFIkZJWk5iF5Tg/i3OZAllwYxae01C1a25AeaDHtbJbVxw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBZqDpY1Sut0u5G1+7UgGWVLuuYMZDF5DMBmGJK3ytS67hN/ux
+	x8OhC6DeZ4p1dvp9SLMQ75WDeN4620cjgdNIEB7vbT/r+dn4M2bWl/8TAXQr6DPo5rXgKo1nQ8S
+	AAKdosMLEOg8KxxLRL26trZ3b2I3xt42CxFB96S/87lX/BiD/drhngKS6DByebapH92Wedf2538
+	yuXvmbFus5WNhqyClPC4zTSIU8PCq/P9sxe6WLN/r7D8w816iZ
+X-Received: by 2002:a05:6a20:7b1a:b0:1ca:dc1b:319c with SMTP id adf61e73a8af0-1cadc1b31c1mr3963358637.6.1724310932783;
+        Thu, 22 Aug 2024 00:15:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFEPkh9puTCLERBLO8DJrwBxsq1v7kj7XihgY9K2CgmZv96owv921d7HarOT+cOVzsmPR5oa3p8zGmcGks/n3E=
+X-Received: by 2002:a05:6a20:7b1a:b0:1ca:dc1b:319c with SMTP id
+ adf61e73a8af0-1cadc1b31c1mr3963348637.6.1724310932487; Thu, 22 Aug 2024
+ 00:15:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: USB-C adapter like Dell DA300 using > 5 W
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-References: <38b871f7-8583-4b9a-940b-ee33a1b6206d@molgen.mpg.de>
- <2024082207-foothill-swirl-0ad0@gregkh>
-Content-Language: en-US
-In-Reply-To: <2024082207-foothill-swirl-0ad0@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240712185418.937087-1-superm1@kernel.org> <789f9bc0-45f4-4602-9f8c-c286fa7b922b@kernel.org>
+In-Reply-To: <789f9bc0-45f4-4602-9f8c-c286fa7b922b@kernel.org>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date: Thu, 22 Aug 2024 15:15:20 +0800
+Message-ID: <CAAd53p67SR+FrdRro7kmZJbYRXZHw2PToyi6gSJv6+8=jZkyyA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Put XHCI controllers into D3 at S4/S5
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	mika.westerberg@linux.intel.com, 
+	Mario Limonciello <mario.limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dear Greg,
+Hi Mario,
 
+On Tue, Aug 20, 2024 at 10:06=E2=80=AFAM Mario Limonciello <superm1@kernel.=
+org> wrote:
+>
+> On 7/12/24 13:54, superm1@kernel.org wrote:
+> > From: Mario Limonciello <mario.limonciello@amd.com>
+> >
+> > When the system is put into S4 or S5 XHCI controllers remain in D0.  Th=
+is
+> > causes higher power consumption and may compromise energy certification=
+s.
+> > Consequently some systems consume more power in S5 than s0i3.
+> >
+> > This affects all PCIe devices, but looking at breakdowns XHCI is the
+> > biggest offender for power consumption.
+> >
+> > This series checks if any wakeups are needed and puts controllers into =
+D3
+> > if no wakeup necessary.
+> >
+> > This series is a spiritual successor to [1] which aimed to do this more
+> > generally in PCI.  It also accomplishes similar goals as [2], but aims =
+for
+> > both S4 and S5.
+> >
+> > [1] https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limon=
+ciello@amd.com/#t
+> > [2] https://lore.kernel.org/linux-pci/9d2f1619-1c61-4e8c-b28d-d4eddefa4=
+5c3@amd.com/T/
+> >
+> > Mario Limonciello (2):
+> >    xhci: pci: If no ports have wakeup enabled then disable PCI device a=
+t
+> >      S4
+> >    xhci: pci: Put XHCI controllers into D3hot at shutdown
+> >
+> >   drivers/usb/host/xhci-pci.c | 17 +++++++++++------
+> >   1 file changed, 11 insertions(+), 6 deletions(-)
+> >
+>
+> Hello,
+>
+> Any feedback for this series?
 
-Thank you for your quick response.
+Does commit 0fab972eef49 ("drivers: core: Detach device from power
+domain on shutdown") work for your case?
+The commit was reverted because it regressed some DT based devices,
+but probably still worth doing for ACPI based systems.
 
-Am 22.08.24 um 01:31 schrieb Greg KH:
-> On Wed, Aug 21, 2024 at 11:32:04PM +0200, Paul Menzel wrote:
+Kai-Heng
 
->> On the Intel Kaby Lake laptop Dell XPS 13 9360 with Debian sid/unstable and
->> *powertop* 2.15-3, connecting a USB-C adapter like Dell DA300 or LMP USB-C
->> mini Dock (P/N 15954) [1] and connecting only an Ethernet cable (module
->> r8152 is used), the adapter gets very hot, and according to PowerTOP it uses
->> over 5 Watts – almost more as the laptop idling.
->>
->>      $ lsusb # Dell DA300
->>      Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
->>      Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4 Bluetooth 4.0
->>      Bus 001 Device 003: ID 04f3:2234 Elan Microelectronics Corp. Touchscreen
->>      Bus 001 Device 004: ID 0c45:670c Microdia Integrated Webcam HD
->>      Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->>      Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
->>      Bus 003 Device 002: ID 2109:2820 VIA Labs, Inc. VL820 Hub
->>      Bus 003 Device 003: ID 06c4:c412 Bizlink International Corp. DELL DA300
->>      Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->>      Bus 004 Device 002: ID 2109:0820 VIA Labs, Inc. VL820 Hub
->>      Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
->>
->> With `LANG= sudo powertop --auto-tune` it stays high.
->>
->> PowerTOP:
->>
->> ```
->> The battery reports a discharge rate of 6.01 W
->> The energy consumed was 146 J
->> The estimated remaining time is 3 hours, 51 minutes
->>
->> Summary: 384.6 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and
->> 8.5% CPU use
->>
->> Power est.              Usage       Events/s    Category       Description
->>    5.94 W      0.0%                      Device         Display backlight
->>    5.23 W    100.0%                      Device         USB device: USB Optical Mouse (Logitech)
->>    4.62 W     66.1%                      Device         USB device: USB 10/100/1000 LAN (Realtek)
->>    205 mW    100.0%                      Device         USB device: Fujitsu Keyboard (Fujitsu)
->>   14.1 mW     13.5 ms/s       0.9        kWork intel_atomic_commit_work
->> ```
->>
->> At another time:
->>
->> ```
->> The battery reports a discharge rate of 10.5 W
->> The energy consumed was 235 J
->> The estimated remaining time is 2 hours, 20 minutes
->>
->> Summary: 395.8 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 23.8% CPU use
->>
->> Power est.              Usage       Events/s    Category       Description
->>    7.13 W    100.0%                      Device         USB device: USB 10/100/1000 LAN (Realtek)
->>    3.92 W     15.8%                      Device         Display backlight
->>    320 mW      0.0 us/s      0.00        Process        [PID 1349] /usr/bin/pipewire
->>   63.6 mW     65.4 ms/s       0.5        Process        [PID 4982] /usr/lib/thunderbird/thunderbird
->>   24.9 mW     25.6 ms/s       6.7        Process        [PID 37753] /usr/lib/firefox-nightly/firefox-bin -contentproc -isForBrowser -prefsLen 36793 -prefMapSize 265654 -jsInitLe
->>   14.7 mW     15.1 ms/s       0.5        kWork intel_atomic_commit_work
->> ```
->>
->> The heat of the USB-C adapter might suggest, that it draws that much power.
->> What is your experience? Can you suggest something?
-> 
-> Buy a different adapter?  That seems like something is really wrong with
-> it.  Does other devices also suck that much power from that port on the
-> laptop?
-
-It happens with two Dell DA300 adapters and two LMP USB-C mini Dock (P/N 
-15954, 12-22 Rev. 3):
-
-     $ lsusb # LMP USB-C
-     Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-     Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications 
-QCA61x4 Bluetooth 4.0
-     Bus 001 Device 003: ID 04f3:2234 Elan Microelectronics Corp. 
-Touchscreen
-     Bus 001 Device 004: ID 0c45:670c Microdia Integrated Webcam HD
-     Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-     Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-     Bus 003 Device 002: ID 2109:2817 VIA Labs, Inc. USB2.0 Hub
-     Bus 003 Device 003: ID 2109:2817 VIA Labs, Inc. USB2.0 Hub
-     Bus 003 Device 005: ID 2109:8817 VIA Labs, Inc. USB Billboard Device
-     Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-     Bus 004 Device 002: ID 2109:0817 VIA Labs, Inc. USB3.0 Hub
-     Bus 004 Device 003: ID 2109:0817 VIA Labs, Inc. USB3.0 Hub
-     Bus 004 Device 004: ID 058f:8468 Alcor Micro Corp. Mass Storage Device
-     Bus 004 Device 005: ID 0bda:8153 Realtek Semiconductor Corp. 
-RTL8153 Gigabit Ethernet Adapter
-
-Both use a Realtek RTL8153 Ethernet adapter.
-
-### LMP device
-
-With *no* auto-tuning:
-
-```
- >> Bad           VM writeback timeout 
-
-    Bad           NMI watchdog should be turned off
-    Bad           Autosuspend for USB device USB Billboard Device 
-[VIA Labs, Inc.         ]
-    Bad           Autosuspend for USB device Mass Storage Device [Generic]
-    Bad           Autosuspend for USB device Touchscreen [ELAN]
-    Bad           Autosuspend for USB device USB 10/100/1000 LAN [Realtek]
-    Bad           Runtime PM for PCI Device SK hynix PC300 NVMe Solid 
-State Drive 512GB
-    Bad           Runtime PM for disk sda
-    Bad           Runtime PM for disk sdb
-    Bad           Runtime PM for PCI Device Intel Corporation Sunrise 
-Point-LP PCI Express Root Port #1
-    Bad           Runtime PM for PCI Device Qualcomm Atheros QCA6174 
-802.11ac Wireless Network Adapter
-    Bad           Runtime PM for PCI Device Intel Corporation DSL6340 
-Thunderbolt 3 Bridge [Alpine Ridge 2C 2015]
-    Bad           Runtime PM for PCI Device Intel Corporation Sunrise 
-Point-LP LPC Controller
-    Bad           Runtime PM for PCI Device Intel Corporation DSL6340 
-Thunderbolt 3 Bridge [Alpine Ridge 2C 2015]
-```
-
-```
-The battery reports a discharge rate of 8.89 W
-The energy consumed was 243 J
-The estimated remaining time is 0 hours, 42 minutes
-
-Summary: 572.3 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
-54.8% CPU use
-
-Power est.              Usage       Events/s    Category       Description
-   6.00 W      5.9%                      Device         Display backlight
-   2.33 W    100.0%                      Device         USB device: USB 
-Billboard Device    (VIA Labs, Inc.         )
-```
-
-After `powertop --auto-tune`:
-
-```
-The battery reports a discharge rate of 8.58 W
-The energy consumed was 213 J
-The estimated remaining time is 0 hours, 39 minutes
-
-Summary: 509.3 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
-34.3% CPU use
-
-Power est.              Usage       Events/s    Category       Description
-   8.23 W      5.9%                      Device         Display backlight
-   6.21 W     7938 pkts/s                Device         Network 
-interface: enx00e04ceabb21 (r8152)
-```
-
-But it also shows:
-
-```
-The battery reports a discharge rate of 9.54 W
-The energy consumed was 189 J
-The estimated remaining time is 0 hours, 33 minutes
-
-Summary: 509.0 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
-44.0% CPU use
-
-Power est.              Usage       Events/s    Category       Description
-   7.39 W      5.9%                      Device         Display backlight
-   776 mW    12391 pkts/s                Device         Network 
-interface: enx00e04ceabb21 (r8152)
-   210 mW    357.9 ms/s       0.4        kWork 
-intel_atomic_commit_work
-```
-
-So measuring energy consumption, and attributing it to devices, also 
-seems to be hard and sometimes unreliable.
-
-Therefore, I’d be interested, it what numbers to expect, and also, if 
-the developers have other methods and tools for measuring this.
-
-
-
-Kind regards,
-
-Paul
+>
+> Thanks,
 
