@@ -1,297 +1,223 @@
-Return-Path: <linux-usb+bounces-13862-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13863-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FBC795B2F3
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 12:32:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 872AE95B31D
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 12:43:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1FEB1F24172
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 10:32:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D227283D30
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 10:43:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BE00183CA5;
-	Thu, 22 Aug 2024 10:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49DF9183CCC;
+	Thu, 22 Aug 2024 10:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="NP5j2MMj"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="EppBzzpS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012058.outbound.protection.outlook.com [52.101.66.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304EF17A584;
-	Thu, 22 Aug 2024 10:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724322727; cv=none; b=neNh4ZCcPbS4qeAvNy3xfe94iJVKU/n4ZZOrfzSsLCMcLY2Gxzwi0CFJVFJM2j1Y+V+Cd2grurB3veNPv75M4Rhuo78qhNERBCds5zR7ZbnWFnX4IjphzS57EQb74SQ9r4q56+n4qhQehUh2AF2K+wfnX1tqvcJmGE3eHHTOWNo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724322727; c=relaxed/simple;
-	bh=tJJYyQk+oSUBsqfm8YrY+zeZ9ssQax21lFme7HgnFb4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tPRisHKF9BhPbuz/zUbcdGTq5sSMFoBl4ib/W3H6xd41nlNAmyz0LEJWndY1fEuLxNvZ8QWAXwoFnuIPjATlypMOXIEKxIVkeimCUxAnYUDAKid+A3sPvyqbdCM+lM2xbXcfx3W0DnUW2hoBYdNrw1mZ8Kb7fus9Pnl8KOIuNkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=NP5j2MMj; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1724322654; x=1724927454; i=wahrenst@gmx.net;
-	bh=bmWJ655L4SO7j85UwgXiqt8bDkgUrBoaH+y+sFg/zuI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=NP5j2MMjy9pkE0lOsGAISKZ660r2xan/B5F1GlARPNyM7/CK9btIrLRX62/4c5Sf
-	 9c/AyiMHgpHBWl3aKsccVyc4UjbqfvPnFeIPCMZHK3JIP1kYdp7PZQOG0uu5C2Gvr
-	 eBTVLnxYRuCof+Gpdpeq1v7l0NwIvVTV/d0+vulTeoXmhChFKr38plqGEFYp+opiV
-	 SK7hdRIaiB2ICEw04L4Eb0+MourOGoVUQGzuvkGYEUXbO4oEIBhJpFR5cAflLO3Gg
-	 a6v73bu5eqJjzN6jVTZNPtOs90PcnrsDsoQ9xhtaaiMM3aBuMgGqrNQKHq6F6SURo
-	 oeUl6rcRoA/OAk/vPw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mz9Un-1ru2s10FEp-00tpe2; Thu, 22
- Aug 2024 12:30:54 +0200
-Message-ID: <c7d39199-5ed2-4642-9740-f9aa60a19eec@gmx.net>
-Date: Thu, 22 Aug 2024 12:30:49 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F75314A0B8;
+	Thu, 22 Aug 2024 10:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724323403; cv=fail; b=gxIToOKyIaPeXIk7X+6iH/jle9ub+UQ7sCfjH88PlLClsqsCQTO3DNH5X+dJlXPjqTyzhYMUtc6CEag6F8LQT+WmWvQ+HIiB0VfHwVYD6Gqq1tFi7C1WUzRbSDiC2Ebh0u+LtnzFXm60t9A6ryxBobDgGAHbYdYiUlAvX/hBZOs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724323403; c=relaxed/simple;
+	bh=2T3ecmVeD9D7CBVvkjGJ0oMoXqqSugTZ3OhW/60X+PY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=LVh41GX+fRCGkU++C6T+uCmp0etBaU3+tQxGbeCmdEBUSaidJJSZ8AUK+xQ4J2MJgdi5cB0l5YbI9NkrpX9Kpq2LRnr4eEq/KJDfbiUjsBE1NGjuMMRhsQOTKzRHlXKSAUn337HXNDXgZ9tWUrucahiYEbcU5HTPQOUZq87VwPc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=EppBzzpS; arc=fail smtp.client-ip=52.101.66.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kGJFx9i958NYA4ad8OxmA9aUEXVw6QD5CjFpmb5LC38WyJbYGgeDdO2yN7W2gDFGpRNBa5qjXk8Smb9XI65g7W6YGS4vW/o0LQeTwTJcOxOFi28eh6QcOS76qLTjzp95PfSFKj8o8E/OLeBR8eRQCo6bpSJjehxTAzk2eRiQsCWcOiaqYdlryLc+WV/MJ3E+evrvwo+y/MDKiMB+0WBQ7EgZqQcZTt5IRYKw3s8GQbC25EO8jRfqWq8ZYgtHRHBnNDvcWmW4PrkVt80f+r1E/1qU3ks0+hfFrw9xF7m/AfhSRCVlf0aWZtreXIgY2CqshoWqH67ASEY3IH4x19ybkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VBytKZ2cnu4FLbaDBxsiXSEE57gLDsHICQpaISLHp1M=;
+ b=GbBLKA6/wkLQkI+NQaPau86euvkT5JRoUNjqyY3C32lttmTguMMvS6rRIo236N436Lf5uwzqxmcI7SAdcvyr8RPy6qt+5DGqDrLJ3XN4j7HWDpvXOkc+k2JyfMaxHEaxexOfAeBzqyG0GRSjE9jfz7fCoFUGq3NbXWVSVoaBcfF8ungYq+vASZTx2iKafSEry7XkbHXx0i29n7bb25hJ2id7UFNpbMbuL4HW/YADSuWDyCquKttmW89b4wdPFwvz1LeQMAbYtcfEMwlvAX6i3WQ3yyORpMXUIdAui20HCerddLPCExh6iDpn4viYlRh3mu0PpUJ/0elNpwf0WnD4hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VBytKZ2cnu4FLbaDBxsiXSEE57gLDsHICQpaISLHp1M=;
+ b=EppBzzpSAvlmbh2w3WRuyMkFzp/gFGlfDCnPKpZmFGeh6SPNQ9Rv2jpmBePx6jU7RYth1dY0DtoMLQsLQOS+hr+YmUP03ZH6Dq5NHBstkyPsoC8hstwNTgu5uvnaLCmVK8RN26yGgpsN0O/6u4YCUljTXxy1uYo4FLOgwW2XvimWUcshi2Asg71KAiAiQVNe5jO3BSvMy4PzXRm7xBu6wLfAEAB+5fB2Gb4+1BdAlo//bHQgopfcKiON8AG2AI8E46fo43J03u5SQckQh2tyRjcnanqTlevin4jYtBdpop0YReAwuRBXOO6rfwAP2tLjd1eXb3E48siJ6OcsE3hZ3g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by DBBPR04MB7529.eurprd04.prod.outlook.com (2603:10a6:10:208::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.19; Thu, 22 Aug
+ 2024 10:43:17 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%5]) with mapi id 15.20.7897.014; Thu, 22 Aug 2024
+ 10:43:17 +0000
+Date: Thu, 22 Aug 2024 18:42:21 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	gregkh@linuxfoundation.org, peter.chen@kernel.org,
+	herve.codina@bootlin.com
+Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org, jun.li@nxp.com
+Subject: Re: [PATCH v2 3/6] dt-bindings: phy: mxs-usb-phy: add nxp,sim
+ property
+Message-ID: <20240822104221.no4xsxqu3l5mdbtu@hippo>
+References: <20240726113207.3393247-1-xu.yang_2@nxp.com>
+ <20240726113207.3393247-3-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240726113207.3393247-3-xu.yang_2@nxp.com>
+X-ClientProxiedBy: AM8P191CA0016.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21a::21) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 7/9] usb: dwc2: Refactor backup/restore of registers
-To: Russell King <linux@armlinux.org.uk>,
- Doug Anderson <dianders@chromium.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kernel-list@raspberrypi.com
-References: <20240821214052.6800-1-wahrenst@gmx.net>
- <20240821214052.6800-8-wahrenst@gmx.net>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20240821214052.6800-8-wahrenst@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:ipHGBrBY87TrA6OEnWRiCoV4daQpl0UeDW4c8PFkDNkQmmQeksl
- g+JC/f6SffB+BaHcc+jZQUua3wzxUXQY3ne8PAKmdS1H764Hz04G9AJy4sdmjnwh5LWu933
- fhf80Zr4cEmG1+Tj7pniq19fx9xkix76+Y2B3yFyi50dMDzjE/+KQkAoFSox9hiFVHuFQfG
- ORVvUWAYwn6pQPLAC40dA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:TArIr41CR30=;6vuj+cQfovOR8oue9/F/AfsAYww
- RxeYPOmIehuSOMH96q5IQlET3+2SoT8Q3N5XskcPBiPJuUFEsVGiQ/gOMMVUaPzmNTKthBsrC
- 2uxFcRSJDB+m1fHM7JOa9UG/96HuFyxgPN8fxBqzvP6J5ZmLHlG9iWyKPPDk5nTT/ZRkYoWzy
- kHILrF9C3GJhSP8QVEackrePOz2sI+k9yj9I22ApcQMoBBryeZg/ewSg760ncSFh3v6JxnSrp
- KqdeI3OlBbzTfA+bcS4nY1C/USDzd1OxUH/nG1qlrSNWZNO5FfH8aynOIlnE5NQdaO7Wzog/p
- i2qXg4DNnv4UaoUkQBR1CeDHVF3bVY/E6yrIFY8JCGs/T3bphO8sUEhST1vOT232fmDXrwdBc
- o1CqyQUoZg2zPAEuNcPeBD2FGP3s2c2V5mXA1P9HEnnygO59uaWOaxiE0h9ZSmTHGcRak53r4
- ly1Col6uhmjW8OlTd8gqfk7GrlNHBE+A92dBozvR2DYH75Z3yrIjzXUwEaN6I/fGNVFvpxWWS
- co8i5JRvfJu0fE4vHN62PTGS8UkY9HOpPL1KILaUe7NqQwFlxxLZJTRkAbIloBVXzif6LpZAA
- EYN3yKQ5h4dJcOy6WwUxdFHrMCWOCsCxnEpCfscgVrQ5xBzCCqPuGzzw/N2dPTP9k04HJWy2O
- kW2Qu8RkVuSPcUYyzEKPVAv2pIzhO5ONy7MOXvF6MrOoq+IMlpz4So58noprONz9ttZp0+kIC
- Vcr/NDGRs3bJlneUfFL1oGXBtNJaVsr5tqMmYoA3ilPtSd8RzX0aRWdfc8yfodzQxE0uFQNiL
- Ms0bNvh17YhMzTgD5ZpQYY3w==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DBBPR04MB7529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8543a776-a33e-413a-4ff9-08dcc2973b49
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|52116014|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?qdgOAvbEl6FVdbNprkkOJi6jjX7YJIaanA0Lg00DG7m0xM0itzLDLvkmapBV?=
+ =?us-ascii?Q?i2oZ8S3n9S1/X21VXN7YpAA6aeQ9y+udYzRVA8UQCuCIYhS4PIlsDuvrIXAh?=
+ =?us-ascii?Q?+OIcElR5Rh3MgZ+53wq3seoFAKDBhnb38GGh551SUH1vYV4yjNHzGU8BngCs?=
+ =?us-ascii?Q?pN/2/MxU3te/EBN/UqA4moPbKeWeY38FFkhrJbUZDUcBLgWmk4xJ3nUW0wJV?=
+ =?us-ascii?Q?FodAQUYlySNEELwfOMnQ6zXKB5cRcYaROYbNJ6fVqGJjIPQ0gXuEwoc4WG2B?=
+ =?us-ascii?Q?3+iWPVitY4JKd85IORcDDGRfqQwJZGUdGOf8R9+gERRud9rm3iU+5rxqDEzO?=
+ =?us-ascii?Q?hkc6U91XLhO69zZC7rlV5NmiKOJ2GoAmyvBIMEBOMO2bLeKAUYlp0w5nnPF0?=
+ =?us-ascii?Q?VrAnINdtViBS2a6jCF007xkn8LDfryT51I19B6Ldc5+ryirAjhkchpyEW0cf?=
+ =?us-ascii?Q?QGBjQyGzwKkV4RfxLYDwjpfEIqaVWHKNy69JFEu2NShMcueuwryZp0+P94LI?=
+ =?us-ascii?Q?2IZVNOx5LFd+rMwel10yF1+rSblWtDNTR4bDxJyqBrUptgVHGjLPHOE7wKSN?=
+ =?us-ascii?Q?PquYpouYxycb4DLRO5wYBZUOEUu2Cji65TrKzPyaBwZyIag0AqsmY4Whmqtq?=
+ =?us-ascii?Q?t14gejkvWUhKmNrrDglpN/J3ypPB1djST7BluvSObxh1luGbP7hNN7KrMCMb?=
+ =?us-ascii?Q?6WFnMQ9OkVxCVOEsTG17Fq/+B9yKWIeIZUtS/t6Ki7yfqwTBKX9zqsq0dtHV?=
+ =?us-ascii?Q?aBcbWXn44DNeMILfRosif2cO4ZumJfSbNkoZawt72nQAkAABJL7Svatl/1Wz?=
+ =?us-ascii?Q?rFqduXpfLWDKTuE2DHqP4NCMUYTUNkwfKACMDy6tPhz2hYYO7GMQYJtrzh5t?=
+ =?us-ascii?Q?MCDokJtHK3tnS2X5th3CuJg76GDFefenVhKcqCZtj7uhYMq44MtGp6IqaE5J?=
+ =?us-ascii?Q?wWRGZzycxv8VQvB40hUOO6W7j5uUArD+PYSTxBHXjowGuTioQ1CfJSyIwHep?=
+ =?us-ascii?Q?XrMNMaxhHERQUpTlNXgl4cdIJYyw5HHCsMNNStLSWVw1hsUakij9/CFWcedZ?=
+ =?us-ascii?Q?8rECZ5XM+sASYourqLeGbCB4Wv2JUdWjd6R3JfP9HvLUCLHZA0ePtQXdu97Q?=
+ =?us-ascii?Q?gb5FRyf8TcAfrncT3oZMzCsMOQnjUa0jUexH3v1j5XIlxBo/3iFQ4njRKC/n?=
+ =?us-ascii?Q?WmkwwMrw7nbkDdgHl3HrcKsCifX/E/XrZu0fCmx/Hodx26FjQoD5Wq+4rCyn?=
+ =?us-ascii?Q?gQGKJmBf+ckt+P52138xybBRD2uU/jN0e+iQEpIICYYBXhwDVPAiIwgwHp5w?=
+ =?us-ascii?Q?ExsXaP97WmM15XnooEF2jLgNxWA4H1Mz8kA4l6hV/vIlEVImkI9njMrl5ANx?=
+ =?us-ascii?Q?u8+O/0GX9eJ7CAYaiGP/ZaK/ExXjd9IYOG805JMyfOC+tjQwf2PBOplg9jy2?=
+ =?us-ascii?Q?P28/Noxw0sM=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?58de3Vh4AjxtBy0EHeFueCkt7B1VS6ERKNy6VX7GklIp6yFzm4wjv3GihiKw?=
+ =?us-ascii?Q?JRV6XeoSpMoCkV558KhRmNeRSSmzolkurdzLQcDdjMEs4wuXvTFtznvxoBcj?=
+ =?us-ascii?Q?r9XSSzHRrfAI6ldAwxbTXuJblbtDP5xmgGMwMtpPRefKjsoU3bD4gtMhE0zD?=
+ =?us-ascii?Q?OS+9Ec88igQHUoPwXoNU4exkcX6/kiKwgmirsEDrO+J60s6gk0162gokPAzS?=
+ =?us-ascii?Q?rwA8mrVyxbbNXn32+rn0SkfIhUMJR2gmWWYXA6TTGHSDk0esdj6MrXXqm843?=
+ =?us-ascii?Q?zbPJD9em3Aul+XwVI4KXXBmnKXMHOJd6RKN+CtkhCezX8mJ/cxqbAUKUMTzx?=
+ =?us-ascii?Q?uGEaloU8p29ehBeTPVlBBxNnpVUV00Khw99k+JwEq7dII0bfSalGyC9TYwyT?=
+ =?us-ascii?Q?+f8NZh9eejTvJN6bQg0K1Can7yf0uDgpFpxXj/Jh5MODSqJE23xOLLHYowVo?=
+ =?us-ascii?Q?Bi/O+NgBNfTZkwmeBEx0ePKqY/mYO6ldcseA0iijRz2Z5548ciJMmKa1Wn5B?=
+ =?us-ascii?Q?stBPtBnal/WNJfwXY3J3TKJvW9rOpk8PkOdKbEImAOb/ewJOPlxnslX30g7G?=
+ =?us-ascii?Q?dx7Gilr3Hox/39B5NXsqI8TyrvsqpTRzpvGcglduYnmrCRdzZ4IUZJKNCFX8?=
+ =?us-ascii?Q?eDFZsYTHbNdrsQTthro+pxRhdIbNFlaKNw6d1zbZBX2MK2yROHw3YIM9V7Yw?=
+ =?us-ascii?Q?4Z+pzI+cMf8/3jirlyKSPYzc4RMWzmqdhM8+ye1dedw/gUMIZm0RRsGBsuHT?=
+ =?us-ascii?Q?6Unea6sIXUjayy8T/OX11SJt6c60r77w9IfWz3lf1580WrnWc6HSz+/4hrZN?=
+ =?us-ascii?Q?Ko0dY8brbvXxOyDuOoUaXdB34sb9k+AkJzpdlUcZKBoqALJFZs3VxkIrvRvj?=
+ =?us-ascii?Q?X1H0uvRvdA2QhTdSP9WPJVkGLxjXkLC0Ik1MI+l0Y/VqO9FtB9GxhHd8w3Hs?=
+ =?us-ascii?Q?ozSGFqmUEjuRgS1Bu7uIJch2KRI7riMrhqNJTLo0AFFt+0Q4HHFLCtS/ZOfR?=
+ =?us-ascii?Q?HnCB+LRPKl0uMXuS/7oBwrmY4mIcPFwwBN/cvydZcMgjLMYBm7gZZ+5iaND1?=
+ =?us-ascii?Q?qxl0hXYi6gU64WwZtF52I53An/AM9QsJEmUKpb5eEppLuQMjwWXBPTZAj0Nt?=
+ =?us-ascii?Q?/Z/+196ZrnPyk4i+3bZHHFyDeMOaNY/aUYngaU/44VXg0aOge1tdfZccU+TJ?=
+ =?us-ascii?Q?s4Q9GU6vInOO+H0at5O6WGUmyx49uO79sJ+5w6YIyQJaR4ewgqtUrhMx7NmQ?=
+ =?us-ascii?Q?yUSGWc29+cf89d7TNAA7KV+b1UNqBfTtO8ZJA0+wPbxzbPZRVLFW2ZsYgVYa?=
+ =?us-ascii?Q?NNWpGJZWnnkF/bTuAGF++8xd0UZcGJkE0hnIitCqM4JsCyMYm3wdgGwronF4?=
+ =?us-ascii?Q?YE5Aqq+dwoQEvl+asmPlwAjjfHIANdJ/rQhz22WF2WzT/MLMpainECUEGwRo?=
+ =?us-ascii?Q?tiWW2QfScQd3gd0rRgBJuk8UEM2JOnts0fVCBFblSgivE1YnxMdpT0Hob6aW?=
+ =?us-ascii?Q?LBDL5cHWo8n31ljrdAPoVMNfyekYSrxOBLPj36Oi642j4qb7eehb8+lHpjW+?=
+ =?us-ascii?Q?iafNgKsXbQNwiUIQsra0FtDP0ynIazFvj2QzJwwo?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8543a776-a33e-413a-4ff9-08dcc2973b49
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 10:43:17.1713
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 05iYFd8EwvBqrkXy6hsIQYcgIi7lUQxvG2X0xk8CiWOqPe5BID2fA2ZO5yIenykKdNX+UhqkNc9e3maqOiC2aQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7529
 
-Am 21.08.24 um 23:40 schrieb Stefan Wahren:
-> The DWC2 runtime PM code reuses similar patterns to backup and
-> restore the registers. So consolidate them in USB mode specific
-> variants. This also has the advantage it is usable for further
-> PM improvements.
->
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+On Fri, Jul 26, 2024 at 07:32:04PM +0800, Xu Yang wrote:
+> i.MX7ULP need properly set System Integration Module(SIM) module to make
+> usb wakeup work well. This will add a "nxp,sim" property.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
 > ---
->   drivers/usb/dwc2/core.h   |  12 +++++
->   drivers/usb/dwc2/gadget.c | 101 +++++++++++++++++++-------------------
->   drivers/usb/dwc2/hcd.c    |  99 +++++++++++++++++++------------------
->   3 files changed, 114 insertions(+), 98 deletions(-)
->
-> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-> index 2bd74f3033ed..81e8632f29ed 100644
-> --- a/drivers/usb/dwc2/core.h
-> +++ b/drivers/usb/dwc2/core.h
-> @@ -1435,6 +1435,8 @@ int dwc2_hsotg_tx_fifo_total_depth(struct dwc2_hsotg *hsotg);
->   int dwc2_hsotg_tx_fifo_average_depth(struct dwc2_hsotg *hsotg);
->   void dwc2_gadget_init_lpm(struct dwc2_hsotg *hsotg);
->   void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsotg);
-> +int dwc2_gadget_backup_critical_registers(struct dwc2_hsotg *hsotg);
-> +int dwc2_gadget_restore_critical_registers(struct dwc2_hsotg *hsotg);
->   static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg)
->   { hsotg->fifo_map = 0; }
->   #else
-> @@ -1482,6 +1484,10 @@ static inline int dwc2_hsotg_tx_fifo_average_depth(struct dwc2_hsotg *hsotg)
->   { return 0; }
->   static inline void dwc2_gadget_init_lpm(struct dwc2_hsotg *hsotg) {}
->   static inline void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsotg) {}
-> +static inline int dwc2_gadget_backup_critical_registers(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
-> +static inline int dwc2_gadget_restore_critical_registers(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
->   static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg) {}
->   #endif
->
-> @@ -1505,6 +1511,8 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
->   void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg);
->   void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup);
->   bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2);
-> +int dwc2_host_backup_critical_registers(struct dwc2_hsotg *hsotg);
-> +int dwc2_host_restore_critical_registers(struct dwc2_hsotg *hsotg);
->   static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hsotg)
->   { schedule_work(&hsotg->phy_reset_work); }
->   #else
-> @@ -1544,6 +1552,10 @@ static inline void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg,
->   					       int rem_wakeup) {}
->   static inline bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
->   { return false; }
-> +static inline int dwc2_host_backup_critical_registers(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
-> +static inline int dwc2_host_restore_critical_registers(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
->   static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hsotg) {}
->
->   #endif
-> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-> index e7bf9cc635be..0bff748bcf74 100644
-> --- a/drivers/usb/dwc2/gadget.c
-> +++ b/drivers/usb/dwc2/gadget.c
-> @@ -5309,6 +5309,49 @@ void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsotg)
->   	dev_dbg(hsotg->dev, "GREFCLK=0x%08x\n", dwc2_readl(hsotg, GREFCLK));
->   }
->
-> +int dwc2_gadget_backup_critical_registers(struct dwc2_hsotg *hsotg)
-> +{
-> +	int ret;
+> Changes in v2:
+>  - add else branch suggested by Rob
+> ---
+>  .../devicetree/bindings/phy/fsl,mxs-usbphy.yaml | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+> index f4b1ca2fb562..ce665a2779b7 100644
+> --- a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+> @@ -87,6 +87,12 @@ properties:
+>      maximum: 119
+>      default: 100
+>  
+> +  nxp,sim:
+> +    description:
+> +      The system integration module (SIM) provides system control and chip
+> +      configuration registers.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 > +
-> +	/* Backup all registers */
-> +	ret = dwc2_backup_global_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to backup global registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
+>  required:
+>    - compatible
+>    - reg
+> @@ -110,6 +116,17 @@ allOf:
+>        required:
+>          - fsl,anatop
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: fsl,imx7ulp-usbphy
+> +    then:
+> +      required:
+> +        - nxp,sim
+> +    else:
+> +      properties:
+> +        nxp,sim: false
 > +
-> +	ret = dwc2_backup_device_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to backup device registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int dwc2_gadget_restore_critical_registers(struct dwc2_hsotg *hsotg)
-> +{
-> +	int ret;
-> +
-> +	ret = dwc2_restore_global_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to restore registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	ret = dwc2_restore_device_registers(hsotg, 0);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to restore device registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   /**
->    * dwc2_gadget_enter_hibernation() - Put controller in Hibernation.
->    *
-> @@ -5326,18 +5369,9 @@ int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
->   	/* Change to L2(suspend) state */
->   	hsotg->lx_state = DWC2_L2;
->   	dev_dbg(hsotg->dev, "Start of hibernation completed\n");
-> -	ret = dwc2_backup_global_registers(hsotg);
-> -	if (ret) {
-> -		dev_err(hsotg->dev, "%s: failed to backup global registers\n",
-> -			__func__);
-> -		return ret;
-> -	}
-> -	ret = dwc2_backup_device_registers(hsotg);
-> -	if (ret) {
-> -		dev_err(hsotg->dev, "%s: failed to backup device registers\n",
-> -			__func__);
-> +	ret = dwc2_gadget_backup_critical_registers(hsotg);
-> +	if (ret)
->   		return ret;
-> -	}
->
->   	gpwrdn = GPWRDN_PWRDNRSTN;
->   	udelay(10);
-> @@ -5483,20 +5517,9 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
->   	dwc2_writel(hsotg, 0xffffffff, GINTSTS);
->
->   	/* Restore global registers */
-> -	ret = dwc2_restore_global_registers(hsotg);
-> -	if (ret) {
-> -		dev_err(hsotg->dev, "%s: failed to restore registers\n",
-> -			__func__);
-> -		return ret;
-> -	}
-> -
-> -	/* Restore device registers */
-> -	ret = dwc2_restore_device_registers(hsotg, rem_wakeup);
-> -	if (ret) {
-> -		dev_err(hsotg->dev, "%s: failed to restore device registers\n",
-> -			__func__);
-> +	ret = dwc2_gadget_restore_critical_registers(hsotg);
-> +	if (ret)
->   		return ret;
-> -	}
->
->   	if (rem_wakeup) {
->   		mdelay(10);
-> @@ -5530,19 +5553,9 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
->   	dev_dbg(hsotg->dev, "Entering device partial power down started.\n");
->
->   	/* Backup all registers */
-> -	ret = dwc2_backup_global_registers(hsotg);
-> -	if (ret) {
-> -		dev_err(hsotg->dev, "%s: failed to backup global registers\n",
-> -			__func__);
-> -		return ret;
-> -	}
-> -
-> -	ret = dwc2_backup_device_registers(hsotg);
-> -	if (ret) {
-> -		dev_err(hsotg->dev, "%s: failed to backup device registers\n",
-> -			__func__);
-> +	ret = dwc2_gadget_backup_critical_registers(hsotg);
-> +	if (ret)
->   		return ret;
-> -	}
->
->   	/*
->   	 * Clear any pending interrupts since dwc2 will not be able to
-> @@ -5610,21 +5623,9 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
->
->   	udelay(100);
->   	if (restore) {
-> -		ret = dwc2_restore_global_registers(hsotg);
-> -		if (ret) {
-> -			dev_err(hsotg->dev, "%s: failed to restore registers\n",
-> -				__func__);
-> -			return ret;
-> -		}
-> -		/* Restore DCFG */
-> -		dwc2_writel(hsotg, dr->dcfg, DCFG);
-Oh dear, i accidentally dropped that. I will fix this.
+>  additionalProperties: false
+>  
+>  examples:
 
-Thanks goes to kernel test robot
+A gentle ping.
+
+If it's fine, please add tag for this binding patch. The rest of the
+patches (expect dts) are already merged to mainline.
+
+Thanks,
+Xu Yang
+
+
+> -- 
+> 2.34.1
+> 
 
