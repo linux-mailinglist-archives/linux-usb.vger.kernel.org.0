@@ -1,145 +1,151 @@
-Return-Path: <linux-usb+bounces-13883-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13901-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1386A95BA0F
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 17:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AFB895BC26
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 18:43:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8FB4B231FC
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 15:26:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65EFCB26157
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 16:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 000F81CB301;
-	Thu, 22 Aug 2024 15:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508AB1CDA37;
+	Thu, 22 Aug 2024 16:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gtI1o/sG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UXoQ8Yfs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153E418EAB;
-	Thu, 22 Aug 2024 15:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45671D130F;
+	Thu, 22 Aug 2024 16:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724340393; cv=none; b=kukZJScfFjZJ1v7lNs46wNxTsGs3ZiCxVM/dpdocgiIVnKOkACaOa07ILGuSk4b0pR9/2wCGtnhILyuoPp55mt/O58QCpb7E00Uo06bjhBB3qFDI3ti1/khrmnhP8h4nttja9Q1U+4QddhpclyPLOva0avk+y4Cfh+YA1NmRMzk=
+	t=1724344984; cv=none; b=Pfj1SuGzZxprrLQ2eKERHPOniowqbI6IT4NlzvhDi7t8h4cCyQ5EjkvP/E72sDtkKk4BsnxL7OHk8aRKToqMueV+cn5oRLPcbBC55rb4FFrQP//ROJbMgaWUdPNtQS5kfXFny+T7dtI9bT0S0VJroqWSjk/O2etOKupFOlfFiiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724340393; c=relaxed/simple;
-	bh=6YjPGB/euod+io2A3d4H4RTlTfhzeuaae2zluY6iaf8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uFCNe2SIA0SYBG9ZkGv8GrjypIZ6UTul6WCo+PuhYwVs9a1FmzRP5om9HJD5WNRjX9jufavqWLfXTb3dJtkRoTckbnDG5n+ksL+bp+jikIRChmYvUhNQZfAlNxxvMVK+GSIoOC61+aQX2iAR6V48LGZKLhfGs+Vkxfv7qAranTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gtI1o/sG; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724340393; x=1755876393;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6YjPGB/euod+io2A3d4H4RTlTfhzeuaae2zluY6iaf8=;
-  b=gtI1o/sGknWTkgzgp4a7fqQifYzUEjcBGdgVTqFV+dvaa+m4YFUyiUbu
-   sWEk2VLOEeczMbI8tNS8BHLvTKOzHSbrTEGsatAVb8xmgiBMHDfaFKosk
-   lXCmlvEdEh5hRU+ohePcIUUUAeWfZVUBUZq//TBhlUoFTuxlBsLsRDL7w
-   0VDXhZT8fjRM+mwSQQzWfND5gsFgxBvhToDFrYAyZ0Qi99syKcFcyxEX4
-   K7KrIwsd00ZXqaLeb4wG4a4L33ISHgN4zhUX87IgjEvj6qyDt5vQu9/8x
-   mdZ04/qWk1I7lhwIYyjezLA+Pj6t80mIRnzfAlmbFyS0MV0qgAoFdAa8r
-   A==;
-X-CSE-ConnectionGUID: /lj4CKjXRtS6cTogn5EOyg==
-X-CSE-MsgGUID: UBor0OTkQCqKECIK15x/tw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="33332873"
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="33332873"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 08:26:32 -0700
-X-CSE-ConnectionGUID: TzgC5e1IS1KLlqME+k1zHw==
-X-CSE-MsgGUID: Usd3LV/9TnKpmTgPKrYQMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="62187114"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa008.jf.intel.com with ESMTP; 22 Aug 2024 08:26:29 -0700
-Message-ID: <060bf2de-d231-4ed6-b7cc-cda40bfd397a@linux.intel.com>
-Date: Thu, 22 Aug 2024 18:28:33 +0300
+	s=arc-20240116; t=1724344984; c=relaxed/simple;
+	bh=CjdcfSha03gUsdXzKaVNu7Ok/Rz/zO7wQYl59L9ABII=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B23NHoEiRk6RQkOqOT4jx05gj7vo/6X9K5R2ylsKXxz/5wkgPQrzjeMyX44o87WdcCHUga8ytIazb32jyam0+jDEe0im/BoPDBL6qSiMv6+so4aBStMdYXNUMgcEQgPlCNMRyCawO6lo6oKU0wUPWGp0PWk1jObzROxhR8LnEPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UXoQ8Yfs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C278EC32782;
+	Thu, 22 Aug 2024 16:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724344984;
+	bh=CjdcfSha03gUsdXzKaVNu7Ok/Rz/zO7wQYl59L9ABII=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UXoQ8Yfs3CT80lVoiRhul5z9oCS6RuUDcyv8omH1omHh5JsQgAipxUsAHTIY4CpKA
+	 QpFuaANfnW70UuyqF3hvLA4mLZ+umOcJOkoVk9l6wl0jddxJT+31Lq0RwThN1wh44+
+	 sAX41d3uGWyg1RQP/z4UMH+HlO0D2Mi1cbwx6+9L+QBvuPwc52IqQSh0AAeEabBjrW
+	 L07GVExqw6oGub71BTQwDzndDS/vZnEoV4dyTkV9Q3KCAaQP61LHovEQ+hXr2XYeq3
+	 JDnOWENKTgeaYif8Jz/GGK45CF3wPZnwK2TTk62zNGI9hJcd1oILbl5wFfGoDMbx5l
+	 aYdH8uwKcNRDQ==
+Date: Thu, 22 Aug 2024 17:42:57 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
+	geert+renesas@glider.be, magnus.damm@gmail.com,
+	gregkh@linuxfoundation.org, mturquette@baylibre.com,
+	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+	biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
+ #reset-cells for RZ/G3S
+Message-ID: <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] xhci: pci: Put XHCI controllers into D3hot at
- shutdown
-To: superm1@kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- Kai-Heng Feng <kai.heng.feng@canonical.com>,
- mika.westerberg@linux.intel.com,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20240712185418.937087-1-superm1@kernel.org>
- <20240712185418.937087-3-superm1@kernel.org>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20240712185418.937087-3-superm1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="R5kWhI8jYXMnqXnv"
+Content-Disposition: inline
+In-Reply-To: <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
 
-On 12.7.2024 21.54, superm1@kernel.org wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> A workaround was put in place for Haswell systems with spurious events
-> to put XHCI controllers into D3hot at shutdown.  This solution actually
-> makes sense for all XHCI controllers though because XHCI controllers
-> left in D0 by the OS may remain in D0 when the SoC goes into S5.
-> 
-> Explicitly put all XHCI controllers into D3hot at shutdown and when
-> module is unloaded.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+
+--R5kWhI8jYXMnqXnv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>=20
+> The RZ/G3S System controller has registers to control signals that need
+> to be de-asserted/asserted before/after different SoC areas are power
+> on/off. This signals are implemented as reset signals. For this document
+> the #reset-cells property.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > ---
->   drivers/usb/host/xhci-pci.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 4408d4caf66d2..dde5e4a210719 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -667,9 +667,7 @@ static void xhci_pci_remove(struct pci_dev *dev)
->   		xhci->shared_hcd = NULL;
->   	}
->   
-> -	/* Workaround for spurious wakeups at shutdown with HSW */
-> -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-> -		pci_set_power_state(dev, PCI_D3hot);
-> +	pci_set_power_state(dev, PCI_D3hot);
->   
->   	usb_hcd_pci_remove(dev);
+>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-=
+sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sys=
+c.yaml
+> index 4386b2c3fa4d..6b0bb34485d9 100644
+> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.ya=
+ml
+> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.ya=
+ml
+> @@ -42,12 +42,28 @@ properties:
+>        - const: cm33stbyr_int
+>        - const: ca55_deny
+> =20
+> +  "#reset-cells":
+> +    const: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> =20
+>  additionalProperties: false
+> =20
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: renesas,r9a08g045-sysc
+> +    then:
+> +      required:
+> +        - "#reset-cells"
 
-Just noticed these have been the wrong way around for a while (impacting HSW).
+Given this is new required property on an existing platform, I'd expect
+some mention of why it used to be okay to not have this but is now
+required. Did firmware or a bootloader stage take things out of reset?
 
-We should first call usb_hcd_pci_remove() and then pci_set_power_state(D3),
-otherwise we force a fully running xHC into D3.
+> +    else:
+> +      properties:
+> +        "#reset-cells": false
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+> --=20
+> 2.39.2
+>=20
 
-Note, with this change we end up first calling
-pci_disable_device(), then pci_set_power_state(D3)
+--R5kWhI8jYXMnqXnv
+Content-Type: application/pgp-signature; name="signature.asc"
 
->   }
-> @@ -882,9 +880,7 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
->   	xhci_shutdown(hcd);
->   	xhci_cleanup_msix(xhci);
->   
-> -	/* Yet another workaround for spurious wakeups at shutdown with HSW */
-> -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-> -		pci_set_power_state(pdev, PCI_D3hot);
-> +	pci_set_power_state(pdev, PCI_D3hot);
+-----BEGIN PGP SIGNATURE-----
 
-Looks good
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsdqkQAKCRB4tDGHoIJi
+0i+AAPoDjYo2y6uMTzLRLfoCjkrx4XlkdvzoEZtEObZg6r8d8AEAiMY9x4dGGNYn
+rLsR+BgKd4cwAM4fW7FwAGCLjJOHbQI=
+=N0Us
+-----END PGP SIGNATURE-----
 
-Note that we now end up first calling pci_set_power_state(D3) and then
-pci_disable_device(). The other way around than the remove case above.
-I don't know if it matters.
-
-Thanks
-Mathias
-
+--R5kWhI8jYXMnqXnv--
 
