@@ -1,117 +1,154 @@
-Return-Path: <linux-usb+bounces-13857-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13858-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59AAA95B008
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 10:17:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E47C95B0DF
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 10:47:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15E57281E7E
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 08:17:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499E81F2603D
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 08:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DBD916DED5;
-	Thu, 22 Aug 2024 08:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05DEC17C231;
+	Thu, 22 Aug 2024 08:45:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aM1f98vz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pkAuxLy4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB7A13C3DD;
-	Thu, 22 Aug 2024 08:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB98D17BB2F;
+	Thu, 22 Aug 2024 08:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724314668; cv=none; b=CF/ZQ/Sge0XGNW9Y3htWQklqjGvm2Xrm4HPEijskep3FD4QLYCxRToUwAJfjRlbYsjW0uGkOUiMjyv2mBRsscHYkSoOmCRSaLu3DsME40BFFpSyGXnO2kXaAGf5UueKP7r4qMWnmiR/MAVj6WEYz6kV79kEnyKO65zE0Czl7nAI=
+	t=1724316348; cv=none; b=sfyVKtYP+/wBjHZl9flP+AxeTki9MBIhOWLwYB3UWQknSNvMmHZ9XOYD8oiGEdemaGHiW43dZSyAvBDFYMNGOLeNA3A8LhbK6kNHUo8ZVjSrqv911kUoLmHqhZm36P/96rnjkPGHyoeZRCIzjoJX/+MYEO0OY7cZB3+xx4YPMFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724314668; c=relaxed/simple;
-	bh=i9+RZMgNXDfIKM6AWUP3aKBMFAEeLFnrjodDLj6ekIY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RAi1hyDR1uGPgvHhnDiyw4ZmVY9O0obI9YcUZewR1+LUerUbr5RmbJQKGw05PQOZsdgIkSkYyLnMB1GCsXfdPb2/KYforcZzVrpfisr7ilta8gHeieLdBpZy3iy3PKtEeKWhsltr+ohfZV85BASQrB00UiZfXNtKQfV2Fym6omY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aM1f98vz; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2f43de7ad5eso435751fa.1;
-        Thu, 22 Aug 2024 01:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724314664; x=1724919464; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vPKMD2ynTcsQDN/WlLeg4f9d/2wCVzNZpD/3xY7a2os=;
-        b=aM1f98vzfiOdyw2ly6CMyUAqEb9ljDHAKmsUcX6FEOadBGuTw4f4CmAC0o+YlkEHlX
-         6AhXbAhf0zih7b+2LjYLFKeVwexeBJ38yK3ger3LQLb8Am1n8PLkIVHqKzR/V7CuoXjL
-         BDTBn11IKVO/GqQH0HuvFWY2SD/44aW/IpbzqZWUrbmP7TCYTGxceoAJYfTZb/nOdJ54
-         uVTP46CRvmv0WOGfKwdEL3Gv33xnCWIbJEhsSkDqRkg4nxXXahMVsHKt0heK/VftO8Ak
-         3+U2yz3lsy588qBLdy67LViuSidL/8RmLzukVrw565MpuZPkbJsPm2ayioXGBfWFGRUB
-         TYJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724314664; x=1724919464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vPKMD2ynTcsQDN/WlLeg4f9d/2wCVzNZpD/3xY7a2os=;
-        b=Lir5iTwNJeeaNf60Pm6t+EPUamMyi6LU4wXAvgeqrBiqRRcEkjGyscFndjNgB3pJdU
-         OrgtXB8PsP9/8peECxyqrp+X4iA0+yC5h9nu37l/V4m9IaQXafcciKvthI3jvg76+q2c
-         IPFlF9pwGJt155eN1gX9ELN8aRT3BngcoTPjiwZXNNocqV0IN+GjND55FBMoqWwVe/qn
-         F4hwxpa8+6DGBS/xMEleo2ntHARuDkr0NeL16OpACEuU/Qioz54pVjjxVlk0PouUD6NK
-         A6YwUjmM/EKQ8/SQ22U/Lm41PoLHoew5S9zrcBEZG8Kl5pJNYIyJQZ9UcnyVspCPOfXm
-         rs8A==
-X-Forwarded-Encrypted: i=1; AJvYcCVKJxKQvV+qlfsmmdq5z0fQA2V3Co016UGbCNqjxtOhnuFypCb2KTc693MuvjwggjrRUjgpmK5UtI4v298=@vger.kernel.org, AJvYcCVWJ3Af5CCSDTgnks4oXRMBmAs8UnkboDmKWVmjGj/IpEA7AumvKEnxUXPieOKInoPj4ZjQMaqtAZg=@vger.kernel.org, AJvYcCXWDkc9/YTg16dYceO35wn+Ddk3CWumdVBmQ2kCsFS8CYq3aoGI/yKwJwlqu4vC8HbZMF9gpevD/vlo@vger.kernel.org
-X-Gm-Message-State: AOJu0YwH18lYgcrDZEk9pI4mi/wwqhb96h2IAmMit2CqUvhKCa5Z/Dgo
-	gBFWDEGUTe8aH3fZdfN1nysxb3YBjQyiF1yFuzsmxkApzX+pXe8aLrhGtLs2lTUDyPiydtZw87K
-	+6gkCQ9In5abOTOnSNpK9Fw4wKwyaSANsbXnS1A==
-X-Google-Smtp-Source: AGHT+IFFMGVRKgodSsQZ7JSSR15ua0Tg42BukRvBOfUO2Xk2QpPePWxJVVeKAvvMzHma4Pa7V0RNd2iezTpeFWy8aJY=
-X-Received: by 2002:a2e:b5c2:0:b0:2ef:2061:8bf5 with SMTP id
- 38308e7fff4ca-2f3f8b56c39mr24729761fa.40.1724314663665; Thu, 22 Aug 2024
- 01:17:43 -0700 (PDT)
+	s=arc-20240116; t=1724316348; c=relaxed/simple;
+	bh=4AYgorz/S/S69wjyG/Pa0zj1b19EvbzvjnS0TkrM/Sg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sM8OBbV6608oOxV60uWN6ypUWeTejDFeFqgbfZyEF3/QSX0yxfVdK8qGhJfGTESR+lvKQsEcnxAS5QC+HWbnsqfbUiQ5I3h9VWKbMz4BNU9zBmUs8tHU0PONrom9gFxHSceLsLU4hti1UClMvtNXOQFbwm7yhyHcEzuDdwSw3Ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pkAuxLy4; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47M12PP7031096;
+	Thu, 22 Aug 2024 08:45:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=zf/b6BX/qFyD3ElYFJgRrkwNCcgjJq8aID/fF6RdZJ4=; b=pk
+	AuxLy43xloTwOlkAiRfVmd4fP95gYV7VlTxplCF5tbCDC+ItoceKkq6aHZ6kgY3j
+	aoi/HCsjQbO8ZKGQe7Oas5v2VDW7tWN4ZV/dJ/JR74CjdJQm28XTeWoH7q32xBFh
+	ExLXujSr0tjaAwZbUJs3zx1Q++4EMc0/JXkfUR5Y3mfanRZzY5bydUCcavVLEnJf
+	tUOPmsrYupVcZsAKwnvApafbJ/xH5OUZCL2bgfMJvqkNoDUCZYcIM85xs2KZD9Uq
+	ObY3jIw70nrQWgNs6r5yz42Av9O+ccmZCnB+Lx/N01C9YYegCFSOB2+vjbh1OkC6
+	yt5D6SAOM801MX3KLt2A==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 415ck9brrv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 22 Aug 2024 08:45:35 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47M8jZ6H032579
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 22 Aug 2024 08:45:35 GMT
+Received: from hu-faisalh-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 22 Aug 2024 01:45:32 -0700
+From: Faisal Hassan <quic_faisalh@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Faisal Hassan
+	<quic_faisalh@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: dwc3: core: update LC timer as per USB Spec V3.2
+Date: Thu, 22 Aug 2024 14:15:04 +0530
+Message-ID: <20240822084504.1355-1-quic_faisalh@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <38b871f7-8583-4b9a-940b-ee33a1b6206d@molgen.mpg.de>
- <2024082207-foothill-swirl-0ad0@gregkh> <8092403e-cc8a-45ce-982a-c954e7428c32@molgen.mpg.de>
-In-Reply-To: <8092403e-cc8a-45ce-982a-c954e7428c32@molgen.mpg.de>
-From: Rajaram R <rajaram.officemail@gmail.com>
-Date: Thu, 22 Aug 2024 13:47:31 +0530
-Message-ID: <CAOiXhaKr9jctG0qUg3zqitUo7ZCTq9CB6Huc1NO5B2ArjCGjBQ@mail.gmail.com>
-Subject: Re: USB-C adapter like Dell DA300 using > 5 W
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mathias Nyman <mathias.nyman@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PvEPJrJ5_Z9BlBacTNDdzWUJybCknrsL
+X-Proofpoint-ORIG-GUID: PvEPJrJ5_Z9BlBacTNDdzWUJybCknrsL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-22_03,2024-08-19_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=904
+ suspectscore=0 mlxscore=0 spamscore=0 bulkscore=0 adultscore=0
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408220064
 
-On Thu, Aug 22, 2024 at 12:36=E2=80=AFPM Paul Menzel <pmenzel@molgen.mpg.de=
-> wrote:
->
-> Dear Greg,
->
->
-> Thank you for your quick response.
->
-> Am 22.08.24 um 01:31 schrieb Greg KH:
-> > On Wed, Aug 21, 2024 at 11:32:04PM +0200, Paul Menzel wrote:
->
-> >> On the Intel Kaby Lake laptop Dell XPS 13 9360 with Debian sid/unstabl=
-e and
-> >> *powertop* 2.15-3, connecting a USB-C adapter like Dell DA300 or LMP U=
-SB-C
-> >> The heat of the USB-C adapter might suggest, that it draws that much p=
-ower.
-> >> What is your experience? Can you suggest something?
-> >
-> > Buy a different adapter?  That seems like something is really wrong wit=
-h
-> > it.  Does other devices also suck that much power from that port on the
-> > laptop?
->
-> It happens with two Dell DA300 adapters and two LMP USB-C mini Dock (P/N
-> 15954, 12-22 Rev. 3):
+This fix addresses STAR 9001285599, which only affects dwc3 core version
+320a. The timer value for PM_LC_TIMER in 320a for the Link ECN changes
+is incorrect. If the PM TIMER ECN is enabled via GUCTL2[19], the link
+compliance test (TD7.21) may fail. If the ECN is not enabled
+(GUCTL2[19] = 0), the controller will use the old timer value (5us),
+which is still acceptable for the link compliance test. Therefore, clear
+GUCTL2[19] to pass the USB link compliance test: TD 7.21.
 
- Is this behaviour only when the ethernet is active ? Could you please
-share the behaviour with no ethernet connection ?
+Cc: stable@vger.kernel.org
+Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
+---
+ drivers/usb/dwc3/core.c | 15 +++++++++++++++
+ drivers/usb/dwc3/core.h |  2 ++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 734de2a8bd21..d0bd3a0e1f9c 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1378,6 +1378,21 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
+ 	}
+ 
++	/*
++	 * STAR 9001285599: This issue affects dwc3 core version 3.20a
++	 * only. If the PM TIMER ECM is enabled through GUCTL2[19], the
++	 * link compliance test (TD7.21) may fail. If the ECN is not
++	 * enabled (GUCTL2[19] = 0), the controller will use the old timer
++	 * value (5us), which is still acceptable for the link compliance
++	 * test. Therefore, do not enable PM TIMER ECM in 3.20a by
++	 * setting GUCTL2[19] by default; instead, use GUCTL2[19] = 0.
++	 */
++	if (DWC3_VER_IS(DWC3, 320A)) {
++		reg = dwc3_readl(dwc->regs, DWC3_GUCTL2);
++		reg &= ~DWC3_GUCTL2_LC_TIMER;
++		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
++	}
++
+ 	/*
+ 	 * When configured in HOST mode, after issuing U3/L2 exit controller
+ 	 * fails to send proper CRC checksum in CRC5 feild. Because of this
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 1e561fd8b86e..c71240e8f7c7 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -421,6 +421,7 @@
+ 
+ /* Global User Control Register 2 */
+ #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
++#define DWC3_GUCTL2_LC_TIMER			BIT(19)
+ 
+ /* Global User Control Register 3 */
+ #define DWC3_GUCTL3_SPLITDISABLE		BIT(14)
+@@ -1269,6 +1270,7 @@ struct dwc3 {
+ #define DWC3_REVISION_290A	0x5533290a
+ #define DWC3_REVISION_300A	0x5533300a
+ #define DWC3_REVISION_310A	0x5533310a
++#define DWC3_REVISION_320A	0x5533320a
+ #define DWC3_REVISION_330A	0x5533330a
+ 
+ #define DWC31_REVISION_ANY	0x0
+-- 
+2.17.1
+
 
