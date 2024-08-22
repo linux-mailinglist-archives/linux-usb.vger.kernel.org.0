@@ -1,92 +1,113 @@
-Return-Path: <linux-usb+bounces-13847-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13848-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29BD195AC94
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 06:27:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 596F495AC9B
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 06:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAAA3281C6C
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 04:27:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13155283661
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2024 04:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A6C73B79C;
-	Thu, 22 Aug 2024 04:27:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9EE3AC0D;
+	Thu, 22 Aug 2024 04:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="v+ZgCF6e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bfgKqCmW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8E7381B8;
-	Thu, 22 Aug 2024 04:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA168249F5
+	for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 04:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724300849; cv=none; b=DRTJnp7pAhigz4/7BTlp0ECb6soLmJEyuIIh7wVwcr2zZ4SAQZJF6sEQ2XP5/VNwy9SH/4m96mXKLPUWXFQU3hhtZzjnGY6Qzf37LqdOR10J8XtOEzucSBaldtS+QX2mIH2RsgW6xdaNhbU1EmwIpxdMCJnbmekG6VIGytEWWPo=
+	t=1724301295; cv=none; b=u1U+X0AMqWSTzxGmvwusbUnn4V1R5QtmQZyi93o1ZKrFbuNu1DoOS3rH9ovOAL+APc824R9FaJ4f+wI3W3ksLwV8OPDZgDyTl60PIDzO6+I3gY+4O61BunuDwOPW9R/NYio1W6XauAG7UQyjFna+lYUZQcQoIRE6F+qSgeNp/ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724300849; c=relaxed/simple;
-	bh=7V+H9aiy6Hmq4hq9uhSZuA59Ro8lxYpKbAXrcA3sXLw=;
+	s=arc-20240116; t=1724301295; c=relaxed/simple;
+	bh=GXgUa7k6IcQXd7FonEUtvXuF8vh5kAxjnsAnnsC9oS8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HX6eypBhfZbwIHodLQlEw9aNRixWv0q6dFPNAi9uI97CLPXXqPK6DE35EVYqp/bjJ1mqnHSHCUgOss9cjAJbFxIIsfjfrRc8uWOYO5o/X2aIgidCoh5ODxYTlzSTZOkIQvL4kDR2+Xp6PYJWwuDgrX6epnlrP7HZWYSMfCnIuvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=v+ZgCF6e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABF1C4AF09;
-	Thu, 22 Aug 2024 04:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724300849;
-	bh=7V+H9aiy6Hmq4hq9uhSZuA59Ro8lxYpKbAXrcA3sXLw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=v+ZgCF6eGa392JfISoJqCnTuDfcClAdh4ysQ90tWOJT9KwmDps2Ub8yXHB8VBfEt9
-	 gNm4EtxXR0XFMPuBd3fS7RWPUvFAoIt55q2o82p/TP/yq2vaQjH7uS3t9fbsq+VMv7
-	 CFVcp8RUFyDabTFc+aKR7xr/50PvrmGpZ4Joa0EU=
-Date: Thu, 22 Aug 2024 12:27:26 +0800
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Lei Liu <liulei.rjpt@vivo.com>
-Cc: Neal Liu <neal_liu@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Bin Liu <b-liu@ti.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH v1 0/5] usb drivers use devm_clk_get_enabled() helpers
-Message-ID: <2024082210-stadium-sly-cf06@gregkh>
-References: <20240822040734.29412-1-liulei.rjpt@vivo.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gp0NhLpvKieiNuhPOqSkoGQFDA4B6YxGheg/4hT90jmp5hgHylOXIJkOyTX4I86+BGgkQnteJe6bP/may8DbfKhi8xJ4IWgOzN6wOM1ts6rYFJbCxQvllidONg/iI53HFOVeXIy1ciUkPrddAypuIxExM5OBfbrLcRcC2vTBCCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bfgKqCmW; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724301294; x=1755837294;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GXgUa7k6IcQXd7FonEUtvXuF8vh5kAxjnsAnnsC9oS8=;
+  b=bfgKqCmW0AiqSM/7XzSsWksCwvBBFUuggaHDS2b0zTHje+qKUd/2N9gX
+   hU6wbV2wq/ykxYsgUn85s0kPdLrgQ0NtxefRi+pMPF2wPltG8YkkC30Gk
+   nZzSRlLUXI0/yV/2s1LO4qISN9WJtKAmZSVmmtpoN2pAfVm70s7s76YkO
+   BnAkGF/RLWmZcS8yOpZDcEQTnZmvbm3ws0TledpGvcD2sjQWnNt3VAGOm
+   RHOozChi/6G5XHxFxJjdNrlTfSFqobhR7JrN2jzXmQ7b4ikOszWw5pS+q
+   iPGSPJ4d+CtmoeLawWS1XUxO7+nleYNzCvbLEwX2DlCHocis0H296b/tK
+   A==;
+X-CSE-ConnectionGUID: Iy3gmEHXSfmTDFyTtKjgfg==
+X-CSE-MsgGUID: DMh0uj+sQDuSpzP+bZK8sA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="22847759"
+X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
+   d="scan'208";a="22847759"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 21:34:53 -0700
+X-CSE-ConnectionGUID: xfySZffFR7aof4YZYNDFvA==
+X-CSE-MsgGUID: RtwkzWdCS+m7fBQX7xEwEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
+   d="scan'208";a="98812342"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa001.jf.intel.com with ESMTP; 21 Aug 2024 21:34:51 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 550CC268; Thu, 22 Aug 2024 07:34:49 +0300 (EEST)
+Date: Thu, 22 Aug 2024 07:34:49 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: linux-usb@vger.kernel.org, Aapo Vienamo <aapo.vienamo@linux.intel.com>,
+	Rene Sapiens <rene.sapiens@intel.com>,
+	R Kannappan <r.kannappan@intel.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: Re: [PATCH v2 0/4] thunderbolt: Improve software receiver lane
+ margining
+Message-ID: <20240822043449.GH1532424@black.fi.intel.com>
+References: <20240819114054.4139941-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240822040734.29412-1-liulei.rjpt@vivo.com>
+In-Reply-To: <20240819114054.4139941-1-mika.westerberg@linux.intel.com>
 
-On Thu, Aug 22, 2024 at 12:07:25PM +0800, Lei Liu wrote:
-> The devm_clk_get_enabled() helpers:
->     - call devm_clk_get()
->     - call clk_prepare_enable() and register what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
+On Mon, Aug 19, 2024 at 02:40:50PM +0300, Mika Westerberg wrote:
+> Hi all,
 > 
-> This simplifies the code and avoids calls to clk_disable_unprepare().
+> This series improves the software receiver lane margining support in
+> debugfs so that it should be more usable now.
 > 
-> ---
-> The files ux500.c, mpfs.c, and pxa27x_udc.c have incorrect usage of 
-> certain interfaces due to the lack of synchronization during the 
-> commit updates. These issues have been corrected in the v1 version.
+> Changes from the previous version:
 > 
-> version 1 changes
-> 1.ux500: Incorrect usage of clk_prepare_enable() should be corrected to
->   devm_clk_get_enabled().
-> 2.mpfs: Incorrect usage of devm_clk_get_enable() should be corrected to
->   devm_clk_get_enabled().
-> 3.pxa27x_udc: Incorrect usage of clk_prepare_enable() should be
->   corrected to devm_clk_get_enabled().
+>   - Initialize 'errors' in margining_run_sw() as pointed out by Dan
+>     Carpenter.
+> 
+> Previous version of the patch can be found:
+> 
+>   https://lore.kernel.org/linux-usb/20240813110135.2178900-2-mika.westerberg@linux.intel.com/
+> 
+> Aapo Vienamo (1):
+>   thunderbolt: Add missing usb4_port_sb_read() to usb4_port_sw_margin()
+> 
+> R Kannappan (1):
+>   thunderbolt: Improve software receiver lane margining
+> 
+> Rene Sapiens (2):
+>   thunderbolt: Consolidate margining parameters into a structure
+>   thunderbolt: Add optional voltage offset range for receiver lane margining
 
-Patch versions start at 1, this should be 2, right?
-
+Applied to thunderbolt.git/next.
 
