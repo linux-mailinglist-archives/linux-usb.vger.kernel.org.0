@@ -1,201 +1,180 @@
-Return-Path: <linux-usb+bounces-13938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC4695C716
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:58:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE4395C721
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 10:00:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA3D91F2213F
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 07:58:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38E11B24768
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 08:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D885313D52A;
-	Fri, 23 Aug 2024 07:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16C1143738;
+	Fri, 23 Aug 2024 07:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="AzDqNmIa"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="DoNc3Nrf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D7F433CE
-	for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 07:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7A113D8A0
+	for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 07:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724399879; cv=none; b=Wi1Zwc0vjgXqTh4BqNeIwLp+dFL7oloGQXH242gEJnSf/J8n6HXi+lsqfed3cF3ODX9uikOQqqm4+3jqndKtplVSdXH4a/h7qiTvpNgEoEB9vfcF167Ss3gwdXaeAI0Zja15peTxHihfMTvZOFrYzVd955Jgqx8Hg6a6tbWBnl0=
+	t=1724399986; cv=none; b=YhsfVY1z6z0uc92LdVajv76K2yCZOZhj1htvvSBXqsHnSqK6BpZGBYJdMpOKWfk8Ww9LJ8vQz3scvi1tCE8CWWfd/zeU9TClPBGQZ3AMChU/d6fzshvPbZ1DPVmtTHnz55yG6+LbREhqW4FSRUFZ1qwzR8wknn1bxEbgJiVHPmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724399879; c=relaxed/simple;
-	bh=t3lkUJpVNYTLzdIOq2kqdXAXqlBNArJf4oHXt6Y2JBo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X/EgmjlEOwleyLiE6jCYOAS9K8vUIi7AtSDyE8fS3m8RS6OjXtZWdESvEcxyHDKFm6wsOavfzndoZ30xZsquQ7E6kOrkbBMYikxU3sQIzsjOtNAnYpFtp4VZDW+Fn3rTIEbGYSbSVbf5681v+vn33Er+DcN6qb8l5T1Yj5WYdxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=AzDqNmIa; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a86859e2fc0so205577766b.3
-        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 00:57:57 -0700 (PDT)
+	s=arc-20240116; t=1724399986; c=relaxed/simple;
+	bh=dGHVx+hFfK2LkEEUaLJJzkbk61htvECuf2CwQAdYmPw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NhXJgQ7bcQFCxE8dBtO22a2kCZXE3Y6if/9USRTxgtQf/IGkFNK3yncFSlGgiL5Y4/R+XSXJCceKI1Iu1QEILAIO8FB23Ut3QKYa5fD1jN1Gofd65CQlPvhYXt+NNH4/ifS6zBE8cZDG5Vj/AQWUpNYDGmx5yEUkXcQjpFQagcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=DoNc3Nrf; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8682bb5e79so242174666b.2
+        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 00:59:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1724399876; x=1725004676; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CG70/jC2mzXi0oHgs9Iw5R9O9LyWrgNsejh29CzrB/s=;
-        b=AzDqNmIaLNJECKZz+vTb6R9NrizQp3JS949M+tJwR3xlwtbvqLMuy0tnaWWwzCZ17s
-         UL6TOOY8D+UxgtMyDGgezOQ3tyHjOVVRMzenMxR0ynz3mUYVQsGn74uaHVZkNEfdCaEL
-         W0e8TOV+u6Fro3Qc+zHSCzpG7Na3+r9qKhlW8=
+        d=tuxon.dev; s=google; t=1724399983; x=1725004783; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9cyUaWQ/RfElk/9t5oBKQMBDU3FsVlRw3b+jDEVNsQM=;
+        b=DoNc3NrfHp1s2iwmcPndsIbFpdoJkTTwmbp2qyy23PXfUfDARwhZGFQZug8yaiMowb
+         j+b+L3x8L29ezFlBfmmAeMgNjqpYpABtTI+0s3HwUnPC7xOjOoIWcnHrZuOpXnpgPFBz
+         JzibB354DlcDKzxdAzffbDTMq+gMXw9yksz0J1Y9WiS9OyNS89A3NcZPoXqRE4Dp9FLS
+         PMb45DR155zLEUvVeMEqZQpRJJrF0I9pzk2IFYFbgj648VLp4nRC0GLp+lyiH03EBlwD
+         Rm0FjLQziaYUeKzqq/Sfbk/TgdDLuOOgatKg9uS6/HpyIfxKPQoqOOk5+iJllniPiSEE
+         SZCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724399876; x=1725004676;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CG70/jC2mzXi0oHgs9Iw5R9O9LyWrgNsejh29CzrB/s=;
-        b=GiY8S6WdUrXlJSMPEJuPNBIfRscKAOP0ekNYjsJJ8c1Gl6ggOAf0AJCZFubJhJZ4s/
-         OA5MS/3V+cU6AcBaWdhw4Hsmi1ULtQUSUq1fyGowojWAENS2cXGeCh7LVJjA2mBQXVEA
-         kFMma9RVlMCE6QPb+FUETG0F1hpAo3064YC/1xm9yYwseO7UpmqpYkECrVMW9wQkq9OW
-         QOGru76qeaZ09hRtXi5Lkb5Bb7jFSzimsSq/wsYuLyWP6Kwh3XDrZJKHyLi8/3OWSaYG
-         zVPDNOdwAQ8CIs6Bafh/rPXE6e2yjCRxTt80KUNBYdxqL8/n9xcuw/v002RP3ADdPDbQ
-         9DEg==
-X-Forwarded-Encrypted: i=1; AJvYcCX43P6xFVvCkcCNDa5P6qSVAr1xx/MI1/lYHZHsJKgWlrNxQKu3uwIRFVaD0CHgeDVlVFFQpP//zGw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz5zXp2knaKrS7uP7P9MDUy18VZHxSZDe/QsGh1cPov9bpe93b
-	VZO1ZO5mxHMwyXcIczy0Ei8qF+CjH2IfEXv79Q1elsf+F+gN7WQLA1DECJPBF98crdn9Pszn7YR
-	rkrmRllUkLXLIIw/StK+NMCA+3Ko4spoEvyc0OQ==
-X-Google-Smtp-Source: AGHT+IGCTEt9qJslktoedJ5myWNlaB5S9MotuCJiG7S/ujvEUKsyZNgSXlQDy9wmRnNuErBP9hV6x1mFDQHb4eYfr+s=
-X-Received: by 2002:a17:907:e2c6:b0:a86:a178:42da with SMTP id
- a640c23a62f3a-a86a52bb7e4mr88308266b.21.1724399875313; Fri, 23 Aug 2024
- 00:57:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724399983; x=1725004783;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9cyUaWQ/RfElk/9t5oBKQMBDU3FsVlRw3b+jDEVNsQM=;
+        b=a5fJ2iO7s9/4JS/xDN6oPL/v/zVK0Fnr92lhitXcMtgwAtoCpxlRhe0lppX2zsJ4ub
+         rNiioh0GtQfsPJe7bdeVCcRnivOjaQus6ERHpAu9hGO5pvu3Z2RLOZY5VDEKwyJNoguv
+         pO1NT4JbuwdXEDLPVElh1syvR1X7183ER6RybhUCy6CPVpINMa1KPt+cxf3AOwbR9FQe
+         83edbhTpK6KmDJ1meC/CcT9ACF+yGSeGAl8DVTU0JVXw5MlGOeYrJPVUYccZNGh9KZRu
+         2PD6SnTAC02kt0gnDcUuMHplf4R161tjPhDOm7B0A0Uj35ac9j3yTFuVFkGwuDCAs+Ch
+         N3sw==
+X-Forwarded-Encrypted: i=1; AJvYcCWD6Ce8vu71LSvNm1lkDHVBLzTjRYgHfbCAI/Zhu5qC6RRkN4maeH5A0rTB4fgNzGlnnoX1aNhbt+Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmnhjG2x6ErHBOz9lpJcCQ767jHEBPJfM8e+FV2KhjSaL6xGxX
+	1KRGay18X4qnHtoeyG9XWVtTfE5gI0DgMK0CXc2q80BbUiebQS8Bh0Z3yfsZdik=
+X-Google-Smtp-Source: AGHT+IFALanES9BGD/uHrel10X5aoBTS5/4uaV/A+E4WAJMOHgg5/BTkzR0yFcRw4eCRtDATN+BsLQ==
+X-Received: by 2002:a17:907:6d0d:b0:a86:938f:e84c with SMTP id a640c23a62f3a-a86a54df8d3mr78450566b.66.1724399982571;
+        Fri, 23 Aug 2024 00:59:42 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f48aac4sm219597466b.185.2024.08.23.00.59.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Aug 2024 00:59:42 -0700 (PDT)
+Message-ID: <e0308678-c031-41e1-8d07-d2b78504180f@tuxon.dev>
+Date: Fri, 23 Aug 2024 10:59:39 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <TYUPR06MB62171A7BF25AB6963CBA07FED28F2@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024082251-grief-profanity-b0da@gregkh> <TYUPR06MB62176043F3E6D6B6675301D3D2882@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <CAOf5uwnz01F28kw12ZN5k3usTcCBMKpFJpAXTaYBZ_3zgWQU3Q@mail.gmail.com> <8ab0ca38-1bf4-ed3e-eef0-cbed2a524b34@quicinc.com>
-In-Reply-To: <8ab0ca38-1bf4-ed3e-eef0-cbed2a524b34@quicinc.com>
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Fri, 23 Aug 2024 09:57:44 +0200
-Message-ID: <CAOf5uwmQ_drN9xE88Eyf01kmh=GLwitLCSo7KxiNDE9-h-D0KQ@mail.gmail.com>
-Subject: Re: [PATCH v6] usb: gadget: u_serial: Add null pointer check in
- gs_read_complete & gs_write_complete
-To: Prashanth K <quic_prashk@quicinc.com>
-Cc: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"opensource.kernel" <opensource.kernel@vivo.com>, 
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Prashanth
-
-On Fri, Aug 23, 2024 at 9:34=E2=80=AFAM Prashanth K <quic_prashk@quicinc.co=
-m> wrote:
->
->
->
-> On 23-08-24 12:28 pm, Michael Nazzareno Trimarchi wrote:
-> > Hi
-> >
-> > On Fri, Aug 23, 2024 at 8:40=E2=80=AFAM =E8=83=A1=E8=BF=9E=E5=8B=A4 <hu=
-lianqin@vivo.com> wrote:
-> >>
-> >> Hello linux community expert:
-> >>
-> >>>> Fixes: c1dca562be8a ("usb gadget: split out serial core")
-> >>>> Cc: stable@vger.kernel.org
-> >>>> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
-> >>>> ---
-> >>>> v6:
-> >>>>   - Update the commit text
-> >>>>   - Add the Fixes tag
-> >>>>   - CC stable kernel
-> >>>>   - Add serial_port_lock protection when checking port pointer
-> >>>>   - Optimize code comments
-> >>>>   - Delete log printing
-> >>
-> >>> You need to list ALL of the versions here, I seem to have missed v4 a=
-nd
-> >>> v5 somewhere so I don't know what changed there.
-> >>
->
-> [...]
-> >>> nested spinlocks, why?  Did you run this with lockdep enabled to veri=
-fy you aren't hitting a different bug now?
-> >>  Because there is a competition relationship between this function and=
- the gserial_disconnect function,
-> >>  the gserial_disconnect function first obtains serial_port_lock and th=
-en obtains port->port_lock.
-> >>  The purpose of nesting is to ensure that when gs_read_complete is exe=
-cuted, it can be successfully executed after obtaining serial_port_lock.
-> >>  gserial_disconnect(..)
-> >>  {
-> >>         struct gs_port  *port =3D gser->ioport;
-> >>         ...
-> >>         spin_lock_irqsave(&serial_port_lock, flags);
-> >>         spin_lock(&port->port_lock);
-> >>         ...
-> >>         gser->ioport =3D NULL;   ---> port =3D NULL;
-> >>         ...
-> >>         spin_unlock(&port->port_lock);
-> >>         spin_unlock_irqrestore(&serial_port_lock, flags);
-> >>  }
-> >>
-> >> After enabling the lockdep function (CONFIG_DEBUG_LOCK_ALLOC=3Dy), the=
-re is no lockdep-related warning information.
-> >>
-> >>> And why is one irqsave and one not?  That feels odd, it might be righ=
-t, but you need to document here why the difference.
-> >>  After the gs_read_complete function is executed, spin_unlock_irqresto=
-re is used to restore the previous state=EF=BC=8C
-> >
-> > =E8=83=A1=E8=BF=9E=E5=8B=A4 this is not a common locking pattern that i=
-s the reason that
-> > should be properly described.
-> This pattern was already used on gser_suspend/resume callbacks, this was
-> done because the lock was stored under port (and port itself was
-> becoming null), hence we added a static spinlock to mitigate it.
-> >
-I see now, but why don't disable the endpoint before disconnecting?
-
-/* disable endpoints, aborting down any active I/O */
-usb_ep_disable(gser->out);
-usb_ep_disable(gser->in);
-
-Michael
-
-
-> >> -       /* Queue all received data until the tty layer is ready for it=
-. */
-> >>         spin_lock(&port->port_lock);
-> >> +       spin_unlock(&serial_port_lock);
-> >> +
-> >> +       /* Queue all received data until the tty layer is ready for it=
-. */
-> >>         list_add_tail(&req->list, &port->read_queue);
-> >>         schedule_delayed_work(&port->push, 0);
-> >> -       spin_unlock(&port->port_lock);
-> >> +       spin_unlock_irqrestore(&port->port_lock, flags);   ---> Here w=
-e use spin_unlock_irqrestore to restore the state
-> >>  }
-> >>
-> >> Thanks
-> >
-> > Thank you
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
+ #reset-cells for RZ/G3S
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
+ sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+ biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
+ linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
+ <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
+ <20240822-mountain-hurdle-dd1f08b96f64@spud>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20240822-mountain-hurdle-dd1f08b96f64@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
 
---=20
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
+On 22.08.2024 19:44, Conor Dooley wrote:
+> On Thu, Aug 22, 2024 at 05:42:57PM +0100, Conor Dooley wrote:
+>> On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
+>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>
+>>> The RZ/G3S System controller has registers to control signals that need
+>>> to be de-asserted/asserted before/after different SoC areas are power
+>>> on/off. This signals are implemented as reset signals. For this document
+>>> the #reset-cells property.
+>>>
+>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>> ---
+>>>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 ++++++++++++++++
+>>>  1 file changed, 16 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>> index 4386b2c3fa4d..6b0bb34485d9 100644
+>>> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>> @@ -42,12 +42,28 @@ properties:
+>>>        - const: cm33stbyr_int
+>>>        - const: ca55_deny
+>>>  
+>>> +  "#reset-cells":
+>>> +    const: 1
+>>> +
+>>>  required:
+>>>    - compatible
+>>>    - reg
+>>>  
+>>>  additionalProperties: false
+>>>  
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: renesas,r9a08g045-sysc
+>>> +    then:
+>>> +      required:
+>>> +        - "#reset-cells"
+>>
+>> Given this is new required property on an existing platform, I'd expect
+>> some mention of why it used to be okay to not have this but is now
+>> required. Did firmware or a bootloader stage take things out of reset?
+> 
+> Reading a bit more into the series, the peripherals in question were
+> just never used nor did a driver for the sysc exist, so there's neither
 
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+Exactly.
+
+> explanation of prior behaviour nor concerns about compatibility?
+
+The newly introduced sysc driver is probed only for RZ/G3S and used to
+control the USB, PCIe signals though reset control driver (registered by
+sysc driver on auxiliary bus) and to identify the chip. The intention is to
+later migrate the chip identification support for the rest of RZ/G2 devices
+to this new driver and add more functionalities, when/if needed.
+
+Thank you,
+Claudiu Beznea
+
+> 
+>>
+>>> +    else:
+>>> +      properties:
+>>> +        "#reset-cells": false
+>>> +
+>>>  examples:
+>>>    - |
+>>>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> -- 
+>>> 2.39.2
+>>>
+> 
+> 
 
