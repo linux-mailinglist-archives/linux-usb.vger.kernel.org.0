@@ -1,167 +1,201 @@
-Return-Path: <linux-usb+bounces-13937-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13938-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A4EB95C6FF
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:54:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DC4695C716
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:58:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A44641C21B95
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 07:54:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA3D91F2213F
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 07:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 034E013D529;
-	Fri, 23 Aug 2024 07:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D885313D52A;
+	Fri, 23 Aug 2024 07:57:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="g9r4KbF8"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="AzDqNmIa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB7713D24C
-	for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 07:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D7F433CE
+	for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 07:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724399654; cv=none; b=oGGXNRYRB7v0WHiJeN0b1Y59VNj4dlzpmrOFFpADLqqRJKSBSIZ9TjyLzu4RY4ICp+F6ozRa1lGipn7pfwsDKXj0xv9PQY+I57p5UcGHX5Af/+SmUOhN9EROzui2DcbuQEraUxXw7pXZS/HxZ+dD70mibgV2TV+N1XmsGBZO+40=
+	t=1724399879; cv=none; b=Wi1Zwc0vjgXqTh4BqNeIwLp+dFL7oloGQXH242gEJnSf/J8n6HXi+lsqfed3cF3ODX9uikOQqqm4+3jqndKtplVSdXH4a/h7qiTvpNgEoEB9vfcF167Ss3gwdXaeAI0Zja15peTxHihfMTvZOFrYzVd955Jgqx8Hg6a6tbWBnl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724399654; c=relaxed/simple;
-	bh=o/OpwKFjjA1yEkgqJPpN5d/tMG8m+GDhUM0qxhUcYY8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PzuS7BZ34yT27yvXGGeoEMxuubn3/eexpej/ObR8jH5UcdWl/lUDWHZaFCDJR79fbc/4Z6NQulxt5b4N/w5sTveGORFxsI3ZItEKkLUgNcV7pp7E/TiFqjP5Ic9KlUmVTb59za9Zvo0ZCBaTMh3VC/NWHLmFqk8Gi6hkN23n86Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=g9r4KbF8; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-58ef19aa69dso1982489a12.3
-        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 00:54:11 -0700 (PDT)
+	s=arc-20240116; t=1724399879; c=relaxed/simple;
+	bh=t3lkUJpVNYTLzdIOq2kqdXAXqlBNArJf4oHXt6Y2JBo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X/EgmjlEOwleyLiE6jCYOAS9K8vUIi7AtSDyE8fS3m8RS6OjXtZWdESvEcxyHDKFm6wsOavfzndoZ30xZsquQ7E6kOrkbBMYikxU3sQIzsjOtNAnYpFtp4VZDW+Fn3rTIEbGYSbSVbf5681v+vn33Er+DcN6qb8l5T1Yj5WYdxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=AzDqNmIa; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a86859e2fc0so205577766b.3
+        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 00:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724399650; x=1725004450; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K9F6H3c2NVmBHPEentW34dAviw4YhqEZNXwnJa/lgq4=;
-        b=g9r4KbF8boXqlaHvOateW8bGYMOhm34jwDwKIzmDuP1vp+uaDAMhXYzuv8uRWqW6NU
-         MjQpU5jSy34jCJgQsLy3OfHRHE2J8AD5feeCkPjYbiZym6eyDruMe4iG7rnPOYfD/o+H
-         BLtzTTlheSsMNwT4cNUiRze65dOg2tFpv3MV+MnBt0LfwwoF6nSucA0oQRk0EY9dVBMi
-         qG4Ut+4xYurOL3y2yUSb1yaubM0eSpK7enfDo5saLzwG1C+R5wyWSq4YghqlUp9IuouO
-         LPm25Wnfdv6AGWlXbWDSmlMPCUVTWHdZlxblshHuKgCvMap2fmCwSzJtCo5MW1XzPcCE
-         BriA==
+        d=amarulasolutions.com; s=google; t=1724399876; x=1725004676; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CG70/jC2mzXi0oHgs9Iw5R9O9LyWrgNsejh29CzrB/s=;
+        b=AzDqNmIaLNJECKZz+vTb6R9NrizQp3JS949M+tJwR3xlwtbvqLMuy0tnaWWwzCZ17s
+         UL6TOOY8D+UxgtMyDGgezOQ3tyHjOVVRMzenMxR0ynz3mUYVQsGn74uaHVZkNEfdCaEL
+         W0e8TOV+u6Fro3Qc+zHSCzpG7Na3+r9qKhlW8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724399650; x=1725004450;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K9F6H3c2NVmBHPEentW34dAviw4YhqEZNXwnJa/lgq4=;
-        b=Izg+X3vBQt7EzTOrrJlQaWJlWibrC4XuWHQ7BOsPSG0orFcu0C/qpmSbBb54ZyGlTz
-         3LnwUcwP62Ldre00PubBUk/ut4RYJ6w9I2xpY1ctjyvFiOENGo8JKIbDod87jXcp+VIH
-         Cpcvhi9ixtXTNsNjjyQjw8K3uQwHMT2cwV398nlpjbZjhISV/H+3ayRB3HEeY/EPy/gs
-         nY0ToIxmJ4J+u0nVFnS1kKils27E61M3EKw1gvj+aNO4FdqP3s7Mbb/0VeZct+N1843u
-         343tacuaj+nlCQTST3ebhts7XEm/1Hp+t1eiFL24yzBpWrNH0fyQTMrJgdbjeF2udcUY
-         GmRg==
-X-Forwarded-Encrypted: i=1; AJvYcCXA+NiOHoQjtkuXQkN1Dnsz+kqK5xuVNhPn7RhTW+k+eTksXaIkWH/wwmGlNynmJAvtD02Hzf4T3GQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfMJl07oRfn7F+jG/mGBYCrv6umOKNaOR/EDZrVS4IHRSOfoxQ
-	6iHz9q3VSvDHvYfL1ZpNQjMpWLqLvnUWkgrf+pzr8VlY76RBAj1fLlA3uloy4O0=
-X-Google-Smtp-Source: AGHT+IEoQJnrG7rJ9f2StMomCkVPrYJqe5+JdS66nZak9PuSepkUhwJhO+/TtFtd6qLUxl+/AblgVw==
-X-Received: by 2002:a05:6402:4303:b0:5be:e999:18ab with SMTP id 4fb4d7f45d1cf-5c0891a1ccemr803908a12.23.1724399649843;
-        Fri, 23 Aug 2024 00:54:09 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a3eabe1sm1754112a12.52.2024.08.23.00.54.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2024 00:54:09 -0700 (PDT)
-Message-ID: <0d8b1322-cf15-4ed9-b958-06516bbb64c7@tuxon.dev>
-Date: Fri, 23 Aug 2024 10:54:06 +0300
+        d=1e100.net; s=20230601; t=1724399876; x=1725004676;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CG70/jC2mzXi0oHgs9Iw5R9O9LyWrgNsejh29CzrB/s=;
+        b=GiY8S6WdUrXlJSMPEJuPNBIfRscKAOP0ekNYjsJJ8c1Gl6ggOAf0AJCZFubJhJZ4s/
+         OA5MS/3V+cU6AcBaWdhw4Hsmi1ULtQUSUq1fyGowojWAENS2cXGeCh7LVJjA2mBQXVEA
+         kFMma9RVlMCE6QPb+FUETG0F1hpAo3064YC/1xm9yYwseO7UpmqpYkECrVMW9wQkq9OW
+         QOGru76qeaZ09hRtXi5Lkb5Bb7jFSzimsSq/wsYuLyWP6Kwh3XDrZJKHyLi8/3OWSaYG
+         zVPDNOdwAQ8CIs6Bafh/rPXE6e2yjCRxTt80KUNBYdxqL8/n9xcuw/v002RP3ADdPDbQ
+         9DEg==
+X-Forwarded-Encrypted: i=1; AJvYcCX43P6xFVvCkcCNDa5P6qSVAr1xx/MI1/lYHZHsJKgWlrNxQKu3uwIRFVaD0CHgeDVlVFFQpP//zGw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxz5zXp2knaKrS7uP7P9MDUy18VZHxSZDe/QsGh1cPov9bpe93b
+	VZO1ZO5mxHMwyXcIczy0Ei8qF+CjH2IfEXv79Q1elsf+F+gN7WQLA1DECJPBF98crdn9Pszn7YR
+	rkrmRllUkLXLIIw/StK+NMCA+3Ko4spoEvyc0OQ==
+X-Google-Smtp-Source: AGHT+IGCTEt9qJslktoedJ5myWNlaB5S9MotuCJiG7S/ujvEUKsyZNgSXlQDy9wmRnNuErBP9hV6x1mFDQHb4eYfr+s=
+X-Received: by 2002:a17:907:e2c6:b0:a86:a178:42da with SMTP id
+ a640c23a62f3a-a86a52bb7e4mr88308266b.21.1724399875313; Fri, 23 Aug 2024
+ 00:57:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
- #reset-cells for RZ/G3S
-Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
- magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
- sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
- biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
- <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <TYUPR06MB62171A7BF25AB6963CBA07FED28F2@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <2024082251-grief-profanity-b0da@gregkh> <TYUPR06MB62176043F3E6D6B6675301D3D2882@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <CAOf5uwnz01F28kw12ZN5k3usTcCBMKpFJpAXTaYBZ_3zgWQU3Q@mail.gmail.com> <8ab0ca38-1bf4-ed3e-eef0-cbed2a524b34@quicinc.com>
+In-Reply-To: <8ab0ca38-1bf4-ed3e-eef0-cbed2a524b34@quicinc.com>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Fri, 23 Aug 2024 09:57:44 +0200
+Message-ID: <CAOf5uwmQ_drN9xE88Eyf01kmh=GLwitLCSo7KxiNDE9-h-D0KQ@mail.gmail.com>
+Subject: Re: [PATCH v6] usb: gadget: u_serial: Add null pointer check in
+ gs_read_complete & gs_write_complete
+To: Prashanth K <quic_prashk@quicinc.com>
+Cc: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>, 
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"opensource.kernel" <opensource.kernel@vivo.com>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi, Conor,
+Hi Prashanth
 
-On 22.08.2024 19:42, Conor Dooley wrote:
-> On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> The RZ/G3S System controller has registers to control signals that need
->> to be de-asserted/asserted before/after different SoC areas are power
->> on/off. This signals are implemented as reset signals. For this document
->> the #reset-cells property.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> ---
->>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 ++++++++++++++++
->>  1 file changed, 16 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
->> index 4386b2c3fa4d..6b0bb34485d9 100644
->> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
->> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
->> @@ -42,12 +42,28 @@ properties:
->>        - const: cm33stbyr_int
->>        - const: ca55_deny
->>  
->> +  "#reset-cells":
->> +    const: 1
->> +
->>  required:
->>    - compatible
->>    - reg
->>  
->>  additionalProperties: false
->>  
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: renesas,r9a08g045-sysc
->> +    then:
->> +      required:
->> +        - "#reset-cells"
-> 
-> Given this is new required property on an existing platform, I'd expect
-> some mention of why it used to be okay to not have this but is now
-> required. Did firmware or a bootloader stage take things out of reset?
+On Fri, Aug 23, 2024 at 9:34=E2=80=AFAM Prashanth K <quic_prashk@quicinc.co=
+m> wrote:
+>
+>
+>
+> On 23-08-24 12:28 pm, Michael Nazzareno Trimarchi wrote:
+> > Hi
+> >
+> > On Fri, Aug 23, 2024 at 8:40=E2=80=AFAM =E8=83=A1=E8=BF=9E=E5=8B=A4 <hu=
+lianqin@vivo.com> wrote:
+> >>
+> >> Hello linux community expert:
+> >>
+> >>>> Fixes: c1dca562be8a ("usb gadget: split out serial core")
+> >>>> Cc: stable@vger.kernel.org
+> >>>> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
+> >>>> ---
+> >>>> v6:
+> >>>>   - Update the commit text
+> >>>>   - Add the Fixes tag
+> >>>>   - CC stable kernel
+> >>>>   - Add serial_port_lock protection when checking port pointer
+> >>>>   - Optimize code comments
+> >>>>   - Delete log printing
+> >>
+> >>> You need to list ALL of the versions here, I seem to have missed v4 a=
+nd
+> >>> v5 somewhere so I don't know what changed there.
+> >>
+>
+> [...]
+> >>> nested spinlocks, why?  Did you run this with lockdep enabled to veri=
+fy you aren't hitting a different bug now?
+> >>  Because there is a competition relationship between this function and=
+ the gserial_disconnect function,
+> >>  the gserial_disconnect function first obtains serial_port_lock and th=
+en obtains port->port_lock.
+> >>  The purpose of nesting is to ensure that when gs_read_complete is exe=
+cuted, it can be successfully executed after obtaining serial_port_lock.
+> >>  gserial_disconnect(..)
+> >>  {
+> >>         struct gs_port  *port =3D gser->ioport;
+> >>         ...
+> >>         spin_lock_irqsave(&serial_port_lock, flags);
+> >>         spin_lock(&port->port_lock);
+> >>         ...
+> >>         gser->ioport =3D NULL;   ---> port =3D NULL;
+> >>         ...
+> >>         spin_unlock(&port->port_lock);
+> >>         spin_unlock_irqrestore(&serial_port_lock, flags);
+> >>  }
+> >>
+> >> After enabling the lockdep function (CONFIG_DEBUG_LOCK_ALLOC=3Dy), the=
+re is no lockdep-related warning information.
+> >>
+> >>> And why is one irqsave and one not?  That feels odd, it might be righ=
+t, but you need to document here why the difference.
+> >>  After the gs_read_complete function is executed, spin_unlock_irqresto=
+re is used to restore the previous state=EF=BC=8C
+> >
+> > =E8=83=A1=E8=BF=9E=E5=8B=A4 this is not a common locking pattern that i=
+s the reason that
+> > should be properly described.
+> This pattern was already used on gser_suspend/resume callbacks, this was
+> done because the lock was stored under port (and port itself was
+> becoming null), hence we added a static spinlock to mitigate it.
+> >
+I see now, but why don't disable the endpoint before disconnecting?
 
-On previous SoCs the SYS controller has no support for controlling the
-signals going to different peripherals (USB, PCIE in case of RZ/G3S).
-I'll add a note about this on next version.
+/* disable endpoints, aborting down any active I/O */
+usb_ep_disable(gser->out);
+usb_ep_disable(gser->in);
 
-Thank you,
-Claudiu Beznea
+Michael
 
 
-> 
->> +    else:
->> +      properties:
->> +        "#reset-cells": false
->> +
->>  examples:
->>    - |
->>      #include <dt-bindings/interrupt-controller/arm-gic.h>
->> -- 
->> 2.39.2
->>
+> >> -       /* Queue all received data until the tty layer is ready for it=
+. */
+> >>         spin_lock(&port->port_lock);
+> >> +       spin_unlock(&serial_port_lock);
+> >> +
+> >> +       /* Queue all received data until the tty layer is ready for it=
+. */
+> >>         list_add_tail(&req->list, &port->read_queue);
+> >>         schedule_delayed_work(&port->push, 0);
+> >> -       spin_unlock(&port->port_lock);
+> >> +       spin_unlock_irqrestore(&port->port_lock, flags);   ---> Here w=
+e use spin_unlock_irqrestore to restore the state
+> >>  }
+> >>
+> >> Thanks
+> >
+> > Thank you
+
+
+
+--=20
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
 
