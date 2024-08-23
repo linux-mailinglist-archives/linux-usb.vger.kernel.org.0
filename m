@@ -1,219 +1,243 @@
-Return-Path: <linux-usb+bounces-13927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13928-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BEA895C5EC
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 08:59:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA69C95C682
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:26:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED4E11F235C4
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 06:59:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDC4A1C21B72
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 07:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCBB13A265;
-	Fri, 23 Aug 2024 06:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90AA213C66A;
+	Fri, 23 Aug 2024 07:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="DTm0UDS0"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="E5ETnKCK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010030.outbound.protection.outlook.com [52.101.228.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718A1376E9
-	for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 06:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724396335; cv=none; b=l+yehCmrZwfEwtPijYCLVh7MfvJx4QP4ynS/pcLrqbnTgiIQ5YsABwuLe/bKpQ8CNUvDrzVenW0DYOrfqGA0ydY/JkvGO07so2ZLsKXHVXs6EIDLdb2nvXUxkfABwAX7GdvBGCZDviAXL0NVpaIvgA+3cqfPFGiIH6FbD615T8k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724396335; c=relaxed/simple;
-	bh=x4RcTxS7zfyh4VHyZyqlmz2Rc+bMT15P3mXl4u4J2bo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J0GMHp/MrjnYnarUnKbfBKc4KcHx/6xs+YcexbOGQqQLFDKIA95vn3iWT3c2EhgrzFSGEe1do67y1Eg+BGWS5+nFLERTIrMzpqZN5MwJPfVtaxpZWys5Q/pilzmITp2pf3K2x9QDVs9LCEFBRPhq2qwz5byMBQewqXK6aVLGxgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=DTm0UDS0; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a86a37208b2so69111966b.0
-        for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2024 23:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1724396332; x=1725001132; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tcIxVeXUlcjPdvkVXsSj564WbRYyu4Yc+PxDazeFpqE=;
-        b=DTm0UDS0hge/iB4brm2d1SGUgR/Ap3dIWBWYxZ2zzEYpGCPg2iXRmqZJmJTvHhnpsm
-         jKnf7XdvSJecGT8zoLFy7HoZdY+KhKItw4Qa445DZq/Emu1/2mxdafp8SUFKp1cZnUZ7
-         Lst0Sj41FPIE6lfeenq9GVpZorwpwedrz3XdU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724396332; x=1725001132;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tcIxVeXUlcjPdvkVXsSj564WbRYyu4Yc+PxDazeFpqE=;
-        b=mblWbpjbKdAuadWHxsEA4zLm86EdR0CyfgNhc/P1YgLiRxS5Q3S5kC1Y0P4YL0Xj8M
-         es1UbeCMMIVXwZ3yy/C0c4BJkJ2Fj2T8D/XtbS79cR4pn0Tkf3mwN+suUXFFF43rQGl8
-         DAkSeuGZCvIEdD3/Et4yE2vBySexPRVwjJUoTsbrJJeBXJLxkfhyvdk582Jh+tyHzG/g
-         7nr5bmbxpycxX/lDt7Qf/JsQirV9Dp+cKeD+lvb+5Bj1gfnSNc0PwV63zSDYYZV0HajM
-         eIwJVphBGyqWf3b52WYuH3Z4Qw2DDwF5Tu+bx9xU1b7GNzIZ9k0v0zMSssAIyJT0O5oF
-         Z79w==
-X-Forwarded-Encrypted: i=1; AJvYcCW0mv89AxQaNRZxDOAAELZkKw6Ux7PMh/mc+x0Jah8kdv28BOu43sJ0TWFde8L10XZKLkOclDlMHcM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQxk1AdjbIbV04FfKp4ZVyw9yKQ7KePmDK9uOsPnNYiJwSbcSL
-	WokXuu6CFmrs81uSwx2P3xw7fQ71mZc1QG5rwP+GJf+ohxieYjONGy0wsdDbwv87+T1HMBAICI3
-	+EnWICLtXs2g5d30gcxwSXGTpxw759yo375jRbA==
-X-Google-Smtp-Source: AGHT+IFG+M4ne0xENiIqIcMPBrRLBLgQky0RVUEjz1aXRxZPrsloy3xTC9Z6s3XTTLDlppz5PKUmpwzZQofsdjIJn+k=
-X-Received: by 2002:a17:906:da88:b0:a86:799d:f8d1 with SMTP id
- a640c23a62f3a-a86a54a991cmr93026066b.47.1724396331230; Thu, 22 Aug 2024
- 23:58:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12978131BDF;
+	Fri, 23 Aug 2024 07:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724397973; cv=fail; b=B2qqbHc/uSAgPYPtT+9Hx8Uh464opNZ7wxXuSbx7QWeL9P5tFEsPWKTcYS7FaaFYdh6zA22W3T1/wboVyogTtmffse6Z1hwrcrGv+zTgwoITJS5UnhZqTtsbhU/XdCiR5iV7TqZ8wCUj5hIpAXfybZPO7q9f3+9BN5srkG72vDA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724397973; c=relaxed/simple;
+	bh=hJhW/yMAK8b8Dr0GVHuFWmi9RXeQRyBiLVwiJs+aSHo=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=tCcFTmo17DRn6eLSZSguuUxDqXCRFNvF9Ivi3jTdK5F3XqLrFiJKnt3BH6LoxrgBmK0p7ivlacRRMJSni0mSX0r9hGezvXd0HwXbgR/2h6FUbFbLpAtmoqbuOmOhtf3Wmv/9EHlaOM4AfJob/RmZlOt4NF1YQ1nv7DxxWHpMDRY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=E5ETnKCK; arc=fail smtp.client-ip=52.101.228.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xxAIYV6zIClfVVL3RNPSbwXSgcvgNI74eV63Ev9nK1ywwm0q5EU3TMSrxMHFJCWtcH8Xg/ljWiBOFI/QS2qdqEqgMYJBwjd8kP3dDvUXVhxIY0t+ovYYow57hkAIllS38qYOOroKHsZ7z7d7Fu4bZxm+xYCGuG94r0VmflKynLUiVB5im5OPksPVwXDPJUu7NsS0wBAQmk5yni9D19Sq6QpalgMZEfnSb/pQIbMELh4aSr+yTeNv6ErdH6l6YQJIVhuHMWwHeTOcFF3qE7TQ+qsvwk1l9XJOIefk3/XtmFaiUHvJOvjh/iSOM5t0zznLndsS8Jm2BOkPNR3uE/X8Kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R1bPuOdmf9jDgiaW1SSzsb7d1IqfHSup6uWCF4yiMGU=;
+ b=R69XlTBD+0zXXoyMF4InO6IgLHqcd9lcKE3WES2zVQqr/R+fuBenCm5fOO8GopDjxs0DDVdZ4YZMxezfOtgnZSySKtlRee+EhE8stnEzAQ6Svjo7guo7nY2PkGc1M3RrQgt5BP55faiqmOKxGVzjYSL6De+ihZIS1xiQWwL9MHQtkyAlBAglb3dWPrHAn5li7uY1ynPlq01J/bmJxPjrCuFSUF+4Lt9UaNSbs3eatuT5CAJ9bg02y1xbCfyko8aWTylDawOZE4iR75NKuZ03VMcCqXcD3W/gIghvMqvp/TSwd6ev583TuVkwucrXQq+cfq013QUdZs0YnsmCBAghMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R1bPuOdmf9jDgiaW1SSzsb7d1IqfHSup6uWCF4yiMGU=;
+ b=E5ETnKCKGszqXR7hh5BDhxc28t1DiugcCVtbB3y6WlRWptol19eIVCdf88ZGsecaifOqLVlOg3HVfVahWr8eQRPyoju+TItrABt5HO0kekIDN+A2LjYV25Vi4ZmYQXUpz5/fUofLTEafNVFc42DUkVl8uupqa7wuNPV3/z4eBdg=
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
+ by TYWPR01MB11932.jpnprd01.prod.outlook.com (2603:1096:400:3fa::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Fri, 23 Aug
+ 2024 07:26:01 +0000
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1%6]) with mapi id 15.20.7897.014; Fri, 23 Aug 2024
+ 07:25:59 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Claudiu.Beznea <claudiu.beznea@tuxon.dev>, "vkoul@kernel.org"
+	<vkoul@kernel.org>, "kishon@kernel.org" <kishon@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>, "geert+renesas@glider.be"
+	<geert+renesas@glider.be>, "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
+	<sboyd@kernel.org>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
+CC: "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-clk@vger.kernel.org"
+	<linux-clk@vger.kernel.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, Claudiu.Beznea <claudiu.beznea@tuxon.dev>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: RE: [PATCH 07/16] reset: rzg2l-usbphy-ctrl: Get reset control array
+Thread-Topic: [PATCH 07/16] reset: rzg2l-usbphy-ctrl: Get reset control array
+Thread-Index: AQHa9KfzjUIr6NsDo02njnbQaEM3ZLI0cJ3Q
+Date: Fri, 23 Aug 2024 07:25:59 +0000
+Message-ID:
+ <TY3PR01MB11346900BCCEB55580C2F912086882@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-8-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-8-claudiu.beznea.uj@bp.renesas.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYWPR01MB11932:EE_
+x-ms-office365-filtering-correlation-id: 3227bd2a-0d1f-42e6-8037-08dcc344d60e
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?U1OmEXujYRrCCp407tCpe6aRnV3EXMezddhR1OeyXCj4vhf9dPyTAKLZZ4eg?=
+ =?us-ascii?Q?boN/CA4QS93gLTjnAPC6rjXfr61Zh3KJsT0KlUqVcePvDjfxah6U021iE/9U?=
+ =?us-ascii?Q?CMjzbkXcmuZqQGbKsy+XMeZkgiM6Ru7tLtBuQbd445SD83YAoh9J1Iaqr7BE?=
+ =?us-ascii?Q?YD4jv8JWEBwBGkKEoj5T7DyygHf94WNF/fULrJU+f9TJgJbLfvfr2ozxU903?=
+ =?us-ascii?Q?3wE/vP3WNZ0ltDMIruUBCpHETFDToTvZOdVHNyzWOV+bddpzdUbhrc/Ss3GH?=
+ =?us-ascii?Q?uBV/Cozj4IcFf+Q9M8VwRobprr+Ve2La1a9uloiNoy6nwPf6LOWLcVpLD+oF?=
+ =?us-ascii?Q?5FythC5s6x2bGk2nY1RtozMsBeJPhUy4RL6rJ0aVkKu12UeKGDBinwYHIUVM?=
+ =?us-ascii?Q?0Du+N8ZI8Z9dpl4nwc2LE52jdVK2GQV3C7sYR22O8Ix++t/zrh4eO6Yvs4lH?=
+ =?us-ascii?Q?nSTbu0SzqA0bmpq/e/NOUb1hRzPWYeitqniHhl8M5Pe1uZ6JJE+kgVXIIrNK?=
+ =?us-ascii?Q?dOFQescAQmvYcQG+DnetUEPME01z3DE3ccO9QIixjDCHxpbl6JBLy7Azlge1?=
+ =?us-ascii?Q?V9y2pal3PGjCXm9IlExctN0Y8ImyIjDwjBauXXb/XZbemZQInBPx2NovpkkP?=
+ =?us-ascii?Q?WUACK4r32cyg6dlkRMilEh0qnhAW0mu+JJWpw5OIFK9qTcMb6jCZXfDLT087?=
+ =?us-ascii?Q?Im3euJ/4ETUAtIm+zihr7ujvaZ1zCpJ20YRSril2cjeYVs1dJL09p9XGMYb9?=
+ =?us-ascii?Q?tXkIgCVLmSirK24cSFVrzlW8bo3WrGlkT3gvu9c8CQmJJ8L6QS5CKfiX3Nap?=
+ =?us-ascii?Q?Brg6YHWFHzNUvYxElCzLyyCV0S4I76W+a9dm72O7Xq+eMhGJzGJSLzFAHDyD?=
+ =?us-ascii?Q?70fZ8WzeFmvZo1dUcARA7mYNiXN+HChyY/V9UxoYPdD+zeAvf3FHSrw0Wozj?=
+ =?us-ascii?Q?EG4EXA+mPbusQ0ifhZonV5lWIv40CD71OtBd7HjQuyZJDQbg0Y49cjl7Oc3P?=
+ =?us-ascii?Q?Wp3fBJSZnFieq8vx87O4EX35TUulzhOLvIfcM+yETX+1L/058fhzdTjyM3nf?=
+ =?us-ascii?Q?C5XBQX9u8bLnhd24ZWIV5wgzV047XAUFE4WyLUTgh9bXNVpsACylLZnyvhgL?=
+ =?us-ascii?Q?pfl4Q5udX1AFMDp+OCJsoZDlms2jDZ+sDUGHW+X32MOS2gFHjHdo5GlVKdoD?=
+ =?us-ascii?Q?+EWk7fYTwzrs+ngxTiCyXAuV/5BfNhvPhOKnT75HMVtAW9AW2nZ8B6eAXyp/?=
+ =?us-ascii?Q?k6r/ZloWq75By4PKXj/Mv0XhlaeRmKoV14q98gl0ware0zYGFiDKLvYfIxZv?=
+ =?us-ascii?Q?rbR+331zguXUpFknku+fv4U8HC8j2wvp3o2t7VJ9gsAv2NxCqOXHmXrFUEey?=
+ =?us-ascii?Q?CDnKmRu/BhWxT6/HSng0491OO0//JSSulud9yIvdTAQwJKh7QHqbh+xS5+H5?=
+ =?us-ascii?Q?8PTrDtJg1xQ=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?qeWa8iisbc/qOw0e4XvCRWgJggh4l4xuyz47gMDWRgKQPVLqS5LFwAM6X6GG?=
+ =?us-ascii?Q?0vpIw/4Aku5LsD1AuxA1JmJzZpT2JcsMbb+NfOFSZTXmny03xUcsl1IiBK71?=
+ =?us-ascii?Q?w9BDjF3tcUhPeceuZ4ZQi5TPsyTrIawT9EBrI1Cqn4ZUh1xeHSlAKwjBoSpI?=
+ =?us-ascii?Q?eLFdHGTaFgKByNgk3rZSBsXBZ24dKKPq0cMVENEnm6g/zEqucN7B8h3IaNex?=
+ =?us-ascii?Q?Jra/8i+bqCowttpuOUdXT4JQ3bXI1ReRKwxVXlXwvsXmeO+ONZvXzYmNtPCG?=
+ =?us-ascii?Q?/j4mpL9T2OqiLfulAtb5x1HzlgEf7lby2LUvfXxPe3zO8cnLwMs6eTXOgwKq?=
+ =?us-ascii?Q?cRbW9x8x4UAsnirRBI3k0Phc8ZwIaE2W2dKro69xSd9esLneVjrjc5B+I9N1?=
+ =?us-ascii?Q?WE20bmP1lqPFEPpkFHcF1sBgtgYARCLkKBW2dgMaiufoNE1ZWeASrMufzKHv?=
+ =?us-ascii?Q?NRgfA3DtL7hwuTOpeTcsoO3tHafUfHw4gjKpbhduHRTWSpieCfQwgFvsjbPp?=
+ =?us-ascii?Q?PXyC7j0E44xrTKbMPCzGHZTCsY/lNqYQDlo6T5xMJvxzH8dfsKYtzAKFNona?=
+ =?us-ascii?Q?DpoZOVSyEQd2GmORwi0BVJVbMp9ArOVg19AYMaDkVe8ocZWOKTzyCwRBS4L2?=
+ =?us-ascii?Q?BuFd10G2URBeaZGWx88MstTDnCEMmlD0zLnH3KwrAMcAhx40D9cDiAE8D9Ay?=
+ =?us-ascii?Q?aCjQa5rdgmbdWTa9aB4j3p6vQh3MqHbSdrRptwDmeCMULmDHByJOsdELw108?=
+ =?us-ascii?Q?Z4cqHENjC6QLHhPBT80OaD52S7xKKlU9wUehNdrIv7lN51iorq1SBu8Ybenl?=
+ =?us-ascii?Q?7jfzd+zySCzkthO+2Gi2fuyeAavtlR0UxhaWGFrU79VnuhingdsLpFpSejCf?=
+ =?us-ascii?Q?qDLMc1oHnDrQGcLxxP+Y7Q//N6irLHll8TQQf58KWWcUGdBKfKKsvFEIXCdo?=
+ =?us-ascii?Q?TDS1rxVaQZESK+fdGEgBt0xubJX5RN+jG3drniiqP6LOWX5Gtfsivns4eZ94?=
+ =?us-ascii?Q?rtJEJh6GIt/gu/D27lpLHO4NSMcpjJZ18dj5QTr0zsaMSq72CUN67rjQ5bAD?=
+ =?us-ascii?Q?VVuVR8Ef9jWAgWJxWFIQM7FLrRaWunlJ141W0SOALrIGlPi8LZy0EX+S4Wam?=
+ =?us-ascii?Q?rikPn+DY4TYYdw9WoN4oQ1L3dz9x0IZIUEoQiFji7VWE7Ydz96atq6Ax/oyp?=
+ =?us-ascii?Q?ctkMGD5rF14snQU87219sLYWaKh2iuIaepxQZbr3ABu4mnUO+tJzpSWZsilO?=
+ =?us-ascii?Q?9/VzOTiqYEzQh6bMj2IZqHOSD9GhNXi5BSoU/pNLvRSWTKJB6AQceMHGC2UG?=
+ =?us-ascii?Q?o+nvU/oZf0xUuFPb4iOV/6U5ZpEtPPscdP8Qqh3BjeH5OFI8PZ8eLLLo3Q7l?=
+ =?us-ascii?Q?qQAhRFnxSE2XMNlfzkzDtTmHpPmj44x39bu+i2mZ/ahQXZy3fnx0HvS0hnA1?=
+ =?us-ascii?Q?bI+g35Ws4w0CERHGiFq3DrQKCwVyDGKo5Xkg+NlSpFdrtERKy+oZb5wwS6er?=
+ =?us-ascii?Q?LpDfuTnPgYmwCfuVbNzJFN0O1ZSpsZxjT/SsnRdq9WUd0/pZmf3EwE8Q9+IW?=
+ =?us-ascii?Q?8M+OY5m9vdKvdZgKCE8sh/Hz9+ZzHGSHWJ9nwt6mwpMif52YwOQZwW7BL9Cr?=
+ =?us-ascii?Q?Mg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <TYUPR06MB62171A7BF25AB6963CBA07FED28F2@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024082251-grief-profanity-b0da@gregkh> <TYUPR06MB62176043F3E6D6B6675301D3D2882@TYUPR06MB6217.apcprd06.prod.outlook.com>
-In-Reply-To: <TYUPR06MB62176043F3E6D6B6675301D3D2882@TYUPR06MB6217.apcprd06.prod.outlook.com>
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Fri, 23 Aug 2024 08:58:39 +0200
-Message-ID: <CAOf5uwnz01F28kw12ZN5k3usTcCBMKpFJpAXTaYBZ_3zgWQU3Q@mail.gmail.com>
-Subject: Re: [PATCH v6] usb: gadget: u_serial: Add null pointer check in
- gs_read_complete & gs_write_complete
-To: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, Prashanth K <quic_prashk@quicinc.com>, 
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"opensource.kernel" <opensource.kernel@vivo.com>, 
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3227bd2a-0d1f-42e6-8037-08dcc344d60e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2024 07:25:59.5677
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fKUsscRZISutP/IazBzQyZuMmTF3ufTmJL2PADCcO2QV3EnvM2BqTTcsqFbloI8WUotbstHP3Rfv8+AkIjVGm4n2zCWZwgL64OdXQboXZyo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB11932
 
-Hi
+Hi Claudiu,
 
-On Fri, Aug 23, 2024 at 8:40=E2=80=AFAM =E8=83=A1=E8=BF=9E=E5=8B=A4 <hulian=
-qin@vivo.com> wrote:
->
-> Hello linux community expert:
->
-> >> Fixes: c1dca562be8a ("usb gadget: split out serial core")
-> >> Cc: stable@vger.kernel.org
-> >> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
-> >> ---
-> >> v6:
-> >>   - Update the commit text
-> >>   - Add the Fixes tag
-> >>   - CC stable kernel
-> >>   - Add serial_port_lock protection when checking port pointer
-> >>   - Optimize code comments
-> >>   - Delete log printing
->
-> >You need to list ALL of the versions here, I seem to have missed v4 and
-> >v5 somewhere so I don't know what changed there.
->
->  V4: Add cc stable kernel     >> Cc: stable@vger.kernel.org
->  V5: Add the Fixes tag       >> Fixes: c1dca562be8a ("usb gadget: split o=
-ut serial core")
-> >You can also add the Fixes tag and CC stable kernel, so that it can be
-> >backported to older kernels (such as 5.15) also.
->    ---------  The above two lines are from Prashanth K's comment
->
-> >>  static void gs_read_complete(struct usb_ep *ep, struct usb_request
-> >> *req)  {
-> >> -    struct gs_port  *port =3D ep->driver_data;
-> >> +    struct gs_port  *port;
-> >> +    unsigned long  flags;
-> >> +
-> >> +    spin_lock_irqsave(&serial_port_lock, flags);
-> >> +    port =3D ep->driver_data;
-> >> +
-> >> +    /* When port is NULL, return to avoid panic. */
->
-> >This comment is not needed, it's obvious that you check before dereferen=
-ce.
->  OK, I will delete this comment in the new patch.
->
-> >BUT you can mention that you are trying to check with the race somewhere=
- else, right?  Please do that, and document here where that race is at that=
- you are doing this extra locking for.
->  I don't fully understand what you mean. Are you asking which logic is in=
- competition with this one, causing this port to be null?
->
+> -----Original Message-----
+> From: Claudiu <claudiu.beznea@tuxon.dev>
+> Sent: Thursday, August 22, 2024 4:28 PM
+> Subject: [PATCH 07/16] reset: rzg2l-usbphy-ctrl: Get reset control array
+>=20
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>=20
+> Before accessing the USB area of the RZ/G3S SoC the PWRRDY bit of the SYS=
+_USB_PWRRDY register need to
+> be cleared. When USB area is not used the PWRRDY bit of the SYS_USB_PWRRD=
+Y register need to be set.
+> This register is in the SYSC controller address space and the assert/de-a=
+ssert of the signal handled
+> by SYSC_USB_PWRRDY was implemented as a reset signal.
+>=20
+> The USB modules available on the RZ/G3S SoC that need this bit set are:
+> - USB ch0 (supporting host and peripheral mode)
+> - USB ch2 (supporting host mode)
+> - USBPHY control
+>=20
+> As the USBPHY control is the root device for all the other USB channels (=
+USB ch0, USB ch1) add support
+> to set the PWRRDY for the USB area when initializing the USBPHY control. =
+As this is done though reset
+> signals get the reset array in the USBPHY control driver.
+>=20
 
+Comment applicable, if the USB PWRRDY signal is modelled as reset signal.
 
-> Considering that in some extreme cases, when the unbind operation
-> being executed, gserial_disconnect has already cleared gser->ioport,
-> and the controller has not stopped & pullup 0, sys.usb.config is reset
+There is no user for this patch. The first user is RZ/G3S and is there is n=
+o support yet.
+I think you should merge this patch with next one so that there is a user(R=
+Z/G3S)
+for this patch.
 
-Here few people know what sys.usb.config doing, you should describe properl=
-y
-what is doing. What I can imagine that you unbind and bind to a new gadget
-changing the sys.usb.config. Is that right?
+Cheers,
+Biju
 
-> and the bind operation will be re-executed, calling gs_read_complete,
-> which will result in accessing gser->iport, resulting in a null pointer
-> dereference, add a null pointer check to prevent this situation.
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>  drivers/reset/reset-rzg2l-usbphy-ctrl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/rese=
+t-rzg2l-usbphy-ctrl.c
+> index 1cd157f4f03b..8b64c12f3bec 100644
+> --- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+> +++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+> @@ -132,7 +132,7 @@ static int rzg2l_usbphy_ctrl_probe(struct platform_de=
+vice *pdev)
+>  	if (IS_ERR(regmap))
+>  		return PTR_ERR(regmap);
+>=20
+> -	priv->rstc =3D devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> +	priv->rstc =3D devm_reset_control_array_get_exclusive(&pdev->dev);
+>  	if (IS_ERR(priv->rstc))
+>  		return dev_err_probe(dev, PTR_ERR(priv->rstc),
+>  				     "failed to get reset\n");
+> --
+> 2.39.2
 
-My only question why unbind should not wait for pending urb to be completed=
-,
-before getting in the race?
-
->
-> >> +    if (!port) {
-> >> +            spin_unlock_irqrestore(&serial_port_lock, flags);
-> >> +            return;
-> >> +    }
-> >>
-> >> -    /* Queue all received data until the tty layer is ready for it. *=
-/
-> >>      spin_lock(&port->port_lock);
-> >> +    spin_unlock(&serial_port_lock);
->
-> >nested spinlocks, why?  Did you run this with lockdep enabled to verify =
-you aren't hitting a different bug now?
->  Because there is a competition relationship between this function and th=
-e gserial_disconnect function,
->  the gserial_disconnect function first obtains serial_port_lock and then =
-obtains port->port_lock.
->  The purpose of nesting is to ensure that when gs_read_complete is execut=
-ed, it can be successfully executed after obtaining serial_port_lock.
->  gserial_disconnect(..)
->  {
->         struct gs_port  *port =3D gser->ioport;
->         ...
->         spin_lock_irqsave(&serial_port_lock, flags);
->         spin_lock(&port->port_lock);
->         ...
->         gser->ioport =3D NULL;   ---> port =3D NULL;
->         ...
->         spin_unlock(&port->port_lock);
->         spin_unlock_irqrestore(&serial_port_lock, flags);
->  }
->
-> After enabling the lockdep function (CONFIG_DEBUG_LOCK_ALLOC=3Dy), there =
-is no lockdep-related warning information.
->
-> >And why is one irqsave and one not?  That feels odd, it might be right, =
-but you need to document here why the difference.
->  After the gs_read_complete function is executed, spin_unlock_irqrestore =
-is used to restore the previous state=EF=BC=8C
-
-=E8=83=A1=E8=BF=9E=E5=8B=A4 this is not a common locking pattern that is th=
-e reason that
-should be properly described.
-
-> -       /* Queue all received data until the tty layer is ready for it. *=
-/
->         spin_lock(&port->port_lock);
-> +       spin_unlock(&serial_port_lock);
-> +
-> +       /* Queue all received data until the tty layer is ready for it. *=
-/
->         list_add_tail(&req->list, &port->read_queue);
->         schedule_delayed_work(&port->push, 0);
-> -       spin_unlock(&port->port_lock);
-> +       spin_unlock_irqrestore(&port->port_lock, flags);   ---> Here we u=
-se spin_unlock_irqrestore to restore the state
->  }
->
-> Thanks
-
-Thank you
 
