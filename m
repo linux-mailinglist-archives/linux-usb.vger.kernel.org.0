@@ -1,167 +1,89 @@
-Return-Path: <linux-usb+bounces-13924-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13925-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CAC995C519
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 07:57:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F0CC95C53F
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 08:14:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18FAF282EA8
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 05:57:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85FAAB22234
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 06:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451DA6026A;
-	Fri, 23 Aug 2024 05:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BCED768EC;
+	Fri, 23 Aug 2024 06:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="C0yZSCzD"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lfHDNevy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECA16F305;
-	Fri, 23 Aug 2024 05:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA647345B;
+	Fri, 23 Aug 2024 06:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724392669; cv=none; b=hwKJo9Zo0lw78n+5o7HEpJ1vBQzSGZ5/tHYQFXe2851JtsO1T9lvtvcSyJPpowDHu7r1oLlZhTOmzFOTzO6Ed5MVUlivIcJuRbv6gWpkP9ZDFCdVKSIwf7Dhpij4f6drj6m7Kg1OaE4g+h8OV9vqL0De8ELCEx5LTxqcD2Wqm2s=
+	t=1724393678; cv=none; b=KgO0OSi7rQ1CXb7p1DYS3pQ2sKlliG+g3lMqQXZQhE5ym4yyvfecugrI6jV+CVcnD+aUa+o1WG26UT2wgF3zqZyhCVGxCTFAgJdUXcAOBu8+4++wPzvTfuodneI7zO5u5/T+S2srAPhUqpek2pmZT4JzwxYancUymHV4dwRXBYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724392669; c=relaxed/simple;
-	bh=qKOTiMwnAcsaXcsYIeN5NCeYSDdkBUGq4qsXHEk3XmI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G/VZsVdwSjRQih9NBB6ngC/mh5j49uYyBCKH0tli+Gpbek1D0aHJyNcijKInoPZ8taS2nl+NUtS27HpJURMCSPwYYzCuCvog5IQCd7U0sdwv7ObAULjSMkP1+AvkxF9AEvQrcQDEK5O6YUViZLd9OZaNvrluW6NDGVqN8VTgCO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=C0yZSCzD; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47N2msbo007676;
-	Fri, 23 Aug 2024 05:57:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:message-id:mime-version:subject:to; s=
-	qcppdkim1; bh=V//feCbavFR0yiNBSQY8IK+/h95Nfvq1hfMd0arRUKw=; b=C0
-	yZSCzDMRED6m0TkyjZk8W19cruJP5LqIAF5K5iI9a9f6zrtKBPUyYMBNKfKneyZ5
-	vfhe3/NzB5n1dEc2nDOaeQx2BK9So0+4mEgnUNcLjRCGoGugbEcQiIeiFRy+8FUF
-	tcttUeYiNQWlNRgFqaI+NrXj6bxv1tccdblaGbpEveSRnsg+k84hwgIrzGiipWgO
-	8C6yd2D49+JsIMJnlH6Rg7Pni3At49uGngBi7/alBo21wDZ3aumVuXMem9GjPKjJ
-	1fhJHZJ76ryHlaAuI9F44G/Jb+HUEb22+9ejpAJLJ3Wpeo2bGbo+FB5vXbXmC737
-	+7O8M8/5E/lHrnnqx83Q==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4159yjf355-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 05:57:38 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47N5v3ZM023796
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 05:57:03 GMT
-Received: from hu-uaggarwa-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 22 Aug 2024 22:57:01 -0700
-From: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        "Uttkarsh
- Aggarwal" <quic_uaggarwa@quicinc.com>
-Subject: [PATCH] usb: dwc3: core: Set GUCTL1[29] to ignore single SE0 glitch for FS/LS operation
-Date: Fri, 23 Aug 2024 11:26:42 +0530
-Message-ID: <20240823055642.27638-1-quic_uaggarwa@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1724393678; c=relaxed/simple;
+	bh=7+O/QT9OMuw+bvc3dHqfZlrxUk8r/29ACuYuoGeKbW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fUt5HRT8ThLH5w0CYF1j5XVSC3mdfkF7s4WP2vE/JJHT+LQij8oGbYC1BvIUCo9zgPQNzepdREejQzhib5QBxlIvQ5kJfQN7RZ598dK9ag+yxMxV32NwgUGurCbkA7X1rWDIeaE7HthO3NOrnnfmpafgDh/Q+pcWTuxRuIbcucc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lfHDNevy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B496AC32786;
+	Fri, 23 Aug 2024 06:14:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1724393678;
+	bh=7+O/QT9OMuw+bvc3dHqfZlrxUk8r/29ACuYuoGeKbW8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lfHDNevyPmsrYzPialk455WsSVsEVhY2O1Exk8rW1to8EAoe1jJXdemwSKNDbe6QA
+	 TRsUqy5bHORrghkKqpcJeb2SpN+ZiI74jmFR0uhmnDLgxK6Qzt0SftHHogta64il9X
+	 L0RbuFLT21ISiKIOJcG4UMdDJ3zcJMLhqrpL6XKs=
+Date: Fri, 23 Aug 2024 14:14:35 +0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Faisal Hassan <quic_faisalh@quicinc.com>
+Cc: Johan Hovold <johan@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: fix NULL pointer dereference on
+ dwc3_qcom_read_usb2_speed
+Message-ID: <2024082315-astride-footrest-ab04@gregkh>
+References: <20240813111847.31062-1-quic_faisalh@quicinc.com>
+ <ZscgKygXTFON3lKk@hovoldconsulting.com>
+ <a3facdb7-e38e-4ef0-aff6-3e6aff0f9d88@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: c4n8LsMcm8ejfNBv0jfF7xUBnhFrEQAB
-X-Proofpoint-GUID: c4n8LsMcm8ejfNBv0jfF7xUBnhFrEQAB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-23_03,2024-08-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- priorityscore=1501 suspectscore=0 bulkscore=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=999 adultscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408230041
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3facdb7-e38e-4ef0-aff6-3e6aff0f9d88@quicinc.com>
 
-Currently in few of Qualcomm chips USB LS mouse not detected
-showing following errors:
+On Fri, Aug 23, 2024 at 09:26:18AM +0530, Faisal Hassan wrote:
+> 
+> 
+> On 8/22/2024 4:55 PM, Johan Hovold wrote:
+> > On Tue, Aug 13, 2024 at 04:48:47PM +0530, Faisal Hassan wrote:
+> >> Null pointer dereference occurs when accessing 'hcd' to detect speed
+> >> from dwc3_qcom_suspend after the xhci-hcd is unbound.
+> > 
+> > Why are you unbinding the xhci driver?
+> > 
+> 
+> On our automotive platforms, when preparing for suspend, a script
+> unbinds the xhci driver to remove all devices, ensuring the platform
+> reaches the lowest power state.
 
-[ 81.585361] usb 1-1: Device not responding to setup address.
-[ 81.798676] usb 1-1: device not accepting address 2, error -71
-[ 81.928378] usb 1-1: new low-speed USB device number 3 using xhci-hcd
-[ 82.076248] usb 1-1: Device not responding to setup address.
-[ 82.290630] usb 1-1: Device not responding to setup address.
-[ 82.503877] usb 1-1: device not accepting address 3, error -71
-[ 82.512548] usb usb1-port1: attempt power cycle
+That used to be the case a decade or so ago, but shouldn't be needed
+anymore if your hardware is "sane" and can properly go to sleep.  Why
+not just fix the driver to correctly sleep instead of unloading
+everything?  This would require you to go through the whole
+initialization sequence again when waking up and that can be a long time
+overall, right?
 
-Based on the Logic analyzer waveforms, It has been identified that
-there is skew of about 8nS b/w DP & DM linestate signals
-(o/p of PHY & i/p to controller) at the UTMI interface,
-Due to this controller is seeing SE0 glitch condition,
-this is causing controller to pre-maturely assume that PHY
-has sent all the data & is initiating next packet much early,
-though in reality PHY is still busy sending previous packets.
+thanks,
 
-Enabling the GUCTL1.FILTER_SE0_FSLS_EOP bit29 allows the controller
-to ignore single SE0 glitches on the linestate during transmission.
-Only two or more SE0 signals are recognized as a valid EOP.
-
-When this feature is activated, SE0 signals on the linestate
-are validated over two consecutive UTMI/ULPI clock edges for EOP detection.
-
-Device mode (FS): If GUCTL1.FILTER_SE0_FSLS_EOP is set,
-then for device LPM handshake, the controller ignores single
-SE0 glitch on the linestate during transmit. Only two or more
-SE0 is considered as a valid EOP on FS port.
-
-Host mode (FS/LS): If GUCTL1.FILTER_SE0_FSLS_EOP is set, then
-the controller ignores single SE0 glitch on the linestate during transmit.
-Only two or more SE0 is considered as a valid EOP on FS/LS port.
-
-Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
----
- drivers/usb/dwc3/core.c | 10 ++++++++++
- drivers/usb/dwc3/core.h |  1 +
- 2 files changed, 11 insertions(+)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 3e55838c0001..1edb16d2940c 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -194,6 +194,16 @@ static void __dwc3_set_mode(struct work_struct *work)
- 
- 	switch (desired_dr_role) {
- 	case DWC3_GCTL_PRTCAP_HOST:
-+
-+		/*
-+		 * Setting GUCTL1 bit 29 so that controller
-+		 * will ignore single SE0 glitch on the linestate
-+		 * during transmit.
-+		 */
-+		reg = dwc3_readl(dwc->regs, DWC3_GUCTL1);
-+		reg |= DWC3_GUCTL1_FILTER_SE0_FSLS_EOP;
-+		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
-+
- 		ret = dwc3_host_init(dwc);
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index e3eea965e57b..73e90daafecf 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -271,6 +271,7 @@
- #define DWC3_GUCTL1_PARKMODE_DISABLE_SS		BIT(17)
- #define DWC3_GUCTL1_PARKMODE_DISABLE_HS		BIT(16)
- #define DWC3_GUCTL1_RESUME_OPMODE_HS_HOST	BIT(10)
-+#define DWC3_GUCTL1_FILTER_SE0_FSLS_EOP		BIT(29)
- 
- /* Global Status Register */
- #define DWC3_GSTS_OTG_IP	BIT(10)
--- 
-2.17.1
-
+greg k-h
 
