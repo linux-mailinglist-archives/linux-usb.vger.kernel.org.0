@@ -1,151 +1,133 @@
-Return-Path: <linux-usb+bounces-14003-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DDED95D68F
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 22:04:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3BE895D7F7
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 22:44:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0566E1F26650
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 20:04:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 155861C22D53
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 20:44:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149C81990AB;
-	Fri, 23 Aug 2024 20:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C202E1C7B91;
+	Fri, 23 Aug 2024 20:44:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="REjBGlHD"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YZg3sNwk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C825219885F;
-	Fri, 23 Aug 2024 20:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC091B8EBE
+	for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 20:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724443314; cv=none; b=FzgPPTA2bqEVcbBGut09C3w3LyYJKuQD5HUHVVnQBKNnSWTRNgdD7Hc1c3kJp+E7oIawBnLOZKnH5j1IIItc8z3Av1/EufmuQUFo75+5IFqd9m7pltYILEmXMx+0q8CYI8GZiMcMmDxlYE+4oljRDFJnwJeihkDO12TuoWO1AYc=
+	t=1724445885; cv=none; b=G4o1secfnY5NLBfsuGaM6Q3y9+LkvIFUzDLUcR5NfG4myO0EH0v6HhQ/r09XdlzFjBbVSC5SbBEXSCD3gPMjSsPSf3GpLQS+p4zlU98UN3X+168+Wtze2U7rlVImm1zxY/7FBKP8WgJrewxLtmFM/u1MJRKBxJoxGoqB5kzNzdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724443314; c=relaxed/simple;
-	bh=a9XdbNnhsqmdk2ytxNMqfMWVUfezMJN0Vr05It/qaiM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LXuwxRbT71wTu0WvJr6lkIAEzQshIFs/B3g4MURcM/ACkrV9y8key1BuNgWtZyYc9Qm12WWCFwOri4wKf4j5GrsrLuP6A72rIfhJclqMbQDnaOZo49mXvyF+3ZwlfCvH4qiqjahzEJrJw5s5iO8bkZJYnwCT8JyWJG3i5CBbkNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=REjBGlHD; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47NBU4fG030891;
-	Fri, 23 Aug 2024 20:01:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=wSDtq68I7uDNo/wbJ3iq3q2X
-	ihGqFZxt70raNw8+vJA=; b=REjBGlHDvC1Ar5VW6kQawzYJsupdYm4TPh+NpxeO
-	nrIDz7+C1Ugx9NoYRokS+SLnjSMUH69OCnbh8J2rcrbXE+DyI2AX7LrbYYyv2I5u
-	oajMzAQ3q6Nqao27W0AtvrukpMmuVHJVYW8lB/Pgja5zyB8OtuXaz4kSiiyR1Y7g
-	Z07xZd2hHSi67WJU/Bi/qZPas7cbNVuTj16xjrpJ4E2/mTarfcIQA2fFit+Gawc2
-	kOifQglHZlS5CZeQ+HUBywi5wSwiJdVijfeXbIyjYgZ6pJNocDUHjLb3tqHYMC01
-	KzDe7jdvyqh5EK4V8c4qWvZOE3ut/Eb7IXH/2WdTx89vkA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 415ck9gpy6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 20:01:22 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47NK1Mm5001817
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 20:01:22 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 23 Aug 2024 13:01:21 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <tiwai@suse.com>, <krzk+dt@kernel.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>
-Subject: [PATCH v25 30/33] ALSA: usb-audio: qcom: Use card and PCM index from QMI request
-Date: Fri, 23 Aug 2024 13:00:58 -0700
-Message-ID: <20240823200101.26755-31-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240823200101.26755-1-quic_wcheng@quicinc.com>
-References: <20240823200101.26755-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1724445885; c=relaxed/simple;
+	bh=ZwiuRkNlvL5/cpgehJtrZvPOsmmD7YzQQKxEkRl2Hew=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=olePJ1RIbIesgoZUkISQgq3om5z0idrHhT4mqiMpaPjc20GECLICL4iwaMcaq2H8JgdW0qnP6GjwmnjV3mFdxIrJg0B+vJmFX6GORZc1ymk7W5ELrn+UJkSHpX8gH6d/JWzdVm9YvkX4bZH3hgUpWGRZ2hNHwmYTHZX8BxhdxqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YZg3sNwk; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7a1dcba8142so248191085a.0
+        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 13:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1724445882; x=1725050682; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qHJoSIvn3TQXsP4HGj1BbikslhYUk1pFvCcRMop1S9M=;
+        b=YZg3sNwkNGMeG/eiokK/lIh4Dxw8z5yo9GdIgFeIM03es0JOyx0TKpZdlV31M+jyGs
+         VrjT6an/notCGn+UTWZQIKW75G5dGQvt1hW1ZAFCoRTQErX5TwE8hvN1o9nnyE4C8rql
+         IP9uhWhhuwAIQlk82NFPqQcF22Sf3kYVFDVaA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724445882; x=1725050682;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qHJoSIvn3TQXsP4HGj1BbikslhYUk1pFvCcRMop1S9M=;
+        b=PLg32Da08UaKrdUJq8cz0wLffteLysTxcPIbhxFnSrETC2WzpTzrKEjaX1zXTXjfNU
+         D8ap+ML3G0ZiAyV3v1fdL96czspEH025j6xU1bPGH8OqgGYl3gw7/ugKmIkJvqqyGlyv
+         JY2BQRPgbFKTCkTKgrzwKjKZZEMFSt7t19f4rW1YBD61t2LYqXm5VOftEAJRtb+1jG3Y
+         L6x12fdukJkpV5htRiA0+E3F7Qu28JHlBXxtmEuOhj1qwX1nRY6g40DOyAn9RQpILnHp
+         OuFwLj476c/efeajN4GrDE5w41TbRfnv6AXqPOZ06C68Tf3TOMpJn5jRFanc55rhSFoz
+         qF3A==
+X-Forwarded-Encrypted: i=1; AJvYcCVy110T2Xs6JZUpIjx/J7PmexQP066DgeJdsh3b+y4NquBe7sBkzSbyCuVKbYuQ2P9rOaFhaBOMDO4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx06UsjkHkvN0te/UGVvzwMjjCGETXBeekKecCvaZrkH/oiXyFZ
+	Ewbnqf53mlLYaYHIpjRbtUeke488d4GC3HmIbTm27IYrgRyhJjA2dO1sAxAkh4ldP5cCcmu+CyZ
+	c7ZOip2kGMiThSX6zvcKONt63EM7Ep+eltAWx
+X-Google-Smtp-Source: AGHT+IER+vkUNoi1LrSh0oKYCE+8iNRAFkc0O4BKptBtu1VAQywG251TPcXwcoPrrjWuSke5xL1qPKa71h4z9pa/Llc=
+X-Received: by 2002:a05:620a:1aaa:b0:795:e9cd:f5b8 with SMTP id
+ af79cd13be357-7a67d497dd3mr1281397585a.23.1724445881936; Fri, 23 Aug 2024
+ 13:44:41 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 23 Aug 2024 13:44:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: g4hY__1NnRcF8Y-BhYCKLWScWhqM2jp4
-X-Proofpoint-ORIG-GUID: g4hY__1NnRcF8Y-BhYCKLWScWhqM2jp4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-23_16,2024-08-23_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=0 mlxscore=0 spamscore=0 bulkscore=0 adultscore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408230147
+In-Reply-To: <ZsdNEWX-eeLiokZl@tzungbi-laptop>
+References: <20240819223834.2049862-1-swboyd@chromium.org> <20240819223834.2049862-17-swboyd@chromium.org>
+ <ZsdNEWX-eeLiokZl@tzungbi-laptop>
+From: Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date: Fri, 23 Aug 2024 13:44:41 -0700
+Message-ID: <CAE-0n50Tuxp0WjFoTx+_i1L4cSOajSNHWPh32PPoXvskJByJJg@mail.gmail.com>
+Subject: Re: [PATCH v3 16/17] platform/chrome: cros_ec_typec: Support DP muxing
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev, devicetree@vger.kernel.org, 
+	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, dri-devel@lists.freedesktop.org, 
+	Guenter Roeck <groeck@chromium.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
+	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
+	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Utilize the card and PCM index coming from the USB QMI stream request.
-This field follows what is set by the ASoC USB backend, and could
-potentially carry information about a specific device selected through the
-ASoC USB backend.  The backend also has information about the last USB
-sound device plugged in, so it can choose to select the last device plugged
-in, accordingly.
+Quoting Tzung-Bi Shih (2024-08-22 07:37:05)
+> On Mon, Aug 19, 2024 at 03:38:30PM -0700, Stephen Boyd wrote:
+> > @@ -671,6 +674,20 @@ static int cros_typec_configure_mux(struct cros_typec_data *typec, int port_num,
+> >       if (port->mux_flags == resp.flags && port->role == pd_ctrl->role)
+> >               return 0;
+> >
+> > +     dp_enabled = resp.flags & USB_PD_MUX_DP_ENABLED;
+> > +     hpd_asserted = resp.flags & USB_PD_MUX_HPD_LVL;
+> > +     /*
+> > +      * Assume the first port to have HPD asserted is the one muxed to DP
+> > +      * (i.e. active_port). When there's only one port this delays setting
+> > +      * the active_port until HPD is asserted, but before that the
+> > +      * drm_connector looks disconnected so active_port doesn't need to be
+> > +      * set.
+> > +      */
+> > +     if (dp_bridge && hpd_asserted && !dp_bridge->active_port)
+> > +             dp_bridge->active_port = port;
+> > +
+> > +     is_active_port = !dp_bridge || dp_bridge->active_port == port;
+>
+> Why `!dp_bridge`?  When will `dp_bridge` be NULL?
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/usb/qcom/qc_audio_offload.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+I'll add a comment.
 
-diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-index b76c61678738..b57e152398b2 100644
---- a/sound/usb/qcom/qc_audio_offload.c
-+++ b/sound/usb/qcom/qc_audio_offload.c
-@@ -106,8 +106,6 @@ struct uaudio_qmi_dev {
- 	bool er_mapped;
- 	/* reference count to number of possible consumers */
- 	atomic_t qdev_in_use;
--	/* idx to last udev card number plugged in */
--	unsigned int last_card_num;
- };
- 
- struct uaudio_dev {
-@@ -1255,7 +1253,7 @@ static int prepare_qmi_response(struct snd_usb_substream *subs,
- 
- 	pcm_dev_num = (req_msg->usb_token & QMI_STREAM_REQ_DEV_NUM_MASK) >> 8;
- 	xfer_buf_len = req_msg->xfer_buff_size;
--	card_num = uaudio_qdev->last_card_num;
-+	card_num = (req_msg->usb_token & QMI_STREAM_REQ_CARD_NUM_MASK) >> 16;
- 
- 	if (!uadev[card_num].ctrl_intf) {
- 		dev_err(&subs->dev->dev, "audio ctrl intf info not cached\n");
-@@ -1448,8 +1446,7 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
- 
- 	direction = (req_msg->usb_token & QMI_STREAM_REQ_DIRECTION);
- 	pcm_dev_num = (req_msg->usb_token & QMI_STREAM_REQ_DEV_NUM_MASK) >> 8;
--	pcm_card_num = req_msg->enable ? uaudio_qdev->last_card_num :
--				ffs(uaudio_qdev->card_slot) - 1;
-+	pcm_card_num = (req_msg->usb_token & QMI_STREAM_REQ_CARD_NUM_MASK) >> 16;
- 	if (pcm_card_num >= SNDRV_CARDS) {
- 		ret = -EINVAL;
- 		goto response;
-@@ -1701,7 +1698,6 @@ static void qc_usb_audio_offload_probe(struct snd_usb_audio *chip)
- 		sdev->card_idx = chip->card->number;
- 		sdev->chip_idx = chip->index;
- 
--		uaudio_qdev->last_card_num = chip->card->number;
- 		snd_soc_usb_connect(usb_get_usb_backend(udev), sdev);
- 	}
- 
+'dp_bridge' is NULL when this driver is running on non-DT platforms,
+i.e. ACPI, or there isn't a graph/ports node for this device. The latter
+could happen if there's some AP controlled piece of hardware that is a
+typec switch, connected directly to a usb-c-connector. This is the case
+on Kukui where we send the DP lanes directly to the usb-c-connector.
 
