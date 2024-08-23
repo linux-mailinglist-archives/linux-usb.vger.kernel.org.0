@@ -1,158 +1,113 @@
-Return-Path: <linux-usb+bounces-13958-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13959-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A14F295CC2F
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 14:14:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4126195CE9E
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 16:02:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A0741F23121
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 12:14:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFA58B21180
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 14:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7DCF185930;
-	Fri, 23 Aug 2024 12:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5F71885B6;
+	Fri, 23 Aug 2024 14:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bwCGwkUh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCS6wPLF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A112D14B966;
-	Fri, 23 Aug 2024 12:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1549C17E01F;
+	Fri, 23 Aug 2024 14:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724415236; cv=none; b=idj0fMyrv2pJY5uk8Rl4MJ1oQU2Hl347BMhM2QxE+MVyw6xOykdfpKRcN4kc8BDU358Zto+3aILAk4g+2F0cVlp2S8uSa3D5mzWiAP0Vq+h6+z9dbB7Mi4EaI0WpEngoQtXMzPV9LQgmEjRI3fteAeQtktSthKats7j9ubMUv+8=
+	t=1724421698; cv=none; b=DAJaOKwBBuYAV3nBlD/8k7kn8Pzx601y9nE7gQySOmo6T3uJP6vOrhRFOxgC6635Vsi4X+0LmH4Y1geWTUJEgQ/vAurbuidCAFEkgeCQkK/C4y/P15zMeXJWIpwDGmBWT0vRskkMtiFLGxTU/CX8WMODFYBUGd/8x4Z3qzPUwIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724415236; c=relaxed/simple;
-	bh=mI3ViYU8W1c0NrAvrNrIid+Oc/raH35FJcXxkoolBEU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=pE2N15HOxX1XZlQd3gbzmqFu84aQQMz/zvOCykGusrw9qS8Pr+6zThrpn37QbTfvalZY80LklYU90TSyKrB+qr2sRDG6Aua96eRAJ7cA52M9XaKYfhoy/+vk+LGUyPeeBLNGBdV/nHg8LdCVqNbzLby7MMDodYypeETQ5NBw8lA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bwCGwkUh; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724415235; x=1755951235;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=mI3ViYU8W1c0NrAvrNrIid+Oc/raH35FJcXxkoolBEU=;
-  b=bwCGwkUh00CYrxgnmYQUJ1oCAKU24DgBjUcgwK3CVYAUG7oc3yE6MHeP
-   OwdR/sLBxKmiABAspWOBHC2T3ykkIjVCTwtDVHNc3sRNIk0YvfQO18Qk/
-   frfz7IGgPXX/VwjnetjkGe/UKncB08BO9i0vNvrHc5Co7wl3Ord7FzLQZ
-   WAX0Q8P45TSs2z2u+fWRFckEQSLa/F/01tRC8Bifb+WqQjyQ3baawT02y
-   2NWFx5+/c19owr1Pchw64sIKOjeY9Pd6vuxGHSXfaUS3Ui1CwYAoAEnfC
-   tcCMC6NGoHdM07/K/r0HN8evbvfAvv+Apk0/jOvLDPEXtf1VrIRtLJ+xy
-   g==;
-X-CSE-ConnectionGUID: emD5+ooARM+MlpXE2I/Jiw==
-X-CSE-MsgGUID: Kdiqp6X9T629nsvXYDM+9A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="33447535"
-X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="33447535"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 05:13:54 -0700
-X-CSE-ConnectionGUID: mzmHBCBVTn+fu6CMuLBL1Q==
-X-CSE-MsgGUID: f3uiEE9IQ5agqORUqnP1jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="61787720"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.245.2])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 05:13:50 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 23 Aug 2024 15:13:46 +0300 (EEST)
-To: Mario Limonciello <superm1@kernel.org>
-cc: Bjorn Helgaas <bhelgaas@google.com>, 
-    Mathias Nyman <mathias.nyman@intel.com>, 
-    Mika Westerberg <mika.westerberg@linux.intel.com>, 
-    "open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, 
-    open list <linux-kernel@vger.kernel.org>, 
-    "open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>, 
-    Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v4 2/5] PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in
- pci_dev_wait()
-In-Reply-To: <20240823042508.1057791-4-superm1@kernel.org>
-Message-ID: <764e053f-4d6c-14ab-b0f4-fac22f90bf2e@linux.intel.com>
-References: <20240823042508.1057791-1-superm1@kernel.org> <20240823042508.1057791-4-superm1@kernel.org>
+	s=arc-20240116; t=1724421698; c=relaxed/simple;
+	bh=yyLRPc7BWlh0n3nzjsmQdJGceCFz05ihd1PqC5TEijI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RVioUxia7a3W4udJ3mqlhbKbcETpDBU3p+8z2OQraEDsAT/D1dEE6zonpq7JHtB4ok7NaUOEDSJ2t0fnVgL8liugqthyd+mxjLwzPPORTQnW2dscxcNhjt3t8XZ6GT94eEpjmVnZ4oOhCFgCnPxtfex/3Q7zQ2EiBmCzTczEjSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCS6wPLF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CEAFC32786;
+	Fri, 23 Aug 2024 14:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724421697;
+	bh=yyLRPc7BWlh0n3nzjsmQdJGceCFz05ihd1PqC5TEijI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=DCS6wPLFSuerifA8IL4WydUW8GV0ZNRh2zRpqkQKrelFTrrNN7/7AE5B3zrOxPecD
+	 Nme+BMKFh38O4DGqxL54dBtWMBhPBfJfMn5ZZXEnM4LH6g5u3l2d9KCHXIrLyzm7Yn
+	 UAwdBIy7V8W8tTX6Jp9EaqkDR08t8SwJ36aSNT0IkS1CZs6npNSPiZ3JEuYl3fCnmC
+	 bJ7cmZWvMwdYtQCPEgxjGT42GdoRxONGLPGX4XZ3g8f7hZiJmIcSCgYs2T6BVC9+xC
+	 fOcMH1ZK9xe+/7hlxWe4INB75FZuVKduPStlRJfZPJcvXV2p3fnJaVTsyk7AEGb2UB
+	 +9D9FjQylmZFQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>,
+	Foster Snowhill <forst@pen.gy>,
+	Georgi Valkov <gvalkov@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Sasha Levin <sashal@kernel.org>,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.10 04/24] usbnet: ipheth: race between ipheth_close and error handling
+Date: Fri, 23 Aug 2024 10:00:26 -0400
+Message-ID: <20240823140121.1974012-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240823140121.1974012-1-sashal@kernel.org>
+References: <20240823140121.1974012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.6
+Content-Transfer-Encoding: 8bit
 
-On Thu, 22 Aug 2024, Mario Limonciello wrote:
+From: Oliver Neukum <oneukum@suse.com>
 
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> A device that has gone through a reset may return a value in PCI_COMMAND
-> but that doesn't mean it's finished transitioning to D0.  On devices that
-> support power management explicitly check PCI_PM_CTRL on everything but
-> system resume to ensure the transition happened.
-> 
-> Devices that don't support power management and system resume will
-> continue to use PCI_COMMAND.
+[ Upstream commit e5876b088ba03a62124266fa20d00e65533c7269 ]
 
-It feels part of the coverletter text would belong into this patch.
+ipheth_sndbulk_callback() can submit carrier_work
+as a part of its error handling. That means that
+the driver must make sure that the work is cancelled
+after it has made sure that no more URB can terminate
+with an error condition.
 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/pci/pci.c | 28 ++++++++++++++++++++--------
->  1 file changed, 20 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index e4a7f5dfe6bf4..b7717155e2fd0 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1308,21 +1308,33 @@ static int pci_dev_wait(struct pci_dev *dev, enum pci_reset_type reset_type, int
->  	 * the read (except when CRS SV is enabled and the read was for the
->  	 * Vendor ID; in that case it synthesizes 0x0001 data).
->  	 *
-> -	 * Wait for the device to return a non-CRS completion.  Read the
-> -	 * Command register instead of Vendor ID so we don't have to
-> -	 * contend with the CRS SV value.
-> +	 * Wait for the device to return a non-CRS completion.  On devices
-> +	 * that support PM control and on waits that aren't part of system
-> +	 * resume read the PM control register to ensure the device has
-> +	 * transitioned to D0.  On devices that don't support PM control,
-> +	 * or during system resume read the command register to instead of
-> +	 * Vendor ID so we don't have to contend with the CRS SV value.
->  	 */
->  	for (;;) {
-> -		u32 id;
-> -
->  		if (pci_dev_is_disconnected(dev)) {
->  			pci_dbg(dev, "disconnected; not waiting\n");
->  			return -ENOTTY;
->  		}
->  
-> -		pci_read_config_dword(dev, PCI_COMMAND, &id);
-> -		if (!PCI_POSSIBLE_ERROR(id))
-> -			break;
-> +		if (dev->pm_cap && reset_type != PCI_DEV_WAIT_RESUME) {
-> +			u16 pmcsr;
-> +
-> +			pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> +			if (!PCI_POSSIBLE_ERROR(pmcsr) &&
-> +				(pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D0)
+Hence the order of actions in ipheth_close() needs
+to be inverted.
 
-Misleading indentation.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Foster Snowhill <forst@pen.gy>
+Tested-by: Georgi Valkov <gvalkov@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/ipheth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 687d70cfc5563..6eeef10edadad 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -475,8 +475,8 @@ static int ipheth_close(struct net_device *net)
+ {
+ 	struct ipheth_device *dev = netdev_priv(net);
+ 
+-	cancel_delayed_work_sync(&dev->carrier_work);
+ 	netif_stop_queue(net);
++	cancel_delayed_work_sync(&dev->carrier_work);
+ 	return 0;
+ }
+ 
 -- 
- i.
+2.43.0
 
-> +				break;
-> +		} else {
-> +			u32 id;
-> +
-> +			pci_read_config_dword(dev, PCI_COMMAND, &id);
-> +			if (!PCI_POSSIBLE_ERROR(id))
-> +				break;
-> +		}
->  
->  		if (delay > timeout) {
->  			pci_warn(dev, "not ready %dms after %s; giving up\n",
-> 
 
