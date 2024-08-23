@@ -1,149 +1,152 @@
-Return-Path: <linux-usb+bounces-13978-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13979-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E20095CFB0
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 16:27:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F23F395CFBF
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 16:28:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AFB0281C5D
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 14:27:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BF761F221FC
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 14:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8121B1403;
-	Fri, 23 Aug 2024 14:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10262188A1F;
+	Fri, 23 Aug 2024 14:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdfn/RJK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JM1Zh8FO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2593E188A0F;
-	Fri, 23 Aug 2024 14:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FCC17E01F;
+	Fri, 23 Aug 2024 14:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724422003; cv=none; b=ofpRShC+aDpp26RemBUPe+rHqjlBfRa8KZ+kPuw3yhjdJ67o1+b31dE2SqfVUck5jnPDIv0Kfgsh4q0i1Nb0IepU4CG0zsJ8r2IKAf6bZkHuNpZdMAh793q/nMxheAzjQFCNfDt4MILspChG11RTcXjUJcP7sRxoLoREISkqzvY=
+	t=1724422218; cv=none; b=CrwQ+fhn+k23ZD63YzEX0PzRYhPvuO6PznQqEepGM2P/3YqY+PuuAxHeQcJZ56PsGzcrI+aXJzBerp61/P/m9LxNWRERsgScVXtP33hzJZEipFSO9qk4J90tSEb0etQoEyXm5LdfHljYqdfZfT+gbxE2bBPU1RyiesQtsLszguo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724422003; c=relaxed/simple;
-	bh=Nb2BbHq+1efjpAn+GbZjGdJrBasAPm8DiOu7LApyvV0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qzUeNPuEQ+5WvSXg90KgyP0qs/fAeuuxP1l5spIdqStpavhnr/6NxUQB4+Fy+KleaN0WR6mivj8ZDOEiBkMqANFZXbQK5+YrgoqRY1ctTdAYfEHPlTvDQj9bPGUhmIlH3Nx8KGjZPk5s2MoQ4KkJJjG/M4nXlGbhpz5jMhWQiCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdfn/RJK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62A7C4AF09;
-	Fri, 23 Aug 2024 14:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724422003;
-	bh=Nb2BbHq+1efjpAn+GbZjGdJrBasAPm8DiOu7LApyvV0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cdfn/RJK72HU0c+HHFGujOd/WndJgGSA6ABwf3tEJHnzNRr+wlDrLnQTUPQOnYK33
-	 f0PoOmxOFkXwRB/Cb0gpH7ZuMU4XaEIrMQjCfqeS5VwtKq+2QOKcv7hURKLrghN5w8
-	 jEETIyufTINQJ0oV6TipCd/0YCR+ODxJkt1VTopoNPSOCxcAWA5QS+TFMbcMVdIhCe
-	 V0wHn9HwOmT43UirQpz0rxDitFY+NaThEptzeTgW7IJv6zADin34MlvBVriNLLczlk
-	 Lv7tq4V5pKm2y45YtojqL20KZbEm6Kkdkl/axVQRehJ+GVS65tdcAO1VVbnOlYtzOn
-	 kigohmFDPNSgw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Foster Snowhill <forst@pen.gy>,
-	Georgi Valkov <gvalkov@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Sasha Levin <sashal@kernel.org>,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	oneukum@suse.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 2/6] usbnet: ipheth: fix carrier detection in modes 1 and 4
-Date: Fri, 23 Aug 2024 10:06:23 -0400
-Message-ID: <20240823140636.1976114-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240823140636.1976114-1-sashal@kernel.org>
-References: <20240823140636.1976114-1-sashal@kernel.org>
+	s=arc-20240116; t=1724422218; c=relaxed/simple;
+	bh=VzqXcNJ759Uw818gSbn6I73cmLxqgn7iNqCDboRjbAk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M1Ji8TK6H9LnVF17o8Xan72WZqmbxPvqtgcOABBLLoNbGzPfPL4YJzjSC7jqD8Qn3zXkCG0319SYk2xOkVjIJbU0POZKebHLloKVIJJKEk92k9igIXWxggHh9PoXNCjYNuwzmgo3hp6LdBAHoEhCOZS5fPFnbCqOfe5ViDomyzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JM1Zh8FO; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724422217; x=1755958217;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VzqXcNJ759Uw818gSbn6I73cmLxqgn7iNqCDboRjbAk=;
+  b=JM1Zh8FOP+tWF9h2fYWY4/LF9kw6ss1Hb6BrKLOd2wTaF65wLpRvPaXm
+   csAmJxK+npRaCM6imbASVIylV8J/uJMsdQF/1jPAWIScMhux17wXhqHnE
+   weVQnnxziKTfgnptRh30hesQFOQLjHN/GRZj4OIYLPBH9x7I/O0pnegQZ
+   qrLlG9FtbW+LbQPTcmUZOD/LpB33tkkGOoUQp9r494pswl34ES7PelnPi
+   W9Y1WKMn578zrHDyvUWlVIzmA3DmVG/Dil+no+udpbz2PE7aUTkpykXKv
+   DjrTRp/ZC9doM27bkrPfgcyoIJvL77GBHTs7OcPxij8hLrdIeuQIX7HwD
+   g==;
+X-CSE-ConnectionGUID: K4xJo2oVRNySujoRfosK/A==
+X-CSE-MsgGUID: 9EsboOftSu+KuUhVyYwIxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="34270419"
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="34270419"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 07:10:16 -0700
+X-CSE-ConnectionGUID: wCFesym4TmKvBgkwOXW/zQ==
+X-CSE-MsgGUID: fmOD+iE2TcaOQ418eE3lkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="61825177"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa009.fm.intel.com with SMTP; 23 Aug 2024 07:10:13 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 23 Aug 2024 17:10:12 +0300
+Date: Fri, 23 Aug 2024 17:10:12 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: gregkh@linuxfoundation.org, badhri@google.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kyletso@google.com, rdbabiera@google.com
+Subject: Re: [PATCH v3] usb: roles: add lockdep class key to struct
+ usb_role_switch
+Message-ID: <ZsiYRAJST/2hAju1@kuha.fi.intel.com>
+References: <20240822223717.253433-1-amitsd@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.320
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822223717.253433-1-amitsd@google.com>
 
-From: Foster Snowhill <forst@pen.gy>
+On Thu, Aug 22, 2024 at 03:37:15PM -0700, Amit Sunil Dhamne wrote:
+> There can be multiple role switch devices running on a platform. Given
+> that lockdep is not capable of differentiating between locks of
+> different instances, false positive warnings for circular locking are
+> reported. To prevent this, register unique lockdep key for each of the
+> individual instances.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
-[ Upstream commit 67927a1b255d883881be9467508e0af9a5e0be9d ]
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Apart from the standard "configurations", "interfaces" and "alternate
-interface settings" in USB, iOS devices also have a notion of
-"modes". In different modes, the device exposes a different set of
-available configurations.
+> ---
+> v1->v2
+> - Avoid usage of ifdefs.
+> v2->v3
+> - Removed redundancies.
+> - Completed peer review and added reviewer signature.
+> ---
+>  drivers/usb/roles/class.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+> index d7aa913ceb8a..7aca1ef7f44c 100644
+> --- a/drivers/usb/roles/class.c
+> +++ b/drivers/usb/roles/class.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/usb/role.h>
+>  #include <linux/property.h>
+>  #include <linux/device.h>
+> +#include <linux/lockdep.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/slab.h>
+> @@ -33,6 +34,8 @@ struct usb_role_switch {
+>  	usb_role_switch_set_t set;
+>  	usb_role_switch_get_t get;
+>  	bool allow_userspace_control;
+> +
+> +	struct lock_class_key key;
+>  };
+>  
+>  #define to_role_switch(d)	container_of(d, struct usb_role_switch, dev)
+> @@ -396,6 +399,9 @@ usb_role_switch_register(struct device *parent,
+>  
+>  	sw->registered = true;
+>  
+> +	lockdep_register_key(&sw->key);
+> +	lockdep_set_class(&sw->lock, &sw->key);
+> +
+>  	/* TODO: Symlinks for the host port and the device controller. */
+>  
+>  	return sw;
+> @@ -412,6 +418,9 @@ void usb_role_switch_unregister(struct usb_role_switch *sw)
+>  {
+>  	if (IS_ERR_OR_NULL(sw))
+>  		return;
+> +
+> +	lockdep_unregister_key(&sw->key);
+> +
+>  	sw->registered = false;
+>  	if (dev_fwnode(&sw->dev))
+>  		component_del(&sw->dev, &connector_ops);
+> 
+> base-commit: ca7df2c7bb5f83fe46aa9ce998b7352c6b28f3a1
+> -- 
+> 2.46.0.184.g6999bdac58-goog
 
-Depending on the iOS version, and depending on the current mode, the
-length and contents of the carrier state control message differs:
-
-* 1 byte (seen on iOS 4.2.1, 8.4):
-    * 03: carrier off (mode 0)
-    * 04: carrier on (mode 0)
-* 3 bytes (seen on iOS 10.3.4, 15.7.6):
-    * 03 03 03: carrier off (mode 0)
-    * 04 04 03: carrier on (mode 0)
-* 4 bytes (seen on iOS 16.5, 17.6):
-    * 03 03 03 00: carrier off (mode 0)
-    * 04 03 03 00: carrier off (mode 1)
-    * 06 03 03 00: carrier off (mode 4)
-    * 04 04 03 04: carrier on (mode 0 and 1)
-    * 06 04 03 04: carrier on (mode 4)
-
-Before this change, the driver always used the first byte of the
-response to determine carrier state.
-
-From this larger sample, the first byte seems to indicate the number of
-available USB configurations in the current mode (with the exception of
-the default mode 0), and in some cases (namely mode 1 and 4) does not
-correlate with the carrier state.
-
-Previous logic erroneously counted `04 03 03 00` as "carrier on" and
-`06 04 03 04` as "carrier off" on iOS versions that support mode 1 and
-mode 4 respectively.
-
-Only modes 0, 1 and 4 expose the USB Ethernet interfaces necessary for
-the ipheth driver.
-
-Check the second byte of the control message where possible, and fall
-back to checking the first byte on older iOS versions.
-
-Signed-off-by: Foster Snowhill <forst@pen.gy>
-Tested-by: Georgi Valkov <gvalkov@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/ipheth.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index c762335587a43..43db0f37f1951 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -307,13 +307,14 @@ static int ipheth_carrier_set(struct ipheth_device *dev)
- 			0x02, /* index */
- 			dev->ctrl_buf, IPHETH_CTRL_BUF_SIZE,
- 			IPHETH_CTRL_TIMEOUT);
--	if (retval < 0) {
-+	if (retval <= 0) {
- 		dev_err(&dev->intf->dev, "%s: usb_control_msg: %d\n",
- 			__func__, retval);
- 		return retval;
- 	}
- 
--	if (dev->ctrl_buf[0] == IPHETH_CARRIER_ON) {
-+	if ((retval == 1 && dev->ctrl_buf[0] == IPHETH_CARRIER_ON) ||
-+	    (retval >= 2 && dev->ctrl_buf[1] == IPHETH_CARRIER_ON)) {
- 		netif_carrier_on(dev->net);
- 		if (dev->tx_urb->status != -EINPROGRESS)
- 			netif_wake_queue(dev->net);
 -- 
-2.43.0
-
+heikki
 
