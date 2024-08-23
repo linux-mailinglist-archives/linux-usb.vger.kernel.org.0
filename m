@@ -1,183 +1,408 @@
-Return-Path: <linux-usb+bounces-13949-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13950-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 603C395C92F
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 11:26:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE9F695C986
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 11:45:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E96D51F24B3F
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:26:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36B43B210E6
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:45:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7009014F9F1;
-	Fri, 23 Aug 2024 09:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B599D14A092;
+	Fri, 23 Aug 2024 09:45:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UF+I0aum"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="HaG1yV53"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA639139D00;
-	Fri, 23 Aug 2024 09:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1916145B00;
+	Fri, 23 Aug 2024 09:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724405167; cv=none; b=fq1O1k4TnnEVXi0GHChox+giX03+RUhhMbUznb1KTJAU/kLawf4AvZGXjO56fgnEgWbKM6X5KmSVfmbey3uLssQ8hKc6ezswJCDP0Q2KFAxwfg25e8EFrubrvCW41HXPtMZXDyweU4hB9hF1lfmrJ7v7/QV3dyw3bA83pnWnTTE=
+	t=1724406337; cv=none; b=A557G87fWUK1eQL4nZC2ffeRAAr9NPzVirHOVpwXsfBkMrc8ZwW0TxgrX0lkK/rlqW8P9vMfX3Ed+4q0XLK+xGiZj7G3Wbf6esPffpa1k+Ee2LonakBJctAS/SyIguIgRYo5DmT6TYf4w0zZ+BC6Ovi4mYCbamsiuOdV6U8ZKeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724405167; c=relaxed/simple;
-	bh=KKURVbxpG44VWHQ8FWkQZv5L5eQkvOOa/qKmI5gdZ0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=HASEVOzezru+lVdWOoZsXYT2XpeBuugwlVI3MR5SprByP0AXTlaSYYlU3s0Vt4jpjc7GKYuMfPNmRb87jm9fnvjSO7JoN32H0LXYWl4lYSC1LGok0xxTubyh/MEvIceNtNAAiuIQ5WA1OKyCqurtJ8cKQczN71RlPFi1gwhKus4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UF+I0aum; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47MNa5fK020311;
-	Fri, 23 Aug 2024 09:25:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vAHQCZzWqtt2MygJQz2IfCsu8bOuoX9ZCdyweAATd5I=; b=UF+I0aum+7h0M1At
-	GPHAGk9sxJyxFaXgF6DZp9pYGH/2ZwtGEjeuCZzspoxJSrqjyBpKSxuKtwqbAH40
-	npkMXtyPbGhASCPknWP//BRt1fOZ4s56I440JrwmHUZo+c9ME2CayuCX/FU8159A
-	nMOiBcUiRuVV8j59X1wFu52GropvRM0Aj87FARUsWpEWBXNXpgrG+c/XmPb1oGjL
-	VHbpJOsmZHu+JNib1DM+2a6KDRcbVZ5XvZpkQYT9c8CrzJPbmSuaYw4+FSbGEujG
-	I0YRl++nsGxmrTY2NZ3OBNLxdVEOVNLKB+aJzjH22z9d9uOk5U7VHqiFTwrSkHUl
-	5wTNQQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 415bkwfb2e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 09:25:55 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47N9PsrN032446
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 09:25:54 GMT
-Received: from [10.216.13.157] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 23 Aug
- 2024 02:25:51 -0700
-Message-ID: <64ad7661-4551-7b00-604b-6e15da23a1c7@quicinc.com>
-Date: Fri, 23 Aug 2024 14:55:47 +0530
+	s=arc-20240116; t=1724406337; c=relaxed/simple;
+	bh=TVFqLU4BQR7t4QSeOgHPuduMP9qPGrYZMv98oK3Bm/Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IX64v61R7tmfuo6/5W47xmCABqUF28a4p48BbeYcGTj4nkLDB7/Vjr80UORLyJZtJFU356Tmh02ma5mIuVD6srzDHmOnnhCcmS6yi1MNcVBZhqS6ylPQFWbEG3P78ECNyLf7bxAVnm7QJRANbwCYnj1+IOO5zyJa4uf8AKglXQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=HaG1yV53; arc=none smtp.client-ip=80.12.242.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id hQrDsSkyGQaX2hQrEstUJe; Fri, 23 Aug 2024 11:45:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1724406326;
+	bh=aPj9/nQrWVCBqBacsw++RJ6mloODfSakma0eIz4MPgE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=HaG1yV53Ybd4FyM0Yk/jr11Vh6UIKD2pHYqCFBD+yxeslD8ubacunO4bmE3Ekyq2B
+	 RcCKUS46uDs0ae2bAMDs/99IMFYjIhGNGJaA+VCHuExmfAUrR3YNlZiXUR9lQTswtL
+	 uXCAw6IEmnC8YYOK+Y3VpHz4M2+4RZxnZX0TMURmFRnMeTV1E9TDUNXQnjesnyX+wo
+	 2ywXkMn7NgMEcf1NJUW8UrY6itc5PADed899EpKZkvEhEf7kWJpwaN2hBMv2HdM3kv
+	 2FcN7ZQxAClhHYXzYJJBopcUSJCk9Fz0A/yXarOcNCWizEmNZwqBF4YCxKUskEc4Q0
+	 4oyl4fRyvUM0A==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Fri, 23 Aug 2024 11:45:26 +0200
+X-ME-IP: 90.11.132.44
+Message-ID: <645bd24f-b86e-4cc1-b65f-7b48d81e633e@wanadoo.fr>
+Date: Fri, 23 Aug 2024 11:45:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6] usb: gadget: u_serial: Add null pointer check in
- gs_read_complete & gs_write_complete
-Content-Language: en-US
-To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-CC: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        opensource.kernel <opensource.kernel@vivo.com>,
-        "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>
-References: <TYUPR06MB62171A7BF25AB6963CBA07FED28F2@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <2024082251-grief-profanity-b0da@gregkh>
- <TYUPR06MB62176043F3E6D6B6675301D3D2882@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <CAOf5uwnz01F28kw12ZN5k3usTcCBMKpFJpAXTaYBZ_3zgWQU3Q@mail.gmail.com>
- <8ab0ca38-1bf4-ed3e-eef0-cbed2a524b34@quicinc.com>
- <CAOf5uwmQ_drN9xE88Eyf01kmh=GLwitLCSo7KxiNDE9-h-D0KQ@mail.gmail.com>
-From: Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <CAOf5uwmQ_drN9xE88Eyf01kmh=GLwitLCSo7KxiNDE9-h-D0KQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 2/3] net/9p/usbg: Add new usb gadget function transport
+To: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc: andrzej.p@collabora.com, asmadeus@codewreck.org, corbet@lwn.net,
+ ericvh@kernel.org, gregkh@linuxfoundation.org, kernel@pengutronix.de,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux_oss@crudebyte.com, lucho@ionkov.net,
+ v9fs@lists.linux.dev
+References: <20240116-ml-topic-u9p-v9-0-93d73f47b76b@pengutronix.de>
+ <20240116-ml-topic-u9p-v9-2-93d73f47b76b@pengutronix.de>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240116-ml-topic-u9p-v9-2-93d73f47b76b@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: e1m-iiWoz4GnVk8S904-SNy0nI59qEZL
-X-Proofpoint-GUID: e1m-iiWoz4GnVk8S904-SNy0nI59qEZL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-23_06,2024-08-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- mlxscore=0 mlxlogscore=686 bulkscore=0 malwarescore=0 priorityscore=1501
- adultscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408230068
 
+Le 23/08/2024 à 09:36, Michael Grzeschik a écrit :
+> Add the new gadget function for 9pfs transport. This function is
+> defining an simple 9pfs transport interface that consists of one in and
+> one out endpoint. The endpoints transmit and receive the 9pfs protocol
+> payload when mounting a 9p filesystem over usb.
+> 
+> Tested-by: Andrzej Pietrasiewicz <andrzej.p-ZGY8ohtN/8qB+jHODAdFcQ@public.gmane.org>
+> Signed-off-by: Michael Grzeschik <m.grzeschik-bIcnvbaLZ9MEGnE8C9+IrQ@public.gmane.org>
+> 
+> ---
 
+Hi,
 
-On 23-08-24 01:27 pm, Michael Nazzareno Trimarchi wrote:
-> Hi Prashanth
-> 
-> On Fri, Aug 23, 2024 at 9:34 AM Prashanth K <quic_prashk@quicinc.com> wrote:
->>
->>
->>
->> On 23-08-24 12:28 pm, Michael Nazzareno Trimarchi wrote:
->>> Hi
->>>
->>> On Fri, Aug 23, 2024 at 8:40 AM 胡连勤 <hulianqin@vivo.com> wrote:
->>>>
->>>> Hello linux community expert:
->>>>
->>>>>> Fixes: c1dca562be8a ("usb gadget: split out serial core")
->>>>>> Cc: stable@vger.kernel.org
->>>>>> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
->>>>>> ---
->>>>>> v6:
->>>>>>   - Update the commit text
->>>>>>   - Add the Fixes tag
->>>>>>   - CC stable kernel
->>>>>>   - Add serial_port_lock protection when checking port pointer
->>>>>>   - Optimize code comments
->>>>>>   - Delete log printing
->>>>
->>>>> You need to list ALL of the versions here, I seem to have missed v4 and
->>>>> v5 somewhere so I don't know what changed there.
->>>>
->>
->> [...]
->>>>> nested spinlocks, why?  Did you run this with lockdep enabled to verify you aren't hitting a different bug now?
->>>>  Because there is a competition relationship between this function and the gserial_disconnect function,
->>>>  the gserial_disconnect function first obtains serial_port_lock and then obtains port->port_lock.
->>>>  The purpose of nesting is to ensure that when gs_read_complete is executed, it can be successfully executed after obtaining serial_port_lock.
->>>>  gserial_disconnect(..)
->>>>  {
->>>>         struct gs_port  *port = gser->ioport;
->>>>         ...
->>>>         spin_lock_irqsave(&serial_port_lock, flags);
->>>>         spin_lock(&port->port_lock);
->>>>         ...
->>>>         gser->ioport = NULL;   ---> port = NULL;
->>>>         ...
->>>>         spin_unlock(&port->port_lock);
->>>>         spin_unlock_irqrestore(&serial_port_lock, flags);
->>>>  }
->>>>
->>>> After enabling the lockdep function (CONFIG_DEBUG_LOCK_ALLOC=y), there is no lockdep-related warning information.
->>>>
->>>>> And why is one irqsave and one not?  That feels odd, it might be right, but you need to document here why the difference.
->>>>  After the gs_read_complete function is executed, spin_unlock_irqrestore is used to restore the previous state，
->>>
->>> 胡连勤 this is not a common locking pattern that is the reason that
->>> should be properly described.
->> This pattern was already used on gser_suspend/resume callbacks, this was
->> done because the lock was stored under port (and port itself was
->> becoming null), hence we added a static spinlock to mitigate it.
->>>
-> I see now, but why don't disable the endpoint before disconnecting?
-> 
-> /* disable endpoints, aborting down any active I/O */
-> usb_ep_disable(gser->out);
-> usb_ep_disable(gser->in);
-> 
-> Michael
-> 
-Not sure about this case, I think generally we need stop IO before
-disabling EP, otherwise TX/RX functions may queue requests while EP is
-getting disabled, thats why i think port is removed before ep_disable.
-Moreover these callbacks (complete/suspend/resume etc) comes from UDC
-and can be async, so better to use locks to prevent these kind of races.
+a few nitpicks below and 1 or 2 real questions.
 
-Regards,
-Prashanth K
+> +#include <linux/slab.h>
+> +#include <linux/kernel.h>
+> +#include <linux/device.h>
+> +#include <linux/module.h>
+> +#include <linux/err.h>
+> +#include <linux/usb/composite.h>
+> +#include <linux/usb/func_utils.h>
+> +#include <linux/completion.h>
+
+Keep it in alphabetic order?
+
+> +
+> +#include <net/9p/9p.h>
+> +#include <net/9p/client.h>
+> +#include <net/9p/transport.h>
+> +
+
+...
+
+> +static void usb9pfs_tx_complete(struct usb_ep *ep, struct usb_request *req)
+> +{
+> +	struct f_usb9pfs *usb9pfs = ep->driver_data;
+> +	struct usb_composite_dev *cdev = usb9pfs->function.config->cdev;
+> +	struct p9_req_t *p9_tx_req = req->context;
+> +	unsigned long flags;
+> +
+> +	/* reset zero packages */
+> +	req->zero = 0;
+> +
+> +	if (req->status) {
+> +		dev_err(&cdev->gadget->dev, "%s usb9pfs complete --> %d, %d/%d\n",
+> +			ep->name, req->status, req->actual, req->length);
+> +		return;
+> +	}
+> +
+> +	dev_dbg(&cdev->gadget->dev, "%s usb9pfs complete --> %d, %d/%d\n",
+> +		ep->name, req->status, req->actual, req->length);
+> +
+> +	spin_lock_irqsave(&usb9pfs->lock, flags);
+> +	WRITE_ONCE(p9_tx_req->status, REQ_STATUS_SENT);
+> +
+> +	p9_req_put(usb9pfs->client, p9_tx_req);
+> +
+> +	spin_unlock_irqrestore(&usb9pfs->lock, flags);
+> +
+> +	complete(&usb9pfs->send);
+> +
+> +	return;
+
+Is it needed?
+
+> +}
+
+...
+
+> +static void usb9pfs_rx_complete(struct usb_ep *ep, struct usb_request *req)
+> +{
+> +	struct f_usb9pfs *usb9pfs = ep->driver_data;
+> +	struct usb_composite_dev *cdev = usb9pfs->function.config->cdev;
+> +	struct p9_req_t *p9_rx_req;
+> +
+> +	if (req->status) {
+> +		dev_err(&cdev->gadget->dev, "%s usb9pfs complete --> %d, %d/%d\n",
+> +			ep->name, req->status, req->actual, req->length);
+> +		return;
+> +	}
+> +
+> +	p9_rx_req = usb9pfs_rx_header(usb9pfs, req->buf);
+> +	if (!p9_rx_req) {
+> +		return;
+> +	}
+
+The { } could be removd.
+
+> +
+> +	memcpy(p9_rx_req->rc.sdata, req->buf, req->actual);
+> +
+> +	p9_rx_req->rc.size = req->actual;
+> +
+> +	p9_client_cb(usb9pfs->client, p9_rx_req, REQ_STATUS_RCVD);
+> +	p9_req_put(usb9pfs->client, p9_rx_req);
+> +
+> +	complete(&usb9pfs->received);
+> +
+> +	return;
+
+Is it needed?
+
+> +}
+
+...
+
+> +static int alloc_requests(struct usb_composite_dev *cdev,
+> +			  struct f_usb9pfs *usb9pfs)
+> +{
+> +	int ret = 0;
+> +
+> +	usb9pfs->in_req = usb_ep_alloc_request(usb9pfs->in_ep, GFP_ATOMIC);
+> +	if (!usb9pfs->in_req) {
+> +		ret = -ENOENT;
+> +		goto fail;
+> +	}
+> +
+> +	usb9pfs->out_req = alloc_ep_req(usb9pfs->out_ep, usb9pfs->buflen);
+> +	if (!usb9pfs->out_req) {
+> +		ret = -ENOENT;
+> +		goto fail_in;
+> +	}
+> +
+> +	usb9pfs->in_req->complete = usb9pfs_tx_complete;
+> +	usb9pfs->out_req->complete = usb9pfs_rx_complete;
+> +
+> +	/* length will be set in complete routine */
+> +	usb9pfs->in_req->context = usb9pfs;
+> +	usb9pfs->out_req->context = usb9pfs;
+> +
+> +	return ret;
+
+return 0; to be more explicit?
+(and would avoid the = 0 when declared)
+
+> +
+> +fail_in:
+> +	usb_ep_free_request(usb9pfs->in_ep, usb9pfs->in_req);
+> +fail:
+> +	return ret;
+> +}
+> +
+> +static int enable_endpoint(struct usb_composite_dev *cdev,
+> +			   struct f_usb9pfs *usb9pfs, struct usb_ep *ep)
+> +{
+> +	int ret;
+> +
+> +	ret = config_ep_by_speed(cdev->gadget, &usb9pfs->function, ep);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = usb_ep_enable(ep);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ep->driver_data = usb9pfs;
+> +
+> +	return ret;
+
+return 0; to be more explicit?
+
+> +}
+
+...
+
+> +static int p9_usbg_create(struct p9_client *client, const char *devname, char *args)
+> +{
+> +	struct f_usb9pfs_dev *dev;
+> +	struct f_usb9pfs_dev *tmp;
+> +	struct f_usb9pfs *usb9pfs;
+> +	struct usb_function *f;
+> +	int ret = -ENOENT;
+> +	int found = 0;
+> +
+> +	if (!devname)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&usb9pfs_lock);
+
+Using cleanup.h would simplify locking in early exit paths.
+
+> +	list_for_each_entry_safe(dev, tmp, &usbg_instance_list, usb9pfs_instance) {
+
+Why the _safe version is used here?
+The list is not modify here directly.
+
+> +		if (!strncmp(devname, dev->tag, strlen(devname))) {
+> +			if (!dev->inuse) {
+> +				dev->inuse = true;
+> +				found = 1;
+> +				break;
+> +			}
+> +			ret = -EBUSY;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (!found) {
+> +		mutex_unlock(&usb9pfs_lock);
+> +		pr_err("no channels available for device %s\n", devname);
+> +		return ret;
+> +	}
+> +
+> +	usb9pfs = dev->usb9pfs;
+> +	if (!usb9pfs) {
+> +		mutex_unlock(&usb9pfs_lock);
+> +		return -EINVAL;
+> +	}
+> +
+> +	f = &usb9pfs->function;
+> +
+> +	client->trans = (void *)usb9pfs;
+> +	if (!usb9pfs->in_req)
+> +		client->status = Disconnected;
+> +	else
+> +		client->status = Connected;
+> +	usb9pfs->client = client;
+> +
+> +	client->trans_mod->maxsize = usb9pfs->buflen;
+> +
+> +	complete(&usb9pfs->received);
+> +	mutex_unlock(&usb9pfs_lock);
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static ssize_t f_usb9pfs_opts_buflen_show(struct config_item *item, char *page)
+> +{
+> +	struct f_usb9pfs_opts *opts = to_f_usb9pfs_opts(item);
+> +	int ret;
+> +
+> +	mutex_lock(&opts->lock);
+> +	ret = sprintf(page, "%d\n", opts->buflen);
+
+sysfs_emit()?
+
+> +	mutex_unlock(&opts->lock);
+> +
+> +	return ret;
+> +}
+
+...
+
+> +static struct f_usb9pfs_dev *_usb9pfs_do_find_dev(const char *tag)
+> +{
+> +	struct f_usb9pfs_dev *usb9pfs_dev;
+> +	struct f_usb9pfs_dev *tmp;
+> +
+> +	if (!tag)
+> +		return NULL;
+> +
+> +	list_for_each_entry_safe(usb9pfs_dev, tmp, &usbg_instance_list, usb9pfs_instance) {
+
+Why the _safe version is used here?
+The list is not modify here directly.
+
+> +		if (strcmp(usb9pfs_dev->tag, tag) == 0)
+> +			return usb9pfs_dev;
+> +	}
+> +
+> +	return NULL;
+> +}
+
+...
+
+> +static void usb9pfs_free_instance(struct usb_function_instance *fi)
+> +{
+> +	struct f_usb9pfs_opts *usb9pfs_opts =
+> +		container_of(fi, struct f_usb9pfs_opts, func_inst);
+> +	struct f_usb9pfs_dev *dev = usb9pfs_opts->dev;
+> +
+> +	list_del(&dev->usb9pfs_instance);
+
+When it is added in the usbg_instance_list list below, it is protected 
+by the usb9pfs_lock mutex. Should it be also protected when it is removed?
+
+> +	kfree(usb9pfs_opts);
+> +}
+> +
+> +static struct usb_function_instance *usb9pfs_alloc_instance(void)
+> +{
+> +	struct f_usb9pfs_opts *usb9pfs_opts;
+> +	struct f_usb9pfs_dev *dev;
+> +
+> +	usb9pfs_opts = kzalloc(sizeof(*usb9pfs_opts), GFP_KERNEL);
+> +	if (!usb9pfs_opts)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	mutex_init(&usb9pfs_opts->lock);
+> +
+> +	usb9pfs_opts->func_inst.set_inst_name = usb9pfs_set_inst_tag;
+> +	usb9pfs_opts->func_inst.free_func_inst = usb9pfs_free_instance;
+> +
+> +	usb9pfs_opts->buflen = DEFAULT_BUFLEN;
+> +
+> +	mutex_lock(&usb9pfs_lock);
+> +	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+
+If kzalloc() was called outside of the mutex, it would be slightly 
+simpler, IMHO.
+
+> +	if (IS_ERR(dev)) {
+> +		mutex_unlock(&usb9pfs_lock);
+> +		kfree(usb9pfs_opts);
+> +		return ERR_CAST(dev);
+> +	}
+> +	list_add_tail(&dev->usb9pfs_instance, &usbg_instance_list);
+> +	mutex_unlock(&usb9pfs_lock);
+> +
+> +	usb9pfs_opts->dev = dev;
+> +	dev->opts = usb9pfs_opts;
+
+'dev' is added to the usbg_instance_list list within a mutex section, so 
+it looks possible that this list is also accessed from somewhere else.
+
+Would it make sense to initialize dev->opts also within the mutex 
+section, to avoid concurrent access to this new item, when dev->opts is 
+still NULL?
+
+> +
+> +	config_group_init_type_name(&usb9pfs_opts->func_inst.group, "",
+> +				    &usb9pfs_func_type);
+> +
+> +	return &usb9pfs_opts->func_inst;
+> +}
+
+...
+
+CJ
+
 
