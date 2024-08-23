@@ -1,353 +1,212 @@
-Return-Path: <linux-usb+bounces-13930-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-13932-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8821F95C69B
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:36:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3829495C6A2
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 09:37:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADDF91C23358
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 07:36:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E23782858DA
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2024 07:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750FA13C9C7;
-	Fri, 23 Aug 2024 07:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="nPX3/8/f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C8C813D518;
+	Fri, 23 Aug 2024 07:37:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010032.outbound.protection.outlook.com [52.101.229.32])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D08136E2E;
-	Fri, 23 Aug 2024 07:35:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724398558; cv=fail; b=UzojTItf8GdzXwVUVWucPi3TWPhEFvLB1vl3UAve3O0eR8VEJXINck7olYmgTZYsTcble2PeXGiOyv5F7zk/fbXwdSt5bnidQjWbBKt1zNc9WTSXUQbdLqh3bD+14DXHBrGcwGbp4czcs0U5gGp9b9LmWY/yCrrTKnW7w/QnB0Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724398558; c=relaxed/simple;
-	bh=GXfT3L4x+8qaCjdyxObYmMAhISnUtNY/v0Xgf6zDAaE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=cmV0ZhOK+wfZ3a019cRp/3bzM7R5tM+5DOjOLS+kEG/jzDRtLBn3DpM3B+CiDUniYPSj26vU4fcK5WIWSGrj28UTpIDR/EovIO+mE3Ubaxu9FXkQdWJ6zhgCs5tiSKn/KAOn5/0aAqQqvKhoUF+uPr7hiBm0nBZ/LmYbRiJ1xDs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=nPX3/8/f; arc=fail smtp.client-ip=52.101.229.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Lu886PCji+UNNYUWAlbaUalapLeQFhb+SJSQKRVqF5gLBdSkkSRCXR5Ba2xx0gYg9X/qRMAbU7yaUhkCOGKKy6UGFcwhU7URaWHfkfimmieCb0Fq3VeF/q+Xm9ZDRdlawLnxraLb0IRauVI2l131m/ZZhleF6Wx2/wi0d3CDoXzKDeDeXGyANJWsrwjLY9lNvtcfvHXVJ85ffTqEI30LogUFH9HKJbtNwvyY9rN6+wbSyEhmwwmyNOI+WGxL5x2mPu2ME28ypja/SwWQDIaqhOItT4AJDcUmyv5Od35DPtH5h5pl0PMAr1ONPZl0J96o9nCCS6bvZ0O1mYB4sRFUTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ha39zt00Ud54rrj+OBwpod3DaKbEwcqFVDbGmwJHTm8=;
- b=OIo7q8YC47HS/CpUmWidJJDWzDTX62JNgyepHpfrjqqApRKmVARNmxgsXs3ongkJE6vnCtVf4qthCY5dy/JGW8AwWuVosc7/mJ0UFwPr1kwUpwzin1gXSX6m1obZcQoH0BktVZ37JADRx/Q9BAS+10iPiNUlowX/22IsQFIBB/JSOVMjjMqoiDYYesg9qCgTd4Sat6tTAI6mySTAZ2jl7QJOa0JJyuSCi0hj6HikPFnBJsphOjdympW2CnldLESsa2NxkNaH9UvOaXtTtEyNBCKVR6qs6A3uLqs0+3bGzPlGKwi7LrSlTDN3g1rHe7meWGYFRZv7jT/nr0bftXpFxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ha39zt00Ud54rrj+OBwpod3DaKbEwcqFVDbGmwJHTm8=;
- b=nPX3/8/fZfbMfmTOGPmVGFsd7zy+yVrvHDVyEg5oh9UVpE+TIggKp/7ajzYezXT0w68MMFF/+le2EVOtiAO6MBjEKUXX+JCiT98EPmbPJdb4XWS3fwUGIO3b90wZB8ZpyJmlwC+pqSL9bO2sr/YmCR/b7RNlbfOvounJV1OOX8g=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TYRPR01MB12916.jpnprd01.prod.outlook.com (2603:1096:405:1b4::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.19; Fri, 23 Aug
- 2024 07:35:50 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%6]) with mapi id 15.20.7897.014; Fri, 23 Aug 2024
- 07:35:50 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Claudiu.Beznea <claudiu.beznea@tuxon.dev>, "vkoul@kernel.org"
-	<vkoul@kernel.org>, "kishon@kernel.org" <kishon@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>, "geert+renesas@glider.be"
-	<geert+renesas@glider.be>, "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
-	<sboyd@kernel.org>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
-CC: "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, Claudiu.Beznea <claudiu.beznea@tuxon.dev>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: RE: [PATCH 10/16] phy: renesas: rcar-gen3-usb2: Add support to
- initialize the bus
-Thread-Topic: [PATCH 10/16] phy: renesas: rcar-gen3-usb2: Add support to
- initialize the bus
-Thread-Index: AQHa9Kf4PPM3ttIrIU+GFs1JG0RdeLI0cirA
-Date: Fri, 23 Aug 2024 07:35:50 +0000
-Message-ID:
- <TY3PR01MB113468A6CA4ADBCA577670AD486882@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <20240822152801.602318-11-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240822152801.602318-11-claudiu.beznea.uj@bp.renesas.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYRPR01MB12916:EE_
-x-ms-office365-filtering-correlation-id: bfd16a1b-3e14-42e0-be79-08dcc3463654
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|376014|1800799024|7416014|38070700018|921020;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?hYdel4nlKjlERDy2Jz4txmmA7Xvs/W/TctX0jyTtGEjlC/612XWT+AbiLaN1?=
- =?us-ascii?Q?rInXMx6t/GEp/YTGQZOpAgi+WuDfyn6US/6TJSOvtbtcqSGVuhI535L4RMVQ?=
- =?us-ascii?Q?Kxe3zZpSKix77niGa/0Oow7i1ImRCHEP+9wJtpcD8Fxe/fd3Q6R0jRtFxLhl?=
- =?us-ascii?Q?Vwr4c9U4erX7zHx2DzwZZp36UvtqViuk0uzGAU8pvrKap0J7xxw03FM+r1KL?=
- =?us-ascii?Q?SbbC2optXayRldw3AkKXqBcK7d9hrk/rRCQD1DoEYJRv/JKvPvghviR0VMb1?=
- =?us-ascii?Q?RxvQTJqk7z1okTdQR/AFBBiIcBlGOT1UOE850Pmq+C0G9uEk6OA+XGa5+KCh?=
- =?us-ascii?Q?KzIssDVu+W2N/JRJFUN3tN6ThyS7uFqBTjwEYitcvmylmm7awiKuyUC4gvZP?=
- =?us-ascii?Q?uMQRG/umLPXd+qgksmm8tgWaQukBWEVECBfAurXAal7/81i3fMXaLgasR7WC?=
- =?us-ascii?Q?p17x07OWDTJA3LeEh4bRlnur39OlBckPdVgZsjzAeXb05t2DLti9bV5zukII?=
- =?us-ascii?Q?WYVGlOj7zxN35U5A7FLUBPF99vc44TUFu7/QKmBC6sx8xdq0qIxxgUoI/mPi?=
- =?us-ascii?Q?KsZanjwEXU2KifRyn0SlRQgknIZPvHJqoTsOq0PQUlKdGsyZ1wtTse+zRYT5?=
- =?us-ascii?Q?K58iPN9PMsWJ43nMtPGQXskJ3FiubbsSglalizaDSiFVDn/iQUwabvA/CKwX?=
- =?us-ascii?Q?eNHIbrlOmpM/rTSKYdxaKbA/geVGN2Y/gKNjaoCf0O1q/gT9nX6umZFRb9bC?=
- =?us-ascii?Q?byPa4Ej3Z6A7zn6TdfT5qU53cp73ty4dnnrKcBL4BXh9HymHnObfNq9otHn2?=
- =?us-ascii?Q?uoZppJ+nGETd29/Txj94p1zaMrwbe0UFP0RIpXxN8+zTRhip+RCpybfSswiJ?=
- =?us-ascii?Q?cBu0BgQl25Zm38GACi1U/f8hF1bVa9WzyIfaslc3odfQlWzGWfeiVTLlXkwS?=
- =?us-ascii?Q?POKEh8nnijcRS9FlfBCW4+4b/YiG8Jcp9ZTARr6ICH5uG/jWktzoY0ZSG3UU?=
- =?us-ascii?Q?J8hV+qlxIz+jf2g4FPrhyv46XSVRvcE64vxHWel9SKQE8ZCm83V+adfXyeS9?=
- =?us-ascii?Q?d2PyoTujUEM1MkLe2OKvsHKZBBZOk2lHBoCw3f4UAiP32KXGqjm+CHutv4D4?=
- =?us-ascii?Q?XUDSm+u+iUJEBBHa4B9MLvP37ohitE7INGKAk1xSX2PXuLRqYecSvP7xXfDo?=
- =?us-ascii?Q?kPRAUc+RqY5LBfg/sf2XXZTt/Nrt8+vxO+hQNCxcPZkQi2SE4sjphH8Phshn?=
- =?us-ascii?Q?+1Njg79StRcM5GCNMBCEk6rrc98AMhvRe5Zkdd+WwJ10LAruulC0Erw7zGN7?=
- =?us-ascii?Q?BlLnLXPAvlJdh1TNtxeEJjpD8gvTNKzQhWm/QCiWHrRSqp0a362Vh7NqY3XQ?=
- =?us-ascii?Q?0j/dntuc2fPkt6AnHv+91Na7CkpwLkb9VpfkJcE7ha94UtH8OA9eF8yONc1A?=
- =?us-ascii?Q?Jkt7usDwBjo=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014)(38070700018)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?ha6o5CKN4oaJqBdV+OVp4eE+GKMU8DzGwtXIned8JmUCpK2XO6EKd2mGPbHf?=
- =?us-ascii?Q?FrI8V4zXd2gB8v7SmXtgc16ni7q+z8mtlK+DWq/fuJn9Uw4DlZr82NOaE5CB?=
- =?us-ascii?Q?V/eHBxhMnG46q5fNemjGIuRZdQJ3LeUFmQhdY2lK72xjG+aweoEaGd55Ml+C?=
- =?us-ascii?Q?b/CCo/szzP7GBLiIwF/I8WGCsagK2tMttYwUOgbK+yIb9RNgb2hx0L1wCwd/?=
- =?us-ascii?Q?Dto5gc9Io4ZfLuDBPVJSF5IiyqLN14ppgSPyI2yD6r80zhCuq+Nj9acgza8s?=
- =?us-ascii?Q?8G/qstgIOm6wARFUJ2CXR28loBVri7ZB5TTYRUvzSuJGu6DchNq8lqOYLht2?=
- =?us-ascii?Q?jDsq4S2bRWHIFF2yoAmsNNPZZsB0GMqwC49NuXq9emSUfXqaSYdAvp9laT7E?=
- =?us-ascii?Q?CRcfaN0VffhIF2CaMMwkNsRN7NQ3Tw81qqZK5LDc3Jm4m6vBVICVDlHMaYpX?=
- =?us-ascii?Q?mk1v3dWbdKoqtOasIp1I835vGEqTiI8HAZJZ0k5CvGbM9hvXssw+iuAyM4BP?=
- =?us-ascii?Q?pvEdR+fRWNAa2p3bIaaIiCrcY6qvb32WoO20D6TioNcn2j2tz1zWAKJlXWsO?=
- =?us-ascii?Q?LfIK9XqKnHHcRAy3nJY+/12Ci8gJcyNOZ8+24mqkKxTVpUd1otlG0ZEX56uM?=
- =?us-ascii?Q?/8vcP0OOG7e4BkCIsx7e5wwsucNkDe0x8in3NKXsg4wDusRxnD7CiZphK2ZH?=
- =?us-ascii?Q?EQQ69nGdF/EwmBMnDwtYf6fwdrMNm2kt6sJDOHiro50Mcu0rbCbpfvbPpAXE?=
- =?us-ascii?Q?lYtQl43E7OI57AjKbux/OPLuuSpWRtC8GF5PiJtXPikfsKtAjP0uYBOot58U?=
- =?us-ascii?Q?yaILKa1E/OmgHGrPEZ4bvT7KwzmjcBz9JOSmA1l7R+REo1HMoq/Gp6zQAXkU?=
- =?us-ascii?Q?6LrlmtBLjdMiUHW5yG2jypjEb7jNXMsqlNCodGjFJMmp+bxW03Nt+gL63hWY?=
- =?us-ascii?Q?C92N+PIplvN8uuPkFjA9sjyI93+ej2tAHLnafVeQq6nIjeCMzBZHWZUKSHrd?=
- =?us-ascii?Q?gIvCnDIDsqPXk8icLVre9uZID1wp/7S7Ij5hTOefs3Veu6l8XWCN7d9FYwLi?=
- =?us-ascii?Q?iRWcW3prI7VJNKxiCN5GB4r9G4WViODQU+bIbOlddPPgFDix2+NCZlBXMc2s?=
- =?us-ascii?Q?7kAM6KcBjawKNd7qLmJT6FSQGzg9K6F+Ed6Lupk0Wcb2FiBT7WLFjxtf15V2?=
- =?us-ascii?Q?2kjec45GwmrTw8d8LgsZeBM1RGDE5/iS0AV4fnRQKpqYgAHTVEEqGAaOPVcl?=
- =?us-ascii?Q?HjpVL2I8hW7mGfcSYwVofUn5aE1BzzSJz9sU/ojx3ZTkzveLiJycuG7gxTI8?=
- =?us-ascii?Q?oEE+V3B+3z6+hcVYdPMkvZOcjRcHuW/mM+zR5kqZgh1qvWXcHsKzs+cUbU3I?=
- =?us-ascii?Q?We3EkrwOfBnGIUo0+18lbEOVlX0Q01pUcSZvgpRKbCQIT3BwWiiKNR4iKtrL?=
- =?us-ascii?Q?JgM2BxKmak3wl7eQRmG9OGxyOZWkjddM/g/rV+UyvwzShFhoNwhl8VV3cOYb?=
- =?us-ascii?Q?TGD53XvYVBFomLj4FWQJVqvQUtb71YovtV3IDiPIMuFCe9PmYJDNfzbCXmQ1?=
- =?us-ascii?Q?Xff6Q9lWpk9G1JkUawLO6eTO53YSPVgTGY8lm7plQ6HvlZu6u+9rbtSYlLzM?=
- =?us-ascii?Q?qQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A5613B5B6
+	for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2024 07:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724398625; cv=none; b=CwvFljhds7iEnMdqwLKgviDP8Xtys2kJU8YuiiscnuPU3y0rP7e15keea9lPvoPYJ0fZpmf7FPA9GA3JQebT4lgQ1A2Zwik9AfyZyJq4tQpbRmx7lsEMrQRE76PGcyS/BAmeT+tRK+WpPKsA2ni3/zjhM0+V6HfyfBAXehvOidE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724398625; c=relaxed/simple;
+	bh=eroYpqdyOiSP4cxkVpk2TA7jSZdwEq21PIcg/hcChc4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F/neXYflA8hKZjiR0HSM+59IzKaqvoy1g7KQgDp2s7LWgHv2G/GEdYBTJlVBp2awYLl+ngzINDt04yNv4ARCbe50SwtYOOz19pqvtO0hJRW4FxeTWXduIxv5hIbIi2FadBbuIDLeiTji/bdla1m7FFe9rEy5Er31ItPVLAQfM/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1shOqr-0004KT-Kz; Fri, 23 Aug 2024 09:36:53 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1shOqn-002R4L-5k; Fri, 23 Aug 2024 09:36:49 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1shOqn-00AtQT-0J;
+	Fri, 23 Aug 2024 09:36:49 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH v9 0/3] usb: gadget: 9pfs transport
+Date: Fri, 23 Aug 2024 09:36:46 +0200
+Message-Id: <20240116-ml-topic-u9p-v9-0-93d73f47b76b@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfd16a1b-3e14-42e0-be79-08dcc3463654
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2024 07:35:50.6343
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ehgFgLiyPzj9D2MlADZdW/+sQLf4mEe4c0QsxYinB5KslhbgPNhflkyypsPsqCYkv4lCdNdJ8TkZgxCUJxrlEuayMUrk5ttR9llOV8dkBP0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYRPR01MB12916
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA48yGYC/33Py26DMBAF0F+JvK4bv4276n9UXfgxDpYIIENQq
+ oh/r2Fb18s7unNG80IL5AQL+ri8UIYtLWkaSzBvF+R7O94Ap1AyYoQJQqnC9wGv05w8fpgZd0Y
+ yLSQn4CgqK84ugF22o++PpftwH65n+1raR2HOENPzvPf1XXKflnXKP+f5jR7Tfy5tFBNsQ+c5U
+ dFYAZ8zjLfHmqcxPd8DoEPbWEtgRXBCeRelYUaxqsBbAi+CV8xyBd4HS6uCaAmiCJoxCKxzxIb
+ 6F7IlyCJICMS6IDlEWRVUS1BFUEYarYNWIcaqoFuCLgK3FACi1tHVv+haQlcEQQwoabwVIfwR9
+ n3/Be6NkVycAgAA
+To: Eric Van Hensbergen <ericvh@kernel.org>, 
+ Latchesar Ionkov <lucho@ionkov.net>, 
+ Dominique Martinet <asmadeus@codewreck.org>, 
+ Christian Schoenebeck <linux_oss@crudebyte.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>, v9fs@lists.linux.dev, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, kernel@pengutronix.de, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>, 
+ Jan Luebbe <jlu@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5641;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=eroYpqdyOiSP4cxkVpk2TA7jSZdwEq21PIcg/hcChc4=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmyDwPcmiUnUg90Z5vYStde383Rnzy6DR7cQjdG
+ LrE+HLauOCJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZsg8DwAKCRC/aVhE+XH0
+ qzNuD/4p66j34UbVtTX1LBfJy2ZgIOqotnBmsrQtrg14PTIp26+4K6hf7z79yhFBhWHuxcoLRtb
+ JaOeeHd2UV7EA3X/j5LFGAo+YDUiBiNLLNCmRblqPnApPytxnQYGGnXYtlQADj+vzfzF/kF3SlB
+ 4a1al1gw5Gzu3qANa5RVYe0QCBl8CQaQvhyF0G3Tbb/zSlcuexaaF0Y4+EHOxbYwVNzTuwPbE9U
+ d7KBNsBc4u+JUAGVHbvSnm55QtsJTpZiraH8ALt/vVQWgOUON5vcdUOq5sU8k5ToY+8RQb6T2fr
+ 5Kxw2lJ991SMnJg3/dTAG42UOpkIsWPvrJ0HsiVI3CdcMGbaqq1oPQHJuJ0yWBPK9ECBapcK8Fv
+ GWYI4JUgDmelgBlgju/BAer10K+GPoQwHxfQA9YTA76+Fl3zfOGPHC+LLjUsjsFeWMS0/tcgsFJ
+ dlUmnIwUP5mkItEQ7GpDtgToWWZxz2DezWK3gvXStz4+XRAl6pSlJam/P90K7ZyyMhSjr3rD4hi
+ 3rivLzAYvHK0aUUq+YOiZrdI1X273O6Ju4kj/Xsjoa3p15OWV7ZquOLW1G5oHoT1uNMQ3VSRQJc
+ 9C8HTYrmDJhISBSDquMi7zGS8a3IwI2/EWRuDN5v8vxIylZ+7IE2oxg8f8E+8xeJwj/uu1xsmUW
+ CoguOWFCY2ScWXw==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Hi Claudiu,
+This series is adding support to mount usb hostside exported 9pfs
+filesystems via the usb gadget interface. It also includes a simple tool
+(p9_fwd.py) to translate an tcp 9pfs transport and reuse it via the usb
+interface.
 
-> -----Original Message-----
-> From: Claudiu <claudiu.beznea@tuxon.dev>
-> Sent: Thursday, August 22, 2024 4:28 PM
-> Subject: [PATCH 10/16] phy: renesas: rcar-gen3-usb2: Add support to initi=
-alize the bus
->=20
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->=20
-> The Renesas RZ/G3S need to initialize the USB BUS before transferring dat=
-a due to hardware limitation.
-> As the register that need to be touched for this is in the address space =
-of the USB PHY, and the UBS
-> PHY need to be initialized before any other USB drivers handling data tra=
-nsfer, add support to
-> initialize the USB BUS.
->=20
-> As the USB PHY is probed before any other USB drivers that enables clocks=
- and de-assert the reset
-> signals and the BUS initialization is done in the probe phase, we need to=
- add code to de-assert reset
-> signal and runtime resume the device (which enables its clocks) before ac=
-cessing the registers.
->=20
-> As the reset signals are not required by the USB PHY driver for the other=
- USB PHY hardware variants,
-> the reset signals and runtime PM was handled only in the function that in=
-itialize the USB BUS.
->=20
-> The PHY initialization was done right after runtime PM enable to have all=
- in place when the PHYs are
-> registered.
+    +--------------------------+    |    +--------------------------+
+    |  9PFS mounting client    |    |    |  9PFS exporting server   |
+ SW |                          |    |    |                          |
+    |   (this:trans_usbg)      |    |    |(e.g. diod or nfs-ganesha)|
+    +-------------^------------+    |    +-------------^------------+
+                  |                 |                  |
+                  |                 |           +------v------+
+                  |                 |           |  p9_fwd.py  |
+                  |                 |           +------^------+
+                  |                 |                  |
+------------------|------------------------------------|-------------
+                  |                 |                  |
+    +-------------v------------+    |    +-------------v------------+
+    |                          |    |    |                          |
+ HW |   USB Device Controller  <--------->   USB Host Controller    |
+    |                          |    |    |                          |
+    +--------------------------+    |    +--------------------------+
 
-There is no user for this patch. The first user is RZ/G3S and you should me=
-rge this patch with
-next one.
+The USB host exports a filesystem, while the gadget on the USB device
+side makes it mountable.
 
-Cheers,
-Biju
+Diod (9pfs server) and the forwarder are on the development host, where
+the root filesystem is actually stored. The gadget is initialized during
+boot (or later) on the embedded board. Then the forwarder will find it
+on the USB bus and start forwarding requests.
 
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->  drivers/phy/renesas/phy-rcar-gen3-usb2.c | 50 ++++++++++++++++++++++--
->  1 file changed, 47 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/phy/renesas/phy-rcar-gen3-usb2.c b/drivers/phy/renes=
-as/phy-rcar-gen3-usb2.c
-> index 7594f64eb737..cf4299cea579 100644
-> --- a/drivers/phy/renesas/phy-rcar-gen3-usb2.c
-> +++ b/drivers/phy/renesas/phy-rcar-gen3-usb2.c
-> @@ -19,12 +19,14 @@
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/regulator/consumer.h>
-> +#include <linux/reset.h>
->  #include <linux/string.h>
->  #include <linux/usb/of.h>
->  #include <linux/workqueue.h>
->=20
->  /******* USB2.0 Host registers (original offset is +0x200) *******/
->  #define USB2_INT_ENABLE		0x000
-> +#define USB2_AHB_BUS_CTR	0x008
->  #define USB2_USBCTR		0x00c
->  #define USB2_SPD_RSM_TIMSET	0x10c
->  #define USB2_OC_TIMSET		0x110
-> @@ -40,6 +42,10 @@
->  #define USB2_INT_ENABLE_USBH_INTB_EN	BIT(2)	/* For EHCI */
->  #define USB2_INT_ENABLE_USBH_INTA_EN	BIT(1)	/* For OHCI */
->=20
-> +/* AHB_BUS_CTR */
-> +#define USB2_AHB_BUS_CTR_MBL_MASK	GENMASK(1, 0)
-> +#define USB2_AHB_BUS_CTR_MBL_INCR4	2
-> +
->  /* USBCTR */
->  #define USB2_USBCTR_DIRPD	BIT(2)
->  #define USB2_USBCTR_PLL_RST	BIT(1)
-> @@ -111,6 +117,7 @@ struct rcar_gen3_chan {
->  	struct extcon_dev *extcon;
->  	struct rcar_gen3_phy rphys[NUM_OF_PHYS];
->  	struct regulator *vbus;
-> +	struct reset_control *rstc;
->  	struct work_struct work;
->  	struct mutex lock;	/* protects rphys[...].powered */
->  	enum usb_dr_mode dr_mode;
-> @@ -125,6 +132,7 @@ struct rcar_gen3_chan {  struct rcar_gen3_phy_drv_dat=
-a {
->  	const struct phy_ops *phy_usb2_ops;
->  	bool no_adp_ctrl;
-> +	bool init_bus;
->  };
->=20
->  /*
-> @@ -650,6 +658,35 @@ static enum usb_dr_mode rcar_gen3_get_dr_mode(struct=
- device_node *np)
->  	return candidate;
->  }
->=20
-> +static int rcar_gen3_phy_usb2_init_bus(struct rcar_gen3_chan *channel)
-> +{
-> +	struct device *dev =3D channel->dev;
-> +	int ret;
-> +	u32 val;
-> +
-> +	channel->rstc =3D devm_reset_control_array_get_shared(dev);
-> +	if (IS_ERR(channel->rstc))
-> +		return PTR_ERR(channel->rstc);
-> +
-> +	ret =3D pm_runtime_resume_and_get(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D reset_control_deassert(channel->rstc);
-> +	if (ret)
-> +		goto rpm_put;
-> +
-> +	val =3D readl(channel->base + USB2_AHB_BUS_CTR);
-> +	val &=3D ~USB2_AHB_BUS_CTR_MBL_MASK;
-> +	val |=3D USB2_AHB_BUS_CTR_MBL_INCR4;
-> +	writel(val, channel->base + USB2_AHB_BUS_CTR);
-> +
-> +rpm_put:
-> +	pm_runtime_put(dev);
-> +
-> +	return ret;
-> +}
-> +
->  static int rcar_gen3_phy_usb2_probe(struct platform_device *pdev)  {
->  	const struct rcar_gen3_phy_drv_data *phy_data; @@ -703,6 +740,15 @@ sta=
-tic int
-> rcar_gen3_phy_usb2_probe(struct platform_device *pdev)
->  		goto error;
->  	}
->=20
-> +	platform_set_drvdata(pdev, channel);
-> +	channel->dev =3D dev;
-> +
-> +	if (phy_data->init_bus) {
-> +		ret =3D rcar_gen3_phy_usb2_init_bus(channel);
-> +		if (ret)
-> +			goto error;
-> +	}
-> +
->  	channel->soc_no_adp_ctrl =3D phy_data->no_adp_ctrl;
->  	if (phy_data->no_adp_ctrl)
->  		channel->obint_enable_bits =3D USB2_OBINT_IDCHG_EN; @@ -733,9 +779,6 @=
-@ static int
-> rcar_gen3_phy_usb2_probe(struct platform_device *pdev)
->  		channel->vbus =3D NULL;
->  	}
->=20
-> -	platform_set_drvdata(pdev, channel);
-> -	channel->dev =3D dev;
-> -
->  	provider =3D devm_of_phy_provider_register(dev, rcar_gen3_phy_usb2_xlat=
-e);
->  	if (IS_ERR(provider)) {
->  		dev_err(dev, "Failed to register PHY provider\n"); @@ -762,6 +805,7 @@=
- static void
-> rcar_gen3_phy_usb2_remove(struct platform_device *pdev)
->  	if (channel->is_otg_channel)
->  		device_remove_file(&pdev->dev, &dev_attr_role);
->=20
-> +	reset_control_assert(channel->rstc);
->  	pm_runtime_disable(&pdev->dev);
->  };
->=20
-> --
-> 2.39.2
+In this case the 9p requests come from the device and are handled by the
+host. The reason is that USB device ports are normally not available on
+PCs, so a connection in the other direction would not work.
+
+One use-case is to use it as an alternative to NFS root booting during
+the development of embedded Linux devices.
+
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+Changes in v9:
+- solved the error return path by using wait_for_completion instead of
+  running in the usb complete callback in a loop
+- by using wait_for_completion solves the req_lock
+- using req->context instead of using a state variable
+- Link to v8: https://lore.kernel.org/r/20240116-ml-topic-u9p-v8-0-409e659ca4dd@pengutronix.de
+
+Changes in v8:
+- this time really added the req_lock spinlock
+- Link to v7: https://lore.kernel.org/r/20240116-ml-topic-u9p-v7-0-3a1eeef77fbe@pengutronix.de
+
+Changes in v7:
+- added back the req_lock spinlock
+- Link to v6: https://lore.kernel.org/r/20240116-ml-topic-u9p-v6-0-695977d76dff@pengutronix.de
+
+Changes in v6:
+- fixed the python script not to have path set by default
+- improved the lock init
+- fixed usb9pfs status change to connected
+- Link to v5: https://lore.kernel.org/r/20240116-ml-topic-u9p-v5-0-5ed0abd53ef5@pengutronix.de
+
+Changes in v5:
+- fixed lockup in mount -> remount -> monut scenario
+- improved p9_fwd transport script with more options
+- Link to v4: https://lore.kernel.org/r/20240116-ml-topic-u9p-v4-0-722ed28b0ade@pengutronix.de
+
+Changes in v4:
+- reworked the naming scheme to be set by the configfs instance
+- added conn_cancel function to properly stop the transfers
+- ensured that umount -f will work even when the host side has crahed
+- added all the review feedback from Andrzej Pietrasiewicz
+- Link to v3: https://lore.kernel.org/r/20240116-ml-topic-u9p-v3-0-c62a36eccda1@pengutronix.de
+
+Changes in v3:
+- dropped patch "usb: gadget: legacy: add 9pfs multi gadget" as discussed with gregkh
+- Link to v2: https://lore.kernel.org/r/20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de
+
+Changes in v2:
+- improved the commit messages
+- introduced an patch to move the header u_f.h to include/linux/usb to compile usb gadget functions treewide
+- moved usbg gadget function to net/9p/
+- adderessed several comments in function driver, like the cleanup path and kbuild errors
+- improved the documentation in Documentation/filesystems/9p.rst
+- Link to v1: https://lore.kernel.org/r/20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de
+
+---
+Michael Grzeschik (3):
+      usb: gadget: function: move u_f.h to include/linux/usb/func_utils.h
+      net/9p/usbg: Add new usb gadget function transport
+      tools: usb: p9_fwd: add usb gadget packet forwarder script
+
+ Documentation/filesystems/9p.rst                   |  58 +-
+ drivers/usb/gadget/configfs.c                      |   2 +-
+ drivers/usb/gadget/function/f_fs.c                 |   2 +-
+ drivers/usb/gadget/function/f_hid.c                |   2 +-
+ drivers/usb/gadget/function/f_loopback.c           |   2 +-
+ drivers/usb/gadget/function/f_midi.c               |   2 +-
+ drivers/usb/gadget/function/f_midi2.c              |   2 +-
+ drivers/usb/gadget/function/f_sourcesink.c         |   2 +-
+ drivers/usb/gadget/u_f.c                           |   2 +-
+ .../gadget/u_f.h => include/linux/usb/func_utils.h |   2 +-
+ net/9p/Kconfig                                     |   6 +
+ net/9p/Makefile                                    |   4 +
+ net/9p/trans_usbg.c                                | 982 +++++++++++++++++++++
+ tools/usb/p9_fwd.py                                | 243 +++++
+ 14 files changed, 1301 insertions(+), 10 deletions(-)
+---
+base-commit: 47ac09b91befbb6a235ab620c32af719f8208399
+change-id: 20240116-ml-topic-u9p-895274530eb1
+
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 
