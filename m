@@ -1,393 +1,201 @@
-Return-Path: <linux-usb+bounces-14035-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14036-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D95095DE26
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 15:47:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAC9195DE60
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 16:31:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DE771C20FB2
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 13:47:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F66728313A
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 14:31:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45AB17966F;
-	Sat, 24 Aug 2024 13:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B07D177992;
+	Sat, 24 Aug 2024 14:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="AQac5zvA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MzWFgsqD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from msa.smtpout.orange.fr (msa-218.smtpout.orange.fr [193.252.23.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F6D15098F;
-	Sat, 24 Aug 2024 13:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D03317837F
+	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 14:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724507255; cv=none; b=r3J5gHdkvQGbxq6dAobebbSOsFOdtX9bdZkHEohhmcwyuu9nbrRgRZzGEejcJCeG9gaZrXtuVjByLc0MZhUfaSWG6vBpuZEQsN8vQpNqENSZOQrlvFN0DbcURM+MRDhQODX8IcfFli8Pf+KTMoMb40/qhBlXrtk1RhLeQQTiSQk=
+	t=1724509871; cv=none; b=jm7R91eX9hqzfFnIHWk6UXFiligpU8tvzIXuKldnZhwrBG3ijFjLe7dWv08v9p+xNC3a9FYi8MAtvsYaa0xtY5XF5vFLi47iMOegblXbrigRqDtXHktmAXmxeXfUidSFztP8NrqRhq/du61+K7Y8EMUDP1GRQE+LTIQBUO4oSc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724507255; c=relaxed/simple;
-	bh=rYV7YbbPPMai7nwihdtZF7TUUXb9Shf6UFzB1mgO7XM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DvrnFIeS2fdPpTd1s1OPjAseEnoCHjtM5qqEW0BmqflxNcBwgIr3yLDyXZFHeCIrKWSQbrqdS+zb4VCqcDNuJvRyreL3RMW9Bs/ctYsiyY/0sZ7sFkpXjPX3Zc1knfRdYNzbq9GFL9uphaTSA5sLESiaIdyq6Eo4Iyp2HoL3aJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=AQac5zvA; arc=none smtp.client-ip=193.252.23.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id hr6vsE2q1aZQfhr6vsx39B; Sat, 24 Aug 2024 15:47:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1724507243;
-	bh=VrJTdN+d9FOn7wLbxMX7FhFh6wourAJWHL5OBIY5qyw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=AQac5zvAUw06SiL2gDL5rQBUQzYSIbh6IknnF7+y55uxiEzIlQuapT67rrpo3oJoz
-	 /ABktPMfiaDKYf5YeXRMB95hhl4ozTVAEJgIKtlT2aiOLxQeY4r3j/DsJeEv0R8W2O
-	 /azzfQjdXST+2JQ+UAk5q1xur6RKcNKrO02Szr7NCAIpuwIVLpC+TEKaJ4MipWPfJx
-	 iWxZN7zx+M1Y8gBMCeQrxs1yf8Iz68txBVgnUNQrz2QNTIxXsJL8H2gWgTpj9npJbB
-	 6waoLYdnD9M/RHwCWNlSpkvMW39kVARdfKzsAWWXadx7NEWJLBxZfYHNUENViwNdtK
-	 Qh0Ix69/XmM4A==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 24 Aug 2024 15:47:23 +0200
-X-ME-IP: 90.11.132.44
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Oliver Neukum <oneukum@suse.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH] usb-storage: Constify struct usb_device_id and us_unusual_dev
-Date: Sat, 24 Aug 2024 15:47:07 +0200
-Message-ID: <b1b75a2a64b1f6cfad2a611f71393f281178fd3f.1724507157.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1724509871; c=relaxed/simple;
+	bh=b6N8JCHKUNSlOZemsoissd/BzdF+bI9HFUC2ZRP1BAc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=enf1VlsWi1r3CYjxp+Y0Qp77kikYI7YPQgWFoKsn8lurYZ+D0+0q4N9a+KJLcT5bEiwOXvzRmV/sz9dtV74T2N37GTyLX7KTwO7FR2ju7QWwJrAMaKQM8cs9m5YwHsqV3rNX3R1RQ7iomzaDFQw1CRzTyx4Ib2/JLTsuHM0IinY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MzWFgsqD; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724509869; x=1756045869;
+  h=date:from:to:cc:subject:message-id;
+  bh=b6N8JCHKUNSlOZemsoissd/BzdF+bI9HFUC2ZRP1BAc=;
+  b=MzWFgsqDRGb9r6/cpeY9x8RLTuQZbOn6sMtxnYFOl+Lc6EnzoHrZV63E
+   zEE3Yody3OoVkJXyHaoygUcmRlDGqXQNYViG/xxl5iu+TElPehHnP1+sC
+   bjrft51KQdGJ7DVS0rmvZ++W9FwYn+kOIDOM62rCEzegd5GF7cBl6urUS
+   zSrfgSAY217XBwutKmJtLdsvUMBe7rDjL3dbzRBCsQu9E/Jtc+sjFA3eW
+   Q58o8s2v7BIcCHMWKMb7pw4z+R/TZVDpO3fwd9TjmU/T4nPmLxhI/cET/
+   qhaFhcs3erKpz6kzkkcmXKcsRqakRSDVsaE/RH4NID3dxFSFPMXsi739H
+   Q==;
+X-CSE-ConnectionGUID: y0NUMAujSXG7fgAcmH2QNQ==
+X-CSE-MsgGUID: QvEQH5XyT1GsSeW336tpZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="26852808"
+X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
+   d="scan'208";a="26852808"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 07:31:06 -0700
+X-CSE-ConnectionGUID: gifCgr0nR0a85Zt7kDck7Q==
+X-CSE-MsgGUID: //vrn0BoQhC4czCe1h2AhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
+   d="scan'208";a="62379883"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 24 Aug 2024 07:31:05 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1shrnD-000EXA-0f;
+	Sat, 24 Aug 2024 14:31:03 +0000
+Date: Sat, 24 Aug 2024 22:30:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ fb9804096bb3508e33ade5a72f2332080cf1324b
+Message-ID: <202408242223.5rxMMuLJ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-'struct usb_device_id' and 'struct us_unusual_dev' are not modified in
-these drivers.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: fb9804096bb3508e33ade5a72f2332080cf1324b  usb: typec: ucsi: Remove useless error check from ucsi_read_error()
 
-Constifying these structures moves some data to a read-only section, so
-increase overall security, especially when the structure holds some
-function pointers (which is the case for struct us_unusual_dev).
+elapsed time: 1596m
 
-On a x86_64, with allmodconfig, as an example:
-Before:
-======
-   text	   data	    bss	    dec	    hex	filename
-  25249	   4261	    896	  30406	   76c6	drivers/usb/storage/alauda.o
-   3969	    672	    360	   5001	   1389	drivers/usb/storage/cypress_atacb.o
+configs tested: 108
+configs skipped: 5
 
-After:
-=====
-   text	   data	    bss	    dec	    hex	filename
-  25461	   4041	    896	  30398	   76be	drivers/usb/storage/alauda.o
-   4225	    400	    360	   4985	   1379	drivers/usb/storage/cypress_atacb.o
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested-only.
+tested configs:
+alpha                             allnoconfig   gcc-13.2.0
+alpha                             allnoconfig   gcc-13.3.0
+alpha                            allyesconfig   gcc-13.3.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                   randconfig-001-20240824   gcc-13.2.0
+arc                   randconfig-002-20240824   gcc-13.2.0
+arm                              allmodconfig   gcc-14.1.0
+arm                               allnoconfig   clang-20
+arm                               allnoconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-14.1.0
+arm                   randconfig-001-20240824   clang-20
+arm                   randconfig-002-20240824   gcc-14.1.0
+arm                   randconfig-003-20240824   clang-20
+arm                   randconfig-004-20240824   clang-15
+arm64                            allmodconfig   clang-20
+arm64                             allnoconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-14.1.0
+arm64                 randconfig-001-20240824   clang-20
+arm64                 randconfig-002-20240824   clang-20
+arm64                 randconfig-003-20240824   clang-20
+arm64                 randconfig-004-20240824   clang-20
+csky                              allnoconfig   gcc-13.2.0
+csky                              allnoconfig   gcc-14.1.0
+csky                  randconfig-001-20240824   gcc-14.1.0
+csky                  randconfig-002-20240824   gcc-14.1.0
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   clang-20
+hexagon                          allyesconfig   clang-20
+i386                             allmodconfig   gcc-12
+i386                              allnoconfig   gcc-12
+i386                             allyesconfig   gcc-12
+i386         buildonly-randconfig-001-20240824   clang-18
+i386         buildonly-randconfig-002-20240824   clang-18
+i386         buildonly-randconfig-003-20240824   clang-18
+i386         buildonly-randconfig-004-20240824   clang-18
+i386         buildonly-randconfig-005-20240824   gcc-12
+i386         buildonly-randconfig-006-20240824   gcc-12
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240824   clang-18
+i386                  randconfig-002-20240824   clang-18
+i386                  randconfig-003-20240824   gcc-12
+i386                  randconfig-004-20240824   gcc-11
+i386                  randconfig-005-20240824   gcc-12
+i386                  randconfig-006-20240824   clang-18
+i386                  randconfig-011-20240824   clang-18
+i386                  randconfig-012-20240824   gcc-12
+i386                  randconfig-013-20240824   gcc-12
+i386                  randconfig-014-20240824   gcc-12
+i386                  randconfig-015-20240824   gcc-12
+i386                  randconfig-016-20240824   gcc-12
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-13.2.0
+loongarch                         allnoconfig   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-13.2.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-13.2.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+mips                              allnoconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-14.1.0
+nios2                             allnoconfig   gcc-13.2.0
+nios2                             allnoconfig   gcc-14.1.0
+openrisc                          allnoconfig   gcc-14.1.0
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   gcc-14.1.0
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-14.1.0
+powerpc                           allnoconfig   gcc-14.1.0
+riscv                             allnoconfig   gcc-14.1.0
+riscv                               defconfig   clang-20
+s390                             allmodconfig   clang-20
+s390                              allnoconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   clang-20
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-13.2.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-14.1.0
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-14.1.0
+um                               allmodconfig   clang-20
+um                                allnoconfig   clang-17
+um                               allyesconfig   gcc-12
+um                                  defconfig   clang-20
+um                             i386_defconfig   gcc-12
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240824   clang-18
+x86_64       buildonly-randconfig-002-20240824   clang-18
+x86_64       buildonly-randconfig-003-20240824   clang-18
+x86_64       buildonly-randconfig-004-20240824   clang-18
+x86_64       buildonly-randconfig-005-20240824   gcc-12
+x86_64       buildonly-randconfig-006-20240824   clang-18
+x86_64                              defconfig   gcc-11
+x86_64                randconfig-001-20240824   gcc-12
+x86_64                randconfig-002-20240824   clang-18
+x86_64                randconfig-003-20240824   gcc-12
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-13.2.0
+xtensa                            allnoconfig   gcc-14.1.0
 
-I hope that a single patch for all drivers in drivers/usb/storage/ is fine.
----
- drivers/usb/storage/alauda.c        | 4 ++--
- drivers/usb/storage/cypress_atacb.c | 4 ++--
- drivers/usb/storage/datafab.c       | 4 ++--
- drivers/usb/storage/ene_ub6250.c    | 4 ++--
- drivers/usb/storage/freecom.c       | 4 ++--
- drivers/usb/storage/isd200.c        | 4 ++--
- drivers/usb/storage/jumpshot.c      | 4 ++--
- drivers/usb/storage/karma.c         | 4 ++--
- drivers/usb/storage/onetouch.c      | 4 ++--
- drivers/usb/storage/sddr09.c        | 4 ++--
- drivers/usb/storage/sddr55.c        | 4 ++--
- drivers/usb/storage/shuttle_usbat.c | 4 ++--
- drivers/usb/storage/uas.c           | 2 +-
- 13 files changed, 25 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-index 40d34cc28344..a9d3c58ce7d9 100644
---- a/drivers/usb/storage/alauda.c
-+++ b/drivers/usb/storage/alauda.c
-@@ -132,7 +132,7 @@ static int init_alauda(struct us_data *us);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id alauda_usb_ids[] = {
-+static const struct usb_device_id alauda_usb_ids[] = {
- #	include "unusual_alauda.h"
- 	{ }		/* Terminating entry */
- };
-@@ -154,7 +154,7 @@ MODULE_DEVICE_TABLE(usb, alauda_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev alauda_unusual_dev_list[] = {
-+static const struct us_unusual_dev alauda_unusual_dev_list[] = {
- #	include "unusual_alauda.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/cypress_atacb.c b/drivers/usb/storage/cypress_atacb.c
-index 98b3ec352a13..30dfd0082474 100644
---- a/drivers/usb/storage/cypress_atacb.c
-+++ b/drivers/usb/storage/cypress_atacb.c
-@@ -33,7 +33,7 @@ MODULE_IMPORT_NS(USB_STORAGE);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id cypress_usb_ids[] = {
-+static const struct usb_device_id cypress_usb_ids[] = {
- #	include "unusual_cypress.h"
- 	{ }		/* Terminating entry */
- };
-@@ -55,7 +55,7 @@ MODULE_DEVICE_TABLE(usb, cypress_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev cypress_unusual_dev_list[] = {
-+static const struct us_unusual_dev cypress_unusual_dev_list[] = {
- #	include "unusual_cypress.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/datafab.c b/drivers/usb/storage/datafab.c
-index bcc4a2fad863..3ea5601d16b8 100644
---- a/drivers/usb/storage/datafab.c
-+++ b/drivers/usb/storage/datafab.c
-@@ -80,7 +80,7 @@ static int datafab_determine_lun(struct us_data *us,
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id datafab_usb_ids[] = {
-+static const struct usb_device_id datafab_usb_ids[] = {
- #	include "unusual_datafab.h"
- 	{ }		/* Terminating entry */
- };
-@@ -102,7 +102,7 @@ MODULE_DEVICE_TABLE(usb, datafab_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev datafab_unusual_dev_list[] = {
-+static const struct us_unusual_dev datafab_unusual_dev_list[] = {
- #	include "unusual_datafab.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
-index 97c66c0d91f4..73dd276ce59c 100644
---- a/drivers/usb/storage/ene_ub6250.c
-+++ b/drivers/usb/storage/ene_ub6250.c
-@@ -43,7 +43,7 @@ MODULE_FIRMWARE(MS_RW_FIRMWARE);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
- 	.driver_info = (flags)}
- 
--static struct usb_device_id ene_ub6250_usb_ids[] = {
-+static const struct usb_device_id ene_ub6250_usb_ids[] = {
- #	include "unusual_ene_ub6250.h"
- 	{ }		/* Terminating entry */
- };
-@@ -65,7 +65,7 @@ MODULE_DEVICE_TABLE(usb, ene_ub6250_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev ene_ub6250_unusual_dev_list[] = {
-+static const struct us_unusual_dev ene_ub6250_unusual_dev_list[] = {
- #	include "unusual_ene_ub6250.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/freecom.c b/drivers/usb/storage/freecom.c
-index c3ce51c2dabd..cab27ba7a32a 100644
---- a/drivers/usb/storage/freecom.c
-+++ b/drivers/usb/storage/freecom.c
-@@ -119,7 +119,7 @@ static int init_freecom(struct us_data *us);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id freecom_usb_ids[] = {
-+static const struct usb_device_id freecom_usb_ids[] = {
- #	include "unusual_freecom.h"
- 	{ }		/* Terminating entry */
- };
-@@ -141,7 +141,7 @@ MODULE_DEVICE_TABLE(usb, freecom_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev freecom_unusual_dev_list[] = {
-+static const struct us_unusual_dev freecom_unusual_dev_list[] = {
- #	include "unusual_freecom.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/isd200.c b/drivers/usb/storage/isd200.c
-index 300aeef160e7..f2254eb3c0d7 100644
---- a/drivers/usb/storage/isd200.c
-+++ b/drivers/usb/storage/isd200.c
-@@ -67,7 +67,7 @@ static int isd200_Initialization(struct us_data *us);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id isd200_usb_ids[] = {
-+static const struct usb_device_id isd200_usb_ids[] = {
- #	include "unusual_isd200.h"
- 	{ }		/* Terminating entry */
- };
-@@ -89,7 +89,7 @@ MODULE_DEVICE_TABLE(usb, isd200_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev isd200_unusual_dev_list[] = {
-+static const struct us_unusual_dev isd200_unusual_dev_list[] = {
- #	include "unusual_isd200.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/jumpshot.c b/drivers/usb/storage/jumpshot.c
-index 229bf0c1afc9..0e71a8f33c2b 100644
---- a/drivers/usb/storage/jumpshot.c
-+++ b/drivers/usb/storage/jumpshot.c
-@@ -62,7 +62,7 @@ MODULE_IMPORT_NS(USB_STORAGE);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id jumpshot_usb_ids[] = {
-+static const struct usb_device_id jumpshot_usb_ids[] = {
- #	include "unusual_jumpshot.h"
- 	{ }		/* Terminating entry */
- };
-@@ -84,7 +84,7 @@ MODULE_DEVICE_TABLE(usb, jumpshot_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev jumpshot_unusual_dev_list[] = {
-+static const struct us_unusual_dev jumpshot_unusual_dev_list[] = {
- #	include "unusual_jumpshot.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
-index 38ddfedef629..d6a5e54f2ca8 100644
---- a/drivers/usb/storage/karma.c
-+++ b/drivers/usb/storage/karma.c
-@@ -51,7 +51,7 @@ static int rio_karma_init(struct us_data *us);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id karma_usb_ids[] = {
-+static const struct usb_device_id karma_usb_ids[] = {
- #	include "unusual_karma.h"
- 	{ }		/* Terminating entry */
- };
-@@ -73,7 +73,7 @@ MODULE_DEVICE_TABLE(usb, karma_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev karma_unusual_dev_list[] = {
-+static const struct us_unusual_dev karma_unusual_dev_list[] = {
- #	include "unusual_karma.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/onetouch.c b/drivers/usb/storage/onetouch.c
-index 01f3c2779ccf..f97cf6cadb8e 100644
---- a/drivers/usb/storage/onetouch.c
-+++ b/drivers/usb/storage/onetouch.c
-@@ -55,7 +55,7 @@ struct usb_onetouch {
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id onetouch_usb_ids[] = {
-+static const struct usb_device_id onetouch_usb_ids[] = {
- #	include "unusual_onetouch.h"
- 	{ }		/* Terminating entry */
- };
-@@ -77,7 +77,7 @@ MODULE_DEVICE_TABLE(usb, onetouch_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev onetouch_unusual_dev_list[] = {
-+static const struct us_unusual_dev onetouch_unusual_dev_list[] = {
- #	include "unusual_onetouch.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/sddr09.c b/drivers/usb/storage/sddr09.c
-index 51bcd4a43690..03d1b9c69ea1 100644
---- a/drivers/usb/storage/sddr09.c
-+++ b/drivers/usb/storage/sddr09.c
-@@ -63,7 +63,7 @@ static int usb_stor_sddr09_init(struct us_data *us);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id sddr09_usb_ids[] = {
-+static const struct usb_device_id sddr09_usb_ids[] = {
- #	include "unusual_sddr09.h"
- 	{ }		/* Terminating entry */
- };
-@@ -85,7 +85,7 @@ MODULE_DEVICE_TABLE(usb, sddr09_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev sddr09_unusual_dev_list[] = {
-+static const struct us_unusual_dev sddr09_unusual_dev_list[] = {
- #	include "unusual_sddr09.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-index 0aa079405d23..b8227478a7ad 100644
---- a/drivers/usb/storage/sddr55.c
-+++ b/drivers/usb/storage/sddr55.c
-@@ -40,7 +40,7 @@ MODULE_IMPORT_NS(USB_STORAGE);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id sddr55_usb_ids[] = {
-+static const struct usb_device_id sddr55_usb_ids[] = {
- #	include "unusual_sddr55.h"
- 	{ }		/* Terminating entry */
- };
-@@ -62,7 +62,7 @@ MODULE_DEVICE_TABLE(usb, sddr55_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev sddr55_unusual_dev_list[] = {
-+static const struct us_unusual_dev sddr55_unusual_dev_list[] = {
- #	include "unusual_sddr55.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/shuttle_usbat.c b/drivers/usb/storage/shuttle_usbat.c
-index f0d0ca37163d..e7c224b7c464 100644
---- a/drivers/usb/storage/shuttle_usbat.c
-+++ b/drivers/usb/storage/shuttle_usbat.c
-@@ -162,7 +162,7 @@ static int init_usbat_flash(struct us_data *us);
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-   .driver_info = (flags) }
- 
--static struct usb_device_id usbat_usb_ids[] = {
-+static const struct usb_device_id usbat_usb_ids[] = {
- #	include "unusual_usbat.h"
- 	{ }		/* Terminating entry */
- };
-@@ -184,7 +184,7 @@ MODULE_DEVICE_TABLE(usb, usbat_usb_ids);
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev usbat_unusual_dev_list[] = {
-+static const struct us_unusual_dev usbat_unusual_dev_list[] = {
- #	include "unusual_usbat.h"
- 	{ }		/* Terminating entry */
- };
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index c223b4dc1b19..03043d567fa1 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -927,7 +927,7 @@ static const struct scsi_host_template uas_host_template = {
- { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
- 	.driver_info = (flags) }
- 
--static struct usb_device_id uas_usb_ids[] = {
-+static const struct usb_device_id uas_usb_ids[] = {
- #	include "unusual_uas.h"
- 	{ USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, USB_SC_SCSI, USB_PR_BULK) },
- 	{ USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, USB_SC_SCSI, USB_PR_UAS) },
 -- 
-2.46.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
