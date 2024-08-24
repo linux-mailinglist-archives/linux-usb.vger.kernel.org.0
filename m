@@ -1,139 +1,104 @@
-Return-Path: <linux-usb+bounces-14041-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14042-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F72F95E040
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 00:25:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E56795E060
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 01:23:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65142282946
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 22:25:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 131FCB21683
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 23:23:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6DB13AA2E;
-	Sat, 24 Aug 2024 22:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4914913D8B3;
+	Sat, 24 Aug 2024 23:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJRhvduw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZLub7AdT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0188F62
-	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 22:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18993EA76
+	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 23:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724538324; cv=none; b=kN26vwzrtih0Y20K6cjNDt4R3I+ABFQg49oEY8TO/6cL10oKhqF8697dF27LzT/3AcVbWVKiEt09LbBRAa4bQqIYfo9pw7TQycLeZMNgDeYulPNsKunSDwYUdwWl9cmnH2PQVM7p3RjQtok0ESJVKrFmy3oMI5Ah1KE0i/SOLIU=
+	t=1724541800; cv=none; b=H3QacpYlkMCWShoHFXGyS1AH7uEVKxuKlF6bAlwMgzqzAMgldg/C76r1nk0wAWEIiEBASQ25yLy0DxXqSbzKlbgRdjKzrI8aHk4Glzi1dosIzWaFQCY4ZTU3M+qetGoYwDb9OXQy13/U44AjGiDCbGAx0ZWawG19L4weYLxChZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724538324; c=relaxed/simple;
-	bh=chGM9zE1WM10DLj367FHIqZ2iigwVbXe449qDNEvXss=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VYSfM5BMmXyO+KXfzq28jm4WfHJGKQiR/E7jJu0pUcL//4E2oEuSgH8KUhStP5m+E2Tf93SYvKhh2dEx4ezbnSqbb1clzpWoBPUrZexG7uq4AR2ZrSBMluZU1JROzd798TQ2ozr8TiKsWxr7ZRElvDhYDccHn4ajRP+RII74qas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJRhvduw; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2705d31a35cso2801352fac.0
-        for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 15:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724538322; x=1725143122; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/3jfYWVVYMnFnkq2u8OQUv9t6htr8yfhef4OcFzoKG4=;
-        b=fJRhvduw2NSXczd0ds6G8/DSy76DiRW+f6lZV8PTavsyhAmBNG08vihQWf6ubplhw7
-         z1U/xl0YTw68nVS8cICfyO/U1Bf8vf5LBeMYRNhpvlVJFAS6dI6WwIyYCmudloRMVQFO
-         hlpi+6yf7KKGO4bsJZSFEfl6Mgx6M+ui6cEGfd7eQReK1I7pHMYF2Qu0y2Y4S+s2YXGT
-         VQze/YGGRQkusxDwVL6ZZU6xX2b9BHtmN35UhokR72FunJ0cJ92GUPsxTNjxuh8oauaT
-         Uyin4okzoWMNtwiUB9jdYfI4BKVPAP6prXqMo7B7RPzAzPFTjd3J0tKIE37tr7pwAtJK
-         q7Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724538322; x=1725143122;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/3jfYWVVYMnFnkq2u8OQUv9t6htr8yfhef4OcFzoKG4=;
-        b=c3OZsxF2Pbkf28iwIndVYs7osa9h+L8XVwfUG6cufm9PpJLvsO5Ftop3L5JVfrsD9y
-         m2t14Y19aOoRsYrxDwGVep5Pr05fxk1ZfDn5L3vutDZJs24d/54GFgNVAUwuMDZejy9q
-         s5CplwlSbJwe1NTLCRMJixo/ViCW/Kc/lhI3IQvA8k+bwZ90eWe3cS/pA77tpmqnZ1Pa
-         ujR2A9Sf+bI9jCTD6ki6uR+67Stwk/pP5oscWbNEnvde1NWyQcIjlXcq33OzMnB04xJy
-         KatKzCOKdQpYxiNezEx5m2Dx0Sx3g4OqYwVoRq+QNqkMnmoNTxE1m7jFzDYkcHTPcBga
-         n9aA==
-X-Gm-Message-State: AOJu0YzzvBZpugdqf+w2A9eBO8cxcJGMbZb7xtRA3uOZ18oH7AfYSq78
-	h6F9wvgHuaHT9MdVaKa0WSv6bz0xQYEM483BCBjkFEbGyAKWAEt9F53iaQP6dM0ln/tYYZKAYLC
-	Zcs4cv3WKKJ5vEcTP1C7kiLiWR7A=
-X-Google-Smtp-Source: AGHT+IHxFOqyGWQVaEApEbTYwH2t1mn5OXOYS3ICUKpIDmhPimv6ZP3mAC0aSKLUExIUm8+501QtiB735AUlrOsfgQw=
-X-Received: by 2002:a05:6870:c693:b0:270:205a:4070 with SMTP id
- 586e51a60fabf-273e64769femr7481976fac.14.1724538322337; Sat, 24 Aug 2024
- 15:25:22 -0700 (PDT)
+	s=arc-20240116; t=1724541800; c=relaxed/simple;
+	bh=sYp4GUi86+q/NMl7C9ZZ1N+eUt4kr+hmZqGnklV/clE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VGewQJ1WX1CEXHef3QNI1MRAVE/fnNGazDHxFSscD/ih2MqzIxVz2bJlHwDvQ2cD8h2tuRucEL3GEBH0DKVk1EEV8y9CdyK082HugB7ijzJpJBYHgJGmtkzzAmfDX3kSpcrbnQtDyA+hBUBMDRuk67nfLUsTkh2Z1GjG7JlzTfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZLub7AdT; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724541799; x=1756077799;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sYp4GUi86+q/NMl7C9ZZ1N+eUt4kr+hmZqGnklV/clE=;
+  b=ZLub7AdTBcJbuU8r3sE9i1ToAOrv+G+U8sGQypuHW0y8x4yLa6v4BWUl
+   UTyUvZo/ymmLQ4wWk4S4y5y+1PHUP0/eho5GY98EVdvNXCKy8zyZv2VRY
+   tkwCdnxwn95Xc0m0i00mcY5pkCRPAlAGpYnavNbYlILcDyk9h+7dHq80L
+   WDg+MsC9nDhzS8Up1KMI/pf49CZzBLIP89GhopxBp9iQIZ9A6sgM54oJF
+   7Vv5UHozGjciXe8w3RZV/ZMkqjmXHHXKA79NDgoacnOlL41xj7B8dtO32
+   LZlXbjJCE/7KXJ/UQTTRPwR2+SnrcnKmVy9HrrD54LarDbE5//TfZcxwz
+   Q==;
+X-CSE-ConnectionGUID: bmPFmD8dQ8WDL7XOaEtdmw==
+X-CSE-MsgGUID: I5fZKqZhR46pHuvo6WVm5Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="25887059"
+X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
+   d="scan'208";a="25887059"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 16:23:18 -0700
+X-CSE-ConnectionGUID: OhKPrfVGSqydwY2iUgg9jw==
+X-CSE-MsgGUID: 33wPfEhnQ9yRDEzWSjiNBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
+   d="scan'208";a="66946308"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 24 Aug 2024 16:23:17 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1si06E-000Enn-2j;
+	Sat, 24 Aug 2024 23:23:14 +0000
+Date: Sun, 25 Aug 2024 07:22:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-testing 20/25] onboard_usb_dev.c:undefined reference to
+ `i2c_find_device_by_fwnode'
+Message-ID: <202408250737.xpHij5TD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240823183553.2288-1-alon.barlev@gmail.com> <ZsoZMVlT2hfr3qx_@arcor.de>
-In-Reply-To: <ZsoZMVlT2hfr3qx_@arcor.de>
-From: Alon Bar-Lev <alon.barlev@gmail.com>
-Date: Sun, 25 Aug 2024 01:25:05 +0300
-Message-ID: <CAOazyz2tTXv18o9wLS03XK_WPwZ7wOD5v-W3WfQvJJS=APS5=Q@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: qcserial: add support for Sierra Wireless EM7511
-To: Reinhard Speyerer <rspmn@arcor.de>
-Cc: linux-usb@vger.kernel.org, johan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Aug 24, 2024 at 8:33=E2=80=AFPM Reinhard Speyerer <rspmn@arcor.de> =
-wrote:
->
-> On Fri, Aug 23, 2024 at 09:35:53PM +0300, alon.barlev@gmail.com wrote:
-> > From: Alon Bar-Lev <alon.barlev@gmail.com>
-> > +     {DEVICE_SWI(0x1199, 0x90b0)},   /* Sierra Wireless EM7511 QDL */
-> > +     {DEVICE_SWI(0x1199, 0x90b1)},   /* Sierra Wireless EM7511 */
->
-> Hi Alon,
->
-> the interface layout for the DEVICE_SWI(0x1199, 0x90b1) entry from your p=
-atch
-> disagrees with the usb-devices output from
-> https://forum.sierrawireless.com/t/em7565-1199-90b1-usbx-qcserial-issue-u=
-buntu-20-04-mbpl-driver-fail-to-compile/26361
-> and the Sierra Wireless MBPL_DRIVER_R27_ENG2-usb-src.tar.gz driver attach=
-ed
-> to this thread https://forum.sierrawireless.com/t/driver-make-error/30702=
- .
->
-> As a consequence the DIAG interface would not be supported by the mainlin=
-e
-> Linux kernel.
->
-> Regards,
-> Reinhard
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   9a03b9a88e4a44e358e3638736286442ae262497
+commit: 7b5e970ff0e58f9239226fe81c77d5b98d744986 [20/25] usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support
+config: s390-randconfig-001-20240824 (https://download.01.org/0day-ci/archive/20240825/202408250737.xpHij5TD-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240825/202408250737.xpHij5TD-lkp@intel.com/reproduce)
 
-Hi Reinhard,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408250737.xpHij5TD-lkp@intel.com/
 
-Thank you for the references.
+All errors (new ones prefixed by >>):
 
-The push back is regarding hardware specific modification of qcserial
-to meet device requirement.
-To make it harder, Sierra patches upstream modules and provides as-is
-without the ability of side-by-side installation.
-I compared the changes of qmi_wwan, usb_wwan most are trivial and
-hopefully reach upstream.
-I hope they workout and add the options support so this can be
-upstreamed eventually.
+   s390-linux-ld: drivers/usb/misc/onboard_usb_dev.o: in function `onboard_dev_probe':
+>> onboard_usb_dev.c:(.text+0x1164): undefined reference to `i2c_find_device_by_fwnode'
+>> s390-linux-ld: onboard_usb_dev.c:(.text+0x1206): undefined reference to `i2c_smbus_write_block_data'
+>> s390-linux-ld: onboard_usb_dev.c:(.text+0x121e): undefined reference to `i2c_smbus_write_word_data'
+   s390-linux-ld: onboard_usb_dev.c:(.text+0x1236): undefined reference to `i2c_smbus_write_word_data'
 
-In order to load firmware it should have been sufficient to have QDL
-setup + somehow setup the tty for the AT channel.
-
-    echo $vendor $product $interface >
-/sys/bus/usb-serial/drivers/qcserial/new_id
-
-Would have done the trick to be able to use this at least manually
-without forcing the device specific nor options at this point, not
-sure how simple it is to support this notation.
-
-For now I will keep using the patched version of qcserial as it
-actually works :)
-
-Thank you again,
-Alon
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
