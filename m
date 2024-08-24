@@ -1,74 +1,83 @@
-Return-Path: <linux-usb+bounces-14037-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14038-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64DD495DE97
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 16:54:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 424F895DEAD
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 17:21:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D109DB21676
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 14:54:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BA021C21016
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 15:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E4B17ADE0;
-	Sat, 24 Aug 2024 14:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F60E17BEB2;
+	Sat, 24 Aug 2024 15:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q0YbsUR+"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="azsTXq+P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA7A176AC1
-	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 14:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE961E51D
+	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 15:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724511251; cv=none; b=rHY2OXW5kZztQBJAlOQThYUxZXyL7oR9lkLX6ExyYXGyCl66x9RD6JbO4N6QGCimxSbpLZD6DXz3Aw1wy+GvRb6EYJ0/G32rEPnFTs0pfXDS+QMJdapbFjIC7UEjy6upTTeB1Nrjg3aNtxkfrvdYVX1w/9cy3iHcM32GsKz7ddI=
+	t=1724512865; cv=none; b=pNDmN1NbDUifWTwEcY9n+LgQ7b4qOTMxw9ml2WpWi9A1P4bVskrYXUQF2CrG1FrjEwgkCccgyGoOd8tDsFzK+vzHScdi3ARgr5JSjf7yB5LWK0WOATQVEilK7G7AQUZHw/VKa2VKTT7d5l7Grp8S2jmgVsMCNEa+mH5utlUWnPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724511251; c=relaxed/simple;
-	bh=/+GNvKbTNYnRq2xzSrKYptz7eI8kWjKW+KeyDQbaRYM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NmXfNwPxsasL5x4BYuv32JwGt4GgMFw3L2zX0qNF1wm4SpiTyZ0RlsSsfGU4VDUxwXxmV3GUsFR4nRSlFEVGlvdT/uMANIKNwslQUDa4vVmW3vok0QW1iSRIx1uF1cMLolfW6waGENKLW5XKLV88hCn3PU7XffDUSvxtfCjbRGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q0YbsUR+; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724511248; x=1756047248;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/+GNvKbTNYnRq2xzSrKYptz7eI8kWjKW+KeyDQbaRYM=;
-  b=Q0YbsUR+C0s56XACLK9IjhOzaClZXZdLh+41OU8lAv8EP2tmd28/ebmM
-   aKL+Q0rtVNpxpN3jAye2nibQoqcsae8HoKiPsheNcTAvYLZUUdlqamOtq
-   2rZwbpeEq4d/kdhGQp+2OeWuxgIa63QSd9oK1SR4ANx9Z6erIs1KPpVA8
-   2BTHuflUSy2GnLU1hjb878M9O18pz6d/jN+s6+61IxqcQ9NAsCq/Xg5xy
-   wN4KL+XQu/yNmATquohhaSvFiUy6Nv8Chx5892dc5/Gb6pacYcZuIZJ+O
-   LEsegXyEsFYTQBbAWT2wtBveqzEAns/q8yVgAmAeaUS7jVqQ+jLE0jkP4
-   Q==;
-X-CSE-ConnectionGUID: qvEhFJiWRZq+TOCsSQshug==
-X-CSE-MsgGUID: 9IkYtCeXTp+bKSenbI7+KQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="22572998"
-X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="22572998"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 07:54:08 -0700
-X-CSE-ConnectionGUID: bLTchCxbQyewZqKK2BJNWQ==
-X-CSE-MsgGUID: hrAx67lNRhCh1nUZ+zMh8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="99581811"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 24 Aug 2024 07:54:07 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1shs9T-000EY3-37;
-	Sat, 24 Aug 2024 14:54:03 +0000
-Date: Sat, 24 Aug 2024 22:53:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-testing 20/25] drivers/usb/misc/onboard_usb_dev.c:329:15:
- error: implicit declaration of function 'i2c_smbus_write_block_data'
-Message-ID: <202408242231.WOLALxi9-lkp@intel.com>
+	s=arc-20240116; t=1724512865; c=relaxed/simple;
+	bh=b0xGI+p9gcd/yQoiWwhTGLwLxo5Oe/8tkN1WCnxaiMo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m4vZaYWIqos+SP0BbYcrye4Np9sFfKX5Fpp9gRcc1wZGqmJuKGT2XEYWxhxTn5GxIYT6K77+uxHMV3wALpo+QQhwbAvvIC0rTc/YP6HCQCEqNf/WSTxiTSqaffIaLGFmCU7VqZTbDmZWFL863w35zy7G6idB04Ou3jBaZUN8HQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=azsTXq+P; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7a1d5f6c56fso192285985a.0
+        for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 08:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1724512862; x=1725117662; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iFD/HdZvKaQemZyniW7+rQ360L3m9+rOVbHWSYB5I1E=;
+        b=azsTXq+PLKP8FBVIRVpSLj+lydrLv5AEAxkQZjwe1RM6taNspObAcumrmVdQc6EBUF
+         B8mMaSEGhzbUJzALVj9PwwK8v7JA3rS/uV1CSAiBXDgLBXgHg2vEZlsZthJ2yrCCJKfG
+         0DGuNwARdVapiT+ccG4gCVW21YrbzEocaFNAhHrWte8hMpw3Vvd3p5fGgL3YeMoVgJV2
+         NAJWn+TY4gcpjmHKAp+jV/wZQ1dbWGW3PDcyT9kfBxyCioiw0b+L2146OO7YZIytS6uT
+         kVZ4oWiJ+pBUSroz8YsYypwokyGP8/LdNxoiEXAdTZASqaDXyVujkpbpGOaTGrIx389l
+         dhKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724512862; x=1725117662;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iFD/HdZvKaQemZyniW7+rQ360L3m9+rOVbHWSYB5I1E=;
+        b=J7ml9imtuV98SiskD+9M5rBtVSnsPjrSmA2sMUk/SiM28J9nEY5ba0weTjoAVC8UD/
+         +NgyGg5qR7k9F/TNGhFjCaCKmu2IrxU24OhbZ7H8Ak/JhybqLmm5VXR80WlxusDMwBpP
+         neCIQc1fmdH0lDrPvMMnoHDbcFJXTewWeIaCwgiTXpw6gaqKAckYVMyMcxASBfUHrBAC
+         rjS5ery8tuKgmnVlV4huPp3W/ymg5TX/Y1cZLz/xmeWwxBrZPebEZovU+B1E87dLQyiB
+         qCId4K2Fgu71YbDBQJ1k47yeVsA+mvMmHG3C1knxqxdtxt/8XXMJLg2RloIoIoQoUwdH
+         C0Dw==
+X-Forwarded-Encrypted: i=1; AJvYcCXFew2XphIiu1rq7JvGLqb6xrLzbNdZmdhqVydnCnshqtotu9ctnSYyG/86l2rHLvr4lFy8sswtW34=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSKh1Q1y+itx3K1Xa1W4bwZHPX7EgX1FKOofyGgOt/QFrllD+x
+	QAzltCnFEuuDyvLxq64dne2zhaIlksMnvrqonv/Q1ukAjHjyy85eix6lmOAODGO32HifmlQjpQ8
+	=
+X-Google-Smtp-Source: AGHT+IGdt+kqNYPY4hj9CKwN8EktiVIBKnBk8Jy2GFyma/+wYt1JorA8B82+CvYXNoEH5nk/bOOlAA==
+X-Received: by 2002:a05:620a:24d0:b0:79e:ff1a:2359 with SMTP id af79cd13be357-7a6896e3e5amr812084585a.14.1724512861875;
+        Sat, 24 Aug 2024 08:21:01 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::546])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a67f3fbdafsm285372585a.119.2024.08.24.08.21.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Aug 2024 08:21:01 -0700 (PDT)
+Date: Sat, 24 Aug 2024 11:20:58 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] usb-storage: Constify struct usb_device_id and
+ us_unusual_dev
+Message-ID: <59fe0f83-168c-4f23-b2bf-504649f29d75@rowland.harvard.edu>
+References: <b1b75a2a64b1f6cfad2a611f71393f281178fd3f.1724507157.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,71 +86,49 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <b1b75a2a64b1f6cfad2a611f71393f281178fd3f.1724507157.git.christophe.jaillet@wanadoo.fr>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-head:   9a03b9a88e4a44e358e3638736286442ae262497
-commit: 7b5e970ff0e58f9239226fe81c77d5b98d744986 [20/25] usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support
-config: arc-randconfig-001-20240824 (https://download.01.org/0day-ci/archive/20240824/202408242231.WOLALxi9-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408242231.WOLALxi9-lkp@intel.com/reproduce)
+On Sat, Aug 24, 2024 at 03:47:07PM +0200, 'Christophe JAILLET' via USB Mass Storage on Linux wrote:
+> 'struct usb_device_id' and 'struct us_unusual_dev' are not modified in
+> these drivers.
+> 
+> Constifying these structures moves some data to a read-only section, so
+> increase overall security, especially when the structure holds some
+> function pointers (which is the case for struct us_unusual_dev).
+> 
+> On a x86_64, with allmodconfig, as an example:
+> Before:
+> ======
+>    text	   data	    bss	    dec	    hex	filename
+>   25249	   4261	    896	  30406	   76c6	drivers/usb/storage/alauda.o
+>    3969	    672	    360	   5001	   1389	drivers/usb/storage/cypress_atacb.o
+> 
+> After:
+> =====
+>    text	   data	    bss	    dec	    hex	filename
+>   25461	   4041	    896	  30398	   76be	drivers/usb/storage/alauda.o
+>    4225	    400	    360	   4985	   1379	drivers/usb/storage/cypress_atacb.o
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested-only.
+> 
+> I hope that a single patch for all drivers in drivers/usb/storage/ is fine.
+> ---
+>  drivers/usb/storage/alauda.c        | 4 ++--
+>  drivers/usb/storage/cypress_atacb.c | 4 ++--
+>  drivers/usb/storage/datafab.c       | 4 ++--
+>  drivers/usb/storage/ene_ub6250.c    | 4 ++--
+>  drivers/usb/storage/freecom.c       | 4 ++--
+>  drivers/usb/storage/isd200.c        | 4 ++--
+>  drivers/usb/storage/jumpshot.c      | 4 ++--
+>  drivers/usb/storage/karma.c         | 4 ++--
+>  drivers/usb/storage/onetouch.c      | 4 ++--
+>  drivers/usb/storage/sddr09.c        | 4 ++--
+>  drivers/usb/storage/sddr55.c        | 4 ++--
+>  drivers/usb/storage/shuttle_usbat.c | 4 ++--
+>  drivers/usb/storage/uas.c           | 2 +-
+>  13 files changed, 25 insertions(+), 25 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408242231.WOLALxi9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/usb/misc/onboard_usb_dev.c: In function 'onboard_dev_5744_i2c_init':
->> drivers/usb/misc/onboard_usb_dev.c:329:15: error: implicit declaration of function 'i2c_smbus_write_block_data' [-Werror=implicit-function-declaration]
-     329 |         ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/misc/onboard_usb_dev.c:333:15: error: implicit declaration of function 'i2c_smbus_write_word_data' [-Werror=implicit-function-declaration]
-     333 |         ret = i2c_smbus_write_word_data(client, USB5744_CMD_CREG_ACCESS,
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/i2c_smbus_write_block_data +329 drivers/usb/misc/onboard_usb_dev.c
-
-   311	
-   312	static int onboard_dev_5744_i2c_init(struct i2c_client *client)
-   313	{
-   314		struct device *dev = &client->dev;
-   315		int ret;
-   316	
-   317		/*
-   318		 * Set BYPASS_UDC_SUSPEND bit to ensure MCU is always enabled
-   319		 * and ready to respond to SMBus runtime commands.
-   320		 * The command writes 5 bytes to memory and single data byte in
-   321		 * configuration register.
-   322		 */
-   323		char wr_buf[7] = {USB5744_CREG_MEM_ADDR, 5,
-   324				  USB5744_CREG_WRITE, 1,
-   325				  USB5744_CREG_RUNTIMEFLAGS2,
-   326				  USB5744_CREG_RUNTIMEFLAGS2_LSB,
-   327				  USB5744_CREG_BYPASS_UDC_SUSPEND};
-   328	
- > 329		ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
-   330		if (ret)
-   331			return dev_err_probe(dev, ret, "BYPASS_UDC_SUSPEND bit configuration failed\n");
-   332	
- > 333		ret = i2c_smbus_write_word_data(client, USB5744_CMD_CREG_ACCESS,
-   334						USB5744_CMD_CREG_ACCESS_LSB);
-   335		if (ret)
-   336			return dev_err_probe(dev, ret, "Configuration Register Access Command failed\n");
-   337	
-   338		/* Send SMBus command to boot hub. */
-   339		ret = i2c_smbus_write_word_data(client, USB5744_CMD_ATTACH,
-   340						USB5744_CMD_ATTACH_LSB);
-   341		if (ret < 0)
-   342			return dev_err_probe(dev, ret, "USB Attach with SMBus command failed\n");
-   343	
-   344		return ret;
-   345	}
-   346	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
