@@ -1,105 +1,96 @@
-Return-Path: <linux-usb+bounces-14033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7FE995DC53
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 08:51:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40BFB95DD04
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 10:44:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 559B61F2264A
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 06:51:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67EF41C20E07
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 08:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF46B14EC73;
-	Sat, 24 Aug 2024 06:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1391155730;
+	Sat, 24 Aug 2024 08:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alphanet.ch header.i=@alphanet.ch header.b="nG91sv1r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m6vj2ZwD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shakotay.alphanet.ch (shakotay.alphanet.ch [46.140.72.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3711F762EB
-	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 06:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.140.72.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE39925762
+	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 08:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724482276; cv=none; b=Y7sedBlLmQ3P+uwU+LJQDccm73n4/OMNjIHBQUIpRDQlvdHBvyt3l8BycZn8vrcsdq6zXfh+ZE7bIgPKak4ZFG7MhndHoCrcBCPYLSvK9tqgZTyj+kl4kPuKW83VbUkJhr1gaf67HRU3kmPY8wr2T8milhdHDR5mCBeIUqtWW0Y=
+	t=1724489077; cv=none; b=hp+m2zjI7zzI1SOhYthVYrqoMl0LK+q44zJuNll0LhD+65Qa/x2BPAAneFMdoG6O65RLhvR38Hoj5aJlQWMoiiD2Lcd80wlohMQLFJzfdaw2FXE7IAZocxuDNYYYK0BScvGWtZCwg1i6Hu/4OyU1XUfJaNPVQ98eggW8z8aSSvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724482276; c=relaxed/simple;
-	bh=OsC8X32x+u7rmaG1B9ycDZv/+N0FAOKPjGVokQDQArY=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sd862UdFCbITEV6GsneHss9m5SbGY74BKHTykSxZWv5/PEePco+lFgvtOq8WxvdScCOD0nRdUfJ+01hhgAt5p+B4paAhS7Kk11ladPwU8X+FtpJcpBfMJvEHOd9KXLhZGnwOK/fjbIcVSuL5AjBzSbtf3kErOQz7rRAyd+5Zkso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alphanet.ch; spf=pass smtp.mailfrom=alphanet.ch; dkim=pass (2048-bit key) header.d=alphanet.ch header.i=@alphanet.ch header.b=nG91sv1r; arc=none smtp.client-ip=46.140.72.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alphanet.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alphanet.ch
-Received: by shakotay.alphanet.ch (Postfix, from userid 1022)
-	id 966311249242; Sat, 24 Aug 2024 08:51:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=alphanet.ch; s=mail;
-	t=1724482270; bh=OsC8X32x+u7rmaG1B9ycDZv/+N0FAOKPjGVokQDQArY=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=nG91sv1rS5ns9M1GiYmaoBgBBWloK+7XWOxXrOGpzL0Y4ERRRw7wxM3vw6PiV+dQA
-	 MuFaGyMLZYnQXn/TDr7kr7Z0dTYmZKi+O4ILDaKFDJEBsY4TNBWXG4mPZLbZJFHbIF
-	 EDeF+oRK34oVjw+qTSD5TsJSZGcLSxzzXWRN79WonZMTPW3qebFK6COrgymvnMGiPk
-	 Q7tpXzYx51rEi+nI6MYycXGion2TXzbCoDtpn4js52dQXZ8J010EmPH/7QahpYS7fT
-	 dNB/pL+KutpCoajnfrn76yqmf0a5e83HWGDxQSJTlLfjOcNeYD+uux2WrbZ0NatDUn
-	 AO/90SFfunLoQ==
-Received: from reliant.alphanet.ch (reliant.alphanet.ch [192.168.1.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by shakotay.alphanet.ch (Postfix) with ESMTPS id 97355124203B
-	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 08:51:03 +0200 (CEST)
-Received: by reliant.alphanet.ch (Postfix, from userid 1000)
-	id 8AD0676CA50; Sat, 24 Aug 2024 08:51:03 +0200 (CEST)
-Date: Sat, 24 Aug 2024 08:51:03 +0200
-From: Marc SCHAEFER <schaefer@alphanet.ch>
-To: linux-usb@vger.kernel.org
+	s=arc-20240116; t=1724489077; c=relaxed/simple;
+	bh=ygnb9ZnLyBtaGmQAkcKjC5VQd0lX2W1dMi7todpN+zk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=qyi++268LfwI/TS5FlrdCMDALMJ9LXEoAUQQBOPQgDGIo7/juDPlkpKzGz0GTYU8nEs/g+Bu5iziZo7Q+KJ7fEBzCu9pdmQjtNWlsPdYA2xQZ0KLqjcGiEby5lV9msM+BhELViL+i0zQev+gWxDOJvb6Fq/9wQ6QRR7HZpfFw+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m6vj2ZwD; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-533496017f8so3662624e87.0
+        for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 01:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724489074; x=1725093874; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ygnb9ZnLyBtaGmQAkcKjC5VQd0lX2W1dMi7todpN+zk=;
+        b=m6vj2ZwD8ONIER3pVa9t8RqIJ0g4y/Cm4m6ZCN2wXnd1e/hEutd+RvoqsT6/xVdLig
+         nq5e2oHDOaNuKXpkc4wl84NlGKqr4ccx9cApbkGIXpCGIk00k/gJZ+5VXNt13T5FHKYl
+         vBjh1eVoMd53Px8JnlRphulbLu3uG3ybMF1X2Wa1JslEJa8QcKtFJLhg75KpsLwrCrE1
+         RVhR5qzxaG0vYD69MCvhW2zdBhb3fBOXx/RW5vhft1O/+TzXVMNBQE0Hgzgrcp8p9Pf2
+         GGwGsjeu3KeCLsv3A+9YwHU5Jo/XyHhN1iX7kgIQq45NygY0i8YrxGfdgIeX86AiWp+I
+         9cMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724489074; x=1725093874;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ygnb9ZnLyBtaGmQAkcKjC5VQd0lX2W1dMi7todpN+zk=;
+        b=cWN9yw60NxRsQmxqjb+w6KcDlq4xEO+tpEklW3SY8/FRaiVNhVVg4SLIsTUJ9YEYKr
+         ptiC5mF+bCfKRty7W3NhUBkRVpJMlUyZp7y9lzmOI4zHBfiZAhjHd6bw7mqZoTUIzPx4
+         yHYZCKczPltJqpU7sFpl3WjSmUDXPfLKDnLQVFrAa7hg/dUmYNrrfEGSazii6e+WZ3ob
+         ySkjhhBhUDwdQ8Xswelu89GxPVJjIEnfj+Dc/mdlcgbOR7r5cli0ZenG0LKLRMkY/3U8
+         SmZZRToVx0knKUxQ7xqgsLGkWjXXHgIiUNoamq0oDS3FnFkC0dOPDQN2l4SR5J4rvkg3
+         lG4Q==
+X-Gm-Message-State: AOJu0YxH0GMymCMgxpLSd/jyCesvOM1nVF+7Gqgbind+DTFVritmTfzH
+	wTB/uZP925j51FZ5GFdSyR5r9BqQkbZ4Y37ZoFSqWQMJb8pNMAMb
+X-Google-Smtp-Source: AGHT+IFmKS7Z47Vu3efOF7ydNtzoFfP/y+GZfH9d5fIKnsZXROTOA89wcrBktq3IEIyoEGmez1vhtA==
+X-Received: by 2002:a05:6512:1597:b0:52e:9cc7:4461 with SMTP id 2adb3069b0e04-5343882dbc5mr2903302e87.5.1724489073400;
+        Sat, 24 Aug 2024 01:44:33 -0700 (PDT)
+Received: from foxbook (bfi133.neoplus.adsl.tpnet.pl. [83.28.46.133])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea2969asm795536e87.47.2024.08.24.01.44.32
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 24 Aug 2024 01:44:33 -0700 (PDT)
+Date: Sat, 24 Aug 2024 10:44:28 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: schaefer@alphanet.ch
+Cc: linux-usb@vger.kernel.org
 Subject: Re: Strange issues with USB device
-Message-ID: <ZsmC1+ko50RcvE9a@alphanet.ch>
-References: <ZsjgmCjHdzck9UKd@alphanet.ch>
- <20240824084437.342426dd@foxbook>
+Message-ID: <20240824104428.593895c9@foxbook>
+In-Reply-To: <ZsmC1+ko50RcvE9a@alphanet.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240824084437.342426dd@foxbook>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello,
+This driver received lots of fixes and improvements in the last few
+years.
 
-On Sat, Aug 24, 2024 at 08:44:37AM +0200, Micha?? Pecio wrote:
-> What sort of kernel is this?
+The newer release you can get, the better. Fixes aren't backported
+immediately, and some aren't backported at all because of too many
+changes in surrounding code.
 
-5.10.0-32-amd64 #1 SMP Debian 5.10.223-1 (2024-08-10) x86_64 GNU/Linux
+If it still doesn't work in v6.6, check v6.10 or v6.11-rc5 tomorrow
+even if you aren't going to use these branches long term.
 
-If required, I can try a backport 6.x, or even compile manually
-a last stable 6.x
-
-> Looks like there are some stream-related xhci_hcd bugs here. You may
-> have more luck with UAS disabled if you need this system working ASAP.
-
-There is no urgency, but yes, I will try that.
-
-> Not only SMART is failing, but also ordinary block reads and maybe
-> writes as well, so it could potentially be a risk of data loss.
-
-I am test-qualifying this system for a few weeks now, and that bug
-only happened under very high load, apparently.  So far no data
-corruption (data comparison is part of the test).
-
-> For debugging, it would help to have a reliable trigger, like "happens
-> every time I run smartctl manually" or "every time I do it while
-> 'cat /dev/sdc >/dev/null'" or at least "often while <some workload>".
-
-This seems to be encountered when I do an array check with mdadm,
-and when I adjust the min and max speed to the max.
-
-> I am able to find the PCI adapter responsible for a USB bus like this:
-> 
-> $ ls -d /sys/bus/pci/devices/*/usb8
-> /sys/bus/pci/devices/0000:02:00.0/usb8
-
-Thank you.
+Regards,
+Michal
 
