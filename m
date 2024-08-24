@@ -1,83 +1,64 @@
-Return-Path: <linux-usb+bounces-14038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14039-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 424F895DEAD
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 17:21:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36D2495DF3D
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 19:40:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BA021C21016
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 15:21:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D68A91F21CB7
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2024 17:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F60E17BEB2;
-	Sat, 24 Aug 2024 15:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA31247A6A;
+	Sat, 24 Aug 2024 17:40:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="azsTXq+P"
+	dkim=pass (1024-bit key) header.d=arcor.de header.i=@arcor.de header.b="spzgzSOm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mr5.vodafonemail.de (mr5.vodafonemail.de [145.253.228.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE961E51D
-	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 15:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D15380B
+	for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 17:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.253.228.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724512865; cv=none; b=pNDmN1NbDUifWTwEcY9n+LgQ7b4qOTMxw9ml2WpWi9A1P4bVskrYXUQF2CrG1FrjEwgkCccgyGoOd8tDsFzK+vzHScdi3ARgr5JSjf7yB5LWK0WOATQVEilK7G7AQUZHw/VKa2VKTT7d5l7Grp8S2jmgVsMCNEa+mH5utlUWnPI=
+	t=1724521252; cv=none; b=jCfUS8MMOBrYJnqm2yR1r5+NmEnbZ9stmTeS1pA0+t6QSPw/NQx2ku1wumJpsKjl6Fw7g+GjQfWaip/Fb/PVtppEZKZcDJiXt9LDSNJzGMNfwNQj/ag9LDAfBoies9+Z1TkBHQInV44QOGjBpIyfkC2sDaXjFPJ/Ur7SYN+56bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724512865; c=relaxed/simple;
-	bh=b0xGI+p9gcd/yQoiWwhTGLwLxo5Oe/8tkN1WCnxaiMo=;
+	s=arc-20240116; t=1724521252; c=relaxed/simple;
+	bh=TVVuq04htXBhj++FDTlOTJ9GMgp5AAJKu+47FLdvy5U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m4vZaYWIqos+SP0BbYcrye4Np9sFfKX5Fpp9gRcc1wZGqmJuKGT2XEYWxhxTn5GxIYT6K77+uxHMV3wALpo+QQhwbAvvIC0rTc/YP6HCQCEqNf/WSTxiTSqaffIaLGFmCU7VqZTbDmZWFL863w35zy7G6idB04Ou3jBaZUN8HQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=azsTXq+P; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7a1d5f6c56fso192285985a.0
-        for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2024 08:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1724512862; x=1725117662; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iFD/HdZvKaQemZyniW7+rQ360L3m9+rOVbHWSYB5I1E=;
-        b=azsTXq+PLKP8FBVIRVpSLj+lydrLv5AEAxkQZjwe1RM6taNspObAcumrmVdQc6EBUF
-         B8mMaSEGhzbUJzALVj9PwwK8v7JA3rS/uV1CSAiBXDgLBXgHg2vEZlsZthJ2yrCCJKfG
-         0DGuNwARdVapiT+ccG4gCVW21YrbzEocaFNAhHrWte8hMpw3Vvd3p5fGgL3YeMoVgJV2
-         NAJWn+TY4gcpjmHKAp+jV/wZQ1dbWGW3PDcyT9kfBxyCioiw0b+L2146OO7YZIytS6uT
-         kVZ4oWiJ+pBUSroz8YsYypwokyGP8/LdNxoiEXAdTZASqaDXyVujkpbpGOaTGrIx389l
-         dhKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724512862; x=1725117662;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iFD/HdZvKaQemZyniW7+rQ360L3m9+rOVbHWSYB5I1E=;
-        b=J7ml9imtuV98SiskD+9M5rBtVSnsPjrSmA2sMUk/SiM28J9nEY5ba0weTjoAVC8UD/
-         +NgyGg5qR7k9F/TNGhFjCaCKmu2IrxU24OhbZ7H8Ak/JhybqLmm5VXR80WlxusDMwBpP
-         neCIQc1fmdH0lDrPvMMnoHDbcFJXTewWeIaCwgiTXpw6gaqKAckYVMyMcxASBfUHrBAC
-         rjS5ery8tuKgmnVlV4huPp3W/ymg5TX/Y1cZLz/xmeWwxBrZPebEZovU+B1E87dLQyiB
-         qCId4K2Fgu71YbDBQJ1k47yeVsA+mvMmHG3C1knxqxdtxt/8XXMJLg2RloIoIoQoUwdH
-         C0Dw==
-X-Forwarded-Encrypted: i=1; AJvYcCXFew2XphIiu1rq7JvGLqb6xrLzbNdZmdhqVydnCnshqtotu9ctnSYyG/86l2rHLvr4lFy8sswtW34=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSKh1Q1y+itx3K1Xa1W4bwZHPX7EgX1FKOofyGgOt/QFrllD+x
-	QAzltCnFEuuDyvLxq64dne2zhaIlksMnvrqonv/Q1ukAjHjyy85eix6lmOAODGO32HifmlQjpQ8
-	=
-X-Google-Smtp-Source: AGHT+IGdt+kqNYPY4hj9CKwN8EktiVIBKnBk8Jy2GFyma/+wYt1JorA8B82+CvYXNoEH5nk/bOOlAA==
-X-Received: by 2002:a05:620a:24d0:b0:79e:ff1a:2359 with SMTP id af79cd13be357-7a6896e3e5amr812084585a.14.1724512861875;
-        Sat, 24 Aug 2024 08:21:01 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::546])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a67f3fbdafsm285372585a.119.2024.08.24.08.21.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Aug 2024 08:21:01 -0700 (PDT)
-Date: Sat, 24 Aug 2024 11:20:58 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] usb-storage: Constify struct usb_device_id and
- us_unusual_dev
-Message-ID: <59fe0f83-168c-4f23-b2bf-504649f29d75@rowland.harvard.edu>
-References: <b1b75a2a64b1f6cfad2a611f71393f281178fd3f.1724507157.git.christophe.jaillet@wanadoo.fr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kw9F2khd1lCDGBGA8XbWXG+zDWJlc50I6h9CCNi0kuWnhN16npaq9RAR652ccJ4AwZ+0Na0BRm66UWI5/NaAIVErmBKah8ZiUCfov479V2iEnfNu68f84T021DgNurqFrRSCWtL9iwjwH5uiiIUcIngQSL7xxUnVSpqQpL/0h7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arcor.de; spf=pass smtp.mailfrom=arcor.de; dkim=pass (1024-bit key) header.d=arcor.de header.i=@arcor.de header.b=spzgzSOm; arc=none smtp.client-ip=145.253.228.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arcor.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arcor.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
+	s=vfde-mb-mr2-23sep; t=1724520806;
+	bh=kG0jHjfRBcybVVbXcH7NXvzrp0oLEvljze+BIAZei9Q=;
+	h=Date:From:To:Subject:Message-ID:References:Content-Type:
+	 In-Reply-To:From;
+	b=spzgzSOmZB1CvAGhYnZyO0zyo1De5U8pw5PFwhqsZ8z7aaNUUzKyU+A6OOcepoGx/
+	 tfgfqwJAcg5jqfVR6a/mMJZoPFRnY3aylSl4E5+LCQ95MMGexmZpxERZGh42zMyeqG
+	 xCS9SlUzk5I/49n3WTykVWsTegb6NV/QcHEXAuak=
+Received: from smtp.vodafone.de (unknown [10.0.0.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by mr5.vodafonemail.de (Postfix) with ESMTPS id 4WrkYf0kLsz1yR7;
+	Sat, 24 Aug 2024 17:33:26 +0000 (UTC)
+Received: from arcor.de (p57a23853.dip0.t-ipconnect.de [87.162.56.83])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.vodafone.de (Postfix) with ESMTPSA id 4WrkYR42SHz90r8;
+	Sat, 24 Aug 2024 17:33:12 +0000 (UTC)
+Date: Sat, 24 Aug 2024 19:33:05 +0200
+From: Reinhard Speyerer <rspmn@arcor.de>
+To: alon.barlev@gmail.com
+Cc: linux-usb@vger.kernel.org, johan@kernel.org
+Subject: Re: [PATCH] USB: serial: qcserial: add support for Sierra Wireless
+ EM7511
+Message-ID: <ZsoZMVlT2hfr3qx_@arcor.de>
+References: <20240823183553.2288-1-alon.barlev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,49 +67,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b1b75a2a64b1f6cfad2a611f71393f281178fd3f.1724507157.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240823183553.2288-1-alon.barlev@gmail.com>
+X-purgate-type: clean
+X-purgate: clean
+X-purgate-size: 1464
+X-purgate-ID: 155817::1724520801-4A7FB44E-22CA2892/0/0
 
-On Sat, Aug 24, 2024 at 03:47:07PM +0200, 'Christophe JAILLET' via USB Mass Storage on Linux wrote:
-> 'struct usb_device_id' and 'struct us_unusual_dev' are not modified in
-> these drivers.
+On Fri, Aug 23, 2024 at 09:35:53PM +0300, alon.barlev@gmail.com wrote:
+> From: Alon Bar-Lev <alon.barlev@gmail.com>
 > 
-> Constifying these structures moves some data to a read-only section, so
-> increase overall security, especially when the structure holds some
-> function pointers (which is the case for struct us_unusual_dev).
+> Add support for Sierra Wireless EM7511 0x90b0/0x90b1 compositions.
 > 
-> On a x86_64, with allmodconfig, as an example:
-> Before:
-> ======
->    text	   data	    bss	    dec	    hex	filename
->   25249	   4261	    896	  30406	   76c6	drivers/usb/storage/alauda.o
->    3969	    672	    360	   5001	   1389	drivers/usb/storage/cypress_atacb.o
-> 
-> After:
-> =====
->    text	   data	    bss	    dec	    hex	filename
->   25461	   4041	    896	  30398	   76be	drivers/usb/storage/alauda.o
->    4225	    400	    360	   4985	   1379	drivers/usb/storage/cypress_atacb.o
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Alon Bar-Lev <alon.barlev@gmail.com>
 > ---
-> Compile tested-only.
+>  drivers/usb/serial/qcserial.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> I hope that a single patch for all drivers in drivers/usb/storage/ is fine.
-> ---
->  drivers/usb/storage/alauda.c        | 4 ++--
->  drivers/usb/storage/cypress_atacb.c | 4 ++--
->  drivers/usb/storage/datafab.c       | 4 ++--
->  drivers/usb/storage/ene_ub6250.c    | 4 ++--
->  drivers/usb/storage/freecom.c       | 4 ++--
->  drivers/usb/storage/isd200.c        | 4 ++--
->  drivers/usb/storage/jumpshot.c      | 4 ++--
->  drivers/usb/storage/karma.c         | 4 ++--
->  drivers/usb/storage/onetouch.c      | 4 ++--
->  drivers/usb/storage/sddr09.c        | 4 ++--
->  drivers/usb/storage/sddr55.c        | 4 ++--
->  drivers/usb/storage/shuttle_usbat.c | 4 ++--
->  drivers/usb/storage/uas.c           | 2 +-
->  13 files changed, 25 insertions(+), 25 deletions(-)
+> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> index 703a9c563557..4e19536a603c 100644
+> --- a/drivers/usb/serial/qcserial.c
+> +++ b/drivers/usb/serial/qcserial.c
+> @@ -165,6 +165,8 @@ static const struct usb_device_id id_table[] = {
+>  	{DEVICE_SWI(0x1199, 0x907b)},	/* Sierra Wireless EM74xx */
+>  	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
+>  	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
+> +	{DEVICE_SWI(0x1199, 0x90b0)},	/* Sierra Wireless EM7511 QDL */
+> +	{DEVICE_SWI(0x1199, 0x90b1)},	/* Sierra Wireless EM7511 */
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Hi Alon,
+
+the interface layout for the DEVICE_SWI(0x1199, 0x90b1) entry from your patch
+disagrees with the usb-devices output from
+https://forum.sierrawireless.com/t/em7565-1199-90b1-usbx-qcserial-issue-ubuntu-20-04-mbpl-driver-fail-to-compile/26361
+and the Sierra Wireless MBPL_DRIVER_R27_ENG2-usb-src.tar.gz driver attached
+to this thread https://forum.sierrawireless.com/t/driver-make-error/30702 .
+
+As a consequence the DIAG interface would not be supported by the mainline
+Linux kernel.
+
+Regards,
+Reinhard
 
