@@ -1,90 +1,94 @@
-Return-Path: <linux-usb+bounces-14056-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14057-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB6E595E327
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 13:45:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF8C295E343
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 14:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1AB21F2186D
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 11:45:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82FE0B21285
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 12:22:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A465913D525;
-	Sun, 25 Aug 2024 11:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1571B14B09E;
+	Sun, 25 Aug 2024 12:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="r4QqL+ET"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wekktgtE";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nqm73YxG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8522B9D4;
-	Sun, 25 Aug 2024 11:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBA34A2C;
+	Sun, 25 Aug 2024 12:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724586330; cv=none; b=ruKp/s1kmXK8onHB2Ny2/HSnFgAKrEfK9NSoT1CVaOJ3HZ/kKEnz3Z5eOTW8Q9lRcGq8Mofw7jNBzb1UasT6vsLqjsfkvjdJgiDbyj4tNV/+/mE6Y+5DWPIteU1v9PDE33U21JGmEI6V691oHlkugIu131QwBIrdwyFE7gmbYLg=
+	t=1724588532; cv=none; b=MtzeFiG7A9CHBwmafgI1GwYFIRSi2OGj57UsrAY0UeBW9Y0YMH1H5HNxmRGtWsMCKEpBGDSIrlZGxW8xxil1Wwj9W517RW/7L3bdCGqXBtcoUtWx82KLFzr1ncfQAjZgx5OVMnAMbVwJkbbCGuOr/nFy7rCo1fLrPTxRluTTMdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724586330; c=relaxed/simple;
-	bh=RrEWQwic0Pw0VGW3kWVimwyowlR2JbDGl3M5gx2prCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tymuGZX16w0hTLf/wAIFZ926502TbqFp8JXvYPiGmV5w8cNWIRuiYCkGKEjiMfTbDKWZu3w6HoEiOb779V7Cy7tRfrOaeoCrajtoQ6H6Sgxd9zaKQPbPrSwYL+7PVeaTqyZQ1gBeznPwur3Jy8ZjB4x/Z30OD7tgYkcGEuO/EYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=r4QqL+ET; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BF7C32782;
-	Sun, 25 Aug 2024 11:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724586329;
-	bh=RrEWQwic0Pw0VGW3kWVimwyowlR2JbDGl3M5gx2prCc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r4QqL+ETmam2vsTtTy98XpPuvGGOLJiWAH9QFxewDDtep2pfqm5Kyw1mEA75CtfAa
-	 uSEgK3gmBJj5Rsux8n3qnUppmUivovc9U32NBZ+xOrB4blwZ+CaCsYgLZFxQVKocLO
-	 cZpjFcQkfn/it0ZKAESzDiQpqHWMZE69DuEtxET4=
-Date: Sun, 25 Aug 2024 13:45:26 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 20/25]
- drivers/usb/misc/onboard_usb_dev.c:329:15: error: implicit declaration of
- function 'i2c_smbus_write_block_data'
-Message-ID: <2024082503-uncoated-chaperone-7f70@gregkh>
-References: <202408242231.WOLALxi9-lkp@intel.com>
+	s=arc-20240116; t=1724588532; c=relaxed/simple;
+	bh=PaZ3gkK7BW4zjJh2O4S3YcY9cxxZbVbiqcRgQ/9z0oI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=h8OnvGBHUgsK9hXDKrbc2Yq4pEaFDGBEXDIEQI5fFLptzGcty2NIwnerVa0mJroFFfSA18FVjlsBjIBJo6C95GuNAFOR5TbKtWm9ZYVYhto0KvDIpqdM9stnKuTVXAlDiT7Kd/WyX6mazx3Umu8/BzE/3rkXzSRM12XQTlx996s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wekktgtE; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nqm73YxG; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1724588529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4TvDebQL130PXgRqRzd/ZewCYQHAzeccg/U2iwVkVr0=;
+	b=wekktgtE/ba7qg2rtEKFNctCrisDl184b4ixuH3+slztEb+EnIdAzBRq4FVDblbw0foAyI
+	q2QSVM07rxIWpnJ9bI9kvDWOYIBq5gxVk8REYNn+9Yu5VF9wpnQM3/N+ZSuWQjEugWUZ7H
+	WZSh3BxPQ4jrgK1gegJw5c08A3utl9qzTYBz8id5CMvS+VrHRyzTKJUMTkwCozNYV+WYg1
+	LrspcPdTT182e/p+zbdcowdLojOCoQ+FYQ9FhjNtZcDh9IPOJnvRjKp/N9GO05ctWgRjxC
+	07r9mCHVdU3Kcx2zQ34JxOHOuveZPnU8GRI/pVIJIdEOe555p8jxSl3UA7oBNw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1724588529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4TvDebQL130PXgRqRzd/ZewCYQHAzeccg/U2iwVkVr0=;
+	b=nqm73YxG2F0LLA2+N30jhceXOlcYJqz+4Ohc7yNOIxqNbobplQYDZ+mF72uyp4D3JGpRQh
+	cT30jBKaamF37bCw==
+To: Mario Limonciello <superm1@kernel.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, Mathias Nyman <mathias.nyman@intel.com>, Mika
+ Westerberg <mika.westerberg@linux.intel.com>
+Cc: "open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, open list
+ <linux-kernel@vger.kernel.org>, "open list : USB XHCI DRIVER"
+ <linux-usb@vger.kernel.org>, Daniel Drake <drake@endlessos.org>, Gary Li
+ <Gary.Li@amd.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ilpo
+ =?utf-8?Q?J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, Mario
+ Limonciello
+ <mario.limonciello@amd.com>
+Subject: Re: [PATCH] x86/tsc: Use rdtsc_ordered() when RDTSCP or
+ LFENCE_RDTSC are supported
+In-Reply-To: <20240823042508.1057791-3-superm1@kernel.org>
+References: <20240823042508.1057791-1-superm1@kernel.org>
+ <20240823042508.1057791-3-superm1@kernel.org>
+Date: Sun, 25 Aug 2024 14:22:09 +0200
+Message-ID: <8734msg5ce.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202408242231.WOLALxi9-lkp@intel.com>
+Content-Type: text/plain
 
-On Sat, Aug 24, 2024 at 10:53:53PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> head:   9a03b9a88e4a44e358e3638736286442ae262497
-> commit: 7b5e970ff0e58f9239226fe81c77d5b98d744986 [20/25] usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support
-> config: arc-randconfig-001-20240824 (https://download.01.org/0day-ci/archive/20240824/202408242231.WOLALxi9-lkp@intel.com/config)
-> compiler: arceb-elf-gcc (GCC) 13.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408242231.WOLALxi9-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408242231.WOLALxi9-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/usb/misc/onboard_usb_dev.c: In function 'onboard_dev_5744_i2c_init':
-> >> drivers/usb/misc/onboard_usb_dev.c:329:15: error: implicit declaration of function 'i2c_smbus_write_block_data' [-Werror=implicit-function-declaration]
->      329 |         ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
->          |               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> drivers/usb/misc/onboard_usb_dev.c:333:15: error: implicit declaration of function 'i2c_smbus_write_word_data' [-Werror=implicit-function-declaration]
->      333 |         ret = i2c_smbus_write_word_data(client, USB5744_CMD_CREG_ACCESS,
->          |               ^~~~~~~~~~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
+On Thu, Aug 22 2024 at 23:25, Mario Limonciello wrote:
 
-I'll drop this series from my tree, please fix up and resend.
+Why is this hidden in a reply to the middle of a PCI patch series?
 
-thanks,
+Sigh.
 
-greg k-h
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> On AMD processors the TSC has been reported drifting on and off for
+> various platforms.  This has been root caused to becaused by out of order
+> TSC and HPET counter values.  When the SoC supports RDTSCP or LFENCE_RDTSC
+> use ordered tsc reads instead.
+
+This really wants a fixes tag.
 
