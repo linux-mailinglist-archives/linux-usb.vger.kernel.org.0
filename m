@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-14045-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14046-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E6AE95E236
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 08:18:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7716B95E237
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 08:18:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1BC4281FF1
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 06:18:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EA981C20BC9
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 06:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62BCA374D1;
-	Sun, 25 Aug 2024 06:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD633D0C5;
+	Sun, 25 Aug 2024 06:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DTxxWVRO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bmIjPxOw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39972AD22
-	for <linux-usb@vger.kernel.org>; Sun, 25 Aug 2024 06:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC172D05D
+	for <linux-usb@vger.kernel.org>; Sun, 25 Aug 2024 06:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724566708; cv=none; b=R1P1clWsxQoeYKpcIw5wsDRF1OdvM1/YzyhjF5IMxE2eGRj0/L5vf3lspCVJjQn1jJIlFQepLwJxrEOsfghEnT69B8UpBqyG+4WtUhYlkK885WnXRO9rYFnOVB6jPJkD5q4g/UkGQGUbvAAHekotaiKLv9Uz47LJHlbxF9qe6r0=
+	t=1724566711; cv=none; b=oO7lqV2SydGy0UKOOyK5282wdwUxrUz2DMWxrV5Wc4GeQdIo7wCliBbnD4f3le9TwtmNQSugc8yiHfnNoA4ifcLcdgjJnOFpPueReLe9xFqvpmn9KDVY9R88cfvmeuZdOyuQYWapT4W8OdB9r+O/KZMXmf+6oh5tNZ9GbKcYPnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724566708; c=relaxed/simple;
-	bh=R03nmN1vQn6Q75xMmjT0qZqeIrED2xCPKMjjABCdJIE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=BHGcuNZ1QoyDrClBtRPvFTu2fqZvQG1k5Xez7bfal854OOiYPGhcaX+V+sNluCZmKp7PWaXmLe3OVxhBRehKQTOfXbK9VwQmefzVLq4tb8EiOKnqwmkMBXfWhZMla7BOrcJEYxo0e9xMmOrIZScGzfHXjZzpjzkUsRJVm6RVrQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DTxxWVRO; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1724566711; c=relaxed/simple;
+	bh=fUD38JqQGbNYFGwhCYZ3DckD+eZibSambR09au+35p0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=C6rZ9Q9ksiYa/TQk0o3zNBDfilHJCtB2x9SbypJiQmGkkqfm8NBT8ZRKvpUGQEIbhswksgUWTkzUbIh4P7VLno28Qo8W0K2n1NsujHrFn6mkLpytGlOD2cm2+x83Ev3IEHXoF/+IPe5V4N0wOIU3nNcW/wq6cHvcTujWI83zc1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bmIjPxOw; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724566706; x=1756102706;
+  t=1724566709; x=1756102709;
   h=date:from:to:cc:subject:message-id;
-  bh=R03nmN1vQn6Q75xMmjT0qZqeIrED2xCPKMjjABCdJIE=;
-  b=DTxxWVROl3pC2AGpWMYWZhmvqJgjS2p0V/VlJUwellohL/YjFnbjNJ7O
-   vSRPsCmy73L/ELdE+tgug0VrrOFqGNrqt3q/7DGyIZmJH+Pj0LU0KGxlx
-   OFAVlf1glCrolf7ifTgmBDk6s+bO0Vu4Cfng3Ja3n8F9DMyzsNy5HGYvw
-   mHjq8hYt3vRAnf+tFBMsPEzAFCFZvXQE+ZtmoRpUoQOZm9OdJnFm6WnLm
-   42rE6HKhWBfdfyUL5FKX2/6YHzmma2Hj+Ha2CZDeRkh7vaV0MMKjxsZiv
-   JH/XtEIGUbdw+TWvw1onvIICKcvkD4FDA4fwch1aFuodxvGa/VSxm/nyZ
-   g==;
-X-CSE-ConnectionGUID: KretRs36Srq5slf86BFMzA==
-X-CSE-MsgGUID: DdSVxGjOQdqOWLLQsvZkmA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="25896285"
+  bh=fUD38JqQGbNYFGwhCYZ3DckD+eZibSambR09au+35p0=;
+  b=bmIjPxOwTow3umIhkWSSLiGrvwPNvCUoiRrOJayCUn4yqv7LEncwgyTi
+   YTCMWfI2lGy4s7NdUKtURxOqfmwN3c2gYpEVqLMlpMsYv64Mu1IPTEhx1
+   jxE2G5uu2h25r8DFuuRq41IP7USqukaBLIyzLUE0q2uCcsI6SceZ1OIrK
+   izK9HXrtpq9RjTeMMJ8gWddiBHLU5gQkaTmBA7+8RcrL5ou4BmHIjC38Q
+   qsMvBavIRszkf6G1Idr9AHe14zFBfzqYx9SGgjfqmSfyfSvQsSWMHeWpD
+   JfmnaxxO060NdQyjybU9ZmkIOPx+Ozt8Mi8O/TK1i4UTcV5nOTyNjXvzG
+   Q==;
+X-CSE-ConnectionGUID: PdcXj8lISsGGdcJht7dUvg==
+X-CSE-MsgGUID: fRpZPF7SR5SgaA21uHOtng==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="25896289"
 X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
-   d="scan'208";a="25896285"
+   d="scan'208";a="25896289"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 23:18:26 -0700
-X-CSE-ConnectionGUID: s11CgpogQhaz9egwyXnq5w==
-X-CSE-MsgGUID: mTXVjPTvTEKophgb3FulrA==
+X-CSE-ConnectionGUID: M/oHtx7mSVa66LE9RoKiAQ==
+X-CSE-MsgGUID: fwwhfednSIWB7NdsK3/3ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
-   d="scan'208";a="62033037"
+   d="scan'208";a="62033038"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
   by orviesa010.jf.intel.com with ESMTP; 24 Aug 2024 23:18:24 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1si6Zy-000Ezm-25;
+	id 1si6Zy-000Ezo-2B;
 	Sun, 25 Aug 2024 06:18:22 +0000
-Date: Sun, 25 Aug 2024 14:17:36 +0800
+Date: Sun, 25 Aug 2024 14:17:45 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD REGRESSION
- 9a03b9a88e4a44e358e3638736286442ae262497
-Message-ID: <202408251433.bJWPyckq-lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 740f2e2791b98e47288b3814c83a3f566518fed2
+Message-ID: <202408251443.EwSPQl3W-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,37 +74,16 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 9a03b9a88e4a44e358e3638736286442ae262497  usb: roles: add lockdep class key to struct usb_role_switch
-
-Error/Warning reports:
-
-https://lore.kernel.org/oe-kbuild-all/202408242231.WOLALxi9-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202408250737.xpHij5TD-lkp@intel.com
-
-Error/Warning: (recently discovered and may have been fixed)
-
-drivers/usb/misc/onboard_usb_dev.c:329:15: error: implicit declaration of function 'i2c_smbus_write_block_data' [-Werror=implicit-function-declaration]
-drivers/usb/misc/onboard_usb_dev.c:333:15: error: implicit declaration of function 'i2c_smbus_write_word_data' [-Werror=implicit-function-declaration]
-onboard_usb_dev.c:(.text+0x1164): undefined reference to `i2c_find_device_by_fwnode'
-s390-linux-ld: onboard_usb_dev.c:(.text+0x1206): undefined reference to `i2c_smbus_write_block_data'
-s390-linux-ld: onboard_usb_dev.c:(.text+0x121e): undefined reference to `i2c_smbus_write_word_data'
-
-Error/Warning ids grouped by kconfigs:
-
-recent_errors
-|-- arc-randconfig-001-20240824
-|   |-- drivers-usb-misc-onboard_usb_dev.c:error:implicit-declaration-of-function-i2c_smbus_write_block_data
-|   `-- drivers-usb-misc-onboard_usb_dev.c:error:implicit-declaration-of-function-i2c_smbus_write_word_data
-`-- s390-randconfig-001-20240824
-    |-- onboard_usb_dev.c:(.text):undefined-reference-to-i2c_find_device_by_fwnode
-    |-- s390-linux-ld:onboard_usb_dev.c:(.text):undefined-reference-to-i2c_smbus_write_block_data
-    `-- s390-linux-ld:onboard_usb_dev.c:(.text):undefined-reference-to-i2c_smbus_write_word_data
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 740f2e2791b98e47288b3814c83a3f566518fed2  usb: cdnsp: fix for Link TRB with TC
 
 elapsed time: 1447m
 
-configs tested: 239
+configs tested: 242
 configs skipped: 9
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
 tested configs:
 alpha                             allnoconfig   gcc-13.2.0
@@ -154,6 +133,8 @@ csky                  randconfig-001-20240824   gcc-13.2.0
 csky                  randconfig-001-20240825   gcc-13.2.0
 csky                  randconfig-002-20240824   gcc-13.2.0
 csky                  randconfig-002-20240825   gcc-13.2.0
+hexagon                          allmodconfig   clang-20
+hexagon                          allyesconfig   clang-20
 i386                             allmodconfig   clang-18
 i386                              allnoconfig   clang-18
 i386                             allyesconfig   clang-18
@@ -258,6 +239,7 @@ s390                             allmodconfig   clang-20
 s390                              allnoconfig   clang-20
 s390                              allnoconfig   gcc-14.1.0
 s390                             allyesconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
 s390                          debug_defconfig   clang-20
 s390                                defconfig   gcc-14.1.0
 s390                  randconfig-001-20240824   gcc-13.2.0
