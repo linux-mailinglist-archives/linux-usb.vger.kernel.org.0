@@ -1,248 +1,141 @@
-Return-Path: <linux-usb+bounces-14065-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14066-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9826C95E4A4
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 20:05:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD24895E553
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 22:38:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45D12B212BD
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 18:05:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 890E7283D87
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 20:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A027015AADA;
-	Sun, 25 Aug 2024 18:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E134154BFC;
+	Sun, 25 Aug 2024 20:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1hjOthV"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b="jX2/Mxkj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AB98C07;
-	Sun, 25 Aug 2024 18:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3920055898
+	for <linux-usb@vger.kernel.org>; Sun, 25 Aug 2024 20:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724609098; cv=none; b=VJpQLKq94KDOiMRt82TMJMi7mfwIB8sHxdeDXdz4zGkYOKEDnlS6JI5KVcPzUWQTv012wGD0KCtyvDAuBN/wM/wkzTKudSyny/y3nEoY5QY2ZFxN8QxOGERSzbAB8VInhssxUXFUHN7S0RiztQmEQ38N9xfFBUKkF6Pb2Y9OQ0I=
+	t=1724618328; cv=none; b=mnGIe8zVBExv1HxRg1j8rncvoxmmxJQA8kqFf8A8lmGyVETJcNM3qdO3axVQNeSsfGyB8HJf+mZ9M/qnDBHZ0AnU/RSVYP7VUa7t/D2dbCkjWzwO4M0juncdBMNe1U2pLXZ0Kn/k8uDV7QSZRW0ySOReU1QnSzqnBLeycXAJTgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724609098; c=relaxed/simple;
-	bh=0lZDn9YR+LNnYGFzzSd9xXOiSOo0EKcuD0+7KcpicHc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mXkHJ/xDTa8fjZ93ahJtb8RV2XdLt7ktx4MuXZY8Q1t8Qm5k2c9RzuCln5GdXLCCgAOj4JJ8c8E4VuhFOL8zDNeOojzhrTX951R9H33Issm5pAI/NX/Bfxh74qQAVhrnq56Zns96K7GR1LFpDi7HMwKF6XDGlzUXxAE4cVa+8uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1hjOthV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB3AC32782;
-	Sun, 25 Aug 2024 18:04:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724609097;
-	bh=0lZDn9YR+LNnYGFzzSd9xXOiSOo0EKcuD0+7KcpicHc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=m1hjOthVq1zs7WCdV/55LphSJ2sSwBkgHTyl+6ucsaddoyZE6F9qG5oNb9IbH+2Wd
-	 0VJmv9NRM5h0ki9E1YNkB5SJblqYlyWJDbXhmxiqQtjEuHXaP9pa4iYqaMRaVxeKo2
-	 +yT+Rmt3KV/E4Gj0TlMSYxC4seatH6NpNqyJCMuSJzoJI/EG2N4K3mkvGjJRj4GFA7
-	 eRhozCj5n+nIzJw4npbzmSGQJfUHCO4Wb5wzkpIku0tdkeHymOMa9puRwiV1xukJ9A
-	 Uwc29pFUYzjJNhghlkjLl1a4SW5y7bkqY3/oMjNe9S3nPMc6aAyHk5k7T3uEFljL4G
-	 wT6UcqmeLRmDA==
-From: Michael Walle <mwalle@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Michael Walle <mwalle@kernel.org>
-Subject: [PATCH v2] usb: gadget: f_acm: make bInterfaceProtocol configurable
-Date: Sun, 25 Aug 2024 20:04:46 +0200
-Message-Id: <20240825180446.3757073-1-mwalle@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1724618328; c=relaxed/simple;
+	bh=s/cRX82mBucJFy4Oi90fUcOAHj7/Q8lW3HS6n9HMrEY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WPgx54a44cXmgsr3DH49cfe0ZqKJ9Ycm1pNSLx9sCQ627pUD9ug28UskM4kNoOTEFUa5DbznlMG4I2IfgFjJXvqbOizQFYWFJrKcbO8hzMeDrpeWOtgbTGlFAY+UxgLtAjdSLmHq6WZDGDY+JblCgFSg4P0SRXIGk5hSvO2VCmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b=jX2/Mxkj; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1724618318; x=1725223118; i=mista.tapas@gmx.net;
+	bh=s/cRX82mBucJFy4Oi90fUcOAHj7/Q8lW3HS6n9HMrEY=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=jX2/Mxkjf5LdL6cBZwm8snOkzz4BI0ffs9RG5Dx63PNN8lDVMVcNvaJjjjhFeAm3
+	 LSUEi5hZYYAwz9FJw4EXcUB0++ypH+oYFKZhqrTuMN+kt5XbepOQMbwMUG5hgDyhO
+	 0a1x8sWGpGgTNdDPkS2BiWx9WjCWa1jsZNtOui2+qxk8Uh/Wk13/xyBYMYTL18zPq
+	 Lw0gaRw3E/850RSzpND4xeoIFqpvGAEECpuMhZ9lAhAWRl14Z9fM2MSE5GPxpnMR1
+	 uiVkgnDodsEX46Ti812EWIfeI2wrrcaI5Itvfqdmjo6HGlOLMk3U+3Q7ah9/VXVAi
+	 P2wdu6YDtUVAIQViGw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.178.77] ([149.50.51.250]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mlw7f-1sGzkL1NDf-00kvg6; Sun, 25
+ Aug 2024 22:38:38 +0200
+Message-ID: <f3a44056-7a0c-4ca9-8049-f50ab303c95f@gmx.net>
+Date: Sun, 25 Aug 2024 22:38:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: Misbehaving Alder Lake-N PCH USB 3.2 xHCI Host Controller
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, linux-usb@vger.kernel.org
+References: <20240820130158.339b4d87@foxbook>
+ <bb565e29-10e9-4211-a854-fdd9771149b4@gmx.net>
+ <20240821150233.4f8f66ef@foxbook>
+ <e6879e07-3548-41c1-b18a-55c40d041b86@linux.intel.com>
+ <2b81ac60-32f5-4b71-98de-d336b7282cfb@gmx.net>
+ <ffb0be5f-11f9-4f94-b292-f47885cfa26a@gmx.net>
+ <20240825065831.0eaba5b2@foxbook>
+ <67D20520-0374-4461-B626-5142F1D7B743@gmx.net>
+ <20240825171537.33e49293@foxbook>
+Content-Language: en-US
+From: FPS <mista.tapas@gmx.net>
+In-Reply-To: <20240825171537.33e49293@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:fZg2a3NaUy1yZzwvGsp2BYC8/Z4M901la/6GTZ1jxQI0dkCl2jT
+ eVBcAep+LEMWXVEZcTRQDka2PEsmS7l4ZLbPlUKl/lvnOX/hBEr6PBamFkVr1s29vQWWIkm
+ NZvNxfdfF1ObmQVEZHZgAqf+14POpe/baMZOpjGmBUudcCvxFjMinDXpzjr2TV6wTK5NvnB
+ UAZ4IQA9ILkCIE0I3vowg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:XG2CyPjs7Ig=;cZyhkcCDkOIX/7ekq6KJyQVJDkM
+ /VJudbEacEE6hKK8NwAf8fNABsDPxoVLdVkOBdbqYawB2qqvqAcuF2R3K0BqLguJ5QlX+P9Gb
+ ybXONxFgGqW7X3mmwPf6+n9e0fLv3zvMBKZValfjGSK2YevnGqE6iFXrX17Hcy+q2gEicc6Mx
+ wePyIdLLegOrjE/tEb8yWkZZSM942Zm4VbQGGto6UL9JV3iMXR/aXMyLOEVv99dU3YoIQFgtt
+ 51hyCpP9E4wqon94Kl+11q71mE7K4btqK9biTmw0PxFDnaQMaFDJYewNR2t/uaCMLuly/6zK7
+ YjVG6Ef91i/KePFknr9XJVTf7JAZQKEGOZZ7HuVtKyzJR6CrbCz+rF7fcI2TupK9df2y4+Frr
+ T7U9M5/Y3zybBHX1ZozJxoyKK5FR9o5cKiJjYuFjClqXHlbjBZjjZgNIGTJUDr1dZGdZk9kh8
+ XLb13w3We6uz81nyjVq3FbeqatKPJYCxIMtDzGNycWYr9zq1cocoVpKJrZfiJOpqK10AXp4Vg
+ X9cNcBHa9ksH15Du8916iR2L156IzgHt4OQJj8Gm6wptkG2wI//0TRpQkHG3zJosyZ50FrMW8
+ f/sPrgAa12SLo8kZ9Bt+EpBPpvSywJuNR9mNtXSZ7dJ20Mfvjzw8LjgrH85mC0ELlKwI2K2X+
+ VHSxnlnG6O1YYMxsDLIpk3azfNWswyFhAUcVU0lDYJdNG2cwPvaXyWuubJB7U1Lx7G35orkBJ
+ 1DFr18aZKdL3Mz0zRRWr0ARIe+h86SpMgXAvv/yl3lA+J3X2T/IPd86CIkzHPlUlf30kquhMc
+ c9flY5jy6B6N43UqnGlVoE0w==
 
-The bInterfaceProtocol is hardcoded to USB_CDC_ACM_PROTO_AT_V25TER. This
-will lead to problems with ModemManger which will gladly try to probe
-that port as a modem if the gadget also has a network function.
-ModemManager will try to send AT commands to the ACM port. Make the
-bInterfaceProtocol configurable. For this, track the number of instances
-and only allow write to the property if there are no intances (yet).
+On 8/25/24 5:15 PM, Micha=C5=82 Pecio wrote:
+> What is the last digit of your HCSPARAMS2 register?
+> Here's my three hosts, guess which is the one with problems.
+>
+> grep HCSPARAMS2 /sys/kernel/debug/usb/xhci/*/reg-cap
+> /sys/kernel/debug/usb/xhci/0000:02:00.0/reg-cap:HCSPARAMS2 =3D 0xfc0000f=
+a
+> /sys/kernel/debug/usb/xhci/0000:03:00.0/reg-cap:HCSPARAMS2 =3D 0xfc00003=
+1
+> /sys/kernel/debug/usb/xhci/0000:04:00.0/reg-cap:HCSPARAMS2 =3D 0x0000001=
+1
 
-This will also set bFunctionProtocol to the same value, see commit
-5c8db070b448 ("USB: Change acm_iad_descriptor bFunctionProtocol to
-USB_CDC_ACM_PROTO_AT_V25TER") for more details.
+Well, the only one with IST[3] set is 0000:02:00.0 and not only that,
+but 0x0A & 0x07 =3D=3D 2 so it wants the TRBs at least 2 _frames_ =3D=3D 2=
+ ms
+ahead of time. Or did I completely miss something here? :)
 
-Signed-off-by: Michael Walle <mwalle@kernel.org>
----
-See the following link for the filter logic:
-https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/blob/main/src/mm-filter.c?ref_type=heads#L303
+> See xHCI section 5.3.4. If IST is high, you are probably out of luck.
 
-v2:
- - rename refcnt to instances
- - add a comment what the mutex will protect
- - mention the intention of "instances" in the commit message
+In my case (on the N97 system) it's a little different though:
 
----
- .../ABI/testing/configfs-usb-gadget-acm       |  7 +++
- drivers/usb/gadget/function/f_acm.c           | 52 ++++++++++++++++++-
- drivers/usb/gadget/function/u_serial.h        |  4 ++
- 3 files changed, 61 insertions(+), 2 deletions(-)
+# grep HCSPARAMS2 /sys/kernel/debug/usb/xhci/0000\:00\:14.0/reg-cap
+HCSPARAMS2 =3D 0x14200054
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-acm b/Documentation/ABI/testing/configfs-usb-gadget-acm
-index d21092d75a05..25e68be9eb66 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-acm
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-acm
-@@ -6,3 +6,10 @@ Description:
- 		This item contains just one readonly attribute: port_num.
- 		It contains the port number of the /dev/ttyGS<n> device
- 		associated with acm function's instance "name".
-+
-+What:		/config/usb-gadget/gadget/functions/acm.name/protocol
-+Date:		Aug 2024
-+KernelVersion:	6.13
-+Description:
-+		Reported bInterfaceProtocol for the ACM device. For legacy
-+		reasons, this defaults to 1 (USB_CDC_ACM_PROTO_AT_V25TER).
-diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
-index 724b2631f249..7061720b9732 100644
---- a/drivers/usb/gadget/function/f_acm.c
-+++ b/drivers/usb/gadget/function/f_acm.c
-@@ -41,6 +41,7 @@ struct f_acm {
- 	struct gserial			port;
- 	u8				ctrl_id, data_id;
- 	u8				port_num;
-+	u8				bInterfaceProtocol;
- 
- 	u8				pending;
- 
-@@ -89,7 +90,7 @@ acm_iad_descriptor = {
- 	.bInterfaceCount = 	2,	// control + data
- 	.bFunctionClass =	USB_CLASS_COMM,
- 	.bFunctionSubClass =	USB_CDC_SUBCLASS_ACM,
--	.bFunctionProtocol =	USB_CDC_ACM_PROTO_AT_V25TER,
-+	/* .bFunctionProtocol = DYNAMIC */
- 	/* .iFunction =		DYNAMIC */
- };
- 
-@@ -101,7 +102,7 @@ static struct usb_interface_descriptor acm_control_interface_desc = {
- 	.bNumEndpoints =	1,
- 	.bInterfaceClass =	USB_CLASS_COMM,
- 	.bInterfaceSubClass =	USB_CDC_SUBCLASS_ACM,
--	.bInterfaceProtocol =	USB_CDC_ACM_PROTO_AT_V25TER,
-+	/* .bInterfaceProtocol = DYNAMIC */
- 	/* .iInterface = DYNAMIC */
- };
- 
-@@ -663,6 +664,9 @@ acm_bind(struct usb_configuration *c, struct usb_function *f)
- 		goto fail;
- 	acm->notify = ep;
- 
-+	acm_iad_descriptor.bFunctionProtocol = acm->bInterfaceProtocol;
-+	acm_control_interface_desc.bInterfaceProtocol = acm->bInterfaceProtocol;
-+
- 	/* allocate notification */
- 	acm->notify_req = gs_alloc_req(ep,
- 			sizeof(struct usb_cdc_notification) + 2,
-@@ -719,8 +723,14 @@ static void acm_unbind(struct usb_configuration *c, struct usb_function *f)
- static void acm_free_func(struct usb_function *f)
- {
- 	struct f_acm		*acm = func_to_acm(f);
-+	struct f_serial_opts	*opts;
-+
-+	opts = container_of(f->fi, struct f_serial_opts, func_inst);
- 
- 	kfree(acm);
-+	mutex_lock(&opts->lock);
-+	opts->instances--;
-+	mutex_unlock(&opts->lock);
- }
- 
- static void acm_resume(struct usb_function *f)
-@@ -761,7 +771,11 @@ static struct usb_function *acm_alloc_func(struct usb_function_instance *fi)
- 	acm->port.func.disable = acm_disable;
- 
- 	opts = container_of(fi, struct f_serial_opts, func_inst);
-+	mutex_lock(&opts->lock);
- 	acm->port_num = opts->port_num;
-+	acm->bInterfaceProtocol = opts->protocol;
-+	opts->instances++;
-+	mutex_unlock(&opts->lock);
- 	acm->port.func.unbind = acm_unbind;
- 	acm->port.func.free_func = acm_free_func;
- 	acm->port.func.resume = acm_resume;
-@@ -812,11 +826,42 @@ static ssize_t f_acm_port_num_show(struct config_item *item, char *page)
- 
- CONFIGFS_ATTR_RO(f_acm_, port_num);
- 
-+static ssize_t f_acm_protocol_show(struct config_item *item, char *page)
-+{
-+	return sprintf(page, "%u\n", to_f_serial_opts(item)->protocol);
-+}
-+
-+static ssize_t f_acm_protocol_store(struct config_item *item,
-+		const char *page, size_t count)
-+{
-+	struct f_serial_opts *opts = to_f_serial_opts(item);
-+	int ret;
-+
-+	mutex_lock(&opts->lock);
-+
-+	if (opts->instances) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-+	ret = kstrtou8(page, 0, &opts->protocol);
-+	if (ret)
-+		goto out;
-+	ret = count;
-+
-+out:
-+	mutex_unlock(&opts->lock);
-+	return ret;
-+}
-+
-+CONFIGFS_ATTR(f_acm_, protocol);
-+
- static struct configfs_attribute *acm_attrs[] = {
- #ifdef CONFIG_U_SERIAL_CONSOLE
- 	&f_acm_attr_console,
- #endif
- 	&f_acm_attr_port_num,
-+	&f_acm_attr_protocol,
- 	NULL,
- };
- 
-@@ -832,6 +877,7 @@ static void acm_free_instance(struct usb_function_instance *fi)
- 
- 	opts = container_of(fi, struct f_serial_opts, func_inst);
- 	gserial_free_line(opts->port_num);
-+	mutex_destroy(&opts->lock);
- 	kfree(opts);
- }
- 
-@@ -843,7 +889,9 @@ static struct usb_function_instance *acm_alloc_instance(void)
- 	opts = kzalloc(sizeof(*opts), GFP_KERNEL);
- 	if (!opts)
- 		return ERR_PTR(-ENOMEM);
-+	opts->protocol = USB_CDC_ACM_PROTO_AT_V25TER;
- 	opts->func_inst.free_func_inst = acm_free_instance;
-+	mutex_init(&opts->lock);
- 	ret = gserial_alloc_line(&opts->port_num);
- 	if (ret) {
- 		kfree(opts);
-diff --git a/drivers/usb/gadget/function/u_serial.h b/drivers/usb/gadget/function/u_serial.h
-index 901d99310bc4..e1274338ea61 100644
---- a/drivers/usb/gadget/function/u_serial.h
-+++ b/drivers/usb/gadget/function/u_serial.h
-@@ -17,6 +17,10 @@
- struct f_serial_opts {
- 	struct usb_function_instance func_inst;
- 	u8 port_num;
-+	u8 protocol;
-+
-+	struct mutex lock; /* protect instances */
-+	int instances;
- };
- 
- /*
--- 
-2.39.2
+=3D=3D b00010 1 00001 0000000000000 0101 0100
 
+IST[3] is low, and IST[2:0] =3D=3D 4, so I would expect that (taking
+paragraph 2 of xHCI section 4.14.2.1.4 into account) 1 ms would be
+enough: 4 + 1 microframes =3D=3D 675 us.
+
+On my N100 system, the working Renesas controller has:
+
+/sys/kernel/debug/usb/xhci/0000:01:00.0/reg-cap:HCSPARAMS2 =3D 0x24000011
+
+1 (+1) microframes - not too shabby. And the Intel one:
+
+/sys/kernel/debug/usb/xhci/0000:00:14.0/reg-cap:HCSPARAMS2 =3D 0x14200054
+
+again the same as on my N97 system.
+
+BTW: Should I still try your 2 patches from the earlier email?
+
+Kind regards,
+FPS
 
