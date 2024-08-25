@@ -1,169 +1,217 @@
-Return-Path: <linux-usb+bounces-14053-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14054-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D03395E2F4
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 12:21:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A86595E2FE
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 12:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 503782822F4
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 10:21:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C1F71F215FD
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Aug 2024 10:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A4713E8AE;
-	Sun, 25 Aug 2024 10:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914F213D89D;
+	Sun, 25 Aug 2024 10:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="fd7pTfrx"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="ZstqMLn7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358A7179A3;
-	Sun, 25 Aug 2024 10:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948822F34;
+	Sun, 25 Aug 2024 10:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724581271; cv=none; b=a5sDDF/ywAsEUz3hbsEmmq8efk2QmfVhn5635iSOiKdVbYM4yEvxHdMq7uDpGAuB187lXVCSqiE7HolrArkNVUbMQXekoZX58HIZYHMy+2aI4EvTZezx/YWso8Xzqf4AFYAunxvx2nptLqmImucyG9EVewANq23crWniny9qhQE=
+	t=1724583391; cv=none; b=hDJQ8ovQFiMHgYCIIYTHkvxrklftlMOl7WG06wKGThQXAc/Op+2Y4tBKknpO+Ud5ZgnX7bapOq+Y/SGdknW9K+NTPtq7gZ2lM1KmBMSbqBI2j2kKE2PYBYyzsgV7vy5y1q0JCGCH/kBQywU0UJ6BYjg/tdd3FbCqM1dCkqDZZsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724581271; c=relaxed/simple;
-	bh=UgnzpKPOXVRPoV4o3k9+mCHEc+u+lKjXZyWUCMUjM/c=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=rUcy4nLS439sBhoPs90ZZuIr+8Pjpc9LlQ0lHAbCo8FgPxcdKPliTOXo892FS9NXhNE4PiaWYEtnI42ePOeRRbFbYAwG2AnJh1bw00gfMXsEUC7gAh5bK39erg689j5uUkx80Sjmhd1a8uYsZBUWlso5Up8CjXjl/7A9MRK2yaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=fd7pTfrx; arc=none smtp.client-ip=162.62.58.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1724580962; bh=JZNt9zJQ6CogOHVsBFz/Z7yNPW5r1uXeVyfB6MiRgz4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fd7pTfrxQSFYenjkmFkIyyzjtP45o75kRH9d9G1wBcwLZqKPpr4TKmG7VwongcU6p
-	 qg+meOQOQs7Nqvy0Frn3BIXVNkdXP6roVEoE7NCAndb7cPpS5P2ckteSy4cQe+P98a
-	 446vhx1Si249I4hU7QXYJAkh2w8QSuzN0ZV5Cvzk=
-Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
-	by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
-	id 26CA3666; Sun, 25 Aug 2024 18:09:44 +0800
-X-QQ-mid: xmsmtpt1724580584t1u4fpqlw
-Message-ID: <tencent_89BAE8BB0933D89E1D1BD94B891BBD257208@qq.com>
-X-QQ-XMAILINFO: NDgMZBR9sMmaCzYfCGXnbxUaCPgQ8YecgBtTTjNOgQnPaaoFs0LTEL2XYq8N9b
-	 wmgV0CpyISXsUk/o00WvueezscGsrAEEuy0IGhjNd79MF5tfjAMY4ZAk0D5A+kkgJAQt95O/TkGE
-	 8BPgIlZOdtQN9gxX4u5T6l+9cC7ek1JoIjP078NkFIX+4a2uN67K+yrJg3pknXuhhJVRGtkVFjVN
-	 oBSznZ8n4g5P50NlLrwNW62p1pjk0HBbqb2qYkOHWNd2muZx/gbkPS26tTxnnEoPi1vN7aqP62kO
-	 EBDZHLupjEPqk+Zfp+UAD4fQjwo3u/lOOCGBR6UMyKT58rkCHxaMXXgbU6C6lLUjb8KW6Tfzhz6R
-	 sBcFXH6Eb+IkrhpiEStVBofL5WH73/9WmtkuICaNOC9zSZc9XuGib3qVA1NZHsDGHe4k9KD0UCG2
-	 LbWLTKv2R5y76ZF6h5d4hmiFJZW+c8EFB5AHSsUcxLW9EOm3IOpPcddl7X1QQ3JcMXyjeBG1DAeS
-	 wwbzC6/BzV9yT6LjWiNPW5ic44ngw7OA09qiRjXIXRMWT3a+1sJR9EhEl6aNv8duEmCSIdd19WmI
-	 +vcwsmzPuEMlHHgGRWsLEj1pXSgkRGw+rdlfYCZqObTuYZVyHBrnUwLGCie6qO6uBbFkKvP42Lm2
-	 Z0p1PhIXtN8Ikvun6AbsOy22CYCmfgdrPRaHYOZw2AaVAmHnZOHVmmy9wLpYkFVm8LUXMKvtUB9D
-	 4teFAP0qfazUiuVi2qPxPbuHofsxFV/yGtfpXsL1ESFCR0dPdytBCO09H1lHgnRuqah2BMeQ41HJ
-	 67pFlfD2ZrdyIU2kBF8oTjQHnbcYmpqn4XKHhsKK8qU2uNSUpiT4FXlTFTTF26eM2L8a1VX2649A
-	 h15xA/xG89ExfQekQCsDj9O4Y2JA/08upFhP2APvJ+LwpH+xXM3yzkIIO0ZiWLO6gn43+FFpUQDb
-	 uXmCew1PSzePeAHERiy2DtzRxU6Me6fswHOeqdO97f25XfEgGWDw==
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-From: Edward Adam Davis <eadavis@qq.com>
-To: gregkh@linuxfoundation.org
-Cc: eadavis@qq.com,
-	kvalo@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
-	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] wifi: ath6kl: Check that the read operation returns a data length of 0
-Date: Sun, 25 Aug 2024 18:09:45 +0800
-X-OQ-MSGID: <20240825100944.2343702-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <2024082554-manatee-ashamed-12d5@gregkh>
-References: <2024082554-manatee-ashamed-12d5@gregkh>
+	s=arc-20240116; t=1724583391; c=relaxed/simple;
+	bh=i74JpuVQK8Iqd0MNXy9tvmYAcpImYRXZ/1aXJCvj2QM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DkwtfyNY6LSOxPUetrR9Y5GGRyJrsG9s71wP1iiKeXOCNb8X3ZMixq15lCPbQTT5ykFonktCxzWxThGeTKRr861PHlO1WtoPJdKK+WuWzjy9Z/IXrwWGELafUFRATljTlPhXsfDqY9rwhXS68NTHlsawzD4cpzoxOQUpr9PxxgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=ZstqMLn7; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7cd9e634ea9so1909246a12.0;
+        Sun, 25 Aug 2024 03:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1724583389; x=1725188189; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RwMvtDRif7+FlWTgSF1tQDTNDkFXHUY4zKJQhL09Nao=;
+        b=ZstqMLn7hcba8dwOCdafws4GpEx1a1oWoekwCkxoCBndlU0MgkIwbCtX6i3uNis/ou
+         F+NOaoHJBxZV2nfmsO2M/MWkvpbcOkML0zI9dnPnesNFy+O7J+dqr2mjZr0xd546+/uW
+         Y4hwBMA911Hq5rtDdXYnQ5Z5jjOGYVlZLREDgrp97ojEOr+P65GjXbN76vcGqmRpTKPL
+         BxVZdeoLk1LTS6dc7UFmrkpWdkX+Hfgm4VKzNVKlV6OOJ28Nx4v7uvhU3kwXlK/clxiz
+         kty1yqDk1QFrdNZinzfTwZ83AXcKbfC/0kuYv6IsErNg6Pi+y+6hgXeNCrSgbzXfcaQO
+         YG3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724583389; x=1725188189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RwMvtDRif7+FlWTgSF1tQDTNDkFXHUY4zKJQhL09Nao=;
+        b=uX+Fz9/8jKLQiKwgOKXAlFSUE9ru+dKkUdYHexvosKXTktwiIcSg1TxeMMey6q+7hT
+         CIlGVaoD6oAOVQw4dmaUEswIpjYJ5cI68CTOx92F2aLt6+Os+4ZgyIizKwqM+1XpuxeB
+         +8WfuYGjpKm9Hy4YnU5+Hd7V1yjuXBujanp28r05/G0R9mMbC4y1b1SHQdAt8HhDEQVD
+         pSyYe7ir88asSxQvOr3UZo6Rh/hvxc8U8KfmpUB9nmv/KbHxHsovpiMqYYoQSzkxx0RG
+         UO/W1gwogVcQStg77UZKNlgKGunNIreVupCPPL1Z2pfKQLAuuSR6siCb/lJ1dzoA4Xqd
+         37PA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAK0kqHzkTB00Rt6kquAh/QZgDiJBnZOV6lnq7FbfdkdWHzQpnGAji8bJX+zNoVZrWgae7Z5RmEsr+JAw=@vger.kernel.org, AJvYcCX5HLhS9Vcpx6HrfceihdsB1WnSMV6uL3BGQTta8JSw7dHce9g64Nw6O5pZ9BdQTViA25nk24Uq/l9Q@vger.kernel.org
+X-Gm-Message-State: AOJu0YwODmZget/WGUQ2hMO27Ntt7oUIs6Grh95WnTJLz60Vsr16PVcV
+	5WN3m9Yi4PmnYs9jIt0Ew1ve+H/rdbqgp7cOmHsEIkJa0SvO/RO2C0IHGHnB/Se7QRODKu1gdBJ
+	K42ICmBg4aFBx0uDW+f6rsR86I6MIRg3x
+X-Google-Smtp-Source: AGHT+IHogx7Y36QzQh4fI03VeOZwLYAvmzqBTuk5y4LhKB4ZJDgYV6PWFMSMcQ0dxklAxU4PXRinT8lWZlNH5Zz9xEo=
+X-Received: by 2002:a17:903:186:b0:202:2e81:27a3 with SMTP id
+ d9443c01a7336-2039e4d9fcfmr65711665ad.29.1724583388669; Sun, 25 Aug 2024
+ 03:56:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240507131522.3546113-1-clabbe@baylibre.com> <20240507131522.3546113-2-clabbe@baylibre.com>
+ <Zp5q5V_OnLAdvBrU@hovoldconsulting.com> <CAFBinCC9ftXxkyoiY=3ia6UubTeG-cHXa40ddd7WMNUhvVjr+g@mail.gmail.com>
+ <Zp_WiocH4D14mEA7@hovoldconsulting.com>
+In-Reply-To: <Zp_WiocH4D14mEA7@hovoldconsulting.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Sun, 25 Aug 2024 12:56:17 +0200
+Message-ID: <CAFBinCATe+RXHz6Cy9cbo=vYL+qm_kz1qDTB8oL775xdgk=TYg@mail.gmail.com>
+Subject: Re: [PATCH 1/1 v7] usb: serial: add support for CH348
+To: Johan Hovold <johan@kernel.org>
+Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, david@ixit.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 25 Aug 2024 10:34:00 +0200, Greg KH wrote:
-> On Sun, Aug 25, 2024 at 04:14:17PM +0800, Edward Adam Davis wrote:
-> > On Sun, 25 Aug 2024 09:25:37 +0200, Greg KH wrote:
-> > > > If the data length returned by the device is 0, the read operation
-> > > > should be considered a failure.
-> > > >
-> > > > Reported-and-tested-by: syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com
-> > > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> > > > ---
-> > > >  drivers/net/wireless/ath/ath6kl/usb.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
-> > > > index 5220809841a6..2a89bab81b24 100644
-> > > > --- a/drivers/net/wireless/ath/ath6kl/usb.c
-> > > > +++ b/drivers/net/wireless/ath/ath6kl/usb.c
-> > > > @@ -1034,6 +1034,9 @@ static int ath6kl_usb_bmi_read(struct ath6kl *ar, u8 *buf, u32 len)
-> > > >  		ath6kl_err("Unable to read the bmi data from the device: %d\n",
-> > > >  			   ret);
-> > > >  		return ret;
-> > > > +	} else {
-> > > > +		ath6kl_err("Actual read the bmi data length is 0 from the device\n");
-> > > > +		return -EIO;
+Hi Johan,
+
+On Tue, Jul 23, 2024 at 6:13=E2=80=AFPM Johan Hovold <johan@kernel.org> wro=
+te:
+[...]
+> > > Do you need to include any copyrights from the vendor driver? It look=
+s
+> > > like at least some of the code below was copied from somewhere (but
+> > > perhaps not that much).
+>
+> > If you - or someone else - have any advice on this I'd be happy to go w=
+ith that!
+>
+> If you copy code directly (even if you clean it up after) you should
+> include it, but not necessarily if you just use it for reference for the
+> protocol.
+>
+> It doesn't hurt mentioning anyway when you add the reference to the
+> vendor driver, for example:
+>
+>         Based on the XXX driver:
+>
+>                 https://...
+>
+>         Copyright YYY
+Thanks, I'll include that in the next version.
+
+[...]
+> > For slow speeds I never receive the "Transmitter holding register
+> > empty" interrupt/signal when using the full TX buffer.
+> > It's not that the interrupt/signal is late - it just never arrives.
+> > I don't know why that is (whether the firmware tries to keep things
+> > "fair" for other ports, ...) though.
+>
+> Perhaps you can run some isolated experiments if you haven't already.
+> Submitting just a single URB with say 128, 512 or 1024 bytes of data and
+> see when/if you ever receive a transmitter holding empty interrupt.
+>
+> How does the vendor driver handle this? Does it really wait for the THRE
+> interrupt before submitting more data?
+The vendor driver:
+- first acquires a per-device (not per port) write_lock [0]
+- then waits for the (per-device, not per port) write buffer to be empty [1=
+]
+- and only then submits more data to be transmitted [2]
+
+> You could try increasing the buffer size to 2k and see how much is
+> received on the other end if you submit one URB (e.g. does the hardware
+> just drop the last 1k of data when the device fifo is full).
+I have not tried this yet but if still relevant (after the info about
+the THRE interrupt) then I can try it and share the results.
+
+[...]
+> > > > +             * If we ingest more data then usb_serial_generic_writ=
+e() will
+> > > > +             * internally try to process as much data as possible =
+with any
+> > > > +             * number of URBs without giving us the chance to wait=
+ in
+> > > > +             * between transfers.
 > > >
-> > > Close, but not quite there.  ath6kl_usb_submit_ctrl_in() needs to verify
-> > > that the actual amount of data was read that was asked for.  If a short
-> > > read happens (or a long one), then an error needs to propagate out, not
-> > > just 0.  See the "note:" line in that function for what needs to be
-> > > properly checked.
+> > > If the hardware really works this way, then perhaps you should not us=
+e
+> > > the generic write implementation. Just maintain a single urb per port
+> > > and don't submit it until the device fifo is empty.
+>
+> > I tried to avoid having to copy & paste (which then also means having
+> > to maintain it down the line) most of the generic write
+> > implementation.
+> > This whole dance with waiting for the "Transmitter holding register
+> > empty" by the way was the reason why parts of the transmit buffer got
+> > lost, see the report from Nicolas in v6 [1]
+>
+> I understand, but the generic implementation is not a good fit here as
+> it actively tries to make sure the device buffers are always full (e.g.
+> by using two URBs back-to-back).
+>
+> If you can't find a way to make the hardware behave properly then a
+> custom implementation using a single URBs is preferable over trying
+> to limit the generic implementation like you did here. Perhaps bits can
+> be reused anyway (e.g. chars_in_buffer if you use the write fifo).
+I cannot find any other usb-serial driver which uses this pattern.
+Most devices seem to be happy to take more data once they trigger the
+write_bulk_callback but not ch348.
+
+If there's any other (even if it's not a usb-serial) driver that I can
+use as a reference implementation for your suggestion?
+I'm not sure whether to use a dedicated kthread, single threaded workqueue,=
+ ...
+
+> > > > +static struct usb_serial_driver ch348_device =3D {
+> > > > +     .driver =3D {
+> > > > +             .owner =3D THIS_MODULE,
+> > > > +             .name =3D "ch348",
+> > > > +     },
+> > > > +     .id_table =3D             ch348_ids,
+> > > > +     .num_ports =3D            CH348_MAXPORT,
+> > > > +     .num_bulk_in =3D          1,
+> > > > +     .num_bulk_out =3D         1,
 > > >
-> > > hope this helps,
-> > Thanks for your analysis.
-> > I have carefully read your analysis and I am not sure if the following
-> > understanding is appropriate:
-> > diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
-> > index 2a89bab81b24..35884316a8c8 100644
-> > --- a/drivers/net/wireless/ath/ath6kl/usb.c
-> > +++ b/drivers/net/wireless/ath/ath6kl/usb.c
-> > @@ -932,6 +932,15 @@ static int ath6kl_usb_submit_ctrl_in(struct ath6kl_usb *ar_usb,
-> >
-> >         kfree(buf);
-> 
-> First off, this should be using usb_control_msg_send() instead of having
-> to roll their own buffer handling, right?
-I couldn't figure it out with what you said. 
+> > > Set both of these to 2 so that core verifies that you have all four
+> > > endpoints.
+>
+> > I will have to test this because I thought that:
+> > - using 2 here makes usb-serial allocate an URB as well and by default
+> > assign it to the first and second port
+> > - usb-serial should not touch the second bulk in / bulk out endpoint
+> > (as they're entirely vendor / chip specific)
+>
+> Setting these two should make core make sure that the endpoints exist,
+> and by default they will be assigned to the first and second port, but
+> you can override that calc_num_endpoints() (as you already do).
+>
+> For the second IN EP, you could even let core allocate the URB and use
+> that instead of doing so manually (e.g. by submitting yourself or using
+> the generic read implementation as mxuport does).
+Thanks for the hint - I have tried this and it indeed simplifies the code!
 
-ath6kl_usb_submit_ctrl_in() is similar to usb_control_msg_send(),
-both calling usb_control_msg() to communicate with USB devices.
 
-In the current issue, when executing an ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP
-read request, the length of the data returned from the device is 0, which
-is different from the expected length of the data to be read, resulting in
-a warning.
+Best regards,
+Martin
 
-ath6kl_usb_submit_ctrl_in()--->
-	usb_control_msg()--->
-		usb_internal_control_msg()
 
-usb_internal_control_msg() will return the length of the data returned from
-the device, usb_control_msg() return the length too, so in ath6kl_usb_submit_ctrl_in(),
-we can filter out incorrect data lengths by judging the value of ret, such
-as ret != Size situation.
-> 
-> > +       /* There are two types of read failure situations that need to be captured:
-> > +        * 1. short read: ret < size && ret >= 0
-> > +        * 2. long read: ret > size
-> > +        * */
-> > +       if (req == ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP && ret != size) {
-> > +               ath6kl_warn("Actual read the data length is: %d, but input size is %d\n", ret, size);
-> > +               return -EIO;
-> > +       }
-> 
-> If you switch to usb_control_msg_send() this logic gets a lot simpler.
-> Perhaps do that instead?
-> 
-> If not, then you need to check for "short writes" or zero writes, see
-> the documentation for usb_control_msg() for what it returns.  Your
-> comment is not correct here, there are 3 different return "states" that
-> you need to handle.
-> 
-> And why are you caring about what the req type is?
-
-BR,
-Edward
-
+[0] https://github.com/WCHSoftGroup/ch9344ser_linux/blob/d4fc95fb1cca996238=
+4ca88b0007df8738ae5829/driver/ch9344.c#L1100
+[1] https://github.com/WCHSoftGroup/ch9344ser_linux/blob/d4fc95fb1cca996238=
+4ca88b0007df8738ae5829/driver/ch9344.c#L1152-L1156
+[2] https://github.com/WCHSoftGroup/ch9344ser_linux/blob/d4fc95fb1cca996238=
+4ca88b0007df8738ae5829/driver/ch9344.c#L1166
 
