@@ -1,127 +1,102 @@
-Return-Path: <linux-usb+bounces-14115-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14116-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 854AF95F258
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 15:05:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCD1C95F277
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 15:11:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 312001F21F78
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:05:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3F9A1C218C9
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE3717ADF7;
-	Mon, 26 Aug 2024 13:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E67DA17C9B5;
+	Mon, 26 Aug 2024 13:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OvVYuUsc"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="sfkBm7uM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433A91E519;
-	Mon, 26 Aug 2024 13:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253FF17A5BE;
+	Mon, 26 Aug 2024 13:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724677539; cv=none; b=IeBmOh1hPhXvYhnQQU+nZ5Dd52iVylHPMaStrLOoXJ5IdsH8jlZxNYkisa35JkK1tXHqGP9FTiR8Z8zejY0BSVGi5hOuBfGMf12zcPmK89HdQau/sKM9N7kSgJfKJpG1D+ex5PyK+qqnfyNAcFQoIQLZryKwU3HZDnPRlmH66s0=
+	t=1724677885; cv=none; b=TJfHCHKawzfgQedPdY2NScRRJmNhZuusorop4PSJu87rrQdhqJAVTj4NK/yB83YpEcZI0uSXDrQ0u12nJwIa3bNTzywTTJamWEhMG4NNwXa1SpaowOldQqq1IyGuyEybcLV8BrGK0FonT3+YRIh3ZhaaJTlZ2d/wa0O+mlxlFJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724677539; c=relaxed/simple;
-	bh=j2r/lmA61y33v49zUYY94K+XWBgzrrigQwUGGXBaxnA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qsAXcAplIYJ/psFPdFfmQGA4/2ei7qXDwFbBE+jcI6l6eipoHB3SEmEF0b5oGmZz01OKwoTIxGuqZ0RWetjo/zxKxVa/0w5rycinYq/AeT+WYIu543VhWkz7R+3uDAAR0iI9iV0MC9X9blDFoE+rPtu6Yu8CZLVHMqBTkU9pun8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OvVYuUsc; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724677539; x=1756213539;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=j2r/lmA61y33v49zUYY94K+XWBgzrrigQwUGGXBaxnA=;
-  b=OvVYuUscftYu5LoOLM3zaoHslGilEyx/hs0dCFYqUUtYixx87j8BwVnv
-   ZSFrp+HzYZzU8zpasKveYY7NLwUpFtF7KO+ElkypRXzMd3l160QcR9My1
-   KTwm7u2Fg2Gvgq9mrrnzT97QwErwa6JrdBWg5Zpwoxaj6QDIbYUsiPKW4
-   3HpldILtIom1FTcd9T3DhS+wS8nKx5x3a5AoUr7FY/BG339Z8lS8O2i1n
-   pW52fHYiv3NwAQHuM4xDPoYW4hUht/Mr54obBMQnYLYWJQh18YAZzMmRQ
-   5Hm8awroT3XCjoZM67TJUC89hqWKRUfWaMxfTHIkgBoj5ZeoRm+QgAATl
-   w==;
-X-CSE-ConnectionGUID: 8WDY/3BCRBybOO2zd49+zw==
-X-CSE-MsgGUID: ISYQkqrRRWyO40GtdEGjfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23278408"
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="23278408"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 06:05:38 -0700
-X-CSE-ConnectionGUID: wD9i0zzqSICHlsUqseS50g==
-X-CSE-MsgGUID: j/b2cHPOQ6aqXtTFrfh/hQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="62476672"
-Received: from ubuntu24.iil.intel.com ([143.185.122.15])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 06:05:35 -0700
-Message-ID: <a717a912035b0a0f82b2f35719cca0c5269e995f.camel@intel.com>
-Subject: [PATCH 2/2] uvc: Add luma 16-bit interlaced pixel format
-From: Dmitry Perchanov <dmitry.perchanov@intel.com>
-To: linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
- sakari.ailus@iki.fi,  demisrael@gmail.com, gregkh@linuxfoundation.org
-Date: Mon, 26 Aug 2024 16:05:04 +0300
-In-Reply-To: <c7c24f3f6661e5a01aae4e7ef549801411f063cb.camel@intel.com>
-References: <c7c24f3f6661e5a01aae4e7ef549801411f063cb.camel@intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1724677885; c=relaxed/simple;
+	bh=p+GbYbWQASurqlY7OYug50PXJM/cMAlqIzI5g9Kq4O0=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=IbCCS2ls8nDBzjFxMn91L44vdrotX/IsfW2O96GpMAQxmxb4qEu1VO+UhbF6BrWiyywyLmomB/GoCy7MKJ7u2o9DSDnHdRhwoxSBDzQNuvU4LaEVlynyaADhROtRh5MKxsa7PNWtpAA4zORSkB3UBF5ONHwsiMQeMCxxAcdIfbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=sfkBm7uM; arc=none smtp.client-ip=203.205.221.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1724677579; bh=2dPCyKhe8fcDZouwEAfvRfw2hnv3gQDexPZBNCHJStI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=sfkBm7uM+CeLJwZUhyuvHwygt7j21D9QERFTpbGNTKfNDy9qezEXMjo8ExNlwJTDd
+	 u6bZfCo59/MHhisQ7r77+I2VlmSXnFSr3ToncJwPr5hVWzyb3/MVeSa2U/gRTjt8aX
+	 2oumKYlH+/47bUkB+tumydp9Vn+jzFE/gG8l2fOY=
+Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
+	by newxmesmtplogicsvrszc5-2.qq.com (NewEsmtp) with SMTP
+	id 19004E2A; Mon, 26 Aug 2024 21:06:16 +0800
+X-QQ-mid: xmsmtpt1724677576toqo2nv2x
+Message-ID: <tencent_5CE6CD937FE377496123A8A454F77F977805@qq.com>
+X-QQ-XMAILINFO: OOWntbL6xj1693je7TqSVsqgZ6HX1JYPOgr+uKMjY8688GwqIrS6HlSypBHO+l
+	 1Hkh0Rr6MZJ04KQC84P0EEzB+6iZ3/yRyWV/TmuapOhVO4ZC0GXTLzhls93iRDI7wTtVea+sUtDf
+	 dj+KUA8FJyeiDgLzihU19mQCozhJPob1MC9az+Eg7qqOBpyLQ9ljoOEDRArK12P2t5vrhKnge3CM
+	 NnIni72TnQJwTuLeqEvzmgy2ZrcwF4dl/6Iu2/96km/K55CNRzlqmEBnU9WbcLiRGYzRwlji94q4
+	 GVcXpesRJHalMAStk2XHsifurMYAawaTQ0vFI0D3sR/VpJYkybyDVyiO3eecmaertSf7+kACD83A
+	 lxW8JZmqsUqwk0O5I8u9ZEERKntbNhlNTrtV/l4qJCKfnPqP9Cve0O2WYrQz63WmENiTA5jyT9LL
+	 i9lsbz2ZxHClt08Ug+fmvsLk7ZQjTUlHKqZ5c37uEhMUkGzf4v2P9ELt2Say2FFLQDv81nlzXMkN
+	 BACkEycIrTPCpNu2N/kbLUriYQJqMK2/KsQ7NkAMSss1WWfiA+KyiTMLTVNVpTY8Vj/HTljaNNYv
+	 mj/BUJYkYsUJC83UurVeLzxP3D6yJOycGLyFBF/eELx81CFRM+fRBQrIW3YIDvCm5h2RHdGj7eV7
+	 bqw4nocwJaPHXcfx8EJlVXsnYH0Vu59sK+4+HhC7gZJ0soQhq3iZvPU31hSLkPWxWAOth4zKdyML
+	 E0nGuUWkCOrdRn3z6EPvCl/7OhMGOD/RD1shy1yKfYVjbQlzpChxJx9ssgGnTNL9RuhwK/jsI2fI
+	 3E4Ok4M+NS60hglIpUkAaEuZJ/h1xB3sLXlilonOKTZCjMi6F+fynENLAL2Pi76RZy24BNqpOUEU
+	 jVQMC1jbsW3cSNC73w3E23y2AGqSJEPJGdwhDIK3RfvPPLncDp7vZO+PWCMOd2nZPl2Em5k6rqAl
+	 E+36uFcP5Ine0WLltPaddIs5xN96ogZvHJtDRtRjDxKQ589+pO0PNxa2C/g+CPtvhg+uLZWUkaLr
+	 uPQ9h6g2rMUGpYX30EcEL8QJewAQk=
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+From: Edward Adam Davis <eadavis@qq.com>
+To: kvalo@kernel.org
+Cc: eadavis@qq.com,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH V2] wifi: ath6kl: Replace ath6kl_usb_submit_ctrl_in with usb_control_msg_recv
+Date: Mon, 26 Aug 2024 21:06:16 +0800
+X-OQ-MSGID: <20240826130615.2712119-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <87seurfr3r.fsf@kernel.org>
+References: <87seurfr3r.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The formats added by this patch are:
+On Mon, 26 Aug 2024 14:42:00 +0300, Kalle Valo wrote:
+> > ath6kl_usb_submit_ctrl_in() did not take into account the situation where
+> > the length of the data read from the device is not equal to the len, and
+> > such missing judgments will result in subsequent code using incorrect data.
+> >
+> > usb_control_msg_recv() handles the abnormal length of the returned data,
+> > so using it directly can fix this warning.
+> >
+> > Reported-by: syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com
+> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> 
+> Did you test this on real ath6kl hardware?
+I don't have ath6kl hardware, I have only tested it on a virtual machine.
 
-        UVC_GUID_FORMAT_Y16I
-
-Interlaced lumina format primary use in RealSense
-Depth cameras with stereo stream for left and right
-image sensors.
-
-Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
----
- drivers/media/common/uvc.c | 4 ++++
- include/linux/usb/uvc.h    | 3 +++
- 2 files changed, 7 insertions(+)
-
-diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
-index c54c2268fee6..027498d37464 100644
---- a/drivers/media/common/uvc.c
-+++ b/drivers/media/common/uvc.c
-@@ -120,6 +120,10 @@ static const struct uvc_format_desc uvc_fmts[] =3D {
- 		.guid		=3D UVC_GUID_FORMAT_Y12I,
- 		.fcc		=3D V4L2_PIX_FMT_Y12I,
- 	},
-+	{
-+		.guid		=3D UVC_GUID_FORMAT_Y16I,
-+		.fcc		=3D V4L2_PIX_FMT_Y16I,
-+	},
- 	{
- 		.guid		=3D UVC_GUID_FORMAT_Z16,
- 		.fcc		=3D V4L2_PIX_FMT_Z16,
-diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-index 88d96095bcb1..1c16be20c966 100644
---- a/include/linux/usb/uvc.h
-+++ b/include/linux/usb/uvc.h
-@@ -118,6 +118,9 @@
- #define UVC_GUID_FORMAT_Y12I \
- 	{ 'Y',  '1',  '2',  'I', 0x00, 0x00, 0x10, 0x00, \
- 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y16I \
-+	{ 'Y',  '1',  '6',  'I', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
- #define UVC_GUID_FORMAT_Z16 \
- 	{ 'Z',  '1',  '6',  ' ', 0x00, 0x00, 0x10, 0x00, \
- 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
---=20
-2.43.0
-
+BR,
+Edward
 
 
