@@ -1,189 +1,128 @@
-Return-Path: <linux-usb+bounces-14143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F24F795FC15
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 23:50:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4323C95FD87
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 00:52:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE78A284FB6
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 21:50:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00A52285B74
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 22:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE5919D08C;
-	Mon, 26 Aug 2024 21:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A815A19E837;
+	Mon, 26 Aug 2024 22:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="XkW6CcXY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD53C19D07C
-	for <linux-usb@vger.kernel.org>; Mon, 26 Aug 2024 21:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B57519ADBE;
+	Mon, 26 Aug 2024 22:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724709000; cv=none; b=NspG4pn19VvC9ep9sB4cvvKzirzVdObKe7QwG5tCJqNMKqOkK0fLVIs1OCpFWCfUe7F883fuPcdVRNLrkORv6ItfT7cUwg1+CWx3hHvhf1bfaK6npc/ktx2FoB6J67HO/w/Bhj2gnsWycxzOjZYk6BEehJHWY1z+Ls9yCTNRyYI=
+	t=1724712677; cv=none; b=gTQV9HeB4Qz79Ok1YCc9CvyAqKc6t4qHg9QEQoEKiblTMv59Lna2Ed00Dg+oMDG63bGhWLHG4ZMcf+Xnk5uwBac6xDiONC5tK4xQ+0DqFKiMzn+286fDMZDmfEH5T6ZJg0Ss6PXIoaJ5PHfERMznu5fQMx7iiF/Un2R8rK6n6Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724709000; c=relaxed/simple;
-	bh=YJ3tRDhtDoPbJA9n+5dj1xKdtRMfYbLpSbQxBnF0Q0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CPy/vb9MOHyVLD7oW6DZyRRjoyDo2E+046G0wbrvZtrqmpGGoMixUvaX2SVcljgENuAX9FVwQ5ZN6ZEeieU33qoD61xdox2Q4zDRG9pGWCrqRRnun7arc75r8FZlDs+gKrIWU4tGfQDHso7G+AmpBng6VseJrxL/XqjRzKzQvt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sihau-0001Gp-Gu; Mon, 26 Aug 2024 23:49:48 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sihau-003HKY-35; Mon, 26 Aug 2024 23:49:48 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sihat-007ByZ-38;
-	Mon, 26 Aug 2024 23:49:47 +0200
-Date: Mon, 26 Aug 2024 23:49:47 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: andrzej.p@collabora.com, asmadeus@codewreck.org, corbet@lwn.net,
-	ericvh@kernel.org, gregkh@linuxfoundation.org,
-	kernel@pengutronix.de, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux_oss@crudebyte.com, lucho@ionkov.net, v9fs@lists.linux.dev
-Subject: Re: [PATCH v9 1/3] usb: gadget: function: move u_f.h to
- include/linux/usb/func_utils.h
-Message-ID: <Zsz4e0RUZ9M1OT7v@pengutronix.de>
-References: <20240116-ml-topic-u9p-v9-0-93d73f47b76b@pengutronix.de>
- <20240116-ml-topic-u9p-v9-1-93d73f47b76b@pengutronix.de>
- <5fce67e8-5687-4fde-b6ee-b564a335283e@wanadoo.fr>
+	s=arc-20240116; t=1724712677; c=relaxed/simple;
+	bh=vwxylYhqYzDcwD8VntoswCnq6jYCY0GwTMnoqPsNrFk=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=T8mR9AmjuqLjAmaXjPQL/nRH9V4jVopbi5dGLHYVEif3PEY2tZ/LKj/8pgZyJfXMQo3awVFXei6ZRza0/hv5oKP/xGlLC1o9XZm32hUSBlQvW4wFdm5Tm128jWxLOz6ugtRYkZquYOt/t4K7ARs23B0nOBRlmBWjowbwJdLTchg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=XkW6CcXY; arc=none smtp.client-ip=203.205.221.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1724712671; bh=efQry0do+stVDVzIBy/a+KnkSgRUN/Tp1juVU/tLaiI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=XkW6CcXYfSCg4KyWSNPv5U6vNBWQJybzi5cNds+DUDVi7XoTohY2hEhSRPSpiobL1
+	 jEeEewiUrCVWBdr2+6KOWwg6O1TJOVZDzpdTMaI9oaXrWfYp4onQApQb50cCXmTUgl
+	 Bqh39USOJbljbM3Lv7PEMu1SJZy32nJum0T+LMwA=
+Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
+	by newxmesmtplogicsvrszc19-0.qq.com (NewEsmtp) with SMTP
+	id CC78C68C; Tue, 27 Aug 2024 06:51:07 +0800
+X-QQ-mid: xmsmtpt1724712667t60kv7uhh
+Message-ID: <tencent_A51B8725EABA04BB2A33BC9E1E1B2E4B0508@qq.com>
+X-QQ-XMAILINFO: MllZffuBkEb5pYkZwEBzGaWEwpFRl4rltLTzryB4XVDEIlx8mFQGAr4Aup1tKy
+	 A6BDPh0eEbwgH5l4SXq0KOWNHpR1JNhWSMgSi07KKCgc3kdBoLT344oLLrgEsLJ9UQIMPBKXYBlj
+	 ETGrE9z4GqX3m7p/XFU/+Pmn3WNwHFvngnOQhIPQg0VwCdnhZWY1db7pHr7efQPRGgXk5h9Kf0ab
+	 LKHH3ajOg6GZnI7PF5zegQkbjOsA01p1uoUA92vbqGpWjRuW/2+UyHOqp9DKbBDEeQ2u2itV8PO0
+	 YQ0XMMaCo5sovj1WLb08X5YBHe1xv34gAUb+E7YAXM0LDF5PgELUUOYRYcG5Vl6PioGvGxQscE5a
+	 8Ilc3bRbZaEsV+xvLlGY10gh9bnGOIlD5Dvxfmd08CdT6yDi/O5bZRXoesGVU9vcVIp8TH3+sJDP
+	 ul4eWYuVHfmR0rVFTPT8iCpm7h4rpomPBIQjyekeoZDcZ6049TAq+oX6VsLfBMKXqkB3VIfxL8Eh
+	 nPJ0Sy5/HCdyeVIMAdOCEuNQWd4ZDWZ+GQuC5+W+FS+KewjXScO6IYLW4LrQ9x0neZ/RpNkwWqZ8
+	 s/e0z3F02cEc4x3jQpI9Oh0b2snaJvB0KxEeOwibzAhFxW7wRrEZ+U6N2bEIX5VAfnPx1/0MN+CG
+	 1Jo+2qvn3AKBxJsQtubJDKc+z8foW/PXaeQS14lBMUHqYdqRmA7TJC4xmCHFgKcpBH6zQR+hCTEa
+	 Sb96u0pnLy6TAUWfhVHuNuY0Pcsn5QMWM6EJeoN5AyzH+w3p32j/gCmiksn8Gltw9sX1K0kYvQ8+
+	 ijzwiBE+ukPFDErQsJda4eqacmDXYI7m8maUsZtmDP3lxdvxiEutYbBSFzUnWFZ1S+cJqPTyKV+X
+	 trm6FjAj7OsEk9Wq+uv/BX3gwbJbBTs2l6pHqhjQSqbq3QPV4k4XuFtZRzCpQbBbvNXwD7lhuxwq
+	 TO5G3oZ7EkQUmdJDIb8s7sG85pAev7z9iIsiOMhs5pfy2q2R+4+3TQ2NzUU6kXGBndLBpXR9lR9V
+	 6tdoyTgcHalZVt16E+h7l2kk4loQA=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: Edward Adam Davis <eadavis@qq.com>
+To: kvalo@kernel.org
+Cc: eadavis@qq.com,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH V6 1/2] wifi: ath6kl: Replace ath6kl_usb_submit_ctrl_in with usb_control_msg_recv
+Date: Tue, 27 Aug 2024 06:51:08 +0800
+X-OQ-MSGID: <20240826225107.2817092-3-eadavis@qq.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <87jzg3uy40.fsf@kernel.org>
+References: <87jzg3uy40.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="x4m+YBvvTd+UQ/49"
-Content-Disposition: inline
-In-Reply-To: <5fce67e8-5687-4fde-b6ee-b564a335283e@wanadoo.fr>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+ath6kl_usb_submit_ctrl_in() did not take into account the situation where
+the length of the data read from the device is not equal to the len, and
+such missing judgments will result in subsequent code using incorrect data.
 
---x4m+YBvvTd+UQ/49
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+usb_control_msg_recv() handles the abnormal length of the returned data,
+so using it directly can fix "target's targ_info doesn't match the host's
+targ_info" warning in ath6kl_bmi_get_target_info.
 
-On Fri, Aug 23, 2024 at 10:30:09AM +0200, Christophe JAILLET wrote:
->Le 23/08/2024 =E0 09:36, Michael Grzeschik a =E9crit=A0:
->>We move the func_utils.h header to include/linux/usb to be
->>able to compile function drivers outside of the
->>drivers/usb/gadget/function directory.
->>
->>Signed-off-by: Michael Grzeschik <m.grzeschik-bIcnvbaLZ9MEGnE8C9+IrQ@publ=
-ic.gmane.org>
->>
->>---
->>v8 -> v9: -
->>v7 -> v8: -
->>v6 -> v7: -
->>v5 -> v6: -
->>v4 -> v5:
->>   - renamed to func_utils.h
->>v3 -> v4: -
->>v2 -> v3: -
->>v1 -> v2:
->>   - new introduced patch
->>---
->>  drivers/usb/gadget/configfs.c                              | 2 +-
->>  drivers/usb/gadget/function/f_fs.c                         | 2 +-
->>  drivers/usb/gadget/function/f_hid.c                        | 2 +-
->>  drivers/usb/gadget/function/f_loopback.c                   | 2 +-
->>  drivers/usb/gadget/function/f_midi.c                       | 2 +-
->>  drivers/usb/gadget/function/f_midi2.c                      | 2 +-
->>  drivers/usb/gadget/function/f_sourcesink.c                 | 2 +-
->>  drivers/usb/gadget/u_f.c                                   | 2 +-
->>  drivers/usb/gadget/u_f.h =3D> include/linux/usb/func_utils.h | 2 +-
->>  9 files changed, 9 insertions(+), 9 deletions(-)
->>
->>diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
->>index 0e7c1e947c0a0..0f8553795a8ed 100644
->>--- a/drivers/usb/gadget/configfs.c
->>+++ b/drivers/usb/gadget/configfs.c
->>@@ -8,8 +8,8 @@
->>  #include <linux/usb/composite.h>
->>  #include <linux/usb/gadget_configfs.h>
->>  #include <linux/usb/webusb.h>
->>+#include <linux/usb/func_utils.h>
->
->Hi,
->
->Here and in the other files, maybe, keep alphabetic order?
->(even if it is not already completely sorted)
->
->>  #include "configfs.h"
->>-#include "u_f.h"
->>  #include "u_os_desc.h"
->>  int check_user_usb_string(const char *name,
->
->...
->
->>rename from drivers/usb/gadget/u_f.h
->>rename to include/linux/usb/func_utils.h
->>index e313c3b8dcb19..9f2a32c765260 100644
->>--- a/drivers/usb/gadget/u_f.h
->>+++ b/include/linux/usb/func_utils.h
->>@@ -1,6 +1,6 @@
->>  // SPDX-License-Identifier: GPL-2.0
->>  /*
->>- * u_f.h
->>+ * usbf_utils.h
->>   *
->>   * Utility definitions for USB functions
->>   *
->>
->
->Maybe the include guard could be updated as-well?
->
+Note: Compile tested only, not tested on hardware, only tested on QEMU.
 
-I reworked it in v10:
+Reported-by: syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+V1 -> V2: Directly using USB functions
+V2 -> V3: Adjust indentation style
+V3 -> V4: Adjust indentation style
+V4 -> V5: Update comments, add warning info
+V5 -> V6: Update comments
 
-https://lore.kernel.org/all/20240116-ml-topic-u9p-v10-0-a85fdeac2c52@pengut=
-ronix.de/
+ drivers/net/wireless/ath/ath6kl/usb.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
+index 5220809841a6..0458b5a078e1 100644
+--- a/drivers/net/wireless/ath/ath6kl/usb.c
++++ b/drivers/net/wireless/ath/ath6kl/usb.c
+@@ -1027,9 +1027,10 @@ static int ath6kl_usb_bmi_read(struct ath6kl *ar, u8 *buf, u32 len)
+ 	int ret;
+ 
+ 	/* get response */
+-	ret = ath6kl_usb_submit_ctrl_in(ar_usb,
+-					ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP,
+-					0, 0, buf, len);
++	ret = usb_control_msg_recv(ar_usb->udev, 0,
++				   ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP,
++				   USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
++				   0, 0, buf, len, 2000, GFP_KERNEL);
+ 	if (ret) {
+ 		ath6kl_err("Unable to read the bmi data from the device: %d\n",
+ 			   ret);
+-- 
+2.43.0
 
---x4m+YBvvTd+UQ/49
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmbM+HsACgkQC+njFXoe
-LGQESg/+KuIbwRo818qLCBM8owS/IjkRfm9s/NM5VBCHQW3B0SdIadvD4dsoXlnt
-S99xcOXKzm4zLqbHGej3cHSgUkefTBEfm/1ipbbPRo4Tcppn8EmcA7cwFkkz3SIt
-0tFSaLScIAvOnVAC8dTZTyGSfQH9WfEdzlBxzs/Zv1mHPYMLHIY+zPsNAANqmvrS
-fFGZiohGwv7AkEgrcJ1iWCyFcJqDInQDeriMdMTdy26HX2N1ptbUAM2r1Bxhb/FW
-+yO4H8cRU8WVEpgxY7S3ppy6fAyvQjBdlMUHpJlb0GHeJlwx+KmgLWhSI7Yxw+gC
-cOLqnZruuO3DAge9dv6Y73xj5WZeTG50AeER37ih9AYc4YEFeSG6U/z+OCATRZJD
-6JEd/UZu5W89PTRoyq4nnN8/98td/B2YVGHVrDYSXXqBUrxsFU/GQ3Y+H2w394qz
-GXMCNg0JJOFAv4dxNfW7w/cTEB5EzjiFuaEsJ+G1s1AhSh+2khDGfnAIupXAhnAT
-FiwgY9+bxZFlGZtmuaDXWzcr6NZvFkUB5XW7HSTv0FWI+hjvNk/GTVWucq+T5nF3
-eeINgs0Sq4yxG4j4wQ4o8idnEBkr32la3XROqVWRTN8383O9pRyEwjuMGU9vB6S1
-Eo74RD0JJJ+5cQpWkazz9Tpur+3c5+YCf4sU/cJMpJPqqn+uk2I=
-=QduD
------END PGP SIGNATURE-----
-
---x4m+YBvvTd+UQ/49--
 
