@@ -1,183 +1,181 @@
-Return-Path: <linux-usb+bounces-14100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14096-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D60295ED50
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 11:33:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F63A95ED27
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 11:30:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4F2E1F228DE
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 09:33:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26D5E28119F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 09:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D505514535D;
-	Mon, 26 Aug 2024 09:33:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF22C13F435;
+	Mon, 26 Aug 2024 09:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d+EjeyBH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sj+qabaA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892FC13D630;
-	Mon, 26 Aug 2024 09:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F02929A2;
+	Mon, 26 Aug 2024 09:30:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724664792; cv=none; b=keHUoY0pMrmxdKFVhfO3Gp1B5gxiqGGDX17GHdOXZgHrJ4Z+FYJYZMu3ZXu5edyM1VLi3ZjMrTEpUhtWwzhzAWPisA1v7jUBbXgA0qwj5t/0+6PmF9LjB+hsMi5Jhwk8DlpsWj93K8THUsgQzej0TsdIHvT4R3NWxkKTwYb8IDA=
+	t=1724664617; cv=none; b=ir4M2B5TphtD0vs1CayM6ww50lWWNZrB6UK7XQjj59JbxIs3zp4Od3XuLkcPyF7n7M08zwYUlYd9VHtkswL3r/ASUWBcIRC++hCoiInIi4COHYSCSsr6nNtLVbtu31L1V4+DwQHgrMtu0hf+Hb4iZcsY66mDLuH3sPf7L5OzGIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724664792; c=relaxed/simple;
-	bh=5gF49ZsaBl+eyYEsQZFl8g7Ns5jOi2/2z9XqrrfRfmI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SV+uiTefO6odSYwMbjTztiBa59T5ZgIA/Mdc3TBrUKkNyvonjBnSXhxjYRIGfhQvt8kSCn9r1gAAvuexMPvWpx+UABoGGJQ7VSgktOKwJpbvAcW6aK3KHXKS/IKd2uOLyHV05mG7uLgebdLRqbZryjVPrOrmRLqrXmmWpU30QRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d+EjeyBH; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724664791; x=1756200791;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5gF49ZsaBl+eyYEsQZFl8g7Ns5jOi2/2z9XqrrfRfmI=;
-  b=d+EjeyBHlhkx1BjfdYbQsoXrglBjlBrZdwqR4WIFaK0oK9RzFyGJKaVV
-   BAcPLfxqHTnmYVKKESGwvik+P69q+wIxjGUS3+YiJcO7SKHm8++jLqCU2
-   ExCaswP+Qy+b1zSZ/79KCsgFI61CVcwA8CQNfikrzlHR5JiQKqzHy5hXw
-   trynUIAvPxnr3hnQbhmqfZK8MD4tzz65v37E8zTgSU9rXdmoKPp46GYa7
-   HdiA+rNYIAAfBQUIfubYgcr9IE8N0JpeI34uBRWkZsv+WNut8gc/tEG6p
-   zKD1+wAo6bt49ngN4kGuE8f41o+SQEQ+J5/jZw2I64cmLEAkccWt9P6LO
-   w==;
-X-CSE-ConnectionGUID: uAbQSPB9RSW0VeQbYmKcPw==
-X-CSE-MsgGUID: lnnUEWNvQRu7WcdIPA4ThA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="25967099"
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="25967099"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 02:33:10 -0700
-X-CSE-ConnectionGUID: StgiaI9yQWW9P7hnhG707A==
-X-CSE-MsgGUID: q0WWbT5FSWeCAnkmt419Iw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="62134701"
-Received: from cpetruta-mobl1.ger.corp.intel.com (HELO [10.245.246.121]) ([10.245.246.121])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 02:33:03 -0700
-Message-ID: <f4e609c0-92ff-4724-8243-bfe5de50d308@linux.intel.com>
-Date: Mon, 26 Aug 2024 11:28:45 +0200
+	s=arc-20240116; t=1724664617; c=relaxed/simple;
+	bh=AzKOmmYCYDiPvUMVeA6PO+2K0vfVzN1yaPtjZCfT+8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQStJXZT3WYBKHOC4Z644dNOTP43BBo0uEjQQrrcSkGI4Reuiwf4aF53E79DgfeK0giKcEsWL/Fad6Gp+u24NVzZPmmazXPOXNX8vBgy1VEjeS6nPZaTw5ehz5FnW8DMP9GWlyC0OB1wsXo1lf2TPiPlcm0LB9rcSjd/0e119aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sj+qabaA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156F9C8B4E8;
+	Mon, 26 Aug 2024 09:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1724664616;
+	bh=AzKOmmYCYDiPvUMVeA6PO+2K0vfVzN1yaPtjZCfT+8k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sj+qabaAeuSWZSKBAS6wzi7JExk+b753ReocbXaPPFGYWhWzGXGvKtnkitWHah+2K
+	 CXcOg7+UYp01N6mwTUo8MhPAejYM43ZK3uRhPZqF8XCtlXKyCGDv2UH79mWbbWU1KL
+	 g5dZax/Hg7CZ0xZ26ZSR1MBRUj8rMsfgv5zDjhwk=
+Date: Mon, 26 Aug 2024 11:30:14 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: leoliu-oc@zhaoxin.com, dlemoal@kernel.org, arnd@kernel.org,
+	schnelle@linux.ibm.com, WeitaoWang-oc@zhaoxin.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	mathias.nyman@linux.intel.com, ulf.hansson@linaro.org,
+	vkoul@kernel.org, hslester96@gmail.com, Carsten_Schmid@mentor.com,
+	efremov@linux.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com,
+	CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, wwt8723@163.com,
+	stern@rowland.harvard.edu, alex.williamson@redhat.com,
+	guanwentao@uniontech.com, xuerpeng@uniontech.com
+Subject: Re: [PATCH v2] USB: Fix kernel NULL pointer when unbind UHCI form
+ vfio-pci
+Message-ID: <2024082631-resort-stays-b065@gregkh>
+References: <42A38D045199FD79+20240826085455.1525536-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v25 00/33] Introduce QC USB SND audio offloading support
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
- lgirdwood@gmail.com, tiwai@suse.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, robh@kernel.org,
- gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-doc@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20240823200101.26755-1-quic_wcheng@quicinc.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20240823200101.26755-1-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42A38D045199FD79+20240826085455.1525536-1-wangyuli@uniontech.com>
 
+On Mon, Aug 26, 2024 at 04:54:55PM +0800, WangYuli wrote:
+> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+> 
+> This bug is found in Zhaoxin platform, but it's a commom code bug.
 
-> Changelog
-> --------------------------------------------
-> Changes in v25:
-> - Cleanups on typos mentioned within the xHCI layers
-> - Modified the xHCI interrupter search if clients specify interrupter index
-> - Moved mixer_usb_offload into its own module, so that other vendor offload USB
-> modules can utilize it also.
-> - Added support for USB audio devices that may have multiple PCM streams, as
-> previous implementation only assumed a single PCM device.  SOC USB will be
-> able to handle an array of PCM indexes supported by the USB audio device.
-> - Added some additional checks in the QC USB offload driver to check that device
-> has at least one playback stream before allowing to bind
-> - Reordered DT bindings to fix the error found by Rob's bot.  The patch that
-> added USB_RX was after the example was updated.
-> - Updated comments within SOC USB to clarify terminology and to keep it consistent
-> - Added SND_USB_JACK type for notifying of USB device audio connections
+To be fair, this is not a normal "common" code path at all :)
 
-I went through the code and didn't find anything that looked like a
-major blocker. There are still a number of cosmetic things you'd want to
-fix such as using checkpatch.pl --strict --codespell to look for obvious
-style issues and typos, see selection below. git am also complains about
-EOF lines.
+> 
+> Fail sequence:
+> step1: Unbind UHCI controller from native driver;
 
-Overall this is starting to look good and ready for other reviewers to
-look at.
+First off, you all know this is really an "unsupported" thing to do.  I
+love it how the vfio people abuse this interface for their main code
+path, but remember that is NEVER what it was designed for at all.  The
+fact that it could possibly work at all is a miracle and everyone gets
+lucky if nothing dies when they attempt to manually do the gyrations you
+are doing here.
 
+> step2: Bind UHCI controller to vfio-pci, which will put UHCI controller in
+> 	   one vfio group's device list and set UHCI's dev->driver_data to
+> 	   struct vfio-pci(for UHCI)
 
+Who sets the driver_data here?
 
-WARNING: 'reaquire' may be misspelled - perhaps 'reacquire'?
-#54: FILE: drivers/usb/host/xhci-ring.c:3037:
-+ * for non OS owned interrupter event ring. It may drop and reaquire
-xhci->lock
-                                                             ^^^^^^^^
-WARNING: 'compliation' may be misspelled - perhaps 'compilation'?
-#16:
-module compliation added by Wesley Cheng to complete original concept code
-       ^^^^^^^^^^^
-CHECK: Prefer kzalloc(sizeof(*sgt)...) over kzalloc(sizeof(struct
-sg_table)...)
-#105: FILE: drivers/usb/host/xhci-sideband.c:35:
-+	sgt = kzalloc(sizeof(struct sg_table), GFP_KERNEL);
+> step3: Unbind EHCI controller from native driver, will try to tell UHCI
+> 	   native driver that "I'm removed by set
+> 	   companion_hcd->self.hs_companion to NULL. However, companion_hcd
+> 	   get from UHCI's dev->driver_data that has modified by vfio-pci
+> 	   already. So, the vfio-pci structure will be damaged!
 
-CHECK: struct mutex definition without comment
-#557: FILE: include/linux/usb/xhci-sideband.h:35:
-+	struct mutex			mutex;
+Damaged how?  Attempting to assign random PCI drivers to the vfio-pci
+driver is again, really really not supported (despite what the vfio
+authors think), so again, it's amazing this works, as you are finding
+out.
 
-WARNING: 'straightfoward' may be misspelled - perhaps 'straightforward'?
-#22:
-straightfoward, as the ASoC components have direct references to the ASoC
-^^^^^^^^^^^^^^
-CHECK: Unnecessary parentheses around 'card == sdev->card_idx'
-#142: FILE: sound/soc/qcom/qdsp6/q6usb.c:217:
-+	if ((card == sdev->card_idx) &&
-+		(pcm == sdev->ppcm_idx[sdev->num_playback - 1])) {
+> step4: Bind EHCI controller to vfio-pci driver, which will put EHCI
+> 	   controller in the same vfio group as UHCI controller;
+>        ... ...
+> step5: Unbind UHCI controller from vfio-pci, which will delete UHCI from
+> 	   vfio group device list that has been damaged in step 3. So, delete
+> 	   operation can random result into a NULL pointer dereference with
+> 	   the below stack dump.
+> step6: Bind UHCI controller to native driver;
+> step7: Unbind EHCI controller from vfio-pci, which will try to remove EHCI
+> 	   controller from the vfio group;
+> step8: Bind EHCI controller to native driver;
 
-CHECK: Unnecessary parentheses around 'pcm ==
-sdev->ppcm_idx[sdev->num_playback - 1]'
-#142: FILE: sound/soc/qcom/qdsp6/q6usb.c:217:
-+	if ((card == sdev->card_idx) &&
-+		(pcm == sdev->ppcm_idx[sdev->num_playback - 1])) {
+That's crazy, why would you be doing all of that in the first place?  Is
+it common to add host controller drivers to virtual machines like this?
+Why not just use usbip instead?
 
-WARNING: 'seqeunces' may be misspelled - perhaps 'sequences'?
-#8:
-seqeunces.  This allows for platform USB SND modules to properly initialize
-^^^^^^^^^
+> [  929.114641] uhci_hcd 0000:00:10.0: remove, state 1
+> [  929.114652] usb usb1: USB disconnect, device number 1
+> [  929.114655] usb 1-1: USB disconnect, device number 2
+> [  929.270313] usb 1-2: USB disconnect, device number 3
+> [  929.318404] uhci_hcd 0000:00:10.0: USB bus 1 deregistered
+> [  929.343029] uhci_hcd 0000:00:10.1: remove, state 4
+> [  929.343045] usb usb3: USB disconnect, device number 1
+> [  929.343685] uhci_hcd 0000:00:10.1: USB bus 3 deregistered
+> [  929.369087] ehci-pci 0000:00:10.7: remove, state 4
+> [  929.369102] usb usb4: USB disconnect, device number 1
+> [  929.370325] ehci-pci 0000:00:10.7: USB bus 4 deregistered
+> [  932.398494] BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
+> [  932.398496] PGD 42a67d067 P4D 42a67d067 PUD 42a65f067 PMD 0
+> [  932.398502] Oops: 0002 [#2] SMP NOPTI
+> [  932.398505] CPU: 2 PID: 7824 Comm: vfio_unbind.sh Tainted: P   D  4.19.65-2020051917-rainos #1
 
-WARNING: 'exisiting' may be misspelled - perhaps 'existing'?
-#12:
-exisiting parameters.
-^^^^^^^^^
+Note, this is a very old kernel, and one that has closed source in it
+making it such that none of us can debug it at all.
 
-CHECK: Please use a blank line after function/struct/union/enum declarations
-#1020: FILE: sound/usb/qcom/usb_audio_qmi_v01.h:98:
-+};
-+#define QMI_UAUDIO_STREAM_REQ_MSG_V01_MAX_MSG_LEN 46
+And are you sure this happens on 6.10?
 
-CHECK: Please use a blank line after function/struct/union/enum declarations
-#1054: FILE: sound/usb/qcom/usb_audio_qmi_v01.h:132:
-+};
-+#define QMI_UAUDIO_STREAM_RESP_MSG_V01_MAX_MSG_LEN 202
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index a08f3f228e6d..5a63d7a772ae 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -48,6 +48,7 @@ static void for_each_companion(struct pci_dev *pdev, struct usb_hcd *hcd,
+>  	struct pci_dev		*companion;
+>  	struct usb_hcd		*companion_hcd;
+>  	unsigned int		slot = PCI_SLOT(pdev->devfn);
+> +	struct pci_driver	*drv;
+>  
+>  	/*
+>  	 * Iterate through other PCI functions in the same slot.
+> @@ -60,6 +61,13 @@ static void for_each_companion(struct pci_dev *pdev, struct usb_hcd *hcd,
+>  				PCI_SLOT(companion->devfn) != slot)
+>  			continue;
+>  
+> +		drv = companion->driver;
+> +		if (drv &&
+> +		    strncmp(drv->name, "uhci_hcd", sizeof("uhci_hcd") - 1) &&
+> +		    strncmp(drv->name, "ohci-pci", sizeof("ohci-pci") - 1) &&
+> +		    strncmp(drv->name, "ehci-pci", sizeof("ehci-pci") - 1))
 
-CHECK: Please use a blank line after function/struct/union/enum declarations
-#1081: FILE: sound/usb/qcom/usb_audio_qmi_v01.h:159:
-+};
-+#define QMI_UAUDIO_STREAM_IND_MSG_V01_MAX_MSG_LEN 181
+Attempting to rely on kernel module names within kernel code just is not
+going to work, sorry.
 
-CHECK: Macro argument 'n' may be better as '(n)' to avoid precedence issues
-#100: FILE: sound/usb/mixer_usb_offload.c:19:
-+#define PCM_IDX(n)  (n & 0xffff)
+What exactly are you trying to do here?  Please at least comment it.
 
-CHECK: Macro argument 'n' may be better as '(n)' to avoid precedence issues
-#101: FILE: sound/usb/mixer_usb_offload.c:20:
-+#define CARD_IDX(n) (n >> 16)
+> +			continue;
 
+Do you just want to fail the binding?  If so, why?  And what is
+precenting a driver to be bound after you do the check?
+
+> +
+>  		/*
+>  		 * Companion device should be either UHCI,OHCI or EHCI host
+>  		 * controller, otherwise skip.
+
+Why doesn't this check suffice?
+
+thanks,
+
+greg k-h
 
