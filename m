@@ -1,160 +1,230 @@
-Return-Path: <linux-usb+bounces-14113-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14114-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 456AD95F24E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 15:02:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B9B295F254
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 15:05:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3A481F22B6B
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:02:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BAC61F21491
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551E317BEBA;
-	Mon, 26 Aug 2024 13:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8CC17ADF7;
+	Mon, 26 Aug 2024 13:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="GJHAVdBQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jdRW4S8l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.48])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD98165F0E;
-	Mon, 26 Aug 2024 13:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1951E519;
+	Mon, 26 Aug 2024 13:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724677340; cv=none; b=I2B4ElMmWXr2fBa/fKJ/ntIX+4aDG9GRmlVT6sZubO5+3gGu2mhyRoapLsF/rA+AIAlHRuJQ0MhlQPamGko8u5QELgOBQsSqGhyIia6VGPgj/Uh3CaMG2/1afXxEr2fyqhiNcqtOpmcQTicbjr/klmekHHUsC32LMLaboeQbf8c=
+	t=1724677498; cv=none; b=DAzHzmqlIfBm2WmptFyIEqIVtNnW9ppunbg3ABY2uC7OwQggLdt5IPmWeR+8/dMAaLk0Re02F+uY58P4lfnge2tUVbe82JCg0gnbw5l4TaSiRCJJIDovEaETrDPRbU6cY51jJke4UxOJqrdZCEYgmFmNGOIe44ZPQ6Xre0Aeq14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724677340; c=relaxed/simple;
-	bh=scIlDt3bJxc6xjtCfFWzsD60sMCU7dzjdhlTShv6odY=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=t24OH41UZZpapI/URs+GkhkMbI6dQhZgF+zAGUx7mYs+AmYYruiZcVmhct9TBBpaDKNpZPbDG0ikn/4skcizU+TCW0T1CibHjBXLToUWo3IwY3p3pM72xnBzPk54DqVNZ7VRDlJ1iElB3OYGNJ3KOCGu1Q8fiYD5+QGbQiZcLg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=GJHAVdBQ; arc=none smtp.client-ip=43.163.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1724677321; bh=4MNoqgFAOdi2a+l9olqRlqs76QuNfFgvKzCU8S9eMFE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=GJHAVdBQezJ0uAmC4uDhKKePM7ocwsgnTHzB7nWLQ2bG0LdTggwD0D0T7LJ42wXQ4
-	 X3nWMPRh0J3Zvmv2MMmlnLN4NZWB1frIXCcrEw5xSG7s8DeC84DAh3wo/4oMfm22Dv
-	 /EaXQ6LykA6uTTeHTOKonGBaOmFRt6iLm0Ina1PE=
-Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
-	by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
-	id 771A2A8; Mon, 26 Aug 2024 21:01:55 +0800
-X-QQ-mid: xmsmtpt1724677318txpb2ic50
-Message-ID: <tencent_6D26CCB3712366696D23AAC446377C576505@qq.com>
-X-QQ-XMAILINFO: OeF1Bg2NKDhoY4We6TlRiMdQPRfowlu1cuonH5uz2sqZ3Ieo5wzXEtAi02xl7E
-	 ID3XGJ6Do7AhjaYuBFmJ0z4EK3O0gXTGtyqkPDQLfjp6fIGnm8lvcaN3VAMTICv4sGmBEPuE01WH
-	 N3xd9q25ObL+n0TSt3OX7dJ2uhCgBX4XowZR8cWYKgCsB8ljOX0XQd6xmB79gfL6qc7ahcAfQdZn
-	 jw+xR7q8xEQdGRK+r89nIlxtGgHPcPzt4uMW2dBwd7Gbj1yy+PLCf54tmPzHfpdR7RqJja6Nkzad
-	 vlLA2RGR0NjK1E/WP2ssGxmdc9iww761mYD/9OkV5DrIlH/CnPcMzzJmrjj94IyHIgy4fOzA5DyL
-	 dAyE7kKIvr8vXUR3BLhQLuHREAdgofzjYh1cA4RtuXRUKUwMZ1xvbGbwgB/RAFfWRxc2blRu4B0U
-	 0shQCR3A94AL/J9ajd25kUhx052DRLYQ+S1AwF6Q3gv4z9+VRJm/k9p2OWAe73N7APz88UcXTLIl
-	 qXmVbuPx7LH0FwJZw+Y+nkdS1TO3gBHybfxyhss3mc0yOYqRRl2H8aKyP7L3OGWabZ+uoWVirt5Z
-	 NSLvGTjvS3qiuwrqjIEhSDivK3Wbs9KtTdsHOvXBkxgGQ/7NdeI4OFhLLxq4r/zXTSs3TIFLKbID
-	 1+dTRkWOKwOkwqgSLhErhO3XTZot8IogGVFr5afuPE3FxYnKiBum1Ccl5hoSro/vRVD5CWF6FQgE
-	 ccCHRNtvSL8uBQR3//pJ9SjumlLnAxlqjAnKDMlGnFlKerK5hgr/CwhkKxXkzumQOAjc19EzPw30
-	 78QI8c/t8/9ckdvbhj14IuwxG2g+zZHYEtGcb0P+zQfU42h0TVYUck55/Cvld318+YFVOZOHHgCE
-	 VbwelnQNiZNa8dvdia9kkRDyyfc7t2SewVlqtsi8/mI+JvJfVallkjNXmUewyBKTlraJY9g7GDVo
-	 UYTFh6Qfost+SsybQikc9CnQPEyvQ7aLUp+gw5SM2NrmPCXLy1eCIYTCHF+hdjXT4yk199Rtuu4h
-	 ecmT0T18h6ujSQLq67SGyifbUTR7gxxDpilrpnGg==
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-From: Edward Adam Davis <eadavis@qq.com>
-To: gregkh@linuxfoundation.org
-Cc: eadavis@qq.com,
-	kvalo@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
-	sergei.shtylyov@gmail.com,
-	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH V4 2/2] wifi: ath6kl: remove ath6kl_usb_submit_ctrl_in
-Date: Mon, 26 Aug 2024 21:01:56 +0800
-X-OQ-MSGID: <20240826130154.2706792-4-eadavis@qq.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240826130154.2706792-3-eadavis@qq.com>
-References: <2024082631-upward-zips-f7b8@gregkh>
- <20240826130154.2706792-3-eadavis@qq.com>
+	s=arc-20240116; t=1724677498; c=relaxed/simple;
+	bh=BhEgjFc9NXhQffGqP/J/E4Mmj/rFv807sRpr3uVxgpA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eQR44oPdCHtQRA+hCzovCH8d/9TbHvWef77nnzDvczO2jjUHilP9bcVbNtuYRdfk/b+IEniNauyAe9qgYpyRieOEeO+E5XddBG2j+jgiZmt/MgYmJtuIGkFb7uCa+V5zkLzjqQrNGPkw4z6upyvNQm7wzCejpj4p7zVvKEIJ63s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jdRW4S8l; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724677497; x=1756213497;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=BhEgjFc9NXhQffGqP/J/E4Mmj/rFv807sRpr3uVxgpA=;
+  b=jdRW4S8lPX7gZ74yjaFMIAbOoBJlOxhjZESOfn5H+Tbh3xX1WcSYnSwt
+   55aVbtmU/gs0gf2KF2dYj2hTh3TKAHW2ZW37uXcuG2OSoXro4R0rtm7ip
+   pbi2WjoyaeRL8g68A+Kwde+4GJaXMdF+IKylvIb7UNxptksJyQNwZaczt
+   v+rAh4lAxoB+dIB8JYbiJ5i2tQtARTeZCnt9+uW/RXhBjiWl1I9kALpGW
+   QflOKKyGETVPLkZWTInY0M6fyMWimgqDzOZkqRMOZjO9wLJ1pMCxLAapb
+   hzjyVdg+5TysYc6PrJRA7cDiR+IXikX5jCMlcDPyNI7C8m3PLjjVSWMM3
+   Q==;
+X-CSE-ConnectionGUID: MG4lRH2SQ/iKyeBivibMTA==
+X-CSE-MsgGUID: vccGpQ/yRiOkfkk64M+/Aw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="22966203"
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="22966203"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 06:04:56 -0700
+X-CSE-ConnectionGUID: iVyaQ6i9SeKGp0tCg0vc5w==
+X-CSE-MsgGUID: nUp855TQSYCOaqCJIdRQWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="63038816"
+Received: from ubuntu24.iil.intel.com ([143.185.122.15])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 06:04:54 -0700
+Message-ID: <568efbd75290e286b8ad9e7347b5f43745121020.camel@intel.com>
+Subject: [PATCH 1/2] v4l: Add luma 16-bit interlaced pixel format
+From: Dmitry Perchanov <dmitry.perchanov@intel.com>
+To: linux-media@vger.kernel.org, linux-usb@vger.kernel.org
+Cc: laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+ sakari.ailus@iki.fi,  demisrael@gmail.com, gregkh@linuxfoundation.org
+Date: Mon, 26 Aug 2024 16:04:23 +0300
+In-Reply-To: <c7c24f3f6661e5a01aae4e7ef549801411f063cb.camel@intel.com>
+References: <c7c24f3f6661e5a01aae4e7ef549801411f063cb.camel@intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-ath6kl_usb_submit_ctrl_in() did not take into account the situation where
-the length of the data read from the device is not equal to the len, and
-such missing judgments will result in subsequent code using incorrect data.
+The formats added by this patch are:
 
-usb_control_msg_recv() handles the abnormal length of the returned data,
-so using it directly.
+        V4L2_PIX_FMT_Y16I
 
-Suggested-by: Greg KH <gregkh@linuxfoundation.org>
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+Interlaced lumina format primary use in RealSense
+Depth cameras with stereo stream for left and right
+image sensors.
+
+Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
 ---
- drivers/net/wireless/ath/ath6kl/usb.c | 39 +++------------------------
- 1 file changed, 3 insertions(+), 36 deletions(-)
+ .../userspace-api/media/v4l/pixfmt-y16i.rst   | 74 +++++++++++++++++++
+ .../userspace-api/media/v4l/yuv-formats.rst   |  1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+ include/uapi/linux/videodev2.h                |  1 +
+ 4 files changed, 77 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y16i.rst
 
-diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
-index 0458b5a078e1..b1fc66d823b8 100644
---- a/drivers/net/wireless/ath/ath6kl/usb.c
-+++ b/drivers/net/wireless/ath/ath6kl/usb.c
-@@ -901,40 +901,6 @@ static int ath6kl_usb_submit_ctrl_out(struct ath6kl_usb *ar_usb,
- 	return 0;
- }
- 
--static int ath6kl_usb_submit_ctrl_in(struct ath6kl_usb *ar_usb,
--				  u8 req, u16 value, u16 index, void *data,
--				  u32 size)
--{
--	u8 *buf = NULL;
--	int ret;
--
--	if (size > 0) {
--		buf = kmalloc(size, GFP_KERNEL);
--		if (buf == NULL)
--			return -ENOMEM;
--	}
--
--	/* note: if successful returns number of bytes transfered */
--	ret = usb_control_msg(ar_usb->udev,
--				 usb_rcvctrlpipe(ar_usb->udev, 0),
--				 req,
--				 USB_DIR_IN | USB_TYPE_VENDOR |
--				 USB_RECIP_DEVICE, value, index, buf,
--				 size, 2000);
--
--	if (ret < 0) {
--		ath6kl_warn("Failed to read usb control message: %d\n", ret);
--		kfree(buf);
--		return ret;
--	}
--
--	memcpy((u8 *) data, buf, size);
--
--	kfree(buf);
--
--	return 0;
--}
--
- static int ath6kl_usb_ctrl_msg_exchange(struct ath6kl_usb *ar_usb,
- 				     u8 req_val, u8 *req_buf, u32 req_len,
- 				     u8 resp_val, u8 *resp_buf, u32 *resp_len)
-@@ -954,8 +920,9 @@ static int ath6kl_usb_ctrl_msg_exchange(struct ath6kl_usb *ar_usb,
- 	}
- 
- 	/* get response */
--	ret = ath6kl_usb_submit_ctrl_in(ar_usb, resp_val, 0, 0,
--					resp_buf, *resp_len);
-+	ret = usb_control_msg_recv(ar_usb->udev, 0, resp_val,
-+				USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-+				0, 0, resp_buf, *resp_len, 2000, GFP_KERNEL);
- 
- 	return ret;
- }
--- 
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-y16i.rst b/Docume=
+ntation/userspace-api/media/v4l/pixfmt-y16i.rst
+new file mode 100644
+index 000000000000..fe4f441cd63c
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/pixfmt-y16i.rst
+@@ -0,0 +1,74 @@
++.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++
++.. _V4L2-PIX-FMT-Y16I:
++
++**************************
++V4L2_PIX_FMT_Y16I ('Y16I')
++**************************
++
++Interleaved grey-scale image, e.g. from a stereo-pair
++
++
++Description
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++This is a grey-scale image with a depth of 16 bits per pixel, but with
++pixels from 2 sources interleaved and unpacked. Each pixel is stored
++in a 16-bit word in the little-endian order.
++The first pixel is from the left source.
++
++**Pixel unpacked representation.**
++Left/Right pixels 16-bit unpacked - 16-bit for each interleaved pixel.
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - Y'\ :sub:`0L[7:0]`
++      - Y'\ :sub:`0L[15:8]`
++      - Y'\ :sub:`0R[7:0]`
++      - Y'\ :sub:`0R[15:8]`
++
++**Byte Order.**
++Each cell is one byte.
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00Llow`
++      - Y'\ :sub:`00Lhigh`
++      - Y'\ :sub:`00Rlow`
++      - Y'\ :sub:`00Rhigh`
++      - Y'\ :sub:`01Llow`
++      - Y'\ :sub:`01Lhigh`
++      - Y'\ :sub:`01Rlow`
++      - Y'\ :sub:`01Rhigh`
++    * - start + 8:
++      - Y'\ :sub:`10Llow`
++      - Y'\ :sub:`10Lhigh`
++      - Y'\ :sub:`10Rlow`
++      - Y'\ :sub:`10Rhigh`
++      - Y'\ :sub:`11Llow`
++      - Y'\ :sub:`11Lhigh`
++      - Y'\ :sub:`11Rlow`
++      - Y'\ :sub:`11Rhigh`
++    * - start + 16:
++      - Y'\ :sub:`20Llow`
++      - Y'\ :sub:`20Lhigh`
++      - Y'\ :sub:`20Rlow`
++      - Y'\ :sub:`20Rhigh`
++      - Y'\ :sub:`21Llow`
++      - Y'\ :sub:`21Lhigh`
++      - Y'\ :sub:`21Rlow`
++      - Y'\ :sub:`21Rhigh`
++    * - start + 24:
++      - Y'\ :sub:`30Llow`
++      - Y'\ :sub:`30Lhigh`
++      - Y'\ :sub:`30Rlow`
++      - Y'\ :sub:`30Rhigh`
++      - Y'\ :sub:`31Llow`
++      - Y'\ :sub:`31Lhigh`
++      - Y'\ :sub:`31Rlow`
++      - Y'\ :sub:`31Rhigh`
+diff --git a/Documentation/userspace-api/media/v4l/yuv-formats.rst b/Docume=
+ntation/userspace-api/media/v4l/yuv-formats.rst
+index 24b34cdfa6fe..78ee406d7647 100644
+--- a/Documentation/userspace-api/media/v4l/yuv-formats.rst
++++ b/Documentation/userspace-api/media/v4l/yuv-formats.rst
+@@ -269,5 +269,6 @@ image.
+     pixfmt-yuv-luma
+     pixfmt-y8i
+     pixfmt-y12i
++    pixfmt-y16i
+     pixfmt-uv8
+     pixfmt-m420
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core=
+/v4l2-ioctl.c
+index 5eb4d797d259..4fffa5739895 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1327,6 +1327,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt=
+)
+ 	case V4L2_PIX_FMT_Y14P:		descr =3D "14-bit Greyscale (MIPI Packed)"; brea=
+k;
+ 	case V4L2_PIX_FMT_Y8I:		descr =3D "Interleaved 8-bit Greyscale"; break;
+ 	case V4L2_PIX_FMT_Y12I:		descr =3D "Interleaved 12-bit Greyscale"; break;
++	case V4L2_PIX_FMT_Y16I:		descr =3D "Interleaved 16-bit Greyscale"; break;
+ 	case V4L2_PIX_FMT_Z16:		descr =3D "16-bit Depth"; break;
+ 	case V4L2_PIX_FMT_INZI:		descr =3D "Planar 10:16 Greyscale Depth"; break;
+ 	case V4L2_PIX_FMT_CNF4:		descr =3D "4-bit Depth Confidence (Packed)"; bre=
+ak;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.=
+h
+index 4e91362da6da..46f616e43ad6 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -797,6 +797,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_S5C_UYVY_JPG v4l2_fourcc('S', '5', 'C', 'I') /* S5C73=
+M3 interleaved UYVY/JPEG */
+ #define V4L2_PIX_FMT_Y8I      v4l2_fourcc('Y', '8', 'I', ' ') /* Greyscale=
+ 8-bit L/R interleaved */
+ #define V4L2_PIX_FMT_Y12I     v4l2_fourcc('Y', '1', '2', 'I') /* Greyscale=
+ 12-bit L/R interleaved */
++#define V4L2_PIX_FMT_Y16I     v4l2_fourcc('Y', '1', '6', 'I') /* Greyscale=
+ 16-bit L/R interleaved */
+ #define V4L2_PIX_FMT_Z16      v4l2_fourcc('Z', '1', '6', ' ') /* Depth dat=
+a 16-bit */
+ #define V4L2_PIX_FMT_MT21C    v4l2_fourcc('M', 'T', '2', '1') /* Mediatek =
+compressed block mode  */
+ #define V4L2_PIX_FMT_MM21     v4l2_fourcc('M', 'M', '2', '1') /* Mediatek =
+8-bit block mode, two non-contiguous planes */
+--=20
 2.43.0
+
 
 
