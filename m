@@ -1,210 +1,130 @@
-Return-Path: <linux-usb+bounces-14103-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14104-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83C7E95EE46
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 12:16:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99A0B95EF83
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:13:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A94C281A4E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 10:16:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDAB31C21E84
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 11:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD7FE1482F5;
-	Mon, 26 Aug 2024 10:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6001514F8;
+	Mon, 26 Aug 2024 11:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="OEI+JDxC"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="etz/aUWJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF3B146593
-	for <linux-usb@vger.kernel.org>; Mon, 26 Aug 2024 10:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776E713DDD9;
+	Mon, 26 Aug 2024 11:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724667352; cv=none; b=eN9sJtOcA9ZSf5Fq/13CUqFOHe3qYDXpPv1YEl0lAaipaL2+QTuzatHrBXFdYw7lOY7t2ZoC0e9WPzSJYDCZ3Xxzl5t0GOxqR9a1O+Zm5myUWdUsgrLTKlT0Mq9k1C0khJFq+/6b3KYhVoRgAFsVjqR8ZmCiFrT/aKPnxebpEU0=
+	t=1724670790; cv=none; b=qC/pt3UTStBDGxXsoil2YISBeuZGNI0kuzRgjXScX7QCT5g3yzmmxGTS+DWd0qj6Rnu2ThEigbmUYK1d4d5KXMeRG4ikPJGWbKAbI7IjUuyoHt7F1yH1tdGxzu70ELm0TdLaz1pvWVhXhlahs7+9aoilu/uWCHlXSOrWtSM4FPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724667352; c=relaxed/simple;
-	bh=dqF9qz6t/GVpGmum6vuUYfrUMXNhwX8AG3M4+n1M7ZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ogbZaHCVbu/mMY5lBmNEPyIzyMQGu8nartWu7UwFRgNB8JlJAwfIufnQEL2KoAWFev/vKRVqJs0YMqmaUmul7lk4E7aaDGwIZyZagqO0Sqfii+3et3OPaZste5ieVGAkgn+DFkicTrOSJ50eXzyfS7UP6a79gj8Y4Ts4JDxvWbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=OEI+JDxC; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f4f2868783so35571711fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 26 Aug 2024 03:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724667347; x=1725272147; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nXSb7P5yQsC6ZA7aZwkzK/D+oEX3tz1a/6VEPbOOF1M=;
-        b=OEI+JDxC340hJbyzaELF9aZjkFT4nnaE1jma3SYSKf8FaDgA8sj2hzwybWxynxWA5X
-         MgON+hpgEbKzURuwi8d3MBJ0Kt82nbfI8ZlyoqEmQozz3gmDJAuM64rbD2K3aR77C3AV
-         eROpf5Q0KDSSNQMz4xScqqIHp9FFyA4M/Up6zMLY9HVH0RuZUzVuRa0hsik+ixO52Tyb
-         jetbHtnX/vAHZjZMenomQw3dxEYAAjaz9+PnG4E7GEpg+ZincehP7SFzQyccplWrKTjc
-         1bLx8Tu+9B23afbvzr66tCsDhNQ02DqmhgGeviPjyhL+fxBZ16refNaKBCLPFxI8Ftsz
-         O9Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724667347; x=1725272147;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nXSb7P5yQsC6ZA7aZwkzK/D+oEX3tz1a/6VEPbOOF1M=;
-        b=mnf71KCIE/Gn2Elc8FF1RlQQSRoN2JLJQwk/8L0GtkNAPP9WvgaT2stEnTeCh8Bgzr
-         xvd+xTG8te19vPKJBQj/JTFuZaGASUWn7g0yciZewUXGjvdbzk3DBv/1cYADDJ2z6VVJ
-         Iys/+8y6FIgCJx2szucthvaDBQIrCxAG+vLGtCgrN4tKiAJ0i7r6LmVeRw2TRjxOqIdP
-         h1OD9dVgYexcoKStOl52BeSOGC9FEr1/3J0GJ/VE7CyogaMYXgpxLtjyAnQUHL6IydyX
-         sPtdTcD03nrDRFyKaz+4+F6mmH7GOiA3j79JR+fChb4FxVKh2tGgazkdkNraoAyH66i9
-         7DQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUXkg8OJBmyAONHkX2AS2wJRoQ9EDuPaXM7XVavpODXSHN1kegKAd83Z2g4YRs5lgc4xkcTAW9AYZo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKqJ6ajsZMcuvzXcHAjXmqz2mTc/hVqlsW720EYbJkWXINKuK3
-	SAJDKJIo1fYUPzbi/XTsIkA2Le+MdGTYkCIAv7fpX/eXtLEZOBqBeIWA5a1qvTM=
-X-Google-Smtp-Source: AGHT+IGnOO+pYmBeCnoRQo4bouYucQfop3nBZsepSSurhHBVuFJ58XyC2lvaGwZIfEzC6OWNRHTbyQ==
-X-Received: by 2002:a05:651c:198b:b0:2f0:1a19:f3f1 with SMTP id 38308e7fff4ca-2f4f48f0feamr66567071fa.7.1724667346682;
-        Mon, 26 Aug 2024 03:15:46 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a3e8f88sm5421649a12.42.2024.08.26.03.15.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Aug 2024 03:15:46 -0700 (PDT)
-Message-ID: <7b16791b-0d7b-49a1-82aa-c4db99ff2bfd@tuxon.dev>
-Date: Mon, 26 Aug 2024 13:15:43 +0300
+	s=arc-20240116; t=1724670790; c=relaxed/simple;
+	bh=02cFjT9rCSquVRGY5ROZxzrKmwM9NghL3+cjh0Ae9ys=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=Kh7QpegXtKcnixU+8y4pu/HlLMoJxUTxy0JaYdNroMwB1YcOvVD5mp+IlyxnpCq4VMG/yHacfk8vuTDboAHSU2deJaAIX5U4WP4rYlRdRfiBjlGEJRbDNoRw7v3d3QlogZcy+nbO2TpAMV5rguQNADoaThDJS3qUfPK6/TGzEMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=etz/aUWJ; arc=none smtp.client-ip=203.205.221.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1724670779; bh=lUpulHGMOGngdtU0gm+4Ln7iEb36uBYkJQf78s2pWtg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=etz/aUWJDNcih8LdHVLqGPS7DVB5cQBmL2bPu10BDXMiwVamL5Z42bO8c/ivbltGv
+	 Ltdu8JVck3o5HCl13VwwXRQIBPxgKiAjRkbFpcA6JIU9vbbia97aL4wz6HhL/85gpI
+	 2wrCbcCYX0gIh6iMgvMyjF3TL+nY17GTEi0luNrQ=
+Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
+	by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
+	id 3373ACF7; Mon, 26 Aug 2024 19:12:55 +0800
+X-QQ-mid: xmsmtpt1724670775tf2wz6iic
+Message-ID: <tencent_2C2C336C9E441B294BB21B6A2558BA34BB08@qq.com>
+X-QQ-XMAILINFO: Nq1uWKlIb9DM8ghTm7BKAMcP/rKH+fHPKtzuBJVGkSe4iTEchhTRkAJuHI6REV
+	 W26t0cY7S1wwplTCQznYfbudqI4jj7gJ6Dn3+vzelMSffkXO1E5jDjdXPkFpt12EHXkVX/YNdpA+
+	 +FOs65YRPNVp++v7Lju48A7PKaq34+6bLRjQWNP7quCN0btYd/Bx1atupZjEplzNCDrEpeDRyXfK
+	 6HjXicbcCAz3OvtRkm69DdCGu72yt8hevXWHHWiuZnTW6YP6Q6jT2ngfW6R3/+omvHDJtRnNRwUm
+	 0BBdvtEvCRhKDqo09BgdFaMWTYDoSS/ebwm/LMGMsrLrELFH7lebVFkElalfgQsZUXOBOE8ZkoMV
+	 leP3pUB7grXugYAVkax+6F9HMD6TNvU/A2C8K6QszhDE6KLUIvJcsavueDWBRJARxdXE0c6bc/8h
+	 OWtx+LVaY8D+kFMssBuGdic+hRblbCpOZFEvqRh7Q9Qa4krgAkpuv3WR4DTimpAi+Dx3dd9WRRt4
+	 z7WXdl3qQi77KTliovUl5ma1EJMxQoHFIimuwByAhXrJInFKLKZ2R4Wtp/iuNSHwM90DgMMGkshH
+	 PC12B+gBllEJ14h1KK/RntI5YxXmBC20jcbBdRHKkqiZqfNn5s3h33eSIftTgGsNTfRX11PwKnRK
+	 UByX6/7+XozbU1D7YO9Q15WT4rWzi5mTavwryiLFuZsN3o7W756YrmcMy/j8Rdi8Bufzf2guVUpF
+	 WN2ohoQwZFHMFViG0dJyFZlC9OfzzMdZzC6pM1XJd1z/EvBpUUcp6rwlElWUF7P6XatxzHVmBjGE
+	 8Hmo76IygIatdVKTsIWohPyItl+xeCk4F1EOyKvO8DZlA9YMmObXwN6O7mkyayyLJFL5lzNI6UqW
+	 HGwxm0GXyqTY+VbAmsFbeYRcQGiVfbkfraPEEcSawdDsZDniE7EHDVYQalWFGzuS51D7Yu+rNUvV
+	 rwmviHLMug9Jx4XCGrLw==
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+From: Edward Adam Davis <eadavis@qq.com>
+To: gregkh@linuxfoundation.org
+Cc: sergei.shtylyov@gmail.com,
+	eadavis@qq.com,
+	kvalo@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH V2] wifi: ath6kl: Replace ath6kl_usb_submit_ctrl_in with usb_control_msg_recv
+Date: Mon, 26 Aug 2024 19:12:54 +0800
+X-OQ-MSGID: <20240826111253.2606362-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <2024082649-shape-karate-40b0@gregkh>
+References: <2024082649-shape-karate-40b0@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
- #reset-cells for RZ/G3S
-Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
- magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
- sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
- biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
- <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
- <0d8b1322-cf15-4ed9-b958-06516bbb64c7@tuxon.dev>
- <20240823-plywood-unfixed-d8d8a2d93f14@spud>
- <5eae2ddb-2a7b-4c1d-a7f7-41fb39058de1@tuxon.dev>
- <20240823-dilute-juggle-7e2d43b8b630@spud>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20240823-dilute-juggle-7e2d43b8b630@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Hi Greg KH and Sergey,
 
-
-On 23.08.2024 19:33, Conor Dooley wrote:
-> On Fri, Aug 23, 2024 at 07:26:42PM +0300, claudiu beznea wrote:
->> On 23.08.2024 19:18, Conor Dooley wrote:
->>> On Fri, Aug 23, 2024 at 10:54:06AM +0300, claudiu beznea wrote:
->>>> Hi, Conor,
->>>>
->>>> On 22.08.2024 19:42, Conor Dooley wrote:
->>>>> On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
->>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>>
->>>>>> The RZ/G3S System controller has registers to control signals that need
->>>>>> to be de-asserted/asserted before/after different SoC areas are power
->>>>>> on/off. This signals are implemented as reset signals. For this document
->>>>>> the #reset-cells property.
->>>>>>
->>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>> ---
->>>>>>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 ++++++++++++++++
->>>>>>  1 file changed, 16 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
->>>>>> index 4386b2c3fa4d..6b0bb34485d9 100644
->>>>>> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
->>>>>> @@ -42,12 +42,28 @@ properties:
->>>>>>        - const: cm33stbyr_int
->>>>>>        - const: ca55_deny
->>>>>>  
->>>>>> +  "#reset-cells":
->>>>>> +    const: 1
->>>>>> +
->>>>>>  required:
->>>>>>    - compatible
->>>>>>    - reg
->>>>>>  
->>>>>>  additionalProperties: false
->>>>>>  
->>>>>> +allOf:
->>>>>> +  - if:
->>>>>> +      properties:
->>>>>> +        compatible:
->>>>>> +          contains:
->>>>>> +            const: renesas,r9a08g045-sysc
->>>>>> +    then:
->>>>>> +      required:
->>>>>> +        - "#reset-cells"
->>>>>
->>>>> Given this is new required property on an existing platform, I'd expect
->>>>> some mention of why it used to be okay to not have this but is now
->>>>> required. Did firmware or a bootloader stage take things out of reset?
->>>>
->>>> On previous SoCs the SYS controller has no support for controlling the
->>>> signals going to different peripherals (USB, PCIE in case of RZ/G3S).
->>>> I'll add a note about this on next version.
->>>
->>> My initial thought here wasn't about previous SoCs though, it was
->>> because you didn't add the compatible in this series for /this/ SoC.
->>
->> RZ/G3S compatible is already present in this file:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml#n26
+On Mon, 26 Aug 2024 07:04:00 +0200, Greg KH wrote:
+> > ath6kl_usb_submit_ctrl_in() did not take into account the situation where
+> > the length of the data read from the device is not equal to the len, and
+> > such missing judgments will result in subsequent code using incorrect data.
+> >
+> > usb_control_msg_recv() handles the abnormal length of the returned data,
+> > so using it directly can fix this warning.
+> >
+> > Reported-by: syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com
+> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > ---
+> > V2: Directly using USB functions
+> >
+> >  drivers/net/wireless/ath/ath6kl/usb.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
+> > index 5220809841a6..dc1f89ebb740 100644
+> > --- a/drivers/net/wireless/ath/ath6kl/usb.c
+> > +++ b/drivers/net/wireless/ath/ath6kl/usb.c
+> > @@ -1027,9 +1027,9 @@ static int ath6kl_usb_bmi_read(struct ath6kl *ar, u8 *buf, u32 len)
+> >  	int ret;
+> >
+> >  	/* get response */
+> > -	ret = ath6kl_usb_submit_ctrl_in(ar_usb,
+> > -					ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP,
+> > -					0, 0, buf, len);
 > 
-> I know, first thing I did when I read the original patch was open the
-> file ;)
-> I don't care about the old SoCs, cos you're not applying the property to
-> them, so what's changed between SoCs isn't really relevant. It's a mention
-> of why, on this SoC, it is safe to add new required properties that I want.
-
-
+> By removing this call, there is now only one call left to
+> ath6kl_usb_submit_ctrl_in(), so that probably can also be unwrapped in a
+> second patch in this series, right?
+Sorry, I didn't clarify what you said.
 > 
-> AFAIU the answer is that no consumer of the resets existed before, so
-
-That's true.
-
-> there's not some special state there, and I am guessing that the new
-> sysc driver you're adding isn't going to fail to probe if there are no
-> resets, 
-
-That's true.
-
-it just won't register a reset controller?
-
-It will register it but,
-
-the new sysc driver is going to probe only for this SoC (RZ/G3S). On RZ/G3S
-we have 2 resets. These well be registered unconditionally, currently, only
-for RZ/G3S. If there will be no DT users for it then it should be no
-problem, AFAICT.
-
-SYSC variants have common features b/w different SoC variants (one of them
-being chip identification). The feature implemented though reset controller
-in this series is not common but particular to RZ/G3S.
-
-When the SYSC will be extended for other SoCs the reset driver registration
-would have to be adapted to not be registered. At the moment, as the SYC is
-compatible only with RZ/G3S and the reset driver is registered on auxiliary
-bus though SYSC there is no restriction, reset is registered all the time,
-but SYSC is only compatible with RZ/G3S.
-
-> Which is fine, cos all
-> devicetrees that have the new peripherals will have #reset-cells etc.
+> > +	ret = usb_control_msg_recv(ar_usb->udev, 0, ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP,
+> > +				 USB_DIR_IN | USB_TYPE_VENDOR |
+> > +				 USB_RECIP_DEVICE, 0, 0, buf, len, 2000, GFP_KERNEL);
 > 
->>> What's worth noting isn't about the prior SoCs, it is about what makes
->>> it okay for this one.
+> As was pointed out, this is a very odd indentation style.
+I will send V3 patch to adjust the indentation style.
+
+BR,
+Edward
+
 
