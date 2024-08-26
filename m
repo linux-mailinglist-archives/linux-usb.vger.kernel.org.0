@@ -1,218 +1,297 @@
-Return-Path: <linux-usb+bounces-14097-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14101-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F24095ED2D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 11:30:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90A4495ED77
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 11:38:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 545651C21917
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 09:30:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5E2B1C22059
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 09:38:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4554F145B35;
-	Mon, 26 Aug 2024 09:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F045A146D45;
+	Mon, 26 Aug 2024 09:37:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lSaJKAUz"
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="zWJ+fGCD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2116.outbound.protection.outlook.com [40.107.22.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB29B14535F;
-	Mon, 26 Aug 2024 09:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724664641; cv=none; b=BB62iOHUSy6lGz1EETCmj7CjmVkxKodozXBXmqw4mjfwRfrfkk0rXg581HyKXnjRPEmMbSDSVmNLoSvx2wFApvVmEocpsc3DuhNMvL6kErS3xXcBnANr6jtUKNi3bJq083aiOy+tdITlTmYmb14dMGjq1qQqt7e6e+oOahvkh0Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724664641; c=relaxed/simple;
-	bh=yCkoxAILzMW60twmqqWTxdixzJ2eUJCOIv16AMrcbyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DNAsHeCqwJMFapM3pIx6Mha7x2wIzyENOftXqaRrJ7PHeJOQ428uDxK1ZDNr+0OyhBeKcXqmflV9tIfI6d9u3arbi+vOCO2RZkNLt3/R7staT9X27dwpruxhl6oAOuum/5E2fjPZZcignsFPqrDjNuN5pksbDcRUm1tQIFM7vio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lSaJKAUz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9914EC91B9B;
-	Mon, 26 Aug 2024 09:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724664641;
-	bh=yCkoxAILzMW60twmqqWTxdixzJ2eUJCOIv16AMrcbyY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lSaJKAUzon2M9zw/LMTvaRRp38Q+9REq82BXXZaBohwG9HqtFf+mvsvBRpjuCg8qS
-	 RvyK2Lg7Whr5P5OefZnQHNPEDQiPHtfdaiZ9rFtqSzeKrr3GqP2NPWkpLfS25GAc72
-	 LoYj47t2IxUmu1vLBrXIqWVU1Xjpl4fy/Efz9oe4=
-Date: Mon, 26 Aug 2024 11:30:38 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: leoliu-oc@zhaoxin.com, dlemoal@kernel.org, arnd@kernel.org,
-	schnelle@linux.ibm.com, WeitaoWang-oc@zhaoxin.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	mathias.nyman@linux.intel.com, ulf.hansson@linaro.org,
-	vkoul@kernel.org, hslester96@gmail.com, Carsten_Schmid@mentor.com,
-	efremov@linux.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com,
-	CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, wwt8723@163.com,
-	stern@rowland.harvard.edu, alex.williamson@redhat.com,
-	guanwentao@uniontech.com, xuerpeng@uniontech.com
-Subject: Re: [PATCH v2] USB: Fix kernel NULL pointer when unbind UHCI form
- vfio-pci
-Message-ID: <2024082626-brigade-shaded-92d4@gregkh>
-References: <42A38D045199FD79+20240826085455.1525536-1-wangyuli@uniontech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C61146A6B;
+	Mon, 26 Aug 2024 09:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.116
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724665021; cv=fail; b=qrUk7C2KlSMFI5x9KVRNFd7tSaYd1BCeOu6Z/wfvCBKeDM5c2LmkefqaHqct5RbU//H51vM5+AqIger4BBxZ+lZJ9JJTN/+AyJtYfL0GGDJWUUIrt33IfisYQzMm1VEtAZ1zAt/1MGv8kUj4SzPZY2Ty9pDe7ilqnV40M/oE+J0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724665021; c=relaxed/simple;
+	bh=Xk1clGUXVrmwgz6BJMOsSZgEkr4mqHbqE+TfOKEAiAc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sBOnhaG4N4Hkzg0iQE+uNXoMSl27vMFbpLb3q9lTKSpqdtwheIl8i7iNi14UwQnkU5hAQBI+cEkLV40YSFGG0+umxeJhn9hR/uP4Fuqd8ZrJwy7gLdtBkWG6xq6ZByv/EXyMmN2+Sc1HDtRkTX1q4UfuKXs4BhTnWDomKJx14Ns=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=zWJ+fGCD; arc=fail smtp.client-ip=40.107.22.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QwRQ3pBpK1tVLWNUJvVvm6P5EDEyZE0ddjNrWyAM5oud6J5XsQNCHjCL2WgQmM1rF7cxthrBYtayiA3psfgAqKJjQoOm9CcWq+fe5DaASQjSsH7YpPgvjGmUWlND85kFuHQ3dipwle83pASR2/NV1AKXfewnhUjXwEJxeqsa40NtJmybaGxG1ueF6WPoJeTWYAsyj/Nc+7r10jRObIk5upvm0yG6QpanEHyMwXuKa3BCDO+CQUKdJzpS4SVUx4YJRECFK8y60eqJzh4JnyYUJ9ojw6XZ1Mp3N5ilxqtERO+EH6h+408GAyoalR18oF/u0yXlPDXqamBhA7kFGIXJYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FPtg7SvKx4wYK9V0lQ83CA7upuKSLZPrtPKknafm6Hg=;
+ b=qGoeCleiibPZaWsBZ/bBcWuHLLeNd7MOuCYe2gVEz6tpwrWA/aAtN0iPeyHloq5qhGX7q8S3Y4eG6/5IM/58Zmln5nwwiXrum+WoY4YqmJicP1pA8o0NTmyGZ2mRr4qgW4aWY2vswWwIKZB0o2FeuCckMvVaxUb7r4YNCDyTCXN31OeVFJO1htn+d293kxs4PVbJYvRX77/LrEn8k1SU1pW/GSM/0JvwMFHJp/IKZcMpaGWWBAuypoLJPF4T6CwpuC6pnnVN/m56Uctv8ldC3n+I1M86eckv9jw4u20NwIPQnRsecMAsr2ZjldrWGwwRcOeboWJI+GN6Ly+WHtQ3Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FPtg7SvKx4wYK9V0lQ83CA7upuKSLZPrtPKknafm6Hg=;
+ b=zWJ+fGCDuo6irx/hWK0WdIuJqgmPMBy3rjED7nqbu44S4HgUDMTNEaZ6ftQtgX7Hz1gDefC+VX9CKqcg91Mlt0IOITxINZzhKPEylDIOMvd6my0fcQgjY79Mk1Lz6qmV9Hrdu55TMb+nwScOyTY4t4TwrpHBFeKorzqbFd18et4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by GVXPR08MB11183.eurprd08.prod.outlook.com (2603:10a6:150:1fc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.14; Mon, 26 Aug
+ 2024 09:36:54 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::4e72:c5d4:488e:f16d]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::4e72:c5d4:488e:f16d%4]) with mapi id 15.20.7918.012; Mon, 26 Aug 2024
+ 09:36:53 +0000
+Message-ID: <acb0bcba-82de-4d67-9000-7c50a8456ff1@wolfvision.net>
+Date: Mon, 26 Aug 2024 11:36:50 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: gadget: uvc: Add H264 frame format support
+To: AKASH KUMAR <quic_akakum@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Daniel Scally <dan.scally@ideasonboard.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi
+ <balbi@kernel.org>, Jack Pham <quic_jackp@quicinc.com>, kernel@quicinc.com,
+ Wesley Cheng <quic_wcheng@quicinc.com>,
+ Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+ Krishna Kurapati <quic_kriskura@quicinc.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240711082304.1363-1-quic_akakum@quicinc.com>
+ <2024071126-napped-cobbler-4693@gregkh>
+ <0f3fe4b4-5451-480e-a9e4-11ee921521b9@quicinc.com>
+ <07d9e1f4-201f-47dc-b692-b1aa14511420@quicinc.com>
+Content-Language: en-US
+From: Michael Riesch <michael.riesch@wolfvision.net>
+Organization: WolfVision GmbH
+In-Reply-To: <07d9e1f4-201f-47dc-b692-b1aa14511420@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: VI1P194CA0034.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:803:3c::23) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42A38D045199FD79+20240826085455.1525536-1-wangyuli@uniontech.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|GVXPR08MB11183:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4d4f26b-cbc1-462b-ecc0-08dcc5b29eba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VGNZaHBYRWE5U004RWRoWjJvSmtlQmN5cWgyblJEczZTaExZczY3eTBiVk5w?=
+ =?utf-8?B?eXZIT0tLV0xyTWxkMDBudnovWDVmaHhJSkNnM3krZVUwS2tSdG52a1VjczUy?=
+ =?utf-8?B?NFQvUG56VFVucWZuKzBWeWNmamVTbENLdW1wTmNXaW5YcjZkREdiZ3FpR1FZ?=
+ =?utf-8?B?YU1NTTVFYzFuRWJ4enJIRlpJNm9RejZMMkVVSkR4UCtyRHowY1VTNHpXMk1u?=
+ =?utf-8?B?MW9ZNWZ3ZytNNmxsZzNmRW8zd2k0by9BRWxUcFR2YVl1OFhidFZ0UXc1eWx6?=
+ =?utf-8?B?cEkzdGZQUWowYlhUL21jaG5NSG1HZDc3Vyt3bXNPQlJ3VTV4VXU3Y0kvTmN4?=
+ =?utf-8?B?akxKU3JqUkxsMlBEemExak1aVzI0RnlyR3ZRajBkWGU2Z1dFS1lNNHNRd1c3?=
+ =?utf-8?B?M0ZVK1ZOSGxhUldlVitSQkJrTHFKa1pUbk9XblpmWkZtK0lnTXNzUjM1TkxH?=
+ =?utf-8?B?OWx0RVVMbDRKeGZ2SWgyYzhDeENhY2U2QjlIcTY3bXpTbStybmpFalREMWxs?=
+ =?utf-8?B?ZFIxeG1abnVnenltbHBRSVduQnZITmR1dTZZRjVxNkhTRHg2bjc5M21QNGhy?=
+ =?utf-8?B?MEozUmdLS20yRmg4N0hCaktrSmZUMzd0M3VlQUpvbk1RUzQyODg2ckI1eWVj?=
+ =?utf-8?B?Y1Q3TllvWE9UUVJMeUErOFJDUlcxMmFDM3NlMmVockhqUk55OUF0NmNBQy9p?=
+ =?utf-8?B?SVcwYStyc21rTkdMWW9aSkJMQzJreDNTZHV1OUFNV01RVnN3VlBEcm4rM1Yv?=
+ =?utf-8?B?REZPUXNKbVkvZUlXOGtoeFBBekRxQ0R5YjR5MFNrdVpoM0ZCNXpnbVkrU25W?=
+ =?utf-8?B?TzlHUytvYVpEK1JQd29nKzFMMkNKc1R4VTRScnpFQjlPSW1qdTlPOEFIUDY0?=
+ =?utf-8?B?ZEJtQ3I2U1VrTHJIdTlGN2lyY2t3TVdGNmJUZ3lWcEo1a2c1a2czNGJyTDBM?=
+ =?utf-8?B?QXh2b3Z3ditxRHpFSWZyMGVvano4Wkx6am1iM3FRRytJK042c1dhcjNMdU1I?=
+ =?utf-8?B?UFVTUEVqWktsV1d0YzNlZWdJKzU4MlhKK1BUUTFNck5IRlRtTVNIUmNtaHFZ?=
+ =?utf-8?B?MkZiNEFseFF5b3VwSithZllqQjh1Z0U1Vys2SUc5Q2hoQTlUVFFRRnRRaWRX?=
+ =?utf-8?B?YVVzaXNQZTFRZGZ2TUJmUXVtb1ZUSldLb0M5OUh4OFZGaHNKUmtCZk8wTnZL?=
+ =?utf-8?B?cmNEbVdBbDJQRUVRUkVNQWsxaE9zQmNlQVIvSWlBV3ZGS2cybVhDcjFwZmdQ?=
+ =?utf-8?B?SjRCOFZUNXl6ZUhraTZCN3l3RU53THBpdVB6QTJWbm43Qnc3blpoNXoxUnEv?=
+ =?utf-8?B?SFNlMldueUtnUlNEZ1FYUXlNbnRneDdrbTlGYUdyUnFtOEtPTjJHZ1lwd1ZX?=
+ =?utf-8?B?bDRONWY4QmdUbGR1Zzk3Vnl3YTd0SVBiWkpsaHIxL1hGc2xVVXMxNk5SVW8v?=
+ =?utf-8?B?elRlek9NN1g5L0ZFZnJYUWFoTzQ0amJmS3pZTGN0bzVTem9hc2hvSFFrVHhr?=
+ =?utf-8?B?eXJaWTRHaVY2Q0RSaUdVYnNoMWZnMncxazN1TmxUZEh3SlVqbzRNa1RsTTlN?=
+ =?utf-8?B?QWdTOStseVNjb0VOK3JYejEzbE5WWE9tSjVodDgyb1Y4RDh6RWtsQnB3cXph?=
+ =?utf-8?B?RXhWUFIycWR1eEUrM0tXdi90R3RWZmlsRXdmd3VSdXUzVitOZUphMkgxTHVt?=
+ =?utf-8?B?Q2dkODlaOElhY0NaNFBVUUhRK3kzWS9uRWg4QW1NYjhEYWErR0draUY4UWNo?=
+ =?utf-8?B?cEptVTdpV3REbkxjcjlwRUE2QUZKanAwdGk5b2w2SDhGQUIrOWk0S3dJNm1E?=
+ =?utf-8?B?VlJEdnVoN0p0US95Q0lYdz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?blhqVXJtaFd2OWlsZ3NVL3NlUitYRGNFMU91Vks5ZTl2NVYxZ3huUGRmOWha?=
+ =?utf-8?B?UlQrT1lOUUtQd2dSclF1b0F2ZWpoMjJGR3g5ZytoQkZDSFlhTU1PcS9qUGhW?=
+ =?utf-8?B?Z01iUUpRRkMvMTVxbmtTWnhoTDZpZmhzNVo0T3I1VTdEMzRPY2IvSEFidWsr?=
+ =?utf-8?B?dlN6Z1ZBWGVNZG93OGNSdG4ycGxmYVhyVm11UzdZaXBTUTZJcm5US2JwMG5k?=
+ =?utf-8?B?VjIvbHl5Vkw1RlpKaWNXcThpUG9MYXB1TDZlM1duZ2wwVFhQcGJvdWRHbVl2?=
+ =?utf-8?B?U21EYmd4cWphMUJjRHBFY3Z2QXNQMWhyNVVuRTF4NElHUU8vZ0hFN0FXcFB1?=
+ =?utf-8?B?blMvbFFlTW05bFFJT2JBS1B3OTNnbGoybmhxY05WR0YrZDA4K3Y0NlZqQ0VS?=
+ =?utf-8?B?TlliU1IrZEd4Z3JicW50K0ltTHJpMXJwV3dVTUEydDFFaTA2NWRDRlZ4RVNo?=
+ =?utf-8?B?bDdRMGZaVGsxSDhQUmQ3eU5OY0ZjeVVQQ1dPb1FrZGgxaVFTTWNtb0tSTU9G?=
+ =?utf-8?B?UkJHaW1lWUhFd1Q2NXdmUTlvOWJ5QVFCSkRzR1p4V1FOdnBGYnY5bEIycTFL?=
+ =?utf-8?B?RStwSUc0anhaMEMyWUM5cTZwSWRVeDBGR0NyMHRFOTEwZ05ndnZrcWs0d24y?=
+ =?utf-8?B?NGxIQmpTQzhhTU02eUJMaVRSQW5Tb3UrSWY4dVk0dzBmUFk4c1pSUURBb2ta?=
+ =?utf-8?B?eGxsUXdJVm1GdDB3a1RiaXdRMG5VNUUyN3gwRXVqTTJWMWVUQkFJSDRlSTBZ?=
+ =?utf-8?B?NnhsVHFCUkZKZElQRHZ3bjltN0xpQWM1bWpVSXovTXZHOXEyaXoycmdmNFQr?=
+ =?utf-8?B?cDdPRWVTV1c5YmpBVTFQbEtkM0cwN2NhZWlsY055c25aRWRpanpyTGM2UmtV?=
+ =?utf-8?B?cHpKdVNZbFYwcTgvSHNwQ1Y0cEhkRGJzU1V5WFNIcVdkaFpFNlRBTWtFSkNx?=
+ =?utf-8?B?c2wrSWNXNTlGVjdUOVh5Z2FsRVpURW5SVXRjTC9sZDVybEdZV2R5eFJyTVpx?=
+ =?utf-8?B?NG5UMUp6eU9Ic0NGa1hNUVg2Z1ZKWXAyajgvVVhMeHFzNVYwOWJkemZyVml1?=
+ =?utf-8?B?cWZQdFpzbzYrRzNXS3dPK1EyTUdkNmVMQ3pjMjdseDR4c3FHRVE2cVRhQkhD?=
+ =?utf-8?B?WU4ycjE1dndGd2xBbkx6Z3RVUWY4dWp6MXA5UE96MGFaVGFKN2FYT2g0OEdO?=
+ =?utf-8?B?MVpkMTNHelZVdGlhWklNTkdtUWRveXRNSDJnaU92Vys0REdOYkcyRTlUdWps?=
+ =?utf-8?B?TW01bWRGOHNXUmVma1J4b2x3dEU4V2xFelFqTytWelg4TXlQT3c3WW9lRkZt?=
+ =?utf-8?B?U3A0TVJ4MkNqYmdKdE5WM3pSNjBUWDVDT0ZlcHdJeWhZR1lyVzJNUksxelhv?=
+ =?utf-8?B?TFo1cHo0cGtKMkpsWURTeThZYTJmZDNCN01lZlo2a3ppaHM4Ti90WUR0QTZz?=
+ =?utf-8?B?M2Zwc2Y3Vkg3b0dUc2NZY3ljK1JTcWM5YTY4Vy93Zkh5SmdZWGtyWU1weGdm?=
+ =?utf-8?B?WjJrQ3RicDRXWnlaT2VpNHNlVEVPRnpkOHdWbXE1MmFLMDFlZEhLNSsxeUtH?=
+ =?utf-8?B?aFZvZTUrU0d2cUFIbHl5cDlFSlhQMEFVWTNVTmxSU0puendGVk9tQmpOUFZy?=
+ =?utf-8?B?UUhsVDR5OXdGbmkrdmJ1R1EyRFRGbmRZbDFXRVdaV1g0TjN0djE2d2lFWDEy?=
+ =?utf-8?B?cTRqV3N1WTE0Y25RdVMycHZLQ1l3S0pTODFENXdZdUVFdlg5dFZFUjhYY29T?=
+ =?utf-8?B?VXkvaU95ajFBbGd3clV4WVdDUlZ5YXBDekhWQ1dPcU01SE9CTjF5cWQ2cGtG?=
+ =?utf-8?B?UzRmSU5EcGlaOStNVTZUWWc1dG5laVAvRXQzS0RVem1tQ0R6cHdpNEgza1Ew?=
+ =?utf-8?B?bTZNVU96T0xZa09NWkErMGRKTXozMW1RS3V0cHBleWRWU3pPZkFFM3pRZzhl?=
+ =?utf-8?B?ZXpCU3hFQ2phTUIySi9aRFliYWxVaHdadG05MW82b2hJM3VENDRRMXhqdUxi?=
+ =?utf-8?B?cXhkTVo0a1g4d3BGZFYzYzJyak5TZm9sNFg5bzVkZkxieks5dmp1ZkxSS0Jy?=
+ =?utf-8?B?QU80ZUowUmZVT1U1MnBMRDZBSkxPYWp2dmdUVEhPVHFsMXpEbTdSY1Z0Y1lo?=
+ =?utf-8?B?MFNvQnI3NE52UFA2Rnk5WVF1UjMvNjgwa1FndHJCUkRuZGRZYWY2M0JHZTdE?=
+ =?utf-8?B?Mmc9PQ==?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4d4f26b-cbc1-462b-ecc0-08dcc5b29eba
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2024 09:36:53.8766
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 12MtUX0BOpshkHaQIjakpzKvRekG65/LptuaAFGK61NOzmD7NVvdW1WLnkn1dgsMJXec+mXFhfGmtps98KhIPgeiRTrumCHaTQ3oM+/GqqQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB11183
 
-On Mon, Aug 26, 2024 at 04:54:55PM +0800, WangYuli wrote:
-> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+Hi Akash,
+
+Thanks for your patches. Very interesting to see H.264 UVC gadget
+support coming to life. May I ask how you tested your patches? What does
+the user space stack on the gadget side look like? And what is the USB
+host in your setup (OS, application, ...)?
+
+On 8/1/24 08:15, AKASH KUMAR wrote:
+> Hi Greg,Daniel,Laurent,
 > 
-> This bug is found in Zhaoxin platform, but it's a commom code bug.
+> On 7/11/2024 3:13 PM, AKASH KUMAR wrote:
+>>
+>> On 7/11/2024 2:37 PM, Greg Kroah-Hartman wrote:
+>>> On Thu, Jul 11, 2024 at 01:53:04PM +0530, Akash Kumar wrote:
+>>>> Add support for framebased frame format which can be used to support>>>> multiple formats like H264 or H265 other than mjpeg and YUV frames.
+>>>>
+>>>> Framebased format is set to H264 by default, which can be updated to
+>>>> other formats by updating the GUID through guid configfs attribute.
+>>>> Using Different structures for all 3 formats as H264 has different
+>>>> structure than mjpeg and uncompressed which will be paased to
+>>>> frame make func based on active format instead of common frame
+>>>> structure, have updated all apis in driver accordingly.
+>>>> h264 is not recognized by hosts machine during enumeration
+>>>> with common frame structure, so we need to pass h264 frame
+>>>> structure separately.
+>>>>
+>>>> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+>>>> ---
+>>>>   .../ABI/testing/configfs-usb-gadget-uvc       |  88 ++-
+>>>>   drivers/usb/gadget/function/uvc_configfs.c    | 570
+>>>> +++++++++++++++---
+>>>>   drivers/usb/gadget/function/uvc_configfs.h    |  34 +-
+>>>>   drivers/usb/gadget/function/uvc_v4l2.c        |  80 ++-
+>>>>   include/uapi/linux/usb/video.h                |  62 ++
+>>>>   5 files changed, 714 insertions(+), 120 deletions(-)
+>>>>
+>>>> Changes for v2:
+>>>> - Added H264 frame format Details in Documentation/ABI/
+>>>>    and new configsfs attribute path for mjpeg and
+>>>>    uncompresseed formats.
+>>>>
+>>>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>>> b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>>> index 4feb692c4c1d..2580083cdcc5 100644
+>>>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>>> @@ -224,13 +224,13 @@ Description:    Additional color matching
+>>>> descriptors
+>>>>                         white
+>>>>           ========================
+>>>> ======================================
+>>>>   -What: /config/usb-gadget/gadget/functions/uvc.name/streaming/mjpeg
+>>>> -Date:        Dec 2014
+>>>> +What:
+>>>> /config/usb-gadget/gadget/functions/uvc.name/streaming/mjpeg/name
+>>> You are changing an existing api, how will all existing code handle
+>>> this? Will it not break? What is ensuring that this will work as-is ok?
+>>> I have modified all existing apis in kernel and have handled it and
+>>> all existing formats
+>> are working along with H264 in this change. Only user needs to change
+>> configfs parameter
+>> path according to updated path in documentation in Userspace.Currently
+>> H264 doesn't work with same
+>> structure and we need add it differently as a result these configfs
+>> paths are getting updated.
+>> Daniel and Laurent can you suggest if it ok?
+>>>> -#define UVCG_FRAME_ATTR(cname, aname, bits) \
+>>>> -static ssize_t uvcg_frame_##cname##_show(struct config_item *item,
+>>>> char *page)\
+>>>> +#define UVCG_FRAME_ATTR(cname, fname, bits) \
+>>>> +static ssize_t uvcg_frame_##fname##_##cname##_show(struct
+>>>> config_item *item, char *page)\
+>>>>   {                                    \
+>>>>       struct uvcg_frame *f = to_uvcg_frame(item);            \
+>>>>       struct f_uvc_opts *opts;                    \
+>>>> @@ -1936,14 +1941,14 @@ static ssize_t
+>>>> uvcg_frame_##cname##_show(struct config_item *item, char *page)\
+>>>>       opts = to_f_uvc_opts(opts_item);                \
+>>>>                                       \
+>>>>       mutex_lock(&opts->lock);                    \
+>>>> -    result = sprintf(page, "%u\n", f->frame.cname);            \
+>>>> +    result = scnprintf(page, PAGE_SIZE, "%u\n",
+>>>> f->frame.fname.cname);\
+>>> sysfs_emit() is made for this.
+>>
+>> Sure, will change.
+>>
+>>
+> can you suggest how to support H264 format without changing userspace
+> nodes,
+> as H264 format structure is different from mjpeg and uncompressed format
+> and
+> using same structure show issue as host is not able to recognize H264
+> format frames.
 > 
-> Fail sequence:
-> step1: Unbind UHCI controller from native driver;
-> step2: Bind UHCI controller to vfio-pci, which will put UHCI controller in
-> 	   one vfio group's device list and set UHCI's dev->driver_data to
-> 	   struct vfio-pci(for UHCI)
-> step3: Unbind EHCI controller from native driver, will try to tell UHCI
-> 	   native driver that "I'm removed by set
-> 	   companion_hcd->self.hs_companion to NULL. However, companion_hcd
-> 	   get from UHCI's dev->driver_data that has modified by vfio-pci
-> 	   already. So, the vfio-pci structure will be damaged!
-> step4: Bind EHCI controller to vfio-pci driver, which will put EHCI
-> 	   controller in the same vfio group as UHCI controller;
->        ... ...
-> step5: Unbind UHCI controller from vfio-pci, which will delete UHCI from
-> 	   vfio group device list that has been damaged in step 3. So, delete
-> 	   operation can random result into a NULL pointer dereference with
-> 	   the below stack dump.
-> step6: Bind UHCI controller to native driver;
-> step7: Unbind EHCI controller from vfio-pci, which will try to remove EHCI
-> 	   controller from the vfio group;
-> step8: Bind EHCI controller to native driver;
-> 
-> [  929.114641] uhci_hcd 0000:00:10.0: remove, state 1
-> [  929.114652] usb usb1: USB disconnect, device number 1
-> [  929.114655] usb 1-1: USB disconnect, device number 2
-> [  929.270313] usb 1-2: USB disconnect, device number 3
-> [  929.318404] uhci_hcd 0000:00:10.0: USB bus 1 deregistered
-> [  929.343029] uhci_hcd 0000:00:10.1: remove, state 4
-> [  929.343045] usb usb3: USB disconnect, device number 1
-> [  929.343685] uhci_hcd 0000:00:10.1: USB bus 3 deregistered
-> [  929.369087] ehci-pci 0000:00:10.7: remove, state 4
-> [  929.369102] usb usb4: USB disconnect, device number 1
-> [  929.370325] ehci-pci 0000:00:10.7: USB bus 4 deregistered
-> [  932.398494] BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-> [  932.398496] PGD 42a67d067 P4D 42a67d067 PUD 42a65f067 PMD 0
-> [  932.398502] Oops: 0002 [#2] SMP NOPTI
-> [  932.398505] CPU: 2 PID: 7824 Comm: vfio_unbind.sh Tainted: P   D  4.19.65-2020051917-rainos #1
-> [  932.398506] Hardware name: Shanghai Zhaoxin Semiconductor Co., Ltd. HX002EH/HX002EH,
-> 	       	   BIOS HX002EH0_01_R480_R_200408 04/08/2020
-> [  932.398513] RIP: 0010:vfio_device_put+0x31/0xa0 [vfio]
-> [  932.398515] Code: 89 e5 41 54 53 4c 8b 67 18 48 89 fb 49 8d 74 24 30 e8 e3 0e f3 de
-> 					 84 c0 74 67 48 8b 53 20 48 8b 43 28 48 8b 7b 18 48 89 42 08 <48> 89 10
-> 					 48 b8+G26 00 01 00 00 00 00 ad de 48 89 43 20 48 b8 00 02 00
-> [  932.398516] RSP: 0018:ffffbbfd04cffc18 EFLAGS: 00010202
-> [  932.398518] RAX: 0000000000000000 RBX: ffff92c7ea717880 RCX: 0000000000000000
-> [  932.398519] RDX: ffff92c7ea713620 RSI: ffff92c7ea713630 RDI: ffff92c7ea713600
-> [  932.398521] RBP: ffffbbfd04cffc28 R08: ffff92c7f02a8080 R09: ffff92c7efc03980
-> [  932.398522] R10: ffffbbfd04cff9a8 R11: 0000000000000000 R12: ffff92c7ea713600
-> [  932.398523] R13: ffff92c7ed8bb0a8 R14: ffff92c7ea717880 R15: 0000000000000000
-> [  932.398525] FS:  00007f3031500740(0000) GS:ffff92c7f0280000(0000) knlGS:0000000000000000
-> [  932.398526] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  932.398527] CR2: 0000000000000000 CR3: 0000000428626004 CR4: 0000000000160ee0
-> [  932.398528] Call Trace:
-> [  932.398534]  vfio_del_group_dev+0xe8/0x2a0 [vfio]
-> [  932.398539]  ? __blocking_notifier_call_chain+0x52/0x60
-> [  932.398542]  ? do_wait_intr_irq+0x90/0x90
-> [  932.398546]  ? iommu_bus_notifier+0x75/0x100
-> [  932.398551]  vfio_pci_remove+0x20/0xa0 [vfio_pci]
-> [  932.398554]  pci_device_remove+0x3e/0xc0
-> [  932.398557]  device_release_driver_internal+0x17a/0x240
-> [  932.398560]  device_release_driver+0x12/0x20
-> [  932.398561]  unbind_store+0xee/0x180
-> [  932.398564]  drv_attr_store+0x27/0x40
-> [  932.398567]  sysfs_kf_write+0x3c/0x50
-> [  932.398568]  kernfs_fop_write+0x125/0x1a0
-> [  932.398572]  __vfs_write+0x3a/0x190
-> [  932.398575]  ? apparmor_file_permission+0x1a/0x20
-> [  932.398577]  ? security_file_permission+0x3b/0xc0
-> [  932.398581]  ? _cond_resched+0x1a/0x50
-> [  932.398582]  vfs_write+0xb8/0x1b0
-> [  932.398584]  ksys_write+0x5c/0xe0
-> [  932.398586]  __x64_sys_write+0x1a/0x20
-> [  932.398589]  do_syscall_64+0x5a/0x110
-> [  932.398592]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> 
-> Using virt-manager/qemu to boot guest os, we can see the same fail sequence!
-> 
-> Fix this by determine whether the PCI Driver of the USB controller is a
-> kernel native driver. If not, do not let it modify UHCI's dev->driver_data.
-> 
-> Link: https://lore.kernel.org/all/1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com/
-> Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
-> Tested-by: Erpeng Xu <xuerpeng@uniontech.com>
-> Signed-off-by: WangYuli <wangyuli@uniontech.com>
-> ---
->  drivers/usb/core/hcd-pci.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> index a08f3f228e6d..5a63d7a772ae 100644
-> --- a/drivers/usb/core/hcd-pci.c
-> +++ b/drivers/usb/core/hcd-pci.c
-> @@ -48,6 +48,7 @@ static void for_each_companion(struct pci_dev *pdev, struct usb_hcd *hcd,
->  	struct pci_dev		*companion;
->  	struct usb_hcd		*companion_hcd;
->  	unsigned int		slot = PCI_SLOT(pdev->devfn);
-> +	struct pci_driver	*drv;
->  
->  	/*
->  	 * Iterate through other PCI functions in the same slot.
-> @@ -60,6 +61,13 @@ static void for_each_companion(struct pci_dev *pdev, struct usb_hcd *hcd,
->  				PCI_SLOT(companion->devfn) != slot)
->  			continue;
->  
-> +		drv = companion->driver;
-> +		if (drv &&
-> +		    strncmp(drv->name, "uhci_hcd", sizeof("uhci_hcd") - 1) &&
-> +		    strncmp(drv->name, "ohci-pci", sizeof("ohci-pci") - 1) &&
-> +		    strncmp(drv->name, "ehci-pci", sizeof("ehci-pci") - 1))
-> +			continue;
-> +
->  		/*
->  		 * Companion device should be either UHCI,OHCI or EHCI host
->  		 * controller, otherwise skip.
-> -- 
-> 2.43.4
-> 
+> Thanks,
+> Akash
 > 
 
-Hi,
+After only a quick look at the USB Video Payload H264 1.5 document, I
+think there should be a folder
+  /config/usb-gadget/gadget/functions/uvc.name/streaming/h264/
+with the formats
+  /config/usb-gadget/gadget/functions/uvc.name/streaming/h264/name
+and the frames
+  /config/usb-gadget/gadget/functions/uvc.name/streaming/h264/name/name
+in analogy to the other payloads, namely mjpeg and uncompressed.
+Naturally, the attributes will be different to the existing formats.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+What exactly does not work with this approach?
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Best regards,
+Michael
 
