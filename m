@@ -1,91 +1,112 @@
-Return-Path: <linux-usb+bounces-14092-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14093-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7366995EC5E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 10:51:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E156995EC74
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 10:54:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A62391C214F1
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 08:51:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E5B1281892
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 08:54:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DCC382D7F;
-	Mon, 26 Aug 2024 08:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333EE13D63D;
+	Mon, 26 Aug 2024 08:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PM4XF3JH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="biu1pXG2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5A682899
-	for <linux-usb@vger.kernel.org>; Mon, 26 Aug 2024 08:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3BF145B24;
+	Mon, 26 Aug 2024 08:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724662246; cv=none; b=kBgKaD23aPScXGJ2jtg8gw1brXCcJ9JxkM0Nn6glEisJZAhQg0j4mbAaPr1dnK7sp/dxuxi2yvmq1eDMTO7dPiLnjzbJbK7u1a3D/ZzApI7g9XcHaoCq57b5pmbxYppRQHq8QtSw0pWC4zZ+N5L/hkMRXrH5ZgvdpinN6nDHNgc=
+	t=1724662453; cv=none; b=uKUacvlkBLHt1WgQ74AP7GfY9Agl7fqAb7Dnj7ZLYEleQ/oFC7CEa8njx6P75AX3sZEaSrBSttPdPLWquMH9xNKlJPjQWirv1djPgzPXa080mKRjP89EjHNBR+BX++eo6uoxuF1rPzN70fevgMwm9snaIAjxYMr9/+1SiCfUIos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724662246; c=relaxed/simple;
-	bh=FwnWEDmL/vqikRkVKYQN6hYf5HWk943TqL7JQk0YhtI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W9HX8n71nZKgJwfcoqdhEE42GRc7Ntp5h41Fo2MaYW8CUEEl4iUjfMWbAKXcq07Z1moHfAv3aF4CzAI6hws2mFWOnJhJXcqCLzQHpIIXsJ3Y5Hjn/u925C4HMwLGy3SuupnwRmmktf0q6YNd0vnDJY5SrRLaUyufP0lioZsgu98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PM4XF3JH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8166AC8CDD5
-	for <linux-usb@vger.kernel.org>; Mon, 26 Aug 2024 08:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724662246;
-	bh=FwnWEDmL/vqikRkVKYQN6hYf5HWk943TqL7JQk0YhtI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=PM4XF3JHwYhcttKlRdtlLVLhUcp3HGS8phZSfo+ZTjibsTqcGN3QH3yh2pu3gQGJR
-	 BC7iT17JBSbbOh8D+wE8kyt/oiatgMYHCUJLp7ysjCg83ogaomIqQZWHO2mcMdsV/R
-	 8BW9/eH/dNE7wUlkpkiebCCJK26RYzIX0gLbPfOjGmayXhGfNy+eK2Upwav8aZCHaP
-	 m3ElB6NDqxkQnJHGYloAjXTgMiPaM1tMlXDXA1yLlp+B6D4j6ZS/dY22ZAZstWAtpt
-	 2FgNlfB4puxqno76AVGzoIuDT5Zqg6JqePxa4uS37ioxFhdNGE/HRNc+pVdYn1AAOh
-	 CrRrOwu7TmVzg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 6E7BEC53B7E; Mon, 26 Aug 2024 08:50:46 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
-Date: Mon, 26 Aug 2024 08:50:46 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: maggu2810@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219198-208809-sGmkfuftql@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
-References: <bug-219198-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1724662453; c=relaxed/simple;
+	bh=YpyRsICQh2Ct8m66TziSRhFUnNrO3LSZMeegHmG9WiY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hlRWV8JWfVzzhJ1Z3LjZ82sPB0IS6wFvOWfLMT1P2Be5ga6bQgKioU97D80Rcgq6qc+6lvzau6hU/OmuCCW1n5F7GoakXIQr3sChmgleke1nHuX4C9NGIegCE4vH/dgHgq/U8bNo1Ca5j8Ahk4AXJJDARdo3GYFrcKg/8TO1SMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=biu1pXG2; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724662453; x=1756198453;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YpyRsICQh2Ct8m66TziSRhFUnNrO3LSZMeegHmG9WiY=;
+  b=biu1pXG2suiNZbwERvrrpdbBcU8eDFyNCJ3wduh9GkG9Kr/WbU90W7Ys
+   Aanoj1FcP5gBT6laxvpgC12OvQyZDOOfLWQvHUOtFGdLqa+wvFnoPIlhq
+   9suGtrYN3l+q1H6vlLSs+2sKBacRLfOX/KKqV0JxZ9TQWXd3MUEBMVIKN
+   P6yJ8G3eStQgoC2Ild2p39MjzbV3q13jDqgqgpXYjWLlHSQzjT4gTE/sT
+   4LNwoWhSKel0sL4i7t0plimeBGisXf/TzFAY6LiPmu3feNsdW8C2Yl85W
+   AqXY5+M8XhW0Ffw3bhHqQsJvV2UvLzCq29pS60C1K0259e/pt+z4dAaGr
+   w==;
+X-CSE-ConnectionGUID: Ti4jnhB8RxmHUnwMIjtPpg==
+X-CSE-MsgGUID: At8E1xeGRKim8CLokGeH+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="23200353"
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="23200353"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 01:54:12 -0700
+X-CSE-ConnectionGUID: 1Dw5wa1cRfKYMJinJLMuUw==
+X-CSE-MsgGUID: stdROqkyQmylCrh6tF6S4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="62280099"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa010.jf.intel.com with SMTP; 26 Aug 2024 01:54:08 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Aug 2024 11:54:06 +0300
+Date: Mon, 26 Aug 2024 11:54:06 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Liao Chen <liaochen4@huawei.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	gregkh@linuxfoundation.org, alcooperx@gmail.com,
+	bcm-kernel-feedback-list@broadcom.com, stern@rowland.harvard.edu,
+	justin.chen@broadcom.com
+Subject: Re: [PATCH -next 3/4] usb: typec: fix module autoloading
+Message-ID: <ZsxCrnp8Cwx+nNjg@kuha.fi.intel.com>
+References: <20240822130113.164644-1-liaochen4@huawei.com>
+ <20240822130113.164644-4-liaochen4@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822130113.164644-4-liaochen4@huawei.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
+On Thu, Aug 22, 2024 at 01:01:12PM +0000, Liao Chen wrote:
+> Add MODULE_DEVICE_TABLE(), so modules could be properly autoloaded
+> based on the alias from of_device_id table.
+> 
+> Signed-off-by: Liao Chen <liaochen4@huawei.com>
 
---- Comment #1 from Markus Rathgeb (maggu2810@gmail.com) ---
-Created attachment 306776
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306776&action=3Dedit
-kernel log 6.11.0-0.rc4.38.fc41
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
---=20
-You may reply to this email to add a comment.
+> ---
+>  drivers/usb/typec/anx7411.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+> index 5a5bf3532ad7..33ff301b918f 100644
+> --- a/drivers/usb/typec/anx7411.c
+> +++ b/drivers/usb/typec/anx7411.c
+> @@ -1576,6 +1576,7 @@ static const struct of_device_id anx_match_table[] = {
+>  	{.compatible = "analogix,anx7411",},
+>  	{},
+>  };
+> +MODULE_DEVICE_TABLE(of, anx_match_table);
+>  
+>  static struct i2c_driver anx7411_driver = {
+>  	.driver = {
+> -- 
+> 2.34.1
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+heikki
 
