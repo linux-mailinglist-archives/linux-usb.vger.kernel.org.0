@@ -1,99 +1,86 @@
-Return-Path: <linux-usb+bounces-14107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14109-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D723695EFAD
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:26:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 624D095F005
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:42:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14BBC1C213D1
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 11:26:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0002FB21A8D
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 11:42:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A381547C4;
-	Mon, 26 Aug 2024 11:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33F84155751;
+	Mon, 26 Aug 2024 11:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2G0fFHvP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qfMzAhWx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D770143C7D;
-	Mon, 26 Aug 2024 11:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941C71482E3;
+	Mon, 26 Aug 2024 11:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724671591; cv=none; b=ndWiJbmV6jwdLNewxaRNl4K+XO3Dz+Fs6W3ihZRNXHAKKPLwu1xVwLPZc1GWsEAZ+18cxa5g3ouPhhgp1DhlJVHeVsa5Mutbl71bmI4j7WcwIEm9bT8TY+5HQXuV1IH5bN6sjoWjk24YQ7jfw9DOi9aMWc2e7otHmD4DhmDlfa0=
+	t=1724672524; cv=none; b=t05MXnlascHAlnf16Puf0bLmdO1XrvcJc4pQVP1EpmGeCYocmV9AxjCBZxP3eISkzjMaZf+82onaG4mSOqw/Iq9xBAVMqPQRd8ixRCWmFalHbgpjDLPnVUPU4AkhhVFSZ9Ekj/QRQmZzwiT3jdrRB2u/ncn93ay3kONZdq7irho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724671591; c=relaxed/simple;
-	bh=xgIrjbnPUK7X9li5k4Abk/lSMwv/fLyCRRwSRyE1oJM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Obia63lCCo2IqwW/ECmeFl54WDzLYKnr5dYFNqUlkN1icXu0fX9Z/Ix2gmHhW40AIO4ZkURj6i/TSXIsM/P8effOMrdX76N8MQaDwQCkg7LPvMNVnpvHp8zVoD8VL0Ze0k6vnie+uapSMa73U+t/JI4SWpgNQoLiqPW41K40W9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2G0fFHvP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85294C4FF16;
-	Mon, 26 Aug 2024 11:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724671590;
-	bh=xgIrjbnPUK7X9li5k4Abk/lSMwv/fLyCRRwSRyE1oJM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=2G0fFHvPmBEga4ilx8TY4lRFxtHPS9EWme/8oo2iegDPfxy1pGnA02Uu0UXT9vmMP
-	 4pmeAaeaWbYS2xstzqWSsmTxZa4RS+VXjnqeimlqtJMfYCXeOrBsSFSTBbqxTlD/Gb
-	 dHFIjsZsZrk+6zeWcskiSgNoUPg48AkbgZE9iuDQ=
-Date: Mon, 26 Aug 2024 13:26:27 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
+	s=arc-20240116; t=1724672524; c=relaxed/simple;
+	bh=3vH/QMaGRSsoqKjoBMoil/aDWRAiSIq+fBv32gLkIM0=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=K7GTnFEzJUdQCFbuFgCPnt/aUaobL/ggINCH0Llqff7qR6N2uXo5wz+VDmjD6o68P3Nfd78RVCp6qHFIUB4hnGRdqLzNqdxWyw9YOvsl8OJXimqfGT4NVfipdkUT7rAS0+E4oiFImkBICqWiS9oLUsI/z9CwApXejJgH0YDpSag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qfMzAhWx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB7CC5140F;
+	Mon, 26 Aug 2024 11:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724672524;
+	bh=3vH/QMaGRSsoqKjoBMoil/aDWRAiSIq+fBv32gLkIM0=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=qfMzAhWxoNZNzhvhuJECIJjQAHNkANFee7t6dgBa/KFGMBbMF6cgWOU78dNI7MfTR
+	 4pd7LSWq3Sytbr1BYmjwtOdZu9bO0myNWHsTCJ/9CCnUcx5k5EJa4j4bUIGGLB2p6m
+	 qACE6iR/vAzNqY+F2gPLT3vFJJf7/E+AafgtYWPhuPRVTWU0F8YHCek0bQKqcXGyEy
+	 CB+PzsvKiUkgqDd4ElEN6/ohTkI32vJpL5IRkfzJb/vQV0Py28iV97cU1BnRL2LT7q
+	 b7K9a+m0K5azbog9P+4YC+5l8aDqjhnvxEu2ntbULaGplKvzepyUGmKcsaVgIjrXuu
+	 B/FUltTE7K88A==
+From: Kalle Valo <kvalo@kernel.org>
 To: Edward Adam Davis <eadavis@qq.com>
-Cc: kvalo@kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org, sergei.shtylyov@gmail.com,
-	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH V3] wifi: ath6kl: Replace ath6kl_usb_submit_ctrl_in with
+Cc: gregkh@linuxfoundation.org,  linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org,  linux-wireless@vger.kernel.org,
+  netdev@vger.kernel.org,
+  syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
+  syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH V2] wifi: ath6kl: Replace ath6kl_usb_submit_ctrl_in with
  usb_control_msg_recv
-Message-ID: <2024082631-upward-zips-f7b8@gregkh>
-References: <tencent_2C2C336C9E441B294BB21B6A2558BA34BB08@qq.com>
- <tencent_AAA2EDEACE4478EA6C9C2CA96E8095DCE80A@qq.com>
+References: <tencent_1D9967CEC6D952EC86530991EED86ED70C06@qq.com>
+	<tencent_F0CB92D8867509922ED02ED5CCA4E7D2C606@qq.com>
+Date: Mon, 26 Aug 2024 14:42:00 +0300
+In-Reply-To: <tencent_F0CB92D8867509922ED02ED5CCA4E7D2C606@qq.com> (Edward
+	Adam Davis's message of "Sun, 25 Aug 2024 22:21:49 +0800")
+Message-ID: <87seurfr3r.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_AAA2EDEACE4478EA6C9C2CA96E8095DCE80A@qq.com>
+Content-Type: text/plain
 
-On Mon, Aug 26, 2024 at 07:19:09PM +0800, Edward Adam Davis wrote:
+Edward Adam Davis <eadavis@qq.com> writes:
+
 > ath6kl_usb_submit_ctrl_in() did not take into account the situation where
 > the length of the data read from the device is not equal to the len, and
 > such missing judgments will result in subsequent code using incorrect data.
-> 
+>
 > usb_control_msg_recv() handles the abnormal length of the returned data,
 > so using it directly can fix this warning.
-> 
+>
 > Reported-by: syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com
 > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> ---
-> V2 -> V3: Adjust indentation style
-> 
->  drivers/net/wireless/ath/ath6kl/usb.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
-> index 5220809841a6..5b1ce4f9ed54 100644
-> --- a/drivers/net/wireless/ath/ath6kl/usb.c
-> +++ b/drivers/net/wireless/ath/ath6kl/usb.c
-> @@ -1027,9 +1027,11 @@ static int ath6kl_usb_bmi_read(struct ath6kl *ar, u8 *buf, u32 len)
->  	int ret;
->  
->  	/* get response */
-> -	ret = ath6kl_usb_submit_ctrl_in(ar_usb,
-> -					ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP,
-> -					0, 0, buf, len);
 
-Again, please make this a patch series, with the second one removing
-ath6kl_usb_submit_ctrl_in() and moving to use usb_control_msg_recv() for
-that too.
+Did you test this on real ath6kl hardware?
 
-thanks,
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-greg k-h
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
