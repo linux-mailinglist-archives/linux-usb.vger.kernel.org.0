@@ -1,252 +1,211 @@
-Return-Path: <linux-usb+bounces-14128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14129-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF1F895F56D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 17:43:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE22795F770
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 19:09:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39326B21BDD
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 15:43:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75FDA284B4C
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 17:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3F81946A2;
-	Mon, 26 Aug 2024 15:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8235A198A1B;
+	Mon, 26 Aug 2024 17:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Vh8H+ftH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+NKdVm+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C295194096
-	for <linux-usb@vger.kernel.org>; Mon, 26 Aug 2024 15:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19F018D64D;
+	Mon, 26 Aug 2024 17:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724686987; cv=none; b=mSQPw1mc7LZ2TC8HcyGIrIn2TGRZXnUPTqKVA6Be5XkR0gBVOOv1B89tXbY2f6S1cfCPjSTaMEqAzV5ALUCpSwCiJs+VUDfr9XHWHgvx4VSICcIlxiVtYVcX1BurTgt+KU5p2HvRdk2U7qYWUIsiz3XYTE6GFs8MjHCtqG23J0U=
+	t=1724692157; cv=none; b=dhBZujzyyGGI+OkpQ/lM9r5aNKcuH36DK5fz+x/bbWmF1PxjZrGDhSEBEvD9tsGQowO41FmTkYQMbYYSzHBqOKVzMdVq/Al5Y49juydVz6lU+GXxF0VNO9/3Ml6hQk7gGGHHATRY+0Sn4/KeS8Qt6AnnTfS2ITgfNtT8tzwEpx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724686987; c=relaxed/simple;
-	bh=Y1MWjJgVWPA3HWnRpA5bjVr87aPr6F48YDVRmpaPeaw=;
+	s=arc-20240116; t=1724692157; c=relaxed/simple;
+	bh=o0yrJMcWN9NhQiyL6wLf2W3XPIcdo7ahAbqDUogj2kI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d18CjClmP/yaeDwL259Z1ldD1CFQyma/UvDXq3LBvqFtRrqGs03/3V6LD62Z3IgLgN1THNcKAWz8k29/CVrJuoeZfCbDvOSlDilQErJhrwh3CQW5dQkAtHw1/GVoz/f7lc4NEbf4Snndcdrub1a6A1CCBZ+p0JmScHaWb1s7o1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Vh8H+ftH; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-45006bcb482so22385161cf.3
-        for <linux-usb@vger.kernel.org>; Mon, 26 Aug 2024 08:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1724686983; x=1725291783; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yP4Fw/lMMClOSx02WHfgPFt+EBlGP0U2oDKxLWoWZtU=;
-        b=Vh8H+ftHwSpEbe2JD75yP831cv+/rUHoB/2xuhwpL9zkJ3RmXzNbBfInz+OY2s/616
-         F17BxAwYFL/gFMAY2H3jdrvGwYkmDYJkHoMtKqUiUXduMI5bMANXHQn1Qq/Euy9sHiEv
-         mmFe1M1CIU207kBvicBQay1LKg8WQR3E+fLD9oyRCwNiqIKO/2FmGWDgV6gRMZ3GFJ2c
-         F4vktV6IWNxEF1LnpKS8wdsD1cg1qOB2EcMKmTuWy+uIdcg8yFKc9Q7CYbpb/3y2C1qt
-         NAMv+mvLrPf1lORlXaWeXCKo1InSr4NApIWnm/lIOylojRqFzWAl0bxFlL7IO0A88/FY
-         RoSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724686983; x=1725291783;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yP4Fw/lMMClOSx02WHfgPFt+EBlGP0U2oDKxLWoWZtU=;
-        b=IIMufOep8FK/KH9GaQYNUlaN7HXXbFMR+npYRtZrOdQnBv3jaeuE6KAscJ2fag5Wy0
-         MFwedl5yfTK8F+tiByZIAvGAo6PDrvC/ledhMe2r2g7DznvUWf2IxtJl8tNKpQF0fo4A
-         /KsVpOt5WM76TWQiWlDdcRoFAmQE8Elgtlyg0Ulm0wC89YjZ1DvWfjP35T29TJADY2BV
-         QCue1ZiLM56iit1joHmuGBFUq3l7uqptz9fQ/7yUOTqytOD8ImsYtN37vL2RlbUZCFuk
-         QrxfBddPOMhVQS62KOX68V60+2olcy+cFH6kPyqA1zIsvXBOqKl+0BKaThcpHZISaSua
-         ywwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWd7QNkqJO03Haxe0CiNXMbq9rXhEamBwPGANSzGv7IQTH2LdSPhKL4ESHtmzp0sHu9bjWdvQJePGQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwL9r7k8OkHuxsOL2E2DjpVGVQSDAlWVm0xlTz6HyJRaxgu+2T
-	2d42urHci4Mm3eANdCE5KsfFyxJoPmyDJKisehSObKz63OTiZV/h3iDKFZ/8ZQ==
-X-Google-Smtp-Source: AGHT+IFwV8p413g5+5hIWLDjV4l8fIiqXTk+f4Q0QVc5D9QSE14Dcyc4aw1/2HSLEYL592tN+kGS3Q==
-X-Received: by 2002:a05:622a:1bac:b0:454:e80f:1457 with SMTP id d75a77b69052e-455095f1c4dmr105372841cf.12.1724686983166;
-        Mon, 26 Aug 2024 08:43:03 -0700 (PDT)
-Received: from rowland.harvard.edu (wrls-249-137-9.wrls-client.fas.harvard.edu. [140.247.12.9])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-454fdfc097csm44414501cf.12.2024.08.26.08.43.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Aug 2024 08:43:02 -0700 (PDT)
-Date: Mon, 26 Aug 2024 11:42:59 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: WangYuli <wangyuli@uniontech.com>, leoliu-oc@zhaoxin.com,
-	dlemoal@kernel.org, arnd@kernel.org, schnelle@linux.ibm.com,
-	WeitaoWang-oc@zhaoxin.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mathias.nyman@linux.intel.com,
-	ulf.hansson@linaro.org, vkoul@kernel.org, hslester96@gmail.com,
-	Carsten_Schmid@mentor.com, efremov@linux.com, tonywwang@zhaoxin.com,
-	weitaowang@zhaoxin.com, CobeChen@zhaoxin.com, TimGuo@zhaoxin.com,
-	wwt8723@163.com, alex.williamson@redhat.com,
-	guanwentao@uniontech.com, xuerpeng@uniontech.com
-Subject: Re: [PATCH v2] USB: Fix kernel NULL pointer when unbind UHCI form
- vfio-pci
-Message-ID: <88f2c959-7b88-4d97-81a4-11902dddd19a@rowland.harvard.edu>
-References: <42A38D045199FD79+20240826085455.1525536-1-wangyuli@uniontech.com>
- <2024082631-resort-stays-b065@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FUtoymrw8rhfH7uEWnt4/Zm/fX6i81Osv5jxvCE4Vro6KtuVwcNiZqta9jxr8KB3X44/NsJPf5INOps3vZNL4JNSY3yRY975+QYJx/O+zzhOfeHRTw0hfP+MCRVObqku3X5VS4g5GV+J5Z7gqnwPoCXex0bgeHiVOf5GYr3xJgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e+NKdVm+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E69ABC5828E;
+	Mon, 26 Aug 2024 17:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724692156;
+	bh=o0yrJMcWN9NhQiyL6wLf2W3XPIcdo7ahAbqDUogj2kI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e+NKdVm+js++0+tUNii5X3zd86+JbZqnR5lwn7PRQdfmSWAuf/jPFpLfK/nDRPBV1
+	 QuL866WhBf2qaa5M3S5LiUSm9VEKJhEyUUISkLIB7FhTT7Fk4ZYRATlqR/cVOnH2Ex
+	 imv3IwC9Zws7uJhkg5ykDa4tRxRJmzMzKdM60lZkfARGazZdpy9hWplHoC7cGAhYaG
+	 MZjVU3GcCf8a+kZwmG1bMiJm4QbADmyS3LD/ZtBF9wO89s9/jVbhuD9LrO7FWIAiA3
+	 v69Q1qpAVOFc1hARm/tmwKmLSPg4HpoPbS+UvgU340zSSdzKEH3+IPqUmUA2tQeeT1
+	 X2vFCbRQ83fUw==
+Date: Mon, 26 Aug 2024 18:09:09 +0100
+From: Conor Dooley <conor@kernel.org>
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
+	geert+renesas@glider.be, magnus.damm@gmail.com,
+	gregkh@linuxfoundation.org, mturquette@baylibre.com,
+	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+	biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
+ #reset-cells for RZ/G3S
+Message-ID: <20240826-daycare-freewill-c0e1400bf255@spud>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
+ <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
+ <0d8b1322-cf15-4ed9-b958-06516bbb64c7@tuxon.dev>
+ <20240823-plywood-unfixed-d8d8a2d93f14@spud>
+ <5eae2ddb-2a7b-4c1d-a7f7-41fb39058de1@tuxon.dev>
+ <20240823-dilute-juggle-7e2d43b8b630@spud>
+ <7b16791b-0d7b-49a1-82aa-c4db99ff2bfd@tuxon.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="kphp1gQZZmvGGz7y"
+Content-Disposition: inline
+In-Reply-To: <7b16791b-0d7b-49a1-82aa-c4db99ff2bfd@tuxon.dev>
+
+
+--kphp1gQZZmvGGz7y
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024082631-resort-stays-b065@gregkh>
+Content-Transfer-Encoding: quoted-printable
 
-All right, I see what's going on...
+On Mon, Aug 26, 2024 at 01:15:43PM +0300, claudiu beznea wrote:
+>=20
+>=20
+> On 23.08.2024 19:33, Conor Dooley wrote:
+> > On Fri, Aug 23, 2024 at 07:26:42PM +0300, claudiu beznea wrote:
+> >> On 23.08.2024 19:18, Conor Dooley wrote:
+> >>> On Fri, Aug 23, 2024 at 10:54:06AM +0300, claudiu beznea wrote:
+> >>>> Hi, Conor,
+> >>>>
+> >>>> On 22.08.2024 19:42, Conor Dooley wrote:
+> >>>>> On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
+> >>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>>>>>
+> >>>>>> The RZ/G3S System controller has registers to control signals that=
+ need
+> >>>>>> to be de-asserted/asserted before/after different SoC areas are po=
+wer
+> >>>>>> on/off. This signals are implemented as reset signals. For this do=
+cument
+> >>>>>> the #reset-cells property.
+> >>>>>>
+> >>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>>>>> ---
+> >>>>>>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 +++++++++++=
++++++
+> >>>>>>  1 file changed, 16 insertions(+)
+> >>>>>>
+> >>>>>> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas=
+,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rz=
+g2l-sysc.yaml
+> >>>>>> index 4386b2c3fa4d..6b0bb34485d9 100644
+> >>>>>> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-=
+sysc.yaml
+> >>>>>> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-=
+sysc.yaml
+> >>>>>> @@ -42,12 +42,28 @@ properties:
+> >>>>>>        - const: cm33stbyr_int
+> >>>>>>        - const: ca55_deny
+> >>>>>> =20
+> >>>>>> +  "#reset-cells":
+> >>>>>> +    const: 1
+> >>>>>> +
+> >>>>>>  required:
+> >>>>>>    - compatible
+> >>>>>>    - reg
+> >>>>>> =20
+> >>>>>>  additionalProperties: false
+> >>>>>> =20
+> >>>>>> +allOf:
+> >>>>>> +  - if:
+> >>>>>> +      properties:
+> >>>>>> +        compatible:
+> >>>>>> +          contains:
+> >>>>>> +            const: renesas,r9a08g045-sysc
+> >>>>>> +    then:
+> >>>>>> +      required:
+> >>>>>> +        - "#reset-cells"
+> >>>>>
+> >>>>> Given this is new required property on an existing platform, I'd ex=
+pect
+> >>>>> some mention of why it used to be okay to not have this but is now
+> >>>>> required. Did firmware or a bootloader stage take things out of res=
+et?
+> >>>>
+> >>>> On previous SoCs the SYS controller has no support for controlling t=
+he
+> >>>> signals going to different peripherals (USB, PCIE in case of RZ/G3S).
+> >>>> I'll add a note about this on next version.
+> >>>
+> >>> My initial thought here wasn't about previous SoCs though, it was
+> >>> because you didn't add the compatible in this series for /this/ SoC.
+> >>
+> >> RZ/G3S compatible is already present in this file:
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml#n26
+> >=20
+> > I know, first thing I did when I read the original patch was open the
+> > file ;)
+> > I don't care about the old SoCs, cos you're not applying the property to
+> > them, so what's changed between SoCs isn't really relevant. It's a ment=
+ion
+> > of why, on this SoC, it is safe to add new required properties that I w=
+ant.
+>=20
+>=20
+> >=20
+> > AFAIU the answer is that no consumer of the resets existed before, so
+>=20
+> That's true.
+>=20
+> > there's not some special state there, and I am guessing that the new
+> > sysc driver you're adding isn't going to fail to probe if there are no
+> > resets,=20
+>=20
+> That's true.
+>=20
+> it just won't register a reset controller?
+>=20
+> It will register it but,
+>=20
+> the new sysc driver is going to probe only for this SoC (RZ/G3S). On RZ/G=
+3S
+> we have 2 resets. These well be registered unconditionally, currently, on=
+ly
+> for RZ/G3S. If there will be no DT users for it then it should be no
+> problem, AFAICT.
 
-On Mon, Aug 26, 2024 at 11:30:14AM +0200, Greg KH wrote:
-> On Mon, Aug 26, 2024 at 04:54:55PM +0800, WangYuli wrote:
-> > From: leoliu-oc <leoliu-oc@zhaoxin.com>
-> > 
-> > This bug is found in Zhaoxin platform, but it's a commom code bug.
-> 
-> To be fair, this is not a normal "common" code path at all :)
-> 
-> > 
-> > Fail sequence:
-> > step1: Unbind UHCI controller from native driver;
-> 
-> First off, you all know this is really an "unsupported" thing to do.  I
-> love it how the vfio people abuse this interface for their main code
-> path, but remember that is NEVER what it was designed for at all.  The
-> fact that it could possibly work at all is a miracle and everyone gets
-> lucky if nothing dies when they attempt to manually do the gyrations you
-> are doing here.
+Okay, sounds it doesn't break for existing devicetrees.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Still, it would be good to support this properly.
+Thanks,
+Conor.
 
-The big assumption in hcd-pci.c has always been that if a UHCI device is 
-bound to a driver, then that driver must be uhci-hcd.  That assumption 
-is no longer true here, because now the driver could be vfio-pci 
-instead.
+--kphp1gQZZmvGGz7y
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > step2: Bind UHCI controller to vfio-pci, which will put UHCI controller in
-> > 	   one vfio group's device list and set UHCI's dev->driver_data to
-> > 	   struct vfio-pci(for UHCI)
-> 
-> Who sets the driver_data here?
+-----BEGIN PGP SIGNATURE-----
 
-The vfio-pci driver does.  Since it's a PCI virtualization driver, it 
-doesn't behave like a normal USB host controller driver and it doesn't 
-set the drvdata to point to the hcd structure.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsy2tQAKCRB4tDGHoIJi
+0rV7AP9DZ2q3xfYMx00ty17Bs3eDE/3N2vWVqh51vuQzlmHBaQD+MSrwIUvtdEhg
+jiaBBICMFZmTjei0JYXu91UpMiCd9AM=
+=MJwd
+-----END PGP SIGNATURE-----
 
-> > step3: Unbind EHCI controller from native driver, will try to tell UHCI
-> > 	   native driver that "I'm removed by set
-> > 	   companion_hcd->self.hs_companion to NULL. However, companion_hcd
-> > 	   get from UHCI's dev->driver_data that has modified by vfio-pci
-> > 	   already. So, the vfio-pci structure will be damaged!
-> 
-> Damaged how?  Attempting to assign random PCI drivers to the vfio-pci
-> driver is again, really really not supported (despite what the vfio
-> authors think), so again, it's amazing this works, as you are finding
-> out.
-
-A partial workaround for this problem might be to do steps 2 and 3 in 
-the opposite order: unbind both controllers (UHCI, then EHCI) and 
-afterwards bind both controllers (EHCI, then UHCI).  Then nothing would 
-get damaged.
-
-> > step4: Bind EHCI controller to vfio-pci driver, which will put EHCI
-> > 	   controller in the same vfio group as UHCI controller;
-> >        ... ...
-> > step5: Unbind UHCI controller from vfio-pci, which will delete UHCI from
-> > 	   vfio group device list that has been damaged in step 3. So, delete
-> > 	   operation can random result into a NULL pointer dereference with
-> > 	   the below stack dump.
-> > step6: Bind UHCI controller to native driver;
-> > step7: Unbind EHCI controller from vfio-pci, which will try to remove EHCI
-> > 	   controller from the vfio group;
-> > step8: Bind EHCI controller to native driver;
-
-Likewise, do both unbind operations first and afterwards do both the 
-bind operations.  However, that might not be enough to solve the problem 
-here.
-
-> That's crazy, why would you be doing all of that in the first place?  Is
-> it common to add host controller drivers to virtual machines like this?
-> Why not just use usbip instead?
-> 
-> > [  929.114641] uhci_hcd 0000:00:10.0: remove, state 1
-> > [  929.114652] usb usb1: USB disconnect, device number 1
-> > [  929.114655] usb 1-1: USB disconnect, device number 2
-> > [  929.270313] usb 1-2: USB disconnect, device number 3
-> > [  929.318404] uhci_hcd 0000:00:10.0: USB bus 1 deregistered
-> > [  929.343029] uhci_hcd 0000:00:10.1: remove, state 4
-> > [  929.343045] usb usb3: USB disconnect, device number 1
-> > [  929.343685] uhci_hcd 0000:00:10.1: USB bus 3 deregistered
-> > [  929.369087] ehci-pci 0000:00:10.7: remove, state 4
-> > [  929.369102] usb usb4: USB disconnect, device number 1
-> > [  929.370325] ehci-pci 0000:00:10.7: USB bus 4 deregistered
-> > [  932.398494] BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-> > [  932.398496] PGD 42a67d067 P4D 42a67d067 PUD 42a65f067 PMD 0
-> > [  932.398502] Oops: 0002 [#2] SMP NOPTI
-> > [  932.398505] CPU: 2 PID: 7824 Comm: vfio_unbind.sh Tainted: P   D  4.19.65-2020051917-rainos #1
-> 
-> Note, this is a very old kernel, and one that has closed source in it
-> making it such that none of us can debug it at all.
-> 
-> And are you sure this happens on 6.10?
-> 
-> > diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> > index a08f3f228e6d..5a63d7a772ae 100644
-> > --- a/drivers/usb/core/hcd-pci.c
-> > +++ b/drivers/usb/core/hcd-pci.c
-> > @@ -48,6 +48,7 @@ static void for_each_companion(struct pci_dev *pdev, struct usb_hcd *hcd,
-> >  	struct pci_dev		*companion;
-> >  	struct usb_hcd		*companion_hcd;
-> >  	unsigned int		slot = PCI_SLOT(pdev->devfn);
-> > +	struct pci_driver	*drv;
-> >  
-> >  	/*
-> >  	 * Iterate through other PCI functions in the same slot.
-> > @@ -60,6 +61,13 @@ static void for_each_companion(struct pci_dev *pdev, struct usb_hcd *hcd,
-> >  				PCI_SLOT(companion->devfn) != slot)
-> >  			continue;
-> >  
-> > +		drv = companion->driver;
-> > +		if (drv &&
-> > +		    strncmp(drv->name, "uhci_hcd", sizeof("uhci_hcd") - 1) &&
-> > +		    strncmp(drv->name, "ohci-pci", sizeof("ohci-pci") - 1) &&
-> > +		    strncmp(drv->name, "ehci-pci", sizeof("ehci-pci") - 1))
-> 
-> Attempting to rely on kernel module names within kernel code just is not
-> going to work, sorry.
-> 
-> What exactly are you trying to do here?  Please at least comment it.
-
-It definitely should be commented.  The idea here is to verify the 
-assumption mentioned earlier, namely, to find out whether the driver 
-bound to this UHCI device really is uhci-hcd.  Testing the driver's 
-name is a pretty ad-hoc way of doing it, but I can't think of anything 
-better.
-
-However, this check really should be done later, after determining 
-whether the companion device is a UHCI, OHCI, or EHCI host controller.  
-Then only one comparison would be needed in each case.
-
-> > +			continue;
-> 
-> Do you just want to fail the binding?  If so, why?  And what is
-> precenting a driver to be bound after you do the check?
-
-This won't cause the binding to fail; it will merely skip calling the 
-notification function.
-
-Races are prevented by the companions_rwsem in hcd-pci.c.  It is held 
-whenever for_each_companion() gets called.
-
-> > +
-> >  		/*
-> >  		 * Companion device should be either UHCI,OHCI or EHCI host
-> >  		 * controller, otherwise skip.
-> 
-> Why doesn't this check suffice?
-
-The question WangYuli wants to answer isn't whether the companion device 
-is UHCI, OHCI, or EHCI.  Rather, it is whether the companion device is 
-bound to the uhci-hcd (or ohci-pci or ehci-pci) driver -- as opposed to 
-the vfio-pci driver.
-
-Alan Stern
+--kphp1gQZZmvGGz7y--
 
