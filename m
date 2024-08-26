@@ -1,121 +1,104 @@
-Return-Path: <linux-usb+bounces-14110-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14111-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2255095F17D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 14:39:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7A3695F242
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 15:00:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDC681F227CC
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 12:39:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05BFC1C219F7
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 13:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D43185933;
-	Mon, 26 Aug 2024 12:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45FF816C84B;
+	Mon, 26 Aug 2024 13:00:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="AKa1LhDu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VDyyy37Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4639F171E76;
-	Mon, 26 Aug 2024 12:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F957E1;
+	Mon, 26 Aug 2024 13:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724675913; cv=none; b=hVrx5+KYscRYhrncF1M9w70V4ndrRnKxXRSm1XkKfkJu9ofqqw/M85VGpIRVjhiHcPujWfw0Yx3thKKJfjHZArgz0tnOd4EvK7d5UYMZy8GvIWc8A2QESxmVCu/RtCk0aHwzhjvWpUd2j3dl2+SXN1tvoy5gqp89FeRgMqPBcJI=
+	t=1724677225; cv=none; b=oD+2UmRdaTHh03yOy8RDczjMbr4llyLC4thzwnkQQaDgTVGxLu+igP9LTE+A3OvLzH0yiWEN7EYIKTLqxCrEyvqiZ8y/PzHukfsUMniZ2nfjqt5d240qaBpMGZeIl2ebglPdXHKLGFZHq51CD+CGX1jRwOS8FjQ3QWxT30MAw7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724675913; c=relaxed/simple;
-	bh=ccZU3a24KVP9awOdU/7n6f47/VRFRXbCEIAY3d6o7uM=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=ET1ItSPjN0kpV1b6U5Y0XjkfLouMjJ7s2lZGthgb7/ktbxj1D2CNJGICSLtP5IPy5Uik/zO071g4WPdl51FGLuKANNKF23I9kgyySL/G78lecNi3cVZ4+WZ2oDlYysXnPow20kSlxnZglWA0TAMJE2RQA/QOZd8BNU0H7vpjiEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=AKa1LhDu; arc=none smtp.client-ip=162.62.58.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1724675901; bh=bYvkknN4lY/PzXuYKt7WBFdDB1eWxCqDPPaUzeINxOc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AKa1LhDuu94LHVfbg0hR+EgLYjj+FSJ0yLKSd8dYrrLgp6BkPtsTdbqavgK1cujh+
-	 Zu7fXp3/VW73oXsJ5NXr6R6HSHzgXA1Y+GGmHHXF9W4igJgqJpcPTE3Ol+k62WbD/H
-	 PViyEtI1Z9J32JfnhlXqMdt76A2s5G8vFT9cbnNQ=
-Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
-	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
-	id 778048C4; Mon, 26 Aug 2024 20:29:56 +0800
-X-QQ-mid: xmsmtpt1724675396tfbb2x19n
-Message-ID: <tencent_A037749680365C4BCC750776D566183C4509@qq.com>
-X-QQ-XMAILINFO: Nt+cTZuZCMyifgW/cBI/x1hPaZW8fHRofdlp7vzxjxMSaBHKfGA2U52/pNBcXt
-	 c0gNrQEiHAU2/aOjUWyOzz+eEEEH8OqV9aVTj5AmQJv0XC2g4tEZKs6D7bVI1tkjrq3mUDVL3OBf
-	 vQ7MUcMclu0fhkMJ1caJXTv0aEQ1jtF4Gt+PFTfsg2BtVdXZXsCM7JDhfHi9u5aavNu2Chs4uzdZ
-	 dlbqzycDFN0IPxHxtomRRSoUyBMEqTdlHDdqGtUzGLXM7gmuFzcwlfEcKtjNY7u50Va9lrwidTub
-	 MenScq2pjM990xwkK/YTFOdKTnLSJry4FBR7OMa1g1CGPvBk/fye4gGs3GDN4jtWRpf9gn8wOumz
-	 aBPL3QIB37l/BFiKWGAtjDcLD1I+bRqziz1Z5u52rxIY/ImrY1WDCNipVZ4WJXnPbHBtD12NMp4p
-	 ASmUPxao7NYt7eVbpp7uiPO1oz9CultHFG1grFL/I2KTKmg5vfO2+6O3HQfmgG+2ZiUS297KSn4j
-	 3wml4bBrxHX2Ue25tOJWL4hm6r6H90acny79hvG+lZuYNSr4B98PCImj64ROwZJbWHgvqvdqy71B
-	 h4PDgwlJ7mqcaWc5BMAOIFHCOOUunBdt0qI6TrM8eKynN7+koYz4c5a7bXd0yEkXstF2uPs9YISg
-	 fP2SHBAxqpb9FmQ3B22gu71moyM+ZCnrAt5tF+lamf4uV1nwt433RKhwdgG+daANnrNSh0Zy3XWK
-	 WKXfBCvppnluQmrZhff5D8j4bOczt6PJKyQqs9LVRLM3+4wlNfap2ueB8kam+ZuN/qyMEohgGkUO
-	 D6hisb7ZSMXNguNYfayUPFZ4EDu9Z210S3TgeW6YvhtgK8MKl8mQlO8SGZLPNEqprCIrRxAnkkGy
-	 7ylgkh/v45Z7hCe6ag60srK972gnz48AK55tO8iZrbULNpjh2FNi3RDR4H7H7do2qESU79SXsjhn
-	 2wYrSAZsmoMMLFSg0O4+m29/deROYVnplL2HFp9Cidp+CR3Y0xFw==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-From: Edward Adam Davis <eadavis@qq.com>
-To: gregkh@linuxfoundation.org
-Cc: eadavis@qq.com,
-	kvalo@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
-	sergei.shtylyov@gmail.com,
-	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH V4 1/2] wifi: ath6kl: Replace ath6kl_usb_submit_ctrl_in with usb_control_msg_recv
-Date: Mon, 26 Aug 2024 20:29:56 +0800
-X-OQ-MSGID: <20240826122955.2674569-3-eadavis@qq.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <2024082631-upward-zips-f7b8@gregkh>
-References: <2024082631-upward-zips-f7b8@gregkh>
+	s=arc-20240116; t=1724677225; c=relaxed/simple;
+	bh=3is/A/6g/chRI0kNCB8CMXeXg4vbikXwkTlsMBaPK0g=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=AD6DY8sa/yU1XVIHsmj2ChQOYaRteLM+n73A014DTCIz6UV0eyhnNtvdBUseNknCwb3+HfhO8MR0cDrYGRbYgFqADeb+DxHeUzxOy4nWlyy1CM7UVudEtiBnUDy8t1sj9ZChKN2xKiW48nwmySp8BgdfO67mkS6cYXH3zEpCV0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VDyyy37Y; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724677225; x=1756213225;
+  h=message-id:subject:from:to:cc:date:
+   content-transfer-encoding:mime-version;
+  bh=3is/A/6g/chRI0kNCB8CMXeXg4vbikXwkTlsMBaPK0g=;
+  b=VDyyy37Y7eUnLEPtzUnMBxQaWSRUAYsD50EOww+BQ3L6uYWRuvTYpauP
+   S2z6tpfO1JenDtvOdfAD++l1doEp5VsiIyvpDOWCWAZmPPX0fid7xGKmi
+   O1zJHWP8uz9l8l3dW7LDtAmifHyrDyBQdfChOVAIVpJZg6FvwOs6qutNb
+   rlb7BksEcTAXFAcczWpDsi/fl5vppA8ewty8B5uc/QLPBgUtVDZiGgp7v
+   ES2iDZR/5Hm4TVg7hxxTKRxxZPtx/h6KNipve9YGrfUcnV/Nj+bWye7k1
+   tqrgN/SNGgRtfMnKU4cnDCJ0wnEfC6a1aN8SiwDlt+dF9ad0YlcmMIpRS
+   g==;
+X-CSE-ConnectionGUID: OCoUDrfQQbGSDX6h7KL1sg==
+X-CSE-MsgGUID: oMd3E1QqT0G+N3Fa4NELYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="26891122"
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="26891122"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 05:59:07 -0700
+X-CSE-ConnectionGUID: oOZBIGsrScKFds0cAbg3Bg==
+X-CSE-MsgGUID: yOAOpmyyQHW2e9ZhaRsUmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="93307504"
+Received: from ubuntu24.iil.intel.com ([143.185.122.15])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 05:59:04 -0700
+Message-ID: <c7c24f3f6661e5a01aae4e7ef549801411f063cb.camel@intel.com>
+Subject: [PATCH 0/2] Add luma 16-bit interlaced pixel format
+From: Dmitry Perchanov <dmitry.perchanov@intel.com>
+To: linux-media@vger.kernel.org, linux-usb@vger.kernel.org
+Cc: laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+ sakari.ailus@iki.fi,  demisrael@gmail.com, gregkh@linuxfoundation.org
+Date: Mon, 26 Aug 2024 15:58:31 +0300
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-ath6kl_usb_submit_ctrl_in() did not take into account the situation where
-the length of the data read from the device is not equal to the len, and
-such missing judgments will result in subsequent code using incorrect data.
+The formats added by this patch are:
 
-usb_control_msg_recv() handles the abnormal length of the returned data,
-so using it directly can fix this warning.
+        V4L2_PIX_FMT_Y16I
+        UVC_GUID_FORMAT_Y16I
 
-Reported-by: syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
-V4: Adjust indentation style
+Interlaced lumina format primary use in RealSense
+Depth cameras with stereo stream for left and right
+image sensors.
 
- drivers/net/wireless/ath/ath6kl/usb.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
-index 5220809841a6..0458b5a078e1 100644
---- a/drivers/net/wireless/ath/ath6kl/usb.c
-+++ b/drivers/net/wireless/ath/ath6kl/usb.c
-@@ -1027,9 +1027,10 @@ static int ath6kl_usb_bmi_read(struct ath6kl *ar, u8 *buf, u32 len)
- 	int ret;
- 
- 	/* get response */
--	ret = ath6kl_usb_submit_ctrl_in(ar_usb,
--					ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP,
--					0, 0, buf, len);
-+	ret = usb_control_msg_recv(ar_usb->udev, 0,
-+				ATH6KL_USB_CONTROL_REQ_RECV_BMI_RESP,
-+				USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-+				0, 0, buf, len, 2000, GFP_KERNEL);
- 	if (ret) {
- 		ath6kl_err("Unable to read the bmi data from the device: %d\n",
- 			   ret);
--- 
+Dmitry Perchanov (2):
+  v4l: Add luma 16-bit interlaced pixel format
+  uvc: Add luma 16-bit interlaced pixel format
+
+ .../userspace-api/media/v4l/pixfmt-y16i.rst   | 74 +++++++++++++++++++
+ .../userspace-api/media/v4l/yuv-formats.rst   |  1 +
+ drivers/media/common/uvc.c                    |  4 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+ include/linux/usb/uvc.h                       |  3 +
+ include/uapi/linux/videodev2.h                |  1 +
+ 6 files changed, 84 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y16i.rst
+
+--=20
 2.43.0
+
 
 
