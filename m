@@ -1,161 +1,136 @@
-Return-Path: <linux-usb+bounces-14145-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14146-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FC9695FDA8
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 01:04:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D941E95FDE3
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 02:02:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 142BAB2253A
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2024 23:04:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E891BB2211E
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 00:02:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A30A919CCF4;
-	Mon, 26 Aug 2024 23:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ADD98F66;
+	Tue, 27 Aug 2024 00:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Qjlcbgv/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="njxG8zx6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB7942AA0;
-	Mon, 26 Aug 2024 23:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6299E621;
+	Tue, 27 Aug 2024 00:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724713479; cv=none; b=GtNLu/X97SnNyArhLYLhZW73fQmBG8gQVbaUdiYpCPM8+vODQnHBr8pzCiD0a6qmI+ZjH0S+1yj1IqCwTC8Sz2rSJxqarRA1pO9YmLg2kE8mE/ra99obO4s9lgLZrqAJwRNvt+3nSUt6Gi7uqa8vjeqithbuYuu8X0/ytVIDWB0=
+	t=1724716935; cv=none; b=ocxizn+jmIEBg2Xyw6BXYnuTVcBulgF44QtcVzMIXwwme1YMjizYOQLb1ftOEk70q4PlCG+aOBGor5DrlTB1+IvDNZ/SnuE6D2wcEGZjLDCaQPT+Y6tYcIfM/+aZWydA3Fjk0q8MHyjs7M0M8ccxhfmP9DKzfUGIJfnF+lgmnKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724713479; c=relaxed/simple;
-	bh=LWoF7d+MwsK8D33tMYWg7z3vjj8wjFqHa2l3bCLL++U=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=bIZxnHnTldcQpBkzUtyIFgDkKb7bert/tE9acwX9fpktf+p45zgzGjmnbP0rZ3xdFDP8valRrOK8XZUguIIFNcHL3YflP+KTU6W+7a7BdsrnqMxsdWmnfwiHEdylBlMa5Ym96LLx7peXfWHX4VC8GzChr+5jsWMI3kJJSyvtZ3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Qjlcbgv/; arc=none smtp.client-ip=203.205.221.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1724713473; bh=BJQ7PYbry8STGQrWKtDLgyffi+mn2fW5YEfdrsCq4Jk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Qjlcbgv/ZIKG3g0DIuYBHJt07bLiIjnK3VY3DrL+cjBeaqLcO13q/CyBD1DW6SJdQ
-	 B9Yy7xJYhHrji8kxFy30yd2x6vP8o4sDPV1P7aKFHRxrB71AEvCW2qON2zFsOdIwij
-	 eFH/EyMuuKyVfEAIW2Mpl8acMFX+f5hjkgdi6Zjk=
-Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
-	by newxmesmtplogicsvrszc19-0.qq.com (NewEsmtp) with SMTP
-	id CC78C68C; Tue, 27 Aug 2024 06:51:07 +0800
-X-QQ-mid: xmsmtpt1724712670t7ofo6x5b
-Message-ID: <tencent_59F76EFB4C8B67EA86DA92C5065949996E06@qq.com>
-X-QQ-XMAILINFO: NEoGzTA04D+5asKIVdFTBV8Xr9PlBlV/LIYO8oMAR7q70ff1Qq8uEGirSL9T9p
-	 wkaVUxAHgPW/Z88IJ1z39oEK6xS/GzXfieTAelECnbgjW7gxu6bRYQL1+HKYxhWdBCilepkTs0AL
-	 B7yaU3Nxft3qpr7TafxVDbBsPF5rrLXSPnhwgZU3DuwUCKnL9FK4klbC9DW2pVR4rxYjm4mQv9xe
-	 hfi35OGMgvnCm6zh/dL+GJSRNmLn73/EBAnnht4r77qUONy/sAyHhjtNl+RReVFViyazn749Mi4U
-	 WlfqVL/dpWo/EhcDgPnhdu8q/H50MTTS4REEfzWQ9kxL5qHqLN3LIjAkF2IzB+uJeKWz3QjlyHWq
-	 t1g43ei+E5p3L40PkY6LP4rEPT713wh8eoM/fw/x3H6zBCmrKEJ35i3XZADxLXLUxjZcFqVHjG8X
-	 voWzDoyTr9O2BtNwWtMxOLZVOy2WzuXpHS6Frgls2iRh9kBJR6Wbhp3ohtDaum5AAfii7miUuNb8
-	 D6yVLHAKaqDopmtSDAG+vXRQwCbPwLP/X1Xqoon8QKrEpwe1ROglqc8KZ/TMrjcDuM65EgoYXLKi
-	 RHNz5vr1V6O5Fx16ImxP0RGkLS3MqDjEsFDsXiVvNM3myhd4tD6aSA6pq7r3LT2yuQ7RTZ89jJ8a
-	 816b1XCJvBIppgI653CBA7W8FWYs+bMhu3vbA2kq4lNaxk/uqtMN8ttP889F3UICtrJWfPyhEdl8
-	 B0GMsTAr71yTE/qyHQf2PM8mHZ6/mh2DxyDdpbya35lXYuorKS16qE7NSvvpmNmAaqAuUEs8I2dO
-	 McpPVwzCUGY5fxFjmZXkK7AufBsHU0EQzD6dyjuVnLszpo+bXvt1mrORdjAEczVmwf6N1CtrZdaZ
-	 Avcqs/Kx1O7OtFGN1JHYOmD+wXB398t7Sc+Bs5hFd85jRY1fv2vxMQcOCVwOSU1sUC7iFwp4nswV
-	 p64oV5bZwKE2dM53wTXtkVPAOkTfaUs3E4sdg4rNVMa3BvZhBZGXZAXe1kNWCoEHAv6yuQda6e5/
-	 /D83fWNmgzJ46Yl+D5tcota4rJIcSZB7iDDeNSynv+oGVDHna7
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
-From: Edward Adam Davis <eadavis@qq.com>
-To: kvalo@kernel.org
-Cc: eadavis@qq.com,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
-	syzbot+92c6dd14aaa230be6855@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH V6 2/2] wifi: ath6kl: remove ath6kl_usb_submit_ctrl_in
-Date: Tue, 27 Aug 2024 06:51:09 +0800
-X-OQ-MSGID: <20240826225107.2817092-4-eadavis@qq.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240826225107.2817092-3-eadavis@qq.com>
-References: <87jzg3uy40.fsf@kernel.org>
- <20240826225107.2817092-3-eadavis@qq.com>
+	s=arc-20240116; t=1724716935; c=relaxed/simple;
+	bh=3Lu2qvntF0LW0D6rPDpqRDqugVpTuyFFhTjrSXWCWNE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Pp+5k34FUvffeeG/RiknFoZOfBqeCsZKNov0eKgWsN2ESYMKLo9bixaRUhWdnKgzoEhdHB2f7BSt9T46eDdN0Akr7iR9u7rTlk2z65/mnOmcyrWlWSMAnSIb7c2cE3o5J32Ii5imBYnERD6biXpilXC/88Kl6aHFjCbvPokkR7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=njxG8zx6; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4281ca54fd3so42279185e9.2;
+        Mon, 26 Aug 2024 17:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724716932; x=1725321732; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Lu2qvntF0LW0D6rPDpqRDqugVpTuyFFhTjrSXWCWNE=;
+        b=njxG8zx6muWAxT+dLD++zkt/KknfbWQiZyFfn72bisCBIBZSgpThKZAl1r90tDd/Fb
+         tN6+Ohwbsp+2IF10SYovuXurEpxNpzEusB/Q1HAhDV5blhB+wXMTk/pO0I4wq56166qg
+         e2215WAMelf6N4g8cdPpk+swlij4hZ+vhiDUnsOs65LKfFsUGW+L8douvvVLORrt6PGw
+         aLpA9+nmt2InYnm8eow0GFngECCdkdkh5qVZZwzz97TEIYu+QRjNOz7RkRs9tf7Bpmph
+         n2JaxfJVkMRtmQ5mi67PfrrqulnosdasWLFZRPnU4YFB/TZpSm0tvjvfZRKtKvIZtelQ
+         cxcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724716932; x=1725321732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3Lu2qvntF0LW0D6rPDpqRDqugVpTuyFFhTjrSXWCWNE=;
+        b=gJ2bG3x71lJycslyfJGbRDbEttIX7eBW7f1btrb8a/tZ9PA35WgA3skkPj0e69lmFF
+         2HSeGgZ39TSUfYGeh0YmS/JoifSebsY/9A/1OkET8hO++pzp9w+EXnfyqQyFulExWUfM
+         AGs04UBfcOOPOM7wmg8Ml6vKeqW6+hwk2DFkWCoxxErrkZz/3CCVOgFpnCQo6sTDrYeG
+         2u3C4sHBeUm7vz0SqsNYwLYyH9F6pUA6PYzd8U/DZHVwEMoUxZXyab93NXfIXZZOQBgg
+         eMi+yWurMwdJsGk6etkf0TmN+DsGcdboFH9PKEYipdVdSKOIU+QE9eE3yRZKcZyXUQde
+         k7Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLpsV/93QZfh9OquMrrMYuRtVhDzw9zAbmUoiEWNwHlPlJqV7lOQrzcbA8M1JiKKLcn9P4Y/Ehuf/2@vger.kernel.org, AJvYcCXOwrd8VrdV4VAosbioVU6+4JGoIysuL89mtX9kFXvkeosaej20kJvrqN5UCdmSWaOqv37CFSsFGOGHKHc=@vger.kernel.org, AJvYcCXsXZ+UbJXu/Row/VCJW5kPWx+VHfYghD9Rgi3jYkT4yLcWgIAWhegyVxLvPJhaR2e9WyQS9elz@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMJ40q3c9U+okCVntcqC7lYFLSI15Z6fW0v8+HZk/RiKUU6k7i
+	x0L0cRR1Rn73t2/+pipLXVz1P38wESHldLyWJfqqdZs0X+kLLIrGOEqr5FSsMzYLsV0dV/9u55Y
+	wqFsjPZ2naxGmI29fw2opO8YW3nU=
+X-Google-Smtp-Source: AGHT+IGAM3TFs9NXhoHtmE3Cku2gMbd6wYRStVxQerrS1NZ8Nv7gH9pabCN8b2jcCBPPxX3JLq4ChV+hMWDv41wP16A=
+X-Received: by 2002:a05:600c:5250:b0:425:7884:6b29 with SMTP id
+ 5b1f17b1804b1-42b9adf038dmr5996955e9.19.1724716931386; Mon, 26 Aug 2024
+ 17:02:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240729022316.92219-1-andrey.konovalov@linux.dev>
+In-Reply-To: <20240729022316.92219-1-andrey.konovalov@linux.dev>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Tue, 27 Aug 2024 02:02:00 +0200
+Message-ID: <CA+fCnZc7qVTmH2neiCn3T44+C-CCyxfCKNc0FP3F9Cu0oKtBRQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: dummy_hcd: execute hrtimer callback in
+ softirq context
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, Marcello Sylvester Bauer <sylv@sylv.io>, 
+	Dmitry Vyukov <dvyukov@google.com>, Aleksandr Nogikh <nogikh@google.com>, Marco Elver <elver@google.com>, 
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com, 
+	syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com, stable@vger.kernel.org, 
+	andrey.konovalov@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-ath6kl_usb_submit_ctrl_in() did not take into account the situation where
-the length of the data read from the device is not equal to the len, and
-such missing judgments will result in subsequent code using incorrect data.
+On Mon, Jul 29, 2024 at 4:23=E2=80=AFAM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@gmail.com>
+>
+> Commit a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer
+> scheduler") switched dummy_hcd to use hrtimer and made the timer's
+> callback be executed in the hardirq context.
+>
+> With that change, __usb_hcd_giveback_urb now gets executed in the hardirq
+> context, which causes problems for KCOV and KMSAN.
+>
+> One problem is that KCOV now is unable to collect coverage from
+> the USB code that gets executed from the dummy_hcd's timer callback,
+> as KCOV cannot collect coverage in the hardirq context.
+>
+> Another problem is that the dummy_hcd hrtimer might get triggered in the
+> middle of a softirq with KCOV remote coverage collection enabled, and tha=
+t
+> causes a WARNING in KCOV, as reported by syzbot. (I sent a separate patch
+> to shut down this WARNING, but that doesn't fix the other two issues.)
+>
+> Finally, KMSAN appears to ignore tracking memory copying operations
+> that happen in the hardirq context, which causes false positive
+> kernel-infoleaks, as reported by syzbot.
+>
+> Change the hrtimer in dummy_hcd to execute the callback in the softirq
+> context.
+>
+> Reported-by: syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D2388cdaeb6b10f0c13ac
+> Reported-by: syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D17ca2339e34a1d863aad
+> Fixes: a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer =
+scheduler")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-usb_control_msg_recv() handles the abnormal length of the returned data,
-so using it directly.
+Hi Greg,
 
-Note: Compile tested only, not tested on hardware, only tested on QEMU.
+Could you pick up either this or Marcello's patch
+(https://lkml.org/lkml/2024/6/26/969)? In case they got lost.
 
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- drivers/net/wireless/ath/ath6kl/usb.c | 39 +++------------------------
- 1 file changed, 3 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
-index 0458b5a078e1..1a5fb2561fef 100644
---- a/drivers/net/wireless/ath/ath6kl/usb.c
-+++ b/drivers/net/wireless/ath/ath6kl/usb.c
-@@ -901,40 +901,6 @@ static int ath6kl_usb_submit_ctrl_out(struct ath6kl_usb *ar_usb,
- 	return 0;
- }
- 
--static int ath6kl_usb_submit_ctrl_in(struct ath6kl_usb *ar_usb,
--				  u8 req, u16 value, u16 index, void *data,
--				  u32 size)
--{
--	u8 *buf = NULL;
--	int ret;
--
--	if (size > 0) {
--		buf = kmalloc(size, GFP_KERNEL);
--		if (buf == NULL)
--			return -ENOMEM;
--	}
--
--	/* note: if successful returns number of bytes transfered */
--	ret = usb_control_msg(ar_usb->udev,
--				 usb_rcvctrlpipe(ar_usb->udev, 0),
--				 req,
--				 USB_DIR_IN | USB_TYPE_VENDOR |
--				 USB_RECIP_DEVICE, value, index, buf,
--				 size, 2000);
--
--	if (ret < 0) {
--		ath6kl_warn("Failed to read usb control message: %d\n", ret);
--		kfree(buf);
--		return ret;
--	}
--
--	memcpy((u8 *) data, buf, size);
--
--	kfree(buf);
--
--	return 0;
--}
--
- static int ath6kl_usb_ctrl_msg_exchange(struct ath6kl_usb *ar_usb,
- 				     u8 req_val, u8 *req_buf, u32 req_len,
- 				     u8 resp_val, u8 *resp_buf, u32 *resp_len)
-@@ -954,8 +920,9 @@ static int ath6kl_usb_ctrl_msg_exchange(struct ath6kl_usb *ar_usb,
- 	}
- 
- 	/* get response */
--	ret = ath6kl_usb_submit_ctrl_in(ar_usb, resp_val, 0, 0,
--					resp_buf, *resp_len);
-+	ret = usb_control_msg_recv(ar_usb->udev, 0, resp_val,
-+				   USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-+				   0, 0, resp_buf, *resp_len, 2000, GFP_KERNEL);
- 
- 	return ret;
- }
--- 
-2.43.0
-
+Thank you!
 
