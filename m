@@ -1,77 +1,77 @@
-Return-Path: <linux-usb+bounces-14193-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14194-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1F199615F4
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 19:51:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C46CF9615FB
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 19:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FA67B22916
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 17:51:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E147284BA3
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 17:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8BDC1CEAAF;
-	Tue, 27 Aug 2024 17:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A141D1739;
+	Tue, 27 Aug 2024 17:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kOmcayY0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i6RDgSXX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB2464A
-	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 17:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644ED64A
+	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 17:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724781104; cv=none; b=FfWccrFi1Y7oDDM0nLg57bJfdGV0bYSDKV1Hg2k8HoF/l9t0q3EQ9Ac/vry0uwsSftlFbYrAM57NMpTkd9JQSxk85iOAIdrZ1E57pgWmuS6tG4RoViI/Qy7h9IeBageSGT10T3fXA1iWb1D8jYW1otX52yHa4sebGzJ+MlXWaRI=
+	t=1724781152; cv=none; b=j4AAbgtZlBvJR+6mFZTjlPN/lYBs2MUTIMxwViHnSOkOHNnoq+gc0gBBQfE1gPkRzHVa0RShTd6lquhspXOS0yPU2StoO1HBWwv+rED8BqywVobA8YJEOJkbcws4zaxxYq2mCYrla4GDHF4MQJLEPOPLZL66LC08unnrl8Cfcso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724781104; c=relaxed/simple;
-	bh=DXzDBKtxPymdALo95TtDZg+Y0fTm4sl0XyGKbn2iFzY=;
+	s=arc-20240116; t=1724781152; c=relaxed/simple;
+	bh=kf8HkXCqaw+F1v+PLnYSfXw0dV2Pbt7C8s9HdtNFX58=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GZc+WzUErQ0fAuTcD3fAd03oitw12rXVPor/N0XOEswU7mjmxz8wgZQuxsGhSFUqSEVFwAxIi742N3wNvqlDjUnWQCjm8/OJTgXPkH69wgbB8YRtnrB5F1g8cO3U7H0OagUkZciGOKjixjUm97+XFBfnv5ENSqbbq05FqLF0jn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kOmcayY0; arc=none smtp.client-ip=209.85.167.42
+	 MIME-Version:Content-Type; b=mIl8iFip1mxq4C0CviLtdAgNvhOD/RwmwFYEXmapSoZs1dfeKegNgACdJPM+UJQIAyNcvmvyrR1ha/k10tt7/xT1Q5GHCdZyiIo2Nt2nRo126dFkL0ukbuFQV2JNt4nAcShCEWYZehHELHU94A2JECLrjAH7jRhLT86QjjeMAXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i6RDgSXX; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-533462b9428so9875358e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 10:51:42 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5334fdabefbso5048451e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 10:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724781101; x=1725385901; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724781148; x=1725385948; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=45HTGQJVSBp5kQg+4OTSk7U8sPIgi6UhdgMThKsrpN4=;
-        b=kOmcayY0OWxIis8fTtjHjE1qVTBduaSw2TTtmg4uZaFwn8Aijh8qsxJ7aTFZ3yWP0/
-         w87XtJCs5Q34eA7uMBnysIs0Kq0dhWk+NwvBGO62h3dy5IJyfvw7qncGb5T0R4TUzAYH
-         H15Cjw2t//2XkGrr3yGdts2O2vanwCXwn+CUiI3qyXT/HReSlobKpmZMXDtqBsDAmwQU
-         qKVc6XebDdgMuBb8no/a+QuqSjiVnyMo2g+X0npDRYmHNy5WuL/I6h0CIqrskUrEZQ0V
-         vX3zbcNuVJUFqHAZcqk4mFLlwSB1zDI4h07ZLLp8Q6pnggAOK942yvZ7VPSKDvxtDqwR
-         eA+A==
+        bh=BrBzCKt4N9BQ5EKcvX9GvFSkuSAxcwLEZXKVeR6c198=;
+        b=i6RDgSXXU2N4vI1pKMtDj3oQ8WrAhX12k7OK7fP5dh/eNoe7MXQWXUsaSdygpywgev
+         A5x1C9YVRpPQDW2jgxVak0abVdjlo0vrfHs3MWkcaPj0w8yvve1w3MS+QtYzJ1ENCNBO
+         j+XPCPS6vRiru0RSQUvm8ihlrsu3CGP3wcta/Uu8AgDDZnATRWH+vWZTF3AHBMYsy0zt
+         Z417OVEK+tIJZdk0ziwNAu0fJLF5j2YleEDRfTsf1RnjJ9MT5U7RhsU9wCaaLKZ5zwIq
+         zdrOcCjdiYpxz+/HlaUFtIGPYrfdyWdDB9Xwog8T3uSY58BGDrqOJJCGcUVLPaetMMlF
+         OvCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724781101; x=1725385901;
+        d=1e100.net; s=20230601; t=1724781149; x=1725385949;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=45HTGQJVSBp5kQg+4OTSk7U8sPIgi6UhdgMThKsrpN4=;
-        b=vpXym5VduE4Zk/4Uw+zrlBmnPCcOuzZje9VplyRgtNvynDN5sCuzhmsdFfTGwJzpEv
-         iBy1122IY1YqbkGoC8leZt3Th1tl0AqfYi5XvYsuwRJVT61gnuecpVCHWoM9HR9Ap8z8
-         STChZjFX5OirnXHCmi9kurTX5yU3Xd4eFs1RpF0OXB9NVtTV2sABATmNgJqdVu1mDr3o
-         jnsDNZXhRr7nb6R+HH/r8MvBxNVCngV+YsVWO5ZLp2hv8pln4lSmH9hgrJXPrMmB3Mxw
-         NaCE65YPh9klAUTqbHTIFOMO5/yI0hLoYFG1HHG32mk9gmCfeNyHlfT5CwI34LONc308
-         AYjg==
-X-Gm-Message-State: AOJu0YxpfnEV4NZr53GG+85mw6rCUOV7gkDzUUdSW/gETxYsM8ZZhyEU
-	upBvzXWpJOYSNpnY2tu00mon6Q9Vbo1yLSZmp0RbyWdo4cVqT4Qp
-X-Google-Smtp-Source: AGHT+IHWHb2VlAKbSypOv/8AboV5MAF06nXdMOxKUy2dHv5XHUqXLKuogiqVjGkU0chjmfWlFoOEhg==
-X-Received: by 2002:a05:6512:308a:b0:530:b773:b4ce with SMTP id 2adb3069b0e04-53438851b52mr12526602e87.33.1724781100395;
-        Tue, 27 Aug 2024 10:51:40 -0700 (PDT)
+        bh=BrBzCKt4N9BQ5EKcvX9GvFSkuSAxcwLEZXKVeR6c198=;
+        b=I4fs3U1CSx3Ek7KEbL7z5CG+4t5tbVzPJNWJRpbdEekp06/otgrnuFBQMyMRrl5+n1
+         VWX4Zg9X6NePHTK4JkPfFoDTNohNigwwzK8vKMd/xG8FVmrB/Pp/y2UNi7aOAG6im4tq
+         lyM+egL9Uj02Epi1m4qxQSe9bNrFdwz5z1N+bHOh7mZ52kVr/C+W9oNJ8ELsoKQY7Df4
+         EEzN8niTWOcdTpBeodwulgF3zy/WEnd1axUNCdK69KwuyA93GS68C98Y7NBIjReRzCpB
+         UWGlHikMLH/TmqopFOEmPNS+Ycyrcn+T8vgAWzBgc9rByCrDc9/AsmJAXaPhVncdaj24
+         /KxA==
+X-Gm-Message-State: AOJu0YwFC9gscexPscKSyU8oGJm+xTtstjgqhRwrbslrkYtiq5q/AalU
+	N6QFFAp+Vjw6gqSmeEXikzI//HQqL8awUnr7hFz1xzaLN+VK32lj
+X-Google-Smtp-Source: AGHT+IGqJrejqmKAVXV5UIZP79vEwUlc8PyuNMtqBwpcqS79p0T0WdvlbqvS7+gI33g3lShHZrIe0g==
+X-Received: by 2002:a05:6512:398e:b0:52f:cf2d:a1a0 with SMTP id 2adb3069b0e04-53455235773mr886e87.26.1724781148207;
+        Tue, 27 Aug 2024 10:52:28 -0700 (PDT)
 Received: from foxbook (bgu35.neoplus.adsl.tpnet.pl. [83.28.84.35])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea296c6sm1852890e87.56.2024.08.27.10.51.39
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea5e4aasm1860712e87.240.2024.08.27.10.52.27
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 27 Aug 2024 10:51:40 -0700 (PDT)
-Date: Tue, 27 Aug 2024 19:51:36 +0200
+        Tue, 27 Aug 2024 10:52:27 -0700 (PDT)
+Date: Tue, 27 Aug 2024 19:52:24 +0200
 From: Michal Pecio <michal.pecio@gmail.com>
 To: Mathias Nyman <mathias.nyman@intel.com>
 Cc: linux-usb@vger.kernel.org
-Subject: [PATCH 5/9] usb: xhci: Simplify error_mid_td marking
-Message-ID: <20240827195136.45ffd31e@foxbook>
+Subject: [PATCH 6/9] usb: xhci: Sanity check "spurious success" handling
+Message-ID: <20240827195224.02c32551@foxbook>
 In-Reply-To: <20240827194625.61be5733@foxbook>
 References: <20240827194625.61be5733@foxbook>
 Precedence: bulk
@@ -83,50 +83,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-It doesn't matter whether we set this flag or not on the final TRB,
-because the TD is about to be immediately "finished" anyway.
+It's not spurious, it's expected, it's required by the spec since its
+final 1.0 revision 14 years ago, and it's handled incorrectly here.
+But until somebody puts some effort to get it all right, try at least
+not to do obviously wrong things here.
 
-Without these checks the code looks cleaner and easier to follow.
+This code claims to handle "spurious" Success events, but in reality
+it is ready and willing to silently swallow any kind of event, on most
+host controllers these days, after any short transfer.
+
+It got in my way while debugging genuinely incorrect events from the
+xHC, which this code thought were meant for it, because it has no way
+of knowing better, because it's utterly broken.
+
+Limit it at least to only accept Success and Short Packet completions
+so that rightful warnings will be printed in other cases.
+
+So far I found no instances of this change exposing previously hidden
+errors, besides the aforementioned case of a buggy xHC. The buggy xHC
+completely fails to acknowledge some TDs in any way. It proceeeds to
+the next TD, whose event then doesn't match the current TD, so if the
+prior TD got a short packet, the "spurious" code swallows the event.
 
 Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
- drivers/usb/host/xhci-ring.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/usb/host/xhci-ring.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index cc0420021683..c777cb897579 100644
+index c777cb897579..e19c8a17b59c 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -2410,26 +2410,23 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		sum_trbs_for_length = true;
- 		fallthrough;
- 	case COMP_ISOCH_BUFFER_OVERRUN:
- 		frame->status = -EOVERFLOW;
--		if (ep_trb != td->last_trb)
--			td->error_mid_td = true;
-+		td->error_mid_td = true;
- 		break;
- 	case COMP_MISSED_SERVICE_ERROR:
- 		frame->status = -EXDEV;
- 		sum_trbs_for_length = true;
--		if (ep_trb != td->last_trb)
--			td->error_mid_td = true;
-+		td->error_mid_td = true;
- 		break;
- 	case COMP_INCOMPATIBLE_DEVICE_ERROR:
- 	case COMP_STALL_ERROR:
- 		frame->status = -EPROTO;
- 		break;
- 	case COMP_USB_TRANSACTION_ERROR:
- 		frame->status = -EPROTO;
- 		sum_trbs_for_length = true;
--		if (ep_trb != td->last_trb)
--			td->error_mid_td = true;
-+		td->error_mid_td = true;
- 		break;
- 	case COMP_STOPPED:
- 		sum_trbs_for_length = true;
- 		break;
+@@ -2785,9 +2785,10 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 			 */
+ 
+ 			if (!(trb_comp_code == COMP_STOPPED ||
+ 			      trb_comp_code == COMP_STOPPED_LENGTH_INVALID ||
+-			      ep_ring->last_td_was_short)) {
++			      (trb_comp_code == COMP_SUCCESS && ep_ring->last_td_was_short) ||
++			      (trb_comp_code == COMP_SHORT_PACKET && ep_ring->last_td_was_short))) {
+ 				xhci_warn(xhci, "WARN Event TRB for slot %u ep %d with no TDs queued?\n",
+ 					  slot_id, ep_index);
+ 			}
+ 			if (ep->skip) {
+@@ -2878,9 +2879,11 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		 * transfer. Ignore it.
+ 		 * FIXME xHCI 4.10.1.1: this should be freed now, not mid-TD
+ 		 */
+ 		if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
+-		    ep_ring->last_td_was_short) {
++		    ep_ring->last_td_was_short &&
++		    (trb_comp_code == COMP_SUCCESS ||
++		    trb_comp_code == COMP_SHORT_PACKET)) {
+ 			ep_ring->last_td_was_short = false;
+ 			return 0;
+ 		}
+ 
 -- 
 2.43.0
 
