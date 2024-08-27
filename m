@@ -1,212 +1,107 @@
-Return-Path: <linux-usb+bounces-14166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAD06960553
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 11:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF2FD96055F
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 11:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AEBB1F22D48
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 09:16:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86F581F23552
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 09:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F38719D093;
-	Tue, 27 Aug 2024 09:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9E5199EAC;
+	Tue, 27 Aug 2024 09:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZYXni5yg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q3AB02Xp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7AB76056;
-	Tue, 27 Aug 2024 09:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65F3194AF6
+	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 09:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724750167; cv=none; b=kXO8gYHFkh2HFvLA/D81uxUaSBI0j4BJbZwMRWKpJ2+JYYeKLWvzPVTsZ2kniKr7lw/61Xufg4XALmgN+snSSi8QTTesONmQzSRWhhtRRie2lHVd31XSJS6lKCe+vbVRs/aNpVhz5aIMHuaYLW6GAucIwfiFeDgw5j3R8i2bbWA=
+	t=1724750400; cv=none; b=EjbA65CYnwVm8ML/SfHCfDGAHh9BuKihRKYV2dfIQveS7dMCOBjC2uzstiy/tOQbdEbkXFUTlLtn2YpOTEi/aWdWzav+3Ppu8gM8fdy046EtfczerV4dyrWKjYVa4QzHlAEGjHCeAjKmbhQP407pWevE4/aP/Zezz9dbOvi4qvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724750167; c=relaxed/simple;
-	bh=Rlu5n1CgqQ9ZEns9yR69BhZINc/7WBPKiF+V3/BhUM8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GoFrJdqOAKUAd71Qs8En/NdHDBo6zudh+3eyQiPoSSMeXm3qD3pRiL5yJK0XhTl9FrQLfF0GkCZ4HNErfY+o1GeRLK45g2Wit0MmxtCpu2/USO9wYrKSX3JFXh8TX6ZgcCVPuk06ffHoTV1MdeScjuJxg+IT4hWOgB9F2Mkbf7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZYXni5yg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47R7kf6C002653;
-	Tue, 27 Aug 2024 09:15:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	3J8Hej+cDjlPlbTqVxRoSC+EFUooWsxZ5wqv5MlLRRM=; b=ZYXni5ygVNuwr+u0
-	yMLYdKz3CJJpRZf98lRs9QXb3bjM9J03KLyaB+CV310hBBKmBNNWnkahNPvCu/Ge
-	vj56juvxJV0mF8ZCpS+gtdXCLU11k7tZG5hs55TCIKKWyIC6pmxDe2FI1pEfua7H
-	SIrHJc+C1PlYV0ElZ7QCM0GVTKuboJz7LLVi7lawtoLDGEKnCis+wEYrK6HWiTzX
-	jz9gGR2UJdkLTpBDkBLLAzHe9l3wAvH2ElwcducWz2nSktJQbOdFdxjZGG7aBtu+
-	S5ZJSU1/4vx/ZEFVP23QVGnld02qo3kOrI4bdjSOifMrqUQBtx17Fm4WNox797TS
-	Tx3MuQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419aq787s7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Aug 2024 09:15:59 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47R9Fwqm027511
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Aug 2024 09:15:58 GMT
-Received: from [10.216.25.164] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 27 Aug
- 2024 02:15:54 -0700
-Message-ID: <33fe50c8-cf98-bd04-87b7-06ec07cc9277@quicinc.com>
-Date: Tue, 27 Aug 2024 14:45:51 +0530
+	s=arc-20240116; t=1724750400; c=relaxed/simple;
+	bh=FiPPhZuyXTCB/bzbslq5BFJ2JbVPZAAG6B7bEfTgTnY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TA6Z9zKMpJOiGK4TqPlW15A67JokmKCFeMdJbuzSB6gDn8odgGiExMN1wGAeIyc6wgMMnz+86CQJgCGoyOhq9dfYHZs41RBAUi/217HjHREirMJ+d7GMShA/beIKQiLN+CAqfXh9YQ3iUPJfYUYOVo4ZewEFSQuRNvleaYOyyc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q3AB02Xp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A953C8B7A0
+	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 09:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724750400;
+	bh=FiPPhZuyXTCB/bzbslq5BFJ2JbVPZAAG6B7bEfTgTnY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=q3AB02XppHhE4GIAerqBGJgWIydLCiNeZcOOurx27s8udPWUNWVmA3vttP99T4qyn
+	 qF5nBloZE8Aj8uo//MZkFeawVe/anjtLKwBY54WaoilCdaPXyfuI2eLkDSlFTtYzwY
+	 f6CHu2iMsEoG5SyIyKtgvUUeWJ6QvrJ5pg33TYfniVtatRNGbT6yMVn1D1469VpsY5
+	 Bi4nb5rKyNVID+3fdBmffVQpVmvbj+UNt2/rSavRPNlBNzTSzV4Y4lSKHIfPec8W4a
+	 9LQcwGbwezY7c6Z0RObIoJz0izGLgeV2q3Vf1Vx9u0MweRh0coG69A2cHzBRV0NrFm
+	 qa7t0ehsHgEqw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 2F00AC53BB7; Tue, 27 Aug 2024 09:20:00 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
+Date: Tue, 27 Aug 2024 09:19:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: maggu2810@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219198-208809-mrE0Cwrj0A@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
+References: <bug-219198-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7] usb: gadget: u_serial: Add null pointer check in
- gs_read_complete & gs_write_complete
-Content-Language: en-US
-To: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>,
-        Michael Nazzareno Trimarchi
-	<michael@amarulasolutions.com>,
-        "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>
-CC: "quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        opensource.kernel <opensource.kernel@vivo.com>,
-        "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>
-References: <TYUPR06MB6217989A40FA4E18598DC694D28A2@TYUPR06MB6217.apcprd06.prod.outlook.com>
-From: Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <TYUPR06MB6217989A40FA4E18598DC694D28A2@TYUPR06MB6217.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: m5IHa8Y4CKc8eL1K4JBhO3_MJb0dzaLL
-X-Proofpoint-ORIG-GUID: m5IHa8Y4CKc8eL1K4JBhO3_MJb0dzaLL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-27_06,2024-08-26_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- suspectscore=0 mlxlogscore=865 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408270069
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
 
+--- Comment #9 from Markus Rathgeb (maggu2810@gmail.com) ---
+Does a git bisect help you to identify the problematic change(s)
 
-On 25-08-24 01:58 pm, 胡连勤 wrote:
-> From: Lianqin Hu <hulianqin@vivo.com>
-> 
-> Considering that in some extreme cases, when the unbind operation
-> is being executed, gserial_disconnect has already cleared gser->ioport,
-> and the controller has not stopped & pullup 0, sys.usb.config is reset
+I am currently in the progress...
 
-As mentioned by Michael earlier, avoid android specific (sys.usb.config)
-operations.
+$ git bisect log
+git bisect start
+# status: waiting for both good and bad commits
+# bad: [8400291e289ee6b2bf9779ff1c83a291501f017b] Linux 6.11-rc1
+git bisect bad 8400291e289ee6b2bf9779ff1c83a291501f017b
+# status: waiting for good commit(s), bad commit known
+# good: [7ba498d9d1bb67bcbc2a79f19a9054cdc8b95098] Linux 6.10.6
+git bisect good 7ba498d9d1bb67bcbc2a79f19a9054cdc8b95098
+# good: [0c3836482481200ead7b416ca80c68a29cfdaabd] Linux 6.10
+git bisect good 0c3836482481200ead7b416ca80c68a29cfdaabd
+# good: [280e36f0d5b997173d014c07484c03a7f7750668] nsfs: use cleanup guard
+git bisect good 280e36f0d5b997173d014c07484c03a7f7750668
 
-> and the bind operation will be re-executed, calling gs_read_complete,
-> which will result in accessing gser->iport, resulting in a null pointer
-> dereference, add a null pointer check to prevent this situation.
-> 
-> Added a static spinlock to prevent gser->ioport from becoming
-> null after the newly added check.
-> 
-> Unable to handle kernel NULL pointer dereference at
+But if you already know what related changes has been done, I could cancel =
+it.
 
-[...]
-> 
-> Fixes: c1dca562be8a ("usb gadget: split out serial core")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
-> ---
-> v7:
->   - Remove code comments
->   - Update the commit text
->   - Add the Fixes tag
->   - CC stable kernel
->   - Add serial_port_lock protection when checking port pointer
->   - Optimize code comments
->   - Delete log printing
+--=20
+You may reply to this email to add a comment.
 
-We usually indicate what had changed in each versions.
-v7: Remove code comments
-v6: xx
-v5: xx
-v4: xx
-v3: xx
-v2: Delete log printing
-
-> ---
-No need for this '---' here, just leave an empty line
->  drivers/usb/gadget/function/u_serial.c | 33 ++++++++++++++++++++++----
->  1 file changed, 28 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-> index b394105e55d6..e43d8065f7ec 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -452,20 +452,43 @@ static void gs_rx_push(struct work_struct *work)
->  
->  static void gs_read_complete(struct usb_ep *ep, struct usb_request *req)
->  {
-> -	struct gs_port	*port = ep->driver_data;
-> +	struct gs_port	*port;
-> +	unsigned long  flags;
-> +
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-> +	port = ep->driver_data;
-> +
-> +	if (!port) {
-> +		spin_unlock_irqrestore(&serial_port_lock, flags);
-> +		return;
-> +	}
->  
-> -	/* Queue all received data until the tty layer is ready for it. */
->  	spin_lock(&port->port_lock);
-> +	spin_unlock(&serial_port_lock);
-> +
-> +	/* Queue all received data until the tty layer is ready for it. */
->  	list_add_tail(&req->list, &port->read_queue);
->  	schedule_delayed_work(&port->push, 0);
-> -	spin_unlock(&port->port_lock);
-> +	spin_unlock_irqrestore(&port->port_lock, flags);
->  }
->  
->  static void gs_write_complete(struct usb_ep *ep, struct usb_request *req)
->  {
-> -	struct gs_port	*port = ep->driver_data;
-> +	struct gs_port	*port;
-> +	unsigned long  flags;
-> +
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-> +	port = ep->driver_data;
-> +
-> +	if (!port) {
-> +		spin_unlock_irqrestore(&serial_port_lock, flags);
-> +		return;
-> +	}
->  
->  	spin_lock(&port->port_lock);
-> +	spin_unlock(&serial_port_lock);
->  	list_add(&req->list, &port->write_pool);
->  	port->write_started--;
->  
-> @@ -486,7 +509,7 @@ static void gs_write_complete(struct usb_ep *ep, struct usb_request *req)
->  		break;
->  	}
->  
-> -	spin_unlock(&port->port_lock);
-> +	spin_unlock_irqrestore(&port->port_lock, flags);
->  }
->  
->  static void gs_free_requests(struct usb_ep *ep, struct list_head *head,
-Regards,
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
