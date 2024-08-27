@@ -1,161 +1,285 @@
-Return-Path: <linux-usb+bounces-14181-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14182-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D98E9611B1
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 17:22:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 942D49611CC
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 17:24:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC94D2819FC
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 15:22:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 094DEB25A32
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 15:23:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 692401C578D;
-	Tue, 27 Aug 2024 15:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D8F11C93A4;
+	Tue, 27 Aug 2024 15:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLSemgMz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zx7iBvPi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E582F17C96
-	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 15:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0311C57BF
+	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 15:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724772146; cv=none; b=rXwGYS8p+lgc9hu7Oj4dvdYYgfu16KQO91neYqM0/kizwKVEsK1ejoTNAcVfgmmuR2HJVkC2zYQoM5EP2FHE6tRixYBdvNIkE2qbcw4s9/Ly9eyRGayoNnTyq/YmM+nKygIP+pAK9txabzJFboQljJArW9qwht4PL3jh5RbpYP4=
+	t=1724772197; cv=none; b=a8ezN1ru1TgIOTngxo4hEGO7psIRPVK4mt0T8cj22p7ZEJCbaEBYLZltecjRfvV+WSK9Osk9CC/5TIb/8qKiJL0+qsJVZf5G3DXtTyCVFmfB7V86zd74TzAdenX6jx3Oey/lrpOK8GBlcTqO/t2BCwFVlbLgjgLuOt/q9cckYy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724772146; c=relaxed/simple;
-	bh=j/loQmpZtNfngUCjHUwAwfZ7kRYT8arR+gJ1x0kvdzw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MxLDv5a4RspEn3cCzR/3DTqE2TPGCr5aEZ7Rk8Zyop3gAr5iI5G/2Can1ocAoOI+NgvVZcfmIL7uG242YHUfEenJKkMdHbfhkk9ewPMpV9iNknyH/+RTPYntQ42OY9N5LEYmF+2//XXLPGHAbXc7U09xiaUn/+BW2sdoGXTe6RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLSemgMz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6273FC61041
-	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 15:22:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724772145;
-	bh=j/loQmpZtNfngUCjHUwAwfZ7kRYT8arR+gJ1x0kvdzw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=eLSemgMzNw/gE380rSuIL7TKxARfx1wVpDkseywmTymf6SHsBNENNVLeirtjfc7Q0
-	 geOiK8ROoKrvmzkUoUm7KPCmAhRX+EY5dh7KX2rFLNlwzpexhZr/OeE9CJDuG/Ta5E
-	 0IJ52+vAq+WhxCAvezsLOr8ESoLHjuJNhbrgLODmHNJtpEfTKnGYzkhfsfBU8I9SpE
-	 RI9yvPwFhVcI5yIrd/jr/d1azcOJi7JC2Hv/Rq42ihagZiUVJcTXnZO7tQ8TSrKssc
-	 XDL5cPOvO2ZON/j6PfF3QOR+EapfoAbGtRJI9yKpCBY4yFc1r/Q0o4mn2fqv3laftU
-	 EuA6O9td98BeQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 52F1FC53B73; Tue, 27 Aug 2024 15:22:25 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
-Date: Tue, 27 Aug 2024 15:22:25 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: adamw@happyassassin.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219198-208809-ubtz0ydLKK@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
-References: <bug-219198-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1724772197; c=relaxed/simple;
+	bh=1D98Cp8N9HGQz1OuxWlecZFwgHIhpdNR0NiBgRN49G0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KK6NY77tzUUoK2AdWzheQ6yf8NkgGE9D6m/IlHY96UVgZ0NLOp2YS3PPX3xEhc4qXVEIIwaBA0G2bXgXB4adOFLHZSpbUvsVzxQQIeQTIJdwdFslQCaC1akoM3QZE18P0DjE2aDEOmw2/1n5/tFbk+LSi7B0NmHFrFQ9vYhrvOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zx7iBvPi; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724772195; x=1756308195;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1D98Cp8N9HGQz1OuxWlecZFwgHIhpdNR0NiBgRN49G0=;
+  b=Zx7iBvPi3fg23PYlzrbxUcwiKq9E8zLv5upUxwXyXMSXEtmGUvXelPcq
+   lIvC97ycUBAH0clh0C4yEjVz6whC8xz3HHpTcU2gFHkedogRj9h1rk1UY
+   PY1EmW8k5KFKSpORAZLr20JQKmwWJIF+DGHlZrp3rw9Tmp7NIBau3NNv8
+   L4z0SRlKDAyDqTxT4yLn6zWWIOLyyghC1amNlOg5jsUBk7TD/oNG0SZvT
+   ORFyx0bJinyMwrQ0B7TxnoZmflXmMZnJycecvpb+pXjqG6YtVgUdHU3e4
+   wsJcDYfaR/o8NZniiwyIWQThQxq2YDE57oX5t7vqHHmJ6UfKYjERaVIpm
+   Q==;
+X-CSE-ConnectionGUID: CvdT9DtfRzGhfKKvFJTIOg==
+X-CSE-MsgGUID: GnDWF1gBRB2XK5C7wJ5EgA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="23432846"
+X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
+   d="diff'?scan'208";a="23432846"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 08:23:14 -0700
+X-CSE-ConnectionGUID: QjMyzPvlQMCTl4m8VSr/yg==
+X-CSE-MsgGUID: Ar9zZojiQYOiojA+R2BMzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
+   d="diff'?scan'208";a="86093759"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa002.fm.intel.com with SMTP; 27 Aug 2024 08:23:11 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 27 Aug 2024 18:23:10 +0300
+Date: Tue, 27 Aug 2024 18:23:10 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jameson Thies <jthies@google.com>,
+	Benson Leung <bleung@chromium.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-usb@vger.kernel.org,
+	"Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+	Bartosz Szpila <bszpila@google.com>
+Subject: Re: [PATCH v2 1/6] usb: typec: ucsi: Remove unused fields from
+ struct ucsi_connector_status
+Message-ID: <Zs3vXigD3LdIqjAU@kuha.fi.intel.com>
+References: <20240816135859.3499351-1-heikki.krogerus@linux.intel.com>
+ <20240816135859.3499351-2-heikki.krogerus@linux.intel.com>
+ <CANFp7mUDm9Ya9Gjv9Bv_neL22SuDocmz_8HCGVbnd8y-0gd7tA@mail.gmail.com>
+ <ZsMoUWSMtaxteBBf@kuha.fi.intel.com>
+ <CANFp7mU69-4_v5JaycrPjt3ZnfyRa8PypFa=_gbuW9qW6_z9dw@mail.gmail.com>
+ <ZsSWIQ7sMAeF9v9Y@kuha.fi.intel.com>
+ <CANFp7mUB4oiyEfh4P5cOucvdaWaC5N=OwcVdZ0Wm8EKBf=Ss9w@mail.gmail.com>
+ <Zscf3IXZuepUqqv6@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="H6XgjSeU1/ZVCZ6m"
+Content-Disposition: inline
+In-Reply-To: <Zscf3IXZuepUqqv6@kuha.fi.intel.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
 
---- Comment #11 from Adam Williamson (adamw@happyassassin.net) ---
-I'm not replugging mine, but as I noted, the Thunderbolt service (I forgot =
-it's
-bolt.service , not thunderbolt.service) is producing a similar effect. I do
-indeed see similar messages to yours *after* bolt.service starts:
+--H6XgjSeU1/ZVCZ6m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Aug 26 11:47:21 xps13a.happyassassin.net systemd[1]: Started bolt.service -
-Thunderbolt system service.
-...
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: pci 0000:55:00.0: enabling
-device (0000 -> 0002)
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:55:00.0: xHCI
-Host Controller
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:55:00.0: new=
- USB
-bus registered, assigned bus number 5
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:55:00.0: hcc
-params 0x200071e9 hci version 0x100 quirks 0x0000000000000010
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:55:00.0: xHCI
-Host Controller
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:55:00.0: new=
- USB
-bus registered, assigned bus number 6
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:55:00.0: Host
-supports USB 3.0 SuperSpeed
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: DMAR: DRHD: handling fault
-status reg 2
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: DMAR: [DMA Read NO_PASID]
-Request device [55:00.0] fault addr 0xffffb000 [fault reason 0x06] PTE Read
-access is not set
-...
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: pci 0000:56:00.0: enabling
-device (0000 -> 0002)
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:56:00.0: xHCI
-Host Controller
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:56:00.0: new=
- USB
-bus registered, assigned bus number 7
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:56:00.0: hcc
-params 0x200071e9 hci version 0x100 quirks 0x0000000000000010
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:56:00.0: xHCI
-Host Controller
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:56:00.0: new=
- USB
-bus registered, assigned bus number 8
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:56:00.0: Host
-supports USB 3.0 SuperSpeed
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: DMAR: DRHD: handling fault
-status reg 2
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: DMAR: [DMA Read NO_PASID]
-Request device [56:00.0] fault addr 0xffffb000 [fault reason 0x0c] non-zero
-reserved fields in PTE
-...
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: pci 0000:57:00.0: enabling
-device (0000 -> 0002)
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:57:00.0: xHCI
-Host Controller
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: xhci_hcd 0000:57:00.0: new=
- USB
-bus registered, assigned bus number 9
-Aug 26 11:47:22 xps13a.happyassassin.net audit[1]: SERVICE_START pid=3D1 ui=
-d=3D0
-auid=3D4294967295 ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dcolord comm=3D"systemd" exe=3D"/usr/lib/systemd/systemd" host=
-name=3D?
-addr=3D? terminal=3D? res=3Dsuccess'
-[snip unrelated messages]
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: DMAR: DRHD: handling fault
-status reg 2
-Aug 26 11:47:22 xps13a.happyassassin.net kernel: DMAR: [DMA Read NO_PASID]
-Request device [57:00.0] fault addr 0xffffb000 [fault reason 0x06] PTE Read
-access is not set
+On Thu, Aug 22, 2024 at 02:24:17PM +0300, Heikki Krogerus wrote:
+> Hi Abhishek,
+> 
+> I'm sorry to keep you waiting.
+> 
+> > You have me convinced on the "failing loudly" part but I'm still
+> > confused about the "how".
+> > 
+> > Making sure we always check versions to access the bits makes me think
+> > we need wrappers on casting to the rightly versioned connector status.
+> > Should we be versioning access for everything that's not in UCSI 1.2
+> > then?
+> > 
+> > Example:
+> > 
+> > struct ucsi_connector_status_raw {
+> >   u8 bytes[19];
+> > };
+> > 
+> > struct ucsi_connector_status_v1 {
+> >   ...
+> > };
+> > 
+> > struct ucsi_connector_status_v2 {
+> >   ...
+> > };
+> > 
+> > struct ucsi_connector_status_v1* get_connector_status_v1(struct
+> > ucsi_connector *con) {
+> >   return (struct ucsi_connector_status_v1 *)con->raw_status;
+> > }
+> > 
+> > struct ucsi_connector_status_v2* get_connector_status_v2(struct
+> > ucsi_connector *con) {
+> >   return con->ucsi->version >= UCSI_VERSION_2_0 ? (struct
+> > ucsi_connector_status_v2 *)&con->raw_status : NULL;
+> > }
+> > 
+> > /* Read all bits supported by the current version. */
+> > int ucsi_read_connector_status(struct ucsi_connector *con, struct
+> > ucsi_connector_status_raw *raw_conn_status);
+> 
+> I'll take a look at this next week. Right now I have to focus on
+> other tasks.
 
-And indeed there are no similar messages in my 6.10.6 log.
+Sorry again for the delay. Today I sketched the idea that I have. I
+think this problem would be the easiest to handle with field specific
+helpers (see attached).
 
---=20
-You may reply to this email to add a comment.
+But at the same time I would like to get rid of all command specific
+data structures. I've been planning that for some time now. We can do
+that with a macro like that UCSI_FIELD(). The problem with those
+structures is that if the fields in the structure don't align nicely
+(like in case of GET_CONNECTOR_STATUS), we have to come up with custom
+members, and that is not ideal at all. There are probable other
+problems too.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+I did not convert anything yet, I'll prepare a more complete RFC
+tomorrow, but you should be able to get the idea from this.
+
+thanks,
+
+-- 
+heikki
+
+--H6XgjSeU1/ZVCZ6m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="ucsi_field.diff"
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index c8c87377909d..972d7b364a3d 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -4,6 +4,7 @@
+ #define __DRIVER_USB_TYPEC_UCSI_H
+ 
+ #include <linux/bitops.h>
++#include <linux/bitfield.h>
+ #include <linux/completion.h>
+ #include <linux/device.h>
+ #include <linux/power_supply.h>
+@@ -352,6 +353,27 @@ struct ucsi_connector_status {
+ #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
+ } __packed;
+ 
++#define UCSI_CONNECTOR_CHANGE(_con)		UCSI_FIELD(&(_con)->status, 0, 16)
++#define UCSI_CONNECTOR_PWR_OPMODE(_con)		UCSI_FIELD(&(_con)->status, 16, 3)
++#define UCSI_CONNECTOR_CONNECTED(_con)		UCSI_FIELD(&(_con)->status, 19, 1)
++#define UCSI_CONNECTOR_PWR_DIR(_con)		UCSI_FIELD(&(_con)->status, 20, 1)
++#define UCSI_CONNECTOR_PARTNER_FLAGS(_con)	UCSI_FIELD(&(_con)->status, 21, 8)
++#define UCSI_CONNECTOR_PARTNER_TYPE(_con)	UCSI_FIELD(&(_con)->status, 29, 3)
++#define UCSI_CONNECTOR_RDO(_con)		UCSI_FIELD(&(_con)->status, 32, 32)
++#define UCSI_CONNECTOR_BC_STATUS(_con)		UCSI_FIELD(&(_con)->status, 64, 2)
++#define UCSI_CONNECTOR_PD_STATUS(_con)		UCSI_FIELD(&(_con)->status, 70, 16)
++
++#define UCSI_FIELD(data, offset, size)					\
++	({								\
++		u8 m = ((offset) % 8);					\
++		FIELD_GET((GENMASK((m + ((size) - 1)), m)),		\
++			  (*((u32 *)(&((u8 *)data)[((offset) / 8)]))));	\
++	})
++
++#define UCSI_FIELD_SAFE(ucsi, data, offset, size)			\
++	if (!WARN_ON(((offset) / 8) >= UCSI_MAX_DATA_LENGTH(ucsi)))	\
++		UCSI_FIELD(data, offset, size)
++
+ /* -------------------------------------------------------------------------- */
+ 
+ struct ucsi_debugfs_entry {
+@@ -513,4 +535,73 @@ static inline void ucsi_debugfs_unregister(struct ucsi *ucsi) { }
+ #define USB_TYPEC_NVIDIA_VLINK_DP_VDO	0x1
+ #define USB_TYPEC_NVIDIA_VLINK_DBG_VDO	0x3
+ 
++/* -------------------------------------------------------------------------- */
++
++static __always_inline enum typec_orientation ucsi_orientation(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return TYPEC_ORIENTATION_NONE;
++	if (!UCSI_CONNECTOR_CONNECTED(con))
++		return TYPEC_ORIENTATION_NONE;
++	if (UCSI_FIELD(con, 86, 1))
++		return TYPEC_ORIENTATION_REVERSE;
++	return TYPEC_ORIENTATION_NORMAL;
++}
++
++static __always_inline int ucsi_sink_path_status(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 87, 1);
++}
++
++static inline int ucsi_reverse_current_protection_status(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 88, 1);
++}
++
++static inline int ucsi_power_reading_ready(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 89, 1);
++}
++
++static inline int ucsi_current_scale(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 90, 3) * 5; /* mA */
++}
++
++static inline int ucsi_peak_current(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 93, 16);
++}
++
++static inline int ucsi_average_current(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 109, 16);
++}
++
++static inline int ucsi_voltage_scale(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 125, 4) * 5; /* mV */
++}
++
++static inline int ucsi_voltage_reading(struct ucsi_connector *con)
++{
++	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
++		return -EINVAL;
++	return UCSI_FIELD(con, 129, 16);
++}
++
+ #endif /* __DRIVER_USB_TYPEC_UCSI_H */
+
+--H6XgjSeU1/ZVCZ6m--
 
