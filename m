@@ -1,65 +1,56 @@
-Return-Path: <linux-usb+bounces-14174-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14175-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 086019608AE
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 13:29:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 747869609D7
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 14:18:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7A502825D3
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 11:29:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7454B2287E
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 12:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8523F19F49D;
-	Tue, 27 Aug 2024 11:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A901A08D6;
+	Tue, 27 Aug 2024 12:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aF7NX9S1"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b="FvuP805k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C3819EEB4
-	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 11:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844711A01BC
+	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 12:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724758162; cv=none; b=kAwTlbZNutIdIVyx3piAc2J6ybJwXcB46uyiSJVi3eN21Qqur6Uq1GxoPqVdsHzTWm6WC+V9CuH1Nfd3v9Zq/0BFbQ3dt9b5NhsxNysptxQbLwK7K2BQOuNHiJCNetn87RDx5gsxqLdjzlnN0QHEJyYBnacZIWNvs6Kq5GsHe1I=
+	t=1724761121; cv=none; b=oZoqwHsX44daxo6KO0DBN+X8wYEvYBa1xiqUKjrWyQvYqqxrkm1ZPrLKrs5dEuAnVhaIz6WwdOTlBajEEJBDpBOAeaKqk+U9YXcR1dG20ZRiQ6JS0jnoRGZHkhATrgTmFV57+nl5UaQeICT1cUTTG1yX4bkW37QVdIXh6o84q1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724758162; c=relaxed/simple;
-	bh=YJ21cPBRkcHgqnFp1+Vw3gWhDAVLPX4ovwIqyKNc4nM=;
+	s=arc-20240116; t=1724761121; c=relaxed/simple;
+	bh=GLT69YwDMenIgOOfJZ1U3XCwokTqXmaq9hxtPOQLDeM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jOCcTWtUWY77cpzGJXadG95NeAqD6wbE0P3dtg9yIRqqOtud6MyIA3+wvM4O3t+MYEOHUIO085cuKJ9ZW3PSjL+h6fGHRBETqvlXl04KDMIG//p7HlLZtoOmCXk4oDW/1YiwmQj7gyXA7uPmyiuJbMNKkqjCyL+Mfw3odZo9e1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aF7NX9S1; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724758160; x=1756294160;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YJ21cPBRkcHgqnFp1+Vw3gWhDAVLPX4ovwIqyKNc4nM=;
-  b=aF7NX9S1U28LQNLlE8iQ141hNwgS3fmhJ3596fAtmtjMazuFoHpPGCw/
-   FOQcUTUtdvzl+5OOSqTpZ0gORtlGKqbkFaWwZB6AKju6P6M1BKuxH7fv8
-   /MCzh0GlYeDbTzwn/5jqwWyC3S3NHw3tuwzD1UtQop0d0Ag5WaG7qXdn0
-   Gv1D0ot4+oYzqzkt60qq8+HidRwJJA+xpQ6TkxSLVQEgFZ38u6HTMYkph
-   IMe1F/hemYeJZljclwk1RtMLuUWfxEgf03S0iIBeFt9/g2fSZF8FKXpU9
-   xmuqbfeLnoMhjZdRP5DmnCqravadxaHZWMJ8mEf+OMgT5dlChjdsNdj5M
-   g==;
-X-CSE-ConnectionGUID: iHnWcgmmRM+OMi9/XSLoJQ==
-X-CSE-MsgGUID: GqDGe97fQHas78Gun3Pijw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23108107"
-X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="23108107"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 04:29:19 -0700
-X-CSE-ConnectionGUID: VWABUOo4QOujnZr/HIk6Bw==
-X-CSE-MsgGUID: ig6zKWuOQWazchHBKTXc/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="93578392"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 27 Aug 2024 04:29:18 -0700
-Message-ID: <744a35f4-ff3e-40d1-8f3e-6f3b28eef756@linux.intel.com>
-Date: Tue, 27 Aug 2024 14:31:23 +0300
+	 In-Reply-To:Content-Type; b=TYUGFpG0BOMCJ8LXu8vy4cJovR7wOsqQ+8s7AG4QVtDm/EIQ28e8PfMFvlz/X/rUBk2AwLJ7WBAT0zTLKLIDpP4kRGRDk/Fy+MvSo9eZd0/ZcSoVnOo09/UyEngz/roioiO/0lENdXk1mi+gkcGkCVy0aNpSV1IE1RRAbobMxsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b=FvuP805k; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1724761111; x=1725365911; i=mista.tapas@gmx.net;
+	bh=GLT69YwDMenIgOOfJZ1U3XCwokTqXmaq9hxtPOQLDeM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=FvuP805k64Aaa1RK++DqEd4d8J+1VGL5EyXCGBM9iTHjaE5uM77bWz+gUVA4xLF5
+	 TeK+GJYIgEKU9hFm6EipGv9HU0BqnpxqN+zW+QpGhtiSwz8IvkCUxl0n3dDbH3dbL
+	 InWZ6cayzR/jYF0dIGey12ui7T6L2o7nvX2sHNcl+oaFLDhEAghNhzNPzfUlmGR8K
+	 wk0ZGFFZU5NTgpEjbxNS24HwC74ZoGtxVuxfyLCjWvMmyVeQoTBk4rrzPLgdi9CFG
+	 ZnoJnTg1yyMUjUeErFnGm0K3HROsT4yIb5mkRkzh4/c+adtnWQR9c6nbdh7d/5Z6/
+	 011nX5ZKeyJ4GtuppQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.178.77] ([94.229.156.43]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MkHMP-1sFxGg2Y0n-00nfut; Tue, 27
+ Aug 2024 14:18:31 +0200
+Message-ID: <4e78b499-c1a5-4ab1-8bb4-26908d2cc75f@gmx.net>
+Date: Tue, 27 Aug 2024 14:18:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,8 +59,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: Misbehaving Alder Lake-N PCH USB 3.2 xHCI Host Controller
-To: FPS <mista.tapas@gmx.net>, =?UTF-8?Q?Micha=C5=82_Pecio?=
- <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+ =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
 Cc: linux-usb@vger.kernel.org
 References: <20240820130158.339b4d87@foxbook>
  <bb565e29-10e9-4211-a854-fdd9771149b4@gmx.net>
@@ -80,87 +71,59 @@ References: <20240820130158.339b4d87@foxbook>
  <20240825065831.0eaba5b2@foxbook>
  <67D20520-0374-4461-B626-5142F1D7B743@gmx.net>
  <eb8ea495-6854-4e2e-9474-6348a7a0bf69@gmx.net>
+ <744a35f4-ff3e-40d1-8f3e-6f3b28eef756@linux.intel.com>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <eb8ea495-6854-4e2e-9474-6348a7a0bf69@gmx.net>
+From: FPS <mista.tapas@gmx.net>
+In-Reply-To: <744a35f4-ff3e-40d1-8f3e-6f3b28eef756@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ym804ihqiWFjHR8Jaw9EtCAGMtxaB64y66OCNi7ohvae3V5a8u0
+ oOirOgyKISeLQ3yJFU1o6AmZOfu1qqf7m5vQ4rXi/9uP/3t9tGJi51ruZ2yTDPAnIKsqRHU
+ uRtYuQ/8nG6hYUpttnWmngUknE2czAJHa+jEglnDFYjMDtxNe9D4BXvLGG6eWDUzMD8b3zp
+ BEDSNBeOFSHew70EG65Ww==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:gFJTMQO6ikc=;6sdnCqcPfCyznDc+38+wvkZmh6k
+ Z+1txd3ApWvgXyyzhr3dPIqfS/zSxirC2Ne4m8oWBT2aZQwSPviaAfIkTYPTX6ETzo7v5IG3W
+ 7XSmWlENtIBFbJMfkTup5SdQlhRTALneiJG2m9m6HwTZFNfckZsWYkV2MP+2buF6MJ7xQtWWD
+ ngEHvGnjqwN6BUIBQ16CN/Lsyu73dZhv4E5x0Zdhev7vL+fze22DX/aLF+0r8kb8AnQZG+LY+
+ 35EN/4hbxTzFDhDxG/E+4ZK3JktTzr3GOAX0z6aW5Ig2Ho7cdJ2ycJiHzh8gycGcwIYO53FB2
+ rzYDyLL5sYPmBMbWsTIZO8arPUtS/+hER4X2acUFlonVGRu604FRsbvf/GUm6exoPs3VvX8wR
+ vKpXMm4xfLgbB6PwO2HIH51j3Vd9aL4RqwB3BAASADKFgBgylj3Wyclh7Y+KhG9UgdElCfQ0s
+ 7eYXr7czy5oGwiMhSL8gi5QliqWNlopDpK2gkKWliaLvPfXLdq3hSVD/zYj0ummCW6WPKwAeB
+ Sk/57De9Xs0eCvtmAzI20U1hgGbN3AsRYKvPbSp6+1uu/1SEj193XL53MfL0Ag+P8WwRmoGKN
+ 2R3kDAP+UQUd8H99Txk7DIUkDIpm+hWIcD1DUWvSJPaoLUMEfNCX6ox/oSgR55/kqCl+pK8T4
+ fTw0DoDHP6gvNJDHLofXmvTEPGyw2bDelffWmtkfulTfJl5aUHqINDRmgSu/yV0ftF0t3jWQy
+ N4fUceoBcBzrWfz59JXw13bv0eqTyh/bGTmX0s+s9LKVTJ2V/9c5ktZ4p3VJAtKidcdUort9J
+ C6HzjGZx7K0OM/gyCP+yO5Fu23ZLOjeXcdITyLQH5aIWQ=
 
-On 27.8.2024 13.30, FPS wrote:
-> On 8/25/24 9:46 AM, fps wrote:
->> I will try and do a little more "comparative tracing" for the capture/playback/full duplex cases on 1. the intel xhci and 2. the renesas xhci which seems to work perfectly.
-> 
-> Hi again!
-> 
-> I captured a trace from the xHCI from the Renesas and the Intel
-> controllers and I noticed a couple of differences (this is for the
-> playback case only). I didn't find info on what precisely these fields
-> tell me.
-> 
-> I show here only partial traces from where it seems that regular
-> playback has started. I also added a couple of new lines since I haven't
-> yet found out how to stop thunderbird from line-wrapping :(
-> 
-> Intel:
-> 
->            jackd-177754  [000] ....2 119172.988707:
-> xhci_ring_ep_doorbell: Ring doorbell for Slot 3 ep1out
->   irq/125-xhci_hc-169     [003] b...3 119172.991808: xhci_handle_event:
-> EVENT: TRB 000000010a3f2000 status 'Success' len 0 slot 3 ep 2 type
-> 'Transfer Event' flags e:c
-> 
->   irq/125-xhci_hc-169     [003] b...3 119172.991811:
-> xhci_handle_transfer: ISOC: Buffer 000000011730a000 length 48 TD size 0
-> intr 0 type 'Isoch' flags B:i:I:c:s:i:e:C
-> 
->   irq/125-xhci_hc-169     [003] b...3 119172.991813: xhci_inc_deq: ISOC
-> 000000001e4e95c7: enq 0x000000010a3f20f0(0x000000010a3f2000) deq
-> 0x000000010a3f2010(0x000000010a3f2000) segs 2 stream 0 bounce 200 cycle 1
-> 
->   irq/125-xhci_hc-169     [003] b...3 119172.991814: xhci_inc_deq: EVENT
-> 000000001a8ce64f: enq 0x00000001095d4000(0x00000001095d4000) deq
-> 0x00000001095d40c0(0x00000001095d4000) segs 2 stream 0 bounce 0 cycle 0
-> 
-> Renesas:
-> 
->            jackd-683428  [003] ....2 564371.947885:
-> xhci_ring_ep_doorbell: Ring doorbell for Slot 1 ep1out
->   irq/127-xhci_hc-173     [002] b...3 564371.948914: xhci_handle_event:
-> EVENT: TRB 0000000115b2d000 status 'Success' len 0 slot 1 ep 2 type
-> 'Transfer Event' flags e:C
-> 
->   irq/127-xhci_hc-173     [002] b...3 564371.948916:
-> xhci_handle_transfer: ISOC: Buffer 0000000153a6a800 length 48 TD size 0
-> intr 0 type 'Isoch' flags B:i:I:c:s:i:e:C
-> 
->   irq/127-xhci_hc-173     [002] b...3 564371.948920: xhci_inc_deq: ISOC
-> 0000000059645549: enq 0x0000000115b2d0f0(0x0000000115b2d000) deq
-> 0x0000000115b2d010(0x0000000115b2d000) segs 2 stream 0 bounce 200 cycle 1
-> 
->   irq/127-xhci_hc-173     [002] b...3 564371.948921: xhci_inc_deq: EVENT
-> 00000000ee8f0a5d: enq 0x000000010662e000(0x000000010662e000) deq
-> 0x000000010662e470(0x000000010662e000) segs 1 stream 0 bounce 0 cycle 1
-> 
-> The first difference is that in the first line of the respective traces
-> the 'Transfer Event' flags have a capital 'C' for the Renesas and a
-> lower case 'c' for the Intel controller.
-> 
-> The second difference is that the fourth line has 'segs 2' for the
-> Intel, but 'segs 1' for the Renesas controller.
-> 
-> A third difference is that the fourth line ends with 'cycle 0' in the
-> Intel case and 'cycle 1' in the Renesas case.
-> 
-> I suppose these differences are mostly harmless?
 
-Should be harmless, the cycle bit and capital 'C' changes each time the
-ringbuffer wraps around.
-This is how TRB consumers/producers keep track of where we are in the ring.
 
-segs 1 vs 2 just tells that we have allocated 2 segments for *Intel host
-event ringbuffer while only one for Renesas.
+On 8/27/24 1:31 PM, Mathias Nyman wrote:
+> Should be harmless, the cycle bit and capital 'C' changes each time the
+> ringbuffer wraps around.
+> This is how TRB consumers/producers keep track of where we are in the ri=
+ng.
+>
+> segs 1 vs 2 just tells that we have allocated 2 segments for *Intel host
+> event ringbuffer while only one for Renesas.
 
-Thanks
-Mathias
+OK, thanks for that explanation. I uploaded the full Intel controller
+trace here (curl'able link):
 
+https://uni-bielefeld.sciebo.de/s/0O4XIzW529sKYQM/download
+
+And here is the Renesas trace:
+
+https://uni-bielefeld.sciebo.de/s/jB4qqFL0okPlYwN/download
+
+Another difference which I find maybe more interesting then. If you
+scroll down to where the steady state has been reached, e.g. timestamp
+119173.008004 for the Intel trace and timestamp 564371.959089 for the
+Renesas trace, then there are always 8 xhci_handle_transfer calls for
+TDs of size 48 and 8 queue_trb calls between doorbell rings for the
+Renesas controller, but for the Intel controller it looks different:
+There are also always 8 xhci_queue_trb calls, but either 7 or 9
+xhci_handle_transfer calls. This is quite odd, no?
+
+Kind
 
