@@ -1,142 +1,127 @@
-Return-Path: <linux-usb+bounces-14159-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14160-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FF8B95FFC0
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 05:26:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6B8596012B
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 07:50:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4548B2100A
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 03:26:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62D5928330C
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 05:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D21D1AAD7;
-	Tue, 27 Aug 2024 03:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E746F12E1C2;
+	Tue, 27 Aug 2024 05:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VOn1wGVY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VRrrEHZm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F9517D2;
-	Tue, 27 Aug 2024 03:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EE6C13D;
+	Tue, 27 Aug 2024 05:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724729166; cv=none; b=qrAys8ux8SnSqxPfv4GU5SzORiNzh/k2wCQsdu6K7YUSl8QncdTcn0y33YGDNqZ1k0XJi9FY+C47U/9QWwtQ63z3QK7sWu2bfDxUj4IuHvKuAy0D2+9T664cUDBKXfXTcQMQjV9wCnn1gk/UfO69v1t66PMNW4CkBQMJtQLPu9g=
+	t=1724737835; cv=none; b=VT3pIrOM3WV1BN/+pnK5+7slhg6+Dj9VzUij1vcYS/0nVEdYr6wPOKrsB5Eh08QbBbGH+Zvscfd3vvXfru3mzEDfI0ypr5046ax6zPLjnqAgNlvCvorowmpHGuN1O0gMUaN0Plg9ve+68QC4OeIDXoSVBfuG/HxD8bojqmKzDVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724729166; c=relaxed/simple;
-	bh=P3O3alY1dOWsnBgRxMhJRgQyWOYsqQUpM59bPHtbPjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7+Ytuv4yUWsvlgLUBH6PP5wXyzoOkr2KpzQGctpT8UlX3OMBppUxD9PejkgQutE15G4zOHhw+OJs4TX9yBWIgGQb2P1VTL6js+XFdNu1+w44uDXWPgBOcie9uBnCz2SvCNZwJ5ofjSzRMrlcfqL/fZyVYWqswEpS7pSgroRuF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VOn1wGVY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C1BC8B7A9;
-	Tue, 27 Aug 2024 03:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724729166;
-	bh=P3O3alY1dOWsnBgRxMhJRgQyWOYsqQUpM59bPHtbPjc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VOn1wGVYWxDe/+cBrO7rnjlhZ4SckN/0/Weo/9m7YtiJc5WIsv8XnimZjLrwczA0R
-	 J9JjajHqHP56SId9uRHq/KwbOfwaSH1+mFuyZXWdiM9mJk+GtX1CG58p3y+cvwO+0w
-	 GLCiZypGUmm9XNayBpWahGBM7w6O1e7KjOS0AucLr3RZZJpugZfv+BkhCM/uXJUtSL
-	 rdW/+sSUU6jh6/PLJ3TyTvebP6A6AtXe4Ek4lLpDZMG2R/uGRWM+L+iuWnj69TmX2X
-	 v9SQriQJbAK8qNWcEYag6uH5urWlzesH3Iy5oaqHZ1mltRXDd4UH2+TEqcO0iv6SGi
-	 bMfz8sUI7D5HA==
-Date: Tue, 27 Aug 2024 03:25:58 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Stephen Boyd <swboyd@chromium.org>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev, devicetree@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Pin-yen Lin <treapking@chromium.org>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Benson Leung <bleung@chromium.org>,
-	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-	David Airlie <airlied@gmail.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	dri-devel@lists.freedesktop.org,
-	Guenter Roeck <groeck@chromium.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Lee Jones <lee@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>, linux-acpi@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v3 15/17] platform/chrome: cros_ec_typec: Add support for
- signaling DP HPD via drm_bridge
-Message-ID: <Zs1HRtTWlxFdSNdJ@google.com>
-References: <20240819223834.2049862-1-swboyd@chromium.org>
- <20240819223834.2049862-16-swboyd@chromium.org>
- <ZsdMoRpwv5twOwqx@tzungbi-laptop>
- <CAE-0n50MVaU2dmRLdLVFWT9KWPO_BK-L7eEqGRSb8TKm1KtPNQ@mail.gmail.com>
+	s=arc-20240116; t=1724737835; c=relaxed/simple;
+	bh=Id5ibrNXsxdWUWMoeaWn5ewrkhVAGe6v0pmUZe73mWQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=npWGy73MWWLyu1XUxucl9f/eOGNS2BlhEtI63ZnXOe0r6J5RGdSadBEW+vGQ5HiQtf2bUDeax5CwnimEYenfygKwOU21MbExk5Q98Q7/kbxx9/os2RpAnmAfsciKZPPYtv0mpJ5nMJntIrw1uzoF7mkJEFKaPBazqeQK0JWSCBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VRrrEHZm; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47QJGdRh001576;
+	Tue, 27 Aug 2024 05:50:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=UQ3fXOtrIT786AaZns6SDYL5Hql1H9mlHZ+MPHuXOFY=; b=VR
+	rrEHZm3e/++6c+VYW8asYcQFgN9HtjJzg2zWd4FkftQZDeP9FGxdoyxKY0n5F1Xz
+	Jek/AlraKgeiV4LWUe9SpbCJgXREnLtIuUBnH4K0rg/6/+CGe9rjf5olkbweZcxD
+	e6/9Q+0r2uv+DIVXxNknreXecKJus1px/Ujv1SOHq+edPVaFok6yhL/mLm91tJmh
+	DWSieaGHt47d8H896Y3waXCGPshDzCRIY0p5oiEFyr/9/HGeLMdxgi3j7AfGIN4o
+	I3Bo5Ui2bW1hpJX+l82+tAafSIViE7iNtrhuCFulOECMGstq4lTWu1mQzGO3OM2S
+	8FIyj4qEvXz9mfEduu8w==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4179anwvks-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Aug 2024 05:50:25 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47R5oEu8020538
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Aug 2024 05:50:14 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 26 Aug 2024 22:50:06 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Jing Leng <jleng@ambarella.com>, Felipe Balbi
+	<balbi@kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>
+CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar <quic_akakum@quicinc.com>
+Subject: [PATCH] usb: dwc3: gadget: Fix TX FIFO size for HS ISOC endpoints
+Date: Tue, 27 Aug 2024 11:19:56 +0530
+Message-ID: <20240827054956.28241-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n50MVaU2dmRLdLVFWT9KWPO_BK-L7eEqGRSb8TKm1KtPNQ@mail.gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: a2S5Bfn-clyQKzQbQR3jugW-HAeVuRlm
+X-Proofpoint-ORIG-GUID: a2S5Bfn-clyQKzQbQR3jugW-HAeVuRlm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-27_04,2024-08-26_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ phishscore=0 suspectscore=0 mlxlogscore=669 clxscore=1011 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408270042
 
-On Fri, Aug 23, 2024 at 01:47:23PM -0700, Stephen Boyd wrote:
-> Quoting Tzung-Bi Shih (2024-08-22 07:35:13)
-> > On Mon, Aug 19, 2024 at 03:38:29PM -0700, Stephen Boyd wrote:
-> > > +struct cros_typec_dp_bridge {
-> > > +     struct cros_typec_data *typec_data;
-> > > +     struct drm_dp_typec_bridge_dev *dev;
-> > > +};
-> >
-> > It looks like structs are all defined in cros_ec_typec.h.  I think this struct
-> > definition can be also moved there.
-> 
-> I put it here because it wasn't used by any other driver. Maybe I can
-> skip the entire struct though and add what I need directly to 'struct
-> cros_typec_data'.
+Use 2K TX FIFO size for low-resolution UVC cameras to support the
+maximum possible UVC instances. Restrict 2K TX FIFO size based on
+the minimum maxburst required to run low-resolution UVC cameras.
 
-I see.
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-* struct cros_typec_altmode_node, used by cros_ec_typec.c.
-* struct cros_typec_data, used by cros_ec_typec.c and cros_typec_vdm.c.
-* struct cros_typec_port, used by cros_ec_typec.c and cros_typec_vdm.c.
-  cros_typec_switch.c has another struct cros_typec_port.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89fc690fdf34..f342ccda6705 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -788,6 +788,10 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+ 		num_fifos = dwc->tx_fifo_resize_max_num;
+ 
++	if (dep->endpoint.maxburst <= 1 &&
++	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
++		num_fifos = 2;
++
+ 	/* FIFO size for a single buffer */
+ 	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
+ 
+-- 
+2.17.1
 
-To simplify, I'm not sure whether we should merge cros_ec_typec.h,
-cros_typec_vdm.c, and cros_typec_vdm.h into cros_ec_typec.c.
-
-Back to struct cros_typec_dp_bridge, I think it's fine to keep it as is.
-
-> 
-> >
-> > > diff --git a/drivers/platform/chrome/cros_ec_typec.h b/drivers/platform/chrome/cros_ec_typec.h
-> > > index deda180a646f..73d300427140 100644
-> > > --- a/drivers/platform/chrome/cros_ec_typec.h
-> > > +++ b/drivers/platform/chrome/cros_ec_typec.h
-> > > @@ -27,6 +27,8 @@ struct cros_typec_altmode_node {
-> > >       struct list_head list;
-> > >  };
-> > >
-> > > +struct cros_typec_dp_bridge;
-> >
-> > If the struct definition moves here, it doesn't need to declare forward.
-> 
-> But then we have to forward declare 'struct cros_typec_data'? There's no
-> escape.
-
-I see.
 
