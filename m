@@ -1,214 +1,99 @@
-Return-Path: <linux-usb+bounces-14200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14201-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73749961822
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 21:44:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33057961873
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 22:20:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB8D1B22504
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 19:44:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2E1D1F24CE0
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2024 20:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA441D31B2;
-	Tue, 27 Aug 2024 19:44:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DC4B1D31B5;
+	Tue, 27 Aug 2024 20:20:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FVXWTM4u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rsmyq5gH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4E5132132;
-	Tue, 27 Aug 2024 19:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FEC1D318B
+	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 20:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724787855; cv=none; b=FlUwrIaRDEMoV5bs2uFAeVVXPypGOkaxdAVGsyNMRjFWBioH3c3MnE3UDKJ3BYedPMrJNs9+oGDZd6QHUvxcPAXLtxiH68V1DhyzlE8phzij61ATJumzoZBBTqV9H9Q92vDw3OvCRfWhsZVW8A1KuAOIO9C7kuL4T4X2z21oTHY=
+	t=1724790044; cv=none; b=cTvnLl/5PL6QI4OOUKiOE7oYdjVfvRrIw9P8MIajrFWn3uROk7vwM/+brqJTcgUxBq0vV4eeTjtT/ov9ySuZKL4yFN2nPnzmNofd96p0LoOKy4oLp7ozjrs1OENUApuX20DSJrRWKkH8a6hI+XP5HUgBsNjTrzbEvytyw74byAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724787855; c=relaxed/simple;
-	bh=cWcqou7ktN+DCizj7qq+pkUDcuFVknbvf6n2uiD2GNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=KcVmg1NAobmRj93A7QgikQRG/Z048o/BbBxv2nB6Nzr5r4SrkYlmiTwLtD9iYAC8aq1fxzUwYOAgw2lZxOfCzphyuZjgh4x1aoYaR5xdlFxsDO6YAt/Km7/G9UQ0E31rpNUXQejEE8EVhFzMWliCtwnN37+nNxTeysBgCBy4LIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FVXWTM4u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58737C4DE02;
-	Tue, 27 Aug 2024 19:44:14 +0000 (UTC)
+	s=arc-20240116; t=1724790044; c=relaxed/simple;
+	bh=V4U21VPr1rTxOckbkq4QnNpdOHVqFEx9Z5lqocCVKdA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Rqx0eY2AVBSL5/bTrR2skMrDMZIzxDg7TsCgHro4y6YJxVc0SIr3qbegZpnibKd+w0/A7GrTN9wrqdPI2TAI6YZuQMOq9fyRleHjjrG2AOgTbhZqdDEvlHhspCfo1V2zIghD79HkM5SnCzgdUbToC1RVkBKA9rGEiKsD/fBpxP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rsmyq5gH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 14136C4AF0F
+	for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2024 20:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724787854;
-	bh=cWcqou7ktN+DCizj7qq+pkUDcuFVknbvf6n2uiD2GNE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=FVXWTM4u9sZttTcUE+5fzLJWeHh+0hh9XefscDDXkwF19uJgVsH0qQIqVzOX/zrI8
-	 4tjVXH6JD7RkSpe8ijrhQURQntHnrzeG0aYbS5sE7skHIdMg00Nb+j5HsOIMSR2K0m
-	 pvNh6aL8fqVR3B5jgl9KtisTuXDEOd7XP77zbntZkEwsyFbAoM7DGzHAN+kzE6C/mv
-	 8C4P7YpUlsNDzHtgIB4Qy+nipzbzvK+UBMciZYt8sjY7F90azJjbIWLLX5hWapNYsU
-	 ZTGcZAa1SxNpbPEgAlMtufN7zUJaGRXpbDXeaClQgqvu+kTR2AUSSw9+QN9r7eGQo2
-	 dNFqB9kIg05uw==
-Date: Tue, 27 Aug 2024 14:44:12 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Mario Limonciello <superm1@kernel.org>, Gary Li <Gary.Li@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	"open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	Daniel Drake <drake@endlessos.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Duc Dang <ducdang@google.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v5 2/5] PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in
- pci_dev_wait()
-Message-ID: <20240827194412.GA526339@bhelgaas>
+	s=k20201202; t=1724790044;
+	bh=V4U21VPr1rTxOckbkq4QnNpdOHVqFEx9Z5lqocCVKdA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Rsmyq5gHcRPJ02bCBSQamXFFBRjXuSSubNINbjMZ2qTcsYE6/Fa2Pm/o39FDzQOW6
+	 jCBeEpU8c4Zguplw+2+GzYHJKAU86u3w5mcThVTdiGGEdTuDPi7G/1ij5vRd5cv8NP
+	 gl5NxPCwInX70tFGStVrv9dyIdRjp9F9jb8XtAJtafx4Ql8MgUh9Mg7DhSS3UqaYES
+	 dJZjfAwVReLRFV4mdiUAcJV8CNvXbCqNLrCwBqHvIUdf7SKLa1cnivqJG++TTa3FCC
+	 7nmJ2n90b5CG+x69Xe8WWUqNr1g2HAGsEKitwhu1Q6sr25W/WLwjScFHPkalwADvU3
+	 iAQadE24ege7Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 09824C53BC0; Tue, 27 Aug 2024 20:20:44 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
+Date: Tue, 27 Aug 2024 20:20:43 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: maggu2810@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219198-208809-tX04dXdcha@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
+References: <bug-219198-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f43d44f2-004d-4b67-8db9-2f474c3e6d30@amd.com>
 
-[+cc Rafael for ACPI power transition from D3cold to D0 delay]
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
 
-On Mon, Aug 26, 2024 at 02:16:34PM -0500, Mario Limonciello wrote:
-> On 8/23/2024 14:54, Bjorn Helgaas wrote:
-> > On Fri, Aug 23, 2024 at 10:40:20AM -0500, Mario Limonciello wrote:
-> > > If a dock is plugged in at the same time as autosuspend delay
-> > > then this can cause malfunctions in the USB4 stack. This happens
-> > > because the device is still in D3cold at the time that the PCI
-> > > core handed control back to the USB4 stack.
-> ...
+--- Comment #14 from Markus Rathgeb (maggu2810@gmail.com) ---
+I did a git checkout aba9753c0677e860f982edff98c7fe5a2b97758c (the commit id
+before 04d17331ca33744e1426fdeee7ba5e975c4b2239).
+It seems to trigger the same error.
 
-> > > A device that has gone through a reset may return a value in
-> > > PCI_COMMAND but that doesn't mean it's finished transitioning to
-> > > D0.  For devices that support power management explicitly check
-> > > PCI_PM_CTRL on everything but system resume to ensure the
-> > > transition happened.
-> ...
+So, I already tried a some different kernel builds / commit IDs and the RCs.
+They all result into non recognized USB devices.
+But additional behaviour differs. On some kernels if the error is hit, the
+system is not usable anymore as the mouse does not react for seconds. Other
+ones shows kernel dumps, other ones only non working USB...
 
-> > > Devices that don't support power management and system resume
-> > > will continue to use PCI_COMMAND.
+I still try to find the commit / merge that stops USB first.
 
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -1309,21 +1309,33 @@ static int pci_dev_wait(struct pci_dev *dev, enum pci_reset_type reset_type, int
-> > >   	 * the read (except when CRS SV is enabled and the read was for the
-> > >   	 * Vendor ID; in that case it synthesizes 0x0001 data).
-> > >   	 *
-> > > -	 * Wait for the device to return a non-CRS completion.  Read the
-> > > -	 * Command register instead of Vendor ID so we don't have to
-> > > -	 * contend with the CRS SV value.
-> > > +	 * Wait for the device to return a non-CRS completion.  On devices
-> > > +	 * that support PM control and on waits that aren't part of system
-> > > +	 * resume read the PM control register to ensure the device has
-> > > +	 * transitioned to D0.  On devices that don't support PM control,
-> > > +	 * or during system resume read the command register to instead of
-> > > +	 * Vendor ID so we don't have to contend with the CRS SV value.
-> > >   	 */
-> > >   	for (;;) {
-> > > -		u32 id;
-> > > -
-> > >   		if (pci_dev_is_disconnected(dev)) {
-> > >   			pci_dbg(dev, "disconnected; not waiting\n");
-> > >   			return -ENOTTY;
-> > >   		}
-> > > -		pci_read_config_dword(dev, PCI_COMMAND, &id);
-> > > -		if (!PCI_POSSIBLE_ERROR(id))
-> > > -			break;
-> > > +		if (dev->pm_cap && reset_type != PCI_DEV_WAIT_RESUME) {
-> > > +			u16 pmcsr;
-> > > +
-> > > +			pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > > +			if (!PCI_POSSIBLE_ERROR(pmcsr) &&
-> > > +			    (pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D0)
-> > > +				break;
-> > > +		} else {
-> > > +			u32 id;
-> > > +
-> > > +			pci_read_config_dword(dev, PCI_COMMAND, &id);
-> > > +			if (!PCI_POSSIBLE_ERROR(id))
-> > > +				break;
-> > > +		}
-> > 
-> > What is the rationale behind using PCI_PM_CTRL in some cases and
-> > PCI_COMMAND in others?
-> 
-> We saw a deadlock during resume from suspend when PCI_PM_CTRL was used for
-> all cases that supported dev->pm_cap.
-> 
-> > Is there some spec language we can cite for
-> > this?
-> 
-> Perhaps it being a "cold reset" during resume?
-> 
-> > IIUC, pci_dev_wait() waits for a device to be ready after a reset
-> > (FLR, D3hot->D0 transition for devices where No_Soft_Reset is clear,
-> > DPC) and after power-up from D3cold (pci_pm_bridge_power_up_actions()).
-> > I think device readiness in all of these cases is covered by PCIe
-> > r6.0, sec 6.6.1.
-> ...
+--=20
+You may reply to this email to add a comment.
 
-> > If the Root Port above the device supports Configuration RRS
-> > Software Visibility, I think we probably should use that here
-> > instead of either PCI_COMMAND or PCI_PM_CTRL.
-> 
-> I did check and in this case the root port the USB4 routers are
-> connected to support this.
-> 
-> How do you think this should be done instead?
-> 
-> > SR-IOV VFs don't implement Vendor ID, which might complicate this
-> > a little.  But it niggles in my mind that there may be some other
-> > problem beyond that.  Maybe Alex remembers.
-> > 
-> > Anyway, if we meet the requirements of sec 6.6.1, the device
-> > should be ready to respond to config requests, and I assume that
-> > also means the device is in D0.
-> 
-> Within that section there is a quote to point out:
-> 
-> "
-> To allow components to perform internal initialization, system
-> software must wait a specified minimum period following exit from a
-> Conventional Reset of one or more devices before it is permitted to
-> issue Configuration Requests to those devices
-> "
-> 
-> In pci_power_up() I don't really see any hardcoded delays
-> specifically for this case of leaving D3cold. The PCI PM spec
-> specifies that it will take "Full context restore or boot latency".
-> I don't think it's reasonable to have NO delay.
-
-I agree, leaving D3cold means "applying power to the device", and PCIe
-r6.0, sec 6.6.1, says that's a Fundamental Reset:
-
-  A Fundamental Reset must occur following the application of power to
-  the component. This is called a Cold Reset.
-
-So we need a delay similar to what we do in
-pci_bridge_wait_for_secondary_bus().  I don't know whether that is
-supposed to happen somewhere on the ACPI side or in the PCI side, but
-my inclination would be the PCI side because the delay isn't really
-platform-specific, it's specified by the PCI specs, and the OS needs
-to manage the RRS Software Visibility retries and features like
-Readiness Notifications.
-
-pci_set_low_power_state() contains corresponding delays for putting
-devices in D1, D2, and D3hot.
-
-Maybe the D3cold -> D0 delays should be in
-platform_pci_set_power_state()?  I think pci_power_up() is the only
-caller that sets the state to D0, and it assumes the device is
-Configuration Ready when platform_pci_set_power_state() returns:
-
-  pci_power_up
-    platform_pci_set_power_state
-    pci_read_config_word(PCI_PM_CTRL)
-
-So I think we need basically the same delays and pci_dev_wait() stuff
-in this path.
-
-Bjorn
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
