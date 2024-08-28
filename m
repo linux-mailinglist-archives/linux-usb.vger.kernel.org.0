@@ -1,102 +1,125 @@
-Return-Path: <linux-usb+bounces-14247-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14248-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D053962F50
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 20:05:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8719F963090
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 20:59:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38601282F62
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 18:05:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 456F1281731
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 18:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C0581A76DA;
-	Wed, 28 Aug 2024 18:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC4C1AB53D;
+	Wed, 28 Aug 2024 18:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDJk4RIa"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="O0Xmz5bf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AC21A7067
-	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 18:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7071C1A76B2;
+	Wed, 28 Aug 2024 18:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724868310; cv=none; b=GBneDkrIbdc1qvB0vkQ5wM9+JFHFZ0p2XhtgNFr0gVb4KvecFtvwJE3YBgrVRlSpk/fipWGOUGzcfvkxwdaYSRBLytJsww/3EQRxWA9qZAye7c686orgdrsdcqAV3VazprjlnJFTWAUQnO02SDhhW8aPmzfdcDvwNeba/g6doBA=
+	t=1724871575; cv=none; b=uqPBi4JLNietbW8rQd6hpl7MGWBFEkILr0QjPsjj7JWPjBwDMg4/Y5qYk00X+WmMyiOSiMzwhXMxsHGVJ8YI6tDT8PW1f2kuBoLOQ4NqL1fOUDMruSnXWZmwdFEPEKXb/m9KKbNfOSb8koOrv/bS+EhS2kW9eDMlq5EqsDvc5G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724868310; c=relaxed/simple;
-	bh=jAn6TK1XUphkPHaWyO9sX4TeYZ1bT7XxEO9etJx+Maw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IS1VTY28Nor7xvHKECHEqQFRG3WTdi51DoxWh0KzB3VHtPdx2jmfqqBHDmHTdBkSqI1y9HEkudrB3C8xT6eVL8V7XYPmwB5T5kv5J8w3l1KIDT+25vcktSQdDrLhxGznFNuC7lLtHNn7Kzz+1aNiSIQH8DNS9qqliEqCW38TyaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDJk4RIa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02A40C4CEC1
-	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 18:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724868310;
-	bh=jAn6TK1XUphkPHaWyO9sX4TeYZ1bT7XxEO9etJx+Maw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=oDJk4RIaOO374I06UF94PbcITJafQaLWmf6bVS/d5jT+aeiaMFDLwzhsniL4e6Ozh
-	 UXYOeWZ6WIFXhVokRyGzjzWfsHq/Xeol3lb1reRix+i1RuHJyb6gTo+xtRQA6M4Kb1
-	 89Lj3GEdE1FJnmpWAZxMNMwqZKwVMp+qZFC5KV9+6gOyTZqTk8Bo56qWEgmgVSf40W
-	 Lu9nqXRsEKZKGHV5rgM0Nmi5xwSJVVlc/Tonnrs6G8istSeeUeNhjpCI3WMI4y6+Y2
-	 T9rxIOiC8TKVd6doqKrSh72Spbz/eVAjIr8QA+2PqNNQNB1v7wzOmUowvyOFpVfj0W
-	 z4Txx+r+JLNzg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EA4A5C53BC4; Wed, 28 Aug 2024 18:05:09 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
-Date: Wed, 28 Aug 2024 18:05:09 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: maggu2810@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219198-208809-hTMm8iMOOG@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
-References: <bug-219198-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1724871575; c=relaxed/simple;
+	bh=2oNMMsYsI+j+ejHVU5D5R1OZsviLXTfVtcjUTwfydlU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Jn+L7pLrQxr1p2TO3auViaZxf3bvq4byxodjve8czn7xQ2k1kYMxyMoHSTxT3qDT3DLYLT/cuNeH9at0WJQN+TSB8DGofY1VLn0R7uflNaMmCZ3YS1aIKnH7V4WHQ4yvmjE6R04FExu84/UXZ34017dFT9hCruB4WN+wVhmkCnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=O0Xmz5bf; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47SAiFvp020336;
+	Wed, 28 Aug 2024 18:59:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	X+bp9nEmFMTVmWQTMXToBGklbro1PYiI6dvNZl24hjw=; b=O0Xmz5bf0/grb8CI
+	bmXJR3TuhNpmeW4y21GNl1aEjQWl4aC+Zw12rl2gx9sHLwPb7UzoUi+A1JeaIMLb
+	rJ6isSaBm9Rl5FQdWhMYTdDmDF/n1f2uzeX/WySv7ubqzQXaZakKtu+xG28hZAya
+	qZubyj/54hHBgPJkUMf5boHQwa++N1WfMKVJzk9DFGVCTbvx8m+uhz0pWzYKXFPc
+	CXtqn48VSVLt1A+pBcpA/Gcelit/+bFyltIEJpusDE4/9/tHlGo7c5XfaMWNL2Ze
+	CUqHbpZ500s9jmP/u/1KKejrfapEoiLd7x84f/1mkz2Qm9YYtasGJavo6hOse+wN
+	uGNWIw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419puttu87-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Aug 2024 18:59:15 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47SIxEYk019455
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Aug 2024 18:59:14 GMT
+Received: from [10.110.100.101] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 28 Aug
+ 2024 11:59:13 -0700
+Message-ID: <d44634b7-1285-4771-b7e0-4e852224d13f@quicinc.com>
+Date: Wed, 28 Aug 2024 11:59:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v25 31/33] ALSA: usb-audio: Add USB offload route kcontrol
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <tiwai@suse.com>, <krzk+dt@kernel.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <robh@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
+References: <20240823200101.26755-1-quic_wcheng@quicinc.com>
+ <20240823200101.26755-32-quic_wcheng@quicinc.com>
+ <4149884a-7c60-40d8-848b-8876f16d6d7f@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <4149884a-7c60-40d8-848b-8876f16d6d7f@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: X3n_XKtTrJz3EB77-0EvdjKlg6OlyTSW
+X-Proofpoint-GUID: X3n_XKtTrJz3EB77-0EvdjKlg6OlyTSW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-28_08,2024-08-28_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=544 suspectscore=0 phishscore=0 spamscore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408280138
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
+Hi Pierre,
 
---- Comment #21 from Markus Rathgeb (maggu2810@gmail.com) ---
-Created attachment 306786
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306786&action=3Dedit
-kernel-6.10.0.f90584f4beb8+.txt
+On 8/26/2024 2:09 AM, Pierre-Louis Bossart wrote:
+>
+>> +config SND_USB_OFFLOAD_MIXER
+>> +	tristate "Qualcomm USB Audio Offload mixer control"
+>> +	help
+>> +	 Say Y to enable the Qualcomm USB audio offloading mixer controls.
+>> +	 This exposes an USB offload capable kcontrol to signal to
+>> +	 applications about which platform sound card can support USB
+>> +	 audio offload.  This can potentially be used to fetch further
+>> +	 information about the offloading status from the platform sound
+>> +	 card.
+> I would remove reference to Qualcomm for this Kconfig, all the code
+> seems generic to me? Probably a left-over from the previous version.
 
-Here the log of plug-in the dock, unplug it and plug it again for commit
-f90584f4beb84211c4d21b319cc13f391fe9f3c2
+Ah, yes will remove any vendor stuff.
 
-It is the commit that git bisect told me as the problematic one.
+Thanks
 
-Reading the git log, I wonder why git bisect did not try
-2b989ab9bc89b29dd4b5509408b8fa42337eda56
+Wesley Cheng
 
-For me it seems it is between the good and bad one and not tested.
-But the same author, so I assume he can judge better.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
