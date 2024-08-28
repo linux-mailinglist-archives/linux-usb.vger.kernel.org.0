@@ -1,139 +1,107 @@
-Return-Path: <linux-usb+bounces-14232-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14233-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B14096263D
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 13:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 99CD596288D
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 15:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3E221F23D53
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 11:44:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F70C1F2331C
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 13:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF2617166E;
-	Wed, 28 Aug 2024 11:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB0BB17BED6;
+	Wed, 28 Aug 2024 13:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="r+1CcVZZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZLbfBb6X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE8516C869;
-	Wed, 28 Aug 2024 11:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C819316BE1B
+	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 13:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724845461; cv=none; b=mL7HS0jiS3PZaGM7L1a6mSiLJYSyI/e4aFoDyCsiCCUS6jmATZPrmkmcs1K6wRFQxvS0fHtT3J3OlxYqR/Mh5fHkThEx76NdQ/0DxkepMj0F64wVYLTFDJIeV4iSGzDAK2YD1kYasoaR7iqhr8/14OmSbgrL18f+x98yWtf1ydI=
+	t=1724851507; cv=none; b=EwWO6y4F03HWvxCdRO9Em2Ww0IU5Ge8LKTGz+ENN6uIFb8aumpV8KY8r6EQv75qwv5OAvmavXgYw3yMTYedImAvckw5qqq2vgqggZrPWOsXRanULQm9MeebgSaKE2XYm72dy+PHpmOgFiRG1dkl3csG767eJce37Qo3szC5pYI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724845461; c=relaxed/simple;
-	bh=gxHxrfYxqX1u3uuADVLNaJEbVWOXzW5afjkBypbztBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tj2MB18EYpMOt7fc0C+SU6Q2fRA5G6JbVcuoQJAagemsbc0QaE63XKiiULoY9aHg7ydgBYPxMsrrk0pr7r1ukSCypaQpwzRMhrrazc1CERzUSC/HCInMVUI1bC0BNUmhCBJE4JKsugvtGBg9n5IFWlrB3x+u+Tfpy2sibesGZXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=r+1CcVZZ; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 6776B21356;
-	Wed, 28 Aug 2024 13:44:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1724845451;
-	bh=rPl7PStARyUjVVEgqBNeslu57i2IKQ9Gm0DF8M4LKvs=; h=From:To:Subject;
-	b=r+1CcVZZYG1ahMnjDBwJtC7wzUyvDQB/sXMkV3o2Qo7h0OJ0NwdpqNNVQah4WDs69
-	 LxysegptqkdT0C0cjyxB/9DT8dg/UFzwEnzzMfQ0gYb78/nhbgMKKt74mu4u1K5x8N
-	 oCSoMOE6SdIAqMTSsKYAHOlRDlx0COjfZV+0ZVtgvrMYJtK4HJqx8CR3THHqp+wxdH
-	 Bgh6XGHVBSIIReiRWqDb6RN+WlogjEOIqF5Do62uqInWoAt7NaAdOo1SjGTKTLMplG
-	 +uWI7XcY41sLOdKQbLcxvA/1nq9Ox6TIrM7GU4PMp9n/OFBzgzQQ5uceYGx9LW1+zY
-	 59ZlSmgeobjlw==
-Date: Wed, 28 Aug 2024 13:44:06 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Parth Pancholi <parth105105@gmail.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Parth Pancholi <parth.pancholi@toradex.com>
-Subject: Re: [PATCH] usb: typec: tcpci: support edge irq
-Message-ID: <20240828114406.GA27965@francesco-nb>
-References: <20240828112058.479753-1-parth105105@gmail.com>
+	s=arc-20240116; t=1724851507; c=relaxed/simple;
+	bh=LPcxLvR8eoW3P3pMBuUQSAZQMzI2AW+DLFYBha4bpsc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=J0AjR5IPDF3NoB/bDjFS+0/tLPPW6jFWOjZyrpjv48a8Ihf1eiUFOp3uGCD/2pwFhLk69Kh3wmTebFvFsp/gJ0qNQK2PeW8SRQbFa9bYN7qJE5XdyGfaUEwI2MsJSTIwWPyR3I8bQ/HMhfxDmmB69VdANF3+xEZYtBEm9CcePjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZLbfBb6X; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f401c20b56so5694261fa.0
+        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 06:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724851504; x=1725456304; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oqap4Ee1FkAELRBcADX4oNJwSNbzXvAn4Ie6soOaHyQ=;
+        b=ZLbfBb6X3WOWqvQ4h/Hd2j8yQewiou+RSBKepFGzBqgS5a+nbm2fI7DszH0JT9HSk5
+         Ls7Q843gddk+lETIvnRKWCejKEA8IRdCj0VTIN5k3GzKEvC52QGQSagosJOz2jpAcuF8
+         MzaJ68vih0o5z/lXd3HaMZtE0Wbo2HGGdbK+jf+YIY0N+rqqG2L7xkTa/Ur1woitCqVK
+         FjRXahtVu/PllniDgLJrGyNsYgS5c2/Lvn+SbOTc+vxO1tP1sCuDq/rAx++jt/ch6EtK
+         +u2IWhw1oEzoKegw9lY06yjDHQD9Zng7T74zLNcpxOdLWj1AObP0c2v7kvzARvaDFfOv
+         8AnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724851504; x=1725456304;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oqap4Ee1FkAELRBcADX4oNJwSNbzXvAn4Ie6soOaHyQ=;
+        b=meDFrl+c5n8Hzlxd5098HBGYZcBjBIwGSxMoPiSRjMO5QDInVKeZEZuOLTaqZJat4+
+         tS3zXaRGCg9vGeXuzDAQJjuUSpo2K/0e3Jo2U4EffKEo4SEo5c/KrwxsInRLRceZdmPt
+         pwSB9V4bv02B8bu1DapNaACij0dfYsNC4pQfSHC4Hoso6dNQjr/Qw7p9HjD4paAL4KMK
+         sTzXEcdq/ConnK5xoLUZluoNgpI7QN+j/xjqu8UGV5cYdJa9/2izO8IVPrMCYxIBS4Ia
+         77uEJ+49JnEsYxnnCOhf1am7+zmNaSyO3+WRn6++raWzjB0zlYajjZyG2ENfVQHjgDA1
+         GBpg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtJEV2HywVkA9T2jwb7Vetk8Ec7fDnDebU7IRto4kWqvuafML8HpvLSVATT/1a0ZCZjXOdKk56QPc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfFluOT4/YmNzDiEpPlaKJuIzSDb90Yey7Ibd2Zd/jPnI56rn6
+	JTe5C8KtOv+Dicjb1w5kLGj3TfxBLFST3G4VLJ8EcijhRDXqqXpfnVPJOg==
+X-Google-Smtp-Source: AGHT+IF7eiFKu5fIeNSMxLlKZvq0NbIAxRXZcTyynAHSYbfR1AEBmPv820iOIU+cyW+jUP2e76m+NA==
+X-Received: by 2002:a2e:9fc2:0:b0:2ef:334e:7c36 with SMTP id 38308e7fff4ca-2f52324a4aamr8232941fa.6.1724851503330;
+        Wed, 28 Aug 2024 06:25:03 -0700 (PDT)
+Received: from foxbook (bgu114.neoplus.adsl.tpnet.pl. [83.28.84.114])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f4047a695bsm19380451fa.18.2024.08.28.06.25.02
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 28 Aug 2024 06:25:03 -0700 (PDT)
+Date: Wed, 28 Aug 2024 15:24:58 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: FPS <mista.tapas@gmx.net>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/9] Various xhci fixes and improvements
+Message-ID: <20240828152458.06188919@foxbook>
+In-Reply-To: <60d7c5a2-bbc0-4c08-8973-5b65b9695400@gmx.net>
+References: <20240827194625.61be5733@foxbook>
+	<60d7c5a2-bbc0-4c08-8973-5b65b9695400@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240828112058.479753-1-parth105105@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 28, 2024 at 01:20:58PM +0200, Parth Pancholi wrote:
-> From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-> 
-> TCPCI USB PHY - PTN5110 could be used with SOCs that only support
-> the edge-triggered GPIO interrupts such as TI's K3 device AM69.
-> Move the interrupt configuration to the firmware which would
-> allow to accommodate edge triggered interrupts for such SOCs.
-> In order to support the edge interrupts, register irq line in advance
-> and keep track of occurrence during port registering.
-> 
-> When the edge interrupts are used, it is observed that some of the
-> interrupts are missed when tcpci_irq() is serving the current
-> interrupt. Therefore, check the status register at the end of
-> tcpci_irq() and re-run the function if the status is not clear
-> i.e. pending interrupt.
-> 
-> Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-> Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 32 +++++++++++++++++++++++---------
->  1 file changed, 23 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index a2651a2a7f2e..4537c1d97e8f 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-...
+> Are you sure these are against 6.11-rc5? Or did I screw up on my side?
+Absolutely for 6.11-rc5 (but -rc4 works too and -rc6 likely will).
 
-> @@ -915,18 +923,24 @@ static int tcpci_probe(struct i2c_client *client)
->  
->  	chip->data.set_orientation = err;
->  
-> -	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
-> -	if (IS_ERR(chip->tcpci))
-> -		return PTR_ERR(chip->tcpci);
-> -
->  	err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
->  					_tcpci_irq,
-> -					IRQF_SHARED | IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> +					IRQF_SHARED | IRQF_ONESHOT,
->  					dev_name(&client->dev), chip);
-> -	if (err < 0) {
-> -		tcpci_unregister_port(chip->tcpci);
-> +	if (err < 0)
->  		return err;
-> -	}
-> +
-> +	/*
-> +	 * Disable irq while registering port. If irq is configured as an edge
-> +	 * irq this allow to keep track and process the irq as soon as it is enabled.
-> +	 */
-> +	disable_irq(client->irq);
-> +
-> +	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
-> +	if (IS_ERR(chip->tcpci))
-> +		return PTR_ERR(chip->tcpci);
-> +
-> +	enable_irq(client->irq);
+Please try again without --dry-run, some of them will only apply on top
+of earlier ones because they touch the same lines. If that doesn't work
+then I may have screwed up mailing them.
 
-If I undestand this correctly, if tcpci_register_port() fails the irq
-stays disabled.
+BTW, #3 is logically dependent on #2, but the others could be reordered
+at will IIRC.
 
-disable_irq(client->irq);
-chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
-enable_irq(client->irq);
+As for your audio case, #4 is probably the only potentially interesting
+one, but it didn't help on my sluggish ASMedia host. It should, however, 
+at least eliminate the "WARN Event TRB with no TDs queued" on USB 3.1
+and newer hosts.
 
-return PTR_ERR_OR_ZERO(chip->tcpci);
+But the root cause of those audio issues is likely elsewhere.
 
-maybe?
-
-Francesco
-
+Regards,
+Michal
 
