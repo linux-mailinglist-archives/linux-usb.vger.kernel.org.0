@@ -1,200 +1,143 @@
-Return-Path: <linux-usb+bounces-14239-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14240-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE233962AE0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 16:54:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 878CA962B01
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 17:02:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AB33283B08
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 14:54:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440E92853CD
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 15:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A731A072B;
-	Wed, 28 Aug 2024 14:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24C619AD4F;
+	Wed, 28 Aug 2024 15:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="asXgWhRm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ifNgOz8h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D34919DF40
-	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 14:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B957617C9AF
+	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 15:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724856864; cv=none; b=SUMoVRekEajyfscrLQU8sOCdNhXUa7+jBpl3dZ9tm6Wc2tsQXEqadS15ksbdGYMFZ79AXBxKKgCoJiXasyOUm/chEXD2Wi4aJZfHRsZHFZhh7iW/TOCiqdrEcmbGs7P88panGdhS85g0U3AryxAmevS9SbgBglSjTKZO1HflRz4=
+	t=1724857339; cv=none; b=pfWo9jANJxRw//WCUGfYV0u5ZObN6Kvv86Osor0yDmRC2CK4FKYQRtpsFfBotfC62ju63BaroGngHvqzTDE9aY31kQkWpmpoK2Z2SCbyvy4LXlpqGR5V5tdEqc/TbFtWI8mT+X4glcyJ06bspWyLSKWkYDq80aOTBE2JOHablNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724856864; c=relaxed/simple;
-	bh=8hzPD33CbZBcgUSyyLMRU9NbMcPOpuPpikLc8tiVvzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XJiNnYlrgsiL+suyGlHzJMWfpYzwBVdLpQVW2W33a9aq8O06MFDSLcuDB/SVWFogJzfYT32bBqv9Urrvkb4TO3f2hzit5SMP5sKTzZ8lRr1Y6XmHGk/38qotE8bpq1X/xp14CPXgT+zhjNhHyX8CAvDXnvwN6KozAZ8r/DykuB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=asXgWhRm; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6bf6dedbfe1so38504996d6.3
-        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 07:54:22 -0700 (PDT)
+	s=arc-20240116; t=1724857339; c=relaxed/simple;
+	bh=fdmoeZpmRwxguM4S7sonzTEWCvDhpI1PW01QmtVmt9s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O/ZY+MX7z8CVeqLGC3jj3h6/RMg26fiSP0Wa6vh/n41XKcbseA+JPFeIhz3FQ21pLToLNilr+zb2are6qz2IqS7j2mJCHJPVoMcBmgjNcG7KTSwOuy3mmA9TWWhc8arP94O+V83RB5jFG8lAhsP9jbDC6wtRJG3CiWPSHYWKJSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ifNgOz8h; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53346132365so8188829e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 08:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1724856862; x=1725461662; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6nhujPZHs27SEAYURkVKz04PPXoynmdVoaZNb24tNBs=;
-        b=asXgWhRmbGIBKGmjQuKCL3mNteYxW7dGvol24DrsPWncuW34mmfUF9XJtl75ygA3Wg
-         v+5VnReLQzOIYQmr7kMC5m9X837rJFcJnb8ehcXCEt4DwV2D78xNQ2vUKupZXDhQhS7g
-         K7+cmCxvTBr2UKwBxMJ6UbGJdZAvUUeaXw6/73wqa2f8gCCXhNPuyo/YhbXll7Se9+Vz
-         XwuoQ4fTB1bJq03I3UaEPaXStG0SznXOyGH8VviBIT8vFbHhRKKYNKTfM4UTFoeS6Rui
-         n5QngeOE9AH4hF6KdxEmUw3q2/UtXEVYaAnsYmldEfUS0LA0cShSr0snLO3ZrMsTLaSD
-         i8Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724856862; x=1725461662;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1724857336; x=1725462136; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6nhujPZHs27SEAYURkVKz04PPXoynmdVoaZNb24tNBs=;
-        b=BYTIDm7L0lzHFc6it9dBlm3MEupy8TjoH/MBhrxTUbxmhC5+NaC0QiJ+ulQJxopHLr
-         2uJ2PZcniCC0yb5OPoyAfKc8fle3uK552SdtzW2hkIHqbBtjLbm4KPmotyT8ji9ZR+25
-         8NvxpG94mMMhATxAeltld/5OQCBFLw5pdJ/DPvT20RYOEJXwzKkXoMOYF+f46iF8EeDd
-         1ffE7Y0UMqskAjD8zZ4CamNSZReAT5worjYahIYSsYNW9U8m7D7xuj5SNJk5vkI4Q4G6
-         u7lBK4E/KpV9yiEI8fVOaYlWwd3O0R3Gz+cnYX/HQY8tAIXVqtaZ7KgXhv5MmJmLVe/a
-         7Tww==
-X-Forwarded-Encrypted: i=1; AJvYcCX4mIPvR5Tca70/8oyBAzgXAbQAcoKhH4RgSAih6bqQYlzXcp9HvRKIdbZLi9Do3mtiKuJmq/NzVqs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5iEoA9Y4/kBddjD9LcADfQuxYaouofpkYmNxqkGCEUBDKWfHT
-	naK1+HOyLUjq4m/IWylb1nh79yXFyzYSnOY8EcEvgu0RPONjJXqzFKvMYQVfqQ==
-X-Google-Smtp-Source: AGHT+IG7YLFsUh+1XQ6LBSM1kv2m/SlRXCAKyBwLLTF7t7Vy4VG2teF/Z8KUcHJAFgEVRXsEq9GITA==
-X-Received: by 2002:a05:6214:2f90:b0:6c1:6b00:6e90 with SMTP id 6a1803df08f44-6c3362be166mr25423966d6.7.1724856862018;
-        Wed, 28 Aug 2024 07:54:22 -0700 (PDT)
-Received: from rowland.harvard.edu (wrls-249-137-9.wrls-client.fas.harvard.edu. [140.247.12.9])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c162dd1cfdsm66104336d6.129.2024.08.28.07.54.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 07:54:21 -0700 (PDT)
-Date: Wed, 28 Aug 2024 10:54:18 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Selvarasu Ganesan <selvarasu.g@samsung.com>, royluo@google.com,
-	paul@crapouillou.net, elder@kernel.org, yuanlinyu@hihonor.com,
-	quic_kriskura@quicinc.com, crwulff@gmail.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
-	akash.m5@samsung.com, rc93.raju@samsung.com,
-	taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
-	eomji.oh@samsung.com, shijie.cai@samsung.com,
-	stable <stable@kernel.org>
-Subject: Re: [PATCH] usb: gadget: udc: Add null pointer check for udc in
- gadget_match_driver
-Message-ID: <4c64791e-a2f0-4878-8025-4ced94da6bc3@rowland.harvard.edu>
-References: <CGME20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37@epcas5p2.samsung.com>
- <20240828070507.2047-1-selvarasu.g@samsung.com>
- <2024082801-dissuade-starlight-e5ad@gregkh>
+        bh=knMFF8nzjVX/q5JCadhibHHQRx8JfqSKU37Wfx4vXhs=;
+        b=ifNgOz8h/57/5NDLRleylUq/jqLc3uap+qPgTXvOOqMOAZX0t6t6T3FSlO99hDh4Mz
+         0ZuBXDDfgrjkYbrP15yMTLcDxRZDf7bzMjTPcCw1H3cQsmei6vrptupMTezdSNjxsCfH
+         /9km3VGFEHp0QmHP3o3csqk9DCQLPA7IF7Vh1mEt8kEqJie9KP4mLKYH/mXIxC79+QEW
+         dBoZbeuMES8+CjajbuLLib4hc2hSOIPvwLYl1UV0cS86kRmd7cM+2XThrBrPeA8Mt5xG
+         9Nu5qmCDK+5eQ66E4ObXTw0IkVGi3maXnvUqKUHh/dXw0o8uadxVDAeFNginLIPxpFGq
+         L65g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724857336; x=1725462136;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=knMFF8nzjVX/q5JCadhibHHQRx8JfqSKU37Wfx4vXhs=;
+        b=B6mvsz7zTrSruwr6Qk/GwCaMrw+rIsUDgJCTTli0wxc1Lnu3IydLQP7YUoPIIidKHR
+         U96BQyYWYkDkgT7J0xh4QXE6MOJ1Sso2pX7A6jPrLbGZalrc8i9kyaWyiFE0T+aAYxqN
+         ssdX5awtnAD7qD2oYGjkug+DACkHgoXUiQ5NXDQO1CpKqJJZCPnTAoibMX5TR1pzGJSH
+         NLAC5xTEnZcCd6OL6XNbIly1BTWSZ2lM5aaWRSVVahsWfn5V+/GAYic0aISWuYaauzTx
+         TJ++v4ghdPyo40IM6KHFAfWw3mp/PLrWGTFLFJDigYN7YJeeX6zpMHBd+vmeEXj7cM31
+         URhg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSS3V0s0rhsbJZ3i3HmwTjAwh/nDfE0UWb4FZ+R6LDNSzCHJ4C6TAGvUaQZ6zSaH3Jr5S8cTQBBzA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2a8sDTrypbfatAtfGK7Sw97nS+TR82sYeHvOms6vtEgKMNIYS
+	3EctD9oPCfS7WUz1dpUhBHlVmi9cEbZWB8qZpISSaYSjKJ7Xy/w29O57eW09
+X-Google-Smtp-Source: AGHT+IEQ7SzGNG9vE0GagCV9YQ5MhkL1ViweW0O7SfdK7AhH6qsNdPuhDWuXVFnSVI03YWSU06JOfQ==
+X-Received: by 2002:ac2:4c46:0:b0:533:7ce:20e0 with SMTP id 2adb3069b0e04-5346c3f91acmr1843251e87.8.1724857335149;
+        Wed, 28 Aug 2024 08:02:15 -0700 (PDT)
+Received: from foxbook (bgu114.neoplus.adsl.tpnet.pl. [83.28.84.114])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea5da7dsm2207982e87.223.2024.08.28.08.02.14
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 28 Aug 2024 08:02:14 -0700 (PDT)
+Date: Wed, 28 Aug 2024 17:02:10 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+ Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: Re: [PATCH 0/9] Various xhci fixes and improvements
+Message-ID: <20240828170210.37406d48@foxbook>
+In-Reply-To: <39d389c3-1b3f-4a11-a40d-5c2eb46096bc@linux.intel.com>
+References: <20240827194625.61be5733@foxbook>
+	<39d389c3-1b3f-4a11-a40d-5c2eb46096bc@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024082801-dissuade-starlight-e5ad@gregkh>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 28, 2024 at 11:39:58AM +0200, Greg KH wrote:
-> On Wed, Aug 28, 2024 at 12:35:04PM +0530, Selvarasu Ganesan wrote:
-> > This commit adds a null pointer check for udc in gadget_match_driver to
-> > prevent the below potential dangling pointer access. The issue arises
-> > due to continuous USB role switch and simultaneous UDC write operations
-> > performed by init.rc from user space through configfs.  In these
-> > scenarios, there was a possibility of usb_udc_release being done before
-> > gadget_match_driver.
-> > 
-> > [27635.233849]  BUG: KASAN: invalid-access in gadget_match_driver+0x40/0x94
-> > [27635.233871]  Read of size 8 at addr d7ffff8837ead080 by task init/1
-> > [27635.233881]  Pointer tag: [d7], memory tag: [fe]
-> > [27635.233888]
-> > [27635.233917]  Call trace:
-> > [27635.233923]   dump_backtrace+0xec/0x10c
-> > [27635.233935]   show_stack+0x18/0x24
-> > [27635.233944]   dump_stack_lvl+0x50/0x6c
-> > [27635.233958]   print_report+0x150/0x6b4
-> > [27635.233977]   kasan_report+0xe8/0x148
-> > [27635.233985]   __hwasan_load8_noabort+0x88/0x98
-> > [27635.233995]   gadget_match_driver+0x40/0x94
-> > [27635.234005]   __driver_attach+0x60/0x304
-> > [27635.234018]   bus_for_each_dev+0x154/0x1b4
-> > [27635.234027]   driver_attach+0x34/0x48
-> > [27635.234036]   bus_add_driver+0x1ec/0x310
-> > [27635.234045]   driver_register+0xc8/0x1b4
-> > [27635.234055]   usb_gadget_register_driver_owner+0x7c/0x140
-> > [27635.234066]   gadget_dev_desc_UDC_store+0x148/0x19c
-> > [27635.234075]   configfs_write_iter+0x180/0x1e0
-> > [27635.234087]   vfs_write+0x298/0x3e4
-> > [27635.234105]   ksys_write+0x88/0x100
-> > [27635.234115]   __arm64_sys_write+0x44/0x5c
-> > [27635.234126]   invoke_syscall+0x6c/0x17c
-> > [27635.234143]   el0_svc_common+0xf8/0x138
-> > [27635.234154]   do_el0_svc+0x30/0x40
-> > [27635.234164]   el0_svc+0x38/0x68
-> > [27635.234174]   el0t_64_sync_handler+0x68/0xbc
-> > [27635.234184]   el0t_64_sync+0x19c/0x1a0
-> > 
-> > Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> > Cc: stable <stable@kernel.org>
-> > Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
-> > ---
-> >  drivers/usb/gadget/udc/core.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> > index cf6478f97f4a..77dc0f28ff01 100644
-> > --- a/drivers/usb/gadget/udc/core.c
-> > +++ b/drivers/usb/gadget/udc/core.c
-> > @@ -1338,6 +1338,7 @@ static void usb_udc_release(struct device *dev)
-> >  	udc = container_of(dev, struct usb_udc, dev);
-> >  	dev_dbg(dev, "releasing '%s'\n", dev_name(dev));
-> >  	kfree(udc);
-> > +	udc = NULL;
+> We are in the middle of reworking transfer event handling with Niklas
+> as well.
 > 
-> That's not ok, as what happens if you race right between freeing it and
-> accessing it elsewhere?
+> I'd be grateful if you could take a quick look at our solution and
+> give your opinion on it as you have expertise in this area.
+Beware that I may only have enough of that to be dangerous ;)
 
-In fact, this assignment does nothing at all.  This is at the end of the 
-function and udc is a local variable, so it's not going to be used 
-again.  The compiler won't even generate any code for this.
+But I also have a few of those PCIe cards with various chips and all
+three public revisions of the spec, so I'm trying to stay in spec and
+verify things on hardware.
 
-> >  }
-> >  
-> >  static const struct attribute_group *usb_udc_attr_groups[];
-> > @@ -1574,7 +1575,7 @@ static int gadget_match_driver(struct device *dev, const struct device_driver *d
-> >  			struct usb_gadget_driver, driver);
-> >  
-> >  	/* If the driver specifies a udc_name, it must match the UDC's name */
-> > -	if (driver->udc_name &&
-> > +	if (driver->udc_name && udc &&
+BTW, I only really touched isochronous transfers so far, but it looks
+like some things are not entirely right in others too. The handling of
+short packets for instance - it looks like TRB_ISP is set on various
+transfers, but process_xxx_td() functions don't care if the event is
+mid-TD and give back the URB immediately.
+
+I though about fixing this (I have a naive hope that some xHC crashes
+that I see are "undefined behavior" caused by driver bugs, even though
+in reality the hardware is probably simply FUBAR) but I'd need to read
+more spec chapters to get there.
+
+> Main idea is simple.
+> If a transfer event points to a TRB between dequeue and enqueue we
+> give back all queued TDs passed up to this TRB.
+> And if the event points to a valid TD then handle that. (normal case)
 > 
-> I agree this isn't good, but you just made the window smaller, please
-> fix this properly.
+> Code is much simpler, we get rid of skip flag, and could probably
+> merge error_mid_td and urb_length_set flags into one flag.
+Yes, lots of things could be better if the code walked the ring from
+the last known dequeue to the current one and analyzed what's there.
+We could know if the event is for something that we have already freed
+(a bug?), or for any known pending TD and which one exactly, or for a
+non-transfer TD (like Forced Stop Event).
 
-I don't see how udc can possibly be NULL here.  It gets initialized to a 
-non-NULL value when usb_add_gadget() does:
+Many of those thing are currently detected with heuristics which only
+work about right if everything goes as planned (no bugs in HW or SW).
 
-	gadget->udc = udc;
+And first find the TD, then worry how to handle it. I like that Niklas
+managed to shorten this giant loop already, and my patches #2 and #3
+shorten it further and move TD selection logic up (#2) and all else
+down (#3). This way we can work on selection and handling separately,
+with less worrying about how they influence each other.
 
-and nothing changes its value thereafter.  It seems much more likely 
-that the error shown above is an invalid pointer access because 
-gadget->udc points to a location that has been deallocated.  Adding this 
-NULL check won't fix the bug.
+> The code isn't complete or tested yet. It doesn't handle
+> under/overruns, but that could probably be fixed by just turning
+> "return 0" for those cases into "break"
+Problem is that not all events give valid dequeue pointers. These two,
+for example, are not guaranteed to. Then we have no idea where on the
+ring the HC currently is. The EP doesn't stall and it may have already
+been resumed by a simple doorbell ring.
 
-Apparently the problem is caused by the fact that bus_for_each_dev(), 
-iterating over the things on the gadget bus, is still using gadget after
-
-	device_del(&gadget->dev);
-
-in usb_del_gadget() returns and while
-
-	device_unregister(&udc->dev);
-
-runs and the udc structure is deallocated.  The only solution I can 
-think of is for the gadget to take a reference to the udc and drop the 
-reference when the gadget is released.  Unfortunately, several UDC 
-drivers define their own gadget-release routines; they will all need to 
-be modified.  And the core will need its own gadget-release routine for 
-use when the UDC driver does not specify its own.
-
-Alan Stern
+Regards,
+Michal
 
