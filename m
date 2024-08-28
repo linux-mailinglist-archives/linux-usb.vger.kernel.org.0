@@ -1,118 +1,138 @@
-Return-Path: <linux-usb+bounces-14234-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14235-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8665962937
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 15:48:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06EB296298B
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 16:00:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ED371F2228C
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 13:48:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFCE81F24866
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 14:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A531A174EDB;
-	Wed, 28 Aug 2024 13:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2909B17332C;
+	Wed, 28 Aug 2024 14:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b="T99rmxzs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h4vPRmKm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DA52D600
-	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 13:48:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1419E4594A;
+	Wed, 28 Aug 2024 14:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724852915; cv=none; b=pPf/80o/k3l4+Qxun0i7i/KQoHd3LMMFOSAWzGJMPU5GCQtX1QkLMkasGuELB3Mh2y8FeK4pmfjodBLb4xUbQ11Fazae9eZCXdKHbEFP6z9jMWjKSuwKRsxweg51UjJRHA1NzKERfmebDAVeS5qE0mbjMKTyGqY0eONgdJqbxkE=
+	t=1724853612; cv=none; b=ZjGQG2fGCTPfUtMKGBaH9J4Ray7tXz2hmfqfH5+YIIo/fXSK2xz9Q5gSyY7+l9AtPm8AvaIF1NW2gY+Lk9oYH3AA6Hky+RMN7o430D2dljlmTJaGi17/0gqkmaKFPbCGVam8hJTXsUMtHU39jJPvQ7T2VoYdiP6Wd6Pt2Zt+URs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724852915; c=relaxed/simple;
-	bh=CmN8PA+9LhiQAvWFN6jcrXULfShrT+D6fwDuFjEqQ9M=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=fYOfsTS5QGgrGFanIXaJBvL9PljsaPFPlZAxFja0/fCoGkOncaanyXBcB1EvBMw3daLCfEUHej2/R315A7n9lUd8hpNpiqMZEuEdym0kvI0iTIn9y/HE+nI3GUkolb893znFRW26bmv2oJ9tvSDgek2dPI8PQ2lftLS1SEc2HmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b=T99rmxzs; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1724852907; x=1725457707; i=mista.tapas@gmx.net;
-	bh=CmN8PA+9LhiQAvWFN6jcrXULfShrT+D6fwDuFjEqQ9M=;
-	h=X-UI-Sender-Class:Date:From:To:CC:Subject:In-Reply-To:References:
-	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=T99rmxzscVDY9lygvR1a2wAShjGiVXMhkl1g9sAuRtjijivgVMmaHYCnfuJPt4ij
-	 pF/MKQQhr5wussmaLRj99D5YdAX/dkoAt6Olc3SEXmwgUoo6JiQsr0H9UjAx+Y2y1
-	 MsFXRkW0frwheyyHxyqmfpQyvONu9Qs1TgfBrkAJW0+GwWW/IeI09QPeaJ0dCQRcQ
-	 dtWtYHrt1GhPPyCVUd5RGwPSwlYnH5cv27si5D3rSmRLo39hvXI7obqzctYZMr4ma
-	 GcSzsDU8QM707bd5wTeIoSAh7Zz/GrxFwv4Al8RmQlqwjB+2n6lfiv9sTfYJ903AM
-	 yzmj3wmVUIjI55J3AA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [127.0.0.1] ([149.50.50.203]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MsYux-1rpgH33DZr-00rDeE; Wed, 28
- Aug 2024 15:48:26 +0200
-Date: Wed, 28 Aug 2024 15:48:25 +0200
-From: fps <mista.tapas@gmx.net>
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-CC: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/9] Various xhci fixes and improvements
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20240828152458.06188919@foxbook>
-References: <20240827194625.61be5733@foxbook> <60d7c5a2-bbc0-4c08-8973-5b65b9695400@gmx.net> <20240828152458.06188919@foxbook>
-Message-ID: <BB1EB264-D2B9-43DC-ABF6-1415A27A0C5A@gmx.net>
+	s=arc-20240116; t=1724853612; c=relaxed/simple;
+	bh=262HsDi8SjTrTZhMptmD29RDun8i+Qy/tLzsixnVHiU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TNZ3dWBQ1fko1Ohfiysg0Dn6yM9Vni8nc5MolwXh+TQYEo2o5jfY3HGAXuHd2xN57tyRazDO6iv5T2IX3/XEvIDdiKlpS1uLuQtLsPfRMb5ivuJY0M66pw+x3fvz5HMuPKvPMe+yC/XT1uL+xnel/48LeILI0ZAAbdYsP9CYnS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h4vPRmKm; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724853611; x=1756389611;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=262HsDi8SjTrTZhMptmD29RDun8i+Qy/tLzsixnVHiU=;
+  b=h4vPRmKmXKFwO/8otQ6AfEapHGWgcuqgfM63wR9T89PFoU7E5SChc+10
+   cFoYMafaLIt+hgbosyYxZFUv6ThQ9Zq7nx05PhefKzgm6xLn454AWGk9W
+   w+FTbQ0gMPFfXVD5qKLl1fI/ybo3iVNOEf/ViZHf6QwL1zdi1M+cdjZ7m
+   WuWOWX5MIDE9M8dkhEGwuap1B0Fi9W8Vt13VV9/21kMXMfkNDHOCaJBU8
+   4xo8vmUtBTYyjiYsNboiDUUIFRQzYg2lnQmC4K5JLusgUJ8WsaI6Q7HbZ
+   rAXFptcAiqOzzGneanE9TdNZFsUn+P/MhIyeeVYY1u0NRPCF9Saj5wyA3
+   w==;
+X-CSE-ConnectionGUID: sy5c3bJYR3uDnHQ0RLatzA==
+X-CSE-MsgGUID: 0owHvAisSeeoYu/ec91iJw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="23342898"
+X-IronPort-AV: E=Sophos;i="6.10,182,1719903600"; 
+   d="scan'208";a="23342898"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 07:00:09 -0700
+X-CSE-ConnectionGUID: 4hMcv1cbTaOEQ1EH9fyNkg==
+X-CSE-MsgGUID: 4L3ogvpNQuSlDFf9P4mauA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,182,1719903600"; 
+   d="scan'208";a="67374791"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa003.fm.intel.com with ESMTP; 28 Aug 2024 07:00:05 -0700
+Message-ID: <bd380d71-4ebe-4889-9ed8-aeefec2b2b0e@linux.intel.com>
+Date: Wed, 28 Aug 2024 17:02:10 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:j8rIXhQX+h5B5HlHVTCBXqwwids4D7M+MyxvkKoZCb+9a+0giUb
- +UoW7RszOi+VNd5/Ng9vt4ZIrssEafE5qaBByzdGpFpVTl9gqU8VJ0hkQo+1mAFX8KlPEqI
- 2CehIjDBP9Lizn9JQPciq6mNRMylqwNLc1BSvo/oN5xdEO9ifADT9S6YfH1x6xEGpEP9jlb
- UurNRxfq3ZJlykvydm7Og==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:z0W7r8C0Blg=;+/B/XAqi1v0cGpQ+6f3mSIK8bqi
- wLwH8JFdJsIs6OMKGCkAO4Nh9xMC63FKhgbkjvpGdHumqiYKanPvdKxG38BLa1WDqIzWWosiY
- 44rD1If01Zm1oPfDQlHWOMq9RB9lXOIUr34rMW9q2ni5xQDyvVRnf9SIyG3FLGeNrnb0MKW5A
- 7dgzxHBUM7dWsBRverBmt+yqiWu0+kWLrAdaqzQUe9QHa+9Yozsi+iV9ywRLYODOoNmc6Bd99
- DDBypY3T13V6blWoCkTaT89HwBMQQ3nXk9f2KtDNefV6c32CgomH42ttLIdJquAXGPaAPNZ7R
- EYKnV94IIaDsO8jLtE14ojsgVp8TvpQ0saCc6qdkdMIOKvhSPacrkTEwjUl57ud4j6YV26SSO
- qnL1R5gC8Zx+6Gq46d/bRG1vjYPYHguvqJ1y0TqCQ4TSSc1UGXUMLyOdw02USq5RyMqAs4YxI
- V0zHY+CF3dXDxXudJ9aLvkiYU5b9DVuG123IQ7650akEhKvoRdznJMHIbG26XTB2UvtiEs6Zy
- cecBiV/C+BDHCv7eU4XOt/lYihs/kx7Ve5bDPY/nSEUPex4vh4r6H7rqakXLjp6ZWKNyCOQOi
- VA2kIw2q3YaE6MvwHUZUP4rMwfYHDi2Cd716g72WdahPaIXTlMNpleDRfRGG8aaLae+Rz8/Ic
- RzWkv7tEh1/KW9uDB9lhvH04aiugmoAiNKe5td0yRkc5qHbbvmLq6e3gso/XbRhGgEirF+RMG
- aHE2eRs2BUrjnVm9UUDeUlmnxw5OhLpeGvKMMGPwzTeESec1UBN3nBXteYGHANht8sY6BI2H6
- f5+ZBMIiuw0d3OkGTHFu1TeA==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] xhci: pci: Put XHCI controllers into D3hot at
+ shutdown
+To: Peter Chen <peter.chen@kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Cc: superm1@kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ mika.westerberg@linux.intel.com, stern@rowland.harvard.edu
+References: <20240712185418.937087-1-superm1@kernel.org>
+ <20240712185418.937087-3-superm1@kernel.org>
+ <20240827063206.GA879539@nchen-desktop>
+ <4db33660-2720-471d-a017-1fca4c9b7268@amd.com>
+ <20240828071303.GA921051@nchen-desktop>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20240828071303.GA921051@nchen-desktop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On August 28, 2024 3:24:58 PM GMT+02:00, "Micha=C5=82 Pecio" <michal=2Epeci=
-o@gmail=2Ecom> wrote:
->> Are you sure these are against 6=2E11-rc5? Or did I screw up on my side=
-?
->Absolutely for 6=2E11-rc5 (but -rc4 works too and -rc6 likely will)=2E
->
->Please try again without --dry-run, some of them will only apply on top
->of earlier ones because they touch the same lines=2E If that doesn't work
->then I may have screwed up mailing them=2E
+>>> Hi Mario & Mathias,
+>>>
+>>> According to xHCI spec v1.2: A.1.2 Power State Definitions:
+>>>
+>>> 	Software shall place each downstream USB port with power
+>>> 	enabled into the Suspend or Disabled state before it
+>>> 	attempts to move the xHC out of the D0 power state.
+>>>
+>>> But I have not found any USB core code does it, do you have any ideas
+>>> about it?
+>>>
+>>> We have added the similar codes at non-PCI USB platform, but met above
+>>> concerns. In fact, we met kernel dump that the thread usb-storage try
+>>> to access the port status when the platform xHCI code has already put
+>>> the controller to D3.
+>>>
+>>> Best regards,
+>>> Peter
+>>>
+>>>
+>>
+>> This is pretty tangential to my patch.  But FWIW in case you missed we're
+>> going to discard this patch in favor of another approach in PCI core.
+>>
+>> Regarding your point though If I'm not mistaken this should be handled by
+>> the Linux parent/child device model.  Each of the ports should be children
+>> of the hub they're connected to and the hub a child of the controller.  So
+>> when doing any actions that start runtime PM on the host controller the
+>> children need to first be in runtime PM.
+>>
+> 
+> It seems there is no runtime PM suspend for xhci and USB core at
+> .shutdown currently. Alan & Mathias, please correct me if I was wrong.
+> 
 
-Oh, of course! My bad=2E Sorry for the noise!
+I think you are right.  At shutdown we only halt the xHC.
+We don't force ports to suspend or disable state.
+We only put some selected xHC to D3
 
+USB 2 ports might suspend themselves if there is no activity.
 
->
->BTW, #3 is logically dependent on #2, but the others could be reordered
->at will IIRC=2E
->
->As for your audio case, #4 is probably the only potentially interesting
->one, but it didn't help on my sluggish ASMedia host=2E It should, however=
-,=20
->at least eliminate the "WARN Event TRB with no TDs queued" on USB 3=2E1
->and newer hosts=2E
->
->But the root cause of those audio issues is likely elsewhere=2E
+Doesn't seem like usb core hcd code, or hub driver does anything either.
 
-Yeah, just giving it a shot :)
+Thanks
+Mathias
 
-Kind regards,
-FPS
 
 
