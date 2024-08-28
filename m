@@ -1,78 +1,89 @@
-Return-Path: <linux-usb+bounces-14238-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14239-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CBB9962AD9
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 16:54:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE233962AE0
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 16:54:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7033E1C21DE5
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 14:54:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AB33283B08
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 14:54:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13AF919E83D;
-	Wed, 28 Aug 2024 14:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A731A072B;
+	Wed, 28 Aug 2024 14:54:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g/UWkv9f"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="asXgWhRm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8032868B;
-	Wed, 28 Aug 2024 14:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D34919DF40
+	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 14:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724856833; cv=none; b=EEx6b79pNzXKSGsleJaoAuqEcIFl+Yw9usNvBcgKwV412Ee38C6yX6TpDLIqSBw+AiJW/s0CM+KJnb04B1UX+yGzQh8pA8NnIUCLB0eDFVDnNfp2goLbbdGt0S7In5l/EXGxdgRLCAnZVDCMmiU/sIVx/42vYp91Vycu5+K5xLY=
+	t=1724856864; cv=none; b=SUMoVRekEajyfscrLQU8sOCdNhXUa7+jBpl3dZ9tm6Wc2tsQXEqadS15ksbdGYMFZ79AXBxKKgCoJiXasyOUm/chEXD2Wi4aJZfHRsZHFZhh7iW/TOCiqdrEcmbGs7P88panGdhS85g0U3AryxAmevS9SbgBglSjTKZO1HflRz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724856833; c=relaxed/simple;
-	bh=V8arl6lpeyELiohDoLFezex7CGe6GUdRnt+dBPTOy8A=;
+	s=arc-20240116; t=1724856864; c=relaxed/simple;
+	bh=8hzPD33CbZBcgUSyyLMRU9NbMcPOpuPpikLc8tiVvzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=chGyfRyGecKT/1U+hfGVJRmDWUXFbFU6zK1kiFwrMQZc2/RNSair1l8Hr4ee+vZ6CNkxbS9U0frP1uvM+cdgv602mNH35dcVeZG9kT/r5A4QM9WtDeN67q57eFP3RnNZTIpek3E3kB2UJGJaOLpDlb3ygBb5BVHIo2CpYB7TqUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g/UWkv9f; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724856832; x=1756392832;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V8arl6lpeyELiohDoLFezex7CGe6GUdRnt+dBPTOy8A=;
-  b=g/UWkv9fOpJ2AMSkXXtetSswpt0tmJwWGMuV+yRP+JfkHWJ3eaYIiX8+
-   U+8OA+1KCVK9yC9c4acP0mzGMYMpg2xItJfSWLpSsCnuStGf0aO/qXlme
-   rAECvqvP/jMXmml0OVz4J4sUlxU+KSEJxm0ViUSca0+3/c4nQFr/e0dxp
-   nXsLqPQa0BmXUBE6tYpXdBCUKc/lbM5xMgVn1iHK7YvqoXrEqrfeN1n7n
-   LgIxxXLa+8JCDYJa/8oTSUaEkOAYmQoHqtg6l2MNoorA70/cS2KOR3kuc
-   1DOmsQcF7Arva8bG1EVxFiZVvmLl24aFHkEit5B+y+5oAVcFqNs8NEhr1
-   g==;
-X-CSE-ConnectionGUID: DaCG3isCQrCw3/w6m/K+hQ==
-X-CSE-MsgGUID: 1Hk1S0YcQfKwZpDHr5hYyw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="33961276"
-X-IronPort-AV: E=Sophos;i="6.10,183,1719903600"; 
-   d="scan'208";a="33961276"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 07:53:48 -0700
-X-CSE-ConnectionGUID: kCR/1cL1QrSJ+4rjpOJvLw==
-X-CSE-MsgGUID: /HQxcthCSTafOH65CJy67A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,183,1719903600"; 
-   d="scan'208";a="67386686"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa003.fm.intel.com with SMTP; 28 Aug 2024 07:53:45 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 28 Aug 2024 17:53:44 +0300
-Date: Wed, 28 Aug 2024 17:53:44 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Message-ID: <Zs85+FeIDz4n7DHx@kuha.fi.intel.com>
-References: <20240828063314.552278-1-lk@c--e.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XJiNnYlrgsiL+suyGlHzJMWfpYzwBVdLpQVW2W33a9aq8O06MFDSLcuDB/SVWFogJzfYT32bBqv9Urrvkb4TO3f2hzit5SMP5sKTzZ8lRr1Y6XmHGk/38qotE8bpq1X/xp14CPXgT+zhjNhHyX8CAvDXnvwN6KozAZ8r/DykuB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=asXgWhRm; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6bf6dedbfe1so38504996d6.3
+        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 07:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1724856862; x=1725461662; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6nhujPZHs27SEAYURkVKz04PPXoynmdVoaZNb24tNBs=;
+        b=asXgWhRmbGIBKGmjQuKCL3mNteYxW7dGvol24DrsPWncuW34mmfUF9XJtl75ygA3Wg
+         v+5VnReLQzOIYQmr7kMC5m9X837rJFcJnb8ehcXCEt4DwV2D78xNQ2vUKupZXDhQhS7g
+         K7+cmCxvTBr2UKwBxMJ6UbGJdZAvUUeaXw6/73wqa2f8gCCXhNPuyo/YhbXll7Se9+Vz
+         XwuoQ4fTB1bJq03I3UaEPaXStG0SznXOyGH8VviBIT8vFbHhRKKYNKTfM4UTFoeS6Rui
+         n5QngeOE9AH4hF6KdxEmUw3q2/UtXEVYaAnsYmldEfUS0LA0cShSr0snLO3ZrMsTLaSD
+         i8Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724856862; x=1725461662;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6nhujPZHs27SEAYURkVKz04PPXoynmdVoaZNb24tNBs=;
+        b=BYTIDm7L0lzHFc6it9dBlm3MEupy8TjoH/MBhrxTUbxmhC5+NaC0QiJ+ulQJxopHLr
+         2uJ2PZcniCC0yb5OPoyAfKc8fle3uK552SdtzW2hkIHqbBtjLbm4KPmotyT8ji9ZR+25
+         8NvxpG94mMMhATxAeltld/5OQCBFLw5pdJ/DPvT20RYOEJXwzKkXoMOYF+f46iF8EeDd
+         1ffE7Y0UMqskAjD8zZ4CamNSZReAT5worjYahIYSsYNW9U8m7D7xuj5SNJk5vkI4Q4G6
+         u7lBK4E/KpV9yiEI8fVOaYlWwd3O0R3Gz+cnYX/HQY8tAIXVqtaZ7KgXhv5MmJmLVe/a
+         7Tww==
+X-Forwarded-Encrypted: i=1; AJvYcCX4mIPvR5Tca70/8oyBAzgXAbQAcoKhH4RgSAih6bqQYlzXcp9HvRKIdbZLi9Do3mtiKuJmq/NzVqs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5iEoA9Y4/kBddjD9LcADfQuxYaouofpkYmNxqkGCEUBDKWfHT
+	naK1+HOyLUjq4m/IWylb1nh79yXFyzYSnOY8EcEvgu0RPONjJXqzFKvMYQVfqQ==
+X-Google-Smtp-Source: AGHT+IG7YLFsUh+1XQ6LBSM1kv2m/SlRXCAKyBwLLTF7t7Vy4VG2teF/Z8KUcHJAFgEVRXsEq9GITA==
+X-Received: by 2002:a05:6214:2f90:b0:6c1:6b00:6e90 with SMTP id 6a1803df08f44-6c3362be166mr25423966d6.7.1724856862018;
+        Wed, 28 Aug 2024 07:54:22 -0700 (PDT)
+Received: from rowland.harvard.edu (wrls-249-137-9.wrls-client.fas.harvard.edu. [140.247.12.9])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c162dd1cfdsm66104336d6.129.2024.08.28.07.54.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2024 07:54:21 -0700 (PDT)
+Date: Wed, 28 Aug 2024 10:54:18 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Selvarasu Ganesan <selvarasu.g@samsung.com>, royluo@google.com,
+	paul@crapouillou.net, elder@kernel.org, yuanlinyu@hihonor.com,
+	quic_kriskura@quicinc.com, crwulff@gmail.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
+	akash.m5@samsung.com, rc93.raju@samsung.com,
+	taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com,
+	stable <stable@kernel.org>
+Subject: Re: [PATCH] usb: gadget: udc: Add null pointer check for udc in
+ gadget_match_driver
+Message-ID: <4c64791e-a2f0-4878-8025-4ced94da6bc3@rowland.harvard.edu>
+References: <CGME20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37@epcas5p2.samsung.com>
+ <20240828070507.2047-1-selvarasu.g@samsung.com>
+ <2024082801-dissuade-starlight-e5ad@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,85 +92,109 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240828063314.552278-1-lk@c--e.de>
+In-Reply-To: <2024082801-dissuade-starlight-e5ad@gregkh>
 
-On Wed, Aug 28, 2024 at 08:33:13AM +0200, Christian A. Ehrhardt wrote:
-> If the busy indicator is set, all other fields in CCI should be
-> clear according to the spec. However, some UCSI implementations do
-> not follow this rule and report bogus data in CCI along with the
-> busy indicator. Ignore the contents of CCI if the busy indicator is
-> set.
+On Wed, Aug 28, 2024 at 11:39:58AM +0200, Greg KH wrote:
+> On Wed, Aug 28, 2024 at 12:35:04PM +0530, Selvarasu Ganesan wrote:
+> > This commit adds a null pointer check for udc in gadget_match_driver to
+> > prevent the below potential dangling pointer access. The issue arises
+> > due to continuous USB role switch and simultaneous UDC write operations
+> > performed by init.rc from user space through configfs.  In these
+> > scenarios, there was a possibility of usb_udc_release being done before
+> > gadget_match_driver.
+> > 
+> > [27635.233849]  BUG: KASAN: invalid-access in gadget_match_driver+0x40/0x94
+> > [27635.233871]  Read of size 8 at addr d7ffff8837ead080 by task init/1
+> > [27635.233881]  Pointer tag: [d7], memory tag: [fe]
+> > [27635.233888]
+> > [27635.233917]  Call trace:
+> > [27635.233923]   dump_backtrace+0xec/0x10c
+> > [27635.233935]   show_stack+0x18/0x24
+> > [27635.233944]   dump_stack_lvl+0x50/0x6c
+> > [27635.233958]   print_report+0x150/0x6b4
+> > [27635.233977]   kasan_report+0xe8/0x148
+> > [27635.233985]   __hwasan_load8_noabort+0x88/0x98
+> > [27635.233995]   gadget_match_driver+0x40/0x94
+> > [27635.234005]   __driver_attach+0x60/0x304
+> > [27635.234018]   bus_for_each_dev+0x154/0x1b4
+> > [27635.234027]   driver_attach+0x34/0x48
+> > [27635.234036]   bus_add_driver+0x1ec/0x310
+> > [27635.234045]   driver_register+0xc8/0x1b4
+> > [27635.234055]   usb_gadget_register_driver_owner+0x7c/0x140
+> > [27635.234066]   gadget_dev_desc_UDC_store+0x148/0x19c
+> > [27635.234075]   configfs_write_iter+0x180/0x1e0
+> > [27635.234087]   vfs_write+0x298/0x3e4
+> > [27635.234105]   ksys_write+0x88/0x100
+> > [27635.234115]   __arm64_sys_write+0x44/0x5c
+> > [27635.234126]   invoke_syscall+0x6c/0x17c
+> > [27635.234143]   el0_svc_common+0xf8/0x138
+> > [27635.234154]   do_el0_svc+0x30/0x40
+> > [27635.234164]   el0_svc+0x38/0x68
+> > [27635.234174]   el0t_64_sync_handler+0x68/0xbc
+> > [27635.234184]   el0t_64_sync+0x19c/0x1a0
+> > 
+> > Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
+> > Cc: stable <stable@kernel.org>
+> > Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+> > ---
+> >  drivers/usb/gadget/udc/core.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> > index cf6478f97f4a..77dc0f28ff01 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -1338,6 +1338,7 @@ static void usb_udc_release(struct device *dev)
+> >  	udc = container_of(dev, struct usb_udc, dev);
+> >  	dev_dbg(dev, "releasing '%s'\n", dev_name(dev));
+> >  	kfree(udc);
+> > +	udc = NULL;
 > 
-> If a command timeout is hit it is possible that the EVENT_PENDING
-> bit is cleared while connector work is still scheduled which can
-> cause the EVENT_PENDING bit to go out of sync with scheduled connector
-> work. Check and set the EVENT_PENDING bit on entry to
-> ucsi_handle_connector_change() to fix this.
+> That's not ok, as what happens if you race right between freeing it and
+> accessing it elsewhere?
+
+In fact, this assignment does nothing at all.  This is at the end of the 
+function and udc is a local variable, so it's not going to be used 
+again.  The compiler won't even generate any code for this.
+
+> >  }
+> >  
+> >  static const struct attribute_group *usb_udc_attr_groups[];
+> > @@ -1574,7 +1575,7 @@ static int gadget_match_driver(struct device *dev, const struct device_driver *d
+> >  			struct usb_gadget_driver, driver);
+> >  
+> >  	/* If the driver specifies a udc_name, it must match the UDC's name */
+> > -	if (driver->udc_name &&
+> > +	if (driver->udc_name && udc &&
 > 
-> Finally, the quirk for some ASUS zenbook models is required for
-> ASUS VivoBooks as well. Apply the quirk to these as well.
+> I agree this isn't good, but you just made the window smaller, please
+> fix this properly.
 
-Can you please split this last part into a separate patch.
+I don't see how udc can possibly be NULL here.  It gets initialized to a 
+non-NULL value when usb_add_gadget() does:
 
-thanks,
+	gadget->udc = udc;
 
-> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> Bisected-by: Christian Heusel <christian@heusel.eu>
-> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c      | 8 ++++++++
->  drivers/usb/typec/ucsi/ucsi_acpi.c | 7 +++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 4039851551c1..540cb1d2822c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -38,6 +38,10 @@
->  
->  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
->  {
-> +	/* Ignore bogus data in CCI if busy indicator is set. */
-> +	if (cci & UCSI_CCI_BUSY)
-> +		return;
-> +
->  	if (UCSI_CCI_CONNECTOR(cci))
->  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
->  
-> @@ -1249,6 +1253,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  
->  	mutex_lock(&con->lock);
->  
-> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
-> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
-> +			     __func__);
-> +
->  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
->  
->  	ret = ucsi_send_command_common(ucsi, command, &con->status,
-> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> index 7a5dff8d9cc6..aa586525ab4c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> @@ -197,6 +197,13 @@ static const struct dmi_system_id ucsi_acpi_quirks[] = {
->  		},
->  		.driver_data = (void *)&ucsi_zenbook_ops,
->  	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "VivoBook_ASUSLaptop"),
-> +		},
-> +		.driver_data = (void *)&ucsi_zenbook_ops,
-> +	},
->  	{
->  		.matches = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LG Electronics"),
+and nothing changes its value thereafter.  It seems much more likely 
+that the error shown above is an invalid pointer access because 
+gadget->udc points to a location that has been deallocated.  Adding this 
+NULL check won't fix the bug.
 
--- 
-heikki
+Apparently the problem is caused by the fact that bus_for_each_dev(), 
+iterating over the things on the gadget bus, is still using gadget after
+
+	device_del(&gadget->dev);
+
+in usb_del_gadget() returns and while
+
+	device_unregister(&udc->dev);
+
+runs and the udc structure is deallocated.  The only solution I can 
+think of is for the gadget to take a reference to the udc and drop the 
+reference when the gadget is released.  Unfortunately, several UDC 
+drivers define their own gadget-release routines; they will all need to 
+be modified.  And the core will need its own gadget-release routine for 
+use when the UDC driver does not specify its own.
+
+Alan Stern
 
