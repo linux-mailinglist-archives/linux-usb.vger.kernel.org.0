@@ -1,204 +1,128 @@
-Return-Path: <linux-usb+bounces-14249-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14250-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 960A3963099
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 21:01:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 738FD9630C4
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 21:12:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E0352866C0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 19:01:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14B231F25221
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 19:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363C21ABEA4;
-	Wed, 28 Aug 2024 19:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5281AC434;
+	Wed, 28 Aug 2024 19:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cnyW3MOE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M0lyU1Dx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EAC61993AF;
-	Wed, 28 Aug 2024 19:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35991AB53B
+	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 19:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724871650; cv=none; b=D3NdP118ZSamLtikyR16iycEL00Hhl81wWDt4hVceKz9JTwWHnXrkvab8KGF8rwGC663ZFuC5rY6rrvChq7WxGpr+dvkr+dsSX7doZPQ6zXy1FVtmyu4qVVopk9a6/lnHawNlM+Ye7lPytpRgOkVKHFTZJ6zpZ7RKnlcbBcrsEI=
+	t=1724872294; cv=none; b=WKK2zVwNPRlTEA6k68u4L2tAu6Fdry/tq2M3aeUv4qWdD6YL02LCRw+8DNYcuMYBPMXMVQdTfX3RHCzuhBQoKuF9qLKd3ufFu7KN6KZsBV2UL/kTKQwA+zRliXvA/uBaazyzRJLEr4xpRE8F93ZdDnzK0YCELL5iZw/I/yfY2q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724871650; c=relaxed/simple;
-	bh=RBJz/zzglqhWIoTl5eUntzhmPrkWOg8/XY8mlpDT9ww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QJprGd9zNE86UXwBAnrYQR2Oti94yA5csJ0TK+SGomybTMdRK6n6kPjx5bOS0cZ9h+Ldpnpc72uI50UDdHg3TdYn5rG03J04Xxn8X/GZFgTmXSvvdYu1kckfwJ99TwS667pU84u0Zmxz9vWlQjVvc/b5x4Gc6eaXenPNlkXQ/2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cnyW3MOE; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47SBC6xs002429;
-	Wed, 28 Aug 2024 19:00:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Ac2F4en+f7psj+DcGIT6h3TuBaKdmQsv/G+RfBE8thg=; b=cnyW3MOEcbliUvTA
-	4au+ulRW4w3FEnGSGxrSipH1r4oIA0tMyS77eUdXDz+AbhWmey5l/pHYt4D5EWdk
-	tNG3Uy5RicqhGk5BXkhvQ4BTSGrIvINoB1WC3SNXKUC86hR/t/I2sKk07PvncRBQ
-	mqKB4W4egzGIFF9khuayZWoMZiTP3/sdkWMxzTizdSRFBZLcjBu7l7H5PM3PmV9s
-	DZRwiDH/nr/EGhWNbzn3lQDBHiZ7CzLJFQLYdffJxVt8I0hZpaGb45K+7APrFLd9
-	8kAOE2WNbUJnvc++LCye5wtS1aoJJxSVgBxlEvt2ZKtXXsMeFtd7s4UMJjT2nXko
-	+6nFGA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419puuath0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Aug 2024 19:00:19 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47SJ0FP4022838
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Aug 2024 19:00:15 GMT
-Received: from [10.110.100.101] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 28 Aug
- 2024 12:00:14 -0700
-Message-ID: <2133dfd6-40f4-41cb-85ea-63fd9467a75f@quicinc.com>
-Date: Wed, 28 Aug 2024 12:00:14 -0700
+	s=arc-20240116; t=1724872294; c=relaxed/simple;
+	bh=qHEPUhXW0IU/aF8dB397D8SsPKI3gAvUq13mUjrTB70=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RUvuEYoFEM34UUHDTJf9FsirZBWFQFyU8kum1/kBcQlWVOvDIiz5aP8KOcpyBd3b/qYrdsop7ueQN5IA6yTCyp3/xNZHdtKvciJd8XKuRw8eV9J6K+HXfrVXxWvd2ZjjiOHND996WK+Pk4XW+4EPDQQYwDl3yTGYvHzT2vG4YoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M0lyU1Dx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 840ADC4CEC8
+	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 19:11:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724872294;
+	bh=qHEPUhXW0IU/aF8dB397D8SsPKI3gAvUq13mUjrTB70=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=M0lyU1Dx5TA/1addd3dS9PN07z4Tf/DgwZT3stHEcoVYMY3RsT9adgYZvsyu+lxpm
+	 QXgHEP+AcputgMr/+S+hGgTdmSzgAo2XZasuDztpdO6hGXqajI2Lm3Gliy4UyiFcGR
+	 v9YHgNlFE46sUBdCN5apmS0TxblRVCBzywgRYFmdmJL/y/3yh0EFzeuCxNbUhHoZtG
+	 X7H/IcMjNc98QTEKn+cjDm33WLTsWLV3X/8Gwofs7avKbn17Rj279iNahJB1gF3cak
+	 A2U4oVrlF1Bdy+vf5DLadYCceMGY4MZ7qWCSEVz4TeWMxp9NEhsDCbHfOfzpElIRlw
+	 5N7VHm7jjRvRA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 7BAEDC53BB9; Wed, 28 Aug 2024 19:11:34 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
+Date: Wed, 28 Aug 2024 19:11:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219198-208809-iW2yE2BbNT@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
+References: <bug-219198-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v25 00/33] Introduce QC USB SND audio offloading support
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <tiwai@suse.com>, <krzk+dt@kernel.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
-References: <20240823200101.26755-1-quic_wcheng@quicinc.com>
- <f4e609c0-92ff-4724-8243-bfe5de50d308@linux.intel.com>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <f4e609c0-92ff-4724-8243-bfe5de50d308@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jyj30OcvCZMaYaVv6BDWhbv4i4P4-mXk
-X-Proofpoint-ORIG-GUID: jyj30OcvCZMaYaVv6BDWhbv4i4P4-mXk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-28_08,2024-08-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 adultscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- clxscore=1015 mlxlogscore=999 mlxscore=0 phishscore=0 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408280138
 
-Hi Pierre,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
 
-On 8/26/2024 2:28 AM, Pierre-Louis Bossart wrote:
->> Changelog
->> --------------------------------------------
->> Changes in v25:
->> - Cleanups on typos mentioned within the xHCI layers
->> - Modified the xHCI interrupter search if clients specify interrupter index
->> - Moved mixer_usb_offload into its own module, so that other vendor offload USB
->> modules can utilize it also.
->> - Added support for USB audio devices that may have multiple PCM streams, as
->> previous implementation only assumed a single PCM device.  SOC USB will be
->> able to handle an array of PCM indexes supported by the USB audio device.
->> - Added some additional checks in the QC USB offload driver to check that device
->> has at least one playback stream before allowing to bind
->> - Reordered DT bindings to fix the error found by Rob's bot.  The patch that
->> added USB_RX was after the example was updated.
->> - Updated comments within SOC USB to clarify terminology and to keep it consistent
->> - Added SND_USB_JACK type for notifying of USB device audio connections
-> I went through the code and didn't find anything that looked like a
-> major blocker. There are still a number of cosmetic things you'd want to
-> fix such as using checkpatch.pl --strict --codespell to look for obvious
-> style issues and typos, see selection below. git am also complains about
-> EOF lines.
+--- Comment #22 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de=
+) ---
+(In reply to The Linux kernel's regression tracker (Thorsten Leemhuis) from
+comment #4)
+> Do you run "powertop --auto-tune" somewhere? Then it might be related to
+> https://lore.kernel.org/all/be791564-ccca-4dd5-915f-aa32b2482817@molgen.m=
+pg.
+> de/
 
-Thanks for the consistent reviews.  Will fix the checkpatch errors and mis-spells.  I didn't have codespell added so fixed that and resolved the typos.
+(In reply to Markus Rathgeb from comment #15)
+> I found the commit that initially break the USB on second connect.
+>=20
+> [2b989ab9bc89b29dd4b5509408b8fa42337eda56] iommu/vt-d: Add helper to
+> allocate paging domain
 
-Thanks
+At least with the commit reverted the Dell DA300z adapter still disconnecte=
+d,
+so my problem seems to be a *different* one.
 
-Wesley Cheng
+    $ git log --no-decorate --oneline -2
+    43275d604d974 Revert "iommu/vt-d: Add helper to allocate paging domain"
+    86987d84b968b Merge tag 'v6.11-rc5-client-fixes' of
+git://git.samba.org/sfrench/cifs-2.6
+    $ sudo dmesg
+    [    0.000000] Linux version 6.11.0-rc5-00058-g43275d604d97
+(build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 13.3.0-2) 13.3.0, GNU ld
+(GNU Binutils for Debian) 2.42.50.20240710) #289 SMP PREEMPT_DYNAMIC Wed Au=
+g 28
+15:29:09 CEST 2024
+    [    0.000000] Command line:
+BOOT_IMAGE=3D/vmlinuz-6.11.0-rc5-00058-g43275d604d97
+root=3DUUID=3D32e29882-d94d-4a92-9ee4-4d03002bfa29 ro quiet pci=3Dnoaer
+mem_sleep_default=3Ddeep log_buf_len=3D8M cryptomgr.notests
+    [=E2=80=A6]
+    [ 7951.874589] usb 4-1: reset SuperSpeed Plus Gen 2x1 USB device number=
+ 2
+using xhci_hcd
+    [ 7952.369334] r8152-cfgselector 4-1.2: USB disconnect, device number 3
+    [ 7952.542017] usb 4-1: reset SuperSpeed Plus Gen 2x1 USB device number=
+ 2
+using xhci_hcd
 
-> Overall this is starting to look good and ready for other reviewers to
-> look at.
->
->
->
-> WARNING: 'reaquire' may be misspelled - perhaps 'reacquire'?
-> #54: FILE: drivers/usb/host/xhci-ring.c:3037:
-> + * for non OS owned interrupter event ring. It may drop and reaquire
-> xhci->lock
->                                                              ^^^^^^^^
-> WARNING: 'compliation' may be misspelled - perhaps 'compilation'?
-> #16:
-> module compliation added by Wesley Cheng to complete original concept code
->        ^^^^^^^^^^^
-> CHECK: Prefer kzalloc(sizeof(*sgt)...) over kzalloc(sizeof(struct
-> sg_table)...)
-> #105: FILE: drivers/usb/host/xhci-sideband.c:35:
-> +	sgt = kzalloc(sizeof(struct sg_table), GFP_KERNEL);
->
-> CHECK: struct mutex definition without comment
-> #557: FILE: include/linux/usb/xhci-sideband.h:35:
-> +	struct mutex			mutex;
->
-> WARNING: 'straightfoward' may be misspelled - perhaps 'straightforward'?
-> #22:
-> straightfoward, as the ASoC components have direct references to the ASoC
-> ^^^^^^^^^^^^^^
-> CHECK: Unnecessary parentheses around 'card == sdev->card_idx'
-> #142: FILE: sound/soc/qcom/qdsp6/q6usb.c:217:
-> +	if ((card == sdev->card_idx) &&
-> +		(pcm == sdev->ppcm_idx[sdev->num_playback - 1])) {
->
-> CHECK: Unnecessary parentheses around 'pcm ==
-> sdev->ppcm_idx[sdev->num_playback - 1]'
-> #142: FILE: sound/soc/qcom/qdsp6/q6usb.c:217:
-> +	if ((card == sdev->card_idx) &&
-> +		(pcm == sdev->ppcm_idx[sdev->num_playback - 1])) {
->
-> WARNING: 'seqeunces' may be misspelled - perhaps 'sequences'?
-> #8:
-> seqeunces.  This allows for platform USB SND modules to properly initialize
-> ^^^^^^^^^
->
-> WARNING: 'exisiting' may be misspelled - perhaps 'existing'?
-> #12:
-> exisiting parameters.
-> ^^^^^^^^^
->
-> CHECK: Please use a blank line after function/struct/union/enum declarations
-> #1020: FILE: sound/usb/qcom/usb_audio_qmi_v01.h:98:
-> +};
-> +#define QMI_UAUDIO_STREAM_REQ_MSG_V01_MAX_MSG_LEN 46
->
-> CHECK: Please use a blank line after function/struct/union/enum declarations
-> #1054: FILE: sound/usb/qcom/usb_audio_qmi_v01.h:132:
-> +};
-> +#define QMI_UAUDIO_STREAM_RESP_MSG_V01_MAX_MSG_LEN 202
->
-> CHECK: Please use a blank line after function/struct/union/enum declarations
-> #1081: FILE: sound/usb/qcom/usb_audio_qmi_v01.h:159:
-> +};
-> +#define QMI_UAUDIO_STREAM_IND_MSG_V01_MAX_MSG_LEN 181
->
-> CHECK: Macro argument 'n' may be better as '(n)' to avoid precedence issues
-> #100: FILE: sound/usb/mixer_usb_offload.c:19:
-> +#define PCM_IDX(n)  (n & 0xffff)
->
-> CHECK: Macro argument 'n' may be better as '(n)' to avoid precedence issues
-> #101: FILE: sound/usb/mixer_usb_offload.c:20:
-> +#define CARD_IDX(n) (n >> 16)
->
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
