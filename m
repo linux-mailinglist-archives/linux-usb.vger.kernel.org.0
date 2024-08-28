@@ -1,205 +1,145 @@
-Return-Path: <linux-usb+bounces-14221-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF2B962130
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 09:34:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4320962069
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 09:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33C2C1C2131E
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 07:34:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04DFE1C2364C
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 07:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FF2415A87B;
-	Wed, 28 Aug 2024 07:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E23B61591FC;
+	Wed, 28 Aug 2024 07:13:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="cPw7N3q5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwOzehiN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18ED15920B
-	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 07:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6155F2CA6;
+	Wed, 28 Aug 2024 07:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724830449; cv=none; b=XwodGXzOFBzj7KkQpG993oSnU+t/jJj57GCMytxASav3c5zKLsn5Y8SM3XztaEinyWrkW3MrptsFdXj5cBGuCpSZi7JhVjbzDgKblyq4SnjkXYpJGXjZfeo9qskceiaeuERmstz1ERTwijvenXWdTp06fMJz4Gl9MXbvX2zM9+k=
+	t=1724829191; cv=none; b=RJMptbLeAhmVQhy/gC9aDdTC0vhJ4TLqZNhqCU8N7UFIczcSB/Z8Ny+yRMjnO5mbXJlBBV0QDjsHzka6hh00bxYTjXWqgoR0SmqHiGdf0kjog+KO8UMHYjajaHabhcM/DYFKwJQTJMgeg0KGLLTFTIbtHu7cdfzHgAlmkZV1WZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724830449; c=relaxed/simple;
-	bh=otvnIfXHyfHnHH7Qu6ysQiK8zxlSfj54BaTYN5UUOZU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=jIg89w59XBLmifC8sfatmgqVT0oWI2sQTu2Rk1sApS2zeXD+YXzG9f4NVCR0vV4v2otA5dcjV9tOE5444UfwUGnSINYUug9ILn+F5KpWcnUNNy8UE70wm29mvNIj00VUK18ec+fc6byOC7yQJ5o448cY6AUlqr5ROJ72ZEgFgZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=cPw7N3q5; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240828073358epoutp0260920573908f38eee4bac8576aaba947~v1CVKa5ib1899118991epoutp02-
-	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 07:33:58 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240828073358epoutp0260920573908f38eee4bac8576aaba947~v1CVKa5ib1899118991epoutp02-
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1724830438;
-	bh=uDnEFHQI7uwzw/2OPKT6RO7BYiKFnaZwVEjT8s8ZdXE=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=cPw7N3q5bKE9Hhaqyemnv6vDbfol8yqLjeSqJGxcfRT1vqsNZhFWuR7C2r2amjXb7
-	 631RZS3skLeQvNyecov3DDzOVmbo0xww5KYXUX40rTHKUlyKewuC0Wn2Wo/8pBvW15
-	 2XP7n5SVgtMCHERBYq06ttReqk+hZqb9+PRxYcnA=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20240828073358epcas5p1fe99baf26266981f31e280d9f83d455c~v1CUmadcP2848528485epcas5p1s;
-	Wed, 28 Aug 2024 07:33:58 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.182]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4Wtx450GdJz4x9Pw; Wed, 28 Aug
-	2024 07:33:57 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	63.46.19863.4E2DEC66; Wed, 28 Aug 2024 16:33:56 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37~v0plxhGJy1043310433epcas5p22;
-	Wed, 28 Aug 2024 07:05:38 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240828070538epsmtrp29db64b1e65691884db50d9fd46ff1de1~v0plwqioL2427224272epsmtrp2N;
-	Wed, 28 Aug 2024 07:05:38 +0000 (GMT)
-X-AuditID: b6c32a50-ef5fe70000004d97-5b-66ced2e46bad
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	A3.66.19367.24CCEC66; Wed, 28 Aug 2024 16:05:38 +0900 (KST)
-Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240828070533epsmtip18c5f65f31b248013ebfa42f9a1f86d35~v0phUECwF0315803158epsmtip1Y;
-	Wed, 28 Aug 2024 07:05:33 +0000 (GMT)
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-To: gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-	royluo@google.com, paul@crapouillou.net, elder@kernel.org,
-	yuanlinyu@hihonor.com, quic_kriskura@quicinc.com, crwulff@gmail.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
-	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
-	Selvarasu Ganesan <selvarasu.g@samsung.com>, stable <stable@kernel.org>
-Subject: [PATCH] usb: gadget: udc: Add null pointer check for udc in
- gadget_match_driver
-Date: Wed, 28 Aug 2024 12:35:04 +0530
-Message-ID: <20240828070507.2047-1-selvarasu.g@samsung.com>
-X-Mailer: git-send-email 2.46.0.windows.1
+	s=arc-20240116; t=1724829191; c=relaxed/simple;
+	bh=qamZVgTLzxmf+M2qHioyapuwePftf9clOU3H2jaNQ7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EFyhE/AEHmTVyJag7/ir+Mqo9K+ZuRGrrVwDTix+c1ZsWWlj1C7QC+v2tv0M77nRn9ewavnN/Ql4KLBAGZ57ATZUTtHiCAo2pa/ShEfGiIlH0itOK8fF/nL6Ft52uzybYkKJ+NSzOP6A5yO7j5LfTaTJG1DrgwEmL5XNdjLkf4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwOzehiN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A616DC4FE81;
+	Wed, 28 Aug 2024 07:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724829191;
+	bh=qamZVgTLzxmf+M2qHioyapuwePftf9clOU3H2jaNQ7Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VwOzehiNNM9WfPV8BdMT0ysx/swiBHT/DwrbkeE6J+9nIPvQvMRlkxGpjO06QZR2A
+	 7AZvSNZeNaPbhfpkhR8txsyOACm2ayebQ3VG0JoftPJ+VkWJwOFCQQ2fJXvo57y6gG
+	 SU8/HnIl8dVWE9X7DWlhKshL9aPmMNxsIe8/LrBtMiRsi7S5MhbQOMn2SW87FGsLPE
+	 8zL8PakTTcNMfy3V+iyzQchaoqgqw+8GSFZcNC8nzH5eSuQYhLMD4vAmw0UEaqCWUx
+	 /xQJ+ivmUJdVL/tT2hI3HzawrqXsyNwJe3QpP3BJYiYeLN0sEWokc+5gpuMk6nqWXf
+	 FFESLx39pY7bg==
+Date: Wed, 28 Aug 2024 15:13:03 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: superm1@kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	mika.westerberg@linux.intel.com, stern@rowland.harvard.edu
+Subject: Re: [PATCH 2/2] xhci: pci: Put XHCI controllers into D3hot at
+ shutdown
+Message-ID: <20240828071303.GA921051@nchen-desktop>
+References: <20240712185418.937087-1-superm1@kernel.org>
+ <20240712185418.937087-3-superm1@kernel.org>
+ <20240827063206.GA879539@nchen-desktop>
+ <4db33660-2720-471d-a017-1fca4c9b7268@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf0xTVxjNfa88Hl1KHpVudzUb5E0WJQFaKfV2lDkz557ZnBAzs7g5VuEJ
-	pD/TH+hc4uqQIRBHRcdmocBAxlJc2cqPiWKQChY6USgIcQGmQjZF2KRlg0jc1lpw/vNyvpPz
-	nXO/795H4vxfCSGZpzGyeo1CRRNcTvvlDesTpr3X9otq3Slo9oY9DNl6LxBovLYCQ5O9lQTy
-	NH6DoYL6ZgKVd7Zx0MTtJQ4aPl9FoLpvC3Hk6/03DJXVezlo8f58GLIXV3FQkdlDoJ7GeQwN
-	L3YEJNcHCWRZDnzKuwXoL58XvCZgmrxFBNNhnQhnap0mpurhSZxx2osJpst2Npw50XmYqZxY
-	AswXrXbA+J0vpnP3KOW5rCKb1ceymixtdp4mJ41+a1fm65kpUpE4QSxDm+hYjULNptFb305P
-	2JanCoxIx+YrVKYAla4wGOikV+V6rcnIxuZqDcY0mtVlq3QSXaJBoTaYNDmJGtb4ilgk2pgS
-	EH6kzDWfHQjXzQkOmos3m8Ev/BIQQUJKAn92DYeVAC7JpzoBbKiqx0KFD8CF7xbwJ8XYlUZs
-	taVhaJQTxHyqA8CKq2+GRIsAdnQXB7xIkqDE8Lc+eZCPppYALHH5OMECp85gsKWlmQh2r6H2
-	wJGCmfAg5lBxsO9BDQhiHpUK66bu4aG0DfD7i51YiI+C/aenHyfjVAwsaKtc0YyQ8GaPOhgM
-	qa3wwmdJIXoNnHG3hoewEPr/uEiE8CewaXyeCJ4HUkcBvDz994poM5zqvYMHffBAbvP5FZ8X
-	4JceBxaKjYTHl6dXFsGD56pXcRz0HBle8V8LJ8+MhoUwA28UjuGhZe2FC81zmAXEWJ+axvrU
-	NNb/k2sBbgdCVmdQ57BZKTpxgoY98ORis7RqJ3j80uPTz4GmHx4lugBGAheAJE5H8/rcA/v5
-	vGzFx4dYvTZTb1KxBhdICez4BC4UZGkDv4rGmCmWyEQSqVQqkSVLxfRzvPuFtmw+laMwskqW
-	1bH61T6MjBCasXgZZpljfnrn5Vup7sNvnO5TZtTs3LHAxEz0Jytde4loyXB3pe3OJocv7/ny
-	2zbhOr7EVCo4NFN+qW8dcbJxMm7+lu29BeFXGUYki+qS+z+VJ9ccuPThMb/Ova+6yT11vU3a
-	IxP9eSyfj79rSIvZklv0QdT7c3fvuniO35dk2NB4hqXsmd1lD1vWe8ktFf749hJfaWtDNanh
-	WWYl8nnTLPfoPkeX8x/e8Wev7jDvdhpdHuPgVF3XI/H2wciy7TXKnTL7wGROav6PUZHXxrL6
-	6+FLN5MPDnxtj3hwZWR2dIneVppkbT+ybPYKWvifc9dyhwiHZdc91Ub/sjRTFHsK0hxDrkIc
-	j+sNiv8Ar5FqvHIEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42LZdlhJTtfpzLk0g66/mhZvrq5itZh7dDeb
-	xZ0F05gs7h2dzWZxavlCJovmxevZLCbt2cpicffhDxaLy7vmsFksWtbKbPHp6H9Wi/7Fl1gs
-	vr/+yGqxqnMOi0V7wyk2iyPLPzJZXP6+E6jk/AU2iwm/gcSkg6IWXz9dYnQQ9Vh9qZ3NY+es
-	u+weCzaVesz5NZnZY9OqTjaP/XPXsHtM3FPnMfvuD0aPvi2rGD0+b5IL4IrisklJzcksSy3S
-	t0vgymhYc5a94K1oRUOnfQPjLaEuRk4OCQETiaUXr7F0MXJxCAlsZ5S43rmGESIhLfF6VheU
-	LSyx8t9zdoiir4wSu67fYOpi5OBgEzCUeHbCBiQuItDCJNHfO58ZxGEW2MQk0b7wOyNIkbBA
-	hMTvlTogg1gEVCVOfJgPNpRXwFpi0eOXzBALNCXW7t3DBBEXlDg58wkLiM0sIC/RvHU28wRG
-	vllIUrOQpBYwMq1iFE0tKM5Nz00uMNQrTswtLs1L10vOz93ECI4qraAdjMvW/9U7xMjEwXiI
-	UYKDWUmE98Txs2lCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeZVzOlOEBNITS1KzU1MLUotgskwc
-	nFINTGtUvgVtVNbtu35icfzKvIx7GbPn/Gg6cHzp7iNfO9rfdNp9Wsr6q2Le/RffKyfeP+KZ
-	EHjtvnhBzgGh+Qt3O5/c2O70eWrX95leQUlBJ5ZPezf1xVeDGLvdMT5BgopCs1wq57u0hUwT
-	3ydxJS2wK5gx43SKfmYnk8/X+U94J9vcKmrdmrDjeUaDwGPRCr9ntxP/8U/OW7StTnLBrsub
-	A/7/dlzzZk7amRe3P+lHTyitniWc970m/oaWmfGGR98Ph5edvCht27mg6vdavQszbm3eyHmt
-	+y7vqtgsj3u7mGOeGUqozjNUsJ/lMufYBsemIodVO72fFGSfFdinKZRVV/xJsyyw2kHd3WOL
-	bntC3EklluKMREMt5qLiRACUQ2OrGQMAAA==
-X-CMS-MailID: 20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37
-References: <CGME20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37@epcas5p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4db33660-2720-471d-a017-1fca4c9b7268@amd.com>
 
-This commit adds a null pointer check for udc in gadget_match_driver to
-prevent the below potential dangling pointer access. The issue arises
-due to continuous USB role switch and simultaneous UDC write operations
-performed by init.rc from user space through configfs.  In these
-scenarios, there was a possibility of usb_udc_release being done before
-gadget_match_driver.
+On 24-08-27 13:44:02, Mario Limonciello wrote:
+> On 8/27/2024 01:32, Peter Chen wrote:
+> > On 24-07-12 13:54:18, superm1@kernel.org wrote:
+> > > From: Mario Limonciello <mario.limonciello@amd.com>
+> > > 
+> > > A workaround was put in place for Haswell systems with spurious events
+> > > to put XHCI controllers into D3hot at shutdown.  This solution actually
+> > > makes sense for all XHCI controllers though because XHCI controllers
+> > > left in D0 by the OS may remain in D0 when the SoC goes into S5.
+> > > 
+> > > Explicitly put all XHCI controllers into D3hot at shutdown and when
+> > > module is unloaded.
+> > > 
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > >   drivers/usb/host/xhci-pci.c | 8 ++------
+> > >   1 file changed, 2 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> > > index 4408d4caf66d2..dde5e4a210719 100644
+> > > --- a/drivers/usb/host/xhci-pci.c
+> > > +++ b/drivers/usb/host/xhci-pci.c
+> > > @@ -667,9 +667,7 @@ static void xhci_pci_remove(struct pci_dev *dev)
+> > >   		xhci->shared_hcd = NULL;
+> > >   	}
+> > > -	/* Workaround for spurious wakeups at shutdown with HSW */
+> > > -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+> > > -		pci_set_power_state(dev, PCI_D3hot);
+> > > +	pci_set_power_state(dev, PCI_D3hot);
+> > >   	usb_hcd_pci_remove(dev);
+> > >   }
+> > > @@ -882,9 +880,7 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+> > >   	xhci_shutdown(hcd);
+> > >   	xhci_cleanup_msix(xhci);
+> > > -	/* Yet another workaround for spurious wakeups at shutdown with HSW */
+> > > -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+> > > -		pci_set_power_state(pdev, PCI_D3hot);
+> > > +	pci_set_power_state(pdev, PCI_D3hot);
+> > 
+> > Hi Mario & Mathias,
+> > 
+> > According to xHCI spec v1.2: A.1.2 Power State Definitions:
+> > 
+> > 	Software shall place each downstream USB port with power
+> > 	enabled into the Suspend or Disabled state before it
+> > 	attempts to move the xHC out of the D0 power state.
+> > 
+> > But I have not found any USB core code does it, do you have any ideas
+> > about it?
+> > 
+> > We have added the similar codes at non-PCI USB platform, but met above
+> > concerns. In fact, we met kernel dump that the thread usb-storage try
+> > to access the port status when the platform xHCI code has already put
+> > the controller to D3.
+> > 
+> > Best regards,
+> > Peter
+> > 
+> > 
+> 
+> This is pretty tangential to my patch.  But FWIW in case you missed we're
+> going to discard this patch in favor of another approach in PCI core.
+> 
+> Regarding your point though If I'm not mistaken this should be handled by
+> the Linux parent/child device model.  Each of the ports should be children
+> of the hub they're connected to and the hub a child of the controller.  So
+> when doing any actions that start runtime PM on the host controller the
+> children need to first be in runtime PM.
+> 
 
-[27635.233849]  BUG: KASAN: invalid-access in gadget_match_driver+0x40/0x94
-[27635.233871]  Read of size 8 at addr d7ffff8837ead080 by task init/1
-[27635.233881]  Pointer tag: [d7], memory tag: [fe]
-[27635.233888]
-[27635.233917]  Call trace:
-[27635.233923]   dump_backtrace+0xec/0x10c
-[27635.233935]   show_stack+0x18/0x24
-[27635.233944]   dump_stack_lvl+0x50/0x6c
-[27635.233958]   print_report+0x150/0x6b4
-[27635.233977]   kasan_report+0xe8/0x148
-[27635.233985]   __hwasan_load8_noabort+0x88/0x98
-[27635.233995]   gadget_match_driver+0x40/0x94
-[27635.234005]   __driver_attach+0x60/0x304
-[27635.234018]   bus_for_each_dev+0x154/0x1b4
-[27635.234027]   driver_attach+0x34/0x48
-[27635.234036]   bus_add_driver+0x1ec/0x310
-[27635.234045]   driver_register+0xc8/0x1b4
-[27635.234055]   usb_gadget_register_driver_owner+0x7c/0x140
-[27635.234066]   gadget_dev_desc_UDC_store+0x148/0x19c
-[27635.234075]   configfs_write_iter+0x180/0x1e0
-[27635.234087]   vfs_write+0x298/0x3e4
-[27635.234105]   ksys_write+0x88/0x100
-[27635.234115]   __arm64_sys_write+0x44/0x5c
-[27635.234126]   invoke_syscall+0x6c/0x17c
-[27635.234143]   el0_svc_common+0xf8/0x138
-[27635.234154]   do_el0_svc+0x30/0x40
-[27635.234164]   el0_svc+0x38/0x68
-[27635.234174]   el0t_64_sync_handler+0x68/0xbc
-[27635.234184]   el0t_64_sync+0x19c/0x1a0
+It seems there is no runtime PM suspend for xhci and USB core at
+.shutdown currently. Alan & Mathias, please correct me if I was wrong.
 
-Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
----
- drivers/usb/gadget/udc/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index cf6478f97f4a..77dc0f28ff01 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1338,6 +1338,7 @@ static void usb_udc_release(struct device *dev)
- 	udc = container_of(dev, struct usb_udc, dev);
- 	dev_dbg(dev, "releasing '%s'\n", dev_name(dev));
- 	kfree(udc);
-+	udc = NULL;
- }
- 
- static const struct attribute_group *usb_udc_attr_groups[];
-@@ -1574,7 +1575,7 @@ static int gadget_match_driver(struct device *dev, const struct device_driver *d
- 			struct usb_gadget_driver, driver);
- 
- 	/* If the driver specifies a udc_name, it must match the UDC's name */
--	if (driver->udc_name &&
-+	if (driver->udc_name && udc &&
- 			strcmp(driver->udc_name, dev_name(&udc->dev)) != 0)
- 		return 0;
- 
--- 
-2.17.1
-
+Thanks,
+Peter
 
