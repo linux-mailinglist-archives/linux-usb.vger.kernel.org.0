@@ -1,145 +1,206 @@
-Return-Path: <linux-usb+bounces-14220-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14222-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4320962069
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 09:13:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06004962329
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 11:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04DFE1C2364C
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 07:13:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84ED81F21581
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 09:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E23B61591FC;
-	Wed, 28 Aug 2024 07:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 800A015C15D;
+	Wed, 28 Aug 2024 09:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwOzehiN"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b="aHvVvfB4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6155F2CA6;
-	Wed, 28 Aug 2024 07:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4585015C149
+	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 09:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724829191; cv=none; b=RJMptbLeAhmVQhy/gC9aDdTC0vhJ4TLqZNhqCU8N7UFIczcSB/Z8Ny+yRMjnO5mbXJlBBV0QDjsHzka6hh00bxYTjXWqgoR0SmqHiGdf0kjog+KO8UMHYjajaHabhcM/DYFKwJQTJMgeg0KGLLTFTIbtHu7cdfzHgAlmkZV1WZ0=
+	t=1724836544; cv=none; b=OaJQfF4BdixX9/7nE+Htr0UCLrPBtrjLFE9DdD35U0PmCO7m2QCzKxLFUqydrxlbdugiebhFEBULRxmGg81T4SkSsaXqPxi/v+MRawqJLXCPhkpydoBVnxnrNgczf0J5SyHOXecrZbEiIupQZcvyiRKQJoXuGm5kqqlH/0+g9Fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724829191; c=relaxed/simple;
-	bh=qamZVgTLzxmf+M2qHioyapuwePftf9clOU3H2jaNQ7Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EFyhE/AEHmTVyJag7/ir+Mqo9K+ZuRGrrVwDTix+c1ZsWWlj1C7QC+v2tv0M77nRn9ewavnN/Ql4KLBAGZ57ATZUTtHiCAo2pa/ShEfGiIlH0itOK8fF/nL6Ft52uzybYkKJ+NSzOP6A5yO7j5LfTaTJG1DrgwEmL5XNdjLkf4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwOzehiN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A616DC4FE81;
-	Wed, 28 Aug 2024 07:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724829191;
-	bh=qamZVgTLzxmf+M2qHioyapuwePftf9clOU3H2jaNQ7Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VwOzehiNNM9WfPV8BdMT0ysx/swiBHT/DwrbkeE6J+9nIPvQvMRlkxGpjO06QZR2A
-	 7AZvSNZeNaPbhfpkhR8txsyOACm2ayebQ3VG0JoftPJ+VkWJwOFCQQ2fJXvo57y6gG
-	 SU8/HnIl8dVWE9X7DWlhKshL9aPmMNxsIe8/LrBtMiRsi7S5MhbQOMn2SW87FGsLPE
-	 8zL8PakTTcNMfy3V+iyzQchaoqgqw+8GSFZcNC8nzH5eSuQYhLMD4vAmw0UEaqCWUx
-	 /xQJ+ivmUJdVL/tT2hI3HzawrqXsyNwJe3QpP3BJYiYeLN0sEWokc+5gpuMk6nqWXf
-	 FFESLx39pY7bg==
-Date: Wed, 28 Aug 2024 15:13:03 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: superm1@kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	mika.westerberg@linux.intel.com, stern@rowland.harvard.edu
-Subject: Re: [PATCH 2/2] xhci: pci: Put XHCI controllers into D3hot at
- shutdown
-Message-ID: <20240828071303.GA921051@nchen-desktop>
-References: <20240712185418.937087-1-superm1@kernel.org>
- <20240712185418.937087-3-superm1@kernel.org>
- <20240827063206.GA879539@nchen-desktop>
- <4db33660-2720-471d-a017-1fca4c9b7268@amd.com>
+	s=arc-20240116; t=1724836544; c=relaxed/simple;
+	bh=HmGZcbIetLy+WYTSVt3zoel+5PKKTXBtdhOpIEfOA8Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JqNA5BPvaB9S0qZoPO09rbbjQB3JxJ0ELaZ4nKIq15BOAayfD9jKYiGtHVgtWmsRyuHBCUBGLCH5Lnhsk9m6xGA1qAD2LtJcbvRfRho0uQuqgXPTH2VNP8yg0ufu3SyxetAaE4qv42GKmhmRu93IzGyrfbHdKWf4HzckeMFLpT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b=aHvVvfB4; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1724836536; x=1725441336; i=mista.tapas@gmx.net;
+	bh=4dBwVsz4I/pvMWa1rbdwwXs5ONxZG/nVm156xVBe2Yc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=aHvVvfB4b1nWRC15KmaAi2TUPpUWZzgJI4/jehZcGOSyr7dluhgV7qJh1cUf8AHr
+	 kso98uDoZnhqg6hBHajI2bElZmAmIOicdauVIDjgy/xyLD/mXAFrSLpOJWToYaFu0
+	 A/g6SlxMtlewZy6oVlkQYvBSsoVFRrYx4iFdAUpg+5LMFsyf1J7Mu+5dG12+3m+Tt
+	 tctaVOPCX/22IxXnXGGRgA7CFDTxeIxJBCzAV6eTv2UK0MLFGcuVqw03b9Ucsslrc
+	 tVCeU/VPqUDHQNW3fE1HToNd6gNqVJ1V7Is6z5FgZIfgM9wizkqkd7h8VZvLFTIme
+	 Svn0r7l7DP3XPOJE/w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.178.77] ([149.50.50.203]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mlf4c-1sI79R3z7K-00qheN; Wed, 28
+ Aug 2024 11:15:36 +0200
+Message-ID: <7c55cd6b-83ef-4004-9898-b004fdabb820@gmx.net>
+Date: Wed, 28 Aug 2024 11:15:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4db33660-2720-471d-a017-1fca4c9b7268@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Misbehaving Alder Lake-N PCH USB 3.2 xHCI Host Controller
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+ =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org
+References: <20240820130158.339b4d87@foxbook>
+ <bb565e29-10e9-4211-a854-fdd9771149b4@gmx.net>
+ <20240821150233.4f8f66ef@foxbook>
+ <e6879e07-3548-41c1-b18a-55c40d041b86@linux.intel.com>
+ <2b81ac60-32f5-4b71-98de-d336b7282cfb@gmx.net>
+ <ffb0be5f-11f9-4f94-b292-f47885cfa26a@gmx.net>
+ <301bfda2-72d5-423a-bed7-87ac786dac83@linux.intel.com>
+From: FPS <mista.tapas@gmx.net>
+Content-Language: en-US
+In-Reply-To: <301bfda2-72d5-423a-bed7-87ac786dac83@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7UUOizOw0BJ00kuS3u0H3XqLwhYmByEyQUVPyg87uK6BHSZAvSG
+ 9kDRPAfsSa7IvlYWc1HS1BbmrCEZHrBBT51H0ggLOiQ0fTAJ7mGIP/3iF63+RxoBEZw274y
+ Us/ULFD5e4XeLVxXWBnLJ6Imw0NnQHq3IPUvCoEszdtpbkt0+UWFzmfoSgjjZ6FbkJNhUjJ
+ YysxFXZm2GMtfUF6As1Ag==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:UL+moYFaSu0=;rXBrncDQj/vuv/UR+ndOCPbRaI4
+ cWFLjRWEsQK2yeJAM/lnQ70Tc+xoQl7icCycKDFn+LgSzQjAvWB3tJqmYUtpQf6B+FLXmoG3X
+ 8CQLuvm3xe5FryO2KzG6XB5W2H2XlMPy+HCol1pGJVawzfp3fIsckpdLtKnncP0M+8toY4mVb
+ r36wo3VL7rFOi0YbuWOAMJghUtXuqMPSY5eOqzfMUdUfQLLDGfWTaKn4t/Ctt6lTa1Dj7tWzV
+ 8rpa/KFstGOjbbBMN+SfW5WOBZrbHeBBpKu6IsZXxBoyQewRpqZDNdapUhYFfNdP2T9/Zcbb/
+ A1domEvnZNyuYphSXiQSKU4pZHtPqSO3iEPmPk0dnkUGB11NvkDMyel2S0XKi+YMkVuCXSF3H
+ IWikrasJXGXlo/3ro+aMp27o7TOH3VT4SfeTLNLlCKHVm6CRHt0tbWylUaZvuiNKE1D5KTF+t
+ y76FnHn8fuVQtws2Ecmyf43aMAY3GoxcqcslLl/JhGwdGJffMjTyeyt/8BjyM6iKR491HRO2Y
+ ELaCuA1uifNOgSISoPrej2uVEmeL8Ieq0ExE8FKbPskVXY15+vSYTMXT4X40q6SbsMEkXiOE5
+ 9cbVgXg8OxFI3AhfOF0JJD3JoFJdLA2assP7idCKN5tlidzLuQ9dVLbmupEyY/1MwT6bs5m5/
+ PyjGVnjfpckz0SMlSYi/P9THYHo1LF7XS3xRCs/2Wrx7mKVk1JwXnJqTz/wx/Vzepe9muPH7r
+ 47d/BNGMjUxcIdjkfqM2CsergOrXEuGoE4cHxBboYam7ehckjKlCBRE3bTgdmlOtR4vY9HK5V
+ omxc8ZHb8x2G2Plqtf2T3KOQ==
 
-On 24-08-27 13:44:02, Mario Limonciello wrote:
-> On 8/27/2024 01:32, Peter Chen wrote:
-> > On 24-07-12 13:54:18, superm1@kernel.org wrote:
-> > > From: Mario Limonciello <mario.limonciello@amd.com>
-> > > 
-> > > A workaround was put in place for Haswell systems with spurious events
-> > > to put XHCI controllers into D3hot at shutdown.  This solution actually
-> > > makes sense for all XHCI controllers though because XHCI controllers
-> > > left in D0 by the OS may remain in D0 when the SoC goes into S5.
-> > > 
-> > > Explicitly put all XHCI controllers into D3hot at shutdown and when
-> > > module is unloaded.
-> > > 
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > >   drivers/usb/host/xhci-pci.c | 8 ++------
-> > >   1 file changed, 2 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> > > index 4408d4caf66d2..dde5e4a210719 100644
-> > > --- a/drivers/usb/host/xhci-pci.c
-> > > +++ b/drivers/usb/host/xhci-pci.c
-> > > @@ -667,9 +667,7 @@ static void xhci_pci_remove(struct pci_dev *dev)
-> > >   		xhci->shared_hcd = NULL;
-> > >   	}
-> > > -	/* Workaround for spurious wakeups at shutdown with HSW */
-> > > -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-> > > -		pci_set_power_state(dev, PCI_D3hot);
-> > > +	pci_set_power_state(dev, PCI_D3hot);
-> > >   	usb_hcd_pci_remove(dev);
-> > >   }
-> > > @@ -882,9 +880,7 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
-> > >   	xhci_shutdown(hcd);
-> > >   	xhci_cleanup_msix(xhci);
-> > > -	/* Yet another workaround for spurious wakeups at shutdown with HSW */
-> > > -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-> > > -		pci_set_power_state(pdev, PCI_D3hot);
-> > > +	pci_set_power_state(pdev, PCI_D3hot);
-> > 
-> > Hi Mario & Mathias,
-> > 
-> > According to xHCI spec v1.2: A.1.2 Power State Definitions:
-> > 
-> > 	Software shall place each downstream USB port with power
-> > 	enabled into the Suspend or Disabled state before it
-> > 	attempts to move the xHC out of the D0 power state.
-> > 
-> > But I have not found any USB core code does it, do you have any ideas
-> > about it?
-> > 
-> > We have added the similar codes at non-PCI USB platform, but met above
-> > concerns. In fact, we met kernel dump that the thread usb-storage try
-> > to access the port status when the platform xHCI code has already put
-> > the controller to D3.
-> > 
-> > Best regards,
-> > Peter
-> > 
-> > 
-> 
-> This is pretty tangential to my patch.  But FWIW in case you missed we're
-> going to discard this patch in favor of another approach in PCI core.
-> 
-> Regarding your point though If I'm not mistaken this should be handled by
-> the Linux parent/child device model.  Each of the ports should be children
-> of the hub they're connected to and the hub a child of the controller.  So
-> when doing any actions that start runtime PM on the host controller the
-> children need to first be in runtime PM.
-> 
 
-It seems there is no runtime PM suspend for xhci and USB core at
-.shutdown currently. Alan & Mathias, please correct me if I was wrong.
 
-Thanks,
-Peter
+On 8/27/24 2:37 PM, Mathias Nyman wrote:
+> It's a bit complex, but it shows the missed service events started from
+> out transfers.
+>
+> Quick background, audio class driver queues URBs. One URB containis one =
+or several
+> TDs (transfer descriptors). One TD is consumed each interval, in this ca=
+se each 125us.
+> In this case audio driver uses two URBs, usually containing 7 or 8 TDs, =
+each transferring
+> 48 bytes. TD (Transfer descriptor) equals one TRB (Transfer Block) in th=
+is particular case.
+
+Thanks for the explanation!
+
+> USB audio driver queues two URBs:
+> =C2=A0 185.943950: xhci_urb_enqueue: ep1out-isoc: urb 000000007faac5c4 p=
+ipe 33792 slot 3 length 0/384=C2=A0 8 x 48 bytes 0x10a3f5000 - 0x10a3f5070
+> =C2=A0 185.943966: xhci_urb_enqueue: ep1out-isoc: urb 0000000094a36c26 p=
+ipe 33792 slot 3 length 0/336=C2=A0 7 x 48 bytes 0x10a3f5080 - 0x10a3f50e0
+>
+> xHCI gives back URBs once completed. About 1ms apart which is ok.
+> Odd that audio driver doesn't queue back the fist URB immediately after =
+receiving it, this could cause missed service event.
+> =C2=A0 185.946834: xhci_urb_giveback: ep1out-isoc: urb 000000007faac5c4 =
+pipe 33792 slot 3 length 384/384
+> =C2=A0 185.947705: xhci_urb_giveback: ep1out-isoc: urb 0000000094a36c26 =
+pipe 33792 slot 3 length 336/336
+>
+> Audio driver queues both URBs after it has processed their content.
+> very odd that the other URB only contains 1 TD (covering only 125us)
+> =C2=A0 185.947732: xhci_urb_enqueue: ep1out-isoc: urb 000000007faac5c4 p=
+ipe 33792 slot 3 length 0/48=C2=A0 1 x 48 bytes (0x10a3f50f0)
+> =C2=A0 185.947745: xhci_urb_enqueue: ep1out-isoc: urb 0000000094a36c26 p=
+ipe 33792 slot 3 length 0/336 7 x 48 bytes (0x10a3f5100 - 10a3f5160)
+>
+> Audio driver cancels both URBs, Odd, why does it do that?
+> =C2=A0 185.949843: xhci_urb_dequeue: ep1out-isoc: urb 000000007faac5c4 p=
+ipe 33792 slot 3 length 0/48=C2=A0=C2=A0=C2=A0 CANCEL why?? (0x10a3f50f0)
+> =C2=A0 185.949848: xhci_urb_dequeue: ep1out-isoc: urb 0000000094a36c26 p=
+ipe 33792 slot 3 length 0/336=C2=A0=C2=A0 CANCEL why?? (0x10a3f5100 - 10a3=
+f5160) turned to no-ops, deq at af5100
+
+I looked a bit at the snd_usb_audio driver for places where urb unlinking =
+or
+killing might happen:
+
+[fps@arch97 usb]$ grep -n usb_kill_urb *.c -R
+midi2.c:242:            usb_kill_urb(ep->urbs[i].urb);
+midi.c:1496:                            usb_kill_urb(ep->out->urbs[j].urb)=
+;
+midi.c:1507:                            usb_kill_urb(ep->in->urbs[j]);
+midi.c:2364:                            usb_kill_urb(ep->in->urbs[j]);
+mixer.c:3647:           usb_kill_urb(mixer->urb);
+mixer.c:3649:           usb_kill_urb(mixer->rc_urb);
+mixer.c:3658:   usb_kill_urb(mixer->urb);
+mixer.c:3659:   usb_kill_urb(mixer->rc_urb);
+[fps@arch97 usb]$ grep -n usb_unlink_urb *.c -R
+endpoint.c:1053:                                usb_unlink_urb(u);
+
+The only really possibly relevant file here is endpoint.c since we're only
+dealing with pcm streams.
+
+endpoint.c:1053 is part of
+
+*
+ * Stop active urbs
+ *
+ * This function moves the EP to STOPPING state if it's being RUNNING.
+ */
+static int stop_urbs(struct snd_usb_endpoint *ep, bool force, bool keep_pe=
+nding)
+
+But none of the call sites for this function look as if they would be call=
+ed in
+the middle of an active use of the endpoint. Weird.
+
+[...]
+
+> URBs contain 8TDs with 125us interval, and should complete 1ms apart on =
+average.
+> This won't be true for every URB as sometimes urb giveback might be bloc=
+ked for
+> a short while, but it should average out. Next URB would then return a b=
+it earlier.
+>
+> In this case it doesn't. URB are permanently delayed.
+>
+> We use "SIA" (Start Isoc ASAP) flag for Isoc transfers, this allows cont=
+roller
+> to queue TD to be transferred "as soon as possible" without forcing it t=
+o a
+> specific microframe.=C2=A0 Could be that this flag in combination with q=
+ueueing TDs
+> very close to the IST limit causes the delay but not triggering missed s=
+ervice
+> events, or under/overruns.
+>
+> Adding more URBs could help, but causes a bit more latency.
+>
+> Or maybe see if we can get audio driver to use 3 URBs with 6TDs each?
+
+I will play around with the code a little bit. I'll probably only break th=
+ings
+though :)
+
+Thanks!
+FPS
 
