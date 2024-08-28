@@ -1,91 +1,78 @@
-Return-Path: <linux-usb+bounces-14237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87DAB9629D7
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 16:09:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBB9962AD9
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 16:54:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 213DFB21087
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 14:09:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7033E1C21DE5
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2024 14:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27EA919D8A4;
-	Wed, 28 Aug 2024 14:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13AF919E83D;
+	Wed, 28 Aug 2024 14:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="CUzv/ywR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g/UWkv9f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FE21898EC
-	for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 14:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8032868B;
+	Wed, 28 Aug 2024 14:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724854151; cv=none; b=eC1gXKR5dsWqEESHo6L+JQXnozOAPRC/l2swf1eMgCzdtYHLW6V9iABQUcWOohyKcV+dsJHruzmKbXgRPTHRmrkF5KsqDwrnpyiqLvNZNySENUuQ1WwCkwkps0DifxG6LCTV/pc1rmqDqVHmdfQiWuw3CTLigt23/jnTgL3/5UM=
+	t=1724856833; cv=none; b=EEx6b79pNzXKSGsleJaoAuqEcIFl+Yw9usNvBcgKwV412Ee38C6yX6TpDLIqSBw+AiJW/s0CM+KJnb04B1UX+yGzQh8pA8NnIUCLB0eDFVDnNfp2goLbbdGt0S7In5l/EXGxdgRLCAnZVDCMmiU/sIVx/42vYp91Vycu5+K5xLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724854151; c=relaxed/simple;
-	bh=WOdOnpf7m/iwndrnl7sIbQvn+os3jPlTjOyRoQ4Q6jA=;
+	s=arc-20240116; t=1724856833; c=relaxed/simple;
+	bh=V8arl6lpeyELiohDoLFezex7CGe6GUdRnt+dBPTOy8A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ul32fxG98es8As0NXhyuGAKVGBQp9lRGTa5fPgcs6SlRNVO2ot6fXvabhKkMV97Z5kpjF140saOejel6hIZ8ka2qlfUQv/Ad6ECXBcAx748if+Ezk/60yzTsra87YIDIt5EAheDvfD84vEtQduqgxjIR6A7RwuFqXx1vTUmMmYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=CUzv/ywR; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-44ff7cc5432so50336221cf.3
-        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2024 07:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1724854149; x=1725458949; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u51CBonYU1HgV7ECF8ZgNqcs2WU2uO/eXvnpaymgIKE=;
-        b=CUzv/ywRVV/Srbj8H3p8BBOMEB1XuBn4/cQAwPcuYgoJrqSY2r3tvPNG73dvJz+aoQ
-         zUobCh2qLBEHDeP3DE8uufWSU6ysSY1qaBnYqTNAAoE1Gtp/AqsPpVrYwmfxlWxC+8Ei
-         easYttNPLc9waD2SaVyFEMgbTVhjSigGVicnndlp3e7wr8obqBXu9ToqQctwSHDF3CHW
-         iyiBcoag195jXKKkdYd3ogJQW2DOMDzu05egs2r008kbt5RGwUn7wcRpYD6mregOl4wd
-         a+Naec3HvscSNgMX44ZD2SMxZl3IEmmS78RLXh4Kns86B569tU5CHEHc2dk0apNRUK9o
-         i+Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724854149; x=1725458949;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u51CBonYU1HgV7ECF8ZgNqcs2WU2uO/eXvnpaymgIKE=;
-        b=GzxA4847EuVg+HQV+DQCfg3GO+tVHUgHFRKWgDjO0oGjET9KuGNhEyJRaJlww1WjHC
-         xWuMrXe+/iAHCjlS2V8i2CART6oTXys8HVQXJHlQcZy8QXfE+vdYCjjE/lnOVH9CyJ0p
-         GeLbzb2tGT7qtw/IYUYsvySmjUeK1coW+ESQMUhA5D0p+6JxQQJVcsp2zv3npuCqnUYp
-         BTKMohsspd/264AqymI9MElnYaQV1DHINF/HuuVYAq98ygj8EYMIUamKJesKE0mXpboi
-         Lbnbv+OIZtmRw9nDjaKBHSU8M5prUDpeHOz2Wn6/Y7E5ckT/nZBQJCidmpXUrXDfZTwX
-         n9uA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3152A7e7y14ak120xH9iBnnonHnXvSBwGEqqJqihpulXEdT28856mYsyJimAtuqSB3TQGfzQLkg0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvHLrJgZmMVF3ZgQpec8YcM7R/oOVnHOVLe9wsYCZg3ROAZdH/
-	fgFIWoQjM3MgJRFrA6d2cSQtUCYlsLB7cuhkL8w9vfJ3t2i0XE6kxS6Kv64Sew==
-X-Google-Smtp-Source: AGHT+IFrGWnak+LjBNGL5be7F92I5fR40nlo/FF00dBfj1K7nJe1j7v7tWbAhF7k+CtaOeNqLzJ2wg==
-X-Received: by 2002:a05:622a:1145:b0:453:5efa:74b8 with SMTP id d75a77b69052e-45509d367famr195767741cf.40.1724854148892;
-        Wed, 28 Aug 2024 07:09:08 -0700 (PDT)
-Received: from rowland.harvard.edu (wrls-249-137-9.wrls-client.fas.harvard.edu. [140.247.12.9])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-454fdfc0475sm62676241cf.8.2024.08.28.07.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 07:09:08 -0700 (PDT)
-Date: Wed, 28 Aug 2024 10:09:05 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Peter Chen <peter.chen@kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>, superm1@kernel.org,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=chGyfRyGecKT/1U+hfGVJRmDWUXFbFU6zK1kiFwrMQZc2/RNSair1l8Hr4ee+vZ6CNkxbS9U0frP1uvM+cdgv602mNH35dcVeZG9kT/r5A4QM9WtDeN67q57eFP3RnNZTIpek3E3kB2UJGJaOLpDlb3ygBb5BVHIo2CpYB7TqUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g/UWkv9f; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724856832; x=1756392832;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V8arl6lpeyELiohDoLFezex7CGe6GUdRnt+dBPTOy8A=;
+  b=g/UWkv9fOpJ2AMSkXXtetSswpt0tmJwWGMuV+yRP+JfkHWJ3eaYIiX8+
+   U+8OA+1KCVK9yC9c4acP0mzGMYMpg2xItJfSWLpSsCnuStGf0aO/qXlme
+   rAECvqvP/jMXmml0OVz4J4sUlxU+KSEJxm0ViUSca0+3/c4nQFr/e0dxp
+   nXsLqPQa0BmXUBE6tYpXdBCUKc/lbM5xMgVn1iHK7YvqoXrEqrfeN1n7n
+   LgIxxXLa+8JCDYJa/8oTSUaEkOAYmQoHqtg6l2MNoorA70/cS2KOR3kuc
+   1DOmsQcF7Arva8bG1EVxFiZVvmLl24aFHkEit5B+y+5oAVcFqNs8NEhr1
+   g==;
+X-CSE-ConnectionGUID: DaCG3isCQrCw3/w6m/K+hQ==
+X-CSE-MsgGUID: 1Hk1S0YcQfKwZpDHr5hYyw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="33961276"
+X-IronPort-AV: E=Sophos;i="6.10,183,1719903600"; 
+   d="scan'208";a="33961276"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 07:53:48 -0700
+X-CSE-ConnectionGUID: kCR/1cL1QrSJ+4rjpOJvLw==
+X-CSE-MsgGUID: /HQxcthCSTafOH65CJy67A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,183,1719903600"; 
+   d="scan'208";a="67386686"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa003.fm.intel.com with SMTP; 28 Aug 2024 07:53:45 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 28 Aug 2024 17:53:44 +0300
+Date: Wed, 28 Aug 2024 17:53:44 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>,
 	open list <linux-kernel@vger.kernel.org>,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	mika.westerberg@linux.intel.com
-Subject: Re: [PATCH 2/2] xhci: pci: Put XHCI controllers into D3hot at
- shutdown
-Message-ID: <bb7bba27-ddb2-4c64-8a6b-3ce4e635320e@rowland.harvard.edu>
-References: <20240712185418.937087-1-superm1@kernel.org>
- <20240712185418.937087-3-superm1@kernel.org>
- <20240827063206.GA879539@nchen-desktop>
- <4db33660-2720-471d-a017-1fca4c9b7268@amd.com>
- <20240828071303.GA921051@nchen-desktop>
- <bd380d71-4ebe-4889-9ed8-aeefec2b2b0e@linux.intel.com>
+	Anurag Bijea <icaliberdev@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
+Message-ID: <Zs85+FeIDz4n7DHx@kuha.fi.intel.com>
+References: <20240828063314.552278-1-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -94,54 +81,85 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bd380d71-4ebe-4889-9ed8-aeefec2b2b0e@linux.intel.com>
+In-Reply-To: <20240828063314.552278-1-lk@c--e.de>
 
-On Wed, Aug 28, 2024 at 05:02:10PM +0300, Mathias Nyman wrote:
-> > > > Hi Mario & Mathias,
-> > > > 
-> > > > According to xHCI spec v1.2: A.1.2 Power State Definitions:
-> > > > 
-> > > > 	Software shall place each downstream USB port with power
-> > > > 	enabled into the Suspend or Disabled state before it
-> > > > 	attempts to move the xHC out of the D0 power state.
-> > > > 
-> > > > But I have not found any USB core code does it, do you have any ideas
-> > > > about it?
-> > > > 
-> > > > We have added the similar codes at non-PCI USB platform, but met above
-> > > > concerns. In fact, we met kernel dump that the thread usb-storage try
-> > > > to access the port status when the platform xHCI code has already put
-> > > > the controller to D3.
-> > > > 
-> > > > Best regards,
-> > > > Peter
-> > > > 
-> > > > 
-> > > 
-> > > This is pretty tangential to my patch.  But FWIW in case you missed we're
-> > > going to discard this patch in favor of another approach in PCI core.
-> > > 
-> > > Regarding your point though If I'm not mistaken this should be handled by
-> > > the Linux parent/child device model.  Each of the ports should be children
-> > > of the hub they're connected to and the hub a child of the controller.  So
-> > > when doing any actions that start runtime PM on the host controller the
-> > > children need to first be in runtime PM.
-> > > 
-> > 
-> > It seems there is no runtime PM suspend for xhci and USB core at
-> > .shutdown currently. Alan & Mathias, please correct me if I was wrong.
-> > 
+On Wed, Aug 28, 2024 at 08:33:13AM +0200, Christian A. Ehrhardt wrote:
+> If the busy indicator is set, all other fields in CCI should be
+> clear according to the spec. However, some UCSI implementations do
+> not follow this rule and report bogus data in CCI along with the
+> busy indicator. Ignore the contents of CCI if the busy indicator is
+> set.
 > 
-> I think you are right.  At shutdown we only halt the xHC.
-> We don't force ports to suspend or disable state.
-> We only put some selected xHC to D3
+> If a command timeout is hit it is possible that the EVENT_PENDING
+> bit is cleared while connector work is still scheduled which can
+> cause the EVENT_PENDING bit to go out of sync with scheduled connector
+> work. Check and set the EVENT_PENDING bit on entry to
+> ucsi_handle_connector_change() to fix this.
 > 
-> USB 2 ports might suspend themselves if there is no activity.
-> 
-> Doesn't seem like usb core hcd code, or hub driver does anything either.
+> Finally, the quirk for some ASUS zenbook models is required for
+> ASUS VivoBooks as well. Apply the quirk to these as well.
 
-That's right.  Host controller drivers are supposed to handle shutdown 
-operations by themselves.  The USB core doesn't do anything.
+Can you please split this last part into a separate patch.
 
-Alan Stern
+thanks,
+
+> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> Bisected-by: Christian Heusel <christian@heusel.eu>
+> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
+> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c      | 8 ++++++++
+>  drivers/usb/typec/ucsi/ucsi_acpi.c | 7 +++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 4039851551c1..540cb1d2822c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -38,6 +38,10 @@
+>  
+>  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  {
+> +	/* Ignore bogus data in CCI if busy indicator is set. */
+> +	if (cci & UCSI_CCI_BUSY)
+> +		return;
+> +
+>  	if (UCSI_CCI_CONNECTOR(cci))
+>  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+>  
+> @@ -1249,6 +1253,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  
+>  	mutex_lock(&con->lock);
+>  
+> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
+> +			     __func__);
+> +
+>  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+>  
+>  	ret = ucsi_send_command_common(ucsi, command, &con->status,
+> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> index 7a5dff8d9cc6..aa586525ab4c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> @@ -197,6 +197,13 @@ static const struct dmi_system_id ucsi_acpi_quirks[] = {
+>  		},
+>  		.driver_data = (void *)&ucsi_zenbook_ops,
+>  	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "VivoBook_ASUSLaptop"),
+> +		},
+> +		.driver_data = (void *)&ucsi_zenbook_ops,
+> +	},
+>  	{
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "LG Electronics"),
+
+-- 
+heikki
 
