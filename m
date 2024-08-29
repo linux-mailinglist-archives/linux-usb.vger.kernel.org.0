@@ -1,111 +1,88 @@
-Return-Path: <linux-usb+bounces-14287-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14286-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 674C9964CF0
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 19:38:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E92D964C99
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 19:05:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 179D71F21A4A
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 17:38:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95E58284EC9
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 17:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369B51B6548;
-	Thu, 29 Aug 2024 17:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DA21B6547;
+	Thu, 29 Aug 2024 17:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="pHRKvHEv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ROhFhDPO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB3C4DA14;
-	Thu, 29 Aug 2024 17:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C02C1B5EC2
+	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 17:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724953097; cv=none; b=becWspkUof6NGWq1E4KxDKyly7vCG+x4zDABR4A56aKpffG0tAyKma6lPmqNFyQjwHP3yk8GkzmUGWZAckxwplFgF2lQQ2zMcnQBRjMbOiWoKxC/TgQU5x4bBqHs0ZuBKokXSZhZcubLTGVou+CX8rN2s7gPxg69VikXFuQ/ie4=
+	t=1724951122; cv=none; b=Hlg9Ya2wWcdJdqQGlxZrbEjho+1JrL/lL+TZak9dCx+nrnibCBtqwC3OPv652I+FSv0m4rqZ4HuuMXw2qx/GddqEhO73MnuAG7dMf47KZ7m/lgzQePM64DIFNlXqDzIRLs+ITeuKU4x3P5yW4qCq6Dme2eTcnWnIVqKF1D8WfSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724953097; c=relaxed/simple;
-	bh=6wsCRnfRZhJ+fkgasXgWSMyOVhetWyJcHAvQJTTQa1k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GK+D6tldzkHIENGD3FeauDzzIMt54WWALPkzfg3NWFroGvsqWAsj5fVL2XOQWYBAyARr/G6c5x+g2QtxQa6dAKbwMtK09FZytOSSqFMV3unOMtA083WuKzz6D0rmIrPrCEbrvyfIBsyFjKqZJYbgxSdu+MWO3Z1lVvqtdWMBF+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=pHRKvHEv; arc=none smtp.client-ip=80.12.242.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id jiZ0syH2EH7HIjiZ0saLgh; Thu, 29 Aug 2024 19:04:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1724951044;
-	bh=vFUq6Wkcy0AE5wCB1N8GYLdJGL7MAsf/gfEpaG3W36I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=pHRKvHEvZwtEjsH/h40qfU3O6PYuOu0xT/xB9uBmeB/WMTUz2/e/arWGDZUsvfmxv
-	 UB3LBJLKSqtlcukPNWkPDe/7RkH+oGYa6PUggVX0JWPU+RhnJiJagfTmp4oplDutb7
-	 geOevXBDxEkSYn43I6hjUmCwFkQbkTfN3kKaQcoPmfiUtA8wPsDp3oO9HGTpQww7xB
-	 6yEYCymgByITWukMbJt4WeQW4+8fOpkvWukrR9D05n94s/NouoPEY1KpPUwXhl7vV3
-	 HcGXSPUyG6VYmvFJGQhMjsqJWfblvY3tE0w5n/YovsxIc7lMtDw/fGlErkT4Qres93
-	 /X7Ny1nJ6/Dng==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Thu, 29 Aug 2024 19:04:04 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <f3b78d27-9a10-44b8-977d-b19e35a1a64a@wanadoo.fr>
-Date: Thu, 29 Aug 2024 19:04:02 +0200
+	s=arc-20240116; t=1724951122; c=relaxed/simple;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n3NiquS4MsSyhCCLb41w6gCrs9DGnxd/OI4iaYFVyjpDDVBMQr0eaYVqhMcQ7HBSYU8+CMmnTGCvZ/g7JwfWsjoEMRXiSPG251L+KAnrqOeY6jds/degQjYYFnGBAgzbMXlq7GH2yxStOiL1aB6TPqR4FrK/kav2z3cx0CXN9a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ROhFhDPO; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42817d3ecfeso115e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 10:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1724951119; x=1725555919; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=ROhFhDPO9Ll9pWySk8+1RNzrFAIkqvOHeAt76Sekt/2Nq2RgyGnHOrg06nVAwJTbbx
+         zAi0uJwwJP0jqEYMfTHLkWaLJ2gekVim0k8G/dT0p2KPEwnnDBxr8vGAEIAbWGgwydbJ
+         27gRXfuhbdNIvrexgxiNmeLdRC7iD8eL/W8DICUJu+ZkoPpVwFJIzZtULYynfRQ7WJSf
+         hf3JckSyM3mS9++wZHTI426vRojfg3E4bT5gEo9V8aflq0OYneGz+LtgkdyczysS1TMQ
+         xYqLj5Joab5nUxH9a9uJl41/gt6GcyBRtoMAcugUPwyUekYoCs3c/38EOqb5F/7yf3PF
+         4aQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724951119; x=1725555919;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=BrCdw3u0SC7tJGiNHP8tIufbE3e1k2Up0z0u9pptugxQiYtXzXOZnv7So74ByAYYmU
+         fDoH5az6CzoMXLLY1NJ+YhppuoUAOGuleScm7wKlQNAYe0GuuRNB2vgaw1Bm8dR1Chfx
+         D4iFvguSKWIVC/cbXG48g3DGrdBc7/u0MgIu+4XjXr1Y2ikQxIki4WwR4h2q5lED5a5I
+         vtkBvnwsJfYubU5RTv20Mn3Jpj50HnVtX8Er8euG1/W2CO7JYkbqjpGR85NikcDsOlx3
+         CK6/bRsyV3h4vgyqh4/OuKWOLdOPTITJG84aw7K7AQA+JM5loalDzZovWESk6bw4gvFg
+         Wzxw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwNxCYQxBZUyKT/gEij7o/+3J9j8bGzZWhchY3rwkgiFENNw1PkhO5qtwqZnRPG0sWVygku8UPKHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGYBgtC1feIeUbLbli8UvJ3IuAMh4DNNeJDBxtpRJMfFXQvJfn
+	E7wJ7z9FY0b2TegPZLu2wA9BbQDv+K5ptelLdtXQ2EVOKRAOqrkLKeSPA5cN0CvSTDpnG/nHT2k
+	mtaK41rj2/aT2YOtOlDjh6m62HiRn2Cx08dY=
+X-Gm-Gg: AV9I1ZQLq4LSbLzUubatkD27dzAa2clZWJZJTSlnboLOFLPcp3J8qbB7RZ4k68RCb/3
+	AVi273nBotCQYTDZEOckddrh9TT1FhcmGD8+NySWeyxE4Db6a4nQkSw14GU8=
+X-Google-Smtp-Source: AGHT+IF8ncbv3hPX6txBwjD+mljfVJFZjCz8WD9pS5r0ChWeEb3HcbLEeUEQAMuL4Kr+bb+8RiZA/+ov4ZUA9UxFSLs=
+X-Received: by 2002:a05:600c:6d12:b0:424:a2ae:8d1d with SMTP id
+ 5b1f17b1804b1-42bba2d4b89mr12755e9.2.1724951118768; Thu, 29 Aug 2024 10:05:18
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] usb: gadget: udc: cdns2: Simplify with dev_err_probe()
-To: "yanzhen@vivo.com >> Yan Zhen" <yanzhen@vivo.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, opensource.kernel@vivo.com, pawell@cadence.com
-References: <20240829112822.3193428-1-yanzhen@vivo.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240829112822.3193428-1-yanzhen@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <CAFs7P=jk=wfo0nbHzqd1NrGX3NKpOezD4-u=nAMqzq7mq4Lidg@mail.gmail.com>
+In-Reply-To: <CAFs7P=jk=wfo0nbHzqd1NrGX3NKpOezD4-u=nAMqzq7mq4Lidg@mail.gmail.com>
+From: Joshua Pius <joshuapius@google.com>
+Date: Thu, 29 Aug 2024 13:04:40 -0400
+Message-ID: <CAFs7P=jPqv2Zr6Fnw584TKhj5joBRt7X7gMidE4MiK1ABAMiRQ@mail.gmail.com>
+Subject: Re: [PATCH] ALSA: Add logitech Audio profile quirk
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Cc: devicetree@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
 
-Le 29/08/2024 à 13:28, Yan Zhen a écrit :
-> Use dev_err_probe() to simplify the error path and unify a
-> message template.
-> 
-> Using this helper is totally fine even if err is known to never
-> be -EPROBE_DEFER.
-> 
-> The benefit compared to a normal dev_err() is the standardized format
-> of the error code, it being emitted symbolically and the fact that
-> the error code is returned which allows more compact error paths.
-> 
-> Signed-off-by: Yan Zhen <yanzhen-DGpbCiVdSXo@public.gmane.org>
-> ---
->   drivers/usb/gadget/udc/cdns2/cdns2-pci.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-> index 50c3d0974d9b..0e904085d968 100644
-> --- a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-> +++ b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-> @@ -35,10 +35,8 @@ static int cdns2_pci_probe(struct pci_dev *pdev,
->   		return -EINVAL;
->   
->   	ret = pcim_enable_device(pdev);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "Enabling PCI device has failed %d\n", ret);
-> -		return ret;
-> -	}
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Enabling PCI device has failed\n");
-
-Nitpick: 'dev' could also be used to be slightly less verbose (other 
-opportunities exist in cdns2_pci_probe()).
-
-CJ
-
->   
->   	pci_set_master(pdev);
->   
 
 
