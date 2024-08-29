@@ -1,185 +1,175 @@
-Return-Path: <linux-usb+bounces-14260-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14261-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC511963BCC
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 08:43:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 254F6963C2D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 09:06:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFE2BB21D7B
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 06:43:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0A3F1F25A81
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 07:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D98EB158208;
-	Thu, 29 Aug 2024 06:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4B115B543;
+	Thu, 29 Aug 2024 07:06:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K5v9wHjy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZTMxWAmG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7ADA647
-	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 06:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93C414B077
+	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 07:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724913817; cv=none; b=oSN9yyY0bYQ676+oGPfHF9LlnFA/YVwL9fdx71U2nTTxgxQ4/Dez7DC4F/kgdjhoiIO8hg34kOYTgI+v6WgfxeFYBkb5MTV4TCAKC1anQzPAdZgBc6floz8KM2ef/8NMSp6uSUKt0QS/gzurXM5PTg4BbEkPH4WrGSC1cVrNLD0=
+	t=1724915210; cv=none; b=mY7A+DR9v/SmaiCoh4iEtoRphtDOoDRfwiUAmYG1pNDiw9ws2679pCW8TkRfJup03f3qKcqa7vq6S4123dZOxKfrAFVGpBnS1vvtKMYLFnoghsxgWq69X5D+xZ+DrJVaOxz+aElgvxB+iEEMsbUrQxgXnQSPr24C9dPoDKhs6xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724913817; c=relaxed/simple;
-	bh=D0UBh8lmD25BhzNxrLT0GAOBpJjLsmm0MDr9A6SNbCo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RDU7TxfdRPLItxoygpnXeLbcodifaCzDsNsYHWKkIaF44o97cYim0zlZC4dFnv7YPjXcBGzNJV33sXXjNuvjTiYwoAKQlfrOlDnWkCn7fkk0g+Plj70CHQXEJuqcowoBc1JeoUELtHZwcfghsDxcZCED5me4rxSG2aimJWeZWQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K5v9wHjy; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724913816; x=1756449816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D0UBh8lmD25BhzNxrLT0GAOBpJjLsmm0MDr9A6SNbCo=;
-  b=K5v9wHjytQKTrLBAqVwd+EdVI8lHbMFv22rYkvSxkc6gKAbxrUW7S5Hj
-   myCRZseX1EDjp38tvVgaIUEUCy6Rpj1jLbu3YS3IobXGrqkMmvJZJ1CIi
-   NOEBZ0od7ugaGWxIBY6pWUSrGZSFu84gKlELI2VXgMPsWRTME5dv0Z+QE
-   gA8Mr4fdkraPUa7pRA9wNlLaxiIbDFoFyXnZF5t9/+2ZQmZ2q2Kmp3t3t
-   nGATKTPQhwBz52MHAKLc/WRsFDBCatcRgjBkz6Hj6Rjra8xmMvh0qEk4s
-   sbY/FS3VU7a4r6ssIYFkdKYBySorrUIn2kofWmUcHLZy9fUHDRAas2JWx
-   w==;
-X-CSE-ConnectionGUID: vBVTePn4SO6FG2Jr9LfTNA==
-X-CSE-MsgGUID: UUdunZn8S/OUE+bfRDjFHQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="23650780"
-X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
-   d="scan'208";a="23650780"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 23:43:35 -0700
-X-CSE-ConnectionGUID: /zgs5dO8QluVkwavck2e+A==
-X-CSE-MsgGUID: 1v82r66uS2WSaaokYbo1fA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
-   d="scan'208";a="63111240"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa006.fm.intel.com with SMTP; 28 Aug 2024 23:43:32 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 29 Aug 2024 09:43:31 +0300
-Date: Thu, 29 Aug 2024 09:43:31 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Benson Leung <bleung@chromium.org>,
-	Bartosz Szpila <bszpila@google.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [RFC PATCH 3/3] usb: typec: ucsi: Helpers for new
- GET_CONNECTOR_STATUS fields
-Message-ID: <ZtAYk27n/zt9EH+1@kuha.fi.intel.com>
-References: <20240828161502.2774996-1-heikki.krogerus@linux.intel.com>
- <20240828161502.2774996-4-heikki.krogerus@linux.intel.com>
- <SJ0PR11MB5770FF121048EC303BCE37BA8F952@SJ0PR11MB5770.namprd11.prod.outlook.com>
+	s=arc-20240116; t=1724915210; c=relaxed/simple;
+	bh=SFHhg3Z5+fzzfbIotHHawBvQfFitQ8DPr+yL4AlplRs=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qwETJPO9Zz4dsiNou1B6SEE+GXwSRzBw0Mc1mX5HPtQFv4TKp7vEJOTFU+0Dqh7SIk0U8qAiAj8nCFUqaaRqUUJztazPo465uavPNJE1Q8HbQjTMoC+nZIvubcyvLBsP1mFuV5wCn9KgEykROr+fq14cYFtqsrd1A4jkNBLkB8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZTMxWAmG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EB80C4CEC6
+	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 07:06:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724915210;
+	bh=SFHhg3Z5+fzzfbIotHHawBvQfFitQ8DPr+yL4AlplRs=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ZTMxWAmGynayjmoT10ELsYPZ+brCNehFOzV/eFCMXc2NSoyHLEP6ugUbFAWhltLVp
+	 d0YoYGbtRwAGOh1DiRmcgUKllL9ii7dYxRK95ibbCEjXWnqmhx2nK9MN+ZVxmbMc6e
+	 FUEtf1GBjGGUCMNTNE7CAojdj6UYHlrvJEoKEwVha6ehriWc3Y21NtqFBA0+A7tFDU
+	 H1iOUr+OjuLZ4iOjTUjJINCt3GaYU6ONbXjm+7RiaftnmIPiGx7tTdACgCkG6Ja7v6
+	 FXhrFCCajUlLOHe2pQYYkhq+X0JrcFr0JUBNgYm0B5SdcJDtuMqCGka8Mf4ZeqJdhO
+	 8A2KXHshyReSA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 70473C53BA7; Thu, 29 Aug 2024 07:06:50 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
+Date: Thu, 29 Aug 2024 07:06:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: maggu2810@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219198-208809-Mv27iLSRfr@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
+References: <bug-219198-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ0PR11MB5770FF121048EC303BCE37BA8F952@SJ0PR11MB5770.namprd11.prod.outlook.com>
 
-On Wed, Aug 28, 2024 at 11:54:32PM +0000, Pilla, Siva sai kumar wrote:
-> > 
-> > UCSI v2 introduced new fields to GET_CONNECTOR_STATUS.
-> > Adding a helper for each field. The helpers check that the
-> > UCSI version is v2 or above.
-> 
-> I believe this approach helps us from ensuring new fields are only used in supported versions.
-> 
-> > 
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi.h | 66 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 66 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> > index dfbc0f6c1b9b..adcbfc96dfcf 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.h
-> > +++ b/drivers/usb/typec/ucsi/ucsi.h
-> > @@ -524,4 +524,70 @@ static inline void ucsi_debugfs_unregister(struct ucsi *ucsi) { }
-> >  #define USB_TYPEC_NVIDIA_VLINK_DP_VDO	0x1
-> >  #define USB_TYPEC_NVIDIA_VLINK_DBG_VDO	0x3
-> > 
-> > +/* -------------------------------------------------------------------------- */
-> > +
-> > +static inline enum typec_orientation ucsi_orientation(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return TYPEC_ORIENTATION_NONE;
-> > +	return UCSI_FIELD(con->status, 86, 1) ? TYPEC_ORIENTATION_REVERSE :
-> > +						TYPEC_ORIENTATION_NORMAL;
-> > +}
-> > +
-> > +static inline int ucsi_sink_path_status(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 87, 1);
-> > +}
-> > +
-> > +static inline int ucsi_reverse_current_protection_status(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 88, 1);
-> > +}
-> > +
-> 
-> I think the below fields are supported from UCSI v2.1 onwards. Can you please perform version check accordingly.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
 
-Good catch!
+--- Comment #26 from Markus Rathgeb (maggu2810@gmail.com) ---
+I resetted the git tree to 2b989ab9bc89, did another build + test.
+This commit is still a good one.
 
-thanks,
+$ git bisect good
+f90584f4beb84211c4d21b319cc13f391fe9f3c2 is the first bad commit
+commit f90584f4beb84211c4d21b319cc13f391fe9f3c2
+Author: Lu Baolu <baolu.lu@linux.intel.com>
+Date:   Tue Jul 2 21:08:38 2024 +0800
 
-> > +static inline int ucsi_power_reading_ready(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 89, 1);
-> > +}
-> > +
-> > +static inline int ucsi_current_scale(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 90, 3) * 5; /* mA */
-> > +}
-> > +
-> > +static inline int ucsi_peak_current(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 93, 16);
-> > +}
-> > +
-> > +static inline int ucsi_average_current(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 109, 16);
-> > +}
-> > +
-> > +static inline int ucsi_voltage_scale(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 125, 4) * 5; /* mV */
-> > +}
-> > +
-> > +static inline int ucsi_voltage_reading(struct ucsi_connector *con)
-> > +{
-> > +	if (WARN_ON(con->ucsi->version < UCSI_VERSION_2_0))
-> > +		return -EINVAL;
-> > +	return UCSI_FIELD(con->status, 129, 16);
-> > +}
-> > +
-> >  #endif /* __DRIVER_USB_TYPEC_UCSI_H */
+    iommu/vt-d: Add helper to flush caches for context change
 
--- 
-heikki
+    This helper is used to flush the related caches following a change in a
+    context table entry that was previously present. The VT-d specification
+    provides guidance for such invalidations in section 6.5.3.3.
+
+    This helper replaces the existing open code in the code paths where a
+    present context entry is being torn down.
+
+    Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+    Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+    Link:
+https://lore.kernel.org/r/20240701112317.94022-2-baolu.lu@linux.intel.com
+    Link:
+https://lore.kernel.org/r/20240702130839.108139-7-baolu.lu@linux.intel.com
+    Signed-off-by: Will Deacon <will@kernel.org>
+
+ drivers/iommu/intel/iommu.c |  32 +-------------------------------
+ drivers/iommu/intel/iommu.h |   4 ++++
+ drivers/iommu/intel/pasid.c | 106
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+++++++++++++-------------------
+ 3 files changed, 92 insertions(+), 50 deletions(-)
+
+
+$ git bisect log
+git bisect start
+# status: waiting for both good and bad commits
+# good: [3d51520954154a476bfdacf9427acd1d9538734c] Merge tag 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma
+git bisect good 3d51520954154a476bfdacf9427acd1d9538734c
+# status: waiting for bad commit, 1 good commit known
+# bad: [aba9753c0677e860f982edff98c7fe5a2b97758c] Merge tag 'tty-6.11-rc1' =
+of
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
+git bisect bad aba9753c0677e860f982edff98c7fe5a2b97758c
+# bad: [a4f9285520584977127946a22eab2adfbc87d1bf] Merge tag 'clk-for-linus'=
+ of
+git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
+git bisect bad a4f9285520584977127946a22eab2adfbc87d1bf
+# bad: [f66b07c56119833b88bffa4ecaf9f983834675de] Merge tag 'vfio-v6.11-rc1=
+' of
+https://github.com/awilliam/linux-vfio
+git bisect bad f66b07c56119833b88bffa4ecaf9f983834675de
+# bad: [afd81d914f6fb3e74a46bf5d0dd0b028591ea22e] Merge tag
+'dma-mapping-6.11-2024-07-19' of git://git.infradead.org/users/hch/dma-mapp=
+ing
+git bisect bad afd81d914f6fb3e74a46bf5d0dd0b028591ea22e
+# bad: [afd81d914f6fb3e74a46bf5d0dd0b028591ea22e] Merge tag
+'dma-mapping-6.11-2024-07-19' of git://git.infradead.org/users/hch/dma-mapp=
+ing
+git bisect bad afd81d914f6fb3e74a46bf5d0dd0b028591ea22e
+# good: [cbf9520823bdd4c44c94b5988e354ee12d57fa58] Merge branch
+'iommu/arm/smmu' into iommu/next
+git bisect good cbf9520823bdd4c44c94b5988e354ee12d57fa58
+# bad: [c2b2e5c50330b29804339df4e7adf70e9f19b793] Merge branch 'iommu/core'
+into iommu/next
+git bisect bad c2b2e5c50330b29804339df4e7adf70e9f19b793
+# bad: [31000732d56b43765d51e08cccb68818fbc0032c] iommu/vt-d: Fix identity =
+map
+bounds in si_domain_init()
+git bisect bad 31000732d56b43765d51e08cccb68818fbc0032c
+# good: [804f98e224e41c16e3b70f97790f84894745a392] iommu/vt-d: Downgrade
+warning for pre-enabled IR
+git bisect good 804f98e224e41c16e3b70f97790f84894745a392
+# bad: [3753311c9190f833963fb47336dfe17221d93706] iommu/vt-d: Refactor PCI =
+PRI
+enabling/disabling callbacks
+git bisect bad 3753311c9190f833963fb47336dfe17221d93706
+# bad: [f90584f4beb84211c4d21b319cc13f391fe9f3c2] iommu/vt-d: Add helper to
+flush caches for context change
+git bisect bad f90584f4beb84211c4d21b319cc13f391fe9f3c2
+# good: [2b989ab9bc89b29dd4b5509408b8fa42337eda56] iommu/vt-d: Add helper to
+allocate paging domain
+git bisect good 2b989ab9bc89b29dd4b5509408b8fa42337eda56
+# first bad commit: [f90584f4beb84211c4d21b319cc13f391fe9f3c2] iommu/vt-d: =
+Add
+helper to flush caches for context change
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
