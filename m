@@ -1,425 +1,152 @@
-Return-Path: <linux-usb+bounces-14289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14290-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F90F964D72
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 20:09:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D446B964E19
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 20:49:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 442D61C22160
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 18:09:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42FAC1F2226C
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 18:49:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931681B86E6;
-	Thu, 29 Aug 2024 18:08:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5601BE866;
+	Thu, 29 Aug 2024 18:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r8wStHdi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lt9wHwxd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093551B81D4;
-	Thu, 29 Aug 2024 18:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6831BE251
+	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 18:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724954915; cv=none; b=AULSSHoLtqL9yhNKdU1JKfhRiwHiSX8MM2ojhgnHHSpDMOJMthf1i8yUCSeXG1Rs90z/y7SefIUgxsqTqT+XK4WazTjmTBfSZtxKPayfuPCfbuUykiqtbbpNwH8OpIQE79CCQMMCxIhQA5ptTYxWGQ2T8q4mWO9BMQFfTvQWx0A=
+	t=1724957083; cv=none; b=k8XENOIGuLRUodTesPCxWxLz8VKOOXbHd27HoW/AACDpvRJ0nmGkk6y01SrU2kVCQAkEub6KXReXCMUfeCRXLimvIssnb1stcF2p9Mo2/fMk71ZE3UN32Qb0mFcJxJYkNIV82rhBELdVNvdycTux0sdxIHMZncDT1LHxKns/tpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724954915; c=relaxed/simple;
-	bh=C13xoFhJK6cmxgZuGmS3AlQujpIr+u06c/XDdASbM3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GopR0dap7sZ7tUNVqeuIbFzibqozdsmbA/NRfMjvrQv1yEwqALHPoB65Y17cQmdGTxO6Sa2jF3EhJJyjOp9xFKFflPKHAsPzw/2P7jOBLr0blMhP4clS5Son8E4QMKYtw5OtNY98Se9gLt7H5TY/sxQRovt3qtEK0X57OgwRLRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r8wStHdi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B073FC4CEC1;
-	Thu, 29 Aug 2024 18:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724954914;
-	bh=C13xoFhJK6cmxgZuGmS3AlQujpIr+u06c/XDdASbM3g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r8wStHdi3ge6t9sjbk6KPialPcbQPcyFbjlsFzhn/L7sqIQPTLqUT/X9x+vYmqG04
-	 nhMqLOAoaKstC5MQY9jGhMI5ENif90I8aGI8P9/tyF6VdWyg9wOTKURrLagXOOEP3B
-	 1NhGgDISSUfmfYq757tfPMgHM4q8eqJMv5XJziF5ljSnqUcRMV+tOn9I4+jsEXHc2p
-	 +M31Y+EFf8clGukjQsVVMGPf4TWCHEg65uugJxBU9K9rOVf13AFDdb9iq9LqkefDwY
-	 rNeZWNB8OOP6XAb7jNtVwPvZWMZ8BcaaUrEZ89UATP2wdvgDWI+9qQ5yMZ/a+XSSaP
-	 0+Fbxqx1VMb1g==
-Date: Thu, 29 Aug 2024 23:38:30 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com,
-	gregkh@linuxfoundation.org, Frank.Li@nxp.com, jun.li@nxp.com,
-	l.stach@pengutronix.de, aford173@gmail.com, hongxing.zhu@nxp.com,
-	alexander.stein@ew.tq-group.com, linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] phy: fsl-imx8mq-usb: add tca function driver for
- imx95
-Message-ID: <ZtC5HqOzgDBYc8uW@vaman>
-References: <20240826070854.1948347-1-xu.yang_2@nxp.com>
- <20240826070854.1948347-3-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1724957083; c=relaxed/simple;
+	bh=XVH+qw8w65unaRXW0f5lRb3ixXIvUxmzc94Q95ng4ZE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=B3V2ho49grP58/oUFv6jxKuiypRJIhy+m5lQRIZtcwER+Ij3dm5vC0T0m2jW2bd8O65pzc0w0dgTupBg2ZIgKdMKl1XiFU3X4YvmLIKw7tD7PC3IQOqzL9Ata0BT0ndGhfsAzWURV5xe3QBASCaFndlJzWu6lWxqZSRMVSJsO/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lt9wHwxd; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42bb9d719d4so2233865e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 11:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724957080; x=1725561880; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bPihfaKA2Ncz2MiX/m9dykVkd/DtCZT9+2T1uLNZPSE=;
+        b=lt9wHwxdvUuoTIhgD6aGT4XXlEaa0mznpoqhHzJP9r2IjhJpHYJmPREN+4hIP7NyHY
+         gBZkhoDTVFEBtB7GrIAR4qWia0MLjWtEOPc9k4XSa+QIRX8wbOwe07Uj9V9SR5ZTF8EL
+         6i/qbv1Dadvttw5k/+tJohpejHd2o4qqe6QrSkfEn7fodg8KopOeAWlEGG/sv+wz40dY
+         40WF42bgqfclFS+j/iHXPct3yQVs7RrNKsxeFz1HgI0mOhZfJT1HA1ZXUU1FvooCdpxU
+         NWGl7Wky1ORP2Uwtc/hTxvzUWMZSLmcsEzTAuBnoe8JYejkmmDO6L0PZIiy2GqdMiPz6
+         X14Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724957080; x=1725561880;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bPihfaKA2Ncz2MiX/m9dykVkd/DtCZT9+2T1uLNZPSE=;
+        b=XVQCJPf7fLa1EpWCO/yUwJwH3lSA04GxNkTHG2BVbaw3zf4Vzx8+DIijLBfeJt+bgg
+         z/YHc8ulRxuBI/JG3YNX/cAY36zOmePOLWFl7pRLLg96cqxnaUwBnnNri4d9enAgv9Y6
+         9ikg0iVGkZLmv3QZkoQc9K26o1apTJ2W3wH4vUhEFBULGIzM7QmjH9s/HlqfkPm/V3k5
+         D/Cc7jiqsACVWAcm1j19pmomqkVLIRKquSUC/G672ao4xmRV5xuLb/befdExkdl5Yjz+
+         wzX5k45K2b3LVCUjy97Isbx95luUrSjhHNPYbQp1T4/77pB1c1M9eHen4XG9cpjbVRs4
+         x+2g==
+X-Forwarded-Encrypted: i=1; AJvYcCVHVm5ltIKnDdz+S5v46hJEJQ8WNDFSKyRpJihJv/6Ap9oLIMKOcOJXDNiid2K69GzO1V1OIr9HBWk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1rj4WzbVs6cnYO+N1gtcKdK7vGkEYuiUcmN6xiyiZLo1RAdHK
+	lxoninl2ZvOILRQisDLKthFceBMFfmjgK8nyt8G7kHMKcFIxSdD0ZS6W3AfAQxM=
+X-Google-Smtp-Source: AGHT+IFrgJIgqAeicEyJjTgtyNnUEWmERidm2ah//MyAABKVE0BHwAU/Z99LitUrA38Qh/UbVXPMNQ==
+X-Received: by 2002:a05:600c:1914:b0:42b:a356:a780 with SMTP id 5b1f17b1804b1-42bb02a8517mr32499365e9.19.1724957079716;
+        Thu, 29 Aug 2024 11:44:39 -0700 (PDT)
+Received: from [127.0.1.1] ([82.79.186.176])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6e33b41sm24540885e9.40.2024.08.29.11.44.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 11:44:39 -0700 (PDT)
+From: Abel Vesa <abel.vesa@linaro.org>
+Subject: [PATCH RFC 0/2] usb: typec: Add new driver for Parade PS8830
+ Type-C Retimer
+Date: Thu, 29 Aug 2024 21:44:24 +0300
+Message-Id: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240826070854.1948347-3-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAInB0GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDUyND3QrDVAsDQwMD3YJiCwtjA90U0+Tk5ERL0yRTU3MloK6CotS0zAq
+ widFKQW7OSrG1tQDqFIg9ZgAAAA==
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Rajendra Nayak <quic_rjendra@quicinc.com>, 
+ Sibi Sankar <quic_sibis@quicinc.com>, Johan Hovold <johan@kernel.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ Abel Vesa <abel.vesa@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1380; i=abel.vesa@linaro.org;
+ h=from:subject:message-id; bh=XVH+qw8w65unaRXW0f5lRb3ixXIvUxmzc94Q95ng4ZE=;
+ b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBm0MGNGMQDzX3Nx5DsiYFHYI6pN0gQaq2VaDNTj
+ 7Z+byN/pdaJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZtDBjQAKCRAbX0TJAJUV
+ VrzjEACkXmp19AD7f0T1wRa6RLzrEPyfAU7fAOv55K7ac9Yu5dHsBuUU80KfJFrWjZf4EbYd4ad
+ 4I6Vh8SBhWRaFhXxNtbKKU4otMeYCWGGRWEEzZsQAjhoXcdgR1JpuJxyZMT2kyOUI797PQJRbfe
+ BummyVyoaRfNUYVWHJlq7jQgh2nQS8DG58CaZfeiNe/ugxxSf2TtE+JFAB3EhOVvybhUAe8hKLb
+ axDY57mOojCq2kvUvwyTrtv/S1TF0tJdgnkbPg2C2ozskbGK0yRo+OhUQrh0AeK1ViyQTPH8gvT
+ Oep18JCLkyH6wTybd++euBxw8lvnKw7GPf0bw6g/QNtT60Y/5qjhx/cm3NmJ4ugx4HQsvNeVx6Y
+ 6lHSuCQmvBcCwvFydra3ynq5sV5b3j0uVMi1v0QqQF+Rw2UQzaCfnzCAyRqqKA39y0zkZBYwFmK
+ hIhshtRpKSLKrKFIm5KIEqeaB0e6F6Qo21qTjEJozDIrDVIb2lcdEqQcrKYjtW6l71n89g6pUN4
+ fLe2+UZUczJBydDxk1Uq7Vv55Ljs879I4DX8yrAhKBI7VLQggDYtgJLG2BeistCm/cWTV4WgT2m
+ arFyPihthyEXNWO3ayxk8wK8kMG6/LQepENmu9IcW78x3ncWv2GSM39sMw+6CrE7d3mGqw2lr2J
+ gSWX9bsN33KaMOA==
+X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
+ fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
 
-On 26-08-24, 15:08, Xu Yang wrote:
-> The i.MX95 USB3 phy has a Type-C Assist block (TCA). This block consists
-> two functional blocks (XBar assist and VBus assist) and one system
-> access interface using APB.
-> 
-> The primary functionality of XBar assist is:
->  - switching lane for flip
->  - moving unused lanes into lower power states.
-> 
-> This info can be get from:
-> i.MX95 RM Chapter 163.3.8 Type-C assist (TCA) block.
-> 
-> This will add support for TCA block to achieve lane switching and tca
-> lower power functionality.
-> 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> Reviewed-by: Jun Li <jun.li@nxp.com>
-> 
-> ---
-> Changes in v2:
->  - return the value of imx95_usb_phy_get_tca()
-> Changes in v3:
->  - no changes
-> ---
->  drivers/phy/freescale/Kconfig              |   1 +
->  drivers/phy/freescale/phy-fsl-imx8mq-usb.c | 240 +++++++++++++++++++++
->  2 files changed, 241 insertions(+)
-> 
-> diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
-> index dcd9acff6d01..81f53564ee15 100644
-> --- a/drivers/phy/freescale/Kconfig
-> +++ b/drivers/phy/freescale/Kconfig
-> @@ -5,6 +5,7 @@ if (ARCH_MXC && ARM64) || COMPILE_TEST
->  config PHY_FSL_IMX8MQ_USB
->  	tristate "Freescale i.MX8M USB3 PHY"
->  	depends on OF && HAS_IOMEM
-> +	depends on TYPEC || TYPEC=n
->  	select GENERIC_PHY
->  	default ARCH_MXC && ARM64
->  
-> diff --git a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-> index adc6394626ce..8bd6d91951a2 100644
-> --- a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-> +++ b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-> @@ -10,6 +10,7 @@
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/regulator/consumer.h>
-> +#include <linux/usb/typec_mux.h>
->  
->  #define PHY_CTRL0			0x0
->  #define PHY_CTRL0_REF_SSP_EN		BIT(2)
-> @@ -50,11 +51,66 @@
->  
->  #define PHY_TUNE_DEFAULT		0xffffffff
->  
-> +#define TCA_CLK_RST			0x00
-> +#define TCA_CLK_RST_SW			BIT(9)
-> +#define TCA_CLK_RST_REF_CLK_EN		BIT(1)
-> +#define TCA_CLK_RST_SUSPEND_CLK_EN	BIT(0)
-> +
-> +#define TCA_INTR_EN			0x04
-> +#define TCA_INTR_STS			0x08
-> +
-> +#define TCA_GCFG			0x10
-> +#define TCA_GCFG_ROLE_HSTDEV		BIT(4)
-> +#define TCA_GCFG_OP_MODE		GENMASK(1, 0)
-> +#define TCA_GCFG_OP_MODE_SYSMODE	0
-> +#define TCA_GCFG_OP_MODE_SYNCMODE	1
-> +
-> +#define TCA_TCPC			0x14
-> +#define TCA_TCPC_VALID			BIT(4)
-> +#define TCA_TCPC_LOW_POWER_EN		BIT(3)
-> +#define TCA_TCPC_ORIENTATION_NORMAL	BIT(2)
-> +#define TCA_TCPC_MUX_CONTRL		GENMASK(1, 0)
-> +#define TCA_TCPC_MUX_CONTRL_NO_CONN	0
-> +#define TCA_TCPC_MUX_CONTRL_USB_CONN	1
-> +
-> +#define TCA_SYSMODE_CFG			0x18
-> +#define TCA_SYSMODE_TCPC_DISABLE	BIT(3)
-> +#define TCA_SYSMODE_TCPC_FLIP		BIT(2)
-> +
-> +#define TCA_CTRLSYNCMODE_CFG0		0x20
-> +#define TCA_CTRLSYNCMODE_CFG1           0x20
-> +
-> +#define TCA_PSTATE			0x30
-> +#define TCA_PSTATE_CM_STS		BIT(4)
-> +#define TCA_PSTATE_TX_STS		BIT(3)
-> +#define TCA_PSTATE_RX_PLL_STS		BIT(2)
-> +#define TCA_PSTATE_PIPE0_POWER_DOWN	GENMASK(1, 0)
-> +
-> +#define TCA_GEN_STATUS			0x34
-> +#define TCA_GEN_DEV_POR			BIT(12)
-> +#define TCA_GEN_REF_CLK_SEL		BIT(8)
-> +#define TCA_GEN_TYPEC_FLIP_INVERT	BIT(4)
-> +#define TCA_GEN_PHY_TYPEC_DISABLE	BIT(3)
-> +#define TCA_GEN_PHY_TYPEC_FLIP		BIT(2)
-> +
-> +#define TCA_VBUS_CTRL			0x40
-> +#define TCA_VBUS_STATUS			0x44
-> +
-> +#define TCA_INFO			0xFC
-> +
-> +struct tca_blk {
-> +	struct typec_switch_dev *sw;
-> +	void __iomem *base;
-> +	struct mutex mutex;
-> +	enum typec_orientation orientation;
-> +};
-> +
->  struct imx8mq_usb_phy {
->  	struct phy *phy;
->  	struct clk *clk;
->  	void __iomem *base;
->  	struct regulator *vbus;
-> +	struct tca_blk *tca;
->  	u32 pcs_tx_swing_full;
->  	u32 pcs_tx_deemph_3p5db;
->  	u32 tx_vref_tune;
-> @@ -64,6 +120,170 @@ struct imx8mq_usb_phy {
->  	u32 comp_dis_tune;
->  };
->  
-> +
-> +static void tca_blk_orientation_set(struct tca_blk *tca,
-> +				enum typec_orientation orientation);
-> +
-> +#ifdef CONFIG_TYPEC
-> +
-> +static int tca_blk_typec_switch_set(struct typec_switch_dev *sw,
-> +				enum typec_orientation orientation)
-> +{
-> +	struct imx8mq_usb_phy *imx_phy = typec_switch_get_drvdata(sw);
-> +	struct tca_blk *tca = imx_phy->tca;
-> +	int ret;
-> +
-> +	if (tca->orientation == orientation)
-> +		return 0;
-> +
-> +	ret = clk_prepare_enable(imx_phy->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	tca_blk_orientation_set(tca, orientation);
-> +	clk_disable_unprepare(imx_phy->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct typec_switch_dev *tca_blk_get_typec_switch(struct platform_device *pdev,
-> +					struct imx8mq_usb_phy *imx_phy)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct typec_switch_dev *sw;
-> +	struct typec_switch_desc sw_desc = { };
-> +
-> +	sw_desc.drvdata = imx_phy;
-> +	sw_desc.fwnode = dev->fwnode;
-> +	sw_desc.set = tca_blk_typec_switch_set;
-> +	sw_desc.name = NULL;
-> +
-> +	sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(sw)) {
-> +		dev_err(dev, "Error register tca orientation switch: %ld",
-> +				PTR_ERR(sw));
-> +		return NULL;
-> +	}
-> +
-> +	return sw;
-> +}
-> +
-> +static void tca_blk_put_typec_switch(struct typec_switch_dev *sw)
-> +{
-> +	typec_switch_unregister(sw);
-> +}
-> +
-> +#else
-> +
-> +static struct typec_switch_dev *tca_blk_get_typec_switch(struct platform_device *pdev,
-> +			struct imx8mq_usb_phy *imx_phy)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static void tca_blk_put_typec_switch(struct typec_switch_dev *sw) {}
-> +
-> +#endif /* CONFIG_TYPEC */
-> +
-> +static void tca_blk_orientation_set(struct tca_blk *tca,
-> +				enum typec_orientation orientation)
-> +{
-> +	u32 val;
-> +
-> +	mutex_lock(&tca->mutex);
-> +
-> +	if (orientation == TYPEC_ORIENTATION_NONE) {
-> +		/*
-> +		 * use Controller Synced Mode for TCA low power enable and
-> +		 * put PHY to USB safe state.
-> +		 */
-> +		val = readl(tca->base + TCA_GCFG);
-> +		val = FIELD_PREP(TCA_GCFG_OP_MODE, TCA_GCFG_OP_MODE_SYNCMODE);
-> +		writel(val, tca->base + TCA_GCFG);
-> +
-> +		val = readl(tca->base + TCA_TCPC);
-> +		val = TCA_TCPC_VALID | TCA_TCPC_LOW_POWER_EN;
-> +		writel(val, tca->base + TCA_TCPC);
-> +
-> +		goto out;
-> +	}
-> +
-> +	/* use System Configuration Mode for TCA mux control. */
-> +	val = readl(tca->base + TCA_GCFG);
-> +	val = FIELD_PREP(TCA_GCFG_OP_MODE, TCA_GCFG_OP_MODE_SYSMODE);
-> +	writel(val, tca->base + TCA_GCFG);
-> +
-> +	/* Disable TCA module */
-> +	val = readl(tca->base + TCA_SYSMODE_CFG);
-> +	val |= TCA_SYSMODE_TCPC_DISABLE;
-> +	writel(val, tca->base + TCA_SYSMODE_CFG);
-> +
-> +	if (orientation == TYPEC_ORIENTATION_REVERSE)
-> +		val |= TCA_SYSMODE_TCPC_FLIP;
-> +	else if (orientation == TYPEC_ORIENTATION_NORMAL)
-> +		val &= ~TCA_SYSMODE_TCPC_FLIP;
-> +
-> +	writel(val, tca->base + TCA_SYSMODE_CFG);
-> +
-> +	/* Enable TCA module */
-> +	val &= ~TCA_SYSMODE_TCPC_DISABLE;
-> +	writel(val, tca->base + TCA_SYSMODE_CFG);
-> +
-> +out:
-> +	tca->orientation = orientation;
-> +	mutex_unlock(&tca->mutex);
-> +}
-> +
-> +static void tca_blk_init(struct tca_blk *tca)
-> +{
-> +	u32 val;
-> +
-> +	/* reset XBar block */
-> +	val = readl(tca->base + TCA_CLK_RST);
-> +	val &= ~TCA_CLK_RST_SW;
-> +	writel(val, tca->base + TCA_CLK_RST);
-> +
-> +	udelay(100);
-> +
-> +	/* clear reset */
-> +	val |= TCA_CLK_RST_SW;
-> +	writel(val, tca->base + TCA_CLK_RST);
-> +
-> +	tca_blk_orientation_set(tca, tca->orientation);
-> +}
-> +
-> +static struct tca_blk *imx95_usb_phy_get_tca(struct platform_device *pdev,
-> +				struct imx8mq_usb_phy *imx_phy)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct tca_blk *tca;
-> +
-> +	tca = devm_kzalloc(dev, sizeof(*tca), GFP_KERNEL);
-> +	if (!tca)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	tca->base = devm_platform_ioremap_resource(pdev, 1);
-> +	if (IS_ERR(tca->base))
-> +		return tca->base;
-> +
-> +	mutex_init(&tca->mutex);
-> +
-> +	tca->orientation = TYPEC_ORIENTATION_NORMAL;
-> +	tca->sw = tca_blk_get_typec_switch(pdev, imx_phy);
-> +
-> +	return tca;
-> +}
-> +
-> +static void imx95_usb_phy_put_tca(struct imx8mq_usb_phy *imx_phy)
-> +{
-> +	struct tca_blk *tca = imx_phy->tca;
-> +
-> +	if (!tca)
-> +		return;
-> +
-> +	tca_blk_put_typec_switch(tca->sw);
-> +}
-> +
->  static u32 phy_tx_vref_tune_from_property(u32 percent)
->  {
->  	percent = clamp(percent, 94U, 124U);
-> @@ -315,6 +535,9 @@ static int imx8mp_usb_phy_init(struct phy *phy)
->  
->  	imx8m_phy_tune(imx_phy);
->  
-> +	if (imx_phy->tca)
-> +		tca_blk_init(imx_phy->tca);
-> +
->  	return 0;
->  }
->  
-> @@ -359,6 +582,8 @@ static const struct of_device_id imx8mq_usb_phy_of_match[] = {
->  	 .data = &imx8mq_usb_phy_ops,},
->  	{.compatible = "fsl,imx8mp-usb-phy",
->  	 .data = &imx8mp_usb_phy_ops,},
-> +	{.compatible = "fsl,imx95-usb-phy",
-> +	 .data = &imx8mp_usb_phy_ops,},
+The Parade PS8830 is a Type-C multi-protocol retimer that is controlled
+via I2C. It provides altmode and orientation handling and usually sits
+between the Type-C port and the PHY.
 
-Okay
+It is currently used alongside Qualcomm Snapdragon X Elite SoCs on quite
+a few laptops already.
 
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, imx8mq_usb_phy_of_match);
-> @@ -398,6 +623,13 @@ static int imx8mq_usb_phy_probe(struct platform_device *pdev)
->  
->  	phy_set_drvdata(imx_phy->phy, imx_phy);
->  
-> +	if (device_is_compatible(dev, "fsl,imx95-usb-phy")) {
+This new driver adds support for the following 3 modes:
+ - DP 4lanes - with pin assignments C and E
+ - USB3
+ - DP 2lanes + USB3
 
-so future version will also have this check, so are we going to increase
-this..? maybe better idea is to expand imx8mp_usb_phy_ops and add a flag
-for tca support and set that for required compatible, or make this a
-property?
+Only DP 4lanes and USB3 modes have been succesfully tested on
+Qualcomm (X Elite) CRD and Lenovo Thinkpad T14s so fat.
+Devicetree patches for these 2 boards will follow.
 
+The DP 2lanes + USB3 is still work-in-progress as it might involve changes
+outside of this retimer driver.
 
-> +		imx_phy->tca = imx95_usb_phy_get_tca(pdev, imx_phy);
-> +		if (IS_ERR(imx_phy->tca))
-> +			return dev_err_probe(dev, PTR_ERR(imx_phy->tca),
-> +						"failed to get tca\n");
-> +	}
-> +
->  	imx8m_get_phy_tuning_data(imx_phy);
->  
->  	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-> @@ -405,8 +637,16 @@ static int imx8mq_usb_phy_probe(struct platform_device *pdev)
->  	return PTR_ERR_OR_ZERO(phy_provider);
->  }
->  
-> +static void imx8mq_usb_phy_remove(struct platform_device *pdev)
-> +{
-> +	struct imx8mq_usb_phy *imx_phy = platform_get_drvdata(pdev);
-> +
-> +	imx95_usb_phy_put_tca(imx_phy);
-> +}
-> +
->  static struct platform_driver imx8mq_usb_phy_driver = {
->  	.probe	= imx8mq_usb_phy_probe,
-> +	.remove = imx8mq_usb_phy_remove,
->  	.driver = {
->  		.name	= "imx8mq-usb-phy",
->  		.of_match_table	= imx8mq_usb_phy_of_match,
-> -- 
-> 2.34.1
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+Abel Vesa (2):
+      dt-bindings: usb: Add Parade PS8830 Type-C retimer bindings
+      usb: typec: Add support for Parade PS8830 Type-C Retimer
 
+ .../devicetree/bindings/usb/parade,ps8830.yaml     | 117 +++++++
+ drivers/usb/typec/mux/Kconfig                      |  10 +
+ drivers/usb/typec/mux/Makefile                     |   1 +
+ drivers/usb/typec/mux/ps8830.c                     | 347 +++++++++++++++++++++
+ 4 files changed, 475 insertions(+)
+---
+base-commit: b18bbfc14a38b5234e09c2adcf713e38063a7e6e
+change-id: 20240521-x1e80100-ps8830-d5ccca95b557
+
+Best regards,
 -- 
-~Vinod
+Abel Vesa <abel.vesa@linaro.org>
+
 
