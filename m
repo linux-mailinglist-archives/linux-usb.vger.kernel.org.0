@@ -1,122 +1,130 @@
-Return-Path: <linux-usb+bounces-14283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B0EE9647BF
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 16:16:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA0E49649FB
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 17:27:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45F471C22549
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 14:16:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66892282B73
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 15:27:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27ED1AE846;
-	Thu, 29 Aug 2024 14:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106F01B2EFD;
+	Thu, 29 Aug 2024 15:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iLk138Dm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E50E19005B;
-	Thu, 29 Aug 2024 14:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31301B1D6A
+	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 15:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724941001; cv=none; b=gvlDS+WmIDbqVC/wluvl8sl5WIyT7M/UPs5m5pG2KPcAz38Z9UZ+2eVuu4VM7DbTAqrZCHZSHc4AZMMp5vZ2DR6OT0W8CgrrNAweWfbXYL1DWHwFNkageVE0YBrtpwSjnYJIdlshrW2dZk5/O/T25x/jFpQ5/qCgYZi4jJ7wnwY=
+	t=1724945206; cv=none; b=qt39VFWvBPapHEY8AgW5vsiMQsovoCHSxht8wexjYupJ0D+RTbl56rXyCN+gUgxM0IW3dTnFZf6eZyJCiLwh5sxOHpUqIyLhL2jqeHg+oFVx3lVZi7qyutRaW05F5XMGDvO7lFpo80PQmC+IOfVL0rDHWAACwyVzDDtM382Sa1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724941001; c=relaxed/simple;
-	bh=tECZU7mql8sjrz983n7f9Ehzd3ecd772DREuZHxXL3o=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=fSP4+TPBv+57n/nG3/1MqwA2L5Ll9qWkwKmMyLGQ7xcQ370kdFQnUflMOrOh1LlyEbpD13WwPwKliIPu86HrR/x5kztCuQeXMI96A1UGe5HjFMY9cBYT0ye5D9QeG2Y7gbrDrZX2VGRJA68VJITml5nlDJDJIStqxdcJc7ZzX6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Wvjrc2ZMNzQr6Q;
-	Thu, 29 Aug 2024 22:11:44 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (unknown [7.193.23.208])
-	by mail.maildlp.com (Postfix) with ESMTPS id 66BE51401F2;
-	Thu, 29 Aug 2024 22:16:35 +0800 (CST)
-Received: from [10.174.178.219] (10.174.178.219) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 29 Aug 2024 22:16:34 +0800
-Subject: Re: [PATCH v2] usb: xHCI: add XHCI_RESET_ON_RESUME quirk for Phytium
- xHCI host
-To: WangYuli <wangyuli@uniontech.com>
-CC: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-pci@vger.kernel.org>, <guanwentao@uniontech.com>, Chen Baozi
-	<chenbaozi@phytium.com.cn>, Wang Zhimin <wangzhimin1179@phytium.com.cn>, Chen
- Zhenhua <chenzhenhua@phytium.com.cn>, Wang Yinfeng
-	<wangyinfeng@phytium.com.cn>, Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
-References: <196A709D168A9A04+20240829095028.345047-1-wangyuli@uniontech.com>
-From: Zenghui Yu <yuzenghui@huawei.com>
-Message-ID: <4a26f1ef-9264-667c-faa1-33a7ae69b473@huawei.com>
-Date: Thu, 29 Aug 2024 22:16:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+	s=arc-20240116; t=1724945206; c=relaxed/simple;
+	bh=4dvJdY5K5kxOqoCC7pXRpqwFhdbAnaNKbX4E/D+enOY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LF6zi/LDJdYUk1q7boNI9jAdXyJAUc/sd3k04jKc55piFbIYZ3V/iSm8WBCNFmMft/hDegcA6mUsEHs37U3pqc1Vd+ZtrVVeitWfadNuxQfMDVheddm1fNksm6PEF7FffLOhRvJ7bQbsq4IAqJRbGck1DjkGrq5M8O4NRQILf1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iLk138Dm; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a868b739cd9so100389066b.2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 08:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724945203; x=1725550003; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IIVRFaFvh25kJ2shkW0d6LgWcnTu2JPMWtkC2wxiE8c=;
+        b=iLk138DmuUR/gMoYbr0SRJadehtWKOy07A3t4/MS4xnlhm1Fsz7e1JxSkvVK01qO+w
+         KiaVHPTY9k1sJ3IufZZNtAdKdTezn5LYjB3Sk/yxwX/a+37NW75hpxKSZgzpf4M+nhMp
+         r5n7amg+em3PwlXIypgGviQVM1SLcm+VuBFrpc57kIFeEOhCmib2JcrXgEATVMojGACU
+         R8t0Mx48+cx1AqUn5rEXjHA0ypfXGDCYgM1Fz2m0gfN1fz3HZNxpufi4TbWzkfmELc7b
+         LD88e2Z2U11bSOXqwF7u5ZIYoiPH63yWpDINWFo+MZ2iqafnmr+2SCag8V+5K1fOGSzb
+         +n7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724945203; x=1725550003;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IIVRFaFvh25kJ2shkW0d6LgWcnTu2JPMWtkC2wxiE8c=;
+        b=rQHmbaptNtKdjMLotcEGRGESBxIPyYRpKt0bsi3EyQ44GSGdGr2pGwGgDsUJLHdNTt
+         VqwXEHITLj0F8ruZfnSLMTErq/WXyBk72zVGoJytilgvJeExKgho44USMvybkNemnxd6
+         2Qr8gRhF12ELYjf0wmlQ/tmzu/SGp/TFruhU+r3s2iwEYvVecTZSqV+4iE96lFrsEP7g
+         2O10oynzF1h5v1+9t3gJdzWf2UdwyhkG0jNS6yM7JNGUFU9SG6RKz26yZfY9akxZtcvt
+         OFyHtZgu193VI+XmqhpwJVBNfKzIQGEdRTz0Hqo0fwKNo0jds3bpySci9Yv32t1FQgFI
+         7d/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWyRWrp0jA1DIYvBVaF69sZKh10Rq1U1PQD6ARlGqUjPrWxj8ZAbvGKXu1hhcLjJMIl7ehShN0C0CE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiAN4k7je1AK+uINM4qmYzrKcxi8ZGNFUhAF7j5inxcGBxNjKL
+	Xm32TCZyPZw58tegNAeCNQUi2rrHrXJiaSpBjijdxL0M4ONE1uyNrE/rsJvx5hxe9ykm01SBTw9
+	1+GQFSWfy76kbtW1i/Mhhq9VvyNy/3vB662dHpw==
+X-Google-Smtp-Source: AGHT+IH2kueLQc5TRgnqFrkLjrGvJRIK/BMurN2noHpa1MBrWwQdN5e//Oya3AbhSVY9odHODdUMQtzGctXu6ADcfvk=
+X-Received: by 2002:a17:907:970f:b0:a86:894e:cd09 with SMTP id
+ a640c23a62f3a-a897f78bdb5mr287428066b.9.1724945202995; Thu, 29 Aug 2024
+ 08:26:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <196A709D168A9A04+20240829095028.345047-1-wangyuli@uniontech.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600007.china.huawei.com (7.193.23.208)
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 29 Aug 2024 17:26:04 +0200
+Message-ID: <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
+Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be, 
+	magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com, 
+	biju.das.jz@bp.renesas.com, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2024/8/29 17:50, WangYuli wrote:
-> The resume operation of Phytium Px210 xHCI host would failed
-> to restore state. Use the XHCI_RESET_ON_RESUME quirk to skip
-> it and reset the controller after resume.
-> 
-> Co-developed-by: Chen Baozi <chenbaozi@phytium.com.cn>
-> Signed-off-by: Chen Baozi <chenbaozi@phytium.com.cn>
-> Co-developed-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
-> Signed-off-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
-> Co-developed-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
-> Signed-off-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
-> Co-developed-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
-> Signed-off-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
-> Co-developed-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
-> Signed-off-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
-> Signed-off-by: WangYuli <wangyuli@uniontech.com>
-> ---
+On Thu, 22 Aug 2024 at 17:28, Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> Hi,
+>
+> Series adds initial USB support for the Renesas RZ/G3S SoC.
+>
+> Series is split as follows:
+>
+> - patch 01/16           - add clock reset and power domain support for USB
+> - patch 02-04/16        - add reset control support for a USB signal
+>                           that need to be controlled before/after
+>                           the power to USB area is turned on/off.
+>
+>                           Philipp, Ulf, Geert, all,
+>
+>                           I detailed my approach for this in patch
+>                           04/16, please have a look and let me know
+>                           your input.
 
-You should add the change log for a v2 patch.
+I have looked briefly. Your suggested approach may work, but I have a
+few thoughts, see below.
 
->  drivers/usb/host/xhci-pci.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index b5705ed01d83..fabae8420ce9 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -55,6 +55,9 @@
->  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
->  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
->  
-> +#define PCI_VENDOR_ID_PHYTIUM		0x1db7
-> +#define PCI_DEVICE_ID_PHYTIUM_XHCI			0xdc27
-> +
->  /* Thunderbolt */
->  #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
->  #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
-> @@ -407,6 +410,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  	if (pdev->vendor == PCI_VENDOR_ID_VIA)
->  		xhci->quirks |= XHCI_RESET_ON_RESUME;
->  
-> +	if (pdev->vendor == PCI_VENDOR_ID_PHYTIUM ||
+If I understand correctly, it is the consumer driver for the device
+that is attached to the USB power domain that becomes responsible for
+asserting/de-asserting this new signal. Right?
 
-Shouldn't this be a '&&'?
+In this regard, please note that the consumer driver doesn't really
+know when the power domain really gets powered-on/off. Calling
+pm_runtime_get|put*() is dealing with the reference counting. For
+example, a call to pm_runtime_get*() just makes sure that the PM
+domain gets-or-remains powered-on. Could this be a problem from the
+reset-signal point of view?
 
-> +	    pdev->device == PCI_DEVICE_ID_PHYTIUM_XHCI)
-> +		xhci->quirks |= XHCI_RESET_ON_RESUME;
-> +
->  	/* See https://bugzilla.kernel.org/show_bug.cgi?id=79511 */
->  	if (pdev->vendor == PCI_VENDOR_ID_VIA &&
->  			pdev->device == 0x3432)
-> 
+[...]
+
+Kind regards
+Uffe
 
