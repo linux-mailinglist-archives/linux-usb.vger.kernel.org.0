@@ -1,175 +1,137 @@
-Return-Path: <linux-usb+bounces-14261-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14262-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254F6963C2D
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 09:06:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86429963D05
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 09:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0A3F1F25A81
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 07:06:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9B721C24044
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 07:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4B115B543;
-	Thu, 29 Aug 2024 07:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 447A2189F41;
+	Thu, 29 Aug 2024 07:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZTMxWAmG"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="doZP7xNs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93C414B077
-	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 07:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD09189BBD;
+	Thu, 29 Aug 2024 07:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724915210; cv=none; b=mY7A+DR9v/SmaiCoh4iEtoRphtDOoDRfwiUAmYG1pNDiw9ws2679pCW8TkRfJup03f3qKcqa7vq6S4123dZOxKfrAFVGpBnS1vvtKMYLFnoghsxgWq69X5D+xZ+DrJVaOxz+aElgvxB+iEEMsbUrQxgXnQSPr24C9dPoDKhs6xk=
+	t=1724916628; cv=none; b=UqVsoMW32IGPx9vF6dl/a164j0Yj36rA69w4eoG7lbEfqe4S6KGGD1vbbBWwKslRgNilx+j8xgFtUqHaMRF5uzXTCyU1nBzj/m9y+wZpWLLfGacoemcokS9KbB/pDUjaiW29Jk3wTPAgE2zHkFl0doldHWkGVMNrXp+RXtM2nDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724915210; c=relaxed/simple;
-	bh=SFHhg3Z5+fzzfbIotHHawBvQfFitQ8DPr+yL4AlplRs=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qwETJPO9Zz4dsiNou1B6SEE+GXwSRzBw0Mc1mX5HPtQFv4TKp7vEJOTFU+0Dqh7SIk0U8qAiAj8nCFUqaaRqUUJztazPo465uavPNJE1Q8HbQjTMoC+nZIvubcyvLBsP1mFuV5wCn9KgEykROr+fq14cYFtqsrd1A4jkNBLkB8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZTMxWAmG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EB80C4CEC6
-	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 07:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724915210;
-	bh=SFHhg3Z5+fzzfbIotHHawBvQfFitQ8DPr+yL4AlplRs=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ZTMxWAmGynayjmoT10ELsYPZ+brCNehFOzV/eFCMXc2NSoyHLEP6ugUbFAWhltLVp
-	 d0YoYGbtRwAGOh1DiRmcgUKllL9ii7dYxRK95ibbCEjXWnqmhx2nK9MN+ZVxmbMc6e
-	 FUEtf1GBjGGUCMNTNE7CAojdj6UYHlrvJEoKEwVha6ehriWc3Y21NtqFBA0+A7tFDU
-	 H1iOUr+OjuLZ4iOjTUjJINCt3GaYU6ONbXjm+7RiaftnmIPiGx7tTdACgCkG6Ja7v6
-	 FXhrFCCajUlLOHe2pQYYkhq+X0JrcFr0JUBNgYm0B5SdcJDtuMqCGka8Mf4ZeqJdhO
-	 8A2KXHshyReSA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 70473C53BA7; Thu, 29 Aug 2024 07:06:50 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
-Date: Thu, 29 Aug 2024 07:06:49 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: maggu2810@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219198-208809-Mv27iLSRfr@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
-References: <bug-219198-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1724916628; c=relaxed/simple;
+	bh=LyEMVh4RLCp2HjxapIF7Tq+5ikLws1y4KEPU3klkGN0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aCiFqjvIBr48CzNTBjYFoogy9KbOtDkPo9aDOhX9xjueXfqvALyb0IrI1i2M1OWnlbP+NWFGkK9VfLY4u+EHH7wBIoCFwft0EgR+R5me3L03QLFnNk1heW0BwCN/NtWIK33+22L6CE5bGyOdaO2zghA1C+ars9aV8ikoW9z7s3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=doZP7xNs; arc=none smtp.client-ip=18.169.211.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1724916614;
+	bh=dAJ8ztKTv9lIJL1qRsZJt5YWdjQ1q7wv2JIz9gJfdcI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=doZP7xNsVsFUD/UtQm6RFYSF/pTMW0qzh/4k2vUxAM9I86i18/z4ZOgR4B+g67NgZ
+	 cL2LuwmpnOqQ19aDtPmAP0l3L7Tu4AWnu+MLIlZiDyBdOZjfgWde2XZqfue4zqEpnn
+	 DPDSbP2SOoHtICK4sa5/UIe7CKnF54cm0B5ZmGjU=
+X-QQ-mid: bizesmtp87t1724916610td1la1ss
+X-QQ-Originating-IP: k3Vx3kPdv4++iXJufQYQJD+NYUDo2mSAC6TuiRzZhRA=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 29 Aug 2024 15:30:08 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 939266593025190656
+From: WangYuli <wangyuli@uniontech.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org,
+	bhelgaas@google.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	guanwentao@uniontech.com,
+	zhanjun@uniontech.com,
+	WangYuli <wangyuli@uniontech.com>,
+	Chen Baozi <chenbaozi@phytium.com.cn>,
+	Wang Zhimin <wangzhimin1179@phytium.com.cn>,
+	Chen Zhenhua <chenzhenhua@phytium.com.cn>,
+	Wang Yinfeng <wangyinfeng@phytium.com.cn>,
+	Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Subject: [PATCH] usb: xHCI: add XHCI_RESET_ON_RESUME quirk for Phytium xHCI host
+Date: Thu, 29 Aug 2024 15:30:05 +0800
+Message-ID: <59E000092FD56E43+20240829073005.304698-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
+The resume operation of Phytium Px210 xHCI host would failed
+to restore state. Use the XHCI_RESET_ON_RESUME quirk to skip
+it and reset the controller after resume.
 
---- Comment #26 from Markus Rathgeb (maggu2810@gmail.com) ---
-I resetted the git tree to 2b989ab9bc89, did another build + test.
-This commit is still a good one.
+Co-developed-by: Chen Baozi <chenbaozi@phytium.com.cn>
+Signed-off-by: Chen Baozi <chenbaozi@phytium.com.cn>
+Co-developed-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
+Signed-off-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
+Co-developed-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
+Signed-off-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
+Co-developed-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
+Signed-off-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
+Co-developed-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Signed-off-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ drivers/usb/host/xhci-pci.c | 6 ++++++
+ include/linux/pci_ids.h     | 2 ++
+ 2 files changed, 8 insertions(+)
 
-$ git bisect good
-f90584f4beb84211c4d21b319cc13f391fe9f3c2 is the first bad commit
-commit f90584f4beb84211c4d21b319cc13f391fe9f3c2
-Author: Lu Baolu <baolu.lu@linux.intel.com>
-Date:   Tue Jul 2 21:08:38 2024 +0800
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index b5705ed01d83..af967644489c 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -55,6 +55,8 @@
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
+ 
++#define PCI_DEVICE_ID_PHYTIUM_XHCI			0xdc27
++
+ /* Thunderbolt */
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
+ #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
+@@ -407,6 +409,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	if (pdev->vendor == PCI_VENDOR_ID_VIA)
+ 		xhci->quirks |= XHCI_RESET_ON_RESUME;
+ 
++	if (pdev->vendor == PCI_VENDOR_ID_PHYTIUM ||
++	    pdev->device == PCI_DEVICE_ID_PHYTIUM_XHCI)
++		xhci->quirks |= XHCI_RESET_ON_RESUME;
++
+ 	/* See https://bugzilla.kernel.org/show_bug.cgi?id=79511 */
+ 	if (pdev->vendor == PCI_VENDOR_ID_VIA &&
+ 			pdev->device == 0x3432)
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index e388c8b1cbc2..25fff4130503 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -2605,6 +2605,8 @@
+ 
+ #define PCI_VENDOR_ID_FUNGIBLE		0x1dad
+ 
++#define PCI_VENDOR_ID_PHYTIUM		0x1db7
++
+ #define PCI_VENDOR_ID_HXT		0x1dbf
+ 
+ #define PCI_VENDOR_ID_TEKRAM		0x1de1
+-- 
+2.43.4
 
-    iommu/vt-d: Add helper to flush caches for context change
-
-    This helper is used to flush the related caches following a change in a
-    context table entry that was previously present. The VT-d specification
-    provides guidance for such invalidations in section 6.5.3.3.
-
-    This helper replaces the existing open code in the code paths where a
-    present context entry is being torn down.
-
-    Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-    Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-    Link:
-https://lore.kernel.org/r/20240701112317.94022-2-baolu.lu@linux.intel.com
-    Link:
-https://lore.kernel.org/r/20240702130839.108139-7-baolu.lu@linux.intel.com
-    Signed-off-by: Will Deacon <will@kernel.org>
-
- drivers/iommu/intel/iommu.c |  32 +-------------------------------
- drivers/iommu/intel/iommu.h |   4 ++++
- drivers/iommu/intel/pasid.c | 106
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++++++++++-------------------
- 3 files changed, 92 insertions(+), 50 deletions(-)
-
-
-$ git bisect log
-git bisect start
-# status: waiting for both good and bad commits
-# good: [3d51520954154a476bfdacf9427acd1d9538734c] Merge tag 'for-linus' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma
-git bisect good 3d51520954154a476bfdacf9427acd1d9538734c
-# status: waiting for bad commit, 1 good commit known
-# bad: [aba9753c0677e860f982edff98c7fe5a2b97758c] Merge tag 'tty-6.11-rc1' =
-of
-git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
-git bisect bad aba9753c0677e860f982edff98c7fe5a2b97758c
-# bad: [a4f9285520584977127946a22eab2adfbc87d1bf] Merge tag 'clk-for-linus'=
- of
-git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
-git bisect bad a4f9285520584977127946a22eab2adfbc87d1bf
-# bad: [f66b07c56119833b88bffa4ecaf9f983834675de] Merge tag 'vfio-v6.11-rc1=
-' of
-https://github.com/awilliam/linux-vfio
-git bisect bad f66b07c56119833b88bffa4ecaf9f983834675de
-# bad: [afd81d914f6fb3e74a46bf5d0dd0b028591ea22e] Merge tag
-'dma-mapping-6.11-2024-07-19' of git://git.infradead.org/users/hch/dma-mapp=
-ing
-git bisect bad afd81d914f6fb3e74a46bf5d0dd0b028591ea22e
-# bad: [afd81d914f6fb3e74a46bf5d0dd0b028591ea22e] Merge tag
-'dma-mapping-6.11-2024-07-19' of git://git.infradead.org/users/hch/dma-mapp=
-ing
-git bisect bad afd81d914f6fb3e74a46bf5d0dd0b028591ea22e
-# good: [cbf9520823bdd4c44c94b5988e354ee12d57fa58] Merge branch
-'iommu/arm/smmu' into iommu/next
-git bisect good cbf9520823bdd4c44c94b5988e354ee12d57fa58
-# bad: [c2b2e5c50330b29804339df4e7adf70e9f19b793] Merge branch 'iommu/core'
-into iommu/next
-git bisect bad c2b2e5c50330b29804339df4e7adf70e9f19b793
-# bad: [31000732d56b43765d51e08cccb68818fbc0032c] iommu/vt-d: Fix identity =
-map
-bounds in si_domain_init()
-git bisect bad 31000732d56b43765d51e08cccb68818fbc0032c
-# good: [804f98e224e41c16e3b70f97790f84894745a392] iommu/vt-d: Downgrade
-warning for pre-enabled IR
-git bisect good 804f98e224e41c16e3b70f97790f84894745a392
-# bad: [3753311c9190f833963fb47336dfe17221d93706] iommu/vt-d: Refactor PCI =
-PRI
-enabling/disabling callbacks
-git bisect bad 3753311c9190f833963fb47336dfe17221d93706
-# bad: [f90584f4beb84211c4d21b319cc13f391fe9f3c2] iommu/vt-d: Add helper to
-flush caches for context change
-git bisect bad f90584f4beb84211c4d21b319cc13f391fe9f3c2
-# good: [2b989ab9bc89b29dd4b5509408b8fa42337eda56] iommu/vt-d: Add helper to
-allocate paging domain
-git bisect good 2b989ab9bc89b29dd4b5509408b8fa42337eda56
-# first bad commit: [f90584f4beb84211c4d21b319cc13f391fe9f3c2] iommu/vt-d: =
-Add
-helper to flush caches for context change
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
