@@ -1,96 +1,144 @@
-Return-Path: <linux-usb+bounces-14293-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14294-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F29964E9D
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 21:17:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C447964EFE
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 21:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65CBC282A73
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 19:17:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 510861C2138F
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 19:33:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2541E1B86D0;
-	Thu, 29 Aug 2024 19:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A2B1B8E86;
+	Thu, 29 Aug 2024 19:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H/PwZUHC"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QzW2R68/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C7D39FC1;
-	Thu, 29 Aug 2024 19:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA041898E0
+	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 19:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724959071; cv=none; b=QjLitWw9ETVMD2zoOxq9Gpty6orVOqqOBcOTtuY2BM0RWYnoLWGCjg0NI1T1fVpUnL+JakuaISM+LsI2SXF+o8tyuDWEQfjld+4BKkewgo+M6UaDUTscW4JYoOHs0/FWO4CbsfCE4Etk6uE0BFk/k/fUf8MIMYUy55Zf513IKW8=
+	t=1724960025; cv=none; b=nLvZtEtunoX6nUGzvW9BiW300JUwZc/Qv1RLqT7Wbk9agDkr+LdmGX8xlMIKlAXJJHbf49Cuon/nTuQkirkRdoLUxlx9C2ZJB8xrOjKxdvjQXhggNtJ89o8kcqUtOZJ6Zvi3Ex4dkvihfnEFUUxj95sQ25rWC7SV88UEaUBpGLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724959071; c=relaxed/simple;
-	bh=D1pwolbhKxBhlHU8BrJEAN68+m9aF26/PtnnDlz1FzQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jWBoDpHqzUYltJgyZsZGWby21kVNMBHajQqNPwW3bpfSKIHkMhgJK29JhY441oA/yxaKrJer4Rh2svmvO6Hqkr5V6Yb7xuSJ0FKd/+CJM5NKhvbcy1HWrJ0ByEcUCuDIYodLZrvBWy7SxBJH+e6viKyGCJE0dIxb9lfOPAd2MIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H/PwZUHC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B81C4CEC1;
-	Thu, 29 Aug 2024 19:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724959071;
-	bh=D1pwolbhKxBhlHU8BrJEAN68+m9aF26/PtnnDlz1FzQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=H/PwZUHCEMUAZHGSgvtU7b0aljQtchgVHXQjoH/6FhMJvmtFF1JkwCkkc1n6yEdcH
-	 xuGotQdmJmUPFfCWM0jDBGeYYr3RKP/upFgT2/aqtEBBjIs1TX130fBjIq9i9Fm2nf
-	 AHkB2C0XFDI14E8T/+5XAvWtR/EAVprPgNy+s9m2xw8Cad9mdcJaCiC8R0uQ59KhPs
-	 Yx6EZb/ZVOYID8qe4RfFIoVMLSM4HNcAaOId/ggNB3JXS+FLVbvFpgWNR0VUp/9wgb
-	 f6yk+dUMFDV8X35A0fbPrPW/ExradjGBxdg2UBPQsGMct+ntBanuYiPXCl9vHL1n/x
-	 ljlmhb1ZjExBg==
-Message-ID: <c8b99b25-ee82-479a-9fdc-48da5be45d44@kernel.org>
-Date: Thu, 29 Aug 2024 21:17:43 +0200
+	s=arc-20240116; t=1724960025; c=relaxed/simple;
+	bh=PrBn1mpQDMnlrgLBKDe4p8Ampi+IFTnW39FupGagWho=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RhsFqCHumAU/0dmlU+d1DBgEGhIt0IMiziHMFUnKiWuYmcWSI3DSEdKpcXsNcybxcyOGPGMpw/PGYWlGEGDZWq7E1QYuTQxpygTt5RdL7zdPwsf2es2FnliPjD0CEa1+MwYhpb97axi0b5r0CVwrKHz8tqGBVNvSOxoO4hFlS0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QzW2R68/; arc=none smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2704d461058so584244fac.0
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 12:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1724960023; x=1725564823; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+89V/Pkw0eErHNWTJZLzdCFWIv36uJ87GHJgsJod6mk=;
+        b=QzW2R68/NYdjaOXf0mQbv6augq7I0xl4QRW9ekcjvXW+nfPNgWk1yIOVel42LlPTS5
+         PSUAHF/BUe2Z70bD4cEq4AbpMMyj4Fx18/H1cc737mUxRrYSTUSWe34HQU7uu/QNz4Ks
+         RoP1tzAHwJs8xfv2Ut85EThLNhZW1KB30vJH0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724960023; x=1725564823;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+89V/Pkw0eErHNWTJZLzdCFWIv36uJ87GHJgsJod6mk=;
+        b=hZagnczB9/KBwnUM4JztOcl1W/+0xDrlWkkUflQrkbFNc+qN8wIaNWWAcIhQs/Hvh+
+         AlUIs8xyAxk3pBhr7+jZ61Tl2IXBjLiri5FIMQIddmRm7IgvLLw4i5rOsDDf2Me7sl3w
+         RBUElVVZ2dZ5za0Te8yzb1pX5rxKVHCq2fqvNIuA9pR0f6GuIxKACtQEvoCqyjCWqVcc
+         bjqLIf0pDaULy7T9BuVlDnaIFx/ZvyemS8AO9w3xfEbttQyWVSd0JeJoOsSbOpB7NoWY
+         VwluM40tfAHCI4f3bYUWvw7pfIPMJCLjE3ODxu65tUGUSUv67t6Q17xPk1V7imXn80kh
+         IDwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXDwsLSY2AEwKPcPFOKgYBK+9i9QfrUqDdbN7tbSoUohPgBNhC098oMcGCxOp2RSZmorMoNtbIk13s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBwL6lzOoFjhqwJfhl8/FcfWPHAoGWOr5y8yg2xNPCHK6hWv9d
+	M2IXhZivp2CCWEaSY9UUstVbi976gqvp+fi+xgyGvX7dTu81E7wPHebYcBRV02xRMVS6JHYp75Y
+	=
+X-Google-Smtp-Source: AGHT+IGxTg3ZVqSgVk8z6mI7c/DCgw7c38tCNjXkNUL6c3fdxea1rO4O4oxf0JKFzowu4unJbeNEBA==
+X-Received: by 2002:a05:687c:2c26:b0:270:2e17:a0c1 with SMTP id 586e51a60fabf-277900d20c5mr4052392fac.13.1724960022939;
+        Thu, 29 Aug 2024 12:33:42 -0700 (PDT)
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com. [209.85.210.54])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-277abb5a2b8sm56104fac.19.2024.08.29.12.33.42
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2024 12:33:42 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-70f6732a16dso71871a34.3
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 12:33:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXaAImnKjXFFcHEfbVQcBTDEd2XJtsmR9f60F0Qq/Po+8ATmiTIenp6ag/YHopjitVK2byyoZ3RvNM=@vger.kernel.org
+X-Received: by 2002:a05:6830:b85:b0:70c:aceb:c6c4 with SMTP id
+ 46e09a7af769-70f5c21e47dmr4373135a34.0.1724960022060; Thu, 29 Aug 2024
+ 12:33:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/2] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-To: Abel Vesa <abel.vesa@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Rajendra Nayak <quic_rjendra@quicinc.com>,
- Sibi Sankar <quic_sibis@quicinc.com>, Johan Hovold <johan@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-References: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
- <20240829-x1e80100-ps8830-v1-2-bcc4790b1d45@linaro.org>
-Content-Language: en-US
-From: Konrad Dybcio <konradybcio@kernel.org>
-In-Reply-To: <20240829-x1e80100-ps8830-v1-2-bcc4790b1d45@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240821214052.6800-1-wahrenst@gmx.net> <20240821214052.6800-9-wahrenst@gmx.net>
+In-Reply-To: <20240821214052.6800-9-wahrenst@gmx.net>
+From: Doug Anderson <dianders@chromium.org>
+Date: Thu, 29 Aug 2024 12:33:25 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X+VbFmzMk8mHy6HGf5+W-7YQjTEDPqiJXs0hecbZ_T9Q@mail.gmail.com>
+Message-ID: <CAD=FV=X+VbFmzMk8mHy6HGf5+W-7YQjTEDPqiJXs0hecbZ_T9Q@mail.gmail.com>
+Subject: Re: [PATCH V3 RFC 8/9] usb: dwc2: Implement recovery after PM domain off
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Russell King <linux@armlinux.org.uk>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+	Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
+	=?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Minas Harutyunyan <hminas@synopsys.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>, 
+	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>, Peter Robinson <pbrobinson@gmail.com>, 
+	dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com, 
+	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 29.08.2024 8:44 PM, Abel Vesa wrote:
-> The Parade PS8830 is a Type-C muti-protocol retimer controlled over I2C.
-> It provides both altmode and orientation handling.
-> 
-> Add a driver with support for the following modes:
->  - DP 4lanes
->  - USB3
->  - DP 2lanes + USB3
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Hi,
+
+On Wed, Aug 21, 2024 at 2:41=E2=80=AFPM Stefan Wahren <wahrenst@gmx.net> wr=
+ote:
+>
+> According to the dt-bindings there are some platforms, which have a
+> dedicated USB power domain for DWC2 IP core supply. If the power domain
+> is switched off during system suspend then all USB register will lose
+> their settings.
+>
+> Use GUSBCFG_TOUTCAL as a canary to detect that the power domain has
+> been powered off during suspend. Since the GOTGCTL_CURMODE_HOST doesn't
+> match on all platform with the current mode, additionally backup
+> GINTSTS. This works reliable to decide which registers should be
+> restored.
+>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 > ---
+>  drivers/usb/dwc2/core.c     |  1 +
+>  drivers/usb/dwc2/core.h     |  2 ++
+>  drivers/usb/dwc2/platform.c | 38 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 41 insertions(+)
+> +static int dwc2_restore_critical_registers(struct dwc2_hsotg *hsotg)
+> +{
+> +       struct dwc2_gregs_backup *gr;
+> +
+> +       gr =3D &hsotg->gr_backup;
+> +
+> +       if (!gr->valid) {
+> +               dev_err(hsotg->dev, "%s: no registers to restore\n",
+> +                       __func__);
 
-[...]
+nit: IMO "__func__" should not be in dev_err() messages. The message
+plus the device should be enough. If __func__ should have been in
+dev_err() messages then the Linux kernel would have automatically put
+it there.
 
-> +	retimer->supplies[0].supply = "vdd33";
-> +	retimer->supplies[1].supply = "vdd18";
-> +	retimer->supplies[2].supply = "vdd15";
+Aside from that, this looks reasonable to me and discussed previously.
 
-1.15?
-
-Konrad
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
