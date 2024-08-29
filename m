@@ -1,88 +1,176 @@
-Return-Path: <linux-usb+bounces-14286-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14288-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E92D964C99
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 19:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F937964D3E
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 19:52:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95E58284EC9
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 17:05:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A39F28424A
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 17:52:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DA21B6547;
-	Thu, 29 Aug 2024 17:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A301B7912;
+	Thu, 29 Aug 2024 17:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ROhFhDPO"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="i8+bLNh4";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="i8+bLNh4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C02C1B5EC2
-	for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 17:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB28192B85;
+	Thu, 29 Aug 2024 17:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724951122; cv=none; b=Hlg9Ya2wWcdJdqQGlxZrbEjho+1JrL/lL+TZak9dCx+nrnibCBtqwC3OPv652I+FSv0m4rqZ4HuuMXw2qx/GddqEhO73MnuAG7dMf47KZ7m/lgzQePM64DIFNlXqDzIRLs+ITeuKU4x3P5yW4qCq6Dme2eTcnWnIVqKF1D8WfSA=
+	t=1724953927; cv=none; b=IO1ADIGak4foMPhQdqEq42OdoSn4mirxY9GfRjXWSwRUf6z7BBxQbvg1xhEETi8Euaabg2bofvD4yYZK06chbDgUDd+1jjOEFiMQw1J0sWu4axYFgLGJQ1McZMk9WEU77DkIGets6rAOH2xPeYRCL/SmNf+wCZrjFtWatImzydw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724951122; c=relaxed/simple;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n3NiquS4MsSyhCCLb41w6gCrs9DGnxd/OI4iaYFVyjpDDVBMQr0eaYVqhMcQ7HBSYU8+CMmnTGCvZ/g7JwfWsjoEMRXiSPG251L+KAnrqOeY6jds/degQjYYFnGBAgzbMXlq7GH2yxStOiL1aB6TPqR4FrK/kav2z3cx0CXN9a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ROhFhDPO; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42817d3ecfeso115e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2024 10:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724951119; x=1725555919; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=ROhFhDPO9Ll9pWySk8+1RNzrFAIkqvOHeAt76Sekt/2Nq2RgyGnHOrg06nVAwJTbbx
-         zAi0uJwwJP0jqEYMfTHLkWaLJ2gekVim0k8G/dT0p2KPEwnnDBxr8vGAEIAbWGgwydbJ
-         27gRXfuhbdNIvrexgxiNmeLdRC7iD8eL/W8DICUJu+ZkoPpVwFJIzZtULYynfRQ7WJSf
-         hf3JckSyM3mS9++wZHTI426vRojfg3E4bT5gEo9V8aflq0OYneGz+LtgkdyczysS1TMQ
-         xYqLj5Joab5nUxH9a9uJl41/gt6GcyBRtoMAcugUPwyUekYoCs3c/38EOqb5F/7yf3PF
-         4aQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724951119; x=1725555919;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=BrCdw3u0SC7tJGiNHP8tIufbE3e1k2Up0z0u9pptugxQiYtXzXOZnv7So74ByAYYmU
-         fDoH5az6CzoMXLLY1NJ+YhppuoUAOGuleScm7wKlQNAYe0GuuRNB2vgaw1Bm8dR1Chfx
-         D4iFvguSKWIVC/cbXG48g3DGrdBc7/u0MgIu+4XjXr1Y2ikQxIki4WwR4h2q5lED5a5I
-         vtkBvnwsJfYubU5RTv20Mn3Jpj50HnVtX8Er8euG1/W2CO7JYkbqjpGR85NikcDsOlx3
-         CK6/bRsyV3h4vgyqh4/OuKWOLdOPTITJG84aw7K7AQA+JM5loalDzZovWESk6bw4gvFg
-         Wzxw==
-X-Forwarded-Encrypted: i=1; AJvYcCVwNxCYQxBZUyKT/gEij7o/+3J9j8bGzZWhchY3rwkgiFENNw1PkhO5qtwqZnRPG0sWVygku8UPKHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGYBgtC1feIeUbLbli8UvJ3IuAMh4DNNeJDBxtpRJMfFXQvJfn
-	E7wJ7z9FY0b2TegPZLu2wA9BbQDv+K5ptelLdtXQ2EVOKRAOqrkLKeSPA5cN0CvSTDpnG/nHT2k
-	mtaK41rj2/aT2YOtOlDjh6m62HiRn2Cx08dY=
-X-Gm-Gg: AV9I1ZQLq4LSbLzUubatkD27dzAa2clZWJZJTSlnboLOFLPcp3J8qbB7RZ4k68RCb/3
-	AVi273nBotCQYTDZEOckddrh9TT1FhcmGD8+NySWeyxE4Db6a4nQkSw14GU8=
-X-Google-Smtp-Source: AGHT+IF8ncbv3hPX6txBwjD+mljfVJFZjCz8WD9pS5r0ChWeEb3HcbLEeUEQAMuL4Kr+bb+8RiZA/+ov4ZUA9UxFSLs=
-X-Received: by 2002:a05:600c:6d12:b0:424:a2ae:8d1d with SMTP id
- 5b1f17b1804b1-42bba2d4b89mr12755e9.2.1724951118768; Thu, 29 Aug 2024 10:05:18
- -0700 (PDT)
+	s=arc-20240116; t=1724953927; c=relaxed/simple;
+	bh=yXNatUfBjc4wB02MKsfPhU9639KrQX5xGYPz47w5l40=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jmph5MX+2az4ZyFWQP0HcCDl4PixmOY7v4QkLkxT1wsJLgbEtd89+HnrFlYrIkfVOc+D0jUrlNCIxg3ogtaHhKsjQuPvun9K0E1Rs7X4eY/8+3OUlETnKq0OTkRhSjEh2iYTidbHsh8gMgLPjeJRUc7cL2eVeoq/BitWiSUDmTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=i8+bLNh4; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=i8+bLNh4; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 47C401F455;
+	Thu, 29 Aug 2024 17:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1724953924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=6SvYEfpScUFeQtPKK/sEjRJJLkXkYqMv9tPfmouJHac=;
+	b=i8+bLNh4uI0CIf4U3AAkjJEvUIXCx69MWWmpSlgILZ6JNxyzAm71zk7CIsjs8K+gWdAi0T
+	vf4W5KRJYxSeKp5z6U+XMTh6WLgwEU1lSxJd2B8DI2wAmfSO7U/sfcSZ8CMjEJ5CiQjYCA
+	vcbMFfv/1xoqf/I9Mfph6uzk/AFjzB4=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1724953924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=6SvYEfpScUFeQtPKK/sEjRJJLkXkYqMv9tPfmouJHac=;
+	b=i8+bLNh4uI0CIf4U3AAkjJEvUIXCx69MWWmpSlgILZ6JNxyzAm71zk7CIsjs8K+gWdAi0T
+	vf4W5KRJYxSeKp5z6U+XMTh6WLgwEU1lSxJd2B8DI2wAmfSO7U/sfcSZ8CMjEJ5CiQjYCA
+	vcbMFfv/1xoqf/I9Mfph6uzk/AFjzB4=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0238913408;
+	Thu, 29 Aug 2024 17:52:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ldryOkO10GaEEgAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Thu, 29 Aug 2024 17:52:03 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCHv2 net] usbnet: modern method to get random MAC
+Date: Thu, 29 Aug 2024 19:50:55 +0200
+Message-ID: <20240829175201.670718-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFs7P=jk=wfo0nbHzqd1NrGX3NKpOezD4-u=nAMqzq7mq4Lidg@mail.gmail.com>
-In-Reply-To: <CAFs7P=jk=wfo0nbHzqd1NrGX3NKpOezD4-u=nAMqzq7mq4Lidg@mail.gmail.com>
-From: Joshua Pius <joshuapius@google.com>
-Date: Thu, 29 Aug 2024 13:04:40 -0400
-Message-ID: <CAFs7P=jPqv2Zr6Fnw584TKhj5joBRt7X7gMidE4MiK1ABAMiRQ@mail.gmail.com>
-Subject: Re: [PATCH] ALSA: Add logitech Audio profile quirk
-To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Cc: devicetree@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:mid,imap1.dmz-prg2.suse.org:helo];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
+The driver generates a random MAC once on load
+and uses it over and over, including on two devices
+needing a random MAC at the same time.
+
+Jakub suggested revamping the driver to the modern
+API for setting a random MAC rather than fixing
+the old stuff.
+
+The bug is as old as the driver.
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+
+---
+
+v2: Correct commentary style
+
+ drivers/net/usb/usbnet.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index dfc37016690b..40536e1cb4df 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -61,9 +61,6 @@
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-// randomly generated ethernet address
+-static u8	node_id [ETH_ALEN];
+-
+ /* use ethtool to change the level for any given device */
+ static int msg_level = -1;
+ module_param (msg_level, int, 0);
+@@ -1743,7 +1740,6 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+ 
+ 	dev->net = net;
+ 	strscpy(net->name, "usb%d", sizeof(net->name));
+-	eth_hw_addr_set(net, node_id);
+ 
+ 	/* rx and tx sides can use different message sizes;
+ 	 * bind() should set rx_urb_size in that case.
+@@ -1819,9 +1815,9 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+ 		goto out4;
+ 	}
+ 
+-	/* let userspace know we have a random address */
+-	if (ether_addr_equal(net->dev_addr, node_id))
+-		net->addr_assign_type = NET_ADDR_RANDOM;
++	/* this flags the device for user space */
++	if (!is_valid_ether_addr(net->dev_addr))
++		eth_hw_addr_random(net);
+ 
+ 	if ((dev->driver_info->flags & FLAG_WLAN) != 0)
+ 		SET_NETDEV_DEVTYPE(net, &wlan_type);
+@@ -2229,7 +2225,6 @@ static int __init usbnet_init(void)
+ 	BUILD_BUG_ON(
+ 		sizeof_field(struct sk_buff, cb) < sizeof(struct skb_data));
+ 
+-	eth_random_addr(node_id);
+ 	return 0;
+ }
+ module_init(usbnet_init);
+-- 
+2.45.2
 
 
