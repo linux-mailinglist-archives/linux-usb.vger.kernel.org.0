@@ -1,161 +1,122 @@
-Return-Path: <linux-usb+bounces-14272-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14273-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7977796407B
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 11:45:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B129696408D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 11:50:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACBFC1C212F8
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 09:45:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65FEA1F2302A
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 09:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D2018DF73;
-	Thu, 29 Aug 2024 09:45:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E866218DF91;
+	Thu, 29 Aug 2024 09:50:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jTZ1aBJr"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GWfMSu6V"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70B7189F37;
-	Thu, 29 Aug 2024 09:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FE118DF6E;
+	Thu, 29 Aug 2024 09:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724924739; cv=none; b=bC6QAi2Bdnxaq/8r+zeskpH0rf/lCo3kE7V6AG/+z9WmE2HNDXDg3FsqHG2hkXtd4OapvhP15SoreYDzbakKWUKXFmcxegj27lyY52BOyJkE+sB12hZkEFvhIrfgRsz77Aqhl8+gt0H2HGwcvXLPZ7AYeLtuandss88L7BLydAU=
+	t=1724925047; cv=none; b=Ugnx5+f8AUD1q2hWbBp/ijv3rRTyN271ApFC53BDUB5+klWRtflCATveZzcQhT2Aj7J6FXFC+dcnKGZuyzIoo2FnA2Jgliq7MVr/9lExSX7kqByKtztsd4ginCG/RI6/iAbDUowZuZG1mTegyJvJu76hKrD1ZeaXGnT95LnbxTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724924739; c=relaxed/simple;
-	bh=4ueHelHgSTqT3lKO+PyUF90mHm7gbgnOAxqWdSm+Ulg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jx6oquAW3n8ibTdns8ZllMjf4LU+JMxyr9vb7JmzFGySRvlhBaX5pXSfkPSE5OiL+s/CIZQf88rDIuh7OsUbRfCCvg4SVABL3ySX6y5u51JjqQSMFnq5X7nckrDwH5Y4UXLYSZ/ir8S/cju/WY5/g8nawRf5uAIqYb81SMnZ3u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jTZ1aBJr; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8Pba2014958;
-	Thu, 29 Aug 2024 09:45:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:message-id:mime-version:subject:to; s=
-	qcppdkim1; bh=jNegF+g1xhVssgmkjuQ/vzvKlzG4fD1d4RD6qVQLKtk=; b=jT
-	Z1aBJrAkXn5hp02TIr1+g/9Elg7hCL/9jvBFUk2kkhQKVLg5k5dLDTdbI0CXFou6
-	up6rrPHuGZoazj7dPd8o3pCu+u74PLF8M1/t6uwCZ3o8AcXhxu9dOnWZ1SJ9iw5k
-	o1hed4CHRpYkUy8QygwGqvz9BcfdNumD3jf9//07Bf7tho09NYq8iCfAC3ovUgGH
-	uU65tgPeIIbrNXnHIrBaBRoegBxthZKk47sgrQz338HxxZNjFasogI8r4Evp2ATg
-	rtscAKjJB1UilnCPxg3T5P4QHjABstrMpsa/XMbo0BQH2yrupSDkQhdMijN+0z8g
-	SUoGjNYCsvwYNupOVXpg==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419px5mp1b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 09:45:32 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47T9jFrk020098
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 09:45:15 GMT
-Received: from hu-faisalh-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 29 Aug 2024 02:45:13 -0700
-From: Faisal Hassan <quic_faisalh@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Faisal Hassan
-	<quic_faisalh@quicinc.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: dwc3: core: update LC timer as per USB Spec V3.2
-Date: Thu, 29 Aug 2024 15:15:02 +0530
-Message-ID: <20240829094502.26502-1-quic_faisalh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1724925047; c=relaxed/simple;
+	bh=7TylQoddSxB9ZHHf9DNZGW9iD+hOgef4/KVkWYwfLMI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eX/vjsOcdU4GZR9rkoGgaMvYx9UdGOGtmtYdJ9JB03ImBNME4d6sO6Bi+j68hYyBM/HCvqXhaZhio4i6JvL8iWkgr3dIai+m1iHfd00RzaYgFGKhy+GYYfEA5nxrieE69mqcBimF9J9j8m7xMgUclVjnkY8+nJvMKNL7Rz6cbDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GWfMSu6V; arc=none smtp.client-ip=18.132.163.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1724925039;
+	bh=C8Ap7JInDIabgSxCYPM4pbBC80uSwTy3ex4duXRFaHU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=GWfMSu6VARU88So7MMtraN3EgOAJDvgF9mYf0Q8erCpe0kqNQmMc+XxSJh9c4c3BV
+	 eMZq21GXmicotFELYNW9gkQWRiQTdX6Kk2gdJygrCerQi7VyyGinskFN7S7go4Z21F
+	 TXmxbqPnI8zlMTwmoPJH5i+tVfpESKFlAAeon+58=
+X-QQ-mid: bizesmtp90t1724925034t64mciaj
+X-QQ-Originating-IP: EJmO/ueDMiuaxusWmcU8TWgM5tfiwk54zZSXTUIcmM4=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 29 Aug 2024 17:50:31 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 17652668555461779045
+From: WangYuli <wangyuli@uniontech.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	guanwentao@uniontech.com,
+	WangYuli <wangyuli@uniontech.com>,
+	Chen Baozi <chenbaozi@phytium.com.cn>,
+	Wang Zhimin <wangzhimin1179@phytium.com.cn>,
+	Chen Zhenhua <chenzhenhua@phytium.com.cn>,
+	Wang Yinfeng <wangyinfeng@phytium.com.cn>,
+	Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Subject: [PATCH v2] usb: xHCI: add XHCI_RESET_ON_RESUME quirk for Phytium xHCI host
+Date: Thu, 29 Aug 2024 17:50:28 +0800
+Message-ID: <196A709D168A9A04+20240829095028.345047-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: FauzJH8HQ6X88T0VtEzu_JSg2OyxzIQC
-X-Proofpoint-GUID: FauzJH8HQ6X88T0VtEzu_JSg2OyxzIQC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-29_02,2024-08-29_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- adultscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408290072
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-This fix addresses STAR 9001285599, which only affects DWC_usb3 version
-3.20a. The timer value for PM_LC_TIMER in DWC_usb3 3.20a for the Link
-ECN changes is incorrect. If the PM TIMER ECN is enabled via GUCTL2[19],
-the link compliance test (TD7.21) may fail. If the ECN is not enabled
-(GUCTL2[19] = 0), the controller will use the old timer value (5us),
-which is still acceptable for the link compliance test. Therefore, clear
-GUCTL2[19] to pass the USB link compliance test: TD 7.21.
+The resume operation of Phytium Px210 xHCI host would failed
+to restore state. Use the XHCI_RESET_ON_RESUME quirk to skip
+it and reset the controller after resume.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Co-developed-by: Chen Baozi <chenbaozi@phytium.com.cn>
+Signed-off-by: Chen Baozi <chenbaozi@phytium.com.cn>
+Co-developed-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
+Signed-off-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
+Co-developed-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
+Signed-off-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
+Co-developed-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
+Signed-off-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
+Co-developed-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Signed-off-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
-Changes in v2: Updated comment and commit message to include the
-controller IP.
+ drivers/usb/host/xhci-pci.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-v1 link:
-https://lore.kernel.org/all/20240822084504.1355-1-quic_faisalh@quicinc.com
-
- drivers/usb/dwc3/core.c | 15 +++++++++++++++
- drivers/usb/dwc3/core.h |  2 ++
- 2 files changed, 17 insertions(+)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 734de2a8bd21..92d7ec830322 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1378,6 +1378,21 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
- 	}
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index b5705ed01d83..fabae8420ce9 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -55,6 +55,9 @@
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
  
-+	/*
-+	 * STAR 9001285599: This issue affects DWC_usb3 version 3.20a
-+	 * only. If the PM TIMER ECM is enabled through GUCTL2[19], the
-+	 * link compliance test (TD7.21) may fail. If the ECN is not
-+	 * enabled (GUCTL2[19] = 0), the controller will use the old timer
-+	 * value (5us), which is still acceptable for the link compliance
-+	 * test. Therefore, do not enable PM TIMER ECM in 3.20a by
-+	 * setting GUCTL2[19] by default; instead, use GUCTL2[19] = 0.
-+	 */
-+	if (DWC3_VER_IS(DWC3, 320A)) {
-+		reg = dwc3_readl(dwc->regs, DWC3_GUCTL2);
-+		reg &= ~DWC3_GUCTL2_LC_TIMER;
-+		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
-+	}
++#define PCI_VENDOR_ID_PHYTIUM		0x1db7
++#define PCI_DEVICE_ID_PHYTIUM_XHCI			0xdc27
 +
- 	/*
- 	 * When configured in HOST mode, after issuing U3/L2 exit controller
- 	 * fails to send proper CRC checksum in CRC5 feild. Because of this
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 1e561fd8b86e..c71240e8f7c7 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -421,6 +421,7 @@
+ /* Thunderbolt */
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
+ #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
+@@ -407,6 +410,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	if (pdev->vendor == PCI_VENDOR_ID_VIA)
+ 		xhci->quirks |= XHCI_RESET_ON_RESUME;
  
- /* Global User Control Register 2 */
- #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
-+#define DWC3_GUCTL2_LC_TIMER			BIT(19)
- 
- /* Global User Control Register 3 */
- #define DWC3_GUCTL3_SPLITDISABLE		BIT(14)
-@@ -1269,6 +1270,7 @@ struct dwc3 {
- #define DWC3_REVISION_290A	0x5533290a
- #define DWC3_REVISION_300A	0x5533300a
- #define DWC3_REVISION_310A	0x5533310a
-+#define DWC3_REVISION_320A	0x5533320a
- #define DWC3_REVISION_330A	0x5533330a
- 
- #define DWC31_REVISION_ANY	0x0
++	if (pdev->vendor == PCI_VENDOR_ID_PHYTIUM ||
++	    pdev->device == PCI_DEVICE_ID_PHYTIUM_XHCI)
++		xhci->quirks |= XHCI_RESET_ON_RESUME;
++
+ 	/* See https://bugzilla.kernel.org/show_bug.cgi?id=79511 */
+ 	if (pdev->vendor == PCI_VENDOR_ID_VIA &&
+ 			pdev->device == 0x3432)
 -- 
-2.17.1
+2.43.4
 
 
