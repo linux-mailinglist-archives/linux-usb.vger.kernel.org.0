@@ -1,137 +1,190 @@
-Return-Path: <linux-usb+bounces-14262-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14263-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86429963D05
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 09:31:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A7D9963D43
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 09:38:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9B721C24044
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 07:31:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 044BB282E49
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2024 07:38:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 447A2189F41;
-	Thu, 29 Aug 2024 07:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DD8D1898E2;
+	Thu, 29 Aug 2024 07:37:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="doZP7xNs"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fNGMJM8e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD09189BBD;
-	Thu, 29 Aug 2024 07:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABEC1188CBD;
+	Thu, 29 Aug 2024 07:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724916628; cv=none; b=UqVsoMW32IGPx9vF6dl/a164j0Yj36rA69w4eoG7lbEfqe4S6KGGD1vbbBWwKslRgNilx+j8xgFtUqHaMRF5uzXTCyU1nBzj/m9y+wZpWLLfGacoemcokS9KbB/pDUjaiW29Jk3wTPAgE2zHkFl0doldHWkGVMNrXp+RXtM2nDA=
+	t=1724917062; cv=none; b=IckjCANnaAGo9wbr3tud/k08i2dAt6ZfhfJlVCsoaMGv/Fr9ltwBT6uOSSrUvAnY26L8vwyweVRwYQACG8zrsqZV79ksjUtkRlJY3UEFE9yNfOwsKXNGE4u76Ukh2OrAqwApw+ZBKXFBfNBP0OMi4BWTrTlQDXf0FC35UHHwkbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724916628; c=relaxed/simple;
-	bh=LyEMVh4RLCp2HjxapIF7Tq+5ikLws1y4KEPU3klkGN0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aCiFqjvIBr48CzNTBjYFoogy9KbOtDkPo9aDOhX9xjueXfqvALyb0IrI1i2M1OWnlbP+NWFGkK9VfLY4u+EHH7wBIoCFwft0EgR+R5me3L03QLFnNk1heW0BwCN/NtWIK33+22L6CE5bGyOdaO2zghA1C+ars9aV8ikoW9z7s3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=doZP7xNs; arc=none smtp.client-ip=18.169.211.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1724916614;
-	bh=dAJ8ztKTv9lIJL1qRsZJt5YWdjQ1q7wv2JIz9gJfdcI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=doZP7xNsVsFUD/UtQm6RFYSF/pTMW0qzh/4k2vUxAM9I86i18/z4ZOgR4B+g67NgZ
-	 cL2LuwmpnOqQ19aDtPmAP0l3L7Tu4AWnu+MLIlZiDyBdOZjfgWde2XZqfue4zqEpnn
-	 DPDSbP2SOoHtICK4sa5/UIe7CKnF54cm0B5ZmGjU=
-X-QQ-mid: bizesmtp87t1724916610td1la1ss
-X-QQ-Originating-IP: k3Vx3kPdv4++iXJufQYQJD+NYUDo2mSAC6TuiRzZhRA=
-Received: from localhost.localdomain ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 29 Aug 2024 15:30:08 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 939266593025190656
-From: WangYuli <wangyuli@uniontech.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org,
-	bhelgaas@google.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	guanwentao@uniontech.com,
-	zhanjun@uniontech.com,
-	WangYuli <wangyuli@uniontech.com>,
-	Chen Baozi <chenbaozi@phytium.com.cn>,
-	Wang Zhimin <wangzhimin1179@phytium.com.cn>,
-	Chen Zhenhua <chenzhenhua@phytium.com.cn>,
-	Wang Yinfeng <wangyinfeng@phytium.com.cn>,
-	Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
-Subject: [PATCH] usb: xHCI: add XHCI_RESET_ON_RESUME quirk for Phytium xHCI host
-Date: Thu, 29 Aug 2024 15:30:05 +0800
-Message-ID: <59E000092FD56E43+20240829073005.304698-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.43.4
+	s=arc-20240116; t=1724917062; c=relaxed/simple;
+	bh=V/zHvR45g8mcSGd5kh42BmkDeiwg3QM7lDnkbVBtWdY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Vbb0hloBAZ8KomKdgYR+xNjjo6/Dhj+5RCl40J+yqzZjH7SA6jt4rbnTE0M/3jBZB+WJtls2tgg0z8xjviVtstAIZMNjvk4Bprk9I9Geq8UROWlnr3Jlap/0rnkT8NX1incCa0RbYWtTGqC+9c1GxyCKCA0kMcRwR6GUFaKPDNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fNGMJM8e; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47SJME7Y013576;
+	Thu, 29 Aug 2024 07:37:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	gfrvWEpkIUn23pupaLdBQulSFP2HY/j3+24BDjYnz7A=; b=fNGMJM8e7+oiV57P
+	LvZ3dxyAXAWbNb2opWfUbEK5qtfheB2qb0qi7BeS6NDLp88I5wJ7Z9NE+lF33oFi
+	MCJsQFHbq2yC4X+SK2QeXtbXc8jY6hALs3ySJb9lXRvGWNBIpVTmypNTHfWxx/e+
+	cBErK7WcZUp0cEbRj4+9tDkdLCz5wuOdgnD16n/VTyR/5zFy9QtrZIkq1AqsE7jP
+	uzk0SCZzvbRRap0xjH0g8orrgXEdJo4WplZP/deRbn7YUCqO5nZxxVUlbAqY7fyw
+	YAolqq+qvo4uuLLNDy/dmCYTAlNTpkgWNDivLOBJ+KnBtbuHbB+B908gYTlT0CX9
+	dTbE0w==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419px5m9q8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 07:37:21 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47T7bKb0008560
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 07:37:20 GMT
+Received: from [10.217.219.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 29 Aug
+ 2024 00:37:13 -0700
+Message-ID: <aebb87ab-d57e-4cb3-8cdb-835678f31154@quicinc.com>
+Date: Thu, 29 Aug 2024 13:07:10 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: gadget: Fix TX FIFO size for HS ISOC endpoints
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jing Leng
+	<jleng@ambarella.com>, Felipe Balbi <balbi@kernel.org>,
+        Jack Pham
+	<quic_jackp@quicinc.com>,
+        "kernel@quicinc.com" <kernel@quicinc.com>,
+        "Wesley
+ Cheng" <quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>,
+        Vijayavardhan Vennapusa
+	<quic_vvreddy@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20240827054956.28241-1-quic_akakum@quicinc.com>
+ <20240827231552.7yokoe7jqdm3wduu@synopsys.com>
+ <93955b6d-0ce1-42cb-ad18-a82e2e8cfca9@quicinc.com>
+ <20240828234554.lw4hzeajneee7n55@synopsys.com>
+From: AKASH KUMAR <quic_akakum@quicinc.com>
+In-Reply-To: <20240828234554.lw4hzeajneee7n55@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Fl07akVfgMyx9T4UE5Uq6fRglCnSiRL2
+X-Proofpoint-GUID: Fl07akVfgMyx9T4UE5Uq6fRglCnSiRL2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-29_02,2024-08-29_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ adultscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
+ priorityscore=1501 bulkscore=0 mlxscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408290055
 
-The resume operation of Phytium Px210 xHCI host would failed
-to restore state. Use the XHCI_RESET_ON_RESUME quirk to skip
-it and reset the controller after resume.
+Hi Thinh,
 
-Co-developed-by: Chen Baozi <chenbaozi@phytium.com.cn>
-Signed-off-by: Chen Baozi <chenbaozi@phytium.com.cn>
-Co-developed-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
-Signed-off-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
-Co-developed-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
-Signed-off-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
-Co-developed-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
-Signed-off-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
-Co-developed-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
-Signed-off-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- drivers/usb/host/xhci-pci.c | 6 ++++++
- include/linux/pci_ids.h     | 2 ++
- 2 files changed, 8 insertions(+)
+On 8/29/2024 5:15 AM, Thinh Nguyen wrote:
+> On Wed, Aug 28, 2024, AKASH KUMAR wrote:
+>> Hi Thinh,
+>>
+>> On 8/28/2024 4:45 AM, Thinh Nguyen wrote:
+>>> On Tue, Aug 27, 2024, Akash Kumar wrote:
+>>>> Use 2K TX FIFO size for low-resolution UVC cameras to support the
+>>>> maximum possible UVC instances. Restrict 2K TX FIFO size based on
+>>>> the minimum maxburst required to run low-resolution UVC cameras.
+>>>>
+>>>> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+>>>> ---
+>>>>    drivers/usb/dwc3/gadget.c | 4 ++++
+>>>>    1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>> index 89fc690fdf34..f342ccda6705 100644
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -788,6 +788,10 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>>>>    	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+>>>>    		num_fifos = dwc->tx_fifo_resize_max_num;
+>>>> +	if (dep->endpoint.maxburst <= 1 &&
+>>>> +	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
+>>>> +		num_fifos = 2;
+>>>> +
+>>>>    	/* FIFO size for a single buffer */
+>>>>    	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
+>>>> -- 
+>>>> 2.17.1
+>>>>
+>>> These settings are starting to get too specific for each application.
+>>> Can we find a better calculation?
+>>>
+>>> Perhaps something like this? (code not tested)
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index 9a18973ebc05..d54b08f92aea 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -908,15 +908,10 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>>>    	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+>>> -	if ((dep->endpoint.maxburst > 1 &&
+>>> -	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
+>>> +	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+>>>    	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
+>>> -		num_fifos = 3;
+>>> -
+>>> -	if (dep->endpoint.maxburst > 6 &&
+>>> -	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+>>> -	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+>>> -		num_fifos = dwc->tx_fifo_resize_max_num;
+>>> +		num_fifos = min_t(unsigned int, dep->endpoint.maxburst + 1,
+>>> +				  dwc->tx_fifo_resize_max_num);
+>>>    	/* FIFO size for a single buffer */
+>>>    	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
+>>>
+>> should be fine for me, as earlier there was no case handling for maxburst <=
+>> 1, by allocating fifo based on maxburst itself
+>>
+>> should be a good solution and will work for all as they customize based on
+>> maxburst through init scripts, let me test and update.
+>>
+> As I noted in the follow up response, you need to also account for
+> additional transaction opportunities for isoc if operating in highspeed.
+> (ie. use usb_endpoint_maxp_mult()).
+yeah i think that we can control with maxpacket size for high speed cams 
+and we can
+work with maxburst requested only to allocate fifo as both are 
+configurable entity and one
+should be free to adjust fifo as per his environment and not add any 
+additional limitation.
+Let me know if we aligned and go ahead with above suggestion only.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index b5705ed01d83..af967644489c 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -55,6 +55,8 @@
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
- 
-+#define PCI_DEVICE_ID_PHYTIUM_XHCI			0xdc27
-+
- /* Thunderbolt */
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
-@@ -407,6 +409,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	if (pdev->vendor == PCI_VENDOR_ID_VIA)
- 		xhci->quirks |= XHCI_RESET_ON_RESUME;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_PHYTIUM ||
-+	    pdev->device == PCI_DEVICE_ID_PHYTIUM_XHCI)
-+		xhci->quirks |= XHCI_RESET_ON_RESUME;
-+
- 	/* See https://bugzilla.kernel.org/show_bug.cgi?id=79511 */
- 	if (pdev->vendor == PCI_VENDOR_ID_VIA &&
- 			pdev->device == 0x3432)
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index e388c8b1cbc2..25fff4130503 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -2605,6 +2605,8 @@
- 
- #define PCI_VENDOR_ID_FUNGIBLE		0x1dad
- 
-+#define PCI_VENDOR_ID_PHYTIUM		0x1db7
-+
- #define PCI_VENDOR_ID_HXT		0x1dbf
- 
- #define PCI_VENDOR_ID_TEKRAM		0x1de1
--- 
-2.43.4
 
+Thanks,
+Akash
 
