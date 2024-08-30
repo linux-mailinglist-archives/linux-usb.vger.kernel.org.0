@@ -1,133 +1,204 @@
-Return-Path: <linux-usb+bounces-14369-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14370-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C897096603D
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 13:12:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B239A966067
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 13:16:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3DAB3B2E5FB
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 11:10:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D69A91C2121A
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 11:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABFFC1A285A;
-	Fri, 30 Aug 2024 11:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559C9185B51;
+	Fri, 30 Aug 2024 11:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWinfTNZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="glZFuTAh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C348318C004
-	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 11:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C3D17ADF8;
+	Fri, 30 Aug 2024 11:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725016064; cv=none; b=B3cqhgv/XpVunFwWfY/MqwxVvETaQwqXCj/wVskE082TqvI1KD6GP44O9Lcmz1dQ0HRRnUDoWu8h1qdxX/dSXdYTqN3Ni6tYBLHu+8KXudjx2Bslqa3a7oLfKlTh3xFv7dX8h3OcwtIUv6outeix1HXFGcS4FfbP799EX9Aq1rY=
+	t=1725016610; cv=none; b=j6lzUsyZSwIg2gF9sUNhRZxZ1PuRxA3w8CV4IXryUZvWtPkT0Wk+dQ4Eu8zHpws7lqdQIWO5hmBp20uvxsf6tsaVLUKDId3UdOhzP8F87HQDlF66tCv6SaP+zhihhKi4oLVbt+03pddfu2SGr+1mA+CeompzGtzuZuydVWbBZZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725016064; c=relaxed/simple;
-	bh=ddcZUJP0lCNCsUD6ceogR0mhZnTc+Iic2YylUI2pFkc=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=JahLn8ZvIk0KAk3sTQVyxjC9Q4E8ZBEk4pickHblHAZDsAmtX4O8hpOWqCyiHTkoWc1ydxSyUmN+/BLJEFaPdvMFWyb/iAtb11h8sWXt8qlDYFN/w0Vozu+eDYEniDVcS/SJqmM+NnocYCH2N39kT50dAC3ZTVSilCXeisUCP1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWinfTNZ; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-70f645a30dcso808801a34.3
-        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 04:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725016062; x=1725620862; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ySADW4Kq/EaBWp1PPWZaR2Cv2x4kzBk5nUHxU8XVBos=;
-        b=iWinfTNZTe+WkgbYeiThf2ASM3AcvvaQlL8jU/ZzOiWqSqejd1IU7LyAnzS8KYyr7I
-         /CkDt8e8glXV1bvBC8ewDASv4Xye1Mg9p84ebuNSqc3BtWP54FWB3FJrKK0zlBF2NCZc
-         2Kld2LsYt85RW0GRzXRCPyXkHif5cOMxc5RkhO34TOaC0hke3MSX6LSexY4Jn69HWZw0
-         3az3zhFYf/H5ePQ2CoexY7gYOTBXHT5081FWPS0p0PcAst8LxLNWNUPxHqFjRShoU8DE
-         JRJY3qH5JCsmu3A96nmaY/6Jir/rQC/X/7ONPhXylVDCck5mVJlX/b29v4UvGQ6wihIt
-         LInQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725016062; x=1725620862;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ySADW4Kq/EaBWp1PPWZaR2Cv2x4kzBk5nUHxU8XVBos=;
-        b=HlkGZviT6g6me1NV+zZElsirjit+B2vEzO8TYR3IqTh0wWf5nu36yJk+XTzdcJ6BB5
-         dGwAZPo6+nBx/pMZ93oik71cAkF5WojPYnGS676YhFuKmsgS6g4ouXZ0stscP2Lrhixm
-         QL04BStvjNstR+XVEnrCwAExwI+AlB2/8TdlG4LvHqLumWWoKVSA+ZivyhiNGNbrzA/3
-         OpviaiVQML+6G2zqZp61jBkbzGtOtlg+Ue3BdZACSFZzHq+W/FayB3hxu/NjiUHhd+gJ
-         l7TW7lDp7zLCbRzzmDku/oMZNczsF4wfCGMew9cgnvHyeG2TdAdsoQq+7F4VA0n/MhyG
-         oQhw==
-X-Gm-Message-State: AOJu0YzvnrxdA9hzdZpCMtEUx6IgFWKRPdyCoqOCjHAdPgyAy9w5rrXx
-	L99D2EASXFB5POs5yS57FFiJ0AdC57+3/milKElEEBUWBz0TLyURUDtCDXG8racxTnkrsKXOBPa
-	QjheN8lRadmRh9RhC/bysxgn3cURy2RWSWO07nw==
-X-Google-Smtp-Source: AGHT+IE8QgqqdZ0x5b9jTQAMzhZ1aCxD8LtaDITAc7vWQa+lmiC8BIBsJ/I7bVSHTO5gSCUpfRUd66FaU5oJdnFV6Q8=
-X-Received: by 2002:a05:6358:440c:b0:1b5:f95a:5a67 with SMTP id
- e5c5f4694b2df-1b603c3bb99mr744742455d.15.1725016061653; Fri, 30 Aug 2024
- 04:07:41 -0700 (PDT)
+	s=arc-20240116; t=1725016610; c=relaxed/simple;
+	bh=AvmihkIx7oKurA5QPSf2V5FnxKKOMPmtGhEcjarscpo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Eu5ZqJpvjqwTgDs77cdlcy0krL3S6d8QSNFwdop0pp/+tui6mPHWPJS7LI/2EXW1iAC8ZUNSXbXL7l8+piLkRVwH24fyrIQXkf3ayusA5pr3QWHwFbvBC2IQXhYOnbPvbQn9Zd0IFJYekY3HqNpfHoBmYzVvSKfgkGiEkeruk/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=glZFuTAh; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725016609; x=1756552609;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AvmihkIx7oKurA5QPSf2V5FnxKKOMPmtGhEcjarscpo=;
+  b=glZFuTAhdd/04yYkQBdZPboA2aRhSa8j3JaXdv71xUnqrFqN/pABN2yy
+   a1SD/Wy+bAVMDH5muMqayN4sg6lFizV+gKbvEI+OcNA0Ws19FEd0Z5es+
+   cKbvrZbl9nY+mUPI7+URt+ySvt4Ue5KUeIcPtBDkA+2DO3IwnvR18sxSN
+   g5ZSr/iSWBCDAMYueYiI2E0uhNBArJBmvntZwkoaRZqkJmDPUT2hVmlKZ
+   +fUT6ml4Wfq/IhNIL3toRg/3YhhsywDcmJArZBGJomfrn6SboZSGEerFR
+   OivOzMayLQthoW6ee8Y5oAkmg8G4lfwqdPTfXqez66t4yxXIxTM/Y2iDC
+   Q==;
+X-CSE-ConnectionGUID: zLX7tznRQH2X1HPuEQi8vA==
+X-CSE-MsgGUID: RHccfPQaScq9VkpivEJNYg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="41153279"
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="41153279"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 04:16:49 -0700
+X-CSE-ConnectionGUID: kH3jSM+1QKSKkkiqSabCow==
+X-CSE-MsgGUID: BD+byvfsQB2xpV/LbQl99g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="64220204"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by orviesa006.jf.intel.com with ESMTP; 30 Aug 2024 04:16:46 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Benson Leung <bleung@chromium.org>,
+	linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: Fix the partner PD revision
+Date: Fri, 30 Aug 2024 14:16:45 +0300
+Message-ID: <20240830111645.2134301-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Amil Sanan <amilsananak@gmail.com>
-Date: Fri, 30 Aug 2024 16:37:29 +0530
-Message-ID: <CABprV6ReozmBsi5Db-MQw2iHt1mXXjy735yfHwQdeC6RX92RLw@mail.gmail.com>
-Subject: adding a new device in uvc_driver
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, dan.scally@ideasonboard.com
-Cc: linux-usb@vger.kernel.org
-Content-Type: multipart/mixed; boundary="0000000000009675300620e49946"
+Content-Transfer-Encoding: 8bit
 
---0000000000009675300620e49946
-Content-Type: multipart/alternative; boundary="00000000000096752e0620e49944"
+The Partner PD Revision field in GET_CONNECTOR_CAPABILITY
+data structure was introduced in UCSI v2.1. In
+ucsi_check_connector_capability() the version was assumed to
+be 2.0, and in ucsi_register_partner() the field is accessed
+completely unconditionally.
 
---00000000000096752e0620e49944
-Content-Type: text/plain; charset="UTF-8"
+Fixing the version in ucsi_check_connector_capability(), and
+replacing the unconditional pd_revision assignment with a
+direct call to ucsi_check_connector_capability() in
+ucsi_register_port(). After this the revision is also
+checked only if there is a PD contract.
 
-adding the webcam of new acer aspire7
+Fixes: b9fccfdb4ebb ("usb: typec: ucsi: Get PD revision for partner")
+Cc: stable@vger.kernel.org
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 50 ++++++++++++++++++-----------------
+ 1 file changed, 26 insertions(+), 24 deletions(-)
 
-output of lsusb: "Bus 001 Device 002: ID 0408:4033 Quanta Computer, Inc.
-ACER HD User Facing
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index f0b5867048e2..fad43f292e7f 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -959,6 +959,27 @@ static void ucsi_unregister_cable(struct ucsi_connector *con)
+ 	con->cable = NULL;
+ }
+ 
++static int ucsi_check_connector_capability(struct ucsi_connector *con)
++{
++	u64 command;
++	int ret;
++
++	if (!con->partner || con->ucsi->version < UCSI_VERSION_2_1)
++		return 0;
++
++	command = UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMBER(con->num);
++	ret = ucsi_send_command(con->ucsi, command, &con->cap, sizeof(con->cap));
++	if (ret < 0) {
++		dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY failed (%d)\n", ret);
++		return ret;
++	}
++
++	typec_partner_set_pd_revision(con->partner,
++		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags));
++
++	return ret;
++}
++
+ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+ {
+ 	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
+@@ -968,6 +989,7 @@ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+ 		ucsi_partner_task(con, ucsi_get_src_pdos, 30, 0);
+ 		ucsi_partner_task(con, ucsi_check_altmodes, 30, HZ);
+ 		ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
++		ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
+ 		break;
+ 	case UCSI_CONSTAT_PWR_OPMODE_TYPEC1_5:
+ 		con->rdo = 0;
+@@ -1012,7 +1034,6 @@ static int ucsi_register_partner(struct ucsi_connector *con)
+ 	if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
+ 		desc.identity = &con->partner_identity;
+ 	desc.usb_pd = pwr_opmode == UCSI_CONSTAT_PWR_OPMODE_PD;
+-	desc.pd_revision = UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags);
+ 
+ 	partner = typec_register_partner(con->port, &desc);
+ 	if (IS_ERR(partner)) {
+@@ -1089,27 +1110,6 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+ 			con->num, u_role);
+ }
+ 
+-static int ucsi_check_connector_capability(struct ucsi_connector *con)
+-{
+-	u64 command;
+-	int ret;
+-
+-	if (!con->partner || con->ucsi->version < UCSI_VERSION_2_0)
+-		return 0;
+-
+-	command = UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMBER(con->num);
+-	ret = ucsi_send_command(con->ucsi, command, &con->cap, sizeof(con->cap));
+-	if (ret < 0) {
+-		dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY failed (%d)\n", ret);
+-		return ret;
+-	}
+-
+-	typec_partner_set_pd_revision(con->partner,
+-		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags));
+-
+-	return ret;
+-}
+-
+ static int ucsi_check_connection(struct ucsi_connector *con)
+ {
+ 	u8 prev_flags = con->status.flags;
+@@ -1231,15 +1231,16 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 		if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
+ 			ucsi_register_partner(con);
+ 			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
+-			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
+ 			if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
+ 				ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
+ 			if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
+ 				ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
+ 
+ 			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
+-			    UCSI_CONSTAT_PWR_OPMODE_PD)
++			    UCSI_CONSTAT_PWR_OPMODE_PD) {
+ 				ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
++				ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
++			}
+ 		} else {
+ 			ucsi_unregister_partner(con);
+ 		}
+@@ -1668,6 +1669,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+ 		ucsi_register_device_pdos(con);
+ 		ucsi_get_src_pdos(con);
+ 		ucsi_check_altmodes(con);
++		ucsi_check_connector_capability(con);
+ 	}
+ 
+ 	trace_ucsi_register_port(con->num, &con->status);
+-- 
+2.45.2
 
-"
-
---00000000000096752e0620e49944
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>adding the webcam of new acer aspire7<br><br></div>ou=
-tput of lsusb: &quot;<span style=3D"font-family:monospace"><span style=3D"c=
-olor:rgb(0,0,0);background-color:rgb(255,255,255)">Bus 001 Device 002: ID 0=
-408:4033 Quanta Computer, Inc. ACER HD User Facing</span><br>
-<br></span><div><span style=3D"font-family:monospace">&quot;</span></div><d=
-iv><span style=3D"font-family:monospace"><br></span></div><br><br></div>
-
---00000000000096752e0620e49944--
---0000000000009675300620e49946
-Content-Type: text/x-patch; charset="US-ASCII"; name="0001-add-a-device-in-uvc_driver.patch"
-Content-Disposition: attachment; 
-	filename="0001-add-a-device-in-uvc_driver.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m0glwgdk0>
-X-Attachment-Id: f_m0glwgdk0
-
-RnJvbSBkMThhZDNiZjliYmM5M2RhM2VlYjBjYTRlYTY1OTg5NTVhYzA1YTk5IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBhbWlsc2FuYW4gPGFtaWxzYW5hbmFrQGdtYWlsLmNvbT4KRGF0
-ZTogVGh1LCAyOSBBdWcgMjAyNCAxNzozODoyNSArMDUzMApTdWJqZWN0OiBbUEFUQ0hdIGFkZCBh
-IGRldmljZSBpbiB1dmNfZHJpdmVyCgpTaWduZWQtb2ZmLWJ5OiBhbWlsc2FuYW4gPGFtaWxzYW5h
-bmFrQGdtYWlsLmNvbT4KLS0tCiBkcml2ZXJzL21lZGlhL3VzYi91dmMvdXZjX2RyaXZlci5jIHwg
-OSArKysrKysrKysKIDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQg
-YS9kcml2ZXJzL21lZGlhL3VzYi91dmMvdXZjX2RyaXZlci5jIGIvZHJpdmVycy9tZWRpYS91c2Iv
-dXZjL3V2Y19kcml2ZXIuYwppbmRleCBmMGZlYmRjMDguLjFhMzIyOWFiNiAxMDA2NDQKLS0tIGEv
-ZHJpdmVycy9tZWRpYS91c2IvdXZjL3V2Y19kcml2ZXIuYworKysgYi9kcml2ZXJzL21lZGlhL3Vz
-Yi91dmMvdXZjX2RyaXZlci5jCkBAIC0yNDQxLDYgKzI0NDEsMTUgQEAgc3RhdGljIGNvbnN0IHN0
-cnVjdCB1c2JfZGV2aWNlX2lkIHV2Y19pZHNbXSA9IHsKIAkgIC5kcml2ZXJfaW5mbwkJPSAoa2Vy
-bmVsX3Vsb25nX3QpJihjb25zdCBzdHJ1Y3QgdXZjX2RldmljZV9pbmZvKXsKIAkJLnV2Y192ZXJz
-aW9uID0gMHgwMTBhLAogCSAgfSB9LAorCSAgeyAubWF0Y2hfZmxhZ3MgCT0gVVNCX0RFVklDRV9J
-RF9NQVRDSF9ERVZJQ0UKKwkJCXwgVVNCX0RFVklDRV9JRF9NQVRDSF9JTlRfSU5GTywKKwkgIC5p
-ZFZlbmRvciA9IDB4MDQwOCwKKwkgIC5pZFByb2R1Y3QgPSAweDQwMzMsCisJICAuYkludGVyZmFj
-ZUNsYXNzID0gVVNCX0NMQVNTX1ZJREVPLAorCSAgLmJJbnRlcmZhY2VTdWJDbGFzcyA9IDEsCisJ
-ICAuYkludGVyZmFjZVByb3RvY29sID0JVVZDX1BDX1BST1RPQ09MXzE1LAorCSAgLmRyaXZlcl9p
-bmZvID0gKGtlcm5lbF91bG9uZ190KSAmKGNvbnN0IHN0cnVjdCB1dmNfZGV2aWNlX2luZm8gKSAK
-KwkJey51dmNfdmVyc2lvbiA9IDB4MDEwYSwgfSB9LAogCS8qIExvZ2lMaW5rIFdpcmVsZXNzIFdl
-YmNhbSAqLwogCXsgLm1hdGNoX2ZsYWdzCQk9IFVTQl9ERVZJQ0VfSURfTUFUQ0hfREVWSUNFCiAJ
-CQkJfCBVU0JfREVWSUNFX0lEX01BVENIX0lOVF9JTkZPLAotLSAKMi40My4wCgo=
---0000000000009675300620e49946--
 
