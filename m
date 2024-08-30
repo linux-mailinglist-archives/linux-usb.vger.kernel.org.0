@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-14399-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14400-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FE296654A
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 17:24:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CF5496654C
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 17:24:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BECA285365
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:24:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF7EE1C20128
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:24:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B461B5813;
-	Fri, 30 Aug 2024 15:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD1F51B583F;
+	Fri, 30 Aug 2024 15:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RSCClhAb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XckUzKZw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A541B4C56
-	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 15:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9931B5323
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 15:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725031478; cv=none; b=sIfD3QxqMCNs6Zt1p/H/aXFJenI1sPUZyDeH0rtcD3ekl6Rfihnut/gJ8nPbwlZp83u5patbevZVe/YGuFBOkgTYFE3FE24A5/zRkdRw6H52jEVRXUvibLtCrAOr4kZq0nImPhienIJgsUr54q2dXqhcOYZe47mBftFZv8qCe1g=
+	t=1725031480; cv=none; b=FkjrzTJdh03O9y3WzDgALYq3WwSFNb9zKgccGIpYD5LdbUO/HkMJp4eitMKrRTIT3pyj8K2/yBd95hpRUB/uaX4LS/KXJGJdAUnnsrI1ZZpmTSHlBPM8J1B3ppcoJYBoq7xU8AU0fm8mS6fy/J7+TsEA+pqAGgqvjC8J7KHq9TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725031478; c=relaxed/simple;
-	bh=h/PLgWcN6IRMNVOWqjexSynCBkmGyQjtubfjbqcBiMw=;
+	s=arc-20240116; t=1725031480; c=relaxed/simple;
+	bh=VRqYs2WV9RUavq8HQiVRm//9zVRFX6Qx4nw6ePE9BLY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Y+0VvI0v7MxaPAAeINkRL4TLR+uYpFprN1+xL3oCLiT2QmdCpUnqSgQaZJr9X8dm5oBtkK0Tf8X8XzfFi/2myVTnhiV+Dq8ErLUyNiQ7DdiGeYKdUQ8oAq5evXARx7G8udnisEGf/tv8lqHx/ZalXEqstuOAKupNRB31WMA3e0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RSCClhAb; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=mUh6Eycm0481kfK3wZRK1jzSp+CUY9U6QB+Huku5Ka8nC0W4Yrrrzi3jn7ebkQacE7er4VmUGxeKndM+7VxV1qUePYUpFglMzWs1XBEZSkoBFdtZ+X7SAte1BOzd+hbhuMCgfcJpJ7cIus5nm+McE943JelZJPu8dA3/GP2tFtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XckUzKZw; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725031477; x=1756567477;
+  t=1725031478; x=1756567478;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=h/PLgWcN6IRMNVOWqjexSynCBkmGyQjtubfjbqcBiMw=;
-  b=RSCClhAb4svXjX4xhEzmX5yaUWJo1iZ5aM8zO1YqrKILd102iQqeRfoF
-   flNZ8Fl0VVD6zKAMad/7+uUJNMvYB8rZD/5+ETuXvemZ/tTBLCZzS1xPg
-   M86x1AR+/f8fPQg9/za6o2hoHAJktl9aR6I30FXY/9HBbrnoRIOy/+ut1
-   gvMRr/8emHk7DBO6wTU3CYK55GM7NSzgaRL8rih1vcszYVijw4ta3GsHc
-   oEciGNbwE5M2zRXpSbBKwf4/dztX1Y2/7uZufgcC8xXU2jXLTvHnaenNT
-   ROKVkXBhWRx05EBwREt/xRd/hFVC+CsXtTvpVQI8IqOBjSjw3MpL6Qpwc
+  bh=VRqYs2WV9RUavq8HQiVRm//9zVRFX6Qx4nw6ePE9BLY=;
+  b=XckUzKZw0lqSeXMRLa1MB2/OvlET+ew9x8+TsSY9j+OdNVAcIjiNUiVG
+   /cILbs8cMviLpoSyDyMr9w8oc+diHoCS6FSlfMWvACwJUBTVpMJ4NWA3W
+   c/+OdlxSG3hVZS4aHC8aIHWEHiXSBnNV+3L7JgrEjPamXp2kflGsdtEpy
+   to5r6fp1DPDGWxcxZUvxtEHiX1zm8kNjWVH9tm/Bi4Okjcat8xShOotnB
+   Mxaovqa/qSXSb0vArPgxQphtzWxv+94miSUCZRGpaen88XNh47NghFG/3
+   jFp8clZT16Z/VJTK1ppJPI97fcTgyRteDWgy84t7OUqXf3jNBkl6/Rh8/
    w==;
-X-CSE-ConnectionGUID: jWQMLTjQSpyqSMnJSLe8EQ==
-X-CSE-MsgGUID: zFeuLl6eRtKbaPpJ7AL7Pw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23861950"
+X-CSE-ConnectionGUID: s0CgcS9rTHaLz3wsvSeo9Q==
+X-CSE-MsgGUID: dPBlFSFLTbu7OS3NPHizHQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23861955"
 X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="23861950"
+   d="scan'208";a="23861955"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 08:24:36 -0700
-X-CSE-ConnectionGUID: z4F53FYZQAKr0vyySO2jww==
-X-CSE-MsgGUID: 8vz6qIJ3QRKCt9fbPG8sPw==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 08:24:38 -0700
+X-CSE-ConnectionGUID: qgPO2DrcQIaEAfvylvB/lQ==
+X-CSE-MsgGUID: gAa0oQEiT1eTdLQxqDdxeg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="63981647"
+   d="scan'208";a="63981649"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa009.fm.intel.com with ESMTP; 30 Aug 2024 08:24:35 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 30 Aug 2024 08:24:37 -0700
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: gregkh@linuxfoundation.org,
 	mika.westerberg@linux.intel.com,
 	mario.limonciello@amd.com,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH v2 2/4] usb: Add tunnel_mode parameter to usb device structure
-Date: Fri, 30 Aug 2024 18:26:28 +0300
-Message-Id: <20240830152630.3943215-3-mathias.nyman@linux.intel.com>
+Subject: [PATCH v2 3/4] usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface
+Date: Fri, 30 Aug 2024 18:26:29 +0300
+Message-Id: <20240830152630.3943215-4-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240830152630.3943215-1-mathias.nyman@linux.intel.com>
 References: <20240830152630.3943215-1-mathias.nyman@linux.intel.com>
@@ -78,140 +78,107 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add 'tunnel_mode' enum to usb device structure to describe if a USB3
-link is tunneled over USB4, or connected directly using native USB2/USB3
-protocols.
+Describe the power management relationship between a tunneled USB3 device
+and the tunnel providing USB4 host with a device link as the relationship
+between them is not evident from normal device hierarchy.
 
-Tunneled devices depend on USB4 NHI host to maintain the tunnel.
-Knowledge about tunneled devices is important to ensure correct
-suspend and resume order between USB4 hosts and tunneled devices.
-i.e. make sure tunnel is up before the USB device using it resumes.
+Tunneling capable ports have an ACPI _DSD object pointing to the USB4
+Host Interface that is used to establish USB3 3.x tunnels
 
-USB hosts such as xHCI may have vendor specific ways to detect tunneled
-connections. This 'tunnel_mode' parameter can be set by USB3 host driver
-during hcd->driver->update_device(hcd, udev) callback.
+Set the link directly between tunneled USB3 devices and USB4 Host
+Interface to ensure that the USB4 host can runtime suspend if no tunneled
+USB 3.x devices exist.
+Current Thunderbolt code sets a link between USB4 Host Interface and USB3
+xHCI host which prevents USB4 Host Interface from runtime suspending even
+if the USB3 host is only serving native USB devices.
 
-tunnel_mode can be set to:
-USB_LINK_UNKNOWN = 0
-USB_LINK_NATIVE
-USB_LINK_TUNNELED
+See commit b2be2b05cf3b ("thunderbolt: Create device links from ACPI
+description") for details.
 
-USB_LINK_UNKNOWN is used in case host is not capable of detecting
-tunneled links.
+As the device link is only set for USB3 devices that are already tunneled
+we know that USB4 Host Interface exists and is bound to its driver.
 
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
 v2:
- Add and use a 3 state enum to describe and store tunnel mode instead
- of bool.
+ - Don't check twice if device is connected to roothub port
+ - also create device link if tunnel mode is unknown and port supports
+   tunneling.
 
- drivers/usb/host/xhci-hub.c | 13 +++++++++----
- drivers/usb/host/xhci.c     |  7 +++++--
- drivers/usb/host/xhci.h     |  4 ++--
- include/linux/usb.h         |  8 ++++++++
- 4 files changed, 24 insertions(+), 8 deletions(-)
+ drivers/usb/core/usb-acpi.c | 53 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 4ba910eadd3f..d27c30ac17fd 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -763,9 +763,12 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
-  *
-  * A USB3 device must be connected to the port to detect the tunnel.
-  *
-- * Return: true if USB3 connection is tunneled over USB4
-+ * Return: link tunnel mode enum, USB_LINK_UNKNOWN if host is incapable of
-+ * detecting USB3 over USB4 tunnels. USB_LINK_NATIVE or USB_LINK_TUNNELED
-+ * otherwise.
-  */
--bool xhci_port_is_tunneled(struct xhci_hcd *xhci, struct xhci_port *port)
-+enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
-+						struct xhci_port *port)
- {
- 	void __iomem *base;
- 	u32 offset;
-@@ -777,10 +780,12 @@ bool xhci_port_is_tunneled(struct xhci_hcd *xhci, struct xhci_port *port)
- 		offset = XHCI_INTEL_SPR_ESS_PORT_OFFSET + port->hcd_portnum * 0x20;
- 
- 		if (readl(base + offset) & XHCI_INTEL_SPR_TUNEN)
--			return true;
-+			return USB_LINK_TUNNELED;
-+		else
-+			return USB_LINK_NATIVE;
- 	}
- 
--	return false;
-+	return USB_LINK_UNKNOWN;
+diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+index 7f8a912d4fe2..21585ed89ef8 100644
+--- a/drivers/usb/core/usb-acpi.c
++++ b/drivers/usb/core/usb-acpi.c
+@@ -142,6 +142,53 @@ int usb_acpi_set_power_state(struct usb_device *hdev, int index, bool enable)
  }
+ EXPORT_SYMBOL_GPL(usb_acpi_set_power_state);
  
- void xhci_set_link_state(struct xhci_hcd *xhci, struct xhci_port *port,
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 1ea2c91106b7..a69245074395 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4529,9 +4529,12 @@ static int xhci_update_device(struct usb_hcd *hcd, struct usb_device *udev)
- 	if (hcd->speed >= HCD_USB3 && !udev->parent->parent) {
- 		port = xhci->usb3_rhub.ports[udev->portnum - 1];
- 
--		if (xhci_port_is_tunneled(xhci, port))
-+		udev->tunnel_mode = xhci_port_is_tunneled(xhci, port);
-+		if (udev->tunnel_mode == USB_LINK_UNKNOWN)
-+			dev_dbg(&udev->dev, "link tunnel state unknown\n");
-+		else if (udev->tunnel_mode == USB_LINK_TUNNELED)
- 			dev_dbg(&udev->dev, "tunneled over USB4 link\n");
--		else
-+		else if (udev->tunnel_mode == USB_LINK_NATIVE)
- 			dev_dbg(&udev->dev, "native USB 3.x link\n");
- 		return 0;
- 	}
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index aa1062a595b6..0a9d663cdfff 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1929,8 +1929,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 wIndex,
- int xhci_hub_status_data(struct usb_hcd *hcd, char *buf);
- int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1);
- struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd);
--bool xhci_port_is_tunneled(struct xhci_hcd *xhci, struct xhci_port *port);
--
-+enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
-+						struct xhci_port *port);
- void xhci_hc_died(struct xhci_hcd *xhci);
- 
- #ifdef CONFIG_PM
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 832997a9da0a..672d8fc2abdb 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -495,6 +495,12 @@ struct usb_dev_state;
- 
- struct usb_tt;
- 
-+enum usb_link_tunnel_mode {
-+	USB_LINK_UNKNOWN = 0,
-+	USB_LINK_NATIVE,
-+	USB_LINK_TUNNELED,
-+};
++/**
++ * usb_acpi_add_usb4_devlink - add device link to USB4 Host Interface for tunneled USB3 devices
++ *
++ * @udev: Tunneled USB3 device connected to a roothub.
++ *
++ * Adds a device link between a tunneled USB3 device and the USB4 Host Interface
++ * device to ensure correct runtime PM suspend and resume order. This function
++ * should only be called for tunneled USB3 devices.
++ * The USB4 Host Interface this tunneled device depends on is found from the roothub
++ * port ACPI device specific data _DSD entry.
++ *
++ * Return: negative error code on failure, 0 otherwise
++ */
++static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
++{
++	const struct device_link *link;
++	struct usb_port *port_dev;
++	struct usb_hub *hub;
 +
- enum usb_port_connect_type {
- 	USB_PORT_CONNECT_TYPE_UNKNOWN = 0,
- 	USB_PORT_CONNECT_TYPE_HOT_PLUG,
-@@ -605,6 +611,7 @@ struct usb3_lpm_parameters {
-  *	WUSB devices are not, until we authorize them from user space.
-  *	FIXME -- complete doc
-  * @authenticated: Crypto authentication passed
-+ * @tunnel_mode: Connection native or tunneled over USB4
-  * @lpm_capable: device supports LPM
-  * @lpm_devinit_allow: Allow USB3 device initiated LPM, exit latency is in range
-  * @usb2_hw_lpm_capable: device can perform USB2 hardware LPM
-@@ -714,6 +721,7 @@ struct usb_device {
- 	unsigned do_remote_wakeup:1;
- 	unsigned reset_resume:1;
- 	unsigned port_is_suspended:1;
-+	enum usb_link_tunnel_mode tunnel_mode;
++	if (!udev->parent || udev->parent->parent)
++		return 0;
++
++	hub = usb_hub_to_struct_hub(udev->parent);
++	port_dev = hub->ports[udev->portnum - 1];
++
++	struct fwnode_handle *nhi_fwnode __free(fwnode_handle) =
++		fwnode_find_reference(dev_fwnode(&port_dev->dev), "usb4-host-interface", 0);
++
++	if (IS_ERR(nhi_fwnode))
++		return 0;
++
++	link = device_link_add(&port_dev->child->dev, nhi_fwnode->dev,
++			       DL_FLAG_AUTOREMOVE_CONSUMER |
++			       DL_FLAG_RPM_ACTIVE |
++			       DL_FLAG_PM_RUNTIME);
++	if (!link) {
++		dev_err(&port_dev->dev, "Failed to created device link from %s to %s\n",
++			dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
++		return -EINVAL;
++	}
++
++	dev_dbg(&port_dev->dev, "Created device link from %s to %s\n",
++		dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
++
++	return 0;
++}
++
+ /*
+  * Private to usb-acpi, all the core needs to know is that
+  * port_dev->location is non-zero when it has been set by the firmware.
+@@ -262,6 +309,12 @@ usb_acpi_find_companion_for_device(struct usb_device *udev)
+ 	if (!hub)
+ 		return NULL;
  
- 	int slot_id;
- 	struct usb2_lpm_parameters l1_params;
++
++	/* Tunneled USB3 devices depend on USB4 Host Interface, set device link to it */
++	if (udev->speed >= USB_SPEED_SUPER &&
++	    udev->tunnel_mode != USB_LINK_NATIVE)
++		usb_acpi_add_usb4_devlink(udev);
++
+ 	/*
+ 	 * This is an embedded USB device connected to a port and such
+ 	 * devices share port's ACPI companion.
 -- 
 2.25.1
 
