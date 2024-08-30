@@ -1,109 +1,95 @@
-Return-Path: <linux-usb+bounces-14402-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14403-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 999989665F8
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 17:45:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F04B96661D
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 17:53:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 434D31F2304B
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:45:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 622AD1C23646
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37A5EEC3;
-	Fri, 30 Aug 2024 15:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQF526jI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534F81B790D;
+	Fri, 30 Aug 2024 15:53:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8E81B5EC9;
-	Fri, 30 Aug 2024 15:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36A71B4C49
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 15:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725032713; cv=none; b=B/RhnTQ1NuMELXYVLqx6yLiaJLAzf3qIlRIIT9NZ9ZnRhNHWsuIRKYI6l8dplgBNaSofl6Qt5PmeERjunlqR5Qxru5rYPfHTVTLU+KivaI8W+Od+UQudxNbf7qekQXdahQ9V/9TpHHFs0vGaEJRW3XhALuXR9B/mOD+4P7gHOe8=
+	t=1725033185; cv=none; b=vGL4ylewDTBII6GYG0OEOlhf6o6tWNejnmu6kbixaJf+bNDv3aZBidyEG6ifdJkJlRx2rmWzpgHwPzqyQRftxTpASWxRjqm9D6NLQikB/rLt7/OcvneM8rLo1+1/1kqTtnwqrZkHISf12DiQ470HCDbi0RIbyO76bMTPf3aG91A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725032713; c=relaxed/simple;
-	bh=HqClUW0y4TPjRV7tFoBqmvUM7p96BH5eNpQ76g7qgbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=nXdjjkKOmDkb2KOWxzYq3YElsYm/bO577G4J1NAkaHir6zrZB0UtFwk+6OKqIydLFUWRSuOcq3AB+6RNV3n5GWBhd2o3E29hArb+qcDWip6YOuucBSn4nsXfowWMwIMskMQk3Rs0ZAgDaMRgCHshfU8hGnwEfrbtHItJejl2o+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQF526jI; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5343d2af735so1897422e87.1;
-        Fri, 30 Aug 2024 08:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725032710; x=1725637510; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wx/lCrTpfSvdHUgVk44KXjqtVq3fG6KgJGrfLz+31DQ=;
-        b=YQF526jIPYdLo52bs9ieyfVwwRrXeZziMTdSXU8Pa6A3UPsiOUV83Ancvuhb9NbHXe
-         GDyjDjP9Ulq1puxHdIq5Nqk1IJcq5t7OBUbFLzHqVd0W3dVqtwBpf2hiYTd0T9mviyzT
-         VqAgtqCzg6nICIGBO+zbjuQYJJ67AEMzsweCTV5GJQY1aRg8MrXfToXMehxzUx0aZgbq
-         jxZiPi6yw4vU0jPzALr8ok0tOutFhAKOs2rxAH2ObTYVr9yxFHJUfWsNBA5vSz54gxAT
-         0xqJsEcfaH3z1pnt87Pnlzk6GVAXMwvvYCFG5D5WCkBHKXhmWaGQo5hMC/SQpMEkVt4J
-         H+WQ==
+	s=arc-20240116; t=1725033185; c=relaxed/simple;
+	bh=RueS7JnGk0i21951pS8Z1lfcC7Kbynif6BpXcfUivBw=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=asty2uGNOqG3eWVjZ2eaB37RiqrT0zlypj0k1c/TDH0N6IeBpf9WHdlONaL4OpIvuZTdsQAT/RB9yoxkI/EZJe4uimmup/L6HXFHtLzCTM95v2rMXlYVZoxmcKIG5smri7QsRwhwbDM9BuGWCFpCLJhOdC1ewh1ZxS8QPzzNvFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-39d2c44422eso19008385ab.2
+        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 08:53:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725032710; x=1725637510;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wx/lCrTpfSvdHUgVk44KXjqtVq3fG6KgJGrfLz+31DQ=;
-        b=B8RzdZ7D17/A2mfNCgFK2e41d6CJisaDo5AcVS/4Cqcl9oWopmqlS6OsWMscMqZtJU
-         COcO39G+cMDR3ciMm20rm9OqhURTPhhXVhJoQqQYzUDuKyYMzyBau8DYqA1CSIfFutFY
-         yT0f6MchybK0p7ftT4Yh2qWIg6M9G+f2rJMboQXAWYeCG6WB6JR0xInp1g5Wqb4oU/61
-         8LX47hvNkhzGfzzPgAWxNyS+yfpN5J7aqX/Tn5IW38yBETyaGeIWZLvwTginCo/Ogflc
-         9hB8AgFoneugdY+pcvaae738tXmAxfZRb0ELrEIf4qRQRXRdlcwSbubA9uHLN12/A7wr
-         fqlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjGEiLTNcwJRzsjuTeoi4atCJiAit4OoIJXjK6G21X868v4RTSVGQkVHmkmgoZBxoVLIgUiWpQ@vger.kernel.org, AJvYcCX0QX1zTjIRDCau/EPHYRz5/tWao2w8KggMQ4YaxcLiT9gVJsu4mRewhyTBVovWfaxnbm8UmPj6L9TJs2I=@vger.kernel.org, AJvYcCXNP1RINHSqMnpKWemgNm3+XMFhHeVhxTVok9SB1tznOfDTmA8J7lOTVTX6F+BbLeWe44bPMmeYLy+K@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNS0f9wkgS8/OnHouubfcFJuXDbZUg/ijr11MCo6fDkJOuMfM7
-	SnvicyKR/m3ckqeglbin014WRCinRwTlJK/Np3KJ43XSNJ++Ihis
-X-Google-Smtp-Source: AGHT+IF/RWISTslY+pNUUnbN+pc2mYiEfpgOldaEiU6kT37eEG8cCnaYn2ostIaybYUKADsBJbPqSg==
-X-Received: by 2002:a05:6512:159e:b0:52e:7542:f469 with SMTP id 2adb3069b0e04-53546a56629mr1760359e87.0.1725032709314;
-        Fri, 30 Aug 2024 08:45:09 -0700 (PDT)
-Received: from foxbook (bin33.neoplus.adsl.tpnet.pl. [83.28.129.33])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-535408286b2sm660237e87.172.2024.08.30.08.45.08
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 30 Aug 2024 08:45:08 -0700 (PDT)
-Date: Fri, 30 Aug 2024 17:45:04 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: pawell@cadence.com, peter.chen@kernel.org
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: xhci: fixes lost of data for xHCI Cadence
- Controllers
-Message-ID: <20240830174504.1282f7b4@foxbook>
-In-Reply-To: <PH7PR07MB95388A2D2A3EB3C26E83710FDD8E2@PH7PR07MB9538.namprd07.prod.outlook.com>
+        d=1e100.net; s=20230601; t=1725033182; x=1725637982;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rJXna8UgM/TDpAaQDndMkHe5nsCGxVc7RnSON73+sAg=;
+        b=W71htu1istjiZng8XSRjD/Rd0ioUp+8rEdr4H88Sitsg+MwOPnGMh7N6eFL2jmL/o5
+         G48dAMt85cgA8jltlDw3F8OVJ2KcuOrXiYJxYNIc//nT/ZHMpe8g3FOW8s12/9WnT4vz
+         JzNwzSk5vCyMRXd1+jcfoiFT6wN0Y/LUdZtd3RBKL/oPzDv5uzZSgXzHOANlFr6U+NUI
+         PpWCPWrrrTkMAueFs1Ee6rSHd6TsrDueHPjUkM9dSGvEOV/UTiXQY4qqC6kPb/+eRwDm
+         hwsz1dwzMV7Vnb0HmLpP+CorIPMt0KJtiewQE8XDL+TEVRuRdYo2LagzVG3aw8Ji1GBa
+         /Uqg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2yA26dFH+Qjuh4ASK4GQ2xSDl7DLKgEY9K2MdHwTk2RLsP/gL4rPshaezsdStU3RwKGkvo30A73I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEpYP5AKssX/2c2yEUkj3MfoV9v/AHdwgjC2TbEr2AW65foENP
+	RdDBhvd4khnz64NyR6N1WIVk5o2cnFu6+Py3TMTXiJQqRu4S+RFGpOa7U+3T+vY1Zn7SbTnP/vF
+	8/c/dpW33pDiN6T6W6Irxu7LqjoiBYCtw4UdmSxjcfqjk31W27l9MAaM=
+X-Google-Smtp-Source: AGHT+IGPpVlc3Cxm6Tux+LHq6e+MRTFLxLn/5DXrJAeoqCb32DWphMPOMPxIk8n+X7k27SklSmmZR3EaWfZ2PeBC8hU238on18Dk
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:1986:b0:398:b1d3:7c9d with SMTP id
+ e9e14a558f8ab-39f4108d9c3mr786575ab.3.1725033181727; Fri, 30 Aug 2024
+ 08:53:01 -0700 (PDT)
+Date: Fri, 30 Aug 2024 08:53:01 -0700
+In-Reply-To: <00000000000040b643061ca951fe@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000005da6a0620e8961e@google.com>
+Subject: Re: [syzbot] [usb?] possible deadlock in assign_fw
+From: syzbot <syzbot+e70e4c6f6eee43357ba7@syzkaller.appspotmail.com>
+To: akinobu.mita@gmail.com, akpm@linux-foundation.org, alinde@google.com, 
+	dakr@redhat.com, glider@google.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, mcgrof@kernel.org, 
+	rafael@kernel.org, russ.weight@linux.dev, syzkaller-bugs@googlegroups.com, 
+	torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+syzbot has bisected this issue to:
 
-> Field Rsvd0 is reserved field, so patch should not have impact for
-> other xHCI controllers.
-Wait, is this a case of Linux failing to zero-initialize something that
-should be zero initialized before use (why not explain it as such?), or
-are you suggesting monkeying with internal xHC data at run time, in area
-which is known to actually be used by at least one implementation?
+commit 4d0e9df5e43dba52d38b251e3b909df8fa1110be
+Author: Albert van der Linde <alinde@google.com>
+Date:   Fri Oct 16 03:13:50 2020 +0000
 
-There is no mention of Rsvd0 in the xHCI spec, did you mean RsvdO?
+    lib, uaccess: add failure injection to usercopy functions
 
-Reserved and Opaque, 
-For exclusive use by the xHC.
-Software shall *not* write this, unless allowed by the vendor.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=132abd2b980000
+start commit:   d5d547aa7b51 Merge tag 'random-6.11-rc6-for-linus' of git:..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10aabd2b980000
+console output: https://syzkaller.appspot.com/x/log.txt?x=172abd2b980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d76559f775f44ba6
+dashboard link: https://syzkaller.appspot.com/bug?extid=e70e4c6f6eee43357ba7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ee2b7b980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177c7b7b980000
 
-Cadence isn't the only xHC vendor...
+Reported-by: syzbot+e70e4c6f6eee43357ba7@syzkaller.appspotmail.com
+Fixes: 4d0e9df5e43d ("lib, uaccess: add failure injection to usercopy functions")
 
-(There is no mention of "Stream Endpoint Context" either, so maybe you
-meant "Stream Context" or "Endpoint Context"...)
-
-Regards,
-Michal
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
