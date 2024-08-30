@@ -1,58 +1,79 @@
-Return-Path: <linux-usb+bounces-14337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 020AA9656DC
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 07:24:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E388965958
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 10:03:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 326A7B22B9D
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 05:24:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BC20281E1F
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 08:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66C3914D428;
-	Fri, 30 Aug 2024 05:23:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A33016B395;
+	Fri, 30 Aug 2024 08:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="I5jsYDMF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Htr/ljZ4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82BBEEB7;
-	Fri, 30 Aug 2024 05:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C513166F19;
+	Fri, 30 Aug 2024 08:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724995433; cv=none; b=gaWB2Uc9U8779qv7YJQqwB5O6ou5wtjt/IJNu/SnF1zuYMwJLbewMMbDFJf5JwCRMQpxkD6kFxEjFSju+xPs5axB9nlxD3YAQFdnqSgczEZu6QQIYBUIxkY8lh+yBxzSYOG8I3l/UT0W3V2S5AmUjLV2weUWnK9FALPLJmfGxhs=
+	t=1725004978; cv=none; b=YYPbMsOEyydNhTdKKVW1iFAkgWpxQzCrsAIAXyYR43cvtR0UUuapj174VyHmSmytPipGAu5ISn6//Zj+2S6j49UC+ntWKw0wpC3VdrOAbhT3yTYmRtDVgF7s2JpRWc9wqA1b4nJl9Kyh5ikg6XLD+/v3GyTrNqwfLa+sJS3Y19U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724995433; c=relaxed/simple;
-	bh=g0jou+hkbZ1Cw5t8c9AWKZzysCGPuMG2V/6r2Uwp1Qw=;
+	s=arc-20240116; t=1725004978; c=relaxed/simple;
+	bh=V5JLcyP1XZThVqKP2FLK8yZHQp7BSEs//17dfoHaEaI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZLan9vpCF8ylgDLU26hys+ncJYADrvHACVD9bxie2Tlf9cR+pKqRsiD7QSOnB6COBbenuecy8F52/jaLg9NtJyxnsJ2OEk3jzjh3HdmmeQGMQT2agAF2UETjdXhNkCmLQ/JZHXURUZ1Ynbw1N3D2wXme0neJEojn2qZWnVfLZDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=I5jsYDMF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8E1CC4CEC4;
-	Fri, 30 Aug 2024 05:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724995433;
-	bh=g0jou+hkbZ1Cw5t8c9AWKZzysCGPuMG2V/6r2Uwp1Qw=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=bzyFW2t+kAxktfQm/lmIYa/0tL8UXsPMICNmFFpO1Mrn/m55bYavZuPbCYO1H+JIric1Fpcul4/odeRNv9uPpjgKTn/YIQd7bmqlR2IK1Dmw5SiY6KvgfMNk1OzI8j3QtQkE8tgMvoPZGgKLj3DFyd7kJ3FJoCSGcSP0j/g1n8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Htr/ljZ4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3028C4CEC8;
+	Fri, 30 Aug 2024 08:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725004978;
+	bh=V5JLcyP1XZThVqKP2FLK8yZHQp7BSEs//17dfoHaEaI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I5jsYDMF/JJrYup8m0quhEu3opTU6/ba3rMsdd6DIHxsgNVGOYp3s5iuAciy2cAXk
-	 ItTHrrLh9/TO3eO8xbDrvN3V8DP+PPWCYx+wtDXWk1u3+1j/gnpJicvvCY7BNW8/hB
-	 ssTRu5dJfZ7ZyNGxHwTAp0Ids7hCWfuW+fiR5ha8=
-Date: Fri, 30 Aug 2024 07:23:49 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: mathias.nyman@intel.com, sergei.shtylyov@gmail.com, helgaas@kernel.org,
-	yuzenghui@huawei.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	guanwentao@uniontech.com, Chen Baozi <chenbaozi@phytium.com.cn>,
-	Wang Zhimin <wangzhimin1179@phytium.com.cn>,
-	Chen Zhenhua <chenzhenhua@phytium.com.cn>,
-	Wang Yinfeng <wangyinfeng@phytium.com.cn>,
-	Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
-Subject: Re: [PATCH v3] usb: xHCI: add XHCI_RESET_ON_RESUME quirk for Phytium
- xHCI host
-Message-ID: <2024083013-crinkle-making-8cb8@gregkh>
-References: <51AD65BA61BA0881+20240830043509.31019-1-wangyuli@uniontech.com>
+	b=Htr/ljZ4bcbC+qH3hiz+ps1PACcNUaMjDmNVw57mwJ336MuYU9kJC4HeWUQo0nfZm
+	 /6gCNWrVzTDl64iW0D5MCCWXyVYMHdDIbZ7r3RarSP+gpdaVdn4mxWQeoHo9II9chF
+	 lC8E2JhDQK6X3nWyOoiwIV3k2yAi+Za+6aH/edwFJTwYCxMy9IxCbvd4P+4Cfze41J
+	 HCHUPeSdRxVhWy6OZO8YPG9ugnv+YuqyeTbtSpmdME3Fvcl21x2hUhj3O1aP46a4lg
+	 Pt+iBmqP6HmO+4Bmu0UuIy2ZXxpaO26aRTna2oav0kll4jc6QilhpdphuN+Iz1nf/6
+	 MPfaAD68BgEJg==
+Date: Fri, 30 Aug 2024 13:32:54 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: "Claudiu.Beznea" <claudiu.beznea@tuxon.dev>,
+	"kishon@kernel.org" <kishon@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"geert+renesas@glider.be" <geert+renesas@glider.be>,
+	"magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"mturquette@baylibre.com" <mturquette@baylibre.com>,
+	"sboyd@kernel.org" <sboyd@kernel.org>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH 10/16] phy: renesas: rcar-gen3-usb2: Add support to
+ initialize the bus
+Message-ID: <ZtF8rtI7e/7cK4BR@vaman>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-11-claudiu.beznea.uj@bp.renesas.com>
+ <TY3PR01MB113468A6CA4ADBCA577670AD486882@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <8faa6b6d-a013-4a71-a8b7-af02ac92d94b@tuxon.dev>
+ <TY3PR01MB11346FBA77256F2156D374ECF86882@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,22 +82,41 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <51AD65BA61BA0881+20240830043509.31019-1-wangyuli@uniontech.com>
+In-Reply-To: <TY3PR01MB11346FBA77256F2156D374ECF86882@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 
-On Fri, Aug 30, 2024 at 12:35:09PM +0800, WangYuli wrote:
-> The resume operation of Phytium Px210 xHCI host would failed
-> to restore state. Use the XHCI_RESET_ON_RESUME quirk to skip
-> it and reset the controller after resume.
+On 23-08-24, 09:01, Biju Das wrote:
+> > >> The Renesas RZ/G3S need to initialize the USB BUS before transferring data due to hardware
+> > limitation.
+> > >> As the register that need to be touched for this is in the address
+> > >> space of the USB PHY, and the UBS PHY need to be initialized before
+> > >> any other USB drivers handling data transfer, add support to initialize the USB BUS.
+> > >>
+> > >> As the USB PHY is probed before any other USB drivers that enables
+> > >> clocks and de-assert the reset signals and the BUS initialization is
+> > >> done in the probe phase, we need to add code to de-assert reset signal and runtime resume the
+> > device (which enables its clocks) before accessing the registers.
+> > >>
+> > >> As the reset signals are not required by the USB PHY driver for the
+> > >> other USB PHY hardware variants, the reset signals and runtime PM was handled only in the function
+> > that initialize the USB BUS.
+> > >>
+> > >> The PHY initialization was done right after runtime PM enable to have
+> > >> all in place when the PHYs are registered.
+> > >
+> > > There is no user for this patch. The first user is RZ/G3S and you
+> > > should merge this patch with next one.
+> > 
+> > I think this is a matter of taste... This is how I usually format the patches (for scenarios like
+> > this) and got no request for squashing.
 > 
-> Changlog:
->  *v1 -> v2: Move the PCI_VENDOR_ID_PHYTIUM form pci_ids.h to xhci-pci.c
->   v2 -> v3: Change "||" to "&&", that was a mistake.
+> That is strange for trivial patches like this.
 
-As per the documentation, the changelog goes below the --- line.
+Splitting is better, this patch does one thing whereas the next one uses
+it adds in new device, i would say quite a clean approach
 
-Please fix up and send a v4.
+NOTE: Don't quote the not required context while replying, it is good
+mail list hygiene
 
-thanks,
-
-greg k-h
+-- 
+~Vinod
 
