@@ -1,140 +1,113 @@
-Return-Path: <linux-usb+bounces-14385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F112966392
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 16:00:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2813D9663B2
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 16:07:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C146286042
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 14:00:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8E8D284726
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 14:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF4E1B1D44;
-	Fri, 30 Aug 2024 14:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pajh9QeW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10EC1AF4F8;
+	Fri, 30 Aug 2024 14:07:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pasta.tip.net.au (pasta.tip.net.au [203.10.76.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17361A4B9C;
-	Fri, 30 Aug 2024 14:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5087DA94
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 14:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.10.76.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725026416; cv=none; b=mCOmAS9woRNvuVKwjXHO7Yt17OesZMQ8w1e3Z/aN8DwIzPVKtP/tEdugH4iZJ9ODPgwGGUp+yirb4x2eCfSV0pfItwJOJk8cynnpIurUxm/87ugTekbgiKmToTr/+9Kmh9wzvuYjbVomyfF9P+krcV6CmzFErpLgL30chJAKY7I=
+	t=1725026857; cv=none; b=Q/o2kDAy85hxA3FxSpULX1spNtGT9V5Hnmp69DMPQl7KG5/f1v9ziFVTFccXkxaX71eZb5IexpJ9I7abYTXgZBi2bgvMsED1jIC1pyVw52G5M1fLIWFufE/ExqB+OLO1xO/gL8NTnniOJ34hIIVoPE3qDZ/4Sgdys8tVi3m2QCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725026416; c=relaxed/simple;
-	bh=6LQwcRohtSWtE15WMfrdudFwvRpiK4GcwW19wTmXtD8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uGraeDUBXxxu7hDTVwUghinDraeo4jB6X2eTwTJRKH1+FvVZOGftLGeIHBvuSH/q507YxUEN8gFpdT7VGynAjkikAsY2gablJhkZPSbK9IHs+NivZpp0KWOAyKcp8iqTIDMEL+SuS+8FbKGi+mUC0CnMlX8c4r/nY8Gb9GR8L4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pajh9QeW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8CEC4CEC2;
-	Fri, 30 Aug 2024 14:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725026415;
-	bh=6LQwcRohtSWtE15WMfrdudFwvRpiK4GcwW19wTmXtD8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pajh9QeWAnT7dxnYYu3bVSssLf8soLVH7pqiHzefUIkDK//7iFyWliwkYh7YrATwm
-	 qwL6UjA51g1SjxrYahJBfJqbFIRJlefF7/A2CWMwuucnR94GWXIMfXeOmfwrtz9rpw
-	 BuLdL/yzV6KfbaxYdxPE+2BXGR/uPqrcMe8exRIg=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Charles Yo <charlesyo@google.com>,
-	Kyle Tso <kyletso@google.com>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Ondrej Jirman <megi@xff.cz>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH 6.6] usb: typec: fix up incorrectly backported "usb: typec: tcpm: unregister existing source caps before re-registration"
-Date: Fri, 30 Aug 2024 16:00:09 +0200
-Message-ID: <2024083008-granddad-unmoving-828c@gregkh>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1725026857; c=relaxed/simple;
+	bh=uzmVF4YuoTPqmLHP1/LWahVsLikCq7H98YMUVFeG258=;
+	h=Message-ID:Date:MIME-Version:Subject:References:From:To:
+	 In-Reply-To:Content-Type; b=s6uITyu8sIP0xTUtXYG3zdz+qXj34C1Uiph9Nvhwasl/mmqetKCxZGXwkf0y9XAjmOuIhrqsM4UTvpyIbJhsAwoTErmnujamMmsNGGMRJtoQvAUkYUCe+i9texlKuvxNtk7z/4xQWApBl/bOL53pJ3tG4cPDJk0bdu375LIkbf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eyal.emu.id.au; spf=pass smtp.mailfrom=eyal.emu.id.au; arc=none smtp.client-ip=203.10.76.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eyal.emu.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eyal.emu.id.au
+Received: from [192.168.2.7] (unknown [101.115.81.153])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by mailhost.tip.net.au (Postfix) with ESMTPSA id 4WwKjK0603z9R5C
+	for <linux-usb@vger.kernel.org>; Sat, 31 Aug 2024 00:07:32 +1000 (AEST)
+Message-ID: <d46a455c-a17d-4775-81be-57a5224bc41a@eyal.emu.id.au>
+Date: Sat, 31 Aug 2024 00:07:32 +1000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Lines: 74
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3090; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=6LQwcRohtSWtE15WMfrdudFwvRpiK4GcwW19wTmXtD8=; b=owGbwMvMwCRo6H6F97bub03G02pJDGkXL2SIPrgVc8hskxy/hsuXnDnbLaYVMStMLtu5tH3mj uvLg7kMOmJZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAivrwM8yyC03+7T3R7Uc59 q5b133v7qpWa4gwLDqbMfHKoYXbvxynab8VLpTcr3D0XDwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Reply-To: eyal@eyal.emu.id.au
+Subject: Re: Understanding 'lsusb -t'
+References: <63d4782a-1d83-4252-a0ca-a9b50e6074f0@eyal.emu.id.au>
+ <2024083057-charger-lustrous-d434@gregkh>
+Content-Language: en-US
+From: Eyal Lebedinsky <eyal@eyal.emu.id.au>
+To: linux-usb@vger.kernel.org
+In-Reply-To: <2024083057-charger-lustrous-d434@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In commit b16abab1fb64 ("usb: typec: tcpm: unregister existing source
-caps before re-registration"), quilt, and git, applied the diff to the
-incorrect function, which would cause bad problems if exercised in a
-device with these capabilities.
+On 30/8/24 10:32 pm, Greg KH wrote:
+> On Fri, Aug 30, 2024 at 10:14:20PM +1000, Eyal Lebedinsky wrote:
+>> I assume that the generated list is a tree, so each leaf (Device/If) is on only one point.
+>>
+>> I note this output:
+>>
+>> $ lsusb -tv
+>> /:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/16p, 480M
+>>      ID 1d6b:0002 Linux Foundation 2.0 root hub
+>> [trimmed]
+>>      |__ Port 004: Dev 004, If 0, Class=Hub, Driver=hub/4p, 480M
+>> [trimmed]
+>>      |__ Port 005: Dev 006, If 0, Class=Hub, Driver=hub/4p, 480M
+>> [trimmed]
+>>      |__ Port 006: Dev 019, If 0, Class=Hub, Driver=hub/4p, 480M
+>>          ID 2109:2817 VIA Labs, Inc.
+>> /:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/10p, 10000M
+>> [trimmed]
+>>      |__ Port 006: Dev 006, If 0, Class=Hub, Driver=hub/4p, 5000M
+>>          ID 2109:0817 VIA Labs, Inc.
+>>
+>> I removed some content that is not relevant to my question.
+>>
+>> Note the Bus 001.Port 006 and Bus 002.Port 006 entries.
+>>
+>> I verified that both are for the same (one) device. They do not show when I disconnect it.
+>> The device is an external 4-port USB3.0 hub. It is listed once as 480M and once as 5000M.
+>> Nothing is plugged into any of the four ports.
+>>
+>> Is this correct? Why does this device show twice in the list?
+> 
+> That's odd, as the same device shouldn't be on multiple busses.  Busses
+> are a "root port" on the system (i.e. a new PCI controller device), so
+> are you sure you just don't have multiple devices with the same
+> device/vendor id?
+> 
+> What is the diff between running the command before and after removing a
+> single device?
+> 
+> thanks,
+> 
+> greg k-h
 
-Fix this all up (including the follow-up fix in commit 04c05d50fa79
-("usb: typec: tcpm: fix use-after-free case in
-tcpm_register_source_caps") to be in the correct function.
+BTW, I run a nightly log of system commands which includes lsusb.
+The first time the device is listed twice is:
 
-Fixes: 04c05d50fa79 ("usb: typec: tcpm: fix use-after-free case in tcpm_register_source_caps")
-Fixes: b16abab1fb64 ("usb: typec: tcpm: unregister existing source caps before re-registration")
-Reported-by: Charles Yo <charlesyo@google.com>
-Cc: Kyle Tso <kyletso@google.com>
-Cc: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Ondrej Jirman <megi@xff.cz>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
+$ uname -a
+Linux e7.eyal.emu.id.au 6.9.11-200.fc40.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Jul 25 18:17:34 UTC 2024 x86_64 GNU/Linux
 
-Note, this is also needed for 6.1, I'll fix up the git ids when
-committing it to the stable tree there as well.
+$ lsusb --version
+lsusb (usbutils) 017
 
- drivers/usb/typec/tcpm/tcpm.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 7db9c382c354..e053b6e99b9e 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2403,7 +2403,7 @@ static int tcpm_register_source_caps(struct tcpm_port *port)
- {
- 	struct usb_power_delivery_desc desc = { port->negotiated_rev };
- 	struct usb_power_delivery_capabilities_desc caps = { };
--	struct usb_power_delivery_capabilities *cap;
-+	struct usb_power_delivery_capabilities *cap = port->partner_source_caps;
- 
- 	if (!port->partner_pd)
- 		port->partner_pd = usb_power_delivery_register(NULL, &desc);
-@@ -2413,6 +2413,11 @@ static int tcpm_register_source_caps(struct tcpm_port *port)
- 	memcpy(caps.pdo, port->source_caps, sizeof(u32) * port->nr_source_caps);
- 	caps.role = TYPEC_SOURCE;
- 
-+	if (cap) {
-+		usb_power_delivery_unregister_capabilities(cap);
-+		port->partner_source_caps = NULL;
-+	}
-+
- 	cap = usb_power_delivery_register_capabilities(port->partner_pd, &caps);
- 	if (IS_ERR(cap))
- 		return PTR_ERR(cap);
-@@ -2426,7 +2431,7 @@ static int tcpm_register_sink_caps(struct tcpm_port *port)
- {
- 	struct usb_power_delivery_desc desc = { port->negotiated_rev };
- 	struct usb_power_delivery_capabilities_desc caps = { };
--	struct usb_power_delivery_capabilities *cap = port->partner_source_caps;
-+	struct usb_power_delivery_capabilities *cap;
- 
- 	if (!port->partner_pd)
- 		port->partner_pd = usb_power_delivery_register(NULL, &desc);
-@@ -2436,11 +2441,6 @@ static int tcpm_register_sink_caps(struct tcpm_port *port)
- 	memcpy(caps.pdo, port->sink_caps, sizeof(u32) * port->nr_sink_caps);
- 	caps.role = TYPEC_SINK;
- 
--	if (cap) {
--		usb_power_delivery_unregister_capabilities(cap);
--		port->partner_source_caps = NULL;
--	}
--
- 	cap = usb_power_delivery_register_capabilities(port->partner_pd, &caps);
- 	if (IS_ERR(cap))
- 		return PTR_ERR(cap);
 -- 
-2.46.0
+Eyal at Home (eyal@eyal.emu.id.au)
 
 
