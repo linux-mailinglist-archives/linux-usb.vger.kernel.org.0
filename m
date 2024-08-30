@@ -1,49 +1,44 @@
-Return-Path: <linux-usb+bounces-14405-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14406-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B21E966B5E
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 23:40:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 485E1966C1A
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 00:09:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30F081F21AFC
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 21:40:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E4671C20C43
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 22:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4F7199FA4;
-	Fri, 30 Aug 2024 21:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD472176FA0;
+	Fri, 30 Aug 2024 22:09:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0ED1474C3;
-	Fri, 30 Aug 2024 21:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 630762AE84
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 22:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725054020; cv=none; b=jKdZ2eQaxSCvbLzqQepLC55xetSXN7XeOt+DT6MZ6PRRZ5PnDqkBB2UmNw3Iu321L4760WuYWv2jBHjDKgfYV8c+n7o5E6VSTgZG30db8d1m8irOUO9i1S73GDGzt3G6hr/7yNu3l1Rq4UJY5khLl8h/oojucC9J65AfSfU8fxo=
+	t=1725055781; cv=none; b=Fo0YiDZGoUliZbgAjuaiYDHXW69Y/2v3SsLKlQ252clY4T5w7c52dfizcat6EgDUs1TafFKgH9IrEhtyfcT1usj8TZ6Y9K7pk2F1QDX7TDVrs4oiQj3oIKDCR1a//O8o97hP0SW7M8ZUCtUTM0Mf9BjDcpNV+dlilxdSRW1PVKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725054020; c=relaxed/simple;
-	bh=cf1n5NssZY1yUpvsrgf2wNTfJcUlZ0bn4pDunKzmJd8=;
+	s=arc-20240116; t=1725055781; c=relaxed/simple;
+	bh=UfDXWS1ZSVzVFrazOgFTi72oBjxv5UDMj291of3tDbQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gh8x7a6bN+xz/y1heersy45VtROomqabQpgVDmNnzxsGfsT0EzISKgY8wIYE+Of+Pn9Uw9IdfWKPvH4uHsSu2Qmck2YsnMB+c8/BTB/t96CACddtV6LwFqgbdOjgNDVeup2T5oqs8tROzzvbgHu3mjulnVqkkUtGuKxpTcXjijo=
+	 Content-Type:Content-Disposition:In-Reply-To; b=JrkXEgwvM5oLMGlChIRIhlPxV50x0+sZn7AJ94SRCJbKa2ew0bWCmdXtmLjJHiJQ5asYE3JvGLshP2/ITu1EHclwHxzhqFF+gmYt7k2Meiv9GXituX0c8KOevQwVx6zUcqIJ+tLc3miq0xeUSynwIcrsJDNvnyjrLef5H83+ApE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
 Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 0A5C014056A; Fri, 30 Aug 2024 23:40:07 +0200 (CEST)
-Date: Fri, 30 Aug 2024 23:40:07 +0200
+	id D31D8140028; Sat, 31 Aug 2024 00:09:35 +0200 (CEST)
+Date: Sat, 31 Aug 2024 00:09:35 +0200
 From: "Christian A. Ehrhardt" <lk@c--e.de>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: Enable ASUS zenbook quirk for
- VivoBooks
-Message-ID: <ZtI8N5/SCt+dI/6z@cae.in-ulm.de>
-References: <20240829100109.562429-1-lk@c--e.de>
- <ZtF/BJMls7kuD2dt@kuha.fi.intel.com>
+Cc: Saranya Gopal <saranya.gopal@intel.com>, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org, rajaram.regupathy@intel.com
+Subject: Re: [PATCH] usb: typec: ucsi: Do not call ACPI _DSM method for UCSI
+ read operations
+Message-ID: <ZtJDH4UCJMQbOWBY@cae.in-ulm.de>
+References: <20240830084342.460109-1-saranya.gopal@intel.com>
+ <ZtGGcRpavSITFai7@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,87 +47,141 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZtF/BJMls7kuD2dt@kuha.fi.intel.com>
+In-Reply-To: <ZtGGcRpavSITFai7@kuha.fi.intel.com>
 
 
-Hi Heikki,
+Hi Heikki, Hi Saranya, 
 
-On Fri, Aug 30, 2024 at 11:12:52AM +0300, Heikki Krogerus wrote:
-> Hi, Christian,
-> 
-> Sorry, I did not look at this properly in v1.
-> 
-> On Thu, Aug 29, 2024 at 12:01:08PM +0200, Christian A. Ehrhardt wrote:
-> > The quirk for some ASUS zenbook models is required for
-> > ASUS VivoBooks. Apply the quirk to these as well.
+On Fri, Aug 30, 2024 at 11:44:33AM +0300, Heikki Krogerus wrote:
+> On Fri, Aug 30, 2024 at 02:13:42PM +0530, Saranya Gopal wrote:
+> > ACPI _DSM methods are needed only for UCSI write operations and for reading
+> > CCI during RESET_PPM operation. So, remove _DSM calls from other places.
+> > While there, remove the Zenbook quirk also since the default behavior
+> > now aligns with the Zenbook quirk. With this change, GET_CONNECTOR_STATUS
+> > returns at least 6 seconds faster than before in Arrowlake-S platforms.
 > > 
-> > This is part of the fix for the builtin keyboard on ASUS
-> > VivoBooks.
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
 > 
-> I think that explanation goes to patch 2/2 and vise versa.
-
-Obviously! Sorry about that.
-
+> Maybe this should be marked as a fix. I think this covers:
+> https://lore.kernel.org/linux-usb/20240829100109.562429-2-lk@c--e.de/
 > 
-> > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> > Bisected-by: Christian Heusel <christian@heusel.eu>
-> > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> Christian, can you check this?
+
+The change certainly looks like the correct thing to do and would
+remove the need for the zenbook quirk. I'll try to get that combination
+tested by the original reporter of
+	https://bugzilla.kernel.org/show_bug.cgi?id=219108
+
+
 > > ---
-> >  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
+> >  drivers/usb/typec/ucsi/ucsi_acpi.c | 56 +++---------------------------
+> >  1 file changed, 5 insertions(+), 51 deletions(-)
 > > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > index 4039851551c1..540cb1d2822c 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -38,6 +38,10 @@
+> > diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> > index 7a5dff8d9cc6..accf15ff1306 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> > @@ -61,9 +61,11 @@ static int ucsi_acpi_read_cci(struct ucsi *ucsi, u32 *cci)
+> >  	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+> >  	int ret;
 > >  
-> >  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+> > -	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+> > -	if (ret)
+> > -		return ret;
+> > +	if (UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
+> > +		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+
+
+This is slightly incorrect because we wait for the completion of at
+least one other command (UCSI_SET_NOTIFICATION_ENABLE) by polling cci. 
+However, this is a very minor corner case. It could be fixed by adding
+an optional ->poll() method or similar that is NULL on other
+implementations and does the DSM READ on ACPI. We could then call this
+before read_cci when polling for completion. If this is done ->read_cci() 
+would never call the DSM method.
+
+However, the change in its current state is a definitive improvement,
+and looks good to me. Thus feel free to add
+	Reviewed-by: Christian A. Ehrhardt <lk@c--e.de>
+
+> >  
+> >  	memcpy(cci, ua->base + UCSI_CCI, sizeof(*cci));
+> >  
+> > @@ -73,11 +75,6 @@ static int ucsi_acpi_read_cci(struct ucsi *ucsi, u32 *cci)
+> >  static int ucsi_acpi_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
 > >  {
-> > +	/* Ignore bogus data in CCI if busy indicator is set. */
-> > +	if (cci & UCSI_CCI_BUSY)
-> > +		return;
-> 
-> This does not look correct. Doesn't this mean you'll timeout always if
-> BUSY is set?
-
-This is only in the notify function that would do the wakeup on
-command completion. The very point of this change is that we do no
-wakeup if UCSI_CCI_BUSY is set along with other bogus bits.
-
-The UCSI controller is supposed to send another notification without
-the busy bit set once the command completes.
-
-Note that the ASUS laptop actually sends notifications with the BUSY
-bit set while processing a command. This is presumably to let us know
-that the command is being processed but that it takes longer.
-
-For example this is a possible sequence:
-ucsi_sync_control_common: cmd=20012	# GET_CONNECT_STATUS
-ucsi_notify_common: cci=0x10000002	# BUSY notification
-ucsi_notify_common: cci=0x80000904	# Command completion
-
-> Couldn't you just check the BUSY as the first action, and then clear
-> the other bits in CCI if it is set, if that is the problem?
-
-That would not make any difference. The value is only used in this function
-for a few other checks that look at fields that are supposed to be zero.
-Thus zeroing these fields would have the same effect.
-
-I think you had the actual error handling in mind that happens _after_
-the timeout hits. CCI is read again there and if it still reports BUSY
-the command is canceled.
-
-> Btw. Does 4f322657ade1 ("usb: typec: ucsi: Call CANCEL from single
-> location") affect the situation in any way?
-
-I would have to check with the reporter of the bug but I don't think
-it makes a difference because this is the error recovery code that
-runs after the timeout. I only touched the notification code that would
-do the wakeup.
+> >  	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+> > -	int ret;
+> > -
+> > -	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+> > -	if (ret)
+> > -		return ret;
+> >  
+> >  	memcpy(val, ua->base + UCSI_MESSAGE_IN, val_len);
+> >  
+> > @@ -102,42 +99,6 @@ static const struct ucsi_operations ucsi_acpi_ops = {
+> >  	.async_control = ucsi_acpi_async_control
+> >  };
+> >  
+> > -static int
+> > -ucsi_zenbook_read_cci(struct ucsi *ucsi, u32 *cci)
+> > -{
+> > -	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+> > -	int ret;
+> > -
+> > -	if (UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
+> > -		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+> > -		if (ret)
+> > -			return ret;
+> > -	}
+> > -
+> > -	memcpy(cci, ua->base + UCSI_CCI, sizeof(*cci));
+> > -
+> > -	return 0;
+> > -}
+> > -
+> > -static int
+> > -ucsi_zenbook_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
+> > -{
+> > -	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+> > -
+> > -	/* UCSI_MESSAGE_IN is never read for PPM_RESET, return stored data */
+> > -	memcpy(val, ua->base + UCSI_MESSAGE_IN, val_len);
+> > -
+> > -	return 0;
+> > -}
+> > -
+> > -static const struct ucsi_operations ucsi_zenbook_ops = {
+> > -	.read_version = ucsi_acpi_read_version,
+> > -	.read_cci = ucsi_zenbook_read_cci,
+> > -	.read_message_in = ucsi_zenbook_read_message_in,
+> > -	.sync_control = ucsi_sync_control_common,
+> > -	.async_control = ucsi_acpi_async_control
+> > -};
+> > -
+> >  static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
+> >  {
+> >  	u16 bogus_change = UCSI_CONSTAT_POWER_LEVEL_CHANGE |
+> > @@ -190,13 +151,6 @@ static const struct ucsi_operations ucsi_gram_ops = {
+> >  };
+> >  
+> >  static const struct dmi_system_id ucsi_acpi_quirks[] = {
+> > -	{
+> > -		.matches = {
+> > -			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+> > -			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
+> > -		},
+> > -		.driver_data = (void *)&ucsi_zenbook_ops,
+> > -	},
+> >  	{
+> >  		.matches = {
+> >  			DMI_MATCH(DMI_SYS_VENDOR, "LG Electronics"),
+> > -- 
+> > 2.34.1
 
 Best regards,
 Christian
