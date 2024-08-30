@@ -1,134 +1,193 @@
-Return-Path: <linux-usb+bounces-14341-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14342-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C6B69659D2
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 10:15:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2206965A25
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 10:22:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 424CC2881D8
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 08:15:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 615AC1F248D3
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 08:22:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A22016E873;
-	Fri, 30 Aug 2024 08:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B5916C856;
+	Fri, 30 Aug 2024 08:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jlmG2C8p"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="PdX55yCj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732B416CD33;
-	Fri, 30 Aug 2024 08:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1F9168C33
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 08:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725005655; cv=none; b=CtYYaFHiyzmUsMkmOsiKJT1hwESQsvQZUjvBCAsYGPRdPK4mJOGyg7RjDc3sbQmv2RYavX6pFxkRoaCXKuYuzM9/9MVePsakoUd6WB19EcNuii8j3/2wzBch6qh0+JuZ+dlIv9lcFjcnGJYO+bKffgZu8/MUwinuZH4ZY28rBFY=
+	t=1725006167; cv=none; b=eXHdeYu+EZ3Hi05zR+GwRcz+4ni6zkeE938+i/vdVvqEAqbBt7KUs0PREMLKvXFjK0OnwGphi/RCLkR2TV0YPZIvv8JakA4X1iczCsCr9f+IKdfz0VaTwVu4w3K/ZTk2P84QQbSRm/zmXeGbbq55xic1BW7N06/OWDS8Cu/JDIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725005655; c=relaxed/simple;
-	bh=lGlK/huPst/Uj54bD7qm1iAGK0SCBjHujklkB/TCQhE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TcdO9/zWUJ+s1mhMGdmvPu5m3bBkv/1WmGVceOfcquhW0Af2m5bQj8Ex1xzMTZymGrb717rIoyaAaX+bgquBw3rtzwizrvSJL0Se6PBdg0imgKoG1NbuNdEp0hQhH3xKYGDl22hGgZKc9qPUT5wvL+xxRWDNw0xSKvJuUtzlAR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jlmG2C8p; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725005653; x=1756541653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lGlK/huPst/Uj54bD7qm1iAGK0SCBjHujklkB/TCQhE=;
-  b=jlmG2C8p1bbQq57HkNeyZCIWvD2K/RB/4rJzPBSW/3dEo2WhmxZeE8yf
-   iHJogG8pWotQE25OGpzoWOtSyOhrE6JR9bIEYe5Ju8mzphTlZwsvdIeTZ
-   CCE5GYdEl54vryBkkZUFrWDrO0LFJifT+/wO4TQ/LWn7+RohniTi1+vY6
-   5RJJ87ytYFsDpW9mGkPfBYSdfvMegszmaoE9+wBWiZ18Lm4RMEQY4K1Nn
-   wHAjytYoCJxIjpn6ScjmdtOPeZC13x1MJyuWWEMey34lGGpUi/1YWJlc8
-   exWBKrbw9DcfQwIEF1hxCMF+OD7e3apm9ryOoN5uzs824xll5F0p3E2QI
-   g==;
-X-CSE-ConnectionGUID: r5jAXTRpQ1eI9+oECssKVw==
-X-CSE-MsgGUID: rSB+q0lMT4moOHfx/fnTaw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="26532991"
-X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
-   d="scan'208";a="26532991"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 01:12:59 -0700
-X-CSE-ConnectionGUID: TsPEtp8iQj+FOhXnxY9XMw==
-X-CSE-MsgGUID: wFox/84oTFKcyBEbHcGt7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
-   d="scan'208";a="64567628"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa008.jf.intel.com with SMTP; 30 Aug 2024 01:12:54 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 30 Aug 2024 11:12:52 +0300
-Date: Fri, 30 Aug 2024 11:12:52 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: Enable ASUS zenbook quirk for
- VivoBooks
-Message-ID: <ZtF/BJMls7kuD2dt@kuha.fi.intel.com>
-References: <20240829100109.562429-1-lk@c--e.de>
+	s=arc-20240116; t=1725006167; c=relaxed/simple;
+	bh=lg2a5Or0gfd5Bku8PfxGPt1GgB3ed0TVDFLBpQJIMg4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eCPTz9EB27cyssNhrpvVQBbEDINCI8sg0vXWmNjSnZzUEZXCNcs0BFcWgI9eZo0L99Mqy4KQsc5XKED4FOlhSnioui6n66e/qwmdHuDEhD/ZidRjzaQ5LSuAuhItw4M52EatgZfXjUsNx7hwbotuloS1a5joZCtEH5OsUR1j/UU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=PdX55yCj; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-429da8b5feaso17043925e9.2
+        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 01:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1725006164; x=1725610964; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zchK+tZfRdJr/B0VNKRrEBtLoJmeJfsr2YpFzQ08IdE=;
+        b=PdX55yCjayxLU3a0HuryCmcojZbcsP1de6j68M6ebp45drf94iA8NvQ3vsQjHDYp5n
+         P8yVFUuidLKGgIn94toZdJ8Hez/KX4ijJvG3obykwA8N6EFCXEfuV0jL5hfAVLH9n2FT
+         JDgtvtEv2wNPr5PRcw7s1+jaMBUU/ydxJV/5vXjkSb4A6Hx/WLesh7ismzSRiwg1c8oU
+         hs4k49jr+zfamjjjl1mOB2Jsvq2B1n/itmC73c4rO1JTg7oZOIHiq05+A5mpJ6OPVLqD
+         zUantHtRV6mHWHqKBVgjPqry3UzYkH1R5EeiZOey60NAit5f9lGIWVAf7MkpNyPle08y
+         M+fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725006164; x=1725610964;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zchK+tZfRdJr/B0VNKRrEBtLoJmeJfsr2YpFzQ08IdE=;
+        b=ivEejmOvoARpj1V5hL8MsMZP1WXSxf7+dhUDl92zbPjinnr1o2CmL1YBB7oytWB1o4
+         eD6Vlk6LgwO+y3ui5etpvWLtEIWQYJ+zZr+0vA0JPQv/B9UF1+jN5bmpcmeiRqa4taCg
+         /1xm43CWjFtGv6Nel3o36uDt/KmpSZ58RBenXx20jiQ+sXtAjt8GjxwljWGu9o954zsW
+         omRujyJNNq5zCxfWps5i4vZK/jnsfNByqN2D4K+H1RHgx1JatBwm40/QQ4T4q03U4Cpg
+         BUwrP/oghtfRq2kDiN8OpazMCkMspUaOfy8suBYldLs1uGgCxY1fMNbI8d3H7elDWpz+
+         R2eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWbpfRVE9H7nLooP2WfsDVLv+9judiD4PwBxYjrJDq1R2gvYd290uvNO8BfAXtRlEXnQnqYNg/05Ho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnQA4k16/TYWAeAfyP2O9Qud520bgaw1nty+gmUgHmDX6q80As
+	KEhln1UBj8oMTMHuUJBh2aA3i2WZRSDNtvrlsd4kRTN7OyhNZwqUfgUwVAJh7YI=
+X-Google-Smtp-Source: AGHT+IF8ZkJGKUmuglZKyShKgzTB0GuKfWBu6xay0mGYscvHuYinOaW5h5J83vGVNlCFB6KS0zIxvQ==
+X-Received: by 2002:a05:600c:3ca2:b0:426:5520:b835 with SMTP id 5b1f17b1804b1-42bb01ae206mr53646705e9.5.1725006164296;
+        Fri, 30 Aug 2024 01:22:44 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb87f7fccsm31864805e9.46.2024.08.30.01.22.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Aug 2024 01:22:43 -0700 (PDT)
+Message-ID: <99bef301-9f6c-4797-b47e-c83e56dfbda9@tuxon.dev>
+Date: Fri, 30 Aug 2024 11:22:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829100109.562429-1-lk@c--e.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+Content-Language: en-US
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
+ sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+ biju.das.jz@bp.renesas.com, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, Christian,
+Hi, Ulf,
 
-Sorry, I did not look at this properly in v1.
-
-On Thu, Aug 29, 2024 at 12:01:08PM +0200, Christian A. Ehrhardt wrote:
-> The quirk for some ASUS zenbook models is required for
-> ASUS VivoBooks. Apply the quirk to these as well.
+On 29.08.2024 18:26, Ulf Hansson wrote:
+> On Thu, 22 Aug 2024 at 17:28, Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>>
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Hi,
+>>
+>> Series adds initial USB support for the Renesas RZ/G3S SoC.
+>>
+>> Series is split as follows:
+>>
+>> - patch 01/16           - add clock reset and power domain support for USB
+>> - patch 02-04/16        - add reset control support for a USB signal
+>>                           that need to be controlled before/after
+>>                           the power to USB area is turned on/off.
+>>
+>>                           Philipp, Ulf, Geert, all,
+>>
+>>                           I detailed my approach for this in patch
+>>                           04/16, please have a look and let me know
+>>                           your input.
 > 
-> This is part of the fix for the builtin keyboard on ASUS
-> VivoBooks.
-
-I think that explanation goes to patch 2/2 and vise versa.
-
-> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> Bisected-by: Christian Heusel <christian@heusel.eu>
-> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> I have looked briefly. Your suggested approach may work, but I have a
+> few thoughts, see below.
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 4039851551c1..540cb1d2822c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -38,6 +38,10 @@
->  
->  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
->  {
-> +	/* Ignore bogus data in CCI if busy indicator is set. */
-> +	if (cci & UCSI_CCI_BUSY)
-> +		return;
+> If I understand correctly, it is the consumer driver for the device
+> that is attached to the USB power domain that becomes responsible for
+> asserting/de-asserting this new signal. Right?
 
-This does not look correct. Doesn't this mean you'll timeout always if
-BUSY is set?
+Right!
 
-Couldn't you just check the BUSY as the first action, and then clear
-the other bits in CCI if it is set, if that is the problem?
+> 
+> In this regard, please note that the consumer driver doesn't really
+> know when the power domain really gets powered-on/off. Calling
+> pm_runtime_get|put*() is dealing with the reference counting. For
+> example, a call to pm_runtime_get*() just makes sure that the PM
+> domain gets-or-remains powered-on. Could this be a problem from the
+> reset-signal point of view?
 
-Btw. Does 4f322657ade1 ("usb: typec: ucsi: Call CANCEL from single
-location") affect the situation in any way?
+It should be safe. From the HW manual I understand the hardware block is
+something like the following:
 
-thanks,
 
--- 
-heikki
+                  USB area
+         +-------------------------+
+         |                         |
+         | PHY --->USB controller  |
+SYSC --> |  ^                      |
+         |  |                      |
+         | PHY reset               |
+         +-------------------------+
+
+Where:
+- SYSC is the system controller that controls the new signal for which
+  I'm requesting opinions in this series
+- PHY reset: is the block controlling the PHYs
+- PHY: is the block controlling the USB PHYs
+- USB controller: is the USB controller
+
+Currently, I passed the SYSC signal handling to the PHY reset driver; w/o
+PHY reset the rest of the USB logic cannot work (neither PHY block nor USB
+controller).
+
+Currently, the PHY reset driver call pm_runtime_resume_and_get() in probe
+and pm_runtime_put() in remove. The struct reset_control_ops::{assert,
+deassert} only set specific bits in registers (no pm_runtime* calls).
+
+The PHY driver is taking its PHY reset in probe and release it in remove().
+With this approach the newly introduced SYSC signal will be
+de-asserted/asserted only in the PHY reset probe/remove (either if it is
+handled though PM domain or reset control signal).
+
+If the SYSC signal would be passed to all the blocks in the USB area (and
+it would be handled though PM domains) it should be no problem either,
+AFAICT, because of reference counting the pm_runtime_get|put*() is taking
+care of. As the PHY reset is the root node the in the devices node tree for
+USB the reference counting should work, too (I may miss something though,
+please correct me if I'm wrong).
+
+If the SYSC signal would be handled though a reset control driver (as
+proposed in this series) and we want to pass this reference to all the
+blocks in the USB area then we can request the reset signal as shared and,
+AFAIK, this is also reference counted. The devices node tree should help
+with the order, too, if I'm not wrong.
+
+Thank you for looking at this,
+Claudiu Beznea
+
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
 
