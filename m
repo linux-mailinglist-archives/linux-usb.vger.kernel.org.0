@@ -1,128 +1,140 @@
-Return-Path: <linux-usb+bounces-14404-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14405-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 787C6966A34
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 22:08:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B21E966B5E
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 23:40:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 363B0281E73
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 20:08:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30F081F21AFC
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 21:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BB571BF332;
-	Fri, 30 Aug 2024 20:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="iKRAcafK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4F7199FA4;
+	Fri, 30 Aug 2024 21:40:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282FE1BD00B;
-	Fri, 30 Aug 2024 20:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0ED1474C3;
+	Fri, 30 Aug 2024 21:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725048491; cv=none; b=s0FwnFljfAz94ZQbW/hN7S5QyOBrLD1dsdvbR7nA/Zdkfj01BGW3RX0iaPRW8KCzsRc6MXdoEzQ+uixE0Wq5D3eTbBYPssFH6YDWvtuORzDE0JvsGSsV/lTaQCnIlw3OX9TQ16zJupun4VF35gwXWXf4AKprw1YB86tGmUOjLbE=
+	t=1725054020; cv=none; b=jKdZ2eQaxSCvbLzqQepLC55xetSXN7XeOt+DT6MZ6PRRZ5PnDqkBB2UmNw3Iu321L4760WuYWv2jBHjDKgfYV8c+n7o5E6VSTgZG30db8d1m8irOUO9i1S73GDGzt3G6hr/7yNu3l1Rq4UJY5khLl8h/oojucC9J65AfSfU8fxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725048491; c=relaxed/simple;
-	bh=/3fz10zRJVpyXK6sRaezWJ1/uIlBgVuX5fdAmisj53k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jRt/O0cJGXJKLFONYcqA4gpF5W1mcnnylzafqUTJEk10kMgos9OhHmvxqmPNRWQbpglQk1QUxPLFzuLLbmfRfEcBdovhgICggY3q7cx2kcKTTPSREgx7UNxe0dy+O/cc8OzbTt9ZCabKAP+qh+M5ih62Pj+d/D1SiyKzonP4C98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=iKRAcafK; arc=none smtp.client-ip=166.84.1.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
-	(No client certificate requested)
-	by l2mail1.panix.com (Postfix) with ESMTPS id 4WwTMx2CCTzDSJ;
-	Fri, 30 Aug 2024 15:53:01 -0400 (EDT)
-Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4WwTMn4Cpfzjym;
-	Fri, 30 Aug 2024 15:52:53 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1725047574; bh=/3fz10zRJVpyXK6sRaezWJ1/uIlBgVuX5fdAmisj53k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=iKRAcafK4SaOBv2EPbDHbwl2KZVb9FeS4GFDBoI8J4yLkhIdaCbn0wK9eMY1fhbmt
-	 5orAaoy9ORkB9v17k/gdpzUPLuQakEifTN+ZjRrfg+l+7guquZREAE/EIuaCfJto0O
-	 SMx83jbe9saV+bFr836WCqA2BCq/0aHeCquTNeOc=
-Message-ID: <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
-Date: Fri, 30 Aug 2024 12:52:52 -0700
+	s=arc-20240116; t=1725054020; c=relaxed/simple;
+	bh=cf1n5NssZY1yUpvsrgf2wNTfJcUlZ0bn4pDunKzmJd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gh8x7a6bN+xz/y1heersy45VtROomqabQpgVDmNnzxsGfsT0EzISKgY8wIYE+Of+Pn9Uw9IdfWKPvH4uHsSu2Qmck2YsnMB+c8/BTB/t96CACddtV6LwFqgbdOjgNDVeup2T5oqs8tROzzvbgHu3mjulnVqkkUtGuKxpTcXjijo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 0A5C014056A; Fri, 30 Aug 2024 23:40:07 +0200 (CEST)
+Date: Fri, 30 Aug 2024 23:40:07 +0200
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anurag Bijea <icaliberdev@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: Enable ASUS zenbook quirk for
+ VivoBooks
+Message-ID: <ZtI8N5/SCt+dI/6z@cae.in-ulm.de>
+References: <20240829100109.562429-1-lk@c--e.de>
+ <ZtF/BJMls7kuD2dt@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
- Thunderbolt additions when coming out of suspend or hibernate
-To: Lukas Wunner <lukas@wunner.de>,
- Mika Westerberg <mika.westerberg@linux.intel.com>, linux-usb@vger.kernel.org
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- Me <kenny@panix.com>
-References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
- <ZsvxR-dQAZtwNi0g@wunner.de>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <ZsvxR-dQAZtwNi0g@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZtF/BJMls7kuD2dt@kuha.fi.intel.com>
 
 
-Huh. So I checked out Linus' master (currently up to 6.11-rc5) and it 
-seems to be doing the right thing now; I left a USB-C ALT monitor setup 
-plugged in when I suspended, then came back to my 4K monitor setup via 
-TB and it came up in the right resolution and everything.
+Hi Heikki,
 
-Excellent news, so I'll keep using Linus' master until 6.11 is released.
+On Fri, Aug 30, 2024 at 11:12:52AM +0300, Heikki Krogerus wrote:
+> Hi, Christian,
+> 
+> Sorry, I did not look at this properly in v1.
+> 
+> On Thu, Aug 29, 2024 at 12:01:08PM +0200, Christian A. Ehrhardt wrote:
+> > The quirk for some ASUS zenbook models is required for
+> > ASUS VivoBooks. Apply the quirk to these as well.
+> > 
+> > This is part of the fix for the builtin keyboard on ASUS
+> > VivoBooks.
+> 
+> I think that explanation goes to patch 2/2 and vise versa.
 
-Oh, and to answer your question, no, my system doesn't (perceptively) 
-wake up when suspended if I connect/disconnect USB/TB cables.
+Obviously! Sorry about that.
 
-... and unfortunately all I have now is (power-hungry) s0ix sleep.
+> 
+> > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> > Bisected-by: Christian Heusel <christian@heusel.eu>
+> > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> > ---
+> >  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > index 4039851551c1..540cb1d2822c 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -38,6 +38,10 @@
+> >  
+> >  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+> >  {
+> > +	/* Ignore bogus data in CCI if busy indicator is set. */
+> > +	if (cci & UCSI_CCI_BUSY)
+> > +		return;
+> 
+> This does not look correct. Doesn't this mean you'll timeout always if
+> BUSY is set?
 
--Kenny
+This is only in the notify function that would do the wakeup on
+command completion. The very point of this change is that we do no
+wakeup if UCSI_CCI_BUSY is set along with other bogus bits.
 
-On 8/25/24 20:06, Lukas Wunner wrote:
-> [cc += Mika, linux-usb]
-> 
-> On Wed, Aug 21, 2024 at 03:05:59PM -0700, Kenneth Crudup wrote:
->> Subject says it all, but to recap my laptop doesn't detect Thunderbolt
->> topology changes when resuming or coming out of hibernate; i.e., the only
->> time a TB topology change happens is if a TB cable is disconnected while
->> suspended or hibernated, but if one is connected, or a different TB setup
->> altogether is connected when the system resumes it doesn't notice the
->> topology change until I disconnect and reconnect.
->>
->> I'm currently running 6.10.6, but this has been going on for a while.
->>
->> [    0.000000] DMI: Dell Inc. XPS 9320/0KNXGD, BIOS 2.12.0 04/11/2024
->> ...
->> [    0.136807] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P (family:
->> 0x6, model: 0x9a, stepping: 0x3)
-> 
-> This commit went into v6.11-rc1 and will at least detect replacement
-> of PCI devices (to a certain extent):
-> 
-> https://git.kernel.org/linus/9d573d19547b
-> 
-> However PCI is layered on top of (tunneled through) the Thunderbolt
-> switching fabric and that's where the real problem likely is here.
-> 
-> Maybe you can open a bug at bugzilla.kernel.org and attach full dmesg
-> and lspci -vvv output in the working case (device attachment at runtime)
-> and the non-working case (device attachment during system sleep).
-> 
-> Does the machine wake up if you attach devices during system sleep?
-> Are you suspending to ACPI S0ix, S3 or S4?
-> 
-> Thanks,
-> 
-> Lukas
-> 
+The UCSI controller is supposed to send another notification without
+the busy bit set once the command completes.
 
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+Note that the ASUS laptop actually sends notifications with the BUSY
+bit set while processing a command. This is presumably to let us know
+that the command is being processed but that it takes longer.
+
+For example this is a possible sequence:
+ucsi_sync_control_common: cmd=20012	# GET_CONNECT_STATUS
+ucsi_notify_common: cci=0x10000002	# BUSY notification
+ucsi_notify_common: cci=0x80000904	# Command completion
+
+> Couldn't you just check the BUSY as the first action, and then clear
+> the other bits in CCI if it is set, if that is the problem?
+
+That would not make any difference. The value is only used in this function
+for a few other checks that look at fields that are supposed to be zero.
+Thus zeroing these fields would have the same effect.
+
+I think you had the actual error handling in mind that happens _after_
+the timeout hits. CCI is read again there and if it still reports BUSY
+the command is canceled.
+
+> Btw. Does 4f322657ade1 ("usb: typec: ucsi: Call CANCEL from single
+> location") affect the situation in any way?
+
+I would have to check with the reporter of the bug but I don't think
+it makes a difference because this is the error recovery code that
+runs after the timeout. I only touched the notification code that would
+do the wakeup.
+
+Best regards,
+Christian
+
 
