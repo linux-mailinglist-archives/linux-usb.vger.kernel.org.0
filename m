@@ -1,181 +1,139 @@
-Return-Path: <linux-usb+bounces-14332-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28C299653BC
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 02:01:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E2596544E
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 02:58:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E49F42855EE
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 00:01:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F970283294
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 00:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E5C290F;
-	Fri, 30 Aug 2024 00:01:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4C279F4;
+	Fri, 30 Aug 2024 00:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8tp/Vrx"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="G8V+SsEW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E922181;
-	Fri, 30 Aug 2024 00:01:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2780F23BE;
+	Fri, 30 Aug 2024 00:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724976100; cv=none; b=V3rUS+iO04Sbj3rupU4YWC89sW+2hjVLpGzfgegAfhwWO24+5Hc4EttmR7iSD/gNdRiT70vosE1QFiob7/9KZebCr16XdQ514uO9Xz/0jLg2DJ3mpkiKy+gQQBYmLQ0emTSzYcB1RykZBfFOOhd0sHMw6TjGk55ALXpGbiSkZnk=
+	t=1724979500; cv=none; b=RYWJcLmgszAGOtW/DXg31T1kCnI4Fn36eaZxGJCslEYSNHHgOc/UvAJUX0BFh9xlEaMwFrj1bYeon4Z9gZNzI5shEHfoPP+B9ek+Ml05s7rBqbzDZ4Xxlrh4KPvb3ojGUWp0t13d/QD6hzcV5QmGYQ35MF0GOXiHZQHk06PY23Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724976100; c=relaxed/simple;
-	bh=T1ME1rHLVVmL3cGLna7XZrJPyHcnjZSXYF872fS4UtI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=X8pmBPBtgkb30Fg60GGcDxuPVS+7ziCr7/bt5UmulEWWzSwePGKn81T2m07ulETOAjoGAYHYFsAgwwVzLosZUjNajJl84/yZQ5oaWE3U2TrPhuCj9jfzdKHUhKy46zWFSkEqgGqCwCzljKq5aPDYenG7U6yF6SeRjlt5QwUTHEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8tp/Vrx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91313C4CEC1;
-	Fri, 30 Aug 2024 00:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724976099;
-	bh=T1ME1rHLVVmL3cGLna7XZrJPyHcnjZSXYF872fS4UtI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=O8tp/Vrxv/ZLEyEcfHgugAoQH6YMqi4gEx5+9S48khvX1P3sQY3fJoC9kitGjD7NT
-	 jxJnz0IuATZLq2MFxt+Jt98u4LipYVCr0Ex8HCeNs1S4RWaaqZa/uSYMq44ffYLJOU
-	 3hmG7vDdCz3D6IZGI55KRLXJsxKWmhZc6cdFI+UpFNMG9jbzJe3QEIPG2owG2Ato4O
-	 ed+4ch7MiQ1Zf8tAJFmrO91VnFD8W/7K4pLx8xflLrrUZu5NVefmbKeHLhIJ+9xBEe
-	 RPO4zJrsZggopeYJgwFBWz5PKCyBqRM+P1fvRMsgtE9aBXGjxsMMKY1ce3ClL4Ub6S
-	 AXf7X3EagbxhA==
-Date: Thu, 29 Aug 2024 19:01:37 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	"open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v5 2/5] PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in
- pci_dev_wait()
-Message-ID: <20240830000137.GA84915@bhelgaas>
+	s=arc-20240116; t=1724979500; c=relaxed/simple;
+	bh=x3PkcUYbk93wlv0T8Lo2vEKgSgWzq8eNSQhUcpy26JY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=U6nmt0pN/ZhpwTBBhTvECouUT0vkiw6sQa/QTRlYNO1Pe1r/WEj8ztOiPLsDsT7T4RyR1k6mA8XPGQcUirhR/oN0ZpX86Z6dwVEBubbQEPs3tILg/jBQiNrmpd62Xbd+YijKnjLTmDqZjknKt7odcXg5hXkxzMGXw1W4rryh4uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=G8V+SsEW; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47TGoTlK012453;
+	Fri, 30 Aug 2024 00:58:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/WHiyZwuFXaUdRDCgl5OHcim/e2B56+x9mCP/4nGyAI=; b=G8V+SsEWUbmmH+ZQ
+	wM2LjTxIgBFxUDTZDZcEEzQi6vHJfGBNbfxo3MKtiGTDyr1ZfUpL9UOBGbqsB77j
+	HErvbQ/g2ZOxRy45/CgAmEbIYZxHA9uKcGXbuyq/VZ0CyL9XZNq7qG8r3/ApNh6m
+	5OYrQP2ysWAsS5DLJO0EqalKuCiFYe7+yefu5GCNp5L13tNfarwJdBTHkvw8wX1v
+	+C1QLDpSi8cWPPVGkHhU6PV5sU4xDNSVs8nOI4X8BzjMOj8Wo/l7Xc1+rlgTlo0Q
+	JdkN1nNhPnEwhWPiSKQOsu6R/3Tt1KbT+tfuQzlOmUbwEfOt22dzqub1y35elf4q
+	oJ5jaQ==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419pv0q43q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 Aug 2024 00:58:07 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47U0w53F026871
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 Aug 2024 00:58:05 GMT
+Received: from [10.111.142.110] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 29 Aug
+ 2024 17:58:01 -0700
+Message-ID: <958333ec-a636-4eee-a582-0b26daf5856e@quicinc.com>
+Date: Fri, 30 Aug 2024 02:57:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240823154023.360234-3-superm1@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 0/2] usb: typec: Add new driver for Parade PS8830
+ Type-C Retimer
+To: Abel Vesa <abel.vesa@linaro.org>,
+        Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Sibi
+ Sankar" <quic_sibis@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        "Dmitry
+ Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <quic_kdybcio@quicinc.com>
+In-Reply-To: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cg7TzyTvItGoD-p8egykMd1xzKGUq5oE
+X-Proofpoint-ORIG-GUID: cg7TzyTvItGoD-p8egykMd1xzKGUq5oE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-29_06,2024-08-29_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=671 bulkscore=0 impostorscore=0 phishscore=0 clxscore=1011
+ mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408300006
 
-On Fri, Aug 23, 2024 at 10:40:20AM -0500, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
+
+
+On 29-Aug-24 20:44, Abel Vesa wrote:
+> The Parade PS8830 is a Type-C multi-protocol retimer that is controlled
+> via I2C. It provides altmode and orientation handling and usually sits
+> between the Type-C port and the PHY.
 > 
-> If a dock is plugged in at the same time as autosuspend delay then
-> this can cause malfunctions in the USB4 stack. This happens because
-> the device is still in D3cold at the time that the PCI core handed
-> control back to the USB4 stack.
+> It is currently used alongside Qualcomm Snapdragon X Elite SoCs on quite
+> a few laptops already.
 > 
-> A device that has gone through a reset may return a value in
-> PCI_COMMAND but that doesn't mean it's finished transitioning to D0.
-> For devices that support power management explicitly check
-> PCI_PM_CTRL on everything but system resume to ensure the transition
-> happened.
-
-Still trying to understand what's going on here.
-
-I posted a change to pci_dev_wait() to read Vendor ID, look for Config
-RRS status, and wait for a successful completion (when RRS Software
-Visibility is enabled) [1].
-
-You tested that and found that it didn't help with *this* issue [2].
-I assume you tested something like v6.11-rc plus the patches from [1],
-i.e., without the PCI_PM_CTRL changes in this series.
-
-  1) Initially the device is in D0
-
-  2) We put it in D3cold (using some ACPI method) because the
-  autosuspend delay expired (?)
-
-  3) Plugging in the dock wakes up the device, so we power up the
-  device (via pci_power_up(), which again uses some ACPI method), and
-  it should transition to D0uninitialized
-
-  4) The USB4 stack sees the device but thinks it's in D3cold (?)
-
-If your testing only included [1], but did not include the
-pci_power_up() change from patch 3/5 "Verify functions currently in
-D3cold have entered D0", I don't think we would call pci_dev_wait(),
-so I wouldn't expect [1] to make any difference.
-
-If you *did* include both [1] and patch 3/5, the implication would be
-that pci_dev_wait() successfully read the Vendor ID, meaning the
-device is not in D3cold when pci_power_up() returns.
-
-Can you clarify what you see and possibly expand/correct my timeline
-above?
-
-[1] https://lore.kernel.org/linux-pci/20240827234848.4429-1-helgaas@kernel.org/
-[2] https://lore.kernel.org/linux-pci/30d9589a-8050-421b-a9a5-ad3422feadad@amd.com/
-
-> Devices that don't support power management and system resume will
-> continue to use PCI_COMMAND.
+> This new driver adds support for the following 3 modes:
+>  - DP 4lanes - with pin assignments C and E
+>  - USB3
+>  - DP 2lanes + USB3
 > 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v4->v5:
->  * Fix misleading indentation
->  * Amend commit message
-> ---
->  drivers/pci/pci.c | 28 ++++++++++++++++++++--------
->  1 file changed, 20 insertions(+), 8 deletions(-)
+> Only DP 4lanes and USB3 modes have been succesfully tested on
+> Qualcomm (X Elite) CRD and Lenovo Thinkpad T14s so fat.
+> Devicetree patches for these 2 boards will follow.
 > 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 1e219057a5069..f032a4aaec268 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1309,21 +1309,33 @@ static int pci_dev_wait(struct pci_dev *dev, enum pci_reset_type reset_type, int
->  	 * the read (except when CRS SV is enabled and the read was for the
->  	 * Vendor ID; in that case it synthesizes 0x0001 data).
->  	 *
-> -	 * Wait for the device to return a non-CRS completion.  Read the
-> -	 * Command register instead of Vendor ID so we don't have to
-> -	 * contend with the CRS SV value.
-> +	 * Wait for the device to return a non-CRS completion.  On devices
-> +	 * that support PM control and on waits that aren't part of system
-> +	 * resume read the PM control register to ensure the device has
-> +	 * transitioned to D0.  On devices that don't support PM control,
-> +	 * or during system resume read the command register to instead of
-> +	 * Vendor ID so we don't have to contend with the CRS SV value.
->  	 */
->  	for (;;) {
-> -		u32 id;
-> -
->  		if (pci_dev_is_disconnected(dev)) {
->  			pci_dbg(dev, "disconnected; not waiting\n");
->  			return -ENOTTY;
->  		}
->  
-> -		pci_read_config_dword(dev, PCI_COMMAND, &id);
-> -		if (!PCI_POSSIBLE_ERROR(id))
-> -			break;
-> +		if (dev->pm_cap && reset_type != PCI_DEV_WAIT_RESUME) {
-> +			u16 pmcsr;
-> +
-> +			pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> +			if (!PCI_POSSIBLE_ERROR(pmcsr) &&
-> +			    (pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D0)
-> +				break;
-> +		} else {
-> +			u32 id;
-> +
-> +			pci_read_config_dword(dev, PCI_COMMAND, &id);
-> +			if (!PCI_POSSIBLE_ERROR(id))
-> +				break;
-> +		}
->  
->  		if (delay > timeout) {
->  			pci_warn(dev, "not ready %dms after %s; giving up\n",
-> -- 
-> 2.43.0
-> 
+> The DP 2lanes + USB3 is still work-in-progress as it might involve changes
+> outside of this retimer driver.
+
+Yep, it's the QC combo PHY being grumpy, this one's fine
+
+Tested-by: Konrad Dybcio <quic_kdybcio@quicinc.com> # x1e80100-romulus
+
+Konrad
 
