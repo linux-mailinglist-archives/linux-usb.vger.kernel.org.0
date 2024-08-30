@@ -1,99 +1,134 @@
-Return-Path: <linux-usb+bounces-14340-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14341-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0660E96599C
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 10:11:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C6B69659D2
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 10:15:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF1F41F23AAD
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 08:11:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 424CC2881D8
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 08:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7976516D32D;
-	Fri, 30 Aug 2024 08:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A22016E873;
+	Fri, 30 Aug 2024 08:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nx8CkU61"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jlmG2C8p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09AD16D302;
-	Fri, 30 Aug 2024 08:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732B416CD33;
+	Fri, 30 Aug 2024 08:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725005457; cv=none; b=cpTHIgbT7ABziX1R8959i1A8JPH03ISwO+gM2QS3+mn6mLuGh52EQg0pKYmHLT0XMVtxJNoBJsB5vr06qJ1SoBdCIFGGb3+9EIHW0TWNWTPIbFS4N0FOD+9TVWYshwxblmL0gKn7IlbdyTrDIEpl803s7Q8I4thGMBeYWbZZ/4M=
+	t=1725005655; cv=none; b=CtYYaFHiyzmUsMkmOsiKJT1hwESQsvQZUjvBCAsYGPRdPK4mJOGyg7RjDc3sbQmv2RYavX6pFxkRoaCXKuYuzM9/9MVePsakoUd6WB19EcNuii8j3/2wzBch6qh0+JuZ+dlIv9lcFjcnGJYO+bKffgZu8/MUwinuZH4ZY28rBFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725005457; c=relaxed/simple;
-	bh=3ydTwNGyIXL6fFISp1v27alYYBcjKlkwV1nvJ+LgMmQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nnxfIPSAYX/lDpUqB+D35hQhIHDJ4gU4/jiexAz4Bv4qv5Ie05PJsbt3Y4gX4epBYfJqBmbdoTl0wNW6mla9/2k4Qfx392hsL2SSqStXgcy/iLyplDDyeVCYhTppwsLtLkxc6jZw/yu60V1awUcHetsgR+IGEJpQRmvcPNsYVWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nx8CkU61; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E7EC4CEC2;
-	Fri, 30 Aug 2024 08:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725005456;
-	bh=3ydTwNGyIXL6fFISp1v27alYYBcjKlkwV1nvJ+LgMmQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=nx8CkU61PYK7Ada7KKWaqejI8FCF8TStl2f+Lw5+1n4UDd90SM5ZBa3jvhEHSaR75
-	 KdGvTylNPwJRnzbGXeaBtrK6ruDB289UA0oHbFmAP0TNeWHoZp3uSW3b/LSkvNEBYp
-	 VJ4q/jMCAnOZ1UMBUlpS00GJ0iJVQWH0wunSHU8zK/mIE2QJ3XwN0tHd7KrVphxUxO
-	 kvTAjnQTR1j8louOu9sUpRx/2B0jVU//KySTJ8fl/qd4UdmBTpitZM+bL9oWT1gw7a
-	 85fp//ihugYz2QqYkXOKyFNwEHYg0ghd19VjmGf3BEkjBwUkIIBA8Ymp3RfgoqV0OB
-	 oKHX9w1cnrk/g==
-From: Vinod Koul <vkoul@kernel.org>
-To: kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
- conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be, 
- magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com, 
- sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com, 
- biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org, 
- Claudiu <claudiu.beznea@tuxon.dev>
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: (subset) [PATCH 00/16] Add initial USB support for the Renesas
- RZ/G3S SoC
-Message-Id: <172500545045.434293.2799164142138573835.b4-ty@kernel.org>
-Date: Fri, 30 Aug 2024 13:40:50 +0530
+	s=arc-20240116; t=1725005655; c=relaxed/simple;
+	bh=lGlK/huPst/Uj54bD7qm1iAGK0SCBjHujklkB/TCQhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TcdO9/zWUJ+s1mhMGdmvPu5m3bBkv/1WmGVceOfcquhW0Af2m5bQj8Ex1xzMTZymGrb717rIoyaAaX+bgquBw3rtzwizrvSJL0Se6PBdg0imgKoG1NbuNdEp0hQhH3xKYGDl22hGgZKc9qPUT5wvL+xxRWDNw0xSKvJuUtzlAR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jlmG2C8p; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725005653; x=1756541653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lGlK/huPst/Uj54bD7qm1iAGK0SCBjHujklkB/TCQhE=;
+  b=jlmG2C8p1bbQq57HkNeyZCIWvD2K/RB/4rJzPBSW/3dEo2WhmxZeE8yf
+   iHJogG8pWotQE25OGpzoWOtSyOhrE6JR9bIEYe5Ju8mzphTlZwsvdIeTZ
+   CCE5GYdEl54vryBkkZUFrWDrO0LFJifT+/wO4TQ/LWn7+RohniTi1+vY6
+   5RJJ87ytYFsDpW9mGkPfBYSdfvMegszmaoE9+wBWiZ18Lm4RMEQY4K1Nn
+   wHAjytYoCJxIjpn6ScjmdtOPeZC13x1MJyuWWEMey34lGGpUi/1YWJlc8
+   exWBKrbw9DcfQwIEF1hxCMF+OD7e3apm9ryOoN5uzs824xll5F0p3E2QI
+   g==;
+X-CSE-ConnectionGUID: r5jAXTRpQ1eI9+oECssKVw==
+X-CSE-MsgGUID: rSB+q0lMT4moOHfx/fnTaw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="26532991"
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="26532991"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 01:12:59 -0700
+X-CSE-ConnectionGUID: TsPEtp8iQj+FOhXnxY9XMw==
+X-CSE-MsgGUID: wFox/84oTFKcyBEbHcGt7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="64567628"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa008.jf.intel.com with SMTP; 30 Aug 2024 01:12:54 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 30 Aug 2024 11:12:52 +0300
+Date: Fri, 30 Aug 2024 11:12:52 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anurag Bijea <icaliberdev@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: Enable ASUS zenbook quirk for
+ VivoBooks
+Message-ID: <ZtF/BJMls7kuD2dt@kuha.fi.intel.com>
+References: <20240829100109.562429-1-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240829100109.562429-1-lk@c--e.de>
 
+Hi, Christian,
 
-On Thu, 22 Aug 2024 18:27:45 +0300, Claudiu wrote:
-> Series adds initial USB support for the Renesas RZ/G3S SoC.
+Sorry, I did not look at this properly in v1.
+
+On Thu, Aug 29, 2024 at 12:01:08PM +0200, Christian A. Ehrhardt wrote:
+> The quirk for some ASUS zenbook models is required for
+> ASUS VivoBooks. Apply the quirk to these as well.
 > 
-> Series is split as follows:
+> This is part of the fix for the builtin keyboard on ASUS
+> VivoBooks.
+
+I think that explanation goes to patch 2/2 and vise versa.
+
+> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> Bisected-by: Christian Heusel <christian@heusel.eu>
+> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> - patch 01/16		- add clock reset and power domain support for USB
-> - patch 02-04/16	- add reset control support for a USB signal
-> 			  that need to be controlled before/after
-> 			  the power to USB area is turned on/off.
-> 
-> [...]
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 4039851551c1..540cb1d2822c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -38,6 +38,10 @@
+>  
+>  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  {
+> +	/* Ignore bogus data in CCI if busy indicator is set. */
+> +	if (cci & UCSI_CCI_BUSY)
+> +		return;
 
-Applied, thanks!
+This does not look correct. Doesn't this mean you'll timeout always if
+BUSY is set?
 
-[10/16] phy: renesas: rcar-gen3-usb2: Add support to initialize the bus
-        commit: 4eae16375357a2a7e8501be5469532f7636064b3
-[11/16] dt-bindings: phy: renesas,usb2-phy: Document RZ/G3S phy bindings
-        commit: f3c8498551146dfb014be0d85d3a7df98be16aa2
-[12/16] phy: renesas: rcar-gen3-usb2: Add support for the RZ/G3S SoC
-        commit: 3c2ea12a625dbf5a864f4920235fa1c739d06e7d
+Couldn't you just check the BUSY as the first action, and then clear
+the other bits in CCI if it is set, if that is the problem?
 
-Best regards,
+Btw. Does 4f322657ade1 ("usb: typec: ucsi: Call CANCEL from single
+location") affect the situation in any way?
+
+thanks,
+
 -- 
-~Vinod
-
-
+heikki
 
