@@ -1,162 +1,109 @@
-Return-Path: <linux-usb+bounces-14401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95D2196654D
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 17:25:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 999989665F8
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 17:45:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20F0A1F25223
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:25:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 434D31F2304B
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09761B5ED0;
-	Fri, 30 Aug 2024 15:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37A5EEC3;
+	Fri, 30 Aug 2024 15:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ANos+/Ru"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQF526jI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9F41B5818
-	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 15:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8E81B5EC9;
+	Fri, 30 Aug 2024 15:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725031482; cv=none; b=L8CaQ9ndZgsu92hnyz2+nZJV2TnJUoinJPjWu2B1X9K75BwZjrsrbBhtFbHJSmMJFCiCqkJ/UJxdu0NfxoTtk6rl+TBLp7rITzxYzcEzHfwE4z8JgiVhcIEcBFPNlSF2FotsKw3whw/jVkCj0d1l5MAjuLXqQdV2xZBX+kb2hpg=
+	t=1725032713; cv=none; b=B/RhnTQ1NuMELXYVLqx6yLiaJLAzf3qIlRIIT9NZ9ZnRhNHWsuIRKYI6l8dplgBNaSofl6Qt5PmeERjunlqR5Qxru5rYPfHTVTLU+KivaI8W+Od+UQudxNbf7qekQXdahQ9V/9TpHHFs0vGaEJRW3XhALuXR9B/mOD+4P7gHOe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725031482; c=relaxed/simple;
-	bh=1a4BEl/a3n4EvTDjun1yx6BvmqO2xegJ6/FvOKAhuK4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Trq2pHbM7Zozwn2Q2YEukMYxfXAAlLcAW5pN4TlOhvhJKrJOmPcifnSog2K33h/VcwvpEvx9OVEa46eeULA4tRNj1Sah9zDd6W3rii62SBnEQGbqwwwiTah/kpEbX+vfAbrU6tfiiLJkpEuYFu9VNQMz0MHtwstXJY4ghA97i9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ANos+/Ru; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725031481; x=1756567481;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1a4BEl/a3n4EvTDjun1yx6BvmqO2xegJ6/FvOKAhuK4=;
-  b=ANos+/Ru0VDLfdYKFyKk9U7650jejw8Wlsx807sEB1oVYfTdsl/aaM5+
-   m0ikBgCWLGHFOvB2IwVPg3EnffpYxPEuOPw0bALknHoD8oGoZ3zPAuJDY
-   gCQZq4pnQMuqMZ0HYQihZkwQtDgrVNYvKoI1CHp6sn2BEBF44YSQK6EH3
-   7lyLHcfmMkQ1MGSHTWo92rpe37M28+XhiyktVGppl4J1MZfVs4c0Ptgh2
-   a5k3jEkFRdpMp4kdfh9jxjfq8rd6OIDvz2J49p9UgqGQXc8i9NUSaHp1P
-   nSqH0+8OwGnDk0ffF0F87uyMreodd3Hr9iXsWdiZp7EHT/q2E+nzzR+eY
-   w==;
-X-CSE-ConnectionGUID: EelKEML2R4Ss6Dtbf7W/3A==
-X-CSE-MsgGUID: tKygKLxoT52pxBGeb69Skg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23861963"
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="23861963"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 08:24:40 -0700
-X-CSE-ConnectionGUID: sBzy5m+3SZqGs5Bik6+GOQ==
-X-CSE-MsgGUID: KYqLVH3YRRO82D+kCxPh9g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="63981655"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa009.fm.intel.com with ESMTP; 30 Aug 2024 08:24:38 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	mika.westerberg@linux.intel.com,
-	mario.limonciello@amd.com,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Rajaram Regupathy <rajaram.regupathy@intel.com>,
-	Saranya Gopal <saranya.gopal@intel.com>
-Subject: [PATCH v2 4/4] thunderbolt: Don't create device link from USB4 Host Interface to USB3 xHC host
-Date: Fri, 30 Aug 2024 18:26:30 +0300
-Message-Id: <20240830152630.3943215-5-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240830152630.3943215-1-mathias.nyman@linux.intel.com>
-References: <20240830152630.3943215-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1725032713; c=relaxed/simple;
+	bh=HqClUW0y4TPjRV7tFoBqmvUM7p96BH5eNpQ76g7qgbA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=nXdjjkKOmDkb2KOWxzYq3YElsYm/bO577G4J1NAkaHir6zrZB0UtFwk+6OKqIydLFUWRSuOcq3AB+6RNV3n5GWBhd2o3E29hArb+qcDWip6YOuucBSn4nsXfowWMwIMskMQk3Rs0ZAgDaMRgCHshfU8hGnwEfrbtHItJejl2o+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQF526jI; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5343d2af735so1897422e87.1;
+        Fri, 30 Aug 2024 08:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725032710; x=1725637510; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wx/lCrTpfSvdHUgVk44KXjqtVq3fG6KgJGrfLz+31DQ=;
+        b=YQF526jIPYdLo52bs9ieyfVwwRrXeZziMTdSXU8Pa6A3UPsiOUV83Ancvuhb9NbHXe
+         GDyjDjP9Ulq1puxHdIq5Nqk1IJcq5t7OBUbFLzHqVd0W3dVqtwBpf2hiYTd0T9mviyzT
+         VqAgtqCzg6nICIGBO+zbjuQYJJ67AEMzsweCTV5GJQY1aRg8MrXfToXMehxzUx0aZgbq
+         jxZiPi6yw4vU0jPzALr8ok0tOutFhAKOs2rxAH2ObTYVr9yxFHJUfWsNBA5vSz54gxAT
+         0xqJsEcfaH3z1pnt87Pnlzk6GVAXMwvvYCFG5D5WCkBHKXhmWaGQo5hMC/SQpMEkVt4J
+         H+WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725032710; x=1725637510;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wx/lCrTpfSvdHUgVk44KXjqtVq3fG6KgJGrfLz+31DQ=;
+        b=B8RzdZ7D17/A2mfNCgFK2e41d6CJisaDo5AcVS/4Cqcl9oWopmqlS6OsWMscMqZtJU
+         COcO39G+cMDR3ciMm20rm9OqhURTPhhXVhJoQqQYzUDuKyYMzyBau8DYqA1CSIfFutFY
+         yT0f6MchybK0p7ftT4Yh2qWIg6M9G+f2rJMboQXAWYeCG6WB6JR0xInp1g5Wqb4oU/61
+         8LX47hvNkhzGfzzPgAWxNyS+yfpN5J7aqX/Tn5IW38yBETyaGeIWZLvwTginCo/Ogflc
+         9hB8AgFoneugdY+pcvaae738tXmAxfZRb0ELrEIf4qRQRXRdlcwSbubA9uHLN12/A7wr
+         fqlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjGEiLTNcwJRzsjuTeoi4atCJiAit4OoIJXjK6G21X868v4RTSVGQkVHmkmgoZBxoVLIgUiWpQ@vger.kernel.org, AJvYcCX0QX1zTjIRDCau/EPHYRz5/tWao2w8KggMQ4YaxcLiT9gVJsu4mRewhyTBVovWfaxnbm8UmPj6L9TJs2I=@vger.kernel.org, AJvYcCXNP1RINHSqMnpKWemgNm3+XMFhHeVhxTVok9SB1tznOfDTmA8J7lOTVTX6F+BbLeWe44bPMmeYLy+K@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNS0f9wkgS8/OnHouubfcFJuXDbZUg/ijr11MCo6fDkJOuMfM7
+	SnvicyKR/m3ckqeglbin014WRCinRwTlJK/Np3KJ43XSNJ++Ihis
+X-Google-Smtp-Source: AGHT+IF/RWISTslY+pNUUnbN+pc2mYiEfpgOldaEiU6kT37eEG8cCnaYn2ostIaybYUKADsBJbPqSg==
+X-Received: by 2002:a05:6512:159e:b0:52e:7542:f469 with SMTP id 2adb3069b0e04-53546a56629mr1760359e87.0.1725032709314;
+        Fri, 30 Aug 2024 08:45:09 -0700 (PDT)
+Received: from foxbook (bin33.neoplus.adsl.tpnet.pl. [83.28.129.33])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-535408286b2sm660237e87.172.2024.08.30.08.45.08
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 30 Aug 2024 08:45:08 -0700 (PDT)
+Date: Fri, 30 Aug 2024 17:45:04 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: pawell@cadence.com, peter.chen@kernel.org
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, mathias.nyman@intel.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: xhci: fixes lost of data for xHCI Cadence
+ Controllers
+Message-ID: <20240830174504.1282f7b4@foxbook>
+In-Reply-To: <PH7PR07MB95388A2D2A3EB3C26E83710FDD8E2@PH7PR07MB9538.namprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-USB core will create device links between tunneled USB3 devices and
-USB4 Host Interface during USB device creation.
+Hi,
 
-Those device links are removed with the tunneled USB3 devices, allowing
-USB4 Host Interface to runtime suspend if USB3 tunnels are not used.
+> Field Rsvd0 is reserved field, so patch should not have impact for
+> other xHCI controllers.
+Wait, is this a case of Linux failing to zero-initialize something that
+should be zero initialized before use (why not explain it as such?), or
+are you suggesting monkeying with internal xHC data at run time, in area
+which is known to actually be used by at least one implementation?
 
-So remove device link creation between USB4 Host Interface and USB3 xHC
-during NHI probe
+There is no mention of Rsvd0 in the xHCI spec, did you mean RsvdO?
 
-Reported-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-Reported-by: Saranya Gopal <saranya.gopal@intel.com>
-Tested-by: Saranya Gopal <saranya.gopal@intel.com>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
-v2:
- no change
+Reserved and Opaque, 
+For exclusive use by the xHC.
+Software shall *not* write this, unless allowed by the vendor.
 
- drivers/thunderbolt/acpi.c | 40 ++++++++++----------------------------
- 1 file changed, 10 insertions(+), 30 deletions(-)
+Cadence isn't the only xHC vendor...
 
-diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
-index c9b6bb46111c..d2a0054217da 100644
---- a/drivers/thunderbolt/acpi.c
-+++ b/drivers/thunderbolt/acpi.c
-@@ -32,40 +32,20 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
- 		goto out_put;
- 
- 	/*
--	 * Try to find physical device walking upwards to the hierarcy.
--	 * We need to do this because the xHCI driver might not yet be
--	 * bound so the USB3 SuperSpeed ports are not yet created.
-+	 * Ignore USB3 ports here as USB core will set up device links between
-+	 * tunneled USB3 devices and NHI host during USB device creation.
-+	 * USB3 ports might not even have a physical device yet if xHCI driver
-+	 * isn't bound yet.
- 	 */
--	do {
--		dev = acpi_get_first_physical_node(adev);
--		if (dev)
--			break;
--
--		adev = acpi_dev_parent(adev);
--	} while (adev);
--
--	/*
--	 * Check that the device is PCIe. This is because USB3
--	 * SuperSpeed ports have this property and they are not power
--	 * managed with the xHCI and the SuperSpeed hub so we create the
--	 * link from xHCI instead.
--	 */
--	while (dev && !dev_is_pci(dev))
--		dev = dev->parent;
--
--	if (!dev)
-+	dev = acpi_get_first_physical_node(adev);
-+	if (!dev || !dev_is_pci(dev))
- 		goto out_put;
- 
--	/*
--	 * Check that this actually matches the type of device we
--	 * expect. It should either be xHCI or PCIe root/downstream
--	 * port.
--	 */
-+	/* Check that this matches a PCIe root/downstream port. */
- 	pdev = to_pci_dev(dev);
--	if (pdev->class == PCI_CLASS_SERIAL_USB_XHCI ||
--	    (pci_is_pcie(pdev) &&
--		(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
--		 pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))) {
-+	if (pci_is_pcie(pdev) &&
-+	    (pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
-+	     pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM)) {
- 		const struct device_link *link;
- 
- 		/*
--- 
-2.25.1
+(There is no mention of "Stream Endpoint Context" either, so maybe you
+meant "Stream Context" or "Endpoint Context"...)
 
+Regards,
+Michal
 
