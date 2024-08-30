@@ -1,124 +1,87 @@
-Return-Path: <linux-usb+bounces-14373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC7B296610D
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 13:53:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FFBC966170
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 14:20:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B3EE1C2372E
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 11:53:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA2BCB27A5B
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 12:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAADD18F2D5;
-	Fri, 30 Aug 2024 11:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Thz3RyBM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6896D199923;
+	Fri, 30 Aug 2024 12:20:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pasta.tip.net.au (pasta.tip.net.au [203.10.76.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82B7199FA8
-	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 11:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0003F1D1312
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 12:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.10.76.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725018796; cv=none; b=ie+y6Gs4Dj5Vr7L5t5N2//ka1r1ywQGZr3hHiRzhsJ5MXCzIo+6HEoMs//Cm2BmxYjCif+h7ya+fVZZUl5G+KCz0tbtocNZ9DD6jVns3ZS/ym2fxPMa6BiA+rrUMP8CamFPJzJihk5xVPnNjicsxfmn9Kmc9Bes9pR0fOUKSQN8=
+	t=1725020445; cv=none; b=F6GCDxxJNtl4jI9gFhSmOKa82b2RCtaITeGi4vnn5nrjBCKHo2N+ax03fsIRhvkp4z5LBxsSPuY9Nz+GSe9ee66Fk9wC6Up3uqy6c8HcuPrSsXPJW7ZY/mm4qosPjRObuIFQIy7fn3eVU8soVGz2mZTpvIig2h3iSmL6XneN+zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725018796; c=relaxed/simple;
-	bh=TaklMqYcDgmkkp4b24nlIdgyNbfAbwJRjZK1wU83df4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r2q0lT6adgmhiju07e4RqnvY9Zay5WgEtNQ1jT+1TiLLiKBt0vrtpOfFlEAMiRQslIX5KygPtxVjmSRMlh9tvPvtjvvtBjFeP3nxcv6SoWlnnEt/b1pKLCcs5FHgnLUDvSI1eePmk/GxuwAyYzspkLb4Z/7Bzc0GWQu2x4H5Cv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Thz3RyBM; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5353d0b7463so3150090e87.3
-        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 04:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725018793; x=1725623593; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+uv9ecrXr2xujd8Gma8wZ2yf9eNAhmsRqjn7nUMfDdw=;
-        b=Thz3RyBMNHJstHetpQE/kC71m9PCdDWZz4n1m4jkwcjvAxvtRRgsAjm3WksPzfS1zS
-         CXI0TdVoswReRWjyLiqIEqe3NFbkVC3PI3MTBYGlv+zF+Z6lWTLYAWxrsinIHxedJjrf
-         d2PyZMaC1D2kCJanGqkEMoAwV3moxjDt5sHGHruhh7azshtupobN4yjbbDY8+UD1GBOb
-         B1ofl/C/jFjRFqTbdH/prXvB4sFtfSIOXI69aD4DCL8rVJOZPTDz1roOAxxI4wUd6h4b
-         N7occ0Hw2kTGQrgC6ML76Zoj0nCsSqCGxp59xQToIOxJkjeNRhMqrLOwyMpPZoDJZLxX
-         WFlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725018793; x=1725623593;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+uv9ecrXr2xujd8Gma8wZ2yf9eNAhmsRqjn7nUMfDdw=;
-        b=HAzwl4TRWqR+1velz9N8UwK+SLlhuFs9+X5EAQbJj1NCnygKEGmqb2cLjAvw6TA6sg
-         xrgOR7v1uCEnaVjCxNOW3GbHtYjKua7OpBVHSavurCLOqOXw8pUjVTDo9XqaNJgvrwcL
-         Vp+rbJdqpgP3CdvdxFL4U26Oba9CN5LKNk54JYsUQ9idLSg6vSkx9DdHez1AS2kdhKcg
-         R9sPgu/2x6HSrc3C95o5kSYBzC1QWnjTh+zOxCeFb/GjON2PU8evOPFIKtCfwaKp98wA
-         Ulz9459mZnmuXzNF4SsA9cz8GHw7xneN02W0itiSSS5XkakIKIhkX/Awn1m+lDydgva6
-         DJhA==
-X-Forwarded-Encrypted: i=1; AJvYcCXRDeETT8+FBokqlJKsZfXC0RfwnEWC1PWe2razo5pXulNpLkNLJUGY4DGEAjhudOr7+9fbgNq2SKg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzB4Tupd7B+5q6sH99xGdD2d3tf4pXKmM219dytCDCA/s8IIVfQ
-	96EkmrHJulPhUteGzlZvxILqvuRTEo1hlUbLk2ur8fwvmljyhiis
-X-Google-Smtp-Source: AGHT+IHg8HAN5X4CufhiP9qTQl3Sy99DTFZWtytFbwA2NbhyUWhAn8TPaobxRQ7o38DcmzdRBGZZAQ==
-X-Received: by 2002:a05:6512:3996:b0:52c:c9e4:3291 with SMTP id 2adb3069b0e04-53546c02e0emr1486608e87.60.1725018792285;
-        Fri, 30 Aug 2024 04:53:12 -0700 (PDT)
-Received: from foxbook (bin33.neoplus.adsl.tpnet.pl. [83.28.129.33])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-535407abf4esm572183e87.65.2024.08.30.04.53.11
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 30 Aug 2024 04:53:11 -0700 (PDT)
-Date: Fri, 30 Aug 2024 13:53:07 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
- Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: Re: [PATCH 0/9] Various xhci fixes and improvements
-Message-ID: <20240830135307.7c57baa8@foxbook>
-In-Reply-To: <39d389c3-1b3f-4a11-a40d-5c2eb46096bc@linux.intel.com>
-References: <20240827194625.61be5733@foxbook>
-	<39d389c3-1b3f-4a11-a40d-5c2eb46096bc@linux.intel.com>
+	s=arc-20240116; t=1725020445; c=relaxed/simple;
+	bh=s/9UPoJ2Hcm0QdRM+ifFEI5a4KOIEVGWJ9WYxoYi2YE=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=nIB11HK06o/KD24lmkq3rEqhWmmXem93gHEQbv2bIgLd6I6DWZjlnL331y1MgGzQWzpDRzdUDbazwxH5uq++Pr+R6cC8FCTlbRXSSkRa56NhCEYSskRRXz3HwJCiBRZVGuO6/QcPM2YU0zU+OMn+A17IRy2ewG1PjGneK84D7s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eyal.emu.id.au; spf=pass smtp.mailfrom=eyal.emu.id.au; arc=none smtp.client-ip=203.10.76.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eyal.emu.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eyal.emu.id.au
+Received: from [192.168.2.7] (unknown [101.115.81.153])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mailhost.tip.net.au (Postfix) with ESMTPSA id 4WwHBr3y6pz9RKG
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 22:14:28 +1000 (AEST)
+Message-ID: <63d4782a-1d83-4252-a0ca-a9b50e6074f0@eyal.emu.id.au>
+Date: Fri, 30 Aug 2024 22:14:20 +1000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org
+Reply-To: eyal@eyal.emu.id.au
+Content-Language: en-US
+From: Eyal Lebedinsky <eyal@eyal.emu.id.au>
+Subject: Understanding 'lsusb -t'
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Mathias,
+I assume that the generated list is a tree, so each leaf (Device/If) is on only one point.
 
-> Code on top of 6.11-rc4 can be found in my
-> feature_transfer_event_rework branch:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git
-Thanks for pointing me to this.
+I note this output:
 
-It does look like a very promising approach. This is the principle of
-"matching before handling" taken to the extreme, as nothing is changed
-during the first pass through the TD list. It seems to work well.
+$ lsusb -tv
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/16p, 480M
+     ID 1d6b:0002 Linux Foundation 2.0 root hub
+[trimmed]
+     |__ Port 004: Dev 004, If 0, Class=Hub, Driver=hub/4p, 480M
+[trimmed]
+     |__ Port 005: Dev 006, If 0, Class=Hub, Driver=hub/4p, 480M
+[trimmed]
+     |__ Port 006: Dev 019, If 0, Class=Hub, Driver=hub/4p, 480M
+         ID 2109:2817 VIA Labs, Inc.
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/10p, 10000M
+[trimmed]
+     |__ Port 006: Dev 006, If 0, Class=Hub, Driver=hub/4p, 5000M
+         ID 2109:0817 VIA Labs, Inc.
 
-I feel like the counting of distances from ring->dequeue is a little,
-I don't know, unexpected maybe, but it does indeed produce surprisingly
-compact and simple code thanks to those segment numbers.
+I removed some content that is not relevant to my question.
 
-That being said, I've always been a strong case of NIH syndrome, so
-I implemented a similar search for passed TDs which relies solely on
-walking the ring in order from dequeue to the event DMA pointer.
+Note the Bus 001.Port 006 and Bus 002.Port 006 entries.
 
-So I guess we will have two implementations to compare and choose from.
+I verified that both are for the same (one) device. They do not show when I disconnect it.
+The device is an external 4-port USB3.0 hub. It is listed once as 480M and once as 5000M.
+Nothing is plugged into any of the four ports.
 
-I will try to develop this approach into a complete implementation that
-actually works and can be tested. I want to maximally preserve original
-behavior, except for obvious bugs (I found an obscure one already) to
-simplify validation and review.
+Is this correct? Why does this device show twice in the list?
 
-So, for example, no removing the skip flag for now. I'm not sure if
-it's a good idea at all, as it frankly is sweeping bugs under the rug.
-I have one HC which sometimes silently misses TDs for no known reason
-and it misses so many of them that auto-skipping wouldn't help anyway.
-OTOH, when I get the TRB errors, at least I know the HC is screwed.
+TIA
 
-Regards,
-Michal
+-- 
+Eyal at Home (eyal@eyal.emu.id.au)
 
