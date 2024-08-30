@@ -1,65 +1,42 @@
-Return-Path: <linux-usb+bounces-14383-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14384-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B12196636B
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:52:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B7D9966379
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 15:55:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD6FA1C21A92
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 13:52:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 391A8282E46
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 13:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7B81AF4ED;
-	Fri, 30 Aug 2024 13:51:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n4UgI8s1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BAD91AF4DA;
+	Fri, 30 Aug 2024 13:55:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from pasta.tip.net.au (pasta.tip.net.au [203.10.76.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11246190059;
-	Fri, 30 Aug 2024 13:51:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE13165F05
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 13:55:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.10.76.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725025915; cv=none; b=MRLV3lCJ5mKQ8VYt/rhyrATuHXZxiZyeQlG70MtXLWqTrlhXO9CAo6xrDhRsrdutSxrjr4vRmCSlcvLmRZxxDytzGDIxlt2eVhgkUA3y1D7+J3xn7uM7d7urjAtLs+d0Dck4GX8HgHRE7S3+m1NPIXFmZzdzhDnjfnlDPpzfEMs=
+	t=1725026145; cv=none; b=ixbiOv8SKzZ3TjUau3xaJ1TCDh/J8AAfXlEsIe7LKCM7/nKbAg3XyKoSawtGGVXQndhMh9gzfSmKjfK02utCObXF3ID5z7kTdk7LYbR3K52YhsJHD+/NRtT+DfajbGxTivANAajpbOOvDcLNGkF+cishxPqVwMF+F9Gvohly0uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725025915; c=relaxed/simple;
-	bh=z5c+A6SazVqr8L3iF7US28CgCvu9PZLF+fDGvMs8bP4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PAd/wjwJ3U3/PFRQ7Eu0ELIAJeciWfB7Ul4fuA4tYECJ7QF9bhW+exq8hTHup38MJq080lL7AlVu4o+mEAUn2I7Mb3x9rhtxAf/jtpEI+0v/zlR1FR8nR7m3BqK98nVYPrPvGKrHzwlwsEQ1K/eAbrzF5jBh6LJAogOJpNlaRYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n4UgI8s1; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725025914; x=1756561914;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=z5c+A6SazVqr8L3iF7US28CgCvu9PZLF+fDGvMs8bP4=;
-  b=n4UgI8s1gVYJO75v0PxHx4tF01krstqYIpBN6HBe1m4M19TMRdVUAVM0
-   ijm7v9UHYYqRU72PNJGimWfup9cFAUojrMUW/5G8Wd4MGnKFvgfOJ9cDw
-   YlhO1qB0JZsc0BRF4/Qw5wsxGRBqJudjj3nVAMStEHNT3m1qRbKzP7H2r
-   qmfR2Lorbw7Uz7ZXIKvA6LYv5VV3DKF8XGnhFm0Gvqpd41/GJJj+7ytNs
-   v97/lgw72swhiVdWle2rb6ci0ef2WsXPE+4iMq5JcqlAtkrEHqS4MR6Fo
-   ZYTpb2DdRYbpghG1LgjXGnPGgLOGSMIejNfTsSlOP8YUv5BcgvSN7c4Xb
-   g==;
-X-CSE-ConnectionGUID: OhzKoBdfRPSbahXp+K6F6w==
-X-CSE-MsgGUID: kJcPnryjQIu3DVIoBvw6bQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23804898"
-X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
-   d="scan'208";a="23804898"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 06:51:54 -0700
-X-CSE-ConnectionGUID: EUBIpPy8TYSzts9WRRxs+w==
-X-CSE-MsgGUID: 4MP1KPWFTjiy58Y3JUwwpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
-   d="scan'208";a="68048416"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa003.fm.intel.com with ESMTP; 30 Aug 2024 06:51:51 -0700
-Message-ID: <45e02c34-c45d-4ec7-8bd3-6c7808518229@linux.intel.com>
-Date: Fri, 30 Aug 2024 16:53:56 +0300
+	s=arc-20240116; t=1725026145; c=relaxed/simple;
+	bh=yfG2dOFUUIH7HBgNA4zYeEh0GnhJGJ9soh6jsjdmpAQ=;
+	h=Message-ID:Date:MIME-Version:Subject:References:From:To:
+	 In-Reply-To:Content-Type; b=d/45/NOcRh5eC83ExWPqijofzOK740nuog+v+hCxtZvM2NKrmbG5Vwu2/2ISwh6OIKIr8b7zPJjP8zsREhv2mO98LzT1M5tn9mOLPLYEXrpOMPMHEjxWW9rPqFLQDG7evKv60cmdD21mjB8kliSc6LbeIYXFM8SUI/GoEZebJSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eyal.emu.id.au; spf=pass smtp.mailfrom=eyal.emu.id.au; arc=none smtp.client-ip=203.10.76.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eyal.emu.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eyal.emu.id.au
+Received: from [192.168.2.7] (unknown [101.115.81.153])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mailhost.tip.net.au (Postfix) with ESMTPSA id 4WwKRc6nndz9RCP
+	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 23:55:40 +1000 (AEST)
+Message-ID: <dd7050f0-0c33-41cb-bbee-acae266ef810@eyal.emu.id.au>
+Date: Fri, 30 Aug 2024 23:55:38 +1000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,87 +44,74 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: xhci: fixes lost of data for xHCI Cadence
- Controllers
-To: Pawel Laszczak <pawell@cadence.com>,
- "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "peter.chen@kernel.org" <peter.chen@kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20240821055828.78589-1-pawell@cadence.com>
- <PH7PR07MB95388A2D2A3EB3C26E83710FDD8E2@PH7PR07MB9538.namprd07.prod.outlook.com>
+Reply-To: eyal@eyal.emu.id.au
+Subject: Re: Understanding 'lsusb -t'
+References: <63d4782a-1d83-4252-a0ca-a9b50e6074f0@eyal.emu.id.au>
+ <2024083057-charger-lustrous-d434@gregkh>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <PH7PR07MB95388A2D2A3EB3C26E83710FDD8E2@PH7PR07MB9538.namprd07.prod.outlook.com>
+From: Eyal Lebedinsky <eyal@eyal.emu.id.au>
+To: linux-usb@vger.kernel.org
+In-Reply-To: <2024083057-charger-lustrous-d434@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 21.8.2024 9.01, Pawel Laszczak wrote:
-> Stream endpoint can skip part of TD during next transfer initialization
-> after beginning stopped during active stream data transfer.
-> The Set TR Dequeue Pointer command does not clear all internal
-> transfer-related variables that position stream endpoint on transfer ring.
+On 30/8/24 10:32 pm, Greg KH wrote:
+> On Fri, Aug 30, 2024 at 10:14:20PM +1000, Eyal Lebedinsky wrote:
+>> I assume that the generated list is a tree, so each leaf (Device/If) is on only one point.
+>>
+>> I note this output:
+>>
+>> $ lsusb -tv
+>> /:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/16p, 480M
+>>      ID 1d6b:0002 Linux Foundation 2.0 root hub
+>> [trimmed]
+>>      |__ Port 004: Dev 004, If 0, Class=Hub, Driver=hub/4p, 480M
+>> [trimmed]
+>>      |__ Port 005: Dev 006, If 0, Class=Hub, Driver=hub/4p, 480M
+>> [trimmed]
+>>      |__ Port 006: Dev 019, If 0, Class=Hub, Driver=hub/4p, 480M
+>>          ID 2109:2817 VIA Labs, Inc.
+>> /:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/10p, 10000M
+>> [trimmed]
+>>      |__ Port 006: Dev 006, If 0, Class=Hub, Driver=hub/4p, 5000M
+>>          ID 2109:0817 VIA Labs, Inc.
+>>
+>> I removed some content that is not relevant to my question.
+>>
+>> Note the Bus 001.Port 006 and Bus 002.Port 006 entries.
+>>
+>> I verified that both are for the same (one) device. They do not show when I disconnect it.
+>> The device is an external 4-port USB3.0 hub. It is listed once as 480M and once as 5000M.
+>> Nothing is plugged into any of the four ports.
+>>
+>> Is this correct? Why does this device show twice in the list?
 > 
-> USB Controller stores all endpoint state information within RsvdO fields
-> inside endpoint context structure. For stream endpoints, all relevant
-> information regarding particular StreamID is stored within corresponding
-> Stream Endpoint context.
-> Whenever driver wants to stop stream endpoint traffic, it invokes
-> Stop Endpoint command which forces the controller to dump all endpoint
-> state-related variables into RsvdO spaces into endpoint context and stream
-> endpoint context. Whenever driver wants to reinitialize endpoint starting
-> point on Transfer Ring, it uses the Set TR Dequeue Pointer command
-> to update dequeue pointer for particular stream in Stream Endpoint
-> Context. When stream endpoint is forced to stop active transfer in the
-> middle of TD, it dumps an information about TRB bytes left in RsvdO fields
-> in Stream Endpoint Context which will be used in next transfer
-> initialization to designate starting point for XDMA. This field is not
-> cleared during Set TR Dequeue Pointer command which causes XDMA to skip
-> over transfer ring and leads to data loss on stream pipe.
+> That's odd, as the same device shouldn't be on multiple busses.  Busses
+> are a "root port" on the system (i.e. a new PCI controller device), so
+> are you sure you just don't have multiple devices with the same
+> device/vendor id?
 > 
-> Patch fixes this by clearing out all RsvdO fields before initializing new
-> transfer via that StreamID.
+> What is the diff between running the command before and after removing a
+> single device?
+
+I now attached a different 4-port usb3 hub (another brand: idVendor=2109, idProduct=0817)
+and I see two devices detected (4 ports each) again, these are the new devices listed:
+
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/16p, 480M
+...
+     |__ Port 006: Dev 023, If 0, Class=Hub, Driver=hub/4p, 480M
+         ID 0bda:5411 Realtek Semiconductor Corp. RTS5411 Hub
+...
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/10p, 10000M
+...
+     |__ Port 006: Dev 010, If 0, Class=Hub, Driver=hub/4p, 5000M
+         ID 0bda:0411 Realtek Semiconductor Corp. Hub
+
+> thanks,
 > 
-> Field Rsvd0 is reserved field, so patch should not have impact for other
-> xHCI controllers.
-> 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> greg k-h
 
-Thanks,
-
-Code looks good but maybe we should skip adding this to stable until we are really
-sure modifying the RsvdO fields for _all_ host controllers doesn't cause any issues.
-
-I simplified and changed the commit message, is the following ok with you:
-
-usb: xhci: fix loss of data on Cadence xHC
-
-Streams should flush their TRB cache, re-read TRBs, and start executing
-TRBs from the beginning of the new dequeue pointer after a 'Set TR
-Dequeue Pointer' command.
-
-Cadence controllers may fail to start from the beginning of the dequeue
-TRB as it doesn't clear the Opaque 'RsvdO' field of the stream context
-during 'Set TR Dequeue' command.
-This stream context area is where xHC stores information about the last
-partially executed TD when a stream is stopped.
-xHC uses this information to resume the transfer where it left mid TD,
-when the stream is restarted.
-
-Patch fixes this by clearing out all RsvdO fields before initializing new
-Stream transfer using a 'Set TR Dequeue Pointer' command.
-
-Field RsvdO is reserved field, so patch should not have impact on other
-xHCI controllers, but don't add this patch to stable kernels yet
-before it has worked flawlessly upstream on different hosts for a while.
-
-[simplify and edit commit message -Mathias]
-
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+-- 
+Eyal at Home (eyal@eyal.emu.id.au)
 
 
