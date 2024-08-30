@@ -1,193 +1,82 @@
-Return-Path: <linux-usb+bounces-14342-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14344-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2206965A25
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 10:22:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4FD7965A61
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 10:33:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 615AC1F248D3
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 08:22:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A22E628D66F
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2024 08:33:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B5916C856;
-	Fri, 30 Aug 2024 08:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB83D16D4CC;
+	Fri, 30 Aug 2024 08:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="PdX55yCj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YaDBJaMH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1F9168C33
-	for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 08:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4785814D422;
+	Fri, 30 Aug 2024 08:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725006167; cv=none; b=eXHdeYu+EZ3Hi05zR+GwRcz+4ni6zkeE938+i/vdVvqEAqbBt7KUs0PREMLKvXFjK0OnwGphi/RCLkR2TV0YPZIvv8JakA4X1iczCsCr9f+IKdfz0VaTwVu4w3K/ZTk2P84QQbSRm/zmXeGbbq55xic1BW7N06/OWDS8Cu/JDIo=
+	t=1725006775; cv=none; b=K5gnwtnQVLqJdNEPZl0P0WioDCPNLDH6byS7jreiR5GI4PvKtoGmoUFWDwfn7WXY8Ggj5YXYwpUq9OWzDdREF+JydmIT5s71YQgKysW67oRujyPbLpxMi91KDCAauVws0GcLDPYV7htyw4/DU05uvJfqv0zHThNq4PErgtoRnrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725006167; c=relaxed/simple;
-	bh=lg2a5Or0gfd5Bku8PfxGPt1GgB3ed0TVDFLBpQJIMg4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eCPTz9EB27cyssNhrpvVQBbEDINCI8sg0vXWmNjSnZzUEZXCNcs0BFcWgI9eZo0L99Mqy4KQsc5XKED4FOlhSnioui6n66e/qwmdHuDEhD/ZidRjzaQ5LSuAuhItw4M52EatgZfXjUsNx7hwbotuloS1a5joZCtEH5OsUR1j/UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=PdX55yCj; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-429da8b5feaso17043925e9.2
-        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2024 01:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1725006164; x=1725610964; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zchK+tZfRdJr/B0VNKRrEBtLoJmeJfsr2YpFzQ08IdE=;
-        b=PdX55yCjayxLU3a0HuryCmcojZbcsP1de6j68M6ebp45drf94iA8NvQ3vsQjHDYp5n
-         P8yVFUuidLKGgIn94toZdJ8Hez/KX4ijJvG3obykwA8N6EFCXEfuV0jL5hfAVLH9n2FT
-         JDgtvtEv2wNPr5PRcw7s1+jaMBUU/ydxJV/5vXjkSb4A6Hx/WLesh7ismzSRiwg1c8oU
-         hs4k49jr+zfamjjjl1mOB2Jsvq2B1n/itmC73c4rO1JTg7oZOIHiq05+A5mpJ6OPVLqD
-         zUantHtRV6mHWHqKBVgjPqry3UzYkH1R5EeiZOey60NAit5f9lGIWVAf7MkpNyPle08y
-         M+fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725006164; x=1725610964;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zchK+tZfRdJr/B0VNKRrEBtLoJmeJfsr2YpFzQ08IdE=;
-        b=ivEejmOvoARpj1V5hL8MsMZP1WXSxf7+dhUDl92zbPjinnr1o2CmL1YBB7oytWB1o4
-         eD6Vlk6LgwO+y3ui5etpvWLtEIWQYJ+zZr+0vA0JPQv/B9UF1+jN5bmpcmeiRqa4taCg
-         /1xm43CWjFtGv6Nel3o36uDt/KmpSZ58RBenXx20jiQ+sXtAjt8GjxwljWGu9o954zsW
-         omRujyJNNq5zCxfWps5i4vZK/jnsfNByqN2D4K+H1RHgx1JatBwm40/QQ4T4q03U4Cpg
-         BUwrP/oghtfRq2kDiN8OpazMCkMspUaOfy8suBYldLs1uGgCxY1fMNbI8d3H7elDWpz+
-         R2eQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbpfRVE9H7nLooP2WfsDVLv+9judiD4PwBxYjrJDq1R2gvYd290uvNO8BfAXtRlEXnQnqYNg/05Ho=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnQA4k16/TYWAeAfyP2O9Qud520bgaw1nty+gmUgHmDX6q80As
-	KEhln1UBj8oMTMHuUJBh2aA3i2WZRSDNtvrlsd4kRTN7OyhNZwqUfgUwVAJh7YI=
-X-Google-Smtp-Source: AGHT+IF8ZkJGKUmuglZKyShKgzTB0GuKfWBu6xay0mGYscvHuYinOaW5h5J83vGVNlCFB6KS0zIxvQ==
-X-Received: by 2002:a05:600c:3ca2:b0:426:5520:b835 with SMTP id 5b1f17b1804b1-42bb01ae206mr53646705e9.5.1725006164296;
-        Fri, 30 Aug 2024 01:22:44 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb87f7fccsm31864805e9.46.2024.08.30.01.22.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Aug 2024 01:22:43 -0700 (PDT)
-Message-ID: <99bef301-9f6c-4797-b47e-c83e56dfbda9@tuxon.dev>
-Date: Fri, 30 Aug 2024 11:22:41 +0300
+	s=arc-20240116; t=1725006775; c=relaxed/simple;
+	bh=YEJdcaUfR9XcunbshRrg9SG0J6v5PICFCQwTIjmSOIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k3uV8r+gUio0Kg1godmZ+NsILYHW8gGmdvyMdVyMJ26SQXg7rrrqvEtYRXOCiw8YuiMg9Wh4yklsloyHGlqHchFQSR5+7bu1MMdxtINyhSKfXOqjM9GQY9G3I3pZrQ9z2xolzd1cWO9OzbjDayXKy3aNCvl0B3dxiO1y2rAcqMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YaDBJaMH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F40C4CEC2;
+	Fri, 30 Aug 2024 08:32:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725006774;
+	bh=YEJdcaUfR9XcunbshRrg9SG0J6v5PICFCQwTIjmSOIA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YaDBJaMH2FYZ7ErEyfcC5uePaEQtH6o/v2HSjlnjYvW88Lwj99Kk88Ep/iIelMgPq
+	 mxJ3WmWrf0fkaCDbocmHnLn4RPaju06Uf1oZZB22m4i0GNtbrr0qZDvhZcCbK4hR0s
+	 CN5ttv3y6iRXbrIgZ7ApEnZ/K6s7wP/dymcP5d0DjjY0aojgPZMzpVKBvgrmfGOQ/r
+	 A+RURvAI+q5+Z9UTrAnqG+O7e/lbUlOh+0XTscBTY0L8Pt3c0ykdOpFz+gge4MpOnF
+	 cv2PkjDjNgy3HJVvzn6e9NJCfqwaGwkMdlHncXOs7kcZMG3sOneVY7yIU8IZM/+Zmf
+	 h7x+YlA108ZRw==
+Date: Fri, 30 Aug 2024 09:32:50 +0100
+From: Simon Horman <horms@kernel.org>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@kernel.org
+Subject: Re: [PATCHv2 net] usbnet: modern method to get random MAC
+Message-ID: <20240830083250.GH1368797@kernel.org>
+References: <20240829175201.670718-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
-Content-Language: en-US
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
- magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
- sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
- biju.das.jz@bp.renesas.com, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240829175201.670718-1-oneukum@suse.com>
 
-Hi, Ulf,
-
-On 29.08.2024 18:26, Ulf Hansson wrote:
-> On Thu, 22 Aug 2024 at 17:28, Claudiu <claudiu.beznea@tuxon.dev> wrote:
->>
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> Hi,
->>
->> Series adds initial USB support for the Renesas RZ/G3S SoC.
->>
->> Series is split as follows:
->>
->> - patch 01/16           - add clock reset and power domain support for USB
->> - patch 02-04/16        - add reset control support for a USB signal
->>                           that need to be controlled before/after
->>                           the power to USB area is turned on/off.
->>
->>                           Philipp, Ulf, Geert, all,
->>
->>                           I detailed my approach for this in patch
->>                           04/16, please have a look and let me know
->>                           your input.
+On Thu, Aug 29, 2024 at 07:50:55PM +0200, Oliver Neukum wrote:
+> The driver generates a random MAC once on load
+> and uses it over and over, including on two devices
+> needing a random MAC at the same time.
 > 
-> I have looked briefly. Your suggested approach may work, but I have a
-> few thoughts, see below.
+> Jakub suggested revamping the driver to the modern
+> API for setting a random MAC rather than fixing
+> the old stuff.
 > 
-> If I understand correctly, it is the consumer driver for the device
-> that is attached to the USB power domain that becomes responsible for
-> asserting/de-asserting this new signal. Right?
+> The bug is as old as the driver.
 
-Right!
+I think this is appropriate:
 
-> 
-> In this regard, please note that the consumer driver doesn't really
-> know when the power domain really gets powered-on/off. Calling
-> pm_runtime_get|put*() is dealing with the reference counting. For
-> example, a call to pm_runtime_get*() just makes sure that the PM
-> domain gets-or-remains powered-on. Could this be a problem from the
-> reset-signal point of view?
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 
-It should be safe. From the HW manual I understand the hardware block is
-something like the following:
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 
-
-                  USB area
-         +-------------------------+
-         |                         |
-         | PHY --->USB controller  |
-SYSC --> |  ^                      |
-         |  |                      |
-         | PHY reset               |
-         +-------------------------+
-
-Where:
-- SYSC is the system controller that controls the new signal for which
-  I'm requesting opinions in this series
-- PHY reset: is the block controlling the PHYs
-- PHY: is the block controlling the USB PHYs
-- USB controller: is the USB controller
-
-Currently, I passed the SYSC signal handling to the PHY reset driver; w/o
-PHY reset the rest of the USB logic cannot work (neither PHY block nor USB
-controller).
-
-Currently, the PHY reset driver call pm_runtime_resume_and_get() in probe
-and pm_runtime_put() in remove. The struct reset_control_ops::{assert,
-deassert} only set specific bits in registers (no pm_runtime* calls).
-
-The PHY driver is taking its PHY reset in probe and release it in remove().
-With this approach the newly introduced SYSC signal will be
-de-asserted/asserted only in the PHY reset probe/remove (either if it is
-handled though PM domain or reset control signal).
-
-If the SYSC signal would be passed to all the blocks in the USB area (and
-it would be handled though PM domains) it should be no problem either,
-AFAICT, because of reference counting the pm_runtime_get|put*() is taking
-care of. As the PHY reset is the root node the in the devices node tree for
-USB the reference counting should work, too (I may miss something though,
-please correct me if I'm wrong).
-
-If the SYSC signal would be handled though a reset control driver (as
-proposed in this series) and we want to pass this reference to all the
-blocks in the USB area then we can request the reset signal as shared and,
-AFAIK, this is also reference counted. The devices node tree should help
-with the order, too, if I'm not wrong.
-
-Thank you for looking at this,
-Claudiu Beznea
-
-> 
-> [...]
-> 
-> Kind regards
-> Uffe
+Reviewed-by: Simon Horman <horms@kernel.org>
 
