@@ -1,143 +1,79 @@
-Return-Path: <linux-usb+bounces-14424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC9E9672DE
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 19:41:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95E7E967318
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 21:14:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E16EC1F220BE
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 17:41:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53A861F20FB3
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 19:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6574D13E02D;
-	Sat, 31 Aug 2024 17:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F91717C7B3;
+	Sat, 31 Aug 2024 19:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oqlnvGnQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DhH6jfKf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9F2B658;
-	Sat, 31 Aug 2024 17:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CDC17ADE8;
+	Sat, 31 Aug 2024 19:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725126071; cv=none; b=D2F/tRJv27LkQGz10e66tu8bhkh28RY75AQnyF+cmpwY8ZFrvTewvidhNWltX0YSlV5t1yfAuo9AmXl/8S23KJhUM7F6CNt+w5UiFd1REfSnIG65JOE7AommUmuIVgs2RIqp4TFZxVqp5nsPeP9JMkemTMRGHBt4ccL6R6dn5qM=
+	t=1725131633; cv=none; b=H+Nv3ekOCAz1KO0EeinHBgN/DvmOmSLfpRY7CWac3OuwiY/adf/3xq8iEkZvoYC6vgNfXzoC5YOEIzY8M4m4MXacsb4g3zy42hqz3PvHcZHXAdn2Qyh9CflX+DpY3UuawOKqX5vCn6tirGEKoY/zubXcRjCKdlIlhr6Qq41YSIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725126071; c=relaxed/simple;
-	bh=hLLbX4Dn2Yresy0z9IosCGN6MOmzaAkR5HPRUGcVyK4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HHKY5voEVi7d8eu1ugEvZtVqlnAH81v1lFgz79Zu8v9MQ0nGsm9ETx/pzy1meRg0fDf+jQMlJCuL0ADFklcP6AWWFE8O0KQjtUnqQ03/MTPLaYhGJYDaeRUX0B/929y3jNuoWsdCLfOacwHLvL0mYICShjUa2Ny1a5A2LZuo0F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oqlnvGnQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE11C4CEC0;
-	Sat, 31 Aug 2024 17:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725126070;
-	bh=hLLbX4Dn2Yresy0z9IosCGN6MOmzaAkR5HPRUGcVyK4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=oqlnvGnQHCBnLqGDsxbMF5MnxbFhgs9F3/PosLykJvoSj/Ql2nJT+6n/lAJGI/CmX
-	 0QEHXuBtpOScu5dauO2lCiBGvnum015iZmHSU8WPjO4/pSWf/2NqAdJoGH/FVQrnJw
-	 SV2jdqAGNCq0Aorun13o5yEb1VnQghZXu2mYz75g=
-Date: Sat, 31 Aug 2024 19:41:07 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.11-rc6
-Message-ID: <ZtNVs1boCTfsIu_3@kroah.com>
+	s=arc-20240116; t=1725131633; c=relaxed/simple;
+	bh=RYG3gy/oG2IMT9vBe2RFrC5np4vuiADPid5nAhxY3vc=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=EEv0H1k7hM1M94UYrMEtA57rmwedRn3HUqegAGgHhH/mFI6sDi9SzWKqtIN1dbaLXx1oejdQHhWyUNWqYMJPzeprRpUksdOt9ldMguj6TYId50hQ0Dg+UDXIKWOkvk2M72jQRyxRjw6tSltHGOv2cp+ysQPBw39yaZHhox5ZtH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DhH6jfKf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF31C4CEC0;
+	Sat, 31 Aug 2024 19:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725131633;
+	bh=RYG3gy/oG2IMT9vBe2RFrC5np4vuiADPid5nAhxY3vc=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=DhH6jfKfn9gOozgU/jOSQVOpco47aqq75aa+V93A44VvPbZSDz51ENpof/VkXsmKN
+	 oA/iZ041hy64A53LeubEQHui+7H7LXSMT54m2wQV4GDqOEhnKUKhIYPG3BJglrby8/
+	 uE7XFPJD5N6Tw/UlXUHZNOJWogUMhM/UoPp+5aMmCU8neT6rGmN95ox3aFgenk8w21
+	 iRa5AHx5JPyXmN/GIC7dwVdsrsFp0mesR/YSuHckP90Y4Q7fRuAMcsHg1P9hQkuvzJ
+	 12xtZiPUAKc8V3R0U58IE0lblWIwMQZChML4rVlpmtV83ZcBGPPoOmTFWrKJjb1acp
+	 tOVQkpS8XPfDg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C333809A80;
+	Sat, 31 Aug 2024 19:13:55 +0000 (UTC)
+Subject: Re: [GIT PULL] USB / Thunderbolt driver fixes for 6.11-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZtNVkRAgDKh7q0Nn@kroah.com>
+References: <ZtNVkRAgDKh7q0Nn@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZtNVkRAgDKh7q0Nn@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc6
+X-PR-Tracked-Commit-Id: 58c2fa54257d640c83137b44e12c174fd660a485
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e8784b0aef62cd6117e1c93c64d060e4c7314a1f
+Message-Id: <172513163392.2915779.17711697234749117283.pr-tracker-bot@kernel.org>
+Date: Sat, 31 Aug 2024 19:13:53 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-[resend with correct subject line this time, sorry about that...]
+The pull request you sent on Sat, 31 Aug 2024 19:40:33 +0200:
 
-The following changes since commit 47ac09b91befbb6a235ab620c32af719f8208399:
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc6
 
-  Linux 6.11-rc4 (2024-08-18 13:17:27 -0700)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e8784b0aef62cd6117e1c93c64d060e4c7314a1f
 
-are available in the Git repository at:
+Thank you!
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc6
-
-for you to fetch changes up to 58c2fa54257d640c83137b44e12c174fd660a485:
-
-  Merge tag 'usb-serial-6.11-rc6' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2024-08-30 15:41:18 +0200)
-
-----------------------------------------------------------------
-USB fixes for 6.11-rc6
-
-Here are some small USB fixes for 6.11-rc6.  Included in here are:
-  - dwc3 driver fixes for reported issues
-  - MAINTAINER file update, marking a driver as unsupported :(
-  - cdnsp driver fixes
-  - USB gadget driver fix
-  - USB sysfs fix
-  - other tiny fixes
-  - new device ids for usb serial driver
-
-All of these have been in linux-next this week with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      dt-bindings: usb: microchip,usb2514: Fix reference USB device schema
-
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-6.11-rc6' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Ian Ray (1):
-      cdc-acm: Add DISABLE_ECHO quirk for GE HealthCare UI Controller
-
-Krzysztof Kozlowski (4):
-      usb: dwc3: omap: add missing depopulate in probe error path
-      usb: dwc3: xilinx: add missing depopulate in probe error path
-      usb: dwc3: st: fix probed platform device ref count on probe error path
-      usb: dwc3: st: add missing depopulate in probe error path
-
-Laurent Pinchart (1):
-      MAINTAINERS: Mark UVC gadget driver as orphan
-
-Luca Weiss (1):
-      usb: typec: fsa4480: Relax CHIP_ID check
-
-Michael Grzeschik (1):
-      usb: dwc3: ep0: Don't reset resource alloc flag (including ep0)
-
-Pawel Laszczak (2):
-      usb: cdnsp: fix incorrect index in cdnsp_get_hw_deq function
-      usb: cdnsp: fix for Link TRB with TC
-
-Selvarasu Ganesan (1):
-      usb: dwc3: core: Prevent USB core invalid event buffer address access
-
-Xu Yang (1):
-      usb: gadget: uvc: queue pump work in uvcg_video_enable()
-
-ZHANG Yuntian (1):
-      USB: serial: option: add MeiG Smart SRM825L
-
-Zijun Hu (1):
-      usb: core: sysfs: Unmerge @usb3_hardware_lpm_attr_group in remove_power_attributes()
-
- .../devicetree/bindings/usb/microchip,usb2514.yaml |  9 ++++++-
- MAINTAINERS                                        |  4 +--
- drivers/usb/cdns3/cdnsp-gadget.h                   |  3 +++
- drivers/usb/cdns3/cdnsp-ring.c                     | 30 +++++++++++++++++++++-
- drivers/usb/class/cdc-acm.c                        |  3 +++
- drivers/usb/core/sysfs.c                           |  1 +
- drivers/usb/dwc3/core.c                            |  8 ++++++
- drivers/usb/dwc3/dwc3-omap.c                       |  4 ++-
- drivers/usb/dwc3/dwc3-st.c                         | 16 +++++-------
- drivers/usb/dwc3/dwc3-xilinx.c                     |  7 ++++-
- drivers/usb/dwc3/ep0.c                             |  3 ++-
- drivers/usb/gadget/function/uvc_video.c            |  1 +
- drivers/usb/serial/option.c                        |  5 ++++
- drivers/usb/typec/mux/fsa4480.c                    |  2 +-
- 14 files changed, 78 insertions(+), 18 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
