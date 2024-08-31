@@ -1,278 +1,186 @@
-Return-Path: <linux-usb+bounces-14415-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14416-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BBBC96711B
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 13:12:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D773E96720F
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 16:21:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEFC91F22970
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 11:12:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 949532835A0
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 14:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C4117DFEB;
-	Sat, 31 Aug 2024 11:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F3281862A;
+	Sat, 31 Aug 2024 14:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DHzdAQ/B"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M/Jx/mNx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB1317CA04
-	for <linux-usb@vger.kernel.org>; Sat, 31 Aug 2024 11:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0F2B658
+	for <linux-usb@vger.kernel.org>; Sat, 31 Aug 2024 14:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725102723; cv=none; b=RaIFrZi9FODO7Z0eJRi2RNNfRra3ic/on4pNYprImIbEtaS4vpYRsSJcEdRg878cskBLT8Iz98ZL6RcH5ZA6i7GSIJu836RUOntou3hi7qr3w0ubvRV2Iew75UDVwbntjMVJO35UYVk96y/MltkqVmx33uyP6zVPzsVk0eVnyuU=
+	t=1725114059; cv=none; b=WzS7oyUrFN0R1tq04z4asNIVQ+4Z0SsjyTz3O6zrTXMbAJZMcbeiqHbLTQGyh8aP7XockGVAQtr6+XbyNQMhrvMKMS+lpljGAkTEzyMvnmvJOs8wznFUeQu5YTPbvzxT30YSVN9Bekfbl/IV2A3Oq18IVET/5fJEM+3mTDCKeiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725102723; c=relaxed/simple;
-	bh=8cTokwO9xffOx9EyeWmFi5fC7VO9RBRqWZRfzyZ+wuM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=aLZfHnVbGm1TQr3QH52BqUNAXgDMcR8p1zEmmRPmAbGd5IBt9SSXZR3LzWbLJs+bBa+EYxPqcyNZXCaZlqbOiwW/jTqmaG/ypU8HAUHN8a2HCaoKaEllQa9hJmGjg3cS46JCvXypYA6r+9m9tV9/8zE8PZveRWef+MxLU0nN7vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DHzdAQ/B; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725102722; x=1756638722;
-  h=date:from:to:cc:subject:message-id;
-  bh=8cTokwO9xffOx9EyeWmFi5fC7VO9RBRqWZRfzyZ+wuM=;
-  b=DHzdAQ/BxYxkZ8cCGhBB36QMItx4D8OlQf70irvKNZlkT/rz3q30hwIy
-   A906LEUs/cq5tDmZfhgHeG015Im5hphTVcu5IYytcIvyQY3nNu8kHg9EK
-   6xPVJVp4mY8c6PELBDtDHt3y2MecFYqMNsAWVFkHYfJiDnBoyAfAGiRz0
-   uOiuhRtS/aa+qLgxV3WJ4x9VtNSQPy5sMFWtiHGDJVvLWGJaqlYMMJgCY
-   3CGERrui8g35gN97X20Z1Ebu+cy1rd3DDKrcXFgGWN9imfy1GU3ccQLZN
-   Uq9R2xbSgvuyKB++/DBiOp6g+M34BFBNj+wTWks/Zs86sIqzljNMurPSH
-   A==;
-X-CSE-ConnectionGUID: L3JO2CWOQSud7NUgeJk0PA==
-X-CSE-MsgGUID: 9pzCY/nqT5iw/f1dulkzTw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="46247211"
-X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="46247211"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 04:12:01 -0700
-X-CSE-ConnectionGUID: sH2APT8WRaOJ2oFS9OCKkA==
-X-CSE-MsgGUID: 8/KE/YcYSnyaoi1oc0CN1Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="64882648"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 31 Aug 2024 04:12:00 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1skM1N-0002ey-2U;
-	Sat, 31 Aug 2024 11:11:57 +0000
-Date: Sat, 31 Aug 2024 19:11:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 58c2fa54257d640c83137b44e12c174fd660a485
-Message-ID: <202408311913.A3gyaS77-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1725114059; c=relaxed/simple;
+	bh=lbityyGP4xdCPcfLsCBTHYFt9GdQygLpiJlwf6xaapk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g46FtWEy5ZVHZEcdFeLF50DoV8G4lIwYYSHKmxG1cZXyWDE7Z7WIDnj8zjpcZLpLgrF9BAoi2puTqEZR6I6G2nVxYvCRF9/zMeSuKKMDcbi+kbpqwiQEfa7IsdIRC3MrnsAInSOqLCKXKIkCIR0OpOSOAQq5zd1gywZVRukJPF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M/Jx/mNx; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725114055;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=G4fRU4GXiLRr9tyWkx+zPFkdV4614FpRfFryE8h7iDU=;
+	b=M/Jx/mNx3NUr1o1/1SGdYXvQSR1pEBgCvKynXu0/vEni0j3L4QWkKH4sHeM+WEIiJXCRRG
+	vZBnRcQ/5vVdG+v0pNfk4SZHkGRN8YXZxGCq60VOLXQ6JqomcnprplSvXTDa9cFeg2KuAN
+	bK/ppFPXxBM9b7rmyOLyOQs2Mtfbr+g=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-519-5oMSUygFNq6SBHUQxEOdqg-1; Sat,
+ 31 Aug 2024 10:20:54 -0400
+X-MC-Unique: 5oMSUygFNq6SBHUQxEOdqg-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F6B41955BEF;
+	Sat, 31 Aug 2024 14:20:50 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.42])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5DC7F30001A4;
+	Sat, 31 Aug 2024 14:20:45 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Enric Balletbo Serra <enric.balletbo@collabora.com>,
+	Andrey Smirnov <andrew.smirnov@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-phy@lists.infradead.org
+Subject: [PATCH 0/6] power: supply: Change usb_types from an array into a bitmask
+Date: Sat, 31 Aug 2024 16:20:33 +0200
+Message-ID: <20240831142039.28830-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 58c2fa54257d640c83137b44e12c174fd660a485  Merge tag 'usb-serial-6.11-rc6' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+Hi All,
 
-elapsed time: 1244m
+When support for the "charge_behaviour" property was added the list of
+available values was made a bitmask in power_supply_desc.
 
-configs tested: 185
-configs skipped: 5
+"usb_types" is very similar in that:
+1. It is an enum
+2. The list of available values is stored in power_supply_desc
+3. When shown it shows all available values, with the active one surrounded
+   by square brackets.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+But "usb_types" uses an array with valid enum values instead of a bitmask.
+This uses more memory then the bitmap approach and it makes it impossible
+to have a shared generic show() function for properties which show
+available values, with the active one surrounded by square brackets.
 
-tested configs:
-alpha                             allnoconfig   gcc-14.1.0
-alpha                            allyesconfig   clang-20
-alpha                               defconfig   gcc-14.1.0
-arc                              allmodconfig   clang-20
-arc                               allnoconfig   gcc-14.1.0
-arc                              allyesconfig   clang-20
-arc                                 defconfig   gcc-14.1.0
-arc                        nsimosci_defconfig   clang-20
-arc                   randconfig-001-20240831   gcc-14.1.0
-arc                   randconfig-002-20240831   gcc-14.1.0
-arm                              allmodconfig   clang-20
-arm                               allnoconfig   gcc-14.1.0
-arm                              allyesconfig   clang-20
-arm                                 defconfig   gcc-14.1.0
-arm                          ep93xx_defconfig   clang-20
-arm                          gemini_defconfig   clang-20
-arm                      jornada720_defconfig   clang-20
-arm                         nhk8815_defconfig   clang-20
-arm                   randconfig-001-20240831   gcc-14.1.0
-arm                   randconfig-002-20240831   gcc-14.1.0
-arm                   randconfig-003-20240831   gcc-14.1.0
-arm                   randconfig-004-20240831   gcc-14.1.0
-arm                        realview_defconfig   clang-20
-arm                         vf610m4_defconfig   clang-20
-arm                    vt8500_v6_v7_defconfig   clang-20
-arm64                            allmodconfig   clang-20
-arm64                             allnoconfig   gcc-14.1.0
-arm64                               defconfig   clang-20
-arm64                               defconfig   gcc-14.1.0
-arm64                 randconfig-001-20240831   gcc-14.1.0
-arm64                 randconfig-002-20240831   gcc-14.1.0
-arm64                 randconfig-003-20240831   gcc-14.1.0
-arm64                 randconfig-004-20240831   gcc-14.1.0
-csky                              allnoconfig   gcc-14.1.0
-csky                                defconfig   gcc-14.1.0
-csky                  randconfig-001-20240831   gcc-14.1.0
-csky                  randconfig-002-20240831   gcc-14.1.0
-hexagon                          alldefconfig   clang-20
-hexagon                          allmodconfig   clang-20
-hexagon                           allnoconfig   gcc-14.1.0
-hexagon                          allyesconfig   clang-20
-hexagon                             defconfig   gcc-14.1.0
-hexagon               randconfig-001-20240831   gcc-14.1.0
-hexagon               randconfig-002-20240831   gcc-14.1.0
-i386                             allmodconfig   clang-18
-i386                              allnoconfig   clang-18
-i386                             allyesconfig   clang-18
-i386         buildonly-randconfig-001-20240831   clang-18
-i386         buildonly-randconfig-002-20240831   clang-18
-i386         buildonly-randconfig-003-20240831   clang-18
-i386         buildonly-randconfig-004-20240831   clang-18
-i386         buildonly-randconfig-005-20240831   clang-18
-i386         buildonly-randconfig-006-20240831   clang-18
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240831   clang-18
-i386                  randconfig-002-20240831   clang-18
-i386                  randconfig-003-20240831   clang-18
-i386                  randconfig-004-20240831   clang-18
-i386                  randconfig-005-20240831   clang-18
-i386                  randconfig-006-20240831   clang-18
-i386                  randconfig-011-20240831   clang-18
-i386                  randconfig-012-20240831   clang-18
-i386                  randconfig-013-20240831   clang-18
-i386                  randconfig-014-20240831   clang-18
-i386                  randconfig-015-20240831   clang-18
-i386                  randconfig-016-20240831   clang-18
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch                           defconfig   gcc-14.1.0
-loongarch             randconfig-001-20240831   gcc-14.1.0
-loongarch             randconfig-002-20240831   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-m68k                          amiga_defconfig   clang-20
-m68k                                defconfig   gcc-14.1.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-microblaze                          defconfig   gcc-14.1.0
-mips                              allnoconfig   gcc-14.1.0
-mips                            gpr_defconfig   clang-20
-mips                          malta_defconfig   clang-20
-mips                      malta_kvm_defconfig   clang-20
-mips                        omega2p_defconfig   clang-20
-mips                         rt305x_defconfig   clang-20
-nios2                            alldefconfig   clang-20
-nios2                             allnoconfig   gcc-14.1.0
-nios2                               defconfig   gcc-14.1.0
-nios2                 randconfig-001-20240831   gcc-14.1.0
-nios2                 randconfig-002-20240831   gcc-14.1.0
-openrisc                          allnoconfig   clang-20
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-12
-openrisc                  or1klitex_defconfig   clang-20
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   clang-20
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-12
-parisc                generic-64bit_defconfig   clang-20
-parisc                randconfig-001-20240831   gcc-14.1.0
-parisc                randconfig-002-20240831   gcc-14.1.0
-parisc64                            defconfig   gcc-14.1.0
-powerpc                    adder875_defconfig   clang-20
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   clang-20
-powerpc                          allyesconfig   gcc-14.1.0
-powerpc                 canyonlands_defconfig   clang-20
-powerpc                       ebony_defconfig   clang-20
-powerpc                    gamecube_defconfig   clang-20
-powerpc                       maple_defconfig   clang-20
-powerpc                 mpc834x_itx_defconfig   clang-20
-powerpc                    mvme5100_defconfig   clang-20
-powerpc               randconfig-001-20240831   gcc-14.1.0
-powerpc                  storcenter_defconfig   clang-20
-powerpc                     tqm8540_defconfig   clang-20
-powerpc64             randconfig-001-20240831   gcc-14.1.0
-powerpc64             randconfig-002-20240831   gcc-14.1.0
-powerpc64             randconfig-003-20240831   gcc-14.1.0
-riscv                            allmodconfig   gcc-14.1.0
-riscv                             allnoconfig   clang-20
-riscv                            allyesconfig   gcc-14.1.0
-riscv                               defconfig   gcc-12
-riscv                    nommu_k210_defconfig   clang-20
-riscv                 randconfig-001-20240831   gcc-14.1.0
-riscv                 randconfig-002-20240831   gcc-14.1.0
-s390                             allmodconfig   gcc-14.1.0
-s390                              allnoconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   gcc-12
-s390                  randconfig-001-20240831   gcc-14.1.0
-s390                  randconfig-002-20240831   gcc-14.1.0
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-12
-sh                    randconfig-001-20240831   gcc-14.1.0
-sh                    randconfig-002-20240831   gcc-14.1.0
-sh                           se7780_defconfig   clang-20
-sh                   secureedge5410_defconfig   clang-20
-sh                        sh7763rdp_defconfig   clang-20
-sh                        sh7785lcr_defconfig   clang-20
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-12
-sparc64               randconfig-001-20240831   gcc-14.1.0
-sparc64               randconfig-002-20240831   gcc-14.1.0
-um                               allmodconfig   clang-20
-um                                allnoconfig   clang-20
-um                               allyesconfig   clang-20
-um                                  defconfig   gcc-12
-um                             i386_defconfig   gcc-12
-um                    randconfig-001-20240831   gcc-14.1.0
-um                    randconfig-002-20240831   gcc-14.1.0
-um                           x86_64_defconfig   gcc-12
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240831   clang-18
-x86_64       buildonly-randconfig-002-20240831   clang-18
-x86_64       buildonly-randconfig-003-20240831   clang-18
-x86_64       buildonly-randconfig-004-20240831   clang-18
-x86_64       buildonly-randconfig-005-20240831   clang-18
-x86_64       buildonly-randconfig-006-20240831   clang-18
-x86_64                              defconfig   clang-18
-x86_64                randconfig-001-20240831   clang-18
-x86_64                randconfig-002-20240831   clang-18
-x86_64                randconfig-003-20240831   clang-18
-x86_64                randconfig-004-20240831   clang-18
-x86_64                randconfig-005-20240831   clang-18
-x86_64                randconfig-006-20240831   clang-18
-x86_64                randconfig-011-20240831   clang-18
-x86_64                randconfig-012-20240831   clang-18
-x86_64                randconfig-013-20240831   clang-18
-x86_64                randconfig-014-20240831   clang-18
-x86_64                randconfig-015-20240831   clang-18
-x86_64                randconfig-016-20240831   clang-18
-x86_64                randconfig-071-20240831   clang-18
-x86_64                randconfig-072-20240831   clang-18
-x86_64                randconfig-073-20240831   clang-18
-x86_64                randconfig-074-20240831   clang-18
-x86_64                randconfig-075-20240831   clang-18
-x86_64                randconfig-076-20240831   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-14.1.0
-xtensa                randconfig-001-20240831   gcc-14.1.0
-xtensa                randconfig-002-20240831   gcc-14.1.0
+This patch-set moves "usb_types" over to a bitmask in power_supply_desc
+to indicate the available values.
+
+Patches 1 - 3:
+
+It turns out that the ucs1002-power driver contained a surprise in that
+it supports writing to "usb_type" even though the ABI doc says it is
+read-only. Since we cannot break shipped userspace API, the ship has sailed
+on this one. The first patch documents that writing "usb_type" is allowed,
+but only for power-supply devices which provide USB power rather then
+consume it.
+
+Enum properties accept writing the FOO_TEXT[] string values, passing
+the enum value matching the FOO_TEXT entry to set_property(), the second
+patch adjusts ucs1002_set_usb_type() to directly accept enum values.
+
+The rt9467 driver was another driver which allowed writing to "usb_type"
+but there the use made no sense, so it is simply dropped.
+
+Patches 4 - 6:
+
+These patches implement the actual moving of usb_types to a bitmask.
+
+Patch 6 is a bit of a bigbang patch moving all drivers over in one go,
+touching a couple of drivers outside drivers/power/supply: 1 in
+drivers/extcon/ 1 in drivers/phy/ and 5 in drivers/usb/typec/ since
+the changes outside of drivers/power/supply are small I've chosen to
+make all the changes in one go rather then have some sort of
+intermediate state where both ways are supported.
+
+For merging this I believe it would be best for an immutable branch / tag
+to be created on the linux-power-supply tree and then send a pull-request
+to the extcon, phy and usb-typec maintainers to merge the tag.
+
+extcon, phy and typec maintainers can you please give your Acked-by for
+patch 6/6 for merging these changes through the linux-power-supply tree?
+
+This set is based on top of the latest linux-power-supply/for-next.
+
+Regards,
+
+Hans
+
+
+Hans de Goede (6):
+  power: supply: "usb_type" property may be written to
+  power: supply: ucs1002: Adjust ucs1002_set_usb_type() to accept string
+    values
+  power: supply: rt9467-charger: Remove "usb_type" property write
+    support
+  power: supply: sysfs: Add power_supply_show_enum_with_available()
+    helper
+  power: supply: sysfs: Move power_supply_show_enum_with_available() up
+  power: supply: Change usb_types from an array into a bitmask
+
+ Documentation/ABI/testing/sysfs-class-power   |  7 +-
+ drivers/extcon/extcon-intel-cht-wc.c          | 15 ++---
+ drivers/phy/ti/phy-tusb1210.c                 | 11 +---
+ drivers/power/supply/axp20x_usb_power.c       | 13 ++--
+ drivers/power/supply/bq256xx_charger.c        | 15 ++---
+ drivers/power/supply/cros_usbpd-charger.c     | 22 +++----
+ .../power/supply/lenovo_yoga_c630_battery.c   |  7 +-
+ drivers/power/supply/mp2629_charger.c         | 15 ++---
+ drivers/power/supply/mt6360_charger.c         | 13 ++--
+ drivers/power/supply/mt6370-charger.c         | 13 ++--
+ drivers/power/supply/power_supply_core.c      |  4 --
+ drivers/power/supply/power_supply_sysfs.c     | 66 ++++++-------------
+ drivers/power/supply/qcom_battmgr.c           | 37 ++++++-----
+ drivers/power/supply/qcom_pmi8998_charger.c   | 13 ++--
+ drivers/power/supply/rk817_charger.c          |  9 +--
+ drivers/power/supply/rn5t618_power.c          | 13 ++--
+ drivers/power/supply/rt9467-charger.c         | 16 ++---
+ drivers/power/supply/rt9471.c                 | 15 ++---
+ drivers/power/supply/ucs1002_power.c          | 26 ++++----
+ drivers/usb/typec/anx7411.c                   | 11 +---
+ drivers/usb/typec/rt1719.c                    | 11 +---
+ drivers/usb/typec/tcpm/tcpm.c                 | 11 +---
+ drivers/usb/typec/tipd/core.c                 |  9 +--
+ drivers/usb/typec/ucsi/psy.c                  | 11 +---
+ include/linux/power_supply.h                  |  3 +-
+ 25 files changed, 132 insertions(+), 254 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.0
+
 
