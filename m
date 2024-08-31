@@ -1,79 +1,94 @@
-Return-Path: <linux-usb+bounces-14425-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14426-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E7E967318
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 21:14:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60F4C967325
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 21:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53A861F20FB3
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 19:14:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 935B61C2150C
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 19:41:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F91717C7B3;
-	Sat, 31 Aug 2024 19:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8A8170A24;
+	Sat, 31 Aug 2024 19:41:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DhH6jfKf"
+	dkim=pass (2048-bit key) header.d=diekuehnen.com header.i=@diekuehnen.com header.b="T7lf2pXs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.diekuehnen.com (mail.diekuehnen.com [78.47.205.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CDC17ADE8;
-	Sat, 31 Aug 2024 19:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48C2524F;
+	Sat, 31 Aug 2024 19:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.47.205.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725131633; cv=none; b=H+Nv3ekOCAz1KO0EeinHBgN/DvmOmSLfpRY7CWac3OuwiY/adf/3xq8iEkZvoYC6vgNfXzoC5YOEIzY8M4m4MXacsb4g3zy42hqz3PvHcZHXAdn2Qyh9CflX+DpY3UuawOKqX5vCn6tirGEKoY/zubXcRjCKdlIlhr6Qq41YSIQ=
+	t=1725133291; cv=none; b=hBHxFFPevRvX+UTVdOJ0MEJwD34hjpfR+JK5qMHQAvqTH0RMIsVcYbf3atmfcf+YheSjW0mBND/NzqjN4bFGtBlBER98xeScWYizh/OsxSO6sV5Ob5EDFu9a0AmRngT9TbokeqVr1Y6ixA200cKOsC6hn1JlPYVbNRjPzGBhgxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725131633; c=relaxed/simple;
-	bh=RYG3gy/oG2IMT9vBe2RFrC5np4vuiADPid5nAhxY3vc=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=EEv0H1k7hM1M94UYrMEtA57rmwedRn3HUqegAGgHhH/mFI6sDi9SzWKqtIN1dbaLXx1oejdQHhWyUNWqYMJPzeprRpUksdOt9ldMguj6TYId50hQ0Dg+UDXIKWOkvk2M72jQRyxRjw6tSltHGOv2cp+ysQPBw39yaZHhox5ZtH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DhH6jfKf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF31C4CEC0;
-	Sat, 31 Aug 2024 19:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725131633;
-	bh=RYG3gy/oG2IMT9vBe2RFrC5np4vuiADPid5nAhxY3vc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=DhH6jfKfn9gOozgU/jOSQVOpco47aqq75aa+V93A44VvPbZSDz51ENpof/VkXsmKN
-	 oA/iZ041hy64A53LeubEQHui+7H7LXSMT54m2wQV4GDqOEhnKUKhIYPG3BJglrby8/
-	 uE7XFPJD5N6Tw/UlXUHZNOJWogUMhM/UoPp+5aMmCU8neT6rGmN95ox3aFgenk8w21
-	 iRa5AHx5JPyXmN/GIC7dwVdsrsFp0mesR/YSuHckP90Y4Q7fRuAMcsHg1P9hQkuvzJ
-	 12xtZiPUAKc8V3R0U58IE0lblWIwMQZChML4rVlpmtV83ZcBGPPoOmTFWrKJjb1acp
-	 tOVQkpS8XPfDg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C333809A80;
-	Sat, 31 Aug 2024 19:13:55 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt driver fixes for 6.11-rc4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZtNVkRAgDKh7q0Nn@kroah.com>
-References: <ZtNVkRAgDKh7q0Nn@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZtNVkRAgDKh7q0Nn@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc6
-X-PR-Tracked-Commit-Id: 58c2fa54257d640c83137b44e12c174fd660a485
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e8784b0aef62cd6117e1c93c64d060e4c7314a1f
-Message-Id: <172513163392.2915779.17711697234749117283.pr-tracker-bot@kernel.org>
-Date: Sat, 31 Aug 2024 19:13:53 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	s=arc-20240116; t=1725133291; c=relaxed/simple;
+	bh=Z01ZmUqepmagPSiRrE/hPtUaOltU1UjTBA+jKJSPPQ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=d3SWdAch/QixgfKqa28JGsmcpKBpGEpFwfBTkQDbFHz8tbecYiVyhyOl0mXw/6laTW5ZaGubzpx7CQxEQsKZmYhDG7oSo06zutLGkB1OCaaLwiLxJyiygj8siCzW3UYlTS7PuxvyTr2NvlrGbOD57IuchynOBD5TKNNGKqJ3VqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=diekuehnen.com; spf=pass smtp.mailfrom=diekuehnen.com; dkim=pass (2048-bit key) header.d=diekuehnen.com header.i=@diekuehnen.com header.b=T7lf2pXs; arc=none smtp.client-ip=78.47.205.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=diekuehnen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diekuehnen.com
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 17CBA7E699;
+	Sat, 31 Aug 2024 21:36:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=diekuehnen.com;
+	s=dkim; t=1725132967;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=46QX0kuhx180X/8BVQKfdic538oR3Z6r3UiNROg8Mi8=;
+	b=T7lf2pXsSKOnmASVTCVThS7v+FSiSl+ZgeUhKY/kPdUlCRCWjb+hHnoj/rHaBsnEU+lj1h
+	et9GEtGPAYjp5isu1sRgRrmL44oBlOYNl/NV5dDEZecEi6aJqrfFwS90nQxUF9Ee1xOzfR
+	v2tsGDtD0Se+IENU7xyLpg0q5Aelm7J5fJPJYaM56xA+2Oj2w1mbCgN9vVYdTCR/g87LZz
+	ajljGKi1MYGSF5oQRQRtedXIYUjDKsc7TWxcCLmggbZmDGHqRr++uzPpm0nJQViJi2BgBF
+	JIvtc23HLLmXj+BJb4lv+rNQWcYZL918sHbUp3UbCxFaJrXVcP7xqhuu+HEb8w==
+From: =?UTF-8?q?Andreas=20K=C3=BChn?= <andreas.kuehn@diekuehnen.com>
+To: avifishman70@gmail.com,
+	tmaimon77@gmail.com,
+	tali.perry1@gmail.com,
+	venture@google.com,
+	yuenn@google.com,
+	benjaminfair@google.com,
+	peter.chen@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: openbmc@lists.ozlabs.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Andreas=20K=C3=BChn?= <andreas.kuehn@diekuehnen.com>
+Subject: [PATCH] usb: chipidea: npcm: Fix coding style with missing space
+Date: Sat, 31 Aug 2024 21:34:06 +0200
+Message-ID: <20240831193407.11302-1-andreas.kuehn@diekuehnen.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-The pull request you sent on Sat, 31 Aug 2024 19:40:33 +0200:
+Fixed coding style issue: added missing space.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc6
+Signed-off-by: Andreas Kühn <andreas.kuehn@diekuehnen.com>
+---
+ drivers/usb/chipidea/ci_hdrc_npcm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e8784b0aef62cd6117e1c93c64d060e4c7314a1f
-
-Thank you!
-
+diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea/ci_hdrc_npcm.c
+index b14127873c55..c89c68f41ccc 100644
+--- a/drivers/usb/chipidea/ci_hdrc_npcm.c
++++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
+@@ -28,7 +28,7 @@ static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned event)
+ 		hw_write(ci, OP_USBMODE, 0xffffffff, 0x0);
+ 		break;
+ 	default:
+-		dev_dbg(dev, "unknown ci_hdrc event (%d)\n",event);
++		dev_dbg(dev, "unknown ci_hdrc event (%d)\n", event);
+ 		break;
+ 	}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.0
+
 
