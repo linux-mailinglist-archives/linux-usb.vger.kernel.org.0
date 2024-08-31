@@ -1,86 +1,177 @@
-Return-Path: <linux-usb+bounces-14412-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14413-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E147C966FCC
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 08:37:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD19C967073
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 11:19:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40B292832E4
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 06:37:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E1AB1F22C48
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 09:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D055C16A94F;
-	Sat, 31 Aug 2024 06:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93906170A3E;
+	Sat, 31 Aug 2024 09:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lum5L+QF"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="lOCgYrI3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CACB1E493;
-	Sat, 31 Aug 2024 06:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5964919BB7;
+	Sat, 31 Aug 2024 09:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725086257; cv=none; b=kzv7fvthx1y8np62V/RuEGof8p5AvAKOWVkgtGrxIo/GiqXksNgU61Sy5CGstH7K9+ecig8/CXBYAG4X8u5TcEAcf3pd+Nurg4PkJ6AidiG4LDAGEr9yE5tSfvxaNS0qkd9FEoZkGEO04pd1d21aypVnu016OgvT+roPa1CKRu4=
+	t=1725095988; cv=none; b=aD7+VuM+z0/t9MNZcjUF9tddvY0020d23zBztlDOhI8kNQqejJjgYWoRuPc1e+9iDtbt41SWic6HkFxXCMoXdqcd95x3W4vhLmiMRIyYGrSysmNGzQqyrViuG6QX3D34wY3KRsfns3PIUkT66q9J2mz8DY5wiET82+JbKgukSMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725086257; c=relaxed/simple;
-	bh=pxlrmMDFHd0W0tM4PvmV3INhRV/Eun/aOkQWz5wLT0E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nc1ofHPDxItqbPjncwkQkv//jEmvqzusr2ZwEcgFmc+5dNf/80rpuBGY5fGL2gDHyUqw7UdARjn38up8T8UNF8vcdDq7Y1Y4GencvD/auuu6rXj+LKhn5AGScQEGcDUg8C2PW8k5eRloZQnLMebykZyCU1K+xySMjWiEWuNG7Bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lum5L+QF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DC92C4CEC0;
-	Sat, 31 Aug 2024 06:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725086257;
-	bh=pxlrmMDFHd0W0tM4PvmV3INhRV/Eun/aOkQWz5wLT0E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lum5L+QFBX4MuZJwCAkmn8D0WxrR5n9+JHo0aXMdwwuPOZXFrY8fo+aebCN9Enhck
-	 thcx5v+r8TZdH6LSIUZOf8mhLAToY8koj5hL2taFCYkdLfRezTu6cUXafhm15Cwwir
-	 otyeAZ6H7QhqRLqru8Nt0Vz+rXQD5zfkdfYKBFYlke7HZQA2gYzcuKps7BdaYCr059
-	 aWZAfQrh8ehO5z/XSBotMdFrvGR7O/m5waRHBOfSxnFkjqrJenirKlTCzx2Na3TomM
-	 Vn+8TIsnInV2OZkzV+0FUJukuDAl39qUIecsKgO9flopF1ffwReYrmJjKSmqOxejAY
-	 KJ6Jon00nnW1A==
-Date: Sat, 31 Aug 2024 08:37:33 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Rajendra Nayak <quic_rjendra@quicinc.com>, Sibi Sankar <quic_sibis@quicinc.com>, 
-	Johan Hovold <johan@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH RFC 1/2] dt-bindings: usb: Add Parade PS8830 Type-C
- retimer bindings
-Message-ID: <h6kxhvem4jsri44ztqpalofli2vpdwt6gvt322hv34pqggcwug@233j4uvdjsyq>
-References: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
- <20240829-x1e80100-ps8830-v1-1-bcc4790b1d45@linaro.org>
+	s=arc-20240116; t=1725095988; c=relaxed/simple;
+	bh=b5NU5go9SW9B7eo/ea+mH/zJwnL2pA1ziUG+9/WC+9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wrq12Wz+5uzY6KRu3y0VGvc2MIZFT3DSxWcMd4y3I5lWCNP/WX88hpZSAc4A7MfskkjH+LtB43s+3YJudZMJcIUvhF27CGvZmOPBUy2WPfcdCd6/7czhK0/o7FjzB0pkOAyN/Mp3CPepuAkNDjDEMjTyA3a/BEuMHKGyMjyU8K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=lOCgYrI3; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1725095953; x=1725700753; i=wahrenst@gmx.net;
+	bh=DCJM6CMJUU62uUqG060BsY+UBF9LmX3KRYG14zeCN44=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=lOCgYrI399GLa63LDSPh5EW2elI/NgrymunA7/8s8tAxhpVoW+3noM+EYCtv+eIZ
+	 BR08UBUpFfQzpV5hGx0nAtqAqEbvRnaeYxrsuT996nzjmQrhjZ4gVJWk5jRZbYAof
+	 w1PGH4vNU4c48mswNprIh7nGkcWcSZtfxRyuReDd25FcEK0VIHLePrjDXh4zgmtbH
+	 m1svDgwAygZVP8o6I13bHkgrXaENuqyR/14dO6wM1sEDa4AFVb2xD/w24/ebHbmVM
+	 fOs5HhznSB3hv5Md3HqElYOfy6arteqkGwhi9WSpkhRPUhNnM8et3OJL3o0gwb7Xz
+	 HGcrgeOy4alVQNmWDA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MYvY2-1sX2bg3y6a-00WVDP; Sat, 31
+ Aug 2024 11:19:13 +0200
+Message-ID: <7ba14fe2-38e0-414c-bc3d-62c1e70741ad@gmx.net>
+Date: Sat, 31 Aug 2024 11:19:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240829-x1e80100-ps8830-v1-1-bcc4790b1d45@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/9] mailbox: bcm2835: Fix timeout during suspend mode
+To: Jassi Brar <jassisinghbrar@gmail.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Doug Anderson <dianders@chromium.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, =?UTF-8?Q?Ma=C3=ADra_Canal?=
+ <mcanal@igalia.com>, Russell King <linux@armlinux.org.uk>,
+ Minas Harutyunyan <hminas@synopsys.com>, linux-pm@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kernel-list@raspberrypi.com, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240821214052.6800-1-wahrenst@gmx.net>
+ <20240821214052.6800-2-wahrenst@gmx.net>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20240821214052.6800-2-wahrenst@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:LHmw1KfsSaItuLqhBtv7gcE2AE8rQOkuLoH3Y1mUAtW48KNCQ6H
+ +zxuSDUOD3/UQ0MsI3HZwFJTu/WyaZn3+j6xUw8k421h56WyzSJDZTBfGHxrvEkkw8KYWEM
+ SKc8hJT3sBmz0KJ5Su+4fh+g3DbZ3tirJGHiCV6LrLEtok4VRnYVciZUbzOnfuGO77V8plW
+ Qr29fYuTJIZMw+eeFw90w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:GCjBaRtpmXg=;K7QcE9qCs2b8RuGubAZxIcNWAvp
+ Wtb4OuvQ/77mPUc7Ynl+S+De8oF8dxA1QusqUi9hqvE5ZkXh7zxx5VpwT5SV/fififXJ+7T1t
+ ACRCVNbU2lXyryXh/+JuzTMIJsCe3Ycmim25oRf+kPp/2a6XXItpyb97qoLAOEwoapBBfsxfT
+ XBsMQ36wrDwe8AqRqTz5++WQIBRQoUmqisu0XjAdRT0IRC5otUhlZuAXrn1IJIaO/Kjum1VU8
+ BnM7ID6EHU1KgND74TQknPT3K8LnPocgQsQHB5i88abm3k6lqG+ZvFEDRMyY0NMozU344u2fc
+ dPWoRt3ECcGhzwGCFk0wS5BkJEz7JvhCYvYPuiRgove1qiRBadDa1I3UhmEs1NrXsuoVKGXmx
+ oUsZ27hQbRs7Gf/XZlCvrQRtfpqk9UPmi+hkGQWRtBEN8ddf14zZOfm0u5WsMPRwl7xppJ0R8
+ AbB+ibHpCAeNWkfeRuTNUnIjwXSFeQrkZ9HRBpmrR5BBh2HwEzCtax9hXcUaLWlvHVBaWQ93u
+ CRyuaPZ8LYt8/VE2iC1QVZUCTk5c9gKhmO5fjODuqpw2id0YkSYNSv/GKsuUQP8HsWI1Xlwqa
+ WBt+5qeFTb3yA3xVhXbx16/kj5/NGgVbki6ecOR4x9Qo/ekHEKgM4AZCHUl0J3fZw4ebUpYyY
+ 1mom1slF7ofeeZ2wPEzsIBbI0Fe7zoAMUPWSmJWAzbW2MpIcrjuGdhgdfuao+j9vQctG1eSRR
+ thgWZpbAgev3jPnSAmvs5OU/YxsRWR2An4OJ9EQOo3KSJdDiBjj/l0jxS8jr+ixLqHKRExGT5
+ WU9G5J4kuK8b+c9KlLlm7pXA==
 
-On Thu, Aug 29, 2024 at 09:44:25PM +0300, Abel Vesa wrote:
-> Document bindings for the Parade PS8830 Type-C retimer. This retimer is
-> currently found on all boards featuring Qualcomm Snapdragon X Elite SoCs
-> and it is needed to provide altmode muxing between DP and USB.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Hi Jassi,
+
+Am 21.08.24 um 23:40 schrieb Stefan Wahren:
+> During noirq suspend phase the Raspberry Pi power driver suffer of
+> firmware property timeouts. The reason is that the IRQ of the underlying
+> BCM2835 mailbox is disabled and rpi_firmware_property_list() will always
+> run into a timeout [1].
+>
+> Since the VideoCore side isn't consider as a wakeup source, set the
+> IRQF_NO_SUSPEND flag for the mailbox IRQ in order to keep it enabled
+> during suspend-resume cycle.
+>
+> [1]
+> PM: late suspend of devices complete after 1.754 msecs
+> WARNING: CPU: 0 PID: 438 at drivers/firmware/raspberrypi.c:128
+>   rpi_firmware_property_list+0x204/0x22c
+> Firmware transaction 0x00028001 timeout
+> Modules linked in:
+> CPU: 0 PID: 438 Comm: bash Tainted: G         C         6.9.3-dirty #17
+> Hardware name: BCM2835
+> Call trace:
+> unwind_backtrace from show_stack+0x18/0x1c
+> show_stack from dump_stack_lvl+0x34/0x44
+> dump_stack_lvl from __warn+0x88/0xec
+> __warn from warn_slowpath_fmt+0x7c/0xb0
+> warn_slowpath_fmt from rpi_firmware_property_list+0x204/0x22c
+> rpi_firmware_property_list from rpi_firmware_property+0x68/0x8c
+> rpi_firmware_property from rpi_firmware_set_power+0x54/0xc0
+> rpi_firmware_set_power from _genpd_power_off+0xe4/0x148
+> _genpd_power_off from genpd_sync_power_off+0x7c/0x11c
+> genpd_sync_power_off from genpd_finish_suspend+0xcc/0xe0
+> genpd_finish_suspend from dpm_run_callback+0x78/0xd0
+> dpm_run_callback from device_suspend_noirq+0xc0/0x238
+> device_suspend_noirq from dpm_suspend_noirq+0xb0/0x168
+> dpm_suspend_noirq from suspend_devices_and_enter+0x1b8/0x5ac
+> suspend_devices_and_enter from pm_suspend+0x254/0x2e4
+> pm_suspend from state_store+0xa8/0xd4
+> state_store from kernfs_fop_write_iter+0x154/0x1a0
+> kernfs_fop_write_iter from vfs_write+0x12c/0x184
+> vfs_write from ksys_write+0x78/0xc0
+> ksys_write from ret_fast_syscall+0x0/0x54
+> Exception stack(0xcc93dfa8 to 0xcc93dff0)
+> [...]
+> PM: noirq suspend of devices complete after 3095.584 msecs
+>
+> Link: https://github.com/raspberrypi/firmware/issues/1894
+> Fixes: 0bae6af6d704 ("mailbox: Enable BCM2835 mailbox support")
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+gentle ping
 > ---
->  .../devicetree/bindings/usb/parade,ps8830.yaml     | 117 +++++++++++++++++++++
->  1 file changed, 117 insertions(+)
-> 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+>   drivers/mailbox/bcm2835-mailbox.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mailbox/bcm2835-mailbox.c b/drivers/mailbox/bcm2835-mailbox.c
+> index fbfd0202047c..ea12fb8d2401 100644
+> --- a/drivers/mailbox/bcm2835-mailbox.c
+> +++ b/drivers/mailbox/bcm2835-mailbox.c
+> @@ -145,7 +145,8 @@ static int bcm2835_mbox_probe(struct platform_device *pdev)
+>   	spin_lock_init(&mbox->lock);
+>
+>   	ret = devm_request_irq(dev, irq_of_parse_and_map(dev->of_node, 0),
+> -			       bcm2835_mbox_irq, 0, dev_name(dev), mbox);
+> +			       bcm2835_mbox_irq, IRQF_NO_SUSPEND, dev_name(dev),
+> +			       mbox);
+>   	if (ret) {
+>   		dev_err(dev, "Failed to register a mailbox IRQ handler: %d\n",
+>   			ret);
+> --
+> 2.34.1
+>
 
 
