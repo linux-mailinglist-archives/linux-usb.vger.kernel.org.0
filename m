@@ -1,202 +1,278 @@
-Return-Path: <linux-usb+bounces-14414-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14415-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C28099670E9
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 12:32:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BBBC96711B
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 13:12:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F36A11C21671
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 10:32:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEFC91F22970
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2024 11:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 126C5176AA5;
-	Sat, 31 Aug 2024 10:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C4117DFEB;
+	Sat, 31 Aug 2024 11:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K79//bN8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DHzdAQ/B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080AA1531E9
-	for <linux-usb@vger.kernel.org>; Sat, 31 Aug 2024 10:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB1317CA04
+	for <linux-usb@vger.kernel.org>; Sat, 31 Aug 2024 11:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725100362; cv=none; b=bewjavXDGWkFoMzsb/H+TYdar9Zi0uXWCjup9fcYn+5tztm4EC5u20i3mJ4SEYc8OZCkJu6VhYnlJ3m0pTayVGvIQ0HBu4tk/bB7qVnYx1/IMjPfVJaZN7mHgESStAg4Ci6Pfx1ViJ7yULXSOnxt4tHj0AxGaG8BZSyblD2c6K4=
+	t=1725102723; cv=none; b=RaIFrZi9FODO7Z0eJRi2RNNfRra3ic/on4pNYprImIbEtaS4vpYRsSJcEdRg878cskBLT8Iz98ZL6RcH5ZA6i7GSIJu836RUOntou3hi7qr3w0ubvRV2Iew75UDVwbntjMVJO35UYVk96y/MltkqVmx33uyP6zVPzsVk0eVnyuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725100362; c=relaxed/simple;
-	bh=LS7JjNLNOai5U4tKMxi9bIxoMnNaywIh2Nz/2XzTViE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S8gED11WUDv/HFlteFge7UEuqMxHAwKQiLJfdFUxopFlqWQz/v5T9AqOp+GmnDsoR9wPkKJIMwZC3BkHiGaCble0XqByRJWQGeh5AXJvkvuwS1cyVQKCWShO5q4UYMHgQmGg/g50a3VrdhHpuTdonFYysZ3rrrcGYeLIDhq9Obo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K79//bN8; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dff1ccdc17bso2837884276.0
-        for <linux-usb@vger.kernel.org>; Sat, 31 Aug 2024 03:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725100360; x=1725705160; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKxIacQXeZ2qcUvNmDUUVII5ysi793GfJwtJp8UupOo=;
-        b=K79//bN8cXBhdsmHCleEkY4jKCZWc7vZw5bVpr+9ezF/Tq9yh1+AQko2aps9jV6Nra
-         L3nUQSBVdDPzzAsctwyEh26AqNfkQnXhfTKx0aojqdEI8gv5BjVAuA2+xBBr1rH1wAtc
-         yiWEUy1EZCGryL4OB5YQUkSL5aAXA3sGcD85ZAL4shyVE7asTxQMohCD4zVZ0qcqazA+
-         b53sCQ6XKu59mdeupIEFnm/dF5Ob8dzrs1MmEDemLvq5f8/ydxpoIgty/SaFvRDwTE85
-         iFPmNSWBYjRCQXEJXCFHh80/KOlBz+bZXN+Kne31Q2Xfyrmax4lC7xpTONo/KgnTjNEo
-         +BGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725100360; x=1725705160;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tKxIacQXeZ2qcUvNmDUUVII5ysi793GfJwtJp8UupOo=;
-        b=jYoSLZ2uZJcU4dpKm99DtNB924poy5YpLA2IZrC+lZIlHsHbX8CYhUdN3dBxubN0UO
-         vyv+583jsd5b1aTrKi2e1/5G8S1gy+4andJJQ2LuYcpJwID8Zsp4gJqFe0bBC3Slm0yI
-         Bo+zCP9N+P6Np33dSs4p6savyeZh7xoT6dnxO+ALyOeh4yzkTvroJVN0FokMPA+yuLob
-         MxkzYHXLbHicQrNj2SxpihjJx4fGEyf4V9OpfZwRIb/VbgHgQAYnW4+08BAwT0fWx2Zf
-         UXaGZ6cY99QpfitKB4R5X0zlJpHgVXlsD5vvIieLkyMuz6zUqaocM37QyTpr7aSc2ZjQ
-         Is7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXHTGnkomYGpNryyuyoeZDlrO7TDhe7aQq/E/JcEZqe22apt7Z6g3vWU+1jm0jv3OOShONUv+UJxhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxjolf4K9imRFijd8QVUjwwXvGI8LaaKXufYzcD8uWi+vN4rGEp
-	drGYZwNI8AlIOZSeIiyH3Dxgx54YiU+0qf0z4j0d1F+DxBl7t+iGCTTh+n1dD+sF/NW91i2BIJM
-	rcCR77GzKLHpNbwlOqqPeb3/zvQd6I52nzDTbiA==
-X-Google-Smtp-Source: AGHT+IH8Eb7EYXiidD/DrNNChHQ2lwNk48tFSRFBB77aRxIJWoIIPagMeOtludSNPt8BV9FsjbJZVJT8vUY8xBCkml0=
-X-Received: by 2002:a05:6902:1145:b0:e0b:a7c1:9dcc with SMTP id
- 3f1490d57ef6-e1a7a019106mr5308764276.20.1725100360016; Sat, 31 Aug 2024
- 03:32:40 -0700 (PDT)
+	s=arc-20240116; t=1725102723; c=relaxed/simple;
+	bh=8cTokwO9xffOx9EyeWmFi5fC7VO9RBRqWZRfzyZ+wuM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=aLZfHnVbGm1TQr3QH52BqUNAXgDMcR8p1zEmmRPmAbGd5IBt9SSXZR3LzWbLJs+bBa+EYxPqcyNZXCaZlqbOiwW/jTqmaG/ypU8HAUHN8a2HCaoKaEllQa9hJmGjg3cS46JCvXypYA6r+9m9tV9/8zE8PZveRWef+MxLU0nN7vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DHzdAQ/B; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725102722; x=1756638722;
+  h=date:from:to:cc:subject:message-id;
+  bh=8cTokwO9xffOx9EyeWmFi5fC7VO9RBRqWZRfzyZ+wuM=;
+  b=DHzdAQ/BxYxkZ8cCGhBB36QMItx4D8OlQf70irvKNZlkT/rz3q30hwIy
+   A906LEUs/cq5tDmZfhgHeG015Im5hphTVcu5IYytcIvyQY3nNu8kHg9EK
+   6xPVJVp4mY8c6PELBDtDHt3y2MecFYqMNsAWVFkHYfJiDnBoyAfAGiRz0
+   uOiuhRtS/aa+qLgxV3WJ4x9VtNSQPy5sMFWtiHGDJVvLWGJaqlYMMJgCY
+   3CGERrui8g35gN97X20Z1Ebu+cy1rd3DDKrcXFgGWN9imfy1GU3ccQLZN
+   Uq9R2xbSgvuyKB++/DBiOp6g+M34BFBNj+wTWks/Zs86sIqzljNMurPSH
+   A==;
+X-CSE-ConnectionGUID: L3JO2CWOQSud7NUgeJk0PA==
+X-CSE-MsgGUID: 9pzCY/nqT5iw/f1dulkzTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="46247211"
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="46247211"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 04:12:01 -0700
+X-CSE-ConnectionGUID: sH2APT8WRaOJ2oFS9OCKkA==
+X-CSE-MsgGUID: 8/KE/YcYSnyaoi1oc0CN1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="64882648"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 31 Aug 2024 04:12:00 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1skM1N-0002ey-2U;
+	Sat, 31 Aug 2024 11:11:57 +0000
+Date: Sat, 31 Aug 2024 19:11:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 58c2fa54257d640c83137b44e12c174fd660a485
+Message-ID: <202408311913.A3gyaS77-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
- <99bef301-9f6c-4797-b47e-c83e56dfbda9@tuxon.dev> <CAPDyKFrVS2vpsJqTvjKCJ7ADqXc4D4k2eeCBsaK4T+=pXDnKUA@mail.gmail.com>
- <fa9b3449-ea3e-4482-b7eb-96999445cea5@tuxon.dev>
-In-Reply-To: <fa9b3449-ea3e-4482-b7eb-96999445cea5@tuxon.dev>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Sat, 31 Aug 2024 12:32:02 +0200
-Message-ID: <CAPDyKFrkkASq7rfRN=9sEet-p8T8t+f__PdnSNRN3bMNipnNNw@mail.gmail.com>
-Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be, 
-	magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com, 
-	biju.das.jz@bp.renesas.com, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
 
-[...]
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 58c2fa54257d640c83137b44e12c174fd660a485  Merge tag 'usb-serial-6.11-rc6' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-> >
-> > If not, there are two other options that can be considered I think.
-> > *) Using the genpd on/off notifiers, to really allow the consumer
-> > driver of the reset-control to know when the PM domain gets turned
-> > on/off.
-> > **) Move the entire reset handling into the PM domain provider, as it
-> > obviously knows when the domain is getting turned on/off.
->
-> This option is what I've explored, tested on my side.
->
-> I explored it in 2 ways:
->
-> 1/ SYSC modeled as an individual PM domain provider (this is more
->    appropriate to how HW manual described the hardware) with this the PHY
->    reset DT node would have to get 2 PM domains handlers (one for the
->    current PM domain provider and the other one for SYSC):
->
-> +               phyrst: usbphy-ctrl@11e00000 {
-> +                       compatible = "renesas,r9a08g045-usbphy-ctrl";
-> +                       reg = <0 0x11e00000 0 0x10000>;
-> +                       clocks = <&cpg CPG_MOD R9A08G045_USB_PCLK>;
-> +                       resets = <&cpg R9A08G045_USB_PRESETN>;
-> +                       power-domain-names = "cpg", "sysc";
-> +                       power-domains = <&cpg R9A08G045_PD_USB_PHY>, <&sysc
-> R9A08G045_SYSC_PD_USB>;
-> +                       #reset-cells = <1>;
-> +                       status = "disabled";
-> +
-> +                       usb0_vbus_otg: regulator-vbus {
-> +                               regulator-name = "vbus";
-> +                       };
-> +               };
-> +
+elapsed time: 1244m
 
-According to what you have described earlier/above, modelling the SYSC
-as a PM domain provider seems like a better description of the HW to
-me. Although, as I said earlier, if you prefer the reset approach, I
-would not object to that.
+configs tested: 185
+configs skipped: 5
 
->
-> and the PHY reset driver will get bulky with powering on/off both of these,
-> at least with my current implementation, something like (and the following
-> code is in probe()):
->
-> +       if (priv->set_power) {
-> +               priv->cpg_genpd_dev = dev_pm_domain_attach_by_name(dev, "cpg");
-> +               if (IS_ERR(priv->cpg_genpd_dev)) {
-> +                       dev_err_probe(dev, error, "Failed to attach CPG PM
-> domain!");
-> +                       error = PTR_ERR(priv->cpg_genpd_dev);
-> +                       goto err_pm_runtime_put;
-> +               }
-> +
-> +               priv->sysc_genpd_dev = dev_pm_domain_attach_by_name(dev,
-> "sysc");
-> +               if (IS_ERR(priv->sysc_genpd_dev)) {
-> +                       dev_err_probe(dev, error, "Failed to attach sysc PM
-> domain!");
-> +                       error = PTR_ERR(priv->sysc_genpd_dev);
-> +                       goto err_genpd_cpg_detach;
-> +               }
-> +
-> +               priv->cpg_genpd_dl = device_link_add(dev, priv->cpg_genpd_dev,
-> +                                                    DL_FLAG_PM_RUNTIME |
-> +                                                    DL_FLAG_STATELESS);
-> +               if (!priv->cpg_genpd_dl) {
-> +                       dev_err_probe(dev, -ENOMEM, "Failed to add CPG
-> genpd device link!");
-> +                       goto err_genpd_sysc_detach;
-> +               }
-> +
-> +               priv->sysc_genpd_dl = device_link_add(dev,
-> priv->sysc_genpd_dev,
-> +                                                     DL_FLAG_PM_RUNTIME |
-> +                                                     DL_FLAG_STATELESS);
-> +               if (!priv->sysc_genpd_dl) {
-> +                       dev_err_probe(dev, -ENOMEM, "Failed to add sysc
-> genpd device link!");
-> +                       goto err_genpd_cpg_dl_del;
-> +               }
-> +
-> +
-> +               error = pm_runtime_resume_and_get(priv->cpg_genpd_dev);
-> +               if (error) {
-> +                       dev_err_probe(dev, error, "Failed to runtime resume
-> cpg PM domain!");
-> +                       goto err_genpd_sysc_dl_del;
-> +               }
-> +
-> +               error = pm_runtime_resume_and_get(priv->sysc_genpd_dev);
-> +               if (error) {
-> +                       dev_err_probe(dev, error, "Failed to runtime resume
-> sysc PM domain!");
-> +                       goto err_genpd_cpg_off;
-> +               }
-> +       }
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Indeed, the code above looks bulky.
+tested configs:
+alpha                             allnoconfig   gcc-14.1.0
+alpha                            allyesconfig   clang-20
+alpha                               defconfig   gcc-14.1.0
+arc                              allmodconfig   clang-20
+arc                               allnoconfig   gcc-14.1.0
+arc                              allyesconfig   clang-20
+arc                                 defconfig   gcc-14.1.0
+arc                        nsimosci_defconfig   clang-20
+arc                   randconfig-001-20240831   gcc-14.1.0
+arc                   randconfig-002-20240831   gcc-14.1.0
+arm                              allmodconfig   clang-20
+arm                               allnoconfig   gcc-14.1.0
+arm                              allyesconfig   clang-20
+arm                                 defconfig   gcc-14.1.0
+arm                          ep93xx_defconfig   clang-20
+arm                          gemini_defconfig   clang-20
+arm                      jornada720_defconfig   clang-20
+arm                         nhk8815_defconfig   clang-20
+arm                   randconfig-001-20240831   gcc-14.1.0
+arm                   randconfig-002-20240831   gcc-14.1.0
+arm                   randconfig-003-20240831   gcc-14.1.0
+arm                   randconfig-004-20240831   gcc-14.1.0
+arm                        realview_defconfig   clang-20
+arm                         vf610m4_defconfig   clang-20
+arm                    vt8500_v6_v7_defconfig   clang-20
+arm64                            allmodconfig   clang-20
+arm64                             allnoconfig   gcc-14.1.0
+arm64                               defconfig   clang-20
+arm64                               defconfig   gcc-14.1.0
+arm64                 randconfig-001-20240831   gcc-14.1.0
+arm64                 randconfig-002-20240831   gcc-14.1.0
+arm64                 randconfig-003-20240831   gcc-14.1.0
+arm64                 randconfig-004-20240831   gcc-14.1.0
+csky                              allnoconfig   gcc-14.1.0
+csky                                defconfig   gcc-14.1.0
+csky                  randconfig-001-20240831   gcc-14.1.0
+csky                  randconfig-002-20240831   gcc-14.1.0
+hexagon                          alldefconfig   clang-20
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   gcc-14.1.0
+hexagon                          allyesconfig   clang-20
+hexagon                             defconfig   gcc-14.1.0
+hexagon               randconfig-001-20240831   gcc-14.1.0
+hexagon               randconfig-002-20240831   gcc-14.1.0
+i386                             allmodconfig   clang-18
+i386                              allnoconfig   clang-18
+i386                             allyesconfig   clang-18
+i386         buildonly-randconfig-001-20240831   clang-18
+i386         buildonly-randconfig-002-20240831   clang-18
+i386         buildonly-randconfig-003-20240831   clang-18
+i386         buildonly-randconfig-004-20240831   clang-18
+i386         buildonly-randconfig-005-20240831   clang-18
+i386         buildonly-randconfig-006-20240831   clang-18
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240831   clang-18
+i386                  randconfig-002-20240831   clang-18
+i386                  randconfig-003-20240831   clang-18
+i386                  randconfig-004-20240831   clang-18
+i386                  randconfig-005-20240831   clang-18
+i386                  randconfig-006-20240831   clang-18
+i386                  randconfig-011-20240831   clang-18
+i386                  randconfig-012-20240831   clang-18
+i386                  randconfig-013-20240831   clang-18
+i386                  randconfig-014-20240831   clang-18
+i386                  randconfig-015-20240831   clang-18
+i386                  randconfig-016-20240831   clang-18
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-14.1.0
+loongarch                           defconfig   gcc-14.1.0
+loongarch             randconfig-001-20240831   gcc-14.1.0
+loongarch             randconfig-002-20240831   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                          amiga_defconfig   clang-20
+m68k                                defconfig   gcc-14.1.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-14.1.0
+mips                              allnoconfig   gcc-14.1.0
+mips                            gpr_defconfig   clang-20
+mips                          malta_defconfig   clang-20
+mips                      malta_kvm_defconfig   clang-20
+mips                        omega2p_defconfig   clang-20
+mips                         rt305x_defconfig   clang-20
+nios2                            alldefconfig   clang-20
+nios2                             allnoconfig   gcc-14.1.0
+nios2                               defconfig   gcc-14.1.0
+nios2                 randconfig-001-20240831   gcc-14.1.0
+nios2                 randconfig-002-20240831   gcc-14.1.0
+openrisc                          allnoconfig   clang-20
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-12
+openrisc                  or1klitex_defconfig   clang-20
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   clang-20
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-12
+parisc                generic-64bit_defconfig   clang-20
+parisc                randconfig-001-20240831   gcc-14.1.0
+parisc                randconfig-002-20240831   gcc-14.1.0
+parisc64                            defconfig   gcc-14.1.0
+powerpc                    adder875_defconfig   clang-20
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   clang-20
+powerpc                          allyesconfig   gcc-14.1.0
+powerpc                 canyonlands_defconfig   clang-20
+powerpc                       ebony_defconfig   clang-20
+powerpc                    gamecube_defconfig   clang-20
+powerpc                       maple_defconfig   clang-20
+powerpc                 mpc834x_itx_defconfig   clang-20
+powerpc                    mvme5100_defconfig   clang-20
+powerpc               randconfig-001-20240831   gcc-14.1.0
+powerpc                  storcenter_defconfig   clang-20
+powerpc                     tqm8540_defconfig   clang-20
+powerpc64             randconfig-001-20240831   gcc-14.1.0
+powerpc64             randconfig-002-20240831   gcc-14.1.0
+powerpc64             randconfig-003-20240831   gcc-14.1.0
+riscv                            allmodconfig   gcc-14.1.0
+riscv                             allnoconfig   clang-20
+riscv                            allyesconfig   gcc-14.1.0
+riscv                               defconfig   gcc-12
+riscv                    nommu_k210_defconfig   clang-20
+riscv                 randconfig-001-20240831   gcc-14.1.0
+riscv                 randconfig-002-20240831   gcc-14.1.0
+s390                             allmodconfig   gcc-14.1.0
+s390                              allnoconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   gcc-12
+s390                  randconfig-001-20240831   gcc-14.1.0
+s390                  randconfig-002-20240831   gcc-14.1.0
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-12
+sh                    randconfig-001-20240831   gcc-14.1.0
+sh                    randconfig-002-20240831   gcc-14.1.0
+sh                           se7780_defconfig   clang-20
+sh                   secureedge5410_defconfig   clang-20
+sh                        sh7763rdp_defconfig   clang-20
+sh                        sh7785lcr_defconfig   clang-20
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-12
+sparc64               randconfig-001-20240831   gcc-14.1.0
+sparc64               randconfig-002-20240831   gcc-14.1.0
+um                               allmodconfig   clang-20
+um                                allnoconfig   clang-20
+um                               allyesconfig   clang-20
+um                                  defconfig   gcc-12
+um                             i386_defconfig   gcc-12
+um                    randconfig-001-20240831   gcc-14.1.0
+um                    randconfig-002-20240831   gcc-14.1.0
+um                           x86_64_defconfig   gcc-12
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240831   clang-18
+x86_64       buildonly-randconfig-002-20240831   clang-18
+x86_64       buildonly-randconfig-003-20240831   clang-18
+x86_64       buildonly-randconfig-004-20240831   clang-18
+x86_64       buildonly-randconfig-005-20240831   clang-18
+x86_64       buildonly-randconfig-006-20240831   clang-18
+x86_64                              defconfig   clang-18
+x86_64                randconfig-001-20240831   clang-18
+x86_64                randconfig-002-20240831   clang-18
+x86_64                randconfig-003-20240831   clang-18
+x86_64                randconfig-004-20240831   clang-18
+x86_64                randconfig-005-20240831   clang-18
+x86_64                randconfig-006-20240831   clang-18
+x86_64                randconfig-011-20240831   clang-18
+x86_64                randconfig-012-20240831   clang-18
+x86_64                randconfig-013-20240831   clang-18
+x86_64                randconfig-014-20240831   clang-18
+x86_64                randconfig-015-20240831   clang-18
+x86_64                randconfig-016-20240831   clang-18
+x86_64                randconfig-071-20240831   clang-18
+x86_64                randconfig-072-20240831   clang-18
+x86_64                randconfig-073-20240831   clang-18
+x86_64                randconfig-074-20240831   clang-18
+x86_64                randconfig-075-20240831   clang-18
+x86_64                randconfig-076-20240831   clang-18
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-14.1.0
+xtensa                randconfig-001-20240831   gcc-14.1.0
+xtensa                randconfig-002-20240831   gcc-14.1.0
 
-Fortunately, we now have dev|devm_pm_domain_attach_list(), which
-replaces all of the code above.
-
-[...]
-
-Kind regards
-Uffe
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
