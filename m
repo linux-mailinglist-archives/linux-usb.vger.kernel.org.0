@@ -1,148 +1,185 @@
-Return-Path: <linux-usb+bounces-14446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 634E8967588
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 10:07:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AB4B967658
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 14:09:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A1C5B20C37
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 08:07:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A9741C20C10
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 12:09:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB868143C6E;
-	Sun,  1 Sep 2024 08:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293A4175D5F;
+	Sun,  1 Sep 2024 12:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="FPrdAQY1"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yZQZBKfy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.19])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E0514290C;
-	Sun,  1 Sep 2024 08:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725178063; cv=none; b=ELEEhtgnH//kV0c1Sgwath7/NtzNUZvHi1Ll4CNCYLWJIEUyYtqM8ClX40jnA9qnkfrvgaUFhkDWXugh/BuqwS8SqnQexPkTTQpAqDJXcZRIxrLllIs0zVPAsgfyW7Jbp1uV6s2TbvD+usWWazkZLzLQCdIxX9jPJSTc7zTvQpU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725178063; c=relaxed/simple;
-	bh=H+4H1RjbMlERyYCXKegid4WbrgXMo/agjaeT4+ZdI/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MNYlKD3hNrXOm7KbhuazkLT43YjND2P9ZoXT2eWUk8tneigWvWLe7YpvKR4QerUIJUGLQspF2zVWQq8b08CnIvgsuCNOPzf8wX3AWiMui3NTXD82r5hFn+4zvkZ0kMGcj2ORhwe7EM+TU76ETO7IXSggNtn55B/G/W80Fpkiyu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=FPrdAQY1; arc=none smtp.client-ip=220.197.32.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=7u7AOaHLwE9q3P+6liu00OMqbJ/gWmnFJKpZmoN9Dr8=;
-	b=FPrdAQY1DM27COWhDwJugxNQf/KqQIdLYBlWIyNlx4Q1HyepMrxfzJmnt0tK/v
-	bCT1rOMfSo9mbsab8xCxYj3K6072FOB4oX8XjRXJOYAELyGr1GMQHtbKSPu/dF+t
-	M2DeA5hzAT8zMroZOJvu0fCy6aIoMAdynhxjPvK+i58X8=
-Received: from dragon (unknown [114.216.210.89])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgDnzwKlINRmKt9CAA--.32856S3;
-	Sun, 01 Sep 2024 16:07:03 +0800 (CST)
-Date: Sun, 1 Sep 2024 16:07:01 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	gregkh@linuxfoundation.org, Frank.Li@nxp.com, jun.li@nxp.com,
-	l.stach@pengutronix.de, aford173@gmail.com, hongxing.zhu@nxp.com,
-	alexander.stein@ew.tq-group.com, linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] arm64: dts: imx95: add usb3 related nodes
-Message-ID: <ZtQgpYY9KjP9FUi5@dragon>
-References: <20240826070854.1948347-1-xu.yang_2@nxp.com>
- <20240826070854.1948347-4-xu.yang_2@nxp.com>
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2053.outbound.protection.outlook.com [40.107.92.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03D61448D9;
+	Sun,  1 Sep 2024 12:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725192537; cv=fail; b=VyFU6f3VbKe4q3qBN6XeIfsgt+ejOEpDa9OuRK1Ouaw7MA5H672LKcFAkRtOXfO6gnG+NjE0UZ95JNnY3Zp7lRH0JHdMrzzrkdMvhbHs4PJP0G/x2suIfVe8IpgUDBSYSpNXYzr0LIMg1BtehuSnXw7LiUVUTT8yRbfUyVA6Uzo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725192537; c=relaxed/simple;
+	bh=tMsn4WgXg/XSbQ2Ohs85msXky9bCO31fXkbtUyQlIc0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oR2P9LIMk560J5Ctbp3sQraPV3NSqTibjmAwOmsI6XH6hiedlFE11s6GIa97FQloFtAUygOTf0Py1nd6qUVPsLq8ZH14o3NUes89DyQ+8re7P+J3ShH0NlQMaszCC7Kbjb5IwO4Fv14HSRxEnQ1YITWY2U0IHn0LvExVUPkCDLs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yZQZBKfy; arc=fail smtp.client-ip=40.107.92.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bXFgL/vbX+bi6DzQqJ73+wvRYIVL/0jAnddwulHknyd3liAguK0zu5+F9sGnje8QGBkpMNxZmho0izJULU/FBTtZR20aEQ6GR1zMMf0H69rakSs09+Ca9lGVkLw4CUEBUKPxx5WhQ2vwusre+fRcChn0am8g94U5qB4fMGWJ/QN3Su9rAlhyDDGzGeJgxF/r2Aeqc+5hB8mSOz/yyCEDwJNbAgmFjw8ZQh/+SVTqW6Vfdkp8rDZJ6cHkgICkui2wfUWfSQM76mGNvB7vzOg1E0fg/6f1XqXQBFmLACV6oP0qjnBJjZkterQvuRr3RTIObWhUmS4m/BhelDzoAhEutg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cQsIozrlIDEjqmLOOKy9Bp7IkU+Hkxv0GeW1lfRiMrk=;
+ b=efcZHHsVnWKCgbdwPimx1ouOPI4qmeH2vy3QWkN9PS3YJxBVmIyGsh01b4B5zMM3FKpH6SIvd9byRf7dvO16GPyi49VOeWeNz8++tnTnsqSPFjxGUdxL3l5l+2I9JTCV0y4HE8W1M2leUX9Ukx2xdM3V3bjHJhTZsPSP1ElgHg6pVSp9KmGolD3UdtoGx5yDZDghW8QztgUV7F/+W2lZuZ7YfGAa6AQOYQt6oAEYZBMeUSAmLzhMbebGfdo/9G/MQiA025Q5wxeU86Dccnvg6VViz4gSV/rbm6LJDLqFpMFCQ5PoxhECgLFldEdjUOY33o/YZQrg7eFZSmBkYzJDRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cQsIozrlIDEjqmLOOKy9Bp7IkU+Hkxv0GeW1lfRiMrk=;
+ b=yZQZBKfyDpWFpALpAWNRqJP03DQvGchNyj3m04X9ICubC5r71ZPV3H9dXVpb2X73rZ2QrimD8ufYtXSsXbUfAgKjdbrz8wUFcuyxV1/hh+7Qyu+0S+eG7kNdujZzF6+5kA2t++9cMAkTFCPUzGWcaVlIOAwepRkYxPQFn5F26OQ=
+Received: from BN9PR03CA0286.namprd03.prod.outlook.com (2603:10b6:408:f5::21)
+ by PH8PR12MB6961.namprd12.prod.outlook.com (2603:10b6:510:1bc::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.23; Sun, 1 Sep
+ 2024 12:08:49 +0000
+Received: from BL02EPF00021F6B.namprd02.prod.outlook.com
+ (2603:10b6:408:f5:cafe::27) by BN9PR03CA0286.outlook.office365.com
+ (2603:10b6:408:f5::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.23 via Frontend
+ Transport; Sun, 1 Sep 2024 12:08:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF00021F6B.mail.protection.outlook.com (10.167.249.7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7918.13 via Frontend Transport; Sun, 1 Sep 2024 12:08:48 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 1 Sep
+ 2024 07:08:47 -0500
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Sun, 1 Sep 2024 07:08:43 -0500
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <gregkh@linuxfoundation.org>, <mka@chromium.org>,
+	<sakari.ailus@linux.intel.com>, <wentong.wu@intel.com>,
+	<javier.carrasco@wolfvision.net>, <stefan.eichenberger@toradex.com>,
+	<francesco.dolcini@toradex.com>, <jbrunet@baylibre.com>,
+	<macpaul.lin@mediatek.com>, <frieder.schrempf@kontron.de>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [PATCH v4 0/2] usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus support
+Date: Sun, 1 Sep 2024 17:38:37 +0530
+Message-ID: <1725192519-3867920-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240826070854.1948347-4-xu.yang_2@nxp.com>
-X-CM-TRANSID:M88vCgDnzwKlINRmKt9CAA--.32856S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KFyftrW8CrWDCr1xCw47twb_yoW8try8p3
-	srGayUZrs2gF1IkFWaqF48KF95J3y0kFZ5ur1fWryjkr9xZ3sFgFWIkF1S9r18XrsrXw4j
-	qFsaqF12kFnxtw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j4g4fUUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiAgtNZWbUDSsrwgAAsc
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB04.amd.com: radhey.shyam.pandey@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00021F6B:EE_|PH8PR12MB6961:EE_
+X-MS-Office365-Filtering-Correlation-Id: d778f468-03d5-4302-9470-08dcca7ed61d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|7416014|376014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?a0MyLWHLgoQguio5lyPOQVxbkLze2zAKiXHtBjArG9XTAIHDLPVahtp2S32F?=
+ =?us-ascii?Q?jvc3L+k9AdNcCBhokjkErYNw7tpzu081ys3rTdAY7oItrLM7VAOz9rtbL1hD?=
+ =?us-ascii?Q?f6+61R7VdriCoNARKOSpHAzAJxrjpVCCc5NkZ7uGtJ5TA0MG5cw/BfNTvaum?=
+ =?us-ascii?Q?s1tZ41wIKizyf9bR2TnKqLYH3GehLP7MJ7v4nuaXR6pwb+soQkx1Zhe98qai?=
+ =?us-ascii?Q?ikeyU3Ydo5VwSDo8V+vG5BpTP+ZfUzf9hD8wGXDvg3bFbggw9NQ+UHBSWGXb?=
+ =?us-ascii?Q?r2NN4zGwLE47zknqXjjOjTz1PuS5HOT38pESbZm/zC1Uf3zBzYLihCQEoZM8?=
+ =?us-ascii?Q?TJsNYmXEc5Fnz/cdIHzFb3rQ9b/LFyE0PEAQ4ZodvboCH0onuL3ZczDccltj?=
+ =?us-ascii?Q?VdwxHzjveICN5SfjLKdUx9eamh50YDkybiEq1chCrqIul8hmTwQ+dBum1NCb?=
+ =?us-ascii?Q?XeiLP/yyFZ+G5Jj5xYSMjXLiCtX9ueholq5xI5taeiZTazbaVHbWLc/67ycM?=
+ =?us-ascii?Q?wIahp3C/hiDqFmSiFAsqtnC7ujjbwPxbT/8M9EBJ0I25IZJTSc64CienY8v1?=
+ =?us-ascii?Q?IZOvN2AHUmkt8OK+kB79j/w/o7DQWlt02MjSVtEieBfsv85RdaG1e0BpVGWA?=
+ =?us-ascii?Q?l7QVNC6sQJVHK/lyk9yjGLtRnY+pHGR4kS9TvyQKPasddWqv9R/3n+IRdkJg?=
+ =?us-ascii?Q?nxaImEXm+9pumcUFQDjhNIz5ITsVF/K6y3M6UKcMkUdsxFSzapVUI6o40TLy?=
+ =?us-ascii?Q?zuVgYZLvwxgPpJI6RkzfmZjTibv8UZTcWtm+udD6s48XG6RJpQ0FWRpV9ODA?=
+ =?us-ascii?Q?CHEmjoLcY5w9b4gCVs6ELCWfVZl+Pf5ZPyffII2TkMkbWrF0hX1mmg6ygYJL?=
+ =?us-ascii?Q?NPn80mRC7TGCLJcQ4FZl3SQSTOOYbHzzDJBnVzLNIrY4efPUxiNJXncw3DSw?=
+ =?us-ascii?Q?KFYlp0dZQZQMgF1mav9WADXcwVPsXHeVK6cYzn4oXG+2/eL7irxhc2YJ3R8R?=
+ =?us-ascii?Q?a5YgGbVEDIeE/+1hyfzFPc+STzHn+x9zTEWjTW9KKqrrBSE7milsnBY4QNPq?=
+ =?us-ascii?Q?UzlduEHjI4cEOUQ0OvUhNLVcnJ0xhDvksZPlIOspMRNTtMxeQ15IAjjK6t+p?=
+ =?us-ascii?Q?tJKDS8h0BzLUwsD4KpqCnRnZZhVxKYseqpPOWU+5j7fLEeYmZHdOJjm5rv5H?=
+ =?us-ascii?Q?KhEvlBRa2WFGF03dJQ2ugpe8J/VZjNNT88P3xv6s4RukCcFYZ0TIR0RuS3b6?=
+ =?us-ascii?Q?DzakEnyWwfgC/jtltNDgVM0bOnLTWrYfCvkte6/VnGRlIEeVeMIEaMcrMNlK?=
+ =?us-ascii?Q?aG+rE3phbo5TZleBhNrvQ5o9eaCJYpGAhm6EZlqSx6nLllaGIZrLcq8Zxusn?=
+ =?us-ascii?Q?0XXmbqCYc5DRT09J3zHIvUMTUvY17mrW79XAcahBHN1CYDCMyY6dEZqiIeZb?=
+ =?us-ascii?Q?OTfY9zFiw3u8vyR+jcv2PibCzMNuQkrcP0qnvtVOZkhNw+A8t2ssFA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2024 12:08:48.5001
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d778f468-03d5-4302-9470-08dcca7ed61d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF00021F6B.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6961
 
-On Mon, Aug 26, 2024 at 03:08:53PM +0800, Xu Yang wrote:
-> Add usb3 phy and controller nodes for imx95.
-> 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
-> ---
-> Changes in v2:
->  - no changes
-> Changes in v3:
->  - no changes
-> ---
->  arch/arm64/boot/dts/freescale/imx95.dtsi | 43 ++++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx95.dtsi b/arch/arm64/boot/dts/freescale/imx95.dtsi
-> index 1bbf9a0468f6..06a7c2f1e211 100644
-> --- a/arch/arm64/boot/dts/freescale/imx95.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx95.dtsi
-> @@ -1188,5 +1188,48 @@ pcie1_ep: pcie-ep@4c380000 {
->  			power-domains = <&scmi_devpd IMX95_PD_HSIO_TOP>;
->  			status = "disabled";
->  		};
-> +
-> +		usb3_phy: phy@4c1f0040 {
-> +			compatible = "fsl,imx95-usb-phy", "fsl,imx8mp-usb-phy";
-> +			reg = <0x0 0x4c1f0040 0x0 0x40>,
-> +			      <0x0 0x4c1fc000 0x0 0x100>;
-> +			clocks = <&scmi_clk IMX95_CLK_HSIO>;
-> +			clock-names = "phy";
-> +			#phy-cells = <0>;
-> +			power-domains = <&scmi_devpd IMX95_PD_HSIO_TOP>;
-> +			orientation-switch;
-> +			status = "disabled";
-> +		};
-> +
-> +		usb3: usb@4c010010 {
+This patchset adds usb5744 SMBus support in onboard usb driver.
 
-Please try to sort nodes with unit-address in the address.
+Changes for v4:
+- Fix error: implicit declaration of function 'i2c_smbus_*' APIs by
+  introducing a kconfig dependency on I2C_CONFIG. This error is reported
+  by kernel test on v3 series and usb:usb-testing 20/25 branch.
+  https://lore.kernel.org/all/2024082503-uncoated-chaperone-7f70@gregkh
 
-Shawn
+Changes for v3:
+- Modified power_on_delay_us comment.
+- Add comment for UDC suspend sequence.
+- Drop USB5744_CREG_MEM_NBYTES and USB5744_CREG_NBYTES and replace
+  it with literal + comment.
+- Move microchip defines to source file.
 
-> +			compatible = "fsl,imx95-dwc3", "fsl,imx8mp-dwc3";
-> +			reg = <0x0 0x4c010010 0x0 0x04>,
-> +			      <0x0 0x4c1f0000 0x0 0x20>;
-> +			clocks = <&scmi_clk IMX95_CLK_HSIO>,
-> +				 <&scmi_clk IMX95_CLK_32K>;
-> +			clock-names = "hsio", "suspend";
-> +			interrupts = <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			power-domains = <&scmi_devpd IMX95_PD_HSIO_TOP>;
-> +			dma-ranges = <0x0 0x0 0x0 0x0 0x10 0x0>;
-> +			status = "disabled";
-> +
-> +			usb3_dwc3: usb@4c100000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0x0 0x4c100000 0x0 0x10000>;
-> +				clocks = <&scmi_clk IMX95_CLK_HSIO>,
-> +					 <&scmi_clk IMX95_CLK_24M>,
-> +					 <&scmi_clk IMX95_CLK_32K>;
-> +				clock-names = "bus_early", "ref", "suspend";
-> +				interrupts = <GIC_SPI 175 IRQ_TYPE_LEVEL_HIGH>;
-> +				phys = <&usb3_phy>, <&usb3_phy>;
-> +				phy-names = "usb2-phy", "usb3-phy";
-> +				snps,gfladj-refclk-lpm-sel-quirk;
-> +				snps,parkmode-disable-ss-quirk;
-> +				iommus = <&smmu 0xe>;
-> +			};
-> +		};
->  	};
->  };
-> -- 
-> 2.34.1
-> 
+Changes in v2:
+- Fix subsystem "usb: misc: onboard_usb_dev:..."
+- Change implementation from introducing onboard_dev_i2c_init
+  func pointer and do i2c initialization based on compatible string.
+  This is to make onboard_dev_5744_i2c_init() as static.
+- Use #define for different register bits instead of magic values.
+- Use err_power_off label name.
+- Modified commit description to be in sync with v2 changes.
+- Move power on reset delay to separate patch.
+
+Radhey Shyam Pandey (2):
+  usb: misc: onboard_dev: extend platform data to add power on delay
+    field
+  usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming
+    support
+
+ drivers/usb/misc/Kconfig           |  2 +-
+ drivers/usb/misc/onboard_usb_dev.c | 74 ++++++++++++++++++++++++++++++
+ drivers/usb/misc/onboard_usb_dev.h |  2 +
+ 3 files changed, 77 insertions(+), 1 deletion(-)
+
+
+base-commit: 431c1646e1f86b949fa3685efc50b660a364c2b6
+-- 
+2.34.1
 
 
