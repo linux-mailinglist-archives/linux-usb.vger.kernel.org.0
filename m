@@ -1,99 +1,226 @@
-Return-Path: <linux-usb+bounces-14452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14454-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2AD967AE4
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 19:02:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ED4E967BDE
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 21:12:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C1771C21279
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 17:02:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8A56281BFB
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 19:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17299181BA8;
-	Sun,  1 Sep 2024 17:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="PychHPat"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD5213A41A;
+	Sun,  1 Sep 2024 19:11:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A58917C;
-	Sun,  1 Sep 2024 17:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527297868B
+	for <linux-usb@vger.kernel.org>; Sun,  1 Sep 2024 19:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725210136; cv=none; b=Ee0GhPRAwLFfUzWfkjPGUXJkVdo7uCVFV1RRA9FzeDH4F+vEcV683xIbAGXPa59c4+LTqpKjbiRoRQTH0i61kpzFg08EBycFdSnzxUYPmL7V95tnFzVEToTToZ6xaFKIioxEq2wiVaQ3ik3+jTSDYPIbknJ0lb818f7HA/nM49Y=
+	t=1725217911; cv=none; b=VMBSmuv1l9752SRTQagUJvxnjyfS1YbuW4wHoyYMY7lWRwxldHQVHLDRLnEo7gRfghQWx3+Fql8gBQJ1Z0OqtssYdcBc5U8pOlIgprdmiNmROpJ0ZYcsIwYn83cEZ+awNMBhQtWFALnKVdHbKE8E1Y3MEeHHCMeq71ZDqTnFyCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725210136; c=relaxed/simple;
-	bh=FsO8EYvnbAmGqUQe9Pii3BHXPSzNdyieBp00jgaKm7k=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=gKhObldzjeHoMC/zoUzzo+KcdwnM7Uq/dwWGnaTQb2LqkIh3Aw6EhX5Lab6CfUvCR3eyOMZ5DhlSatCiHvjV/WSeqbZU2F1bQ1mFBpwMX3muFea6u2BibVU1hwSW2wuEEEW24zYUgW2ormggtyjbPzP6Uu484LwnUYBd8+W21aQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=PychHPat reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=AjyGkwb0KCWQ1NnIxOsmkp9771bZVXLIiIJ0kX0YArs=; b=P
-	ychHPatwvXf5BcFDQSDy3NXr9qKNZ6eJRupeBD4dg8jBZAPPEMg4IQ6ewsf4ZwsA
-	5ZZ8zTMxuOL+AjVRkK2tqFehv4Uu2aOeKzelQ2haiMUsGbaEWNh8l+KKq81UbYde
-	A18PrnUFBG+LEudVg1UxsEAkUgzbZizuUp+lZqE51g=
-Received: from 00107082$163.com ( [111.35.190.113] ) by
- ajax-webmail-wmsvr-40-114 (Coremail) ; Mon, 2 Sep 2024 01:01:07 +0800 (CST)
-Date: Mon, 2 Sep 2024 01:01:07 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:[PATCH] usb: xhci: wait for controller ready when resume with
- reinit_xhc
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <20240901162425.5103-1-00107082@163.com>
-References: <20240901162425.5103-1-00107082@163.com>
-X-NTES-SC: AL_Qu2ZB/6av0gt4SmfbekXn0oTju85XMCzuv8j3YJeN500oyTB5iUpZW9hIlzs+ce1LiCjoAi1QiJDzc1IZKB2cbw2hLX9ZgVPvBhNSXgmNrsJ
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1725217911; c=relaxed/simple;
+	bh=7Dqnzu4OI88UdtAfkzrUCgMAN8G6HbgriW4lk9+LvSU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TehPzUeUUeyC10jDJbwB2EW3vt9igr+HVTHiOXlXEhoYIKklcfJ+rxAcmvwQd9PFSk3Q8sRMplF2UHqlU4WYwBfw0eijSFa9VlpQ0RzGXt1u29N+GHjH+b0gyy9gf+N/MmyhFuBZShxgzmd/cIDEGSfhOnA/gwTC3POf6cVbkbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1skpyy-0006ZW-E3; Sun, 01 Sep 2024 21:11:28 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1skpyw-004jEq-R6; Sun, 01 Sep 2024 21:11:26 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1skpyw-00727u-0z;
+	Sun, 01 Sep 2024 21:11:26 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH v12 0/3] usb: gadget: 9pfs transport
+Date: Sun, 01 Sep 2024 21:11:15 +0200
+Message-Id: <20240116-ml-topic-u9p-v12-0-9a27de5160e0@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <1fe3e185.3639.191ae88840f.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:_____wD3n6zUndRmuSdHAA--.44675W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqRNNqmVOClTVCwACs0
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFO81GYC/33SO27DMAwG4KsEmqtG70en3qPoIIlUIiCxDTsxU
+ gS5e2WvVTWSID+CwP8kC84FF/JxeJIZ17KUcagFF28Hks5hOCEtUBtEMKEY54ZeL/Q2TiXRu5+
+ o81pYpSXDyEldiWFBGucwpPO2dL1cL8d9+lint4Fpxlwe+8Gv71qfy3Ib55/9/sq37j+XVk4ZD
+ eCSZCb7oPBzwuF0v83jUB7vgGTTVtETRBWiMilm7YU3oinIniCrkIwI0mBKEHhTUD1BVcEKgSB
+ cZAHaX+ieoKugEViIoCVm3RRMTzBVMF57a8EayLkp2J5gqyADR8RsbY7tL1xPcFVQzKPRPgUF0
+ BR8T/BV8BKszMpGa2JT4KwbKbZlyukMGJJIup0I3o8l31PlPENmrJThj/F6vX4BTrIToGcDAAA
+ =
+To: Eric Van Hensbergen <ericvh@kernel.org>, 
+ Latchesar Ionkov <lucho@ionkov.net>, 
+ Dominique Martinet <asmadeus@codewreck.org>, 
+ Christian Schoenebeck <linux_oss@crudebyte.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>, v9fs@lists.linux.dev, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, kernel@pengutronix.de, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>, 
+ Jan Luebbe <jlu@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6221;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=7Dqnzu4OI88UdtAfkzrUCgMAN8G6HbgriW4lk9+LvSU=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBm1LxZCkKV+/Nyjbxp7/bq/Ju4h9r7Luoeoncv5
+ 1/RhU2pqZ+JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZtS8WQAKCRC/aVhE+XH0
+ q5amD/487D24Hws8Qhmt39tdMri4cSMPbDrLtY8lyffuiFce3TObo22nnFSw6BJzvRqhBfQzoT1
+ O84c4q5d0wxagalEgftcdIn0AR2SdkLqNK9bzi0nK80OrZlsTt/CSNqs5NAaPnAZy0CUXvycHzv
+ afz4q6Ze2UdsggGFXKMwhqWk3RV7h3XOyuOta2t9sEs2uC89SdqDSaKxqoEurV5wBOMj4loj1rM
+ oz0/dr+CvV8PE/bXWzAgfH9lJSZ7zRMAWCuudU0wDGtCJ/NpEOvY1QZ3yMLL/jbLH9d7q+XqJ8A
+ fiBFLo3998HDnvTT9zprVgCLRIKPqkqdGNCBXJNa/A2rbYmeqOAomK7p7Zygo98e/lstuejXXlh
+ S1/vqg7mmYrdS+OtQSUjE47Tn3g2+B1iL1ckUlipBm6R3BlAZOJDMvJJFWISbVZVAjSrss0KojB
+ cU3g6qpKzZBZBP7kCLf26+bk7cMqRBAtfBUqAZTnx95VJmNsgyraCte6IZTflj9oVrn8yFbYvFr
+ huPIIitlzN3Nmsf8DYLwxbbjZ42p29bO05PwVo7A6HVOuvRXxuCU9X36RjG8Gg5FcDCc1N1TsNb
+ 0WyTjXNstR0Kx/tuL96GGjr6n2jLZb5LZ5zHsamx6ppBoTFi0cyn/OIC/KxBmUnAbQnOeacLF8I
+ Q/G6n7R6jYneSsQ==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-T29wcy4uLiBKdXN0IGZpbmQgb3V0IHRoZSB3YXJuaW5nICIgIGVwXzgxOiBQTTogcGFyZW50IDMt
-MS4xOjEuMSBzaG91bGQgbm90IGJlIHNsZWVwaW5nIiBzaG93cyB1cCB3aGVuIEkgc3VzcGVuZCBt
-eSBzeXN0ZW0gd2l0aCBVU0IgY2FtZXJhIG9uLCAKYW5kIHRoaXMgcGF0Y2ggY291bGQgbm90IGZp
-eCBpdC4KUGxlYXNlIGlnbm9yZSB0aGUgcGF0Y2gsIHNvcnJ5IGJvdGhlcmluZy4uLgoKRGF2aWQK
-CgpBdCAyMDI0LTA5LTAyIDAwOjI0OjI1LCAiRGF2aWQgV2FuZyIgPDAwMTA3MDgyQDE2My5jb20+
-IHdyb3RlOgo+V2hlbiByZXN1bWUgc3lzdGVtIHdpdGggcmVpbml0X3hoYyB0cnVlLCBQTSB3b3Vs
-ZCByZXBvcnQga2VybmVsCj53YXJuaW5nIGFib3V0IGRldmljZSBwYXJlbnQ6Cj4KPiA+dXNiIDMt
-MS4xOiByZXNldCBoaWdoLXNwZWVkIFVTQiBkZXZpY2UgbnVtYmVyIDQgdXNpbmcgeGhjaV9oY2QK
-PiA+Li4KPiA+ZXBfODE6IFBNOiBwYXJlbnQgMy0xLjE6MS4xIHNob3VsZCBub3QgYmUgc2xlZXBp
-bmcKPgo+TW92ZSB0aGUgY29kZSB3YWl0aW5nIGZvciBjb250cm9sbGVyIHJlYWR5IG91dCwgYW5k
-IG1ha2UgaXQKPmNhcnJ5IG91dCB3b3JrIG5vIG1hdHRlciByZWluaXRfeGhjIGlzIHRydWUgb3Ig
-ZmFsc2UuCj5UaGUgZXJyb3IgaXMgaWdub3JlZCB3aGVuIHJlaW5pdF94aGMgaXMgdHJ1ZS4KPgo+
-U2lnbmVkLW9mZi1ieTogRGF2aWQgV2FuZyA8MDAxMDcwODJAMTYzLmNvbT4KPi0tLQo+IGRyaXZl
-cnMvdXNiL2hvc3QveGhjaS5jIHwgMTQgKysrKysrKystLS0tLS0KPiAxIGZpbGUgY2hhbmdlZCwg
-OCBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQo+Cj5kaWZmIC0tZ2l0IGEvZHJpdmVycy91
-c2IvaG9zdC94aGNpLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYwo+aW5kZXggZWZkZjRjMjI4
-YjhjLi44YWViMWIzNGNkYmYgMTAwNjQ0Cj4tLS0gYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYwo+
-KysrIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLmMKPkBAIC0xMDMyLDEzICsxMDMyLDE1IEBAIGlu
-dCB4aGNpX3Jlc3VtZShzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ksIHBtX21lc3NhZ2VfdCBtc2cpCj4g
-CWlmIChoaWJlcm5hdGVkIHx8IHhoY2ktPnF1aXJrcyAmIFhIQ0lfUkVTRVRfT05fUkVTVU1FIHx8
-IHhoY2ktPmJyb2tlbl9zdXNwZW5kKQo+IAkJcmVpbml0X3hoYyA9IHRydWU7Cj4gCj4rCS8qCj4r
-CSAqIFNvbWUgY29udHJvbGxlcnMgbWlnaHQgbG9zZSBwb3dlciBkdXJpbmcgc3VzcGVuZCwgc28g
-d2FpdAo+KwkgKiBmb3IgY29udHJvbGxlciBub3QgcmVhZHkgYml0IHRvIGNsZWFyLCBqdXN0IGFz
-IGluIHhIQyBpbml0Lgo+KwkgKiBJZ25vcmUgcmV0dmFsIGlmIHJlaW5pdF94aGMgaXMgdHJ1ZSwg
-c2luY2UgdGhlIGRldmljZSB3b3VsZAo+KwkgKiBiZSByZWluaXRlZC4KPisJICovCj4rCXJldHZh
-bCA9IHhoY2lfaGFuZHNoYWtlKCZ4aGNpLT5vcF9yZWdzLT5zdGF0dXMsCj4rCQkJCVNUU19DTlIs
-IDAsIDEwICogMTAwMCAqIDEwMDApOwo+IAlpZiAoIXJlaW5pdF94aGMpIHsKPi0JCS8qCj4tCQkg
-KiBTb21lIGNvbnRyb2xsZXJzIG1pZ2h0IGxvc2UgcG93ZXIgZHVyaW5nIHN1c3BlbmQsIHNvIHdh
-aXQKPi0JCSAqIGZvciBjb250cm9sbGVyIG5vdCByZWFkeSBiaXQgdG8gY2xlYXIsIGp1c3QgYXMg
-aW4geEhDIGluaXQuCj4tCQkgKi8KPi0JCXJldHZhbCA9IHhoY2lfaGFuZHNoYWtlKCZ4aGNpLT5v
-cF9yZWdzLT5zdGF0dXMsCj4tCQkJCQlTVFNfQ05SLCAwLCAxMCAqIDEwMDAgKiAxMDAwKTsKPiAJ
-CWlmIChyZXR2YWwpIHsKPiAJCQl4aGNpX3dhcm4oeGhjaSwgIkNvbnRyb2xsZXIgbm90IHJlYWR5
-IGF0IHJlc3VtZSAlZFxuIiwKPiAJCQkJICByZXR2YWwpOwo+LS0gCj4yLjM5LjIK
+This series is adding support to mount usb hostside exported 9pfs
+filesystems via the usb gadget interface. It also includes a simple tool
+(p9_fwd.py) to translate an tcp 9pfs transport and reuse it via the usb
+interface.
+
+    +--------------------------+    |    +--------------------------+
+    |  9PFS mounting client    |    |    |  9PFS exporting server   |
+ SW |                          |    |    |                          |
+    |   (this:trans_usbg)      |    |    |(e.g. diod or nfs-ganesha)|
+    +-------------^------------+    |    +-------------^------------+
+                  |                 |                  |
+                  |                 |           +------v------+
+                  |                 |           |  p9_fwd.py  |
+                  |                 |           +------^------+
+                  |                 |                  |
+------------------|------------------------------------|-------------
+                  |                 |                  |
+    +-------------v------------+    |    +-------------v------------+
+    |                          |    |    |                          |
+ HW |   USB Device Controller  <--------->   USB Host Controller    |
+    |                          |    |    |                          |
+    +--------------------------+    |    +--------------------------+
+
+The USB host exports a filesystem, while the gadget on the USB device
+side makes it mountable.
+
+Diod (9pfs server) and the forwarder are on the development host, where
+the root filesystem is actually stored. The gadget is initialized during
+boot (or later) on the embedded board. Then the forwarder will find it
+on the USB bus and start forwarding requests.
+
+In this case the 9p requests come from the device and are handled by the
+host. The reason is that USB device ports are normally not available on
+PCs, so a connection in the other direction would not work.
+
+One use-case is to use it as an alternative to NFS root booting during
+the development of embedded Linux devices.
+
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+Changes in v12:
+- removed the unused "struct usb_function *f" catched by kbuild test robot
+- Link to v11: https://lore.kernel.org/r/20240116-ml-topic-u9p-v11-0-b4890e06733a@pengutronix.de
+
+Changes in v11:
+- fixed the include guard in func_utils.h
+- Link to v10: https://lore.kernel.org/r/20240116-ml-topic-u9p-v10-0-a85fdeac2c52@pengutronix.de
+
+Changes in v10:
+- fixed reset of tx req context in complete handler
+- added suggestions from Cristoph JAILLET from v9 review
+- Link to v9: https://lore.kernel.org/r/20240116-ml-topic-u9p-v9-0-93d73f47b76b@pengutronix.de
+
+Changes in v9:
+- solved the error return path by using wait_for_completion instead of
+  running in the usb complete callback in a loop
+- by using wait_for_completion solves the req_lock
+- using req->context instead of using a state variable
+- Link to v8: https://lore.kernel.org/r/20240116-ml-topic-u9p-v8-0-409e659ca4dd@pengutronix.de
+
+Changes in v8:
+- this time really added the req_lock spinlock
+- Link to v7: https://lore.kernel.org/r/20240116-ml-topic-u9p-v7-0-3a1eeef77fbe@pengutronix.de
+
+Changes in v7:
+- added back the req_lock spinlock
+- Link to v6: https://lore.kernel.org/r/20240116-ml-topic-u9p-v6-0-695977d76dff@pengutronix.de
+
+Changes in v6:
+- fixed the python script not to have path set by default
+- improved the lock init
+- fixed usb9pfs status change to connected
+- Link to v5: https://lore.kernel.org/r/20240116-ml-topic-u9p-v5-0-5ed0abd53ef5@pengutronix.de
+
+Changes in v5:
+- fixed lockup in mount -> remount -> monut scenario
+- improved p9_fwd transport script with more options
+- Link to v4: https://lore.kernel.org/r/20240116-ml-topic-u9p-v4-0-722ed28b0ade@pengutronix.de
+
+Changes in v4:
+- reworked the naming scheme to be set by the configfs instance
+- added conn_cancel function to properly stop the transfers
+- ensured that umount -f will work even when the host side has crahed
+- added all the review feedback from Andrzej Pietrasiewicz
+- Link to v3: https://lore.kernel.org/r/20240116-ml-topic-u9p-v3-0-c62a36eccda1@pengutronix.de
+
+Changes in v3:
+- dropped patch "usb: gadget: legacy: add 9pfs multi gadget" as discussed with gregkh
+- Link to v2: https://lore.kernel.org/r/20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de
+
+Changes in v2:
+- improved the commit messages
+- introduced an patch to move the header u_f.h to include/linux/usb to compile usb gadget functions treewide
+- moved usbg gadget function to net/9p/
+- adderessed several comments in function driver, like the cleanup path and kbuild errors
+- improved the documentation in Documentation/filesystems/9p.rst
+- Link to v1: https://lore.kernel.org/r/20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de
+
+---
+Michael Grzeschik (3):
+      usb: gadget: function: move u_f.h to include/linux/usb/func_utils.h
+      net/9p/usbg: Add new usb gadget function transport
+      tools: usb: p9_fwd: add usb gadget packet forwarder script
+
+ Documentation/filesystems/9p.rst                   |  58 +-
+ drivers/usb/gadget/configfs.c                      |   2 +-
+ drivers/usb/gadget/function/f_fs.c                 |   2 +-
+ drivers/usb/gadget/function/f_hid.c                |   2 +-
+ drivers/usb/gadget/function/f_loopback.c           |   2 +-
+ drivers/usb/gadget/function/f_midi.c               |   2 +-
+ drivers/usb/gadget/function/f_midi2.c              |   2 +-
+ drivers/usb/gadget/function/f_sourcesink.c         |   2 +-
+ drivers/usb/gadget/u_f.c                           |   2 +-
+ .../gadget/u_f.h => include/linux/usb/func_utils.h |   8 +-
+ net/9p/Kconfig                                     |   6 +
+ net/9p/Makefile                                    |   4 +
+ net/9p/trans_usbg.c                                | 956 +++++++++++++++++++++
+ tools/usb/p9_fwd.py                                | 243 ++++++
+ 14 files changed, 1278 insertions(+), 13 deletions(-)
+---
+base-commit: 47ac09b91befbb6a235ab620c32af719f8208399
+change-id: 20240116-ml-topic-u9p-895274530eb1
+
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
+
 
