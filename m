@@ -1,109 +1,99 @@
-Return-Path: <linux-usb+bounces-14451-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14452-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 189879677E7
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 18:25:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B2AD967AE4
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 19:02:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C26E11F20F2B
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 16:25:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C1771C21279
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2024 17:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F51183CBE;
-	Sun,  1 Sep 2024 16:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17299181BA8;
+	Sun,  1 Sep 2024 17:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WpkoZhaa"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="PychHPat"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D2E2143894;
-	Sun,  1 Sep 2024 16:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A58917C;
+	Sun,  1 Sep 2024 17:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725207932; cv=none; b=bF7Q8CURtVnR5VWkU9MeVkt8ZL/997v9ylA+cqqKAqXFH4oulzrGJ38ejxRLuPum3s9kVq1anjx6MxYPe6iHHufY4ldaEb4/RGSjmJfH+Y59Tz9cU876xYOHYDj+YmJ9iQyY052amPAmPRNPIy0//eIZoG6jrS0gb+K1yWS7XPk=
+	t=1725210136; cv=none; b=Ee0GhPRAwLFfUzWfkjPGUXJkVdo7uCVFV1RRA9FzeDH4F+vEcV683xIbAGXPa59c4+LTqpKjbiRoRQTH0i61kpzFg08EBycFdSnzxUYPmL7V95tnFzVEToTToZ6xaFKIioxEq2wiVaQ3ik3+jTSDYPIbknJ0lb818f7HA/nM49Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725207932; c=relaxed/simple;
-	bh=3Mj6ijRTEP3d5AnaV0LktCCKBKb4f1wkpToEYFw8SjQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eBtSTM35mOhkRH6V0SF/F1Et4TSaT+zJVj9P2/mja8/9473ZxZLEHXBRtx99tjsEyC2ALxjzbyONn+JgXMQjmMsbVPBd9txfTR9idGqBiNy7+dq1Z6uMlLdZXenlW7HJ/Onk9u7swMsYnF0QJ2dYw2OtdoXZBZOLasyTLJ+gd+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WpkoZhaa; arc=none smtp.client-ip=220.197.31.5
+	s=arc-20240116; t=1725210136; c=relaxed/simple;
+	bh=FsO8EYvnbAmGqUQe9Pii3BHXPSzNdyieBp00jgaKm7k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=gKhObldzjeHoMC/zoUzzo+KcdwnM7Uq/dwWGnaTQb2LqkIh3Aw6EhX5Lab6CfUvCR3eyOMZ5DhlSatCiHvjV/WSeqbZU2F1bQ1mFBpwMX3muFea6u2BibVU1hwSW2wuEEEW24zYUgW2ormggtyjbPzP6Uu484LwnUYBd8+W21aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=PychHPat reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=DgpRk
-	EVaxYPqJS1SPvfN+U+2xNOaGMTcZtuiECOYSgY=; b=WpkoZhaaIdOXVereO/pX1
-	nSCp4eLA5rOp20stL+CxtI4OwwghATqJjeTgddmjA0184LifwCwJtYUbQW/nElDe
-	h2otGD20dPDVuBmb40ZqhwW6BgG5cVA0U0JgfZa6RMcrNz5gTG9HYLiMM86HlS3J
-	/kfqwoI7qLsHboIyTwiNiE=
-Received: from localhost.localdomain (unknown [111.35.190.113])
-	by gzga-smtp-mta-g3-5 (Coremail) with SMTP id _____wBHZhU6ldRmT8x5Kg--.41103S4;
-	Mon, 02 Sep 2024 00:24:46 +0800 (CST)
-From: David Wang <00107082@163.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	David Wang <00107082@163.com>
-Subject: [PATCH] usb: xhci: wait for controller ready when resume with reinit_xhc
-Date: Mon,  2 Sep 2024 00:24:25 +0800
-Message-Id: <20240901162425.5103-1-00107082@163.com>
-X-Mailer: git-send-email 2.39.2
+	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=AjyGkwb0KCWQ1NnIxOsmkp9771bZVXLIiIJ0kX0YArs=; b=P
+	ychHPatwvXf5BcFDQSDy3NXr9qKNZ6eJRupeBD4dg8jBZAPPEMg4IQ6ewsf4ZwsA
+	5ZZ8zTMxuOL+AjVRkK2tqFehv4Uu2aOeKzelQ2haiMUsGbaEWNh8l+KKq81UbYde
+	A18PrnUFBG+LEudVg1UxsEAkUgzbZizuUp+lZqE51g=
+Received: from 00107082$163.com ( [111.35.190.113] ) by
+ ajax-webmail-wmsvr-40-114 (Coremail) ; Mon, 2 Sep 2024 01:01:07 +0800 (CST)
+Date: Mon, 2 Sep 2024 01:01:07 +0800 (CST)
+From: "David Wang" <00107082@163.com>
+To: mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:[PATCH] usb: xhci: wait for controller ready when resume with
+ reinit_xhc
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2024 www.mailtech.cn 163com
+In-Reply-To: <20240901162425.5103-1-00107082@163.com>
+References: <20240901162425.5103-1-00107082@163.com>
+X-NTES-SC: AL_Qu2ZB/6av0gt4SmfbekXn0oTju85XMCzuv8j3YJeN500oyTB5iUpZW9hIlzs+ce1LiCjoAi1QiJDzc1IZKB2cbw2hLX9ZgVPvBhNSXgmNrsJ
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBHZhU6ldRmT8x5Kg--.41103S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KF18tw17WryDAFyUtr15CFg_yoW8XF4DpF
-	4akr4UGF1rta1fKF1qyay2ya4rGasIq398XFZrC34a9rZrt345WryUtrW3Ja9rWrWfGr48
-	tF40qay5KF12qF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE1vVZUUUUU=
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqRNNqmVOClTVCQAAs0
+Message-ID: <1fe3e185.3639.191ae88840f.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:_____wD3n6zUndRmuSdHAA--.44675W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqRNNqmVOClTVCwACs0
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-When resume system with reinit_xhc true, PM would report kernel
-warning about device parent:
-
- >usb 3-1.1: reset high-speed USB device number 4 using xhci_hcd
- >..
- >ep_81: PM: parent 3-1.1:1.1 should not be sleeping
-
-Move the code waiting for controller ready out, and make it
-carry out work no matter reinit_xhc is true or false.
-The error is ignored when reinit_xhc is true.
-
-Signed-off-by: David Wang <00107082@163.com>
----
- drivers/usb/host/xhci.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index efdf4c228b8c..8aeb1b34cdbf 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1032,13 +1032,15 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
- 	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
- 		reinit_xhc = true;
- 
-+	/*
-+	 * Some controllers might lose power during suspend, so wait
-+	 * for controller not ready bit to clear, just as in xHC init.
-+	 * Ignore retval if reinit_xhc is true, since the device would
-+	 * be reinited.
-+	 */
-+	retval = xhci_handshake(&xhci->op_regs->status,
-+				STS_CNR, 0, 10 * 1000 * 1000);
- 	if (!reinit_xhc) {
--		/*
--		 * Some controllers might lose power during suspend, so wait
--		 * for controller not ready bit to clear, just as in xHC init.
--		 */
--		retval = xhci_handshake(&xhci->op_regs->status,
--					STS_CNR, 0, 10 * 1000 * 1000);
- 		if (retval) {
- 			xhci_warn(xhci, "Controller not ready at resume %d\n",
- 				  retval);
--- 
-2.39.2
-
+T29wcy4uLiBKdXN0IGZpbmQgb3V0IHRoZSB3YXJuaW5nICIgIGVwXzgxOiBQTTogcGFyZW50IDMt
+MS4xOjEuMSBzaG91bGQgbm90IGJlIHNsZWVwaW5nIiBzaG93cyB1cCB3aGVuIEkgc3VzcGVuZCBt
+eSBzeXN0ZW0gd2l0aCBVU0IgY2FtZXJhIG9uLCAKYW5kIHRoaXMgcGF0Y2ggY291bGQgbm90IGZp
+eCBpdC4KUGxlYXNlIGlnbm9yZSB0aGUgcGF0Y2gsIHNvcnJ5IGJvdGhlcmluZy4uLgoKRGF2aWQK
+CgpBdCAyMDI0LTA5LTAyIDAwOjI0OjI1LCAiRGF2aWQgV2FuZyIgPDAwMTA3MDgyQDE2My5jb20+
+IHdyb3RlOgo+V2hlbiByZXN1bWUgc3lzdGVtIHdpdGggcmVpbml0X3hoYyB0cnVlLCBQTSB3b3Vs
+ZCByZXBvcnQga2VybmVsCj53YXJuaW5nIGFib3V0IGRldmljZSBwYXJlbnQ6Cj4KPiA+dXNiIDMt
+MS4xOiByZXNldCBoaWdoLXNwZWVkIFVTQiBkZXZpY2UgbnVtYmVyIDQgdXNpbmcgeGhjaV9oY2QK
+PiA+Li4KPiA+ZXBfODE6IFBNOiBwYXJlbnQgMy0xLjE6MS4xIHNob3VsZCBub3QgYmUgc2xlZXBp
+bmcKPgo+TW92ZSB0aGUgY29kZSB3YWl0aW5nIGZvciBjb250cm9sbGVyIHJlYWR5IG91dCwgYW5k
+IG1ha2UgaXQKPmNhcnJ5IG91dCB3b3JrIG5vIG1hdHRlciByZWluaXRfeGhjIGlzIHRydWUgb3Ig
+ZmFsc2UuCj5UaGUgZXJyb3IgaXMgaWdub3JlZCB3aGVuIHJlaW5pdF94aGMgaXMgdHJ1ZS4KPgo+
+U2lnbmVkLW9mZi1ieTogRGF2aWQgV2FuZyA8MDAxMDcwODJAMTYzLmNvbT4KPi0tLQo+IGRyaXZl
+cnMvdXNiL2hvc3QveGhjaS5jIHwgMTQgKysrKysrKystLS0tLS0KPiAxIGZpbGUgY2hhbmdlZCwg
+OCBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQo+Cj5kaWZmIC0tZ2l0IGEvZHJpdmVycy91
+c2IvaG9zdC94aGNpLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYwo+aW5kZXggZWZkZjRjMjI4
+YjhjLi44YWViMWIzNGNkYmYgMTAwNjQ0Cj4tLS0gYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYwo+
+KysrIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLmMKPkBAIC0xMDMyLDEzICsxMDMyLDE1IEBAIGlu
+dCB4aGNpX3Jlc3VtZShzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ksIHBtX21lc3NhZ2VfdCBtc2cpCj4g
+CWlmIChoaWJlcm5hdGVkIHx8IHhoY2ktPnF1aXJrcyAmIFhIQ0lfUkVTRVRfT05fUkVTVU1FIHx8
+IHhoY2ktPmJyb2tlbl9zdXNwZW5kKQo+IAkJcmVpbml0X3hoYyA9IHRydWU7Cj4gCj4rCS8qCj4r
+CSAqIFNvbWUgY29udHJvbGxlcnMgbWlnaHQgbG9zZSBwb3dlciBkdXJpbmcgc3VzcGVuZCwgc28g
+d2FpdAo+KwkgKiBmb3IgY29udHJvbGxlciBub3QgcmVhZHkgYml0IHRvIGNsZWFyLCBqdXN0IGFz
+IGluIHhIQyBpbml0Lgo+KwkgKiBJZ25vcmUgcmV0dmFsIGlmIHJlaW5pdF94aGMgaXMgdHJ1ZSwg
+c2luY2UgdGhlIGRldmljZSB3b3VsZAo+KwkgKiBiZSByZWluaXRlZC4KPisJICovCj4rCXJldHZh
+bCA9IHhoY2lfaGFuZHNoYWtlKCZ4aGNpLT5vcF9yZWdzLT5zdGF0dXMsCj4rCQkJCVNUU19DTlIs
+IDAsIDEwICogMTAwMCAqIDEwMDApOwo+IAlpZiAoIXJlaW5pdF94aGMpIHsKPi0JCS8qCj4tCQkg
+KiBTb21lIGNvbnRyb2xsZXJzIG1pZ2h0IGxvc2UgcG93ZXIgZHVyaW5nIHN1c3BlbmQsIHNvIHdh
+aXQKPi0JCSAqIGZvciBjb250cm9sbGVyIG5vdCByZWFkeSBiaXQgdG8gY2xlYXIsIGp1c3QgYXMg
+aW4geEhDIGluaXQuCj4tCQkgKi8KPi0JCXJldHZhbCA9IHhoY2lfaGFuZHNoYWtlKCZ4aGNpLT5v
+cF9yZWdzLT5zdGF0dXMsCj4tCQkJCQlTVFNfQ05SLCAwLCAxMCAqIDEwMDAgKiAxMDAwKTsKPiAJ
+CWlmIChyZXR2YWwpIHsKPiAJCQl4aGNpX3dhcm4oeGhjaSwgIkNvbnRyb2xsZXIgbm90IHJlYWR5
+IGF0IHJlc3VtZSAlZFxuIiwKPiAJCQkJICByZXR2YWwpOwo+LS0gCj4yLjM5LjIK
 
