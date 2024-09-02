@@ -1,77 +1,76 @@
-Return-Path: <linux-usb+bounces-14492-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14493-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5D4968756
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 14:15:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCEB09687C0
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 14:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B54191F22C5F
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 12:15:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AD011C21CAD
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 12:43:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2BE19E96A;
-	Mon,  2 Sep 2024 12:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0vI5ZCxP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7426919C54F;
+	Mon,  2 Sep 2024 12:43:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D2919E96B;
-	Mon,  2 Sep 2024 12:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D9219E976
+	for <linux-usb@vger.kernel.org>; Mon,  2 Sep 2024 12:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725279293; cv=none; b=YpgD2BvvGtUMFpfDuiKtArsFZxYK/hENggNfqyfW7t6zA4L6KRnpwVtHUh9Ak2X7PfGdwWAZ8doLPpQbf+3V8FAJ0q73HU86Um+IBkZSlVGCXxZtwxxjnRZouZoGqDsH/7+QlNgaWTFidd49DfNJFhuGe8m5PXP2dXeFJUipduk=
+	t=1725281035; cv=none; b=HNlVTCucI1QDR7ARJ0j8zllVnaRl7i7aUrm973bhH1cRzGQkg1WGzr7+26o5Vag+7vKDDniqHetP/2t2R37uT1sOirhyuauJ/CEcs5htlDjz7sktteyr2Hk+vUUtHRB3QbeZqTS2wCKKLXuXClLZx23wL63HXGA5M0Bt+r0lQAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725279293; c=relaxed/simple;
-	bh=n601jGxcwbLz5zKu9HSp5uYcLAZIHKllavn+kEnf+Ro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YGSCnbGvsn+P4NvUl8XiFVtj/QBcWfi1oXs34Uh8hBbcjaqA2m6M4I7sD+GSIqbmRc3WfDExS2oh4nnNI/RdNL4b4uJsN/yDhv+6bVYF/56KRk0oitOcoAFFfnG922DF9QjNcP5bdKq7eEarIkqsaESAxVVVtDaiMHXEzZ62gZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0vI5ZCxP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683BAC4CEC2;
-	Mon,  2 Sep 2024 12:14:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725279293;
-	bh=n601jGxcwbLz5zKu9HSp5uYcLAZIHKllavn+kEnf+Ro=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0vI5ZCxPvJUx2Ek04kWkcq0ibB0vYrvouMQLskDZLCdq7+ai12ozER/Znc5bkWrwb
-	 vHureAhzvx8OjG79jN+NSm5vBTJ2al9PtnK8Azgjnst9QM8Gjw7PxnRM+JBoRjZw+R
-	 KGwLwz33qAxXRj3TeLgPqd6fo9BJ35sgQDp9munA=
-Date: Mon, 2 Sep 2024 14:14:49 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: linux-usb@vger.kernel.org, peter.chen@kernel.org, sashal@kernel.org,
-	stable@vger.kernel.org, hui.pu@gehealthcare.com
-Subject: Re: [GIT PULL] USB chipidea patches for linux-5.15.y and linux-6.1.y
-Message-ID: <2024090208-throat-sponge-79cc@gregkh>
-References: <20240902092711.jwuf4kxbbmqsn7xk@hippo>
+	s=arc-20240116; t=1725281035; c=relaxed/simple;
+	bh=dBLxSUmlR7SYu09TMr30gJbUjsjyPxs85lSMJNFAYYg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=W0Tl7toG1bi2xhqFinqd6fiO9dSmf7OWA6q7yi/b7fDqDOl7Rvk2P+ndxltgLA5kHJav1PHrIHjGZHocoNnXM++RTfLhVmjn/Le0QuD2xrqqYeYi/uZdXBX8DbSW8BozfBGhyRTDfVWNy6+T3xzJW95VtyuDRTicKNLby8smtm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Wy7gD21r4zpVH0;
+	Mon,  2 Sep 2024 20:42:00 +0800 (CST)
+Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
+	by mail.maildlp.com (Postfix) with ESMTPS id 07378140121;
+	Mon,  2 Sep 2024 20:43:50 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemf500003.china.huawei.com
+ (7.202.181.241) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 2 Sep
+ 2024 20:43:49 +0800
+From: Zhang Zekun <zhangzekun11@huawei.com>
+To: <patchwork@huawei.com>, <Thinh.Nguyen@synopsys.com>,
+	<gregkh@linuxfoundation.org>, <shawnguo@kernel.org>,
+	<s.hauer@pengutronix.de>, <kernel@pengutronix.de>, <festevam@gmail.com>,
+	<linux-usb@vger.kernel.org>, <vz@mleia.com>, <stern@rowland.harvard.edu>
+CC: <zhangzekun11@huawei.com>
+Subject: [PATCH 0/2] Use helper function devm_clk_get_enabled()
+Date: Mon, 2 Sep 2024 20:30:18 +0800
+Message-ID: <20240902123020.29267-1-zhangzekun11@huawei.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240902092711.jwuf4kxbbmqsn7xk@hippo>
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemf500003.china.huawei.com (7.202.181.241)
 
-On Mon, Sep 02, 2024 at 05:27:11PM +0800, Xu Yang wrote:
-> Hi Greg,
-> 
-> The below two patches are needed on linux-5.15.y and linux-6.1.y, please
-> help to add them to the stable tree. 
-> 
-> b7a62611fab7 usb: chipidea: add USB PHY event
-> 87ed257acb09 usb: phy: mxs: disconnect line when USB charger is attached
-> 
-> They are available in the Git repository at:
->   git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git branch usb-testing
+devm_clk_get() and clk_prepare_enable() can be replaced by helper function
+devm_clk_get_enabled(). Use helper function devm_clk_get_enabled() to
+simplify code.
 
-Also, wait, this wouldn't work anyway, you are asking me to pull a
-random testing branch into the stable tree?
+Zhang Zekun (2):
+  usb: dwc3: Use helper function devm_clk_get_enabled()
+  usb: ohci-nxp: Use helper function devm_clk_get_enabled()
 
-confused,
+ drivers/usb/dwc3/dwc3-imx8mp.c | 47 ++++++++--------------------------
+ drivers/usb/host/ohci-nxp.c    | 18 +++----------
+ 2 files changed, 15 insertions(+), 50 deletions(-)
 
-greg k-h
+-- 
+2.17.1
+
 
