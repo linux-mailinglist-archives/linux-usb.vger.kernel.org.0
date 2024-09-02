@@ -1,221 +1,175 @@
-Return-Path: <linux-usb+bounces-14497-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14498-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A91E3968946
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 15:58:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60192968948
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 15:59:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 221591F22192
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 13:58:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E3E81C21B42
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 13:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655A720FAA8;
-	Mon,  2 Sep 2024 13:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6D320FA9E;
+	Mon,  2 Sep 2024 13:59:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jbS21Gsc"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="WAYlBi5y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6B9183CBB
-	for <linux-usb@vger.kernel.org>; Mon,  2 Sep 2024 13:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C59183CBB
+	for <linux-usb@vger.kernel.org>; Mon,  2 Sep 2024 13:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725285503; cv=none; b=XRkQHjQtoGx7b058zaexhZsuF8Amm9EoYPTmWehpT5FQEPylABvn0TvalbJnkyYsuXbjfieHGuk4IKLABQRjgFueBAuv5vUvC/Kug5n6pFoCtNl9J6XqOU6FU5kyKVzw7rNJXg4pzTG95TgwHEeTTJvRVJbA8I0lU8IkQli8vM0=
+	t=1725285571; cv=none; b=qDaL8nTx/KRLeqznD67awMAkc9F+d7GrC1d7dCWeLkYz4jb8JkBcl/18YR9CpfZbr/VtZUkhFuxiIlVPw+DOoBDUElOdcrbrFhEt2osTa3GDnCcZ9Ln5GGHVPumxKinuIN+4oYYQVFmiOYlbC07L/yakL+kYVOk4wuSywStZEa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725285503; c=relaxed/simple;
-	bh=77Em/0+PwDa6cdDVhhukewOuiaJu+6okTjnMbbiKN60=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=Ww+1VDw5pPTDsyYCl+SeEX/u30/ecs8HKzJco/OIGhbooXOClSk9Dz1xMGg2zYXFfOpo0Fs4CTAzJf7iVkuHmlukUOXR2POGcLp24i/6HUHS1YMRzAbXGkRKqw2755UG9zR3+1DsbVfvLmCY1YnjqDf1KEYhY4dwr7HL3yC/EkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jbS21Gsc; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240902135818epoutp040955c59d31e38d50197a12349d28d9ec~xcgU3r5wU2466624666epoutp04t
-	for <linux-usb@vger.kernel.org>; Mon,  2 Sep 2024 13:58:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240902135818epoutp040955c59d31e38d50197a12349d28d9ec~xcgU3r5wU2466624666epoutp04t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1725285499;
-	bh=2JdZmd0hXajsenejN+yfwg6Vczo0f37j8pc3Xi5gO38=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=jbS21GsccKh0F6j14tt1HBOQ2mslEhs+5Ont/f9flbFmyXx9gyZoVZnCv35kALc3P
-	 oguamj5wvDwcsMIRBitWLBELsHscAPynNyTuVE5i+r9i2g6crukeXKNkymfDguCeWr
-	 ieVp5VP1o632+s1h3YiizEpIq0MZvvm8g37jf8Ww=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20240902135818epcas5p2ce71ea836ec16ed9433e7639d07b312b~xcgUHBQse2672326723epcas5p2y;
-	Mon,  2 Sep 2024 13:58:18 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.183]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4Wy9M92Dkrz4x9Py; Mon,  2 Sep
-	2024 13:58:13 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	9F.43.19863.574C5D66; Mon,  2 Sep 2024 22:58:13 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240902134041epcas5p1f3c7e865fdcedb24bbd9ecfa9ca5e219~xcQ8d3qND3191131911epcas5p1s;
-	Mon,  2 Sep 2024 13:40:41 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240902134041epsmtrp26930a7b02dadee34d16aa33f50f2b455~xcQ8cssRv3156631566epsmtrp2N;
-	Mon,  2 Sep 2024 13:40:41 +0000 (GMT)
-X-AuditID: b6c32a50-c73ff70000004d97-14-66d5c475ed32
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	51.E4.08456.950C5D66; Mon,  2 Sep 2024 22:40:41 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240902134038epsmtip1ad7521958994a7c7a975cc65f4eb3497~xcQ4wGpUj3139831398epsmtip1-;
-	Mon,  2 Sep 2024 13:40:37 +0000 (GMT)
-Message-ID: <28b0a42c-2379-4844-ae18-9b0679263460@samsung.com>
-Date: Mon, 2 Sep 2024 19:10:36 +0530
+	s=arc-20240116; t=1725285571; c=relaxed/simple;
+	bh=DPUwrKEX2aTzxirXKp5y/TNy2XqvUYq/gxL8iKrJ+jY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O/15CfrAVy8DdAP/uI4m1Gy774Q7mmBXQKuPDZeTtuWYyqJ627tL9W+dEWqwve52GV+Zqdj3kQ1ev6ktXsKjEl5oFZ/25GlZxhjJj91vLE8J9CaIMD+unR47xeIWnxbmPeNl7IjhKvFuJaIjAUhDzAvfiZoyEmXr9PJuCIg5GiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=WAYlBi5y; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6c35357cdacso12335026d6.0
+        for <linux-usb@vger.kernel.org>; Mon, 02 Sep 2024 06:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1725285568; x=1725890368; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3gbj1ygV/9/idhVix3ALp3+oVE2OAL81xJouBb7EPq0=;
+        b=WAYlBi5y4f53D+SrE221/U2EyprjLt/nkRN5HMZyLkBZnEl/OhSNmSGc3fOCqpF0+t
+         xSyywD6IKT42mlnn63e1H+1or1TecXljREvy8P+E76cZczcBrwLdDND35YcG6a8GL80P
+         dXgEAPuarILURqWbHKCRyznsrS3hj5PNnuEKiTfdoKivhx7yMvegezNqiP7XPmfQVKFD
+         sxhiTWoS7Kz+Ld209NDacJo2IbH0E8fCkvl0t+4E8A6mi4+WQ8ZlGpK9CQF6mFRLNvxl
+         T4M7giRbKXJq3V6OuzybNR0fD+679RCK3rn114nyR+xN5r/HEM2k35CQNrwb/b9KA3Ii
+         ra0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725285568; x=1725890368;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3gbj1ygV/9/idhVix3ALp3+oVE2OAL81xJouBb7EPq0=;
+        b=Dm8TOx7kEBzN6dPmaTTDaXIjFnk5INlUp9b4ikxDzZ7odwauM6PKDZm4tsPsZoWJ4l
+         03i8LQhXG1rwKBQgBI5s0IMqWibSMIpA8uYplNUiTvSPjE+xaWRnZ+moqK5Iv4Sy1UEA
+         k/7G0HfW/MXll7sv6sTZxMc1jWZoJNebAbLMk1qzdSmvGBIGeJDRhV49IPf5toaMzGbQ
+         WotjrrItWbkcUj2/dJ31GG36+In9tWdOYFmH9espQpVXI6UYJvMoEOK/wLAIsZTqO/7q
+         72zg0HUXGi/8OMSvLWs5LZMZnaEPb/U/5VBaSi4G62DWxniAurhyvkBwdQag6kmUBClh
+         fulw==
+X-Forwarded-Encrypted: i=1; AJvYcCUcE4juq/QDMDHF/tpLUcvYumzdMbKCSltXNkTlKe4/UcuH93TJOQmx++KnuAxLRtacZR17VBcbYF4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpqyewIDyNPK1Z6PvCi21pQR9xSI7pqYO0GSeOcx6cSoqrM4/q
+	ygEYJmk7xQb622siZu1QHTrdd/a07mydICU+oV1neU+noAhLVCMK1UARjNoGtQ==
+X-Google-Smtp-Source: AGHT+IGB8ins+w/j5r8JsWHb8qbJBY+OK0kBRaRNF0jmAv8UOgfRM127LHoWgPP2E2Z//w0NqNpwAQ==
+X-Received: by 2002:a0c:f413:0:b0:6bf:7927:3a9f with SMTP id 6a1803df08f44-6c355f87aa7mr74079116d6.46.1725285568512;
+        Mon, 02 Sep 2024 06:59:28 -0700 (PDT)
+Received: from rowland.harvard.edu (wrls-249-137-9.wrls-client.fas.harvard.edu. [140.247.12.9])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c340bfa741sm42124776d6.21.2024.09.02.06.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 06:59:28 -0700 (PDT)
+Date: Mon, 2 Sep 2024 09:59:25 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Zhang Zekun <zhangzekun11@huawei.com>
+Cc: patchwork@huawei.com, Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	linux-usb@vger.kernel.org, vz@mleia.com
+Subject: Re: [PATCH 2/2] usb: ohci-nxp: Use helper function
+ devm_clk_get_enabled()
+Message-ID: <6c65e493-19ff-4fd9-8b2a-c96bcad761f6@rowland.harvard.edu>
+References: <20240902123020.29267-1-zhangzekun11@huawei.com>
+ <20240902123020.29267-3-zhangzekun11@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: udc: Add null pointer check for udc in
- gadget_match_driver
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg KH <gregkh@linuxfoundation.org>, royluo@google.com,
-	paul@crapouillou.net, elder@kernel.org, yuanlinyu@hihonor.com,
-	quic_kriskura@quicinc.com, crwulff@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
-	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
-	eomji.oh@samsung.com, shijie.cai@samsung.com, stable <stable@kernel.org>
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <fbf87ddf-6d8e-43b7-b9f5-65025395b170@rowland.harvard.edu>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCJsWRmVeSWpSXmKPExsWy7bCmpm7pkatpBltf8Fi8ubqK1WLu0d1s
-	FncWTGOyuHd0NpvFqeULmSyaF69ns5i0ZyuLxd2HP1gsLu+aw2axaFkrs8Wno/9ZLfoXX2Kx
-	+P76I6vFqs45LBbtDafYLC5/3wmUPX+BzWLCbyAx6aCoxddPlxgdRDxWX2pn89g56y67x4JN
-	pR5zfk1m9ti0qpPNY//cNeweE/fUecy++4PRo2/LKkaPz5vkAriism0yUhNTUosUUvOS81My
-	89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgL5TUihLzCkFCgUkFhcr6dvZFOWX
-	lqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgYmQIVJmRnTHo3i6lgiWTFhaZdzA2M
-	C0S7GDk5JARMJN7NmM3excjFISSwh1Hi6KJPrBDOJ0aJ5p7HLBDON0aJH+8WsMC0ND/oYYRI
-	7AVK9HZCOW8ZJV7ems8IUsUrYCdxfcVpIJuDg0VARWJaDw9EWFDi5MwnYINEBeQl7t+awQ5i
-	CwvESfSen8oMYosIaElsbnrJDDKTWeAOs0RjWzMTSIJZQFzi1pP5TCAz2QQMJZ6dsAEJcwq4
-	S2x5co4ZokReonnrbLBeCYFuTommM/eZIa52kVi+7zoThC0s8er4FnYIW0ri87u9bBB2tcTq
-	Ox/ZIJpbGCUOP/kGVWQv8fjoI2aQxcwCmhLrd+lDhGUlpp5aB3Ubn0Tv7ydQ83kldsyDsVUl
-	TjVehpovLXFvyTVWCNtD4mrrdeYJjIqzkMJlFpI3ZyH5ZxbC5gWMLKsYpVILinPTU5NNCwx1
-	81LL4VGenJ+7iRGc/LUCdjCu3vBX7xAjEwfjIUYJDmYlEd7YjVfThHhTEiurUovy44tKc1KL
-	DzGaAiNoIrOUaHI+MP/klcQbmlgamJiZmZlYGpsZKonzvm6dmyIkkJ5YkpqdmlqQWgTTx8TB
-	KdXAVJU5v3mpUvmyHz/+TtJQDHRnDHTsfvg24eTNv5MMT3T/8pyVcs+98drLySfS82zM9kkW
-	5czQaPniUN7muWJuBEdAY6np7sv/Jf5t4jsZGLR3ap5X3/uVzKXnNVZfbuFYeCljbuCRw3kF
-	xx6+0NXPaX0kkaP/iP0D97RjgW1uu3liXjBvC+X+bS7vyyHlVlV9U/Eg/xZ+by2/0tPnTgUI
-	cue/7RaPXc0jtrAq5XtvGdOkRzoup4/9562cfN37ZfMRwRVFNmGPY8K+ukTkTHNPayjvjjWR
-	aZjNub3y8qufnlWa71u+tgbMzf5uo39z0/3JUY6b2W53J269V6sg7eZ7v/TB6k91i7+H5Jox
-	LspXYinOSDTUYi4qTgQAo935oocEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHIsWRmVeSWpSXmKPExsWy7bCSnG7kgatpBttWGFu8ubqK1WLu0d1s
-	FncWTGOyuHd0NpvFqeULmSyaF69ns5i0ZyuLxd2HP1gsLu+aw2axaFkrs8Wno/9ZLfoXX2Kx
-	+P76I6vFqs45LBbtDafYLC5/3wmUPX+BzWLCbyAx6aCoxddPlxgdRDxWX2pn89g56y67x4JN
-	pR5zfk1m9ti0qpPNY//cNeweE/fUecy++4PRo2/LKkaPz5vkAriiuGxSUnMyy1KL9O0SuDIm
-	vZvFVLBEsuJC0y7mBsYFol2MnBwSAiYSzQ96GLsYuTiEBHYzShz6v5wJIiEt8XpWFyOELSyx
-	8t9zdoii14wSmy4uAiviFbCTuL7iNFARBweLgIrEtB4eiLCgxMmZT1hAbFEBeYn7t2awg9jC
-	AnESveenMoPYIgJaEpubXjKDzGQWuMMs8fD1GqgFb5gkrj/6DFbFLCAucevJfCaQBWwChhLP
-	TtiAhDkF3CW2PDkHVWIm0bUV4lBmoGXNW2czT2AUmoXkjllIJs1C0jILScsCRpZVjJKpBcW5
-	6bnFhgVGeanlesWJucWleel6yfm5mxjBUa6ltYNxz6oPeocYmTgYDzFKcDArifDGbryaJsSb
-	klhZlVqUH19UmpNafIhRmoNFSZz32+veFCGB9MSS1OzU1ILUIpgsEwenVAMTz5uinEL7svvn
-	Jke/OtE4TXW1luedG2GcS/7wRfr9Pc4++VJ6tvWBIy/8PzTMu3G/drPH7oxs/raJKxgPGa1b
-	dzb+exzTX9m1zLxfd2SGrDk0yWkOQ+M1M5usJ/fyrp2dLJbe+nx7LZug5mYvg7KKOp3KqB97
-	M05viC2RtmP20+NtYefti5+wOLnwmExO3VUe/pdFZ9XTz/7grdxj8MJGYsGdyVp/vqz8sJ89
-	xZc1QYDh1pfVk2esCZ86L8RsGpeI87eqwE28Jb8kLY3m+Jjrt+qs9fh7XvPY/yWihuVTJae4
-	J/wKec+gXdN2jWvFiVyWM7fN4xP+BOas0xT76SUa4tz4qHKB6Jk/N+dd8p2gxFKckWioxVxU
-	nAgAHZzroWEDAAA=
-X-CMS-MailID: 20240902134041epcas5p1f3c7e865fdcedb24bbd9ecfa9ca5e219
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37
-References: <CGME20240828070538epcas5p2ce9b001afd4588139070d01f0fb2ac37@epcas5p2.samsung.com>
-	<20240828070507.2047-1-selvarasu.g@samsung.com>
-	<2024082801-dissuade-starlight-e5ad@gregkh>
-	<4c64791e-a2f0-4878-8025-4ced94da6bc3@rowland.harvard.edu>
-	<3c75924e-ed1d-4b1d-8d4e-fb4dfe4f363b@samsung.com>
-	<fbf87ddf-6d8e-43b7-b9f5-65025395b170@rowland.harvard.edu>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240902123020.29267-3-zhangzekun11@huawei.com>
 
+On Mon, Sep 02, 2024 at 08:30:20PM +0800, Zhang Zekun wrote:
+> devm_clk_get() and clk_prepare_enable() can be replaced by helper
+> function devm_clk_get_enabled(). Let's use devm_clk_get_enabled() to
+> simplify code and avoid calling clk_disable_unprepare().
+> 
+> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
+> ---
 
-On 8/31/2024 9:59 AM, Alan Stern wrote:
-> On Fri, Aug 30, 2024 at 06:16:12PM +0530, Selvarasu Ganesan wrote:
->> Hi Alan,
->>
->> Thanks for your comments. I understand your suggestions. We already have
->> a similar reference check with the udc name before calling
->> usb_gadget_register_driver.
->> In the drivers/usb/gadget/configfs.c file, I am wondering if there might
->> be an issue with the check of udc_name before
->> usb_gadget_register_driver. This is the only way to allow
->> gadget_register to be called before releasing or unregistering an
->> existing udc. Do you think we need to add an additional check here,
->> referencing the UDC, to prevent gadget_register from being called before
->> the existing UDC is released?
-> I don't understand what you're saying.  There is no routine named
-> "gadget_register".  (And there is no variable named "udc_name" in the
-> code below, although there is gi->composite.gadget_driver.udc_name --
-> but that's not a variable, it is a field in a structure.)
->
->> drivers/usb/gadget/configfs.c : gadget_dev_desc_UDC_store()
->> ===========================================================
->> if (gi->composite.gadget_driver.udc_name) {
->>                           ret = -EBUSY;
->>                           goto err;
->>                   }
->> gi->composite.gadget_driver.udc_name = name;
-> Are you talking about this check and assignment?  Why do you think there
-> might be a problem here?
->
-> Are you worried that some UDC might be released while this code is
-> running?  If that happens, why would it be a problem?
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-
-I am talking here based on the call traces, we are observing the 
-following call traces at the time of failures. One specific point of 
-interest is the gadget_match_driver() function, which is called as part 
-of the usb_gadget_register_driver() function. I am wondering how the 
-usb_gadget_register_driver() function allows the registration of a new 
-driver even when an existing same UDC is not releasing. One possibility 
-is that gi->composite.gadget_driver.udc_name becomes NULL before the UDC 
-is released. However, as of now, we do not have any evidence to support 
-this theory. We are still trying to reproduce the same issue with added 
-more debugging logs.
-
-CPU0: (ROLE SWITCH DEVICE <-> HOST)
-==================================
-
-->usb_role_switch_set_role()
-  ->dwc3_usb_role_switch_set()
-   ->dwc3_set_mode()
-    ->__dwc3_set_mode()
-     ->dwc3_gadget_exit()
-      ->usb_del_gadget()
-       ->device_unregister()
-        ->put_device(dev)
-         ->usb_udc_release()
-
-
-  CPU1 (echo "<dwc3 device name>" > <path of udc 
-config>/config/usb_gadget/g1/UDC)
-=================================================================================
-->configfs_write_iter()
-  ->gadget_dev_desc_UDC_store()
-   ->usb_gadget_register_driver()
-    ->driver_register()
-     ->bus_add_driver()
-      ->driver_attach()
-       ->bus_for_each_dev()
-        ->__driver_attach()
-         ->gadget_match_driver()
-
->
->> ret = usb_gadget_register_driver(&gi->composite.gadget_driver);
-> Alan Stern
->
+>  drivers/usb/host/ohci-nxp.c | 18 ++++--------------
+>  1 file changed, 4 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
+> index 8264c454f6bd..5b775e1ea527 100644
+> --- a/drivers/usb/host/ohci-nxp.c
+> +++ b/drivers/usb/host/ohci-nxp.c
+> @@ -51,8 +51,6 @@ static struct hc_driver __read_mostly ohci_nxp_hc_driver;
+>  
+>  static struct i2c_client *isp1301_i2c_client;
+>  
+> -static struct clk *usb_host_clk;
+> -
+>  static void isp1301_configure_lpc32xx(void)
+>  {
+>  	/* LPC32XX only supports DAT_SE0 USB mode */
+> @@ -155,6 +153,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>  	struct resource *res;
+>  	int ret = 0, irq;
+>  	struct device_node *isp1301_node;
+> +	struct clk *usb_host_clk;
+>  
+>  	if (pdev->dev.of_node) {
+>  		isp1301_node = of_parse_phandle(pdev->dev.of_node,
+> @@ -180,26 +179,20 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	/* Enable USB host clock */
+> -	usb_host_clk = devm_clk_get(&pdev->dev, NULL);
+> +	usb_host_clk = devm_clk_get_enabled(&pdev->dev, NULL);
+>  	if (IS_ERR(usb_host_clk)) {
+> -		dev_err(&pdev->dev, "failed to acquire USB OHCI clock\n");
+> +		dev_err(&pdev->dev, "failed to acquire and start USB OHCI clock\n");
+>  		ret = PTR_ERR(usb_host_clk);
+>  		goto fail_disable;
+>  	}
+>  
+> -	ret = clk_prepare_enable(usb_host_clk);
+> -	if (ret < 0) {
+> -		dev_err(&pdev->dev, "failed to start USB OHCI clock\n");
+> -		goto fail_disable;
+> -	}
+> -
+>  	isp1301_configure();
+>  
+>  	hcd = usb_create_hcd(driver, &pdev->dev, dev_name(&pdev->dev));
+>  	if (!hcd) {
+>  		dev_err(&pdev->dev, "Failed to allocate HC buffer\n");
+>  		ret = -ENOMEM;
+> -		goto fail_hcd;
+> +		goto fail_disable;
+>  	}
+>  
+>  	hcd->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> @@ -229,8 +222,6 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>  	ohci_nxp_stop_hc();
+>  fail_resource:
+>  	usb_put_hcd(hcd);
+> -fail_hcd:
+> -	clk_disable_unprepare(usb_host_clk);
+>  fail_disable:
+>  	isp1301_i2c_client = NULL;
+>  	return ret;
+> @@ -243,7 +234,6 @@ static void ohci_hcd_nxp_remove(struct platform_device *pdev)
+>  	usb_remove_hcd(hcd);
+>  	ohci_nxp_stop_hc();
+>  	usb_put_hcd(hcd);
+> -	clk_disable_unprepare(usb_host_clk);
+>  	isp1301_i2c_client = NULL;
+>  }
+>  
+> -- 
+> 2.17.1
+> 
 
