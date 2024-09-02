@@ -1,140 +1,109 @@
-Return-Path: <linux-usb+bounces-14468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14469-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E098967F8F
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 08:37:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24B96967FA3
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 08:47:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6A3B1F2291B
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 06:37:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D457D282826
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 06:47:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37ECF15574F;
-	Mon,  2 Sep 2024 06:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A740155A52;
+	Mon,  2 Sep 2024 06:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uZGiy2Xv"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="JnTHhCqP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E47136982;
-	Mon,  2 Sep 2024 06:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C2113C80E;
+	Mon,  2 Sep 2024 06:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725259059; cv=none; b=VESVi7xb5yHNcNDnB1zDUrUO4xc81k95fdTeEcph39ROUdM6lZklz4Bo7ntEh03Sa80HrPy0rvdZROcz2ldO8+hqhUSicivV1uTidtSq1XgFs+1DD9C5eb/dXQnuFT4ye0MMI6PEFog8/KjqGq1g1k3/uuiPDtfKEVB2U+Lz8FU=
+	t=1725259628; cv=none; b=mSdx4sOv4dBNHDFLAQoUS3wuwl5PhiFdcKsmyF3xT14E93nVVW4zX8NuzZspgVT0mxUbr1iv4zucxvj3K1GivVVzdVGR55ENpMmTioT8Nzz3eHvjgMt0s4nQLi7dExx3ZGdyDTaToeLR07D9T95nriIYEDMWQrdsqhsxQD17l44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725259059; c=relaxed/simple;
-	bh=xSb4BNooMB4KLTCFcdB3Tq4qzP8BjQcXgqaW5oG/Gy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KkPduLArcyvh4Lj0aQtV3nB/3moXuge+3+eaHslRnEgOMg3WMKBIudUy5sCEaYjAJ4LixBdwajZibs4mkGQrQdRkpFzwAf88QopBTKwxKqFSnSJfB3uwWRRobvBUq/YMuD0QM8+LN+023oCM5mo/58y6RWbghrohWg2HRn/opBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uZGiy2Xv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14E8C4CEC2;
-	Mon,  2 Sep 2024 06:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725259059;
-	bh=xSb4BNooMB4KLTCFcdB3Tq4qzP8BjQcXgqaW5oG/Gy4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uZGiy2Xvcxguyw0dLUh8J/5AyJxpW3WB782bpVPNH7RlkUzo8Ta1f289/rChdULTB
-	 OC2jHDiGCg7ktbyoj+7BxXTcuQKP6ydJOJAhzuWF4uCfGz5nswbqzptx/BgEjulB7z
-	 MdIurnCFpQwWbrp3aXBRtkaFakKL7/QPWK4pRG5Q=
-Date: Mon, 2 Sep 2024 08:37:35 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1725259628; c=relaxed/simple;
+	bh=Ret7zFwxCYQcGF4d0fXMLdocIH0wzq4DLfMcNCBze+c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=CpNfPYvREHSnDqx5oreAzKU8Iw/mKEBY/H8MkuLGWu2NAwZGNU8P16zEg9ZMAG90WshT+Y3dEUnAT8ZgqzGRpf1RRs+nyy+G3C+9vxnBBfNShC0Z/Lyf8Y5+Fk6Qcjlgjlnp/CXUiw0nzHr/NpsZiL3+B/39oEXdmfuenVwyDyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=JnTHhCqP reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=0xFQuaIPpT0coRgUUTskLytqClpw0Z8btfuptZXm+3w=; b=J
+	nTHhCqP/UB6cpeGA4gvnWhrBs6tW3zfNDS27QcGN8Bgp82b5VV5qONAPVyakRyOE
+	aDZ0qktL14UzXFGq4a3+01hEcz0/RTBCdGfzzk0n46mQiNO5S55bxZ1NEZdrQhJ4
+	xkgRnt/gKfePV05TO7XmKcgs3nNKszHd9HjmlhuJvk=
+Received: from slark_xiao$163.com ( [112.97.47.204] ) by
+ ajax-webmail-wmsvr-40-143 (Coremail) ; Mon, 2 Sep 2024 14:46:04 +0800 (CST)
+Date: Mon, 2 Sep 2024 14:46:04 +0800 (CST)
+From: "Slark Xiao" <slark_xiao@163.com>
+To: "Greg KH" <gregkh@linuxfoundation.org>
+Cc: "Johan Hovold" <johan@kernel.org>, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: pl2303: account for deficits of clones
-Message-ID: <2024090225-monthly-denatured-e0be@gregkh>
-References: <a07922bd-4550-41d8-a7cd-8943baf6f8fb@siemens.com>
- <2024090203-challenge-paper-e1fe@gregkh>
- <4ccbc9ad-7d19-430c-95aa-d726b6b83412@siemens.com>
+Subject: Re:Re: Re: Re: Re: [PATCH] USB: serial: option: add support for
+ Foxconn T99W651
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2024 www.mailtech.cn 163com
+In-Reply-To: <2024090237-pacemaker-natural-e0ff@gregkh>
+References: <20240705081709.105496-1-slark_xiao@163.com>
+ <Zoe3qBwWG33AZaU9@hovoldconsulting.com>
+ <5b098485.965d.190822996fc.Coremail.slark_xiao@163.com>
+ <Zoe7RT7o39C7iXmA@hovoldconsulting.com>
+ <43cc2529.9d61.190823e694a.Coremail.slark_xiao@163.com>
+ <2024070538-circling-ambiguity-908f@gregkh>
+ <6c85e8f3.4bab.191b0e374ee.Coremail.slark_xiao@163.com>
+ <2024090237-pacemaker-natural-e0ff@gregkh>
+X-NTES-SC: AL_Qu2ZB/6etk0t5SmRYekfmk8Sg+84W8K3v/0v1YVQOpF8jC/rxA8yTV9qJ1fT6uWPMgypvjG+TwFc5vldb4Rber8LJE2CpuyFzurFtgbYiNI5wA==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4ccbc9ad-7d19-430c-95aa-d726b6b83412@siemens.com>
+Message-ID: <4669a740.6a05.191b17bc3e0.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:_____wD3v8csX9VmoiRJAA--.3802W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiow5OZGVOFRisawACsk
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On Mon, Sep 02, 2024 at 08:28:42AM +0200, Jan Kiszka wrote:
-> On 02.09.24 08:06, Greg Kroah-Hartman wrote:
-> > On Sun, Sep 01, 2024 at 11:11:29PM +0200, Jan Kiszka wrote:
-> >> From: Jan Kiszka <jan.kiszka@siemens.com>
-> >>
-> >> There are apparently incomplete clones of the HXD type chip in use.
-> >> Those return -EPIPE on GET_LINE_REQUEST and BREAK_REQUEST. Avoid
-> >> flooding the kernel log with those errors. Rather use the
-> >> line_settings cache for GET_LINE_REQUEST and signal missing support by
-> >> returning -ENOTTY from pl2303_set_break.
-> >>
-> >> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-> >> ---
-> >>  drivers/usb/serial/pl2303.c | 13 +++++++------
-> >>  1 file changed, 7 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-> >> index d93f5d584557..04cafa819390 100644
-> >> --- a/drivers/usb/serial/pl2303.c
-> >> +++ b/drivers/usb/serial/pl2303.c
-> >> @@ -731,12 +731,13 @@ static int pl2303_get_line_request(struct usb_serial_port *port,
-> >>  				GET_LINE_REQUEST, GET_LINE_REQUEST_TYPE,
-> >>  				0, 0, buf, 7, 100);
-> >>  	if (ret != 7) {
-> >> -		dev_err(&port->dev, "%s - failed: %d\n", __func__, ret);
-> >> +		struct pl2303_private *priv = usb_get_serial_port_data(port);
-> >>  
-> >> -		if (ret >= 0)
-> >> -			ret = -EIO;
-> >> +		dev_dbg(&port->dev, "%s - failed, falling back on cache: %d\n",
-> >> +			__func__, ret);
-> >> +		memcpy(buf, priv->line_settings, 7);
-> > 
-> > Ugh, how is this device working in other operating systems?
-> > 
-> 
-> I don't know. Also, the last downstream driver Prolific posted [1]
-> didn't point to this specialty.
-
-Given that prolific's windows driver is known to explicitly attempt to
-disable clone devices, I would be amazed if it supported it at all :)
-
-> I opened a few of those adapter cables (some received from [2], others
-> from a different source), and the chips were not labeled (in contrast to
-> the picture from [2]). So I'm suspecting clones to be in play. Reminds
-> me of the quest for sane WIFI USB adapters.
-
-This chip has had lots of different cloned devices over the years, which
-is pretty odd given that the thing is so cheap to start with.  Anyway,
-we live with it and move on...
-
-> >>  
-> >> -		return ret;
-> >> +		return 0;
-> >>  	}
-> >>  
-> >>  	dev_dbg(&port->dev, "%s - %7ph\n", __func__, buf);
-> >> @@ -1078,8 +1079,8 @@ static int pl2303_set_break(struct usb_serial_port *port, bool enable)
-> >>  				 BREAK_REQUEST, BREAK_REQUEST_TYPE, state,
-> >>  				 0, NULL, 0, 100);
-> >>  	if (result) {
-> >> -		dev_err(&port->dev, "error sending break = %d\n", result);
-> >> -		return result;
-> >> +		dev_dbg(&port->dev, "error sending break = %d\n", result);
-> >> +		return -ENOTTY;
-> > 
-> > Are you sure that ENOTTY is correct here?  Why not just send back
-> > -EINVAL or something like that telling userspace that this is not
-> > allowed for this device?
-> 
-> I was copying from serial_break() which now returns -ENOTTY if the
-> handler is NULL. If you prefer -EINVAL, I can change. Just looking for a
-> consistent code.
-
-Ah, yeah, that's tricky.  I'll let Johan pick one :)
-
-thanks,
-
-greg k-h
+CkF0IDIwMjQtMDktMDIgMTM6NTk6MjgsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
+bi5vcmc+IHdyb3RlOgo+T24gTW9uLCBTZXAgMDIsIDIwMjQgYXQgMTE6NTk6NDJBTSArMDgwMCwg
+U2xhcmsgWGlhbyB3cm90ZToKPj4gQXQgMjAyNC0wNy0wNSAxNzozOTo1NiwgIkdyZWcgS0giIDxn
+cmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4gd3JvdGU6Cj4+ID5PbiBGcmksIEp1bCAwNSwgMjAy
+NCBhdCAwNTozNDowNlBNICswODAwLCBTbGFyayBYaWFvIHdyb3RlOgo+PiA+PiAKPj4gPj4gQXQg
+MjAyNC0wNy0wNSAxNzoyMjoxMywgIkpvaGFuIEhvdm9sZCIgPGpvaGFuQGtlcm5lbC5vcmc+IHdy
+b3RlOgo+PiA+PiA+T24gRnJpLCBKdWwgMDUsIDIwMjQgYXQgMDU6MTE6MjJQTSArMDgwMCwgU2xh
+cmsgWGlhbyB3cm90ZToKPj4gPj4gPgo+PiA+PiA+PiBJIGhhdmUgYSBjb25jZXJuIGFib3V0IHRo
+ZSB0ZXN0IHJlc3VsdCBvZiAidXNiLWRldmljZXMiIGluIFVidW50dQo+PiA+PiA+PiAyMi4wNC4g
+RG8geW91IGtub3cgd2h5IGl0IHdvdWxkbid0IHNob3cgb3VyIGRldmljZXMgYW55IG1vcmU/IAo+
+PiA+PiA+Cj4+ID4+ID5Obywgc29ycnksIG5vIGlkZWEuIEV2ZXJ5dGhpbmcgc2VlbXMgdG8gd29y
+ayBoZXJlIHdpdGggdGhlIGxhdGVzdAo+PiA+PiA+dXNidXRpbHMtMDE3Lgo+PiA+PiA+Cj4+ID4+
+ID5JcyBpdCBqdXN0IHlvdXIgZGV2aWNlcyB0aGF0IG5vIGxvbmdlciBzaG93IHVwIG9yIGRvZXNu
+J3QgaXQgd29yayBhdAo+PiA+PiA+YWxsPwo+PiA+PiA+Cj4+ID4+IEEgbG90IG9mIGRldmljZXMg
+bWlzc2VkIGluIFVidW50dSAyMi4wNCwgZXNwZWNpYWxseSBmb3IgbW9kZW0gZGV2aWNlcy4KPj4g
+Pj4gTm90aGluZyB3b3VsZCBiZSBwcmludGVkIGZvciBtb2RlbSBkZXZpY2VzLgo+PiA+Cj4+ID5X
+aGF0IHNwZWNpZmljIHZlcnNpb24gb2YgdXNidXRpbHMgYXJlIHlvdSB1c2luZz8KPj4gPgo+PiA+
+SWYgeW91IHB1bGwgZnJvbSB0aGUgZ2l0aHViIHJlcG8sIGNhbiB5b3UgdHJ5IHRoZSB2ZXJzaW9u
+IHRoZXJlPwo+PiA+Cj4+ID5BbmQgaWYgdGhhdCBoYXMgcHJvYmxlbXMsIGEgZGlmZiBvZiBib3Ro
+IHdvcmtpbmcgYW5kIG5vdC13b3JraW5nIHdvdWxkCj4+ID5iZSBncmVhdC4KPj4gPgo+PiA+dGhh
+bmtzLAo+PiA+Cj4+ID5ncmVnIGstaAo+PiBIaSBHcmVnLAo+PiBJIHJlcHJvZHVjZWQgdGhpcyBp
+c3N1ZSBhZ2Fpbi4gQW5kIG5vdyBJIGNoZWNrZWQgaXQgd2l0aCBkaWZmZXJlbnQgdXNidXRpbHMK
+Pj4gdmVyc2lvbiBvbmUgYnkgb25lLiAgVmVyc2lvbiAwMTQgaGFzIHRoaXMgaXNzdWUuIEJvdGgg
+MDEzIGFuZCAwMTUgd29ya3Mgd2VsbC4KPj4gUGxlYXNlIHNlZSBhdHRhY2hlZCBsb2c6Cj4KPlNv
+IHRoaXMgaXMgZmluZSBub3cgd2l0aCB0aGUgbGF0ZXN0IHZlcnNpb24/ICBOb3RlIHRoYXQgMDE1
+IHdhcyByZWxlYXNlZAo+d2F5IGJhY2sgaW4gMjAyMiBhbmQgdGhhdCBpcyBldmVuIHF1aXRlIG9s
+ZCwgMDE3IGlzIHRoZSBsYXRlc3QgcmVsZWFzZQo+b2YgdXNidXRpbHMuCj4KPkEgcHJvYmxlbSBp
+biB1c2ItZGV2aWNlcyB3YXMgZml4ZWQgaW4gdGhlIDAxNSByZWxlYXNlLCBkZWFsaW5nIHdpdGgK
+PnJlY3Vyc2lvbiBhbmQgb3ZlcndyaXRpbmcgZXhpc3RpbmcgdmFyaWFibGVzLCBzbyBvZGRzIGFy
+ZSB0aGF0IGlzIHdoYXQKPmZpeGVkIHRoZSBwcm9ibGVtIHlvdSB3ZXJlIGhhdmluZy4gIFBsZWFz
+ZSBqdXN0IHVzZSB0aGF0IG9yIG5ld2VyIGFuZAo+YWxsIHNob3VsZCBiZSBmaW5lLgo+Cj50aGFu
+a3MsCj4KPmdyZWcgay1oClllYWgsIG5vdyBJIGFtIHVzaW5nIFYwMTcuIEJUVywgdGhlIGRlZmF1
+bHQgb2YgdXNidXRpbHMgb2YgVWJ1bnR1IDIyLjA0LjQgTFRTIGlzIDAxNC4KU28gbWF5IEkga25v
+dyBkbyB5b3UgaGF2ZSBhbnkgcGxhbiB0byBmaXggaXQgc2luY2UgMjIuMDQgTFRTIHN0aWxsIHVu
+ZGVyIG1haW50YWluLgoKVGhhbmtzCg==
 
