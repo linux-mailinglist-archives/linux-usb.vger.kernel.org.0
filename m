@@ -1,53 +1,51 @@
-Return-Path: <linux-usb+bounces-14469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24B96967FA3
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 08:47:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95917967FBE
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 08:53:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D457D282826
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 06:47:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EA05B21815
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 06:52:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A740155A52;
-	Mon,  2 Sep 2024 06:47:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6967E156993;
+	Mon,  2 Sep 2024 06:52:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="JnTHhCqP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1mDvVBCP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C2113C80E;
-	Mon,  2 Sep 2024 06:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E362D154BEA;
+	Mon,  2 Sep 2024 06:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725259628; cv=none; b=mSdx4sOv4dBNHDFLAQoUS3wuwl5PhiFdcKsmyF3xT14E93nVVW4zX8NuzZspgVT0mxUbr1iv4zucxvj3K1GivVVzdVGR55ENpMmTioT8Nzz3eHvjgMt0s4nQLi7dExx3ZGdyDTaToeLR07D9T95nriIYEDMWQrdsqhsxQD17l44=
+	t=1725259971; cv=none; b=Zht80XC2M06Z+Sb+NbyoKGRGSGtd7lIOC9YadjMDFvZC0KoiQ1AKuOhzI61MTIJRQl/5d9tnCjccJyzV4ImHL647WFE2TGQwFYq1PtcgAlhxx4L42K0VpRtMJ0hhQCrI75GeCHfx1EX9c6JzmX7d3SQ1fEUx2SOYORT4RwV4rR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725259628; c=relaxed/simple;
-	bh=Ret7zFwxCYQcGF4d0fXMLdocIH0wzq4DLfMcNCBze+c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=CpNfPYvREHSnDqx5oreAzKU8Iw/mKEBY/H8MkuLGWu2NAwZGNU8P16zEg9ZMAG90WshT+Y3dEUnAT8ZgqzGRpf1RRs+nyy+G3C+9vxnBBfNShC0Z/Lyf8Y5+Fk6Qcjlgjlnp/CXUiw0nzHr/NpsZiL3+B/39oEXdmfuenVwyDyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=JnTHhCqP reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=0xFQuaIPpT0coRgUUTskLytqClpw0Z8btfuptZXm+3w=; b=J
-	nTHhCqP/UB6cpeGA4gvnWhrBs6tW3zfNDS27QcGN8Bgp82b5VV5qONAPVyakRyOE
-	aDZ0qktL14UzXFGq4a3+01hEcz0/RTBCdGfzzk0n46mQiNO5S55bxZ1NEZdrQhJ4
-	xkgRnt/gKfePV05TO7XmKcgs3nNKszHd9HjmlhuJvk=
-Received: from slark_xiao$163.com ( [112.97.47.204] ) by
- ajax-webmail-wmsvr-40-143 (Coremail) ; Mon, 2 Sep 2024 14:46:04 +0800 (CST)
-Date: Mon, 2 Sep 2024 14:46:04 +0800 (CST)
-From: "Slark Xiao" <slark_xiao@163.com>
-To: "Greg KH" <gregkh@linuxfoundation.org>
-Cc: "Johan Hovold" <johan@kernel.org>, linux-usb@vger.kernel.org, 
+	s=arc-20240116; t=1725259971; c=relaxed/simple;
+	bh=S7CC/iZB7Rb45+kIN5CIjyVrAmEYMfx5cVaEEE8jWqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IjmBuD4esoF09E9wQ4nlwQ6G3TZUm2pVE1Ia0kxbU1GFLmEQZ8NkI4YRjI1ERYLg/W25FXEm/+BiucUqA3ejl+Njm8sWe/12zLKmHvCvewCGY1N+ZDvdC05kilbB1Wb0jtqTDFUj3BZ9N1E5tMW3FAcSpL80VdPxdge5Le5Pu3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1mDvVBCP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03B82C4CEC2;
+	Mon,  2 Sep 2024 06:52:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1725259970;
+	bh=S7CC/iZB7Rb45+kIN5CIjyVrAmEYMfx5cVaEEE8jWqw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1mDvVBCPMlKjCYN/We32c/kbyKdhhCTbVr95zuf8FmDGgkw1NYTl9LOeAZpPVYFY8
+	 uiZhhyNAHddSgiMIzpVPiVXydcVXmHjnqQf8H2BjIiI5een4FYCptgOhzIWrmqZ7AJ
+	 jbrwkj4ofijmEddu9no9JZuDi/Psh/49ohqHmMXk=
+Date: Mon, 2 Sep 2024 08:52:47 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Slark Xiao <slark_xiao@163.com>
+Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re:Re: Re: Re: Re: [PATCH] USB: serial: option: add support for
+Subject: Re: Re: Re: Re: Re: [PATCH] USB: serial: option: add support for
  Foxconn T99W651
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <2024090237-pacemaker-natural-e0ff@gregkh>
+Message-ID: <2024090202-sauna-unsent-c373@gregkh>
 References: <20240705081709.105496-1-slark_xiao@163.com>
  <Zoe3qBwWG33AZaU9@hovoldconsulting.com>
  <5b098485.965d.190822996fc.Coremail.slark_xiao@163.com>
@@ -56,54 +54,76 @@ References: <20240705081709.105496-1-slark_xiao@163.com>
  <2024070538-circling-ambiguity-908f@gregkh>
  <6c85e8f3.4bab.191b0e374ee.Coremail.slark_xiao@163.com>
  <2024090237-pacemaker-natural-e0ff@gregkh>
-X-NTES-SC: AL_Qu2ZB/6etk0t5SmRYekfmk8Sg+84W8K3v/0v1YVQOpF8jC/rxA8yTV9qJ1fT6uWPMgypvjG+TwFc5vldb4Rber8LJE2CpuyFzurFtgbYiNI5wA==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+ <4669a740.6a05.191b17bc3e0.Coremail.slark_xiao@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <4669a740.6a05.191b17bc3e0.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:_____wD3v8csX9VmoiRJAA--.3802W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiow5OZGVOFRisawACsk
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4669a740.6a05.191b17bc3e0.Coremail.slark_xiao@163.com>
 
-CkF0IDIwMjQtMDktMDIgMTM6NTk6MjgsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
-bi5vcmc+IHdyb3RlOgo+T24gTW9uLCBTZXAgMDIsIDIwMjQgYXQgMTE6NTk6NDJBTSArMDgwMCwg
-U2xhcmsgWGlhbyB3cm90ZToKPj4gQXQgMjAyNC0wNy0wNSAxNzozOTo1NiwgIkdyZWcgS0giIDxn
-cmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4gd3JvdGU6Cj4+ID5PbiBGcmksIEp1bCAwNSwgMjAy
-NCBhdCAwNTozNDowNlBNICswODAwLCBTbGFyayBYaWFvIHdyb3RlOgo+PiA+PiAKPj4gPj4gQXQg
-MjAyNC0wNy0wNSAxNzoyMjoxMywgIkpvaGFuIEhvdm9sZCIgPGpvaGFuQGtlcm5lbC5vcmc+IHdy
-b3RlOgo+PiA+PiA+T24gRnJpLCBKdWwgMDUsIDIwMjQgYXQgMDU6MTE6MjJQTSArMDgwMCwgU2xh
-cmsgWGlhbyB3cm90ZToKPj4gPj4gPgo+PiA+PiA+PiBJIGhhdmUgYSBjb25jZXJuIGFib3V0IHRo
-ZSB0ZXN0IHJlc3VsdCBvZiAidXNiLWRldmljZXMiIGluIFVidW50dQo+PiA+PiA+PiAyMi4wNC4g
-RG8geW91IGtub3cgd2h5IGl0IHdvdWxkbid0IHNob3cgb3VyIGRldmljZXMgYW55IG1vcmU/IAo+
-PiA+PiA+Cj4+ID4+ID5Obywgc29ycnksIG5vIGlkZWEuIEV2ZXJ5dGhpbmcgc2VlbXMgdG8gd29y
-ayBoZXJlIHdpdGggdGhlIGxhdGVzdAo+PiA+PiA+dXNidXRpbHMtMDE3Lgo+PiA+PiA+Cj4+ID4+
-ID5JcyBpdCBqdXN0IHlvdXIgZGV2aWNlcyB0aGF0IG5vIGxvbmdlciBzaG93IHVwIG9yIGRvZXNu
-J3QgaXQgd29yayBhdAo+PiA+PiA+YWxsPwo+PiA+PiA+Cj4+ID4+IEEgbG90IG9mIGRldmljZXMg
-bWlzc2VkIGluIFVidW50dSAyMi4wNCwgZXNwZWNpYWxseSBmb3IgbW9kZW0gZGV2aWNlcy4KPj4g
-Pj4gTm90aGluZyB3b3VsZCBiZSBwcmludGVkIGZvciBtb2RlbSBkZXZpY2VzLgo+PiA+Cj4+ID5X
-aGF0IHNwZWNpZmljIHZlcnNpb24gb2YgdXNidXRpbHMgYXJlIHlvdSB1c2luZz8KPj4gPgo+PiA+
-SWYgeW91IHB1bGwgZnJvbSB0aGUgZ2l0aHViIHJlcG8sIGNhbiB5b3UgdHJ5IHRoZSB2ZXJzaW9u
-IHRoZXJlPwo+PiA+Cj4+ID5BbmQgaWYgdGhhdCBoYXMgcHJvYmxlbXMsIGEgZGlmZiBvZiBib3Ro
-IHdvcmtpbmcgYW5kIG5vdC13b3JraW5nIHdvdWxkCj4+ID5iZSBncmVhdC4KPj4gPgo+PiA+dGhh
-bmtzLAo+PiA+Cj4+ID5ncmVnIGstaAo+PiBIaSBHcmVnLAo+PiBJIHJlcHJvZHVjZWQgdGhpcyBp
-c3N1ZSBhZ2Fpbi4gQW5kIG5vdyBJIGNoZWNrZWQgaXQgd2l0aCBkaWZmZXJlbnQgdXNidXRpbHMK
-Pj4gdmVyc2lvbiBvbmUgYnkgb25lLiAgVmVyc2lvbiAwMTQgaGFzIHRoaXMgaXNzdWUuIEJvdGgg
-MDEzIGFuZCAwMTUgd29ya3Mgd2VsbC4KPj4gUGxlYXNlIHNlZSBhdHRhY2hlZCBsb2c6Cj4KPlNv
-IHRoaXMgaXMgZmluZSBub3cgd2l0aCB0aGUgbGF0ZXN0IHZlcnNpb24/ICBOb3RlIHRoYXQgMDE1
-IHdhcyByZWxlYXNlZAo+d2F5IGJhY2sgaW4gMjAyMiBhbmQgdGhhdCBpcyBldmVuIHF1aXRlIG9s
-ZCwgMDE3IGlzIHRoZSBsYXRlc3QgcmVsZWFzZQo+b2YgdXNidXRpbHMuCj4KPkEgcHJvYmxlbSBp
-biB1c2ItZGV2aWNlcyB3YXMgZml4ZWQgaW4gdGhlIDAxNSByZWxlYXNlLCBkZWFsaW5nIHdpdGgK
-PnJlY3Vyc2lvbiBhbmQgb3ZlcndyaXRpbmcgZXhpc3RpbmcgdmFyaWFibGVzLCBzbyBvZGRzIGFy
-ZSB0aGF0IGlzIHdoYXQKPmZpeGVkIHRoZSBwcm9ibGVtIHlvdSB3ZXJlIGhhdmluZy4gIFBsZWFz
-ZSBqdXN0IHVzZSB0aGF0IG9yIG5ld2VyIGFuZAo+YWxsIHNob3VsZCBiZSBmaW5lLgo+Cj50aGFu
-a3MsCj4KPmdyZWcgay1oClllYWgsIG5vdyBJIGFtIHVzaW5nIFYwMTcuIEJUVywgdGhlIGRlZmF1
-bHQgb2YgdXNidXRpbHMgb2YgVWJ1bnR1IDIyLjA0LjQgTFRTIGlzIDAxNC4KU28gbWF5IEkga25v
-dyBkbyB5b3UgaGF2ZSBhbnkgcGxhbiB0byBmaXggaXQgc2luY2UgMjIuMDQgTFRTIHN0aWxsIHVu
-ZGVyIG1haW50YWluLgoKVGhhbmtzCg==
+On Mon, Sep 02, 2024 at 02:46:04PM +0800, Slark Xiao wrote:
+> 
+> At 2024-09-02 13:59:28, "Greg KH" <gregkh@linuxfoundation.org> wrote:
+> >On Mon, Sep 02, 2024 at 11:59:42AM +0800, Slark Xiao wrote:
+> >> At 2024-07-05 17:39:56, "Greg KH" <gregkh@linuxfoundation.org> wrote:
+> >> >On Fri, Jul 05, 2024 at 05:34:06PM +0800, Slark Xiao wrote:
+> >> >> 
+> >> >> At 2024-07-05 17:22:13, "Johan Hovold" <johan@kernel.org> wrote:
+> >> >> >On Fri, Jul 05, 2024 at 05:11:22PM +0800, Slark Xiao wrote:
+> >> >> >
+> >> >> >> I have a concern about the test result of "usb-devices" in Ubuntu
+> >> >> >> 22.04. Do you know why it wouldn't show our devices any more? 
+> >> >> >
+> >> >> >No, sorry, no idea. Everything seems to work here with the latest
+> >> >> >usbutils-017.
+> >> >> >
+> >> >> >Is it just your devices that no longer show up or doesn't it work at
+> >> >> >all?
+> >> >> >
+> >> >> A lot of devices missed in Ubuntu 22.04, especially for modem devices.
+> >> >> Nothing would be printed for modem devices.
+> >> >
+> >> >What specific version of usbutils are you using?
+> >> >
+> >> >If you pull from the github repo, can you try the version there?
+> >> >
+> >> >And if that has problems, a diff of both working and not-working would
+> >> >be great.
+> >> >
+> >> >thanks,
+> >> >
+> >> >greg k-h
+> >> Hi Greg,
+> >> I reproduced this issue again. And now I checked it with different usbutils
+> >> version one by one.  Version 014 has this issue. Both 013 and 015 works well.
+> >> Please see attached log:
+> >
+> >So this is fine now with the latest version?  Note that 015 was released
+> >way back in 2022 and that is even quite old, 017 is the latest release
+> >of usbutils.
+> >
+> >A problem in usb-devices was fixed in the 015 release, dealing with
+> >recursion and overwriting existing variables, so odds are that is what
+> >fixed the problem you were having.  Please just use that or newer and
+> >all should be fine.
+> >
+> >thanks,
+> >
+> >greg k-h
+> Yeah, now I am using V017. BTW, the default of usbutils of Ubuntu 22.04.4 LTS is 014.
+> So may I know do you have any plan to fix it since 22.04 LTS still under maintain.
+
+How can I go back in time to fix that version?  :)
+
+That's up to Ubuntu to resolve, there's nothing I can do, sorry.  Please
+contact them and get them to resolve it as that's what your support
+contract with them should provide.
+
+good luck!
+
+greg k-h
 
