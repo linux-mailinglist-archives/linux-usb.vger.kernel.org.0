@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-14502-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14503-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33320968B9A
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 18:08:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FAC4968BE6
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 18:17:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBA2F1F22BE3
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 16:08:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7A15B21925
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 16:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6511A3047;
-	Mon,  2 Sep 2024 16:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3221AB6E8;
+	Mon,  2 Sep 2024 16:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mACZoTjn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UvXw2XgR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953941A3023;
-	Mon,  2 Sep 2024 16:08:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AC53BBC1;
+	Mon,  2 Sep 2024 16:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725293322; cv=none; b=VaM3hJiUFSZXbLEHq6sGpMUSd4vUN5MUiEVy31CFTq7I/KVjzujndYva8BSIDw9ct/R6c/KX7b5UnrlUYNuVTIwug328/YwmLeic4+D5VApuvXIIKpnSEn0dm9EqwLT4QriJc49f+C237q5MvOH7pV4YWoGujL8TtpdL9cHzhTc=
+	t=1725293773; cv=none; b=nRO39AwilVeaIwT1Ap9Z2ZLJLryPDHlj8a4ZyIF/OMC0Mn4XJTPbrG2Y7MXv+1UnHiit4fQ+xJ7ltmZ4YtZWVR5p7CvggrguBwtUFMI6cPF193eaIlqVKKlxCSnAA2eGexSzq5ZK6jTVudgBRSqTEk/rtp/OUDMiTxXq8mqdDk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725293322; c=relaxed/simple;
-	bh=if7yjNyBgqjtclIo4VlrGx3tIrfl+IYGxrT4VwbB6bE=;
+	s=arc-20240116; t=1725293773; c=relaxed/simple;
+	bh=yP+DQzvw63ChFrvj3CjBpQFX8iR05V2bAnDs8DmZ0ng=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VYiSGdfUOqw9XQR84anIxLbesgClBziELgL2lfTr4w83OvuQksN9n+fog53CFNDFuuDC7kmmSrk/upKU01NjTOf119gN7lRn8+7i4NzWoNZnv9jT7XxeRu3Jd58iP0hjxiDhmylNkMclE5xy/EODfObquDdr4iDmpgWX92bvFPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mACZoTjn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A31DC4CEC7;
-	Mon,  2 Sep 2024 16:08:36 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mSW6O750B8l8JsCavY2Q7YFYl0GFFXgik4CtsMkzqDoRt5YC3k73WeEqHUFlSrTlawAHt/KfW/UbLE/GgoXYWzbGIjPBDBku+JWJvuRl9Vdkqv1ANqTzh7r2WZiOiafstWejRJqFcwN2NwDMeCTGoQW5xI7rV653AhhsR0CKOKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UvXw2XgR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A990C4CEC2;
+	Mon,  2 Sep 2024 16:16:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725293321;
-	bh=if7yjNyBgqjtclIo4VlrGx3tIrfl+IYGxrT4VwbB6bE=;
+	s=k20201202; t=1725293773;
+	bh=yP+DQzvw63ChFrvj3CjBpQFX8iR05V2bAnDs8DmZ0ng=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mACZoTjnLs2vJ3gAdjV6wl3EUkkNjJK1I7EBThjEPxmVy6pIPkyqLPsZjOGuY63p8
-	 nM/2DWLW94DxeKVSQfEzkKCRgzq10ile10t8/8bIb0UKi1jexuR76C77SQQ4NX2Nx0
-	 7LkR+dPJIhXB9OcktjPkhuJdWewbiSpIFSSuzGNxexjk8b4O7plMG6RD8/vqM55VHv
-	 YECe2M6nFJyXhZ+u2GwkmBlDOW6kp13vgIImRrtnf6/UEQ0uozXJJ27mIlZEutKN0Z
-	 rU4lIwNS9tiZulWu6+kNvHJaqKvcKoTRjtanGOdpr5jgfGUns4pzoitsUieLxNJoEl
-	 xg6qx8/HybDgA==
-Message-ID: <1179f9e8-1e5e-4658-8102-ee4d2c49575f@kernel.org>
-Date: Mon, 2 Sep 2024 18:08:34 +0200
+	b=UvXw2XgRbUEkpGX21v00vwgbghwNg31bp//RynLl8Ojtu61grwn1ZWKVTOmaWUww7
+	 1Orh24E/s62LK/GKaFMifKmGGbdUDH0Kiyc774IBOSWpQx28vE//M8iREmB1NXyKAY
+	 Fd5589smw6P1DwbbXFajJDpSMYemOb3L5IW6INpTOqFPr7UYkYxpBhKCpa7CHY/4Pi
+	 VYUbY0a+MjGOsGwwpDWxvd69YeXixkwVP0ypUKflf+axnMKMyAOeLB+0IJx5tAfiLM
+	 vNYca1mPdA0YCrbS10vsNf6lp6UTGbHq5RqJIuTcLnViCAOdu/+PFaoxjmmXbi0i6s
+	 4awim7gc5a46Q==
+Message-ID: <329f65dd-a23b-460f-85ee-84fe674fe97d@kernel.org>
+Date: Mon, 2 Sep 2024 18:16:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,21 +50,18 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIIHY5XSB1c2I6IGdhZGdldDogdV9zZXJp?=
- =?UTF-8?Q?al=3A_Add_null_pointer_check_in_gs=5Fread=5Fcomplete_=26_gs=5Fwri?=
- =?UTF-8?Q?te=5Fcomplete?=
+Subject: Re: [PATCH v9] usb: gadget: u_serial: Add null pointer check in
+ gs_read_complete & gs_write_complete
 To: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
  Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
- Prashanth K <quic_prashk@quicinc.com>
+ Prashanth K <quic_prashk@quicinc.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
 Cc: "quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "opensource.kernel" <opensource.kernel@vivo.com>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- Yuesong Li <liyuesong@vivo.com>
+ "akpm@linux-foundation.org" <akpm@linux-foundation.org>
 References: <TYUPR06MB6217DE28012FFEC5E808DD64D2962@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <PUZPR06MB6224FF88145DAA364464EA7FD2922@PUZPR06MB6224.apcprd06.prod.outlook.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,19 +107,54 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <PUZPR06MB6224FF88145DAA364464EA7FD2922@PUZPR06MB6224.apcprd06.prod.outlook.com>
+In-Reply-To: <TYUPR06MB6217DE28012FFEC5E808DD64D2962@TYUPR06MB6217.apcprd06.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 02/09/2024 16:38, 胡连勤 wrote:
-> Ping......
+On 29/08/2024 13:54, 胡连勤 wrote:
+> From: Lianqin Hu <hulianqin@vivo.com>
+> 
+> Considering that in some extreme cases, when the unbind operation
+> is being executed, gserial_disconnect has already cleared gser->ioport,
+> triggering a gadget reconfiguration at this time and gs_read_complete
+> gets called afterwards, which results in accessing null pointer,
+> add a null pointer check to prevent this situation.
 > 
 
-You ping after four days? As whom do you treat us? I already complained
-about @vivo.com in several threads. That's one more to the list of very
-poor interactions from @vivo.com.
+...
 
-READ submitting-patches very carefully and then get your process fixed.
+>  
+>  static void gs_write_complete(struct usb_ep *ep, struct usb_request *req)
+>  {
+> -	struct gs_port	*port = ep->driver_data;
+> +	struct gs_port	*port;
+> +	unsigned long  flags;
+> +
+> +	spin_lock_irqsave(&serial_port_lock, flags);
+> +	port = ep->driver_data;
+> +
+> +	if (!port) {
+> +		spin_unlock_irqrestore(&serial_port_lock, flags);
+> +		return;
+> +	}
+>  
+>  	spin_lock(&port->port_lock);
+> +	spin_unlock(&serial_port_lock);
+
+You pinged us for this after 4 days. This is damn v9 and still
+unresolved comments from previous review.
+
+Explain, how did you resolve Greg's comment about this unintuitive code:
+https://lore.kernel.org/all/2024082251-grief-profanity-b0da@gregkh/
+
+Pattern of immediacy, rush and impatience was used in one of latest big
+messes (just google about harassing open source maintainers by some
+random contributors).
+
+I suggest go back to drawing board and improve the code instead of
+making it spaghetti without explanation, even though we asked for that
+explanation.
+
 
 Best regards,
 Krzysztof
