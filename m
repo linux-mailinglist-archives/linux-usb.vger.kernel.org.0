@@ -1,366 +1,226 @@
-Return-Path: <linux-usb+bounces-14522-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14524-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8075C969553
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:27:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF14A9695C3
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:37:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B30EDB21307
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:27:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FD3C1F246B8
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5361D6DA9;
-	Tue,  3 Sep 2024 07:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F711D6C48;
+	Tue,  3 Sep 2024 07:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qEMwhIS7"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="PHX/mgQj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2041D6C48;
-	Tue,  3 Sep 2024 07:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725348451; cv=none; b=QUuFeZB+2NT+QqGu+kkdfeEtgw4sJ0/Ca46Sx/N+wufeNZ0N5RmMmBIM885/wqNvGlShGdON7/xqqdI3CY4GgbeACfNM/GVD8PQAjASJT0/OI5U5zm+nAFWtbMmniCEa2hylfH20cReo5IDZoYMYTYeJxbO1fqsrWkH5XXfhKkc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725348451; c=relaxed/simple;
-	bh=FBTyhTz0hfnBO0ZeXv3g1ysGP0vjKBQSdRHL/Bw0uSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Foolh6Xwtw0hqUHCLRvuaFnRkkLeFIeQPBVU/K7aYWpOv8ELldQCBFKypIn/iJbzZ3zk0Pw9rc6Gp2TF4iqWJt7qbMph1xKzMtAkWFtEewcdPwNk9Mt5GT7TGorvW47ZLME/1wezfdlMouKiyha8nHobQs3jGsC6Tsj/9dKbALk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qEMwhIS7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A70CC4CEC5;
-	Tue,  3 Sep 2024 07:27:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725348450;
-	bh=FBTyhTz0hfnBO0ZeXv3g1ysGP0vjKBQSdRHL/Bw0uSQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qEMwhIS7tPVZSCRuOKmZpeVkDHNc8Abam4blS4rR9cH3VLUD2zWHfpON3mXItbijT
-	 wrMGkm4buyBNjzfMSV4Qjj725DDJ8OYZfUxCZj8lUOt17aNYsvLvytU3ptt3wfifvF
-	 7NLGGkT6nlcFHbPWPhioQzFtIcRWNv45Y9P5sGcs81hSCvDFOOoix19Ok45QfXx197
-	 nINEVtSxGZNfSUpoDngeYwxqL18piKEjVFfOSL9/hNZ3Eu1P1imSpiE+YeblWBX97z
-	 mpOKcGg20UTcE3KRwVmcVh1bax7s9alBjHheF9S7VLnMLbZK6JEjacWqx5fmenOaMS
-	 e44csNOypKuGg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1slNx2-0000000019Y-3NuM;
-	Tue, 03 Sep 2024 09:27:45 +0200
-Date: Tue, 3 Sep 2024 09:27:44 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <Zta6cBq881Ju7r7H@hovoldconsulting.com>
-References: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
- <20240829-x1e80100-ps8830-v1-2-bcc4790b1d45@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0FD1D6DBE;
+	Tue,  3 Sep 2024 07:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725348995; cv=fail; b=YY2ksHL0v7GiPkAv76fM0mbLrebbMatoeo4hXJ9yq0wmZpZgBfgDulCyYJPyT25zDYv+Iaf5Dk5xJSwCRAJ/8jvY1NSNdxpTwoYJeyMsTVJ42nsQkw3XEjLjnvR0iY0krA2iU4+IojeVzDqpcsKFzXienXB4w+vE6PBzxOVmjLA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725348995; c=relaxed/simple;
+	bh=cmSH7t78lgIYbW3BOkPciMHD4gJib63aU/13qQ88Alc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=mcYMXfpMFxsAdyQT3uE/RHgouvh1QLQkhNiEeC2c9lwTzAnrkJVNuLJLfflFRSDkPbIzUL1H4jYw8fyjbf9gKnVTo1iu3W5wSC58Anr2+zkbPYVrB6UpN08cSoETJjvZb3wCe6tYyLAVyP2eHdiZOtfQvHMcr91PhSacTBYQ8YU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=PHX/mgQj; arc=fail smtp.client-ip=40.107.20.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PqmAl9OvJ73hgBPtoy+DF2z8K9SF6twftAY6lFpW0qrwXGZQ88nw3KkOHdPlp3J6FwwNwbVX7e36iXQ2vzlc7r56DSf53MuM4RBLh5Ln8hb2HEAMvQbxCsc314GMHuMgsv3PLtEYDfCBxRpha/V3j5UBKb6/U6tyE5YPNM08YqauXRBB6QjP27FgLDhCW56zHiIctoygpJwGln6d9f+CIEfqquK2Adan/G3RFWh4MPtl3qudwno/TOL9K2jLaIVGgV83ahltN6PLlbiUofXfMkuPHb81hxR1hxxdj2HSgbAqHGy1px17CQk2IlYLJ9Z1o5RqSSxPSBQaz8q4hULm5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nVraK8nhVOVulJAZxC5aqFjqd4IazwcmU0v2dw5i+as=;
+ b=N5XJI0uASBq+dvLPcpAoAuK/m72cZPcZJvRdF+hIdlziwPZALLRI5qi/q9Wo1HYjOegkI0WJQ9rXBad/8nnxNRdNGTqx2UuS/hs9si29bzI7kADtNtV1FsE+RZeNOchlaXuHeAKpyeMAHIPsMGhcIUqEe+xV+JWi0QrpqfIonush3L6X8Vm03DloqGfD4Ywb3fmnRzny5TeazXMF5KoBvG6Z8BzrlNwuLyH9tnIpN7y/VlwcdyjC3pI0OcE7qZl3DFMFiquZS9NmDxmlhxnUuK2VIilV+bkf1Ri+CDsX+sdrgFAkb/Jqu+K3cipSLargMvFk1GmU6GDzw/QfvHkX0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nVraK8nhVOVulJAZxC5aqFjqd4IazwcmU0v2dw5i+as=;
+ b=PHX/mgQjRtMXW2DwArednA/QLr1cboxn5UZ+9AwwY3eWKjMocQNXd0IstiqhUZ2vBooNH/nLIHi/dY/MpEYWZj8TKOI4niPzyR9daF93mWfaLfYeKb2F74naYkgw3MYnHwzzi0ecAsByVbLOssaILrGT81dLv+50BYVZsvcpfGD45/2N503Awj0OwcSq0f7Lz4AMnek2LHO/GlbQ/iCOojhGA5XOTJMw7r7KbvYTMom7DintFnZ63bxM49cnNnwoNraIWSytDcAA2Yc5u+Mu2etNiDiiYjqcEKWnSu4rVzFRyjH19f0baY48FhZ6BtyFUhAn1WI0bef9waavfoH+uw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by DB9PR04MB8362.eurprd04.prod.outlook.com (2603:10a6:10:241::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.24; Tue, 3 Sep
+ 2024 07:36:28 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%4]) with mapi id 15.20.7918.024; Tue, 3 Sep 2024
+ 07:36:28 +0000
+Date: Tue, 3 Sep 2024 15:35:09 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	peter.chen@kernel.org, herve.codina@bootlin.com,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org, jun.li@nxp.com
+Subject: Re: [PATCH v2 3/6] dt-bindings: phy: mxs-usb-phy: add nxp,sim
+ property
+Message-ID: <20240903073509.7fb6izjnbhtiocjn@hippo>
+References: <20240726113207.3393247-1-xu.yang_2@nxp.com>
+ <20240726113207.3393247-3-xu.yang_2@nxp.com>
+ <20240829090935.ktc7jgd2en4qay2h@hippo>
+ <2024090332-smokiness-virus-5f65@gregkh>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024090332-smokiness-virus-5f65@gregkh>
+X-ClientProxiedBy: SI1PR02CA0017.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::10) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829-x1e80100-ps8830-v1-2-bcc4790b1d45@linaro.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DB9PR04MB8362:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54f7b52e-fd6d-43de-c289-08dccbeb1f4a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|7416014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Lkdt3oaqVumTOb0sl09ebbMtY4SuZCpd1m1b6ks37ZcDylpC0gsCx7zq43yd?=
+ =?us-ascii?Q?Hx1LOx6Y00xZrl+YFa6qTZfzvZy0Fc3VfTeRGoG/zi+WIurNntSPtbUYhFyT?=
+ =?us-ascii?Q?OO/RjcL3vEXDQv6FcLTlsEMOFDB28Ijk/Dp/96D5/NzLFZiRZhUwQ6bDL+sz?=
+ =?us-ascii?Q?20E5+wpwwRnB7BPsmuCHF+6dJRxvFPNeOLaWeiZmTelvP8HPMcxE7/Jeph/5?=
+ =?us-ascii?Q?2xmLMn+/un9PhCUnbcXGPcx7h6UIV0ZMqchSpp3xGhpeZxIOe//GF1y5nCOv?=
+ =?us-ascii?Q?qETOB5hkTg4jmkUuuh/EIL+roHAGdlRJ+JWuW4AFm7gW/S65Y5RZQXVCq6fu?=
+ =?us-ascii?Q?u9pqRk/0KFOtJWtzbdfJafcD6I+UNq3oV0MLCerCPLXhPK0zv9yHWaEDNtIC?=
+ =?us-ascii?Q?IZpXpJ5/UB+H1LcKWomG4FM0aJVy38vrI9jznWkFrK4qp7LDbdXAOfaT4yPb?=
+ =?us-ascii?Q?Sm6FKbdGSw0JKwR6zjv3hewsOibU/BD7CfSiM/VFhuVdyNj2xGWxh4ita5PP?=
+ =?us-ascii?Q?oOmxeHZvWvy1a2S2JKq+Sq5CkHgXnL8lC5gpYNLUSXypLf7zAcda9Ukvv20A?=
+ =?us-ascii?Q?UT1FrFWUBKh+kxmOMRj+JZt6v/JS1g5oaQXyvL48JlQt0AL7b1KOeDBkR3P/?=
+ =?us-ascii?Q?aTqmqZ9EqOZ2Fi8FLHVoTOiy44FitNoHn2bGF81l8nk4NuYym4HzrcvJKzpW?=
+ =?us-ascii?Q?aRCP9FQ2yvCbN76/+V78F6M66+EKp71q3KeqdUQ8Y7NbKR2xr0bfPlJfzrhC?=
+ =?us-ascii?Q?yKP01Vi8Yay0wg32SFQz1EeZ4ktkvJoRq3KESI1l/dOuBEcEHjN0u7h70Hag?=
+ =?us-ascii?Q?YFkiycUMhaiJEJ8uCL5XHrDUFnJO7A1ZMdO0RIFNC71aeY8eJX+6X0FpfrNg?=
+ =?us-ascii?Q?/36bsd6+Uf/9S3o3kb5so9iNbYCmdRkwwnUnLhhr9zHEbL36bN/ohYZ2PIWt?=
+ =?us-ascii?Q?bKfmnVJ5QQ8rQouB5Alq2Q85GILWuRTHDPQu1+pkY2uXj3WkFCUl7ejE3r6q?=
+ =?us-ascii?Q?7P+qmZUBT2FPYdmuHRqs06jCd2rTunJRhQDecwhY+t+LDcOc9Up4VgPJBe9v?=
+ =?us-ascii?Q?paKxgTaDTQhxZ1C1xDT+likPcYFICXM97V8LnXcwVqTn0soi0O/iffkojceK?=
+ =?us-ascii?Q?UR9AjhUNzmZalKwsbNfcaIos1hg8c2zI8PNN7WInMv4nef1bPpGpsYkdMXO4?=
+ =?us-ascii?Q?tAIn9Mwmll4a8hVQS8UlqiLLyDvwaZGor550obcB49mktb/b91Mta2ToPZux?=
+ =?us-ascii?Q?e8bykY9iKw1Aoq8/KCKz6LXc1pD8y/3LTHSrKKnKhr4T//mTfPVR+guf9AQj?=
+ =?us-ascii?Q?RmyLxydKX2WzciU5EoP4OCosBbCQKQCwDwwk+xelje0Brq1hKmTCbsdJneMd?=
+ =?us-ascii?Q?PqSKeVmh90AlvrdVZXHe1iv9mVNZZ0KjbvhiG8YQQXksrBeZBg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?TTGYARAkgq/r/uYD14ZShwWeJQjbNQIcp6ssfov+OzL0gfQjppqDgaL+05L0?=
+ =?us-ascii?Q?GmaUAfF9E/tbbEEm3j7GhbJX1Lh+ZQCcT2p+3yvKOjt8Ouze+l3wty1Hdiye?=
+ =?us-ascii?Q?pXW7VxGP2XadZnFXq/XnpZdAhRdvL4XCDx5dIwRjK/AMZnuIyRbSOdcapMAx?=
+ =?us-ascii?Q?UmwTQwQozKmxWFJn0JPhTyNdgJyLFy7XLsWZ4WHuCMKPxeQ6a8mFJEhou48/?=
+ =?us-ascii?Q?BbOr62e5oNUC2X5xg1IIRtRJUo/LakOVL5weTG6ESTFYcDWCGlcagK5tQ/Io?=
+ =?us-ascii?Q?HGBoNrJxab68crPRIqJnD7NrkPBRg8B63FB8HnM3VH2UPY/llSkWsjeGiB8Q?=
+ =?us-ascii?Q?n/f3t3zHhjZwGpWx5MXaXdKW2Ki7xLYaCKsvzTOcchJctYvRSsPq63Gmq2G1?=
+ =?us-ascii?Q?wrkc8zBEuY0U3eB+QvTSntcY7SYkn9RK3TQ83FmNblAnFyQrRVzlvSD+cMkH?=
+ =?us-ascii?Q?r6tY7/CqNv8o2tRipls7XD8yCyMOw0GNeki3HLE6IUg8okBcIphW+DMi5xWL?=
+ =?us-ascii?Q?aapQU/gwvUloaSFysD9eabOFEnHIijMy2Ha4r4MLTbL8EzDFWJI63ahGKDrY?=
+ =?us-ascii?Q?iDeESX5gWssfj7XJe3a+Xt+RiEZG4yTZ6htYdD+LQIe7aA9kvEar2JXXyNZI?=
+ =?us-ascii?Q?uEkoNNE1K15vIt2DHDW/p4FwLSrEDE++M2xMOdk+DgoGa45A/xaiYDrWFBuJ?=
+ =?us-ascii?Q?YZq/KCbIs67B1DFvT66QgiavoRwI7TOcDT77/RYX2s6x2N9iKXHOhbX8qxb3?=
+ =?us-ascii?Q?5bMeyNruvZcqdR2m7BIEseXaky3fl6fomgBN+a32yckW3xeZo3eb6JcBVqug?=
+ =?us-ascii?Q?I8XDNMDsbz4MPRhCDGn8H0qBGn8HaY3wV27QeXg/5sdbjznKeetmwxc1aoAW?=
+ =?us-ascii?Q?/A/GpTulgAQ2Hf0n8rpXexOd39oocsVTal3hdT/S63pd13+EP3p9B42QJNO7?=
+ =?us-ascii?Q?jSNA8d2CdM4+uVyY51AgReaO1phvwplVsoyFrT5hyNmG7roaA7HOn5a+U1Dz?=
+ =?us-ascii?Q?qfctbUzrl/aWvllq1T0TT/HlxxxcjP+GTznbr0gZDRN+A3fx4CYx3RdsdAi7?=
+ =?us-ascii?Q?R60sineFM/uERjXlj/ACB2jj1gCGtfdqR8m8fJ1Rq0JOowtruaPvPfS5kADB?=
+ =?us-ascii?Q?scnwl6jIHMqF0kC5YNuQ7waIf3oMFLvsyLz4dAwV4dareR0S+SBuNVoy8o1j?=
+ =?us-ascii?Q?tZFq3oQS53TUEGj668VETtmYLBgUaiaubZLROMhJW6uitmW2bSxixQVHdmQk?=
+ =?us-ascii?Q?UhOVyKG47seIRTjP9U3WDXPOueSVbI2bl/56zEptzBEc5RxUAGJvMaK9+eBw?=
+ =?us-ascii?Q?E3TMAfxTDKCUaQf+/HE6hhSb5/F/fQVo4YVa2IJhVvKeV+pSygqTEdw77V9l?=
+ =?us-ascii?Q?oCpoYLlF//9ADMWvEirFhheT5HoOTfmZfi+lLdmXAKDmkHAneumUrg7bfzgY?=
+ =?us-ascii?Q?ue9WYbQJkJKadaUK5NSns7wdYC0GFSNKffG7/jb8LoLjjOAPmkFA1BrRodtP?=
+ =?us-ascii?Q?PgQ024u7hhnb3dwBhm3iBpU2saLQAbRI4BKCca7VZAx2FNIVdxUYD3sQYyLh?=
+ =?us-ascii?Q?h1s5gbhKJE4dk2eVq3Sp66ayA+H00KJmQTWMfPCZ?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54f7b52e-fd6d-43de-c289-08dccbeb1f4a
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2024 07:36:28.3973
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x2OFfAtaGRWzdrUONS439N7Wbh30b7o5oNzUm6GrVeOhd5hqCgbQ+k6dw+VBm0qET/0OHTy+O6H1GAp+tORTbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8362
 
-On Thu, Aug 29, 2024 at 09:44:26PM +0300, Abel Vesa wrote:
-> The Parade PS8830 is a Type-C muti-protocol retimer controlled over I2C.
-> It provides both altmode and orientation handling.
+On Tue, Sep 03, 2024 at 09:08:52AM +0200, Greg KH wrote:
+> On Thu, Aug 29, 2024 at 05:09:35PM +0800, Xu Yang wrote:
+> > Hi Greg,
+> > 
+> > On Fri, Jul 26, 2024 at 07:32:04PM +0800, Xu Yang wrote:
+> > > i.MX7ULP need properly set System Integration Module(SIM) module to make
+> > > usb wakeup work well. This will add a "nxp,sim" property.
+> > > 
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > 
+> > > ---
+> > > Changes in v2:
+> > >  - add else branch suggested by Rob
+> > > ---
+> > >  .../devicetree/bindings/phy/fsl,mxs-usbphy.yaml | 17 +++++++++++++++++
+> > >  1 file changed, 17 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+> > > index f4b1ca2fb562..ce665a2779b7 100644
+> > > --- a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+> > > +++ b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+> > > @@ -87,6 +87,12 @@ properties:
+> > >      maximum: 119
+> > >      default: 100
+> > >  
+> > > +  nxp,sim:
+> > > +    description:
+> > > +      The system integration module (SIM) provides system control and chip
+> > > +      configuration registers.
+> > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > +
+> > >  required:
+> > >    - compatible
+> > >    - reg
+> > > @@ -110,6 +116,17 @@ allOf:
+> > >        required:
+> > >          - fsl,anatop
+> > >  
+> > > +  - if:
+> > > +      properties:
+> > > +        compatible:
+> > > +          const: fsl,imx7ulp-usbphy
+> > > +    then:
+> > > +      required:
+> > > +        - nxp,sim
+> > > +    else:
+> > > +      properties:
+> > > +        nxp,sim: false
+> > > +
+> > >  additionalProperties: false
+> > >  
+> > >  examples:
+> > 
+> > 
+> > Could you please pick up patch #3? Rest of the patches are mainlined.
 > 
-> Add a driver with support for the following modes:
->  - DP 4lanes
->  - USB3
->  - DP 2lanes + USB3
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Can you please resend it as an individual patch with the reviewed-by
+> added to it?
 
-> +struct ps8830_retimer {
-> +	struct i2c_client *client;
-> +	struct regulator_bulk_data supplies[4];
-> +	struct gpio_desc *reset_gpio;
-> +	struct regmap *regmap;
-> +	struct typec_switch_dev *sw;
-> +	struct typec_retimer *retimer;
-> +	struct clk *xo_clk;
-> +
-> +	bool needs_update;
-> +	struct typec_switch *typec_switch;
-> +	struct typec_mux *typec_mux;
-> +
-> +	struct mutex lock; /* protect non-concurrent retimer & switch */
-> +
-> +	enum typec_orientation orientation;
-> +	unsigned long mode;
-> +	int cfg[3];
-> +
+Sure. Will do it later.
 
-Stray newline.
-
-> +};
-> +
-> +static int ps8830_configure(struct ps8830_retimer *retimer, int cfg0, int cfg1, int cfg2)
-> +{
-> +	if (cfg0 == retimer->cfg[0] &&
-> +	    cfg1 == retimer->cfg[1] &&
-> +	    cfg2 == retimer->cfg[2])
-> +		return 0;
-> +
-> +	retimer->cfg[0] = cfg0;
-> +	retimer->cfg[1] = cfg1;
-> +	retimer->cfg[2] = cfg2;
-> +
-> +	regmap_write(retimer->regmap, 0x0, cfg0);
-> +	regmap_write(retimer->regmap, 0x1, cfg1);
-> +	regmap_write(retimer->regmap, 0x2, cfg2);
-> +
-> +	return 0;
-> +}
-
-You always return 0 here so should this be a void function?
-
-> +
-> +static int ps8380_set(struct ps8830_retimer *retimer)
-> +{
-> +	int cfg0 = 0x00, cfg1 = 0x00, cfg2 = 0x00;
-
-Please avoid doing multiple initialisations like this (one per line is
-more readable).
-
-> +	int ret;
-> +
-> +	retimer->needs_update = false;
-> +
-> +	switch (retimer->orientation) {
-> +	/* Safe mode */
-> +	case TYPEC_ORIENTATION_NONE:
-> +		cfg0 = 0x01;
-> +		cfg1 = 0x00;
-> +		cfg2 = 0x00;
-> +		break;
-> +	case TYPEC_ORIENTATION_NORMAL:
-> +		cfg0 = 0x01;
-> +		break;
-> +	case TYPEC_ORIENTATION_REVERSE:
-> +		cfg0 = 0x03;
-> +		break;
-> +	}
-> +
-> +	switch (retimer->mode) {
-> +	/* Safe mode */
-> +	case TYPEC_STATE_SAFE:
-> +		cfg0 = 0x01;
-> +		cfg1 = 0x00;
-> +		cfg2 = 0x00;
-> +		break;
-> +
-> +	/* USB3 Only */
-> +	case TYPEC_STATE_USB:
-> +		cfg0 |= 0x20;
-> +		break;
-> +
-> +	/* DP Only */
-> +	case TYPEC_DP_STATE_C:
-> +	case TYPEC_DP_STATE_E:
-> +		cfg0 &= 0x0f;
-> +		cfg1 = 0x85;
-> +		break;
-> +
-> +	/* DP + USB */
-> +	case TYPEC_DP_STATE_D:
-> +	case TYPEC_DP_STATE_F:
-> +		cfg0 |= 0x20;
-> +		cfg1 = 0x85;
-> +		break;
-> +
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	gpiod_set_value(retimer->reset_gpio, 0);
-> +	msleep(20);
-> +	gpiod_set_value(retimer->reset_gpio, 1);
-> +
-> +	msleep(60);
-> +
-> +	ret = ps8830_configure(retimer, 0x01, 0x00, 0x00);
-> +
-> +	msleep(30);
-> +
-> +	return ps8830_configure(retimer, cfg0, cfg1, cfg2);
-
-As the build bots pointed out, ret is never used, and the configure
-function always returns 0. Make the function type void and return 0
-explicitly here instead?
-
-> +}
-
-> +static int ps8830_retimer_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct typec_switch_desc sw_desc = { };
-> +	struct typec_retimer_desc rtmr_desc = { };
-> +	struct ps8830_retimer *retimer;
-> +	int ret;
-> +
-> +	retimer = devm_kzalloc(dev, sizeof(*retimer), GFP_KERNEL);
-> +	if (!retimer)
-> +		return -ENOMEM;
-> +
-> +	retimer->client = client;
-> +
-> +	retimer->regmap = devm_regmap_init_i2c(client, &ps8830_retimer_regmap);
-> +	if (IS_ERR(retimer->regmap)) {
-> +		dev_err(dev, "Failed to allocate register map\n");
-> +		return PTR_ERR(retimer->regmap);
-> +	}
-> +
-> +	retimer->supplies[0].supply = "vdd33";
-> +	retimer->supplies[1].supply = "vdd18";
-> +	retimer->supplies[2].supply = "vdd15";
-
-vdd115?
-
-> +	retimer->supplies[3].supply = "vcc";
-> +	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(retimer->supplies),
-> +				      retimer->supplies);
-> +	if (ret)
-> +		return ret;
-> +
-> +	retimer->xo_clk = devm_clk_get(dev, "xo");
-> +	if (IS_ERR(retimer->xo_clk))
-> +		return PTR_ERR(retimer->xo_clk);
-> +
-> +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(retimer->reset_gpio))
-> +		return PTR_ERR(retimer->reset_gpio);
-> +
-> +	retimer->typec_switch = fwnode_typec_switch_get(dev->fwnode);
-> +	if (IS_ERR(retimer->typec_switch))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->typec_switch),
-> +				     "failed to acquire orientation-switch\n");
-> +
-> +	retimer->typec_mux = fwnode_typec_mux_get(dev->fwnode);
-> +	if (IS_ERR(retimer->typec_mux)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(retimer->typec_mux),
-> +				    "failed to acquire mode-mux\n");
-> +		goto err_switch_put;
-> +	}
-> +
-> +	ret = regulator_bulk_enable(ARRAY_SIZE(retimer->supplies),
-> +				    retimer->supplies);
-> +	if (ret < 0) {
-> +		dev_err(dev, "cannot enable regulators %d\n", ret);
-
-Please add a colon after "regulators" to maintain a consistent style of
-error messages. 
-
-> +		goto err_mux_put;
-> +	}
-> +
-> +	ret = clk_prepare_enable(retimer->xo_clk);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to enable XO: %d\n", ret);
-
-Lower case "failed" for consistency.
-
-> +		goto err_disable_vreg;
-> +	}
-> +
-> +	gpiod_set_value(retimer->reset_gpio, 0);
-> +	msleep(20);
-> +	gpiod_set_value(retimer->reset_gpio, 1);
-> +
-> +	msleep(60);
-> +	mutex_init(&retimer->lock);
-
-I'd initialise resources like this before resetting the device (e.g.
-move above regmap init).
-
-> +
-> +	sw_desc.drvdata = retimer;
-> +	sw_desc.fwnode = dev_fwnode(dev);
-> +	sw_desc.set = ps8830_sw_set;
-> +
-> +	ret = drm_aux_bridge_register(dev);
-> +	if (ret)
-> +		goto err_disable_gpio;
-> +
-> +	retimer->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(retimer->sw)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(retimer->sw),
-> +				    "Error registering typec switch\n");
-
-Switch registration cannot return EPROBE_DEFER so I suggest using
-dev_err() for clarity (e.g. as you must not call functions that can
-defer probe after registering child devices like the aux bridge).
-
-> +		goto err_disable_gpio;
-> +	}
-> +
-> +	rtmr_desc.drvdata = retimer;
-> +	rtmr_desc.fwnode = dev_fwnode(dev);
-> +	rtmr_desc.set = ps8830_retimer_set;
-> +
-> +	retimer->retimer = typec_retimer_register(dev, &rtmr_desc);
-> +	if (IS_ERR(retimer->retimer)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(retimer->retimer),
-> +				    "Error registering typec retimer\n");
-
-Same here.
-
-> +		goto err_switch_unregister;
-> +	}
-> +
-> +	dev_info(dev, "Registered Parade PS8830 retimer\n");
-
-Drop this, drivers shouldn't spam the logs on success.
-
-> +	return 0;
-> +
-> +err_switch_unregister:
-> +	typec_switch_unregister(retimer->sw);
-> +
-> +err_disable_gpio:
-> +	gpiod_set_value(retimer->reset_gpio, 0);
-> +	clk_disable_unprepare(retimer->xo_clk);
-> +
-> +err_disable_vreg:
-> +	regulator_bulk_disable(ARRAY_SIZE(retimer->supplies),
-> +			       retimer->supplies);
-> +err_mux_put:
-> +	typec_mux_put(retimer->typec_mux);
-> +
-> +err_switch_put:
-> +	typec_switch_put(retimer->typec_switch);
-> +
-> +	return ret;
-> +}
-
-> +static const struct i2c_device_id ps8830_retimer_table[] = {
-> +	{ "parade,ps8830" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ps8830_retimer_table);
-
-This one should not be needed, right?
-
-> +static const struct of_device_id ps8830_retimer_of_table[] = {
-> +	{ .compatible = "parade,ps8830" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ps8830_retimer_of_table);
-
-Johan
+Thanks,
+Xu Yang
 
