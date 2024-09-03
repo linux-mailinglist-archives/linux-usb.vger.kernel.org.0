@@ -1,89 +1,120 @@
-Return-Path: <linux-usb+bounces-14594-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14595-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9EAD96A66A
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 20:25:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBF8F96A692
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 20:31:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 209EDB221ED
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 18:25:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CADC1F24A42
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 18:31:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E779191477;
-	Tue,  3 Sep 2024 18:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DD91922CF;
+	Tue,  3 Sep 2024 18:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FF6yylWR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VpAcO3E0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BEC18C920;
-	Tue,  3 Sep 2024 18:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D1518E027;
+	Tue,  3 Sep 2024 18:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725387912; cv=none; b=bl5tPEEpwt6/6Isj1UN+effEPGWycU6OGtVKUKHTOWrw1LnJrLHaF51O1GOZ8w0Ac3hH+PMUt1VOPhK1BxgRKdYPvT2ntZEEGIkpntkZyjCar/nThKbM02Dh9viwh1JgD90QbYCfkmvT58tXfs1++G3sdNd1jj8T/BGQ5GL5L7Q=
+	t=1725388303; cv=none; b=bt7VssdDnFW0nrTjBvq5s4P8mZq1mSainSuYvOsYKrMdpDfG6Vxr4V83TETcOGTfmsfw5CtlFyH0TqFhyLLZPdXd4gtu9gluAK+eeORGc5HogC/G58Yke6CBcF+6MX2aMdXRzFDSgoURxzpLcXyT5JhAGj2EmVTuWFCPlNOnNh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725387912; c=relaxed/simple;
-	bh=lAc4reMSsVnb79X3z07GT39746ssq10KcRvtp8vCAxk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=QQTs4Z8p190qF23VS9Ore5brGQBMrLjeI6Q0k2M3UZN+xgXZBhciXGmnR/OEJ/pOZqJjlVkiFfu1CXSS7k73G0dszueqFfRMSTadrluPteCl7fP6Skabgq3zS2Oa8bDmZZqq2fk2XCDRtLYpHHp8e5ovATAZdN46Q0yL1itlESk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FF6yylWR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3247C4CEC4;
-	Tue,  3 Sep 2024 18:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725387912;
-	bh=lAc4reMSsVnb79X3z07GT39746ssq10KcRvtp8vCAxk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=FF6yylWRBR7FaYEpBbMS6CxVLYSf463E35BKpBxqaXlbebuBSY5ma4qXi8eUB/PpI
-	 cIsFkSEvmaQznetuVY7C4n/W3cNVXO3uSzQL2wX3AWo28glFdRtu9pzDTm6YmqljO2
-	 xhnUUOImCtRIL19FCXzP0k+Ei5F8Zm2WSABHFlUNbLf7ia+ksDn+IsVtffpffpB57F
-	 Mo66LTUooxtWArKL2fgyjneuCqjsMZz72/DN46rPOoVegX7VSmJYe2bGZmnr1goTD/
-	 Z9aci/OrV/ALy9LCdsjPNSxkmiQ6EIz3xIlp0o3a6ElSe2TM+zODIe80OdBUkzrafB
-	 WGR1Sfc/iM/fQ==
-Date: Tue, 3 Sep 2024 13:25:09 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Gary Li <Gary.Li@amd.com>, Mario Limonciello <superm1@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	"open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	Daniel Drake <drake@endlessos.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v5 2/5] PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in
- pci_dev_wait()
-Message-ID: <20240903182509.GA260253@bhelgaas>
+	s=arc-20240116; t=1725388303; c=relaxed/simple;
+	bh=lLtBvj4b4a9FZjEQXtG8TT4P04Lxq60KH2gciLcoEKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JNOVJtP01XBTQKqp9f16RBO57nvpB48Nzl5Py5EqkqMBUDymlefj8X1J3wgPVIW812F1rZAQFcXf5E77ddWGH0XK45dYLKKdv6q/B8Z++qLeTbeBuGru/nGoP3JowO70OWhp7XISsbGEQpUMc1p8xF9BRH6INm+OB46WTs+o6gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VpAcO3E0; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725388302; x=1756924302;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lLtBvj4b4a9FZjEQXtG8TT4P04Lxq60KH2gciLcoEKw=;
+  b=VpAcO3E0dJNsNam4bq2h+6CG9DYzeXY3K2JK+PTai32QIMgEj5egW7qv
+   J5xlkQ66vhnL0PYVLJPrUYMod1/UeTwiMhlb0VcSXBMECoK8xyxroNmUJ
+   hASlnlRheaxLxwY5c6jVmmjJVlDx9w55Y1JLQ4XQ3qyi2VfbP1+pWEl9u
+   jGx7LQeBYxNbud5OOO9VVxBAewRzeJ33bmnvujpX/Z7Q2G+wmZ/QWyvUm
+   bGfVCaGwtuzBhWGzahcUVYxtXRP9dPdVjoxFlgXkr0bRupsuxxSKX2CuX
+   dWqsN8hNNFiPWS0kcPZcmkVgF8QFjENo8zR0Hneg33czdg2ftReu6Ai6X
+   A==;
+X-CSE-ConnectionGUID: Yl7EuGAURHSKzAOrWG3WMw==
+X-CSE-MsgGUID: FvkMtC7sRXipXnpBtsFUPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24147196"
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="24147196"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 11:31:41 -0700
+X-CSE-ConnectionGUID: WVx0QEHbQRynxXfjEMTsWQ==
+X-CSE-MsgGUID: nUIglSs7TRqIA/x//dRGZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="95809013"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa001.fm.intel.com with ESMTP; 03 Sep 2024 11:31:39 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 12D613C1; Tue, 03 Sep 2024 21:31:37 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] usb: common: Switch to device_property_match_property_string()
+Date: Tue,  3 Sep 2024 21:31:36 +0300
+Message-ID: <20240903183136.3641770-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bdc99602-7bb2-4026-8122-e92f894aca09@amd.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 03, 2024 at 12:31:00PM -0500, Mario Limonciello wrote:
-> On 9/3/2024 12:11, Bjorn Helgaas wrote:
-> ...
+Replace open coded device_property_match_property_string().
 
-> >    8) The USB4 stack sees the device and assumes it is in D0, but it
-> >    seems to still be in D3cold.  What is this based on?  Is there a
-> >    config read that returns ~0 data when it shouldn't?
-> 
-> Yes there is.  From earlier in the thread I have a [log] I shared.
-> 
-> The message emitted is from ring_interrupt_active():
-> 
-> "thunderbolt 0000:e5:00.5: interrupt for TX ring 0 is already enabled"
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/common/common.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-Right, that's in the cover letter, but I can't tell from this what the
-ioread32(ring->nhi->iobase + reg) returned.  It looks like this is an
-MMIO read of BAR 0, not a config read.
+diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+index 84ec00b7966c..b7bea1015d7c 100644
+--- a/drivers/usb/common/common.c
++++ b/drivers/usb/common/common.c
+@@ -107,19 +107,18 @@ EXPORT_SYMBOL_GPL(usb_speed_string);
+  */
+ enum usb_device_speed usb_get_maximum_speed(struct device *dev)
+ {
+-	const char *maximum_speed;
++	const char *p = "maximum-speed";
+ 	int ret;
+ 
+-	ret = device_property_read_string(dev, "maximum-speed", &maximum_speed);
+-	if (ret < 0)
+-		return USB_SPEED_UNKNOWN;
+-
+-	ret = match_string(ssp_rate, ARRAY_SIZE(ssp_rate), maximum_speed);
++	ret = device_property_match_property_string(dev, p, ssp_rate, ARRAY_SIZE(ssp_rate));
+ 	if (ret > 0)
+ 		return USB_SPEED_SUPER_PLUS;
+ 
+-	ret = match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
+-	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
++	ret = device_property_match_property_string(dev, p, speed_names, ARRAY_SIZE(speed_names));
++	if (ret > 0)
++		return ret;
++
++	return USB_SPEED_UNKNOWN;
+ }
+ EXPORT_SYMBOL_GPL(usb_get_maximum_speed);
+ 
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-> [log] https://gist.github.com/superm1/cb407766ab15f42f12a6fe9d1196f6fc
 
