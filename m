@@ -1,118 +1,97 @@
-Return-Path: <linux-usb+bounces-14518-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14519-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAFAD9694DC
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:12:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 143269694F1
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:14:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECD8C1C231E3
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:12:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF10628306F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9367221C16C;
-	Tue,  3 Sep 2024 07:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91791D6C41;
+	Tue,  3 Sep 2024 07:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="STnHriJm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gs1AGCOE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136CD1D6194;
-	Tue,  3 Sep 2024 07:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2C31D6786;
+	Tue,  3 Sep 2024 07:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725347397; cv=none; b=dONOaUd+/kte/Hk2v9pO/yTEKJ7+7dln7hy5Td7wGnaZetTHkdIMJCpTXOkE88dHJu5I7fV3vrz4z0gpK883yChu8/CpnUP34hdweVdX5NfJvaPCdwM3/YNQLwsuM4MZR+2ByzYuS602BOWWRtgRa6fYcPv3Ub22YhBvI2HJ4es=
+	t=1725347607; cv=none; b=L+yYqmkaclZM7Kvc8cOXyaJq67VDzUyWbhnrSqot0dYDr9PnlHkOJlRozwJMaxPmweEgSO1Fp2EWDTCqWP2SYPXvqicVKCA3IE45lNjLGCPX/BDVW5ECv8tlzw8d3IAlQdDHJYFSezNx1RHHbTfEAyeUwxHIfTk2a63mcuKRdCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725347397; c=relaxed/simple;
-	bh=YEgWiHXBuskcPndGXIwLrLW9HeAxJb4B1CgKB0BFHno=;
+	s=arc-20240116; t=1725347607; c=relaxed/simple;
+	bh=gdQzZXQlNJ2WddxY58vtzSE+Tx9smuEhfiUdnMoqg7g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M4WIYJIJPWXP0r115jiQ8C43c+FEtaomJdPIGb1APuJDjA11oLw+upqaWN/JAxdIG8cd0xplGFsS+RBb8dC5Nkq0VHnVdlqoTwAvjgYq8La3rSXbuceCn/4j5/L0LHJusTI4xzXyYBbs+5ZwyfqOaQeGGYnr5EWD2VbTJ9kD2oI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=STnHriJm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0A8DC4CEC6;
-	Tue,  3 Sep 2024 07:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725347396;
-	bh=YEgWiHXBuskcPndGXIwLrLW9HeAxJb4B1CgKB0BFHno=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=SWLxgZlfmNr8O/W2e0lCuzBQJfJFd/ZIIkZ3ToK3FcCXsgsuTU5JhYXTQKQOVv+jNBEHRlgBmV7+cpbCcMmtPY64cuqgdPsjobC1FL4z/xsFLA03hBq71PIFBCBKJEKexG1k5DU5Ojdq0C5GSW1G3NakeqLk6lB5L6QjfXn0xtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gs1AGCOE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC72BC4CEC5;
+	Tue,  3 Sep 2024 07:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725347606;
+	bh=gdQzZXQlNJ2WddxY58vtzSE+Tx9smuEhfiUdnMoqg7g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=STnHriJmfSwk3zd7FKQ9ObfXGV0wHnu1Gp9iLdbedkLQ5S8WiZ4sS1Y4nvq7uIZn4
-	 2zf+kekIOdX8CdCQBcB/NO0NudqAqV428ExhJH16hX6+3uYSe9logxDogC9l2kwMtO
-	 EufZDOag7qHsBS9ih9W17bidAngDY9oRbWashrD4=
-Date: Tue, 3 Sep 2024 09:09:53 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Marcello Sylvester Bauer <sylv@sylv.io>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Aleksandr Nogikh <nogikh@google.com>,
-	Marco Elver <elver@google.com>,
-	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com,
-	syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com,
-	stable@vger.kernel.org, andrey.konovalov@linux.dev
-Subject: Re: [PATCH] usb: gadget: dummy_hcd: execute hrtimer callback in
- softirq context
-Message-ID: <2024090332-whomever-careless-5b7d@gregkh>
-References: <20240729022316.92219-1-andrey.konovalov@linux.dev>
- <CA+fCnZc7qVTmH2neiCn3T44+C-CCyxfCKNc0FP3F9Cu0oKtBRQ@mail.gmail.com>
+	b=gs1AGCOE0G9fqfFMaSn6iVu8Mq8LATc6F2Zfv81WpvPE9dRr3nnBEfcFkPCe+F4oi
+	 RxyaYqcDIUmPlyIbiiIAHo0f8PaJepNHUlB+EXBtkRAPZXakwUGiyutUpmAG1urLl6
+	 90esgVCbA8qZJCGUeirSeGWISfaU4n7bFJUd3LFJazKHKn01VeWFKO4+m7kwqUyHMp
+	 mCpt73XfigcFJUqP9YPo50jpw4r77A1f+Xuhoi7EfSFTmHo/ICV0paScvwr21F7sCg
+	 YZ4ioGQh0SdO4b4zMI7us8SmiY1G0zC5S0nk/n2QGjfIAYD4CI/u1zG/N/IpX24GkK
+	 fiZmzoPriFhng==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1slNjS-000000000zP-0Wm6;
+	Tue, 03 Sep 2024 09:13:42 +0200
+Date: Tue, 3 Sep 2024 09:13:42 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH RFC 1/2] dt-bindings: usb: Add Parade PS8830 Type-C
+ retimer bindings
+Message-ID: <Zta3Jr7rCDzxe_mE@hovoldconsulting.com>
+References: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
+ <20240829-x1e80100-ps8830-v1-1-bcc4790b1d45@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZc7qVTmH2neiCn3T44+C-CCyxfCKNc0FP3F9Cu0oKtBRQ@mail.gmail.com>
+In-Reply-To: <20240829-x1e80100-ps8830-v1-1-bcc4790b1d45@linaro.org>
 
-On Tue, Aug 27, 2024 at 02:02:00AM +0200, Andrey Konovalov wrote:
-> On Mon, Jul 29, 2024 at 4:23 AM <andrey.konovalov@linux.dev> wrote:
-> >
-> > From: Andrey Konovalov <andreyknvl@gmail.com>
-> >
-> > Commit a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer
-> > scheduler") switched dummy_hcd to use hrtimer and made the timer's
-> > callback be executed in the hardirq context.
-> >
-> > With that change, __usb_hcd_giveback_urb now gets executed in the hardirq
-> > context, which causes problems for KCOV and KMSAN.
-> >
-> > One problem is that KCOV now is unable to collect coverage from
-> > the USB code that gets executed from the dummy_hcd's timer callback,
-> > as KCOV cannot collect coverage in the hardirq context.
-> >
-> > Another problem is that the dummy_hcd hrtimer might get triggered in the
-> > middle of a softirq with KCOV remote coverage collection enabled, and that
-> > causes a WARNING in KCOV, as reported by syzbot. (I sent a separate patch
-> > to shut down this WARNING, but that doesn't fix the other two issues.)
-> >
-> > Finally, KMSAN appears to ignore tracking memory copying operations
-> > that happen in the hardirq context, which causes false positive
-> > kernel-infoleaks, as reported by syzbot.
-> >
-> > Change the hrtimer in dummy_hcd to execute the callback in the softirq
-> > context.
-> >
-> > Reported-by: syzbot+2388cdaeb6b10f0c13ac@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=2388cdaeb6b10f0c13ac
-> > Reported-by: syzbot+17ca2339e34a1d863aad@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=17ca2339e34a1d863aad
-> > Fixes: a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
-> 
-> Hi Greg,
-> 
-> Could you pick up either this or Marcello's patch
-> (https://lkml.org/lkml/2024/6/26/969)? In case they got lost.
+On Thu, Aug 29, 2024 at 09:44:25PM +0300, Abel Vesa wrote:
+> Document bindings for the Parade PS8830 Type-C retimer. This retimer is
+> currently found on all boards featuring Qualcomm Snapdragon X Elite SoCs
+> and it is needed to provide altmode muxing between DP and USB.
 
-Both are lost now, (and please use lore.kernel.org, not lkml.org), can
-you resend the one that you wish to see accepted?
+> +  vdd15-supply:
+> +    description: power supply (1.5V)
 
-thanks,
+As Konrad already pointed out, this appears to be a 1.15 V supply, in
+which case the name and description needs an update.
 
-greg k-h
+> +
+> +  vdd18-supply:
+> +    description: power supply (1.8V)
+> +
+> +  vdd33-supply:
+> +    description: power supply (3.3V)
+
+Johan
 
