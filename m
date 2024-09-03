@@ -1,92 +1,75 @@
-Return-Path: <linux-usb+bounces-14509-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14510-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6EC09692F8
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 06:58:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D13396930E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:02:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9C8F1C22D56
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 04:58:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE8DBB21BCD
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 05:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D34D1CE6EB;
-	Tue,  3 Sep 2024 04:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9F51CB527;
+	Tue,  3 Sep 2024 05:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pepXRYHK"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rhXcyiOj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EF22904;
-	Tue,  3 Sep 2024 04:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7811CDFDD
+	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 05:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725339511; cv=none; b=E0GkpV4TPvFzlk+87/vCHUryRFBGyNQzTp6+0gOBN0tR5QY4+ig3Kxz1ilQPHIgeHIsW2vs/I41uLThsrRHtn1UkvL5vYmreI9m5fTdOXfPYTcXYblUfS8jPMemvCylsmLNtgMW+XQLYdm5jSi6Ta6voyipGNRki62jwx5TYwMI=
+	t=1725339683; cv=none; b=ndNvajGvBuGDq8X9j1KbWrgMerKOYrhAS5YayqczmKjQUtETUw/XR+wKONL+07NBIErfc5rO0HkJ+xJjoVniL8m8+bgToJwZi6zOxf+/P8EwPoGevmDr/iHJ8/TNj8izv/ZMr4r7IJYeQIyCN0aEYbnQt9SfTM9C9n533UdlE/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725339511; c=relaxed/simple;
-	bh=tdLMtVR7YmxiIHJhUKcA6olrG88nI5AsrPflnfZQiLU=;
+	s=arc-20240116; t=1725339683; c=relaxed/simple;
+	bh=ZMJnMajbUt93foKRo2W29PWr9qDmGBpxfeA4osXVn0Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qYTF3t2St1jgkCzl1+Lc8InzpNPXgMZNVCoY2IlGO75Y/tvdFNTTbtkLFwSyCIpfGOrXAt9eIWSWvMVI1t2Go8y8SoTeEAXaoTh/0mDK/23KnwjDG+tTlxq9JqHf9FZ6blYMjesUe7CZlWvFP/LSHIWElc1K8DwBBuRe1WmlBy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pepXRYHK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 265C6C4CEC5;
-	Tue,  3 Sep 2024 04:58:29 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LnrH4hOqmnO5vcX065NZK8jbJpaYDrUuYTWUYeWIVFjkKrp0Qb8rj9wU02RANea/MoB1Nvf2/w0f+BjceKdmG2P59zvS0/tipLdIM4xi1S+FejFmM/sxVukBSTE17SbdSPMCK/q4j02Q2cut/eYMXuKdj8V4JgmHUfGXF9hKsVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rhXcyiOj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3E0BC4CEC5;
+	Tue,  3 Sep 2024 05:01:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725339510;
-	bh=tdLMtVR7YmxiIHJhUKcA6olrG88nI5AsrPflnfZQiLU=;
+	s=korg; t=1725339682;
+	bh=ZMJnMajbUt93foKRo2W29PWr9qDmGBpxfeA4osXVn0Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pepXRYHKdOG3ESgqBn9T69uS2e+af/+rBoD82sC1aJE16tmSlPIiLWgx0P0ZmgFZQ
-	 jzWxoMDDQKqHIH55rSQWgt0Ip6LRwUk7TIiFO+1FPhQSovAn/U+5Qmz8qhTulJFwo4
-	 0Zi+KRXRC41gvbK3JyU5IWCV99E1HCjsXdSLiXXQ=
-Date: Tue, 3 Sep 2024 06:58:27 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
-	Prashanth K <quic_prashk@quicinc.com>,
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"opensource.kernel" <opensource.kernel@vivo.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	=?utf-8?B?5p2O5bKz5p2+?= <liyuesong@vivo.com>
-Subject: Re: =?utf-8?B?562U5aSNOiDnrZTlpI06IFtQQVRD?=
- =?utf-8?Q?H_v9=5D_usb=3A_gadget=3A_u=5Fserial=3A_Ad?= =?utf-8?Q?d?= null
- pointer check in gs_read_complete & gs_write_complete
-Message-ID: <2024090328-carbon-feeble-3d84@gregkh>
-References: <TYUPR06MB6217DE28012FFEC5E808DD64D2962@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <PUZPR06MB6224FF88145DAA364464EA7FD2922@PUZPR06MB6224.apcprd06.prod.outlook.com>
- <1179f9e8-1e5e-4658-8102-ee4d2c49575f@kernel.org>
- <TYUPR06MB62171CA61CC646756826B8D9D2932@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	b=rhXcyiOjAYPNUltv1/b8WKiE7DNEN0+3TU3BEdXIuyy1cy9HbQqECbYF4FzKZfDx1
+	 ikTQS8SfYnyxNp9TSekm0k2zV5Udb0XOCsdm4xyrbbbKC47ag2FkcnrVYHucERX3o3
+	 tJ80/gJFvs8cvQLGBUYuW+QafPsFn7OTdC+Za16A=
+Date: Tue, 3 Sep 2024 07:01:19 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Saad Shabbir <saadshabbir735@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Why it is not sending my simple Mouse
+Message-ID: <2024090300-shortness-feminize-9fdc@gregkh>
+References: <CAKPak7kA6Xn2Gbrv==CJbyTBHx6V9JyWXPgJPAM3wtfx5ohD_A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYUPR06MB62171CA61CC646756826B8D9D2932@TYUPR06MB6217.apcprd06.prod.outlook.com>
+In-Reply-To: <CAKPak7kA6Xn2Gbrv==CJbyTBHx6V9JyWXPgJPAM3wtfx5ohD_A@mail.gmail.com>
 
-On Tue, Sep 03, 2024 at 02:23:09AM +0000, 胡连勤 wrote:
-> Hello linux community expert:
+On Tue, Sep 03, 2024 at 01:50:55AM +0400, Saad Shabbir wrote:
+> https://github.com/vadimgrn/usbip-win2/wiki#ude-driver-list-of-devices-known-to-work
 > 
-> >You ping after four days? As whom do you treat us? I already complained about @vivo.com in several threads. That's one more to the list of very poor interactions from @vivo.com.
+> HID_DEVICE_SYSTEM_MOUSE
+> HID-compliant mouse
 > 
-> >READ submitting-patches very carefully and then get your process fixed.
+> i cant understand why it is not sending my mouse through the IP.
 > 
-> We sincerely apologize. We have always respected the maintainers of the Linux community and had no intention of offending them.
+> it is sending my USB Storage Sandisk,
 > 
-> Perhaps we were anxious and hoped that the patch could be merged earlier (to solve the problems encountered in production as soon as possible), 
-> which inadvertently offended the community maintainers. We apologize again for this.
+> C:\Program Files\USBip>usbip.exe list -r 192.168.0.124
 
-If you wish to have patches reviewed and merged quickly, please help out
-in the review and testing of other changes that have been submitted
-before yours, to help cut down the workload of those of us reviewing
-these changes.
+There is not much we can do here for Windows questions, sorry.
 
-thanks,
+best of luck!
 
 greg k-h
 
