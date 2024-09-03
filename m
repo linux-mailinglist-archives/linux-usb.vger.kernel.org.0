@@ -1,210 +1,148 @@
-Return-Path: <linux-usb+bounces-14609-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14610-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA35996AC78
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 00:45:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C220196AC81
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 00:49:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 470291F25D7B
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 22:45:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E52591C246DC
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 22:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D10331B9844;
-	Tue,  3 Sep 2024 22:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57AB21A4E8B;
+	Tue,  3 Sep 2024 22:49:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZoAnmyCF"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GGtoiBTa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916B1192B68
-	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 22:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D551126BE1
+	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 22:49:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725403548; cv=none; b=QVRIip7E22eTybQGvQiYRiQJQV7Arahd9fNVezDZAVVLbyXYJPWLKVPMS9ijN7tfgpUt4nhSLCidVvcRfQxj9SgxwTvVgJ/GYmKDF77Yv+TDz/iblGhJQV71Mca9/Y4gYNmqIxsQns2milRQmNjvjSPM5jRs2f3ZD/igQD1oT+Q=
+	t=1725403765; cv=none; b=T+9XalAWcuADlvch3SSr8HctwK/SttqCt+6cfAhhu5xs5ArMiRU304fdeEQMJqJwDlEmHaFPxeqrUAQEUIzDoJbonaBn6sZdTUEfGgR7gNjy2F9eae4qKKe6jiNuemKGUmMWvnisBeBLJvkG88kHaapTQUcWOX6ScFd0JCjeKF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725403548; c=relaxed/simple;
-	bh=VPVc1ryHA/YkHSUTWCz79nzdEgicqousfazw/96TSZM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MdMSKB5wjmZfAtAK5D+rSAUuJeX4BsBC7v6tjV5OdJV+RPuMBIdd/roeeHAHxkZkC3olOcXCk9fwJ4npA6I/tBZ/K0tfm6sC4RwEL/rHoEEfxBiK2Bv5vV3atQduhVg5vAZ5aGSCFeleNYGBuSFRPzyG/vBfmSJKhHnG0TIXubY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZoAnmyCF; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725403547; x=1756939547;
-  h=date:from:to:cc:subject:message-id;
-  bh=VPVc1ryHA/YkHSUTWCz79nzdEgicqousfazw/96TSZM=;
-  b=ZoAnmyCF1des3UHpX0guRqybwLqquoOSqWBx2tcLUDwcltVwokoFAS6d
-   3x6OHhV5dc12qo6csoY0sVEk+EM+V6kCUBGqfUsIeficCLjwbQ9/0Zpwq
-   /g9imomQUe1NP9lqNU3/VuR5KDHqWfufBgn18F0efE+VESsbKPmSSKgdc
-   MxlsWnaZbwPVJcndqR/Jgn0LTfNo+9WcjgsPGDQ/EcC2IuxG8DOUsyiMb
-   cRndNk37UuAioa1rhcX232T9F2cBzMz7R/WqYsCHE2Zm1aMt/X8iJGoCc
-   /f3kq1WE7n9HDHg2u1HJciWzW8JPBFGcuDEP0Vc5+JJ6xXAkkHbwkNXDL
-   w==;
-X-CSE-ConnectionGUID: UFsEiNqeRViQXMknisCiLA==
-X-CSE-MsgGUID: 9n/H1ZLsRN2Pl0wk8gwKhA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="23547680"
-X-IronPort-AV: E=Sophos;i="6.10,200,1719903600"; 
-   d="scan'208";a="23547680"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 15:45:38 -0700
-X-CSE-ConnectionGUID: hJTXSROWQXeL//pfKi2DMQ==
-X-CSE-MsgGUID: 4KndLY5/S0aofKs97RjADQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,200,1719903600"; 
-   d="scan'208";a="65306223"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 03 Sep 2024 15:45:37 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1slcHG-0007If-33;
-	Tue, 03 Sep 2024 22:45:34 +0000
-Date: Wed, 04 Sep 2024 06:45:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 8d31daeef3ee750b85717cd5887f453c3398e728
-Message-ID: <202409040613.adOSxbIr-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1725403765; c=relaxed/simple;
+	bh=TtyX2gK5m3nn23OtYeDlMe0JllQ4/PmVqk0mkdxmM0g=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OsHnpOxwjB82lfPd9jx7rH8VStLWj3rt8Ebavk5vPTMoFEmzhfl3IEYNSFzS7J/WjChCN7LEpsR0uk0DXQ1GlPOF6444EBY+Ca1wBQ2o5EBNA6VLCrpXtUzpCZTWatC/YPi+/NnByoUqnPJ3jV/q6QdRAGNLS1SDbsKqyjt5WJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GGtoiBTa; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6c3552ce7faso1227086d6.1
+        for <linux-usb@vger.kernel.org>; Tue, 03 Sep 2024 15:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1725403763; x=1726008563; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uhkZOEeJ95CcasGDNkmg/phbGBaUk1oIC37JjrClemw=;
+        b=GGtoiBTa2PTnMt5qsv43WUG9RdNGUP9XPM1q8sr9xgQRol07+bG+QW2+Ri8SBjndyE
+         39rIBUWhWiH9auxXqu2QyaNOdimkqZaQmRoTBgJWO+P25alTBOOa+lPq9hg8qblXMGci
+         cR+MBD57s0alrU9EjH6ewGjBGpk8wPv8MJP1M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725403763; x=1726008563;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uhkZOEeJ95CcasGDNkmg/phbGBaUk1oIC37JjrClemw=;
+        b=cr8Q7jim9Du5cNP0BjrOAgsKfxQy1OsHgH88RhFqoflUP4+WN/1E4J9xIQfYeMSHYe
+         wDSjV+/vRiooCWM1nd6QRFRfbKDPNlp88MmhP+JmiYzA73g2xnkv5pcdaEKVu+uX0kVw
+         Lv6wRCnuw/xBMPb8igNe+NpJ4gxpLYsPGQXfXWfxPj7fcSvZoxYCq5+FRYKy/FWGwMtX
+         Yy7NqqFH+IcgH2HuUggPsjkKUybpadMdUidAHk3uUscjlc+rht1PQVwQI6SgoMbRimBe
+         8SlNyiqPVqXFyUizViBuvBTuNqRHEvN7X5yrcNb//QvljehdVnOTZVOxBZ7CUr2lFsik
+         iG3w==
+X-Forwarded-Encrypted: i=1; AJvYcCXf3atmDVX5MOJfRBuorHyJexDeLprVsuXT9t/tHodAQGhFEsAxd25kquXxLJ7HxNMhP+uCV9e73OI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsk6+Nzp3NXYRny1RT5bpeLUQuwTNjPPresn+NOWiZ3+KQiQIQ
+	1XIa80waK/vJtPclpVmxqlHhPUB93Mavzg1bxQ7vk++dYnZE6K6tI5NEGdLtOWUeJMDP3UfVbiP
+	WRo8uPYvtRlbF2VExRBZih/L/7vS+YwKp2hgT
+X-Google-Smtp-Source: AGHT+IF34ocTupB91QqHAUN7muZ3pQu7SJrIS8QiPpHwQnzTFwdvCLem6xytcCmScWzLqSwtal0se6zIR4RyUsc0prs=
+X-Received: by 2002:a05:6214:1c44:b0:6c4:d2f9:644e with SMTP id
+ 6a1803df08f44-6c518e03025mr2177666d6.12.1725403763196; Tue, 03 Sep 2024
+ 15:49:23 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 3 Sep 2024 18:49:22 -0400
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <ZtWdsZrFxfjYLgaG@smile.fi.intel.com>
+References: <20240901040658.157425-1-swboyd@chromium.org> <20240901040658.157425-12-swboyd@chromium.org>
+ <ZtWdsZrFxfjYLgaG@smile.fi.intel.com>
+From: Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date: Tue, 3 Sep 2024 18:49:22 -0400
+Message-ID: <CAE-0n52Hupp-ANE2ggeGCRZSM+xmrJt-Q5+5Cb7=C-mxykbz0g@mail.gmail.com>
+Subject: Re: [PATCH v4 11/18] device property: Add remote endpoint to devcon matcher
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev, devicetree@vger.kernel.org, 
+	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, dri-devel@lists.freedesktop.org, 
+	Guenter Roeck <groeck@chromium.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
+	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Daniel Scally <djrscally@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
+	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 8d31daeef3ee750b85717cd5887f453c3398e728  ARM: dts: imx7ulp: add "nxp,sim" property for usbphy1
+Quoting Andy Shevchenko (2024-09-02 04:12:49)
+> On Sat, Aug 31, 2024 at 09:06:49PM -0700, Stephen Boyd wrote:
+>
+> Is it possible to move these Cc:s after --- line below?
 
-elapsed time: 864m
+Ok.
 
-configs tested: 117
-configs skipped: 3
+>
+> >  /**
+> >   * devcon_match_fn_t - device connection match function
+> >   * @fwnode: Remote connection's device node
+> > + * @endpoint: Remote connection's endpoint node
+> >   * @con_id: Identifier for the connection
+> >   * @data: Match function caller specific data
+> >   *
+> >   * Implement a callback with this function signature to search a fwnode's
+> >   * connections for a match with a function like device_connection_find_match().
+> >   * This function will be called possibly multiple times, once for each
+> > - * connection. The match function should inspect the @fwnode to look for a
+> > - * match. The @con_id and @data provided are the same as the @con_id and @data
+> > - * arguments passed to the functions that take a devcon_match_fn_t argument.
+> > + * connection. The match function should inspect the connection's @fwnode
+> > + * and/or @endpoint to look for a match. The @con_id and @data provided are the
+> > + * same as the @con_id and @data arguments passed to the functions that take a
+> > + * devcon_match_fn_t argument.
+>
+> So, struct fwnode_handle is a single-linked list. Can we utilise that instead
+> of adding a new parameter? I.o.w. do those objects (@fwnode and @endpoint) have
+> anything in common and can be chained?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+No, we can't use that. We need to know which endpoint in the remote
+fwnode is connected to the fwnode we're searching from. This is how we
+know which typec mux structure is associated with which type-c port so
+we can drive DP there. We might have two endpoints connected to the same
+fwnode and then we wouldn't be able to differentiate the endpoint and
+the typec mux to configure.
 
-tested configs:
-alpha                             allnoconfig   gcc-14.1.0
-alpha                            allyesconfig   clang-20
-alpha                               defconfig   gcc-14.1.0
-arc                              allmodconfig   clang-20
-arc                               allnoconfig   gcc-14.1.0
-arc                              allyesconfig   clang-20
-arc                                 defconfig   gcc-14.1.0
-arm                              allmodconfig   clang-20
-arm                               allnoconfig   gcc-14.1.0
-arm                              allyesconfig   clang-20
-arm                     am200epdkit_defconfig   clang-20
-arm                         assabet_defconfig   clang-20
-arm                         axm55xx_defconfig   clang-20
-arm                                 defconfig   gcc-14.1.0
-arm                      jornada720_defconfig   clang-20
-arm                        spear3xx_defconfig   clang-20
-arm                        spear6xx_defconfig   clang-20
-arm64                            allmodconfig   clang-20
-arm64                             allnoconfig   gcc-14.1.0
-arm64                               defconfig   gcc-14.1.0
-csky                              allnoconfig   gcc-14.1.0
-csky                                defconfig   gcc-14.1.0
-hexagon                          allmodconfig   clang-20
-hexagon                           allnoconfig   gcc-14.1.0
-hexagon                          allyesconfig   clang-20
-hexagon                             defconfig   gcc-14.1.0
-i386                             allmodconfig   clang-18
-i386                              allnoconfig   clang-18
-i386                             allyesconfig   clang-18
-i386                                defconfig   clang-18
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch                           defconfig   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-m68k                                defconfig   gcc-14.1.0
-m68k                        m5407c3_defconfig   clang-20
-m68k                       m5475evb_defconfig   clang-20
-m68k                           virt_defconfig   clang-20
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-microblaze                          defconfig   gcc-14.1.0
-mips                              allnoconfig   gcc-14.1.0
-mips                           ip28_defconfig   clang-20
-mips                     loongson2k_defconfig   clang-20
-mips                      malta_kvm_defconfig   clang-20
-mips                         rt305x_defconfig   clang-20
-nios2                             allnoconfig   gcc-14.1.0
-nios2                               defconfig   gcc-14.1.0
-openrisc                          allnoconfig   clang-20
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-12
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   clang-20
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-12
-parisc64                            defconfig   gcc-14.1.0
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   clang-20
-powerpc                          allyesconfig   gcc-14.1.0
-powerpc                        icon_defconfig   clang-20
-powerpc                  mpc885_ads_defconfig   clang-20
-riscv                            allmodconfig   gcc-14.1.0
-riscv                             allnoconfig   clang-20
-riscv                            allyesconfig   gcc-14.1.0
-riscv                               defconfig   clang-20
-riscv                               defconfig   gcc-12
-s390                             allmodconfig   gcc-14.1.0
-s390                              allnoconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   gcc-12
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-12
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                          alldefconfig   clang-20
-sparc64                             defconfig   gcc-12
-um                               allmodconfig   clang-20
-um                                allnoconfig   clang-20
-um                               allyesconfig   clang-20
-um                                  defconfig   gcc-12
-um                             i386_defconfig   gcc-12
-um                           x86_64_defconfig   gcc-12
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240904   clang-18
-x86_64       buildonly-randconfig-002-20240904   clang-18
-x86_64       buildonly-randconfig-003-20240904   clang-18
-x86_64       buildonly-randconfig-004-20240904   clang-18
-x86_64       buildonly-randconfig-005-20240904   clang-18
-x86_64       buildonly-randconfig-006-20240904   clang-18
-x86_64                              defconfig   clang-18
-x86_64                                  kexec   gcc-12
-x86_64                randconfig-001-20240904   clang-18
-x86_64                randconfig-002-20240904   clang-18
-x86_64                randconfig-003-20240904   clang-18
-x86_64                randconfig-004-20240904   clang-18
-x86_64                randconfig-005-20240904   clang-18
-x86_64                randconfig-006-20240904   clang-18
-x86_64                randconfig-011-20240904   clang-18
-x86_64                randconfig-012-20240904   clang-18
-x86_64                randconfig-013-20240904   clang-18
-x86_64                randconfig-014-20240904   clang-18
-x86_64                randconfig-015-20240904   clang-18
-x86_64                randconfig-016-20240904   clang-18
-x86_64                randconfig-071-20240904   clang-18
-x86_64                randconfig-072-20240904   clang-18
-x86_64                randconfig-073-20240904   clang-18
-x86_64                randconfig-074-20240904   clang-18
-x86_64                randconfig-075-20240904   clang-18
-x86_64                randconfig-076-20240904   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-x86_64                               rhel-8.3   gcc-12
-xtensa                            allnoconfig   gcc-14.1.0
+>
+> >   * Note: This function can be called multiple times.
+>
+> What does this mean? Is it idempotent? Or what is the effect of being called
+> multiple times?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I've removed this note now.
 
