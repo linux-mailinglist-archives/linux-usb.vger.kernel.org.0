@@ -1,84 +1,83 @@
-Return-Path: <linux-usb+bounces-14607-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14608-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7503496AC07
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 00:20:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D633996AC42
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 00:35:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35F15282282
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 22:20:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06EF01C24599
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 22:35:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C151EBFE4;
-	Tue,  3 Sep 2024 22:20:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE99A1D58AF;
+	Tue,  3 Sep 2024 22:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VTvrZ2V6"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lm1jVuAH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935F9126C16
-	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 22:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41CB186E30
+	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 22:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725402018; cv=none; b=SWVxNRbFhANMldCiR60sg73Q9MnlliAwVBriYUIdkY5iaDjLdufdk8JFrhlDDg/zsZrCSI+Mzy7fBw9Dv22Ce6YlUxAisjt9Ssx3UGBlS9Tyit+8myuSaeEPWxuNfxhMzQWPKXwBq0K+GZrBhJihuF9olywsyBEfq8wUME/QRJY=
+	t=1725402947; cv=none; b=kZwRM9nAfBO2/09ob6FgKDoHriFy5Jl7Ai1cfFFG1+iuww5etY6ZvF6TUWfTHR9jhbTdZ6D9IYEApJRruz3sUVgsa6pqdJ16FidJGm9s+KpJlsohhVsOIKioK9jEWIRu0o9CIcvqCugP0JKKcLJz8C2hgS/nIjwct3HQ19JWbCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725402018; c=relaxed/simple;
-	bh=VgukLIdAqyeSxA2DG9cLyohXbxxYr/YDX0u8EHAwkCo=;
+	s=arc-20240116; t=1725402947; c=relaxed/simple;
+	bh=Np+Q0wHOCgirMFjVPl8Z6i7/K3O+RkvC3vKi9xQ+BOA=;
 	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XzwmHJDziKcocTUKe2dS+9UN6IlvFMpc3sTD8O3LlOrT1mwosT0v07rYU+SbMkKsyo35yGyjc17AckbSMx9nZFH2zC8DRhdaSjeba5IDxtfT2ANv4F2lFdd7jUVvQ1fJFdERa12kAPRO0/yrZOjWBIg3eXn463DUGHg2nptKI8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=VTvrZ2V6; arc=none smtp.client-ip=209.85.128.174
+	 To:Cc:Content-Type; b=Gyd2Fh4n9et1bnYaDx6DMT2c6S6BOrCEuvCbd2DvyYH7nX1IEsqkg3KACP8gc2aDGc/HtdV7JMy33J7EoMnr4VUJvE2E3aKecDxluUKxlBias2EBf2GjF8wL+WtHZJMlsTHXIiVAIby142QmC0tEIJvWs2HrGK06fOD5642HsAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lm1jVuAH; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6b47ff8a59aso52911447b3.2
-        for <linux-usb@vger.kernel.org>; Tue, 03 Sep 2024 15:20:16 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7a8125458e4so299596785a.3
+        for <linux-usb@vger.kernel.org>; Tue, 03 Sep 2024 15:35:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1725402015; x=1726006815; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1725402944; x=1726007744; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:user-agent:from:references
          :in-reply-to:mime-version:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/+hY8C/Csnv3M/LgsDuLYd+cu/lwq52aGSpQU/ytorc=;
-        b=VTvrZ2V603HQdo/9/LWa4zQ44amdPFCY7kfke0lr/B3rLqLVhOB7lYsh8TqxSRR778
-         dTcQ3DAqK4wJBYcl/IFucWhVytIaiCaEWvXb+DhAZnuBOjX7qp/lBTeV9aeXtcYWaTjF
-         ZbLTIK/dvZY0E5on/qd0KUA2Oa+wlAcgBF4ZQ=
+        bh=Np+Q0wHOCgirMFjVPl8Z6i7/K3O+RkvC3vKi9xQ+BOA=;
+        b=lm1jVuAH2pFMPzHxtGzV+WNdlwFrpY5gjA/JLR95yM3WWoKr/HkJvVpdhDMOr2UWUt
+         Cy2dqItUtK2a+DuFQMqvmArShpAQO3aqWp7sbWN7kjm2tCABSIOadrLNsoPb2cHostjR
+         Law3Q1kIib6qsOl/qn5WpjVr+h8IHVgHTxk8k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725402015; x=1726006815;
+        d=1e100.net; s=20230601; t=1725402944; x=1726007744;
         h=cc:to:subject:message-id:date:user-agent:from:references
          :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/+hY8C/Csnv3M/LgsDuLYd+cu/lwq52aGSpQU/ytorc=;
-        b=YnjOB08lMICjRVxywam57MnNXOzV4I7dHRBWQ9BpeGK6HuZriok0RK0z2+Yqjtvp/O
-         +RkBIX3ieCLbpAtJ7YZ57suGgRl1Nvn1WkonJAJoDnHKvO7XSgHefW+gwbKMU3s+Az1c
-         WLk1eXwCzsfFEjsHXAt4zvIyVLo2xyWzfoFkxrkBHPadW7+2L49oRRC+xkLfbRwWsexb
-         dscIIrA+447x2ac5SP8AwXtngrpWpwTU8aLDL8SqQaFqPg+dx1GCdqSnfbMbq/9H8uVl
-         YtSFhaY0aL+Cgp1hPdMeK7NRgBaGTNirc6XSf5vcNUkiEKshabdVzDSyCpaDoIlU6fHj
-         JB/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXja9+QgZq+dQ+Dds33sXf6IayAQxVGKEoAbWWOMpMY87rjGuxplSMOIDeR0TYB4JHrCihvHoJXwxo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbras9aSSaQKYSNXiS38OapQteTOKs9YG0/IoimnApybh3+oRD
-	yoPdorHsxv08IslvERyU1zGA4IXkITizIi4E0LjuF59ZkpfQSYFS12JPrFl0yeTOcaq0sj3EatT
-	szX2ExmyWDnr0fXjvKVDpnZSB9LXC2QfOuL3k
-X-Google-Smtp-Source: AGHT+IFwXAJ53tzp721XKIBWOOUK4nFlwB+WIRkuEoAHaKs0HLbFhY0QtOfcaSBF6O58JI106A7GqiGJo71sW3vWmWA=
-X-Received: by 2002:a05:690c:fca:b0:6af:8662:ff37 with SMTP id
- 00721157ae682-6d40f82a5e9mr204127277b3.21.1725402015390; Tue, 03 Sep 2024
- 15:20:15 -0700 (PDT)
+        bh=Np+Q0wHOCgirMFjVPl8Z6i7/K3O+RkvC3vKi9xQ+BOA=;
+        b=hccIYcy7Un8RN1cu5MMXIv44zRLua9hYCWoPMDKfNzKSR784K8wH9PuSH9t12EAUOJ
+         qqWW5ruoA/Z/BXbDRkqj4p3llV7GL4BWQQ0sxG1hVw1naRWDbrJLjgT6rpq+mAOmxA8H
+         ghpekz+siRZOTF3h/K9d7rLH9bu4fN0xvFm+fj2lsSHmKNCVDXRY6G40eEva5aAVxeBG
+         2i/xVKSvQ1DBH+VJamqbsKqCMQNUg2BFKX2LkVB9u4zZ1//8YkqyV/O1UuuJFheokYRv
+         vGo/iU2j4Ta7DKCnsqeMPu01MqATwKdEkdZF9QfpMOxwSMX8FdPMfyolvwzg+uefuJ4s
+         m2yQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHSLc6gZHDFrYxi4HopqaCdy+fUyL8xOj886ooy2vNo7e5CDSSRzGfuyD1udftY77QsiBYW8gyr+U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrLg0lHEayy5/SdE4E25COpaOWkpvZzw3AWMMHK/ROv36XgkKF
+	ZFBiS5sahIjZDF/fBl8Q/v3TCXeVA629rXcMmkYZYXZ8+ptA4bh4UJ49oMkFL7Weli4/gzDWxhX
+	KxUYVjibt/BfyytLKP0UxxFv92VH+d2IVrvIA
+X-Google-Smtp-Source: AGHT+IHROkfnEqJwyKjhAgQRGsJgxkFB29+Yc6u1MFfoALprduJBtTl2Q7hk3LAUymLuEO32wO/aAKlH5269r5m9+pM=
+X-Received: by 2002:a05:620a:28c8:b0:7a6:6fd6:9d6a with SMTP id
+ af79cd13be357-7a8f6b767cemr1583962985a.5.1725402944498; Tue, 03 Sep 2024
+ 15:35:44 -0700 (PDT)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 3 Sep 2024 18:20:14 -0400
+ HTTPREST; Tue, 3 Sep 2024 15:35:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <ZtWjEudmlR51zkU9@smile.fi.intel.com>
-References: <20240901040658.157425-1-swboyd@chromium.org> <20240901040658.157425-7-swboyd@chromium.org>
- <ZtWjEudmlR51zkU9@smile.fi.intel.com>
+In-Reply-To: <ZtWeuFUEgnF9e2S4@smile.fi.intel.com>
+References: <20240901040658.157425-1-swboyd@chromium.org> <20240901040658.157425-11-swboyd@chromium.org>
+ <ZtWeuFUEgnF9e2S4@smile.fi.intel.com>
 From: Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date: Tue, 3 Sep 2024 18:20:14 -0400
-Message-ID: <CAE-0n51eSxxvnJXwnfPrXx1=rei=8OGGEtCAgw6nhCktZ0iQDw@mail.gmail.com>
-Subject: Re: [PATCH v4 06/18] drm/bridge: aux-hpd: Support USB Type-C DP
- altmodes via DRM lane assignment
+Date: Tue, 3 Sep 2024 15:35:44 -0700
+Message-ID: <CAE-0n51nLCNJxhxMr3EmqoWz=3dLU-ckfSwgEUtrhBRZchLu_w@mail.gmail.com>
+Subject: Re: [PATCH v4 10/18] devcon property: Document devcon_match_fn_t
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
 	patches@lists.linux.dev, devicetree@vger.kernel.org, 
@@ -102,194 +101,46 @@ Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
 	Vinod Koul <vkoul@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Quoting Andy Shevchenko (2024-09-02 04:35:46)
-> On Sat, Aug 31, 2024 at 09:06:44PM -0700, Stephen Boyd wrote:
-> > Extend the aux-hpd bridge driver to support assigning DP lanes to USB
-> > type-c pins based on typec mux state entry. Existing users of this
-> > driver only need the HPD signaling support, so leave that in place and
-> > wrap the code with a variant that supports more features of USB type-c
+Quoting Andy Shevchenko (2024-09-02 04:17:12)
+> On Sat, Aug 31, 2024 at 09:06:48PM -0700, Stephen Boyd wrote:
+> > The usage of this match function is hard to understand at a glance.
+> > Document the arguments and the return value so it is clear how to
+> > implement the function.
 >
-> Isn't the proper spelling "USB Type-C"?
-
-Perhaps in a title?
-
->
-> > DP altmode, i.e. pin configurations. Prefix that code with
-> > 'drm_dp_typec_bridge' to differentiate it from the existing
-> > 'drm_aux_hpd_bridge' code.
-> >
-> > Parse the struct typec_mux_state members to determine if DP altmode has
-> > been entered and if HPD is asserted or not. Signal HPD to the drm bridge
-> > chain when HPD is asserted. Similarly, parse the pin assignment and map
-> > the DP lanes to the usb-c output lanes, taking into account any lane
-> > remapping from the data-lanes endpoint property. Pass that lane mapping
-> > to the previous drm_bridge in the bridge chain during the atomic check
-> > phase.
+> Thank you for the patch!
 >
 > ...
 >
-> > +static inline struct drm_dp_typec_bridge_data *
-> > +hpd_bridge_to_typec_bridge_data(struct drm_aux_hpd_bridge_data *hpd_data)
-> > +{
-> > +     return container_of(hpd_data, struct drm_dp_typec_bridge_data, hpd_bridge);
->
-> + container_of.h ?
->
-> With that said, can the argument be const here?
-
-You mean 'hpd_data'? Don't think so because then we would want
-container_of_const(), and to return a const pointer from this function
-when drm_dp_typec_bridge_assign_pins() wants to modify struct
-drm_dp_typec_bridge_data::num_lanes.
-
->
-> > +}
->
-> ...
->
-> Ditto for the two more helpers, added in this change.
-
-Ditto.
-
->
-> ...
->
-> > +static void drm_dp_typec_bridge_release(struct device *dev)
-> > +{
-> > +     struct drm_dp_typec_bridge_dev *typec_bridge_dev;
-> > +     struct auxiliary_device *adev;
-> > +
-> > +     typec_bridge_dev = to_drm_dp_typec_bridge_dev(dev);
-> > +     adev = &typec_bridge_dev->adev;
-> > +
-> > +     ida_free(&drm_aux_hpd_bridge_ida, adev->id);
->
-> > +     of_node_put(adev->dev.platform_data);
-> > +     of_node_put(adev->dev.of_node);
->
-> I'm wondering why it's not made fwnode to begin with...
-> From the file / function names it's not obvious that it's OF-only code. Neither
-> there is no explanations why this must be OF-only code (among all fwnode types
-> supported).
-
-When in Rome? The drm_bridge code doesn't work with fwnode today, and
-making it support fwnode is a much larger change. I'm not going to make
-drm_bridge work with fwnode. Maybe when ACPI describes elements in the
-display chain we can convert drm_bridge to use fwnode.
-
->
-> > +     kfree(typec_bridge_dev);
-> > +}
->
-> ...
->
-> > +             return ERR_PTR(dev_err_probe(parent, -ENODEV, "Missing typec endpoint(s) port@0\n"));
->
-> We have a new helper for such cases.
-
-Thanks!
-
->
-> ...
->
-> > +     adev->dev.of_node = of_node_get(parent->of_node);
->
-> device_set_node() ?
-
-Or device_set_of_node_from_dev()?
-
->
-> ...
->
-> > +     ret = auxiliary_device_init(adev);
-> > +     if (ret) {
-> > +             of_node_put(adev->dev.platform_data);
-> > +             of_node_put(adev->dev.of_node);
-> > +             ida_free(&drm_aux_hpd_bridge_ida, adev->id);
-> > +             kfree(adev);
-> > +             return ERR_PTR(ret);
->
-> Can cleanup.h be utilised here and in other error paths in this function?
-
-It looks like we can set these later and save on the of_node_put()s
-until after the auxiliary_device_init() is called. Doing that allows
-them to be in one place, the release function.
-
-> > +static int dp_lane_to_typec_lane(enum dp_lane lane)
-> > +{
-> > +     switch (lane) {
-> > +     case DP_ML0:
-> > +             return USB_SSTX2;
-> > +     case DP_ML1:
-> > +             return USB_SSRX2;
-> > +     case DP_ML2:
-> > +             return USB_SSTX1;
-> > +     case DP_ML3:
-> > +             return USB_SSRX1;
-> > +     }
->
-> > +     return -EINVAL;
->
-> Hmm... This can be simply made as default case.
-
-And then the enum is always "covered" and the compiler doesn't complain
-about missing cases (I don't think we have -Wswitch-enum)? Seems worse.
-
->
-> > +}
->
-> ...
->
-> > +     for (i = 0; i < num_lanes; i++) {
-> > +             /* Get physical type-c lane for DP lane */
-> > +             typec_lane = dp_lane_to_typec_lane(i);
-> > +             if (typec_lane < 0) {
-> > +                     dev_err(&adev->dev, "Invalid type-c lane configuration at DP_ML%d\n", i);
-> > +                     return -EINVAL;
->
-> Most likely typec_lane contains an error code here. If yes, it would be rather
->
->                         return typec_lane;
->
-> If no, why not make that happen?
-
-Sure.
-
->
-> > +static int drm_dp_typec_bridge_atomic_check(struct drm_bridge *bridge,
-> > +                                        struct drm_bridge_state *bridge_state,
-> > +                                        struct drm_crtc_state *crtc_state,
-> > +                                        struct drm_connector_state *conn_state)
-> > +{
-> > +     struct drm_dp_typec_bridge_data *data;
-> > +     struct drm_lane_cfg *in_lanes;
-> > +     u8 *dp_lanes;
-> > +     size_t num_lanes;
->
-> > +     int i;
->
-> Does it need to be signed? Can it theoretically overflow as num_lanes defined
-> as size_t?
-
-I guess it could but seems highly unlikely. Using unsigned is fine.
-
->
-> > +             port->typec_data = typec_data;
-> > +             if (of_property_read_u32_array(ep.local_node, "data-lanes",
-> > +                                            port->lane_mapping,
-> > +                                            ARRAY_SIZE(port->lane_mapping))) {
->
-> > +                     memcpy(port->lane_mapping, mapping, sizeof(mapping));
->
-> Hmm... I'm wondering if direct assignment will save a few .text bytes
->
->                 port->lane_mapping = ...;
->                 of_property_read_u32_array(ep.local_node, "data-lanes",
->                                            port->lane_mapping,
->                                            ARRAY_SIZE(port->lane_mapping));
->
-> Also note that conditional is not needed in this case.
+> I believe we still use "device property:" in the subject for this header file changes.
+> $ git log --oneline --no-merges -- include/linux/property.h
 >
 
-Ok. I'm fine with either way here. Maybe Dmitry has an opinion.
+Ok.
+
+>
+> > +/**
+> > + * devcon_match_fn_t - device connection match function
+> > + * @fwnode: Remote connection's device node
+> > + * @con_id: Identifier for the connection
+> > + * @data: Match function caller specific data
+> > + *
+> > + * Implement a callback with this function signature to search a fwnode's
+> > + * connections for a match with a function like device_connection_find_match().
+> > + * This function will be called possibly multiple times, once for each
+> > + * connection. The match function should inspect the @fwnode to look for a
+> > + * match. The @con_id and @data provided are the same as the @con_id and @data
+> > + * arguments passed to the functions that take a devcon_match_fn_t argument.
+>
+> > + * Note: This function can be called multiple times.
+>
+> As noted in the next patch, this would be nice to elaborate (at least to me
+> this sounds like declaration of idempotency which is unlikely what is
+> meant, or am I mistaken?).
+
+I based this on something that I've already forgotten! :)
+
+It's saying that the function you implement shouldn't have side-effects
+because it will be called many times. I actually wrote above that it
+will be called "possibly multiple times, once for each connection". Let
+me try to remove "multiple times".
 
