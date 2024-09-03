@@ -1,105 +1,99 @@
-Return-Path: <linux-usb+bounces-14504-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14505-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5EC8968F37
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 23:51:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3226F9690FB
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 03:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489D91F234DA
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2024 21:51:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5949284194
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 01:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D57016F0D0;
-	Mon,  2 Sep 2024 21:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mTVhHnuU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3441C68B0;
+	Tue,  3 Sep 2024 01:34:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37D41A4E9F
-	for <linux-usb@vger.kernel.org>; Mon,  2 Sep 2024 21:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1997C13D51C
+	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 01:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725313894; cv=none; b=hVzQM+C4e8+Lyleb11iz26WANTJNPqUAR8iygGa9TRnNHlt2OjLEho8fsFq2bNpsk4DzrxaRg7IvKM7KwFc7VNIDJGD4Drg08Q0HRnKyKjNyBaok8OF1e4c8IEMncfZPJKOq96UQlBfJq1rliuj2VaL5EsES5L8M+iKD9Grwu5c=
+	t=1725327269; cv=none; b=j+1txl54hk0aCQ7icXcTjNIxUIIIKxex/6JWA/3d4bYURBfomE4hNzygwfBYkxQUGTKL151QdnEXCyVkJCjLLbqb9Ws+SCXPpEt4TxFSNRiXC6oxk7Q3b4M5CoD0hUF9zWVC3RuL9JFmF94ZbJJNdqyyw+kKHDejQiHjfs0FbPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725313894; c=relaxed/simple;
-	bh=TcpSq63cfMx0039UGvatC7Hrp1hzQOiwf926hF3ivxE=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=rGE9uaFYcJMzvLaKYyIyKx5QyPWYiLK8FVgixLfL9RI6knlBPP36HTDjfRAVUOyeSehY2fAQLR4/6rtnDXel8lIryi3BS4Jg65joz6E9MwGgBq7bcRPh+n2/MLWDyLLk2r+n11Wt8MJamJS3DUGBT+78SeUF3o9sxxrScWgSHQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mTVhHnuU; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-39d47a9ffd5so17629555ab.2
-        for <linux-usb@vger.kernel.org>; Mon, 02 Sep 2024 14:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725313892; x=1725918692; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hvHUi+d/g4RXNlAgw/js2UGC87ddygH/jNBZnIqM5O8=;
-        b=mTVhHnuUDyCZnF0Judx10cA8PwhlQDeOZoZ6f3cy1ciGrQuJ5oFprBJ6AnmHZQQTND
-         b8M/tefs6BLD8V4IIeXw53KnSKhlBH5GvpEHiSKqXaUXgJYlugDXg36NSA40KKdysR9b
-         3e5nBGNJ4fErdM0pCW3tbZ/NMrL06GAy1TASmICIizHBWmfGlfNr6oBd+mLxROZlA0C6
-         6gzieEuU9bZhg1ns1Cs/LcNcNVFEQSfKTHwt+IKo/r/8OgXSKVDyC1Zql/C1iU/U1YTB
-         T7CXzCtCPzzf4LlPVgKmbA5bOObeGxNt1UipVhkCP49Po1nhPbHv/8EvWjg0mX4U5Gyv
-         72Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725313892; x=1725918692;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hvHUi+d/g4RXNlAgw/js2UGC87ddygH/jNBZnIqM5O8=;
-        b=VVgiw0AKllZGroFvdXEDyC0+8sJ3guCDdRhYpPgtZJqtcE7QwIiBxi2IZfsdgkvdsk
-         /oK2s+hn0T4adNlaw9ploWUCdSYbmuOhoMCgTiG+Upvh09W0nt7ajybIrOFEvlHLTDE9
-         V9wsDQP7IyBTrlCtwmz2KlSXyZuwP1eid8BbTG1tWVDh3QD4iwA3EfnHtICUGBnuJ3NQ
-         gV1VmGy1+6Rsh+yzVNLPP5FDK77RYi88/yA/a8SfN6WD6gtloaCntSbcKG789G7VlAoI
-         TmXlKmQGx7RDKQxtt2dwoKMCDBZ8kLZFzK7PQDBkU/bcA9irGpbMHooPEvhzuqQ4HnZo
-         5+Qw==
-X-Gm-Message-State: AOJu0YzlC/4lvy7rsfdtea12RYsxXgxjwrZsoaur6PbFjsatUUvqVUGO
-	cOtPBjkVEm7ZOlC3HP3k+WvzXs44DwWh9qzZXnyyXPUsjQHFlN9qdmSaFweGhmlvFMIT+OmZDyX
-	QEJtx6MDiaeWa64t2klS5jIa+euVU53gO
-X-Google-Smtp-Source: AGHT+IEJSUKFS1PjgDUd9QE0VTqBZCsJ3MPFeIG7loEnOMKXMYoMeMK/oQu0lCk6ngm3BX9UQNVk60GaZ+R5VCSp3t0=
-X-Received: by 2002:a92:8706:0:b0:39f:4ec5:f4ab with SMTP id
- e9e14a558f8ab-39f4ec5f66cmr82322075ab.19.1725313891645; Mon, 02 Sep 2024
- 14:51:31 -0700 (PDT)
+	s=arc-20240116; t=1725327269; c=relaxed/simple;
+	bh=RNhcyOjC145Ca/HEXPwA4H4EtCCvjpvwptxmx1w0ZkQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lLnLyk+H2lhskyrVVHOwnp9HYir91Uek3RQsqXsna3NwFUVmUTHAUAOqK2OGUe048y1p7NF3q2ODMPvVvwYpYWnj/OPL4/blzVR/9XWgLFq5/H0+pzB9EdiE7GZF+pLuOiE14UFar3ZomVP/HX3dZrTCcPapJAaauJsmfclRnsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WySmJ4m9KzpTwP;
+	Tue,  3 Sep 2024 09:32:32 +0800 (CST)
+Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3A026180087;
+	Tue,  3 Sep 2024 09:34:23 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
+ (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 3 Sep
+ 2024 09:34:22 +0800
+From: Hongbo Li <lihongbo22@huawei.com>
+To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+	<sergei.shtylyov@gmail.com>
+CC: <linux-usb@vger.kernel.org>, <lihongbo22@huawei.com>
+Subject: [PATCH -next v2] usb: f_mass_storage: Make use of the helper macro kthread_run()
+Date: Tue, 3 Sep 2024 09:42:49 +0800
+Message-ID: <20240903014249.3098082-1-lihongbo22@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Saad Shabbir <saadshabbir735@gmail.com>
-Date: Tue, 3 Sep 2024 01:50:55 +0400
-Message-ID: <CAKPak7kA6Xn2Gbrv==CJbyTBHx6V9JyWXPgJPAM3wtfx5ohD_A@mail.gmail.com>
-Subject: Why it is not sending my simple Mouse
-To: linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500022.china.huawei.com (7.185.36.66)
 
-https://github.com/vadimgrn/usbip-win2/wiki#ude-driver-list-of-devices-known-to-work
+Replace kthread_create/wake_up_process() with kthread_run()
+to simplify the code.
 
-HID_DEVICE_SYSTEM_MOUSE
-HID-compliant mouse
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
 
-i cant understand why it is not sending my mouse through the IP.
+---
+v2:
+  - Change the misspelled word: s/Repalce/Replace/
 
-it is sending my USB Storage Sandisk,
+v1: https://yhbt.net/lore/linux-usb/3b404347-dee0-6dfc-9fac-ec4abedb13f1@gmail.com/T/#t
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-C:\Program Files\USBip>usbip.exe list -r 192.168.0.124
-Exportable USB devices
-======================
-   1-71    : SanDisk Corp. : unknown product (0781:558a)
-           : /dev/bus/usb/001/071
-           : (Defined at Interface level) (00/00/00)
-           :  0 - Mass Storage/SCSI/Bulk-Only (08/06/50)
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index cfd712fd7452..e11d8c0edf06 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -3050,7 +3050,7 @@ static int fsg_bind(struct usb_configuration *c, struct usb_function *f)
+ 	if (!common->thread_task) {
+ 		common->state = FSG_STATE_NORMAL;
+ 		common->thread_task =
+-			kthread_create(fsg_main_thread, common, "file-storage");
++			kthread_run(fsg_main_thread, common, "file-storage");
+ 		if (IS_ERR(common->thread_task)) {
+ 			ret = PTR_ERR(common->thread_task);
+ 			common->thread_task = NULL;
+@@ -3059,7 +3059,6 @@ static int fsg_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 		DBG(common, "I/O thread pid: %d\n",
+ 		    task_pid_nr(common->thread_task));
+-		wake_up_process(common->thread_task);
+ 	}
+ 
+ 	fsg->gadget = gadget;
+-- 
+2.34.1
 
-but when i connect my mouse
-
-C:\Program Files\USBip>usbip.exe list -r 192.168.0.124
-
-C:\Program Files\USBip>usbip.exe list -r 192.168.0.124
-
-C:\Program Files\USBip>usbip.exe list -r 192.168.0.124
-
-it shows nothing...
-
-can you please help?
 
