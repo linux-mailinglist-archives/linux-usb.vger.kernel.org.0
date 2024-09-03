@@ -1,175 +1,151 @@
-Return-Path: <linux-usb+bounces-14543-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14544-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07EF0969B59
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 13:15:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE274969B8A
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 13:23:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A70251F2451F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 11:15:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93CA3284F87
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 11:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A301A0BE3;
-	Tue,  3 Sep 2024 11:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93B2E1A42B2;
+	Tue,  3 Sep 2024 11:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hb/iH0j4"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Ao07F+Mo";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aGsHTC3N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from pfhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A9C1B12C2;
-	Tue,  3 Sep 2024 11:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E2A1A2621
+	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 11:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725362125; cv=none; b=W/4GP6pu/NVwAKwrUbhwpxn0lYsegitrBK6Jg3/kYPl5MHfLdyHhpvyD2hKqyE9v+49MPn3hvCWU76oIH+ezpDOKxdRvygoocHdUTsMWj3C5FFr1aLSd/WVU4SVQgSJjCozcpOuUK7UeSNTbvwh7LHRStJMgb0u6sATKm6UZd4w=
+	t=1725362621; cv=none; b=KO8ard8vBefRh6KyNAbjEnFTdsjXWwhQOH2TOsuJfB5ZhGNyGtaxYuM0XaAfKR0tccDXRGLCIh4zp11tS7IMMptI0T6BkXG2Q4F//6BW4wzO4z/kLdvCfM4zrFHf+qe76z4k1xdGCsll5mGG54miyONbLiM7YDIPIjVfcZRJ2jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725362125; c=relaxed/simple;
-	bh=KfGX1dn8HNVuzrnALRJ6/KgJTduArsS/FUwz9Q12b3I=;
+	s=arc-20240116; t=1725362621; c=relaxed/simple;
+	bh=gNwFbvWyRZ6yFax8rjmdqCliffmZyH+WUKdxfLy3NQ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vvn25NjOWsN4xkjcgkmXQ50uqB7ODBK4Z3hBJQQJrqD7M04d7+1VKtlh0aFCYnFuTbXOcd8Fv13DqzwGsrjc2CPk/8Ipa7N0Q+WsmISBJcMyBAbvjMvo6eTN1W+igsuNL/hJL535mlc5wI6yzv+x16odjeBzpNfsVR/PPDFjVDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hb/iH0j4; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725362123; x=1756898123;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KfGX1dn8HNVuzrnALRJ6/KgJTduArsS/FUwz9Q12b3I=;
-  b=Hb/iH0j4a3Oau5osSCaRz6UaTpzryyMvxryLtHE8HHETN9SJkFQykZl+
-   ptvtIh86RKW2qQdGQ69iJoTTizwLiF4lFH5lGluAA7rXsIw5mxfvQUEZM
-   gvP8h5v4MkSVKGM1hFwaY0WSEUxvclIAeDq6oi2xRsn+/r9ZlMoc1TGmM
-   H6/gQOfSCImxWPWHiqkp9b08WSoXjfQ7hVM87FJ3zMhnBWKYhjWVTf8fg
-   p7ryTV53PY7h//ImoZCxhSQdieaHIoiELUPmwYi0eDTqwno2jLNgbGXXS
-   5OOATdaGBKpvpL1M1XcJDGH1/IqqeKqmCUoL3G6q3lHuNVUab2F/jLsMz
-   g==;
-X-CSE-ConnectionGUID: /x4qRc6zQSa3AWu4pSheKQ==
-X-CSE-MsgGUID: AghVxcb0T1yK7NWVZbq4cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="35322514"
-X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="35322514"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 04:15:22 -0700
-X-CSE-ConnectionGUID: JIDeYybnQVSbI/6PSXDR1w==
-X-CSE-MsgGUID: gA1+HILmTOK07TZHYfFVnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="69013942"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa003.fm.intel.com with SMTP; 03 Sep 2024 04:15:19 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 03 Sep 2024 14:15:15 +0300
-Date: Tue, 3 Sep 2024 14:15:15 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: Enable ASUS zenbook quirk for
- VivoBooks
-Message-ID: <Ztbvw5seWqRA5/8L@kuha.fi.intel.com>
-References: <20240829100109.562429-1-lk@c--e.de>
- <ZtF/BJMls7kuD2dt@kuha.fi.intel.com>
- <ZtI8N5/SCt+dI/6z@cae.in-ulm.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=udslo26FiZTcDXjpbmttw7wAedz6rHpXBI/ZAMuYj2P68K5PY6SEjd6cp5gwTKU5MQrDyr0QXD7NV9gfe0ytUePjz0kW5pTA+H8BvXOlDGMbR6cN49ye/GQpxxvyc6gKXdgMoc7XHxKCxNnV3ycl71jCswN15RrfsTo5FLajDaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Ao07F+Mo; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aGsHTC3N; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 6913D114038C;
+	Tue,  3 Sep 2024 07:23:38 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Tue, 03 Sep 2024 07:23:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1725362618;
+	 x=1725449018; bh=5bo0X494kUqH46bacpHWSVNT4YBROPr6lS5yOClb+R4=; b=
+	Ao07F+Mo82pJoimfMm778SzbhPHgu7zVNhCXsgpWi5pmAcTSFuFgWRH56/zoSAFL
+	OsE/Ayk2FCBECjjfxVIxofYb0BfFtZt/cOQmn8LNG+LKyksNWidwaiGA4AZQxEmK
+	SSgUXs9EAjlLAtlwKkVLkhcWBMBdWDIt4jo6bJT9lrqyuLgZPvE+CG3F5030XHmQ
+	3HgRG+4Z6sPJpKleDrrIhrNa5iMXOAG8OdXun76BOHXdzdsZ5nJsevQedse1D2VW
+	6z+2YIedlhOPyhjOVfd489XPm02cNXIKoeIKKo3lMsDKT3CF49hB7niS8MKj8rqX
+	SurdYJhsKD6Ty0XqKLuU2g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725362618; x=
+	1725449018; bh=5bo0X494kUqH46bacpHWSVNT4YBROPr6lS5yOClb+R4=; b=a
+	GsHTC3NirZUogNF23LHk0PcvXxHJFakl6ybFOcfqrBBW6rTRJ/zfNZVKPT2gIul+
+	OsF2fl1BVue5k+JoJua26oXF1j+AIz7WK3RymrSISK12kZW9yJap1MuSD+DxLTt6
+	l/Z5Adgo4cQRe4ckJC0U6wrMfStr4oxOVI3PJ2Z6tkvzKjBhqJvv0V8G+U06tCy+
+	mjRkMsDJYHDaFa0Xkk4n4ja1fWC/mdQDoafjtmEm10orhQsSu8Gl6hx0ztVkWpWX
+	Ze1lbFI9wmp7ugsylUNEIDUl6xGzCzk8VvLxl8IYtHOX0zRJvHFhbaKlQ3DwuVNl
+	/ONmURKTEfbtqE3fVwVHw==
+X-ME-Sender: <xms:uvHWZgNoE3Zzej6ZvGWipWCwiIs25w04Waw285GHNsaNwTgSHL6_HQ>
+    <xme:uvHWZm8XcHoJ3spLv_86kQTw17U0CoXa5Poe18qZXPuzlUl0z2Wol0649G6birwQN
+    _M3y8VrkJ2Zeg>
+X-ME-Received: <xmr:uvHWZnQMfKryQpr4fYrWSydrFdjrUzHtjK8icRS2G__n9J6RzmEHh2qGjywJHuZhaQydO0vdlYUOiJyy68Qvce_Eb_XUr_sTpcIwyg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehhedgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddu
+    necuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtf
+    frrghtthgvrhhnpeelheehudduueeggeejgfehueduffehveeukefgkeeufeeltdejteei
+    uedtkeekleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghpthhtohepgedpmhhouggvpehs
+    mhhtphhouhhtpdhrtghpthhtohepmhhitghhrghlrdhvrhgrshhtihhlsehhihgughhloh
+    gsrghlrdgtohhmpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgv
+    lhdrohhrgh
+X-ME-Proxy: <xmx:uvHWZovx1GHwARMGNidIKE3hOVGXX6vITyYxKACRPPsxGMGlLUZDzA>
+    <xmx:uvHWZod-FWts1DO9YrmfQ2Aaue8mICnVsF-hmwdc9mVPe7l2OkVdLQ>
+    <xmx:uvHWZs3FLh8W3v4Vmc4nr4rn2VEESYSMUluKpgKteO5i8oTki3iEYQ>
+    <xmx:uvHWZs_3Od5FRGfRddiZ6sbvPk8uBxpbUJug9476e8gkKNSbHv__2w>
+    <xmx:uvHWZn4RP13KGcijlZsm2ajmDaw1EQNmDLuiQqfII10XCQ875u8Brbga>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 Sep 2024 07:23:37 -0400 (EDT)
+Date: Tue, 3 Sep 2024 13:23:30 +0200
+From: Greg KH <greg@kroah.com>
+To: "Vrastil, Michal" <michal.vrastil@hidglobal.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: composite: fix OS descriptors w_value logic
+Message-ID: <2024090305-harmonica-strained-ed09@gregkh>
+References: <AS8PR05MB84857AB3DC49395AEC7C235990932@AS8PR05MB8485.eurprd05.prod.outlook.com>
+ <AS8PR05MB848522189AE458978C5F231490932@AS8PR05MB8485.eurprd05.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZtI8N5/SCt+dI/6z@cae.in-ulm.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR05MB848522189AE458978C5F231490932@AS8PR05MB8485.eurprd05.prod.outlook.com>
 
-On Fri, Aug 30, 2024 at 11:40:07PM +0200, Christian A. Ehrhardt wrote:
-> 
-> Hi Heikki,
-> 
-> On Fri, Aug 30, 2024 at 11:12:52AM +0300, Heikki Krogerus wrote:
-> > Hi, Christian,
-> > 
-> > Sorry, I did not look at this properly in v1.
-> > 
-> > On Thu, Aug 29, 2024 at 12:01:08PM +0200, Christian A. Ehrhardt wrote:
-> > > The quirk for some ASUS zenbook models is required for
-> > > ASUS VivoBooks. Apply the quirk to these as well.
-> > > 
-> > > This is part of the fix for the builtin keyboard on ASUS
-> > > VivoBooks.
-> > 
-> > I think that explanation goes to patch 2/2 and vise versa.
-> 
-> Obviously! Sorry about that.
-> 
-> > 
-> > > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> > > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> > > Bisected-by: Christian Heusel <christian@heusel.eu>
-> > > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> > > ---
-> > >  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > > index 4039851551c1..540cb1d2822c 100644
-> > > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > > @@ -38,6 +38,10 @@
-> > >  
-> > >  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
-> > >  {
-> > > +	/* Ignore bogus data in CCI if busy indicator is set. */
-> > > +	if (cci & UCSI_CCI_BUSY)
-> > > +		return;
-> > 
-> > This does not look correct. Doesn't this mean you'll timeout always if
-> > BUSY is set?
-> 
-> This is only in the notify function that would do the wakeup on
-> command completion. The very point of this change is that we do no
-> wakeup if UCSI_CCI_BUSY is set along with other bogus bits.
-> 
-> The UCSI controller is supposed to send another notification without
-> the busy bit set once the command completes.
-> 
-> Note that the ASUS laptop actually sends notifications with the BUSY
-> bit set while processing a command. This is presumably to let us know
-> that the command is being processed but that it takes longer.
-> 
-> For example this is a possible sequence:
-> ucsi_sync_control_common: cmd=20012	# GET_CONNECT_STATUS
-> ucsi_notify_common: cci=0x10000002	# BUSY notification
-> ucsi_notify_common: cci=0x80000904	# Command completion
-> 
-> > Couldn't you just check the BUSY as the first action, and then clear
-> > the other bits in CCI if it is set, if that is the problem?
-> 
-> That would not make any difference. The value is only used in this function
-> for a few other checks that look at fields that are supposed to be zero.
-> Thus zeroing these fields would have the same effect.
-> 
-> I think you had the actual error handling in mind that happens _after_
-> the timeout hits. CCI is read again there and if it still reports BUSY
-> the command is canceled.
-> 
-> > Btw. Does 4f322657ade1 ("usb: typec: ucsi: Call CANCEL from single
-> > location") affect the situation in any way?
-> 
-> I would have to check with the reporter of the bug but I don't think
-> it makes a difference because this is the error recovery code that
-> runs after the timeout. I only touched the notification code that would
-> do the wakeup.
+On Tue, Sep 03, 2024 at 11:14:39AM +0000, Vrastil, Michal wrote:
+> >From 118f8c8b72d633c0daa65e564e48cbf4964977ab Mon Sep 17 00:00:00 2001
+> From: Michal Vrastil <michal.vrastil@hidglobal.com>
+> Date: Tue, 3 Sep 2024 10:55:15 +0200
+> Subject: [PATCH] Revert "usb: gadget: composite: fix OS descriptors w_value
+> logic"
 
-Okay. Can you resend this with the correct commit message.
+This looks odd, did you mean to put the whole commit in the mail?
+
+Also, all tabs are gone, meaning you probably did a cut/paste thing,
+please read the kernel documentation for how to use 'git send-email' to
+make this simpler?
+
+> 
+> This reverts commit ec6ce7075ef879b91a8710829016005dc8170f17.
+> 
+> Fix install of WinUSB dsriver using OS descriptors. Without the fix the drivers are not installed correctly
+> and the property 'DeviceInterfaceGUID' is missing on host side.
+> 
+> The original change was based on assumption that the interface number is in the high byte of wValue but it is in the low byte, instead.
+> Unfortunately, the fix is based on MS documentation which is also wrong.
+
+Please wrap your changelog text at 72 columns like your editor tried to
+get you to do :)
+> 
+> The actual USB request for OS descriptors (using USB analyzer) looks like:
+> 
+> Offset  0   1   2   3   4   5   6   7
+> 0x000   C1  A1  02  00  05  00  0A  00
+> 
+> C1: bmRequestType (device to host, vendor, interface)
+> A1: nas magic number
+> 0002: wValue (2: nas interface)
+> 0005: wIndex (5: get extended property i.e. nas interface GUID)
+> 008E: wLength (142)
+> 
+> The fix was tested on Windows 10 and Windows 11.
+> 
+> Signed-off-by: Michal Vrastil <michal.vrastil@hidglobal.com>
+
+What commit id does this fix?
 
 thanks,
 
--- 
-heikki
+greg k-h
 
