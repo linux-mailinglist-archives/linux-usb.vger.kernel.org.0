@@ -1,144 +1,231 @@
-Return-Path: <linux-usb+bounces-14588-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14590-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB1896A45A
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 18:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FA2396A515
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 19:12:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E68D71F22425
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 16:31:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D3BA1F25705
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 17:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6810218BB98;
-	Tue,  3 Sep 2024 16:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999C318DF77;
+	Tue,  3 Sep 2024 17:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nIPr/qqK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b25C1xEG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C2818BBB0
-	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 16:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD821C14;
+	Tue,  3 Sep 2024 17:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725381049; cv=none; b=hWbBTD8Ab2qf0FwVh2OR+xfctDHBK2p1wYZ02mbmlbMcDlYwu73jtpE6xhKrwBsYboa5vcPOuuy0kmi2YEz4YSbcl7VCsMwNVhXOmqCdYwYwzO+10in/4yyXApbfdQ9xQuPJh872RDy0BK6o3L9c2r4DIRBra7Mdx19GLSeYPvI=
+	t=1725383520; cv=none; b=l40AmRqijWNyEEHylXsjKizcL0vFjnsxSvSzLXNOwAuVsUjLQCUD4nUQ1X+YLACPij/RurRP32efwefJlntkCRE6zPeWRujqAu18IEpaU2LtOrljUtmvV3QtPenbryn0MbEYfp5jxjcsxOQ3+2OH3ISTDJg6SVrEVrhfJgoh2hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725381049; c=relaxed/simple;
-	bh=+SIfP7UISjPZqy3MROtCCerdpwFBvqDPS8zBDXoCQ6E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SI1eetJKL532QFK1Lyg6qCZ20rs0hV1HoeIJ3IjDzwPSpLjH1ZRyzuzzpQ7pn25CnlA3Wsd/sWeQ+OFhx5y3cV6YAvWljmwTSuk2D3DlxwVdVIa9Qj3ZTgZJcxdNjp0nLxt5SpjiVpvA4Xct0rbI9+ft1PxI96996FaG9+leaws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nIPr/qqK; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a86acbaddb4so661388766b.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Sep 2024 09:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1725381046; x=1725985846; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=abnaghlK+pw02PpQ8vIksrIw0Rsf4nvWXUu7Ofg0f3k=;
-        b=nIPr/qqKDQWv8JYtRlpHJsa24FL1z7figrDB2cy2mm5nDRQ0lpkt8j1U33NNgadMY7
-         0xOD44BHcz3QW+LnMNy5I6ETKAPhmZqnVkpWAtf0yxIkwDYEK8xUxGBj6m63x8GxB+TD
-         FJndg1fl8/2WCLsVmgi3Ekvug0QNx3Nwrpsns=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725381046; x=1725985846;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=abnaghlK+pw02PpQ8vIksrIw0Rsf4nvWXUu7Ofg0f3k=;
-        b=QOXxoeaEqDU22SRtCmEB69WMsxUV5zPJdvlBJVKoB8jmY51Xp8wDsAnOGVj5YeE8OL
-         vSXELNjveWDTdjgrbicDM6P2YZysfVkFggI7peNHA0i2F8CLmbf+VKOfxGhJtbkLcM02
-         nw7urEgGzuHQ2VGHcTnp6wIN5oSRDm8hXU9fPL8PNZr7Jei0ELdDz/E1Y1jhUTVa7eao
-         fKE8vpvrZXjgGHLgk3XSlswmCvvs5kugsgqH0y4Yu/AjkGNcgseFlO/BEmozONA49wZY
-         FGrQJgE9rhdx9vpydpgdmiR0oGUu5tLQ1gg26gRLka7viS3fX0kgXcV1sVGv1NDvuqqX
-         seDA==
-X-Forwarded-Encrypted: i=1; AJvYcCXcH2RgR4zChKQQn9fAyJAjZjTC515MYrrAuhGpq8V5OjoE5iEOaQ7Ood7lSONXvsGbjQG6Ojo4W4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGYurSWcaB/pRM2isQfwBqv8AfligC6Lxnvt90Gc1IvTuGqO1n
-	C13x4LFhC4VLPoUoB+fJmsvSQLlmH6PEWeezm8kOSTm+vUOUmq3uft2bnld2
-X-Google-Smtp-Source: AGHT+IGyA2BXvcyBi9Eat2Zpbm/KcDxn+TOMa7RYJ393x/0cWxbrH8YSipKSJQZfPaSIpsa1AvtybA==
-X-Received: by 2002:a17:907:1c0a:b0:a7a:ab8a:380 with SMTP id a640c23a62f3a-a897fad872amr1435845166b.69.1725381045331;
-        Tue, 03 Sep 2024 09:30:45 -0700 (PDT)
-Received: from ukaszb-ng.c.googlers.com.com (140.20.91.34.bc.googleusercontent.com. [34.91.20.140])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8989196bc4sm700685866b.125.2024.09.03.09.30.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 09:30:44 -0700 (PDT)
-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	s=arc-20240116; t=1725383520; c=relaxed/simple;
+	bh=LP56cnU6byzfTTmQxjj+Dqls6VQhgI4J9t5PyD+H3YY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=b8yjaLl+htmnurCUqUbCYqq6Po1Veu2raa42ygR+AUqaZc4R+0khlfbV6ML8n3bnscjhWiCUdRvVNREwfM6P+dlbTAUd/2g4UUEPd4BfZxVmzvypvcTjxbTXDmzKqbPCTY6fbmD1vIHyJRE0r2tHy5k+zpcvIZ85K/CKFAMfPEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b25C1xEG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A415C4CEC4;
+	Tue,  3 Sep 2024 17:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725383519;
+	bh=LP56cnU6byzfTTmQxjj+Dqls6VQhgI4J9t5PyD+H3YY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=b25C1xEGEv1Uj0tKdQtpMlZUQlCbOQG1lAj/6pZp6IJYPdWdUw5FtItqPROaFxTo5
+	 pyIgoHvkM55bnumJsoi5cnEkVYau3+w9yv6MzrSLjYagCEW1F0h3GoTvWJVPaPU+r7
+	 b8+0sFG86TN5rDi5J/1fT4QhjsWGaszYRpijDhybFjxrR5N6i03sFoC5M45N+R6cvN
+	 Umyig+BAyUZaiuJj5ibeCiHG8MPpEUXKOyZp5LzZnayzwotqQ+Djw0DsGH7UdBOuJG
+	 MMLMiGyBRhq5KaW7UPZ0w7aVuoa1HBZtMyPMvNtSPiDg2c9mtvVkXqdaylrypJgi2n
+	 xEJaSdyS4426Q==
+Date: Tue, 3 Sep 2024 12:11:57 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Mario Limonciello <superm1@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	"open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lee Jones <lee@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Pavan Holla <pholla@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Subject: [PATCH v5 8/8] mfd: cros_ec: Don't load charger with UCSI
-Date: Tue,  3 Sep 2024 16:30:33 +0000
-Message-ID: <20240903163033.3170815-9-ukaszb@chromium.org>
-X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
-In-Reply-To: <20240903163033.3170815-1-ukaszb@chromium.org>
-References: <20240903163033.3170815-1-ukaszb@chromium.org>
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH v5 2/5] PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in
+ pci_dev_wait()
+Message-ID: <20240903171157.GA254033@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ac2dfbf-fd9a-4223-8d9e-bb41dbf98b1a@amd.com>
 
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On Tue, Sep 03, 2024 at 11:29:23AM -0500, Mario Limonciello wrote:
+> On 8/29/2024 19:01, Bjorn Helgaas wrote:
+> > On Fri, Aug 23, 2024 at 10:40:20AM -0500, Mario Limonciello wrote:
+> > > From: Mario Limonciello <mario.limonciello@amd.com>
+> > > 
+> > > If a dock is plugged in at the same time as autosuspend delay then
+> > > this can cause malfunctions in the USB4 stack. This happens because
+> > > the device is still in D3cold at the time that the PCI core handed
+> > > control back to the USB4 stack.
+> > > 
+> > > A device that has gone through a reset may return a value in
+> > > PCI_COMMAND but that doesn't mean it's finished transitioning to D0.
+> > > For devices that support power management explicitly check
+> > > PCI_PM_CTRL on everything but system resume to ensure the transition
+> > > happened.
+> > 
+> > Still trying to understand what's going on here.
+> > 
+> > I posted a change to pci_dev_wait() to read Vendor ID, look for Config
+> > RRS status, and wait for a successful completion (when RRS Software
+> > Visibility is enabled) [1].
+> > 
+> > You tested that and found that it didn't help with *this* issue [2].
+> > I assume you tested something like v6.11-rc plus the patches from [1],
+> > i.e., without the PCI_PM_CTRL changes in this series.
+> > 
+> >    1) Initially the device is in D0
+> > 
+> >    2) We put it in D3cold (using some ACPI method) because the
+> >    autosuspend delay expired (?)
+> > 
+> >    3) Plugging in the dock wakes up the device, so we power up the
+> >    device (via pci_power_up(), which again uses some ACPI method), and
+> >    it should transition to D0uninitialized
+> > 
+> >    4) The USB4 stack sees the device but thinks it's in D3cold (?)
+> ...
 
-When UCSI is enabled, don't load cros_usbpd_charger and cros_usbpd_logger
-drivers. Charger functionality is provided by the UCSI driver already and
-logging will need to be added.
+> > If you *did* include both [1] and patch 3/5, the implication would be
+> > that pci_dev_wait() successfully read the Vendor ID, meaning the
+> > device is not in D3cold when pci_power_up() returns.
+> 
+> The testing here was from the LTS 6.6.y kernel with both [1] and
+> patch 3/5 from this series.
+> 
+> > Can you clarify what you see and possibly expand/correct my
+> > timeline above?
+> 
+> The timeline you shared is nearly correct.  The USB4 stack *thinks*
+> the device is in D0 because of the return of pci_power_up().
+> 
+> As by polling PCI_PM_CTRL we can see it's still in D3, so it hasn't
+> made it to D0uninitialized yet.
+> 
+> I guess I reading between the lines you have an assumption that you
+> can't read the vendor ID from D3; which doesn't appear to be the
+> case from our testing.
 
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
- drivers/mfd/cros_ec_dev.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+A Vendor ID read of a device in D3hot should definitely work.
+Obviously if the device were in D3cold, we'd get no response at all,
+so the requester should log a UR error and fabricate ~0 data.
 
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index d5d63df7fcbd..bc083c7b21de 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -133,11 +133,6 @@ static const struct cros_feature_to_cells cros_subdevices[] = {
- 		.mfd_cells	= cros_ec_ucsi_cells,
- 		.num_cells	= ARRAY_SIZE(cros_ec_ucsi_cells),
- 	},
--	{
--		.id		= EC_FEATURE_USB_PD,
--		.mfd_cells	= cros_usbpd_charger_cells,
--		.num_cells	= ARRAY_SIZE(cros_usbpd_charger_cells),
--	},
- 	{
- 		.id		= EC_FEATURE_HANG_DETECT,
- 		.mfd_cells	= cros_ec_wdt_cells,
-@@ -261,6 +256,21 @@ static int ec_device_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	/*
-+	 * UCSI provides power supply information so we don't need to separately
-+	 * load the cros_usbpd_charger driver.
-+	 */
-+	if (cros_ec_check_features(ec, EC_FEATURE_USB_PD) &&
-+	    !cros_ec_check_features(ec, EC_FEATURE_UCSI_PPM)) {
-+		retval = mfd_add_hotplug_devices(ec->dev,
-+						 cros_usbpd_charger_cells,
-+						 ARRAY_SIZE(cros_usbpd_charger_cells));
-+
-+		if (retval)
-+			dev_warn(ec->dev, "failed to add usbpd-charger: %d\n",
-+				 retval);
-+	}
-+
- 	/*
- 	 * Lightbar is a special case. Newer devices support autodetection,
- 	 * but older ones do not.
--- 
-2.46.0.469.g59c65b2a67-goog
+But if the device starts out in D3cold and we power it up, it should
+not go through D3hot.  The only legal transition from D3cold is to
+D0uninitialized (PCIe r6.0, sec 5.8).
 
+OK, so with [1] and patch 3/5:
+
+  1) Initially the device is in D0
+
+  2) We put it in D3cold (using some ACPI method) because the
+  autosuspend delay expired (?)
+
+  3) Plugging in the dock wakes up the device, so we power up the
+  device (via pci_power_up(), which again uses some ACPI method), and
+  it should transition to D0uninitialized
+
+  4) With patch 3/5, pci_power_up() calls pci_dev_wait() because
+  dev->current_state == PCI_D3cold
+
+  5) I *assume* RRS SV is enabled (lspci -vv of Root Port would
+  confirm this; maybe we should add a pci_dbg message about which
+  register we're polling).  If so, patch [1] means we should poll
+  Vendor ID until successful completion.
+
+  6) pci_dbg log should confirm the device is ready with a "ready %dms
+  after D3cold->D0" message, which would mean we got a successful
+  completion when reading Vendor ID
+
+  7) For debugging purposes, it would be interesting to read and log
+  the PCI_PM_CTRL value here.  Per sec 2.3.1, the device is not
+  allowed to return RRS at this point since we already got a
+  successful completion.
+
+  8) The USB4 stack sees the device and assumes it is in D0, but it
+  seems to still be in D3cold.  What is this based on?  Is there a
+  config read that returns ~0 data when it shouldn't?
+
+> > [1] https://lore.kernel.org/linux-pci/20240827234848.4429-1-helgaas@kernel.org/
+> > [2] https://lore.kernel.org/linux-pci/30d9589a-8050-421b-a9a5-ad3422feadad@amd.com/
+> > 
+> > > Devices that don't support power management and system resume will
+> > > continue to use PCI_COMMAND.
+> > > 
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > > v4->v5:
+> > >   * Fix misleading indentation
+> > >   * Amend commit message
+> > > ---
+> > >   drivers/pci/pci.c | 28 ++++++++++++++++++++--------
+> > >   1 file changed, 20 insertions(+), 8 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > > index 1e219057a5069..f032a4aaec268 100644
+> > > --- a/drivers/pci/pci.c
+> > > +++ b/drivers/pci/pci.c
+> > > @@ -1309,21 +1309,33 @@ static int pci_dev_wait(struct pci_dev *dev, enum pci_reset_type reset_type, int
+> > >   	 * the read (except when CRS SV is enabled and the read was for the
+> > >   	 * Vendor ID; in that case it synthesizes 0x0001 data).
+> > >   	 *
+> > > -	 * Wait for the device to return a non-CRS completion.  Read the
+> > > -	 * Command register instead of Vendor ID so we don't have to
+> > > -	 * contend with the CRS SV value.
+> > > +	 * Wait for the device to return a non-CRS completion.  On devices
+> > > +	 * that support PM control and on waits that aren't part of system
+> > > +	 * resume read the PM control register to ensure the device has
+> > > +	 * transitioned to D0.  On devices that don't support PM control,
+> > > +	 * or during system resume read the command register to instead of
+> > > +	 * Vendor ID so we don't have to contend with the CRS SV value.
+> > >   	 */
+> > >   	for (;;) {
+> > > -		u32 id;
+> > > -
+> > >   		if (pci_dev_is_disconnected(dev)) {
+> > >   			pci_dbg(dev, "disconnected; not waiting\n");
+> > >   			return -ENOTTY;
+> > >   		}
+> > > -		pci_read_config_dword(dev, PCI_COMMAND, &id);
+> > > -		if (!PCI_POSSIBLE_ERROR(id))
+> > > -			break;
+> > > +		if (dev->pm_cap && reset_type != PCI_DEV_WAIT_RESUME) {
+> > > +			u16 pmcsr;
+> > > +
+> > > +			pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > > +			if (!PCI_POSSIBLE_ERROR(pmcsr) &&
+> > > +			    (pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D0)
+> > > +				break;
+> > > +		} else {
+> > > +			u32 id;
+> > > +
+> > > +			pci_read_config_dword(dev, PCI_COMMAND, &id);
+> > > +			if (!PCI_POSSIBLE_ERROR(id))
+> > > +				break;
+> > > +		}
+> > >   		if (delay > timeout) {
+> > >   			pci_warn(dev, "not ready %dms after %s; giving up\n",
+> > > -- 
+> > > 2.43.0
+> > > 
+> 
 
