@@ -1,55 +1,61 @@
-Return-Path: <linux-usb+bounces-14514-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14515-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7789B969488
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:03:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ABEC969490
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:04:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA0B01C20D6C
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:03:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E77E0B236A1
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0051D61A9;
-	Tue,  3 Sep 2024 07:02:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1054C1D61A2;
+	Tue,  3 Sep 2024 07:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UzM/z1mP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CB6s09fH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE671D6194;
-	Tue,  3 Sep 2024 07:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838921CCEEC;
+	Tue,  3 Sep 2024 07:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725346971; cv=none; b=eSqPeGHn8eDvIW707N3MVVQCg8Rwy2E+nuLZyUNrYyGYex0cMsS/4ULkdu1wfN8bABrXUV6b4Ud/wrMdpUsV0jteCLGOVa130XKAT1z+e2loyH9KMsV6ZWujt0bIWheSIjWfL8Q3wL/vJCmgYEJ2vIozqumRT4VY9phUENSuXXY=
+	t=1725347045; cv=none; b=JbCZ4oR1pJFnu2WHLDzWcaZaM6zY6CarLLsYy1dzGT6cn3BHPLxU/yin1ED8xEeM0NlFPmFoc8Af//fbcaUR/VH9XJibQBUJiTkqCCq4e1C7xy7/JHSFTAsgH0igNNJnKdkmH0QsD7OHfgacmJsJuXooMXva8mJ9XGVO3SrPFFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725346971; c=relaxed/simple;
-	bh=3qidJfQt+X4a5kMK7cfyTY7OkqPL4BDhOdGy6okPpKo=;
+	s=arc-20240116; t=1725347045; c=relaxed/simple;
+	bh=Slca8lD1DlvSk2D0BUDJG9aG9GeCUTaKROfks2UHNiA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GPWpWMJGC0cnSTe09COhtgLzHi8QJBT2J8YGuXzwVJaxy2/Fo4wf9TKAVs9SymLndCfZ13O3UBRyQMTM1icusUelOOXzEOq3+FkTj3cTkk2fhyyJJubmAwahSts7O/QYgweeoNLn3yMPJdMWfbB7tZnsmVHX8bCfe+O+JEdcUeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UzM/z1mP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B82C4CEC5;
-	Tue,  3 Sep 2024 07:02:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=H5O2BxRWzonx+tkU3t6fFAi8RhXRew27Blbs1sXB4E+/4Hc1xW01AF3LiySCEaJRAIO02eBEu+67qeVCzBEF/Y8UJ63ydNhglbUaKtBeQCo78LuhBELg+/aJcDgC1wPJsDnUMh+ivX0YpXpo54qsCJadaq48UQ4XAjTsAPe4s14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CB6s09fH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86AFBC4CEC6;
+	Tue,  3 Sep 2024 07:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725346970;
-	bh=3qidJfQt+X4a5kMK7cfyTY7OkqPL4BDhOdGy6okPpKo=;
+	s=korg; t=1725347045;
+	bh=Slca8lD1DlvSk2D0BUDJG9aG9GeCUTaKROfks2UHNiA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UzM/z1mPycuq4e2yNt8f7GA15sih3ir21E8Talxo4MlWCSmmpSmTueSUhufJ/kTq/
-	 n+7dvsgFyKe1KYXdSL/FJVfg9Szkry1FA46kTuCvhTdTDOs5uipkLfz53z/DQgoQ08
-	 LyVDpiIkc5hCdxJEAHOh0Nc1jEjY8ksZQOl3xIqc=
-Date: Tue, 3 Sep 2024 09:02:47 +0200
+	b=CB6s09fHVKI8KSqLISVCSqr00f49L2O+jAJfDiv/EQPHQH5xaxdvEayXMJ0BtN0xY
+	 ACdON3+y+2K70BLZR8oung6+fO1hdye1bUsulUTXLF7x4HtALOZlims/IfFC5kWv2h
+	 37YdzRLufUNX7PLRJBJdjk3jwseKo8V8GLy0Ez3o=
+Date: Tue, 3 Sep 2024 09:04:02 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: stable@vger.kernel.org, linux-usb@vger.kernel.org,
-	Charles Yo <charlesyo@google.com>, Kyle Tso <kyletso@google.com>,
-	Amit Sunil Dhamne <amitsd@google.com>, Ondrej Jirman <megi@xff.cz>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH 6.6] usb: typec: fix up incorrectly backported "usb:
- typec: tcpm: unregister existing source caps before re-registration"
-Message-ID: <2024090336-spider-skirmish-2ac9@gregkh>
-References: <2024083008-granddad-unmoving-828c@gregkh>
- <ZtVaaFD5wbmYlLCa@kuha.fi.intel.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Enric Balletbo Serra <enric.balletbo@collabora.com>,
+	Andrey Smirnov <andrew.smirnov@gmail.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-phy@lists.infradead.org
+Subject: Re: [PATCH 1/6] power: supply: "usb_type" property may be written to
+Message-ID: <2024090342-succulent-unkempt-666c@gregkh>
+References: <20240831142039.28830-1-hdegoede@redhat.com>
+ <20240831142039.28830-2-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,30 +64,38 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZtVaaFD5wbmYlLCa@kuha.fi.intel.com>
+In-Reply-To: <20240831142039.28830-2-hdegoede@redhat.com>
 
-On Mon, Sep 02, 2024 at 09:25:44AM +0300, Heikki Krogerus wrote:
-> On Fri, Aug 30, 2024 at 04:00:09PM +0200, Greg Kroah-Hartman wrote:
-> > In commit b16abab1fb64 ("usb: typec: tcpm: unregister existing source
-> > caps before re-registration"), quilt, and git, applied the diff to the
-> > incorrect function, which would cause bad problems if exercised in a
-> > device with these capabilities.
-> > 
-> > Fix this all up (including the follow-up fix in commit 04c05d50fa79
-> > ("usb: typec: tcpm: fix use-after-free case in
-> > tcpm_register_source_caps") to be in the correct function.
-> > 
-> > Fixes: 04c05d50fa79 ("usb: typec: tcpm: fix use-after-free case in tcpm_register_source_caps")
-> > Fixes: b16abab1fb64 ("usb: typec: tcpm: unregister existing source caps before re-registration")
-> > Reported-by: Charles Yo <charlesyo@google.com>
-> > Cc: Kyle Tso <kyletso@google.com>
-> > Cc: Amit Sunil Dhamne <amitsd@google.com>
-> > Cc: Ondrej Jirman <megi@xff.cz>
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Sat, Aug 31, 2024 at 04:20:34PM +0200, Hans de Goede wrote:
+> According to Documentation/ABI/testing/sysfs-class-power the "usb_type"
+> property is Read-Only.
 > 
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> For power-supplies which consume USB power such as battery charger chips,
+> this is correct.
+> 
+> But the UCS1002 USB Port Power Controller driver which is a driver
+> for a chip which is a power-source for USB-A charging ports "usb_type"
+> is actually writable to configure the type of USB charger emulated
+> by the USB-A port.
 
-Thanks for the review!
+Ick, crazy hardware :(
+
+> 
+> Adjust the docs and the power_supply_sysfs.c code to adjust for this
+> new writeable use of "usb_type":
+> 
+> 1. Update Documentation/ABI/testing/sysfs-class-power to document that
+> "usb_type" may be writable
+> 
+> 2. Change the power_supply_attr type in power_supply_sysfs.c from
+> POWER_SUPPLY_ATTR() into POWER_SUPPLY_ENUM_ATTR() so that the various
+> usb_type string values from POWER_SUPPLY_TYPE_TEXT[] such as e.g.
+> "SDP" and "USB_PD" can be written to the "usb_type" attribute instead
+> of only accepting integer values.
+> 
+> Cc: Enric Balletbo Serra <enric.balletbo@collabora.com>
+> Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
