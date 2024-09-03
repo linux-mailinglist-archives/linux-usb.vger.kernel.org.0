@@ -1,227 +1,217 @@
-Return-Path: <linux-usb+bounces-14525-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14526-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34E26969602
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:49:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ACD4969648
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:57:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2AD8281C4A
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:49:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FAD91C2338E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 07:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2941320011A;
-	Tue,  3 Sep 2024 07:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A6E1CE6E9;
+	Tue,  3 Sep 2024 07:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P9Olyl99"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="F8HRI7Io"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2056.outbound.protection.outlook.com [40.107.103.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA6220010E
-	for <linux-usb@vger.kernel.org>; Tue,  3 Sep 2024 07:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725349711; cv=none; b=BxG+VeTD038lIECzrLBwSqEUIvw92AcQ8ZrMVu2qj6TuyGmgLiBYhQF7fQVKCCD9goAtu0gtvmgPEfTe4khZl7rdT7TomcTYYZD2Y2b0mG5uoTMjvm0ijbkj9WAfiHle24F41sUCEv+78XyQmhsO2FH9OMXfyVjXHVYZBMh1nZ4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725349711; c=relaxed/simple;
-	bh=OzAAloQkVD+rs+4rsitm3SRVAe1ZtNLTsnKUzGhnlSU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=iE+OsLk7UkO1P4PPHwkl9WHqG3vWV6Dg+V8sGQypuRl8RlA868nXxwkLM4Tg8d78EOqNfnQr13p27FvLZQc1bNu5Z+dfHxEQlkfC/BFNpZwmUC9W2uC/6j3qLtwaMJile9kKz5jrbUv4mlHVe4lkLrTg+aZJkoIkVClZ8sT+hH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P9Olyl99; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f401c20b56so49540261fa.0
-        for <linux-usb@vger.kernel.org>; Tue, 03 Sep 2024 00:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725349708; x=1725954508; darn=vger.kernel.org;
-        h=mime-version:in-reply-to:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/7j6ikRhorFjHb5RRdadJwTGvQU9QmnobyoOq5Zmkeg=;
-        b=P9Olyl99ndsA3fD0Q4M3qNvJkliGaF3cFSMuaPl+Y3XdepMYdiwfoYT2HFV8LaeVm7
-         V+0Ae/HSCtLFSAT128LKvcnazz9DvLPGE8Pe7+FLdZvnaxtAcnpjp4xYg89yDu8HMXWr
-         Oz4u8DI3t8wVNNVpDmKUmWK2AH5GH5DL7LBfHl7J7NVXarmhnhqUDs9a9AXJB27dvZXX
-         HN4KoCea1TkIXHxt360MezdmK7tMTNUnXftWWMspIEEii+4M2XVFm0Trw2DsVB5ASMwl
-         IoV92jdO5vZ3e6mc74sh1s4uIaoHO2JJxcWkyKhqgB7RsLDjrnDQI41tZhCaRlgg8GS/
-         9cWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725349708; x=1725954508;
-        h=mime-version:in-reply-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7j6ikRhorFjHb5RRdadJwTGvQU9QmnobyoOq5Zmkeg=;
-        b=acnsWNqzxDiJ8Y6kChHj7Rtj4Mi1onMkipXaDafI1aogntWknQHWIFGBeCHia5k4pZ
-         8gtf/zIUmOsVtMTy8or/e0F0qEOvBADZS/4fMrLmZn2qWeGaQ2kX0z/+kBW4tX1LH7Ou
-         NRVDMeSxR/ZDVmNKkGVOeMmmI4CzoJD1Qt5wSuRhWoVu4s7A1frOjODpggsh4Qlr5tX8
-         eR3dKFiqu/OVeK+vv6SQ9ZOhiGrbV8BXVskCnmkaJKj4s010gHMKxM6pxvaakx9JX5IT
-         S7w32aUsoO9j3aJga1+dc3pG1VFjjTgxljUd2cgHxscQvxldBRrha+Hij/QjL4w68e34
-         i1hQ==
-X-Gm-Message-State: AOJu0YzeJGLxe38k0B36ROkIIhMf27GKnRNogcvgRvwUPo4tuDNg0fsY
-	/msFT4nVF9yX0WXyWjmRoxqtl7wh1Zs5W6UkLLDpvWu6l17IPg6p
-X-Google-Smtp-Source: AGHT+IFGEs0SMf9dB+zJAEYitydPbZwWlv6hgpSy2L6+drwnJV0MS5h7Gn7jGVyx8P4tcoUDjwou2Q==
-X-Received: by 2002:a2e:b88a:0:b0:2f5:cd0:9e0c with SMTP id 38308e7fff4ca-2f612b1cadfmr48129951fa.21.1725349707262;
-        Tue, 03 Sep 2024 00:48:27 -0700 (PDT)
-Received: from foxbook (bfh247.neoplus.adsl.tpnet.pl. [83.28.45.247])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f615181c46sm20970171fa.103.2024.09.03.00.48.26
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 03 Sep 2024 00:48:26 -0700 (PDT)
-Date: Tue, 3 Sep 2024 09:48:22 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: schaefer@alphanet.ch
-Cc: linux-usb@vger.kernel.org
-Subject: Re: Strange issues with UAS URB cancellation
-Message-ID: <20240903094822.3ae297cb@foxbook>
-In-Reply-To: <ZswP0+cLIqkTF0D/@alphanet.ch>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC3E1DAC77;
+	Tue,  3 Sep 2024 07:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.56
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725350268; cv=fail; b=SDJUbSDmjeaxiyAqH2zzJYb4RFkRqNErQwdg8esDn1lBC7DBfsQht3XgHPHt3hGCg2uDYSWacODcyuucweskRHPlGxqFgmjgvYw8FPUpCxgpmzNE6bpA5+mKqyReP6igy3AbbINK2KRZYHfxEFH4HU9ioU33g/PSdSfozWTa2kQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725350268; c=relaxed/simple;
+	bh=5+5E3wgBVkU4gUP5e9vy7/BZ/H01qlzhihKclnHDFZk=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=VEcnEsxUwgLyikPqdRgNdXPtvh8PNLoxTbdwRoNh0f+8EGGmw0aG+7+BRrrz1uzdYagC/BER64U2TrnDG4V4T4uVEm+55KY6/MHwpY07Hmy/BKVOGVyM+eVb7IYloT1kw1p46s9LF4GoOGaeHQbguYIXge7M7NZxfa0CKvwbWyc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=F8HRI7Io; arc=fail smtp.client-ip=40.107.103.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hPPFtQbSX2oT3CrNxQaDw6CRD2fCh4D2iFBgIt/eVQTNwmN5QpfABVLZuebMOapy2KnI5v963s/Z9Ng9C5ZBmyGroG0uR4wRMekoHdYeuDsF1cHMolgfb3ndfq9kKj5CfOjDKLHUFs++sOL1E/rIMCwK4pxRrtgPJVhiUJMA9JGe69oKRQ6bTF7LbQn7H398Ne+pCBV7MzfAxGu0PqzNvlsEs3ALS5A3yl6NgjPeN8TNwkCp+Y2TXozfuYk9Btby1WlA0RSyxEtDqRqn15333OJMxccaJeTuhHpqtREiUScnBD0KrDKvNbkHvHI9mlVg42A2O9/zBOa7/DFwWaRf7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9+sfnXDxeTAM0npGO+NqyKIzNQbMJ6avO6b4ZGmBVQU=;
+ b=PFFnBV7FPdM6jB7kn7CFJVC4BdVyundIPQZXJToT9urAiqQ5lTQbUw8Nu24hlXyvcHb4Yv5LCXJz1OdEtnb5AhflGKZm1pt+62tLpO4jeakExK72hNmUJzRO1Wmz4qwnzQsLPbOas2DWQ3iNOWpY7ZQDUjbhVhku3E4Zj8yR+2X43ahuxoazT8vw2tLzdyrYK1pL0C9IYX0w1I2G5cexiYFJgkO68SJjXF3T/DJQ5+6fvR6e109WtWkUjHMRN/WJuX0grRMnAiTct8GMuEhxIqsdATgt7SJwR22I5GRBZm7x06Ek78O8nOCjWxV2S4uyYO9Gannmtwj1tz61wH54vg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9+sfnXDxeTAM0npGO+NqyKIzNQbMJ6avO6b4ZGmBVQU=;
+ b=F8HRI7Ioq9vsJq2vPC0TIgKqWtHPZELMfys5reGjMC4dvNl0pYbc0Rpm93OV4n6Tpocmrtm48TKG3DaodjfXZaVmFRhO2dtOzKf9fCMOtOQZVnYA84eTaledrP1cvprFOYnLzNxUpn+LD3hmuBIGhM99VNXjiuJsjyYO8aVuybpFzS9I51Ve5oYfCyRPUcvgKcUeITsqOm6ZEYF06o9aDil939sR5cgIIWzSW6FPMxvOU5F9Emg2qxEZX+2kZkItPEqLk5dN3CPD4jYEnXpdPmiyxkgIoEacwPYr52NCwm9v5ni6VgTpnGB58bln7GoVPE0dwUgLQ3fQka2qgb01vw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by PA1PR04MB10652.eurprd04.prod.outlook.com (2603:10a6:102:491::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Tue, 3 Sep
+ 2024 07:57:43 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%4]) with mapi id 15.20.7918.024; Tue, 3 Sep 2024
+ 07:57:43 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: vkoul@kernel.org,
+	kishon@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	gregkh@linuxfoundation.org
+Cc: linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: phy: mxs-usb-phy: add nxp,sim property
+Date: Tue,  3 Sep 2024 15:58:09 +0800
+Message-Id: <20240903075810.1196928-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0195.apcprd06.prod.outlook.com (2603:1096:4:1::27)
+ To DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/h9t487cNKtjtBgvVTZr6klO"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PA1PR04MB10652:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28b5753a-39a1-4e30-5495-08dccbee1765
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|52116014|1800799024|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?AnJPa7V/AlZUPabvHo4IsyAWEyiFIki989niP0Vbtjasihue8pzFLpEJcfy7?=
+ =?us-ascii?Q?dyR7HDd1roLEoTJe5cKw1HySrd01A6Aihml4q4t1oMtvjPbOFx0uc1RahTJG?=
+ =?us-ascii?Q?3gn0e01a6Mxq8rAz5pcTZ5Kvcv3GtVYfMoFGugRbtjj27iBa4xF76yW+aaR0?=
+ =?us-ascii?Q?ZD0tC7hFp7EJGYHTduwxc1qofbs4C7OpSBieFDISt+HSyeXKyWsisrs2fDc/?=
+ =?us-ascii?Q?UznRddrrvdlYjrQfXyClQf4uWNx8CbcyoxZnvRGCpZvoxP/ZVtiH6zFNpQTp?=
+ =?us-ascii?Q?NMUDjvP1QBOl8nwA2V02+1w6XCF/jD7vnfrXMCC0Edg+lAmXQw6AJ48076zU?=
+ =?us-ascii?Q?cwwSKBDpfj9XlcOQcIJ9sNsY+cnTwyMqkKUBumWtz4FD6ecVtjnEV3MbKDan?=
+ =?us-ascii?Q?4ok8PfupIMWwxHsCAt0H+rhTeToHXrdVX597305SReAKf+mvfTSU0KbBjecx?=
+ =?us-ascii?Q?3hFCrLsFdPQDW8jDIb/SUiS9cJOduI/IWSj/YGj8KiI40JN47I0jdEAefUPn?=
+ =?us-ascii?Q?dTGqbNv2reQ5/vr/u89HBxhMX4LbQJ6RjZzIRQK6W63xT1nTFAya3c9kl82N?=
+ =?us-ascii?Q?wABzl4fkATdWC3nNzuuRFP7mLB6HxSpJmEZZRKOlwSCw1ia6hvdFmqFeNx3R?=
+ =?us-ascii?Q?Ae+M21LlQHjLC3z7A3FbSAt4FRxM3BcWpagocpzprPpOOVbXLRxmpUoA2WAP?=
+ =?us-ascii?Q?NW4SLHyAq/VEO/1xBJrALny7sbR7V4CoV2+7PBYiTzzgSxEnMxoW2Pg8RCpn?=
+ =?us-ascii?Q?X5GC9lSEhXWOZME1BRslAeLljI0fDupTkD8ks5GAkdYaGg9PFDVQ9HuwoDou?=
+ =?us-ascii?Q?3VTwolxSjMdVHwWQTImsnDorZzUgDu/JQCP1ZoxwrjsAIMwpZzLl3MPun5f6?=
+ =?us-ascii?Q?5NgMUen2zvbxFjfP0MXH9QAgZp1O/l/6Cgh/7HDG81BwK972L2+aKSm5TM1z?=
+ =?us-ascii?Q?UXj6bHIpwsn1aTM6cXDmB0IsiNkzDzw3XXbn2ROSEGaHOaeWbnbZg3Lr44Wk?=
+ =?us-ascii?Q?z0DHdbwCUeuYUXEg/rzzFYEg8at22nDqW/vLjJh/o0/h7jPgTiJHO9OyJ0MJ?=
+ =?us-ascii?Q?+3C5KWC4oH1vkLnLNVYrXsvBygfNlFVeB9H1HLrakyoJL8ZTDuYPJsAFI31N?=
+ =?us-ascii?Q?E1ueywowiXT7BRA1H0bQXQpWVGXrnvnxAWhwotTTyLUVDmNzIs5fDXz7mQZw?=
+ =?us-ascii?Q?Hmhob6tF9KVt0DmHSbwoe4LSK3NCrKY6SV9M7YKXHLpJFu36LEs8B2bIx2Lf?=
+ =?us-ascii?Q?I/9ofgTRAXrdd35VNRkhGeIpO5XJOG0muYznjbaVoVUH8HhYzjrz4erwKB2r?=
+ =?us-ascii?Q?ZUboGZ5AIC5mcPL7M+OHHjQlE6/FhgIFh4yZ49Qj2rYr8oQs13c21wRTiXkW?=
+ =?us-ascii?Q?+/S6qjhUaWE2jnNQ169HFI6fXcxJvJ55R0v3AsZe2klbOrtnZKDer34785pN?=
+ =?us-ascii?Q?/hdp/Vj2HtY=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(52116014)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xRiWytgKMMocO3BX2Od6cPuDP6tDL84xpnU5M0HmjJKY6veESOA/ZgAH7KkA?=
+ =?us-ascii?Q?5BQUmmuVwThkQB4168lgMy+3ec4ctkzGF2iuZZMdNSvdG7enNpKZuYuh9wH3?=
+ =?us-ascii?Q?AcuX85Zt3PWc2S0yyxW1GYpWQKXaUB2rrYUITU1/Wj1xpyPA6/d/b9Hlrjus?=
+ =?us-ascii?Q?MzRF8oALkLknwkiW393ekAu6KcAhVZAqT07mGZ7sUiH/o9v5W6fBV8A1mKTv?=
+ =?us-ascii?Q?BcBnCNjiMK4eOqx+wuI+AB6xiUU3olg1zHHDcPpMTzlLYS9SCE9YAuHQrLZW?=
+ =?us-ascii?Q?TOdViv3Uz6oJnJHkU8eOmA3J12lpJ8taHOT8hhv9djDhQqiBqHUlbOxFZmqS?=
+ =?us-ascii?Q?Qe2ZU2ccrbpyGe0TxkSbrp5f7BGTOjRvBhXqFM2k9el1nyzE1Ga5bch11Gk+?=
+ =?us-ascii?Q?CEBXK3uTfZBoyy9Q0OIR3+8j/IrjeuB1Sf4rKn3Y0LAmXqouPIrK1HpRUqo0?=
+ =?us-ascii?Q?k/m/dy02pzWHFNRYdpCyR5O/a0NTNeo4sEU9QFcy/cFvIsrnaZsyXroJJO7v?=
+ =?us-ascii?Q?jr8vrnVdjtVlzbp7FLUe6kEyxZXvaVvURQk8+P6svWG1Q7H4dM0RmiHJwQb3?=
+ =?us-ascii?Q?7UQoF8fWB9VY0YEvroijz9WWsdJARhpku4m8zQOxNva3sg07D/v1k4t0UGld?=
+ =?us-ascii?Q?nojQNWpRtm4atDrmpzF7uceA2P2+Not97rBYfyEVovDh43Hf3J6P/kZcMCc/?=
+ =?us-ascii?Q?4CZ2hyRzq6666kvVPgEOLqFcgsIhXm68CqZhTCna+K/UzHrpPIluy1FCeeg+?=
+ =?us-ascii?Q?mLRq+vGs1CqgkcsQmCWJlB1zj1XYYXF3WQEgm6qsFLmoEhvEjgCGpz4e9Br9?=
+ =?us-ascii?Q?egKHgWyqXVLhWPAF5ZUFuzy6xLyDrIYE2F6Q77Pc8Jn+UPkBpjk0qaiDNgH2?=
+ =?us-ascii?Q?DbSmT8EVHfa03VzxBuKIS5j8B9q3la0KWkEOh4NytXvQzBdp8HzLNee+pWcD?=
+ =?us-ascii?Q?1ZLPW314sEokvzbHOqEroPBirKYMGsJRT5uV2pyRKOurp6mKetU1QcynBrPv?=
+ =?us-ascii?Q?8PeJ1DA2ehwEcX1PUmt8cpEwhWFd0gup+a7jIzVmj7rc4+hmMBrkDZR3KoAH?=
+ =?us-ascii?Q?iZckI0sskCIiFLzFSHJn/SioKzuhP0PNd06y8Yjh7Tm7K73WAcqrcCZh5gS9?=
+ =?us-ascii?Q?ajK7xHjH5wDKvzLFyBmdUy1J1lxl3VVYOWRX+3JQb0F8N4aWTQ7jC7Akpg/7?=
+ =?us-ascii?Q?/9WCYWhAdPCApWf6i/QMOvr+XkzF8oV4hWF0aOHoO4HLNJbhia/LxYxgLaL0?=
+ =?us-ascii?Q?8mvod4FygM64qQlMnl2nkaYlpObrOMnc8IYsPS2Mm7r8t1xOFvznpwFfQ92v?=
+ =?us-ascii?Q?QLvQjnIxOOPzq0dlwxE5i7nvkyzKC0xIQqWQNj4yQ+FizwqkL59Y/i8Xnhxn?=
+ =?us-ascii?Q?wierUunmwUDSY6scqAVRLJoUONcwUu5YUtxR6EjBFBd0G1MRqr662UDR6wAT?=
+ =?us-ascii?Q?RjQkPx1a4ymZJYyjBgcvEHZRirn24p38v9R21Mjd9krlTCVXMUpYQHD2+8V0?=
+ =?us-ascii?Q?xyUh5mXbjIP3G0SdQOmpiXvkPKrsA2vUB9PH4nG6B2mnmomtoQck+fmqtGQ6?=
+ =?us-ascii?Q?m74xipZOZlHR6DNi4Am/3IKcKYPnOcWDNGDfG+f4?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28b5753a-39a1-4e30-5495-08dccbee1765
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2024 07:57:43.7760
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HjuOHQ1CQ+JLoW8cUYYYvjIamR16uM5G9OqrNJ0Hv+3JjBoAdh3OLzVy+aydb4R76Ru4xxWYkUeYixRN2WxTow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10652
 
---MP_/h9t487cNKtjtBgvVTZr6klO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+i.MX7ULP need properly set System Integration Module(SIM) module to make
+usb wakeup work well. This will add a "nxp,sim" property.
 
-Hi,
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-[ I changed the title a little. And please use "reply to all" when
-responding to the list, so that everybody involved in the thread gets
-the response directly, regardless of linux-usb subscription status. ]
+---
+Changes in v2:
+ - add else branch suggested by Rob
+Changes in v3:
+ - add Rb tag
+---
+ .../devicetree/bindings/phy/fsl,mxs-usbphy.yaml | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-This 6.11-rc5 result is still not looking great, and neither is the
-non-UAS 5.10.223 for that matter. These xHCI errors shouldn't be there;
-it looks like there are still some bugs in URB cancellation code or in
-the hardware maybe.
-
-I'm not very familiar with streams stuff, but I remember having similar
-symptoms on isochronous devices due to a particular hardware bug (not
-on ASMedia though) and due to some event processing bugs.
-
-I can offer this patch for testing (on 6.11-rc5), which tries to:
-1. work around (hypothetical) similar HW bugs on non-NEC controllers
-2. generally add more error checking in this area
-3. log all transfer completion events and print the log on errors
-
-This may shed more light on what's going on and why things are failing.
-Knowing xHCI driver, in each of those cases it probably gets completely
-stuck, until SCSI layer loses patience 30 seconds later and requests a
-reset of the storage device.
-
-Regards,
-Michal
-
---MP_/h9t487cNKtjtBgvVTZr6klO
-Content-Type: text/x-patch
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename=strange-debug.patch
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 4ea2c3e072a9..0acdcf4d28db 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -814,11 +814,16 @@ static void xhci_unmap_td_bounce_buffer(struct xhci_hcd *xhci,
- 	seg->bounce_offs = 0;
- }
+diff --git a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+index f4b1ca2fb562..ce665a2779b7 100644
+--- a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
++++ b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
+@@ -87,6 +87,12 @@ properties:
+     maximum: 119
+     default: 100
  
--static int xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
--			   struct xhci_ring *ep_ring, int status)
-+static int __xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
-+			   struct xhci_ring *ep_ring, int status, const char *from)
- {
- 	struct urb *urb = NULL;
- 
-+	ep_ring->cleanup_first_dma = xhci_trb_virt_to_dma(td->start_seg, td->first_trb);
-+	ep_ring->cleanup_last_dma = xhci_trb_virt_to_dma(td->last_trb_seg, td->last_trb);
-+	ep_ring->cleanup_status = status;
-+	ep_ring->cleanup_from = from;
++  nxp,sim:
++    description:
++      The system integration module (SIM) provides system control and chip
++      configuration registers.
++    $ref: /schemas/types.yaml#/definitions/phandle
 +
- 	/* Clean up the endpoint's TD list */
- 	urb = td->urb;
+ required:
+   - compatible
+   - reg
+@@ -110,6 +116,17 @@ allOf:
+       required:
+         - fsl,anatop
  
-@@ -862,6 +867,8 @@ static int xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
- 	return 0;
- }
- 
-+#define xhci_td_cleanup(xhci, td, ep_ring, status) __xhci_td_cleanup(xhci, td, ep_ring, status, __func__)
++  - if:
++      properties:
++        compatible:
++          const: fsl,imx7ulp-usbphy
++    then:
++      required:
++        - nxp,sim
++    else:
++      properties:
++        nxp,sim: false
 +
+ additionalProperties: false
  
- /* Complete the cancelled URBs we unlinked from td_list. */
- static void xhci_giveback_invalidated_tds(struct xhci_virt_ep *ep)
-@@ -1153,14 +1160,13 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
- 			/*
- 			 * NEC uPD720200 sometimes sets this state and fails with
- 			 * Context Error while continuing to process TRBs.
--			 * Be conservative and trust EP_CTX_STATE on other chips.
- 			 */
--			if (!(xhci->quirks & XHCI_NEC_HOST))
--				break;
-+			xhci_info(xhci, "Stop Endpoint Context Error & Stopped on slot %d ep %d\n",
-+					slot_id, ep_index);
- 			fallthrough;
- 		case EP_STATE_RUNNING:
- 			/* Race, HW handled stop ep cmd before ep was running */
--			xhci_dbg(xhci, "Stop ep completion ctx error, ep is running\n");
-+			xhci_info(xhci, "Stop ep completion ctx error, ep is running\n");
- 
- 			command = xhci_alloc_command(xhci, false, GFP_ATOMIC);
- 			if (!command) {
-@@ -1176,6 +1182,11 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
- 		}
- 	}
- 
-+	int state = GET_EP_CTX_STATE(ep_ctx);
-+	if (comp_code != COMP_SUCCESS || state != EP_STATE_STOPPED)
-+		xhci_err(xhci, "Stop Endpoint on slot %d ep %d failed with comp %d ctx_state %d\n",
-+				slot_id, ep_index, comp_code, state);
-+
- 	/* will queue a set TR deq if stopped on a cancelled, uncleared TD */
- 	xhci_invalidate_cancelled_tds(ep);
- 	ep->ep_state &= ~EP_STOP_CMD_PENDING;
-@@ -2636,6 +2647,11 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	if (!ep_ring)
- 		return handle_transferless_tx_event(xhci, ep, trb_comp_code);
- 
-+	snprintf(&ep_ring->log_b[ep_ring->log_i++][0], 100,
-+			"event %px ep_trb_dma %llx comp_code %d len %d slot %d ep %d",
-+			event, ep_trb_dma, trb_comp_code, EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)), slot_id, ep_index);
-+	ep_ring->log_i %= 5;
-+
- 	/* Look for common error cases */
- 	switch (trb_comp_code) {
- 	/* Skip codes that require special handling depending on
-@@ -2863,6 +2879,11 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 					"comp_code %u\n", ep_index,
- 					trb_comp_code);
- 				trb_in_td(xhci, td, ep_trb_dma, true);
-+				xhci_info(xhci, "last xhci_td_cleanup: first_dma %llx last_dma %llx status %d from %s\n",
-+						ep_ring->cleanup_first_dma, ep_ring->cleanup_last_dma,
-+						ep_ring->cleanup_status, ep_ring->cleanup_from);
-+				for (int i = 0; i < 5; i++)
-+					xhci_info(xhci, "handle_tx_event log %2d: %s\n", i-4, &ep_ring->log_b[(ep_ring->log_i + i) % 5][0]);
- 
- 				return -ESHUTDOWN;
- 			}
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index ebd0afd59a60..cec743d86a3b 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1361,6 +1361,14 @@ struct xhci_ring {
- 	enum xhci_ring_type	type;
- 	bool			last_td_was_short;
- 	struct radix_tree_root	*trb_address_map;
-+
-+	dma_addr_t		cleanup_first_dma;
-+	dma_addr_t		cleanup_last_dma;
-+	const char		*cleanup_from;
-+	int			cleanup_status;
-+
-+	int			log_i;
-+	char			log_b[5][100];
- };
- 
- struct xhci_erst_entry {
+ examples:
+-- 
+2.34.1
 
---MP_/h9t487cNKtjtBgvVTZr6klO--
 
