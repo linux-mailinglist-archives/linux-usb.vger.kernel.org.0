@@ -1,94 +1,164 @@
-Return-Path: <linux-usb+bounces-14564-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14565-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EEC5969F03
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 15:28:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C74C7969F0B
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 15:30:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94A55B2203C
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 13:28:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71D5C1F25025
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 13:30:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF4171C2421;
-	Tue,  3 Sep 2024 13:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCF61B12EA;
+	Tue,  3 Sep 2024 13:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=diekuehnen.com header.i=@diekuehnen.com header.b="yp1r/26l"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="P+cwsVOJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.diekuehnen.com (mail.diekuehnen.com [78.47.205.37])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9054D1A726A;
-	Tue,  3 Sep 2024 13:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.47.205.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2851C242F;
+	Tue,  3 Sep 2024 13:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725370078; cv=none; b=P54XtiVPgMXbnqmVgdQj5L2odlnNFSszgLhwsYkrbRxQvp0jt8J9ZJ3nORvPwl/JJ72iq+jQOjLVe+586zSHViUTDRnBB3ZoPRQ1FJg2hqykxXDgUvOamk6/o46IL2OqwDjzhnRT3crHoeaINU0MmbvVqNMvZB2Jxl7ENlRKnEM=
+	t=1725370190; cv=none; b=p9qZiIapNb+7/44RCjZBxbmW1pcD65BsoJUbUc2/Xw5CeF2wUaLyxFjoaLEshsLZDmfEM7XJszWAhv3LZym2IZgNZ2vdg135G9xU4emLdCpF/TX2FJj9VeOpJTMKtvCa85uWjSHTS4OoInHvb4aOWVT4/NWQ0Y92Ity/KD8p6XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725370078; c=relaxed/simple;
-	bh=CLQG+IdwZ22SMXaJSPeFr07Fb9OMYcb0Y4GqWfh/YmI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I18QGyS7OZ3oDNq+ernLCvgo462pocg5Yc/ZycFoL5drpwdjGqZIfqCRMdAYG9WK0Hhl/WUhXizR3cZD56ZRdeRr3GkPXd5sNCmRMPLhNm628xvAMMUmF74HkI661UwAOUp0NcY9nKV2iyXKT5z/AkLQRx65D9PKMh7WT5w9vw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=diekuehnen.com; spf=pass smtp.mailfrom=diekuehnen.com; dkim=pass (2048-bit key) header.d=diekuehnen.com header.i=@diekuehnen.com header.b=yp1r/26l; arc=none smtp.client-ip=78.47.205.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=diekuehnen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diekuehnen.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CD2EE7E70D;
-	Tue,  3 Sep 2024 15:27:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=diekuehnen.com;
-	s=dkim; t=1725370068;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=HV2hf1nSATsA3NNJxSWkfgMwLvWvQ3pMvRpwUZxKkXc=;
-	b=yp1r/26lNKqk7dD7+0Bh9E7ZrMQKfgz+bGiBEeBdChNJ567eFsyqrGZq1VTcMhFk4hoGwg
-	ZpUBSD0nmRlaGKi+SSeQnVLwBY/d/7R7o67TUMm/KcJlLOT57Imw6g2tXihs+Hp397/Kin
-	8WFCA/oHt1CBebwGnNIw9qBQrGMtBJFcYIkOwup+hDeWJa1aSCm+UrSuyB7hTI90ttxHLH
-	XCsQsPFsXflPnWPHchXA2uTfQ4ET/WKP4Epez4sMkqNpuOqN1xRXCeJTp9m7TM0AGirIPq
-	ouIESRkTIQtc2p6gpjXtn+51mF/8cssoG+wsiI2hOh8DVvcmh7WjR8j8T6KAHA==
-From: =?UTF-8?q?Andreas=20K=C3=BChn?= <andreas.kuehn@diekuehnen.com>
-To: avifishman70@gmail.com,
-	tmaimon77@gmail.com,
-	tali.perry1@gmail.com,
-	venture@google.com,
-	yuenn@google.com,
-	benjaminfair@google.com,
-	peter.chen@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: =?UTF-8?q?Andreas=20K=C3=BChn?= <andreas.kuehn@diekuehnen.com>,
-	openbmc@lists.ozlabs.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: chipidea: npcm: Fix coding style with clarification of data type
-Date: Tue,  3 Sep 2024 15:25:15 +0200
-Message-ID: <20240903132535.15554-1-andreas.kuehn@diekuehnen.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1725370190; c=relaxed/simple;
+	bh=m6PdLgnTXOez5AhkrL0LnfNQVFKTYIvo5+OBwmv4Wkw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kB81K4o3q1oOfR2fSIlqjUZFtjGMOhZQSGxM+jjW+vgscLzb37Ovv9ql2YUY1U8ZBwMjsMi+qk/B+fQtofHhCW9zqB5R7xeuWyB31vrf2mZRkeqw/hyveGbV1kFFvYxrYdmIzm4nG6liVy4mJ4wbsRyiI7m4yjSU3ueNyAhOzas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=P+cwsVOJ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 483Agugb014913;
+	Tue, 3 Sep 2024 13:29:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=4NQycEyc125xNTS3TYtmmc
+	NjWV6AcYdZJ+XMDcN/R+g=; b=P+cwsVOJ/VT3JyXMf8pFW/Dcb1G+iBItWXWUHs
+	tO9a7IE2suIhELGQqEf6csTTqSdJNgakEzBVNsBuNBEavNhxhzS6nx8xi7sYFtfD
+	sK4wDQf/CLnQTEYByKoQrpASEDOS31rBdBrVdhsrYolMH6znrBtwLTW4NwPwnbp5
+	XtGB5TKiS5aiCO5CiZoPERWzmGFl3QzkuFCdSjtDAfKLIgiFBnmnZR4OKWMnWdkD
+	qRvNSa+hD7HVLNZIa0at9E7HncmrhWZOhmdTJz23t5RfDO3BmN7DHrwpXSJtN618
+	8CkFPcWqL1SKdXD2QZHuCQ5Tc+Cuk5zL0A4q6WirXPxsEhfQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41bt66yfkh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Sep 2024 13:29:41 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 483DTdgB021168
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 3 Sep 2024 13:29:39 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 3 Sep 2024 06:29:33 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Jing Leng <jleng@ambarella.com>, Felipe Balbi
+	<balbi@kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>
+CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar <quic_akakum@quicinc.com>
+Subject: [PATCH v2] usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
+Date: Tue, 3 Sep 2024 18:59:17 +0530
+Message-ID: <20240903132917.603-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KeKLWNqf6DWwYKR1d9WuTfoYBoOiqQpb
+X-Proofpoint-GUID: KeKLWNqf6DWwYKR1d9WuTfoYBoOiqQpb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-03_01,2024-09-03_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409030109
 
-Fixed coding style issue: unsigned to unsigned int.
+The current logic is rigid, setting num_fifos to fixed values:
 
-Signed-off-by: Andreas Kühn <andreas.kuehn@diekuehnen.com>
+3 for any maxburst greater than 1.
+tx_fifo_resize_max_num for maxburst greater than 6.
+Additionally, it did not differentiate much between bulk and
+isochronous transfers, applying similar logic to both.
+
+The new logic is more dynamic and tailored to the specific needs of
+bulk and isochronous transfers:
+
+Bulk Transfers: Ensures that num_fifos is optimized by considering
+both the maxburst value and the maximum allowed number of FIFOs.
+
+Isochronous Transfers: Ensures that num_fifos is sufficient by
+considering the maxburst value and the maximum packet multiplier.
+
+This change aims to optimize the allocation of Tx FIFOs for both bulk
+and isochronous endpoints, potentially improving data transfer
+efficiency and overall performance.
+It also enhances support for all use cases, which can be tweaked
+with DT parameters and the endpoint’s maxburst and maxpacket.
+
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
 ---
- drivers/usb/chipidea/ci_hdrc_npcm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes for v2:
+Redefine logic for resizing tx fifos.
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea/ci_hdrc_npcm.c
-index c89c68f41ccc..3e5e05dbda89 100644
---- a/drivers/usb/chipidea/ci_hdrc_npcm.c
-+++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
-@@ -18,7 +18,7 @@ struct npcm_udc_data {
- 	struct ci_hdrc_platform_data pdata;
- };
+Changes for v1:
+Added additional condition to allocate tx fifo for hs isoc eps,
+keeping the other resize logic same.
+---
+ drivers/usb/dwc3/gadget.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89fc690fdf34..49809a931104 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -778,15 +778,12 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
  
--static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned event)
-+static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned int event)
- {
- 	struct device *dev = ci->dev->parent;
+ 	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
  
+-	if ((dep->endpoint.maxburst > 1 &&
+-	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
+-	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
+-		num_fifos = 3;
+-
+-	if (dep->endpoint.maxburst > 6 &&
+-	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+-	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+-		num_fifos = dwc->tx_fifo_resize_max_num;
++	if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
++		num_fifos = min_t(unsigned int, dep->endpoint.maxburst + 1,
++				  dwc->tx_fifo_resize_max_num);
++	if (usb_endpoint_xfer_isoc(dep->endpoint.desc))
++		num_fifos = max_t(unsigned int, dep->endpoint.maxburst,
++				  usb_endpoint_maxp_mult(dep->endpoint.desc));
+ 
+ 	/* FIFO size for a single buffer */
+ 	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
 -- 
-2.43.0
+2.17.1
 
 
