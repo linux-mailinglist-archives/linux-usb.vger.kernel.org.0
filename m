@@ -1,98 +1,109 @@
-Return-Path: <linux-usb+bounces-14532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14533-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDEC4969720
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 10:32:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21761969988
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 11:52:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C6A9283CA0
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 08:32:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D157B2881E8
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2024 09:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3203721C18E;
-	Tue,  3 Sep 2024 08:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4D21A3036;
+	Tue,  3 Sep 2024 09:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Cc+KDwbW"
+	dkim=pass (2048-bit key) header.d=elrest.cz header.i=@elrest.cz header.b="B+zqkUzI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.cesky-hosting.cz (smtp.cesky-hosting.cz [91.239.200.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4DB21C16B;
-	Tue,  3 Sep 2024 08:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD181A0BC7;
+	Tue,  3 Sep 2024 09:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.239.200.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725352336; cv=none; b=gzV4QH4eAk+4TwDrP10ezPefexeELcEQMZ9mSCunhtDuBrPzb9CA+DtDZ70Zb0YHeCu5mFxamsxRGJUzhFtfMRKcne+h1sK3nC/Y6sEuHsfqOAGQaiP7t/U15JQ4jyaM2k9s2l/6u1k/Jr1tGGYPVCj8XqGk+78zLPxEd9wG/ts=
+	t=1725357157; cv=none; b=jHtxHfmjrN6gIVFwp8K1ou8R4HIPctOg0zZewzrCf5X4mlg9106XUJBt8FXwGSjrC004C4B+shJpdPFc945HL5T2GzTU7ZjTgD0Vxj8jl0BVP3nAAaBvDbMTO6XJEf65suTrpHmjNNoKQPL0XUpHhehwxGuNbU4CE96g+9H3dho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725352336; c=relaxed/simple;
-	bh=RIuf/aEL89DX2+EKoF8e7PpiBo6v3Bm+nSSkkwxOHdU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lmuNa5TS2Mq5xAgUV4JfifEfMAgHlSfhuZthS51NdI2PP9JwbpwV+JogkMqxC0G1pohEuvc42bDjXZDCNvxVYIVJ1k2x+UzFAi/not7JC/evdOKrO5oASI1KIczCPEbmJre6+tUA/4i3uDo4VvHDg+N87d/oEq6O8rfN9jmK+nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Cc+KDwbW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 751AFC4AF09;
-	Tue,  3 Sep 2024 08:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725352336;
-	bh=RIuf/aEL89DX2+EKoF8e7PpiBo6v3Bm+nSSkkwxOHdU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cc+KDwbWX9G8khKq4ZglLTf6b8GWR8okboip7/LWlJvrOdLAcpgKUczNx4Uab+GKw
-	 dJilAflccnRZS8rghorICxdB1+IBO/oRkgvXYW5Xz4pQTYVp+5sXrWeJ7oPEKJnnS1
-	 Zkop6D7NQ1rZ0xb0xxc7IyrTpOqlUxImjmOkRv54=
-Date: Tue, 3 Sep 2024 10:32:12 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Enric Balletbo Serra <enric.balletbo@collabora.com>,
-	Andrey Smirnov <andrew.smirnov@gmail.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-phy@lists.infradead.org
-Subject: Re: [PATCH 6/6] power: supply: Change usb_types from an array into a
- bitmask
-Message-ID: <2024090308-retying-playpen-cc51@gregkh>
-References: <20240831142039.28830-1-hdegoede@redhat.com>
- <20240831142039.28830-7-hdegoede@redhat.com>
- <2024090340-mumbo-worsening-9a55@gregkh>
- <6f4e23ce-2f32-44fc-93d9-ab7d0867b0ee@redhat.com>
+	s=arc-20240116; t=1725357157; c=relaxed/simple;
+	bh=ptodtkKagi9GVZPcHmohXhYM5PL23nadgiXtCIZaBWY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UT77JCcLZiWO7l8qzsJFMK0KWO1AGYNdwgbktvzX0Y7BkHdx3DDCGvAlTEeC4KSyrpTvUmpCRBfBalMcjYH64fucgippP1C6e2c0rs7o+WwQrLcfkTQA/SRb5soWDyeNe98LK6+pW1EpNLq1rkbeioJAv/Ra88gdszqOPv9zSSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=elrest.cz; spf=pass smtp.mailfrom=elrest.cz; dkim=pass (2048-bit key) header.d=elrest.cz header.i=@elrest.cz header.b=B+zqkUzI; arc=none smtp.client-ip=91.239.200.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=elrest.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=elrest.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=elrest.cz;
+	s=rampa2-202408; t=1725356549;
+	bh=ptodtkKagi9GVZPcHmohXhYM5PL23nadgiXtCIZaBWY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=B+zqkUzIj4dl1sBQA6XLFQRTMSojYkiE3o54FVqroAyUpWC6lQw7pGC6oJKUnPS77
+	 iWMV39Zwm6jty2zz6/nyn/pp32LtUyIzdQ4A3M1VGY/qrDqh7x6cLHkvkVaDI8IbXf
+	 6BOVEbU2CXFAf7meLCjeruXzU1ebS+q0ISqcOiJ+D4H6vSo0u88SlgQ/jx2W0I4blc
+	 T+6tOUxEBxJ3CcDv9DnIy/CHFIHj4Vy7NaDMruK4dNsShsRSTxnaFpE6f2MDCggtLM
+	 ttTevh0+mIrd53tPDviAe/McPda81JsB8IGeSHlhGm5/wGeZbGkZYpb4ayrjb1uqAi
+	 E1BgaL7Q++wRA==
+X-Virus-Scanned: Debian amavis at smtp.cesky-hosting.cz
+Received: from localhost.localdomain (unknown [185.63.98.16])
+	(Authenticated sender: tomas.marek@elrest.cz)
+	by smtp.cesky-hosting.cz (Postfix) with ESMTPSA id 4Wygdc3PS2z3Nw;
+	Tue,  3 Sep 2024 11:42:28 +0200 (CEST)
+From: Tomas Marek <tomas.marek@elrest.cz>
+To: hminas@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: Arthur.Petrosyan@synopsys.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	oleg.karfich@wago.com
+Subject: [PATCH] usb: dwc2: drd: fix clock gating on USB role switch
+Date: Tue,  3 Sep 2024 11:41:56 +0200
+Message-Id: <20240903094156.6516-1-tomas.marek@elrest.cz>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f4e23ce-2f32-44fc-93d9-ab7d0867b0ee@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 03, 2024 at 10:27:08AM +0200, Hans de Goede wrote:
-> Hi Greg,
-> 
-> Thank you for the reviews.
-> 
-> On 9/3/24 9:04 AM, Greg Kroah-Hartman wrote:
-> > On Sat, Aug 31, 2024 at 04:20:39PM +0200, Hans de Goede wrote:
-> >> The bit_types array just hold a list of valid enum power_supply_usb_type
-> >> values which map to 0 - 9. This can easily be represented as a bitmap.
-> >>
-> >> This reduces the size of struct power_supply_desc and further reduces
-> >> the data section size by drivers no longer needing to store the array.
-> >>
-> >> This also unifies how usb_types are handled with charge_behaviours,
-> >> which allows power_supply_show_usb_type() to be removed.
-> >>
-> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> > 
-> > Nice!
-> > 
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> I assume this also counts as an ack for merging this through
-> the linux-power-supply tree ?
+The dwc2_handle_usb_suspend_intr() function disables gadget clocks in USB
+peripheral mode when no other power-down mode is available (introduced by
+commit 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")).
+However, the dwc2_drd_role_sw_set() USB role update handler attempts to
+read DWC2 registers if the USB role has changed while the USB is in suspend
+mode (when the clocks are gated). This causes the system to hang.
 
-Yes please.
+Release gadget clocks before handling the USB role update.
+
+Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")
+
+Signed-off-by: Tomas Marek <tomas.marek@elrest.cz>
+---
+ drivers/usb/dwc2/drd.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index a8605b02115b..ccb33cd1f04b 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -127,6 +127,18 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 			role = USB_ROLE_DEVICE;
+ 	}
+ 
++#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
++	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
++	if (dwc2_is_device_mode(hsotg)) {
++		if (hsotg->lx_state == DWC2_L2) {
++			if (hsotg->params.power_down ==
++			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
++			    !hsotg->params.no_clock_gating)
++				dwc2_gadget_exit_clock_gating(hsotg, 0);
++		}
++	}
++#endif
++
+ 	if (role == USB_ROLE_HOST) {
+ 		already = dwc2_ovr_avalid(hsotg, true);
+ 	} else if (role == USB_ROLE_DEVICE) {
+-- 
+2.25.1
+
 
