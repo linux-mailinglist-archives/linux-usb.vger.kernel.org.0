@@ -1,193 +1,222 @@
-Return-Path: <linux-usb+bounces-14648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A74A996C179
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 16:57:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7628696C1A4
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 17:02:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1D87B29559
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 14:54:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDF5A1F2A75C
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 15:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36BC1DC1AD;
-	Wed,  4 Sep 2024 14:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F771DCB06;
+	Wed,  4 Sep 2024 15:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HhM7w8pF"
+	dkim=pass (2048-bit key) header.d=hidglobal.com header.i=@hidglobal.com header.b="U9ffxvqt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013001.outbound.protection.outlook.com [52.101.67.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC711DA608;
-	Wed,  4 Sep 2024 14:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725461676; cv=none; b=Jgb0r6uRbL0gLrjPx6gcjje5608IaDx8slgRP673N4TcVCmLwAZIk36BeE1rnIhD3aivSwvaV5k/VqRKM6ylGOW7dZrGW0gepsPwSXC5hqhWkzEdUcnCtHyC7WnPUTUqXq7HyPHTKyqZHv6wLhOEeyU0VODH4LJS/UkYzAA5NLw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725461676; c=relaxed/simple;
-	bh=gScODNlhZlCpvbSMLGAqKd3woX3TK+hV8QrO1mnEaek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lhQ6/Xkf5Ov2/5TuB2EpFUiBt5UFNzXvDCoF3KUZH88UCzNZfp7FclnUAh/jNMCTEQPXyZ7Fax7UFHosSq92LBrPUY4HstkYivVPtlgJ1w99sno1Dow6CCnAKq82lsWZwQjRLiP/sVb3JLFC3FBbPA2S5MgOF9E1YJm1GmRMuus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HhM7w8pF; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725461674; x=1756997674;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gScODNlhZlCpvbSMLGAqKd3woX3TK+hV8QrO1mnEaek=;
-  b=HhM7w8pFOmqRa0tHZHdFrCacc/2mW0/mdNq5FH/V2p/FNpQRvj7iW/20
-   R19ezm1o1fweLolN0fCu8e3alKsCKvtQRsR7/gNKylCPejk3Q0hSqD5yg
-   JJLUmUng5lTyL3ynPErwY6L1F8QKmOgCiihliCYtxV8dWS2fqBZ/+mAzk
-   QnTtVp3BEc8FuyuRJu7tiEoYlZ0zreOxyxSRupblEUJx9xqMlLemXcBSe
-   lAUEaghWYnMEUNt3+lX9S2Z+PxXJnkAr9KbI2ovcf2lQw00CLCZ1eXhPm
-   9IQOad/lUfLWICW/KYLiT7i1XQdX+Oz4FkwvHIczn3AvoNlhqWK8fMWdQ
-   Q==;
-X-CSE-ConnectionGUID: F5poGVHbTsW3L6TG5mmuVg==
-X-CSE-MsgGUID: Nz60CBNeT3K8k/On7NPPXg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="34728443"
-X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
-   d="scan'208";a="34728443"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 07:54:33 -0700
-X-CSE-ConnectionGUID: 5eekNsSJQU2avM4KnI150w==
-X-CSE-MsgGUID: ujr9ZKurQTSX4qVvTL7Wcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
-   d="scan'208";a="64962308"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa006.fm.intel.com with SMTP; 04 Sep 2024 07:54:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 04 Sep 2024 17:54:29 +0300
-Date: Wed, 4 Sep 2024 17:54:29 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v3] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Message-ID: <Zth0pbxJnKYKn8u2@kuha.fi.intel.com>
-References: <20240903181917.617400-1-lk@c--e.de>
- <ZthNkY4MEpUgw3We@kuha.fi.intel.com>
- <ZthnbdKig//kPKgF@cae.in-ulm.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1F91DC753
+	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 15:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.1
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725462111; cv=fail; b=BxyzSemHdSXHdweMDgFkj7f9KXpKRMQ+9WKp3xUCmmMIN20JlyYGf9GpyD10YAKlrURuKTA6sV9p8H4GbqP0nUw8k3wJYMHCqX3aRwH7ErCP+rCKK7BO55GoEp7LB+rOYi5D+7+1FT/HcBW9H1xuRTrxmSQH2xywdWr7XXVPRps=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725462111; c=relaxed/simple;
+	bh=kNeqOlFSt1TtlKh8+AeI7WcgbcQq7+LSg2gALPKfT9g=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=nmmaGKmJKpzMxFORlm5SfmgcByVMabEw/q6zu9kButOsxA0r7Dkfj4HxExac40ZZzb00zNj0gZZFSHA3wMLoY8Bs6r3fpNpq4N0kdqjLsJgeFIwGSYuNcw8L0yiw7lkoR3twQCW4Rz/OZPm2YTayipAotnhIOEijVM2V2NdLstM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hidglobal.com; spf=pass smtp.mailfrom=hidglobal.com; dkim=pass (2048-bit key) header.d=hidglobal.com header.i=@hidglobal.com header.b=U9ffxvqt; arc=fail smtp.client-ip=52.101.67.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hidglobal.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hidglobal.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=givD+Wtl/RUgY+LpnfZ/e8U7/30PFNuY1qkhUx6UeMXzDIoT235dFOSAXUZrsSt23enE7hKf8h/pQMyzTeDYhueTNxUbOk7/gNq5u5yvTt6rT5f2qbaWUL2qNm0nvrvgxrG3kkZLOsOF4EZkzsbFCQCSY2CIokIiTuSbzMBWkuWHRDgY2umVQqDg1ryXTYeoc2OanyGoJQrL3bjf3wjEymG21XBqqcswhVcl+vqnfxEeyMDhq/lLLsjy2ttQ2jlbjn3a3LyX9N9Qkrdu4uUCp5Qph2Aor+ifiU/0p4IGJNBtKpIkNYPQbbnro2TOjD/D6umfm3PGpOWccGqd9k54Kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xrYAcofQimcB1fhkG28Z7Siq/A2t7HTpJjt4HrWiGAI=;
+ b=L6zZOEXHCKsXkb4Bd78X34cAgaKukUQHpg9JJIiOfjUd6lycgyZI8xSkZ2Gr0QxKrTCMycc3DD7FKvGAMV9JmNHjSQap426gr7ujrfk9rq9MAjUhkJwMQVxxP8DRzcXPPoUKKOXv4QR2dIldjfV2aAC1EgiDx+XBQju7UgVqlRPWyO9ZjbBqsEmpliOnNu8ozsL0bQo/MEd39zKxLd5BvVzocgSewb4blRlnvwIuXBcbK9N2+BB8lh8xVQ0p5hEt2xjMiDLAp/SY03BORVQ59YPPjNpX1CcP7ukJzNtxQzyAWbu5/kZPxopZGTH1d1g70y9gcUiRzw/QNKZ3YNtw7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hidglobal.com; dmarc=pass action=none
+ header.from=hidglobal.com; dkim=pass header.d=hidglobal.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hidglobal.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xrYAcofQimcB1fhkG28Z7Siq/A2t7HTpJjt4HrWiGAI=;
+ b=U9ffxvqtiFpvLGitWmPru8xNlFRwvlRgvZ1jlTYyunKnEydF0CcDQ5RbN5NG1fWFP3iUjWRyxbe4hAoTCjdZV6fcesjZs+eODxvb5YmezjCqms5cab4CQE277g/+D9ZWyVG5i+/L+9oAZtU/ltRWgYgMcMQG17zqGnNNu1P19TBoiKaz3+dQxZF5RoN5uLd/9y+Cxvq1xmcMKAw7JIzdEvItBgWRhirZ/Gzbzj/BSPvKCybTuS10JXu9zxYJvrOU6WfBOnuonDGurHy1BRUE9oDsK7o9kgjIfpm7Pit3Sej+UyF3yEfDe49oXdLXLIkSZ5g2JsTDbMxxwuuy3g5qhw==
+Received: from AS8PR05MB8485.eurprd05.prod.outlook.com (2603:10a6:20b:3cb::12)
+ by AS8PR05MB8584.eurprd05.prod.outlook.com (2603:10a6:20b:3ce::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Wed, 4 Sep
+ 2024 15:01:39 +0000
+Received: from AS8PR05MB8485.eurprd05.prod.outlook.com
+ ([fe80::465f:2e65:bd01:4957]) by AS8PR05MB8485.eurprd05.prod.outlook.com
+ ([fe80::465f:2e65:bd01:4957%3]) with mapi id 15.20.7918.024; Wed, 4 Sep 2024
+ 15:01:39 +0000
+From: "Vrastil, Michal" <michal.vrastil@hidglobal.com>
+To: "stable@kernel.org" <stable@kernel.org>, "balbi@kernel.org"
+	<balbi@kernel.org>, "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: [PATCH] Revert "usb: gadget: composite: fix OS descriptors w_value
+Thread-Topic: [PATCH] Revert "usb: gadget: composite: fix OS descriptors
+ w_value
+Thread-Index: AQHa/ttYqxbhHhDYREmJ6xqh2EfPhQ==
+Date: Wed, 4 Sep 2024 15:01:39 +0000
+Message-ID:
+ <AS8PR05MB84851190CC1941157ED33D7D909C2@AS8PR05MB8485.eurprd05.prod.outlook.com>
+References:
+ <AS8PR05MB84857AB3DC49395AEC7C235990932@AS8PR05MB8485.eurprd05.prod.outlook.com>
+In-Reply-To:
+ <AS8PR05MB84857AB3DC49395AEC7C235990932@AS8PR05MB8485.eurprd05.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hidglobal.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR05MB8485:EE_|AS8PR05MB8584:EE_
+x-ms-office365-filtering-correlation-id: 9e195cdf-8c60-479c-8a90-08dcccf27ab8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?tgnEcOAydrz938wcKWSWChhUX1/msV9oE+SQbpAF07bxKmhX0zmaBL+8brWD?=
+ =?us-ascii?Q?nANWvB27uXYd8Hw++aiXRSrvrmm1wTDj0O24Scp7TsJZr5yA7r5S5gfcvd4a?=
+ =?us-ascii?Q?B6cnPORa0B6rNKacu+PGYvTpehWk2XJtrD14x2ddW/Q38aPq/PxY5iWlgFWe?=
+ =?us-ascii?Q?2G5ylJKu4WE+7m+Y1YrupoYO3zM2hFY+6hD4CbBdHMlqIbQSxWy4tk/jXZd2?=
+ =?us-ascii?Q?H+XYvOgVXyxLAeLwiR528SDfjz6XnbX/gENQJmnSOm28Sy15UzDAut8+mBly?=
+ =?us-ascii?Q?cvVXanmPyc6dzaETBrr4XwHQRpIwlQtDsmihIVEjw1Op/jg2zbImj2t4ghgp?=
+ =?us-ascii?Q?uVvEuzA37uufFPV5u33pIc67Ro2yDvbzLpFszjSsAICuZZQbh6l9yDhQxrkK?=
+ =?us-ascii?Q?twWoLC5yPImCpvDZUlHw3cOrWDBp6agUxla7iJI4mviyxWpoZcLCXM5q7I2r?=
+ =?us-ascii?Q?walA2cf8DKgdms4amdgoTxC09Bl1wnCavqidaCS4cQXqcE1a0bNPppOwD9h1?=
+ =?us-ascii?Q?oazRji5/avlr3APfikW+sm4EnhxAILhLbQv9b2pzHiRhj3nmJdbZKtSgLCSN?=
+ =?us-ascii?Q?29K4jycot7gkZMQTNiluJp5SR+Ikrn/58bxZitoEvunWXmJgDuXi7awR5rdA?=
+ =?us-ascii?Q?5FCLLrBTZVpx0wxQtLcdhrldJ/Ynu4fpnTq2UjDDeztw0Fuq+EICCrEwhFNT?=
+ =?us-ascii?Q?Hl08g19ib9lkZA36zu6CN87lR9xAfw9ftAxNyFjODB6ua4sUvJt5faFIt+hG?=
+ =?us-ascii?Q?UIjZbo7A9DyHTqCF2riodfU+A3VlmBRUwtw1hbsoRS1aUHLpRrPDGpGAHCHp?=
+ =?us-ascii?Q?KOA7XaYzgCexZnUeuaIOUlWf/uJvrZ+pD83vIrrNBsswR+f4usM7zBe/5MEY?=
+ =?us-ascii?Q?b3jCBFo8V+sQ6wJlMKuMRNGi4mSSa6wp+Mne0opLpF1Qu2dQvXrDdKvbkYVf?=
+ =?us-ascii?Q?HjKg2xISJx6DzmPpR9lIXVi9mV0RUIbkOuW/8kKYRj83mdQeayc5AmEc0Zxt?=
+ =?us-ascii?Q?QfJ0BpwDs41EAxPaHhRb4N1WcT/0MRlHuPfRFEyF2Rn+qHYoQHRuCigf9jUJ?=
+ =?us-ascii?Q?Vg1PtpKfmA+SugIx6JKzvwqmyndM5jD4rpRddqW9Uiiqc/47DHFHZ8O/VxEk?=
+ =?us-ascii?Q?S4xEP8Cn+Rdeb0gZ1A1oe2FBukyBJir0DK60kug95Yoj5+5zFZIEdeFfULd7?=
+ =?us-ascii?Q?YbbazUcgfC3g0RGKe9eLNRUnCVAjK5ZK9T5JgLUuZ/Qa/DczEvUtY898bcMZ?=
+ =?us-ascii?Q?KRdHPKYWjPHDoarahwYmTy5rfa/WRIXErxCguH+IEDvfnSOSrx/dyxBB0PqC?=
+ =?us-ascii?Q?Cx/bzWEMfdwI2fVP8x92DS79xUzxUiEVvZxMbSbHbj/OMNx3eog7ttvejSGl?=
+ =?us-ascii?Q?b8AE7rm+bqycRSB+ynNQi1dgYvhtpM+S5He6UlxrEN4p8INGIA=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR05MB8485.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?Z1g6JPPLg6I99cfqD1K5KpC+xOXKcYqr70dDMQfwOzxGQDZ8M0nFKrPXM8hZ?=
+ =?us-ascii?Q?O4yDKRPwxhR9n2q8lgiZzaAE7sXfQ369sbpWj/iROYHiSfti4Ha5zDhW2s4R?=
+ =?us-ascii?Q?F9Ax18zdtBAdNQDWG9k0HKBHKzgsB91+NXyTPZu5CQ0mahTQVzVSb8ww3jK7?=
+ =?us-ascii?Q?j1o1pGhgCzaFopzGNmcCpYyhFus5pIPJaI0Xb77scSnDnWAoNNYrvpml4QZJ?=
+ =?us-ascii?Q?WxMt1QKQBcRjUBVoBYRTg/RcyIYTo8FA6HHUWQtKk+hPEVzNkjiASMhXbrDg?=
+ =?us-ascii?Q?2KqaonzTo58KebXHYIxGeADcDdyKT9J/b1d0yRw658yCIlXV7LYBg9Tt7i3G?=
+ =?us-ascii?Q?eYq9qEQNaW6zy2NgcyaeUYSUQ5ThhxWQZf0h1SMWlhO7HufPddxPkz05jKiw?=
+ =?us-ascii?Q?AP12fn9Ri+RIWQSLSZuOWIw+vbrcbbtJljcTxl5/Q4K699KADwgwBu/v3Dym?=
+ =?us-ascii?Q?fJ4qPiVC2dlZGlJ0RGdYZRxdHjthLXbCBYnHoBBT53yKbfIv1EEyrftk33Rz?=
+ =?us-ascii?Q?3qc8igPIvzVYnVM2L9A3JDJXzR/DN6NLvHhGxAQqcbhLkxkh6WA47AfqxKAD?=
+ =?us-ascii?Q?rEN76Fxe4cqmlNpSnKnNnG7agOnqzSzfybpEf3zzSI+zS9jPB0tWJ/pr7FIx?=
+ =?us-ascii?Q?l6XyUr5xfdqeXwqg+GVnsz7fsCPNCWvGMDF/zpfK/jGrtuM/i5ewxW0LcC9C?=
+ =?us-ascii?Q?jXx3ydqGwzTnUXfj5n7NOjHwFs/6nUMWMML0HsKpx2Nz46XHnW7sYVdIiX+i?=
+ =?us-ascii?Q?2Lqjg8a80Y0KLJEJK1QrhM3ztUCoINWwIa7tzIxAczwSJqdJd/c1zidHWFL4?=
+ =?us-ascii?Q?/O+eok0GGGtLph5LnokTQ9zvKSgb3D/smY9AUtZJDgdGOmxJ5a91whkXy2O8?=
+ =?us-ascii?Q?mb9+nJtPp1x71ndLmkMW61yFc3j6yAAwdaqv37SUpFsWElm98vhicw9P8gIT?=
+ =?us-ascii?Q?ifZD+CCTgjLTFmGYfT0Nb6E91tnNFmSeQxlHVWvqqRY0qM9lUzLqEfOmbv4s?=
+ =?us-ascii?Q?CfJncgXMT1k3ebI6I90bn8PIpmLMEfOfMyFVzVbPMAQThgMg9qNOs3QvBlWF?=
+ =?us-ascii?Q?/Neunlsfz96jXl12PtZn+D008+3YxwObFnJBdejiiNlgKziXK2PFyY/t9SY+?=
+ =?us-ascii?Q?Gr365K0XMqdBm6Wjo5UiA08aWLgMs2mUEEtmJANIIJAwAyko4gHVg5k+0BIw?=
+ =?us-ascii?Q?Qpjw2i6gdCti7gb7vCazEQmUwDIocl6A9YfPWZt0ZEOas6xFbinr03g8bdrk?=
+ =?us-ascii?Q?XeTidRFMbi5AMJmwHth8hnveE/XIiAH1Zp4hzmPz2w+M1NHch2Gp8tCV2FlL?=
+ =?us-ascii?Q?objJokQ0Jpp0jCEmr0/wcp7j+VVcMeFBqUWhplfO6FqhASrcbJMnDhYK7kHa?=
+ =?us-ascii?Q?Itj6CBRtOLlB6ccHA8yVOYvSf/XXJq0rhd3FM1JPJfYwh4kMpX+3X4BIX1eG?=
+ =?us-ascii?Q?eTk1xN2edlBimteaVo57fdUOAOQ5UQ4pakLvvVKujkiWauA9lheXOw092U8Y?=
+ =?us-ascii?Q?HlJ5vfilk3Afz8XbGGc+AJSWoUshs2C1c2MAaKtsvBtO4yg1GPjcRuYefCWv?=
+ =?us-ascii?Q?+OPdOwEUsxeLUHR1kxZ7TUrMATuwcN5TaoayCe4DL1d5+WkP8FTAvLSV4cv2?=
+ =?us-ascii?Q?Fg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZthnbdKig//kPKgF@cae.in-ulm.de>
+X-OriginatorOrg: hidglobal.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR05MB8485.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e195cdf-8c60-479c-8a90-08dcccf27ab8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Sep 2024 15:01:39.2575
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f0bdc1c9-5148-4f86-ac40-edd976e1814c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6n6fnwquMjD4my5PsYclzEHu7Ofa6hj/XA4JaRRri9sTu2m6HtAOCYnplUuVPKFv8tgdPsjZesKCW+OxZzcWb6oZ1N3dKRnnA7FKU2yjuWw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR05MB8584
 
-On Wed, Sep 04, 2024 at 03:58:05PM +0200, Christian A. Ehrhardt wrote:
-> 
-> Hi Heikki,
-> 
-> On Wed, Sep 04, 2024 at 03:07:45PM +0300, Heikki Krogerus wrote:
-> > On Tue, Sep 03, 2024 at 08:19:17PM +0200, Christian A. Ehrhardt wrote:
-> > > If the busy indicator is set, all other fields in CCI should be
-> > > clear according to the spec. However, some UCSI implementations do
-> > > not follow this rule and report bogus data in CCI along with the
-> > > busy indicator. Ignore the contents of CCI if the busy indicator is
-> > > set.
-> > > 
-> > > If a command timeout is hit it is possible that the EVENT_PENDING
-> > > bit is cleared while connector work is still scheduled which can
-> > > cause the EVENT_PENDING bit to go out of sync with scheduled connector
-> > > work. Check and set the EVENT_PENDING bit on entry to
-> > > ucsi_handle_connector_change() to fix this.
-> > > 
-> > > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> > > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> > > Bisected-by: Christian Heusel <christian@heusel.eu>
-> > > Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-> > > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> > > ---
-> > >  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > > index 4039851551c1..540cb1d2822c 100644
-> > > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > > @@ -38,6 +38,10 @@
-> > >  
-> > >  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
-> > >  {
-> > > +	/* Ignore bogus data in CCI if busy indicator is set. */
-> > > +	if (cci & UCSI_CCI_BUSY)
-> > > +		return;
-> > 
-> > I started testing this and it looks like the commands never get
-> > cancelled when the BUSY bit is set. I don't think this patch is the
-> > problem, though. I think the BUSY handling broke earlier, probable in
-> > 5e9c1662a89b ("usb: typec: ucsi: rework command execution functions").
-> > 
-> > I need to look at this a bit more carefully, but in the meantime, can
-> > you try this:
-> > 
-> > 	if (cci & UCSI_CCI_BUSY) {
-> > 		complete(&ucsi->complete);
-> >		return;
-> >         }
-> 
-> I really don't think this is the correct thing to do and it will
-> likely make things worse.
+This reverts commit ec6ce7075ef879b91a8710829016005dc8170f17.
 
-That was the behaviour before all that command execution refactoring
-this summer. I'm not saying that it's right, but that's how it was.
+Fix install of WinUSB dsriver using OS descriptors.
+Without the fix the drivers is not installed correctly
+and the property 'DeviceInterfaceGUID' is missing on host side.
 
-> A notification with the UCSI_CCI_BUSY bit does _not_ mean that
-> the controller is busy doing other things and cannot complete the
-> command.
-> 
-> Instead it is an indication that the controller _is_ working to
-> complete our command but will take somewhat longer:
-> 
-> Citing:
-> | Note: If a command takes longer than MIN_TIME_TO_RESPOND_WITH_BUSY ms
-> |       for the PPM (excluding PPM to OPM communication latency) to complete,
-> |       then the PPM shall respond to the command by setting the CCI Busy
-> |       Indicator and notify the OPM.
-> |       Subsequently, when the PPM actually completes the command, the
-> |       PPM shall notify the OPM of the outcome of the command via an
-> |       asynchronous notification associated with that command.
-> 
-> Unless I misunderstand what you are trying to do your change would
-> cause us to needlessly abort/cancel every command that takes more than
-> MIN_TIME_TO_RESPOND_WITH_BUSY to complete.
-> 
-> What am I missing?
+The original change was based on assumption that the interface number
+is in the high byte of wValue but it is in the low byte, instead.
+Unfortunately, the fix is based on MS documentation which is also wrong.
 
-The decision to Cancel was made to work around buggy EC firmwares that
-reported BUSY, and then never completed the command. So without that
-Cancel hack, the PPM was stuck on those systems.
+The actual USB request for OS descriptors (using USB analyzer) looks
+like:
 
-I don't know what we should do about that hack. We probable could just
-ignore those old systems, and then add quirks for them as needed. But
-I also don't really like what you are proposing in this patch, that we
-basically ignore the BUSY bit completely.
+Offset  0   1   2   3   4   5   6   7
+0x000   C1  A1  02  00  05  00  0A  00
 
-Right now I was hoping that we return the behaviour of the driver to
-a point where everything worked as before, and after that start
-improving the driver. That's why I was hoping to hear does the problem
-that you are seeing go away with that approach.
+C1: bmRequestType (device to host, vendor, interface)
+A1: nas magic number
+0002: wValue (2: nas interface)
+0005: wIndex (5: get extended property i.e. nas interface GUID)
+008E: wLength (142)
 
-With which command do you guys get the busy notification?
+The fix was tested on Windows 10 and Windows 11.
 
-In any case, I don't think all those ucsi_*_common() functions give us
-enough room to move here. I feel that the command execution needs to
-be refactored somehow again.
+Fixes: ec6ce70 ("usb: gadget: composite: fix OS descriptors w_value logic")
+Signed-off-by: Michal Vrastil <michal.vrastil@hidglobal.com>
+---
+ drivers/usb/gadget/composite.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.=
+c
+index 17ae3b394469..a3106b179562 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1925,7 +1925,7 @@ composite_setup(struct usb_gadget *gadget, const stru=
+ct usb_ctrlrequest *ctrl)
+ 			buf[5] =3D 0x01;
+ 			switch (ctrl->bRequestType & USB_RECIP_MASK) {
+ 			case USB_RECIP_DEVICE:
+-				if (w_index !=3D 0x4 || (w_value & 0xff))
++				if (w_index !=3D 0x4 || (w_value >> 8))
+ 					break;
+ 				buf[6] =3D w_index;
+ 				/* Number of ext compat interfaces */
+@@ -1941,9 +1941,9 @@ composite_setup(struct usb_gadget *gadget, const stru=
+ct usb_ctrlrequest *ctrl)
+ 				}
+ 				break;
+ 			case USB_RECIP_INTERFACE:
+-				if (w_index !=3D 0x5 || (w_value & 0xff))
++				if (w_index !=3D 0x5 || (w_value >> 8))
+ 					break;
+-				interface =3D w_value >> 8;
++				interface =3D w_value & 0xFF;
+ 				if (interface >=3D MAX_CONFIG_INTERFACES ||
+ 				    !os_desc_cfg->interface[interface])
+ 					break;
+--=20
+2.43.0
 
--- 
-heikki
 
