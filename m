@@ -1,191 +1,132 @@
-Return-Path: <linux-usb+bounces-14636-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14637-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E19C96B937
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 12:51:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11A8B96BB67
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 14:00:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3B441F26C68
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 10:51:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C22B1284BF5
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 12:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 250E91D0145;
-	Wed,  4 Sep 2024 10:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nCv3HGcu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 176331D588F;
+	Wed,  4 Sep 2024 12:00:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4611865F0;
-	Wed,  4 Sep 2024 10:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548D21D094E
+	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 12:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725446972; cv=none; b=C5juyK3X6zZb/wr83WJvGLvEbBKqSHyk1GMZVdQi2PeW7uSkLo/sITOGaNnsw8OBdKj+0jY9IovWHrOGcZXSN7SQXgOPWdoMymWDrFpHfFJS6oK1AG65EOxWGowEl5KUjnOzHY+oif1TWngUZZn2tVcCJ4xqBvEGGoMqYBSx+x4=
+	t=1725451233; cv=none; b=J5tVrKNc/PilpYjqb9evzjOMemVH15Eq33iK4s+iNH7xPpBgW+FK/E8aUmZLApAVvZlk8aFQf8K5Vs7XLxqL6uqmnsBWwkNhiyqNSQ7sFymKpp2P5rUojFjn19gD8S4+YsVpqt0M5cw7GTy/ohjjHH4RSt0n+MVI5M3vgoNzWUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725446972; c=relaxed/simple;
-	bh=0ijP+pVmbADabEuDyLRkpzrf3oC7O0FWuy5uCaOr28w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=XblxuVXS6qcPEB4V0cWTplOgFkg8GowqtX9iWmnz6SsP+8Qb7zd/whDiW72Sfn8DVk/rHIY2yTVXDk+kZa0AF/TSL+W0bqp7apoi+/uwgkRRspsIs19tUC/QjSJPrIrhTuLGbDliVe4W6yIcwWq0dQOCbAskyi6zgWl2Vyhhl/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nCv3HGcu; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4849h0Cb027357;
-	Wed, 4 Sep 2024 10:49:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	O98drQdkSode7+dkoFVrCnCB9AJPpOKGVsLRbhcDHbM=; b=nCv3HGcuEuQ5MVZ0
-	tjkiNhZftb32t6TpxlT7Yf4EYjLTqevForavP4tXAkDhNEJDc3uMLI90MSH3r8aP
-	0ioCg0lUgdvjKjGcMoqkTGzu3AXP1+0i36Nohf+4nLTVGtMryqFcGmKl4prHZToC
-	LTtzaOg4YDzPrkSu6L0QUgWcUbodJQmJxdWDW4nNrEiqln0VC4Gb0ejDQLrjl1Ft
-	ZjHET3JtgjwNtbsW5naDCwXM7E3LyLiM0ej9299h6CSGpXh6MfEtPspbvTGv7jsS
-	HFinAwl9hUPcpvkoc9hJgpUM0/Saly82gCkDFqAp8LG4RXVSSOw/ONStucM64x51
-	Yt6ujQ==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41bt672j4n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 10:49:22 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484AnLZn000395
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Sep 2024 10:49:21 GMT
-Received: from [10.217.219.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
- 03:49:14 -0700
-Message-ID: <b016abbb-7214-4892-b1d2-1bf3ba1b7560@quicinc.com>
-Date: Wed, 4 Sep 2024 16:19:12 +0530
+	s=arc-20240116; t=1725451233; c=relaxed/simple;
+	bh=LotsMZQLGbpgWtMdeUoqb0JoyeRU3z5VSU/DLHyC0zI=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=izVe2B9+rozgJzkWh3Il31zDpKpybQLwpa/ke1JQCsZKlLWuBTthktSw4WjgK3DlKhpZyv2dKXtN9nyQBDT4pYnLBmrM/tree/QN6Fhc4ac1VVliHOcHJNtGLAmSVhP8lJvJQ1X5ZnHCdIdhlqjIHw2eBiq4G8/EwsGoTAejDaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-39d5537a659so70385155ab.1
+        for <linux-usb@vger.kernel.org>; Wed, 04 Sep 2024 05:00:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725451230; x=1726056030;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IMKGNV1Sd2HPCALfxFpty/63gpdBjLmsdNKo0ZVwKxg=;
+        b=N7VKCp+1GSl/DdT4RN4N+a9LODykBpW/NARG5WFq4Bi7ITB8aL1IbHt2FiacoaWCCY
+         IfdzB9+bFGITN7k1xaJVXId+86YfrCGcLtp5zmcK7ux8oLJZbZYPI7mE34K/FC6GSDI2
+         QmhZD9cHepgzT6EluX+9PvLfvJCZgWUK7o8TW5SBSCEhw0/UPoxMD0qFOeTNwovdPF45
+         MMCLodSeHBQcXSem078WsEbOR5CdGdgQG7/XfX5C0SuMlWKfpU9gFLPhqx512VFnKDCF
+         zSB8AIpsb/fsQYzMEWJXmGupaEApjoh/MIVyESFMZV9ah9HWjuA2iCeO0KLZnqPRap6P
+         Q05g==
+X-Forwarded-Encrypted: i=1; AJvYcCWi3e+38Kjmy38MGL5fiuorz9FOgYFLK1mifxfCbsY2ScL88iKPTeqqRzOgPRSfvvao/PERtiLFN1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywsk1AYLbR8PJJql6XKTqKwks0YXL0Yu89XDHTscy3NFqkSFIp0
+	N7S3s/eYmjUvib+gK7wOXVw5IpZNbw4pGMIDtu1SYuGNanbz5PThfFk1dmDcbB8Xg0QA+Kj7jOx
+	B+mAxc8Iz2nf6WdmfZMJuNxxaU0qjWW6kgFPNo7C1L+t3j7V88DentO0=
+X-Google-Smtp-Source: AGHT+IF2e9Ikq8FWA1oMH4xBEJt3o/3R8XylN+cezKrpHRcejLcOKo7hZRPr2KlojXtIfD/E4gkC/JnyaZDsZVif9c1A1tqj7I1P
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Refine the logic for resizing Tx
- FIFOs
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jing Leng
-	<jleng@ambarella.com>, Felipe Balbi <balbi@kernel.org>,
-        Jack Pham
-	<quic_jackp@quicinc.com>,
-        "kernel@quicinc.com" <kernel@quicinc.com>,
-        "Wesley
- Cheng" <quic_wcheng@quicinc.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>,
-        Daniel Scally
-	<dan.scally@ideasonboard.com>,
-        Vijayavardhan Vennapusa
-	<quic_vvreddy@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20240903132917.603-1-quic_akakum@quicinc.com>
- <20240903221055.s4gu6actfbrkonmr@synopsys.com>
-Content-Language: en-US
-From: AKASH KUMAR <quic_akakum@quicinc.com>
-In-Reply-To: <20240903221055.s4gu6actfbrkonmr@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: R4vkwNhuaDIAm_x4aCxkuzty1zm6Uir0
-X-Proofpoint-GUID: R4vkwNhuaDIAm_x4aCxkuzty1zm6Uir0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-04_09,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409040081
+X-Received: by 2002:a05:6e02:b49:b0:39f:54d6:5597 with SMTP id
+ e9e14a558f8ab-39f54d657ebmr5705065ab.3.1725451229930; Wed, 04 Sep 2024
+ 05:00:29 -0700 (PDT)
+Date: Wed, 04 Sep 2024 05:00:29 -0700
+In-Reply-To: <000000000000407108061e0ed264@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a338d6062149eb22@google.com>
+Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak in usbtmc_write
+From: syzbot <syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Thinh,
+syzbot has found a reproducer for the following issue on:
 
-On 9/4/2024 3:41 AM, Thinh Nguyen wrote:
-> On Tue, Sep 03, 2024, Akash Kumar wrote:
->> The current logic is rigid, setting num_fifos to fixed values:
->>
->> 3 for any maxburst greater than 1.
->> tx_fifo_resize_max_num for maxburst greater than 6.
->> Additionally, it did not differentiate much between bulk and
->> isochronous transfers, applying similar logic to both.
->>
->> The new logic is more dynamic and tailored to the specific needs of
->> bulk and isochronous transfers:
->>
->> Bulk Transfers: Ensures that num_fifos is optimized by considering
->> both the maxburst value and the maximum allowed number of FIFOs.
->>
->> Isochronous Transfers: Ensures that num_fifos is sufficient by
->> considering the maxburst value and the maximum packet multiplier.
->>
->> This change aims to optimize the allocation of Tx FIFOs for both bulk
->> and isochronous endpoints, potentially improving data transfer
->> efficiency and overall performance.
->> It also enhances support for all use cases, which can be tweaked
->> with DT parameters and the endpoint’s maxburst and maxpacket.
->>
->> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
->> ---
->> Changes for v2:
->> Redefine logic for resizing tx fifos.
->>
->> Changes for v1:
->> Added additional condition to allocate tx fifo for hs isoc eps,
->> keeping the other resize logic same.
->> ---
->>   drivers/usb/dwc3/gadget.c | 15 ++++++---------
->>   1 file changed, 6 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 89fc690fdf34..49809a931104 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -778,15 +778,12 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
->>   
->>   	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
->>   
->> -	if ((dep->endpoint.maxburst > 1 &&
->> -	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
->> -	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
->> -		num_fifos = 3;
->> -
->> -	if (dep->endpoint.maxburst > 6 &&
->> -	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
->> -	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
->> -		num_fifos = dwc->tx_fifo_resize_max_num;
->> +	if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
->> +		num_fifos = min_t(unsigned int, dep->endpoint.maxburst + 1,
->> +				  dwc->tx_fifo_resize_max_num);
->> +	if (usb_endpoint_xfer_isoc(dep->endpoint.desc))
->> +		num_fifos = max_t(unsigned int, dep->endpoint.maxburst,
->> +				  usb_endpoint_maxp_mult(dep->endpoint.desc));
-> No. Don't mix usb_endpoint_maxp_mult with maxburst like this. Check base
-> on operating speed. Also, now you're ignoring tx_fifo_resize_max_num for
-> isoc.
-Sure will add separate check based on speed.
+HEAD commit:    88fac17500f4 Merge tag 'fuse-fixes-6.11-rc7' of git://git...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12281339980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=35c699864e165c51
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1702531f980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=150dd8af980000
 
-We have to support three versions of CAM support through same dt and image
-SS/SS+ capable cam which needs 10k fifo
-HS cams which needs 3K
-multi UVC cams which needs 1k and 2k fifo
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6e5a9ba13ba0/disk-88fac175.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/229238ec073e/vmlinux-88fac175.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/64327bdcda24/bzImage-88fac175.xz
 
-Putting any dependency with tx_fifo_resize_max_num, we can't achieve 1k 
-and 10K,
-it has to be decided by maxbursts itself which user can configure.
-All uvc gadget applications supports configurable maxburst which they 
-use while opening,
-so it should be better for isoc eps to decide fifo based on maxbursts.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
 
-Thanks,
-Akash
+=====================================================
+BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x597/0x2350 drivers/usb/core/urb.c:430
+ usb_submit_urb+0x597/0x2350 drivers/usb/core/urb.c:430
+ usbtmc_write+0xc32/0x1220 drivers/usb/class/usbtmc.c:1606
+ vfs_write+0x493/0x1550 fs/read_write.c:588
+ ksys_write+0x20f/0x4c0 fs/read_write.c:643
+ __do_sys_write fs/read_write.c:655 [inline]
+ __se_sys_write fs/read_write.c:652 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:652
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:3994 [inline]
+ slab_alloc_node mm/slub.c:4037 [inline]
+ __kmalloc_cache_noprof+0x4f0/0xb00 mm/slub.c:4184
+ kmalloc_noprof include/linux/slab.h:681 [inline]
+ usbtmc_create_urb drivers/usb/class/usbtmc.c:757 [inline]
+ usbtmc_write+0x3d3/0x1220 drivers/usb/class/usbtmc.c:1547
+ vfs_write+0x493/0x1550 fs/read_write.c:588
+ ksys_write+0x20f/0x4c0 fs/read_write.c:643
+ __do_sys_write fs/read_write.c:655 [inline]
+ __se_sys_write fs/read_write.c:652 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:652
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Byte 15 of 16 is uninitialized
+Memory access of size 16 starts at ffff88810bce7000
+
+CPU: 0 UID: 0 PID: 5229 Comm: syz-executor195 Not tainted 6.11.0-rc6-syzkaller-00026-g88fac17500f4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+=====================================================
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
