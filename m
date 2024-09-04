@@ -1,92 +1,91 @@
-Return-Path: <linux-usb+bounces-14671-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14672-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7569196CAB8
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 01:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BB4E96CADF
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 01:40:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B4FC1F28553
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 23:10:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C67751F2857C
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 23:40:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C6617BECA;
-	Wed,  4 Sep 2024 23:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB08918592C;
+	Wed,  4 Sep 2024 23:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AsMmucNb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BECF1714B2
-	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 23:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AD117C9B9;
+	Wed,  4 Sep 2024 23:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725491404; cv=none; b=JcH34TIEQnGG8Hcoi1iyJN0KRRXSab9fAXAVw4TqJrHNUicRe8qXcdHizUrmwLtZ3IFlr+8DDqPZ5PorPpRYfoLPr6Qqv/0mfQsUp6BSbMYpDUxZx6mVE+E1qEwXf4p5uArFiCqnK5VgeVc+gW+9ehl3+R+52fcqPNb52/Fkl08=
+	t=1725493234; cv=none; b=J3jUYKrcYW/znfsmjgbiYT4z1atO090SYqgJkUjlWoXRezYIhUS9OrfGyRQscOnYSsyLdcSPRbFhPwbS3r8fdhkKR29t8G0EIiE6BBM0HE9PnHTkLTHj2nGs+HAFduQGATxBJZO6UjW3EzizKo2hUIhRqsZ8pNKI7nrIgIoGBA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725491404; c=relaxed/simple;
-	bh=XDCEXeZjDEgTsnaKTeQtn71nPRiCuzPxvN7L3apD7zM=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=LdFLSj+D6nGhXaSFauAcvz2Duu8XnNkqO+7sOfpBu//uPxP+VrY1UVa4I9a4lT/Jd/PWdtMWPC7GQLU/0iK8l6YjW6EinVgXHSJOIUqzIaBWuPlbCK2C+io1Tv/DrQTcoHQH1injeBM+7cQg6ilgSiiqZbTBViCxitRWD34LBmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-82a20631362so26831139f.0
-        for <linux-usb@vger.kernel.org>; Wed, 04 Sep 2024 16:10:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725491402; x=1726096202;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/ho66xjoxyTrQbP+mTI+/BUPw0B7PvrXhsz5eATbiE=;
-        b=MWJ2V12ULgPhJDX/+7haTCu1Sg2l+8dfb+z34QPZmjktRqI0isHb9z77BTyb64dSBX
-         ylOsfPbK3AslHwAfbtnF5esv61tUJaMWYa8TKD3d37Dvsc6wNFDAZHgqpO7UNpobfFFu
-         9TdFhl1x2lvwYWRymCq6V92ch7SSpqiBrPRf0kblQgICQNkEPzkpOnaESEeMNyPG/HeP
-         IYqazCTgLYY2Q6H2gkYGMVW/Ez8ptvzEsH4/mnrtYnAStduxIXwmGG4W7Ubl/FhlJR6l
-         jVJlKkVbLiPeOB9aSWu85JmEKeJAyfg9eAn5CSoTldbWTeLyvJWAVuWuXbUzdWLBwRlS
-         +Tkw==
-X-Forwarded-Encrypted: i=1; AJvYcCXV17znPJRjzsUIyWi/5t2MuI0+R/QMUJzkONQKDQyhhOwc3WHRRd8brXEi1kwNrmrZ3mZZV9sLYTk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw01qNPjym41uQWOIx7xdi9JvLsvTK+mXJ/OEemC/FLU4KmU33p
-	RqOrBqvmP+BKx7pOXHO+QRwWiSKqbiGWCf7ps0aULV4ZcgSTTazXBtl7AWUj9oB1nxr5Gfx5kts
-	+inpt6+vUNndgvgRKfPKNioGPk7We331g2zmJLa96JJkRdyTa081sfBw=
-X-Google-Smtp-Source: AGHT+IF39j2FjCLuhwIJ0BNVL6jmyKTmWOhxtJQqyLt7DgNe2elxCC9qyWzmlJYlUL4s4JpA3pYrwBl05j2I9Gogjz8+/FjhZjrn
+	s=arc-20240116; t=1725493234; c=relaxed/simple;
+	bh=zVSb90sLTNYgIoTPRnjs98ty8wxs/c8jl0LH1KH+cxU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rVBRkSx9b63cZDUw7F5/EDGp/NcYV0x0TGOoxvmFY7+4ppt5PPM40GGBUnJJjvjilA/hNxZaglw6cP6oXGEECOlhe8mwpc2ShLygqxp0YSw4txQY+VEDH4Uye2WPlWBU5CXQKQ2pM2KD2BesAdAr/We68G2iuHRHRuMljpi2M/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AsMmucNb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A353CC4CEC2;
+	Wed,  4 Sep 2024 23:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725493233;
+	bh=zVSb90sLTNYgIoTPRnjs98ty8wxs/c8jl0LH1KH+cxU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=AsMmucNbnUzbTODOvRhIecAG+xRFIIaayTq2R4J5vLbjcNMWQUd5INsTwrXENXGT+
+	 xqiKvs8w1n9qweXST6roo8k9CNp7ZgTxppm4IrCTIsoR9f3wfJqTaxZ3H/bo6UP9iE
+	 nsYyMBr9GQF3Sqwo9HJiJymLtK3O9A99oD+LTOM9gIJCk5egYZEUo81hzNLktm2DDE
+	 28I9njCahOXNPGDdcPEbLc9G5dM85ENgLjOvSdLvCNaj5wiuFL0kWNXQPFDxpeGYYp
+	 qdsskIiTBPeBh438Nde7a86ihs1DTgXB+BevUxvQg73GSpzt4hNnnIT0CkvlFKmmuS
+	 2KgwX2sd61zYQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE9163822D30;
+	Wed,  4 Sep 2024 23:40:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:f70c:0:b0:804:2f5b:9a40 with SMTP id
- ca18e2360f4ac-82a791e8ec7mr8073639f.1.1725491402614; Wed, 04 Sep 2024
- 16:10:02 -0700 (PDT)
-Date: Wed, 04 Sep 2024 16:10:02 -0700
-In-Reply-To: <0000000000008cec8b0619e97267@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001dc6ed062153467b@google.com>
-Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in __mod_timer (5)
-From: syzbot <syzbot+ab28cee83cdcfd7f87ca@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, rafael@kernel.org, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] r8152: fix the firmware doesn't work
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172549323425.1198891.7163852244083604728.git-patchwork-notify@kernel.org>
+Date: Wed, 04 Sep 2024 23:40:34 +0000
+References: <20240903063333.4502-1-hayeswang@realtek.com>
+In-Reply-To: <20240903063333.4502-1-hayeswang@realtek.com>
+To: Hayes Wang <hayeswang@realtek.com>
+Cc: kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Hello:
 
-commit 22f00812862564b314784167a89f27b444f82a46
-Author: Alan Stern <stern@rowland.harvard.edu>
-Date:   Fri Jun 14 01:30:43 2024 +0000
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-    USB: class: cdc-wdm: Fix CPU lockup caused by excessive log messages
+On Tue, 3 Sep 2024 14:33:33 +0800 you wrote:
+> generic_ocp_write() asks the parameter "size" must be 4 bytes align.
+> Therefore, write the bp would fail, if the mac->bp_num is odd. Align the
+> size to 4 for fixing it. The way may write an extra bp, but the
+> rtl8152_is_fw_mac_ok() makes sure the value must be 0 for the bp whose
+> index is more than mac->bp_num. That is, there is no influence for the
+> firmware.
+> 
+> [...]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14eb4cab980000
-start commit:   e0cce98fe279 Merge tag 'tpmdd-next-6.10-rc2' of git://git...
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b9016f104992d69c
-dashboard link: https://syzkaller.appspot.com/bug?extid=ab28cee83cdcfd7f87ca
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=126531d6980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12b27be6980000
+Here is the summary with links:
+  - [net] r8152: fix the firmware doesn't work
+    https://git.kernel.org/netdev/net/c/8487b4af59d4
 
-If the result looks correct, please mark the issue as fixed by replying with:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-#syz fix: USB: class: cdc-wdm: Fix CPU lockup caused by excessive log messages
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
