@@ -1,116 +1,106 @@
-Return-Path: <linux-usb+bounces-14642-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14644-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A917496BE93
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 15:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04A3696BF7E
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 16:02:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA754B23553
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 13:21:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06FF1B2815B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 14:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B221DA2FB;
-	Wed,  4 Sep 2024 13:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93A31DC057;
+	Wed,  4 Sep 2024 14:00:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoytOfnP"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Ao8YCVhO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77291DB553;
-	Wed,  4 Sep 2024 13:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5FE1EBFF7;
+	Wed,  4 Sep 2024 14:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725456039; cv=none; b=NlTG2J2JXwvk93Q2Tiknot+adIODuDh91bstEv5+p43TyW2eaX80/dkBEmXl66cOVav6O9xn+qoOfSWM7L+FGvQV6Nu03vy9lHDrgP0Eufn0DcpJIGyIb7zpOUoTGFhvUO3t3EM+cFTzNOjtQ5zL0thsMxxh2wYL4kDzm5+7vIg=
+	t=1725458459; cv=none; b=X1Kak6svIq2sl8DEWFyMhFdcBvQnUgZHHUE1z5vCV5iDsoXu8BPeuV20DpTNQ3OeBtEZs1UVm7fQbZ25cvoQTtnt3W4d5vRAVquhxVGuNHDiTCy60RaCby5GVOQUVrNZeLbGu6xR6WvAdUyYqITRGchcizjG9QBKRtZNq3eMjbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725456039; c=relaxed/simple;
-	bh=wXXMkNPHzyiaoOtekDBMY5Ahv9yc6m0RbCrnPUk2Y48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fz1Uh4vdlQs6y/6rdGI590giTuzzpNPTPUvqW+HHYMwT2h5+uIf+PVZ7sCsgYwmdWGFuq+WZWAu5apYxxSuFn9yye4segn5PQho8LaDPFO4PB9tiXMZyhndXfFEQ90eBtzDFWXV/U+rjdO0Yb6MsebK+aSr3B5ZgueirKCMPp1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoytOfnP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC1DC4CEC3;
-	Wed,  4 Sep 2024 13:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725456038;
-	bh=wXXMkNPHzyiaoOtekDBMY5Ahv9yc6m0RbCrnPUk2Y48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OoytOfnPEfjkfIWoq07kolMUKOWCvfzVkVFXNgfirnWMZYWj9JpFbkzzcHGbCpMM8
-	 /IsE8vEtWed8ziutxbztS6VC5Z75s2lthQGgL9sO24VwGGKbU/2QI8Sdk0EuALQRDO
-	 Jb6iPMfchDkL6xeLk4a/SAeH9Qhe9GIViu233u1ey6fASYZQPQgOgxO4Vb3kIAUZlb
-	 PK8v/PdmPEqr5yIqAYhNAkLQ8coALLSXBGaYxmURSqpRbLUwFooDwanYnb5QA0YVYx
-	 n4pyqBWj0ee9Pbr9yJGyGUP6Jjjh8nQGCoSNcXcXSFQCu4/FC9M2N6ido6UvsnOs/5
-	 FM4fJrOnrJnsA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1slpwN-000000005Jx-3581;
-	Wed, 04 Sep 2024 15:20:55 +0200
-Date: Wed, 4 Sep 2024 15:20:55 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <Zthet0QqChgGWJAe@hovoldconsulting.com>
-References: <20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org>
- <20240829-x1e80100-ps8830-v1-2-bcc4790b1d45@linaro.org>
- <Zta6cBq881Ju7r7H@hovoldconsulting.com>
+	s=arc-20240116; t=1725458459; c=relaxed/simple;
+	bh=xabmwVwQUfF7rMm58x2oBZLhkCaDibSaetB+crQrpuw=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=OAs+FeZnF98rFPzAwgcv/nXK+k6qYnvghKH7OpsXlrXo0ewT2vXvWIn1DLYQnN8Mg7Df13pnoI1SU+QyR/xfkSHF7U6fPHJlOrqcxqoieWnOTdeMbDYlFJ5yH4C6jnIsAbTlecHwjnGUMnIjwNabBX6F95T+sKbmToPFA2OQq4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Ao8YCVhO; arc=none smtp.client-ip=203.205.221.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1725458145; bh=u37Twz/6bME7bbrSdnZ1lrczgEz+AGuUNz7vrUaLOGY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Ao8YCVhOGptzW/UDVf6kbJNdqb1SgEZuyO55LsdNVsBCzGwU87kiHrk8Ji7n3omTc
+	 4GZDONrUaya3Tjam/zZPWab+79NdUgg08eeVyR9udoKualnD3NrpVBKE4mM7x1DVSm
+	 hQmFFBRAzRSXZGAaJg0Au+WAFXOrXmJbRIfu6ZuU=
+Received: from pek-lxu-l1.wrs.com ([111.198.224.50])
+	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+	id DEA95858; Wed, 04 Sep 2024 21:55:42 +0800
+X-QQ-mid: xmsmtpt1725458142tvab6f9qa
+Message-ID: <tencent_088B2EF2AEE00C8AE7D706CCD2CBC6484906@qq.com>
+X-QQ-XMAILINFO: MtZ4zLDUQmWfH/lz9dc5MnQ75kPkxKWb7vHlAveeCNVyUoPreePdjTWxND4d0x
+	 +3xJEDSDvAdD4br0zdEcCOhjg5R2JKbL9la5I7ytqWxcrSjedjQH8n8aKFRCe2VHwgHP1rkBT7vH
+	 8bw8WlT1jnNqtkm5/gi9oDBPbSnTJofm0vLmLqVN+yDj9npcym/zCJdNH6spcaUC1nr+/Dl9Y+Cf
+	 1FpbmmX16HoG53mQj3UTN+nDNbgL8iGK8dYXAcs96JN1Hr/A2JwmO5fKLjnAJvx/X7IycteWkS81
+	 wdWnjMwpO5Hec6w2LfwcLdCSJQjtXIb9ofJKY4UVyAP6d0VSAf7APMI4hIYzTlXPZFNWbI+Usnb4
+	 wLZj8O3KXAIjtiBi98qo1l4Of2DkcyFfOKtEHuiemnyXuUe0BvrM3xZUIz3vMohB9XjbApDDctQq
+	 +MbJS021RFjjTh4ltyjh8GvgZ4wsEEl6gw2HafjClNwDoZDGCUjPaxycVJyAhKV2skAFwcAkTKyn
+	 wGnj76K7Eie3adxYN3F7KCX/qGWVN9DJ2BFaW+j8Ho3bF33asFrljRJVb/0NvyylFogJKnEUJp/k
+	 vm0jpzvgSJWcO9sqBA4F0XX3N/t4XxcFz/X97d95Vv6n7OWz4LITl0Dm7Kr+fyT2o4fX5UlDUJVE
+	 s7TOuglyrj4AL+xOkjZCUrVsY07AVNKFG1d6SuEO7ZfZJC8oPTRbtkYcdWHGqOOLvRPT8EPvr6mI
+	 /OSYXfbCvnnsvMqsvFTbZvKhsumxvTku2vk5FPk2dJ1nz7eghEBxR4YW31KMEjzYrEhq75S748fG
+	 vALLhULuV2H5iO8XmI4YWKjB97v6pTOsadh/2RwPPELRjyitFxd0muIXDvDfwgCpIOD3UmiUc96C
+	 8HrTtSRtYS5ht4ejcxWDVDD+uRXMiuCxNQTu0RJ5NaW7BIRsDTt81/hTcy6oYUzgU/KWMnO2V28E
+	 sqvd+Xbh0=
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+Cc: gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH] USB: usbtmc: prevent kernel-infoleak
+Date: Wed,  4 Sep 2024 21:55:43 +0800
+X-OQ-MSGID: <20240904135542.4178115-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <000000000000a338d6062149eb22@google.com>
+References: <000000000000a338d6062149eb22@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zta6cBq881Ju7r7H@hovoldconsulting.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 03, 2024 at 09:27:45AM +0200, Johan Hovold wrote:
-> On Thu, Aug 29, 2024 at 09:44:26PM +0300, Abel Vesa wrote:
-> > The Parade PS8830 is a Type-C muti-protocol retimer controlled over I2C.
-> > It provides both altmode and orientation handling.
-> > 
-> > Add a driver with support for the following modes:
-> >  - DP 4lanes
-> >  - USB3
-> >  - DP 2lanes + USB3
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+The syzbot reported a kernel-usb-infoleak in usbtmc_write,
+we need to clear the structure before filling fields.
 
-> > +	retimer->supplies[0].supply = "vdd33";
-> > +	retimer->supplies[1].supply = "vdd18";
-> > +	retimer->supplies[2].supply = "vdd15";
-> 
-> vdd115?
-> 
-> > +	retimer->supplies[3].supply = "vcc";
+Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
+Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+ drivers/usb/class/usbtmc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I took a look at the schematics and it seems like all but one of the
-above supply names are wrong and that some are missing. "vcc" also does
-not exist in either the binding or dt patches you sent separately.
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index 6bd9fe565385..e9ddaa9b580d 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -759,6 +759,7 @@ static struct urb *usbtmc_create_urb(void)
+ 		usb_free_urb(urb);
+ 		return NULL;
+ 	}
++	memset(dmabuf, 0, bufsize);
+ 
+ 	urb->transfer_buffer = dmabuf;
+ 	urb->transfer_buffer_length = bufsize;
+-- 
+2.43.0
 
-From what I can tell the supplies are:
-
-	vdd		1.15 V
-	vdd33		3.3 V
-	vdd33_cap	3.3 V
-	vddat		1.15 V
-	vddar		1.15 V
-	vddio		1.8 V
-
-Also, have you checked that there are no ordering constraints between
-the supplies?
-
-Johan
 
