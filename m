@@ -1,95 +1,134 @@
-Return-Path: <linux-usb+bounces-14626-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14627-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E54BE96B09D
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 07:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A02AB96B10C
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 08:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23E8D1C239E2
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 05:44:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3DF71C2061D
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 06:10:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2797983CD9;
-	Wed,  4 Sep 2024 05:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1BF84E0A;
+	Wed,  4 Sep 2024 06:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xy/9NIem"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="XTrLsKM5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58B85B1E0
-	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 05:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1EF84A5E;
+	Wed,  4 Sep 2024 06:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725428690; cv=none; b=lQDghFCAuzgKYlr5BwVYBAfIDxfmnJtQcVbDnoly15xrdJ8QzjWAVVDI9E/mXyeRTN4vGDprl6ZED9I8eKHwkJtVLx6ATU7/1AuiL3LG1Oj09OWAY2HkQE1B86PpJRubqy/VWiQLE3U1TT9PIUWKTOLzZfVdcDkhl3w9fW8SvCk=
+	t=1725430252; cv=none; b=VcSLG/NcJKMJeFARcX2soowSJYfJ7Qtw+xZhI8bImA/1DQM6FyPPiIJUSCLiS0+wIPPjicrJhlGbO8DYyjfAdgRATYnAAcEBV/2B0yKiqsTzQm0RK45xAJQYdhJz0WBbX0J2cUgVllbZ3Co6Nkf5+zBX56W835nijle5REZM9WQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725428690; c=relaxed/simple;
-	bh=zjjzgPcvtiUl1JZS24cU/u9iIyO1cNZU3RDyYFpGuGs=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SSabIe+Jc2UYTpIPkGCJfFLo0J3I7rVv1D9gLvKhD47fmOJAYkFJkdvjcEwbL8wbN3uvilQ/vYa35lwbmRjqn4HQsPIntnRpZhMGUWl4tOdoUzRsN9SOqVRJ9awNOXoHl4u9cu/a1XmxvOOE/ZPLLKpC/nVvXQIoy+PdFxsRURc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xy/9NIem; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2AEC8C4CEC9
-	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 05:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725428690;
-	bh=zjjzgPcvtiUl1JZS24cU/u9iIyO1cNZU3RDyYFpGuGs=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Xy/9NIemHQHaD2U+mH8ah7v4s3JsTHPJK9yXjpDA4CwUm15aKFexVGtR508E1hNkg
-	 H4O7znzZXre0A6SJkTDDkuZD7iksSdqvOAKLjsIKC3hoT0gxVoEY7CB4SXe3o4az47
-	 9BCrJIxV5ZiH5RygFqfLBtdeXwmTKayKmxQyRUV9yxDOC8swvsvigvUAfNNrlCHD4y
-	 UH3HN1v6Qrj/vQrooyaqyJZNSMY2Q8flRQnQuc/srAOSnQM5FIYX7nlMUBZcyoou6R
-	 FD6RJQee2fCsFhqDpFNmj7gbECRtRS5SixS2i1HlKXn3+/CJWliyIcVf7mcnfc1xi6
-	 vacOFw0r9xmNg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1FF56C53BBF; Wed,  4 Sep 2024 05:44:50 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
-Date: Wed, 04 Sep 2024 05:44:49 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: adamw@happyassassin.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219198-208809-WFOdWVZOQM@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
-References: <bug-219198-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1725430252; c=relaxed/simple;
+	bh=tT5xdBKyAffEoJ3EwqkwtBD3YsRNv2Iggt63GrMvxts=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZvbHUQ2nfm+u+R6HbY2DkUGp9zy00LmbNCnSaAe/ViuwgIg1RNWgCmm82cvbOM2tx/H+FWw9ve2qyimcb/VyHEjgc69e5vXL7pxaov0xZ2eq/neysbu/TUdxOB5O6gPPXAeb8uyqEVOA19xI3TZci2LjztvJawi4Jn83w44X7T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=XTrLsKM5; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.123.3] (kenny-tx.gotdns.com [162.196.229.233])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4WzBtq0SM9zy3Q;
+	Wed,  4 Sep 2024 02:10:42 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1725430243; bh=tT5xdBKyAffEoJ3EwqkwtBD3YsRNv2Iggt63GrMvxts=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=XTrLsKM5n1UYh+vbloCJEIJXYoDOXZgopen7ej2JiPNkMkeI0w3jhDeowEOel/Hqu
+	 zIFmHJqf+bL8XMpWxDEX8WTUGC5uca90py5nvoVrrdGZkoA/BkAnQPtBXZxVAYgDe5
+	 XSQTZg8vbGTqCJF8aw1Urma5CuAXuh1pEnfJf10Y=
+Message-ID: <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
+Date: Tue, 3 Sep 2024 23:10:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
+ Thunderbolt additions when coming out of suspend or hibernate
+To: Lukas Wunner <lukas@wunner.de>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>, linux-usb@vger.kernel.org
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Kenneth Crudup <kenny@panix.com>
+References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
+ <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
 
---- Comment #30 from Adam Williamson (adamw@happyassassin.net) ---
-Because there was a parallel - actually somewhat earlier - discussion on a
-mailing list that led to that patch:
-https://lore.kernel.org/linux-iommu/20240814162726.5efe1a6e.alex.williamson=
-@redhat.com/
-. (no, Alex Williamson is not me, though we get each other's email quite a =
-lot.
-:>)
+... or, maybe not. Turns out that sometimes my system can't suspend 
+(just hangs, spinning hard somewhere based on the heat and the fans) 
+when plugged into a Thunderbolt dock at the time of suspend.
 
---=20
-You may reply to this email to add a comment.
+-K
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+On 8/30/24 12:52, Kenneth Crudup wrote:
+> 
+> Huh. So I checked out Linus' master (currently up to 6.11-rc5) and it 
+> seems to be doing the right thing now; I left a USB-C ALT monitor setup 
+> plugged in when I suspended, then came back to my 4K monitor setup via 
+> TB and it came up in the right resolution and everything.
+> 
+> Excellent news, so I'll keep using Linus' master until 6.11 is released.
+> 
+> Oh, and to answer your question, no, my system doesn't (perceptively) 
+> wake up when suspended if I connect/disconnect USB/TB cables.
+> 
+> ... and unfortunately all I have now is (power-hungry) s0ix sleep.
+> 
+> -Kenny
+> 
+> On 8/25/24 20:06, Lukas Wunner wrote:
+>> [cc += Mika, linux-usb]
+>>
+>> On Wed, Aug 21, 2024 at 03:05:59PM -0700, Kenneth Crudup wrote:
+>>> Subject says it all, but to recap my laptop doesn't detect Thunderbolt
+>>> topology changes when resuming or coming out of hibernate; i.e., the 
+>>> only
+>>> time a TB topology change happens is if a TB cable is disconnected while
+>>> suspended or hibernated, but if one is connected, or a different TB 
+>>> setup
+>>> altogether is connected when the system resumes it doesn't notice the
+>>> topology change until I disconnect and reconnect.
+>>>
+>>> I'm currently running 6.10.6, but this has been going on for a while.
+>>>
+>>> [    0.000000] DMI: Dell Inc. XPS 9320/0KNXGD, BIOS 2.12.0 04/11/2024
+>>> ...
+>>> [    0.136807] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P 
+>>> (family:
+>>> 0x6, model: 0x9a, stepping: 0x3)
+>>
+>> This commit went into v6.11-rc1 and will at least detect replacement
+>> of PCI devices (to a certain extent):
+>>
+>> https://git.kernel.org/linus/9d573d19547b
+>>
+>> However PCI is layered on top of (tunneled through) the Thunderbolt
+>> switching fabric and that's where the real problem likely is here.
+>>
+>> Maybe you can open a bug at bugzilla.kernel.org and attach full dmesg
+>> and lspci -vvv output in the working case (device attachment at runtime)
+>> and the non-working case (device attachment during system sleep).
+>>
+>> Does the machine wake up if you attach devices during system sleep?
+>> Are you suspending to ACPI S0ix, S3 or S4?
+>>
+>> Thanks,
+>>
+>> Lukas
+>>
+> 
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
