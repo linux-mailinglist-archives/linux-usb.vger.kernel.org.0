@@ -1,146 +1,97 @@
-Return-Path: <linux-usb+bounces-14624-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14625-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 051D396B083
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 07:31:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33F8D96B09C
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 07:42:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3843E1C20F3E
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 05:31:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC6881F25769
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 05:42:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7038D83CD2;
-	Wed,  4 Sep 2024 05:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D3B83CD2;
+	Wed,  4 Sep 2024 05:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=elrest.cz header.i=@elrest.cz header.b="jyz/vs//"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gI72ZSwi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.cesky-hosting.cz (smtp.cesky-hosting.cz [91.239.200.238])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630301EC00B;
-	Wed,  4 Sep 2024 05:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.239.200.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624815B1E0
+	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 05:42:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725427894; cv=none; b=Na3Lk5NEwDJ/r82Au2IP0r2gBAhXuihaj+1Dvk7X6PP9cT5T4UCTEWvJmO6zVpTCb32iohh973tCLfohj56IffuLrF+KjRDD8Zek4+qPWP7mcc8sTvoRrRm5kXkDMQ0kGe/4gZ3FzQcioIn/cnbU753nheDOoV/UwUqIWC40hvE=
+	t=1725428553; cv=none; b=KNpm4zDExJFkq96EwFmYwsJJ/jEax2MqTA4EvTjxyCwSC6gA/cTdsSCJEo7P36Wfii3LmFkaXf/C3lufhWOc9actUT4ZPOpvXVmnn77z/IjiMRIP3cmZFXHIctpHkSaMTi0n9xDDwv/WTdiBpglSiSus5Qt7m7fXYrLqZpEUTeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725427894; c=relaxed/simple;
-	bh=VG1kmKAti+Ow7R45ux9a8XtBf5InNjSs75jykWkNvpM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aPqaZpRBz/IR00nJDP+1wlf9B0sNVKTWy2NBXVsd/wK/FW+NmpWb+3pPPbH+XkZDEa83E6D1g5lnVtHxRDZufqEoeyFT1YzYAgF3Z2rPxyRqLU7u8iosGfLdU9w2XR7Cm8OVtUTeWO8jyq9wvifxvgcyEMKNrLUYDd9r1HOSB6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=elrest.cz; spf=pass smtp.mailfrom=elrest.cz; dkim=pass (2048-bit key) header.d=elrest.cz header.i=@elrest.cz header.b=jyz/vs//; arc=none smtp.client-ip=91.239.200.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=elrest.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=elrest.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=elrest.cz;
-	s=rampa2-202408; t=1725427885;
-	bh=VG1kmKAti+Ow7R45ux9a8XtBf5InNjSs75jykWkNvpM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jyz/vs//N11Tu2e2Z84Oh9cSGr3/TZRJ0p2T54zcG6ww/dZ4mAQPOM0ILXbsH4eay
-	 LL43XnlO2OtyhNeRa82AR+F6HV4ArppSKY0IdLOSYRfgY4YOyuZPaPFBSyfwy+i4rY
-	 7anT/upHB1/NJMpHdpRQvrectCX3wok3NG+MrYeuilfnDvbfclpT0XAFMQVxCrxTW1
-	 ZKkxkKg8FcgWnHWVYRFjFltcoNv7uB7armDymM4R/BjltLuXRW6PXTcY2DjupiIAyb
-	 s+hzTCt/3Cui1ZamSoZgODGgw8JyyKXEQNbe+X21fU4Z+SDTElAj3VEc9Ia+4cd1Mz
-	 YcFAT9Ty5Hhhw==
-X-Virus-Scanned: Debian amavis at smtp.cesky-hosting.cz
-X-Thin-Conversation: conversation
-Received: from f902c60e4871 (unknown [185.63.98.16])
-	(Authenticated sender: tomas.marek@elrest.cz)
-	by smtp.cesky-hosting.cz (Postfix) with ESMTPSA id 4WzB1T0GrnzM2;
-	Wed,  4 Sep 2024 07:31:24 +0200 (CEST)
-Date: Wed, 4 Sep 2024 07:30:52 +0200
-From: Tomas Marek <tomas.marek@elrest.cz>
-To: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: hminas@synopsys.com, gregkh@linuxfoundation.org,
-	Arthur.Petrosyan@synopsys.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, oleg.karfich@wago.com
-Subject: Re: [PATCH] usb: dwc2: drd: fix clock gating on USB role switch
-Message-ID: <20240904053052.GA8@f902c60e4871>
-References: <20240903094156.6516-1-tomas.marek@elrest.cz>
- <a2ea1fa0-645d-2a16-f396-797e5b96fd45@omp.ru>
+	s=arc-20240116; t=1725428553; c=relaxed/simple;
+	bh=SB5/d2fpyA/4SkDospA9TNshZ1chhJCyMDIJdbtf6y4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AFCialE4q6ZfNnjPz3WSBq0B6i67YS7JWGNbsXayCKnc8cCa/vEHLEqPeDsjCW++mCjrbN3ALZOu4/ywMoADu8mPMgG1NxtzaeiLFYgX8g4KwrYYhqVBE6ETKobDUQ7gqgwqjrcSEs998v7+tr+pAOwMFDeVZZ5TWayAh+idm30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gI72ZSwi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 005E2C4CEC8
+	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 05:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725428552;
+	bh=SB5/d2fpyA/4SkDospA9TNshZ1chhJCyMDIJdbtf6y4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=gI72ZSwiESOS8+Ti0o1jw5ygCQmEmLoyAYaOMPG1MyonaCzj53vw2mX3x4ge3DVGU
+	 CTOpTzBqxE7z82KEvtagftJq1wj0/1d62RXQGzHE/2vGZXwbBtdNZFJ3ebX9Ectd+/
+	 Sgg16h/Nlh5qR18xO6GaT3ySWZ2pa767B714MDhtmOV7ZNxBPbovfE+MS1WyjKAKQt
+	 eMduYy92NjVIWsl0yjalY/yFsKccHtIa2l57lw9rESKBUgs6JC4s/QrhYeaozHGxBS
+	 R9QRV7b0SDh3LUpDIyWbv3/S3825h/pp3IAGISbdZ36qBNIQhl4+WCc1pQoej8378e
+	 eU6jMx5cSfJaA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E92D4C53BC7; Wed,  4 Sep 2024 05:42:31 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219198] usb on Dell WD19TB Thunderbolt Dock stop working
+Date: Wed, 04 Sep 2024 05:42:31 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219198-208809-1piPYiMwXJ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219198-208809@https.bugzilla.kernel.org/>
+References: <bug-219198-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a2ea1fa0-645d-2a16-f396-797e5b96fd45@omp.ru>
-User-Agent: Mutt/1.5.23 (2014-03-12)
 
-Hi Sergey,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219198
 
-thank you for your review.
+--- Comment #29 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de=
+) ---
+For the record, that seems to be commit 7af6c720417f (iommu/vt-d: Fix incor=
+rect
+domain ID in context flush helper) [1]. No idea, why neither this bug report
+URL nor Markus is mentioned in the patch.
 
-On Tue, Sep 03, 2024 at 04:20:26PM +0300, Sergey Shtylyov wrote:
-> On 9/3/24 12:41 PM, Tomas Marek wrote:
-> 
-> > The dwc2_handle_usb_suspend_intr() function disables gadget clocks in USB
-> > peripheral mode when no other power-down mode is available (introduced by
-> > commit 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")).
-> > However, the dwc2_drd_role_sw_set() USB role update handler attempts to
-> > read DWC2 registers if the USB role has changed while the USB is in suspend
-> > mode (when the clocks are gated). This causes the system to hang.
-> > 
-> > Release gadget clocks before handling the USB role update.
-> > 
-> > Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")
-> > 
-> > Signed-off-by: Tomas Marek <tomas.marek@elrest.cz>
-> > ---
-> >  drivers/usb/dwc2/drd.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-> > index a8605b02115b..ccb33cd1f04b 100644
-> > --- a/drivers/usb/dwc2/drd.c
-> > +++ b/drivers/usb/dwc2/drd.c
-> > @@ -127,6 +127,18 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
-> >  			role = USB_ROLE_DEVICE;
-> >  	}
-> >  
-> > +#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
-> > +	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
-> > +	if (dwc2_is_device_mode(hsotg)) {
-> 
->    Why not avoid #ifdef by doing e.g.:
-> 
-> 	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
-> 	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE) &&
-> 	     dwc2_is_device_mode(hsotg)) {
-> 
-> > +		if (hsotg->lx_state == DWC2_L2) {
-> > +			if (hsotg->params.power_down ==
-> > +			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
-> > +			    !hsotg->params.no_clock_gating)
-> 
->    Well, these *if*s are mergeable too... :-)
-> 
+[1]:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D7af6c720417f21f015f46baa33e182f349ddc93b
 
-OK, why not. In the end all conditions could be merged into one if statement like:
+--=20
+You may reply to this email to add a comment.
 
-	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
-	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
-	     dwc2_is_device_mode(hsotg) &&
-	     hsotg->lx_state == DWC2_L2 &&
-	     hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
-	     hsotg->bus_suspended &&
-	     !hsotg->params.no_clock_gating)
-		dwc2_gadget_exit_clock_gating(hsotg, 0);
-
-I’ll submit a new patch version with this modification.
-
-Best regards
-
-Tomas
-
-> > +				dwc2_gadget_exit_clock_gating(hsotg, 0);
-> > +		}
-> > +	}
-> > +#endif
-> > +
-> [...]
-> 
-> MBR, Sergey
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
