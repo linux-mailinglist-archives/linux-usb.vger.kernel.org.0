@@ -1,48 +1,53 @@
-Return-Path: <linux-usb+bounces-14643-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F1196BF62
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 15:59:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFBA596BFB5
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 16:09:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53FD8288572
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 13:59:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 889321F21C1C
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 14:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC581DC061;
-	Wed,  4 Sep 2024 13:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080341DA62C;
+	Wed,  4 Sep 2024 14:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="syPv7Q/2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 633FE144316;
-	Wed,  4 Sep 2024 13:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF2B1CCEFC;
+	Wed,  4 Sep 2024 14:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725458291; cv=none; b=W9z75NbgULhWFTyVxCNjf5iKeJzUL06908UdNVC0yHk2jrPDCdldydrd/s7n5ALWm4fsEus2QvAJ249pTHVmqFkodAdDs8YubxBv2XQ/zFwE2jsJLAJlXj9O5TQedvdOYlEH53owR6et/CHI0SXivcCXK0P/24w+Q54Zx5Ahgzc=
+	t=1725458959; cv=none; b=Wou6OEj6ro9f4NmxduU+M1mrPNRrB4NLQUmVLbeBSpV2aHV+/AD0ZndyJG7nceMmgfFuqGDrlHm8avW+Va8t4yyx3tB5Ef2rN8ldIwwfIMOsusDClxuKWoIPp3dFzhyJULh7y7V3AYWhWm7RhUB1G8W40fsq2W2rIcFL1LBXI9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725458291; c=relaxed/simple;
-	bh=YAplyYgWPO6E3YUZiymtzPbxWQuvUbJnGyWt94aPRRM=;
+	s=arc-20240116; t=1725458959; c=relaxed/simple;
+	bh=7JdnEjqz9jcNffdXfifGqMh2TR+LCih6AVd6xeSLJjs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q/S2pgdJE9l3Or6dBapNxNSg4co/VHEvAfZHG5tg6DagzzjtdNcSNK+pQKhuQvQzI/0NckMXbiLp/YeneeEa4mnhRW+3FEOD9fTXi52bDT3HV+2Ssnj5SWrkA7PGOojYsKwJHEVgpQ8by8USHtFdQKH973HeQM6Q/saSCMd4cTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 39C5D140551; Wed,  4 Sep 2024 15:58:05 +0200 (CEST)
-Date: Wed, 4 Sep 2024 15:58:05 +0200
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v3] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Message-ID: <ZthnbdKig//kPKgF@cae.in-ulm.de>
-References: <20240903181917.617400-1-lk@c--e.de>
- <ZthNkY4MEpUgw3We@kuha.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WcLFgSBSSKHyHPFg8aGF+1PQdy47GPqRh7Qmp8NTfrYmUDLa5kUs2PeOIZohFPuyO12bZI4Jon5MM1gNpTzX2fEtdWVo7sakbY2FYx7rEMrzcYVmFt7jrWxK9bEvD/Gx7keVSLNSgH00MJycZGmB2dS9QxUG8VAQdK17DDnmWOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=syPv7Q/2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 905C3C4CEC2;
+	Wed,  4 Sep 2024 14:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1725458959;
+	bh=7JdnEjqz9jcNffdXfifGqMh2TR+LCih6AVd6xeSLJjs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=syPv7Q/2L4WttlPYC9pvSqSskeSiWDL60iIiI9qKHllZD+ZFXdc6xtZppGkXdnYph
+	 Qu/csyCEGVA67T2LJfuMvEk/glrURZL7PoeM8CIvb6gI++SXNEIqlmkA1C8wL8A4ac
+	 rsl2+g0npRSbGYCbVmeVjS1+4SqdfNzTsP5YOfic=
+Date: Wed, 4 Sep 2024 16:09:15 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] USB: usbtmc: prevent kernel-infoleak
+Message-ID: <2024090430-revolving-unmindful-75b7@gregkh>
+References: <000000000000a338d6062149eb22@google.com>
+ <tencent_088B2EF2AEE00C8AE7D706CCD2CBC6484906@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -51,87 +56,46 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZthNkY4MEpUgw3We@kuha.fi.intel.com>
+In-Reply-To: <tencent_088B2EF2AEE00C8AE7D706CCD2CBC6484906@qq.com>
+
+On Wed, Sep 04, 2024 at 09:55:43PM +0800, Edward Adam Davis wrote:
+> The syzbot reported a kernel-usb-infoleak in usbtmc_write,
+> we need to clear the structure before filling fields.
+
+Really?
 
 
-Hi Heikki,
-
-On Wed, Sep 04, 2024 at 03:07:45PM +0300, Heikki Krogerus wrote:
-> On Tue, Sep 03, 2024 at 08:19:17PM +0200, Christian A. Ehrhardt wrote:
-> > If the busy indicator is set, all other fields in CCI should be
-> > clear according to the spec. However, some UCSI implementations do
-> > not follow this rule and report bogus data in CCI along with the
-> > busy indicator. Ignore the contents of CCI if the busy indicator is
-> > set.
-> > 
-> > If a command timeout is hit it is possible that the EVENT_PENDING
-> > bit is cleared while connector work is still scheduled which can
-> > cause the EVENT_PENDING bit to go out of sync with scheduled connector
-> > work. Check and set the EVENT_PENDING bit on entry to
-> > ucsi_handle_connector_change() to fix this.
-> > 
-> > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> > Bisected-by: Christian Heusel <christian@heusel.eu>
-> > Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-> > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > index 4039851551c1..540cb1d2822c 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -38,6 +38,10 @@
-> >  
-> >  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
-> >  {
-> > +	/* Ignore bogus data in CCI if busy indicator is set. */
-> > +	if (cci & UCSI_CCI_BUSY)
-> > +		return;
 > 
-> I started testing this and it looks like the commands never get
-> cancelled when the BUSY bit is set. I don't think this patch is the
-> problem, though. I think the BUSY handling broke earlier, probable in
-> 5e9c1662a89b ("usb: typec: ucsi: rework command execution functions").
+> Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
+> Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
+> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> ---
+>  drivers/usb/class/usbtmc.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> I need to look at this a bit more carefully, but in the meantime, can
-> you try this:
-> 
-> 	if (cci & UCSI_CCI_BUSY) {
-> 		complete(&ucsi->complete);
-> 		return;
->         }
+> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+> index 6bd9fe565385..e9ddaa9b580d 100644
+> --- a/drivers/usb/class/usbtmc.c
+> +++ b/drivers/usb/class/usbtmc.c
+> @@ -759,6 +759,7 @@ static struct urb *usbtmc_create_urb(void)
+>  		usb_free_urb(urb);
+>  		return NULL;
+>  	}
+> +	memset(dmabuf, 0, bufsize);
 
-I really don't think this is the correct thing to do and it will
-likely make things worse.
+To do this simpler, kzmalloc() above this would be nice.
 
-A notification with the UCSI_CCI_BUSY bit does _not_ mean that
-the controller is busy doing other things and cannot complete the
-command.
+But, this feels odd, where is the data leaking from?  This is used for
+both the read and write path, but where is the leak happening?  A short
+read?  If so, we need to properly truncate the buffer being sent to
+userspace and not send the unread data.  If a short write, that makes no
+sense.
 
-Instead it is an indication that the controller _is_ working to
-complete our command but will take somewhat longer:
+So this needs a bit more work, please find the real issue here and don't
+paper over the problem with "set it all to 0" like this.
 
-Citing:
-| Note: If a command takes longer than MIN_TIME_TO_RESPOND_WITH_BUSY ms
-|       for the PPM (excluding PPM to OPM communication latency) to complete,
-|       then the PPM shall respond to the command by setting the CCI Busy
-|       Indicator and notify the OPM.
-|       Subsequently, when the PPM actually completes the command, the
-|       PPM shall notify the OPM of the outcome of the command via an
-|       asynchronous notification associated with that command.
+thanks,
 
-Unless I misunderstand what you are trying to do your change would
-cause us to needlessly abort/cancel every command that takes more than
-MIN_TIME_TO_RESPOND_WITH_BUSY to complete.
-
-What am I missing?
-
-Best regards,
-Christian
-
+greg k-h
 
