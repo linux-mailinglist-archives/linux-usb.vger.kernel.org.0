@@ -1,132 +1,171 @@
-Return-Path: <linux-usb+bounces-14637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11A8B96BB67
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 14:00:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 516C996BBAE
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 14:10:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C22B1284BF5
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 12:00:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D019B1F24DAD
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2024 12:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 176331D588F;
-	Wed,  4 Sep 2024 12:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7815F1DB936;
+	Wed,  4 Sep 2024 12:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P3VQFYR3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548D21D094E
-	for <linux-usb@vger.kernel.org>; Wed,  4 Sep 2024 12:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168811DB54F;
+	Wed,  4 Sep 2024 12:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725451233; cv=none; b=J5tVrKNc/PilpYjqb9evzjOMemVH15Eq33iK4s+iNH7xPpBgW+FK/E8aUmZLApAVvZlk8aFQf8K5Vs7XLxqL6uqmnsBWwkNhiyqNSQ7sFymKpp2P5rUojFjn19gD8S4+YsVpqt0M5cw7GTy/ohjjHH4RSt0n+MVI5M3vgoNzWUY=
+	t=1725451553; cv=none; b=GorZM1XEG06lXF4/kfM3DO8gvAbJWm3KBSXJZdcISYTyUAPkNZlRAuFuwu3IpE+ic0EWHad/2H7DyS06jS+WmnSBQ3JK0qrC13oIyQPobPv2bC2eIJijgS2oSevPJSI+2dSOYcgehcYx2IcnWkp/YOgzI9KKDxsL+kExLZmKmkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725451233; c=relaxed/simple;
-	bh=LotsMZQLGbpgWtMdeUoqb0JoyeRU3z5VSU/DLHyC0zI=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=izVe2B9+rozgJzkWh3Il31zDpKpybQLwpa/ke1JQCsZKlLWuBTthktSw4WjgK3DlKhpZyv2dKXtN9nyQBDT4pYnLBmrM/tree/QN6Fhc4ac1VVliHOcHJNtGLAmSVhP8lJvJQ1X5ZnHCdIdhlqjIHw2eBiq4G8/EwsGoTAejDaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-39d5537a659so70385155ab.1
-        for <linux-usb@vger.kernel.org>; Wed, 04 Sep 2024 05:00:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725451230; x=1726056030;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IMKGNV1Sd2HPCALfxFpty/63gpdBjLmsdNKo0ZVwKxg=;
-        b=N7VKCp+1GSl/DdT4RN4N+a9LODykBpW/NARG5WFq4Bi7ITB8aL1IbHt2FiacoaWCCY
-         IfdzB9+bFGITN7k1xaJVXId+86YfrCGcLtp5zmcK7ux8oLJZbZYPI7mE34K/FC6GSDI2
-         QmhZD9cHepgzT6EluX+9PvLfvJCZgWUK7o8TW5SBSCEhw0/UPoxMD0qFOeTNwovdPF45
-         MMCLodSeHBQcXSem078WsEbOR5CdGdgQG7/XfX5C0SuMlWKfpU9gFLPhqx512VFnKDCF
-         zSB8AIpsb/fsQYzMEWJXmGupaEApjoh/MIVyESFMZV9ah9HWjuA2iCeO0KLZnqPRap6P
-         Q05g==
-X-Forwarded-Encrypted: i=1; AJvYcCWi3e+38Kjmy38MGL5fiuorz9FOgYFLK1mifxfCbsY2ScL88iKPTeqqRzOgPRSfvvao/PERtiLFN1s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywsk1AYLbR8PJJql6XKTqKwks0YXL0Yu89XDHTscy3NFqkSFIp0
-	N7S3s/eYmjUvib+gK7wOXVw5IpZNbw4pGMIDtu1SYuGNanbz5PThfFk1dmDcbB8Xg0QA+Kj7jOx
-	B+mAxc8Iz2nf6WdmfZMJuNxxaU0qjWW6kgFPNo7C1L+t3j7V88DentO0=
-X-Google-Smtp-Source: AGHT+IF2e9Ikq8FWA1oMH4xBEJt3o/3R8XylN+cezKrpHRcejLcOKo7hZRPr2KlojXtIfD/E4gkC/JnyaZDsZVif9c1A1tqj7I1P
+	s=arc-20240116; t=1725451553; c=relaxed/simple;
+	bh=SgmrCust3oEATibES8ZZVRSqeZ8VTNZXAxnvXuj1f0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V3hqPQDrZetCbsX4g8tp0orNV4bQtTL30XbvrMZdelUDYhKb3Cndna4/JofhEbist9qr+cmqQjPBuvhdHvsUN9qYEZnjYqQAqs4R2KdxAx/9bZsx/lTV19sQ5ymTnP27ayNMvDQ2rM5JSLsyhbDIxDKLaEFzn71qrJgiKnYfkaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P3VQFYR3; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725451552; x=1756987552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SgmrCust3oEATibES8ZZVRSqeZ8VTNZXAxnvXuj1f0Y=;
+  b=P3VQFYR3QSdMxWCuNpLkBOb2Xt/kXdtdA4cLba5temyEci7wPkANFXMS
+   VZdZmm8XpAxVKG+qkAtcTqhD7YrA3VfyLSnoyapqUaRfiy9Mtz7brWAyo
+   G2qRHKdWSi5w2bvJLknPybFU0vwswDUOj2jGzZJxTPW4JtoienbC7rJ6a
+   FemMNpULQFpGIp0hne7owRQY5fU/CpXKVyu+ZMexYj8si2rKg9ViDXCLP
+   Ky/Q56IjJpVCQD6y+onqQ+IDxYxSzY1NxmYjc6y6YFwoslQm5OZB2kcHw
+   5E+zYraxjiI2FOg3uk+lYLQxeJCZe9S2FyvxQQjOs8HLCb6h8qOyJBFL1
+   Q==;
+X-CSE-ConnectionGUID: Rmvvdao4Qzu0aPCiKnhK1Q==
+X-CSE-MsgGUID: +d1cOigpRtC1P/N43xSbeQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24268744"
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="24268744"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 05:05:51 -0700
+X-CSE-ConnectionGUID: rMHvMWCDTQGZhNO+g5vN3w==
+X-CSE-MsgGUID: B6XUC9GJQbSCo0+uCbo5xg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="96046651"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Sep 2024 05:05:47 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 07915AF3; Wed, 04 Sep 2024 15:05:45 +0300 (EEST)
+Date: Wed, 4 Sep 2024 15:05:45 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, Gary Li <Gary.Li@amd.com>,
+	Mario Limonciello <superm1@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	"open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	Daniel Drake <drake@endlessos.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH v5 2/5] PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in
+ pci_dev_wait()
+Message-ID: <20240904120545.GF1532424@black.fi.intel.com>
+References: <20240903182509.GA260253@bhelgaas>
+ <525214d1-793e-412c-b3b2-b7e20645b9cf@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b49:b0:39f:54d6:5597 with SMTP id
- e9e14a558f8ab-39f54d657ebmr5705065ab.3.1725451229930; Wed, 04 Sep 2024
- 05:00:29 -0700 (PDT)
-Date: Wed, 04 Sep 2024 05:00:29 -0700
-In-Reply-To: <000000000000407108061e0ed264@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a338d6062149eb22@google.com>
-Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak in usbtmc_write
-From: syzbot <syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <525214d1-793e-412c-b3b2-b7e20645b9cf@amd.com>
 
-syzbot has found a reproducer for the following issue on:
+Hi,
 
-HEAD commit:    88fac17500f4 Merge tag 'fuse-fixes-6.11-rc7' of git://git...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12281339980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=35c699864e165c51
-dashboard link: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1702531f980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=150dd8af980000
+On Tue, Sep 03, 2024 at 01:32:30PM -0500, Mario Limonciello wrote:
+> On 9/3/2024 13:25, Bjorn Helgaas wrote:
+> > On Tue, Sep 03, 2024 at 12:31:00PM -0500, Mario Limonciello wrote:
+> > > On 9/3/2024 12:11, Bjorn Helgaas wrote:
+> > > ...
+> > 
+> > > >     8) The USB4 stack sees the device and assumes it is in D0, but it
+> > > >     seems to still be in D3cold.  What is this based on?  Is there a
+> > > >     config read that returns ~0 data when it shouldn't?
+> > > 
+> > > Yes there is.  From earlier in the thread I have a [log] I shared.
+> > > 
+> > > The message emitted is from ring_interrupt_active():
+> > > 
+> > > "thunderbolt 0000:e5:00.5: interrupt for TX ring 0 is already enabled"
+> > 
+> > Right, that's in the cover letter, but I can't tell from this what the
+> > ioread32(ring->nhi->iobase + reg) returned.  It looks like this is an
+> > MMIO read of BAR 0, not a config read.
+> > 
+> 
+> Yeah.  I suppose another way to approach this problem is to make something
+> else in the call chain poll PCI_PM_CTRL.
+> 
+> Polling at the start of nhi_runtime_resume() should also work.  For the
+> "normal" scenario it would just be a single read to PCI_PM_CTRL.
+> 
+> Mika, thoughts?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6e5a9ba13ba0/disk-88fac175.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/229238ec073e/vmlinux-88fac175.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/64327bdcda24/bzImage-88fac175.xz
+I'm starting to wonder if we are looking at the correct place ;-) This
+reminds me that our PCIe SV people recently reported a couple of Linux
+related issues which they recommended to fix, and these are on my list
+but I'll share them because maybe they are related?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+First problem, and actually a PCI spec violation, is that Linux does not
+clear Bus Master, MMIO and IO space enables when it programs the device
+to D3 on runtime suspend path. It does so on system sleep path though.
+Something like below (untested) should do that:
 
-=====================================================
-BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x597/0x2350 drivers/usb/core/urb.c:430
- usb_submit_urb+0x597/0x2350 drivers/usb/core/urb.c:430
- usbtmc_write+0xc32/0x1220 drivers/usb/class/usbtmc.c:1606
- vfs_write+0x493/0x1550 fs/read_write.c:588
- ksys_write+0x20f/0x4c0 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __x64_sys_write+0x93/0xe0 fs/read_write.c:652
- x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index f412ef73a6e4..79a566376301 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -1332,6 +1332,7 @@ static int pci_pm_runtime_suspend(struct device *dev)
+ 
+ 	if (!pci_dev->state_saved) {
+ 		pci_save_state(pci_dev);
++		pci_pm_default_suspend(pci_dev);
+ 		pci_finish_runtime_suspend(pci_dev);
+ 	}
+ 
 
-Uninit was created at:
- slab_post_alloc_hook mm/slub.c:3994 [inline]
- slab_alloc_node mm/slub.c:4037 [inline]
- __kmalloc_cache_noprof+0x4f0/0xb00 mm/slub.c:4184
- kmalloc_noprof include/linux/slab.h:681 [inline]
- usbtmc_create_urb drivers/usb/class/usbtmc.c:757 [inline]
- usbtmc_write+0x3d3/0x1220 drivers/usb/class/usbtmc.c:1547
- vfs_write+0x493/0x1550 fs/read_write.c:588
- ksys_write+0x20f/0x4c0 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __x64_sys_write+0x93/0xe0 fs/read_write.c:652
- x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+The second thing is that Thunderbolt driver, for historical reasons,
+leaves the MSI enabled when entering D3. This too might be related. I
+think we can unconditionally disable it so below hack should do that
+(untested as well). I wonder if you could try if any of these or both
+can help here? Both of these issues can result unwanted events during D3
+entry as far as I understand.
 
-Byte 15 of 16 is uninitialized
-Memory access of size 16 starts at ffff88810bce7000
-
-CPU: 0 UID: 0 PID: 5229 Comm: syz-executor195 Not tainted 6.11.0-rc6-syzkaller-00026-g88fac17500f4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-=====================================================
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
+index dc1f456736dc..73b815fbbceb 100644
+--- a/drivers/thunderbolt/ctl.c
++++ b/drivers/thunderbolt/ctl.c
+@@ -659,12 +659,11 @@ struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, int index, int timeout_msec,
+ 	if (!ctl->frame_pool)
+ 		goto err;
+ 
+-	ctl->tx = tb_ring_alloc_tx(nhi, 0, 10, RING_FLAG_NO_SUSPEND);
++	ctl->tx = tb_ring_alloc_tx(nhi, 0, 10, 0);
+ 	if (!ctl->tx)
+ 		goto err;
+ 
+-	ctl->rx = tb_ring_alloc_rx(nhi, 0, 10, RING_FLAG_NO_SUSPEND, 0, 0xffff,
+-				   0xffff, NULL, NULL);
++	ctl->rx = tb_ring_alloc_rx(nhi, 0, 10, 0, 0, 0xffff, 0xffff, NULL, NULL);
+ 	if (!ctl->rx)
+ 		goto err;
+ 
 
