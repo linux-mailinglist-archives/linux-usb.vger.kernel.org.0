@@ -1,93 +1,130 @@
-Return-Path: <linux-usb+bounces-14674-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14675-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66F2D96CC20
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 03:14:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E9996CD97
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 06:10:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C4421F278B6
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 01:14:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 469C11C228AB
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 04:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF5CC9450;
-	Thu,  5 Sep 2024 01:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B19BE14F11E;
+	Thu,  5 Sep 2024 04:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="NpoyBOQx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB43EAFA
-	for <linux-usb@vger.kernel.org>; Thu,  5 Sep 2024 01:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E3614BFB0;
+	Thu,  5 Sep 2024 04:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725498843; cv=none; b=la4yeZaE8yB4zFL2jZyXoT1iOKohCkeoqmcsf7IYMdwsv2MovISDywckKQbNdWxVTVnTFB++TFerpaccuH1fWHoRj8oWodWFXDIkga8vxymsPLZNlyjRMvgGq2EummctzKXxEgeM96LIRQ1fUyl0yX++RbC6XLOynsakAod0CRo=
+	t=1725509407; cv=none; b=PtrwS/GXZvoD2JayeC5fl8fPYaBXQSS4ItVpCEXXbVt4mH2pQe2zItl5deaUPRRgFOHuZE+CZL9tza3gJ3H4IBsSkMer2uAtMidMjV1Ij25fWos1wYKaTnmQW/koAoXDGtx5oC1Il6rWrso1GwwttN9qLc50En1Yr7pu7G8/Mfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725498843; c=relaxed/simple;
-	bh=qw2qZjvRCEZ+LclXMbZaNnI5HPRAPg4nv2w9MyZyTjs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=edkqObRNZa1IP/lLc2iqeHeouEGeGssxwaVAQU5mMd1DFYa8qKzuBmpxcDZARm7Dg1IgfKny3liTi3wqbssyZOfJK55WAhIJd0vmUZ1uGIUxBuVuEdY3i1SnUfAwOwtwcdFSav8pATUielx4+bgF1dxQSVwkd0/AUiMW/5s0cYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WzhCW1y0KzfbXT;
-	Thu,  5 Sep 2024 09:11:51 +0800 (CST)
-Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id C4275140155;
-	Thu,  5 Sep 2024 09:13:58 +0800 (CST)
-Received: from [10.174.176.82] (10.174.176.82) by
- kwepemf500003.china.huawei.com (7.202.181.241) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 5 Sep 2024 09:13:57 +0800
-Message-ID: <5272b60e-37c7-4876-8e92-13c0c01dccbb@huawei.com>
-Date: Thu, 5 Sep 2024 09:13:57 +0800
+	s=arc-20240116; t=1725509407; c=relaxed/simple;
+	bh=G65og403rtSMdTteQVGCLcJapT90sVFDZwyL1ekh7NM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ccLTNWeKrSiGpV3rGvQY53CS+xY6j+sHOGbpD/pyacAcHaBSkEBs3FloHMWGcNzTijQSxuECgRTXv98ft+dcZrwfck0tHhnxwbE5sw1Uam4KhrDnCzmpUerXGHFMJ6vQ19bOi6CJiBR1hFBzJ2hOkMPD/LFDRA2HP3V4X6pJk7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=NpoyBOQx; arc=none smtp.client-ip=54.207.22.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1725509386;
+	bh=Wvfr2Y6nFS6ZVKiutKRs2eU7/DfVbTdIA2yJgUR7wMQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=NpoyBOQxqCjD9s8dGPMjCwXEOmMrGf63UHRvcd6LRoXZ2sYZ78QBBQay+J4Yr1RSp
+	 TblAuGUR1rrr1MqA4nNJXeuh1ZbHNchjG/V1/ZT481zPMM0XQ7sGbpC/QlaV5xXqJ0
+	 zbYSeiBFUhz64kv+lzTDEH846nh7GDrhVDfMzyeU=
+X-QQ-mid: bizesmtp91t1725509363tnx67fe2
+X-QQ-Originating-IP: jPbWgPxXdZG9YClnvv/RtHcDOKMmFYN1H9EF+2bSNno=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 05 Sep 2024 12:09:21 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 10599983041081818894
+From: WangYuli <wangyuli@uniontech.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org,
+	sergei.shtylyov@gmail.com,
+	helgaas@kernel.org,
+	yuzenghui@huawei.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	guanwentao@uniontech.com,
+	WangYuli <wangyuli@uniontech.com>,
+	Chen Baozi <chenbaozi@phytium.com.cn>,
+	Wang Zhimin <wangzhimin1179@phytium.com.cn>,
+	Chen Zhenhua <chenzhenhua@phytium.com.cn>,
+	Wang Yinfeng <wangyinfeng@phytium.com.cn>,
+	Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Subject: [PATCH v4] usb: xHCI: add XHCI_RESET_ON_RESUME quirk for Phytium xHCI host
+Date: Thu,  5 Sep 2024 12:09:16 +0800
+Message-ID: <2C1FDC3BB34715BE+20240905040916.63199-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] usb: dwc3: Use helper function devm_clk_get_enabled()
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: <patchwork@huawei.com>, <Thinh.Nguyen@synopsys.com>,
-	<shawnguo@kernel.org>, <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
-	<festevam@gmail.com>, <linux-usb@vger.kernel.org>, <vz@mleia.com>,
-	<stern@rowland.harvard.edu>
-References: <20240902123020.29267-1-zhangzekun11@huawei.com>
- <20240902123020.29267-2-zhangzekun11@huawei.com>
- <2024090400-enforced-unmarked-eea8@gregkh>
-From: "zhangzekun (A)" <zhangzekun11@huawei.com>
-In-Reply-To: <2024090400-enforced-unmarked-eea8@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemf500003.china.huawei.com (7.202.181.241)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
+The resume operation of Phytium Px210 xHCI host would failed
+to restore state. Use the XHCI_RESET_ON_RESUME quirk to skip
+it and reset the controller after resume.
 
+Co-developed-by: Chen Baozi <chenbaozi@phytium.com.cn>
+Signed-off-by: Chen Baozi <chenbaozi@phytium.com.cn>
+Co-developed-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
+Signed-off-by: Wang Zhimin <wangzhimin1179@phytium.com.cn>
+Co-developed-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
+Signed-off-by: Chen Zhenhua <chenzhenhua@phytium.com.cn>
+Co-developed-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
+Signed-off-by: Wang Yinfeng <wangyinfeng@phytium.com.cn>
+Co-developed-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Signed-off-by: Jiakun Shuai <shuaijiakun1288@phytium.com.cn>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+Changlog:
+ *v1 -> v2: Move the PCI_VENDOR_ID_PHYTIUM form pci_ids.h to xhci-pci.c
+  v2 -> v3: Change "||" to "&&", that was a mistake.
+  v3 -> v4: Correct the commit-msg format.
+---
+ drivers/usb/host/xhci-pci.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-在 2024/9/4 16:49, Greg KH 写道:
-> On Mon, Sep 02, 2024 at 08:30:19PM +0800, Zhang Zekun wrote:
->> devm_clk_get() and clk_prepare_enable() can be replaced by helper
->> function devm_clk_get_enabled(). Let's use devm_clk_get_enabled() to
->> simplify code and avoid calling clk_disable_unprepare().
->>
->> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
-> 
-> Also, have you tested that this actually works?  using devm can have
-> tricky sync issues when shutting down so I'm going to start requiring
-> that any conversions like this be proven to work properly on real
-> hardware.
-> 
-> thanks,
-> 
-> greg k-h
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index b5705ed01d83..bfb8f0699475 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -55,6 +55,9 @@
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
+ 
++#define PCI_VENDOR_ID_PHYTIUM		0x1db7
++#define PCI_DEVICE_ID_PHYTIUM_XHCI			0xdc27
++
+ /* Thunderbolt */
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
+ #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
+@@ -407,6 +410,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	if (pdev->vendor == PCI_VENDOR_ID_VIA)
+ 		xhci->quirks |= XHCI_RESET_ON_RESUME;
+ 
++	if (pdev->vendor == PCI_VENDOR_ID_PHYTIUM &&
++	    pdev->device == PCI_DEVICE_ID_PHYTIUM_XHCI)
++		xhci->quirks |= XHCI_RESET_ON_RESUME;
++
+ 	/* See https://bugzilla.kernel.org/show_bug.cgi?id=79511 */
+ 	if (pdev->vendor == PCI_VENDOR_ID_VIA &&
+ 			pdev->device == 0x3432)
+-- 
+2.43.4
 
-Hi, greg,
-
-I make a compile test and have not test on a real hardware. I have read 
-through the code logic but did not find a obvious problem.
-
-Best Regards,
-Zekun
 
