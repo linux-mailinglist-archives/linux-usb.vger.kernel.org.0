@@ -1,293 +1,136 @@
-Return-Path: <linux-usb+bounces-14706-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14707-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E692D96DAD2
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 15:50:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B41F796DB08
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 16:03:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 170AB1C2376E
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 13:50:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 688B71F273CF
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 14:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E9519D899;
-	Thu,  5 Sep 2024 13:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B07D19DF73;
+	Thu,  5 Sep 2024 14:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K0+EaZcm"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="EooB0z4b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F9E19B589
-	for <linux-usb@vger.kernel.org>; Thu,  5 Sep 2024 13:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8392419D063;
+	Thu,  5 Sep 2024 14:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725544239; cv=none; b=UjSk9VOduS9vXj4HA+ZfzoCMNNZMxWkU/8G4OGV2XpEi3PsPq9fLc+CCSZ6I4LJamTAPKRJ8qS7BAmVHJZNZ/0fyZ7xmZrFoGnQPryh6APyIS0KUSSDHi9xWDaizZWwtSD0vqqw+E2XTQrP9PCyn371QwQzoJW/vsYgVTCQId+M=
+	t=1725545003; cv=none; b=a4wMRaYKxq4BujfMFkhbGRih+AnafO+PwWw4e8lC5Y8q3sRBuc8C6bKo5bTFaPZ83bULK/cdteGVI0x3ZmiIQINIscN9ypAWWNI7IMJ0Wb/YXWD8RTHS6dSh3BhzgasoZYTEM/JWIkA9GpoghL1AI/LB0j3fflmJ1dn0M6PCyfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725544239; c=relaxed/simple;
-	bh=puLgy12sWloq2rGuZrVjUwWBj7qYs7i29Fd0ulYnQTQ=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=d3sxozIJjduThxKvp4fnIhMatFx8uVU3VBqHQowu6b/e+H+jnge9sfW0jojPYW/pzwHaGkxkAk4DnRREqqNFFIz4JQ6LPBn06y+YB0vkuYyvM7pmSiacmJ1MH9EJwIqhFm4wsXfESvW9JsFkBgJdkQgxKmQ2bGEKJEQpDqTIQhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K0+EaZcm; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725544238; x=1757080238;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to;
-  bh=puLgy12sWloq2rGuZrVjUwWBj7qYs7i29Fd0ulYnQTQ=;
-  b=K0+EaZcmJ5nD0z+fE893NBmxuDlckrZGv1PeBhkVfSmGZ4h+ElBs1ObP
-   FnaZfie7eGzzzQKH0WAcxPwuWBM6wh5Uzycn1+hMSIjOV5Alwj8SznOeU
-   DhznWOV885AkEU3kZlkCfL21U9KDc/DEF8xLZOyeWwFdedPcBuZLEBOvi
-   c7wRXP8UkMy8Rxkn+2s4Ili9duda/a1K39jPo5cszHtlgV0wbnscDBLdr
-   ZivH1ssIpsFgxyNt75mBoMwJp81LioOheulLdv2sML4ufKnDI9Q01bM2D
-   v/D2OysV45xXi+xgqt4sk6+mVgRpGZt7yR0tJd6OaGtD+WpgSF1cBgvqj
-   Q==;
-X-CSE-ConnectionGUID: L4KTMgyeSgix10CH0Nn02Q==
-X-CSE-MsgGUID: D1vzYJy+Swub21fPWK/mVw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="41763650"
-X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208,223";a="41763650"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 06:50:37 -0700
-X-CSE-ConnectionGUID: w9E8PCBjQGmS7/GsemiEcg==
-X-CSE-MsgGUID: bSrvSJN3QQ6asXQReKUYag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208,223";a="70219113"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa004.fm.intel.com with ESMTP; 05 Sep 2024 06:50:36 -0700
-Content-Type: multipart/mixed; boundary="------------BhpMM4pGuBIqa30YlFTD00A0"
-Message-ID: <e16c21cd-41f3-4191-9957-6e61ddfefd24@linux.intel.com>
-Date: Thu, 5 Sep 2024 16:52:41 +0300
+	s=arc-20240116; t=1725545003; c=relaxed/simple;
+	bh=2PIdgmYCTQhpB3buDWDS+H+ZtKRl7MiH0GDhZc1dNx4=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=Hq6RZkIcdJGcF9/+rYNjsl944Jn7dZ7b3jvmZsWmF7+IejxP+Gpny01tfG8BWfp4YPFyvAiuHJiphF7Y/5Cuby747JRZiQaCp84+DE3x7amuo6LxCVMmVbM/nxMx98+G8DkuB29dlqHDC46qsrTPdiV7/lJAquuC+1FF+bwgVLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=EooB0z4b; arc=none smtp.client-ip=43.163.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1725544991; bh=XgohNXx97I0uptF7u5z6FP7cxt8HsRv5HFOo2nDId/Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=EooB0z4btVCd+UdkYFz+CojkMU+R57gdLgWF3BumFP+HPia81UY4EE4uy7BSWDHLC
+	 5yolGZsW++MDrrHb2zMzHC9a41cMaH7aBvjzntHPSyH5TXmcg+K2PzVR4H5JGD6qEO
+	 CHWAfoQTfhEPVK4B4rFtGf/IQ5+MGBky7tn9XqRI=
+Received: from pek-lxu-l1.wrs.com ([111.198.224.50])
+	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+	id E3528AA6; Thu, 05 Sep 2024 21:56:53 +0800
+X-QQ-mid: xmsmtpt1725544613tl2cxml02
+Message-ID: <tencent_70402C916F4897E0E81EEEEACE287B726D0A@qq.com>
+X-QQ-XMAILINFO: NhpLzBn2I3XwL71riNAFusPou+gQw+nHNV+5xQ2bOcVVBDKi4GP9+pS4PxjMnb
+	 pmy3XQgBqzjCJyIeP9gcXbUddXnTIGToWNoV8hbEsDkCvy7qTqsGyl67ygOJkrqGXXVvo+YFsRe3
+	 X297PrYTAIQCTlq+nluuxxtzGcBu/ZTxJPNPcyX2910F91xg0lWnx8QglCYfoCzMUM2asGn3v2Kl
+	 O58gZxOQX+ZB9cTJtIMj9MQj+Awmh8jSroLNEQBDAkH8h66I7PPYGuA9RX4zjFoSE1LGPvuMv2nw
+	 3ScyV6MD8jMtCQFhCzT8IPGmefyOUTkoVAJyDQG/jp2LXIwQTYf2uw3zINmqN1GQdrk0LHa1XR4w
+	 o+Njo7FdThg83C2WmNQiHk7ekJg2S/vrNZOeW9/JFKKiyg0B5ZSfjRKn6bhHI6ex3yuHTdK+PV5a
+	 VlY6iogn2/6SmjjYfAcLf9i3QM/dmghpKAHWLFmJigeo/SVqg6mS3eZg3qk4782LXI0Q3bsOesG2
+	 oPIFSs/zh9vnOkAKQN+pnv3NBtYcZq/iot4sXTPVxliuB34yTZQhNqHg0p1RmOcyv9CxUXOMor6z
+	 nvLLzKsrHG7emEskvigWydjWXcVwfg4OA7iji/uuhsiZ6VQLqvFhhvV+DepEQZurJtdJ6GPTZR/Q
+	 MjXJppo9a7dYckCiGCoPufiYy+w+pF0vjauuviPs5yOLrbQVLNNya8ZyxfBKfYuE9LRUkXYi4Zr9
+	 4G0hkIPUl9Mxon1+H1b7QTH/NFG26pnmmqRdgpor5XIFVhs725I3YijJvXzN+VC6mAp5240ZBcCZ
+	 lxtK8BL88cqIghTEKAaBTHMuU9pLSIuBpH9zBKNcteJqYN5ru5Jw2se3cGBP7dB5HcxffE+tj/HK
+	 zZvB9e9XpHEQETWDq9xsvkFXkVG+fHeGUfkfE4cKwCpcOhtrzQLq5xDF3hS/fyykmLFiH5ZjGHuB
+	 llEMq/vSp/f17qtjDOWZbNHjyh9pqZOKmflyBWwBM=
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+From: Edward Adam Davis <eadavis@qq.com>
+To: gregkh@linuxfoundation.org
+Cc: eadavis@qq.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] USB: usbtmc: prevent kernel-infoleak
+Date: Thu,  5 Sep 2024 21:56:53 +0800
+X-OQ-MSGID: <20240905135652.179197-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <2024090427-trident-delegator-0781@gregkh>
+References: <2024090427-trident-delegator-0781@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Strange issues with UAS URB cancellation
-To: Marc SCHAEFER <schaefer@alphanet.ch>
-Cc: Micha?? Pecio <michal.pecio@gmail.com>, linux-usb@vger.kernel.org
-References: <ZswP0+cLIqkTF0D/@alphanet.ch> <20240903094822.3ae297cb@foxbook>
- <ZtcHOlqlQMMD4LzY@alphanet.ch> <20240903152218.74393a9e@foxbook>
- <ZtcUGe0FWxpO6058@alphanet.ch> <ZtcUq37F6gqgzifm@alphanet.ch>
- <ZtcVXoI6jNM9Lqbl@alphanet.ch> <20240903174535.6e5e581b@foxbook>
- <ZtdmOiKN6hb2Y82I@alphanet.ch>
- <71c073de-8af5-4457-88eb-91a709c2d941@linux.intel.com>
- <ZtiMp39CWrI0e+GB@alphanet.ch>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <ZtiMp39CWrI0e+GB@alphanet.ch>
+Content-Transfer-Encoding: 8bit
 
-This is a multi-part message in MIME format.
---------------BhpMM4pGuBIqa30YlFTD00A0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 4.9.2024 19.36, Marc SCHAEFER wrote:
-> Hello,
+On Wed, 4 Sep 2024 16:13:03 +0200, Greg KH wrote:
+> On Wed, Sep 04, 2024 at 04:09:15PM +0200, Greg KH wrote:
+> > On Wed, Sep 04, 2024 at 09:55:43PM +0800, Edward Adam Davis wrote:
+> > > The syzbot reported a kernel-usb-infoleak in usbtmc_write,
+> > > we need to clear the structure before filling fields.
+> >
+> > Really?
+> >
+> >
+> > >
+> > > Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
+> > > Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+> > > Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
+> > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > > ---
+> > >  drivers/usb/class/usbtmc.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+> > > index 6bd9fe565385..e9ddaa9b580d 100644
+> > > --- a/drivers/usb/class/usbtmc.c
+> > > +++ b/drivers/usb/class/usbtmc.c
+> > > @@ -759,6 +759,7 @@ static struct urb *usbtmc_create_urb(void)
+> > >  		usb_free_urb(urb);
+> > >  		return NULL;
+> > >  	}
+> > > +	memset(dmabuf, 0, bufsize);
+> >
+> > To do this simpler, kzmalloc() above this would be nice.
+> >
+> > But, this feels odd, where is the data leaking from?  This is used for
+> > both the read and write path, but where is the leak happening?  A short
+> > read?  If so, we need to properly truncate the buffer being sent to
+> > userspace and not send the unread data.  If a short write, that makes no
+> > sense.
+A short write.
 > 
-> On Wed, Sep 04, 2024 at 05:26:28PM +0300, Mathias Nyman wrote:
->> I can start working on some debugging patches as well if you have the time to try
+> I looked at the report and this seems to be data sent to the device, so
+> somehow we aren't setting the length to send to the device correctly.
+The length of the data passed in by the user is 3 bytes, plus a TMC header
+length of 12 bytes and an additional 3 bytes. The actual length of the
+data sent to the device is 16 bytes((3 + 12 + 3)~3 = 16).
+
+Normally, when executing copy_from_user, the 3 bytes data passed in by
+the user is written after the TMC header, which initializes the first 15
+bytes of the 16 bytes. But it is not yet clear why the 15th byte is not
+initialized. The kernel data leaked to user space reported by Syzbot
+should be it.
+
 > 
-> Yes, with pleasure.  I often have time to recompile stuff, and I can leave the test
-> system running.
+> Good luck!
 
-Thanks, testpatch below, and also as attachment.
+BR,
+Edward
 
-8<---
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index efdf4c228b8c..b5f97f75a5ff 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1749,14 +1749,14 @@ static int xhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
-  
-         i = urb_priv->num_tds_done;
-         if (i < urb_priv->num_tds)
--               xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
--                               "Cancel URB %p, dev %s, ep 0x%x, "
--                               "starting at offset 0x%llx",
--                               urb, urb->dev->devpath,
--                               urb->ep->desc.bEndpointAddress,
--                               (unsigned long long) xhci_trb_virt_to_dma(
--                                       urb_priv->td[i].start_seg,
--                                       urb_priv->td[i].first_trb));
-+               xhci_warn(xhci,
-+                         "Cancel URB %p, dev %s, ep 0x%x, stream_id %u starting at offset 0x%llx",
-+                         urb, urb->dev->devpath,
-+                         urb->ep->desc.bEndpointAddress,
-+                         urb->stream_id,
-+                         (unsigned long long) xhci_trb_virt_to_dma(
-+                                 urb_priv->td[i].start_seg,
-+                                 urb_priv->td[i].first_trb));
-  
-         for (; i < urb_priv->num_tds; i++) {
-                 td = &urb_priv->td[i];
-(END)
-+       char str[XHCI_MSG_MAX];
-  
-         ep_index = TRB_TO_EP_INDEX(le32_to_cpu(trb->generic.field[3]));
-         stream_id = TRB_TO_STREAM_ID(le32_to_cpu(trb->generic.field[2]));
-@@ -1351,6 +1352,11 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
-         if (!ep_ring) {
-                 xhci_warn(xhci, "WARN Set TR deq ptr command for freed stream ID %u\n",
-                                 stream_id);
-+               xhci_warn(xhci, "MN: %s\n" ,
-+                            xhci_decode_trb(str, XHCI_MSG_MAX, le32_to_cpu(trb->generic.field[0]),
-+                                           le32_to_cpu(trb->generic.field[1]),
-+                                           le32_to_cpu(trb->generic.field[2]),
-+                                          le32_to_cpu(trb->generic.field[3])));
-                 /* XXX: Harmless??? */
-                 goto cleanup;
-         }
-@@ -1386,6 +1392,12 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
-                                         cmd_comp_code);
-                         break;
-                 }
-+               xhci_warn(xhci, "MN: %s\n",
-+                         xhci_decode_trb(str, XHCI_MSG_MAX, le32_to_cpu(trb->generic.field[0]),
-+                                         le32_to_cpu(trb->generic.field[1]),
-+                                         le32_to_cpu(trb->generic.field[2]),
-+                                         le32_to_cpu(trb->generic.field[3])));
-+
-                 /* OK what do we do now?  The endpoint state is hosed, and we
-                  * should never get to this point if the synchronization between
-                  * queueing, and endpoint state are correct.  This might happen
-@@ -2864,6 +2876,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
-                                         trb_comp_code);
-                                 trb_in_td(xhci, td, ep_trb_dma, true);
-  
-+                               if (xhci_halted_host_endpoint(ep_ctx, trb_comp_code)) {
-+                                       xhci_err(xhci, "MN: No TD found, fix halted ep");
-+                                       xhci_handle_halted_endpoint(xhci, ep, NULL, EP_HARD_RESET);
-+                               } else {
-+                                       xhci_err(xhci, "MN: No TD found, ep not halted");
-+                               }
-                                 return -ESHUTDOWN;
-                         }
-                 }
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index efdf4c228b8c..b5f97f75a5ff 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1749,14 +1749,14 @@ static int xhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
-  
-         i = urb_priv->num_tds_done;
-         if (i < urb_priv->num_tds)
--               xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
--                               "Cancel URB %p, dev %s, ep 0x%x, "
--                               "starting at offset 0x%llx",
--                               urb, urb->dev->devpath,
--                               urb->ep->desc.bEndpointAddress,
--                               (unsigned long long) xhci_trb_virt_to_dma(
--                                       urb_priv->td[i].start_seg,
--                                       urb_priv->td[i].first_trb));
-+               xhci_warn(xhci,
-+                         "Cancel URB %p, dev %s, ep 0x%x, stream_id %u starting at offset 0x%llx",
-+                         urb, urb->dev->devpath,
-+                         urb->ep->desc.bEndpointAddress,
-+                         urb->stream_id,
-+                         (unsigned long long) xhci_trb_virt_to_dma(
-+                                 urb_priv->td[i].start_seg,
-+                                 urb_priv->td[i].first_trb));
-  
-         for (; i < urb_priv->num_tds; i++) {
-                 td = &urb_priv->td[i];
-
---------------BhpMM4pGuBIqa30YlFTD00A0
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-xhci-Debug-patch-handle-halted-ep-if-TD-is-not-found.patch"
-Content-Disposition: attachment;
- filename*0="0001-xhci-Debug-patch-handle-halted-ep-if-TD-is-not-found.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
-
-RnJvbSBiZjdiYmY4ZGJmOTJkYzA2ZTEwOGExMDNmNWYwMWIzZjQxNjMzOWRhIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBNYXRoaWFzIE55bWFuIDxtYXRoaWFzLm55bWFuQGxp
-bnV4LmludGVsLmNvbT4KRGF0ZTogVGh1LCA1IFNlcCAyMDI0IDE2OjIwOjIyICswMzAwClN1
-YmplY3Q6IFtQQVRDSF0geGhjaTogRGVidWcgcGF0Y2g6IGhhbmRsZSBoYWx0ZWQgZXAgaWYg
-VEQgaXMgbm90IGZvdW5kLgoKQSBob3N0IHNpZGUgaGFsdGVkIGVuZHBvaW50IG1heSBub3Qg
-YmUgcmVjb3ZlcmVkIGlmIHRoZSBCYWJibGUgZXJyb3IKZXZlbnQgZG9lcyBub3QgcG9pbnQg
-dG8gYW55IHBlbmRpbmcgIHRyYW5mZXIgZGVzY3JpcHRvciAoVEQpLgoKSGFuZGxlIGhhbHRl
-ZCBlbmRwb2ludCBldmVudCBpZiB0cmFuc2ZlciBldmVudCBkb2VzIG5vdCBwb2ludCB0bwph
-bnkgcGVuZGluZyBURC4gVGhlIEJhYmJsZSBlcnJvciBtYXkgaGF2ZSBiZWVuIGZvciBhIFRE
-IHRoYXQgaGFzIGFscmVhZHkKYmVlbiBnaXZlbiBiYWNrLgoKQWtsc28gYWRkIGRlYnVpZ2dv
-aW5nIGZvciBUUkJfRVJST1IgaXNzdWVzIHNlZW4gd2hlbiBxdWV1aW5nIGEKU2V0IFRSIERl
-cSBwb2ludGVyIGNvbW1hbmQKClNpZ25lZC1vZmYtYnk6IE1hdGhpYXMgTnltYW4gPG1hdGhp
-YXMubnltYW5AbGludXguaW50ZWwuY29tPgotLS0KIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1y
-aW5nLmMgfCAyMCArKysrKysrKysrKysrKysrKysrLQogZHJpdmVycy91c2IvaG9zdC94aGNp
-LmMgICAgICB8IDE2ICsrKysrKysrLS0tLS0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgMjcgaW5z
-ZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9o
-b3N0L3hoY2ktcmluZy5jIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLXJpbmcuYwppbmRleCA0
-ZWEyYzNlMDcyYTkuLjRlZThiMmI0MmFjNSAxMDA2NDQKLS0tIGEvZHJpdmVycy91c2IvaG9z
-dC94aGNpLXJpbmcuYworKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcmluZy5jCkBAIC0x
-MDA4LDcgKzEwMDgsNyBAQCBzdGF0aWMgaW50IHhoY2lfaW52YWxpZGF0ZV9jYW5jZWxsZWRf
-dGRzKHN0cnVjdCB4aGNpX3ZpcnRfZXAgKmVwKQogCQkJCWlmIChjYWNoZWRfdGQpIHsKIAkJ
-CQkJaWYgKGNhY2hlZF90ZC0+dXJiLT5zdHJlYW1faWQgIT0gdGQtPnVyYi0+c3RyZWFtX2lk
-KSB7CiAJCQkJCQkvKiBNdWx0aXBsZSBzdHJlYW1zIGNhc2UsIGRlZmVyIG1vdmUgZHEgKi8K
-LQkJCQkJCXhoY2lfZGJnKHhoY2ksCisJCQkJCQl4aGNpX3dhcm4oeGhjaSwKIAkJCQkJCQkg
-Ik1vdmUgZHEgZGVmZXJyZWQ6IHN0cmVhbSAldSBVUkIgJXBcbiIsCiAJCQkJCQkJIHRkLT51
-cmItPnN0cmVhbV9pZCwgdGQtPnVyYik7CiAJCQkJCQl0ZC0+Y2FuY2VsX3N0YXR1cyA9IFRE
-X0NMRUFSSU5HX0NBQ0hFX0RFRkVSUkVEOwpAQCAtMTM0MCw2ICsxMzQwLDcgQEAgc3RhdGlj
-IHZvaWQgeGhjaV9oYW5kbGVfY21kX3NldF9kZXEoc3RydWN0IHhoY2lfaGNkICp4aGNpLCBp
-bnQgc2xvdF9pZCwKIAlzdHJ1Y3QgeGhjaV9zbG90X2N0eCAqc2xvdF9jdHg7CiAJc3RydWN0
-IHhoY2lfdGQgKnRkLCAqdG1wX3RkOwogCWJvb2wgZGVmZXJyZWQgPSBmYWxzZTsKKwljaGFy
-IHN0cltYSENJX01TR19NQVhdOwogCiAJZXBfaW5kZXggPSBUUkJfVE9fRVBfSU5ERVgobGUz
-Ml90b19jcHUodHJiLT5nZW5lcmljLmZpZWxkWzNdKSk7CiAJc3RyZWFtX2lkID0gVFJCX1RP
-X1NUUkVBTV9JRChsZTMyX3RvX2NwdSh0cmItPmdlbmVyaWMuZmllbGRbMl0pKTsKQEAgLTEz
-NTEsNiArMTM1MiwxMSBAQCBzdGF0aWMgdm9pZCB4aGNpX2hhbmRsZV9jbWRfc2V0X2RlcShz
-dHJ1Y3QgeGhjaV9oY2QgKnhoY2ksIGludCBzbG90X2lkLAogCWlmICghZXBfcmluZykgewog
-CQl4aGNpX3dhcm4oeGhjaSwgIldBUk4gU2V0IFRSIGRlcSBwdHIgY29tbWFuZCBmb3IgZnJl
-ZWQgc3RyZWFtIElEICV1XG4iLAogCQkJCXN0cmVhbV9pZCk7CisJCXhoY2lfd2Fybih4aGNp
-LCAiTU46ICVzXG4iICwKKwkJCSAgICAgeGhjaV9kZWNvZGVfdHJiKHN0ciwgWEhDSV9NU0df
-TUFYLCBsZTMyX3RvX2NwdSh0cmItPmdlbmVyaWMuZmllbGRbMF0pLAorICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxlMzJfdG9fY3B1KHRyYi0+Z2VuZXJp
-Yy5maWVsZFsxXSksCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgbGUzMl90b19jcHUodHJiLT5nZW5lcmljLmZpZWxkWzJdKSwKKwkgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIGxlMzJfdG9fY3B1KHRyYi0+Z2VuZXJpYy5maWVsZFsz
-XSkpKTsKIAkJLyogWFhYOiBIYXJtbGVzcz8/PyAqLwogCQlnb3RvIGNsZWFudXA7CiAJfQpA
-QCAtMTM4Niw2ICsxMzkyLDEyIEBAIHN0YXRpYyB2b2lkIHhoY2lfaGFuZGxlX2NtZF9zZXRf
-ZGVxKHN0cnVjdCB4aGNpX2hjZCAqeGhjaSwgaW50IHNsb3RfaWQsCiAJCQkJCWNtZF9jb21w
-X2NvZGUpOwogCQkJYnJlYWs7CiAJCX0KKwkJeGhjaV93YXJuKHhoY2ksICJNTjogJXNcbiIs
-CisJCQkgIHhoY2lfZGVjb2RlX3RyYihzdHIsIFhIQ0lfTVNHX01BWCwgbGUzMl90b19jcHUo
-dHJiLT5nZW5lcmljLmZpZWxkWzBdKSwKKwkJCQkJICBsZTMyX3RvX2NwdSh0cmItPmdlbmVy
-aWMuZmllbGRbMV0pLAorCQkJCQkgIGxlMzJfdG9fY3B1KHRyYi0+Z2VuZXJpYy5maWVsZFsy
-XSksCisJCQkJCSAgbGUzMl90b19jcHUodHJiLT5nZW5lcmljLmZpZWxkWzNdKSkpOworCiAJ
-CS8qIE9LIHdoYXQgZG8gd2UgZG8gbm93PyAgVGhlIGVuZHBvaW50IHN0YXRlIGlzIGhvc2Vk
-LCBhbmQgd2UKIAkJICogc2hvdWxkIG5ldmVyIGdldCB0byB0aGlzIHBvaW50IGlmIHRoZSBz
-eW5jaHJvbml6YXRpb24gYmV0d2VlbgogCQkgKiBxdWV1ZWluZywgYW5kIGVuZHBvaW50IHN0
-YXRlIGFyZSBjb3JyZWN0LiAgVGhpcyBtaWdodCBoYXBwZW4KQEAgLTI4NjQsNiArMjg3Niwx
-MiBAQCBzdGF0aWMgaW50IGhhbmRsZV90eF9ldmVudChzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ks
-CiAJCQkJCXRyYl9jb21wX2NvZGUpOwogCQkJCXRyYl9pbl90ZCh4aGNpLCB0ZCwgZXBfdHJi
-X2RtYSwgdHJ1ZSk7CiAKKwkJCQlpZiAoeGhjaV9oYWx0ZWRfaG9zdF9lbmRwb2ludChlcF9j
-dHgsIHRyYl9jb21wX2NvZGUpKSB7CisJCQkJCXhoY2lfZXJyKHhoY2ksICJNTjogTm8gVEQg
-Zm91bmQsIGZpeCBoYWx0ZWQgZXAiKTsKKwkJCQkJeGhjaV9oYW5kbGVfaGFsdGVkX2VuZHBv
-aW50KHhoY2ksIGVwLCBOVUxMLCBFUF9IQVJEX1JFU0VUKTsKKwkJCQl9IGVsc2UgeworCQkJ
-CQl4aGNpX2Vycih4aGNpLCAiTU46IE5vIFREIGZvdW5kLCBlcCBub3QgaGFsdGVkIik7CisJ
-CQkJfQogCQkJCXJldHVybiAtRVNIVVRET1dOOwogCQkJfQogCQl9CmRpZmYgLS1naXQgYS9k
-cml2ZXJzL3VzYi9ob3N0L3hoY2kuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5jCmluZGV4
-IGVmZGY0YzIyOGI4Yy4uYjVmOTdmNzVhNWZmIDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9o
-b3N0L3hoY2kuYworKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYwpAQCAtMTc0OSwxNCAr
-MTc0OSwxNCBAQCBzdGF0aWMgaW50IHhoY2lfdXJiX2RlcXVldWUoc3RydWN0IHVzYl9oY2Qg
-KmhjZCwgc3RydWN0IHVyYiAqdXJiLCBpbnQgc3RhdHVzKQogCiAJaSA9IHVyYl9wcml2LT5u
-dW1fdGRzX2RvbmU7CiAJaWYgKGkgPCB1cmJfcHJpdi0+bnVtX3RkcykKLQkJeGhjaV9kYmdf
-dHJhY2UoeGhjaSwgdHJhY2VfeGhjaV9kYmdfY2FuY2VsX3VyYiwKLQkJCQkiQ2FuY2VsIFVS
-QiAlcCwgZGV2ICVzLCBlcCAweCV4LCAiCi0JCQkJInN0YXJ0aW5nIGF0IG9mZnNldCAweCVs
-bHgiLAotCQkJCXVyYiwgdXJiLT5kZXYtPmRldnBhdGgsCi0JCQkJdXJiLT5lcC0+ZGVzYy5i
-RW5kcG9pbnRBZGRyZXNzLAotCQkJCSh1bnNpZ25lZCBsb25nIGxvbmcpIHhoY2lfdHJiX3Zp
-cnRfdG9fZG1hKAotCQkJCQl1cmJfcHJpdi0+dGRbaV0uc3RhcnRfc2VnLAotCQkJCQl1cmJf
-cHJpdi0+dGRbaV0uZmlyc3RfdHJiKSk7CisJCXhoY2lfd2Fybih4aGNpLAorCQkJICAiQ2Fu
-Y2VsIFVSQiAlcCwgZGV2ICVzLCBlcCAweCV4LCBzdHJlYW1faWQgJXUgc3RhcnRpbmcgYXQg
-b2Zmc2V0IDB4JWxseCIsCisJCQkgIHVyYiwgdXJiLT5kZXYtPmRldnBhdGgsCisJCQkgIHVy
-Yi0+ZXAtPmRlc2MuYkVuZHBvaW50QWRkcmVzcywKKwkJCSAgdXJiLT5zdHJlYW1faWQsCisJ
-CQkgICh1bnNpZ25lZCBsb25nIGxvbmcpIHhoY2lfdHJiX3ZpcnRfdG9fZG1hKAorCQkJCSAg
-dXJiX3ByaXYtPnRkW2ldLnN0YXJ0X3NlZywKKwkJCQkgIHVyYl9wcml2LT50ZFtpXS5maXJz
-dF90cmIpKTsKIAogCWZvciAoOyBpIDwgdXJiX3ByaXYtPm51bV90ZHM7IGkrKykgewogCQl0
-ZCA9ICZ1cmJfcHJpdi0+dGRbaV07Ci0tIAoyLjI1LjEKCg==
-
---------------BhpMM4pGuBIqa30YlFTD00A0--
 
