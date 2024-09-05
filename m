@@ -1,177 +1,309 @@
-Return-Path: <linux-usb+bounces-14684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14685-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89E5696CFCB
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 08:54:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A143796CFEA
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 09:02:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C41B283DC5
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 06:54:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C623F1C21916
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 07:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337551925BE;
-	Thu,  5 Sep 2024 06:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EAE5192B70;
+	Thu,  5 Sep 2024 07:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdg/jNFY"
+	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="T4u2gmig";
+	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="1P98VINV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09CCD1925AB;
-	Thu,  5 Sep 2024 06:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725519242; cv=none; b=rdnN7f7Nos4gOVyO3q5iz3H0P3CnBOcM7dxAORl18gjLI44yAT6XN0Mw0H5uLqJVtI677/LUdZtHGBCyFpugsioPiwzBniDQ18j1fzaC9q3rCpr64y8YlTGqEJtWeHArKPjbJUBSHlfNkMLmrR0u/BlRSAK5jHQopANUdApj37s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725519242; c=relaxed/simple;
-	bh=mZRLfsoTsU7RqYQ4BVH0C6KZId6ilapJ4zMKhdniZvg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pZKlfiLa27kSTfspzuG5aXHrwaNHc24vxAzBMfTbchAkWFSjbFv3s/ztWfUNpwCckh4D8oSXfmgRlyS9eRuOzXP6qdgq1Qmm3Kvp0zFzktQYzYX85T5vNXIJRa1NIBC9NGqqV7KndlDxju60aJedJ50fOF5ofqo59ANm0Fw3PZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdg/jNFY; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-374c7d14191so792543f8f.0;
-        Wed, 04 Sep 2024 23:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725519239; x=1726124039; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WCjj1MmwVfCqD13mxvraZ2zXL+q3ngdxrGAIeYR3F0g=;
-        b=cdg/jNFYVw/M7AwblonFdAVT4VECpP+242YoNYYQ7jZj1gjsG6O4DdQZTXGFnIwP4O
-         55gsUkLvX+qMw8Kdj/Eq/q+vBb13CM6bVjgF5CUVomIEFf11QNQ1gNSJD0oo5GXuIx0L
-         rhiHxp5g5lKENxnzmr1OBReD03QBZaHM7nHZL+nkprwQ431iGvz9unP9yxWN3QVcaRNI
-         k5aybipoW1do8tuN0kuUJ2xSiKq9DobJaKjEPJr3RQFrbpYmoVjFTFZ72uPVrEMkHv/v
-         fAiYMwbBZUcZzTQSlgoHvHeM7dG1NsmGvT31NPLq92Ico4HiD5A/DqeWZaWOT0Af2j+X
-         HhQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725519239; x=1726124039;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WCjj1MmwVfCqD13mxvraZ2zXL+q3ngdxrGAIeYR3F0g=;
-        b=aatyUhDdjR//D2p+w0pq+kuT1nQ7Ic6qCQVjVBbpp9hair8+K76ecEqhQei+btUH4E
-         At9Xjg0rt9/qgUvzQurov1F46ssyyXcZ+m4YO6pJ+6h7wre9gt2hEMCmgjcOXSZ1jCln
-         QqvLy+JwoUY2gBieEfp5oxwRfxdhL0lpL6Pv99w+c97XI+Bv5SytguhUsRRw0eS2bADy
-         41L7FufX2wAlJgvEL2z+x3QQpBT/fFWzUgkIDhS3m1cmUyleUQjluwPxUnoNHJHOLuDL
-         qixph4f3lBnSorl10nP9VsX3Dt/pS8iBFYzzwygT/ebWw03vtXWgeDivDwT5/0QaHICA
-         2myQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVd3WycqaI6O/ZyMvUs/Q0GTXkDmErqQ6c1VoC9cP2XdpZ8UNJaFwQPS4SYWYNyFIeuhiTM2GLvDhJDaks=@vger.kernel.org, AJvYcCXjfBbjMWivlFXbdXQr0EumBjMlt028LmRnfUMgXao6T8RPZ9AA+QZNurPDUgG+LU9PG9qf1sjDOofi@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjR/RwyElojECChnnozTL+G3Pk6M9iq2BtPD6UireogR+eWs6e
-	i9ZaY24AiC3NumKplu1g7AwukBM3phKJuv7sjJoY5FFmKbhrlkil4p2Z2Wzn
-X-Google-Smtp-Source: AGHT+IErccV2CysyHRgiNDDFiw4dBuj9LX2wPliTjWA6NMRCisM65fOVBshxyzcs0/IgTdNcQU1Yrw==
-X-Received: by 2002:a5d:440e:0:b0:374:cd15:c46c with SMTP id ffacd0b85a97d-3779a6129b6mr2562748f8f.15.1725519238869;
-        Wed, 04 Sep 2024 23:53:58 -0700 (PDT)
-Received: from partp-nb.corp.toradex.com (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3749efb14bfsm18421552f8f.104.2024.09.04.23.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 23:53:58 -0700 (PDT)
-From: Parth Pancholi <parth105105@gmail.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Parth Pancholi <parth.pancholi@toradex.com>
-Subject: [PATCH v2] usb: typec: tcpci: support edge irq
-Date: Thu,  5 Sep 2024 08:53:28 +0200
-Message-Id: <20240905065328.7116-1-parth105105@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2DA14D2B3;
+	Thu,  5 Sep 2024 07:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725519712; cv=fail; b=pU6y6kBrtkOmKB40FvvdVvYXr/I6rKAEFLU3VGBuOuQiCmn5l73I1uzrtA9tumEIWtBRyyLW3cfSOvALPQJ5ooq4DF9aoI1geJ/TgDee/FbBjPswIVgYEKYnrhnf/GLpzNjNQSwERMimFEazU663aj57uXNVsXMIdXzJbywXd2Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725519712; c=relaxed/simple;
+	bh=PcqrmKbu0DUNH3A+QKwO8dc2ydopc1rTjA5D1CfZ+k0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=MWyPYHVyKau/FCMSOCTnRInChYplgjFn7RYEbWtcgnvR41n9DOassK4cPSel5UNImwOfRY/xhZmhzvz+qdhdd+KaQUJzClKm+BXl4Oxx7GS6RSiOUkHBuXtxq4LD5sUh3jStJPlrVfgw5h0tnHj2CV/+7ZHskC3NvvoWURbwyoc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=T4u2gmig; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=1P98VINV; arc=fail smtp.client-ip=208.86.201.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+	by mx0b-0014ca01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484M0Z2o025324;
+	Thu, 5 Sep 2024 00:01:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=proofpoint;
+	 bh=OMl7bGZOIQhrWGDNvwDF1W+AqPyJQTeLY0wX+xCW1po=; b=T4u2gmigu8k6
+	ZD7R+PNHrsFimeI5OVYSM75u5IDw8EEeVl8pUfOuFyMR9LMIKwXSfhmVxTTogGHR
+	U0lwRt2UN+Vth4pwadugl68iSIgNpOwfUMxVGl2TWsN6wbAfh9fwsSaTL2nL+oZt
+	WHpAGJWXvwdg/Xz8QrrlYti0jsZzdQDu31yH6rzQvlo8b23h06SeyRd4U+PoSlf8
+	f79MWQVAagWLIIjKEZBXB9MGEqbI0zSVQdjmPagVB/XCVNxN9LDM7j0nUNrV9ACn
+	49qFWtJRbJQydFhnjTJ+J2xnk//REam6DhkaMGdXuXbVZdKYb6HRwMDUAH+y0Kw8
+	sG8KqAxutg==
+Received: from bn1pr04cu002.outbound.protection.outlook.com (mail-eastus2azlp17010005.outbound.protection.outlook.com [40.93.12.5])
+	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 41bxrvgxtc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Sep 2024 00:01:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=aY1ZZ6bpUHrzQkbDGmYf4nzDF0j1MXC8dcP5h9eGnRO7Lw6rh+2+NhCjQRvPkdLBnD9/FMpy+rCJNZCGUWDXa5Vg6ezBCmaCD4htQuh8N0gbTjECqVDUmk0oB5z7n5U5Cc+FPcjRaq5Xc2FN1CIe+EeACUZJ6Dp5ohT+swAKSE74f0WssAyZIDqeGtfZfizHsT7Xm4zyq3fVGe1diEYMVnP60/ThD2mJXrvUv5+w/kXcW6a8gtK8ePbs6N2UhgJ3F4SKd50QYFBJiZKWW5AtpDgBM7Pp5VzlOY8lk3IPUzkqFHfOB8JNm9Ffo3VlsfdnOHs+jQayz/GMwnLLKwa+pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OMl7bGZOIQhrWGDNvwDF1W+AqPyJQTeLY0wX+xCW1po=;
+ b=qYUVJ291avO1P6C4pQsrO1d4qMJwBJK8PURz6OGa7G5bsL12wnGrAEQPgjPqtBN3hvBNF6e5WaKfGvPHpMwXTrttA2bPs0tfOyEAWsUbBOUi+vpqAfMIkj3I24YQ2e46DIq51gtWAaExPcy61qHdiTjL2jk7iad9z6qbhX5+x91Lclhmc4D47QYT1ZGHjXDn6O4BXnNsT/RvwnztWQNWBMarBqiR7tM2kU65igl+3oBZxhePpqg8VRjF2M4hRgYv1hXnIf4nlqL4LfCSZMxAEz5KEG9T5CkKCNAWmh1r2pOWFnjsSvWINbWkyn0v83ce2MPUYGsMeTSeojuHMy9udA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OMl7bGZOIQhrWGDNvwDF1W+AqPyJQTeLY0wX+xCW1po=;
+ b=1P98VINV/dyxtxtx5C+imGEqitOfJDsAxo8uBGPNlm3jyBaHJK3AVFUP6+a+FIwckx/Hzxu/QCNzP8xZZo6T3WkxUQ4IvXNVbhN/8fiFrmU/OxZUxmqQuhC4tdNUKIsOELHsQbv5cf22syenIkxMZNzMEW2NGpm3573dvj2828M=
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
+ by BL0PR07MB8210.namprd07.prod.outlook.com (2603:10b6:208:1cc::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
+ 2024 07:01:15 +0000
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::5dbd:49e3:4dc:ccc7]) by PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::5dbd:49e3:4dc:ccc7%4]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
+ 07:01:15 +0000
+From: Pawel Laszczak <pawell@cadence.com>
+To: "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: FW: [PATCH] usb: xhci: fix loss of data on Cadence xHC
+Thread-Topic: [PATCH] usb: xhci: fix loss of data on Cadence xHC
+Thread-Index: AQHa/2D1v7Tx38XDdkOfqL/qNaUw7bJIw3GA
+Date: Thu, 5 Sep 2024 07:01:15 +0000
+Message-ID:
+ <PH7PR07MB9538584F3C0AD11119403F11DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+References: <20240905065716.305332-1-pawell@cadence.com>
+In-Reply-To: <20240905065716.305332-1-pawell@cadence.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-dg-ref:
+ PG1ldGE+PGF0IGFpPSIwIiBubT0iYm9keS50eHQiIHA9ImM6XHVzZXJzXHBhd2VsbFxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLWEyZTg4ZTIzLTZiNTQtMTFlZi1hOGI1LTYwYTVlMjViOTZhM1xhbWUtdGVzdFxhMmU4OGUyNS02YjU0LTExZWYtYThiNS02MGE1ZTI1Yjk2YTNib2R5LnR4dCIgc3o9Ijg0NzQiIHQ9IjEzMzY5OTkzMjczNjUxMjQzNCIgaD0iWStLTTE3QVFIbmdXMW83eU9OTzByam04clU4PSIgaWQ9IiIgYmw9IjAiIGJvPSIxIi8+PC9tZXRhPg==
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|BL0PR07MB8210:EE_
+x-ms-office365-filtering-correlation-id: eae2dbb4-58da-434e-2b8a-08dccd7888dc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?VmXQRgTbIPdFc3Uc8LE4pY9Q/IqpB7wsWuLWgShPXneEQneoj9ddcAOB0Hxs?=
+ =?us-ascii?Q?rxMu7juFkUJvUf7puPXn3IWRBvQYIFJIhVQNNEY3eE2Qi1Uh37FiWUDS3bGJ?=
+ =?us-ascii?Q?wuVh4Z8AO8LvmXV9JiUgwfwwq87UHTt/gQ9J2SPnGeupBFUPdcpl+7wlKzYE?=
+ =?us-ascii?Q?LpICh8bcuZCQTz666u/CNjFj1lcU0kH0SChXoziQ09nX8uJ7TeHCgCuknSY9?=
+ =?us-ascii?Q?7v5tdYvBdSq6Q4EUMr9BTWks7cdF4NJK3pEZgnCX5zAkkFmpDxU/e3H1LuLT?=
+ =?us-ascii?Q?sJGxXeisostldqZ99RMLZM5xAqXXC65/RrKWiRMvUePt36fepylSMyE/oKkJ?=
+ =?us-ascii?Q?kgW0gP6/zvJhVM2fqbIy5wpEPCEAqJ0S6JItm9Jl3852iOMrtqhBg9u7USdP?=
+ =?us-ascii?Q?pvSYMlpAsm2XQRJtFUV27X9vxi9NgAAF6iz8bcpzl85OBMi5tzIFXfKIWl65?=
+ =?us-ascii?Q?s1otJ1Q33aWb4q8l+S4TGI7Vj4XrS4ZpxVVzGrRsuBY6pNwPH2fIIoZ2WcOG?=
+ =?us-ascii?Q?ezfY/rb0gRXxMjVbHMroOVBfY4uC4aYe95Xu2woK7J2te1FUZWvdsKEw+s10?=
+ =?us-ascii?Q?79/ywukTPd6p9+GA1Jd24N2H8JMCBVBacij+Ag7+6zrgLz/dQwY0vYHGPHBC?=
+ =?us-ascii?Q?XDl/8wEhgxGJ0j745K5+f6dKKHZBeClkOrsayvMBCxA/5WrO1YLOdYj78qUg?=
+ =?us-ascii?Q?lEQxsXB3h+YASAd+7E/nobt1UPghdcbrEtzN3F3QIMeEROwgLBKUJ/3ftBZh?=
+ =?us-ascii?Q?J6M1idezXsNNyHG98rJNLTNEVOc5UDd0oBKLf2Yqnk+k6+xII1mQheBiHDxW?=
+ =?us-ascii?Q?Ic2PaxFeizEeDv0seqO7bux6ok9hUUg4OAV4lzBw2cI52L+6VoyqvpOLGULW?=
+ =?us-ascii?Q?NJmt1eWKWSzhXObs3LlcezlhTk04RfjoKhg3JWhnATvnrI1Im/JwUswup9IX?=
+ =?us-ascii?Q?Bm7aRXz+zT6JMprAet6TCLbPcyQzzzseeqogTrg/RRioxP7AQfg1kNjqNh8W?=
+ =?us-ascii?Q?AoVcpD0Iti9K5Tr5la06obZNPZYAbHemDryGaf0O3Xz6iE/2EoxboYb5zbDZ?=
+ =?us-ascii?Q?gWaE7Ht20243SLo5ARp7QgF936kswMawr61TpDuezdX5v8HSnt8PazpNJUpG?=
+ =?us-ascii?Q?HqTv3B6FSmrCujUKCG0SW1UdWtJeH2azMnqQ8fTMQ6DnIxvW1zSktuxiWaXx?=
+ =?us-ascii?Q?vmR681GXnX7Tkkk1qUV8aXUyU7k2B7zulgkMoST7SJe7hRQkFLhw6pQgSkIx?=
+ =?us-ascii?Q?eM8nHVKH4K/NdNQSEWUiHsYrWqtCtBztXys7BcN0KZ8VMtwCuG9fvP9yM228?=
+ =?us-ascii?Q?lBDEf7thIBdmJQDWrBw4693xmRk3dlCybJOWjcTS4lP+jPl8KobFoA10zYak?=
+ =?us-ascii?Q?/4Kja/vdN1mXcbIlsi8w4RyADqUFaOAEOVb5Vlwn1T++u22hAQ=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?MC1anLCNEfSoq6O87WtD1IKCuB3Y0dT26RC1MplhkdFuVMxEMYmf11/2OOmN?=
+ =?us-ascii?Q?mfjuKazTfvS7UfwznHv4iF+drWUFjvoVojolDsFNs3VM4IlwfLF5j3XFiMkp?=
+ =?us-ascii?Q?br5d9oLCY1HPLmiUdVXVOH2Mokc+KniPRACkMlh9syBJfBgnlrO1goDy2hu+?=
+ =?us-ascii?Q?+91CbIgjChMmVZoacyYrcXCRtDCX3K5OSyWWVSL18GacUntq+ivYkDfoFRf3?=
+ =?us-ascii?Q?UbOqx87LZjEvpvoByObhoILwBzhp+j7Nyqp1lq7bVIHGOq79qfxk/PrNyOs9?=
+ =?us-ascii?Q?76l7tG+JyzHR+m1e2xNfEaXdCWlPyjf7N3KJOGVmFQ/ithADnERJA7wIQY2n?=
+ =?us-ascii?Q?dhldYEN02eDXieifhei1d9so8NKOcQycqDLG9jskQkhB+rPhve5K1iUG1Cbh?=
+ =?us-ascii?Q?TqCBSvLcOqjJy/hEQkPohG98WDuW/yJn8JO+EFwm/mHpiXgli4JqH8Enr9/H?=
+ =?us-ascii?Q?iNWOM4mvqis6UvayCtUBeItDiYTEj8IHyJEClnZdzM7xdgR5fNYTQaZhfPev?=
+ =?us-ascii?Q?FQebqY/keXYM7oteYyO5khzpMk5qk/IcESWJIcIdbqw0WxOLIbwGWN/Zb4eL?=
+ =?us-ascii?Q?1136zw+HAip3rPHyuZkMDR24ZA+VFMIT9lJ8GZ8u2/ryEweBdciWuh6Y49aa?=
+ =?us-ascii?Q?tqJgyBAOmvQ9J9fBJgwt8/NyG4xBN0sddfEDZ3tt5ktQ0QCpLMXgwpBr2Yri?=
+ =?us-ascii?Q?6p66VgAQtxGh3wfNtTIrFqMzr23AotX1iQh9EI+8Ur3ZOFIfFUfeeaxJb+Sb?=
+ =?us-ascii?Q?Wc3tYe9UwA8dj3cynDY8HMrYq4aBoM657sQfCVhStozsUeN63sMhIOu35+dK?=
+ =?us-ascii?Q?uTOL3+/rfRopY9Pfv7eUf+8Qzos/iWLo/yJ0B7GGfIXQQd/jcmTw0pg8eaG8?=
+ =?us-ascii?Q?9wtNJS/DmtMiAKZUOJHebfKKV2kkND2J44D+8JB1oib9Ic+m6+t9e+R8xObK?=
+ =?us-ascii?Q?4njsGu/8lf/qJ4xv82/BkFPuMY82goiUpKGXL0QHFa8UWotD228tjcOcpfR3?=
+ =?us-ascii?Q?NcUxkvOgXqmX69HE134aUB4nLHPKJelbFIvIjl+YtFUccPxR+TmQ1SkaEATs?=
+ =?us-ascii?Q?ojHLXo2csiR82xTHrHXCyFufP33G39rXOCJ81vJetoBH1075mw0q2AKNCCnu?=
+ =?us-ascii?Q?uR0CF68CxRiU4g1e3CuyLo6u5eTLc0XvT5B19wFiCVttqzQQAwpyfDn8DbsS?=
+ =?us-ascii?Q?bwCbK5qL4pJ2EFs2Mf2bddouFLUuxqeJzjg6EhbbcjvC/bCl//gg3lJ9PQWJ?=
+ =?us-ascii?Q?GELgn1b82BZ7Gooe8US3UnykZXj8S7bcnjLkRKua8m3aXW5acldqhvoFlrqc?=
+ =?us-ascii?Q?v8rpsuJVc6DMPC268GHJfqzinkhkDjtjFqXUnmQdJVHuCMBFgO5i1KguzzAy?=
+ =?us-ascii?Q?3bT6qqGVNfVOeCnpzQH9EhedAZGDwMm88TkXCcwVk4PA7fyDcUzYyDnEmbk7?=
+ =?us-ascii?Q?lF2nLE3na4k17+IZaV75LncGFHAqekTU9Y7h6xrkZ/VTe4LfnyfFM/0SHyXN?=
+ =?us-ascii?Q?bqBVFVM35U6grWaKmNTavFElIm8MrjNobK7ZgHiH8u3UgfmTTY9g+pvrtCkW?=
+ =?us-ascii?Q?Lr6J/e6HEW6WS0U2slAm/gEXfeo+rWuf1WqS2oN1?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eae2dbb4-58da-434e-2b8a-08dccd7888dc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2024 07:01:15.5491
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: msQSACY+M0qL7tFU2YVB6qglZBjiqpC6/YTwWjf3HvN5wl9kb1hHXrj6ULKTilpaFjfg+UlKtd1t+1ZTtrvLRMwdqAmQg4qZN28DzmHbrt0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR07MB8210
+X-Proofpoint-ORIG-GUID: sFJ0rsAqE3ywZ6utkHE6bpQYPmv6xIeU
+X-Proofpoint-GUID: sFJ0rsAqE3ywZ6utkHE6bpQYPmv6xIeU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-05_04,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 spamscore=0
+ adultscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
+ suspectscore=0 phishscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2409050050
 
-From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+Streams should flush their TRB cache, re-read TRBs, and start executing
+TRBs from the beginning of the new dequeue pointer after a 'Set TR Dequeue
+Pointer' command.
 
-TCPCI USB PHY - PTN5110 could be used with SOCs that only support
-the edge-triggered GPIO interrupts such as TI's K3 device AM69.
-Move the interrupt configuration to the firmware which would
-allow to accommodate edge triggered interrupts for such SOCs.
-In order to support the edge interrupts, register irq line in advance
-and keep track of occurrence during port registering.
+Cadence controllers may fail to start from the beginning of the dequeue
+TRB as it doesn't clear the Opaque 'RsvdO' field of the stream context
+during 'Set TR Dequeue' command. This stream context area is where xHC
+stores information about the last partially executed TD when a stream
+is stopped. xHC uses this information to resume the transfer where it left
+mid TD, when the stream is restarted.
 
-When the edge interrupts are used, it is observed that some of the
-interrupts are missed when tcpci_irq() is serving the current
-interrupt. Therefore, check the status register at the end of
-tcpci_irq() and re-run the function if the status is not clear
-i.e. pending interrupt.
+Patch fixes this by clearing out all RsvdO fields before initializing new
+Stream transfer using a 'Set TR Dequeue Pointer' command.
 
-Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
+Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD=
+ Driver")
+cc: <stable@vger.kernel.org>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+
 ---
-v2: Re-enable irq irrespective of tcpci_register_port() return status which was disabled before this call
----
- drivers/usb/typec/tcpm/tcpci.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+Changelog:
+v3:
+- changed patch to patch Cadence specific
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index a2651a2a7f2e..ed32583829be 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -707,10 +707,13 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+v2:
+- removed restoring of EDTLA field=20
+
+ drivers/usb/cdns3/host.c     |  4 +++-
+ drivers/usb/host/xhci-pci.c  |  7 +++++++
+ drivers/usb/host/xhci-ring.c | 14 ++++++++++++++
+ drivers/usb/host/xhci.h      |  1 +
+ 4 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
+index ceca4d839dfd..7ba760ee62e3 100644
+--- a/drivers/usb/cdns3/host.c
++++ b/drivers/usb/cdns3/host.c
+@@ -62,7 +62,9 @@ static const struct xhci_plat_priv xhci_plat_cdns3_xhci =
+=3D {
+ 	.resume_quirk =3D xhci_cdns3_resume_quirk,
+ };
+=20
+-static const struct xhci_plat_priv xhci_plat_cdnsp_xhci;
++static const struct xhci_plat_priv xhci_plat_cdnsp_xhci =3D {
++	.quirks =3D XHCI_CDNS_SCTX_QUIRK,
++};
+=20
+ static int __cdns_host_init(struct cdns *cdns)
  {
- 	u16 status;
- 	int ret;
-+	int irq_ret;
- 	unsigned int raw;
- 
- 	tcpci_read16(tcpci, TCPC_ALERT, &status);
-+	irq_ret = status & tcpci->alert_mask;
- 
-+process_status:
- 	/*
- 	 * Clear alert status for everything except RX_STATUS, which shouldn't
- 	 * be cleared until we have successfully retrieved message.
-@@ -783,7 +786,12 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
- 	else if (status & TCPC_ALERT_TX_FAILED)
- 		tcpm_pd_transmit_complete(tcpci->port, TCPC_TX_FAILED);
- 
--	return IRQ_RETVAL(status & tcpci->alert_mask);
-+	tcpci_read16(tcpci, TCPC_ALERT, &status);
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index b9ae5c2a2527..9199dbfcea07 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -74,6 +74,9 @@
+ #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
+ #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
+=20
++#define PCI_DEVICE_ID_CADENCE				0x17CD
++#define PCI_DEVICE_ID_CADENCE_SSP			0x0200
 +
-+	if (status & tcpci->alert_mask)
-+		goto process_status;
+ static const char hcd_name[] =3D "xhci_hcd";
+=20
+ static struct hc_driver __read_mostly xhci_pci_hc_driver;
+@@ -532,6 +535,10 @@ static void xhci_pci_quirks(struct device *dev, struct=
+ xhci_hcd *xhci)
+ 			xhci->quirks |=3D XHCI_ZHAOXIN_TRB_FETCH;
+ 	}
+=20
++	if (pdev->vendor =3D=3D PCI_DEVICE_ID_CADENCE &&
++	    pdev->device =3D=3D PCI_DEVICE_ID_CADENCE_SSP)
++		xhci->quirks |=3D XHCI_CDNS_SCTX_QUIRK;
 +
-+	return IRQ_RETVAL(irq_ret);
- }
- EXPORT_SYMBOL_GPL(tcpci_irq);
- 
-@@ -915,20 +923,22 @@ static int tcpci_probe(struct i2c_client *client)
- 
- 	chip->data.set_orientation = err;
- 
--	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
--	if (IS_ERR(chip->tcpci))
--		return PTR_ERR(chip->tcpci);
--
- 	err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
- 					_tcpci_irq,
--					IRQF_SHARED | IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-+					IRQF_SHARED | IRQF_ONESHOT,
- 					dev_name(&client->dev), chip);
--	if (err < 0) {
--		tcpci_unregister_port(chip->tcpci);
-+	if (err < 0)
- 		return err;
--	}
- 
--	return 0;
-+	/*
-+	 * Disable irq while registering port. If irq is configured as an edge
-+	 * irq this allow to keep track and process the irq as soon as it is enabled.
-+	 */
-+	disable_irq(client->irq);
-+	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
-+	enable_irq(client->irq);
+ 	/* xHC spec requires PCI devices to support D3hot and D3cold */
+ 	if (xhci->hci_version >=3D 0x120)
+ 		xhci->quirks |=3D XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 1dde53f6eb31..a1ad2658c0c7 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1386,6 +1386,20 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd =
+*xhci, int slot_id,
+ 			struct xhci_stream_ctx *ctx =3D
+ 				&ep->stream_info->stream_ctx_array[stream_id];
+ 			deq =3D le64_to_cpu(ctx->stream_ring) & SCTX_DEQ_MASK;
 +
-+	return PTR_ERR_OR_ZERO(chip->tcpci);
- }
- 
- static void tcpci_remove(struct i2c_client *client)
--- 
-2.34.1
++			/*
++			 * Cadence xHCI controllers store some endpoint state
++			 * information within Rsvd0 fields of Stream Endpoint
++			 * context. This field is not cleared during Set TR
++			 * Dequeue Pointer command which causes XDMA to skip
++			 * over transfer ring and leads to data loss on stream
++			 * pipe.
++			 * To fix this issue driver must clear Rsvd0 field.
++			 */
++			if (xhci->quirks & XHCI_CDNS_SCTX_QUIRK) {
++				ctx->reserved[0] =3D 0;
++				ctx->reserved[1] =3D 0;
++			}
+ 		} else {
+ 			deq =3D le64_to_cpu(ep_ctx->deq) & ~EP_CTX_CYCLE_MASK;
+ 		}
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 101e74c9060f..4cbd58eed214 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1907,6 +1907,7 @@ struct xhci_hcd {
+ #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
+ #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
+ #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
++#define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
+=20
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+--=20
+2.43.0
 
 
