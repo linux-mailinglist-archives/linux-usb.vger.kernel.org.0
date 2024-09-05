@@ -1,254 +1,314 @@
-Return-Path: <linux-usb+bounces-14695-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14696-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DED5F96D26B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 10:46:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F7E096D28B
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 10:56:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FB211C2456B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 08:46:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08F7F28770E
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 08:56:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30EBB194C78;
-	Thu,  5 Sep 2024 08:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81071953A3;
+	Thu,  5 Sep 2024 08:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="YN4vjaWJ";
-	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="SdT/lLqT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HlkVsBNb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64759193409;
-	Thu,  5 Sep 2024 08:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725525970; cv=fail; b=uBw58bHUx10wc850aRHpR5W/MqVYc28tfNE82CKHeepHAuQPT2pl/Jrb/W5CpHMNKXLvX2gO5CNO6LUgZKw+MRbrT5afGCnu7RLvpmMk4jO98APDAVJEOcTrePjnju+216+3VD8hlIv3j1Q/yk3X3+LJ1wfLjqnjuRq1sdi0SRQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725525970; c=relaxed/simple;
-	bh=5a2glb/NXmNhGN8WdaSbtsBhOLTgCncJVJ+ZsF4UWmI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Jmrswco7oz2psWgYq/xHe9kQocrjvXAuwggSFRIgItYXqXHhvcRZUo2llc1rlitBvxQdlA7C+/yIu1mAJZcxmtucgcMTUn3zG0t3n0zLwUbbbY+uzIVtvWV9m6UFne5J2jnIyGqUjRIqwCgtRqanb8qjfH56lMjH54twTPdev6Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=YN4vjaWJ; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=SdT/lLqT; arc=fail smtp.client-ip=208.86.201.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-	by mx0b-0014ca01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484M0YTr023969;
-	Thu, 5 Sep 2024 01:46:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=proofpoint;
-	 bh=RE2eRKRI8IxD/ow9stc3xruOSx65H1KV6KtNgYvx8zY=; b=YN4vjaWJCuAr
-	oa6VwvAoZwQhTEe6U65LJ2sUcqmXbFuCkWRS0efWfj7ijnewD7nLGowErWeqnLcT
-	2k8bqKkKFfkHCVoiR8iOu8hJL4ZJnhdR3ZpP1/e5n+ZAzyDuakuTcC0XbX2Davbr
-	3y+w8OmrXk4oaDZIjXmBhrq6+puIFzgfa2LwqPC2pR8Y58IlwZmuviFq4prf+Sn/
-	PwufFn1u6smv2RoOqQQ2iw1xCRzfSkm5VTPo+QFFq6FoyI3S0SbjgRV0Nl9E93dK
-	fPfUSReIQVUrnHSiwyL8fS28Exyqv6itUyPSt8JejlQXsacQ7EWqTa7dGvnCWyBW
-	Ydjb+/KGLQ==
-Received: from bn1pr04cu002.outbound.protection.outlook.com (mail-eastus2azlp17010002.outbound.protection.outlook.com [40.93.12.2])
-	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 41bxrvh9n2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Sep 2024 01:46:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=L3Kpnv/YROVUrNcdObcWyT9TniG3z9UgIMkm2quD5jQFtMyuchmUHFuHJ3G0z2gkVKo1CK0FXkaKr3VGWZy8GeL+FQLIbPk7F0DeEhWqsk4YCi11lLuV+pufMre1VZcQMyFxRHjrH1NYPX6hpCoki2mKucRv4WYU5YyMqDkihzQtuSfZyWwWd7NzEWX6M0Mi6LAvuvl18TikYI8PTExHS0oddoZiUT3ie+jDUecS6INPBVzbn7R5WKqVMYsGCbx25sFWUii/6mKSMKPN/HiZF53+9B1Io4IgLJ12XWrs6h3jLBHY8jqq9ZsuRwKXwF6qR0ACi+8rnEf8FD88e+HBxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RE2eRKRI8IxD/ow9stc3xruOSx65H1KV6KtNgYvx8zY=;
- b=rWL2n8g1eiX/2viu8j6NtQ7VZlaBwRR9bef6+1fsrV0nFbSkUyemHdxNKwZH3c6Qj6zpx88oLjWZd+QpHX4inK9u9rvh/HedfedO1pTlEG9dxrDho/D2RNQMop1nkMBGGt0Bs1BAVzm+eeXuwwINb6EY4fgjD2rJ7ShcK0oxVU2gMyICdyZCcsFJPnLxPWpt6lSN9f5+w+0oGnjGUY9D0JJ63O6pyJbMGWmLNV13duBsyYcxIKLaeV/jSvgfrGlaKlFNqaUOF+Uz7bHx48W0HU9WFjeeGrSx316grMXrfE6FuGIyNWLyWuDSOaqebotE4Y42r2V0F2BNe0BnLXxVzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RE2eRKRI8IxD/ow9stc3xruOSx65H1KV6KtNgYvx8zY=;
- b=SdT/lLqTgjIbFLjdfMsc91/f5pOpZx5PnR2VHVCKHkcaWb8QAyDqNhPSOU+p9CZjnELxNnDCy8ujanFXAJFTt4/2orI0GYAF3Tv/NWoxNx0poZjziPEpsQ5q78U5tz+K5rnlAFqlYhITDN2Vm5dQrkdUhHvvcM8tB6D9fsEv0hI=
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
- by CY8PR07MB9593.namprd07.prod.outlook.com (2603:10b6:930:57::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
- 2024 08:45:59 +0000
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::5dbd:49e3:4dc:ccc7]) by PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::5dbd:49e3:4dc:ccc7%4]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
- 08:45:59 +0000
-From: Pawel Laszczak <pawell@cadence.com>
-To: Peter Chen <peter.chen@kernel.org>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdnsp: Fix incorrect usb_request status
-Thread-Topic: [PATCH] usb: cdnsp: Fix incorrect usb_request status
-Thread-Index: AQHa/2Tn03ME/LN6AkWudh1fxcnHPLJIy8/AgAAKNoCAAAX1oA==
-Date: Thu, 5 Sep 2024 08:45:59 +0000
-Message-ID:
- <PH7PR07MB95383CF665431DBDACD73B65DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
-References: <20240905072541.332095-1-pawell@cadence.com>
- <PH7PR07MB95382F640BC61712E986895BDD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
- <20240905080543.GC325295@nchen-desktop>
-In-Reply-To: <20240905080543.GC325295@nchen-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-dg-ref:
- PG1ldGE+PGF0IGFpPSIwIiBubT0iYm9keS50eHQiIHA9ImM6XHVzZXJzXHBhd2VsbFxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLTQ0Y2VjMmQwLTZiNjMtMTFlZi1hOGI1LTYwYTVlMjViOTZhM1xhbWUtdGVzdFw0NGNlYzJkMi02YjYzLTExZWYtYThiNS02MGE1ZTI1Yjk2YTNib2R5LnR4dCIgc3o9IjQ2NjAiIHQ9IjEzMzY5OTk5NTU4MjI3MjQ2MiIgaD0idmZZYjhIMzRMdTBhVzh3ajRVbEpnejFHN3E0PSIgaWQ9IiIgYmw9IjAiIGJvPSIxIi8+PC9tZXRhPg==
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|CY8PR07MB9593:EE_
-x-ms-office365-filtering-correlation-id: 03f4a145-41f4-41de-8f07-08dccd872a89
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?gd4HVGWluzzAbOk5w2DzJxaK5Yt6sl7k9b+rkoivekbhlr1T3eLpBQeGSQyN?=
- =?us-ascii?Q?GbZ7oZs0m+5wxRyaijBdSrUEEAPyeGuLL6V10Txbre+VDVjutBgqV9HkCK9b?=
- =?us-ascii?Q?+ondyZZcCioCczs8l9BH+jX0qS2AOWqUDpwNHoaCTovK495fkOz/+oX6metu?=
- =?us-ascii?Q?DgTaOHVUsqhXn5Fgz6LIWvtZTNYJ2BUEexIkUXqh65HjPOkcJNXY1xTcH9t0?=
- =?us-ascii?Q?wevL6NrusfnBLAvUXTM0ymUKKKTyQh0Gd5V1WGIOHrs39bb71zaAXr/+e+IG?=
- =?us-ascii?Q?PecRS7rAZzg19Ckr7eNCUlSisbkE6LNpBhwBCfdl701pmx5hSSvh2Gnn1Y+A?=
- =?us-ascii?Q?XRdDNmsyRQsM5A1sLMV+CF+zgBdKthlFQEmZf/L8kuuIXaz0d/P07MF497Hk?=
- =?us-ascii?Q?ZnW4NCjuxUFgds7LiyvPl4EMSoRMRj6YUPH9RftouQL/VutOU2k1ln+uQ+v1?=
- =?us-ascii?Q?SCyiGoNtqYBcFESqkRvTBS43H1HZ3kKOi05xOysUjIk6lBtWabe2eMOVM/kh?=
- =?us-ascii?Q?z5WacFeMjdB8bi/WVij1eE7VVriaJxAuax1fXw11lj4ME3/4r+tO6hp38yVz?=
- =?us-ascii?Q?MYoiHC5AUtmGwb/RTPllM1ZLdVFiS1xv0HAeiDXcqgZdqaw95zCt0L+Hhxp7?=
- =?us-ascii?Q?8j7r0FzFT9xg6kRH5nLg4xIcgVFV+b48dEom9fL3c4SusLcV1SCFX7DjLmvv?=
- =?us-ascii?Q?h7FbzyY9md/SKC43mHvmeT6ewxF0euri7T4uF8BM45v66xg4OYJiPEF0gBRO?=
- =?us-ascii?Q?14hTRmkQ/2rfbVsDTjGd04MfTfG0XjJhI6dSQpOtG/G9WMYxs6F88uldOCDJ?=
- =?us-ascii?Q?RixpbSK6r4gVh2caoNf07VEjIKu23IYxfb+nICtULgdVyouByaWRGf6e7TiP?=
- =?us-ascii?Q?jTD1RcilwGtn0auzEjei1bAeSy3sMJ4MoMIn9obgaekyEX+XOUU9h/9H2am9?=
- =?us-ascii?Q?CuopDizjNa266CdfwF7QsH4z7dwM/GK+1vG33Hm048xudYhm01FQHmTsrRqx?=
- =?us-ascii?Q?6zYX6vm4ReUnga9CdT/Y4shmy9LR4UwMQ18896jjz2wpdDvp/Z+qZPOipzVR?=
- =?us-ascii?Q?+4Qh3mzEUQHRx0aUjFVKTPBK9VIcCdc7/V4p0m/+sgkR4+RlUuLBmzu96am2?=
- =?us-ascii?Q?XVDl/vcrWuJsgHXTHrp7Ng1oaNPilbfybyjviXKSW9daNxoGz/iHFhV7W8CA?=
- =?us-ascii?Q?rp8bXkM5AMvP1wE6ByRDRUBKhQbCwFZzaEx8vvPLnJrWrV3/hTvHWfzN7dDt?=
- =?us-ascii?Q?eBg1LU+m85y9wCJmIIstkKDYZMoSEYbZPIKglIf2TsOZxYsg9iuVEKU0NUIc?=
- =?us-ascii?Q?nKPhGgPDy8tsAgKFpkueBDNRyvecL36Fvnf2/vWLNCMVATxwEcljC9oapRT/?=
- =?us-ascii?Q?6n1Rie7MWdE6ycweCv+1H94yFOcQkrZMFKLRdfNruDR7E5fkTA=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?2Ltka+XPrNl5LUqw1ippaYQNGZxS32tghj4saEjurNM+TiTXN90Xm/RlHT0i?=
- =?us-ascii?Q?dMU35O7ofpuaCBXGIGPK5y9p34rCS7nscF9lnG8kbbarl9LPBWp6uOvvMoCo?=
- =?us-ascii?Q?cbdd42mid5hvjWPQqvQ4e5+KBaiGtyUg1ubaaBB9pvU0Pxu/fZ3Keb/PUwZx?=
- =?us-ascii?Q?Z66TiwjodVVBdORk5d01k43YCdVbJxJi/P9v0YyErSYSvHaH/mBju9L7Q2er?=
- =?us-ascii?Q?nRIWAKQAoaGqdrCpvG8KXtrWDYTy8R21/EhGd+2zCJFbnFg4gkoA79nMc1nl?=
- =?us-ascii?Q?jImaj9xyHvsmRvXwGcqiyJsMWXpxmWaeFmr4bu5Put99BoZOI0lPz9DZVZi3?=
- =?us-ascii?Q?cgiaPeI1vwl2ubUtCDeP+H540HqbZZr0bu1edlkgwK9DTPSIZVsOWX1Q7Imu?=
- =?us-ascii?Q?okY5NRFKTy9wEE/KC87RwcWGMyO+ZOryXu/boL1VpnHQkwsrNloZpeje6PSD?=
- =?us-ascii?Q?bvq1J+stU4Xn/yqffb0HiBsVJ/1DwJoffzqnUBkY1Vbjfif9YzNtWhYJDi1Y?=
- =?us-ascii?Q?U+Ovz82khF8Pbqo90DIYDtoaOGg1bNkoo1hO9uor/HipZr35jTvB4KaD2zr1?=
- =?us-ascii?Q?0/zehS+Tum2iEvHUukj+Im7NIx4vnRPSqAwssM1Sh4fnrcjpy4YnVCQ0jnCx?=
- =?us-ascii?Q?o5dP9rrsGtOmgRtbNb8CZvwcgd4Sp9Ezbc6Dtb7WVLAFt9HyKrwGkNntxAlm?=
- =?us-ascii?Q?+LHrJmR/9LwPsENPXLzxEpPRIxzOdQ5Lzlt0EDcUQ9TaN5WSnRyP+JBzfM0K?=
- =?us-ascii?Q?sWTPFNYJwMDQzf3kMfbm0Na6jtwQRnzWn2TTA6cF98DToLMVTPAa/yXK/ODp?=
- =?us-ascii?Q?u0fDWIJA00wbOui0X8K6R60pRmb4T4pYjma1wwuhFAG14MxNtCPbSCMka2R8?=
- =?us-ascii?Q?saAvS4mFuOCRYguGF7Ymprwhi6yvfAhhhLgeZrW/Ac2OkNTAE1MG7TWxX7wE?=
- =?us-ascii?Q?LPdMssTLAKcoJR0E1eIxTea5jxNVF7VWyD9gqvhvkYlp7NTXLwBhFE3DTxTX?=
- =?us-ascii?Q?Xivf23/UNJanFIatmH9P6T5t1aEoNKprFKDVDAznT2KXeAMvjkGAHFBKzJLT?=
- =?us-ascii?Q?dAsDlwGknFLgb3gasSXNqhKa0gXT2LhJaEy112kmVRriWtroqmSDvmguVVj9?=
- =?us-ascii?Q?akt4ldYPMvY0tFYvBvlMf7HCHAtX4Z1cz+GI2IlnY7ORf3shEZJj6BtJ3lG1?=
- =?us-ascii?Q?mzSID2mPqowXBDGEYSzyc3PX8bM7BCyUHyo8OK3WGcR+Iezat0i18SNuBryz?=
- =?us-ascii?Q?HZ2F+fcM2CFPLjyoAp8tCB0oWt0qgeFL8jzwo/GaJA1A3AQadl4VFnnP9IxS?=
- =?us-ascii?Q?p5k9VjnYK+CIjuZblCNUGL9qi3Qkf+IIBzNq+o7ZHFruxpFpSFsChbsB+Tdz?=
- =?us-ascii?Q?1Jpkko0fvwlWhtZ2/GssyNfo6cOgUyqIxSruK2W6YFO2KwQy5Krmsku75LzF?=
- =?us-ascii?Q?x7Likz4m0Rm88jfZVFIwQtKmz1gXKHKLWTePWTLUitNgGjZgNvw4HVMNJvV1?=
- =?us-ascii?Q?L7148TuLAey268gq1Tpuu7gaETh6LlUuq9mdLJW8HirYkVt/6/YwHvHZJop2?=
- =?us-ascii?Q?m7p3+u8qM34XzjHXOocGDCWBazym5S17bYOOOzi7?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D3A189901
+	for <linux-usb@vger.kernel.org>; Thu,  5 Sep 2024 08:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725526573; cv=none; b=cbQYelYeWGxa49KldAJ3zQSGeqGSY4ugKdn4oaCyGnqVMRcxr7kATxCxI9ONSWxJ9EaMUuGWXjABkUhAxNYmNuqVT7mADVq+06ehmZ3frWI5LxIt15gsq4RhgYDWEkfazeUuz7hKKNY3DPor3ud9/Xo+4sUaTbaYW79YkemzH1I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725526573; c=relaxed/simple;
+	bh=I8KKgKeQUVtp+oZAdHzxgWYY8xd2Hr6y2X8k0FDr3lE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f+tD1zFFVDfTaK+wswh0Yw5U3Pcp9IyScvJ2nHRt3RC8ekXl0vWqfUJaTlyeFqrwsk2U5HElbfK2Qti8WV1NqpK+HmUrgfxKBNkl9nbRcdHdjVrb3D4a4nwIaO94GpOd8YSJmFs74/ldhdy4gqf60WSTGknRlc6XhiTDcCBNX7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HlkVsBNb; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725526567;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CCRNllYqBtGzqObg9g39uxxJwI2WY4VlxJaE2fzg3LQ=;
+	b=HlkVsBNbHCH1Q4vOpPmGvNhlE6bqfa8HeGCUD/GMw/0V7FIVdOBVVlBlXG6ee7UnLqw9gT
+	gRQLbze0/es4FEP1Ma6V6eWZtjg4RMuhhhVVttP1X9hcm3qARMDDnTs1+yCnmL9CCsuVAs
+	nSp3KNSzP4W8sYzLLw+0fRlRCzn8fpo=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-118-lT9GW0ZGNNyPyYZgek9oBw-1; Thu, 05 Sep 2024 04:56:06 -0400
+X-MC-Unique: lT9GW0ZGNNyPyYZgek9oBw-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a86f0c0af53so61006766b.0
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2024 01:56:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725526565; x=1726131365;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CCRNllYqBtGzqObg9g39uxxJwI2WY4VlxJaE2fzg3LQ=;
+        b=g1emsvxW3pRi0RAhH6W8/fPMw2ia7nQ6NHVIdTMH8XRw9xc4BS3aET2F8sRaH031S4
+         n7owEkaQ1podVACAFcvL//YEbZHbYPk4Q8EdR3xdgW/tzzhN7be+wpxGv3sqMDMytsqf
+         ZvjRAhgtDZXgaw08Sh5k1v+4OBigeahs9o/CGaQD8+kSgWPduRyD2ZiXhdXgFyDgzZ8I
+         G1Zh38dP2SbRQM/Iej4ktJ2FdBsQQtnXhinndLFDSEivz3Jl+iSRmQQLsjwakZnlZktf
+         FGevPYPTAvd98cgTrIHfxIWYxXLwUk/4HtB3xAUMA+QvlNU8XHRgo/p9yjqgVxsQTvfk
+         X3gw==
+X-Forwarded-Encrypted: i=1; AJvYcCVgvYpRMi3qYD2vmwVqh8buCxkycf5Hu0rveeiYKveYp+mDJjzo6T18X0XTJ9oLchMbw028JWsutkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqKuJFqfEVJpVrApZuiP5Drjf98EmxbHzKKYm/2gvG0i7W45BT
+	SE8wlvvTFCxrHE3cA4FTVi0LjMY+D4BlPSKXEteLi1KxysI/gEkKEo8cFmY8vuplMuJ3oFGCkq0
+	pNanzo/t3grcPCrT2mKC8WC4BIjp3L+50tPSdeuW+ltl6SEMHZgnbxngnIg==
+X-Received: by 2002:a17:907:7e9c:b0:a77:cca9:b212 with SMTP id a640c23a62f3a-a897fa751e1mr1774617366b.45.1725526565111;
+        Thu, 05 Sep 2024 01:56:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGAMG2vbjagSZHFNowL4wH1G5nsXrqphynWdZ+SgABd0lHS1ZNCGypsbmYwwqkKtblg3WAAwA==
+X-Received: by 2002:a17:907:7e9c:b0:a77:cca9:b212 with SMTP id a640c23a62f3a-a897fa751e1mr1774614866b.45.1725526564486;
+        Thu, 05 Sep 2024 01:56:04 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8a623e5c76sm104066466b.204.2024.09.05.01.56.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Sep 2024 01:56:04 -0700 (PDT)
+Message-ID: <5544d302-9480-4cca-9cfd-ed56cecf6bd3@redhat.com>
+Date: Thu, 5 Sep 2024 10:56:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03f4a145-41f4-41de-8f07-08dccd872a89
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2024 08:45:59.7489
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vcf6T9PJQnpIExi4cWiCWBoffHcZ75BeChQwWkmEqNXSFcPO+yJy8NvrFgXw0r6+k2g/RmIU/Fxlnf1n+jtrGBo0RrJy3Zgb5lWEhBQmaXw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR07MB9593
-X-Proofpoint-ORIG-GUID: yXB_UKK0AxFuDKTI-VAGCxRSORcBPOcw
-X-Proofpoint-GUID: yXB_UKK0AxFuDKTI-VAGCxRSORcBPOcw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-05_04,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 spamscore=0
- adultscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
- suspectscore=0 phishscore=0 bulkscore=0 mlxlogscore=669 mlxscore=0
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2409050064
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] platform/x86/hp: Avoid spurious wakeup on HP ProOne
+ 440
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org,
+ jorge.lopez2@hp.com
+Cc: acelan.kao@canonical.com, platform-driver-x86@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240905042447.418662-1-kai.heng.feng@canonical.com>
+ <20240905042447.418662-2-kai.heng.feng@canonical.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240905042447.418662-2-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
->
->On 24-09-05 07:31:10, Pawel Laszczak wrote:
->> Fix changes incorrect usb_request->status returned during disabling
->> endpoints. Before fix the status returned during dequeuing requests
->> while disabling endpoint was ECONNRESET.
->> Patch changes it to ESHUTDOWN.
->
->Would you please explain why we need this change?
+Hi Kai-Heng Feng,
 
-This patch is needed for UVC gadget.=20
-During stopping streaming the class starts dequeuing usb requests and
-controller driver returns the -ECONNRESET status. After completion
-requests the class or application "uvc-gadget" try to queue this
-request again. Changing this status to ESHUTDOWN cause that UVC
-assume that endpoint is disabled, or device is disconnected and
-stop re-queuing usb requests.
+On 9/5/24 6:24 AM, Kai-Heng Feng wrote:
+> The HP ProOne 440 has a power saving design that when the display is
+> off, it also cuts the USB touchscreen device's power off.
+> 
+> This can cause system early wakeup because cutting the power off the
+> touchscreen device creates a disconnect event and prevent the system
+> from suspending:
+> [  445.814574] hub 2-0:1.0: hub_suspend
+> [  445.814652] usb usb2: bus suspend, wakeup 0
+> [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
+> [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
+> [  445.824651] xhci_hcd 0000:00:14.0: handle_port_status: starting usb1 port polling.
+> [  445.844039] xhci_hcd 0000:00:14.0: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x20 returns -16
+> [  445.844058] xhci_hcd 0000:00:14.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
+> [  445.844072] xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
+> [  446.276101] PM: Some devices failed to suspend, or early wake event detected
+> 
+> So add a quirk to make sure the following is happening:
+> 1. Let the i915 driver suspend first, to ensure the display is off so
+>    system also cuts the USB touchscreen's power.
+> 2. If the touchscreen is present, wait a while to let the USB disconnect
+>    event fire.
+> 3. Since the disconnect event already happened, the xhci's suspend
+>    routine won't be interrupted anymore.
 
-Thanks,
-Pawel
+You only set the suspend-handler from the dmi-quirk callback, so it
+is only ever set on the affected laptop-model. So this can be simplified
+by simply always doing the msleep(200) on suspend, instead of poking at
+USB system internals to find out if the touchscreen is there on suspend.
 
->
->Peter
->
->>
->> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
->> USBSSP DRD Driver")
->> cc: stable@vger.kernel.org
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->>  drivers/usb/cdns3/cdnsp-ring.c | 6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
->> b/drivers/usb/cdns3/cdnsp-ring.c index 1e011560e3ae..bccc8fc143d0
->> 100644
->> --- a/drivers/usb/cdns3/cdnsp-ring.c
->> +++ b/drivers/usb/cdns3/cdnsp-ring.c
->> @@ -718,7 +718,8 @@ int cdnsp_remove_request(struct cdnsp_device
->*pdev,
->>  	seg =3D cdnsp_trb_in_td(pdev, cur_td->start_seg, cur_td->first_trb,
->>  			      cur_td->last_trb, hw_deq);
->>
->> -	if (seg && (pep->ep_state & EP_ENABLED))
->> +	if (seg && (pep->ep_state & EP_ENABLED) &&
->> +	    !(pep->ep_state & EP_DIS_IN_RROGRESS))
->>  		cdnsp_find_new_dequeue_state(pdev, pep, preq-
->>request.stream_id,
->>  					     cur_td, &deq_state);
->>  	else
->> @@ -736,7 +737,8 @@ int cdnsp_remove_request(struct cdnsp_device
->*pdev,
->>  	 * During disconnecting all endpoint will be disabled so we don't
->>  	 * have to worry about updating dequeue pointer.
->>  	 */
->> -	if (pdev->cdnsp_state & CDNSP_STATE_DISCONNECT_PENDING) {
->> +	if (pdev->cdnsp_state & CDNSP_STATE_DISCONNECT_PENDING ||
->> +	    pep->ep_state & EP_DIS_IN_RROGRESS) {
->>  		status =3D -ESHUTDOWN;
->>  		ret =3D cdnsp_cmd_set_deq(pdev, pep, &deq_state);
->>  	}
->> --
->> 2.43.0
->>
+I guess there may be versions of this specific laptop with/without
+the touchscreen, but I'm not overly worried about adding a 200 ms delay
+on just 1 model laptop for the versions which don't have a touchscreen.
+
+A bigger worry which I have is that we are going to see the same problem
+on other vendor's laptops. So I think in the end we may need something
+done in a more generic manner, in e.g. the drm subsystem (since this
+is display related). For now lets go with this fix and when we hit similar
+cases we can figure out what a generic fix will look like.
+
+One more comment inline below.
+
+
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/platform/x86/hp/hp-wmi.c | 104 ++++++++++++++++++++++++++++++-
+>  1 file changed, 103 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+> index 876e0a97cee1..80fc3ee4deaf 100644
+> --- a/drivers/platform/x86/hp/hp-wmi.c
+> +++ b/drivers/platform/x86/hp/hp-wmi.c
+> @@ -30,6 +30,9 @@
+>  #include <linux/rfkill.h>
+>  #include <linux/string.h>
+>  #include <linux/dmi.h>
+> +#include <linux/delay.h>
+> +#include <linux/pci.h>
+> +#include <linux/usb.h>
+>  
+>  MODULE_AUTHOR("Matthew Garrett <mjg59@srcf.ucam.org>");
+>  MODULE_DESCRIPTION("HP laptop WMI driver");
+> @@ -1708,6 +1711,52 @@ static void __exit hp_wmi_bios_remove(struct platform_device *device)
+>  		platform_profile_remove();
+>  }
+>  
+> +static int hp_wmi_suspend_handler(struct device *device)
+> +{
+> +	acpi_handle handle;
+> +	struct acpi_device *adev;
+> +	struct device *physdev;
+> +	struct usb_port *port_dev;
+> +	struct usb_device *udev;
+> +	acpi_status status;
+> +	bool found = false;
+> +
+> +	/* The USB touchscreen device always connects to HS11 */
+> +	status = acpi_get_handle(NULL, "\\_SB.PC00.XHCI.RHUB.HS11", &handle);
+> +	if (ACPI_FAILURE(status))
+> +		return 0;
+> +
+> +	adev = acpi_fetch_acpi_dev(handle);
+> +	if (!adev)
+> +		return 0;
+> +
+> +	physdev = get_device(acpi_get_first_physical_node(adev));
+> +	if (!physdev)
+> +		return 0;
+> +
+> +	port_dev = to_usb_port(physdev);
+> +	if (port_dev->state == USB_STATE_NOTATTACHED)
+> +		return 0;
+> +
+> +	udev = port_dev->child;
+> +
+> +	if (udev) {
+
+This is racy. Often desktop environments will turn off the display
+before doing a system-suspend, so the touchscreen is already disconnected
+at this point but the USB subsystem may not have processed it yet.
+
+What if the USB subsystem processes the disconnect exactly at this point?
+
+Then your port_dev->child pointer is no longer valid and your passing
+a pointer to free-ed mem to usb_get_dev()
+
+As I said above since this code only runs on 1 model based on a DMI
+match just simplify this entire function to a single "msleep(200)"
+and be done with it.
+
+Regards,
+
+Hans
+
+
+> +		usb_get_dev(udev);
+> +		if (le16_to_cpu(udev->descriptor.idVendor) == 0x1fd2 &&
+> +		    le16_to_cpu(udev->descriptor.idProduct) == 0x8102) {
+> +			dev_dbg(&hp_wmi_platform_dev->dev, "LG Melfas touchscreen found\n");
+> +			found = true;
+> +		}
+> +		usb_put_dev(udev);
+> +
+> +		/* Let the xhci have time to handle disconnect event */
+> +		if (found)
+> +			msleep(200);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int hp_wmi_resume_handler(struct device *device)
+>  {
+>  	/*
+> @@ -1745,7 +1794,7 @@ static int hp_wmi_resume_handler(struct device *device)
+>  	return 0;
+>  }
+>  
+> -static const struct dev_pm_ops hp_wmi_pm_ops = {
+> +static struct dev_pm_ops hp_wmi_pm_ops = {
+>  	.resume  = hp_wmi_resume_handler,
+>  	.restore  = hp_wmi_resume_handler,
+>  };
+> @@ -1871,6 +1920,57 @@ static int hp_wmi_hwmon_init(void)
+>  	return 0;
+>  }
+>  
+> +static int lg_usb_touchscreen_quirk(const struct dmi_system_id *id)
+> +{
+> +	struct pci_dev *vga, *xhci;
+> +	struct device_link *vga_link, *xhci_link;
+> +
+> +	vga = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, NULL);
+> +
+> +	xhci = pci_get_class(PCI_CLASS_SERIAL_USB_XHCI, NULL);
+> +
+> +	if (vga && xhci) {
+> +		xhci_link = device_link_add(&hp_wmi_platform_dev->dev, &xhci->dev,
+> +				      DL_FLAG_STATELESS);
+> +		if (xhci_link)
+> +			dev_info(&hp_wmi_platform_dev->dev, "Suspend before %s\n",
+> +				 pci_name(xhci));
+> +		else
+> +			return 1;
+> +
+> +		vga_link = device_link_add(&vga->dev, &hp_wmi_platform_dev->dev,
+> +					   DL_FLAG_STATELESS);
+> +		if (vga_link)
+> +			dev_info(&hp_wmi_platform_dev->dev, "Suspend after %s\n",
+> +				 pci_name(vga));
+> +		else {
+> +			device_link_del(xhci_link);
+> +			return 1;
+> +		}
+> +	}
+> +
+> +
+> +	/* During system bootup, the display and the USB touchscreen device can
+> +	 * be on and off several times, so the device may not be present during
+> +	 * hp-wmi's probe routine. Try to find the device in suspend routine
+> +	 * instead.
+> +	 */
+> +	hp_wmi_pm_ops.suspend = hp_wmi_suspend_handler;
+> +
+> +	return 1;
+> +}
+> +
+> +static const struct dmi_system_id hp_wmi_quirk_table[] = {
+> +	{
+> +		.callback = lg_usb_touchscreen_quirk,
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "HP ProOne 440 23.8 inch G9 All-in-One Desktop PC"),
+> +		},
+> +	},
+> +	{}
+> +};
+> +
+>  static int __init hp_wmi_init(void)
+>  {
+>  	int event_capable = wmi_has_guid(HPWMI_EVENT_GUID);
+> @@ -1909,6 +2009,8 @@ static int __init hp_wmi_init(void)
+>  			goto err_unregister_device;
+>  	}
+>  
+> +	dmi_check_system(hp_wmi_quirk_table);
+> +
+>  	return 0;
+>  
+>  err_unregister_device:
+
 
