@@ -1,257 +1,447 @@
-Return-Path: <linux-usb+bounces-14700-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14701-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 917E996D617
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 12:30:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E9FE96D6F6
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 13:23:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02E10B239FD
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 10:30:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C34F0B2184A
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 11:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E77198E83;
-	Thu,  5 Sep 2024 10:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B9819938D;
+	Thu,  5 Sep 2024 11:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XZMuz79D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rysf8soX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D2F198845;
-	Thu,  5 Sep 2024 10:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E3119884A
+	for <linux-usb@vger.kernel.org>; Thu,  5 Sep 2024 11:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725532231; cv=none; b=dqHOI049jJ26HW14KcozsEtHAfCORDM9lfiqpcxGPn2V2rt4lFTwI8D1sXzJz5k/CSgXquwa9w7K6woqMNZIZKQgDKprCYwqIU74TomgyNBGdYboVDrUtW3FvbQ2nqgRYtcQNsecR/JibOxLW2k0b4rLCsoa52xiusW1a74mefE=
+	t=1725535405; cv=none; b=nb+dEg8eqbaAxcH4tF8p91qKT3i2P7quW3de+Bgmtk51NirM5EFMTSfqQR/WMbpQouuCrWX2r5wiAF83xjtt3JzsDSsV3BYfZaknjCfMrIdob31YEu79EfvpD0qLM+20L6JA6DiJR9m+Pq96S9paJdy9+MpHpbVMWpR29vaiafY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725532231; c=relaxed/simple;
-	bh=GM6trB8qqYdQ/Ed3/cfE8iPX9QWQHUFk57sGbyXrPPg=;
+	s=arc-20240116; t=1725535405; c=relaxed/simple;
+	bh=uzVm63Qqt3Tui1IbbhruevLE5CI9ytwBhLtMm8qzhag=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X8fcApoZ7yx2+KwobfwtGoeueIUTgLFuj2PxkB2Wc3ckxp6hc3P+uxSacCtdNedWSNbRkWdQV7QEJAxxnGzCIFLKVBxXg984iWqShj8efLqE7scdV00WmkDrMI/5R5usPG4DEofSun7lrOGiSJCjgoNl5GLNHxKiuEHL0HRaZLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XZMuz79D; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=i4Di2G5SCoM0vr0g5IPC9Rzoxwq4DqvTn4j69jGM4xJxOAhPr6m9tcA2kYnUgAYZgzJ9sCDk4s3nwqqnOFObsyxa0+xftnnpBjhoaI9HzSTw49nKDzvuomSQKog/6eZlX7ldzvOGWW8jlAOgNxC9uxINMMgfqSgwfmffpb7DYvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rysf8soX; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725532229; x=1757068229;
+  t=1725535404; x=1757071404;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GM6trB8qqYdQ/Ed3/cfE8iPX9QWQHUFk57sGbyXrPPg=;
-  b=XZMuz79Dr/BKnWn5JVAHv/LDnqjbhNzwx4Nf4e7uiv3rNprbuftiXcFP
-   MXSoXPIR0ugXwPf6Ls61VBqRa4UL4TqtzfanH8LHdPxOyIsTJ+nHHRJ7b
-   S+PL6/v6ZWyTyK7Ld3z2pqAY2Y1780UsxPU9oijcqHO2wyXOiVKCcdmGd
-   kTp2Mh9T1aKfIaOTOtArGxIWNr73Gq6yFXCtFEug4ifM5vKZLQx/YNRsQ
-   a8payl27eVFfjEnIzb6ncksnuVHGZNtrCGZ+uQwUJ3IXcH/7YrmzSS/q2
-   sANA9yY26pHgzag55BTRbLzmVbn4jcCXBN6HQECbJ4RQvB6xZt5bAv51r
-   g==;
-X-CSE-ConnectionGUID: P/wmimskRF6eHIkpL0DIqg==
-X-CSE-MsgGUID: fPP3r8E5QDe6O/NXVHxkhA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="28128280"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=uzVm63Qqt3Tui1IbbhruevLE5CI9ytwBhLtMm8qzhag=;
+  b=Rysf8soXuuv9GrQMwlWtWpvY5qeiYqcPt10/FvClmEheAMOyYK1G4AEC
+   TYVoPmyyQnYw9kkS0/69G1eTX783O/hp6zZHL8wdbzIJHhU8uRMX6ssYW
+   D1t40oD3AsNTxnIA0n2mgQ39S11LqhgNdkDuFCt944r1at88JzKZASLGg
+   P7SSov6R+9klsFQjPNgAUflVykkKXHEeDU6cQ6upZXe7NfOyqQTiLEn0W
+   3wbXJQmHTI535NzP8mD7oWVq6TyzGJ6AZca/cEF/6NQ519q/NkQ7/F3+9
+   wLZA9HTFrg9Zqz6Yy1UltX/Wb4XjaxKHuPvhlVKLpxElA0W2rFrHjm8sT
+   Q==;
+X-CSE-ConnectionGUID: 52sEose9RV+dGSnfzpD1bQ==
+X-CSE-MsgGUID: cWK4QR0gTBm5KT9BxW7Cow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="34816128"
 X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="28128280"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 03:30:28 -0700
-X-CSE-ConnectionGUID: 73TzvbwMTiWyYJScluHwVg==
-X-CSE-MsgGUID: 5S3Ka0+CS0aqsY2DBbGsLA==
+   d="scan'208";a="34816128"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 04:23:23 -0700
+X-CSE-ConnectionGUID: oASWpxPsTRWZgEa/hPgv4w==
+X-CSE-MsgGUID: 2L/stiQhSL2bBChkSJaD2A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="96323927"
+   d="scan'208";a="70388810"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa002.jf.intel.com with SMTP; 05 Sep 2024 03:30:25 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 05 Sep 2024 13:30:23 +0300
-Date: Thu, 5 Sep 2024 13:30:23 +0300
+  by orviesa005.jf.intel.com with SMTP; 05 Sep 2024 04:23:19 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 05 Sep 2024 14:23:18 +0300
+Date: Thu, 5 Sep 2024 14:23:18 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v3] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Message-ID: <ZtmIP1iTz+XnUD4o@kuha.fi.intel.com>
-References: <20240903181917.617400-1-lk@c--e.de>
- <ZthNkY4MEpUgw3We@kuha.fi.intel.com>
- <ZthnbdKig//kPKgF@cae.in-ulm.de>
- <Zth0pbxJnKYKn8u2@kuha.fi.intel.com>
- <ZtixzrzsA9bluuL7@cae.in-ulm.de>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Pavan Holla <pholla@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v5 3/8] usb: typec: ucsi: Implement ChromeOS UCSI driver
+Message-ID: <ZtmUptrsOvcRxiVa@kuha.fi.intel.com>
+References: <20240903163033.3170815-1-ukaszb@chromium.org>
+ <20240903163033.3170815-4-ukaszb@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZtixzrzsA9bluuL7@cae.in-ulm.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240903163033.3170815-4-ukaszb@chromium.org>
 
-Hi,
+On Tue, Sep 03, 2024 at 04:30:28PM +0000, Łukasz Bartosik wrote:
+> From: Pavan Holla <pholla@chromium.org>
+> 
+> Implementation of a UCSI transport driver for ChromeOS.
+> This driver will be loaded if the ChromeOS EC implements a PPM.
+> 
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
+> Co-developed-by: Łukasz Bartosik <ukaszb@chromium.org>
+> Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
 
-On Wed, Sep 04, 2024 at 09:15:26PM +0200, Christian A. Ehrhardt wrote:
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  MAINTAINERS                           |   7 +
+>  drivers/usb/typec/ucsi/Kconfig        |  13 ++
+>  drivers/usb/typec/ucsi/Makefile       |   1 +
+>  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 278 ++++++++++++++++++++++++++
+>  4 files changed, 299 insertions(+)
+>  create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi.c
 > 
-> Hi Heikki,
-> 
-> On Wed, Sep 04, 2024 at 05:54:29PM +0300, Heikki Krogerus wrote:
-> > On Wed, Sep 04, 2024 at 03:58:05PM +0200, Christian A. Ehrhardt wrote:
-> > > 
-> > > Hi Heikki,
-> > > 
-> > > On Wed, Sep 04, 2024 at 03:07:45PM +0300, Heikki Krogerus wrote:
-> > > > On Tue, Sep 03, 2024 at 08:19:17PM +0200, Christian A. Ehrhardt wrote:
-> > > > > If the busy indicator is set, all other fields in CCI should be
-> > > > > clear according to the spec. However, some UCSI implementations do
-> > > > > not follow this rule and report bogus data in CCI along with the
-> > > > > busy indicator. Ignore the contents of CCI if the busy indicator is
-> > > > > set.
-> > > > > 
-> > > > > If a command timeout is hit it is possible that the EVENT_PENDING
-> > > > > bit is cleared while connector work is still scheduled which can
-> > > > > cause the EVENT_PENDING bit to go out of sync with scheduled connector
-> > > > > work. Check and set the EVENT_PENDING bit on entry to
-> > > > > ucsi_handle_connector_change() to fix this.
-> > > > > 
-> > > > > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> > > > > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> > > > > Bisected-by: Christian Heusel <christian@heusel.eu>
-> > > > > Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-> > > > > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> > > > > Cc: stable@vger.kernel.org
-> > > > > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> > > > > ---
-> > > > >  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
-> > > > >  1 file changed, 8 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > > > > index 4039851551c1..540cb1d2822c 100644
-> > > > > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > > > > @@ -38,6 +38,10 @@
-> > > > >  
-> > > > >  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
-> > > > >  {
-> > > > > +	/* Ignore bogus data in CCI if busy indicator is set. */
-> > > > > +	if (cci & UCSI_CCI_BUSY)
-> > > > > +		return;
-> > > > 
-> > > > I started testing this and it looks like the commands never get
-> > > > cancelled when the BUSY bit is set. I don't think this patch is the
-> > > > problem, though. I think the BUSY handling broke earlier, probable in
-> > > > 5e9c1662a89b ("usb: typec: ucsi: rework command execution functions").
-> > > > 
-> > > > I need to look at this a bit more carefully, but in the meantime, can
-> > > > you try this:
-> > > > 
-> > > > 	if (cci & UCSI_CCI_BUSY) {
-> > > > 		complete(&ucsi->complete);
-> > > >		return;
-> > > >         }
-> > > 
-> > > I really don't think this is the correct thing to do and it will
-> > > likely make things worse.
-> > 
-> > That was the behaviour before all that command execution refactoring
-> > this summer. I'm not saying that it's right, but that's how it was.
-> 
-> The code to do that is still there but does not get called because
-> the ETIMEDOUT error is checked for CCI in ucsi_run_command.
-> I guess something like this (only compile tested) would fix it:
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 540cb1d2822c..d6d61606bbcf 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -111,15 +111,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
->  		size = clamp(size, 0, 16);
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fe83ba7194ea..8c030ea0b503 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5300,6 +5300,13 @@ L:	chrome-platform@lists.linux.dev
+>  S:	Maintained
+>  F:	drivers/watchdog/cros_ec_wdt.c
 >  
->  	ret = ucsi->ops->sync_control(ucsi, command);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = ucsi->ops->read_cci(ucsi, cci);
-> -	if (ret)
-> -		return ret;
-> +	if (ucsi->ops->read_cci(ucsi, cci))
-> +		return -EIO;
+> +CHROMEOS UCSI DRIVER
+> +M:	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> +M:	Łukasz Bartosik <ukaszb@chromium.org>
+> +L:	chrome-platform@lists.linux.dev
+> +S:	Maintained
+> +F:	drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> +
+>  CHRONTEL CH7322 CEC DRIVER
+>  M:	Joe Tessler <jrt@google.com>
+>  L:	linux-media@vger.kernel.org
+> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> index 680e1b87b152..75559601fe8f 100644
+> --- a/drivers/usb/typec/ucsi/Kconfig
+> +++ b/drivers/usb/typec/ucsi/Kconfig
+> @@ -69,6 +69,19 @@ config UCSI_PMIC_GLINK
+>  	  To compile the driver as a module, choose M here: the module will be
+>  	  called ucsi_glink.
 >  
->  	if (*cci & UCSI_CCI_BUSY)
->  		return -EBUSY;
-> +	if (ret)
+> +config CROS_EC_UCSI
+> +	tristate "UCSI Driver for ChromeOS EC"
+> +	depends on MFD_CROS_EC_DEV
+> +	depends on CROS_USBPD_NOTIFY
+> +	depends on !EXTCON_TCSS_CROS_EC
+> +	default MFD_CROS_EC_DEV
+> +	help
+> +	  This driver enables UCSI support for a ChromeOS EC. The EC is
+> +	  expected to implement a PPM.
+> +
+> +	  To compile the driver as a module, choose M here: the module
+> +	  will be called cros_ec_ucsi.
+> +
+>  config UCSI_LENOVO_YOGA_C630
+>  	tristate "UCSI Interface Driver for Lenovo Yoga C630"
+>  	depends on EC_LENOVO_YOGA_C630
+> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+> index aed41d23887b..be98a879104d 100644
+> --- a/drivers/usb/typec/ucsi/Makefile
+> +++ b/drivers/usb/typec/ucsi/Makefile
+> @@ -21,4 +21,5 @@ obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
+>  obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
+>  obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
+>  obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
+> +obj-$(CONFIG_CROS_EC_UCSI)		+= cros_ec_ucsi.o
+>  obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
+> diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> new file mode 100644
+> index 000000000000..6b9dc05a4960
+> --- /dev/null
+> +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> @@ -0,0 +1,278 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * UCSI driver for ChromeOS EC
+> + *
+> + * Copyright 2024 Google LLC.
+> + */
+> +
+> +#include <linux/container_of.h>
+> +#include <linux/dev_printk.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_data/cros_ec_commands.h>
+> +#include <linux/platform_data/cros_usbpd_notify.h>
+> +#include <linux/platform_data/cros_ec_proto.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/wait.h>
+> +
+> +#include "ucsi.h"
+> +
+> +/*
+> + * Maximum size in bytes of a UCSI message between AP and EC
+> + */
+> +#define MAX_EC_DATA_SIZE	256
+> +
+> +/*
+> + * Maximum time in miliseconds the cros_ec_ucsi driver
+> + * will wait for a response to a command or and ack.
+> + */
+> +#define WRITE_TMO_MS		5000
+> +
+> +struct cros_ucsi_data {
+> +	struct device *dev;
+> +	struct ucsi *ucsi;
+> +
+> +	struct cros_ec_device *ec;
+> +	struct notifier_block nb;
+> +	struct work_struct work;
+> +
+> +	struct completion complete;
+> +	unsigned long flags;
+> +};
+> +
+> +static int cros_ucsi_read(struct ucsi *ucsi, unsigned int offset, void *val,
+> +			  size_t val_len)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	struct ec_params_ucsi_ppm_get req = {
+> +		.offset = offset,
+> +		.size = val_len,
+> +	};
+> +	int ret;
+> +
+> +	if (val_len > MAX_EC_DATA_SIZE) {
+> +		dev_err(udata->dev, "Can't read %zu bytes. Too big.", val_len);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_GET,
+> +			  &req, sizeof(req), val, val_len);
+> +	if (ret < 0) {
+> +		dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_GET: error=%d", ret);
 > +		return ret;
->  
->  	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
->  		return -EIO;
-> 
-
-Yes, that looks good.
-
-> > > A notification with the UCSI_CCI_BUSY bit does _not_ mean that
-> > > the controller is busy doing other things and cannot complete the
-> > > command.
-> > > 
-> > > Instead it is an indication that the controller _is_ working to
-> > > complete our command but will take somewhat longer:
-> > > 
-> > > Citing:
-> > > | Note: If a command takes longer than MIN_TIME_TO_RESPOND_WITH_BUSY ms
-> > > |       for the PPM (excluding PPM to OPM communication latency) to complete,
-> > > |       then the PPM shall respond to the command by setting the CCI Busy
-> > > |       Indicator and notify the OPM.
-> > > |       Subsequently, when the PPM actually completes the command, the
-> > > |       PPM shall notify the OPM of the outcome of the command via an
-> > > |       asynchronous notification associated with that command.
-> > > 
-> > > Unless I misunderstand what you are trying to do your change would
-> > > cause us to needlessly abort/cancel every command that takes more than
-> > > MIN_TIME_TO_RESPOND_WITH_BUSY to complete.
-> > > 
-> > > What am I missing?
-> > 
-> > The decision to Cancel was made to work around buggy EC firmwares that
-> > reported BUSY, and then never completed the command. So without that
-> > Cancel hack, the PPM was stuck on those systems.
-> 
-> Yes fine. But the cancel should be done _after_ the command times
-> out normally, I guess. Otherwise conforming systems will get there
-> commands terminated/aborted for no good reason. And this is what
-> the current code tries to do.
-> 
-> > I don't know what we should do about that hack. We probable could just
-> > ignore those old systems, and then add quirks for them as needed. But
-> > I also don't really like what you are proposing in this patch, that we
-> > basically ignore the BUSY bit completely.
-> 
-> See above. I think that solves both cases nicely.
-
-Agreed. Can you incorporate that into this patch?
-
-> > Right now I was hoping that we return the behaviour of the driver to
-> > a point where everything worked as before, and after that start
-> > improving the driver. That's why I was hoping to hear does the problem
-> > that you are seeing go away with that approach.
-> > 
-> > With which command do you guys get the busy notification?
-> 
-> It happens for all types of commands. I will append debug output where
-> all commands sent and all CCI values read are printed.
-> 
-> Unfortunately, I don't have direct access to the affected hardware.
-> I'm just looking into this because one of my changes from earlier
-> this year caused a regression on that machine. Is this sufficient to
-> show what's going on?
-
-Yes it's fine. I was mostly interested.
-
-> > In any case, I don't think all those ucsi_*_common() functions give us
-> > enough room to move here. I feel that the command execution needs to
-> > be refactored somehow again.
-> 
-> That's your call to make but personally, I like the recent changes
-> to the interface between ucsi.c and the backend drivers.
-
-Just to clarify here, I did no have anything that drastic in mind.
-
-Thanks Christian,
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int cros_ucsi_read_version(struct ucsi *ucsi, u16 *version)
+> +{
+> +	return cros_ucsi_read(ucsi, UCSI_VERSION, version, sizeof(*version));
+> +}
+> +
+> +static int cros_ucsi_read_cci(struct ucsi *ucsi, u32 *cci)
+> +{
+> +	return cros_ucsi_read(ucsi, UCSI_CCI, cci, sizeof(*cci));
+> +}
+> +
+> +static int cros_ucsi_read_message_in(struct ucsi *ucsi, void *val,
+> +				     size_t val_len)
+> +{
+> +	return cros_ucsi_read(ucsi, UCSI_MESSAGE_IN, val, val_len);
+> +}
+> +
+> +static int cros_ucsi_async_control(struct ucsi *ucsi, u64 cmd)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	struct ec_params_ucsi_ppm_set *req;
+> +	size_t req_len;
+> +	int ret;
+> +
+> +	req_len = sizeof(struct ec_params_ucsi_ppm_set) + sizeof(cmd);
+> +	req = kzalloc(req_len, GFP_KERNEL);
+> +	if (!req)
+> +		return -ENOMEM;
+> +
+> +	req->offset = UCSI_CONTROL;
+> +	memcpy(req->data, &cmd, sizeof(cmd));
+> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_SET,
+> +			  req, req_len, NULL, 0);
+> +	if (ret < 0) {
+> +		dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_SET: error=%d", ret);
+> +		return ret;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	bool ack = UCSI_COMMAND(cmd) == UCSI_ACK_CC_CI;
+> +	int ret;
+> +
+> +	if (ack)
+> +		set_bit(ACK_PENDING, &udata->flags);
+> +	else
+> +		set_bit(COMMAND_PENDING, &udata->flags);
+> +
+> +	ret = cros_ucsi_async_control(ucsi, cmd);
+> +	if (ret)
+> +		goto out;
+> +
+> +	if (!wait_for_completion_timeout(&udata->complete, WRITE_TMO_MS))
+> +		ret = -ETIMEDOUT;
+> +
+> +out:
+> +	if (ack)
+> +		clear_bit(ACK_PENDING, &udata->flags);
+> +	else
+> +		clear_bit(COMMAND_PENDING, &udata->flags);
+> +	return ret;
+> +}
+> +
+> +struct ucsi_operations cros_ucsi_ops = {
+> +	.read_version = cros_ucsi_read_version,
+> +	.read_cci = cros_ucsi_read_cci,
+> +	.read_message_in = cros_ucsi_read_message_in,
+> +	.async_control = cros_ucsi_async_control,
+> +	.sync_control = cros_ucsi_sync_control,
+> +};
+> +
+> +static void cros_ucsi_work(struct work_struct *work)
+> +{
+> +	struct cros_ucsi_data *udata = container_of(work, struct cros_ucsi_data, work);
+> +	u32 cci;
+> +
+> +	if (cros_ucsi_read(udata->ucsi, UCSI_CCI, &cci, sizeof(cci)))
+> +		return;
+> +
+> +	if (UCSI_CCI_CONNECTOR(cci))
+> +		ucsi_connector_change(udata->ucsi, UCSI_CCI_CONNECTOR(cci));
+> +
+> +	if (cci & UCSI_CCI_ACK_COMPLETE &&
+> +	    test_and_clear_bit(ACK_PENDING, &udata->flags))
+> +		complete(&udata->complete);
+> +	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> +	    test_and_clear_bit(COMMAND_PENDING, &udata->flags))
+> +		complete(&udata->complete);
+> +}
+> +
+> +static int cros_ucsi_event(struct notifier_block *nb,
+> +			   unsigned long host_event, void *_notify)
+> +{
+> +	struct cros_ucsi_data *udata = container_of(nb, struct cros_ucsi_data, nb);
+> +
+> +	if (!(host_event & PD_EVENT_PPM))
+> +		return NOTIFY_OK;
+> +
+> +	dev_dbg(udata->dev, "UCSI notification received");
+> +	flush_work(&udata->work);
+> +	schedule_work(&udata->work);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static void cros_ucsi_destroy(struct cros_ucsi_data *udata)
+> +{
+> +	cros_usbpd_unregister_notify(&udata->nb);
+> +	cancel_work_sync(&udata->work);
+> +	ucsi_destroy(udata->ucsi);
+> +}
+> +
+> +static int cros_ucsi_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct cros_ec_dev *ec_data = dev_get_drvdata(dev->parent);
+> +	struct cros_ucsi_data *udata;
+> +	int ret;
+> +
+> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
+> +	if (!udata)
+> +		return -ENOMEM;
+> +
+> +	udata->dev = dev;
+> +
+> +	udata->ec = ec_data->ec_dev;
+> +	if (!udata->ec) {
+> +		dev_err(dev, "couldn't find parent EC device");
+> +		return -ENODEV;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, udata);
+> +
+> +	INIT_WORK(&udata->work, cros_ucsi_work);
+> +	init_completion(&udata->complete);
+> +
+> +	udata->ucsi = ucsi_create(dev, &cros_ucsi_ops);
+> +	if (IS_ERR(udata->ucsi)) {
+> +		dev_err(dev, "failed to allocate UCSI instance");
+> +		return PTR_ERR(udata->ucsi);
+> +	}
+> +
+> +	ucsi_set_drvdata(udata->ucsi, udata);
+> +
+> +	udata->nb.notifier_call = cros_ucsi_event;
+> +	ret = cros_usbpd_register_notify(&udata->nb);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register notifier: error=%d", ret);
+> +		ucsi_destroy(udata->ucsi);
+> +		return ret;
+> +	}
+> +
+> +	ret = ucsi_register(udata->ucsi);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register UCSI: error=%d", ret);
+> +		cros_ucsi_destroy(udata);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void cros_ucsi_remove(struct platform_device *dev)
+> +{
+> +	struct cros_ucsi_data *udata = platform_get_drvdata(dev);
+> +
+> +	ucsi_unregister(udata->ucsi);
+> +	cros_ucsi_destroy(udata);
+> +}
+> +
+> +static int __maybe_unused cros_ucsi_suspend(struct device *dev)
+> +{
+> +	struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+> +
+> +	cancel_work_sync(&udata->work);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused cros_ucsi_resume(struct device *dev)
+> +{
+> +	struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+> +
+> +	return ucsi_resume(udata->ucsi);
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(cros_ucsi_pm_ops, cros_ucsi_suspend,
+> +			 cros_ucsi_resume);
+> +
+> +static const struct platform_device_id cros_ucsi_id[] = {
+> +	{ KBUILD_MODNAME, 0 },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(platform, cros_ucsi_id);
+> +
+> +static struct platform_driver cros_ucsi_driver = {
+> +	.driver = {
+> +		.name = KBUILD_MODNAME,
+> +		.pm = &cros_ucsi_pm_ops,
+> +	},
+> +	.id_table = cros_ucsi_id,
+> +	.probe = cros_ucsi_probe,
+> +	.remove = cros_ucsi_remove,
+> +};
+> +
+> +module_platform_driver(cros_ucsi_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("UCSI driver for ChromeOS EC");
+> -- 
+> 2.46.0.469.g59c65b2a67-goog
 
 -- 
 heikki
