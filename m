@@ -1,181 +1,200 @@
-Return-Path: <linux-usb+bounces-14689-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72D4596D0DB
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 09:53:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0497A96D131
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 10:04:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0C77B21461
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 07:53:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2831D1C21C57
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2024 08:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE091946B3;
-	Thu,  5 Sep 2024 07:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40279193419;
+	Thu,  5 Sep 2024 08:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZjrlTIi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dNZz5tDK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B40C1925B5;
-	Thu,  5 Sep 2024 07:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42A31925B0
+	for <linux-usb@vger.kernel.org>; Thu,  5 Sep 2024 08:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725522763; cv=none; b=auMZj6ZXES1g5hF59OFDfYKNoVXbj+NuzjNmFGA3TqWFqYGBz18mhQ33U3S/e6tLr1v7D8TmS7UW9jy6+Iop77xvLGMME+dm3N+0onLH6EHJArgfWTSKjWfZCqX4RYkaqHYbHkpjwyITkmQ80gyIF4YnHDOIK6s4CjbC/T/dxxU=
+	t=1725523448; cv=none; b=Wz6EFERIHwPg8ux16uGVvXHrPq3Z0+JhDtEi5OcBm/2pUGxUjGclw3inHG13sfTnJrD5A47rzBw2qpMBjdh/1+4Os6Bm82yIF/3tYy68y/noMNhaO6TeWK7eYKIDlM2i6Mmqb2Cm45x1VgMvMCs+izrFww/DgrUzBf3bsKDnXeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725522763; c=relaxed/simple;
-	bh=1w/DEc4Hg4y0fdNyNzind01KPDVGipnFjRZPtt8ca10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pHDdleQPVJy3PW6FTmdhhGmuWL10YF4mp1k8OPQPzaJHvjeiBMQC9t21JYwXiC6B+9rjvEAzUomvEUd/uvOjJlTuamksVDqSeWWvz+un8Fr8OMgEP/WRgfHrUxrHVCv9Yi4NZdMUmkAMnBIA9f8BOybFFaxvHTazEdIlgVlJ4yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZjrlTIi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B765C4CEC3;
-	Thu,  5 Sep 2024 07:52:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725522762;
-	bh=1w/DEc4Hg4y0fdNyNzind01KPDVGipnFjRZPtt8ca10=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QZjrlTIihvgnrnv9ZJbwzCxYksy0vYij2huAmMf6Q1+pRI1lDYM1XNpxfwd36lloy
-	 QVF/0ASW11I1dqeofBFl6VQWpHQcfu2mN++sNVZubWKrnJ9qDvmxL/H/LkON0LM07c
-	 r5HcnUQvlJL8CRihL250rMZ6+YjP/+eMi1U1Ji/7/2G459tCwAF/wXNx+E1M5ktHyw
-	 rsPv7124pOwURK/ZC0fJuRyNCHbQzp5W03uampYTdzQK4CwNwyXDOAr+OVHD2PZeCv
-	 nViqVFyN4Kqna95qkmjJ8g0V4RykdYaJOoAvg1nOFaaAI1BJmqWIWeDnZEv204+a1N
-	 kGVMplaqhVxRQ==
-Date: Thu, 5 Sep 2024 15:52:35 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: xhci: fix loss of data on Cadence xHC
-Message-ID: <20240905075235.GB325295@nchen-desktop>
-References: <20240905065716.305332-1-pawell@cadence.com>
- <PH7PR07MB95386A40146E3EC64086F409DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+	s=arc-20240116; t=1725523448; c=relaxed/simple;
+	bh=fz8+siYXglxlWnmdjU55HWapuXHV02y4qc+KjTOoTkM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=TLVArkUOjTIFqYlnKNrY47K5wJif0ckmMlwJcllgQYshyjYik0WrvgkokT6QF+xysF8GFd+WAcMcviyASmEuWh41/DGviHnWmWWYCxWv0MU2VcoeFgJvI2rzR4MGPIzkdTJ/Ph8+KZuITSHKzZoYmdYrbfE8awuO6Oz7YEyoSPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dNZz5tDK; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725523447; x=1757059447;
+  h=date:from:to:cc:subject:message-id;
+  bh=fz8+siYXglxlWnmdjU55HWapuXHV02y4qc+KjTOoTkM=;
+  b=dNZz5tDK67/hBAeVIUJaZGiTG+vTtJXtjq7W7QXYQ9gz5ARSvppWlUsI
+   0J2k3UbW5oW/jf6dJscj/joUviBk9OuEDwOUL/VNwyBPpY1yKKJiS3ZOt
+   qra/ZseFMWJb75Fw/AE+aMVmxTnWLPqPsbz0CCQm48cvmThylATW9KcIq
+   NzMaqu6XTtVOvwr395q0QZw3mlEqOJxqSWJBo7mEFFQPwrCs3PuruskmQ
+   oiFT1geHbmED8IhDSIsaI8CLnTRtA0gUN27Mcg9/D11G0kvC47SW/543o
+   ACMozGuaaGk6ChC0Nt7GFAUGwUWTz0TPSaQyjwULgmrVW0VuIMwMd+Fcd
+   w==;
+X-CSE-ConnectionGUID: yrb9p1vERJ2SXBcpROP1ww==
+X-CSE-MsgGUID: jVtAKaDvRsWRgdGewEpOfA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="24368237"
+X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
+   d="scan'208";a="24368237"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 01:04:07 -0700
+X-CSE-ConnectionGUID: 8+leS/H6QNSvcdwmmWnEAA==
+X-CSE-MsgGUID: 2yNuiAaBSlmxNkdATkdU0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
+   d="scan'208";a="65235866"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 05 Sep 2024 01:04:05 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sm7TH-00095e-0x;
+	Thu, 05 Sep 2024 08:04:03 +0000
+Date: Thu, 05 Sep 2024 16:03:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 87eb3cb4ec619299cd5572e1d5eb68aef4074ac2
+Message-ID: <202409051628.MajZKuYH-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95386A40146E3EC64086F409DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
 
-On 24-09-05 07:03:28, Pawel Laszczak wrote:
-> Streams should flush their TRB cache, re-read TRBs, and start executing
-> TRBs from the beginning of the new dequeue pointer after a 'Set TR Dequeue
-> Pointer' command.
-> 
-> Cadence controllers may fail to start from the beginning of the dequeue
-> TRB as it doesn't clear the Opaque 'RsvdO' field of the stream context
-> during 'Set TR Dequeue' command. This stream context area is where xHC
-> stores information about the last partially executed TD when a stream
-> is stopped. xHC uses this information to resume the transfer where it left
-> mid TD, when the stream is restarted.
-> 
-> Patch fixes this by clearing out all RsvdO fields before initializing new
-> Stream transfer using a 'Set TR Dequeue Pointer' command.
-> 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 87eb3cb4ec619299cd5572e1d5eb68aef4074ac2  usb: typec: ucsi: Fix cable registration
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-> 
-> ---
-> Changelog:
-> v3:
-> - changed patch to patch Cadence specific
-> 
-> v2:
-> - removed restoring of EDTLA field 
-> 
->  drivers/usb/cdns3/host.c     |  4 +++-
->  drivers/usb/host/xhci-pci.c  |  7 +++++++
->  drivers/usb/host/xhci-ring.c | 14 ++++++++++++++
->  drivers/usb/host/xhci.h      |  1 +
->  4 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-> index ceca4d839dfd..7ba760ee62e3 100644
-> --- a/drivers/usb/cdns3/host.c
-> +++ b/drivers/usb/cdns3/host.c
-> @@ -62,7 +62,9 @@ static const struct xhci_plat_priv xhci_plat_cdns3_xhci = {
->  	.resume_quirk = xhci_cdns3_resume_quirk,
->  };
->  
-> -static const struct xhci_plat_priv xhci_plat_cdnsp_xhci;
-> +static const struct xhci_plat_priv xhci_plat_cdnsp_xhci = {
-> +	.quirks = XHCI_CDNS_SCTX_QUIRK,
-> +};
->  
->  static int __cdns_host_init(struct cdns *cdns)
->  {
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index b9ae5c2a2527..9199dbfcea07 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -74,6 +74,9 @@
->  #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
->  #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
->  
-> +#define PCI_DEVICE_ID_CADENCE				0x17CD
-> +#define PCI_DEVICE_ID_CADENCE_SSP			0x0200
-> +
->  static const char hcd_name[] = "xhci_hcd";
->  
->  static struct hc_driver __read_mostly xhci_pci_hc_driver;
-> @@ -532,6 +535,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
->  	}
->  
-> +	if (pdev->vendor == PCI_DEVICE_ID_CADENCE &&
-> +	    pdev->device == PCI_DEVICE_ID_CADENCE_SSP)
-> +		xhci->quirks |= XHCI_CDNS_SCTX_QUIRK;
-> +
->  	/* xHC spec requires PCI devices to support D3hot and D3cold */
->  	if (xhci->hci_version >= 0x120)
->  		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 1dde53f6eb31..a1ad2658c0c7 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1386,6 +1386,20 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
->  			struct xhci_stream_ctx *ctx =
->  				&ep->stream_info->stream_ctx_array[stream_id];
->  			deq = le64_to_cpu(ctx->stream_ring) & SCTX_DEQ_MASK;
-> +
-> +			/*
-> +			 * Cadence xHCI controllers store some endpoint state
-> +			 * information within Rsvd0 fields of Stream Endpoint
-> +			 * context. This field is not cleared during Set TR
-> +			 * Dequeue Pointer command which causes XDMA to skip
-> +			 * over transfer ring and leads to data loss on stream
-> +			 * pipe.
-> +			 * To fix this issue driver must clear Rsvd0 field.
-> +			 */
-> +			if (xhci->quirks & XHCI_CDNS_SCTX_QUIRK) {
-> +				ctx->reserved[0] = 0;
-> +				ctx->reserved[1] = 0;
-> +			}
->  		} else {
->  			deq = le64_to_cpu(ep_ctx->deq) & ~EP_CTX_CYCLE_MASK;
->  		}
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 101e74c9060f..4cbd58eed214 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1907,6 +1907,7 @@ struct xhci_hcd {
->  #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
->  #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
->  #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
-> +#define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
->  
->  	unsigned int		num_active_eps;
->  	unsigned int		limit_active_eps;
-> -- 
-> 2.43.0
-> 
+elapsed time: 2206m
+
+configs tested: 107
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc-13.3.0
+alpha                            allyesconfig   gcc-13.3.0
+arc                              alldefconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                   randconfig-001-20240905   gcc-13.2.0
+arc                   randconfig-002-20240905   gcc-13.2.0
+arm                               allnoconfig   clang-20
+arm                   randconfig-001-20240905   clang-14
+arm                   randconfig-002-20240905   clang-20
+arm                   randconfig-003-20240905   clang-20
+arm                   randconfig-004-20240905   gcc-14.1.0
+arm64                             allnoconfig   gcc-14.1.0
+arm64                 randconfig-001-20240905   clang-20
+arm64                 randconfig-002-20240905   gcc-14.1.0
+arm64                 randconfig-003-20240905   clang-20
+arm64                 randconfig-004-20240905   gcc-14.1.0
+csky                              allnoconfig   gcc-14.1.0
+csky                  randconfig-001-20240905   gcc-14.1.0
+csky                  randconfig-002-20240905   gcc-14.1.0
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   clang-20
+hexagon               randconfig-001-20240905   clang-20
+hexagon               randconfig-002-20240905   clang-20
+i386                             allmodconfig   gcc-12
+i386                              allnoconfig   gcc-12
+i386                             allyesconfig   gcc-12
+i386         buildonly-randconfig-001-20240904   clang-18
+i386         buildonly-randconfig-002-20240904   gcc-12
+i386         buildonly-randconfig-003-20240904   clang-18
+i386         buildonly-randconfig-004-20240904   clang-18
+i386         buildonly-randconfig-005-20240904   clang-18
+i386         buildonly-randconfig-006-20240904   clang-18
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240904   clang-18
+i386                  randconfig-002-20240904   clang-18
+i386                  randconfig-003-20240904   clang-18
+i386                  randconfig-004-20240904   clang-18
+i386                  randconfig-005-20240904   gcc-12
+i386                  randconfig-006-20240904   gcc-12
+i386                  randconfig-011-20240904   clang-18
+i386                  randconfig-012-20240904   clang-18
+i386                  randconfig-013-20240904   gcc-12
+i386                  randconfig-014-20240904   clang-18
+i386                  randconfig-015-20240904   clang-18
+i386                  randconfig-016-20240904   gcc-12
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-14.1.0
+loongarch             randconfig-001-20240905   gcc-14.1.0
+loongarch             randconfig-002-20240905   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+mips                              allnoconfig   gcc-14.1.0
+nios2                             allnoconfig   gcc-14.1.0
+nios2                 randconfig-001-20240905   gcc-14.1.0
+nios2                 randconfig-002-20240905   gcc-14.1.0
+openrisc                          allnoconfig   gcc-14.1.0
+openrisc                         allyesconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   gcc-14.1.0
+parisc                           allyesconfig   gcc-14.1.0
+parisc                randconfig-001-20240905   gcc-14.1.0
+parisc                randconfig-002-20240905   gcc-14.1.0
+powerpc                           allnoconfig   gcc-14.1.0
+powerpc               randconfig-002-20240905   clang-20
+powerpc64             randconfig-001-20240905   gcc-14.1.0
+powerpc64             randconfig-002-20240905   gcc-14.1.0
+powerpc64             randconfig-003-20240905   clang-20
+riscv                             allnoconfig   gcc-14.1.0
+riscv                 randconfig-001-20240905   gcc-14.1.0
+riscv                 randconfig-002-20240905   clang-20
+s390                             allmodconfig   clang-20
+s390                              allnoconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                  randconfig-001-20240905   clang-20
+s390                  randconfig-002-20240905   gcc-14.1.0
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                    randconfig-001-20240905   gcc-14.1.0
+sh                    randconfig-002-20240905   gcc-14.1.0
+sparc                            allmodconfig   gcc-14.1.0
+sparc64               randconfig-001-20240905   gcc-14.1.0
+sparc64               randconfig-002-20240905   gcc-14.1.0
+um                                allnoconfig   clang-17
+um                    randconfig-001-20240905   gcc-12
+um                    randconfig-002-20240905   gcc-12
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240905   gcc-12
+x86_64       buildonly-randconfig-002-20240905   clang-18
+x86_64       buildonly-randconfig-003-20240905   gcc-12
+x86_64       buildonly-randconfig-004-20240905   clang-18
+x86_64       buildonly-randconfig-005-20240905   clang-18
+x86_64       buildonly-randconfig-006-20240905   gcc-12
+x86_64                              defconfig   gcc-11
+x86_64                randconfig-001-20240905   clang-18
+x86_64                randconfig-002-20240905   gcc-12
+x86_64                randconfig-003-20240905   clang-18
+x86_64                randconfig-004-20240905   gcc-12
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-14.1.0
+xtensa                randconfig-001-20240905   gcc-14.1.0
+xtensa                randconfig-002-20240905   gcc-14.1.0
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
