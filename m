@@ -1,57 +1,89 @@
-Return-Path: <linux-usb+bounces-14773-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14774-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5359E96ED25
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 10:07:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67CFE96ED9D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 10:18:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E8A11C21422
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 08:07:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 127B41F218DE
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 08:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 554FD157A72;
-	Fri,  6 Sep 2024 08:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66F5156C4B;
+	Fri,  6 Sep 2024 08:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdWV2Y/j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="db5hdR/o"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA4F208A0;
-	Fri,  6 Sep 2024 08:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BDE156C40;
+	Fri,  6 Sep 2024 08:18:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725610000; cv=none; b=NpqMsCdP6NkrsQSZJMdK16h0VyzoD2yufPk84PikkoIxj7xqs090q+yZJq+DZHwXrKW+MLEv1lmYeai/iNSMzinBuXNVOmFrNV2U6GzbJGPncIcqPukZcWYIvbCC+EqGXv2UJ9EzF2COV/WGdw5HKXwD0/8srTmcG5nJkTpx0iE=
+	t=1725610709; cv=none; b=L675XjJKkgTxUXe3UKAe/QcrZHeYNJ6q5A+Lq15HkPUbxD+OYP3mGVBiu3q729zpRFzb4tVSJwatBAwnWiwb0KpmCNOrHaeivdUytScVzZB2+y8zdv88CnNJ25KHvl1SFm0hGIbWLGQ0/SKxzv/q5c1llxffVKSYkwhXidjS6wE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725610000; c=relaxed/simple;
-	bh=mxkUdqDQRDmpXkwejmdT8UroiLSt811uYfUtusdSIB4=;
+	s=arc-20240116; t=1725610709; c=relaxed/simple;
+	bh=P9ijqIiAgO/MrBm843x3Xs7+rP6/2wpXmDlmyoVM9dw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IEfxNncqANRbRo413zCX3KeU7nN9CMlnafEECAoASDs2IVNhVZ7wUy+hsnb8sa+2IgMN2OCRJHtvfsQo89Zx5qxodv/SRaSxgskS0ic3PxxL1hkrnjR6hGy4NiyDwisiDGMTjm/QnP/lv9dppxSxEyTyyjQhw73MB3xysNkfML4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdWV2Y/j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595EAC4CEC4;
-	Fri,  6 Sep 2024 08:06:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q+NFdUKE8qB26SqynCbYrV+bo/R3X4Pdxkut8qFUZ1X3RYmtflouT4C34QRMUjsypjHyqwfnWN3NgAYc5dHUNbgY7QOCmnmUgamBYk1mr1iUo3nPIruL+FSA+Ooy2G7eUbQZ965H78vCKstdXrk57g8zqfQDJNCLyaKPIV9e5HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=db5hdR/o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2301EC4CEC4;
+	Fri,  6 Sep 2024 08:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725610000;
-	bh=mxkUdqDQRDmpXkwejmdT8UroiLSt811uYfUtusdSIB4=;
+	s=k20201202; t=1725610708;
+	bh=P9ijqIiAgO/MrBm843x3Xs7+rP6/2wpXmDlmyoVM9dw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OdWV2Y/jxvc0Rhuhcj88TeO6xoDap9rxV/WAUVHTaYXYfkMC4hjoW9dByfSS4F9mu
-	 um/1E1ZHYggJ+wguuWHlw/OADJR4dOcgIN35YJKoyl9vaF8TSq5zVkUCWtV/V8pIpH
-	 Yb2lH09pG1ugIOth+CSALWZte1d6p+xfRLKX27wKXBhj7NrdQNWDo+MYmqBnage7HX
-	 w87jfrWWa+2yf/ksgk5L6g40YkK6GSCHIQP9nmdSe9hoA/YG5P52Gyyz6ekrKmjcot
-	 f4cv4i1xPPKkndcwJbestgbACNHyAr1Pf3wRjrK2IImQYZPuznJV+i1WWqIb8KMjgH
-	 vvyj4Le5/9gKg==
-Date: Fri, 6 Sep 2024 16:06:32 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: cdnsp: Fix incorrect usb_request status
-Message-ID: <20240906080632.GA389470@nchen-desktop>
-References: <20240906064547.265943-1-pawell@cadence.com>
- <PH7PR07MB9538E8CA7A2096AAF6A3718FDD9E2@PH7PR07MB9538.namprd07.prod.outlook.com>
+	b=db5hdR/o5UoYbI2b7BscGrpbq9xRl/AdUrPSlA/8fOZxDBR1QdSNxnkUtd9QrwnYQ
+	 6pQtPdpljx4ztREQGI0fUOu7ElhyluT3ouzQDIDl7B4k1JJA3nLP2WF6yw2VnRse+4
+	 WbQ7KdTqpR80IKFv3Ktw1YT/pOxcAID/Sbkj9+6IaVE9GZRxTFPxCwgqPXfRrmzMvF
+	 CUXEEoKFKUvVt3XayK9lBqBdEbRKeOOLa33STCZCrXjw1r/joD50JkYuCVKMXSwwjf
+	 kekuTfnzGTCIsKf4wyU4EcQvvHRVXT0de/rhtGwZorbh485sthvIKXxw1T+vNc7jzH
+	 O0Vg4PR9q+y/Q==
+Date: Fri, 6 Sep 2024 08:18:21 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Stephen Boyd <swboyd@chromium.org>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev, devicetree@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Pin-yen Lin <treapking@chromium.org>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Benson Leung <bleung@chromium.org>,
+	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+	David Airlie <airlied@gmail.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	dri-devel@lists.freedesktop.org,
+	Guenter Roeck <groeck@chromium.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Lee Jones <lee@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>, linux-acpi@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH v4 18/18] platform/chrome: cros_ec_typec: Handle lack of
+ HPD information
+Message-ID: <Ztq6zf8n09ZcJNjT@google.com>
+References: <20240901040658.157425-1-swboyd@chromium.org>
+ <20240901040658.157425-19-swboyd@chromium.org>
+ <ZtgqLZXbJbpG65vD@google.com>
+ <CAE-0n51w3AAtLPq5M-i8F6z2jSOT3xFw3g8HM1h48xXBSeoZnA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,63 +92,75 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR07MB9538E8CA7A2096AAF6A3718FDD9E2@PH7PR07MB9538.namprd07.prod.outlook.com>
+In-Reply-To: <CAE-0n51w3AAtLPq5M-i8F6z2jSOT3xFw3g8HM1h48xXBSeoZnA@mail.gmail.com>
 
-On 24-09-06 06:48:54, Pawel Laszczak wrote:
-> Fix changes incorrect usb_request->status returned during disabling
-> endpoints. Before fix the status returned during dequeuing requests
-> while disabling endpoint was ECONNRESET.
-> Patch change it to ESHUTDOWN.
+On Wed, Sep 04, 2024 at 02:45:36PM -0700, Stephen Boyd wrote:
+> Quoting Tzung-Bi Shih (2024-09-04 02:36:45)
+> > On Sat, Aug 31, 2024 at 09:06:56PM -0700, Stephen Boyd wrote:
+> > > +static void cros_typec_inject_hpd(struct cros_typec_data *typec,
+> > > +                               struct ec_response_usb_pd_mux_info *resp,
+> > > +                               struct cros_typec_port *port)
+> > > +{
+> > [...]
+> > > +     /*
+> > > +      * Only read the mux GPIO setting if we need to change the active port.
+> > > +      * Otherwise, an active port is already set and HPD going high or low
+> > > +      * doesn't change the muxed port until DP mode is exited.
+> > > +      */
+> > > +     if (!typec->active_dp_port) {
+> >
+> > Given that cros_typec_inject_hpd() is called before `typec->active_dp_port`
+> > would be set (from previous patch "platform/chrome: ...  Support DP muxing"),
+> > would it possibly wrongly fall into here at the beginning?  (E.g.:
+> > cros_typec_probe() -> cros_typec_port_update() -> cros_typec_configure_mux()
+> > -> cros_typec_inject_hpd().)
 > 
-> Patch fixes issue detected during testing UVC gadget.
-> During stopping streaming the class starts dequeuing usb requests and
-> controller driver returns the -ECONNRESET status. After completion
-> requests the class or application "uvc-gadget" try to queue this
-> request again. Changing this status to ESHUTDOWN cause that UVC assumes
-> that endpoint is disabled, or device is disconnected and stops
-> re-queuing usb requests.
-> 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: stable@vger.kernel.org
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> We wouldn't get here if 'hpd_asserted' is false though. We want to fall
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
+Ack, I overlooked that.
 
-Peter
+> > > [...]
+> > > +     /* Inject HPD from the GPIO state if EC firmware is broken. */
+> > > +     if (typec->hpd_asserted)
+> > > +             resp->flags |= USB_PD_MUX_HPD_LVL;
+> >
+> > `typec->hpd_asserted` is shared between all typec->ports[...].  Would it be
+> > possible that a HPD is asserted for another port but not current `port`?
+> > E.g.: cros_typec_inject_hpd() for port 2 and cros_typec_dp_bridge_hpd_notify()
+> > gets called due to port 1 at the same time?
 > 
-> ---
-> Changelog:
-> v2:
-> - added explanation of issue
-> 
->  drivers/usb/cdns3/cdnsp-ring.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 1e011560e3ae..bccc8fc143d0 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -718,7 +718,8 @@ int cdnsp_remove_request(struct cdnsp_device *pdev,
->  	seg = cdnsp_trb_in_td(pdev, cur_td->start_seg, cur_td->first_trb,
->  			      cur_td->last_trb, hw_deq);
->  
-> -	if (seg && (pep->ep_state & EP_ENABLED))
-> +	if (seg && (pep->ep_state & EP_ENABLED) &&
-> +	    !(pep->ep_state & EP_DIS_IN_RROGRESS))
->  		cdnsp_find_new_dequeue_state(pdev, pep, preq->request.stream_id,
->  					     cur_td, &deq_state);
->  	else
-> @@ -736,7 +737,8 @@ int cdnsp_remove_request(struct cdnsp_device *pdev,
->  	 * During disconnecting all endpoint will be disabled so we don't
->  	 * have to worry about updating dequeue pointer.
->  	 */
-> -	if (pdev->cdnsp_state & CDNSP_STATE_DISCONNECT_PENDING) {
-> +	if (pdev->cdnsp_state & CDNSP_STATE_DISCONNECT_PENDING ||
-> +	    pep->ep_state & EP_DIS_IN_RROGRESS) {
->  		status = -ESHUTDOWN;
->  		ret = cdnsp_cmd_set_deq(pdev, pep, &deq_state);
->  	}
-> -- 
-> 2.43.0
-> 
+> I'd like to avoid synchronizing the hpd notify and this injection code,
+> if that's what you're asking. Thinking about this though, I've realized
+> that it's broken even when HPD is working on the EC. Consider this
+> scenario with two type-c ports C0 and C1:
+>
+> [...]
+
+I understood it more: originally, I was wondering if it needs an array
+`typec->hpd_asserted[...]` for storing HPD for each port.  But, no.
+
+What cros_typec_dp_bridge_hpd_notify() get is just a connected/disconnected
+signal.  It kicks off cros_typec_port_work() for finding which port is
+supposed to trigger the event (with some logic with `active_dp_port`,
+`mux_gpio`, and `hpd_asserted`).
+
+
+Curious about one more scenario, is it possible:
+
+Initially, no DP port and no mux is using:
+  active_dp_port = NULL
+  hpd_asserted = false
+  mux_gpio = NULL
+
+CPU A                                        CPU B
+------------------------------------------------------------------------------
+cros_typec_port_work()
+  cros_typec_port_update(port_num=0)
+                                             [C0 connected]
+                                             cros_typec_dp_bridge_hpd_notify()
+                                               hpd_asserted = true
+  cros_typec_port_update(port_num=1)
+    cros_typec_configure_mux(port_num=1)
+      cros_typec_inject_hpd()
+      active_dp_port = C1
 
