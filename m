@@ -1,65 +1,80 @@
-Return-Path: <linux-usb+bounces-14771-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14772-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E964D96EBA0
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 09:09:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E91A696EC13
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 09:36:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21CE51C21F6C
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 07:09:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1696286B9E
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 07:36:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E64114C592;
-	Fri,  6 Sep 2024 07:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164D31537D4;
+	Fri,  6 Sep 2024 07:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jqzFV16W"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BCPRsMHw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228EC14BFA3
-	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 07:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF5F14C592
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 07:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725606570; cv=none; b=uLGF4ImcvIEU57AnQrV9IigI9shZLVoncsjAx2k/eIFPbAFoIxvw8mKaTCzvjImdofJTG/QI1FtbES4w+bt1Shq6k8A+QYg03/KyqP5ycObTzhdVPHHU1eVwKc2AfIDulXiQX21/XKSzJqOG4Vnxt9IylbxmqrZdSkHhVGg+v6M=
+	t=1725608155; cv=none; b=LYZO4qJFufcHx+OW0lTxKVqON/+OCYvOcnxbk9D1CBBKWnusIHB+A1LkKT4+hoEevd7gySzzO6dVFEpQGPFAWRxqQJCwMaRTVamp4vIJvOG0afT88grF7LX8jFCdXs+O+Jxj/YiYu9t2hAucYIoh+ThrLJVcRgoMkZbRY2/H6UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725606570; c=relaxed/simple;
-	bh=M1nTB0kr4SU4VopcGie1kS1y4jmH1EIe+SbpPWRbxp8=;
+	s=arc-20240116; t=1725608155; c=relaxed/simple;
+	bh=nDPVjiB2sY6jBl+bAwv7wDSsuxTgIU1K4DHTBn3/MNY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e9wBhVHlMqWLX95kW5/PNPB/9BamhJQG8qT4m9HpRdbDXeoSS9QCa+LDC2uLNXfdcTY34kIV85QyogIOpMeCx5P6IuhvZAC9OGufuTDtlrdqVTKn3+PfNg58THivFWEkUD8jt1oJHGoPMNilMw+4RMZcVeHBbwrw0igIvEhlQlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jqzFV16W; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725606569; x=1757142569;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=M1nTB0kr4SU4VopcGie1kS1y4jmH1EIe+SbpPWRbxp8=;
-  b=jqzFV16WgdT3oAoM6QLUp4cyBvhXetktsuHXUcBn2CLdqS5EkH/+q5L8
-   vcFlxddFoRFT/OBU2RMfXp4L1TWAuje1cwv3y6dPuRjSdViYiMGAL5DG+
-   d/4jqT3whjuP19gFlzXFzyR+rKQ2Uedv2QvmJX+5PuZYfzLM9GqteTS3O
-   IxnZDPqfz3WBntzD+IAlTMfpYoRt4Kg6xyt4Q+xX7nlVBR8Uzp24kLWhv
-   y1J8/k1SxqbdR/ZepgSDYTYtNdptKHRG3RSeHMKQm3cYkWSTSM9KMaXaV
-   P9bJQP8KhSapjciCLCznhgjmNyLosQ5v+zAziwcLbvI6VbKfcsBmcIn1+
-   Q==;
-X-CSE-ConnectionGUID: hjTZNxIEQEmcxA91ydG47g==
-X-CSE-MsgGUID: tciEMSXYSMmBIwnmq8b55Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="28238819"
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="28238819"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 00:09:28 -0700
-X-CSE-ConnectionGUID: FXCUxlspTMKkaHtioM19qA==
-X-CSE-MsgGUID: qyDYt7lBSdWomhANFLaJfg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="89128559"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.98.118]) ([10.245.98.118])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 00:09:27 -0700
-Message-ID: <9a270951-4ffc-4d7b-a116-74a75c82a4c9@linux.intel.com>
-Date: Fri, 6 Sep 2024 10:09:23 +0300
+	 In-Reply-To:Content-Type; b=iE5z5Tqmg53AX20PnXmuIp9Sjhg+FWWH68O2pxhNqeVxsx+W13CyALqjRmNRWNCDQVhgkPUMYKiaa/DzWkWWFhTund7oWtS8AXZH1V1j9tBYXO92ldp0QdAM5ivy6MsUhoblJYOh1YKA+XzLum4759dPZGSoApU1IHzzAcPmQU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BCPRsMHw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725608149;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=blft9IP0BzWdJp3TaH4Zg3FpZbJCoe4Kn/C+T0s0wEg=;
+	b=BCPRsMHwHyOKojrMHm+pI9c/wBEQwP8ZYOapxSoDe4sERFoGtkgy0gHD1VZeF5NFSy/8j+
+	kxGYz/cI4qdM+vV53joUxfgmGecFajouD3tCg7hx+3Wz5IS72zgL1QGHg/jNjzYYfbag6p
+	gnW35vEPQ/ZMzQRDa+FdQpl061Rj/Wk=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-359-EQQg6xxZN-y2dzuUqDKdvg-1; Fri, 06 Sep 2024 03:35:48 -0400
+X-MC-Unique: EQQg6xxZN-y2dzuUqDKdvg-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a8691010836so157976066b.2
+        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2024 00:35:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725608147; x=1726212947;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=blft9IP0BzWdJp3TaH4Zg3FpZbJCoe4Kn/C+T0s0wEg=;
+        b=YxFBJ7/Zo2sGFzcZOPRMElq+2bRMDrtlQ2neCyfg0f+DOOYOF9exZwgbX8r7ab7VuM
+         u7mZpVtwVHVofArRFbNXYfkIEmkh/p9+UXXt03QEs+aSTbIuGjW0UOysbrwYKcXqkEx8
+         QfiVOGBLGpLW15bghOsJuDn8t5HGNcnsr3fSjm3QpiJWtWoz7GEpvF+X4mlpYk54Z3x4
+         7m0q2MBFZX+Li3EUMalebLee4tOmDejM1zbHGyO2pR8Zk8Qakgys/MExayayz7zLyu7c
+         2aPrmzCfQ+2Ch14GSClMlXFe4fBJF4W7m3crYXU1wRHxU4ZOsgyZ4UEHBvTuTP8kMPVY
+         vMYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJu3eEzkidrUVD6tIPeKDm2oeQCnhjvEz8u0Iz7lollSVMbRbWDK8ji2xqeeCTlEMj1ZtB8u32geQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIhl5K/HLfRkqyLwwkzvs0HzzmoM+XFzvBpAo0kUHrS5+dgkb8
+	4VTZJVFL3EurmN8gpr8vCPaPdXLbsL0Pl+9JCE/V5awQQBR24Hwhoa8w8/4Y2gX+NsT+xs1leDC
+	PUY1SD5OkIA3p7A9yY12n6PhVjUYvRpg9tkEg7MO5zREnoSvjkqIfAhKW9Q==
+X-Received: by 2002:a17:907:7f03:b0:a86:b18e:bb7a with SMTP id a640c23a62f3a-a8a887fce23mr100747266b.42.1725608146857;
+        Fri, 06 Sep 2024 00:35:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFzyyOx82bBwEQKvoCTfe+4kLAZtCsdRQ+cWVMKBnF9FQq+tY2HKzQmH1DprT/M3pMOFnG3+A==
+X-Received: by 2002:a17:907:7f03:b0:a86:b18e:bb7a with SMTP id a640c23a62f3a-a8a887fce23mr100745366b.42.1725608146360;
+        Fri, 06 Sep 2024 00:35:46 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8a62038d4dsm237426266b.51.2024.09.06.00.35.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2024 00:35:45 -0700 (PDT)
+Message-ID: <3e12ef27-30e4-4b5a-acd6-5d3023a82941@redhat.com>
+Date: Fri, 6 Sep 2024 09:35:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,123 +82,173 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/12] usb: xhci: adjust empty TD list handling in
- handle_tx_event()
-To: fps <mista.tapas@gmx.net>, Mathias Nyman <mathias.nyman@linux.intel.com>,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org
-References: <20240905143300.1959279-1-mathias.nyman@linux.intel.com>
- <20240905143300.1959279-11-mathias.nyman@linux.intel.com>
- <54D5652C-956D-46DE-B58A-1718BC7C9A56@gmx.net>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <54D5652C-956D-46DE-B58A-1718BC7C9A56@gmx.net>
+Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne
+ 440
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org,
+ jorge.lopez2@hp.com
+Cc: acelan.kao@canonical.com, platform-driver-x86@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240906053047.459036-1-kai.heng.feng@canonical.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240906053047.459036-1-kai.heng.feng@canonical.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+Hi,
+
+On 9/6/24 7:30 AM, Kai-Heng Feng wrote:
+> The HP ProOne 440 has a power saving design that when the display is
+> off, it also cuts the USB touchscreen device's power off.
+> 
+> This can cause system early wakeup because cutting the power off the
+> touchscreen device creates a disconnect event and prevent the system
+> from suspending:
+> [  445.814574] hub 2-0:1.0: hub_suspend
+> [  445.814652] usb usb2: bus suspend, wakeup 0
+> [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
+> [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
+> [  445.824651] xhci_hcd 0000:00:14.0: handle_port_status: starting usb1 port polling.
+> [  445.844039] xhci_hcd 0000:00:14.0: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x20 returns -16
+> [  445.844058] xhci_hcd 0000:00:14.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
+> [  445.844072] xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
+> [  446.276101] PM: Some devices failed to suspend, or early wake event detected
+> 
+> So add a quirk to make sure the following is happening:
+> 1. Let the i915 driver suspend first, to ensure the display is off so
+>    system also cuts the USB touchscreen's power.
+> 2. Wait a while to let the USB disconnect event fire and get handled.
+> 3. Since the disconnect event already happened, the xhci's suspend
+>    routine won't be interrupted anymore.
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Ilpo, do you plan to do another fixes pull-request for 6.11,
+or shall I add this to for-next to target 6.12-rc1 ?
+
+Either way works for me. If you plan to do another fixes
+pull-request, note that I plan to post a v2 of the panasonic
+patches this Monday.
+
+Regards,
+
+Hans
 
 
-On 06/09/2024 7.44, fps wrote:
-> On September 5, 2024 4:32:58 PM GMT+02:00, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
->> From: Niklas Neronin <niklas.neronin@linux.intel.com>
->>
->> Introduce an initial check for an empty list prior to entering the while
->> loop. Which enables, the implementation of distinct warnings to
->> differentiate between scenarios where the list is initially empty and
->> when it has been emptied during processing skipped isoc TDs.
->>
->> These adjustments not only simplifies the large while loop, but also
->> facilitates future enhancements to the handle_tx_event() function.
->>
->> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
->> drivers/usb/host/xhci-ring.c | 51 +++++++++++++++++-------------------
->> 1 file changed, 24 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->> index d37eeee74960..a4383735b16c 100644
->> --- a/drivers/usb/host/xhci-ring.c
->> +++ b/drivers/usb/host/xhci-ring.c
->> @@ -2761,35 +2761,25 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->> 		return 0;
->> 	}
->>
->> -	do {
->> -		/* This TRB should be in the TD at the head of this ring's
->> -		 * TD list.
->> +	if (list_empty(&ep_ring->td_list)) {
->> +		/*
->> +		 * Don't print wanings if ring is empty due to a stopped endpoint generating an
-> 
-> "wanings" should be "warnings", no?
 
-Thanks, yes it should be the latter.
-It will fix it in a handle_tx_event() cleanup patch.
+> ---
+> v3:
+>  - Use dev_dbg() instead of dev_info().
+> 
+> v2:
+>  - Remove the part that searching for the touchscreen device.
+>  - Wording.
+> 
+>  drivers/platform/x86/hp/hp-wmi.c | 59 +++++++++++++++++++++++++++++++-
+>  1 file changed, 58 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+> index 876e0a97cee1..92cb02b50dfc 100644
+> --- a/drivers/platform/x86/hp/hp-wmi.c
+> +++ b/drivers/platform/x86/hp/hp-wmi.c
+> @@ -30,6 +30,8 @@
+>  #include <linux/rfkill.h>
+>  #include <linux/string.h>
+>  #include <linux/dmi.h>
+> +#include <linux/delay.h>
+> +#include <linux/pci.h>
+>  
+>  MODULE_AUTHOR("Matthew Garrett <mjg59@srcf.ucam.org>");
+>  MODULE_DESCRIPTION("HP laptop WMI driver");
+> @@ -1708,6 +1710,14 @@ static void __exit hp_wmi_bios_remove(struct platform_device *device)
+>  		platform_profile_remove();
+>  }
+>  
+> +static int hp_wmi_suspend_handler(struct device *device)
+> +{
+> +	/* Let the xhci have time to handle disconnect event */
+> +	msleep(200);
+> +
+> +	return 0;
+> +}
+> +
+>  static int hp_wmi_resume_handler(struct device *device)
+>  {
+>  	/*
+> @@ -1745,7 +1755,7 @@ static int hp_wmi_resume_handler(struct device *device)
+>  	return 0;
+>  }
+>  
+> -static const struct dev_pm_ops hp_wmi_pm_ops = {
+> +static struct dev_pm_ops hp_wmi_pm_ops = {
+>  	.resume  = hp_wmi_resume_handler,
+>  	.restore  = hp_wmi_resume_handler,
+>  };
+> @@ -1871,6 +1881,51 @@ static int hp_wmi_hwmon_init(void)
+>  	return 0;
+>  }
+>  
+> +static int lg_usb_touchscreen_quirk(const struct dmi_system_id *id)
+> +{
+> +	struct pci_dev *vga, *xhci;
+> +	struct device_link *vga_link, *xhci_link;
+> +
+> +	vga = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, NULL);
+> +
+> +	xhci = pci_get_class(PCI_CLASS_SERIAL_USB_XHCI, NULL);
+> +
+> +	if (vga && xhci) {
+> +		xhci_link = device_link_add(&hp_wmi_platform_dev->dev, &xhci->dev,
+> +				      DL_FLAG_STATELESS);
+> +		if (xhci_link)
+> +			dev_dbg(&hp_wmi_platform_dev->dev, "Suspend before %s\n",
+> +				 pci_name(xhci));
+> +		else
+> +			return 1;
+> +
+> +		vga_link = device_link_add(&vga->dev, &hp_wmi_platform_dev->dev,
+> +					   DL_FLAG_STATELESS);
+> +		if (vga_link)
+> +			dev_dbg(&hp_wmi_platform_dev->dev, "Suspend after %s\n",
+> +				 pci_name(vga));
+> +		else {
+> +			device_link_del(xhci_link);
+> +			return 1;
+> +		}
+> +	}
+> +
+> +	hp_wmi_pm_ops.suspend = hp_wmi_suspend_handler;
+> +
+> +	return 1;
+> +}
+> +
+> +static const struct dmi_system_id hp_wmi_quirk_table[] = {
+> +	{
+> +		.callback = lg_usb_touchscreen_quirk,
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "HP ProOne 440 23.8 inch G9 All-in-One Desktop PC"),
+> +		},
+> +	},
+> +	{}
+> +};
+> +
+>  static int __init hp_wmi_init(void)
+>  {
+>  	int event_capable = wmi_has_guid(HPWMI_EVENT_GUID);
+> @@ -1909,6 +1964,8 @@ static int __init hp_wmi_init(void)
+>  			goto err_unregister_device;
+>  	}
+>  
+> +	dmi_check_system(hp_wmi_quirk_table);
+> +
+>  	return 0;
+>  
+>  err_unregister_device:
 
-Thanks,
-Niklas
-> 
-> 
->> +		 * extra completion event if the device was suspended. Or, a event for the last TRB
->> +		 * of a short TD we already got a short event for. The short TD is already removed
->> +		 * from the TD list.
->> 		 */
->> -		if (list_empty(&ep_ring->td_list)) {
->> -			/*
->> -			 * Don't print wanings if it's due to a stopped endpoint
->> -			 * generating an extra completion event if the device
->> -			 * was suspended. Or, a event for the last TRB of a
->> -			 * short TD we already got a short event for.
->> -			 * The short TD is already removed from the TD list.
->> -			 */
->> -
->> -			if (!(trb_comp_code == COMP_STOPPED ||
->> -			      trb_comp_code == COMP_STOPPED_LENGTH_INVALID ||
->> -			      ep_ring->last_td_was_short)) {
->> -				xhci_warn(xhci, "WARN Event TRB for slot %u ep %d with no TDs queued?\n",
->> -					  slot_id, ep_index);
->> -			}
->> -			if (ep->skip) {
->> -				ep->skip = false;
->> -				xhci_dbg(xhci, "td_list is empty while skip flag set. Clear skip flag for slot %u ep %u.\n",
->> -					 slot_id, ep_index);
->> -			}
->> -
->> -			td = NULL;
->> -			goto check_endpoint_halted;
->> +		if (trb_comp_code != COMP_STOPPED &&
->> +		    trb_comp_code != COMP_STOPPED_LENGTH_INVALID &&
->> +		    !ep_ring->last_td_was_short) {
->> +			xhci_warn(xhci, "Event TRB for slot %u ep %u with no TDs queued\n",
->> +				  slot_id, ep_index);
->> 		}
->>
->> +		ep->skip = false;
->> +		goto check_endpoint_halted;
->> +	}
->> +
->> +	do {
->> 		td = list_first_entry(&ep_ring->td_list, struct xhci_td,
->> 				      td_list);
->>
->> @@ -2800,7 +2790,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->>
->> 			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
->> 				skip_isoc_td(xhci, td, ep, status);
->> -				continue;
->> +				if (!list_empty(&ep_ring->td_list))
->> +					continue;
->> +
->> +				xhci_dbg(xhci, "All TDs skipped for slot %u ep %u. Clear skip flag.\n",
->> +					 slot_id, ep_index);
->> +				ep->skip = false;
->> +				td = NULL;
->> +				goto check_endpoint_halted;
->> 			}
->>
->> 			/*
-> 
-> Kind regards,
-> FPS
 
