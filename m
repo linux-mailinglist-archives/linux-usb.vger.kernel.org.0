@@ -1,142 +1,193 @@
-Return-Path: <linux-usb+bounces-14763-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14764-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11DAE96E7FF
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 05:06:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67F7D96E8C1
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 06:44:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCE121F24B12
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 03:06:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EE862865BB
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 04:44:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E35F381B1;
-	Fri,  6 Sep 2024 03:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC31482ED;
+	Fri,  6 Sep 2024 04:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b="uO0hDJf+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AC11805A;
-	Fri,  6 Sep 2024 03:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4797171CD
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 04:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725592008; cv=none; b=Ti9GcLWQAuLa54sz9SVJUNq29YNR1UhMZMfShH2s8KA6Bm8fLBC77Ekpjk8Nm6V8HEqzx1qxH5xK8d/eV9xflZCr7GlDqCC8Zx47YkT0OikI5DNjraVaVzQCcDKmuqRWMtlxnqOMDhFGcpjlO5ebu3fo5Ny/7VuwtzpD3ojXLkI=
+	t=1725597859; cv=none; b=ihnIpeT8ivRRa7eWyrEfjmBmsgbdVRByFUeMTHZGZGuG5fQ/jgg4Rd1biSWNsheazOa69MkZUTcNwEHybCYiVVY2hq5cuy+VWnzpcKwe84xER8bcLLM24Dl8CIJtmfKSCOmvqrJBQtwHSU3vrJB1TUxdzytqZu61WH6V13hTwhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725592008; c=relaxed/simple;
-	bh=b1tjpeyOK9mQG3APi9N8ElGJuuJJDMoUoJ6UWqqFFfE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D4kkPGPpze0Guw1abdMJ+P3J4HEcn6Z1w0SJX/WcC/K2FyZLYT2rKVZBjni+6ScI0XVDmcf7CFsxCl037aMsZ3i3MmNETW2udBEoBkw3WNfNbQO+YRhR6xCyD5LAZ9+Gd4gG6SWRWGUGLrQcje5nuJdQenxKx0umUTL/wc3GoFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_UNFAMILIAR
-	SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,
-	URL:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-20
-X-CID-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,UR
-	L:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:EDM_GE969F26,ACTI
-	ON:release,TS:-20
-X-CID-META: VersionHash:82c5f88,CLOUDID:2c00f2f9f017478b15ea7a3b45cd0dee,BulkI
-	D:240906110635Q3J4J70O,BulkQuantity:0,Recheck:0,SF:44|66|38|24|72|19|102,T
-	C:nil,Content:0,EDM:1,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
-X-User: duanchenghao@kylinos.cn
-Received: from chenghao.. [(223.70.160.255)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 747009131; Fri, 06 Sep 2024 11:06:32 +0800
-From: Duan Chenghao <duanchenghao@kylinos.cn>
-To: gregkh@linuxfoundation.org,
-	pavel@ucw.cz,
-	linux-pm@vger.kernel.org
-Cc: niko.mauno@vaisala.com,
-	stanley_chang@realtek.com,
-	tj@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	duanchenghao@kylinos.cn
-Subject: [PATCH] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
-Date: Fri,  6 Sep 2024 11:05:48 +0800
-Message-Id: <20240906030548.845115-1-duanchenghao@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1725597859; c=relaxed/simple;
+	bh=DhoLawP5JqxYWRdJaF0mfF99Q3V94cXn5EHLVJH8X/E=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=AAMemZH8nFTT6RvYCo01FKFfAqejLbq9MqBPZ2P1fz93HMti6e+eW+V12DGhRnWM4/DW+uZQXZbHZNsOQgjGgn55aqq6JnbFAyds2aZvaEyLIOQDlOMEePmwH9K7Gx+WtR2CBLdvOHyve5b9e+eITH87wV+Mpq1UEWZIDbXt7ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=mista.tapas@gmx.net header.b=uO0hDJf+; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1725597850; x=1726202650; i=mista.tapas@gmx.net;
+	bh=pPRj+A5MkLgPFaW2IGn7+XUjJxSx0KiwFJ24jEkYKBA=;
+	h=X-UI-Sender-Class:Date:From:To:CC:Subject:In-Reply-To:References:
+	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=uO0hDJf+iLkK35C+lnSVIWbK3bQZZCBTlQiOCJHC/nTeaxPS+yGBx5g/45UK+QRA
+	 hTRZsq7q+t9Azg0BldJf4BmB2uQmeqdGiirbTqnTIulXollifwXdim+rMmbUnIS2R
+	 YZwSN3SBdGXEBSL3s49JF98iqakDqjg9EKt2+v8fyrigH+GzEtEu2zZy0YBQqz+Zk
+	 Lp23CMyfREV3himZ0rSib+jOEpFf8L5A8HSjTwLE9gpFVrM6WPFBT24vrAVnr30De
+	 dOJZbd6v30b127ihHt8SB32Bnap30oMTpPzN+awdNLAE2qDhqLv0DbmDKf9Xl85JD
+	 ME35N95pUiYd5ZkQpg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [127.0.0.1] ([92.39.21.169]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MdefD-1sDN7r1y6b-00qBkL; Fri, 06
+ Sep 2024 06:44:10 +0200
+Date: Fri, 06 Sep 2024 06:44:08 +0200
+From: fps <mista.tapas@gmx.net>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>, gregkh@linuxfoundation.org
+CC: linux-usb@vger.kernel.org, Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_10/12=5D_usb=3A_xhci=3A_adjust_emp?=
+ =?US-ASCII?Q?ty_TD_list_handling_in_handle=5Ftx=5Fevent=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20240905143300.1959279-11-mathias.nyman@linux.intel.com>
+References: <20240905143300.1959279-1-mathias.nyman@linux.intel.com> <20240905143300.1959279-11-mathias.nyman@linux.intel.com>
+Message-ID: <54D5652C-956D-46DE-B58A-1718BC7C9A56@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:creY+wMEqfB0O75JFarCo5i3Ug6dz1E+VUIiy/3wfk6ozZ7UZ6e
+ dzZ5Ikd/wWpAjTP2S/wSxqEMpoaItpY8HmhMll33PHYBE5ekAQN/8mWBgfcgRR0Ugr+0Cjx
+ OT8+yoDu5gOKD0MVRyGVE0vyuJPfjkr1/nt9JRgCMg5dXohN3bqBbNIsLyD/OrtlTBhF8p4
+ SLeJzWNM17wif/GnOhcIQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:wEj2ckS5bps=;YTsZD+b9kAeSDk7zqTzD8DNM1fs
+ 3Hr1+4lhktXRFEGvVxREA49D6qecJlv7uYz/poKYEv/RXqgo4V8k57bJ/b7lnIFSqRsHx51JO
+ MO/G42bdqfqg+JqMAYQw3H1zUHLlfIq2zTmnWLWcJ+d7IxB73puzmiALp0wI2czUfqJMZ9z93
+ BqHg6yNT4pBiPQ4XLaVj3Wzll5wNm9QYjlIH6ZslXpDGGgpeBIw5Jk9LnEnJ1CI7OwS/pQ6dF
+ AEsyDMTOSRLTlEVtQt5xvZGbu8uTyRXWSmWYh93Hc/u3xViii3gSniSf6E9kAGegi2LC9IM20
+ PoAO56JJP2BQY3Rhle/dHu/CSfF9SJ06tqaXJGGgSI+86EGeatuqdqSW6wXUEuZS3q7DAPIXF
+ gHiZtP4IqBeQFysV3bnhP731hsAHcdDLWP7WKI2q5FRMhH5ryqIwISg5wY5dnIXdZxhrADdal
+ njSTHqUivKINJuMsLohren932TsKI2NyK4LaPfpQ/0ac1Tmizh0FkNg9URCZd+PIgP3/iJ1Eq
+ HeJhlXTvW1/xSYoAOBqHVS6uQLqzY5CrPFQerEYY5mkq2DpuxFeyGOVhLEl0B+2xmdN+1NK2T
+ Rv6DdzcZep79+HfUouC1yAcHEwNYrzrlXAn3/2RIlgq3jbaW0B/nvp15udYOf29WPrQWbD5wy
+ AtaFi6zIWX4wZDSYwIARljKSTNuXybES99BxbszuI82XwYtc4sSYfCVxU0uXjCGaWTUuXngmP
+ ctqB2QlLQNjcHWag6kenPCOe408DaSk6TDMmMbNV6All71AqtbARK4O9a08UTmiO1Pw8RxIi/
+ YJHaNtCRPlLTu/Zi+K+46muA==
 
-When a device is inserted into the USB port and an S4 wakeup is initiated,
-after the USB-hub initialization is completed, it will automatically enter suspend mode.
-Upon detecting a device on the USB port, it will proceed with resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
-During the S4 wakeup process, peripherals are put into suspend mode, followed by task recovery.
-However, upon detecting that the hcd is in the HCD_FLAG_WAKEUP_PENDING state,
-it will return an EBUSY status, causing the S4 suspend to fail and subsequent task recovery to not proceed.
+On September 5, 2024 4:32:58 PM GMT+02:00, Mathias Nyman <mathias=2Enyman@l=
+inux=2Eintel=2Ecom> wrote:
+>From: Niklas Neronin <niklas=2Eneronin@linux=2Eintel=2Ecom>
+>
+>Introduce an initial check for an empty list prior to entering the while
+>loop=2E Which enables, the implementation of distinct warnings to
+>differentiate between scenarios where the list is initially empty and
+>when it has been emptied during processing skipped isoc TDs=2E
+>
+>These adjustments not only simplifies the large while loop, but also
+>facilitates future enhancements to the handle_tx_event() function=2E
+>
+>Signed-off-by: Niklas Neronin <niklas=2Eneronin@linux=2Eintel=2Ecom>
+>Signed-off-by: Mathias Nyman <mathias=2Enyman@linux=2Eintel=2Ecom>
+>---
+> drivers/usb/host/xhci-ring=2Ec | 51 +++++++++++++++++-------------------
+> 1 file changed, 24 insertions(+), 27 deletions(-)
+>
+>diff --git a/drivers/usb/host/xhci-ring=2Ec b/drivers/usb/host/xhci-ring=
+=2Ec
+>index d37eeee74960=2E=2Ea4383735b16c 100644
+>--- a/drivers/usb/host/xhci-ring=2Ec
+>+++ b/drivers/usb/host/xhci-ring=2Ec
+>@@ -2761,35 +2761,25 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+> 		return 0;
+> 	}
+>=20
+>-	do {
+>-		/* This TRB should be in the TD at the head of this ring's
+>-		 * TD list=2E
+>+	if (list_empty(&ep_ring->td_list)) {
+>+		/*
+>+		 * Don't print wanings if ring is empty due to a stopped endpoint gene=
+rating an
 
-This patch makes two modifications in total:
-1. The set_bit and clean_bit operations for the HCD_FLAG_WAKEUP_PENDING flag of Hcd,
-which were previously split between the top half and bottom half of the interrupt,
-are now unified and executed solely in the bottom half of the interrupt.
-This prevents the bottom half tasks from being frozen during the S4 process,
-ensuring that the clean_bit process can proceed without interruption.
+"wanings" should be "warnings", no?
 
-2. Add a condition to the set_bit operation for the hcd status HCD_FLAG_WAKEUP_PENDING.
-When the hcd status is HC_STATE_SUSPENDED, perform the setting of the aforementioned status bit.
-This prevents a subsequent set_bit from occurring after the clean_bit if the hcd is in the resuming process.
 
-Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
----
- drivers/usb/core/hcd.c | 1 -
- drivers/usb/core/hub.c | 3 +++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+>+		 * extra completion event if the device was suspended=2E Or, a event f=
+or the last TRB
+>+		 * of a short TD we already got a short event for=2E The short TD is a=
+lready removed
+>+		 * from the TD list=2E
+> 		 */
+>-		if (list_empty(&ep_ring->td_list)) {
+>-			/*
+>-			 * Don't print wanings if it's due to a stopped endpoint
+>-			 * generating an extra completion event if the device
+>-			 * was suspended=2E Or, a event for the last TRB of a
+>-			 * short TD we already got a short event for=2E
+>-			 * The short TD is already removed from the TD list=2E
+>-			 */
+>-
+>-			if (!(trb_comp_code =3D=3D COMP_STOPPED ||
+>-			      trb_comp_code =3D=3D COMP_STOPPED_LENGTH_INVALID ||
+>-			      ep_ring->last_td_was_short)) {
+>-				xhci_warn(xhci, "WARN Event TRB for slot %u ep %d with no TDs queued=
+?\n",
+>-					  slot_id, ep_index);
+>-			}
+>-			if (ep->skip) {
+>-				ep->skip =3D false;
+>-				xhci_dbg(xhci, "td_list is empty while skip flag set=2E Clear skip f=
+lag for slot %u ep %u=2E\n",
+>-					 slot_id, ep_index);
+>-			}
+>-
+>-			td =3D NULL;
+>-			goto check_endpoint_halted;
+>+		if (trb_comp_code !=3D COMP_STOPPED &&
+>+		    trb_comp_code !=3D COMP_STOPPED_LENGTH_INVALID &&
+>+		    !ep_ring->last_td_was_short) {
+>+			xhci_warn(xhci, "Event TRB for slot %u ep %u with no TDs queued\n",
+>+				  slot_id, ep_index);
+> 		}
+>=20
+>+		ep->skip =3D false;
+>+		goto check_endpoint_halted;
+>+	}
+>+
+>+	do {
+> 		td =3D list_first_entry(&ep_ring->td_list, struct xhci_td,
+> 				      td_list);
+>=20
+>@@ -2800,7 +2790,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>=20
+> 			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
+> 				skip_isoc_td(xhci, td, ep, status);
+>-				continue;
+>+				if (!list_empty(&ep_ring->td_list))
+>+					continue;
+>+
+>+				xhci_dbg(xhci, "All TDs skipped for slot %u ep %u=2E Clear skip flag=
+=2E\n",
+>+					 slot_id, ep_index);
+>+				ep->skip =3D false;
+>+				td =3D NULL;
+>+				goto check_endpoint_halted;
+> 			}
+>=20
+> 			/*
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 1ff7d901fede..a6bd0fbd82f4 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd *hcd)
- 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
- 	if (hcd->rh_registered) {
- 		pm_wakeup_event(&hcd->self.root_hub->dev, 0);
--		set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		queue_work(pm_wq, &hcd->wakeup_work);
- 	}
- 	spin_unlock_irqrestore (&hcd_root_hub_lock, flags);
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4b93c0bd1d4b..7f847c4afc0d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 
- int usb_remote_wakeup(struct usb_device *udev)
- {
-+	struct usb_hcd  *hcd = bus_to_hcd(udev->bus);
- 	int	status = 0;
- 
- 	usb_lock_device(udev);
- 	if (udev->state == USB_STATE_SUSPENDED) {
- 		dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-");
-+		if (hcd->state == HC_STATE_SUSPENDED)
-+			set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		status = usb_autoresume_device(udev);
- 		if (status == 0) {
- 			/* Let the drivers do their thing, then... */
--- 
-2.34.1
-
+Kind regards,
+FPS
 
