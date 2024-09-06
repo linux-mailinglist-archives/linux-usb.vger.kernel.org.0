@@ -1,81 +1,99 @@
-Return-Path: <linux-usb+bounces-14776-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14777-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFFE096EE75
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 10:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46A3596EED9
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 11:13:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E95DD1C22EF9
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 08:44:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72C911C23680
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 09:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFEDE158534;
-	Fri,  6 Sep 2024 08:44:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74231C7B8F;
+	Fri,  6 Sep 2024 09:13:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="enn+DCz/"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oAmvG5xM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67404BE6C;
-	Fri,  6 Sep 2024 08:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD991C7B7B
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 09:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725612279; cv=none; b=eiAqcHkuf4wNIy0DQ5a3bhmGMgPMcW1BgzGbpRI7nGA2+Yc6OL5TCSCevPvWQDG4+suEOg+0PMMhtwVi/kuqzKRTKDTeYOGbScQ018D2/MEbhVuLxU/YBrcD8WHT5wEzuK0bRTexpuymE4Kc/uOXO7/ww4P8dZVDoJqfwdVnbZE=
+	t=1725613998; cv=none; b=Cgt7ooJmxlBOdscIB5xAbuvUFgw2tOAPXvZFZTZTqomJB01M1WXUenFs0eJNVn02eOmupKjRk77Trs9qpg5u/4/IqhMrDzQdlPv7HJzuXvY9J+s+2vTBNz6nicocMMj4D38k8IOiQYu9YmdmHYFG8/xSllhD8rj6ouJty702Cfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725612279; c=relaxed/simple;
-	bh=LsbP+G6YCGhSEArvYtEA6D21hf8VHCPCuW84buYYrok=;
+	s=arc-20240116; t=1725613998; c=relaxed/simple;
+	bh=FO3OnzQCYf5XaTnOgHdQrwmKtK3/VT0ecilwbwzzCWk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WUEpLJe2v4Muk6vcsV+yr0m9+ui8aeRC2QtqBnu0AESXXV9xQJO5anaKzVPjhapjnDep7y/nJ2fKq5uMtX0OjODJGgALg0LfR56/bIWNVImq6HwEV9CXJYCa42yoaTgpO+YCHfLBsop57Iiw82KokRm+VDzXxYjB34E+NakXZHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=enn+DCz/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53595C4CEC4;
-	Fri,  6 Sep 2024 08:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725612278;
-	bh=LsbP+G6YCGhSEArvYtEA6D21hf8VHCPCuW84buYYrok=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=enn+DCz/B6kvCeRAPEWK9Zw2uRKBorbm41hA1JwzucDA09d1Ca9Pdd8tnhtdRtj0/
-	 RTrROSkd6zvCi+VsACwPd/wzMYSRmqTBEGu5AMrBp7eSUsBWo5WDr0MZG3Qfb1xfnV
-	 FG4RIPHbtA4jn2UE/Ok9v5mW393lbFrA6uQ3BiIFnfEOIhJyfIjd/dUJqOEzNt4U3h
-	 V8IiLJR6A+V7TdAdke8h0BXnb9Pi4rYGE4flOQ7Drak0p04Hs5Pj1RqDu+fLkeMcnF
-	 V9FJ8lIaqleMymNNDPA99plk/H9TbfB87g0u4zb+yc79pe+xhqiEI+MamnjMLuF/4b
-	 a446aps19iYLQ==
-Date: Fri, 6 Sep 2024 08:44:35 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Pavan Holla <pholla@chromium.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v5 2/8] platform/chrome: Update EC feature flags
-Message-ID: <ZtrA8y0266RTm5Z3@google.com>
-References: <20240903163033.3170815-1-ukaszb@chromium.org>
- <20240903163033.3170815-3-ukaszb@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AA8uvkOFxEuQltMBfTaILxofJNnS5/tZxIwDcrvlnAdsUfSvZPzICHcD9P6f6fZoLsSK2ttHww2cZeHqkWvZ3vJW2vJG9B3LBkDc88TN+WyoVGcTW+/c6qjr/R9zZYOKr7CBeafNsiZIcHwMAXpC1g5+jGs/vxtnnuShiPlUjiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oAmvG5xM; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=P8fxc1HKaOUB6wOiTADncN2wqkEK80jWJ2fl/jsaj9c=; b=oAmvG5xM3VZCWP5ipzfwzww5fv
+	9jDwTwcbOQH3E9mnD26ScU1aCpIE/psCFCjMTsKWgtSYLmZodVtPqV2An6/MgKXRNAO/125BXTgDt
+	vPt1R/eENh9MEApDvTDrYE6HtYNWkXwm36qHHX7dibB50bMOua454b6Jbt9XWcyfid/76imwvQEQM
+	AAxILWlthomyXkRhiLaqLZs/9sKCjDdofUUAePKX0NpEdINNkzraGSWONxiqOfeiZU41KKP4mi9Gm
+	meSOUdEZ7M7FJhsPiQHeq7ce+nGijOYKE8wAEw1F8n92OlMeNC+kk6HYlkEzlJoPjvKvOQeGUUvlq
+	6hBrkgwQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1smV1h-00000000dFW-27MN;
+	Fri, 06 Sep 2024 09:13:10 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id D8D583003E1; Fri,  6 Sep 2024 11:13:08 +0200 (CEST)
+Date: Fri, 6 Sep 2024 11:13:08 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Amit Sunil Dhamne <amitsd@google.com>
+Subject: Re: [PATCH v2 0/3] Fix a lockdep complaint related to USB role
+ switching
+Message-ID: <20240906091308.GV4723@noisy.programming.kicks-ass.net>
+References: <20240905204709.556577-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240903163033.3170815-3-ukaszb@chromium.org>
+In-Reply-To: <20240905204709.556577-1-bvanassche@acm.org>
 
-On Tue, Sep 03, 2024 at 04:30:27PM +0000, Łukasz Bartosik wrote:
-> From: Pavan Holla <pholla@chromium.org>
+On Thu, Sep 05, 2024 at 01:47:06PM -0700, Bart Van Assche wrote:
+> Hi Greg,
 > 
-> Define EC_FEATURE_UCSI_PPM to enable usage of the cros_ec_ucsi
-> driver. Also, add any feature flags that are implemented by the EC
-> but are missing in the kernel header.
+> This patch series suppresses a lockdep complaint about recursive locking
+> that is triggered by switching USB roles. Please consider this patch series
+> for the next merge window.
 > 
-> Signed-off-by: Pavan Holla <pholla@chromium.org>
+> Thanks,
+> 
+> Bart.
+> 
+> Changes compared to v1:
+>  - Added two patches. One that combines the two mutex_init() definitions and
+>    another patch that introduces mutex_init_with_key().
+>  - Changed patch 3/3 such that it uses mutex_init_with_key(). Added Amit's
+>    Signed-off-by.
+> 
+> Bart Van Assche (3):
+>   locking/mutex: Define mutex_init() once
+>   locking/mutex: Introduce mutex_init_with_key()
+>   usb: roles: Fix a false positive recursive locking complaint
+> 
+>  drivers/usb/roles/class.c |  6 +++++-
+>  include/linux/mutex.h     | 19 ++++++++++++-------
+>  2 files changed, 17 insertions(+), 8 deletions(-)
 
-Same as previous patch, it needs your S-o-b tag at the end.  See [1].
-
-[1]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
