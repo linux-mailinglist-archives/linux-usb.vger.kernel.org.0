@@ -1,132 +1,128 @@
-Return-Path: <linux-usb+bounces-14790-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14791-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9244396F65B
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 16:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA2B396F68D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 16:20:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17223286A67
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 14:11:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A16A286F9D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 14:20:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF9D1D0143;
-	Fri,  6 Sep 2024 14:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2F21D0491;
+	Fri,  6 Sep 2024 14:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="xrj/PiVX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iHPooccS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F58C1CF7A8;
-	Fri,  6 Sep 2024 14:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30AE1EEF9
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 14:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725631870; cv=none; b=WaymvWh3Q7e1BM2YJegyT/WIpiYnpz8rzmxnFlIHFTrQn1YCGrh1HZrCWClKgNwBYdDrL86SdbqYvcFLpksOHOroPceSNJ2NpKiOxtpKcd1scbKoOU5elg7xO46v6A9kPINpi5X6NLRHuVnBnaCihSkpmqJz54n1FV9CFTCK9uQ=
+	t=1725632401; cv=none; b=HPhVnOpPOJ98JyftMZBa1qGGMPITnnW8AxnL+WvoVTEKiI5XvCyhgvhZVLp1yfhc3i6LCnU3IJhBdqrmW0FXHg3Ate9xZKYI3I0aW8W5SVIoIJgdxA00kbHlv4b75t07pSDk5/TDXZPcKDV6ZF8bVynOdGpFG/fv+qzoAx0xaQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725631870; c=relaxed/simple;
-	bh=c/t+G8YnmMiXwefYmFLh4cenVroWZGpo0bMweRzBv8U=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=JAbHrDj9fTnWXmY5CakHNWk94f167McnwUYBsz9IEiTy5zbbFtlylscH2XAUF0BFziarHAN27nRfOpoqETs8P3jCfwX0/BWzt93W/KXXMTmMbQ1mzUJ6XxtBuyd9l5j/lxhbrFlD+kpv3tYKMwh2CJ4tN2c6Nixwu8TPiKsbZwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=xrj/PiVX; arc=none smtp.client-ip=203.205.221.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1725631865; bh=5fYQjJJeIHbEi/MHYR9mQgsttlxdfBHHE0O6dknJ3Y4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=xrj/PiVXTqidfmJh/BN7GzbmPcYVRueuuK7TD5CDoXYlGT/945RUKSazTb0m3fiA1
-	 uP9HQqIlz1RnJ3IeDGTTuEbvgRJFkpk4duV3TO9a5BroqKVfkvd1ylmgRnZmGMB6Vz
-	 UpkWDnH6z9ECkFxjAorBMyAkAKHg8wRTj2ThxYeI=
-Received: from pek-lxu-l1.wrs.com ([111.198.224.50])
-	by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
-	id 2C2AAECF; Fri, 06 Sep 2024 22:11:02 +0800
-X-QQ-mid: xmsmtpt1725631862tzhi2yfde
-Message-ID: <tencent_5E4FB78DACA5F90D97926A5DBE5D96993007@qq.com>
-X-QQ-XMAILINFO: M/NR0wiIuy70Njpei0mZ6yEAAVkWoC/0dTLDvjX6vuKxIvWSRQE6FfcTMWjKxB
-	 riWgL0TH7Jm1+RM2+7OXuBWUFEWHnw8KX+RGxjTS7VHsJeUZi2DzrzePQ9SQway7aX/Gg1YkD5l/
-	 nxdMA+KuvpZ6CkBu+2RzQZMqjf/UJT3nFAIIZspGyLHG8VfikUaR6/amU6l2XkPSsfXTj7c+KDnF
-	 Ipuhx4bi94ZYW7zPFcvsVPBx9YT9S+eTbTeXVoX8/1rL//uwTL1VgRTjnviehI5FW/r8eAU2kq4z
-	 pkVywMQiVqzmVfmH7+ehyfmOZsCBrcX2P7rP/Rp8ucMepKAhPD8y3CdGjfJ4bAItiBnNd6KsNM+K
-	 e3P2ZMakmu4p0Q4gRDbScsuTehlgiqqOu+0VqNW2ddOAlsBVxKq6sr0vuTc8QijYZo6hYTuD2dqa
-	 Bf7hleegOgS5z4kqzEngLCnCxbu9669z3w9Gk54IDlKjE3u6Uwx6TAuaNdy5NA3yRUM3Na/0HGs7
-	 P8MV5HlwMk8UkWhyFWt008JIMdl9/MmpNo48A8jwFfWDPq+M6fTntTMwVVMBbP35804egygS+BrH
-	 Bdy3F2DzgZbplQPNSa5Qn4t6aeQSjmKzuZuP6zqf3pCOpDeoGi/6EUJ0w0Nm90Zdyksa6TdfKw2f
-	 pho6HiALoqMJ4vcwxWEnSSw+uy4wKGBMf721njFXlF2VhT7O9+qeLdH+Y94LqUmQi8/aDYKOyYVY
-	 R7Vvca4D4oSIgpktG8ZAj+ANHuALlikjsrMLP7q4yq1J8V95Ow2IE/9AD7fxUlLIYh4H9K6XGRO4
-	 s5sEFIDrJ5rncjDjQ3pjw8x04avrZQFfB/LrABzxJgu9fWYfYD0Y+4O1N8y/sQ6V6VybIWbM29k/
-	 js5mHlJMPLAf1m0McdaGswkfE9QK7hy3leDWn1VcaPsJ6zkh1Ixvphd8chKEQ94+l46frCLNQ9eT
-	 gw3UzEbbU6fj3lagJdpO3XjDPcBQSpUepR0Z01usA=
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-From: Edward Adam Davis <eadavis@qq.com>
-To: eadavis@qq.com
-Cc: gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH V2] USB: usbtmc: prevent kernel-usb-infoleak
-Date: Fri,  6 Sep 2024 22:11:03 +0800
-X-OQ-MSGID: <20240906141102.358431-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <tencent_E8A0E926ED22CE20783A6EC02FC56C18950A@qq.com>
-References: <tencent_E8A0E926ED22CE20783A6EC02FC56C18950A@qq.com>
+	s=arc-20240116; t=1725632401; c=relaxed/simple;
+	bh=vId2srKe0fbdlIdvOiJAT3wMG2yLGyRD/YQjTpUDQMY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mOn2ARLLTCyBCzlt+w9vUVUSf2IBkyOKsGir/qKNorrEnRMDn87+qC7tlO+WjxDvXOkGyYtdkClDmUGEAlZfKVKnccs9pQvZmUoRSf9+bttJUYXqIuuv8iObTjm57Ps+RMlnJHdQ0KIiUnzclSZob0YQV2YyTqsU7qX+/aKEwWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iHPooccS; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725632400; x=1757168400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=vId2srKe0fbdlIdvOiJAT3wMG2yLGyRD/YQjTpUDQMY=;
+  b=iHPooccS9dsVjydli8SlQzRwsDzHf1ENNZjbEygwHf+WMxfA0Sx7sbWF
+   o5hGDFWUBVpDwoDb0LiPPs1fmmaPSQm3Sacfziw5YYq7th82zcs4HCkXF
+   pWfBmZsgTpxZMAOoirSQ4K+4b5ZO6RlUHrQIIFqK9G9X187fBWnWVIg7L
+   fTxLsL61BjQjbyfG4pnsBScEby8u0/nuQ2k0iBvcsHJC4aT6zxg3bh1Ds
+   /qd7m22woqu4Q0aytbV2rBsrMGct0zoj98XC92BhSAsbvpZrNTo7QzjYO
+   ALdL4SL3Dxss7VWQhYDNy/aX8fZAL2TTj2MSkActqPnA9nJ2bW1yHZolS
+   Q==;
+X-CSE-ConnectionGUID: 0eK8XlHtT9K4ksYQ5BTCXw==
+X-CSE-MsgGUID: 3VKYR2IcQhGENUFZGpdBUw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="24501389"
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="24501389"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 07:19:38 -0700
+X-CSE-ConnectionGUID: xMhbKBW6SvKhdEFXgs1ogw==
+X-CSE-MsgGUID: WGKnkTF8TWi57Mq7zahTNA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="65656795"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa007.fm.intel.com with SMTP; 06 Sep 2024 07:19:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 06 Sep 2024 17:19:33 +0300
+Date: Fri, 6 Sep 2024 17:19:33 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Pavan Holla <pholla@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v5 3/8] usb: typec: ucsi: Implement ChromeOS UCSI driver
+Message-ID: <ZtsPdWRHkHWufsVh@kuha.fi.intel.com>
+References: <20240903163033.3170815-1-ukaszb@chromium.org>
+ <20240903163033.3170815-4-ukaszb@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240903163033.3170815-4-ukaszb@chromium.org>
 
-The syzbot reported a kernel-usb-infoleak in usbtmc_write.
+Hi,
 
-The expression "aligned = (transfersize + (USBTMC_HEADER_SIZE + 3)) & ~3;"
-in usbtmcw_write() follows the following pattern:
+Sorry to go back on this, but I noticed something..
 
-aligned = (1 + 12 + 3) & ~3 = 16   // 3 bytes have not been initialized
-aligned = (2 + 12 + 3) & ~3 = 16   // 2 bytes have not been initialized
-aligned = (3 + 12 + 3) & ~3 = 16   // 1 byte has not been initialized
-aligned = (4 + 12 + 3) & ~3 = 16   // All bytes have been initialized
-aligned = (5 + 12 + 3) & ~3 = 20   // 3 bytes have not been initialized
-aligned = (6 + 12 + 3) & ~3 = 20   // 2 bytes have not been initialized
-aligned = (7 + 12 + 3) & ~3 = 20   // 1 byte has not been initialized
-aligned = (8 + 12 + 3) & ~3 = 20   // All bytes have been initialized
-aligned = (9 + 12 + 3) & ~3 = 24
-...
+On Tue, Sep 03, 2024 at 04:30:28PM +0000, Łukasz Bartosik wrote:
+> +static int cros_ucsi_async_control(struct ucsi *ucsi, u64 cmd)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	struct ec_params_ucsi_ppm_set *req;
+> +	size_t req_len;
+> +	int ret;
+> +
+> +	req_len = sizeof(struct ec_params_ucsi_ppm_set) + sizeof(cmd);
+> +	req = kzalloc(req_len, GFP_KERNEL);
+> +	if (!req)
+> +		return -ENOMEM;
 
-Note: #define USBTMC_HEADER_SIZE      12
+Where is the memory for req released?
 
-This results in the buffer[USBTMC_SEAD_SIZE+transfersize] and its
-subsequent memory not being initialized.
+First I though that cros_ec_cmd() does it, but it's actually
+allocating it's own cros_ec_command, and then releasing that in the
+end, so I just got confused about it.
 
-The condition aligned < buflen is used to avoid out of bounds access to
-the buffer[USBTMC_HEADER_SIZE + transfersize] when "transfersize = 
-buflen - USBTMC_HEADER_SIZE".
+Is this a memory leak, or am I missing something?
 
-Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
-Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- drivers/usb/class/usbtmc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> +
+> +	req->offset = UCSI_CONTROL;
+> +	memcpy(req->data, &cmd, sizeof(cmd));
+> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_SET,
+> +			  req, req_len, NULL, 0);
+> +	if (ret < 0) {
+> +		dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_SET: error=%d", ret);
+> +		return ret;
+> +	}
+> +	return 0;
+> +}
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 6bd9fe565385..faf8c5508997 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -1591,6 +1591,10 @@ static ssize_t usbtmc_write(struct file *filp, const char __user *buf,
- 		goto exit;
- 	}
- 
-+	if (aligned < buflen && (transfersize % 4))
-+		memset(&buffer[USBTMC_HEADER_SIZE + transfersize], 0,
-+			aligned - USBTMC_HEADER_SIZE - transfersize);
-+
- 	dev_dbg(&data->intf->dev, "%s(size:%u align:%u)\n", __func__,
- 		(unsigned int)transfersize, (unsigned int)aligned);
- 
+thanks,
+
 -- 
-2.43.0
-
+heikki
 
