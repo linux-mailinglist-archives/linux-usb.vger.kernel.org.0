@@ -1,132 +1,141 @@
-Return-Path: <linux-usb+bounces-14759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93D3A96E723
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 03:12:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A50896E7A5
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 04:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF5AA1C22B50
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 01:12:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5B7C1F24296
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 02:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C671A270;
-	Fri,  6 Sep 2024 01:12:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42711208A0;
+	Fri,  6 Sep 2024 02:20:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NhLx8kpE"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="ZIxrw+aN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671181DFCF;
-	Fri,  6 Sep 2024 01:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1C81CA94
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 02:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725585153; cv=none; b=Fp6DVspP4wjvy7Q1vTPer3IIcDL/dv3fjQj5LYxaLnSv2H3yU39k1IRkee2t7D1wqurSFZizUbOWBjhDnF9hiz8ELQhX6TsqWrNylpycYUu2Y51EkplIhuYSBT/qk+1TgVIBZGYQt6YHYFzq5b8+T5k6IrgOt0ldrABPv0xt2Gk=
+	t=1725589257; cv=none; b=NQpRlVMqOcIx4wh/cnEJT4rcfhvLUdAZJEO/ZMOCwup3/dy4KG5+jESjOmYmn2t/qPPRiu6QR5zS6ClvvzDfgZYpqHgdYr3d/7k3fxIbM2l292C/dl3qk+2iCR5bugaQfF5raaUqetIThm+tt3tSljcz/SuWOeF40nIex0vQ8bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725585153; c=relaxed/simple;
-	bh=tajvxvjnOiEA5fsVw+UnLHqK+urb541csY0X9cR0iU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U97eDd7VeREYbjlf3QsNzWxu853O+yr6S3xMDY1k0ulqdEkDRl+vrYTXqNMklPLSdCgDSsqD5Hpmsry+h7DB19FIise9vTvjRLNg0oFjFn+Yo9oYWTNrK063F82OKwA0W7KpELWQBNqi6UH28DK16CERVduQ3FJia4ERWl2aYQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NhLx8kpE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C353CC4CEC3;
-	Fri,  6 Sep 2024 01:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725585153;
-	bh=tajvxvjnOiEA5fsVw+UnLHqK+urb541csY0X9cR0iU4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NhLx8kpEp0nenjDFHDZlrvUdZU6o6yg/H7umqYZhpaoC+4iMaksv4tCI4vuArh2Ud
-	 78J8Dt70gIbURuImyRfVnurlEcz1gOz2XpPIGMpxmpIrfxKe24R+mo+BUQr3y0XZhB
-	 Hc4AsqZpmS8g8KdYqTuRhimz7GPcOoKzxarmTBfUChG9MTFQ7ezbZrh8oDGFF/USMx
-	 S1OmKWYuigqBtRvoHQoYob1c3rvxnyeK67A8c55YYmcmKdU+UxCCtqxQeFe/Jmsevr
-	 YYMUfT/UdVDQ4cPx/POof04qctPRl8DIoJz0XLxYI5p01HcG3BhAPc3i2R9Oray+eB
-	 EsvIDfQvUnVQQ==
-Date: Fri, 6 Sep 2024 09:12:24 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdnsp: Fix incorrect usb_request status
-Message-ID: <20240906011224.GA357232@nchen-desktop>
-References: <20240905072541.332095-1-pawell@cadence.com>
- <PH7PR07MB95382F640BC61712E986895BDD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
- <20240905080543.GC325295@nchen-desktop>
- <PH7PR07MB95383CF665431DBDACD73B65DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+	s=arc-20240116; t=1725589257; c=relaxed/simple;
+	bh=JIQNcd0t1lA3YwGxvO9W/1yWR64K8A/Szr46CY6CL6A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JIR/ljDrUcjHn6M2Hu0kekogCeYyJst8uFXILwgc6HY7zvNOBkpoYC4bBryqBgcsKhWfLMvaB75idjtA2vxy7iUMTQMgNcHkrNSI2v0/Y/9LcKVqaG5l5o22FjK21jhwm1Q/HefShuZhTaEhQeKBpGjluD0LmJHcQLneScF0l8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=ZIxrw+aN; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 100F93F1C9
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 02:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1725589253;
+	bh=WQPEUq7feoIG55GGUqRCXiORPRpQ+XnJ3+6Byz4Q+m0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=ZIxrw+aNjywyQqLYs8zCOWQaJa4q5MIxGfG+SZj43IuPVYdhC+MgHxefTmYmOLslK
+	 tCkED+MeJo7xn2u86KbIbi9KEzZ9Kbr6+5ZSXjgL7dJFYz48B8kTBJuJuSBG9UcsTT
+	 SL0OOXtD+7RtL6hgWdNXdWn4iMm+xhLR1vuMnznkWhTbqK93NVeddfMZuLKX34LVaw
+	 hR0sBohZ4yLc3YoniFuxXm0mG7TsNE9wvKysyvtcmAUPfpRtR+pmyWXhjatY+O3Te5
+	 cRUiHhFjUs11atRaGA1IZJN+qsfRrPrAw0XfKVPMTSXNYt1Di2r+XxTmzQXQi47E04
+	 mGJ2GgotpY5kQ==
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5c2486f1f14so1308235a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2024 19:20:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725589252; x=1726194052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WQPEUq7feoIG55GGUqRCXiORPRpQ+XnJ3+6Byz4Q+m0=;
+        b=cJhpjHjo5BhziwniLdF4br5zjHGIdXh0Is9iMEkpV5t5Bpd2vZUO1V1NM8NA5NpVta
+         +GvBc20fK9mmJmHk0i+tciXj/tf8DCV8N1WOaL2oCLbqjRJxWsoddc5ES1WWSob/PUpP
+         S4UtwRQa/DKdauM1nB0ivAGtgutpRuyjNYDL92xKrZDYkRanF15QbOw9N+T0eKnLaVqH
+         3ET9Yqt9BWNWgq+58SsXY2uRHz2fCEdWyHFGrKoQXeo8uAv84Tz5qTtMW766wnvt+99D
+         +baEPo+gSKkTfOJvOtczg/XZZWL1SQziWYUBkaF/SQu1WHphmJRfvs7hm5P84uOk+RGX
+         BvYg==
+X-Forwarded-Encrypted: i=1; AJvYcCWefpcB73ZqBXt4O5ZjrxLY3RGN9CaL9SrlojQTSTzo14kvMM8ThEFhEg9SgO+1D0ixu9Zce43U+J8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3c0yQTxMnI1owFSnvY8Y48VDVYI+hgfBztQNlDKL5ZahtntGa
+	WNaJbgOrSMrnlvJXl/z8YQ9WnUrb+KMa93vKTckVljs1+eYT/iK7D4KsjXnj0IMvue9qQ2KUw+o
+	fVCsriJtLMxfYrtAuhOohywnuWsJWuI6rKKuOYSPmKoQW3j0EnqyMOVCy7vI8Xw23svlwj1Ryj/
+	0+8Rh1ooarfn7maL7GWnBjjmmgapYtJKUtEjZ9nRz/HnS7mgsn
+X-Received: by 2002:a05:6402:d08:b0:5be:f295:a1a5 with SMTP id 4fb4d7f45d1cf-5c3dc78a59amr445857a12.10.1725589252386;
+        Thu, 05 Sep 2024 19:20:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHKvx68TjuIu907/2i3MdI5p9PE5yWLsu+o9PcDePGulmT7vZH7GmhLiWUwz4CIkWnGkqtXwJFCCP3aJ1iGl4Y=
+X-Received: by 2002:a05:6402:d08:b0:5be:f295:a1a5 with SMTP id
+ 4fb4d7f45d1cf-5c3dc78a59amr445846a12.10.1725589251889; Thu, 05 Sep 2024
+ 19:20:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95383CF665431DBDACD73B65DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+References: <20240905042447.418662-1-kai.heng.feng@canonical.com>
+ <2024090516-battering-prompter-3f53@gregkh> <CAAd53p5tGvTh_zP8BdBu1o0t5=s_uBQuctKQcwCNwyHo6Fx7oQ@mail.gmail.com>
+ <2024090522-suggest-overpay-9fba@gregkh>
+In-Reply-To: <2024090522-suggest-overpay-9fba@gregkh>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date: Fri, 6 Sep 2024 10:20:40 +0800
+Message-ID: <CAAd53p6D73t7o8g+9zMYg=c78fGBZCMEnf55XgPQB=jjVY+Y2A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: linux/usb.h: Move USB port definition to usb.h
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, jorge.lopez2@hp.com, 
+	acelan.kao@canonical.com, platform-driver-x86@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24-09-05 08:45:59, Pawel Laszczak wrote:
+On Thu, Sep 5, 2024 at 2:50=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>
+> On Thu, Sep 05, 2024 at 02:24:31PM +0800, Kai-Heng Feng wrote:
+> > On Thu, Sep 5, 2024 at 1:20=E2=80=AFPM Greg KH <gregkh@linuxfoundation.=
+org> wrote:
+> > >
+> > > On Thu, Sep 05, 2024 at 12:24:46PM +0800, Kai-Heng Feng wrote:
+> > > > Move struct usb_port to linux/usb.h so other subsystems can use it =
+too.
+> > >
+> > > These really are "internal to the usb core" functions and variables, =
+I
+> > > am loath to export them as it requires that you "know" what the devic=
+e
+> > > type is of something without any recorse if you get it wrong.  I
+> > > commented on patch 2/2 about that.
+> > >
+> > > Could we provide a usb core function for you instead to help out?  Wh=
+at
+> > > exactly are you trying to get access to on the USB bus that you need =
+to
+> > > use here, the port or the device?
 > >
-> >On 24-09-05 07:31:10, Pawel Laszczak wrote:
-> >> Fix changes incorrect usb_request->status returned during disabling
-> >> endpoints. Before fix the status returned during dequeuing requests
-> >> while disabling endpoint was ECONNRESET.
-> >> Patch changes it to ESHUTDOWN.
+> > The device so the quirk can check its vendor and product id.
 > >
-> >Would you please explain why we need this change?
-> 
-> This patch is needed for UVC gadget. 
-> During stopping streaming the class starts dequeuing usb requests and
-> controller driver returns the -ECONNRESET status. After completion
-> requests the class or application "uvc-gadget" try to queue this
-> request again. Changing this status to ESHUTDOWN cause that UVC
-> assume that endpoint is disabled, or device is disconnected and
-> stop re-queuing usb requests.
-> 
+> > That means a function or helper that can return USB port/device from
+> > an ACPI path.
+>
+> So you don't want the port, only the device.  Why not just search the
+> bus for a device, you don't care where in the acpi path it lives, right?
+> Or better yet, do this in the driver for the device itself, that's when
+> you know you have the right device.
 
-Get it. Would you please update commit message with your above
-explanation?
+The crucial part of the quirk is the device links between VGA and USB
+controller to enforce suspend order, it can be hard to create and
+maintain the links when the USB device can disappear at any moment.
 
-Peter
+Kai-Heng
 
-> >
-> >>
-> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
-> >> USBSSP DRD Driver")
-> >> cc: stable@vger.kernel.org
-> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >> ---
-> >>  drivers/usb/cdns3/cdnsp-ring.c | 6 ++++--
-> >>  1 file changed, 4 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
-> >> b/drivers/usb/cdns3/cdnsp-ring.c index 1e011560e3ae..bccc8fc143d0
-> >> 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> >> @@ -718,7 +718,8 @@ int cdnsp_remove_request(struct cdnsp_device
-> >*pdev,
-> >>  	seg = cdnsp_trb_in_td(pdev, cur_td->start_seg, cur_td->first_trb,
-> >>  			      cur_td->last_trb, hw_deq);
-> >>
-> >> -	if (seg && (pep->ep_state & EP_ENABLED))
-> >> +	if (seg && (pep->ep_state & EP_ENABLED) &&
-> >> +	    !(pep->ep_state & EP_DIS_IN_RROGRESS))
-> >>  		cdnsp_find_new_dequeue_state(pdev, pep, preq-
-> >>request.stream_id,
-> >>  					     cur_td, &deq_state);
-> >>  	else
-> >> @@ -736,7 +737,8 @@ int cdnsp_remove_request(struct cdnsp_device
-> >*pdev,
-> >>  	 * During disconnecting all endpoint will be disabled so we don't
-> >>  	 * have to worry about updating dequeue pointer.
-> >>  	 */
-> >> -	if (pdev->cdnsp_state & CDNSP_STATE_DISCONNECT_PENDING) {
-> >> +	if (pdev->cdnsp_state & CDNSP_STATE_DISCONNECT_PENDING ||
-> >> +	    pep->ep_state & EP_DIS_IN_RROGRESS) {
-> >>  		status = -ESHUTDOWN;
-> >>  		ret = cdnsp_cmd_set_deq(pdev, pep, &deq_state);
-> >>  	}
-> >> --
-> >> 2.43.0
-> >>
+>
+> thanks,
+>
+> greg k-h
 
