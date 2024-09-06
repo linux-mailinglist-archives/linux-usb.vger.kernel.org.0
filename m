@@ -1,83 +1,82 @@
-Return-Path: <linux-usb+bounces-14792-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14793-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A011196F693
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 16:22:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D846B96F6AB
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 16:28:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D358286F6A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 14:22:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBA01F25A98
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 14:28:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A9D1D04B4;
-	Fri,  6 Sep 2024 14:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910DB1D0940;
+	Fri,  6 Sep 2024 14:28:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="oiEN1A03"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="j8ac36Eb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9068C156880
-	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 14:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB9E1D048B
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 14:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725632540; cv=none; b=LNbAiu1A9w3+gpy58d+6XSTu4J6+a2saLi6U0sv3pw9npkOQqo/9icgksDUcgaCy4pmHR8Q7nsM4fMYJfveXCZTWrg3aLJGbxw4fGo21wBNf76xAmgpcAcQeOE8oYVYn2hkuCMKpBAOJVPPsdNmOjnFOoNcEcM7bIP9hRNCHAsU=
+	t=1725632897; cv=none; b=GP6CJeazvQTChG/SaQUh5q5x/w/tXvuO8Gk88KQOpVu7GrCcqC1kKnKOY1j/0m7IRR5VArpg/YewgGX9cSmbhCHXD6KxSEqYC24BMt0JGI4ZwLq05igeoSjLVLQriFPLx6N/wGJQRRDcqXs8/DJ5wznhFmdOt8F2p3bK+nPBFz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725632540; c=relaxed/simple;
-	bh=tQjkERqH5a7vtr1bH4iiesADfhckp05VjCbDTRK2JqA=;
+	s=arc-20240116; t=1725632897; c=relaxed/simple;
+	bh=OMkJ8MDyk2DS5zAFJI6QLOdm/mfILbRwKQikdM8A9GI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oEE1cLZUhm4gXrWSUSknIjBnbuynf3ZeuOH2M9ly0Vzi1by59xE3JqHHCz2gl2D8Z5wYpTB+GeASt01RxTDV6qLrsx2oY49y4F1hyyrtJlLwV++Omp6/CeRqCamFNbcAAOKXbGvEjh97iXL+bm382/0ReujXj3AWDxVME4dO5iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=oiEN1A03; arc=none smtp.client-ip=209.85.219.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=qKFf65GhTAMSo0ddWcVK16DsTuVCSePy6/ugIHTaqOp20jbzkd+Lrx3AzUzSlzbZa2jpR83k4wnHIbE0yhnj1JsBHRbX4OUY+D1j08Rksf+Nz/Ld2qASOftE+ujSl5zwHQRRtY4MANh5zcy/7eHRaXBsX/X76NdGUFzCybCrZnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=j8ac36Eb; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6c34c2a7dc7so10490376d6.3
-        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2024 07:22:18 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6c35618056aso9452636d6.1
+        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2024 07:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1725632537; x=1726237337; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1725632894; x=1726237694; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i13O7aMho6sIZDHthcXgLUs7X49lVWT+R426B+rq6ZI=;
-        b=oiEN1A03rPndoHW6s/52Y0nhxhf1eeYR6joDXFafJ6sTj1g4EtVm0cChsL3P9VCArP
-         6pUdQiVoRt9AZ+q/yT5adz5koHwHcuM/3IKjNXFrOXGVSPtF+FSfZGKNuQ3UJYS5ccbz
-         7Ea7L/1ez1SXgKFZYtQLOEbwuQgKsB/EjbRKGG4XavppSGtfOh+4jYr1vgZDEyLM+PVu
-         31Kuk50YLn5jpCNTXa1GZaIjvp412ZDLs5V9YQBMFacA0WQCqWgFR8cABd8i2iR4vhdw
-         iQvnS0L8x337pCgKhMVvh5eZxxpTdK/jj4c4gtrUY2Cxr1B7IPPlY5FU0/I2otFNM6V2
-         InYw==
+        bh=fd8vrf+CGhXnOKcGX7cHb7W2deBIxR1gYTsL+B2njdY=;
+        b=j8ac36EbcoXPAmlNAyle/e+tasjz0XFzIduUwEVaUbXFW1ErbXzhJRdnOSUgBfZvCg
+         7jaSByCfcsqXWfjU624xCeXkNQxFacfdrVu1ntAgLutozEm2Ivls/H+5WmtJQxf2YlyV
+         rAbSPIeqzcG22OpCo+3IfR7vbxbJhOR2iYYTOlYYCNjhe9Af3hYqn2JSfeQJNpMlMORV
+         tQN+V9Uhr4AQoo5ENZe2GF9GQoQJSlyJ6N5NnsrBsbL78ZPLl2h1h8SoPp7tB2HglUY/
+         QfJPcpyR4/jg0JkoWxxFik6jckAna3hhfefDk9+/FT9W4TFWBO/Op9eeqUUEaVe9sYme
+         Rf9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725632537; x=1726237337;
+        d=1e100.net; s=20230601; t=1725632894; x=1726237694;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i13O7aMho6sIZDHthcXgLUs7X49lVWT+R426B+rq6ZI=;
-        b=Vr35Gqd3Z1IvOoI3jFBBI4sMSicvL0llBnMoNCHdmDP9kcTKhbGfRNev91MgJQsCVl
-         zHddkgHzmloxXVRSX2aUdEZ6TJLK7ansZ1Mzf7HWIxDQTUXdtvCZxiHU3KH3iodY7n7F
-         PojSVC90Hj34uRFNtO/prx4Fcp9wALcuP3UdvDIxjDmcfU4Aee1cpTIqCPNRgqSBcRuT
-         FgD1SPY6LkPExqJci69KrE2D/Jz5SygNrLDLQ+wOhTS7YJrLe9as0ramZPMHJAyXWQOy
-         Gk0q2XvWbXsNX/l+kojv4liNT6A8X5ZjDQJ3j8/uQ7EUqTMWXPXwFCaoEtc0JAlny/3i
-         ta6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW0bxG8+GBuJq2uQ9UylqizmYGmCgpDKidwWh+uA8CpVFBVan9JsuYyU3Xv63igErZlO514qaXwunQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrxcdX1Z9WaSPQegUJ18nXtf4uUdkc56w8iLhPzEvg+3qrhBZN
-	ApvBp4I2SnLxluMDZskNng6DcCBXNgwmSWPnHRQk0/76jOOxlTkuqPnXmfocFQ==
-X-Google-Smtp-Source: AGHT+IHGtc7MfDbeSVaqNtS8fOc7eRQVn4NDEMJLoXNjeV99r/fMfQbwdjG9upYn27KoLoBbDA8LRQ==
-X-Received: by 2002:a05:6214:5346:b0:6c1:547b:418a with SMTP id 6a1803df08f44-6c33e69c654mr322505756d6.36.1725632537418;
-        Fri, 06 Sep 2024 07:22:17 -0700 (PDT)
+        bh=fd8vrf+CGhXnOKcGX7cHb7W2deBIxR1gYTsL+B2njdY=;
+        b=VtI7/BvH8DauTTYy3AaFGBGU7WMMr9lbweia4oYovoT6HVwydAMBlfrXCKweQKoCf7
+         AHWV3xeC1F+ePQO2I+OYLOd2JD1phnavsZa5b29QL+w6iObyrmPBbiki1fcYdr49sYoo
+         vhxbJqCABBVL7nfZRBgcnlMvpXGK4qwNuIjWrBmQnoBfX/7mXINJmC79Ai0JrxkGFwvz
+         1lkkQMBF3F7m4Zvpk7KPYMGZnoGKY7gm+upWkLmpWYDbLQDCC/DVSIDZvqxsGIqQxhrW
+         Bx+7LYYsQYtp4JZ557YfnMpIdcef6S2V5NSlCq68MN0YGeLlq97u0eW4omdIT+Q/ie7X
+         ISBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPV4FEQNfgutyYWyGaFW+bIXSijqqtM22pISHVNHPoaWHXCuOyec/TeXrYEfXSE9cb8CRvR/yr+Zk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3kpvyElGcajz9+7sVmE60OJO6sNx1vh3j8DXGy/gmTv+bfwIQ
+	a6zHL7CvkxMO9JqS/e47cgp7MT41jm/h/dnJERga4w3KDN+N587FN2JVs/iX7Q==
+X-Google-Smtp-Source: AGHT+IFLOJ30BAbDPove6N2EQT5RiwKHTKYOy61jJwIp8x9PszQWTHAxXwkSBghebLq7ownX01rKrw==
+X-Received: by 2002:a05:6214:4293:b0:6c5:111e:8ff7 with SMTP id 6a1803df08f44-6c5283f60c9mr32121726d6.2.1725632894460;
+        Fri, 06 Sep 2024 07:28:14 -0700 (PDT)
 Received: from rowland.harvard.edu ([2601:19b:681:fd10::24a8])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c5201e4bf4sm17079946d6.56.2024.09.06.07.22.16
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c5201dee9bsm17064496d6.5.2024.09.06.07.28.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Sep 2024 07:22:16 -0700 (PDT)
-Date: Fri, 6 Sep 2024 10:22:14 -0400
+        Fri, 06 Sep 2024 07:28:14 -0700 (PDT)
+Date: Fri, 6 Sep 2024 10:28:11 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
-	gregkh@linuxfoundation.org, jorge.lopez2@hp.com,
-	acelan.kao@canonical.com, platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne
- 440
-Message-ID: <d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu>
-References: <20240906053047.459036-1-kai.heng.feng@canonical.com>
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH V2] USB: usbtmc: prevent kernel-usb-infoleak
+Message-ID: <25d5853a-7156-4892-a383-4547e9c95472@rowland.harvard.edu>
+References: <tencent_E8A0E926ED22CE20783A6EC02FC56C18950A@qq.com>
+ <tencent_5E4FB78DACA5F90D97926A5DBE5D96993007@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,34 +85,70 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240906053047.459036-1-kai.heng.feng@canonical.com>
+In-Reply-To: <tencent_5E4FB78DACA5F90D97926A5DBE5D96993007@qq.com>
 
-On Fri, Sep 06, 2024 at 01:30:47PM +0800, Kai-Heng Feng wrote:
-> The HP ProOne 440 has a power saving design that when the display is
-> off, it also cuts the USB touchscreen device's power off.
+On Fri, Sep 06, 2024 at 10:11:03PM +0800, Edward Adam Davis wrote:
+> The syzbot reported a kernel-usb-infoleak in usbtmc_write.
 > 
-> This can cause system early wakeup because cutting the power off the
-> touchscreen device creates a disconnect event and prevent the system
-> from suspending:
+> The expression "aligned = (transfersize + (USBTMC_HEADER_SIZE + 3)) & ~3;"
+> in usbtmcw_write() follows the following pattern:
+> 
+> aligned = (1 + 12 + 3) & ~3 = 16   // 3 bytes have not been initialized
+> aligned = (2 + 12 + 3) & ~3 = 16   // 2 bytes have not been initialized
+> aligned = (3 + 12 + 3) & ~3 = 16   // 1 byte has not been initialized
+> aligned = (4 + 12 + 3) & ~3 = 16   // All bytes have been initialized
+> aligned = (5 + 12 + 3) & ~3 = 20   // 3 bytes have not been initialized
+> aligned = (6 + 12 + 3) & ~3 = 20   // 2 bytes have not been initialized
+> aligned = (7 + 12 + 3) & ~3 = 20   // 1 byte has not been initialized
+> aligned = (8 + 12 + 3) & ~3 = 20   // All bytes have been initialized
+> aligned = (9 + 12 + 3) & ~3 = 24
+> ...
 
-Is the touchscreen device connected directly to the root hub?  If it is 
-then it looks like there's a separate bug here, which needs to be fixed.
+What is the purpose of aligned?  Why doesn't the driver simply use
+USBTMC_HEADER_SIZE + transfersize instead of rounding it up to a 
+multiple of 4?
 
-> [  445.814574] hub 2-0:1.0: hub_suspend
-> [  445.814652] usb usb2: bus suspend, wakeup 0
+> Note: #define USBTMC_HEADER_SIZE      12
+> 
+> This results in the buffer[USBTMC_SEAD_SIZE+transfersize] and its
+> subsequent memory not being initialized.
+> 
+> The condition aligned < buflen is used to avoid out of bounds access to
+> the buffer[USBTMC_HEADER_SIZE + transfersize] when "transfersize = 
+> buflen - USBTMC_HEADER_SIZE".
+> 
+> Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
+> Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
+> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> ---
+>  drivers/usb/class/usbtmc.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+> index 6bd9fe565385..faf8c5508997 100644
+> --- a/drivers/usb/class/usbtmc.c
+> +++ b/drivers/usb/class/usbtmc.c
+> @@ -1591,6 +1591,10 @@ static ssize_t usbtmc_write(struct file *filp, const char __user *buf,
+>  		goto exit;
+>  	}
+>  
+> +	if (aligned < buflen && (transfersize % 4))
 
-Since the wakeup flag is set to 0, the root hub should not generate a 
-wakeup request when a port-status-change event happens.
+Shouldn't this be
 
-> [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
-> [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
+	if (USBTMC_HEADER_SIZE + transfersize < aligned)
 
-But it did.  This appears to be a bug in one of the xhci-hcd suspend 
-routines.
-
-Alternatively, if the touchscreen device is connected to an intermediate 
-hub then that intermediate hub should not be allowed to generate wakeup 
-events.  That's determined by userspace, though, not by the kernel.
+?
 
 Alan Stern
+
+> +		memset(&buffer[USBTMC_HEADER_SIZE + transfersize], 0,
+> +			aligned - USBTMC_HEADER_SIZE - transfersize);
+> +
+>  	dev_dbg(&data->intf->dev, "%s(size:%u align:%u)\n", __func__,
+>  		(unsigned int)transfersize, (unsigned int)aligned);
+>  
+> -- 
+> 2.43.0
 
