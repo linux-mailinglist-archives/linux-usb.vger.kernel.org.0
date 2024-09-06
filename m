@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-14784-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14785-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5A0696F502
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 15:05:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E56196F549
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 15:25:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D3272861D6
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 13:05:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C0281C21B42
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 13:25:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10DCF1CDA31;
-	Fri,  6 Sep 2024 13:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD941CE6E8;
+	Fri,  6 Sep 2024 13:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BMyPKwRW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JUkr3q4T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839441C8FC0
-	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 13:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DDF1CB152
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 13:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725627921; cv=none; b=pZiGNW/CutasLK+2wLSEUP9zmA4q5QetcqA0CuruOYEpOv3ejnZELLg0anoLpE2rZItBgjohehZJ3n+NJZvW/eE45I6i6sMWvgI/6U9blaqWgHEWdhchX6yhbIt+8Sz71aMWMtCAjZ5fexOK7tsQb99iaXCUXU6l3qRrBVneQZg=
+	t=1725629134; cv=none; b=WXmrPNrtcZB754VHoPvfxKxaH9w97Bqi8f0W+r6SVU7thc4yzdcWHqnHECKcaIcTwlrNduRIToggmDlEzQGDLpskuz7J380oNMqmUwrBRgYJdnIhS8ZiF0oueLS1ozhbRYAQTjwi5k1sZ/Yp7fM8dKN+RIfn0D50KXHljyr8ze4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725627921; c=relaxed/simple;
-	bh=AI5Ufot6Vgxp4eRC2AbRoLa9XbwEToNxvP1o+Q9CsCM=;
+	s=arc-20240116; t=1725629134; c=relaxed/simple;
+	bh=BNB3Zqm1b+nQ2v1A6MGBNP0ydTCNdXTu4ohBpGV3WPA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sjjV8HpleYfYfzVSBQzyKGTCW4hqHPmmCdlfojhq7JDsotDSYy5LMMKko8MJCFi+uQIFBSBuABd6dY5pruS3Z2xz+7R9194l5zCkifGu/K9LVhXAA93NdUlO3vQqoUBeQzJtipMhfkIT5NEhoLyE6u9LdVvHvt6o8Ozy/+lsSjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BMyPKwRW; arc=none smtp.client-ip=198.175.65.11
+	 In-Reply-To:Content-Type; b=K1rwkGIDvXRKe9NMph6TKvHNo43GN+hUMNLsDxGsGgcA1MchT/eRzfgGAxmJAZDpRxcLGQ2Fxsq4oSFOxmETSzHpWKURwP2XmZmqRh+c1V1mK8by0C6AT6TezJDujnCq/K2fVRzSGZRMaVV9xQC/ZwO/TkwFqh4oAUZQTIjn72Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JUkr3q4T; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725627920; x=1757163920;
+  t=1725629133; x=1757165133;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=AI5Ufot6Vgxp4eRC2AbRoLa9XbwEToNxvP1o+Q9CsCM=;
-  b=BMyPKwRWgS7yrL/ox/4Af2ANzzdylrfvTiapWCrpu+KlahEUsLGCIXdn
-   KuPiwR3auEv6FLDR4tkby3z1MnZgEQ8oszmgztMMZXT6FInXUG6kQBCFG
-   NNRrJBo9m3urXsgpXOugZsI/3DIkZDKWExZ+GcNmuAnjO3JJGp7LzT+oK
-   0Zc9ujt41XkdCgEJK1WpWMCEKlnbjee4ZZWT7t6mv2+9bhfeXJyEkbSTg
-   dyifopNqb+iEvJl86rkv95RfKZeYsYjcZbi0TaRiZaQ5WwQZOGFqU0HWw
-   2ASFnOET1ZZHnZiq8lk27qAAKU0e2FIhQ8Bo5Npb1I04VT/BHaJuiLJob
-   g==;
-X-CSE-ConnectionGUID: Q40tPsxdTmigw4NSRsU4/g==
-X-CSE-MsgGUID: 9WmfPq3DQGWu04EPaLiSPg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="34960519"
+  bh=BNB3Zqm1b+nQ2v1A6MGBNP0ydTCNdXTu4ohBpGV3WPA=;
+  b=JUkr3q4TxX62Hoq5EHTIsw5HFxPRjl4TTnDMn10HPDSx0QOAZDxdsmF7
+   8gERYYvUCo3EqF0ddrbeh3Gzpo58q8jkQQDl0RuDCHRWCZh/0HoJpQPyk
+   6LSZt8XSWntvvJN+vPhrMMGn9XJSpCoU+S6moixxf/xNNHknQDtzzJztN
+   XGqZZdTCFLg78K4qbH++yNPrKDkqsYVtlMYZI5kq/Z0P/hiIau4nODWgB
+   G6YTWt5Z44r3vCvqq/VdwY8eDmTz6LSUuCxxMqGV1+GjUtBRp47QaLzk6
+   u+wfTNzQnH2I+nmPJLnyQWfo2C8AhFOZqXQUkFnq1INaNRNk1LB808BS5
+   w==;
+X-CSE-ConnectionGUID: 6UsAYXrYRPS3FR17OFvNtg==
+X-CSE-MsgGUID: sIaydLTaR+6hmbFY+NXMLg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="35055215"
 X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="34960519"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 06:05:19 -0700
-X-CSE-ConnectionGUID: e9+GkDhzThm3BRpFdOoJ7A==
-X-CSE-MsgGUID: eQUl6gIPQQadbpPJP/Y4vg==
+   d="scan'208";a="35055215"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 06:25:32 -0700
+X-CSE-ConnectionGUID: K1oxxuYBRY25nKcEuXuIPQ==
+X-CSE-MsgGUID: wYVXCRAvRamouI8uillqGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="65930376"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.98.118]) ([10.245.98.118])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 06:05:17 -0700
-Message-ID: <1ae67893-fc97-4210-9e5d-74af158d5422@linux.intel.com>
-Date: Fri, 6 Sep 2024 16:05:14 +0300
+   d="scan'208";a="65648865"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Sep 2024 06:25:30 -0700
+Message-ID: <45be598b-eb23-4f8b-aeb0-5893945c105b@linux.intel.com>
+Date: Fri, 6 Sep 2024 16:27:36 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,143 +67,134 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/12] usb: xhci: adjust empty TD list handling in
- handle_tx_event()
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
- mathias.nyman@linux.intel.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-References: <20240906142316.3b00e4f1@foxbook>
+Subject: Re: [PATCH 04/12] usb: xhci: remove excessive isoc frame debug
+ message spam
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ Niklas Neronin <niklas.neronin@linux.intel.com>
+References: <20240905143300.1959279-1-mathias.nyman@linux.intel.com>
+ <20240905143300.1959279-5-mathias.nyman@linux.intel.com>
+ <20240905213030.hvk2rucvrhlvkczq@synopsys.com>
 Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20240906142316.3b00e4f1@foxbook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20240905213030.hvk2rucvrhlvkczq@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-
-On 06/09/2024 15.23, Michał Pecio wrote:
->> @@ -2761,35 +2761,25 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->> 		return 0;
->> 	}
+On 6.9.2024 0.30, Thinh Nguyen wrote:
+> On Thu, Sep 05, 2024, Mathias Nyman wrote:
+>> From: Niklas Neronin <niklas.neronin@linux.intel.com>
 >>
->> -	do {
->> -		/* This TRB should be in the TD at the head of this ring's
->> -		 * TD list.
->> +	if (list_empty(&ep_ring->td_list)) {
->> +		/*
->> +		 * Don't print wanings if ring is empty due to a stopped endpoint generating an
->> +		 * extra completion event if the device was suspended. Or, a event for the last TRB
-> Is changing this code perhaps an opportunity to clarify its comments?
-> 
-> This is just confusing. A stopped endpoint doesn't generate any "extra"
-> events since it can't be stopped again. Commit message of a83d6755814e4
-> suggests that this was about stopping running but idle EPs (as is the
-> case of EP0 before suspend). So briefly and to the point:
-> 
-> /* Ignore Force Stopped Event on an empty ring,
->    or one containing only NOPs and Links */
-
-Thanks, for the suggestion. Indeed the comment should be updated.
-
-> 
->> +		 * of a short TD we already got a short event for. The short TD is already removed
->> +		 * from the TD list.
->> 		 */
->> -		if (list_empty(&ep_ring->td_list)) {
->> -			/*
->> -			 * Don't print wanings if it's due to a stopped endpoint
->> -			 * generating an extra completion event if the device
->> -			 * was suspended. Or, a event for the last TRB of a
->> -			 * short TD we already got a short event for.
->> -			 * The short TD is already removed from the TD list.
->> -			 */
+>> The removed debug messages trigger each time an isoc frame is handled.
+>> In case of an error, a dedicated debug message exists.
+>>
+>> For example, a 60fps USB camera will trigger the debug message every 0.6s.
+>>
+>> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> ---
+>>   drivers/usb/host/xhci-ring.c | 4 ----
+>>   1 file changed, 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index 4ea2c3e072a9..e1c9838084bf 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -3941,10 +3941,6 @@ static int xhci_get_isoc_frame_id(struct xhci_hcd *xhci,
+>>   	start_frame_id = (start_frame_id >> 3) & 0x7ff;
+>>   	end_frame_id = (end_frame_id >> 3) & 0x7ff;
+>>   
+>> -	xhci_dbg(xhci, "%s: index %d, reg 0x%x start_frame_id 0x%x, end_frame_id 0x%x, start_frame 0x%x\n",
+>> -		 __func__, index, readl(&xhci->run_regs->microframe_index),
+>> -		 start_frame_id, end_frame_id, start_frame);
 >> -
->> -			if (!(trb_comp_code == COMP_STOPPED ||
->> -			      trb_comp_code == COMP_STOPPED_LENGTH_INVALID ||
->> -			      ep_ring->last_td_was_short)) {
->> -				xhci_warn(xhci, "WARN Event TRB for slot %u ep %d with no TDs queued?\n",
->> -					  slot_id, ep_index);
->> -			}
->> -			if (ep->skip) {
->> -				ep->skip = false;
->> -				xhci_dbg(xhci, "td_list is empty while skip flag set. Clear skip flag for slot %u ep %u.\n",
->> -					 slot_id, ep_index);
->> -			}
->> -
->> -			td = NULL;
->> -			goto check_endpoint_halted;
->> +		if (trb_comp_code != COMP_STOPPED &&
->> +		    trb_comp_code != COMP_STOPPED_LENGTH_INVALID &&
->> +		    !ep_ring->last_td_was_short) {
->> +			xhci_warn(xhci, "Event TRB for slot %u ep %u with no TDs queued\n",
->> +				  slot_id, ep_index);
-> I would add trb_comp_code here if touching this line.
-> 
->> 		}
+>>   	if (start_frame_id < end_frame_id) {
+>>   		if (start_frame > end_frame_id ||
+>>   				start_frame < start_frame_id)
+>> -- 
+>> 2.25.1
 >>
->> +		ep->skip = false;
-> I don't like that the xhci_dbg() has been removed. If skip debugging is
-> to be reliable, it should report all state transitions. And this is an
-> unusual one, so maybe very interesting. Skip debugging is valuable, as
-> the logic is tricky and has known problem cases. More below.
+> 
+> Please capture this info in the tracepoint instead. Otherwise we have no
+> idea if the isoc is scheduled as SIA or CFI. If it's CFI, I want to know
+> the start frame value. Currently, I don't think you're decoding this in
+> the TRB tracepoints.
 
-Sure, I'll add a debug message when the skip flag is toggled.
+Good point
 
-> 
->> +		goto check_endpoint_halted;
->> +	}
->> +
->> +	do {
->> 		td = list_first_entry(&ep_ring->td_list, struct xhci_td,
->> 				      td_list);
->>
->> @@ -2800,7 +2790,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->>
->> 			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
->> 				skip_isoc_td(xhci, td, ep, status);
->> -				continue;
->> +				if (!list_empty(&ep_ring->td_list))
->> +					continue;
->> +
->> +				xhci_dbg(xhci, "All TDs skipped for slot %u ep %u. Clear skip flag.\n",
->> +					 slot_id, ep_index);
-> This used to get the empty list warning, but now it's mere xhci_dbg().
-> Throwing out all queued TDs is not the common case and it may easily
-> be a bug. Indeed, I can readily name two cases when it is a bug today:
-> 
-> 1. Force Stopped Event on a NOP or Link following the missed TD. Then
-> trb_in_td() doesn't match subsequent TD and the rest is trashed.
-> 
-> Actually, this is a v6.11 regression since d56b0b2ab1429. Although past
-> behavior was bad and broken too, it was broken differently.
-> 
-> 2. Ring Underrun/Overrun if new TDs were queued before we handled it.
-> If ep_trb_dma is NULL, nothing ever matches and everything goes out.
-> 
-> Arguably, these are rare events and I haven't observed them yet.
-> And one more problem that I don't think currently exists, but:
-> 
-> 3. If you ever find yourself doing it on an ordinary event (Success,
-> Transaction Error, Babble, etc.) then, seriously, WTF?
-> 
-> Bottom line, empty list is a very suspicious thing to see here. I can
-> only think of two legitimate cases:
-> 
-> 1. Ring X-run, only if nothing new was queued since it occurred.
-> 2. FSE outside transfer TDs, if no transfer TDs existed after it.
+Added TBC, TLBPC, frame_id, as SIA enabled 'S' or disabled 's' flag to Isoch TRB tracing.
+76.383778: xhci_queue_trb: ISOC: Buffer 0000000118dfa000 length 3 TD size/TBC 0 intr 0 type 'Isoch' TBC 0 TLBPC 0 frame_id 610 flags s:b:i:I:c:s:I:e:C
 
-I can change it from a debug to a warning. Then the edge case should be more visible.
+code:
 
-> 
->> +				ep->skip = false;
->> +				td = NULL;
->> +				goto check_endpoint_halted;
-> Isoch EPs can't stall and aren't supposed to halt on errors, 4.10.2.
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 1f6ca0231c84..48b643ae8a40 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1023,9 +1023,6 @@ enum xhci_setup_dev {
+  /* Interrupter Target - which MSI-X vector to target the completion event at */
+  #define TRB_INTR_TARGET(p)     (((p) & 0x3ff) << 22)
+  #define GET_INTR_TARGET(p)     (((p) >> 22) & 0x3ff)
+-/* Total burst count field, Rsvdz on xhci 1.1 with Extended TBC enabled (ETE) */
+-#define TRB_TBC(p)             (((p) & 0x3) << 7)
+-#define TRB_TLBPC(p)           (((p) & 0xf) << 16)
+  
+  /* Cycle bit - indicates TRB ownership by HC or HCD */
+  #define TRB_CYCLE              (1<<0)
+@@ -1059,6 +1056,12 @@ enum xhci_setup_dev {
+  /* Isochronous TRB specific fields */
+  #define TRB_SIA                        (1<<31)
+  #define TRB_FRAME_ID(p)                (((p) & 0x7ff) << 20)
++#define GET_FRAME_ID(p)                (((p) >> 20) & 0x7ff)
++/* Total burst count field, Rsvdz on xhci 1.1 with Extended TBC enabled (ETE) */
++#define TRB_TBC(p)             (((p) & 0x3) << 7)
++#define GET_TBC(p)             (((p) >> 7) & 0x3)
++#define TRB_TLBPC(p)           (((p) & 0xf) << 16)
++#define GET_TLBPC(p)           (((p) >> 16) & 0xf)
+  
+  /* TRB cache size for xHC with TRB cache */
+  #define TRB_CACHE_SIZE_HS      8
+@@ -2068,7 +2071,6 @@ static inline const char *xhci_decode_trb(char *str, size_t size,
+                                 field3 & TRB_CYCLE ? 'C' : 'c');
+                 break;
+         case TRB_NORMAL:
+-       case TRB_ISOC:
+         case TRB_EVENT_DATA:
+         case TRB_TR_NOOP:
+                 snprintf(str, size,
+@@ -2085,7 +2087,25 @@ static inline const char *xhci_decode_trb(char *str, size_t size,
+                         field3 & TRB_ENT ? 'E' : 'e',
+                         field3 & TRB_CYCLE ? 'C' : 'c');
+                 break;
+-
++       case TRB_ISOC:
++               snprintf(str, size,
++                       "Buffer %08x%08x length %d TD size/TBC %d intr %d type '%s' TBC %u TLBPC %u frame_id %u flags %c:%c:%c:%c:%c:%c:%c:%c:%c",
++                       field1, field0, TRB_LEN(field2), GET_TD_SIZE(field2),
++                       GET_INTR_TARGET(field2),
++                       xhci_trb_type_string(type),
++                       GET_TBC(field3),
++                       GET_TLBPC(field3),
++                       GET_FRAME_ID(field3),
++                       field3 & TRB_SIA ? 'S' : 's',
++                       field3 & TRB_BEI ? 'B' : 'b',
++                       field3 & TRB_IDT ? 'I' : 'i',
++                       field3 & TRB_IOC ? 'I' : 'i',
++                       field3 & TRB_CHAIN ? 'C' : 'c',
++                       field3 & TRB_NO_SNOOP ? 'S' : 's',
++                       field3 & TRB_ISP ? 'I' : 'i',
++                       field3 & TRB_ENT ? 'E' : 'e',
++                       field3 & TRB_CYCLE ? 'C' : 'c');
++               break;
 
-Good point, thanks.
 
-> 
->> 			}
->>
->> 			/*
+
+Does this look good to you?
+
+Patch on top of my for-usb-next branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=for-usb-next
+
+Thanks
+Mathias
 
