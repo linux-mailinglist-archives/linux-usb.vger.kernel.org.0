@@ -1,65 +1,62 @@
-Return-Path: <linux-usb+bounces-14767-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14768-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80A3A96E948
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 07:31:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56DE996E978
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 07:51:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 398F4286475
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 05:31:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4B02B23A12
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 05:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25F1885628;
-	Fri,  6 Sep 2024 05:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 728B213699A;
+	Fri,  6 Sep 2024 05:51:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="vfj3DiGe"
+	dkim=pass (2048-bit key) header.d=elrest.cz header.i=@elrest.cz header.b="IoFqo9ri"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+Received: from smtp.cesky-hosting.cz (smtp.cesky-hosting.cz [91.239.200.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D661BC23;
-	Fri,  6 Sep 2024 05:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72FD2941B;
+	Fri,  6 Sep 2024 05:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.239.200.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725600677; cv=none; b=f+r92QwV2/VI/fsyJEQiarDMWz6Ipw9pqNikOQjqHXwj1Fk8zuXPHKWMiFzslOHZg97QHve0IVyM43mLAmwI/Prtq6CRO84EJUoGXBDdFgdrycKSOauIizqgidU9tUnBQFShebN00XvdA4z1VekuO+yTWXSnJ0xruqDzXzDzuBM=
+	t=1725601870; cv=none; b=JlctCd6rSto/b/TzCpq2qN8lb5kUOr92KHNqKIAQgN79+Id3GSYEEWCKY1YBprg9xDgLo2NBrGM6vR3rtFfTWnu2KSrNeCRJz7yHK30jb+Rk6iZ8OkClhas1jxuU+RCEkfYtgRZVRfoaBpBl9t2jxN8W7daLEaod+51aHtK1MiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725600677; c=relaxed/simple;
-	bh=h09P8HLKfyRwc0dRd+XCdETIOzYIh+xJX+5H6gLZg7g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K4oo5JFI9H2beDH0qOTW3xDDIYpUubnvcg/oA668Isiwo8H18FAFikFk3Vnd2mTZkFHNwgaIeMEE+R2bcak3vCEA9AjA1fheJ+umrLiRiFQ8pYWDY/sbsExg610VWmgv3dngd0r24veA1p5kBVDrd3S/CBhnHRzmdLJQvOEfrDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=vfj3DiGe; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from localhost.localdomain (unknown [10.101.196.174])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id C10DE3FE84;
-	Fri,  6 Sep 2024 05:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1725600664;
-	bh=9a0OMGDGZrWicasMjCZX0lZ5DMyf3q0ANOrm+ZbpmDg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=vfj3DiGeWTj3yAlBpOvmvEc7q0tTOZuyNlMulqIJnEjE/oFs4V+Jrj4rVdFKL8INL
-	 q+nQtnhh6isJ9GHJxAk23dd4WYXttlfp1OUTJavA+znS7iG9xobvtlyQQvD7ptaw7+
-	 4wBNcs9IuEGvGdOXWbc+sgUhlvdPiVtUmiHjmH1Yjf9MJhrtHDcgPgERqpdBpIlqlP
-	 QODevfKZqw1Hujlep7FLj194TRT74pBUcyD27VCZl5CE7fdyxSnpgcIh7FmVuT633s
-	 d6KK8kWOj6tk3vL78pUOh22BPZBQV6yruYtwVc5kHbadfjUFotrNHi5nQwU31S4Vi7
-	 bVbH/GQLk//Jg==
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-To: hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	jorge.lopez2@hp.com
-Cc: acelan.kao@canonical.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1725601870; c=relaxed/simple;
+	bh=TuxLsa7W/bRtzhMsHtb8h6BVR2XMO8eC6nDKdJJm/l4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KovOZzAvr/K8E2zREvEZ1vJ5bXrXiA2VidD6/hvQDQVL1q6Biqp/rtrIuMUpFyqLUjth57FO6JHdRpTsZMNRgpnpDWwIle4kgaM7KQqFNjcqc8bARlN2IILl9rxPSctScH51YLJ6m5y0UNyPrzx5+CUAqVGEwDWNZh1WfU8lbYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=elrest.cz; spf=pass smtp.mailfrom=elrest.cz; dkim=pass (2048-bit key) header.d=elrest.cz header.i=@elrest.cz header.b=IoFqo9ri; arc=none smtp.client-ip=91.239.200.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=elrest.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=elrest.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=elrest.cz;
+	s=rampa2-202408; t=1725601855;
+	bh=TuxLsa7W/bRtzhMsHtb8h6BVR2XMO8eC6nDKdJJm/l4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=IoFqo9riDdRbOqHh2cGB7HBrD/P+AU1gZ6hyK8okAfBC+NYZF+x13N4KXrLzc7ynw
+	 l5ECyo53iLk3wZaDn9D0/5SdoxLGWafPR5MUAX7khcjfizBbJ2t6Qa5IL8WhxRxXb3
+	 5iLvZuI58cA1YIj7Yn4bOpI5Vk9zUXFDsFNkOZ45hj/Z7rBieJSxYUwrs5Iqb/wQEv
+	 aHhNWghbyZP8uOykPHZuIkls4eUDVibUkAMRnxmmN4RRlLakQScsIyWg5yPU9XLvv+
+	 RzXR9+6MsSkAS/phRtq0rPO/o3Yd4glchcT4g4GTRkGevqjjliJUSZaX7YqwwtSNyX
+	 LJYN+uE+dJkWg==
+X-Virus-Scanned: Debian amavis at smtp.cesky-hosting.cz
+Received: from localhost.localdomain (unknown [185.63.98.16])
+	(Authenticated sender: tomas.marek@elrest.cz)
+	by smtp.cesky-hosting.cz (Postfix) with ESMTPSA id 4X0QM25t5hzRR;
+	Fri,  6 Sep 2024 07:50:53 +0200 (CEST)
+From: Tomas Marek <tomas.marek@elrest.cz>
+To: hminas@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: Arthur.Petrosyan@synopsys.com,
 	linux-usb@vger.kernel.org,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne 440
-Date: Fri,  6 Sep 2024 13:30:47 +0800
-Message-ID: <20240906053047.459036-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	linux-kernel@vger.kernel.org,
+	oleg.karfich@wago.com,
+	stable@vger.kernel.org
+Subject: [PATCH v2] usb: dwc2: drd: fix clock gating on USB role switch
+Date: Fri,  6 Sep 2024 07:50:25 +0200
+Message-Id: <20240906055025.25057-1-tomas.marek@elrest.cz>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,140 +65,47 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The HP ProOne 440 has a power saving design that when the display is
-off, it also cuts the USB touchscreen device's power off.
+The dwc2_handle_usb_suspend_intr() function disables gadget clocks in USB
+peripheral mode when no other power-down mode is available (introduced by
+commit 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")).
+However, the dwc2_drd_role_sw_set() USB role update handler attempts to
+read DWC2 registers if the USB role has changed while the USB is in suspend
+mode (when the clocks are gated). This causes the system to hang.
 
-This can cause system early wakeup because cutting the power off the
-touchscreen device creates a disconnect event and prevent the system
-from suspending:
-[  445.814574] hub 2-0:1.0: hub_suspend
-[  445.814652] usb usb2: bus suspend, wakeup 0
-[  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
-[  445.824639] xhci_hcd 0000:00:14.0: resume root hub
-[  445.824651] xhci_hcd 0000:00:14.0: handle_port_status: starting usb1 port polling.
-[  445.844039] xhci_hcd 0000:00:14.0: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x20 returns -16
-[  445.844058] xhci_hcd 0000:00:14.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
-[  445.844072] xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
-[  446.276101] PM: Some devices failed to suspend, or early wake event detected
+Release the gadget clocks before handling the USB role update.
 
-So add a quirk to make sure the following is happening:
-1. Let the i915 driver suspend first, to ensure the display is off so
-   system also cuts the USB touchscreen's power.
-2. Wait a while to let the USB disconnect event fire and get handled.
-3. Since the disconnect event already happened, the xhci's suspend
-   routine won't be interrupted anymore.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tomas Marek <tomas.marek@elrest.cz>
 ---
-v3:
- - Use dev_dbg() instead of dev_info().
+Changes in v2:
+ - CC stable@vger.kernel.org
+ - merge ifdef and nested if statements into one if statement
+---
+ drivers/usb/dwc2/drd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-v2:
- - Remove the part that searching for the touchscreen device.
- - Wording.
-
- drivers/platform/x86/hp/hp-wmi.c | 59 +++++++++++++++++++++++++++++++-
- 1 file changed, 58 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-index 876e0a97cee1..92cb02b50dfc 100644
---- a/drivers/platform/x86/hp/hp-wmi.c
-+++ b/drivers/platform/x86/hp/hp-wmi.c
-@@ -30,6 +30,8 @@
- #include <linux/rfkill.h>
- #include <linux/string.h>
- #include <linux/dmi.h>
-+#include <linux/delay.h>
-+#include <linux/pci.h>
- 
- MODULE_AUTHOR("Matthew Garrett <mjg59@srcf.ucam.org>");
- MODULE_DESCRIPTION("HP laptop WMI driver");
-@@ -1708,6 +1710,14 @@ static void __exit hp_wmi_bios_remove(struct platform_device *device)
- 		platform_profile_remove();
- }
- 
-+static int hp_wmi_suspend_handler(struct device *device)
-+{
-+	/* Let the xhci have time to handle disconnect event */
-+	msleep(200);
-+
-+	return 0;
-+}
-+
- static int hp_wmi_resume_handler(struct device *device)
- {
- 	/*
-@@ -1745,7 +1755,7 @@ static int hp_wmi_resume_handler(struct device *device)
- 	return 0;
- }
- 
--static const struct dev_pm_ops hp_wmi_pm_ops = {
-+static struct dev_pm_ops hp_wmi_pm_ops = {
- 	.resume  = hp_wmi_resume_handler,
- 	.restore  = hp_wmi_resume_handler,
- };
-@@ -1871,6 +1881,51 @@ static int hp_wmi_hwmon_init(void)
- 	return 0;
- }
- 
-+static int lg_usb_touchscreen_quirk(const struct dmi_system_id *id)
-+{
-+	struct pci_dev *vga, *xhci;
-+	struct device_link *vga_link, *xhci_link;
-+
-+	vga = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, NULL);
-+
-+	xhci = pci_get_class(PCI_CLASS_SERIAL_USB_XHCI, NULL);
-+
-+	if (vga && xhci) {
-+		xhci_link = device_link_add(&hp_wmi_platform_dev->dev, &xhci->dev,
-+				      DL_FLAG_STATELESS);
-+		if (xhci_link)
-+			dev_dbg(&hp_wmi_platform_dev->dev, "Suspend before %s\n",
-+				 pci_name(xhci));
-+		else
-+			return 1;
-+
-+		vga_link = device_link_add(&vga->dev, &hp_wmi_platform_dev->dev,
-+					   DL_FLAG_STATELESS);
-+		if (vga_link)
-+			dev_dbg(&hp_wmi_platform_dev->dev, "Suspend after %s\n",
-+				 pci_name(vga));
-+		else {
-+			device_link_del(xhci_link);
-+			return 1;
-+		}
-+	}
-+
-+	hp_wmi_pm_ops.suspend = hp_wmi_suspend_handler;
-+
-+	return 1;
-+}
-+
-+static const struct dmi_system_id hp_wmi_quirk_table[] = {
-+	{
-+		.callback = lg_usb_touchscreen_quirk,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "HP ProOne 440 23.8 inch G9 All-in-One Desktop PC"),
-+		},
-+	},
-+	{}
-+};
-+
- static int __init hp_wmi_init(void)
- {
- 	int event_capable = wmi_has_guid(HPWMI_EVENT_GUID);
-@@ -1909,6 +1964,8 @@ static int __init hp_wmi_init(void)
- 			goto err_unregister_device;
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index a8605b02115b..1ad8fa3f862a 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -127,6 +127,15 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 			role = USB_ROLE_DEVICE;
  	}
  
-+	dmi_check_system(hp_wmi_quirk_table);
++	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
++	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
++	     dwc2_is_device_mode(hsotg) &&
++	     hsotg->lx_state == DWC2_L2 &&
++	     hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++	     hsotg->bus_suspended &&
++	     !hsotg->params.no_clock_gating)
++		dwc2_gadget_exit_clock_gating(hsotg, 0);
 +
- 	return 0;
- 
- err_unregister_device:
+ 	if (role == USB_ROLE_HOST) {
+ 		already = dwc2_ovr_avalid(hsotg, true);
+ 	} else if (role == USB_ROLE_DEVICE) {
 -- 
-2.43.0
+2.25.1
 
 
