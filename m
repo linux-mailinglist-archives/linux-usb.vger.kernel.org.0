@@ -1,122 +1,109 @@
-Return-Path: <linux-usb+bounces-14786-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14787-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 135E196F58A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 15:39:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B88F296F5E7
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 15:53:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C461C28461F
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 13:39:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7494C284F2F
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 13:53:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999201C9EA2;
-	Fri,  6 Sep 2024 13:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C1A1CDFD6;
+	Fri,  6 Sep 2024 13:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O/BY2/VB"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Sin3IB+H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEFA1E49B
-	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 13:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554761CEAC9
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 13:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725629961; cv=none; b=LfUTiH5W84rfKpN+kBLx0JQmlKiJwq0gf1ZHvJ/wndqHNC4Kuet4+9CLKiXXkESq4a7vBWfF9vTyf1XRzdIbXi+UEZVjxD2tX5kuw4eG1U09t/pGpKe610GMlOZiGVY+FXMs36THYP6I7EK2hrLIAeS6Yl3G4LRyBbBGXg3lOnM=
+	t=1725630802; cv=none; b=gMm/pkiilQKdGrJ+qNNBY0RjgyNT4mYulR7jZaplhPYaQmLAy13JfildYRCNYFUSG2cSSERLnTH/a+sXjGP438X+Pbdezf7QMB/573iitE9bZDUGek/O7iy+4NfSywUr/dGQQdgmtOc+IBuT4JJ2/03PFs/Jt5xFGv61fM8RRio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725629961; c=relaxed/simple;
-	bh=4+7n8ZIPLyFUFSkFZ2QdnIclQut94O/MuKpjXWgNZgs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=djZUzcoIapT0eTFL7jsOHxQkz9yJMSXeHpvP5E5YIdVpXQ4mYAc8Fc4rmbCfkjaPLM3bGRJGpa7GKNOyt/iOYk+P3YjFQLV+DFnNothwC4PRpgh2/Q2pbmrzhToi4dqk+2qPO3oZzzVM1GalymQwO4ev22nnQcN7Ea8fz4sz/vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O/BY2/VB; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725629960; x=1757165960;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4+7n8ZIPLyFUFSkFZ2QdnIclQut94O/MuKpjXWgNZgs=;
-  b=O/BY2/VBIjk7RH4XtjdY7Xg+DBPYAXL0v3LzDBYuw4Uk9RQcGv0jj/jK
-   2/DWPA2nBl5ejdVC9oo71crrpFo5IdbGuhaiDUw/DK9GW4mZcV+Xkc9LC
-   YBqRRtF/eOR/Ph1qUGOGHo4CzYGJnYbgstzIdg6PRjTE2uAIbaicYiQr+
-   qf40//6Sq+T5F6EKyAjSyd7rvHY9IvFlm4M/KzbYD39Zgkk+2cHrD4ob/
-   n8xBgnxjmFYzE7cj6fPazres3B7CsIqCq063JC5AHGehGGzceohoss3jn
-   6QFzwP2cLdF3QLMpu8n5vY6hRiw3LMlkraIXYtbTBVER13Tymm/sBgvv6
-   Q==;
-X-CSE-ConnectionGUID: 380oJJyhToe5fC21qWothg==
-X-CSE-MsgGUID: jUfTeCweRaa3Zo11JHOZRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="28176439"
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="28176439"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 06:39:19 -0700
-X-CSE-ConnectionGUID: peFE1sk+S+mpO1MuwzC4dw==
-X-CSE-MsgGUID: k6Q/br/cRMeZVWI1o1lnXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="70899518"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa004.jf.intel.com with ESMTP; 06 Sep 2024 06:39:16 -0700
-Message-ID: <27bdf845-9cbf-406e-b156-472ca79c94a8@linux.intel.com>
-Date: Fri, 6 Sep 2024 16:41:22 +0300
+	s=arc-20240116; t=1725630802; c=relaxed/simple;
+	bh=Em8bvn/f2H5KfpZ0ThOOeCWybP6uMU6Mon9pWOSdXgU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XvZa6XAKhM+GJGvmbXQSommSNckZcu9g+BeVAMI3VJj4iJ6q4xsmfeCzo1OlsXCmbMHZptaAifmWh5fA07QvCSWcmKOABAfO195HUHJ6d5TqULNBaAyL1jGYL7iufzctLyAfXEWZTkDDCBjCN2fe+ut9bP0d2mA4uIoQKT4eJiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Sin3IB+H; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5333b2fbedaso3582461e87.0
+        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2024 06:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1725630798; x=1726235598; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oiDpLiwQWRQKgEUyDLSR0/UKgRFrC686Eaq4LU0p0Rs=;
+        b=Sin3IB+HrjwmBUg2GxoYpT1Z4tXNp5mCR3tGRzzKPSFSR/La2p7feUSGMv0VBCZapF
+         wsKzlxfXGq5VL/y36S0RKcnOgMcU4PDygKGN3EdEcuxtScgAQ45L2sKi6ALCk1GNcWyU
+         lx8BHuiK19DJcRmZK7G4wpZFBJfic1xWxUdHg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725630798; x=1726235598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oiDpLiwQWRQKgEUyDLSR0/UKgRFrC686Eaq4LU0p0Rs=;
+        b=NQNiSMXPKCxaqITbWPLL6U1SfvME+qEgMbJ8yvs7HUqFp6vUsS7F2pfK1xupBzHWxM
+         Emh3iBDy3aguxJ7e/rTIDXfqMQG5Gvh+PDkhuRhO5s2pOBm2vkzGat1BodPXqfgRNSrS
+         /ccImPIjj6Dyjnk/4fnFSipumeAqoc3GDYDCzcZsJxKyy5UytbkMsmyYsJdfwK8oWIci
+         JUR3G6WkUlIxilOUF67tRZNC/zz2G9K+vipGOFPWv1vgBG988qWRLGddxVOyCIssKlKl
+         y198fsQVy5rDlKAkwsmuo1uqOhLSepqAYE6I6u6Qw+YCvjLRdjN7G67RZ/0K5ZWDMWku
+         O/Og==
+X-Forwarded-Encrypted: i=1; AJvYcCXUq02J/VzmOGArso9vo6U3FKuSKFQCP4cioV3oXtU1EAZfXDLG65SmS7uuWxHwpQAhMJ0Mo1f/s58=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/BV6Ms9oQAEtUq8fXPhyy/8EvWxEHdMPpH/HDKrzU6aQx1TwB
+	z3ujgzZ2qfGiWr82K7k94HYnOhQ3wN4dB00sZdkwnkWMxY+A5cJXc+Zv5jdV7U8y/QDB6lceGYJ
+	hwoTBJszJuf4Jh0upDFgxjH8eHwjSsUsyOww=
+X-Google-Smtp-Source: AGHT+IEw61CvBBoRPiccYSMUEy0oGgYCG2GgCkWOPBK65MyPZmUJ6aZypgSS1/nrR6LwN9Rq/SX47iUq960J99ro+zE=
+X-Received: by 2002:a05:6512:a92:b0:52f:d15f:d46b with SMTP id
+ 2adb3069b0e04-536587abfa0mr1738029e87.14.1725630798085; Fri, 06 Sep 2024
+ 06:53:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Add device links between tunneled USB3 devices and
- USB4 Host
-To: Mario Limonciello <mario.limonciello@amd.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, "Rangoju, Raju" <Raju.Rangoju@amd.com>,
- Sanath S <Sanath.S@amd.com>, gregkh@linuxfoundation.org
-References: <20240830152630.3943215-1-mathias.nyman@linux.intel.com>
- <321cf204-cf74-4f51-8ed3-8c5738444359@amd.com>
- <20240904050013.GZ1532424@black.fi.intel.com>
- <7a3fc5cd-1705-40ab-8d93-d9f286009aa7@amd.com>
- <20240905055330.GH1532424@black.fi.intel.com>
- <830cc833-24a7-4e19-8804-6b4135e122d1@amd.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <830cc833-24a7-4e19-8804-6b4135e122d1@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240903163033.3170815-1-ukaszb@chromium.org> <20240903163033.3170815-3-ukaszb@chromium.org>
+ <ZtrA8y0266RTm5Z3@google.com>
+In-Reply-To: <ZtrA8y0266RTm5Z3@google.com>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Fri, 6 Sep 2024 15:53:06 +0200
+Message-ID: <CALwA+NbiW+Gt9fi6Y+_xJFUEQWZFp5cvB5kqw_LVd4Mcf03Xtw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/8] platform/chrome: Update EC feature flags
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Pavan Holla <pholla@chromium.org>, 
+	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5.9.2024 21.57, Mario Limonciello wrote:
-> On 9/5/2024 00:53, Mika Westerberg wrote:
->> On Wed, Sep 04, 2024 at 12:38:15PM -0500, Mario Limonciello wrote:
->>> ❯ ls -l /sys/bus/pci/drivers/thunderbolt/*/consumer*
->>> lrwxrwxrwx 1 root root 0 Sep  4 12:33
->>> /sys/bus/pci/drivers/thunderbolt/0000:c4:00.5/consumer:pci:0000:00:03.1 ->
->>> ../../../virtual/devlink/pci:0000:c4:00.5--pci:0000:00:03.1/
->>> lrwxrwxrwx 1 root root 0 Sep  4 12:33
->>> /sys/bus/pci/drivers/thunderbolt/0000:c4:00.6/consumer:pci:0000:00:04.1 ->
->>> ../../../virtual/devlink/pci:0000:c4:00.6--pci:0000:00:04.1/
->>> ❯ cat /sys/bus/pci/drivers/thunderbolt/*/power/runtime_status
->>> suspended
->>> active
->>>
->>> I would have expected the USB4 host router to go back into runtime PM, but
->>> it doesn't anymore until I reboot the system.
->>
->> Yes, it should enter runtime suspend after a while. Would you mind
->> sharing dmesg around this?
-> 
-> I was capturing artifacts when all of a sudden it started to work.  Then I remembered I updated the BIOS on this system very recently.  This is a pre-production BIOS.
-> 
-> I downgraded back to old BIOS and everything works as you expect, so there is some BIOS bug at play.  I'll see if others can reproduce my result and drive a BIOS solution.
-> 
-> Sorry for the noise on the patch, all is great!
-> 
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
+On Fri, Sep 6, 2024 at 10:44=E2=80=AFAM Tzung-Bi Shih <tzungbi@kernel.org> =
+wrote:
+>
+> On Tue, Sep 03, 2024 at 04:30:27PM +0000, =C5=81ukasz Bartosik wrote:
+> > From: Pavan Holla <pholla@chromium.org>
+> >
+> > Define EC_FEATURE_UCSI_PPM to enable usage of the cros_ec_ucsi
+> > driver. Also, add any feature flags that are implemented by the EC
+> > but are missing in the kernel header.
+> >
+> > Signed-off-by: Pavan Holla <pholla@chromium.org>
+>
+> Same as previous patch, it needs your S-o-b tag at the end.  See [1].
+>
+> [1]: https://www.kernel.org/doc/html/latest/process/submitting-patches.ht=
+ml#when-to-use-acked-by-cc-and-co-developed-by
 
-Thanks for testing it
+I have not added any modifications to this patch. I understand that my
+S-o-b tag is not needed in such a case. Is that not correct ?
 
--Mathias
-
-
+Thanks,
+Lukasz
 
