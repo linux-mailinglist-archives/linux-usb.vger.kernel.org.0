@@ -1,130 +1,189 @@
-Return-Path: <linux-usb+bounces-14770-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14771-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39BFB96EB3B
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 08:59:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E964D96EBA0
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 09:09:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED2A7289832
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 06:59:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21CE51C21F6C
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 07:09:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D76E1482E8;
-	Fri,  6 Sep 2024 06:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E64114C592;
+	Fri,  6 Sep 2024 07:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jqzFV16W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB966141987;
-	Fri,  6 Sep 2024 06:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228EC14BFA3
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 07:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725605956; cv=none; b=Xe2RoSDXo9VS/snibbv4geHEPUZ7haQ2+HT1aNmc9Ib6+3aeishuYumO5XKeF6C40FfgdfTOq4ZNlVviXnleTP6LQUxZlp85TxHPOX8bPRpoa/c2Ii/JoAuz2f2pH9JBGtAyYJkaP9OjoWXnZ1jhaRjbX6jiMOW0WetArPLJX94=
+	t=1725606570; cv=none; b=uLGF4ImcvIEU57AnQrV9IigI9shZLVoncsjAx2k/eIFPbAFoIxvw8mKaTCzvjImdofJTG/QI1FtbES4w+bt1Shq6k8A+QYg03/KyqP5ycObTzhdVPHHU1eVwKc2AfIDulXiQX21/XKSzJqOG4Vnxt9IylbxmqrZdSkHhVGg+v6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725605956; c=relaxed/simple;
-	bh=mnUu2HyKbLvtOYL9epi6A7gg7rKyVXS4ja6D7jENLhc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R8roNNkmRKih3dLp/9ujFAQA1c7BimEyyA6m/EUrC1aDuFr1kSO67l137mUs6jbDNZiQraZ9GmGjMwLIwUUvThZSv2LJwzMdSFvUUuAugsQmfw0tY0hy7ybMdNpEHFBLM9cCRYiPV1EaaVP8w+CS99OXt7JeVFXtm0zrRBh9xSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 438B814035E; Fri,  6 Sep 2024 08:59:04 +0200 (CEST)
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: [PATCH v4] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Date: Fri,  6 Sep 2024 08:58:53 +0200
-Message-Id: <20240906065853.637205-1-lk@c--e.de>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1725606570; c=relaxed/simple;
+	bh=M1nTB0kr4SU4VopcGie1kS1y4jmH1EIe+SbpPWRbxp8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e9wBhVHlMqWLX95kW5/PNPB/9BamhJQG8qT4m9HpRdbDXeoSS9QCa+LDC2uLNXfdcTY34kIV85QyogIOpMeCx5P6IuhvZAC9OGufuTDtlrdqVTKn3+PfNg58THivFWEkUD8jt1oJHGoPMNilMw+4RMZcVeHBbwrw0igIvEhlQlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jqzFV16W; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725606569; x=1757142569;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M1nTB0kr4SU4VopcGie1kS1y4jmH1EIe+SbpPWRbxp8=;
+  b=jqzFV16WgdT3oAoM6QLUp4cyBvhXetktsuHXUcBn2CLdqS5EkH/+q5L8
+   vcFlxddFoRFT/OBU2RMfXp4L1TWAuje1cwv3y6dPuRjSdViYiMGAL5DG+
+   d/4jqT3whjuP19gFlzXFzyR+rKQ2Uedv2QvmJX+5PuZYfzLM9GqteTS3O
+   IxnZDPqfz3WBntzD+IAlTMfpYoRt4Kg6xyt4Q+xX7nlVBR8Uzp24kLWhv
+   y1J8/k1SxqbdR/ZepgSDYTYtNdptKHRG3RSeHMKQm3cYkWSTSM9KMaXaV
+   P9bJQP8KhSapjciCLCznhgjmNyLosQ5v+zAziwcLbvI6VbKfcsBmcIn1+
+   Q==;
+X-CSE-ConnectionGUID: hjTZNxIEQEmcxA91ydG47g==
+X-CSE-MsgGUID: tciEMSXYSMmBIwnmq8b55Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="28238819"
+X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
+   d="scan'208";a="28238819"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 00:09:28 -0700
+X-CSE-ConnectionGUID: FXCUxlspTMKkaHtioM19qA==
+X-CSE-MsgGUID: qyDYt7lBSdWomhANFLaJfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
+   d="scan'208";a="89128559"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.98.118]) ([10.245.98.118])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 00:09:27 -0700
+Message-ID: <9a270951-4ffc-4d7b-a116-74a75c82a4c9@linux.intel.com>
+Date: Fri, 6 Sep 2024 10:09:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 10/12] usb: xhci: adjust empty TD list handling in
+ handle_tx_event()
+To: fps <mista.tapas@gmx.net>, Mathias Nyman <mathias.nyman@linux.intel.com>,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org
+References: <20240905143300.1959279-1-mathias.nyman@linux.intel.com>
+ <20240905143300.1959279-11-mathias.nyman@linux.intel.com>
+ <54D5652C-956D-46DE-B58A-1718BC7C9A56@gmx.net>
+Content-Language: en-US
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+In-Reply-To: <54D5652C-956D-46DE-B58A-1718BC7C9A56@gmx.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If the busy indicator is set, all other fields in CCI should be
-clear according to the spec. However, some UCSI implementations do
-not follow this rule and report bogus data in CCI along with the
-busy indicator. Ignore the contents of CCI if the busy indicator is
-set.
 
-If a command timeout is hit it is possible that the EVENT_PENDING
-bit is cleared while connector work is still scheduled which can
-cause the EVENT_PENDING bit to go out of sync with scheduled connector
-work. Check and set the EVENT_PENDING bit on entry to
-ucsi_handle_connector_change() to fix this.
 
-Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
-This ensures that the command is cancelled even if ->sync_control
-returns an error (most likely -ETIMEDOUT).
+On 06/09/2024 7.44, fps wrote:
+> On September 5, 2024 4:32:58 PM GMT+02:00, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
+>> From: Niklas Neronin <niklas.neronin@linux.intel.com>
+>>
+>> Introduce an initial check for an empty list prior to entering the while
+>> loop. Which enables, the implementation of distinct warnings to
+>> differentiate between scenarios where the list is initially empty and
+>> when it has been emptied during processing skipped isoc TDs.
+>>
+>> These adjustments not only simplifies the large while loop, but also
+>> facilitates future enhancements to the handle_tx_event() function.
+>>
+>> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> ---
+>> drivers/usb/host/xhci-ring.c | 51 +++++++++++++++++-------------------
+>> 1 file changed, 24 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index d37eeee74960..a4383735b16c 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -2761,35 +2761,25 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>> 		return 0;
+>> 	}
+>>
+>> -	do {
+>> -		/* This TRB should be in the TD at the head of this ring's
+>> -		 * TD list.
+>> +	if (list_empty(&ep_ring->td_list)) {
+>> +		/*
+>> +		 * Don't print wanings if ring is empty due to a stopped endpoint generating an
+> 
+> "wanings" should be "warnings", no?
 
-Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-Bisected-by: Christian Heusel <christian@heusel.eu>
-Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
----
- drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+Thanks, yes it should be the latter.
+It will fix it in a handle_tx_event() cleanup patch.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 4039851551c1..d6d61606bbcf 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -38,6 +38,10 @@
- 
- void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
- {
-+	/* Ignore bogus data in CCI if busy indicator is set. */
-+	if (cci & UCSI_CCI_BUSY)
-+		return;
-+
- 	if (UCSI_CCI_CONNECTOR(cci))
- 		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
- 
-@@ -107,15 +111,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
- 		size = clamp(size, 0, 16);
- 
- 	ret = ucsi->ops->sync_control(ucsi, command);
--	if (ret)
--		return ret;
--
--	ret = ucsi->ops->read_cci(ucsi, cci);
--	if (ret)
--		return ret;
-+	if (ucsi->ops->read_cci(ucsi, cci))
-+		return -EIO;
- 
- 	if (*cci & UCSI_CCI_BUSY)
- 		return -EBUSY;
-+	if (ret)
-+		return ret;
- 
- 	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
- 		return -EIO;
-@@ -1249,6 +1251,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 
- 	mutex_lock(&con->lock);
- 
-+	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
-+		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
-+			     __func__);
-+
- 	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
- 
- 	ret = ucsi_send_command_common(ucsi, command, &con->status,
--- 
-2.43.0
-
+Thanks,
+Niklas
+> 
+> 
+>> +		 * extra completion event if the device was suspended. Or, a event for the last TRB
+>> +		 * of a short TD we already got a short event for. The short TD is already removed
+>> +		 * from the TD list.
+>> 		 */
+>> -		if (list_empty(&ep_ring->td_list)) {
+>> -			/*
+>> -			 * Don't print wanings if it's due to a stopped endpoint
+>> -			 * generating an extra completion event if the device
+>> -			 * was suspended. Or, a event for the last TRB of a
+>> -			 * short TD we already got a short event for.
+>> -			 * The short TD is already removed from the TD list.
+>> -			 */
+>> -
+>> -			if (!(trb_comp_code == COMP_STOPPED ||
+>> -			      trb_comp_code == COMP_STOPPED_LENGTH_INVALID ||
+>> -			      ep_ring->last_td_was_short)) {
+>> -				xhci_warn(xhci, "WARN Event TRB for slot %u ep %d with no TDs queued?\n",
+>> -					  slot_id, ep_index);
+>> -			}
+>> -			if (ep->skip) {
+>> -				ep->skip = false;
+>> -				xhci_dbg(xhci, "td_list is empty while skip flag set. Clear skip flag for slot %u ep %u.\n",
+>> -					 slot_id, ep_index);
+>> -			}
+>> -
+>> -			td = NULL;
+>> -			goto check_endpoint_halted;
+>> +		if (trb_comp_code != COMP_STOPPED &&
+>> +		    trb_comp_code != COMP_STOPPED_LENGTH_INVALID &&
+>> +		    !ep_ring->last_td_was_short) {
+>> +			xhci_warn(xhci, "Event TRB for slot %u ep %u with no TDs queued\n",
+>> +				  slot_id, ep_index);
+>> 		}
+>>
+>> +		ep->skip = false;
+>> +		goto check_endpoint_halted;
+>> +	}
+>> +
+>> +	do {
+>> 		td = list_first_entry(&ep_ring->td_list, struct xhci_td,
+>> 				      td_list);
+>>
+>> @@ -2800,7 +2790,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>>
+>> 			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
+>> 				skip_isoc_td(xhci, td, ep, status);
+>> -				continue;
+>> +				if (!list_empty(&ep_ring->td_list))
+>> +					continue;
+>> +
+>> +				xhci_dbg(xhci, "All TDs skipped for slot %u ep %u. Clear skip flag.\n",
+>> +					 slot_id, ep_index);
+>> +				ep->skip = false;
+>> +				td = NULL;
+>> +				goto check_endpoint_halted;
+>> 			}
+>>
+>> 			/*
+> 
+> Kind regards,
+> FPS
 
