@@ -1,65 +1,78 @@
-Return-Path: <linux-usb+bounces-14762-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14763-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80C4296E7F3
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 05:03:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11DAE96E7FF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 05:06:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3987528357E
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 03:03:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCE121F24B12
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 03:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92686381B1;
-	Fri,  6 Sep 2024 03:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="cZ0fxCZm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E35F381B1;
+	Fri,  6 Sep 2024 03:06:48 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5764D18E0E;
-	Fri,  6 Sep 2024 03:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AC11805A;
+	Fri,  6 Sep 2024 03:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725591815; cv=none; b=eS+IYwYgf7JCoS7TJAJHeMAKZUxKWAlYVzqqtd+4j8GD1CxNkKJWLpVvKUAx8YrMPhOW6GSzDwYsCUnIim8Q/YAV8QYD3fLja3uL52hX5lghgCux/ZWbSxiUnn0B27KwwXt4lr58opsyEdxfnczFMZ9DtVxL3ShlF9PbVJ0K+Lw=
+	t=1725592008; cv=none; b=Ti9GcLWQAuLa54sz9SVJUNq29YNR1UhMZMfShH2s8KA6Bm8fLBC77Ekpjk8Nm6V8HEqzx1qxH5xK8d/eV9xflZCr7GlDqCC8Zx47YkT0OikI5DNjraVaVzQCcDKmuqRWMtlxnqOMDhFGcpjlO5ebu3fo5Ny/7VuwtzpD3ojXLkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725591815; c=relaxed/simple;
-	bh=pY5ZeyCMUSMIPlXrBWEPXCGN8z8YDj1hmA9FiJoT+yM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jwRzwhd14wEI0VyPESquZhnmW6YLnyLzkoKbDIAJTYHToA75jO26lLpMuR0SxaI2Dohtia1S5iWSTLKwR36N0u6TO99QWQxLVKTfZ5LhDT6xBhqYKVACLIuIZkid8TCi996pJnm1bEFqjS86dC9dPuheD7jRrFNVb+Nu/XULnT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=cZ0fxCZm; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from localhost.localdomain (unknown [10.101.196.174])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id C7FD83F8D0;
-	Fri,  6 Sep 2024 03:03:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1725591802;
-	bh=b3HaiPJkHmkZb7OFUj3DBAtoNHQP33N6Bt1SRGcN4VA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=cZ0fxCZmHeX8NP40Y2Si76I8WDhsAxy2cVIHOMqZx3q8Xf5WJSAkIl4xn8tdsaqbq
-	 p7V9oqD/gnp+X82LvVw6P0OveHIFVHR1rKETOPEYj3lotxGDOCuQhYz4meIBXBUsDD
-	 FOZIgQz8R7GyfADjN8GBVDl86sZ7z6thAgUzDpN7StEgSzWcgEAksamMRoSLoQKCp3
-	 jVQgcunSNM1mMREtpGMHuUYmOZFSZrrXY+wTY22kx7X7Hy0lsLxTm7ZAQCpoNR4WiI
-	 CfSxqlraGVFWfJELaqEFb1VkhlKcQlrhiOtRHb2z/HunaGgFr1/v3P2Dkhmh5wrYuP
-	 9bLxaPUtveyuQ==
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-To: hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	jorge.lopez2@hp.com
-Cc: acelan.kao@canonical.com,
-	platform-driver-x86@vger.kernel.org,
+	s=arc-20240116; t=1725592008; c=relaxed/simple;
+	bh=b1tjpeyOK9mQG3APi9N8ElGJuuJJDMoUoJ6UWqqFFfE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D4kkPGPpze0Guw1abdMJ+P3J4HEcn6Z1w0SJX/WcC/K2FyZLYT2rKVZBjni+6ScI0XVDmcf7CFsxCl037aMsZ3i3MmNETW2udBEoBkw3WNfNbQO+YRhR6xCyD5LAZ9+Gd4gG6SWRWGUGLrQcje5nuJdQenxKx0umUTL/wc3GoFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_UNFAMILIAR
+	SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,
+	URL:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-20
+X-CID-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,UR
+	L:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:EDM_GE969F26,ACTI
+	ON:release,TS:-20
+X-CID-META: VersionHash:82c5f88,CLOUDID:2c00f2f9f017478b15ea7a3b45cd0dee,BulkI
+	D:240906110635Q3J4J70O,BulkQuantity:0,Recheck:0,SF:44|66|38|24|72|19|102,T
+	C:nil,Content:0,EDM:1,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
+	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
+X-User: duanchenghao@kylinos.cn
+Received: from chenghao.. [(223.70.160.255)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 747009131; Fri, 06 Sep 2024 11:06:32 +0800
+From: Duan Chenghao <duanchenghao@kylinos.cn>
+To: gregkh@linuxfoundation.org,
+	pavel@ucw.cz,
+	linux-pm@vger.kernel.org
+Cc: niko.mauno@vaisala.com,
+	stanley_chang@realtek.com,
+	tj@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v2] platform/x86/hp: Avoid spurious wakeup on HP ProOne 440
-Date: Fri,  6 Sep 2024 11:03:00 +0800
-Message-ID: <20240906030300.442110-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	duanchenghao@kylinos.cn
+Subject: [PATCH] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
+Date: Fri,  6 Sep 2024 11:05:48 +0800
+Message-Id: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,137 +81,62 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The HP ProOne 440 has a power saving design that when the display is
-off, it also cuts the USB touchscreen device's power off.
+When a device is inserted into the USB port and an S4 wakeup is initiated,
+after the USB-hub initialization is completed, it will automatically enter suspend mode.
+Upon detecting a device on the USB port, it will proceed with resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
+During the S4 wakeup process, peripherals are put into suspend mode, followed by task recovery.
+However, upon detecting that the hcd is in the HCD_FLAG_WAKEUP_PENDING state,
+it will return an EBUSY status, causing the S4 suspend to fail and subsequent task recovery to not proceed.
 
-This can cause system early wakeup because cutting the power off the
-touchscreen device creates a disconnect event and prevent the system
-from suspending:
-[  445.814574] hub 2-0:1.0: hub_suspend
-[  445.814652] usb usb2: bus suspend, wakeup 0
-[  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
-[  445.824639] xhci_hcd 0000:00:14.0: resume root hub
-[  445.824651] xhci_hcd 0000:00:14.0: handle_port_status: starting usb1 port polling.
-[  445.844039] xhci_hcd 0000:00:14.0: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x20 returns -16
-[  445.844058] xhci_hcd 0000:00:14.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
-[  445.844072] xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
-[  446.276101] PM: Some devices failed to suspend, or early wake event detected
+This patch makes two modifications in total:
+1. The set_bit and clean_bit operations for the HCD_FLAG_WAKEUP_PENDING flag of Hcd,
+which were previously split between the top half and bottom half of the interrupt,
+are now unified and executed solely in the bottom half of the interrupt.
+This prevents the bottom half tasks from being frozen during the S4 process,
+ensuring that the clean_bit process can proceed without interruption.
 
-So add a quirk to make sure the following is happening:
-1. Let the i915 driver suspend first, to ensure the display is off so
-   system also cuts the USB touchscreen's power.
-2. Wait a while to let the USB disconnect event fire and get handled.
-3. Since the disconnect event already happened, the xhci's suspend
-   routine won't be interrupted anymore.
+2. Add a condition to the set_bit operation for the hcd status HCD_FLAG_WAKEUP_PENDING.
+When the hcd status is HC_STATE_SUSPENDED, perform the setting of the aforementioned status bit.
+This prevents a subsequent set_bit from occurring after the clean_bit if the hcd is in the resuming process.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
 ---
-v2:
- - Remove the part that searching for the touchscreen device.
- - Wording.
+ drivers/usb/core/hcd.c | 1 -
+ drivers/usb/core/hub.c | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
- drivers/platform/x86/hp/hp-wmi.c | 59 +++++++++++++++++++++++++++++++-
- 1 file changed, 58 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-index 876e0a97cee1..7c239d8d02fd 100644
---- a/drivers/platform/x86/hp/hp-wmi.c
-+++ b/drivers/platform/x86/hp/hp-wmi.c
-@@ -30,6 +30,8 @@
- #include <linux/rfkill.h>
- #include <linux/string.h>
- #include <linux/dmi.h>
-+#include <linux/delay.h>
-+#include <linux/pci.h>
- 
- MODULE_AUTHOR("Matthew Garrett <mjg59@srcf.ucam.org>");
- MODULE_DESCRIPTION("HP laptop WMI driver");
-@@ -1708,6 +1710,14 @@ static void __exit hp_wmi_bios_remove(struct platform_device *device)
- 		platform_profile_remove();
- }
- 
-+static int hp_wmi_suspend_handler(struct device *device)
-+{
-+	/* Let the xhci have time to handle disconnect event */
-+	msleep(200);
-+
-+	return 0;
-+}
-+
- static int hp_wmi_resume_handler(struct device *device)
- {
- 	/*
-@@ -1745,7 +1755,7 @@ static int hp_wmi_resume_handler(struct device *device)
- 	return 0;
- }
- 
--static const struct dev_pm_ops hp_wmi_pm_ops = {
-+static struct dev_pm_ops hp_wmi_pm_ops = {
- 	.resume  = hp_wmi_resume_handler,
- 	.restore  = hp_wmi_resume_handler,
- };
-@@ -1871,6 +1881,51 @@ static int hp_wmi_hwmon_init(void)
- 	return 0;
- }
- 
-+static int lg_usb_touchscreen_quirk(const struct dmi_system_id *id)
-+{
-+	struct pci_dev *vga, *xhci;
-+	struct device_link *vga_link, *xhci_link;
-+
-+	vga = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, NULL);
-+
-+	xhci = pci_get_class(PCI_CLASS_SERIAL_USB_XHCI, NULL);
-+
-+	if (vga && xhci) {
-+		xhci_link = device_link_add(&hp_wmi_platform_dev->dev, &xhci->dev,
-+				      DL_FLAG_STATELESS);
-+		if (xhci_link)
-+			dev_info(&hp_wmi_platform_dev->dev, "Suspend before %s\n",
-+				 pci_name(xhci));
-+		else
-+			return 1;
-+
-+		vga_link = device_link_add(&vga->dev, &hp_wmi_platform_dev->dev,
-+					   DL_FLAG_STATELESS);
-+		if (vga_link)
-+			dev_info(&hp_wmi_platform_dev->dev, "Suspend after %s\n",
-+				 pci_name(vga));
-+		else {
-+			device_link_del(xhci_link);
-+			return 1;
-+		}
-+	}
-+
-+	hp_wmi_pm_ops.suspend = hp_wmi_suspend_handler;
-+
-+	return 1;
-+}
-+
-+static const struct dmi_system_id hp_wmi_quirk_table[] = {
-+	{
-+		.callback = lg_usb_touchscreen_quirk,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "HP ProOne 440 23.8 inch G9 All-in-One Desktop PC"),
-+		},
-+	},
-+	{}
-+};
-+
- static int __init hp_wmi_init(void)
- {
- 	int event_capable = wmi_has_guid(HPWMI_EVENT_GUID);
-@@ -1909,6 +1964,8 @@ static int __init hp_wmi_init(void)
- 			goto err_unregister_device;
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 1ff7d901fede..a6bd0fbd82f4 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd *hcd)
+ 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
+ 	if (hcd->rh_registered) {
+ 		pm_wakeup_event(&hcd->self.root_hub->dev, 0);
+-		set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+ 		queue_work(pm_wq, &hcd->wakeup_work);
  	}
+ 	spin_unlock_irqrestore (&hcd_root_hub_lock, flags);
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 4b93c0bd1d4b..7f847c4afc0d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
  
-+	dmi_check_system(hp_wmi_quirk_table);
-+
- 	return 0;
+ int usb_remote_wakeup(struct usb_device *udev)
+ {
++	struct usb_hcd  *hcd = bus_to_hcd(udev->bus);
+ 	int	status = 0;
  
- err_unregister_device:
+ 	usb_lock_device(udev);
+ 	if (udev->state == USB_STATE_SUSPENDED) {
+ 		dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-");
++		if (hcd->state == HC_STATE_SUSPENDED)
++			set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+ 		status = usb_autoresume_device(udev);
+ 		if (status == 0) {
+ 			/* Let the drivers do their thing, then... */
 -- 
-2.43.0
+2.34.1
 
 
