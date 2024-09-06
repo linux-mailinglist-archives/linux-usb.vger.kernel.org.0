@@ -1,139 +1,236 @@
-Return-Path: <linux-usb+bounces-14796-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14797-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A90896F817
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 17:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C1B096F874
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 17:38:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB9112878D4
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 15:19:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5433A2869E5
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2024 15:38:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3AE01D27B3;
-	Fri,  6 Sep 2024 15:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2FA1D2F67;
+	Fri,  6 Sep 2024 15:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="C+Kif5Xw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ho1tVtX5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE0D1D04B6
-	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 15:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0A81D1F60
+	for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2024 15:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725635969; cv=none; b=OraMtVwmruUB1twZTgcvBID3kA0gByv58jpswq12WuFP2Mrkwfwx5A/RUSKtgNiO20ijHJRwCPn/ppBrirbMbNEOmzmxFCOrj6NGWKGg2oMgfpeTHXHKtSQOLz6+RKzQcOTxfqTAqre7sIuBHzVwurarP8plXShTXppBoR/JrEY=
+	t=1725637115; cv=none; b=AjlTFfF9vQ/RhbwS/PLbMoHE2o8O/37GsCFl1uxzpH6FCUi+fNORpa6WQAs03kkzPJBsvvlA1LPUbD06ufqkojNmdAcwGU5TWGGSggHs5SWc6Ewc/n7WAJi2dXonaWEo2bbTeYEUM0qD+u+DXgBA/vv+AbyLFrQIAKW5l6kx/Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725635969; c=relaxed/simple;
-	bh=OSOuZkL/X/mNYuXEJFd7gBdX1eJI67yAbSVWtX/fPfM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=co3qKOTyoFiTvYa1Vx5AVdVx4/FshNbNcTxKYSlDxdGhWeG9wuJyfXgapM7FG9Ex++xTp8XPHfNA1UcPAtnClQOPPhBpbaU6AgiuCe/jCNFS+FV0Un+ETTrgaMLQOCa+OEqqsmGlWjNps5WMZ3JAvkyFyBaEow6m1cYNTXmcuqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=C+Kif5Xw; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5356ab89665so2769225e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2024 08:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1725635965; x=1726240765; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=noleaBBmcHPsgizwxXud/rVIz/5Px6kF4LobwcN7U0c=;
-        b=C+Kif5XwYx+u9HexTZxylPeye91tZHolPPlpjxExO22LrL9ec9Uk2b4lnAEmt/Auu8
-         1L+OWoa6mDcNW7nKdpDT+/mAkZyHFaTHnRBbdrNdMShrleavUDuSyAARvJdQHZonzs0m
-         mm1NrxoDcEOhdH9/uk0goiaoqUBzYOCmR4XiI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725635965; x=1726240765;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=noleaBBmcHPsgizwxXud/rVIz/5Px6kF4LobwcN7U0c=;
-        b=s0gw1Ejysf2m5skE7Igzrfdt2v/f0RSR6L/2lw/qgb/0GukyUynEuDg935F/EA8eIY
-         wlTUhEpc0TvZyLm0ZEUP/mAZc8Fel1Y+0mStgxo9NjMAS3CFCY/I60CdWqORGjDeJyTN
-         X516MgP0CQZl+DN01/MdLig8X5b0Zkt6Z7L+VwBfI/OG7tCNvgPXtADTwv0lbgw32dfz
-         8LubYuzPg3hNXrM2cZyGlnpyBZiRoheU7yJmf8ztiMNzfgc2JLKwdlrg3q0MKUMgl7Sw
-         XRiDB2nDBCnGBAwYxZ1WW7qZwVHJNbWJ3B0xMFlA4QecWpvVEn7bcPeDmctyS/1Dk/e9
-         lVsg==
-X-Forwarded-Encrypted: i=1; AJvYcCVuaBL1BCr7OW7Y/vBsc4ToTlBz71egJcH/CNjmlDFkKQk3OLueiiJMcne8tOelvw9LEffo0yhypGo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjesK3yhDa9EtL39CCvdhgAzmAm45khaRryPs0vjjhWWaRVlmq
-	A7/Faf++luIm60Pf/k1XyiTuyqkurIPTkbjWDx7gbYQG71KVPDY/Jd2nGlB6ol2EGydkIX0D08y
-	+DYYxhln7mJ3A/WDxd/WKud1hxMtLHTxsjAk=
-X-Google-Smtp-Source: AGHT+IFVAM63Bs3VAvkqUDPEevU3qk7fsjHoPUg2mzp90Yr8MmCSObJgVxVt+3ywvZD2kgDj118t+VIs4MviiAaHop8=
-X-Received: by 2002:a05:6512:110f:b0:530:daaa:271c with SMTP id
- 2adb3069b0e04-536587b3427mr2273671e87.16.1725635964384; Fri, 06 Sep 2024
- 08:19:24 -0700 (PDT)
+	s=arc-20240116; t=1725637115; c=relaxed/simple;
+	bh=JaBVqsVU8WX6V6UVJg/HWc0gC7APve2Bgl7CXoiu8Zc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nxW3g+tIlDfENagEiY18O8yYYQeGYhXRd4FDz/j8C6k4Mf6b+G2BJBsvp9yNn5lYdo0JmYqqjQ7DxKWcnoShNpn0sGjU0HHxpeZ4XlPnZCtaM7I/5EASYC0c9RdYvrCueVvoS4+yWK5Y/Y72KPP9l+X8P8/kwQ5/dsbql4ImWa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ho1tVtX5; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725637113; x=1757173113;
+  h=date:from:to:cc:subject:message-id;
+  bh=JaBVqsVU8WX6V6UVJg/HWc0gC7APve2Bgl7CXoiu8Zc=;
+  b=ho1tVtX5T3dxZOMRwkxHMMPwMBS6cJXxCw182dLJcfb9FVOQbkSj3L9K
+   +xPznqRNGBW6wGtuTMXkrfxNwW8mboZQpokdn1TbVEHpcwEIb4ZNjpN+N
+   waNKvNoOkc1VOnxNKwDe2l9jNu6PNP1YX3UOBMsnaOgAe9sF6tXdQQck5
+   UMra2D3my9QkugpOExAoAX1UR/jVeTbrgoFdPv9zmtKxjPTA5c3nvm1rS
+   DA6Wqb53+3ajCQiQU/hADbGnnvmQCCXS8RtU5STUbL0qEXOE0NaZTchQE
+   H8lW+kSoFcsaMM5ZY7nxqAJJiUqqH+XbhDyqRBF0JvDdLAyTrrBrxlrOf
+   g==;
+X-CSE-ConnectionGUID: mefngSsiSMSwRdQSS8cHZA==
+X-CSE-MsgGUID: jsB3kKtkSYO5bwgmaMvPPQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="13412717"
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="13412717"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 08:38:30 -0700
+X-CSE-ConnectionGUID: wCZFuE5FRieQcY0R4YEQwA==
+X-CSE-MsgGUID: mkBEgCYkQWKXhdx+OvmxeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="65959564"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 06 Sep 2024 08:38:29 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1smb2Y-000BR6-34;
+	Fri, 06 Sep 2024 15:38:26 +0000
+Date: Fri, 06 Sep 2024 23:38:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 9c0c11bb87b09a8b7cdc21ca1090e7b36abe9d09
+Message-ID: <202409062311.dPZJfUk0-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240903163033.3170815-1-ukaszb@chromium.org> <20240903163033.3170815-4-ukaszb@chromium.org>
- <ZtsPdWRHkHWufsVh@kuha.fi.intel.com>
-In-Reply-To: <ZtsPdWRHkHWufsVh@kuha.fi.intel.com>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Fri, 6 Sep 2024 17:19:13 +0200
-Message-ID: <CALwA+NY0LOhCNHidMfr4x0=4VOgGUODE1EU8up4BddretwLLxA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/8] usb: typec: ucsi: Implement ChromeOS UCSI driver
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Pavan Holla <pholla@chromium.org>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 6, 2024 at 4:20=E2=80=AFPM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi,
->
-> Sorry to go back on this, but I noticed something..
->
-> On Tue, Sep 03, 2024 at 04:30:28PM +0000, =C5=81ukasz Bartosik wrote:
-> > +static int cros_ucsi_async_control(struct ucsi *ucsi, u64 cmd)
-> > +{
-> > +     struct cros_ucsi_data *udata =3D ucsi_get_drvdata(ucsi);
-> > +     struct ec_params_ucsi_ppm_set *req;
-> > +     size_t req_len;
-> > +     int ret;
-> > +
-> > +     req_len =3D sizeof(struct ec_params_ucsi_ppm_set) + sizeof(cmd);
-> > +     req =3D kzalloc(req_len, GFP_KERNEL);
-> > +     if (!req)
-> > +             return -ENOMEM;
->
-> Where is the memory for req released?
->
-> First I though that cros_ec_cmd() does it, but it's actually
-> allocating it's own cros_ec_command, and then releasing that in the
-> end, so I just got confused about it.
->
-> Is this a memory leak, or am I missing something?
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 9c0c11bb87b09a8b7cdc21ca1090e7b36abe9d09  xhci: support setting interrupt moderation IMOD for secondary interrupters
 
-Yes, you are right this is a memory leak.
-Thanks for catching this. I will fix it in the next version.
+Unverified Warning (likely false positive, please contact us if interested):
 
-Regards,
-Lukasz
+arch/arm64/boot/dts/freescale/imx8dxl-evk.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8dxp-tqma8xdp-mba8xx.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8qm-apalis-eval-v1.2.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8qm-apalis-eval.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8qm-apalis-ixora-v1.1.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval-v1.2.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.1.dtb: usbphy@5b100000: 'nxp,sim' is a required property
+arch/arm64/boot/dts/freescale/imx8qxp-tqma8xqp-mba8xx.dtb: usbphy@5b100000: 'nxp,sim' is a required property
 
-> > +
-> > +     req->offset =3D UCSI_CONTROL;
-> > +     memcpy(req->data, &cmd, sizeof(cmd));
-> > +     ret =3D cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_SET,
-> > +                       req, req_len, NULL, 0);
-> > +     if (ret < 0) {
-> > +             dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_=
-SET: error=3D%d", ret);
-> > +             return ret;
-> > +     }
-> > +     return 0;
-> > +}
->
-> thanks,
->
-> --
-> heikki
+Warning ids grouped by kconfigs:
+
+recent_errors
+`-- arm64-randconfig-052-20240905
+    |-- arch-arm64-boot-dts-freescale-imx8dxl-evk.dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    |-- arch-arm64-boot-dts-freescale-imx8dxp-tqma8xdp-mba8xx.dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    |-- arch-arm64-boot-dts-freescale-imx8qm-apalis-eval-v1..dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    |-- arch-arm64-boot-dts-freescale-imx8qm-apalis-eval.dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    |-- arch-arm64-boot-dts-freescale-imx8qm-apalis-ixora-v1..dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    |-- arch-arm64-boot-dts-freescale-imx8qm-apalis-v1.-eval-v1..dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    |-- arch-arm64-boot-dts-freescale-imx8qm-apalis-v1.-eval.dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    |-- arch-arm64-boot-dts-freescale-imx8qm-apalis-v1.-ixora-v1..dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+    `-- arch-arm64-boot-dts-freescale-imx8qxp-tqma8xqp-mba8xx.dtb:usbphy-5b100000:nxp-sim-is-a-required-property
+
+elapsed time: 1465m
+
+configs tested: 117
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc-14.1.0
+alpha                            allyesconfig   clang-20
+arc                              allmodconfig   clang-20
+arc                               allnoconfig   gcc-14.1.0
+arc                              allyesconfig   clang-20
+arm                              allmodconfig   clang-20
+arm                               allnoconfig   gcc-14.1.0
+arm                              allyesconfig   clang-20
+arm                         bcm2835_defconfig   clang-20
+arm                      footbridge_defconfig   clang-20
+arm                         nhk8815_defconfig   clang-20
+arm                         s5pv210_defconfig   clang-20
+arm64                            allmodconfig   clang-20
+arm64                             allnoconfig   gcc-14.1.0
+csky                              allnoconfig   gcc-14.1.0
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   gcc-14.1.0
+hexagon                          allyesconfig   clang-20
+i386                             allmodconfig   clang-18
+i386                              allnoconfig   clang-18
+i386                             allyesconfig   clang-18
+i386         buildonly-randconfig-001-20240906   gcc-12
+i386         buildonly-randconfig-002-20240906   gcc-12
+i386         buildonly-randconfig-003-20240906   gcc-12
+i386         buildonly-randconfig-004-20240906   gcc-12
+i386         buildonly-randconfig-005-20240906   gcc-12
+i386         buildonly-randconfig-006-20240906   gcc-12
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240906   gcc-12
+i386                  randconfig-002-20240906   gcc-12
+i386                  randconfig-003-20240906   gcc-12
+i386                  randconfig-004-20240906   gcc-12
+i386                  randconfig-005-20240906   gcc-12
+i386                  randconfig-006-20240906   gcc-12
+i386                  randconfig-011-20240906   gcc-12
+i386                  randconfig-012-20240906   gcc-12
+i386                  randconfig-013-20240906   gcc-12
+i386                  randconfig-014-20240906   gcc-12
+i386                  randconfig-015-20240906   gcc-12
+i386                  randconfig-016-20240906   gcc-12
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+mips                              allnoconfig   gcc-14.1.0
+mips                     loongson1c_defconfig   clang-20
+mips                      malta_kvm_defconfig   clang-20
+nios2                             allnoconfig   gcc-14.1.0
+openrisc                          allnoconfig   clang-20
+openrisc                            defconfig   gcc-12
+parisc                            allnoconfig   clang-20
+parisc                              defconfig   gcc-12
+powerpc                           allnoconfig   clang-20
+powerpc                      arches_defconfig   clang-20
+powerpc                   bluestone_defconfig   clang-20
+powerpc                 linkstation_defconfig   clang-20
+powerpc                 mpc8315_rdb_defconfig   clang-20
+powerpc                      ppc44x_defconfig   clang-20
+powerpc                      tqm8xx_defconfig   clang-20
+riscv                             allnoconfig   clang-20
+riscv                               defconfig   gcc-12
+s390                             allmodconfig   gcc-14.1.0
+s390                              allnoconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   gcc-12
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-12
+sh                          landisk_defconfig   clang-20
+sh                          sdk7780_defconfig   clang-20
+sh                             sh03_defconfig   clang-20
+sh                     sh7710voipgw_defconfig   clang-20
+sh                            titan_defconfig   clang-20
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-12
+um                               allmodconfig   clang-20
+um                                allnoconfig   clang-20
+um                               allyesconfig   clang-20
+um                                  defconfig   gcc-12
+um                             i386_defconfig   gcc-12
+um                           x86_64_defconfig   gcc-12
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240906   clang-18
+x86_64       buildonly-randconfig-002-20240906   clang-18
+x86_64       buildonly-randconfig-003-20240906   clang-18
+x86_64       buildonly-randconfig-004-20240906   clang-18
+x86_64       buildonly-randconfig-005-20240906   clang-18
+x86_64       buildonly-randconfig-006-20240906   clang-18
+x86_64                              defconfig   clang-18
+x86_64                                  kexec   gcc-12
+x86_64                randconfig-001-20240906   clang-18
+x86_64                randconfig-002-20240906   clang-18
+x86_64                randconfig-003-20240906   clang-18
+x86_64                randconfig-004-20240906   clang-18
+x86_64                randconfig-005-20240906   clang-18
+x86_64                randconfig-006-20240906   clang-18
+x86_64                randconfig-011-20240906   clang-18
+x86_64                randconfig-012-20240906   clang-18
+x86_64                randconfig-013-20240906   clang-18
+x86_64                randconfig-014-20240906   clang-18
+x86_64                randconfig-015-20240906   clang-18
+x86_64                randconfig-016-20240906   clang-18
+x86_64                randconfig-071-20240906   clang-18
+x86_64                randconfig-072-20240906   clang-18
+x86_64                randconfig-073-20240906   clang-18
+x86_64                randconfig-074-20240906   clang-18
+x86_64                randconfig-075-20240906   clang-18
+x86_64                randconfig-076-20240906   clang-18
+x86_64                          rhel-8.3-rust   clang-18
+x86_64                               rhel-8.3   gcc-12
+xtensa                            allnoconfig   gcc-14.1.0
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
