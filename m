@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-14817-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CA5E9700BB
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 10:09:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA6B49700E2
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 10:27:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1D2F281207
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 08:08:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95CBB1F22817
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 08:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5CCE14A0A9;
-	Sat,  7 Sep 2024 08:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0676D14B96B;
+	Sat,  7 Sep 2024 08:27:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17404132124;
-	Sat,  7 Sep 2024 08:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FAD1B85DC;
+	Sat,  7 Sep 2024 08:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725696534; cv=none; b=htjxwEx0vE6idUErWcIWdU9PCPYKjEEp6kNJQYqQhxJRomuzWb0ZHeQ4L9b7DRKS8KswkhV+ENgi6B/zBvnazCRbI8C7cDxnRqV+W+Ww7IxsRZYc18SaiDzSUMZuMRqgPC7362JPt3CPcHffl8Vuh2UYorNjdFfVOfQARnXrXuE=
+	t=1725697657; cv=none; b=L0c6iKtiqSb6j9z9eYUn9Pkl+8zSlsAmGGBH95RnehFcGnbe9f4YyQZr56CGQufcc0QWKqt+rJi+CxjHRTwJyJLVeV3x2WhCC70flpiFk8jHqKEDzyYwH7dEvi9eZOv60UZS8s656zV4GKCQWLOUHirvOPG5SlDK2BO7DCOphtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725696534; c=relaxed/simple;
-	bh=JfUIM5jVL4uUha3SMBR9r1gfPNBKWcmx2A5OhHPs4H0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fH89tFhkJ+K677LgMSMzEVy5ay5LjZG1YV045b6riT8nOA1GvtSvDxPsUq+LSw6bne0GpUASrKJC1eHi+J2scnomzSs+/2xkD5T5tLIlsN3g9FJtNehzPt0iJU9iEayW/yaYmUtDMX85Rpgl13TEaDXA4jnFRVyIHOrZF+t4RkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+	s=arc-20240116; t=1725697657; c=relaxed/simple;
+	bh=dIv+OdKCrxghhMjsgV2OpaXd/FEP/Yx0K83Aj/eLBJk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZhmI+BqqORqq35pq9c8RhgZ34rd9GTMx3/BmCN9+mCUE5POpgaYW6ZocUkuwNEvJu7WweFsHPe9u0sq2KsbvAcnXK+ufnyg2Dj40OVg1hbXqD8RR1utQcILXoVh7yK5DpSgidEpnXAdN4abbOg4ds6TF5cFsfYAI6keQDVpPv/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X15MC6srMz2Dbmd;
-	Sat,  7 Sep 2024 16:08:23 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4X15mV1CKCzyRYD;
+	Sat,  7 Sep 2024 16:26:50 +0800 (CST)
 Received: from kwepemm600016.china.huawei.com (unknown [7.193.23.20])
-	by mail.maildlp.com (Postfix) with ESMTPS id 06F131A0188;
-	Sat,  7 Sep 2024 16:08:48 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 63BD61800F2;
+	Sat,  7 Sep 2024 16:27:31 +0800 (CST)
 Received: from huawei.com (10.175.112.208) by kwepemm600016.china.huawei.com
  (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Sat, 7 Sep
- 2024 16:08:47 +0800
+ 2024 16:27:30 +0800
 From: Lin Ruifeng <linruifeng4@huawei.com>
 To: <b-liu@ti.com>, <gregkh@linuxfoundation.org>, <matthias.bgg@gmail.com>,
 	<angelogioacchino.delregno@collabora.com>
 CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-Subject: [PATCH -next] usb: musb: mediatek: Simplify code with dev_err_probe()
-Date: Sat, 7 Sep 2024 15:55:08 +0800
-Message-ID: <20240907075508.79889-1-linruifeng4@huawei.com>
+Subject: [PATCH -next v2] usb: musb: mediatek: Simplify code with dev_err_probe()
+Date: Sat, 7 Sep 2024 16:13:51 +0800
+Message-ID: <20240907081351.19879-1-linruifeng4@huawei.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -54,7 +54,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemm600016.china.huawei.com (7.193.23.20)
 
 The combination of dev_err() and the returned error code could be
@@ -63,6 +63,8 @@ converting to dev_err_probe() to make code more simple.
 
 Signed-off-by: Lin Ruifeng <linruifeng4@huawei.com>
 ---
+v2:
+- The wrong message is modified.
  drivers/usb/musb/mediatek.c | 27 +++++++++++----------------
  1 file changed, 11 insertions(+), 16 deletions(-)
 
