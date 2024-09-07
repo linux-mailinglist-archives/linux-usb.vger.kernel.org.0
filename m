@@ -1,337 +1,219 @@
-Return-Path: <linux-usb+bounces-14823-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14824-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A266D970380
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 20:04:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B78E4970471
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 01:01:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24F361F2207F
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 18:04:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 323E5B2215B
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 23:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AAB91667D8;
-	Sat,  7 Sep 2024 18:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B4816A92B;
+	Sat,  7 Sep 2024 23:01:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PDI9MqEg"
+	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="fTMPCgpw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+Received: from pv50p00im-ztdg10012001.me.com (pv50p00im-ztdg10012001.me.com [17.58.6.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533A915E5BA;
-	Sat,  7 Sep 2024 18:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725732220; cv=fail; b=NcFIgpUf/NTqCIBUFYrbXskniMNaYdIzoFRKKMKYtDMR8JfPXu+458zHmlWKz4RJmmHW/VJo1wFIhiIX5aFgXULOhnC6PZAk7/HsbZDEZ8lEjRIzw1e//o6ID2peSDSU4fEz2BBxWCr+aKWisPlez1HpD6gzwYompwrqZGNnrak=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725732220; c=relaxed/simple;
-	bh=8gvurG0pk0PLhtOwuk/P8FNSiBORvNrB+qIASBM4QBU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TuMDhfxhPB0BXTubfFZMC0l5Zty0Xn12T9oky0B0QUn+3WA4Ebu+jo0ilH0ZfaD5pH1fd+yeWOSqxsy2jLReqmLloZ+KfF2gV2rpap2qxi1p2YOIzlvmqgPqWJxItWK8WG1+S+7qlIgV/FxfaXp9sTWO5lPZ4v9VWqhEXOUTUE8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PDI9MqEg; arc=fail smtp.client-ip=40.107.93.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xErTvWsiArxa8ymyBqug5Or+7qAZ+YXAT5xzBoLg79TywlgDI+gaN+rfNN7fTh6BS0UXs4A8/Ktb0lLMfXI+M2HwxvjDRP3qkJ+uZNMHIoExwpVe/SLgahY2WsxxBPWbIHaLAmhiCLpiq6KWx8xAm4y2NjYF/1X/uQDbDulEicFv843Pfh3l2Tvt/3FDbPoxYybWHdyxwidklWA6/Xc8qT9hxJ4nw3/Oa2vHrBk99HnkNMvMY4VmZqM2G4h0lO1AVyqL4KASnnTLibsL6u6RanzpiQtuPbjdN93ooTXJAA1s83LuYyuZirRwhgzOleMBb3niocqvlHn5L22KXsB8CQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xq9nHp7JM/c1RuzM1VpRsh34OZ9zK5qM4c6E5tjiVKY=;
- b=YOS5yk1OpZcQBn/H4CmMOhHNDemUwiqk78ZnLU4AgCJLbVceKjvwwhIMeDBJcH4hOdnf+gwVSs/pcl3h7AIwAC5ShDAIbG0cAbbVJ1lS0eYsCWYBCgTqGOOwZFu8R+klZwbQta4PSPqBLhsSbV9c3rLkofgLGEVqNfbjZC18l4sm2VHtSyMUzz6PfxV5gjCqQuaSN0LTPtamdziR78wr5fisMzkJWpUf2ouTSB2hLc7G/sqELfUs7rhWD6ujbrHZWqP66sTldP+tNNeYF8FS+u769JBH4DATZnnvLZAadEqIJq7shmSVOKCFJQRT3RuTTA8ncC5Ap5wogaJ1if2zlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xq9nHp7JM/c1RuzM1VpRsh34OZ9zK5qM4c6E5tjiVKY=;
- b=PDI9MqEgBVtMoo7cI6WFRpfHrb61M++cBUsede7l99CNqYocL77GSg2K14r7dRx65KwOYJWazdSEVIMV7dbNHkOuB/2TlomZxDeoEjbBGrecfOA02y/NnVe3KnYPAb3lUFQsveWzbYell651gzj8kj1JjNUanMHLLdHdmmVTox4=
-Received: from DM6PR07CA0113.namprd07.prod.outlook.com (2603:10b6:5:330::16)
- by PH7PR12MB5975.namprd12.prod.outlook.com (2603:10b6:510:1da::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Sat, 7 Sep
- 2024 18:03:31 +0000
-Received: from DS2PEPF00003439.namprd02.prod.outlook.com
- (2603:10b6:5:330:cafe::59) by DM6PR07CA0113.outlook.office365.com
- (2603:10b6:5:330::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.16 via Frontend
- Transport; Sat, 7 Sep 2024 18:03:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS2PEPF00003439.mail.protection.outlook.com (10.167.18.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7918.13 via Frontend Transport; Sat, 7 Sep 2024 18:03:30 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 7 Sep
- 2024 13:03:29 -0500
-Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Sat, 7 Sep 2024 13:03:26 -0500
-From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To: <mka@chromium.org>, <gregkh@linuxfoundation.org>,
-	<javier.carrasco@wolfvision.net>, <frieder.schrempf@kontron.de>,
-	<macpaul.lin@mediatek.com>, <stefan.eichenberger@toradex.com>,
-	<jbrunet@baylibre.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH v6 2/2] usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support
-Date: Sat, 7 Sep 2024 23:33:16 +0530
-Message-ID: <1725732196-70975-3-git-send-email-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1725732196-70975-1-git-send-email-radhey.shyam.pandey@amd.com>
-References: <1725732196-70975-1-git-send-email-radhey.shyam.pandey@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B900158A08
+	for <linux-usb@vger.kernel.org>; Sat,  7 Sep 2024 23:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725750102; cv=none; b=K5mJ+GT+rFbia007Y4aNeoTDJCsO1+d31Sq2I3OW9sqEC99U4CktfL6lhirfpp45w7pT+jo3CfhuNNIi2bkDPWnExQRUIP6unb1TbN+vt2Kwo7Y4qBTk/W4AcLnONnPa+nXlpJzUBa7TiZ54OyVYfrLGgBxJd7/UszO1w8aBoFk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725750102; c=relaxed/simple;
+	bh=t8NXUXJ2UYDRW2Hia90fsYHK5pU+gn9obpMauNDNOv4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pEt7RzOn6aWEfony+xNJGmws+cUqNsgj9hcZwLGXFaby0GCRuw7O0zU/qZTwt/zBVzL2lE0dX6AWDsWrta0O0YKGe1trvN2QGvAjOw/Il0LkGVMusVjDxOY6/7EWM5VkapC7J0FbDjB164aLzCKArUCSLFibz9h6zHqiZc4FQjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=fTMPCgpw; arc=none smtp.client-ip=17.58.6.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
+	t=1725750098; bh=7Qi/LCZqf4hpZjcaRzVVYAVRnlZ9gOUsZ7aAger/xaM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=fTMPCgpw16n0RsT5x2OV3Hb7CD3S895WyIdafEJuYqRSBtrj8XHYtV6e2Yb8AI0IA
+	 G8RJeaYYETXRCfYvoSFYuvqJTs9JoAHicnjwnVf6XGfE6s4G8vei34QAOPedX85/WK
+	 47LsWx3xfRtH/A7DwF1QUZq8lK6Q0XW1O+kZEGUMQCo5bNAEFLCt3Ot28BbvrEspGf
+	 BjYuB3vGScBbSBYGhs/ME1Zr3FYnD8S2dYMkvxv9Pe5+h7TGYD/hNuUmuPlG8J5fP3
+	 33V3We5HneBULGx4Bk69bYrhdLSkAZgLVtVNk1ejU9wkq9slXLYbs24Oakm10PDsR8
+	 mLge064n0V2Lw==
+Received: from fossa.. (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10012001.me.com (Postfix) with ESMTPSA id 11FA5A00A3;
+	Sat,  7 Sep 2024 23:01:33 +0000 (UTC)
+From: Foster Snowhill <forst@pen.gy>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Georgi Valkov <gvalkov@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH net-next] usbnet: ipheth: prevent OoB reads of NDP16
+Date: Sun,  8 Sep 2024 01:01:08 +0200
+Message-ID: <20240907230108.978355-1-forst@pen.gy>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: radhey.shyam.pandey@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF00003439:EE_|PH7PR12MB5975:EE_
-X-MS-Office365-Filtering-Correlation-Id: d123a800-b887-4016-f78b-08dccf6761a2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?MbU9QtabZtXpUQOwNQ4obLnhgIvxEUkhGUOrmNNm7boAzQi7TUd2wNuMCco/?=
- =?us-ascii?Q?+lQFwIyMys6zojg1V4pCmYicunPlmJUm0tQpmOAJWw7XvZpDCi1FKSkG4v0+?=
- =?us-ascii?Q?BWQFoWjYjHprXhRQE9kmcM7BK9CWETFcStW5NQ/hU+fTRql+D4q+g7FsRURL?=
- =?us-ascii?Q?WUrPgKoZSzwk0hu45oJAoAGIGdLlYKDjsexiaKqIxWPVGFEkt30cd/Q90V7a?=
- =?us-ascii?Q?90/xbjyFnmiLtAHFI5OdYgQvAK222Sdd8xdebrxtpSYZuWI9YLnmi7N5oy+n?=
- =?us-ascii?Q?M/Xna7mpqJ6ioQ3VDKMiahF/Skbu5abTAv2Qf5bHbtWsO1k+SyVciY1Gvr8+?=
- =?us-ascii?Q?3/HJv6sVR5AKNyrY1f3PjTQPhW4Nr1huEPuQvnuRcoU9MvpompiQmUmAFNG3?=
- =?us-ascii?Q?F+VUfFLf9Jb0jAhOVyEfDHJ+lDufOvHJtHKo/r0Ubm1gBKLrB/4qcfHCuB5s?=
- =?us-ascii?Q?IdzGqMeqMVCu8Pdka2PSJscWXGqPXbC5OEG6v2B45G2+o/lJYSW+7JVKOek6?=
- =?us-ascii?Q?HdOhUDpYDulHCGAvFKpAgzxn1/vpI5BihBqyzk17hTc5x7N5ZN+kPdb0z0TD?=
- =?us-ascii?Q?hdFk0bGfMt3bCfvmxuNMD90PqTS7Qpss8IU5YP3nqEuXxnNzm5f2xOq8saIL?=
- =?us-ascii?Q?YKhaJx4/S3ADQStJ69XkQmImfapXIF0SDWI8UBNtjZqHuka0s4B6I75y9dSY?=
- =?us-ascii?Q?a/0TKN1O8TuO9VXG+x+cuP980HYRj0T45caBhOxWIzd513tbZGvPq7iKMvqo?=
- =?us-ascii?Q?U5h4xMCJPZR026n8A4l8O5uGPg2p53dJUOBqIU4QHR8XcQR4OShYpgd84jhT?=
- =?us-ascii?Q?NIUQiJn1yLZ8uYThjavE8Z7Gvzw9Edkb2VjFtXaiFU0Sk1+pF/fC1qIHxOnt?=
- =?us-ascii?Q?w6lYVwCdJ7l0BNs1W02YbK/vsxqlHNZv3TlOxx6EpSiZI3nxc1ru/+LY0IFL?=
- =?us-ascii?Q?WjzMVGVcckzoh74o30Ltn2RXU/fgLvXNzN8eBZ2oT4P9bBydTdJqf/jfZM3+?=
- =?us-ascii?Q?5+kEHwJJUdmyDRjM8a3Drt95W/hVtmHzikM3Y7ToAFFJkBqvYqr55s+VoPuS?=
- =?us-ascii?Q?5QuMCyN2Z+sWb93uxGN6AfXaHVtu4skjWgYD+HAg4IjLxwX+k5yj2Nk4aksC?=
- =?us-ascii?Q?CdE+4bJYeLoqTpdL4J22qjhnSPkEZSvmk3R/gwN1Q3+kC84v9D8f+/6kkS5H?=
- =?us-ascii?Q?egrxjnKZcHNZPDo1MwrCqHqiDJR+F3eVvzPrmnPrbNqpOD3D6XIzvTXc5zIQ?=
- =?us-ascii?Q?W2bPkUNccAnnyMjr0lmKuCKCxQGqDI81usd5j9nOW/xO9GE0yr77QK6zU2aZ?=
- =?us-ascii?Q?GtlIhEU6xnQcpegBYNNtGC8nDHgboyMOlTT/4gESpNTvWXG1SaylAUOX+U+X?=
- =?us-ascii?Q?O5CxUTcB6djAddoB0RbGBmMUSEe6V/YzXmIL+p7rhJKTrURiZ3I/W83GJ3GC?=
- =?us-ascii?Q?XfFR2FqYIxaFRSSvn/R8RcUeouWnZh62?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2024 18:03:30.5325
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d123a800-b887-4016-f78b-08dccf6761a2
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF00003439.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5975
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: b3pPLcYv25b23hrRA9NDV3APsY2qQXjI
+X-Proofpoint-GUID: b3pPLcYv25b23hrRA9NDV3APsY2qQXjI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-07_12,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1030 phishscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 adultscore=0 spamscore=0
+ mlxlogscore=613 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2409070191
 
-usb5744 supports SMBus Configuration and it may be configured via the
-SMBus slave interface during the hub start-up configuration stage.
+There were a few potential out of bounds reads when processing
+malformed URBs received from a connected device in NCM mode:
 
-To program it driver uses i2c-bus phandle (added in commit '02be19e914b8
-dt-bindings: usb: Add support for Microchip usb5744 hub controller') to
-get i2c client device and then based on usb5744 compatible check calls
-usb5744 i2c default initialization sequence.
+* Only the start of NDP16 (wNdpIndex) was checked to fit in the URB
+  buffer.
+* Datagram length check as part of DPEs could overflow.
+* DPEs could be read past the end of NDP16 and even end of URB buffer
+  if a trailer DPE wasn't encountered.
 
-Apart from the USB command attach, prevent the hub from suspend.
-when the USB Attach with SMBus (0xAA56) command is issued to the hub,
-the hub is getting enumerated and then it puts in a suspend mode.
-This causes the hub to NAK any SMBus access made by the SMBus Master
-during this period and not able to see the hub's slave address while
-running the "i2c probe" command.
+The above is not expected to happen in normal device operation.
 
-Prevent the MCU from putting the HUB in suspend mode through register
-write. The BYPASS_UDC_SUSPEND bit (Bit 3) of the RuntimeFlags2
-register at address 0x411D controls this aspect of the hub. The
-BYPASS_UDC_SUSPEND bit in register 0x411Dh must be set to ensure that the
-MCU is always enabled and ready to respond to SMBus runtime commands.
-This register needs to be written before the USB attach command is issued.
+To address the above issues without reimplementing more of CDC NCM,
+rely on and check for a specific fixed format of incoming URBs
+expected from an iOS device:
 
-The byte sequence is as follows:
-Slave addr: 0x2d           00 00 05 00 01 41 1D 08
-Slave addr: 0x2d           99 37 00
-Slave addr: 0x2d           AA 56 00
+* 12-byte NTH16
+* 96-byte NDP16, allowing up to 22 DPEs (up to 21 datagrams + trailer)
 
-Also since usb5744 i2c initialization routine uses i2c SMBus APIs invoke
-these APIs only when i2c driver is enabled in the kernel configuration.
+On iOS, NDP16 directly follows NTH16, and its length is constant
+regardless of the DPE count.
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Adapt the driver to use the fixed URB format. Set an upper bound for
+the DPE count based on the expected header size. Always expect a null
+trailer DPE.
+
+The minimal URB length of 108 bytes (IPHETH_NCM_HEADER_SIZE) in NCM mode
+is already enforced in ipheth since introduction of NCM support.
+
+Signed-off-by: Foster Snowhill <forst@pen.gy>
+Tested-by: Georgi Valkov <gvalkov@gmail.com>
 ---
-Changes for v6:
-- Return -ENODEV in _i2c_init() if I2C_CONFIG is not defined.
+This should perhaps go into "net" rather than "net-next"? I submitted
+the previous patch series to "net-next", but it got merged into "net"
+[1]. However it's quite late in the 6.11-rc cycle, I see that 6.11-rc7
+net stuff was already merged into Linus' tree ~two days ago.
 
-Changes for v5:
-- Drop Kconfig I2C_CONFIG dependency and instead put the _i2c_init()
-  implementation inside IS_ENABLED(CONFIG_I2C) check. Also a note
-  that check for get i2c-bus phandle and find i2c device is not
-  guarded by CONFIG_I2C check as we want to return error when i2c-bus
-  phandle is present and CONFIG_I2C is not enabled in kernel
-  configuration.
-
-Changes for v4:
-- Fix error: implicit declaration of function 'i2c_smbus_*' APIs by
-  introducing a dependency on I2C_CONFIG. This error is reported
-  by kernel test on v3 series and usb:usb-testing 20/25 branch.
-  https://lore.kernel.org/all/2024082503-uncoated-chaperone-7f70@gregkh
-
-Changes for v3:
-- Add comment for UDC suspend sequence.
-- Drop USB5744_CREG_MEM_NBYTES and USB5744_CREG_NBYTES and replace
-  it with literal + comment.
-- Move microchip defines to source file.
-
-Changes for v2:
-- Move power on reset delay to separate patch.
-- Switch to compatible based check for calling usb5755
-  onboard_dev_5744_i2c_init(). This is done to make
-  onboard_dev_5744_i2c_init() as static.
-- Fix subsystem "usb: misc: onboard_usb_dev:..."
-- Use #define for different register bits instead of magic values.
-- Use err_power_off label name.
-- Modified commit description to be in sync with v2 changes.
+[1]: https://lore.kernel.org/netdev/172320844026.3782387.2037318141249570355.git-patchwork-notify@kernel.org/
 ---
- drivers/usb/misc/onboard_usb_dev.c | 77 ++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ drivers/net/usb/ipheth.c | 64 ++++++++++++++++++++++------------------
+ 1 file changed, 36 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-index da27c48fc11d..560591e02d6a 100644
---- a/drivers/usb/misc/onboard_usb_dev.c
-+++ b/drivers/usb/misc/onboard_usb_dev.c
-@@ -11,6 +11,7 @@
- #include <linux/err.h>
- #include <linux/gpio/consumer.h>
- #include <linux/init.h>
-+#include <linux/i2c.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/module.h>
-@@ -29,6 +30,17 @@
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 46afb95ffabe..8c62501f47a9 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -61,7 +61,16 @@
+ #define IPHETH_USBINTF_PROTO    1
  
- #include "onboard_usb_dev.h"
+ #define IPHETH_IP_ALIGN		2	/* padding at front of URB */
+-#define IPHETH_NCM_HEADER_SIZE  (12 + 96) /* NCMH + NCM0 */
++/* On iOS devices, NCM headers in RX have a fixed size:
++ * - NTH16 (NCMH): 12 bytes, as per CDC NCM 1.0 spec
++ * - NDP16 (NCM0): 96 bytes
++ */
++#define IPHETH_NDP16_HEADER_SIZE 96
++#define IPHETH_NDP16_MAX_DPE	((IPHETH_NDP16_HEADER_SIZE - \
++				  sizeof(struct usb_cdc_ncm_ndp16)) / \
++				 sizeof(struct usb_cdc_ncm_dpe16))
++#define IPHETH_NCM_HEADER_SIZE	(sizeof(struct usb_cdc_ncm_nth16) + \
++				 IPHETH_NDP16_HEADER_SIZE)
+ #define IPHETH_TX_BUF_SIZE      ETH_FRAME_LEN
+ #define IPHETH_RX_BUF_SIZE_LEGACY (IPHETH_IP_ALIGN + ETH_FRAME_LEN)
+ #define IPHETH_RX_BUF_SIZE_NCM	65536
+@@ -213,9 +222,9 @@ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
+ 	struct usb_cdc_ncm_ndp16 *ncm0;
+ 	struct usb_cdc_ncm_dpe16 *dpe;
+ 	struct ipheth_device *dev;
++	u16 dg_idx, dg_len;
+ 	int retval = -EINVAL;
+ 	char *buf;
+-	int len;
  
-+/* USB5744 register offset and mask */
-+#define USB5744_CMD_ATTACH			0xAA
-+#define USB5744_CMD_ATTACH_LSB			0x56
-+#define USB5744_CMD_CREG_ACCESS			0x99
-+#define USB5744_CMD_CREG_ACCESS_LSB		0x37
-+#define USB5744_CREG_MEM_ADDR			0x00
-+#define USB5744_CREG_WRITE			0x00
-+#define USB5744_CREG_RUNTIMEFLAGS2		0x41
-+#define USB5744_CREG_RUNTIMEFLAGS2_LSB		0x1D
-+#define USB5744_CREG_BYPASS_UDC_SUSPEND		BIT(3)
+ 	dev = urb->context;
+ 
+@@ -225,41 +234,40 @@ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
+ 	}
+ 
+ 	ncmh = urb->transfer_buffer;
+-	if (ncmh->dwSignature != cpu_to_le32(USB_CDC_NCM_NTH16_SIGN) ||
+-	    le16_to_cpu(ncmh->wNdpIndex) >= urb->actual_length) {
+-		dev->net->stats.rx_errors++;
+-		return retval;
+-	}
++	if (ncmh->dwSignature != cpu_to_le32(USB_CDC_NCM_NTH16_SIGN))
++		goto rx_error;
+ 
+-	ncm0 = urb->transfer_buffer + le16_to_cpu(ncmh->wNdpIndex);
+-	if (ncm0->dwSignature != cpu_to_le32(USB_CDC_NCM_NDP16_NOCRC_SIGN) ||
+-	    le16_to_cpu(ncmh->wHeaderLength) + le16_to_cpu(ncm0->wLength) >=
+-	    urb->actual_length) {
+-		dev->net->stats.rx_errors++;
+-		return retval;
+-	}
++	/* On iOS, NDP16 directly follows NTH16 */
++	ncm0 = urb->transfer_buffer + sizeof(struct usb_cdc_ncm_nth16);
++	if (ncm0->dwSignature != cpu_to_le32(USB_CDC_NCM_NDP16_NOCRC_SIGN))
++		goto rx_error;
+ 
+ 	dpe = ncm0->dpe16;
+-	while (le16_to_cpu(dpe->wDatagramIndex) != 0 &&
+-	       le16_to_cpu(dpe->wDatagramLength) != 0) {
+-		if (le16_to_cpu(dpe->wDatagramIndex) >= urb->actual_length ||
+-		    le16_to_cpu(dpe->wDatagramIndex) +
+-		    le16_to_cpu(dpe->wDatagramLength) > urb->actual_length) {
+-			dev->net->stats.rx_length_errors++;
+-			return retval;
+-		}
++	for (int dpe_i = 0; dpe_i < IPHETH_NDP16_MAX_DPE; ++dpe_i, ++dpe) {
++		dg_idx = le16_to_cpu(dpe->wDatagramIndex);
++		dg_len = le16_to_cpu(dpe->wDatagramLength);
 +
- static void onboard_dev_attach_usb_driver(struct work_struct *work);
++		/* Null DPE must be present after last datagram pointer entry
++		 * (3.3.1 USB CDC NCM spec v1.0)
++		 */
++		if (dg_idx == 0 && dg_len == 0)
++			return 0;
++
++		if (dg_idx < IPHETH_NCM_HEADER_SIZE ||
++		    dg_idx >= urb->actual_length ||
++		    dg_len > urb->actual_length - dg_idx)
++			goto rx_error;
  
- static struct usb_device_driver onboard_dev_usbdev_driver;
-@@ -297,10 +309,50 @@ static void onboard_dev_attach_usb_driver(struct work_struct *work)
- 		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
+-		buf = urb->transfer_buffer + le16_to_cpu(dpe->wDatagramIndex);
+-		len = le16_to_cpu(dpe->wDatagramLength);
++		buf = urb->transfer_buffer + dg_idx;
+ 
+-		retval = ipheth_consume_skb(buf, len, dev);
++		retval = ipheth_consume_skb(buf, dg_len, dev);
+ 		if (retval != 0)
+ 			return retval;
+-
+-		dpe++;
+ 	}
+ 
+-	return 0;
++rx_error:
++	dev->net->stats.rx_errors++;
++	return retval;
  }
  
-+static int onboard_dev_5744_i2c_init(struct i2c_client *client)
-+{
-+#if IS_ENABLED(CONFIG_I2C)
-+	struct device *dev = &client->dev;
-+	int ret;
-+
-+	/*
-+	 * Set BYPASS_UDC_SUSPEND bit to ensure MCU is always enabled
-+	 * and ready to respond to SMBus runtime commands.
-+	 * The command writes 5 bytes to memory and single data byte in
-+	 * configuration register.
-+	 */
-+	char wr_buf[7] = {USB5744_CREG_MEM_ADDR, 5,
-+			  USB5744_CREG_WRITE, 1,
-+			  USB5744_CREG_RUNTIMEFLAGS2,
-+			  USB5744_CREG_RUNTIMEFLAGS2_LSB,
-+			  USB5744_CREG_BYPASS_UDC_SUSPEND};
-+
-+	ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "BYPASS_UDC_SUSPEND bit configuration failed\n");
-+
-+	ret = i2c_smbus_write_word_data(client, USB5744_CMD_CREG_ACCESS,
-+					USB5744_CMD_CREG_ACCESS_LSB);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Configuration Register Access Command failed\n");
-+
-+	/* Send SMBus command to boot hub. */
-+	ret = i2c_smbus_write_word_data(client, USB5744_CMD_ATTACH,
-+					USB5744_CMD_ATTACH_LSB);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "USB Attach with SMBus command failed\n");
-+
-+	return ret;
-+#else
-+	return -ENODEV;
-+#endif
-+}
-+
- static int onboard_dev_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct onboard_dev *onboard_dev;
-+	struct device_node *i2c_node;
- 	int err;
- 
- 	onboard_dev = devm_kzalloc(dev, sizeof(*onboard_dev), GFP_KERNEL);
-@@ -340,6 +392,27 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
-+	i2c_node = of_parse_phandle(pdev->dev.of_node, "i2c-bus", 0);
-+	if (i2c_node) {
-+		struct i2c_client *client;
-+
-+		client = of_find_i2c_device_by_node(i2c_node);
-+		of_node_put(i2c_node);
-+
-+		if (!client) {
-+			err = -EPROBE_DEFER;
-+			goto err_power_off;
-+		}
-+
-+		if (of_device_is_compatible(pdev->dev.of_node, "usb424,2744") ||
-+		    of_device_is_compatible(pdev->dev.of_node, "usb424,5744"))
-+			err = onboard_dev_5744_i2c_init(client);
-+
-+		put_device(&client->dev);
-+		if (err < 0)
-+			goto err_power_off;
-+	}
-+
- 	/*
- 	 * The USB driver might have been detached from the USB devices by
- 	 * onboard_dev_remove() (e.g. through an 'unbind' by userspace),
-@@ -351,6 +424,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 	schedule_work(&attach_usb_driver_work);
- 
- 	return 0;
-+
-+err_power_off:
-+	onboard_dev_power_off(onboard_dev);
-+	return err;
- }
- 
- static void onboard_dev_remove(struct platform_device *pdev)
+ static void ipheth_rcvbulk_callback(struct urb *urb)
 -- 
-2.34.1
+2.45.1
 
 
