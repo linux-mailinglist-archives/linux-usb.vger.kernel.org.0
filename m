@@ -1,154 +1,188 @@
-Return-Path: <linux-usb+bounces-14820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22A699702C7
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 16:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C3597037C
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 20:03:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3CA21F225A9
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 14:46:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF9A91F2178E
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 18:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4642E15DBC1;
-	Sat,  7 Sep 2024 14:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9FB15E5C8;
+	Sat,  7 Sep 2024 18:03:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="i/UyB2wu"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BabmKaYZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2072.outbound.protection.outlook.com [40.107.237.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7601A28FC
-	for <linux-usb@vger.kernel.org>; Sat,  7 Sep 2024 14:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725720358; cv=none; b=Qcw8fCQt1YF3e1xhEu0eSxsX2qFO8Hy1p89yUrVmd+OzplZklYnJUxBVTiozW+byzZWJw8BZCrEKtNOksYcuR4qn8/AHeSkuMpMlO3phtv3TpeK/eeNx25SO/FaL2/22D1kzM+uESUubBp9nc3maOXBohIJYcJozNKyBpJ/vdF0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725720358; c=relaxed/simple;
-	bh=3KW+8vZDn7bmreH0NvLasVcUOw54kaykTkEoTe24RvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QHPi09DCRf94QHs5zVdicWurox5cMDl30mu2p0Tdlum2NHnbSqeViFagNILuPNgXErpz+6GUuikCEZuanbrBTOvDMCtD4bmSRC18rsrLCZ9EF2ugZdZOCmJaLP7gWzxiDQCL4GzXwVdE68v2KqgpUDiX2fXMDuf1zbbpts5DXNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=i/UyB2wu; arc=none smtp.client-ip=209.85.217.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-49bf3b4d07bso73598137.1
-        for <linux-usb@vger.kernel.org>; Sat, 07 Sep 2024 07:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1725720355; x=1726325155; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oxOrFNaty7JNsfbJoX0oXukafoOW9gJNMYUI/wybL6s=;
-        b=i/UyB2wuMM3JhBqxYcnnYsRlAXTwx0pMQD8bQySwpTW7YJi++O2hV2ku6+aoSPbe0m
-         mgSQ82AnX1YJGxd/QIYUQz/DLkn4Gnt1aglStvAVqZiSPKL5OcI71rnokQcug++rEMYw
-         HO5e14MygM0zF0LH8qI78SpXwk6e0SqMtvSvNevhQZWC4EOI+d7gGooiyUNxinvXXJrY
-         ljiqp+lZtgncVCBdFTqbZJCzgPNj9s5PyefwgG5qqJovgjfRiXhCKo523xN9A6tsqBze
-         gRYciHm/K0Kr+JFxzCte9P8e9cSezIijLCdhw5HDZDV50ln98eghgCJcmVUS5zdbOAvY
-         gA1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725720355; x=1726325155;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oxOrFNaty7JNsfbJoX0oXukafoOW9gJNMYUI/wybL6s=;
-        b=QVKUMbLhmj5hrMNaN1jMe4V1XDvAvcWzNf2PrVR/ayA95D7lwmkim8ILnQUh45j02V
-         BsFdaSXKu/1kySsXPBKHIQma+YTRO+e23EEmKjEALmkmzJSIWdvvJP7Sq437aqdk/WcG
-         Vgr+4mH/XlY2BCiUBEdPb0jmnDA1jT9SQEEQc5o7ZXivbQ/wvqrht17ZnZOXV9patf+a
-         oByje/EDcOkhR5yvu7BEBfRdZFMcYFJFI3Y2YyU/2l1zehg9XJalRnHMIeds24nOh8Ma
-         hLoYwjUsVUil1dzX/LGPPW+WkTHI6k966+mJ1IMx71Q7HipmGso39jeVyRXrzg1UDO5f
-         +YdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVRMyar7lO4aY/GvwyzmnsxdFo3cvOHyIbhumGv8x3k0PTEqGJmWjVMoV2w6xRuGQlw3BpiuPRHUFk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKYBrf8RPE6OTTPSjYP3/tMHGB8JrtWDrRi7snag5E2iKFsXPW
-	1XYjdabX7FNmUln57mCJPEYupd6PBGAamZOtNrnRI8e8LAoyHmsQ0j1milE9pQ==
-X-Google-Smtp-Source: AGHT+IET8oByV6Z94LoxErKMm+WE11lJykrg7SK9vQGvNbjMgBF55Fn4F1bqx/m6Z9q0Mr0kbbEp/Q==
-X-Received: by 2002:a05:6102:3748:b0:49b:d7e0:1052 with SMTP id ada2fe7eead31-49bde1472b7mr6507041137.1.1725720355341;
-        Sat, 07 Sep 2024 07:45:55 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::24a8])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c53477d348sm4912566d6.132.2024.09.07.07.45.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Sep 2024 07:45:54 -0700 (PDT)
-Date: Sat, 7 Sep 2024 10:45:52 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH V2] USB: usbtmc: prevent kernel-usb-infoleak
-Message-ID: <608621b0-6a6b-46d3-bfa8-ff907fb83148@rowland.harvard.edu>
-References: <25d5853a-7156-4892-a383-4547e9c95472@rowland.harvard.edu>
- <tencent_F437644B027489769D66E43D51361E965A09@qq.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435C93A28B;
+	Sat,  7 Sep 2024 18:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725732210; cv=fail; b=QuPCMz4pQMXmBrujjFVWDZS2LKBeRul1kvLkFITxPFp97RK1MWyRNfeWe35lPHd3dXJP7XLUaq58LMJ58oXD5F7JD5vHId3ZYc/PQxtEMaifVwoMx9z89SRqXKqRRD3R+1+lf9bdTZAV5bzL0r82uWPELLxtV+EyW4m/dvYCtk4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725732210; c=relaxed/simple;
+	bh=/RcZ+sA1IgvtjMCNEHCVvL0wAL7ujyG4+yN/BOEMgQw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PQIeIh8eX54sFg1BYv/mcwWpXgNF+Q2LPw72roz5S/Kef7xy3X5EJT7eoZOT+dPlTTAPQIkWscYsnCuLIR8MyBSiP8XNu3O34HFAMwDVasUBHguOjXa5WIfQbVhy7zLhgt8mmHNRVFRTBD6gx4JmoEccRPzaEK8MSksar7KtAB4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BabmKaYZ; arc=fail smtp.client-ip=40.107.237.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b6Kis0BNkPD+dwQ6qMv5+9w3thYS2CStinpl1HkSXcrvOVsn+afrT0O0Uo2qxsr4udGHsxYqIJck74MZLXvTRERRbVvUk1b2wS4ztwBTl+76/cELMRPKFzFd1FLX6u4rQ0cXgO5Uuhu8/Px/ur9hZ6MSGIcu/1UArGAxkoPt0TJbCh3kqKrr+f2upIV/TkIfmo/cbbWyrMgnG+tjVX4qcuCYAjw9NqIhXGMJsr+UbkvN/18UZYaBqBGOpidURcjUQB/MPWTHwe22F51k7yPnbQM3fbIi2A0B/QV/uGczyUyO3ngCbtWBfWrlTXhJZSn3IYXJXr5XiwKFLtkMw0Xq9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7MNLOrK9vM1SyU4QfzPylVkNVZiGp04vM+TwRs9RfuM=;
+ b=pShL6ZKrp2cVIp3tIPnRF3rUdYbgyGf+PT/rJKIKs8EqC7UdyksSXh8A3f4k+ww5OdEogJIBM2Oq/9qKW6VSAvhfBRZhUkcrt25lYXPHF66LudtoXenrV7tQH+FiYMQYjXFVkdamFnt25l3YW0QeVG7Jb3UzEc/rPO2WytUOYZCVV7muA7w68WCBBur6ALRW/dAkqXln+KhZ8XqYZLFn1vksImWVtpB25z4o5mtiLrRoADqTcsI5lGIbuKnhJOpRMbyOSHPwE1hcPF7osenjdCbSnBczMR5NA2yAGqlry4qV8nEtJNAyJhXLEdMw45g6MG2An5oEVl6vPLsDyvJHLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7MNLOrK9vM1SyU4QfzPylVkNVZiGp04vM+TwRs9RfuM=;
+ b=BabmKaYZ/mf9xMVQb6gKwqzq5Pn1Ogh8x1zcVGzivp0hZKF5l26WYJaXjAs1AOD2/SDaiZs8ZMJkrqfgXOoY7gOnyzhjj7BgLJjuCV/1PMWNcTizfR/IFan8vvKEMXgW61XR9oNQs3R+6KhO+sSLXlBSzAgtgH8Dz65BsFfEFeI=
+Received: from CH0PR04CA0036.namprd04.prod.outlook.com (2603:10b6:610:77::11)
+ by DM6PR12MB4372.namprd12.prod.outlook.com (2603:10b6:5:2af::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.28; Sat, 7 Sep
+ 2024 18:03:24 +0000
+Received: from DS2PEPF0000343D.namprd02.prod.outlook.com
+ (2603:10b6:610:77:cafe::b4) by CH0PR04CA0036.outlook.office365.com
+ (2603:10b6:610:77::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.14 via Frontend
+ Transport; Sat, 7 Sep 2024 18:03:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS2PEPF0000343D.mail.protection.outlook.com (10.167.18.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7918.13 via Frontend Transport; Sat, 7 Sep 2024 18:03:23 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 7 Sep
+ 2024 13:03:22 -0500
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Sat, 7 Sep 2024 13:03:19 -0500
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <mka@chromium.org>, <gregkh@linuxfoundation.org>,
+	<javier.carrasco@wolfvision.net>, <frieder.schrempf@kontron.de>,
+	<macpaul.lin@mediatek.com>, <stefan.eichenberger@toradex.com>,
+	<jbrunet@baylibre.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [PATCH v6 0/2] usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus support
+Date: Sat, 7 Sep 2024 23:33:14 +0530
+Message-ID: <1725732196-70975-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_F437644B027489769D66E43D51361E965A09@qq.com>
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB04.amd.com: radhey.shyam.pandey@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PEPF0000343D:EE_|DM6PR12MB4372:EE_
+X-MS-Office365-Filtering-Correlation-Id: 574b27d2-1a16-4b5b-8b07-08dccf675d9b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?tAG0Hrkrcdkk+kppJlECfkUk8mN3q6mMcCkOckEyMtH367dM/RcM7MnUO0ML?=
+ =?us-ascii?Q?MpedAzliu6A+gF37NPL7I/vRlFDC7cvuWrxRaDPG9bJDEr9xaSsEilOg/fxw?=
+ =?us-ascii?Q?SCDD1Py9dRjFUplya+kK/lFriW+drNXTg84NaJpWdy3Dukx1uUZt8I6ILrTf?=
+ =?us-ascii?Q?Vby4fXnhKa208C14yBbiGHFztdrX6kTFgQqAAE+dZcotDi47ZS/i2J3u8T3S?=
+ =?us-ascii?Q?vWjw4Biss4RdFo0ztHPpCJMKYzXIZgNwSX/Xb1VZN3a2JXGCIrUWgksRvA/Y?=
+ =?us-ascii?Q?6OMRDmHeEC/w8fPYWbX9U5GhMxTc2wUyhoKPaS1ZkkFMnooZoOSVe/TvSXr/?=
+ =?us-ascii?Q?/VnqmISIANEU1cFoQIrh9Qr0FVwds7RiD/C6+iTsemMchAvR+wUHJHuj+My7?=
+ =?us-ascii?Q?8PkjrzX68tNXZN/rCzmh7xHoiuSuZqoDUS6l9/h/XAuURy/dQAJ9ZX3NhHsa?=
+ =?us-ascii?Q?Ga5alcbXHPm1AuKiYt36ZsjM3KkZ06bhhXrRSagE1LuHnl1OVmpMufBq6vBC?=
+ =?us-ascii?Q?HqvbrONg7fb9KbXYe3tmcLoMqaoDNpnxYLHH1h4zlsp4Ob0i0KefW9Oh5NHy?=
+ =?us-ascii?Q?G+BsM8/bsMUte9uzIaw7si943JWvQ2MERbSaqXEOnTk2FpnT35U982LWfmrK?=
+ =?us-ascii?Q?7u/OUpVgC+S4D2G1kV8NNzhH3exCoyVOI0BaTz42cZRORguT/f4jVNlzqkVJ?=
+ =?us-ascii?Q?mLF0kkLLf7cLxrj8I2emQnlSoiauBPJUov2P0HCGSzvphb4mqBxCfAIBRZ+8?=
+ =?us-ascii?Q?OHbY0MS5gvLoaXF/+FhMx8k8C5lELjTsv8Bv76sIWrYkxvbzxzd+vJ5omcM7?=
+ =?us-ascii?Q?aIIU47bcp+GPCRiB0kHMqgMTPDGLL333gAw3xH+qz/1RsSrHd5V0YVxJXE3e?=
+ =?us-ascii?Q?ug2F11WzYhSvFQbebsPV48jcZoCCcVbcwDAhzJnsYc/JDozi82VEnRLpFIRk?=
+ =?us-ascii?Q?fgbU+GhpSSlYdOYoR1BSpJymI5GWZiGutjzEodnTk06FjshjBs+HGm4FVrO0?=
+ =?us-ascii?Q?m5ViWJR0EUzT59VLLVFVS79YGJKWDO/hsqFJrzUCDGwqc66P2nZdsqBhgU+B?=
+ =?us-ascii?Q?ClXwT7uou5DYWhJaEZpMdH7whTbDA84m05nbt04qmG34msnlgyY9jf/jPM9u?=
+ =?us-ascii?Q?x3Q25ftppK86+2/Ri7zMOn3srS8sjs50S5JzvDpVTif2OrFvXv7Jgnj2ueVG?=
+ =?us-ascii?Q?IR1SX6w5xLqq2by4V7vMGJgO+U0UqCg/+JAHLotwe7fydR/25FhLJZxnWEPq?=
+ =?us-ascii?Q?hrvBJjtMx+SEBHmdvVSv9dc28Bp8RHHVou4K1IFHh2qUFkgVZ62P5L+2xj9s?=
+ =?us-ascii?Q?26PNdPhaVSTz/6PxT6q0MW/69IyNVfQXAYE0DGeMJuLcU1RkCmjzqb9C65yP?=
+ =?us-ascii?Q?pMwylrt2oI/H1P+ssPkfoNcaClJbBrJVCWrERmayK1Nr0vWQZfr52mtB3fP3?=
+ =?us-ascii?Q?yDD8JrE0kjV39RL5bMRtPc1rU7B6zo3R?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2024 18:03:23.7729
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 574b27d2-1a16-4b5b-8b07-08dccf675d9b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS2PEPF0000343D.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4372
 
-On Sat, Sep 07, 2024 at 10:08:57AM +0800, Edward Adam Davis wrote:
-> On Fri, 6 Sep 2024 10:28:11 -0400, Alan Stern wrote:
-> > On Fri, Sep 06, 2024 at 10:11:03PM +0800, Edward Adam Davis wrote:
-> > > The syzbot reported a kernel-usb-infoleak in usbtmc_write.
-> > > 
-> > > The expression "aligned = (transfersize + (USBTMC_HEADER_SIZE + 3)) & ~3;"
-> > > in usbtmcw_write() follows the following pattern:
-> > > 
-> > > aligned = (1 + 12 + 3) & ~3 = 16   // 3 bytes have not been initialized
-> > > aligned = (2 + 12 + 3) & ~3 = 16   // 2 bytes have not been initialized
-> > > aligned = (3 + 12 + 3) & ~3 = 16   // 1 byte has not been initialized
-> > > aligned = (4 + 12 + 3) & ~3 = 16   // All bytes have been initialized
-> > > aligned = (5 + 12 + 3) & ~3 = 20   // 3 bytes have not been initialized
-> > > aligned = (6 + 12 + 3) & ~3 = 20   // 2 bytes have not been initialized
-> > > aligned = (7 + 12 + 3) & ~3 = 20   // 1 byte has not been initialized
-> > > aligned = (8 + 12 + 3) & ~3 = 20   // All bytes have been initialized
-> > > aligned = (9 + 12 + 3) & ~3 = 24
-> > > ...
-> > 
-> > What is the purpose of aligned?  Why doesn't the driver simply use
-> > USBTMC_HEADER_SIZE + transfersize instead of rounding it up to a 
-> > multiple of 4?
-> I just found out that the logic of aligned calculation is like this. 
-> As for why it is calculated like this, perhaps Guido Kiener can provide
-> a clearer explanation.
-> It was introduced by commit 4d5e18d9ed93 ("usb: usbtmc: Optimize usbtmc_write").
-> > 
-> > > Note: #define USBTMC_HEADER_SIZE      12
-> > > 
-> > > This results in the buffer[USBTMC_SEAD_SIZE+transfersize] and its
-> > > subsequent memory not being initialized.
-> > > 
-> > > The condition aligned < buflen is used to avoid out of bounds access to
-> > > the buffer[USBTMC_HEADER_SIZE + transfersize] when "transfersize = 
-> > > buflen - USBTMC_HEADER_SIZE".
-> > > 
-> > > Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
-> > > Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
-> > > Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
-> > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> > > ---
-> > >  drivers/usb/class/usbtmc.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-> > > index 6bd9fe565385..faf8c5508997 100644
-> > > --- a/drivers/usb/class/usbtmc.c
-> > > +++ b/drivers/usb/class/usbtmc.c
-> > > @@ -1591,6 +1591,10 @@ static ssize_t usbtmc_write(struct file *filp, const char __user *buf,
-> > >  		goto exit;
-> > >  	}
-> > >  
-> > > +	if (aligned < buflen && (transfersize % 4))
-> > 
-> > Shouldn't this be
-> > 
-> > 	if (USBTMC_HEADER_SIZE + transfersize < aligned)
-> Logically, it seems possible to write it this way.
+This patchset adds usb5744 SMBus support in onboard usb driver.
 
-In fact, what you wrote is wrong.  Consider the case where buflen is 32 
-and transfersize is 17.  Then aligned = (12 + 17 + 3) & ~3 = 32, so your 
-condition would fail to initialize the extra 3 bytes.
+Changes for v6:
+- Return -ENODEV in _i2c_init() if I2C_CONFIG is not defined.
 
-Alan Stern
+Changes for v5:
+- Drop Kconfig I2C_CONFIG dependency and instead put the _i2c_init()
+  implementation inside IS_ENABLED(CONFIG_I2C) check.
+
+Changes for v4:
+- Fix error: implicit declaration of function 'i2c_smbus_*' APIs by
+  introducing a kconfig dependency on I2C_CONFIG. This error is reported
+  by kernel test on v3 series and usb:usb-testing 20/25 branch.
+  https://lore.kernel.org/all/2024082503-uncoated-chaperone-7f70@gregkh
+
+Changes for v3:
+- Modified power_on_delay_us comment.
+- Add comment for UDC suspend sequence.
+- Drop USB5744_CREG_MEM_NBYTES and USB5744_CREG_NBYTES and replace
+  it with literal + comment.
+- Move microchip defines to source file.
+
+Changes in v2:
+- Fix subsystem "usb: misc: onboard_usb_dev:..."
+- Change implementation from introducing onboard_dev_i2c_init
+  func pointer and do i2c initialization based on compatible string.
+  This is to make onboard_dev_5744_i2c_init() as static.
+- Use #define for different register bits instead of magic values.
+- Use err_power_off label name.
+- Modified commit description to be in sync with v2 changes.
+- Move power on reset delay to separate patch.
+
+Radhey Shyam Pandey (2):
+  usb: misc: onboard_dev: extend platform data to add power on delay
+    field
+  usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming
+    support
+
+ drivers/usb/misc/onboard_usb_dev.c | 78 ++++++++++++++++++++++++++++++
+ drivers/usb/misc/onboard_usb_dev.h |  2 +
+ 2 files changed, 80 insertions(+)
+
+-- 
+2.34.1
+
 
