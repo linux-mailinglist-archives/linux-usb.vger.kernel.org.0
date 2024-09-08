@@ -1,131 +1,118 @@
-Return-Path: <linux-usb+bounces-14829-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14830-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2F279704C6
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 04:27:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5C9F97051F
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 07:20:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 509FE282DA5
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 02:27:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D54441C21397
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 05:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF30C18E2A;
-	Sun,  8 Sep 2024 02:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6805142048;
+	Sun,  8 Sep 2024 05:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="dWn5CaKJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EuPHpnwc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-236.mail.qq.com (out203-205-221-236.mail.qq.com [203.205.221.236])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F761C6A3;
-	Sun,  8 Sep 2024 02:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C195D7F6;
+	Sun,  8 Sep 2024 05:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725762439; cv=none; b=My2Rk5vfXlaSw1j1rWFRAw9fTiN6njylrg4y+MVrtm8duVfBje6rSot8lg4V7yRjnTOllqeHSeLwGFCFqZ3cRu26bvqVYKoLpP0H1QdRZV1BgxqBuOHeKIRLeZ/ni6WUOVqhg0b/0qXjNiWrx45EBLdc0AmM3BzF4QkkP+OBGzk=
+	t=1725772846; cv=none; b=OEhc/GwUZS6qrFoAvhDIfPapks94DL2pIDd/QLnnqyKcXF1IO52hEUQHc/bIJRdETH5oinLnFEscMwVIxcsC3x3WQ7j1EC95CeYjBMPhF47hI552phALIYZrXAuVNH7LvoEAkE1BSXXu6mHIAyE2NhmkittmIIn/mhb/UOK2jZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725762439; c=relaxed/simple;
-	bh=AR5x396hMeoSem05Pk2AvKmRJ6WuVPoQprpA1QtXPj4=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=qRRCdUzrXW4d315uapeyKiAw5y3DxH8RoqyXjTfg7TMoCn+Guhwe9nOiTxyw+TK37HUOnOCQI19NJ28T7ajGQCE7LeHKFm6L2TaZmuJDCnYoE6bP92lPdYBDUT/qelaaViW6yRx+TObVun4efrH1utmT+oQhhNJhVLGqqQI1ne0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=dWn5CaKJ; arc=none smtp.client-ip=203.205.221.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1725762428; bh=UudtNL88LUJ3NB8arAYr34hP2OIPJIAhi9QV+4JSPGw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dWn5CaKJ6vXwXGxkWqX98nFa3qlhbhkomVGhP+D617fhnWbmVHyi+UDbR8QH1G5f2
-	 VtEHC/PPukv9hFEAntQkghe6DOp8gvtyDrx7E3dSf2i2TCZ978PJVjZHeNnj1hn31h
-	 qJoUkPzYjkKYNQRPtJZvOniwLWXz+mDaFlJR+nhw=
-Received: from pek-lxu-l1.wrs.com ([111.198.224.50])
-	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
-	id 53915208; Sun, 08 Sep 2024 10:20:57 +0800
-X-QQ-mid: xmsmtpt1725762057tsgdbm3ks
-Message-ID: <tencent_5F7E6CD82F3D6FB49414E9D6EC3ACCFC780A@qq.com>
-X-QQ-XMAILINFO: MfTIjKnZiIhe9l50zj7PLAadxBLycdpkrfqd8JFMvsnwZlST30ze3ifXbumsKz
-	 RbEiZ9MHIg18vHSapTnvOFazYfWxCliB4sNBbCZI2dBbd39LSsYzrKJB7AcERkWHKHjo6kPEOJX4
-	 0ZWWuwVKr8VpihgZsegcRDFttNhjqwX5b+95y5IT9b43sp1HEFEHvtT+2aicDgHYqU5qC6gkCFKh
-	 fsDi8Nt3EfkQiqQfBDWEiBhhyYWe6z/s03nrjnZDv9PYaHo8FI+e4EenB/PIyGArkA2S+v58HG33
-	 Fj8LmUZG+GOED8s6MYTXy89da8wHovJWi0ecW8Fv+G0LXRKGa7RAX9sBJRotuyYaUxveJ6Yg9gbI
-	 OQfNsCHCrsGt8grMPPaUk2MjS/8Joyazk3gR1YdGy+bjkrKEfJ3F17NvB1F0gi5Glpobe5M+cAP0
-	 RVazcRSmU45EWO+ad20IYFxOFhh2y0TUQPSvHf4g9REo8b/TTw+jbiAerD0iSDX5A7N0RRO146Xj
-	 Drz4T839hayCP+1VxReDTTSdvgbLkxJyTybll+hXQc4ra+SECoNQYJ/n8xikEWys2QGhbwzQ5Frw
-	 pR6E5If/Y74dp6IHRkqrOnwhBLgvrL8wc/IjkvEyT5xjIyPTLiS/Ft3frDNGBlpZdqAngfRH/Spx
-	 2/XNAB4eHHENl6iuGldyMibeh0P8bKkgsMzPF5Vz+jcUdTHtKRp5VSiSngT0wWpwMiI+j7G2lnaR
-	 I2sXQEBPZRae8boEx8d8B/zoTtasd0uKqc/aP+LPezYweGkkLdzsYWRqcXRcW7Hqm0ehsWjmZdqN
-	 WpOqNLewhtIU+UFuP9X+eqStXXtbAGeVx9CTqPolA3XHrAJ/LH45Fp+XpXSrS1EH6/oGVIlrFbW5
-	 UQR2NRW7zufK+LoRvCJNGBihEKnIGn3YCqQYBurnkiS69gDPRm1JDoT9k4dmGCfEOMfi+vBJRPI7
-	 hZ6ghN9RO+qCahtoP6deL3jrnABq9M
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-From: Edward Adam Davis <eadavis@qq.com>
-To: stern@rowland.harvard.edu
-Cc: eadavis@qq.com,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1725772846; c=relaxed/simple;
+	bh=f1Zp6AIuu3bbA6MZQpt7yaZ3+dW58hv2ReaYmPB5G8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OmAmIYUn4/9C73mw6g7uL+lLBCEE7BhqdwF6H1P9MBH10wLPK/GWep0sjQM3VcNyE2CTK3VT8Pn4KnPgtY1aZF3qk5KpR5Zi+NWozD/lNCVnWQ0oV2qCJyyKlYAoXjBvNChS5bftfNBfaZwEIn7Iw2iIA2Kbg4h0OzQ/S+trpbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EuPHpnwc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F63C4CEC3;
+	Sun,  8 Sep 2024 05:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1725772846;
+	bh=f1Zp6AIuu3bbA6MZQpt7yaZ3+dW58hv2ReaYmPB5G8k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EuPHpnwcKHyXGAu52SuaGdsx1WvavKKy0LxZ2cCK9qfaKlFD1+D8uaz5SssNMJe5V
+	 EtQV2vrn4UOTsNnc2XvEKB4G6Db4JsJGZJVK6fCsnKoaVFAyvODkzUX2K7AJb1c3Oi
+	 jiNhgdPi0Tlcm6kjHa90tnX66cMoNB146Ixb8zJQ=
+Date: Sun, 8 Sep 2024 07:20:40 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: stern@rowland.harvard.edu, linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com,
 	syzkaller-bugs@googlegroups.com
-Subject: [PATCH V3] USB: usbtmc: prevent kernel-usb-infoleak
-Date: Sun,  8 Sep 2024 10:20:57 +0800
-X-OQ-MSGID: <20240908022056.1286558-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <3b4b8e7f-57b2-4ca1-8dc1-63faef573df3@rowland.harvard.edu>
+Subject: Re: [PATCH V3] USB: usbtmc: prevent kernel-usb-infoleak
+Message-ID: <2024090810-arrogant-disallow-6f08@gregkh>
 References: <3b4b8e7f-57b2-4ca1-8dc1-63faef573df3@rowland.harvard.edu>
+ <tencent_5F7E6CD82F3D6FB49414E9D6EC3ACCFC780A@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_5F7E6CD82F3D6FB49414E9D6EC3ACCFC780A@qq.com>
 
-The syzbot reported a kernel-usb-infoleak in usbtmc_write.
+On Sun, Sep 08, 2024 at 10:20:57AM +0800, Edward Adam Davis wrote:
+> The syzbot reported a kernel-usb-infoleak in usbtmc_write.
+> 
+> The expression "aligned = (transfersize + (USBTMC_HEADER_SIZE + 3)) & ~3;"
+> in usbtmcw_write() follows the following pattern:
+> 
+> aligned = (1 + 12 + 3) & ~3 = 16   // 3 bytes have not been initialized
+> aligned = (2 + 12 + 3) & ~3 = 16   // 2 bytes have not been initialized
+> aligned = (3 + 12 + 3) & ~3 = 16   // 1 byte has not been initialized
+> aligned = (4 + 12 + 3) & ~3 = 16   // All bytes have been initialized
+> aligned = (5 + 12 + 3) & ~3 = 20   // 3 bytes have not been initialized
+> aligned = (6 + 12 + 3) & ~3 = 20   // 2 bytes have not been initialized
+> aligned = (7 + 12 + 3) & ~3 = 20   // 1 byte has not been initialized
+> aligned = (8 + 12 + 3) & ~3 = 20   // All bytes have been initialized
+> aligned = (9 + 12 + 3) & ~3 = 24
+> ...
+> 
+> Note: #define USBTMC_HEADER_SIZE      12
+> 
+> This results in the buffer[USBTMC_SEAD_SIZE+transfersize] and its
+> subsequent memory not being initialized.
+> 
+> Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
+> Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
+> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> ---
+> V2 -> V3: Update condition and comments
+> 
+>  drivers/usb/class/usbtmc.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+> index 6bd9fe565385..faf8c5508997 100644
+> --- a/drivers/usb/class/usbtmc.c
+> +++ b/drivers/usb/class/usbtmc.c
+> @@ -1591,6 +1591,10 @@ static ssize_t usbtmc_write(struct file *filp, const char __user *buf,
+>  		goto exit;
+>  	}
+>  
+> +	if (USBTMC_HEADER_SIZE + transfersize < aligned)
+> +		memset(&buffer[USBTMC_HEADER_SIZE + transfersize], 0,
+> +			aligned - USBTMC_HEADER_SIZE - transfersize);
 
-The expression "aligned = (transfersize + (USBTMC_HEADER_SIZE + 3)) & ~3;"
-in usbtmcw_write() follows the following pattern:
+As this is now a pain to read/understand, and there's no comment
+describing it so we'll not really understand it in a few months, let
+alone years, how about we just do the trivial thing and make the
+allocation with kzalloc() to start with?  And put a comment there saying
+why it's zeroed out.
 
-aligned = (1 + 12 + 3) & ~3 = 16   // 3 bytes have not been initialized
-aligned = (2 + 12 + 3) & ~3 = 16   // 2 bytes have not been initialized
-aligned = (3 + 12 + 3) & ~3 = 16   // 1 byte has not been initialized
-aligned = (4 + 12 + 3) & ~3 = 16   // All bytes have been initialized
-aligned = (5 + 12 + 3) & ~3 = 20   // 3 bytes have not been initialized
-aligned = (6 + 12 + 3) & ~3 = 20   // 2 bytes have not been initialized
-aligned = (7 + 12 + 3) & ~3 = 20   // 1 byte has not been initialized
-aligned = (8 + 12 + 3) & ~3 = 20   // All bytes have been initialized
-aligned = (9 + 12 + 3) & ~3 = 24
-...
+Sorry, I thought this was going to be a lot simpler based on your first
+patch than this type of logic.
 
-Note: #define USBTMC_HEADER_SIZE      12
+thanks,
 
-This results in the buffer[USBTMC_SEAD_SIZE+transfersize] and its
-subsequent memory not being initialized.
-
-Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
-Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
-V2 -> V3: Update condition and comments
-
- drivers/usb/class/usbtmc.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 6bd9fe565385..faf8c5508997 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -1591,6 +1591,10 @@ static ssize_t usbtmc_write(struct file *filp, const char __user *buf,
- 		goto exit;
- 	}
- 
-+	if (USBTMC_HEADER_SIZE + transfersize < aligned)
-+		memset(&buffer[USBTMC_HEADER_SIZE + transfersize], 0,
-+			aligned - USBTMC_HEADER_SIZE - transfersize);
-+
- 	dev_dbg(&data->intf->dev, "%s(size:%u align:%u)\n", __func__,
- 		(unsigned int)transfersize, (unsigned int)aligned);
- 
--- 
-2.43.0
-
+greg k-h
 
