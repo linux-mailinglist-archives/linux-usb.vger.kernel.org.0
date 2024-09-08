@@ -1,133 +1,153 @@
-Return-Path: <linux-usb+bounces-14825-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14826-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8DE97047B
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 01:21:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0CF397049A
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 03:13:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1240B21AB8
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2024 23:21:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B7741F21FF5
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 01:13:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B1916A39E;
-	Sat,  7 Sep 2024 23:21:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1D17482;
+	Sun,  8 Sep 2024 01:13:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="NiOkNjPe"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="rLRv7+2a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mr85p00im-ztdg06021101.me.com (mr85p00im-ztdg06021101.me.com [17.58.23.180])
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64D449634
-	for <linux-usb@vger.kernel.org>; Sat,  7 Sep 2024 23:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DA12F2C;
+	Sun,  8 Sep 2024 01:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725751285; cv=none; b=HuO8qeWScC3qkArjqsOj5StXQmQtueXsGRW0/VS+5xeKtAT0dIE+mHhnbtNs2NRBQtbMECHwgRbxAQuFRST/95hQoy903v6zosHDrN313+dNhGH5UhZOze4PWoFd0zUBd1STWRUcRFxVgQ6Pu4ucs+TtEaHyee+/qjgiwwC/hHE=
+	t=1725758012; cv=none; b=e2YhaxM1xgD7lLhJh6CwPROFhkupUHkbUA0t4mL25pqslLHbO2uka76pG2NTwvJx4wBBrK9lfLY5bSeqUJkV48B1yuS7uySPZ8JK24LgGmPJnVMdDSgfP9ijZ5ObgxtI1HAS7xPZF8UFaBDxwvvf9qz9oiUwynduuG7SiPV+fK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725751285; c=relaxed/simple;
-	bh=6ZSkvFLZf5b3HKHpcNYmQ62hczi1BIkCzMhnyLUF7Ho=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q9Wm5svKrlCH3Mx2FQebvV8f3hWW72yvoi0dQxE0LqZqgEUjtvczpfWlrY1C7L4J3UYrI6x49BUxHnsmpuxIqWr7wVMfIJ4eNgokmHANJBFcaK2jykXKj7vsey/2KLoMsxVM/UcX7qk7pZloFi6uTe0bU895/yheC/AACEI18jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=NiOkNjPe; arc=none smtp.client-ip=17.58.23.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-	t=1725751283; bh=ZIoZb8zOiSuBl4OMCio4mHtYJAp1BE6Kz2Hf+e/qxgg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	b=NiOkNjPeK07qG0RyjYH70i7R0zOQmkOs1cWU7EuSJWquem763KQSZG06cCXCav3sq
-	 a2GG3VqJYO/wyxXL3VRMRzzcSZBuNA+YwGyhNp0wlFFOoMAbjzlizsJ69CewvNUWmw
-	 U7yfMYXa4IfXmnv8BfP/Tb3cXV2uA+vM7OtgEtUlbL8zQ2fE8vweGshxkLydw//Bb5
-	 bjZATJ09Z1VYEBhJmRVwQysHPUaL7ghYLGu/o5Qh+9JdT/m1X+Zmt+n3o5eVuu3KuM
-	 atiWJPafg0Pk7EStXFcsMFDl93FxhMh8Kqez4JbRd/7hJGFsFTCW16J7+/amSfVRAx
-	 rbwsFqEebaGoQ==
-Received: from [192.168.40.3] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-ztdg06021101.me.com (Postfix) with ESMTPSA id BFE3F802E3;
-	Sat,  7 Sep 2024 23:21:20 +0000 (UTC)
-Message-ID: <4730d2a2-00ee-4b80-a251-7591967b5f90@pen.gy>
-Date: Sun, 8 Sep 2024 01:21:17 +0200
+	s=arc-20240116; t=1725758012; c=relaxed/simple;
+	bh=DgZcOvKPBSwAmip5A6MqupecVKvMA+n9ChhlUYhHyAw=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=azzKznssmXuCLpBfU+4YUh1KrryPHki5wnvnWfymeWVzpoEQ4eFBo5OjgN65pvFIrGpZFV4MH9cBb7fEpu4GhIYt+yzxYvUMawJO/Bqi9v1/8Ro9mYjcoZn6D2hrEODUBs9vhay4trpH7wkk/NAU+VBKP0hYzkiCuWGdL1ryC1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=rLRv7+2a; arc=none smtp.client-ip=162.62.58.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1725757999; bh=CeGEpHwJdC86LeRy+UEkWILLt2ZvLXUiEV0BNgHFh1M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=rLRv7+2aPWRvmhjojeBGFQU/9KZTjBGe8W/aqD2BQOf6QnWkBJsWOIyJlSLA0vHwg
+	 6REiCP73ZlnS2xtOTOnDtRqqjYEjx3ry8CGYnjn8M42C32VsglElFuuSi9sJzGxq4Q
+	 2w5d8u5zyAqZk+VNznHpOGSLNj+kIqtmC784LeGw=
+Received: from pek-lxu-l1.wrs.com ([111.198.224.50])
+	by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
+	id EEFA3C86; Sun, 08 Sep 2024 08:59:47 +0800
+X-QQ-mid: xmsmtpt1725757187tbyju58h0
+Message-ID: <tencent_13C00D8E12545D9DDDE1193ECFED8D83A507@qq.com>
+X-QQ-XMAILINFO: MmPNY57tR1XnHqK/65UZE20DtdqLO2kMgSg9Zemp6CW/UNKeVsgTEU3tqnFiT7
+	 arTzMw0B/K+TyFGthzvvLriKlcZRW+u9lAy+ou7mTyLQMOqiH5JQOFozQuOKB8+KeUqmWfeW+kPJ
+	 vlgjL9qvVO5H/qxDc542DCvxA55CPjOkSJU9LLx8yP1QnVpWPEcMJu8keEwHKBiq6BUF+fktZH1z
+	 t0rYIvKK/rC7Gx4S5J5gzzjJ0LPu1qdCiutoB5R89FrcXZ/Bn/eQbXz9aOAWVYgQ/EXYD8nzBWOH
+	 3S0s8vBqAuuS87YrfF89pCNIqdA2n9Btz1VUIkoe1Nw9EOJcTGsyafVmEaSGrB4afcr3NOGiP2c+
+	 +8f5KEd9G3Z1qlnIkEAo5XkF57TNcPLbjlMEq/f4y7vdTkd/lJK0OhEnEu2SzlWfpDtDnQFLDuNj
+	 gNCuNqpJhHQu9LibTYa6GeC6NQF+pkrbc9EZqNCL4SIepkku13eWQMS6mnr3Ab3NXcz5oJ/3Rgah
+	 mH/B49OI0wORzlWwa/ZGTdV8BUEglWVKhqzgKXAJnKNV/LChruBjKbUgAqa6HY4PM0qnMjiVC5BG
+	 PAfHPLbbf1wPQKT6b5u742jDftoobkCU0nJyI505iCr6m+3DMI2T5kwiSlVPFe3KLP2jtYIRGfPp
+	 U9rQN1zva1mID3EtaNrEBxmWUPfmdB2zrnLxsnhGtN0hW5EM+RbB3RcYEcXbLpsxHCHiTMYZQamW
+	 iMy2afz3U7zlqGsGyGdiazDrQSpcXjO4MvoGxwA/HHT1refTMLw7A8Zo0RxdvLPSMupZb4ZK6zu9
+	 RtDS2bKtI319uqsE9EVWYZggqyPeiHrW1YdJcr0Km3VmF5o40c6LYc7W4NYToDdcn2Vb5RxWfUgC
+	 7DrhxVrfK7LoQvG/55WcL6PyL4QrHyB3Ci30mtiU0fzw9+L2PetP2IGGqmo8eBeDxx/hBNvvfNuV
+	 fkzX6m2w56tP3JRbrNdw==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: Edward Adam Davis <eadavis@qq.com>
+To: stern@rowland.harvard.edu
+Cc: eadavis@qq.com,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH V2] USB: usbtmc: prevent kernel-usb-infoleak
+Date: Sun,  8 Sep 2024 08:59:48 +0800
+X-OQ-MSGID: <20240908005947.1218188-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <608621b0-6a6b-46d3-bfa8-ff907fb83148@rowland.harvard.edu>
+References: <608621b0-6a6b-46d3-bfa8-ff907fb83148@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 2/5] usbnet: ipheth: remove extraneous rx URB
- length check
-Content-Language: en-GB
-To: Simon Horman <horms@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Georgi Valkov <gvalkov@gmail.com>,
- Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20240806172809.675044-1-forst@pen.gy>
- <20240806172809.675044-2-forst@pen.gy>
- <n6E0amSPUC4I6p-Xg062-XrSvsNWyH_I1xFzFq00lw_nNUf-2lNPHe5QceV9Bw2aDGx5eocXn0AEQ-JVuiFYrg==@protonmail.internalid>
- <20240809101612.GJ3075665@kernel.org>
-From: Foster Snowhill <forst@pen.gy>
-Autocrypt: addr=forst@pen.gy; keydata=
- xjMEYB86GRYJKwYBBAHaRw8BAQdAx9dMHkOUP+X9nop8IPJ1RNiEzf20Tw4HQCV4bFSITB7N
- G2ZvcnN0QHBlbi5neSA8Zm9yc3RAcGVuLmd5PsKPBBAWCgAgBQJgHzoZBgsJBwgDAgQVCAoC
- BBYCAQACGQECGwMCHgEAIQkQfZTG0T8MQtgWIQTYzKaDAhzR7WvpGD59lMbRPwxC2EQWAP9M
- XyO82yS1VO/DWKLlwOH4I87JE1wyUoNuYSLdATuWvwD8DRbeVIaCiSPZtnwDKmqMLC5sAddw
- 1kDc4FtMJ5R88w7OOARgHzoZEgorBgEEAZdVAQUBAQdARX7DpC/YwQVQLTUGBaN0QuMwx9/W
- 0WFYWmLGrrm6CioDAQgHwngEGBYIAAkFAmAfOhkCGwwAIQkQfZTG0T8MQtgWIQTYzKaDAhzR
- 7WvpGD59lMbRPwxC2BqxAQDWMSnhYyJTji9Twic7n+vnady9mQIy3hdB8Dy1yDj0MgEA0DZf
- OsjaMQ1hmGPmss4e3lOGsmfmJ49io6ornUzJTQ0=
-In-Reply-To: <20240809101612.GJ3075665@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: nCP9FqJMyqaY_xo5XyY7nJzH8r4VBEhK
-X-Proofpoint-GUID: nCP9FqJMyqaY_xo5XyY7nJzH8r4VBEhK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-07_12,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 adultscore=0
- malwarescore=0 suspectscore=0 bulkscore=0 clxscore=1030 mlxscore=0
- mlxlogscore=522 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2409070194
+Content-Transfer-Encoding: 8bit
 
-Hello Simon,
-
-Thank you very much for the feedback, and apologies for the delay.
-
-On 2024-08-09 12:16, Simon Horman wrote:
-> I am slightly concerned what happens if a frame that does not match the
-> slightly stricter check in this patch, is now passed to
-> dev->rcvbulk_callback().
+On Sat, 7 Sep 2024 10:45:52 -0400, Alan Stern wrote:
+> On Sat, Sep 07, 2024 at 10:08:57AM +0800, Edward Adam Davis wrote:
+> > On Fri, 6 Sep 2024 10:28:11 -0400, Alan Stern wrote:
+> > > On Fri, Sep 06, 2024 at 10:11:03PM +0800, Edward Adam Davis wrote:
+> > > > The syzbot reported a kernel-usb-infoleak in usbtmc_write.
+> > > >
+> > > > The expression "aligned = (transfersize + (USBTMC_HEADER_SIZE + 3)) & ~3;"
+> > > > in usbtmcw_write() follows the following pattern:
+> > > >
+> > > > aligned = (1 + 12 + 3) & ~3 = 16   // 3 bytes have not been initialized
+> > > > aligned = (2 + 12 + 3) & ~3 = 16   // 2 bytes have not been initialized
+> > > > aligned = (3 + 12 + 3) & ~3 = 16   // 1 byte has not been initialized
+> > > > aligned = (4 + 12 + 3) & ~3 = 16   // All bytes have been initialized
+> > > > aligned = (5 + 12 + 3) & ~3 = 20   // 3 bytes have not been initialized
+> > > > aligned = (6 + 12 + 3) & ~3 = 20   // 2 bytes have not been initialized
+> > > > aligned = (7 + 12 + 3) & ~3 = 20   // 1 byte has not been initialized
+> > > > aligned = (8 + 12 + 3) & ~3 = 20   // All bytes have been initialized
+> > > > aligned = (9 + 12 + 3) & ~3 = 24
+> > > > ...
+> > >
+> > > What is the purpose of aligned?  Why doesn't the driver simply use
+> > > USBTMC_HEADER_SIZE + transfersize instead of rounding it up to a
+> > > multiple of 4?
+> > I just found out that the logic of aligned calculation is like this.
+> > As for why it is calculated like this, perhaps Guido Kiener can provide
+> > a clearer explanation.
+> > It was introduced by commit 4d5e18d9ed93 ("usb: usbtmc: Optimize usbtmc_write").
+> > >
+> > > > Note: #define USBTMC_HEADER_SIZE      12
+> > > >
+> > > > This results in the buffer[USBTMC_SEAD_SIZE+transfersize] and its
+> > > > subsequent memory not being initialized.
+> > > >
+> > > > The condition aligned < buflen is used to avoid out of bounds access to
+> > > > the buffer[USBTMC_HEADER_SIZE + transfersize] when "transfersize =
+> > > > buflen - USBTMC_HEADER_SIZE".
+> > > >
+> > > > Fixes: 4ddc645f40e9 ("usb: usbtmc: Add ioctl for vendor specific write")
+> > > > Reported-and-tested-by: syzbot+9d34f80f841e948c3fdb@syzkaller.appspotmail.com
+> > > > Closes: https://syzkaller.appspot.com/bug?extid=9d34f80f841e948c3fdb
+> > > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > > > ---
+> > > >  drivers/usb/class/usbtmc.c | 4 ++++
+> > > >  1 file changed, 4 insertions(+)
+> > > >
+> > > > diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+> > > > index 6bd9fe565385..faf8c5508997 100644
+> > > > --- a/drivers/usb/class/usbtmc.c
+> > > > +++ b/drivers/usb/class/usbtmc.c
+> > > > @@ -1591,6 +1591,10 @@ static ssize_t usbtmc_write(struct file *filp, const char __user *buf,
+> > > >  		goto exit;
+> > > >  	}
+> > > >
+> > > > +	if (aligned < buflen && (transfersize % 4))
+> > >
+> > > Shouldn't this be
+> > >
+> > > 	if (USBTMC_HEADER_SIZE + transfersize < aligned)
+> > Logically, it seems possible to write it this way.
 > 
-> I see that observations have been made that this does not happen.  But is
-> there no was to inject malicious packets, or for something to malfunction?
+> In fact, what you wrote is wrong.  Consider the case where buflen is 32
+> and transfersize is 17.  Then aligned = (12 + 17 + 3) & ~3 = 32, so your
+> condition would fail to initialize the extra 3 bytes.
+The buflen is equal to USBTMC_BUFSIZE and can not equal to any other value.
+You can find it in usbtmc_create_urb() and usbtmc_write().
 
-Specifically for this patchset, in my opinion it shouldn't have had any
-effect on dev->rcvbulk_callback(). The first thing that both of the
-callbacks do is check the length of the incoming URB, to make sure they fit
-the padding (for legacy callback) or the entirety of NTH16+NDP16 (for NCM).
+Note: #define USBTMC_BUFSIZE          (4096)
 
-However your message did prompt me to look at the code again with fresh
-eyes, especially at the NCM implementation, and there is definitely need
-for improvement in handling malicious URBs. I've submitted a patch a few
-minutes ago [1] to address the issues I noticed.
-
-What I think happened is I had two conflicting ideas in my head, one was
-"make this generic enough to support arbitrary NCM header length and
-location", and on the other hand "iOS has a very specific header size,
-don't reimplement CDC NCM which already has a proper driver in cdc_ncm".
-The implementation ended up somewhere in between, and resulted in code
-that is susceptible to being negatively affected by malicious URBs.
-
-With the latest patch [1] I decided that I should limit the NCM
-implementation in ipheth to the iOS-specific URB payload format, and error
-on anything else to be on the safe side. If there is ever need to make it
-more generic (e.g. if iOS suddenly changes the URB payload structure),
-a better idea could be to somehow reuse the existing code in the cdc_ncm
-driver, which is a lot more careful in parsing incoming data. That would
-possibly involve converting ipheth to use the usbnet framework.
-
-[1]: https://lore.kernel.org/netdev/20240907230108.978355-1-forst@pen.gy/
-
-Cheers,
-Foster.
+BR,
+Edward
 
 
