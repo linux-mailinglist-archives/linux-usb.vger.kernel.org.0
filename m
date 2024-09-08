@@ -1,183 +1,185 @@
-Return-Path: <linux-usb+bounces-14840-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14841-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7140297090F
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 19:35:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 495079709D1
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 22:55:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F9011C20C10
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 17:35:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8AF21F2202C
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 20:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B95171E65;
-	Sun,  8 Sep 2024 17:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=webcom.xion.oxcs.net header.i=@webcom.xion.oxcs.net header.b="Alr7xi4l"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FD4179658;
+	Sun,  8 Sep 2024 20:55:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from nmtao101.oxsus-vadesecure.net (mta-131a.oxsus-vadesecure.net [135.148.117.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7911C01
-	for <linux-usb@vger.kernel.org>; Sun,  8 Sep 2024 17:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=135.148.117.228
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725816913; cv=pass; b=Rf7cOq9NOSMDqniEMhgRNzD+eK0MXeeu/2scbxILbYd/vD6Ae79/8OKdRQB9IklWr6XP+qS7uqv+Ar913j5o4kvxcMTk93JoWS2c/d/g1+gtMx/t2a17suuy8Yrop5tofYvKKa1w4qm/ulTat18YRzmV8wOKtRJKvCimO+rNoO8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725816913; c=relaxed/simple;
-	bh=O6V9H5eyIIj+ZtiiR01PI0i0jkyZhprqF1u6c5sukxA=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=L1B8KGZvnSiF5+uBgwqelUK41Y2IqTsQjssYgccvyuOshG3V2GP7XRr7c7BlTbju4ZhY+IYVJWfonKWLssypO9gPrWXSWqEepXqU72L1RB1Tf6OM0VFdCDF0w92SYvem30TLc0FQk0WYT8Px+fwcwclaVyq3TWTyEP21Ukmf7YE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=opensat.com; spf=fail smtp.mailfrom=opensat.com; dkim=pass (2048-bit key) header.d=webcom.xion.oxcs.net header.i=@webcom.xion.oxcs.net header.b=Alr7xi4l; arc=pass smtp.client-ip=135.148.117.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=opensat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=opensat.com
-Authentication-Results: oxsus-vadesecure.net;
- auth=pass smtp.auth=3@311702 smtp.mailfrom=sbrown@opensat.com;
-ARC-Seal: i=1; a=rsa-sha256; d=oxsus-vadesecure.net; s=arc-202309-rsa2048; t=1725816891; cv=none; b=a+/d8Gn1F00oH6GhJYlRk8GBgyDE2cgUZuWfvb4BQDG92KYxSSHtdoRwqvknnuClQf+aAUZu95oVJ5NIS8q5riPSAf9bqm9oX3AyvvAmTLHcuzLxpFo8sXomRTafFAdeGfMnnrYL1PsFAO1TxGdra2Ufn9vRUmTaFMbVCdgAYjlfuBmzxF9L0bIx0BI6iXbd0Y+kxpSzUQfhzUpPWMTE1XpeLa58wzoa6WWO1rSEZ5ALbmIvMyEGFrl451K2sxA3cImerR4v36QqYAjJcTxI+qdIPwfGhhm68x7rN5ih3mGddODqCD7DQ6FV770kiBVn5ROc6rw9CimA/lsIFHWh3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; d=oxsus-vadesecure.net; s=arc-202309-rsa2048; t=1725816891; c=relaxed/relaxed; h=from:reply-to:subject:date:to:cc:resent-date:resent-from:resent-to:resent-cc:in-reply-to:references:list-id:list-help:list-unsubscribe:list-unsubscribe-post:list-subscribe:list-post:list-owner:list-archive; bh=oFf67DdN/uo9gmQvE4MCYp+CJ2YUhbQ4nhyphvCI530=; b=mJ31yokUhDdwUxKBjMTD6fZj3k4Nk4HebePrEcPNn2zqy5A83R1KKrskZuqd3sAncJLZtFm5bFrnrGK90HFwxGrmmLkuOZHhsem3SjNoH4jjOtaXcLIo+lGazhLuab9Nkgx89lFDAYNCibK2fRsjgpK6TG1RaA93fEXtiLgKdJEoxpKg4usxw6HOOOxQkSEboe0eFRDh//RaukPZKS44QfL6ff0TXCMhTnZPVwisPHCDaiq3g9aNlXC96/D6c9YEtQQ7809HQHLNuuEd0KqRc2QplLe83BIHcJwWEbHPVphspdQHRQ+9m+TeTHqSKh8uG7q/MdrgH9EMNIkXkzajsg==
-ARC-Authentication-Results: i=1;
-DKIM-Signature: v=1; a=rsa-sha256; bh=oFf67DdN/uo9gmQvE4MCYp+CJ2YUhbQ4nhyphv
- CI530=; c=relaxed/relaxed; d=webcom.xion.oxcs.net; h=from:reply-to:
- subject:date:to:cc:resent-date:resent-from:resent-to:resent-cc:
- in-reply-to:references:list-id:list-help:list-unsubscribe:
- list-unsubscribe-post:list-subscribe:list-post:list-owner:list-archive;
- q=dns/txt; s=mail1; t=1725816891; x=1726421691; b=Alr7xi4lFjLkz1W9aefVV
- 1qZx91B+ehCjWttklq2AqAF8pizceSwR5ZPq2hwq3st1yx2WhGEnUn8SyjhcUOm5AbrVNnA
- kPtFunNxd1t0taW5sBg1s9nOK98D8b2xTUU6Db27UaCj/1fqFD8eKUqL4vn08Hwq0HhkJvT
- ptocaXwhw1hQHop7U2ybQwP0ar4zoiXP2B6+rS6qHbU/rBhwnx5U9SCDJLH92E6wN4bnHSF
- bsbshHP4KRPMW9x33PZzAy6OMzC4slOdUNSGr72+LCptRkfRcTWtbCCpkeqn67OoMQD8Mi1
- BejYigEbHbiC/yoeLJZVdqsNOHYtRq4oT+zbQ==
-Received: from proxy-13.proxy.cloudus.ewr.xion.oxcs.net ([50.77.43.154])
- by oxsus1nmtao01p.internal.vadesecure.com with ngmta
- id 779605eb-17f35551540ecceb; Sun, 08 Sep 2024 17:34:51 +0000
-Received: from localhost (localhost [127.0.0.1])
-	by opensat.com (Postfix) with ESMTP id AC66F8F40301;
-	Sun,  8 Sep 2024 11:34:48 -0600 (MDT)
-X-Virus-Scanned: Debian amavisd-new at opensat.com
-Received: from opensat.com ([127.0.0.1])
-	by localhost (nm-server.opensat.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id djc3LeTkS4Dn; Sun,  8 Sep 2024 11:34:46 -0600 (MDT)
-Received: from P340.lan (P340.lan [192.168.10.2])
-	by opensat.com (Postfix) with ESMTP id 918128F400AF;
-	Sun,  8 Sep 2024 11:34:46 -0600 (MDT)
-Message-ID: <2cebd02d4fcfbc7c72d3daa4e0112c69baca0aba.camel@ewol.com>
-Subject: [BUG REPORT] usb: dwc3: Transaction Error while doing iso output
-From: Steve Brown <sbrown@opensat.com>
-To: felipe.balbi@linux.intel.com
-Cc: linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-Date: Sun, 08 Sep 2024 11:34:46 -0600
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC29C1C01
+	for <linux-usb@vger.kernel.org>; Sun,  8 Sep 2024 20:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725828902; cv=none; b=ul8lqZuZefloOBosqa4Z+ic/CndQQsDAjIRqNHyhgKhPRR2mHXGFOVsieEpix4IBweQPjGTGoEU7rk7rI2arJLOHYiyprDBIUeJc/Kw88Ufxzft0QxLCsjiLFazny0TIxf78YYFuZ8yxdRY9IgzoNtaADqCabAP35B3Oz997YtM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725828902; c=relaxed/simple;
+	bh=zN3q3bvVxr+IRbcTF7Mt9+0mGWCJvt/L/HlTFdTrw2c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jcuyivnsvr2Zsl7KcB9Bc6Mkm8yurwhu/jwQL3hILNdPxXRS+CsUQlpS7Pqimayp1CRCKKQLGETq0NHzR1fcdVVsoL6MJInZiLNJ6Lne/2hR6CvwIV+rqzooOHrnDquj5fu46pepp/OeVotVCO4Aoe64j1+uFRTaNjS394sT+b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1snOvn-0002CA-Jf; Sun, 08 Sep 2024 22:54:47 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1snOvi-006Uad-Jx; Sun, 08 Sep 2024 22:54:42 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1snOvi-00DtLg-1c;
+	Sun, 08 Sep 2024 22:54:42 +0200
+Date: Sun, 8 Sep 2024 22:54:42 +0200
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Documentation <linux-doc@vger.kernel.org>,
+	Linux USB <linux-usb@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	v9fs@lists.linux.dev, Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jan Luebbe <jlu@pengutronix.de>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] tools: usb: p9_fwd: wrap USBG shell command examples in
+ literal code blocks
+Message-ID: <Zt4PEp8z1rfhFZCm@pengutronix.de>
+References: <20240908113423.158352-1-bagasdotme@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2GlOQuJU+wYS6vhG"
+Content-Disposition: inline
+In-Reply-To: <20240908113423.158352-1-bagasdotme@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
- Hi Felipe,
- =20
- =20
- The problem was encountered using the wsjtx packet radio program in
-conjunction with a Yaesu FT-710 ham radio transceiver. The FT-710 has a
-dual uart and sound device behind an internal hub. The uarts are used
-to control the radio frequency and switch between transmit and receive.
-The sound device is used for transmit and receive audio.=C2=A0
- The uarts and sound device receive (input) function as expected, but
-the transmit (output) fails.
 
- =20
- =20
- I distilled the failure to the following scenario:
- =20
- 1. Using aplay to send a short file to the sound output succeeds.
-2. Opening one of the uarts via "cat /dev/ttyUSB0" and then sending the
-sound file fails.
+--2GlOQuJU+wYS6vhG
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- =20
- =20
- Wireshark reports the iso transmit failure as Protocol Error (-71).
-Ftrace of xhci reports it as a Transaction Error (0x04) returned by the
-dwc3 controller.
- =20
-=20
- I have tested this on a RPi4b and RPi5 as well as a several Rockchip
-boards. All fail.
- =20
- =20
- The dwc2 controllers on the USB-C connector on both the RPi4b and RPi5
-do not exhibit this problem. Nor does the dwc2 controller on the RPi3b.
-The Intel Comet Lake USB3.0 controller on my desktop machine succeeds
-as well.
-=20
+Thanks for taking care of this.
 
- GSPNSID values for the various boards:
-RPi5 is 5533330b  BCM2712 / USB:RP1
-RPi4b is 4f54280a BCM2711 / USB:VL805
-OPi5Pro is 5533300a RK3588S USB:soc
-OPi3 is 5533300a RK3566 USB:soc
+On Sun, Sep 08, 2024 at 06:34:23PM +0700, Bagas Sanjaya wrote:
+>Stephen Rothwell reported htmldocs warning when merging usb tree:
+>
+>Documentation/filesystems/9p.rst:99: ERROR: Unexpected indentation.
+>
+>That's because Sphinx tries rendering p9_fwd.py output as a grid table
+>instead.
+>
+>Wrap shell commands in "USBG Example" section in literal code blocks
+>to fix above warning and to be in line with rest of commands in the doc.
+>
+>Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>Closes: https://lore.kernel.org/linux-next/20240905184059.0f30ff9a@canb.au=
+ug.org.au/
+>Fixes: 673f0c3ffc75 ("tools: usb: p9_fwd: add usb gadget packet forwarder =
+script")
+>Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
- If I insert a USB1.1 hub prior to the radio, the iso output succeeds.=20
+Acked-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-=20
- Below is the usb tree. The board is an RPi5 running kernel 6.11.0-rc6
-from https://github.com/raspberrypi/linux.git
-=20
-  /:  Bus 03.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/2p, 480M
-     ID 1d6b:0002 Linux Foundation 2.0 root hub
-     |__ Port 2: Dev 27, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-         ID 04b4:6560 Cypress Semiconductor Corp. CY7C65640 USB-2.0 "TetraH=
-ub"
-         |__ Port 1: Dev 28, If 0, Class=3DVendor Specific Class, Driver=3D=
-cp210x, 12M
-             ID 10c4:ea70 Silicon Labs CP2105 Dual UART Bridge
-         |__ Port 1: Dev 28, If 1, Class=3DVendor Specific Class, Driver=3D=
-cp210x, 12M
-             ID 10c4:ea70 Silicon Labs CP2105 Dual UART Bridge
-         |__ Port 2: Dev 29, If 0, Class=3DAudio, Driver=3Dsnd-usb-audio, 1=
-2M
-             ID 0d8c:0013 C-Media Electronics, Inc.=20
-         |__ Port 2: Dev 29, If 3, Class=3DHuman Interface Device, Driver=
-=3Dusbhid, 12M
-             ID 0d8c:0013 C-Media Electronics, Inc.=20
-         |__ Port 2: Dev 29, If 1, Class=3DAudio, Driver=3Dsnd-usb-audio, 1=
-2M
-             ID 0d8c:0013 C-Media Electronics, Inc.=20
-         |__ Port 2: Dev 29, If 2, Class=3DAudio, Driver=3Dsnd-usb-audio, 1=
-2M
-             ID 0d8c:0013 C-Media Electronics, Inc.
+>---
+> Documentation/filesystems/9p.rst | 6 +++---
+> 1 file changed, 3 insertions(+), 3 deletions(-)
+>
+>diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems/=
+9p.rst
+>index 2cc85f3e8659ff..514ed13a0122b0 100644
+>--- a/Documentation/filesystems/9p.rst
+>+++ b/Documentation/filesystems/9p.rst
+>@@ -86,11 +86,11 @@ When using the usbg transport, for now there is no nat=
+ive usb host
+> service capable to handle the requests from the gadget driver. For
+> this we have to use the extra python tool p9_fwd.py from tools/usb.
+>
+>-Just start the 9pfs capable network server like diod/nfs-ganesha e.g.:
+>+Just start the 9pfs capable network server like diod/nfs-ganesha e.g.::
+>
+>         $ diod -f -n -d 0 -S -l 0.0.0.0:9999 -e $PWD
+>
+>-Optionaly scan your bus if there are more then one usbg gadgets to find t=
+heir path:
+>+Optionaly scan your bus if there are more then one usbg gadgets to find t=
+heir path::
+>
+>         $ python $kernel_dir/tools/usb/p9_fwd.py list
+>
+>@@ -99,7 +99,7 @@ Optionaly scan your bus if there are more then one usbg =
+gadgets to find their pa
+>           2 |   67 | unknown          | unknown          | 1d6b:0109 | 2-=
+1.1.2
+>           2 |   68 | unknown          | unknown          | 1d6b:0109 | 2-=
+1.1.3
+>
+>-Then start the python transport:
+>+Then start the python transport::
+>
+>         $ python $kernel_dir/tools/usb/p9_fwd.py --path 2-1.1.2 connect -=
+p 9999
+>
+>
+>base-commit: 9c0c11bb87b09a8b7cdc21ca1090e7b36abe9d09
+>--=20
+>An old man doll... just what I always wanted! - Clara
+>
+>
 
-  I have the wireshark pcap and the ftrace, but I'm not sure how to get
-the reg dump at the instant of the error. I can post these files if you
-think they would be useful. However, this appears to be a problem with
-the controller, not the driver.
-=20
- Lastly, I have one of the Taradov usb sniffers. When I hook it up and
-attempt to see what's on the wire, the behavior changes and all I get
-is continuous log of:
- Sep 06 09:21:58 wsjtx kernel: usb 3-2: clear tt 1 (9021) error -71
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
- I have the sniffer output from the above and can post it if you think it's=
- useful.=C2=A0 =20
-The sniffer performs as expected on my desktop machine.
-=20
+--2GlOQuJU+wYS6vhG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Do you have a suggestion of how to proceed?
-=20
+-----BEGIN PGP SIGNATURE-----
 
-Steve WA9OLA
-=20
-=20
-=20
-=20
-=20
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmbeDw8ACgkQC+njFXoe
+LGTkwBAArdhWO1zhxAGW/ByLL4IiT1YV1Lbkg+uvEfThLHZeVp2jwg4dfko/K3yn
+I1nEaIwg3cbbiU0IY93yZjXGwCULzhJxP8PeQ8o97DleU918Onphp7Wt4Vt74vag
+0GG6i9mzx7J6rd9P9aW+Wcnixm7hO8lCkDNda8jrlXuNWLD/a+fz+3RdOdgj1EaC
+AW1HqYRKBA/wA4fCHn8U7bjCP1cbBU67mJgopm2TxA+L82D0+l9r3l8ncb4fgmNr
+mIcNwIuxmiHvKEZck/n9FKc+TW18AKG9YND+iPcLXEGNG1GCUmflR2IZgKtLXVjf
+gp32r8o7c8OVy34DcJh57y3zwlL+4eYR59Bn4MGS8vaF9z907phi4OttfrpgBDU4
+fKBX4Mfnxldflj0S3eeb6pXs01NLH13oI7HdIWMinTjLLmFacNYDelvlc6PFKKP6
+uxLfHZ8PeVYHxVmjSurBqwXqCwzN7dMzMdSPTf5ZG+OCr5/AHMoFgpRVSgYnVKQF
+UEvpg2pVgxsw0oZrB6A5xFjd1j3v7qdBeoA4hDEbYeLaBng0i7oF/8mPWXNOhRyy
+vxrSEvwWvb4AmJfImiBiSsIUrUPJnL39Kz79knYOwCDwx2znfpjIrcii9gvWEXOZ
+kGqPqnH9QRiZq8GPMA2GE2q3/3I6dEM1sHEawvA26lDu2Hin5R4=
+=ZSZ5
+-----END PGP SIGNATURE-----
 
-=20
-=20
-=20
-=20
-
-=20
- =20
-=20
+--2GlOQuJU+wYS6vhG--
 
