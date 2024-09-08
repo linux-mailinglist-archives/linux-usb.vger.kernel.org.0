@@ -1,97 +1,79 @@
-Return-Path: <linux-usb+bounces-14838-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14839-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21D4C9707A0
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 14:53:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E86179708E1
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 19:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C48B91F21768
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 12:53:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 172FC1C20B6C
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 17:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6659315C149;
-	Sun,  8 Sep 2024 12:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65470175D47;
+	Sun,  8 Sep 2024 17:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXzZMgUq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFOAvR88"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35031E522
-	for <linux-usb@vger.kernel.org>; Sun,  8 Sep 2024 12:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEC0535D8;
+	Sun,  8 Sep 2024 17:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725799993; cv=none; b=tRBTqohuqizlHXVDKFE+8/KNuyY7ZWy9hhnoLR8qWe11aDiFnR1Mw5iIUJTShsauATxciKcrlKpm7EF8oHV3eDUzUFIAsQqLNq94Edr8OybYupGcifPUslwe8URx3kMED40/ZH0AHtPXm0oALP/0/zNQW36PmwWRyKuaEh7RUfA=
+	t=1725815843; cv=none; b=EweB0OJFXb3SACqS3u5gTSWLwupqb5z5iYTSf3mTWytMGjGwSQ91GszKzHm8dJTYC4jvlKUfYnR8BJGlhsMMdzgXh8UjhluZGgqQTVCKigFrRLhl4f2lif1xzCArxLAcLcSq73Yv3IxirHcUQxtJrXKXumjfmr4DdKNFH4YlAIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725799993; c=relaxed/simple;
-	bh=E179StVCpltXZrEQ+ZTOqev4HeGZb4FhY75rn9eBOFc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GC3qkhfgll2Dbk9f9BH4Cc4wFb6gdZ2WLTKcLc4TK9oBJPM5lMwlLoF2TCH73d+nci7HVggThrBgGyNNZg8gCqyXCjDhWNkt3srUJtpuOUMJdkKYzIw2/z2lLYPRMFqvsA0IujjCXqQj9Fd4ouKUo+kzUzN79SYzrva3jkf9T5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXzZMgUq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4EF43C4CEC9
-	for <linux-usb@vger.kernel.org>; Sun,  8 Sep 2024 12:53:12 +0000 (UTC)
+	s=arc-20240116; t=1725815843; c=relaxed/simple;
+	bh=uPpvTTxcBc/nZRx5WCbV4GYWTcujKt39sdy1KaJcQRU=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=PhvtZQi5Vs3B1s+bJV7Q3OzyIPV2/kHp6VbISZ3TX81l9rN4ehf+yhZ/xGDwwq73WTq2U0vrSeTlthlUmo2I1brBVAqlA7PpplwAz4dZPIBTR8npWxzPiB6DIgo3r2ZxfAPr0GHdxfTN2T5A0oBhK/gBDkEG7uQHq/897fYLDqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFOAvR88; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2DB8C4CEC5;
+	Sun,  8 Sep 2024 17:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725799992;
-	bh=E179StVCpltXZrEQ+ZTOqev4HeGZb4FhY75rn9eBOFc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=qXzZMgUqhVwjWmHJDc4yuLBM6o5/DacN+NTbwyNqpwORu8b9qNc+YUEeAFtGD6w8R
-	 j5iAS8I2RJVgUroi3CCyTBc5dIJGdcl2u7IeCnZPd9UfW/rHCmCvrYMxMZUPQvWTVo
-	 PC8o7JbTO3ghyLVw3tnuBzdF/6KXVVIqGnME/3OH6MEcj7anlgQ7LHnRCxWQEfsCsn
-	 Uwxt4tIBE2jCXUS41ij9nksRZiQZ8f0WyFvbL+m2j3dcyeQsSECOnzUvhW1/hB4OAY
-	 9BgjoqxuaX7LRsXQ3TSFo1FkOM53Jrwcy0OswH8lGfH1TL7pQTiKlwziR5CDIy6o1A
-	 LC4j7f8tNjihQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 410ABC53BC2; Sun,  8 Sep 2024 12:53:12 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218525] Thunderbolt eGPU bad performance
-Date: Sun, 08 Sep 2024 12:53:11 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: kaukov.peter@pm.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218525-208809-X89sFQd4ul@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218525-208809@https.bugzilla.kernel.org/>
-References: <bug-218525-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1725815842;
+	bh=uPpvTTxcBc/nZRx5WCbV4GYWTcujKt39sdy1KaJcQRU=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=cFOAvR884g8x+IOOv5SeyySQaHtXLFtubwvM9cU4IbZ3Z4GTj19mvDU3ZgVyxPdTN
+	 UUqz9RFc3dzg7PWhHESF2UNBlZ+hjszBK7tj5WQMPrLJxRv0ev+0Zg3wPadbgvhwre
+	 QiQ9v+jN/rvn7xKqXrgJuU9txbKPCgMLn+vT5DkW/VGb2KbFBQjxYKqLilYJ2CJc8F
+	 PoxxM35DIVOXJP5FpmG45uIjgHPg1kwk0p+qk07H7irqEeThKLpp0X4sOWvv/0vsk2
+	 5KUw468SMMp5FSMeYsIoh/em+4QRoqoBdISroZG3iNgQKjam1ZZuuNk6XpC4AbIHJy
+	 hq6ZVBRJDPiVg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB15D3805D82;
+	Sun,  8 Sep 2024 17:17:24 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 6.11-rc7
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <Zt1W7_sJsYEfHDLu@kroah.com>
+References: <Zt1W7_sJsYEfHDLu@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Zt1W7_sJsYEfHDLu@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc7
+X-PR-Tracked-Commit-Id: 87eb3cb4ec619299cd5572e1d5eb68aef4074ac2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 51c4d5f10da4434d63790a679f54e68abc7170e7
+Message-Id: <172581584339.2926424.15484863288024218338.pr-tracker-bot@kernel.org>
+Date: Sun, 08 Sep 2024 17:17:23 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218525
+The pull request you sent on Sun, 8 Sep 2024 09:49:03 +0200:
 
---- Comment #17 from Kaukov (kaukov.peter@pm.me) ---
-I just upgraded to a Framework 13 with AMD Ryzen 7 7840U. I'm using the same
-Gentoo installation I've used for the past few years (rebuilt for the new C=
-PU).
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.11-rc7
 
-Baldur's Gate 3 runs flawlessly with a few less FPS than on Windows, but ab=
-ove
-60 and sometimes above 100.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/51c4d5f10da4434d63790a679f54e68abc7170e7
 
-This leads me to believe the issue comes from Intel and only Intel.
+Thank you!
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
