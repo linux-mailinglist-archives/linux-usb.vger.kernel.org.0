@@ -1,167 +1,117 @@
-Return-Path: <linux-usb+bounces-14850-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14851-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB23E9713E8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:36:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C46FF971634
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 13:05:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8801B24465
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 09:36:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDE361C22DDD
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:05:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ACC91B2EF8;
-	Mon,  9 Sep 2024 09:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020AC1B5821;
+	Mon,  9 Sep 2024 11:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fYD5sFBw"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZDujQyy0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC601B3724;
-	Mon,  9 Sep 2024 09:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E68A1B5309
+	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 11:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725874427; cv=none; b=rWdm4N8emGC/Yqf/yBKJEWUp4Zm5W81+OFQFllAihG6SM3tlSjyapzDeKr6aWCwQ7PsO0SfxdxVdJEIWbZ6fR60lUKt1jxGgatHjE8w136sEmSbrYDyNYTPhTEkGRdrWh4Y4YSJhVYDVHojvsPLFZhS9xacy+kUGDLqRFEyT3uQ=
+	t=1725879889; cv=none; b=Wzv7rqMZYsPjLINBVdqT2fiLQKfyQIhQVO9vB3utquMxrsgc4SNS9kOA5kks5nkgEBi1W4pTS64Xoh08XzvAyOJh5lr3wx/JSR9ZiXZGaR8+/oHJsDawym+mirUJKVhjUyyKXVgsUTc7QH5ZNgFEUP5jU6krhVUljpKpAAU4+UU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725874427; c=relaxed/simple;
-	bh=DIKNCNiGhIjn9n1V5kMQXTMDbSl+SXirRNtiyKv/cFY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UBiNiVoAonKoej3cbAHmEHhCfpsBXMofTX1IELn4pMKIQLWqeVz/+jS7wpUAulQYZnXvaPPgMOPa/Scur7xmv1XJzcbe5JXR4RfBzmf5hyOzm4xPEuFO6ENInkN/cdgH+QEWfkeSfTU0ToOoQjNYhTICYg3LSORa1q57iGBjGxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fYD5sFBw; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725874426; x=1757410426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DIKNCNiGhIjn9n1V5kMQXTMDbSl+SXirRNtiyKv/cFY=;
-  b=fYD5sFBwzvOI2EgSosdM4UoIXj53S80LDTSOy5fJYosCmuCZeZQvpLZa
-   NEafaTBlvJJHg5XUzjtByDD+P3yVxaTyqrXEs+Y9XLsVOVqEUCj6zahWy
-   +rqd3QPH91mYXbHVX2I44a7pI8b/0LAsBmP1BNtxsWieP6W+VfKv6iMi6
-   ouIpoBwDFXvogceBJEwBCxKD+njNmptk/s3No8JHdYh5jbMhx9UEaIJMa
-   RNX91p96qL6vokewA9BnYDsd/PhguUf0qw1JeMWjGNcUBtJZYR7NCWbnS
-   uKxl/sRTY7AqKptFL2HVh8/vWta7tbSZAT6MypN/pILMHoj9kcZgg68vT
-   w==;
-X-CSE-ConnectionGUID: 90C/ZtjCTaebxikLJpq5bQ==
-X-CSE-MsgGUID: nHA78hL3QYmve3SmWChS9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24673237"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="24673237"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:33:41 -0700
-X-CSE-ConnectionGUID: yYzMhBXASGSePtWNnhhfDw==
-X-CSE-MsgGUID: k9CyDuEmTdGy4ofPkKB7FQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="89892116"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa002.fm.intel.com with SMTP; 09 Sep 2024 02:33:16 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 09 Sep 2024 12:33:14 +0300
-Date: Mon, 9 Sep 2024 12:33:14 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v4] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Message-ID: <Zt7A2lcW9v3ItKGm@kuha.fi.intel.com>
-References: <20240906065853.637205-1-lk@c--e.de>
+	s=arc-20240116; t=1725879889; c=relaxed/simple;
+	bh=szTqbfCGzry0H7Py1nmRo5tO1eeQ9ULTLcYO1zLFbLE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tD2+vAsCIN20c2/pN4CHFFs2lGAp5qKfF8ANyYOp21BwfitsHjFnv+YCknFwiH3KcF1n7T/aw+dZsUIaafjtmOV3QOQ5xcX/UVW0W7sgiCBMK1AnxweoDdbJ4EUNAAZovCvX9fZQw7nxCWCNZ0Bah7OW1pkS/iDBTT8f38L0Yic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZDujQyy0; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-53567b4c3f4so4215727e87.2
+        for <linux-usb@vger.kernel.org>; Mon, 09 Sep 2024 04:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1725879885; x=1726484685; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R+ACCN4PdLgMnNkEduMHgpyyWq6nTrphJ5WztKFlcaY=;
+        b=ZDujQyy0jqGKgZllLssWleh41ElPBH7BRE8fQx+IpxDYZxhSsm+9CrzJZswNMwPu0Z
+         hTWZTKMGbGwR2gYsNbYFyShzh3Tvtw4VyLxEVswGrmNDTMgT1TFcmDBkiDb17gNd28PL
+         cKadUQXYy1wNTcjxvdR/jDVXgBNo3aFRgoChIZ+NUFTi9hS13z/xTkoNM0jsAqI0CrsC
+         p1kgUCNTCIFQnXR56zx1+dDyYPAdNQBdrx2mNI8V3JXY6+VLwchfkkzG1KcHESgCaGLj
+         N+H1/Oh7hPt6L2D5XLF3YiLHrHjmDcXqjKg0szGauCRBth+twOujYlE8j4kvfApatJoV
+         6j+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725879885; x=1726484685;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+ACCN4PdLgMnNkEduMHgpyyWq6nTrphJ5WztKFlcaY=;
+        b=M7y8hEvj1F5HtjlBaK6ZlLvo+gXuBHcnRI/ujiZBBokLf62vvotNMKHt0fETrlERG+
+         YX1WYbcjJ7ccGxUHHactFyiaIiasuqgfx5hvHT//zIBi2aoja6oARZ15QLyoqJFhINth
+         3zpmsVNgSSH9ZgR56S739Sk8uxlCNU7G6dJCx9jqgnXMjZRuAjEejlRFoqzJc3HeOlTN
+         BSQO9+f1Ad4xX2t/G8mG8Orf6zmuRQx/0T9uQwTDU+ofPqxOYnA9F0CuDqvsazCCb8TJ
+         FnYsNyN2G5TGtda+PmnRTxjYxku9ZpjZt0eHSvBY3le137NKwo/tvQdN42lu06kNirVz
+         CORw==
+X-Forwarded-Encrypted: i=1; AJvYcCVKUxPsb0rZ0IAlTDMsAg+UxmbAyQmbhVBcGgEk9TEbwDP/MotjW9WiV/hPnd3oPgW70u430sI9pjY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBZuZqM+YZyESo2vWva1W4ctNYzuzabX6cD6Ow1X1kSO9Squwf
+	CF9qEhqpmRNF5hGJ0Y/l3iQeanJdV9ICT/kRYhuyWbCSdwvc3UowWQrwfMF6OmQ=
+X-Google-Smtp-Source: AGHT+IFKSYbNan1yW0bAt7KrzaEur4+mXSdgwQLseUO53131XSZWa6HbJ1TUV4/t81eBc7MSC7ElwA==
+X-Received: by 2002:a05:6512:3e0f:b0:52c:dc6f:75a3 with SMTP id 2adb3069b0e04-536587ef21fmr7504017e87.40.1725879884943;
+        Mon, 09 Sep 2024 04:04:44 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13b3:9201:e68f:3bce:663e:dfa9? ([2001:a61:13b3:9201:e68f:3bce:663e:dfa9])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25d64880sm321392666b.219.2024.09.09.04.04.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 04:04:44 -0700 (PDT)
+Message-ID: <d15bc43b-f130-4fd1-a758-b19b2dc99d46@suse.com>
+Date: Mon, 9 Sep 2024 13:04:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240906065853.637205-1-lk@c--e.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] usbnet: ipheth: prevent OoB reads of NDP16
+To: Foster Snowhill <forst@pen.gy>, Oliver Neukum <oneukum@suse.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240907230108.978355-1-forst@pen.gy>
+ <mJ-iCj-W_ES_nck94l7PueyUQpXxmgDdxq78OHP889JitvF0zcid_IBg1HhgEDh-YKlYjtmXt-xwqrZRDACrJA==@protonmail.internalid>
+ <8510a98e-f950-4349-99bc-9d36febe94d3@suse.com>
+ <4be673c9-b06a-4c2d-8b27-a1e91150df94@pen.gy>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <4be673c9-b06a-4c2d-8b27-a1e91150df94@pen.gy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 06, 2024 at 08:58:53AM +0200, Christian A. Ehrhardt wrote:
-> If the busy indicator is set, all other fields in CCI should be
-> clear according to the spec. However, some UCSI implementations do
-> not follow this rule and report bogus data in CCI along with the
-> busy indicator. Ignore the contents of CCI if the busy indicator is
-> set.
+On 09.09.24 11:04, Foster Snowhill wrote:
+  
+> Thus the `ipheth` driver does not aim to be a CDC NCM-compliant
+> implementation and, in fact, can't be one because of the points above.
 > 
-> If a command timeout is hit it is possible that the EVENT_PENDING
-> bit is cleared while connector work is still scheduled which can
-> cause the EVENT_PENDING bit to go out of sync with scheduled connector
-> work. Check and set the EVENT_PENDING bit on entry to
-> ucsi_handle_connector_change() to fix this.
+> For a complete spec-compliant CDC NCM implementation, there is already
+> the `cdc_ncm` driver. This driver is used for reverse tethering (sharing
+> computer's internet connection with an attached phone) on iPhones. This
+> patch does not in any way change `cdc_ncm`.
 > 
-> Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
-> This ensures that the command is cancelled even if ->sync_control
-> returns an error (most likely -ETIMEDOUT).
-> 
-> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> Bisected-by: Christian Heusel <christian@heusel.eu>
-> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> With all of the above, does your NACK still stand? Thanks!
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Hi,
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 4039851551c1..d6d61606bbcf 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -38,6 +38,10 @@
->  
->  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
->  {
-> +	/* Ignore bogus data in CCI if busy indicator is set. */
-> +	if (cci & UCSI_CCI_BUSY)
-> +		return;
-> +
->  	if (UCSI_CCI_CONNECTOR(cci))
->  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
->  
-> @@ -107,15 +111,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
->  		size = clamp(size, 0, 16);
->  
->  	ret = ucsi->ops->sync_control(ucsi, command);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = ucsi->ops->read_cci(ucsi, cci);
-> -	if (ret)
-> -		return ret;
-> +	if (ucsi->ops->read_cci(ucsi, cci))
-> +		return -EIO;
->  
->  	if (*cci & UCSI_CCI_BUSY)
->  		return -EBUSY;
-> +	if (ret)
-> +		return ret;
->  
->  	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
->  		return -EIO;
-> @@ -1249,6 +1251,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  
->  	mutex_lock(&con->lock);
->  
-> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
-> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
-> +			     __func__);
-> +
->  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
->  
->  	ret = ucsi_send_command_common(ucsi, command, &con->status,
-> -- 
-> 2.43.0
+I am sorry for the confusion. May I suggest a reformulation of the
+commit message. It reads like this patch is intended for generic CDC-NCM.
 
--- 
-heikki
+I withdraw my objections. They were based on a confusion.
+
+	Regards
+		Oliver
+
 
