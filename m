@@ -1,162 +1,156 @@
-Return-Path: <linux-usb+bounces-14860-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14861-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C123971B3B
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 15:39:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21195971B50
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 15:43:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77156B23E1D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 13:39:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B01BCB22974
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 13:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5213A1B9B37;
-	Mon,  9 Sep 2024 13:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8A61B9B44;
+	Mon,  9 Sep 2024 13:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="eNNEiTLT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lgzewRXa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mr85p00im-ztdg06011101.me.com (mr85p00im-ztdg06011101.me.com [17.58.23.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8491B6525
-	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 13:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6457117837E;
+	Mon,  9 Sep 2024 13:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725889153; cv=none; b=HHshzw5n0nPUi1KNehRkTLlZbMYM47WOu0tN9eISW5cNkt29Dcg+pA9ysZMT4xnjfXLhMg0hzadK97F44AHPcb4pMch7WcoIqId07DmosMSkyCFce/ACJ8x4Ow3IFZ6dTFbkGbZAu9qERUZKnaMKUcW3jVf2cLdfoCBjNFGpQHM=
+	t=1725889371; cv=none; b=qCTOwr+8GpWICAXYRORcgrqpJrvR3AMowfPRWT3/xXaKi8ja00G1B7OahgKaT0yix916hqNtIS+bzurMPAWAUlEsDYarCK60K9yn/otFwoN+2c6+g1l6DmVAF+AuCb7EtP/yMCXxAheiLzU0Q01C9BIdnl3VW5ySZC7wKfrqU1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725889153; c=relaxed/simple;
-	bh=iGfiSH4xvhUsGH2AQrPyFir1nwWANrvDJ8bXRs8ajHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gkL5v5pL6ssZPf1WZYx2LLn9N9UXjVn3P2zTdH77r9LbQN2aCyBWCnOjV3MYyrNUkoEi/omQIXECs59jYt2ZYdOgDaF4BEyIXQ+i6DBTGDuuAbcf/W5WXnKNlzdxlcxyMnFHYzuvMnfqXNr0XT399lyxWUU9phC7RweclXGC7ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=eNNEiTLT; arc=none smtp.client-ip=17.58.23.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-	t=1725889151; bh=9eJjzXLhz6RaoqwWGrm1y8m3QlKHhDrD/xVa1TCe0u8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	b=eNNEiTLTiXzKfpZVk2uQn3xcV98a7kNsl0iVN0A5jR1keUdzzvu9lh7WctIzLANy8
-	 296hmf3zfhvBETHQsTsx+rl8bd8Kwnxk/gG1hR7/jSdalcSvEVgbCCPjnL1SkREXNd
-	 5QElWTQNBzVFmPrre+mSCGWdpclEfXvJlnbToU2rx5JCIDkC611qaEQ7LBDYjjRBct
-	 zwS11xMWbcX8er/yZfQd9Fkdz9lFmEjCg5AoAMUbC1PNZiCT2S8phnM2Yu4j6UgQSM
-	 MX75ifn8vdn3Yitmth0kRCBz9AI1hXQIMN8w7irk0Nhm7pUoYakaP8Aw1t4gWGCf2n
-	 WfCmZyXl7y/QA==
-Received: from [192.168.40.3] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-ztdg06011101.me.com (Postfix) with ESMTPSA id 9FA43DA0220;
-	Mon,  9 Sep 2024 13:39:07 +0000 (UTC)
-Message-ID: <3d5a69be-2527-41cd-b3f2-28ae86084ee7@pen.gy>
-Date: Mon, 9 Sep 2024 15:39:02 +0200
+	s=arc-20240116; t=1725889371; c=relaxed/simple;
+	bh=1hEFgXjyHg+9bqsPRbgYga/Fi1zEn8b81S/wo0XuZJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sLx3F0D0yH0Rf2QfIir5iG02EcnAdD3zj/+QvVsx62+lsFWR1Sx1Bd3T1NuR6OmN9EGJADAatDsk7a6afs/pyOzBNFuiwRBXrBNdj7hEvgr5T5wY/50B5E2YtizvpAZ8WSx+fc8Hx0bW/RVcJzvlbuVJR1EotXr7IdccqijfuSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lgzewRXa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A8EC4CEC5;
+	Mon,  9 Sep 2024 13:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725889370;
+	bh=1hEFgXjyHg+9bqsPRbgYga/Fi1zEn8b81S/wo0XuZJg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lgzewRXaY3nnJE5z+/F6Ju6idhr5S6DN59OK4hYUXZNgIFVvd7PMvWsIrutHi1tzy
+	 YoFgbEFnu9iRquEkUKgfoW+4cSgr2Q8P8LHIJLdkH8+xX7X20K6lx1B0PcuIwU03VD
+	 O4zlqlpdaC9uycXfKNGglQ5U0rzhvc/q3KLUuYFP4rKXXPuT/BzFTQz3neP4tc+fsd
+	 +OWHbJeVV2kWI3xsM8uNo9uZdjfv4KQRfZePQYdwrQ060426iRjeAKe8IDY23gSvxR
+	 G72/12qaVvLrLtk3WDIo1m7OeKn8ZSb64zgHJHXJCXusS4sWVODSTXxgMO4E/hLIxp
+	 O1zuuzTPBItwQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1snefb-000000003P5-1Cat;
+	Mon, 09 Sep 2024 15:43:08 +0200
+Date: Mon, 9 Sep 2024 15:43:07 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: pl2303: account for deficits of clones
+Message-ID: <Zt77a-LpTSgyVx57@hovoldconsulting.com>
+References: <a07922bd-4550-41d8-a7cd-8943baf6f8fb@siemens.com>
+ <Zt7q-5kk5SPgE7P4@hovoldconsulting.com>
+ <5ed9df75-c45b-44fd-8eb1-3cc9c6b0001e@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next] usbnet: ipheth: prevent OoB reads of NDP16
-Content-Language: en-GB
-To: Oliver Neukum <oneukum@suse.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240907230108.978355-1-forst@pen.gy>
- <mJ-iCj-W_ES_nck94l7PueyUQpXxmgDdxq78OHP889JitvF0zcid_IBg1HhgEDh-YKlYjtmXt-xwqrZRDACrJA==@protonmail.internalid>
- <8510a98e-f950-4349-99bc-9d36febe94d3@suse.com>
- <4be673c9-b06a-4c2d-8b27-a1e91150df94@pen.gy>
- <6BnH4O2XKc10y5baGCbmsK5bvKjVwAwL1qcdUy2GYc06i5huflew3Mx9mf34yv4GUipEkyvF5kCYDT8WMaZ3xg==@protonmail.internalid>
- <d15bc43b-f130-4fd1-a758-b19b2dc99d46@suse.com>
-From: Foster Snowhill <forst@pen.gy>
-Autocrypt: addr=forst@pen.gy; keydata=
- xjMEYB86GRYJKwYBBAHaRw8BAQdAx9dMHkOUP+X9nop8IPJ1RNiEzf20Tw4HQCV4bFSITB7N
- G2ZvcnN0QHBlbi5neSA8Zm9yc3RAcGVuLmd5PsKPBBAWCgAgBQJgHzoZBgsJBwgDAgQVCAoC
- BBYCAQACGQECGwMCHgEAIQkQfZTG0T8MQtgWIQTYzKaDAhzR7WvpGD59lMbRPwxC2EQWAP9M
- XyO82yS1VO/DWKLlwOH4I87JE1wyUoNuYSLdATuWvwD8DRbeVIaCiSPZtnwDKmqMLC5sAddw
- 1kDc4FtMJ5R88w7OOARgHzoZEgorBgEEAZdVAQUBAQdARX7DpC/YwQVQLTUGBaN0QuMwx9/W
- 0WFYWmLGrrm6CioDAQgHwngEGBYIAAkFAmAfOhkCGwwAIQkQfZTG0T8MQtgWIQTYzKaDAhzR
- 7WvpGD59lMbRPwxC2BqxAQDWMSnhYyJTji9Twic7n+vnady9mQIy3hdB8Dy1yDj0MgEA0DZf
- OsjaMQ1hmGPmss4e3lOGsmfmJ49io6ornUzJTQ0=
-In-Reply-To: <d15bc43b-f130-4fd1-a758-b19b2dc99d46@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: NHYTpL-O_r4V_u_FisTlk8ukUbAVehsM
-X-Proofpoint-ORIG-GUID: NHYTpL-O_r4V_u_FisTlk8ukUbAVehsM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-09_06,2024-09-09_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
- phishscore=0 clxscore=1030 mlxlogscore=596 malwarescore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2409090110
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ed9df75-c45b-44fd-8eb1-3cc9c6b0001e@siemens.com>
 
-Hi,
+On Mon, Sep 09, 2024 at 02:52:25PM +0200, Jan Kiszka wrote:
+> On 09.09.24 14:32, Johan Hovold wrote:
+> > On Sun, Sep 01, 2024 at 11:11:29PM +0200, Jan Kiszka wrote:
+> >> From: Jan Kiszka <jan.kiszka@siemens.com>
+> >>
+> >> There are apparently incomplete clones of the HXD type chip in use.
+> >> Those return -EPIPE on GET_LINE_REQUEST and BREAK_REQUEST. Avoid
+> >> flooding the kernel log with those errors. Rather use the
+> >> line_settings cache for GET_LINE_REQUEST and signal missing support by
+> >> returning -ENOTTY from pl2303_set_break.
+> > 
+> > This looks mostly fine to me, but could you please try to make these
+> > changes only apply to the clones or, since those probably cannot be
+> > detected reliably, HXD?
+> > 
+> 
+> OK. Is there a way to switch between dev_err and dev_dbg without
+> duplicating the line?
 
-I think you already got the idea, but just in case, a more concise
-explanation for Apple's tethering implementation would be "they just
-happened to use NCM encapsulation for RX, everything else about it
-has nothing to do with CDC NCM".
+Perhaps, did you check? But I think we should go with adding a flag and
+suppressing the known broken calls completely post probe.
+ 
+> > What is the 'lsusb -v' for these devices?
+> 
+> Bus 001 Device 019: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial
+> Port / Mobile Action MA-8910P
+> Couldn't open device, some information will be missing
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               1.10
+>   bDeviceClass            0
+>   bDeviceSubClass         0
+>   bDeviceProtocol         0
+>   bMaxPacketSize0        64
+>   idVendor           0x067b Prolific Technology, Inc.
+>   idProduct          0x2303 PL2303 Serial Port / Mobile Action MA-8910P
+>   bcdDevice            4.00
 
-On 2024-09-09 13:04, Oliver Neukum wrote:
-> May I suggest a reformulation of the
-> commit message. It reads like this patch is intended for generic CDC-NCM.
+So this would be detected as an HXD by the current driver. Not sure what
+else could be used except possibly the product string and the fact that
+these requests fail to determine if it's a legit HXD.
 
-No problem, does the commit message below read better? Suggestions are
-absolutely welcome.
+> >> @@ -731,12 +731,13 @@ static int pl2303_get_line_request(struct usb_serial_port *port,
+> >>  				GET_LINE_REQUEST, GET_LINE_REQUEST_TYPE,
+> >>  				0, 0, buf, 7, 100);
+> >>  	if (ret != 7) {
+> >> -		dev_err(&port->dev, "%s - failed: %d\n", __func__, ret);
+> >> +		struct pl2303_private *priv = usb_get_serial_port_data(port);
+> >>  
+> >> -		if (ret >= 0)
+> >> -			ret = -EIO;
+> >> +		dev_dbg(&port->dev, "%s - failed, falling back on cache: %d\n",
+> >> +			__func__, ret);
+> >> +		memcpy(buf, priv->line_settings, 7);
+> >>  
+> >> -		return ret;
+> >> +		return 0;
+> >>  	}
+> > 
+> > Looking at the driver, it seems like we could move the only call to this
+> > function to probe, and perhaps then an error message for cloned devices
+> 
+> Nope, this is called on every pl2303_set_termios, thus is even under
+> user control.
 
-For one, I added a paragraph closer to the beginning that's explicit
-about the intentions of this driver: it doesn't aim to be and can't be
-a generic spec-compliant implementation. I can't avoid naming "CDC NCM"
-completely, but I only use it in the first paragraph to clarify the
-difference. There was one subsequent mention of it, and I replaced it
-with a more generic "NCM mode".
+What do you mean by "nope"? I'm saying that it looks like it may be
+possible to move this call to probe() given how it is used currently.
 
-If this is good, I'll give v1 a day or two more for any more feedback,
-and then resubmit v2 with the updated commit message.
+Or you can just add an additional call to probe() without the dev_err()
+and use that for clone detection.
 
-Cheers,
-Foster
+> > is not such a big deal. But even that could be suppressed based on the
+> > type.
+> > 
+> > Or we could use this call failing to flag the device as a likely clone
+> > and use that flag to also skip break signalling completely.
+> 
+> Oh, you meant the function below? But that is also in user hands (as well).
+> 
+> Flagging after the first call is theoretically possible - but is it
+> worth the related effort? I doubt that a bit.
 
----
+I'm saying that we can issue the get_line_settings request during
+probe() (for HXD) and if it fails, we treat the device as a clone and
+skip the requests that are not supported completely.
 
-usbnet: ipheth: prevent OoB reads of NDP16
-
-In "NCM mode", the iOS device encapsulates RX (phone->computer) traffic
-in NCM Transfer Blocks (similarly to CDC NCM). However, unlike reverse
-tethering (handled by the `cdc_ncm` driver), regular tethering is not
-compliant with the CDC NCM spec, as the device is missing the necessary
-descriptors, and TX (computer->phone) traffic is not encapsulated
-at all. Thus `ipheth` implements a very limited subset of the spec with
-the sole purpose of parsing RX URBs.
-
-In the first iteration of the NCM mode implementation, there were a few
-potential out of bounds reads when processing malformed URBs received
-from a connected device:
-
-* Only the start of NDP16 (wNdpIndex) was checked to fit in the URB
-  buffer.
-* Datagram length check as part of DPEs could overflow.
-* DPEs could be read past the end of NDP16 and even end of URB buffer
-  if a trailer DPE wasn't encountered.
-
-The above is not expected to happen in normal device operation.
-
-To address the above issues for iOS devices in NCM mode, rely on
-and check for a specific fixed format of incoming URBs expected from
-an iOS device:
-
-* 12-byte NTH16
-* 96-byte NDP16, allowing up to 22 DPEs (up to 21 datagrams + trailer)
-
-On iOS, NDP16 directly follows NTH16, and its length is constant
-regardless of the DPE count.
-
-The format above was observed on all iOS versions starting with iOS 16,
-where NCM mode was introduced, up until the latest stable iOS release,
-which is iOS 17.6.1 at the moment of writing.
-
-Adapt the driver to use the fixed URB format. Set an upper bound for
-the DPE count based on the expected header size. Always expect a null
-trailer DPE.
-
-The minimal URB length of 108 bytes (IPHETH_NCM_HEADER_SIZE) in NCM mode
-is already enforced in ipheth since introduction of NCM mode support.
+Johan
 
