@@ -1,185 +1,141 @@
-Return-Path: <linux-usb+bounces-14841-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14842-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 495079709D1
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 22:55:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 783BE970C1D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 05:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8AF21F2202C
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2024 20:55:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D441EB20F59
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 03:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FD4179658;
-	Sun,  8 Sep 2024 20:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFBBF1AC8BA;
+	Mon,  9 Sep 2024 03:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="hmd0NIx5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC29C1C01
-	for <linux-usb@vger.kernel.org>; Sun,  8 Sep 2024 20:54:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794BC3D8E
+	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 03:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725828902; cv=none; b=ul8lqZuZefloOBosqa4Z+ic/CndQQsDAjIRqNHyhgKhPRR2mHXGFOVsieEpix4IBweQPjGTGoEU7rk7rI2arJLOHYiyprDBIUeJc/Kw88Ufxzft0QxLCsjiLFazny0TIxf78YYFuZ8yxdRY9IgzoNtaADqCabAP35B3Oz997YtM=
+	t=1725851128; cv=none; b=C23WbIl4iM43LEGzducoNdT9REcZn6lR99q8NPy4S+azOmKBStRafwZdHlWaS8YDaPjLnHHmszEe07OfaMJnSA1I/9TI230SrzrfMikR6xwm+JSJyVQpobp2XpPeslhekXd17G4C7EAfopZCfnrTSEq+Nq8NtUFFM+vPc071ZVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725828902; c=relaxed/simple;
-	bh=zN3q3bvVxr+IRbcTF7Mt9+0mGWCJvt/L/HlTFdTrw2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jcuyivnsvr2Zsl7KcB9Bc6Mkm8yurwhu/jwQL3hILNdPxXRS+CsUQlpS7Pqimayp1CRCKKQLGETq0NHzR1fcdVVsoL6MJInZiLNJ6Lne/2hR6CvwIV+rqzooOHrnDquj5fu46pepp/OeVotVCO4Aoe64j1+uFRTaNjS394sT+b0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1snOvn-0002CA-Jf; Sun, 08 Sep 2024 22:54:47 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1snOvi-006Uad-Jx; Sun, 08 Sep 2024 22:54:42 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1snOvi-00DtLg-1c;
-	Sun, 08 Sep 2024 22:54:42 +0200
-Date: Sun, 8 Sep 2024 22:54:42 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Documentation <linux-doc@vger.kernel.org>,
-	Linux USB <linux-usb@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	v9fs@lists.linux.dev, Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jan Luebbe <jlu@pengutronix.de>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] tools: usb: p9_fwd: wrap USBG shell command examples in
- literal code blocks
-Message-ID: <Zt4PEp8z1rfhFZCm@pengutronix.de>
-References: <20240908113423.158352-1-bagasdotme@gmail.com>
+	s=arc-20240116; t=1725851128; c=relaxed/simple;
+	bh=uibYA0DDhkVGM1oULcHE7FcHV+h/M6ULLQSMEo15LJE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i2xTUaxzIFcF58QX482m3eoy2N66v/6eacILmaT2sxxR6vCHSXMVvIcGhQkCmrg/TiMAWLEKFx8Pof++kc63Fuf8g7T6PCd5i930XbfDumYC2d8V9xJd45ILXqjkLamqxmptir5srPx53BNZLt/s2HPeDN5bmfclnHqGWxxurdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=hmd0NIx5; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 31A253F1E5
+	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 03:05:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1725851119;
+	bh=GjcxPsYBfm9i0vtMaX4QCNll1ePzYeiDXIPkGdzVHmU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=hmd0NIx5RyRHlKqj9LfPffk54BYtAhkjYnwfWVoesEPrro9ig+RnT6yfPktUsLruH
+	 ReEOvtbH273NhMTk9dfYXbroOfMTEE0Hm3XbIOMNgl1Sq0rcy/XUfwRpAMuUTyNGla
+	 WPtQU57xjEpdc+RjNg/IFtLZx1J9y5hB6pBYECpL/SDtNY29nXaacbicIb7mUKRupG
+	 fpGD1NqJ53MJoIs9dfS5cbM36W/MDRo7H2MeIHRSdDd1cQOxsUJ5kkpzUxhk45WoID
+	 FAr/nSyXzQfm7TkxEHVlSm7eIw8wscJWr8iq9z1f8FOC4eN3w84dRvpANDM1Xgufl9
+	 cjcgFsHemLtJA==
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a8711c48990so403033566b.2
+        for <linux-usb@vger.kernel.org>; Sun, 08 Sep 2024 20:05:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725851118; x=1726455918;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GjcxPsYBfm9i0vtMaX4QCNll1ePzYeiDXIPkGdzVHmU=;
+        b=jMfuJTbq/6JHu80/BsGJL0vZy6jTlld/Btu1mtWRB6KqyreR9I4MjkpNp1n1yZj3BN
+         akZxm4MHuLWe99RCzMSbaj4M4j5KpuUoFKDHGh3sQO/QvdEgLTE9sqzA2qEUx0ngIN1j
+         eg7vBAQjRlGt8FqUZPEVXyidKC/6HmNY3l42OEeROVS3Y5y58jfAWZiwfJfGqHxtnc7Q
+         C9tq+d8OTFfFMXMBJu57gEAC7l7MUVxxOInn3aGBSqenIKTq+y4siuPUzAZMJMXPYK4f
+         XJ722DPrXO4Smw6S4IIPKbLhvy+tTlGotghWzvM2Z2x/2ldulCtOQ3VU+sB74skuRPzl
+         QZZg==
+X-Forwarded-Encrypted: i=1; AJvYcCWvPOWcka/M8bh6GIClnJwlbYa0KnJzy/+boQME3tZlzYZi4Z9bTinwGKHfKzIF4b5XGa0emthmUYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrMw56QLo7e+RLgjdZiXKvLGq4grBtkksTD9D0F5+xlDX2Hzg2
+	Mz7m+rwADe08Z71THRkboMvYxsSjPP0W7+gQmoMNuCGl1CHVD+QQSeb+Udyz98G2j3+3Uyh/xN4
+	CgDHfcAJUzapYp1b+NEQUNuVHEePSYCTJmEARrdVKnOLsUvqhv4LZzWOklQhlPP3lBzcTmzMBrK
+	S1JhmLkJzaNzVPOIm6A0KuxCYg0XSoUN1ElIctsJTRxHAQxRjY
+X-Received: by 2002:a17:907:8686:b0:a8a:66b6:58d with SMTP id a640c23a62f3a-a8d1c4d7913mr662532066b.41.1725851118560;
+        Sun, 08 Sep 2024 20:05:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGuG/c1pV3OAm6nu2vGlRvKv9U2b23ZY+JOWpXPKoYpNvuHAMLNmrC0KbsLPzB4znzP3SjrhcsA8LUxfwmEUvU=
+X-Received: by 2002:a17:907:8686:b0:a8a:66b6:58d with SMTP id
+ a640c23a62f3a-a8d1c4d7913mr662529366b.41.1725851117993; Sun, 08 Sep 2024
+ 20:05:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2GlOQuJU+wYS6vhG"
-Content-Disposition: inline
-In-Reply-To: <20240908113423.158352-1-bagasdotme@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-
-
---2GlOQuJU+wYS6vhG
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
+References: <20240906053047.459036-1-kai.heng.feng@canonical.com> <d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu>
+In-Reply-To: <d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date: Mon, 9 Sep 2024 11:05:05 +0800
+Message-ID: <CAAd53p4i1zzW2DsVfirjXVsQX0AgXy1XbzWaM-ziWmAmp8J1=A@mail.gmail.com>
+Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne 440
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, hdegoede@redhat.com, 
+	ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org, 
+	jorge.lopez2@hp.com, acelan.kao@canonical.com, 
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Thanks for taking care of this.
+On Fri, Sep 6, 2024 at 10:22=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Fri, Sep 06, 2024 at 01:30:47PM +0800, Kai-Heng Feng wrote:
+> > The HP ProOne 440 has a power saving design that when the display is
+> > off, it also cuts the USB touchscreen device's power off.
+> >
+> > This can cause system early wakeup because cutting the power off the
+> > touchscreen device creates a disconnect event and prevent the system
+> > from suspending:
+>
+> Is the touchscreen device connected directly to the root hub?  If it is
+> then it looks like there's a separate bug here, which needs to be fixed.
+>
+> > [  445.814574] hub 2-0:1.0: hub_suspend
+> > [  445.814652] usb usb2: bus suspend, wakeup 0
+>
+> Since the wakeup flag is set to 0, the root hub should not generate a
+> wakeup request when a port-status-change event happens.
 
-On Sun, Sep 08, 2024 at 06:34:23PM +0700, Bagas Sanjaya wrote:
->Stephen Rothwell reported htmldocs warning when merging usb tree:
->
->Documentation/filesystems/9p.rst:99: ERROR: Unexpected indentation.
->
->That's because Sphinx tries rendering p9_fwd.py output as a grid table
->instead.
->
->Wrap shell commands in "USBG Example" section in literal code blocks
->to fix above warning and to be in line with rest of commands in the doc.
->
->Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
->Closes: https://lore.kernel.org/linux-next/20240905184059.0f30ff9a@canb.au=
-ug.org.au/
->Fixes: 673f0c3ffc75 ("tools: usb: p9_fwd: add usb gadget packet forwarder =
-script")
->Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+The disconnect event itself should not generate a wake request, but
+the interrupt itself still needs to be handled.
 
-Acked-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>
+> > [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, p=
+ortsc: 0x202a0
+> > [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
+>
+> But it did.  This appears to be a bug in one of the xhci-hcd suspend
+> routines.
 
->---
-> Documentation/filesystems/9p.rst | 6 +++---
-> 1 file changed, 3 insertions(+), 3 deletions(-)
->
->diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems/=
-9p.rst
->index 2cc85f3e8659ff..514ed13a0122b0 100644
->--- a/Documentation/filesystems/9p.rst
->+++ b/Documentation/filesystems/9p.rst
->@@ -86,11 +86,11 @@ When using the usbg transport, for now there is no nat=
-ive usb host
-> service capable to handle the requests from the gadget driver. For
-> this we have to use the extra python tool p9_fwd.py from tools/usb.
->
->-Just start the 9pfs capable network server like diod/nfs-ganesha e.g.:
->+Just start the 9pfs capable network server like diod/nfs-ganesha e.g.::
->
->         $ diod -f -n -d 0 -S -l 0.0.0.0:9999 -e $PWD
->
->-Optionaly scan your bus if there are more then one usbg gadgets to find t=
-heir path:
->+Optionaly scan your bus if there are more then one usbg gadgets to find t=
-heir path::
->
->         $ python $kernel_dir/tools/usb/p9_fwd.py list
->
->@@ -99,7 +99,7 @@ Optionaly scan your bus if there are more then one usbg =
-gadgets to find their pa
->           2 |   67 | unknown          | unknown          | 1d6b:0109 | 2-=
-1.1.2
->           2 |   68 | unknown          | unknown          | 1d6b:0109 | 2-=
-1.1.3
->
->-Then start the python transport:
->+Then start the python transport::
->
->         $ python $kernel_dir/tools/usb/p9_fwd.py --path 2-1.1.2 connect -=
-p 9999
->
->
->base-commit: 9c0c11bb87b09a8b7cdc21ca1090e7b36abe9d09
->--=20
->An old man doll... just what I always wanted! - Clara
->
->
+So should the xhci-hcd delay all interrupt handling after system resume?
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+>
+> Alternatively, if the touchscreen device is connected to an intermediate
+> hub then that intermediate hub should not be allowed to generate wakeup
+> events.  That's determined by userspace, though, not by the kernel.
 
---2GlOQuJU+wYS6vhG
-Content-Type: application/pgp-signature; name="signature.asc"
+It's connected to roothub.
 
------BEGIN PGP SIGNATURE-----
+Kai-Heng
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmbeDw8ACgkQC+njFXoe
-LGTkwBAArdhWO1zhxAGW/ByLL4IiT1YV1Lbkg+uvEfThLHZeVp2jwg4dfko/K3yn
-I1nEaIwg3cbbiU0IY93yZjXGwCULzhJxP8PeQ8o97DleU918Onphp7Wt4Vt74vag
-0GG6i9mzx7J6rd9P9aW+Wcnixm7hO8lCkDNda8jrlXuNWLD/a+fz+3RdOdgj1EaC
-AW1HqYRKBA/wA4fCHn8U7bjCP1cbBU67mJgopm2TxA+L82D0+l9r3l8ncb4fgmNr
-mIcNwIuxmiHvKEZck/n9FKc+TW18AKG9YND+iPcLXEGNG1GCUmflR2IZgKtLXVjf
-gp32r8o7c8OVy34DcJh57y3zwlL+4eYR59Bn4MGS8vaF9z907phi4OttfrpgBDU4
-fKBX4Mfnxldflj0S3eeb6pXs01NLH13oI7HdIWMinTjLLmFacNYDelvlc6PFKKP6
-uxLfHZ8PeVYHxVmjSurBqwXqCwzN7dMzMdSPTf5ZG+OCr5/AHMoFgpRVSgYnVKQF
-UEvpg2pVgxsw0oZrB6A5xFjd1j3v7qdBeoA4hDEbYeLaBng0i7oF/8mPWXNOhRyy
-vxrSEvwWvb4AmJfImiBiSsIUrUPJnL39Kz79knYOwCDwx2znfpjIrcii9gvWEXOZ
-kGqPqnH9QRiZq8GPMA2GE2q3/3I6dEM1sHEawvA26lDu2Hin5R4=
-=ZSZ5
------END PGP SIGNATURE-----
-
---2GlOQuJU+wYS6vhG--
+>
+> Alan Stern
 
