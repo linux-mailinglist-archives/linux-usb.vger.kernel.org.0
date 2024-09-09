@@ -1,122 +1,122 @@
-Return-Path: <linux-usb+bounces-14846-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14847-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B3F39712CD
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:01:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B9149712E3
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:04:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 395F428524C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 09:01:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1E1EB23191
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 09:04:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD6C1B29BF;
-	Mon,  9 Sep 2024 09:01:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB7F1B29CC;
+	Mon,  9 Sep 2024 09:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UDwX4EVU"
+	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="gaAmFmo0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from ci74p00im-qukt09090102.me.com (ci74p00im-qukt09090102.me.com [17.57.156.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40671AC88E;
-	Mon,  9 Sep 2024 09:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37BD8F5A
+	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 09:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.156.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725872512; cv=none; b=HhKOtb4CxAurTYvQs8oupqIc5evrbjPtUlcbFjKxbkMys9bzptAsplQBgKhk488XH02DbzyJ0FoLCD4qukBOl2e/y8jpyW5pPpWtIqw+Zm3Hd08wB7hHQncb7eaQD63rfmWhwJXarxiqxpIXtEK1im4c6btL+oSEG9b4O6CFG0k=
+	t=1725872653; cv=none; b=X/Pn7dbwAoReIp3z4r5bZNKHdUw16PbKQzMCJpjywlzU8AUwiDpQmmPOUU91tU9Bl91WNiDL/EYaujGbyO0DacCpowQ87uWXGo1ipIx018hok+E1GS7w32IZkwBbvB5AU5qHGFl17MgZxzE8dlomkIf48ClQJMjxbQLeqbz1fV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725872512; c=relaxed/simple;
-	bh=ku5W56W1XNsijkLvO7GmJwyBMqN3cGd5vZD15ts6Trc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bh/n8DwH2hBP/JnDRekLwk+ibc5gHcwzZJ30QAY4j6SMuBLlFrZArboaWjxnxu4XPkQb2lVJ6MnCPU3CNv699Wl/7L4BsDZUzfcHE0W3yvAFr+cwEPwsKu1mtpOQ4Akmz6WMW3PRTMMHVrx29Am8UZutQTBLmWOjpf2fpYWnlnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UDwX4EVU; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725872510; x=1757408510;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ku5W56W1XNsijkLvO7GmJwyBMqN3cGd5vZD15ts6Trc=;
-  b=UDwX4EVUDpDqgh6C0ftR+/gdQGbTgJef0ZfXexwYsbZc30VNKwRqnCPB
-   cuFAT+7VTp4cs2jztkRkDqTeUgfJsBYu7Yr/mjGeJ86SIE6zYzgvBczQd
-   KdDay2mHB/zFYIkPWI944dy4DmO8OIe2hEISf1D4xRXoyPL97szKjzr0G
-   mv2Vl6nr6olj3CqdgeIIMx6cEVP7D72ys+ukMmtRtCWw/Xn5vNWP2Dha7
-   CHwM5tx6Bv+VB28AeK+b+a1L3/qSLHfVEDuq/FZAoDyNg6hygZKYATBgQ
-   OfvKzpW9WN6p0viXLcJ9ZkqomhS7Cis9+FEr5somWcABEdIZmTiXzaRUT
-   Q==;
-X-CSE-ConnectionGUID: jh5owUL3RtGuiBbv0Zd8Sw==
-X-CSE-MsgGUID: T8PZQ8f5QAG/WO2ngRTWyg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="13436258"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="13436258"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:01:49 -0700
-X-CSE-ConnectionGUID: iry4G+k1Sj2U1cXyP2emXg==
-X-CSE-MsgGUID: UV4YPHqLRvmu3MOvLenbGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="66594619"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 09 Sep 2024 02:01:48 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 12201297; Mon, 09 Sep 2024 12:01:46 +0300 (EEST)
-Date: Mon, 9 Sep 2024 12:01:46 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Kenneth Crudup <kenny@panix.com>
-Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
- Thunderbolt additions when coming out of suspend or hibernate
-Message-ID: <20240909090146.GG275077@black.fi.intel.com>
-References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
- <ZsvxR-dQAZtwNi0g@wunner.de>
- <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
- <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
- <20240904122835.GG1532424@black.fi.intel.com>
- <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+	s=arc-20240116; t=1725872653; c=relaxed/simple;
+	bh=HuAzle0O7gPg0QJV7m8XVn3tTr3qju6NtHIJRuZAFHw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=hfsD8nH2AFTExDKI9+/KmWziXZPcqOEjEwVL7o9HrqkpCK9Ely5KZIc11Ob6lTuJ50nuEVrF1gZbCUBIkJhizBJRIFs8uz313JWJAUF4uYy2megSmKxcMtRFbdTsfhfB8dgMjuj+3OGmkyOZ2t/biUOkKYJDZ2lEYDrb/6LyOsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=gaAmFmo0; arc=none smtp.client-ip=17.57.156.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
+	t=1725872650; bh=0N+YcGX5JKTj2RFBVjEnYi3cAnTw2iTZC8ytorLbQmY=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+	b=gaAmFmo0PsERLGDN5hRdyGOw6SwzbNEMcf75EP2rgjpVBTKNMfnHHb1wye+tQozaN
+	 AtaqR7MQTb7LpzOHk91QmroYD6syooqtxZwByDlt6kprxR43p0DsVA0Jgm+cMzOSL9
+	 NDyTApyt6hDEMzy2WPPHSgADdxpGmBQk4czj7ttCfDspcM+1dhC0bplvhpEEgFsHlY
+	 pCj1SR+eg789+6FPDTctnzJQg1FhXlCcTRo7XwZ8gvummDW1XjSXodEIdJfpNdz5mm
+	 CuSrHO/3w6Prcd39gzmIsj6tmZPFTTnGNSRnmsQvYPNgmJzOzEcn0oEE8F5whgpgoO
+	 /XWKWxSoTIsRA==
+Received: from [192.168.40.3] (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
+	by ci74p00im-qukt09090102.me.com (Postfix) with ESMTPSA id 638CA3C001C2;
+	Mon,  9 Sep 2024 09:04:08 +0000 (UTC)
+Message-ID: <4be673c9-b06a-4c2d-8b27-a1e91150df94@pen.gy>
+Date: Mon, 9 Sep 2024 11:04:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+User-Agent: Mozilla Thunderbird Beta
+To: Oliver Neukum <oneukum@suse.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240907230108.978355-1-forst@pen.gy>
+ <mJ-iCj-W_ES_nck94l7PueyUQpXxmgDdxq78OHP889JitvF0zcid_IBg1HhgEDh-YKlYjtmXt-xwqrZRDACrJA==@protonmail.internalid>
+ <8510a98e-f950-4349-99bc-9d36febe94d3@suse.com>
+Content-Language: en-GB
+From: Foster Snowhill <forst@pen.gy>
+Autocrypt: addr=forst@pen.gy; keydata=
+ xjMEYB86GRYJKwYBBAHaRw8BAQdAx9dMHkOUP+X9nop8IPJ1RNiEzf20Tw4HQCV4bFSITB7N
+ G2ZvcnN0QHBlbi5neSA8Zm9yc3RAcGVuLmd5PsKPBBAWCgAgBQJgHzoZBgsJBwgDAgQVCAoC
+ BBYCAQACGQECGwMCHgEAIQkQfZTG0T8MQtgWIQTYzKaDAhzR7WvpGD59lMbRPwxC2EQWAP9M
+ XyO82yS1VO/DWKLlwOH4I87JE1wyUoNuYSLdATuWvwD8DRbeVIaCiSPZtnwDKmqMLC5sAddw
+ 1kDc4FtMJ5R88w7OOARgHzoZEgorBgEEAZdVAQUBAQdARX7DpC/YwQVQLTUGBaN0QuMwx9/W
+ 0WFYWmLGrrm6CioDAQgHwngEGBYIAAkFAmAfOhkCGwwAIQkQfZTG0T8MQtgWIQTYzKaDAhzR
+ 7WvpGD59lMbRPwxC2BqxAQDWMSnhYyJTji9Twic7n+vnady9mQIy3hdB8Dy1yDj0MgEA0DZf
+ OsjaMQ1hmGPmss4e3lOGsmfmJ49io6ornUzJTQ0=
+Subject: Re: [PATCH net-next] usbnet: ipheth: prevent OoB reads of NDP16
+In-Reply-To: <8510a98e-f950-4349-99bc-9d36febe94d3@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: Umu5cJ4NhBlO-Xdz4YTs_es9mDh_faV8
+X-Proofpoint-GUID: Umu5cJ4NhBlO-Xdz4YTs_es9mDh_faV8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-09_02,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=296
+ suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0 adultscore=0
+ clxscore=1030 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2409090071
 
-Hi,
+Hello Oliver,
 
-On Mon, Sep 09, 2024 at 12:51:18AM -0700, Kenneth Crudup wrote:
+Thank you for the feedback.
+
+>> To address the above issues without reimplementing more of CDC NCM,
+>> rely on and check for a specific fixed format of incoming URBs
+>> expected from an iOS device:
+>>
+>> * 12-byte NTH16
+>> * 96-byte NDP16, allowing up to 22 DPEs (up to 21 datagrams + trailer)
 > 
-> I can't get to the dmesg when it crashes, but I did a SysRq-S/C and have
-> attached the crash output; let me know if this is at all helpful.
+> I am afraid this is an approach we must not take. We cannot rely on
+> a specific device's behavior in a class driver.
 > 
-> I see I'd SysRq-S/C on a previous hang, I've attached that one, too.
+> This is a NACK.
 
-Unfortunately I did not see anything too useful in that. There is the
-suspend thread going on but it does not seem to show what exactly is
-hanging there.
+The `ipheth` driver, that the patch is for, is designed specifically for
+interacting with iPhones. iPhones' "NCM" implementation for regular
+tethering (sharing mobile/cellular internet with an attached Linux system)
+is _not_ compliant with the CDC NCM spec:
 
-> This particular time it suspended OK, but hung indefinitely when I plugged
-> it into another TB3 dock (the previous one was TB4, if it matters).
+* Does not have the required CDC NCM descriptors
+* TX (computer->phone) is not NCM-encapsulated at all
 
-Can you describe the flow with bit more details? And let's stick with
-one dock for now (if both have the same issue anyway).
+Thus the `ipheth` driver does not aim to be a CDC NCM-compliant
+implementation and, in fact, can't be one because of the points above.
 
-You do something like this?
+For a complete spec-compliant CDC NCM implementation, there is already
+the `cdc_ncm` driver. This driver is used for reverse tethering (sharing
+computer's internet connection with an attached phone) on iPhones. This
+patch does not in any way change `cdc_ncm`.
 
-1. Boot the system up, TB4 dock connected.
-2. Verify everything is working. BTW, do you have monitor(s) connected
-   to the dock?
-3. Enter system suspend.
-4. Verify it is suspended (suspend LED if exists is "blinking", fans are
-   turned off).
-5. Wake it up from keyboard.
+With all of the above, does your NACK still stand? Thanks!
 
-  Expectation: System wakes up fine, all the devices work exactly same as
-  prior suspend. All connected monitors display picture.
-
-If this is the flow, can you do steps up to 3 with
-"thunderbolt.dyndbg=+p" and provide full dmesg of that at least so if
-nothing else I can try to reproduce it on our end?
 
