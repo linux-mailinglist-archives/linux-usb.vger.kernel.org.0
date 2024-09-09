@@ -1,286 +1,191 @@
-Return-Path: <linux-usb+bounces-14848-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14849-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4927971356
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:23:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C59089713B3
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:31:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73231B231A7
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 09:23:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 504291F24D38
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 09:31:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D98AD1B3B07;
-	Mon,  9 Sep 2024 09:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C569C1B4C53;
+	Mon,  9 Sep 2024 09:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NrFr0xvl"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="e9/wegB+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8041B375C
-	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 09:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464F41B29D9
+	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 09:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725873653; cv=none; b=ONrUUck5GgXBQFugeoWIYQ17pqIWQ3NmsxPGjVP/uieK0ObPAEnHVB/A4BV1BGTfb4S9WlTVPafofM1RZUILgVRYwA3UeMbo0IC9IjrqwMfUJVYgBDcFxzsq6wKBKjbkskIkDG3EWLXlZp3EE/VnTHtiJzjICh6v8Kq+ogpvWK0=
+	t=1725874179; cv=none; b=En/nK7kkXElysqaWLF/SaU+CNj3rJeWrHCAg0brKGGytScZnuT82rU7XOAcEF67Se745g4sXt9J3iNhDdivfjJnMA112pxRKuCRxOG0gA+Eu8BqN9jL0RgE3blyZB0DVCTX/I2o/OW2LVHZbUXfpqO3CG1LX3W4t6IO1+bOoycc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725873653; c=relaxed/simple;
-	bh=yIAAedIpGx605/0B/HRH3Spvvs+tPpn7q/VthPrcngs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a0/M6HXtefncrRaJjPl3mZARboXF+B1Iae1i0lXdoGoqSud13lL5v+KJ4tydDmEJaA+96n7X+P9pvpv2oHyuP/nk3PjgxZnBDINEfO111JjEQKP2ushGxQ8K6P4c9XKplnEUMAnjFsSGmAmpr12Hkmcov5h6JPKrZ12Z4XKbVwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NrFr0xvl; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725873652; x=1757409652;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yIAAedIpGx605/0B/HRH3Spvvs+tPpn7q/VthPrcngs=;
-  b=NrFr0xvlqqT9KNctr6rXD9OylCyQ/M3EbZvYfgjvJOvpRowQhRR1xBJR
-   QJFo/BS+9qkDiU/mMeUC64wmlEtoVn778jCcGiJ3x12D6gB9hmBR9KZkd
-   EhmDZd31llf68rsr8IDeNpYOl+fKeW1smwRl5por+Wq7xJJHdUzIEDj38
-   v1g9oxRl7k5t9r9rwUrlSy96kGU4DHYZ6vZYyKm70XGyrLaLCBrlCnh7f
-   FEn8z340M9i05HNFOF/ZG10Dx5y437iZYK2gw4plb/GbzeeoLmZ9pR5/u
-   bSRpTGMHn3Dlp3kCACQvN/j+5k7weDfFwIduR1sox5I2/ya9WulBjUOCk
-   w==;
-X-CSE-ConnectionGUID: cJOK2qMvTBO3PesPLCudNA==
-X-CSE-MsgGUID: dTsx5tbZRDSQ6IL3HFjFoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24422435"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="24422435"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:20:51 -0700
-X-CSE-ConnectionGUID: i43raAmdR96QALoPxtW2Vw==
-X-CSE-MsgGUID: j6QUmduaS6awlm52ANA5eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="104077717"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa001.jf.intel.com with SMTP; 09 Sep 2024 02:20:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 09 Sep 2024 12:20:47 +0300
-Date: Mon, 9 Sep 2024 12:20:47 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Gopal, Saranya" <saranya.gopal@intel.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"Regupathy, Rajaram" <rajaram.regupathy@intel.com>
-Subject: Re: [PATCH] usb: typec: ucsi: Do not call ACPI _DSM method for UCSI
- read operations
-Message-ID: <Zt6979hVhtzGBeq6@kuha.fi.intel.com>
-References: <20240830084342.460109-1-saranya.gopal@intel.com>
- <ZtGGcRpavSITFai7@kuha.fi.intel.com>
- <ZtJDH4UCJMQbOWBY@cae.in-ulm.de>
- <DS0PR11MB74574A426FAA3322F4FFC017E39E2@DS0PR11MB7457.namprd11.prod.outlook.com>
+	s=arc-20240116; t=1725874179; c=relaxed/simple;
+	bh=BN4tazxh3rpRIAWwNqOVoPdvVfcO1FwnyEStibweItQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ajgJJUCRQ3ceCo5f4J+tN6RMG7TctgDGf378GPYXTcvuicn1HvLqjI5AN+8/4Ot9AUIRTaUOh71KsP3i2dliFSClwIRDXXXRemSYWJgaHXEDnheJgLYNB6JFrzHRdOAr7zkDTwJS7eKDqL17zpRVZgJ/EefmfDeBH7+5xaX39ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=e9/wegB+; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 84DF33F20C
+	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 09:29:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1725874172;
+	bh=1s6ErxBpBnN4TDCj/24ykKeIJzZtbIIx8kz5Yh/iY7Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=e9/wegB+0/e64FXmg6K+JwOGQHoA0k0jqeKMe1KSS+SRq9YbTiRVIzjuaiCE0hnhi
+	 I0SYg6nmOqQNB81Gl+j1PAyTAL3Upy95cFwD8W/kywPyxgCNMvCGTAPegzmFGMAtJa
+	 t4GeEDCjYAvltNDsBSnbtFLhnQvGLz/ERfnb43l4RkuzVXcIJdCJ+Pmt5mrxV8Qv+u
+	 ASb1RP8gNP+Otihi91RzdFRf/tLKrOnQNoWWnTYPdXAShK8cs793cqpQjcg9oJW9kY
+	 Q4YhIEcyn+LZnBlgOCtGyZLv1XvR2PjISvjBCscqX85LNhETTb1PC6x97hCJrokaA/
+	 UwcutdPQg2HnQ==
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2053f49d0c9so55672595ad.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Sep 2024 02:29:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725874171; x=1726478971;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1s6ErxBpBnN4TDCj/24ykKeIJzZtbIIx8kz5Yh/iY7Y=;
+        b=Cx0UtGqvyQ/fsztotg4txxCkC5Y7q4t26WIsIwkLxW9ZRUXQsg1juV18Isrw+tTsZG
+         QKx0gdzEFA5BqnCp+8szoqy/qzwKtHHGZa4kf/F4vmT7q0lbOOBv6eUyOo2tCqFeoHM9
+         GKikTWwi/TH0tP/KQF4NKJeMV/KqQrwciWkD7RcQBBrjyqHjiflTFGt7E/11Xw+EYx2D
+         Ms91AyINjfdiNw8s8UiZpHUc09glQzOnugZbJ+quW/i4Gaj5VQ2BJAZ6aL29+oShWuOk
+         hCmX9aoiDw/HDxvM0vTHgJDJnH0xffB0ie0J+CSe7PXOhs5j0G7bMT9OVsMSDGZDa5kG
+         tshA==
+X-Gm-Message-State: AOJu0YxvRNRMkjq6D6n1hefvsuB0vawQda72cpcaQH0UtIW9mqoJeR/5
+	HwvEB/aFebx8Ucw9nrqYSIXDMvZl+siWtOojMDnWfoRCnY0GcLWZ5SHGgitwqj0r4Ui67idPqA3
+	y+loqLahq7Ufne2Y8GFwS463osxXFdQ6LFvQCegMtmJjv4XJocHEU9VFSmx9yVsnnFPS9EYW2mg
+	==
+X-Received: by 2002:a17:902:ce91:b0:206:b5b8:25dd with SMTP id d9443c01a7336-206eeb7a78bmr170498235ad.23.1725874171064;
+        Mon, 09 Sep 2024 02:29:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHOj9jqwDDJjKtB8eNNDnBjTUzIZm4sDUYK04l69QZOWzQRdEeA2WvR6/1IBLED1Y1FZtDrUw==
+X-Received: by 2002:a17:902:ce91:b0:206:b5b8:25dd with SMTP id d9443c01a7336-206eeb7a78bmr170497875ad.23.1725874170361;
+        Mon, 09 Sep 2024 02:29:30 -0700 (PDT)
+Received: from [127.0.0.1] ([103.172.41.204])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710e3757csm30355605ad.112.2024.09.09.02.29.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 02:29:29 -0700 (PDT)
+Message-ID: <9fddd930-21ae-4e7d-86ee-c586af3b50e0@canonical.com>
+Date: Mon, 9 Sep 2024 17:29:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DS0PR11MB74574A426FAA3322F4FFC017E39E2@DS0PR11MB7457.namprd11.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next v2] usb: musb: mediatek: Simplify code with
+ dev_err_probe()
+To: Lin Ruifeng <linruifeng4@huawei.com>, b-liu@ti.com,
+ gregkh@linuxfoundation.org, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20240907081351.19879-1-linruifeng4@huawei.com>
+Content-Language: en-US
+From: Guoqing Jiang <guoqing.jiang@canonical.com>
+In-Reply-To: <20240907081351.19879-1-linruifeng4@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Saranya, Christian,
 
-On Fri, Sep 06, 2024 at 11:47:42AM +0000, Gopal, Saranya wrote:
-> Hi Heikki, Christian,
-> 
-> > -----Original Message-----
-> > From: Christian A. Ehrhardt <lk@c--e.de>
-> > Sent: Saturday, August 31, 2024 3:40 AM
-> > To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Cc: Gopal, Saranya <saranya.gopal@intel.com>; linux-
-> > usb@vger.kernel.org; gregkh@linuxfoundation.org; Regupathy,
-> > Rajaram <rajaram.regupathy@intel.com>
-> > Subject: Re: [PATCH] usb: typec: ucsi: Do not call ACPI _DSM method
-> > for UCSI read operations
-> > 
-> > 
-> > Hi Heikki, Hi Saranya,
-> > 
-> > On Fri, Aug 30, 2024 at 11:44:33AM +0300, Heikki Krogerus wrote:
-> > > On Fri, Aug 30, 2024 at 02:13:42PM +0530, Saranya Gopal wrote:
-> > > > ACPI _DSM methods are needed only for UCSI write operations
-> > and for reading
-> > > > CCI during RESET_PPM operation. So, remove _DSM calls from
-> > other places.
-> > > > While there, remove the Zenbook quirk also since the default
-> > behavior
-> > > > now aligns with the Zenbook quirk. With this change,
-> > GET_CONNECTOR_STATUS
-> > > > returns at least 6 seconds faster than before in Arrowlake-S
-> > platforms.
-> > > >
-> > > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
-> > >
-> > > Maybe this should be marked as a fix. I think this covers:
-> > > https://lore.kernel.org/linux-usb/20240829100109.562429-2-
-> > lk@c--e.de/
-> > >
-> 
-> Heikki,
-> I see that Christian's other patch is marked as a fix already (https://lore.kernel.org/linux-usb/20240906065853.637205-1-lk@c--e.de/T/#u). 
 
-The other part still needs a fix.
+On 9/7/24 16:13, Lin Ruifeng wrote:
+> The combination of dev_err() and the returned error code could be
+> replaced by dev_err_probe() in driver's probe function. Let's,
+> converting to dev_err_probe() to make code more simple.
+>
+> Signed-off-by: Lin Ruifeng <linruifeng4@huawei.com>
+> ---
+> v2:
+> - The wrong message is modified.
+>   drivers/usb/musb/mediatek.c | 27 +++++++++++----------------
+>   1 file changed, 11 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
+> index 0a35aab3ab81..63c86c046b98 100644
+> --- a/drivers/usb/musb/mediatek.c
+> +++ b/drivers/usb/musb/mediatek.c
+> @@ -416,10 +416,9 @@ static int mtk_musb_probe(struct platform_device *pdev)
+>   		return -ENOMEM;
+>   
+>   	ret = of_platform_populate(np, NULL, NULL, dev);
+> -	if (ret) {
+> -		dev_err(dev, "failed to create child devices at %p\n", np);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				"failed to create child devices at %p\n", np);
+>   
+>   	ret = mtk_musb_clks_get(glue);
+>   	if (ret)
+> @@ -448,23 +447,19 @@ static int mtk_musb_probe(struct platform_device *pdev)
+>   		glue->role = USB_ROLE_NONE;
+>   		break;
+>   	default:
+> -		dev_err(&pdev->dev, "Error 'dr_mode' property\n");
+> -		return -EINVAL;
+> +		return dev_err_probe(&pdev->dev, -EINVAL,
+> +				"Error 'dr_mode' property\n");
+>   	}
+>   
+>   	glue->phy = devm_of_phy_get_by_index(dev, np, 0);
+> -	if (IS_ERR(glue->phy)) {
+> -		dev_err(dev, "fail to getting phy %ld\n",
+> -			PTR_ERR(glue->phy));
+> -		return PTR_ERR(glue->phy);
+> -	}
+> +	if (IS_ERR(glue->phy))
+> +		return dev_err_probe(dev, PTR_ERR(glue->phy),
+> +				"fail to getting phy\n");
+>   
+>   	glue->usb_phy = usb_phy_generic_register();
+> -	if (IS_ERR(glue->usb_phy)) {
+> -		dev_err(dev, "fail to registering usb-phy %ld\n",
+> -			PTR_ERR(glue->usb_phy));
+> -		return PTR_ERR(glue->usb_phy);
+> -	}
+> +	if (IS_ERR(glue->usb_phy))
+> +		return dev_err_probe(dev, PTR_ERR(glue->usb_phy),
+> +				"fail to registering usb-phy\n");
+>   
+>   	glue->xceiv = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+>   	if (IS_ERR(glue->xceiv)) {
 
-> So, can this patch go in as it is?
-> Please let me know if I need to resubmit with any changes.
+Sorry, this is probably out of topic. I had seen one relevant kmemleak 
+report (probably false
+positive) which is related to dev_err_probe.
 
-If you prefer that we go with Christian's patch to fix the issue
-- which is fine by me - you need to rebase this on top of his patch in
-any case. So you will need to resend this either way.
+[<ffff800083692200>] kmemleak_alloc+0xe0/0x120
+[<ffff800080a1d7f4>] __kmalloc_node_track_caller+0x354/0x4d0
+[<ffff800081443520>] kvasprintf+0xd0/0x1a0
+[<ffff8000814438bc>] kasprintf+0xac/0x120
+[<ffff8000820b5578>] device_set_deferred_probe_reason+0x68/0x148
+[<ffff8000820a1844>] dev_err_probe+0x164/0x1b0
+[<ffff800081ba00a8>] __clk_bulk_get+0x108/0x238
+[<ffff800081ba0248>] clk_bulk_get_optional+0x20/0x50
+[<ffff800081b9f294>] devm_clk_bulk_get_optional+0x6c/0x160
+[<ffff800081791efc>] mtk_tphy_probe+0x38c/0x7a8
+[<ffff8000820bbe98>] platform_probe+0xd0/0x240
+[<ffff8000820b35c8>] really_probe+0x368/0xa10
+[<ffff8000820b3de0>] __driver_probe_device+0x170/0x420
+[<ffff8000820b40f8>] driver_probe_device+0x68/0x1f0
+[<ffff8000820b47fc>] __driver_attach+0x234/0x558
+[<ffff8000820ae1b8>] bus_for_each_dev+0x108/0x1c8
 
-Christian would you mind resending that second patch after all where
-you take the Zenbook quirk into use on that ASUS system?
+Not sure if this patch could trigger the same report.
 
-Let's make that as the actual fix for the issue. Maybe it's more clear
-that way.
-
-thanks,
-
-> > > Christian, can you check this?
-> > 
-> > The change certainly looks like the correct thing to do and would
-> > remove the need for the zenbook quirk. I'll try to get that combination
-> > tested by the original reporter of
-> > 	https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> > 
-> > 
-> > > > ---
-> > > >  drivers/usb/typec/ucsi/ucsi_acpi.c | 56 +++-------------------------
-> > --
-> > > >  1 file changed, 5 insertions(+), 51 deletions(-)
-> > > >
-> > > > diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c
-> > b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> > > > index 7a5dff8d9cc6..accf15ff1306 100644
-> > > > --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-> > > > +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> > > > @@ -61,9 +61,11 @@ static int ucsi_acpi_read_cci(struct ucsi
-> > *ucsi, u32 *cci)
-> > > >  	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-> > > >  	int ret;
-> > > >
-> > > > -	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-> > > > -	if (ret)
-> > > > -		return ret;
-> > > > +	if (UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
-> > > > +		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-> > > > +		if (ret)
-> > > > +			return ret;
-> > > > +	}
-> > 
-> > 
-> > This is slightly incorrect because we wait for the completion of at
-> > least one other command (UCSI_SET_NOTIFICATION_ENABLE) by
-> > polling cci.
-> > However, this is a very minor corner case. It could be fixed by adding
-> > an optional ->poll() method or similar that is NULL on other
-> > implementations and does the DSM READ on ACPI. We could then call
-> > this
-> > before read_cci when polling for completion. If this is done -
-> > >read_cci()
-> > would never call the DSM method.
-> > 
-> > However, the change in its current state is a definitive improvement,
-> > and looks good to me. Thus feel free to add
-> > 	Reviewed-by: Christian A. Ehrhardt <lk@c--e.de>
-> 
-> Thanks for the review, Christian.
-> 
-> Thanks,
-> Saranya
-> > 
-> > > >
-> > > >  	memcpy(cci, ua->base + UCSI_CCI, sizeof(*cci));
-> > > >
-> > > > @@ -73,11 +75,6 @@ static int ucsi_acpi_read_cci(struct ucsi
-> > *ucsi, u32 *cci)
-> > > >  static int ucsi_acpi_read_message_in(struct ucsi *ucsi, void *val,
-> > size_t val_len)
-> > > >  {
-> > > >  	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-> > > > -	int ret;
-> > > > -
-> > > > -	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-> > > > -	if (ret)
-> > > > -		return ret;
-> > > >
-> > > >  	memcpy(val, ua->base + UCSI_MESSAGE_IN, val_len);
-> > > >
-> > > > @@ -102,42 +99,6 @@ static const struct ucsi_operations
-> > ucsi_acpi_ops = {
-> > > >  	.async_control = ucsi_acpi_async_control
-> > > >  };
-> > > >
-> > > > -static int
-> > > > -ucsi_zenbook_read_cci(struct ucsi *ucsi, u32 *cci)
-> > > > -{
-> > > > -	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-> > > > -	int ret;
-> > > > -
-> > > > -	if (UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
-> > > > -		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-> > > > -		if (ret)
-> > > > -			return ret;
-> > > > -	}
-> > > > -
-> > > > -	memcpy(cci, ua->base + UCSI_CCI, sizeof(*cci));
-> > > > -
-> > > > -	return 0;
-> > > > -}
-> > > > -
-> > > > -static int
-> > > > -ucsi_zenbook_read_message_in(struct ucsi *ucsi, void *val,
-> > size_t val_len)
-> > > > -{
-> > > > -	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-> > > > -
-> > > > -	/* UCSI_MESSAGE_IN is never read for PPM_RESET, return
-> > stored data */
-> > > > -	memcpy(val, ua->base + UCSI_MESSAGE_IN, val_len);
-> > > > -
-> > > > -	return 0;
-> > > > -}
-> > > > -
-> > > > -static const struct ucsi_operations ucsi_zenbook_ops = {
-> > > > -	.read_version = ucsi_acpi_read_version,
-> > > > -	.read_cci = ucsi_zenbook_read_cci,
-> > > > -	.read_message_in = ucsi_zenbook_read_message_in,
-> > > > -	.sync_control = ucsi_sync_control_common,
-> > > > -	.async_control = ucsi_acpi_async_control
-> > > > -};
-> > > > -
-> > > >  static int ucsi_gram_read_message_in(struct ucsi *ucsi, void
-> > *val, size_t val_len)
-> > > >  {
-> > > >  	u16 bogus_change =
-> > UCSI_CONSTAT_POWER_LEVEL_CHANGE |
-> > > > @@ -190,13 +151,6 @@ static const struct ucsi_operations
-> > ucsi_gram_ops = {
-> > > >  };
-> > > >
-> > > >  static const struct dmi_system_id ucsi_acpi_quirks[] = {
-> > > > -	{
-> > > > -		.matches = {
-> > > > -			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK
-> > COMPUTER INC."),
-> > > > -			DMI_MATCH(DMI_PRODUCT_NAME,
-> > "ZenBook UX325UA_UM325UA"),
-> > > > -		},
-> > > > -		.driver_data = (void *)&ucsi_zenbook_ops,
-> > > > -	},
-> > > >  	{
-> > > >  		.matches = {
-> > > >  			DMI_MATCH(DMI_SYS_VENDOR, "LG
-> > Electronics"),
-> > > > --
-> > > > 2.34.1
-
--- 
-heikki
+Thanks,
+Guoqing
 
