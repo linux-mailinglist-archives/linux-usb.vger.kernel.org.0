@@ -1,191 +1,167 @@
-Return-Path: <linux-usb+bounces-14849-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14850-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C59089713B3
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:31:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB23E9713E8
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 11:36:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 504291F24D38
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 09:31:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8801B24465
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 09:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C569C1B4C53;
-	Mon,  9 Sep 2024 09:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ACC91B2EF8;
+	Mon,  9 Sep 2024 09:33:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="e9/wegB+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fYD5sFBw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464F41B29D9
-	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 09:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC601B3724;
+	Mon,  9 Sep 2024 09:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725874179; cv=none; b=En/nK7kkXElysqaWLF/SaU+CNj3rJeWrHCAg0brKGGytScZnuT82rU7XOAcEF67Se745g4sXt9J3iNhDdivfjJnMA112pxRKuCRxOG0gA+Eu8BqN9jL0RgE3blyZB0DVCTX/I2o/OW2LVHZbUXfpqO3CG1LX3W4t6IO1+bOoycc=
+	t=1725874427; cv=none; b=rWdm4N8emGC/Yqf/yBKJEWUp4Zm5W81+OFQFllAihG6SM3tlSjyapzDeKr6aWCwQ7PsO0SfxdxVdJEIWbZ6fR60lUKt1jxGgatHjE8w136sEmSbrYDyNYTPhTEkGRdrWh4Y4YSJhVYDVHojvsPLFZhS9xacy+kUGDLqRFEyT3uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725874179; c=relaxed/simple;
-	bh=BN4tazxh3rpRIAWwNqOVoPdvVfcO1FwnyEStibweItQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ajgJJUCRQ3ceCo5f4J+tN6RMG7TctgDGf378GPYXTcvuicn1HvLqjI5AN+8/4Ot9AUIRTaUOh71KsP3i2dliFSClwIRDXXXRemSYWJgaHXEDnheJgLYNB6JFrzHRdOAr7zkDTwJS7eKDqL17zpRVZgJ/EefmfDeBH7+5xaX39ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=e9/wegB+; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 84DF33F20C
-	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 09:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1725874172;
-	bh=1s6ErxBpBnN4TDCj/24ykKeIJzZtbIIx8kz5Yh/iY7Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=e9/wegB+0/e64FXmg6K+JwOGQHoA0k0jqeKMe1KSS+SRq9YbTiRVIzjuaiCE0hnhi
-	 I0SYg6nmOqQNB81Gl+j1PAyTAL3Upy95cFwD8W/kywPyxgCNMvCGTAPegzmFGMAtJa
-	 t4GeEDCjYAvltNDsBSnbtFLhnQvGLz/ERfnb43l4RkuzVXcIJdCJ+Pmt5mrxV8Qv+u
-	 ASb1RP8gNP+Otihi91RzdFRf/tLKrOnQNoWWnTYPdXAShK8cs793cqpQjcg9oJW9kY
-	 Q4YhIEcyn+LZnBlgOCtGyZLv1XvR2PjISvjBCscqX85LNhETTb1PC6x97hCJrokaA/
-	 UwcutdPQg2HnQ==
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2053f49d0c9so55672595ad.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Sep 2024 02:29:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725874171; x=1726478971;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1s6ErxBpBnN4TDCj/24ykKeIJzZtbIIx8kz5Yh/iY7Y=;
-        b=Cx0UtGqvyQ/fsztotg4txxCkC5Y7q4t26WIsIwkLxW9ZRUXQsg1juV18Isrw+tTsZG
-         QKx0gdzEFA5BqnCp+8szoqy/qzwKtHHGZa4kf/F4vmT7q0lbOOBv6eUyOo2tCqFeoHM9
-         GKikTWwi/TH0tP/KQF4NKJeMV/KqQrwciWkD7RcQBBrjyqHjiflTFGt7E/11Xw+EYx2D
-         Ms91AyINjfdiNw8s8UiZpHUc09glQzOnugZbJ+quW/i4Gaj5VQ2BJAZ6aL29+oShWuOk
-         hCmX9aoiDw/HDxvM0vTHgJDJnH0xffB0ie0J+CSe7PXOhs5j0G7bMT9OVsMSDGZDa5kG
-         tshA==
-X-Gm-Message-State: AOJu0YxvRNRMkjq6D6n1hefvsuB0vawQda72cpcaQH0UtIW9mqoJeR/5
-	HwvEB/aFebx8Ucw9nrqYSIXDMvZl+siWtOojMDnWfoRCnY0GcLWZ5SHGgitwqj0r4Ui67idPqA3
-	y+loqLahq7Ufne2Y8GFwS463osxXFdQ6LFvQCegMtmJjv4XJocHEU9VFSmx9yVsnnFPS9EYW2mg
-	==
-X-Received: by 2002:a17:902:ce91:b0:206:b5b8:25dd with SMTP id d9443c01a7336-206eeb7a78bmr170498235ad.23.1725874171064;
-        Mon, 09 Sep 2024 02:29:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHOj9jqwDDJjKtB8eNNDnBjTUzIZm4sDUYK04l69QZOWzQRdEeA2WvR6/1IBLED1Y1FZtDrUw==
-X-Received: by 2002:a17:902:ce91:b0:206:b5b8:25dd with SMTP id d9443c01a7336-206eeb7a78bmr170497875ad.23.1725874170361;
-        Mon, 09 Sep 2024 02:29:30 -0700 (PDT)
-Received: from [127.0.0.1] ([103.172.41.204])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710e3757csm30355605ad.112.2024.09.09.02.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Sep 2024 02:29:29 -0700 (PDT)
-Message-ID: <9fddd930-21ae-4e7d-86ee-c586af3b50e0@canonical.com>
-Date: Mon, 9 Sep 2024 17:29:23 +0800
+	s=arc-20240116; t=1725874427; c=relaxed/simple;
+	bh=DIKNCNiGhIjn9n1V5kMQXTMDbSl+SXirRNtiyKv/cFY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UBiNiVoAonKoej3cbAHmEHhCfpsBXMofTX1IELn4pMKIQLWqeVz/+jS7wpUAulQYZnXvaPPgMOPa/Scur7xmv1XJzcbe5JXR4RfBzmf5hyOzm4xPEuFO6ENInkN/cdgH+QEWfkeSfTU0ToOoQjNYhTICYg3LSORa1q57iGBjGxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fYD5sFBw; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725874426; x=1757410426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DIKNCNiGhIjn9n1V5kMQXTMDbSl+SXirRNtiyKv/cFY=;
+  b=fYD5sFBwzvOI2EgSosdM4UoIXj53S80LDTSOy5fJYosCmuCZeZQvpLZa
+   NEafaTBlvJJHg5XUzjtByDD+P3yVxaTyqrXEs+Y9XLsVOVqEUCj6zahWy
+   +rqd3QPH91mYXbHVX2I44a7pI8b/0LAsBmP1BNtxsWieP6W+VfKv6iMi6
+   ouIpoBwDFXvogceBJEwBCxKD+njNmptk/s3No8JHdYh5jbMhx9UEaIJMa
+   RNX91p96qL6vokewA9BnYDsd/PhguUf0qw1JeMWjGNcUBtJZYR7NCWbnS
+   uKxl/sRTY7AqKptFL2HVh8/vWta7tbSZAT6MypN/pILMHoj9kcZgg68vT
+   w==;
+X-CSE-ConnectionGUID: 90C/ZtjCTaebxikLJpq5bQ==
+X-CSE-MsgGUID: nHA78hL3QYmve3SmWChS9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24673237"
+X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
+   d="scan'208";a="24673237"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:33:41 -0700
+X-CSE-ConnectionGUID: yYzMhBXASGSePtWNnhhfDw==
+X-CSE-MsgGUID: k9CyDuEmTdGy4ofPkKB7FQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
+   d="scan'208";a="89892116"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa002.fm.intel.com with SMTP; 09 Sep 2024 02:33:16 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 09 Sep 2024 12:33:14 +0300
+Date: Mon, 9 Sep 2024 12:33:14 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anurag Bijea <icaliberdev@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH v4] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
+Message-ID: <Zt7A2lcW9v3ItKGm@kuha.fi.intel.com>
+References: <20240906065853.637205-1-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next v2] usb: musb: mediatek: Simplify code with
- dev_err_probe()
-To: Lin Ruifeng <linruifeng4@huawei.com>, b-liu@ti.com,
- gregkh@linuxfoundation.org, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20240907081351.19879-1-linruifeng4@huawei.com>
-Content-Language: en-US
-From: Guoqing Jiang <guoqing.jiang@canonical.com>
-In-Reply-To: <20240907081351.19879-1-linruifeng4@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240906065853.637205-1-lk@c--e.de>
 
+On Fri, Sep 06, 2024 at 08:58:53AM +0200, Christian A. Ehrhardt wrote:
+> If the busy indicator is set, all other fields in CCI should be
+> clear according to the spec. However, some UCSI implementations do
+> not follow this rule and report bogus data in CCI along with the
+> busy indicator. Ignore the contents of CCI if the busy indicator is
+> set.
+> 
+> If a command timeout is hit it is possible that the EVENT_PENDING
+> bit is cleared while connector work is still scheduled which can
+> cause the EVENT_PENDING bit to go out of sync with scheduled connector
+> work. Check and set the EVENT_PENDING bit on entry to
+> ucsi_handle_connector_change() to fix this.
+> 
+> Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
+> This ensures that the command is cancelled even if ->sync_control
+> returns an error (most likely -ETIMEDOUT).
+> 
+> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> Bisected-by: Christian Heusel <christian@heusel.eu>
+> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
+> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-On 9/7/24 16:13, Lin Ruifeng wrote:
-> The combination of dev_err() and the returned error code could be
-> replaced by dev_err_probe() in driver's probe function. Let's,
-> converting to dev_err_probe() to make code more simple.
->
-> Signed-off-by: Lin Ruifeng <linruifeng4@huawei.com>
 > ---
-> v2:
-> - The wrong message is modified.
->   drivers/usb/musb/mediatek.c | 27 +++++++++++----------------
->   1 file changed, 11 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
-> index 0a35aab3ab81..63c86c046b98 100644
-> --- a/drivers/usb/musb/mediatek.c
-> +++ b/drivers/usb/musb/mediatek.c
-> @@ -416,10 +416,9 @@ static int mtk_musb_probe(struct platform_device *pdev)
->   		return -ENOMEM;
->   
->   	ret = of_platform_populate(np, NULL, NULL, dev);
-> -	if (ret) {
-> -		dev_err(dev, "failed to create child devices at %p\n", np);
+>  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 4039851551c1..d6d61606bbcf 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -38,6 +38,10 @@
+>  
+>  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  {
+> +	/* Ignore bogus data in CCI if busy indicator is set. */
+> +	if (cci & UCSI_CCI_BUSY)
+> +		return;
+> +
+>  	if (UCSI_CCI_CONNECTOR(cci))
+>  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+>  
+> @@ -107,15 +111,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+>  		size = clamp(size, 0, 16);
+>  
+>  	ret = ucsi->ops->sync_control(ucsi, command);
+> -	if (ret)
 > -		return ret;
-> -	}
+> -
+> -	ret = ucsi->ops->read_cci(ucsi, cci);
+> -	if (ret)
+> -		return ret;
+> +	if (ucsi->ops->read_cci(ucsi, cci))
+> +		return -EIO;
+>  
+>  	if (*cci & UCSI_CCI_BUSY)
+>  		return -EBUSY;
 > +	if (ret)
-> +		return dev_err_probe(dev, ret,
-> +				"failed to create child devices at %p\n", np);
->   
->   	ret = mtk_musb_clks_get(glue);
->   	if (ret)
-> @@ -448,23 +447,19 @@ static int mtk_musb_probe(struct platform_device *pdev)
->   		glue->role = USB_ROLE_NONE;
->   		break;
->   	default:
-> -		dev_err(&pdev->dev, "Error 'dr_mode' property\n");
-> -		return -EINVAL;
-> +		return dev_err_probe(&pdev->dev, -EINVAL,
-> +				"Error 'dr_mode' property\n");
->   	}
->   
->   	glue->phy = devm_of_phy_get_by_index(dev, np, 0);
-> -	if (IS_ERR(glue->phy)) {
-> -		dev_err(dev, "fail to getting phy %ld\n",
-> -			PTR_ERR(glue->phy));
-> -		return PTR_ERR(glue->phy);
-> -	}
-> +	if (IS_ERR(glue->phy))
-> +		return dev_err_probe(dev, PTR_ERR(glue->phy),
-> +				"fail to getting phy\n");
->   
->   	glue->usb_phy = usb_phy_generic_register();
-> -	if (IS_ERR(glue->usb_phy)) {
-> -		dev_err(dev, "fail to registering usb-phy %ld\n",
-> -			PTR_ERR(glue->usb_phy));
-> -		return PTR_ERR(glue->usb_phy);
-> -	}
-> +	if (IS_ERR(glue->usb_phy))
-> +		return dev_err_probe(dev, PTR_ERR(glue->usb_phy),
-> +				"fail to registering usb-phy\n");
->   
->   	glue->xceiv = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
->   	if (IS_ERR(glue->xceiv)) {
+> +		return ret;
+>  
+>  	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
+>  		return -EIO;
+> @@ -1249,6 +1251,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  
+>  	mutex_lock(&con->lock);
+>  
+> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
+> +			     __func__);
+> +
+>  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+>  
+>  	ret = ucsi_send_command_common(ucsi, command, &con->status,
+> -- 
+> 2.43.0
 
-Sorry, this is probably out of topic. I had seen one relevant kmemleak 
-report (probably false
-positive) which is related to dev_err_probe.
-
-[<ffff800083692200>] kmemleak_alloc+0xe0/0x120
-[<ffff800080a1d7f4>] __kmalloc_node_track_caller+0x354/0x4d0
-[<ffff800081443520>] kvasprintf+0xd0/0x1a0
-[<ffff8000814438bc>] kasprintf+0xac/0x120
-[<ffff8000820b5578>] device_set_deferred_probe_reason+0x68/0x148
-[<ffff8000820a1844>] dev_err_probe+0x164/0x1b0
-[<ffff800081ba00a8>] __clk_bulk_get+0x108/0x238
-[<ffff800081ba0248>] clk_bulk_get_optional+0x20/0x50
-[<ffff800081b9f294>] devm_clk_bulk_get_optional+0x6c/0x160
-[<ffff800081791efc>] mtk_tphy_probe+0x38c/0x7a8
-[<ffff8000820bbe98>] platform_probe+0xd0/0x240
-[<ffff8000820b35c8>] really_probe+0x368/0xa10
-[<ffff8000820b3de0>] __driver_probe_device+0x170/0x420
-[<ffff8000820b40f8>] driver_probe_device+0x68/0x1f0
-[<ffff8000820b47fc>] __driver_attach+0x234/0x558
-[<ffff8000820ae1b8>] bus_for_each_dev+0x108/0x1c8
-
-Not sure if this patch could trigger the same report.
-
-Thanks,
-Guoqing
+-- 
+heikki
 
