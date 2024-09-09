@@ -1,146 +1,110 @@
-Return-Path: <linux-usb+bounces-14844-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14845-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6F259711C9
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 10:24:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A5F697127B
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 10:47:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 815E91F230C8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 08:24:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55BEA1C2245E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 08:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183501B1431;
-	Mon,  9 Sep 2024 08:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2FEA1B2519;
+	Mon,  9 Sep 2024 08:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HkxL2XoY"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fKEiFbNp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0138E1AF4DB
-	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 08:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA091B1414
+	for <linux-usb@vger.kernel.org>; Mon,  9 Sep 2024 08:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725870136; cv=none; b=us7TrCm99Pq/VAkJjpTU73UG0yclzJa/z87+YT8tih4tLmF1Sy4qVNtr7VudqBh3VLBtFOMjrDqNE29gRLuqPhq7+rFqdBTwjteVQ5/tAegiJrAwvjfJNeF/qSwnpn+HvKAd7b93IVqKX6HlE0/QzLeAdHJJRAaMYMQbDAzkeMk=
+	t=1725871637; cv=none; b=PATPgas1A8/dgYvoXIo/5MVxMVggPgOLc0Wa0iO21U6l86fnRElwzFtrlziHsQ5qSNGkhBGERdpN7sk78d+XVHkZbS0CG6GpkQ30zmoLDg7firAAt4aJlQ+Gs87riGqADSHRT2cjjxNxcsnun/SGjuPPdmMZhe1jVMYLqafRdeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725870136; c=relaxed/simple;
-	bh=5SV9BncNsCwdDRsJKDW7QHWdqlrduHaqsSp2Nj0m8y0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tihuD0X2Q0decN677+bbSAp1qHflI52pn0+mA5Yo07cN6iI8s2i+Aj+JTzQ0Y/XcJ2bSkG0nhCKXrwHLf1sbCMI2atdocaPwlM18G7iu+oTxD1a2Q1ziVc3Oje34YDjw+439+LQ/r24a2amoX8eWmtlwckAah0sWcQ/lImRrGkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HkxL2XoY; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c260b19f71so4026757a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Sep 2024 01:22:14 -0700 (PDT)
+	s=arc-20240116; t=1725871637; c=relaxed/simple;
+	bh=67DL9UktAXzrHcrFumAZEwLE/YCzi76PqdEqAACbucc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BuTfeypEbrZ+CZSNG1Xeb4ORmDTrIz+FBz+/w9GgICfAtnFbp5nAset/aTTQ/vbNhtB3R4bNLFUqVVLPT1HlTGYPgsC3Q9swcedmeklxxZ8bxvuBilji96Lzx6V0NTWD1MVa81eGtuXT59ndgPpw69+k+eOD0tIQ8Jisa7aB8Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fKEiFbNp; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-374b25263a3so2288323f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 09 Sep 2024 01:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725870133; x=1726474933; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gdM+QCwg/ntiYysKTHm+SMSy3bdTTXjM4KfjMorhyeE=;
-        b=HkxL2XoYggZK9Re5aQB2QRFxgR1MFAWN9Bp2shAGwMHCX9qudJT+TVg5uXPaAWHPLj
-         YsR73K3e4sA63O7XN6+nIy8fefrd0MCiQLQzbe577fXL87kNlgjk/ihTKI2Za1ov+0nF
-         42EjoYJFy2gmzOYkW9mx4QbIiLTpBkZ4eily3ZpznHiyWxG5/3RLsE7/XGOYhJIiFxca
-         Lzg8LeMrPxcOAyxfm8JC/26pea6h+SznEokV0uhMTrO+7MFlcZ9MrmxEdU0x3MBz40kA
-         /sZibTvNZu7whgrYOC3NLRTdz7WtsLcgN90kH/M5SIqMYHqpdIhunsiq2shiqieK18yr
-         RU8A==
+        d=suse.com; s=google; t=1725871633; x=1726476433; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eRhD01m5pD4Tx0VdaioM7TI5h41AeXLRmUnW4jKsLv4=;
+        b=fKEiFbNpdKnHeWCQAEjSiK9f5vLDjY6of7/XOJO/quo/VzpsvtL2dLXs+wyIlcVMfg
+         oQVnN35reSYT2yGwXA+zK/tUD8vIiaiURkg8MmGB4aEe+yavZYooua1ScW+CqGk9JRkY
+         0r++UYddvOFHr6Q2aWOL9wQgpGvYRuO1AmYKqUYkuVS3RLJ4cqZpH5FSdCU93mFjXk1g
+         +yP0AAoMKfxmgVGCEzeihoei5+F+mow7TjQzxwrj6MHnWNREUE5CR+cAQeZKsau8JdAK
+         bJLeMC5U8+w+piK+PpHL5Dgks8Bt+/bK88UvRHCTtwlz9Owsij+UkVvmX64Vku9UBclM
+         TaHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725870133; x=1726474933;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gdM+QCwg/ntiYysKTHm+SMSy3bdTTXjM4KfjMorhyeE=;
-        b=GKlS/PqkYg57qMMFHRnNGMDtMWJQY/X6EcTkweGpmFEpFxqXRNHGs2G6tDtSylkd5q
-         IpsMd5VQLuLU75blEkLh/wc9vOczNgZH9VH2uEKSwS/kHWAbU6uNN3rcr14TdOZSgDKx
-         535Jd8M0wVqrw4v9pJZHU7Rhz5zlM7rPwvUE6BgXFNqb+rgpuZ/52UjKRX4OV+HtRq8P
-         /jXwDyWzjEf2xJMoC2/wW1aBJnpon1ULIqrgtwhSO+SwcHEHBke56ZQHd5Yv+3Q0Kvu3
-         UNdH8lqDDg02u4H1AcPv9qTEaPPOApAiFmVfIOBBUSAA/54UXXizEzYJ5ooZDuAXiDsA
-         bBow==
-X-Forwarded-Encrypted: i=1; AJvYcCXfj/RG/n4sCy3FDy0bGeTqyQRl3RWt9uLPXGM26bHcSI/F+V5/fJC0a9PZe5MzwJ9CEs4+2JXNuzw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylpZr5ncamGH9DWRRlBXSywKNg7GFYsUk42swQ1gCfmNQaudds
-	6ZGdpz2mbyY0RE/VkUM6TI+bOl1wZ6Mc+dWJMeqwcTBB+2Euk7x9
-X-Google-Smtp-Source: AGHT+IHS059AWdBgvSGL/JaqIIw+DViYBcjAj68f/qe6hc5Sk60hlXPMybjGjs1RDrcPQc5z26I3iA==
-X-Received: by 2002:a17:907:930e:b0:a8a:3ece:d073 with SMTP id a640c23a62f3a-a8a885bfdbfmr806943166b.10.1725870132954;
-        Mon, 09 Sep 2024 01:22:12 -0700 (PDT)
-Received: from foxbook (bip230.neoplus.adsl.tpnet.pl. [83.28.131.230])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25cec12esm303830966b.156.2024.09.09.01.22.11
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 09 Sep 2024 01:22:12 -0700 (PDT)
-Date: Mon, 9 Sep 2024 10:22:08 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org
-Subject: Re: [PATCH 10/12] usb: xhci: adjust empty TD list handling in
- handle_tx_event()
-Message-ID: <20240909102208.490eb0ed@foxbook>
-In-Reply-To: <1ae67893-fc97-4210-9e5d-74af158d5422@linux.intel.com>
-References: <20240906142316.3b00e4f1@foxbook>
-	<1ae67893-fc97-4210-9e5d-74af158d5422@linux.intel.com>
+        d=1e100.net; s=20230601; t=1725871633; x=1726476433;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRhD01m5pD4Tx0VdaioM7TI5h41AeXLRmUnW4jKsLv4=;
+        b=SqPILWkQ5ZJZO5UL0ZBlismgYzNQP/eTw6cc85XwjQGRmJ+8C+Qzv1PPDeQnno4gRd
+         qEj+I3JXd7CWuln61CifTBCKCwzzI+2p+GaYFzJlIICWYLFNrnFScV2MuEflCE1wxgIh
+         EfLylkKPZ6OtlvBYsXZh7iRpzCw3Thn0Kj2zxm3Ki6bUSh+4b3fRkjcVfWfLOqHb0ZPF
+         aphFu/Eg9r0CkiRSUrGT6hRM63gRYQ7e80edhnkcXb/Drqj42cOgv9bI3tK+PwqdknU3
+         S+4yB1e0YQ3+5pCSb90D7FwxmwFWy0N0BoxMoG+wwP7q/hlPFpbmr6jJxOLCyFQ+/ecs
+         kYhA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8iBXk8mTJ0LQ5wup+RFspcVbJrZuQgYoQFSejVwOldm7AUcZcx4Pyui64Fxvrs2HMV7E1kz1gqns=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxd3jiYs8cqPk7FtztoOAtkT7qLzDCqp6CLZvBz/NroHSbjDlgF
+	GkJrPlDcFFhc0bnphkVu12MrGdzDZjTlaFSa9VVmcdDAppodG9/DBVFmduZpsnU=
+X-Google-Smtp-Source: AGHT+IHuH34xXlzk7fHHJpOQQ6kyrzNVVCI5+xfxdmnh0PKudIfQ/+z8O+v3Q2sgfq3jECYDUsY0AQ==
+X-Received: by 2002:adf:ec06:0:b0:374:b6f4:d8d1 with SMTP id ffacd0b85a97d-378949edc6bmr4108900f8f.13.1725871632820;
+        Mon, 09 Sep 2024 01:47:12 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13b3:9201:e68f:3bce:663e:dfa9? ([2001:a61:13b3:9201:e68f:3bce:663e:dfa9])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3789564a340sm5421316f8f.24.2024.09.09.01.47.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 01:47:12 -0700 (PDT)
+Message-ID: <8510a98e-f950-4349-99bc-9d36febe94d3@suse.com>
+Date: Mon, 9 Sep 2024 10:47:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] usbnet: ipheth: prevent OoB reads of NDP16
+To: Foster Snowhill <forst@pen.gy>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240907230108.978355-1-forst@pen.gy>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20240907230108.978355-1-forst@pen.gy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hi,
 
-> > This used to get the empty list warning, but now it's mere
-> > xhci_dbg(). Throwing out all queued TDs is not the common case and
-> > it may easily be a bug. Indeed, I can readily name two cases when
-> > it is a bug today:
-> > 
-> > 1. Force Stopped Event on a NOP or Link following the missed TD.
-> > Then trb_in_td() doesn't match subsequent TD and the rest is
-> > trashed.
-> > 
-> > Actually, this is a v6.11 regression since d56b0b2ab1429. Although
-> > past behavior was bad and broken too, it was broken differently.
-> > 
-> > 2. Ring Underrun/Overrun if new TDs were queued before we handled
-> > it. If ep_trb_dma is NULL, nothing ever matches and everything goes
-> > out.
-> > 
-> > Arguably, these are rare events and I haven't observed them yet.
-> > And one more problem that I don't think currently exists, but:
-> > 
-> > 3. If you ever find yourself doing it on an ordinary event (Success,
-> > Transaction Error, Babble, etc.) then, seriously, WTF?
-> > 
-> > Bottom line, empty list is a very suspicious thing to see here. I
-> > can only think of two legitimate cases:
-> > 
-> > 1. Ring X-run, only if nothing new was queued since it occurred.
-> > 2. FSE outside transfer TDs, if no transfer TDs existed after it.  
+On 08.09.24 01:01, Foster Snowhill wrote:
+
+> To address the above issues without reimplementing more of CDC NCM,
+> rely on and check for a specific fixed format of incoming URBs
+> expected from an iOS device:
 > 
-> I can change it from a debug to a warning. Then the edge case should
-> be more visible.
+> * 12-byte NTH16
+> * 96-byte NDP16, allowing up to 22 DPEs (up to 21 datagrams + trailer)
 
-Actually, I'm no longer sure. If that ever happens, the user will next
-see "WARN list empty" or "ERROR TRB not part of current TD" and this
-will show there is a problem, so dyndbg will be enabled to investigate.
+I am afraid this is an approach we must not take. We cannot rely on
+a specific device's behavior in a class driver.
 
-I would still like to see more comp_codes printed in those messages,
-because on isoc there are some "weird" codes like Missed Service or
-Underrun, which have a very different meaning from the usual ones and
-are a source of bugs. But I would have to think about which cases it
-is useful for, particularly after this change.
+This is a NACK.
 
-Lastly, I'm not sure if this change is worthwile. Over the weekend,
-I have produced a fairly simple but dramatic simplification of this
-whole code. The 'empty list' branch that your patch deals with can
-be completely removed, because it duplicates functionality of other
-code. The skipping loop is reduced down to 8 lines of code, as it
-should have always been in the first place.
-
-I will try to clean those patches up and send them out today. They
-received varying degree of testing (some are two weeks old) and have
-not caused any regression so far. They are simple and revieable IMO.
-
-Regards,
-Michal
+	Regards
+		Oliver
 
