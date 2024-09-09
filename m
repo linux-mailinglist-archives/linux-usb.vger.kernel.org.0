@@ -1,133 +1,145 @@
-Return-Path: <linux-usb+bounces-14854-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14858-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0207971960
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 14:32:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C757B9719EF
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 14:51:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBF5C1C230A2
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 12:32:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81710285550
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2024 12:50:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3FC1B5EB2;
-	Mon,  9 Sep 2024 12:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06551B9B46;
+	Mon,  9 Sep 2024 12:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a78sDkVY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZafzdWSQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8641DFF0;
-	Mon,  9 Sep 2024 12:32:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CDF1B86D3;
+	Mon,  9 Sep 2024 12:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725885162; cv=none; b=HWiqhjrzLYKRf+HhZOmAJc4l/GzW4qHSyvbNUbasq4hRz66hh34PhLEsP2Is7dvyOzKj2G+dxIaeKbuhgMZgiN4Zu8ENJ5c9CMMVR1mS1hZ3uHiFumwKowYub4TBjQ3nHMhARg4DCs1ruUrtzSoUFFoMdNvlJuKFoX0UmeYQNgE=
+	t=1725886224; cv=none; b=LxDNZwwH/KTp93qwOimuk9PuGwfuTT2pPjqCkpBRk7nm6ej+oB8bE90xPPk57CQB/v1IiZpp02fIM7VdjgGAND9s7BmvvDBl3PaPtAlAYKb4PqlVCi+6+HtSvg3P/vRE01W7XDqnWrjRtC5vdhwuKe/G6FIFf5W/eZRTPoqIiAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725885162; c=relaxed/simple;
-	bh=MNxJppAPsE+Xe5YVRAFxO+fktSUiHO0Kg0zOQEvY35M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XgQWP9moTM8Gnb78+AVHqMjmE4InADnYqUS8UQxO/EBGbi2B0ngdZ/sqEnQQ/XFya0nCScF7QWcLo2PzPjVrXbVLzTgPk1ZmoxZ4djjo5QMElkntjC8WEeoFy+FQDsaEWGFTT+mTxz1J0tdmnaGCtZIBWCp+LBQBfJ/4cc97tp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a78sDkVY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D006C4CEC5;
-	Mon,  9 Sep 2024 12:32:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725885162;
-	bh=MNxJppAPsE+Xe5YVRAFxO+fktSUiHO0Kg0zOQEvY35M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a78sDkVYh11C5QY5KAlW15ljRMy6bSy92pGuCEzZ3tCuPMY+6MzjzwklkGlFx+Tzp
-	 XUucl1Z6tDXwMQzeMEpj/1ffkw8NFB8Hj8Pvop06/Iz21goCo5+d7fPN7+yk+9FNQc
-	 cFVBupEvRFYb22477epkNAJALyu16koqNiAB3vlV1R8mBcwy2rcy98yH5eR+6axZSw
-	 TqFv3+mvSl7WO8sMMIPYwmOmGI9FxDEwahkHi8yV4C3u/ixLhTq7CUGqsaRMkTcb+2
-	 zjMeOOiXCsmUBqmcBZVgKZR7HeDl4Zsw3KsTo0K8R5PQYJNlCdJDteJwlwi7G4KL9b
-	 JLCtFqIHtB7Yg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sndZj-0000000023H-1vJ3;
-	Mon, 09 Sep 2024 14:32:59 +0200
-Date: Mon, 9 Sep 2024 14:32:59 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: pl2303: account for deficits of clones
-Message-ID: <Zt7q-5kk5SPgE7P4@hovoldconsulting.com>
-References: <a07922bd-4550-41d8-a7cd-8943baf6f8fb@siemens.com>
+	s=arc-20240116; t=1725886224; c=relaxed/simple;
+	bh=KWYespF+mcQwqISVVXzv9T2zQplfsj431bxXbvKt39o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GEaWhTatHMPTXQBls71j8afFJN6EiStVgYH5wG8sczFOG4CtJJ+qaLFXT6MQ2WaQBEXu6idjWV+8eqSnySPZFyKpm5xO8mxtPUFLBgE4vLqX1Of5GJS+Q6VOVJ8eEcLfFBnZi0kciaEPiwlheQM0Pyzut3qOq7dry4lWvXlqtGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZafzdWSQ; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725886223; x=1757422223;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KWYespF+mcQwqISVVXzv9T2zQplfsj431bxXbvKt39o=;
+  b=ZafzdWSQF+zEWjDUDmTmf85z5kkdw+s1pKV2/FBJP/n0Nn/K2KY5sA1Z
+   IEUXCM68FYRrJ+KU7HrexCx/vZBmM30+sSvp0OwDdLhOtJv+8Pzv/mEtq
+   ugGyyVnZ9YptSWlfRu3+fQjF+3PJUVFFxOnYtGMyS5WtB55AkltaGnrko
+   MDgdRBMor33D7g3yrizD2HrjscZqIJxHIezAODFs0A1cc5ik6Y5e9EvZu
+   3wBwSSLJjDQOK8p7hEWzcMXHBXO1UOMxuLJTsXY7Ik5mn5w4ebqLrAzAM
+   1QxgveusaG7XtORXu5hlRuPq3iGs4w8WSUk+JUJSKhzxh5lLLZ0ELNj/t
+   g==;
+X-CSE-ConnectionGUID: 1BMZ9U31SPm44MxQXT3x6A==
+X-CSE-MsgGUID: ZWVytuzpSPuuaQws/4WGmQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24079104"
+X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
+   d="scan'208";a="24079104"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 05:50:05 -0700
+X-CSE-ConnectionGUID: vx5aSnBRQneWiQsSzpk30A==
+X-CSE-MsgGUID: Hc3TVcRKRKK+K5Fxc3MKGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
+   d="scan'208";a="97470243"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa001.fm.intel.com with ESMTP; 09 Sep 2024 05:49:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id E351C321; Mon, 09 Sep 2024 15:49:56 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Utkarsh Patel <utkarsh.h.patel@intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+	"David E. Box" <david.e.box@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Zha Qipeng <qipeng.zha@intel.com>,
+	Lee Jones <lee@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: [PATCH v2 0/3] platform/x86: intel_scu: Move headers to x86 subfolder
+Date: Mon,  9 Sep 2024 15:41:03 +0300
+Message-ID: <20240909124952.1152017-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a07922bd-4550-41d8-a7cd-8943baf6f8fb@siemens.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 01, 2024 at 11:11:29PM +0200, Jan Kiszka wrote:
-> From: Jan Kiszka <jan.kiszka@siemens.com>
-> 
-> There are apparently incomplete clones of the HXD type chip in use.
-> Those return -EPIPE on GET_LINE_REQUEST and BREAK_REQUEST. Avoid
-> flooding the kernel log with those errors. Rather use the
-> line_settings cache for GET_LINE_REQUEST and signal missing support by
-> returning -ENOTTY from pl2303_set_break.
+Add the record to the MAINTAINERS to follow what is going on with the
+Intel MID platform related code and drivers.
 
-This looks mostly fine to me, but could you please try to make these
-changes only apply to the clones or, since those probably cannot be
-detected reliably, HXD?
+With that, clean up a bit a couple of headers, i.e. move them to x86
+subfolder of include/linux/platform_data where they belong to.
 
-What is the 'lsusb -v' for these devices?
- 
-> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-> ---
->  drivers/usb/serial/pl2303.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-> index d93f5d584557..04cafa819390 100644
-> --- a/drivers/usb/serial/pl2303.c
-> +++ b/drivers/usb/serial/pl2303.c
-> @@ -731,12 +731,13 @@ static int pl2303_get_line_request(struct usb_serial_port *port,
->  				GET_LINE_REQUEST, GET_LINE_REQUEST_TYPE,
->  				0, 0, buf, 7, 100);
->  	if (ret != 7) {
-> -		dev_err(&port->dev, "%s - failed: %d\n", __func__, ret);
-> +		struct pl2303_private *priv = usb_get_serial_port_data(port);
->  
-> -		if (ret >= 0)
-> -			ret = -EIO;
-> +		dev_dbg(&port->dev, "%s - failed, falling back on cache: %d\n",
-> +			__func__, ret);
-> +		memcpy(buf, priv->line_settings, 7);
->  
-> -		return ret;
-> +		return 0;
->  	}
+No functional changes intended.
 
-Looking at the driver, it seems like we could move the only call to this
-function to probe, and perhaps then an error message for cloned devices
-is not such a big deal. But even that could be suppressed based on the
-type.
+Taking into account nature of this change it's supposed to go via PDx86
+tree, please Ack.
 
-Or we could use this call failing to flag the device as a likely clone
-and use that flag to also skip break signalling completely.
+v2:
+- Maintained --> Supported (Dave)
+- added two cleanup patches (Mika and me)
 
->  	dev_dbg(&port->dev, "%s - %7ph\n", __func__, buf);
-> @@ -1078,8 +1079,8 @@ static int pl2303_set_break(struct usb_serial_port *port, bool enable)
->  				 BREAK_REQUEST, BREAK_REQUEST_TYPE, state,
->  				 0, NULL, 0, 100);
->  	if (result) {
-> -		dev_err(&port->dev, "error sending break = %d\n", result);
-> -		return result;
-> +		dev_dbg(&port->dev, "error sending break = %d\n", result);
-> +		return -ENOTTY;
->  	}
+Andy Shevchenko (2):
+  MAINTAINERS: Add Intel MID section
+  platform/x86: intel_scu_wdt: Move intel_scu_wdt.h to x86 subfolder
 
-And similar here, the log level could depend on the type, unless the
-function should just bail out early for clones.
+Mika Westerberg (1):
+  platform/x86: intel_scu_ipc: Move intel_scu_ipc.h out of
+    arch/x86/include/asm
 
->  
->  	return 0;
+ MAINTAINERS                                   | 20 ++++++++++++++++++-
+ arch/x86/include/asm/intel_telemetry.h        |  2 +-
+ arch/x86/platform/intel-mid/intel-mid.c       |  3 ++-
+ drivers/mfd/intel_pmc_bxt.c                   |  3 +--
+ drivers/mfd/intel_soc_pmic_bxtwc.c            |  3 +--
+ drivers/mfd/intel_soc_pmic_mrfld.c            |  3 +--
+ drivers/platform/x86/intel_scu_ipc.c          |  2 +-
+ drivers/platform/x86/intel_scu_ipcutil.c      |  2 +-
+ drivers/platform/x86/intel_scu_pcidrv.c       |  2 +-
+ drivers/platform/x86/intel_scu_pltdrv.c       |  2 +-
+ drivers/platform/x86/intel_scu_wdt.c          |  3 ++-
+ drivers/usb/typec/mux/intel_pmc_mux.c         |  3 +--
+ drivers/watchdog/intel-mid_wdt.c              |  5 ++---
+ .../platform_data/{ => x86}/intel-mid_wdt.h   |  6 +++---
+ .../linux/platform_data/x86}/intel_scu_ipc.h  |  4 ++--
+ 15 files changed, 39 insertions(+), 24 deletions(-)
+ rename include/linux/platform_data/{ => x86}/intel-mid_wdt.h (74%)
+ rename {arch/x86/include/asm => include/linux/platform_data/x86}/intel_scu_ipc.h (96%)
 
-Johan
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
+
 
