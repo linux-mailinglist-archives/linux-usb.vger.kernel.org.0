@@ -1,342 +1,178 @@
-Return-Path: <linux-usb+bounces-14885-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14886-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D656C972E70
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 11:43:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 689BD973041
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 11:59:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 063121C20FD7
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:43:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B808AB2290A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:59:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C5C19049D;
-	Tue, 10 Sep 2024 09:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEAE118B498;
+	Tue, 10 Sep 2024 09:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dwWsWYAW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8636A18FDC5;
-	Tue, 10 Sep 2024 09:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D719188CDC
+	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 09:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725961333; cv=none; b=HFvp0a9tgw9aXZvbKAYzxoqF6I9O/9MO2ULgQffMHFHPllnIZDE+lcC3xDJJWj8VENZ8J1JHu/nNvpKZHuwaxYfTFfQD3ycW8Jbr0oR7cJxm0aNsPlUqVG5gBW8Ma7XDUTPovzXIQ25izNUcQ8m7QlKfnM7/jXR6gC97GKO4o/g=
+	t=1725962345; cv=none; b=he3Dy1THtd4jSJ5QiG6ujZTqMSOzEL451ruSnFDSEwVnxd4oaqIT/8QapjkJzNYJmjtK82bhL4KjmxauxVlg8CKkmZiUFxHcgRhO/Zio9eLqty6EA6K54gvXTxKiS3WBwyAaSLnIW2JruC9REC6ZbHKghhKSt5dErksvREoWlPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725961333; c=relaxed/simple;
-	bh=5LFaB4QeRF7sCvthexbWNV7eT6PsLxn6wE3VOrnStQ0=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 MIME-Version:Date; b=QgeClY+pWrcbfs5WiGp+LNUU2duxJfOomCfZGQPPhQXJW7ApF34ofo/SYhN3dMWQEfFMmbJ1qo4A+H0EkBJQrsYD62c7W9OZchjqBl5P1ZWB6433zrsVvruAEpiRGJq7bUjdPj9XcwHNVySTSQH/e/akMqG9bAMwd8Ui6xCRX8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ef80a98c6f5811efa216b1d71e6e1362-20240910
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:7af2211c-764b-4bbd-ba05-e0dfd58e57ee,IP:20,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-3,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:17
-X-CID-INFO: VERSION:1.1.38,REQID:7af2211c-764b-4bbd-ba05-e0dfd58e57ee,IP:20,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-3,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:17
-X-CID-META: VersionHash:82c5f88,CLOUDID:1d3bfc4f5e06006388cbca7b60dda97c,BulkI
-	D:2409062205428B690IWE,BulkQuantity:3,Recheck:0,SF:24|72|19|45|64|66|102,T
-	C:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: ef80a98c6f5811efa216b1d71e6e1362-20240910
-X-User: duanchenghao@kylinos.cn
-Received: from [192.168.27.151] [(223.70.160.255)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 891067160; Tue, 10 Sep 2024 17:42:03 +0800
-Message-ID: <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
-Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
- USB status when S4 wakes up
-From: duanchenghao <duanchenghao@kylinos.cn>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
-	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-In-Reply-To: <1725931490447646.3.seg@mailgw.kylinos.cn>
-References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
-	 <1725931490447646.3.seg@mailgw.kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1725962345; c=relaxed/simple;
+	bh=bQLe2pUIEEyUZE+/EAglMsUr+F12sN/BLUBijDrXSac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Edm8PuLhPW51UhCtboq1nSTm9bvkuZoUVhcA5QVQ8mfieJZt/y+aYpa8hWXrOXXbwVpisCxPhFgafFgdQaGNmY5jQk2JPuoaeIat1auWIlb4X9kQiEbf5Po2PcsmqpxBwkkWDr9DIVxHxZog1+zurs2mnI2rDLTgBaJki8H7qXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dwWsWYAW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725962342;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jiUkwL8jiwz5bb5LLszsrQRqvrS9SIKe3P1nTjcI9RU=;
+	b=dwWsWYAWI/uWKosgUnEVQj3alAgbhDX8IzmuB/v7r4TuiF9tZaQXwUkrlfOfL1C6N1t5H4
+	GsCHCa/o7ldPtApcIbMHzwyooOO6OrXSOCux99ZTDSvuF46vwsb9i+zYKNqYpobLGGWX6f
+	1b9JMEO7mjwZk8jle4DOmYdhLFk8VPQ=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-621-TwoU7eFeO5ywgLno7SwjVg-1; Tue, 10 Sep 2024 05:59:01 -0400
+X-MC-Unique: TwoU7eFeO5ywgLno7SwjVg-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a8a6fee3ab1so422144866b.3
+        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 02:59:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725962340; x=1726567140;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jiUkwL8jiwz5bb5LLszsrQRqvrS9SIKe3P1nTjcI9RU=;
+        b=UBG3cBk1IAzZ64XE1HmGsI81H23jqdbPesFkhwjENNeUJKRoPVkJVBoU0t8M/mKrjq
+         +KHCXGIOXXhOK4hIYWZ2iecN/SBBWWsMsBjqp4Kl+x7PA4xikHKPBreQATIn4Z2EZr1K
+         /moBEKdtcIC7I51qPwLwQVEo6+tFIxG0dCAEfScI/Qgy6l9BA6AATFQFUWBiqy6O4M9Z
+         V1yhD+EYwS+icVQxgpezHSt8Q4/jNiuSXjNK6RWVNVfO1BX0qsB/1yKgNFAmRtorphLO
+         HxpxALwY+Z9mIFaEJEzEaWaGtuyX6cW5HRX114a3W/rU9XNnip5IfAecBqxV6mqepo2F
+         Mucg==
+X-Forwarded-Encrypted: i=1; AJvYcCXd63ILcMnadGkhAYjgqqhzjxdvGiZQnh6RnrCfEjupQb0VhdIFWG8Ls6GGU2m8u+m2+qRX2Tl/oaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpoLqoe+NkYNvv8n4X+KOajGhzFv/mrnCqRbDyh/DTwu295TSS
+	D6TqDRMVFYcNukfEWn3pCEIwTDY8qR5OMokwIHhtmAzJaA5PW7zuYCkDQjX4xCBQM7x6jTol+r6
+	LlKMc6ysE2E+Flv9YVKs1eqcFCdO+3GJks5s40Hj/vRJ8VLsebjMdnpk+Hw==
+X-Received: by 2002:a17:907:268e:b0:a86:8953:e1fe with SMTP id a640c23a62f3a-a8ffadf3c37mr21982466b.47.1725962339863;
+        Tue, 10 Sep 2024 02:58:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IERbuGqTbebYxtwPp+Ofxmyy5JzHR+T4dmVYSq8mepeZfuhvqFtrdMXLyJgC2KYWCtRG3tCIA==
+X-Received: by 2002:a17:907:268e:b0:a86:8953:e1fe with SMTP id a640c23a62f3a-a8ffadf3c37mr21979466b.47.1725962339290;
+        Tue, 10 Sep 2024 02:58:59 -0700 (PDT)
+Received: from [192.168.88.27] (146-241-69-130.dyn.eolo.it. [146.241.69.130])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25830efdsm459314066b.41.2024.09.10.02.58.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Sep 2024 02:58:58 -0700 (PDT)
+Message-ID: <ff23bcb5-d2e8-4b1b-a669-feab4a97994a@redhat.com>
+Date: Tue, 10 Sep 2024 11:58:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 10 Sep 2024 17:36:56 +0800
-User-Agent: Evolution 3.44.4-0ubuntu2 
-
-
-> [Please make sure that the lines in your email message don't extend=20
-> beyond 76 columns or so.]
->=20
-
-OK. Later, I will modify the patch format. V2 patch will be released
-later
-
-> Lots of things here seem to be wrong.
->=20
-> On Fri, Sep 06, 2024 at 11:05:48AM +0800, Duan Chenghao wrote:
-> > When a device is inserted into the USB port and an S4 wakeup is
-> > initiated,
->=20
-> There is no such thing as an S4 wakeup.=C2=A0 Do you mean wakeup from an
-> S4=20
-> suspend state?
-
-Yes, waking up from the S4 suspend state.
-
->=20
-> > after the USB-hub initialization is completed, it will
-> > automatically enter suspend mode.
->=20
-> What will enter suspend mode?=C2=A0 The hub that the device was plugged
-> into?
-> That should not happen.=C2=A0 The hub initialization code should detect
-> that=20
-> a new device was plugged in and prevent the hub from suspending.
->=20
-
-Yes, the current issue is that the hub detects a new device during the
-resuming process. However, the S4 wakeup is attempting to put the hub
-into suspend mode, and during the suspend process, it detects that the
-HCD_FLAG_WAKEUP_PENDING flag has already been set, resulting in the
-return of an EBUSY status.
-
-> > Upon detecting a device on the USB port, it will proceed with
-> > resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
->=20
-> HCD_FLAG_WAKEUP_PENDING is not a state.=C2=A0 It is a flag.
->=20
-> > During the S4 wakeup process, peripherals are put into suspend
-> > mode, followed by task recovery.
->=20
-> What do you mean by "task recovery"?=C2=A0 We don't need to recover any=
-=20
-> tasks.
->=20
-
-S4 wakeup restores the image that was saved before the system entered
-the S4 sleep state.
-
-=C2=A0=C2=A0=C2=A0 S4 waking up from hibernation
-=C2=A0=C2=A0=C2=A0 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=C2=A0=C2=A0=C2=A0 kernel initialization
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
-=C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
-=C2=A0=C2=A0=C2=A0 freeze user task and kernel thread
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
-=C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
-=C2=A0=C2=A0=C2=A0 load saved image
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=20
-=C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
-=C2=A0=C2=A0=C2=A0 freeze the peripheral device and controller
-=C2=A0=C2=A0=C2=A0 (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If =
-it is set,
-=C2=A0=C2=A0=C2=A0=C2=A0 return to EBUSY and do not perform the following r=
-estore image.)
-=C2=A0=C2=A0=C2=A0 |
-=C2=A0=C2=A0=C2=A0 v
-=C2=A0=C2=A0=C2=A0 restore image(task recovery)
-
-
-> What do you mean by "peripherals are put into suspend mode"?=C2=A0 That's
-> not=20
-> what happens.=C2=A0 Peripherals are set back to full power.
->=20
-> > However, upon detecting that the hcd is in the
-> > HCD_FLAG_WAKEUP_PENDING state,
-> > it will return an EBUSY status, causing the S4 suspend to fail and
-> > subsequent task recovery to not proceed.
->=20
-> What will return an EBUSY status?
-
-if HCD_FLAG_WAKEUP_PENDING flag is set_bit, will return EBUSY.
-
->=20
-> Why do you say that S4 suspend will fail?=C2=A0 Aren't you talking about
-> S4=20
-> wakeup?
-
-After returning EBUSY, the subsequent restore image operation will not
-be executed.
-
->=20
-> Can you provide a kernel log that explains these points and shows
-> what=20
-> problem you are trying to solve?
-
-[=C2=A0=C2=A0=C2=A0 9.009166][ 2] [=C2=A0 T403] PM: Image signature found, =
-resuming
-[=C2=A0=C2=A0=C2=A0 9.009167][ 2] [=C2=A0 T403] PM: resume from hibernation
-[=C2=A0=C2=A0=C2=A0 9.009243][ 2] [=C2=A0 T403] inno-codec inno-codec.16.au=
-to:
-[inno_vpu][vpu_notifier:1540]vpu_notifier: untested action 5...
-[=C2=A0=C2=A0=C2=A0 9.009244][ 2] [=C2=A0 T403] Freezing user space process=
-es ... (elapsed
-0.001 seconds) done.
-[=C2=A0=C2=A0=C2=A0 9.010355][ 2] [=C2=A0 T403] OOM killer disabled.
-[=C2=A0=C2=A0=C2=A0 9.010355][ 2] [=C2=A0 T403] Freezing remaining freezabl=
-e tasks ...
-(elapsed 0.000 seconds) done.
-[=C2=A0=C2=A0=C2=A0 9.012152][ 2] [=C2=A0 T403] PM: Basic memory bitmaps cr=
-eated
-[=C2=A0=C2=A0=C2=A0 9.073333][ 2] [=C2=A0 T403] PM: Using 3 thread(s) for d=
-ecompression
-[=C2=A0=C2=A0=C2=A0 9.073334][ 2] [=C2=A0 T403] PM: Loading and decompressi=
-ng image data
-(486874 pages)...
-[=C2=A0=C2=A0=C2=A0 9.073335][ 2] [=C2=A0 T403] hibernate: Hibernated on CP=
-U 0 [mpidr:0x0]
-[=C2=A0=C2=A0=C2=A0 9.095928][ 2] [=C2=A0 T403] PM: Image loading progress:=
-=C2=A0=C2=A0 0%
-[=C2=A0=C2=A0=C2=A0 9.664803][ 2] [=C2=A0 T403] PM: Image loading progress:=
-=C2=A0 10%
-[=C2=A0=C2=A0=C2=A0 9.794156][ 2] [=C2=A0 T403] PM: Image loading progress:=
-=C2=A0 20%
-[=C2=A0=C2=A0=C2=A0 9.913001][ 2] [=C2=A0 T403] PM: Image loading progress:=
-=C2=A0 30%
-[=C2=A0=C2=A0 10.034331][ 2] [=C2=A0 T403] PM: Image loading progress:=C2=
-=A0 40%
-[=C2=A0=C2=A0 10.154070][ 2] [=C2=A0 T403] PM: Image loading progress:=C2=
-=A0 50%
-[=C2=A0=C2=A0 10.277096][ 2] [=C2=A0 T403] PM: Image loading progress:=C2=
-=A0 60%
-[=C2=A0=C2=A0 10.398860][ 2] [=C2=A0 T403] PM: Image loading progress:=C2=
-=A0 70%
-[=C2=A0=C2=A0 10.533760][ 2] [=C2=A0 T403] PM: Image loading progress:=C2=
-=A0 80%
-[=C2=A0=C2=A0 10.659874][ 2] [=C2=A0 T403] PM: Image loading progress:=C2=
-=A0 90%
-[=C2=A0=C2=A0 10.760681][ 2] [=C2=A0 T403] PM: Image loading progress: 100%
-[=C2=A0=C2=A0 10.760693][ 2] [=C2=A0 T403] PM: Image loading done
-[=C2=A0=C2=A0 10.760718][ 2] [=C2=A0 T403] PM: Read 1947496 kbytes in 1.68 =
-seconds
-(1159.22 MB/s)
-[=C2=A0=C2=A0 10.761982][ 2] [=C2=A0 T403] PM: Image successfully loaded
-[=C2=A0=C2=A0 10.761988][ 2] [=C2=A0 T403] printk: Suspending console(s) (u=
-se
-no_console_suspend to debug)
-[=C2=A0=C2=A0 10.864973][ 2] [=C2=A0 T403] innovpu_freeze:1782
-[=C2=A0=C2=A0 10.864974][ 2] [=C2=A0 T403] innovpu_suspend:1759
-[=C2=A0=C2=A0 11.168871][ 2] [=C2=A0 T189] PM: pci_pm_freeze():
-hcd_pci_suspend+0x0/0x38 returns -16
-[=C2=A0=C2=A0 11.168875][ 2] [=C2=A0 T189] PM: dpm_run_callback():
-pci_pm_freeze+0x0/0x108 returns -16
-[=C2=A0=C2=A0 11.168876][ 2] [=C2=A0 T189] PM: Device 0000:05:00.0 failed t=
-o quiesce
-async: error -16
-[=C2=A0=C2=A0 12.270452][ 2] [=C2=A0 T403] innovpu_thaw:1792
-[=C2=A0=C2=A0 12.405296][ 2] [=C2=A0 T403] PM: Failed to load hibernation i=
-mage,
-recovering.
-[=C2=A0=C2=A0 12.486859][ 2] [=C2=A0 T403] PM: Basic memory bitmaps freed
-[=C2=A0=C2=A0 12.486860][ 2] [=C2=A0 T403] OOM killer enabled.
-[=C2=A0=C2=A0 12.486861][ 2] [=C2=A0 T403] Restarting tasks ...=20
-
->=20
-> > This patch makes two modifications in total:
-> > 1. The set_bit and clean_bit operations for the
-> > HCD_FLAG_WAKEUP_PENDING flag of Hcd,
-> > which were previously split between the top half and bottom half of
-> > the interrupt,
-> > are now unified and executed solely in the bottom half of the
-> > interrupt.
-> > This prevents the bottom half tasks from being frozen during the S4
-> > process,
-> > ensuring that the clean_bit process can proceed without
-> > interruption.
->=20
-> The name is "clear_bit" (with an 'r'), not "clean_bit".
->=20
-> > 2. Add a condition to the set_bit operation for the hcd status
-> > HCD_FLAG_WAKEUP_PENDING.
-> > When the hcd status is HC_STATE_SUSPENDED, perform the setting of
-> > the aforementioned status bit.
-> > This prevents a subsequent set_bit from occurring after the
-> > clean_bit if the hcd is in the resuming process.
->=20
-> hcd_bus_resume() clears that HCD_FLAG_WAKEUP_PENDING bit after
-> calling=20
-> hcd->driver->bus_resume().=C2=A0 After that point,
-> usb_hcd_resume_root_hub()=20
-> won't be called, so how can HCD_FLAG_WAKEUP_PENDING get set again?
->=20
-> Alan Stern
->=20
-> > Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
-> > ---
-> > =C2=A0drivers/usb/core/hcd.c | 1 -
-> > =C2=A0drivers/usb/core/hub.c | 3 +++
-> > =C2=A02 files changed, 3 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > index 1ff7d901fede..a6bd0fbd82f4 100644
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd
-> > *hcd)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_lock_irqsave (&hcd=
-_root_hub_lock, flags);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (hcd->rh_registered)=
- {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0pm_wakeup_event(&hcd->self.root_hub->dev, 0);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0queue_work(pm_wq, &hcd->wakeup_work);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_unlock_irqrestore =
-(&hcd_root_hub_lock, flags);
-> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > index 4b93c0bd1d4b..7f847c4afc0d 100644
-> > --- a/drivers/usb/core/hub.c
-> > +++ b/drivers/usb/core/hub.c
-> > @@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device
-> > *udev, pm_message_t msg)
-> > =C2=A0
-> > =C2=A0int usb_remote_wakeup(struct usb_device *udev)
-> > =C2=A0{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct usb_hcd=C2=A0 *hcd =
-=3D bus_to_hcd(udev->bus);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0status =3D 0;
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0usb_lock_device(udev);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (udev->state =3D=3D =
-USB_STATE_SUSPENDED) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-")=
-;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (hcd->state =3D=3D HC_STATE_SUSPENDED)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0set_bi=
-t(HCD_FLAG_WAKEUP_PENDING, &hcd-
-> > > flags);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0status =3D usb_autoresume_device(udev);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (status =3D=3D 0) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-/* Let the drivers do their thing, then...
-> > */
-> > --=20
-> > 2.34.1
-> >=20
-> >=20
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv2 net] usbnet: fix cyclical race on disconnect with work
+ queue
+To: Oliver Neukum <oneukum@suse.com>, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+References: <20240905134811.35963-1-oneukum@suse.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20240905134811.35963-1-oneukum@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
 
+On 9/5/24 15:46, Oliver Neukum wrote:
+> The work can submit URBs and the URBs can schedule the work.
+> This cycle needs to be broken, when a device is to be stopped.
+> Use a flag to do so.
+> This is a design issue as old as the driver.
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> CC: stable@vger.kernel.org
+> ---
+> 
+> v2: fix PM reference issue
+> 
+>   drivers/net/usb/usbnet.c   | 37 ++++++++++++++++++++++++++++---------
+>   include/linux/usb/usbnet.h | 17 +++++++++++++++++
+>   2 files changed, 45 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index 18eb5ba436df..2506aa8c603e 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -464,10 +464,15 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
+>   void usbnet_defer_kevent (struct usbnet *dev, int work)
+>   {
+>   	set_bit (work, &dev->flags);
+> -	if (!schedule_work (&dev->kevent))
+> -		netdev_dbg(dev->net, "kevent %s may have been dropped\n", usbnet_event_names[work]);
+> -	else
+> -		netdev_dbg(dev->net, "kevent %s scheduled\n", usbnet_event_names[work]);
+> +	if (!usbnet_going_away(dev)) {
+> +		if (!schedule_work(&dev->kevent))
+> +			netdev_dbg(dev->net,
+> +				   "kevent %s may have been dropped\n",
+> +				   usbnet_event_names[work]);
+> +		else
+> +			netdev_dbg(dev->net,
+> +				   "kevent %s scheduled\n", usbnet_event_names[work]);
+> +	}
+>   }
+>   EXPORT_SYMBOL_GPL(usbnet_defer_kevent);
+>   
+> @@ -535,7 +540,8 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
+>   			tasklet_schedule (&dev->bh);
+>   			break;
+>   		case 0:
+> -			__usbnet_queue_skb(&dev->rxq, skb, rx_start);
+> +			if (!usbnet_going_away(dev))
+> +				__usbnet_queue_skb(&dev->rxq, skb, rx_start);
+>   		}
+>   	} else {
+>   		netif_dbg(dev, ifdown, dev->net, "rx: stopped\n");
+> @@ -843,9 +849,18 @@ int usbnet_stop (struct net_device *net)
+>   
+>   	/* deferred work (timer, softirq, task) must also stop */
+>   	dev->flags = 0;
+> -	del_timer_sync (&dev->delay);
+> -	tasklet_kill (&dev->bh);
+> +	del_timer_sync(&dev->delay);
+> +	tasklet_kill(&dev->bh);
+>   	cancel_work_sync(&dev->kevent);
+> +
+> +	/* We have cyclic dependencies. Those calls are needed
+> +	 * to break a cycle. We cannot fall into the gaps because
+> +	 * we have a flag
+> +	 */
+> +	tasklet_kill(&dev->bh);
+> +	del_timer_sync(&dev->delay);
+> +	cancel_work_sync(&dev->kevent);
 
+I guess you do the shutdown twice because a running tasklet or timer 
+could re-schedule the others? If so, what prevent the rescheduling to 
+happen in the 2nd iteration? why can't you add usbnet_going_away() 
+checks on tasklet and timer reschedule point?
+
+Thanks,
+
+Paolo
 
 
