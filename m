@@ -1,154 +1,147 @@
-Return-Path: <linux-usb+bounces-14912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14913-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E428973947
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 16:03:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97A7997394D
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 16:04:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21F471F244AC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 14:03:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC1121C247BE
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 14:04:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1804319309D;
-	Tue, 10 Sep 2024 14:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455F519580B;
+	Tue, 10 Sep 2024 14:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CU8AvWRL"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DRd8C1mA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D2728389
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 14:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E6128389;
+	Tue, 10 Sep 2024 14:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725976988; cv=none; b=IR+64L0gIaBA9lM6iefO81I9cZGNfMP8wabqwM27i6uY3maPjoN7xSCNLPRYIA6zXUInVbhzk+ua/gt/x1CHfZn18T4pTIZwY8EhqY58M5f8cCy4yG4hX/2TXM3uuGihY8BbGXkcn/7t0xl+fTYelX96mxcRVsuRZWbfe9xsH3k=
+	t=1725977062; cv=none; b=ad5TSQYmPKH8WcYPY20eE8Jc0Frxve97wmvHG/plwnyYuhJsRRhi7nyHdZSXb8xCsrGRKWem3SyS9k025KjA15rJlns4jrFFhutRkev9Yz0Hsq4/IXqYHPNeUKhcBII2q0n6gMpbPc2fsJF+h4s1f1LLdtM9vYmzG0HpO2RsjRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725976988; c=relaxed/simple;
-	bh=OmviRgppHGhq8YSAjyzxPpHL3eBFIaV8TfAAO9+0pF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gzoq9TAoDocWJBhaWRLZTY127HFC8bObkryYLbHbQKgnOulNzlwNCqXgS2ILUstPbuGSwQ7b2SkuRgw4c6FTZgbGHr/CBxMGWwZ8+ffwru5QA3dMiSjEdzGhAE3a6EHkKy9vadeBDLqLFSAlri5P+ZxxGgI1D7hEC2CneOvFEqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CU8AvWRL; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8ce5db8668so640549666b.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 07:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725976985; x=1726581785; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3sdldMH+y5OeaRs0sQiUc69EoWGH2zYBCHPZqq8+kI=;
-        b=CU8AvWRLee07c6F34bKdhe2zcI6CIVOemareHwed+sBdzWZ3b+gvoISiXPRGDvB57j
-         W+8bVOyOBqtaaiY9Jw7DJfiERjQqC60W7+qTCmfwaDAr9YSsZHpJadkZBXcTB2PAn0SC
-         9v517mqQm0r38J2sl0fjbkgAMc+G1hM5bhZb1P9DU4+5GPbwUBZ98/6fM9HtbWrpRCq+
-         7UukNugDFWC15Gyc9eDeSoBodCeFHxIDzIAn4zpoozPj6p/weKrJ1EvO4s3c3gvYlcWG
-         zrX4ipFpttHp13O72sRPl5sCfDfm+Bm9sh/ZPVEVXPa27Eks3svreU/f+vvW7YlbUvlw
-         KqBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725976985; x=1726581785;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3sdldMH+y5OeaRs0sQiUc69EoWGH2zYBCHPZqq8+kI=;
-        b=Z2WtmHRq1lX3agGd0921OMi3mU9uJUyV0TAoFdbDuqlSHZxInyTZE1o9P85bhwOWi3
-         gW+rftfVzdvzZcttLnQO3flAKsKtWdaGP0tSPTk3xQB16CVATk2ob3LpLj46JyjiRJSS
-         08nRr7NNB9OF4BAi80orwqSeKV6wxFnfD2wVaUzK+0IqezVDM8aG+ebP804u1gZjf+MG
-         kzMmhtnZBCvxVClf2629D6rJBTT7aV8n4YEza67SvecUd+3EJU2yDlsPKEIEvsT3XHHM
-         VmPkYIXWNuN0IWv2TR/9WEfNzrjggTbn5Hbgn+1DxdyA5HeHUymVABe5AW55Vap5AXAa
-         fk0w==
-X-Gm-Message-State: AOJu0Yyb+EM1biLGTTb+JJEm3s/sZZyHfSR/70qFslsM93eGkoDTWJAF
-	7/Kccuyl0fnFNl/UBhfB+erkBZMwAFDaMbIfEUFuyvKFQ3btV9JqoDP3Ew==
-X-Google-Smtp-Source: AGHT+IFNWXjyRw1VP45UIj39XSSjWlNGii5CicDZrgTUjgdjBls7VjCTUeeKrYpzkmY9fx1jGOwTqQ==
-X-Received: by 2002:a17:907:7f0b:b0:a8a:ead3:851c with SMTP id a640c23a62f3a-a8ffab18544mr88088166b.15.1725976985020;
-        Tue, 10 Sep 2024 07:03:05 -0700 (PDT)
-Received: from foxbook (bgv123.neoplus.adsl.tpnet.pl. [83.28.85.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25d5dc8csm485817266b.206.2024.09.10.07.03.04
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 10 Sep 2024 07:03:04 -0700 (PDT)
-Date: Tue, 10 Sep 2024 16:03:01 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [PATCH 2/2] usb: xhci: Fix sum_trb_lengths()
-Message-ID: <20240910160301.340571ef@foxbook>
-In-Reply-To: <20240910160114.50b77a91@foxbook>
-References: <20240910160114.50b77a91@foxbook>
+	s=arc-20240116; t=1725977062; c=relaxed/simple;
+	bh=HO9jMzugqdGriCjZTDUoRxmWP1kjr0j4Rz0Nt3ecBGw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=ZdkbUsyEeHWqzjAjGeMWFeaaIMiNqm2Ju9d1LUG0CPGvl8HFnOHJ22dLjNeRI197P91/C+P+uopjyITUcocmjqVhgP3N+BVolyJQkz+sLzSHL/18m2ONPJEudu+53niLQ+UeUAPgmoAqkGIa/wXQVqPyyJkT0Ge1V4QHo9lqats=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DRd8C1mA; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 03BD91C000D;
+	Tue, 10 Sep 2024 14:04:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1725977058;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cbvz3JQ6Dzafg8NgXNOuBniHfq+3yKtYClfjYxdImOM=;
+	b=DRd8C1mAQDBaTQOrfuyjMKW5d7pmqbS8bcV6C60uk/1Q179nX5Ynppjikh9xA5ewgkHzo5
+	E6Xjsco+6DLttCCCXyP00KjhoMMKwXmMPS3Q/Q7nv2ekxcZdGzpb62Zm6DNdwETyHJ2ckk
+	+PNf14dUjc4mCWW4KOhKTr50mj11WNObCtKvMbaYTmWfhz2kWo+m+jbREPwklbnpr3B29U
+	SB/uSJoYjYcJWa2/6B/EijKgto+Ci8glIkhFCorL4wLuKUUV1LCotxK0SA8+hTZN9XJK+E
+	/OiFRpyvwph2mjVEEctN4XUq9uE5zGKotvLL+gNZBc1ubLbpb22QoKm3jSEw+Q==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 10 Sep 2024 16:04:17 +0200
+Message-Id: <D42NSY6SFTBG.2EEB1S4CB54QN@bootlin.com>
+To: "Peter Chen" <peter.chen@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v5 00/12] Fix USB suspend on TI J7200 (cdns3-ti, cdns3,
+ xhci)
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
+ <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>, "Roger Quadros" <rogerq@kernel.org>, "Pawel
+ Laszczak" <pawell@cadence.com>, "Mathias Nyman" <mathias.nyman@intel.com>,
+ "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Tero Kristo" <kristo@kernel.org>, <linux-usb@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, "Kevin Hilman"
+ <khilman@kernel.org>, =?utf-8?q?Gr=C3=A9gory_Clement?=
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Conor Dooley" <conor.dooley@microchip.com>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
+ <20240809011921.GA2673490@nchen-desktop>
+In-Reply-To: <20240809011921.GA2673490@nchen-desktop>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-This function is supposed to sum the lengths of all transfer TRBs in
-a TD up to a point, but it starts summing at the current dequeue since
-it only ever gets called on the first pending TD.
+Hello Peter,
 
-This won't work when there are cancelled TDs at the beginning of the
-ring. The function tries to exclude No-Ops from the count, but not all
-cancelled TDs are No-Op'ed - not those the HW stopped on.
+On Fri Aug 9, 2024 at 3:19 AM CEST, Peter Chen wrote:
+> On 24-07-26 20:17:48, Th=C3=A9o Lebrun wrote:
+> > Currently, system-wide suspend is broken on J7200 because of a
+> > controller reset. The TI wrapper does not get re-initialised at resume
+> > and the first register access from cdns core fails.
+> >=20
+> > We address that in a few ways:
+> >  - In cdns3-ti, if a reset has occured at resume, we reconfigure the HW=
+.
+> >  - We pass the XHCI_RESET_ON_RESUME quirk, meaning the XHCI core expect=
+s
+> >    a resume.
+> >  - We add a xhci->lost_power flag.
+> >=20
+> > The previous revision had one big issue: we had to know if
+> > reset-on-resume was true, at probe-time. This is where the main
+> > difference with previous revisions is. We now pass the information from
+> > wrapper devices back up into XHCI. The xhci->lost_power flag gets its
+> > default value from the XHCI_RESET_ON_RESUME quirk. It however allows
+> > wrappers to signal *at resume* if they still expect a reset.
+> >=20
+> > That means wrappers that are unsure if they will reset should:
+> >  - (1) set the quirk at probe and,
+> >  - (2) potentially set xhci->lost_power to false at resume.
+>
+> Judge if controller is power lost has implemented at cdns_power_is_lost
+> Please check if you could use that.
 
-The absolutely obvious fix is to start counting at the TD's first TRB.
-And remove the now-useless 'ring' parameter, and 'xhci' too.
+That function is being used! Its return value is passed as second
+argument to the resume() callback in struct cdns_role_driver. We set
+xhci->lost_power using that exact value.
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
- drivers/usb/host/xhci-ring.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+My cover letter explanation was slightly off, as it is not wrappers that
+set xhci->lost_power, but instead role drivers. Wrappers don't have any
+reason to touch the xhci struct directly, they are one layer above.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a3ffadf8e400..e5c5cf4d38c6 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2249,13 +2249,12 @@ static int finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	return xhci_td_cleanup(xhci, td, ep_ring, td->status);
- }
- 
--/* sum trb lengths from ring dequeue up to stop_trb, _excluding_ stop_trb */
--static int sum_trb_lengths(struct xhci_hcd *xhci, struct xhci_ring *ring,
--			   union xhci_trb *stop_trb)
-+/* sum trb lengths from the first trb up to stop_trb, _excluding_ stop_trb */
-+static u32 sum_trb_lengths(struct xhci_td *td, union xhci_trb *stop_trb)
- {
- 	u32 sum;
--	union xhci_trb *trb = ring->dequeue;
--	struct xhci_segment *seg = ring->deq_seg;
-+	union xhci_trb *trb = td->first_trb;
-+	struct xhci_segment *seg = td->start_seg;
- 
- 	for (sum = 0; trb != stop_trb; next_trb(&seg, &trb)) {
- 		if (!trb_is_noop(trb) && !trb_is_link(trb))
-@@ -2446,7 +2445,7 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		goto finish_td;
- 
- 	if (sum_trbs_for_length)
--		frame->actual_length = sum_trb_lengths(xhci, ep->ring, ep_trb) +
-+		frame->actual_length = sum_trb_lengths(td, ep_trb) +
- 			ep_trb_len - remaining;
- 	else
- 		frame->actual_length = requested;
-@@ -2529,7 +2528,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		goto finish_td;
- 	case COMP_STOPPED_LENGTH_INVALID:
- 		/* stopped on ep trb with invalid length, exclude it */
--		td->urb->actual_length = sum_trb_lengths(xhci, ep_ring, ep_trb);
-+		td->urb->actual_length = sum_trb_lengths(td, ep_trb);
- 		goto finish_td;
- 	case COMP_USB_TRANSACTION_ERROR:
- 		if (xhci->quirks & XHCI_NO_SOFT_RETRY ||
-@@ -2550,7 +2549,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		td->urb->actual_length = requested - remaining;
- 	else
- 		td->urb->actual_length =
--			sum_trb_lengths(xhci, ep_ring, ep_trb) +
-+			sum_trb_lengths(td, ep_trb) +
- 			ep_trb_len - remaining;
- finish_td:
- 	if (remaining > requested) {
--- 
-2.43.0
+Related: [PATCH v5 08/15] commit message looks like this:
+
+------------------------------------------------------------------------
+
+The cdns_role_driver->resume() callback takes a second boolean argument
+named `hibernated` in its implementations. This is mistaken; the only
+potential caller is:
+
+int cdns_resume(struct cdns *cdns)
+{
+	/* ... */
+
+	if (cdns->roles[cdns->role]->resume)
+		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
+
+	return 0;
+}
+
+The argument can be true in cases outside of return from hibernation.
+Reflect the true meaning by renaming both arguments to `lost_power`.
+
+------------------------------------------------------------------------
+
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
