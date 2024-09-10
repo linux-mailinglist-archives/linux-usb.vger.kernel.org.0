@@ -1,129 +1,184 @@
-Return-Path: <linux-usb+bounces-14887-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14889-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F26199730F6
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 12:05:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90F4A97324A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 12:21:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 317AE1C24B63
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 10:05:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 551AA2899EB
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 10:20:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DA141917FE;
-	Tue, 10 Sep 2024 10:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 482D41917E2;
+	Tue, 10 Sep 2024 10:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="geiVBppQ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SeMikXsx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D661917D6;
-	Tue, 10 Sep 2024 10:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9E718FC9F
+	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 10:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725962627; cv=none; b=OsyKoJqzyOgLTwjWAUZsXFvv79MNyA7Kz1o0r/J1xh7wzsSiVDLKQ+NTkrJbpnpBi2DtoozrJgLRL7DTXJ6lefD+FH9N+iVFc3FMAAu6U84vACuUuDp9XWH84jXT0BTeWwHqJEHpIdY815OjnRAVfsgckH3mVzhv7RCihoSlsrU=
+	t=1725963339; cv=none; b=J+b1jYNGWzdKDGQ3j5Np4UexS8zuMz8WFEEARQpRGnEQS1K5iLZiAVyLiPRWIGd4GXuDX0AXtNIOG9xtKRJiAZiYVnufmH08hMvtsg5Fs90NUSiD7MtGTfTRbI7wcmxQu/6zFz+79vMvUVgehc5mhIqpAoXr5Lye9bq5sTeNk/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725962627; c=relaxed/simple;
-	bh=W64MFvFVpIvTxWzm0aAbmkcRhJVLUdYZqRBC9+A2u+E=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=AgrCcDLkmzpk27fndR+oX0GqYpMjGwrjvfSG/68QFe17bPjh8V6IzoqTr2d1VAmJkLenk7OeXpkz64rq3hdVGaZe8nq9hZfJ4506VZr+JcN+OW7sMm1MlutotH7G36YqLHxPcIutFbQkOfTSr3TgElRiT1j8NdSDWLD1cl71/bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=geiVBppQ; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00348240008;
-	Tue, 10 Sep 2024 10:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1725962617;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t1Un8sAVYGgks6pYsecrKnYuyHFKooLsXNJOWsSFhmI=;
-	b=geiVBppQsTTU2/i/dssl1ET33GdvY1dSOyrplSTQuyTNCWXJFmG2RJ92d4RxEjdlc19GLQ
-	jxkKFCMr3ZkGwKro92VR4lgklTYEHLJkK92NFmqTFDYqGKCD+I/X6YpZml50lI8C2fD6xE
-	VVlnnNFjWmJAzqzFmOEFWNNCcVYVbRDx6Gdj62H5zZQuZjEcC1Xk2P33BH8PHnsIEIY9NA
-	q+k9IMis1Bdt3geooQ5BcU9fNWFmgG+3PxASPyqy1PWPXrhVOZ72u/mE7u4k/1dbs2AR7J
-	B4GWxoiSnAL8Q33N40V8D2bSDeQ8YS4BbyhY722YnL4sdqpl8/ixQRhdObryGg==
+	s=arc-20240116; t=1725963339; c=relaxed/simple;
+	bh=FZ9ezYeJt5a6b+Z3I3vwss2oeGa/KPGnUnlACEjPjOU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NhS2UWf8xsTm97nX0FeuOSiZm11+cMAxOWrQ52/DBE45Mrh/bVKd4axaMvIH8sx9Vbw+8PWMCgwGhgGIL/Jmx31Kw4X7PfaFcCNuuRP2gomihMN7cJYgfmQPw+PvNtoECw8QEMY17hMGna/gH8fPx2Eyk53YZ0vfkyoMdG30GW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SeMikXsx; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5c255e3c327so5789222a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 03:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1725963336; x=1726568136; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yLF6tmAB1/QRpEiLm9OO64ukpnVsCuBmOKFxt4qPONA=;
+        b=SeMikXsx+huz8jPtgQG7aUU2izHSuIZL9P0yvOPPSLwldq0bSqZQ44Lpp9AAkYkRiI
+         7M//FXLOSJ3WLsX0W7gkykF8y8i02FFTC814y7hwfe7Bhr0FQ8pVkjnJs+u0ss9mLp84
+         oigXCqelbHfhmOm4ZM9XBft6vSQEruDpMBUUk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725963336; x=1726568136;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yLF6tmAB1/QRpEiLm9OO64ukpnVsCuBmOKFxt4qPONA=;
+        b=t+iNsvTYaz5MkRSXqay48EL3abgS4+teVrXR1Me0uHjSUyVJlCUs3QO/nCkGwrA/sy
+         Mq3kJ59XzVRKEbQBk5ZyW1fNCPnChJaQhU3ae2wvmjuSIqnukTT9kUqJjZtQCSiB5StW
+         PBaa0f3Sq+ncNyupzLlcR4L2hfUP3SFDeYYy8kqoQ9sd4Rl7ZtgoyodCRdkdSi01W0OS
+         VSpLxe80WUb+zWTZVxK0Vsjm1Tu5x1YvY/U8FWKcEFbehmUmKtugPrXWjUpTgPBHodg/
+         Xlp8EFc42AUCc+8Geyu+V80FRc/YwU+5861G+VnMcCrw+HSZBS75BlqHKDwXBFowQqU0
+         qTyg==
+X-Forwarded-Encrypted: i=1; AJvYcCW54MRlk4zeaQfeRCFLMIuCcRk7KA8MuXyekMjyYzJpEMm9zbPBmpnWdDXHuB39rEV2O7FCZnKwABU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyI2Zx7VjYZ5iju2sqNgTKoq3Ut3jQOv4Td8ObVoAIcE8SRA2L0
+	/D17Vbfs/4YpNTD9CtUF+pHV4lrhYCxvJoWXb5gGKpNMZfvFYRg3OBHy/12w6vVAfzbfgpFUblv
+	z
+X-Google-Smtp-Source: AGHT+IEQexjbD8PkgFBnUvDyJzo9P3yeHw4QzYeSgwrKgmsNx/g75FRl5ueIUndBV+gsleoeDxyzmw==
+X-Received: by 2002:a05:6402:50d3:b0:5be:cfb1:ceb8 with SMTP id 4fb4d7f45d1cf-5c3dc78dce0mr8513973a12.13.1725963335526;
+        Tue, 10 Sep 2024 03:15:35 -0700 (PDT)
+Received: from ukaszb-ng.c.googlers.com.com (140.20.91.34.bc.googleusercontent.com. [34.91.20.140])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c3ebd424f0sm4075401a12.7.2024.09.10.03.15.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Sep 2024 03:15:35 -0700 (PDT)
+From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Pavan Holla <pholla@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Subject: [PATCH v6 0/8] usb: typec: Implement UCSI driver for ChromeOS
+Date: Tue, 10 Sep 2024 10:15:19 +0000
+Message-ID: <20240910101527.603452-1-ukaszb@chromium.org>
+X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Sep 2024 12:03:35 +0200
-Message-Id: <D42IONMJMLQS.37KAIQ5GKLRTU@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v5 02/12] dt-bindings: usb: ti,j721e-usb: add
- ti,j7200-usb compatible
-Cc: "Mathias Nyman" <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Kevin Hilman"
- <khilman@kernel.org>, =?utf-8?q?Gr=C3=A9gory_Clement?=
- <gregory.clement@bootlin.com>, <devicetree@vger.kernel.org>, "Tero Kristo"
- <kristo@kernel.org>, <linux-kernel@vger.kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, <linux-arm-kernel@lists.infradead.org>,
- "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>,
- "Pawel Laszczak" <pawell@cadence.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Roger Quadros" <rogerq@kernel.org>, "Peter
- Chen" <peter.chen@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
- <20240726-s2r-cdns-v5-2-8664bfb032ac@bootlin.com>
- <172202197161.1924212.4114467370508864411.robh@kernel.org>
-In-Reply-To: <172202197161.1924212.4114467370508864411.robh@kernel.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-On Fri Jul 26, 2024 at 9:26 PM CEST, Rob Herring (Arm) wrote:
-> On Fri, 26 Jul 2024 20:17:50 +0200, Th=C3=A9o Lebrun wrote:
-> > On J7200, the controller & its wrapper are reset on resume. It has the
-> > same behavior as ti,j721e-usb with a different SoC integration.
-> >=20
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >=20
->
-> My bot found errors running 'make dt_binding_check' on your patch:
+This series implements a UCSI ChromeOS EC transport driver. 
+The ChromeOS EC is expected to implement UCSI Platform Policy
+Manager (PPM).
 
-Clearly this patch was wrong.
-Past me trusted future me to verify and future me trusted past me.
-Sorry!
+---
+Changes in v6:
+- Reverted to type names uint*_t in cros_ec_commands.h in order 
+to be consistent with type names used in other parts of the file.
+- Updated comments in cros_ec_commands.h related to UCSI.
+- Added missing sign-offs.
+- Fixed memory leak in cros_ucsi_async_control() by moving
+ec_params_ucsi_ppm_set request buffer to stack.
+- Replaced cros_ucsi_read with cros_ucsi_read_cci in cros_ucsi_work().
+- Updated changes in v5, it was missing information related to
+commits addition:
+  platform/chrome: Update EC feature flags
+  usb: typec: cros_ec_ucsi: Use complete instead of resume
+  mfd: cros_ec: Load cros_ec_ucsi on supported ECs
+  mfd: cros_ec: Don't load charger with UCSI
+- Link to v5: https://lore.kernel.org/r/all/20240903163033.3170815-1-ukaszb@chromium.org/
 
-For reference, new patch content will look like below.
-This doesn't trigger a warning on:
+Changes in v5:
+- Increased WRITE_TMO_MS to 5000.
+- Replaced DRV_NAME with KBUILD_MODNAME.
+- Added comments for WRITE_TMO_MS and MAX_EC_DATA_SIZE defines.
+- Refactored cros_ucsi_async_control() to dynamically allocate memory
+for a message to EC instead of allocating the message on stack.
+- Replaced type names uint*_t with u*.
+- Removed ret variable in cros_ucsi_work().
+- Updated ucsi_operations interface to align with changes introduced in
+  v6.11.
+- Replaced test_bit() with test_and_clear_bit() in cros_ucsi_work().
+- Updated EC feature flags in commit "platform/chrome: Update EC feature
+  flags".
+- Added new commit "usb: typec: cros_ec_ucsi: Use complete instead
+of resume".
+- Added trace events in commit "usb: typec: cros_ec_ucsi: Add trace
+  events".
+- Added netlink in commit "usb: typec: cros_ec_ucsi: Add netlink"
+for debugging and testing puropses.
+- Added new commit "mfd: cros_ec: Load cros_ec_ucsi on supported ECs".
+- Added new commit "mfd: cros_ec: Don't load charger with UCSI".
+- Link to v4: https://lore.kernel.org/all/CAB2FV=6We88NrvN8NZYt8NkMFH9N_ZBGyUWVUpGwPdja2X_+NA@mail.gmail.com/T/
 
-    make dt_binding_check DT_SCHEMA_FILES=3Dti,j721e-usb
+Changes in v4:
+- Setup notifications before calling ucsi_register.
+- Cancel work before destroying driver data.
+- Link to v3: https://lore.kernel.org/r/20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org
 
-------------------------------------------------------------------------
+Changes in v3:
+- Moved driver from platform/chrome to usb/typec/ucsi.
+- Used id_table instead of MODULE_ALIAS.
+- Split EC header changes into seperate commit.
+- Fixes from additional internal reviews and kernel bot warnings.
+- Link to v2: https://lore.kernel.org/r/20240325-public-ucsi-h-v2-0-a6d716968bb1@chromium.org
 
-diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Docu=
-mentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-index 653a89586f4e..d14c18b64086 100644
---- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-@@ -14,7 +14,9 @@ properties:
-     oneOf:
-       - const: ti,j721e-usb
-       - items:
--          - const: ti,am64-usb
-+          - enum:
-+              - ti,am64-usb
-+              - ti,j7200-usb
-           - const: ti,j721e-usb
+Changes in v2:
+- No code or commit message changes.
+- Added drivers/platform/chrome maintainers for review.
+- Link to v1: https://lore.kernel.org/r/20240325-public-ucsi-h-v1-0-7c7e888edc0a@chromium.org
 
-   reg:
 
-------------------------------------------------------------------------
+Abhishek Pandit-Subedi (2):
+  usb: typec: cros_ec_ucsi: Use complete instead of resume
+  mfd: cros_ec: Don't load charger with UCSI
 
-Regards,
+Pavan Holla (4):
+  platform/chrome: Update ChromeOS EC header for UCSI
+  platform/chrome: Update EC feature flags
+  usb: typec: ucsi: Implement ChromeOS UCSI driver
+  mfd: cros_ec: Load cros_ec_ucsi on supported ECs
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Łukasz Bartosik (2):
+  usb: typec: cros_ec_ucsi: Add trace events
+  usb: typec: cros_ec_ucsi: Add netlink
+
+ MAINTAINERS                                   |  10 +
+ drivers/mfd/cros_ec_dev.c                     |  25 +-
+ drivers/usb/typec/ucsi/Kconfig                |  13 +
+ drivers/usb/typec/ucsi/Makefile               |   3 +
+ drivers/usb/typec/ucsi/cros_ec_ucsi_main.c    | 346 ++++++++++++++++++
+ drivers/usb/typec/ucsi/cros_ec_ucsi_nl.c      |  87 +++++
+ drivers/usb/typec/ucsi/cros_ec_ucsi_nl.h      |  52 +++
+ drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h   |  92 +++++
+ .../linux/platform_data/cros_ec_commands.h    |  60 ++-
+ 9 files changed, 684 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi_main.c
+ create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi_nl.c
+ create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi_nl.h
+ create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h
+
+-- 
+2.46.0.598.g6f2099f65c-goog
 
 
