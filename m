@@ -1,111 +1,124 @@
-Return-Path: <linux-usb+bounces-14878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14880-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4163972ACC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:31:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A92C972CAE
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 11:00:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 803EB285544
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 07:31:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14204287EF9
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57BC17DFF1;
-	Tue, 10 Sep 2024 07:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9CF187871;
+	Tue, 10 Sep 2024 09:00:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21C8176FAC;
-	Tue, 10 Sep 2024 07:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0B3016A957;
+	Tue, 10 Sep 2024 09:00:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725953481; cv=none; b=N5roEd5aq8iY4JT9WNquRCg7HU9OR1GXpfUQaQXQ4d20yTofpM+0K9fUNwc/PCuxISS2EHd4vSix8VZQRgaZm93Snijo+gNxqyXDYwLf6pYT+n+b2dmdaWNpm3pNuw95M1xHoMguoelk7KCgLP8vCllLpBkwP+7tMbRQWaOf7Ns=
+	t=1725958826; cv=none; b=AQtyz8xoNLqMpF+W4rQQUFHZnx6Jz3bWWUsm5lrnR0y57TxGl34YGnY7nZyvgQPOSLmslSkNlAEPcDaxLqC6nuhXV4hP+a3vXNxGf7mKkavi5XJ8zdQgRC/6u3tZER5WwvFV/be5BeIoAsG5Bh6YXKGhtKvEGmtiB/LuDUMp98E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725953481; c=relaxed/simple;
-	bh=vsENJtQxSNfJwmUEDsr6Qasi3X0eOWGN4uKDgjXBL9g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=FiNZHC02X/Qm5y8fpMhEI3OWqJ7Gco/OORAOnjZxoZnhObYXNCDlZkJmceIQQGS6U4+P73YOmviPskz4kkdJHn7JJL9XZAi9+l16gPBndoKmqunhYQGCbwVu1/8YCfxoC6nWmcffjgnpaDq676aRXxJm0dmsqf09gGpCa9gfAIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.12.127] (g127.RadioFreeInternet.molgen.mpg.de [141.14.12.127])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id F22E361E5FE07;
-	Tue, 10 Sep 2024 09:31:13 +0200 (CEST)
-Message-ID: <1a2b267a-8d9f-44e6-880d-2383f8b5369b@molgen.mpg.de>
-Date: Tue, 10 Sep 2024 09:31:13 +0200
+	s=arc-20240116; t=1725958826; c=relaxed/simple;
+	bh=R/6lvEGnan2GdVeJmJT9ipw0THIFlDnuJcz377UswX0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hInACrg4L7JMRbBebanvVFceQIqUyFPX++q8dLXYKwjAEGGTmS11lRj063CNZYFQII9kXik9qqsvtlEF/XAVokubWgIgeYnZM91WL3hlCBaw7K2N9CyLPC1+RrquOqc0m5LcWTRwt3zKkiIecbC8iqNndtzz3up2QKfQW0nxY30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee266e00aa18f1-4a8f9;
+	Tue, 10 Sep 2024 17:00:17 +0800 (CST)
+X-RM-TRANSID:2ee266e00aa18f1-4a8f9
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.97])
+	by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee466e00aa00da-843b0;
+	Tue, 10 Sep 2024 17:00:17 +0800 (CST)
+X-RM-TRANSID:2ee466e00aa00da-843b0
+From: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
+To: rui.silva@linaro.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhang jiao <zhangjiao2@cmss.chinamobile.com>
+Subject: [PATCH] usb: isp1760: Use devm_kcalloc
+Date: Tue, 10 Sep 2024 15:26:42 +0800
+Message-Id: <20240910072642.39396-1-zhangjiao2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] Bluetooth: btusb: Fix not handling ZPL/short-transfer
-To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-References: <20240909205152.2397337-1-luiz.dentz@gmail.com>
-Content-Language: en-US
-Cc: linux-bluetooth@vger.kernel.org, linux-usb@vger.kernel.org
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20240909205152.2397337-1-luiz.dentz@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Dear Luiz,
+From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+
+Use devm_kcalloc to simplify code.
+
+Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+---
+ drivers/usb/isp1760/isp1760-hcd.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
+index 0e5e4cb74c87..593ce841ae53 100644
+--- a/drivers/usb/isp1760/isp1760-hcd.c
++++ b/drivers/usb/isp1760/isp1760-hcd.c
+@@ -2572,18 +2572,18 @@ int isp1760_hcd_register(struct isp1760_hcd *priv, struct resource *mem,
+ 
+ 	priv->hcd = hcd;
+ 
+-	priv->atl_slots = kcalloc(mem_layout->slot_num,
++	priv->atl_slots = devm_kcalloc(dev, mem_layout->slot_num,
+ 				  sizeof(struct isp1760_slotinfo), GFP_KERNEL);
+ 	if (!priv->atl_slots) {
+ 		ret = -ENOMEM;
+ 		goto put_hcd;
+ 	}
+ 
+-	priv->int_slots = kcalloc(mem_layout->slot_num,
++	priv->int_slots = devm_kcalloc(dev, mem_layout->slot_num,
+ 				  sizeof(struct isp1760_slotinfo), GFP_KERNEL);
+ 	if (!priv->int_slots) {
+ 		ret = -ENOMEM;
+-		goto free_atl_slots;
++		goto put_hcd;
+ 	}
+ 
+ 	init_memory(priv);
+@@ -2597,16 +2597,12 @@ int isp1760_hcd_register(struct isp1760_hcd *priv, struct resource *mem,
+ 
+ 	ret = usb_add_hcd(hcd, irq, irqflags);
+ 	if (ret)
+-		goto free_int_slots;
++		goto put_hcd;
+ 
+ 	device_wakeup_enable(hcd->self.controller);
+ 
+ 	return 0;
+ 
+-free_int_slots:
+-	kfree(priv->int_slots);
+-free_atl_slots:
+-	kfree(priv->atl_slots);
+ put_hcd:
+ 	usb_put_hcd(hcd);
+ 	return ret;
+@@ -2619,6 +2615,4 @@ void isp1760_hcd_unregister(struct isp1760_hcd *priv)
+ 
+ 	usb_remove_hcd(priv->hcd);
+ 	usb_put_hcd(priv->hcd);
+-	kfree(priv->atl_slots);
+-	kfree(priv->int_slots);
+ }
+-- 
+2.33.0
 
 
-Thank you for your patch.
 
-Am 09.09.24 um 22:51 schrieb Luiz Augusto von Dentz:
-> From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-> 
-> Requesting transfers of the exact same size of wMaxPacketSize may result
-> in ZPL/short-transfer since the USB stack cannot handle it as we are
-> limiting the buffer size to be the same as wMaxPacketSize.
-> 
-> Also, in terms of throughput this change has the same effect to
-> interrupt endpoint as 290ba200815f "Bluetooth: Improve USB driver throughput
-
-(*interrupt* would fit on the line above.)
-
-> by increasing the frame size" had for the bulk endpoint, so users of the
-> advertisement bearer (e.g. BT Mesh) may benefit from this change.
-
-Do you have a benchmark script, that can be run?
-
-> Fixes: 5e23b923da03 ("[Bluetooth] Add generic driver for Bluetooth USB devices")
-> Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-> ---
->   drivers/bluetooth/btusb.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 36a869a57910..83df387aea92 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -1341,7 +1341,10 @@ static int btusb_submit_intr_urb(struct hci_dev *hdev, gfp_t mem_flags)
->   	if (!urb)
->   		return -ENOMEM;
->   
-> -	size = le16_to_cpu(data->intr_ep->wMaxPacketSize);
-> +	/* Use maximum HCI Event size so the USB stack handles
-> +	 * ZPL/short-transfer automatically.
-> +	 */
-> +	size = HCI_MAX_EVENT_SIZE;
->   
->   	buf = kmalloc(size, mem_flags);
->   	if (!buf) {
-
-
-Kind regards,
-
-Paul
-
-Kind regards,
-
-Paul
 
