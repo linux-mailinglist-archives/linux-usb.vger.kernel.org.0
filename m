@@ -1,306 +1,184 @@
-Return-Path: <linux-usb+bounces-14907-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14908-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B4CF9738C2
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 15:38:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB2B8973919
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 15:51:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A01EA1C24358
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 13:38:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58DE01F26516
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 13:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1E9192D99;
-	Tue, 10 Sep 2024 13:37:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F7C192D65;
+	Tue, 10 Sep 2024 13:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="L4gy/aaJ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eaGPx47v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA93192591
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 13:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1F718E11;
+	Tue, 10 Sep 2024 13:50:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725975475; cv=none; b=WgItYypfjvIJ120jNqJteh2MFdb9BWAkI+YimGwAWpxfCxSfydSYzipvW17EPnBLKq7w27aXSz98VKVT0EG3RpCUEXFa/IAJSsdPDggSWIAn1vRSaP0MAPTxHNIvKNE/QRVLnTLZ0FCmO892y2UNwvKe/g9B2Yo8dRWyEiUbjac=
+	t=1725976256; cv=none; b=FgWu4JHOcvQU12bJOhpmnaV4NoLFS86+JleCFDuNMm3sfkVrMmNQU2Cg24+Aj97wzo9kCQ+3TtMfXJN16FoviWNXLb+zM8uqhwqnf1KAfHt0K8RBxw6yKtJNxuU2uIt17k0ffDcO89tn1fjRKJl2SzZxzeBsJYW4EsHAm6ICgJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725975475; c=relaxed/simple;
-	bh=F1nnKjw5JWKrv0UivfX+cMJ6hkeW1uOfmktdZO120YA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:In-Reply-To:
-	 Content-Type:References; b=FtjBx7NOtYhDH+Z1Sclq3EB8NWQXKxPKeksgIN3Vr+8atsyjLhcHrwHro2Y7MhsS9yf2oyH6+K0hqFW8LPxWEPqvOdyBkNO2aa+1Vm282pMoOXRwxfj11CvxIiVtWfagiWXVyz5fWvNm3xO42VEww8OxV2eY6eLTl4LFxIadMzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=L4gy/aaJ; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240910133749epoutp02862ec5dfa264e4cdd62ec0b1a2c27ba4~z5YtwRMfQ0952409524epoutp02e
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 13:37:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240910133749epoutp02862ec5dfa264e4cdd62ec0b1a2c27ba4~z5YtwRMfQ0952409524epoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1725975469;
-	bh=V2jX6S5jxmXGwvz9YAgIq6JEb5TjbdLJEKL1WqTvCT8=;
-	h=Date:From:Subject:To:Cc:In-Reply-To:References:From;
-	b=L4gy/aaJ0d3HetKmHB9RCzrje4iWYVVgneWIHs5kwSGn+dUcrco0HMaTnbeWA65rn
-	 djdPnoGTTE684PWKwtsSjYy/NxIyefex2oVb0vkozaAICPPwBGjmqdT6rSM9NRgGJ/
-	 qMmG/UhQ4kGvmuQRQnParfJta2URUO/zuuZUeb4I=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20240910133748epcas5p30b7e5807bba43052efbaa462255ff814~z5YtYnTHs1397213972epcas5p3j;
-	Tue, 10 Sep 2024 13:37:48 +0000 (GMT)
-Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.176]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4X34Wv4ppnz4x9Px; Tue, 10 Sep
-	2024 13:37:47 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	6D.9F.08855.BAB40E66; Tue, 10 Sep 2024 22:37:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20240910133747epcas5p3d74fd2fcf2efe0507b27c12bcc5f062c~z5YrsZ3Vr0055100551epcas5p3X;
-	Tue, 10 Sep 2024 13:37:47 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240910133747epsmtrp2e4c3a2107d0836ce9fc4270346cf9bc6~z5YrrqQlk1375313753epsmtrp2S;
-	Tue, 10 Sep 2024 13:37:47 +0000 (GMT)
-X-AuditID: b6c32a44-107ff70000002297-48-66e04babc447
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	39.6C.07567.AAB40E66; Tue, 10 Sep 2024 22:37:46 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240910133744epsmtip27f2e324b6766ae6c65b461f624cbeea6~z5YpMZHrI2586125861epsmtip2V;
-	Tue, 10 Sep 2024 13:37:44 +0000 (GMT)
-Message-ID: <dff83c7d-56b8-481f-af69-8d4262bd54e4@samsung.com>
-Date: Tue, 10 Sep 2024 19:07:28 +0530
+	s=arc-20240116; t=1725976256; c=relaxed/simple;
+	bh=dYhzfGqHXYEOx8MS6KvaDFYNnbAbgP5YUojlUAiEMAk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=QNBsbn6fTD4eKAvIAuYrf5ar7XPNckjxoUXNWdd/YtCUbwxgOIyuT+y5AYEd0EtqByFMwF7rpVjEuvcjjNciF8H1doiB0aTUayZDKvTDpZB/sXXGyvIgyOXMMaloUM7bCTzVqFQ8ZelgnpJBpMrb+SVleUhP01dAHSxQuOVqciU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eaGPx47v; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay6-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::226])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id D6931C2497;
+	Tue, 10 Sep 2024 13:50:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D6B7C000D;
+	Tue, 10 Sep 2024 13:50:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1725976238;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FKaZoEWr8UWtqcWAfis4JtnDRQPZMMSkWUHYpeNsgqY=;
+	b=eaGPx47vgkkjXWUCMPhevbzMVrQx+6xiGAlWW1jjipJdpQiNhIsAiuyDC7TDz/BFoQFJSH
+	5FbcGgVYB41zBYzcUmIxkZGyrp2FqyVK0tDTCtDBbCDAjYLpg2Ps1+zkVOAFEhNrPNpK9a
+	knMtt3c6Emm6LpuHYQf0/QGK9NFH3Wlq52sL8/lmQcQbckzrh8F6/GPa/Xm6B0gff9i5AT
+	Mbyt4rbAEzoyCHsCipRVb0jWL1KJvId5qvMHc1228PvJXjkN42P6o0VBwuywXW5Naq6D+X
+	fJUQMEwVlEg38PNdi0PxJ8jCSHcDLiTY0LPBO76k2yZOlD0t39bv78NPLKdghA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Subject: Re: [PATCH] usb: dwc3: Potential fix of possible dwc3 interrupt
- storm
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
-	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
-	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
-	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
-	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"shijie.cai@samsung.com" <shijie.cai@samsung.com>
-Content-Language: en-US
-In-Reply-To: <20240907003946.qn6t3xw65qwl2cn7@synopsys.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0xbVRz29N6+FmvuOiqHzrl6zWJKgLVY6mUrzCmabiMGnU4l0VroHSX0
-	tdvicBIda4cTpWBjllqogOtA20UIslILpLNInHWOCIzwGKCzUQZDA+g2t9nZ9qLy33e+3/f9
-	noeD8LtZQk65wUJSBrUOZ21A/YNicaZv348HJQNjm4lrl7xM4nLrSQYR6WhjENZTnSzC0X8W
-	JWZ+uokSo8FmFvFJ+3GEWBm6yyS87zbHuRtfIoTjKwHhbT3HfpynDLnPsJX2Hi9Q9oRWgXK1
-	+8EitLhCoSXVGpISkYZSo6bcUJaH79uvelKVI5dIM6W5xGO4yKDWk3l4QWFR5tPlunh7uOh1
-	ta4yThWpzWZ8e76CMlZaSJHWaLbk4aRJozPJTFlmtd5caSjLMpCWHVKJJDsnLnytQtu97AEm
-	b3bVUuwO+ygIpNcBLgdiMhj0d7DqwAYOH+sD0FnvQhMBPrYC4LHgK3TgOoBNFx3MOsBJOrrD
-	z9D8AIAjXV5AP5YAtM1Z2Qk3D8uHo8MzjARGsW3QP+UGNL8RfvtRNFlBgG2Fc1NOdiIpC5PC
-	X84rEvQmrAiOeZxJeQqWAc+dH2Yk8iPYCSZsfa82mRPBUuFUtCWJudhOONS2AGh+K7SebUIS
-	BogFODD0Theg5yyAtX+NsGm8CS5807OGhXD1twEWjd+EvsvLLNpsA3Awen1NtAv+PHQFSXSK
-	YGLYGdxOF7sP1t+OMuit8OCJWj6t3gYjNaNrKTfDWc/42uKU8NZpHr2raRTO/9nOagQi17q1
-	uNaN5lo3juv/wq0A9YI00mTWl5GlOSapgTz8371LjfpukPy86QUBMNESywoDBgeEAeQgeAqv
-	IX/2IJ+nUb9xhKSMKqpSR5rDICd+nw8QoaDUGP/9BotKKsuVyORyuSz3UbkUT+UtHndr+FiZ
-	2kJWkKSJpP71MThc4VGGJ+WhtMKuPlfEx63pTLvX4XNbx6r3Tro7ovlzDvvwYkj8of/7GNmn
-	QIeXmyeLD1xkKh6ozzj5vioV/0zfH2t8pIgquXJg/ojHfv/v8o7nD/umq97Ori6heucbXm7s
-	UxXXUJqpYt3Ve9prHdeWL4z/8GsTdleBBp596lRaKHCprdAza9vv/Lz/2JJwlbd79+2Z7JW/
-	b9h6N7Z4V9noCzclYxjSu0U7ffrjqy/eQqwTKYcavhaEszrDFxYGdzxRNbkyseDYZW97iVs4
-	bh0arAuybL5IlX3PcyV/ZPBGoJh49WHFWzvZ2kZVNe/TM4tb/LE7TtWhLwQRv4GasIx9VzM3
-	jaNmrVqajlBm9T9gxDpRRQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnkeLIzCtJLcpLzFFi42LZdlhJXneV94M0g5ZGI4s3V1exWtxZMI3J
-	4tTyhUwWzYvXs1lM2rOVxeLuwx8sFpd3zWGzWLSsldni09H/rBarOucAxb7vZLaYdFDUYtWC
-	A+wOvB77565h9+jbsorRY8v+z4wenzfJBbBEcdmkpOZklqUW6dslcGVs+riEsWCVUcXbf3/Y
-	Gxh3aHUxcnBICJhIbDrk18XIxSEksJtRoqvrIXsXIydQXFri9awuRghbWGLlv+fsEEWvGSXW
-	3t7MApLgFbCTuHz+LhOIzSKgKrHt1lxGiLigxMmZT8BqRAXkJe7fmsEOsoxNwFDi2QkbkLCw
-	gJ/E9DcnwMpFBHQkDpw4zwQyn1mgh1Xiy9ePLBDLbrNIHPi4hhmkillAXOLWk/lgyzgFrCWO
-	LnzFCBE3k+ja2gVly0s0b53NPIFRaBaSO2YhaZ+FpGUWkpYFjCyrGCVTC4pz03OTDQsM81LL
-	9YoTc4tL89L1kvNzNzGC40xLYwfjvfn/9A4xMnEwHmKU4GBWEuHtt7uXJsSbklhZlVqUH19U
-	mpNafIhRmoNFSZzXcMbsFCGB9MSS1OzU1ILUIpgsEwenVAOTpb7thbJT10/aloswvbr0/uNH
-	hebemSufsd1SdxeJWmXv9jbvV4XdUpv9Aao1p9gLovqPrCzboSCYrqDyRyq2fi7zpROcgbsE
-	LG4umrU3hSk8q5aPT/Clvmzzks9Hb803S/oi90ONa//5FUu3nL4xdbHlhINcbn+c750NP/Eg
-	ktGk5vGaVhXL5hu7n16/3cdxwr9Becvmzxptsx0PzPJmPrhml73Q1xuf+L9Fc7UEi7Z0rGwu
-	mPVJv2hNUu6/pLPzb/y/p2W8Q/bKu0fhV197fE47/O7JXovc6xvmP2CeVfWgLnLbD5G3covW
-	JYZ8+vGb/3STlM2EU54qXwLe7fh6Kr3gbnZjrXPOCf6Jwk475yixFGckGmoxFxUnAgDHfr62
-	IgMAAA==
-X-CMS-MailID: 20240910133747epcas5p3d74fd2fcf2efe0507b27c12bcc5f062c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240905002630epcas5p4532c1e66864e39990376b696aa1f53d7
-References: <11535d95-c972-4dbe-afb5-de3a44bc4a21@samsung.com>
-	<CGME20240905002630epcas5p4532c1e66864e39990376b696aa1f53d7@epcas5p4.samsung.com>
-	<20240905002611.rxlv66zsker2h5w2@synopsys.com>
-	<d5552437-119c-4a0f-9d71-6959727b6364@samsung.com>
-	<20240905211338.omst6jr3okbxkqdh@synopsys.com>
-	<f9561f03-5f83-4270-b7f3-17b880cfabfe@samsung.com>
-	<20240905231825.6r2sp2bapxidur7a@synopsys.com>
-	<64d049cc-d55d-4376-b6b9-402eb6f170c0@samsung.com>
-	<20240906005935.caugoe3mqqdqwqao@synopsys.com>
-	<30ca8527-419b-4e44-a21b-18e494b39076@samsung.com>
-	<20240907003946.qn6t3xw65qwl2cn7@synopsys.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 10 Sep 2024 15:50:37 +0200
+Message-Id: <D42NIH63EHZG.KKWZR2WZB68L@bootlin.com>
+Subject: Re: [PATCH v5 09/12] xhci: introduce xhci->lost_power flag
+Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ "Kevin Hilman" <khilman@kernel.org>, =?utf-8?q?Gr=C3=A9gory_Clement?=
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>
+To: "Roger Quadros" <rogerq@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Peter Chen" <peter.chen@kernel.org>, "Pawel Laszczak"
+ <pawell@cadence.com>, "Mathias Nyman" <mathias.nyman@intel.com>, "Nishanth
+ Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo"
+ <kristo@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
+ <20240726-s2r-cdns-v5-9-8664bfb032ac@bootlin.com>
+ <1cd45625-84e4-43aa-ae2b-a59f10add898@kernel.org>
+In-Reply-To: <1cd45625-84e4-43aa-ae2b-a59f10add898@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-
-On 9/7/2024 6:09 AM, Thinh Nguyen wrote:
-> On Sat, Sep 07, 2024, Selvarasu Ganesan wrote:
->> Hi Thinh,
->>
->> I ran the code you recommended on our testing environment and was able
->> to reproduce the issue one time.
->>
->> When evt->flags contains DWC3_EVENT_PENDING, I've included the following
->> debugging information: I added this debug message at the start of
->> dwc3_event_buffers_cleanup and dwc3_event_buffers_setup functions in
->> during suspend and resume.
->>
->> The results were quite interesting . I'm curious to understand how
->> evt->flags is set to DWC3_EVENT_PENDING, and along with DWC3_GEVNTSIZ is
->> equal to 0x1000 during the suspend.
-> That is indeed strange.
+On Mon Aug 5, 2024 at 3:41 PM CEST, Roger Quadros wrote:
+> On 26/07/2024 21:17, Th=C3=A9o Lebrun wrote:
+> > The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
+> > expect a reset after resume. It is also used by some to enforce a XHCI
+> > reset on resume (see needs-reset-on-resume DT prop).
+> >=20
+> > Some wrappers are unsure beforehands if they will reset. Add a mechanis=
+m
+> > to signal *at resume* if power has been lost. Parent devices can set
+> > this flag, that defaults to the XHCI_RESET_ON_RESUME value.
+> >=20
+> > The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on the
+> > controller. This is required as we do not know if a suspend will
+> > trigger a reset, so the best guess is to avoid runtime PM.
+> >=20
+> > Reset the xhci->lost_power value each time in xhci_resume(), making it
+> > safe for devices to only set lost_power on some resumes.
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  drivers/usb/host/xhci.c | 8 +++++++-
+> >  drivers/usb/host/xhci.h | 6 ++++++
+> >  2 files changed, 13 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index 0a8cf6c17f82..2c9b32d339f9 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -1029,9 +1029,12 @@ int xhci_resume(struct xhci_hcd *xhci, pm_messag=
+e_t msg)
+> > =20
+> >  	spin_lock_irq(&xhci->lock);
+> > =20
+> > -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken=
+_suspend)
+> > +	if (hibernated || xhci->lost_power || xhci->broken_suspend)
 >
->> Its means that the previous bottom-half handler prior to suspend might
->> still be executing in the middle of the process.
->>
->> Could you please give your suggestions here? And let me know if anything
->> want to test or additional details are required.
->>
->>
->> ##DBG: dwc3_event_buffers_cleanup:
->>    evt->length    :0x1000
->>    evt->lpos      :0x20c
->>    evt->count     :0x0
->>    evt->flags     :0x1 // This is Unexpected if DWC3_GEVNTSIZ(0)(0xc408):
->> 0x00001000. Its means that previous bottom-half handler may be still
->> running in middle
-> Perhaps.
+> Why not treat xhci->lost_power and xhci->quriks & XHCI_RESET_ON_RESUME in=
+dependently?
 >
-> But I doubt that's the case since it shouldn't take that long for the
-> bottom-half to be completed before the next resume yet the flag is still
-> set.
+> XHCI_RESET_ON_RESUME is sued by devices that know they always need to be =
+reset on resume.
 >
->>    DWC3_GEVNTSIZ(0)(0xc408)       : 0x00001000
->>    DWC3_GEVNTCOUNT(0)(0xc40c)     : 0x00000000
->>    DWC3_DCFG(0xc700)              : 0x00e008a8
->>    DWC3_DCTL(0xc704)              : 0x0cf00a00
->>    DWC3_DEVTEN(0xc708)            : 0x00000000
->>    DWC3_DSTS(0xc70c)              : 0x00d20cd1
->>
-> The controller status is halted. So there's no problem with
-> soft-disconnect. For the interrupt mask in GEVNTSIZ to be cleared,
-> that likely means that the bottom-half had probably completed.
+> xhci->lost_power is used by devices that don't have consistent behavior.
 
-Agree, But I am worrying on If the bottom-half is completed, then 
-DWC3_EVENT_PENDING must be cleared in evt->flags.
-Is there any possibility of a CPU reordering issue when updating 
-evt->flags in the bottom-half handler?.
-Should I try with wmb() when writing to evt->flags?
->
->> ##DBG: dwc3_event_buffers_setup:
->>    evt->length    :0x1000
->>    evt->lpos      :0x20c
-> They fact that evt->lpos did not get updated tells me that there's
-> something wrong with memory access to your platform during suspend and
-> resume.
+The goal is to avoid almost-duplicate functionality. I feel like:
 
-Are you expecting the evt->lpos value to be zero here? If so, this is 
-expected in our test setup because we avoid writing zero to evt->lpos as 
-part of dwc3_event_buffers_cleanup if evt->flags have a value of 1. This 
-is simply to track the status of evt->lpos during suspend to resume when 
-evt->flags have a value of DWC3_EVENT_PENDING. The following test codes 
-for the reference.
+    XHCI_RESET_ON_RESUME is the default value of xhci->lost_power,
+    which might be modified at resume.
 
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -505,8 +505,20 @@ static int dwc3_alloc_event_buffers(struct dwc3 
-*dwc, unsigned int length)
-  int dwc3_event_buffers_setup(struct dwc3 *dwc)
-  {
-         struct dwc3_event_buffer        *evt;
-+       u32                             reg;
+Is a more straight forward solution than:
 
-         evt = dwc->ev_buf;
-+
-+       if (evt->flags & DWC3_EVENT_PENDING) {
-+               pr_info("evt->length :%x\n", evt->length);
-+               pr_info("evt->lpos :%x\n", evt->lpos);
-+               pr_info("evt->count :%x\n", evt->count);
-+               pr_info("evt->flags :%x\n", evt->flags);
-+
-+               dwc3_exynos_reg_dump(dwc);
-+
-+       }
-+
-         evt->lpos = 0;
-         dwc3_writel(dwc->regs, DWC3_GEVNTADRLO(0),
-                         lower_32_bits(evt->dma));
-@@ -514,8 +526,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
-                         upper_32_bits(evt->dma));
-         dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
-                         DWC3_GEVNTSIZ_SIZE(evt->length));
--       dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
+    Both XHCI_RESET_ON_RESUME and xhci->lost_power define if power was
+    lost at resume. First must be statically known, second can be
+    updated during runtime. If second is used, first one must NOT be
+    set.
 
-+       /* Clear any stale event */
-+       reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-+       dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
-         return 0;
-  }
+Indeed, the first solution brings two additional lines of code as you
+commented below. I'd argue the easier-to-wrap-your-head-around logic is
+more important.
 
-@@ -525,7 +539,16 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
-
-         evt = dwc->ev_buf;
-
--       evt->lpos = 0;
-+       if (evt->flags & DWC3_EVENT_PENDING) {
-+               pr_info("evt->length :%x\n", evt->length);
-+               pr_info("evt->lpos :%x\n", evt->lpos);
-+               pr_info("evt->count :%x\n", evt->count);
-+               pr_info("evt->flags :%x\n", evt->flags);
-+
-+               dwc3_exynos_reg_dump(dwc);
-+       } else {
-+               evt->lpos = 0;
-+       }
+Tell me if you are convinced the second approach is better.
 
 >
->>    evt->count     :0x0
->>    evt->flags     :0x1 // Still It's not clearing in during resume.
->>
->>    DWC3_GEVNTSIZ(0)(0xc408)       : 0x00000000
->>    DWC3_GEVNTCOUNT(0)(0xc40c)     : 0x00000000
->>    DWC3_DCFG(0xc700)              : 0x00080800
->>    DWC3_DCTL(0xc704)              : 0x00f00000
->>    DWC3_DEVTEN(0xc708)            : 0x00000000
->>    DWC3_DSTS(0xc70c)              : 0x00d20001
->>
-> Please help look into your platform to see what condition triggers this
-> memory access issue. If this is a hardware quirk, we can properly update
-> the change and note it to be so.
+>
+> >  		reinit_xhc =3D true;
+> > =20
+> > +	/* Reset to default value, parent devices might correct it at next re=
+sume. */
+> > +	xhci->lost_power =3D !!(xhci->quirks & XHCI_RESET_ON_RESUME);
+> > +
+>
+> then you don't need to do this.
 
-Sure I will try to figure it out. However, we are facing challenges in 
-reproducing the issue. There could be a delay in understanding the 
-conditions that trigger the memory issue if it is related to a memory issue.
+To be honest, I added this line out of rigor. We could remove it and say
+that any device that modifies xhci->lost_power once at resume must set
+it at each later resume.
+
+The above line felt like a small safety net to avoid logic mistakes.
 
 >
-> Thanks,
-> Thinh
+> >  	if (!reinit_xhc) {
+> >  		/*
+> >  		 * Some controllers might lose power during suspend, so wait
+> > @@ -5228,6 +5231,9 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_=
+quirks_t get_quirks)
+> >  	if (get_quirks)
+> >  		get_quirks(dev, xhci);
+> > =20
+> > +	/* Default value, that can be corrected at resume. */
+> > +	xhci->lost_power =3D !!(xhci->quirks & XHCI_RESET_ON_RESUME);
+> > +=20
 >
-> (If possible, for future tests, please dump the dwc3 tracepoints. Many
-> thanks for the tests.)
+> nor this.
 
-I tried to get dwc3 traces in the failure case, but so far no instances 
-have been reported. Our testing is still in progress with enable dwc3 
-traces.
+Regards,
 
-I will keep posting once I get the dwc3 traces in the failure scenario.
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-
-Thanks,
-Selva
 
