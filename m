@@ -1,124 +1,71 @@
-Return-Path: <linux-usb+bounces-14880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A92C972CAE
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 11:00:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A432972CD7
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 11:05:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14204287EF9
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:00:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EFC4283EF1
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:05:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9CF187871;
-	Tue, 10 Sep 2024 09:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235EC188A09;
+	Tue, 10 Sep 2024 09:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fInl1ysE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0B3016A957;
-	Tue, 10 Sep 2024 09:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830F5188002;
+	Tue, 10 Sep 2024 09:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725958826; cv=none; b=AQtyz8xoNLqMpF+W4rQQUFHZnx6Jz3bWWUsm5lrnR0y57TxGl34YGnY7nZyvgQPOSLmslSkNlAEPcDaxLqC6nuhXV4hP+a3vXNxGf7mKkavi5XJ8zdQgRC/6u3tZER5WwvFV/be5BeIoAsG5Bh6YXKGhtKvEGmtiB/LuDUMp98E=
+	t=1725959081; cv=none; b=BGprnmZDbeohCnxlM/77y9xjGZzMjr7OLuM7zFu0/bAnXTDMoBORSLj0zkHH8GCPJazOPkmg/WqBk9FDLS3s9lXp9Mo4E1EDuvV/MpM+l9mkiPrDPfX6+s6Et+VaJTC72YejPtsZ+aBnUkDeZS766Yid1O6/jWixMqlzAcrD+ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725958826; c=relaxed/simple;
-	bh=R/6lvEGnan2GdVeJmJT9ipw0THIFlDnuJcz377UswX0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hInACrg4L7JMRbBebanvVFceQIqUyFPX++q8dLXYKwjAEGGTmS11lRj063CNZYFQII9kXik9qqsvtlEF/XAVokubWgIgeYnZM91WL3hlCBaw7K2N9CyLPC1+RrquOqc0m5LcWTRwt3zKkiIecbC8iqNndtzz3up2QKfQW0nxY30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee266e00aa18f1-4a8f9;
-	Tue, 10 Sep 2024 17:00:17 +0800 (CST)
-X-RM-TRANSID:2ee266e00aa18f1-4a8f9
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.97])
-	by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee466e00aa00da-843b0;
-	Tue, 10 Sep 2024 17:00:17 +0800 (CST)
-X-RM-TRANSID:2ee466e00aa00da-843b0
-From: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
-To: rui.silva@linaro.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhang jiao <zhangjiao2@cmss.chinamobile.com>
-Subject: [PATCH] usb: isp1760: Use devm_kcalloc
-Date: Tue, 10 Sep 2024 15:26:42 +0800
-Message-Id: <20240910072642.39396-1-zhangjiao2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1725959081; c=relaxed/simple;
+	bh=H8CEp2/9jZrHleI1Lrib9tpsZICUCaPP2NNzePDTsIg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VeXlVRew8taF5ZCpcCznacLnhEdr9Y9PSmqoZdHTFR35lO2YQ4oAvYLyK3Fs3JSkgAJn3IadgrrbHp0Z83L7f3knOt2QVmocOhG322kbrnRATjWFK6zcXGz04imCL8knvjzroea99bWtmrAfS2aqw/WQIZaOpPyNg6gzMtdHYxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fInl1ysE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE07C4CEC3;
+	Tue, 10 Sep 2024 09:04:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1725959081;
+	bh=H8CEp2/9jZrHleI1Lrib9tpsZICUCaPP2NNzePDTsIg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fInl1ysELlfXBZ5rZYn2C/8XqQLsX9jQADNKUFYC4dz5+tzaJtJEO4bVWL9R8maC3
+	 DX/P4UdNMPHqSVVJiZr2wmElhDXGXpC12K4kRpJQDUByzOPfLZTCrm41R2KzFRMjRD
+	 qD6euzDvj060RN7da5VT79JnSJqlMou1uR7pn7oQ=
+Date: Tue, 10 Sep 2024 11:04:38 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
+Cc: rui.silva@linaro.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: isp1760: Use devm_kcalloc
+Message-ID: <2024091053-deforest-acuteness-7d20@gregkh>
+References: <20240910072642.39396-1-zhangjiao2@cmss.chinamobile.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240910072642.39396-1-zhangjiao2@cmss.chinamobile.com>
 
-From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+On Tue, Sep 10, 2024 at 03:26:42PM +0800, zhangjiao2 wrote:
+> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+> 
+> Use devm_kcalloc to simplify code.
 
-Use devm_kcalloc to simplify code.
+In what way?
 
-Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
----
- drivers/usb/isp1760/isp1760-hcd.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+Are you sure it's safe to do this?  How was this tested?
 
-diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
-index 0e5e4cb74c87..593ce841ae53 100644
---- a/drivers/usb/isp1760/isp1760-hcd.c
-+++ b/drivers/usb/isp1760/isp1760-hcd.c
-@@ -2572,18 +2572,18 @@ int isp1760_hcd_register(struct isp1760_hcd *priv, struct resource *mem,
- 
- 	priv->hcd = hcd;
- 
--	priv->atl_slots = kcalloc(mem_layout->slot_num,
-+	priv->atl_slots = devm_kcalloc(dev, mem_layout->slot_num,
- 				  sizeof(struct isp1760_slotinfo), GFP_KERNEL);
- 	if (!priv->atl_slots) {
- 		ret = -ENOMEM;
- 		goto put_hcd;
- 	}
- 
--	priv->int_slots = kcalloc(mem_layout->slot_num,
-+	priv->int_slots = devm_kcalloc(dev, mem_layout->slot_num,
- 				  sizeof(struct isp1760_slotinfo), GFP_KERNEL);
- 	if (!priv->int_slots) {
- 		ret = -ENOMEM;
--		goto free_atl_slots;
-+		goto put_hcd;
- 	}
- 
- 	init_memory(priv);
-@@ -2597,16 +2597,12 @@ int isp1760_hcd_register(struct isp1760_hcd *priv, struct resource *mem,
- 
- 	ret = usb_add_hcd(hcd, irq, irqflags);
- 	if (ret)
--		goto free_int_slots;
-+		goto put_hcd;
- 
- 	device_wakeup_enable(hcd->self.controller);
- 
- 	return 0;
- 
--free_int_slots:
--	kfree(priv->int_slots);
--free_atl_slots:
--	kfree(priv->atl_slots);
- put_hcd:
- 	usb_put_hcd(hcd);
- 	return ret;
-@@ -2619,6 +2615,4 @@ void isp1760_hcd_unregister(struct isp1760_hcd *priv)
- 
- 	usb_remove_hcd(priv->hcd);
- 	usb_put_hcd(priv->hcd);
--	kfree(priv->atl_slots);
--	kfree(priv->int_slots);
- }
--- 
-2.33.0
+thanks,
 
-
-
+greg k-h
 
