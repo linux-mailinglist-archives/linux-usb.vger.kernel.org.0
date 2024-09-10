@@ -1,155 +1,176 @@
-Return-Path: <linux-usb+bounces-14904-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14905-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F29297372B
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 14:26:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A26B9973863
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 15:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6A721F25413
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 12:26:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C669C1C2443B
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 13:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C55D190492;
-	Tue, 10 Sep 2024 12:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67501192D9B;
+	Tue, 10 Sep 2024 13:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1ZCuRmU"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Am+tsIX/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8601318F2D5
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 12:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4604C192D8E
+	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 13:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725971190; cv=none; b=iHAUIuvRhBVv3nMS7YPduHRoW7YhY4/IcWN9J5BU+dR5qAAPaCEjk+3CAcJt6kj8hTGlEAQwv6H1/5eIqrdTRKvdzJ2M95ciIfVwmSjnsmNE58OunU4Ty6f2yvQJOErNStG7iXCvCjlQAA3Q1XUhAdUcbZ7GQbljjQp641sKsUw=
+	t=1725974032; cv=none; b=kGESw6ADrZCkNogP9sI7qCIoAXTNgy5S5uLoq//T+AfoXXdctvCMSkPU3diPUu272oQeV+AefQgYJMuQjgJeYiuKKrOq3rDco0FFKYJQob5wz2EILXbdkp7rwo9+3eBcoeVWl6fC0e+th/822T4izxk8ud41tKYcFXG4yJLqqvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725971190; c=relaxed/simple;
-	bh=i5W7ej9czhxprPg7VKO34vaXzXcqKct+hfuRtVKvjBc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GvpTw4rrbvDu55+bC0qdehDVRNn2LvnCQdNOMyTbQbrlj12IeFjg0JOsaM4Ozg8tpTD445PgNN8WJXTg66u6afkRhQ7OPueXjE+FShOlWYFLvNry5VDsBlxyXKmbZvhluUefLdbDCQmlcopDaQh4nt7gyLfQMugEUqLnSdPBzx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1ZCuRmU; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-718ebb01fd2so545984b3a.2
-        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 05:26:29 -0700 (PDT)
+	s=arc-20240116; t=1725974032; c=relaxed/simple;
+	bh=Td8G0ZhZzKBRWrXjIEUMlAY6Xd0molozO56n4pFV8iU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UejBMsQJUxs4XpXBfeu94bsNDqZWccc8yfg0+1H6/KCygUO73IgddM3++pc21RVv1F/wUGSPxkiG4Ld3EHJTWKauYeMhhj7BdIKDVjBUfg1iVdZHuV8rVS3FB3uOBw9y+AHLejdrscRbdDACwrfkJYoADqkBFMfQe8HeOfrYUwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Am+tsIX/; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7a9a7bea3cfso190528685a.1
+        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 06:13:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725971189; x=1726575989; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lvaqbLejZoQ+oZna2KowQG5yxOkmCKLrGbW3RFBdl4k=;
-        b=k1ZCuRmUJZE66Oil/PBaz5FMiRH95XXC6EHuNVa3cqd8a5hb6B4O7RFU7cHyCJ/nZE
-         zffVQKSh9PwL51Z7iF5kIDnLUr2Sg6MHgORB/qs97xm1Zf6+q83b6GPdb1q12MpK27iq
-         7HbUocfE/+QH0IE2/JMCzjBAqlREyY35d+iuOKg3/W3FNM3wnT1y96qWxLfxDyEeAqdq
-         lkWVZGtOXeuA1py+0MGUzmt5A/WvVLay4NRoCJUoGX3JBY1hgmbEexkrnYoO3vKB4SWz
-         GFWP+AhnqEJKZmswsmNrUXMii0DC6HxBxEXogfTM6/xvvp/F76cDYAEIRH/6vZa/6I/u
-         o79A==
+        d=rowland.harvard.edu; s=google; t=1725974029; x=1726578829; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fpN52Tl3Y7hU7ZRXluVo1s+cWZSZSn4C8T8BEZMK7SE=;
+        b=Am+tsIX/q8YPkmqKLk3MEsUHCWyN0fZsQrPapl2OijcrId7JwKGjfLWRzE3eAh75Tr
+         RXyaQ8EkrYjCcg49T97gnEhS9EYBGGsK6bBD+XdLPOhUACQUAo4Ni5muvF8PCCnNUFkC
+         I/pzqs8opqqDdBS1g2cKU/VFwi4hccoTQBdysKq0YNZk3HiNRCy/UHt4wgfb8f7Kd6Gi
+         7nW0eXu9h74kZoSySijqEWMstVy4XbGDZ7c52a7WKQamWxeFU19w4gyfGTX9v5plm14M
+         PUOdZ/bsTo4eYkk1MUY3nh1tyPt3WkWOFsLmwLmZ80Zd+akzbtfGavJ82uTJlB3ePRPn
+         c30A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725971189; x=1726575989;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1725974029; x=1726578829;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvaqbLejZoQ+oZna2KowQG5yxOkmCKLrGbW3RFBdl4k=;
-        b=LLQ2CpQsQcI69rOfL9nfRgwQvpsmRN13UM/8BpbwfMTzO9dXqeFDfH7qWAeEBbC7Rt
-         5f+sX5g6blat48h4oQjAqG62qXvDF75HQdu4t81odIIG7EfTgYwbsKffwIY/vyUyKlKW
-         HfpQiy2RPssMMZ23I8gcqCyfp4q2mo7ji6WFbSkk0pvpf/WCnzAYm5GtFJNqhJXqCIvV
-         B3Rl4VCRuKOUhx3GasDX4sSsmMgJEmAmzVH69RRlBlLHvo5MCJUDTqbw8OYPbXJjz6O0
-         kePlrCVQYvtZeWt+elTqAa2sbQYIiTakTiIBzKmJx9fYpSLYOCi04Efp0PUMhoQHbyb7
-         vbKg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVpaV+by0YMjbhx02qQTrtY9/RwEcaCIFmp5J/34oTC2jgRT0UxNEN3DDetNLMhjbNwTMxNt8NUuA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiRoTw/Hn4SAkn+g7bFykKBheaBQ8FhsINpDSU8mDrXYUtzuzd
-	bvDaC8AAibvqLmDY+N0vjyI5/v0i400CAoVXVGB5eBqo4TI7Lw54v0nMB14R
-X-Google-Smtp-Source: AGHT+IHmRqqyHLiYi2cSPBsglXQzqsu83zCaGDlbNfRqdCXX7eulXfutkIVTarlk5ZRSKga6bETr+A==
-X-Received: by 2002:a05:6a20:7345:b0:1cf:3f39:c46a with SMTP id adf61e73a8af0-1cf5e0f0dd8mr396038637.6.1725971188647;
-        Tue, 10 Sep 2024 05:26:28 -0700 (PDT)
-Received: from [192.168.1.7] ([119.42.110.5])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-719090be13dsm1264484b3a.184.2024.09.10.05.26.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Sep 2024 05:26:28 -0700 (PDT)
-Message-ID: <d4b02fcb-6476-4a67-bc07-e6a224891b20@gmail.com>
-Date: Tue, 10 Sep 2024 19:26:24 +0700
+        bh=fpN52Tl3Y7hU7ZRXluVo1s+cWZSZSn4C8T8BEZMK7SE=;
+        b=ewTZ3unFqFc2jgwxnGhEwqLrEmeUdQEbadD0NHuMJXMfQ/ICysCHTU1iPoEHQJn81W
+         M0g0si5T3AzlG5LlkFdwpRNf/1j0i78mEGDL2LRMLvQXNQ3zoYJqIiy/jHQOW6Ky9Z7z
+         btQS5lHERkwRZ5GObaWdHUFVk5IUfJM3Hn8ODS4VwCYXDT+RE8cVIVav3lRblh9pira5
+         Uhdm0MBULNF+tK/hqKYyvWHV619U1lxv7AVW4YVJkpecpO6KNmOVzkC7jKH3H8MpFeIv
+         GRDY1Qf+kPyEero+W0EPbyq1jP1Z3DSfvMSRYrPKis8033J+oHCh9WpkAOvgB4d+d/0J
+         T+Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCXPJ5kBEr5OycZ8dIkNoPg4p71hawQiwEB4fOsaMgJeiDFF0SzYXrLcU9+PxOB4hnkUBMM4OgshhxI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWFKbZ6ayKH5d3cvZQ0RI7yfbavjUWaxW4lXcfqOf2TutalNDq
+	tk2run/zkMR8nKEgddo2JWG0gYKl5jvnBxgGFALsksWJ4oEul5rQt7gtfcfFbw==
+X-Google-Smtp-Source: AGHT+IF5PRcpk2RCeI33il7JeEsHL67QzDDZTB7lIxRX8RSfCSIdG7+kckjVTEpmGMcjUlhDs60Fuw==
+X-Received: by 2002:a05:620a:4406:b0:7a9:b8dd:eb96 with SMTP id af79cd13be357-7a9b8ddef9amr999401985a.30.1725974029054;
+        Tue, 10 Sep 2024 06:13:49 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::ed50])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7a04667sm304784885a.75.2024.09.10.06.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Sep 2024 06:13:48 -0700 (PDT)
+Date: Tue, 10 Sep 2024 09:13:45 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org,
+	jorge.lopez2@hp.com, acelan.kao@canonical.com,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne
+ 440
+Message-ID: <fe0d3259-c60b-4ef8-aa42-edb5ca2e2d90@rowland.harvard.edu>
+References: <20240906053047.459036-1-kai.heng.feng@canonical.com>
+ <d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu>
+ <CAAd53p4i1zzW2DsVfirjXVsQX0AgXy1XbzWaM-ziWmAmp8J1=A@mail.gmail.com>
+ <7be0c87a-c00f-4346-8482-f41ef0249b57@rowland.harvard.edu>
+ <CAAd53p7c4-jpZ6OsW+H9qw2mvvr8kSfX2UEf8YrsWJt5koYbAA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: option: support for Quectel EG916Q-GL
-To: "Benjamin B. Frost" <benjamin@geanix.com>, linux-usb@vger.kernel.org
-Cc: sean@geanix.com, martin@geanix.com, johan@kernel.org
-References: <20240910073050.2619669-1-benjamin@geanix.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20240910073050.2619669-1-benjamin@geanix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAd53p7c4-jpZ6OsW+H9qw2mvvr8kSfX2UEf8YrsWJt5koYbAA@mail.gmail.com>
 
-On 2024-09-10 14:30, Benjamin B. Frost wrote:
-> Add Quectel EM916Q-GL with product ID 0x6007
+On Tue, Sep 10, 2024 at 11:33:02AM +0800, Kai-Heng Feng wrote:
+> On Mon, Sep 9, 2024 at 10:39 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Mon, Sep 09, 2024 at 11:05:05AM +0800, Kai-Heng Feng wrote:
+> > > On Fri, Sep 6, 2024 at 10:22 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > > On Fri, Sep 06, 2024 at 01:30:47PM +0800, Kai-Heng Feng wrote:
+> > > > > The HP ProOne 440 has a power saving design that when the display is
+> > > > > off, it also cuts the USB touchscreen device's power off.
+> > > > >
+> > > > > This can cause system early wakeup because cutting the power off the
+> > > > > touchscreen device creates a disconnect event and prevent the system
+> > > > > from suspending:
+> > > >
+> > > > Is the touchscreen device connected directly to the root hub?  If it is
+> > > > then it looks like there's a separate bug here, which needs to be fixed.
+> > > >
+> > > > > [  445.814574] hub 2-0:1.0: hub_suspend
+> > > > > [  445.814652] usb usb2: bus suspend, wakeup 0
+> > > >
+> > > > Since the wakeup flag is set to 0, the root hub should not generate a
+> > > > wakeup request when a port-status-change event happens.
+> > >
+> > > The disconnect event itself should not generate a wake request, but
+> > > the interrupt itself still needs to be handled.
+> > >
+> > > >
+> > > > > [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
+> > > > > [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
+> > > >
+> > > > But it did.  This appears to be a bug in one of the xhci-hcd suspend
+> > > > routines.
+> >
+> > I failed to notice before that the suspend message message above is for
+> > bus 2 whereas the port change event here is on bus 1.  Nevertheless, I
+> > assume that bus 1 was suspended with wakeup = 0, so the idea is the
+> > same.
 > 
-> T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=6007 Rev= 2.00
-> S:  Manufacturer=Quectel
-> S:  Product=EG916Q-GL
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=200mA
-> A:  FirstIf#= 4 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=option
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  32 Ivl=32ms
-> I:* If#= 5 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=option
-> I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=option
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> Yes the bus 1 was already suspended.
 > 
-> Signed-off-by: Benjamin B. Frost <benjamin@geanix.com>
-> ---
->   drivers/usb/serial/option.c | 2 ++
->   1 file changed, 2 insertions(+)
+> >
+> > > So should the xhci-hcd delay all interrupt handling after system resume?
+> >
+> > It depends on how the hardware works; I don't know the details.  The
+> > best approach would be: when suspending the root hub with wakeup = 0,
+> > the driver will tell the hardware not to generate interrupt requests for
+> > port-change events (and then re-enable those interrupt requests when the
+> > root hub is resumed, later on).
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 176f38750ad5..8ff9f1435c2f 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -279,6 +279,7 @@ static void option_instat_callback(struct urb *urb);
->   #define QUECTEL_PRODUCT_EG912Y			0x6001
->   #define QUECTEL_PRODUCT_EC200S_CN		0x6002
->   #define QUECTEL_PRODUCT_EC200A			0x6005
-> +#define QUECTEL_PRODUCT_EG916Q			0x6007
->   #define QUECTEL_PRODUCT_EM061K_LWW		0x6008
->   #define QUECTEL_PRODUCT_EM061K_LCN		0x6009
->   #define QUECTEL_PRODUCT_EC200T			0x6026
-> @@ -1271,6 +1272,7 @@ static const struct usb_device_id option_ids[] = {
->   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
->   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG912Y, 0xff, 0, 0) },
->   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
-> +	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG916Q) },
->   
->   	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->   	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+> So the XHCI_CMD_EIE needs to be cleared in prepare callback to ensure
+> there's no interrupt in suspend callback.
 
-Hi,
-sorry but that is not correct. Interface 4 and 5 should be handled by 
-the cdc_ether driver, not by the option driver. You need to use the 
-USB_DEVICE_AND_INTERFACE_INFO macro exactly as in the 3 Quectel devices 
-above your entry.
+Not in the prepare callback.  Clear it during the suspend callback.
 
-thanks
-Lars
+But now reading this and the earlier section, I realize what the problem 
+is.  There's only one bit in the command register to control IRQ 
+generation, so you can't turn off interrupt requests for bus 1 (the 
+legacy USB-2 bus) without also turning them off for bus 2 (the USB-3 
+bus).
+
+> Maybe this can be done, but this seems to greatly alter the xHCI suspend flow.
+Yes, this approach isn't feasible.
+
+> > If that's not possible, another possibility is that the driver could
+> > handle the interrupt and clear the hardware's port-change status bit but
+> > then not ask for the root hub to be resumed.  However, this would
+> > probably be more difficult to get right.
+> 
+> IIUC the portsc status bit gets cleared after roothub is resumed. So
+> this also brings not insignificant change.
+> Not sure if its the best approach.
+
+It should be possible for this to work.  Just make the interrupt 
+handler skip calling usb_hcd_resume_root_hub() if wakeup is not enabled 
+for the root hub getting the port-status change.  When the root hub 
+resumes as part of the system resume later on, the hub driver will check 
+and see that a connect change occurred.
+
+Alan Stern
 
