@@ -1,173 +1,259 @@
-Return-Path: <linux-usb+bounces-14871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14872-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC3F09727AB
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 05:33:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BF4F972A1E
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:03:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF7F91F24BCE
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 03:33:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DE051F257CA
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 07:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC4B3A29A;
-	Tue, 10 Sep 2024 03:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C3617BB26;
+	Tue, 10 Sep 2024 07:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="iLzMt6Rr"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="lSw0xEbF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010059.outbound.protection.outlook.com [52.101.69.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB7D171A1
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 03:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725939206; cv=none; b=d5uC2K6x89j1UW3RZPsSLG1TAI0enJkI3bMC+movE7DmmUKMHbWNJMaYZNPgfv71ePnaLbDI+wkyj00ql27lwE4svR5PWr9yhAPxXLe+pCiKis8ugg1R56zipQk5fs8+fOgCwD+NWsVugOJ0hCqPt8AktNssN1cPk07VmFSdFz4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725939206; c=relaxed/simple;
-	bh=M1uP5T0syaPKmILBGoKjk5yrtVDRgj+U0SiUidxvyAs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a7rvJsM+fGpP5PU0HCsFrcNj2RcZDLESEWwZE9J7o9b16QizB7cVAJ9+ZFhnD2bgjMEla7HuyCYGy+LpGE0KkwGRTFEGB9GE18m7gNjA1wDnOBzyC7FJyhmKCbXpNeL5tNeuT3N4bXmjM/1/gAU+cY7tUoqh/+Pw+F1+P0/4cQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=iLzMt6Rr; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C10DC3F664
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 03:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1725939195;
-	bh=bdVMALNY4Nj+ezeanQrYsAz9ac60a7efpGm9G6VkDpg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=iLzMt6RrcY/ZBpNhgEiTF/27CPwOyLascBuCqlV7dHfIaWZ1RhmHyWj5TlMSKFiR4
-	 VIOqW/wdwRE+39E4H2F3AANxFMNv6qWubVgk3uAFaLvnx6JoN4Hi5S/B7omSWLc14M
-	 G8rKFtgNfoo9xvkGojSh9FMQAMhLcTmRGTfSYp9vy5RvMAzRNr390fEN5s+Y/RJg36
-	 IgdeXaC8R1yOGmFDiG8SC6BXAoxzOnGWCCMpiAFN3FAkUkknLIWNtm+hePnT0+9pT9
-	 JqxhiCWCWarlvTAqSGV+L3+RzFpmxCU1JfKD64AJfqW6/ZfFF1TVd5gCmU9QCnFOTh
-	 ju3wlraIPzaiQ==
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a8a92ab4cdbso21149066b.0
-        for <linux-usb@vger.kernel.org>; Mon, 09 Sep 2024 20:33:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725939195; x=1726543995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bdVMALNY4Nj+ezeanQrYsAz9ac60a7efpGm9G6VkDpg=;
-        b=JZSfpmwed3HeRjq8ITGmc0VpS1Kg6Af6T7T0wbr65lJ8RetHEqq7eOopjih42hknDH
-         DUgCWk8IOZd2YsbuCTgSKVPxNFh2y5JEvEepKrhIOyYTzDZi8VWDqcLtX7gOUD8Q28iA
-         uxO545oEj2FGnH8r5cRspgczpE+VhVky4hQVV3gN43rpqmWw2PTtVx5zmToqNHksMA33
-         cmJFM5IyNhnXxiFqQmVTMoKjauyxCLlnfefFXkjH/hgqYr6W7c00AtEqYmRAnkOAS94n
-         EA+QjS/4NVenPOl/ALaKy2XzE1Ei2fymNxS6+v35sY/V2IJc/hHiE8SHOlgtlnT/ctc0
-         A7cA==
-X-Forwarded-Encrypted: i=1; AJvYcCVoFyts+ZQuvQym0U36ThBhmsAapAA0ipEYjV46NbOPf5KFzRMWf4dqNUW+rk2YfvIdO9+9ktF1kdY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsAk9b9F/p8o/kPkeJSbOjUJCmitgm4OOOHkBHRlQOBkqssl3S
-	BirJaiKgbIigCsQ1pU6u0a4zi6D3qzU7s2hn9BNhs+4PXfZCnqgpULfGOG0x04MbDjBsI1YskJM
-	I7efgC0sPvsUnDgIN71nTpio/OupaKuxWyWR9c/QNFd4lrbLZqbYeiucadYrni4KRIydd17ihKg
-	toMV+tY1Gm4nyuz+Lo09lxKbnYnhmfJWn/tv+af0uT7rjGJ0sD
-X-Received: by 2002:a17:907:2cc4:b0:a8d:439d:5c25 with SMTP id a640c23a62f3a-a8d439d5dd4mr610728766b.4.1725939194994;
-        Mon, 09 Sep 2024 20:33:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGZXtqOWZQ5DP9i2k8x9bhsn2QouSJ03mlNURHgsOx/klP+Z9vIiP/N3mGSJraaI3jlqXXbyC2kGjXcONaqKGg=
-X-Received: by 2002:a17:907:2cc4:b0:a8d:439d:5c25 with SMTP id
- a640c23a62f3a-a8d439d5dd4mr610726466b.4.1725939194421; Mon, 09 Sep 2024
- 20:33:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE459335A7;
+	Tue, 10 Sep 2024 07:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725951794; cv=fail; b=NbVu9cnV4PavQ1zliAM5Ab+F5pohuzvPrpPOrMphNOJ4pLawVF9D1VDiKmFEcOaomcRxnKA8r4f2scDkXzprfU/PjtIGzF1rHZPr8ZJL409ngqp/Q2479qjMRQBi64YtI7gLd3GodnPYLL/AlMziC8NV4qib1BOC3+/CPbdTnzQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725951794; c=relaxed/simple;
+	bh=KmTH7JctGdSddpee6yUN2Gw9iXlt95zRke8KsmWij08=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=O3BFBJGm0fEhnFAIVWKnl7Gds5jaZiW5qALJM5ax9dbzEOCEt8e4DeRLyHI3VAjCtPPbuZMkWVm34AlcJj3l5ETID6Lz3By8yYePG4ULQ5Ad/T7fwr+GH6VNeIPDkNR/C7b/HgZ3Icb0JGSl7J73q4sanQU7nOvur4eywApEjQQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=lSw0xEbF; arc=fail smtp.client-ip=52.101.69.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SZ6PWSDEv+PoBTmA4EkLVZPvr4grIHGmPn949VaaZINQiiIzLHGIGPp1oB5nDi6uv0NNi88Ae41eeL1yQNzDLkDNRk1+BrCRs5KTx9zWfepWWE4jM8MBU9ATzQH1F0C3t/6G4s5Iz+hV53I1uF+G33AF9jz0rNwYtzAf+6BC0/devWKwHC7uazfZ49uEWXyC6FYOupQ7kL6fLFaA1f69L5iSvxhF9aqqGaFS2dsadukPzXFht6Gdz+yX+Br6BC7OspRXwJX/XDjqX0rhJpleX/Y/BVBn3WUw0E1JnAb072bjoFmr4n7ksq+se+Pit25U2Qvo371nZGNqu2bIOJT+Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oL/W2dv0JiR6ixWs28Px+WcW0LjLoUyM/xiiZG2pqxw=;
+ b=ArLB9ihUV04avGriToxGsJJWRhc+PBNnC2vzYo7JZkBDwG/u660g77bEDi3EMGDiRcJR6jSxJl4mazgrnpPunhtjV0u6c5kE0lTUcZ3l1GsSDaniCit/eeTvO9VC1QeUMdIr/eavTqni0NBaO/HV+vT1OQxh1koZHUwSqYM4nwZHPmMgmLJ43RCqxh16vq+1JPeY3b2ULoFbAT+t75niQzEG5OAMptmygGhE5f4SQi9Dhz41sEWYozghHvleSNIr/4DR8YCTn3mbQ9nA0BZFSJQlVTxnqrNYvIFGk6EwVpcZ0jEMlFWrAJaXawGuQKVG3IjMuiJCrutGxnWTjyIsHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oL/W2dv0JiR6ixWs28Px+WcW0LjLoUyM/xiiZG2pqxw=;
+ b=lSw0xEbFbHhia8X1wS9Keafi8JI5CuwMegvYvZuy6UmZhMoXuOHBIcc8LSHBvoOX/N/Z+qisVBqN7cjuecUiBTgWQX0iZbL2yMJvCX8hFF6PlStg7pgzaL59oMGbsA+2/M2P+5Ms0hUFxv5k+QBjZvt9SIof697nRfO/ASl8uw8Y3grGZDoiFKg5pwipxQj/AEmvNDX13IFoYKDhIed8La6gSc0NNdAXUm0h208zvl4RxyTwWzfFUAW84tf8jrA20Y6/VY3qZV80rWZJgbFvDJ+c7atwoXZ9dDijHUVcaa0baXWWORefE57IOnA/gdIEj1GogW8pB7o3rAaoCNB5iw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by DB8PR04MB7099.eurprd04.prod.outlook.com (2603:10a6:10:12b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.24; Tue, 10 Sep
+ 2024 07:03:06 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%4]) with mapi id 15.20.7918.024; Tue, 10 Sep 2024
+ 07:03:06 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: vkoul@kernel.org,
+	kishon@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	gregkh@linuxfoundation.org,
+	Frank.Li@nxp.com,
+	jun.li@nxp.com,
+	l.stach@pengutronix.de,
+	aford173@gmail.com,
+	hongxing.zhu@nxp.com,
+	alexander.stein@ew.tq-group.com
+Cc: linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v4 1/5] dt-bindings: phy: imx8mq-usb: add compatible "fsl,imx95-usb-phy"
+Date: Tue, 10 Sep 2024 15:03:35 +0800
+Message-Id: <20240910070339.4150883-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0184.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::9) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906053047.459036-1-kai.heng.feng@canonical.com>
- <d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu>
- <CAAd53p4i1zzW2DsVfirjXVsQX0AgXy1XbzWaM-ziWmAmp8J1=A@mail.gmail.com> <7be0c87a-c00f-4346-8482-f41ef0249b57@rowland.harvard.edu>
-In-Reply-To: <7be0c87a-c00f-4346-8482-f41ef0249b57@rowland.harvard.edu>
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Tue, 10 Sep 2024 11:33:02 +0800
-Message-ID: <CAAd53p7c4-jpZ6OsW+H9qw2mvvr8kSfX2UEf8YrsWJt5koYbAA@mail.gmail.com>
-Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne 440
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, hdegoede@redhat.com, 
-	ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org, 
-	jorge.lopez2@hp.com, acelan.kao@canonical.com, 
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DB8PR04MB7099:EE_
+X-MS-Office365-Filtering-Correlation-Id: 998e1d75-6c54-43e6-b0af-08dcd1669ea2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|52116014|1800799024|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?1o8qZct3blxAWayV3nZLyom5LS1uPywL4ydRoqyJoOCuMbwu8/wpeYyrLP+D?=
+ =?us-ascii?Q?R2LdS7+nguZlC0mmtpYmGqy2vSkoBtbv5TJ5+qBsCgpWGr0XPrZOU7/nY8bM?=
+ =?us-ascii?Q?2Z2Z0ILlxsbySimWH1Hn0X6pkXkD0Y3x2b2Q8XaW6PVUPbpIwHEGNglvQhZp?=
+ =?us-ascii?Q?719BVkkHVJbuahT7VpjfrgsCIAAOEW71SS2RP+nhLG75ypBLpqmTup5fjxjc?=
+ =?us-ascii?Q?R6kWk4YCGbL7tfSRLuCeLAU+NkhW/BH3xmVNXxA/sRvlQPYxUuF5SL0tENr+?=
+ =?us-ascii?Q?6cFU6VXbC+IPVKBvjHHBPkLpDG12EoYMBTqVnFcIhxBMyLz1PBLZyL40jfJC?=
+ =?us-ascii?Q?0Lztn99y/WYG9dc2Delp1RjiJpFv2ffQgKQDxDt4xWOT/Oe/E0aRKUNqj8eh?=
+ =?us-ascii?Q?yRwSpg1jfiCUA+9p/1tdQZjqlYDr4iXbGv0Z2yLdN+qwTSrO278C+f+CqgMO?=
+ =?us-ascii?Q?2g9pucimhNfj+3Dx/jib3qfg6hki7CrSEsw6EWD/Di0DLQwKb0Bv9W0MxI7h?=
+ =?us-ascii?Q?BvXU1swfj4fI6AHQqtHijxbvk/UTYQh+z9eHmk68VEgJB3Nhh7p7DVibSnKu?=
+ =?us-ascii?Q?xP9u7jU1MyfFHHd2f32iHJZyFe/qmm25ClZNc4xoPkLkaxM7Tc4jgO83TZq0?=
+ =?us-ascii?Q?EYLoAV9tacxYufGasJEFiTQPHdaR4JSzctvpceFdEkOkUll88Auy9OvpfPXq?=
+ =?us-ascii?Q?RNE4xn0GU118fOfeSIuklf5/OLgCF7TY77VtXIk/gSKiD0LUunVew8sWatcx?=
+ =?us-ascii?Q?FAvLckZ4ph0Z71r4dSd+/czOvI2Lo1Krk7i0lD2C9LIsSEii8O1/z4da5HLB?=
+ =?us-ascii?Q?YdbTGVB/PYiOi258zUhXvRxklSpnt+hb7sUtsAw8x7NP4/Syvc8enzSAFfrI?=
+ =?us-ascii?Q?j27OMC7T6iw1Wp+cJyvd8VDLmMIb1ILBS3PgQtqcHGgMzir+Wu7k3fK/YfzE?=
+ =?us-ascii?Q?a0qWVhpGbeZkNfoOOqJBBmUmx4TBrG81PsyhzhYDBH565EZXsfmC+4DMDJZ9?=
+ =?us-ascii?Q?pumYo6DfTWNnr5+EmAwobbRFb88Y5+A3Zv4zFt0JukVn18sfcUsw8D8Ex9FL?=
+ =?us-ascii?Q?+AGHUgn+IgGEpumTntG44D50ngYnurQocUUv8JRdvSrnXVYT7DA4joVYnt4I?=
+ =?us-ascii?Q?RRKCjbnYXIcb1fTVz54AnRwRj/4v8t5UZH3gHfWRJSHN+EmiWXFkoAjcGDO2?=
+ =?us-ascii?Q?RJUs+8mSeXK48SPrYVJrmcqkfmaoSwo6l8Sl9gDwOSTdWsez3iuMzwIoxLo/?=
+ =?us-ascii?Q?Bs6jAlvQg+1bL32huc3vGvn0OkoykJFcihpV6NqHI65L6OExlrHhXdIwB6IA?=
+ =?us-ascii?Q?MwTEUkcbkKvnVzHVXggmQIXWPPT5fN1ePeLMwAoYu4p1DmRmlwVGOgaeJROL?=
+ =?us-ascii?Q?+9RM98gYwejZcIGrxItiRqANi8nD0wpn7SsCWBpOMhpWpmEBnKh129ITE7PO?=
+ =?us-ascii?Q?s39V5ZxWGxk=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(52116014)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?4KcCoSlb1T+i2iJyl3/S/pmkFhHNgOfoA2scdg8iCL3QlG3vWV9mLs4RWUHe?=
+ =?us-ascii?Q?TmAmey7XXmrfs82l3SZeXih4nyUZoJ9Sx/UFiUpriGdZSosOJXQCQ8lca4Gl?=
+ =?us-ascii?Q?vMNMQa5uVc2dj+GzGYysBKDA7DvOpoM58PloVXx1Mv6DeuE5o4/4TTgHoJai?=
+ =?us-ascii?Q?RioxycvmeUaFrdIPJAGL5T4wOGSeFnGOA/1UZTyxFKlv+PjNUZTIv6G2YkjU?=
+ =?us-ascii?Q?IrJrDJW8PBDogP/JZC5ECUj4rk0fKHTnAqgeyAi4sz+kmwCLr+sTDkY1MIQm?=
+ =?us-ascii?Q?DX47IvZbPsVq2c1iLNHucwKdqUYQAqgYbfe/cGooEPwZngNyAo54qy6WRa+G?=
+ =?us-ascii?Q?dKEbdxcfI4T5nVRWnsPqSFLjpofaBXkqn7WN++BVxL+2pGPAAMi2Q/dMbMuu?=
+ =?us-ascii?Q?d/6I3KcLXZOdWFQBzGcHsuFYde+FdcNpcnW26qBaZJ4PZuJf+GAwsuaCcSM7?=
+ =?us-ascii?Q?WoIurhGYvYWFAYz/nfTl4u5OPgf3t1SKehHm28io8JE4nSWo3XNiSZQJKQAj?=
+ =?us-ascii?Q?Ie5CdRx3VuPCdzkmrFXefQvEuWqOTElli0m6DPNMIwDG9i3qmvLP7gVXLMb4?=
+ =?us-ascii?Q?0ncFg78rmIBCUPhUnYmUNObaJOEk12BBGmRIo08MjpLdHsI51+lzhBwPeCBA?=
+ =?us-ascii?Q?BKV6+XcRm58NGOMePteOWHuen0bGkg0O+cDwBvtoq+bexd4UFkc25UxFtY3y?=
+ =?us-ascii?Q?9hGUInO0CYo8l0PmnsDShMMFqmT8uc3Xni5LN96d3i07viB5bIfugRxNz+Mp?=
+ =?us-ascii?Q?Xe19Agoh7hmoETdBZpvq9Cj7UtCxWHjW5XyGO7D+xO+Kw1BTmnkQBtsC2sho?=
+ =?us-ascii?Q?bQK7Tt9cWpDzMvOLY3y0wM+aISsvO625nrshkU9e/eh2tMfbox1QNf1NjdVh?=
+ =?us-ascii?Q?Ul6pyCEwETipgVcaqBSctpiejmd2QeazIGJqctgsSAPIgZWu09irUV/PJDRl?=
+ =?us-ascii?Q?7XfBKCj4wjD0ubhQZDCmCjiJrudiCHxaXZCbswHHuP83JnqfXqTbM0K1jhU6?=
+ =?us-ascii?Q?h/VPM9cqQwmQZHPq8xdaRhh/9fnNrVaAPUwCaDELnPlQGL46mk3CzXIlnAxL?=
+ =?us-ascii?Q?s3JRbRWOu/6G1XklLBOpzVp/Hg8mgw/xsg3WmzwlYZ+qUve27Rr8QEOKgUZX?=
+ =?us-ascii?Q?agnTNqjDgDLF3G5SVGmLCUK7LK64/TFm6LhGiduZ8WfT458Bg9/98PPSjjkt?=
+ =?us-ascii?Q?wjjTxovryJSFOKprHDBECCDEi3jWIAObHvCwLxHwKpjQKrhLE49DD9uwXo+a?=
+ =?us-ascii?Q?3Di+OqhUB/iRbvOLF9XGeftiRumaNAdXyfegUJrW6zdSGVcrHwSY/9Xo7fr/?=
+ =?us-ascii?Q?cjj8EA8GX6YEn8hWbX9dfqgi4Wp2ST8GNdZWDPEtxCQc7vvDYPIoizFIV0nw?=
+ =?us-ascii?Q?arLSt7SdwTRKdpA9V9ybcQGCLR+BEkFMfbK4/iKwx6E/EBforRAOvCbmAiic?=
+ =?us-ascii?Q?kN+sHhd1XX1NUd68xYU4s8SAOA+lUeNAWSEH2VKTEB4VtDnf1LTiyx/l8Id0?=
+ =?us-ascii?Q?LqeRXBE6YYftAm/sZdWx9qwL+JQjzHIoncjMZzdwdZ1fyt8GUi85d8ZEdP46?=
+ =?us-ascii?Q?YLejHbXg7MNRE66ZP0W/H0b748lWXZ7B3/MES1bg?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 998e1d75-6c54-43e6-b0af-08dcd1669ea2
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2024 07:03:06.1840
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vtYs33HkzLwnUy6RO7IfnCW2mmwmOIQIesL9W0UdQUA1U5D5v3tjh8NOLA8ie/qkFUGkHavW/eVINEAYoBonyg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7099
 
-On Mon, Sep 9, 2024 at 10:39=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Mon, Sep 09, 2024 at 11:05:05AM +0800, Kai-Heng Feng wrote:
-> > On Fri, Sep 6, 2024 at 10:22=E2=80=AFPM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > >
-> > > On Fri, Sep 06, 2024 at 01:30:47PM +0800, Kai-Heng Feng wrote:
-> > > > The HP ProOne 440 has a power saving design that when the display i=
-s
-> > > > off, it also cuts the USB touchscreen device's power off.
-> > > >
-> > > > This can cause system early wakeup because cutting the power off th=
-e
-> > > > touchscreen device creates a disconnect event and prevent the syste=
-m
-> > > > from suspending:
-> > >
-> > > Is the touchscreen device connected directly to the root hub?  If it =
-is
-> > > then it looks like there's a separate bug here, which needs to be fix=
-ed.
-> > >
-> > > > [  445.814574] hub 2-0:1.0: hub_suspend
-> > > > [  445.814652] usb usb2: bus suspend, wakeup 0
-> > >
-> > > Since the wakeup flag is set to 0, the root hub should not generate a
-> > > wakeup request when a port-status-change event happens.
-> >
-> > The disconnect event itself should not generate a wake request, but
-> > the interrupt itself still needs to be handled.
-> >
-> > >
-> > > > [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 1=
-1, portsc: 0x202a0
-> > > > [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
-> > >
-> > > But it did.  This appears to be a bug in one of the xhci-hcd suspend
-> > > routines.
->
-> I failed to notice before that the suspend message message above is for
-> bus 2 whereas the port change event here is on bus 1.  Nevertheless, I
-> assume that bus 1 was suspended with wakeup =3D 0, so the idea is the
-> same.
+The usb phy in i.MX95 is compatible with i.MX8MP's, this will add a
+compatible "fsl,imx95-usb-phy" for i.MX95. Also change reg maxItems
+to 2 since i.MX95 needs another regmap to control Type-C Assist (TCA)
+block. Since i.MX95 usb phy is able to switch SS lanes, this will also
+add orientation-switch and port property to the file.
 
-Yes the bus 1 was already suspended.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
->
-> > So should the xhci-hcd delay all interrupt handling after system resume=
-?
->
-> It depends on how the hardware works; I don't know the details.  The
-> best approach would be: when suspending the root hub with wakeup =3D 0,
-> the driver will tell the hardware not to generate interrupt requests for
-> port-change events (and then re-enable those interrupt requests when the
-> root hub is resumed, later on).
+---
+Changes in v2:
+ - replace minItems with description in reg property
+ - remove orientation-switch and port
+ - refer to usb-switch.yaml
+ - use unevaluatedProperties
+Changes in v3:
+ - add Rb tag
+Changes in v4:
+ - no changes
+---
+ .../bindings/phy/fsl,imx8mq-usb-phy.yaml      | 42 ++++++++++++++++---
+ 1 file changed, 37 insertions(+), 5 deletions(-)
 
-So the XHCI_CMD_EIE needs to be cleared in prepare callback to ensure
-there's no interrupt in suspend callback.
-Maybe this can be done, but this seems to greatly alter the xHCI suspend fl=
-ow.
+diff --git a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+index dc3a3f709fea..6d6d211883ae 100644
+--- a/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml
+@@ -11,12 +11,17 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - fsl,imx8mq-usb-phy
+-      - fsl,imx8mp-usb-phy
++    oneOf:
++      - enum:
++          - fsl,imx8mq-usb-phy
++          - fsl,imx8mp-usb-phy
++      - items:
++          - const: fsl,imx95-usb-phy
++          - const: fsl,imx8mp-usb-phy
+ 
+   reg:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
+ 
+   "#phy-cells":
+     const: 0
+@@ -89,7 +94,34 @@ required:
+   - clocks
+   - clock-names
+ 
+-additionalProperties: false
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - fsl,imx95-usb-phy
++    then:
++      properties:
++        reg:
++          items:
++            - description: USB PHY Control range
++            - description: USB PHY TCA Block range
++    else:
++      properties:
++        reg:
++          maxItems: 1
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - fsl,imx95-usb-phy
++    then:
++      $ref: /schemas/usb/usb-switch.yaml#
++
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+-- 
+2.34.1
 
->
-> If that's not possible, another possibility is that the driver could
-> handle the interrupt and clear the hardware's port-change status bit but
-> then not ask for the root hub to be resumed.  However, this would
-> probably be more difficult to get right.
-
-IIUC the portsc status bit gets cleared after roothub is resumed. So
-this also brings not insignificant change.
-Not sure if its the best approach.
-
->
-> Alan Stern
 
