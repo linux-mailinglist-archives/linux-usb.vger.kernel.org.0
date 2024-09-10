@@ -1,219 +1,134 @@
-Return-Path: <linux-usb+bounces-14877-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8812C972A49
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:10:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 339B3972ACE
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 09:31:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14C861F248FB
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 07:10:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44E85285D6B
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 07:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC0B217C20F;
-	Tue, 10 Sep 2024 07:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44E9F17C9EB;
+	Tue, 10 Sep 2024 07:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mk61IJMe"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="iHUWrIUr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA13F17BEBD
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 07:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8616552F71
+	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 07:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725952193; cv=none; b=swYG91zmaI99d49b3ZxbuqgHDbVFywaMTlout6niAzV7xSmqGAT8iX5b2lA2yT60i1Npl1dNANFsKTtVr76sFX+wANT8myjQViZRE2x7xgYQjKkKYSHRVrkAQvKpuerNHmfbtI0Sl7TAFAu78DRDqq5+kBASD2uaYIS51wu7RNo=
+	t=1725953482; cv=none; b=rtSZshZ9hG+cu/+Rj+rPlajuVzPhdAsPkNhkj7uME4fLtrh3Xua3YZuMtBr/MnlDl/qNgxbgZxAu8IGfvf2Em7HW30gczp7w/+VZsL8xmhKwhYPv9rD1xFRQYiZQEYgom+Lrl06GJ6B0/ZAVdWjlinr+ehyz/YTLCc/bRB735XM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725952193; c=relaxed/simple;
-	bh=LZeMNTVWgwpuBjsLeCFAEeISGcQ0CfYWhGNJpZ+WcNg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tmuTtRmiwaMUyN3WBIg76rzAhYzKshGBS8rUF5v27ZPTC9AKlsy8Vx9NiouBo7zHdAQLCo9nRSi/W/cRBbhanG53Bg0SYGqWvuNE08seRtMucwkmCIZMsrlcoc0a8uQc0La9TT6eiOOD79fV1/riHVQseJYSkfB06JqtgnIXzmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mk61IJMe; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725952191; x=1757488191;
-  h=date:from:to:cc:subject:message-id;
-  bh=LZeMNTVWgwpuBjsLeCFAEeISGcQ0CfYWhGNJpZ+WcNg=;
-  b=Mk61IJMeCxgMv73596+N0HbF7Sxizk3R68ru7nOPR72eW8agxHklf5FJ
-   RUplSq0L+BTXQYPWajgOjYN+kkDY2SqqRuRB4L64VYuaWnUAF/148eMmY
-   DEuLBXYS9tk9hyc0vr8yApcFIIdPAktCokPxMyGr1DzVvKCuCqh63p8k3
-   YbmMjFala6znl1838pMjHHxqrZYhWFZtOzjW+bzmEeOyBpSkL+1STzrIu
-   ZP0mV6yBlzkDVvBzOOal7WESvwLc7h9ZI+xsQ604Kb+sgEbq0mV16iLhM
-   bte9/+C4pA9AgTU3fjxfHRAZj1Aw/9NGYLF80gNUoEnObXllbUOgE8bbG
-   w==;
-X-CSE-ConnectionGUID: S/TLSWTNTZ2Xnxx1Q/HTyQ==
-X-CSE-MsgGUID: 206YEte+TbSlKTBIYo0dZg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="36062106"
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="36062106"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 00:09:51 -0700
-X-CSE-ConnectionGUID: uhsJH983RkyXbr/Ms5HuvQ==
-X-CSE-MsgGUID: CqdUEOqXQauEYxFupJibKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="71338800"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 10 Sep 2024 00:09:49 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snv0V-0000Ck-2D;
-	Tue, 10 Sep 2024 07:09:47 +0000
-Date: Tue, 10 Sep 2024 15:08:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- f299cd11f7539482e87b2d2d527968a26b33f0ec
-Message-ID: <202409101556.olmfXS1O-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1725953482; c=relaxed/simple;
+	bh=8cofkmCq7dqA1taowLt9kl0V78YG5C3uOW9gw/PMHPc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZWppKUdSFPO3lkRTAo+qj3qmN5kvfWMlzJ9EvpgcPCl+sz3Ac2SewH/P33aA0maNzkVj0mH6swOsZa3fDGihOgJQ+PMwdfNz8Zo0uLOBXzQ+Mej47p1xwLEgcNzVxKB3A3alQ0KLRSOJWu4p8JOB3VNyhMcEmW1YsD9VIe3qOOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=iHUWrIUr; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+	Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=atESwYaRQBYrvn2R+xblv9DMu+fN/o2RgLu6lY7fIQs=; b=iHUWrIUrkdtUbZgsJdi7CdVtCW
+	h9dSjxdvFJk3f5/9/q4ehm2mmuGEKw0/qtbojDy+TvmZmFpALZclEjN5uLs+Kg5pDWj7HuDCk9l+r
+	jETXCWjFu4wekwePz4ap6gEC/YlFjRv+SF6GmHWhaeV5QNn8LyQ7UYnjo8eIszYXbpthNakUYn3Tn
+	IPgr/foZkiTuDe+hUOpUNUEie9yRQHvoLCxYJNUKUFnNKHzVTVdwe3Ir7Phk0uTrzNIqlpNSZFbsZ
+	c5wQFpDO+mjfVCzahgWv/tKOgIZkNFTkE3U6E5j7bYD5XmliB4DytATM7kUZzN7BVTJ3DymQgBIhS
+	SJmJi9hw==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <benjamin@geanix.com>)
+	id 1snvLK-000Atp-Bq; Tue, 10 Sep 2024 09:31:18 +0200
+Received: from [185.17.218.86] (helo=benjamin-ThinkPad.geanix.com)
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <benjamin@geanix.com>)
+	id 1snvLK-000LeN-28;
+	Tue, 10 Sep 2024 09:31:18 +0200
+From: "Benjamin B. Frost" <benjamin@geanix.com>
+To: linux-usb@vger.kernel.org
+Cc: sean@geanix.com,
+	martin@geanix.com,
+	johan@kernel.org,
+	"Benjamin B. Frost" <benjamin@geanix.com>
+Subject: [PATCH] USB: serial: option: support for Quectel EG916Q-GL
+Date: Tue, 10 Sep 2024 09:30:50 +0200
+Message-Id: <20240910073050.2619669-1-benjamin@geanix.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: benjamin@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27393/Mon Sep  9 10:29:16 2024)
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: f299cd11f7539482e87b2d2d527968a26b33f0ec  Merge 6.11-rc7 into usb-next
+Add Quectel EM916Q-GL with product ID 0x6007
 
-elapsed time: 1449m
+T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=6007 Rev= 2.00
+S:  Manufacturer=Quectel
+S:  Product=EG916Q-GL
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=200mA
+A:  FirstIf#= 4 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=option
+E:  Ad=88(I) Atr=03(Int.) MxPS=  32 Ivl=32ms
+I:* If#= 5 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=option
+I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-configs tested: 126
-configs skipped: 3
+Signed-off-by: Benjamin B. Frost <benjamin@geanix.com>
+---
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc-14.1.0
-alpha                            allyesconfig   clang-20
-alpha                            allyesconfig   gcc-13.3.0
-alpha                               defconfig   gcc-14.1.0
-arc                              allmodconfig   clang-20
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-14.1.0
-arc                              allyesconfig   clang-20
-arc                              allyesconfig   gcc-13.2.0
-arc                                 defconfig   gcc-14.1.0
-arm                              allmodconfig   clang-20
-arm                              allmodconfig   gcc-14.1.0
-arm                               allnoconfig   gcc-14.1.0
-arm                              allyesconfig   clang-20
-arm                              allyesconfig   gcc-14.1.0
-arm                                 defconfig   gcc-14.1.0
-arm                       imx_v4_v5_defconfig   gcc-14.1.0
-arm                       spear13xx_defconfig   gcc-14.1.0
-arm                        spear6xx_defconfig   gcc-14.1.0
-arm64                            allmodconfig   clang-20
-arm64                             allnoconfig   gcc-14.1.0
-arm64                               defconfig   gcc-14.1.0
-csky                              allnoconfig   gcc-14.1.0
-csky                                defconfig   gcc-14.1.0
-hexagon                          allmodconfig   clang-20
-hexagon                           allnoconfig   gcc-14.1.0
-hexagon                          allyesconfig   clang-20
-hexagon                             defconfig   gcc-14.1.0
-i386                             allmodconfig   clang-18
-i386                             allmodconfig   gcc-12
-i386                              allnoconfig   clang-18
-i386                              allnoconfig   gcc-12
-i386                             allyesconfig   clang-18
-i386                             allyesconfig   gcc-12
-i386         buildonly-randconfig-001-20240909   clang-18
-i386         buildonly-randconfig-002-20240909   gcc-12
-i386         buildonly-randconfig-003-20240909   gcc-12
-i386         buildonly-randconfig-004-20240909   gcc-12
-i386         buildonly-randconfig-005-20240909   clang-18
-i386         buildonly-randconfig-006-20240909   gcc-12
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240909   clang-18
-i386                  randconfig-002-20240909   gcc-12
-i386                  randconfig-003-20240909   clang-18
-i386                  randconfig-004-20240909   gcc-12
-i386                  randconfig-005-20240909   clang-18
-i386                  randconfig-006-20240909   clang-18
-i386                  randconfig-011-20240909   clang-18
-i386                  randconfig-012-20240909   clang-18
-i386                  randconfig-013-20240909   gcc-12
-i386                  randconfig-014-20240909   clang-18
-i386                  randconfig-015-20240909   clang-18
-i386                  randconfig-016-20240909   gcc-12
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch                           defconfig   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-m68k                                defconfig   gcc-14.1.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-microblaze                          defconfig   gcc-14.1.0
-mips                              allnoconfig   gcc-14.1.0
-mips                        bcm47xx_defconfig   gcc-14.1.0
-mips                           ip27_defconfig   gcc-14.1.0
-mips                      loongson3_defconfig   gcc-14.1.0
-nios2                             allnoconfig   gcc-14.1.0
-nios2                               defconfig   gcc-14.1.0
-openrisc                          allnoconfig   clang-20
-openrisc                          allnoconfig   gcc-14.1.0
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-12
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   clang-20
-parisc                            allnoconfig   gcc-14.1.0
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-12
-parisc64                         alldefconfig   gcc-14.1.0
-parisc64                            defconfig   gcc-14.1.0
-powerpc                     akebono_defconfig   gcc-14.1.0
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   clang-20
-powerpc                           allnoconfig   gcc-14.1.0
-powerpc                          allyesconfig   clang-20
-powerpc                          allyesconfig   gcc-14.1.0
-powerpc                          g5_defconfig   gcc-14.1.0
-powerpc                  iss476-smp_defconfig   gcc-14.1.0
-powerpc                      pasemi_defconfig   gcc-14.1.0
-powerpc                     tqm8548_defconfig   gcc-14.1.0
-riscv                            allmodconfig   clang-20
-riscv                            allmodconfig   gcc-14.1.0
-riscv                             allnoconfig   clang-20
-riscv                             allnoconfig   gcc-14.1.0
-riscv                            allyesconfig   clang-20
-riscv                            allyesconfig   gcc-14.1.0
-riscv                               defconfig   gcc-12
-s390                             allmodconfig   gcc-14.1.0
-s390                              allnoconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   gcc-12
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-12
-sh                          kfr2r09_defconfig   gcc-14.1.0
-sh                          rsk7269_defconfig   gcc-14.1.0
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-12
-um                               allmodconfig   clang-20
-um                                allnoconfig   clang-17
-um                                allnoconfig   clang-20
-um                               allyesconfig   clang-20
-um                               allyesconfig   gcc-12
-um                                  defconfig   gcc-12
-um                             i386_defconfig   gcc-12
-um                           x86_64_defconfig   gcc-12
-um                           x86_64_defconfig   gcc-14.1.0
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64                              defconfig   clang-18
-x86_64                              defconfig   gcc-11
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-14.1.0
-xtensa                  nommu_kc705_defconfig   gcc-14.1.0
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 176f38750ad5..8ff9f1435c2f 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -279,6 +279,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EG912Y			0x6001
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+ #define QUECTEL_PRODUCT_EC200A			0x6005
++#define QUECTEL_PRODUCT_EG916Q			0x6007
+ #define QUECTEL_PRODUCT_EM061K_LWW		0x6008
+ #define QUECTEL_PRODUCT_EM061K_LCN		0x6009
+ #define QUECTEL_PRODUCT_EC200T			0x6026
+@@ -1271,6 +1272,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG912Y, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
++	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG916Q) },
+ 
+ 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+ 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
