@@ -1,78 +1,79 @@
-Return-Path: <linux-usb+bounces-14899-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14900-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F32A9735FC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 13:14:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E76F973602
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 13:15:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D68DBB24A44
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 11:14:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A549A1C24393
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 11:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC93618C925;
-	Tue, 10 Sep 2024 11:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF18418C03E;
+	Tue, 10 Sep 2024 11:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DelAvc0b"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YcCg5L+i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E8B1F956
-	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 11:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E9C1862B3
+	for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 11:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725966868; cv=none; b=FGsVimAoJRydC737wIcm5ZsdCw+g88d9oThZSOAlB2jyqwLj/4Cj8em5ISgFzMXHouu94WUai8iMUU4mG7/67aKHG+seLXRGYVenFkQ9qrgesBtAJyZBjRzR7VWfmGO8l61SjwCufuk3iwpDIr3FY7otF0cxUFE3PO4ZbIKyRAI=
+	t=1725966924; cv=none; b=p8sMB703u8PEwu5Qd7ZChlmtOEhHLuh0ppAdzG8NI6iI7DzKvlQYm19VQdPoqfmkbWFOgZbOYDp7rCAFN0gkZw3HuBKORDzb2DPW+b1vxwuDWUp6+2+vJ1fAZMdI+x10P08oLmNzZEc6NZDazEBNFdZTQPPW5XmzbGibGJCz5TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725966868; c=relaxed/simple;
-	bh=PlLnZyG7s6FFM1KOXNmWkwphcEqMDPrz3CRs0EXSvmk=;
+	s=arc-20240116; t=1725966924; c=relaxed/simple;
+	bh=hVmQaTKIEnC6MB1zf/naZVpx7ELe/9fGYtK2/R53pR0=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SGug3/0p3cROMMSI6TwGJjWqYyfUouM0NCEeBpzBGTJqxb2a3O5QbjXAN48E2fwUPD7RRT9wb3fLZNbDi6gq1L88k5SQNTVVP4AJFZM6tVTLt4+MlCMPZfT6JSTZtXZ0662rwwEvsZj7KBknZVrv1SBGPYyvgX3cKMlmymvDgfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DelAvc0b; arc=none smtp.client-ip=209.85.167.46
+	 MIME-Version:Content-Type; b=hQjAGyy1OPTusCYEUyIMC15syPARGNDCA3+Bb091HfOP68D6GEuEePb68XjlQ0NiH49fmwEU7EE+YGCML6D3nOwh1aKSLXi+MmnPN5vgH7rIDeuGLIxyqWw4BWO7R6fhmY8thmxNB/lFNghQiJIjBn9gEQduD/HyZZM1vK6AtOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YcCg5L+i; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52f01b8738dso470921e87.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 04:14:26 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8d2b4a5bf1so86140266b.2
+        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2024 04:15:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725966865; x=1726571665; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725966921; x=1726571721; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bQE/xQz8E3TBsWh3hm+jzO/w4KFV1pN/JUyOxyhMsPg=;
-        b=DelAvc0be+xTZP8moecH/O4bRlH39lN7LNHsOueJ5aiAA9hf+ajx9ZH92fxXMLYYBy
-         ddc9KufGgJ88abj6r7VspftjJq9x+xr3Oj4ibLf/kXhOsD4DRMdRhDtuSfiAB44OtC9B
-         CpvHvB6OXIOUyYN1oFE3SdHTOwn/9TVQ73BVAq0sZ4yWaRNnTFxxI6ooJC8mj7P+x+kU
-         ni4OqMH0wKgI5KcfazFI9/ees/unkzOSuLFufweA4pSgAf0XNi2LgspoYbOG8A/zoojS
-         LwMr4QdexZNX4bpBE0lfkyXjJDiMN6d0hU1B74Ii2MmSLLkJI29MWvd0GOWvBhhN1vYW
-         vQ5Q==
+        bh=/yLxqMhD0synWgyzLhpvt1FtY/fRTgGMWh9h9uRXwIU=;
+        b=YcCg5L+iddp4x/VUvrSY56ztBeDoOG6TxvGXHcvRpyiaRn/nJZNUwx2odYzikC870p
+         7r4rW2mYnzk+z0+f6SuZORA9b9nY5T5puxbatMn8fU/m9FChnxzWahw5ku4KBf8sJZkA
+         qtTMalEdbUMGtONrLELner/D2Tifl6FaVbosMAa0MSpQ1Oft5DmeakDFtVkdjmnn5h9Q
+         N/vjelBppnlo/dNvT2EIkSKUuG2KzO3NnvJNMNPTRvnSNZOZUCRX9gTyT0EgblJjhUTz
+         79jnUgSjkD5wo6016E4kwcnt83DSpiwE0a5yQSOIJacJt25h2XXKShnizvueFz0TzGS3
+         UMMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725966865; x=1726571665;
+        d=1e100.net; s=20230601; t=1725966921; x=1726571721;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bQE/xQz8E3TBsWh3hm+jzO/w4KFV1pN/JUyOxyhMsPg=;
-        b=Oj2vB2U5yEX3YNm/VLaj0oOdt7VcskApFXWLIyRw8GhSSFaL8NuWzIDQhhbZvVNxqw
-         qic4xiPt7wArB/0qDYARwdhP2BU2AlmYELTn5I7ImVDnLyllisTxr3j1A03l/ZAGpUKU
-         0/177YfN01xHjTlcUjPRlKwZdKqNJ1YU+T8ZWzcZ6wc93MZk08Opg9S8rI51dd3nJSxx
-         bBtL28VihyQz3Oj9/6rsUjMRZczs2Yq1Lw2p5lJGDeQ+YOnAnHMwcIC+gIbf8B3pUgF7
-         v050tbEDPkLoz+6DOFoepDoYkG1YNxL4uibrADkiW6RTAqwwOP5y8WmrgaH8Z6pc+z9Q
-         LQ2w==
-X-Gm-Message-State: AOJu0YwizCpoWZPlsSucfy1PflCxoKf5Tn0dQ5j8m3G6KZ9TKvpZ9XZI
-	lPULTlTrutagGzQ1t2hMbBr8xBXyAuUVuHZ+pBVM/cFNMTSNE1aeh4WHaQ==
-X-Google-Smtp-Source: AGHT+IEZlNBDpUOb92Mu14PiKa18GU4DfGe/Ib+gd/usCWNEZgnsjEU1Anhl10Jljq2bqSUZOpxHfQ==
-X-Received: by 2002:a05:6512:2806:b0:533:4689:973c with SMTP id 2adb3069b0e04-536587b220fmr8871124e87.23.1725966864122;
-        Tue, 10 Sep 2024 04:14:24 -0700 (PDT)
+        bh=/yLxqMhD0synWgyzLhpvt1FtY/fRTgGMWh9h9uRXwIU=;
+        b=Ttc9xppRiXFXRxiwePJu8xEojyesOjBDL8nsCYYFHoVjNEAcAsm4aFRYFUnLASWJWh
+         ZsSQabDEI72FgICwbui+UzZnDSz8xLvTEdUFR0Q4JjHWEeZi6NdCq+2yZLjVhRwN+zD9
+         7hyv26r/b1wMCFvPoi8ZT8i7HZJU4p4SUoqhRFCF9moiaRbS3DOaEykZc3XpRBmHeClN
+         Dpag/MXW3XarQbsowMwUZaGcolhopnDVo1um/2KhQdM8NFfEzUZGbqi88OCNvUFS04k4
+         oVRe/X8MWV+wdhkkhvnVOE2go4fdRmWMmDafPT5uvXkm+o1KK5h9UG4vNd1GtHyFBqac
+         4Pxw==
+X-Gm-Message-State: AOJu0Yx0aHEN04gtqQINyPv2sNhqs6/YjcS/77nfoa9YHUQwsAqYhGWC
+	mwRR88NGdZIwr61eXnTX+/0Um2e8DJUI9sWpfXoH1nONaoLw0mL1wU6vnA==
+X-Google-Smtp-Source: AGHT+IHv3K289g79QfhdrSxc3MmAteHoactj4GG0c45jkD/qQY516DC6zP+KwWW1ZIcowgIvFl2SUw==
+X-Received: by 2002:a17:907:9813:b0:a86:ac9e:45fd with SMTP id a640c23a62f3a-a8ffae2f33amr38861366b.62.1725966920846;
+        Tue, 10 Sep 2024 04:15:20 -0700 (PDT)
 Received: from foxbook (bgv123.neoplus.adsl.tpnet.pl. [83.28.85.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25d40c70sm466437066b.195.2024.09.10.04.14.23
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25952761sm467218566b.59.2024.09.10.04.15.19
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 10 Sep 2024 04:14:23 -0700 (PDT)
-Date: Tue, 10 Sep 2024 13:14:21 +0200
+        Tue, 10 Sep 2024 04:15:20 -0700 (PDT)
+Date: Tue, 10 Sep 2024 13:15:17 +0200
 From: Michal Pecio <michal.pecio@gmail.com>
 To: Mathias Nyman <mathias.nyman@intel.com>, Niklas Neronin
  <niklas.neronin@linux.intel.com>
 Cc: linux-usb@vger.kernel.org
-Subject: [PATCH 2/5] usb: xhci: Clean up the TD skipping loop
-Message-ID: <20240910131421.60f14062@foxbook>
+Subject: [PATCH 3/5] usb: xhci: Unify event handler's 'empty list' and 'no
+ match' cases
+Message-ID: <20240910131517.2bc8a403@foxbook>
 In-Reply-To: <20240910131233.409c6481@foxbook>
 References: <20240910131233.409c6481@foxbook>
 Precedence: bulk
@@ -84,144 +85,152 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Recent reworks left this loop ending with:
+Sometimes handle_tx_event() gets an event which doesn't match any
+pending TD. Or it may be that there are simply no pending TDs at all.
 
-		if (ep->skip)
-			ep->skip = false;
-	while (ep->skip);
+These two cases are hardly different, but they are handled by two
+separate blocks of code. Some logic is pointlessly duplicated, some
+logic is missing or buggy in one branch or in the other.
 
-which obviously cannot ever repeat. Repetition is only possible by a
-'continue' statement earlier in the loop body.
+Reduce the 'empty list' case in the searching loop to a minimum and
+merge the code removed from there with almost identical code after
+the loop, which deals with the 'no match' case.
 
-Move the "tail", which only executes once, out of the loop body.
+This fixes the "spurious success" check in the 'empty list' case not
+verifying if the host actually has the quirk, and the lack of halted
+endpoint recovery in the 'no match' case.
 
-Bring the cases of "Found TD" and "skip isoc td" closely together to
-consolidate the skipping logic in one place and improve clarity. Now
-this code properly controls the loop condition.
+Remove an obsolete attempt at stall recovery. This code relied on a
+bug which has been fixed earlier this year, and it was never really
+fully effective because not all cancelled TDs get No-Op'ed.
 
-No functional change.
+Make the empty list warning print event completion code, like the
+'no match' case does.
 
 Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
- drivers/usb/host/xhci-ring.c | 100 ++++++++++++++++++-----------------
- 1 file changed, 51 insertions(+), 49 deletions(-)
+ drivers/usb/host/xhci-ring.c | 68 ++++++++++++------------------------
+ 1 file changed, 23 insertions(+), 45 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 0cab482b3f4e..0eef7cd2f20a 100644
+index 0eef7cd2f20a..56b0c0e85293 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -2823,60 +2823,62 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 		/* Is this a TRB in the currently executing TD? */
- 		ep_seg = trb_in_td(xhci, td, ep_trb_dma, false);
- 
--		if (!ep_seg) {
--
--			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
--				skip_isoc_td(xhci, td, ep, status);
--				continue;
--			}
--
+@@ -2606,7 +2606,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	int ep_index;
+ 	struct xhci_td *td = NULL;
+ 	dma_addr_t ep_trb_dma;
+-	struct xhci_segment *ep_seg;
++	struct xhci_segment *ep_seg = NULL;
+ 	union xhci_trb *ep_trb;
+ 	int status = -EINPROGRESS;
+ 	struct xhci_ep_ctx *ep_ctx;
+@@ -2793,28 +2793,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		 * TD list.
+ 		 */
+ 		if (list_empty(&ep_ring->td_list)) {
 -			/*
--			 * Skip the Force Stopped Event. The 'ep_trb' of FSE is not in the current
--			 * TD pointed by 'ep_ring->dequeue' because that the hardware dequeue
--			 * pointer still at the previous TRB of the current TD. The previous TRB
--			 * maybe a Link TD or the last TRB of the previous TD. The command
--			 * completion handle will take care the rest.
+-			 * Don't print wanings if it's due to a stopped endpoint
+-			 * generating an extra completion event if the device
+-			 * was suspended. Or, a event for the last TRB of a
+-			 * short TD we already got a short event for.
+-			 * The short TD is already removed from the TD list.
 -			 */
--			if (trb_comp_code == COMP_STOPPED ||
--			    trb_comp_code == COMP_STOPPED_LENGTH_INVALID) {
--				return 0;
+-
+-			if (!(trb_comp_code == COMP_STOPPED ||
+-			      trb_comp_code == COMP_STOPPED_LENGTH_INVALID ||
+-			      ep_ring->last_td_was_short)) {
+-				xhci_warn(xhci, "WARN Event TRB for slot %u ep %d with no TDs queued?\n",
+-					  slot_id, ep_index);
 -			}
+ 			if (ep->skip) {
+ 				ep->skip = false;
+ 				xhci_dbg(xhci, "td_list is empty while skip flag set. Clear skip flag for slot %u ep %u.\n",
+ 					 slot_id, ep_index);
+ 			}
 -
--			/*
--			 * Some hosts give a spurious success event after a short
--			 * transfer. Ignore it.
--			 */
--			if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
--			    ep_ring->last_td_was_short) {
--				ep_ring->last_td_was_short = false;
--				return 0;
--			}
--
--			/* HC is busted, give up! */
--			xhci_err(xhci,
--				"ERROR Transfer event TRB DMA ptr not "
--				"part of current TD ep_index %d "
--				"comp_code %u\n", ep_index,
--				trb_comp_code);
--			trb_in_td(xhci, td, ep_trb_dma, true);
--			return -ESHUTDOWN;
--		}
--
-+		/*
-+		 * If ep->skip is set, it means there are missed tds on the
-+		 * endpoint ring need to take care of.
-+		 * Process them as short transfer until reach the td pointed by
-+		 * the event.
-+		 */
- 		if (ep->skip) {
--			xhci_dbg(xhci,
--				 "Found td. Clear skip flag for slot %u ep %u.\n",
--				 slot_id, ep_index);
--			ep->skip = false;
-+			if (ep_seg) {
-+				xhci_dbg(xhci,
-+					 "Found td. Clear skip flag for slot %u ep %u.\n",
-+					 slot_id, ep_index);
-+				ep->skip = false;
-+			} else {
-+				if (usb_endpoint_xfer_isoc(&td->urb->ep->desc))
-+					skip_isoc_td(xhci, td, ep, status);
-+				else
-+					break;
-+			}
+-			td = NULL;
+-			goto check_endpoint_halted;
++			break;
  		}
  
--	/*
--	 * If ep->skip is set, it means there are missed tds on the
--	 * endpoint ring need to take care of.
--	 * Process them as short transfer until reach the td pointed by
--	 * the event.
--	 */
- 	} while (ep->skip);
+ 		td = list_first_entry(&ep_ring->td_list, struct xhci_td,
+@@ -2848,11 +2832,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	if (!ep_seg) {
  
-+	if (!ep_seg) {
-+
-+		/*
-+		 * Skip the Force Stopped Event. The 'ep_trb' of FSE is not in the current
-+		 * TD pointed by 'ep_ring->dequeue' because that the hardware dequeue
-+		 * pointer still at the previous TRB of the current TD. The previous TRB
-+		 * maybe a Link TD or the last TRB of the previous TD. The command
-+		 * completion handle will take care the rest.
-+		 */
-+		if (trb_comp_code == COMP_STOPPED ||
-+		    trb_comp_code == COMP_STOPPED_LENGTH_INVALID) {
-+			return 0;
+ 		/*
+-		 * Skip the Force Stopped Event. The 'ep_trb' of FSE is not in the current
+-		 * TD pointed by 'ep_ring->dequeue' because that the hardware dequeue
+-		 * pointer still at the previous TRB of the current TD. The previous TRB
+-		 * maybe a Link TD or the last TRB of the previous TD. The command
+-		 * completion handle will take care the rest.
++		 * Ignore the Force Stopped Event. The endpoint may stop on
++		 * some Link or No-Op TRB outside our TDs. We don't care.
+ 		 */
+ 		if (trb_comp_code == COMP_STOPPED ||
+ 		    trb_comp_code == COMP_STOPPED_LENGTH_INVALID) {
+@@ -2870,13 +2851,25 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		}
+ 
+ 		/* HC is busted, give up! */
+-		xhci_err(xhci,
+-			"ERROR Transfer event TRB DMA ptr not "
+-			"part of current TD ep_index %d "
+-			"comp_code %u\n", ep_index,
+-			trb_comp_code);
+-		trb_in_td(xhci, td, ep_trb_dma, true);
+-		return -ESHUTDOWN;
++		if (list_empty(&ep_ring->td_list)) {
++			xhci_warn(xhci, "WARN Event TRB for slot %u ep %d comp_code %u with no TDs queued?\n",
++					slot_id, ep_index, trb_comp_code);
++		} else {
++			xhci_err(xhci, "ERROR Transfer event TRB DMA ptr not part of current TD ep_index %d comp_code %u\n",
++					ep_index, trb_comp_code);
++			trb_in_td(xhci, td, ep_trb_dma, true);
 +		}
 +
 +		/*
-+		 * Some hosts give a spurious success event after a short
-+		 * transfer. Ignore it.
++		 * Bugs (in HW or SW) may cause the xHC to execute transfers as
++		 * they are being cancelled and forgotten about. Then we get some
++		 * event and have no idea which transfer caused it. If the event
++		 * indicates that the EP halted, try to fix that at least.
 +		 */
-+		if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
-+		    ep_ring->last_td_was_short) {
-+			ep_ring->last_td_was_short = false;
-+			return 0;
-+		}
++		if (xhci_halted_host_endpoint(ep_ctx, trb_comp_code))
++			xhci_handle_halted_endpoint(xhci, ep, td, EP_HARD_RESET);
 +
-+		/* HC is busted, give up! */
-+		xhci_err(xhci,
-+			"ERROR Transfer event TRB DMA ptr not "
-+			"part of current TD ep_index %d "
-+			"comp_code %u\n", ep_index,
-+			trb_comp_code);
-+		trb_in_td(xhci, td, ep_trb_dma, true);
-+		return -ESHUTDOWN;
-+	}
-+
++		return 0;
+ 	}
+ 
  	if (trb_comp_code == COMP_SHORT_PACKET)
- 		ep_ring->last_td_was_short = true;
+@@ -2887,16 +2880,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma) / sizeof(*ep_trb)];
+ 	trace_xhci_handle_transfer(ep_ring, (struct xhci_generic_trb *) ep_trb);
+ 
+-	/*
+-	 * No-op TRB could trigger interrupts in a case where a URB was killed
+-	 * and a STALL_ERROR happens right after the endpoint ring stopped.
+-	 * Reset the halted endpoint. Otherwise, the endpoint remains stalled
+-	 * indefinitely.
+-	 */
+-
+-	if (trb_is_noop(ep_trb))
+-		goto check_endpoint_halted;
+-
+ 	td->status = status;
+ 
+ 	/* update the urb's actual_length and give back to the core */
+@@ -2906,11 +2889,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		process_isoc_td(xhci, ep, ep_ring, td, ep_trb, event);
  	else
+ 		process_bulk_intr_td(xhci, ep, ep_ring, td, ep_trb, event);
+-	return 0;
+-
+-check_endpoint_halted:
+-	if (xhci_halted_host_endpoint(ep_ctx, trb_comp_code))
+-		xhci_handle_halted_endpoint(xhci, ep, td, EP_HARD_RESET);
+ 
+ 	return 0;
+ 
 -- 
 2.43.0
 
