@@ -1,53 +1,50 @@
-Return-Path: <linux-usb+bounces-14908-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14909-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB2B8973919
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 15:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD17C97392E
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 15:57:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58DE01F26516
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 13:51:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 832E91F26A1E
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2024 13:57:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F7C192D65;
-	Tue, 10 Sep 2024 13:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA5C192D9D;
+	Tue, 10 Sep 2024 13:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eaGPx47v"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gQFhDQHZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1F718E11;
-	Tue, 10 Sep 2024 13:50:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94AED192D60;
+	Tue, 10 Sep 2024 13:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725976256; cv=none; b=FgWu4JHOcvQU12bJOhpmnaV4NoLFS86+JleCFDuNMm3sfkVrMmNQU2Cg24+Aj97wzo9kCQ+3TtMfXJN16FoviWNXLb+zM8uqhwqnf1KAfHt0K8RBxw6yKtJNxuU2uIt17k0ffDcO89tn1fjRKJl2SzZxzeBsJYW4EsHAm6ICgJ8=
+	t=1725976672; cv=none; b=Up7wQALEzcN4/rb91GThktwk3Y3nyqxMYxns31CiooZqAGXNK2u3KiBVhw/e5F5wBOog70zx3CzFHNGFeQDmbqctb8wbCgZqfWfMKbpMQU0WZCdtlfqsSVvoozwcOpgjVnpaaRVl5wAehZGJIPGVe6mQvotUAa54iowJTUv7BR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725976256; c=relaxed/simple;
-	bh=dYhzfGqHXYEOx8MS6KvaDFYNnbAbgP5YUojlUAiEMAk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=QNBsbn6fTD4eKAvIAuYrf5ar7XPNckjxoUXNWdd/YtCUbwxgOIyuT+y5AYEd0EtqByFMwF7rpVjEuvcjjNciF8H1doiB0aTUayZDKvTDpZB/sXXGyvIgyOXMMaloUM7bCTzVqFQ8ZelgnpJBpMrb+SVleUhP01dAHSxQuOVqciU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eaGPx47v; arc=none smtp.client-ip=217.70.178.240
+	s=arc-20240116; t=1725976672; c=relaxed/simple;
+	bh=zZfcjLht3SGpqV3G2JGMBDdZB66dQC2a1hDt+03nhmg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=o+HxFCF05s5/Orm3AIMMg8YioDZaCPu+ee2joxEFJrA4Bfd2F6W8umPLSbGAC0NBQbHKPTG8q/oki+lXWyh82/td1ietR1nfL5eGm6y8n2SpO+qdTQt1qR08HzQJLok0jLbsjOFgkjvcEHiItVz8DHKgHXEduF/c6tOPfrqgVMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gQFhDQHZ; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay6-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::226])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id D6931C2497;
-	Tue, 10 Sep 2024 13:50:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D6B7C000D;
-	Tue, 10 Sep 2024 13:50:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 64B7A1C0002;
+	Tue, 10 Sep 2024 13:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1725976238;
+	t=1725976661;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FKaZoEWr8UWtqcWAfis4JtnDRQPZMMSkWUHYpeNsgqY=;
-	b=eaGPx47vgkkjXWUCMPhevbzMVrQx+6xiGAlWW1jjipJdpQiNhIsAiuyDC7TDz/BFoQFJSH
-	5FbcGgVYB41zBYzcUmIxkZGyrp2FqyVK0tDTCtDBbCDAjYLpg2Ps1+zkVOAFEhNrPNpK9a
-	knMtt3c6Emm6LpuHYQf0/QGK9NFH3Wlq52sL8/lmQcQbckzrh8F6/GPa/Xm6B0gff9i5AT
-	Mbyt4rbAEzoyCHsCipRVb0jWL1KJvId5qvMHc1228PvJXjkN42P6o0VBwuywXW5Naq6D+X
-	fJUQMEwVlEg38PNdi0PxJ8jCSHcDLiTY0LPBO76k2yZOlD0t39bv78NPLKdghA==
+	bh=+5qKRpXx/yX0uSjdpqTnr+3shh0+e1DrLOHMnv76MDo=;
+	b=gQFhDQHZXhP2exQYhIS1YAURc1OirprONZJMYY64MBwxflZ6URRSq1uOlymHPWgauSd778
+	PbJhbKbjfLdvxTZh5HLxTpf73lK/p5NLb8Cz8PuvF4qekNIEt8z64EmHvXnJ6RhF4aT10x
+	KSzbElzWG+QIqFXgXegY1c8xHumzrShzzllQrDnvgH3/+5Z5ZruzmbPrQdz3MRGclyWVuZ
+	kE9RyApX2I4zVX9YRGluH+XhS2rYXlw8E9BfoEC07OBdRx9kHURtZKJEjliA6r6b0+WYed
+	UkicjFEWmCqsxNKv93rR9kZtCXMUNdVP7Y255EtzRHuSMK7nG9+ABDttIXSMmQ==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,9 +53,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Sep 2024 15:50:37 +0200
-Message-Id: <D42NIH63EHZG.KKWZR2WZB68L@bootlin.com>
-Subject: Re: [PATCH v5 09/12] xhci: introduce xhci->lost_power flag
+Date: Tue, 10 Sep 2024 15:57:40 +0200
+Message-Id: <D42NNVGT7JLU.2CFGBTBNAP0E7@bootlin.com>
 Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
  "Kevin Hilman" <khilman@kernel.org>, =?utf-8?q?Gr=C3=A9gory_Clement?=
@@ -72,107 +68,59 @@ To: "Roger Quadros" <rogerq@kernel.org>, "Greg Kroah-Hartman"
  Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo"
  <kristo@kernel.org>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v5 07/12] usb: cdns3-ti: add J7200 support with
+ reset-on-resume behavior
 X-Mailer: aerc 0.18.2-0-ge037c095a049
 References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
- <20240726-s2r-cdns-v5-9-8664bfb032ac@bootlin.com>
- <1cd45625-84e4-43aa-ae2b-a59f10add898@kernel.org>
-In-Reply-To: <1cd45625-84e4-43aa-ae2b-a59f10add898@kernel.org>
+ <20240726-s2r-cdns-v5-7-8664bfb032ac@bootlin.com>
+ <0a634553-023c-4a46-8743-28357021c689@kernel.org>
+In-Reply-To: <0a634553-023c-4a46-8743-28357021c689@kernel.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon Aug 5, 2024 at 3:41 PM CEST, Roger Quadros wrote:
+On Mon Aug 5, 2024 at 3:54 PM CEST, Roger Quadros wrote:
 > On 26/07/2024 21:17, Th=C3=A9o Lebrun wrote:
-> > The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
-> > expect a reset after resume. It is also used by some to enforce a XHCI
-> > reset on resume (see needs-reset-on-resume DT prop).
+> > Add ti,j7200-usb compatible. Match data indicates the controller resets
+> > on resume which tells that to the cdns3 core. This in turn silences a
+> > xHCI warning visible in cases of unexpected resets.
 > >=20
-> > Some wrappers are unsure beforehands if they will reset. Add a mechanis=
+> > We also inherit the errata quirk CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE fro=
 m
-> > to signal *at resume* if power has been lost. Parent devices can set
-> > this flag, that defaults to the XHCI_RESET_ON_RESUME value.
-> >=20
-> > The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on the
-> > controller. This is required as we do not know if a suspend will
-> > trigger a reset, so the best guess is to avoid runtime PM.
-> >=20
-> > Reset the xhci->lost_power value each time in xhci_resume(), making it
-> > safe for devices to only set lost_power on some resumes.
+> > the default `cdns_ti_auxdata` configuration.
 > >=20
 > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 > > ---
-> >  drivers/usb/host/xhci.c | 8 +++++++-
-> >  drivers/usb/host/xhci.h | 6 ++++++
-> >  2 files changed, 13 insertions(+), 1 deletion(-)
+> >  drivers/usb/cdns3/cdns3-ti.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
 > >=20
-> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > index 0a8cf6c17f82..2c9b32d339f9 100644
-> > --- a/drivers/usb/host/xhci.c
-> > +++ b/drivers/usb/host/xhci.c
-> > @@ -1029,9 +1029,12 @@ int xhci_resume(struct xhci_hcd *xhci, pm_messag=
-e_t msg)
+> > diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.=
+c
+> > index 159814dfc856..65b8b6f4c654 100644
+> > --- a/drivers/usb/cdns3/cdns3-ti.c
+> > +++ b/drivers/usb/cdns3/cdns3-ti.c
+> > @@ -258,7 +258,21 @@ static const struct of_dev_auxdata cdns_ti_auxdata=
+[] =3D {
+> >  	{},
+> >  };
 > > =20
-> >  	spin_lock_irq(&xhci->lock);
-> > =20
-> > -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken=
-_suspend)
-> > +	if (hibernated || xhci->lost_power || xhci->broken_suspend)
+> > +static struct cdns3_platform_data cdns_ti_j7200_pdata =3D {
+> > +	.quirks =3D CDNS3_RESET_ON_RESUME |
 >
-> Why not treat xhci->lost_power and xhci->quriks & XHCI_RESET_ON_RESUME in=
-dependently?
->
-> XHCI_RESET_ON_RESUME is sued by devices that know they always need to be =
-reset on resume.
->
-> xhci->lost_power is used by devices that don't have consistent behavior.
+> But you mentioned that the behavior can be different based on which
+> idle state the system went into.
+> Setting this flag will means Reset is required on every resume.
 
-The goal is to avoid almost-duplicate functionality. I feel like:
+No, this flag's only behavior is to enable XHCI_RESET_ON_RESUME in the
+lower xHCI stack. Code is in __cdns_host_init():
 
-    XHCI_RESET_ON_RESUME is the default value of xhci->lost_power,
-    which might be modified at resume.
+	if (cdns->pdata && (cdns->pdata->quirks & CDNS3_RESET_ON_RESUME))
+		cdns->xhci_plat_data->quirks |=3D XHCI_RESET_ON_RESUME;
 
-Is a more straight forward solution than:
+> Instead, you just need to rely on the runtime check and set the xhci->los=
+t_power flag at resume.
 
-    Both XHCI_RESET_ON_RESUME and xhci->lost_power define if power was
-    lost at resume. First must be statically known, second can be
-    updated during runtime. If second is used, first one must NOT be
-    set.
-
-Indeed, the first solution brings two additional lines of code as you
-commented below. I'd argue the easier-to-wrap-your-head-around logic is
-more important.
-
-Tell me if you are convinced the second approach is better.
-
->
->
-> >  		reinit_xhc =3D true;
-> > =20
-> > +	/* Reset to default value, parent devices might correct it at next re=
-sume. */
-> > +	xhci->lost_power =3D !!(xhci->quirks & XHCI_RESET_ON_RESUME);
-> > +
->
-> then you don't need to do this.
-
-To be honest, I added this line out of rigor. We could remove it and say
-that any device that modifies xhci->lost_power once at resume must set
-it at each later resume.
-
-The above line felt like a small safety net to avoid logic mistakes.
-
->
-> >  	if (!reinit_xhc) {
-> >  		/*
-> >  		 * Some controllers might lose power during suspend, so wait
-> > @@ -5228,6 +5231,9 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_=
-quirks_t get_quirks)
-> >  	if (get_quirks)
-> >  		get_quirks(dev, xhci);
-> > =20
-> > +	/* Default value, that can be corrected at resume. */
-> > +	xhci->lost_power =3D !!(xhci->quirks & XHCI_RESET_ON_RESUME);
-> > +=20
->
-> nor this.
+I argued about my view of the XHCI_RESET_ON_RESUME quirk under
+[PATCH v5 09/12].
+https://lore.kernel.org/lkml/D42NIH63EHZG.KKWZR2WZB68L@bootlin.com/
 
 Regards,
 
