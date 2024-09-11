@@ -1,112 +1,148 @@
-Return-Path: <linux-usb+bounces-14926-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14927-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDD6D9749AC
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 07:19:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14B93974A17
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 08:05:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0DB31C253B7
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 05:19:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D02992884CF
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 06:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978F761FCF;
-	Wed, 11 Sep 2024 05:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997436A33B;
+	Wed, 11 Sep 2024 06:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m0fhHeX3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZFxIeYVn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B5B5680;
-	Wed, 11 Sep 2024 05:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B36F40849;
+	Wed, 11 Sep 2024 06:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726031947; cv=none; b=TYQAsYx+zZNwiluQpgvczG8gCLWWgmymzLUgV65CMK8516laAeWdbmxXdZxeMk+lr7Oc51Z6NZvzlWrjw9QL7VE9stF1tSUAxjp9G26+Zn3ZH6JyNi+k13l1FaVBRRPIOFwezNhN4PyeY7QwnSHhMPNTibtiTVChOk9zFzLk6Hk=
+	t=1726034709; cv=none; b=gJwjpz1jLVzx4UwW1FquxNp/Nx4NDAFlbRjT2D0K5O4Nu9Q6w7fy0ttzw+e5NBgMdTGCHRddQ722kdse3vXBNSyQGQVU2/GXf9bVB3dVTgxULZjelLCOF4mqu+LD1gi/DFHutdyPwMzJ/IY8tjLJjsa7opaTJCMFiJfvcDWleJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726031947; c=relaxed/simple;
-	bh=unXxna7n/7rQalTgAPNaAlNsd1AAw2uCgz0W+HRJtRk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tAzny3TzactZCeqPI2tdtjDjQCSaV6D2TH8506j9yUHt3PltW9h/4LsVOf1B2UbnxKU0yTzzVVciz8I30859WLT3H4chbphPIUSQm9yOWatI1pKp5iHELJbIkfW+yFHJQ3DEBCGB75UoFjcpUl5AVlCYAmfM9roVcygKrTvnqVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m0fhHeX3; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20688fbaeafso64945015ad.0;
-        Tue, 10 Sep 2024 22:19:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726031945; x=1726636745; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RGecZtNlYRGSVUVbzd9Cc7GxeUDF7uiSFa5DLwCliL8=;
-        b=m0fhHeX3VrDeTyFi+MQOfSnLVtyoA35TPikspdlY+/R+bkh8zK5Rh14AD6ytEHgTVD
-         wYYEu/t1ANTU5BhAF/1Y4L7m13wvbAxa2GChb9OQm4Nh0fzBCzyGf69ndAVXhGfFYlS2
-         DWeUJx0BAEFxlYX8n1CViDXpZNZCYmiYg/wqzMX8FefOTC3MB/UL5K6QZxrQCwkAIQa6
-         r2erJCn9JjqWJewtlpj5Prw5sqQumz3WVkn2m2CzCXFCqo62YXymFXlzKXwFs3yPMpYs
-         XhRVhcAxOuUIJQjj+aUY1AmkTbgg5KwjWEHxZNKXjLS2HNoIkzPVon9O6y2C4LxYrQu0
-         j1Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726031945; x=1726636745;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RGecZtNlYRGSVUVbzd9Cc7GxeUDF7uiSFa5DLwCliL8=;
-        b=qBlsf0B+ulMYJ/mjeoC8G7OkgQPafchcmCC6TQ7vnVCC+/5q1tBvt3VAWrLbatd965
-         X7bdCzwuivO7H9OeJbbEbElCQCZN7La8SZVxBt0uaamRw0M5oBgo7QRb5K3BnL+dZs98
-         hqSyRBMLuJsvIiNpxNqSBIPVwaO6xRuAZYJ5lhBUK88llW/Cexz06mP3vI7ncm7yDh8f
-         bpOtDF3UP8vQBd+I8M2xY7QJa9kEu79Fwr/FX3tYvEwhpAB/fXrIVlPNcJBSAQxCMK0C
-         yMq9OHSFitFlt4ym9cJVrdRo80H1E6rTvcTgM8CADthBmm49ACxAUKAEf2Lx+3XgB7pE
-         J73Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWkpQmrfWOXoqigR/LIASKEThUS2qMkL7+oqawm9+2qbOq9pdS6G+2ZSjiLDe1+hsoc/qEGzh0/rheYDP0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlEwb3xz6MHcILtvDk9TPpE+S+wnuGdCh4MQAxtp3Alu7M9kIC
-	GwiOIpbwDPvhTNjR+1bi5kGHtA1zsrtGj/4WGI4/+R2vxui+ow34
-X-Google-Smtp-Source: AGHT+IF7sh7PQJ+mMvZHlU738whKU93cwnPY+FnPLoTLffKuxT1kmXE4a63N9/nNTB4CUdlm+nhIyQ==
-X-Received: by 2002:a17:903:22cc:b0:205:809c:d490 with SMTP id d9443c01a7336-2074c5e6165mr49312895ad.16.1726031945051;
-        Tue, 10 Sep 2024 22:19:05 -0700 (PDT)
-Received: from kic-machine.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710e10eb4sm56252735ad.7.2024.09.10.22.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 22:19:04 -0700 (PDT)
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-To: gregkh@linuxfoundation.org,
-	mathias.nyman@intel.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ki.chiang65@gmail.com
-Subject: [PATCH 0/3] xhci: Some improvement for Etron xHCI host
-Date: Wed, 11 Sep 2024 13:17:16 +0800
-Message-Id: <20240911051716.6572-4-ki.chiang65@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240911051716.6572-1-ki.chiang65@gmail.com>
-References: <20240911051716.6572-1-ki.chiang65@gmail.com>
+	s=arc-20240116; t=1726034709; c=relaxed/simple;
+	bh=oS6W6RuD01zziSDUkNdAa9V8LFDpaby7DxbfQdP+WyQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KeWmxVKfOpH+ngLpJlVKtI/zJkH6NMBbbuLR5SxIC5M6pD+bKmMQ5a3zRHrO2CDzRIZVmHigcDR+P8vCHM2TJmQxhQGmHx66xps8/yEktFXUqKr8oxs1v3ln8rFbTmyPia24G6Fc7aw6cAlTinBF56vxbinMWLHRZ3Lgkt4h6fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZFxIeYVn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29B1C4CEC5;
+	Wed, 11 Sep 2024 06:05:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726034708;
+	bh=oS6W6RuD01zziSDUkNdAa9V8LFDpaby7DxbfQdP+WyQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ZFxIeYVnrkP5hegcl50Fe4tO2Bl8UnO1W+s0h2TOgm6f18RWhlm5ejUcJ6GFsRQ/E
+	 QZjltk8XovkjcMBlKtadpgiQvmnrG+oa8NuFQ9qQY43rGyMWlc+SSWODNoHl+Csroz
+	 x8B27WAmyOcY53lcCJBolvzHMsLd+ftz7K6WodZcks1JPNeEBwV7XEY+jvuDzECL0Y
+	 DUk8L1KRKkBEVF+HvZbSlC0J7U6Xt+Ti6CG007xlhXGisYmtxWAxeS2roWUM4GiBX1
+	 Dgt+c7S3WHKJd+CGEQvvTp+HiKzYypAZRnhCr69kPOFvgQsbOTNpZV4a49mXrnehkA
+	 AQYha9KfPWrPA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1soGTm-000000005SH-3toq;
+	Wed, 11 Sep 2024 08:05:26 +0200
+Date: Wed, 11 Sep 2024 08:05:26 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial updates for 6.12-rc1
+Message-ID: <ZuEzJgTKeD0RscpX@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Add two new quirks XHCI_NO_RESET_DEVICE/XHCI_NO_BREAK_CTRL_TD to
-invoke the workaround:
- xhci: Don't issue Reset Device command to Etron xHCI host
- xhci: Fix control transfer error on Etron xHCI host
+The following changes since commit 47ac09b91befbb6a235ab620c32af719f8208399:
 
-Apply quirk XHCI_NO_SOFT_RETRY to disable Soft Retry:
- xhci: Don't perform Soft Retry for Etron xHCI host
+  Linux 6.11-rc4 (2024-08-18 13:17:27 -0700)
 
-Kuangyi Chiang (3):
-  xhci: Don't issue Reset Device command to Etron xHCI host
-  xhci: Fix control transfer error on Etron xHCI host
-  xhci: Don't perform Soft Retry for Etron xHCI host
+are available in the Git repository at:
 
- drivers/usb/host/xhci-pci.c  |  6 ++++++
- drivers/usb/host/xhci-ring.c | 13 +++++++++++++
- drivers/usb/host/xhci.c      | 19 +++++++++++++++++++
- drivers/usb/host/xhci.h      |  2 ++
- 4 files changed, 40 insertions(+)
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.12-rc1
 
--- 
-2.25.1
+for you to fetch changes up to 4c0d9477ba69a417c698aec1d3012e188cf97add:
 
+  USB: serial: kobil_sct: restore initial terminal settings (2024-08-26 15:29:27 +0200)
+
+----------------------------------------------------------------
+USB-serial updates for 6.12-rc1
+
+Here are the USB-serial updates for 6.12-rc1, including:
+
+ - fix kobil_sct initial terminal settings
+ - set driver owner when registering drivers
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Johan Hovold (1):
+      USB: serial: kobil_sct: restore initial terminal settings
+
+Krzysztof Kozlowski (2):
+      USB: serial: set driver owner when registering drivers
+      USB: serial: drop driver owner initialization
+
+ drivers/usb/serial/aircable.c          |  1 -
+ drivers/usb/serial/ark3116.c           |  1 -
+ drivers/usb/serial/belkin_sa.c         |  1 -
+ drivers/usb/serial/ch341.c             |  1 -
+ drivers/usb/serial/cp210x.c            |  1 -
+ drivers/usb/serial/cyberjack.c         |  1 -
+ drivers/usb/serial/cypress_m8.c        |  3 ---
+ drivers/usb/serial/digi_acceleport.c   |  2 --
+ drivers/usb/serial/empeg.c             |  1 -
+ drivers/usb/serial/f81232.c            |  2 --
+ drivers/usb/serial/f81534.c            |  1 -
+ drivers/usb/serial/ftdi_sio.c          |  1 -
+ drivers/usb/serial/garmin_gps.c        |  1 -
+ drivers/usb/serial/generic.c           |  1 -
+ drivers/usb/serial/io_edgeport.c       |  4 ----
+ drivers/usb/serial/io_ti.c             |  2 --
+ drivers/usb/serial/ipaq.c              |  1 -
+ drivers/usb/serial/ipw.c               |  1 -
+ drivers/usb/serial/ir-usb.c            |  1 -
+ drivers/usb/serial/iuu_phoenix.c       |  1 -
+ drivers/usb/serial/keyspan.c           |  4 ----
+ drivers/usb/serial/keyspan_pda.c       |  2 --
+ drivers/usb/serial/kl5kusb105.c        |  1 -
+ drivers/usb/serial/kobil_sct.c         |  4 +---
+ drivers/usb/serial/mct_u232.c          |  1 -
+ drivers/usb/serial/metro-usb.c         |  1 -
+ drivers/usb/serial/mos7720.c           |  1 -
+ drivers/usb/serial/mos7840.c           |  1 -
+ drivers/usb/serial/mxuport.c           |  1 -
+ drivers/usb/serial/navman.c            |  1 -
+ drivers/usb/serial/omninet.c           |  1 -
+ drivers/usb/serial/opticon.c           |  1 -
+ drivers/usb/serial/option.c            |  1 -
+ drivers/usb/serial/oti6858.c           |  1 -
+ drivers/usb/serial/pl2303.c            |  1 -
+ drivers/usb/serial/qcaux.c             |  1 -
+ drivers/usb/serial/qcserial.c          |  1 -
+ drivers/usb/serial/quatech2.c          |  1 -
+ drivers/usb/serial/safe_serial.c       |  1 -
+ drivers/usb/serial/sierra.c            |  1 -
+ drivers/usb/serial/spcp8x5.c           |  1 -
+ drivers/usb/serial/ssu100.c            |  1 -
+ drivers/usb/serial/symbolserial.c      |  1 -
+ drivers/usb/serial/ti_usb_3410_5052.c  |  2 --
+ drivers/usb/serial/upd78f0730.c        |  1 -
+ drivers/usb/serial/usb-serial-simple.c |  1 -
+ drivers/usb/serial/usb-serial.c        | 12 +++++++-----
+ drivers/usb/serial/usb_debug.c         |  2 --
+ drivers/usb/serial/visor.c             |  3 ---
+ drivers/usb/serial/whiteheat.c         |  2 --
+ drivers/usb/serial/wishbone-serial.c   |  1 -
+ drivers/usb/serial/xr_serial.c         |  1 -
+ drivers/usb/serial/xsens_mt.c          |  1 -
+ include/linux/usb/serial.h             |  7 +++++--
+ 54 files changed, 13 insertions(+), 78 deletions(-)
 
