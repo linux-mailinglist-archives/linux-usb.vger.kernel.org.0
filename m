@@ -1,191 +1,131 @@
-Return-Path: <linux-usb+bounces-14957-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14958-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6300A9755CB
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 16:42:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F37C297565F
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 17:06:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 271AF288058
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 14:42:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 320801C22EFA
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 15:06:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B631A38D9;
-	Wed, 11 Sep 2024 14:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6416A1A303D;
+	Wed, 11 Sep 2024 15:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Vk9XFC80"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PjeOxHP7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f194.google.com (mail-yb1-f194.google.com [209.85.219.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B211AAE37
-	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 14:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4701038DE1;
+	Wed, 11 Sep 2024 15:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726065639; cv=none; b=JpuJATak6jitmmZKTiiEqMm/YhZUVkEbL1K5swUkVmyQJPAOYTIcuP5aV9UrRDY/0ePkVORWb+pcmq5HHJz6zgcdi/k9wTBWgYV1bCKr5RtVLOa90Otvm/+VeOc2ws3NS1Hv1desjxlGxjJsuB0mM7ss4EoXaHo3C5a/JRKCY7I=
+	t=1726067155; cv=none; b=E97JWvCIMNnH416VW0zwXwvdjqEXhTtUDsnOXlhl2hGCmGFqEZZK/rJfdbtZNwRUAUzKpPEktYZKZ2hEMOH1fgsrvh9k8M24GiWfp+ADHXjEwNJxHYyzsDeKAQ31a4bh+7JhVbVPUYsMedcvH+ANdkra8ApqHJWj0lU/SGprgvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726065639; c=relaxed/simple;
-	bh=EbFyWvV+rED0DyO1/FkrZ71C6UtxjlADNQZzQYUzhyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SyVKZZyBuCnEi7eB3rB0qUkfrTpKryviT8ogGxI12W7EGzEkTKy1FrzavJB82aXlJE2a1fWKh+oYs8WAvmmv67zKsSk+KUGHRdGFHQ4+LcZeSateyjuIGvRrljpx+o+hJ6i5W8e6qi5+Sua6J5iW/mK3AbMXmV0+UCpOLXc+Vk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Vk9XFC80; arc=none smtp.client-ip=209.85.219.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-yb1-f194.google.com with SMTP id 3f1490d57ef6-e1d0e1bffc8so6462998276.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 07:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1726065636; x=1726670436; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9DWu3pupeS9K819pDXfx+OFFNctZPkwT6aoMYNARBHA=;
-        b=Vk9XFC80zRR3XY+KwzPkLFERkROgsRErsGoPM++hGiJWGD9ibDeSKGaUx8gSQIIicx
-         QWyl6aITy46eflRjY5p9AgN8ctzklTWyo+Z5szwYKgwmU1DIPrvKytCY0aJhF9hF5aOM
-         Wn5BUp90UkUdzRqr3/XN1WoV6WbBvWO56l3ci1TSx/rCpoU76o7bm7o1vjvqmguDuBpL
-         QLzusKg2wWavD2F+li9+tDh+D5BMMvw62Ef1ffIggIvRqkRa2NkC0aKgtQF7x3Sag8A2
-         08QOyNLJ5hHMMPryPIGdKdwKoJRGT8pizfnhDcBLua9b6TcKqc7rJDieJFE2kUmBEgMX
-         MBrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726065636; x=1726670436;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9DWu3pupeS9K819pDXfx+OFFNctZPkwT6aoMYNARBHA=;
-        b=Mcxgy2TlJYoX/MAutJhUbbSLl+y9iqKppOX8Z3Q5r1fOiI6bX86oOM79C407bwbskT
-         BSrIBSEbwALPFT2Nycs+je3ms7klEuCeVYdG71ssZ8+J8DF5lfZ8QiU9jZ7wVyV3xIL0
-         rXFcI/Dt6G8ZlAFK6c0RJrWl+Py2RC7gP2nmooPd4lGF/bTFwyH5+k3FrFwHnEXgL4r5
-         yE0YOTHqXrIzqBD3qraCGNm+0joMDigwj5o/5uChdFu4qlpbGSU+eGuEzGQuDUMTg9gm
-         R0wXwbTJF8qT16jHS9qoY5g7z0dYNPLnc0tLJI4EBJ0QTHd4C+AVEK9cvEiZlz5kw0mB
-         Le/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVXs07KMDsCrsnC4/XN0ePJ+s7gaTbOL68klYbjkWB5+O3eUysgBCwJ6SDYU55xVfktdiTCCH0hF/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3+5LGead00dlDs/yVQSBjyTPNDbaFAxbjU8F2+r80LU1cg1sm
-	Xhh8ME81AjwSuuwgZTpE3RTd2aD///RMs3Z12tlcfMba6tM2U+dSoF1JF3QqsA==
-X-Google-Smtp-Source: AGHT+IG7H8eEV8INPa/cmNYRUc28xvktJNRam9hol104TOcVltKRv+QeyHCTcCk0KOZwzPjMTQfNMg==
-X-Received: by 2002:a05:6902:230e:b0:e1a:8052:c3c7 with SMTP id 3f1490d57ef6-e1d348807a4mr15056101276.20.1726065636501;
-        Wed, 11 Sep 2024 07:40:36 -0700 (PDT)
-Received: from rowland.harvard.edu (wrls-249-137-9.wrls-client.fas.harvard.edu. [140.247.12.9])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c53433982esm42669826d6.42.2024.09.11.07.40.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 07:40:36 -0700 (PDT)
-Date: Wed, 11 Sep 2024 10:40:33 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: duanchenghao <duanchenghao@kylinos.cn>
-Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org,
-	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
- USB status when S4 wakes up
-Message-ID: <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
-References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
- <1725931490447646.3.seg@mailgw.kylinos.cn>
- <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+	s=arc-20240116; t=1726067155; c=relaxed/simple;
+	bh=I7TOYOV0X+sl4yRBZMSMqcGVltMkSNKivipdeWSVjxg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EnxtCg8nRIM9lYOJCS/xIozakF0MgI9706gz702uLpmyyoKr1SaMCJcvGff01c5UUwxvBxvVGFkZC7sM9ir6tyhdcm3AQpIv6Q72rfsjaoTon+vOxQP6mBxDhQcumzE2Iil7poSz3VqxJOv1HyCCHyaEce3oSdZPGrsKV98Cn4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PjeOxHP7; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726067154; x=1757603154;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I7TOYOV0X+sl4yRBZMSMqcGVltMkSNKivipdeWSVjxg=;
+  b=PjeOxHP7YOIoLks4y7dZh/fwFOzFnYV5iBm1a7Vbb7eZCGYf1T92gtsY
+   agnULkVilsfmzvJGRUdCaKDj0DbXZc+85ekwh0sL1zMNHer162p6AREpu
+   Ws2sqc2iOneLwTEMjgAaH23f0UNolxu2oJdEIR3I/HJBCDtAOqf2z21MD
+   O8p/C0pA0j8uSQTHYXcujK/f8NuhBSBJUrrlnMisfBw1jd0J4NlLkA18v
+   s7YJn0UOHL8FiDHTTavLsgTPVFy894FXJ7PaHTHKn+WasXJj1qrboju6A
+   t3dTsSt0ypMOoEcmAZx+KH3Oqgi/Qpp/w27I57SRhB6l51TDGE105ZHqm
+   Q==;
+X-CSE-ConnectionGUID: w53S7PQ+TnWFaAPVAU/UBg==
+X-CSE-MsgGUID: vpiry80bThGvvPxmng6BWQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="28609056"
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="28609056"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 08:05:53 -0700
+X-CSE-ConnectionGUID: WPJQ2vlkRHiXpufoIrMFbA==
+X-CSE-MsgGUID: YCDcUTeQT/uNie3BOY/0Aw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="67687500"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa006.jf.intel.com with ESMTP; 11 Sep 2024 08:05:52 -0700
+Message-ID: <d222e5b9-7241-46a1-84fe-be2343fa4346@linux.intel.com>
+Date: Wed, 11 Sep 2024 18:07:58 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] xhci: Fix control transfer error on Etron xHCI host
+To: Kuangyi Chiang <ki.chiang65@gmail.com>, gregkh@linuxfoundation.org,
+ mathias.nyman@intel.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20240911051716.6572-1-ki.chiang65@gmail.com>
+ <20240911051716.6572-2-ki.chiang65@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20240911051716.6572-2-ki.chiang65@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 10, 2024 at 05:36:56PM +0800, duanchenghao wrote:
-> S4 wakeup restores the image that was saved before the system entered
-> the S4 sleep state.
+On 11.9.2024 8.17, Kuangyi Chiang wrote:
+> Performing a stability stress test on a USB3.0 2.5G ethernet adapter
+> results in errors like this:
 > 
->     S4 waking up from hibernation
->     =============================
->     kernel initialization
->     |   
->     v   
->     freeze user task and kernel thread
->     |   
->     v   
->     load saved image
->     |    
->     v   
->     freeze the peripheral device and controller
->     (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If it is set,
->      return to EBUSY and do not perform the following restore image.)
-
-Why is the flag set at this point?  It should not be; the device and 
-controller should have been frozen with wakeup disabled.
-
->     |
->     v
->     restore image(task recovery)
-
-> > > However, upon detecting that the hcd is in the
-> > > HCD_FLAG_WAKEUP_PENDING state,
-> > > it will return an EBUSY status, causing the S4 suspend to fail and
-> > > subsequent task recovery to not proceed.
-> > 
-> > What will return an EBUSY status?
+> [   91.441469] r8152 2-3:1.0 eth3: get_registers -71
+> [   91.458659] r8152 2-3:1.0 eth3: get_registers -71
+> [   91.475911] r8152 2-3:1.0 eth3: get_registers -71
+> [   91.493203] r8152 2-3:1.0 eth3: get_registers -71
+> [   91.510421] r8152 2-3:1.0 eth3: get_registers -71
 > 
-> if HCD_FLAG_WAKEUP_PENDING flag is set_bit, will return EBUSY.
-
-I meant: Which function will return EBUSY status?  The answer is in the 
-log below; hcd_pci_suspend() does this.
-
-> > Why do you say that S4 suspend will fail?  Aren't you talking about
-> > S4 
-> > wakeup?
+> The r8152 driver will periodically issue lots of control-IN requests
+> to access the status of ethernet adapter hardware registers during
+> the test.
 > 
-> After returning EBUSY, the subsequent restore image operation will not
-> be executed.
+> This happens when the xHCI driver enqueue a control TD (which cross
+> over the Link TRB between two ring segments, as shown) in the endpoint
+> zero's transfer ring. Seems the Etron xHCI host can not perform this
+> TD correctly, causing the USB transfer error occurred, maybe the upper
+> driver retry that control-IN request can solve problem, but not all
+> drivers do this.
 > 
-> > 
-> > Can you provide a kernel log that explains these points and shows
-> > what 
-> > problem you are trying to solve?
+> |     |
+> -------
+> | TRB | Setup Stage
+> -------
+> | TRB | Link
+> -------
+> -------
+> | TRB | Data Stage
+> -------
+> | TRB | Status Stage
+> -------
+> |     |
 > 
-> [    9.009166][ 2] [  T403] PM: Image signature found, resuming
-> [    9.009167][ 2] [  T403] PM: resume from hibernation
-> [    9.009243][ 2] [  T403] inno-codec inno-codec.16.auto:
-> [inno_vpu][vpu_notifier:1540]vpu_notifier: untested action 5...
-> [    9.009244][ 2] [  T403] Freezing user space processes ... (elapsed
-> 0.001 seconds) done.
-> [    9.010355][ 2] [  T403] OOM killer disabled.
-> [    9.010355][ 2] [  T403] Freezing remaining freezable tasks ...
-> (elapsed 0.000 seconds) done.
-> [    9.012152][ 2] [  T403] PM: Basic memory bitmaps created
-> [    9.073333][ 2] [  T403] PM: Using 3 thread(s) for decompression
-> [    9.073334][ 2] [  T403] PM: Loading and decompressing image data
-> (486874 pages)...
-> [    9.073335][ 2] [  T403] hibernate: Hibernated on CPU 0 [mpidr:0x0]
-> [    9.095928][ 2] [  T403] PM: Image loading progress:   0%
-> [    9.664803][ 2] [  T403] PM: Image loading progress:  10%
-> [    9.794156][ 2] [  T403] PM: Image loading progress:  20%
-> [    9.913001][ 2] [  T403] PM: Image loading progress:  30%
-> [   10.034331][ 2] [  T403] PM: Image loading progress:  40%
-> [   10.154070][ 2] [  T403] PM: Image loading progress:  50%
-> [   10.277096][ 2] [  T403] PM: Image loading progress:  60%
-> [   10.398860][ 2] [  T403] PM: Image loading progress:  70%
-> [   10.533760][ 2] [  T403] PM: Image loading progress:  80%
-> [   10.659874][ 2] [  T403] PM: Image loading progress:  90%
-> [   10.760681][ 2] [  T403] PM: Image loading progress: 100%
-> [   10.760693][ 2] [  T403] PM: Image loading done
-> [   10.760718][ 2] [  T403] PM: Read 1947496 kbytes in 1.68 seconds
-> (1159.22 MB/s)
-> [   10.761982][ 2] [  T403] PM: Image successfully loaded
-> [   10.761988][ 2] [  T403] printk: Suspending console(s) (use
-> no_console_suspend to debug)
-> [   10.864973][ 2] [  T403] innovpu_freeze:1782
-> [   10.864974][ 2] [  T403] innovpu_suspend:1759
-> [   11.168871][ 2] [  T189] PM: pci_pm_freeze():
-> hcd_pci_suspend+0x0/0x38 returns -16
 
-This should not be allowed to happen.  Freezing is mandatory and not 
-subject to wakeup requests.
+What if the link TRB is between Data and Status stage, does that
+case work normally?
 
-Is your problem related to the one discussed in this email thread?
+> To work around this, the xHCI driver should enqueue a No Op TRB if
+> next available TRB is the Link TRB in the ring segment, this can
+> prevent the Setup and Data Stage TRB to be breaked by the Link TRB.
 
-https://lore.kernel.org/linux-usb/d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu/
+There are some hosts that need the 'Chain' bit set in the Link TRB,
+does that work in this case?
 
-Would the suggestion I made there -- i.e., have the xhci-hcd 
-interrupt handler skip calling usb_hcd_resume_root_hub() if the root hub 
-was suspended with wakeup = 0 -- fix your problem?
+Thanks
+Mathias
 
-Alan Stern
 
