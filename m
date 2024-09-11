@@ -1,55 +1,58 @@
-Return-Path: <linux-usb+bounces-14950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C083B97545C
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 15:46:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2E77975492
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 15:52:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69C461F2610E
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 13:46:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D347282734
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 13:52:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709D819EEA1;
-	Wed, 11 Sep 2024 13:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FB5199949;
+	Wed, 11 Sep 2024 13:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dvqjejD7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TfonS4uG"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70E3188A00
-	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 13:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEDD18593F;
+	Wed, 11 Sep 2024 13:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726062105; cv=none; b=GNXVdWDtJBdTX9utbw7ekZf29S7+ipikR1Q535dCtfdy6FFmpO2GdjvrWP3Ov39IOg2/HOlwgxTaB5D4xuwNuujUN8eKShXsBjo5OY90iPcug4sRaTe1vdOh+epCC2oE69fdRMW7E1wdzIe30//7R7Fk1pn7ctCV4P3QfDmjh1g=
+	t=1726062638; cv=none; b=K0SegHNKIOnQzsP9FKu0nA4Tcn3H/16w5Z1GvxzCnfGNKVRm2vV4BwZe+WFziM883kBj+9o3vmxN+wVeSEbdd4RJe47G+d2rjE1GzW+sRw65sREoMbKikuZRTF/eJK0OEjOqJglisdgsBczLeZI7EY3i5BGU9upARKeEivR4an0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726062105; c=relaxed/simple;
-	bh=b5ljPf0qNs3u5yESNj2pTSmaBxSFIlMWpBDMeoMqWcQ=;
+	s=arc-20240116; t=1726062638; c=relaxed/simple;
+	bh=j6g3n6ztpZlP10F3yPeE6CvPv6QkWwHvhtKHzXMVn2A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HCk98HTRtYmCR9aoOoTfPZo+lKVP7Ucr7gwzMOmwWP+N3W5c3I1zkcIdIrQHvUIJ0W2FO3YXHZ4Yp8fRu8DWeVu/kMpl1JBpKz9Midhk4a6CmEST0wv0gN+bzsn01+64uuUzJpQijPPabSKOD4/abLFXym8r3rfnwTvXHqfLGxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dvqjejD7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A89AC4CEC5;
-	Wed, 11 Sep 2024 13:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726062104;
-	bh=b5ljPf0qNs3u5yESNj2pTSmaBxSFIlMWpBDMeoMqWcQ=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=msv26mw3VPGZt5/LvFg2taEAWwUEx0ERejVE96EWq97kf1uumTbQ+36Xl9SqzO7pmVt5cTMT8QU5W6wUXhSG+vkFh5Dh8QNWBhrsGExdct8m1XjCpF9S6UgOPSjFlOFQeU+x0cvVlm4nDsTwRqVMk7ghkyv67CuJsimrabk9tGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TfonS4uG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C3AC4CEC0;
+	Wed, 11 Sep 2024 13:50:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726062637;
+	bh=j6g3n6ztpZlP10F3yPeE6CvPv6QkWwHvhtKHzXMVn2A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dvqjejD7SMddPseEE2s6XQSvTJW+Vzfm0pCyQEQNoIiLKNKJoFQESMOgisgEvxu+z
-	 N0SNQoUcUnjlQzYg5sWhq02bo32TnhUlhJIL2CtyXzYXZdIumBgmS/D3uR0PLuviCN
-	 7iSvKYH3NvlwClbrCv4C6tHQyr9cIBdKdvWboUsA=
-Date: Wed, 11 Sep 2024 15:41:41 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: linux-usb@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Amit Sunil Dhamne <amitsd@google.com>
-Subject: Re: [PATCH v2 0/3] Fix a lockdep complaint related to USB role
- switching
-Message-ID: <2024091144-throwing-stucco-65f1@gregkh>
-References: <20240905204709.556577-1-bvanassche@acm.org>
+	b=TfonS4uGyBE2rJqMkVBvyBLj+X+lKerJnjvCJKY8IkDlwe9W9ZS501Oa438JkOaee
+	 YCiCGL3w+L+Kdc9dUNH/Ts1zRZJQIjxxHLYe9fO6B2j8RhT0/h+VEoAu5h09zAstVa
+	 fGqY/jaPWA6yyWUpfa/IKMzg+bKviOLvF+2n6fkp5MevWYlzBAKvp5exyb/BX6Yx0/
+	 RWqUOrIaRxk3wqwSji4nm0Ar6A4dQ6Ss3PMJe1P2jURdNB4a0AxNrIkQ4C+D+q7Wq2
+	 YYD1sfsn25B9d4fevHJZvGXcAW6VFBxMaSp179AbvUaS9Mj/p84PqQrZxn/srxRx+E
+	 o8Jgu4a5r/rkA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1soNkF-000000006D9-3UJt;
+	Wed, 11 Sep 2024 15:50:56 +0200
+Date: Wed, 11 Sep 2024 15:50:55 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 6.12-rc1-2
+Message-ID: <ZuGgPxNo6BMryM-c@hovoldconsulting.com>
+References: <ZuEz67ehYXIG8AXB@hovoldconsulting.com>
+ <2024091114-duplex-grit-f5a7@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,23 +61,23 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240905204709.556577-1-bvanassche@acm.org>
+In-Reply-To: <2024091114-duplex-grit-f5a7@gregkh>
 
-On Thu, Sep 05, 2024 at 01:47:06PM -0700, Bart Van Assche wrote:
-> Hi Greg,
+On Wed, Sep 11, 2024 at 03:24:35PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Sep 11, 2024 at 08:08:43AM +0200, Johan Hovold wrote:
+> > The following changes since commit 431c1646e1f86b949fa3685efc50b660a364c2b6:
+> > 
+> >   Linux 6.11-rc6 (2024-09-01 19:46:02 +1200)
+> > 
+> > are available in the Git repository at:
+> > 
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.12-rc1-2
 > 
-> This patch series suppresses a lockdep complaint about recursive locking
-> that is triggered by switching USB roles. Please consider this patch series
-> for the next merge window.
+> I've pulled this into my usb-next branch as it's too late for 6.11.
 
-I already took this commit into my tree for -rc1:
-	https://lore.kernel.org/r/20240822223717.253433-1-amitsd@google.com
+Yes, I assumed so (and referred to 6.12 in the tag and Subject).
 
-It's almost identical to yours, but you are messing with mutex states
-here, why?  I'll be glad to take a series on top of that one if you can
-describe why this one is "more correct" that that one.
+Thanks.
 
-thanks,
-
-greg k-h
+Johan
 
