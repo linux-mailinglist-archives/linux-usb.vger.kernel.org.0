@@ -1,193 +1,133 @@
-Return-Path: <linux-usb+bounces-14952-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14953-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2571C9754E3
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 16:00:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C75BA9754E6
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 16:01:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B6EC1F21B39
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 14:00:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04FEEB278F4
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 14:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB4C19CC15;
-	Wed, 11 Sep 2024 13:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AB5190671;
+	Wed, 11 Sep 2024 14:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MzYgItTM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B825141A80
-	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8887E583
+	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 14:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726063161; cv=none; b=Oz4bevElS8Z/zzg9K0/Y53Quuz571j2LgWhUbL6CzLqggshIyFkR5iBbOE1S/QZpPO9hZx8K/Q/gIhkpZ9yMDwsmHNAW/0ElduQ95iutGYdTbjvARhl5K+DiSNDLAXlqvsPFuJwxiwWiT6r43IjxNvLThKJSxAV3ePCJcdSDUSc=
+	t=1726063262; cv=none; b=Z52Vq/6x0vdNU8k2PlTzs7xdi+HUsMNs/lyKq2QquwgO5K7U7XITU5M1OCspcp34+heXkWcx3FjHgTwFTmj8ie+4mPHkTiBQ+A7bnIukzi+GttZRT4z7iWXJxuwQgYYK1ywxdm0YuwAqXHzs9oQ+jcHLIctsrmKk/R5VHiaYyiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726063161; c=relaxed/simple;
-	bh=j/IOnyIDuox47ClSTUNzfwKZIVR3liYG+wB+hgxQfss=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=a26SLnEJh704A8nCi4WEE+qV0pCHvMnwppGRNzNBrNgwyVKYW9ZohZWJtAwPQ/TnQOII4KYIZqjexirp6MoTwL7sJV8s0pwT9ZcIvONlJOcxenLMfP84G9r8b4bBSy7Ww2z0QdLvBcODQQMADjqYGxPi5EGO3VOEE0Iho87jcCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-39f53b1932aso119554495ab.3
-        for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 06:59:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726063159; x=1726667959;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iyFSjWPsVOn4jot16e15VF13cbZtKB2RZwrXgLJVpIs=;
-        b=YFuJe7jXOAN1BUrFv9EGlIfqI2QFaF9GBlx1IBZpkhEpE/S3QVognZC3slYKgVwCex
-         NKSqdXA2ntnueeAhGZ3V1hKbSkpu98m4Kb0iD2LwJK7kMVlu0E4GbLPia9pfx7HYlE3r
-         ZfENAb4rLb554l3uefEPaMd/pqsH4WjiD+UdpNFFqQZRKZVyRbxRfPJKkhHQMWvEzkTv
-         SpCx/ikuwZPySozCt2fxT7v8nlhHdBUHGF9gF/Zh8Q6sdGCHpuWncFWnvBMM4OFkdOgc
-         dSPeNRjWAU7ssJd+tfH4rfKM9P1LduYaIRxJxeQV+VgOca/6VGvwx6i9DRpw6JLdHjAM
-         y/ow==
-X-Forwarded-Encrypted: i=1; AJvYcCVIAK+yncinEiG8rdfze8WaH5JiqPTjl2XCjxRPqWquq7R9EezcLQRjf2DFWJMRgVOxwUfkNu/1hlM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzm9pjJDyEt9RpSrN1wXeBv0HlFUSmTWzUfkhsZ3QHWeDzIxvfA
-	L2bxEHdukUmt2uLa4fuXHQvbQebmOBpz3usqXhvACaHyqnGk/+xCfIarfMxLBuu/vswLI8AjtZb
-	l80jngQrdvVWRVfFbu4ZTQvAdMRXT0O908wmenmsgcavIvKnRPxqnx+0=
-X-Google-Smtp-Source: AGHT+IHCax3tASed1rU34Ah0qudPhtB1RGSc/HnK4mmJeBkYaGKzhZbvAr1AsvbFj/vUqH+9+0fmI1tVQH2fBKH4vnx7i7z5uKRB
+	s=arc-20240116; t=1726063262; c=relaxed/simple;
+	bh=qN+cH6Xt0cHn3OYrwSWb7ux4N743VnFfarN7TgyzE8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ont7AntVApwHI++jSK/0H5GjQOIuOAPRRamBqEPkk1a4iwJFRrmYXdEb5sfI7XPwFxWTnRcdfuv34ZZhGpgg4xb27CUH7DLhN9KT/HN1qnKwFtq/HR4GY+5cpOp26VHxPRNHruba6YsW++7Rjq+lOWLrlAWp/hUDYAzbi6Exl+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MzYgItTM; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726063260; x=1757599260;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=qN+cH6Xt0cHn3OYrwSWb7ux4N743VnFfarN7TgyzE8U=;
+  b=MzYgItTMcNfH2vw+yhy0A1YdBXB1eaPRBum5lfAfll0EK051mdCB6kom
+   EbsbJEbRZHsyk+qs402+LLFzeoLEmSojsFIVC/RSj1sn/+8OKXznA753Z
+   trMKOOVWjim+xv8xGeuMtWG6lVP/HdvjaMppm86hxtXNZtSibd4+UXz7Y
+   9klZmdcOIoT+/EbO/bZkNFLZN3qUQpLi4qQ2EyETcR/Vs4u4Dr2gWvenp
+   S44WtkHvGZcw6pSqfwbWtXGKJ5rtmGPE25N7932v3cGn4UyYGh2ejNDKO
+   pQeu7fMwHlAqtI5bVaKXcO7LbkY9pT9kF6kKhnSYOP5las04KfgXQbL1/
+   g==;
+X-CSE-ConnectionGUID: V+nUKuebSM6FxBeQotqnWg==
+X-CSE-MsgGUID: FBFjyRxwR++TxBQUWmYDPQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="36219564"
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="36219564"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 07:00:59 -0700
+X-CSE-ConnectionGUID: vwrrdKfjSIiJr8ux9DJlQg==
+X-CSE-MsgGUID: 8D3yFtwMRfqRgJ4Fba3qtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="72170008"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 11 Sep 2024 07:00:56 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1soNtu-0003fi-1V;
+	Wed, 11 Sep 2024 14:00:54 +0000
+Date: Wed, 11 Sep 2024 22:00:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Pavan Holla <pholla@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
+Message-ID: <202409112121.GHL72j84-lkp@intel.com>
+References: <20240910101527.603452-7-ukaszb@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b27:b0:3a0:4c75:3aed with SMTP id
- e9e14a558f8ab-3a04f0ee4c4mr216510885ab.25.1726063158765; Wed, 11 Sep 2024
- 06:59:18 -0700 (PDT)
-Date: Wed, 11 Sep 2024 06:59:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007038c00621d865b7@google.com>
-Subject: [syzbot] [usb?] INFO: task hung in adu_release
-From: syzbot <syzbot+b67c1b86d4e644a5cb6d@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240910101527.603452-7-ukaszb@chromium.org>
 
-Hello,
+Hi Łukasz,
 
-syzbot found the following issue on:
+kernel test robot noticed the following build warnings:
 
-HEAD commit:    9c0c11bb87b0 xhci: support setting interrupt moderation IM..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a0189f980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4a1ccb5ad00c3ba6
-dashboard link: https://syzkaller.appspot.com/bug?extid=b67c1b86d4e644a5cb6d
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ae6ffb980000
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus lee-mfd/for-mfd-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11-rc7 next-20240910]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d41cb6c3e427/disk-9c0c11bb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1beec7548c8b/vmlinux-9c0c11bb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/66b2bb190ac1/bzImage-9c0c11bb.xz
+url:    https://github.com/intel-lab-lkp/linux/commits/ukasz-Bartosik/platform-chrome-Update-ChromeOS-EC-header-for-UCSI/20240910-182729
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240910101527.603452-7-ukaszb%40chromium.org
+patch subject: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
+config: x86_64-randconfig-121-20240911 (https://download.01.org/0day-ci/archive/20240911/202409112121.GHL72j84-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409112121.GHL72j84-lkp@intel.com/reproduce)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b67c1b86d4e644a5cb6d@syzkaller.appspotmail.com
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409112121.GHL72j84-lkp@intel.com/
 
-INFO: task syz.0.63:3967 blocked for more than 143 seconds.
-      Not tainted 6.11.0-rc6-syzkaller-g9c0c11bb87b0 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz.0.63        state:D stack:27872 pid:3967  tgid:3961  ppid:3214   flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5188 [inline]
- __schedule+0xcda/0x2f80 kernel/sched/core.c:6529
- __schedule_loop kernel/sched/core.c:6606 [inline]
- schedule+0xe7/0x350 kernel/sched/core.c:6621
- usb_kill_urb.part.0+0x1ca/0x250 drivers/usb/core/urb.c:713
- usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:702
- adu_abort_transfers drivers/usb/misc/adutux.c:129 [inline]
- adu_release_internal drivers/usb/misc/adutux.c:302 [inline]
- adu_release+0x545/0x720 drivers/usb/misc/adutux.c:331
- __fput+0x408/0xbb0 fs/file_table.c:422
- task_work_run+0x14e/0x250 kernel/task_work.c:228
- exit_task_work include/linux/task_work.h:40 [inline]
- do_exit+0xaa3/0x2b30 kernel/exit.c:882
- do_group_exit+0xd3/0x2a0 kernel/exit.c:1031
- get_signal+0x25fb/0x2770 kernel/signal.c:2917
- arch_do_signal_or_restart+0x90/0x7e0 arch/x86/kernel/signal.c:310
- exit_to_user_mode_loop kernel/entry/common.c:111 [inline]
- exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
- __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
- syscall_exit_to_user_mode+0x147/0x260 kernel/entry/common.c:218
- do_syscall_64+0xda/0x250 arch/x86/entry/common.c:89
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f6e0ed1cef9
-RSP: 002b:00007f6e0e71b0e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007f6e0eed62e8 RCX: 00007f6e0ed1cef9
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f6e0eed62e8
-RBP: 00007f6e0eed62e0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6e0eed62ec
-R13: 0000000000000000 R14: 00007ffcc5944490 R15: 00007ffcc5944578
- </TASK>
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/typec/ucsi/cros_ec_ucsi_main.c:178:24: sparse: sparse: symbol 'cros_ucsi_ops' was not declared. Should it be static?
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/30:
- #0: ffffffff88ebb660 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:326 [inline]
- #0: ffffffff88ebb660 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:838 [inline]
- #0: ffffffff88ebb660 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x75/0x340 kernel/locking/lockdep.c:6626
-2 locks held by getty/2606:
- #0: ffff888108adf0a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
- #1: ffffc900000432f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xfc8/0x1490 drivers/tty/n_tty.c:2211
-1 lock held by syz.0.63/3967:
- #0: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_release+0xcf/0x720 drivers/usb/misc/adutux.c:323
-2 locks held by syz.0.110/4656:
- #0: ffffffff899affb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x27/0x2f0 drivers/usb/core/file.c:38
- #1: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_open+0x5d/0x820 drivers/usb/misc/adutux.c:236
-2 locks held by syz.0.110/4657:
- #0: ffffffff899affb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x27/0x2f0 drivers/usb/core/file.c:38
- #1: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_open+0x5d/0x820 drivers/usb/misc/adutux.c:236
-2 locks held by syz.0.110/4658:
- #0: ffffffff899affb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x27/0x2f0 drivers/usb/core/file.c:38
- #1: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_open+0x5d/0x820 drivers/usb/misc/adutux.c:236
+vim +/cros_ucsi_ops +178 drivers/usb/typec/ucsi/cros_ec_ucsi_main.c
 
-=============================================
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  177  
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10 @178  struct ucsi_operations cros_ucsi_ops = {
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  179  	.read_version = cros_ucsi_read_version,
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  180  	.read_cci = cros_ucsi_read_cci,
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  181  	.read_message_in = cros_ucsi_read_message_in,
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  182  	.async_control = cros_ucsi_async_control,
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  183  	.sync_control = cros_ucsi_sync_control,
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  184  };
+ef8d61204d9db5 drivers/usb/typec/ucsi/cros_ec_ucsi.c Pavan Holla 2024-09-10  185  
 
-NMI backtrace for cpu 1
-CPU: 1 UID: 0 PID: 30 Comm: khungtaskd Not tainted 6.11.0-rc6-syzkaller-g9c0c11bb87b0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:93 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:119
- nmi_cpu_backtrace+0x27b/0x390 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x29c/0x300 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:162 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:223 [inline]
- watchdog+0xf0c/0x1240 kernel/hung_task.c:379
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0 skipped: idling at native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
-NMI backtrace for cpu 0 skipped: idling at arch_safe_halt arch/x86/include/asm/irqflags.h:106 [inline]
-NMI backtrace for cpu 0 skipped: idling at acpi_safe_halt+0x1a/0x20 drivers/acpi/processor_idle.c:111
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
