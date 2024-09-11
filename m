@@ -1,74 +1,80 @@
-Return-Path: <linux-usb+bounces-14940-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14941-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14080975109
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 13:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83FEF975216
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 14:28:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91A061F2246A
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 11:46:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04F761F231FB
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 12:28:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91201185B6F;
-	Wed, 11 Sep 2024 11:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B59F192D86;
+	Wed, 11 Sep 2024 12:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ST7C2ivW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eDutfCiW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF5B42AB4
-	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 11:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EF11922CA
+	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 12:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726055192; cv=none; b=XKyq0BI0qtUmpVqiBa78gicCqyxBhDOPTvkB/wEsw+Vrp0sLpDu9jQ5DRiVbKnXuiuRNuECA584Rso/10tkHYc+FnFAr6XKMCe6tBMb0G5qVAIiSoGYuLH/hpBuNRZLXh79h76LnSwWXq/nh3SSsptJz4B7aRDUQQnGPZBkuufc=
+	t=1726057677; cv=none; b=s7mKPglT7xPmdQQnjlCA6j3QLFAUREv0R7XqmySYBwDknZN5HT8Wh2ENdYL60LeeKtbRTcaIbYcvk5g3WqajD2z5bIVDFrHOK/hH7bxrKBSXpra9ABzTtzRGpRAARn+nN/v9ijEIjpDCCxJxQYerenc+eWa5W/MEOntR77hrmBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726055192; c=relaxed/simple;
-	bh=zDfl0nb33oSvpO6ZIhy4kmbYxyVq3wInYR16i9dv7ms=;
+	s=arc-20240116; t=1726057677; c=relaxed/simple;
+	bh=hCyv+3gn+MQYPHXJntRjENuvk/D30440d+7guoUICwc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bXbFUDjdiCpzJ0GXhLNw3I4hVMBTCkZLgzj3lp+4TNhMrNk+Mh+gKXwwPgLG6fLf6kGGFrMadWnuYa5ts2dv7T/4ZjomaolThfz6pS3klefs5IEkY+p7uqKjMsG40vZNWyl9SCFz9UIwHBOAU7aroeY0KOHB8JzEXmxmjQhgXFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ST7C2ivW; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2055a524017so5524385ad.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 04:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726055190; x=1726659990; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=saISybT+04xXE6sJeq1RhjUz46ExY/XiFSgt9+eqjgM=;
-        b=ST7C2ivW0RdsYgLbU7Ze4JnP6PgXemnMD5z+XFTLo6yyPZ9PYAWuoSFsmK+OuQfGXA
-         HJwRK9FShlf9JVSLz7jSeoITaf7PHOJGZ/gWAvNHOQEtYSJy2DLPMY2fGkO29/Xdl6PS
-         sWfrJqVUx4xIaykKO7IqeORElbMSn9mNXT7KmUGffKfyahOEbEoT9/gYMs+YmNc+4qxS
-         NNyS+4C506sqlusmyuu9OYkP+Yw6iZ3joyKqlXMJ4FLp+vpaTZ68zgVQ+drnwvONI+cJ
-         x5jmjEdS9+wsR6nokSQhR9B71o3LeeWnaW/4ZUsvrS1j4PnQSk94HXMLsKo5Cjza8zzT
-         oDDA==
+	 In-Reply-To:Content-Type; b=tQo5CEhhYe7jTWQrnQFm6YAZrF+dxXnc9m3DyHSkIOEhIDua+WpyNqBwjW1JapFkbsleCzKDDjRsFex4rGh3pPvRpGWJmdniXL/049Q3DacWJYIDRKrNK6S81q8GM6PCnHsN+jdP9FQGY8P3JGwVUYWYi05Ec8aoQY4eBsJpvBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eDutfCiW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1726057673;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=q/NSXqDGhdhn7Jx5pa1Emu+bzY3oWOLypAKpBZONwLs=;
+	b=eDutfCiW9P9G4W0q9/o2hg+VigyQasJjSNiOkleUZoT87LGx7yOG+iRRuy/gCDoxtVmN74
+	fbV2P7S2iTPTEy4/YnyFdh7rQqAdMlJLvZoe6WZQtFF9spMEZrAoUQ/OFozU7SsSCwsaP9
+	JZjF24C1q2wk/Bdg8qCkIsptUvXrTXQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-641-r3JWEFGbPTiAIOhkmivE6g-1; Wed, 11 Sep 2024 08:27:52 -0400
+X-MC-Unique: r3JWEFGbPTiAIOhkmivE6g-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a868b6d6882so87254666b.1
+        for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 05:27:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726055190; x=1726659990;
+        d=1e100.net; s=20230601; t=1726057670; x=1726662470;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=saISybT+04xXE6sJeq1RhjUz46ExY/XiFSgt9+eqjgM=;
-        b=RP8uZ0iWipdRXGkW8AESPnIyFyXeJMGmL5wEqtt9bQ0izf8GV86zV8GbyZBvwZiEZ5
-         LMvO6Rx5aNPYOtK0zYXmHqKZ3MvK1BupAK+frcE5wIHhhiKZXYfjRstadgqAMoC/GkQw
-         9U1ZUie1bwO4xTNQjR+0tVmnFR4RV9/KzHBYDwCJ+FTDRkATKwSimDcNMxkrfZ4Ul1Xr
-         8GZ93IDYYAVWWpUTjM7tKRHTK0LBSaOEqIuq8YdnA2CQJM5i4uC6YcEqqWRfkTpObTMN
-         eMFPBe7sklk73x48Ir+Cq6iNvjouUQzsIOXPpjpuU00q6XJ+b47ZRKv9ABp7UjyEElHd
-         jJaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUgLiPQiRAXbqL9hSfuAlvp4Qq854P0DWuYfle04hNhHdCnOeGAZ02LhuudjLw3Pk3q4ncYmw06MiM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyxd/u+lyPavA+IZf6garfWsPu8EOBcMkwIChRE/xWFCoaAjDaw
-	4C4rJq1LemxWarAXJLWC1TCOR26h8u9VxPhLOtldCAPt2fWauHka
-X-Google-Smtp-Source: AGHT+IEOsKA0AwP6UousCot1fVSwVPDln/m8LqC9+Hw0ucmOj80BPW3Kx45g9E0TPGvEbKXlM7H9Pw==
-X-Received: by 2002:a17:902:db06:b0:205:9112:6c38 with SMTP id d9443c01a7336-2074c6e2101mr23020805ad.10.1726055189658;
-        Wed, 11 Sep 2024 04:46:29 -0700 (PDT)
-Received: from [192.168.1.7] ([119.42.110.5])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-20710e324bbsm62004415ad.87.2024.09.11.04.46.27
+        bh=q/NSXqDGhdhn7Jx5pa1Emu+bzY3oWOLypAKpBZONwLs=;
+        b=rhAJvyCl/yRyyy2KadpJcDCUPlXQhGS1LVKJtkosqNQu+3PEt5YOgX89gOhpmRX2eb
+         YXflQAgtV1/Ss2xL+5E8dZoaSPN5ToCc+Cb4AJTcMQw5Dr+tNhvnP+I6jk9sgWidDMe2
+         lA8uS2XQchWB+ZfY+9go+AqgtViXSm3L/4V51U4ZwufwB4c80FwT4z1B7vBTdpgcbErJ
+         S4NbcFlR+4x50ptJt7M7+PLiLiiLREpuVJ2zyc9XHjmDYd2bYW6NZLRRVJKK4GhoGimk
+         yigwwvAqcGGGBVW5Ufod6ScCNxqHDqdTJ+vCVe8k8w3MqGGSS8Hf41wUhcGnOUTRlYfh
+         iIug==
+X-Forwarded-Encrypted: i=1; AJvYcCXhHKPsa+zP0aWdYWo7tThwNNR4hr4LwCq0h9I3vteVBkWe61tNBBEj2L1z5f5ppwtu2IuPo7F8IFo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzugYdEVJu3N50ldpMhD/PCy4e1nwtEULKliNyr5l1S0+X4v5cQ
+	iIHcf31dqlv+u2+BkTREUOfejn8nwyAsddAJbiakWNchXPLPRqGJO2e6uMKjy/rC2LHqEl+cSVl
+	L4o7UE0vpT605Mdd1yB9f75QJjIg6ajj+VYUjVfvfl+qck8ik4pkNNuBK+w==
+X-Received: by 2002:a17:907:d15:b0:a8a:cc5a:7f30 with SMTP id a640c23a62f3a-a8ffb29dd63mr451035866b.25.1726057670174;
+        Wed, 11 Sep 2024 05:27:50 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH/c1X3DRA/mWIVTcTk+QQnZxO9T4fi76uQn0cYUplb9zL6FkZdwQdjqe7jLbHQzM45Cmmfyg==
+X-Received: by 2002:a17:907:d15:b0:a8a:cc5a:7f30 with SMTP id a640c23a62f3a-a8ffb29dd63mr451031966b.25.1726057669606;
+        Wed, 11 Sep 2024 05:27:49 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25952c01sm611232466b.64.2024.09.11.05.27.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Sep 2024 04:46:29 -0700 (PDT)
-Message-ID: <8b356c79-3300-4fa8-a6e5-1556e2f6579e@gmail.com>
-Date: Wed, 11 Sep 2024 18:46:24 +0700
+        Wed, 11 Sep 2024 05:27:49 -0700 (PDT)
+Message-ID: <9158a89f-6e06-41ad-8c68-97ecc3409c16@redhat.com>
+Date: Wed, 11 Sep 2024 14:27:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,89 +82,100 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] USB: serial: option: support for Quectel EG916Q-GL
-To: "Benjamin B. Frost" <benjamin@geanix.com>
-Cc: sean@geanix.com, martin@geanix.com, johan@kernel.org,
- linux-usb@vger.kernel.org
-References: <d4b02fcb-6476-4a67-bc07-e6a224891b20@gmail.com>
- <20240911085405.319899-1-benjamin@geanix.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20240911085405.319899-1-benjamin@geanix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 0/3] platform/x86: intel_scu: Move headers to x86
+ subfolder
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Utkarsh Patel <utkarsh.h.patel@intel.com>, Guenter Roeck
+ <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-watchdog@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ "David E. Box" <david.e.box@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Zha Qipeng <qipeng.zha@intel.com>,
+ Lee Jones <lee@kernel.org>, Heikki Krogerus
+ <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20240909124952.1152017-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240909124952.1152017-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2024-09-11 15:54, Benjamin B. Frost wrote:
-> Add Quectel EM916Q-GL with product ID 0x6007
-> 
-> T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=6007 Rev= 2.00
-> S:  Manufacturer=Quectel
-> S:  Product=EG916Q-GL
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=200mA
-> A:  FirstIf#= 4 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  32 Ivl=32ms
-> I:  If#= 5 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:* If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> 
-> Signed-off-by: Benjamin B. Frost <benjamin@geanix.com>
-> ---
-> 
-> V1 -> V2: Change as suggested by Lars has been implemented.
-> Using USB_DEVICE_AND_INTERFACE_INFO instead of USB_DEVICE.
-> Thank you for letting me know.
-> 
->   drivers/usb/serial/option.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 176f38750ad5..e47a12c81a2f 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -279,6 +279,7 @@ static void option_instat_callback(struct urb *urb);
->   #define QUECTEL_PRODUCT_EG912Y			0x6001
->   #define QUECTEL_PRODUCT_EC200S_CN		0x6002
->   #define QUECTEL_PRODUCT_EC200A			0x6005
-> +#define QUECTEL_PRODUCT_EG916Q			0x6007
->   #define QUECTEL_PRODUCT_EM061K_LWW		0x6008
->   #define QUECTEL_PRODUCT_EM061K_LCN		0x6009
->   #define QUECTEL_PRODUCT_EC200T			0x6026
-> @@ -1271,6 +1272,7 @@ static const struct usb_device_id option_ids[] = {
->   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
->   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG912Y, 0xff, 0, 0) },
->   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG916Q, 0xff, 0x00, 0x00) },
->   
->   	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->   	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+Hi,
 
-That was much better, now it is correct.
-Reviewed-by: Lars Melin <larsm17@gmail.com>
+On 9/9/24 2:41 PM, Andy Shevchenko wrote:
+> Add the record to the MAINTAINERS to follow what is going on with the
+> Intel MID platform related code and drivers.
+> 
+> With that, clean up a bit a couple of headers, i.e. move them to x86
+> subfolder of include/linux/platform_data where they belong to.
+> 
+> No functional changes intended.
+> 
+> Taking into account nature of this change it's supposed to go via PDx86
+> tree, please Ack.
 
-additional info
-MI_00 Quectel USB Diag Port
-MI_01 Quectel USB NMEA Port
-MI_02 Quectel USB AT Port
-MI_03 Quectel USB Modem Port
-MI_04 Quectel USB Net Port
+Since the changes outside of drivers/platform/x86 are tiny and the merge
+window is close I've decided to take the series without waiting for acks:
+
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
+
+
+> 
+> v2:
+> - Maintained --> Supported (Dave)
+> - added two cleanup patches (Mika and me)
+> 
+> Andy Shevchenko (2):
+>   MAINTAINERS: Add Intel MID section
+>   platform/x86: intel_scu_wdt: Move intel_scu_wdt.h to x86 subfolder
+> 
+> Mika Westerberg (1):
+>   platform/x86: intel_scu_ipc: Move intel_scu_ipc.h out of
+>     arch/x86/include/asm
+> 
+>  MAINTAINERS                                   | 20 ++++++++++++++++++-
+>  arch/x86/include/asm/intel_telemetry.h        |  2 +-
+>  arch/x86/platform/intel-mid/intel-mid.c       |  3 ++-
+>  drivers/mfd/intel_pmc_bxt.c                   |  3 +--
+>  drivers/mfd/intel_soc_pmic_bxtwc.c            |  3 +--
+>  drivers/mfd/intel_soc_pmic_mrfld.c            |  3 +--
+>  drivers/platform/x86/intel_scu_ipc.c          |  2 +-
+>  drivers/platform/x86/intel_scu_ipcutil.c      |  2 +-
+>  drivers/platform/x86/intel_scu_pcidrv.c       |  2 +-
+>  drivers/platform/x86/intel_scu_pltdrv.c       |  2 +-
+>  drivers/platform/x86/intel_scu_wdt.c          |  3 ++-
+>  drivers/usb/typec/mux/intel_pmc_mux.c         |  3 +--
+>  drivers/watchdog/intel-mid_wdt.c              |  5 ++---
+>  .../platform_data/{ => x86}/intel-mid_wdt.h   |  6 +++---
+>  .../linux/platform_data/x86}/intel_scu_ipc.h  |  4 ++--
+>  15 files changed, 39 insertions(+), 24 deletions(-)
+>  rename include/linux/platform_data/{ => x86}/intel-mid_wdt.h (74%)
+>  rename {arch/x86/include/asm => include/linux/platform_data/x86}/intel_scu_ipc.h (96%)
+> 
+
 
