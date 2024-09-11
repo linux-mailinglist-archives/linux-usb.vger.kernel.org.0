@@ -1,56 +1,56 @@
-Return-Path: <linux-usb+bounces-14927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14928-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B93974A17
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 08:05:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84234974A20
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 08:08:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D02992884CF
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 06:05:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E63252885DC
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 06:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997436A33B;
-	Wed, 11 Sep 2024 06:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A9C84E18;
+	Wed, 11 Sep 2024 06:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZFxIeYVn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d5k3Rtgp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B36F40849;
-	Wed, 11 Sep 2024 06:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C8F7E111;
+	Wed, 11 Sep 2024 06:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726034709; cv=none; b=gJwjpz1jLVzx4UwW1FquxNp/Nx4NDAFlbRjT2D0K5O4Nu9Q6w7fy0ttzw+e5NBgMdTGCHRddQ722kdse3vXBNSyQGQVU2/GXf9bVB3dVTgxULZjelLCOF4mqu+LD1gi/DFHutdyPwMzJ/IY8tjLJjsa7opaTJCMFiJfvcDWleJE=
+	t=1726034906; cv=none; b=djfyLDtJH3w0HFUfzpuSDkI3Yb0YJw2e0Yo9eg6XMjsqV5pTyAPvOV3DDEyUAIHKqYqsN6vk1qFvb2yllx+4rCUOyBs0qQ1YyxMjrkgSfgrGPU7RSMkAhaIPcbjvjygPLrOJeCBfvx+k8TaFqJGawRnkGe91EpAQYWI8ZdqwVZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726034709; c=relaxed/simple;
-	bh=oS6W6RuD01zziSDUkNdAa9V8LFDpaby7DxbfQdP+WyQ=;
+	s=arc-20240116; t=1726034906; c=relaxed/simple;
+	bh=1adCz8OwlbTinoU7Gfr9pEp20l0uXSi0C6wqrnrmsPs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KeWmxVKfOpH+ngLpJlVKtI/zJkH6NMBbbuLR5SxIC5M6pD+bKmMQ5a3zRHrO2CDzRIZVmHigcDR+P8vCHM2TJmQxhQGmHx66xps8/yEktFXUqKr8oxs1v3ln8rFbTmyPia24G6Fc7aw6cAlTinBF56vxbinMWLHRZ3Lgkt4h6fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZFxIeYVn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29B1C4CEC5;
-	Wed, 11 Sep 2024 06:05:08 +0000 (UTC)
+	 Content-Disposition; b=icmcuBoXge8Sm3BFfE1S7DVBMPy2TCu/L/zwhu3eIz/DRAqsBACLmRTs8O06vUlAYd/Ye7d0pxthq8ZnrXjV05AMzd6g6XrZjeEnRIO6c3aLNdVphMckULuF54gJXOkWXoGd7jScLq2DMTaiMoCSzrC0No94uNi+gcCMX6tFjII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d5k3Rtgp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF90C4CEC6;
+	Wed, 11 Sep 2024 06:08:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726034708;
-	bh=oS6W6RuD01zziSDUkNdAa9V8LFDpaby7DxbfQdP+WyQ=;
+	s=k20201202; t=1726034905;
+	bh=1adCz8OwlbTinoU7Gfr9pEp20l0uXSi0C6wqrnrmsPs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ZFxIeYVnrkP5hegcl50Fe4tO2Bl8UnO1W+s0h2TOgm6f18RWhlm5ejUcJ6GFsRQ/E
-	 QZjltk8XovkjcMBlKtadpgiQvmnrG+oa8NuFQ9qQY43rGyMWlc+SSWODNoHl+Csroz
-	 x8B27WAmyOcY53lcCJBolvzHMsLd+ftz7K6WodZcks1JPNeEBwV7XEY+jvuDzECL0Y
-	 DUk8L1KRKkBEVF+HvZbSlC0J7U6Xt+Ti6CG007xlhXGisYmtxWAxeS2roWUM4GiBX1
-	 Dgt+c7S3WHKJd+CGEQvvTp+HiKzYypAZRnhCr69kPOFvgQsbOTNpZV4a49mXrnehkA
-	 AQYha9KfPWrPA==
+	b=d5k3RtgpVBF/P7sradWD6RM5uY9/xWs5b8zUyhitAGba5V3SWdG8D5ID+VHzLPd1z
+	 gSsHPxGUD/FXawEMXMQfha5sdLnCkVAYF2PQQeEauEAiTtRDDy69jh5jpOjp1DvD1J
+	 WRT0J2BNS/iNMVNh1+gc6PofrdWzo22j+XZN0Wmle+8r3siN0Jmlk/yYFkoLoXzxx0
+	 pOV4/iuZi4JDzERdxsjHTW8xsc6FFkDD+GCHwC4h1/xWERS69zYWxGGX/wPJnwD2WE
+	 e5pvV530hctcY1eqeYdQRnXbmGpewF7GE5XKgeYsdgIazHfceCPT//ws+W2DxHT/pe
+	 bQkyhrreGFWxg==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1soGTm-000000005SH-3toq;
-	Wed, 11 Sep 2024 08:05:26 +0200
-Date: Wed, 11 Sep 2024 08:05:26 +0200
+	id 1soGWx-000000005Yg-3d3r;
+	Wed, 11 Sep 2024 08:08:43 +0200
+Date: Wed, 11 Sep 2024 08:08:43 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 6.12-rc1
-Message-ID: <ZuEzJgTKeD0RscpX@hovoldconsulting.com>
+Subject: [GIT PULL] USB-serial fixes for 6.12-rc1-2
+Message-ID: <ZuEz67ehYXIG8AXB@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,89 +60,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-The following changes since commit 47ac09b91befbb6a235ab620c32af719f8208399:
+The following changes since commit 431c1646e1f86b949fa3685efc50b660a364c2b6:
 
-  Linux 6.11-rc4 (2024-08-18 13:17:27 -0700)
+  Linux 6.11-rc6 (2024-09-01 19:46:02 +1200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.12-rc1
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.12-rc1-2
 
-for you to fetch changes up to 4c0d9477ba69a417c698aec1d3012e188cf97add:
+for you to fetch changes up to 7d47d22444bb7dc1b6d768904a22070ef35e1fc0:
 
-  USB: serial: kobil_sct: restore initial terminal settings (2024-08-26 15:29:27 +0200)
-
-----------------------------------------------------------------
-USB-serial updates for 6.12-rc1
-
-Here are the USB-serial updates for 6.12-rc1, including:
-
- - fix kobil_sct initial terminal settings
- - set driver owner when registering drivers
-
-All have been in linux-next with no reported issues.
+  USB: serial: pl2303: add device id for Macrosilicon MS3020 (2024-09-06 17:11:13 +0200)
 
 ----------------------------------------------------------------
-Johan Hovold (1):
-      USB: serial: kobil_sct: restore initial terminal settings
+USB-serial device id for 6.12-rc1
 
-Krzysztof Kozlowski (2):
-      USB: serial: set driver owner when registering drivers
-      USB: serial: drop driver owner initialization
+Here's a new pl2303 device id.
 
- drivers/usb/serial/aircable.c          |  1 -
- drivers/usb/serial/ark3116.c           |  1 -
- drivers/usb/serial/belkin_sa.c         |  1 -
- drivers/usb/serial/ch341.c             |  1 -
- drivers/usb/serial/cp210x.c            |  1 -
- drivers/usb/serial/cyberjack.c         |  1 -
- drivers/usb/serial/cypress_m8.c        |  3 ---
- drivers/usb/serial/digi_acceleport.c   |  2 --
- drivers/usb/serial/empeg.c             |  1 -
- drivers/usb/serial/f81232.c            |  2 --
- drivers/usb/serial/f81534.c            |  1 -
- drivers/usb/serial/ftdi_sio.c          |  1 -
- drivers/usb/serial/garmin_gps.c        |  1 -
- drivers/usb/serial/generic.c           |  1 -
- drivers/usb/serial/io_edgeport.c       |  4 ----
- drivers/usb/serial/io_ti.c             |  2 --
- drivers/usb/serial/ipaq.c              |  1 -
- drivers/usb/serial/ipw.c               |  1 -
- drivers/usb/serial/ir-usb.c            |  1 -
- drivers/usb/serial/iuu_phoenix.c       |  1 -
- drivers/usb/serial/keyspan.c           |  4 ----
- drivers/usb/serial/keyspan_pda.c       |  2 --
- drivers/usb/serial/kl5kusb105.c        |  1 -
- drivers/usb/serial/kobil_sct.c         |  4 +---
- drivers/usb/serial/mct_u232.c          |  1 -
- drivers/usb/serial/metro-usb.c         |  1 -
- drivers/usb/serial/mos7720.c           |  1 -
- drivers/usb/serial/mos7840.c           |  1 -
- drivers/usb/serial/mxuport.c           |  1 -
- drivers/usb/serial/navman.c            |  1 -
- drivers/usb/serial/omninet.c           |  1 -
- drivers/usb/serial/opticon.c           |  1 -
- drivers/usb/serial/option.c            |  1 -
- drivers/usb/serial/oti6858.c           |  1 -
- drivers/usb/serial/pl2303.c            |  1 -
- drivers/usb/serial/qcaux.c             |  1 -
- drivers/usb/serial/qcserial.c          |  1 -
- drivers/usb/serial/quatech2.c          |  1 -
- drivers/usb/serial/safe_serial.c       |  1 -
- drivers/usb/serial/sierra.c            |  1 -
- drivers/usb/serial/spcp8x5.c           |  1 -
- drivers/usb/serial/ssu100.c            |  1 -
- drivers/usb/serial/symbolserial.c      |  1 -
- drivers/usb/serial/ti_usb_3410_5052.c  |  2 --
- drivers/usb/serial/upd78f0730.c        |  1 -
- drivers/usb/serial/usb-serial-simple.c |  1 -
- drivers/usb/serial/usb-serial.c        | 12 +++++++-----
- drivers/usb/serial/usb_debug.c         |  2 --
- drivers/usb/serial/visor.c             |  3 ---
- drivers/usb/serial/whiteheat.c         |  2 --
- drivers/usb/serial/wishbone-serial.c   |  1 -
- drivers/usb/serial/xr_serial.c         |  1 -
- drivers/usb/serial/xsens_mt.c          |  1 -
- include/linux/usb/serial.h             |  7 +++++--
- 54 files changed, 13 insertions(+), 78 deletions(-)
+This one has been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Junhao Xie (1):
+      USB: serial: pl2303: add device id for Macrosilicon MS3020
+
+ drivers/usb/serial/pl2303.c | 1 +
+ drivers/usb/serial/pl2303.h | 4 ++++
+ 2 files changed, 5 insertions(+)
 
