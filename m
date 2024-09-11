@@ -1,83 +1,193 @@
-Return-Path: <linux-usb+bounces-14951-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14952-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2E77975492
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 15:52:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2571C9754E3
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 16:00:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D347282734
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 13:52:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B6EC1F21B39
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 14:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FB5199949;
-	Wed, 11 Sep 2024 13:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TfonS4uG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB4C19CC15;
+	Wed, 11 Sep 2024 13:59:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEDD18593F;
-	Wed, 11 Sep 2024 13:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B825141A80
+	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726062638; cv=none; b=K0SegHNKIOnQzsP9FKu0nA4Tcn3H/16w5Z1GvxzCnfGNKVRm2vV4BwZe+WFziM883kBj+9o3vmxN+wVeSEbdd4RJe47G+d2rjE1GzW+sRw65sREoMbKikuZRTF/eJK0OEjOqJglisdgsBczLeZI7EY3i5BGU9upARKeEivR4an0=
+	t=1726063161; cv=none; b=Oz4bevElS8Z/zzg9K0/Y53Quuz571j2LgWhUbL6CzLqggshIyFkR5iBbOE1S/QZpPO9hZx8K/Q/gIhkpZ9yMDwsmHNAW/0ElduQ95iutGYdTbjvARhl5K+DiSNDLAXlqvsPFuJwxiwWiT6r43IjxNvLThKJSxAV3ePCJcdSDUSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726062638; c=relaxed/simple;
-	bh=j6g3n6ztpZlP10F3yPeE6CvPv6QkWwHvhtKHzXMVn2A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=msv26mw3VPGZt5/LvFg2taEAWwUEx0ERejVE96EWq97kf1uumTbQ+36Xl9SqzO7pmVt5cTMT8QU5W6wUXhSG+vkFh5Dh8QNWBhrsGExdct8m1XjCpF9S6UgOPSjFlOFQeU+x0cvVlm4nDsTwRqVMk7ghkyv67CuJsimrabk9tGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TfonS4uG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C3AC4CEC0;
-	Wed, 11 Sep 2024 13:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726062637;
-	bh=j6g3n6ztpZlP10F3yPeE6CvPv6QkWwHvhtKHzXMVn2A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TfonS4uGyBE2rJqMkVBvyBLj+X+lKerJnjvCJKY8IkDlwe9W9ZS501Oa438JkOaee
-	 YCiCGL3w+L+Kdc9dUNH/Ts1zRZJQIjxxHLYe9fO6B2j8RhT0/h+VEoAu5h09zAstVa
-	 fGqY/jaPWA6yyWUpfa/IKMzg+bKviOLvF+2n6fkp5MevWYlzBAKvp5exyb/BX6Yx0/
-	 RWqUOrIaRxk3wqwSji4nm0Ar6A4dQ6Ss3PMJe1P2jURdNB4a0AxNrIkQ4C+D+q7Wq2
-	 YYD1sfsn25B9d4fevHJZvGXcAW6VFBxMaSp179AbvUaS9Mj/p84PqQrZxn/srxRx+E
-	 o8Jgu4a5r/rkA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1soNkF-000000006D9-3UJt;
-	Wed, 11 Sep 2024 15:50:56 +0200
-Date: Wed, 11 Sep 2024 15:50:55 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 6.12-rc1-2
-Message-ID: <ZuGgPxNo6BMryM-c@hovoldconsulting.com>
-References: <ZuEz67ehYXIG8AXB@hovoldconsulting.com>
- <2024091114-duplex-grit-f5a7@gregkh>
+	s=arc-20240116; t=1726063161; c=relaxed/simple;
+	bh=j/IOnyIDuox47ClSTUNzfwKZIVR3liYG+wB+hgxQfss=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=a26SLnEJh704A8nCi4WEE+qV0pCHvMnwppGRNzNBrNgwyVKYW9ZohZWJtAwPQ/TnQOII4KYIZqjexirp6MoTwL7sJV8s0pwT9ZcIvONlJOcxenLMfP84G9r8b4bBSy7Ww2z0QdLvBcODQQMADjqYGxPi5EGO3VOEE0Iho87jcCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-39f53b1932aso119554495ab.3
+        for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 06:59:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726063159; x=1726667959;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iyFSjWPsVOn4jot16e15VF13cbZtKB2RZwrXgLJVpIs=;
+        b=YFuJe7jXOAN1BUrFv9EGlIfqI2QFaF9GBlx1IBZpkhEpE/S3QVognZC3slYKgVwCex
+         NKSqdXA2ntnueeAhGZ3V1hKbSkpu98m4Kb0iD2LwJK7kMVlu0E4GbLPia9pfx7HYlE3r
+         ZfENAb4rLb554l3uefEPaMd/pqsH4WjiD+UdpNFFqQZRKZVyRbxRfPJKkhHQMWvEzkTv
+         SpCx/ikuwZPySozCt2fxT7v8nlhHdBUHGF9gF/Zh8Q6sdGCHpuWncFWnvBMM4OFkdOgc
+         dSPeNRjWAU7ssJd+tfH4rfKM9P1LduYaIRxJxeQV+VgOca/6VGvwx6i9DRpw6JLdHjAM
+         y/ow==
+X-Forwarded-Encrypted: i=1; AJvYcCVIAK+yncinEiG8rdfze8WaH5JiqPTjl2XCjxRPqWquq7R9EezcLQRjf2DFWJMRgVOxwUfkNu/1hlM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm9pjJDyEt9RpSrN1wXeBv0HlFUSmTWzUfkhsZ3QHWeDzIxvfA
+	L2bxEHdukUmt2uLa4fuXHQvbQebmOBpz3usqXhvACaHyqnGk/+xCfIarfMxLBuu/vswLI8AjtZb
+	l80jngQrdvVWRVfFbu4ZTQvAdMRXT0O908wmenmsgcavIvKnRPxqnx+0=
+X-Google-Smtp-Source: AGHT+IHCax3tASed1rU34Ah0qudPhtB1RGSc/HnK4mmJeBkYaGKzhZbvAr1AsvbFj/vUqH+9+0fmI1tVQH2fBKH4vnx7i7z5uKRB
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024091114-duplex-grit-f5a7@gregkh>
+X-Received: by 2002:a05:6e02:b27:b0:3a0:4c75:3aed with SMTP id
+ e9e14a558f8ab-3a04f0ee4c4mr216510885ab.25.1726063158765; Wed, 11 Sep 2024
+ 06:59:18 -0700 (PDT)
+Date: Wed, 11 Sep 2024 06:59:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007038c00621d865b7@google.com>
+Subject: [syzbot] [usb?] INFO: task hung in adu_release
+From: syzbot <syzbot+b67c1b86d4e644a5cb6d@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Sep 11, 2024 at 03:24:35PM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Sep 11, 2024 at 08:08:43AM +0200, Johan Hovold wrote:
-> > The following changes since commit 431c1646e1f86b949fa3685efc50b660a364c2b6:
-> > 
-> >   Linux 6.11-rc6 (2024-09-01 19:46:02 +1200)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.12-rc1-2
-> 
-> I've pulled this into my usb-next branch as it's too late for 6.11.
+Hello,
 
-Yes, I assumed so (and referred to 6.12 in the tag and Subject).
+syzbot found the following issue on:
 
-Thanks.
+HEAD commit:    9c0c11bb87b0 xhci: support setting interrupt moderation IM..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a0189f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4a1ccb5ad00c3ba6
+dashboard link: https://syzkaller.appspot.com/bug?extid=b67c1b86d4e644a5cb6d
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ae6ffb980000
 
-Johan
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d41cb6c3e427/disk-9c0c11bb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1beec7548c8b/vmlinux-9c0c11bb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/66b2bb190ac1/bzImage-9c0c11bb.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b67c1b86d4e644a5cb6d@syzkaller.appspotmail.com
+
+INFO: task syz.0.63:3967 blocked for more than 143 seconds.
+      Not tainted 6.11.0-rc6-syzkaller-g9c0c11bb87b0 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz.0.63        state:D stack:27872 pid:3967  tgid:3961  ppid:3214   flags:0x00004006
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5188 [inline]
+ __schedule+0xcda/0x2f80 kernel/sched/core.c:6529
+ __schedule_loop kernel/sched/core.c:6606 [inline]
+ schedule+0xe7/0x350 kernel/sched/core.c:6621
+ usb_kill_urb.part.0+0x1ca/0x250 drivers/usb/core/urb.c:713
+ usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:702
+ adu_abort_transfers drivers/usb/misc/adutux.c:129 [inline]
+ adu_release_internal drivers/usb/misc/adutux.c:302 [inline]
+ adu_release+0x545/0x720 drivers/usb/misc/adutux.c:331
+ __fput+0x408/0xbb0 fs/file_table.c:422
+ task_work_run+0x14e/0x250 kernel/task_work.c:228
+ exit_task_work include/linux/task_work.h:40 [inline]
+ do_exit+0xaa3/0x2b30 kernel/exit.c:882
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1031
+ get_signal+0x25fb/0x2770 kernel/signal.c:2917
+ arch_do_signal_or_restart+0x90/0x7e0 arch/x86/kernel/signal.c:310
+ exit_to_user_mode_loop kernel/entry/common.c:111 [inline]
+ exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
+ syscall_exit_to_user_mode+0x147/0x260 kernel/entry/common.c:218
+ do_syscall_64+0xda/0x250 arch/x86/entry/common.c:89
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f6e0ed1cef9
+RSP: 002b:00007f6e0e71b0e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00007f6e0eed62e8 RCX: 00007f6e0ed1cef9
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f6e0eed62e8
+RBP: 00007f6e0eed62e0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6e0eed62ec
+R13: 0000000000000000 R14: 00007ffcc5944490 R15: 00007ffcc5944578
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/30:
+ #0: ffffffff88ebb660 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:326 [inline]
+ #0: ffffffff88ebb660 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:838 [inline]
+ #0: ffffffff88ebb660 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x75/0x340 kernel/locking/lockdep.c:6626
+2 locks held by getty/2606:
+ #0: ffff888108adf0a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
+ #1: ffffc900000432f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xfc8/0x1490 drivers/tty/n_tty.c:2211
+1 lock held by syz.0.63/3967:
+ #0: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_release+0xcf/0x720 drivers/usb/misc/adutux.c:323
+2 locks held by syz.0.110/4656:
+ #0: ffffffff899affb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x27/0x2f0 drivers/usb/core/file.c:38
+ #1: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_open+0x5d/0x820 drivers/usb/misc/adutux.c:236
+2 locks held by syz.0.110/4657:
+ #0: ffffffff899affb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x27/0x2f0 drivers/usb/core/file.c:38
+ #1: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_open+0x5d/0x820 drivers/usb/misc/adutux.c:236
+2 locks held by syz.0.110/4658:
+ #0: ffffffff899affb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x27/0x2f0 drivers/usb/core/file.c:38
+ #1: ffffffff89ad3688 (adutux_mutex){+.+.}-{3:3}, at: adu_open+0x5d/0x820 drivers/usb/misc/adutux.c:236
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 UID: 0 PID: 30 Comm: khungtaskd Not tainted 6.11.0-rc6-syzkaller-g9c0c11bb87b0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:93 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:119
+ nmi_cpu_backtrace+0x27b/0x390 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x29c/0x300 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:162 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:223 [inline]
+ watchdog+0xf0c/0x1240 kernel/hung_task.c:379
+ kthread+0x2c1/0x3a0 kernel/kthread.c:389
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0 skipped: idling at native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
+NMI backtrace for cpu 0 skipped: idling at arch_safe_halt arch/x86/include/asm/irqflags.h:106 [inline]
+NMI backtrace for cpu 0 skipped: idling at acpi_safe_halt+0x1a/0x20 drivers/acpi/processor_idle.c:111
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
