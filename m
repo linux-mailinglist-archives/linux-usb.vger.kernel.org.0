@@ -1,112 +1,101 @@
-Return-Path: <linux-usb+bounces-14961-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40DF9759DF
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 20:03:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C31F2975D99
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 01:10:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F4A51F242B2
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 18:03:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 930BC283EE8
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2024 23:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C723F1B142E;
-	Wed, 11 Sep 2024 18:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69A81A3047;
+	Wed, 11 Sep 2024 23:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="aaSKblFw"
+	dkim=pass (1024-bit key) header.d=rosa.ru header.i=@rosa.ru header.b="OTikq7Lx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.rosa.ru (mail.rosa.ru [176.109.80.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD01A2EAE5
-	for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 18:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212D22F30;
+	Wed, 11 Sep 2024 23:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.109.80.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726077799; cv=none; b=nVD0PjalJ7YnzDKP7XgI+2q3vvds2BzQdMWc81/0YFIj3C3zAg/sAN95Ci7Tos3Fo99PcRgm3vcRkLJy045PIbbT/hyP/M8/DPYf8dz8JBhjyhGlsNDNWO+NjtpqBQHQt8ZyF1pYuPuG3p7Ar+lVsuQZYVcEKM75XRWzyn6MpfE=
+	t=1726096218; cv=none; b=Qis1DSzVi3ZWaMG/1mDJ8EuyEZyO4kZOssQ+hVlmJI4uEPGFCqb7i9urnI3SstpBSV6HntaZLhO7tjzxFZtI3PpHx1dMVdM9gMi7JiXahAKSnIO6PS5pvm/W+QahruemiAwI/KECmg9J+cg4Qax6s6FXroIT8jRD+JPRVc3GwRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726077799; c=relaxed/simple;
-	bh=PG+qKQYMIgNQK7DxMVy+Isa/87GSFduVnbXPEig0kjU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i4mnjDEZtfVd+MjwojbyiKvmGItwUGeTYVDv+5vWT6FG55Ek9VAVpqQmOK98ypuEHcYjeJN/joswWo7IDpA2v47jjgoDi4lKjFpSO4DRiGtfGEFrNhn/h6JRROhaEClAOtZJ/i9cHS+C3w2SsEupfSX9PgtvnvLMSMOtZlmQhAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=aaSKblFw; arc=none smtp.client-ip=199.89.1.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4X3pMg46rRz6ClY9S;
-	Wed, 11 Sep 2024 18:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1726077787; x=1728669788; bh=1ManA1WjnnLn5YviY+MrWlEP
-	Hesfqe0hd8uZWMu3HlU=; b=aaSKblFwF4eKtGeXmqDFQ76xGet8X6jCxqZGbGZK
-	LaIT9b5EkQo7IoaQ1XnmfdLy2OYkRyiZTusnGhckY8VARu7k2qulD7l5B57xQGvF
-	9zOVJkDvhjEZHiyASehne+/M84XjfDBcvukk9OxM6tlKSp9Zzw9VjN0ALLuMe/OW
-	ToXT7H0cwGmDqFL4KxEtALA6Mcxwqnu5ozV1VmcspaxBEsSJSIFr04NAJqe1lEN3
-	amq0GCwADjZ6L1CCioQZXBhoxjOJZnjvWr9Px/PCWL1hCifPM36w16DfxUp1czka
-	RNYp0XwRV9h6VZx7KTNUX/GpbffCq0pf9Ja+w7Skp8vc9Q==
-X-Virus-Scanned: by MailRoute
-Received: from 008.lax.mailroute.net ([127.0.0.1])
- by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id vnvvPappUYIH; Wed, 11 Sep 2024 18:03:07 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4X3pMY6vhMz6ClY9R;
-	Wed, 11 Sep 2024 18:03:05 +0000 (UTC)
-Message-ID: <10b5b9c9-016c-4d38-850a-63dfe9f3e9ed@acm.org>
-Date: Wed, 11 Sep 2024 11:03:03 -0700
+	s=arc-20240116; t=1726096218; c=relaxed/simple;
+	bh=1hJMu9DLeokC/nbTuI8d+HfcTEk4y33TTTHXBH6FcYQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Hi+SJVp2Fq0QekoXnX92I1QOSVOo5x1B0prEZdLr9rF92qoG0R1rs184MOzroDGTauhnYLrHVDx9AKCwdcIPxAkdZlNDYdgNYO+Yah3YTt9mxIZSeEe8GAVn5q2y9wdWO9R7ohwsK1HgaiT7lAxyXGprFhf7you39CXsqUdYoJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rosa.ru; spf=pass smtp.mailfrom=rosa.ru; dkim=pass (1024-bit key) header.d=rosa.ru header.i=@rosa.ru header.b=OTikq7Lx; arc=none smtp.client-ip=176.109.80.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rosa.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosa.ru
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=rosa.ru; s=mail;
+	bh=1hJMu9DLeokC/nbTuI8d+HfcTEk4y33TTTHXBH6FcYQ=;
+	h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From;
+	b=OTikq7LxpQeZnZbcIsMUaWC4P1NSPlNlK5+phEIeXv0Z2uaVAI/onccQoKmG2pMdPU1Q7dVCC7H
+	GxhH9Sb/LRMfDQSjS8p1hsuDO1ELipGw4LreEMtb4FJNU48sN46pQBd8A1sWblGVnxwYPRUj+ugQr
+	BA2Q8Hes2BhUAlUGc3A=
+Received: from [31.135.99.32] (account m.arhipov@rosa.ru HELO localhost.localdomain)
+  by mail.rosa.ru (CommuniGate Pro SMTP 6.4.1j)
+  with ESMTPSA id 129029; Thu, 12 Sep 2024 01:10:00 +0300
+From: Mikhail Arkhipov <m.arhipov@rosa.ru>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mikhail Arkhipov <m.arhipov@rosa.ru>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: [PATCH] usb: gadget: udc: net2280: Fix NULL pointer dereference in net2280_free_request
+Date: Thu, 12 Sep 2024 01:09:23 +0300
+Message-Id: <20240911220923.13628-1-m.arhipov@rosa.ru>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] Fix a lockdep complaint related to USB role
- switching
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
- Andy Shevchenko <andy.shevchenko@gmail.com>,
- Amit Sunil Dhamne <amitsd@google.com>
-References: <20240905204709.556577-1-bvanassche@acm.org>
- <2024091144-throwing-stucco-65f1@gregkh>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <2024091144-throwing-stucco-65f1@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/11/24 6:41 AM, Greg Kroah-Hartman wrote:
-> On Thu, Sep 05, 2024 at 01:47:06PM -0700, Bart Van Assche wrote:
->> This patch series suppresses a lockdep complaint about recursive locking
->> that is triggered by switching USB roles. Please consider this patch series
->> for the next merge window.
-> 
-> I already took this commit into my tree for -rc1:
-> 	https://lore.kernel.org/r/20240822223717.253433-1-amitsd@google.com
-> 
-> It's almost identical to yours, but you are messing with mutex states
-> here, why?
+When the function net2280_free_request is called with a NULL _ep pointer,
+the function still tries to dereference _ep before returning. This leads
+to a NULL pointer dereference and possible kernel panic.
 
-What does "messing with mutex states" mean in this context? My patch 3/3
-does not modify the mutex lock class key at runtime. Instead, it
-sets the mutex lock class key when the mutex is initialized. I think
-this is a cleaner approach than modifying the lock class key at runtime.
+This bug can be triggered when a USB endpoint is removed unexpectedly
+and the driver attempts to free resources associated with it.
 
-> I'll be glad to take a series on top of that one if you can
-> describe why this one is "more correct" that that one.
+Move the NULL check before calling container_of to ensure that the
+function does not attempt to dereference a NULL pointer. This prevents
+the kernel from crashing when either _ep or _req is NULL.
 
-I will rebase my patch series on top of your for-next branch. I think
-there is agreement that the approach of patch 3/3 in this series is
-slightly better than the approach of the patch that has already been
-queued.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Thanks,
+Signed-off-by: Mikhail Arkhipov <m.arhipov@rosa.ru>
+---
+ drivers/usb/gadget/udc/net2280.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Bart.
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index 1b929c519cd7..3e8280fa3207 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -582,13 +582,12 @@ static void net2280_free_request(struct usb_ep *_ep, struct usb_request *_req)
+ 	struct net2280_ep	*ep;
+ 	struct net2280_request	*req;
+ 
+-	ep = container_of(_ep, struct net2280_ep, ep);
+ 	if (!_ep || !_req) {
+-		dev_err(&ep->dev->pdev->dev, "%s: Invalid ep=%p or req=%p\n",
+-							__func__, _ep, _req);
++		dev_err(NULL, "%s: Invalid ep=%p or req=%p\n", __func__, _ep, _req);
+ 		return;
+ 	}
+ 
++	ep = container_of(_ep, struct net2280_ep, ep);
+ 	req = container_of(_req, struct net2280_request, req);
+ 	WARN_ON(!list_empty(&req->queue));
+ 	if (req->td)
+-- 
+2.39.3 (Apple Git-146)
 
 
