@@ -1,183 +1,232 @@
-Return-Path: <linux-usb+bounces-14966-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14967-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E820975EB7
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 04:05:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71DA1975FA3
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 05:22:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 472DE1C229B0
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 02:05:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F1CAB2103C
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 03:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3053A1DB;
-	Thu, 12 Sep 2024 02:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BDDC13B586;
+	Thu, 12 Sep 2024 03:21:48 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D397F2BB0D
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 02:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4EF7581A;
+	Thu, 12 Sep 2024 03:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726106726; cv=none; b=pVDqFQ09o6ds9r5kS9QqKn4klu9RjfQ3LBYakITFOr6YOcqcG4cq633ziFUBILKip7WsFL98e+criATCebw7BjrJSgwRhB0e1QN2cJvSdVMJc4LUxnw9rHHMhy3C2kyCjUniL1Ths9lvsGvOT9ghYSff5KNSb4Tkun22SM64Of0=
+	t=1726111308; cv=none; b=qS1Ao74mMZLynUTBV6h4TCIDKoL8c98/jgODlP0Ltm1f5wxSSmaHGjkl4qUSh4e4qHCxXZ8hIgCfKZX6TGB1I8aWpb8q0lWOxlRLwA0373LfAuCrdYpDayUVA3I+mOw8ZXassHO7NLfonW06INHMLuN4iXp7t7Gy9xx+U67YFmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726106726; c=relaxed/simple;
-	bh=k1DDeLrPo9bZi3s9wB1xBQAJvMDXKriKzFRnWJPeDrU=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=FDCUtOfLHhX3gLHxOfZApCMEmDrSMekjW7/QbNmDn49dDflYAf09EzopNGputFwiz+sU2vpB1sSPi6owlM09uIlrIp9tzCM/sv+GPFlsTIQoOU82uJ3VL+Ww4XEj+HwscddE2N47eSvszxb4xteuMgW13r5cT+5UBiYt3Bb1lIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-82cea2c4e35so84111939f.3
-        for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 19:05:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726106724; x=1726711524;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YirzoZYB9q5g6bsdYZqQML31UlBw4n3vWu4awKz582k=;
-        b=ksITvEO6RXF9Eus+nqTNnCfZjbGGkzkngFbyN3h26jllyjRZe7Y40HenRttGE5big4
-         LVVcbvY4NvXyYOMJfdurmsXoy69pGRE1yFZGeMbWTFBHytpV5j5B5f+hWQM3vuzY73rY
-         u1LgFJm/MlJCwQw8RGdKQbb+qWLaGN2PnD+9GkAeRKtPq7CdgWLBMxOtC+iYUbLFfXoB
-         8eNRp/btRazdbcFNaN5a25q3YHrF1HoFzOuqNpuresg4fLYWsALGbWGuk3x2MHmb7k/9
-         ECfz6KsWBVaTgquTieA7tv8ha+nTSgbISkeJtn/kHTuNkl55nn87EyScM2ztsvU2pCxc
-         krSw==
-X-Forwarded-Encrypted: i=1; AJvYcCUsCpHY10UrdjD6pZP41wmdMoAxOZOOS0yutjOgv6Hcv2ajxnTdif1bmD+1s+assLOj4ErKj5UwG4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1zkrkdCQq/+T7rkeIawKwmQdVydeYUKwzaq/FWOui/CKRdsul
-	dhMc+FIF58LHLcsFnayNta0ksn3CHBNDsKIr8sC2BeuKmvM/6gKm+95LGR/FXIfBjwUa+DpOARq
-	X/xSB0PgI9YLMg6BKD7YOaxGNtF2gSVgqCGbS/fW7GAMhZRBq2vgtKgk=
-X-Google-Smtp-Source: AGHT+IFZ7aFQAsf1717hAdU4186B4n2uwnowmnHld6LVEudo/jNaLUaZ6zSVX31IQ3dq5sJ9lvvPDWRqsNp5QMXo6Q1ey39NuhZW
+	s=arc-20240116; t=1726111308; c=relaxed/simple;
+	bh=ph0wr14BP3HBKS0NCJK84D/bKgdyPh+ABfrWRJkXg3c=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eqXLnsZnkxDi6H3qmlFDlQOLk7T1Fvai7eQmgrh+sSASypRFziqAWKU3N/lUj8Tx5Wm+sIRBlCQDQdgld/rTtZ48GKovwjR3kYSbX8VArZZYgPJSWoQN57Yv8a/j4FNgbIFdlbpBUpswaruQ5OQOpej3xaTF8h8LtbKSQucGPwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1a3d4df270b611efa216b1d71e6e1362-20240912
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:761ef5a2-2666-48e2-a4c3-7bd4fc1a22b1,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-INFO: VERSION:1.1.38,REQID:761ef5a2-2666-48e2-a4c3-7bd4fc1a22b1,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:-5
+X-CID-META: VersionHash:82c5f88,CLOUDID:efb5a396d9a204eefb3f6d6105fe1332,BulkI
+	D:2409062205428B690IWE,BulkQuantity:8,Recheck:0,SF:64|66|17|19|102,TC:nil,
+	Content:1|-5,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,CO
+	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-UUID: 1a3d4df270b611efa216b1d71e6e1362-20240912
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 206081397; Thu, 12 Sep 2024 11:21:29 +0800
+Message-ID: <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
+	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date: Thu, 12 Sep 2024 11:21:26 +0800
+In-Reply-To: <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
+References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+	 <1725931490447646.3.seg@mailgw.kylinos.cn>
+	 <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+	 <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:154f:b0:3a0:4250:165f with SMTP id
- e9e14a558f8ab-3a0847d0c17mr12778215ab.0.1726106723927; Wed, 11 Sep 2024
- 19:05:23 -0700 (PDT)
-Date: Wed, 11 Sep 2024 19:05:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001fdbd80621e28ae3@google.com>
-Subject: [syzbot] [usb?] KMSAN: kernel-infoleak in iowarrior_read
-From: syzbot <syzbot+b8080cbc8d286a5fa23a@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+=E5=9C=A8 2024-09-11=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:40 -0400=EF=BC=
+=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Sep 10, 2024 at 05:36:56PM +0800, duanchenghao wrote:
+> > S4 wakeup restores the image that was saved before the system
+> > entered
+> > the S4 sleep state.
+> >=20
+> > =C2=A0=C2=A0=C2=A0 S4 waking up from hibernation
+> > =C2=A0=C2=A0=C2=A0 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > =C2=A0=C2=A0=C2=A0 kernel initialization
+> > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 freeze user task and kernel thread
+> > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 load saved image
+> > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 freeze the peripheral device and controller
+> > =C2=A0=C2=A0=C2=A0 (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB.=
+ If it is
+> > set,
+> > =C2=A0=C2=A0=C2=A0=C2=A0 return to EBUSY and do not perform the followi=
+ng restore
+> > image.)
+>=20
+> Why is the flag set at this point?=C2=A0 It should not be; the device and=
+=20
+> controller should have been frozen with wakeup disabled.
+>=20
+This is check point, not set point. When the USB goes into a suspend
+state, the HCD_FLAG_WAKEUP_PENDING flag is checked, and if it is found
+that the USB is in the process of resuming, then an EBUSY error is
+returned.
 
-syzbot found the following issue on:
+> > =C2=A0=C2=A0=C2=A0 |
+> > =C2=A0=C2=A0=C2=A0 v
+> > =C2=A0=C2=A0=C2=A0 restore image(task recovery)
+>=20
+> > > > However, upon detecting that the hcd is in the
+> > > > HCD_FLAG_WAKEUP_PENDING state,
+> > > > it will return an EBUSY status, causing the S4 suspend to fail
+> > > > and
+> > > > subsequent task recovery to not proceed.
+> > >=20
+> > > What will return an EBUSY status?
+> >=20
+> > if HCD_FLAG_WAKEUP_PENDING flag is set_bit, will return EBUSY.
+>=20
+> I meant: Which function will return EBUSY status?=C2=A0 The answer is in
+> the=20
+> log below; hcd_pci_suspend() does this.
+>=20
+> > > Why do you say that S4 suspend will fail?=C2=A0 Aren't you talking
+> > > about
+> > > S4=20
+> > > wakeup?
+> >=20
+> > After returning EBUSY, the subsequent restore image operation will
+> > not
+> > be executed.
+> >=20
+> > >=20
+> > > Can you provide a kernel log that explains these points and shows
+> > > what=20
+> > > problem you are trying to solve?
+> >=20
+> > [=C2=A0=C2=A0=C2=A0 9.009166][ 2] [=C2=A0 T403] PM: Image signature fou=
+nd, resuming
+> > [=C2=A0=C2=A0=C2=A0 9.009167][ 2] [=C2=A0 T403] PM: resume from hiberna=
+tion
+> > [=C2=A0=C2=A0=C2=A0 9.009243][ 2] [=C2=A0 T403] inno-codec inno-codec.1=
+6.auto:
+> > [inno_vpu][vpu_notifier:1540]vpu_notifier: untested action 5...
+> > [=C2=A0=C2=A0=C2=A0 9.009244][ 2] [=C2=A0 T403] Freezing user space pro=
+cesses ...
+> > (elapsed
+> > 0.001 seconds) done.
+> > [=C2=A0=C2=A0=C2=A0 9.010355][ 2] [=C2=A0 T403] OOM killer disabled.
+> > [=C2=A0=C2=A0=C2=A0 9.010355][ 2] [=C2=A0 T403] Freezing remaining free=
+zable tasks ...
+> > (elapsed 0.000 seconds) done.
+> > [=C2=A0=C2=A0=C2=A0 9.012152][ 2] [=C2=A0 T403] PM: Basic memory bitmap=
+s created
+> > [=C2=A0=C2=A0=C2=A0 9.073333][ 2] [=C2=A0 T403] PM: Using 3 thread(s) f=
+or decompression
+> > [=C2=A0=C2=A0=C2=A0 9.073334][ 2] [=C2=A0 T403] PM: Loading and decompr=
+essing image
+> > data
+> > (486874 pages)...
+> > [=C2=A0=C2=A0=C2=A0 9.073335][ 2] [=C2=A0 T403] hibernate: Hibernated o=
+n CPU 0
+> > [mpidr:0x0]
+> > [=C2=A0=C2=A0=C2=A0 9.095928][ 2] [=C2=A0 T403] PM: Image loading progr=
+ess:=C2=A0=C2=A0 0%
+> > [=C2=A0=C2=A0=C2=A0 9.664803][ 2] [=C2=A0 T403] PM: Image loading progr=
+ess:=C2=A0 10%
+> > [=C2=A0=C2=A0=C2=A0 9.794156][ 2] [=C2=A0 T403] PM: Image loading progr=
+ess:=C2=A0 20%
+> > [=C2=A0=C2=A0=C2=A0 9.913001][ 2] [=C2=A0 T403] PM: Image loading progr=
+ess:=C2=A0 30%
+> > [=C2=A0=C2=A0 10.034331][ 2] [=C2=A0 T403] PM: Image loading progress:=
+=C2=A0 40%
+> > [=C2=A0=C2=A0 10.154070][ 2] [=C2=A0 T403] PM: Image loading progress:=
+=C2=A0 50%
+> > [=C2=A0=C2=A0 10.277096][ 2] [=C2=A0 T403] PM: Image loading progress:=
+=C2=A0 60%
+> > [=C2=A0=C2=A0 10.398860][ 2] [=C2=A0 T403] PM: Image loading progress:=
+=C2=A0 70%
+> > [=C2=A0=C2=A0 10.533760][ 2] [=C2=A0 T403] PM: Image loading progress:=
+=C2=A0 80%
+> > [=C2=A0=C2=A0 10.659874][ 2] [=C2=A0 T403] PM: Image loading progress:=
+=C2=A0 90%
+> > [=C2=A0=C2=A0 10.760681][ 2] [=C2=A0 T403] PM: Image loading progress: =
+100%
+> > [=C2=A0=C2=A0 10.760693][ 2] [=C2=A0 T403] PM: Image loading done
+> > [=C2=A0=C2=A0 10.760718][ 2] [=C2=A0 T403] PM: Read 1947496 kbytes in 1=
+.68 seconds
+> > (1159.22 MB/s)
+> > [=C2=A0=C2=A0 10.761982][ 2] [=C2=A0 T403] PM: Image successfully loade=
+d
+> > [=C2=A0=C2=A0 10.761988][ 2] [=C2=A0 T403] printk: Suspending console(s=
+) (use
+> > no_console_suspend to debug)
+> > [=C2=A0=C2=A0 10.864973][ 2] [=C2=A0 T403] innovpu_freeze:1782
+> > [=C2=A0=C2=A0 10.864974][ 2] [=C2=A0 T403] innovpu_suspend:1759
+> > [=C2=A0=C2=A0 11.168871][ 2] [=C2=A0 T189] PM: pci_pm_freeze():
+> > hcd_pci_suspend+0x0/0x38 returns -16
+>=20
+> This should not be allowed to happen.=C2=A0 Freezing is mandatory and not=
+=20
+> subject to wakeup requests.
+>=20
+> Is your problem related to the one discussed in this email thread?
+>=20
+> https://lore.kernel.org/linux-usb/d8600868-6e4b-45ab-b328-852b6ac8ecb5@ro=
+wland.harvard.edu/
+>=20
+> Would the suggestion I made there -- i.e., have the xhci-hcd=20
+> interrupt handler skip calling usb_hcd_resume_root_hub() if the root
+> hub=20
+> was suspended with wakeup =3D 0 -- fix your problem?
 
-HEAD commit:    d1f2d51b711a Merge tag 'clk-fixes-for-linus' of git://git...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=125c743b980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=de85d75807a205cd
-dashboard link: https://syzkaller.appspot.com/bug?extid=b8080cbc8d286a5fa23a
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1633ca8b980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11db6567980000
+Skipping usb_hcd_resume_root_hub() should generally be possible, but
+it's important to ensure that normal remote wakeup functionality is not
+compromised. Is it HUB_SUSPEND that the hub you are referring to is in
+a suspended state?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/df667fbbb2c1/disk-d1f2d51b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1574a134d7c4/vmlinux-d1f2d51b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a977c1daccb8/bzImage-d1f2d51b.xz
+v2 patch:
+https://lore.kernel.org/all/20240910105714.148976-1-duanchenghao@kylinos.cn=
+/
+>=20
+> Alan Stern
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b8080cbc8d286a5fa23a@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
-BUG: KMSAN: kernel-infoleak in _inline_copy_to_user include/linux/uaccess.h:180 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_user+0xbc/0x110 lib/usercopy.c:26
- instrument_copy_to_user include/linux/instrumented.h:114 [inline]
- _inline_copy_to_user include/linux/uaccess.h:180 [inline]
- _copy_to_user+0xbc/0x110 lib/usercopy.c:26
- copy_to_user include/linux/uaccess.h:209 [inline]
- iowarrior_read+0xb02/0xdc0 drivers/usb/misc/iowarrior.c:326
- vfs_read+0x2a1/0xf60 fs/read_write.c:474
- ksys_read+0x20f/0x4c0 fs/read_write.c:619
- __do_sys_read fs/read_write.c:629 [inline]
- __se_sys_read fs/read_write.c:627 [inline]
- __x64_sys_read+0x93/0xe0 fs/read_write.c:627
- x64_sys_call+0x3055/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:1
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Uninit was created at:
- slab_post_alloc_hook mm/slub.c:3998 [inline]
- slab_alloc_node mm/slub.c:4041 [inline]
- __do_kmalloc_node mm/slub.c:4161 [inline]
- __kmalloc_noprof+0x661/0xf30 mm/slub.c:4174
- kmalloc_noprof include/linux/slab.h:685 [inline]
- kmalloc_array_noprof include/linux/slab.h:726 [inline]
- iowarrior_probe+0x10ea/0x1b90 drivers/usb/misc/iowarrior.c:836
- usb_probe_interface+0xd6f/0x1350 drivers/usb/core/driver.c:399
- really_probe+0x4db/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x2ab/0x5d0 drivers/base/dd.c:799
- driver_probe_device+0x72/0x890 drivers/base/dd.c:829
- __device_attach_driver+0x568/0x9e0 drivers/base/dd.c:957
- bus_for_each_drv+0x403/0x620 drivers/base/bus.c:457
- __device_attach+0x3c1/0x650 drivers/base/dd.c:1029
- device_initial_probe+0x32/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3dc/0x5c0 drivers/base/bus.c:532
- device_add+0x13aa/0x1ba0 drivers/base/core.c:3682
- usb_set_configuration+0x31c9/0x38d0 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0x109/0x2a0 drivers/usb/core/generic.c:254
- usb_probe_device+0x3a7/0x690 drivers/usb/core/driver.c:294
- really_probe+0x4db/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x2ab/0x5d0 drivers/base/dd.c:799
- driver_probe_device+0x72/0x890 drivers/base/dd.c:829
- __device_attach_driver+0x568/0x9e0 drivers/base/dd.c:957
- bus_for_each_drv+0x403/0x620 drivers/base/bus.c:457
- __device_attach+0x3c1/0x650 drivers/base/dd.c:1029
- device_initial_probe+0x32/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3dc/0x5c0 drivers/base/bus.c:532
- device_add+0x13aa/0x1ba0 drivers/base/core.c:3682
- usb_new_device+0x15f4/0x2470 drivers/usb/core/hub.c:2651
- hub_port_connect drivers/usb/core/hub.c:5521 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x4ffb/0x72d0 drivers/usb/core/hub.c:5903
- process_one_work kernel/workqueue.c:3231 [inline]
- process_scheduled_works+0xae0/0x1c40 kernel/workqueue.c:3312
- worker_thread+0xea7/0x14d0 kernel/workqueue.c:3389
- kthread+0x3e2/0x540 kernel/kthread.c:389
- ret_from_fork+0x6d/0x90 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-
-Bytes 0-72 of 73 are uninitialized
-Memory access of size 73 starts at ffff888135d8b000
-Data copied to user address 0000000020000000
-
-CPU: 0 UID: 0 PID: 5280 Comm: syz-executor107 Not tainted 6.11.0-rc6-syzkaller-00326-gd1f2d51b711a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
