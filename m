@@ -1,132 +1,126 @@
-Return-Path: <linux-usb+bounces-14977-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14978-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1135976087
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 07:45:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7985897609B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 07:53:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CAE91F22A2F
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 05:45:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC3B71C22C2B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 05:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A6A188926;
-	Thu, 12 Sep 2024 05:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A8B1188926;
+	Thu, 12 Sep 2024 05:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ltWNoQLX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418201885A2;
-	Thu, 12 Sep 2024 05:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB77663CB;
+	Thu, 12 Sep 2024 05:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726119900; cv=none; b=doLafN+lJFvXk72xuIUMFImS8TxDst9vrHHg0xW7KWziI+BLadl1NcQaV4ezb5I50vmoBY+R3TP/rWMIjsR6k6IUaFevSuSnQp9QXoZ1oRC25Yj7WsxXhpHzB+EzWkUPQ8AWUNZBhzbvFzcyhJhaAZyuZnUEWyywIW/a5DSB2gA=
+	t=1726120377; cv=none; b=oBLazwfrz8sEVMmWJapOg8JrEX8+CsYTaQp4YMvgEQrVjlxlPeE0wFBsZeI1lo2kxR2+y+GiBpTAGuJ2Vnqd5vBXZD+j7LQyRnfaUN0QmKMZkZGAxgfctYRlKAEwgSzfRUP+6js+IwH9ewyYQapSX2U/K/xR03OhoMzgYUrSMrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726119900; c=relaxed/simple;
-	bh=rOeQorWaZDlaIIJiAOwM/shiKOi3AhhiIX+db/g+M4U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AbT81bEkLE6Cp8CB36PxVDbdm2wdOmCdEd5jGi4ohpZbxFpDKXXEYpWx6MVyfr5HqeLUUYNYJy6bDbg+x0rqret0hQri71fu0EUSWug4+Q3jAdKzT8/wq2bOCgC/2qFH4ymnYekrjgchi7sZH8pqYJrHw0QnHxpciS2fr+EHY0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 7A6721402BA; Thu, 12 Sep 2024 07:44:49 +0200 (CEST)
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
-	Anurag Bijea <icaliberdev@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: [PATCH] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Date: Thu, 12 Sep 2024 07:44:33 +0200
-Message-Id: <20240912054433.721651-1-lk@c--e.de>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1726120377; c=relaxed/simple;
+	bh=cyf1Hb2C/+172elhulghuDprDeDW/q6iLjvvVCDRM3k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FrFKVsxYq2Xvokq3RWJrpnMTfxuEZFHUtF/bKCWUeGSO//lyi3ZIh0fYQ10JNcg5KyNS0Jo5qT7AjjJXwFPn10QdndzkXw6NA+VRBEy/qOsZ/rDo+AHySxLUpBbi1VOKxwTPG5p79qOXdPcJdRkHqwEXrtT2jKaveQk4PFtli6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ltWNoQLX; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20551e2f1f8so6077505ad.2;
+        Wed, 11 Sep 2024 22:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726120375; x=1726725175; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cyf1Hb2C/+172elhulghuDprDeDW/q6iLjvvVCDRM3k=;
+        b=ltWNoQLXUZM1tdFQ7MjRu1A/qEih3feZ6k9KL2EKBevOfokIlHIIH+pI/8RnhY7lcl
+         a70gQa+6qCJi+UCGQSvGigjRHY2SUHgmbpq4EDUJObx9g5YhNNtqRTPm0XuP/YdquTDr
+         ROMlo15rV5fZem6UUXDbB0PbgC/p1gJOVncHLo88lJ+WJf+Rq5Z+16NAF7/keNSlKTk3
+         j32k3NroGton6/9yKKPfnHHsagtw5Smme7hnBcuyrykjufCYz9QFYT2+GmnFw/i/udI8
+         XBl0Rz9adRpo7Wxllha/dGf2UDRI15N0jveiLAPjunj9m6wYoqav/CmMzngD0IaSUE6w
+         MHQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726120375; x=1726725175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cyf1Hb2C/+172elhulghuDprDeDW/q6iLjvvVCDRM3k=;
+        b=Vbwdq3lRm0fH+PDGaOKNTKGs3vkFM2FKZOTkZ5rzX5ra/lEaYeoh51FK/KDxmA8bms
+         NH0c1HcY8UiPEnLVTePye3A+b6V1DBlKZHokeRJ3vsJSKIobPR8DS/HUZrY0D1BBRjEa
+         Y1bPj+Ml3A9q4hEhSbOlJMfgpGf4xKosWX7jdhNY9qxYtca79fkHuUpHq/tWf6pcs/AQ
+         UesxvAyYBGCG0lFdhgYgBBfe+31Xt1z4Zu5carHljP1MIfel2NPuBlXl3ur2RE/1IOa2
+         hxdNhk53Ph99SW32v5P9Ud9dLPv11Rf4cthImSH+c7jE7V2tURKXK8YfZps+e8pIyuc9
+         e9AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2y1YZATM203Td9ONTipdLWTMWCth6sNItj4kdTl3q4Aqybvvx/mKMSFhW+T5Sq99HBppYqLMgkDFPUeo=@vger.kernel.org, AJvYcCX5i0WWQINygN4uKyRJe1AxfbiQmWUYaHxkfTkw1s7zmwa42pOBwFHHuEp4AgGFEE0X32pVoyNa+nd1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3mUdElPh1g7fj0TZpNBhbL/Um8v/pYPhfavJon0vYmkmFbODt
+	XPbrQcMkc40JL+QNJCDnr+jCFfx5szYwKIkhaJaK/OlgZ1Ctot7p1ixa1pqESn/k6XoKWlyL3tO
+	A/0+y6U9KGaozK5zPHnNVn4/pdxxHcLWGxAw=
+X-Google-Smtp-Source: AGHT+IHTZBq7WQxTCuoatyBiiOKHG7oXH+KbJERrM2Lth84TKU6yGz3+BeSN/yGNB7IcRHa0JUAbWO2todjO7Xitf5c=
+X-Received: by 2002:a17:903:2302:b0:207:20c5:42c with SMTP id
+ d9443c01a7336-2076e40be2dmr29349775ad.45.1726120374758; Wed, 11 Sep 2024
+ 22:52:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240911051716.6572-4-ki.chiang65@gmail.com> <20240911093828.58129593@foxbook>
+In-Reply-To: <20240911093828.58129593@foxbook>
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+Date: Thu, 12 Sep 2024 13:52:48 +0800
+Message-ID: <CAHN5xi235kgU8Xd0VYw6r5NeieCM8uqWjgPnLSP1haAFqgcFsw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] xhci: Some improvement for Etron xHCI host
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mathias.nyman@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-If the busy indicator is set, all other fields in CCI should be
-clear according to the spec. However, some UCSI implementations do
-not follow this rule and report bogus data in CCI along with the
-busy indicator. Ignore the contents of CCI if the busy indicator is
-set.
+Hi,
 
-If a command timeout is hit it is possible that the EVENT_PENDING
-bit is cleared while connector work is still scheduled which can
-cause the EVENT_PENDING bit to go out of sync with scheduled connector
-work. Check and set the EVENT_PENDING bit on entry to
-ucsi_handle_connector_change() to fix this.
+Thank you for the review.
 
-Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
-This ensures that the command is cancelled even if ->sync_control
-returns an error (most likely -ETIMEDOUT).
+Micha=C5=82 Pecio <michal.pecio@gmail.com> =E6=96=BC 2024=E5=B9=B49=E6=9C=
+=8811=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=883:38=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> Hi,
+>
+> I have some Etron controller (forgot which one) but I'm not using it
+> because it crashes ("dies") all the time under my workloads.
+>
+> I suppose I could try your patches if I find a moment for it.
+>
+> I'm aware of one more bug which affects my Etron: if an error occurs
+> on an isochronous TD, two events are generated: first the error, then
+> "success", even if the error is on the final TRB (the common case).
+> Then the "success" causes "TRB DMA not part of current TD" warning.
+> I suspect that all Etron chips are the same. This should be easily
+> reproducible by unpligging an audio/video device while streaming.
 
-Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-Bisected-by: Christian Heusel <christian@heusel.eu>
-Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
----
- NOTE: Rebased onto usb-next.
+Hmm, I don't encounter this problem.
 
- drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+>
+> Considering how utterly broken this hardware is, I think it could be
+> more efficient to have a single "Etron host" quirk. These bugs are
+> so stupid that it seems unlikely that any of Etron quirks would ever
+> be reused on other hardware. Of course it should still use "general"
+> quirks when applicable, such as "broken streams", which it does IIRC.
+>
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 35dce4057c25..e0f3925e401b 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -38,6 +38,10 @@
- 
- void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
- {
-+	/* Ignore bogus data in CCI if busy indicator is set. */
-+	if (cci & UCSI_CCI_BUSY)
-+		return;
-+
- 	if (UCSI_CCI_CONNECTOR(cci))
- 		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
- 
-@@ -103,15 +107,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
- 		return -EINVAL;
- 
- 	ret = ucsi->ops->sync_control(ucsi, command);
--	if (ret)
--		return ret;
--
--	ret = ucsi->ops->read_cci(ucsi, cci);
--	if (ret)
--		return ret;
-+	if (ucsi->ops->read_cci(ucsi, cci))
-+		return -EIO;
- 
- 	if (*cci & UCSI_CCI_BUSY)
- 		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
-+	if (ret)
-+		return ret;
- 
- 	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
- 		return -EIO;
-@@ -1197,6 +1199,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 
- 	mutex_lock(&con->lock);
- 
-+	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
-+		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
-+			     __func__);
-+
- 	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
- 
- 	ret = ucsi_send_command_common(ucsi, command, &con->status,
--- 
-2.43.0
+Ok, I will use one quirk XHCI_ETRON_HOST for these workarounds in the
+next patch revision.
 
+> Regards,
+> Michal
+
+Thanks,
+Kuangyi Chiang
 
