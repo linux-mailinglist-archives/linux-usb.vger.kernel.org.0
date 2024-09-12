@@ -1,112 +1,233 @@
-Return-Path: <linux-usb+bounces-15052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04A6D977365
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 23:12:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A6A1977384
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 23:19:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FA02B213BC
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 21:12:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 611BAB228F9
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 21:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A66691C2337;
-	Thu, 12 Sep 2024 21:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA791C1AA6;
+	Thu, 12 Sep 2024 21:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="liPO5dG3"
+	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="Es30tNfZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+Received: from ci74p00im-qukt09081902.me.com (ci74p00im-qukt09081902.me.com [17.57.156.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E0A1C1AD7;
-	Thu, 12 Sep 2024 21:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDE818BB8A
+	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 21:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.156.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726175559; cv=none; b=FoHL9h4sYvzhFHlmh5xABE6kOqzNkCR3n1MAOrBZZ4nanLaCYCWZ/m/He0bV0Tzglf2/SdY4LdElsGlbmUvzuOwWMh5y6ZVpKpZq3iSJADYjOOLZSZewAP+KxW7Mfqpj3XM3fx+jo27FyYQh0u8a4hpOPw0gSVPcj0R5DnFn3aM=
+	t=1726175944; cv=none; b=tyoKrdnw46Wo1PG2f2i/KkYSGWKY8abHiHquHDqoeOaA4YD/Qe77R++HBvn++7FbYTE3LozEY4XT2t9rYoG5P4ejJ/T7GT07JrahxC8td4FiGsRAtKYTIQynccGZ12ONR/PHHTC8WdVDcLi5fYwWXdN4ZJWRt2TohrQPrCasZV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726175559; c=relaxed/simple;
-	bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bh3nyeAukiQNRr7Tnr3uvZGBYjuJvY3WjRc6JL1LtscLPm/SbahDU65/XCab9yZUOjexdco5e8zqPJ3Y+hD4Yt+i1WoenT5OidUuRCU5xvmOAl7A85JEQ7ra6/FH1opIz44VWTG5ZXoIFKiiYqXnpP39KKhfa9W0OYs4939pA3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=liPO5dG3; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [172.16.225.84] (syn-076-167-104-212.res.spectrum.com [76.167.104.212])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4X4VWc4RF0z4DmW;
-	Thu, 12 Sep 2024 17:12:28 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1726175549; bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=liPO5dG3r0r3gORS46SnzZmwWyq9zjinhaHFujt7nM9gr+OG09bk4l4CvUbaik+iK
-	 v1P4nr5r+qMRKAeA8IVhm4G2qV55QmAiz+2ph/P727Z9k5C+vqYIQ5lzb93sq5F50P
-	 Xc03LDampk6OAhGig/vK7O3XvKEjVWZuzT5vow2s=
-Message-ID: <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
-Date: Thu, 12 Sep 2024 14:12:27 -0700
+	s=arc-20240116; t=1726175944; c=relaxed/simple;
+	bh=89xDsc8rPiqQdYQrasQa/ym5eXT7n4JZWt8JY+1zNKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tzIhBX8/+6uMsCOwRdE/FMuCDY4lOZ1c76DwCQnxaBzW3TEjHADE3i2hyGcyoNVsfFWfUopYcm1eYuAr+ANF0GwjDc4MEEd+6w1rmOblAOC/u+XmLxW1c5IGcFz4LwMcg948Y2xhzdHPuiML8t60D+RWdToeCVvVpvqO6tT7ChY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=Es30tNfZ; arc=none smtp.client-ip=17.57.156.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
+	t=1726175941; bh=vovF47F5HplS3Hx4Wtm0+Hlb8XzHo4WlYQMicnj+0uw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=Es30tNfZDCL8vQkj0rMAlE0J/5Dy2y1J5tV//Kdms1rilFqJ4viDAXbOQgZaJiH6N
+	 JjdtGK7XeBY8ffleDq3MCxHQcsgq9t99XciRghGCNJ+iWQZqnJ3p0D7JfB0XjjUBZC
+	 UoYY/du9UI1hd8aHQejg/9pLd0OwP3bh92A0dI89Yrb6aYy5/b59icuCONgw0LC4XU
+	 jWinksd7zngbcsd+I+VvtijEHCip5vwtTS1XAorD7ysXjKbZCtSZTzpgNVFPW8+iK4
+	 yuSPoc4pqh3OmFLM9y4ViyIuQE9IvgNSUd5UIN3GVGK7D/+Hy6gMFiWj6UVDeDh9iP
+	 /EJDNbUcmI0BA==
+Received: from fossa.iopsys.eu (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
+	by ci74p00im-qukt09081902.me.com (Postfix) with ESMTPSA id B426E290031F;
+	Thu, 12 Sep 2024 21:18:58 +0000 (UTC)
+From: Foster Snowhill <forst@pen.gy>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Georgi Valkov <gvalkov@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Oliver Neukum <oneukum@suse.com>,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH net-next v2] usbnet: ipheth: prevent OoB reads of NDP16
+Date: Thu, 12 Sep 2024 23:18:17 +0200
+Message-ID: <20240912211817.1707844-1-forst@pen.gy>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
- Thunderbolt additions when coming out of suspend or hibernate
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Me <kenny@panix.com>
-References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
- <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
- <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
- <20240904122835.GG1532424@black.fi.intel.com>
- <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 9zy841-CfjNvdSs-yK8ol7y2yKXUlhJA
+X-Proofpoint-ORIG-GUID: 9zy841-CfjNvdSs-yK8ol7y2yKXUlhJA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-12_08,2024-09-12_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=917 bulkscore=0 clxscore=1030 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2409120155
 
+In "NCM mode", the iOS device encapsulates RX (phone->computer) traffic
+in NCM Transfer Blocks (similarly to CDC NCM). However, unlike reverse
+tethering (handled by the `cdc_ncm` driver), regular tethering is not
+compliant with the CDC NCM spec, as the device is missing the necessary
+descriptors, and TX (computer->phone) traffic is not encapsulated
+at all. Thus `ipheth` implements a very limited subset of the spec with
+the sole purpose of parsing RX URBs.
 
-I'll run the stuff you need, but now it looks like whatever is breaking 
-suspend/resume in Linus' master has been ported down from upstream into 
-6.10.10; I'm now getting the same panic()s as I did with master. I just 
-had a failed resume and the crash dump (which happened on its own) looks 
-the same as the one I'd posted here.
+In the first iteration of the NCM mode implementation, there were a few
+potential out of bounds reads when processing malformed URBs received
+from a connected device:
 
-I may try and find some time to bisect the issue, but it'll take some time.
+* Only the start of NDP16 (wNdpIndex) was checked to fit in the URB
+  buffer.
+* Datagram length check as part of DPEs could overflow.
+* DPEs could be read past the end of NDP16 and even end of URB buffer
+  if a trailer DPE wasn't encountered.
 
--K
+The above is not expected to happen in normal device operation.
 
-On 9/9/24 00:51, Kenneth Crudup wrote:
-> 
-> I can't get to the dmesg when it crashes, but I did a SysRq-S/C and have 
-> attached the crash output; let me know if this is at all helpful.
-> 
-> I see I'd SysRq-S/C on a previous hang, I've attached that one, too.
-> 
-> This particular time it suspended OK, but hung indefinitely when I 
-> plugged it into another TB3 dock (the previous one was TB4, if it matters).
-> 
-> 
-> On 9/4/24 05:28, Mika Westerberg wrote:
->> Hi,
->>
->> On Tue, Sep 03, 2024 at 11:10:41PM -0700, Kenneth Crudup wrote:
->>>
->>> ... or, maybe not. Turns out that sometimes my system can't suspend 
->>> (just
->>> hangs, spinning hard somewhere based on the heat and the fans) when 
->>> plugged
->>> into a Thunderbolt dock at the time of suspend.
->>
->> Can you create a bug in bugzilla.kernel.org and attach full dmesg so
->> that you enter suspend with dock connected (so that the issue
->> reproduces)? Please also add "thunderbolt.dyndbg=+p" in the kernel
->> command line so we can see what the driver is doing. Also probably good
->> to add the lspci dumps too as Lukas asked.
->>
-> 
+To address the above issues for iOS devices in NCM mode, rely on
+and check for a specific fixed format of incoming URBs expected from
+an iOS device:
 
+* 12-byte NTH16
+* 96-byte NDP16, allowing up to 22 DPEs (up to 21 datagrams + trailer)
+
+On iOS, NDP16 directly follows NTH16, and its length is constant
+regardless of the DPE count.
+
+Adapt the driver to use the fixed URB format. Set an upper bound for
+the DPE count based on the expected header size. Always expect a null
+trailer DPE.
+
+The minimal URB length of 108 bytes (IPHETH_NCM_HEADER_SIZE) in NCM mode
+is already enforced in ipheth since introduction of NCM mode support.
+
+Signed-off-by: Foster Snowhill <forst@pen.gy>
+Tested-by: Georgi Valkov <gvalkov@gmail.com>
+---
+v2: No code changes. Update commit message to further clarify that
+    `ipheth` is not and does not aim to be a complete or spec-compliant
+    CDC NCM implementation.
+v1: https://lore.kernel.org/netdev/20240907230108.978355-1-forst@pen.gy/
+
+This should perhaps go into "net" rather than "net-next"? I submitted
+the previous patch series to "net-next", but it got merged into "net"
+[1]. However it's quite late in the 6.11-rc cycle, so not sure.
+
+[1]: https://lore.kernel.org/netdev/172320844026.3782387.2037318141249570355.git-patchwork-notify@kernel.org/
+---
+ drivers/net/usb/ipheth.c | 64 ++++++++++++++++++++++------------------
+ 1 file changed, 36 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 46afb95ffabe..8c62501f47a9 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -61,7 +61,16 @@
+ #define IPHETH_USBINTF_PROTO    1
+ 
+ #define IPHETH_IP_ALIGN		2	/* padding at front of URB */
+-#define IPHETH_NCM_HEADER_SIZE  (12 + 96) /* NCMH + NCM0 */
++/* On iOS devices, NCM headers in RX have a fixed size:
++ * - NTH16 (NCMH): 12 bytes, as per CDC NCM 1.0 spec
++ * - NDP16 (NCM0): 96 bytes
++ */
++#define IPHETH_NDP16_HEADER_SIZE 96
++#define IPHETH_NDP16_MAX_DPE	((IPHETH_NDP16_HEADER_SIZE - \
++				  sizeof(struct usb_cdc_ncm_ndp16)) / \
++				 sizeof(struct usb_cdc_ncm_dpe16))
++#define IPHETH_NCM_HEADER_SIZE	(sizeof(struct usb_cdc_ncm_nth16) + \
++				 IPHETH_NDP16_HEADER_SIZE)
+ #define IPHETH_TX_BUF_SIZE      ETH_FRAME_LEN
+ #define IPHETH_RX_BUF_SIZE_LEGACY (IPHETH_IP_ALIGN + ETH_FRAME_LEN)
+ #define IPHETH_RX_BUF_SIZE_NCM	65536
+@@ -213,9 +222,9 @@ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
+ 	struct usb_cdc_ncm_ndp16 *ncm0;
+ 	struct usb_cdc_ncm_dpe16 *dpe;
+ 	struct ipheth_device *dev;
++	u16 dg_idx, dg_len;
+ 	int retval = -EINVAL;
+ 	char *buf;
+-	int len;
+ 
+ 	dev = urb->context;
+ 
+@@ -225,41 +234,40 @@ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
+ 	}
+ 
+ 	ncmh = urb->transfer_buffer;
+-	if (ncmh->dwSignature != cpu_to_le32(USB_CDC_NCM_NTH16_SIGN) ||
+-	    le16_to_cpu(ncmh->wNdpIndex) >= urb->actual_length) {
+-		dev->net->stats.rx_errors++;
+-		return retval;
+-	}
++	if (ncmh->dwSignature != cpu_to_le32(USB_CDC_NCM_NTH16_SIGN))
++		goto rx_error;
+ 
+-	ncm0 = urb->transfer_buffer + le16_to_cpu(ncmh->wNdpIndex);
+-	if (ncm0->dwSignature != cpu_to_le32(USB_CDC_NCM_NDP16_NOCRC_SIGN) ||
+-	    le16_to_cpu(ncmh->wHeaderLength) + le16_to_cpu(ncm0->wLength) >=
+-	    urb->actual_length) {
+-		dev->net->stats.rx_errors++;
+-		return retval;
+-	}
++	/* On iOS, NDP16 directly follows NTH16 */
++	ncm0 = urb->transfer_buffer + sizeof(struct usb_cdc_ncm_nth16);
++	if (ncm0->dwSignature != cpu_to_le32(USB_CDC_NCM_NDP16_NOCRC_SIGN))
++		goto rx_error;
+ 
+ 	dpe = ncm0->dpe16;
+-	while (le16_to_cpu(dpe->wDatagramIndex) != 0 &&
+-	       le16_to_cpu(dpe->wDatagramLength) != 0) {
+-		if (le16_to_cpu(dpe->wDatagramIndex) >= urb->actual_length ||
+-		    le16_to_cpu(dpe->wDatagramIndex) +
+-		    le16_to_cpu(dpe->wDatagramLength) > urb->actual_length) {
+-			dev->net->stats.rx_length_errors++;
+-			return retval;
+-		}
++	for (int dpe_i = 0; dpe_i < IPHETH_NDP16_MAX_DPE; ++dpe_i, ++dpe) {
++		dg_idx = le16_to_cpu(dpe->wDatagramIndex);
++		dg_len = le16_to_cpu(dpe->wDatagramLength);
++
++		/* Null DPE must be present after last datagram pointer entry
++		 * (3.3.1 USB CDC NCM spec v1.0)
++		 */
++		if (dg_idx == 0 && dg_len == 0)
++			return 0;
++
++		if (dg_idx < IPHETH_NCM_HEADER_SIZE ||
++		    dg_idx >= urb->actual_length ||
++		    dg_len > urb->actual_length - dg_idx)
++			goto rx_error;
+ 
+-		buf = urb->transfer_buffer + le16_to_cpu(dpe->wDatagramIndex);
+-		len = le16_to_cpu(dpe->wDatagramLength);
++		buf = urb->transfer_buffer + dg_idx;
+ 
+-		retval = ipheth_consume_skb(buf, len, dev);
++		retval = ipheth_consume_skb(buf, dg_len, dev);
+ 		if (retval != 0)
+ 			return retval;
+-
+-		dpe++;
+ 	}
+ 
+-	return 0;
++rx_error:
++	dev->net->stats.rx_errors++;
++	return retval;
+ }
+ 
+ static void ipheth_rcvbulk_callback(struct urb *urb)
 -- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+2.45.1
+
 
