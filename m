@@ -1,117 +1,79 @@
-Return-Path: <linux-usb+bounces-15013-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15014-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D7BA976D9D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 17:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E485976E3A
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 17:53:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED59D288AAE
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 15:20:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 112B8284CFE
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 15:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768B519C554;
-	Thu, 12 Sep 2024 15:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fKAKw7s6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E793D1B78FC;
+	Thu, 12 Sep 2024 15:53:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BD7126BE2
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 15:20:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22544199948
+	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 15:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726154425; cv=none; b=IV3r+VC/PUf91gjmVbxdVu+uGSkdM0MfDUoddkfUta18zqBHh4PEhjsdzat0jFABY5e2rA0UWmWiWy7OlpryAmkQrK63XSQkCm4Im1LoqxJghk6wq/xo5J4YU1SZEF/kKCkunUos7kw3WQKn9G0XHnIBkHPI1POqXSpjPVihSj0=
+	t=1726156421; cv=none; b=WuwF1KRzLKn4t9VfUT6oJ+7S+i/CpjYNSF4HUpCHXNb9dB9O5MKFgcV00ajhEfVwfGBe0n7uGMb62r7xf38Vl0FzkV3SLuy71jhEJZ/OB/pCFFU05Q+DGIInTaQvo5lZTzGpqi6cM92BRN26vu4fqHxa4+C58mBgzKW8goIP648=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726154425; c=relaxed/simple;
-	bh=7kv0EG9PtIBQlSrdpQXP3nA9MyHPwvDC5zvjc0SWOIQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=otZVfSmsMQ1yX5oT85I8dpt0M4J+vgguU8VKq7Mz5Mb9oYsXhmqyI1Ucb7AFFrW+OlvYa+VwoQk3JEZ5D6COr56A6Kuv1Df4VlKenY5mK7eLedf/uhHKwtcT3nPac+syjM5YmPe4hwS2HtLT0MOn/S2Ly1ktq0iXzxd5laU11f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fKAKw7s6; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726154423; x=1757690423;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=7kv0EG9PtIBQlSrdpQXP3nA9MyHPwvDC5zvjc0SWOIQ=;
-  b=fKAKw7s6MsIJBEH5Bm3Pbno8yp/3ezBodyvLLDUuIjxAtIdiOIKj0i1D
-   a23oButTPf+cXorS/8MwwZpJpPgddVpsrdZEvgn9U+agf0BnOCJdBA94m
-   Tmho4OJQzY9emDag7giOtG+qz15jyZ3ibtcPlQi1CUjsqQqt7ahpu0oCG
-   WU1/2xq69foAyqpUKY8uggVF8K0o2ZxBH+zrmvXUlea+SuFRBGRdDr3Hr
-   LRMbWJMlN+bwAjEavDJQeDHg5JcDVhA7JBgxN2VTMA1IR5Bb0W+aZD74z
-   Y+1hP/UWOsw4D5/mDJGBt/4enihxirFfk6eiBKQrj6Z172jy2WnFJJh8F
-   w==;
-X-CSE-ConnectionGUID: NOtG34lmTuaUQfYmw08g2w==
-X-CSE-MsgGUID: dCeHlfVwTOewFISr/lnoIQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="25145836"
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="25145836"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 08:20:23 -0700
-X-CSE-ConnectionGUID: 4M7cynU3QwCVDvg5VskzMQ==
-X-CSE-MsgGUID: E+UUybr0TMSQe8q0o9AFTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="90987575"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa002.fm.intel.com with ESMTP; 12 Sep 2024 08:20:20 -0700
-Message-ID: <8dae1527-24a3-401e-b968-a874808e6f46@linux.intel.com>
-Date: Thu, 12 Sep 2024 18:22:27 +0300
+	s=arc-20240116; t=1726156421; c=relaxed/simple;
+	bh=H3Fhj71qw/sn6U0lOBAG0Po7bRVCrYtJ9cdxwhKoiIo=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F8zbfYKKtRuBtyTitaxUx0sha723dHuo4GChj8vu+zJ0FxgQ0vb/xf1ird79GVilnokVN/naMccR7K+RZzRTAb3c2p7Zle2oiAryrs7PDv42bQSpiiNmP+pb+kXmkKOfyIYhnvEhI+C+xYISAz4DyYPskLDQPY95znAOb96Y6u8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-25-87.elisa-laajakaista.fi [88.113.25.87])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+	id 293b1902-711f-11ef-9150-005056bdfda7;
+	Thu, 12 Sep 2024 18:53:33 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 12 Sep 2024 18:53:32 +0300
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"peter.chen@kernel.org" <peter.chen@kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: xhci: fix loss of data on Cadence xHC
+Message-ID: <ZuMOfHp9j_6_3-WC@surfacebook.localdomain>
+References: <20240905065716.305332-1-pawell@cadence.com>
+ <PH7PR07MB9538584F3C0AD11119403F11DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+ <PH7PR07MB9538734A9BC4FA56E34998EEDD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Strange issues with UAS URB cancellation
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: Marc SCHAEFER <schaefer@alphanet.ch>
-Cc: Micha?? Pecio <michal.pecio@gmail.com>, linux-usb@vger.kernel.org
-References: <ZtcVXoI6jNM9Lqbl@alphanet.ch> <20240903174535.6e5e581b@foxbook>
- <ZtdmOiKN6hb2Y82I@alphanet.ch>
- <71c073de-8af5-4457-88eb-91a709c2d941@linux.intel.com>
- <ZtiMp39CWrI0e+GB@alphanet.ch>
- <e16c21cd-41f3-4191-9957-6e61ddfefd24@linux.intel.com>
- <ZtnHs8udyl6bfGdF@alphanet.ch> <ZtnI57FYnoz1xKxF@alphanet.ch>
- <ZtnpOfv2qXCUy5/i@alphanet.ch>
- <ecc97ef6-ae0f-44e3-ad6e-60a8df0b54a6@linux.intel.com>
- <Zt8gkkRGMdgaEOXX@alphanet.ch>
- <54229f03-8fa3-41aa-b576-59ec5a07848e@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <54229f03-8fa3-41aa-b576-59ec5a07848e@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR07MB9538734A9BC4FA56E34998EEDD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
 
-On 11.9.2024 17.25, Mathias Nyman wrote:
+Thu, Sep 05, 2024 at 07:06:48AM +0000, Pawel Laszczak kirjoitti:
+> Please ignore this patch. I send it again with correct version in subject.
 
-> xhci driver doesn't yet have tracing for stream contexts, I started writing those but
-> didn't finish them yet.
+It seems it's in Mathias' tree, never the less, see also below.
 
-A set of tracing and debugging patches for this is now available in my
-fix_uas_babble_error branch
+...
 
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_uas_babble_error
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_uas_babble_error
+> >+#define PCI_DEVICE_ID_CADENCE				0x17CD
 
-Much appreciated if you have the time to try them out.
-This time I think we should enable _all_ xhci traces.
-The trace file might grow fast but it would be good to get traces starting
-before the uas device is connected.
+First of all this is misleadig as this is VENDOR_ID, second, there is official
+ID constant for Cadence in pci_ids.h.
 
-Updated steps:
+#define PCI_VENDOR_ID_CDNS              0x17cd
 
-mount -t tracefs none /sys/kernel/tracing/
-echo 81920 > /sys/kernel/tracing/buffer_size_kb
-echo 1 > /sys/kernel/tracing/events/xhci-hcd/enable
-echo 1 > /sys/kernel/tracing/tracing_on
-<connect uas device>
-<trigger issue>
-send content of /sys/kernel/tracing/trace and dmesg to me
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks
-Mathias
+
 
