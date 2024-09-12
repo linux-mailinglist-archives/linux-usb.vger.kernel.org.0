@@ -1,173 +1,190 @@
-Return-Path: <linux-usb+bounces-15059-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15060-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE9A6977470
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 00:40:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F6F97758E
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 01:29:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69F011F25467
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 22:40:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 109BD282161
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 23:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B25B1C2DD9;
-	Thu, 12 Sep 2024 22:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8CF18BC07;
+	Thu, 12 Sep 2024 23:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="kaAQ40wD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HpxfaHD6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAF81C244F
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 22:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFE91C3314
+	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 23:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726180827; cv=none; b=mtn1kn1AmCib4cJi5z5Oq9VttnrCG5Gtw3vZJRWcsjhOl6uWw42dx6aW4jiuLjw5GAyTN9jpBdVQeBB0RbFrO9i7NNT/LkoRk5yrgX65wyoYshqejXdJF7kZyFd2r/s20p9/N47ecRUk17Qd3EpIGDkJq8WzuabRNdixEkd8G98=
+	t=1726183591; cv=none; b=EnG6U5en1QxvQDmT2hpfveR9S451tfkFnRHk4N7REdRLsqgKpDVUz5kxE8KF1IxQhCUh2NRltjGzFYvFAuozB0lccJsTG6q1Vh1e3CIvXz3U9+1WUSS5nZEYuMs8jGF/pileVIOnSdiO9xysdRIsjO6klj/HQjkg76TeqXjRgns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726180827; c=relaxed/simple;
-	bh=sxAKHP3cQV0x7xhU/eX/1732Tjzdx2vIP6oJohlXeQ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pupgHiuCkkCkDBxIBWpsHivfOi6DGw36UaDXDJ1I2UU976XfXcl+vzBOFH97Xr55a2RxABWA5URTo7t4wKykbLWAWsc4cZ47j0/9e6vW59RymhmVcrkHdft7NthaHsD/mawrBeJP3hRt5b81Jtu6uaZoJgyooyr6Ah+03JYQRPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=kaAQ40wD; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4X4XT558QTzlgMVj;
-	Thu, 12 Sep 2024 22:40:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1726180820; x=1728772821; bh=guJG9
-	KumtE8xMLtZPQDShZaNC8ri4kiOKkGzlIM4Teg=; b=kaAQ40wDaRMxJ4+ZmnIAx
-	8tqeFL+1gpjrgv7VoH/2UFv+/T4ARgrtg7KaIi/zctyEY2iS75r/zmIwXQfRcowt
-	bHufIZBDFQ8A6MzIfeASK6bfjlRMlim+9d8CH6OQwP21JOri0cgX9MkLRzu3R217
-	sGlduz2ii34zXk2K8FhYqchUYTdVpmaAiJ0qf1JGQI1UAjL3TEQAumb1qt8+sbon
-	hnZQ6OgIWUp/dQuu94acsx7/JJOIAxp1MBVQVN+hwAkd+jd7yRmulJRO/8r7Lur6
-	12alSgD6/CABEnjE6lmZvQzQr93arwxl0d+QYDbkA1U948B4y7FKhcPyKU07bWyx
-	Q==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id zeVFqAQgqILO; Thu, 12 Sep 2024 22:40:20 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4X4XSz2x6XzlgMVl;
-	Thu, 12 Sep 2024 22:40:19 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [PATCH v3 3/3] usb: roles: Improve the fix for a false positive recursive locking complaint
-Date: Thu, 12 Sep 2024 15:39:56 -0700
-Message-ID: <20240912223956.3554086-4-bvanassche@acm.org>
-X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
-In-Reply-To: <20240912223956.3554086-1-bvanassche@acm.org>
-References: <20240912223956.3554086-1-bvanassche@acm.org>
+	s=arc-20240116; t=1726183591; c=relaxed/simple;
+	bh=AaV5BIZtfsOqmNhxqEnd/CUMPikNikqc4gb0i/esfeM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p+xQIecgGerrAgqZtJx62urwSs8y7iYDbM7WNPKjszHbQvDzb1xsZyBQwGLKnRGH/T2d2r4r5Bu0z7dcf/xZvO/NgiYvf0UbiIkST43wGj1TVyAPpDKQQ1btWv651GUaPUm6OR5MUDrCBnmzH2vkFjBtKgZyA1mWJC7MOFNI/xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HpxfaHD6; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7cf5e179b68so1284749a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 16:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726183589; x=1726788389; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YZdUE8Iodj8kUFxgn8s41HQN9QXU5H4aO1QpJ5Ef1es=;
+        b=HpxfaHD6W4L5Y3wWceCwTWYEdAMurQx+kgQLWhsRX2pN9BDZhhpiiL4jmBi0ZTo5wp
+         MdwE9GJTYQHssSkHXEHjcZoOcQYLjPRbrvEKzVoEr/QVCCogSj12PA292CbSep/ydpwR
+         1dFV+EL233VpV6aQIqxRqFM1nZ5ebVVDlRc+5gmMOeHuRdU0IoZ5DsE9ucSFlte+wkCM
+         k8HIpegNfgvyyMqQoEbPbI9rZlgECNbL34NeFMeBaPuQxKAVRDe+1AxggMdQMZycdyfV
+         vauOBAZ0ma7V5Qbp9Gh4B+15xxqC0eN8LtOPeWsi3SkyfwMWCKvbnyeOuqsB7+NgLu4Q
+         vF3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726183589; x=1726788389;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YZdUE8Iodj8kUFxgn8s41HQN9QXU5H4aO1QpJ5Ef1es=;
+        b=nEdfhYnNkBI5P/pc2HxXQBAc4a2U4rI01aSn57//XuMnnv3eDXy9SQupAg04AHQWYB
+         1IXwSQsm/5aOnXypIMrygbZGBT07Z0ZoAyhFnjoWrb/XSfgI/GIdAp0C71PKrRO+fm0K
+         9jutQ54mPqx0kckXYJz3wJLPPGGgVcQjiCdSBY51eviTfeot0JwkxNEsrktO4qhsBu8x
+         gQdY+2/4dusiOZaacPC4xXdnjXfv5o6PHLWj2+/y1A5bzJku66Tpf3NiQ2fDbrLyQNXi
+         Ws/i8JvOO32JA7SCxc16hNK6XHmCMDgZU8wAAv6l5dxmyXOfV0dCtmK2XayGPhopy5dN
+         xHfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXH2Uz8WcwWnHr14Bs2SNtsLJnsj5nsDoZH7hSFGs1gwWR8YRi/eGIk55hEga+A4ejPtEGcIwssV1g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC7COHqracCvvILsqGr/raWTfjy7mayMxHFCE3Kyk/o3oKEhcO
+	W/MmKl6u4CnwMVYIJGI+dg3/m/rGDVUrl2wuLPzaY1d+EN3IO96yxeRE7eQ1NQ==
+X-Google-Smtp-Source: AGHT+IEFdGF7Q2YWcAplAlykHSQNMLpEEWqBpuC11ZSD7YT+1n5yivK+MLpI/ib8DE+YI2s+P2mm4g==
+X-Received: by 2002:a17:90b:2285:b0:2c9:36bf:ba6f with SMTP id 98e67ed59e1d1-2db9fc1bf48mr6758422a91.3.1726183588056;
+        Thu, 12 Sep 2024 16:26:28 -0700 (PDT)
+Received: from ?IPV6:2600:1700:4570:89a0:ad3f:6937:2713:ef56? ([2600:1700:4570:89a0:ad3f:6937:2713:ef56])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dbb9d157b4sm277831a91.47.2024.09.12.16.26.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Sep 2024 16:26:27 -0700 (PDT)
+Message-ID: <dc323138-3bbb-4e23-91f1-d6b80cb7bb72@google.com>
+Date: Thu, 12 Sep 2024 16:26:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 1/2] dt-bindings: connector: Add property to set pd timer
+ values
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, heikki.krogerus@linux.intel.com,
+ gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ kyletso@google.com, rdbabiera@google.com,
+ Badhri Jagan Sridharan <badhri@google.com>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20240911000715.554184-1-amitsd@google.com>
+ <20240911000715.554184-2-amitsd@google.com>
+ <5iakowhmqc3hbstmwbs6ixabr27hf2dfz2m4do4qvsrtgrdn72@r7xqawwgebla>
+Content-Language: en-US
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <5iakowhmqc3hbstmwbs6ixabr27hf2dfz2m4do4qvsrtgrdn72@r7xqawwgebla>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Improve commit fc88bb116179 ("usb: roles: add lockdep class key to struct
-usb_role_switch") as follows:
-* Move the lock class key declaration just above the mutex declaration su=
-ch
-  that the declaration order of these objects matches their initializatio=
-n
-  order.
-* Destroy the mutex and lock class key just before these objects are
-  freed. This makes it easier to verify that the destruction calls happen
-  after the last use of these objects.
-* Instead of switching the mutex key to the dynamic lock class key after
-  initialization of the mutex has completed, initialize the mutex with th=
-e
-  dynamic lock class key.
+Hi Dmitry,
 
-Cc: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Badhri Jagan Sridharan <badhri@google.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/usb/roles/class.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+On 9/12/24 3:05 AM, Dmitry Baryshkov wrote:
+> On Tue, Sep 10, 2024 at 05:07:05PM GMT, Amit Sunil Dhamne wrote:
+>> This commit adds a new property "pd-timers" to enable setting of
+>> platform/board specific pd timer values for timers that have a range of
+>> acceptable values.
+>>
+>> Cc: Badhri Jagan Sridharan <badhri@google.com>
+>> Cc: linux-usb@vger.kernel.org
+>> Cc: devicetree@vger.kernel.org
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>   .../bindings/connector/usb-connector.yaml     | 23 +++++++++++++++++++
+>>   include/dt-bindings/usb/pd.h                  |  8 +++++++
+>>   2 files changed, 31 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> index fb216ce68bb3..9be4ed12f13c 100644
+>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> @@ -253,6 +253,16 @@ properties:
+>>   
+>>       additionalProperties: false
+>>   
+>> +  pd-timers:
+>> +    description: An array of u32 integers, where an even index (i) is the timer (referenced in
+>> +      dt-bindings/usb/pd.h) and the odd index (i+1) is the timer value in ms (refer
+>> +      "Table 6-68 Time Values" of "USB Power Delivery Specification Revision 3.0, Version 1.2 " for
+>> +      the appropriate value). For certain timers the PD spec defines a range rather than a fixed
+>> +      value. The timers may need to be tuned based on the platform. This dt property allows the user
+>> +      to assign specific values based on the platform. If these values are not explicitly defined,
+>> +      TCPM will use a valid default value for such timers.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> Is it really necessary to use the array property? I think it's easier
+> and more logical to define corresponding individual properties, one per
+> the timer.
 
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index 7aca1ef7f44c..c58a12c147f4 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -22,6 +22,7 @@ static const struct class role_class =3D {
-=20
- struct usb_role_switch {
- 	struct device dev;
-+	struct lock_class_key key;
- 	struct mutex lock; /* device lock*/
- 	struct module *module; /* the module this device depends on */
- 	enum usb_role role;
-@@ -34,8 +35,6 @@ struct usb_role_switch {
- 	usb_role_switch_set_t set;
- 	usb_role_switch_get_t get;
- 	bool allow_userspace_control;
--
--	struct lock_class_key key;
- };
-=20
- #define to_role_switch(d)	container_of(d, struct usb_role_switch, dev)
-@@ -329,6 +328,8 @@ static void usb_role_switch_release(struct device *de=
-v)
- {
- 	struct usb_role_switch *sw =3D to_role_switch(dev);
-=20
-+	mutex_destroy(&sw->lock);
-+	lockdep_unregister_key(&sw->key);
- 	kfree(sw);
- }
-=20
-@@ -367,7 +368,8 @@ usb_role_switch_register(struct device *parent,
- 	if (!sw)
- 		return ERR_PTR(-ENOMEM);
-=20
--	mutex_init(&sw->lock);
-+	lockdep_register_key(&sw->key);
-+	mutex_init_with_key(&sw->lock, &sw->key);
-=20
- 	sw->allow_userspace_control =3D desc->allow_userspace_control;
- 	sw->usb2_port =3D desc->usb2_port;
-@@ -399,9 +401,6 @@ usb_role_switch_register(struct device *parent,
-=20
- 	sw->registered =3D true;
-=20
--	lockdep_register_key(&sw->key);
--	lockdep_set_class(&sw->lock, &sw->key);
--
- 	/* TODO: Symlinks for the host port and the device controller. */
-=20
- 	return sw;
-@@ -418,9 +417,6 @@ void usb_role_switch_unregister(struct usb_role_switc=
-h *sw)
- {
- 	if (IS_ERR_OR_NULL(sw))
- 		return;
--
--	lockdep_unregister_key(&sw->key);
--
- 	sw->registered =3D false;
- 	if (dev_fwnode(&sw->dev))
- 		component_del(&sw->dev, &connector_ops);
+Thanks for the review. The reason I did it this way was for
+convenience. If in the future someone else wants add a new timer,
+it'd be convenient to just add it as a new macro definition in pd.h
+rather than having to define a new property each time, especially
+if folks want to add more timers (scales better).
+There are 3 timers already and I am working to add a fourth in a
+follow up patch if the current RFC gets accepted.
+
+Please let me know what do you think?
+
+Regards,
+
+Amit
+
+>> +
+>>   dependencies:
+>>     sink-vdos-v1: [ sink-vdos ]
+>>     sink-vdos: [ sink-vdos-v1 ]
+>> @@ -478,3 +488,16 @@ examples:
+>>               };
+>>           };
+>>       };
+>> +
+>> +  # USB-C connector with PD timers
+>> +  - |
+>> +    #include <dt-bindings/usb/pd.h>
+>> +    usb {
+>> +        connector {
+>> +            compatible = "usb-c-connector";
+>> +            label = "USB-C";
+>> +            pd-timers =
+>> +                <PD_TIMER_SINK_WAIT_CAP 600>,
+>> +                <PD_TIMER_CC_DEBOUNCE 170>;
+>> +        };
+>> +    };
+>> diff --git a/include/dt-bindings/usb/pd.h b/include/dt-bindings/usb/pd.h
+>> index e6526b138174..6c58c30f3f39 100644
+>> --- a/include/dt-bindings/usb/pd.h
+>> +++ b/include/dt-bindings/usb/pd.h
+>> @@ -465,4 +465,12 @@
+>>   	 | ((vbm) & 0x3) << 15 | (curr) << 14 | ((vbi) & 0x3f) << 7	\
+>>   	 | ((gi) & 0x3f) << 1 | (ct))
+>>   
+>> +/* PD Timer definitions */
+>> +/* tTypeCSinkWaitCap (Table 6-68 Time Values, USB PD3.1 Spec) */
+>> +#define PD_TIMER_SINK_WAIT_CAP		0
+>> +/* tPSSourceOff (Table 6-68 Time Values, USB PD3.1 Spec) */
+>> +#define PD_TIMER_PS_SOURCE_OFF		1
+>> +/* tCCDebounce (Table 4-33 CC Timing, USB Type-C Cable & Connector Spec Rel2.2) */
+>> +#define PD_TIMER_CC_DEBOUNCE		2
+>> +
+>>   #endif /* __DT_POWER_DELIVERY_H */
+>> -- 
+>> 2.46.0.598.g6f2099f65c-goog
+>>
 
