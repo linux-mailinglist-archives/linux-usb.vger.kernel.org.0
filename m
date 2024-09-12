@@ -1,120 +1,152 @@
-Return-Path: <linux-usb+bounces-15010-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15011-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C005D976CC0
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 16:53:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62189976CE7
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 17:00:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87CB22860BB
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 14:53:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 861D71C23D3D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 15:00:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D681B984A;
-	Thu, 12 Sep 2024 14:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868C477F11;
+	Thu, 12 Sep 2024 15:00:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ibbt1mLK"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="YeCRBz4U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837A71B6541;
-	Thu, 12 Sep 2024 14:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1C07DA62
+	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 15:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726152782; cv=none; b=hmGDJ/hLQmvCoQJxgL65lyoTHmC9tm+bpiP1gKZxmectdokZugr6n6W3HdSlxw1q2XUu7m3WmXvK+uEa3dV5hAwOXdFftI/bhj9LVFm1mCTQ/wlnro0B6WuiqwIkTbSY556nX7WJFtYg9/7c/ur15SnJHJA0+ItpRcwXO+Bc/WY=
+	t=1726153235; cv=none; b=rQA0a81OZZVmt24r3CudrpxCEIYZl2rzRFQnBjCaKRBaO7JSGU9xKXZxa5E0MjSrir4xcVoxuR4Th6H+lbI53p7TbNNo+Hs1gDAqh9GP4P13+9e1khwSiPTw5zgf06mh/X4odnZxZ1Qm+5FgLTLQU3WrICw2Fvn4oxwY+xzdLuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726152782; c=relaxed/simple;
-	bh=OWL4mlcwtG9tysqDuntuby0lkx3kp3yrJUTlD+NSAk4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rnicchxPB1BteSum9SXaLO6mSGE97PdRAwJ2cyVurSLL/Y2M6M1Nw7/0Go+8nQwhiodwqm85yuW+J6Dd9GPZjgMD//Zo4d69Il/jrs02rNmAzNsSqJItW7t2rqNtX0ly7tK3lTJXJW08U4pOOpehDfBV5HIZVC1ziy7Pk5KDwr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ibbt1mLK; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2d8a7c50607so734612a91.1;
-        Thu, 12 Sep 2024 07:53:01 -0700 (PDT)
+	s=arc-20240116; t=1726153235; c=relaxed/simple;
+	bh=7L47ev+2rIiO9RYsStVCwqce6vN2zxIMqLv/5Qypajk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gK0KnBR5sBXn7KJCe8BJ5lm8E+0O6v/M4feLvA60eosbpQY/J0lK+RJBlqlXJ5CO5ljndotBT0xg8kyEsysQwJFGWB8Z0tkGra+2Y2iYK5tDCV7dTz4FaymfqL17BoJ36hpOyH8PHYx39E0v8y/stVNJ+SVTvXwslroUyoVyVyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=YeCRBz4U; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7a4df9dc885so82752285a.0
+        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 08:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726152781; x=1726757581; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5IKbYoDJEP2KO85oswQmEdobyY+Md1ZqhM7AUuMvg0=;
-        b=ibbt1mLKj11tLbnR97UW6F+YW2wPi3W+XfDh0J98oYss0JXl+k2YsbAq67qabJgl+Q
-         zbQoeHhS0z99PPJvAjvlX6mwBawlUoLmPlTlmVPoQ28suqi00VOgSDc92JVj3QJayxqR
-         itqzb62HOHaFPF/qz67/lsQVXDXzGCg+Djrdq/M3O6Z0dCbeG5RDTFoMnpaU7mQk/qf4
-         dISkgum5m3rPkf3/kmDdrjUkkxv/26DkikbBR3lgx60b2vgURIaM59hktxwF6g+vLFGC
-         TK5CE2fZmImQRI1IJ5uHe/RFfQuMXtzKTo4iHEMh8mGZiUg/Y34sUy3YEi72vsTnj+w4
-         +Fcg==
+        d=rowland.harvard.edu; s=google; t=1726153232; x=1726758032; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZAYn7AWMFdIVv0f37NgeBxnEuOXY388haBmrjcdyedA=;
+        b=YeCRBz4UxFpGwCN5cT8SdrgrIaExegqVau6/pnm9u3eBJK48gJqOho1/j3STn4C8wC
+         q13bU5eofxSJQOx8z6XDxjJbL18qYdJ/daQYElTEUAR4UZBkThMHXmCUyUXxWAn0cjlx
+         kA1Av8urf5MsYfJd5fPUxQFRSoA2RP4WkJeaelzQHLg3elDQ1+yZLwGEfFZHoUHicshU
+         SOe+HKr5HyYVXZYK/Hputy/YLVg3jb1rx6DhwJ9w/d0pkT1GtoU4Fpbdd1kslxc3yoUo
+         yfz90A7TfWRwFQcr/WymGp7QWgVxfyE2RA3vnx4LctxGlXS0FFZPaOFJhw3Ldja9UmTO
+         AdmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726152781; x=1726757581;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+5IKbYoDJEP2KO85oswQmEdobyY+Md1ZqhM7AUuMvg0=;
-        b=q/SYTXKtNHzAzrMRCD0S1//yfq7FxWqcDaO8xBHr89y5rlUuk1YOQWvHVadUu0BzrJ
-         yTTfz4rLVHAfjHD5Sdlu3bQdNsvJjCOv5FF0osTWiaIvKYYNhKKP4TxS+PkN4K2YKsu+
-         gD4CxNqf73CVs4XlHz/2Sf3dLBwJQCgnsn0IXeoVxCQOfN+BvCh+o+GxabAHB/uxYNJl
-         lAZ2VrGtY5MW29d1Oppmhw0JLhMMo4kSXMgi38fwWyybXCJGfwbaPjWXVjnUYe1s03lR
-         Sv+I3jcyVFNKZQbNNlZe3X29sDjG4e30waEjttcf3Mwab6ZgSW7zazxAzZqzgzGthfKU
-         i7jg==
-X-Forwarded-Encrypted: i=1; AJvYcCWCVwZ0MGN+nCpKJNuQbC94fUb0QoSbBxAFUZkL3tECYBCjF9tSCA7zklAWGFIa5Abch26bD6TAOyKdyy0=@vger.kernel.org, AJvYcCXdU4Lc8vw1fpImAS465CYELrqSrOxlixs0MJ9iCZ+3ej5qUZWwIuR34d2xhPT+6M9IgZdK/DzUj7Oo@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsKRjclaVXVJ3IXaMcuK0l1aSNH80ynJcHN70Woz9rSYFCrfYx
-	P6iwTB0QsuzPSKiEkWJv74qqoXXM0Q6KZGk6sGtw3zYnZO8sLcN1
-X-Google-Smtp-Source: AGHT+IGnHgXzCoYLfVO4IAmPffp9UdTT8UdZ3TotNadEvQeLFNoK2/xvDlu0w5z7lWOj456UG/fd0A==
-X-Received: by 2002:a17:90a:3ec4:b0:2d8:8509:85d1 with SMTP id 98e67ed59e1d1-2dba00826d9mr3133023a91.38.1726152780589;
-        Thu, 12 Sep 2024 07:53:00 -0700 (PDT)
-Received: from embed-PC.. ([106.222.232.184])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dadbfe4b41sm12760161a91.8.2024.09.12.07.52.51
+        d=1e100.net; s=20230601; t=1726153232; x=1726758032;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZAYn7AWMFdIVv0f37NgeBxnEuOXY388haBmrjcdyedA=;
+        b=N+3QRM3sM830fjb4sWiuHN8FLsMs2Zhnu9FwAaE3u4AFDWYWS7zM7k8+1n0t68/Ms7
+         Q9qpzXDkcrl4TBdq7nFFfw38cXwxfSRe4F8CxDRIoRRHoKCRIiuR4wQh1KvZX+Upefxm
+         /ss/p+etHWdkqF/XqLXQnjQYzpw3zFDLiz9PdQCdZCpqhOpFPa5QvK5UrpOmvfmmu0BT
+         P5glQMStVvKkysiZwGSnwvS/sZ5nzEog3S1RxYniwyJ/VeVLO/qG50qFFEFkVwQS1jNx
+         GsGJTwMRI7ToxtL+e+Ah5wqt6CPVTXK4E6WEjvvEy0qyrNyUt2lZyIu8hFau8Kns+075
+         zRLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUEmbY5/RIKu7E/b/dVpf5EFPVEkNcUT6gvcWdvypbMDvmMXuCM3XCpiX0ugH2X6ZTXGwvyEx3zk8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0xzEkI5CcOwwt+ZR92blNMvIf6yV7/JI0edXfK9z58fDv0nVe
+	gYexVGShFolfE+wUvgjWO+oqjZPW4NdkiZfyjZweGK+fwZr5+VsnMSpyX+NBMg==
+X-Google-Smtp-Source: AGHT+IGm0kosw61FYxbFzQdMrzultDRpDvVUYnNuhPbncnk9H5TX3B9V0J/rfa5HaCMNIFYZ78QQUg==
+X-Received: by 2002:a05:620a:45ab:b0:7a9:b798:5e29 with SMTP id af79cd13be357-7a9e60fd4f3mr403584885a.30.1726153231339;
+        Thu, 12 Sep 2024 08:00:31 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::ff03])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a796ad15sm550744185a.30.2024.09.12.08.00.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 07:52:59 -0700 (PDT)
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org
-Cc: skhan@linuxfoundation.org,
-	dan.carpenter@linaro.org,
-	rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] usb: storage: ene_ub6250: Fix right shift warnings
-Date: Thu, 12 Sep 2024 20:22:47 +0530
-Message-Id: <20240912145247.15544-1-abhishektamboli9@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 12 Sep 2024 08:00:31 -0700 (PDT)
+Date: Thu, 12 Sep 2024 11:00:27 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: duanchenghao <duanchenghao@kylinos.cn>
+Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org,
+	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+Message-ID: <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
+References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+ <1725931490447646.3.seg@mailgw.kylinos.cn>
+ <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+ <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
+ <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
 
-Change bl_len from u16 to u32 to accommodate the necessary bit shifts.
+On Thu, Sep 12, 2024 at 11:21:26AM +0800, duanchenghao wrote:
+> 在 2024-09-11星期三的 10:40 -0400，Alan Stern写道：
+> > On Tue, Sep 10, 2024 at 05:36:56PM +0800, duanchenghao wrote:
+> > > S4 wakeup restores the image that was saved before the system
+> > > entered
+> > > the S4 sleep state.
+> > > 
+> > >     S4 waking up from hibernation
+> > >     =============================
+> > >     kernel initialization
+> > >     |   
+> > >     v   
+> > >     freeze user task and kernel thread
+> > >     |   
+> > >     v   
+> > >     load saved image
+> > >     |    
+> > >     v   
+> > >     freeze the peripheral device and controller
+> > >     (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If it is
+> > > set,
+> > >      return to EBUSY and do not perform the following restore
+> > > image.)
+> > 
+> > Why is the flag set at this point?  It should not be; the device and 
+> > controller should have been frozen with wakeup disabled.
+> > 
+> This is check point, not set point.
 
-Fix the following smatch warnings:
+Yes, I know that.  But when the flag was checked, why did the code find 
+that it was set?  The flag should have been clear.
 
-drivers/usb/storage/ene_ub6250.c:1509 ms_scsi_read_capacity() warn:
-right shifting more than type allows 16 vs 24
-drivers/usb/storage/ene_ub6250.c:1510 ms_scsi_read_capacity() warn:
-right shifting more than type allows 16 vs 16
+> > Is your problem related to the one discussed in this email thread?
+> > 
+> > https://lore.kernel.org/linux-usb/d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu/
+> > 
+> > Would the suggestion I made there -- i.e., have the xhci-hcd 
+> > interrupt handler skip calling usb_hcd_resume_root_hub() if the root
+> > hub 
+> > was suspended with wakeup = 0 -- fix your problem?
+> 
+> Skipping usb_hcd_resume_root_hub() should generally be possible, but
+> it's important to ensure that normal remote wakeup functionality is not
+> compromised. Is it HUB_SUSPEND that the hub you are referring to is in
+> a suspended state?
 
-Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
----
- drivers/usb/storage/ene_ub6250.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't understand this question.  hub_quiesce() gets called with 
+HUB_SUSPEND when the hub enters a suspended state.
 
-diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
-index 97c66c0d91f4..ab6718dc874f 100644
---- a/drivers/usb/storage/ene_ub6250.c
-+++ b/drivers/usb/storage/ene_ub6250.c
-@@ -1484,7 +1484,7 @@ static int ms_scsi_mode_sense(struct us_data *us, struct scsi_cmnd *srb)
- static int ms_scsi_read_capacity(struct us_data *us, struct scsi_cmnd *srb)
- {
- 	u32   bl_num;
--	u16    bl_len;
-+	u32    bl_len;
- 	unsigned int offset = 0;
- 	unsigned char    buf[8];
- 	struct scatterlist *sg = NULL;
--- 
-2.34.1
+You are correct about the need for normal remote wakeup to work 
+properly.  The interrupt handler should skip calling 
+usb_hcd_resume_root_hub() for port connect or disconnect changes and for 
+port overcurrent changes (when the root hub is suspended with wakeup = 
+0).  But it should _not_ skip calling usb_hcd_resume_root_hub() for port 
+resume events.
 
+Alan Stern
 
