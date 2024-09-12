@@ -1,86 +1,90 @@
-Return-Path: <linux-usb+bounces-15011-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15012-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62189976CE7
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 17:00:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A8F976CFD
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 17:06:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 861D71C23D3D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 15:00:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7C29282454
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 15:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868C477F11;
-	Thu, 12 Sep 2024 15:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D1D1A42B7;
+	Thu, 12 Sep 2024 15:06:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="YeCRBz4U"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="JwvPeCEn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1C07DA62
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 15:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F8E3D556
+	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 15:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726153235; cv=none; b=rQA0a81OZZVmt24r3CudrpxCEIYZl2rzRFQnBjCaKRBaO7JSGU9xKXZxa5E0MjSrir4xcVoxuR4Th6H+lbI53p7TbNNo+Hs1gDAqh9GP4P13+9e1khwSiPTw5zgf06mh/X4odnZxZ1Qm+5FgLTLQU3WrICw2Fvn4oxwY+xzdLuI=
+	t=1726153572; cv=none; b=sqoZsL/SLB5F+vI20WytgQt9FEGCGnIecitdtTf2pzDw/2zs7BIbO/ZGg9EJmZ6WdlwKsTg+fqbmldcKbPjEuGjelG86BxqrCe3/dBn+mvZ7Pd57KFUQs4CjWarifOEHydiQEkHcJViexYM1WD089AphmBXVNv9Ms/y0/qsuH3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726153235; c=relaxed/simple;
-	bh=7L47ev+2rIiO9RYsStVCwqce6vN2zxIMqLv/5Qypajk=;
+	s=arc-20240116; t=1726153572; c=relaxed/simple;
+	bh=Xeu1D4BRsiQbRZsJ2sVciIIVio/OZrLDy29Tthg+Yi0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gK0KnBR5sBXn7KJCe8BJ5lm8E+0O6v/M4feLvA60eosbpQY/J0lK+RJBlqlXJ5CO5ljndotBT0xg8kyEsysQwJFGWB8Z0tkGra+2Y2iYK5tDCV7dTz4FaymfqL17BoJ36hpOyH8PHYx39E0v8y/stVNJ+SVTvXwslroUyoVyVyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=YeCRBz4U; arc=none smtp.client-ip=209.85.222.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tb5GbjIpcNIsyDnFG0PCxApEHhWrYo6QnkFtT6szd1xBQLfdT5h6LnSLDK1W/tcegM5HKrzOMUuOUUpIm8oa6aTytdkRDJ/YT8XIBCLdt4N9pu+UM1lwd5pCmhJo5DKaFx76uHnVzO0H2+zZChan/cr+/7f+I/1yhfzJL1HkpiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=JwvPeCEn; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7a4df9dc885so82752285a.0
-        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 08:00:32 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-45815723c87so8352121cf.0
+        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 08:06:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1726153232; x=1726758032; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1726153570; x=1726758370; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=ZAYn7AWMFdIVv0f37NgeBxnEuOXY388haBmrjcdyedA=;
-        b=YeCRBz4UxFpGwCN5cT8SdrgrIaExegqVau6/pnm9u3eBJK48gJqOho1/j3STn4C8wC
-         q13bU5eofxSJQOx8z6XDxjJbL18qYdJ/daQYElTEUAR4UZBkThMHXmCUyUXxWAn0cjlx
-         kA1Av8urf5MsYfJd5fPUxQFRSoA2RP4WkJeaelzQHLg3elDQ1+yZLwGEfFZHoUHicshU
-         SOe+HKr5HyYVXZYK/Hputy/YLVg3jb1rx6DhwJ9w/d0pkT1GtoU4Fpbdd1kslxc3yoUo
-         yfz90A7TfWRwFQcr/WymGp7QWgVxfyE2RA3vnx4LctxGlXS0FFZPaOFJhw3Ldja9UmTO
-         AdmA==
+        bh=CfegXMNukWSQFaI2F0mkDsnuhmbgmMHLYZZ41KpmG1M=;
+        b=JwvPeCEnPJ6CuYZI35iKrEXPNj59TGr9Xl7ovynhjvhwe9nnEiX4/n0ZmFT45pl6Rp
+         7WP3xZe/f1ftPecTXC+s/Wojxl4dNXUFu0GpeFTqh8THvBFgN9e+Fu8tuG6mkNQU6WV5
+         mnh8hMfmSddwxQzaWbd8tLjZe86NqnSptCKcn/AcY2/jw519SONYZaakxzohzN2xmQy5
+         YXop8TmqSHlyoz9MLf1fuF4DkJnBepeoEjMG7/jZUkof1AvWvAhQiwfr54rNEjHrDyQH
+         TVHHC4IbzBSg9ziGO5tow9K2k46ixq3ZmgM3YYyLYLzK8r7eU4qzk+viUPDUKgzURg6+
+         bC7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726153232; x=1726758032;
+        d=1e100.net; s=20230601; t=1726153570; x=1726758370;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAYn7AWMFdIVv0f37NgeBxnEuOXY388haBmrjcdyedA=;
-        b=N+3QRM3sM830fjb4sWiuHN8FLsMs2Zhnu9FwAaE3u4AFDWYWS7zM7k8+1n0t68/Ms7
-         Q9qpzXDkcrl4TBdq7nFFfw38cXwxfSRe4F8CxDRIoRRHoKCRIiuR4wQh1KvZX+Upefxm
-         /ss/p+etHWdkqF/XqLXQnjQYzpw3zFDLiz9PdQCdZCpqhOpFPa5QvK5UrpOmvfmmu0BT
-         P5glQMStVvKkysiZwGSnwvS/sZ5nzEog3S1RxYniwyJ/VeVLO/qG50qFFEFkVwQS1jNx
-         GsGJTwMRI7ToxtL+e+Ah5wqt6CPVTXK4E6WEjvvEy0qyrNyUt2lZyIu8hFau8Kns+075
-         zRLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUEmbY5/RIKu7E/b/dVpf5EFPVEkNcUT6gvcWdvypbMDvmMXuCM3XCpiX0ugH2X6ZTXGwvyEx3zk8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0xzEkI5CcOwwt+ZR92blNMvIf6yV7/JI0edXfK9z58fDv0nVe
-	gYexVGShFolfE+wUvgjWO+oqjZPW4NdkiZfyjZweGK+fwZr5+VsnMSpyX+NBMg==
-X-Google-Smtp-Source: AGHT+IGm0kosw61FYxbFzQdMrzultDRpDvVUYnNuhPbncnk9H5TX3B9V0J/rfa5HaCMNIFYZ78QQUg==
-X-Received: by 2002:a05:620a:45ab:b0:7a9:b798:5e29 with SMTP id af79cd13be357-7a9e60fd4f3mr403584885a.30.1726153231339;
-        Thu, 12 Sep 2024 08:00:31 -0700 (PDT)
+        bh=CfegXMNukWSQFaI2F0mkDsnuhmbgmMHLYZZ41KpmG1M=;
+        b=VmE1Xi1Td/GKV+Osvyz8JFI8tGt9l+DZReL+Pq0t5JpnZL5B2jixhLWaybSIwBNFIW
+         nj6k8A36GgEFRpSCujl1KxREmVC0knVMF5xuESj4C1Dt4WQy1d9t74tkv9+cEmtn+Xqr
+         flXD7Ruvcv1qC5XvMJjJA+q7QBe/Tg0ZTsj0ifpHiltNT5C5DOKPU7wptwvp3jsIam5r
+         7nKu+lQGfmg20DfC91dTDGiRB981qcXcg7+pON00sOoskHXlFalbHLZRNY+enF3PGhXx
+         CGuYMklTWFa9ZVulwNr8MAXtJuUYwddMXmqXVgzUs6gRXlIB+kA+DVmvewCk/UNzTOcv
+         PlAA==
+X-Forwarded-Encrypted: i=1; AJvYcCW7o3HA3R2r7ss6ZvDN1zVRw+uIpYap1NIOzwUK8rLcyUdaz1POa+9tPUcHAuODfVH4WcXBMCmR9xY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1YmwJWNu1alXqPBGrkjFfkmAJKXGjXkQ5K83sxPTpYHDi1wKg
+	+KF4RYVEHWeDchtirmQt0EfgE4EwimGlBoKDImGsU0Kyw+JxtLIeH7XPlLUeoQ==
+X-Google-Smtp-Source: AGHT+IHASY8POUZzq4SzWd4eRvpU7ACy0FdfD9ZYvB30CHcbuAKLRH7kkORNebQSHw6WSRrL9rIngA==
+X-Received: by 2002:a05:622a:1ba1:b0:458:3b66:ace9 with SMTP id d75a77b69052e-4583c7c4259mr177032941cf.25.1726153569798;
+        Thu, 12 Sep 2024 08:06:09 -0700 (PDT)
 Received: from rowland.harvard.edu ([2601:19b:681:fd10::ff03])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a796ad15sm550744185a.30.2024.09.12.08.00.30
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45822eb001bsm54183181cf.54.2024.09.12.08.06.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 08:00:31 -0700 (PDT)
-Date: Thu, 12 Sep 2024 11:00:27 -0400
+        Thu, 12 Sep 2024 08:06:09 -0700 (PDT)
+Date: Thu, 12 Sep 2024 11:06:06 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: duanchenghao <duanchenghao@kylinos.cn>
-Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org,
-	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
- USB status when S4 wakes up
-Message-ID: <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
-References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
- <1725931490447646.3.seg@mailgw.kylinos.cn>
- <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
- <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
- <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org,
+	jorge.lopez2@hp.com, acelan.kao@canonical.com,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, kaihengfeng@gmail.com
+Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne
+ 440
+Message-ID: <c1f1ab87-eda2-4570-ab00-1114d0bdade0@rowland.harvard.edu>
+References: <20240906053047.459036-1-kai.heng.feng@canonical.com>
+ <d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu>
+ <CAAd53p4i1zzW2DsVfirjXVsQX0AgXy1XbzWaM-ziWmAmp8J1=A@mail.gmail.com>
+ <7be0c87a-c00f-4346-8482-f41ef0249b57@rowland.harvard.edu>
+ <CAAd53p7c4-jpZ6OsW+H9qw2mvvr8kSfX2UEf8YrsWJt5koYbAA@mail.gmail.com>
+ <fe0d3259-c60b-4ef8-aa42-edb5ca2e2d90@rowland.harvard.edu>
+ <CAAd53p67c0qQijUreu0AShsKucgPY03OQP+RGw=P7-vCV3Y6eg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,63 +94,35 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+In-Reply-To: <CAAd53p67c0qQijUreu0AShsKucgPY03OQP+RGw=P7-vCV3Y6eg@mail.gmail.com>
 
-On Thu, Sep 12, 2024 at 11:21:26AM +0800, duanchenghao wrote:
-> 在 2024-09-11星期三的 10:40 -0400，Alan Stern写道：
-> > On Tue, Sep 10, 2024 at 05:36:56PM +0800, duanchenghao wrote:
-> > > S4 wakeup restores the image that was saved before the system
-> > > entered
-> > > the S4 sleep state.
-> > > 
-> > >     S4 waking up from hibernation
-> > >     =============================
-> > >     kernel initialization
-> > >     |   
-> > >     v   
-> > >     freeze user task and kernel thread
-> > >     |   
-> > >     v   
-> > >     load saved image
-> > >     |    
-> > >     v   
-> > >     freeze the peripheral device and controller
-> > >     (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If it is
-> > > set,
-> > >      return to EBUSY and do not perform the following restore
-> > > image.)
-> > 
-> > Why is the flag set at this point?  It should not be; the device and 
-> > controller should have been frozen with wakeup disabled.
-> > 
-> This is check point, not set point.
-
-Yes, I know that.  But when the flag was checked, why did the code find 
-that it was set?  The flag should have been clear.
-
-> > Is your problem related to the one discussed in this email thread?
-> > 
-> > https://lore.kernel.org/linux-usb/d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu/
-> > 
-> > Would the suggestion I made there -- i.e., have the xhci-hcd 
-> > interrupt handler skip calling usb_hcd_resume_root_hub() if the root
-> > hub 
-> > was suspended with wakeup = 0 -- fix your problem?
+On Thu, Sep 12, 2024 at 02:28:15PM +0800, Kai-Heng Feng wrote:
+> On Tue, Sep 10, 2024 at 9:13 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > It should be possible for this to work.  Just make the interrupt
+> > handler skip calling usb_hcd_resume_root_hub() if wakeup is not enabled
+> > for the root hub getting the port-status change.  When the root hub
+> > resumes as part of the system resume later on, the hub driver will check
+> > and see that a connect change occurred.
 > 
-> Skipping usb_hcd_resume_root_hub() should generally be possible, but
-> it's important to ensure that normal remote wakeup functionality is not
-> compromised. Is it HUB_SUSPEND that the hub you are referring to is in
-> a suspended state?
+> This can work. But should the change be made in
+> usb_hcd_resume_root_hub() or by the caller?
+> The issue can potentially happen to all USB controllers, not just xHCI.
 
-I don't understand this question.  hub_quiesce() gets called with 
-HUB_SUSPEND when the hub enters a suspended state.
+True.  However, we need to make sure that remote wakeup continues to 
+work properly.  This means that the handler should skip calling 
+usb_hcd_resume_root_hub() (when the root hub is suspended with wakeup = 
+0) for port connect/disconnect changes or for port overcurrent changes.  
+But it should _not_ skip calling usb_hcd_resume_root_hub() for port 
+resume events (i.e., wakeup requests received from downstream).
 
-You are correct about the need for normal remote wakeup to work 
-properly.  The interrupt handler should skip calling 
-usb_hcd_resume_root_hub() for port connect or disconnect changes and for 
-port overcurrent changes (when the root hub is suspended with wakeup = 
-0).  But it should _not_ skip calling usb_hcd_resume_root_hub() for port 
-resume events.
+usb_hcd_resume_root_hub() does not have enough information to know the 
+reason for the resume; only the interrupt handler does.
+
+Have you been following the discussion in this other email thread?
+
+https://lore.kernel.org/linux-usb/20240906030548.845115-1-duanchenghao@kylinos.cn/
+
+It seems very similar to the problem you are trying to fix.
 
 Alan Stern
 
