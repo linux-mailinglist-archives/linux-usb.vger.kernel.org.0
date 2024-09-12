@@ -1,56 +1,58 @@
-Return-Path: <linux-usb+bounces-14984-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14985-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AE339761DC
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 08:53:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A7B29761DF
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 08:53:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F540284CD7
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 06:53:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9161281982
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 06:53:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C0818BBA6;
-	Thu, 12 Sep 2024 06:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA6310FF;
+	Thu, 12 Sep 2024 06:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bUbEoL8y"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kPN8iEtc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B755B10FF;
-	Thu, 12 Sep 2024 06:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CAE41C6A;
+	Thu, 12 Sep 2024 06:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726124010; cv=none; b=ZzjKkk5rZQ1qczakBCNCtLZsu3n/AE84zdSDJxQv7nP5EYKFPCTFHMDak4oWY1mSJyz+pVOGqutNe7g0d85s8jHEE0FL/ohGOzoCXNMCwEy8PROiVMT+gW3mP6hIFnwu+aDxB3fw1rV5t/ADJvsthrMkBhKUHXVyJBXn4V1zen4=
+	t=1726124027; cv=none; b=YiUE0h0IGo68JW/bmtoq1T0dhY/O2S23skXT5K+ejtwI8KWXgOQ/9uWLCIIvS3bo+a8KigriT/WkTYpLzq2GuyXOifD9ZSWl5zeU4A1EGxNySIoqjhzsEUnNrmD4JLqmTyP6q0c6KJDHCOmUXNXh98pY9wy7paPjoQ7eO1Y5JUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726124010; c=relaxed/simple;
-	bh=x1z6am5b0jOeS5/RmI9p91PrHTnNU3+NkzsNXV+rKQs=;
+	s=arc-20240116; t=1726124027; c=relaxed/simple;
+	bh=G3WchTtge4g6NnY60rIEF0UBsEDbkw6ExHhLMU1LGp8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r06ztzIgdEBGurq9U5zW71aCdHYEvYLHZB6DqQnnO0QPZXqMhTYAkFfMMS6Wxur2Z3oVu84KHMo61SNl5vPGu9nY6gYxmUFNXYrceKIrHwB+Y4Gp/LF4HDPPuGUvcOFZ7qmQ2FyW4uF0LHFsIXCa2No6NXcINpBuXgSTKZ7tRE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bUbEoL8y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A233AC4CECD;
-	Thu, 12 Sep 2024 06:53:29 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=I7H3DsS3qxG5cu75Fum3DqGZ+wa8eDD8C1x5bfyFAVo43g8VKHfJ+L/NQ/dXr1AwERwpD18WtALWYQDLY9qJKCdFWaEDbGgAMyV+cHC939O6jpfFpTX+n9+DSRLSGLkmyNkWpMGzivgHZPW5Os4ewWsHmgRqSGcLqXs9uhej0zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kPN8iEtc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC75CC4CEC6;
+	Thu, 12 Sep 2024 06:53:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726124010;
-	bh=x1z6am5b0jOeS5/RmI9p91PrHTnNU3+NkzsNXV+rKQs=;
+	s=korg; t=1726124027;
+	bh=G3WchTtge4g6NnY60rIEF0UBsEDbkw6ExHhLMU1LGp8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bUbEoL8y6t1LgtuRraiS0oWdU0B1FnwzQZi5OK23+cdv0oDdNDT10e8jDF30PVGKp
-	 EpC9xx5gKrcPPT75ycE+Wykd/BwVMm/e7vRxkIJTi4q+Mx2BThaa+timlFoR07AaOM
-	 EiBUJ6uVHdhTvqpIxrILKO1UA38wMskjmS2hbANs=
-Date: Thu, 12 Sep 2024 08:53:27 +0200
+	b=kPN8iEtcJi4JgkGvsD6Jzew7s1wgeT052p++QMBbNTZY8FoU5E3tC6jTOcRzf34hb
+	 uUb3LGFnLHndlTq/doqyFf2yUnqdRH0RiN3tZxNfmHtJMEILPTPtxifHedUt017mI2
+	 GZKgSUvzwKaSEGxdzF4VbAtG9CFk4kk4dOBgdves=
+Date: Thu, 12 Sep 2024 08:53:44 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Anurag Bijea <icaliberdev@gmail.com>,
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Anurag Bijea <icaliberdev@gmail.com>,
 	Christian Heusel <christian@heusel.eu>,
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Jameson Thies <jthies@google.com>,
 	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Message-ID: <2024091215-mullets-praying-375b@gregkh>
-References: <20240912054433.721651-1-lk@c--e.de>
+Subject: Re: [PATCH v4] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
+Message-ID: <2024091231-unarmored-deploy-c950@gregkh>
+References: <20240906065853.637205-1-lk@c--e.de>
+ <2024091156-astronomy-licorice-5569@gregkh>
+ <ZuKFetxhrQY1L5fQ@cae.in-ulm.de>
+ <CAA8EJpp3KMkZc3pArrgLcue-GbqLQjeOZ+9XWQDL0NeJxnfR+g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,114 +61,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240912054433.721651-1-lk@c--e.de>
+In-Reply-To: <CAA8EJpp3KMkZc3pArrgLcue-GbqLQjeOZ+9XWQDL0NeJxnfR+g@mail.gmail.com>
 
-On Thu, Sep 12, 2024 at 07:44:33AM +0200, Christian A. Ehrhardt wrote:
-> If the busy indicator is set, all other fields in CCI should be
-> clear according to the spec. However, some UCSI implementations do
-> not follow this rule and report bogus data in CCI along with the
-> busy indicator. Ignore the contents of CCI if the busy indicator is
-> set.
+On Thu, Sep 12, 2024 at 09:21:39AM +0300, Dmitry Baryshkov wrote:
+> On Thu, 12 Sept 2024 at 09:08, Christian A. Ehrhardt <lk@c--e.de> wrote:
+> >
+> >
+> > Hi,
+> >
+> > On Wed, Sep 11, 2024 at 03:37:25PM +0200, Greg Kroah-Hartman wrote:
+> > > On Fri, Sep 06, 2024 at 08:58:53AM +0200, Christian A. Ehrhardt wrote:
+> > > > If the busy indicator is set, all other fields in CCI should be
+> > > > clear according to the spec. However, some UCSI implementations do
+> > > > not follow this rule and report bogus data in CCI along with the
+> > > > busy indicator. Ignore the contents of CCI if the busy indicator is
+> > > > set.
+> > > >
+> > > > If a command timeout is hit it is possible that the EVENT_PENDING
+> > > > bit is cleared while connector work is still scheduled which can
+> > > > cause the EVENT_PENDING bit to go out of sync with scheduled connector
+> > > > work. Check and set the EVENT_PENDING bit on entry to
+> > > > ucsi_handle_connector_change() to fix this.
+> > > >
+> > > > Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
+> > > > This ensures that the command is cancelled even if ->sync_control
+> > > > returns an error (most likely -ETIMEDOUT).
+> > > >
+> > > > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> > > > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> > > > Bisected-by: Christian Heusel <christian@heusel.eu>
+> > > > Tested-by: Anurag Bijea <icaliberdev@gmail.com>
+> > > > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> > > > ---
+> > > >  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
+> > > >  1 file changed, 12 insertions(+), 6 deletions(-)
+> > >
+> > > Does not apply to my usb-next branch :(
+> > >
+> > > Can you rebase and resend this?  Or wait until -rc1 is out and rebase
+> > > and resend then?
+> >
+> > I sent a v5 rebased onto usb-next.
 > 
-> If a command timeout is hit it is possible that the EVENT_PENDING
-> bit is cleared while connector work is still scheduled which can
-> cause the EVENT_PENDING bit to go out of sync with scheduled connector
-> work. Check and set the EVENT_PENDING bit on entry to
-> ucsi_handle_connector_change() to fix this.
-> 
-> Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
-> This ensures that the command is cancelled even if ->sync_control
-> returns an error (most likely -ETIMEDOUT).
-> 
-> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> Bisected-by: Christian Heusel <christian@heusel.eu>
-> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> ---
->  NOTE: Rebased onto usb-next.
-> 
->  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 35dce4057c25..e0f3925e401b 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -38,6 +38,10 @@
->  
->  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
->  {
-> +	/* Ignore bogus data in CCI if busy indicator is set. */
-> +	if (cci & UCSI_CCI_BUSY)
-> +		return;
-> +
->  	if (UCSI_CCI_CONNECTOR(cci))
->  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
->  
-> @@ -103,15 +107,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
->  		return -EINVAL;
->  
->  	ret = ucsi->ops->sync_control(ucsi, command);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = ucsi->ops->read_cci(ucsi, cci);
-> -	if (ret)
-> -		return ret;
-> +	if (ucsi->ops->read_cci(ucsi, cci))
-> +		return -EIO;
->  
->  	if (*cci & UCSI_CCI_BUSY)
->  		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
-> +	if (ret)
-> +		return ret;
->  
->  	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
->  		return -EIO;
-> @@ -1197,6 +1199,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  
->  	mutex_lock(&con->lock);
->  
-> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
-> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
-> +			     __func__);
-> +
->  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
->  
->  	ret = ucsi_send_command_common(ucsi, command, &con->status,
-> -- 
-> 2.43.0
-> 
-> 
+> Note, it wasn't marked as v5, it didn't contain a changelog, etc.
+> Please consider using the `b4` tool to send patches. It automates
+> versioning, changelog generation, etc.
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Yes, this needs to be properly marked as such, my patch-bot already
+noticed that :(
 
