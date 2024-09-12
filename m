@@ -1,176 +1,172 @@
-Return-Path: <linux-usb+bounces-15000-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15001-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10656976938
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 14:33:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25331976955
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 14:44:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50636B22234
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 12:33:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0F191F24587
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 12:44:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6A31A262B;
-	Thu, 12 Sep 2024 12:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1B61A3BD4;
+	Thu, 12 Sep 2024 12:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="dY4L4U10";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="dY4L4U10"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mFfh1/y/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEA619F42D;
-	Thu, 12 Sep 2024 12:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9486619F42D;
+	Thu, 12 Sep 2024 12:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726144404; cv=none; b=Nw34FoXM8ALiblnr2pfBPBfqakn35qbFSAyfnsgIyAJV3GglyQbSyIluHEnLRwPg/ot3uV7EcniRI1URfzfP0LzpVA0Q63Q1cbk1HOqQIbzhZmW6OTIQVTbhEDfzpjDNMuIbTwt9aT006FBsbLsHfiANnHqot5vpnvPYpm8Exi8=
+	t=1726145033; cv=none; b=C9B3cFGw8/vb15yYDFAlYza7uTIWZTg503Zufyx52zf6uudNbuSaK/hPEE5swEO0WEALk0iUAegSvZX3S7BYnTzrFa7izPI2XoDJb6xsJ8GrevU8TVn7q61Qm1q9BpFnSvwgnUkfC/z5vkwm+9ZC6j6BJcNEux/+qRtBEerM/RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726144404; c=relaxed/simple;
-	bh=ivbeg34ovgeNcQj5yU7ZKdFerQwnvFUk05BcoKsoTO0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LFAsdVF9SqNKcEay9pGyICAMCMtOH37mWCC0rQoqS7XT61WbYsRbjs+RFcQWs+R/x5hbGTSPRWAJnAfkh6l5Nb72cOiuAu5wjKqyUHc4Uqk5Kzx92qQ+jjI8TpJQA3WAeJTpdQaCXe3Pm3wyRIcN5OgZagYh8EBmkxhvvtxa5BY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=dY4L4U10; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=dY4L4U10; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 62BA11FB79;
-	Thu, 12 Sep 2024 12:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1726144400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=eLbWUhsmJNcOBKiJToMXxLKYZ5o7Ckwgprs7elDrDJ4=;
-	b=dY4L4U10N3pmXWNAMsjJfVDkSS/bizBx2QhyFJNTvdjVlhWEarUtDbZfPqdBtf9kzBi+x2
-	azOndxB/Dd+6Ch60ZYzzICSwnBsFQddaSWPXHGPoxrZrNbBYym1l86BMmwCssM/JeP47uG
-	aifj8IoBExHg27fwqTmCB5R3LTiCtvk=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=dY4L4U10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1726144400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=eLbWUhsmJNcOBKiJToMXxLKYZ5o7Ckwgprs7elDrDJ4=;
-	b=dY4L4U10N3pmXWNAMsjJfVDkSS/bizBx2QhyFJNTvdjVlhWEarUtDbZfPqdBtf9kzBi+x2
-	azOndxB/Dd+6Ch60ZYzzICSwnBsFQddaSWPXHGPoxrZrNbBYym1l86BMmwCssM/JeP47uG
-	aifj8IoBExHg27fwqTmCB5R3LTiCtvk=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 41BF913AD8;
-	Thu, 12 Sep 2024 12:33:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qDXrDpDf4mYfXQAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Thu, 12 Sep 2024 12:33:20 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] appledisplay: close race between probe and completion handler
-Date: Thu, 12 Sep 2024 14:32:59 +0200
-Message-ID: <20240912123317.1026049-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1726145033; c=relaxed/simple;
+	bh=IDkxlvm6XZtP/KDhyz89G+TMnQ4CIX8A9FuQEJL5VmU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u8ZF4SimLevwc4p0IG1tbcp8JUCRhRMejLxdA4pJvZrg7rwzjj+F+FA9jcwzCG+7npcacq5IT/9qvfJFV07irgT5AstgOGjFLusq3rLLMQr3SAiT8wb/OVSfu2raywGkeql9DuNSfNr9tKd95llC7hJAkUWaJ/z7vdIU8dGiVNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mFfh1/y/; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726145032; x=1757681032;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IDkxlvm6XZtP/KDhyz89G+TMnQ4CIX8A9FuQEJL5VmU=;
+  b=mFfh1/y/ySrxEKXmtrlSFx10yGWWwDsU2IkAuM6BVNURPF6yRcFRwLPv
+   ExwgWAdMnFmzPaRpHEWe1InXa5+Rmzp7rPJCv0GdDhf/R6/AaxSbXzsdm
+   dNPDJujqrDghq9zhtBZ3GrEMCJdZl8heeguYvqt3KZY14h0sS0CwsMiHq
+   M6204FPIu6z16PIu0nXQ9zjhmMMIS60byVqsMDZbfkutfcOTxLf0ndyER
+   BnbqFo5uYCflZjK2s8eSB4YVM+MAAshdZKJyAfJSZg+nB9plVEoQeAlbK
+   tz7Y0jB69JAPx+ra02xeUw0peWWkvJiLv0jgPX5qiynGNvmku/x4udy5d
+   w==;
+X-CSE-ConnectionGUID: cZ0QDl8HQESlh+6a7tNdVQ==
+X-CSE-MsgGUID: 9y4KksxgQZO/9wqGB5cfCQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="25189029"
+X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
+   d="scan'208";a="25189029"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 05:43:51 -0700
+X-CSE-ConnectionGUID: op32tmxCSjatLMdfJRaPeQ==
+X-CSE-MsgGUID: QRSUhwtVTfGvAHGGi5e5Cg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
+   d="scan'208";a="67988731"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa006.jf.intel.com with SMTP; 12 Sep 2024 05:43:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Sep 2024 15:43:46 +0300
+Date: Thu, 12 Sep 2024 15:43:46 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anurag Bijea <icaliberdev@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH v5] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
+Message-ID: <ZuLiAsliEq66XjYP@kuha.fi.intel.com>
+References: <20240912074132.722855-1-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 62BA11FB79
-X-Spam-Score: -5.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	DWL_DNSWL_MED(-2.00)[suse.com:dkim];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240912074132.722855-1-lk@c--e.de>
 
-There is a small window during probing when IO is running
-but the backlight is not registered. Processing events
-during that time will crash. The completion handler
-needs to check for a backlight before scheduling work.
+On Thu, Sep 12, 2024 at 09:41:32AM +0200, Christian A. Ehrhardt wrote:
+> If the busy indicator is set, all other fields in CCI should be
+> clear according to the spec. However, some UCSI implementations do
+> not follow this rule and report bogus data in CCI along with the
+> busy indicator. Ignore the contents of CCI if the busy indicator is
+> set.
+> 
+> If a command timeout is hit it is possible that the EVENT_PENDING
+> bit is cleared while connector work is still scheduled which can
+> cause the EVENT_PENDING bit to go out of sync with scheduled connector
+> work. Check and set the EVENT_PENDING bit on entry to
+> ucsi_handle_connector_change() to fix this.
+> 
+> Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
+> This ensures that the command is cancelled even if ->sync_control
+> returns an error (most likely -ETIMEDOUT).
+> 
+> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> Bisected-by: Christian Heusel <christian@heusel.eu>
+> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
+> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 
-The bug is as old as the driver.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-CC: stable@vger.kernel.org
----
- drivers/usb/misc/appledisplay.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+> ---
+>  V1 -> V2: Split out the ucsi_acpi.c part
+>  V2 -> V3: Dropped the ucsi_acpi.c part due to conflicts
+>  V3 -> V4: Additional fix for command cancelling
+>  V4 -> V5: Rebased onto usb-next
+> 
+>  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 35dce4057c25..e0f3925e401b 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -38,6 +38,10 @@
+>  
+>  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  {
+> +	/* Ignore bogus data in CCI if busy indicator is set. */
+> +	if (cci & UCSI_CCI_BUSY)
+> +		return;
+> +
+>  	if (UCSI_CCI_CONNECTOR(cci))
+>  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+>  
+> @@ -103,15 +107,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+>  		return -EINVAL;
+>  
+>  	ret = ucsi->ops->sync_control(ucsi, command);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = ucsi->ops->read_cci(ucsi, cci);
+> -	if (ret)
+> -		return ret;
+> +	if (ucsi->ops->read_cci(ucsi, cci))
+> +		return -EIO;
+>  
+>  	if (*cci & UCSI_CCI_BUSY)
+>  		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
+> +	if (ret)
+> +		return ret;
+>  
+>  	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
+>  		return -EIO;
+> @@ -1197,6 +1199,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  
+>  	mutex_lock(&con->lock);
+>  
+> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
+> +			     __func__);
+> +
+>  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+>  
+>  	ret = ucsi_send_command_common(ucsi, command, &con->status,
+> -- 
+> 2.43.0
 
-diff --git a/drivers/usb/misc/appledisplay.c b/drivers/usb/misc/appledisplay.c
-index c8098e9b432e..62b5a30edc42 100644
---- a/drivers/usb/misc/appledisplay.c
-+++ b/drivers/usb/misc/appledisplay.c
-@@ -107,7 +107,12 @@ static void appledisplay_complete(struct urb *urb)
- 	case ACD_BTN_BRIGHT_UP:
- 	case ACD_BTN_BRIGHT_DOWN:
- 		pdata->button_pressed = 1;
--		schedule_delayed_work(&pdata->work, 0);
-+		/*
-+		 * there is a window during which no device
-+		 * is registered
-+		 */
-+		if (pdata->bd )
-+			schedule_delayed_work(&pdata->work, 0);
- 		break;
- 	case ACD_BTN_NONE:
- 	default:
-@@ -202,6 +207,7 @@ static int appledisplay_probe(struct usb_interface *iface,
- 	const struct usb_device_id *id)
- {
- 	struct backlight_properties props;
-+	struct backlight_device *backlight;
- 	struct appledisplay *pdata;
- 	struct usb_device *udev = interface_to_usbdev(iface);
- 	struct usb_endpoint_descriptor *endpoint;
-@@ -272,13 +278,14 @@ static int appledisplay_probe(struct usb_interface *iface,
- 	memset(&props, 0, sizeof(struct backlight_properties));
- 	props.type = BACKLIGHT_RAW;
- 	props.max_brightness = 0xff;
--	pdata->bd = backlight_device_register(bl_name, NULL, pdata,
-+	backlight = backlight_device_register(bl_name, NULL, pdata,
- 					      &appledisplay_bl_data, &props);
--	if (IS_ERR(pdata->bd)) {
-+	if (IS_ERR(backlight)) {
- 		dev_err(&iface->dev, "Backlight registration failed\n");
--		retval = PTR_ERR(pdata->bd);
-+		retval = PTR_ERR(backlight);
- 		goto error;
- 	}
-+	pdata->bd = backlight;
- 
- 	/* Try to get brightness */
- 	brightness = appledisplay_bl_get_brightness(pdata->bd);
 -- 
-2.45.2
-
+heikki
 
