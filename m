@@ -1,151 +1,112 @@
-Return-Path: <linux-usb+bounces-15047-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15052-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEBB6977235
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 21:45:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04A6D977365
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 23:12:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 775781F22911
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 19:45:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FA02B213BC
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 21:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A9D1CDFDA;
-	Thu, 12 Sep 2024 19:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A66691C2337;
+	Thu, 12 Sep 2024 21:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="R3pxgM5d"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="liPO5dG3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9940C1C0DF0;
-	Thu, 12 Sep 2024 19:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E0A1C1AD7;
+	Thu, 12 Sep 2024 21:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726170026; cv=none; b=NuAB80l2OTPk2wuaLZUrRfbzQjdZPAswJNi/Hqx1F+pf0YV1YOUJ75tyKntuKx+xQ/UbnbBoyZqnzHMQ3dth2ak7HDTzBkWgBHNsGA2G9rn55xhxksuvStoH/TPK+Knj7n4DZXKB4O6UttcuCaUbAQvaVRon02/J2AIUkYxV/TM=
+	t=1726175559; cv=none; b=FoHL9h4sYvzhFHlmh5xABE6kOqzNkCR3n1MAOrBZZ4nanLaCYCWZ/m/He0bV0Tzglf2/SdY4LdElsGlbmUvzuOwWMh5y6ZVpKpZq3iSJADYjOOLZSZewAP+KxW7Mfqpj3XM3fx+jo27FyYQh0u8a4hpOPw0gSVPcj0R5DnFn3aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726170026; c=relaxed/simple;
-	bh=prnyaP8xdPvgf7lPSdgoOnTFSQEEfdLilloaJUXm1RE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d8H3J7DM9tfjMjm8R9XjYGaX0C9ZODgPS9zhYkkYFfCqpAcmuK97ecHJFqh2M3PBexj27HnT1eq9nzWqEBVJUo4rVa4RlqIKi3xMKS89stsy63wn0q7ZV5Xk6hWi2ixidU6Be1PNLthJIjeOCdZG2+RIopLKJ7CUv+qxCf4cil0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=R3pxgM5d; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48CHtE53009379;
-	Thu, 12 Sep 2024 19:39:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	IHuzCQGYpXyTPH0RihFbQD623zcQRcB8CUdC3cqWdMA=; b=R3pxgM5dNh9T2Az8
-	PZ5ac24L2Q8WQ/2fKUD/e/lochroPqS9LGXSO1VmS1fyup/qE+XRUPYUt4seyEum
-	P82YhN689vuOSeFV3Er0e1JvIoh8/cSEmjeDUHztrw2sJyqVv2i22TC/wqS6sBZf
-	W1d+vrhDiD4du2Idr2ppYi4i3MMLWEiivJu9VMcGcYSvw+pBtYQBVUqEfxoovTkJ
-	XYfRRLZayzK8+6wHQTr9IvC7cKepQSmbrR6pMhnJnBwnTWP1NSlZ+nE19fjAvj+t
-	NzO8OeZfTtbu9v/bB4gnZQ9r+g9pq7RGzXqXKHWmcbCFDXxFT0Brsh1fsU6sV9as
-	IrPD/Q==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41gy6peeyj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Sep 2024 19:39:56 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48CJdubu006060
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Sep 2024 19:39:56 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 12 Sep 2024 12:39:55 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <tiwai@suse.com>, <krzk+dt@kernel.org>,
-        <pierre-louis.bossart@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>
-Subject: [PATCH v27 32/32] ASoC: usb: Rediscover USB SND devices on USB port add
-Date: Thu, 12 Sep 2024 12:39:35 -0700
-Message-ID: <20240912193935.1916426-33-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240912193935.1916426-1-quic_wcheng@quicinc.com>
-References: <20240912193935.1916426-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1726175559; c=relaxed/simple;
+	bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bh3nyeAukiQNRr7Tnr3uvZGBYjuJvY3WjRc6JL1LtscLPm/SbahDU65/XCab9yZUOjexdco5e8zqPJ3Y+hD4Yt+i1WoenT5OidUuRCU5xvmOAl7A85JEQ7ra6/FH1opIz44VWTG5ZXoIFKiiYqXnpP39KKhfa9W0OYs4939pA3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=liPO5dG3; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [172.16.225.84] (syn-076-167-104-212.res.spectrum.com [76.167.104.212])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4X4VWc4RF0z4DmW;
+	Thu, 12 Sep 2024 17:12:28 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1726175549; bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=liPO5dG3r0r3gORS46SnzZmwWyq9zjinhaHFujt7nM9gr+OG09bk4l4CvUbaik+iK
+	 v1P4nr5r+qMRKAeA8IVhm4G2qV55QmAiz+2ph/P727Z9k5C+vqYIQ5lzb93sq5F50P
+	 Xc03LDampk6OAhGig/vK7O3XvKEjVWZuzT5vow2s=
+Message-ID: <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
+Date: Thu, 12 Sep 2024 14:12:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ogiyPitW642ue2kmpSl3oPFemrvuiZ_P
-X-Proofpoint-GUID: ogiyPitW642ue2kmpSl3oPFemrvuiZ_P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- bulkscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 phishscore=0
- impostorscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409120144
+User-Agent: Mozilla Thunderbird
+Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
+ Thunderbolt additions when coming out of suspend or hibernate
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Me <kenny@panix.com>
+References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
+ <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
+ <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
+ <20240904122835.GG1532424@black.fi.intel.com>
+ <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In case the USB backend device has not been initialized/probed, USB SND
-device connections can still occur.  When the USB backend is eventually
-made available, previous USB SND device connections are not communicated to
-the USB backend.  Call snd_usb_rediscover_devices() to generate the connect
-callbacks for all USB SND devices connected.  This will allow for the USB
-backend to be updated with the current set of devices available.
 
-The chip array entries are all populated and removed while under the
-register_mutex, so going over potential race conditions:
+I'll run the stuff you need, but now it looks like whatever is breaking 
+suspend/resume in Linus' master has been ported down from upstream into 
+6.10.10; I'm now getting the same panic()s as I did with master. I just 
+had a failed resume and the crash dump (which happened on its own) looks 
+the same as the one I'd posted here.
 
-Thread#1:
-  q6usb_component_probe()
-    --> snd_soc_usb_add_port()
-      --> snd_usb_rediscover_devices()
-        --> mutex_lock(register_mutex)
+I may try and find some time to bisect the issue, but it'll take some time.
 
-Thread#2
-  --> usb_audio_disconnect()
-    --> mutex_lock(register_mutex)
+-K
 
-So either thread#1 or thread#2 will complete first.  If
+On 9/9/24 00:51, Kenneth Crudup wrote:
+> 
+> I can't get to the dmesg when it crashes, but I did a SysRq-S/C and have 
+> attached the crash output; let me know if this is at all helpful.
+> 
+> I see I'd SysRq-S/C on a previous hang, I've attached that one, too.
+> 
+> This particular time it suspended OK, but hung indefinitely when I 
+> plugged it into another TB3 dock (the previous one was TB4, if it matters).
+> 
+> 
+> On 9/4/24 05:28, Mika Westerberg wrote:
+>> Hi,
+>>
+>> On Tue, Sep 03, 2024 at 11:10:41PM -0700, Kenneth Crudup wrote:
+>>>
+>>> ... or, maybe not. Turns out that sometimes my system can't suspend 
+>>> (just
+>>> hangs, spinning hard somewhere based on the heat and the fans) when 
+>>> plugged
+>>> into a Thunderbolt dock at the time of suspend.
+>>
+>> Can you create a bug in bugzilla.kernel.org and attach full dmesg so
+>> that you enter suspend with dock connected (so that the issue
+>> reproduces)? Please also add "thunderbolt.dyndbg=+p" in the kernel
+>> command line so we can see what the driver is doing. Also probably good
+>> to add the lspci dumps too as Lukas asked.
+>>
+> 
 
-Thread#1 completes before thread#2:
-  SOC USB will notify DPCM backend of the device connection.  Shortly
-  after, once thread#2 runs, we will get a disconnect event for the
-  connected device.
-
-Thread#2 completes before thread#1:
-  Then during snd_usb_rediscover_devices() it won't notify of any
-  connection for that particular chip index.
-
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/soc/soc-usb.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
-index f88ccf90df32..3457bb51a0a1 100644
---- a/sound/soc/soc-usb.c
-+++ b/sound/soc/soc-usb.c
-@@ -252,6 +252,8 @@ void snd_soc_usb_add_port(struct snd_soc_usb *usb)
- 	mutex_lock(&ctx_mutex);
- 	list_add_tail(&usb->list, &usb_ctx_list);
- 	mutex_unlock(&ctx_mutex);
-+
-+	snd_usb_rediscover_devices();
- }
- EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
- 
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
