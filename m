@@ -1,58 +1,77 @@
-Return-Path: <linux-usb+bounces-14985-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14986-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A7B29761DF
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 08:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B3C9761F3
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 08:57:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9161281982
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 06:53:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C45E52819E9
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 06:57:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA6310FF;
-	Thu, 12 Sep 2024 06:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610CB18BC1C;
+	Thu, 12 Sep 2024 06:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kPN8iEtc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZg3tpNx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CAE41C6A;
-	Thu, 12 Sep 2024 06:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C964282FB;
+	Thu, 12 Sep 2024 06:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726124027; cv=none; b=YiUE0h0IGo68JW/bmtoq1T0dhY/O2S23skXT5K+ejtwI8KWXgOQ/9uWLCIIvS3bo+a8KigriT/WkTYpLzq2GuyXOifD9ZSWl5zeU4A1EGxNySIoqjhzsEUnNrmD4JLqmTyP6q0c6KJDHCOmUXNXh98pY9wy7paPjoQ7eO1Y5JUU=
+	t=1726124218; cv=none; b=lA1mus9LCVmH7CenP7YcoAJPwUUGPv2xs1UCPARbJt3gQiL7MmH2tflK3EVHN5/N/nUAlxU9e+V1HEEJ1rd5QfRrit8C8CCMQl290afdrqe8Yljxt7z3f7J10FRJBg14g6wJJ9OWmtgAXS/pxgW8nfTDCg1lbZdeCVVsiOuUBq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726124027; c=relaxed/simple;
-	bh=G3WchTtge4g6NnY60rIEF0UBsEDbkw6ExHhLMU1LGp8=;
+	s=arc-20240116; t=1726124218; c=relaxed/simple;
+	bh=pAtNUJ33O0bK5joXiQ65JiDytqxm99aC47Jxhgt84nA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I7H3DsS3qxG5cu75Fum3DqGZ+wa8eDD8C1x5bfyFAVo43g8VKHfJ+L/NQ/dXr1AwERwpD18WtALWYQDLY9qJKCdFWaEDbGgAMyV+cHC939O6jpfFpTX+n9+DSRLSGLkmyNkWpMGzivgHZPW5Os4ewWsHmgRqSGcLqXs9uhej0zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kPN8iEtc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC75CC4CEC6;
-	Thu, 12 Sep 2024 06:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726124027;
-	bh=G3WchTtge4g6NnY60rIEF0UBsEDbkw6ExHhLMU1LGp8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kPN8iEtcJi4JgkGvsD6Jzew7s1wgeT052p++QMBbNTZY8FoU5E3tC6jTOcRzf34hb
-	 uUb3LGFnLHndlTq/doqyFf2yUnqdRH0RiN3tZxNfmHtJMEILPTPtxifHedUt017mI2
-	 GZKgSUvzwKaSEGxdzF4VbAtG9CFk4kk4dOBgdves=
-Date: Thu, 12 Sep 2024 08:53:44 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Anurag Bijea <icaliberdev@gmail.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=N4G7jFL6DpmOoQWrka7CCbTCq9jJE8/mItHhOGjXW6mof3RuvybN8U/4wyHsuP0D9LWHhntIiCt24gformeCPBSxqN/bdDsQwP0PQENgGbjbTXuN+4sXP1Xe+a0EN4qp8Y3hG7inOeSQWV7arlQQfi3VRfyn3bj8vtWoMSXETVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iZg3tpNx; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726124217; x=1757660217;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pAtNUJ33O0bK5joXiQ65JiDytqxm99aC47Jxhgt84nA=;
+  b=iZg3tpNxHfxV2ebiDy+LhWnH2hZKqblPcGLiXF6g02vZBaNdFAdNEWxs
+   n/O+5j7wnH6omUamVaLIgX6qfYXGRaFjtbghWLlzEXjUcBqBzebGHkMZ3
+   Ggevck+z34ptJ9H6IAXbkm9SUpHx4+WWu5P730EbkSjOG2OfPJ8VU9Vvt
+   Vb/gjKpEe/+f1xYC3fE0Eygz88JsCtJVcYEvyk4hZFVzWx/p3pDhLAhf5
+   Tt1nlFR4ax1UI0s3+zctMqFE2HzphaHOLAxG5c9rVH0hi6tKPmQrhVnnM
+   DdEsT6oh9/mi0JeNxodqiHL/UE2rSitBZMbzyN/YiqsNMeTHvsfz1THlj
+   g==;
+X-CSE-ConnectionGUID: qQlCvgzESzWHfuohyYyQfw==
+X-CSE-MsgGUID: d2l6MwdSQpCDLmBEk6Yh+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24781667"
+X-IronPort-AV: E=Sophos;i="6.10,222,1719903600"; 
+   d="scan'208";a="24781667"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 23:56:57 -0700
+X-CSE-ConnectionGUID: 2BDirs9cQA2vDTbuoj2Tkg==
+X-CSE-MsgGUID: gDwfCEQ1Shq2eXDir4r03w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,222,1719903600"; 
+   d="scan'208";a="67338633"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa007.fm.intel.com with SMTP; 11 Sep 2024 23:56:53 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Sep 2024 09:56:52 +0300
+Date: Thu, 12 Sep 2024 09:56:52 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anurag Bijea <icaliberdev@gmail.com>,
 	Christian Heusel <christian@heusel.eu>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Jameson Thies <jthies@google.com>,
 	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH v4] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
-Message-ID: <2024091231-unarmored-deploy-c950@gregkh>
-References: <20240906065853.637205-1-lk@c--e.de>
- <2024091156-astronomy-licorice-5569@gregkh>
- <ZuKFetxhrQY1L5fQ@cae.in-ulm.de>
- <CAA8EJpp3KMkZc3pArrgLcue-GbqLQjeOZ+9XWQDL0NeJxnfR+g@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
+Message-ID: <ZuKQtIfACKVQxol0@kuha.fi.intel.com>
+References: <20240912054433.721651-1-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,54 +80,97 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpp3KMkZc3pArrgLcue-GbqLQjeOZ+9XWQDL0NeJxnfR+g@mail.gmail.com>
+In-Reply-To: <20240912054433.721651-1-lk@c--e.de>
 
-On Thu, Sep 12, 2024 at 09:21:39AM +0300, Dmitry Baryshkov wrote:
-> On Thu, 12 Sept 2024 at 09:08, Christian A. Ehrhardt <lk@c--e.de> wrote:
-> >
-> >
-> > Hi,
-> >
-> > On Wed, Sep 11, 2024 at 03:37:25PM +0200, Greg Kroah-Hartman wrote:
-> > > On Fri, Sep 06, 2024 at 08:58:53AM +0200, Christian A. Ehrhardt wrote:
-> > > > If the busy indicator is set, all other fields in CCI should be
-> > > > clear according to the spec. However, some UCSI implementations do
-> > > > not follow this rule and report bogus data in CCI along with the
-> > > > busy indicator. Ignore the contents of CCI if the busy indicator is
-> > > > set.
-> > > >
-> > > > If a command timeout is hit it is possible that the EVENT_PENDING
-> > > > bit is cleared while connector work is still scheduled which can
-> > > > cause the EVENT_PENDING bit to go out of sync with scheduled connector
-> > > > work. Check and set the EVENT_PENDING bit on entry to
-> > > > ucsi_handle_connector_change() to fix this.
-> > > >
-> > > > Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
-> > > > This ensures that the command is cancelled even if ->sync_control
-> > > > returns an error (most likely -ETIMEDOUT).
-> > > >
-> > > > Reported-by: Anurag Bijea <icaliberdev@gmail.com>
-> > > > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
-> > > > Bisected-by: Christian Heusel <christian@heusel.eu>
-> > > > Tested-by: Anurag Bijea <icaliberdev@gmail.com>
-> > > > Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> > > > ---
-> > > >  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
-> > > >  1 file changed, 12 insertions(+), 6 deletions(-)
-> > >
-> > > Does not apply to my usb-next branch :(
-> > >
-> > > Can you rebase and resend this?  Or wait until -rc1 is out and rebase
-> > > and resend then?
-> >
-> > I sent a v5 rebased onto usb-next.
+On Thu, Sep 12, 2024 at 07:44:33AM +0200, Christian A. Ehrhardt wrote:
+> If the busy indicator is set, all other fields in CCI should be
+> clear according to the spec. However, some UCSI implementations do
+> not follow this rule and report bogus data in CCI along with the
+> busy indicator. Ignore the contents of CCI if the busy indicator is
+> set.
 > 
-> Note, it wasn't marked as v5, it didn't contain a changelog, etc.
-> Please consider using the `b4` tool to send patches. It automates
-> versioning, changelog generation, etc.
+> If a command timeout is hit it is possible that the EVENT_PENDING
+> bit is cleared while connector work is still scheduled which can
+> cause the EVENT_PENDING bit to go out of sync with scheduled connector
+> work. Check and set the EVENT_PENDING bit on entry to
+> ucsi_handle_connector_change() to fix this.
+> 
+> Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
+> This ensures that the command is cancelled even if ->sync_control
+> returns an error (most likely -ETIMEDOUT).
+> 
+> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> Bisected-by: Christian Heusel <christian@heusel.eu>
+> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
+> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> ---
+>  NOTE: Rebased onto usb-next.
 
-Yes, this needs to be properly marked as such, my patch-bot already
-noticed that :(
+You have not versioned this patch properly - this should be already v5
+unless I'm mistaken. That is also have not a proper patch changelog.
+
+If you need help with the patch formatting, please check this
+document:
+
+https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
+
+thanks,
+
+>  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 35dce4057c25..e0f3925e401b 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -38,6 +38,10 @@
+>  
+>  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  {
+> +	/* Ignore bogus data in CCI if busy indicator is set. */
+> +	if (cci & UCSI_CCI_BUSY)
+> +		return;
+> +
+>  	if (UCSI_CCI_CONNECTOR(cci))
+>  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+>  
+> @@ -103,15 +107,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+>  		return -EINVAL;
+>  
+>  	ret = ucsi->ops->sync_control(ucsi, command);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = ucsi->ops->read_cci(ucsi, cci);
+> -	if (ret)
+> -		return ret;
+> +	if (ucsi->ops->read_cci(ucsi, cci))
+> +		return -EIO;
+>  
+>  	if (*cci & UCSI_CCI_BUSY)
+>  		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
+> +	if (ret)
+> +		return ret;
+>  
+>  	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
+>  		return -EIO;
+> @@ -1197,6 +1199,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  
+>  	mutex_lock(&con->lock);
+>  
+> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
+> +			     __func__);
+> +
+>  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+>  
+>  	ret = ucsi_send_command_common(ucsi, command, &con->status,
+> -- 
+> 2.43.0
+
+-- 
+heikki
 
