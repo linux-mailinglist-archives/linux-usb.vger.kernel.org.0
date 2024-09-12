@@ -1,135 +1,135 @@
-Return-Path: <linux-usb+bounces-14988-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14989-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C8D497624C
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 09:12:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8B81976323
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 09:44:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C67EE1F24271
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 07:12:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6439E1F21F67
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 07:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6125F18BC14;
-	Thu, 12 Sep 2024 07:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WsT0YJ6g"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6471E190675;
+	Thu, 12 Sep 2024 07:42:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58288186E58;
-	Thu, 12 Sep 2024 07:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920FD186E58;
+	Thu, 12 Sep 2024 07:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726125132; cv=none; b=mxyeQ8YDE/0Q9etavHo24j2IuN024G1DP34QEXFaF/TeTJAxU7BGWKT7Ni+R6R5vungvAQVZLT0JxIoao3vhr22r5GBKO7JxidMj7g4a0oBTcs18PWOSecPxjXg44jxVHKQgSNGIZHbS4gZuz1DRL0XbKyy18sD/2bKAu044v2I=
+	t=1726126922; cv=none; b=uEB7MivIW+WlzN0daTb4V/eKBy0/v+klWcijkj+BYS4exj38VAd6jHpVxvBGkt0UFMK8CGPSlv82qLQkX74i9mw8E5bCYp7P19wnhSWCx5Rwvm1wPObc7PeQ0QBDhTxCnoVol997K3WSy0Klm9HLK0Hk5LuGnhEoSC/MImp2IfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726125132; c=relaxed/simple;
-	bh=MZG69yN+VrDh2mqtkQIj+eKhaHCGouv3mkdUyAMEDE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kr0q4WxWorpZw9yv+aNimK32GmnuQpdYsfGqfpYK9bA1PI27YL+gJ+qnl/UXTb+XvJJLhQHApcEGz2r5hA7RE0b378xaB18f2oXggVrGFSyRxk6qubUC4YOAYdDJDCgyQ7pUAZzO5dy9IUtyi27wAXwK7dBb7bFWoxPRUGhRhPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WsT0YJ6g; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c40942358eso946143a12.1;
-        Thu, 12 Sep 2024 00:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726125129; x=1726729929; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPB8bSnbYYyaLXMYazm7IKm+KD/Qi3JzsUK5HOuFh60=;
-        b=WsT0YJ6gfyLGThYZzFsBbwemVYL/esVyCJzA8z885N/7UwBnCZZjc97YmX8xJPwNsk
-         ZUwHztMoqF4XtQqe7WTxPy2Od20LpPVUVEJ9ijHxu9EfgfTWluCslwHPFuYgzFVWDQnL
-         u967+yrKFMV9whnjlyTEBVJjqHt74w+a3XcUjRb/jthGVjpu+OAmgsWZD+EzbA5J/fiz
-         kGzktRAFzrjki/DjgBPjkXzYYWe2l6Nxy1Ndan1X7Kfy/MGX+B7d3VVMm4ZTktSfXXJM
-         WdFjADOGx6ApGUICjmZmoV6t7ZoDEzq22knqLCyoAV3GvhSEJ1NLKIpwXNml2jNdHAUb
-         of8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726125129; x=1726729929;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RPB8bSnbYYyaLXMYazm7IKm+KD/Qi3JzsUK5HOuFh60=;
-        b=Cq2rzFRtl7+3hlCdnoWTvjbCTtzyM7mvpGei14EWIWH7GeA1x/WXqiMTh7a0TZ3CWt
-         M0UzoGlZa/BwApKqgII6uvIcZdJCMaedpx75DG+/DxRWDMr+DJoXsJIynkJpZFzNuxuM
-         jeLBaRPUA/n2DUxj9GCxZ+Oz6q1QkzBeDhHWz3tLk46EWjB6WP9K1V5ORv4MASIAAEuW
-         eOFRvJd2WqCgFjMZ5uIN4NKZELQQ2fuiGsLGZ7pDd2DQw2oV0axNzOZb31L2fP4byX6L
-         jv0jVnzY5NdUsB/WLUKyF+2M6tMg8LvYrPzWSORjvwSxGytLJPLdcn+Upk0YjF2JkLva
-         uu9A==
-X-Forwarded-Encrypted: i=1; AJvYcCVWJ5wBc+/RiMQKMKh0p8TU4TzYJkQlvtk9beuWKLxe0mIYmSB9AfJ8p/1QMSdSq/1GXluwcyaVzBvU@vger.kernel.org, AJvYcCVklZL6oyV9ASiMQGQ+FxpJAY/uhiK8nDCQ11t9D9PqszRlVLxNmcDLbY04sjTwK7vklL2cjpby+2pWd3E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEvNaKzsH7dgZlqmpq5/dBrieyEz+7Iqy7YT9TQRKgsrjROGeu
-	qB7ex6l+E5IqadRqSj/15R2/4/Q2+RzGXu/vY91uHDB4owE8EoNo
-X-Google-Smtp-Source: AGHT+IFjQrmnZ1v5Q+Orx0b/xD4kyE6g0/G6HJcyZYdPWz5D3lxa0VyltlCMrHlspyo4MAW534kIbQ==
-X-Received: by 2002:a05:6402:27c7:b0:5c2:7699:92ef with SMTP id 4fb4d7f45d1cf-5c414387344mr2023513a12.16.1726125129160;
-        Thu, 12 Sep 2024 00:12:09 -0700 (PDT)
-Received: from foxbook (bio143.neoplus.adsl.tpnet.pl. [83.28.130.143])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c3ebd52099sm6142860a12.48.2024.09.12.00.12.07
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 12 Sep 2024 00:12:08 -0700 (PDT)
-Date: Thu, 12 Sep 2024 09:12:03 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Kuangyi Chiang <ki.chiang65@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, mathias.nyman@intel.com
-Subject: Re: [PATCH 0/3] xhci: Some improvement for Etron xHCI host
-Message-ID: <20240912091203.3ac9b88a@foxbook>
-In-Reply-To: <CAHN5xi235kgU8Xd0VYw6r5NeieCM8uqWjgPnLSP1haAFqgcFsw@mail.gmail.com>
-References: <20240911051716.6572-4-ki.chiang65@gmail.com>
-	<20240911093828.58129593@foxbook>
-	<CAHN5xi235kgU8Xd0VYw6r5NeieCM8uqWjgPnLSP1haAFqgcFsw@mail.gmail.com>
+	s=arc-20240116; t=1726126922; c=relaxed/simple;
+	bh=qCqYFttykGHahVVtMisMWvxk28hUdSktJEz0yRCXa4k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZxEAqDLfIWVkh4X/fq64jQ8QPe5Be20X4wbxDPimtAiwUl8Oc5qxkVveqv0XlJ0baJwDeZrWpmQsVt26ZtAbWA1dz3VWranBDoJr7/jGbto2h/dhdbypgUCBtCFAQf/crOOkBUVvl0yO3jw8MlbGwSVA07CNhXhZyy4ne3WMdDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 07A621402BA; Thu, 12 Sep 2024 09:41:57 +0200 (CEST)
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
+	Anurag Bijea <icaliberdev@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: [PATCH v5] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
+Date: Thu, 12 Sep 2024 09:41:32 +0200
+Message-Id: <20240912074132.722855-1-lk@c--e.de>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+If the busy indicator is set, all other fields in CCI should be
+clear according to the spec. However, some UCSI implementations do
+not follow this rule and report bogus data in CCI along with the
+busy indicator. Ignore the contents of CCI if the busy indicator is
+set.
 
-> > I'm aware of one more bug which affects my Etron: if an error occurs
-> > on an isochronous TD, two events are generated: first the error,
-> > then "success", even if the error is on the final TRB (the common
-> > case). Then the "success" causes "TRB DMA not part of current TD"
-> > warning. I suspect that all Etron chips are the same. This should
-> > be easily reproducible by unpligging an audio/video device while
-> > streaming.  
-> 
-> Hmm, I don't encounter this problem.
+If a command timeout is hit it is possible that the EVENT_PENDING
+bit is cleared while connector work is still scheduled which can
+cause the EVENT_PENDING bit to go out of sync with scheduled connector
+work. Check and set the EVENT_PENDING bit on entry to
+ucsi_handle_connector_change() to fix this.
 
-OK, I know what happened. This bug only affects SuperSpeed isochronous
-endpoints. If you don't have this kind of device, you will not see it.
-I checked that High-speed isochronous errors are reported correctly.
+Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
+This ensures that the command is cancelled even if ->sync_control
+returns an error (most likely -ETIMEDOUT).
 
-My motivation to develop a workaround for this bug has just decreased
-another notch.
+Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+Bisected-by: Christian Heusel <christian@heusel.eu>
+Tested-by: Anurag Bijea <icaliberdev@gmail.com>
+Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+---
+ V1 -> V2: Split out the ucsi_acpi.c part
+ V2 -> V3: Dropped the ucsi_acpi.c part due to conflicts
+ V3 -> V4: Additional fix for command cancelling
+ V4 -> V5: Rebased onto usb-next
 
+ drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-On the other hand, I was unable to reproduce the control transfer bug.
-The exact chip I have is labeled "EtronTech EJ168A", for the record.
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 35dce4057c25..e0f3925e401b 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -38,6 +38,10 @@
+ 
+ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+ {
++	/* Ignore bogus data in CCI if busy indicator is set. */
++	if (cci & UCSI_CCI_BUSY)
++		return;
++
+ 	if (UCSI_CCI_CONNECTOR(cci))
+ 		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+ 
+@@ -103,15 +107,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+ 		return -EINVAL;
+ 
+ 	ret = ucsi->ops->sync_control(ucsi, command);
+-	if (ret)
+-		return ret;
+-
+-	ret = ucsi->ops->read_cci(ucsi, cci);
+-	if (ret)
+-		return ret;
++	if (ucsi->ops->read_cci(ucsi, cci))
++		return -EIO;
+ 
+ 	if (*cci & UCSI_CCI_BUSY)
+ 		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
++	if (ret)
++		return ret;
+ 
+ 	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
+ 		return -EIO;
+@@ -1197,6 +1199,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 
+ 	mutex_lock(&con->lock);
+ 
++	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
++		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
++			     __func__);
++
+ 	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+ 
+ 	ret = ucsi_send_command_common(ucsi, command, &con->status,
+-- 
+2.43.0
 
-You are right, not all transfers have the data stage and transactions
-get out of sync with segment boundaries. I modified the patch to only
-print a warning instead of queuing a No-Op and then did various things
-which use control transactions: setting baud rate on serial, changing
-the volume on audio, starting video recording on a webcam, running
-ethtool on a NIC.
-
-The warning was printed a few times, but nothing interesting happened.
-Dynamic debug was enabled on handle_tx_event() - no errors reported.
-
-Maybe a different silicon/firmware revision, or maybe it's another
-SuperSpeed-only bug, or other special conditions for it to happen?
-
-> Ok, I will use one quirk XHCI_ETRON_HOST for these workarounds in the
-> next patch revision.
-That was just a suggestion, you should ask Mathias Nyman, I suppose.
-
-But, again, my impression of this hardware is that it's pretty bad
-and full of bugs, and they are bizarre enough to likely be unique.
-
-Regards,
-Michal
 
