@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-14993-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14994-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41CF8976596
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 11:31:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4876B9765CF
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 11:38:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65A7D1C22573
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 09:31:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11D7C28634C
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 09:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE7A19E976;
-	Thu, 12 Sep 2024 09:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21CAE19047C;
+	Thu, 12 Sep 2024 09:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="a9y9nv9N"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FeNtmR3D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5BE19C554
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 09:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67491922CE
+	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 09:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726133446; cv=none; b=dc87daFh/HqLQajRHXOL1wa2kptOEonuEvsbesrZyBujbJmkrPo6kyf54n6yShXp1j+lE63nffm6QKv5qekdl9XggyWebBkqTGjOvfUIFxMTH3Uk91BB4Xjzm77TXURqi2DSK3bufC1RHDazKfPBPaQDTykpt9CYxUcZwB7Jt5w=
+	t=1726133840; cv=none; b=ggxKd8hy/3VM+fjZcr9sixYuIbSKIRB1rlkhFr6oZaiagNE4cA9PYLmT513s4BF8gLza3HNLrqnKnLmkRLaTpR/Zh+kjXE2W8aEupkamXceQtWEdsxpGrChJar07Ky9/6iSfpNWHQrsnzIgd/gLy21dwm8cpdSgS61AuRwv/ZJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726133446; c=relaxed/simple;
-	bh=kIskcl+cEgPa5aOW8KFz0H+4vDyJJxE4xQKfindfVE0=;
+	s=arc-20240116; t=1726133840; c=relaxed/simple;
+	bh=4NchE+gXpDJKpNCBtXE9qdeVGRvkSqAV+nX+Jhl6J7Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qX0F8f1yHKDUCBjVu/72PwrRVfzbW43imJQOJBC1i9mEY6iGqVgnqAmxq9ltrHYu5Ymlcc/Cf8CsAN7Fak9TiAmnUS54L3o0WRKjcE37PIvYl4tj1w9PQnSns/Bz3bfgXtJB1h9b45KLWQrNSDQSTPbJb38e9+Lr7cd+grJSgUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=a9y9nv9N; arc=none smtp.client-ip=209.85.218.53
+	 In-Reply-To:Content-Type; b=LuoKqykhW7MXfTM5PeAG5JTv2loiuhthDNzU3CPC1zeNW7jicisD7h9ZcBU0eSYtRV6oclXMFZw8j1h3pMlWyQWsH6W8yd3f5IS3xbtGCjTtUQxguexy5gxYe+viAwNRgYh1WSIMmfwTtRXfJADi6JElEb5jhacNl4+FBrNWRr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FeNtmR3D; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a9018103214so104165366b.3
-        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 02:30:43 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-371ba7e46easo626506f8f.0
+        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 02:37:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1726133442; x=1726738242; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1726133837; x=1726738637; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8tehr3Mtj48VR2KLQ5YViiHbq049BmJKRG0Xv+xURro=;
-        b=a9y9nv9Ndk311ezdPxvKVfd6wriza/G/oKMayiBpLs3th6CMFI82PSH0SoVhXsOshN
-         dlt/IXhUFIVsosvXq502tT2ReCZk+Jv4iHCJ5Ew18yENiWMigVfvu+yboDg2QLaYKW2a
-         q/uDQixv47epgqaHXyLlUBdQ3x59G6uGF3WIhlNDVqFvApnIDtCIhvamwIByghz1qx3G
-         JgjcXrf5VTJFG4jq0mo1eo8fVRXPa8IxH9sZS6uIQaklaNmF73tyrCc8UkXYqRSRf7Ij
-         vITjwoSXPI7YRssoKu8SzKruQNW2UktbHKCQ2XS0JoIYVcT8BFF3uKpKaisPAc8YjYwq
-         4hzQ==
+        bh=eQfDu/Uq1qhOxhhOrTZrsOruIabtnoNo1q0fsLPIwno=;
+        b=FeNtmR3DdeZF/J/fv+XF/m1oibZ0K1K83EPkkpj9fSPSfFOLCtJqHshctR3aru390C
+         uDnpabTVp9BpBIy1YCFKWWd5fy1PE2rxiyn1YFVKnBC4Zme2zVdVpfscTFDp73gtM02y
+         mhf9nIPgwj8bJCHOeI2TrEXxemRYteSlYhjhKMPVq57fHxBreIHfUAFVb7/H5fhwoqzb
+         dUQQ38K/7toPXwRmJBKErpH+vR9ab9pAIiAGe+vZ0wyYsQ+BnQgoKTj0VvIp59SHfP2l
+         vNdqM1uxgtUCKigQ9qarCU6s3tO9jv4Em2TSrNIl07IUt4BuxpkCflnlPfsBVW9r9nu4
+         A6iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726133442; x=1726738242;
+        d=1e100.net; s=20230601; t=1726133837; x=1726738637;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tehr3Mtj48VR2KLQ5YViiHbq049BmJKRG0Xv+xURro=;
-        b=Iv8WJqB/AiuYKaFV5wgp4wGANfCGdqpu+SgPeNFLkQsMXATjTXXxtKnGAncA852TG0
-         5yMmiLjBaVwlyZcYXJEVFPrmAdWxW6sZbo3mbCa+BzRCk+z+QCQcpCYzgLDtHjmjqHgo
-         QicG7C6vVrfia7F1WmzZ9UKXM2cV5UeJXRfyGpteOlepJuE7nf//mvpl62ThsXyEeYyp
-         rnj1IvcJOvcDAZKQ7VyR/NEJHJE/0WTYizo0dlLzmEKfCxcj6Tw2qRNJV9wSi/WsDTHa
-         645LASqfHyuDsKV0YEFb9DvJePUNqbUYElytXOYgyfA/REeuKpPK9aboIIj/RPVoHoS2
-         zq9w==
-X-Forwarded-Encrypted: i=1; AJvYcCVkkxdlO37iGzZO5kaysZGFuMwxTUwHZ2R8YPQRW+MoTGeVZ/1kwvG4njtFaokEfvuasb66UwZ4eVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwBZUZCnmqLmxhaat2W8vbmsRCIEhWbD9+Vw3GF/nzrcdH9n/O
-	gmfvNrlJX/eUzg6sl0EK87qjimG/QP+BsrfCj0MwBjmx2LSaLwl9WpL47admdCs=
-X-Google-Smtp-Source: AGHT+IFk61q1QaMhES8++jv0G4QK+ddVK/i63wtjh2HBapnGeR6O1fso9P71UpK7pdr8aia6GB6nVg==
-X-Received: by 2002:a17:907:f7a0:b0:a8d:6648:813f with SMTP id a640c23a62f3a-a90293f9ec4mr197574166b.3.1726133441942;
-        Thu, 12 Sep 2024 02:30:41 -0700 (PDT)
+        bh=eQfDu/Uq1qhOxhhOrTZrsOruIabtnoNo1q0fsLPIwno=;
+        b=hheAbltqvGnlOwyb5yDp7UaRK6cF0pdbPX2YCNgh4VLtPZrA2xKAScaeD0pNt0jftF
+         rYW2pirhXc/b5ZlntQEAvl6rJK6NxOW7lpYiU4PHiYEotDVYWPOX8MWnCR4o7ReKIQXW
+         M6IsUiEr5TQCibehuPcP8rwqGnHC1OPBhJzLgqQfGjdeM4akeFfxP4tF9eS0GpDAJ8Hu
+         9Cc1IAQ8bH77jamL+KhSUwOxndkDEdhyGHkq6NBGuHQzrXi59RRkqfc4jfDLqqt5qa6o
+         DrjbVQOkFRTUpMYR5d+szHJy3o5B31p7VbZ4/TsP8+B7Ta7qAD3gcOYqiL18W6+6M3yW
+         qXqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU0b5wv+beXW3NCitgMsx5bCmB2IJPpXAxo3N2wavy3X2+Ml2fyS5O4lSDBkkqNOt19/ySNndfrZk8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsbkL0/Nmvud17iD1nNDmLaI/3hIE9yQxQL95kSSIueevw6/+5
+	7+85VGVoUDc89zhFuU08t9KWRZWRh7mtLeTkn4k6J1z07JBX2oDjU7lIMS4zQZI=
+X-Google-Smtp-Source: AGHT+IHvdvU1R4UhhqiuLsjbgn2hoIwX2iplRd79sFPQd6lGt8CUtB6PHGgcnRdAyT6Kvo5KmkOcEg==
+X-Received: by 2002:a5d:6743:0:b0:371:6fba:d555 with SMTP id ffacd0b85a97d-378c2cf40bamr1273609f8f.18.1726133836388;
+        Thu, 12 Sep 2024 02:37:16 -0700 (PDT)
 Received: from ?IPV6:2001:a61:13ca:eb01:f47c:2f3f:7fd9:e714? ([2001:a61:13ca:eb01:f47c:2f3f:7fd9:e714])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25d65742sm719928066b.216.2024.09.12.02.30.41
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378956d35dasm13771057f8f.67.2024.09.12.02.37.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Sep 2024 02:30:41 -0700 (PDT)
-Message-ID: <3ff7c85f-95f9-427f-a496-370f2e56d1fe@suse.com>
-Date: Thu, 12 Sep 2024 11:30:39 +0200
+        Thu, 12 Sep 2024 02:37:16 -0700 (PDT)
+Message-ID: <bb1cbc3d-fc46-4d0f-90b3-39b25f5bc58e@suse.com>
+Date: Thu, 12 Sep 2024 11:37:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,36 +78,50 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCHv2 net] usbnet: fix cyclical race on disconnect with work
  queue
-To: Paolo Abeni <pabeni@redhat.com>, Oliver Neukum <oneukum@suse.com>,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+To: Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
  netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
 References: <20240905134811.35963-1-oneukum@suse.com>
- <ff23bcb5-d2e8-4b1b-a669-feab4a97994a@redhat.com>
+ <20240910154405.641a459f@kernel.org>
 Content-Language: en-US
 From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <ff23bcb5-d2e8-4b1b-a669-feab4a97994a@redhat.com>
+In-Reply-To: <20240910154405.641a459f@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 10.09.24 11:58, Paolo Abeni wrote:
-
-> I guess you do the shutdown twice because a running tasklet or timer could re-schedule the others? If so, what prevent the rescheduling to happen in the 2nd iteration? why can't you add usbnet_going_away() checks on tasklet and timer reschedule point?
+On 11.09.24 00:44, Jakub Kicinski wrote:
 
 Hi,
+  
+> I have sort of an inverse question to what Paolo asked :)
 
-I am not sure I fully understand the question. Technically
-the flag prevents it in cooperation with del_timer_sync(),
-which will wait for the timer handler to run to completion.
+This is getting interesting.
 
-Hence if the timer handler has passed the the check the first
-time, it will see the flag the second time.
-I am not sure that answers the question, because AFAICT I have
-added the checks, but there is an inevitable window between
-the check and acting upon it.
+> AFAIU we need the double-cancel because checking the flag and
+> scheduling are not atomic. But if we do that why the memory
+
+Right.
+
+> barriers? They make it seem like we're doing something clever
+> with memory ordering, while really we're just depending on normal
+> properties of the tasklet/timer/work APIs.
+
+Good question. I added this because they are used in usbnet_defer_kevent()
+which can be used in hard irq context. Are you saying I should check
+whether this is actually needed?
+
+> FTR disable_work_sync() would work nicely here but it'd be
+> a PITA for backports.
+
+So should I use it?
+  
+> Also - is this based on some report or syzbot? I'm a bit tempted
+> to put this in net-next given how unlikely the race is vs how
+> commonly used the driver is.
+
+Having found the thing with the random MAC I decided to look
+closely at the driver for overlooked stuff.
 
 	Regards
 		Oliver
