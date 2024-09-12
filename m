@@ -1,208 +1,172 @@
-Return-Path: <linux-usb+bounces-14983-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-14984-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28599976182
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 08:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AE339761DC
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 08:53:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7E11283A25
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 06:28:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F540284CD7
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 06:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFB118BB91;
-	Thu, 12 Sep 2024 06:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C0818BBA6;
+	Thu, 12 Sep 2024 06:53:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="X4HO/w1D"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bUbEoL8y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797FC18A6A9
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 06:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B755B10FF;
+	Thu, 12 Sep 2024 06:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726122520; cv=none; b=cnk+zq8Fv3I7swYqoXCeoLkaxRb5JWMS3x7BeNkq7ZAPpMNM9G4OgD/E2/HDmKahhNT2dG7WQdkz11Kr41AKS+5ieyFjttwPgsG7sF5Hct2EW/k59zwufLxADWZ4PCz0ilXPY9/8qtZu+wmQ35g/y0l/HfvxzgDtLYHdkXlbdyg=
+	t=1726124010; cv=none; b=ZzjKkk5rZQ1qczakBCNCtLZsu3n/AE84zdSDJxQv7nP5EYKFPCTFHMDak4oWY1mSJyz+pVOGqutNe7g0d85s8jHEE0FL/ohGOzoCXNMCwEy8PROiVMT+gW3mP6hIFnwu+aDxB3fw1rV5t/ADJvsthrMkBhKUHXVyJBXn4V1zen4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726122520; c=relaxed/simple;
-	bh=C4dY2+lEUwUAR7oupuEUzuOC7BMjVqo9q+11nVeJbFU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ogJqU6BEVwVHGB9K95RDEtHmSNXn9x/+dgFD2jc0ih5acErLMxLw/LhgHnhNnDcOOpzYBChX36C3raG5ZJD8qU5AdU6kQXXvBh0qSrL3jgRRDY5duJTN7bNVrTEpojD1s3y00wiXn2os+JNJi/J7w2nZP49k7atD919+XY9HbEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=X4HO/w1D; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 741C73F2FC
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 06:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1726122510;
-	bh=sa6+SBaAxzMT/3eIq2BIGYwjKRAOqA6pxbefKSvrzAA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=X4HO/w1DjWoHzoJzeEpEWDGCZAM+zO6Eq/zSm4U1gMHC7IytLA3/aKuLWI2PF0yGr
-	 CDvsAzDyzRjZx2UeUZkk85TfEbE8jW2VAaoofxdUYroMl+stEbq9M8Hm7xS0lWycef
-	 GW+1kfjMXBnFfSqlBGX5aHceZA33PX4OFK4Tq2qbtYWGWEnFylJIOEGbKmKV+RmxeQ
-	 GtaoHdwY3rZmZJs1dQe9ya1uabGwZTWmBsywm8E5WjQ+o5NMvTOiYWZOUQX+VR7oXY
-	 nFceJVyeJVCnLyCKyftRLCWceROgDqjNlWf8omgTspH+NrTSYa7ApF0H5ez+Nn+qES
-	 +LOLgw/5oouJg==
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2f75f196ed9so4596481fa.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Sep 2024 23:28:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726122510; x=1726727310;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sa6+SBaAxzMT/3eIq2BIGYwjKRAOqA6pxbefKSvrzAA=;
-        b=df9D94CvyFlK0W9dCr988vBEkrUOkBOK/IO1eP4tANyySFwWzs49MqcxbpYHZnLq5U
-         KgqGGSeNW2PziDApAkoiQhH6ChSWdIFif1ANb2hquhoR9IvE6hNm8oqAoKkKugYJ08bC
-         ylnx3oGMHEs+6840KoBl8HMOe9eCz+KimNaw3CewEPkfoxcb75Mpn98ePKOhOHMIsZ2e
-         eHmrKG6YZcWW/WwdEL1oixyy+hxQ3xGeX/V4CnjYtz+JeGrFfAr4LYO2rxEu2Xz5Stsf
-         TMycYfWnvYCzY7FxbpnadZmuKf1E0tr//AkCYDFvol9UF0djTssxlyDb+Q1W7+Vzu1/6
-         sSPg==
-X-Forwarded-Encrypted: i=1; AJvYcCV/pz1Z+ROh6XRa6x5TAwj0nYCFemaxI2ZxNexi2oeNQlHO4Fxgy0FnjId6wNxzJRbeWnsaf4bbZW4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yycp03Vnq53kAV3gFerVXSn5FpbKUbpSSDrLw+TCaCoUXAKHjoh
-	MxmU0w6bcDj56hjSn/nstj/HhpgI6Q17Q1ofNWl2MHmbI3LgbBpkXc7mAEczbfF3U3G73JzJjEU
-	cI6rTytsIp+JfI1tQKkCOqHgzCwAkXZigC8TVTtc+TWt8Q3oJudngpXwPOs4XKmbmDkirqj+Fo2
-	kgFzpGTQL9eqW1e60iaMmDBPGp4i0JDEBfRUIiIHINmjudMnk0
-X-Received: by 2002:a2e:bc25:0:b0:2f7:5a83:a90b with SMTP id 38308e7fff4ca-2f787d9f3c0mr9289131fa.8.1726122509696;
-        Wed, 11 Sep 2024 23:28:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGePUOXOpmSriCJ/cXhQP4iqCGWM2kJ4JGiFuk2QqgtfeNpV7EU8/DJsqI0olqw//BMDbX3WSHIoUF3JmCwjs0=
-X-Received: by 2002:a2e:bc25:0:b0:2f7:5a83:a90b with SMTP id
- 38308e7fff4ca-2f787d9f3c0mr9288801fa.8.1726122509043; Wed, 11 Sep 2024
- 23:28:29 -0700 (PDT)
+	s=arc-20240116; t=1726124010; c=relaxed/simple;
+	bh=x1z6am5b0jOeS5/RmI9p91PrHTnNU3+NkzsNXV+rKQs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r06ztzIgdEBGurq9U5zW71aCdHYEvYLHZB6DqQnnO0QPZXqMhTYAkFfMMS6Wxur2Z3oVu84KHMo61SNl5vPGu9nY6gYxmUFNXYrceKIrHwB+Y4Gp/LF4HDPPuGUvcOFZ7qmQ2FyW4uF0LHFsIXCa2No6NXcINpBuXgSTKZ7tRE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bUbEoL8y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A233AC4CECD;
+	Thu, 12 Sep 2024 06:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1726124010;
+	bh=x1z6am5b0jOeS5/RmI9p91PrHTnNU3+NkzsNXV+rKQs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bUbEoL8y6t1LgtuRraiS0oWdU0B1FnwzQZi5OK23+cdv0oDdNDT10e8jDF30PVGKp
+	 EpC9xx5gKrcPPT75ycE+Wykd/BwVMm/e7vRxkIJTi4q+Mx2BThaa+timlFoR07AaOM
+	 EiBUJ6uVHdhTvqpIxrILKO1UA38wMskjmS2hbANs=
+Date: Thu, 12 Sep 2024 08:53:27 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anurag Bijea <icaliberdev@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH] usb: typec: ucsi: Fix busy loop on ASUS VivoBooks
+Message-ID: <2024091215-mullets-praying-375b@gregkh>
+References: <20240912054433.721651-1-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906053047.459036-1-kai.heng.feng@canonical.com>
- <d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu>
- <CAAd53p4i1zzW2DsVfirjXVsQX0AgXy1XbzWaM-ziWmAmp8J1=A@mail.gmail.com>
- <7be0c87a-c00f-4346-8482-f41ef0249b57@rowland.harvard.edu>
- <CAAd53p7c4-jpZ6OsW+H9qw2mvvr8kSfX2UEf8YrsWJt5koYbAA@mail.gmail.com> <fe0d3259-c60b-4ef8-aa42-edb5ca2e2d90@rowland.harvard.edu>
-In-Reply-To: <fe0d3259-c60b-4ef8-aa42-edb5ca2e2d90@rowland.harvard.edu>
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Thu, 12 Sep 2024 14:28:15 +0800
-Message-ID: <CAAd53p67c0qQijUreu0AShsKucgPY03OQP+RGw=P7-vCV3Y6eg@mail.gmail.com>
-Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne 440
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, hdegoede@redhat.com, 
-	ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org, 
-	jorge.lopez2@hp.com, acelan.kao@canonical.com, 
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, kaihengfeng@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240912054433.721651-1-lk@c--e.de>
 
-On Tue, Sep 10, 2024 at 9:13=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Tue, Sep 10, 2024 at 11:33:02AM +0800, Kai-Heng Feng wrote:
-> > On Mon, Sep 9, 2024 at 10:39=E2=80=AFPM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > >
-> > > On Mon, Sep 09, 2024 at 11:05:05AM +0800, Kai-Heng Feng wrote:
-> > > > On Fri, Sep 6, 2024 at 10:22=E2=80=AFPM Alan Stern <stern@rowland.h=
-arvard.edu> wrote:
-> > > > >
-> > > > > On Fri, Sep 06, 2024 at 01:30:47PM +0800, Kai-Heng Feng wrote:
-> > > > > > The HP ProOne 440 has a power saving design that when the displ=
-ay is
-> > > > > > off, it also cuts the USB touchscreen device's power off.
-> > > > > >
-> > > > > > This can cause system early wakeup because cutting the power of=
-f the
-> > > > > > touchscreen device creates a disconnect event and prevent the s=
-ystem
-> > > > > > from suspending:
-> > > > >
-> > > > > Is the touchscreen device connected directly to the root hub?  If=
- it is
-> > > > > then it looks like there's a separate bug here, which needs to be=
- fixed.
-> > > > >
-> > > > > > [  445.814574] hub 2-0:1.0: hub_suspend
-> > > > > > [  445.814652] usb usb2: bus suspend, wakeup 0
-> > > > >
-> > > > > Since the wakeup flag is set to 0, the root hub should not genera=
-te a
-> > > > > wakeup request when a port-status-change event happens.
-> > > >
-> > > > The disconnect event itself should not generate a wake request, but
-> > > > the interrupt itself still needs to be handled.
-> > > >
-> > > > >
-> > > > > > [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, =
-id 11, portsc: 0x202a0
-> > > > > > [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
-> > > > >
-> > > > > But it did.  This appears to be a bug in one of the xhci-hcd susp=
-end
-> > > > > routines.
-> > >
-> > > I failed to notice before that the suspend message message above is f=
-or
-> > > bus 2 whereas the port change event here is on bus 1.  Nevertheless, =
-I
-> > > assume that bus 1 was suspended with wakeup =3D 0, so the idea is the
-> > > same.
-> >
-> > Yes the bus 1 was already suspended.
-> >
-> > >
-> > > > So should the xhci-hcd delay all interrupt handling after system re=
-sume?
-> > >
-> > > It depends on how the hardware works; I don't know the details.  The
-> > > best approach would be: when suspending the root hub with wakeup =3D =
-0,
-> > > the driver will tell the hardware not to generate interrupt requests =
-for
-> > > port-change events (and then re-enable those interrupt requests when =
-the
-> > > root hub is resumed, later on).
-> >
-> > So the XHCI_CMD_EIE needs to be cleared in prepare callback to ensure
-> > there's no interrupt in suspend callback.
->
-> Not in the prepare callback.  Clear it during the suspend callback.
->
-> But now reading this and the earlier section, I realize what the problem
-> is.  There's only one bit in the command register to control IRQ
-> generation, so you can't turn off interrupt requests for bus 1 (the
-> legacy USB-2 bus) without also turning them off for bus 2 (the USB-3
-> bus).
->
-> > Maybe this can be done, but this seems to greatly alter the xHCI suspen=
-d flow.
-> Yes, this approach isn't feasible.
->
-> > > If that's not possible, another possibility is that the driver could
-> > > handle the interrupt and clear the hardware's port-change status bit =
-but
-> > > then not ask for the root hub to be resumed.  However, this would
-> > > probably be more difficult to get right.
-> >
-> > IIUC the portsc status bit gets cleared after roothub is resumed. So
-> > this also brings not insignificant change.
-> > Not sure if its the best approach.
->
-> It should be possible for this to work.  Just make the interrupt
-> handler skip calling usb_hcd_resume_root_hub() if wakeup is not enabled
-> for the root hub getting the port-status change.  When the root hub
-> resumes as part of the system resume later on, the hub driver will check
-> and see that a connect change occurred.
+On Thu, Sep 12, 2024 at 07:44:33AM +0200, Christian A. Ehrhardt wrote:
+> If the busy indicator is set, all other fields in CCI should be
+> clear according to the spec. However, some UCSI implementations do
+> not follow this rule and report bogus data in CCI along with the
+> busy indicator. Ignore the contents of CCI if the busy indicator is
+> set.
+> 
+> If a command timeout is hit it is possible that the EVENT_PENDING
+> bit is cleared while connector work is still scheduled which can
+> cause the EVENT_PENDING bit to go out of sync with scheduled connector
+> work. Check and set the EVENT_PENDING bit on entry to
+> ucsi_handle_connector_change() to fix this.
+> 
+> Finally, check UCSI_CCI_BUSY before the return code of ->sync_control.
+> This ensures that the command is cancelled even if ->sync_control
+> returns an error (most likely -ETIMEDOUT).
+> 
+> Reported-by: Anurag Bijea <icaliberdev@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219108
+> Bisected-by: Christian Heusel <christian@heusel.eu>
+> Tested-by: Anurag Bijea <icaliberdev@gmail.com>
+> Fixes: de52aca4d9d5 ("usb: typec: ucsi: Never send a lone connector change ack")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> ---
+>  NOTE: Rebased onto usb-next.
+> 
+>  drivers/usb/typec/ucsi/ucsi.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 35dce4057c25..e0f3925e401b 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -38,6 +38,10 @@
+>  
+>  void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  {
+> +	/* Ignore bogus data in CCI if busy indicator is set. */
+> +	if (cci & UCSI_CCI_BUSY)
+> +		return;
+> +
+>  	if (UCSI_CCI_CONNECTOR(cci))
+>  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+>  
+> @@ -103,15 +107,13 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+>  		return -EINVAL;
+>  
+>  	ret = ucsi->ops->sync_control(ucsi, command);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = ucsi->ops->read_cci(ucsi, cci);
+> -	if (ret)
+> -		return ret;
+> +	if (ucsi->ops->read_cci(ucsi, cci))
+> +		return -EIO;
+>  
+>  	if (*cci & UCSI_CCI_BUSY)
+>  		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
+> +	if (ret)
+> +		return ret;
+>  
+>  	if (!(*cci & UCSI_CCI_COMMAND_COMPLETE))
+>  		return -EIO;
+> @@ -1197,6 +1199,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  
+>  	mutex_lock(&con->lock);
+>  
+> +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> +		dev_err_once(ucsi->dev, "%s entered without EVENT_PENDING\n",
+> +			     __func__);
+> +
+>  	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+>  
+>  	ret = ucsi_send_command_common(ucsi, command, &con->status,
+> -- 
+> 2.43.0
+> 
+> 
 
-This can work. But should the change be made in
-usb_hcd_resume_root_hub() or by the caller?
-The issue can potentially happen to all USB controllers, not just xHCI.
+Hi,
 
-Kai-Heng
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
->
-> Alan Stern
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
