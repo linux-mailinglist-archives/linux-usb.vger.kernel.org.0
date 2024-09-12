@@ -1,107 +1,125 @@
-Return-Path: <linux-usb+bounces-15017-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17AB3976F49
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 19:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C433E976FC0
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 19:47:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A5751C238AA
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 17:08:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7BBA1C23D35
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2024 17:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8E971BF7F0;
-	Thu, 12 Sep 2024 17:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAE151BE85C;
+	Thu, 12 Sep 2024 17:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TXrJzS8G"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="12pvVjgM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559351BF338
-	for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 17:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1792B450FA;
+	Thu, 12 Sep 2024 17:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726160873; cv=none; b=Yi6nAP44hlralQc2vkaTBLXCcblc5KcCleLYVNv6uvWygsPT6UwUadmRWGw7u11eMvYAaOVQI4WEM34Us05YitJi/IRpL9aUVKu/tzKGlIBjhUHZgbi7FNiVQ+hJS4NSRGTea1bck8j+0hpEc2wIUDkPshZAjDIO/XTv8cYgmJI=
+	t=1726163271; cv=none; b=lBzNqTSMAiVVnJgYASF6OpTe57ObB8QiRvz559T1CvoxQ9q/pdjPjqRJo7Gbm1wE37osQj/pG7UXpVwF0DeMUTixHeXDpZcEGJMxvsdvd7hHsLMYt1cOfU4jW2nOxBAWHwfVRL5qWewZ2g7N8vuFOm4eFrHVJhNsYYhPmUAjG4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726160873; c=relaxed/simple;
-	bh=OiNWEqHciZkVPseAu8B8WmN0darILG6zbl3zeYFKgTk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s3nFcEwyBPt6d35cerYYWfHq5cYPcKbYDGWHQrQUsA1WLwzxV9kN/NEjT2I9z6usvC/hqEEbcQAvsvUHHTmfPOdI0MbzASZy8RIEDAMCnHTHcgpsq/qucDKp3bKYD+ER8RDYWI+ZiMWkJ4jrzZzNhvvGYnFpEVymMZz1vayEpjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TXrJzS8G; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-374c962e5adso784383f8f.1
-        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2024 10:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1726160869; x=1726765669; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/oseDqCRJUhFD2dLeTPXlO5hbRz2duVo6NZcTc3tDjk=;
-        b=TXrJzS8Gn1wF/eb7iQ6Mkk4gsOREfjMNJ6byBLwfVKpaTkeFh8a0oCiFP8rU/6PogF
-         1MplRFKFyrYYYIu9snElanAIbsS8XY6fTR2cahiSHd5kiojj0OhwqO+QM6NoHYC2Ihhb
-         WE9n/kb4tiS9Fs/sPjmh2uXDQTdTLkmA40I7+2bzX4rLTE5L8XMXOKqVJxE/d+qJ0VBC
-         60rZyTHEDZL9/WkiUWYaxDDOAg7/3S+dkJ6r7c7yAIVZul7Tt0giP67IUVu5pLRDG75b
-         +epbLjE8L0K0xVN2wZ6ixISOq93i+gg8kqr7v/HllMGz8VFQ3rm782LhufS5DDIoyhKy
-         9/ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726160869; x=1726765669;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/oseDqCRJUhFD2dLeTPXlO5hbRz2duVo6NZcTc3tDjk=;
-        b=lU/Ric9CcA83NJ9o1Te2L7rbyus47A9xTGA/eBx3nRckGnNVFFcdFXTmWN4F4nkN4Z
-         LysAMecLaXYmROkT0cB2u8WiWn+l23s9Sp6RmAwB+ZKUhqekB+RbT9OZHlaCwKQ7AEcm
-         IlmIlDBkRh5fWodrIUzkyGfXoik8WXoxP3+hQHbdvTzeh0cLYyDqSacvkEaUQWqBcjNO
-         8HalWawaqTSntZ87ArZktQZEw9je0QrjluU7smEuoO/R1dVvi0koQdPCBYAfMPu7wiXO
-         dr8u0BSH26t/85COU+hmtoH7VZTvYxsYDYELekyFJCzyWtLzA+ZTJGBrpOGDfxEAy+3o
-         qD2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXXDcMn/s3ROfRS49MuaY+tIICC66yYPjN2WSa3PbQ/tgb1BTX/TiuUkeu/MPGHLIY/uVL43fzw3nA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwT0N24qbkm2DKItSsqGJ4h0ASO3PYRRTsd0jPOeEbkXh/a+dzo
-	8keGVmC63O4XeXiuY9x/gVMgU0EJgyyKroGs5KpqrhqhDuZ9qGzHbNgFazQRPN0=
-X-Google-Smtp-Source: AGHT+IHvBFz42bnD10MptdQXnDZJ29xeTaCo2acJIgwblIAwEYqHIRq1XEqzLBBjgHeAVF9yUsPdDQ==
-X-Received: by 2002:adf:e282:0:b0:376:7dc1:6e91 with SMTP id ffacd0b85a97d-378a8a1c6c5mr6485540f8f.11.1726160868823;
-        Thu, 12 Sep 2024 10:07:48 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13ca:eb01:f47c:2f3f:7fd9:e714? ([2001:a61:13ca:eb01:f47c:2f3f:7fd9:e714])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cb1f0140dsm165140815e9.39.2024.09.12.10.07.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Sep 2024 10:07:48 -0700 (PDT)
-Message-ID: <cedf861a-bc1c-4677-983f-321407503f9e@suse.com>
-Date: Thu, 12 Sep 2024 19:07:47 +0200
+	s=arc-20240116; t=1726163271; c=relaxed/simple;
+	bh=V59tfk+p83hYWl3xIBeXykYvxSNMAPxX7texZ0OBgqc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HxbPnNFgkBEe8OgvAW8LOHMEmPi/bT1cAGkAjH/jBVPekIeJqDl/9RXhDtxk5UJtagcyr9rvgsNF+CschzBP6HufqA+JWhHYeGFIMQ6BcpKcwlBQFROYQjQ8TiWo61Bz6NwkMH24KnEApOTNXWR8W/VUk4KMRHb6dwbRrc0yX8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=12pvVjgM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 491A9C4CEC3;
+	Thu, 12 Sep 2024 17:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1726163270;
+	bh=V59tfk+p83hYWl3xIBeXykYvxSNMAPxX7texZ0OBgqc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=12pvVjgMWiIJ0lGyWL5xbf3d/VWZrJNpHNKjgcP3kb29RuOmbtUoyibSDUlMOdHaD
+	 bky3FSTY+Uo/nj+SRFdCNz4mwIHlFt0DoULYiU8CD4H0com5e/DWhdzEnnTRQNTt1i
+	 l7CB0LpMLJlMpKVy48tUC46p5CBsEgPowwD03R3M=
+Date: Thu, 12 Sep 2024 19:47:47 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: John Keeping <jkeeping@inmusicbrands.com>
+Cc: Roy Luo <royluo@google.com>, Alan Stern <stern@rowland.harvard.edu>,
+	Chris Wulff <crwulff@gmail.com>, yuan linyu <yuanlinyu@hihonor.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: core: force synchronous registration
+Message-ID: <2024091239-wildly-caucus-1a67@gregkh>
+References: <20240912164502.2134084-1-jkeeping@inmusicbrands.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: iowarrior: fix infoleak in iowarrior_read()
-To: Jeongjun Park <aha310510@gmail.com>, gregkh@linuxfoundation.org
-Cc: colin.i.king@gmail.com, kees@kernel.org, gustavo@embeddedor.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- syzbot+b8080cbc8d286a5fa23a@syzkaller.appspotmail.com
-References: <20240912163413.10019-1-aha310510@gmail.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20240912163413.10019-1-aha310510@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240912164502.2134084-1-jkeeping@inmusicbrands.com>
 
-
-
-On 12.09.24 18:34, Jeongjun Park wrote:
-> The dev->read_queue buffer memory allocated from iowarrior_probe is
-> allocated in an uninitialized state, and it is possible to copy the
-> uninitialized memory area to the user buffer through iowarrior_read.
+On Thu, Sep 12, 2024 at 05:45:00PM +0100, John Keeping wrote:
+> Registering a gadget driver is expected to complete synchronously and
+> immediately after calling driver_register() this function checks that
+> the driver has bound so as to return an error.
+> 
+> Set PROBE_FORCE_SYNCHRONOUS to ensure this is the case even when
+> asynchronous probing is set as the default.
+> 
+> Fixes: fc274c1e99731 ("USB: gadget: Add a new bus for gadgets")
+> Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
+> ---
+> v2:
+> - Add "Fixes" trailer
+> 
+>  drivers/usb/gadget/udc/core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index cf6478f97f4a3..a6f46364be65f 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -1696,6 +1696,7 @@ int usb_gadget_register_driver_owner(struct usb_gadget_driver *driver,
+>  	driver->driver.bus = &gadget_bus_type;
+>  	driver->driver.owner = owner;
+>  	driver->driver.mod_name = mod_name;
+> +	driver->driver.probe_type = PROBE_FORCE_SYNCHRONOUS;
+>  	ret = driver_register(&driver->driver);
+>  	if (ret) {
+>  		pr_warn("%s: driver registration failed: %d\n",
+> -- 
+> 2.46.0
+> 
+> 
 
 Hi,
 
-I am very sorry, but this is not a proper fix. That this happens
-shows that the driver has a bug in iowarrior_read(). Zeroing out
-the buffer just papers over it.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-	Regards
-		Oliver
+You are receiving this message because of the following common error(s)
+as indicated below:
 
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
