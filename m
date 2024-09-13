@@ -1,55 +1,56 @@
-Return-Path: <linux-usb+bounces-15062-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15063-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8968197765A
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 03:21:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F75297766E
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 03:35:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42E6E285E65
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 01:20:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF7361F249F9
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 01:34:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1444A28;
-	Fri, 13 Sep 2024 01:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528623FE4;
+	Fri, 13 Sep 2024 01:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ix+68JlT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lER63ki/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5944A06;
-	Fri, 13 Sep 2024 01:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE106443D;
+	Fri, 13 Sep 2024 01:34:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726190454; cv=none; b=Yc5PLSf/Hl9YBtW6HhGSbiUau+Y4yGcER4hEINTyUeROSuEgj83/w2Qn1AeY04k+ViIAko3c6qsx97rbkIAIYEwl+2EKyPLDf+TpJkjrgAEQ/0yRt6tEezdrc2aQken6eiZ3YejP2iWeanwvFoKZbWp1M8qFaaHHS0YAnBPVkk4=
+	t=1726191293; cv=none; b=VcvsqrS0SZ2KwPDNTuQ9iz4EIJ4QVCJUPNENieSRJdzlNnnwp0p0UR/b8hxAAjRnXXycQyroftGJU5svfbld5MBcAgUT5xqew1h0+EmoPxxO0szK6o2gTpzrGW0NQj4i/MqhDBoSIn/z9PBqP+u+YY9e9xTzFtsLyfxO1drxH9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726190454; c=relaxed/simple;
-	bh=VcDIvEwAHrvmEiuXUDM/KAOQWTRLgSLltWnbqqhQbNI=;
+	s=arc-20240116; t=1726191293; c=relaxed/simple;
+	bh=GBa90cpQO4bdwxqTlAy3EnRRdCl548M4R4K/5s+El4k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kLb1GogWlHAXwklD7PNhmrBw5ZFHt3XiC2IKtuZNVAqXyK8uLVnpA2oZsUsMt5XN0AOki1lzUlGvaUURukExDjcPqXXie3qpx3igKBgQoECj4EIsbQtsq3BcT9nVxKucJpaYDRfPFO28Lq+Cn15mSl0LRWTGIyU5DUkwOo1mmqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ix+68JlT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01EDC4CEC3;
-	Fri, 13 Sep 2024 01:20:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=CZKnuG2ZOXc87QHhIrjV5TEKa3rEKdx/XEgIkdm8Hr2zlbZ4RJrrZKBjwgGIsFEjsbVBn01l2likXDZqukGA+Wah27EbyFzzQ9aaf8GKYmuxmcgLX221bnKAnpCH8qx3rhF5wmVIRPJ0o8aSDDAJ3hJqoxAP2gAEmhCRBHwIgUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lER63ki/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5199AC4CEC3;
+	Fri, 13 Sep 2024 01:34:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726190453;
-	bh=VcDIvEwAHrvmEiuXUDM/KAOQWTRLgSLltWnbqqhQbNI=;
+	s=k20201202; t=1726191293;
+	bh=GBa90cpQO4bdwxqTlAy3EnRRdCl548M4R4K/5s+El4k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ix+68JlTdvXksJsw3/SvpqcptI8dqDHrC6MTKqflU2y+IPobhb6rRzQ1mYWubLDXY
-	 uK9eGkWicE+6IUn6feButcx/Id9og2BFq5P73kuQCsXn1SLmTbDBBbv9o4q1fd619h
-	 ebZ7Pijf8Jm3fKQx57e/kYwgCLZrVPrsQOr4TfsmwH2gmvxvSNN8NP5ynYFpT5Fg8E
-	 2VTBdMc9n3AYTq98ec85fS80lkCZ+fawiPDN4nghjNpDFA4+DGD/zBNRjRLp9uDqgh
-	 DUlxbIlXlvKSNJSun2pz0ttBU8CjMlEFdioX3pMGPRXu0McAzNBI/BUD35UA5Wg/Dn
-	 Z11bppe+/nYCQ==
-Date: Fri, 13 Sep 2024 09:20:45 +0800
+	b=lER63ki/Q7YCO/TEKNeYrwC0yKuv1cW0Ud2PVp9WnZPpQfy71+jihd71uDnDhnJzi
+	 Fgc2VnGwN+ZVRCtOE0ubrEXcCD9hAH477m7hCHpRKNbRpVRVrwWW236jbk+Ah4pJFX
+	 CbjxEcGb6jg49KGZPfiQtkTwOFBYyTJQrL6K0pvwv9TNSjh5v6DPF53+wP4TZjSLp3
+	 reTPyLR5sSK3D6+bhqiE9GtFyufL40EM8lgznpn834inxbtHJCzlW2TGlezqMUfFxJ
+	 RBhxr/gCBXJvyaYRNOTm+KHgzmo15CJfRoo1GktI3iDHk4nIDh/fvBrCxRzKezWbA7
+	 i8zh1Hptht1lA==
+Date: Fri, 13 Sep 2024 09:34:46 +0800
 From: Peter Chen <peter.chen@kernel.org>
 To: Xu Yang <xu.yang_2@nxp.com>
 Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
 	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH 1/2] usb: chipidea: udc: limit usb request length to max
- 16KB
-Message-ID: <20240913012045.GA320526@nchen-desktop>
+Subject: Re: [PATCH 2/2] usb: chipidea: udc: create bounce buffer for problem
+ sglist entries if possible
+Message-ID: <20240913013446.GB320526@nchen-desktop>
 References: <20240912045150.915573-1-xu.yang_2@nxp.com>
+ <20240912045150.915573-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,72 +59,253 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240912045150.915573-1-xu.yang_2@nxp.com>
+In-Reply-To: <20240912045150.915573-2-xu.yang_2@nxp.com>
 
-On 24-09-12 12:51:49, Xu Yang wrote:
-> Currently, the deivice controller has below limitations:
-> 1. can't generate short packet interrupt if IOC not set in dTD. So if one
->    request span more than one dTDs and only the last dTD set IOC, the usb
->    request will pending there if no more data comes.
-> 2. the controller can't accurately deliver data to differtent usb requests
->    in some cases due to short packet. For example: one usb request span 3
->    dTDs, then if the controller received a short packet the next packet
->    will go to 2nd dTD of current request rather than the first dTD of next
->    request.
+On 24-09-12 12:51:50, Xu Yang wrote:
+> The chipidea controller doesn't fully support sglist, such as it can not
+> transfer data spanned more dTDs to form a bus packet, so it can only work
+> on very limited cases.
 > 
-
-Are there any IP errata for it?
-
-> To let the device controller work properly, one usb request should only
-> correspond to one dTD. Then every dTD will set IOC. In theory, each dTD
-> support up to 20KB data transfer if the offset is 0. Due to we cannot
-> predetermine the offset, this will limit the usb request length to max
-> 16KB. This should be fine since most of the user transfer data based on
-> this size policy.
+> The limitations as below:
+> 1. the end address of the first sg buffer must be 4KB aligned.
+> 2. the start and end address of the middle sg buffer must be 4KB aligned.
+> 3. the start address of the first sg buffer must be 4KB aligned.
 > 
-> Although these limitations found on OUT eps, we can put the request to IN
-> eps too, this will benefit the following patches.
-
-Since IN endpoints have not found the problem, please limit the changes
-only for OUT endpoints.
-
+> However, not all the use cases violate these limitations. To make the
+> controller compatible with most of the cases, this will try to bounce the
+> problem sglist entries which can be found by sglist_get_invalid_entry().
+> Then a bounced line buffer (the size will roundup to page size) will be
+> allocated to replace the remaining problem sg entries. The data will be
+> copied between problem sg entries and bounce buffer according to the
+> transfer direction. The bounce buffer will be freed when the request
+> completed.
 > 
 > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+
+Acked-by: Peter Chen <peter.chen@kernel.com>
+
 > ---
->  drivers/usb/chipidea/ci.h  | 1 +
->  drivers/usb/chipidea/udc.c | 5 +++++
->  2 files changed, 6 insertions(+)
+>  drivers/usb/chipidea/udc.c | 147 +++++++++++++++++++++++++++++++++++++
+>  drivers/usb/chipidea/udc.h |   2 +
+>  2 files changed, 149 insertions(+)
 > 
-> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
-> index 2a38e1eb6546..f8deccfc8713 100644
-> --- a/drivers/usb/chipidea/ci.h
-> +++ b/drivers/usb/chipidea/ci.h
-> @@ -25,6 +25,7 @@
->  #define TD_PAGE_COUNT      5
->  #define CI_HDRC_PAGE_SIZE  4096ul /* page size for TD's */
->  #define ENDPT_MAX          32
-> +#define CI_MAX_REQ_SIZE	(4 * CI_HDRC_PAGE_SIZE)
->  #define CI_MAX_BUF_SIZE	(TD_PAGE_COUNT * CI_HDRC_PAGE_SIZE)
->  
->  /******************************************************************************
 > diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index b1a1be6439b6..5d9369d01065 100644
+> index 5d9369d01065..dc4dae2c31b4 100644
 > --- a/drivers/usb/chipidea/udc.c
 > +++ b/drivers/usb/chipidea/udc.c
-> @@ -969,6 +969,11 @@ static int _ep_queue(struct usb_ep *ep, struct usb_request *req,
->  		return -EMSGSIZE;
->  	}
+> @@ -10,6 +10,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/device.h>
+>  #include <linux/dmapool.h>
+> +#include <linux/dma-direct.h>
+>  #include <linux/err.h>
+>  #include <linux/irqreturn.h>
+>  #include <linux/kernel.h>
+> @@ -540,6 +541,126 @@ static int prepare_td_for_sg(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+>  	return ret;
+>  }
 >  
-> +	if (hwreq->req.length > CI_MAX_REQ_SIZE) {
-> +		dev_err(hwep->ci->dev, "request length too big (max 16KB)\n");
-> +		return -EMSGSIZE;
+> +/*
+> + * Verify if the scatterlist is valid by iterating each sg entry.
+> + * Return invalid sg entry index which is less than num_sgs.
+> + */
+> +static int sglist_get_invalid_entry(struct device *dma_dev, u8 dir,
+> +			struct usb_request *req)
+> +{
+> +	int i;
+> +	struct scatterlist *s = req->sg;
+> +
+> +	if (req->num_sgs == 1)
+> +		return 1;
+> +
+> +	dir = dir ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
+> +
+> +	for (i = 0; i < req->num_sgs; i++, s = sg_next(s)) {
+> +		/* Only small sg (generally last sg) may be bounced. If
+> +		 * that happens. we can't ensure the addr is page-aligned
+> +		 * after dma map.
+> +		 */
+> +		if (dma_kmalloc_needs_bounce(dma_dev, s->length, dir))
+> +			break;
+> +
+> +		/* Make sure each sg start address (except first sg) is
+> +		 * page-aligned and end address (except last sg) is also
+> +		 * page-aligned.
+> +		 */
+> +		if (i == 0) {
+> +			if (!IS_ALIGNED(s->offset + s->length,
+> +						CI_HDRC_PAGE_SIZE))
+> +				break;
+> +		} else {
+> +			if (s->offset)
+> +				break;
+> +			if (!sg_is_last(s) && !IS_ALIGNED(s->length,
+> +						CI_HDRC_PAGE_SIZE))
+> +				break;
+> +		}
 > +	}
 > +
-
-Since this IP is used by many vendors, it may fix by others.
-I prefer add flag like CI_HDRC_SHORT_PACKET_NOT_SUPPORT, 
-and set in imx platform file.
-
-Peter
-
+> +	return i;
+> +}
+> +
+> +static int sglist_do_bounce(struct ci_hw_req *hwreq, int index,
+> +			bool copy, unsigned int *bounced)
+> +{
+> +	void *buf;
+> +	int i, ret, nents, num_sgs;
+> +	unsigned int rest, rounded;
+> +	struct scatterlist *sg, *src, *dst;
+> +
+> +	nents = index + 1;
+> +	ret = sg_alloc_table(&hwreq->sgt, nents, GFP_KERNEL);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sg = src = hwreq->req.sg;
+> +	num_sgs = hwreq->req.num_sgs;
+> +	rest = hwreq->req.length;
+> +	dst = hwreq->sgt.sgl;
+> +
+> +	for (i = 0; i < index; i++) {
+> +		memcpy(dst, src, sizeof(*src));
+> +		rest -= src->length;
+> +		src = sg_next(src);
+> +		dst = sg_next(dst);
+> +	}
+> +
+> +	/* create one bounce buffer */
+> +	rounded = round_up(rest, CI_HDRC_PAGE_SIZE);
+> +	buf = kmalloc(rounded, GFP_KERNEL);
+> +	if (!buf) {
+> +		sg_free_table(&hwreq->sgt);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	sg_set_buf(dst, buf, rounded);
+> +
+> +	hwreq->req.sg = hwreq->sgt.sgl;
+> +	hwreq->req.num_sgs = nents;
+> +	hwreq->sgt.sgl = sg;
+> +	hwreq->sgt.nents = num_sgs;
+> +
+> +	if (copy)
+> +		sg_copy_to_buffer(src, num_sgs - index, buf, rest);
+> +
+> +	*bounced = rest;
+> +
+> +	return 0;
+> +}
+> +
+> +static void sglist_do_debounce(struct ci_hw_req *hwreq, bool copy)
+> +{
+> +	void *buf;
+> +	int i, nents, num_sgs;
+> +	struct scatterlist *sg, *src, *dst;
+> +
+> +	sg = hwreq->req.sg;
+> +	num_sgs = hwreq->req.num_sgs;
+> +	src = sg_last(sg, num_sgs);
+> +	buf = sg_virt(src);
+> +
+> +	if (copy) {
+> +		dst = hwreq->sgt.sgl;
+> +		for (i = 0; i < num_sgs - 1; i++)
+> +			dst = sg_next(dst);
+> +
+> +		nents = hwreq->sgt.nents - num_sgs + 1;
+> +		sg_copy_from_buffer(dst, nents, buf, sg_dma_len(src));
+> +	}
+> +
+> +	hwreq->req.sg = hwreq->sgt.sgl;
+> +	hwreq->req.num_sgs = hwreq->sgt.nents;
+> +	hwreq->sgt.sgl = sg;
+> +	hwreq->sgt.nents = num_sgs;
+> +
+> +	kfree(buf);
+> +	sg_free_table(&hwreq->sgt);
+> +}
+> +
+>  /**
+>   * _hardware_enqueue: configures a request at hardware level
+>   * @hwep:   endpoint
+> @@ -552,6 +673,8 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+>  	struct ci_hdrc *ci = hwep->ci;
+>  	int ret = 0;
+>  	struct td_node *firstnode, *lastnode;
+> +	unsigned int bounced_size;
+> +	struct scatterlist *sg;
+>  
+>  	/* don't queue twice */
+>  	if (hwreq->req.status == -EALREADY)
+> @@ -559,11 +682,28 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+>  
+>  	hwreq->req.status = -EALREADY;
+>  
+> +	if (hwreq->req.num_sgs && hwreq->req.length) {
+> +		ret = sglist_get_invalid_entry(ci->dev->parent, hwep->dir,
+> +					&hwreq->req);
+> +		if (ret < hwreq->req.num_sgs) {
+> +			ret = sglist_do_bounce(hwreq, ret, hwep->dir == TX,
+> +					&bounced_size);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +	}
+> +
+>  	ret = usb_gadget_map_request_by_dev(ci->dev->parent,
+>  					    &hwreq->req, hwep->dir);
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (hwreq->sgt.sgl) {
+> +		/* We've mapped a bigger buffer, now recover the actual size */
+> +		sg = sg_last(hwreq->req.sg, hwreq->req.num_sgs);
+> +		sg_dma_len(sg) = min(sg_dma_len(sg), bounced_size);
+> +	}
+> +
+>  	if (hwreq->req.num_mapped_sgs)
+>  		ret = prepare_td_for_sg(hwep, hwreq);
+>  	else
+> @@ -742,6 +882,10 @@ static int _hardware_dequeue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+>  	usb_gadget_unmap_request_by_dev(hwep->ci->dev->parent,
+>  					&hwreq->req, hwep->dir);
+>  
+> +	/* sglist bounced */
+> +	if (hwreq->sgt.sgl)
+> +		sglist_do_debounce(hwreq, hwep->dir == RX);
+> +
+>  	hwreq->req.actual += actual;
+>  
+>  	if (hwreq->req.status)
+> @@ -1588,6 +1732,9 @@ static int ep_dequeue(struct usb_ep *ep, struct usb_request *req)
+>  
+>  	usb_gadget_unmap_request(&hwep->ci->gadget, req, hwep->dir);
+>  
+> +	if (hwreq->sgt.sgl)
+> +		sglist_do_debounce(hwreq, false);
+> +
+>  	req->status = -ECONNRESET;
+>  
+>  	if (hwreq->req.complete != NULL) {
+> diff --git a/drivers/usb/chipidea/udc.h b/drivers/usb/chipidea/udc.h
+> index 5193df1e18c7..c8a47389a46b 100644
+> --- a/drivers/usb/chipidea/udc.h
+> +++ b/drivers/usb/chipidea/udc.h
+> @@ -69,11 +69,13 @@ struct td_node {
+>   * @req: request structure for gadget drivers
+>   * @queue: link to QH list
+>   * @tds: link to TD list
+> + * @sgt: hold original sglist when bounce sglist
+>   */
+>  struct ci_hw_req {
+>  	struct usb_request	req;
+>  	struct list_head	queue;
+>  	struct list_head	tds;
+> +	struct sg_table		sgt;
+>  };
+>  
+>  #ifdef CONFIG_USB_CHIPIDEA_UDC
+> -- 
+> 2.34.1
+> 
 
