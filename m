@@ -1,129 +1,136 @@
-Return-Path: <linux-usb+bounces-15108-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15109-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75983978B49
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 00:14:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE1F7978BD5
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 01:22:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7BF01C22E77
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 22:14:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E11DC1C255A7
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 23:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B122A17C9A0;
-	Fri, 13 Sep 2024 22:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D87518732E;
+	Fri, 13 Sep 2024 23:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fZG6TdZe"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DpwEI7du"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f73.google.com (mail-vs1-f73.google.com [209.85.217.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907101465BD;
-	Fri, 13 Sep 2024 22:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C54E17C9B2
+	for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2024 23:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726265666; cv=none; b=TcRpqRpJ9G1V2gJqrJo03MRdtYHwbOyTBH2SgoxxESKq6+FwDQkVBU4HL5OTYXNR8Ag136KKHJRdA31TeidrktMg3uof2svRrJuA/y2p/SQWsAWarZeiWemokU8qjFnZzE/DAq5nItMQg6vnQHg+20v4AW/JxIEtEY2z6NT404o=
+	t=1726269717; cv=none; b=EGJDfC3PQrv14tK4DrnUMJUQhBBrSdOmpg3d8zR05FLi8DwixXbHnaMVMl5/MvzxcaFHeCr5TtI0JyhMRY4YA4Cu/2SZ23D4Vsitu3uoytnAoJbtQQ7rXRhI81/HRRe3QebaFaLzzJSi8+EqNdlJVhyRzTDN+E/NyGylVNtzkZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726265666; c=relaxed/simple;
-	bh=T9DzavKcLabQzYB5iHOUE1B4T8eJcT1KtWWq6NbNHbU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=PKSJBzGb5jeQ4bEmowRK/q0MeqDcy3N957W+b3ImBu5uPL9tSL3NGD31AZYudaOB5J5RdlnNiTOA/IDdeqpPvnSEsZXSxAlwoBzRnsYJDMncj2u7ExP+h6PF065eHUurliDV0vFgFUB8TzRMQZ9QRcpYDgEh2saLMgHSRmN0xkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fZG6TdZe; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48DAslFN003394;
-	Fri, 13 Sep 2024 22:14:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	kYznQ95DJKtpP23L3CyjW0yB9e5K+e0VQ0yg2e7udL4=; b=fZG6TdZeibjZMWYK
-	4Mt/59sDFfv10g+Db8d9cdogdKEVpypoqkZtb7P/n5k9khLdFne5/VJWZTIRGMJ/
-	9s3GtW5PrrSJrBsD3XErYs5B6p8FnCksHW3MRrBjtAOI8ltcv4XF9zzf+oqrcYz6
-	aIPlvPiJoUntoqtiUkRrqJiCWghTukFk1qjf0gQ9nfNvaE12j1Bemy7kgU/KAXGX
-	vbiEYMh/+LJSGlvKq3glDDMn1lOD4AMtaYAOyai4WTG8xv0EP/B8Ot5fPD0sXjem
-	ZspgBYRJapjUa022af8m/KZVV38YY57G2LAUvqTWFvLsLik7FVqOoi+Yi3r2dQMF
-	CtDwnQ==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41gybq1xjd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Sep 2024 22:14:02 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48DME1BI022104
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Sep 2024 22:14:01 GMT
-Received: from [10.71.114.155] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 13 Sep
- 2024 15:14:01 -0700
-Message-ID: <a9dcaa5a-4f5d-451a-93aa-7457798fc243@quicinc.com>
-Date: Fri, 13 Sep 2024 15:14:00 -0700
+	s=arc-20240116; t=1726269717; c=relaxed/simple;
+	bh=ZR4zzrJ7VfwbKEOrB4Fz+3qk/wJzSD20AcrL3bdyVb8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=JIt4toUKec8RgVZ1SpQ+806xLJmqBEOnXsPbXNqI73pSg9BkPwlPfKvAWpQIK22qx1LFup318zyCobGsSrnFAPdxPqUFTEkvlIHrobWsK77gnu1+C9tUiDD4NyE4wN9rov/CfziaPVddLB/SPLnsLJAQTBD11R3K/fjCVTJj2vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DpwEI7du; arc=none smtp.client-ip=209.85.217.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com
+Received: by mail-vs1-f73.google.com with SMTP id ada2fe7eead31-49bcae71155so511412137.3
+        for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2024 16:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726269715; x=1726874515; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MusCj4ir4PSCrsUEXUGtNPthWYDXOiereiA9bi88QOE=;
+        b=DpwEI7duYilWb+J202kJ10d8j5vtcf0UdenX+6YAh7l30FCmd5vGiIoIkvVoz4UAJp
+         h/5ThOk3BI3Pj1NA+d9NAHsmJ/YNQ8HCt00z1KFokyIOgc6921fxh4rUOTJwH4gDQNW0
+         v2XVgAzIMpV3WtDALbnvFRaXFQJgHcchHyo3KFNAApvxQ6SsqsUZScLrY4K/eD19W3NV
+         fElamm7glKAVc0OazkBtCn0xI4BUgPmH8QApQ8fGAg2VcbCw6KgjQLzY198BMdqK756O
+         4uk1IrO7OL7bdYAklb/LcSizCOLPcdFgeifrhaER74A1Jq+7oQxAr2LnyPwjje9plIHp
+         u6bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726269715; x=1726874515;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MusCj4ir4PSCrsUEXUGtNPthWYDXOiereiA9bi88QOE=;
+        b=vhMXhPbrdtDW/YwyKaoXHF2fF2EHAmFEIEb4OMqF27LnpQ4j1DHxR6mLRCyDYUqmNn
+         xd6e3q0Q8jg5Urc4x/CFJAAZmTDv/BWygEeNGZdZnkCw5SmBME19XUhXRYPr4YO9NoRe
+         Sxxj3VMWQECyJogWWYOrzhazmV09c2PPL0a7lG9cSNdn2/dhpwdlVZeYsvwCpRMHwKVD
+         4fHi/k6to3Cqsk8G7w/XIstc+L6iqaMmu8xWFtCCAqSnmvp93wT1sRkSnaAP8+AIpyJb
+         olWqlUhrt98oFgzqSuOsxCxKlumsf8J2dYeikRNgsXz5oxiw97kdTIVKeXkUdKc2adf7
+         G5+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUOCgPDRXXcvfm0cQuIgS2lK3yW2aP4kRjQN/OQIRGlZuf6eniN5H7IAlcvgCMd45GRJKwBN3LeFik=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwYuKBOaEdkFJSoMPZnms94rsO9y7psXsre3hmAkKKu7iSAdVW
+	026L35AWZ4nBOX0f2KyIpsFPC4NfLduko8IVhBxXNxsBjk7bgfYulvywu/SFWN/xP0Fyg3Ns5Aq
+	bDA==
+X-Google-Smtp-Source: AGHT+IFq2KBEKBhquBRGzPqSjJyQNiRU9Q5Fx5vMKbhgYYZh5gkNJeMsW9/caw6zOQuL6RVVlwtNRlFXUHI=
+X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
+ (user=royluo job=sendgmr) by 2002:a05:6102:3e1a:b0:493:ba4a:6f8c with SMTP id
+ ada2fe7eead31-49d4f6bb754mr205460137.3.1726269714995; Fri, 13 Sep 2024
+ 16:21:54 -0700 (PDT)
+Date: Fri, 13 Sep 2024 23:21:45 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v27 01/32] xhci: add helper to stop endpoint and wait for
- completion
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
-        <mathias.nyman@linux.intel.com>
-CC: <Thinh.Nguyen@synopsys.com>, <alsa-devel@alsa-project.org>,
-        <bgoswami@quicinc.com>, <broonie@kernel.org>, <conor+dt@kernel.org>,
-        <corbet@lwn.net>, <devicetree@vger.kernel.org>,
-        <dmitry.torokhov@gmail.com>, <gregkh@linuxfoundation.org>,
-        <krzk+dt@kernel.org>, <lgirdwood@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <mathias.nyman@intel.com>, <perex@perex.cz>,
-        <pierre-louis.bossart@linux.intel.com>, <robh@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <tiwai@suse.com>
-References: <20240913103237.2f5dc796@foxbook>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20240913103237.2f5dc796@foxbook>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
+Message-ID: <20240913232145.3507723-1-royluo@google.com>
+Subject: [PATCH v2] usb: dwc3: re-enable runtime PM after failed resume
+From: Roy Luo <royluo@google.com>
+To: royluo@google.com, Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	badhri@google.com, frank.wang@rock-chips.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Ea9Dy7IqYhLusQtkdmuC5WmSVcZRbLXp
-X-Proofpoint-GUID: Ea9Dy7IqYhLusQtkdmuC5WmSVcZRbLXp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 spamscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1011 bulkscore=0
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409130157
 
-Hi Michal,
+When dwc3_resume_common() returns an error, runtime pm is left in
+suspended and disabled state in dwc3_resume(). Since the device
+is suspended, its parent devices (like the power domain or glue
+driver) could also be suspended and may have released resources
+that dwc requires. Consequently, calling dwc3_suspend_common() in
+this situation could result in attempts to access unclocked or
+unpowered registers.
+To prevent these problems, runtime PM should always be re-enabled,
+even after failed resume attempts. This ensures that
+dwc3_suspend_common() is skipped in such cases.
 
-On 9/13/2024 1:32 AM, Michał Pecio wrote:
-> Hi,
->
->> Expose xhci_stop_endpoint_sync() which is a synchronous variant of
->> xhci_queue_stop_endpoint().  This is useful for client drivers that are
->> using the secondary interrupters, and need to stop/clean up the current
->> session.  The stop endpoint command handler will also take care of
->> cleaning up the ring.
-> I'm not entirely sure what you meant by "cleaning up the ring" (maybe a
-> comment would be in order?), but I see nothing being done here after the
-> command completes and FYI xhci-ring.c will not run the default handler if
-> the command is queued with a completion, like here.
->
-> At least that's the case for certain command types and there is probably
-> a story behind each of them. I know that xhci_stop_device() queues a
-> Stop EP with completion (and also a few without(?)). Maybe it's a bug...
+Fixes: 68c26fe58182 ("usb: dwc3: set pm runtime active before resume common")
+Cc: stable@vger.kernel.org
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+ drivers/usb/dwc3/core.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Maybe the last sentence is not needed.  When we are using the secondary interrupters, at least in the offload use case that I've verified with, the XHCI is completely unaware of what TDs have been queued, etc...  So technically, even if we did call the default handler (ie xhci_handle_cmd_stop_ep), most of the routines to invalidate TDs are going to be no-ops.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index ccc3895dbd7f..4bd73b5fe41b 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2537,7 +2537,7 @@ static int dwc3_suspend(struct device *dev)
+ static int dwc3_resume(struct device *dev)
+ {
+ 	struct dwc3	*dwc = dev_get_drvdata(dev);
+-	int		ret;
++	int		ret = 0;
+ 
+ 	pinctrl_pm_select_default_state(dev);
+ 
+@@ -2545,14 +2545,12 @@ static int dwc3_resume(struct device *dev)
+ 	pm_runtime_set_active(dev);
+ 
+ 	ret = dwc3_resume_common(dwc, PMSG_RESUME);
+-	if (ret) {
++	if (ret)
+ 		pm_runtime_set_suspended(dev);
+-		return ret;
+-	}
+ 
+ 	pm_runtime_enable(dev);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static void dwc3_complete(struct device *dev)
 
-Thanks
-
-Wesley Cheng
+base-commit: ad618736883b8970f66af799e34007475fe33a68
+-- 
+2.46.0.662.g92d0881bb0-goog
 
 
