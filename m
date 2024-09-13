@@ -1,196 +1,359 @@
-Return-Path: <linux-usb+bounces-15094-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15095-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56097977D46
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 12:24:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66C57978049
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 14:42:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D276D1F250A4
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 10:24:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9358E1C21773
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 12:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE501D79BF;
-	Fri, 13 Sep 2024 10:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B14A1DA104;
+	Fri, 13 Sep 2024 12:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="TcJ35mBg"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GeQB5+jy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2099.outbound.protection.outlook.com [40.107.101.99])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF0D1C1AB8;
-	Fri, 13 Sep 2024 10:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726223056; cv=fail; b=ccm6UUTY8nXioP7QRyIX+urW7JMyXPOit8z0JCs1+4blxaHIUx04/+djoImT5vxOAKZjA7HihJ0Yt7bwgIvnuKX9ICcjv8F/hP6SwNgQLZl5fccRZBa7rtKfCq+BfQW4tsfW8PRCrGpZOont0bS+L2MlmYAFURZ/NjqvEeyxmjE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726223056; c=relaxed/simple;
-	bh=xzGbFIbgdtiQNj6GoAHe1xNsccpJoGiweb4pyy5Rv0Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=aaIHoMtc+gQLxdtK/WFurjfWD9fWH8iE18l2iNbqXSS0PwvY6sy2l/k098lPUA3oLG9peNf3iw/fyvS03ZaBs7fYbFNVS/gaSC324vPnecNVFYbKpdwk3pA8o6zlRzc8gnpOzhFsvDW1gNzXMyfArDvKVRIoIFt8kPteot5WXK8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=TcJ35mBg; arc=fail smtp.client-ip=40.107.101.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HdhTxdqJnjfeMpq2/Y08lr1Nn102Ao5jcDXiW71ajUegr1MsfPosRf64uPADVf2+HQ26Kis6Hh+TxzRSwhx3LTIPZFL20/VJ1b7uB8zfRpVgxj72Qzwy7Y7ZSkjxnP54abOMY7+cD95ga4yhEA1kJSHTv2I9ii3iqNJ85W6dUglhWqWYr6wSCVgDbG7KThlGIpAr0uaEK1zTLS8ZTgyj1plMk5g8aHldZjoKO4HD3dsCufS63sg/AZFdV9LY2SDE6E0BcXC/GxFgjl8fnaYIg/o3ccQEgxPHNoPX/dthH1CoNq9upykbpZWJnVFPdKEWvBEB+JNHeQh9gYvYToxVzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UdeeZCB4RybyyNg4J9DnsTyumq0gIgnJOHnK1hfOtPc=;
- b=H7hLLgEkN+8OEtYMtT7RlqSze0kgHsjkALtfuLHst1xEG6Cw1/MpLhktEdfERDIFPRDrlsVrCdM/sezW+2GE6CpUEcjlFFGRAhjJtolTCECEdvNCMyk3pJ6VZ5I+Ygm1HV0xcO8djrX6G3sZAigLhhHb9kwD82ooA9TtajU/D+cq5d8b9rU9cM4svXh6ueR2LpqGh5UdVNfo1uo8GZbJ1lqRiYlCV8JOP0vrIlqhhGzNszQxq5SauNSEAY5mt2QnjhR4TUtl8ee5k73tZBT0ahPOXK7BW79f4sSqov27aNyH85h3ZvxFzzsnjjnP/0oiDr3gdH2N/xBapRqWiY2/jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UdeeZCB4RybyyNg4J9DnsTyumq0gIgnJOHnK1hfOtPc=;
- b=TcJ35mBg+4lkIBEGr9R/ERxvUgfjlJz6nO3Z2D3X3GU7lAgaqOFzcPqzNqPgFBYHLc0nTv7T/p6SCN6j8NGH9jVFL7Q0ONMgABl8BwfaJeYzZcfYkqDHrjhrqXL6Fc3WlQUNWA1EzxL8bYDFP8LXrSeGpNFXsSR2mLmrOc6lvio=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by LV8PR08MB9584.namprd08.prod.outlook.com (2603:10b6:408:1fb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Fri, 13 Sep
- 2024 10:24:11 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%6]) with mapi id 15.20.7939.017; Fri, 13 Sep 2024
- 10:24:11 +0000
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: John Keeping <jkeeping@inmusicbrands.com>,
-	stable@vger.kernel.org,
-	Roy Luo <royluo@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	yuan linyu <yuanlinyu@hihonor.com>,
-	Chris Wulff <crwulff@gmail.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: gadget: core: force synchronous registration
-Date: Fri, 13 Sep 2024 11:23:23 +0100
-Message-ID: <20240913102325.2826261-1-jkeeping@inmusicbrands.com>
-X-Mailer: git-send-email 2.46.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO2P123CA0106.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:139::21) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD9C1D7997
+	for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2024 12:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726231344; cv=none; b=b8sH98z0Tdf5EPefhE+ItORYeOy+4WA/6VDKSiy5NPOKsl7eQMXPvyeyPGtUqQMduGM9mi/kF8NVspY0j8lXkd63/NuQR1Cmd3rOgt3E27r6VFrRI0FmC/CYWKGTzwHlhagSOUwMNwDO/cjfr7z3HpTbDAH6TMB74itmt7/4ZSE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726231344; c=relaxed/simple;
+	bh=s5pFfvEOI7fNZFwDF7FXjBZEe5M29/s7SLPDATThLQQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=KF1bAfUPcmdPAPlS7dTfeRg7Kvq0GifDANjbS7hQO0XMKOBpQUVyp7wIIFAEZTtk+N69aaNChsgM9bf48EKrUq9lkhYLQlbLzISERqTX+BLbcdf5kNazCDi2BocujcRKUffMr/m7MtyhRJNZ7LkxTx47oFlXf5PVuXzBpvfsNpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GeQB5+jy; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240913124220epoutp04760f8953ca9c3b0c6288a622e153bbeb~0zkH_ghc52264822648epoutp04O
+	for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2024 12:42:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240913124220epoutp04760f8953ca9c3b0c6288a622e153bbeb~0zkH_ghc52264822648epoutp04O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1726231340;
+	bh=69uLk9lGiimVrr7ddMJOWyqtrTyPP1DP+O9FhTYpyZY=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=GeQB5+jyo/E5SSptqWH4yFsu9oqc2oKFToPUgq/WO54WgMiSOnEs9k9/Z9Z/eulH1
+	 vGiG7dTiyPxJvU3bM3spYifYzmIXwnl7n+hvrokv/cLH/pOrbGgwkAwq2GKtmLK9mw
+	 2nf0ATkfpUjPpyH7oVSZ9cVNuCBdjaprO9tBjyg4=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20240913124219epcas5p36fff23e8c89eb1b94f3012895707b44a~0zkHYLTdv2858828588epcas5p3t;
+	Fri, 13 Sep 2024 12:42:19 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4X4v8V1Hghz4x9Pq; Fri, 13 Sep
+	2024 12:42:18 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	3A.88.09743.92334E66; Fri, 13 Sep 2024 21:42:17 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240913124217epcas5p122019d5707ab9bff8283e14ffd6662fa~0zkFna7ZM2928429284epcas5p1W;
+	Fri, 13 Sep 2024 12:42:17 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240913124217epsmtrp2c3e2b796da78873e40c23980eb439a30~0zkFmvHPE2066820668epsmtrp2W;
+	Fri, 13 Sep 2024 12:42:17 +0000 (GMT)
+X-AuditID: b6c32a4a-14fff7000000260f-b5-66e43329c6c5
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	7C.B1.19367.92334E66; Fri, 13 Sep 2024 21:42:17 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240913124213epsmtip1c29b0ecbd23761043cc28d8ebba6fd1d~0zkCR9dek0184701847epsmtip1W;
+	Fri, 13 Sep 2024 12:42:13 +0000 (GMT)
+Message-ID: <dd7965fa-9266-46b9-9219-1ef726480a9b@samsung.com>
+Date: Fri, 13 Sep 2024 18:12:04 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|LV8PR08MB9584:EE_
-X-MS-Office365-Filtering-Correlation-Id: 006f8322-bc29-411f-a335-08dcd3de3535
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|7416014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?8j83nZM80ELIPyQmbc5oyugppw8d+DMRMNl2E4BFWX+nmQdaCJHGYeSxKtFh?=
- =?us-ascii?Q?48FLHALmgvkszCOzgXtjX8YshidtJ7Ju9kh0kFGz42rjChrr+gBhIk/MtD7p?=
- =?us-ascii?Q?zQhdJkfGNb463iU+Bdyt5O5+e2WV1mxHQix0A6MMw0WYjRCol93+jj6y3Cbu?=
- =?us-ascii?Q?sweAPLgCnlLRfOfiz4TXsDQYV0QUYTZLv7mWknwlJ0hldV8SSBCk99YyFjxS?=
- =?us-ascii?Q?mNrY9UqLZEaBy+171r5O/yvfOaLj6Us6BNSxMyWiFd+6uLEtyoZoWcCJtTUE?=
- =?us-ascii?Q?EYC64zVs6xn5CLNbyXtUVNR/9I/6gJe3QxqN2snXxm/sKRttt3nucNJK6k3z?=
- =?us-ascii?Q?UN7SGtay800dlNPkKP4ZDucoJYQaw0eqzBRqa7P1KutLuY3cy0UNmmwsG26k?=
- =?us-ascii?Q?2KEUgcxZIufFlFH4kuxyYLa8maOxcDwpaaJs5xdkkVIFkbF31DFYfTPQ9XoF?=
- =?us-ascii?Q?vi7tGLJIuhw8RQVRk+b1qFWKCi+h8dDB8OSkZAFFqd/J3KD85hhxOgKbM8m6?=
- =?us-ascii?Q?BfRxKY8NjrzVOz8t8TayNyNXIN5yV77ElUAmMmciGT/2Iai1jKA4iUQOxnef?=
- =?us-ascii?Q?b1iCkMRVqJ1YMQdNp8eeUvPUXp1IPJAo3Uy+IYo9BxcNO95R7KaaheGHLbFq?=
- =?us-ascii?Q?kbf5+rjMZZ2yyZPFsnx31mGUaRBFeS2quuZI6137rQW5wAxHzSsnbI7kzwTV?=
- =?us-ascii?Q?fsIb06rpY31T4mQWqk7leAnZqvQdNllX2PXQh7QI/8hkrh/oO2AH+gdooycR?=
- =?us-ascii?Q?Tmr7sdhXuk/YzyaAXbInMm70zG1QMuQUtMTpD9Jf8TVMkzvvgsW1lkE93NRA?=
- =?us-ascii?Q?I648VlKO7g/BZX1P+pwucuvI1P+gJ9RwZEgM3X/PUCwUnPjlyQAMfEWfuWw0?=
- =?us-ascii?Q?jVkfq3aNNje8Z56mCUiFMK8QDHAXt9W2u9Ek5BzB9vEk/ClfrVGbt8FnKVkg?=
- =?us-ascii?Q?YwP+4mG+fC9vb4KIsR+LF3drcGonOyX4rK+3T0maKDkpUA2oOYTe7ID0E6FR?=
- =?us-ascii?Q?otJNr3MT9ocMz1apc9jJGxNmES18L267Saq1Jo1bIlYS5uAy/2vN9gXwfenV?=
- =?us-ascii?Q?T31/EhkCCbdoQ7raQqPiTihDOxAwL/D5H3v2PxyI8tMo5xouYxN4DRUMqnjo?=
- =?us-ascii?Q?4OI7KqEcZI/M7ddWsXIJHx/WYt8YzwmcitZHlEDD15TqxoCE9Y7WWKYm87hO?=
- =?us-ascii?Q?X7WEl5NcZlrnaVYhBeCLX4WWbTOsLUgKHmS7FESKVUMXzgXcpTxmZlkvFPx0?=
- =?us-ascii?Q?fhg6TamDEZktO8zQY/gl4TZNjSHhSXOBUtS6FMQEwR8DCPsuWpkVFHmOdOLB?=
- =?us-ascii?Q?OXUbSFY4Zm1EBpJo7T1JyKrIsBPcc4Jv23aAGAqAxYrXEKhQ+XO22UuuV+ud?=
- =?us-ascii?Q?Rb7y16ZVayXS6hYiqDNgTWPJmISBu44pRU/IQ2mN5EfnESIlmA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(7416014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?nKoIXua68KJ1B3iP0zJtrQah0aUmFLeEfG/ymyDMPlw/T+ubh9UYslDhH8Bv?=
- =?us-ascii?Q?xznA/fVPi131aiCxi8sQSqcWRNqb3Ib3GZqdUft6550LPc0HFhyZY155JHkW?=
- =?us-ascii?Q?fE4owAUUfTHdJo8qn6y02zif+RWBlBP0sI7Zwbe45HEydTlaXwQLu+IT9VjZ?=
- =?us-ascii?Q?mXPcLhRYjBz4IZXSj7aWQAmTJloxBLuDUeEJ4TqPr9JSm3vK3VPA1p38f7pB?=
- =?us-ascii?Q?DuTndb3Yra4iXVP5G8IVEiy87jYLg0QbYLbYBztJxgGUgkWr1zgz5cPpdOCt?=
- =?us-ascii?Q?gytNNK66TYiY2f696Cu5eudeuklHCXiKfloWDHh55FG6pXqvADUOzGbRJNY/?=
- =?us-ascii?Q?RSzsmXUXB/3Y2m4ny1YlQI8h9WddE7oUtk8t0FIv6vgnR3VKTJJweNZ/JCFK?=
- =?us-ascii?Q?6fyEYpJ88xnTvgdyYU61YV+nu+E6Hg5JfTkftok3MPo3vAbyy02dsp1bv4xx?=
- =?us-ascii?Q?Ki5kZ61gNwMA7BXOC34Z5shfnDBqo2kleDHet3ZOVL2X47BQxJUGsyUt6E0I?=
- =?us-ascii?Q?zkDSwAwaYGu3Ry1mfLN7/msC4mUa1xnURLO35/AJK7KTM9mH8pT/J3v+UjG/?=
- =?us-ascii?Q?NVIA9Vyg9v3TEWiVVCE3iV7cVnqva1RirzMcBV1mS417RxjkQW3lFmlYDaYQ?=
- =?us-ascii?Q?Kf+o+CI30ImLzNLGSWEeUcZ/CH7W/kiCmql777A51q1gehkpXggxctG6uf9R?=
- =?us-ascii?Q?485uvPYtEkIb3zq1S66dyXdQUkDQ1gh7JCp701mSBOhEJJKHtf07Q4OcZnj/?=
- =?us-ascii?Q?STeQuC6FaGOpXfoREztLXtBtUagQHmBHezuvbQzh6ExGWbaAtq7+NifD/x6O?=
- =?us-ascii?Q?bFUzzqITw5VkuDiLAFrCi0YbWZ06pX5j3xXXPuiyLQHsXl2oPxbFJe8gJK5u?=
- =?us-ascii?Q?J6cSghJIqyEUERzcx4BdkRJ/Hn9GUkPLJMpNuHPgp2CnXoKVx1ck0gfdnJWh?=
- =?us-ascii?Q?kQGSnmDzMWcFud8I3bRJfFeLUAKBjR/E91pDgbVkFhBf7VSB9OOc1njoWhSj?=
- =?us-ascii?Q?gh/4OXygfzaTaPhjxp/fwlpJ4Ywy0Q1ThARLVQ4/rq0kPYGiu+fY7Z2FA9sC?=
- =?us-ascii?Q?XjlnDyEvghBPALFTIwLBumAFrxDnZ5M3+34UtWZWzHDW3y3mhbeLuxNdEvnQ?=
- =?us-ascii?Q?OdHuGrXzZ8slDA+NXYtV4OtFmgP7jMJVXWLsUf1JRC/XpLd9HsOlp08E72bu?=
- =?us-ascii?Q?1GglN0MpDTee9iRYno8+cx1KpNAHiA6w7XyqsF1QknlLy5dKgSNnTRx5q5+4?=
- =?us-ascii?Q?p3yneq1TwO/rgxvfZ/uiKFcTPIo0hDscUvfa7rGm/DJCFVEAOFERk8fYmAl2?=
- =?us-ascii?Q?n7qQmXOxjNvh6zwjJJCVrfaA2Aw/XuAKEotIVuwuhWGF3lyQFahjKRa2Xh67?=
- =?us-ascii?Q?D/FnEfn8tsebb8jDGAHrVj4xIkF6PgWscnU4ODJG+Dmxu19FBM+Wvb5+vli3?=
- =?us-ascii?Q?qhxcQ6CHgjfYL4VnxLKQSuEjpjrUg1sVxPbHervyzOtVQf4l7WEodCv5mX4c?=
- =?us-ascii?Q?XtftGXoXpz2adYitXmBM/wfyeEoosQq14kGD0nec1af0LHdMUVfZuq4AXg/L?=
- =?us-ascii?Q?ugk+7F0r4jjPCh3beBM1Qt39ItVlMCdQdxw9mSPR/AqIseOo9Mr307K2DrZm?=
- =?us-ascii?Q?5Q=3D=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 006f8322-bc29-411f-a335-08dcd3de3535
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2024 10:24:11.1599
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Pzoc3WnsruK/aE8zlH6xzNFWolmTbfCqqbFXU60QJqlOp+lQ4/VWLcMyAs8lKpzsZ/konlodICfSRFw9Ww2x6TTX8G3NR5gRjRLsLE9e2Hk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR08MB9584
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: Potential fix of possible dwc3 interrupt
+ storm
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
+	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
+	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
+	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
+	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
+	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
+	"shijie.cai@samsung.com" <shijie.cai@samsung.com>
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20240911002408.gr4fv5vkst7ukxd5@synopsys.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmhq6m8ZM0g0UbrS3eXF3FanFnwTQm
+	i1PLFzJZNC9ez2Yxac9WFou7D3+wWFzeNYfNYtGyVmaLT0f/s1qs6pwDFPu+k9li0kFRi1UL
+	DrA78Hrsn7uG3aNvyypGjy37PzN6fN4kF8ASlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pm
+	YKhraGlhrqSQl5ibaqvk4hOg65aZA3SekkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUg
+	JafApECvODG3uDQvXS8vtcTK0MDAyBSoMCE740BXN3vBG9eKA1O2MjcwzrHqYuTkkBAwkbi4
+	ZS97FyMXh5DAbkaJCQsXsEI4nxgl+md9Z4Jzfi6bwAjTcu19A1TVTkaJU3/PMkM4bxkl/qxb
+	C1bFK2Ancb9nNxuIzSKgKvFpQhcTRFxQ4uTMJywgtqiAvMT9WzPYQWxhgQCJK0tmgPWKCOhI
+	HDhxHmw1s0AHq8SC7jawZmYBcYlbT+YD2RwcbAKGEs9O2ICEOQWsJXZc+skKUSIv0bx1NthB
+	EgIrOSSO725igzjbRWJPxwuoF4QlXh3fwg5hS0l8frcXqqZaYvWdj2wQzS2MEoeffIMqspd4
+	fPQRM8hiZgFNifW79CGW8Un0/n4Cdo+EAK9ER5sQRLWqxKnGy1AjpSXuLbnGCmF7SDy5Oh/s
+	BCGBHlaJ5hXBExgVZiEFyywkX85C8s4shMULGFlWMUqmFhTnpqcWmxYY5aWWw2M8OT93EyM4
+	+Wp57WB8+OCD3iFGJg7GQ4wSHMxKIryT2B6lCfGmJFZWpRblxxeV5qQWH2I0BcbPRGYp0eR8
+	YPrPK4k3NLE0MDEzMzOxNDYzVBLnfd06N0VIID2xJDU7NbUgtQimj4mDU6qBaX+00rnMtb8W
+	m3TIqVo9DWjQ6Ozc8us4m86kbfpr1a0LLKUfeyeeWn9UqtX94dtby8pvcVbEJ00XORh25KY6
+	P68uG4eAmaRMkfmrySv9VicJFvdVeTH5JXZOCWRlj587+VOK7o7tWSEV1172b3pvd2rTraX6
+	L+ZHT241qz7ixXzt8vmeu065oS6xvpf/a9y+euXEy/PrXhZXMiywtntkK/Rm+mqTbSyLTkp+
+	SPilx5N1tfhftFLD9s+RvQdPPjZcdkdnxkQRpxtxW8Lv1fnzH4g491lItM3gq+/TQw2ZXGc9
+	ihN0/nYtFLuvIK/gkfKuNCuyzy6hcmM6m+ilQ61/v3olVHjVX+R7lm3kardZiaU4I9FQi7mo
+	OBEAEIjJekcEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmkeLIzCtJLcpLzFFi42LZdlhJTlfT+EmaQfN1QYs3V1exWtxZMI3J
+	4tTyhUwWzYvXs1lM2rOVxeLuwx8sFpd3zWGzWLSsldni09H/rBarOucAxb7vZLaYdFDUYtWC
+	A+wOvB77565h9+jbsorRY8v+z4wenzfJBbBEcdmkpOZklqUW6dslcGUc6OpmL3jjWnFgylbm
+	BsY5Vl2MnBwSAiYS1943sILYQgLbGSVmLrKFiEtLvJ7VxQhhC0us/PecvYuRC6jmNaPE78vN
+	TCAJXgE7ifs9u9lAbBYBVYlPE7qg4oISJ2c+YQGxRQXkJe7fmsEOYgsL+ElMf3MCbKiIgI7E
+	gRPnmUCGMgv0sEp8+fqRBWIDkLPj/C9mkCpmAXGJW0/mA1VxcLAJGEo8O2EDEuYUsJbYcekn
+	K0SJmUTXVohLmYGWNW+dzTyBUWgWkjtmIZk0C0nLLCQtCxhZVjGKphYU56bnJhcY6hUn5haX
+	5qXrJefnbmIEx5dW0A7GZev/6h1iZOJgPMQowcGsJMI7ie1RmhBvSmJlVWpRfnxRaU5q8SFG
+	aQ4WJXFe5ZzOFCGB9MSS1OzU1ILUIpgsEwenVANTuQTrtxiuizvnmk99l6N+jOdhmvC2dR53
+	Il5d8v5wcE6fgVTB3br1R/2fv546d9Ouq5xXVsXuWxQlOun6/LOc9U6fDobe8T7V7/Q8+nfZ
+	jeqmO31OmfUmE++I/Snv44spXlcWzJR231kx4F3kfueIEosTuouV6p/bFa3b6FyWFdN8fk6S
+	XKPZxTXWAXv+nVp/5MzyhyEXrZ6cPNR0ZpaPSZdXx9fE9kuBf0v//vKxmL3IO3SigkCjivk1
+	+xPTJQMLTxd1Bt96lheilmT6p1sx58ztEpPla3qshOQuzjsf4B549+kv16kZU9eprWjZ+vnZ
+	t5OCodEC31ZcsPsS51th/FXCY5lSANc/KfHt+V/XK7EUZyQaajEXFScCABxvwZ4eAwAA
+X-CMS-MailID: 20240913124217epcas5p122019d5707ab9bff8283e14ffd6662fa
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240911002436epcas5p19be55e1144edd6f77184192c7f22a85e
+References: <20240905002611.rxlv66zsker2h5w2@synopsys.com>
+	<d5552437-119c-4a0f-9d71-6959727b6364@samsung.com>
+	<20240905211338.omst6jr3okbxkqdh@synopsys.com>
+	<f9561f03-5f83-4270-b7f3-17b880cfabfe@samsung.com>
+	<20240905231825.6r2sp2bapxidur7a@synopsys.com>
+	<64d049cc-d55d-4376-b6b9-402eb6f170c0@samsung.com>
+	<20240906005935.caugoe3mqqdqwqao@synopsys.com>
+	<30ca8527-419b-4e44-a21b-18e494b39076@samsung.com>
+	<20240907003946.qn6t3xw65qwl2cn7@synopsys.com>
+	<dff83c7d-56b8-481f-af69-8d4262bd54e4@samsung.com>
+	<CGME20240911002436epcas5p19be55e1144edd6f77184192c7f22a85e@epcas5p1.samsung.com>
+	<20240911002408.gr4fv5vkst7ukxd5@synopsys.com>
 
-Registering a gadget driver is expected to complete synchronously and
-immediately after calling driver_register() this function checks that
-the driver has bound so as to return an error.
 
-Set PROBE_FORCE_SYNCHRONOUS to ensure this is the case even when
-asynchronous probing is set as the default.
+On 9/11/2024 5:54 AM, Thinh Nguyen wrote:
+> On Tue, Sep 10, 2024, Selvarasu Ganesan wrote:
+>> On 9/7/2024 6:09 AM, Thinh Nguyen wrote:
+>>> On Sat, Sep 07, 2024, Selvarasu Ganesan wrote:
+>>>> Hi Thinh,
+>>>>
+>>>> I ran the code you recommended on our testing environment and was able
+>>>> to reproduce the issue one time.
+>>>>
+>>>> When evt->flags contains DWC3_EVENT_PENDING, I've included the following
+>>>> debugging information: I added this debug message at the start of
+>>>> dwc3_event_buffers_cleanup and dwc3_event_buffers_setup functions in
+>>>> during suspend and resume.
+>>>>
+>>>> The results were quite interesting . I'm curious to understand how
+>>>> evt->flags is set to DWC3_EVENT_PENDING, and along with DWC3_GEVNTSIZ is
+>>>> equal to 0x1000 during the suspend.
+>>> That is indeed strange.
+>>>
+>>>> Its means that the previous bottom-half handler prior to suspend might
+>>>> still be executing in the middle of the process.
+>>>>
+>>>> Could you please give your suggestions here? And let me know if anything
+>>>> want to test or additional details are required.
+>>>>
+>>>>
+>>>> ##DBG: dwc3_event_buffers_cleanup:
+>>>>     evt->length    :0x1000
+>>>>     evt->lpos      :0x20c
+>>>>     evt->count     :0x0
+>>>>     evt->flags     :0x1 // This is Unexpected if DWC3_GEVNTSIZ(0)(0xc408):
+>>>> 0x00001000. Its means that previous bottom-half handler may be still
+>>>> running in middle
+>>> Perhaps.
+>>>
+>>> But I doubt that's the case since it shouldn't take that long for the
+>>> bottom-half to be completed before the next resume yet the flag is still
+>>> set.
+>>>
+>>>>     DWC3_GEVNTSIZ(0)(0xc408)       : 0x00001000
+>>>>     DWC3_GEVNTCOUNT(0)(0xc40c)     : 0x00000000
+>>>>     DWC3_DCFG(0xc700)              : 0x00e008a8
+>>>>     DWC3_DCTL(0xc704)              : 0x0cf00a00
+>>>>     DWC3_DEVTEN(0xc708)            : 0x00000000
+>>>>     DWC3_DSTS(0xc70c)              : 0x00d20cd1
+>>>>
+>>> The controller status is halted. So there's no problem with
+>>> soft-disconnect. For the interrupt mask in GEVNTSIZ to be cleared,
+>>> that likely means that the bottom-half had probably completed.
+>> Agree, But I am worrying on If the bottom-half is completed, then
+>> DWC3_EVENT_PENDING must be cleared in evt->flags.
+>> Is there any possibility of a CPU reordering issue when updating
+>> evt->flags in the bottom-half handler?.
+>> Should I try with wmb() when writing to evt->flags?
+> Assuming that the problem occurs after the bottom-half completed, there
+> should be implicit memory barrier. The memory operation should complete
+> before the release from spin_unlock complete. I don't think wmb() will
+> help.
+Agree.
+>>>> ##DBG: dwc3_event_buffers_setup:
+>>>>     evt->length    :0x1000
+>>>>     evt->lpos      :0x20c
+>>> They fact that evt->lpos did not get updated tells me that there's
+>>> something wrong with memory access to your platform during suspend and
+>>> resume.
+>> Are you expecting the evt->lpos value to be zero here? If so, this is
+>> expected in our test setup because we avoid writing zero to evt->lpos as
+>> part of dwc3_event_buffers_cleanup if evt->flags have a value of 1. This
+> Oh ok. I did not know you made this modification.
+>
+>> is simply to track the status of evt->lpos during suspend to resume when
+>> evt->flags have a value of DWC3_EVENT_PENDING. The following test codes
+>> for the reference.
+>>
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -505,8 +505,20 @@ static int dwc3_alloc_event_buffers(struct dwc3
+>> *dwc, unsigned int length)
+>>    int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>>    {
+>>           struct dwc3_event_buffer        *evt;
+>> +       u32                             reg;
+>>
+>>           evt = dwc->ev_buf;
+>> +
+>> +       if (evt->flags & DWC3_EVENT_PENDING) {
+>> +               pr_info("evt->length :%x\n", evt->length);
+>> +               pr_info("evt->lpos :%x\n", evt->lpos);
+>> +               pr_info("evt->count :%x\n", evt->count);
+>> +               pr_info("evt->flags :%x\n", evt->flags);
+>> +
+>> +               dwc3_exynos_reg_dump(dwc);
+>> +
+>> +       }
+>> +
+>>           evt->lpos = 0;
+>>           dwc3_writel(dwc->regs, DWC3_GEVNTADRLO(0),
+>>                           lower_32_bits(evt->dma));
+>> @@ -514,8 +526,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>>                           upper_32_bits(evt->dma));
+>>           dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
+>>                           DWC3_GEVNTSIZ_SIZE(evt->length));
+>> -       dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
+>>
+>> +       /* Clear any stale event */
+>> +       reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+>> +       dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
+>>           return 0;
+>>    }
+>>
+>> @@ -525,7 +539,16 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
+>>
+>>           evt = dwc->ev_buf;
+>>
+>> -       evt->lpos = 0;
+>> +       if (evt->flags & DWC3_EVENT_PENDING) {
+>> +               pr_info("evt->length :%x\n", evt->length);
+>> +               pr_info("evt->lpos :%x\n", evt->lpos);
+>> +               pr_info("evt->count :%x\n", evt->count);
+>> +               pr_info("evt->flags :%x\n", evt->flags);
+>> +
+>> +               dwc3_exynos_reg_dump(dwc);
+>> +       } else {
+>> +               evt->lpos = 0;
+> I wasn't aware of this change.
+>
+>> +       }
+>>
+>>>>     evt->count     :0x0
+>>>>     evt->flags     :0x1 // Still It's not clearing in during resume.
+>>>>
+>>>>     DWC3_GEVNTSIZ(0)(0xc408)       : 0x00000000
+>>>>     DWC3_GEVNTCOUNT(0)(0xc40c)     : 0x00000000
+>>>>     DWC3_DCFG(0xc700)              : 0x00080800
+>>>>     DWC3_DCTL(0xc704)              : 0x00f00000
+>>>>     DWC3_DEVTEN(0xc708)            : 0x00000000
+>>>>     DWC3_DSTS(0xc70c)              : 0x00d20001
+>>>>
+>>> Please help look into your platform to see what condition triggers this
+>>> memory access issue. If this is a hardware quirk, we can properly update
+>>> the change and note it to be so.
+>> Sure I will try to figure it out. However, we are facing challenges in
+>> reproducing the issue. There could be a delay in understanding the
+>> conditions that trigger the memory issue if it is related to a memory issue.
+>>
+>>> Thanks,
+>>> Thinh
+>>>
+>>> (If possible, for future tests, please dump the dwc3 tracepoints. Many
+>>> thanks for the tests.)
+>> I tried to get dwc3 traces in the failure case, but so far no instances
+>> have been reported. Our testing is still in progress with enable dwc3
+>> traces.
+>>
+>> I will keep posting once I get the dwc3 traces in the failure scenario.
+>>
+> Thanks for the update. I hope enabling of the driver tracepoints will
+> not impact the reproduction of the issue. With the driver log, we'll get
+> more clues to what was going on.
+>
+> Thanks,
+> Thinh
+Hi Thinh,
 
-Fixes: fc274c1e99731 ("USB: gadget: Add a new bus for gadgets")
-Cc: stable@vger.kernel.org
-Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
----
-v3:
-- Add cc: stable
-v2:
-- Add "Fixes" trailer
+So far, there have been no reported error instances. But, we suspecting 
+that the issue may be related to our glue driver. In our glue driver, we 
+access the reference of evt->flags when starting or stopping the gadget 
+based on a VBUS notification. We apologize for sharing this information 
+so late, as we only became aware of it recently.
 
- drivers/usb/gadget/udc/core.c | 1 +
- 1 file changed, 1 insertion(+)
+The following sequence outlines the possible scenarios of race conditions:
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index cf6478f97f4a..a6f46364be65 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1696,6 +1696,7 @@ int usb_gadget_register_driver_owner(struct usb_gadget_driver *driver,
- 	driver->driver.bus = &gadget_bus_type;
- 	driver->driver.owner = owner;
- 	driver->driver.mod_name = mod_name;
-+	driver->driver.probe_type = PROBE_FORCE_SYNCHRONOUS;
- 	ret = driver_register(&driver->driver);
- 	if (ret) {
- 		pr_warn("%s: driver registration failed: %d\n",
--- 
-2.46.0
+Thread#1 (Our glue Driver Sequence)
+===================================
+->USB VBUS notification
+->Start/Stop gadget
+->dwc->ev_buf->flags |= BIT(20); (It's for our reference)
+->Call dwc3 exynos runtime suspend/resume
+->dwc->ev_buf->flags &= ~BIT(20);
+->Call dwc3 core runtime suspend/resume
+
+Thread#2
+========
+->dwc3_interrupt()
+->evt->flags |= DWC3_EVENT_PENDING;
+->dwc3_thread_interrupt()
+->evt->flags &= ~DWC3_EVENT_PENDING;
+
+
+
+After our internal discussions, we have decided to remove the 
+unnecessary access to evt->flag in our glue driver. We have made these 
+changes and initiated testing.
+
+Thank you for your help so far to understand more into our glue driver code.
+
+And We are thinking that it would be fine to reset evt->flag when the 
+USB controller is started, along with the changes you suggested earlier. 
+This additional measure will help prevent similar issues from occurring 
+in the future.
+
+Please let us know your thoughts on this proposal. If it is not 
+necessary, we understand and will proceed accordingly.
+
+
+Thanks,
+Selva
 
 
