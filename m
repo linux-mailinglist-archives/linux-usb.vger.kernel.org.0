@@ -1,125 +1,156 @@
-Return-Path: <linux-usb+bounces-15091-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15092-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33CAB977C72
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 11:43:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3878E977C93
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 11:53:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEDCA281B85
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 09:43:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5016A28847B
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 09:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB2181D79AC;
-	Fri, 13 Sep 2024 09:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F2A1D6DC2;
+	Fri, 13 Sep 2024 09:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DghWpUcd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UHw+eD5y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA8C1BB691;
-	Fri, 13 Sep 2024 09:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD6A1C1743;
+	Fri, 13 Sep 2024 09:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726220542; cv=none; b=YHrE9riHaLi3OJwhUHKg3jyqBChC2VzukudfFu2BslyleQ1qMg5QauxmrymnMSygXDMFvVWoHUMUf/A2yQ/1dq+HhM85hkUU18qGcoWGZEvEtFDd4JfM2bCg/povzoJ51vQhLdj6oKPtzbQcBp7XCOCg1lsYMCOsQygYzdNypEU=
+	t=1726221233; cv=none; b=CFMia5FAltPGMdSELWfuXnSB5ww+TlRPmahYC6IWMZ+8ZplEgP194x0HBVUTg+6ThG4SN4wC1Hq/tCgWK4V8nXNouSg2WWgs1mScTfLgtbgUh0nlewcU7G09+02qtEkyGl4tFE8x2yHU+HhnadErl1RdfJOKygqYZ99dyPeMgx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726220542; c=relaxed/simple;
-	bh=I/efSkz7mVWHAkEcQ9g5Lmv7coFvWhBd9YvtsQNEWVk=;
+	s=arc-20240116; t=1726221233; c=relaxed/simple;
+	bh=mCI+QATUiukZGtLa4D51SCOTzP//jCzdbzpitsxGZlM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rqbu1t2C9b72Rv6OFPPqjK1d70dAwHnRn24EoCOVuyrq1jddRuVh8Y6KcKXZ3Hns35OJTNPKDUZf81FkpZYOfeRZM2CWZ7RgzsrvOrgD+IOoKKqwqIUZmlCKmnhTyAqQ+gm4isRC3LRjcyo5oSlYSyhah4MyRCOaPjafAPlj9u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DghWpUcd; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726220541; x=1757756541;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=I/efSkz7mVWHAkEcQ9g5Lmv7coFvWhBd9YvtsQNEWVk=;
-  b=DghWpUcdpr1/izcBCdjLPiwbxkf8iMTPvkC+O6IqiFNAON/xQc6Dxvmy
-   jdgCFEvgV2Xbhr1udVBJJWvdvtvIv9Y/YR2bekQ6JuxWWGBmrSQp0O22j
-   j96XMrT/aJ1YRdZtMLl7OO3pvl0LWqvaq/k2Vy/X6w2WR/oVIzJGX9WfD
-   QDuNrlREUb/sJDwtZWkWettJ1rMxAGTdZttUy9/gH+epMSCwdZNNZmrPG
-   IWD5vG5/OoUJJlEbHMlOd/Ott8iTFvNESjD+YY9eNdmxwAInmHWJR2Z75
-   CuN7e8PJbHtX6dffNjlUiORuyBjyZHtCXq/lyLczMbkCgSsbJH4rEBvkJ
-   g==;
-X-CSE-ConnectionGUID: o1gOYxABRk6veZ+It4HqvQ==
-X-CSE-MsgGUID: gevrJZLzSGmN9ZIZm9nQXA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="35780145"
-X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="35780145"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 02:42:20 -0700
-X-CSE-ConnectionGUID: MvbTAdetTyixA+iw3Ef87g==
-X-CSE-MsgGUID: CNcK0jXvT2ixwsGvFI7WnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="105454676"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 02:42:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sp2oh-00000008FMQ-3V1W;
-	Fri, 13 Sep 2024 12:42:15 +0300
-Date: Fri, 13 Sep 2024 12:42:15 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: [PATCH v1 1/2] xhci: pci: Use standard pattern for device IDs
-Message-ID: <ZuQI98wLOyqGCLa7@smile.fi.intel.com>
-References: <20240913084411.3309911-1-andriy.shevchenko@linux.intel.com>
- <20240913084411.3309911-2-andriy.shevchenko@linux.intel.com>
- <9ccea075-5724-3a9c-738f-03eb2d519c45@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=i5iof+LsCnS04TCjNspXKgbisdqkznZPt112Xz88HO2+Fbm7lb7ZKWzvf3ODUcN9cYIfu9rKpNWdFKX4vVuZyry4sDmkVdyAvPMNS/jd9uwqFoHOSyv2RNzxmgKqpCXeZBL9OQARjZ+gknryzt6ZI7XZ5rX0AJ1B9wnFGxlrEk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UHw+eD5y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B84C4CEC0;
+	Fri, 13 Sep 2024 09:53:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726221233;
+	bh=mCI+QATUiukZGtLa4D51SCOTzP//jCzdbzpitsxGZlM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UHw+eD5yjsMFBcAGhpiJUZJkhQoPwRxn8EJ+PN7sYj/Y6vBut04qcplxG8fkbs9og
+	 y5xwF+smKmvyeUsCVr/teU8LA9xkkDANvkNrw4fhJk/EX/Uu5CO6rDwCGiQVw4KwYV
+	 T8czPUU1rhauNhA/h7NIf6jLNdsNjdTG5/89oMLSICt4ZBYIiDwxSYgH5MfOhmkL2R
+	 gh4A4nLgbZp8MaxK118KWdbEx6zFucEJNLZXHHVpSC8qBTHi0s6TTFaCkAr675HBZD
+	 wpZvhOPY7kKOOqly09GyaJR7FYwqKkEEjb8mjrEbrkoL4IyjrXC6+BjrIN7rFYnmGw
+	 2kQroOR3Rkm5Q==
+Date: Fri, 13 Sep 2024 17:53:44 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH 1/2] usb: chipidea: udc: limit usb request length to max
+ 16KB
+Message-ID: <20240913095344.GA321485@nchen-desktop>
+References: <20240912045150.915573-1-xu.yang_2@nxp.com>
+ <20240913012045.GA320526@nchen-desktop>
+ <20240913071133.pstilja3z25yey2p@hippo>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9ccea075-5724-3a9c-738f-03eb2d519c45@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20240913071133.pstilja3z25yey2p@hippo>
 
-On Fri, Sep 13, 2024 at 11:51:48AM +0300, Sergei Shtylyov wrote:
-> On 9/13/24 11:43 AM, Andy Shevchenko wrote:
-> 
-> > The definitions of vendor IDs are follow the pattern
-> 
->    s/are//?
-
-Yeah, thank you for catching this.
-
-> > PCI_VENDOR_ID_#vendor, while device IDs — PCI_DEVICE_ID_#vendor_#device.
+On 24-09-13 15:11:33, Xu Yang wrote:
+> On Fri, Sep 13, 2024 at 09:20:45AM +0800, Peter Chen wrote:
+> > On 24-09-12 12:51:49, Xu Yang wrote:
+> > > Currently, the deivice controller has below limitations:
+> > > 1. can't generate short packet interrupt if IOC not set in dTD. So if one
+> > >    request span more than one dTDs and only the last dTD set IOC, the usb
+> > >    request will pending there if no more data comes.
+> > > 2. the controller can't accurately deliver data to differtent usb requests
+> > >    in some cases due to short packet. For example: one usb request span 3
+> > >    dTDs, then if the controller received a short packet the next packet
+> > >    will go to 2nd dTD of current request rather than the first dTD of next
+> > >    request.
+> > > 
 > > 
-> > Update the ETRON device IDs to follow the above mentioned pattern.
-
-[...]
-
-> >  	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
-> > -			pdev->device == PCI_DEVICE_ID_EJ168) {
-> > +	    pdev->device == PCI_DEVICE_ID_ETRON_EJ168) {
-> >  		xhci->quirks |= XHCI_RESET_ON_RESUME;
-> >  		xhci->quirks |= XHCI_BROKEN_STREAMS;
-> >  	}
-> >  	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
-> > -			pdev->device == PCI_DEVICE_ID_EJ188) {
-> > +	    pdev->device == PCI_DEVICE_ID_ETRON_EJ188) {
-> >  		xhci->quirks |= XHCI_RESET_ON_RESUME;
-> >  		xhci->quirks |= XHCI_BROKEN_STREAMS;
+> > Are there any IP errata for it?
 > 
->    Hm, these 2 *if*s seem mergeable?
+> No. It's decided by hw IP design. This old design may not suit current
+> requirements.
+> 
+> > 
+> > > To let the device controller work properly, one usb request should only
+> > > correspond to one dTD. Then every dTD will set IOC. In theory, each dTD
+> > > support up to 20KB data transfer if the offset is 0. Due to we cannot
+> > > predetermine the offset, this will limit the usb request length to max
+> > > 16KB. This should be fine since most of the user transfer data based on
+> > > this size policy.
+> > > 
+> > > Although these limitations found on OUT eps, we can put the request to IN
+> > > eps too, this will benefit the following patches.
+> > 
+> > Since IN endpoints have not found the problem, please limit the changes
+> > only for OUT endpoints.
+> 
+> This 1st patch is mainly used to serve the 2nd patch which may impact
+> both IN and OUT eps.
+...
+> Because it's hard to judge whether a request is
+> suit for transfer if it spans more dTDs. So it's needed for both eps.
 
-It's out of the scope of this mini-series, but seems a good catch!
+Sorry, I do not understand you above words. First, you may know this
+request is for IN or OUT, second, according to TD size and data buffer
+address, you may know you use one or more dTDs.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Peter
 
-
+> I've looked through all function drivers, all of them use 16KB as max
+> request size. If one future function driver does use a larger request
+> size, they can adjust it according to this error log too.
+> 
+> > 
+> > > 
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > ---
+> > >  drivers/usb/chipidea/ci.h  | 1 +
+> > >  drivers/usb/chipidea/udc.c | 5 +++++
+> > >  2 files changed, 6 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+> > > index 2a38e1eb6546..f8deccfc8713 100644
+> > > --- a/drivers/usb/chipidea/ci.h
+> > > +++ b/drivers/usb/chipidea/ci.h
+> > > @@ -25,6 +25,7 @@
+> > >  #define TD_PAGE_COUNT      5
+> > >  #define CI_HDRC_PAGE_SIZE  4096ul /* page size for TD's */
+> > >  #define ENDPT_MAX          32
+> > > +#define CI_MAX_REQ_SIZE	(4 * CI_HDRC_PAGE_SIZE)
+> > >  #define CI_MAX_BUF_SIZE	(TD_PAGE_COUNT * CI_HDRC_PAGE_SIZE)
+> > >  
+> > >  /******************************************************************************
+> > > diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> > > index b1a1be6439b6..5d9369d01065 100644
+> > > --- a/drivers/usb/chipidea/udc.c
+> > > +++ b/drivers/usb/chipidea/udc.c
+> > > @@ -969,6 +969,11 @@ static int _ep_queue(struct usb_ep *ep, struct usb_request *req,
+> > >  		return -EMSGSIZE;
+> > >  	}
+> > >  
+> > > +	if (hwreq->req.length > CI_MAX_REQ_SIZE) {
+> > > +		dev_err(hwep->ci->dev, "request length too big (max 16KB)\n");
+> > > +		return -EMSGSIZE;
+> > > +	}
+> > > +
+> > 
+> > Since this IP is used by many vendors, it may fix by others.
+> > I prefer add flag like CI_HDRC_SHORT_PACKET_NOT_SUPPORT, 
+> > and set in imx platform file.
+> 
+> Okay, I can limit the impact to only imx platform.
+> 
+> Thanks,
+> Xu Yang 
 
