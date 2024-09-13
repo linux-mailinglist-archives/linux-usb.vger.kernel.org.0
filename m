@@ -1,47 +1,63 @@
-Return-Path: <linux-usb+bounces-15107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DB37978B00
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 23:59:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75983978B49
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 00:14:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FCAC1F25C92
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 21:59:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7BF01C22E77
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 22:14:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B853156F42;
-	Fri, 13 Sep 2024 21:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B122A17C9A0;
+	Fri, 13 Sep 2024 22:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="Dq37+OLs"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fZG6TdZe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCE8126BE6;
-	Fri, 13 Sep 2024 21:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907101465BD;
+	Fri, 13 Sep 2024 22:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726264753; cv=none; b=P3rqqUK9e25TMkYzaw+TvN3dw98CW+nxUvs1CkMUTa+DIEwXLsdwCiFSTxRc4G1QAOVUaBYhnA+ZDDZRgFpdj4QDD9EHfP8w9lXRxrt/1l7ETcl7eAgzkIwD8hFGj6758da+ERycwNRnY9kKmMLhBVKB+7lEp3witTJFTUQqH+o=
+	t=1726265666; cv=none; b=TcRpqRpJ9G1V2gJqrJo03MRdtYHwbOyTBH2SgoxxESKq6+FwDQkVBU4HL5OTYXNR8Ag136KKHJRdA31TeidrktMg3uof2svRrJuA/y2p/SQWsAWarZeiWemokU8qjFnZzE/DAq5nItMQg6vnQHg+20v4AW/JxIEtEY2z6NT404o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726264753; c=relaxed/simple;
-	bh=UTm6ACR3Fr5v/JNoDjfcOje9uZzp0NsX2AMJLzaMnY0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EboUKNUNZb2k8tIK2363hqhMZjbfdm8mWSaff2ShIy0TLOPUomRnyfOrtW+bEHoSV0NFAKKZkaTxn4lMY8dE92HQmz9Rp88ngj/foGqWtO4u0AMsqBl2l8eoK1ytKUx/AkfUDefhsGvH7tmA7AZi24V02xwr/HXHvyCOvWk2xMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=Dq37+OLs; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [192.168.123.3] (kenny-tx.gotdns.com [162.196.229.233])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4X57Vw1T06z4MZM;
-	Fri, 13 Sep 2024 17:59:04 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1726264744; bh=UTm6ACR3Fr5v/JNoDjfcOje9uZzp0NsX2AMJLzaMnY0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Dq37+OLsyrkTA2cAsLieiQZkxbLkZ5Q3TgZ4LjQv3aqua88A6B+zFR6KZOVeiqgEL
-	 2NX7xZvcpcnbfAXaBTRKmnkwny5uq3Ij4+QW1QLOKLm0bjVMBISvRA6lgZ9vY6/tom
-	 uyGnO2Ux4h0Az1i92xNE858+iD3C8uzW4CKE1zUY=
-Message-ID: <ad0458ee-b75c-46f9-a012-1e0615aecf53@panix.com>
-Date: Fri, 13 Sep 2024 14:59:02 -0700
+	s=arc-20240116; t=1726265666; c=relaxed/simple;
+	bh=T9DzavKcLabQzYB5iHOUE1B4T8eJcT1KtWWq6NbNHbU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=PKSJBzGb5jeQ4bEmowRK/q0MeqDcy3N957W+b3ImBu5uPL9tSL3NGD31AZYudaOB5J5RdlnNiTOA/IDdeqpPvnSEsZXSxAlwoBzRnsYJDMncj2u7ExP+h6PF065eHUurliDV0vFgFUB8TzRMQZ9QRcpYDgEh2saLMgHSRmN0xkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fZG6TdZe; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48DAslFN003394;
+	Fri, 13 Sep 2024 22:14:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	kYznQ95DJKtpP23L3CyjW0yB9e5K+e0VQ0yg2e7udL4=; b=fZG6TdZeibjZMWYK
+	4Mt/59sDFfv10g+Db8d9cdogdKEVpypoqkZtb7P/n5k9khLdFne5/VJWZTIRGMJ/
+	9s3GtW5PrrSJrBsD3XErYs5B6p8FnCksHW3MRrBjtAOI8ltcv4XF9zzf+oqrcYz6
+	aIPlvPiJoUntoqtiUkRrqJiCWghTukFk1qjf0gQ9nfNvaE12j1Bemy7kgU/KAXGX
+	vbiEYMh/+LJSGlvKq3glDDMn1lOD4AMtaYAOyai4WTG8xv0EP/B8Ot5fPD0sXjem
+	ZspgBYRJapjUa022af8m/KZVV38YY57G2LAUvqTWFvLsLik7FVqOoi+Yi3r2dQMF
+	CtDwnQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41gybq1xjd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 22:14:02 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48DME1BI022104
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 22:14:01 GMT
+Received: from [10.71.114.155] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 13 Sep
+ 2024 15:14:01 -0700
+Message-ID: <a9dcaa5a-4f5d-451a-93aa-7457798fc243@quicinc.com>
+Date: Fri, 13 Sep 2024 15:14:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,93 +65,65 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
- Thunderbolt additions when coming out of suspend or hibernate
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- Kenneth Crudup <kenny@panix.com>
-References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
- <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
- <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
- <20240904122835.GG1532424@black.fi.intel.com>
- <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
- <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
- <20240913052540.GN275077@black.fi.intel.com>
- <7ac9a400-fdb2-4d78-bacf-2e502c7338e8@panix.com>
+Subject: Re: [PATCH v27 01/32] xhci: add helper to stop endpoint and wait for
+ completion
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+        <mathias.nyman@linux.intel.com>
+CC: <Thinh.Nguyen@synopsys.com>, <alsa-devel@alsa-project.org>,
+        <bgoswami@quicinc.com>, <broonie@kernel.org>, <conor+dt@kernel.org>,
+        <corbet@lwn.net>, <devicetree@vger.kernel.org>,
+        <dmitry.torokhov@gmail.com>, <gregkh@linuxfoundation.org>,
+        <krzk+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <mathias.nyman@intel.com>, <perex@perex.cz>,
+        <pierre-louis.bossart@linux.intel.com>, <robh@kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <tiwai@suse.com>
+References: <20240913103237.2f5dc796@foxbook>
 Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <7ac9a400-fdb2-4d78-bacf-2e502c7338e8@panix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20240913103237.2f5dc796@foxbook>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Ea9Dy7IqYhLusQtkdmuC5WmSVcZRbLXp
+X-Proofpoint-GUID: Ea9Dy7IqYhLusQtkdmuC5WmSVcZRbLXp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1011 bulkscore=0
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409130157
 
+Hi Michal,
 
-Huh. This particular kernel is proving to be quite resilient, as in 
-"announce that it's been fixed, as that'll definitely make it break" 
-resilient.
+On 9/13/2024 1:32 AM, Michał Pecio wrote:
+> Hi,
+>
+>> Expose xhci_stop_endpoint_sync() which is a synchronous variant of
+>> xhci_queue_stop_endpoint().  This is useful for client drivers that are
+>> using the secondary interrupters, and need to stop/clean up the current
+>> session.  The stop endpoint command handler will also take care of
+>> cleaning up the ring.
+> I'm not entirely sure what you meant by "cleaning up the ring" (maybe a
+> comment would be in order?), but I see nothing being done here after the
+> command completes and FYI xhci-ring.c will not run the default handler if
+> the command is queued with a completion, like here.
+>
+> At least that's the case for certain command types and there is probably
+> a story behind each of them. I know that xhci_stop_device() queues a
+> Stop EP with completion (and also a few without(?)). Maybe it's a bug...
 
-I've done at least 5/6 suspend/resume cycles going between no dock, 
-USB-C/DP docks and now TB(USB4) docks and it's resumed properly every 
-time (and thanks to 	9d573d195 even seems to recognize topology changes 
-too).
+Maybe the last sentence is not needed.  When we are using the secondary interrupters, at least in the offload use case that I've verified with, the XHCI is completely unaware of what TDs have been queued, etc...  So technically, even if we did call the default handler (ie xhci_handle_cmd_stop_ep), most of the routines to invalidate TDs are going to be no-ops.
 
-(My main USB4/TB dock is at home, A Caldigit 4 with a 7680x2160 DP 
-monitor on it; this tends to be the problematic dock for suspend/resumes 
-and provided calling these suspend/resume issues publically "fixed" 
-doesn't invoke Murphy's Law I'll know if I'd had continued success 
-tomorrow).
+Thanks
 
--K
+Wesley Cheng
 
-On 9/12/24 23:11, Kenneth Crudup wrote:
-> 
-> Well, now get this- I'm back to running Linus' master (as of 
-> 79a61cc3fc0) and I've been trying to get resumes to fail and they 
-> haven't (which means the next time I try after hitting "send" it's going 
-> to fail spectacularly).
-> 
-> My SWAG is it may be related to commits 79a61cc3fc or 3e705251d998c9, 
-> but I'll see if it breaks and if it doesn't, all the better :)
-> 
-> -K
-> 
-> On 9/12/24 22:25, Mika Westerberg wrote:
->> Hi,
->>
->> On Thu, Sep 12, 2024 at 02:12:27PM -0700, Kenneth Crudup wrote:
->>> I'll run the stuff you need, but now it looks like whatever is breaking
->>> suspend/resume in Linus' master has been ported down from upstream into
->>> 6.10.10; I'm now getting the same panic()s as I did with master. I 
->>> just had
->>> a failed resume and the crash dump (which happened on its own) looks the
->>> same as the one I'd posted here.
->>
->> Is the crash you see something different from the hang? If you can catch
->> that with the backtrace and the register dump it should help.
->>
->> Couple of additional steps to try:
->>
->> - Unplug monitors from the dock and see if that makes it work (assuming
->>    you have monitors connected).
->>
->> - Disable PCIe tunneling and see if that makes it work. This results
->>    that the PCIe devices on the dock are not functional but it can point
->>    us to the direction. You can do this on regular distro (Ubuntu, Fedora
->>    etC) like:
->>
->>      $ boltctl config auth-mode disabled
->>
->>    Or got to "Settings" -> "Privacy & Security" -> "Thunderbolt" and flip
->>    off the "Direct Access" switch.
->>
->>> I may try and find some time to bisect the issue, but it'll take some 
->>> time.
->>
->> Sure.
->>
-> 
-
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
 
