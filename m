@@ -1,153 +1,118 @@
-Return-Path: <linux-usb+bounces-15076-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15077-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8A1C977848
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 07:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D42C97784B
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 07:25:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 006A91C24F0C
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 05:25:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C9C11C24DF2
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 05:25:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C0BF15574A;
-	Fri, 13 Sep 2024 05:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4594D15666D;
+	Fri, 13 Sep 2024 05:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TvUuyRy+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fg1iraEU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C535C4A07;
-	Fri, 13 Sep 2024 05:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDEE1448ED;
+	Fri, 13 Sep 2024 05:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726205115; cv=none; b=QVEi7qnCrUKC56nAHdGYmrAGqK+QVceSmTu8Gn+fbI7TE5ZFZSPoN9k/D2kuLoGEbiy1mTJWNBee4Rlk4e4T0i40xEkNJiMPI+KbNRqBRmDxG3tQFrEHKMMAHBeZYSIj8vndCAi+/K7jw87ubb/X9Qr8m17En0JlZ/zf1qwXvdI=
+	t=1726205148; cv=none; b=YwYkajTkPTPKwRMvxbLlZUNNRBXDRUCiqpFmjQgJhnY66Zh80z2WHC6p9XuBbjyXctS6rgGENQaTwk6GcXWRdURkeqPGCwnv3q8bWtetL2m3dMn9SxMAGKSJbrPtpXfdbw21qHSk69fEDrXcfRK255xekUzTYabOc9CxaeujzRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726205115; c=relaxed/simple;
-	bh=27gpEokVPxNneEEgKh8PwQgYDDsz/nj+/b0k1NQV3fE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vDRLRIhzmH7grAHGUiLAX4KD5ORwF02AiIfdEki+mvY2rhjt0xKLS5xRt9ZLB6Ez0mlwMylHlPOLeh7veXISh/M0Kc14lR8TnSiDnuT5XUFN3/INJVP7u4LH967LfWzwKBQ+du17jtB0yFmIuRaNWC/JDw+C4pRCqbTILdGykUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TvUuyRy+; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7d4f85766f0so1541908a12.2;
-        Thu, 12 Sep 2024 22:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726205113; x=1726809913; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=20ZaIfIVSeWUJgDUWvfCEP+VNL9P/nfw/kHDqiLJ47k=;
-        b=TvUuyRy+f9eI/nye1+bRS+RR6DSwM7IR1OMssftnp6V6RLHxkfB65gaNbT15dhI3Z0
-         1kHlcsdnbZR2p0mGcMgtUZrP2KBWrZEAYD1wLmCvwfbTUwfmFZ/ZMFxeq5PDX6yRGfVT
-         wMap1vq+nnnA/7L1JCJ98uU7+zRSZ8TZ8+EnxWZHGZaY7jgmYFElluwF/bgAOb2fYWsU
-         IhhCnN6zh71fFn+oGz1evCISMJBaWuI/zFCmxe3wJqZFYp4v8ORZM6QIYeRMb0DafH0h
-         76xHU4k0/ktvvif7sdS7jJP3YSrFAtQ8eu//pK5p0yVeeTIt/e6kIkqjoRB1B7/zpDz+
-         2jsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726205113; x=1726809913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=20ZaIfIVSeWUJgDUWvfCEP+VNL9P/nfw/kHDqiLJ47k=;
-        b=IWydeHNLVY5VyMNMThuwoYziwaGhPnfbBz5kLGyRCq8StfxRj3JdZAOSy9v0BBeYdJ
-         JXvr2sTRzQm0zX6y55Y72OUUcjL/y5fBYzoFnOGx2exKDmGkru8/UtmjSkZtUSzgY8Ng
-         gQNW60e6s/1CH/ocFe85p5s3x1GaLy70GeblKKBdDSzPOFcvuvcF1nUT0yzrH6ap0Dbe
-         5JWcgrX1C/ycPrFT/kqywWWZfSUNzwlESLvugetvvF1kg1NN7vhVNma5o9qzPbQsPdl1
-         PRe/6uJHmwXBYBifegfLbHd1ZRdm19BOD1EukYLUizMiGg7mmhMStjNw4b4wYie6sOJJ
-         FDTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWHNOikg/j/WkMGacBmxFvH7xnIhzOJKyZlEB9EvMENodFReOiIVcp+IDJeWRyUuaqXX2raGQ29@vger.kernel.org, AJvYcCX4XeXQNYQ5ZGZzGTJE0GPUdQFTrtJoVPYJW99wv5hsAxsjlnvXM6WTvUtb2RihbXi8JzKpsIBDclas@vger.kernel.org, AJvYcCXtWbAoNhJ9IiZO9wjqs3nd7ycAZTktoqqT4vUkkqtrYI+dCDn8JOp/s4nQUAc9TYsTq80Hec1+znijVfA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4sURdgkYEPwHquBLiYzKq8gnEKhQ+z9jof6uMFwApYIU4xGcT
-	LQpwHXQN2rYjnxCCtHaWRhhEAFiaOExKwUAAzMhIgOCVYjiMHeTcCfzCUDoXjIpM++pKHmsC//E
-	z5Rfq+0Iaz90rRrXDhN3alHoDwNc=
-X-Google-Smtp-Source: AGHT+IGdVg8q8qvyLIEMHbHsPv/DvSwUDUKj0IRac1OwT3hrcFwNwy5nZqfkXIzxp2oIAKxdmnaUNjMKrxKD5eWTv5Y=
-X-Received: by 2002:a17:90a:46cb:b0:2da:5d71:fbc with SMTP id
- 98e67ed59e1d1-2db9ffcc71emr6157282a91.16.1726205112882; Thu, 12 Sep 2024
- 22:25:12 -0700 (PDT)
+	s=arc-20240116; t=1726205148; c=relaxed/simple;
+	bh=NvnynQVxtCwASRc03BGay6td2pkugPnoBWnUTgamBjA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SBKiZEcIl8JP69HTOQZBSb9aKTSaiAEh4f8UiEsiZBjvQhV4x3K6Y0+/M4eAZH2qcAh2bfrgYpDaC+i3dGU0QkQmEPiQ/LT87VWAh9ulKcCr2L4lUGoIu0p6iy+rBPFlSg0SlYFsSEO0pemESFZVCtMScOynO6PCCU1kHNMYzaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fg1iraEU; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726205147; x=1757741147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NvnynQVxtCwASRc03BGay6td2pkugPnoBWnUTgamBjA=;
+  b=fg1iraEUf515+35gPAlS6eNw2W0tccSi8E6Iq9hT9/NZUFD0UziKCmM7
+   +WliybK7BbldrqMLq63bG4fDWgboPKOQh+3lYsMXJzSJ6mAnY56W7/0as
+   0PSt+fBz9jQHJlyiaf5VFYolp7vwq060AeDUjXCshhGQiaJP9qQjwHYgL
+   QaXKfBWpHxvkVXpk25ymdmV4uUEiq0N/tm4DEXf4QuNyDUB3EVAOOU0km
+   /AWy9l5LRiPU4eOiI3cgewzF+bwJ9uorqT8gDec+MyGBs8ry7t08cIKut
+   rS37vL4uyzQmWo2KaI5mC4IxePgzjAIoZF3uRsfXKDsjMkomjUWr3Mvys
+   w==;
+X-CSE-ConnectionGUID: XkDjZyizTC2MyDqY7X0jWg==
+X-CSE-MsgGUID: wWQIsZFSQZ+tY2bRDJT+mw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="24580279"
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="24580279"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 22:25:46 -0700
+X-CSE-ConnectionGUID: QXN/vjzcRgiGwn+IyLznwQ==
+X-CSE-MsgGUID: dNuInLACRWy5HY4B8bohZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="105406019"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa001.jf.intel.com with ESMTP; 12 Sep 2024 22:25:41 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 72BBC32A; Fri, 13 Sep 2024 08:25:40 +0300 (EEST)
+Date: Fri, 13 Sep 2024 08:25:40 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Kenneth Crudup <kenny@panix.com>
+Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
+ Thunderbolt additions when coming out of suspend or hibernate
+Message-ID: <20240913052540.GN275077@black.fi.intel.com>
+References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
+ <ZsvxR-dQAZtwNi0g@wunner.de>
+ <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
+ <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
+ <20240904122835.GG1532424@black.fi.intel.com>
+ <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+ <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240911051716.6572-1-ki.chiang65@gmail.com> <20240911051716.6572-2-ki.chiang65@gmail.com>
- <d222e5b9-7241-46a1-84fe-be2343fa4346@linux.intel.com>
-In-Reply-To: <d222e5b9-7241-46a1-84fe-be2343fa4346@linux.intel.com>
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-Date: Fri, 13 Sep 2024 13:25:06 +0800
-Message-ID: <CAHN5xi3UEJJ2aPuF3y0PHoqzb6xhmD+UG3YZyh2Ut_hk0H58gg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] xhci: Fix control transfer error on Etron xHCI host
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
 
 Hi,
 
-Thank you for the review.
+On Thu, Sep 12, 2024 at 02:12:27PM -0700, Kenneth Crudup wrote:
+> I'll run the stuff you need, but now it looks like whatever is breaking
+> suspend/resume in Linus' master has been ported down from upstream into
+> 6.10.10; I'm now getting the same panic()s as I did with master. I just had
+> a failed resume and the crash dump (which happened on its own) looks the
+> same as the one I'd posted here.
 
-Mathias Nyman <mathias.nyman@linux.intel.com> =E6=96=BC 2024=E5=B9=B49=E6=
-=9C=8811=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8811:05=E5=AF=AB=E9=81=
-=93=EF=BC=9A
->
-> On 11.9.2024 8.17, Kuangyi Chiang wrote:
-> > Performing a stability stress test on a USB3.0 2.5G ethernet adapter
-> > results in errors like this:
-> >
-> > [   91.441469] r8152 2-3:1.0 eth3: get_registers -71
-> > [   91.458659] r8152 2-3:1.0 eth3: get_registers -71
-> > [   91.475911] r8152 2-3:1.0 eth3: get_registers -71
-> > [   91.493203] r8152 2-3:1.0 eth3: get_registers -71
-> > [   91.510421] r8152 2-3:1.0 eth3: get_registers -71
-> >
-> > The r8152 driver will periodically issue lots of control-IN requests
-> > to access the status of ethernet adapter hardware registers during
-> > the test.
-> >
-> > This happens when the xHCI driver enqueue a control TD (which cross
-> > over the Link TRB between two ring segments, as shown) in the endpoint
-> > zero's transfer ring. Seems the Etron xHCI host can not perform this
-> > TD correctly, causing the USB transfer error occurred, maybe the upper
-> > driver retry that control-IN request can solve problem, but not all
-> > drivers do this.
-> >
-> > |     |
-> > -------
-> > | TRB | Setup Stage
-> > -------
-> > | TRB | Link
-> > -------
-> > -------
-> > | TRB | Data Stage
-> > -------
-> > | TRB | Status Stage
-> > -------
-> > |     |
-> >
->
-> What if the link TRB is between Data and Status stage, does that
-> case work normally?
+Is the crash you see something different from the hang? If you can catch
+that with the backtrace and the register dump it should help.
 
-I am not sure, I don't encounter this case, maybe OK.
+Couple of additional steps to try:
 
->
-> > To work around this, the xHCI driver should enqueue a No Op TRB if
-> > next available TRB is the Link TRB in the ring segment, this can
-> > prevent the Setup and Data Stage TRB to be breaked by the Link TRB.
->
-> There are some hosts that need the 'Chain' bit set in the Link TRB,
-> does that work in this case?
+- Unplug monitors from the dock and see if that makes it work (assuming
+  you have monitors connected).
 
-No, it doesn't work. It seems to be a hardware issue.
+- Disable PCIe tunneling and see if that makes it work. This results
+  that the PCIe devices on the dock are not functional but it can point
+  us to the direction. You can do this on regular distro (Ubuntu, Fedora
+  etC) like:
 
->
-> Thanks
-> Mathias
->
+    $ boltctl config auth-mode disabled
 
-Thanks,
-Kuangyi Chiang
+  Or got to "Settings" -> "Privacy & Security" -> "Thunderbolt" and flip
+  off the "Direct Access" switch.
+
+> I may try and find some time to bisect the issue, but it'll take some time.
+
+Sure.
 
