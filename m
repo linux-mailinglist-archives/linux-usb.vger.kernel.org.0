@@ -1,144 +1,224 @@
-Return-Path: <linux-usb+bounces-15081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15089-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B851297798B
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 09:24:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86DA5977C4F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 11:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5796EB25118
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 07:24:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44C67288BA9
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 09:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0DE1BC06D;
-	Fri, 13 Sep 2024 07:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70A71D7983;
+	Fri, 13 Sep 2024 09:38:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CElDnCGe"
+	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="B4u4418t";
+	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="qOOYeU3r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EEE77107;
-	Fri, 13 Sep 2024 07:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726212243; cv=none; b=AD9kmmjHOkTv6RdCwlSw0JfC/gKDsP4e5ZvhV1le5R2yKJkuc4ewyj+Z/QJ42UmTH6jLUjrSxJS4SUuR1Ug+XOsJk32fBoTxyq9yMV0aogb7eOeBXGwB3dBJyginjZG1gETkPETiqN9AY18Mh1YgpvkyUOyvA+kZt3LiO+JgeKU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726212243; c=relaxed/simple;
-	bh=iPvd+9z6NuPIzam4+usKWHP3bX8Hx0aJk/Uu79HF2cQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S8A1gyKFn1ssX2IKgYOXgfF+6faZfDCtPTfjb8Q2w7ixBAQCvaxKoIAGSbTNKX6Zz0N+GN7YVVkJqZgEyvfcPYNkyKyk6pMF2oC1OcSNJV43ExcAswF0lbLt1zTrPXv7EBgimIgSK18DaM/j+gZ9+lXM4aGS3G2bsO3zYwBKHf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CElDnCGe; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726212242; x=1757748242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iPvd+9z6NuPIzam4+usKWHP3bX8Hx0aJk/Uu79HF2cQ=;
-  b=CElDnCGeCEIJDuWLjrrSJT9s/4bj3VfPIsJSZ07npCeoIiAhNSMR3e+H
-   cUEfcGAQv12dxckwnxa/IotHwdVLek7KvDt7UxqWVbbbPc5zXmR2xIxlJ
-   khtb+AnCuGMz1QEW2ekpR4jICXtg3YI0JfD7caQ0uPCjLp8/K+nYzPpts
-   Mi30Li6RQ5IBzjEUKo96EpwiCU0HfoBIj+nwRqV9Yu8nkjq2AlchGkK9j
-   j/vgEWf36lWFYdGDlkSCjC7pNkYhidI49cpLjef6eWMIuL1eFSEgKuNSK
-   gYQcW7Dg2VzAqvdJB1u8/bVDp78exnQqe3itMcV7mZGXcWC7b5JFV1lpf
-   A==;
-X-CSE-ConnectionGUID: lUUAcCy3T9ygMX7e+UBLEw==
-X-CSE-MsgGUID: lse/c7hXSwyspobCD9AAcg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="47618229"
-X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="47618229"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 00:24:01 -0700
-X-CSE-ConnectionGUID: oHG4PVODQ7GpA5DverliGg==
-X-CSE-MsgGUID: LJV4th+PRpCy+8quuV7LfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="105429499"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 13 Sep 2024 00:23:58 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id DCA0732A; Fri, 13 Sep 2024 10:23:56 +0300 (EEST)
-Date: Fri, 13 Sep 2024 10:23:56 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, Gary Li <Gary.Li@amd.com>,
-	Mario Limonciello <superm1@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	"open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	Daniel Drake <drake@endlessos.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v5 2/5] PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in
- pci_dev_wait()
-Message-ID: <20240913072356.GO275077@black.fi.intel.com>
-References: <20240903182509.GA260253@bhelgaas>
- <525214d1-793e-412c-b3b2-b7e20645b9cf@amd.com>
- <20240904120545.GF1532424@black.fi.intel.com>
- <2bf715fb-509b-4b00-a28d-1cc83c0bb588@amd.com>
- <20240905093325.GJ1532424@black.fi.intel.com>
- <b4237bef-809f-4d78-8a70-d962e7eb467b@amd.com>
- <20240910091329.GI275077@black.fi.intel.com>
- <66019fa3-2f02-4b03-9eb7-7b0bed0fd044@amd.com>
- <20240913045807.GM275077@black.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8835F1B985B;
+	Fri, 13 Sep 2024 09:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726220332; cv=fail; b=g4j+EtMamJR//q5dl9+axY9gGB/ayG6BGe7nYasHlkSFN/Mhq8zPqWUOqBG/VzWLP6JLOqho8Nc9nMDHOYeIIkuPF7U6YlpDH4mIGaIs4k1tfPSkmegnjhdrdW6PNmI7sMTnIXLMpcS19tdAxkFm4mwVfVmw89b3gP0zTRPt0pE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726220332; c=relaxed/simple;
+	bh=9J1LCB++bJAhup14OLt5eaGokWRxsS1q4lvARZ+nBI4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=sVuaKrRXM4x/40rh9l/5jPjBiz5+6pFpGT6K1eJjSFGNzLe/G3dPEVKNE1GhjaRaJNrZyGTa2S/ogXKxRHqRbf49qH43UO7E2JWOtFskdZl9duBfSgFL47UyjBXs8nWzjDzRKDvRC+4E+BvVsP5pHu7ozcfQwPS7HLo34L9q04k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=B4u4418t; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=qOOYeU3r; arc=fail smtp.client-ip=208.86.201.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+	by mx0b-0014ca01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48CKaSgx023965;
+	Fri, 13 Sep 2024 01:19:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=proofpoint;
+	 bh=Vxc3XbA+2jRc9gzczlbx9Y0hwfitSbRc30AjRNH8krc=; b=B4u4418t9NyX
+	L19SHgIPT/QrJlBQEmj6d+YejutemLvYWGEnJgxkcIBDxrD/8c0owPl82ZLMPt/f
+	fzxo+ff5/QnM/vQyDOub/19ThlWBVk/iuK0MTsqr4OpzyfmWefP++CLc3B6qoPqu
+	07Iq7MLdfyEBnMwHj5grxvus4L2A2/H3A0ny0QrP8dhc5DrtZNFcg85onyIupZze
+	+xutoaAYDZW5nsYgO+ZXmx2Z/Fv+Vs9K4+HmrSdbnF7uQz1pK4sOpeNX9CYjwUwG
+	epwMPRJdHJjPHoAeQUs9kX1Z+io0P/Z6aVa9npiqrjHYBiueX4BFchHCMgUHbb/F
+	p4O6SGimQg==
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
+	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 41k571byhj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 01:19:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MTYVi1QlxmGwaxjdRZbcXGCxWw7US9GqSyskogRpj8vFDFcOLCm/cfxmY4m3bKO2CAdJQYlITwXHn/npxPGr9xDMJX6fNepOVbN9KAB7LIsGHLiCLMT/ZljI2M4lap3K48joggBCZulWmXlnH2UqPTQTPUiml66yL7b+UwZXbDyJil0DRgOaR4Z/PbVjfW41y3xcvULzvbp84qN+n9yJkwOC7cI+IXzSglVBK1JgtRZ+5wMXwO85WN4ADFjGKZa51e7siTSGhKq4TYqIJGqFf0BNXBNrozgS6L0ghX/OZN2DnweJcUZ9V7c71gR+vLytVanI1C1g3AZqSL+nG2h7/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vxc3XbA+2jRc9gzczlbx9Y0hwfitSbRc30AjRNH8krc=;
+ b=tLbpoAPFFXhzGW3CenXwG0qijSqOQ2FILjjDI4d51/14DXp9Qgc2k42VMA8GCz3Hs+Yw2Tf9Z0rt3xK1omoWxaCIz2qEwbVyc9CJLHQPUCJ9d3z1HYilIuZj+5H0zmpk8gU69Fac/SmAJrFpSvxNBCtJtd3/m1GRUmGqUMo8WFenNyw3wTcAGRcb9iy6x+KbrYprNbFlSbO4iDKrpZvvdGRq2/zqp38cUuXWAECGwSzhSOBPJebsI/0t83sEs/UaaK5IaHC6321J7PduZJLvj0OR1ilfov68JwexBmDDwRcRHY1dPUu4moS5Wewy7k0asfmGnVnYYd3hIUJECK5Hhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Vxc3XbA+2jRc9gzczlbx9Y0hwfitSbRc30AjRNH8krc=;
+ b=qOOYeU3recDSitORp9WfcplrziNUSPTv3BFNk53Qrts4dB4M5JswhjugLvMBVE1kCX1AH13D8gYyuFR2aTs/W4omb5sXHUdO5Yl0o6G7iKQVGBsV2QgICtwgKl3g5woMHld4iodg9o+/6KyXB4qy/jb4G/Ym5VOrtcMPFUOPn64=
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
+ by BN0PR07MB8277.namprd07.prod.outlook.com (2603:10b6:408:120::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.18; Fri, 13 Sep
+ 2024 08:19:28 +0000
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::5dbd:49e3:4dc:ccc7]) by PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::5dbd:49e3:4dc:ccc7%4]) with mapi id 15.20.7962.016; Fri, 13 Sep 2024
+ 08:19:27 +0000
+From: Pawel Laszczak <pawell@cadence.com>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+CC: "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org"
+	<stable@vger.kernel.org>
+Subject: RE: [PATCH] usb: xhci: fix loss of data on Cadence xHC
+Thread-Topic: [PATCH] usb: xhci: fix loss of data on Cadence xHC
+Thread-Index: AQHa/2D1v7Tx38XDdkOfqL/qNaUw7bJIw3GAgAAB0kCAC5PQAIABEb3A
+Date: Fri, 13 Sep 2024 08:19:27 +0000
+Message-ID:
+ <PH7PR07MB9538278A720F77E5B3653541DD652@PH7PR07MB9538.namprd07.prod.outlook.com>
+References: <20240905065716.305332-1-pawell@cadence.com>
+ <PH7PR07MB9538584F3C0AD11119403F11DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+ <PH7PR07MB9538734A9BC4FA56E34998EEDD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+ <ZuMOfHp9j_6_3-WC@surfacebook.localdomain>
+In-Reply-To: <ZuMOfHp9j_6_3-WC@surfacebook.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-dg-ref:
+ PG1ldGE+PGF0IGFpPSIwIiBubT0iYm9keS50eHQiIHA9ImM6XHVzZXJzXHBhd2VsbFxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLWUzM2I2NDI3LTcxYTgtMTFlZi1hOGI3LTYwYTVlMjViOTZhM1xhbWUtdGVzdFxlMzNiNjQyOS03MWE4LTExZWYtYThiNy02MGE1ZTI1Yjk2YTNib2R5LnR4dCIgc3o9IjE0ODIiIHQ9IjEzMzcwNjg5MTY2MjY5NTgyMCIgaD0iSTVoMFNCUitoUWFjQWhzWThNS0k5SHIxZjU4PSIgaWQ9IiIgYmw9IjAiIGJvPSIxIi8+PC9tZXRhPg==
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|BN0PR07MB8277:EE_
+x-ms-office365-filtering-correlation-id: 3a63e60d-8250-4eda-0ebb-08dcd3ccc8ef
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?DdR9Xx3Gmr+KBTTe5J6W1CuQF/ncrKUvJEwoDOsk132i0N5Nu8R/JYKO2DD5?=
+ =?us-ascii?Q?zEBAmeEwBnXP89u/NQot/2pKZ/rP4HEnyBnb8Gm0AP7Uyz5KPa4zKFxKArZs?=
+ =?us-ascii?Q?HNjMuPPlQIYFNHeoEbXPie9WW42zkOzjO5GOf2XA0DNSJzxQPKIeGL6Kba+M?=
+ =?us-ascii?Q?G9d51Mb43QQ2p5aeqLDMjaIudbuIkk4bi7Fw3BqE6b7oA3z873vP2W2O6mVp?=
+ =?us-ascii?Q?25hQ7LAxhQ3noKb4OwRu11WHk3ByoLyG4LewMZ+/peDnK8su7UECAFeCJu0x?=
+ =?us-ascii?Q?ALh+ktdo3hqOX5nB59udExbKD5Jlq6XqIiPWLnmomPZGEi4phySOx1ydi/EF?=
+ =?us-ascii?Q?5oFCPXIBRRgNXUVp+vqXGJEpQ30BwMVrtI9vqr6ntm16pj0NAotj+gAQPypd?=
+ =?us-ascii?Q?gHN/ltP+KEsvPXIJGrAkbDAHiX68VcH5YukHGig/NzNJHWN/kNwoIYSNwUuL?=
+ =?us-ascii?Q?r4+75arV9l0lY2fEyHv8wpbMaPpkeEDJbZusO7kvZ58BMK4TVnBmM5vhZ4Rz?=
+ =?us-ascii?Q?nN5mA+LQUEBNJrF+tNdDhv77LUK0Nx8y07XZ+UQKg19eL5y190ubfxws4C7S?=
+ =?us-ascii?Q?Q617c5rB1HuC5rKggwlz1KYUP0yMjRwWavN6pG2OUp3AF0IRfBYvTbYq8jTr?=
+ =?us-ascii?Q?XfblAJ0cbJT3R+kEGP/8m5OLhLvB50DnVjoYpIzqvqJFwPnrtL63/DgrKb0L?=
+ =?us-ascii?Q?H0GhCctTg31m5lmZffTuGBxwWmWSHMXPp0fHZT+I8RbpayQWuaWTYuO7WI37?=
+ =?us-ascii?Q?nz7kMDTGNKTJR4EUZy0lZramuq82YzXoQLb4Ttw2yWGtlX4kdArcHn80X+jS?=
+ =?us-ascii?Q?AKHxbuVAYETMpGqr/pgk/fE4ACq7fdNovAzBhdJaV89lCo9eQ5TiesUmBa3I?=
+ =?us-ascii?Q?lAU+C06xbckPrbe0jAr7oVmjQp+TD0gpCHm0je0Vpk/+tjBt0HxZusUDZl55?=
+ =?us-ascii?Q?nzH+KEDBuvai10Mw6edLJwwvVIGVuXnMYnt3/U8c3SGUE1lqiyMfZfNaFXzA?=
+ =?us-ascii?Q?Za6RgP1oAqEaFJClMztbah/MBZeAN2GcaxM7DR5A7QvPobXWR+qBfaisfV/e?=
+ =?us-ascii?Q?tg4KlboyjLFsBSXz4yMDtlsqOxULc0zyGUUOresbTlKjlbvqTku91l72emn7?=
+ =?us-ascii?Q?CxeWNwzm7U3qYkfDf50ZyTkj6yA9ADGs9fH5DHg3uMGURaDnJMEOpRSRoKYN?=
+ =?us-ascii?Q?p10o0BtbkZyCds8PhZPPN3GMrdmMzdVwiyuFh3L4qlTIdwj5CeVwjUcakZ8O?=
+ =?us-ascii?Q?I/wRlmrXG0MOUYDfgpgmoV8UsY6yVEfzJ2ocLebeutcOrwHykcPlm9k9s85V?=
+ =?us-ascii?Q?1rOVwzaUkE0GANJUKfoGHmqF2FOPB73n5oIlvLUkotKDenRQLHHnadr88xyZ?=
+ =?us-ascii?Q?E2CE7XMZYqpCA+EJZVi7AS4tytLb8b0C/QQ6eOc5XO50Nl0aFw=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?q0jOkrgXwr3K67pe7wZnlE2vWGbcsy3qc1H0x2BM9PhNMJ20g14yJBE3MCbG?=
+ =?us-ascii?Q?Y3j5sOGsTsFWMx49vMbk/FszK8i0PX0rio/ADoScJ9TJBSXT4jL/cx6ebE/m?=
+ =?us-ascii?Q?lIRvxueViN0lG/MI3UcqenJ2lkw1wixzp9BR5L3mODGU9w1ww4D3ep97w9wv?=
+ =?us-ascii?Q?BGSxdgcIym+OkW+th7Qs6LgOz0/f0IsSjNLZlTlPT78AgtnWBtc1fxMGdqTg?=
+ =?us-ascii?Q?jKEYoC+qRDi9j0LjFN7AhcO3mQiNGc0pA5Da+S/vqnJgV/wpMJ6h1DfbFKZ+?=
+ =?us-ascii?Q?XX0Ameuk2tOTah6Zw3JRcrOBcin/ygu/5gFFijNNeVTAUS0xeT5iIobZCcF0?=
+ =?us-ascii?Q?TDnvmJgkBkTwuX2GFsIWADI6BCSKFYZ/9erbqEZtitCLhOdquzQjBTsBVsEZ?=
+ =?us-ascii?Q?n0CpXByrKjJB8Bs48R546GUQVXFu2q6ff0W3mmGhglGJWBgCYJev3Ib1Ngsx?=
+ =?us-ascii?Q?BR3tFikqB8c9eL8vsUiGeIfmY0rmtNagjULAl+XAkVNbki5YFf4KXoI0FcjE?=
+ =?us-ascii?Q?fBMMfNJ3X0AD85jSnP4pCfenprIT05DUDakpnCNr9Grh3qYHoxfkHZFBLqN8?=
+ =?us-ascii?Q?eKnw9WnEGdmcxOL1XuW6J9ll3brmyJz1yetXhDIUETrMZeYJuIGAQkmH6oOe?=
+ =?us-ascii?Q?TjAUUMopS+8+daZy9ogwQFV0bv5FWqAN1loTXvv11UlytmH0Cr55JS7mkGJB?=
+ =?us-ascii?Q?uo/BVnB3dp4PhX4sOxSTQ5ygZttamSIWrEbCUp8vn1+4fjtvbQBPYm8boAIZ?=
+ =?us-ascii?Q?ERvUm0DrbMZH92scDcFhxpDWpENUvA+0pNR9YPO4djlizhmx3fzRZL1UBZUe?=
+ =?us-ascii?Q?UmUjNzLZCRkQIFfezysxFHGSzrc4BAR+VwTB3RuECFaCvPaC4UnKyyGY325n?=
+ =?us-ascii?Q?pzPCT5p1AFuCBuhIiOPTICNaEWXFgRGJry7QKpkFYFKJL2UjM1S9t4k/UzZ4?=
+ =?us-ascii?Q?QcL151lfwPCLIYw+LsOTc9vkYVKVapTkzONVWcPw9hMUELtQ9ZR7EBnNQqfp?=
+ =?us-ascii?Q?ovJFMaETEwDlt2FKgXdoVvlpG6JJn22KVmsU4hdjLiopG/HIkt0VVPeFrcxV?=
+ =?us-ascii?Q?eMrLyVOowSsqwb1EA/YdI3DAv9sHkzVbmA7ZEs2yPE88s3NKYV79sAUyTYVt?=
+ =?us-ascii?Q?TXO7nFP7oqZ0lItam0PHSOjdL3uLdozgcMcNMju5CCRpDDSiXslXSckUKXKQ?=
+ =?us-ascii?Q?R8N4ArEuXtalK6Jpnt9IRpKzI8lmo2XKoGTIZXa183mtqnqI70nYGzQLyVqM?=
+ =?us-ascii?Q?nwOK0YONsiV6+6jKUq2tNki2hfGVXhgXijOp9n4bZZfPVEDAhodwzxlZFyTj?=
+ =?us-ascii?Q?eNldERLvY/L6WWvBks2fq/quJfsdpsoD4YfqKmMDMX3BQvfwiWFDbLGiNuRB?=
+ =?us-ascii?Q?SlViIIhM5csKk8keENw5mniNA1+tZJzKWTWNFAa7f+/GD57kFzp2t2F5kB64?=
+ =?us-ascii?Q?qcwGzQePgIVpH3p3MXxgbBc6yGoyHPB9laLZItSnQS3BbNxQ8x3Hm8y9uJKX?=
+ =?us-ascii?Q?dSerUfFZDRbMCJNuCod3VPcLwQm1FXMHkBwKV9OSJEbGUkMPsyDswiFs4LfX?=
+ =?us-ascii?Q?4GQzRGm/0HzjTC1b7mOhROCNWe/fFIq19WvywMA1?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240913045807.GM275077@black.fi.intel.com>
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a63e60d-8250-4eda-0ebb-08dcd3ccc8ef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2024 08:19:27.7282
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XmylaLoAdOBSAUYChLw3M2LTXCiKn8Yie/AEvWSneYF/KdBLSjSRR45ekvb/k1OsOTZUif9lWi3iOYzceZwuoY1QT9MF3DWgaBVE4PUk+Es=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR07MB8277
+X-Proofpoint-ORIG-GUID: OHPSlma3jH7BEAYgxHeDcGIAi2jg6PhB
+X-Proofpoint-GUID: OHPSlma3jH7BEAYgxHeDcGIAi2jg6PhB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 mlxscore=0 clxscore=1011 spamscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=402
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2408220000 definitions=main-2409130057
 
-Hi again,
+>
+>Thu, Sep 05, 2024 at 07:06:48AM +0000, Pawel Laszczak kirjoitti:
+>> Please ignore this patch. I send it again with correct version in subjec=
+t.
+>
+>It seems it's in Mathias' tree, never the less, see also below.
+>
+>...
+>
+>> >+#define PCI_DEVICE_ID_CADENCE				0x17CD
+>
+>First of all this is misleadig as this is VENDOR_ID, second, there is offi=
+cial ID
+>constant for Cadence in pci_ids.h.
+>
+>#define PCI_VENDOR_ID_CDNS              0x17cd
 
-On Fri, Sep 13, 2024 at 07:58:07AM +0300, Mika Westerberg wrote:
-> Yeah, I agree now. It does not look like the methods are messing each
-> other here. We don't see the GPE handler being run but I don't think it
-> matters here. For some reason the device just is not yet ready when it
-> is supposed to be in D0.
-> 
-> Sorry for wasting your time with these suspects.
+You have right. I assume that I should send the next patch v4.
+I'm going to leave PCI_DEVICE_ID_CADENCE_SSP. I hope that will not be probl=
+em. =20
 
-One more suggestion though ;-) I realized that my hack patch to disable
-I/O and MMIO did not actually do that because it looks like we don't
-clear those bits ever. I wonder if you could still check if the below
-changes anything? At least it should now "disable" the device to follow
-the spec.
+>
+>--
+>With Best Regards,
+>Andy Shevchenko
+>
 
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index f412ef73a6e4..79a566376301 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -1332,6 +1332,7 @@ static int pci_pm_runtime_suspend(struct device *dev)
- 
- 	if (!pci_dev->state_saved) {
- 		pci_save_state(pci_dev);
-+		pci_pm_default_suspend(pci_dev);
- 		pci_finish_runtime_suspend(pci_dev);
- 	}
- 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index ffaaca0978cb..91f4e7a03c94 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -2218,6 +2218,13 @@ static void do_pci_disable_device(struct pci_dev *dev)
- 		pci_command &= ~PCI_COMMAND_MASTER;
- 		pci_write_config_word(dev, PCI_COMMAND, pci_command);
- 	}
-+	/*
-+	 * PCI PM 1.2 sec 8.2.2 says that when a function is put into D3
-+	 * the OS needs to disable I/O and MMIO space in addition to bus
-+	 * mastering so do that here.
-+	 */
-+	pci_command &= ~(PCI_COMMAND_IO | PCI_COMMAND_MEMORY);
-+	pci_write_config_word(dev, PCI_COMMAND, pci_command);
- 
- 	pcibios_disable_device(dev);
- }
 
