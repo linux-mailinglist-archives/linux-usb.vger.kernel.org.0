@@ -1,131 +1,134 @@
-Return-Path: <linux-usb+bounces-15086-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15088-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61409977B9A
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 10:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5816B977BBB
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 10:59:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21648286154
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 08:52:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E45E283A2A
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 08:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70AC1BC9EB;
-	Fri, 13 Sep 2024 08:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982F31D6C68;
+	Fri, 13 Sep 2024 08:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D3MpF1HH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="frq4NGj3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0651714CD;
-	Fri, 13 Sep 2024 08:51:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8463215443F;
+	Fri, 13 Sep 2024 08:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726217515; cv=none; b=TdAzkJsZhl3d0nTxKQUjR/QONGTfVik2s89/ykkey1abe15d5sV9CPOiR00X7AqdVy79LWqEh6IuSQc1WTaGIpTJ4VJmWxKoZyshUUVk3vOexPyUguD7Wc7L5++EO3wyA08BiOUw/y1ui9Zae9tltqvRUw3S0YvwUDFeWcTUn8k=
+	t=1726217968; cv=none; b=ebQqz1mXgi2eklQ6154+J3HwDHzvCNc6gvDIR2weqih7s+ewFRFHbB9Vi8qiQX+cPJJA2QMWTC2dt0hFtO9RCjkGH5rpe+8+RJFq9ixoMwFkIlYnkB6ocAP1CI/eqZNO9UAc4dJyyi7lvHoXfFLjFNQ7U8sGFyZ36nFwfoiOHqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726217515; c=relaxed/simple;
-	bh=NTzttWqrbCGcePhblw3/n6xG8yRKJoBHaeMA4ZzQAYk=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=F9kxCB5UhxxuGVxpvzLJnUQjqMeovl7bvEfSl9SC25zWOe2mg0ujKvYBv+5MvYa5C/aBkWH9RfWM5S+KTBZNf8nlyV2Na7TsuKm6ozzrBOchXv12WmH0uh/GA68k1ztzgeAcn+hudM6+TlQn5nKp1j8FAylk9FzzCQcB3T9dfec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D3MpF1HH; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53659867cbdso1034623e87.3;
-        Fri, 13 Sep 2024 01:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726217512; x=1726822312; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xk0E6BCm30g0GxBtlyK/KF5VtT4XzwvZU2m9YT6pjqo=;
-        b=D3MpF1HHIEL8cgDCTUNXQ10Pg/3EVDEN4o5wxAVKozaW8p2DSQw3qwBBxhSn9G12QH
-         QTgLJ0JByO+Hl6jXrGAGP4c9sD3Mad1v8hIe/iBHJlnfuGtHOs5N14XWftvsYtl0HpTF
-         cUD0AwWvcZ4kkTDwa7B6qfuErWe7PlVN/6xEl9Jyu+LFqJsCTqvy4ASPzXjSzLZ7hpj7
-         KtPDTelPaxOkhjTaHfbxYREhXIWxJgQrXouBsCifjTtgAIpyspx45rbys7ksl+QzpRD/
-         Ea/frCWxQ3fR/oe01hzhyT2w0pH6MZy2sfVmdpvL+6bfOt292Xjs6oaL2Ky4X8O5qzLI
-         7iKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726217512; x=1726822312;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xk0E6BCm30g0GxBtlyK/KF5VtT4XzwvZU2m9YT6pjqo=;
-        b=JXvi/Z+e8bWB8aJ3c+JG4laeSAMfLvFx5pue3PxGIJU9jmeRZo3rF9LGKr4kuJ86JN
-         nbWvBToGvoF/xSMplVJ8ttJsSHelppuSTifMswBToRHOSFon+qPnlO1GRUMxjhIBjOUt
-         4jOw5Epresl79ppnNq2QS2rHm2x11IuxuMA3bD15iKtsjiRNbZYzTrxpQQ5c1b1RKo3i
-         0YBdGTbvB4AsKBSLohgTGbeYM27FAHWXC/JAZkFW1fa43Pii1OO0bbyLDPrLSBvnHk0R
-         tk2fgDFZVbMijbWBCCBNoqgsdlHA2vMh+0/+boFc5nADAELckMdjdJYsFtOhOao32cDk
-         q4dg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCdoV+Px8m6tOKlaCKFndTXIJZvIID9SC2dSuDDaZKacGCPWHKahPdWzWSwQopl6lx5DKJhSW3hxhj2v4=@vger.kernel.org, AJvYcCVxoTrxwJ+dBxbjiBN2sZ8wnb88zBI4DTIcNa4rbEcXfGyKYYwoEzG6PcwnlQvksO3pmiu+I+bRmvX0@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVqgWU5fJQqLDd37wgt4tyJ+JRh1acLvoDuL4/SWjo74pU6yED
-	r/4DdhvJUJOgtvZti47A1NuHd6jwTCQbK8nhea82rVz+ssOXAu5yOCU35A==
-X-Google-Smtp-Source: AGHT+IGxNi/eksmtDF9xNgBpBumKlvsbz3pMNR6bhHQfTmiKOxvcJ675AwKH3vEM2OB16uqxa+kP0g==
-X-Received: by 2002:a05:6512:224e:b0:52c:e119:7f1 with SMTP id 2adb3069b0e04-5367ff329ccmr1750424e87.51.1726217510618;
-        Fri, 13 Sep 2024 01:51:50 -0700 (PDT)
-Received: from [192.168.1.106] ([31.173.86.0])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5367ae68509sm511807e87.89.2024.09.13.01.51.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Sep 2024 01:51:50 -0700 (PDT)
-Subject: Re: [PATCH v1 1/2] xhci: pci: Use standard pattern for device IDs
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@linux.intel.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Mathias Nyman <mathias.nyman@intel.com>
-References: <20240913084411.3309911-1-andriy.shevchenko@linux.intel.com>
- <20240913084411.3309911-2-andriy.shevchenko@linux.intel.com>
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <9ccea075-5724-3a9c-738f-03eb2d519c45@gmail.com>
-Date: Fri, 13 Sep 2024 11:51:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	s=arc-20240116; t=1726217968; c=relaxed/simple;
+	bh=zRkh1Ji+XJM1QVnhjaVembi9RZTPeDYx7ZVLPItSeJ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NKlcynR2bmAqe170SJ8RDCTwUleyWkKFATugTlVRcmk3UhKFZwhOHwDzgR+TKfvc0c2Ss+1wvm5uTIfnxZKB5Rt51bwheLlVVIxfKhpDbr4v81A4pBz1sgpNouGJtjlODlvei5Gb7DqrxuRXRtdBTwrIfKbe4cZbLDAKJaJkFJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=frq4NGj3; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726217966; x=1757753966;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zRkh1Ji+XJM1QVnhjaVembi9RZTPeDYx7ZVLPItSeJ4=;
+  b=frq4NGj3b4BLxL/1iT7p6kWX2qr00W4qu6VqdUXeV+EJkjm3OCO+r378
+   hy1m2yMP23g3k4IbSjpvRH+JZ070V3fWp/PmMiA553icPQP5cIy+KQyL/
+   a7HW+Lsw3/Gh74+70NWK28JiW5h6KictKo6p5Cq0eB00lUhuycFvRMkgL
+   XXsjr5iHpx2mIpAFP0tVkWfcGkn5bMWY82BVztYzM7XWf7vq/hXSFbxqk
+   GD6pGzJnmAnMBTaNYKbKDDJWC5/1f6Iq7cq+SR3cqMt4dzzYjU9GyK/Bi
+   WekFNkJ4vHoJyg5slbjKc1U6RLw3ZSbE+UZS8qQFhh87nSC5YHyFLebBs
+   Q==;
+X-CSE-ConnectionGUID: qUaf1PLWQQSQv/knTwHUHw==
+X-CSE-MsgGUID: F1IfLTdhR9CQqmJ0AlSLvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="29004358"
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="29004358"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 01:59:25 -0700
+X-CSE-ConnectionGUID: RWGsGADGS/aa0PhV8zUxIw==
+X-CSE-MsgGUID: j/LSU4Q5QsKg8MOzQAm9/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="67834021"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa010.jf.intel.com with ESMTP; 13 Sep 2024 01:59:24 -0700
+Message-ID: <7e73a66f-e853-4da5-bb95-f28c75d993f2@linux.intel.com>
+Date: Fri, 13 Sep 2024 12:01:30 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240913084411.3309911-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: xhci: fix loss of data on Cadence xHC
+To: Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Pawel Laszczak <pawell@cadence.com>
+Cc: "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "peter.chen@kernel.org" <peter.chen@kernel.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20240905065716.305332-1-pawell@cadence.com>
+ <PH7PR07MB9538584F3C0AD11119403F11DD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+ <PH7PR07MB9538734A9BC4FA56E34998EEDD9D2@PH7PR07MB9538.namprd07.prod.outlook.com>
+ <ZuMOfHp9j_6_3-WC@surfacebook.localdomain>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <ZuMOfHp9j_6_3-WC@surfacebook.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 9/13/24 11:43 AM, Andy Shevchenko wrote:
-
-> The definitions of vendor IDs are follow the pattern
-
-   s/are//?
-
-> PCI_VENDOR_ID_#vendor, while device IDs — PCI_DEVICE_ID_#vendor_#device.
+On 12.9.2024 18.53, Andy Shevchenko wrote:
+> Thu, Sep 05, 2024 at 07:06:48AM +0000, Pawel Laszczak kirjoitti:
+>> Please ignore this patch. I send it again with correct version in subject.
 > 
-> Update the ETRON device IDs to follow the above mentioned pattern.
+> It seems it's in Mathias' tree, never the less, see also below.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-[...]
+> ...
+> 
+>>> +#define PCI_DEVICE_ID_CADENCE				0x17CD
+> 
+> First of all this is misleadig as this is VENDOR_ID, second, there is official
+> ID constant for Cadence in pci_ids.h.
+> 
+> #define PCI_VENDOR_ID_CDNS              0x17cd
+> 
 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index de50f5ba60df..6d9eb2b031e2 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-[...]
-> @@ -388,12 +388,12 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
->  
->  	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
-> -			pdev->device == PCI_DEVICE_ID_EJ168) {
-> +	    pdev->device == PCI_DEVICE_ID_ETRON_EJ168) {
->  		xhci->quirks |= XHCI_RESET_ON_RESUME;
->  		xhci->quirks |= XHCI_BROKEN_STREAMS;
->  	}
->  	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
-> -			pdev->device == PCI_DEVICE_ID_EJ188) {
-> +	    pdev->device == PCI_DEVICE_ID_ETRON_EJ188) {
->  		xhci->quirks |= XHCI_RESET_ON_RESUME;
->  		xhci->quirks |= XHCI_BROKEN_STREAMS;
->  	
+Thanks, fixed and rebased.
 
-   Hm, these 2 *if*s seem mergeable?
+Changes:
 
-MBR, Sergey
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 5e7747f80762..4bc6ee57ec42 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -78,8 +78,7 @@
+  #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI                        0x2142
+  #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI                        0x3242
+  
+-#define PCI_DEVICE_ID_CADENCE                          0x17CD
+-#define PCI_DEVICE_ID_CADENCE_SSP                      0x0200
++#define PCI_DEVICE_ID_CDNS_SSP                         0x0200
+  
+  static const char hcd_name[] = "xhci_hcd";
+  
+@@ -470,8 +469,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+                         xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
+         }
+  
+-       if (pdev->vendor == PCI_DEVICE_ID_CADENCE &&
+-           pdev->device == PCI_DEVICE_ID_CADENCE_SSP)
++       if (pdev->vendor == PCI_VENDOR_ID_CDNS &&
++           pdev->device == PCI_DEVICE_ID_CDNS_SSP)
+                 xhci->quirks |= XHCI_CDNS_SCTX_QUIRK;
+-Mathias
+
 
