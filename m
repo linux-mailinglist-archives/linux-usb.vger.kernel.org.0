@@ -1,113 +1,149 @@
-Return-Path: <linux-usb+bounces-15114-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15115-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79EE697902E
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 12:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA860979366
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 23:51:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1729BB24750
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 10:59:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23B88B2200A
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 21:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A101CF7B7;
-	Sat, 14 Sep 2024 10:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7485813A250;
+	Sat, 14 Sep 2024 21:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Dm6aB36d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5FF1CF29A
-	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 10:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43ABF129A78
+	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 21:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726311508; cv=none; b=jELjOy104LwD8N14mnwoeV77NvN6F7g9XyddgJtJtPBP09hQSZdo/B/Po0rY/BuAOJ2/Y1LWReGClkwsGFgG2Ui51ZeD66PZ7DnfG+i1q6lhnOYHHawHnwZGVfYpdEDVhZ8bkZ6u0lNGAt6btM7LxpvfSFr46v3T7rQULaAOHWA=
+	t=1726350668; cv=none; b=e15qjJtLlWQCjhG27+qTWwxaztzdUAP1VIXhGTdZxG/v2/hBPPTqRLy49N2Bfz+EBoMPTF/wabQaYFwVn3e77Gk5V5++JSZaS/c4BPKC17RB5vkPM3js8jP89dfdp6S2ggh2OaOFRiovywtBCnbuqA5bg1Enuy98OaN72+7fstc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726311508; c=relaxed/simple;
-	bh=6FU7I+36Vs4Ty1Rx4f/ad8Ea+XxLUpDl/B1613vDDkw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=eIp7ywo8vZAdSOdb00xR6PU7Yr6X7DmUF4IS2DI2wFBCkidegvQYPZQtYMoUusRYS83H+w6siVgCRJxJrDeerFN6cJ4yWb5RXQdd075gVCose7gPCpcGeDbnhzkUMJxZzkNp/BHd+arMl7NFqYYiPhL9gC20uTvquenFAxGxCu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-82aa8af04feso565960339f.1
-        for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 03:58:26 -0700 (PDT)
+	s=arc-20240116; t=1726350668; c=relaxed/simple;
+	bh=oECQKR+o7oR4aWVTxUqVAlb9CGCNswo07bNaGltmOmQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QFFoyke37Hz0e3lPAx1GadXTLwSKrOSzFryacSIT1we25OkuaEgksxXkttqLP0BTbNAOnoyOm5AcdmIUC5rwJssepaqpEpW5Y43gQNeTDvQaj5P91uqgZd3b5z4qe+8DH+BzXRiHuaeFludXHxefhvCa34k3WP7QkkZeAWlZJMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Dm6aB36d; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5365cc68efaso3385000e87.1
+        for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 14:51:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1726350664; x=1726955464; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dfmpYUKiZBoYJxaXCZNOzoEowtv+ye5+GIly97iMOVc=;
+        b=Dm6aB36dCe8oz4jtuMZc/FkqDl+7kwqYin7lB2B7HGYOaS9EXKUTh5iNe1Iz0zbEJO
+         eiQuC7dJtRh1zubvOVB7hRbm0ysLo4Hci9/wF8/O9+7tkqiVh2Wn+nODcPbSlsYjankh
+         qH7hZjKr8G5LCmE4RUdXzlzye8l1Lu/glfHBw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726311506; x=1726916306;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lVuoLqGne9P1lyA2uxe9sfoWtm1gKn1KP1rP9poDOqc=;
-        b=F1LW9X3+WgP9OLPbRZLikF8gE237rK3dR+MZFJ3ul9LjjTUbp4nQu9+lq2U/duFkAV
-         9yGwAPlu4TunDOjtTmm5WTZ1QlSmoioRi9QpqXe3eM4jDeunIwpshkRNK7YtYwa45thx
-         Xl6S3hVH9n/CAvu6hUBxoPe+2+ia7Cf3Wma3DSYThro9zN+T+0wem+YhNJJk04ss9Dwz
-         B/Kti1PI608FOF70QKNmLLUYcKfFJ+xBwWaXryM2ZpAXdc4hP4CEt5EIervV1YytL5lV
-         H+1DHtkHQniyY5iIN2r3H+hXBoVbmOCtSC8fCQyUB9JjKO842f2vVm/S42nI3XGYWxlU
-         YdxA==
-X-Forwarded-Encrypted: i=1; AJvYcCX2v5vLxfZh8DQ1vf3fK+HrjjS0joOHHmZcFYK4dUje2iXpX0oyKTQ5X855sIesmIBOEjQMajv8g7s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDBFPH7A6D7bff1eOlb8mumq+ysowmdUkia0Na8yNr6B81D7Rw
-	TS15X5OPVmyK7sVpruyKOhgQNtnGBZJkGjcJp6oiwp0a6+XQ5J+uJbj78MsCeIfdT+iDGGd48oe
-	i9IR6bK5/m2SFKuMNRhdZYzleOvf8zVnC93fNUCOlVkHzCFpGS1zUMG0=
-X-Google-Smtp-Source: AGHT+IHzBsQojbp13wK6XmU9C7AZ9k813RygyDRi5OKXtOOvw2u+OuBRBiJUcfIBiNabCak5lb/wRNbX28H8fM2Z8ubJ6ni4kb9b
+        d=1e100.net; s=20230601; t=1726350664; x=1726955464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dfmpYUKiZBoYJxaXCZNOzoEowtv+ye5+GIly97iMOVc=;
+        b=M5iWvHyWfhi9jVD6VOXngHdMer4TgvB1PJG9vrplQmT8kjw8D3MyWg0n0y6Zj2cdw2
+         vDU+jWDhEWJXiruRnsyB27owhr5dYqYgiVzAIZAngaeAOnUjXVlgMvf3CMPDz9y8oVlm
+         jo61iw0J/C7c6QAh6gLkYoMVzYGRyteNqvU1hS/raCtkUnqQU3DME5Tru4fN4lVM2mr8
+         /IjB7Di1nwa5u+Z9AfCTYDkfvwFH8rAYiKoMyCMR/6BXeKGzA7DSyxgdlpoToWuz3cGT
+         c53iJdHH5u7/tGhKGGhNPlVr74ffUJhtwzGYikiGSyC6MEtcBefv6bp4csngjT6ob0Az
+         gerQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWmadK/Fz560PdEqDfRlpP0a+i8WetlN1qooyEJ9/Uh1A/d4S0eTdmBcRTbW8ZYZxxhz3eEfdw/iB0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhxaS+z9DlU1Qqbjqp2KrYky4fFTShYcYad9Ch1G3SVn1Pe2nf
+	xW5Gt59cWPqZ+PkoOFDpPmXTJTRwcG/9TsBRjxIAW3TwE8trZruT1M4k4aGLg28lroPTC6PlaCi
+	YuIcRbsSLp10MlOAWPK9ujGlwRG1ZhoeIHyI=
+X-Google-Smtp-Source: AGHT+IFgSycBRnWfO8N5uMnakNDOmBrL2NCJapreoOOW7tcXkT2z4Ms9//OPjSdwxF5awDRUkJU7rCo715tyOjYkGZI=
+X-Received: by 2002:a05:6512:3f0d:b0:52c:88d7:ae31 with SMTP id
+ 2adb3069b0e04-53678feb54cmr6326788e87.48.1726350663255; Sat, 14 Sep 2024
+ 14:51:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aa2:b0:3a0:9238:d43 with SMTP id
- e9e14a558f8ab-3a092380dd4mr22628925ab.12.1726311506208; Sat, 14 Sep 2024
- 03:58:26 -0700 (PDT)
-Date: Sat, 14 Sep 2024 03:58:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <66e56c52.050a0220.3a9b1.0031.GAE@google.com>
-Subject: [syzbot] Monthly usb report (Sep 2024)
-From: syzbot <syzbot+listc92cdb9da74ba407482a@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
+References: <20240910101527.603452-1-ukaszb@chromium.org> <20240910101527.603452-5-ukaszb@chromium.org>
+ <ZuGZNyJkIreUhoc0@kuha.fi.intel.com>
+In-Reply-To: <ZuGZNyJkIreUhoc0@kuha.fi.intel.com>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Sat, 14 Sep 2024 23:50:52 +0200
+Message-ID: <CALwA+NZuR3M=rMACWJLch8OMPUQ9W1MBcbjNtOjSrqb-oXBMmw@mail.gmail.com>
+Subject: Re: [PATCH v6 4/8] usb: typec: cros_ec_ucsi: Use complete instead of resume
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Pavan Holla <pholla@chromium.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello usb maintainers/developers,
+On Wed, Sep 11, 2024 at 3:21=E2=80=AFPM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi =C5=81ukasz,
+>
+> On Tue, Sep 10, 2024 at 10:15:23AM +0000, =C5=81ukasz Bartosik wrote:
+> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> >
+> > On platforms using cros_ec_lpc, resume is split into .resume_early and
+> > .complete. To avoid missing EC events, use .complete to schedule work
+> > when resuming.
+> >
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > ---
+> >  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 13 ++++++++-----
+> >  1 file changed, 8 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/=
+ucsi/cros_ec_ucsi.c
+> > index 20e608097fc6..422b3b14028c 100644
+> > --- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> > @@ -241,15 +241,18 @@ static int __maybe_unused cros_ucsi_suspend(struc=
+t device *dev)
+> >       return 0;
+> >  }
+> >
+> > -static int __maybe_unused cros_ucsi_resume(struct device *dev)
+> > +static void __maybe_unused cros_ucsi_complete(struct device *dev)
+> >  {
+> >       struct cros_ucsi_data *udata =3D dev_get_drvdata(dev);
+> > -
+> > -     return ucsi_resume(udata->ucsi);
+> > +     ucsi_resume(udata->ucsi);
+> >  }
+> >
+> > -static SIMPLE_DEV_PM_OPS(cros_ucsi_pm_ops, cros_ucsi_suspend,
+> > -                      cros_ucsi_resume);
+> > +static const struct dev_pm_ops cros_ucsi_pm_ops =3D {
+> > +#ifdef CONFIG_PM_SLEEP
+> > +     .suspend =3D cros_ucsi_suspend,
+> > +     .complete =3D cros_ucsi_complete,
+> > +#endif
+> > +};
+> >
+> >  static const struct platform_device_id cros_ucsi_id[] =3D {
+> >       { KBUILD_MODNAME, 0 },
+>
+> Please merge this into the previous patch.
+>
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+I will merge it.
 
-During the period, 6 new issues were detected and 0 were fixed.
-In total, 80 issues are still open and 351 have been fixed so far.
+Thanks,
+Lukasz
 
-Some of the still happening issues:
+> thanks,
 
-Ref  Crashes Repro Title
-<1>  3780    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<2>  3144    Yes   KASAN: slab-use-after-free Read in hdm_disconnect
-                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
-<3>  2019    Yes   INFO: rcu detected stall in worker_thread (9)
-                   https://syzkaller.appspot.com/bug?extid=225bfad78b079744fd5e
-<4>  999     Yes   INFO: rcu detected stall in hub_event
-                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
-<5>  874     Yes   general protection fault in ir_raw_event_store_with_filter
-                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<6>  862     Yes   INFO: task hung in usb_get_descriptor (2)
-                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
-<7>  836     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<8>  652     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<9>  515     Yes   INFO: rcu detected stall in corrupted (4)
-                   https://syzkaller.appspot.com/bug?extid=aa7d098bd6fa788fae8e
-<10> 478     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
-                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+>
+> --
+> heikki
 
