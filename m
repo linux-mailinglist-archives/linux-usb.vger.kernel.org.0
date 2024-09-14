@@ -1,136 +1,214 @@
-Return-Path: <linux-usb+bounces-15120-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15121-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C03F49793CB
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Sep 2024 01:28:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 052909793D2
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Sep 2024 01:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CDEDB225D3
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 23:28:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 859521F21E81
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 23:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C676146590;
-	Sat, 14 Sep 2024 23:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D52C145A09;
+	Sat, 14 Sep 2024 23:43:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=myyahoo.com header.i=@myyahoo.com header.b="Ji3HzvkA"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MAistcia"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sonic313-20.consmr.mail.sg3.yahoo.com (sonic313-20.consmr.mail.sg3.yahoo.com [106.10.240.79])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2571754B
-	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 23:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=106.10.240.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13EE13EFF3
+	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 23:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726356514; cv=none; b=kIYPMiiu5Px09d6OULDdMKuzWUFd/oMIUgLqvahytchlbtLtJInYOwPxRH2Qx8/+zyU0D7LHtxJZCsX8/k48Nkpiide5OVqpsJkc5rnL60O+dMt+CoxC91brsNiraT608Z8x8V6SSLBzeZHjX8FPjiHD+CUX4AKTpbN3EMeR8Es=
+	t=1726357432; cv=none; b=QpAA8tEc5/Cd2eH0UtLLT0FEhI0JkQzpUOtqrWyP0EQIOGxqAXM39YMvVEd2cdkUhyBXHilT52S77GecpTmnTh+5JEm9ZVuVd4zxJlNAj/Mw6Wx9PkOIn4roRAa/6rZGBBVaC3kgJsDnqJFffGYzlBA9+dgdo3OPITSNk5YvjvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726356514; c=relaxed/simple;
-	bh=Emd4abe0oHfdm5VW4aDX6LLoJgAcXCzLVCOLXZmKLAI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=fICBW97lVJtRtO9DoeErV1Hxc6uHyYWqWnTXfoQ181v7SbewsPGqORep1hTObez5fBDCta5RsbPlqPNkRmtAanbr4BacfZ7LlqcjC2Il2Uh6B/0GV0J1jTUqoxWKmikg89h1IiWX2TSJl483LRTa2ohG2WXmlzh36+PrlRwckLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=myyahoo.com; spf=pass smtp.mailfrom=myyahoo.com; dkim=pass (2048-bit key) header.d=myyahoo.com header.i=@myyahoo.com header.b=Ji3HzvkA; arc=none smtp.client-ip=106.10.240.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=myyahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=myyahoo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=myyahoo.com; s=s2048; t=1726356503; bh=TqTHPitrrLhLwGL6rNyIpEVqge6ePj8pP14s373Eogc=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=Ji3HzvkAZpemkE7BeapDgDiKleMFAyl7grlF85/l8Tmo+HFpCUgItrm7MkFiO1hdF6/T6w+x6LGdNRcya4qLEdv7hkxZPGoMZKO2QDH6YS0Atr5CPuXmhlB2qU569xv59aX33L/eakl0AS7Sz7882Z5L80NYF/CGoqAdlLlahR6oaI2dlKUg2a9OGMwW8hBd5uES7urDTWQL7G3NH3m+QdSlIG5TSiKAHnUL1N/ERCnpGBOI+JvZCk2Sv8EK4cABa5u37I0f82vji+VqsfHVKZVi64qxJLLAbhETqE09Lw2DaWm3KlI+JsZPE3EpkWT2PhvV6DzMYoafBy/ArQHV9A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1726356503; bh=47/RBK4F6FVYtdejh6kk5hKTUteXDjVCScPBdJDpDQO=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=QBZAYG3KJCr69wz6zvwqcgrsJ9V9Qg16tnSqBhIKr9EDT6rexDrOAj3v0gIDAak62TDYHf5YmgkZGpx8wkOB4VEMxjEtyDi3Bhu5HtADrDWKiyT5JMhf2nThQc5ItYoIvwlRdySCBUy2+xoNSknfk07Qt4D9R5B7sMnk4DBbJ2Pc4ob220omMFHKMmTsyjhrt6/1TS8mvtWov3XWzjH/t/jikpwvDP2xLpAW0oY+ZgKiwr3vi0XdDzVd6Mu6iX7NZSzJLCA87Mc8dbeAF6vkZ5cvVsI44jHvVJGRY3qver1bToLMTgiEqC5+7vqK6yNDm/4/k4sNRZnA3l+FU3PA5w==
-X-YMail-OSG: v8E_RlgVM1lcltomIYYRG8UX3jaI069jZo7QukGaA1oGoRncwEG0bMAJGHs40yS
- Y_vXdi5C3b5pC4P5sPnWcPLzea5QM4MLrD9rTlQUUeOyC5wmi7soh_LnVOhL.R.lgNYkliKrx5fm
- Ux2fmg23JEBddWRdWucbj4uEsD9vNs.vHJZGJ9z3sCLnM1awEVr.lDHeYN8Ket.3JoE13ob2wKAI
- HTIZTau3DSa8t673uPZ6EObr5fLuvJ6IfwLX3cbc2kf81lw6cQV846WPMjaTsQEHYIKieNNfdA3W
- Jn0hWH_eGpOFg8.cjn7ubRzZNlgNtK83bdv3Zh7pJdYGtBnoglMt9AS2xjZgdq0QSJ.TwB8jVUR9
- I6GR6YYQ5k41H5f1P6bUvPRCX_wfzLJp7NEF0p8vNn2xOPfnauln5MB83xzvC4C_ZdGjVl8uYzxW
- ZWzETP7WX_nqorgoZjg5nF1NHA3lQDjSZg4RDhS.F69gBr3Nq2.0_Gk6ViN2L1AqJIt3lKYhXBTl
- jq0vUyQ5eYsFA4LVeKUM7njPYs98VHJGqVRKSgjebHM47FEYYWekA3z6ixKfwkUZX28GU.5d.hsg
- mXsGpICVnlbJm4uD9NwD3DS13lQ6ooeE6ui3oUS9HxCbbwk2kIaZvW.4jJRVmM435WRfoSbxpMkh
- 2Pni2ZimcRqootot594NFKkyILjUSY7dApoq7qlc527xB8d5buu4tnxIEH5Ekv6TkeQL2QyhIfOy
- 4sArp70FRPN2YAEDLm.GM0QnZJbL4eUGplGpFe_0kczRNDY3hB8xWNG2pyorhKjy3GO0MDUs0YCJ
- mO_daSMZOfkaYVftFx4D8ynDwNY66mBXY__F5Tr._WJo2XBdQU.vnuxPwujD88Asy4NnKx1Yapgq
- FUpS2zZIRfKcOMybte.3v8Nrhokr3OMV_CAR6ATKDZTcC3ocu6AN_8thhrJmiyRqxLutFDpZrgaF
- kvku0.qQt65bg61JuXjMuinOgGpmo6VkMfHW4ohBxcQHAIxyFLymGOr2uNdqENKzt2J8gk8P_6Is
- VSyp0auVChjzCQrGlBPtbLESexjg7.ct0y0rFsRpvn.TOeIF0jsi3hmHnG_UxDTDRKC17YT.GhUT
- a8hJKdVtCAOFI0CEEiAjiOpFYpAy.7bW8DYPmBxiWmeMgY5n7ETaPJ1ShADsw9u74Dy5KxMPfvVc
- r0.6QqGqbklI2EyGrdtSa8NwCJq9yC_AsXhCRgfIOZ0.0staMdWg3R5noTX4bEvUjHd78tU5hcKJ
- 9li8QaUquW_eQt0UYlx_ThS811L.RdTE_dJ_YfpsstKIyBWfxZzIlyW3REBzxz_X1ELzVZdZccdl
- Qn7X7FuEC3bBcmyq4YiAoStITwUX_TL5B3tPqVlx3Q92wmufqBluCub8yOWu2dfjqV96zkDMdBei
- pOkUPvdMd20AUsuVrhgpVSJWjix9ltlZl0yXJnFGC1i7GJWtk9FnKlbxaMfZ96QmE_bwsaXIYttQ
- V5.KSfK7l122.72ZAUkb7enmRW8l2mc8o1aLpYkhi49VgumCE8VyeIp7uW6atC3TyAr2BneTec8W
- M8GnZi_GLh_4EfDgOBGOk2HbAmjutnDS2vFPWtyXP_OoSOJrItXuM.Afk.ZPi4p9dVo7sa2.lNjE
- Yavy2KfYBglhbMEdYuYYsCg6dtpjhPO8h2JouXXy_.Fm8bSvcrEZmIDRpZxNsJZyxijAg13qvs2Q
- M.s2JRXe8SNZlt5xhPPWLcSO_aC06QEcXUOrZaWpoGV9jMVzcNvx3eYESOaZl1KXcKQ8mA33Hl.J
- One4iyFlRlY8TxL2HiH.ptKI4n20dyLTUeKVA2WGANslEjzSPRO9jTwGnqHdEsimIiRQxjtBqOgs
- Z8crJTjxYk9d0dBfMe2RdfX5BjKQvoo49wwTX7Fjaf8FZzG9s7OY5fdCetYTfE9mp4kf9VmbdnUz
- 4UkJSDSXkAqQespckgo6pXL592qmLxSi_hkj3OqoTMo7Wq0a_HGGoAyHjo.G80hhqEyoDInIsM5n
- .yA0QueMVzz6hiki4HCzqnMmeu4WlWY0PZa0DlzFzG0qdEMmbe_J6BtSBqQnt9ALgFfrUikFMo6f
- IzHnn0qqN0kszmQJHCNWIumMpMJjURZD0UHYXxJfZPpdsMBK7_rHQgkz79paFyWnQ.sdhZ7I9k60
- skXBsLj.rgJVp8p1VQRWNtJPz3svWJIvnk9j3ZlzGSLRRjcRu9p2pgpz.HYKlDA3IPOU6_indO9e
- VyMeaNVeN2VO9iSRG0Lv44lTdbe0Pmy_x92.Xb44PIGnax89jvSdTtHWA_8ku43V8
-X-Sonic-MF: <abdul.rahim@myyahoo.com>
-X-Sonic-ID: 8e4f8196-d385-481c-9291-452c447b5336
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.sg3.yahoo.com with HTTP; Sat, 14 Sep 2024 23:28:23 +0000
-Received: by hermes--production-sg3-fc85cddf6-6lk5x (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 02ee57d89096c2bea0084e4f53d4e48c;
-          Sat, 14 Sep 2024 23:18:12 +0000 (UTC)
-From: Abdul Rahim <abdul.rahim@myyahoo.com>
-To: gregkh@linuxfoundation.org,
-	kees@kernel.org,
-	m.grzeschik@pengutronix.de,
-	quic_jjohnson@quicinc.com,
-	gustavoars@kernel.org
-Cc: Abdul Rahim <abdul.rahim@myyahoo.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_midi: prefer strscpy() over strcpy()
-Date: Sun, 15 Sep 2024 04:47:49 +0530
-Message-ID: <20240914231756.503521-1-abdul.rahim@myyahoo.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1726357432; c=relaxed/simple;
+	bh=t1aExyFjz98/zA5xARPP+uj1Od5zhESbswgoCwcbbZU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R2Vu+avy792WXeCoZGOAAkLCeQ6rSU1zkyVWcwDpvVLOk3wVUH1X3UKfeHGpUHGW47/oCVrTmAWjoc2u+MGOMtyXcm0bfa8vjGodl3MUnD1O28rsEXsj+RGdB7jO4ZaEcuu5tCSos3BMEYSh9xC/9vpmcosUgZV8WjhwDdMqkNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=MAistcia; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5356bb5522bso2633579e87.1
+        for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 16:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1726357429; x=1726962229; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xGYWLlguSdnKQtisEXngNTszohi1t3W+x1ViuQ9Aq3c=;
+        b=MAistciaomGjcaIkjjj+FgkXfBbNM2fIniXla2gQ4DQSun3r4hFv9FOn6qkOvHlVy8
+         nm6DH3xTwgZ8N8bsi20BMDdLQpk7ffp1xlygYteMFe8zVgt0IyBxjU3TMrWxIuwBG18o
+         +CQfOZz5ifqeeL8wv/unthXgQI7s2GIoXWZnU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726357429; x=1726962229;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xGYWLlguSdnKQtisEXngNTszohi1t3W+x1ViuQ9Aq3c=;
+        b=q75bg7kojmMWm/2V0BZRezHyJ7RYJPqEylXEw+84x2iPx8WVYqTlCZAqOfWpBCxLkK
+         MOx49TkHgto5p5GynX2Lzhbc8rOI0Pmwr1A7zQlicU5Wjhp4qcJISAovIgG3eGdyEqIl
+         iG8eLrEe5K4IZmmA1QSJLajy34kabcEyz55C4/s8rG55rzVUrmCItNoV8DdVfpN+Q5Yd
+         pceeo/nc940zznm/S+hI5zFDVogmQ7RvP+Nfki9RRntt1pBXrOerp5DzCx0q8XpamR0X
+         BQvwvZ9GnzXvsJXV9lshiXs8mWkrwAcI/lDy2DTf8vh86flAbvATKnEir9jXE6VSExAI
+         x0Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCWF92pqmMm7HmUtCfYLl6E6zBPkT1YjlMpEJSAciJnPLoX9Odw4wUF7r4pxg4IG1QOUSeOUo6Ail2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8n6aYBLHm66VkfcOG/dOd1J1JHC4ZHoSYMPEnmFPYkFidNwDH
+	s2CrX5rE6r7a5IPIrlWs+KiWAoRhjmeQZK/wIRK55v4NmSRWXS1sDLzzhyz6XehpTbAfSFWR/9P
+	ctc4Grb/Ux5/QYRweo4RDF5tOF+2oqacU1Hs=
+X-Google-Smtp-Source: AGHT+IE/h8etWleI1971X/m56jcmQZ1SGmNJF4Yoxv61MOhR7T+Z3qSUcd4rmrhLXNVUkw0nSqhkEbXct45s8k02zBQ=
+X-Received: by 2002:a05:6512:138a:b0:533:4477:28a2 with SMTP id
+ 2adb3069b0e04-5367fecbf90mr3951036e87.16.1726357428129; Sat, 14 Sep 2024
+ 16:43:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-References: <20240914231756.503521-1-abdul.rahim.ref@myyahoo.com>
+References: <20240910101527.603452-1-ukaszb@chromium.org> <20240910101527.603452-4-ukaszb@chromium.org>
+ <lqs2y5gvsaij5rg4o4krruseuijinqgzky6kiorjegham4aumq@fx2doq5j7wkq>
+ <CALwA+NYC82pJHGmZXnOsWJvg0yJb3aKjLi7V32Kgb9QPtZQTyg@mail.gmail.com> <CAA8EJppnpu86PzwrsLmjA-3gR-ybaaX49d9uZe4iCUeVnTuCfA@mail.gmail.com>
+In-Reply-To: <CAA8EJppnpu86PzwrsLmjA-3gR-ybaaX49d9uZe4iCUeVnTuCfA@mail.gmail.com>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Sun, 15 Sep 2024 01:43:34 +0200
+Message-ID: <CALwA+NbwMigbV+WQV=Jm4JVApWQO6XOh0Yx-QdVsnf8L9Qrh=g@mail.gmail.com>
+Subject: Re: [PATCH v6 3/8] usb: typec: ucsi: Implement ChromeOS UCSI driver
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Pavan Holla <pholla@chromium.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The function strcpy() is depreciated and potentially unsafe. It performs
-no bounds checking on the destination buffer. This could result in
-linear overflows beyond the end of the buffer, leading to all kinds of
-misbehaviors. The safe replacement is strscpy() [1].
+On Sun, Sep 15, 2024 at 1:03=E2=80=AFAM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Sun, 15 Sept 2024 at 01:50, =C5=81ukasz Bartosik <ukaszb@chromium.org>=
+ wrote:
+> >
+> > On Thu, Sep 12, 2024 at 2:58=E2=80=AFPM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > On Tue, Sep 10, 2024 at 10:15:22AM GMT, =C5=81ukasz Bartosik wrote:
+> > > > From: Pavan Holla <pholla@chromium.org>
+> > > >
+> > > > Implementation of a UCSI transport driver for ChromeOS.
+> > > > This driver will be loaded if the ChromeOS EC implements a PPM.
+> > > >
+> > > > Signed-off-by: Pavan Holla <pholla@chromium.org>
+> > > > Co-developed-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > > > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > > > ---
+> > > >  MAINTAINERS                           |   7 +
+> > > >  drivers/usb/typec/ucsi/Kconfig        |  13 ++
+> > > >  drivers/usb/typec/ucsi/Makefile       |   1 +
+> > > >  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 273 ++++++++++++++++++++++=
+++++
+> > > >  4 files changed, 294 insertions(+)
+> > > >  create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> > > >
+> > >
+> > > [...]
+> > >
+> > > > +
+> > > > +static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd)
+> > > > +{
+> > > > +     struct cros_ucsi_data *udata =3D ucsi_get_drvdata(ucsi);
+> > > > +     bool ack =3D UCSI_COMMAND(cmd) =3D=3D UCSI_ACK_CC_CI;
+> > > > +     int ret;
+> > > > +
+> > > > +     if (ack)
+> > > > +             set_bit(ACK_PENDING, &udata->flags);
+> > > > +     else
+> > > > +             set_bit(COMMAND_PENDING, &udata->flags);
+> > > > +
+> > > > +     ret =3D cros_ucsi_async_control(ucsi, cmd);
+> > > > +     if (ret)
+> > > > +             goto out;
+> > > > +
+> > > > +     if (!wait_for_completion_timeout(&udata->complete, WRITE_TMO_=
+MS))
+> > > > +             ret =3D -ETIMEDOUT;
+> > > > +
+> > > > +out:
+> > > > +     if (ack)
+> > > > +             clear_bit(ACK_PENDING, &udata->flags);
+> > > > +     else
+> > > > +             clear_bit(COMMAND_PENDING, &udata->flags);
+> > > > +     return ret;
+> > > > +}
+> > > > +
+> > > > +struct ucsi_operations cros_ucsi_ops =3D {
+> > > > +     .read_version =3D cros_ucsi_read_version,
+> > > > +     .read_cci =3D cros_ucsi_read_cci,
+> > > > +     .read_message_in =3D cros_ucsi_read_message_in,
+> > > > +     .async_control =3D cros_ucsi_async_control,
+> > > > +     .sync_control =3D cros_ucsi_sync_control,
+> > >
+> > > Please use ucsi_sync_control_common instead.
+> > >
+> >
+> > I will use ucsi_sync_control_common. Thanks for pointing it out.
+> >
+> > > > +};
+> > > > +
+> > > > +static void cros_ucsi_work(struct work_struct *work)
+> > > > +{
+> > > > +     struct cros_ucsi_data *udata =3D container_of(work, struct cr=
+os_ucsi_data, work);
+> > > > +     u32 cci;
+> > > > +
+> > > > +     if (cros_ucsi_read_cci(udata->ucsi, &cci))
+> > > > +             return;
+> > > > +
+> > > > +     if (UCSI_CCI_CONNECTOR(cci))
+> > > > +             ucsi_connector_change(udata->ucsi, UCSI_CCI_CONNECTOR=
+(cci));
+> > > > +
+> > > > +     if (cci & UCSI_CCI_ACK_COMPLETE &&
+> > > > +         test_and_clear_bit(ACK_PENDING, &udata->flags))
+> > > > +             complete(&udata->complete);
+> > > > +     if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> > > > +         test_and_clear_bit(COMMAND_PENDING, &udata->flags))
+> > > > +             complete(&udata->complete);
+> > >
+> > > ucsi_notify_common(). Why are you ignoring these functions?
+> > >
+> >
+> > I have missed these common functions mainly because our baseline is on
+> > the v6.6 kernel.
+>
+> Please, don't send patches based on the old kernels. The development
+> should be done on the tip of the maintainer's tree.
+>
 
-this fixes checkpatch warning:
-    WARNING: Prefer strscpy over strcpy
+I should have been more specific. I always rebase to the latest
+upstream kernel and fix any
+conflicts and compilation errors before sending patches to upstream
+review. But living on a daily
+basis on the v6.6 kernel caused me to miss the common function you pointed =
+out.
 
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strcpy [1]
-Signed-off-by: Abdul Rahim <abdul.rahim@myyahoo.com>
----
- drivers/usb/gadget/function/f_midi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Thanks,
+Lukasz
 
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index 1067847cc079..837fcdfa3840 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -819,9 +819,9 @@ static int f_midi_register_card(struct f_midi *midi)
- 		goto fail;
- 	}
- 
--	strcpy(card->driver, f_midi_longname);
--	strcpy(card->longname, f_midi_longname);
--	strcpy(card->shortname, f_midi_shortname);
-+	strscpy(card->driver, f_midi_longname);
-+	strscpy(card->longname, f_midi_longname);
-+	strscpy(card->shortname, f_midi_shortname);
- 
- 	/* Set up rawmidi */
- 	snd_component_add(card, "MIDI");
-@@ -833,7 +833,7 @@ static int f_midi_register_card(struct f_midi *midi)
- 	}
- 	midi->rmidi = rmidi;
- 	midi->in_last_port = 0;
--	strcpy(rmidi->name, card->shortname);
-+	strscpy(rmidi->name, card->shortname);
- 	rmidi->info_flags = SNDRV_RAWMIDI_INFO_OUTPUT |
- 			    SNDRV_RAWMIDI_INFO_INPUT |
- 			    SNDRV_RAWMIDI_INFO_DUPLEX;
--- 
-2.46.0
 
+
+> > I will use ucsi_notify_common() however I noticed one
+> > major difference. The ucsi_notify_common() uses test_bit while above
+> > we use test_and_clear_bit. I will send a separate commit to change
+> > test_bit->test_and_clear_bit in the ucsi_notify_common() because usage
+> > of test_and_clear_bit fixes possible race condition.
+>
+> Ack, thanks!
+>
+> --
+> With best wishes
+> Dmitry
 
