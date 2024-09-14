@@ -1,212 +1,113 @@
-Return-Path: <linux-usb+bounces-15113-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15114-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4790E978CF2
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 05:01:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79EE697902E
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 12:59:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C0F21C22CDC
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 03:01:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1729BB24750
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 10:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ADBD3219F;
-	Sat, 14 Sep 2024 03:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZtgB9Cy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A101CF7B7;
+	Sat, 14 Sep 2024 10:58:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F917286A3
-	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 03:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5FF1CF29A
+	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 10:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726282840; cv=none; b=GIf1ETJztYlBO/UfZV+eVBBtwogNfICOuSCoKSemFXZeO8aS3XYCTCerYkq7BLTdHohL7TbMRatZ/f5fFM+mpYMN/4tBT3PeU8y0OZdFnIbhy3AE/tKwgKSnevDhyaKrzKV9Q03sMYoDCPKaNfzytYlsvX6Cz2U/CHzp+GCXQW8=
+	t=1726311508; cv=none; b=jELjOy104LwD8N14mnwoeV77NvN6F7g9XyddgJtJtPBP09hQSZdo/B/Po0rY/BuAOJ2/Y1LWReGClkwsGFgG2Ui51ZeD66PZ7DnfG+i1q6lhnOYHHawHnwZGVfYpdEDVhZ8bkZ6u0lNGAt6btM7LxpvfSFr46v3T7rQULaAOHWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726282840; c=relaxed/simple;
-	bh=d5HvnOJ3neff6ROF8fA8+8t4xFqms1lYw4N2lin8uOg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=f5kOkHuPx/e+XO+AFmbaGqmq7DthqUH5iO04/wJTdkue4gi7EtK3J2jsFB20OM0lhp+4Z4AGUH/TUTbShF27nbfSx2KRFuQ61v/5ocoTstwmVNEl84amkO2vkMgWlk6BydCSfezP+dNZ+rX9obCW0v8I61wye0VaXPnwBYlpGyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iZtgB9Cy; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726282839; x=1757818839;
-  h=date:from:to:cc:subject:message-id;
-  bh=d5HvnOJ3neff6ROF8fA8+8t4xFqms1lYw4N2lin8uOg=;
-  b=iZtgB9CywvkzE9noNmBr26K23o7yUYHae/eHzJ0AYt9y+UBvgFtYupgr
-   95dk1qaK+P0wnm64vRYo2IpUdGD5WvDIBa0nim+Jbu6oPvK4dmkPktdz8
-   XucCG+c9v2SDiXjXcDvcg26FS6rGr9U2v//fJ1ELeVp/2FlPQ3gdrMmmL
-   9/TrAL+IVvBny+c+WNH9rVM7CBYBFcNWZ9QL17JhpSpnxQnIPrUnnjgek
-   jkFfqBemr9JqR0p4Wpjhd+9vYZv82gWdV6Q78XJW6+nZ+6G7X3anbUA6B
-   dK/ZNzURVmDJRNX0YPukgEG6wEsMQhsKgmTL4wkfbyCDdXN+8BRjWE0dg
-   w==;
-X-CSE-ConnectionGUID: yZj5J6jiT4u6SkCmE/dugA==
-X-CSE-MsgGUID: MfHJmXAoShqu4QkcliWZzQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="28941951"
-X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="28941951"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 20:00:38 -0700
-X-CSE-ConnectionGUID: SLU4fCY/ROWh8ravlcApgA==
-X-CSE-MsgGUID: uh8vcPVfTAK/ZCtyUwYNCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="68606283"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 13 Sep 2024 20:00:36 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1spJ1W-0007I6-1V;
-	Sat, 14 Sep 2024 03:00:34 +0000
-Date: Sat, 14 Sep 2024 11:00:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD REGRESSION
- 68d4209158f43a558c5553ea95ab0c8975eab18c
-Message-ID: <202409141123.5BRBe2yS-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1726311508; c=relaxed/simple;
+	bh=6FU7I+36Vs4Ty1Rx4f/ad8Ea+XxLUpDl/B1613vDDkw=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=eIp7ywo8vZAdSOdb00xR6PU7Yr6X7DmUF4IS2DI2wFBCkidegvQYPZQtYMoUusRYS83H+w6siVgCRJxJrDeerFN6cJ4yWb5RXQdd075gVCose7gPCpcGeDbnhzkUMJxZzkNp/BHd+arMl7NFqYYiPhL9gC20uTvquenFAxGxCu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-82aa8af04feso565960339f.1
+        for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 03:58:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726311506; x=1726916306;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lVuoLqGne9P1lyA2uxe9sfoWtm1gKn1KP1rP9poDOqc=;
+        b=F1LW9X3+WgP9OLPbRZLikF8gE237rK3dR+MZFJ3ul9LjjTUbp4nQu9+lq2U/duFkAV
+         9yGwAPlu4TunDOjtTmm5WTZ1QlSmoioRi9QpqXe3eM4jDeunIwpshkRNK7YtYwa45thx
+         Xl6S3hVH9n/CAvu6hUBxoPe+2+ia7Cf3Wma3DSYThro9zN+T+0wem+YhNJJk04ss9Dwz
+         B/Kti1PI608FOF70QKNmLLUYcKfFJ+xBwWaXryM2ZpAXdc4hP4CEt5EIervV1YytL5lV
+         H+1DHtkHQniyY5iIN2r3H+hXBoVbmOCtSC8fCQyUB9JjKO842f2vVm/S42nI3XGYWxlU
+         YdxA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2v5vLxfZh8DQ1vf3fK+HrjjS0joOHHmZcFYK4dUje2iXpX0oyKTQ5X855sIesmIBOEjQMajv8g7s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDBFPH7A6D7bff1eOlb8mumq+ysowmdUkia0Na8yNr6B81D7Rw
+	TS15X5OPVmyK7sVpruyKOhgQNtnGBZJkGjcJp6oiwp0a6+XQ5J+uJbj78MsCeIfdT+iDGGd48oe
+	i9IR6bK5/m2SFKuMNRhdZYzleOvf8zVnC93fNUCOlVkHzCFpGS1zUMG0=
+X-Google-Smtp-Source: AGHT+IHzBsQojbp13wK6XmU9C7AZ9k813RygyDRi5OKXtOOvw2u+OuBRBiJUcfIBiNabCak5lb/wRNbX28H8fM2Z8ubJ6ni4kb9b
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1aa2:b0:3a0:9238:d43 with SMTP id
+ e9e14a558f8ab-3a092380dd4mr22628925ab.12.1726311506208; Sat, 14 Sep 2024
+ 03:58:26 -0700 (PDT)
+Date: Sat, 14 Sep 2024 03:58:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <66e56c52.050a0220.3a9b1.0031.GAE@google.com>
+Subject: [syzbot] Monthly usb report (Sep 2024)
+From: syzbot <syzbot+listc92cdb9da74ba407482a@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 68d4209158f43a558c5553ea95ab0c8975eab18c  sub: cdns3: Use predefined PCI vendor ID constant
+Hello usb maintainers/developers,
 
-Error/Warning (recently discovered and may have been fixed):
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-    https://lore.kernel.org/oe-kbuild-all/202409140539.3Axwv38m-lkp@intel.com
+During the period, 6 new issues were detected and 0 were fixed.
+In total, 80 issues are still open and 351 have been fixed so far.
 
-    drivers/usb/misc/onboard_usb_dev.c:330:(.text+0xb58): undefined reference to `i2c_smbus_write_word_data'
-    drivers/usb/misc/onboard_usb_dev.c:408:(.text+0xb24): undefined reference to `i2c_smbus_write_block_data'
-    riscv64-linux-ld: drivers/usb/misc/onboard_usb_dev.c:332:(.text+0xb8c): undefined reference to `i2c_smbus_write_word_data'
+Some of the still happening issues:
 
-Error/Warning ids grouped by kconfigs:
+Ref  Crashes Repro Title
+<1>  3780    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<2>  3144    Yes   KASAN: slab-use-after-free Read in hdm_disconnect
+                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
+<3>  2019    Yes   INFO: rcu detected stall in worker_thread (9)
+                   https://syzkaller.appspot.com/bug?extid=225bfad78b079744fd5e
+<4>  999     Yes   INFO: rcu detected stall in hub_event
+                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+<5>  874     Yes   general protection fault in ir_raw_event_store_with_filter
+                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<6>  862     Yes   INFO: task hung in usb_get_descriptor (2)
+                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+<7>  836     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<8>  652     Yes   INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+<9>  515     Yes   INFO: rcu detected stall in corrupted (4)
+                   https://syzkaller.appspot.com/bug?extid=aa7d098bd6fa788fae8e
+<10> 478     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
+                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
 
-recent_errors
-`-- riscv-randconfig-001-20240913
-    |-- drivers-usb-misc-onboard_usb_dev.c:(.text):undefined-reference-to-i2c_smbus_write_block_data
-    |-- drivers-usb-misc-onboard_usb_dev.c:(.text):undefined-reference-to-i2c_smbus_write_word_data
-    `-- riscv64-linux-ld:drivers-usb-misc-onboard_usb_dev.c:(.text):undefined-reference-to-i2c_smbus_write_word_data
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-elapsed time: 744m
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-configs tested: 106
-configs skipped: 5
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-tested configs:
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                                 defconfig    gcc-14.1.0
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                                 defconfig    gcc-14.1.0
-arm                      jornada720_defconfig    clang-20
-arm                            mmp2_defconfig    clang-20
-arm                        multi_v5_defconfig    clang-20
-arm                         wpcm450_defconfig    clang-20
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                               defconfig    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.1.0
-i386                             allmodconfig    clang-18
-i386                              allnoconfig    clang-18
-i386                             allyesconfig    clang-18
-i386        buildonly-randconfig-001-20240914    clang-18
-i386        buildonly-randconfig-002-20240914    clang-18
-i386        buildonly-randconfig-003-20240914    clang-18
-i386        buildonly-randconfig-004-20240914    clang-18
-i386        buildonly-randconfig-005-20240914    clang-18
-i386        buildonly-randconfig-006-20240914    clang-18
-i386                                defconfig    clang-18
-i386                  randconfig-001-20240914    clang-18
-i386                  randconfig-002-20240914    clang-18
-i386                  randconfig-003-20240914    clang-18
-i386                  randconfig-004-20240914    clang-18
-i386                  randconfig-005-20240914    clang-18
-i386                  randconfig-006-20240914    clang-18
-i386                  randconfig-011-20240914    clang-18
-i386                  randconfig-012-20240914    clang-18
-i386                  randconfig-013-20240914    clang-18
-i386                  randconfig-014-20240914    clang-18
-i386                  randconfig-015-20240914    clang-18
-i386                  randconfig-016-20240914    clang-18
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch                           defconfig    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                                defconfig    gcc-14.1.0
-m68k                       m5249evb_defconfig    clang-20
-m68k                        m5307c3_defconfig    clang-20
-m68k                          multi_defconfig    clang-20
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                          defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                        omega2p_defconfig    clang-20
-nios2                             allnoconfig    gcc-14.1.0
-nios2                               defconfig    gcc-14.1.0
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-openrisc                 simple_smp_defconfig    clang-20
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-parisc64                            defconfig    gcc-14.1.0
-powerpc                    adder875_defconfig    clang-20
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.1.0
-powerpc                   bluestone_defconfig    clang-20
-riscv                            alldefconfig    clang-20
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                                  defconfig    gcc-12
-sh                           se7705_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                           x86_64_defconfig    clang-20
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-18
-x86_64                           allyesconfig    clang-18
-x86_64                              defconfig    clang-18
-x86_64                          rhel-8.3-rust    clang-18
-xtensa                            allnoconfig    gcc-14.1.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You may send multiple commands in a single email message.
 
