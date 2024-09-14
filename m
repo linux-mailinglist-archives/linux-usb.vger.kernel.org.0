@@ -1,107 +1,186 @@
-Return-Path: <linux-usb+bounces-15110-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15111-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D2EE978BD9
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 01:25:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C407F978C8A
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 04:04:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CEA2CB25ED4
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2024 23:25:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4B851F237EF
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 02:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252E518453A;
-	Fri, 13 Sep 2024 23:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAA6C133;
+	Sat, 14 Sep 2024 02:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ifYGJIt8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLI01uXq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3874B14B061
-	for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2024 23:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C8879DC;
+	Sat, 14 Sep 2024 02:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726269915; cv=none; b=FrxuI2N+vDACFPXpTJQivA0lNbBuCLJ2lS7PuSPxwuqueBjDjERW5iflJfaZXAS1PQt5I8t74Ek95Fc3qQWWHG6P0736zH0tFhUVPOtR4iNL1nw2Y8qsCfEyK8CmPJD5rYesNlSi5NeuMXHSum63fnV4ZJPU9vcw4ipGewuzITI=
+	t=1726279462; cv=none; b=p2TrHSDEEjFvrh0bsMwVlhP+J7uBXicQkjgg4lb6QcxxuCvdqnYgEcs/sWOytZrFdJa7CCsG13INy1CjDQHLsmKjTiZlU2cqJSBLqLVXOuXxPl+nwq06htwP0Fl+Xc6VD3UsghCpOuiyugZ1U0TW8p/ay0+661fe0TBePb0VqOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726269915; c=relaxed/simple;
-	bh=YhDdGu4hZiGlx+q+XBnCOedph29DSV5sGtHeIamXfXY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fyxu344ePJay8tGLaY4qrE/OA4cfcm4ONsMeCFNfxHg9dFXJNAKVeJPCuG8/bbG+3gbC+vA5/1b4qVtjkvHVvar0AlyYX8mXthHnTgZ1vq+/R6tpdzmu65zHD70cgFRoTu7OAL/5//gpzaeUgoNGu5l+dZ4n8Im1brEJBs4QQSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ifYGJIt8; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6c582ca168fso7432146d6.2
-        for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2024 16:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726269913; x=1726874713; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1upeTCfWWdmhQBb3MjHQmjSH67h27z34eMn0HTUO29I=;
-        b=ifYGJIt8rMJe6N1neShOnbqb7mDtAOecOH9pOE5y0gziT+jPc+/Ct1h+h7Tfgt8zI9
-         qAD4s+e/d3PQHGc6eWngLkzzaqDhCza9Ah4O3X/AYlc6YnbW0K1EpYShiLs3kQ4LiLm0
-         9U3AUAjqPW1fCiKV/i/JFXjrt4iBe/Yyqs/CH8ceZRUwcpu5racJ95PZ7AHeAUvxbGGu
-         mwSIhtDpJ6f7/BrfK8I3vbTmcEsJtl3suYMy6Rj4hrx7nCgQuSdA8rMK7puN0w572jg8
-         sZZHp8sO+3Yj5nQ3vfQrLju7nKdYG3Ef3Es7QhIexFYkArA+F0QlsITqQvZfxxO3V0Nx
-         La2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726269913; x=1726874713;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1upeTCfWWdmhQBb3MjHQmjSH67h27z34eMn0HTUO29I=;
-        b=nUnad4hm7CdvCBVod+YNFI2gEBthaSS6TBWwEY3y3SJBbknK20yZuiSJbsHmvWzL6u
-         Hvc901vM95dUFh+p0ATiTllxLCkt401lf166EXcTN7KzfzrNIUH3oF0my+J5ZifFEky8
-         xXOgClATbvfGtOeLF2ndWdmEDXcRX+Z8TA4KlzeVJWE0c+pbz51ye+XQixu9JcCEVSgK
-         5e6nkUQru7aPbUN1kjrKjrohACzQv173juaN+Bt8IwGD4X46xzgy9QOldfryoj4UfPeq
-         MCwd72xKyA7bp9HjNQ/oCePs4MvLlSZT73gLtj78EgEtgNPtF4JZ9DGlV5AbduYNHaxR
-         SgIg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1FxagXhyQVn3wSO72JzEzS69rnbzIP4L3HFn9LXyiL0qIzQsNSZv0UUZg2wCgvK1DvncSK7Pv8OI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTjWLyupCuIaugk0jCcX3NlSw/dhqaAAdl+ATbbD1/My16Oi6+
-	ngdnW7q1Her55/5IijCXxz8MS9VstbbpSIRiM+2PP54gNbz6Afk0OhkyCt9gjmkLM8LZ/DBhcYF
-	EFEb2FuQWMFeDMnDwHkOCtW2jUT/gfjH5sBE9
-X-Google-Smtp-Source: AGHT+IFqtIPpQJsc7jyZAn718b4uKPn4dZBFMgeJxtohg1PFwMBWzsu9Up8tGLWlLeZprh/19Ar11aLSbpd88jMMo6w=
-X-Received: by 2002:a05:6214:5bca:b0:6c3:64b6:3e29 with SMTP id
- 6a1803df08f44-6c57e0b5f9cmr65012116d6.30.1726269912814; Fri, 13 Sep 2024
- 16:25:12 -0700 (PDT)
+	s=arc-20240116; t=1726279462; c=relaxed/simple;
+	bh=lGe1gUr2lyFNLcM2vBDH6nkw9jLR96wITy4Kj2optVg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZgqQUgLWoPxxOwBCCdxwgL7uQDbfLGrIKUZIRy1ZtcqXzsZ0HCjThKjVzxk5CnbTfsKHRvo3EdsSpa5sT9ibVKSXui3dZgT/BkH5m950oKpOtr5CIXZbwwdIOuSaMoKr6b13J5eiRJ47NhytHvUvYxnnHxb0vTr44rQD2DNmk5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLI01uXq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE30C4CEC0;
+	Sat, 14 Sep 2024 02:04:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726279462;
+	bh=lGe1gUr2lyFNLcM2vBDH6nkw9jLR96wITy4Kj2optVg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eLI01uXq/5SKuXD5VChrt3Nb75i84VF1gBxYtPcM8t8ox2wB+k7h5TYHajP/uIdVq
+	 szpwN4oWL4b/c0y89cXiUW6zzyKzwjSeypCaj7KoeTqa1cZ8jNvb3LHG21h2zOwLZ2
+	 XB6EPAXPiWtQAzQpsMTRRQz4ucFfPQZezvioY+Xi5p91mGcjKnAmKvoYuqZ6JCA1tB
+	 59KJbmPm+Q0+vuVToCBgELJev3JlL76SxWeFuUS5QM48Y40CE+IOxibNFv/gXmnFFV
+	 BbZbhe0UpTdRpxzoQNBFQkkDdoTXO0wBTUe+VFAhZgpZO6sI0nscdccoZpD1SoDpo0
+	 pzFMk8pDDhnDA==
+Date: Sat, 14 Sep 2024 10:04:14 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH 1/2] usb: chipidea: udc: limit usb request length to max
+ 16KB
+Message-ID: <20240914020414.GA2887@nchen-desktop>
+References: <20240912045150.915573-1-xu.yang_2@nxp.com>
+ <20240913012045.GA320526@nchen-desktop>
+ <20240913071133.pstilja3z25yey2p@hippo>
+ <20240913095344.GA321485@nchen-desktop>
+ <20240913152513.uxgwkedh5ryq5ktl@hippo>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906005803.1824339-1-royluo@google.com> <20240907005829.ldaspnspaegq5m4t@synopsys.com>
- <CA+zupgxMefawABGDkpRy9XmWJ5S50H1U9AF9V3UqX2b5G3pj-Q@mail.gmail.com> <20240913181251.3upf6zme2j2mobv3@synopsys.com>
-In-Reply-To: <20240913181251.3upf6zme2j2mobv3@synopsys.com>
-From: Roy Luo <royluo@google.com>
-Date: Fri, 13 Sep 2024 16:24:36 -0700
-Message-ID: <CA+zupgzyK8hL3=b-P5uA+bhuhZUVDva26a7fo-JdTmPqRVgDnA@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: dwc3: re-enable runtime PM after failed resume
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, "badhri@google.com" <badhri@google.com>, 
-	"frank.wang@rock-chips.com" <frank.wang@rock-chips.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240913152513.uxgwkedh5ryq5ktl@hippo>
 
-On Fri, Sep 13, 2024 at 11:12=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsy=
-s.com> wrote:
->
-> Can you include this info in the commit message?
->
-> And while at it, can you also update minor style change to remove the
-> brackets for single line if statement to this:
->
->         ret =3D dwc3_resume_common(dwc, PMSG_RESUME);
->         if (ret)
->                 pm_runtime_set_suspended(dev);
->
+On 24-09-13 23:25:13, Xu Yang wrote:
+> On Fri, Sep 13, 2024 at 05:53:44PM +0800, Peter Chen wrote:
+> > On 24-09-13 15:11:33, Xu Yang wrote:
+> > > On Fri, Sep 13, 2024 at 09:20:45AM +0800, Peter Chen wrote:
+> > > > On 24-09-12 12:51:49, Xu Yang wrote:
+> > > > > Currently, the deivice controller has below limitations:
+> > > > > 1. can't generate short packet interrupt if IOC not set in dTD. So if one
+> > > > >    request span more than one dTDs and only the last dTD set IOC, the usb
+> > > > >    request will pending there if no more data comes.
+> > > > > 2. the controller can't accurately deliver data to differtent usb requests
+> > > > >    in some cases due to short packet. For example: one usb request span 3
+> > > > >    dTDs, then if the controller received a short packet the next packet
+> > > > >    will go to 2nd dTD of current request rather than the first dTD of next
+> > > > >    request.
+> > > > > 
+> > > > 
+> > > > Are there any IP errata for it?
+> > > 
+> > > No. It's decided by hw IP design. This old design may not suit current
+> > > requirements.
+> > > 
+> > > > 
+> > > > > To let the device controller work properly, one usb request should only
+> > > > > correspond to one dTD. Then every dTD will set IOC. In theory, each dTD
+> > > > > support up to 20KB data transfer if the offset is 0. Due to we cannot
+> > > > > predetermine the offset, this will limit the usb request length to max
+> > > > > 16KB. This should be fine since most of the user transfer data based on
+> > > > > this size policy.
+> > > > > 
+> > > > > Although these limitations found on OUT eps, we can put the request to IN
+> > > > > eps too, this will benefit the following patches.
+> > > > 
+> > > > Since IN endpoints have not found the problem, please limit the changes
+> > > > only for OUT endpoints.
+> > > 
+> > > This 1st patch is mainly used to serve the 2nd patch which may impact
+> > > both IN and OUT eps.
+> > ...
+> > > Because it's hard to judge whether a request is
+> > > suit for transfer if it spans more dTDs. So it's needed for both eps.
+> > 
+> > Sorry, I do not understand you above words. First, you may know this
+> > request is for IN or OUT, second, according to TD size and data buffer
+> > address, you may know you use one or more dTDs.
+> 
+> If req.num_sgs = 0, then we can know how many TDs need to transfer data.
+> 
+> For example:
+> req.buf = 0xA0001800 req.length = 40KB
+> 
+>  - TD1 addr:0xA0001800 size:18KB
+>  - TD2 addr:0xA0017000 size:20KB
+>  - TD3 addr:0xA002D000 size:2KB
+> 
+> We basically won't meet issue for non-sg case. The only expection is that
+> received short packet on TD1 (or TD2). Then the next data packet will go
+> to TD2. But it should go to TD1 of next request.
+> 
+> But if num_sgs > 0, we need to check validity of each sg entry due to above
+> limitations.
+> 
+> For example:
+> req.num_sgs = 3 req.length = 40KB
+> 
+>  - sg1.addr = 0xA0001800 length = 18KB -> TD1
+>  - sg2.addr = 0xA0016000 length = 20KB -> TD2
+>  - sg3.addr = 0xA0028800 length = 2KB  -> TD3
+> 
+> This request can be safty used to transfer data. But we can also meet
+> previous short packet issue.
+> 
+> req.num_sgs = 5 req.length = 10B + 20KB
+> 
+>  - sg1.addr = 0xA0001800 length = 10B -> TD1
+>  - sg2.addr = 0xA0016000 length = 6KB -> TD2
+>  - sg3.addr = 0xA0028800 length = 6KB -> TD3
+>  - sg4.addr = 0xA003A000 length = 4KB -> TD3
+>  - sg5.addr = 0xA004C000 length = 4KB -> TD3
+> 
 
-Sure, sent out v2 for review.
+With your the 2nd patch, you could make end of sg1.addr is PAGE aligned,
+in that case, the sg1 and sg2 could be at the one TD. sg1 is at the
+first dTD, and sg2 at the 2nd & 3rd dTD. If that could be done, the
+host may not see short packet, anyway, you could confirm through
+analyser.
 
-Regards,
-Roy Luo
+Peter
+
+> This request can't be used to transfer data since sg1 + sg2 can't
+> form a data packet. The host will see a short packet (100 bytes).
+> 
+> req.num_sgs = 5 req.length = 20KB + 10B
+> 
+>  - sg1.addr = 0xA0001800 length = 2KB -> TD1
+>  - sg2.addr = 0xA0016400 length = 5KB -> TD2
+>  - sg3.addr = 0xA0028800 length = 8KB -> TD3
+>  - sg4.addr = 0xA003A800 length = 5KB -> TD4
+>  - sg5.addr = 0xA004C200 length = 10B -> TD5
+> 
+> Compared to previous request, it need 5 TDs even though req.length
+> are same. Most of the sg entries can't share same TD since their
+> address is not page aligned. For high-speed isoc eps, sg1 + sg2 can't
+> form a 3KB DATA2 + DATA1 + DATA0 data sequence too. 
+> 
+> Therefore, it's a bit complicated to validate request if num_sgs > 0,
+> especially when req.length is larger than 16KB (1 TD size).
+> 
+> When add such condition, each of the sg entry must follow below
+> requirements:
+>  1. the end address of the first sg buffer must be 4KB aligned.
+>  2. the start and end address of the middle sg buffer must be 4KB aligned.
+>  3. the start address of the last sg buffer must be 4KB aligned.
+> 
+> So it will be more easy to validate the request.
+> 
+> Hope this will help you understand the motivation of 1st patch.
+> 
+> Thanks,
+> Xu Yang
 
