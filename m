@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-15116-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15117-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E227F979367
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 23:53:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE71979397
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Sep 2024 00:09:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FB3D2839D2
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 21:53:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17B821F2212F
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Sep 2024 22:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7AA713A868;
-	Sat, 14 Sep 2024 21:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC8213D53F;
+	Sat, 14 Sep 2024 22:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YlxcgQCF"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nUFQIuWf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C9B12C465
-	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 21:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6D9BA49
+	for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 22:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726350792; cv=none; b=EWwfAcwYrEI/9Uc0/+3bzTdgUSUppXsLzmC50e0r54KKCIcMXO3URRUKDYnQjnFqjGuUC60X5y6qwTdkfceK6eyQ3Hc4Ax7m5M5M2haTds4uEewkLMIULMO0Ufc5mOcQpdXs0gxrbzk86NYAvJ0uqAmi8w5qrvjl1aO2P6RaOSk=
+	t=1726351742; cv=none; b=oAp4j0n94TZiopzBOyS3CdyeReXfgGB13PLdpdp7+4U2kIh12ZhYGE2c9T7mWWGmCzIVz6le3KaRMc1aZ3uuBHGRt51ISp4Nw+tZd+h64GQA5Adig3t6PR3o1yd4KXaeUPnHR2Ncyajrzky1SuXrOTknDjWsnG06MT57S8bUO10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726350792; c=relaxed/simple;
-	bh=UpNvkLzkGjwqkjimss974ang+etxYSifzA8mGMgNG8U=;
+	s=arc-20240116; t=1726351742; c=relaxed/simple;
+	bh=3m1DCrSvQKjujDvwmkxK7th6xOLHKnS9HmMRPhoYvkE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S4iPheqzRw5XijH2lJVHiFfztw4Smglquz0dyhKu/KcHvN1KbqfQ5KXRMy0SAhaeqZR8IoX7MejHA/LzbhtqbRY0w5nLlR6m3tNJ1wnQoxUjSAbP+ega4z82mbS1XnxS3uHxnw3CSMHiFsobXld3VVmBDu8EdLPuYH76oENKr0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YlxcgQCF; arc=none smtp.client-ip=209.85.208.172
+	 To:Cc:Content-Type; b=I038hzUyVSxKP86gZjluxJ297nXLFm6fMGSacN9Eq/DJpfSYLUsJFYI6NwazNBVlP2uQMemaHAmlwib1U//tGswAiZ83X0YLfHPV64WNjqz5Tu7Mb8wpSBA39GfThpyWQvTj9Ayxt/dekm+bt5ylkgeD007mWO6CTyWfcU/UK9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nUFQIuWf; arc=none smtp.client-ip=209.85.167.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f753375394so30333491fa.0
-        for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 14:53:10 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-53654e2ed93so3710488e87.0
+        for <linux-usb@vger.kernel.org>; Sat, 14 Sep 2024 15:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726350789; x=1726955589; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1726351737; x=1726956537; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I6Bzk4dLYxHFcdldpQy2JJvKI7rQO/9ma1QASgYBCBQ=;
-        b=YlxcgQCFZTp9tuif/2Uy/gW/TlFebWklsjARHU8N1heWNj4JZhYVDV20ZoP4k8+mxo
-         7Mfta5DoTohjQkuCo5h8I8lg8kAFmCq6IbTVst/M1SX9M+Iy9N65D5rgOBrtCPi4ktE2
-         zpZU5O0G0fuFDm+Lmh0kJD/wF0MP1iVI9iJG8=
+        bh=yiEB2J67EKAy/BEGMAFfw030z4rUaOkg2/WsC3ToBn4=;
+        b=nUFQIuWf4LOQAVUVRVSDJ0VDGpQfUqjYpk1xzVe7W3Ozkpq9kZziv5fq3eL0JvVfLK
+         J3eMzNYjSC7oFS73tY5n9RgiY5nel+18ZkKQJS/Q3ODwX55DCZpPy64DMaM2Mz9enam3
+         LE/7R8VPoRL2W4WpX8jf/Lp36l0lFWRL3n++A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726350789; x=1726955589;
+        d=1e100.net; s=20230601; t=1726351737; x=1726956537;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I6Bzk4dLYxHFcdldpQy2JJvKI7rQO/9ma1QASgYBCBQ=;
-        b=trjH/bpqLGOS0sEQOUDEbdAXkqQQZ5e/XQRAUetHP7iT6fyiFGup0g41VURDY/2k4B
-         zMF94HZa6DRwa6yJvJxU54CcI+FW64D5tCO6cP0uGdqK/4nOxPgjO6nuB6l59jFsP+8l
-         duPBTPK8aKffjGXjpr4R3nOwajYyscG31m/SUqMLiDrErOcLINDRnVEkxHHDy2HXza3E
-         QowAwUmAdjk7M2O67wU3xDZlLEhRJwSUi7zl7ewrwfz1A3vLI9alRMHEV4zLp1KhEZp+
-         BbwTm/V+frtPq0YqTBn7vrz13o3tPOaVe7tsa163uuPB65iThjeay+YVa+z06qmlQaja
-         C9KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6Ry4PVMWw5iqOcyGXcBtKE0gmKcS+w/uzShSYfnq5KPJN62FpSaeKg+m3J+LfOPUoL19C1IMUA7I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYWqFGU5ddxokpsgL+wfZ+8dJKl/4w5fKTMR2+5S2EwhRhjeFm
-	JXenrowbgzXZnoSKYhXP0zK23nxI5Ui0U+spObV0iIKKN667euSwtA2z7MmFw5YJpNmS+O0l+vH
-	X/LZFsQRYahSWpGaNBNpiX4RLM21VnxspU3g=
-X-Google-Smtp-Source: AGHT+IGjKbgiyhU5o5TCUvFphkQECQYbcubMDKYXnsb12tJXkdY5CbXCmUkm2BVC68I2DEksfJ+H0pu9y9hKevcCKCA=
-X-Received: by 2002:a05:6512:10ce:b0:530:ba4b:f65d with SMTP id
- 2adb3069b0e04-53678fbf80fmr5797188e87.28.1726350787710; Sat, 14 Sep 2024
- 14:53:07 -0700 (PDT)
+        bh=yiEB2J67EKAy/BEGMAFfw030z4rUaOkg2/WsC3ToBn4=;
+        b=fernVl2haF9TSycolodF9P+iZiF3tHl71YQGy8ezW/5P0GTsRNzhMleM4Fjnjb6F5h
+         tjm2lnTVl23omuQure115xjOSk9eR7+JMGafGTR8tNPHIyiVepPfvDtFup0IOMnLIISX
+         Oe7t4lXE6KH6FK0jfDTWv8fE4I+QPlWuOYnOssrse5WMN9Rk9by6QSWX938js1l8edH2
+         2HPjJ4WOZ1wJVkBdD1Q8N5Rp4rTxpTYFYLSu9y2O3jiyblWZ83/naV7YhBny+7a1EMBu
+         s+aIhAj5Y8I56W632djLBxfWZPFr5aV1QyW0/dfMBksIn1bLy5YrnhOsJU/PSOXfr+GD
+         z2CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW80twAi9vPLfUL8dI8IhSG9DSttJPIL77uMYnQgH/sNQl9/z7hGbAk7v/bslMMl1yrFjBgtqKi28g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmiE8WULj0A87AVZ3rqMVvus35cNvqjgtyzAvVU9F/Xi37FN3Q
+	WoUYuE0Lbk8sBOj5H/87kiX2xqPlRx7j+i3k6pCaowwoArac3/UUK582QpbgrR1+NRNAJbNtnlI
+	Vw8lTn9llKsgfg/QPBjS9ToToFBW9USLQy9w=
+X-Google-Smtp-Source: AGHT+IGZPVT5JPb9fNFWNHiguDTtiBSmIx38CcaEKwJ+Ijj1Pen/2pppakRhdotesmo/nvup9+nR370ute1AVyZQSQE=
+X-Received: by 2002:a05:6512:3e29:b0:52c:d76f:7f61 with SMTP id
+ 2adb3069b0e04-53678ff4d55mr6631566e87.56.1726351736897; Sat, 14 Sep 2024
+ 15:08:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240910101527.603452-1-ukaszb@chromium.org> <20240910101527.603452-6-ukaszb@chromium.org>
- <ZuGcw9y0hIiuIXvK@kuha.fi.intel.com>
-In-Reply-To: <ZuGcw9y0hIiuIXvK@kuha.fi.intel.com>
+References: <20240910101527.603452-1-ukaszb@chromium.org> <20240910101527.603452-7-ukaszb@chromium.org>
+ <ZuGkMiE3sHOpo/Ci@kuha.fi.intel.com>
+In-Reply-To: <ZuGkMiE3sHOpo/Ci@kuha.fi.intel.com>
 From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Sat, 14 Sep 2024 23:52:56 +0200
-Message-ID: <CALwA+NbY1qbV_01NcOSN=C=9hiE3UV3aYvrKzaGKm95Q2EQ8EA@mail.gmail.com>
-Subject: Re: [PATCH v6 5/8] usb: typec: cros_ec_ucsi: Add trace events
+Date: Sun, 15 Sep 2024 00:08:45 +0200
+Message-ID: <CALwA+Nb6zWe-WOgcu8-ni5OCx9XxerVhi76fZze2KP_kmFVonA@mail.gmail.com>
+Subject: Re: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, 
 	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
@@ -84,238 +84,217 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 11, 2024 at 3:36=E2=80=AFPM Heikki Krogerus
+On Wed, Sep 11, 2024 at 4:09=E2=80=AFPM Heikki Krogerus
 <heikki.krogerus@linux.intel.com> wrote:
 >
-> On Tue, Sep 10, 2024 at 10:15:24AM +0000, =C5=81ukasz Bartosik wrote:
-> > Add trace events to ChromeOS UCSI driver to enable debugging.
-> >
+> Hi,
+>
+> On Tue, Sep 10, 2024 at 10:15:25AM +0000, =C5=81ukasz Bartosik wrote:
+> > Add netlink to ChromeOS UCSI driver to allow forwarding
+> > of UCSI messages to userspace for debugging and testing
+> > purposes.
+>
+> Why does this need to be cros_ec specific?
+>
+
+You're right. Netlink does not have to be cros_ec_ucsi specific.
+Would you like to have netlink in typec_ucsi ?
+
 > > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
 > > ---
-> >  MAINTAINERS                                 |  1 +
-> >  drivers/usb/typec/ucsi/cros_ec_ucsi.c       |  8 ++
-> >  drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h | 92 +++++++++++++++++++++
-> >  3 files changed, 101 insertions(+)
-> >  create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h
+> >  MAINTAINERS                                   |  4 +-
+> >  drivers/usb/typec/ucsi/Makefile               |  4 +-
+> >  .../{cros_ec_ucsi.c =3D> cros_ec_ucsi_main.c}   | 66 +++++++++++++-
+> >  drivers/usb/typec/ucsi/cros_ec_ucsi_nl.c      | 87 +++++++++++++++++++
+> >  drivers/usb/typec/ucsi/cros_ec_ucsi_nl.h      | 52 +++++++++++
+> >  5 files changed, 209 insertions(+), 4 deletions(-)
+> >  rename drivers/usb/typec/ucsi/{cros_ec_ucsi.c =3D> cros_ec_ucsi_main.c=
+} (79%)
+> >  create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi_nl.c
+> >  create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi_nl.h
 > >
 > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 8c030ea0b503..d084f32208f0 100644
+> > index d084f32208f0..2afb406a24ce 100644
 > > --- a/MAINTAINERS
 > > +++ b/MAINTAINERS
-> > @@ -5306,6 +5306,7 @@ M:      =C5=81ukasz Bartosik <ukaszb@chromium.org=
->
+> > @@ -5305,7 +5305,9 @@ M:      Abhishek Pandit-Subedi <abhishekpandit@ch=
+romium.org>
+> >  M:   =C5=81ukasz Bartosik <ukaszb@chromium.org>
 > >  L:   chrome-platform@lists.linux.dev
 > >  S:   Maintained
-> >  F:   drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> > +F:   drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h
+> > -F:   drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> > +F:   drivers/usb/typec/ucsi/cros_ec_ucsi_main.c
+> > +F:   drivers/usb/typec/ucsi/cros_ec_ucsi_nl.c
+> > +F:   drivers/usb/typec/ucsi/cros_ec_ucsi_nl.h
+> >  F:   drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h
 > >
 > >  CHRONTEL CH7322 CEC DRIVER
-> >  M:   Joe Tessler <jrt@google.com>
+> > diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/M=
+akefile
+> > index be98a879104d..82d960394c39 100644
+> > --- a/drivers/usb/typec/ucsi/Makefile
+> > +++ b/drivers/usb/typec/ucsi/Makefile
+> > @@ -21,5 +21,7 @@ obj-$(CONFIG_UCSI_ACPI)                     +=3D ucsi=
+_acpi.o
+> >  obj-$(CONFIG_UCSI_CCG)                       +=3D ucsi_ccg.o
+> >  obj-$(CONFIG_UCSI_STM32G0)           +=3D ucsi_stm32g0.o
+> >  obj-$(CONFIG_UCSI_PMIC_GLINK)                +=3D ucsi_glink.o
+> > -obj-$(CONFIG_CROS_EC_UCSI)           +=3D cros_ec_ucsi.o
+> >  obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)  +=3D ucsi_yoga_c630.o
+> > +
+> > +obj-$(CONFIG_CROS_EC_UCSI)           +=3D cros_ec_ucsi.o
+> > +cros_ec_ucsi-y                               :=3D cros_ec_ucsi_main.o =
+cros_ec_ucsi_nl.o
 > > diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/=
-ucsi/cros_ec_ucsi.c
-> > index 422b3b14028c..70185616ec86 100644
+ucsi/cros_ec_ucsi_main.c
+> > similarity index 79%
+> > rename from drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> > rename to drivers/usb/typec/ucsi/cros_ec_ucsi_main.c
+> > index 70185616ec86..008b61921278 100644
 > > --- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> > @@ -16,7 +16,9 @@
-> >  #include <linux/slab.h>
-> >  #include <linux/wait.h>
-> >
-> > +#define CREATE_TRACE_POINTS
+> > +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi_main.c
+> > @@ -19,6 +19,7 @@
+> >  #define CREATE_TRACE_POINTS
 > >  #include "ucsi.h"
-> > +#include "cros_ec_ucsi_trace.h"
+> >  #include "cros_ec_ucsi_trace.h"
+> > +#include "cros_ec_ucsi_nl.h"
 > >
 > >  /*
 > >   * Maximum size in bytes of a UCSI message between AP and EC
-> > @@ -62,6 +64,8 @@ static int cros_ucsi_read(struct ucsi *ucsi, unsigned=
- int offset, void *val,
-> >               dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_=
-GET: error=3D%d", ret);
+> > @@ -43,6 +44,43 @@ struct cros_ucsi_data {
+> >       unsigned long flags;
+> >  };
+> >
+> > +/*
+> > + * When set to true the cros_ec_ucsi driver will forward all UCSI mess=
+ages
+> > + * exchanged between OPM <-> PPM to userspace through netlink
+> > + */
+> > +static bool is_ap_sniffer_en;
+> > +
+> > +static ssize_t enable_ap_sniffer_show(struct device *dev,
+> > +                                   struct device_attribute *attr,
+> > +                                   char *buf)
+> > +{
+> > +     return sprintf(buf, "%d\n", is_ap_sniffer_en);
+> > +}
+> > +
+> > +static ssize_t enable_ap_sniffer_store(struct device *dev,
+> > +                                    struct device_attribute *attr,
+> > +                                    const char *buf, size_t count)
+> > +{
+> > +     u8 value;
+> > +
+> > +     if (kstrtou8(buf, 0, &value))
+> > +             return -EINVAL;
+> > +
+> > +     is_ap_sniffer_en =3D value ? 1 : 0;
+> > +     return count;
+> > +}
+> > +
+> > +static DEVICE_ATTR_RW(enable_ap_sniffer);
+> > +
+> > +static struct attribute *cros_ec_ucsi_attrs[] =3D {
+> > +     &dev_attr_enable_ap_sniffer.attr,
+> > +     NULL
+> > +};
+> > +
+> > +static const struct attribute_group cros_ec_ucsi_attrs_grp =3D {
+> > +     .attrs =3D cros_ec_ucsi_attrs,
+> > +};
+>
+> Undocumented sysfs entry.
+>
+
+I will document the new sysfs entry.
+
+> >  static int cros_ucsi_read(struct ucsi *ucsi, unsigned int offset, void=
+ *val,
+> >                         size_t val_len)
+> >  {
+> > @@ -65,6 +103,9 @@ static int cros_ucsi_read(struct ucsi *ucsi, unsigne=
+d int offset, void *val,
 > >               return ret;
 > >       }
-> > +
-> > +     trace_cros_ec_opm_to_ppm_rd(offset, val, val_len);
+> >
+> > +     if (is_ap_sniffer_en)
+> > +             nl_cros_ec_bcast_msg(NL_CROS_EC_TO_PPM, NL_CROS_EC_RD, of=
+fset,
+> > +                                  val, val_len);
+> >       trace_cros_ec_opm_to_ppm_rd(offset, val, val_len);
 > >       return 0;
 > >  }
-> >
-> > @@ -96,6 +100,8 @@ static int cros_ucsi_async_control(struct ucsi *ucsi=
-, u64 cmd)
-> >               dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_=
-SET: error=3D%d", ret);
+> > @@ -101,6 +142,9 @@ static int cros_ucsi_async_control(struct ucsi *ucs=
+i, u64 cmd)
 > >               return ret;
 > >       }
-> > +
-> > +     trace_cros_ec_opm_to_ppm_wr(req->offset, &cmd, sizeof(cmd));
+> >
+> > +     if (is_ap_sniffer_en)
+> > +             nl_cros_ec_bcast_msg(NL_CROS_EC_TO_PPM, NL_CROS_EC_WR,
+> > +                                  req->offset, (u8 *) &cmd, sizeof(cmd=
+));
+> >       trace_cros_ec_opm_to_ppm_wr(req->offset, &cmd, sizeof(cmd));
 > >       return 0;
 > >  }
-> >
-> > @@ -138,6 +144,8 @@ static void cros_ucsi_work(struct work_struct *work=
+> > @@ -144,6 +188,8 @@ static void cros_ucsi_work(struct work_struct *work=
 )
 > >       struct cros_ucsi_data *udata =3D container_of(work, struct cros_u=
 csi_data, work);
 > >       u32 cci;
 > >
-> > +     trace_cros_ec_ppm_to_opm(0);
-> > +
-> >       if (cros_ucsi_read_cci(udata->ucsi, &cci))
-> >               return;
+> > +     if (is_ap_sniffer_en)
+> > +             nl_cros_ec_bcast_msg(NL_CROS_EC_TO_OPM, 0, 0, NULL, 0);
+> >       trace_cros_ec_ppm_to_opm(0);
 > >
-> > diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h b/drivers/usb/=
-typec/ucsi/cros_ec_ucsi_trace.h
-> > new file mode 100644
-> > index 000000000000..b765ef5c8236
-> > --- /dev/null
-> > +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi_trace.h
-> > @@ -0,0 +1,92 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
+> >       if (cros_ucsi_read_cci(udata->ucsi, &cci))
+> > @@ -229,13 +275,29 @@ static int cros_ucsi_probe(struct platform_device=
+ *pdev)
+> >               return ret;
+> >       }
+> >
+> > +     ret =3D nl_cros_ec_register();
+> > +     if (ret) {
+> > +             dev_err(dev, "failed to register netlink: error=3D%d", re=
+t);
+> > +             cros_ucsi_destroy(udata);
+> > +             return ret;
+> > +     }
 > > +
-> > +#undef TRACE_SYSTEM
-> > +#define TRACE_SYSTEM cros_ec_ucsi
+> > +     ret =3D sysfs_create_group(&dev->kobj, &cros_ec_ucsi_attrs_grp);
+> > +     if (ret) {
+> > +             dev_err(dev, "failed to register sysfs group: error=3D%d"=
+, ret);
+> > +             cros_ucsi_destroy(udata);
+> > +             return ret;
+> > +     }
 > > +
-> > +#if !defined(__CROS_EC_UCSI_TRACE_H) || defined(TRACE_HEADER_MULTI_REA=
-D)
-> > +#define __CROS_EC_UCSI_TRACE_H
-> > +
-> > +#include <linux/tracepoint.h>
-> > +
-> > +#define decode_cmd(cmd)                                               =
-                       \
-> > +     __print_symbolic(cmd,                                            =
-               \
-> > +             { 0,                            "Unknown command"        =
-       },      \
-> > +             { UCSI_PPM_RESET,               "PPM_RESET"              =
-       },      \
-> > +             { UCSI_CONNECTOR_RESET,         "CONNECTOR_RESET,"       =
-       },      \
-> > +             { UCSI_ACK_CC_CI,               "ACK_CC_CI"              =
-       },      \
-> > +             { UCSI_SET_NOTIFICATION_ENABLE, "SET_NOTIFICATION_ENABLE"=
-       },      \
-> > +             { UCSI_GET_CAPABILITY,          "GET_CAPABILITY"         =
-       },      \
-> > +             { UCSI_GET_CONNECTOR_CAPABILITY, "GET_CONNECTOR_CAPABILIT=
-Y"     },      \
-> > +             { UCSI_SET_UOM,                 "SET_UOM"                =
-       },      \
-> > +             { UCSI_SET_UOR,                 "SET_UOR"                =
-       },      \
-> > +             { UCSI_SET_PDM,                 "SET_PDM"                =
-       },      \
-> > +             { UCSI_SET_PDR,                 "SET_PDR"                =
-       },      \
-> > +             { UCSI_GET_ALTERNATE_MODES,     "GET_ALTERNATE_MODES"    =
-       },      \
-> > +             { UCSI_GET_CAM_SUPPORTED,       "GET_CAM_SUPPORTED"      =
-       },      \
-> > +             { UCSI_GET_CURRENT_CAM,         "GET_CURRENT_CAM"        =
-       },      \
-> > +             { UCSI_SET_NEW_CAM,             "SET_NEW_CAM"            =
-       },      \
-> > +             { UCSI_GET_PDOS,                "GET_PDOS"               =
-       },      \
-> > +             { UCSI_GET_CABLE_PROPERTY,      "GET_CABLE_PROPERTY"     =
-       },      \
-> > +             { UCSI_GET_CONNECTOR_STATUS,    "GET_CONNECTOR_STATUS"   =
-       },      \
-> > +             { UCSI_GET_ERROR_STATUS,        "GET_ERROR_STATUS"       =
-       })
+> >       return 0;
+> >  }
+> >
+> > -static void cros_ucsi_remove(struct platform_device *dev)
+> > +static void cros_ucsi_remove(struct platform_device *pdev)
+> >  {
+> > -     struct cros_ucsi_data *udata =3D platform_get_drvdata(dev);
+> > +     struct cros_ucsi_data *udata =3D platform_get_drvdata(pdev);
 >
-> Couldn't you just export ucsi_cmd_str() ?
+> Please merge that change into the patch 3/8.
 >
 
-I ran into an issue when using exported ucsi_cmd_str(). Trace-cmd
-report reports [FAILED TO PARSE].
-For example
-trace-cmd record -e cros_ec_ucsi
-...
-trace-cmd report
-     kworker/0:3-1891  [000]    59.432234: cros_ec_ppm_to_opm:   notificati=
-on
-     kworker/0:3-1891  [000]    59.432971: cros_ec_opm_to_ppm_rd:
-[FAILED TO PARSE] cmd=3D4 offset=3D4 length=3D4 msg=3DARRAY[04, 00, 00, 20]
-
-I believe this issue applies also to some UCSI trace events.
-
-With decode_cmd from the above it works fine
-For example
-trace-cmd record -e cros_ec_ucsi
-...
-trace-cmd report
-     kworker/0:1-10    [000]    49.248920: cros_ec_ppm_to_opm:   notificati=
-on
-     kworker/0:1-10    [000]    49.249857: cros_ec_opm_to_ppm_rd:
-(CCI) : 04 00 00 20
-     kworker/0:1-10    [000]    49.253230: cros_ec_opm_to_ppm_wr:
-(CTRL) GET_CONNECTOR_STATUS: 12 00 02 00 00 00 00 00
-
-> > +#define decode_offset(offset)                                        \
-> > +     __print_symbolic(offset,                                \
-> > +             { UCSI_VERSION,         "VER"           },      \
-> > +             { UCSI_CCI,             "CCI"           },      \
-> > +             { UCSI_CONTROL,         "CTRL"          },      \
-> > +             { UCSI_MESSAGE_IN,      "MSG_IN"        },      \
-> > +             { UCSI_MESSAGE_OUT,     "MSG_OUT"       },      \
-> > +             { UCSIv2_MESSAGE_OUT,   "MSG_OUTv2"     })
-> > +
-> > +DECLARE_EVENT_CLASS(cros_ec_opm_to_ppm,
-> > +     TP_PROTO(u16 offset, const void *value, size_t length),
-> > +     TP_ARGS(offset, value, length),
-> > +     TP_STRUCT__entry(
-> > +             __field(u8, cmd)
-> > +             __field(u16, offset)
-> > +             __field(size_t, length)
-> > +             __dynamic_array(char, msg, length)
-> > +     ),
-> > +     TP_fast_assign(
-> > +             __entry->cmd =3D *((u64 *) value + 3);
-> > +             __entry->offset =3D offset;
-> > +             __entry->length =3D length;
-> > +             memcpy(__get_dynamic_array(msg), value, length);
-> > +     ),
-> > +     TP_printk("(%s) %s: %s",
-> > +             decode_offset(__entry->offset),
-> > +             __entry->offset =3D=3D UCSI_CONTROL ?
-> > +             decode_cmd(__entry->cmd) : "",
-> > +             __print_hex(__get_dynamic_array(msg), __entry->length))
-> > +);
-> > +
-> > +DEFINE_EVENT(cros_ec_opm_to_ppm, cros_ec_opm_to_ppm_rd,
-> > +     TP_PROTO(u16 offset, const void *value, size_t length),
-> > +     TP_ARGS(offset, value, length)
-> > +);
-> > +
-> > +DEFINE_EVENT(cros_ec_opm_to_ppm, cros_ec_opm_to_ppm_wr,
-> > +     TP_PROTO(u16 offset, const void *value, size_t length),
-> > +     TP_ARGS(offset, value, length)
-> > +);
-> > +
-> > +TRACE_EVENT(cros_ec_ppm_to_opm,
-> > +     TP_PROTO(int x),
-> > +     TP_ARGS(x),
-> > +     TP_STRUCT__entry(__array(char, x, 0)),
-> > +     TP_fast_assign((void)x),
-> > +     TP_printk("notification%s", "")
-> > +);
->
-> This does not look cros_ec specific. Could you check if this could be
-> made part of the ucsi core tracepoints?
->
-
-Good point. I will look into it.
-
-> I can also look into this more carefully, and throw ideas if you like.
-> Let me know.
->
-
-I would definitely like to hear your ideas on the topic :).
+I will merge this change to the"usb: typec: ucsi: Implement ChromeOS
+UCSI driver".
 
 Thanks,
 Lukasz
 
-> Br,
 
 
-
+> > +     sysfs_remove_group(&pdev->dev.kobj, &cros_ec_ucsi_attrs_grp);
+> > +     nl_cros_ec_unregister();
+> >       ucsi_unregister(udata->ucsi);
+> >       cros_ucsi_destroy(udata);
+> >  }
+>
+> thanks,
 >
 > --
 > heikki
