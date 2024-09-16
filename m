@@ -1,58 +1,86 @@
-Return-Path: <linux-usb+bounces-15151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15152-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3E4397A93C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 00:30:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 592F497A94C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 00:46:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E2452860CB
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 22:30:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D46391F28963
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 22:46:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F49015ECC5;
-	Mon, 16 Sep 2024 22:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0059C14BFBF;
+	Mon, 16 Sep 2024 22:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rosa.ru header.i=@rosa.ru header.b="IQt9GVjK"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="vMDmavKT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.rosa.ru (mail.rosa.ru [176.109.80.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93BB200A3;
-	Mon, 16 Sep 2024 22:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.109.80.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F8784D0D
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 22:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726525797; cv=none; b=smXPOimRkKPgjvwPRsLI8ZQO+XsQ4Sz7WlQ556CJ2T01GBy+x9s+lxGYxZFqhH+UA/L7C/DoA0NR4eoOCjxsj+wjnnOwAXiqQ+UodmA8yGm4e7qc+Jrlx5aHn9Wb+4wNwMBw81BQeNK8eIC0sNUNdLcUh1+Jhlbi8rI+JvFPrfE=
+	t=1726526800; cv=none; b=ZDUKZ6izi89QThIlIMbnPpkFhzR1e/aioRWj+A7XjdDffWcYBcJtXmaSI5L6iSWiqhqHikJNwTTFShaZaSnX4R0u8Owry1pWlu7RooUdvn2PNfP/eMrApnRPMDEt5vZI20WjKuz0wI+Jz3584xNEaPgWaE4JOo+albWyRTaD7dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726525797; c=relaxed/simple;
-	bh=1SdDV+XTgvFpvWxNWjRysSQtrRUjupuoiIhyYFH+kmM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ErTSCMyPqQjqAjGMsggDXpMbdgcN5+XYxmXo5tEyBdtEKpReSJbhKAiYLhW5FyqF0WhNO7u3uM1tDK8V4blo2tkKNg1VUgvgQIsn9V6d50WykksiEawPZWLN2UuPr5edT7YGYxjJIQj5OPcjVsmaHMw1bPTzn16+Eli34MBdXXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rosa.ru; spf=pass smtp.mailfrom=rosa.ru; dkim=pass (1024-bit key) header.d=rosa.ru header.i=@rosa.ru header.b=IQt9GVjK; arc=none smtp.client-ip=176.109.80.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rosa.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosa.ru
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=rosa.ru; s=mail;
-	bh=1SdDV+XTgvFpvWxNWjRysSQtrRUjupuoiIhyYFH+kmM=;
-	h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From;
-	b=IQt9GVjKYpZB51h/sHTk28oDAb5asKcDXSBImWBu05Rr+3GUycYYzjUwf+sBhs57ZgpUFArsGpG
-	yV36gPMv1b0+Uv21DvCxitpL+NyL1idIvRHWj5+RUItWPefMY0c7svGFy9CB7QQe+DpfpZFslXGmT
-	+OVl4z1OKxw3bZ+Wwp0=
-Received: from [31.135.99.32] (account m.arhipov@rosa.ru HELO localhost.localdomain)
-  by mail.rosa.ru (CommuniGate Pro SMTP 6.4.1j)
-  with ESMTPSA id 131315; Tue, 17 Sep 2024 01:29:40 +0300
-From: Mikhail Arkhipov <m.arhipov@rosa.ru>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mikhail Arkhipov <m.arhipov@rosa.ru>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Felipe Balbi <balbi@ti.com>,
-	Ben Dooks <ben.dooks@codethink.co.uk>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] usb: gadget: r8a66597-udc: Fix double free in r8a66597_probe
-Date: Tue, 17 Sep 2024 01:29:37 +0300
-Message-Id: <20240916222937.12878-1-m.arhipov@rosa.ru>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+	s=arc-20240116; t=1726526800; c=relaxed/simple;
+	bh=1Dc9bAz+Oh205dCftd8HURcb7c11L4LkHWoHGfvdaNA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=eG9ySX6zmgG3ENvDHWv+NlXQx7r8B6WiYgqwlcavmW9s81rdV5PAr68jf8POod0An8AwMd9P1oXbXSliQNGWpyaRSCNThX/W8wNkXv8btODJnR3fNr6p04vF/AMw0HBFA1oR1DDrVo87Ke8hkdDXOhmNIkoErejWL91bw74rySc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=vMDmavKT; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240916224633epoutp035ba95d8ab8155dd225dd46c725331c7b~12vixP-401926319263epoutp03S
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 22:46:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240916224633epoutp035ba95d8ab8155dd225dd46c725331c7b~12vixP-401926319263epoutp03S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1726526793;
+	bh=ElSQ03JvnpcpNQ+d5oM7jM1soYKwWyMeyIq4z3n4+ac=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=vMDmavKTyrHeKqxPP2f8Mr2J7OBaicanuEHyHIJnTB8WCnsRpdbwWYlAjWPwpk0+p
+	 m8DPu13wWbd3/gjwHuD0gByN89KbOZW/PIRLvJkXtdcMJ9CMPlxqLNfXEyxtCcs465
+	 T4KhLe2Mt0Gb82I+f8IAnQDj3CwNcInG0eHns8hA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20240916224632epcas5p2ef48a285aafd57235560fb1bca2ad6d8~12vhy6wC70627906279epcas5p2J;
+	Mon, 16 Sep 2024 22:46:32 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4X70QH18XQz4x9Pq; Mon, 16 Sep
+	2024 22:46:31 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	98.D8.09743.645B8E66; Tue, 17 Sep 2024 07:46:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e~12vfwdV4q2782427824epcas5p4N;
+	Mon, 16 Sep 2024 22:46:30 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240916224630epsmtrp17866936d088f2d0515b31a8a4cd9b362~12vfvqcHk2935029350epsmtrp1S;
+	Mon, 16 Sep 2024 22:46:30 +0000 (GMT)
+X-AuditID: b6c32a4a-3b1fa7000000260f-c4-66e8b54601b0
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	62.E1.19367.645B8E66; Tue, 17 Sep 2024 07:46:30 +0900 (KST)
+Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240916224628epsmtip2ce6e0eef8f436c1456633b83139613d4~12vdiNS2Y2234122341epsmtip2P;
+	Mon, 16 Sep 2024 22:46:28 +0000 (GMT)
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
+	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
+	Selvarasu Ganesan <selvarasu.g@samsung.com>, stable <stable@kernel.org>
+Subject: [PATCH v2] usb: dwc3: core: Stop processing of pending events if
+ controller is halted
+Date: Tue, 17 Sep 2024 04:15:41 +0530
+Message-ID: <20240916224543.187-1-selvarasu.g@samsung.com>
+X-Mailer: git-send-email 2.46.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,47 +88,172 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGJsWRmVeSWpSXmKPExsWy7bCmuq771hdpBotWMVm8ubqK1eLOgmlM
+	FqeWL2SymH8zyaJ58Xo2i0l7trJY3H34g8Xi8q45bBaLlrUyW3w6+p/VYlXnHBaLI8s/Mllc
+	/r4TKHb+AlDxQVGLVQsOsDsIeGxa1cnmMe9koMf+uWvYPfq2rGL02LL/M6PH501yAWxR2TYZ
+	qYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QFcrKZQl5pQC
+	hQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSKE3OLS/PS9fJSS6wMDQyMTIEKE7IzDjxZ
+	z1TwTbFi9p1PrA2M12S6GDk5JARMJBpPN7F0MXJxCAnsZpTYPvU9M4TziVHi8pcOFjjn8IsT
+	TDAtz+b/garayShxffJhqKrvjBI7nhxn7GLk4GATMJR4dsIGpEFEYAqjxLe5dSA1zAJLmCQ2
+	b17PBlIjLJAgsWyzOUgNi4CqxP9rC1hAbF4BK4n2qW+ZIZZpSqzdu4cJIi4ocXLmE7AaZgF5
+	ieats8GOkBCYyCHxfck5RogGF4npi++wQtjCEq+Ob2GHsKUkXva3QdnVEqvvfGSDaG4Beu3J
+	N6iEvcTjo4+YQY5jBtq8fpc+xDI+id7fT5hAwhICvBIdbUIQ1aoSpxovs0HY0hL3llyDWush
+	MenobbCJQgKxEk8vnGOfwCg3C8kLs5C8MAth2QJG5lWMkqkFxbnpqcWmBUZ5qeXwyEzOz93E
+	CE6wWl47GB8++KB3iJGJg/EQowQHs5IIr+3vp2lCvCmJlVWpRfnxRaU5qcWHGE2B4TqRWUo0
+	OR+Y4vNK4g1NLA1MzMzMTCyNzQyVxHlft85NERJITyxJzU5NLUgtgulj4uCUamCaqtw+48ac
+	xLTgKP8z7nu7jR3jdp54fnEpl0/tlWjbrRbmTOt3Lf7KknDl3qwPAqKvjPP2uIlWhwXnnjxz
+	5JNqyxM15pKXifrSExr4Fj1+/SuyuX1hiaNqTUeOxOHEu/53z5/VVDlxYGuFR4J98pUb2oFr
+	fSd+zhTn3vqcY4ejD6eu+Jk3l7dcmCs7T9PJt3j+WoNPG17EVLDNCJLJuGmXaiP/1/mItJpc
+	nsW+7VVPNZoElDQOh0i8K9u/x//Q+YjLfDliykaCXEcfCrkEZ/XFl3NpHrjoVrFmW3LnRW5V
+	roYEr3MCPMtmfJorGqV9wj+t4dSinOtSbkbfp7W+nfEj0F4u6XDP0eSohY9ncSixFGckGmox
+	FxUnAgAyw8nLOQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNLMWRmVeSWpSXmKPExsWy7bCSvK7b1hdpBh+myVi8ubqK1eLOgmlM
+	FqeWL2SymH8zyaJ58Xo2i0l7trJY3H34g8Xi8q45bBaLlrUyW3w6+p/VYlXnHBaLI8s/Mllc
+	/r4TKHb+AlDxQVGLVQsOsDsIeGxa1cnmMe9koMf+uWvYPfq2rGL02LL/M6PH501yAWxRXDYp
+	qTmZZalF+nYJXBkHnqxnKvimWDH7zifWBsZrMl2MnBwSAiYSz+b/Ye5i5OIQEtjOKNFw9Ckj
+	REJa4vWsLihbWGLlv+fsEEVfGSV6n3eydjFycLAJGEo8O2EDEhcRmMEo8eTTNVYQh1lgE5NE
+	+8LvYN3CAnES56+0sYPYLAKqEv+vLWABsXkFrCTap75lhtigKbF27x4miLigxMmZT8BqmAXk
+	JZq3zmaewMg3C0lqFpLUAkamVYyiqQXFuem5yQWGesWJucWleel6yfm5mxjB4a8VtINx2fq/
+	eocYmTgYDzFKcDArifDa/n6aJsSbklhZlVqUH19UmpNafIhRmoNFSZxXOaczRUggPbEkNTs1
+	tSC1CCbLxMEp1cBkHrptuduUawfMV2UVX169wfSS38dF305we50SexhnPjuvz2MGy32b/ZMz
+	PoV2nBT0VF+ksZmXsf957AvmNfPqtrPscbX9edzr4nIPW3kmg47tmpqmon8VPBe761v+3L0p
+	4rdkgE+yrFBG9TK92xEPz6y7sMNhrlzA7X1za+YezZB9c1n0e+K2o9fXx2qmefZ15iUq2vor
+	GrRMXezZxNETYSc4x0VlgsesCy/dV5p82Bh2Q2TqrpcWxadKUqQ4eOt/SWXz7N2/vEI+uTWr
+	enLv1JX8NoIxDQ0ef7+6SKQuC0mbcTQ+Wz2DN3CXn1KjT6p6nkxo+N1LdbOOz52ot7vnWP7P
+	91YJT7eqth3e8VWJpTgj0VCLuag4EQAD4AvO7gIAAA==
+X-CMS-MailID: 20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e
+References: <CGME20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e@epcas5p4.samsung.com>
 
-The function r8a66597_free_request is called to free r8a66597->ep0_req,
-but the pointer is not set to NULL afterward, which may lead to a double
-free if the function is called again.
+This commit addresses an issue where events were being processed when
+the controller was in a halted state. To fix this issue by stop
+processing the events as the event count was considered stale or
+invalid when the controller was halted.
 
-If the probe process fails and the r8a66597_probe function subsequently
-goes through its error handling path. Since r8a66597_free_request is called
-multiple times in different error handling sections, it leads to an attempt
-to free the same memory twice.
-
-Set r8a66597->ep0_req to NULL after calling r8a66597_free_request
-to prevent any further attempts to free this pointer.
-
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: 0f91349b89f3 ("usb: gadget: convert all users to the new udc infrastructure")
-Signed-off-by: Mikhail Arkhipov <m.arhipov@rosa.ru>
+Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
- drivers/usb/gadget/udc/r8a66597-udc.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/r8a66597-udc.c b/drivers/usb/gadget/udc/r8a66597-udc.c
-index db4a10a979f9..43b81cae7d17 100644
---- a/drivers/usb/gadget/udc/r8a66597-udc.c
-+++ b/drivers/usb/gadget/udc/r8a66597-udc.c
-@@ -1952,12 +1952,14 @@ static int r8a66597_probe(struct platform_device *pdev)
+Changes in v2:
+- Updated the code changes that suggested by reviewer (Thinh Nguyen).
+- Link to v1: https://lore.kernel.org/lkml/20240719110100.329-1-selvarasu.g@samsung.com/
+---
+ drivers/usb/dwc3/core.c   | 22 +++++++++++++++++++---
+ drivers/usb/dwc3/core.h   |  4 ----
+ drivers/usb/dwc3/gadget.c | 11 -----------
+ 3 files changed, 19 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9eb085f359ce..65ae5203b89e 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -544,6 +544,7 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
+ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+ {
+ 	struct dwc3_event_buffer	*evt;
++	u32				reg;
  
- err_add_udc:
- 	r8a66597_free_request(&r8a66597->ep[0].ep, r8a66597->ep0_req);
-+	r8a66597->ep0_req = NULL;
- clean_up2:
- 	if (r8a66597->pdata->on_chip)
- 		clk_disable_unprepare(r8a66597->clk);
+ 	if (!dwc->ev_buf)
+ 		return 0;
+@@ -556,8 +557,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+ 			upper_32_bits(evt->dma));
+ 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
+ 			DWC3_GEVNTSIZ_SIZE(evt->length));
+-	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
  
- 	if (r8a66597->ep0_req)
- 		r8a66597_free_request(&r8a66597->ep[0].ep, r8a66597->ep0_req);
-+		r8a66597->ep0_req = NULL;
- 
- 	return ret;
++	/* Clear any stale event */
++	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
++	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
+ 	return 0;
  }
+ 
+@@ -584,7 +587,10 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
+ 	dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(0), 0);
+ 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0), DWC3_GEVNTSIZ_INTMASK
+ 			| DWC3_GEVNTSIZ_SIZE(0));
+-	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
++
++	/* Clear any stale event */
++	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
++	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
+ }
+ 
+ static void dwc3_core_num_eps(struct dwc3 *dwc)
+@@ -2499,7 +2505,11 @@ static int dwc3_runtime_resume(struct device *dev)
+ 
+ 	switch (dwc->current_dr_role) {
+ 	case DWC3_GCTL_PRTCAP_DEVICE:
+-		dwc3_gadget_process_pending_events(dwc);
++		if (dwc->pending_events) {
++			pm_runtime_put(dwc->dev);
++			dwc->pending_events = false;
++			enable_irq(dwc->irq_gadget);
++		}
+ 		break;
+ 	case DWC3_GCTL_PRTCAP_HOST:
+ 	default:
+@@ -2589,6 +2599,12 @@ static void dwc3_complete(struct device *dev)
+ static const struct dev_pm_ops dwc3_dev_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
+ 	.complete = dwc3_complete,
++
++	/*
++	 * Runtime suspend halts the controller on disconnection. It replies on
++	 * platforms with custom connection notification to start the controller
++	 * again.
++	 */
+ 	SET_RUNTIME_PM_OPS(dwc3_runtime_suspend, dwc3_runtime_resume,
+ 			dwc3_runtime_idle)
+ };
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index c71240e8f7c7..9c508e0c5cdf 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1675,7 +1675,6 @@ static inline void dwc3_otg_host_init(struct dwc3 *dwc)
+ #if !IS_ENABLED(CONFIG_USB_DWC3_HOST)
+ int dwc3_gadget_suspend(struct dwc3 *dwc);
+ int dwc3_gadget_resume(struct dwc3 *dwc);
+-void dwc3_gadget_process_pending_events(struct dwc3 *dwc);
+ #else
+ static inline int dwc3_gadget_suspend(struct dwc3 *dwc)
+ {
+@@ -1687,9 +1686,6 @@ static inline int dwc3_gadget_resume(struct dwc3 *dwc)
+ 	return 0;
+ }
+ 
+-static inline void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+-{
+-}
+ #endif /* !IS_ENABLED(CONFIG_USB_DWC3_HOST) */
+ 
+ #if IS_ENABLED(CONFIG_USB_DWC3_ULPI)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 291bc549935b..10178e5eda5a 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4728,14 +4728,3 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
+ 
+ 	return dwc3_gadget_soft_connect(dwc);
+ }
+-
+-void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+-{
+-	if (dwc->pending_events) {
+-		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
+-		dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
+-		pm_runtime_put(dwc->dev);
+-		dwc->pending_events = false;
+-		enable_irq(dwc->irq_gadget);
+-	}
+-}
 -- 
-2.39.3 (Apple Git-146)
+2.17.1
 
 
