@@ -1,259 +1,367 @@
-Return-Path: <linux-usb+bounces-15152-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15153-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 592F497A94C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 00:46:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20B2397A96C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 00:54:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D46391F28963
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 22:46:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45B6C1C22929
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 22:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0059C14BFBF;
-	Mon, 16 Sep 2024 22:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C6A14D43D;
+	Mon, 16 Sep 2024 22:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="vMDmavKT"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fGBbtDxR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F8784D0D
-	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 22:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBB44594D
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 22:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726526800; cv=none; b=ZDUKZ6izi89QThIlIMbnPpkFhzR1e/aioRWj+A7XjdDffWcYBcJtXmaSI5L6iSWiqhqHikJNwTTFShaZaSnX4R0u8Owry1pWlu7RooUdvn2PNfP/eMrApnRPMDEt5vZI20WjKuz0wI+Jz3584xNEaPgWaE4JOo+albWyRTaD7dw=
+	t=1726527262; cv=none; b=mb6FMjiXjNG3J9f81QTIcV+uNa1n9FwUhu4Uiq6PAH+mPlQA5bj/kFtCeKwzUgKWXgKBfD1L7TNR9pQ45EDnJFHN/AFVSOWY2jbnCKT4NdqdRSajY5tY5GsFcmZGXzYGQspVur6k1m0nlJ+aiY/0Um1LtlXAmzP6SdtSoMr41ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726526800; c=relaxed/simple;
-	bh=1Dc9bAz+Oh205dCftd8HURcb7c11L4LkHWoHGfvdaNA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=eG9ySX6zmgG3ENvDHWv+NlXQx7r8B6WiYgqwlcavmW9s81rdV5PAr68jf8POod0An8AwMd9P1oXbXSliQNGWpyaRSCNThX/W8wNkXv8btODJnR3fNr6p04vF/AMw0HBFA1oR1DDrVo87Ke8hkdDXOhmNIkoErejWL91bw74rySc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=vMDmavKT; arc=none smtp.client-ip=203.254.224.33
+	s=arc-20240116; t=1726527262; c=relaxed/simple;
+	bh=jAhBrVYoluyaqsybi2E8xENGRagHDVg9JLsB5Ig0Apo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=hn+vDTCeCCvpNONTk41iLLDXqVkeLiWQ1P7RCCXK5iiZzndra3nK0PICBCDtJtVAVs3Cp8ERCNppNoh5b1gIcjf+cde7bbptB4wvShyis5BDf2XB1phdC2isispUf7CQPn5Rk8P9tWcsQqQGNfkZYbp7W86oN/7F+6nst3ygNlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fGBbtDxR; arc=none smtp.client-ip=203.254.224.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240916224633epoutp035ba95d8ab8155dd225dd46c725331c7b~12vixP-401926319263epoutp03S
-	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 22:46:33 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240916224633epoutp035ba95d8ab8155dd225dd46c725331c7b~12vixP-401926319263epoutp03S
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240916225417epoutp02b1aa800fbd6883fffa1265f84a90116d~122SszReu2262122621epoutp02p
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 22:54:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240916225417epoutp02b1aa800fbd6883fffa1265f84a90116d~122SszReu2262122621epoutp02p
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1726526793;
-	bh=ElSQ03JvnpcpNQ+d5oM7jM1soYKwWyMeyIq4z3n4+ac=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=vMDmavKTyrHeKqxPP2f8Mr2J7OBaicanuEHyHIJnTB8WCnsRpdbwWYlAjWPwpk0+p
-	 m8DPu13wWbd3/gjwHuD0gByN89KbOZW/PIRLvJkXtdcMJ9CMPlxqLNfXEyxtCcs465
-	 T4KhLe2Mt0Gb82I+f8IAnQDj3CwNcInG0eHns8hA=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20240916224632epcas5p2ef48a285aafd57235560fb1bca2ad6d8~12vhy6wC70627906279epcas5p2J;
-	Mon, 16 Sep 2024 22:46:32 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4X70QH18XQz4x9Pq; Mon, 16 Sep
-	2024 22:46:31 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	98.D8.09743.645B8E66; Tue, 17 Sep 2024 07:46:31 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e~12vfwdV4q2782427824epcas5p4N;
-	Mon, 16 Sep 2024 22:46:30 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240916224630epsmtrp17866936d088f2d0515b31a8a4cd9b362~12vfvqcHk2935029350epsmtrp1S;
-	Mon, 16 Sep 2024 22:46:30 +0000 (GMT)
-X-AuditID: b6c32a4a-3b1fa7000000260f-c4-66e8b54601b0
+	s=mail20170921; t=1726527257;
+	bh=4U45AWwW9pIBWcvWv3JZJ+PmTEKQCsH8vsyYcc/cj8M=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=fGBbtDxR3Ktcc3Mn+suXfhbIPMFHaKYahuSft3SXK6D53Tiuytp6VehiZT7sUs34f
+	 DS2w67SJ4ResNeQQWKLfqpCd+yN5exHB2IVx/KujreijPafiQeTIzPusymRu/fupSY
+	 sy0pO1814fF44Pc4q7uNllXrBQ8qailF0j0pD9cE=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+	20240916225417epcas5p4cfc11009984974263ed1c8b9ad470f24~122SWo_3I3255132551epcas5p4_;
+	Mon, 16 Sep 2024 22:54:17 +0000 (GMT)
+Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.183]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4X70bD0bcLz4x9Pp; Mon, 16 Sep
+	2024 22:54:16 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	7C.C4.19863.717B8E66; Tue, 17 Sep 2024 07:54:15 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240916225415epcas5p1968703c07fb3102f42b9322460bb8404~122QqU1dx1967619676epcas5p1y;
+	Mon, 16 Sep 2024 22:54:15 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240916225415epsmtrp2b2f61bcc303d4569bdb2ee8d48809894~122QpjAhm0408304083epsmtrp2v;
+	Mon, 16 Sep 2024 22:54:15 +0000 (GMT)
+X-AuditID: b6c32a50-ef5fe70000004d97-00-66e8b71730c8
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	62.E1.19367.645B8E66; Tue, 17 Sep 2024 07:46:30 +0900 (KST)
-Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	97.BB.08456.717B8E66; Tue, 17 Sep 2024 07:54:15 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
 	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240916224628epsmtip2ce6e0eef8f436c1456633b83139613d4~12vdiNS2Y2234122341epsmtip2P;
-	Mon, 16 Sep 2024 22:46:28 +0000 (GMT)
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-	felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
-	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
-	Selvarasu Ganesan <selvarasu.g@samsung.com>, stable <stable@kernel.org>
-Subject: [PATCH v2] usb: dwc3: core: Stop processing of pending events if
- controller is halted
-Date: Tue, 17 Sep 2024 04:15:41 +0530
-Message-ID: <20240916224543.187-1-selvarasu.g@samsung.com>
-X-Mailer: git-send-email 2.46.0.windows.1
+	20240916225413epsmtip29cd70fca384d952f0dbdf2b12b6ad1f9~122OyuroR2812828128epsmtip2m;
+	Mon, 16 Sep 2024 22:54:13 +0000 (GMT)
+Message-ID: <2aa4bfd4-b7ce-4b00-b21e-781936c4a0fd@samsung.com>
+Date: Tue, 17 Sep 2024 04:24:00 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: Potential fix of possible dwc3 interrupt
+ storm
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
+	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
+	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
+	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
+	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
+	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
+	"shijie.cai@samsung.com" <shijie.cai@samsung.com>
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20240916211819.ulvmre4o57bhrr6q@synopsys.com>
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGJsWRmVeSWpSXmKPExsWy7bCmuq771hdpBotWMVm8ubqK1eLOgmlM
-	FqeWL2SymH8zyaJ58Xo2i0l7trJY3H34g8Xi8q45bBaLlrUyW3w6+p/VYlXnHBaLI8s/Mllc
-	/r4TKHb+AlDxQVGLVQsOsDsIeGxa1cnmMe9koMf+uWvYPfq2rGL02LL/M6PH501yAWxR2TYZ
-	qYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QFcrKZQl5pQC
-	hQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSKE3OLS/PS9fJSS6wMDQyMTIEKE7IzDjxZ
-	z1TwTbFi9p1PrA2M12S6GDk5JARMJBpPN7F0MXJxCAnsZpTYPvU9M4TziVHi8pcOFjjn8IsT
-	TDAtz+b/garayShxffJhqKrvjBI7nhxn7GLk4GATMJR4dsIGpEFEYAqjxLe5dSA1zAJLmCQ2
-	b17PBlIjLJAgsWyzOUgNi4CqxP9rC1hAbF4BK4n2qW+ZIZZpSqzdu4cJIi4ocXLmE7AaZgF5
-	ieats8GOkBCYyCHxfck5RogGF4npi++wQtjCEq+Ob2GHsKUkXva3QdnVEqvvfGSDaG4Beu3J
-	N6iEvcTjo4+YQY5jBtq8fpc+xDI+id7fT5hAwhICvBIdbUIQ1aoSpxovs0HY0hL3llyDWush
-	MenobbCJQgKxEk8vnGOfwCg3C8kLs5C8MAth2QJG5lWMkqkFxbnpqcWmBUZ5qeXwyEzOz93E
-	CE6wWl47GB8++KB3iJGJg/EQowQHs5IIr+3vp2lCvCmJlVWpRfnxRaU5qcWHGE2B4TqRWUo0
-	OR+Y4vNK4g1NLA1MzMzMTCyNzQyVxHlft85NERJITyxJzU5NLUgtgulj4uCUamCaqtw+48ac
-	xLTgKP8z7nu7jR3jdp54fnEpl0/tlWjbrRbmTOt3Lf7KknDl3qwPAqKvjPP2uIlWhwXnnjxz
-	5JNqyxM15pKXifrSExr4Fj1+/SuyuX1hiaNqTUeOxOHEu/53z5/VVDlxYGuFR4J98pUb2oFr
-	fSd+zhTn3vqcY4ejD6eu+Jk3l7dcmCs7T9PJt3j+WoNPG17EVLDNCJLJuGmXaiP/1/mItJpc
-	nsW+7VVPNZoElDQOh0i8K9u/x//Q+YjLfDliykaCXEcfCrkEZ/XFl3NpHrjoVrFmW3LnRW5V
-	roYEr3MCPMtmfJorGqV9wj+t4dSinOtSbkbfp7W+nfEj0F4u6XDP0eSohY9ncSixFGckGmox
-	FxUnAgAyw8nLOQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNLMWRmVeSWpSXmKPExsWy7bCSvK7b1hdpBh+myVi8ubqK1eLOgmlM
-	FqeWL2SymH8zyaJ58Xo2i0l7trJY3H34g8Xi8q45bBaLlrUyW3w6+p/VYlXnHBaLI8s/Mllc
-	/r4TKHb+AlDxQVGLVQsOsDsIeGxa1cnmMe9koMf+uWvYPfq2rGL02LL/M6PH501yAWxRXDYp
-	qTmZZalF+nYJXBkHnqxnKvimWDH7zifWBsZrMl2MnBwSAiYSz+b/Ye5i5OIQEtjOKNFw9Ckj
-	REJa4vWsLihbWGLlv+fsEEVfGSV6n3eydjFycLAJGEo8O2EDEhcRmMEo8eTTNVYQh1lgE5NE
-	+8LvYN3CAnES56+0sYPYLAKqEv+vLWABsXkFrCTap75lhtigKbF27x4miLigxMmZT8BqmAXk
-	JZq3zmaewMg3C0lqFpLUAkamVYyiqQXFuem5yQWGesWJucWleel6yfm5mxjB4a8VtINx2fq/
-	eocYmTgYDzFKcDArifDa/n6aJsSbklhZlVqUH19UmpNafIhRmoNFSZxXOaczRUggPbEkNTs1
-	tSC1CCbLxMEp1cBkHrptuduUawfMV2UVX169wfSS38dF305we50SexhnPjuvz2MGy32b/ZMz
-	PoV2nBT0VF+ksZmXsf957AvmNfPqtrPscbX9edzr4nIPW3kmg47tmpqmon8VPBe761v+3L0p
-	4rdkgE+yrFBG9TK92xEPz6y7sMNhrlzA7X1za+YezZB9c1n0e+K2o9fXx2qmefZ15iUq2vor
-	GrRMXezZxNETYSc4x0VlgsesCy/dV5p82Bh2Q2TqrpcWxadKUqQ4eOt/SWXz7N2/vEI+uTWr
-	enLv1JX8NoIxDQ0ef7+6SKQuC0mbcTQ+Wz2DN3CXn1KjT6p6nkxo+N1LdbOOz52ot7vnWP7P
-	91YJT7eqth3e8VWJpTgj0VCLuag4EQAD4AvO7gIAAA==
-X-CMS-MailID: 20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGJsWRmVeSWpSXmKPExsWy7bCmlq749hdpBrtWWli8ubqK1eLOgmlM
+	FqeWL2SyaF68ns1i0p6tLBZ3H/5gsbi8aw6bxaJlrcwWn47+Z7VY1TkHKPZ9J7PFpIOiFqsW
+	HGB34PXYP3cNu0ffllWMHlv2f2b0+LxJLoAlKtsmIzUxJbVIITUvOT8lMy/dVsk7ON453tTM
+	wFDX0NLCXEkhLzE31VbJxSdA1y0zB+g8JYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+cYmtUmpB
+	Sk6BSYFecWJucWleul5eaomVoYGBkSlQYUJ2xoLJj1gLZrhXLN2/krGBcY5NFyMnh4SAicSD
+	ZW+Yuhi5OIQE9jBKnN+9ig3C+cQo8aBrNzuE841R4t3iR8wwLdfuXINq2csoMa1tNiOE85ZR
+	onnqA3aQKl4BO4lLLatZQGwWAVWJjYc+s0LEBSVOznwCFhcVkJe4f2sGWL2wQIDElSUzGEFs
+	EQEdiQMnzoNtYBboYJVY0N3GBJJgFhCXuPVkPpDNwcEmYCjx7ATYE5wC1hKNV06xQpTISzRv
+	nc0M0ishsJZD4s7uk+wQZ7tIXLh9mgXCFpZ4dXwLVFxK4vO7vWwQdrXE6jsf2SCaWxglDj/5
+	BlVkL/H4KMj/HEAbNCXW79KHWMYn0fv7Cdg9EgK8Eh1tQhDVqhKnGi9DjZSWuLfkGiuE7SHx
+	5Op8aGDdZpFYffwm+wRGhVlI4TILyZuzkPwzC2HzAkaWVYxSqQXFuempyaYFhrp5qeXwOE/O
+	z93ECE7AWgE7GFdv+Kt3iJGJg/EQowQHs5IIr+3vp2lCvCmJlVWpRfnxRaU5qcWHGE2BMTSR
+	WUo0OR+YA/JK4g1NLA1MzMzMTCyNzQyVxHlft85NERJITyxJzU5NLUgtgulj4uCUamBSve/i
+	FW/kMqFoh7JrcA1vdn+3VmJEoHD85WWnV5WfbrE/qcTEKpIUu66rY++Tbn+ZZ+vUme6FnXXd
+	7Pa5YarEk1m104R/cfCxHL5yX0a9pOrZIvbAIm+N6kouhmKTjdkbFG/NyWFyEXJ7KHbimv3k
+	Px+OVOmLMHjtlNi1LryzuTgv5cfZq3aRpQJMUgadXCtPKwmEvQ99F3xS/0LJ6lTRWFlxqxrf
+	HYstslu4KjNjNrf/+f3m8qUPU+TeSK2sLurvk5koGHi98l3l8b8XuffJe5kHa3+PPBlatTRm
+	/t3mrWtusi8qEQmaVGSSnl4odOKVvN7xuuyu+bMfuaz9tf232qariooL3Gr1F5WuV2Ipzkg0
+	1GIuKk4EANOS6JlJBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnkeLIzCtJLcpLzFFi42LZdlhJXld8+4s0g4MfhS3eXF3FanFnwTQm
+	i1PLFzJZNC9ez2Yxac9WFou7D3+wWFzeNYfNYtGyVmaLT0f/s1qs6pwDFPu+k9li0kFRi1UL
+	DrA78Hrsn7uG3aNvyypGjy37PzN6fN4kF8ASxWWTkpqTWZZapG+XwJWxYPIj1oIZ7hVL969k
+	bGCcY9PFyMkhIWAice3ONaYuRi4OIYHdjBKdl+8zQySkJV7P6mKEsIUlVv57zg5R9JpR4k/j
+	U3aQBK+AncSlltUsIDaLgKrExkOfWSHighInZz4Bi4sKyEvcvzUDrF5YwE9i+psTYENFBHQk
+	Dpw4D7aZWaCHVeLL149gDUICt1kk1kwQAbGZBcQlbj2ZD1TEwcEmYCjx7ATY1ZwC1hKNV06x
+	QpSYSXRthTiUGWhX89bZzBMYhWYhOWMWkkmzkLTMQtKygJFlFaNkakFxbnpusWGBUV5quV5x
+	Ym5xaV66XnJ+7iZGcJxpae1g3LPqg94hRiYOxkOMEhzMSiK8tr+fpgnxpiRWVqUW5ccXleak
+	Fh9ilOZgURLn/fa6N0VIID2xJDU7NbUgtQgmy8TBKdXApNT+MSFWYBbjzM3rGndPf2Gkp358
+	4cuWXBtlxbkdNjqnGtk3sj380DTl6wPhazMv7iqs6nzhvpj1DveZP8ff+7DGT5NZdYKp/f6R
+	K7leF69veHfMPT9369upuSdUWDKW/Uv8vze9jvnL1MyZnZfTuL2zs3cuWNGn3rjl1dE8j62b
+	BHwsJNdf8PPk6//ocrnxULsGoxCbAqvamift6woll2lfdvmyTF95bdpNu4j+sL2zOLJUeoyK
+	BZKbTrG8/19pVOIuYr/00zxD5jffk/5u9OYUODXR8onUwa7794L3fVhetF1vT9/jzhdfn8Qu
+	LGh6y+Min7lpzgkeBhe7mI/Zv+5y3v8UpNCVvNyF/YbsPCWW4oxEQy3mouJEANY4sJ8iAwAA
+X-CMS-MailID: 20240916225415epcas5p1968703c07fb3102f42b9322460bb8404
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e
-References: <CGME20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e@epcas5p4.samsung.com>
+X-CMS-RootMailID: 20240911002436epcas5p19be55e1144edd6f77184192c7f22a85e
+References: <64d049cc-d55d-4376-b6b9-402eb6f170c0@samsung.com>
+	<20240906005935.caugoe3mqqdqwqao@synopsys.com>
+	<30ca8527-419b-4e44-a21b-18e494b39076@samsung.com>
+	<20240907003946.qn6t3xw65qwl2cn7@synopsys.com>
+	<dff83c7d-56b8-481f-af69-8d4262bd54e4@samsung.com>
+	<CGME20240911002436epcas5p19be55e1144edd6f77184192c7f22a85e@epcas5p1.samsung.com>
+	<20240911002408.gr4fv5vkst7ukxd5@synopsys.com>
+	<dd7965fa-9266-46b9-9219-1ef726480a9b@samsung.com>
+	<20240913175106.qbav2aigzwaj7pvd@synopsys.com>
+	<2cf9624b-8612-46aa-a528-a8948ef4f5e1@samsung.com>
+	<20240916211819.ulvmre4o57bhrr6q@synopsys.com>
 
-This commit addresses an issue where events were being processed when
-the controller was in a halted state. To fix this issue by stop
-processing the events as the event count was considered stale or
-invalid when the controller was halted.
 
-Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
+On 9/17/2024 2:48 AM, Thinh Nguyen wrote:
+> On Mon, Sep 16, 2024, Selvarasu Ganesan wrote:
+>> On 9/13/2024 11:21 PM, Thinh Nguyen wrote:
+>>> Hi,
+>>>
+>>> On Fri, Sep 13, 2024, Selvarasu Ganesan wrote:
+>>>> Hi Thinh,
+>>>>
+>>>> So far, there have been no reported error instances. But, we suspecting
+>>>> that the issue may be related to our glue driver. In our glue driver, we
+>>>> access the reference of evt->flags when starting or stopping the gadget
+>>>> based on a VBUS notification. We apologize for sharing this information
+>>>> so late, as we only became aware of it recently.
+>>>>
+>>>> The following sequence outlines the possible scenarios of race conditions:
+>>>>
+>>>> Thread#1 (Our glue Driver Sequence)
+>>>> ===================================
+>>>> ->USB VBUS notification
+>>>> ->Start/Stop gadget
+>>>> ->dwc->ev_buf->flags |= BIT(20); (It's for our reference)
+>>>> ->Call dwc3 exynos runtime suspend/resume
+>>>> ->dwc->ev_buf->flags &= ~BIT(20);
+>>>> ->Call dwc3 core runtime suspend/resume
+>>>>
+>>>> Thread#2
+>>>> ========
+>>>> ->dwc3_interrupt()
+>>>> ->evt->flags |= DWC3_EVENT_PENDING;
+>>>> ->dwc3_thread_interrupt()
+>>>> ->evt->flags &= ~DWC3_EVENT_PENDING;
+>>>>
+>>> This is great! That's likely the problem. Glad you found it.
+>>>
+>>>> After our internal discussions, we have decided to remove the
+>>>> unnecessary access to evt->flag in our glue driver. We have made these
+>>>> changes and initiated testing.
+>>>>
+>>>> Thank you for your help so far to understand more into our glue driver code.
+>>>>
+>>>> And We are thinking that it would be fine to reset evt->flag when the
+>>>> USB controller is started, along with the changes you suggested earlier.
+>>>> This additional measure will help prevent similar issues from occurring
+>>>> in the future.
+>>>>
+>>>> Please let us know your thoughts on this proposal. If it is not
+>>>> necessary, we understand and will proceed accordingly.
+>>>>
+>>> You can submit the change I suggested. That's a valid change. However,
+>>> we should not include the reset of the DWC3_EVENT_PENDING flag. Had we
+>>> done this, you may not found the issue above. It serves no purpose for
+>>> the core driver logic and will be an extra burden for us to maintain. (I
+>>> don't want to scratch my head in the future to figure out why that
+>>> change was needed or concern whether it can be removed without causing
+>>> regression).
+>> Yeah I understand.
+>>
+>> Please reconfirm the below changes once with commit message. I will post
+>> new version if this changes are fine.
+>>
+>>
+>> [PATCH] usb: dwc3: core: Stop processing of pending events if controller
+>> is halted
+>>
+>> This commit addresses an issue where events were being processed when
+>> the controller was in a halted state. To fix this issue by stop
+>> processing the events as the event count was considered stale or
+>> invalid when the controller was halted.
+>>
+>> Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+>> Cc: stable <stable@kernel.org>
+>> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+>> Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>> ---
+>>    drivers/usb/dwc3/core.c   | 17 +++++++++++++++--
+>>    drivers/usb/dwc3/core.h   |  4 ----
+>>    drivers/usb/dwc3/gadget.c | 22 +++++++++++-----------
+>>    3 files changed, 26 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 9eb085f359ce..f47b20bc2d1f 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -544,6 +544,7 @@ static int dwc3_alloc_event_buffers(struct dwc3
+>> *dwc, unsigned int length)
+>>    int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>>    {
+>>           struct dwc3_event_buffer        *evt;
+>> +       u32                             reg;
+>>
+>>           if (!dwc->ev_buf)
+>>                   return 0;
+>> @@ -556,8 +557,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>>                           upper_32_bits(evt->dma));
+>>           dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
+>>                           DWC3_GEVNTSIZ_SIZE(evt->length));
+>> -       dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
+>>
+>> +       /* Clear any stale event */
+> Do the same thing here as in dwc3_event_buffers_cleanup().
+done in new version.
+>
+>> +       reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+>> +       dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
+>>           return 0;
+>>    }
+>>
+>> @@ -2499,7 +2502,11 @@ static int dwc3_runtime_resume(struct device *dev)
+>>
+>>           switch (dwc->current_dr_role) {
+>>           case DWC3_GCTL_PRTCAP_DEVICE:
+>> -               dwc3_gadget_process_pending_events(dwc);
+>> +               if (dwc->pending_events) {
+>> +                       pm_runtime_put(dwc->dev);
+>> +                       dwc->pending_events = false;
+>> +                       enable_irq(dwc->irq_gadget);
+>> +               }
+>>                   break;
+>>           case DWC3_GCTL_PRTCAP_HOST:
+>>           default:
+>> @@ -2589,6 +2596,12 @@ static void dwc3_complete(struct device *dev)
+>>    static const struct dev_pm_ops dwc3_dev_pm_ops = {
+>>           SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
+>>           .complete = dwc3_complete,
+>> +
+>> +       /*
+>> +        * Runtime suspend halts the controller on disconnection. It
+>> replies on
+>> +        * platforms with custom connection notification to start the
+>> controller
+>> +        * again.
+>> +        */
+>>           SET_RUNTIME_PM_OPS(dwc3_runtime_suspend, dwc3_runtime_resume,
+>>                           dwc3_runtime_idle)
+>>    };
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index c71240e8f7c7..9c508e0c5cdf 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1675,7 +1675,6 @@ static inline void dwc3_otg_host_init(struct dwc3
+>> *dwc)
+>>    #if !IS_ENABLED(CONFIG_USB_DWC3_HOST)
+>>    int dwc3_gadget_suspend(struct dwc3 *dwc);
+>>    int dwc3_gadget_resume(struct dwc3 *dwc);
+>> -void dwc3_gadget_process_pending_events(struct dwc3 *dwc);
+>>    #else
+>>    static inline int dwc3_gadget_suspend(struct dwc3 *dwc)
+>>    {
+>> @@ -1687,9 +1686,6 @@ static inline int dwc3_gadget_resume(struct dwc3 *dwc)
+>>           return 0;
+>>    }
+>>
+>> -static inline void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+>> -{
+>> -}
+>>    #endif /* !IS_ENABLED(CONFIG_USB_DWC3_HOST) */
+>>
+>>    #if IS_ENABLED(CONFIG_USB_DWC3_ULPI)
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 291bc549935b..a32c3a292353 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -4483,6 +4483,17 @@ static irqreturn_t dwc3_check_event_buf(struct
+>> dwc3_event_buffer *evt)
+>>                   return IRQ_HANDLED;
+>>
+>>           count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+> If we properly cleanup event count in dwc3_event_buffers_cleanup() as
+> noted above, then you don't need this condition below. You can remove
+> the below check:
+done in new version.
+>
+>> +
+>> +       /*
+>> +        * If the controller is halted, the event count is
+>> stale/invalid. Ignore
+>> +        * them. This happens if the interrupt assertion is from an
+>> out-of-band
+>> +        * resume notification.
+>> +        */
+>> +       if (!dwc->pullups_connected && count) {
+>> +               dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
+>> +               return IRQ_HANDLED;
+>> +       }
+>> +
+>>           count &= DWC3_GEVNTCOUNT_MASK;
+>>           if (!count)
+>>                   return IRQ_NONE;
+>> @@ -4728,14 +4739,3 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
+>>
+>>           return dwc3_gadget_soft_connect(dwc);
+>>    }
+>> -
+>> -void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+>> -{
+>> -       if (dwc->pending_events) {
+>> -               dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
+>> -               dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
+>> -               pm_runtime_put(dwc->dev);
+>> -               dwc->pending_events = false;
+>> -               enable_irq(dwc->irq_gadget);
+>> -       }
+>> -}
 
-Changes in v2:
-- Updated the code changes that suggested by reviewer (Thinh Nguyen).
-- Link to v1: https://lore.kernel.org/lkml/20240719110100.329-1-selvarasu.g@samsung.com/
----
- drivers/usb/dwc3/core.c   | 22 +++++++++++++++++++---
- drivers/usb/dwc3/core.h   |  4 ----
- drivers/usb/dwc3/gadget.c | 11 -----------
- 3 files changed, 19 insertions(+), 18 deletions(-)
+Hi Thinh,
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 9eb085f359ce..65ae5203b89e 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -544,6 +544,7 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
- int dwc3_event_buffers_setup(struct dwc3 *dwc)
- {
- 	struct dwc3_event_buffer	*evt;
-+	u32				reg;
- 
- 	if (!dwc->ev_buf)
- 		return 0;
-@@ -556,8 +557,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
- 			upper_32_bits(evt->dma));
- 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
- 			DWC3_GEVNTSIZ_SIZE(evt->length));
--	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
- 
-+	/* Clear any stale event */
-+	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-+	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
- 	return 0;
- }
- 
-@@ -584,7 +587,10 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
- 	dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(0), 0);
- 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0), DWC3_GEVNTSIZ_INTMASK
- 			| DWC3_GEVNTSIZ_SIZE(0));
--	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
-+
-+	/* Clear any stale event */
-+	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-+	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
- }
- 
- static void dwc3_core_num_eps(struct dwc3 *dwc)
-@@ -2499,7 +2505,11 @@ static int dwc3_runtime_resume(struct device *dev)
- 
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
--		dwc3_gadget_process_pending_events(dwc);
-+		if (dwc->pending_events) {
-+			pm_runtime_put(dwc->dev);
-+			dwc->pending_events = false;
-+			enable_irq(dwc->irq_gadget);
-+		}
- 		break;
- 	case DWC3_GCTL_PRTCAP_HOST:
- 	default:
-@@ -2589,6 +2599,12 @@ static void dwc3_complete(struct device *dev)
- static const struct dev_pm_ops dwc3_dev_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
- 	.complete = dwc3_complete,
-+
-+	/*
-+	 * Runtime suspend halts the controller on disconnection. It replies on
-+	 * platforms with custom connection notification to start the controller
-+	 * again.
-+	 */
- 	SET_RUNTIME_PM_OPS(dwc3_runtime_suspend, dwc3_runtime_resume,
- 			dwc3_runtime_idle)
- };
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index c71240e8f7c7..9c508e0c5cdf 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1675,7 +1675,6 @@ static inline void dwc3_otg_host_init(struct dwc3 *dwc)
- #if !IS_ENABLED(CONFIG_USB_DWC3_HOST)
- int dwc3_gadget_suspend(struct dwc3 *dwc);
- int dwc3_gadget_resume(struct dwc3 *dwc);
--void dwc3_gadget_process_pending_events(struct dwc3 *dwc);
- #else
- static inline int dwc3_gadget_suspend(struct dwc3 *dwc)
- {
-@@ -1687,9 +1686,6 @@ static inline int dwc3_gadget_resume(struct dwc3 *dwc)
- 	return 0;
- }
- 
--static inline void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
--{
--}
- #endif /* !IS_ENABLED(CONFIG_USB_DWC3_HOST) */
- 
- #if IS_ENABLED(CONFIG_USB_DWC3_ULPI)
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 291bc549935b..10178e5eda5a 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4728,14 +4728,3 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
- 
- 	return dwc3_gadget_soft_connect(dwc);
- }
--
--void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
--{
--	if (dwc->pending_events) {
--		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
--		dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
--		pm_runtime_put(dwc->dev);
--		dwc->pending_events = false;
--		enable_irq(dwc->irq_gadget);
--	}
--}
--- 
-2.17.1
+Thanks for your suggestions. I posted a updated version in the below 
+link. SO, kindly review the same.
 
+https://lore.kernel.org/lkml/20240916224543.187-1-selvarasu.g@samsung.com/
+
+Thanks,
+Selva
+> The rest looks fine.
+>
+> Thanks,
+> Thinh
 
