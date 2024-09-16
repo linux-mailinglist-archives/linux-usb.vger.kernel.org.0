@@ -1,154 +1,192 @@
-Return-Path: <linux-usb+bounces-15131-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15132-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B0A0979A6E
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 06:43:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 428B3979ABC
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 07:25:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04AEB1F2321C
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 04:43:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4BD81F21F11
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 05:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5110A224D6;
-	Mon, 16 Sep 2024 04:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6114644E;
+	Mon, 16 Sep 2024 05:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLrVCw/D"
+	dkim=pass (2048-bit key) header.d=everestkc-com-np.20230601.gappssmtp.com header.i=@everestkc-com-np.20230601.gappssmtp.com header.b="ZPp1wIzE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7502441C71;
-	Mon, 16 Sep 2024 04:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE9B446D1
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 05:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726461816; cv=none; b=WSZSK8mpjB7AfGNTAcC4JQg5KLGyS4gSciVBvdKV10Sl7N4+9R+U374rnGPLiCX4Tbbyfqt94IrdAScOZu4FGOsZ/Qw9cJZMFADqD8GQl5KQqaqlmHNCKiXipJ7C4L4jCsq01m8W77cWc7ZSc+SyEYUAFhrZjYLwjBgd2fVMqaI=
+	t=1726464316; cv=none; b=pV3MCeLdSr2AVFtLXR+NvZwolWOwx9GWNzt6OELUBLxBb+r1e3oheBT0n2SAC4HImrk4FIj7eVlBxXi8q2M/GybtiGNu1Zz0DkPOMD7wYM2RJywqAM29IOfCU8JqSVjH3XMsPXUC7iIVC6A6TFccPuc+3y+Gn4KUSdYt/c0t3PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726461816; c=relaxed/simple;
-	bh=ZeZmp2jaqMB+hbBlYQkjKDos43cdAC6oZwwwcJ8/rwk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WYs7m68Pf7DpVnJa6hiCrhsm993sH4kQNiZNW331Wkz4s3Tzlzef9sTbJ4K97VMVHlhAtMTT3y6nq4eBqvFi1pkC7RH+1D83cLH8XizSp5NBCAI9P46UDMr7sJX8JpF8e7hBiSUiMcbYbTK+wn2IFtQsMQWV9ICP6NxNEZbGE74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLrVCw/D; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2d8818337a5so3550186a91.1;
-        Sun, 15 Sep 2024 21:43:35 -0700 (PDT)
+	s=arc-20240116; t=1726464316; c=relaxed/simple;
+	bh=9PL0KJkREBXZCsZeUMZCiVV9MTdg3kNhpdgdTCTbBVA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mQKZox+P7/0JcVPTesUX6k2uajLLx7AnRqPTAtwdIx9R1+T7ReK9vwriGmsZzio0/WFLrF1xeVcBAJLpYLzUX6eS7KtoDGL5CBSXKeHqPwzTjlVntaXzt4JtkY9pYgN/mEpDisqYauDOULoWhPzYT/job1dZu9AIZ2JC3JrTNto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=everestkc.com.np; spf=none smtp.mailfrom=everestkc.com.np; dkim=pass (2048-bit key) header.d=everestkc-com-np.20230601.gappssmtp.com header.i=@everestkc-com-np.20230601.gappssmtp.com header.b=ZPp1wIzE; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=everestkc.com.np
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=everestkc.com.np
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-205659dc63aso38938405ad.1
+        for <linux-usb@vger.kernel.org>; Sun, 15 Sep 2024 22:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726461815; x=1727066615; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jc4DBkxkMDzV5V8zKj5Rd2iVFxJc77hDWl6rcVj69Aw=;
-        b=JLrVCw/DKlOfckBsOUowOT3CkM1RAxMhNTQK+EA/dN5vKKn7EPDL1aKuP47SzzKzhK
-         6YgyoghG4FfXVlPHYhX5SCqWUF+KLInNBSG3vKbwglw1SHS+4w1qubhpQt5cVIUrDnWl
-         l4+wqs6wsKFPvPKA7QArSQwnCt0vqeVSBxSHKs+tLKz6YiFXSCAbPI7unzDjMzvyJgWN
-         9TAhMOAfglIMzbLzqVC8iCP92cMHetk2zPde/XALiPwLYIH1w8/0lS9xHAjM0TXW2yjw
-         dBv6iHTRq+BhUtKL8prhdJNEv/rePZ6rK/1Re0H3UxA88QcSNkNpZGy8TO5o+NNK8Twv
-         rCeA==
+        d=everestkc-com-np.20230601.gappssmtp.com; s=20230601; t=1726464314; x=1727069114; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LuSOh5erKMKm0kXqVEy8c5VHv8IQUs4PbHs0ClPNTXk=;
+        b=ZPp1wIzEQaj6a7MHF6tfZdM4RHOaYYdfJcL1OUBW69/jbn2pe29vCqu4f4BeuwpKOt
+         4zszxipGgqlYGJpEXyUMMqIrx096FeZdG3CicilWFWnFPf3TXVyMrry7TF0h+wnxIMbW
+         D3VbMsFaFwaw4A81pGJ9ZQLswalGjWjdbCnDOEf7F0DVY/DajFPBmXm62WzA5n+B+cod
+         +gX2nN/webFRpQ48S4a+UWqRVHSgSMGpCpnETGtM/UZLfKqMEyE9VGK1hWI6yxsl6A+p
+         InfQuapNmOCFRuRycRMTIqeaZIDXDVtmnUfWVm/cuf6PLKaX1kPVJ8vDO6wkN61PadNE
+         6v4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726461815; x=1727066615;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jc4DBkxkMDzV5V8zKj5Rd2iVFxJc77hDWl6rcVj69Aw=;
-        b=crkPZBB4BvfrCU/iKY2bw12t6OfBLDSVqt7ub1zoiF7Qyl2CrhtqLX2KpxHvEeLICz
-         kpdgE8z+qYOnE6CjEFQfQqavgBNlnCqwjkyzgLeExX/3SHu7qRv2+5SNfFCrE6wb6f6I
-         mdDEvyETcJ//0YQDEGLW/1KXqSbMWkE7uQ1pr8zd5W0udYdRY+FfQtJTQaQnRI7FArHr
-         9GevtFe1fnjRthef3WBtgp579bAGRdKS1TCApw8W0D4oUdj6kwNc1F5xzgV/y46/xlB5
-         sGzON7ePCchGtaSvZZZjT09gHHX35eyeWXmRiOEQ4Y9Dn/4hXImX5Z7xPXqpVLQw2pb6
-         hn0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUYc6YSc0+qghUKwC6UWEyq+jYUNP7cFESIVSOQJfQeckG8Bfz2knp5WfjX1PA5uMBx2NMup20G3SmqmFk=@vger.kernel.org, AJvYcCVNE1HzTs9ZmxVnhO79Bbzw4uvsg+FBV5nBtiHrbgJ25XPKD0XNJzCbEG4Sok2ZZggmxcvH1Oiff9MH@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEWYJ1pUeqoWGGXfmarxULVubgQ32GxC7RYC5gMr+Y9MtY0ZoO
-	flUE2Dr3+gEU9F32Bv7C4ROXx2GezgoNkqRxka36ABUwcTdaYz3oZ9R3SWuDDswepD7427QnpAt
-	iy2vmxbzSl6Wkb1ruIBklV9mHFy5ZhNUY
-X-Google-Smtp-Source: AGHT+IFVkEmZ9LA3nWy1Uwdnipyak8kl47qIzEVnN5pQT/FFXyK/ln/KY4JeG1Za8apUWqNoR2TdY1rOOfLGLI8Ilh0=
-X-Received: by 2002:a17:90b:2285:b0:2c9:36bf:ba6f with SMTP id
- 98e67ed59e1d1-2db9fc1bf48mr21436914a91.3.1726461814523; Sun, 15 Sep 2024
- 21:43:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726464314; x=1727069114;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LuSOh5erKMKm0kXqVEy8c5VHv8IQUs4PbHs0ClPNTXk=;
+        b=qZZ0JqmBOOE6L/KLYBwf+B26Q/ZhQRbc69uiMC0a37eg44lto9S79e04TIFpamuw1t
+         qjOzk78xArAw3GYVMN//PabRwSeoIH3ZLlub7QNL8QUc5ra5EIkTSyb4TqXXXIhOFw+S
+         7/gUvIH5z2va8Y6HSCZMPdzr3TCN1TqnLjK4znagjZwbUuo9u+nXQr1oaD0pTFvEVjXs
+         bWJCmGSvszslGhNYAgxR8YGIYX6vbz/xTaMb9GVJUrdQYM4EAqCZbOUCNOzVuJwjC+76
+         K+UppZZ5H3YWDEPn2xijtpxpBFyhvf58o3PIoDJeYo7WAz1nECLrKENk1RJxJTjRE26O
+         Qg5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXNwopHyOAQFrDTyw4RnLXKL2z01V/G+Dc3I/0RZUUC076VUihEeBYRE6jppEEdX6YPt8N2UCyX55c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3b1zI6rTUMDUJWI0ZkKYXEDPiEVRksBR+8cnnok8ySs3+Xtk3
+	tkyjL5s7dgJY3PMIrsaMU70Cum2iTLQfwL4RI367ozCtoO/9xYTnHCpV2y1Igjk=
+X-Google-Smtp-Source: AGHT+IHmQ63E/FEOpoDXOeA0lDDGe6ISeVicf0+BYH3UfBDH+OXq+7L1AczokPEJBRu4wR99+sU0NQ==
+X-Received: by 2002:a17:903:11ce:b0:1f7:26f:9185 with SMTP id d9443c01a7336-2076e36a649mr238332795ad.10.1726464313734;
+        Sun, 15 Sep 2024 22:25:13 -0700 (PDT)
+Received: from localhost.localdomain ([132.178.238.28])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-207946f3558sm29624865ad.183.2024.09.15.22.25.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Sep 2024 22:25:13 -0700 (PDT)
+From: "Everest K.C." <everestkc@everestkc.com.np>
+To: gregkh@linuxfoundation.org,
+	u.kleine-koenig@pengutronix.de
+Cc: "Everest K.C." <everestkc@everestkc.com.np>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] Fix spelling errors in file drivers/usb/gadget/udc/m66592-udc.c
+Date: Sun, 15 Sep 2024 23:23:56 -0600
+Message-ID: <20240916052357.6487-1-everestkc@everestkc.com.np>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <2024091626-trailside-grandkid-5f86@gregkh>
+References: <2024091626-trailside-grandkid-5f86@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240916040629.28750-1-aha310510@gmail.com> <2024091648-excusable-unfilled-83de@gregkh>
-In-Reply-To: <2024091648-excusable-unfilled-83de@gregkh>
-From: Jeongjun Park <aha310510@gmail.com>
-Date: Mon, 16 Sep 2024 13:43:22 +0900
-Message-ID: <CAO9qdTHPA6cUWc+T8pcO8_tUpJ5PZ4UgmyP6oA+R5bEH8nX5pQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: use mutex_lock in iowarrior_read()
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: colin.i.king@gmail.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Sep 16, 2024 at 01:06:29PM +0900, Jeongjun Park wrote:
-> > Currently, iowarrior_read() does not provide any protection for the
-> > iowarrior structure, so the iowarrior structure is vulnerable to data-race.
-> >
-> > Therefore, I think it is appropriate to protect the structure using
-> > mutex_lock in iowarrior_read().
-> >
-> > Fixes: 946b960d13c1 ("USB: add driver for iowarrior devices.")
-> > Signed-off-by: Jeongjun Park <aha310510@gmail.com>
-> > ---
-> >  drivers/usb/misc/iowarrior.c | 42 +++++++++++++++++++++++++++---------
-> >  1 file changed, 32 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-> > index 6d28467ce352..7f3d37b395c3 100644
-> > --- a/drivers/usb/misc/iowarrior.c
-> > +++ b/drivers/usb/misc/iowarrior.c
-> > @@ -277,28 +277,41 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
-> >       struct iowarrior *dev;
-> >       int read_idx;
-> >       int offset;
-> > +     int retval = 0;
-> >
-> >       dev = file->private_data;
-> >
-> > +     if (!dev) {
->
-> How can this happen?  How was this tested?
->
-> And you didn't mention this in your changelog, why?
+Fixed spelling errors in error message and comments that
+were reported by codespell as follows:
+	unexpect  --> unexpected
+	workaound --> workaround
 
-There is no separate reproduction code or bug report. However, all other
-functions in iowarrior use mutex_lock to protect the iowarrior structure.
-Only iowarrior_read does not use mutex_lock, which could potentially cause
-bugs.
+Signed-off-by: Everest K.C. <everestkc@everestkc.com.np>
+---
+ v1 --> v2: Removed the coding style fix. This patch now only
+	    fixes spelling errors. The coding style will be fixed
+	    in a separate patch. 
 
-There is no reason why this function should not use mutex_lock,
-so I think adding a lock is appropriate.
+ drivers/usb/gadget/udc/m66592-udc.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
->
-> > +             retval = -ENODEV;
-> > +             goto exit;
-> > +     }
->
-> What prevents dev from becoming invalid after it is checked here?
+diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
+index bfaa5291e6c8..c5e68caaac8d 100644
+--- a/drivers/usb/gadget/udc/m66592-udc.c
++++ b/drivers/usb/gadget/udc/m66592-udc.c
+@@ -110,7 +110,7 @@ static inline u16 control_reg_get_pid(struct m66592 *m66592, u16 pipenum)
+ 		offset = get_pipectr_addr(pipenum);
+ 		pid = m66592_read(m66592, offset) & M66592_PID;
+ 	} else
+-		pr_err("unexpect pipe num (%d)\n", pipenum);
++		pr_err("unexpected pipe num (%d)\n", pipenum);
+ 
+ 	return pid;
+ }
+@@ -126,7 +126,7 @@ static inline void control_reg_set_pid(struct m66592 *m66592, u16 pipenum,
+ 		offset = get_pipectr_addr(pipenum);
+ 		m66592_mdfy(m66592, pid, M66592_PID, offset);
+ 	} else
+-		pr_err("unexpect pipe num (%d)\n", pipenum);
++		pr_err("unexpected pipe num (%d)\n", pipenum);
+ }
+ 
+ static inline void pipe_start(struct m66592 *m66592, u16 pipenum)
+@@ -155,7 +155,7 @@ static inline u16 control_reg_get(struct m66592 *m66592, u16 pipenum)
+ 		offset = get_pipectr_addr(pipenum);
+ 		ret = m66592_read(m66592, offset);
+ 	} else
+-		pr_err("unexpect pipe num (%d)\n", pipenum);
++		pr_err("unexpected pipe num (%d)\n", pipenum);
+ 
+ 	return ret;
+ }
+@@ -172,7 +172,7 @@ static inline void control_reg_sqclr(struct m66592 *m66592, u16 pipenum)
+ 		offset = get_pipectr_addr(pipenum);
+ 		m66592_bset(m66592, M66592_SQCLR, offset);
+ 	} else
+-		pr_err("unexpect pipe num(%d)\n", pipenum);
++		pr_err("unexpected pipe num(%d)\n", pipenum);
+ }
+ 
+ static inline int get_buffer_size(struct m66592 *m66592, u16 pipenum)
+@@ -293,7 +293,7 @@ static void pipe_buffer_release(struct m66592 *m66592,
+ 		if (info->type == M66592_BULK)
+ 			m66592->bulk--;
+ 	} else
+-		pr_err("ep_release: unexpect pipenum (%d)\n",
++		pr_err("ep_release: unexpected pipenum (%d)\n",
+ 				info->pipe);
+ }
+ 
+@@ -428,7 +428,7 @@ static int alloc_pipe_config(struct m66592_ep *ep,
+ 		counter = &m66592->isochronous;
+ 		break;
+ 	default:
+-		pr_err("unexpect xfer type\n");
++		pr_err("unexpected xfer type\n");
+ 		return -EINVAL;
+ 	}
+ 	ep->type = info.type;
+@@ -579,7 +579,7 @@ static void start_ep0(struct m66592_ep *ep, struct m66592_request *req)
+ 		control_end(ep->m66592, 0);
+ 		break;
+ 	default:
+-		pr_err("start_ep0: unexpect ctsq(%x)\n", ctsq);
++		pr_err("start_ep0: unexpected ctsq(%x)\n", ctsq);
+ 		break;
+ 	}
+ }
+@@ -599,7 +599,7 @@ static void init_controller(struct m66592 *m66592)
+ 		m66592_bclr(m66592, M66592_DPRPU, M66592_SYSCFG);
+ 		m66592_bset(m66592, M66592_USBE, M66592_SYSCFG);
+ 
+-		/* This is a workaound for SH7722 2nd cut */
++		/* This is a workaround for SH7722 2nd cut */
+ 		m66592_bset(m66592, 0x8000, M66592_DVSTCTR);
+ 		m66592_bset(m66592, 0x1000, M66592_TESTMODE);
+ 		m66592_bclr(m66592, 0x8000, M66592_DVSTCTR);
+@@ -1186,7 +1186,7 @@ __acquires(m66592->lock)
+ 		control_end(m66592, 0);
+ 		break;
+ 	default:
+-		pr_err("ctrl_stage: unexpect ctsq(%x)\n", ctsq);
++		pr_err("ctrl_stage: unexpected ctsq(%x)\n", ctsq);
+ 		break;
+ 	}
+ }
+-- 
+2.43.0
 
-I'm not sure what this means. Can you explain it in more detail?
-
->
-> > +
-> > +     mutex_lock(&dev->mutex);
->
-> Please use the guard() form here, it makes the change much simpler and
-> easier to review and maintain.
-
-I didn't know such a convenient function existed. It certainly seems like
-it would make maintenance easier, but it also seems like it would be a
-good idea to consistently replace all mutex_locks in iowarrior.c with guard().
-
-What do you think?
-
-Regards,
-Jeongjun Park
-
->
-> thanks,
->
-> greg k-h
 
