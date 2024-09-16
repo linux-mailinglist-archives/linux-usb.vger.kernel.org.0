@@ -1,74 +1,76 @@
-Return-Path: <linux-usb+bounces-15137-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15138-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D0C6979CD6
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 10:35:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49A2F979F48
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 12:28:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 935F21F2399F
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 08:35:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CBDB1C22CC3
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 10:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D42D13D8B0;
-	Mon, 16 Sep 2024 08:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44CB815383A;
+	Mon, 16 Sep 2024 10:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IN2RQ1bg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cCM5zITX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C0E5588E
-	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 08:35:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA7714A4C1
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 10:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726475735; cv=none; b=le0ysSsU4LqdHhV4IqAfFxNKUjKPVoeY9m6H3gJVvZlb9N3AAyHbGz9vXRWbYsvF3d3zmrS09YfAxqtdOZMTs41CB0D3PV5wkuEGMPp36nbX7GoHy348U1ttt8Y4EBMHFA+IrUDooAx1mFj0vxA8eDWG13XCICV+EWJqZ+lJme4=
+	t=1726482526; cv=none; b=FkYFK3IkQg8BN+KGY7nifEBb40LRHdLjaVR9O81sxV7PZ2CcMlJel/xjB1sgsZ8/oIyeRzt7x+vkXuR8f3gioUytIDa6Rr3NDFKOAHuiVHcChvOeQ6zjUO7RW4KyDhixYtZqCLRf7MUrB3hQE64CrL1EEHTbMT+IGGNFkJrYnbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726475735; c=relaxed/simple;
-	bh=/nwtXF3hLOPB73p62TxSPjaiOvKukeEL3qu6NUtL18Q=;
+	s=arc-20240116; t=1726482526; c=relaxed/simple;
+	bh=pDqst7knH5b5b0N7PwG3+xglcT7PeB2fKqtQhBtecIA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g20NioM48OrC9Fuv2X82wsVCVjnVQu5/k+wFHEidQ1bMKk+GTQGNR/W7UtW6+/u1YLl7VpYue7dkpinv/ccPhr73C+eXC08MztAQrNJSqjk42hBi7gika/RohAE3QddSJOv74fQC38gL0hrj2xi2m/tbTWQvGPEq/x96nCs4VII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IN2RQ1bg; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-374c4c6cb29so3237676f8f.3
-        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 01:35:32 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=lREd3I1AOs3rer07UYXVhDnWeAyKAD6/z+/bXokq9bT04KJUfc20GoLg3RVoD+oP6hpMdoIjTsB/q/P9aHFI8J++1uNaTJ6HANAnzJignAaRM3dIMoyKPKQCKJWIPD6a/GGWb/TLCSrd9rLWI4aExAMGwrjCEG0iqWKse9M39qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cCM5zITX; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-374d1dd1e75so304562f8f.1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 03:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1726475731; x=1727080531; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CMINKOsmPsHhcKu4v5845p8XqAyVAJIHsx+sTkvYhMI=;
-        b=IN2RQ1bgl7MI1CKO66qzoZqA2I5+aRnwy3hoUkCEtnGuvQHZFz4RbEQeSi+T96hFzB
-         PdODomd2LYO2R0Flu2vw8rFSBXUENlxgDH7iHIPXfGw7sptKgNyfAOdqOBRWh2x1hiy/
-         A6uC5CTRDjjWTo4vn9bZlHekSlMrJ0vjiktYiDFqa4gEmgIkKcr0C637hhBG6Lt9cHtv
-         aViplzFsUC6WvPShMNhPcdY7bR/ADhaGdDzJccjhhXbWIaw8uLmFQdzncPiCsBzsLUa5
-         LektQuGGAWkR1C+2r9uUjhJWhW+Ifd8iQFiO+i7K7UlScL0XC8ApPLoV8OjKXAW6hPtp
-         VvWQ==
+        d=linaro.org; s=google; t=1726482522; x=1727087322; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=FrvXr7mWJZPmRuY1IQsR2n0NYi0A8ps+cVaZEBwchh0=;
+        b=cCM5zITXYiNsd/Q4eDMrU6Lrt1vvrNkuoj7rfC+HtkbvuD8tjiUg1mng673U7TOCx+
+         5oaghDjBp79eOhZbhfzzDi23ke9v8R6sQsQLFuTOR6uJFRj26d7AwqazPts870N+m1eQ
+         KcSO7WCbqN/u2+wxGWAOxt+3LTWfRqUo4EbdjznXI1YQgkpP9Y2F1ehX5l8s10vmUyoa
+         4jrkAJzxqLtXuP6wwae8RbKIbZlOh3qsobyySHFwQ9ZzvrtdoQsiIUM+zbAC83YTOAtp
+         p3jhBQ/Wp94o4yWOggecrE24+5w1ZkcCO1uXkUlNiuJgnGTjlHe6SXTa4LFeRqaSFzR3
+         SBmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726475731; x=1727080531;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CMINKOsmPsHhcKu4v5845p8XqAyVAJIHsx+sTkvYhMI=;
-        b=ZNBWk5WrwzzhiHVAoLVngMSLWpaooNaqiUT8oTp+pj9KnKHhni1mRBfJT15TqPpRmH
-         WGafo/hnCvqBrzawYCFVPiuWUfZ71cSNAf643yGEFbM5kV46xuVoNRW+YNBmC3YCQz+B
-         xkQBfZ5bMyaay+34bo9AvNU3MyYskTEuba9bx1cNGz4jnEQPzwcoXLpF/7narihFa0IJ
-         Fg4SuOfI413jqq4exuBHuxbehDq4yJD0OqhqylezPRP9qiEZZrr7CILGZyPulYYUurgK
-         Ru0CS0+SVny/7ajfPFMTF+UFbYcB52NF0oOBFWRXEAPsTY2aTEBgRY+DOgaYlw58Vi6o
-         JVaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgxG9Os2ssHETzvnqotFNU3i2CQV+yJkDKo3phTX1TRKJs6rS+vb6XqTz09eyyJJ1A+t5XEvvVzRk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8JqLsAqIy16/IdAKugtDO6EVVw2s5N+dQXWJZEAnY2VjH/BPe
-	sI0PxmJqyQ0xnj7+APNJaVF7MyZ46NHLAouMeGdK3OXh6fbbKRf8X3+sBRPA34s=
-X-Google-Smtp-Source: AGHT+IE69UyTFKQQkGocKkUovyUk2AzY8YU3o8sLgoMLS2EWGr6fEKXQOQLsjaX1L9CBGh3Eg3PRCA==
-X-Received: by 2002:a05:6000:120d:b0:374:cafe:c55f with SMTP id ffacd0b85a97d-378d61e269bmr7882762f8f.20.1726475730509;
-        Mon, 16 Sep 2024 01:35:30 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13e7:b801:321e:ca35:2127:23e6? ([2001:a61:13e7:b801:321e:ca35:2127:23e6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378e78052efsm6555075f8f.97.2024.09.16.01.35.29
+        d=1e100.net; s=20230601; t=1726482522; x=1727087322;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FrvXr7mWJZPmRuY1IQsR2n0NYi0A8ps+cVaZEBwchh0=;
+        b=THHbp6QoTFMuQxQ17Qp8RQQ9+YkyP9g4eG01vbNHF8brf6Nx/hbn3kc0wAMMIsb3PK
+         lYxekGcgXmOSBgALEtK3O2w8pA1ALHsA8X1uDAX1P+6j7ZAF70Dpao9IeN/qbrAso1uq
+         yF3Td9wGEfo5lBdBKiZJzei7cDlg20+c8CJZHp8q2YubV5cF477wT/aBj9I6oa41YZlM
+         Aij+LrykFl/uOgGKK94aJLOfeviGO4opWmE8tRpe1HWoyCluW3kjMAFZSmAACdNEQtXF
+         X9A96vPS0Sleknvxw75oeOv+5lzrV164AYEj6d4JU0TP7saEX2R/pG5PlxbTEur2G34I
+         oruA==
+X-Forwarded-Encrypted: i=1; AJvYcCWdNJAP/YybPCU+nenb+1H+nOH7vlqFbB8xm3R3hp0gFiN0G3H5Vw4f4jWOJx0V44riHpaRg6VguEE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtlMBJJu5M3qvOuQpmdWvItEULP7hOuEbd0yX19yJMfYfrYoHF
+	Nvr7a0cxKIb0+GFpMpWJ0vaN1i2HmkE8XiITUQWMBuT+VH2xbdD/dDSD8wBdheGEmbXsmzAi1M8
+	o
+X-Google-Smtp-Source: AGHT+IGh3WqVzNod+W9x5au2z3vMgPIWUCC/Vm1m+KWMKba5DtDy1+nj2sJBydGEfOc5xZFR8D4lPw==
+X-Received: by 2002:a05:6000:402a:b0:378:955f:cc09 with SMTP id ffacd0b85a97d-378c2d5f6d9mr4080119f8f.11.1726482521780;
+        Mon, 16 Sep 2024 03:28:41 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.211.167])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378e7804483sm6785972f8f.92.2024.09.16.03.28.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Sep 2024 01:35:30 -0700 (PDT)
-Message-ID: <15bc0f3a-5433-43e0-b0b0-8b9c26dec165@suse.com>
-Date: Mon, 16 Sep 2024 10:35:28 +0200
+        Mon, 16 Sep 2024 03:28:41 -0700 (PDT)
+Message-ID: <8b99ac02-fc68-4797-94c1-c9b1ecb8ea62@linaro.org>
+Date: Mon, 16 Sep 2024 12:28:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,163 +78,82 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: use mutex_lock in iowarrior_read()
-To: Greg KH <gregkh@linuxfoundation.org>, Jeongjun Park <aha310510@gmail.com>
-Cc: colin.i.king@gmail.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240916040629.28750-1-aha310510@gmail.com>
- <2024091648-excusable-unfilled-83de@gregkh>
+Subject: Re: [PATCH] usb: dwc3: rtk: Clean up error code in
+ __get_dwc3_maximum_speed()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <865e56dc-37cc-47b1-8d35-9047ecb1984a@stanley.mountain>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <2024091648-excusable-unfilled-83de@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <865e56dc-37cc-47b1-8d35-9047ecb1984a@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 16.09.24 06:15, Greg KH wrote:
-> On Mon, Sep 16, 2024 at 01:06:29PM +0900, Jeongjun Park wrote:
->> Currently, iowarrior_read() does not provide any protection for the
->> iowarrior structure, so the iowarrior structure is vulnerable to data-race.
->>
->> Therefore, I think it is appropriate to protect the structure using
->> mutex_lock in iowarrior_read().
->>
->> Fixes: 946b960d13c1 ("USB: add driver for iowarrior devices.")
->> Signed-off-by: Jeongjun Park <aha310510@gmail.com>
->> ---
->>   drivers/usb/misc/iowarrior.c | 42 +++++++++++++++++++++++++++---------
->>   1 file changed, 32 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
->> index 6d28467ce352..7f3d37b395c3 100644
->> --- a/drivers/usb/misc/iowarrior.c
->> +++ b/drivers/usb/misc/iowarrior.c
->> @@ -277,28 +277,41 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
->>   	struct iowarrior *dev;
->>   	int read_idx;
->>   	int offset;
->> +	int retval = 0;
->>   
->>   	dev = file->private_data;
->>   
->> +	if (!dev) {
+On 12/09/2024 10:54, Dan Carpenter wrote:
+> The __get_dwc3_maximum_speed() function returns an enum type which, in
+> this context here, is basically unsigned int.  On error cases, it's
+> supposed to return USB_SPEED_UNKNOWN, but it was accidentally changed to
+> return negative error codes in commit f93e96c544ca ("usb: dwc3: rtk: use
+> scoped device node handling to simplify error paths").
 > 
-> How can this happen?  How was this tested?
-
-It cannot happen.
-
-[..]
->> +	mutex_lock(&dev->mutex);
+> There is only one caller and because of the way that the types work out,
+> returning negative error codes is not a problem.  They will be treated
+> as greater than USB_SPEED_HIGH and ignored as invalid.  So this patch
+> does not affect run time behavior, it's just a clean up.
 > 
-> Please use the guard() form here, it makes the change much simpler and
-> easier to review and maintain.
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 
-That would break the O_NONBLOCK case.
+Fixes: f93e96c544ca ("usb: dwc3: rtk: use scoped device node handling to simplify error paths")
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Looking at the code it indeed looks like iowarrior_read() can race
-with itself. Strictly speaking it always could happen if a task used
-fork() after open(). The driver tries to restrict its usage to one
-thread, but I doubt that the logic is functional.
 
-It seems to me the correct fix is something like this:
-
- From 1627bc3a8e9aae60bdfc85430db2a44283e71a68 Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Thu, 12 Sep 2024 12:47:33 +0200
-Subject: [PATCH] iowarrior: fix read racing against itself case
-
-In a multithreaded application iowarrior_read() can race against itself.
-It needs to take the mutex.
-
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
-  drivers/usb/misc/iowarrior.c | 33 ++++++++++++++++++++++++++-------
-  1 file changed, 26 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-index 6d28467ce352..3b49d6c7b569 100644
---- a/drivers/usb/misc/iowarrior.c
-+++ b/drivers/usb/misc/iowarrior.c
-@@ -277,6 +277,8 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
-  	struct iowarrior *dev;
-  	int read_idx;
-  	int offset;
-+	int result;
-+	bool nonblock = file->f_flags & O_NONBLOCK;
-  
-  	dev = file->private_data;
-  
-@@ -292,14 +294,25 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
-  	    && (count != (dev->report_size + 1)))
-  		return -EINVAL;
-  
-+	if (nonblock) {
-+		result = mutex_trylock(&dev->mutex);
-+		if (!result)
-+			return -EAGAIN;
-+		result = 0;
-+	} else {
-+		result = mutex_lock_interruptible(&dev->mutex);
-+		if (result < 0)
-+			return -EINTR;
-+	}
-  	/* repeat until no buffer overrun in callback handler occur */
-  	do {
-  		atomic_set(&dev->overflow_flag, 0);
-  		if ((read_idx = read_index(dev)) == -1) {
-  			/* queue empty */
--			if (file->f_flags & O_NONBLOCK)
--				return -EAGAIN;
--			else {
-+			if (nonblock) {
-+				result = -EAGAIN;
-+				goto out;
-+			} else {
-  				//next line will return when there is either new data, or the device is unplugged
-  				int r = wait_event_interruptible(dev->read_wait,
-  								 (!dev->present
-@@ -309,14 +322,17 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
-  								  -1));
-  				if (r) {
-  					//we were interrupted by a signal
--					return -ERESTART;
-+					result = -ERESTART;
-+					goto out;
-  				}
-  				if (!dev->present) {
-  					//The device was unplugged
--					return -ENODEV;
-+					result = -ENODEV;
-+					goto out;
-  				}
-  				if (read_idx == -1) {
-  					// Can this happen ???
-+					mutex_unlock(&dev->mutex);
-  					return 0;
-  				}
-  			}
-@@ -324,13 +340,16 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
-  
-  		offset = read_idx * (dev->report_size + 1);
-  		if (copy_to_user(buffer, dev->read_queue + offset, count)) {
--			return -EFAULT;
-+			result = -EFAULT;
-+			goto out;
-  		}
-  	} while (atomic_read(&dev->overflow_flag));
-  
-  	read_idx = ++read_idx == MAX_INTERRUPT_BUFFER ? 0 : read_idx;
-  	atomic_set(&dev->read_idx, read_idx);
--	return count;
-+out:
-+	mutex_unlock(&dev->mutex);
-+	return result < 0 ? result : count;
-  }
-  
-  /*
--- 
-2.45.2
-
+Best regards,
+Krzysztof
 
 
