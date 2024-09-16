@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-15133-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15134-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87CBB979B83
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 08:50:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A6C7979B8D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 08:52:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4025F1F22BB7
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 06:50:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5932B2842AC
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 06:52:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEF28288C;
-	Mon, 16 Sep 2024 06:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE3E8175F;
+	Mon, 16 Sep 2024 06:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1D/ZAl0R"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EdZDsE7G"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8E6537F5;
-	Mon, 16 Sep 2024 06:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F07523A9;
+	Mon, 16 Sep 2024 06:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726469413; cv=none; b=XN870FYbJ865MCJJJTa82kTUHIq9XHxp28+jFbz7Jqv75VJvUpInjwqNkshqcaB8t4e5ojU4xgZeum4hoy+/GzruKpEKFa2LTVSvypxmonVCxd3dOCqAQZM+dEvrYOVkt4OVSnVd9d+6rCXRZlcjsSvaQoIklyb7HFHHo8IqYNI=
+	t=1726469540; cv=none; b=cdSDHJOgXZ86Xp3Fy6G5tl8JpHbD9LcJAbLpB2+jc4F5PlbGsUv1xjlGZWe/9I0uKy2belqOSEatmlUf6sZ4kfa5yOXOJJweDWZ7A2mWOnRmI32CkMbY6U0n7i6MMp/oqfRF4yUZQ+GyuDINUGGr/Xhd8hSwbNxllIfed1YndHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726469413; c=relaxed/simple;
-	bh=GxHk/xrFXYov3d1t2q6REcdnGozK9lGHAQk2s4rVGv8=;
+	s=arc-20240116; t=1726469540; c=relaxed/simple;
+	bh=erVwroX0EYxBlfLPn9xaj2JYjfZ/Sfv/EMD4+BSx31o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qaFiFoONkax6jHmarYdwae6u0t1TYtEvdLHppclYrOS94nylziJB4QVtPbQYPRwpefYmSwD47vICKfmGnl3nMDfYdL+nUCdY1T55A37ininDsFsq7rKAyvRi0ietAnz3o5Eg68iiW1E6tBwbjSJAM+wUm0ZJ8JH6UdLPaUOGu2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1D/ZAl0R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC52C4CEC4;
-	Mon, 16 Sep 2024 06:50:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=suJRR/T9qvKPeTpAiu0+7mMo7XDQmm++7+tsxJPeWywUDT8RRlH8UqE/bXUSh9lV+m6RlS741PBcAwdPEjAlI/XpRllatgef/lFEl8yKbf0WcC2bC5+R1cPRyQ/UUPsbX91GD65c7CKPrDauO0Ju3lKwhpBiARNLzl9+aaRScLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EdZDsE7G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B3D5C4CEC4;
+	Mon, 16 Sep 2024 06:52:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726469412;
-	bh=GxHk/xrFXYov3d1t2q6REcdnGozK9lGHAQk2s4rVGv8=;
+	s=korg; t=1726469539;
+	bh=erVwroX0EYxBlfLPn9xaj2JYjfZ/Sfv/EMD4+BSx31o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1D/ZAl0RVmtqm9US99vyDuECyGRRRgVIfnIFnwGU5H58vcajQ8KZ4X4L7WK7n+FXT
-	 uLowrq1KQ8SkfQbDkJnUQ2Bg9qo2rVCYJ4Ld5X38vU8c9CKYMH8vRZS87spWszqvtW
-	 Gh2ny002nw9WJBoqcRMIaOASrs6S+dxa2/EkfCAI=
-Date: Mon, 16 Sep 2024 08:50:09 +0200
+	b=EdZDsE7GClnmwz5KFPZf8T1A9FICtG7t85hW/ptGttjIQFtplR/KsyXezqf8mPdj2
+	 PZ2ZGfc5tXByTNYO/PRtIb6rpNLUDsXL1CSKfvYYNevT/IYwJ7U9VkDPLI3wLctvy3
+	 QN+3lfi6h9GeLZR6Sqteu9sYnUgkGsiS+iW9L/TA=
+Date: Mon, 16 Sep 2024 08:52:16 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Jeongjun Park <aha310510@gmail.com>
-Cc: colin.i.king@gmail.com, linux-usb@vger.kernel.org,
+To: "Everest K.C." <everestkc@everestkc.com.np>
+Cc: u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: use mutex_lock in iowarrior_read()
-Message-ID: <2024091659-showing-bulge-196b@gregkh>
-References: <20240916040629.28750-1-aha310510@gmail.com>
- <2024091648-excusable-unfilled-83de@gregkh>
- <CAO9qdTHPA6cUWc+T8pcO8_tUpJ5PZ4UgmyP6oA+R5bEH8nX5pQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Fix spelling errors in file
+ drivers/usb/gadget/udc/m66592-udc.c
+Message-ID: <2024091639-tasty-relay-5082@gregkh>
+References: <2024091626-trailside-grandkid-5f86@gregkh>
+ <20240916052357.6487-1-everestkc@everestkc.com.np>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,90 +56,32 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAO9qdTHPA6cUWc+T8pcO8_tUpJ5PZ4UgmyP6oA+R5bEH8nX5pQ@mail.gmail.com>
+In-Reply-To: <20240916052357.6487-1-everestkc@everestkc.com.np>
 
-On Mon, Sep 16, 2024 at 01:43:22PM +0900, Jeongjun Park wrote:
-> Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Sep 16, 2024 at 01:06:29PM +0900, Jeongjun Park wrote:
-> > > Currently, iowarrior_read() does not provide any protection for the
-> > > iowarrior structure, so the iowarrior structure is vulnerable to data-race.
-> > >
-> > > Therefore, I think it is appropriate to protect the structure using
-> > > mutex_lock in iowarrior_read().
-> > >
-> > > Fixes: 946b960d13c1 ("USB: add driver for iowarrior devices.")
-> > > Signed-off-by: Jeongjun Park <aha310510@gmail.com>
-> > > ---
-> > >  drivers/usb/misc/iowarrior.c | 42 +++++++++++++++++++++++++++---------
-> > >  1 file changed, 32 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-> > > index 6d28467ce352..7f3d37b395c3 100644
-> > > --- a/drivers/usb/misc/iowarrior.c
-> > > +++ b/drivers/usb/misc/iowarrior.c
-> > > @@ -277,28 +277,41 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
-> > >       struct iowarrior *dev;
-> > >       int read_idx;
-> > >       int offset;
-> > > +     int retval = 0;
-> > >
-> > >       dev = file->private_data;
-> > >
-> > > +     if (!dev) {
-> >
-> > How can this happen?  How was this tested?
-> >
-> > And you didn't mention this in your changelog, why?
+On Sun, Sep 15, 2024 at 11:23:56PM -0600, Everest K.C. wrote:
+> Fixed spelling errors in error message and comments that
+> were reported by codespell as follows:
+> 	unexpect  --> unexpected
+> 	workaound --> workaround
 > 
-> There is no separate reproduction code or bug report. However, all other
-> functions in iowarrior use mutex_lock to protect the iowarrior structure.
-> Only iowarrior_read does not use mutex_lock, which could potentially cause
-> bugs.
-
-But if you don't have a report, and don't have this device, how can you
-test this to make sure?
-
-> There is no reason why this function should not use mutex_lock,
-> so I think adding a lock is appropriate.
-
-Fair enough, but do it properly please.
-
-> > > +             retval = -ENODEV;
-> > > +             goto exit;
-> > > +     }
-> >
-> > What prevents dev from becoming invalid after it is checked here?
+> Signed-off-by: Everest K.C. <everestkc@everestkc.com.np>
+> ---
+>  v1 --> v2: Removed the coding style fix. This patch now only
+> 	    fixes spelling errors. The coding style will be fixed
+> 	    in a separate patch. 
 > 
-> I'm not sure what this means. Can you explain it in more detail?
+>  drivers/usb/gadget/udc/m66592-udc.c | 18 +++++++++---------
 
-What happens if the private_data pointer becomes "stale" right after
-checking it is not NULL?  You need to explain how it is safe, if it is,
-to do this.
+If you do:
+	git log --oneline drivers/usb/gadget/udc/m66592-udc.c
+you will see the format for how to properly write the Subject: line
+here.
 
-Actually, what ever sets this to NULL?  I think this check isn't needed
-at all from looking at the code (hint, think about the lifetime of the
-file pointer...)
-
-> > > +     mutex_lock(&dev->mutex);
-> >
-> > Please use the guard() form here, it makes the change much simpler and
-> > easier to review and maintain.
-> 
-> I didn't know such a convenient function existed. It certainly seems like
-> it would make maintenance easier, but it also seems like it would be a
-> good idea to consistently replace all mutex_locks in iowarrior.c with guard().
-> 
-> What do you think?
-
-Unless you have the hardware to test this, I would not worry about doing
-conversions like this.  I think I have this device somewhere around in
-my "big box of USB devices", but testing any driver changes for it will
-take a while before I can find it.
-
-Actually, in looking at the code further, I think the lock is not taken
-on purpose, so if you want to change this, you will have to document why
-it is now really needed and what will happen if it is not.
+As this is your first kernel contributions, I recommend working in an
+area that is designed for new developers to help work through these
+types of issues, drivers/staging/  Get some experience there before
+moving out into other areas of the kernel.  Also note that many
+subsystems do not care about things like spelling fixes, so be careful.
 
 thanks,
 
