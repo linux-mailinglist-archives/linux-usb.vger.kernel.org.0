@@ -1,186 +1,155 @@
-Return-Path: <linux-usb+bounces-15126-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15127-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FDE99799D9
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 03:46:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86DFD9799E6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 04:04:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84A361C22978
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 01:46:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EF55282745
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 02:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66048D520;
-	Mon, 16 Sep 2024 01:46:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 380E1D520;
+	Mon, 16 Sep 2024 02:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=everestkc-com-np.20230601.gappssmtp.com header.i=@everestkc-com-np.20230601.gappssmtp.com header.b="gcYMUCsJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a/5zcmfi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FA4360
-	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 01:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A43C8E9;
+	Mon, 16 Sep 2024 02:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726451192; cv=none; b=AFAuSJyIK8qTKTzdt9gv4/hFs4orMYsRvAVPzvPHPq8HbPrMMJdkX1QjWzFA/m751vLNV6eo2O5TzgB8nhsDrtHDcL8TUa6V5c7JchztgZI0L6J/TOQ9l0e6v2ULdHVjBZ1crw3oiW53T1qq3QW46f5N1o7gdKdHXg6gvKsKQ1c=
+	t=1726452276; cv=none; b=IQvOXMvdUgr5bZL42D+Xjf9j6Ea4+Bdyanc9hIMR/t7MdtnezYxxnQ1LwRgOBd2OPaWAON1U4MqzjAbzwvv4ZGR20ke4qZjzIM8FfEG7gbyfWnkd5M9yEt+qeptI+9THjgPsKi7JFwPMxN4IwCFvAD/dDhmRh6t7+C4L+27hcJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726451192; c=relaxed/simple;
-	bh=xE/fdlG6ydZQllBtKyFWLr5BsH11sTnbp+iFO5aF6dI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jAw816m2MeOV9fDI8uy2FidzQwD6edUpzhX61ZsfgEUth4J21/CrSJWbLYLG50X1Rij8aVMSshD60Df8825FU6ePFsAaHIIN4A3w4PD48aZPmIAHXEx9TxRwlIYi/WKseDabtI5bHxsn9dcMzpGJoMoyv/UqiG0dWzQzVq/2eGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=everestkc.com.np; spf=none smtp.mailfrom=everestkc.com.np; dkim=pass (2048-bit key) header.d=everestkc-com-np.20230601.gappssmtp.com header.i=@everestkc-com-np.20230601.gappssmtp.com header.b=gcYMUCsJ; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=everestkc.com.np
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=everestkc.com.np
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-718d606726cso2606190b3a.3
-        for <linux-usb@vger.kernel.org>; Sun, 15 Sep 2024 18:46:30 -0700 (PDT)
+	s=arc-20240116; t=1726452276; c=relaxed/simple;
+	bh=WUYLE36L+WCT8uDtjp0Z6sx/J6FpuWUiwQ1JKa3K3do=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DDhXfhiu1fJTK4bx8q2T6o5MJMLyBG4SmL6niespsx88af/UXE8C5ZHQjapgkNeyoAzgwhQy655CZ8C09wYjfJpcVnM0om+MXIT5WU+1iK4jPPyqvUBH1kwpqZHK5jueR8hToar7ioSLn+n92okU/WdM0zflDAZLPpuk/6ZXj3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a/5zcmfi; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7191df6b5f5so2739482b3a.0;
+        Sun, 15 Sep 2024 19:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=everestkc-com-np.20230601.gappssmtp.com; s=20230601; t=1726451190; x=1727055990; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ppeTr2u8I2Un8Fu3bec/meFpGK501IK9rm4AM6FtSDA=;
-        b=gcYMUCsJxoTf2sGjjM9J5X3MPpHLcGAh8on4ZvLehTcHqTzXNIi0YxjfGo1vC/P3T7
-         MSr1Al2QwJyZXt+tFuw0w4MwD+OWYL4yaEl05JRgw+IndtSRsbiY4gdsba/SlhgixGHp
-         8UrI4F7HEn3WtfmAiDXpeTOYl37lKsePRdH8BNj19/6T+DfITXRyCPf0OMKgEIFXAViS
-         LV/D2hfdoDOq88MeAnqBktR574GYELVIpHJYhBACqccHEsGBFBmJ8fh9lYej4yKCepfF
-         GK32g7CdCB4skR4KOSIYxWTCsI2WagA4VWpt72iktmQjuWe5iropAQ72kuAUJgaZxVpr
-         xsCw==
+        d=gmail.com; s=20230601; t=1726452274; x=1727057074; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WUYLE36L+WCT8uDtjp0Z6sx/J6FpuWUiwQ1JKa3K3do=;
+        b=a/5zcmfi5TuAiynNyHarFHO6UGsX0xl1ZtKJn+3T9wlZ10kwAWPYzeJNfvdWf5NZGS
+         M0I9MHiwhgYr5sD/3ft57+5kKRD+HjySVJH/+NOkIQuKiric4q/QoAtZ3dqIG/+G+kSI
+         sV4LWHtFntJPNnq8vhqFTpJpu3IIZ2S2aHQymhxqBgwG9GOLucGYmMp+b3AeY4NkYoha
+         ZB2DmiSm0QKRbDFBkMsGNlDKZUT4ZoiheuozmnEFsxX8LfDLtB2mk46bwjGKPmJL1D+p
+         O1AYAvx85Wxto95WlJ38ZYZxUtjHbfXDri9K4ylownFKAcVdgdsMUJ1c61U3GmVyvEUo
+         RFxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726451190; x=1727055990;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ppeTr2u8I2Un8Fu3bec/meFpGK501IK9rm4AM6FtSDA=;
-        b=u7peTdikv7xacP6fKTV9B9npPDQrtyc0p9hKoxCeYwfyoijORwlVlkHUBsOdqt/2dn
-         RkYCG9LsQNVhVyEPmvRx2SemuGTy+d1ELN3mXOC/meU84hlVVa9NuzvNQ3B7Z/tXYhkE
-         KYdo94VvJItNxiYGboTGvyo4HfrgKpgp9uk3ed5HTomdYIkpQc+Vz4fZfkn1z3jQG0Xr
-         e+tCjvEiVjYhEEXtvkX90FPhY0SNa7ugIJgNveAgb+FqYjq4FUP4E8OHH8f/m/oLA/u4
-         0aTjqa680AGxEHSfSTkcXnMtYS/eY20jr3qUsp9TH/cOQpgZYo9qRvJsADQHtIVvYG4d
-         nVUw==
-X-Forwarded-Encrypted: i=1; AJvYcCW5xFzwQ/YpDtoJQKz7fp9xjQbFnm8nTebGXXpK4yUo16TxhXg20K7kwquPqORd1J7QmhfZCspwsoA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxbm3H5rGBH8PaOvX5yQ8dsPsXGgrcQdko/iN8S1ajBQZxyeo4T
-	Hp+bPoCNrUxsCPxAUe7+aR3LdN+4eJPNjumFaonLdRHWdGoo6XGwfYBlTkSEd40=
-X-Google-Smtp-Source: AGHT+IG1m4qPjI+QqXPoM3f4N/A5UNKrK1vTMJmDpcSIgfw9T63TKvVVkYDriEN2bD5uYSXGJOhRMQ==
-X-Received: by 2002:a05:6a00:4f85:b0:717:81b3:4c7a with SMTP id d2e1a72fcca58-719262060abmr22528974b3a.24.1726451189784;
-        Sun, 15 Sep 2024 18:46:29 -0700 (PDT)
-Received: from localhost.localdomain ([132.178.238.28])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71944adfa72sm2884129b3a.93.2024.09.15.18.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Sep 2024 18:46:29 -0700 (PDT)
-From: "Everest K.C." <everestkc@everestkc.com.np>
-To: gregkh@linuxfoundation.org,
-	u.kleine-koenig@pengutronix.de
-Cc: "Everest K.C." <everestkc@everestkc.com.np>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] Fix spelling errors and codestyle in file drivers/usb/gadget/udc/m66592-udc.c
-Date: Sun, 15 Sep 2024 19:45:07 -0600
-Message-ID: <20240916014509.5871-1-everestkc@everestkc.com.np>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1726452274; x=1727057074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WUYLE36L+WCT8uDtjp0Z6sx/J6FpuWUiwQ1JKa3K3do=;
+        b=Er+Hq1Fwx9TsUYGEUbgkrK/pZGVJrILl6rHd1gg3MiRHhnLviWb40X2HzX95+juy9d
+         QE5NGTe4HO6vMaN8zmDs8CP/p4DhNNAoU1WGUANG6HQVCkrYOSTyUijaI0T5h9UIfRnQ
+         vhPBS828dtP+/u4g2emq4DOMZq03hEbQyDErSo9d+xigHvyKMjALQtwaYO5XvT/3mkFZ
+         +bEG4DTFqhE+7eoDzqE9cbyr2M6eFU6rjnbYeMcwkJxJqsPM9OA89TeRaClA61jrLWAv
+         Yp+da1rG839AhxSW7q28XT0X0EaSK5DraZak0LeJNyq3aX7/fhNgClmkUKiHXjsYXb85
+         Yu5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVpsHBvNLgap1Pkwl1ZTF9UY/iXQCA9tYh2Cgpk93EKYSdQnoYwz4INDxZHPV9SKvrDaILrTLkxnvJx@vger.kernel.org, AJvYcCXN74112CUPOjg5IqqHbIQ1lUoXD/yaUi51xUg8k+KhuwCOtOhhWAEI9jAPBB9Gh+sDj3kuvJmYG+iwDyU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGm+CPD6NgvsmeY+4UPWsCwHfLm+E6IpZC7RplZhzaINJfAvAm
+	WRfeq0Irnx4TtrA78FO7wk6qeDZGGtOcvnB0IEzXfSmmNKWY7dBQ9rVx4xvu9wLGIfduBrQYS8D
+	I7VAi7U+4Mm1i/bCKHgHUngWohE8K2K+L
+X-Google-Smtp-Source: AGHT+IE1bMaUA+fWmy8vQqyozHauW12KHm7QnUONI2Y5N/KmorxOP48n87iqTLgiisx7W6UHIt+6q6B5v9YN4nWnOaY=
+X-Received: by 2002:a05:6a00:2e94:b0:706:6962:4b65 with SMTP id
+ d2e1a72fcca58-719260915c1mr20491032b3a.14.1726452274382; Sun, 15 Sep 2024
+ 19:04:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240911051716.6572-4-ki.chiang65@gmail.com> <20240911093828.58129593@foxbook>
+ <CAHN5xi235kgU8Xd0VYw6r5NeieCM8uqWjgPnLSP1haAFqgcFsw@mail.gmail.com> <20240912091203.3ac9b88a@foxbook>
+In-Reply-To: <20240912091203.3ac9b88a@foxbook>
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+Date: Mon, 16 Sep 2024 10:04:30 +0800
+Message-ID: <CAHN5xi1hwMi3v9j5OPJjWqtPwVHw_6AycyYeGBmApD+4RwtSZQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] xhci: Some improvement for Etron xHCI host
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mathias.nyman@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fixed spelling errors in error message and comments that
-were reported by codespell as follows:
-	unexpect  --> unexpected
-	workaound --> workaround
-Also, fixed codestyle error and  replaced a hardcoded function
-name in a pr_err statement with __func__.
+Hi,
 
-Signed-off-by: Everest K.C. <everestkc@everestkc.com.np>
----
- drivers/usb/gadget/udc/m66592-udc.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Thank you for testing the patch.
 
-diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-index bfaa5291e6c8..e0b261ff0828 100644
---- a/drivers/usb/gadget/udc/m66592-udc.c
-+++ b/drivers/usb/gadget/udc/m66592-udc.c
-@@ -110,7 +110,7 @@ static inline u16 control_reg_get_pid(struct m66592 *m66592, u16 pipenum)
- 		offset = get_pipectr_addr(pipenum);
- 		pid = m66592_read(m66592, offset) & M66592_PID;
- 	} else
--		pr_err("unexpect pipe num (%d)\n", pipenum);
-+		pr_err("unexpected pipe num (%d)\n", pipenum);
- 
- 	return pid;
- }
-@@ -126,7 +126,7 @@ static inline void control_reg_set_pid(struct m66592 *m66592, u16 pipenum,
- 		offset = get_pipectr_addr(pipenum);
- 		m66592_mdfy(m66592, pid, M66592_PID, offset);
- 	} else
--		pr_err("unexpect pipe num (%d)\n", pipenum);
-+		pr_err("unexpected pipe num (%d)\n", pipenum);
- }
- 
- static inline void pipe_start(struct m66592 *m66592, u16 pipenum)
-@@ -155,7 +155,7 @@ static inline u16 control_reg_get(struct m66592 *m66592, u16 pipenum)
- 		offset = get_pipectr_addr(pipenum);
- 		ret = m66592_read(m66592, offset);
- 	} else
--		pr_err("unexpect pipe num (%d)\n", pipenum);
-+		pr_err("unexpected pipe num (%d)\n", pipenum);
- 
- 	return ret;
- }
-@@ -172,7 +172,7 @@ static inline void control_reg_sqclr(struct m66592 *m66592, u16 pipenum)
- 		offset = get_pipectr_addr(pipenum);
- 		m66592_bset(m66592, M66592_SQCLR, offset);
- 	} else
--		pr_err("unexpect pipe num(%d)\n", pipenum);
-+		pr_err("unexpected pipe num(%d)\n", pipenum);
- }
- 
- static inline int get_buffer_size(struct m66592 *m66592, u16 pipenum)
-@@ -293,7 +293,7 @@ static void pipe_buffer_release(struct m66592 *m66592,
- 		if (info->type == M66592_BULK)
- 			m66592->bulk--;
- 	} else
--		pr_err("ep_release: unexpect pipenum (%d)\n",
-+		pr_err("ep_release: unexpected pipenum (%d)\n",
- 				info->pipe);
- }
- 
-@@ -428,7 +428,7 @@ static int alloc_pipe_config(struct m66592_ep *ep,
- 		counter = &m66592->isochronous;
- 		break;
- 	default:
--		pr_err("unexpect xfer type\n");
-+		pr_err("unexpected xfer type\n");
- 		return -EINVAL;
- 	}
- 	ep->type = info.type;
-@@ -579,7 +579,7 @@ static void start_ep0(struct m66592_ep *ep, struct m66592_request *req)
- 		control_end(ep->m66592, 0);
- 		break;
- 	default:
--		pr_err("start_ep0: unexpect ctsq(%x)\n", ctsq);
-+		pr_err("%s: unexpected ctsq(%x)\n", __func__, ctsq);
- 		break;
- 	}
- }
-@@ -599,7 +599,7 @@ static void init_controller(struct m66592 *m66592)
- 		m66592_bclr(m66592, M66592_DPRPU, M66592_SYSCFG);
- 		m66592_bset(m66592, M66592_USBE, M66592_SYSCFG);
- 
--		/* This is a workaound for SH7722 2nd cut */
-+		/* This is a workaround for SH7722 2nd cut */
- 		m66592_bset(m66592, 0x8000, M66592_DVSTCTR);
- 		m66592_bset(m66592, 0x1000, M66592_TESTMODE);
- 		m66592_bclr(m66592, 0x8000, M66592_DVSTCTR);
-@@ -1186,7 +1186,7 @@ __acquires(m66592->lock)
- 		control_end(m66592, 0);
- 		break;
- 	default:
--		pr_err("ctrl_stage: unexpect ctsq(%x)\n", ctsq);
-+		pr_err("ctrl_stage: unexpected ctsq(%x)\n", ctsq);
- 		break;
- 	}
- }
--- 
-2.43.0
+Micha=C5=82 Pecio <michal.pecio@gmail.com> =E6=96=BC 2024=E5=B9=B49=E6=9C=
+=8812=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=883:12=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> Hi,
+>
+> > > I'm aware of one more bug which affects my Etron: if an error occurs
+> > > on an isochronous TD, two events are generated: first the error,
+> > > then "success", even if the error is on the final TRB (the common
+> > > case). Then the "success" causes "TRB DMA not part of current TD"
+> > > warning. I suspect that all Etron chips are the same. This should
+> > > be easily reproducible by unpligging an audio/video device while
+> > > streaming.
+> >
+> > Hmm, I don't encounter this problem.
+>
+> OK, I know what happened. This bug only affects SuperSpeed isochronous
+> endpoints. If you don't have this kind of device, you will not see it.
+> I checked that High-speed isochronous errors are reported correctly.
+>
+> My motivation to develop a workaround for this bug has just decreased
+> another notch.
+>
+>
+> On the other hand, I was unable to reproduce the control transfer bug.
+> The exact chip I have is labeled "EtronTech EJ168A", for the record.
+>
+> You are right, not all transfers have the data stage and transactions
+> get out of sync with segment boundaries. I modified the patch to only
+> print a warning instead of queuing a No-Op and then did various things
+> which use control transactions: setting baud rate on serial, changing
+> the volume on audio, starting video recording on a webcam, running
+> ethtool on a NIC.
+>
+> The warning was printed a few times, but nothing interesting happened.
+> Dynamic debug was enabled on handle_tx_event() - no errors reported.
+>
+> Maybe a different silicon/firmware revision, or maybe it's another
+> SuperSpeed-only bug, or other special conditions for it to happen?
 
+Do you see any "Transfer error for slot..." error message?
+What is the speed of your device? high speed?
+I try to downgrade my ethernet adapter to high speed and do some tests,
+no errors are reported in dmesg if dynamic debug is enabled.
+I think it is a super speed issue, however, it doesn't happen on the high
+speed device, I am not sure. So the patch will not check the speed of the
+device.
+
+>
+> > Ok, I will use one quirk XHCI_ETRON_HOST for these workarounds in the
+> > next patch revision.
+> That was just a suggestion, you should ask Mathias Nyman, I suppose.
+
+OK, thanks.
+
+>
+> But, again, my impression of this hardware is that it's pretty bad
+> and full of bugs, and they are bizarre enough to likely be unique.
+>
+> Regards,
+> Michal
+
+Thanks,
+Kuangyi Chiang
 
