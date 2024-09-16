@@ -1,211 +1,186 @@
-Return-Path: <linux-usb+bounces-15125-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15126-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A743A9799C6
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 03:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FDE99799D9
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 03:46:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA90F1C21F7A
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 01:24:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84A361C22978
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 01:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E9179C4;
-	Mon, 16 Sep 2024 01:24:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66048D520;
+	Mon, 16 Sep 2024 01:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=everestkc-com-np.20230601.gappssmtp.com header.i=@everestkc-com-np.20230601.gappssmtp.com header.b="gcYMUCsJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C86322A
-	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 01:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FA4360
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 01:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726449867; cv=none; b=b59gsxjvGumEjYnWZkSM/+7wcg/Kjalxsa3OuhP1soxQma2i7i5nYyTw8Xk/f5y5wTCKV0PsEC6aQaSa57khNKPi9y/EMaR4ebHO2YODHZRtpL+RUk+JlUcf4aqmrn1W9GRi6tAjscy/w+XarcAC83nA2HJ/IZ7Q6XiWaZUqAKQ=
+	t=1726451192; cv=none; b=AFAuSJyIK8qTKTzdt9gv4/hFs4orMYsRvAVPzvPHPq8HbPrMMJdkX1QjWzFA/m751vLNV6eo2O5TzgB8nhsDrtHDcL8TUa6V5c7JchztgZI0L6J/TOQ9l0e6v2ULdHVjBZ1crw3oiW53T1qq3QW46f5N1o7gdKdHXg6gvKsKQ1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726449867; c=relaxed/simple;
-	bh=HMcTlkxRiNmJ9vl1vyU++C0a9NxzpTKKt+IC25EwReA=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=IxIhxQVOMzOW7Z7KnsyE0Wm1N5IorWkrziFGE9miRPtbR8o2r2TlXJcUKO2eqc5Y13XbOUBBCtgWK2LRq0V6bX9dqQHm5ggXFFdd4fEi6g7N2x91idjAttfwfWiqlLZWaK1HRu7+E4icSG5rQ9fjI/87LDWH/yue65ePMXM7MNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a0a2c95e81so3985205ab.0
-        for <linux-usb@vger.kernel.org>; Sun, 15 Sep 2024 18:24:25 -0700 (PDT)
+	s=arc-20240116; t=1726451192; c=relaxed/simple;
+	bh=xE/fdlG6ydZQllBtKyFWLr5BsH11sTnbp+iFO5aF6dI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jAw816m2MeOV9fDI8uy2FidzQwD6edUpzhX61ZsfgEUth4J21/CrSJWbLYLG50X1Rij8aVMSshD60Df8825FU6ePFsAaHIIN4A3w4PD48aZPmIAHXEx9TxRwlIYi/WKseDabtI5bHxsn9dcMzpGJoMoyv/UqiG0dWzQzVq/2eGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=everestkc.com.np; spf=none smtp.mailfrom=everestkc.com.np; dkim=pass (2048-bit key) header.d=everestkc-com-np.20230601.gappssmtp.com header.i=@everestkc-com-np.20230601.gappssmtp.com header.b=gcYMUCsJ; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=everestkc.com.np
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=everestkc.com.np
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-718d606726cso2606190b3a.3
+        for <linux-usb@vger.kernel.org>; Sun, 15 Sep 2024 18:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=everestkc-com-np.20230601.gappssmtp.com; s=20230601; t=1726451190; x=1727055990; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ppeTr2u8I2Un8Fu3bec/meFpGK501IK9rm4AM6FtSDA=;
+        b=gcYMUCsJxoTf2sGjjM9J5X3MPpHLcGAh8on4ZvLehTcHqTzXNIi0YxjfGo1vC/P3T7
+         MSr1Al2QwJyZXt+tFuw0w4MwD+OWYL4yaEl05JRgw+IndtSRsbiY4gdsba/SlhgixGHp
+         8UrI4F7HEn3WtfmAiDXpeTOYl37lKsePRdH8BNj19/6T+DfITXRyCPf0OMKgEIFXAViS
+         LV/D2hfdoDOq88MeAnqBktR574GYELVIpHJYhBACqccHEsGBFBmJ8fh9lYej4yKCepfF
+         GK32g7CdCB4skR4KOSIYxWTCsI2WagA4VWpt72iktmQjuWe5iropAQ72kuAUJgaZxVpr
+         xsCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726449865; x=1727054665;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gGWQzV5Vm4a1RYkO1X9dZLApElpq2f+UThBNZEBb32U=;
-        b=nUc63Jwg0dmU+gHQJaYdo+yZgn7/yH7Er0TyIGA2J7rPx9HKBQsWjbTj8na+hstMP8
-         6ZeTn7zmgOIBmzMoGhXUFim+WQrjhs6IlyJGoYQZHHZ/Ie01nFrf393nRApn9f1+cTB6
-         4sUMRIL27/aaWgECxPD3sdaL67xWXCgjvdzBroBybxGWHiumLXVcyf1URj8qL7nSVqNZ
-         I3161nagggrB8DJc+giVRAfhfXJbf4UDKRD7wKcmsGRVNBp9n1frg6FiQDCDPcYhkJnb
-         r0fRjR694IM9HsfV/mg8EMWYK3RL557JKhYdLUy5IddwkGeFwxz2Byg0K+tXtRjnKq98
-         m+Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCUfyojp9Ss2328xsy5Eacgx8B5INRG8POVZFXTtOj6d2++4tg7WruzdlCd5eNq7SalJfssgegq9tiQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1DfC3swJCaM2DTlbFCl4vQss61x0NQ/CfAh10m0km+yXsNGoH
-	QWgCFzecX92ik/XmndTB1oijFzctIrZ76bMn6GQFq1aSz7g5gO1+ZReAOIaYDZtonDRmKz/CyQw
-	AkYA6pamidtjuyjhT4BIQVrSPXGjg101Iqoyn3Lry1bZCvCjK+aWRLSQ=
-X-Google-Smtp-Source: AGHT+IF3wpvEd8oH6J2Q/IwNxAKo4ctYzlkrN7IFPFVB3z2tPpXBoRRzhEg+U/qM896HTNMFyuckhCuhHJAfEJrmQaOQcF/PhhRJ
+        d=1e100.net; s=20230601; t=1726451190; x=1727055990;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ppeTr2u8I2Un8Fu3bec/meFpGK501IK9rm4AM6FtSDA=;
+        b=u7peTdikv7xacP6fKTV9B9npPDQrtyc0p9hKoxCeYwfyoijORwlVlkHUBsOdqt/2dn
+         RkYCG9LsQNVhVyEPmvRx2SemuGTy+d1ELN3mXOC/meU84hlVVa9NuzvNQ3B7Z/tXYhkE
+         KYdo94VvJItNxiYGboTGvyo4HfrgKpgp9uk3ed5HTomdYIkpQc+Vz4fZfkn1z3jQG0Xr
+         e+tCjvEiVjYhEEXtvkX90FPhY0SNa7ugIJgNveAgb+FqYjq4FUP4E8OHH8f/m/oLA/u4
+         0aTjqa680AGxEHSfSTkcXnMtYS/eY20jr3qUsp9TH/cOQpgZYo9qRvJsADQHtIVvYG4d
+         nVUw==
+X-Forwarded-Encrypted: i=1; AJvYcCW5xFzwQ/YpDtoJQKz7fp9xjQbFnm8nTebGXXpK4yUo16TxhXg20K7kwquPqORd1J7QmhfZCspwsoA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxbm3H5rGBH8PaOvX5yQ8dsPsXGgrcQdko/iN8S1ajBQZxyeo4T
+	Hp+bPoCNrUxsCPxAUe7+aR3LdN+4eJPNjumFaonLdRHWdGoo6XGwfYBlTkSEd40=
+X-Google-Smtp-Source: AGHT+IG1m4qPjI+QqXPoM3f4N/A5UNKrK1vTMJmDpcSIgfw9T63TKvVVkYDriEN2bD5uYSXGJOhRMQ==
+X-Received: by 2002:a05:6a00:4f85:b0:717:81b3:4c7a with SMTP id d2e1a72fcca58-719262060abmr22528974b3a.24.1726451189784;
+        Sun, 15 Sep 2024 18:46:29 -0700 (PDT)
+Received: from localhost.localdomain ([132.178.238.28])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71944adfa72sm2884129b3a.93.2024.09.15.18.46.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Sep 2024 18:46:29 -0700 (PDT)
+From: "Everest K.C." <everestkc@everestkc.com.np>
+To: gregkh@linuxfoundation.org,
+	u.kleine-koenig@pengutronix.de
+Cc: "Everest K.C." <everestkc@everestkc.com.np>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] Fix spelling errors and codestyle in file drivers/usb/gadget/udc/m66592-udc.c
+Date: Sun, 15 Sep 2024 19:45:07 -0600
+Message-ID: <20240916014509.5871-1-everestkc@everestkc.com.np>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c8b:b0:3a0:9013:83f0 with SMTP id
- e9e14a558f8ab-3a09013878amr67672095ab.3.1726449864677; Sun, 15 Sep 2024
- 18:24:24 -0700 (PDT)
-Date: Sun, 15 Sep 2024 18:24:24 -0700
-In-Reply-To: <0000000000003c68f3061fd2c285@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e82e420622326e3f@google.com>
-Subject: Re: [syzbot] [usb?] KASAN: invalid-free in dev_free
-From: syzbot <syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com>
-To: andreyknvl@gmail.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-syzbot has found a reproducer for the following issue on:
+Fixed spelling errors in error message and comments that
+were reported by codespell as follows:
+	unexpect  --> unexpected
+	workaound --> workaround
+Also, fixed codestyle error and  replaced a hardcoded function
+name in a pr_err statement with __func__.
 
-HEAD commit:    68d4209158f4 sub: cdns3: Use predefined PCI vendor ID cons..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=10a96200580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cb61872d4d8c5df9
-dashboard link: https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1297cc07980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1217c8a9980000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c69290425359/disk-68d42091.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/caf4f26a3e85/vmlinux-68d42091.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3acdec4b62e6/bzImage-68d42091.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: double-free in dev_free+0x446/0x700 drivers/usb/gadget/legacy/raw_gadget.c:225
-Free of addr ffff8881066f9240 by task syz-executor254/3953
-
-CPU: 1 UID: 0 PID: 3953 Comm: syz-executor254 Not tainted 6.11.0-rc7-syzkaller-00152-g68d4209158f4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:93 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:119
- print_address_description mm/kasan/report.c:377 [inline]
- print_report+0xc3/0x620 mm/kasan/report.c:488
- kasan_report_invalid_free+0xaa/0xd0 mm/kasan/report.c:563
- poison_slab_object+0x135/0x160 mm/kasan/common.c:232
- __kasan_slab_free+0x14/0x30 mm/kasan/common.c:256
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2256 [inline]
- slab_free mm/slub.c:4477 [inline]
- kfree+0x10b/0x380 mm/slub.c:4598
- dev_free+0x446/0x700 drivers/usb/gadget/legacy/raw_gadget.c:225
- kref_put include/linux/kref.h:65 [inline]
- raw_release+0x16e/0x2c0 drivers/usb/gadget/legacy/raw_gadget.c:473
- __fput+0x408/0xbb0 fs/file_table.c:422
- task_work_run+0x14e/0x250 kernel/task_work.c:228
- exit_task_work include/linux/task_work.h:40 [inline]
- do_exit+0xaa3/0x2b30 kernel/exit.c:882
- do_group_exit+0xd3/0x2a0 kernel/exit.c:1031
- __do_sys_exit_group kernel/exit.c:1042 [inline]
- __se_sys_exit_group kernel/exit.c:1040 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1040
- x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7ffa254cedf9
-Code: Unable to access opcode bytes at 0x7ffa254cedcf.
-RSP: 002b:00007fffc9f7d918 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ffa254cedf9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 00007ffa255583b0 R08: ffffffffffffffb0 R09: 00007fffc9f7d9a0
-R10: 00007fffc9f7d9a0 R11: 0000000000000246 R12: 00007ffa255583b0
-R13: 0000000000000000 R14: 00007ffa2555c1e0 R15: 00007ffa25499680
- </TASK>
-
-Allocated by task 3955:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
- __kasan_kmalloc+0x8f/0xa0 mm/kasan/common.c:387
- kasan_kmalloc include/linux/kasan.h:211 [inline]
- __do_kmalloc_node mm/slub.c:4162 [inline]
- __kmalloc_node_track_caller_noprof+0x1ff/0x3e0 mm/slub.c:4181
- memdup_user+0x2a/0xd0 mm/util.c:226
- raw_ioctl_ep_enable drivers/usb/gadget/legacy/raw_gadget.c:847 [inline]
- raw_ioctl+0xbca/0x2b90 drivers/usb/gadget/legacy/raw_gadget.c:1318
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:907 [inline]
- __se_sys_ioctl fs/ioctl.c:893 [inline]
- __x64_sys_ioctl+0x193/0x220 fs/ioctl.c:893
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Freed by task 3954:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:579
- poison_slab_object+0xf7/0x160 mm/kasan/common.c:240
- __kasan_slab_free+0x14/0x30 mm/kasan/common.c:256
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2256 [inline]
- slab_free mm/slub.c:4477 [inline]
- kfree+0x10b/0x380 mm/slub.c:4598
- dev_free+0x446/0x700 drivers/usb/gadget/legacy/raw_gadget.c:225
- kref_put include/linux/kref.h:65 [inline]
- raw_release+0x16e/0x2c0 drivers/usb/gadget/legacy/raw_gadget.c:473
- __fput+0x408/0xbb0 fs/file_table.c:422
- __fput_sync+0x47/0x50 fs/file_table.c:507
- __do_sys_close fs/open.c:1566 [inline]
- __se_sys_close fs/open.c:1551 [inline]
- __x64_sys_close+0x86/0x100 fs/open.c:1551
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-The buggy address belongs to the object at ffff8881066f9240
- which belongs to the cache kmalloc-16 of size 16
-The buggy address is located 0 bytes inside of
- 16-byte region [ffff8881066f9240, ffff8881066f9250)
-
-The buggy address belongs to the physical page:
-page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1066f9
-anon flags: 0x200000000000000(node=0|zone=2)
-page_type: 0xfdffffff(slab)
-raw: 0200000000000000 ffff888100041640 0000000000000000 dead000000000001
-raw: 0000000000000000 0000000000800080 00000001fdffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0xd2cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 4772382410, free_ts 0
- create_dummy_stack mm/page_owner.c:94 [inline]
- register_dummy_stack+0x8a/0xd0 mm/page_owner.c:100
- init_page_owner+0x48/0xbe0 mm/page_owner.c:118
- invoke_init_callbacks mm/page_ext.c:148 [inline]
- page_ext_init+0x725/0xbf0 mm/page_ext.c:497
- mm_core_init+0x202/0x240 mm/mm_init.c:2673
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff8881066f9100: 00 05 fc fc 00 00 fc fc 00 00 fc fc 00 00 fc fc
- ffff8881066f9180: 00 00 fc fc 00 00 fc fc 00 00 fc fc fa fb fc fc
->ffff8881066f9200: 00 00 fc fc fa fb fc fc fa fb fc fc 00 00 fc fc
-                                           ^
- ffff8881066f9280: 00 00 fc fc fa fb fc fc fa fb fc fc 00 00 fc fc
- ffff8881066f9300: 00 00 fc fc 00 05 fc fc fa fb fc fc 00 00 fc fc
-==================================================================
-
-
+Signed-off-by: Everest K.C. <everestkc@everestkc.com.np>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ drivers/usb/gadget/udc/m66592-udc.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
+index bfaa5291e6c8..e0b261ff0828 100644
+--- a/drivers/usb/gadget/udc/m66592-udc.c
++++ b/drivers/usb/gadget/udc/m66592-udc.c
+@@ -110,7 +110,7 @@ static inline u16 control_reg_get_pid(struct m66592 *m66592, u16 pipenum)
+ 		offset = get_pipectr_addr(pipenum);
+ 		pid = m66592_read(m66592, offset) & M66592_PID;
+ 	} else
+-		pr_err("unexpect pipe num (%d)\n", pipenum);
++		pr_err("unexpected pipe num (%d)\n", pipenum);
+ 
+ 	return pid;
+ }
+@@ -126,7 +126,7 @@ static inline void control_reg_set_pid(struct m66592 *m66592, u16 pipenum,
+ 		offset = get_pipectr_addr(pipenum);
+ 		m66592_mdfy(m66592, pid, M66592_PID, offset);
+ 	} else
+-		pr_err("unexpect pipe num (%d)\n", pipenum);
++		pr_err("unexpected pipe num (%d)\n", pipenum);
+ }
+ 
+ static inline void pipe_start(struct m66592 *m66592, u16 pipenum)
+@@ -155,7 +155,7 @@ static inline u16 control_reg_get(struct m66592 *m66592, u16 pipenum)
+ 		offset = get_pipectr_addr(pipenum);
+ 		ret = m66592_read(m66592, offset);
+ 	} else
+-		pr_err("unexpect pipe num (%d)\n", pipenum);
++		pr_err("unexpected pipe num (%d)\n", pipenum);
+ 
+ 	return ret;
+ }
+@@ -172,7 +172,7 @@ static inline void control_reg_sqclr(struct m66592 *m66592, u16 pipenum)
+ 		offset = get_pipectr_addr(pipenum);
+ 		m66592_bset(m66592, M66592_SQCLR, offset);
+ 	} else
+-		pr_err("unexpect pipe num(%d)\n", pipenum);
++		pr_err("unexpected pipe num(%d)\n", pipenum);
+ }
+ 
+ static inline int get_buffer_size(struct m66592 *m66592, u16 pipenum)
+@@ -293,7 +293,7 @@ static void pipe_buffer_release(struct m66592 *m66592,
+ 		if (info->type == M66592_BULK)
+ 			m66592->bulk--;
+ 	} else
+-		pr_err("ep_release: unexpect pipenum (%d)\n",
++		pr_err("ep_release: unexpected pipenum (%d)\n",
+ 				info->pipe);
+ }
+ 
+@@ -428,7 +428,7 @@ static int alloc_pipe_config(struct m66592_ep *ep,
+ 		counter = &m66592->isochronous;
+ 		break;
+ 	default:
+-		pr_err("unexpect xfer type\n");
++		pr_err("unexpected xfer type\n");
+ 		return -EINVAL;
+ 	}
+ 	ep->type = info.type;
+@@ -579,7 +579,7 @@ static void start_ep0(struct m66592_ep *ep, struct m66592_request *req)
+ 		control_end(ep->m66592, 0);
+ 		break;
+ 	default:
+-		pr_err("start_ep0: unexpect ctsq(%x)\n", ctsq);
++		pr_err("%s: unexpected ctsq(%x)\n", __func__, ctsq);
+ 		break;
+ 	}
+ }
+@@ -599,7 +599,7 @@ static void init_controller(struct m66592 *m66592)
+ 		m66592_bclr(m66592, M66592_DPRPU, M66592_SYSCFG);
+ 		m66592_bset(m66592, M66592_USBE, M66592_SYSCFG);
+ 
+-		/* This is a workaound for SH7722 2nd cut */
++		/* This is a workaround for SH7722 2nd cut */
+ 		m66592_bset(m66592, 0x8000, M66592_DVSTCTR);
+ 		m66592_bset(m66592, 0x1000, M66592_TESTMODE);
+ 		m66592_bclr(m66592, 0x8000, M66592_DVSTCTR);
+@@ -1186,7 +1186,7 @@ __acquires(m66592->lock)
+ 		control_end(m66592, 0);
+ 		break;
+ 	default:
+-		pr_err("ctrl_stage: unexpect ctsq(%x)\n", ctsq);
++		pr_err("ctrl_stage: unexpected ctsq(%x)\n", ctsq);
+ 		break;
+ 	}
+ }
+-- 
+2.43.0
+
 
