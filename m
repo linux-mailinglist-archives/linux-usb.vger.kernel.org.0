@@ -1,265 +1,182 @@
-Return-Path: <linux-usb+bounces-15155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15156-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3C097A97D
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 01:19:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D996097A9AF
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 01:41:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B255B293EB
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 23:19:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3110AB2B30D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2024 23:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A80815E5DC;
-	Mon, 16 Sep 2024 23:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066FC154439;
+	Mon, 16 Sep 2024 23:41:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nCtPDNUE"
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="ZQfRq29O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010016.outbound.protection.outlook.com [52.101.229.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A082E15C13B
-	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 23:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726528735; cv=none; b=nPLbNjBqSbl83aKbjarFH7Vi71tRwMnVMx8HjXpDztgcT09DBZSKUOmPIuek4a6LUkUEIrl+y9ecxdOjhYYgUMb06DtiPDBJSpeDKmdOQzlDACd/WEKU6zK/fnbrtV60Gv6yrxiTxNef6La1IgKKIiEArduAGdrB4lJg0qKp+MU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726528735; c=relaxed/simple;
-	bh=EAkrRyWWsaw41+qQU6LsGs7V24atXDdHn8IEAT8POzQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=rDfRxB+Jm5OQsHclt7aVWCmY9O0rxAa806195xiiAUa9c/K9ddqj7Akmm84WHR2/pCXOw3DE4TXsy4wZdA2EyNAYfe91bUqhxOAynFF9ymNONNF+eAeFORSdNH9JtLm1h1+Tbv5TI2cRIx+fNhctim846mdAZ2S+6gprxwcXAQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nCtPDNUE; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240916231850epoutp02d477dac8c6a7c7d42fcb523ef399a04c~13Lur7__N1106611066epoutp02s
-	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 23:18:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240916231850epoutp02d477dac8c6a7c7d42fcb523ef399a04c~13Lur7__N1106611066epoutp02s
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1726528730;
-	bh=lv9/Fnu2SiRPUvL+6bb2Mpc54pmLuygGOmtM2PEJFDU=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=nCtPDNUElFfNXuBgRWZEkGWub7P4P+5xbJH9IgTXdVv7NbDIHBbb+RBFQ6f7M+v8t
-	 3VuswfuOWXX0PXVeEVRntPUDhkFH4hQ03egn5aV4CAGCmhfTC4U8X1v7ZpDjypV4LI
-	 srKnpRnAoJpEUDLoff7ZT7ysYdKVrr1kc5OnikFE=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20240916231849epcas5p23d52ba51068846f2819eeb3a70f8522d~13LthWVPe2901729017epcas5p2C;
-	Mon, 16 Sep 2024 23:18:49 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.175]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4X717W65kXz4x9Pp; Mon, 16 Sep
-	2024 23:18:47 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	96.C6.19863.7DCB8E66; Tue, 17 Sep 2024 08:18:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240916231847epcas5p19dc48e3baeea70619dc766ba86938fee~13LrddUa_2203822038epcas5p1M;
-	Mon, 16 Sep 2024 23:18:47 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240916231847epsmtrp2b29813f45bc78aa2f2a91699039eb517~13LrctLtk1941019410epsmtrp2C;
-	Mon, 16 Sep 2024 23:18:47 +0000 (GMT)
-X-AuditID: b6c32a50-ef5fe70000004d97-11-66e8bcd7cff5
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	42.F2.19367.7DCB8E66; Tue, 17 Sep 2024 08:18:47 +0900 (KST)
-Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240916231844epsmtip24ba2cf6c9c51f43d91dc64c0e231dd0f~13LpR9fJX1066810668epsmtip2s;
-	Mon, 16 Sep 2024 23:18:44 +0000 (GMT)
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-	felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
-	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
-	Selvarasu Ganesan <selvarasu.g@samsung.com>, stable@kernel.org
-Subject: [PATCH v3] usb: dwc3: core: Stop processing of pending events if
- controller is halted
-Date: Tue, 17 Sep 2024 04:48:09 +0530
-Message-ID: <20240916231813.206-1-selvarasu.g@samsung.com>
-X-Mailer: git-send-email 2.46.0.windows.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BE0A95E
+	for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2024 23:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726530095; cv=fail; b=ClP+WqlKuwAehc4imO9w9O94LvhpW7oHPDQrFvYnJTYO6v73eyYGz2OTBZfTV4OfBYLOCIazlZfi84IwzENhYLrCEizf/5PTXBWnwGckjCdfssI/LHaPQ+u99lMLx5IOteK9WolnhunbeGCgBj7DGF3kRHses0EjVGheTyUuZRA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726530095; c=relaxed/simple;
+	bh=DrB9F8HBaGMGdvo9xjLSd7KiKgAS9ZsSABefwWiGrm0=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=DpeIjsCYDpOhrgZ+1T7JsmT9ITDQBpO0VkWX46RdYQkGDLyaI9QD1DA9vZl33HhtTdrv7TSS32wfzxcwti05cYGtn4K0GCDx9bDgkpsfEsIdr2kZt/4qii0ctE0Q+H89oUhAQ3HNVwaxE81SS0Kk2BcykMqUoxVx7Uam6CTiWgU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=ZQfRq29O; arc=fail smtp.client-ip=52.101.229.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=X/T/VLe/N62zI48AOrr4NezPfEpRqXnwfFCGCoMYCgX6Awq2hgULrGEcZVISQ4UtmZ6KtixUDH2k+76uhnLg2jewO1INucvpzl0tFDy9UaUZu4XDiIio+BGJIFMqL9Q7bX8rM9zID97VVWmA9QOXP5OMVvTNYK/IOgmlR7Q0a7dUAcvOwmOwDZe361VKjwWUbdze6TFOHDgrmj9oDy7L1OnWP4xXPZGVYYdfT+2cebtSdobm6cvqnhZ6QNM/qtnsdwpca96Hsz+CsMqp7aDXbkh5X69IJIgW/xIiQEI3nFXSRtvOAWXbb/PwJK9Vf7DRfS7qq5MK2vZ+HU6Ct6sYdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0F/iaryenQylaG1ZwS1j0nWoPOT7zc5uiaQa0oF53es=;
+ b=Eu2CkQS22x0uSrCg55HurMYoVcH5VNtNJz3JXTeqeVWODgu8pboSd+jyrt6b5pcLKbJfBsiML18C0OOczsbB2mMTx5Y/6+k0apZKnevBt38MMpzPB3o/lB//Zrg5XWjjizWWOZV2+auZeh2o/C96kxZ9bQr/99ujlPr7Tu1snzHGt5K1xF9kL4WZOs7oP/gTuRgw8gLAgutf3U1uyD3nEhu7qsX0DDNUUp2BUfEaUB7dn6WcGg85+ry7cwxcsaNCTf6sHeJsGYcmbNl30VOS1HXcR+oUE2aBepK8hNPyfXuPw6fi3denpaTnEABZVU34omnLLKVdB3dnQJmaA0GU0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0F/iaryenQylaG1ZwS1j0nWoPOT7zc5uiaQa0oF53es=;
+ b=ZQfRq29OzyIey4VBoleXmWfqxeIjvs7FZp0isr1o67fnG/MmkofNHiGwNq74qhyRsfAlMPyp5WubMze8vI5QnaC99LzAObdTXqTioSfuUC9NJsRJ+KjYd2TtbwCJTT3SfRpggcTAZyRv+5WgQslR1TPtM7m08WI+/fQ16GG3GY4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11) by TYCPR01MB8238.jpnprd01.prod.outlook.com
+ (2603:1096:400:103::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.24; Mon, 16 Sep
+ 2024 23:41:28 +0000
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::c568:1028:2fd1:6e11]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::c568:1028:2fd1:6e11%5]) with mapi id 15.20.7962.022; Mon, 16 Sep 2024
+ 23:41:28 +0000
+Message-ID: <87setz6uag.wl-kuninori.morimoto.gx@renesas.com>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Mark Brown <broonie@kernel.org>,
+	Linux-USB <linux-usb@vger.kernel.org>,
+	Linux-ALSA <alsa-devel@alsa-project.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	linux-staging@lists.linux.dev
+Subject: Re: [PATCH 000/113] ALSA: add snd_pcm_is_playback/capture() macro
+In-Reply-To: <87wmjgdnzg.wl-tiwai@suse.de>
+References: <874j7z3j1a.wl-kuninori.morimoto.gx@renesas.com>
+	<d6e47194-a708-4dfe-96c8-aba9391e4496@perex.cz>
+	<46b37ef3-047c-4b1b-a79b-37187a46754a@sirena.org.uk>
+	<87ed5o8hen.wl-kuninori.morimoto.gx@renesas.com>
+	<87wmjgdnzg.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 Emacs/29.3 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date: Mon, 16 Sep 2024 23:41:28 +0000
+X-ClientProxiedBy: TYWP286CA0013.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:178::9) To TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGJsWRmVeSWpSXmKPExsWy7bCmpu71PS/SDE4tMbB4c3UVq8WdBdOY
-	LE4tX8hkMf9mkkXz4vVsFpP2bGWxuPvwB4vF5V1z2CwWLWtltvh09D+rxarOOSwWR5Z/ZLK4
-	/H0nUOz8BaDig6IWqxYcYHcQ8Ni0qpPNY97JQI/9c9ewe/RtWcXosWX/Z0aPz5vkAtiism0y
-	UhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgK5WUihLzCkF
-	CgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgYmQIVJmRnnN30
-	i71gu3JF/9pdzA2Mf2S7GDk4JARMJF5OtOhi5OIQEtjDKLHu2EvGLkZOIOcTo8TReckQCSC7
-	b+V8VpAESMPtpu3sEImdjBJNBx9BOd8ZJZ5tvs8GMpZNwFDi2QkbkAYRgSmMEt/m1oHUMAvM
-	ZpKYt+0tE0hCWCBBounhO3YQm0VAVeLZrZlgNq+AlcShju1sENs0Jdbu3cMEEReUODnzCQuI
-	zSwgL9G8dTYzyFAJgYkcEu/fHoY6z0Vi4r+V7BC2sMSr41ugbCmJz+/2Qg2tllh95yMbRHML
-	o8ThJ9+giuwlHh99xAzyATPQ5vW79CGW8Un0/n7CBAkvXomONiGIalWJU42XoUZKS9xbcg3q
-	BA+J7Z2vocEYK3F09hvGCYxys5C8MAvJC7MQli1gZF7FKJVaUJybnppsWmCom5daDo/M5Pzc
-	TYzgBKsVsINx9Ya/eocYmTgYDzFKcDArifDa/n6aJsSbklhZlVqUH19UmpNafIjRFBiwE5ml
-	RJPzgSk+ryTe0MTSwMTMzMzE0tjMUEmc93Xr3BQhgfTEktTs1NSC1CKYPiYOTqkGJnEu/xPH
-	bm7tzVSybuVwn1+1IFI0V0AopvV4xYMa4+DC2+tt9/2pEZ+5YdLyxC9Z51SCzzt3e6qwseQI
-	nXuwRSozfInZ/dKULFdX/ksnDR81fT1+tYPXbd+LuQc8F18Uv5vO5lfnusrzZvyDgmvG9qk+
-	Uh9zN9QE3GfKiHcLY3/P7OF9eF9hQ+OaBcYHXEsFuhc+jRcRjmq4JeS24njJqXxjTr+lNtPv
-	FN5bwDG9q/uGU3Sm6aflUsrnfnqt52+pvRGuWLbC9WX0d5Zq3ytybQkJ3LIzmLtuvE8VrFty
-	heXZsUk9jktrDDQjHiWsN6ypSjhw83S7FLP7Fgm3+gVqj8zvi+Q7J3xNfStfxanEUpyRaKjF
-	XFScCAAtepIkOQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNLMWRmVeSWpSXmKPExsWy7bCSvO71PS/SDLpncFu8ubqK1eLOgmlM
-	FqeWL2SymH8zyaJ58Xo2i0l7trJY3H34g8Xi8q45bBaLlrUyW3w6+p/VYlXnHBaLI8s/Mllc
-	/r4TKHb+AlDxQVGLVQsOsDsIeGxa1cnmMe9koMf+uWvYPfq2rGL02LL/M6PH501yAWxRXDYp
-	qTmZZalF+nYJXBlnN/1iL9iuXNG/dhdzA+Mf2S5GTg4JAROJ203b2bsYuTiEBLYzSrxdMoUV
-	IiEt8XpWFyOELSyx8t9zqKKvjBK3Xk5g6WLk4GATMJR4dsIGJC4iMINR4smna6wgDrPASiaJ
-	P1dmgXULC8RJ7L48lQnEZhFQlXh2ayY7iM0rYCVxqGM7G8QGTYm1e/cwQcQFJU7OfMICYjML
-	yEs0b53NPIGRbxaS1CwkqQWMTKsYRVMLinPTc5MLDPWKE3OLS/PS9ZLzczcxgsNfK2gH47L1
-	f/UOMTJxMB5ilOBgVhLhtf39NE2INyWxsiq1KD++qDQntfgQozQHi5I4r3JOZ4qQQHpiSWp2
-	ampBahFMlomDU6qBya758Ylb+iWhSybHJN/8fUUgkFf19v3AM0ZJRwVf9fy5whkSXmhytPfR
-	PCbbRYG7eHhXbHTQV1uqcfbrs/uHc2+9UV7DxzZX+xaDnPQcecf4hcaeeR2vhDOtuPt3NEwQ
-	6ihsFmpzU9E7cTjM52LMg7Xrnx19+HiRl1H8mVUMMiXxjzTywywFv6tMUlvcrmPYzqMQIzRp
-	/+yFGWrXT8VrHC0Ia36VO++8daP0owBmkfgpfCY5/utec/7eWLx6QsPv35cPmP02ZLDtnZKe
-	81pow4n/PSX8pQp8tm4SRvtepkoZ8zR4T1ta73P3YsnShPWzLzudnMaiP117gsaqx9Zrl02a
-	H+N4//n39SqqizfWK7EUZyQaajEXFScCAD1+1tHuAgAA
-X-CMS-MailID: 20240916231847epcas5p19dc48e3baeea70619dc766ba86938fee
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240916231847epcas5p19dc48e3baeea70619dc766ba86938fee
-References: <CGME20240916231847epcas5p19dc48e3baeea70619dc766ba86938fee@epcas5p1.samsung.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|TYCPR01MB8238:EE_
+X-MS-Office365-Filtering-Correlation-Id: 48f1f869-803f-4e02-5535-08dcd6a915ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ivPkZquN8lN8o1EBqZulpvqj3K5zgPBTuqX+PvPIjonNvzIwGqzThxybIxId?=
+ =?us-ascii?Q?rIxS95ez1ETpuD1gtdZWnWNGkhhm03+7hIsSkIbQE0Clp7xf2yrzp9Kq6+MI?=
+ =?us-ascii?Q?CwamnaZl1j2mAAmQfVHjcz7/Xj1olgutPmAWidxABywJCnVuTeVa6xqWMYdL?=
+ =?us-ascii?Q?CDfha3XuybX+tWxwE236MxuUsg0YWE3sKhiMQBZ7mrpMbasv2dvWbaqqpbG6?=
+ =?us-ascii?Q?o5+/LtM5EnJsgQkrOyRzq4r1aeyrq2xEUsdtM0JE60CuOKw22glgjZ+uBkGJ?=
+ =?us-ascii?Q?6gE3KHUNzT+pYapqcI350vogJdzjF/omdkRB+tfIcHJBqriOgKo9pozXvOn4?=
+ =?us-ascii?Q?7bhRV7ijz4pIcP0EyBGvwwht35zcjmcF/RIVpguWgAxDRd10lVSz6pkLVf2Y?=
+ =?us-ascii?Q?Mo/32LBxR4UqfpgVG3Oc7yvVXIhI0E8UDlQH2xAnVLv4whdm3g9+gNKpr1HV?=
+ =?us-ascii?Q?t1dedMqydqjQfVnmVBmEJuAJEp6IY3jw5NBobo/utE7GA0hi9aMGLul9blxd?=
+ =?us-ascii?Q?dFCNiBTXWdz4iINTvSo0oRsoy/MM9bVF9dI4V/gcKmeEHHg5WrkfCgze7d1u?=
+ =?us-ascii?Q?JBXdXBggiY7S1n965GGUe7P8eSSdT/jVDMcHDBNHL5gJ/ngd/F7uf+TR2uq9?=
+ =?us-ascii?Q?hCpa9jnUg/7YXA0A0nfX1VJNAF1JCzmnSjcR1mIffYNdkf45YPeCS0pIs7gY?=
+ =?us-ascii?Q?BfDlLWfzrkBSVwCRxuLRwqJJrKwrpvWQzN7NN/b8ojtGzHQ7gG1xD46EIOkF?=
+ =?us-ascii?Q?3+8zWlwg3KvlwY0X2gs67GwR01xr+SapAinU/uACTZHzQSaA2r7O0IHI6nvO?=
+ =?us-ascii?Q?Xw1mrmcOig/BLdB9pm3TdwmsfLNZQ0TRRsenujRL3WbU5eAjkBIFXZm6vONL?=
+ =?us-ascii?Q?RXoJ9NbFgKO1SGoNb20I94ZtMtuWbLFNVXDjmx02EFe6f88s7IE++8cBFWT1?=
+ =?us-ascii?Q?hD0BBC6O0Z1qxqAI2lMhYpIKfRfsyWyP2L1zDRvqfudX/cKpkQi+uNsvUlEF?=
+ =?us-ascii?Q?23w+Ypiy1Upkh3nWnGeIxzwAVUDzzVUrSHjdeg3/FBHjn9GAjXezDmwCJNjg?=
+ =?us-ascii?Q?QmneZTSsPWm7x/krC60NgTMwlIoHOWyR4QuWNFmfqRuGY6x4WbF1PkAWMpxc?=
+ =?us-ascii?Q?nILKA+kZY+ztuc0Y8W4Oxt2SNOCg35eFio4uRHyoUpXkEwOmGMHrn4/Z6vIH?=
+ =?us-ascii?Q?f6OvUnOLPblPHsbese6NMzTBanzVqy1a6HspcPZaPRIuqp2U9egm4oVjLYaM?=
+ =?us-ascii?Q?la58gTfKZTqqCcQIaXKhO8Tmmd8NTSzP+nVFrdzc37JS78qL2fD42LQd44en?=
+ =?us-ascii?Q?D3RxtK4F7kTKrrsPAsdpktqfZHtXWYMhlX8ji+fmRvSF4HhGjXDX8I/29+LB?=
+ =?us-ascii?Q?tfaGPQNhUsnBCbLR5Q/1Zo8ELTllH5vUsVKfSZZtaMPXsD9qsg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?3o0hS0suT+rVTrPmvZ5swgliCpoc/W/lprtZZdnY5IKpZJd3kAvaese8YTXw?=
+ =?us-ascii?Q?DyL8N4RFHXx0uzRO+MzVfJIZapuIQpluJXd52STf+GFtssufTcKTnC/Vu3AQ?=
+ =?us-ascii?Q?th3bYfsXUARp1U0BKUsGliPe/cro28Se+8bqjBlW1dl0Tm/bOYd56EOeCLd9?=
+ =?us-ascii?Q?gBQTKbhGjMuJjfOtn0ZqLaFwI1zone20OuoFpWI7YbMuhDIrT7Z2xk2sbYCv?=
+ =?us-ascii?Q?N0zUje2gVr0Ns8y7iSUeSLYZbRH9YZ0qYXUEZ+j+n7v1G/GBwob0Bs3leAJ0?=
+ =?us-ascii?Q?P4yZFCq8EKzxj9T4IoM7g1ZulJXZAJX43VJ270+TJilii26YWRd+Ma2PXndq?=
+ =?us-ascii?Q?9OnjiLdAg8Pf82qGj9qNZ9aaowKDnlFpKyY6OXHxs249WKarT0G+a998ToCZ?=
+ =?us-ascii?Q?cjvSmY6WLQnocGQCnXT7to2998ci93KO6UwCFDMPBGVS10NwhZCeRbuyaKg2?=
+ =?us-ascii?Q?iQOOyZi4kTF98d1QYcNBr/Giwqk39x5pwIJicJ6qzSW8xTXHM9uis/eGQoTj?=
+ =?us-ascii?Q?c/UZcF0RZdoz7L97phcsbDOkrzevCrKaF8AF0xkftFWE1eM1C5lZ8XYkba55?=
+ =?us-ascii?Q?Olg4Wp9ONQMRCBNqHhISANFo64Qy0+Jt0LtPPVOBtUmj6Bk2mYxdHkA6j/oN?=
+ =?us-ascii?Q?hdX+CsMhOSgzz+hqo5OeLYDZSNGxMuFRl2g49q+km4kgm2az0nxQ2rkcXyOG?=
+ =?us-ascii?Q?xp0JjvxCl7i307C3Ou01BsX75yxgGjtINKzVhg5VgsLr5KkIKAY4fQhxGdov?=
+ =?us-ascii?Q?Vjn2m1vS7E4b5dOBo9Y07bhDc53v+KsSJoGulHIHchKY3Iq6S1Y6GkrTsO1O?=
+ =?us-ascii?Q?+j9AfbUZvkUZfMGmmMB9T2CfRTjw/ZaryuM9FjbMPlJd++i2d0GhIcgj4ftb?=
+ =?us-ascii?Q?INz8pPjCsGJTGCige4EBhiUpxvPx9UUmydDF+yWDZW8fng96TkIXvDWUrsdf?=
+ =?us-ascii?Q?cwX3MDhfFF80aNCorO9YYjWTOouxyzp1EWvBR1wDVRS4WzkIPzMe4DVn9tWO?=
+ =?us-ascii?Q?yROmgYSwdpIBX6/NZIhXmcNp9mgYIY8tcTed92JuNlhOUTb1jk80KF8Eja4l?=
+ =?us-ascii?Q?eLj/is4wngZRDS68Fo57QRx2mAcU1MjlT/l78r/k2sILiFORW0q9FBUBexKy?=
+ =?us-ascii?Q?rEL9oH3jBrvv3M6t7b0kfUGJHx6CQ3p4TZDr/d2j4ZN+GSBfKdvJZ60ZhCnB?=
+ =?us-ascii?Q?hoPtbv/38jHQMsTmhf5ROQw1zjUZw0Tg/NyDnjNDcqYZQTUyQ06Gd1jDyLWi?=
+ =?us-ascii?Q?9HIj+iUNoFVsN5D6uCWRpEsyuKjadJz2AbI49ofpNAxpb4sX1YnF7ezr2oMp?=
+ =?us-ascii?Q?q/Oyaoeb0bbT4HopApNlwcwLB6s9txZwdPQapHhLwthzHQiO+79WBHu/T3qd?=
+ =?us-ascii?Q?dZ4a0URNOTptWLAx99Oa/atup74Fn9tgzJo3reKl9/MSG143mus+1oIOq8u+?=
+ =?us-ascii?Q?rL13Bb5jjYObJXdmrSFdt3CnLnl8hAqwOLg4TJuzzGQRHHzwbVIkhiU+f9Kz?=
+ =?us-ascii?Q?+7Dsq6YMsp3s2AU9YvxOcbIYRq/4nphoUlqIn+6Vb3p0/6PrKKGgCDrQMYOc?=
+ =?us-ascii?Q?JGF/KBQ0hS5QhYxAv5o6QtTtQU1035ttinLuu2U3OBkZV/fmHV2ZhY5HGMdH?=
+ =?us-ascii?Q?Z1k4X2x5vX+oQA1sdnOgi3Q=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48f1f869-803f-4e02-5535-08dcd6a915ef
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2024 23:41:28.6481
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xo5X7YhrZSk4X4rwjGO5PxrDuffduSjzD1IGDB70euSZRpZxdjEGN+QR0zoQ5F8Ez8cvTZgZ7WVV1fVZnk9ZsRvkHIzpY1A9R69B1S515INTqnH1+/6EgM7R9hwheMZm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8238
 
-This commit addresses an issue where events were being processed when
-the controller was in a halted state. To fix this issue by stop
-processing the events as the event count was considered stale or
-invalid when the controller was halted.
 
-Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
-Cc: stable@kernel.org
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Hi Takashi
+
+> > This patch-set got both Ack and Nack.
+> > I wonder can I re-post this after merge-window again ?
+> > I'm asking because this is very huge patch-set.
+> 
+> If we get a NACK for this kind of cleanups, it's rather negative.
+> Unless its' a mandatory preliminary change for other upcoming stuff,
+> I don't think it's worth to work on this further. 
+
+Hmm...
+
+Thank you for your help !!
+
+Best regards
 ---
-
-Changes in v3:
-- Updated Cc tag and a typo mistake.
-- Link to v2: https://lore.kernel.org/lkml/20240916224543.187-1-selvarasu.g@samsung.com/
----
-
-Changes in v2:
-- Updated the code changes that suggested by reviewer (Thinh Nguyen).
-- Link to v1: https://lore.kernel.org/lkml/20240719110100.329-1-selvarasu.g@samsung.com/
----
- drivers/usb/dwc3/core.c   | 22 +++++++++++++++++++---
- drivers/usb/dwc3/core.h   |  4 ----
- drivers/usb/dwc3/gadget.c | 11 -----------
- 3 files changed, 19 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 9eb085f359ce..152376977a8e 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -544,6 +544,7 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
- int dwc3_event_buffers_setup(struct dwc3 *dwc)
- {
- 	struct dwc3_event_buffer	*evt;
-+	u32				reg;
- 
- 	if (!dwc->ev_buf)
- 		return 0;
-@@ -556,8 +557,10 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
- 			upper_32_bits(evt->dma));
- 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
- 			DWC3_GEVNTSIZ_SIZE(evt->length));
--	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
- 
-+	/* Clear any stale event */
-+	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-+	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
- 	return 0;
- }
- 
-@@ -584,7 +587,10 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
- 	dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(0), 0);
- 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0), DWC3_GEVNTSIZ_INTMASK
- 			| DWC3_GEVNTSIZ_SIZE(0));
--	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
-+
-+	/* Clear any stale event */
-+	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-+	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
- }
- 
- static void dwc3_core_num_eps(struct dwc3 *dwc)
-@@ -2499,7 +2505,11 @@ static int dwc3_runtime_resume(struct device *dev)
- 
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
--		dwc3_gadget_process_pending_events(dwc);
-+		if (dwc->pending_events) {
-+			pm_runtime_put(dwc->dev);
-+			dwc->pending_events = false;
-+			enable_irq(dwc->irq_gadget);
-+		}
- 		break;
- 	case DWC3_GCTL_PRTCAP_HOST:
- 	default:
-@@ -2589,6 +2599,12 @@ static void dwc3_complete(struct device *dev)
- static const struct dev_pm_ops dwc3_dev_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
- 	.complete = dwc3_complete,
-+
-+	/*
-+	 * Runtime suspend halts the controller on disconnection. It relies on
-+	 * platforms with custom connection notification to start the controller
-+	 * again.
-+	 */
- 	SET_RUNTIME_PM_OPS(dwc3_runtime_suspend, dwc3_runtime_resume,
- 			dwc3_runtime_idle)
- };
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index c71240e8f7c7..9c508e0c5cdf 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1675,7 +1675,6 @@ static inline void dwc3_otg_host_init(struct dwc3 *dwc)
- #if !IS_ENABLED(CONFIG_USB_DWC3_HOST)
- int dwc3_gadget_suspend(struct dwc3 *dwc);
- int dwc3_gadget_resume(struct dwc3 *dwc);
--void dwc3_gadget_process_pending_events(struct dwc3 *dwc);
- #else
- static inline int dwc3_gadget_suspend(struct dwc3 *dwc)
- {
-@@ -1687,9 +1686,6 @@ static inline int dwc3_gadget_resume(struct dwc3 *dwc)
- 	return 0;
- }
- 
--static inline void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
--{
--}
- #endif /* !IS_ENABLED(CONFIG_USB_DWC3_HOST) */
- 
- #if IS_ENABLED(CONFIG_USB_DWC3_ULPI)
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 291bc549935b..10178e5eda5a 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4728,14 +4728,3 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
- 
- 	return dwc3_gadget_soft_connect(dwc);
- }
--
--void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
--{
--	if (dwc->pending_events) {
--		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
--		dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
--		pm_runtime_put(dwc->dev);
--		dwc->pending_events = false;
--		enable_irq(dwc->irq_gadget);
--	}
--}
--- 
-2.17.1
-
+Kuninori Morimoto
 
