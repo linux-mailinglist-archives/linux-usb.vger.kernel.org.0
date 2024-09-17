@@ -1,124 +1,117 @@
-Return-Path: <linux-usb+bounces-15180-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15185-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54BD497B197
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 16:50:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D70E297B213
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 17:45:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19264285F75
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 14:50:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 766881F28C32
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 15:45:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19253178368;
-	Tue, 17 Sep 2024 14:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 085E91D017A;
+	Tue, 17 Sep 2024 15:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TKWlaU9P";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="R9YjvQfn"
+	dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b="B98xYqHO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7F3535DC;
-	Tue, 17 Sep 2024 14:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295961D0143;
+	Tue, 17 Sep 2024 15:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.3.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726584621; cv=none; b=S4+p2AQsU+q620Q4BZewoAIIIxRQ6/YN9vhg7UGGh+ENuGD8p7WDqV7OQldOocywYkp1KpFKm73GlTKYQ2oO4A1/8dRXn+yQVmKLPnkCtcC9wcunuKDcs/O1Y0/nuMXxDEN0fEe2FBnuqpZJfBhyi9UQz4oK7dRB27Uuu6M3cDY=
+	t=1726586389; cv=none; b=OBA4jQChsbxE7I2eq65eu7YftnTTArLpe1GSMWCoN3FRFSXqt+GMINL4dF0amOuDZz7f+QI7CoNIIPfTKklnOLEOmXd382KJuoO7LaOLbE4TBHwSteu4GJIKdOAbdwarqkEBF4WIwwbHHDSbKTJGxmZaJ+35vh76rHO8OuSn91Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726584621; c=relaxed/simple;
-	bh=vsbLyYUXsDioKkrnt/JOxoELHNh5QqS1ACqYJPcHIRQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=co4BIoZtirjGYFwnLhVZ0VE6bN4IVS22VR0SgYVZ1w+lDh4ZboRBXfJBr7A4KdtuswWWw05KtLwoBUBVMvmE2WmAWJtwSY7dqxmIj3TwEVDYV2BlPdarv2UX++oyTEzunz92UVvhoZQ5+b5gvqAljHZIWe4vYpNRSdxWLEXXaps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TKWlaU9P; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=R9YjvQfn; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 17 Sep 2024 16:50:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1726584618;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rxJRzbktYiDJXT+Ub/Ybk8aF3V3Yo1DxmmO7BxSocTo=;
-	b=TKWlaU9PXHY6Q/j8IGbl/hcg7jrpk52Vr2plBkxPMLfnJsB8zUhVE3PaaRNA+2PATRXFve
-	Hx0jQLMrahlLRoVaDG4QELVl3EfExUAikQy2PYcBAm8jWi/Zar5DoddHw9iL6aiodhYnUa
-	cpMoYuieMsTCnj1lCRrOZX7lpXjW4VEau05Od4s5M/sAKF96XQjsD88erckHYDtqPogUfV
-	GZAEUbAO5BuyjGX50QwQCY/znEqSgeZS+CY10H2/yOQ0VbDo62ITlY6kLuyXhFzVjeBu4x
-	HxOtqXC4NtTIuNXT385ev7ooJZADG3WTPF1kbiMHT+iGR4LEho1DObWndG3dUg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1726584618;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rxJRzbktYiDJXT+Ub/Ybk8aF3V3Yo1DxmmO7BxSocTo=;
-	b=R9YjvQfn5CWH9BLCY1TXG4V2cC+vDqaUqBBfZSENZJ1uCErdXnHcQ7ZyCTZ2NTtCcdmZUs
-	DTeyub0MuvmPJmCA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Mikhail Arkhipov <m.arhipov@rosa.ru>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Felipe Balbi <balbi@ti.com>, Ben Dooks <ben.dooks@codethink.co.uk>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: Re: [PATCH] usb: gadget: r8a66597-udc: Fix double free in
- r8a66597_probe
-Message-ID: <20240917145017.dCZwT_uL@linutronix.de>
-References: <20240916222937.12878-1-m.arhipov@rosa.ru>
+	s=arc-20240116; t=1726586389; c=relaxed/simple;
+	bh=pa485UOUkElKygnxw79IBPNMjoDl+Ap2Tje5OinibaU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=g7p0hatVQUoIKFdOshiS44AXMrxFg5y3h2SIYxD5ZuBopEgcnFTKkvJUot/K6bW2aKn7GG3z3N0YF7urXPrAKFfAKwDHyG4pdY81ua6IaneZ/4L9eEa7IFT0kec+JVUE6jIGsWFpM5HatHs3tgwGA8WkeBKYr4ZcpMYYHR/6OQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com; spf=pass smtp.mailfrom=ysoft.com; dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b=B98xYqHO; arc=none smtp.client-ip=81.19.3.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ysoft.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+	s=20160406-ysoft-com; t=1726585839;
+	bh=AAPF2+cdPzfUKD00WoAQzPpdJ/0u3TYSCKdZMRoyuLQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=B98xYqHOPffcTL14JM2hywqoYqe2HFWtBcjLqt3kkhH+y67JZm+tYpznPnv8uM6R0
+	 DAXM/LLNSioMi7mZquKO23GBRfBefiSdqSqxPqntI7XGt7gt0Vsl/zsWdFog9Q1xaq
+	 d6ZU1UHgxCpAKNNg2TzNGr4FEWVggOaEuDWXEvDk=
+Received: from vokac-nb.ysoft.local (unknown [10.1.8.111])
+	by uho.ysoft.cz (Postfix) with ESMTP id 731CCA0548;
+	Tue, 17 Sep 2024 17:10:39 +0200 (CEST)
+From: =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Petr Benes <petr.benes@ysoft.com>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Herburger <gregor.herburger@ew.tq-group.com>,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
+	Michael Walle <mwalle@kernel.org>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Mathieu Othacehe <m.othacehe@gmail.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	=?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Subject: [PATCH 0/4] Add support for new IMX8MP based board
+Date: Tue, 17 Sep 2024 17:09:57 +0200
+Message-ID: <20240917151001.1289399-1-michal.vokac@ysoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240916222937.12878-1-m.arhipov@rosa.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2024-09-17 01:29:37 [+0300], Mikhail Arkhipov wrote:
-> The function r8a66597_free_request is called to free r8a66597->ep0_req,
-> but the pointer is not set to NULL afterward, which may lead to a double
-> free if the function is called again.
-> 
-> If the probe process fails and the r8a66597_probe function subsequently
-> goes through its error handling path. Since r8a66597_free_request is called
-> multiple times in different error handling sections, it leads to an attempt
-> to free the same memory twice.
-> 
-> Set r8a66597->ep0_req to NULL after calling r8a66597_free_request
-> to prevent any further attempts to free this pointer.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 0f91349b89f3 ("usb: gadget: convert all users to the new udc infrastructure")
-> Signed-off-by: Mikhail Arkhipov <m.arhipov@rosa.ru>
+Hi,
 
-Looking at how the code looks now and how it looks back then, I simply
-haven't seen it. I would suggest to instead assigning NULL simply remove
-the second block. The request gets allocated shortly before
-usb_add_gadget_udc() is invoked. It does not make sense to have this
-conditional check all the way from clean_up2 where it is not allocated.
+this series adds support for a new member in our IOTA platform.
+The board is based on the i.MX8MP SoC. The first two patches
+add support for most of the board functionality except USB Type-C
+port and some other minor things.
 
->  drivers/usb/gadget/udc/r8a66597-udc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/udc/r8a66597-udc.c b/drivers/usb/gadget/udc/r8a66597-udc.c
-> index db4a10a979f9..43b81cae7d17 100644
-> --- a/drivers/usb/gadget/udc/r8a66597-udc.c
-> +++ b/drivers/usb/gadget/udc/r8a66597-udc.c
-> @@ -1952,12 +1952,14 @@ static int r8a66597_probe(struct platform_device *pdev)
->  
->  err_add_udc:
->  	r8a66597_free_request(&r8a66597->ep[0].ep, r8a66597->ep0_req);
-> +	r8a66597->ep0_req = NULL;
->  clean_up2:
->  	if (r8a66597->pdata->on_chip)
->  		clk_disable_unprepare(r8a66597->clk);
->  
->  	if (r8a66597->ep0_req)
->  		r8a66597_free_request(&r8a66597->ep[0].ep, r8a66597->ep0_req);
-> +		r8a66597->ep0_req = NULL;
->  
->  	return ret;
->  }
+[PATCH 3] adds new device tree binding for a Diodes Incorporated
+PI5USB30213A Type-C Controller and [PATCH 4] enables that port on
+the IOTA2 Lumpy board.
 
-Sebastian
+We also wrote a driver for that Type-C port controller. I would like
+to get that driver upstream as well but I expect it will take much
+more iterations and effort to get it into mainline-ready shape so
+I intentionally excluded it from this series. AFAIK it should not
+be a problem to accept a device tree binding for a HW that does not
+have a driver in the kernel yet.
+
+Michal Vokáč (2):
+  dt-bindings: arm: Add i.MX8MP IOTA2 Lumpy board
+  arm64: dts: imx: Add imx8mp-iota2-lumpy board
+
+Petr Benes (2):
+  dt-bindings: usb: Add Diodes Incorporated PI5USB30213A Type-C
+    Controller
+  arm64: dts: imx8mp-iota2: Enable the USB Type-C port
+
+ .../devicetree/bindings/arm/fsl.yaml          |   1 +
+ .../bindings/usb/diodes,pi5usb30213a.yaml     |  95 ++++
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 521 ++++++++++++++++++
+ 4 files changed, 618 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+
+-- 
+2.43.0
+
 
