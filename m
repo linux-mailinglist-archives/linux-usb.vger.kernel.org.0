@@ -1,50 +1,70 @@
-Return-Path: <linux-usb+bounces-15195-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15196-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4128A97B4E1
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 22:45:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 467EE97B4E4
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 22:47:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C49ECB225AE
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 20:45:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E808B1F228F3
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 20:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0371D1917C9;
-	Tue, 17 Sep 2024 20:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA451917E0;
+	Tue, 17 Sep 2024 20:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="czwqEBEA"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mf0mxuNp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0EA13C3D5
-	for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 20:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D0713C3D5;
+	Tue, 17 Sep 2024 20:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726605941; cv=none; b=sSA3er5L74scAg6hTsC/D/gT0+D1brIcZHaB6OFi0hPS6N6g2zwa8Kl9lNYLwmQJ76xEZHdRE3i8cOcI5j+VtSm3EryIMJH/hOpZjAc1FAJ+PF4NX4wDf388t4Hi/f8vkVCt2uGpYPwVSVnHpjbtbst4qL1f9lhvNHhHmXl4g8w=
+	t=1726606036; cv=none; b=LbQ2W4gIX3uhmkqCUNYrIvNac0YRn7BhVDm7YdvQzr+mqF+/K1YwboT8qb0BihfrkEfW6OYCa/j2kR315wptlEWxyKsde1RdFyk3GhQXJnIqwiCFP/pX2QvrE2D2EmfKUA0V8AN6MI1fvCsF0F52A0pgLeBk9tvTN+uuUElLrWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726605941; c=relaxed/simple;
-	bh=t527FZ2dUKRQXa8PZ/yilT72OIBfuNtYnBazVFUSHpI=;
+	s=arc-20240116; t=1726606036; c=relaxed/simple;
+	bh=xXJ1FrtXW+q9HIjEt0gOAJQgfOWwuPQ54KAxRTajXg8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=anDRsgg/uWxKnicMUQ/Vlpnh7xvym/o0iHkrq37ng8VC6QuR965AjtvEGnd1qrT7s71T+SvI0ANOXMZL9E85P6QALr3hs0QJPLeepcQCNsAXo+aSYqfR3OWR5NtiNixyhFS1oAyTu2x3rgRxxKE/B5HqABKOlsdeXW/2VKALjDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=czwqEBEA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67F5C4CEC5;
-	Tue, 17 Sep 2024 20:45:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rhkoQqwQNQwQx4pFAgU8ZeEGRwI38iDdMMU4lMizjb9t0JTzHdTyduH/K4IHRjVOeyA+ehD4cetI/QJumMU925fG8/tCnTgLL+gLjTIP3JJvb8qITwCFFPPHiWUJfl+/PdCSFoQyMd4Q84sNKItbd4GnVxWYeD+w0S5PHhuGygQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mf0mxuNp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92181C4CEC5;
+	Tue, 17 Sep 2024 20:47:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726605941;
-	bh=t527FZ2dUKRQXa8PZ/yilT72OIBfuNtYnBazVFUSHpI=;
+	s=korg; t=1726606036;
+	bh=xXJ1FrtXW+q9HIjEt0gOAJQgfOWwuPQ54KAxRTajXg8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=czwqEBEAgJiNMkMo+ywC0hY2WUvQxQfasbc/DG/Kw2bSVzEZrjVrm/ClhX9z9ignr
-	 A3kL1mxrMQasrL5c19F7lCo4M0o4gjlZfKFlYyYdWwho7H0ge3M0O1e51l8z9SG7WG
-	 0hudeJhR+Fkl86oZwVA2SW1uwYbr1rnHJ7VyFfks=
-Date: Tue, 17 Sep 2024 22:45:38 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
-Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: PATCH: Fix problem with xhci resume from suspend
-Message-ID: <2024091756-gathering-ocean-ba9c@gregkh>
-References: <CAKHHu8rQTrTQM4Bsst-6wdUPxkuNP1bCc9Gq4WsLnwP5j4wkYg@mail.gmail.com>
+	b=mf0mxuNpuxhKXGDo2SGLRvbkgYhxd2A3BEXkWcR59dQHQbw3XQtdI0TzxSWDtnSSB
+	 hfWf+NbJ6Dqh6Tlfu8Lcwy+zLnWcfgpXoP0J38gTaRig6Ww2+vj5/CymPh5gbVYxxr
+	 FNPz3ddatQ0Hpnl/pKPjXhVXok7lE7Ulkr53XEaQ=
+Date: Tue, 17 Sep 2024 22:47:14 +0200
+From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>,
+	"dh10.jung@samsung.com" <dh10.jung@samsung.com>,
+	"naushad@samsung.com" <naushad@samsung.com>,
+	"akash.m5@samsung.com" <akash.m5@samsung.com>,
+	"rc93.raju@samsung.com" <rc93.raju@samsung.com>,
+	"taehyun.cho@samsung.com" <taehyun.cho@samsung.com>,
+	"hongpooh.kim@samsung.com" <hongpooh.kim@samsung.com>,
+	"eomji.oh@samsung.com" <eomji.oh@samsung.com>,
+	"shijie.cai@samsung.com" <shijie.cai@samsung.com>,
+	stable <stable@kernel.org>
+Subject: Re: [PATCH v2] usb: dwc3: core: Stop processing of pending events if
+ controller is halted
+Message-ID: <2024091758-squeezing-banknote-2704@gregkh>
+References: <CGME20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e@epcas5p4.samsung.com>
+ <20240916224543.187-1-selvarasu.g@samsung.com>
+ <20240916230032.ugw23x7gijamrf5x@synopsys.com>
+ <2024091716-snide-mashing-2c21@gregkh>
+ <20240917054703.w47rfo7x4lhzgccn@synopsys.com>
+ <2024091758-devotion-clutter-29f6@gregkh>
+ <da717b2e-e8dc-461f-bef7-d3d9e5df3632@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,45 +73,53 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKHHu8rQTrTQM4Bsst-6wdUPxkuNP1bCc9Gq4WsLnwP5j4wkYg@mail.gmail.com>
+In-Reply-To: <da717b2e-e8dc-461f-bef7-d3d9e5df3632@samsung.com>
 
-On Tue, Sep 17, 2024 at 08:47:43PM +0200, Jose Alberto Reguero wrote:
-> I have a ASUS PN51 S mini pc that has two xhci devices. One from AMD,
-> and other from ASMEDIA. The one from ASMEDIA have problems when resume
-> from suspend, and keep broken until unplug the  power cord. I use this
-> kernel parameter: xhci-hcd.quirks=128 and then it works ok. I make a
-> path to reset only the ASMEDIA xhci.
+On Tue, Sep 17, 2024 at 09:52:00PM +0530, Selvarasu Ganesan wrote:
 > 
+> On 9/17/2024 12:38 PM, gregkh@linuxfoundation.org wrote:
+> > On Tue, Sep 17, 2024 at 05:47:05AM +0000, Thinh Nguyen wrote:
+> >> On Tue, Sep 17, 2024, gregkh@linuxfoundation.org wrote:
+> >>> On Mon, Sep 16, 2024 at 11:00:30PM +0000, Thinh Nguyen wrote:
+> >>>> On Tue, Sep 17, 2024, Selvarasu Ganesan wrote:
+> >>>>> This commit addresses an issue where events were being processed when
+> >>>>> the controller was in a halted state. To fix this issue by stop
+> >>>>> processing the events as the event count was considered stale or
+> >>>>> invalid when the controller was halted.
+> >>>>>
+> >>>>> Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+> >>>>> Cc: stable <stable@kernel.org>
+> >>>> Checkpatch doesn't like that format. Fix the Cc stable tag to below:
+> >>>>
+> >>>> Cc: stable@kernel.org
+> >>> What?  Why?  That should be fine, exactly what is the warning that this
+> >>> gives?  That should be fine, as it's what my scripts put into patches
+> >>> that I create :)
+> >>>
+> >> This is what checkpatch complains:
+> >>
+> >> WARNING:BAD_STABLE_ADDRESS_STYLE: Invalid email format for stable: 'stable <stable@kernel.org>', prefer 'stable@kernel.org'
+> >> #23:
+> >> Cc: stable <stable@kernel.org>
+> >>
+> >> total: 0 errors, 1 warnings, 0 checks, 72 lines checked
+> > Ugh, that's wrong, whatever you want to do here is fine.
+> >
+> > Someone should send a patch for checkpatch...
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> Signed-off-by: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
+> Hi Greg,
 > 
-> diff -ur linux-6.10.8/drivers/usb/host/xhci-pci.c
-> linux-6.10.8.new/drivers/usb/host/xhci-pci.c
-> --- linux-6.10.8/drivers/usb/host/xhci-pci.c 2024-09-04 13:30:16.000000000 +0200
-> +++ linux-6.10.8.new/drivers/usb/host/xhci-pci.c 2024-09-12
-> 19:37:14.378870385 +0200
-> @@ -76,6 +76,7 @@
->  #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI 0x1142
->  #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI 0x1242
->  #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI 0x2142
-> +#define PCI_DEVICE_ID_ASMEDIA_3042_XHCI 0x3042
->  #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI 0x3242
+> However I already posted new version with address a typo mistake as 
+> well. Kindly review the same.
 > 
->  static const char hcd_name[] = "xhci_hcd";
-> @@ -447,6 +448,10 @@
->   pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
->   xhci->quirks |= XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
-> 
-> + if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-> + pdev->device == PCI_DEVICE_ID_ASMEDIA_3042_XHCI)
-> + xhci->quirks |= XHCI_RESET_ON_RESUME;
+> https://lore.kernel.org/lkml/20240916231813.206-1-selvarasu.g@samsung.com/
 
-Something went wrong with the whitespace here, can you try sending it
-again?  You can't use cut/paste from a web client for patches, the email
-documentation should explain how to do this properly from gmail if you
-have problems.
-
-thanks,
+It's the middle of the merge window, I'll look at it after -rc1 is out,
+thanks.
 
 greg k-h
 
