@@ -1,170 +1,111 @@
-Return-Path: <linux-usb+bounces-15199-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15200-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F6E97B594
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 00:10:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF2A97B5A4
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 00:16:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E68F2830D7
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 22:10:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96080B2277D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 22:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E353D178CD9;
-	Tue, 17 Sep 2024 22:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA176178363;
+	Tue, 17 Sep 2024 22:15:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArKr4aIY"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="e4aqrLKx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C473415B0F2
-	for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 22:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F5B45008;
+	Tue, 17 Sep 2024 22:15:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726611029; cv=none; b=G7fnmcJwwU55pRxw+4OJy2G8Dgp/TDOsFDqTFkvNqr25q1eGfqt7ZzmzEL/eFaDgSveMp/VfvWAxNPo/WKMc961lT+AeFxhug/gSVyiagppTc2XnsFyPVKqdIfVqmXOCaL+guIME9TQVgqZSTR2vxBoa3hRiJUxvgTYpbpMyXG4=
+	t=1726611359; cv=none; b=L5xt7gz8aJcyYqsNUzkN2jbrgbYx8ogf80qnQYzanqktfeBc+w/4M4DK8PzG7gKSKYpK92GWbp7vxPhSaUlgn1nYgFheH1BNp5k1hx1qkFwkk1Q0LmJ17whiPOHtqx48BjdTnmXOvFd8JARQAgrCAAhQzIKhjhsDq/3htzCkakY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726611029; c=relaxed/simple;
-	bh=cyQ+J/rxi+BkozIW0MwUt9eFlCjrfVUP100sry1rkDU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Wpm0hIEBo6NuzEjr0rbhMpZxdczUiHJvwPA/O/eo0mMXj8DKKu6BgOyN3OdyfJdWNFxd0pGUo+JjADELd+NtANgOXEOxmzZms0EI+c4LMpdSbbTDca0a/vRFYCw4Aw+fdD05vBBRT46/BQmnz+5zp8kqfAyahgH5nwrosv3behY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ArKr4aIY; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42cafda818aso59777885e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 15:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726611026; x=1727215826; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VOqeZpBUfsFzXqWxSpZSBqTqHba6MGOPhOsOyyCShQM=;
-        b=ArKr4aIYAllf1enRU8AGn4/UoYDxjARbDLzFuUcmhwcYhWnmSUM4BGTrKo3+KdNrky
-         Mh5jlUBB88YQ5bqq6w5c4FIfeigByHNQdXj2MlsyMjmQbmP5mDabyCj5Dqz6sKws914B
-         vZqHVA/7QVjax3o7d3LKdwrNCBH1QbhWQOywg0hfIk2BX07+lb412H71rwM2nfeRlprw
-         Nyc93kj1cxblKa/0Sk0nB3nlYB8XkLZPoOlNCMxSLMO4tWb4pyajiWTNXqVJ7QyGGBfL
-         LSRRL5XtwJ4QDuPVVD1vxnOLsaokAzpdpKLyjSWPwiH+xo8uwkEC9xYlCRtbFDTwb5cA
-         KGfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726611026; x=1727215826;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VOqeZpBUfsFzXqWxSpZSBqTqHba6MGOPhOsOyyCShQM=;
-        b=OPsbUrEW4W9o078MVopSAJQyBRUQLN8xQxDzU37fWS3lGvn7sSFfymM33YTUCGAGjN
-         /nLa3aNJKgryALhe/emEfVaI0nG1q0SQEicf8TecHWJ575swPHBPi8rRy5MxGoWS+m3x
-         e987EdgTCsCAdxS8is+wcF3F26aAwBwNT76HWZQZFe0oBIMFpVEE5Rx34iCd4/W2kGkU
-         k5zgYcRlmrMLrnpGrJEZETY9W83mdKSCwK/V5vqwBdUsuU20YcLToQozhth7/jwL3EpG
-         5O45460++pisNRDUhrwWP0HDyGuKOLB2bcqV/TQjNnXEYiVvh+icrB3+edZ5znVqMaXM
-         fAbg==
-X-Gm-Message-State: AOJu0Yx17H2mlqGOCDe7lw49inJmgsfnw2lbh/AJVn7yI8MMLVdKEltW
-	AugPsTb1yLpxEII/fY3kX7u6ZmWAKwuCBdWavOVRrvgLtAP703h3
-X-Google-Smtp-Source: AGHT+IE65nqIUE9miq8Sh2lSZ/W8TSskyZmCYkWUfFvcbpy0LYp8VCEYlQgUgeOKFmqdL4Q8sE/gVQ==
-X-Received: by 2002:a7b:c453:0:b0:42c:de34:34be with SMTP id 5b1f17b1804b1-42cde3436e0mr159890845e9.3.1726611025659;
-        Tue, 17 Sep 2024 15:10:25 -0700 (PDT)
-Received: from [192.168.1.97] (71.red-81-33-253.dynamicip.rima-tde.net. [81.33.253.71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42d9b055075sm150980425e9.8.2024.09.17.15.10.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2024 15:10:25 -0700 (PDT)
-Message-ID: <018846f9a846e70d22f31203e4e8e93a1ee58de1.camel@gmail.com>
-Subject: Re: PATCH: Fix problem with xhci resume from suspend
-From: jose.alberto.reguero@gmail.com
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Date: Wed, 18 Sep 2024 00:10:24 +0200
-In-Reply-To: <2024091756-gathering-ocean-ba9c@gregkh>
-References: 
-	<CAKHHu8rQTrTQM4Bsst-6wdUPxkuNP1bCc9Gq4WsLnwP5j4wkYg@mail.gmail.com>
-	 <2024091756-gathering-ocean-ba9c@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+	s=arc-20240116; t=1726611359; c=relaxed/simple;
+	bh=hNNoS3Kj/B2bKaituE7QLZaNM10cqzDk5p7c7ApO2GM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LiuKdVNrfJ28grHCpomyidpwnyswFIukjowG/b5cvt6dWb90y+EdQG/avFz4jg/10odZ3W0uAJyyo3YkfqZRifCcNXVanFZZ74k7mHn/ghnzSRcALIwrB2CwwykhdmktnDq2jxcyvrxgJ4iPQ4VzjBhMwtOiczj9sp/mIvCZvYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=e4aqrLKx; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48H5vDc0008726;
+	Tue, 17 Sep 2024 17:15:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=PODMain02222019; bh=v7D5OK1F2vkHYZzM
+	H/wqdmPxU26UrCk9Ppqj2hXcn04=; b=e4aqrLKxVwNoTRHhj1O697Dy2NqQKkX2
+	d05Q5Q4jRIVXUGUmLrtRqacEEBUCiHmtZkeXpAuPtkP0CCkTzdxH1M3drqDXaD/v
+	AGUOwET/xjXLRjMlxo6nBNvQGFfsn8JbSK9pp3VsJaMnDgIPBTia7mV6TDejs3YJ
+	UeGOmRq5ub3f70dFGbg9UqsYR1IYwgA1lAbMwTlp+iQ+mCtwetqbir1K/pJnfh3F
+	5UrShmMpTNInSULNmQg5KFsWjFgPTqCh0Hd+cGW2OKpog+hVcPof+Rs21WrGwm1k
+	ENSxwT1ccyDjkXVm1wsNjHjk3fg8wYK9F1CjYcxu4fqiRfrqstzgbw==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 41n7vy498w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Sep 2024 17:15:42 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 17 Sep
+ 2024 23:15:39 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Tue, 17 Sep 2024 23:15:39 +0100
+Received: from aus-sw-rshr002.ad.cirrus.com (aus-sw-rshr002.ad.cirrus.com [141.131.145.15])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 5B712820244;
+	Tue, 17 Sep 2024 22:15:38 +0000 (UTC)
+From: James Ogletree <jogletre@opensource.cirrus.com>
+To: <jikos@kernel.org>, <bentiss@kernel.org>, <dmitry.torokhov@gmail.com>
+CC: <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        James Ogletree
+	<jogletre@opensource.cirrus.com>
+Subject: [RFC PATCH 0/6] Separate notions of max concurrent playbacks and
+Date: Tue, 17 Sep 2024 22:14:06 +0000
+Message-ID: <20240917221412.1003718-1-jogletre@opensource.cirrus.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: YxDUFC2tu-UPWBgc7L6ZU_CgxiFRDt93
+X-Proofpoint-GUID: YxDUFC2tu-UPWBgc7L6ZU_CgxiFRDt93
+X-Proofpoint-Spam-Reason: safe
 
-El mar, 17-09-2024 a las 22:45 +0200, Greg KH escribi=C3=B3:
-> On Tue, Sep 17, 2024 at 08:47:43PM +0200, Jose Alberto Reguero wrote:
-> > I have a ASUS PN51 S mini pc that has two xhci devices. One from
-> > AMD,
-> > and other from ASMEDIA. The one from ASMEDIA have problems when
-> > resume
-> > from suspend, and keep broken until unplug the=C2=A0 power cord. I use
-> > this
-> > kernel parameter: xhci-hcd.quirks=3D128 and then it works ok. I make
-> > a
-> > path to reset only the ASMEDIA xhci.
-> >=20
-> >=20
-> > Signed-off-by: Jose Alberto Reguero
-> > <jose.alberto.reguero@gmail.com>
-> >=20
-> > diff -ur linux-6.10.8/drivers/usb/host/xhci-pci.c
-> > linux-6.10.8.new/drivers/usb/host/xhci-pci.c
-> > --- linux-6.10.8/drivers/usb/host/xhci-pci.c 2024-09-04
-> > 13:30:16.000000000 +0200
-> > +++ linux-6.10.8.new/drivers/usb/host/xhci-pci.c 2024-09-12
-> > 19:37:14.378870385 +0200
-> > @@ -76,6 +76,7 @@
-> > =C2=A0#define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI 0x1142
-> > =C2=A0#define PCI_DEVICE_ID_ASMEDIA_1142_XHCI 0x1242
-> > =C2=A0#define PCI_DEVICE_ID_ASMEDIA_2142_XHCI 0x2142
-> > +#define PCI_DEVICE_ID_ASMEDIA_3042_XHCI 0x3042
-> > =C2=A0#define PCI_DEVICE_ID_ASMEDIA_3242_XHCI 0x3242
-> >=20
-> > =C2=A0static const char hcd_name[] =3D "xhci_hcd";
-> > @@ -447,6 +448,10 @@
-> > =C2=A0 pdev->device =3D=3D PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
-> > =C2=A0 xhci->quirks |=3D XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
-> >=20
-> > + if (pdev->vendor =3D=3D PCI_VENDOR_ID_ASMEDIA &&
-> > + pdev->device =3D=3D PCI_DEVICE_ID_ASMEDIA_3042_XHCI)
-> > + xhci->quirks |=3D XHCI_RESET_ON_RESUME;
->=20
-> Something went wrong with the whitespace here, can you try sending it
-> again?=C2=A0 You can't use cut/paste from a web client for patches, the
-> email
-> documentation should explain how to do this properly from gmail if
-> you
-> have problems.
->=20
-> thanks,
->=20
-> greg k-h
+Currently the notion of maximum number of effects a device can
+keep in its memory is tied to the number of effects a device
+can play at the same time. The same value that EVIOCGEFFECTS
+ioctl reports also acts as a ceiling on the number of effects
+that can be uploaded.
 
-Sorry, submit it again. Hope this time is alright.
+In order to support devices with the ability to store a
+different number of effects than can be simultaneously played,
+it appears necessary to separate these notions.
 
-Jose Alberto Reguero
+James Ogletree (6):
+  Input: Add variable to track maximum concurrent playbacks
+  HID: logitech-hidpp: Assign max concurrent playbacks
+  HID: pidff: Assign max concurrent playbacks
+  Input: cs40l50 - Assign max concurrent playbacks
+  Input: da7280 - Assign max concurrent playbacks
+  Input: uinput - Assign max concurrent playbacks
 
-diff -ur linux-6.10.8/drivers/usb/host/xhci-pci.c linux-
-6.10.8.new/drivers/usb/host/xhci-pci.c
---- linux-6.10.8/drivers/usb/host/xhci-pci.c	2024-09-04
-13:30:16.000000000 +0200
-+++ linux-6.10.8.new/drivers/usb/host/xhci-pci.c	2024-09-12
-19:37:14.378870385 +0200
-@@ -76,6 +76,7 @@
- #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
- #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
- #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
-+#define PCI_DEVICE_ID_ASMEDIA_3042_XHCI			0x3042
- #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
-=20
- static const char hcd_name[] =3D "xhci_hcd";
-@@ -447,6 +448,10 @@
- 		pdev->device =3D=3D PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
- 		xhci->quirks |=3D XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
-=20
-+	if (pdev->vendor =3D=3D PCI_VENDOR_ID_ASMEDIA &&
-+		pdev->device =3D=3D PCI_DEVICE_ID_ASMEDIA_3042_XHCI)
-+		xhci->quirks |=3D XHCI_RESET_ON_RESUME;
-+
- 	if (pdev->vendor =3D=3D PCI_VENDOR_ID_TI && pdev->device =3D=3D
-0x8241)
- 		xhci->quirks |=3D XHCI_LIMIT_ENDPOINT_INTERVAL_7;
-=20
+ drivers/hid/hid-logitech-hidpp.c   | 1 +
+ drivers/hid/usbhid/hid-pidff.c     | 1 +
+ drivers/input/evdev.c              | 2 +-
+ drivers/input/misc/cs40l50-vibra.c | 3 ++-
+ drivers/input/misc/da7280.c        | 1 +
+ drivers/input/misc/uinput.c        | 1 +
+ include/linux/input.h              | 2 ++
+ 7 files changed, 9 insertions(+), 2 deletions(-)
 
+-- 
+2.43.0
 
 
