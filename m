@@ -1,114 +1,119 @@
-Return-Path: <linux-usb+bounces-15175-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15176-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D54C597AFF9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 14:10:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8440F97B0A7
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 15:17:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E2E81F25552
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 12:10:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F7E228378A
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 13:17:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2854616B38B;
-	Tue, 17 Sep 2024 12:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F016B1741C6;
+	Tue, 17 Sep 2024 13:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hLns+buI"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PA2zPht6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8731514831C;
-	Tue, 17 Sep 2024 12:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE9227442
+	for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 13:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726574994; cv=none; b=sc6qc0INuRWDTpseNf0J0spd738XtY3DaQuezJpl2GIUKr6ZKlwAwZO2BEqUhF8K3fIxc0KB+pcjxBQQRg+krdDzjCwiFzMaX/rne4ZrwQGMGRW3C+jVmZzSp6+S3quTofLzvtmW0Cur0VSUxRX71IrguoEtFzSMcc8lx8u9pUQ=
+	t=1726579049; cv=none; b=MS6yt3BHQkL1shnNL39Z32BrSh6soUsCLGjK5FE5WjSrplqfDXoZgnKYKO23XMZHG2JsVMZDmDP5Do373+Z/V75nrP/PHXNixwbr1/sTjGGkNTwg5X+2xx0ucZA9H0HlCtVwNi+TN/ZoZs+r2IqYW95XN3hdpRSLguYSnN4i/K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726574994; c=relaxed/simple;
-	bh=QV3P/Kc85ci91UAQat3NFkOXriWFY3fMtlpURWGPxdQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H5oZnTixVU10OJs1R+if0sL8nJTjPCVZeUgwcVAP/dUhfn7KcH0/kyxhKxtAQTgwzY12nAXHhFiRxIYCgETYD4hUtduBSrt12isKzSy7TT54HjQnyFRA/E6RLhJKL1HVawMlGwfx+UFtxNs8hWyk9M42ITc4G7ijz8YzsHRjeBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hLns+buI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D3DC4CEC5;
-	Tue, 17 Sep 2024 12:09:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726574994;
-	bh=QV3P/Kc85ci91UAQat3NFkOXriWFY3fMtlpURWGPxdQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hLns+buIHGTBeTuUl2ZahOi1CLusjFI9D0ICyRBRR/G/ffQd2v5lW6Lm04lMZhOd0
-	 NXEaI1O/CFlJitQGuSiqyeCw7KkZyEHf1qAXYRaytX/fLUmuIPpmfXd88Q7ju2t3jv
-	 IkSRy8FBi6FYg3a3lQlByVNaUq2UxgRc8RYs6FAA=
-Date: Tue, 17 Sep 2024 14:09:46 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
-Cc: Ferry Toth <ftoth@exalondelft.nl>, Kees Cook <kees@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Richard Acayan <mailingradian@gmail.com>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>,
-	Hardik Gajjar <hgajjar@de.adit-jv.com>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: u_ether: Use __netif_rx() in
- rx_callback()
-Message-ID: <2024091735-spoiled-apache-6ca1@gregkh>
-References: <10019b141275f7fa3e2446e207e7a9afaaa98b3d.camel@gmail.com>
+	s=arc-20240116; t=1726579049; c=relaxed/simple;
+	bh=JV+Z7tJW/jScZunkCk3Xq1v1i3Bpk2ewWr8LssnADUE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mP6fmtVJODAfcQwbqU8zDlpi5H57GUEa7ou7a9E07NNEuQ+smlOoDW5PlVVRnkjfgob1kQp383MumhCwkhy84nlTqyFCck9H3Hm0iye5iWUmypnl22ll7RgBA1oaLfCWYBzvAi0brTJUousgpOPeOJOu2rBZJnupDKhZ9iH0LJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PA2zPht6; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-374c1120a32so3822580f8f.1
+        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 06:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1726579046; x=1727183846; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TQHADIzE/cTC02zvTR6h6NYt8OyzLzbjd1IrJBpXV+I=;
+        b=PA2zPht6/9O/Qj12q6STdkCG9yQdn0EFJzLTw0Gpp0fKjYBCZqorPID/duElXpUDN9
+         O2NI2me1HeGb0ihrbGYX+lsth0YB+4wtxM9Fd03dM7yHDUtk8QlPuYxqMi0t/bki23fr
+         pHylKrVv7zrPg83iTM13VrjNnCQhRKXwB9hcICvXacJU8fdY8+sTjaerIr74bzoihcDs
+         ckRFekNoHLAlBQ/0vbPmO0L72vWyARm75mndjv3aK4vDPzYW0C6vn2to+yurvVGUJCvD
+         pOgBZM1TJUn/Ev4mfmD61IqSsZssx6KNSZ3qdtQG0ABObVQzbNdFbA92mgcYHWW1dirn
+         F+3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726579046; x=1727183846;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TQHADIzE/cTC02zvTR6h6NYt8OyzLzbjd1IrJBpXV+I=;
+        b=BDCZrq1SWfFXgcedOWfFHm8AzRnNMEaX+9yJlwyRczH2NiOL4PHqxJ4Rk8OICrRpjP
+         PR9v6WnE54h7WSFpIWcdytz3PYHq4jW56pybpqgLZtDqwfkN2ipi/Ve8OalduO49vio/
+         kvO0mahPo2m17l8FMBrShuij5rGxG3UaNrxeGgKcl6BKl5aWvKslh/GjM4lF5w3F/tXw
+         bX26lvgM3akXURD+Vx5XJYIF7zJ83BUGKhOI90wh+mKPEfryrovKVBJQFwx3n5nsYVJ/
+         6Rd0QlxnKSoKAB9VL6wh3Yy6WQeKqjD49uIhgO7pGwbbJCVF0FW3LV+kUnlC0Tf9ArUN
+         elCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBGWVCdQqUfK4x3zieMHsPS7Sfey7Eu38RBKzgx/ZqrVySmHQUOgSrukoJB7XLx9F4nvM3pxUiKUM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+5QC6HmUN1BwIsNHjkDBuqx34k8tNH9hIQcfy4N9KIeXjLR0v
+	Bp4uFtMtHcuWjbcM/GBymWsRb0UOiT+PIJORUsl49pB3oR9KwoNe5aDFgRXdGFE=
+X-Google-Smtp-Source: AGHT+IEKfuYw0ignUGezpYcL7SUmk+4lYS++Y/1Yu+xdXH32HtECwh8759pw7xUTtKV4DVchA7c1ag==
+X-Received: by 2002:adf:eb81:0:b0:371:8cc1:2024 with SMTP id ffacd0b85a97d-378c285dbbcmr9662317f8f.0.1726579045357;
+        Tue, 17 Sep 2024 06:17:25 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13ed:c201:b884:edfc:abaf:1cf4? ([2001:a61:13ed:c201:b884:edfc:abaf:1cf4])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378e780551esm9681266f8f.101.2024.09.17.06.17.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Sep 2024 06:17:25 -0700 (PDT)
+Message-ID: <d88289f9-e22a-4960-9b3b-ad0b3ab17a89@suse.com>
+Date: Tue, 17 Sep 2024 15:17:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <10019b141275f7fa3e2446e207e7a9afaaa98b3d.camel@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: use mutex_lock in iowarrior_read()
+To: Jeongjun Park <aha310510@gmail.com>, Oliver Neukum <oneukum@suse.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, colin.i.king@gmail.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240916040629.28750-1-aha310510@gmail.com>
+ <2024091648-excusable-unfilled-83de@gregkh>
+ <15bc0f3a-5433-43e0-b0b0-8b9c26dec165@suse.com>
+ <CAO9qdTHrbG-aWetpM_e7zHUhrwPD=7uCHPbWSMoorgnwjKEOmA@mail.gmail.com>
+ <bf971924-9d91-40a3-a4c2-5b518e2ce2fd@suse.com>
+ <CAO9qdTHWfYv8u-gJqGkuG_OSdkU9c=qZSnEbE+zCYWG5bT6r+Q@mail.gmail.com>
+ <c96e95c2-aa59-4ef0-b211-c1cea71519ea@suse.com>
+ <CAO9qdTH_+syAOBXUYT61VZMovDJYjCD1b-Who16Aqj4BXq8GLA@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CAO9qdTH_+syAOBXUYT61VZMovDJYjCD1b-Who16Aqj4BXq8GLA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 17, 2024 at 01:19:25PM +0200, Hubert Wiśniewski wrote:
-> netif_rx() now disables bottom halves, which causes the USB gadget to be
-> unable to receive frames if the interface is not brought up quickly enough
-> after being created by the driver (a bug confirmed on AM3352 SoC).
+On 17.09.24 12:01, Jeongjun Park wrote:
+
+> Okay, I understand. Then I think it would be appropriate to do
+> the patch below to prevent blocking, but I have one question.
 > 
-> Replacing netif_rx() with __netif_rx() restores the old behavior and fixes
-> the bug. This can be done since rx_callback() is called from the interrupt
-> context.
+> Currently, many misc usb drivers do not seem to handle the
+> O_NONBLOCK flag when using mutex_lock. If this is really
+
+Yes. The quality of many drivers could be improved.
+Feel free to make patches. However, the lack of quality elsewhere
+does not justify a regression. Hence code fixing drivers already
+correctly supporting O_NONBLOCK must be correct in that regard.
+
+> necessary code, I think it would require code modifications to
+> other functions inside iowarrior and many misc usb drivers.
 > 
-> Fixes: baebdf48c360 ("net: dev: Makes sure netif_rx() can be invoked in any context.")
-> Signed-off-by: Hubert Wiśniewski <hubert.wisniewski.25632@gmail.com>
-> ---
-> v1 -> v2: Added Fixes tag and corrected Signed-off-by tag
-> 
+> What do you think about this?
 
-Hi,
+The formatting seems to be broken. In terms of content it is good.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+	Regards
+		Oliver
 
