@@ -1,68 +1,56 @@
-Return-Path: <linux-usb+bounces-15165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15166-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3953D97ABD0
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 09:08:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A65A97ACDA
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 10:30:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C7D81C218EC
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 07:08:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACA8A1F2582C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 08:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D9E7149C42;
-	Tue, 17 Sep 2024 07:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA3D157A59;
+	Tue, 17 Sep 2024 08:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pi/MiEDF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PPRxXVyc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC74D5C613;
-	Tue, 17 Sep 2024 07:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBBA15AF6;
+	Tue, 17 Sep 2024 08:30:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726556905; cv=none; b=tqzgaM4KDVGNJGWQzsam3rikBYO9ZNGo5Cz5umV5y8WcnJ1lXxQRWdtd3puFeJD/xCsHF/l1gmDzDps7xJOUhiMUE+MiRYjme1h2N+5koLO2jb4yhAJ82knImgEqdfbRLC5lHSivsRktp4MQ6e0OMHylhyHRWwm41MfSe0ozonQ=
+	t=1726561832; cv=none; b=LHxqvLUb79cgSb8/Q88gNQYgl4q+G+8up4Ouys/G6xu1TjKzYlWOZXNg4lzR7lb22rZlYsHStYrBdNUytt5Tc9Evc9eoVIIX1vcYh2tWacIf2Jfaq9QHYGWUy/eWGgkZsgKi2tjKCS8TIcs/vK57Qyfv6gwL1awZV6OYKkoyPEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726556905; c=relaxed/simple;
-	bh=ywDWDT7uwRjpjVeQCDAYEXrWBlGwwNQFLzAouXZ5Fp8=;
+	s=arc-20240116; t=1726561832; c=relaxed/simple;
+	bh=vilMTGZcXF6i1znoYdW1DfhTTmW+PiKswocbh2AUG7k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qqq3wpSkd1q+72ZUdBPPYiFJ7db5Z8W0NLI1czI1cMoFIMA4rRA0yyW1uJ2H8WzHsm9GciW9Z+slIbhwW8z29YGKYdiJyFHoGqJf88tXxuY9d6I621fZ5Ce6FO0U6KxzRLKPxwbStCGnvzk2ZjLn3P/1UHgQ7AitTcLvcJlAXVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pi/MiEDF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF951C4CECE;
-	Tue, 17 Sep 2024 07:08:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726556904;
-	bh=ywDWDT7uwRjpjVeQCDAYEXrWBlGwwNQFLzAouXZ5Fp8=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=p3PP3p1YPFqOZJRMfXZSTGi0yTVQxaj6d33pOHhIVkE/+QYpnNoGeyq6KnTURa1zu7uZI2irWtl6PutcDgHAf0IyhdRTBuPX03ptlAXDsPCf3aCrmu4RGk2d2wdldvOslCiO6XIMuPBEoNG4XTtpoynuM37nHU816vtTlyt5iHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PPRxXVyc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0480C4CEC6;
+	Tue, 17 Sep 2024 08:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726561832;
+	bh=vilMTGZcXF6i1znoYdW1DfhTTmW+PiKswocbh2AUG7k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pi/MiEDFtexiTTgZTDadyhzzx9yFK3hhOqM7BfcZlxJ26q/uLRKBok9H9C9qESr3v
-	 H5ajlgnvcMcHZfGn1O/daOMxiV0ixBxf4RuTpR3VB2gtU4YYWxAITapWxgy3SVBZeU
-	 YtAL5EeIutyqNbEyrTL2L7KCwzq4ekoYhjfE1HJM=
-Date: Tue, 17 Sep 2024 09:08:20 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Selvarasu Ganesan <selvarasu.g@samsung.com>,
-	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>,
-	"dh10.jung@samsung.com" <dh10.jung@samsung.com>,
-	"naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>,
-	"rc93.raju@samsung.com" <rc93.raju@samsung.com>,
-	"taehyun.cho@samsung.com" <taehyun.cho@samsung.com>,
-	"hongpooh.kim@samsung.com" <hongpooh.kim@samsung.com>,
-	"eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"shijie.cai@samsung.com" <shijie.cai@samsung.com>,
-	stable <stable@kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: core: Stop processing of pending events if
- controller is halted
-Message-ID: <2024091758-devotion-clutter-29f6@gregkh>
-References: <CGME20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e@epcas5p4.samsung.com>
- <20240916224543.187-1-selvarasu.g@samsung.com>
- <20240916230032.ugw23x7gijamrf5x@synopsys.com>
- <2024091716-snide-mashing-2c21@gregkh>
- <20240917054703.w47rfo7x4lhzgccn@synopsys.com>
+	b=PPRxXVycUMCvn8ysa1WAvsU4MoONBGJ5DFinQAj8jL4QWgCPGT4YAjatmj1XQLjC0
+	 1aU0ZBc2erwcT3j2B7RAXXrQPmaJ4/rzdQOu+ws7QN28jYWMIprlBg5UeM3HqDEqsc
+	 UoPugIcMQQNBwYgFogO9fCBnjixmtFJ8ioffdDqtb1ZRTYBnES9KHJ+K1tDCHdTp5J
+	 XWwVvx4+TasXMlzNDtezwu2kE8YDvMW2z/0PgdDL+PuQkVVmtyZ02g6/7SPYAJW+8Y
+	 zot3dZ+wwERKzrYMa8kJ+gmw8uMa+S1SISpFf70ovcAAm3YXr/N8fhfQke1+a2cisL
+	 6RCqcNCqQHKXw==
+Date: Tue, 17 Sep 2024 01:30:32 -0700
+From: Kees Cook <kees@kernel.org>
+To: Abdul Rahim <abdul.rahim@myyahoo.com>
+Cc: gregkh@linuxfoundation.org, m.grzeschik@pengutronix.de,
+	quic_jjohnson@quicinc.com, gustavoars@kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_midi: prefer strscpy() over strcpy()
+Message-ID: <202409170130.C9F169D4@keescook>
+References: <20240914231756.503521-1-abdul.rahim.ref@myyahoo.com>
+ <20240914231756.503521-1-abdul.rahim@myyahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,42 +59,24 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240917054703.w47rfo7x4lhzgccn@synopsys.com>
+In-Reply-To: <20240914231756.503521-1-abdul.rahim@myyahoo.com>
 
-On Tue, Sep 17, 2024 at 05:47:05AM +0000, Thinh Nguyen wrote:
-> On Tue, Sep 17, 2024, gregkh@linuxfoundation.org wrote:
-> > On Mon, Sep 16, 2024 at 11:00:30PM +0000, Thinh Nguyen wrote:
-> > > On Tue, Sep 17, 2024, Selvarasu Ganesan wrote:
-> > > > This commit addresses an issue where events were being processed when
-> > > > the controller was in a halted state. To fix this issue by stop
-> > > > processing the events as the event count was considered stale or
-> > > > invalid when the controller was halted.
-> > > > 
-> > > > Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
-> > > > Cc: stable <stable@kernel.org>
-> > > 
-> > > Checkpatch doesn't like that format. Fix the Cc stable tag to below:
-> > > 
-> > > Cc: stable@kernel.org
-> > 
-> > What?  Why?  That should be fine, exactly what is the warning that this
-> > gives?  That should be fine, as it's what my scripts put into patches
-> > that I create :)
-> > 
+On Sun, Sep 15, 2024 at 04:47:49AM +0530, Abdul Rahim wrote:
+> The function strcpy() is depreciated and potentially unsafe. It performs
+> no bounds checking on the destination buffer. This could result in
+> linear overflows beyond the end of the buffer, leading to all kinds of
+> misbehaviors. The safe replacement is strscpy() [1].
 > 
-> This is what checkpatch complains:
+> this fixes checkpatch warning:
+>     WARNING: Prefer strscpy over strcpy
 > 
-> WARNING:BAD_STABLE_ADDRESS_STYLE: Invalid email format for stable: 'stable <stable@kernel.org>', prefer 'stable@kernel.org'
-> #23: 
-> Cc: stable <stable@kernel.org>
-> 
-> total: 0 errors, 1 warnings, 0 checks, 72 lines checked
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strcpy [1]
+> Signed-off-by: Abdul Rahim <abdul.rahim@myyahoo.com>
 
-Ugh, that's wrong, whatever you want to do here is fine.
+Yup, these look good. Thanks!
 
-Someone should send a patch for checkpatch...
+Reviewed-by: Kees Cook <kees@kernel.org>
 
-thanks,
-
-greg k-h
+-- 
+Kees Cook
 
