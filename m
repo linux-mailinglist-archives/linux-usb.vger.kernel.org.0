@@ -1,120 +1,192 @@
-Return-Path: <linux-usb+bounces-15188-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15189-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3D0697B2A1
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 18:09:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB19F97B2EE
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 18:22:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BBFE1C211A7
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 16:09:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B7AB28384A
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 16:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3671217B4F6;
-	Tue, 17 Sep 2024 16:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79FEF13D8A2;
+	Tue, 17 Sep 2024 16:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h8aoETVF"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="B99buMtM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B778248C;
-	Tue, 17 Sep 2024 16:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35C117B4ED
+	for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 16:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726589360; cv=none; b=LcPD8hO/QVaVftcGaSkQwNRSWPqE8m6r2e/ECIXkcnin175cbgruh0l8oq1jtvwjQHBx6aS7ZxJrYkNb5iSq0ykrwX8WgzcpnE59056ztGbE11eAWAaifoN93uu8tDefho7eYoPu7+8ldp5imnd5hXKIA0pv2s2jqGkYjCgWK48=
+	t=1726590138; cv=none; b=hnPqQ0r8Y4zSUM2xIpsYEe6d1o4mtrzHjVfsQ7dsRm2lvd778tMiTrZh7qP52zm8pDdG6q35XjQOnyJlajwvChV+rSr7IeI77I2jL+JJ1T0Sy/RYwmwPoOhuKJwP0mvDZ+t6u3UelKuQIHzEfMYJt+b+hPWpDQW34knHTRmbs1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726589360; c=relaxed/simple;
-	bh=BELhoByfq/OOJDZzH14bHenPNHWdoqYvOyKGjkRQKi8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kd0wGdPf4zpwA9afy981NyaRtKfSc3LtlLn7jCTnxR4u5uaSof2EddUDtcErreX79L4gKnHB1znfErN/AUIg7w3elIeQuWGWiBIkvVKMUoD0QlDzeAlL0pFuCDEs84/f6dokzVHG84yu32vYeeUvdWW7TaV0nus3BE5uiKiPNrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h8aoETVF; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2d889207d1aso3980925a91.3;
-        Tue, 17 Sep 2024 09:09:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726589359; x=1727194159; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3H06y1U1cap7HmC9Kj3KwaZVLwBBdwCGozszPGEgWks=;
-        b=h8aoETVFyCEVqx3TAGdgLu4z3BF7CHCara1NdGPVhJFJ+qHG5NIJ78v5HFtzAD9t6X
-         sRzG0jdvbPua90Jws77XQRD0o7l2JnBr+oX7mbezKQkhkPWwsyTLw968N5dRIS3xbqVV
-         eUub/i+HYdz6M+TLNzQuZMZWMJBjZ+0E7gLd/gpeVQEVmVDtMNJMWoym9Rq74uq5A4mU
-         T4oNxAB1qI03117sE9gcLl0OOFPpUD6BlS7mIi5Kj447B1T2kD61lsQzzJ5BSnroosx3
-         iqX6WDK2kX/O5WrinsgZFCGp8kLlcNV1MpHqoUS1TSUmLdezVkDc5xmQAc4nnfsmLjD4
-         Bb1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726589359; x=1727194159;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3H06y1U1cap7HmC9Kj3KwaZVLwBBdwCGozszPGEgWks=;
-        b=RS2ZAAQTfAOS7H6J5Q6AGwWno1FL+LvjL5ApdppIsUDAbcqhzkrcbmp9dik1/tp2gY
-         HsIsl2SxyCn0I0VEenDzj1GZ3p/7Om8vb/RgN/6LiKkRxX8pVtMiHymYkFfx/qtW7a48
-         He9GuBz4CxGi2yEBv7bbtp7F9zCQOCk2h2owVhEUbcBGH4pNibwGcIzzAY77SgYH6Xli
-         zO2sw4vDrNhaoAlE9K47uDJl/jwCiUZge51BKh70T9amIjqg+hFtQvBCoDT33mQwJvEH
-         VsCzs//quXg0GXMNlT/kdfzZZWX7VMz6g4UPkcX03NdeAqkH78CJiOE/DNSXfmWsk+Xb
-         RqDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVGwPzG7vabPxmZMBsJy3hvW4qh39D0lO3SQWzEY0GzqE5N+ryBFHt3/Cd0PRVeA3J9NQvxQ5dgJrDm@vger.kernel.org, AJvYcCWtXBxcEgd95WXb+WevwqSQX+g8zJrmeUx+mdGdpTTj1zDYgj9K18hhWVDv3ugeiT2lOucJ0xTVb45NAOE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwyvaPKNq5tIOXZuELiaaAorxeJ6l/TR2KKPC2Q/Ym/8cVOE28
-	ijwzHBPFfLbmRHidazHd626/zXTq6dWHF15WIcqstOciGyd2Q6PD2OYtFotBYY1Os6c1qWPOFsL
-	WmO0O+o3qFh5OvBIgn0vUoCaGbus=
-X-Google-Smtp-Source: AGHT+IGqh87nNg8jg1Ud364Rnd5Pc+JSrzq06UGYIArerA2z7jFgxhV2KPrwrAu6kXnE9vCVQ9UbwmqkyyM/IinLJSU=
-X-Received: by 2002:a17:90b:1804:b0:2d4:924:8891 with SMTP id
- 98e67ed59e1d1-2dba008587emr19169750a91.38.1726589358709; Tue, 17 Sep 2024
- 09:09:18 -0700 (PDT)
+	s=arc-20240116; t=1726590138; c=relaxed/simple;
+	bh=IBAc7Et+n4VYCK9+p393VjHjiVEy4G3zG9joVXhMc/M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=NymmH8/KWiIlnGL+tUVumrDArADWu1kvZL7MCTqua2oQWgvE3EToNVdQtnUQlJX2zTGdxDxls0oGtz2lQ8KW+WsguHmZ1Y2R7ckuY/oHgmQW2oIO9Onn6ggiP7RDl8szm2xi+s58SKlMLWfTXVCVze86dmNNfA0q5KT4rKPQgKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=B99buMtM; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240917162207epoutp021198d43e9c14eb014520ca73a720ab4c~2FJLKNr9h0349603496epoutp02d
+	for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 16:22:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240917162207epoutp021198d43e9c14eb014520ca73a720ab4c~2FJLKNr9h0349603496epoutp02d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1726590127;
+	bh=AkvLWYQt/CE4wS94Lzo2iJIySkF3sjVM/X6037Wed+8=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=B99buMtMQkTLNqzrEc8uYlyYtFD8UwCAFq6Xq6ObmzpUoP+eAfjFsTnwrPOQ6VaDp
+	 NYUi6lxPvgJMNI09YmdDiuNLnDw/qGfXvOCIpi5gQFUlytKeY/6MtdtHQyOzuqjstZ
+	 pnvUi7OO6gxKC1BTtE83gkb/ybeZYe8oLOM0v/pQ=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20240917162206epcas5p30a5aff5e1a3e716a3f935d4540aa85f0~2FJJwP8ZI1661916619epcas5p3J;
+	Tue, 17 Sep 2024 16:22:06 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.181]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4X7RrD5KDnz4x9Pv; Tue, 17 Sep
+	2024 16:22:04 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	B5.19.08855.CACA9E66; Wed, 18 Sep 2024 01:22:04 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240917162204epcas5p252d46fd21b2a2f0744b6549ba0c04ae3~2FJHsFth-2561625616epcas5p29;
+	Tue, 17 Sep 2024 16:22:04 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240917162204epsmtrp292c397d3fbe9eb3f4f747f8600145612~2FJHrI9xh0254702547epsmtrp2L;
+	Tue, 17 Sep 2024 16:22:04 +0000 (GMT)
+X-AuditID: b6c32a44-107ff70000002297-94-66e9acac0187
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	BA.A1.08964.BACA9E66; Wed, 18 Sep 2024 01:22:03 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240917162201epsmtip21499845cc227df5869d38d8f6f4307cc~2FJFmZ5LG1339713397epsmtip2a;
+	Tue, 17 Sep 2024 16:22:01 +0000 (GMT)
+Message-ID: <da717b2e-e8dc-461f-bef7-d3d9e5df3632@samsung.com>
+Date: Tue, 17 Sep 2024 21:52:00 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <d88289f9-e22a-4960-9b3b-ad0b3ab17a89@suse.com>
- <20240917154107.137653-1-aha310510@gmail.com> <64dfb120-3a95-44dd-a50c-c4818baeb833@suse.com>
-In-Reply-To: <64dfb120-3a95-44dd-a50c-c4818baeb833@suse.com>
-From: Jeongjun Park <aha310510@gmail.com>
-Date: Wed, 18 Sep 2024 01:09:07 +0900
-Message-ID: <CAO9qdTFc9jhOQYbXnES_HkfOPsH8vuZz0nEwzhgQZ3nerW0wKQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: use mutex_lock in iowarrior_read()
-To: Oliver Neukum <oneukum@suse.com>
-Cc: colin.i.king@gmail.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: dwc3: core: Stop processing of pending events
+ if controller is halted
+To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>
+Cc: "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
+	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
+	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
+	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
+	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
+	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
+	"shijie.cai@samsung.com" <shijie.cai@samsung.com>, stable
+	<stable@kernel.org>
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <2024091758-devotion-clutter-29f6@gregkh>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIJsWRmVeSWpSXmKPExsWy7bCmlu6aNS/TDOZvUbN4c3UVq8WdBdOY
+	LE4tX8hkMf9mkkXz4vVsFpP2bGWxuPvwB4vF5V1z2CwWLWtltvh09D+rxarOOUCx7zuB3PMX
+	gOoOilqsWnCA3YHfY9OqTjaPeScDPfbPXcPu0bdlFaPHlv2fGT0+b5ILYIvKtslITUxJLVJI
+	zUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBOlhJoSwxpxQoFJBYXKyk
+	b2dTlF9akqqQkV9cYquUWpCSU2BSoFecmFtcmpeul5daYmVoYGBkClSYkJ0xf39JwQGeiq4j
+	FxkbGGdydTFycEgImEh0dpV1MXJxCAnsZpSYfe0ZE4TziVFixvk5zBDON0aJrycWsXQxcoJ1
+	LG84ww6R2MsocefMBVYI5y2jxLdjU9hB5vIK2En8OM0F0sAioCox9dlyRhCbV0BQ4uTMJ2CD
+	RAXkJe7fmsEOYgsLpEhMP3YerEZEIFPi2Z8GFpCZzAKrWCW+X5kMVsQsIC5x68l8JpD5bAKG
+	Es9O2ICEOQXMJJ6decwMUSIvsf3tHGaIQ09wSEycHwfxpovEy349iLCwxKvjW9ghbCmJz+/2
+	skHY1RKr73xkA1krIdDCKHH4yTeoInuJx0cfMYPMYRbQlFi/Sx9iFZ9E7+8nTBDjeSU62oQg
+	qlUlTjVehhopLXFvyTVWCNtDYtLR22AThQSOMkmcnck1gVFhFlKgzELy4ywkz8xCWLyAkWUV
+	o2RqQXFuemqyaYFhXmo5PLKT83M3MYLTspbLDsYb8//pHWJk4mA8xCjBwawkwmv7+2maEG9K
+	YmVValF+fFFpTmrxIUZTYOxMZJYSTc4HZoa8knhDE0sDEzMzMxNLYzNDJXHe161zU4QE0hNL
+	UrNTUwtSi2D6mDg4pRqY/EsWqCZbZ2reC65tP/Fw0ZMZsbUPCw/rPE0tL+/uUpc/6xLwu0NB
+	33z7LmYD0dnnflb5O0+wO6O5Pi9gyfOJdZWsR/+UVzWa+h5aJs+1bemKUxKLxa7kZhSt7Xh6
+	byOr96F1Nlc3Buy88OWk1tGbDQa1HFZ+vkkZ/rr2/wv+KD5c9/rEE4ntZ66UtslFGvutfRZ8
+	3HWJFXfTxQ0F6VV91xc87rPmK51pn3LrWa7LJr2UiVfkAs0ba1WOXG4QmP3h58s3XR9W/331
+	UUFKZYeEU165Zi/ngpOKHUt3XyrnMl//vWCXr35DOVtX+fvVK0u2z/iT4VVcZh0jUD+/WMrL
+	wuFlTsKS7R6JmU/fzX+gxFKckWioxVxUnAgAFnGU6FQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsWy7bCSvO7qNS/TDL4csLF4c3UVq8WdBdOY
+	LE4tX8hkMf9mkkXz4vVsFpP2bGWxuPvwB4vF5V1z2CwWLWtltvh09D+rxarOOUCx7zuB3PMX
+	gOoOilqsWnCA3YHfY9OqTjaPeScDPfbPXcPu0bdlFaPHlv2fGT0+b5ILYIvisklJzcksSy3S
+	t0vgypi/v6TgAE9F15GLjA2MM7m6GDk5JARMJJY3nGHvYuTiEBLYzShx6monI0RCWuL1rC4o
+	W1hi5b/n7CC2kMBrRonLcyu6GDk4eAXsJH6cBpvDIqAqMfXZcrByXgFBiZMzn7CA2KIC8hL3
+	b80AaxUWSJF4fus6G4gtIpAp8WrHbDaQvcwCa1glPm9/xAZxxFEmiV9PnoJ1MwuIS9x6Mp8J
+	ZBmbgKHEsxM2IGFOATOJZ2ceM0OUmEl0bYW4kxlo2fa3c5gnMArNQnLHLCSTZiFpmYWkZQEj
+	yypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOA41NLcwbh91Qe9Q4xMHIyHGCU4mJVE
+	eG1/P00T4k1JrKxKLcqPLyrNSS0+xCjNwaIkziv+ojdFSCA9sSQ1OzW1ILUIJsvEwSnVwJR2
+	4M+bKXNWXXp3r3WNwSn5Kxy1tzj0mSqK/ljOSO3KuRozqbovbHKj6/KNm7iSp2w99ixPrCBC
+	1KL5jEbB9wfbl9bPs9ZsEJ63LGFy6+Ob1899nSxvt7kz0PlPUa+L8Z61i40Xhy71X9N6ssR0
+	roXkMfZAQTXnX5+7qpL7+hrCF9mY2JnIL9Bo+Liu/9mPZ9vC8t719lfFsGarZyy2ZrI72+Ov
+	W+rFnHjF3GQ978206y9frj/AstYiQ2fCcq5PE6VWTZE9ky3A3hK4eoXl8q4prWzbdolMWmbM
+	NceOw2ODQwZDs/lE98rUy88VTj7c/u/rSWuXIPMLDP+nyKsfPB/desBAy+fHiqdmoWpVwUos
+	xRmJhlrMRcWJAIb9p8syAwAA
+X-CMS-MailID: 20240917162204epcas5p252d46fd21b2a2f0744b6549ba0c04ae3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e
+References: <CGME20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e@epcas5p4.samsung.com>
+	<20240916224543.187-1-selvarasu.g@samsung.com>
+	<20240916230032.ugw23x7gijamrf5x@synopsys.com>
+	<2024091716-snide-mashing-2c21@gregkh>
+	<20240917054703.w47rfo7x4lhzgccn@synopsys.com>
+	<2024091758-devotion-clutter-29f6@gregkh>
 
-Oliver Neukum <oneukum@suse.com> wrote:
->
-> On 17.09.24 17:41, Jeongjun Park wrote:
->
-> Hi,
->
-> comments in line.
->
-> > ---
-> >   drivers/usb/misc/iowarrior.c | 46 ++++++++++++++++++++++++++++--------
-> >   1 file changed, 36 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-> > index 6d28467ce352..dbf0ed04f7c3 100644
-> > --- a/drivers/usb/misc/iowarrior.c
-> > +++ b/drivers/usb/misc/iowarrior.c
-> > @@ -277,28 +277,45 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
-> >       struct iowarrior *dev;
-> >       int read_idx;
-> >       int offset;
-> > +     int retval = 0;
->
-> Initialization is useless.
->
-> The rest is fine.
 
-If so, I will modify only that part and send it to you as a patch.
-
-Regards,
-Jeongjun Park
-
+On 9/17/2024 12:38 PM, gregkh@linuxfoundation.org wrote:
+> On Tue, Sep 17, 2024 at 05:47:05AM +0000, Thinh Nguyen wrote:
+>> On Tue, Sep 17, 2024, gregkh@linuxfoundation.org wrote:
+>>> On Mon, Sep 16, 2024 at 11:00:30PM +0000, Thinh Nguyen wrote:
+>>>> On Tue, Sep 17, 2024, Selvarasu Ganesan wrote:
+>>>>> This commit addresses an issue where events were being processed when
+>>>>> the controller was in a halted state. To fix this issue by stop
+>>>>> processing the events as the event count was considered stale or
+>>>>> invalid when the controller was halted.
+>>>>>
+>>>>> Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+>>>>> Cc: stable <stable@kernel.org>
+>>>> Checkpatch doesn't like that format. Fix the Cc stable tag to below:
+>>>>
+>>>> Cc: stable@kernel.org
+>>> What?  Why?  That should be fine, exactly what is the warning that this
+>>> gives?  That should be fine, as it's what my scripts put into patches
+>>> that I create :)
+>>>
+>> This is what checkpatch complains:
+>>
+>> WARNING:BAD_STABLE_ADDRESS_STYLE: Invalid email format for stable: 'stable <stable@kernel.org>', prefer 'stable@kernel.org'
+>> #23:
+>> Cc: stable <stable@kernel.org>
+>>
+>> total: 0 errors, 1 warnings, 0 checks, 72 lines checked
+> Ugh, that's wrong, whatever you want to do here is fine.
 >
->         Regards
->                 Oliver
+> Someone should send a patch for checkpatch...
+>
+> thanks,
+>
+> greg k-h
+
+Hi Greg,
+
+However I already posted new version with address a typo mistake as 
+well. Kindly review the same.
+
+https://lore.kernel.org/lkml/20240916231813.206-1-selvarasu.g@samsung.com/
+
+Thanks,
+Selva
 >
 
