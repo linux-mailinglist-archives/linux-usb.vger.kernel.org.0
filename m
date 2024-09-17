@@ -1,232 +1,229 @@
-Return-Path: <linux-usb+bounces-15184-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832F597B1F0
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 17:37:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 926EC97B23C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 17:49:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7D3A1C23FBD
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 15:37:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD76FB29A26
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 15:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5191A7264;
-	Tue, 17 Sep 2024 15:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DF31946A8;
+	Tue, 17 Sep 2024 15:41:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b="RTiHy/cg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W5I0mnN4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1499D1A4E97;
-	Tue, 17 Sep 2024 15:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.3.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27433175D57;
+	Tue, 17 Sep 2024 15:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726585908; cv=none; b=B9dCk/91uCWE3WuNW8fOXsa8ja23aLGgqqhf2MoDjeUzMbP7oKfXPp2eirHlSi6alLaq8LEzLQQRj+JqA+kXUGXMwuWORNpNy4m5erPmBxqqpVXnp2TAO9aRElKMkxV7gx6v99pGmGzpThY03EL/AENFRmQoGvvp2zFAZNsC4Qg=
+	t=1726587696; cv=none; b=jxd3UaPla4fuOoPixaJroDYOuSa986/CkUCbDSze4lvzVJG0uNstPWM0ykhhCvV6L31NpCJFI57O8vnJIcb3b6ZZzDWNIyMdFz3e7MPY1dD86j57lMHCbtY9I3QK6+LePNA/nZVGnW34F23dQSxcQBRTCFKrMtM8zJmava3k63o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726585908; c=relaxed/simple;
-	bh=8+/F/LA//3GmNp7GS/whc94/nqtg59vlioqOSKVj2wU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DvXmOhgTBgPdUYa9mHryy2hIluwZzAnSKnEXeSFTCLxVOcJKm+jeUuftiRitjmaxGHvLKRfEpRRI4Fs+fUDymgLwX+gNyZNkNaz17QD7hg0/CUmoeTEUreMthJxJGM+g+ucPaeky1fZidkcfgvFdG8q5u6+ROu5mgSTOA3yDhP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com; spf=pass smtp.mailfrom=ysoft.com; dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b=RTiHy/cg; arc=none smtp.client-ip=81.19.3.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ysoft.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-	s=20160406-ysoft-com; t=1726585904;
-	bh=Q5o/w+Og7Zq+gJWW+L+++plpsvu1kWMuvJvgOLXM2v4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RTiHy/cg/ZtZ4yV/fl4CzCC/jj8WfCku1VoFH7TLTR3lbM4jjQ6+xBhwbxBr1mwtX
-	 vv8NPJ7DRdWgFYoOwW8Z0hlTXwIUCOFFWofTWk+HG8m6UoimVG13dlkws8Y2caK4Lw
-	 xdzJ4vs+Ygqg6+1OnWj69BKtJFpUA5agElLS21B8=
-Received: from vokac-nb.ysoft.local (unknown [10.1.8.111])
-	by uho.ysoft.cz (Postfix) with ESMTP id 16E18A25FB;
-	Tue, 17 Sep 2024 17:11:44 +0200 (CEST)
-From: =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Petr Benes <petr.benes@ysoft.com>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Herburger <gregor.herburger@ew.tq-group.com>,
-	Hiago De Franco <hiago.franco@toradex.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Mathieu Othacehe <m.othacehe@gmail.com>,
-	devicetree@vger.kernel.org,
+	s=arc-20240116; t=1726587696; c=relaxed/simple;
+	bh=B95BDudSjFAy/R2H+SL/kqDBaib+V3s8HTtOB08FwEQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=UPt0FjasRkuFOERg1O/Z/W5AKE0SKZi+MlVHxvu4cZrNeAnIyde+neQArOW0Crnsf8p7Gy3wHZWaqsOeP3oIKu2794C9GpZRP9xMxCIa/BXQDboEPjXzKkeGUXTTXzSa8ryFb1N7j3OHn9WwEQkBKlzjt2mtUhH8hHy1F/QezJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W5I0mnN4; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7db238d07b3so4607714a12.2;
+        Tue, 17 Sep 2024 08:41:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726587672; x=1727192472; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zyMjeXu3OpqjGRYJSQIFTO8OVuBFAop/R2lwpRCjT10=;
+        b=W5I0mnN4dnZqIjCLakqBDOSp0VOuVv3D+KBbgYNq7GUhEiNt2pB2qJxJrt4dWIkrDt
+         HVRVD1ssc7MH6bjywqMXYCaNvQWqQj6lLU6fm/J/eUpRjmb4x09NxgBHcA8An8QgZZEY
+         FDv8b3DIbECya3A/W5Xyg37/E6TD/STef5nJyh4+Lx2sNilV+m33tX6nw5lV/ER6SzXx
+         kQBYy+DciTXEv/xb1ix5s68LG9s99AXeVkkSejXsC3XhrCNlj2vmGLoLCF6mOO2VA4gn
+         DQ9pRKydj4o3iyuA0XkJohuaw7Jz1F41ve4aBQccmVsB6j0HRaaBz13QAJMFkU8eBKrH
+         Yt3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726587672; x=1727192472;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zyMjeXu3OpqjGRYJSQIFTO8OVuBFAop/R2lwpRCjT10=;
+        b=qYltnpAW3LI/TYauhalvxG9lRAfJh4mvvHuew22lSnUtFl6xlfm6Ks5G0esKxpjHTE
+         WcTITmJXAN8oXeOq6kg6lvAO4okYCaPCSPw+cIMy2xyQdfZZSEsg92KLnES+LHPsRsH4
+         Mrl6l1dmvoOiCWblawh4SSkviZJ73pfm/xe+Q1ePOq9e4dCRG0/yraBIa765YUs+EnNb
+         PQMRwPCFQLljF+qSe3+NH9E/uQAe8jP1r7bfY+z4cjOkj8H8TVBPm+qH8m3aRAtQ92hg
+         mH6Cx5XfDjSXwxlfoKf9+OneRH6GT0sonL+H08OMCZsBzpHG/8vRMS+qbs9aWuArWqDL
+         ZVCg==
+X-Forwarded-Encrypted: i=1; AJvYcCV33YcPu+/d+TvXo0CZPkpn8EPH8lxu1n4Phyf/J5ptbDdEOplRtIqx6ZYXiEer5xbsthN2Hdx6OlsoA8s=@vger.kernel.org, AJvYcCW7MxC4AyyXErg3MZLjs9GXHLBm875oNLVyy9zAFkFHo1U2cW6C1oAnDPooc9jCkyKzYoLP9C4z2ILN@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2iXRjs50cgCFTcVTRL+bmNymNVskQBeA7m/AubZ9Iwh48kFa1
+	5Lu4QlVu3I84rizMW8zEJs4wJ0KoSx0Ab4fFzSoATy5cAxsdHHdk41HenrEZ
+X-Google-Smtp-Source: AGHT+IHcXfIZM/MxapOHro6O3vkHE9BRbzKVHnujFEAm01zqaoFisDVKcQUiTRm3Vg/hQZdXjfBAuQ==
+X-Received: by 2002:a17:90a:7408:b0:2d8:b91d:d284 with SMTP id 98e67ed59e1d1-2db9ff91f8bmr22007709a91.16.1726587672133;
+        Tue, 17 Sep 2024 08:41:12 -0700 (PDT)
+Received: from kernelexploit-virtual-machine.localdomain ([121.185.186.233])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dbb9c7c7a8sm9599246a91.15.2024.09.17.08.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Sep 2024 08:41:11 -0700 (PDT)
+From: Jeongjun Park <aha310510@gmail.com>
+To: oneukum@suse.com
+Cc: aha310510@gmail.com,
+	colin.i.king@gmail.com,
+	gregkh@linuxfoundation.org,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	=?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-Subject: [PATCH 4/4] arm64: dts: imx8mp-iota2: Enable the USB Type-C port
-Date: Tue, 17 Sep 2024 17:10:01 +0200
-Message-ID: <20240917151001.1289399-5-michal.vokac@ysoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240917151001.1289399-1-michal.vokac@ysoft.com>
-References: <20240917151001.1289399-1-michal.vokac@ysoft.com>
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: use mutex_lock in iowarrior_read()
+Date: Wed, 18 Sep 2024 00:41:07 +0900
+Message-Id: <20240917154107.137653-1-aha310510@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <d88289f9-e22a-4960-9b3b-ad0b3ab17a89@suse.com>
+References: <d88289f9-e22a-4960-9b3b-ad0b3ab17a89@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Petr Benes <petr.benes@ysoft.com>
+Oliver Neukum <oneukum@suse.com> wrote:
+>
+> On 17.09.24 12:01, Jeongjun Park wrote:
+>
+> > Okay, I understand. Then I think it would be appropriate to do
+> > the patch below to prevent blocking, but I have one question.
+> >
+> > Currently, many misc usb drivers do not seem to handle the
+> > O_NONBLOCK flag when using mutex_lock. If this is really
+>
+> Yes. The quality of many drivers could be improved.
+> Feel free to make patches. However, the lack of quality elsewhere
+> does not justify a regression. Hence code fixing drivers already
+> correctly supporting O_NONBLOCK must be correct in that regard.
+>
+> > necessary code, I think it would require code modifications to
+> > other functions inside iowarrior and many misc usb drivers.
+> >
+> > What do you think about this?
+>
+> The formatting seems to be broken. In terms of content it is good.
 
-Enable the USB Type-C port with the Diodes PI5USB30213A port controller.
-The port supports dual role data but can operate only in source power role
-and PD is not supported.
+Oh, this format was sent broken. I'm sending you the patch below again.
+I'll send you a new patch with this patch right away.
 
-Signed-off-by: Petr Benes <petr.benes@ysoft.com>
-Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+And I'll try to write a patch for other functions and misc usbs that don't
+support O_NONBLOCK properly soon.
+
+Regards,
+Jeongjun Park
+
 ---
- .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
+ drivers/usb/misc/iowarrior.c | 46 ++++++++++++++++++++++++++++--------
+ 1 file changed, 36 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-index 21d0899cabd5..b15d211e8667 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-@@ -38,6 +38,17 @@ memory@40000000 {
- 		      <0x1 0x00000000 0 0x80000000>;
- 	};
+diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
+index 6d28467ce352..dbf0ed04f7c3 100644
+--- a/drivers/usb/misc/iowarrior.c
++++ b/drivers/usb/misc/iowarrior.c
+@@ -277,28 +277,45 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
+ 	struct iowarrior *dev;
+ 	int read_idx;
+ 	int offset;
++	int retval = 0;
  
-+	reg_typec: regulator-typec {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbc_vbus>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-name = "typec";
-+	};
-+
- 	reg_usb_host: regulator-usb-host {
- 		compatible = "regulator-fixed";
- 		enable-active-high;
-@@ -218,6 +229,47 @@ &i2c2 {
- 	pinctrl-0 = <&pinctrl_i2c2>;
- 	status = "okay";
+ 	dev = file->private_data;
  
-+	tcpc@d {
-+		compatible = "diodes,pi5usb30213a";
-+		reg = <0xd>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_typec>;
-+		interrupts-extended = <&gpio1 5 IRQ_TYPE_LEVEL_LOW>;
-+		status = "okay";
++	if (file->f_flags & O_NONBLOCK) {
++		retval = mutex_trylock(&dev->mutex);
++		if (!retval)
++			return -EAGAIN;
++	} else {
++		retval = mutex_lock_interruptible(&dev->mutex);
++		if (retval)
++			return -ERESTARTSYS;
++	}
 +
-+		connector {
-+			compatible = "usb-c-connector";
-+			label = "USB-C";
-+			vbus-supply = <&reg_typec>;
-+			power-role = "source";
-+			data-role = "dual";
-+			typec-power-opmode = "default";
-+			self-powered;
-+			pd-disable;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usb_con_hs: endpoint {
-+						remote-endpoint = <&typec_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usb_con_ss: endpoint {
-+						remote-endpoint = <&typec_ss>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
- 	rtc: rtc@68 {
- 		compatible = "dallas,ds1341";
- 		reg = <0x68>;
-@@ -237,6 +289,38 @@ &uart2 {
- 	status = "okay";
- };
+ 	/* verify that the device wasn't unplugged */
+-	if (!dev || !dev->present)
+-		return -ENODEV;
++	if (!dev->present) {
++		retval = -ENODEV;
++		goto exit;
++	}
  
-+&usb3_phy0 {
-+	status = "okay";
-+};
-+
-+&usb3_0 {
-+	status = "okay";
-+};
-+
-+&usb_dwc3_0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	status = "okay";
-+
-+	port@0 {
-+		reg = <0>;
-+
-+		typec_hs: endpoint {
-+			remote-endpoint = <&usb_con_hs>;
-+		};
-+	};
-+
-+	port@1 {
-+		reg = <1>;
-+
-+		typec_ss: endpoint {
-+			remote-endpoint = <&usb_con_ss>;
-+		};
-+	};
-+};
-+
- &usb3_phy1 {
- 	vbus-supply = <&reg_usb_host>;
- 	status = "okay";
-@@ -356,6 +440,12 @@ MX8MP_IOMUXC_SAI3_MCLK__PWM4_OUT	0x102
- 		>;
- 	};
+ 	dev_dbg(&dev->interface->dev, "minor %d, count = %zd\n",
+ 		dev->minor, count);
  
-+	pinctrl_typec: typecgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05	0x1c0
-+		>;
-+	};
-+
- 	pinctrl_uart2: uart2grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x0
-@@ -363,6 +453,12 @@ MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x0
- 		>;
- 	};
+ 	/* read count must be packet size (+ time stamp) */
+ 	if ((count != dev->report_size)
+-	    && (count != (dev->report_size + 1)))
+-		return -EINVAL;
++	    && (count != (dev->report_size + 1))) {
++		retval = -EINVAL;
++		goto exit;
++	}
  
-+	pinctrl_usbc_vbus: usbcgrp {
-+		fsl,pins =
-+			<MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x0
-+		>;
-+	};
+ 	/* repeat until no buffer overrun in callback handler occur */
+ 	do {
+ 		atomic_set(&dev->overflow_flag, 0);
+ 		if ((read_idx = read_index(dev)) == -1) {
+ 			/* queue empty */
+-			if (file->f_flags & O_NONBLOCK)
+-				return -EAGAIN;
++			if (file->f_flags & O_NONBLOCK) {
++				retval = -EAGAIN;
++				goto exit;
++			}
+ 			else {
+ 				//next line will return when there is either new data, or the device is unplugged
+ 				int r = wait_event_interruptible(dev->read_wait,
+@@ -309,28 +326,37 @@ static ssize_t iowarrior_read(struct file *file, char __user *buffer,
+ 								  -1));
+ 				if (r) {
+ 					//we were interrupted by a signal
+-					return -ERESTART;
++					retval = -ERESTART;
++					goto exit;
+ 				}
+ 				if (!dev->present) {
+ 					//The device was unplugged
+-					return -ENODEV;
++					retval = -ENODEV;
++					goto exit;
+ 				}
+ 				if (read_idx == -1) {
+ 					// Can this happen ???
+-					return 0;
++					retval = 0;
++					goto exit;
+ 				}
+ 			}
+ 		}
+ 
+ 		offset = read_idx * (dev->report_size + 1);
+ 		if (copy_to_user(buffer, dev->read_queue + offset, count)) {
+-			return -EFAULT;
++			retval = -EFAULT;
++			goto exit;
+ 		}
+ 	} while (atomic_read(&dev->overflow_flag));
+ 
+ 	read_idx = ++read_idx == MAX_INTERRUPT_BUFFER ? 0 : read_idx;
+ 	atomic_set(&dev->read_idx, read_idx);
++	mutex_unlock(&dev->mutex);
+ 	return count;
 +
- 	pinctrl_usb_host_vbus: usb1grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR	0x0
--- 
-2.43.0
++exit:
++	mutex_unlock(&dev->mutex);
++	return retval;
+ }
+ 
+ /*
+--
 
+>
+>         Regards
+>                 Oliver
 
