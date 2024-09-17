@@ -1,76 +1,76 @@
-Return-Path: <linux-usb+bounces-15178-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15179-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1722397B175
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 16:33:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3E8797B183
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 16:36:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 104D31C21000
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 14:33:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6096CB29C5B
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 14:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9FC7171E7C;
-	Tue, 17 Sep 2024 14:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1F8717839C;
+	Tue, 17 Sep 2024 14:36:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jivuHYw7";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KK/5QAj6"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="H04SHWy0";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8Xo7XX0n"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4429182;
-	Tue, 17 Sep 2024 14:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E0517BA4;
+	Tue, 17 Sep 2024 14:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726583621; cv=none; b=Iz0v23/7XelkhZqeIzqHe1fqSW+cMqVGlLNQJnyHPrhjIbEVINGnAmAXkSkJGgRlyDhijBs3kzLZ8uyeUQ0V2H8qe/24x0EbT68WpDuqaaOvNrfrlfsiWtlASsGwCmecVzB9Xe9sN9mbr0U/zreG9gzq7jn5Mhi6rjgHnhR4jOs=
+	t=1726583783; cv=none; b=tWsQ/u8YNvTTV7g4Bpb6NkWL/QAiMyQ2Wri4qurD+6mc6z1WONZI0cM/D9fyaGk5yAlf2sqll932cQtAi4bPxUhajj/Fd4+1GSFwHVmaLkT3vjeDaDDKwUMat0aGUS0u6aJiVZ+WHm2ak8fq+1BV8KPPX5vartddaXkA8HlP8Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726583621; c=relaxed/simple;
-	bh=oGzlw87oPqHFdR25vE+og8sUGLP1VRSzbkYsHeyM9a4=;
+	s=arc-20240116; t=1726583783; c=relaxed/simple;
+	bh=eERQoFLLKS1jUFQ/esGCtA/zHSeXSjRjwERE5ZyicwY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nVKp8FMGLBkjlS/Ga35NF+nUUjPPJBHQiNxhDUiGNYNdFgMPTXyLEZw6QDREiAKPAHsBnRFYKqK3blQOPcNX/cm8y5KAcqoKvnxqtmizidK8grH8dH3sbRkGmRQYcXYzHCPVZwqSmjaDgq3guznLwqOdggsIQnnFggj8wvjlBJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jivuHYw7; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=KK/5QAj6; arc=none smtp.client-ip=193.142.43.55
+	 Content-Type:Content-Disposition:In-Reply-To; b=XrO0AZ6ZGI33/M2xgVYPkuAWheQaak2nm+EfyftaCMwn7Bui1IGeYy9qChe4PpIX32C7BIeyZmfu15F22+2dcl4LEtafsplAIq++TLkz6KhabLiVjgrwyIboNBrwqXGFmxohFdPGrNLcTRUA+ni7yKAvYp/fFH/EIm8NtfCMf2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=H04SHWy0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8Xo7XX0n; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 17 Sep 2024 16:33:35 +0200
+Date: Tue, 17 Sep 2024 16:36:18 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1726583616;
+	s=2020; t=1726583780;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=oGzlw87oPqHFdR25vE+og8sUGLP1VRSzbkYsHeyM9a4=;
-	b=jivuHYw7h74bdlH3bkN59aqjIQS03u2kThH0T9unTy407uw9sNggcRsD43ecBsb8wlVmLO
-	rONgW40RMhaz5kcbBVMps/reHJTew3FSMGc+EwC0GrgmJqW846WXMPyvyJwYj8vTqep4C8
-	/F9AKbiWvUrxQPGsrAWWcbUulMgSTvQjg6u6NP6vawUQI6MrNFD1ie5SKwm+vf4S2qq7qz
-	Eqqy8w035boW2wOH05AFW3Ss0LQ1YCIMTMo2Dwtjn48vpGL5LI0SQtgzoWTViAwUm49GRI
-	LbTehJwZ3H9WF7pSvUduKYhVHVrRyH24xn5ora53UX11OmP5m695iv/pbXUeLw==
+	bh=eERQoFLLKS1jUFQ/esGCtA/zHSeXSjRjwERE5ZyicwY=;
+	b=H04SHWy0if3JwmyAIX5dHfOx7haa9PYtDcTksq5gknDhTTGaDmsVb/nzgdZJmFGWjqvIHE
+	nc90KEFhe84wBbncaquEHrLgAHY5ikQAMCKY0hniT4bDZGHF1Vz1lRrLDlEj9d1FKp9nsd
+	jqFshsskwGp/fp8j49TpwzfdXkTT/gdvDChb9XaSlb2nwfzWyyb6cheE0zXnNK3szXdGJM
+	PQM7EiI+/HsMH4G7AnE7FD5xWAIC0k6S14WcoKUUtY+JeHbIJ73/hVeGkOp6Mc7LrFi5od
+	/aHPvqWKXVJhrXPH0AvGIMbHtzbddy3QrGLihvGWPAfvdvlkNmQq6EX6+1eXcg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1726583616;
+	s=2020e; t=1726583780;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=oGzlw87oPqHFdR25vE+og8sUGLP1VRSzbkYsHeyM9a4=;
-	b=KK/5QAj6HuNfkeLZatTaTCdRZM8yiqxJq4c9WaiwBYTAd72aSFfjbUAxwEztFi8FjOiaC0
-	YO8GjUB+qKGfzMCQ==
+	bh=eERQoFLLKS1jUFQ/esGCtA/zHSeXSjRjwERE5ZyicwY=;
+	b=8Xo7XX0n9CV/lD5msiazedGWUo7Pgclqo3fGx9r8VGfkwZ0zMP1Ew0WlbNBVR4xoAhKJaL
+	RiDen92OMherceAw==
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 To: Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ferry Toth <ftoth@exalondelft.nl>, Kees Cook <kees@kernel.org>,
+	Ferry Toth <ftoth@exalondelft.nl>,
+	Hardik Gajjar <hgajjar@de.adit-jv.com>, Kees Cook <kees@kernel.org>,
 	Justin Stitt <justinstitt@google.com>,
 	Richard Acayan <mailingradian@gmail.com>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>,
-	Hardik Gajjar <hgajjar@de.adit-jv.com>,
 	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Eric Dumazet <edumazet@google.com>,
+	"Ricardo B. Marliere" <ricardo@marliere.net>,
 	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
 	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: u_ether: Use __netif_rx() in
+Subject: Re: [PATCH v3] usb: gadget: u_ether: Use __netif_rx() in
  rx_callback()
-Message-ID: <20240917143335.YO5zm3JG@linutronix.de>
-References: <10019b141275f7fa3e2446e207e7a9afaaa98b3d.camel@gmail.com>
+Message-ID: <20240917143618.jPgAwF3M@linutronix.de>
+References: <155be9e56e650dd7f7baf1c7e193e1a3d85e7141.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,9 +80,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <10019b141275f7fa3e2446e207e7a9afaaa98b3d.camel@gmail.com>
+In-Reply-To: <155be9e56e650dd7f7baf1c7e193e1a3d85e7141.camel@gmail.com>
 
-On 2024-09-17 13:19:25 [+0200], Hubert Wi=C5=9Bniewski wrote:
+On 2024-09-17 15:56:33 [+0200], Hubert Wi=C5=9Bniewski wrote:
 > netif_rx() now disables bottom halves, which causes the USB gadget to be
 > unable to receive frames if the interface is not brought up quickly enough
 > after being created by the driver (a bug confirmed on AM3352 SoC).
@@ -93,12 +93,14 @@ On 2024-09-17 13:19:25 [+0200], Hubert Wi=C5=9Bniewski wrote:
 >=20
 > Fixes: baebdf48c360 ("net: dev: Makes sure netif_rx() can be invoked in a=
 ny context.")
+> Cc: stable@vger.kernel.org
 > Signed-off-by: Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.com>
 
-This does not look right.
-Can you add a backtrace and check with lockdep enabled?
-netif_rx() should not disable BH if invoked from an interrupt.
-
+Now that I see v3, my v2 question stands.
+This supposed only to disable BH if invoked from from non-interrupt.
+hardirq and softirq should be good. A backtrace would be nice and further
+explanation how this becomes a problem. Also lockdep should complain at
+some point.
 
 Sebastian
 
