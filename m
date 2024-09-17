@@ -1,59 +1,66 @@
-Return-Path: <linux-usb+bounces-15160-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15161-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED87797AAD1
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 06:50:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA1A697AB1A
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 07:39:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A46841F22E04
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 04:50:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63B20B2BC2A
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 05:39:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFDB3BBF6;
-	Tue, 17 Sep 2024 04:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E0113BC0E;
+	Tue, 17 Sep 2024 05:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LH/uGK1w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FE244C77
-	for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2024 04:50:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A76A137745;
+	Tue, 17 Sep 2024 05:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726548607; cv=none; b=FN7p6XPEfQRJTiOEk/QMawHUe3scK/DLiibhlb3u0MLCqiyjg7i+JeMtx/7iq7DBFMzW0349qtOEJkQSPbJXdGtt5er+cHHvlbU0d2LN3g8saNVdTGmCcnb8+YZsK7s+/V6pjB3NjKv0adgxppHVvlJl9ROn8Vr3H5VrYZKOQz8=
+	t=1726551374; cv=none; b=LTrVwCfwclneE+XL9GExsL1hTfXPrA0pNWY/XTDQXWa4cOY0YGgJqMawTzz9+xlIljIKStcoiE9ikkT2Z0AK3QvWvI3CpRoewq0vK0xA1o9pUBhXDAEeBj1mKBO4ymXjTT8s7kfX/3DjQG/BBkoENftCPyM0hP46Sav04cqmBZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726548607; c=relaxed/simple;
-	bh=Sn1LKgeiv7Ac9Vx4YAFMr8WB687zRSgn39BsPkqstYA=;
+	s=arc-20240116; t=1726551374; c=relaxed/simple;
+	bh=OPXVdrWekYS4HRt3jS1XMZNUS2M7lr5o0Nv4AyrbWTk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZTHpCKsHysE8VEjg4KvTOQdK7jj86n2bU21xAtLnGsyC1YddVicKsjoOsa6FFM5Qk1trvJfPzAFFwMqM+zgGtwO55OEqVD57Ra5sArsYBBkIiXjubXCegb+3F/MNHPO+MyvEh7BDU2PgA6fk+xbYJYG5hios88xAJjoM4JIKALo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sqQ9s-00005O-Rv; Tue, 17 Sep 2024 06:49:48 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sqQ9s-008ToX-BP; Tue, 17 Sep 2024 06:49:48 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sqQ9s-00D9So-0m;
-	Tue, 17 Sep 2024 06:49:48 +0200
-Date: Tue, 17 Sep 2024 06:49:48 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Johan Hovold <johan@kernel.org>
-Cc: Rob Herring <robh@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] USB-Serial serdev support
-Message-ID: <20240917044948.i2eog4ondf7vna7q@pengutronix.de>
-References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
- <Zt7kCxawoszunWq3@hovoldconsulting.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PpGOolBVCmM5jAOfPzAeOg5hVMW1ltRVcEhbtuK+PYrnB2CmAyBU6od6JkQqjNTL/3cWrVuLKrhUvxVKymnI1fh/5Xp/MMDxvkiSkRM3RakK6aRbaMW8wqUwf4KZbkTRtopJKU3hdLt8bdZPtFgqN2Mlm/D0v84dVtjAwcrPI/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LH/uGK1w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87478C4CEC6;
+	Tue, 17 Sep 2024 05:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1726551374;
+	bh=OPXVdrWekYS4HRt3jS1XMZNUS2M7lr5o0Nv4AyrbWTk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LH/uGK1wp4trpla9LCHuK7pFxzF0HqSw2Y7k/Kb10m/OSNj2DI/RkHKvKNfs/0hLb
+	 uPSRuFHkjtkIkEEfqC9b9gj62MxHo0OS2t76Sun34NhPRnXaZsKtnAlURt17BEn6I9
+	 SnHrZAMLCXTYaKsvR/RTdLCBboAP67drtMwBw9EM=
+Date: Tue, 17 Sep 2024 07:36:10 +0200
+From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Selvarasu Ganesan <selvarasu.g@samsung.com>,
+	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>,
+	"dh10.jung@samsung.com" <dh10.jung@samsung.com>,
+	"naushad@samsung.com" <naushad@samsung.com>,
+	"akash.m5@samsung.com" <akash.m5@samsung.com>,
+	"rc93.raju@samsung.com" <rc93.raju@samsung.com>,
+	"taehyun.cho@samsung.com" <taehyun.cho@samsung.com>,
+	"hongpooh.kim@samsung.com" <hongpooh.kim@samsung.com>,
+	"eomji.oh@samsung.com" <eomji.oh@samsung.com>,
+	"shijie.cai@samsung.com" <shijie.cai@samsung.com>,
+	stable <stable@kernel.org>
+Subject: Re: [PATCH v2] usb: dwc3: core: Stop processing of pending events if
+ controller is halted
+Message-ID: <2024091716-snide-mashing-2c21@gregkh>
+References: <CGME20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e@epcas5p4.samsung.com>
+ <20240916224543.187-1-selvarasu.g@samsung.com>
+ <20240916230032.ugw23x7gijamrf5x@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,60 +69,27 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zt7kCxawoszunWq3@hovoldconsulting.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20240916230032.ugw23x7gijamrf5x@synopsys.com>
 
-Hi Johan,
-
-On 24-09-09, Johan Hovold wrote:
-> On Wed, Aug 07, 2024 at 04:08:47PM +0200, Marco Felsch wrote:
-> > this patchset is based on Johan's patches [1] but dropped the need of
-> > the special 'serial' of-node [2].
+On Mon, Sep 16, 2024 at 11:00:30PM +0000, Thinh Nguyen wrote:
+> On Tue, Sep 17, 2024, Selvarasu Ganesan wrote:
+> > This commit addresses an issue where events were being processed when
+> > the controller was in a halted state. To fix this issue by stop
+> > processing the events as the event count was considered stale or
+> > invalid when the controller was halted.
+> > 
+> > Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+> > Cc: stable <stable@kernel.org>
 > 
-> That's great that you found and referenced my proof-of-concept patches,
-> but it doesn't seem like you tried to understand why this hasn't been
-> merged yet.
-
-I'm glad for your input.
-
-> First, as the commit message you refer to below explain, we need some
-> way to describe multiport controllers. Just dropping the 'serial' node
-> does not make that issue go away.
-
-Sorry for asking but isn't the current OF abstraction [1] enough? As far
-as I understood we can describe the whole USB tree within OF. I used [1]
-and the this patchset to describe the following hierarchy:
-
- usb-root -> usb-hub port-1 -> usb-serial interface-0 -> serial
-                                                         bt-module
-
-[1] Documentation/devicetree/bindings/usb/usb-device.yaml
-
-> Second, and more importantly, you do not address the main obstacle for
-> enabling serdev for USB serial which is that the serdev cannot handle
-> hotplugging.
-
-Hotplugging is a good point but out-of-scope IMHO (at least for now)
-since the current serdev implementation rely on additional firmware
-information e.g OF node to be present. E.g. if the above mentioned setup
-would connect the "serial bt-module" directly to the UART port you still
-need an OF node to bind the serdev driver. If the node isn't present
-user-space would need to do the hci handling.
-
-So from my POV the serdev abstraction is for manufacturers which make
-use of "onboard" usb-devices which are always present at the same USB
-tree location. Serdev is not made for general purpose USB ports (yet)
-where a user can plug-in all types of USB devices.
-
-Regards,
-  Marco
-
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/log/?h=usb-serial-of
-> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-serial-of&id=b19239022c92567a6a9ed40e8522e84972b0997f
+> Checkpatch doesn't like that format. Fix the Cc stable tag to below:
 > 
-> Johan
-> 
+> Cc: stable@kernel.org
+
+What?  Why?  That should be fine, exactly what is the warning that this
+gives?  That should be fine, as it's what my scripts put into patches
+that I create :)
+
+thanks,
+
+greg k-h
 
