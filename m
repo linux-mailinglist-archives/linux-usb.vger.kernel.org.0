@@ -1,129 +1,128 @@
-Return-Path: <linux-usb+bounces-15173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C72797AF20
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 12:44:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A305297AFA7
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 13:23:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 564DF1F20F7D
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 10:44:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A076B2A15A
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 11:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AA5016BE39;
-	Tue, 17 Sep 2024 10:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC5F1662E8;
+	Tue, 17 Sep 2024 11:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FX4RIrkj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktMB1LgK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0FA15AAD9;
-	Tue, 17 Sep 2024 10:44:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C766E57D;
+	Tue, 17 Sep 2024 11:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726569845; cv=none; b=MdQynZ6x0JNE1mAp1RdiuYeCFa7JibKukNep+lXHG2fk0KdUBjnfSh5bNeaaxbGIBFdin+FcUrhf6qQaSs2TGSfGy4cPTPB4I7RnSMmu1rHYcJlGZhXs/u26o+Wzd+v2FXIQNxyxiVSab1BvQjcV2F1O7GaXyPQ275mJ5sqfFxo=
+	t=1726571972; cv=none; b=YzihL6aJhXIjvxk9J6cNRLHD0jL4Tq9zl1NLUHy4lGyqqa80gcA/DQu6Luy7TM4NNvEr6rA7IHHYZ7HvjB9b52VfqaS9OJue99o4qGxdBm2LSzSGNFeffOmF09OU5kvaQJQNZCoqy2yE2HPCWmGPYEvkzhJvtpDiDaLkw1e4LqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726569845; c=relaxed/simple;
-	bh=Dw6SRkhJaUljHHuflw1YfeyyikPusE87/cpiEPJdP2E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NjKxI7bTgM/GBOYDfDYpUwJvfTbsb9vhuRwDQQkijHToo9HWLLgbP9Otec+vMsO+/GLpMdlPHauf9vKpu++SLhVrf0luUXEr6yi7+kR4iVXhrylwKn/P7JZTyiwCv34boDLJQf9bABNi1v5tHXqpHZkOIWt5ZB2nL7XO1cn7iNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FX4RIrkj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72007C4CEC5;
-	Tue, 17 Sep 2024 10:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726569845;
-	bh=Dw6SRkhJaUljHHuflw1YfeyyikPusE87/cpiEPJdP2E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FX4RIrkjVGK6gJNs8E8iUSHdaizTw6DbvZnLcoyv2vFM7ghiO3E8pUWVdymsnvTKI
-	 pte+Kx5YM3n/gaZQSIBKnqT1zUzsjWy6xiB0GT/TSXzlbZb7hT/rUu4cPjaJhQa5W1
-	 vUOrMB9C+UR/vt0uN6133oJ5ID7DEI5lSNRcL78SEysWRITzkY8prU6Ip2yFn/Y51y
-	 S0xQ8jnPvRFcWbdLasg6Ink7vdFi3/d2+Ms9dVJvQLhrri9nrqgeaybpfL7l0FDQnX
-	 ymqUGdchh8T+XrS+GfqPpvo0+8aRcRtFeGbvINsZRhQqqoOuYtE2TBuEzpwiHLFvtO
-	 ZBs84ryDa3IeA==
-Message-ID: <a0a519c9-6562-42f1-a71f-eb1c81092256@kernel.org>
-Date: Tue, 17 Sep 2024 12:43:57 +0200
+	s=arc-20240116; t=1726571972; c=relaxed/simple;
+	bh=oDEGe+IbXnjXP8bHyViYlZMJBe3NK2+FwSE2EiOLfyg=;
+	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=uxTIGv4Bca7PKzSgJP0gItKblHq8y1SRAOPwN6AbEXiISqqB/6K4alhZ5UhU70dxmXZV45Ey7F9vExRqRRwo85GsJ/qrWUcPvDlBYxATWyVJQdbSyG758fVQoW+D4N/79pHOfQo43iTo8Em79e/x6LVRmtS7Xe4ihhUv67+Arg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ktMB1LgK; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a8d2b4a5bf1so758874666b.2;
+        Tue, 17 Sep 2024 04:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726571969; x=1727176769; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=tUcm5Im+md7LODP7Hdr/71vG84FUle4ybr5JwMog4Zo=;
+        b=ktMB1LgKf40PhY5vrYIxuhGHZVJKgktj8y3D2Tb36yUwnIDml+QHcRAPeqDrL4bbaD
+         kGu7+WN2Adq/bR6rqvOdPjWi1ziOxxmH2zVddVCuZ4LsRvHNL03jttGcbLETnWyVBcV+
+         W/n112AJ8JYs7floeWJqQr62TIKeblAqSIz8zLyUQpQcBy+iCucZ0p33kTwuBYi5uh9t
+         GkNx7WyGJ2Xdpv91Xw+UgL861PsZ5QBBqcc00D8BkcAjmeJ1vVYhoqprJpr8BbVO/yy5
+         uMLokdt2UrAYEyMirnyxp27bYQRVnD5yY4kEcEtZzafajRovt3iYDyhvHeZFgUfCXMHo
+         fQiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726571969; x=1727176769;
+        h=mime-version:user-agent:content-transfer-encoding:date:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tUcm5Im+md7LODP7Hdr/71vG84FUle4ybr5JwMog4Zo=;
+        b=Ztx07l8gksSy81Ob7y8WDR3qXxJBN6xvRPJf7ECCnYQEg1V7PTu0U1dzNInUZNvHL0
+         LwpiZcqVo+1B8XLevyVdVJ+wHKxYi7cTloyNFmzIIf2qjqqDvVysCwQTD7mq75k5Ddiv
+         PsBZvv59le+P/VeE2xQuks954cJsW/qfNf5QxjRlIbZmuNVdqBdGoIl+H/ymS/sDroz7
+         LwEAwdom5qpi5YAQLMfDDWcW7k97Bbl1GKy2wZZSM41w+cXsiPovSk06FftBdGw1UcQ2
+         wFJVm2ml7ypfi2eZ6Nc/k8CpdmgvqRMn7Igruu6Y5cBPeDGdl7EaE2tJw4r44NOENXI6
+         0bQw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5Iapl/CwmC94xb070iorQ31ARZLFRStoNyEA/dv8TEQ3feoYiNzVt+hAdtFkTRRK6/BHYBjDPVhyi@vger.kernel.org, AJvYcCWliimfNbxQqv/vSgM7/9VwcMGttRGnftTEgp7I8lJwRoCp9az7xtUlHbJ0189OJCGGnXGpNLNue1ogrUk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvQzM2pALbkPvt/gBLF4Ko3Z3QxwouRbkL9uEnTnQ7BODofqpx
+	/+7Tv189BTGiFg2JuCq7SHddk1CVCWeyEjaoRIOfd4IPhYsdZSwy
+X-Google-Smtp-Source: AGHT+IGRsPna0vulZPvdgVQ9MXw7LBoiLMdkxyJ6FtgzWvDfBBAgk+WpzcsIQvskCOqECufdF+vI4g==
+X-Received: by 2002:a17:907:e687:b0:a8d:2c3e:7ed3 with SMTP id a640c23a62f3a-a90295a6a66mr1785252766b.35.1726571968515;
+        Tue, 17 Sep 2024 04:19:28 -0700 (PDT)
+Received: from [192.168.216.101] (public-gprs228163.centertel.pl. [31.60.38.132])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9061116c28sm434275766b.95.2024.09.17.04.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Sep 2024 04:19:28 -0700 (PDT)
+Message-ID: <10019b141275f7fa3e2446e207e7a9afaaa98b3d.camel@gmail.com>
+Subject: [PATCH v2] usb: gadget: u_ether: Use __netif_rx() in rx_callback()
+From: Hubert =?UTF-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ferry Toth
+ <ftoth@exalondelft.nl>, Kees Cook <kees@kernel.org>, Justin Stitt
+ <justinstitt@google.com>, Richard Acayan <mailingradian@gmail.com>,
+ "Ricardo B. Marliere" <ricardo@marliere.net>, Hardik Gajjar
+ <hgajjar@de.adit-jv.com>, Jeff Johnson <quic_jjohnson@quicinc.com>, Eric
+ Dumazet <edumazet@google.com>, "David S. Miller" <davem@davemloft.net>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Toke
+ =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 17 Sep 2024 13:19:25 +0200
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: genesys,gl850g: allow downstream device
- subnodes
-To: Icenowy Zheng <uwu@icenowy.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240917094008.283529-1-uwu@icenowy.me>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240917094008.283529-1-uwu@icenowy.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 17/09/2024 11:40, Icenowy Zheng wrote:
-> As this binding describes USB hubs, it's natural for them to have
-> downstream devices.
-> 
-> Change "additionalProperties" to "unevaluatedProperties" to allow
-> properties defined in usb-device.yaml (for DT cells properties) and add
-> a pattern-based downstream device subnode rule to match those subnodes.
-> 
-> These changes allow downstream devices get defined under the hub.
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
+netif_rx() now disables bottom halves, which causes the USB gadget to be
+unable to receive frames if the interface is not brought up quickly enough
+after being created by the driver (a bug confirmed on AM3352 SoC).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Replacing netif_rx() with __netif_rx() restores the old behavior and fixes
+the bug. This can be done since rx_callback() is called from the interrupt
+context.
 
-Best regards,
-Krzysztof
+Fixes: baebdf48c360 ("net: dev: Makes sure netif_rx() can be invoked in any=
+ context.")
+Signed-off-by: Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.com>
+---
+v1 -> v2: Added Fixes tag and corrected Signed-off-by tag
+
+ drivers/usb/gadget/function/u_ether.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/fun=
+ction/u_ether.c
+index 4bb0553da658..fd7e483b4a48 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -266,7 +266,7 @@ static void rx_complete(struct usb_ep *ep, struct usb_r=
+equest *req)
+ 			/* no buffer copies needed, unless hardware can't
+ 			 * use skb buffers.
+ 			 */
+-			status =3D netif_rx(skb2);
++			status =3D __netif_rx(skb2);
+ next_frame:
+ 			skb2 =3D skb_dequeue(&dev->rx_frames);
+ 		}
+--=20
+2.30.2
+
+
 
 
