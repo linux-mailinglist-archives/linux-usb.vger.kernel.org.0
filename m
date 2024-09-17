@@ -1,70 +1,52 @@
-Return-Path: <linux-usb+bounces-15196-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15197-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 467EE97B4E4
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 22:47:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EAC697B4E9
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 22:52:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E808B1F228F3
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 20:47:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA0EB2853C0
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 20:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA451917E0;
-	Tue, 17 Sep 2024 20:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC51A19148F;
+	Tue, 17 Sep 2024 20:52:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mf0mxuNp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dJFmL2pS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D0713C3D5;
-	Tue, 17 Sep 2024 20:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F7427470;
+	Tue, 17 Sep 2024 20:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726606036; cv=none; b=LbQ2W4gIX3uhmkqCUNYrIvNac0YRn7BhVDm7YdvQzr+mqF+/K1YwboT8qb0BihfrkEfW6OYCa/j2kR315wptlEWxyKsde1RdFyk3GhQXJnIqwiCFP/pX2QvrE2D2EmfKUA0V8AN6MI1fvCsF0F52A0pgLeBk9tvTN+uuUElLrWE=
+	t=1726606367; cv=none; b=FDKcW1gEVecQ4E9uTMEzB48e+V/5TFXMfchmTycpomJsegFLafWCtzO1jB/vEU2SHBT3ca4d0/guSycPvQlcbaMgoztwDS/wtcZPHk2Z1lkGP68mNHbDmYe/I2cG+C7xuY6uC8J9d+pSXKrzXi5kFd2qAZ2yQ/BBBCnXoJQNjOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726606036; c=relaxed/simple;
-	bh=xXJ1FrtXW+q9HIjEt0gOAJQgfOWwuPQ54KAxRTajXg8=;
+	s=arc-20240116; t=1726606367; c=relaxed/simple;
+	bh=MihfQfGY4t38NvosXuHtawOewr8RJbkv4jxSbju8Jv0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rhkoQqwQNQwQx4pFAgU8ZeEGRwI38iDdMMU4lMizjb9t0JTzHdTyduH/K4IHRjVOeyA+ehD4cetI/QJumMU925fG8/tCnTgLL+gLjTIP3JJvb8qITwCFFPPHiWUJfl+/PdCSFoQyMd4Q84sNKItbd4GnVxWYeD+w0S5PHhuGygQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mf0mxuNp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92181C4CEC5;
-	Tue, 17 Sep 2024 20:47:15 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YHqCp0a8lrIRkFjjddJq11V/kYMP2OnYwMcVxzinfDARyIC+aq38U0VECEM32XrGoge8ZGe7EF9JGnE5DDEj6WMTN7+dLwjvWOAzrUwZcM11qlLgb/JvazMEXb8qOQO6/51tE6qwf2bxhzWUlhUuumkrNoff5kigjbZMm301CZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dJFmL2pS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4754BC4CEC5;
+	Tue, 17 Sep 2024 20:52:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726606036;
-	bh=xXJ1FrtXW+q9HIjEt0gOAJQgfOWwuPQ54KAxRTajXg8=;
+	s=korg; t=1726606366;
+	bh=MihfQfGY4t38NvosXuHtawOewr8RJbkv4jxSbju8Jv0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mf0mxuNpuxhKXGDo2SGLRvbkgYhxd2A3BEXkWcR59dQHQbw3XQtdI0TzxSWDtnSSB
-	 hfWf+NbJ6Dqh6Tlfu8Lcwy+zLnWcfgpXoP0J38gTaRig6Ww2+vj5/CymPh5gbVYxxr
-	 FNPz3ddatQ0Hpnl/pKPjXhVXok7lE7Ulkr53XEaQ=
-Date: Tue, 17 Sep 2024 22:47:14 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>,
-	"dh10.jung@samsung.com" <dh10.jung@samsung.com>,
-	"naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>,
-	"rc93.raju@samsung.com" <rc93.raju@samsung.com>,
-	"taehyun.cho@samsung.com" <taehyun.cho@samsung.com>,
-	"hongpooh.kim@samsung.com" <hongpooh.kim@samsung.com>,
-	"eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"shijie.cai@samsung.com" <shijie.cai@samsung.com>,
-	stable <stable@kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: core: Stop processing of pending events if
- controller is halted
-Message-ID: <2024091758-squeezing-banknote-2704@gregkh>
-References: <CGME20240916224630epcas5p42b355e2884c665e19d3c9c3a5afd428e@epcas5p4.samsung.com>
- <20240916224543.187-1-selvarasu.g@samsung.com>
- <20240916230032.ugw23x7gijamrf5x@synopsys.com>
- <2024091716-snide-mashing-2c21@gregkh>
- <20240917054703.w47rfo7x4lhzgccn@synopsys.com>
- <2024091758-devotion-clutter-29f6@gregkh>
- <da717b2e-e8dc-461f-bef7-d3d9e5df3632@samsung.com>
+	b=dJFmL2pSCzN2MD1mO1hs/Np4+opJWOXqz1p+CZTyEy63txS3tSSbo5xS8oWob0kl+
+	 Y/yPvBZyfuxtv28h3ohytM8d7sLWhfVD3S0GLOa0eyv6/bX1ge9m5sB4RPiEXIvlnA
+	 NLdhNSHVjSJIeUsglowVFcEpjVpWjQGFQ4QcQiNY=
+Date: Tue, 17 Sep 2024 22:52:43 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jeongjun Park <aha310510@gmail.com>
+Cc: oneukum@suse.com, colin.i.king@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: using mutex lock and supporting O_NONBLOCK flag in
+ iowarrior_read()
+Message-ID: <2024091730-reporter-clause-80b4@gregkh>
+References: <20240917164820.143197-1-aha310510@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,53 +55,58 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <da717b2e-e8dc-461f-bef7-d3d9e5df3632@samsung.com>
+In-Reply-To: <20240917164820.143197-1-aha310510@gmail.com>
 
-On Tue, Sep 17, 2024 at 09:52:00PM +0530, Selvarasu Ganesan wrote:
+On Wed, Sep 18, 2024 at 01:48:20AM +0900, Jeongjun Park wrote:
+> iowarrior_read() uses the iowarrior dev structure, but does not use any 
+> lock on the structure. This can cause various bugs including data-races,
+> so it is more appropriate to use a mutex lock to safely protect the 
+> iowarrior dev structure. When using a mutex lock, you should split the
+> branch to prevent blocking when the O_NONBLOCK flag is set.
 > 
-> On 9/17/2024 12:38 PM, gregkh@linuxfoundation.org wrote:
-> > On Tue, Sep 17, 2024 at 05:47:05AM +0000, Thinh Nguyen wrote:
-> >> On Tue, Sep 17, 2024, gregkh@linuxfoundation.org wrote:
-> >>> On Mon, Sep 16, 2024 at 11:00:30PM +0000, Thinh Nguyen wrote:
-> >>>> On Tue, Sep 17, 2024, Selvarasu Ganesan wrote:
-> >>>>> This commit addresses an issue where events were being processed when
-> >>>>> the controller was in a halted state. To fix this issue by stop
-> >>>>> processing the events as the event count was considered stale or
-> >>>>> invalid when the controller was halted.
-> >>>>>
-> >>>>> Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
-> >>>>> Cc: stable <stable@kernel.org>
-> >>>> Checkpatch doesn't like that format. Fix the Cc stable tag to below:
-> >>>>
-> >>>> Cc: stable@kernel.org
-> >>> What?  Why?  That should be fine, exactly what is the warning that this
-> >>> gives?  That should be fine, as it's what my scripts put into patches
-> >>> that I create :)
-> >>>
-> >> This is what checkpatch complains:
-> >>
-> >> WARNING:BAD_STABLE_ADDRESS_STYLE: Invalid email format for stable: 'stable <stable@kernel.org>', prefer 'stable@kernel.org'
-> >> #23:
-> >> Cc: stable <stable@kernel.org>
-> >>
-> >> total: 0 errors, 1 warnings, 0 checks, 72 lines checked
-> > Ugh, that's wrong, whatever you want to do here is fine.
-> >
-> > Someone should send a patch for checkpatch...
-> >
-> > thanks,
-> >
-> > greg k-h
+> In addition, it is unnecessary to check for NULL on the iowarrior dev 
+> structure obtained by reading file->private_data. Therefore, it is 
+> better to remove the check.
 > 
-> Hi Greg,
-> 
-> However I already posted new version with address a typo mistake as 
-> well. Kindly review the same.
-> 
-> https://lore.kernel.org/lkml/20240916231813.206-1-selvarasu.g@samsung.com/
+> Fixes: 946b960d13c1 ("USB: add driver for iowarrior devices.")
+> Signed-off-by: Jeongjun Park <aha310510@gmail.com>
+> ---
+>  drivers/usb/misc/iowarrior.c | 46 ++++++++++++++++++++++++++++--------
+>  1 file changed, 36 insertions(+), 10 deletions(-)
 
-It's the middle of the merge window, I'll look at it after -rc1 is out,
-thanks.
+Hi,
 
-greg k-h
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
