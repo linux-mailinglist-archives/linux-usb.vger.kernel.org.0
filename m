@@ -1,178 +1,155 @@
-Return-Path: <linux-usb+bounces-15170-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15171-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1CD197AEA8
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 12:23:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49EF797AEAF
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 12:26:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07ECAB23757
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 10:14:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68503B22EFD
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 10:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 575E0165EE6;
-	Tue, 17 Sep 2024 10:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DZzD+XD5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B52A16A949;
+	Tue, 17 Sep 2024 10:22:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF8120323;
-	Tue, 17 Sep 2024 10:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5E315D5A6;
+	Tue, 17 Sep 2024 10:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726568062; cv=none; b=llKvWBVQVqK5Houj43iKyQC+5oPjXX+M4JJ+tz3X0MoQMKviro+qGaU3syklnR0M3rD1kHipVZf8DLwVPH09V2wTyHgn60iZQ591m4UYFXfA8AW+QB1XiQN5rRBlvNaVJ+rsCAYdaPYnRzU2r/9jmrd2WGq2mTEJWRJFv8AE+ww=
+	t=1726568540; cv=none; b=pRD+a+xXnVkDnjNeADHKG8Xtd6WTFjmb/eFFeYZvdgL0tMd582B0eBKY3ZLkCrw2Ue+JCNW6pBQyKnw0cIh9I7BiGSlHGhpttih9H3yqix0IqpauuXoCPAHvDrvwxwGoQqeMZp7jStUgDKZpluIiQSCEqiB8RW8XfuOtuohAgiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726568062; c=relaxed/simple;
-	bh=6D4S999Nnxi0r3tu7/o4AjVIMG0y9Zam5kzWfkgR+PA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZWJWDqAQXgZW++u1m+kHzqhleVRRbSPnCGVZvLc0jrr6eqEv1/j9eILwlDShkDChBOPcKNGddcPQd1X1a+Vyj34pq0lpTBhZC34DLdiLDqY7oc/hJrskFoup//0nlX6XusEnsBE1rrkMdUUGxdqHOGBhTxOBQKIg9xEnFASgGOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DZzD+XD5; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48H6N5wx010049;
-	Tue, 17 Sep 2024 10:14:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=Q2hyy08txf3PgeLa/vwjP0
-	4RLvzJlwXDq1iftDTDDHQ=; b=DZzD+XD5XWiLv8DdLnVs3s3hD7Psl5aCcnh47T
-	9g/kWiqDd3CY3HppQfBZ2h/2ZrBPYMjO1k4HoUHaOpo7wBuz59veOwHPoeZT891C
-	AUPirAKzR0Z/5eiJiz+aTwN+zJJySipuvf+L+jDxLCGIQ1+zO4sTBOBRJFpQneiC
-	6/nhkfkU9DA5Zo7WmGUt0Ht0Yl3NF0cjADvUR3qRDiO2ItpFm1RPqsdZzT3HpSbg
-	BCfpnADwwQTDSjZV2S0xDX84BCNLi5kIYQ6l9qHLl79yKpFf2MwaDqNbZzmPwqOB
-	WIAD3Fq0/mLIGlHZssRoz7f+Q3752AgAW2zARtmnnlu5Gaug==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4jdpfym-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 10:14:13 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48HAECOe001275
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 10:14:12 GMT
-Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 17 Sep 2024 03:14:05 -0700
-From: Akash Kumar <quic_akakum@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Jing Leng <jleng@ambarella.com>, Felipe Balbi
-	<balbi@kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>,
-        Daniel Scally
-	<dan.scally@ideasonboard.com>
-CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Akash Kumar <quic_akakum@quicinc.com>
-Subject: [PATCH v3] usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
-Date: Tue, 17 Sep 2024 15:43:55 +0530
-Message-ID: <20240917101355.15580-1-quic_akakum@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1726568540; c=relaxed/simple;
+	bh=OvPvzmYVf5PPB6SaJ1tyg1h/ET1ohPg3n64z+iN4ZdY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nirJxKZ3qCUNx7xVc6slylXMuy51juHzFZxOlmfH+ff4Dg6/w6aEVrSBrBdQQLs87XylUI0hhwwLwYwharCkdl2KNH4I66LwODsqM7pFOaujPVhJIy7rEluGm4nmOSUcvVD0CAqGjc+SWRo/cfnEpc9fRXu9GYLya7ok5nqures=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from inp1wst083.omp.ru (81.22.207.138) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Tue, 17 Sep
+ 2024 13:22:09 +0300
+From: Roman Smirnov <r.smirnov@omp.ru>
+To: <stable@vger.kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Roman Smirnov <r.smirnov@omp.ru>, Mathias Nyman <mathias.nyman@intel.com>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Sergey Shtylyov
+	<s.shtylyov@omp.ru>, Karina Yankevich <k.yankevich@omp.ru>, Sergey Yudin
+	<s.yudin@omp.ru>, <lvc-project@linuxtesting.org>, Mathias Nyman
+	<mathias.nyman@linux.intel.com>
+Subject: [PATCH 5.10] xhci: check virt_dev is valid before dereferencing it
+Date: Tue, 17 Sep 2024 13:21:50 +0300
+Message-ID: <20240917102150.84686-1-r.smirnov@omp.ru>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zEv5BUY6L3AdlikcuWGM6GiR7p2004C4
-X-Proofpoint-GUID: zEv5BUY6L3AdlikcuWGM6GiR7p2004C4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- clxscore=1011 adultscore=0 mlxscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 bulkscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409170074
+Content-Type: text/plain
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 09/17/2024 10:08:56
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 19
+X-KSE-AntiSpam-Info: Lua profiles 187794 [Sep 17 2024]
+X-KSE-AntiSpam-Info: Version: 6.1.1.5
+X-KSE-AntiSpam-Info: Envelope from: r.smirnov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 34 0.3.34
+ 8a1fac695d5606478feba790382a59668a4f0039
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 81.22.207.138 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 81.22.207.138 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info:
+	omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;lore.kernel.org:7.1.1;127.0.0.199:7.1.2;inp1wst083.omp.ru:7.1.1;81.22.207.138:7.1.2
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 81.22.207.138
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 19
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 09/17/2024 10:12:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 9/17/2024 9:17:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-The current logic is rigid, setting num_fifos to fixed values:
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-3 for any maxburst greater than 1.
-tx_fifo_resize_max_num for maxburst greater than 6.
-Additionally, it did not differentiate much between bulk and
-isochronous transfers, applying similar logic to both.
+commit 03ed579d9d51aa018830b0de3e8b463faf6b87db upstream.
 
-The new logic is more dynamic and tailored to the specific needs of
-bulk and isochronous transfers:
+Check that the xhci_virt_dev structure that we dug out based
+on a slot_id value from a command completion is valid before
+dereferencing it.
 
-Bulk Transfers: Ensures that num_fifos is optimized by considering
-both the maxburst value and the maximum allowed number of FIFOs
-based on the DT property tx_fifo_resize_max_num and the maximum
-packet multiplier for HS.
-
-Isochronous Transfers: Ensures that num_fifos is sufficient by
-considering the maximum packet multiplier for HS and maxburst for SS,
-along with a constraint with the DT property tx_fifo_resize_max_num.
-
-This change aims to optimize the allocation of Tx FIFOs for both bulk
-and isochronous endpoints, potentially improving data transfer
-efficiency and overall performance. It also enhances support for all
-use cases, which can be tweaked with DT parameters and the
-endpoint’s maxburst and maxpacket
-
-Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20210129130044.206855-7-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Roman Smirnov <r.smirnov@omp.ru>
 ---
- Changes for v3:
- Redefine logic for resizing tx fifos,added check based on
- operating speed and used maxp for HS and maxburst for SS
- and defined max allocation based on dt property.
+ drivers/usb/host/xhci-ring.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
- Changes for v2:
- Redefine logic for resizing tx fifos, handled fifo based on
- minimum of maxp and maxburts.
-
- Changes for v1:
- Added additional condition to allocate tx fifo for hs isoc
- eps, keeping the other resize logic same.
----
- drivers/usb/dwc3/gadget.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 89fc690fdf34..7557bd0053a7 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -778,15 +778,19 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index fbb7a5b51ef4..a769803e7d38 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1415,6 +1415,8 @@ static void xhci_handle_cmd_config_ep(struct xhci_hcd *xhci, int slot_id,
+ 	 * is not waiting on the configure endpoint command.
+ 	 */
+ 	virt_dev = xhci->devs[slot_id];
++	if (!virt_dev)
++		return;
+ 	ctrl_ctx = xhci_get_input_control_ctx(virt_dev->in_ctx);
+ 	if (!ctrl_ctx) {
+ 		xhci_warn(xhci, "Could not get input context, bad type.\n");
+@@ -1459,6 +1461,8 @@ static void xhci_handle_cmd_addr_dev(struct xhci_hcd *xhci, int slot_id)
+ 	struct xhci_slot_ctx *slot_ctx;
  
- 	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+ 	vdev = xhci->devs[slot_id];
++	if (!vdev)
++		return;
+ 	slot_ctx = xhci_get_slot_ctx(xhci, vdev->out_ctx);
+ 	trace_xhci_handle_cmd_addr_dev(slot_ctx);
+ }
+@@ -1470,13 +1474,15 @@ static void xhci_handle_cmd_reset_dev(struct xhci_hcd *xhci, int slot_id,
+ 	struct xhci_slot_ctx *slot_ctx;
  
--	if ((dep->endpoint.maxburst > 1 &&
--	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
--	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
--		num_fifos = 3;
-+	if (dwc->gadget->speed <= USB_SPEED_HIGH &&
-+	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
-+	     usb_endpoint_xfer_isoc(dep->endpoint.desc)))
-+		num_fifos = min_t(unsigned int,
-+				  usb_endpoint_maxp_mult(dep->endpoint.desc) + 1,
-+				  dwc->tx_fifo_resize_max_num);
+ 	vdev = xhci->devs[slot_id];
++	if (!vdev) {
++		xhci_warn(xhci, "Reset device command completion for disabled slot %u\n",
++			  slot_id);
++		return;
++	}
+ 	slot_ctx = xhci_get_slot_ctx(xhci, vdev->out_ctx);
+ 	trace_xhci_handle_cmd_reset_dev(slot_ctx);
  
--	if (dep->endpoint.maxburst > 6 &&
-+	if (dwc->gadget->speed > USB_SPEED_HIGH &&
- 	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
--	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
--		num_fifos = dwc->tx_fifo_resize_max_num;
-+	     usb_endpoint_xfer_isoc(dep->endpoint.desc)))
-+		num_fifos = min_t(unsigned int,
-+				  dep->endpoint.maxburst,
-+				  dwc->tx_fifo_resize_max_num);
+ 	xhci_dbg(xhci, "Completed reset device command.\n");
+-	if (!xhci->devs[slot_id])
+-		xhci_warn(xhci, "Reset device command completion "
+-				"for disabled slot %u\n", slot_id);
+ }
  
- 	/* FIFO size for a single buffer */
- 	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
+ static void xhci_handle_cmd_nec_get_fw(struct xhci_hcd *xhci,
 -- 
-2.17.1
+2.34.1
 
 
