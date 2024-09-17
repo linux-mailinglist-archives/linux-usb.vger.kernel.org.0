@@ -1,257 +1,178 @@
-Return-Path: <linux-usb+bounces-15169-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15170-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6276497AE66
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 12:01:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1CD197AEA8
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 12:23:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E74141F23CED
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 10:01:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07ECAB23757
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2024 10:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B2215E5DC;
-	Tue, 17 Sep 2024 10:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 575E0165EE6;
+	Tue, 17 Sep 2024 10:14:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hx2O5rXO"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DZzD+XD5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D53A1BF24;
-	Tue, 17 Sep 2024 10:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF8120323;
+	Tue, 17 Sep 2024 10:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726567308; cv=none; b=A5doW1WFdD1gbOaCXPTBOPSqadDWA2YsIn2oWUAplqoHn29FU3CmdhsD36dV+Qunxf3srdpO7WgVeEJ+McFphRlPfUYiB+yKDeLB6csmuODnrIYbvLtZAMzHwN9O3GL38sUIbVRBxYrr811IYn6CDn2BcuJiTPvB8058aL0bxUA=
+	t=1726568062; cv=none; b=llKvWBVQVqK5Houj43iKyQC+5oPjXX+M4JJ+tz3X0MoQMKviro+qGaU3syklnR0M3rD1kHipVZf8DLwVPH09V2wTyHgn60iZQ591m4UYFXfA8AW+QB1XiQN5rRBlvNaVJ+rsCAYdaPYnRzU2r/9jmrd2WGq2mTEJWRJFv8AE+ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726567308; c=relaxed/simple;
-	bh=WdZbC4xC2N1aKtvrdJPt0oA9qnr6HeespGb7Br57/zI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B4xl3UaiPl+NH8Tdsjlv8UkixG4CahR/Ax55A5r0BUdXfuHsweUSCZOIC16csXt564NfW/sMb2e+rZXsSxvYKZm8sjvVcjfXbaXQb0B1lns7gXs/du173cyHYlGqO0rt1e3HhVl7Wj7SGQhr+AO504Q8yJxmp075BwKiRvyltLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hx2O5rXO; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7d4f8a1626cso3404440a12.3;
-        Tue, 17 Sep 2024 03:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726567306; x=1727172106; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4DHtwYBbM0sOjga2wfGnDyYSgFCfAU3tu7m455ZVE8c=;
-        b=Hx2O5rXOJ0ubZi0cR0rVCDlFMjV44BPZIBZDt+PA5hECUZkAXCS/UFW8XTBHZH9Ia2
-         XVsEjkw6eh4XXoU7hGjHkwiLowQJewhkK70l80PSzj50OcdV2QsLJRVkjqdSkQzyK+Ib
-         e5rDUgAlXgLZyPlnoo12sYmUk96zl/lEwRxaX76E2e/XV0gn0Gn0jesK7CasupYV4G8/
-         DjZIsmrFn4p3vpCq4cOGQs+UUdhOimSrs9kr5wwtk7hH7xfwzchV0lHuolej9Ql12AdU
-         ecZ1y1jXgFxRlH6hO6S7PPqbPOnj7Hf9RC8pGD9N1Ups4QyHv9OHf3o4I6ES49eRtJra
-         il7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726567306; x=1727172106;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4DHtwYBbM0sOjga2wfGnDyYSgFCfAU3tu7m455ZVE8c=;
-        b=bjOEY7yqLxZqb2rILcvHYuKZdEIVI2UTeUbkEm2GH5kMzrzNRwG6nE0QRq+XFoNXGy
-         e+rHg0ykV+/rHQC1TLJt/ak1qpiWP46zW9q/MNCBtU4/KhE1D4/7WVtXp65qQXO4+Q4j
-         x6a0o27EqtrDvppd35qeAYm2n8ZhoiT1eq+04dDfMz4FV7lMU2b8nc2A9q533/rES3J6
-         Wx1vC+SYrs9O5xgaK23/bOrJ9Vm0FdJlmHLQhF3BhhGhfJsHHExJlqr6x6jurn3ri6EY
-         THB3dlcrtdLuJOif9Jo1L1RWtXjOJp8S9vHVw5G4RkFWy+7fw4WSR7wM15fb0TW2whkV
-         WHlw==
-X-Forwarded-Encrypted: i=1; AJvYcCUGZVKIP8rAQlfKVs1vNrVnPnIY/XOPAomL/cBXLbB8GK8H1RtoJFkuVeNPOuV2hbHk8EFJ3k5gdo5INz0=@vger.kernel.org, AJvYcCVG7cjTr7E0PbfZhLBEYmsvV6cWlYnduOdtBHCM8rEB5lFHC4WYTJpxU8ky7cHs6VGsWGuJmAg4upei@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAshc7+d0uWASqeIgU/SH1zofmMW9ei38VBogr5HSzz3w/Eua7
-	NIKgtnl2/gT+U0gqa5iD6TiAiRbaFQlJQPCffOcRYNYa4/MwRBZYCchF9wUCV6k/4ZBNQmfLG2P
-	T4idgINxjd9ztn90iyp5v64BtRkI=
-X-Google-Smtp-Source: AGHT+IFfBdHVrZzk+3LfT6kPSTUxjmW5AG3HHb3/lMnpikf6mm2Pg/QHYd3khZmyctdBjCrIeSG9N96Ej4tI4e8+Y3I=
-X-Received: by 2002:a17:90a:ce06:b0:2ca:5a46:cbc8 with SMTP id
- 98e67ed59e1d1-2dbb9f3a7e4mr17398317a91.26.1726567306453; Tue, 17 Sep 2024
- 03:01:46 -0700 (PDT)
+	s=arc-20240116; t=1726568062; c=relaxed/simple;
+	bh=6D4S999Nnxi0r3tu7/o4AjVIMG0y9Zam5kzWfkgR+PA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZWJWDqAQXgZW++u1m+kHzqhleVRRbSPnCGVZvLc0jrr6eqEv1/j9eILwlDShkDChBOPcKNGddcPQd1X1a+Vyj34pq0lpTBhZC34DLdiLDqY7oc/hJrskFoup//0nlX6XusEnsBE1rrkMdUUGxdqHOGBhTxOBQKIg9xEnFASgGOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DZzD+XD5; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48H6N5wx010049;
+	Tue, 17 Sep 2024 10:14:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=Q2hyy08txf3PgeLa/vwjP0
+	4RLvzJlwXDq1iftDTDDHQ=; b=DZzD+XD5XWiLv8DdLnVs3s3hD7Psl5aCcnh47T
+	9g/kWiqDd3CY3HppQfBZ2h/2ZrBPYMjO1k4HoUHaOpo7wBuz59veOwHPoeZT891C
+	AUPirAKzR0Z/5eiJiz+aTwN+zJJySipuvf+L+jDxLCGIQ1+zO4sTBOBRJFpQneiC
+	6/nhkfkU9DA5Zo7WmGUt0Ht0Yl3NF0cjADvUR3qRDiO2ItpFm1RPqsdZzT3HpSbg
+	BCfpnADwwQTDSjZV2S0xDX84BCNLi5kIYQ6l9qHLl79yKpFf2MwaDqNbZzmPwqOB
+	WIAD3Fq0/mLIGlHZssRoz7f+Q3752AgAW2zARtmnnlu5Gaug==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4jdpfym-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Sep 2024 10:14:13 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48HAECOe001275
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Sep 2024 10:14:12 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 17 Sep 2024 03:14:05 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Jing Leng <jleng@ambarella.com>, Felipe Balbi
+	<balbi@kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>
+CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar <quic_akakum@quicinc.com>
+Subject: [PATCH v3] usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
+Date: Tue, 17 Sep 2024 15:43:55 +0530
+Message-ID: <20240917101355.15580-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240916040629.28750-1-aha310510@gmail.com> <2024091648-excusable-unfilled-83de@gregkh>
- <15bc0f3a-5433-43e0-b0b0-8b9c26dec165@suse.com> <CAO9qdTHrbG-aWetpM_e7zHUhrwPD=7uCHPbWSMoorgnwjKEOmA@mail.gmail.com>
- <bf971924-9d91-40a3-a4c2-5b518e2ce2fd@suse.com> <CAO9qdTHWfYv8u-gJqGkuG_OSdkU9c=qZSnEbE+zCYWG5bT6r+Q@mail.gmail.com>
- <c96e95c2-aa59-4ef0-b211-c1cea71519ea@suse.com>
-In-Reply-To: <c96e95c2-aa59-4ef0-b211-c1cea71519ea@suse.com>
-From: Jeongjun Park <aha310510@gmail.com>
-Date: Tue, 17 Sep 2024 19:01:35 +0900
-Message-ID: <CAO9qdTH_+syAOBXUYT61VZMovDJYjCD1b-Who16Aqj4BXq8GLA@mail.gmail.com>
-Subject: Re: [PATCH] usb: use mutex_lock in iowarrior_read()
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, colin.i.king@gmail.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zEv5BUY6L3AdlikcuWGM6GiR7p2004C4
+X-Proofpoint-GUID: zEv5BUY6L3AdlikcuWGM6GiR7p2004C4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ clxscore=1011 adultscore=0 mlxscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409170074
 
-Oliver Neukum <oneukum@suse.com> wrote:
->
-> On 17.09.24 08:23, Jeongjun Park wrote:
-> > Oliver Neukum <oneukum@suse.com> wrote:
->
-> > Okay. But O_NONBLOCK flag check already exists, and I don't know
-> > if we need to branch separately to mutex_trylock just because O_NONBLOCK
-> > flag exists. I think mutex_lock_interruptible is enough.
->
-> It will still block.
->
-> > And the point of locking is too late. I think it would be more appropriate to
-> > read file->private_data and then lock it right away.
->
-> You are right. dev->present should be checked under the lock only.
->
-> > I think this patch is a more appropriate patch:
-> >
-> > ---
-> >   drivers/usb/misc/iowarrior.c | 41 +++++++++++++++++++++++++++---------
-> >   1 file changed, 31 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-> > index 6d28467ce352..6fb4ecebbc15 100644
-> > --- a/drivers/usb/misc/iowarrior.c
-> > +++ b/drivers/usb/misc/iowarrior.c
-> > @@ -277,28 +277,40 @@ static ssize_t iowarrior_read(struct file *file,
-> > char __user *buffer,
-> >      struct iowarrior *dev;
-> >      int read_idx;
-> >      int offset;
-> > +   int retval = 0;
-> >
-> >      dev = file->private_data;
-> >
-> > +   if (mutex_lock_interruptible(&dev->mutex)) {
->
-> This blocks. To quote the man page:
->
->         O_NONBLOCK or O_NDELAY
->                When  possible,  the file is opened in nonblocking mode.
->                 Neither the open() nor any subsequent I/O operations on the file descriptor which is
->                returned will cause the calling process to wait.
->
->
+The current logic is rigid, setting num_fifos to fixed values:
 
-Okay, I understand. Then I think it would be appropriate to do
-the patch below to prevent blocking, but I have one question.
+3 for any maxburst greater than 1.
+tx_fifo_resize_max_num for maxburst greater than 6.
+Additionally, it did not differentiate much between bulk and
+isochronous transfers, applying similar logic to both.
 
-Currently, many misc usb drivers do not seem to handle the
-O_NONBLOCK flag when using mutex_lock. If this is really
-necessary code, I think it would require code modifications to
-other functions inside iowarrior and many misc usb drivers.
+The new logic is more dynamic and tailored to the specific needs of
+bulk and isochronous transfers:
 
-What do you think about this?
+Bulk Transfers: Ensures that num_fifos is optimized by considering
+both the maxburst value and the maximum allowed number of FIFOs
+based on the DT property tx_fifo_resize_max_num and the maximum
+packet multiplier for HS.
 
-Regards,
-Jeongjun Park
+Isochronous Transfers: Ensures that num_fifos is sufficient by
+considering the maximum packet multiplier for HS and maxburst for SS,
+along with a constraint with the DT property tx_fifo_resize_max_num.
 
+This change aims to optimize the allocation of Tx FIFOs for both bulk
+and isochronous endpoints, potentially improving data transfer
+efficiency and overall performance. It also enhances support for all
+use cases, which can be tweaked with DT parameters and the
+endpoint’s maxburst and maxpacket
+
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
 ---
-drivers/usb/misc/iowarrior.c | 46 ++++++++++++++++++++++++++++--------
-1 file changed, 36 insertions(+), 10 deletions(-)
+ Changes for v3:
+ Redefine logic for resizing tx fifos,added check based on
+ operating speed and used maxp for HS and maxburst for SS
+ and defined max allocation based on dt property.
 
-diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-index 6d28467ce352..dbf0ed04f7c3 100644
---- a/drivers/usb/misc/iowarrior.c
-+++ b/drivers/usb/misc/iowarrior.c
-@@ -277,28 +277,45 @@ static ssize_t iowarrior_read(struct file *file,
-char __user *buffer,
-struct iowarrior *dev;
-int read_idx;
-int offset;
-+ int retval = 0;
-dev = file->private_data;
-+ if (file->f_flags & O_NONBLOCK) {
-+ retval = mutex_trylock(&dev->mutex);
-+ if (!retval)
-+ return -EAGAIN;
-+ } else {
-+ retval = mutex_lock_interruptible(&dev->mutex);
-+ if (retval)
-+ return -ERESTARTSYS;
-+ }
-+
-/* verify that the device wasn't unplugged */
-- if (!dev || !dev->present)
-- return -ENODEV;
-+ if (!dev->present) {
-+ retval = -ENODEV;
-+ goto exit;
-+ }
-dev_dbg(&dev->interface->dev, "minor %d, count = %zd\n",
-dev->minor, count);
-/* read count must be packet size (+ time stamp) */
-if ((count != dev->report_size)
-- && (count != (dev->report_size + 1)))
-- return -EINVAL;
-+ && (count != (dev->report_size + 1))) {
-+ retval = -EINVAL;
-+ goto exit;
-+ }
-/* repeat until no buffer overrun in callback handler occur */
-do {
-atomic_set(&dev->overflow_flag, 0);
-if ((read_idx = read_index(dev)) == -1) {
-/* queue empty */
-- if (file->f_flags & O_NONBLOCK)
-- return -EAGAIN;
-+ if (file->f_flags & O_NONBLOCK) {
-+ retval = -EAGAIN;
-+ goto exit;
-+ }
-else {
-//next line will return when there is either new data, or the device
-is unplugged
-int r = wait_event_interruptible(dev->read_wait,
-@@ -309,28 +326,37 @@ static ssize_t iowarrior_read(struct file *file,
-char __user *buffer,
--1));
-if (r) {
-//we were interrupted by a signal
-- return -ERESTART;
-+ retval = -ERESTART;
-+ goto exit;
-}
-if (!dev->present) {
-//The device was unplugged
-- return -ENODEV;
-+ retval = -ENODEV;
-+ goto exit;
-}
-if (read_idx == -1) {
-// Can this happen ???
-- return 0;
-+ retval = 0;
-+ goto exit;
-}
-}
-}
-offset = read_idx * (dev->report_size + 1);
-if (copy_to_user(buffer, dev->read_queue + offset, count)) {
-- return -EFAULT;
-+ retval = -EFAULT;
-+ goto exit;
-}
-} while (atomic_read(&dev->overflow_flag));
-read_idx = ++read_idx == MAX_INTERRUPT_BUFFER ? 0 : read_idx;
-atomic_set(&dev->read_idx, read_idx);
-+ mutex_unlock(&dev->mutex);
-return count;
-+
-+exit:
-+ mutex_unlock(&dev->mutex);
-+ return retval;
-}
-/*
---
+ Changes for v2:
+ Redefine logic for resizing tx fifos, handled fifo based on
+ minimum of maxp and maxburts.
 
->
-> [..]
-> > +unlock_exit:
-> > +   mutex_unlock(&dev->mutex);
-> > +exit:
-> > +   return retval;
->
-> The rest looks good to me.
->
->         Regards
->                 Oliver
->
+ Changes for v1:
+ Added additional condition to allocate tx fifo for hs isoc
+ eps, keeping the other resize logic same.
+---
+ drivers/usb/dwc3/gadget.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89fc690fdf34..7557bd0053a7 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -778,15 +778,19 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 
+ 	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+ 
+-	if ((dep->endpoint.maxburst > 1 &&
+-	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
+-	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
+-		num_fifos = 3;
++	if (dwc->gadget->speed <= USB_SPEED_HIGH &&
++	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
++	     usb_endpoint_xfer_isoc(dep->endpoint.desc)))
++		num_fifos = min_t(unsigned int,
++				  usb_endpoint_maxp_mult(dep->endpoint.desc) + 1,
++				  dwc->tx_fifo_resize_max_num);
+ 
+-	if (dep->endpoint.maxburst > 6 &&
++	if (dwc->gadget->speed > USB_SPEED_HIGH &&
+ 	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+-	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+-		num_fifos = dwc->tx_fifo_resize_max_num;
++	     usb_endpoint_xfer_isoc(dep->endpoint.desc)))
++		num_fifos = min_t(unsigned int,
++				  dep->endpoint.maxburst,
++				  dwc->tx_fifo_resize_max_num);
+ 
+ 	/* FIFO size for a single buffer */
+ 	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
+-- 
+2.17.1
+
 
