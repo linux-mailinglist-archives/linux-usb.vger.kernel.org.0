@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-15216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E8B297BCE0
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 15:16:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DD1997BCE5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 15:17:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5A7C1F23C17
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 13:16:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A076284F98
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 13:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DB518A6DD;
-	Wed, 18 Sep 2024 13:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A5018A934;
+	Wed, 18 Sep 2024 13:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IiXQVF+V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2HXQyf1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F15A1EEFC;
-	Wed, 18 Sep 2024 13:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B9B18A920;
+	Wed, 18 Sep 2024 13:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726665402; cv=none; b=IPQ3V2ot1QKGMzpq5Q0JZyteVUWH6RGgHe0c1HcaHoXZ7fMErawSmnCmwCwC8FrOkX43SonJE5mM/OPp76IhKwKx1oGtEtPHqwTmUKqBp61/PiArTzas+BRUQE7xMGzDJ7zlSe5bGfbX3zRJIv5jv7trXTRtupRm9CgZG9Xj3I4=
+	t=1726665447; cv=none; b=DUfIha9d9fCwSlDBA6EcGoh1QgtPVBWyyp7KR5D8AHJDxAZDdxhfBT7oraezwzS34k0AoEB+0BjgD6vaDweqVhU7I9vopNEkDBsICrIUNYL5AlypU2H73Y2nHfPGzgDml+YhqQv7G4z05KwJ/9RINcuFf1Ae2PP/HQjKmn6tleE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726665402; c=relaxed/simple;
-	bh=I1WKWjb/1pB6Z+0gQytF8A1x1ayRFI7/3X2gekOAgd4=;
+	s=arc-20240116; t=1726665447; c=relaxed/simple;
+	bh=TuziZi0l9Czwaf09HEiC9oPsYPMowg2ApmqPSFpQzwA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UjNay01FSAYJaTc42CWUlfHLhyRzYhXzEWBoks0D9Go24BgwIfOMMPrQpNJSK8w5Uk+9CwsaWFq46Q6+M9b7mFvz/2ll4vYyifeUbiQ2crSi7dV9g2/tt9R3U7PEt91BXhs7m6gQ3MwkRepR5v1GIi6j5cbyZDVVZlGPt0GiYaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IiXQVF+V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67577C4CEC3;
-	Wed, 18 Sep 2024 13:16:35 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=k8fWRXZ/RkRbMGlfp84+G2gbvPKGOpkoXylb6+10hFVe46OtYaNfCXYalwc4ohqHA0VfjGty6ecKw21/B9mKySMkOUaRJ13RgfdD9r3oqBtk/yA92UrK5a+mVbYjEn0JsZjEE3g3MHQVpNBbE1B+hswRBcIE4wtzFB5s4T+dylg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2HXQyf1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B1CC4CEC3;
+	Wed, 18 Sep 2024 13:17:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726665400;
-	bh=I1WKWjb/1pB6Z+0gQytF8A1x1ayRFI7/3X2gekOAgd4=;
+	s=k20201202; t=1726665447;
+	bh=TuziZi0l9Czwaf09HEiC9oPsYPMowg2ApmqPSFpQzwA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IiXQVF+VziAkw35mC+OWLIX8iZg6/fPBwEDHfwXKKFZrebtluGnigmqmDfORiXaEq
-	 VQABPQH5qCKwEhk7zZeip+1/0tN1kqKgC/HHcnHaZiABCaBNh9csDkBeAP77nNt6tg
-	 Ifkdkcu9B/qvVBltoOlLhJq4c0qmgItc/aR5rqLrATa+JCwC8MuBkCdbH4vTtVnkGL
-	 0tUL4j2WBuWKfKgi8iiAWqnqQZc4y8q4/xiKag9+bFbmG/amXqh4B6eOiiq0R2GNOT
-	 eSAORFuxyUbnkVKTltLCpK/x38NokFA+2qpV0qB2hAVGluY+P5VFduCoACNJ9JRBq/
-	 lA/98wNDhdnFQ==
-Message-ID: <3ac31595-f596-4960-bba2-0b0b55041193@kernel.org>
-Date: Wed, 18 Sep 2024 15:16:33 +0200
+	b=p2HXQyf12U89qd8XgEeMzlAB7pRx0QZx47rmNMA7AOyqYdKIRwFu76+9RjKcQfaIp
+	 cjtfWd3xuIdUKeEtVb+3d128+3D3sZJPkfGkLghAvI8+76V/jLRO1o1pMfOClyDFPp
+	 eiMP/hqnscwGZdmWh2ARQZqb81Vi3tqa9R/sZLpYdrQ2ylUDm9DUOUeBvLOhakkxLx
+	 3EmU09668mOFrCBIRFtEEaVh0hNHZO7fK+iGWU/tey9A/J784l8z0/geTHoVuDIeuS
+	 3O62Mpxi/Yk4AEl2nYBEQipN09CyuSDFLsnWkRZ/AaxKtcJl2i2prW/1LcUomBdIjo
+	 BtuWG6Wo9jZ6A==
+Message-ID: <91d26ba6-01cd-4b45-8cca-689475285463@kernel.org>
+Date: Wed, 18 Sep 2024 15:17:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] dt-bindings: usb: Add Diodes Incorporated
- PI5USB30213A Type-C Controller
+Subject: Re: [PATCH 4/4] arm64: dts: imx8mp-iota2: Enable the USB Type-C port
 To: =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -70,7 +69,7 @@ Cc: Sascha Hauer <s.hauer@pengutronix.de>,
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
  imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
 References: <20240917151001.1289399-1-michal.vokac@ysoft.com>
- <20240917151001.1289399-4-michal.vokac@ysoft.com>
+ <20240917151001.1289399-5-michal.vokac@ysoft.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,111 +115,63 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240917151001.1289399-4-michal.vokac@ysoft.com>
+In-Reply-To: <20240917151001.1289399-5-michal.vokac@ysoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 17/09/2024 17:10, Michal Vokáč wrote:
 > From: Petr Benes <petr.benes@ysoft.com>
 > 
-> Diodes Incorporated PI5USB30213A Type-C Controller supports host,
-> device, and dual-role mode based on voltage levels detected on CC
-> pin. Supports dual differential channel, 2:1 USB 3.0 Mux/Demux,
-> USB Type-C specification 1.1.
+> Enable the USB Type-C port with the Diodes PI5USB30213A port controller.
+> The port supports dual role data but can operate only in source power role
+> and PD is not supported.
 > 
 > Signed-off-by: Petr Benes <petr.benes@ysoft.com>
 > Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
 > ---
->  .../bindings/usb/diodes,pi5usb30213a.yaml     | 95 +++++++++++++++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml
+>  .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 96 +++++++++++++++++++
+>  1 file changed, 96 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml b/Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml
-> new file mode 100644
-> index 000000000000..1cae10724152
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/diodes,pi5usb30213a.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> index 21d0899cabd5..b15d211e8667 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> @@ -38,6 +38,17 @@ memory@40000000 {
+>  		      <0x1 0x00000000 0 0x80000000>;
+>  	};
+>  
+> +	reg_typec: regulator-typec {
+> +		compatible = "regulator-fixed";
+> +		enable-active-high;
+> +		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_usbc_vbus>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-name = "typec";
+> +	};
 > +
-> +title: PI5USB30213A Type-C port controller
-> +
-> +description:
-> +  Diodes Incorporated PI5USB30213A Type-C Controller supports host,
-> +  device, and dual-role mode based on voltage levels detected on CC
-> +  pin. Dual differential channel, 2:1 USB 3.0 Mux/Demux, USB Type-C
-> +  specification 1.1 compliant.
-> +
-> +maintainers:
-> +  - Petr Benes <petr.benes@ysoft.com>
-
-Please put maintainers before description: block.
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - diodes,pi5usb30213a
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    type: object
-> +    $ref: ../connector/usb-connector.yaml#
-
-Full path, so /schemas/connector/usb-....
-
-> +    unevaluatedProperties: false
-> +    description:
-> +      The managed USB Type-C connector.
-
-Description should not be needed.
-> +
-> +    properties:
-> +      compatible:
-> +        const: usb-c-connector
-
-Drop, not needed.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - connector
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      pi5usb30213a: tcpc@d {
+>  	reg_usb_host: regulator-usb-host {
+>  		compatible = "regulator-fixed";
+>  		enable-active-high;
+> @@ -218,6 +229,47 @@ &i2c2 {
+>  	pinctrl-0 = <&pinctrl_i2c2>;
+>  	status = "okay";
+>  
+> +	tcpc@d {
 
 typec@d
 
-and drop label
+> +		compatible = "diodes,pi5usb30213a";
+> +		reg = <0xd>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_typec>;
+> +		interrupts-extended = <&gpio1 5 IRQ_TYPE_LEVEL_LOW>;
+> +		status = "okay";
 
-> +        compatible = "diodes,pi5usb30213a";
-> +        reg = <0xd>;
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&pinctrl_typec>;
-> +        interrupts-extended = <&gpio1 5 IRQ_TYPE_LEVEL_LOW>;
-> +        status = "okay";
+Drop
 
-Drop status
+
 
 Best regards,
 Krzysztof
