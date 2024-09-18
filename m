@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-15211-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15212-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D81CC97B7F7
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 08:32:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30FC197B7F9
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 08:33:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 176BB1C22494
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 06:32:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AD99B263DE
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 06:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805EA15099E;
-	Wed, 18 Sep 2024 06:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CBA615F41F;
+	Wed, 18 Sep 2024 06:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DWC0Eyx7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WS++DJSH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F305321364;
-	Wed, 18 Sep 2024 06:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7465156250;
+	Wed, 18 Sep 2024 06:32:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726641166; cv=none; b=GnIAdrtgUF68Y6Wu64g+yGIY8qqqaVtEllDdGDm2E9ZbxOYfSrCc4trzriU44yP2YYmQThr1RfLplGi+sOlJsWuxUBbKKXRGu/vLwP+/DLJgF63vCgXi6x8AO3Wma6irxr5PTnUC8AR9Tr78r6OqmHGFTfYXwgAO01tAukJeJT8=
+	t=1726641178; cv=none; b=jwnsPZSKJ7H1QVeM2X573PmAAKRzisycWlfr8rHSRhghYTyM2uDpK9pxv1xGKR+KzGdGitpGKIQ9oQ04pU2AO4SFtCX6MNZZrB1WYrV2NLmoTxoIA5aE1mujRLfC+NNEKzrmB9uyh1h1qHOFayC/aa1Vyvk9X0nRHddt7SU5AFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726641166; c=relaxed/simple;
-	bh=92bAq1IIGNwnFwppRRlpstW1IZh5HfwF37PcPfL5yrA=;
+	s=arc-20240116; t=1726641178; c=relaxed/simple;
+	bh=bdY2oRbFUsJMSfydNZV+udNA/uUfcDC0GM+JSVjxcnw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sTYDwURNchDIeAJxulc7nH+4JuZK8tMLu9mq6jfYfZq5r/dhdR6ADw9G6qIxd31bANoq1k+6tLa4QW3/bkBV2mTw9FX6Xo8vrD8a7C7b7DuaXDVmRzzgg9KDxohXC1VZn7Iwh5r2kWhlaxFfAwwOXuGWRcUp1GaAh1L1WwkS/Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DWC0Eyx7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC4ABC4CEC3;
-	Wed, 18 Sep 2024 06:32:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ULV6hEnXYxuNumSlf9vkMW51CXcbnqQqifCvqjH2mYzWw3JOI7VP3hRLVsdtWwfei3U3+/ZpA6ulRU9+wx6sKW0H4k+LqjjbUaf/C0AAbPITtHv3zL75uEqkvbaCPLnRZE96PJCT058i6FRnvmSNukLbl2i2Ctb845G3wOgOCzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WS++DJSH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E5BC4CEC3;
+	Wed, 18 Sep 2024 06:32:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726641165;
-	bh=92bAq1IIGNwnFwppRRlpstW1IZh5HfwF37PcPfL5yrA=;
+	s=k20201202; t=1726641178;
+	bh=bdY2oRbFUsJMSfydNZV+udNA/uUfcDC0GM+JSVjxcnw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DWC0Eyx7EYDf1v9vzFum+QqcOYTmoTMbJU6tGOrJ8Cqf+A5G01eLZU35SczZI/s2q
-	 /vcbhxtFLKwUE8+acCt1TvmiUTMQWDLGmlxdAMpGyDi/Rjt5XREl3qHRPWaQU61rT4
-	 Dyov5ntM923AjLI2m4QFZDAqaT2WaK2blkkOgCjF46I5NOmj9AJRJ2QRD01+7TGbR0
-	 pXo0gwYzu7VJxAjgkZr3jc28M3/cIEd1IyN3aq0WgXN//vKR1QjXEg092skbnDgdNF
-	 NEFi9V2YOP3JsU/YFt5Fm/UdM9RnY5lUAIb7/4D3wEL6tZrWINzn/Am5N/43jXysEG
-	 OczDYBz6+ab3A==
-Date: Wed, 18 Sep 2024 06:32:41 +0000
+	b=WS++DJSHcCPY/UlAXdKaANI/57tz5LIXgWwP58koFUD6Fa1zRYCt5cuA072Q8cPne
+	 VGoZrkn576PWCFkqM9VBsWQEUGAMdZ1rZY2lrOMO/fukB1keWNe2whv4bZw3gXzd9D
+	 LOnxrxOqvq42ckOOMD9dCL6CFkp9lLDS48xDAebO7sIm28ATigrHzPc9C8LVRD2Wbh
+	 oeqZzPchBLRY9q7XcEDEy65lm45pT5OAvY+UjxkOT9CAj7jIYn3HHAmeZx796w1XqS
+	 7Hm5BCWoZdXREiQPjPvm4Cnq7rL7ZUANf5lbWPcZMOh4WiYNzfumbuFMRvSqd1DirT
+	 H7nD4gj/5zKeg==
+Date: Wed, 18 Sep 2024 06:32:54 +0000
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -51,11 +51,10 @@ Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
 	Pavan Holla <pholla@chromium.org>, linux-usb@vger.kernel.org,
 	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v6 1/8] platform/chrome: Update ChromeOS EC header for
- UCSI
-Message-ID: <Zup0Ca7QtatvsCjC@google.com>
+Subject: Re: [PATCH v6 2/8] platform/chrome: Update EC feature flags
+Message-ID: <Zup0FgL8-J1-S1co@google.com>
 References: <20240910101527.603452-1-ukaszb@chromium.org>
- <20240910101527.603452-2-ukaszb@chromium.org>
+ <20240910101527.603452-3-ukaszb@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,15 +64,14 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240910101527.603452-2-ukaszb@chromium.org>
+In-Reply-To: <20240910101527.603452-3-ukaszb@chromium.org>
 
-On Tue, Sep 10, 2024 at 10:15:20AM +0000, Łukasz Bartosik wrote:
+On Tue, Sep 10, 2024 at 10:15:21AM +0000, Łukasz Bartosik wrote:
 > From: Pavan Holla <pholla@chromium.org>
 > 
-> Add EC host commands for reading and writing UCSI structures
-> in the EC. The corresponding kernel driver is cros-ec-ucsi.
-> 
-> Also update PD events supported by the EC.
+> Define EC_FEATURE_UCSI_PPM to enable usage of the cros_ec_ucsi
+> driver. Also, add any feature flags that are implemented by the EC
+> but are missing in the kernel header.
 > 
 > Signed-off-by: Pavan Holla <pholla@chromium.org>
 > Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
