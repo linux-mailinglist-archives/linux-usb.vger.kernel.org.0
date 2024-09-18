@@ -1,179 +1,145 @@
-Return-Path: <linux-usb+bounces-15217-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15218-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DD1997BCE5
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 15:17:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4299C97BF6B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 19:07:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A076284F98
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 13:17:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7615B1C21F04
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2024 17:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A5018A934;
-	Wed, 18 Sep 2024 13:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5E11C9DD8;
+	Wed, 18 Sep 2024 17:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2HXQyf1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="onyM3H4R"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B9B18A920;
-	Wed, 18 Sep 2024 13:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3378510A1C;
+	Wed, 18 Sep 2024 17:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726665447; cv=none; b=DUfIha9d9fCwSlDBA6EcGoh1QgtPVBWyyp7KR5D8AHJDxAZDdxhfBT7oraezwzS34k0AoEB+0BjgD6vaDweqVhU7I9vopNEkDBsICrIUNYL5AlypU2H73Y2nHfPGzgDml+YhqQv7G4z05KwJ/9RINcuFf1Ae2PP/HQjKmn6tleE=
+	t=1726679220; cv=none; b=cUAhVeDWDhQjUqxJnUgOKwBZ8KMJfKwtDuwgj8NOD+ASHSq+erCfutxxu3Uxfbz6cuw4HlIIEFVoxlegSJubM+oZyY3zy0x/9tKG7DYqME8tEVBMa7Iq1dKu4ePyQTOxMA5I6byCk3QPytr0pv2M8CxAFTCFBdrd15iyDUlL5Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726665447; c=relaxed/simple;
-	bh=TuziZi0l9Czwaf09HEiC9oPsYPMowg2ApmqPSFpQzwA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k8fWRXZ/RkRbMGlfp84+G2gbvPKGOpkoXylb6+10hFVe46OtYaNfCXYalwc4ohqHA0VfjGty6ecKw21/B9mKySMkOUaRJ13RgfdD9r3oqBtk/yA92UrK5a+mVbYjEn0JsZjEE3g3MHQVpNBbE1B+hswRBcIE4wtzFB5s4T+dylg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2HXQyf1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B1CC4CEC3;
-	Wed, 18 Sep 2024 13:17:21 +0000 (UTC)
+	s=arc-20240116; t=1726679220; c=relaxed/simple;
+	bh=+HDf3q+sbF310Cwhvi+S25url1iCzDjqXFzg0SppkeE=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=GJlXBYcuGl6W9nvZSq/czSpzRR/JNUDGJc43m7Zxie0D8+DDKLEf68CI75/q9xVf7k5UFuW9dL9NHd30lzq6GQ87usQV5XNJySjfqucaUlEyYJTJc7XMkNhnPum4APgenQhOijlhTJ2J6iN6nNmLKC3FxW3J+AxUMissz/gFPLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=onyM3H4R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48176C4CEC2;
+	Wed, 18 Sep 2024 17:06:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726665447;
-	bh=TuziZi0l9Czwaf09HEiC9oPsYPMowg2ApmqPSFpQzwA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p2HXQyf12U89qd8XgEeMzlAB7pRx0QZx47rmNMA7AOyqYdKIRwFu76+9RjKcQfaIp
-	 cjtfWd3xuIdUKeEtVb+3d128+3D3sZJPkfGkLghAvI8+76V/jLRO1o1pMfOClyDFPp
-	 eiMP/hqnscwGZdmWh2ARQZqb81Vi3tqa9R/sZLpYdrQ2ylUDm9DUOUeBvLOhakkxLx
-	 3EmU09668mOFrCBIRFtEEaVh0hNHZO7fK+iGWU/tey9A/J784l8z0/geTHoVuDIeuS
-	 3O62Mpxi/Yk4AEl2nYBEQipN09CyuSDFLsnWkRZ/AaxKtcJl2i2prW/1LcUomBdIjo
-	 BtuWG6Wo9jZ6A==
-Message-ID: <91d26ba6-01cd-4b45-8cca-689475285463@kernel.org>
-Date: Wed, 18 Sep 2024 15:17:20 +0200
+	s=k20201202; t=1726679219;
+	bh=+HDf3q+sbF310Cwhvi+S25url1iCzDjqXFzg0SppkeE=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=onyM3H4RQSAqQlguwsZ001WuaWLCXtP0w9nmu0T1/MVSdhqguFeXjfjTYTcoUFtsB
+	 r25dX3qg/FhS1Flk0t5o7acuwDJ2BN5kdBW3iE/Dr8UPpX8vubzwKNUkqonhK0B1iB
+	 bsMKQjEf/bXnTEGoSthc2r1SWVNlVBkShpl/XEGGSSQjzk1B+WCzErkPkC6f8sHZRB
+	 arfADccvYmQnMm6lEkCuPQ1w8O+sZps5/q5Nd33MiK14MOfWZl9t2SJmaJCQyt775T
+	 p5bYrKW1Hxn3b8xdgRswJkuXhRIEHIjcuVMEeqpS2cmQvzpsXb4owP7mIGTe3cEBpI
+	 ju6mNZsEGZUSQ==
+Date: Wed, 18 Sep 2024 12:06:58 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] arm64: dts: imx8mp-iota2: Enable the USB Type-C port
-To: =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Shawn Guo <shawnguo@kernel.org>, Petr Benes <petr.benes@ysoft.com>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- Herburger <gregor.herburger@ew.tq-group.com>,
- Hiago De Franco <hiago.franco@toradex.com>,
- Hugo Villeneuve <hvilleneuve@dimonoff.com>,
- Joao Paulo Goncalves <joao.goncalves@toradex.com>,
- Michael Walle <mwalle@kernel.org>,
- Alexander Stein <alexander.stein@ew.tq-group.com>,
- Mathieu Othacehe <m.othacehe@gmail.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: =?utf-8?q?Michal_Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>, 
+ linux-arm-kernel@lists.infradead.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Petr Benes <petr.benes@ysoft.com>, 
+ Hiago De Franco <hiago.franco@toradex.com>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Mathieu Othacehe <m.othacehe@gmail.com>, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Shawn Guo <shawnguo@kernel.org>, linux-usb@vger.kernel.org, 
+ Joao Paulo Goncalves <joao.goncalves@toradex.com>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, Michael Walle <mwalle@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
+ Herburger <gregor.herburger@ew.tq-group.com>, 
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>, imx@lists.linux.dev
+In-Reply-To: <20240917151001.1289399-1-michal.vokac@ysoft.com>
 References: <20240917151001.1289399-1-michal.vokac@ysoft.com>
- <20240917151001.1289399-5-michal.vokac@ysoft.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240917151001.1289399-5-michal.vokac@ysoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <172667917680.1807230.4131958018210713774.robh@kernel.org>
+Subject: Re: [PATCH 0/4] Add support for new IMX8MP based board
 
-On 17/09/2024 17:10, Michal Vokáč wrote:
-> From: Petr Benes <petr.benes@ysoft.com>
+
+On Tue, 17 Sep 2024 17:09:57 +0200, Michal Vokáč wrote:
+> Hi,
 > 
-> Enable the USB Type-C port with the Diodes PI5USB30213A port controller.
-> The port supports dual role data but can operate only in source power role
-> and PD is not supported.
+> this series adds support for a new member in our IOTA platform.
+> The board is based on the i.MX8MP SoC. The first two patches
+> add support for most of the board functionality except USB Type-C
+> port and some other minor things.
 > 
-> Signed-off-by: Petr Benes <petr.benes@ysoft.com>
-> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
-> ---
->  .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 96 +++++++++++++++++++
->  1 file changed, 96 insertions(+)
+> [PATCH 3] adds new device tree binding for a Diodes Incorporated
+> PI5USB30213A Type-C Controller and [PATCH 4] enables that port on
+> the IOTA2 Lumpy board.
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> index 21d0899cabd5..b15d211e8667 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> @@ -38,6 +38,17 @@ memory@40000000 {
->  		      <0x1 0x00000000 0 0x80000000>;
->  	};
->  
-> +	reg_typec: regulator-typec {
-> +		compatible = "regulator-fixed";
-> +		enable-active-high;
-> +		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_usbc_vbus>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-name = "typec";
-> +	};
-> +
->  	reg_usb_host: regulator-usb-host {
->  		compatible = "regulator-fixed";
->  		enable-active-high;
-> @@ -218,6 +229,47 @@ &i2c2 {
->  	pinctrl-0 = <&pinctrl_i2c2>;
->  	status = "okay";
->  
-> +	tcpc@d {
-
-typec@d
-
-> +		compatible = "diodes,pi5usb30213a";
-> +		reg = <0xd>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_typec>;
-> +		interrupts-extended = <&gpio1 5 IRQ_TYPE_LEVEL_LOW>;
-> +		status = "okay";
-
-Drop
+> We also wrote a driver for that Type-C port controller. I would like
+> to get that driver upstream as well but I expect it will take much
+> more iterations and effort to get it into mainline-ready shape so
+> I intentionally excluded it from this series. AFAIK it should not
+> be a problem to accept a device tree binding for a HW that does not
+> have a driver in the kernel yet.
+> 
+> Michal Vokáč (2):
+>   dt-bindings: arm: Add i.MX8MP IOTA2 Lumpy board
+>   arm64: dts: imx: Add imx8mp-iota2-lumpy board
+> 
+> Petr Benes (2):
+>   dt-bindings: usb: Add Diodes Incorporated PI5USB30213A Type-C
+>     Controller
+>   arm64: dts: imx8mp-iota2: Enable the USB Type-C port
+> 
+>  .../devicetree/bindings/arm/fsl.yaml          |   1 +
+>  .../bindings/usb/diodes,pi5usb30213a.yaml     |  95 ++++
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 521 ++++++++++++++++++
+>  4 files changed, 618 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> 
+> --
+> 2.43.0
+> 
+> 
 
 
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Best regards,
-Krzysztof
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y freescale/imx8mp-iota2-lumpy.dtb' for 20240917151001.1289399-1-michal.vokac@ysoft.com:
+
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: pwm@30690000: 'pwm-gpios' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/pwm/imx-pwm.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: pcie-ep@33800000: reg: [[864026624, 4194304], [402653184, 134217728]] is too short
+	from schema $id: http://devicetree.org/schemas/pci/fsl,imx6q-pcie-ep.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: pcie-ep@33800000: reg-names: ['dbi', 'addr_space'] is too short
+	from schema $id: http://devicetree.org/schemas/pci/fsl,imx6q-pcie-ep.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: usb@38200000: 'pinctrl-0' is a dependency of 'pinctrl-names'
+	from schema $id: http://devicetree.org/schemas/pinctrl/pinctrl-consumer.yaml#
+
+
+
+
 
 
