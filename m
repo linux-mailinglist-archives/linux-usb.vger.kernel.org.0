@@ -1,40 +1,40 @@
-Return-Path: <linux-usb+bounces-15251-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15252-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8ACC97CE1C
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 21:19:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB60997CE1D
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 21:22:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FAB61F23F33
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 19:19:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E6211F23D41
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 19:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D92225A8;
-	Thu, 19 Sep 2024 19:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0AB22F1C;
+	Thu, 19 Sep 2024 19:22:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCD62B9C4
-	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 19:19:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9630E1F95A
+	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 19:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726773558; cv=none; b=IGG9fEq+DgYGt/srEKZpSMpFHdSDM9QR06QCcAq83Lt16OAyNvVA8ZXEf7NpAXP7Kwum0MtJ8EFS/7cBoCny6T3S11lBAV1Aa02RV2k5BnzG1rQ9N1vp37GNGobHnb92hlECcPsz/tGVmAgzMkhFPbpmUGX4Ca8x3xu2/WiOWdY=
+	t=1726773756; cv=none; b=KZuXT6M2QGA5z3zSrQyoLt3GNwhdz8GnNsYmRtu9fetZWPgY8MifpVYUP3EkQgkDO7+NgzBsEHQIhaZI7V4MNRWe1lLZXNBcvOpRQu706L6XeFeyFGXTv4u8o++YkojUDyW433lcZ2ZzVCXeN6YKuCtkPeiQBTXo+GZY+a8r9o4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726773558; c=relaxed/simple;
-	bh=/1nwadqNo7kXE6qNpA4ZpZVwhhd5AEqbi9FZanbBHQk=;
+	s=arc-20240116; t=1726773756; c=relaxed/simple;
+	bh=/LlRzrFr7kQMqcAov0BMbxIOzlR0spX7RtFTxxmYsNo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=j8pgpGFuauh56v5xxGv8dO0E8r5QbnfzeAH0v604PoZFnv0dwp3NGLOQIs5K+RKpue1Bvq2CY4mUV2cA43zym+rwKjfc5wW4mlyVW+YtwRJ8RXTIHWo1KIwBrZKUk3YOKZDwUa/ptGdS27NWumBXxDByr6WwE0y9QdCf7Pf6DGU=
+	 In-Reply-To:Content-Type; b=jSttrcP+kC9EH0KpO3MhXycg3WEe9DSaFLAY/6hzAIeNazY0k/CdfbmxhKiC4pB6BVibHcIOX8MSghytjusvhcKyPMZk10zNbQ714Cm8mp7Ka7yE4sagSrnMpFejbvFyJ6418WxYoVQgO+tQi2rThsX228LCGxYORPfhtv9aYJI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
 Received: from [192.168.1.111] (31.173.81.63) by msexch01.omp.ru (10.188.4.12)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Thu, 19 Sep
- 2024 22:18:50 +0300
-Message-ID: <2544903d-26c4-ca4f-b67b-5ef68e7c2e21@omp.ru>
-Date: Thu, 19 Sep 2024 22:18:49 +0300
+ 2024 22:22:18 +0300
+Message-ID: <77fbfb75-2b6c-d7e3-f53b-42bea0f544c4@omp.ru>
+Date: Thu, 19 Sep 2024 22:22:11 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -94,41 +94,9 @@ X-KSE-Attachment-Filter-Triggered-Rules: Clean
 X-KSE-Attachment-Filter-Triggered-Filters: Clean
 X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On 9/19/24 21:42, Jose Alberto Reguero wrote:
+The subject doesn't look well yet, consider s/th like:
 
-> I have a ASUS PN51 S mini pc that has two xhci devices. One from AMD, and other
-> from ASMEDIA. The one from ASMEDIA have problems when resume from suspend, and
-> keep broken until unplug the  power cord. I use this kernel parameter:
-> xhci-hcd.quirks=128 and then it works ok. I make a path to reset only the
-> ASMEDIA xhci. 
-> 
-> 
-> Signed-off-by: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
-> 
-> ---
->  drivers/usb/host/xhci-pci.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index dc1e345ab67e..8f075ab63f65 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-[...]
-> @@ -447,6 +448,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
->  		xhci->quirks |= XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
->  
-> +	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_3042_XHCI)
-
-   Hum, please either add 1 more tab here or start the continuation line
-under pdev jn the broken up line. The *if* expression should not blend with
-code in the branch.
-
-> +		xhci->quirks |= XHCI_RESET_ON_RESUME;
-> +
->  	if (pdev->vendor == PCI_VENDOR_ID_TI && pdev->device == 0x8241)
->  		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_7;
+usb: host: xhci-pci: fix problem with resuming from suspend
 
 MBR, Sergey
 
