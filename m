@@ -1,102 +1,149 @@
-Return-Path: <linux-usb+bounces-15252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15253-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB60997CE1D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 21:22:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2FDB97CE5D
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 22:01:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E6211F23D41
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 19:22:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44329285111
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 20:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0AB22F1C;
-	Thu, 19 Sep 2024 19:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F10013E02C;
+	Thu, 19 Sep 2024 20:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oQeU6//D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9630E1F95A
-	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 19:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5D013B5AE
+	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 20:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726773756; cv=none; b=KZuXT6M2QGA5z3zSrQyoLt3GNwhdz8GnNsYmRtu9fetZWPgY8MifpVYUP3EkQgkDO7+NgzBsEHQIhaZI7V4MNRWe1lLZXNBcvOpRQu706L6XeFeyFGXTv4u8o++YkojUDyW433lcZ2ZzVCXeN6YKuCtkPeiQBTXo+GZY+a8r9o4=
+	t=1726776057; cv=none; b=dHIdDdz7MH5mPwY4fuWJ7d/P9J3/Ybo0Ct3TdEG7EMzIYOKL+NBNevWjRHVYuWmv0VylcuiWqmv/vD4OgUzsV3qMdeKOJKNIr9u4OfAH8JDwaD8Xta9vSn3F0sLl1dhmUn7FFDnVRygov2dgl9q4cobBcKVb3On27EaKuW4+G08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726773756; c=relaxed/simple;
-	bh=/LlRzrFr7kQMqcAov0BMbxIOzlR0spX7RtFTxxmYsNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jSttrcP+kC9EH0KpO3MhXycg3WEe9DSaFLAY/6hzAIeNazY0k/CdfbmxhKiC4pB6BVibHcIOX8MSghytjusvhcKyPMZk10zNbQ714Cm8mp7Ka7yE4sagSrnMpFejbvFyJ6418WxYoVQgO+tQi2rThsX228LCGxYORPfhtv9aYJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.1.111] (31.173.81.63) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Thu, 19 Sep
- 2024 22:22:18 +0300
-Message-ID: <77fbfb75-2b6c-d7e3-f53b-42bea0f544c4@omp.ru>
-Date: Thu, 19 Sep 2024 22:22:11 +0300
+	s=arc-20240116; t=1726776057; c=relaxed/simple;
+	bh=RFVxadnFs31MpYCZW3HGd22hr61t6wT5W1HJygEmxv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VKeBbdzUBrt8J309v6G/Xa+kQG+JYL4+XlzTFOUwGewCUwevFqdgw2mod++DbBjVyIuYPNoFWLeqOM4xjo5/a5/BZz3+e7tJ2ZpOGcl1ARyu9wPARJpwM43LYLtvuVi/9D3SlPIZc6l1H33cOoASLKBagw7Y4mB/8Pt4ZNeGVa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oQeU6//D; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5365b6bd901so1458105e87.2
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 13:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1726776054; x=1727380854; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EaVBunmnbZVdq/qwLaTcD5ybL6Hmaz/2JnQ80TsIRDw=;
+        b=oQeU6//DLSPh4hwxdv8n3xIE4M5xihHzc3x0YVmq7X2Lc6HFvGA3epn3eauAbD3ejD
+         kD3uit+cLgUqd0SyjET73XbbJ5entvYnjnq9JH92CA6sPIuRgsPRsNj4xjCd1zcn3J3x
+         8Z7T9IvxwdMpuyhQdWG34Gsq5Am1vS9PHXg84vczfYB5gAjPbkgljnPA259V6e2TyZ53
+         hyKLqRbbdao0HxvPRzUyMUr+QTTeDts953WqfNsZNP7RbBKl39ofI66KiXcnsUf2DHqI
+         hU1hJvOhGUoX0jmxvsUF6raUGgVQyI1Ex0078kEujTwLQLrLZAn311ANYmuoayviosQc
+         fI3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726776054; x=1727380854;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EaVBunmnbZVdq/qwLaTcD5ybL6Hmaz/2JnQ80TsIRDw=;
+        b=QnPe8qI0bpfQg9lG7L+wJtzO27Vwu1c1CMfmv1bt3qNI9J4kPOZBZ1B05OJRgA0v6Y
+         uVxFj3/pWTy9VrG0Ua3HHdyx7o3Eqt1uXwgXqD0zcxKwwhg4GhbA9R5C2v6+mGmdOR0i
+         O+s66q1TiPzwwKS0SGznx3Fsj9h7h9UgkBZyKEkGk3tSkJK4gAAgIonAwWeXLswTeqPR
+         Aqh9XmAWEpFf1BLX5tqJRiuaECB+MI8MV1J5LmbmZCsPkoG7P+/XN8Qz3KyV00umKgSp
+         LHVTZyU8EngOEqhhTsSc1cv8ULJ9+Nj8B6teD2Od1YzS0U7Q9fgglbPdWQHwKfIPJ00y
+         rWwg==
+X-Forwarded-Encrypted: i=1; AJvYcCXoFlV1EakVHqht57XFt+nnxznmwKxtufLpmpem7WYDzdhjWfcc2Hj/tEbUAWW5dLeDottc7NhvxYI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI4oagaJXCHZwegn1obzKlaKnaH70jFnBeKQShqvjkZp/r2FE4
+	BkCSDbozvZwxINOZw5YlJTe6Wt7ELUNdRNyl7XlxVXnt5fd837NnnQwRIumz784=
+X-Google-Smtp-Source: AGHT+IH/OgvV2NHf628qjdXYPI581cfKDVffxsYLBlLGj2tiaXFgxuBsk9rKqPPRpqHhRmS/LNqQkw==
+X-Received: by 2002:a05:6512:39d0:b0:530:e1ee:d95 with SMTP id 2adb3069b0e04-536acf6a767mr90866e87.1.1726776054184;
+        Thu, 19 Sep 2024 13:00:54 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-536870b8c26sm1931392e87.267.2024.09.19.13.00.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2024 13:00:52 -0700 (PDT)
+Date: Thu, 19 Sep 2024 23:00:50 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
+	Pavan Holla <pholla@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
+Message-ID: <rpdbzy5ldlsq2ahvuyrzx6tprgtgxpftd4xbos7cd3wwnhapvu@2hstbs5qg65h>
+References: <20240910101527.603452-1-ukaszb@chromium.org>
+ <20240910101527.603452-7-ukaszb@chromium.org>
+ <ZuGkMiE3sHOpo/Ci@kuha.fi.intel.com>
+ <CALwA+Nb6zWe-WOgcu8-ni5OCx9XxerVhi76fZze2KP_kmFVonA@mail.gmail.com>
+ <ZuvxAQmMsnIYZMTP@kuha.fi.intel.com>
+ <CALwA+NYmKm0sVT=NPfJU7Ena__P5ec451nhViXFhK9BYu87jxg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2] usb: Fix problem with xhci resume from suspend
-Content-Language: en-US
-To: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>, Greg KH
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>, Mathias Nyman
-	<mathias.nyman@intel.com>
-References: <20240919184202.22249-1-jose.alberto.reguero@gmail.com>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20240919184202.22249-1-jose.alberto.reguero@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 09/19/2024 18:57:59
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 187870 [Sep 19 2024]
-X-KSE-AntiSpam-Info: Version: 6.1.1.5
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 34 0.3.34
- 8a1fac695d5606478feba790382a59668a4f0039
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.63 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.63 in (user) dbl.spamhaus.org}
-X-KSE-AntiSpam-Info:
-	d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.63
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 09/19/2024 19:00:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 9/19/2024 3:09:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALwA+NYmKm0sVT=NPfJU7Ena__P5ec451nhViXFhK9BYu87jxg@mail.gmail.com>
 
-The subject doesn't look well yet, consider s/th like:
+On Thu, Sep 19, 2024 at 08:03:37PM GMT, Łukasz Bartosik wrote:
+> On Thu, Sep 19, 2024 at 11:38 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > On Sun, Sep 15, 2024 at 12:08:45AM +0200, Łukasz Bartosik wrote:
+> > > On Wed, Sep 11, 2024 at 4:09 PM Heikki Krogerus
+> > > <heikki.krogerus@linux.intel.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Tue, Sep 10, 2024 at 10:15:25AM +0000, Łukasz Bartosik wrote:
+> > > > > Add netlink to ChromeOS UCSI driver to allow forwarding
+> > > > > of UCSI messages to userspace for debugging and testing
+> > > > > purposes.
+> > > >
+> > > > Why does this need to be cros_ec specific?
+> > > >
+> > >
+> > > You're right. Netlink does not have to be cros_ec_ucsi specific.
+> > > Would you like to have netlink in typec_ucsi ?
+> >
+> > Does it need to be netlink? We would then have tracepoints, the
+> > custom debugfs interface, and this netlink interface.
+> >
+> > I think this information could be exposed via trancepoints (unless I'm
+> > missing something).
+> >
+> 
+> Hi Heikki,
+> 
+> I agree that there is a common area which is covered by both trace
+> events and netlink.
+> However netlink also has advantages which IMHO trace events lack. One
+> of our cases is that
+> from userspace it is easy to forward the UCSI messages to a Wireshark
+> with a plugin
+> which can decode it. Another case is to use UCSI forwarded messages
+> through netlink
+> for testing and validation of chromebooks.
+> 
+> How about leaving netlink specific to cros_ec_ucsi driver ? Would you
+> consent to that ?
 
-usb: host: xhci-pci: fix problem with resuming from suspend
+I think having it specific to cros_ec_ucsi is the worst option out of
+three. It should either be generified to work with all UCSI drivers or
+go away and be replaced by tracepoints (against, generic to all UCSI
+drivers) or some other mechanism (e.g. TCPM has rolling log of
+messages).
 
-MBR, Sergey
+-- 
+With best wishes
+Dmitry
 
