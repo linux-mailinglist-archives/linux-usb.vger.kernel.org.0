@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-15248-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15249-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CED197CD6F
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 20:03:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3440E97CD77
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 20:11:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 315B91C2220B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 18:03:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 570E81C224D0
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 18:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 050B31B27D;
-	Thu, 19 Sep 2024 18:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0981C6B5;
+	Thu, 19 Sep 2024 18:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PaFPmDFX"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PRMw0wRT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31BB79D2
-	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 18:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC1A1802E
+	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 18:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726769032; cv=none; b=N6TrGeVU6h+537N7hlFs8oadotCb7QVQqAq8KxJjJ+PGHX/SbiTrucomjF86NuosFJTQLaYChsocf1DNx+FAiQZhqMuXpHEPipPh+sgoebj8p0OViaKT05KvMBHFEnxqIGVM4Zh59xmaHiTu+EYhKkHWqrB7D4GCy5kF8wQFP3k=
+	t=1726769460; cv=none; b=i/cTNO5Oc/CIzdoxIt6XhzBal/9IzCvohTQ5wuHx5mPUMTgGzkvFMvfJCh4EYuaAGeQfx+LTDgUWdA1htnRIwFtDWYogqJsUj6HzJ16e1T2myJGBVkG2H3EmSI7J66Hd4AKcP5kPYjukLuCaxRA+BqRNuq52N7QIElbpsrczVec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726769032; c=relaxed/simple;
-	bh=Q+WUh7HOz489PHwGkH+G04XUdi/ognfyKOKhgp2Paxo=;
+	s=arc-20240116; t=1726769460; c=relaxed/simple;
+	bh=l2MLzMX5iXvCMR0lUpuNHiki4c0+puCef2Bk6SNuv7c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FN2WwZnrSMmXX+qcQCXRwnV0G7Sm5W7VFiqhyV2033JnfDFd48QDi7NOcaHmc4fjdKpk+c9PLSpIw6my8aA+oeFGL84HHQxCAW/67JPlm8Ej6witSway5qZZThs075g+P9g4osqVdGtFjee0fPueyop85NAGkMg9ziTbsBrcqjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PaFPmDFX; arc=none smtp.client-ip=209.85.167.50
+	 To:Cc:Content-Type; b=OLHWV/vWw5L/RR2VIQKn5v0VT7qAyPJCaZ94Arbb+Cs5W1PatBIZq1TZtTu5FYDXVxyxhx3Zmyb88enhmdZLf8pDBvLUKns8zeUVSuFYs7tFBMt4AWjjoZDlgRFiRcI6nkhFY5+xGp3rTAepAqmlhn+psy7L34zKJe+MId1EYig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PRMw0wRT; arc=none smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5365a9574b6so1928681e87.1
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 11:03:50 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5356bb55224so1671347e87.0
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 11:10:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726769029; x=1727373829; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1726769457; x=1727374257; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q+WUh7HOz489PHwGkH+G04XUdi/ognfyKOKhgp2Paxo=;
-        b=PaFPmDFXSMmblw9xoLAb4Nw4LKHeaOZ3Lb4fu06xFUkxUcyV1oonw99ao3kQg/zR1f
-         xUf/v/YcvYcWkbDRVvVBzKLhZ6QkmLXrBaHHG1J/2UJ2zjaVfAF3SX79t1gDm2doBFs1
-         k6wquPrcD7Xx9Wra57a2u5FLHL7TmJto2D23Y=
+        bh=l2MLzMX5iXvCMR0lUpuNHiki4c0+puCef2Bk6SNuv7c=;
+        b=PRMw0wRTEGBq+i4EUjrZextIip8DeNVK+o5TtICIVGj4XuGJaW256jM01DVmpGgrKS
+         KsPZJ7uCrwg5LIGMqKNjH2MjAHBhAFAED5RVE9SBS9X/JVJyZab6dKozXnif3GvSxx8a
+         I6XDnApjNkMtq2OtGm8NR6aateSBzeiHV6GvE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726769029; x=1727373829;
+        d=1e100.net; s=20230601; t=1726769457; x=1727374257;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q+WUh7HOz489PHwGkH+G04XUdi/ognfyKOKhgp2Paxo=;
-        b=JCgEQSdxMiJvHSMif1N35/V8D05QHrzM+vOs6tBB92mm7W34TQzfM40nWHA/TGXc/U
-         /8GoyKDSJnEUbeAnQDxhqecAqA+wYttE4Hjju4lnwZVnuJUh0frk/QH3sOi/BDzbPAsf
-         JwxjdEcC/BRqqQMcJUL65yx7NiuFL9iBtkTGDQ3ZDl54RzLecZnhM4j6GfVezVSbSr3e
-         h1tRdr60uCh3AjzbQqX3lQdGseC7dQ7m82eV0tyrthhGZHi5ki6Oy4EObPk4H/fTNyS3
-         FQYJO8CJbPSSM8YIxzewX5WsuN8RBsgzJOCY6LHMNJnnAuO8GF6MEDJRXysk5P6XeyWB
-         kMNg==
-X-Forwarded-Encrypted: i=1; AJvYcCWKzFO3LcFn1lOujP1oucYgtWUH7adhuU+4r4ktiylKV5bzv6FBZ0ecTqNZDZToSwt4zYooTC9Z9k0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywxz3i5lgsRjtXnjNYqS6ZdT80ZAVq5CClD1j0eHAZeYRYZa/WT
-	bW8AwRRUyjKpGU/ozbRmggmqozq7pLf7r2kECvj0CF+0KeqLl5/rb9WlU1GXpBpfsJ02/RKTS67
-	RUKQvCIkqXPJwKByfK04W+vFDPpPvKfSQi7hV+vnit10wtr/P
-X-Google-Smtp-Source: AGHT+IEynQGkNP4WbeFQP6jpDWrH9yOKb6T8S/4juXfQlmxAEKATqQezRqfjbwE27+/f/DlyTlM6/xaGwqhTrbpg+a8=
-X-Received: by 2002:a05:6512:3ca6:b0:530:ab68:25c5 with SMTP id
- 2adb3069b0e04-536ac2d6aa1mr173978e87.2.1726769028765; Thu, 19 Sep 2024
- 11:03:48 -0700 (PDT)
+        bh=l2MLzMX5iXvCMR0lUpuNHiki4c0+puCef2Bk6SNuv7c=;
+        b=lfJTYvpwll0wRpCXVIq9lf7RGjc8zEUl8j9sRxYyviQGauuSf/KiVt9D376GSivftI
+         sfYQQq2Lda/I38lhroPDcz1F3cJ8YTCFLzFzelPYwV8iV8jkz7tOEBiQGbF3TFumSUJi
+         6NXtcA4YnF7M0CWJt5c2irAr8oQExa+OIsyEBtbC8EUlhG3Pf/zdDCVMP70CoRtD3d1K
+         PWpipEntU0aUEPBTUpmCdXZYxnJV1bsLjWNDb2AZ203vpMgW4QUer7XiJkx8EIfAWICI
+         cPnuXUNeWYdwKsapuOhnUfFx4mEfj5Lba/f0RwVWHB5SuXtpdTDUdaKEWWB1zEgIo3SH
+         muCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7fSOrsTJexvsLlwHe4fq7LfGDocSBTsHzMywwISBkFmtL/JfAS5GQcuXSpdQiSOu8BVweNadlsSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC0ZGzheAl7QOzUjPDqZ9Mv6moQg3SN9Eba8AA+YMqbCvyF4Il
+	JgC4JfOEh8ejh+jxx12w2oaRC3E8XbH4GlN57WletU5PB7bHRKKUpnoZyAMhKzFY860HB65Gv4Q
+	XVAXxVabVxTwwIprJK5Tbk3mNHppqQX6IA3g=
+X-Google-Smtp-Source: AGHT+IEFIdoPQ2a5NgJf0CRGmYSPP7BrB3wIZtvRgaI4UwTPy7YaDopHcBZl/oNbmDkXg9DZFPtF/KioLV/DrJ2l2Ts=
+X-Received: by 2002:a05:6512:308c:b0:536:53fc:e8fc with SMTP id
+ 2adb3069b0e04-536ac2e59damr120162e87.16.1726769456693; Thu, 19 Sep 2024
+ 11:10:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240910101527.603452-1-ukaszb@chromium.org> <20240910101527.603452-7-ukaszb@chromium.org>
- <ZuGkMiE3sHOpo/Ci@kuha.fi.intel.com> <CALwA+Nb6zWe-WOgcu8-ni5OCx9XxerVhi76fZze2KP_kmFVonA@mail.gmail.com>
- <ZuvxAQmMsnIYZMTP@kuha.fi.intel.com>
-In-Reply-To: <ZuvxAQmMsnIYZMTP@kuha.fi.intel.com>
+References: <20240910101527.603452-1-ukaszb@chromium.org> <20240910101527.603452-6-ukaszb@chromium.org>
+ <ZuGcw9y0hIiuIXvK@kuha.fi.intel.com> <CALwA+NbY1qbV_01NcOSN=C=9hiE3UV3aYvrKzaGKm95Q2EQ8EA@mail.gmail.com>
+ <ZuweqBOt_53n3HPA@kuha.fi.intel.com>
+In-Reply-To: <ZuweqBOt_53n3HPA@kuha.fi.intel.com>
 From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Thu, 19 Sep 2024 20:03:37 +0200
-Message-ID: <CALwA+NYmKm0sVT=NPfJU7Ena__P5ec451nhViXFhK9BYu87jxg@mail.gmail.com>
-Subject: Re: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
+Date: Thu, 19 Sep 2024 20:10:45 +0200
+Message-ID: <CALwA+NYbm05y0BF1nayC+1gpoEKcvCUb05oHC50XQhdVFL5pzg@mail.gmail.com>
+Subject: Re: [PATCH v6 5/8] usb: typec: cros_ec_ucsi: Add trace events
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, 
 	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
@@ -85,53 +85,37 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 19, 2024 at 11:38=E2=80=AFAM Heikki Krogerus
+On Thu, Sep 19, 2024 at 2:53=E2=80=AFPM Heikki Krogerus
 <heikki.krogerus@linux.intel.com> wrote:
 >
-> On Sun, Sep 15, 2024 at 12:08:45AM +0200, =C5=81ukasz Bartosik wrote:
-> > On Wed, Sep 11, 2024 at 4:09=E2=80=AFPM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Tue, Sep 10, 2024 at 10:15:25AM +0000, =C5=81ukasz Bartosik wrote:
-> > > > Add netlink to ChromeOS UCSI driver to allow forwarding
-> > > > of UCSI messages to userspace for debugging and testing
-> > > > purposes.
-> > >
-> > > Why does this need to be cros_ec specific?
+> Hi =C5=81ukasz,
+>
+> > > This does not look cros_ec specific. Could you check if this could be
+> > > made part of the ucsi core tracepoints?
 > > >
 > >
-> > You're right. Netlink does not have to be cros_ec_ucsi specific.
-> > Would you like to have netlink in typec_ucsi ?
+> > Good point. I will look into it.
+> >
+> > > I can also look into this more carefully, and throw ideas if you like=
+.
+> > > Let me know.
+> > >
+> >
+> > I would definitely like to hear your ideas on the topic :).
 >
-> Does it need to be netlink? We would then have tracepoints, the
-> custom debugfs interface, and this netlink interface.
->
-> I think this information could be exposed via trancepoints (unless I'm
-> missing something).
+> This information is more or less the same that you would like to get
+> from that netlink interface, right? If that's the case, then is there
+> some reason why you want to get the same information from two
+> different interfaces? Sorry if I'm missing something obvious.
 >
 
-Hi Heikki,
-
-I agree that there is a common area which is covered by both trace
-events and netlink.
-However netlink also has advantages which IMHO trace events lack. One
-of our cases is that
-from userspace it is easy to forward the UCSI messages to a Wireshark
-with a plugin
-which can decode it. Another case is to use UCSI forwarded messages
-through netlink
-for testing and validation of chromebooks.
-
-How about leaving netlink specific to cros_ec_ucsi driver ? Would you
-consent to that ?
+I find both trace events and netlink useful. I elaborated on the cases
+for which netlink seems more appropriate in my other reply.
 
 Thanks,
 Lukasz
 
-> Br,
-
+> thanks,
 >
 > --
 > heikki
