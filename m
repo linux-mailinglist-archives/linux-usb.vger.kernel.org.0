@@ -1,122 +1,123 @@
-Return-Path: <linux-usb+bounces-15249-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15250-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3440E97CD77
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 20:11:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8BBF97CDC6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 20:43:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 570E81C224D0
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 18:11:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90B3B1F235D4
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2024 18:43:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0981C6B5;
-	Thu, 19 Sep 2024 18:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45AB6208B8;
+	Thu, 19 Sep 2024 18:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PRMw0wRT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ee8Xieyi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC1A1802E
-	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 18:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFDE200AE
+	for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 18:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726769460; cv=none; b=i/cTNO5Oc/CIzdoxIt6XhzBal/9IzCvohTQ5wuHx5mPUMTgGzkvFMvfJCh4EYuaAGeQfx+LTDgUWdA1htnRIwFtDWYogqJsUj6HzJ16e1T2myJGBVkG2H3EmSI7J66Hd4AKcP5kPYjukLuCaxRA+BqRNuq52N7QIElbpsrczVec=
+	t=1726771383; cv=none; b=V8GhwdORkqc03T/jzrXgK5X0A/GZiSnSXMbJHihxN21nezjuzfQttOX9/pkkj71wy4dFNqTYBx1jB2GU/mxhkIYY7APDKTs7VwGFozsee0+spsajPIvOLMsNq5j0uxv8HZUY52utElOygToWpewyqNsM7PCd4UXNLPnFiLkHljI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726769460; c=relaxed/simple;
-	bh=l2MLzMX5iXvCMR0lUpuNHiki4c0+puCef2Bk6SNuv7c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OLHWV/vWw5L/RR2VIQKn5v0VT7qAyPJCaZ94Arbb+Cs5W1PatBIZq1TZtTu5FYDXVxyxhx3Zmyb88enhmdZLf8pDBvLUKns8zeUVSuFYs7tFBMt4AWjjoZDlgRFiRcI6nkhFY5+xGp3rTAepAqmlhn+psy7L34zKJe+MId1EYig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PRMw0wRT; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5356bb55224so1671347e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 11:10:58 -0700 (PDT)
+	s=arc-20240116; t=1726771383; c=relaxed/simple;
+	bh=84+vDW6K06v0qdV3DcknRdUZ28uHPIL5Auy/zeo+DoA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=kJNbVfCm9pYjZb2b6lRtkiBct7fgmqsUYP3AK4SFHyvNDanv4OInbr7rvDU6ugmrLtf8JUjjqlIaPFHEvwj53C4aK9pXyEY1Vz3Sds4dVGrtK+GV+XE6GHsKWx/MB09kiYYVB6pLPr8pCGoQIA0I8zheLLjJN1ANy+KG5ja7X2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ee8Xieyi; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42e748f78d6so9691185e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2024 11:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726769457; x=1727374257; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l2MLzMX5iXvCMR0lUpuNHiki4c0+puCef2Bk6SNuv7c=;
-        b=PRMw0wRTEGBq+i4EUjrZextIip8DeNVK+o5TtICIVGj4XuGJaW256jM01DVmpGgrKS
-         KsPZJ7uCrwg5LIGMqKNjH2MjAHBhAFAED5RVE9SBS9X/JVJyZab6dKozXnif3GvSxx8a
-         I6XDnApjNkMtq2OtGm8NR6aateSBzeiHV6GvE=
+        d=gmail.com; s=20230601; t=1726771380; x=1727376180; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=skn2+avL/ut77GG9XoXw8xue0Jsd1GSMPnTPwSdQA+s=;
+        b=Ee8XieyirGHa+pP8jCUtkZEvY6nVyPRxyw6gWcj6i9Ilu59LEma6UIoYuIwlQl7yJT
+         XBYhFoIT89FIqLV4Bl+I2O2cydEQ0OxDjkwBfSJW3v0r+RUFENaxwZtnDSs+QH9YMdNL
+         ml82qb6URiv4MNOwwTETeAAGxwqx8s/7VOUzi6e/OZM5Iplh7T3+QqsFmpmWRZbs8nBB
+         d6K5Ixxm4pvAbKC0QojY6gOvlNWKvQYtr32eRvNcvNPcKsw37ax/PsoGWKRlQmzdCY2e
+         RMchI6CQEQFP94lca9t2JS4FvD8ti/8Yf7zT3fvLrzqFB9IiLttRN+LQFVkDczKgtSAb
+         e9pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726769457; x=1727374257;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l2MLzMX5iXvCMR0lUpuNHiki4c0+puCef2Bk6SNuv7c=;
-        b=lfJTYvpwll0wRpCXVIq9lf7RGjc8zEUl8j9sRxYyviQGauuSf/KiVt9D376GSivftI
-         sfYQQq2Lda/I38lhroPDcz1F3cJ8YTCFLzFzelPYwV8iV8jkz7tOEBiQGbF3TFumSUJi
-         6NXtcA4YnF7M0CWJt5c2irAr8oQExa+OIsyEBtbC8EUlhG3Pf/zdDCVMP70CoRtD3d1K
-         PWpipEntU0aUEPBTUpmCdXZYxnJV1bsLjWNDb2AZ203vpMgW4QUer7XiJkx8EIfAWICI
-         cPnuXUNeWYdwKsapuOhnUfFx4mEfj5Lba/f0RwVWHB5SuXtpdTDUdaKEWWB1zEgIo3SH
-         muCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7fSOrsTJexvsLlwHe4fq7LfGDocSBTsHzMywwISBkFmtL/JfAS5GQcuXSpdQiSOu8BVweNadlsSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC0ZGzheAl7QOzUjPDqZ9Mv6moQg3SN9Eba8AA+YMqbCvyF4Il
-	JgC4JfOEh8ejh+jxx12w2oaRC3E8XbH4GlN57WletU5PB7bHRKKUpnoZyAMhKzFY860HB65Gv4Q
-	XVAXxVabVxTwwIprJK5Tbk3mNHppqQX6IA3g=
-X-Google-Smtp-Source: AGHT+IEFIdoPQ2a5NgJf0CRGmYSPP7BrB3wIZtvRgaI4UwTPy7YaDopHcBZl/oNbmDkXg9DZFPtF/KioLV/DrJ2l2Ts=
-X-Received: by 2002:a05:6512:308c:b0:536:53fc:e8fc with SMTP id
- 2adb3069b0e04-536ac2e59damr120162e87.16.1726769456693; Thu, 19 Sep 2024
- 11:10:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726771380; x=1727376180;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=skn2+avL/ut77GG9XoXw8xue0Jsd1GSMPnTPwSdQA+s=;
+        b=TLUjTVSDYTQOeToc6URViqHYHZWwzkwNmjp20KjTdv1YdROa6uzA0cJ3gvZWmv/GpW
+         na1cD8Cbr80joASoEBtk7r7IYSgozel+OO8/N7agwC8CnWhUzHQlzOw4OhOIHYKeVpwc
+         tjc9lQIfC7qO8frSavdqV+IbqXWziatMeRuFT20GpFerYFkus/IZzzNSYX2TupYdzVwi
+         UAJgkdRCPOok4kVz2ifT0cU26TQ+mol2VHTqzTYuWdJ2bvIGVTbbEal+5EIyY75mrGhK
+         BdY3xyDDaqU87oGMxbBVq3TeC6rdGQ6wwQqzNV97Kw7Z8x3090xfOnRGq9GqrOoCbqgQ
+         /6Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCWm5OrrdLYRudNC3sLGqj4SPljfn7qt5zrCu38BNZNJnjtlmxcF/jk6oXLtH0gPSpTlH6uFoKCRhXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCkI1msbwWEVGDEjKfJO9F50i3beaVr4Vcu2UwNRqScZuGRzD7
+	O5xn9d75tITNuJTnZTQLYJYPjdMsQ0uTME/oRQqbm9Du5MtbPfxD
+X-Google-Smtp-Source: AGHT+IFdttYZZo4j8lcnW7cmzQkJg/XEu8Xi6kRKJvRpMLN0BJ6GK/f8bgDEZ0kx6KrKb/ws3akHYA==
+X-Received: by 2002:a05:600c:5254:b0:42c:a72a:e8f4 with SMTP id 5b1f17b1804b1-42e7abfd2e3mr2549565e9.14.1726771380348;
+        Thu, 19 Sep 2024 11:43:00 -0700 (PDT)
+Received: from localhost.localdomain (71.red-81-33-253.dynamicip.rima-tde.net. [81.33.253.71])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42e7540e2c1sm29687365e9.2.2024.09.19.11.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2024 11:43:00 -0700 (PDT)
+From: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
+To: Greg KH <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	jose.alberto.reguero@gmail.com
+Subject: [PATCH v2] usb: Fix problem with xhci resume from suspend
+Date: Thu, 19 Sep 2024 20:42:02 +0200
+Message-ID: <20240919184202.22249-1-jose.alberto.reguero@gmail.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240910101527.603452-1-ukaszb@chromium.org> <20240910101527.603452-6-ukaszb@chromium.org>
- <ZuGcw9y0hIiuIXvK@kuha.fi.intel.com> <CALwA+NbY1qbV_01NcOSN=C=9hiE3UV3aYvrKzaGKm95Q2EQ8EA@mail.gmail.com>
- <ZuweqBOt_53n3HPA@kuha.fi.intel.com>
-In-Reply-To: <ZuweqBOt_53n3HPA@kuha.fi.intel.com>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Thu, 19 Sep 2024 20:10:45 +0200
-Message-ID: <CALwA+NYbm05y0BF1nayC+1gpoEKcvCUb05oHC50XQhdVFL5pzg@mail.gmail.com>
-Subject: Re: [PATCH v6 5/8] usb: typec: cros_ec_ucsi: Add trace events
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Pavan Holla <pholla@chromium.org>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 19, 2024 at 2:53=E2=80=AFPM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi =C5=81ukasz,
->
-> > > This does not look cros_ec specific. Could you check if this could be
-> > > made part of the ucsi core tracepoints?
-> > >
-> >
-> > Good point. I will look into it.
-> >
-> > > I can also look into this more carefully, and throw ideas if you like=
-.
-> > > Let me know.
-> > >
-> >
-> > I would definitely like to hear your ideas on the topic :).
->
-> This information is more or less the same that you would like to get
-> from that netlink interface, right? If that's the case, then is there
-> some reason why you want to get the same information from two
-> different interfaces? Sorry if I'm missing something obvious.
->
+I have a ASUS PN51 S mini pc that has two xhci devices. One from AMD, and other
+from ASMEDIA. The one from ASMEDIA have problems when resume from suspend, and
+keep broken until unplug the  power cord. I use this kernel parameter:
+xhci-hcd.quirks=128 and then it works ok. I make a path to reset only the
+ASMEDIA xhci. 
 
-I find both trace events and netlink useful. I elaborated on the cases
-for which netlink seems more appropriate in my other reply.
 
-Thanks,
-Lukasz
+Signed-off-by: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
 
-> thanks,
->
-> --
-> heikki
+---
+ drivers/usb/host/xhci-pci.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index dc1e345ab67e..8f075ab63f65 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -76,6 +76,7 @@
+ #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
+ #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
+ #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
++#define PCI_DEVICE_ID_ASMEDIA_3042_XHCI			0x3042
+ #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
+ 
+ static const char hcd_name[] = "xhci_hcd";
+@@ -447,6 +448,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
+ 		xhci->quirks |= XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
+ 
++	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
++		pdev->device == PCI_DEVICE_ID_ASMEDIA_3042_XHCI)
++		xhci->quirks |= XHCI_RESET_ON_RESUME;
++
+ 	if (pdev->vendor == PCI_VENDOR_ID_TI && pdev->device == 0x8241)
+ 		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_7;
+ 
+-- 
+2.42.0
+
 
