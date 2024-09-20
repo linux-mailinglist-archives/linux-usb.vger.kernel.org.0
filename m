@@ -1,243 +1,299 @@
-Return-Path: <linux-usb+bounces-15264-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15265-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 853D797D23D
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 10:03:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C53A97D364
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 11:09:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7D311C23A54
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 08:03:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64536B20FCC
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 09:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB15F13AD26;
-	Fri, 20 Sep 2024 08:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1F813A244;
+	Fri, 20 Sep 2024 09:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b="Lv2MdKwS"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="XKcVLxRH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
+Received: from HK3PR03CU002.outbound.protection.outlook.com (mail-eastasiaazon11011033.outbound.protection.outlook.com [52.101.129.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5EA84A35;
-	Fri, 20 Sep 2024 08:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.3.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726819340; cv=none; b=bw5DO+hyXhmQVGheDNJiwzSiRvIlqfv6teJL2S2OcER9obvRKrAqCKAgu/bas1AST8KschC/mzwCy44+rMU17kwIvjI9jmwNhDsZfEuHzPByQjIrAlMbT+ilnP8Sphuge2GkRvZ9k1n26N0LFZ7pXgS95mPD83/7VIdMEh9Izps=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726819340; c=relaxed/simple;
-	bh=dchjXH3GOuDT5ORsLr79w+px6Xeqc5pHXr+Is0GNQao=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Qle7QbEfTnpodcFbFgVmvSr965AXf+duthxZNJlbwSrtbni0qGu7Njo2sJBmUxlcYtaziZ9g7qLp5zPMPJioUDtxYxDReHOWb77iF+tmhWtrfOd14NMNyoVaiuzoLJJJ+fZHnq5lyULWwsvvNwz462kG9+CnpmSexfjtyvoC194=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com; spf=pass smtp.mailfrom=ysoft.com; dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b=Lv2MdKwS; arc=none smtp.client-ip=81.19.3.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ysoft.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-	s=20160406-ysoft-com; t=1726819335;
-	bh=ez55a4moooNpCqRfQjUFEarkopMlUtJ2vKpPd8FLuks=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Lv2MdKwSRpn3DN70lehqbyGsHq9GTqk4KUvPy7Fdzv1rGi7820F6o8C5S1N1EaIPx
-	 umXQ0f/RODMpk6CWI+hsjI9sPCBfrful8RTi5PbnCmJyJiSdLvUM5fKiUxJEXaJlOc
-	 Tdt8QjsasWCtX0B9EHPkvU6SocOIETYKn7nkHu5c=
-Received: from vokac-nb.ysoft.local (unknown [10.1.8.111])
-	by uho.ysoft.cz (Postfix) with ESMTP id 4E18EA0A6E;
-	Fri, 20 Sep 2024 10:02:15 +0200 (CEST)
-From: =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Petr Benes <petr.benes@ysoft.com>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Herburger <gregor.herburger@ew.tq-group.com>,
-	Hiago De Franco <hiago.franco@toradex.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Mathieu Othacehe <m.othacehe@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EA74D8D0;
+	Fri, 20 Sep 2024 09:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.129.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726823383; cv=fail; b=OAAjYz87hUvAOC5LRsw60Z/gSyBWeu074mkFixyBOjDTCJPQ/i6n1gPatuh1YdVY9mTNnbf93CM6knCJMmByTEs95qNTJNwg3iIn1cOEfnQKXNWaoNq7x41DBs1PIvqL3+lIkEBsMjXSsQP+Xw9V44hfrGAVZzo8qeM4Cy4stII=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726823383; c=relaxed/simple;
+	bh=4PdqwTuTbPy7A8KVqJs2cM8fbXBtZwC7YpSiIHVII1s=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=iHvb3W7TzlWAWytiwjLYG6QETx3J6a6DO0nq9jzw/GRM0LwcDAuOWntspuDzDkePN3PCaRxfgXsT5Tp8Gs7e9PGh+ikLw4wqtvq+f2k5TJKwbc2oKBo0SD7QpFEH5TtbhU7eUlK813aVgq3xZWF8A1xGsU6g0sw+tL+n5iXqxMc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=XKcVLxRH; arc=fail smtp.client-ip=52.101.129.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Jkv9uMH9kT1yjroYkULb243IKvjcHu26skXWkeD3POIpdoUH/JqBzef6tsFNCUuOCl9T+yOschszTkfriihZ6rBX4QFm+GBdc9nZxLwljAe6QzzmlzDz0/YAIBybfyArHbQmVpgxcBiCHTTNKEHbhEIusF/JQ+PbUFYiEofbEmnc8V+vrVncY9YHVLVLJibV1cBAKLYhkLsC86D2RhLLxUzqL7qUcQq8A1dWHDZNgX61CBpj5xik2BqM0HnbzPGQd+rYMg02M+6hcAydUJCHj1cYjJMEOffp0WxYFtpjEZSmJlaqYx+ZFGnpUgA75la1LZQhEyV/xAzzt+aB+K5JjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aR7fLCKp50OCzEfxs1F6w6Gum50h2rPyPgNfhzgNzA0=;
+ b=Fm4olOe82McyYB6ysWaU/Mbj7NoSTpw6aholD+8OnLj1LR/JEV+WJ/BNQaM3iOJIfWkLtlSSGOz2lt4gMcsAEr3yVFZ1oQOozwtpjvps0c2GPBp+3Qq4lv1Paahjd384MXU2CsNdIdelr6o+ppPBbs46H+MpJM103aftfCopC567sMyZgo9G2B4pZglojonBFOjXl3nE5ATCIdVLhYMb1oPoHJti44pthSR5ufNL38/IfPWGHBLYLbCuIXwPC+LzrwBWvJzlxm0A/YEeKZjg5gOEPU3a/kipBmjE05+5qOrg44zDWX+K21u7+oR3IbpMsqLz3nOhUrcbfp7fjBO2hQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aR7fLCKp50OCzEfxs1F6w6Gum50h2rPyPgNfhzgNzA0=;
+ b=XKcVLxRHIWg3BLARvg/v95Hn49m6VtYvGI41k/Yum/N2n4/w4v0iGIF6P7ELidFAROeTHNbbPfUxk+1tV83g69q0fEf2Sskf/8MyEXRXZgKlToU0I4pSnzzVC48nLVOxv/8J+B/oHHXE/r/ECAZOBYoT+QDdy8hoWqBzblmPzw36yPl54X+TL+yCO7ngs1Ab03YzfvMDSD2lvY5tzk++bAfO810osYeYPJhPtyPRStDCg1X20z/J409ymjtgVMEUfvsoA8/ewOrkUgWgmaoWiMDNlEOJLLq9wEaS2BlqaFgwhO/223QWBLt+1jofJjdxspyWdJB1grdcEuym3Uba8Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from KL1PR0601MB4113.apcprd06.prod.outlook.com (2603:1096:820:31::7)
+ by SI2PR06MB5171.apcprd06.prod.outlook.com (2603:1096:4:1ed::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.22; Fri, 20 Sep
+ 2024 09:09:35 +0000
+Received: from KL1PR0601MB4113.apcprd06.prod.outlook.com
+ ([fe80::7e85:dad0:3f7:78a1]) by KL1PR0601MB4113.apcprd06.prod.outlook.com
+ ([fe80::7e85:dad0:3f7:78a1%4]) with mapi id 15.20.7962.022; Fri, 20 Sep 2024
+ 09:09:34 +0000
+From: Yan Zhen <yanzhen@vivo.com>
+To: neal_liu@aspeedtech.com,
+	gregkh@linuxfoundation.org,
+	joel@jms.id.au,
+	herve.codina@bootlin.com
+Cc: andrew@codeconstruct.com.au,
+	linux-aspeed@lists.ozlabs.org,
 	linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
-	=?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-Subject: [PATCH v2 4/4] arm64: dts: imx8mp-iota2: Enable the USB Type-C port
-Date: Fri, 20 Sep 2024 10:01:54 +0200
-Message-ID: <20240920080154.1595808-5-michal.vokac@ysoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240920080154.1595808-1-michal.vokac@ysoft.com>
-References: <20240920080154.1595808-1-michal.vokac@ysoft.com>
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-renesas-soc@vger.kernel.org,
+	opensource.kernel@vivo.com,
+	Yan Zhen <yanzhen@vivo.com>
+Subject: [PATCH v1] usb: gadget: udc: fix typo in the comment
+Date: Fri, 20 Sep 2024 16:47:05 +0800
+Message-Id: <20240920084708.1967059-1-yanzhen@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0218.apcprd06.prod.outlook.com
+ (2603:1096:4:68::26) To KL1PR0601MB4113.apcprd06.prod.outlook.com
+ (2603:1096:820:31::7)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4113:EE_|SI2PR06MB5171:EE_
+X-MS-Office365-Filtering-Correlation-Id: 233261e2-767d-40f8-be25-08dcd953f1af
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|52116014|376014|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?w2/NVtna5DxCGLnaqKwdYWNC1eAAHvjw8QZ8eBx7GI76jB4S94xwKTh0tAnL?=
+ =?us-ascii?Q?8MXXx1JKKXD2Css6YPZrx+Dmu4M9gnq4TNk+UPhdsc6BEDILcksxvPSA8oEy?=
+ =?us-ascii?Q?RqYwh6BUrVLTtM1xh0/f42QEJkTXClJab+q14COSJ5LDH3aDfYO3Z3eltsxH?=
+ =?us-ascii?Q?mLpoJJO74UTEBVIDXxCuJxwvA32ofll4ibUNdEM4PZbBMRo4+aLMgG/4/mqq?=
+ =?us-ascii?Q?8PA++LZ3ugX1+SbBGbS+NBcls/ttx4ktnPVIc81AgIXILlwFYKiXWkQMTgTF?=
+ =?us-ascii?Q?qLpmGQ62Snb2/oHpID/A7QCDEcVajilUNZWuWv47zZ+WtkH1o6++dNrzb1Oo?=
+ =?us-ascii?Q?OiAyZCvqXzlhHHr9Uo2iXh2m8cx61bspgpl7lfcDRnSdMjAEq+f0sXYHqQlf?=
+ =?us-ascii?Q?LZ2Qa7cCTG94BVbngcpk0pQuF5ro1cu9JXDyswogfjxiSWkOLAHhnUvHPifO?=
+ =?us-ascii?Q?mpjg9aYW5QFmU3O9zp63OEAGi9eTXCk3WKyBERso6lHWUs0IDcxGO2RbSgc+?=
+ =?us-ascii?Q?Dkbt5JuYiioPXFmx+HT/4tmdBwjW/signNSjzbXowIejz5PSzUq/yyiEn2BJ?=
+ =?us-ascii?Q?69QB3sdfXxltsvTtEh8sUhqcXSaxmwf2GzwaUdq987l8InTBo5BdeWc9WTmo?=
+ =?us-ascii?Q?3JEQyLNgRuD6bCOLIR40i2pK43PSVQ/cNYmybjVgHgrHbnj4f3ZiKgfu22ow?=
+ =?us-ascii?Q?BUL//DK/PiSW5v1HeZ9WWVqNd/Snfme7/PHfONfy8KsmW91ek7458WhnAGsE?=
+ =?us-ascii?Q?KRkq5wo+iBI84zzhBC50X6FFUj854N+dn827V3eaTnjXxCntLNvGmdTpGCHd?=
+ =?us-ascii?Q?kvIXZgtOosyLs/XJodlIlVZ8NSoQIxyZEewHjLUBs68pxwOECn40l5VLZUzU?=
+ =?us-ascii?Q?thCfHvxqV2l59gozRvqmoKimXmFgZHEJ2V/m4wer/0s/mdv8313RHNG8r65y?=
+ =?us-ascii?Q?8Z879BzhwAV4Bdw6NwqGNZSG/ZzMMIHbPv8g+Hmp0249BuMPkcr9tSiG6f8J?=
+ =?us-ascii?Q?yTa/jsEJvsL9r224Xp8I0mKRpJIbcbckmIw/WFVbJ7VNq0SUJWaVDrVXTSdZ?=
+ =?us-ascii?Q?A/wpXsLBn5gKq8n1UdBrS0AvfM8MdJAQIhrptUJxGK4xtC0nyRO2gE/JujHl?=
+ =?us-ascii?Q?uh7I4wEvE7f1W1/Uyag2tDTV5hfKZIXr2LdmaL6cnrlgrZ8l/1wr9qzf4QQY?=
+ =?us-ascii?Q?EZ8xDeUbbOWWshJLhaix4rLPc4CtGh0Ffzamq2vvHr0mPVqbteti18grbA+V?=
+ =?us-ascii?Q?SRxIPLM2UKtQC/CstOaVH+MOlpDLR/VGDgMTJtqpVIYbAf7HTjycl5u+6Of+?=
+ =?us-ascii?Q?JmSChy7NPbqyoZo3wwY68+0ceCKqpgOgZgEIxUzuIoVnGuSPhQ9AqylEO+if?=
+ =?us-ascii?Q?3SMJVuU5Q1m9ypkuEfkiR0PPjHg8UkaTBsIbtJlVpmQ1viXJNg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB4113.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(52116014)(376014)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?rflHA0KJW6HYIrrAQ1RLtC78Jp4W73iejmMt3q7R67MoLGV6GMZ3iiZN2z2u?=
+ =?us-ascii?Q?UpTcHCdp0anl27DTjXRj33Yb7C8xcrDCs8XFAYO6sgHYwueVQeFGWmtNu0cL?=
+ =?us-ascii?Q?AaTT2HvqVJG1Rln8E6eCrpNaDb2zQhqqnZHt8LOToxwxjn30yxyOoEgHyOq1?=
+ =?us-ascii?Q?DC71ZLKeYl4vvde7mFrNCkRB2//oS+ys7ptR2g/0z7bMlxRK+zm4Fg9SAyrY?=
+ =?us-ascii?Q?LoFQSWurGfX1StsopQqW9BKbNRW6wTbrN85qkLLBI6eSGOC4mzKCDwIH3PMM?=
+ =?us-ascii?Q?/TkZXelJrs4xxIqSaH1PCELecMIfR1f591QW7mJg3MtF6itAEkVHwgfqj4cB?=
+ =?us-ascii?Q?0bsJB1+9tj5Iu+qLVePj1VoXe2f0wpd5WbWT5PDTH1YRdC5d9y74/azGuhr0?=
+ =?us-ascii?Q?KA7zY0Ummv0QRG3OP/uWbjfsHlHL0V9HrLeFr3j5Sc8icF+vOD7Kk0uWt8Y8?=
+ =?us-ascii?Q?dlnt6fWzSgxnY3CYgCEYzi41Yp5nLPcGJgHx37oSjTv3HQ49c5bN4kHo4Osm?=
+ =?us-ascii?Q?P7QvM5jKHCGKB8dTUvr5Vph8msldZwSufJjQhckeE1mROufWnQzvP1TNPeOe?=
+ =?us-ascii?Q?DfWwXkx5jIAZW7l0Cp8vv9w+f4ZNRUuSZjSgxilUzKM+blZdvhUshLczH/zl?=
+ =?us-ascii?Q?yOUSw1yFftB52o9ADXysX0wpFTofBz4tHxDP6dPktGVGP8pvEhO1n4E87+GM?=
+ =?us-ascii?Q?KYWVgyrFNPjlOobqxtp3r5PfgtIOu/s39MWC9OJug+74xNjPDh7RXsnzZ7qf?=
+ =?us-ascii?Q?g0/8vpeUuYeJzjC6lLeEuooRHj2yd4jHoYVpYPOLHjTIjUMgQ6kZaRgg9e8h?=
+ =?us-ascii?Q?HyBa01oBozL1U3vMeuwOtCckwdZyqIhs/sIIRgijMtJ1H8yVAZWWMFZfvsSe?=
+ =?us-ascii?Q?XVm5BdFHQoKxlyTjYp4HsgzaXhFcpz2KMN9IgOasxQrN/LpMHcRW8PTrpcGq?=
+ =?us-ascii?Q?upbK8IFVwOGhcgaLHtvd7DMUgsfRYNga25juAMj7XtSDlCc0A8g3M0sSAuhg?=
+ =?us-ascii?Q?eOjAw/O1gAh33+XagQyRYSHdDTvHvl+dHKD+7HAi0qBzBX1NMCaQ1ajsAbWS?=
+ =?us-ascii?Q?ez7r+2LeN5+IfFHpjUMmQEAulmRi8nJHW+M0/P7VxFFgROvVTOzj9nk2UF2J?=
+ =?us-ascii?Q?S8ET8q1JgldtdsRyM7di49J9FQBIH9tS1hu5kQb0SLegrGeo93xYV++1DCn3?=
+ =?us-ascii?Q?7l0NN5MrQbiL26v+jzEg6JcTI/JgHlH+3LVKTP1flhWijBAIqhoqY4uc/RGa?=
+ =?us-ascii?Q?L5hL/jH5iZ+cKqtJyORedxItt//fR6IZOuHiQjS842esiJVJMORh6L0Tq21O?=
+ =?us-ascii?Q?indZ0d9JkRypVb5rE0qxKlNaJaZE5Ci2+sAxiLBGMXvctd12lShv0ozNISkO?=
+ =?us-ascii?Q?ka/wwO4ntwdpMIOrQCO97Ok7tB+WMjKTCWOwIN1fjmysqBpF3SfvvKpjTQgR?=
+ =?us-ascii?Q?XgxWPy51KEUTHsWezIq5WsnvSN4ocDH2brM2M4ZI2o47sGJITP/JHCUSrhBG?=
+ =?us-ascii?Q?1CQV09U6LRm9hfdMIt8/xf/bs3n3nn2FJ1d9gcxRWi+N/hLlR8Mv4pDL8szQ?=
+ =?us-ascii?Q?HPvxO7cBYBgKcsUdUqb4vgqGxNVUcTNgaABNV9ck?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 233261e2-767d-40f8-be25-08dcd953f1af
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR0601MB4113.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2024 09:09:34.2531
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l4YF3JNQbFeK/EsFjveDRHU3P8MpWAH6Sy0YPpu9EjcnN8kYIQIMmDKvHfrhrBtq/Sc9noTvXpUPaZOy1zYWcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5171
 
-From: Petr Benes <petr.benes@ysoft.com>
+Correctly spelled comments make it easier for the reader to understand
+the code.
 
-Enable the USB Type-C port with the Diodes PI5USB30213A port controller.
-The port supports dual role data but can operate only in source power role
-and PD is not supported.
+Fix typos:
+'trasmit' -> 'transmit',
+'structres' -> 'structures',
+'divisble' -> 'divisible',
+'trainsmited' -> 'transmitted',
+'packect's' -> 'packet's',
+'timmer' -> 'timer',
+'devcice' -> 'device',
+'delelate' -> 'delegate',
+'lengh' -> 'length'.
 
-Signed-off-by: Petr Benes <petr.benes@ysoft.com>
-Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+Signed-off-by: Yan Zhen <yanzhen@vivo.com>
 ---
-v2:
-- Use typec instead of tcpc.
-- Drop unneeded status.
+ drivers/usb/gadget/udc/aspeed_udc.c    | 2 +-
+ drivers/usb/gadget/udc/dummy_hcd.c     | 2 +-
+ drivers/usb/gadget/udc/fsl_qe_udc.c    | 6 +++---
+ drivers/usb/gadget/udc/fusb300_udc.c   | 2 +-
+ drivers/usb/gadget/udc/net2272.c       | 2 +-
+ drivers/usb/gadget/udc/renesas_usbf.c  | 2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c | 2 +-
+ 7 files changed, 9 insertions(+), 9 deletions(-)
 
- .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-index d33428c58f2d..9b31a1e7a781 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-@@ -32,6 +32,17 @@ button-reset {
- 		};
- 	};
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index f4781e611aaa..5b62f43b36f7 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -156,7 +156,7 @@
+ #define AST_EP_DMA_DESC_PID_DATA1	(2 << 14)
+ #define AST_EP_DMA_DESC_PID_MDATA	(3 << 14)
+ #define EP_DESC1_IN_LEN(x)		((x) & 0x1fff)
+-#define AST_EP_DMA_DESC_MAX_LEN		(7680) /* Max packet length for trasmit in 1 desc */
++#define AST_EP_DMA_DESC_MAX_LEN		(7680) /* Max packet length for transmit in 1 desc */
  
-+	reg_typec: regulator-typec {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-+		pinctrl-0 = <&pinctrl_usbc_vbus>;
-+		pinctrl-names = "default";
-+		regulator-max-microvolt = <5000000>;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-name = "typec";
-+	};
-+
- 	reg_usb_host: regulator-usb-host {
- 		compatible = "regulator-fixed";
- 		enable-active-high;
-@@ -218,6 +229,46 @@ &i2c2 {
- 	pinctrl-names = "default";
- 	status = "okay";
+ struct ast_udc_request {
+ 	struct usb_request	req;
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index ff7bee78bcc4..f759bfc2f243 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -80,7 +80,7 @@ module_param_named(num, mod_data.num, uint, S_IRUGO);
+ MODULE_PARM_DESC(num, "number of emulated controllers");
+ /*-------------------------------------------------------------------------*/
  
-+	typec@d {
-+		compatible = "diodes,pi5usb30213a";
-+		reg = <0xd>;
-+		interrupts-extended = <&gpio1 5 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-0 = <&pinctrl_typec>;
-+		pinctrl-names = "default";
-+
-+		connector {
-+			compatible = "usb-c-connector";
-+			data-role = "dual";
-+			label = "USB-C";
-+			pd-disable;
-+			power-role = "source";
-+			self-powered;
-+			typec-power-opmode = "default";
-+			vbus-supply = <&reg_typec>;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usb_con_hs: endpoint {
-+						remote-endpoint = <&typec_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usb_con_ss: endpoint {
-+						remote-endpoint = <&typec_ss>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
- 	rtc: rtc@68 {
- 		compatible = "dallas,ds1341";
- 		reg = <0x68>;
-@@ -309,6 +360,12 @@ MX8MP_IOMUXC_SAI3_MCLK__PWM4_OUT	0x102
- 		>;
- 	};
+-/* gadget side driver data structres */
++/* gadget side driver data structures */
+ struct dummy_ep {
+ 	struct list_head		queue;
+ 	unsigned long			last_io;	/* jiffies timestamp */
+diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/fsl_qe_udc.c
+index 4e88681a79b6..55f49d01f9c5 100644
+--- a/drivers/usb/gadget/udc/fsl_qe_udc.c
++++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
+@@ -511,7 +511,7 @@ static int qe_ep_register_init(struct qe_udc *udc, unsigned char pipe_num)
+ 	out_8(&epparam->tbmr, rtfcr);
  
-+	pinctrl_typec: typecgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05	0x1c0
-+		>;
-+	};
-+
- 	pinctrl_uart2: uart2grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x0
-@@ -322,6 +379,11 @@ MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR	0x0
- 		>;
- 	};
+ 	tmp = (u16)(ep->ep.maxpacket + USB_CRC_SIZE);
+-	/* MRBLR must be divisble by 4 */
++	/* MRBLR must be divisible by 4 */
+ 	tmp = (u16)(((tmp >> 2) << 2) + 4);
+ 	out_be16(&epparam->mrblr, tmp);
  
-+	pinctrl_usbc_vbus: usbcgrp {
-+		fsl,pins = <MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x0
-+		>;
-+	};
-+
- 	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x194
-@@ -389,15 +451,47 @@ &uart2 {
- 	status = "okay";
- };
+@@ -1413,7 +1413,7 @@ static int ep_txframe_handle(struct qe_ep *ep)
+ 	return 0;
+ }
  
-+&usb3_0 {
-+	status = "okay";
-+};
-+
- &usb3_1 {
- 	status = "okay";
- };
+-/* confirm the already trainsmited bd */
++/* confirm the already transmitted bd */
+ static int qe_ep_txconf(struct qe_ep *ep)
+ {
+ 	struct qe_bd __iomem *bd;
+@@ -2196,7 +2196,7 @@ static int tx_irq(struct qe_udc *udc)
+ }
  
-+&usb3_phy0 {
-+	status = "okay";
-+};
-+
- &usb3_phy1 {
- 	vbus-supply = <&reg_usb_host>;
- 	status = "okay";
- };
  
-+&usb_dwc3_0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	status = "okay";
-+
-+	port@0 {
-+		reg = <0>;
-+
-+		typec_hs: endpoint {
-+			remote-endpoint = <&usb_con_hs>;
-+		};
-+	};
-+
-+	port@1 {
-+		reg = <1>;
-+
-+		typec_ss: endpoint {
-+			remote-endpoint = <&usb_con_ss>;
-+		};
-+	};
-+};
-+
- &usb_dwc3_1 {
- 	dr_mode = "host";
- 	pinctrl-names = "default";
+-/* setup packect's rx is handle in the function too */
++/* setup packet's rx is handle in the function too */
+ static void rx_irq(struct qe_udc *udc)
+ {
+ 	struct qe_ep *ep;
+diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/udc/fusb300_udc.c
+index 873265634ccc..8558ba4b8a8b 100644
+--- a/drivers/usb/gadget/udc/fusb300_udc.c
++++ b/drivers/usb/gadget/udc/fusb300_udc.c
+@@ -1297,7 +1297,7 @@ static void init_controller(struct fusb300 *fusb300)
+ 	reg |= val;
+ 	iowrite32(reg, fusb300->reg + FUSB300_OFFSET_HSCR);
+ 
+-	/*set u1 u2 timmer*/
++	/*set u1 u2 timer*/
+ 	fusb300_set_u2_timeout(fusb300, 0xff);
+ 	fusb300_set_u1_timeout(fusb300, 0xff);
+ 
+diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
+index 19bbc38f3d35..5e398180cded 100644
+--- a/drivers/usb/gadget/udc/net2272.c
++++ b/drivers/usb/gadget/udc/net2272.c
+@@ -2097,7 +2097,7 @@ static irqreturn_t net2272_irq(int irq, void *_dev)
+ 	}
+ 	/* check dma interrupts */
+ #endif
+-	/* Platform/devcice interrupt handler */
++	/* Platform/device interrupt handler */
+ #if !defined(PLX_PCI_RDK)
+ 	net2272_handle_stat1_irqs(dev, net2272_read(dev, IRQSTAT1));
+ 	net2272_handle_stat0_irqs(dev, net2272_read(dev, IRQSTAT0));
+diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/udc/renesas_usbf.c
+index 657f265ac7cc..6de09ece8545 100644
+--- a/drivers/usb/gadget/udc/renesas_usbf.c
++++ b/drivers/usb/gadget/udc/renesas_usbf.c
+@@ -2482,7 +2482,7 @@ static int usbf_handle_ep0_setup(struct usbf_ep *ep0)
+ 	ep0->delayed_status = 0;
+ 
+ 	if ((crq.ctrlreq.bRequestType & USB_TYPE_MASK) != USB_TYPE_STANDARD) {
+-		/* This is not a USB standard request -> delelate */
++		/* This is not a USB standard request -> delegate */
+ 		goto delegate;
+ 	}
+ 
+diff --git a/drivers/usb/gadget/udc/snps_udc_core.c b/drivers/usb/gadget/udc/snps_udc_core.c
+index 2fc5d4d277bc..25f418d2c232 100644
+--- a/drivers/usb/gadget/udc/snps_udc_core.c
++++ b/drivers/usb/gadget/udc/snps_udc_core.c
+@@ -2707,7 +2707,7 @@ static irqreturn_t udc_control_in_isr(struct udc *dev)
+ 					/* write fifo */
+ 					udc_txfifo_write(ep, &req->req);
+ 
+-					/* lengh bytes transferred */
++					/* length bytes transferred */
+ 					len = req->req.length - req->req.actual;
+ 					if (len > ep->ep.maxpacket)
+ 						len = ep->ep.maxpacket;
 -- 
-2.43.0
+2.34.1
 
 
