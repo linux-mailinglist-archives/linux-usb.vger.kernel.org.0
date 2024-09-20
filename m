@@ -1,115 +1,139 @@
-Return-Path: <linux-usb+bounces-15272-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15273-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C44DE97D78A
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 17:35:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4905997DAEA
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 01:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E4BA28450D
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 15:35:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C813285240
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 23:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2D017D36A;
-	Fri, 20 Sep 2024 15:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D51218E032;
+	Fri, 20 Sep 2024 23:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="eDlm00JC"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oJUhsjfE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F3513F454
-	for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2024 15:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7FA5D915;
+	Fri, 20 Sep 2024 23:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726846522; cv=none; b=kF/zFNlAKPxWvmuGnwA7sr8kqk/ekTMKr91teW8SvMje7HBuhXEpCE5ptQPmVRxUTuqGh96Jew9G3Zea5Gf0G7x0IhH++c4c1L+sqJC6uBT/yHcSxNOKZYfvMteluKWHa6WPHUVrCKuhwDZ5qKWaG5Ov+sGKfDNY1vdzM35CI+4=
+	t=1726876228; cv=none; b=sesN2RUx03i+iJAIcQRTj3Taaxpsgj/+5EY0GoEAEF2I+XQoIsxQXD/ZFdXrtIBa/G9ocKmD6AlL3ogZQlUgfiIA3mXSSGGXBG5tsYHPLu1f+D2BqIQkNcxA7JG/34A6uC8hoAuYmi1i7xEuZece+iz0zwXtD1j5ReelO9JdLPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726846522; c=relaxed/simple;
-	bh=tTvPjaXJ0SM9m+3Ph1ct+vB9T/747mnj3hb0xF+TqL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R4D1LdaEDemowva7CE5bW5/XFhvUL8cNdd9Zj24iBWk1HrLscjv1mXd8bT+ovDN4ccciALlRUGJREEwADJ1FeZ50pCDEDNJTi7ERXCQr9e+DHmlwlNg+t1WvIBfJNbf/VopRfY/m9AAJEMReU0Ngd/XVErS7b731FfI25OxaQ8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=eDlm00JC; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3787ddbd5a2so1330130f8f.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2024 08:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726846519; x=1727451319; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+8DczkGT1Fr+vsOlvsCO7gqNr0f4sI3Hx9k6lPQnO4=;
-        b=eDlm00JCTZrdgEWZ1aXIju6m6rB0cUoZ1J+rV9iklf7a5M8GfCHKaN/a6J20/E+Vtu
-         nQ5Nhk9tI19Es+HkxE9fjiED2RBSgCgKbrvDMJJKx27exSL4VefgrKGJGZnkT5kr6NXu
-         w4k7S8wm8ALo2rLJa5zHUMAsn/j/j0GlLfNrC0v8X1TWZcsBnVN3tXvLifGKvVPb/DHB
-         qD8ujILEDENny/lhsOIJTuuPTVf2k3uId1hDFw7XOzn0lv3+aNsPaMpF5EJRfMOIEkhB
-         h67Q1ITdDQMJsAElQB59ifTlJRIF6qeGtcEBwYnpIOkv4fNJNapzOc6YO7+2K3BmvAuX
-         u8Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726846519; x=1727451319;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n+8DczkGT1Fr+vsOlvsCO7gqNr0f4sI3Hx9k6lPQnO4=;
-        b=gTg2ToaikA890biidBlB/EuooL/znwHHFEkWtBJi20Biv/LHasHOzX9vCUZReqAG3M
-         o/LYJ99ucFiVxu0Vtuexy/4VvnN1h35m8bpYY+4G9eK4eg1WHe07/xQTqqziWl/F3sUQ
-         WiVR+JjNN/vamFzPLYsIYVJ99twBRKGeXmTfYYj5gHFQiI7CC4EdW2hT+NtA9CpKePQ+
-         TfIChxOlzBGIFO7AwAySIpembrp+zmK6wfX+z1/22K/Lh4RfYp6GYhNsPGRz90z/FFib
-         Kw1OdbWvaFBGo6/adKfQrihcuCJHj0EMTtyTeKpaSIVFNdE5rBC6qtG+7Kz015UslwmC
-         1YeQ==
-X-Gm-Message-State: AOJu0YxssrmgYH0r83k1JeC6+SOtCnkL0FWQN964bxlLek/kUczDis5n
-	sL62x0/rh9f15BFAuvtr4xp6jPPx87XUrvNV446+h7C+N/kBAO3BCfoV8euxmgY=
-X-Google-Smtp-Source: AGHT+IEKviZhV/mlgRQ6XDNcvPONDegkwDhfCHTcnH7tNPghAvpjFRdkLdW4+6t6WaPwgt8Qr2SpRA==
-X-Received: by 2002:adf:db4b:0:b0:374:c040:b00e with SMTP id ffacd0b85a97d-37a4236e261mr1848135f8f.39.1726846518731;
-        Fri, 20 Sep 2024 08:35:18 -0700 (PDT)
-Received: from localhost (p5dc68d3d.dip0.t-ipconnect.de. [93.198.141.61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378e71f0600sm18112379f8f.9.2024.09.20.08.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2024 08:35:18 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [PATCH] usb: phy: isp1301:: Drop explicit initialization of struct i2c_device_id::driver_data to 0
-Date: Fri, 20 Sep 2024 17:34:35 +0200
-Message-ID: <20240920153430.503212-17-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1726876228; c=relaxed/simple;
+	bh=ipjxMYTJoUHV3BA3NQmOYPF7baYuN9ZnKpWZo3rOiu4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=k5hJOOKoIEd89oIChSlAG6W+ipKsRoKQUhbb1RfNtHMnn9NOLvVMgPrx9V6UCWuwXXapn0rj/b76dr5KkXANlCQvPffKthsacTnzttYwjHfQGrDyk8+tlfFrXD3BY9nyngkW6hhekiSKTmnKnXB6AKqvj0soKh6t17ElK224JDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oJUhsjfE; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48KKfbDf018634;
+	Fri, 20 Sep 2024 23:49:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ipjxMYTJoUHV3BA3NQmOYPF7baYuN9ZnKpWZo3rOiu4=; b=oJUhsjfEtGDyM+Xk
+	sT9Exk6FnRk/K6LyxiHaCDBqhVQbTf9oAsbilKHcPnCirdSxQW7Zu1BgW5oSfbOl
+	fZi+/Dg5P+46YauPnUtI1ShsqpNNTsKIxnWvPiRVF0Hl3tNcbs/mMeNeVPfGGI5W
+	WA71H3X71j6loxOa4Uop19VSgmmhYkd2pjOPqFrgcR+youl3vZYOR085mQ5eaqAp
+	MT/5pUUcu/2hkaGobdhEskM14ziOgL75PBULCWpJURYdIszjjkZ1vdUB9UoFMl0Z
+	8dq1uAhO9+I14V7FSfXVJ8axATi9KnrF/xg0onTL2vXjzp4MtEVigsfIOxkYHy7d
+	ANgOUw==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4hftsu2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Sep 2024 23:49:58 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48KNnwf2011994
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Sep 2024 23:49:58 GMT
+Received: from [10.71.112.62] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 20 Sep
+ 2024 16:49:57 -0700
+Message-ID: <182938da-da86-49a4-800a-446954cc6c60@quicinc.com>
+Date: Fri, 20 Sep 2024 16:49:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=953; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=tTvPjaXJ0SM9m+3Ph1ct+vB9T/747mnj3hb0xF+TqL8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBm7ZYZ2yuXvnQfbIajZYnTCXIQciei8zuqT1IXn V+Mcj6FNMmJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZu2WGQAKCRCPgPtYfRL+ TrymB/9EhogthB5UwlOgXwNY5PVmrfT6YcLkuNucKUeohrdhIV4OvhG1D9gY296Pu9iea/qAxII DXyQIFKk/F4+v/i5y5m3PEcude9PSH1OaFfzqTc/OR9AL8TZw5icincLYim9WKI9zis6tTA3fM6 trBPPHbM6nFxd5qRyPzDr/Pnli/9qvvGo1AKjJf/bIHkC8cdUxmLtljN7mK+I1GaWlkejruWAmX WBljrLarkyBOogd6HvFVkaDnAnVoPOaD+tBqUJ58FBLwflVfib4ozCllBtFa7I/pYLpe0XEUijp plCJuzWG82GRYl0kZE3mmdV/Cu/U34YyEuf2KMno0PrpMrGo
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v27 01/32] xhci: add helper to stop endpoint and wait for
+ completion
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+CC: <mathias.nyman@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
+        <alsa-devel@alsa-project.org>, <bgoswami@quicinc.com>,
+        <broonie@kernel.org>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <devicetree@vger.kernel.org>, <dmitry.torokhov@gmail.com>,
+        <gregkh@linuxfoundation.org>, <krzk+dt@kernel.org>,
+        <lgirdwood@gmail.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <pierre-louis.bossart@linux.intel.com>,
+        <robh@kernel.org>, <srinivas.kandagatla@linaro.org>, <tiwai@suse.com>
+References: <20240913103237.2f5dc796@foxbook>
+ <a9dcaa5a-4f5d-451a-93aa-7457798fc243@quicinc.com>
+ <20240915095514.6b01fefb@foxbook>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20240915095514.6b01fefb@foxbook>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: iytzgxK0RhtlpMsGzW7stpvgCpcQAXKb
+X-Proofpoint-ORIG-GUID: iytzgxK0RhtlpMsGzW7stpvgCpcQAXKb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409200174
 
-These drivers don't use the driver_data member of struct i2c_device_id,
-so don't explicitly initialize this member.
+Hi Michal,
 
-This prepares putting driver_data in an anonymous union which requires
-either no initialization or named designators. But it's also a nice
-cleanup on its own.
+On 9/15/2024 12:55 AM, Michał Pecio wrote:
+> Hi,
+>
+>> Maybe the last sentence is not needed.  When we are using the
+>> secondary interrupters, at least in the offload use case that I've
+>> verified with, the XHCI is completely unaware of what TDs have been
+>> queued, etc...  So technically, even if we did call the default
+>> handler (ie xhci_handle_cmd_stop_ep), most of the routines to
+>> invalidate TDs are going to be no-ops.
+> Yes, the cancellation machinery will return immediately if there are
+> no TDs queued by xhci_hcd itself.
+>
+> But xhci_handle_cmd_stop_ep() does a few more things for you - it
+> checks if the command has actually succeeded, clears any halt condition
+> which may be preventing stopping the endpoint, and it sometimes retries
+> the command (only on "bad" chips, AFAIK).
+>
+> This new code does none of the above, so in the general case it can't
+> even guarantee that the endpoint is stopped when it returns zero. This
+> should ideally be documented in some way, or fixed, before somebody is
+> tempted to call it with unrealistically high expectations ;)
+>
+> As far as I see, it only works for you because isochronous never halts
+> and Qualcomm HW is (hopefully) free of those stop-after-restart bugs.
+> There will be problems if the SB tries to use any other endpoint type.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
- drivers/usb/phy/phy-isp1301.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So what I ended up doing was to split off the context error handling into a separate helper API, which can be also called for the sync ep stop API.  From there, based on say....the helper re queuing the stop EP command, it would return a specific value to signify that it has done so.  The sync based API will then re-wait for the completion of the subsequent stop endpoint command that was queued.  In all other context error cases, it'd return the error to the caller, and its up to them to handle it accordingly.
 
-diff --git a/drivers/usb/phy/phy-isp1301.c b/drivers/usb/phy/phy-isp1301.c
-index 993d7525a102..f9b5c411aee4 100644
---- a/drivers/usb/phy/phy-isp1301.c
-+++ b/drivers/usb/phy/phy-isp1301.c
-@@ -25,7 +25,7 @@ struct isp1301 {
- #define phy_to_isp(p)		(container_of((p), struct isp1301, phy))
- 
- static const struct i2c_device_id isp1301_id[] = {
--	{ "isp1301", 0 },
-+	{ "isp1301" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, isp1301_id);
+Thanks
 
-base-commit: 62f92d634458a1e308bb699986b9147a6d670457
--- 
-2.45.2
+Wesley Cheng
 
 
