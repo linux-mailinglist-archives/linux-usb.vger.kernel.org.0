@@ -1,169 +1,144 @@
-Return-Path: <linux-usb+bounces-15270-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15271-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E1797D658
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 15:41:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C40697D74D
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 17:08:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D27871F23DE1
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 13:41:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 541DF28290A
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 15:08:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC9417B50F;
-	Fri, 20 Sep 2024 13:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07CBF3BBC1;
+	Fri, 20 Sep 2024 15:07:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C0I+Fkbz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eYwDgtZo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666DE17B507
-	for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2024 13:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2626417C7C9;
+	Fri, 20 Sep 2024 15:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726839696; cv=none; b=uRTLGCMWL6KV23fK/Gk8hk3dzDspUPVTIEaGdXDSQ6HJ5iod7lglHP5+yz4OCJY1aeQX21/z2B0tMF5+qocMKk6t9HdK8koGVCwDcc/fQ4rxKHiPMLTr+MxODEOCD58jnzn2ysiQKwff5XYBQrvj+QsMPB5FxSq2Q5b9ViYJy7I=
+	t=1726844859; cv=none; b=JG1QUGd3IPDqNWfNeHWg5GqtivWtthP4s874TpbuxaaHbyGS5wGdqORnKOlZOnL1sxbOE1s7R6hWnqArbZc0eJhHCQLsajDGJrTUIJoTSfp7sj4fFjXNtuqcQSOYM1uY5qeAwqGL3IMBGEtIEv23p9XFjt6pPIzQNN6K47SRxjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726839696; c=relaxed/simple;
-	bh=F6XBYwiicyA+nj26vjDbYS6rMplMwRTiMlA0bkAHKZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N/7WLZtaBxfdOgCllzIJI8s1a/y8u2i+7oV+Or/GVmTJOCmH6SwHJzCQin+YK5GNV2AE9TqWUs+/hbRebGR0f9WErGGXSwR+SkJYVGRR3563F5lO5LQGRC9RXMhjcdGChLmg54gX0IdVCv7S/XXXD0/fMyWdcHhFp/lP7e7WX+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C0I+Fkbz; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-535be093a43so2708499e87.3
-        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2024 06:41:34 -0700 (PDT)
+	s=arc-20240116; t=1726844859; c=relaxed/simple;
+	bh=T3Bx79A9fpSpiBg/sM2LWVV+GyyLV76LWhZ1clxz26o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YgJj3nriLlPth1Buvx2Szz+j15MIDR5AtJzZ/v5IElO+8qt210byKyrrRNu1vlx+XvOfRMCYxJQcF6u0lzSFjAJOIkoisee43S+xPGSe70AzA5Kvm8c3PhO2J7Y8qg8+0AP3onD4ne2ujd+SkpHm7sE7irhSJvtQBqelKpiR6Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eYwDgtZo; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-718d606726cso1492039b3a.3;
+        Fri, 20 Sep 2024 08:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726839692; x=1727444492; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cy8eJSiB/nOK0MNLeFOudgQDV58ne9sCKlAuyt+d5bs=;
-        b=C0I+FkbzsZvOVkfMU2Lj4XR3G2Ua3mxq8P7bxTz72yY9lA004DHCGgdJUWqH3oP/Yy
-         s9q2+ePIHiPZNLH5gVkmhwBE3KX6vENrdrfehmJE+GPmDokVAyj7mexOUFL+eIJ1dG73
-         dnZIEtpgpurPfqs1N6oyBhLNCQgNKBSMgJhPTpRRx4oeP2LDMdBsI9OQUu2DBeND7eZZ
-         J/jza7sF0lawK5rcHlq692e8mlY6OH71nN/K3MQas3QFzHr/hsE1nOt5ZPFYLY3xtRzL
-         EY/maDFa+YAo8ZoWuzUFlBIvvE4tYQjtK0vpydBBNZC4t48DczQaetK4FfnCsFxYphpS
-         SnKg==
+        d=gmail.com; s=20230601; t=1726844857; x=1727449657; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qqssmp9/Q4bMnylmVAyuApOL66R83xQywZPSLREzBdw=;
+        b=eYwDgtZoKnvDLvEolCIgRuQ5xEaQtLMVqHfLXUXpkLYPy/bbnt7MzDKUjeC0GeAy8I
+         WrI4jZjP7OI+4H6A7QsS+/y/RE9zhPwy55+cDOZjv/lUpOXeIgXDp60ywl/6oKTH1ByU
+         I7HEpzIwTEKWPqdqIRPJp8mWqKjMLue/hNlwVE4sjFLyXjzGexy8YdTt3ZyMP7UUrkna
+         +GC6Rxq6OseuGdU0HDRE4CAnGjPaPv2PLGd7r2Q2nFPWTFVl3orlAIVs9WBORo3x9/QD
+         ApTaw1NuMBiWLX7PLUl3BAHYag2lCm4Ap52zZ6VRJJmiA95YX5CH4StoOls1lwjJrqPv
+         ok6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726839692; x=1727444492;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cy8eJSiB/nOK0MNLeFOudgQDV58ne9sCKlAuyt+d5bs=;
-        b=qB8Ziy2FM3RayY9XIjvT7PI3HfLf4C7tTtjCsGA+IXhYiZKkN/BcaSxKi4Ty0C6JT4
-         yvXSdiJZhiqKd9rBUNuNoP58kO9Vo9nOfQNsAEapcHZOFGj3262EjvFygeQFIra+iOMa
-         xkZnTefA04wk5hj4rIKYVQartuw+/tw0c4m9zRYIbB8IH2D3UZN7R51FpJ7f3DSxSLzP
-         WkBUPQ/u0g1PVP5J6G3Q3ghfQBVY2F/3RLjQp2FwLMc/6xGPEa28p5TdLvXkrnFJ7886
-         BCUt20bc/IErcBcJurX6AziCmZSmqErP252CSMcIYLlcd6XyY9XIzJ2hX/vGNy+Xz9mu
-         PB1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVt7XowyANXNjVZMioQgG+o8+duXAmDRHplmfNXmib7hbA09EQWcjWVOu5iqoHgXYEBYlua3Riftyw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkGH7HLI93Fkr7AvcF/Ca2+ewJWSA2m+rPwXuWE/Z6sTBaZY1A
-	qkAD8fQcb2nIaALKxA3L08PnvBBYOK30zk3Rc5Ij3eqKnITyTeLTZbx85Vc8s+w=
-X-Google-Smtp-Source: AGHT+IE3spKxFlKow+XZEn/pdnVcnC7xAb2KymB9nWls7Ajtm+SQAP7jVkeioCLRLwIL4VXLIlrZbQ==
-X-Received: by 2002:a05:6512:3192:b0:52e:7656:a0f4 with SMTP id 2adb3069b0e04-536ac32012emr1856875e87.41.1726839692396;
-        Fri, 20 Sep 2024 06:41:32 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5368704dbc8sm2166041e87.101.2024.09.20.06.41.31
+        d=1e100.net; s=20230601; t=1726844857; x=1727449657;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qqssmp9/Q4bMnylmVAyuApOL66R83xQywZPSLREzBdw=;
+        b=RwKSVDEDdwbd12bx7bTvncYNaAHOXASEi7Qdz4k0zXG1CIgOTea3ss5vYBFJGetzm9
+         AcsCAVeCXikR+QIYLvT7LhZ9FY9Ga6mPpPsO2RDta846hM8RyM9Iu3zONSZYqgFdAi3s
+         HTdm/4ZGajTZ8BG4k/StAdtqt9R/97KF8a2Ar/axVPdJaKo6M7OvoyJhiZpG8hUNy34w
+         QMNaYsu/pqfsLJYx8ocKMnprit29W50+HNsefQ9ebLvPkVpvQHLzHNYiZU1B4OBd2XNK
+         RB2axtBnLtFoECFsQw7J0L5zces4deKjYdVjeYYwI5UMX3ElW9/xbktMbuTIPZwrjL2y
+         NVdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPJw3E6i5vFu4sMUEgjjWPBnvHXgt1GQn6FtRFN9hKzLxH9Wqqc1mVVlnoPBPiJ2itJ5ZZ8js4d83/oQA=@vger.kernel.org, AJvYcCWenGfkoXF5aNGyogRY1K2mYfYfwsuNK/9LQRKO0YxsMtOewzg7E6OiNqJ7SPBK4bW2XPpfn3A00fR+@vger.kernel.org, AJvYcCWqDh0k82s148Bfb205IX/PVPRU2D0KpPjiF+jMtCOyfmp0BFsQOfnhrJIP8aMuRLrG9Osa9+t+iVHemChO@vger.kernel.org, AJvYcCXD6jqrBahn4en8EXCV8cjla6FghpcXnjVEExk+MRwZQ9U/6Je91G2fbEontauuD8SioaYnA+SMMmg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw95ImUaX2zyirVLLuZX8x6GzzcfECVD+jfPd729HVxgHKGMZzf
+	n4W67KWSsWyBVuO77lzcvg+SiRsKnZMbCRa4IwUqvpi3e7H06RngzYNlzVua
+X-Google-Smtp-Source: AGHT+IHEzdh15TOy6+vECMW1tVXFloHn7UQoapI0TK3/tNqpmkHmb5bjWq9xhi2e9iQ7SLX0EC4omQ==
+X-Received: by 2002:a05:6a21:3489:b0:1cf:2a85:722d with SMTP id adf61e73a8af0-1d30c9897d1mr4086676637.3.1726844857214;
+        Fri, 20 Sep 2024 08:07:37 -0700 (PDT)
+Received: from purva-IdeaPad-Gaming-3-15IHU6.lan ([2409:40c0:223:9c18:4232:3cbf:2f25:b7b])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944a97799sm9910403b3a.23.2024.09.20.08.07.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2024 06:41:31 -0700 (PDT)
-Date: Fri, 20 Sep 2024 16:41:30 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Stephen Boyd <swboyd@chromium.org>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, devicetree@vger.kernel.org, 
-	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, 
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org, 
-	Guenter Roeck <groeck@chromium.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
-	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Daniel Scally <djrscally@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
-	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v4 01/18] drm/atomic-helper: Introduce lane remapping
- support to bridges
-Message-ID: <vbb7uo3xszign2mjkciclrsbajf53btfguwhixueohqpvfiouu@mmk4qdskqjoa>
-References: <20240901040658.157425-1-swboyd@chromium.org>
- <20240901040658.157425-2-swboyd@chromium.org>
+        Fri, 20 Sep 2024 08:07:36 -0700 (PDT)
+From: SurajSonawane2415 <surajsonawane0215@gmail.com>
+To: jikos@kernel.org,
+	bentiss@kernel.org,
+	corbet@lwn.net,
+	linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: SurajSonawane2415 <surajsonawane0215@gmail.com>
+Subject: [PATCH] docs: fix spelling and grammar mistakes
+Date: Fri, 20 Sep 2024 20:37:16 +0530
+Message-Id: <20240920150716.15821-1-surajsonawane0215@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240901040658.157425-2-swboyd@chromium.org>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 31, 2024 at 09:06:39PM GMT, Stephen Boyd wrote:
-> Add support to the DRM atomic logic to support lane remapping between
-> bridges, encoders and connectors. Typically lane mapping is handled
-> statically in firmware, e.g. on DT we use the data-lanes property to
-> assign lanes when connecting display bridges. Lane assignment is dynamic
-> with USB-C DisplayPort altmodes, e.g. pin conf D assigns 2 lanes of DP
-> to pins on the USB-C connector while pin conf C assigns 4 lanes of DP to
-> pins on the USB-C connector. The lane assignment can't be set statically
-> because the DP altmode repurposes USB-C pins for the DP lanes while also
-> limiting the number of DP lanes or their pin assignment at runtime.
-> 
-> Bridge drivers should point their 'struct drm_bus_cfg::lanes' pointer to
-> an allocated array of 'struct drm_lane_cfg' structures and indicate the
-> size of this allocated array with 'struct drm_bus_cfg::num_lanes' in
-> their atomic_check() callback. The previous bridge in the bridge chain
-> can look at this information by calling
-> drm_bridge_next_bridge_lane_cfg() in their atomic_check() callback to
-> figure out what lanes need to be logically assigned to the physical
-> output lanes to satisfy the next bridge's lane assignment.
-> 
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Robert Foss <rfoss@kernel.org>
-> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> Cc: Jonas Karlman <jonas@kwiboo.se>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: <dri-devel@lists.freedesktop.org>
-> Cc: Pin-yen Lin <treapking@chromium.org>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/gpu/drm/drm_atomic_state_helper.c |  2 ++
->  drivers/gpu/drm/drm_bridge.c              | 34 +++++++++++++++++++++++
->  include/drm/drm_atomic.h                  | 31 +++++++++++++++++++++
->  include/drm/drm_bridge.h                  |  4 +++
->  4 files changed, 71 insertions(+)
+Fix grammatical and spelling errors in the HID documentation files. 
 
-I have given this a lot of thought in the last several days, thanks for
-the interesting problem.
+Signed-off-by: SurajSonawane2415 <surajsonawane0215@gmail.com>
+---
+ Documentation/hid/hiddev.rst        | 4 ++--
+ Documentation/hid/intel-ish-hid.rst | 2 +-
+ Documentation/hid/uhid.rst          | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Basically, as I said during LPC, I feel that this is an overkill to be
-handled in the drm_bridge layer. In most other usecases the lane
-configuration is static and doesn't change. MIPI DSI standard, for
-example, explicitly disallows that: "The number of Lanes used shall be a
-static parameter.  It shall be fixed at the time of system design or
-initial configuration and may not change dynamically." (MIPI DSI 1.3,
-section 6.1).
-
-Following the struct drm_connector_hdmi introduction I think we are
-getting closer and closer to the struct drm_connector_dp, which should
-record all DP-related data to be used by DisplayPort connectors. An
-example of a field in this struct-to-be might be `u8 num_lanes`. In the
-normal DP / uDP cases it will be static, in case of USB-C AltMode it
-will be dynamic and change depending on pinconf being configured.
-
+diff --git a/Documentation/hid/hiddev.rst b/Documentation/hid/hiddev.rst
+index 9b82c7f89..073485f84 100644
+--- a/Documentation/hid/hiddev.rst
++++ b/Documentation/hid/hiddev.rst
+@@ -15,10 +15,10 @@ To support these disparate requirements, the Linux USB system provides
+ HID events to two separate interfaces:
+ * the input subsystem, which converts HID events into normal input
+ device interfaces (such as keyboard, mouse and joystick) and a
+-normalised event interface - see Documentation/input/input.rst
++normalized event interface - see Documentation/input/input.rst
+ * the hiddev interface, which provides fairly raw HID events
+ 
+-The data flow for a HID event produced by a device is something like
++The data flow for an HID event produced by a device is something like
+ the following::
+ 
+  usb.c ---> hid-core.c  ----> hid-input.c ----> [keyboard/mouse/joystick/event]
+diff --git a/Documentation/hid/intel-ish-hid.rst b/Documentation/hid/intel-ish-hid.rst
+index 2adc174fb..fdabf6ec6 100644
+--- a/Documentation/hid/intel-ish-hid.rst
++++ b/Documentation/hid/intel-ish-hid.rst
+@@ -21,7 +21,7 @@ mainly use HID over I2C or USB. But ISH doesn't use either I2C or USB.
+ Overview
+ ========
+ 
+-Using a analogy with a usbhid implementation, the ISH follows a similar model
++Using an analogy with a usbhid implementation, the ISH follows a similar model
+ for a very high speed communication::
+ 
+ 	-----------------		----------------------
+diff --git a/Documentation/hid/uhid.rst b/Documentation/hid/uhid.rst
+index 2243a6b75..2681038cd 100644
+--- a/Documentation/hid/uhid.rst
++++ b/Documentation/hid/uhid.rst
+@@ -106,7 +106,7 @@ UHID_INPUT2:
+ 
+ UHID_GET_REPORT_REPLY:
+   If you receive a UHID_GET_REPORT request you must answer with this request.
+-  You  must copy the "id" field from the request into the answer. Set the "err"
++  You must copy the "id" field from the request into the answer. Set the "err"
+   field to 0 if no error occurred or to EIO if an I/O error occurred.
+   If "err" is 0 then you should fill the buffer of the answer with the results
+   of the GET_REPORT request and set "size" correspondingly.
 -- 
-With best wishes
-Dmitry
+2.34.1
+
 
