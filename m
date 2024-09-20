@@ -1,107 +1,117 @@
-Return-Path: <linux-usb+bounces-15259-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15260-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82CA397D0E1
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 07:13:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19BF497D230
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 10:02:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B20F31C21A9C
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 05:13:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D78F5286A53
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 08:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63760374C4;
-	Fri, 20 Sep 2024 05:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBCEF57CB6;
+	Fri, 20 Sep 2024 08:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="TDdjeood"
+	dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b="gTk0Nu1X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C402746B;
-	Fri, 20 Sep 2024 05:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2F418EB1;
+	Fri, 20 Sep 2024 08:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.3.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726809181; cv=none; b=kEdnVJZ8RTZ+fHsHP3oEL6edWVT8OSp+ogbK2UdA+oR5jWsvfdsc7TZNt45YzGoGH4k8+ZP03bwlJ++4Za3dnqABPxrD47yYQtbNAxC3VhoQPnlUEzl+P7Snts55rM8jvK/vK0D+yhZYcwp9edc5loTK/ZMOH8XYq4fSvXmtKgQ=
+	t=1726819331; cv=none; b=VdcrR40uuUPtGNZ/iuLMuvCUfRqdmcl9KQ7bwUJiNWFBVWUc6S4yMZl0Af93Gw+WkWJe8D/JW9xFtq9EGO9dZFbQg5BizYO0f9nR2jx3n8ejBxzFDPrkUc70dCkekQQN83SnT5II7ZXDkoGRnl9gOVdAUFVakj3xaiOkKsbdP3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726809181; c=relaxed/simple;
-	bh=piMSoVhy/D9gqh9FrPUHfiLZ9DC1lL5bBLpyTws+rS8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nSBLHVzMkU5Q530frdmNppm8Y8iwFgucDMBwbwVavnT0mMj6z2aHQjmRf7ycKmsyZkgFoyHcHnH8FFUuHnKqv2dAvDGOz7zMweyDlGruHgL/DhY6moeBwF+m7UxXY8xql3XXO7xlDYptoiOkLKkmQPByMTfQBZztUvsYjmCFeeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=TDdjeood; arc=none smtp.client-ip=54.204.34.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1726809165;
-	bh=iIpeX/YTfhSlEkkeuECb8mo5DaPBrbYDbRDN4IXS7fo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=TDdjeoodJmrkIzwWB2mdFdtDixosckyJJ2/ntEKeFmi7c13VhXRwzYzQ4lmpiIwao
-	 D65bb5cPCDpPWE1Ms0h5JD686a6iaV7gsyVpD+YfMJJLx4sKP8U5OOBZUFqrk0CvyL
-	 BmPApI02cdaBqXKf/+iEba9RM4bGRvfd1MdnicxE=
-X-QQ-mid: bizesmtpsz6t1726809128tdg8zyx
-X-QQ-Originating-IP: 4qK6gaLJ7eqPa1/2ba1T5tsfcJmFoZtyCcdNx9BH5JI=
-Received: from localhost.localdomain ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 20 Sep 2024 13:12:06 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 10282610817389181719
-From: WangYuli <wangyuli@uniontech.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org,
-	raoxu@uniontech.com,
-	wangyuli@uniontech.com
-Cc: linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1726819331; c=relaxed/simple;
+	bh=4t9FIdG8kcgMmWsigSoI8Jasp4vMsO39N68Dc9kJ7xk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i4zpF2i2wiY2wgncs2WMrwq/6PelFXL5wRdKVmhHvmRLjBoXX8qLC10asbyQ2UJ6hGcsp1hIgJGjHnMJdkRZZ1us8SA95u/byAZau4TjvIaT+DeeYA4qei+VaE3/mj23TcvIfOY4yQa0pN/omRXbN7wSzXCgn2m9wLhsWw5EJgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com; spf=pass smtp.mailfrom=ysoft.com; dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b=gTk0Nu1X; arc=none smtp.client-ip=81.19.3.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ysoft.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+	s=20160406-ysoft-com; t=1726819324;
+	bh=eNwOUsnTzpWabWCjSD0aAJbn8IKtEXU1rIipDUczE6o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gTk0Nu1XyC3Oun7Izllc+bHHB3+nwekV86IrrlXdEyDtDOAVrzbFfNlTysrQngHi5
+	 4l4wQD/8lo6Dgpt/cD6JrJy9cgGAFzyE8s4S8AijH2zi7Ur532EBDrlICZfxUqHDmJ
+	 xO0GT3hHIYw3p9yi/UpM67dhshbeN8IbzLVyhTAo=
+Received: from vokac-nb.ysoft.local (unknown [10.1.8.111])
+	by uho.ysoft.cz (Postfix) with ESMTP id 1F87DA0419;
+	Fri, 20 Sep 2024 10:02:04 +0200 (CEST)
+From: =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Petr Benes <petr.benes@ysoft.com>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Herburger <gregor.herburger@ew.tq-group.com>,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
+	Michael Walle <mwalle@kernel.org>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Mathieu Othacehe <m.othacehe@gmail.com>,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	guanwentao@uniontech.com,
-	zhanjun@uniontech.com
-Subject: [PATCH] xhci: debugfs: Add virt endpoint state to xhci debugfs
-Date: Fri, 20 Sep 2024 13:11:59 +0800
-Message-ID: <63B520E210CBE3F6+20240920051159.1363806-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.45.2
+	linux-usb@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	=?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Subject: [PATCH v2 0/4] Add support for new IMX8MP based board
+Date: Fri, 20 Sep 2024 10:01:50 +0200
+Message-ID: <20240920080154.1595808-1-michal.vokac@ysoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-The ring data structure of each xHCI endpoint might stop sending
-data due to the virt endpoint state.
+Hi,
 
-Show the virt endpoint state within the endpoint context via debugfs
-to facilitate debugging.
+this series adds support for a new member in our IOTA platform.
+The board is based on the i.MX8MP SoC. The first two patches
+add support for most of the board functionality except USB Type-C
+port and some other minor things.
 
-Co-developed-by: Xu Rao <raoxu@uniontech.com>
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- drivers/usb/host/xhci-debugfs.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+[PATCH 3] adds new device tree binding for a Diodes Incorporated
+PI5USB30213A Type-C Controller and [PATCH 4] enables that port on
+the IOTA2 Lumpy board.
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index f8ba15e7c225..35247cd50c74 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -291,12 +291,13 @@ static int xhci_endpoint_context_show(struct seq_file *s, void *unused)
- 	for (ep_index = 0; ep_index < 31; ep_index++) {
- 		ep_ctx = xhci_get_ep_ctx(xhci, dev->out_ctx, ep_index);
- 		dma = dev->out_ctx->dma + (ep_index + 1) * CTX_SIZE(xhci->hcc_params);
--		seq_printf(s, "%pad: %s\n", &dma,
-+		seq_printf(s, "%pad: %s, virt_state:%#x\n", &dma,
- 			   xhci_decode_ep_context(str,
- 						  le32_to_cpu(ep_ctx->ep_info),
- 						  le32_to_cpu(ep_ctx->ep_info2),
- 						  le64_to_cpu(ep_ctx->deq),
--						  le32_to_cpu(ep_ctx->tx_info)));
-+						  le32_to_cpu(ep_ctx->tx_info)),
-+						  dev->eps[ep_index].ep_state);
- 	}
- 
- 	return 0;
+We also wrote a driver for that Type-C port controller. I would like
+to get that driver upstream as well but I expect it will take much
+more iterations and effort to get it into mainline-ready shape so
+I intentionally excluded it from this series. AFAIK it should not
+be a problem to accept a device tree binding for a HW that does not
+have a driver in the kernel yet.
+
+Michal Vokáč (2):
+  dt-bindings: arm: Add i.MX8MP IOTA2 Lumpy board
+  arm64: dts: imx: Add imx8mp-iota2-lumpy board
+
+Petr Benes (2):
+  dt-bindings: usb: Add Diodes Incorporated PI5USB30213A Type-C
+    Controller
+  arm64: dts: imx8mp-iota2: Enable the USB Type-C port
+
+ .../devicetree/bindings/arm/fsl.yaml          |   1 +
+ .../bindings/usb/diodes,pi5usb30213a.yaml     |  88 +++
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 518 ++++++++++++++++++
+ 4 files changed, 608 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+
 -- 
-2.45.2
+2.43.0
 
 
