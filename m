@@ -1,133 +1,175 @@
-Return-Path: <linux-usb+bounces-15276-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15278-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAC5D97DBEF
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 09:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A3F797DDC5
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 18:04:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E884C1C211DF
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 07:11:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D9D51C20E82
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 16:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFA614EC7E;
-	Sat, 21 Sep 2024 07:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC92174EE4;
+	Sat, 21 Sep 2024 16:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k2AEDzg7"
+	dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b="ElKmbHez"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mail.rosalinux.ru (mail.rosalinux.ru [195.19.76.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CD538F9C
-	for <linux-usb@vger.kernel.org>; Sat, 21 Sep 2024 07:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D8638DE1;
+	Sat, 21 Sep 2024 16:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.19.76.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726902698; cv=none; b=bdcOdukJMF2TR8ySpeQtjgMUUMmkdaZIUu53uQ9w+YzLVxOxqFCK//+X5A4/9kjEsryhermiHaeqx56MeB2c5cFv11UyhNX15AwfrjULWAP8cN06Jfcg6GUC6/CbrjdRNNMLkCeB06sCCg+FDvc5DX+z2XHoXMiHI6UgviifVrE=
+	t=1726934677; cv=none; b=GNjNyrv8070egu3uSZOrvepFskSIh2an3HzyIRtdmnpxjQtFac2B0fEgsVI01pTPHzumH5V+Gs3oXgSu5qdBaG6SWWg0wd6tAyMN4hGz999fj8Z7J+nsJA5WA6QT7143mgi3y86b440k87gi5uwU+qfo1WySjWfOJJMw5d6S8zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726902698; c=relaxed/simple;
-	bh=hH41RHYKw4lqHr7XX6POAThxUbZ8bCohv68dNVoXk5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nTRD9Lb4zG7Zr8pJzzTlYb4KvqXOKF6Sr+Kd/wV0MZDDBWZeDd5B86G26lGu8rIT9BUoSXKmlnlYr/1D+GdX7OZ9ZVgbwcBGdtyCsgsFl7YLNI4qP7AOSZEIB7hwefnM+m53KyW3WoLnlVxPnqpNkh44oo7mCsvmKT8C6mdF+hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k2AEDzg7; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726902695; x=1758438695;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hH41RHYKw4lqHr7XX6POAThxUbZ8bCohv68dNVoXk5I=;
-  b=k2AEDzg7Hm7JvZtAfqeFlNhVDMl2FKXbk889soEJfmA+HNoN6/uFPunV
-   0fjw3X98c2tkhGlt+Tk455nM7Y4xYAszZRo+u4LWEysDQkBeFG8n1/InE
-   2nmBjnqrvPTgB1pLcLKFSqg6qxrOU4JndwMjnwaVqYGNzV6t55bBzh9vH
-   RyyD8nRwMkHgc72/xMHwzZn7lYHaHDoYF5DPqJcuRP7FObwe+78vOWmko
-   Hi0SfIHkRlKZhXUllPKPZQbk6KVOJb6Jqqj6hI+FaYDeuQ+4cpgFeC6M2
-   UVm5WlSznm5+MCKGaKTzfPUG/GqCa/d6uNL+Ep2T6pDCXwcv2vth7leWP
-   w==;
-X-CSE-ConnectionGUID: +5Xoj8OjTrG+ObNU5aWGvA==
-X-CSE-MsgGUID: IMdsF2qRTMe07VDHTa0nwg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11201"; a="37048611"
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="37048611"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 00:11:34 -0700
-X-CSE-ConnectionGUID: LW2f+v8+QbK2TXDTZwLecw==
-X-CSE-MsgGUID: 0cus1x7xSPqo0v/a888WbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="70682292"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Sep 2024 00:11:31 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sruHA-000FBb-2d;
-	Sat, 21 Sep 2024 07:11:28 +0000
-Date: Sat, 21 Sep 2024 15:11:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Pavan Holla <pholla@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
-Message-ID: <202409211431.LpvxyX25-lkp@intel.com>
-References: <20240910101527.603452-7-ukaszb@chromium.org>
+	s=arc-20240116; t=1726934677; c=relaxed/simple;
+	bh=H5F90rB58uGzcWaFnaZV/LE4qBTOYOpGICqjNo/uK20=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aTq4Sgpf2nmBfWzApp4bK1x2zbNgOOVskaW+IC3IhwcNwsaaqVVb4RMKzhvxx/UdnJF0wcZnU6Txi5EvCO4FvCzwjQ0n+6FV5MoAbIt+NrYVnzl23YIy4apB5ox0PfRYlO55ClmPQXhe78dBHJfDmxnHvLoZEavRQKMa8jx5NdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru; spf=pass smtp.mailfrom=rosalinux.ru; dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b=ElKmbHez; arc=none smtp.client-ip=195.19.76.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosalinux.ru
+Received: from localhost (localhost [127.0.0.1])
+	by mail.rosalinux.ru (Postfix) with ESMTP id 62215FC20D6C5;
+	Sat, 21 Sep 2024 19:04:18 +0300 (MSK)
+Received: from mail.rosalinux.ru ([127.0.0.1])
+	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id j-VzKUJ4tFvU; Sat, 21 Sep 2024 19:04:18 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.rosalinux.ru (Postfix) with ESMTP id 2E6E31F0C6EF;
+	Sat, 21 Sep 2024 19:04:18 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru 2E6E31F0C6EF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
+	s=1D4BB666-A0F1-11EB-A1A2-F53579C7F503; t=1726934658;
+	bh=ssdv2fMp3zp3i+dXzmOSC1VQ7A/1Z1y2ZcLf3tqNFl8=;
+	h=From:To:Date:Message-ID:MIME-Version;
+	b=ElKmbHez+sOVcTWiazVaAXZLkhfoXA8uTxs+i1RDUi7cbPq/zAGGMY7Uaw/QSkOYS
+	 NUUDGmGFFVb/B+ci9a7RJ1f+kygaVfk/94Rtv1qxfSGpmJPF1WifpmawfOjrj7JUOG
+	 /WT02xFLPUdAnuYTcBoZ39MoXKpbVEgptjvA1PL4AQPcLms5XmzQ076nTaOkMC0vyl
+	 6CaVQiOxiVVUmOTxiVkXOSdEwF2UAH9hZtFCw13ximRL7YZAxU9M8XYfYo5gTZOR5u
+	 rlhOoxKrKb5f8626OiDeKdtTvN/UxVFHG7Kd9lwmJqF9T1gwJxYbPWkPXqUyCYK2Vn
+	 KsX8UwCl3y6HA==
+X-Virus-Scanned: amavisd-new at rosalinux.ru
+Received: from mail.rosalinux.ru ([127.0.0.1])
+	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 95v4ZdzvCY0P; Sat, 21 Sep 2024 19:04:18 +0300 (MSK)
+Received: from localhost.localdomain (unknown [89.169.48.235])
+	by mail.rosalinux.ru (Postfix) with ESMTPSA id 06375FC20D6C5;
+	Sat, 21 Sep 2024 19:04:16 +0300 (MSK)
+From: Mikhail Lobanov <m.lobanov@rosalinux.ru>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mikhail Lobanov <m.lobanov@rosalinux.ru>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Rodolfo Giometti <giometti@linux.it>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: [PATCH v2] usb: oxu210hp-hcd: Fix double locking of oxu->mem_lock spinlock
+Date: Sat, 21 Sep 2024 07:49:12 -0400
+Message-ID: <20240921114914.8802-1-m.lobanov@rosalinux.ru>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240910101527.603452-7-ukaszb@chromium.org>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Łukasz,
+Initially, the function oxu_qh_alloc() acquired the spinlock oxu->mem_loc=
+k,
+and then called the function ehci_qtd_alloc(), which also attempted
+to acquire the same spinlock. This would lead to a deadlock.
 
-kernel test robot noticed the following build errors:
+Remove the locking from the function ehci_qtd_alloc(). Now, oxu_qh_alloc(=
+)
+can call ehci_qtd_alloc() without causing double locking. In all other
+cases where ehci_qtd_alloc() is called, acquire the spinlock before the
+call, maintaining spinlock locking as in the previous implementation.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus lee-mfd/for-mfd-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11 next-20240920]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ukasz-Bartosik/platform-chrome-Update-ChromeOS-EC-header-for-UCSI/20240910-182729
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20240910101527.603452-7-ukaszb%40chromium.org
-patch subject: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
-config: x86_64-buildonly-randconfig-005-20240921 (https://download.01.org/0day-ci/archive/20240921/202409211431.LpvxyX25-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240921/202409211431.LpvxyX25-lkp@intel.com/reproduce)
+Fixes: b92a78e582b1 ("usb host: Oxford OXU210HP HCD driver.")
+Signed-off-by: Mikhail Lobanov <m.lobanov@rosalinux.ru>
+---
+v1->v2: remove bogus mutex mentioning from commit description and update
+the commit message to use spinlock.
+link to v1: https://lore.kernel.org/lkml/20240916174326.118495-1-m.lobano=
+v@rosalinux.ru/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409211431.LpvxyX25-lkp@intel.com/
+ drivers/usb/host/oxu210hp-hcd.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
->> ERROR: modpost: "genl_register_family" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "genl_unregister_family" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "__alloc_skb" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "genlmsg_put" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "nla_put" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "skb_trim" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "sk_skb_reason_drop" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "init_net" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "netlink_broadcast_filtered" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-=
+hcd.c
+index 3f871fe62b90..fa24cf89dadb 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -977,8 +977,6 @@ static struct ehci_qtd *ehci_qtd_alloc(struct oxu_hcd=
+ *oxu)
+ 	int i;
+ 	struct ehci_qtd *qtd =3D NULL;
+=20
+-	spin_lock(&oxu->mem_lock);
+-
+ 	for (i =3D 0; i < QTD_NUM; i++)
+ 		if (!oxu->qtd_used[i])
+ 			break;
+@@ -997,8 +995,6 @@ static struct ehci_qtd *ehci_qtd_alloc(struct oxu_hcd=
+ *oxu)
+ 		oxu->qtd_used[i] =3D 1;
+ 	}
+=20
+-	spin_unlock(&oxu->mem_lock);
+-
+ 	return qtd;
+ }
+=20
+@@ -1601,7 +1597,9 @@ static struct list_head *qh_urb_transaction(struct =
+oxu_hcd *oxu,
+ 	/*
+ 	 * URBs map to sequences of QTDs: one logical transaction
+ 	 */
++	spin_lock(&oxu->mem_lock);
+ 	qtd =3D ehci_qtd_alloc(oxu);
++	spin_unlock(&oxu->mem_lock);
+ 	if (unlikely(!qtd))
+ 		return NULL;
+ 	list_add_tail(&qtd->qtd_list, head);
+@@ -1630,7 +1628,9 @@ static struct list_head *qh_urb_transaction(struct =
+oxu_hcd *oxu,
+ 		/* ... and always at least one more pid */
+ 		token ^=3D QTD_TOGGLE;
+ 		qtd_prev =3D qtd;
++		spin_lock(&oxu->mem_lock);
+ 		qtd =3D ehci_qtd_alloc(oxu);
++		spin_unlock(&oxu->mem_lock);
+ 		if (unlikely(!qtd))
+ 			goto cleanup;
+ 		qtd->urb =3D urb;
+@@ -1686,7 +1686,9 @@ static struct list_head *qh_urb_transaction(struct =
+oxu_hcd *oxu,
+ 			break;
+=20
+ 		qtd_prev =3D qtd;
++		spin_lock(&oxu->mem_lock);
+ 		qtd =3D ehci_qtd_alloc(oxu);
++		spin_unlock(&oxu->mem_lock);
+ 		if (unlikely(!qtd))
+ 			goto cleanup;
+ 		if (likely(len > 0)) {
+@@ -1724,7 +1726,9 @@ static struct list_head *qh_urb_transaction(struct =
+oxu_hcd *oxu,
+ 		}
+ 		if (one_more) {
+ 			qtd_prev =3D qtd;
++			spin_lock(&oxu->mem_lock);
+ 			qtd =3D ehci_qtd_alloc(oxu);
++			spin_unlock(&oxu->mem_lock);
+ 			if (unlikely(!qtd))
+ 				goto cleanup;
+ 			qtd->urb =3D urb;
+--=20
+2.43.0
 
