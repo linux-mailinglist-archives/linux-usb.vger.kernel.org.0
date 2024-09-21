@@ -1,139 +1,144 @@
-Return-Path: <linux-usb+bounces-15273-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15274-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4905997DAEA
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 01:50:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB40197DAFE
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 02:25:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C813285240
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2024 23:50:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED3421C210C7
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 00:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D51218E032;
-	Fri, 20 Sep 2024 23:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 622496FBF;
+	Sat, 21 Sep 2024 00:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oJUhsjfE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j5kOC7T8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7FA5D915;
-	Fri, 20 Sep 2024 23:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B7A257D;
+	Sat, 21 Sep 2024 00:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726876228; cv=none; b=sesN2RUx03i+iJAIcQRTj3Taaxpsgj/+5EY0GoEAEF2I+XQoIsxQXD/ZFdXrtIBa/G9ocKmD6AlL3ogZQlUgfiIA3mXSSGGXBG5tsYHPLu1f+D2BqIQkNcxA7JG/34A6uC8hoAuYmi1i7xEuZece+iz0zwXtD1j5ReelO9JdLPM=
+	t=1726878304; cv=none; b=j+ElpIha8Ylw7oQ7n7fekOiB8/bBC3STT3cK3FcjHEw7XC5DTiDdA8ucrae3ShZUe0k3+Mu1cPwc48BJ8PtTTeXWYjncqph6OtIlI8dOoEuW00wGDmgx5KP8T/LQbxA+Mty4ulgOlJYPN0XKscyc0f9lTk7Yw7foCGLtgKDaTgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726876228; c=relaxed/simple;
-	bh=ipjxMYTJoUHV3BA3NQmOYPF7baYuN9ZnKpWZo3rOiu4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=k5hJOOKoIEd89oIChSlAG6W+ipKsRoKQUhbb1RfNtHMnn9NOLvVMgPrx9V6UCWuwXXapn0rj/b76dr5KkXANlCQvPffKthsacTnzttYwjHfQGrDyk8+tlfFrXD3BY9nyngkW6hhekiSKTmnKnXB6AKqvj0soKh6t17ElK224JDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oJUhsjfE; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48KKfbDf018634;
-	Fri, 20 Sep 2024 23:49:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ipjxMYTJoUHV3BA3NQmOYPF7baYuN9ZnKpWZo3rOiu4=; b=oJUhsjfEtGDyM+Xk
-	sT9Exk6FnRk/K6LyxiHaCDBqhVQbTf9oAsbilKHcPnCirdSxQW7Zu1BgW5oSfbOl
-	fZi+/Dg5P+46YauPnUtI1ShsqpNNTsKIxnWvPiRVF0Hl3tNcbs/mMeNeVPfGGI5W
-	WA71H3X71j6loxOa4Uop19VSgmmhYkd2pjOPqFrgcR+youl3vZYOR085mQ5eaqAp
-	MT/5pUUcu/2hkaGobdhEskM14ziOgL75PBULCWpJURYdIszjjkZ1vdUB9UoFMl0Z
-	8dq1uAhO9+I14V7FSfXVJ8axATi9KnrF/xg0onTL2vXjzp4MtEVigsfIOxkYHy7d
-	ANgOUw==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4hftsu2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Sep 2024 23:49:58 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48KNnwf2011994
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Sep 2024 23:49:58 GMT
-Received: from [10.71.112.62] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 20 Sep
- 2024 16:49:57 -0700
-Message-ID: <182938da-da86-49a4-800a-446954cc6c60@quicinc.com>
-Date: Fri, 20 Sep 2024 16:49:57 -0700
+	s=arc-20240116; t=1726878304; c=relaxed/simple;
+	bh=LDiupKMatztnfbrKBKYiIRKaIbOOzvDj36STPReByR0=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=A0a3+JC49JfmUgU0hpqqYTZQgp/Zs6g4wX2Mr2mIpBpbnrpY48CQ4eafrEmYGpMCNWNnqpwB5Ry4czcTUpSenNtjlaAm9rXrlCrIu2dY6Gk407yNoZYiCpw+55+PSvG8OV/lvpy5U0AlTjlzhXkrAJexUEYbBCX+chlg02r7zGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j5kOC7T8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA32C4CEC3;
+	Sat, 21 Sep 2024 00:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726878304;
+	bh=LDiupKMatztnfbrKBKYiIRKaIbOOzvDj36STPReByR0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=j5kOC7T8u+SEHynvGF7zJ32gTJYxhEkHhC9JDxDMbbD+6t7qIDxGxTAdv4fJSNygB
+	 Z5ME2l/nH1gX8++NXKyRdxmDhffVSCBBjofuGnH7VpEii1hdfFiAqL0eBmtA5umuB+
+	 AZ2yHGUdAzeGlNf0PU8WpkJF3OEkkTxU3j8c8wT+SgAXMu392pffNaZBWw7B0u1TvC
+	 A8OvmMVSh+8Z6roaTA4a5xfs21V3K3UYKmVQLq17pSl9+RIfe6YLGyVt2P7OdXpNDm
+	 MLwudJb90m6B+DEchGIe+amPMFN08jVRat/fgZoS2lCLTbY0ZSEGGW3fNT2soJqf3y
+	 S+hOGzoC5rF2A==
+Date: Fri, 20 Sep 2024 19:25:03 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v27 01/32] xhci: add helper to stop endpoint and wait for
- completion
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-CC: <mathias.nyman@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <alsa-devel@alsa-project.org>, <bgoswami@quicinc.com>,
-        <broonie@kernel.org>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <devicetree@vger.kernel.org>, <dmitry.torokhov@gmail.com>,
-        <gregkh@linuxfoundation.org>, <krzk+dt@kernel.org>,
-        <lgirdwood@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <pierre-louis.bossart@linux.intel.com>,
-        <robh@kernel.org>, <srinivas.kandagatla@linaro.org>, <tiwai@suse.com>
-References: <20240913103237.2f5dc796@foxbook>
- <a9dcaa5a-4f5d-451a-93aa-7457798fc243@quicinc.com>
- <20240915095514.6b01fefb@foxbook>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20240915095514.6b01fefb@foxbook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: iytzgxK0RhtlpMsGzW7stpvgCpcQAXKb
-X-Proofpoint-ORIG-GUID: iytzgxK0RhtlpMsGzW7stpvgCpcQAXKb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409200174
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: =?utf-8?q?Michal_Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Mathieu Othacehe <m.othacehe@gmail.com>, 
+ Alexander Stein <alexander.stein@ew.tq-group.com>, 
+ linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
+ Hiago De Franco <hiago.franco@toradex.com>, 
+ Herburger <gregor.herburger@ew.tq-group.com>, imx@lists.linux.dev, 
+ Petr Benes <petr.benes@ysoft.com>, linux-usb@vger.kernel.org, 
+ Michael Walle <mwalle@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Joao Paulo Goncalves <joao.goncalves@toradex.com>, 
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>, Shawn Guo <shawnguo@kernel.org>, 
+ devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+In-Reply-To: <20240920080154.1595808-1-michal.vokac@ysoft.com>
+References: <20240920080154.1595808-1-michal.vokac@ysoft.com>
+Message-Id: <172687817135.147604.5208248981438560257.robh@kernel.org>
+Subject: Re: [PATCH v2 0/4] Add support for new IMX8MP based board
 
-Hi Michal,
 
-On 9/15/2024 12:55 AM, Michał Pecio wrote:
+On Fri, 20 Sep 2024 10:01:50 +0200, Michal Vokáč wrote:
 > Hi,
->
->> Maybe the last sentence is not needed.  When we are using the
->> secondary interrupters, at least in the offload use case that I've
->> verified with, the XHCI is completely unaware of what TDs have been
->> queued, etc...  So technically, even if we did call the default
->> handler (ie xhci_handle_cmd_stop_ep), most of the routines to
->> invalidate TDs are going to be no-ops.
-> Yes, the cancellation machinery will return immediately if there are
-> no TDs queued by xhci_hcd itself.
->
-> But xhci_handle_cmd_stop_ep() does a few more things for you - it
-> checks if the command has actually succeeded, clears any halt condition
-> which may be preventing stopping the endpoint, and it sometimes retries
-> the command (only on "bad" chips, AFAIK).
->
-> This new code does none of the above, so in the general case it can't
-> even guarantee that the endpoint is stopped when it returns zero. This
-> should ideally be documented in some way, or fixed, before somebody is
-> tempted to call it with unrealistically high expectations ;)
->
-> As far as I see, it only works for you because isochronous never halts
-> and Qualcomm HW is (hopefully) free of those stop-after-restart bugs.
-> There will be problems if the SB tries to use any other endpoint type.
+> 
+> this series adds support for a new member in our IOTA platform.
+> The board is based on the i.MX8MP SoC. The first two patches
+> add support for most of the board functionality except USB Type-C
+> port and some other minor things.
+> 
+> [PATCH 3] adds new device tree binding for a Diodes Incorporated
+> PI5USB30213A Type-C Controller and [PATCH 4] enables that port on
+> the IOTA2 Lumpy board.
+> 
+> We also wrote a driver for that Type-C port controller. I would like
+> to get that driver upstream as well but I expect it will take much
+> more iterations and effort to get it into mainline-ready shape so
+> I intentionally excluded it from this series. AFAIK it should not
+> be a problem to accept a device tree binding for a HW that does not
+> have a driver in the kernel yet.
+> 
+> Michal Vokáč (2):
+>   dt-bindings: arm: Add i.MX8MP IOTA2 Lumpy board
+>   arm64: dts: imx: Add imx8mp-iota2-lumpy board
+> 
+> Petr Benes (2):
+>   dt-bindings: usb: Add Diodes Incorporated PI5USB30213A Type-C
+>     Controller
+>   arm64: dts: imx8mp-iota2: Enable the USB Type-C port
+> 
+>  .../devicetree/bindings/arm/fsl.yaml          |   1 +
+>  .../bindings/usb/diodes,pi5usb30213a.yaml     |  88 +++
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 518 ++++++++++++++++++
+>  4 files changed, 608 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/diodes,pi5usb30213a.yaml
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> 
+> --
+> 2.43.0
+> 
+> 
 
-So what I ended up doing was to split off the context error handling into a separate helper API, which can be also called for the sync ep stop API.  From there, based on say....the helper re queuing the stop EP command, it would return a specific value to signify that it has done so.  The sync based API will then re-wait for the completion of the subsequent stop endpoint command that was queued.  In all other context error cases, it'd return the error to the caller, and its up to them to handle it accordingly.
 
-Thanks
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Wesley Cheng
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y freescale/imx8mp-iota2-lumpy.dtb' for 20240920080154.1595808-1-michal.vokac@ysoft.com:
+
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: pcie-ep@33800000: reg: [[864026624, 4194304], [402653184, 134217728]] is too short
+	from schema $id: http://devicetree.org/schemas/pci/fsl,imx6q-pcie-ep.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: pcie-ep@33800000: reg-names: ['dbi', 'addr_space'] is too short
+	from schema $id: http://devicetree.org/schemas/pci/fsl,imx6q-pcie-ep.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: usb@38200000: 'pinctrl-0' is a dependency of 'pinctrl-names'
+	from schema $id: http://devicetree.org/schemas/pinctrl/pinctrl-consumer.yaml#
+
+
+
+
 
 
