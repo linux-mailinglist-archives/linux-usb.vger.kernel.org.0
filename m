@@ -1,308 +1,242 @@
-Return-Path: <linux-usb+bounces-15285-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15286-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A28F97DEF6
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 23:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8595C97DFB9
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 03:11:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCB3B28195F
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2024 21:02:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 450BE2818D3
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 01:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F31E16EB54;
-	Sat, 21 Sep 2024 21:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B741917FE;
+	Sun, 22 Sep 2024 01:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J8Fk5OM8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iD17Jsmn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1243314EC46;
-	Sat, 21 Sep 2024 21:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F83F1917CE
+	for <linux-usb@vger.kernel.org>; Sun, 22 Sep 2024 01:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726952540; cv=none; b=I4Uj3sOM91iJ+snP3utO4TxbbCkUmSzrTfe3rI/LBKbfRCFeIhZ4QtshtsLr/zteOzob5+AKqwfW6q9ot7OnMsYf8V/a7tnV7Vo4s20lPb1L3iq+VcrJr7Qrr8PlZtwdKME1jCZ7GjHXoL6c3j3ninuFSuijpcgf3Zmn5wAcEgg=
+	t=1726967501; cv=none; b=TtZuRYqgTO4ISBksimnJWIFjQB07Z16QUKgd91gUr1EaleCeI+vzz5u1sBHk58TSxGqAFgygVQZ9Wd0dEiCpdWxFEcJzbqCvozuoZqV3To9htmCJkZzww+79fVAEPttySphEoObxzGemQNR4lV1jpcsyNe/olVuLtxxmGH02qTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726952540; c=relaxed/simple;
-	bh=3wCK4pDmxl7uTyWPDiG6ZYuTYmBF9WwLuq6djQ6BLkI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jkOaZFlGqFNt/RwN2oMGmqfHbqUDuFRep3rn+QNqIkHael38/aKhlFMK9PmYS/sDyTrLTpgRQ17ptAYeuLwqISH03CUKnQVp3CpT/tRfTxMOqSHoyvmT76c8sr/InOFEGefW0zyi0O3LT5f29IgCGuB5s6s6K9Y6179hgcnH/eA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J8Fk5OM8; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-374c180d123so1822388f8f.3;
-        Sat, 21 Sep 2024 14:02:17 -0700 (PDT)
+	s=arc-20240116; t=1726967501; c=relaxed/simple;
+	bh=mkPZTZ4+7X6YfRtxtJvsGondZDr3cT+dPb4FafRwtlc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=pfMYrF0towSWvckSoFD9QmcEmriZcMahv0MwVDbyNQYT7/bESxMf8Xlo8057F7FBOHuOuhnJ1VfuSDvzjFkKKBxnVO+Ebu2mKryUI4RPgCFShmXYR/f3JOO/Y6KLHffYDCVoBjPDbKHowWxVN6kZ3m/UAT+IPLKEayaK+IUE6Ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iD17Jsmn; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5c247dd0899so2812a12.1
+        for <linux-usb@vger.kernel.org>; Sat, 21 Sep 2024 18:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726952536; x=1727557336; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zKoAXStZLBWHetqp1i1bLnjUeePA58I2T3QO0NmIvV0=;
-        b=J8Fk5OM8D5jxV64eL6aJsJe5HXgZiratkh48rJ5dATxJfI6OREdNrWpdMWODt7G0G0
-         s1w1tnauEVKFocWF+ztT4qcN+eNj7Q4St/NVs/4EeX4YCPN9tuSFyXyR2v9bjSzNSTki
-         iMUueWaqL5AjO4qc5WsJN5vqqWFQ4R4NSmLQYnbARJuK2wbevyA0v8Yy+WUxDzr4xBci
-         4KioBTiYWmzZ/ztp5Cd7echosDVnfImSaHd+9k0z5z3g4G00qE7hLXjcEd9BcWmiAT9K
-         gB7pyIE6t5a/qlSNyeY1MeOWtw0fIAK2b55tiIhaVAs2Bve3Mxv3075Ojbh8Rm4mhqOa
-         ZRfg==
+        d=google.com; s=20230601; t=1726967497; x=1727572297; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
+        b=iD17JsmnF63TWL61UBkCOk+f84qtZUYIeuK3yrghPIiJuXNAGzAu+g4RkSCi73pYXo
+         0FjSJONUGguXFtJQ5zCrHDtsKMn9uEAJOLOHkGODSSoctFoiaEsZEJGoe3gViEc6KiZy
+         QuG1r1z4wZX7k2T+OPk6JD9Dle/Wc1lP41GTML4fuivfbTOTCD5p0wYG4VUI/y9B7nJw
+         clvC0PcsIY1mvkb0aKPTXAnFLaAvajFPyjfiW3yvvWcN3SIh4XxvGMJCmdvebjWJWntj
+         ANIgfu9yycWFyuphNvDa+C4eYW65TL0Aa0VS1cpE9n4T4HBWWz360GD7mHRPoCCS3JRb
+         XIiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726952536; x=1727557336;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zKoAXStZLBWHetqp1i1bLnjUeePA58I2T3QO0NmIvV0=;
-        b=ZZOczaSudOMPgjm195XTivnH26iI/OwzENuS01Bd+Q+nRFA5sGDeLK+Ty8LvXsofoN
-         3u0hOGcpC0meCmnvuICS563GZ80UdSBQA/I5kYFP46kGeclQgm4qoocpJdvINXvk+5ve
-         CLMfSE+tXqbX7Fo2FS9gWZzn7KyiJoMP8wFeXBrHEB6Gfol6tZYUZod+5r5I291WaB5a
-         k4gT9I2khgsRT7vjUfoI+Up4uSx6mmGtpNBoEidwnRuQ2WHyrOTB6e4Bh6f3AumqRytt
-         JkeGZuDDSTPxcrtc68/JHkyaD31Fsaibdc7295Tc/jnsmoroVLHA2bfE1ZGqzxji0BIa
-         jSDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+WnqtZGheaJhbkMbjiCJelGL6HzT0Py9zpkjGHGmLgkT9PU82F7XfTaZJKqtEWxkr5iBQTlHcn0kt@vger.kernel.org, AJvYcCWxpSnif140N7gNNOlycl0HLnqzcgs8KqSGUNFn7XwdznUBeWsFSJiwrqA4QCTetbyNmglC4voWlROz384=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxxd0ireRWSMpGaK2aXBTe5Obo1Tk3SAzz7jOf/RtOy/csFvvSJ
-	IXCLeGSt9sBxkM1hORQaC6BNFLcE3SUaIBZIhnaxRd3lbHVutNKYBvafDI3NDrH1ypQyhZKs5F3
-	e2O8EKa0yWP7s3QeInWxYOBz0SDM=
-X-Google-Smtp-Source: AGHT+IEUm6alyY+xiS5Eswn1hbYUtIGkAkiOyJTDIHRXpKNYIc6s4aylzcfTCsv7nyhcfB8WhkBRL6HdXpeBuxfPHto=
-X-Received: by 2002:adf:ef89:0:b0:374:babf:ac4d with SMTP id
- ffacd0b85a97d-37a42392ec2mr3083634f8f.58.1726952536232; Sat, 21 Sep 2024
- 14:02:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726967497; x=1727572297;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
+        b=TM/Nb6SJMvbIxBQa0y8cp3CZSga8QQPccSv+wNXCW5wtf2TAaBaOviLkLJu9qJORqW
+         8arUjFlX+dGTzW3d2QLHBx2cyyBAZemhNyRUermeAQKpOkXaBrFO6iWcquEmUtDib+V2
+         U85EblAjYRBL+FWPQf1JHWvOFYIjx0VzUz1Mjz+xc4B1Kk4hlKJK/wRk4/iAJSoqK0HT
+         Bmsh70rVxblTnpi6R0v5U7KVGcZfpSr32E0a2Fg/wCyNLfUY0FiBEoezDzHLRjVd3h1r
+         gJjLZRoFUFyIBOeBB4Y9uH7y6lZVzZLMCwkSMF6lGOcrCvpc4bw+Pw6StsLrfaIrkpze
+         bh0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWB9Twzsj9L+m+oSOq7B2JEA5QUUufdPhkT5EVwCzlvF/tFWYpjZEaWSZZhG7qaOyTei7K5ZaQvWis=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMRk/cnsye8v/Aq1NBc3B0OjC2k/Hjo6m9647D6otzPvmdiZb+
+	s8oWC62dt/EYPl/faUlAM5D8snwjm0OcYvB5YFGrHL3JIrV6LM6I9QMgsSFNZdgroSoE5huSmdZ
+	mHYh9iFA9i5kb2dNtjmxhAMRqCkVAqM/2LyXp
+X-Google-Smtp-Source: AGHT+IGDmCMq0c04L7WDXF6pJrRZIraPcPIIO/dV9PrR/c2TmXM8wUqd7VfSgbRwDhKV1hUl4eLr7f40znDL+x9wu5o=
+X-Received: by 2002:a05:6402:26c2:b0:5c4:6376:bb68 with SMTP id
+ 4fb4d7f45d1cf-5c5b846d1aemr39682a12.3.1726967496849; Sat, 21 Sep 2024
+ 18:11:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <66ef21d7.050a0220.3195df.0068.GAE@google.com>
-In-Reply-To: <66ef21d7.050a0220.3195df.0068.GAE@google.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Sat, 21 Sep 2024 23:02:05 +0200
-Message-ID: <CA+fCnZfPcaNKA-BnOA1GsLDkirr3wz06LRRB_3E+LdZE+W=2Tg@mail.gmail.com>
-Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in raw_ioctl_ep_set_clear_halt_wedge
-To: syzbot <syzbot+1966d2bbc2befdc0ba2c@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+From: Jann Horn <jannh@google.com>
+Date: Sun, 22 Sep 2024 03:10:59 +0200
+Message-ID: <CAG48ez1xYXWfvTy4N7Ut9MAs2+GGWNOwYgQb6zToRpJfQEacfg@mail.gmail.com>
+Subject: lockdep detected circular locking between rtnl_mutex and
+ pm_chain_head.rwsem [wireguard and r8152]
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-pm@vger.kernel.org, wireguard@lists.zx2c4.com, 
+	Network Development <netdev@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>, 
+	kernel list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 21, 2024 at 9:43=E2=80=AFPM syzbot
-<syzbot+1966d2bbc2befdc0ba2c@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    68d4209158f4 sub: cdns3: Use predefined PCI vendor ID con=
-s..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/us=
-b.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D143d808058000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dcb61872d4d8c5=
-df9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D1966d2bbc2befdc=
-0ba2c
-> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for D=
-ebian) 2.40
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/c69290425359/dis=
-k-68d42091.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/caf4f26a3e85/vmlinu=
-x-68d42091.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/3acdec4b62e6/b=
-zImage-68d42091.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+1966d2bbc2befdc0ba2c@syzkaller.appspotmail.com
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KASAN: slab-use-after-free in usb_endpoint_xfer_isoc include/uapi/li=
-nux/usb/ch9.h:563 [inline]
-> BUG: KASAN: slab-use-after-free in raw_ioctl_ep_set_clear_halt_wedge+0x4b=
-e/0x7c0 drivers/usb/gadget/legacy/raw_gadget.c:1012
-> Read of size 1 at addr ffff888111e55b83 by task syz.4.752/7534
->
-> CPU: 1 UID: 0 PID: 7534 Comm: syz.4.752 Not tainted 6.11.0-rc7-syzkaller-=
-00152-g68d4209158f4 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 08/06/2024
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:93 [inline]
->  dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:119
->  print_address_description mm/kasan/report.c:377 [inline]
->  print_report+0xc3/0x620 mm/kasan/report.c:488
->  kasan_report+0xd9/0x110 mm/kasan/report.c:601
->  usb_endpoint_xfer_isoc include/uapi/linux/usb/ch9.h:563 [inline]
->  raw_ioctl_ep_set_clear_halt_wedge+0x4be/0x7c0 drivers/usb/gadget/legacy/=
-raw_gadget.c:1012
->  raw_ioctl+0x105/0x2b90 drivers/usb/gadget/legacy/raw_gadget.c:1350
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:907 [inline]
->  __se_sys_ioctl fs/ioctl.c:893 [inline]
->  __x64_sys_ioctl+0x193/0x220 fs/ioctl.c:893
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7f2f3c32def9
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f=
-7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
- ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f2f3afa1038 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007f2f3c4e5f80 RCX: 00007f2f3c32def9
-> RDX: 0000000000000000 RSI: 000000004004550d RDI: 0000000000000003
-> RBP: 00007f2f3c3a0b76 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 0000000000000000 R14: 00007f2f3c4e5f80 R15: 00007ffdece30528
->  </TASK>
->
-> Allocated by task 7538:
->  kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
->  kasan_save_track+0x14/0x30 mm/kasan/common.c:68
->  poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
->  __kasan_kmalloc+0x8f/0xa0 mm/kasan/common.c:387
->  kasan_kmalloc include/linux/kasan.h:211 [inline]
->  __do_kmalloc_node mm/slub.c:4162 [inline]
->  __kmalloc_node_track_caller_noprof+0x1ff/0x3e0 mm/slub.c:4181
->  memdup_user+0x2a/0xd0 mm/util.c:226
->  raw_ioctl_ep_enable drivers/usb/gadget/legacy/raw_gadget.c:847 [inline]
->  raw_ioctl+0xbca/0x2b90 drivers/usb/gadget/legacy/raw_gadget.c:1318
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:907 [inline]
->  __se_sys_ioctl fs/ioctl.c:893 [inline]
->  __x64_sys_ioctl+0x193/0x220 fs/ioctl.c:893
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> Freed by task 7534:
->  kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
->  kasan_save_track+0x14/0x30 mm/kasan/common.c:68
->  kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:579
->  poison_slab_object+0xf7/0x160 mm/kasan/common.c:240
->  __kasan_slab_free+0x14/0x30 mm/kasan/common.c:256
->  kasan_slab_free include/linux/kasan.h:184 [inline]
->  slab_free_hook mm/slub.c:2256 [inline]
->  slab_free mm/slub.c:4477 [inline]
->  kfree+0x10b/0x380 mm/slub.c:4598
->  dev_free+0x446/0x700 drivers/usb/gadget/legacy/raw_gadget.c:225
->  kref_put include/linux/kref.h:65 [inline]
->  raw_release+0x16e/0x2c0 drivers/usb/gadget/legacy/raw_gadget.c:473
->  __fput+0x408/0xbb0 fs/file_table.c:422
->  __fput_sync+0x47/0x50 fs/file_table.c:507
->  __do_sys_close fs/open.c:1566 [inline]
->  __se_sys_close fs/open.c:1551 [inline]
->  __x64_sys_close+0x86/0x100 fs/open.c:1551
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> The buggy address belongs to the object at ffff888111e55b80
->  which belongs to the cache kmalloc-16 of size 16
-> The buggy address is located 3 bytes inside of
->  freed 16-byte region [ffff888111e55b80, ffff888111e55b90)
->
-> The buggy address belongs to the physical page:
-> page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x111e=
-55
-> flags: 0x200000000000000(node=3D0|zone=3D2)
-> page_type: 0xfdffffff(slab)
-> raw: 0200000000000000 ffff888100041640 dead000000000100 dead000000000122
-> raw: 0000000000000000 0000000000800080 00000001fdffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x152cc0=
-(GFP_USER|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 9, tgid 9 (kworker/0:=
-1), ts 108651586204, free_ts 108237529970
->  set_page_owner include/linux/page_owner.h:32 [inline]
->  post_alloc_hook+0x2d1/0x350 mm/page_alloc.c:1500
->  prep_new_page mm/page_alloc.c:1508 [inline]
->  get_page_from_freelist+0x1311/0x25f0 mm/page_alloc.c:3446
->  __alloc_pages_noprof+0x21e/0x2290 mm/page_alloc.c:4702
->  __alloc_pages_node_noprof include/linux/gfp.h:269 [inline]
->  alloc_pages_node_noprof include/linux/gfp.h:296 [inline]
->  alloc_slab_page+0x4e/0xf0 mm/slub.c:2325
->  allocate_slab mm/slub.c:2488 [inline]
->  new_slab+0x84/0x260 mm/slub.c:2541
->  ___slab_alloc+0xdac/0x1870 mm/slub.c:3727
->  __slab_alloc.constprop.0+0x56/0xb0 mm/slub.c:3817
->  __slab_alloc_node mm/slub.c:3870 [inline]
->  slab_alloc_node mm/slub.c:4029 [inline]
->  __do_kmalloc_node mm/slub.c:4161 [inline]
->  __kmalloc_noprof+0x325/0x3c0 mm/slub.c:4174
->  kmalloc_noprof include/linux/slab.h:685 [inline]
->  kzalloc_noprof include/linux/slab.h:807 [inline]
->  rh_call_control drivers/usb/core/hcd.c:491 [inline]
->  rh_urb_enqueue drivers/usb/core/hcd.c:821 [inline]
->  usb_hcd_submit_urb+0x6b6/0x2090 drivers/usb/core/hcd.c:1529
->  usb_submit_urb+0x87c/0x1730 drivers/usb/core/urb.c:581
->  usb_start_wait_urb+0x103/0x4c0 drivers/usb/core/message.c:59
->  usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
->  usb_control_msg+0x327/0x4b0 drivers/usb/core/message.c:154
->  usb_clear_port_feature drivers/usb/core/hub.c:453 [inline]
->  hub_activate+0xb02/0x1d60 drivers/usb/core/hub.c:1230
->  hub_resume+0xaa/0x3f0 drivers/usb/core/hub.c:4005
->  usb_resume_interface.constprop.0.isra.0+0x2c8/0x3e0 drivers/usb/core/dri=
-ver.c:1379
->  usb_resume_both+0x274/0x800 drivers/usb/core/driver.c:1539
-> page last free pid 4937 tgid 4937 stack trace:
->  reset_page_owner include/linux/page_owner.h:25 [inline]
->  free_pages_prepare mm/page_alloc.c:1101 [inline]
->  free_unref_page+0x698/0xce0 mm/page_alloc.c:2619
->  qlink_free mm/kasan/quarantine.c:163 [inline]
->  qlist_free_all+0x4e/0x140 mm/kasan/quarantine.c:179
->  kasan_quarantine_reduce+0x192/0x1e0 mm/kasan/quarantine.c:286
->  __kasan_slab_alloc+0x4e/0x70 mm/kasan/common.c:322
->  kasan_slab_alloc include/linux/kasan.h:201 [inline]
->  slab_post_alloc_hook mm/slub.c:3992 [inline]
->  slab_alloc_node mm/slub.c:4041 [inline]
->  kmem_cache_alloc_noprof+0x11c/0x2b0 mm/slub.c:4048
->  getname_flags.part.0+0x4c/0x550 fs/namei.c:139
->  getname_flags include/linux/audit.h:322 [inline]
->  getname fs/namei.c:225 [inline]
->  __do_sys_unlink fs/namei.c:4534 [inline]
->  __se_sys_unlink fs/namei.c:4532 [inline]
->  __x64_sys_unlink+0xb0/0x110 fs/namei.c:4532
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> Memory state around the buggy address:
->  ffff888111e55a80: 00 00 fc fc 00 01 fc fc fa fb fc fc 00 00 fc fc
->  ffff888111e55b00: fa fb fc fc 00 00 fc fc fa fb fc fc fa fb fc fc
-> >ffff888111e55b80: fa fb fc fc 00 00 fc fc fa fb fc fc fa fb fc fc
->                    ^
->  ffff888111e55c00: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
->  ffff888111e55c80: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
->
-> If you want to overwrite report's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
->
-> If the report is a duplicate of another one, reply with:
-> #syz dup: exact-subject-of-another-report
->
-> If you want to undo deduplication, reply with:
-> #syz undup
+Hi!
 
-#syz dup: KASAN: invalid-free in dev_free
+While trying out a kernel at commit
+88264981f2082248e892a706b2c5004650faac54 (latest mainline) with
+lockdep enabled, I hit a lockdep warning - it looks like wireguard
+takes the rtnl_lock in a PM callback (meaning pm_chain_head.rwsem is
+already held), while r8152 registers a PM callback in a context where
+the rtnl_lock is held, and this makes lockdep unhappy. But I don't
+know enough about the PM code to know which of those is the problem or
+whether this race could even occur. I'm also not sure whether this is
+a regression - I don't usually run lockdep kernels on this machine.
+
+
+[ 1749.181131] PM: suspend entry (s2idle)
+[ 1749.209736] Filesystems sync: 0.028 seconds
+
+[ 1749.220240] ======================================================
+[ 1749.220242] WARNING: possible circular locking dependency detected
+[ 1749.220244] 6.11.0-slowkasan+ #140 Not tainted
+[ 1749.220247] ------------------------------------------------------
+[ 1749.220249] systemd-sleep/5239 is trying to acquire lock:
+[ 1749.220252] ffffffffb1156c88 (rtnl_mutex){+.+.}-{3:3}, at:
+wg_pm_notification (drivers/net/wireguard/device.c:81
+drivers/net/wireguard/device.c:64)
+[ 1749.220265]
+but task is already holding lock:
+[ 1749.220267] ffffffffb077e170 ((pm_chain_head).rwsem){++++}-{3:3},
+at: blocking_notifier_call_chain_robust (kernel/notifier.c:128
+kernel/notifier.c:353 kernel/notifier.c:341)
+[ 1749.220277]
+which lock already depends on the new lock.
+
+[ 1749.220279]
+the existing dependency chain (in reverse order) is:
+[ 1749.220281]
+-> #1 ((pm_chain_head).rwsem){++++}-{3:3}:
+[ 1749.220287] down_write (./arch/x86/include/asm/preempt.h:79
+kernel/locking/rwsem.c:1304 kernel/locking/rwsem.c:1315
+kernel/locking/rwsem.c:1580)
+[ 1749.220292] blocking_notifier_chain_register (kernel/notifier.c:272
+kernel/notifier.c:290)
+[ 1749.220295] rtl8152_open (drivers/net/usb/r8152.c:6994)
+[ 1749.220300] __dev_open (net/core/dev.c:1476)
+[ 1749.220304] __dev_change_flags (net/core/dev.c:8837)
+[ 1749.220308] dev_change_flags (net/core/dev.c:8909)
+[ 1749.220311] do_setlink (net/core/rtnetlink.c:2900)
+[ 1749.220315] __rtnl_newlink (net/core/rtnetlink.c:3696)
+[ 1749.220318] rtnl_newlink (net/core/rtnetlink.c:3744)
+[ 1749.220322] rtnetlink_rcv_msg (net/core/rtnetlink.c:6646)
+[ 1749.220325] netlink_rcv_skb (net/netlink/af_netlink.c:2550)
+[ 1749.220329] netlink_unicast (net/netlink/af_netlink.c:1331
+net/netlink/af_netlink.c:1357)
+[ 1749.220332] netlink_sendmsg (net/netlink/af_netlink.c:1901)
+[ 1749.220335] ____sys_sendmsg (net/socket.c:730 net/socket.c:745
+net/socket.c:2603)
+[ 1749.220339] ___sys_sendmsg (net/socket.c:2659)
+[ 1749.220342] __sys_sendmsg (net/socket.c:2686)
+[ 1749.220344] do_syscall_64 (arch/x86/entry/common.c:52
+arch/x86/entry/common.c:83)
+[ 1749.220348] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+[ 1749.220352]
+-> #0 (rtnl_mutex){+.+.}-{3:3}:
+[ 1749.220357] __lock_acquire (kernel/locking/lockdep.c:3159
+kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
+kernel/locking/lockdep.c:5199)
+[ 1749.220362] lock_acquire (kernel/locking/lockdep.c:467
+kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
+[ 1749.220365] __mutex_lock (kernel/locking/mutex.c:610
+kernel/locking/mutex.c:752)
+[ 1749.220369] wg_pm_notification (drivers/net/wireguard/device.c:81
+drivers/net/wireguard/device.c:64)
+[ 1749.220372] notifier_call_chain (kernel/notifier.c:93)
+[ 1749.220375] blocking_notifier_call_chain_robust
+(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
+[ 1749.220378] pm_notifier_call_chain_robust
+(./include/linux/notifier.h:207 kernel/power/main.c:104)
+[ 1749.220382] pm_suspend (kernel/power/suspend.c:367
+kernel/power/suspend.c:588 kernel/power/suspend.c:625)
+[ 1749.220386] state_store (kernel/power/main.c:746)
+[ 1749.220389] kernfs_fop_write_iter (fs/kernfs/file.c:334)
+[ 1749.220393] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
+[ 1749.220397] ksys_write (fs/read_write.c:736)
+[ 1749.220399] do_syscall_64 (arch/x86/entry/common.c:52
+arch/x86/entry/common.c:83)
+[ 1749.220402] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+[ 1749.220406]
+other info that might help us debug this:
+
+[ 1749.220408]  Possible unsafe locking scenario:
+
+[ 1749.220409]        CPU0                    CPU1
+[ 1749.220411]        ----                    ----
+[ 1749.220413]   rlock((pm_chain_head).rwsem);
+[ 1749.220416]                                lock(rtnl_mutex);
+[ 1749.220420]                                lock((pm_chain_head).rwsem);
+[ 1749.220423]   lock(rtnl_mutex);
+[ 1749.220426]
+*** DEADLOCK ***
+
+[ 1749.220428] 5 locks held by systemd-sleep/5239:
+[ 1749.220430] #0: ffff888125d2e3f8 (sb_writers#6){.+.+}-{0:0}, at:
+ksys_write (fs/read_write.c:736)
+[ 1749.220439] #1: ffff8881e5cb9888 (&of->mutex){+.+.}-{3:3}, at:
+kernfs_fop_write_iter (fs/kernfs/file.c:326)
+[ 1749.220447] #2: ffff888460aee2d8 (kn->active#166){.+.+}-{0:0}, at:
+kernfs_fop_write_iter (fs/kernfs/file.c:326)
+[ 1749.220455] #3: ffffffffb0757008
+(system_transition_mutex){+.+.}-{3:3}, at: pm_suspend
+(kernel/power/suspend.c:574 kernel/power/suspend.c:625)
+[ 1749.220463] #4: ffffffffb077e170
+((pm_chain_head).rwsem){++++}-{3:3}, at:
+blocking_notifier_call_chain_robust (kernel/notifier.c:128
+kernel/notifier.c:353 kernel/notifier.c:341)
+[ 1749.220471]
+stack backtrace:
+[ 1749.220474] CPU: 1 UID: 0 PID: 5239 Comm: systemd-sleep Not tainted
+6.11.0-slowkasan+ #140
+[ 1749.220478] Hardware name: [...]
+[ 1749.220480] Call Trace:
+[ 1749.220483]  <TASK>
+[ 1749.220485] dump_stack_lvl (lib/dump_stack.c:124)
+[ 1749.220491] print_circular_bug (kernel/locking/lockdep.c:2077)
+[ 1749.220496] check_noncircular (kernel/locking/lockdep.c:2203)
+[...]
+[ 1749.220519] __lock_acquire (kernel/locking/lockdep.c:3159
+kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
+kernel/locking/lockdep.c:5199)
+[...]
+[ 1749.220546] lock_acquire (kernel/locking/lockdep.c:467
+kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
+[...]
+[ 1749.220577] __mutex_lock (kernel/locking/mutex.c:610
+kernel/locking/mutex.c:752)
+[...]
+[ 1749.220627] wg_pm_notification (drivers/net/wireguard/device.c:81
+drivers/net/wireguard/device.c:64)
+[ 1749.220631] notifier_call_chain (kernel/notifier.c:93)
+[ 1749.220636] blocking_notifier_call_chain_robust
+(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
+[...]
+[ 1749.220649] pm_notifier_call_chain_robust
+(./include/linux/notifier.h:207 kernel/power/main.c:104)
+[ 1749.220652] pm_suspend (kernel/power/suspend.c:367
+kernel/power/suspend.c:588 kernel/power/suspend.c:625)
+[ 1749.220656] state_store (kernel/power/main.c:746)
+[ 1749.220661] kernfs_fop_write_iter (fs/kernfs/file.c:334)
+[ 1749.220665] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
+[...]
+[ 1749.220693] ksys_write (fs/read_write.c:736)
+[...]
+[ 1749.220701] do_syscall_64 (arch/x86/entry/common.c:52
+arch/x86/entry/common.c:83)
+[ 1749.220704] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+[ 1749.220708] RIP: 0033:0x7fe2e2917240
+[...]
+[ 1749.220735]  </TASK>
+[ 1749.223599] Freezing user space processes
+[ 1749.226307] Freezing user space processes completed (elapsed 0.002 seconds)
 
