@@ -1,118 +1,135 @@
-Return-Path: <linux-usb+bounces-15295-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15296-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB9B97E3B3
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 23:15:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 897EF97E433
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 01:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C476B1F21522
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 21:15:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC1E61C20F7A
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 23:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5350575804;
-	Sun, 22 Sep 2024 21:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD5E81AC1;
+	Sun, 22 Sep 2024 23:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NgDN9V9s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SC5PvYNE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CD62772A;
-	Sun, 22 Sep 2024 21:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C435D7711B;
+	Sun, 22 Sep 2024 23:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727039722; cv=none; b=Ufe6Vx7FInnjBGrLy+YTloyxpexYiCBoOtWvU/4gjfGm9xOmGg9kp6AcUCkBHIxYReyWfWcZyn0pwf1Czz9bLwTuvM2rIShVsMkfczJnr0dhoyXlg5RQzAPN36aebP2VS2LIvoNu+tkw5iWG5OxY7XEg/GaeZ6cbBI/+xkLvJdM=
+	t=1727047422; cv=none; b=gZm9gumr8A6DP/UNrt8sGqLVzZvSrtY4pqoI1XtnICvvbEQl0s7VjHUjPV7R9ZtK9YsG0hKaR5wzokc5U64x+qyb+wIiK/9cEz/P8Atsc/7oWsC/pW2P8xK/U3at45qt8xCXN6LXwYzJbGsNpFPjSWDLm2l925KSILSd+PPqaB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727039722; c=relaxed/simple;
-	bh=5ny3RQhMqihFsV/JC/ZyRl5/+LubAaXlCXt40/uDcvM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X/ZjmMEgkHjBDCixI/xpb5RL2z2OjDF/KzDxnEQG+wENImOXQqln5C2cRyuEohBWXtu82jDAENdJ1q5oCXaqlcXwJUqaqs3xULMfsjtjKtPsH/NNKd3stM8nufES1wK+6gNVK4F+yxkeZBgjHHLuWdthyLiFQ9OGP/JSRQ06+24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NgDN9V9s; arc=none smtp.client-ip=209.85.208.43
+	s=arc-20240116; t=1727047422; c=relaxed/simple;
+	bh=q7eskfOPt+1rRCtOr6+tX3pkJAaYv+NDxxYgXtTbR9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uNaghgKHTA7B1c/r6+7MuRRbG2uAvhwv1eyemVLbNryVqn7dloEJWrk9VQvQBinEM+SOCnVrM9NAFK2xV67r44pkjAdtbQaDalPtvmKpzbb5Ct05UfuLhNpz3Y6idcf+aUpaJDKiRanEBPH06ROV4gh7Vr9AAcHQDZu69LYQ0gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SC5PvYNE; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5c5b9d2195eso1396113a12.1;
-        Sun, 22 Sep 2024 14:15:21 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f758f84dfbso28846761fa.0;
+        Sun, 22 Sep 2024 16:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727039720; x=1727644520; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eB/6pDEBZVxEyIJkPqartZ804jEkBIA1WpVHHbVXKkk=;
-        b=NgDN9V9s1TuBuFGbEcfVDXCzSKqaGi5SwT6A+dURCRnl4fXUxe02KzCcrjm/AUir6c
-         OP78W2ofEc+m2bvdjw9mi0MrzDHg5mfAGuZYr8ApoeJxzMoycw499FimlXCh26YqAkJg
-         /fINtWX9oniM4yPJZhpGL9F9HH91HcsbeXaT9Gqf7CbpDIQ+6PHjjux5hj/Jmy2doZCT
-         2ueTCnhEUo/n2XK3OCN8h9gL/6zfCJa4vckozxxkYcqrLJPvm+94yDMcpnfPoq8b09GP
-         9vI9+MURfk80LE7EsZ4Zc+hu+q/yIKfQpvXKWSYT7Vge8pOZZ81cpiof0k8kYAfC+aMa
-         HqOg==
+        d=gmail.com; s=20230601; t=1727047419; x=1727652219; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q7eskfOPt+1rRCtOr6+tX3pkJAaYv+NDxxYgXtTbR9I=;
+        b=SC5PvYNEJiMVXF92OfoQ8qNgOaV7DWt11Ibk3Cggy/9zGEmpgARnGmBhqiLmYKz83t
+         u3voWLIemDWCEYYUxUo79oXene1EQxII/KL6b9RF3bEGAUTLJDta3YCq2bXtR09iq8u+
+         Ns1vK5c3GORGpCEmVW5rMCPTKYnCLMEwPIzljSF2Bh1m1PdBpv6jeuRJ0L5E+QcY/jDw
+         vEmcOwvopL47IvOMPQA+bOvjl0FAJnvUq/X9iShm/hLE6pNaPwnTDVVL24a6QikzIvzL
+         XrDiAZMDqQmWBy4uausRPR0MXrVNBRfnUaOlCvJuc0x0YOhhzclixtoEAe0OxkW0VJSV
+         r+Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727039720; x=1727644520;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eB/6pDEBZVxEyIJkPqartZ804jEkBIA1WpVHHbVXKkk=;
-        b=eyEEM4iPkno0JuS3BN+ieMr9qDDn6JtOytueqLSsXJS2qjs9c7F895NUVujg7CjehV
-         demrdP6dOpW9CXZD3RBE0Ww2bHZ9SflRUWa9a02Gk1UoBjC6cACBS6kPRUPXuIvJ5+y+
-         RBxJ8+3xxxDCJ3p3ipZvs2MV3nMIdzPZ4AIUy+jxnbQwbRKXYJwgoDzM95d2NAzB1M9c
-         +MBcaKAFktSGh2XTPea29VdLnLYOC/BmiEs5skeypMG9MiMcku+8sx20NQX/LLzXBAVC
-         TYUcOO6JX+hjcpxyPK6LbVKpvqB3FmfmdUCatIV9v/00R2TTJy2ky9hT0bEg/fMOg6Le
-         C8ng==
-X-Forwarded-Encrypted: i=1; AJvYcCWHRB5DIG+VlLqrNc1CWkuu9F1FlZBwsrjvA0yc66mMxtdVWSdQKu7wjq6fGFTMAEq4/60wwqo6l13YyBM=@vger.kernel.org, AJvYcCWzYhp5bsUTLfeZuDMIpkUltw9E68v1KeH1SBV7t9xvmowq+yAE6j2+o1DUtFvLFZ4lBNEC+VHppuxe@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxxno2dPzBAC71PRSIp10Yc7qTqxd950CSu8WZOQ1g0tx53j0hF
-	L2gmeaOESuXa/M+F4yDL+fUleHYalMQ4cQ/XQy7TGIUUuN5LdlJv
-X-Google-Smtp-Source: AGHT+IHM7cYSwGtP4K0/lsVfMIUY9Vk7/2U+K1cWYPkDk0P26jIWUYPlr5eYFeoe68Sk1THt6ZuZSw==
-X-Received: by 2002:a05:6402:34d6:b0:5be:fc1d:fd38 with SMTP id 4fb4d7f45d1cf-5c464e02e53mr7561779a12.36.1727039719457;
-        Sun, 22 Sep 2024 14:15:19 -0700 (PDT)
-Received: from localhost.localdomain ([185.136.103.176])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c42bb89f7esm9444006a12.66.2024.09.22.14.15.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Sep 2024 14:15:17 -0700 (PDT)
-From: amin-amani <didi1364@gmail.com>
-To: johan@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	amin-amani <didi1364@gmail.com>
-Subject: [PATCH] usb: serial: digi_acceleport: Enhance error handling by checkpatch.pl
-Date: Mon, 23 Sep 2024 00:45:12 +0330
-Message-Id: <20240922211512.49273-1-didi1364@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20230601; t=1727047419; x=1727652219;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q7eskfOPt+1rRCtOr6+tX3pkJAaYv+NDxxYgXtTbR9I=;
+        b=VN8Cqz16/7VczhKot2EPIn2BEaqrMiU/i9796LNGA7mjZCZGcEVj4tYKd26pW79VuX
+         618ANMKUNKDhivzL8eX12FFp/0qyglW9o3rL4+LJhc2YxrQ/kYLkcdFomDTIpyM1n86O
+         B0yIORgrDhu+XsTiXgV4U318YmZYNewa9TbbwFWgkvrEa/G6YhMM93SrV3rekOg3BaeJ
+         KkwjWt+EMC+Ah30kcoCxxKMkeFLBbvUk3swIuzTeWdraO6aV+BZY5F0jBj/OeqiYDQ9l
+         nm/OIy6BYKYpsxdB0Qg27676tN+zuATI4wzEyWFnggtQoT0CYdfpLdrQ22qd4JwEfPAv
+         lVMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5XpzQvIyZQ63stCsY2fbAvDNVRinF4OW0E3EEKpkvXOHPdFXozMUoICFCDMBWq8m5leaO6ulQVIGC6tM=@vger.kernel.org, AJvYcCU5hs2Mh/wwNFZxd9YtaYmxXdV/uCBZRb7I38fX5IQkeDIPQNoypvPSHlmvluRrimqECbTS7oMqUR4K@vger.kernel.org, AJvYcCU84EliJ2Yk1hYFZw8m9VZjFVWuw6WBirMD5HGJitzwR3bB3kCr6BrgPkYhG7DKqx3DGJFDYIQtCmQ6@vger.kernel.org, AJvYcCUJE7ISC4coYhKoFaLTzOKqRYGoXtyat+kHwVcriCLFPM0zkPWEKE+ftVc3kWretnZErHPszdbTjonJRvayrw==@vger.kernel.org, AJvYcCW4wWAPkN9CrsaagK395CNTtbplog1+us71R63P+UJWvBsCWU9OAAwVqsZbufaWxBxYgGSjb+t4x5R7@vger.kernel.org, AJvYcCWx/uUtunBpmgNNOc6KI3mitXM07aiaOoxlzSawJX7ffLf4qjcQSPnoiRwmRG3exNyD30WsI+JM6/smgc9m@vger.kernel.org, AJvYcCXsyYZmECsTqI94CgROwjd5XKiQyGjwIDFGl05b8YZ5bUBsWU5qXKSDu/Zc4LqSx//LhCreUtoGzEmx2Ow=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1juVBO8PNEHDGB6z54vS/7+PAlpOt5fufJ/LrXHDzPXLAfzap
+	7NyDI2pEG/CUEdAjr5uDzVlPojoP54UisH4g/xgwBTO4sj9kkKVR
+X-Google-Smtp-Source: AGHT+IFxxbTsRovcLK/IAIObXStATfMZ7Iuax45veoWqZPyjnMH/P/kvJozSKjZWi/qtWeIKTq4t3w==
+X-Received: by 2002:a2e:be9e:0:b0:2f7:cba9:6098 with SMTP id 38308e7fff4ca-2f7cba9614dmr49207831fa.19.1727047418324;
+        Sun, 22 Sep 2024 16:23:38 -0700 (PDT)
+Received: from foxbook (bgu157.neoplus.adsl.tpnet.pl. [83.28.84.157])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f79d2e1deesm27117811fa.10.2024.09.22.16.23.33
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 22 Sep 2024 16:23:36 -0700 (PDT)
+Date: Mon, 23 Sep 2024 01:23:28 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: <mathias.nyman@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
+ <alsa-devel@alsa-project.org>, <bgoswami@quicinc.com>,
+ <broonie@kernel.org>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+ <devicetree@vger.kernel.org>, <dmitry.torokhov@gmail.com>,
+ <gregkh@linuxfoundation.org>, <krzk+dt@kernel.org>, <lgirdwood@gmail.com>,
+ <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <mathias.nyman@intel.com>, <perex@perex.cz>,
+ <pierre-louis.bossart@linux.intel.com>, <robh@kernel.org>,
+ <srinivas.kandagatla@linaro.org>, <tiwai@suse.com>
+Subject: Re: [PATCH v27 01/32] xhci: add helper to stop endpoint and wait
+ for completion
+Message-ID: <20240923012328.1e4d0bc6@foxbook>
+In-Reply-To: <182938da-da86-49a4-800a-446954cc6c60@quicinc.com>
+References: <20240913103237.2f5dc796@foxbook>
+	<a9dcaa5a-4f5d-451a-93aa-7457798fc243@quicinc.com>
+	<20240915095514.6b01fefb@foxbook>
+	<182938da-da86-49a4-800a-446954cc6c60@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-- Separated null checks for port, serial and private data.
+Hi,
 
-Signed-off-by: amin-amani <didi1364@gmail.com>
----
- drivers/usb/serial/digi_acceleport.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+> So what I ended up doing was to split off the context error handling
+> into a separate helper API, which can be also called for the sync ep
+> stop API.=C2=A0 From there, based on say....the helper re queuing the stop
+> EP command, it would return a specific value to signify that it has
+> done so.=C2=A0 The sync based API will then re-wait for the completion of
+> the subsequent stop endpoint command that was queued.
 
-diff --git a/drivers/usb/serial/digi_acceleport.c b/drivers/usb/serial/digi_acceleport.c
-index d1dea3850576..d858358f94d8 100644
---- a/drivers/usb/serial/digi_acceleport.c
-+++ b/drivers/usb/serial/digi_acceleport.c
-@@ -1309,9 +1309,14 @@ static void digi_read_bulk_callback(struct urb *urb)
- 			__func__, status);
- 		return;
- 	}
--	if (port->serial == NULL ||
--		(serial_priv = usb_get_serial_data(port->serial)) == NULL) {
--		dev_err(&port->dev, "%s: serial is bad or serial->private "
-+	if (port->serial == NULL) {
-+		dev_err(&port->dev, "%s: serial is bad,"
-+			" status=%d\n", __func__, status);
-+		return;
-+	}
-+	serial_priv = usb_get_serial_data(port->serial);
-+	if (serial_priv == NULL) {
-+		dev_err(&port->dev, "%s:serial->private "
- 			"is NULL, status=%d\n", __func__, status);
- 		return;
- 	}
--- 
-2.25.1
+AFAIK retries are only necessary on buggy hardware. I don't see them on
+my controllers except for two old ones, both with the same buggy chip.
 
+>=C2=A0In all other context error cases, it'd return the error to the calle=
+r,
+> and its up to them to handle it accordingly.
+
+For the record, all existing callers end up ignoring this return value.
+
+Honestly, I don't know if improving this function is worth your effort
+if it's working for you as-is. There are no users except xhci-sideband
+and probably shouldn't be - besides failing to fix stalled endpoints,
+this function also does nothing to prevent automatic restart of the EP
+when new URBs are submitted through xhci_hcd, so it is mainly relevant
+for sideband users who never submit URBs the usual way.
+
+My issue with this function is that it is simply poorly documented what
+it is or isn't expected to achieve (both here and in the calling code
+in xhci-sideband.c), and the changelog message is wrong to suggest that
+the default completion handler will run (unless somewhere there are
+patches to make it happen), making it look like this code can do things
+that it really cannot do. And this is apparently a public, exported API.
+
+Regards,
+Michal
 
