@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-15289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15290-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95DA697E0FD
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 12:52:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB8E297E110
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 13:17:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 491431F21286
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 10:52:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6104D281425
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 11:17:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECC417C216;
-	Sun, 22 Sep 2024 10:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0322A17C211;
+	Sun, 22 Sep 2024 11:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j+8OBQmM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BClXpnjR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F02149E03;
-	Sun, 22 Sep 2024 10:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C368A3B7AC;
+	Sun, 22 Sep 2024 11:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727002340; cv=none; b=DFgHs7zRdBvnhN+tmaKsP22xhmCzz81AUutbHts2DdPjtpwwvrhVxJuaNIet5Xt0nmCk9aUMX4zY2MPHafYiunlKm2jVk1WN2RHH38THygBQLJ/1mLXzGbCarECV21T9vhDxXKGDodyMN/UJa5Qw2sXrRDpY5u/+L3WwNOwUARw=
+	t=1727003823; cv=none; b=L8Mc2vVZaLeCS2Zqz1emVWWpK/6SWo/lomloqQT/SV03lzNmjk43W60E6jit5YVn8qQKevhZugEZ3vojckj9/nb4QWFnN7brHfM2P7b/7fL1BKQpKZYvViaeJ1fdiQSyDAr6kxnJnlUYEOVUIoZ8GJnzLr3FBDWDziIHuifnZ/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727002340; c=relaxed/simple;
-	bh=i/tP2SmX/sJJ4OmN5277UTw+ECHWt6l3Fa3UC1PE/rg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dIOLKDj49//6Pg1ZZn7XB08HjPYOdsMUXPW3BxkCCpuTaa7oijGKAu2cNP3BWBZcAuRknyA6QtfNVbIDAbOKM1RMLAo573EO4hO+1aaDWZUlE2SrGzA0YYxs6Cs8E2D/AdlZkFnung1Nll3tXSPHliQPz/V8Jgk18kPhkkChrM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j+8OBQmM; arc=none smtp.client-ip=209.85.215.171
+	s=arc-20240116; t=1727003823; c=relaxed/simple;
+	bh=Gajp+mpCYHLHu8sQHo0hFq1kYS6p5TLQebfwa9R/IG4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tz5Y4rpBCDU8LNtPEJizNZ2pKx7wIaiLQnmyhkDtaQO7kFYcL//6DCg1QQBJMjtKqeTxyvFz5cxvgGh/3CGFAwAXw44bB2yo8nDwW+B75+1vdkf0BMwqX2k30uupM0RWcESgPfM2/wkLfQdD7Wx2qHwvFO1pNO4MWRO8/8fo2/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BClXpnjR; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-656d8b346d2so2083635a12.2;
-        Sun, 22 Sep 2024 03:52:18 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a8a7596b7dfso591021666b.0;
+        Sun, 22 Sep 2024 04:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727002337; x=1727607137; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727003820; x=1727608620; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYNkcZOOFAOULSW26CQqeju6OQug9C3qT2bdg22sMxg=;
-        b=j+8OBQmMlbFIJ0Gw38uG2sUKy3YgV1ferkxYQOulyI6qw2HrAz4ef4xq/D1CTHzY55
-         xw2If5etBDOaLl0BtkJlkd8OKHCtaYIMgjBqKGRlr9ejJ02+7Le1zacSNmvLtMiuHHDn
-         TjV11caItXUGdkP+HxTIl4bbFtkHrFYd2ccRiYu8AwYajBTPXhoUX670PbSNteTGIdAF
-         QzQuKUW9GxePOjWkVY8P5gpPl0W4vnK5A72xp8odYj+S7knSXaFUL728bP4t/Clr5BM9
-         Yl0mjQI1udHP2vg4vkOoD7Ihs9XqojlPgbEV81wNvGuXss/QMkiLPSQTQNNIx4VBEl/P
-         +RXQ==
+        bh=xplsKOdeSs4IX/8B8Bo8H4/l3jhusQaBjOqWGwO3bho=;
+        b=BClXpnjRgWiGruNgtCpfkFCwNHgwJEtbOe5oHKxd369mWUNBpi8CO475oIsGtBy1gt
+         gtzodN+MvXHk9TeOk89+TdZlaCvGca29guNjCSZiBKeIAVcdSw3wF9WYlbZi8FJxRFpE
+         rk5kC4B2F12ungB3UScWchJ15Sy+afl+98UWeGHQjwfkF8pC1X/OuFNT2EY7AJ5L4q4S
+         SbdXHfDZWMA1UtSq4URiInvc/A2p8GDPpM3V9w+3ZKN455BTV0dp0BLObU16OlA1ZUwQ
+         Db7x8Oj0RZGoVL2E71D2txNSMdXyUQlyUnqxu2ERT4rQbuU55oV9QnvVo8/sgyOy9tzB
+         HIKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727002337; x=1727607137;
+        d=1e100.net; s=20230601; t=1727003820; x=1727608620;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JYNkcZOOFAOULSW26CQqeju6OQug9C3qT2bdg22sMxg=;
-        b=nawlO5u5XoI7tReDOBaBMpp7ieQGxUpYF1VMoccw82bgO0x4/DNvi4QRLWbXsSys9g
-         Kuwnw3HOmmuSGWq8AFvrSEKb4q+LefAcTVqAvNsIaLC6dBb9vmU8UIIx8/iMZd4Oc5aX
-         jaSc6mc3vA+a01If/ZPujjfuxCb8C2isUpLAg3wemNwRIBr1nFVU7nJ0SdT8Nb5LyVJ1
-         qkpQYX4H0Wvok08ZIOZ4hkcnAxIHg8sTDvk+haYn5IBTC/uh20C66LaxhIkS/HDWbJJ/
-         DBDnOZiJA7TPme4JW2Wmu+FRT8QG+HHYfHBPZQnVgJFHlyMgHR0an/bkCeICe6aqexF/
-         rriA==
-X-Forwarded-Encrypted: i=1; AJvYcCVovC6vi5nI4fMnl2VNwGC5pQyycRAKyU17mnRcRQOakoUAHWs3AVGPq7uJTyoMOoOJ/UAoIDXVlo18a4I=@vger.kernel.org, AJvYcCXJKC5PJ5cdcXip4FvOuuapSskgdLIn5LKtKGCTZEe6zVFddS/SYHwqWR2r7O3nqdyHD+fxp1yUqGCn@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7E5dgecNQd53fVPNi3z9spvMH4npBbkAAjMRqz9WTlzE1hb3f
-	uKEcW7ChfmFeCFNi4iGDSTiDWRV2PZLKKb7nfJLm2PPFKxCcRfSI
-X-Google-Smtp-Source: AGHT+IFvZ1yvhIrBeq1eSAv9RBCJNlkIZKOVfJgU9XgJ3CyKpfPUA+GO8KpCw9N6BbWHLM7zmRBrJQ==
-X-Received: by 2002:a17:90a:e00d:b0:2c9:649c:5e08 with SMTP id 98e67ed59e1d1-2dd7f3fe992mr10597826a91.15.1727002337512;
-        Sun, 22 Sep 2024 03:52:17 -0700 (PDT)
-Received: from ubuntu.worldlink.com.np ([27.34.65.190])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dd7f947427sm5222331a91.48.2024.09.22.03.52.15
+        bh=xplsKOdeSs4IX/8B8Bo8H4/l3jhusQaBjOqWGwO3bho=;
+        b=ssOo3cIYyFmaLdX9GYpdTAOZkFpwXX2R7lsKlIkHtAPSg1J/c03B0SeXG3J3tyvvjy
+         0Tn++759kYiBImZ4f9/qnH80+e+YmOxMZWZNfHZLR+sNwehlI+HgB3MvrxXmCXoT1gtw
+         hiX+ajnvQj96RELlQY5Mz6Mu+P323uZreaUDMIszaaqj6s9xegjx/fLILlCs6kTBc9p7
+         IOh9izb8QsO5bplAindojDdAvPFB4E5Pg6ztGEAysWwuAGYJ3/EH826J8KOaowjujLjR
+         Z9n2T1XNTPATprU4+CvcZn2V4cK6uUWPlYGosLLbMuZibZGLmQJakV7faUn2dK+jhO8h
+         dxEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUfWUiNb5omw/Zje+cPUN3aOZxihX95ILpfeKkCQlH3EyiSDBATL3QffWM8d/zIQSv6mbJwU1F5Op3LC2U=@vger.kernel.org, AJvYcCVIuy2OkBtyeXsQY3ep0+/sbXte5V6SGKmUnx1BlJSX3Jn4GpFni6cU26bpt1ScWyfwCuZl4UZ9tj+C@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwlIW3D8x0HiPawQnw5+7Wh6CjZHidXCErme6zR4EGHpopyPdz
+	kiAGIu4xTzxBsLgzwUFdhfDhlgof+2Wc0/2antbjlwS/i3bxrD7T
+X-Google-Smtp-Source: AGHT+IEeideO1lYcQEPhYIxgWzPS53oFskjpQ4idvyDpBJkUc7RuQp5CTp3TWFSmmZF5rU92T3RYSw==
+X-Received: by 2002:a17:907:3ea2:b0:a8b:58e3:ac1f with SMTP id a640c23a62f3a-a90d3510a4amr850650266b.12.1727003819649;
+        Sun, 22 Sep 2024 04:16:59 -0700 (PDT)
+Received: from samiama.sinacomsys.local ([178.252.129.11])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9061331bc8sm1067474566b.221.2024.09.22.04.16.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Sep 2024 03:52:17 -0700 (PDT)
-From: Dipendra Khadka <kdipendra88@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: Dipendra Khadka <kdipendra88@gmail.com>,
+        Sun, 22 Sep 2024 04:16:58 -0700 (PDT)
+From: amin-amani <didi1364@gmail.com>
+To: johan@kernel.org
+Cc: gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] Fix  dereferencing freed memory 'fw'
-Date: Sun, 22 Sep 2024 10:52:11 +0000
-Message-ID: <20240922105212.28099-1-kdipendra88@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-kernel@vger.kernel.org,
+	"A.Amani" <didi1364@gmail.com>
+Subject: [PATCH] usb: serial: digi_acceleport: Improve readability and enhance error handling
+Date: Sun, 22 Sep 2024 14:47:01 +0330
+Message-Id: <20240922111701.85965-1-didi1364@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,36 +83,170 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-smatch reported dereferencing freed memory as below:
-'''
-drivers/usb/typec/tipd/core.c:1196 tps6598x_apply_patch() error: dereferencing freed memory 'fw'
-'''
+From: "A.Amani" <didi1364@gmail.com>
 
-Invoking release_firware(fw) just after checking ret.
+- Improved coding style to adhere to kernel standards as suggested by
+  checkpatch.pl.
+- Indented case statements for baud rate and word size to improve code
+  readability.
+- Separated null checks for port, serial, and private data for clearer
+  error handling.
+- Improved error messages to better indicate which specific data (port,
+  serial, or private) is null.
+- No functional changes, only structural improvements and clearer
+  debugging output.
 
-Signed-off-by: Dipendra Khadka <kdipendra88@gmail.com>
+Signed-off-by: A.Amani <didi1364@gmail.com>
 ---
- drivers/usb/typec/tipd/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/serial/digi_acceleport.c | 105 +++++++++++++++++++--------
+ 1 file changed, 73 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index ea768b19a7f1..eb5596e3406a 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -1191,11 +1191,11 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
- 	dev_info(tps->dev, "Firmware update succeeded\n");
+diff --git a/drivers/usb/serial/digi_acceleport.c b/drivers/usb/serial/digi_acceleport.c
+index d1dea3850576..da707967a0c4 100644
+--- a/drivers/usb/serial/digi_acceleport.c
++++ b/drivers/usb/serial/digi_acceleport.c
+@@ -685,25 +685,44 @@ static void digi_set_termios(struct tty_struct *tty,
+ 		}
+ 		switch (baud) {
+ 		/* drop DTR and RTS on transition to B0 */
+-		case 0: digi_set_modem_signals(port, 0, 1); break;
+-		case 50: arg = DIGI_BAUD_50; break;
+-		case 75: arg = DIGI_BAUD_75; break;
+-		case 110: arg = DIGI_BAUD_110; break;
+-		case 150: arg = DIGI_BAUD_150; break;
+-		case 200: arg = DIGI_BAUD_200; break;
+-		case 300: arg = DIGI_BAUD_300; break;
+-		case 600: arg = DIGI_BAUD_600; break;
+-		case 1200: arg = DIGI_BAUD_1200; break;
+-		case 1800: arg = DIGI_BAUD_1800; break;
+-		case 2400: arg = DIGI_BAUD_2400; break;
+-		case 4800: arg = DIGI_BAUD_4800; break;
+-		case 9600: arg = DIGI_BAUD_9600; break;
+-		case 19200: arg = DIGI_BAUD_19200; break;
+-		case 38400: arg = DIGI_BAUD_38400; break;
+-		case 57600: arg = DIGI_BAUD_57600; break;
+-		case 115200: arg = DIGI_BAUD_115200; break;
+-		case 230400: arg = DIGI_BAUD_230400; break;
+-		case 460800: arg = DIGI_BAUD_460800; break;
++		case 0:
++			digi_set_modem_signals(port, 0, 1); break;
++		case 50:
++			arg = DIGI_BAUD_50; break;
++		case 75:
++			arg = DIGI_BAUD_75; break;
++		case 110:
++			arg = DIGI_BAUD_110; break;
++		case 150:
++			arg = DIGI_BAUD_150; break;
++		case 200:
++			arg = DIGI_BAUD_200; break;
++		case 300:
++			arg = DIGI_BAUD_300; break;
++		case 600:
++			arg = DIGI_BAUD_600; break;
++		case 1200:
++			arg = DIGI_BAUD_1200; break;
++		case 1800:
++			arg = DIGI_BAUD_1800; break;
++		case 2400:
++			arg = DIGI_BAUD_2400; break;
++		case 4800:
++			arg = DIGI_BAUD_4800; break;
++		case 9600:
++			arg = DIGI_BAUD_9600; break;
++		case 19200:
++			arg = DIGI_BAUD_19200; break;
++		case 38400:
++			arg = DIGI_BAUD_38400; break;
++		case 57600:
++			arg = DIGI_BAUD_57600; break;
++		case 115200:
++			arg = DIGI_BAUD_115200; break;
++		case 230400:
++			arg = DIGI_BAUD_230400; break;
++		case 460800:
++			arg = DIGI_BAUD_460800; break;
+ 		default:
+ 			arg = DIGI_BAUD_9600;
+ 			baud = 9600;
+@@ -737,10 +756,14 @@ static void digi_set_termios(struct tty_struct *tty,
+ 	if ((cflag & CSIZE) != (old_cflag & CSIZE)) {
+ 		arg = -1;
+ 		switch (cflag & CSIZE) {
+-		case CS5: arg = DIGI_WORD_SIZE_5; break;
+-		case CS6: arg = DIGI_WORD_SIZE_6; break;
+-		case CS7: arg = DIGI_WORD_SIZE_7; break;
+-		case CS8: arg = DIGI_WORD_SIZE_8; break;
++		case CS5:
++			arg = DIGI_WORD_SIZE_5; break;
++		case CS6:
++			arg = DIGI_WORD_SIZE_6; break;
++		case CS7:
++			arg = DIGI_WORD_SIZE_7; break;
++		case CS8:
++			arg = DIGI_WORD_SIZE_8; break;
+ 		default:
+ 			dev_dbg(dev,
+ 				"digi_set_termios: can't handle word size %d\n",
+@@ -967,16 +990,30 @@ static void digi_write_bulk_callback(struct urb *urb)
+ 	int status = urb->status;
+ 	bool wakeup;
  
- release_fw:
--	release_firmware(fw);
- 	if (ret) {
- 		dev_err(tps->dev, "Failed to write patch %s of %zu bytes\n",
- 			firmware_name, fw->size);
+-	/* port and serial sanity check */
+-	if (port == NULL || (priv = usb_get_serial_port_data(port)) == NULL) {
+-		pr_err("%s: port or port->private is NULL, status=%d\n",
++	/* port sanity check */
++	if (port == NULL) {
++		pr_err("%s: port is NULL, status=%d\n",
++			__func__, status);
++		return;
++	}
++	/* serial sanity check */
++	priv = usb_get_serial_port_data(port);
++	if (priv == NULL) {
++		pr_err("%s: port->private is NULL, status=%d\n",
+ 			__func__, status);
+ 		return;
  	}
-+	release_firmware(fw);
- 
- 	return ret;
- };
+ 	serial = port->serial;
+-	if (serial == NULL || (serial_priv = usb_get_serial_data(serial)) == NULL) {
++	if (serial == NULL) {
+ 		dev_err(&port->dev,
+-			"%s: serial or serial->private is NULL, status=%d\n",
++			"%s: serial  is NULL, status=%d\n",
++			__func__, status);
++		return;
++	}
++	serial_priv = usb_get_serial_data(serial);
++	if (serial_priv == NULL) {
++		dev_err(&port->dev,
++			"%s: serial->private is NULL, status=%d\n",
+ 			__func__, status);
+ 		return;
+ 	}
+@@ -1309,13 +1346,17 @@ static void digi_read_bulk_callback(struct urb *urb)
+ 			__func__, status);
+ 		return;
+ 	}
+-	if (port->serial == NULL ||
+-		(serial_priv = usb_get_serial_data(port->serial)) == NULL) {
+-		dev_err(&port->dev, "%s: serial is bad or serial->private "
++	if (port->serial == NULL) {
++		dev_err(&port->dev, "%s: serial is bad,"
++			" status=%d\n", __func__, status);
++		return;
++	}
++	serial_priv = usb_get_serial_data(port->serial);
++	if (serial_priv == NULL) {
++		dev_err(&port->dev, "%s:serial->private "
+ 			"is NULL, status=%d\n", __func__, status);
+ 		return;
+ 	}
+-
+ 	/* do not resubmit urb if it has any status error */
+ 	if (status) {
+ 		dev_err(&port->dev,
 -- 
-2.43.0
+2.34.1
 
 
