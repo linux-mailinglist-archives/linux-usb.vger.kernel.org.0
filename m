@@ -1,242 +1,134 @@
-Return-Path: <linux-usb+bounces-15286-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15287-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8595C97DFB9
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 03:11:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A5597E0AD
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 11:17:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 450BE2818D3
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 01:11:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 945651F2132C
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2024 09:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B741917FE;
-	Sun, 22 Sep 2024 01:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iD17Jsmn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7076712D760;
+	Sun, 22 Sep 2024 09:17:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F83F1917CE
-	for <linux-usb@vger.kernel.org>; Sun, 22 Sep 2024 01:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE931EB46
+	for <linux-usb@vger.kernel.org>; Sun, 22 Sep 2024 09:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726967501; cv=none; b=TtZuRYqgTO4ISBksimnJWIFjQB07Z16QUKgd91gUr1EaleCeI+vzz5u1sBHk58TSxGqAFgygVQZ9Wd0dEiCpdWxFEcJzbqCvozuoZqV3To9htmCJkZzww+79fVAEPttySphEoObxzGemQNR4lV1jpcsyNe/olVuLtxxmGH02qTs=
+	t=1726996644; cv=none; b=mT6BoWZrPPnAwHDTTVcuKEG3EXGz+6q0AHvdq1hyQ1K9xzedY801sqeXWqSn2kSLfABbsX7YaG31ipyfcjtOxBX4jx6Pa69ksaitvZgpD5fHl95pOVDMb3Q889VQeb4jCHjD/zX8O+NhHTmDiRxilinRJekdLaOM33ga7jD3vfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726967501; c=relaxed/simple;
-	bh=mkPZTZ4+7X6YfRtxtJvsGondZDr3cT+dPb4FafRwtlc=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=pfMYrF0towSWvckSoFD9QmcEmriZcMahv0MwVDbyNQYT7/bESxMf8Xlo8057F7FBOHuOuhnJ1VfuSDvzjFkKKBxnVO+Ebu2mKryUI4RPgCFShmXYR/f3JOO/Y6KLHffYDCVoBjPDbKHowWxVN6kZ3m/UAT+IPLKEayaK+IUE6Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iD17Jsmn; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5c247dd0899so2812a12.1
-        for <linux-usb@vger.kernel.org>; Sat, 21 Sep 2024 18:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726967497; x=1727572297; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
-        b=iD17JsmnF63TWL61UBkCOk+f84qtZUYIeuK3yrghPIiJuXNAGzAu+g4RkSCi73pYXo
-         0FjSJONUGguXFtJQ5zCrHDtsKMn9uEAJOLOHkGODSSoctFoiaEsZEJGoe3gViEc6KiZy
-         QuG1r1z4wZX7k2T+OPk6JD9Dle/Wc1lP41GTML4fuivfbTOTCD5p0wYG4VUI/y9B7nJw
-         clvC0PcsIY1mvkb0aKPTXAnFLaAvajFPyjfiW3yvvWcN3SIh4XxvGMJCmdvebjWJWntj
-         ANIgfu9yycWFyuphNvDa+C4eYW65TL0Aa0VS1cpE9n4T4HBWWz360GD7mHRPoCCS3JRb
-         XIiw==
+	s=arc-20240116; t=1726996644; c=relaxed/simple;
+	bh=M/eZFAhMUaYa0RhmlRvxZHNHJgXkgmvfbAmbHepbqls=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=uTK3sEgE+uJnH5PKtcJpyjwOPJxXTHKZC2EgaQcHDc9mpaX6GgaOIZxvDCvvNXD965sMnFU16v75rhTnmqRi4eC4P77MoeMuAl1qEvFzyBd+9AkkFIKo+XiMyPvUkzFkbO7PVqaCdl+yKRDfFqNzyLfKiXM7ZRR6IfbYxcxT/bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a049f9738fso37515565ab.3
+        for <linux-usb@vger.kernel.org>; Sun, 22 Sep 2024 02:17:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726967497; x=1727572297;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
-        b=TM/Nb6SJMvbIxBQa0y8cp3CZSga8QQPccSv+wNXCW5wtf2TAaBaOviLkLJu9qJORqW
-         8arUjFlX+dGTzW3d2QLHBx2cyyBAZemhNyRUermeAQKpOkXaBrFO6iWcquEmUtDib+V2
-         U85EblAjYRBL+FWPQf1JHWvOFYIjx0VzUz1Mjz+xc4B1Kk4hlKJK/wRk4/iAJSoqK0HT
-         Bmsh70rVxblTnpi6R0v5U7KVGcZfpSr32E0a2Fg/wCyNLfUY0FiBEoezDzHLRjVd3h1r
-         gJjLZRoFUFyIBOeBB4Y9uH7y6lZVzZLMCwkSMF6lGOcrCvpc4bw+Pw6StsLrfaIrkpze
-         bh0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWB9Twzsj9L+m+oSOq7B2JEA5QUUufdPhkT5EVwCzlvF/tFWYpjZEaWSZZhG7qaOyTei7K5ZaQvWis=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMRk/cnsye8v/Aq1NBc3B0OjC2k/Hjo6m9647D6otzPvmdiZb+
-	s8oWC62dt/EYPl/faUlAM5D8snwjm0OcYvB5YFGrHL3JIrV6LM6I9QMgsSFNZdgroSoE5huSmdZ
-	mHYh9iFA9i5kb2dNtjmxhAMRqCkVAqM/2LyXp
-X-Google-Smtp-Source: AGHT+IGDmCMq0c04L7WDXF6pJrRZIraPcPIIO/dV9PrR/c2TmXM8wUqd7VfSgbRwDhKV1hUl4eLr7f40znDL+x9wu5o=
-X-Received: by 2002:a05:6402:26c2:b0:5c4:6376:bb68 with SMTP id
- 4fb4d7f45d1cf-5c5b846d1aemr39682a12.3.1726967496849; Sat, 21 Sep 2024
- 18:11:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726996642; x=1727601442;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xZlxNiqGhVO8KGi8G8VOncekpmqDbO4rxQuTO7t98V4=;
+        b=I+AkGxF7fWTdb1Um3iuQs2V32POFuJi4dSYRUrPaGKdhI71r2aWRPqvewSkSiQMUZV
+         xnAh+djRIRntpHkqT3LXPBJs7fwt6JkW5izPhYOmFxVG3x8NAmSnn8VRg+6uPJlXD5IP
+         BC6RYTr9Fr5a0yadkRl+MNHtbQjRxRyXPUlxVjvMxInxd0KFUJDDI9P+JoShdxzr+KhP
+         eHg0/e8Xf9Ik80SYeFuERtmCkZEouXXk1FiXPwekPIv5YxjHTrJlzB7ovpINT6c9konG
+         baJVXSxQC1Sj2HrF6/MhgCENiYFyJo2fyykWi0hV7SbzHqUl4uoMXJe0nOTYLhnr477B
+         bW8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWIotrxDIb/ZH1qILTi+kaePDB+XnZx8i2Jqnt1GM2f/TDPMEMbFN97r7qqiXuBlcEXwugniFKgBhU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs8zeoXgyWwUl5O5PGLPSi3hKBRRu2f5MMJUnNWvr4IUshZ0DC
+	KVRRYzlirDYrJJuPHwPcQxuBqm6Sbygr9y8LVCCnzgpkPd1PqAqGAX7eLeRDBB1xCsgPoUrqMwO
+	+LokeXE348DdNDFU4M9X5Tf5Tijie8N6ZMsMzp4CxA9wrradNQsK903Q=
+X-Google-Smtp-Source: AGHT+IH0227KKcpAN2HBn66W/qC4cbgp1UVGCv90D90kGu65khMkuKGjaFJI1smH9vf+pIjHLaqrnkStoAtCYW1oaJGpByW+dN2j
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Jann Horn <jannh@google.com>
-Date: Sun, 22 Sep 2024 03:10:59 +0200
-Message-ID: <CAG48ez1xYXWfvTy4N7Ut9MAs2+GGWNOwYgQb6zToRpJfQEacfg@mail.gmail.com>
-Subject: lockdep detected circular locking between rtnl_mutex and
- pm_chain_head.rwsem [wireguard and r8152]
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: linux-pm@vger.kernel.org, wireguard@lists.zx2c4.com, 
-	Network Development <netdev@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>, 
-	kernel list <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a05:6e02:1a63:b0:3a0:9f85:d74e with SMTP id
+ e9e14a558f8ab-3a0c8d0ba04mr71182365ab.16.1726996641788; Sun, 22 Sep 2024
+ 02:17:21 -0700 (PDT)
+Date: Sun, 22 Sep 2024 02:17:21 -0700
+In-Reply-To: <0000000000006f6622061eb52dba@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <66efe0a1.050a0220.3195df.0094.GAE@google.com>
+Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak in usbtmc_generic_write
+From: syzbot <syzbot+8f282cce71948071c335@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
-Hi!
+syzbot has found a reproducer for the following issue on:
 
-While trying out a kernel at commit
-88264981f2082248e892a706b2c5004650faac54 (latest mainline) with
-lockdep enabled, I hit a lockdep warning - it looks like wireguard
-takes the rtnl_lock in a PM callback (meaning pm_chain_head.rwsem is
-already held), while r8152 registers a PM callback in a context where
-the rtnl_lock is held, and this makes lockdep unhappy. But I don't
-know enough about the PM code to know which of those is the problem or
-whether this race could even occur. I'm also not sure whether this is
-a regression - I don't usually run lockdep kernels on this machine.
+HEAD commit:    88264981f208 Merge tag 'sched_ext-for-6.12' of git://git.k..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=125cec27980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=547de13ee0a4d284
+dashboard link: https://syzkaller.appspot.com/bug?extid=8f282cce71948071c335
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108bb080580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165cec27980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d83fc781c223/disk-88264981.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1ed4c5969fba/vmlinux-88264981.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/76a67bd894be/bzImage-88264981.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8f282cce71948071c335@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x597/0x2350 drivers/usb/core/urb.c:430
+ usb_submit_urb+0x597/0x2350 drivers/usb/core/urb.c:430
+ usbtmc_generic_write+0x7b6/0xe80 drivers/usb/class/usbtmc.c:1213
+ usbtmc_write+0xdb7/0x1210 drivers/usb/class/usbtmc.c:1622
+ vfs_write+0x487/0x1540 fs/read_write.c:681
+ ksys_write+0x20f/0x4c0 fs/read_write.c:736
+ __do_sys_write fs/read_write.c:748 [inline]
+ __se_sys_write fs/read_write.c:745 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:745
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:4092 [inline]
+ slab_alloc_node mm/slub.c:4135 [inline]
+ __kmalloc_cache_noprof+0x4f0/0xb00 mm/slub.c:4291
+ kmalloc_noprof include/linux/slab.h:878 [inline]
+ usbtmc_create_urb drivers/usb/class/usbtmc.c:757 [inline]
+ usbtmc_generic_write+0x430/0xe80 drivers/usb/class/usbtmc.c:1176
+ usbtmc_write+0xdb7/0x1210 drivers/usb/class/usbtmc.c:1622
+ vfs_write+0x487/0x1540 fs/read_write.c:681
+ ksys_write+0x20f/0x4c0 fs/read_write.c:736
+ __do_sys_write fs/read_write.c:748 [inline]
+ __se_sys_write fs/read_write.c:745 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:745
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Byte 3 of 4 is uninitialized
+Memory access of size 4 starts at ffff8881150f6000
+
+CPU: 1 UID: 0 PID: 5201 Comm: syz-executor176 Not tainted 6.11.0-syzkaller-08481-g88264981f208 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+=====================================================
 
 
-[ 1749.181131] PM: suspend entry (s2idle)
-[ 1749.209736] Filesystems sync: 0.028 seconds
-
-[ 1749.220240] ======================================================
-[ 1749.220242] WARNING: possible circular locking dependency detected
-[ 1749.220244] 6.11.0-slowkasan+ #140 Not tainted
-[ 1749.220247] ------------------------------------------------------
-[ 1749.220249] systemd-sleep/5239 is trying to acquire lock:
-[ 1749.220252] ffffffffb1156c88 (rtnl_mutex){+.+.}-{3:3}, at:
-wg_pm_notification (drivers/net/wireguard/device.c:81
-drivers/net/wireguard/device.c:64)
-[ 1749.220265]
-but task is already holding lock:
-[ 1749.220267] ffffffffb077e170 ((pm_chain_head).rwsem){++++}-{3:3},
-at: blocking_notifier_call_chain_robust (kernel/notifier.c:128
-kernel/notifier.c:353 kernel/notifier.c:341)
-[ 1749.220277]
-which lock already depends on the new lock.
-
-[ 1749.220279]
-the existing dependency chain (in reverse order) is:
-[ 1749.220281]
--> #1 ((pm_chain_head).rwsem){++++}-{3:3}:
-[ 1749.220287] down_write (./arch/x86/include/asm/preempt.h:79
-kernel/locking/rwsem.c:1304 kernel/locking/rwsem.c:1315
-kernel/locking/rwsem.c:1580)
-[ 1749.220292] blocking_notifier_chain_register (kernel/notifier.c:272
-kernel/notifier.c:290)
-[ 1749.220295] rtl8152_open (drivers/net/usb/r8152.c:6994)
-[ 1749.220300] __dev_open (net/core/dev.c:1476)
-[ 1749.220304] __dev_change_flags (net/core/dev.c:8837)
-[ 1749.220308] dev_change_flags (net/core/dev.c:8909)
-[ 1749.220311] do_setlink (net/core/rtnetlink.c:2900)
-[ 1749.220315] __rtnl_newlink (net/core/rtnetlink.c:3696)
-[ 1749.220318] rtnl_newlink (net/core/rtnetlink.c:3744)
-[ 1749.220322] rtnetlink_rcv_msg (net/core/rtnetlink.c:6646)
-[ 1749.220325] netlink_rcv_skb (net/netlink/af_netlink.c:2550)
-[ 1749.220329] netlink_unicast (net/netlink/af_netlink.c:1331
-net/netlink/af_netlink.c:1357)
-[ 1749.220332] netlink_sendmsg (net/netlink/af_netlink.c:1901)
-[ 1749.220335] ____sys_sendmsg (net/socket.c:730 net/socket.c:745
-net/socket.c:2603)
-[ 1749.220339] ___sys_sendmsg (net/socket.c:2659)
-[ 1749.220342] __sys_sendmsg (net/socket.c:2686)
-[ 1749.220344] do_syscall_64 (arch/x86/entry/common.c:52
-arch/x86/entry/common.c:83)
-[ 1749.220348] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
-[ 1749.220352]
--> #0 (rtnl_mutex){+.+.}-{3:3}:
-[ 1749.220357] __lock_acquire (kernel/locking/lockdep.c:3159
-kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
-kernel/locking/lockdep.c:5199)
-[ 1749.220362] lock_acquire (kernel/locking/lockdep.c:467
-kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
-[ 1749.220365] __mutex_lock (kernel/locking/mutex.c:610
-kernel/locking/mutex.c:752)
-[ 1749.220369] wg_pm_notification (drivers/net/wireguard/device.c:81
-drivers/net/wireguard/device.c:64)
-[ 1749.220372] notifier_call_chain (kernel/notifier.c:93)
-[ 1749.220375] blocking_notifier_call_chain_robust
-(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
-[ 1749.220378] pm_notifier_call_chain_robust
-(./include/linux/notifier.h:207 kernel/power/main.c:104)
-[ 1749.220382] pm_suspend (kernel/power/suspend.c:367
-kernel/power/suspend.c:588 kernel/power/suspend.c:625)
-[ 1749.220386] state_store (kernel/power/main.c:746)
-[ 1749.220389] kernfs_fop_write_iter (fs/kernfs/file.c:334)
-[ 1749.220393] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
-[ 1749.220397] ksys_write (fs/read_write.c:736)
-[ 1749.220399] do_syscall_64 (arch/x86/entry/common.c:52
-arch/x86/entry/common.c:83)
-[ 1749.220402] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
-[ 1749.220406]
-other info that might help us debug this:
-
-[ 1749.220408]  Possible unsafe locking scenario:
-
-[ 1749.220409]        CPU0                    CPU1
-[ 1749.220411]        ----                    ----
-[ 1749.220413]   rlock((pm_chain_head).rwsem);
-[ 1749.220416]                                lock(rtnl_mutex);
-[ 1749.220420]                                lock((pm_chain_head).rwsem);
-[ 1749.220423]   lock(rtnl_mutex);
-[ 1749.220426]
-*** DEADLOCK ***
-
-[ 1749.220428] 5 locks held by systemd-sleep/5239:
-[ 1749.220430] #0: ffff888125d2e3f8 (sb_writers#6){.+.+}-{0:0}, at:
-ksys_write (fs/read_write.c:736)
-[ 1749.220439] #1: ffff8881e5cb9888 (&of->mutex){+.+.}-{3:3}, at:
-kernfs_fop_write_iter (fs/kernfs/file.c:326)
-[ 1749.220447] #2: ffff888460aee2d8 (kn->active#166){.+.+}-{0:0}, at:
-kernfs_fop_write_iter (fs/kernfs/file.c:326)
-[ 1749.220455] #3: ffffffffb0757008
-(system_transition_mutex){+.+.}-{3:3}, at: pm_suspend
-(kernel/power/suspend.c:574 kernel/power/suspend.c:625)
-[ 1749.220463] #4: ffffffffb077e170
-((pm_chain_head).rwsem){++++}-{3:3}, at:
-blocking_notifier_call_chain_robust (kernel/notifier.c:128
-kernel/notifier.c:353 kernel/notifier.c:341)
-[ 1749.220471]
-stack backtrace:
-[ 1749.220474] CPU: 1 UID: 0 PID: 5239 Comm: systemd-sleep Not tainted
-6.11.0-slowkasan+ #140
-[ 1749.220478] Hardware name: [...]
-[ 1749.220480] Call Trace:
-[ 1749.220483]  <TASK>
-[ 1749.220485] dump_stack_lvl (lib/dump_stack.c:124)
-[ 1749.220491] print_circular_bug (kernel/locking/lockdep.c:2077)
-[ 1749.220496] check_noncircular (kernel/locking/lockdep.c:2203)
-[...]
-[ 1749.220519] __lock_acquire (kernel/locking/lockdep.c:3159
-kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
-kernel/locking/lockdep.c:5199)
-[...]
-[ 1749.220546] lock_acquire (kernel/locking/lockdep.c:467
-kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
-[...]
-[ 1749.220577] __mutex_lock (kernel/locking/mutex.c:610
-kernel/locking/mutex.c:752)
-[...]
-[ 1749.220627] wg_pm_notification (drivers/net/wireguard/device.c:81
-drivers/net/wireguard/device.c:64)
-[ 1749.220631] notifier_call_chain (kernel/notifier.c:93)
-[ 1749.220636] blocking_notifier_call_chain_robust
-(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
-[...]
-[ 1749.220649] pm_notifier_call_chain_robust
-(./include/linux/notifier.h:207 kernel/power/main.c:104)
-[ 1749.220652] pm_suspend (kernel/power/suspend.c:367
-kernel/power/suspend.c:588 kernel/power/suspend.c:625)
-[ 1749.220656] state_store (kernel/power/main.c:746)
-[ 1749.220661] kernfs_fop_write_iter (fs/kernfs/file.c:334)
-[ 1749.220665] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
-[...]
-[ 1749.220693] ksys_write (fs/read_write.c:736)
-[...]
-[ 1749.220701] do_syscall_64 (arch/x86/entry/common.c:52
-arch/x86/entry/common.c:83)
-[ 1749.220704] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
-[ 1749.220708] RIP: 0033:0x7fe2e2917240
-[...]
-[ 1749.220735]  </TASK>
-[ 1749.223599] Freezing user space processes
-[ 1749.226307] Freezing user space processes completed (elapsed 0.002 seconds)
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
