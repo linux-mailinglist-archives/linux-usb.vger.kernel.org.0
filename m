@@ -1,78 +1,81 @@
-Return-Path: <linux-usb+bounces-15334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15335-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF563983A62
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 01:20:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69EDF983A58
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 01:17:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CDF7282B4E
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 22:41:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95E69B22014
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 22:41:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038BD85931;
-	Mon, 23 Sep 2024 22:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C87E129E9C;
+	Mon, 23 Sep 2024 22:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xqkol/wg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2WVRiLxD"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD962907
-	for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 22:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2B7128369
+	for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 22:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727131265; cv=none; b=mNxNYp+ccLK8BSWqvOPaRdKqFbhSd3Xy9n1YI8GrTFOCFZBE4Eyk6mQzA0G7zJR0lzQpu2IihjdfYxRcJsKiJE/WLryw4puj1mhSc2SepFNwTpZ5VDnkASCutFteEX9/jw16R+MpHQWqiAxZOnR3gnPsdZPG0THbY04urNZidfg=
+	t=1727131269; cv=none; b=JcdJfZcJMQ8iCk8eraog+PE9ClH/1aKkOtDvfLFeTN0B9nIIrzJoWnpnC4Y9GlDB+VgcaEjbJ7D+PJtvktmlgKXX8fnozo5+3eHjhbcJ4D5Qh/IG9RON6Y0l/kOsgCgAx4gGvcA1AaZWEJfwsZeZFQa4ZfNkcgAM587jzeFY+oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727131265; c=relaxed/simple;
-	bh=GSCd7C/d+ylgtXrc9F7rTXAgFQ4kzwVOtROXH16ndoc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=LX1hEkKm1EcUj+VkphCTvsOnlIQK7/mS07up/88Kvm5qH6OC77I6On33N3tyvMUaMh7WDmRLnF88Lru6zXbW1cSZxRMZLRNv8JwRrif3oTaE/cRgpaJXd1DfsbXSR7xnafyJGfhmC2cOtIQHhYt879L2UicDbVPUE56Jg1T+HSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xqkol/wg; arc=none smtp.client-ip=209.85.128.202
+	s=arc-20240116; t=1727131269; c=relaxed/simple;
+	bh=PS4BLuuHTqRfAsc6UJdp59YR5Wc8DDeE0Qb1w74bDi0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Eh5Zt/qSMmy6Hy7UHvY3lSUsMn2AjEfF9n+NygC9RNmdb4v55Dh3TDplzgg3HzLZoZFH0EbUHyPys0BmNzM6khAjfcSOwh/VpRfKFmSeIxoxLHC4eMN2vC5yQkRcmFxA4BQvK8Zb1jMODMX6Rq/KqG53wRYPCa0TuZMltI5686g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2WVRiLxD; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-690404fd230so73547337b3.3
-        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 15:41:03 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e20937a68bso7664467b3.3
+        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 15:41:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727131263; x=1727736063; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZoULqqwj4G3XNtXjnOz7why+OLiXHg9txfngqFgB/jM=;
-        b=Xqkol/wgJq9NI6dEeKU3RYZ/AyfGl6UMbxP8h+y4CylIonZ2DeQdF1bxRnOPhED33K
-         0M0T8aWaK1Xn80HZVm2wlre50zqV+kBeUmbaARY2bS+Aeay/NM51sX2P2mM6StEC6c4D
-         UDUkk+f+XtlkfUP72MrLUbwslM+1+yyd688k6X3HprUXUraFpLrgi92wBxWjKpEDtB/4
-         V9OnlgioVOp3k6+bhLmADgvyfsIZ/fkCl+VAryUXeP/WRptY59JVLKmCuqMm4WEpBWpn
-         I4+QJ1v+fJfmfDch+jvON3IkoybO1aVgsk3IH67mbrk/ti1dDZhTzyrdOV5hVyP0Uf/x
-         BlmQ==
+        d=google.com; s=20230601; t=1727131267; x=1727736067; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h0CyW1JtJfwLGoAAX+BVVApeoMCB4q+lbs8zs4x8alI=;
+        b=2WVRiLxDW2ERc+ddNqTsBvG2XSMSCOp5TlN4/UJSKY6zKgUTnkvhocH136rj/4Fkzg
+         XRp59ODCK1kv1T/HiAatc4SG5Sp/cEd5hiIjom/NCSV/a+reUOdQEOg+ck3DYL7EGsYV
+         Mu3wzyX5/9WY1aaSzkBmerkZ3z1q9/lzIdEStK/0BZYKLkzafLPn9WLzmqMkHpgPNKcm
+         iZCnE1/gf7B3uI6Zyasxd5pcm3WmUe6XEKWM29mnYEH9gUTcmKJUICrDFrB/V949+emt
+         iXPDIkVANU5C3QJ9FZyGa9/HtxxAIir9g9N5rfp+uJWPAivdlSOyFBcxL0EwV/jrH62r
+         E1Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727131263; x=1727736063;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoULqqwj4G3XNtXjnOz7why+OLiXHg9txfngqFgB/jM=;
-        b=tuI6cU8yyqV28R0NVWqQ4hDKxPjd9t5B6VtxDrURxoyf8rpvBq/yxy+RjynXlMuuFv
-         GB6qsRHBsL+q7aNFYG3H9t5VUdVBbdg5vHyQQPRn/91fRkik89RQFnEqKdnEbRbrFUzz
-         ehPfwHI6ZIUBsPUJr9f7x4QeTwoC1XKQmLw3VVy8smTIjRje/Ohd01w7pkvNGfEDOiic
-         JiuzlN+j14x9M7dRs0G2cNNb4BOIGcvyFxtpQrLGZgrLtTu8EkXoWjnrn/qrXBpVPUZD
-         aNwSJC8YMTY22xscS80FnbXmoIJEKjUArR4hzKEdZrF5FJOXB7C6VP2QXBsLv+ykVtHL
-         6sGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpkmsrdsvRc/anCg0JhY5lT9YGNCYdPt9Y1vunG8fBbigg31Zm4HUpHgsZGhW8He0ioibCImo08t0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8sMTPdlKH4mmQTc06Pyl+E5cSPtv0wFOUozfY5w1LcIJQFXkY
-	Kc1N2/yme7vRWahhejTfkfk/iRmrvmeNLFXACoJ1H3LRwHtlDFWywN7d7nxt84fmURBoSmFkVkf
-	A7A==
-X-Google-Smtp-Source: AGHT+IEXpzIYcYsmTLKPd3jrRYMqBg1mBudgZ4U8Lyu2HY5beZ0fdWyVImEb0QiaDHKoCbIIu3DCYtSPThc=
+        d=1e100.net; s=20230601; t=1727131267; x=1727736067;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h0CyW1JtJfwLGoAAX+BVVApeoMCB4q+lbs8zs4x8alI=;
+        b=nJBMkpTICUdhtCqyJ5Cnq7ZJNvvY8gkfaVdyvokoukt9Z1bv6F3agfvAOAv53/kd+6
+         aZFK2wYBi5XWX+HCgaDoxDP5zqhp3G04cdK3nwrKTOzP6zqmTr3aEyOjyCtKtcYp/KrJ
+         DNrGkQrD7ptcDKYvVUhIago8OTEtcMen1E/sfSUZAUIMXrmD5dGX4coaVfsaI9iagxrE
+         VsXQ4TeHEEZ8QPzv1LsHG+9wyPnKQ+gI2X3zSDc3i/YsK3pSZ+Rf+Fd6exEfjMSsAxFV
+         bF/VCdCyIw1kkKW7S5TRHOKlHJAGpps+E3kJoina5PHHDneHNob4Q8YzujG0AN1Yyekj
+         Q4Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCXi0avZnSItlyYaACtT9x7EhEp+w4LEpouspp1MusRQXOjbBi3RTyzX9alF9Htw3UGBCCzpOFX8XeY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxltN33wViLkcPGKYuJgDPqt8a2Ha3nSNf4408WnpmQvn7q3sEz
+	uB6WwWT35SU0y96BxRukx+s3LEAHRxymaQFwZdReKs+1lnHiqpdNMKbn8gGVMshPZImVgvuIopT
+	dDg==
+X-Google-Smtp-Source: AGHT+IGSjLQWmP851y1eVS2/hu9bUHsBbO9LVlRM6GryOZeP6D1cgOZJreq/N+ptQftupMuqBX9oaKMKBFo=
 X-Received: from amitsd-gti.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:827])
- (user=amitsd job=sendgmr) by 2002:a05:690c:f05:b0:6dd:bcce:7cbe with SMTP id
- 00721157ae682-6dfeec02c4cmr1054977b3.2.1727131263094; Mon, 23 Sep 2024
- 15:41:03 -0700 (PDT)
-Date: Mon, 23 Sep 2024 15:40:49 -0700
+ (user=amitsd job=sendgmr) by 2002:a05:690c:6d01:b0:6dd:dcf5:28ad with SMTP id
+ 00721157ae682-6dfeea08a59mr2106147b3.0.1727131267372; Mon, 23 Sep 2024
+ 15:41:07 -0700 (PDT)
+Date: Mon, 23 Sep 2024 15:40:50 -0700
+In-Reply-To: <20240923224059.3674414-1-amitsd@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240923224059.3674414-1-amitsd@google.com>
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240923224059.3674414-1-amitsd@google.com>
-Subject: [RFC v3 0/2] Add support for time DT property in TCPM
+Message-ID: <20240923224059.3674414-2-amitsd@google.com>
+Subject: [RFC v3 1/2] dt-bindings: connector: Add properties to define time values
 From: Amit Sunil Dhamne <amitsd@google.com>
 To: gregkh@linuxfoundation.org, robh@kernel.org, dmitry.baryshkov@linaro.org, 
 	heikki.krogerus@linux.intel.com
@@ -81,37 +84,79 @@ Cc: badhri@google.com, kyletso@google.com, rdbabiera@google.com,
 	devicetree@vger.kernel.org, Amit Sunil Dhamne <amitsd@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-USB PD specification defines a bunch of timers that can have a range of
-acceptable values instead of specific values. These values have to be
-tuned based on the platform. However, TCPM currently sets them to a
-default value without providing a mechanism to set platform specific
-values.
+This commit adds the following properties:
+  * sink-wait-cap-time-ms
+  * ps-source-off-time-ms
+  * cc-debounce-time-ms
 
-This patchset adds new DT properties per timer to allow users to define
-platform specific values.
+This is to enable setting of platform/board specific timer values as
+these timers have a range of acceptable values.
 
-Changes compare to v2:
-  - Added min, max & default values to DT property in Documentation.
-  - Changed return type of tcpm_fw_get_timings to void instead of int.
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+ .../bindings/connector/usb-connector.yaml     | 35 ++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-Changes compared to v1:
-  - Defined new properties per timer that we are interested in rather
-    than defining a single pd-timers u32 array property.
-  - Better description of the timer properties.
-  - Since subject has changed, adding link for previous patchset for
-    posterity:
-    https://lore.kernel.org/all/20240911000715.554184-1-amitsd@google.com/
-
-Amit Sunil Dhamne (2):
-  dt-bindings: connector: Add properties to define time values
-  usb: typec: tcpm: Add support for parsing time dt properties
-
- .../bindings/connector/usb-connector.yaml     | 35 ++++++++-
- drivers/usb/typec/tcpm/tcpm.c                 | 74 +++++++++++++++----
- 2 files changed, 92 insertions(+), 17 deletions(-)
-
-
-base-commit: 68d4209158f43a558c5553ea95ab0c8975eab18c
+diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+index fb216ce68bb3..21a0c58c65cd 100644
+--- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
++++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+@@ -253,6 +253,36 @@ properties:
+ 
+     additionalProperties: false
+ 
++  sink-wait-cap-time-ms:
++    description: Represents the max time in ms that USB Type-C port (in sink
++      role) should wait for the port partner (source role) to send source caps.
++      SinkWaitCap timer starts when port in sink role attaches to the source.
++      This timer will stop when sink receives PD source cap advertisement before
++      timeout in which case it'll move to capability negotiation stage. A
++      timeout leads to a hard reset message by the port.
++    minimum: 310
++    maximum: 620
++    default: 310
++
++  ps-source-off-time-ms:
++    description: Represents the max time in ms that a DRP in source role should
++      take to turn off power after the PsSourceOff timer starts. PsSourceOff
++      timer starts when a sink's PHY layer receives EOP of the GoodCRC message
++      (corresponding to an Accept message sent in response to a PR_Swap or a
++      FR_Swap request). This timer stops when last bit of GoodCRC EOP
++      corresponding to the received PS_RDY message is transmitted by the PHY
++      layer. A timeout shall lead to error recovery in the type-c port.
++    minimum: 750
++    maximum: 920
++    default: 920
++
++  cc-debounce-time-ms:
++    description: Represents the max time in ms that a port shall wait to
++      determine if it's attached to a partner.
++    minimum: 100
++    maximum: 200
++    default: 200
++
+ dependencies:
+   sink-vdos-v1: [ sink-vdos ]
+   sink-vdos: [ sink-vdos-v1 ]
+@@ -380,7 +410,7 @@ examples:
+     };
+ 
+   # USB-C connector attached to a typec port controller(ptn5110), which has
+-  # power delivery support and enables drp.
++  # power delivery support, explicitly defines time properties and enables drp.
+   - |
+     #include <dt-bindings/usb/pd.h>
+     typec: ptn5110 {
+@@ -393,6 +423,9 @@ examples:
+             sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
+                          PDO_VAR(5000, 12000, 2000)>;
+             op-sink-microwatt = <10000000>;
++            sink-wait-cap-time-ms = <465>;
++            ps-source-off-time-ms = <835>;
++            cc-debounce-time-ms = <101>;
+         };
+     };
+ 
 -- 
 2.46.0.792.g87dc391469-goog
 
