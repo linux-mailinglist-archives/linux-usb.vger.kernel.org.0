@@ -1,245 +1,149 @@
-Return-Path: <linux-usb+bounces-15325-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15326-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5623597EDED
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 17:15:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 284E097EE3A
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 17:31:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E45DFB21FD2
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 15:15:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2CDB2811A9
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 15:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FE819F11F;
-	Mon, 23 Sep 2024 15:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBF59475;
+	Mon, 23 Sep 2024 15:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b="jqFqoHD9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qtlb+AMW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9EF1FC8;
-	Mon, 23 Sep 2024 15:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.3.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B5A6FB0;
+	Mon, 23 Sep 2024 15:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727104465; cv=none; b=o72c/pGscVfKOllWJ0MAfcNcz8GmwqCoc4a7Qn4e/T5TncwKtwamOymSFIW+/tSURlcyuH89jmiMeiUYXBPMbdHSCdVHqxP5wxhZjEn6yXw9PsuD/1VyNTv3QZqnq4CfUOttVDj+QlaI90kEjlsAek/fCP8VDu91wWGlUlxlAAc=
+	t=1727105506; cv=none; b=B/7RPLF3J1x6TYYmifLwp6LzVQ/v63omNJ0kdeJ6yFJfPkC4EXvLCQOFDM3Rzx/6S/tjsiirUpYsXmtQNXZYRUI/sr0SG82s05OeKVxQs5FJ9dqAl4b9+pfnZfxEFHjYvWHHfzDZt2cfrlFyfAmB/z1+23fGJJmEFfaonUibq94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727104465; c=relaxed/simple;
-	bh=g/0Hdg8Un2CXL8LH60icGy740pZE1jnp1uFF0pCD7B8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y+4Ybwqs7uN0fCtNJmGBNRQ7nw2XuKxNYe2RUDdS1KE6S0VLH6xb6zhLjEsZsYp2I9NVAWpa+efeX41FLWuktxgliYaRaG/xMfOqGJQYj127s22E0xrGlVK5GkAG9ke0/vKdzD8cIDf+k47I3tbgGf6DjNbQiFRnQjYLwShEPTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com; spf=pass smtp.mailfrom=ysoft.com; dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b=jqFqoHD9; arc=none smtp.client-ip=81.19.3.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ysoft.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-	s=20160406-ysoft-com; t=1727104462;
-	bh=YQdTsrkK3A3RwP/xvM3nu45doQX8paQActYi2VSP4Zw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jqFqoHD9s51BZaXQsoYyxT42Ru3GcdQn0INqUKLAqf9VNJbEufuxN2eNUXeP8UQ2l
-	 8+FQc3LO3MPyYJj2xjCCBTKo685YNPl2rsNA2gmiikhjPlGC5aVu55aXtFsTzb9mw/
-	 gf6fUmjS11rMd6Df/x1pUHX8WbyO8MAt42cwwrxI=
-Received: from vokac-nb.ysoft.local (unknown [10.1.8.111])
-	by uho.ysoft.cz (Postfix) with ESMTP id B2D33A0640;
-	Mon, 23 Sep 2024 17:14:21 +0200 (CEST)
-From: =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Petr Benes <petr.benes@ysoft.com>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Herburger <gregor.herburger@ew.tq-group.com>,
-	Hiago De Franco <hiago.franco@toradex.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Mathieu Othacehe <m.othacehe@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1727105506; c=relaxed/simple;
+	bh=+LvQdCy3NWZsFks6BqjodIPKgk8H+PvYTnXOhTexFFM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HiB/boOJU96oz90D1XPd061+FQg3D06c0eNXThjCy3Fka/s2MOk2aNd+s+9Eo6uf1TFjbbyDs7weC9QSTpAS39sDH1DeSlHY6NyC8dP7NfAOVjm4+J9M1A5M7pxEiwE+mxuIxJ1R/Mu5JeV/r86ECmIwNOxNnUWLMsKujshuiBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qtlb+AMW; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727105505; x=1758641505;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+LvQdCy3NWZsFks6BqjodIPKgk8H+PvYTnXOhTexFFM=;
+  b=Qtlb+AMWmjx8M0UkIjfps5IIonIIBiIvoOSZBwd+w57ucdM11mA41HG6
+   8trf/Md2LdfjKavSmJMbnbmXk9IAtJk5+zMUrreAnOmF4isxMMaZCiuEA
+   LLIlWE1/qEiFTum6sD1QpGlOedO73AZMvpRD3gyLGytjYpqvkwfGh3UHR
+   YpIcE0Lk6DUBhbC21TWe2CICHu/xLf1Yt3jMZNRqoWkOFDUBIt7F3iCME
+   BgG1J24QnrITU707xdEE8rUu0ld/6V/QqDJMFFHjIqIHGSvMtDFjr819I
+   4lg/spSC3y+OaYTpyxef/paRK9RsntXQPgzv40VDJpQqREafjkgnHjQfc
+   g==;
+X-CSE-ConnectionGUID: 1DEm89VjS6u6laa7OjONSw==
+X-CSE-MsgGUID: c+GqONRXSnWeOzRx5MT2Xg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="28952925"
+X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
+   d="scan'208";a="28952925"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 08:31:44 -0700
+X-CSE-ConnectionGUID: Llq5G3CXT6+fF0hQGM8Fhg==
+X-CSE-MsgGUID: 1bMUUrTKSOaWlbfsUUUd8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
+   d="scan'208";a="71242158"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa008.fm.intel.com with ESMTP; 23 Sep 2024 08:31:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 3D1092CC; Mon, 23 Sep 2024 18:31:41 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	=?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-Subject: [PATCH v3 4/4] arm64: dts: imx8mp-iota2: Enable the USB Type-C port
-Date: Mon, 23 Sep 2024 17:14:17 +0200
-Message-ID: <20240923151417.1665431-5-michal.vokac@ysoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240923151417.1665431-1-michal.vokac@ysoft.com>
-References: <20240923151417.1665431-1-michal.vokac@ysoft.com>
+	linux-kernel@vger.kernel.org
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH v1 1/1] xhci: Don't use "proxy" headers
+Date: Mon, 23 Sep 2024 18:31:31 +0300
+Message-ID: <20240923153139.3701266-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Petr Benes <petr.benes@ysoft.com>
+Update header inclusions to follow IWYU (Include What You Use)
+principle.
 
-Enable the USB Type-C port with the Diodes PI5USB30213A port controller.
-The port supports dual role data but can operate only in source power role
-and PD is not supported.
-
-Signed-off-by: Petr Benes <petr.benes@ysoft.com>
-Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-v3:
-- none
-v2:
-- Use typec instead of tcpc.
-- Drop unneeded status.
+ drivers/usb/host/xhci.h       | 22 +++++++++++++++++++---
+ include/linux/usb/xhci-dbgp.h |  3 +++
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
- .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-index 120e6b87a000..bfed410339a4 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-@@ -32,6 +32,17 @@ button-reset {
- 		};
- 	};
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 620502de971a..b617de4d4c76 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -12,15 +12,31 @@
+ #ifndef __LINUX_XHCI_HCD_H
+ #define __LINUX_XHCI_HCD_H
  
-+	reg_typec: regulator-typec {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-+		pinctrl-0 = <&pinctrl_usbc_vbus>;
-+		pinctrl-names = "default";
-+		regulator-max-microvolt = <5000000>;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-name = "typec";
-+	};
++#include <linux/bitops.h>
++#include <linux/completion.h>
++#include <linux/dev_printk.h>
++#include <linux/irqreturn.h>
++#include <linux/mutex.h>
++#include <linux/pm.h>
++#include <linux/spinlock.h>
++#include <linux/sprintf.h>
++#include <linux/timer_types.h>
++#include <linux/types.h>
+ #include <linux/usb.h>
+-#include <linux/timer.h>
+-#include <linux/kernel.h>
+ #include <linux/usb/hcd.h>
++#include <linux/workqueue.h>
 +
- 	reg_usb_host: regulator-usb-host {
- 		compatible = "regulator-fixed";
- 		enable-active-high;
-@@ -218,6 +229,46 @@ &i2c2 {
- 	pinctrl-names = "default";
- 	status = "okay";
+ #include <linux/io-64-nonatomic-lo-hi.h>
+ #include <linux/io-64-nonatomic-hi-lo.h>
  
-+	typec@d {
-+		compatible = "diodes,pi5usb30213a";
-+		reg = <0xd>;
-+		interrupts-extended = <&gpio1 5 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-0 = <&pinctrl_typec>;
-+		pinctrl-names = "default";
++struct clk;
++struct dentry;
++struct dma_pool;
++struct radix_tree_root;
++struct reset_control;
 +
-+		connector {
-+			compatible = "usb-c-connector";
-+			data-role = "dual";
-+			label = "USB-C";
-+			pd-disable;
-+			power-role = "source";
-+			self-powered;
-+			typec-power-opmode = "default";
-+			vbus-supply = <&reg_typec>;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usb_con_hs: endpoint {
-+						remote-endpoint = <&typec_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usb_con_ss: endpoint {
-+						remote-endpoint = <&typec_ss>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
- 	rtc: rtc@68 {
- 		compatible = "dallas,ds1341";
- 		reg = <0x68>;
-@@ -309,6 +360,12 @@ MX8MP_IOMUXC_SAI3_MCLK__PWM4_OUT	0x102
- 		>;
- 	};
+ /* Code sharing between pci-quirks and xhci hcd */
+-#include	"xhci-ext-caps.h"
++#include "xhci-ext-caps.h"
+ #include "pci-quirks.h"
  
-+	pinctrl_typec: typecgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05	0x1c0
-+		>;
-+	};
-+
- 	pinctrl_uart2: uart2grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x0
-@@ -322,6 +379,11 @@ MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR	0x0
- 		>;
- 	};
+ #include "xhci-port.h"
+diff --git a/include/linux/usb/xhci-dbgp.h b/include/linux/usb/xhci-dbgp.h
+index 171fd74b1cfc..880d1421df4b 100644
+--- a/include/linux/usb/xhci-dbgp.h
++++ b/include/linux/usb/xhci-dbgp.h
+@@ -10,6 +10,9 @@
+ #ifndef __LINUX_XHCI_DBGP_H
+ #define __LINUX_XHCI_DBGP_H
  
-+	pinctrl_usbc_vbus: usbcgrp {
-+		fsl,pins = <MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x0
-+		>;
-+	};
++#include <linux/errno.h>
++#include <linux/init.h>
 +
- 	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x194
-@@ -389,15 +451,47 @@ &uart2 {
- 	status = "okay";
- };
- 
-+&usb3_0 {
-+	status = "okay";
-+};
-+
- &usb3_1 {
- 	status = "okay";
- };
- 
-+&usb3_phy0 {
-+	status = "okay";
-+};
-+
- &usb3_phy1 {
- 	vbus-supply = <&reg_usb_host>;
- 	status = "okay";
- };
- 
-+&usb_dwc3_0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	status = "okay";
-+
-+	port@0 {
-+		reg = <0>;
-+
-+		typec_hs: endpoint {
-+			remote-endpoint = <&usb_con_hs>;
-+		};
-+	};
-+
-+	port@1 {
-+		reg = <1>;
-+
-+		typec_ss: endpoint {
-+			remote-endpoint = <&usb_con_ss>;
-+		};
-+	};
-+};
-+
- &usb_dwc3_1 {
- 	dr_mode = "host";
- 	status = "okay";
+ #ifdef CONFIG_EARLY_PRINTK_USB_XDBC
+ int __init early_xdbc_parse_parameter(char *s, int keep_early);
+ int __init early_xdbc_setup_hardware(void);
 -- 
-2.43.0
+2.43.0.rc1.1336.g36b5255a03ac
 
 
