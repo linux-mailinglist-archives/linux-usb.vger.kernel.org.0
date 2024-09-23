@@ -1,88 +1,113 @@
-Return-Path: <linux-usb+bounces-15297-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15298-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD3DA97E621
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 08:45:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF91897E624
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 08:47:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A172B20C95
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 06:45:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A4281F21586
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 06:47:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EDD42940D;
-	Mon, 23 Sep 2024 06:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 300D1219E1;
+	Mon, 23 Sep 2024 06:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cwiD89Pb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gQeeQClr"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB0479E1;
-	Mon, 23 Sep 2024 06:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F26279E1;
+	Mon, 23 Sep 2024 06:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727073914; cv=none; b=h7KV84ITKmw78KqHsb45Qul4lZaxtOHt/e4/UCAhsiHhhJrZqg1V7Ly2nLJ1qPt4o12ZDHlMT+1pIlKOlQRUk8wm+CInnZvwwXUqKg7nRXZg8XtPNpbE7PQEQ+A5R4KUR0fB+N7sgwapJX9X3xUc/S09zWDQoLwD65eGsDb6z58=
+	t=1727074041; cv=none; b=Onoh9i3N/W2M35nStKqBXKP6HyGKwzATNKaNvU+fKCTFcBFAiRJJrHYJgN3w2N02t+AOhTaUzOytKjHonYTlVJNQQHjbWgfomXiGHz2xCwR58g/105deWxN/8Ho9+83x0eftKJnkx5u+u7XxFD7vH7LhTKr6hyvtv6I+/AHPPqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727073914; c=relaxed/simple;
-	bh=C8xxTFY5vBhvSGx1onfQ86a5vc9rr46CcQqRUnx/07I=;
+	s=arc-20240116; t=1727074041; c=relaxed/simple;
+	bh=53iniC7jI02cR162zTnFckidMsqxose3NiwOriwcVZM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lXTZnU7B0XD4+tg1UoQlw+wVrAnqeRRRtUAplVFeYkgsHeaAncYcVOCZZEiGvim2Z36xzMdec355Qm/UGD7qIptQXJWzN1dpqFcHd6dj5HgPj5vk3CMNUTysuVNrfn7vhou5EXoVlCBU/vu4Y5++YbKaPIp9X+hE/5+OR2CYojI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cwiD89Pb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 898ADC4CEC4;
-	Mon, 23 Sep 2024 06:45:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dAlU2NiO4eQN/SExb0cndaEJkuYDbJbbUJlt8EsrY8Y5jy55q/I2p6oBnSh5wE9vcyi1iXIILzt0eRs+ZcH2LvN361QM6rSnO3rX9/Ey6TAND2nLGVs8AcWHo4Qcb/5EN6fGs/B1yxROqgewWzpGMXhIXDRKZ0hYK9sU98dNs/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gQeeQClr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C35F2C4CEC4;
+	Mon, 23 Sep 2024 06:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1727073913;
-	bh=C8xxTFY5vBhvSGx1onfQ86a5vc9rr46CcQqRUnx/07I=;
+	s=korg; t=1727074041;
+	bh=53iniC7jI02cR162zTnFckidMsqxose3NiwOriwcVZM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cwiD89PbtGFjfZumScTsE1bUIEuYYgZytGQyEFIexdgBd3wYyKTg44plUDKzVZRyr
-	 0UyVr6h5iIIW1n/muqWlfLF0E1CYyG0tgWvs6erYiNI7ylOegWBAqbxAgBnHjZUiM8
-	 ZR3OaOuz6m73uNQzXKuoHh5lnJbpsQX/uIDS4X+I=
-Date: Mon, 23 Sep 2024 08:45:12 +0200
+	b=gQeeQClr/BBgvyo/Ji0tn0tW0hsufiBP4EhUCT9VIAOMFDNAhf4McgGarIULwJI7O
+	 Y0As20YJ+BiUV/735ESUgMLMti8hl+6Wx3IC1BHgdZzs09+YeGDRCo9tRF/h7f50LP
+	 /hRD/Hn4xbDvcG0J6nuoOpEDE91xwrC86stpgwnE=
+Date: Mon, 23 Sep 2024 08:47:19 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Fabian =?iso-8859-1?Q?St=E4ber?= <fabian@fstab.de>
-Cc: stable@vger.kernel.org, regressions@lists.linux.dev,
-	linux-usb@vger.kernel.org
-Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
-Message-ID: <2024092318-pregnancy-handwoven-3458@gregkh>
-References: <CAPX310gmJeYhE2C6-==rKSDh6wAmoR8R5-pjEOgYD3AP+Si+0w@mail.gmail.com>
+To: amin-amani <didi1364@gmail.com>
+Cc: johan@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: serial: digi_acceleport: Enhance error handling by
+ checkpatch.pl
+Message-ID: <2024092347-expansive-thrower-b40a@gregkh>
+References: <20240922211512.49273-1-didi1364@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPX310gmJeYhE2C6-==rKSDh6wAmoR8R5-pjEOgYD3AP+Si+0w@mail.gmail.com>
+In-Reply-To: <20240922211512.49273-1-didi1364@gmail.com>
 
-On Mon, Sep 23, 2024 at 08:34:23AM +0200, Fabian Stäber wrote:
-> Hi,
-
-Adding the linux-usb list.
-
-> I got a Dell WD19TBS Thunderbolt Dock, and it has been working with
-> Linux for years without issues. However, updating to
-> linux-lts-6.6.29-1 or newer breaks the USB ports on my Dock. Using the
-> latest non-LTS kernel doesn't help, it also breaks the USB ports.
+On Mon, Sep 23, 2024 at 12:45:12AM +0330, amin-amani wrote:
+> - Separated null checks for port, serial and private data.
 > 
-> Downgrading the kernel to linux-lts-6.6.28-1 works. This is the last
-> working version.
-> 
-> I opened a thread on the Arch Linux forum
-> https://bbs.archlinux.org/viewtopic.php?id=299604 with some dmesg
-> output. However, it sounds like this is a regression in the Linux
-> kernel, so I'm posting this here as well.
-> 
-> Let me know if you need any more info.
+> Signed-off-by: amin-amani <didi1364@gmail.com>
+> ---
+>  drivers/usb/serial/digi_acceleport.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 
-Is there any way you can use 'git bisect' to test inbetween kernel
-versions/commits to find the offending change?
+Hi,
 
-Does the non-lts arch kernel work properly?
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
 
