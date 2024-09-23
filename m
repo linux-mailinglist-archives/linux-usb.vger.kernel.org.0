@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-15312-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15313-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B16197EB18
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 13:54:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 098C297EBA8
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 14:42:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B7AB2809DC
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 11:54:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AD0A1C21266
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 12:42:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F021990D0;
-	Mon, 23 Sep 2024 11:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7223A1990B5;
+	Mon, 23 Sep 2024 12:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s5ZEe+/1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqoLV1xa"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC741EB48;
-	Mon, 23 Sep 2024 11:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFBD1E502;
+	Mon, 23 Sep 2024 12:42:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727092387; cv=none; b=R9j2yazD+/flN7zdXgcI8TJiMn6pKYA1GZN4/WV/lziMqwIbBOx/gkgt0XAklg+ApjDVhO0yhB/nUBgblh6CJHyEr2mjM43fhiLPhvZHmiKwCT1R88Lkz7FbBMEZMa9taOqE1Tob8YZA4pK3mLf/3wjoxCPqqzMIa5NAbiPpJwA=
+	t=1727095345; cv=none; b=S7WfijmOGExaY857PBtZQl2HF9CX0vxLC1DPCEHDAZqKg07O09FWqOQFxfDzPLjS5tBAalLHszYNUA/Fz8EbEX81ZYwqPKINuGKF7pKTel2oaSBHadwzGxwfmOV1R5ekMteVqgkd0UqUQhOAlKgfM+BDU0dSOv1LoEfO7GyOEQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727092387; c=relaxed/simple;
-	bh=BHCAGMjIfbhDX04xdZmHDFbvFp+bkX7fak28gq87iMs=;
+	s=arc-20240116; t=1727095345; c=relaxed/simple;
+	bh=ZO3tApegJN6iMdFa/YiioltGe4UFdob1JTPszLVjSeA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PdPNFoFMMqqunL+2tvqARyZdbofdhQiHh428up+JMuLN8BrfcoQAYXHXNw+TkjiPK0CaMEUwI8vtiyGBXfxO6ryoCgxwyXiWRCBuwEscYsUOL3Y+XVN9TcvdMxaLJIl3u2u2+tLssyzgR8Yhimte8kvQMUwI3aBkyX3dYgAFtk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s5ZEe+/1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5078CC4CEC4;
-	Mon, 23 Sep 2024 11:53:05 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ngPCmpibV14f0SFQ894K6tUwq+cU03aHdQ55L/xS/sxR1Cy3bbVlZ5wB40WAPe/gf6ihXZ4Z1wgiDuXLZBZuVwR3ucC2oLaLs2fwuWNIm5Ig8KXV1snxNXKnelBNdw0V6/SvwM2QWmAuaQe52hLFKZ266hZyFWOiDbsBrPrysU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KqoLV1xa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06688C4CEC4;
+	Mon, 23 Sep 2024 12:42:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727092387;
-	bh=BHCAGMjIfbhDX04xdZmHDFbvFp+bkX7fak28gq87iMs=;
+	s=k20201202; t=1727095344;
+	bh=ZO3tApegJN6iMdFa/YiioltGe4UFdob1JTPszLVjSeA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=s5ZEe+/1C9RNXAbdxM9JZPxfllH2UGzYtgh26TiTjjHcFKB5e+7tmXKvPBKb9u4xo
-	 7CFHH1vj/6/73vF5nV+YegbueAIi74ggtrHVEGERJAJHc4ATcM4Mn6dT0g1kM1QpwG
-	 GdnvqviV+d+HB3C6rIQNy8ohmS1d6E6fpASIaiBso41P/SjLfI5r9zO69+w0Oh6hz3
-	 QxWXsE6zHY9sexaXtINuC0rnDTr+cyu3mbr5RSpRPedZXPR1Xesqo2NZsQ1ftDOrA9
-	 Qo+ZP0CMzq9G7wy5C2SKxD++6fNXvrnlsKOMVRDKV/Q7NMvOvy6ZS1Mme1FtLWBOmj
-	 u32AKj/xywBhg==
-Message-ID: <a02e472c-f206-44d3-9a6b-d921e73110fd@kernel.org>
-Date: Mon, 23 Sep 2024 14:53:02 +0300
+	b=KqoLV1xaKOzM1GQ3p/PRn75e7qgqjWixB0Sn12pZlMC0egrirgqu272A8HlOwx3tP
+	 EbZXTQhM23Zzax0J1XfPcOsdXPcd9YCGpL3SLcNNr6ar7j1AHTTXVVS8NJ0Dat4NmE
+	 jM8i1XmIzmgOlqUuJgaaSZxLzhvgwjotQTzU7Sugg2FM/3IMZQ1chmM1/139dqWVDc
+	 HYV0FYJFqoN/vT0PfdgFpmzJZO6QmcWaV5fhMDlpLZQrEOHJw6/XzIW4mXoa34NUJI
+	 5fENLUZhDgueLJZFf6KhFckG1q0CStE1N6X+Hre5nvS8z5z6hoj/VJM65tGWTJDG09
+	 MbSRcSt3G0Znw==
+Message-ID: <d6ec3b8b-9405-49fa-ba39-a0bf6311a489@kernel.org>
+Date: Mon, 23 Sep 2024 15:42:20 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,63 +50,129 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: add missing compatible arraylist
-To: Karan Sanghavi <karansanghvi98@gmail.com>, Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZvBNLRc8xnAoGvoc@Emma>
+Subject: Re: [PATCH v1 1/1] sub: cdns3: Use predefined PCI vendor ID constant
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240913131710.3630560-1-andriy.shevchenko@linux.intel.com>
 Content-Language: en-US
 From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <ZvBNLRc8xnAoGvoc@Emma>
+In-Reply-To: <20240913131710.3630560-1-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22/09/2024 20:00, Karan Sanghavi wrote:
-> Added the vice versa order for compatible property in the yaml file so
-> that the dtb can parse for the order mentioned in the dts file
-> k3-am642-sk.dts for ti,j721e-usb.yaml
+Hi,
 
-k3-am642-sk.dts does not introduce any nodes with the said compatibles.
-
-"ti,am64-usb" compatible is introduced by k3-am642-main.dtsi.
-There is only one compatible introduced so there is nothing to do about
-order here.
-
-i.e.
-        usbss0: cdns-usb@f900000 {
-                compatible = "ti,am64-usb";
-                reg = <0x00 0xf900000 0x00 0x100>;
-
-What is the functional problem you are facing? Maybe then someone
-can point you in the right direction.
-
+On 13/09/2024 16:17, Andy Shevchenko wrote:
+> The PCI vendor ID for Cadence is defined in pci_ids.h. Use it.
+> While at it, move to PCI_DEVICE() macro and usual pattern for
+> PCI class and device IDs.
 > 
-> This is highly ambiguous to me as where exactly the changes needs to be
-> added is it in the dts file or is the yaml where we have to reverse the
-> order already mentioned or do we have to add the another order as I have
-> done ?
-> 
-> Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/usb/cdns3/cdns3-pci-wrap.c |  5 ++---
+>  drivers/usb/cdns3/cdnsp-pci.c      | 29 +++++++++++++++--------------
+>  2 files changed, 17 insertions(+), 17 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> index 95ff9791baea..822653217c43 100644
-> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> @@ -17,6 +17,9 @@ properties:
->        - items:
->            - const: ti,j721e-usb
->            - const: ti,am64-usb
-> +      - items:
-> +          - const: ti,am64-usb
-> +          - const: ti,j721e-usb
+> diff --git a/drivers/usb/cdns3/cdns3-pci-wrap.c b/drivers/usb/cdns3/cdns3-pci-wrap.c
+> index 1f6320d98a76..591d149de8f3 100644
+> --- a/drivers/usb/cdns3/cdns3-pci-wrap.c
+> +++ b/drivers/usb/cdns3/cdns3-pci-wrap.c
+> @@ -37,8 +37,7 @@ struct cdns3_wrap {
+>  #define PCI_DRIVER_NAME		"cdns3-pci-usbss"
+>  #define PLAT_DRIVER_NAME	"cdns-usb3"
 >  
->    reg:
->      maxItems: 1
+> -#define CDNS_VENDOR_ID		0x17cd
+> -#define CDNS_DEVICE_ID		0x0100
+> +#define PCI_DEVICE_ID_CDNS_USB3	0x0100
+
+Why do we need to change this? You did not explain in commit log.
+
+I would call this PCI_DEVICE_ID_CDNS_USBSS3. Also see later why to differentiate with USBSSP.
+
+>  
+>  static struct pci_dev *cdns3_get_second_fun(struct pci_dev *pdev)
+>  {
+> @@ -190,7 +189,7 @@ static void cdns3_pci_remove(struct pci_dev *pdev)
+>  }
+>  
+>  static const struct pci_device_id cdns3_pci_ids[] = {
+> -	{ PCI_DEVICE(CDNS_VENDOR_ID, CDNS_DEVICE_ID), },
+> +	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USB3) },
+
+For better readability I still prefer
+	PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSS3)
+
+>  	{ 0, }
+>  };
+>  
+> diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+> index 225540fc81ba..2d05368a6745 100644
+> --- a/drivers/usb/cdns3/cdnsp-pci.c
+> +++ b/drivers/usb/cdns3/cdnsp-pci.c
+> @@ -28,10 +28,11 @@
+>  #define PCI_DRIVER_NAME		"cdns-pci-usbssp"
+>  #define PLAT_DRIVER_NAME	"cdns-usbssp"
+>  
+> -#define CDNS_VENDOR_ID		0x17cd
+> -#define CDNS_DEVICE_ID		0x0200
+> -#define CDNS_DRD_ID		0x0100
+> -#define CDNS_DRD_IF		(PCI_CLASS_SERIAL_USB << 8 | 0x80)
+> +#define PCI_DEVICE_ID_CDNS_USB3		0x0100
+
+This is an entirely different card who's device ID should be 0x200?
+Also I don't think this card supports USB3 so it is a wrong name choice.
+
+I would call this PCI_DEVICE_ID_CDNS_USBSSP	0x200	to match with PCI driver name.
+
+> +#define PCI_DEVICE_ID_CDNS_UDC		0x0200
+
+UDC is used for Peripheral controller only. Is that really the case here?
+originally it was called DRD. 
+So how about?
+	PCI_DEVICE_ID_CDNS_DRD		0x0100
+
+> +
+> +#define PCI_CLASS_SERIAL_USB_CDNS_USB3	(PCI_CLASS_SERIAL_USB << 8 | 0x80)
+> +#define PCI_CLASS_SERIAL_USB_CDNS_UDC	PCI_CLASS_SERIAL_USB_DEVICE
+>  
+>  static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
+>  {
+> @@ -40,10 +41,10 @@ static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
+>  	 * Platform has two function. The fist keeps resources for
+>  	 * Host/Device while the secon keeps resources for DRD/OTG.
+>  	 */
+> -	if (pdev->device == CDNS_DEVICE_ID)
+> -		return  pci_get_device(pdev->vendor, CDNS_DRD_ID, NULL);
+> -	else if (pdev->device == CDNS_DRD_ID)
+> -		return pci_get_device(pdev->vendor, CDNS_DEVICE_ID, NULL);
+> +	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC)
+> +		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USB3, NULL);
+> +	if (pdev->device == PCI_DEVICE_ID_CDNS_USB3)
+> +		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_UDC, NULL);
+>  
+>  	return NULL;
+>  }
+> @@ -220,12 +221,12 @@ static const struct dev_pm_ops cdnsp_pci_pm_ops = {
+>  };
+>  
+>  static const struct pci_device_id cdnsp_pci_ids[] = {
+> -	{ PCI_VENDOR_ID_CDNS, CDNS_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
+> -	  PCI_CLASS_SERIAL_USB_DEVICE, PCI_ANY_ID },
+> -	{ PCI_VENDOR_ID_CDNS, CDNS_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
+> -	  CDNS_DRD_IF, PCI_ANY_ID },
+> -	{ PCI_VENDOR_ID_CDNS, CDNS_DRD_ID, PCI_ANY_ID, PCI_ANY_ID,
+> -	  CDNS_DRD_IF, PCI_ANY_ID },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
+> +	  .class = PCI_CLASS_SERIAL_USB_CDNS_UDC },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
+> +	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB3),
+> +	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
+>  	{ 0, }
+>  };
+>  
 
 -- 
 cheers,
