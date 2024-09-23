@@ -1,109 +1,123 @@
-Return-Path: <linux-usb+bounces-15306-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15307-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 929FA97E7CA
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 10:45:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D646397E897
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 11:26:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CCCD1F21D97
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 08:45:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8709B1F21023
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 09:26:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF54193422;
-	Mon, 23 Sep 2024 08:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BBB4194A6C;
+	Mon, 23 Sep 2024 09:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gEvM3ldn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXjGR0sE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A813032A;
-	Mon, 23 Sep 2024 08:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D09849649;
+	Mon, 23 Sep 2024 09:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727081152; cv=none; b=MbPrDXGCs8EJeR4aX/KXz0ik/Vl7sqqbO8QktKFywNPMGSZfh2txlSTLIA9PECI24CqRkEwFPn9r1i2ggLRYxi0+NbzJZ+2W4x4yAK7WliVWv3iU1uQ3+za4K4Aqc6JB49BeLlguCxYE8guqPhgYWq2bAn/v2aKufjEtI1nMj88=
+	t=1727083592; cv=none; b=rUCV0G5r2X2xpOOfodKyPD5MMjoYjvvspayrQ67tNep266C9AkRFgRxV3OFTPqFcQi5vtYPtyjQhtJ6QcZfdVXj9Q77N5qgANe8lPwDFuqiq6j762SjJMUeddR5HrEgH03ua4cdd7funWXrn6o5h5nUBCDPhB90jHlD8wjWr/s8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727081152; c=relaxed/simple;
-	bh=dqYEiBbupjRg1zIR1DoGNbbHYOqQUOZ7smtF8tjTIjE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rpKNMPJp1y1wDZx6H0oovux7REn5aWIKlAvvEOcFLI5Dp4nrZ5cV63src6LCWSzaK73YwnE8GIXM/f69RNYNYHWjNlgz+TB8MFL/id7CGTf0laAtlyjgltZqc1ri5sluM3ZVciwdtsuS7tvg88Bz0yCo3f3T6yQARJr74s+gwvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gEvM3ldn; arc=none smtp.client-ip=209.85.222.41
+	s=arc-20240116; t=1727083592; c=relaxed/simple;
+	bh=S1up5lkRW9QRalf19GpjfNed7GQaI+egFG7lTr+ICFo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P9cv4XKDdMoI9HmpLK7G6+crh8Np4KEbp0rOEuV8RpwRQNPsOgiBNfNRBFi7g+q0/d43PVDKY1njppiMJpL6xjdlK8B6lVnC5mjZN0zU1kf/VtZGzqimlp/nM5VS88xnXaEPAB3vGBZGtyG9UgIBzi00k1D8EqpDo83of2aJHCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXjGR0sE; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-846b934981aso804496241.3;
-        Mon, 23 Sep 2024 01:45:50 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2059112f0a7so35748465ad.3;
+        Mon, 23 Sep 2024 02:26:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727081150; x=1727685950; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dqYEiBbupjRg1zIR1DoGNbbHYOqQUOZ7smtF8tjTIjE=;
-        b=gEvM3ldnhZvWkbK5LwH23aqVNUrkX00lYK9TvyO30MbGrvsxBaOKaulPoMBxlT2QOh
-         NaBGyXNsQHQpD3J1kdDTvE8Rp9aicpMExDBOyxbD+e8/z6Vou+M9X2bTBPLbFS8p3EUW
-         NSGFCyNe+ZYikyX8VlIbpm+Wy6ZTCuNIf3wHaGipGL6qa9aEdOzXdTCdDe1o3ThI5dW+
-         ebFd4gVL4Hx8/5l+1UncAg20V8umFSUX4COQe1mDYY9pUI542rkz1h3h20FVW0b00YG1
-         +V3lzc9KDbfwjDjMFMJ3xB+BXWtYIv2BMOql+rwVGDneGVteRXR4xpEpuYkEeEKRfNNA
-         h9rw==
+        d=gmail.com; s=20230601; t=1727083591; x=1727688391; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2dOKvq5sK3chOPZqSUs73Dh4rYzc9HljqeogIORX3dY=;
+        b=AXjGR0sEuonQiYZkl908jiGV1NmZUN4MiWGVVUPIF3OJRbb0q6sRuVrcP9ueWTWSm9
+         uW38hZHX6JlCyvhhMniRlIoRF0mv9P+u9oQiaSKtgYtDSjsMOFFbZN/O2az7QbWI5nCL
+         kMAdEfceL1QfH1f/d2IX4+aHC++AidMjCtfj5izknNM0VwIaREPZlD7XHpSJQXxgtqLb
+         akNeRsiM3htZUdXWaN+rXbCqoayd3KGMwUCxzDtPxhj86H817WXVHBQppSM66VMgyY0a
+         d9BqRoDFq+M5PeLP7Iu4IORp7PaK2pgRnkYx9pIj90kMUZNi8H0LNNwgWIvk7907HwKc
+         i1dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727081150; x=1727685950;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1727083591; x=1727688391;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dqYEiBbupjRg1zIR1DoGNbbHYOqQUOZ7smtF8tjTIjE=;
-        b=ReYHxkhIf9niOx8GU6euoYwtFPjxaj9wW0aTzVpKHT2c4RWtRNZ4rcpvB0INFkX2eF
-         MQgBOs9Qjv5D2iZmgEvChuk0T3xb4FVCaByttCeOy/NueW7A9YASLINq5hhugDdBpoFP
-         Y4DZAnk2WJGAxdvtfrtSmQA9FBjbF+jk35S/1aMCYH11ByMhpQsu9K8hNdmKhlCjT1la
-         hOs+wbl2JCf+tyc0hQaIs1xlETpvRXUWgBd9bugd7Hqw8qVVFS/L93sR0c1iiTbt899d
-         swrMjPrpGulr9sSaL3MwSxeng9W/oQkM7uw0gg1fY3chsQ4IoBGy6Dx+5FfWIW5Kth+l
-         f42Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVgiYpa6xJzCNRL8gKRhF5NUCsO2XnT8NFTofOMoE2sQOt9WEb/x3y3adLxWoZPeoF/WS8Cd1X4A69BYkA=@vger.kernel.org, AJvYcCXrOm9iO6k14D16QRKgR+P3gSuIp4W4L6ZTDTzL9pq6lLUkyiVYZJYWEHWIE48IFO9bQ/ulmg1pWfNY@vger.kernel.org
-X-Gm-Message-State: AOJu0YzP4VXO2wjYZUosLMQpICEKuqsvezA5+YSu49VrdvaKqXiOvUqh
-	4EelrSql9lEq7FpfhPYwpREevUBmF45alvD+cwgNMDcJhn+xe/Z31nzE/pjNYRUkeg+Z01HDiDT
-	jqKC/E7Ut4mW/A9yU1aL6mYGGSik=
-X-Google-Smtp-Source: AGHT+IEzbx43L1g7xNzICxB6bl0i3dkmy4SfSzShQk/2kMz8ApnMlXSxFMXtyZkY5Hp9AjqMiQ32fjxz3oAf6LqSXEg=
-X-Received: by 2002:a05:6122:2225:b0:4ef:678e:8a90 with SMTP id
- 71dfb90a1353d-503e041b6b1mr6407274e0c.3.1727081149835; Mon, 23 Sep 2024
- 01:45:49 -0700 (PDT)
+        bh=2dOKvq5sK3chOPZqSUs73Dh4rYzc9HljqeogIORX3dY=;
+        b=caTXznfjzcvvWvfzoyChZDjfYheeSGYKlcevCq1ucrrZEzxiNfN7a9qSSnaf7KTavL
+         15GOOx7lf4xiDJG1fCly4u/y7HjxJPxINJHS8wEBa017Xn45nJg6K869QHfmB3P4B2fd
+         ZdRf4QCRxF83Tiq+nhNuRYJHqBzIqhrWNg82gHmTK9ifLQ0MvXCKO+vsP0knSEdmoPxy
+         97Vt4zDVVadYlOoca0aCeaid0BBXZ++GHamE/xCtBidZDgQ1ZgW8AHC2iM+wahXRGk1H
+         4FeHAp58jxso4I8OfnszA7fKNXFRqg1UFv0ujYPzMLl1t8CZZMmrsdGil9l8sx7n/Ciz
+         g3Jg==
+X-Forwarded-Encrypted: i=1; AJvYcCV48eMbRL1jlh68GEMOY/WT1VFC++Dp6hLC6h26B7SUHI4T+BiUgVsV5pMbhjI1T354oXPG6Opm77he@vger.kernel.org, AJvYcCWcFp4gcsFiSCZd7VBa0eX3IAnNwPUPN9B6tZWBzF8WITmXP9tnmxcpIVOA6/wM7wVi7zXJTtE27nY/Sck=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywGhChz7CdX7TFSaUFM72md+kf5rFUF1kAzJLtNFCG/EEoXxqG
+	M8TC6fA/E4zYqY12OC0WEwiKm0nL1PUiY1bSIPHkFiQgg0hrZyKM
+X-Google-Smtp-Source: AGHT+IFtAzwYm8z4tBSxUndNMddatVmlI7wJjSRNkQRBia7HLCtsla+2ptRdtvUXOR7VYYQ9B0v2DA==
+X-Received: by 2002:a17:902:ef48:b0:205:8cde:34c3 with SMTP id d9443c01a7336-208d8423fdamr170755805ad.54.1727083590721;
+        Mon, 23 Sep 2024 02:26:30 -0700 (PDT)
+Received: from ubuntu.. ([27.34.65.190])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945da8c9sm130427475ad.17.2024.09.23.02.26.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Sep 2024 02:26:30 -0700 (PDT)
+From: Dipendra Khadka <kdipendra88@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org
+Cc: Dipendra Khadka <kdipendra88@gmail.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: typec: tipd: Fix dereferencing freed memory 'fw in core.c
+Date: Mon, 23 Sep 2024 09:26:24 +0000
+Message-ID: <20240923092625.2673-1-kdipendra88@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240922105212.28099-1-kdipendra88@gmail.com> <ZvEoVC_j6jdBhvim@kuha.fi.intel.com>
-In-Reply-To: <ZvEoVC_j6jdBhvim@kuha.fi.intel.com>
-From: Dipendra Khadka <kdipendra88@gmail.com>
-Date: Mon, 23 Sep 2024 14:30:38 +0545
-Message-ID: <CAEKBCKOHEynh1CLDyY8uibUXt5XhU6yGDRKAswfeQhVxGVAdEg@mail.gmail.com>
-Subject: Re: [PATCH] Fix dereferencing freed memory 'fw'
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Heikki,
+Smatch reported dereferencing freed memory 'fw' in tps6598x_apply_patch().
 
-On Mon, 23 Sept 2024 at 14:20, Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Sun, Sep 22, 2024 at 10:52:11AM +0000, Dipendra Khadka wrote:
-> > smatch reported dereferencing freed memory as below:
-> > '''
-> > drivers/usb/typec/tipd/core.c:1196 tps6598x_apply_patch() error: dereferencing freed memory 'fw'
-> > '''
->
-> This is only my opinion, but I don't like those '''single triple
-> quotes''' in commit messages - they are just confusing. You don't need
-> to use any kind of quotation marks in cases like this IMO.
->
+Invoking relrease_firmware(fw) just after checking ret.
 
-Thanks for the feedback. I will send v2.
+Fixes: 916b8e5fa73d ("usb: typec: tipd: add error log to provide firmware name and size")
+Signed-off-by: Dipendra Khadka <kdipendra88@gmail.com>
+---
+v2:
+ - Updated patch subject.
+ - Updated patch description.
+ - Added Fixes tag.
+v1: 
+ drivers/usb/typec/tipd/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> thanks,
->
-> --
-> heikki
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index ea768b19a7f1..70bf8023ea35 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -1191,12 +1191,13 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
+ 	dev_info(tps->dev, "Firmware update succeeded\n");
+ 
+ release_fw:
+-	release_firmware(fw);
+ 	if (ret) {
+ 		dev_err(tps->dev, "Failed to write patch %s of %zu bytes\n",
+ 			firmware_name, fw->size);
+ 	}
+ 
++	relrease_firmware(fw);
++
+ 	return ret;
+ };
+ 
+-- 
+2.43.0
 
-Best Regards,
-Dipendra Khadka
 
