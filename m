@@ -1,130 +1,146 @@
-Return-Path: <linux-usb+bounces-15318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15319-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15C2097EC8A
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 15:44:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F9FF97ECEC
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 16:17:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D048528213D
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 13:44:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BCBEB21993
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 14:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A192E82899;
-	Mon, 23 Sep 2024 13:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A0319CC1D;
+	Mon, 23 Sep 2024 14:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jx5NFNrZ"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="RtVYo/io";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="DyVBgZIZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA89A126C01;
-	Mon, 23 Sep 2024 13:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C8C10F7;
+	Mon, 23 Sep 2024 14:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727099053; cv=none; b=aYxqhUwV7NOIsNYQsa5ddfIYhSTuSC+50v/ipTX+B4Rb7cDyLrUDlHnq1tRE+DnWkT31IutxyBbJpxWS5QXhpIvyFfL/qYf4W57yt+EcKk6u1udcpdHepprFpqtwZVSrPurGuzo7dimBGh/qlsR6D2qPyVRqZPd+laeRRk4jfmI=
+	t=1727101017; cv=none; b=ECjju+xLSjyODwhbaEMkxtxM72PHj/D/iQiZjW+l/f6b941m+MGxFdHiJ1iyk1UF27jYF5UyTFRIOd4tBKk9HR92m3qzkfIpjRsa//QrQ31kVpD5THvOfSRGGuYjEfQswAtm9Y3Hg05n94J7zU6/FXLMliGcevGWuRn++EPcZhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727099053; c=relaxed/simple;
-	bh=N5NIP3ZW+5iVO/QubsRqPXXSLKWvzlJWTErvwa2ixIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EUPjIuODFAyLHK0DNXvje436pz4eJ/1SfxcaV1TTHXsP3qOIcL0tpOtJ3jodYlGkww4/vt40RfgYgXVrfw1b7G/UUa8kMBc1ypq79d3MGjzd+pmq65lh7o/3RdFCqBeQn/P8tkIvWsN4UcWs7JfB6s6LSVB6j7WXZodONd7daew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jx5NFNrZ; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727099052; x=1758635052;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N5NIP3ZW+5iVO/QubsRqPXXSLKWvzlJWTErvwa2ixIA=;
-  b=jx5NFNrZiWdZeGYBw2Xc4OkQO6VWcVfUZ0quJdcMO1MfwgDl2LC0zzk6
-   1VCfskQYuIgUQXspbwsJc/aD6/zISxX/YwozrcZpYtNWlI6bLgQQcUBbX
-   Pd2xDSwyEGtLP/lmeoL9wWBQWHAQsptGpm8pvQrhO2BpFD4Q2u13jQGEU
-   UksSw4Q+75yAd/Bwc8S0hgJxaDc7P8k1fv6Ln9No5/C8/y2JjQYrnrE8m
-   igqqnCh3Om/x+iHUqK+Rsjqwak1g62WEHsUiqboQpwg9fFV16TzeLisg7
-   eymvza5a7ZTCcs9+Szb01U7/YguJu9Yg5D/3WP1zfTgvjKxmR3O0G2TQO
-   A==;
-X-CSE-ConnectionGUID: C7Z+MRZNQ928idsKS1z1rQ==
-X-CSE-MsgGUID: fhR3ddUzR2u5PQiKDqGe2w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="29935057"
-X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="29935057"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 06:44:11 -0700
-X-CSE-ConnectionGUID: CWNEBTUFQyOlxuQomxaYEw==
-X-CSE-MsgGUID: W7W7GCQ5QD+QGy5On4DvRQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="71070503"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 06:44:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ssjME-0000000C17b-2lN9;
-	Mon, 23 Sep 2024 16:44:06 +0300
-Date: Mon, 23 Sep 2024 16:44:06 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] sub: cdns3: Use predefined PCI vendor ID constant
-Message-ID: <ZvFwppgtysrFR6Dx@smile.fi.intel.com>
-References: <20240913131710.3630560-1-andriy.shevchenko@linux.intel.com>
- <d6ec3b8b-9405-49fa-ba39-a0bf6311a489@kernel.org>
- <ZvFkv-xrs1ul7-oI@smile.fi.intel.com>
- <ed7e7044-1b5a-44a4-be24-7c94278244b0@kernel.org>
+	s=arc-20240116; t=1727101017; c=relaxed/simple;
+	bh=ffsN+B8i9wwxmm54ykTW5O3U7+XiB+deDuykjj3u76o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sqdQDezsdFqVUJx1iUXoXDmFzAK9g7Yw0FHV3JmkfVYrVS7wVHnO0pWfKdx6U1/VBTVdDfG03ZYpbfLx284sMxpVtPTKHEatH5sZEwTeoQ8yjlqJotDXjdFQyYaM9Qeaj3MvADNlbHqTnA3ToIO3tJtnlktH3Nqg9tBp8Ibkk8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=RtVYo/io; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=DyVBgZIZ; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 614F821DB8;
+	Mon, 23 Sep 2024 14:16:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1727101012; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=vy3r3kjKM26aBsWsuVuahNpyztjcHkCjXvxlsDEnO2I=;
+	b=RtVYo/ioFvlvZ8tt0CcZIzykm8WHpGKs4bAcgQ/r0dRrzi2gCST647LIQ5KvinlnpRu2MV
+	43e7xt/VlXVyVP551eEPTiV6w8iwBP2DwOg4eAYiSDQ9SA7UqDOMO2r39yo7tCncYY3YKr
+	Y2k+4kKVnBw3ePDlwBHkTvJQDsq7Oeg=
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1727101011; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=vy3r3kjKM26aBsWsuVuahNpyztjcHkCjXvxlsDEnO2I=;
+	b=DyVBgZIZRjiKaXNU7dBmlr0b8kn9VVFJsCf02jcVzzMLsRG5VeX34gf/bl8ewD42I2upYz
+	IIo0jC7aEXtY+YiIx1zHWGTMz4B9J1SvANx5zr1v+rdXiG2lQhFubcXq7KABxHZj9h6HGZ
+	jErfwDb27sTIscH+HMNUgXMlazkVNlM=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3FBC213A64;
+	Mon, 23 Sep 2024 14:16:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id aZlVDlN48WZOXwAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Mon, 23 Sep 2024 14:16:51 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] usb: yurex: make waiting on yurex_write interruptible
+Date: Mon, 23 Sep 2024 16:16:43 +0200
+Message-ID: <20240923141649.148563-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.46.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ed7e7044-1b5a-44a4-be24-7c94278244b0@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:mid];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-On Mon, Sep 23, 2024 at 04:24:15PM +0300, Roger Quadros wrote:
-> On 23/09/2024 15:53, Andy Shevchenko wrote:
-> > On Mon, Sep 23, 2024 at 03:42:20PM +0300, Roger Quadros wrote:
-> >> On 13/09/2024 16:17, Andy Shevchenko wrote:
+The IO yurex_write() needs to wait for in order to have a device
+ready for writing again can take a long time time.
+Consequently the sleep is done in an interruptible state.
+Therefore others waiting for yurex_write() itself to finish should
+use mutex_lock_interruptible.
 
-...
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Fixes: 6bc235a2e24a5 ("USB: add driver for Meywa-Denki & Kayac YUREX")
+---
+ drivers/usb/misc/yurex.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> >>> -#define CDNS_DEVICE_ID		0x0200
-> >>> -#define CDNS_DRD_ID		0x0100
-> >>> -#define CDNS_DRD_IF		(PCI_CLASS_SERIAL_USB << 8 | 0x80)
-> >>> +#define PCI_DEVICE_ID_CDNS_USB3		0x0100
-> >>
-> >> This is an entirely different card who's device ID should be 0x200?
-> >> Also I don't think this card supports USB3 so it is a wrong name choice.
-> > 
-> > Are you stating that 0x0100 in both cases points to the *different* devices?!
-> > This is unbelievable, however possible abuse of PCI IDs.
-> 
-> I am not entirely sure.
-> What I do know is that one card should be USBSS (0x100) and other should be
-> USBSSP (0x200). P for super-speed-Plus.
-
-That's my understanding as well.
-
-> Also please see commit 96b96b2a567f ("usb: cdnsp: changes PCI Device ID to
-> fix conflict with CNDS3 driver")
-
-I believe this is an interesting way to solve the issue "enumeration with two
-or more drivers for the same HW". So, 0x100 in here is used just to see which
-driver is in use (has been chosen at build time?).
-
-That said, the 0x100 in both cases seems to me the _same_ device in question.
-Hence it should be called the same, whatever you prefer. So, since the patches
-are already in USB Next, feel free to update the constant definition names as
-it looks like you are much more familiar with the hardware than me.
-
+diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
+index 4a9859e03f6b..0deffdc8205f 100644
+--- a/drivers/usb/misc/yurex.c
++++ b/drivers/usb/misc/yurex.c
+@@ -430,7 +430,7 @@ static ssize_t yurex_write(struct file *file, const char __user *user_buffer,
+ 			   size_t count, loff_t *ppos)
+ {
+ 	struct usb_yurex *dev;
+-	int i, set = 0, retval = 0;
++	int i, set = 0, retval;
+ 	char buffer[16 + 1];
+ 	char *data = buffer;
+ 	unsigned long long c, c2 = 0;
+@@ -444,7 +444,10 @@ static ssize_t yurex_write(struct file *file, const char __user *user_buffer,
+ 	if (count == 0)
+ 		goto error;
+ 
+-	mutex_lock(&dev->io_mutex);
++	retval = mutex_lock_interruptible(&dev->io_mutex);
++	if (retval < 0)
++		return -EINTR;
++
+ 	if (dev->disconnected) {		/* already disconnected */
+ 		mutex_unlock(&dev->io_mutex);
+ 		retval = -ENODEV;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.46.1
 
 
