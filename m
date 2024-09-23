@@ -1,150 +1,181 @@
-Return-Path: <linux-usb+bounces-15314-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15315-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DC3197EBBA
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 14:53:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D35D897EC05
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 15:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1B02282710
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 12:53:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B531B21CCE
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 13:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D101990C7;
-	Mon, 23 Sep 2024 12:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F921199231;
+	Mon, 23 Sep 2024 13:07:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l32Hvrc9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2CcblEp8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1747A80C0C;
-	Mon, 23 Sep 2024 12:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801BA198E6F;
+	Mon, 23 Sep 2024 13:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727096006; cv=none; b=UlaL6BVOekyIGBN8sjch92BeMrvIwlQPiblbCGSYiOUU3AoHZKIm02roHviJYWyFh3/js9/hDpqHe+jyBcC0HIE/esfNj4RrqgnV7aoDPXu8mo5URgwTOr+x1XyXoMiNX8QbVDvsHCoNBywzUjlG3K7mYL3XRk1hARYttHJXG2c=
+	t=1727096823; cv=none; b=CSYkP7AGMdErSEZwwo/t07/EwAVdAQF1/jGE1AcFftdSeMNmYJLWYnTU/K9UMaDh/TrnaP4+DbXIMI2Immo8cOZhipemQbZEyWCGuVs4myTJSjptJq0xT+mhcShAsT/MY7HRS5hnX2NX+4xdcH0+y9P2nZL8J2Dmf+fV2uZPRQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727096006; c=relaxed/simple;
-	bh=U85natxC5lKU5jfLHXEMyFt+8HVrr2Afqb2PHGISf48=;
+	s=arc-20240116; t=1727096823; c=relaxed/simple;
+	bh=o8HTBfVyR5kXn+aqXU7zjNAFtRfUn4jh6KoQZTzAbkc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gJSOwQ+JvoQq0fxJ3TIO89uYPhxA1QhCLcJ8+vIRgS1ScEvdGPuaID8WlakAe/KBUyRHIEO9dQ3XCrdrYApJA1QmxHOBQAY4/STQei3qFTg3cyDXuZFKlnTPC67Tq0+7wJU93f7MSZAq2NTdDGxKkQtmNg1bD2ENW/dp/7dGUzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l32Hvrc9; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727096005; x=1758632005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U85natxC5lKU5jfLHXEMyFt+8HVrr2Afqb2PHGISf48=;
-  b=l32Hvrc9iFSrYlMetHxTLeY6IlXlK//GM82le+PJdujv4L08+DDCdw1T
-   71vtDm8wWIlXxvLZBUllC70iFETH7ReMu9U6cdLgCVPM7uyPsw1eSiDlz
-   dOLxSp145a5b5/2aOiccLPLcG1L7Epe3snPi8D+nc8gP1irVKdsrs9LLm
-   6X4V1v0fPbGfTXtpV1zfr3uA/ODaLAVXlWF1wVWPiDCn/sKFQVY4bwNzh
-   yBsrGC32h+fkmuFH8/6Vz3Fx1uStyS1mdw3vvYHNV5X+hiOiGv8CXmVx0
-   EqM7TtClE1CWMXi0RLkRrFnQ6Lb1DfVq3yz+gKFk+2l5z7sqZOdCaZh1Y
-   A==;
-X-CSE-ConnectionGUID: 2RnFhkflS5ecRmij+rRyFg==
-X-CSE-MsgGUID: fHjezW+GR7WnlCTXIOR2zQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="37413303"
-X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="37413303"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 05:53:24 -0700
-X-CSE-ConnectionGUID: 5zE+S9xjQg+xOlbaNc96dQ==
-X-CSE-MsgGUID: BBTLqyh9QSaCn0jBQvQwcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="70646530"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 05:53:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ssiZ6-0000000Bzph-1uDI;
-	Mon, 23 Sep 2024 15:53:20 +0300
-Date: Mon, 23 Sep 2024 15:53:19 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] sub: cdns3: Use predefined PCI vendor ID constant
-Message-ID: <ZvFkv-xrs1ul7-oI@smile.fi.intel.com>
-References: <20240913131710.3630560-1-andriy.shevchenko@linux.intel.com>
- <d6ec3b8b-9405-49fa-ba39-a0bf6311a489@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=J4LQCqyf/taqaCGXgE8spAoo+XlJLHmiMxI5o/GN0DrU7Y5N9rIC2FogVTcRF2HOAsY6zDrTeY6+PIDHptjepmGnHpZBJrmvGw1I7b1zJ4FFfoujEIg0SHYl+U8fMm/a5xMwvjjnuyrn4ZmiCr9dW1sjQXHdTTayukO/6HQ8JrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2CcblEp8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5D8C4CEC4;
+	Mon, 23 Sep 2024 13:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1727096823;
+	bh=o8HTBfVyR5kXn+aqXU7zjNAFtRfUn4jh6KoQZTzAbkc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=2CcblEp8r66+Mre+tQmJTYKSydEuUo0Y964S1AwaEMY5uonHaHWBCK7YfYCFZ/d3J
+	 MrXCuFZrCqXhALLUj9Bid0XS/gH6mQrdCFsx+85UBZ8H/pCs4FNVxbbrNAH3vBXUKW
+	 G9lxZ7dua4SvCE3cIDrmsYfZa6GsEP2DeXkYNK60=
+Date: Mon, 23 Sep 2024 15:06:58 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: dengjie03 <dengjie03@kylinos.cn>
+Cc: rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, xiehongyu1@kylinos.cn,
+	duanchenghao@kylinos.cn, xiongxin <xiongxin@kylinos.cn>
+Subject: Re: [PATCH] KYLIN: USB: Fix the issue of S4 wakeup queisce phase
+ where task resumption fails due to USB status
+Message-ID: <2024092355-chip-stuffy-bd93@gregkh>
+References: <20240923100553.119324-1-dengjie03@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d6ec3b8b-9405-49fa-ba39-a0bf6311a489@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240923100553.119324-1-dengjie03@kylinos.cn>
 
-On Mon, Sep 23, 2024 at 03:42:20PM +0300, Roger Quadros wrote:
-> On 13/09/2024 16:17, Andy Shevchenko wrote:
-> > The PCI vendor ID for Cadence is defined in pci_ids.h. Use it.
-> > While at it, move to PCI_DEVICE() macro and usual pattern for
-> > PCI class and device IDs.
-
-...
-
-> > +#define PCI_DEVICE_ID_CDNS_USB3	0x0100
+On Mon, Sep 23, 2024 at 06:05:53PM +0800, dengjie03 wrote:
+> Reproduction of the problem: During the S4 stress test,
+> when a USB device is inserted or removed, there is a
+> probability that the S4 wakeup will turn into a reboot.
+> The following two points describe how to analyze and
+> locate the problem points:
 > 
-> Why do we need to change this? You did not explain in commit log.
-
-It's explained: "...usual pattern for PCI class and device IDs."
-
-> I would call this PCI_DEVICE_ID_CDNS_USBSS3. Also see later why to differentiate with USBSSP.
-
-It's good to know that there are semantic differences,
-but it is already applied, feel free to update.
-
-...
-
-> > -	{ PCI_DEVICE(CDNS_VENDOR_ID, CDNS_DEVICE_ID), },
-> > +	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USB3) },
+> 1. During the boot stage when S4 is awakened, after
+> the USB RootHub is initialized,it will enter the
+> runtime suspend state. From then on, whenever an
+> xhci port change event occurs, it will trigger a
+> remote wakeup request event and add wakeup_work to
+> pm_wq, where the subsequent RootHub runtime resume
+> process will be handled by pm_wq.
 > 
-> For better readability I still prefer
-> 	PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSS3)
-
-I disagree. The PCI_VDEVICE() has less letters and much easier to get
-the vendor from the (less power to parse and decode is required).
-
-...
-
-> > -#define CDNS_DEVICE_ID		0x0200
-> > -#define CDNS_DRD_ID		0x0100
-> > -#define CDNS_DRD_IF		(PCI_CLASS_SERIAL_USB << 8 | 0x80)
-> > +#define PCI_DEVICE_ID_CDNS_USB3		0x0100
+> xhci runtime suspend flow：
+> S4 boot
+>    |->xhci init
+>        |->register_root_hub
+> 	   |->hub_probe
+> 	       |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
 > 
-> This is an entirely different card who's device ID should be 0x200?
-> Also I don't think this card supports USB3 so it is a wrong name choice.
-
-Are you stating that 0x0100 in both cases points to the *different* devices?!
-This is unbelievable, however possible abuse of PCI IDs.
-
-> I would call this PCI_DEVICE_ID_CDNS_USBSSP	0x200	to match with PCI driver name.
+> xhci runtime resume flow ：
+> xhci_irq()
+>     |->xhci_handle_event()
+> 	|->handle_port_status()
+>    	    |->if(hcd->state == HC_STATE_SUSPENDED)
+> 		 |->usb_hcd_resume_root_hub()
+> 		    |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
+>   		    |->queue_work(pm_wq, &hcd->wakeup_work)
+> 			|->hcd_resume_work()			       /* hcd->wakeup_work */
+> 			    |->usb_remote_wakeup()
+> 				|->callback = RPM_GET_CALLBACK(dev, runtime_resume)
+> 				    |->usb_runtime_resume()            /* usb runtime resume  */
+> 					|->generic_resume()
+> 					    |->hcd_bus_resume()
+> 						|->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+> 						  /* wakeup pending signal to be clear */
 > 
-> > +#define PCI_DEVICE_ID_CDNS_UDC		0x0200
+> 2. However, during the quiesce phase of S4 wakeup,
+> freeze_kernel_threads() will freeze this pm_wq,
+> and between freeze_kernel_threads() and dpm_suspend_start(),
+> there exists a very time-consuming S4 image loading process.
+> This leads to a situation where, if an xhci port change event occurs
+> after freeze_kernel_threads(), triggering the wakeup pending
+> signal to be set,but it cannot be processed by pm_wq to clear
+> this wakeup_pending bit, it will result in a subsequent
+> dpm_suspend_start() where USB suspend_common() detects the
+> wakeup pending signal being set and returns an -EBUSY error,
+> interrupting the S4 quiesce process and reverting to a reboot.
 > 
-> UDC is used for Peripheral controller only. Is that really the case here?
-> originally it was called DRD. 
-> So how about?
-> 	PCI_DEVICE_ID_CDNS_DRD		0x0100
+> S4 wakeup
+>     |->resume_store
+> 	|->software_resume()
+> 	    |->freeze_kernel_threads()		/* will freeze pm_wq */
+> 	    |->load_image_and_restore()
+> 		  |->swsusp_read()    	        /* S4 image loading: time-consuming .
+> When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
+> However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
+>    		  |->hibernation_restore
+> 			|->dpm_suspend_start(PMSG_QUIESCE)
+> 			    |->hcd_pci_suspend()
+> 				|->suspend_common()
+> 				    |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
+> 
+> Below is a description of the countermeasures taken to address this issue:
+> 1. Considering the restore process that occurs after
+> the quiesce phase during S4 wakeup, which essentially
+> resets all root hubs,checking this wakeup pending status
+> in USB suspend_common() during the quiesce phase is of
+> little significance and should therefore be filtered out.
+> 
+> S4 wakeup restore phase
+>     |->dpm_resume(PMSG_RESTORE)
+> 	|->hcd_pci_restore()
+> 	    |->xhci_resume()		       /* reset all root hubs */
+> 
+> Fixes: 3904bdf0821c40352495f632862637080e6bd744(PM: hibernate: Freeze kernel threads in software_resume())
 
-I strongly disagree. The same PCI IDs should be named the same independently on
-how many drivers use them.
+Please read the documentation for how to list a Fixes: tag, it should be
+a bit smaller than this line :)
 
-The only possibility to have what you propose is the complete screwed up PCI
-IDs allocations done by vendor (I do not believe this is the case with Cadence).
+> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> Co-developed-by: dengjie03 <dengjie03@kylinos.cn>
 
--- 
-With Best Regards,
-Andy Shevchenko
+As the documentation states, we need real names, not email aliases.
+
+And fix up how you use co-developed-by please, again, the documentation
+shows how to do so.
 
 
+> ---
+>  drivers/base/power/main.c  |  5 +++++
+>  drivers/usb/core/hcd-pci.c | 21 ++++++++++++++-------
+>  include/linux/pm.h         |  1 +
+>  3 files changed, 20 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index fb4d18a0b185..264d08b9e331 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -559,6 +559,11 @@ bool dev_pm_may_skip_resume(struct device *dev)
+>  	return !dev->power.must_resume && pm_transition.event != PM_EVENT_RESTORE;
+>  }
+>  
+> +bool is_pm_queisce(void)
+
+Bad name for a global function :(
+
+> +{
+> +	return pm_transition.event == PM_EVENT_QUIESCE;
+
+What happens if it changes right after this?  Where is the locking
+involved?  And why does USB only care about this and no other subsystem?
+
+thanks,
+
+greg k-h
 
