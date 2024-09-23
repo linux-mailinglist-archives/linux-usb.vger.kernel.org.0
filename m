@@ -1,104 +1,118 @@
-Return-Path: <linux-usb+bounces-15333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15334-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A00398392E
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 23:43:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF563983A62
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 01:20:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08EC61F22027
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 21:43:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CDF7282B4E
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 22:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2796F84DF5;
-	Mon, 23 Sep 2024 21:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038BD85931;
+	Mon, 23 Sep 2024 22:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nu9eSSmn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xqkol/wg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8E983A09
-	for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 21:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD962907
+	for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 22:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727127813; cv=none; b=DltQyhzaev12NK09L3IY+e6sjiWkx+d7QqQ4IxmF0H5HU/O5TagDCTkqEROIVeV3SRSLCyNJ7eoRAuOHj/rtlepLSasLMSyQ2SuC92zgePvS7FbjHwfI0At6EAtTRE78jxOmmRaPYg3ZNRhqvFDbkFLYohBLCE2qRA77hDfSemU=
+	t=1727131265; cv=none; b=mNxNYp+ccLK8BSWqvOPaRdKqFbhSd3Xy9n1YI8GrTFOCFZBE4Eyk6mQzA0G7zJR0lzQpu2IihjdfYxRcJsKiJE/WLryw4puj1mhSc2SepFNwTpZ5VDnkASCutFteEX9/jw16R+MpHQWqiAxZOnR3gnPsdZPG0THbY04urNZidfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727127813; c=relaxed/simple;
-	bh=okkRFY8RfzSdIpKjFnMzEfSppfhHZcOGLUhJIfuYOqs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=K5kHF15NKlOdt3I/h+4wTr4ZKXHYMkX247Zeu8NfbC0xykkm2uhibtYQerjZ3EYhzzy062ejSDAnYfV1tvkzQoqmRpSkdCsge/BLCwjPwaN9DJ7hedfHV34FHSb581LLXwWYd/zdRjKbcJnJWPeaaDO/x7Ltq/FiV7op0UBubik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nu9eSSmn; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37a33e55d01so3649331f8f.3
-        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 14:43:31 -0700 (PDT)
+	s=arc-20240116; t=1727131265; c=relaxed/simple;
+	bh=GSCd7C/d+ylgtXrc9F7rTXAgFQ4kzwVOtROXH16ndoc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=LX1hEkKm1EcUj+VkphCTvsOnlIQK7/mS07up/88Kvm5qH6OC77I6On33N3tyvMUaMh7WDmRLnF88Lru6zXbW1cSZxRMZLRNv8JwRrif3oTaE/cRgpaJXd1DfsbXSR7xnafyJGfhmC2cOtIQHhYt879L2UicDbVPUE56Jg1T+HSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xqkol/wg; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-690404fd230so73547337b3.3
+        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 15:41:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727127810; x=1727732610; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=okkRFY8RfzSdIpKjFnMzEfSppfhHZcOGLUhJIfuYOqs=;
-        b=Nu9eSSmnS03J9cTdte/Vt+/J83E7UOJ5gYvxVfFnX5lvIyi+v2hPVW3rUmi7iQqoAZ
-         6dJN2W+UTne+C2ns1P509xvGQc629b515RkKCcJELGG0FtC3/SZ/WFh19B2s8MDWK9JE
-         T2kEIu61/Uy+3KSm/79g/SppSU6PKrNz78aXe6lx7pUcqqZ7M/9YSjqjuc9bEnXe98LV
-         jawObyJyHoDhanRoLfCOZfSoYuPdVogxFe7qzEmBr3HBXpBAdEd0DLHDWXZLF5zgn1cA
-         m2V1yd6Ngne9ttqMr1+bbTNYmANGI5uMs1I68Jri3yNWDFtMVoC+0qoUZr19us1NhDBe
-         IxFg==
+        d=google.com; s=20230601; t=1727131263; x=1727736063; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZoULqqwj4G3XNtXjnOz7why+OLiXHg9txfngqFgB/jM=;
+        b=Xqkol/wgJq9NI6dEeKU3RYZ/AyfGl6UMbxP8h+y4CylIonZ2DeQdF1bxRnOPhED33K
+         0M0T8aWaK1Xn80HZVm2wlre50zqV+kBeUmbaARY2bS+Aeay/NM51sX2P2mM6StEC6c4D
+         UDUkk+f+XtlkfUP72MrLUbwslM+1+yyd688k6X3HprUXUraFpLrgi92wBxWjKpEDtB/4
+         V9OnlgioVOp3k6+bhLmADgvyfsIZ/fkCl+VAryUXeP/WRptY59JVLKmCuqMm4WEpBWpn
+         I4+QJ1v+fJfmfDch+jvON3IkoybO1aVgsk3IH67mbrk/ti1dDZhTzyrdOV5hVyP0Uf/x
+         BlmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727127810; x=1727732610;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=okkRFY8RfzSdIpKjFnMzEfSppfhHZcOGLUhJIfuYOqs=;
-        b=X3rSsMld1ncTb+e0JYtJfNKsAeH4psGyUsPef9VrBLeWTHv+Oo0YW4R3uQiPhpl4jh
-         qA4NQNOrUd/oTFB96QRrT2FaQPKM8B/rZHy1j3diVNrOoZOee1S/MSgk49GKuFE9lfuD
-         ihAYr6ZBjgNK7ng+dkk9p0a/T4zO/Y4AMiaWZSwmHah47tp5J/EfwmZkW1TlEu+MYXeP
-         UdMb2lSTNDeLLhuGMlGi+Rk4Vc3Vt3/17Z+J89lGb7FAqe4Bj2XvRTe+yKRBYdnvlIjc
-         Z7jfqPpczQK5GbZQeaqMBiBJSBbX1djVkiNxg8NjLE7PLdsooAwdJz9h/bBEk/TvmUNe
-         Mmbw==
-X-Forwarded-Encrypted: i=1; AJvYcCWdz1ZgOvXzhtpSO9oV2rKhAu9KEzcUpx+4S928wS8ASsaUBXw2NmezV4aZxvaI1/JYwd1i56tBR1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGt5VvC9EHEvZ6seNqT3rhBRvoIu6hyOLDPckBQl/aw7sGJhdj
-	J5Fe0YGBaD08eOQZQmnEk44ffm/LVbE7Uz4Obme5cZv5ufOI7YfM
-X-Google-Smtp-Source: AGHT+IGWjoMFIf2lJ6hWSBvDalhqqpDi6zHDItRIKA6JNO/uteNs99W9Ly9RYy77jaIMqF0rLrLgIA==
-X-Received: by 2002:a5d:6a11:0:b0:378:a935:482 with SMTP id ffacd0b85a97d-37a431bee5bmr5536228f8f.58.1727127810124;
-        Mon, 23 Sep 2024 14:43:30 -0700 (PDT)
-Received: from [192.168.1.190] (71.red-81-33-253.dynamicip.rima-tde.net. [81.33.253.71])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cbc2a8bedsm54563f8f.19.2024.09.23.14.43.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Sep 2024 14:43:29 -0700 (PDT)
-Message-ID: <0c51aa7d-a86b-490b-bf7c-0894b43d6652@gmail.com>
-Date: Mon, 23 Sep 2024 23:43:29 +0200
+        d=1e100.net; s=20230601; t=1727131263; x=1727736063;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZoULqqwj4G3XNtXjnOz7why+OLiXHg9txfngqFgB/jM=;
+        b=tuI6cU8yyqV28R0NVWqQ4hDKxPjd9t5B6VtxDrURxoyf8rpvBq/yxy+RjynXlMuuFv
+         GB6qsRHBsL+q7aNFYG3H9t5VUdVBbdg5vHyQQPRn/91fRkik89RQFnEqKdnEbRbrFUzz
+         ehPfwHI6ZIUBsPUJr9f7x4QeTwoC1XKQmLw3VVy8smTIjRje/Ohd01w7pkvNGfEDOiic
+         JiuzlN+j14x9M7dRs0G2cNNb4BOIGcvyFxtpQrLGZgrLtTu8EkXoWjnrn/qrXBpVPUZD
+         aNwSJC8YMTY22xscS80FnbXmoIJEKjUArR4hzKEdZrF5FJOXB7C6VP2QXBsLv+ykVtHL
+         6sGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpkmsrdsvRc/anCg0JhY5lT9YGNCYdPt9Y1vunG8fBbigg31Zm4HUpHgsZGhW8He0ioibCImo08t0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8sMTPdlKH4mmQTc06Pyl+E5cSPtv0wFOUozfY5w1LcIJQFXkY
+	Kc1N2/yme7vRWahhejTfkfk/iRmrvmeNLFXACoJ1H3LRwHtlDFWywN7d7nxt84fmURBoSmFkVkf
+	A7A==
+X-Google-Smtp-Source: AGHT+IEXpzIYcYsmTLKPd3jrRYMqBg1mBudgZ4U8Lyu2HY5beZ0fdWyVImEb0QiaDHKoCbIIu3DCYtSPThc=
+X-Received: from amitsd-gti.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:827])
+ (user=amitsd job=sendgmr) by 2002:a05:690c:f05:b0:6dd:bcce:7cbe with SMTP id
+ 00721157ae682-6dfeec02c4cmr1054977b3.2.1727131263094; Mon, 23 Sep 2024
+ 15:41:03 -0700 (PDT)
+Date: Mon, 23 Sep 2024 15:40:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: Fix problem with xhci resume from suspend
-To: Sergey Shtylyov <s.shtylyov@omp.ru>, Greg KH
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- Mathias Nyman <mathias.nyman@intel.com>
-References: <20240919184202.22249-1-jose.alberto.reguero@gmail.com>
- <77fbfb75-2b6c-d7e3-f53b-42bea0f544c4@omp.ru>
-Content-Language: es-ES
-From: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
-In-Reply-To: <77fbfb75-2b6c-d7e3-f53b-42bea0f544c4@omp.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
+Message-ID: <20240923224059.3674414-1-amitsd@google.com>
+Subject: [RFC v3 0/2] Add support for time DT property in TCPM
+From: Amit Sunil Dhamne <amitsd@google.com>
+To: gregkh@linuxfoundation.org, robh@kernel.org, dmitry.baryshkov@linaro.org, 
+	heikki.krogerus@linux.intel.com
+Cc: badhri@google.com, kyletso@google.com, rdbabiera@google.com, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, Amit Sunil Dhamne <amitsd@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-El 19/09/2024 a las 21:22, Sergey Shtylyov escribió:
-> The subject doesn't look well yet, consider s/th like:
->
-> usb: host: xhci-pci: fix problem with resuming from suspend
->
-> MBR, Sergey
+USB PD specification defines a bunch of timers that can have a range of
+acceptable values instead of specific values. These values have to be
+tuned based on the platform. However, TCPM currently sets them to a
+default value without providing a mechanism to set platform specific
+values.
 
-I look at it in the next version.
+This patchset adds new DT properties per timer to allow users to define
+platform specific values.
 
-Thanks for reviewing.
+Changes compare to v2:
+  - Added min, max & default values to DT property in Documentation.
+  - Changed return type of tcpm_fw_get_timings to void instead of int.
 
-Jose Alberto Reguero
+Changes compared to v1:
+  - Defined new properties per timer that we are interested in rather
+    than defining a single pd-timers u32 array property.
+  - Better description of the timer properties.
+  - Since subject has changed, adding link for previous patchset for
+    posterity:
+    https://lore.kernel.org/all/20240911000715.554184-1-amitsd@google.com/
+
+Amit Sunil Dhamne (2):
+  dt-bindings: connector: Add properties to define time values
+  usb: typec: tcpm: Add support for parsing time dt properties
+
+ .../bindings/connector/usb-connector.yaml     | 35 ++++++++-
+ drivers/usb/typec/tcpm/tcpm.c                 | 74 +++++++++++++++----
+ 2 files changed, 92 insertions(+), 17 deletions(-)
+
+
+base-commit: 68d4209158f43a558c5553ea95ab0c8975eab18c
+-- 
+2.46.0.792.g87dc391469-goog
 
 
