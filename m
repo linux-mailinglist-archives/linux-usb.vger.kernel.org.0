@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-15311-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15312-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93AD697E996
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 12:10:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B16197EB18
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 13:54:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40F3B1F21022
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 10:10:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B7AB2809DC
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 11:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ABCE196D9D;
-	Mon, 23 Sep 2024 10:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F021990D0;
+	Mon, 23 Sep 2024 11:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b="XslPyD/2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s5ZEe+/1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215AC19580F;
-	Mon, 23 Sep 2024 10:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.3.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC741EB48;
+	Mon, 23 Sep 2024 11:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727086175; cv=none; b=Id25fmIQsRTPTt/tT947Jx1vOqP8lMRz814P3865pYhEv5qs6SzryNiLv3L/w7U64om9FepsvFwJK0ydIiY8Z8hrEUzHSp1v4AZahz5laG/yKrrRXKh8HUdmngMG2LcURcAEZPKHniwW3GQ1nEGzQ5haKHIAmWFYN7/qXFXLnCs=
+	t=1727092387; cv=none; b=R9j2yazD+/flN7zdXgcI8TJiMn6pKYA1GZN4/WV/lziMqwIbBOx/gkgt0XAklg+ApjDVhO0yhB/nUBgblh6CJHyEr2mjM43fhiLPhvZHmiKwCT1R88Lkz7FbBMEZMa9taOqE1Tob8YZA4pK3mLf/3wjoxCPqqzMIa5NAbiPpJwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727086175; c=relaxed/simple;
-	bh=QZ3pAoHrGvUQCCcPlsz7aLXmCdd7EUz+OWY1xzniUFo=;
+	s=arc-20240116; t=1727092387; c=relaxed/simple;
+	bh=BHCAGMjIfbhDX04xdZmHDFbvFp+bkX7fak28gq87iMs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gz0ElC8JBWI6y2jVjKBjMwRWjiJinekO52owHADPpyD49d/yqHXScy04mPXjcbaWa5oTLPTcv3a/VII3imiWF4Obq1R5YCdGaPSn0J4N5lZ/BXBOj9h9wfMbcLGLGk0pt6i3WpFvQS9wJ2tNEJ0BfRwryTmmDrnJrC6tH5Sum2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com; spf=pass smtp.mailfrom=ysoft.com; dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b=XslPyD/2; arc=none smtp.client-ip=81.19.3.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ysoft.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-	s=20160406-ysoft-com; t=1727086166;
-	bh=mqxC8Twz5bhAEBeZd64fyOAa9Ptp6JX1NANnvh+5f6A=;
+	 In-Reply-To:Content-Type; b=PdPNFoFMMqqunL+2tvqARyZdbofdhQiHh428up+JMuLN8BrfcoQAYXHXNw+TkjiPK0CaMEUwI8vtiyGBXfxO6ryoCgxwyXiWRCBuwEscYsUOL3Y+XVN9TcvdMxaLJIl3u2u2+tLssyzgR8Yhimte8kvQMUwI3aBkyX3dYgAFtk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s5ZEe+/1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5078CC4CEC4;
+	Mon, 23 Sep 2024 11:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727092387;
+	bh=BHCAGMjIfbhDX04xdZmHDFbvFp+bkX7fak28gq87iMs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XslPyD/262cs7tuq3XgQDQY8bwCA9znDEFndO0lWbD9VqVxHisyHuW8PPfJU0b5Hw
-	 OKLM8+WRdFGhPhD74YYn5UqnDY+ZdFNMkEgpN1eyl188K2EwVNacF9ciYbFgI52gJQ
-	 z7xa8sJNQ6AU05DTunnmJI4rJEgxPM5knOff4WsE=
-Received: from [10.1.8.111] (unknown [10.1.8.111])
-	by uho.ysoft.cz (Postfix) with ESMTP id F1063A025E;
-	Mon, 23 Sep 2024 12:09:25 +0200 (CEST)
-Message-ID: <8f054dbe-6f58-4c93-b5db-1c67cb310a5f@ysoft.com>
-Date: Mon, 23 Sep 2024 12:09:25 +0200
+	b=s5ZEe+/1C9RNXAbdxM9JZPxfllH2UGzYtgh26TiTjjHcFKB5e+7tmXKvPBKb9u4xo
+	 7CFHH1vj/6/73vF5nV+YegbueAIi74ggtrHVEGERJAJHc4ATcM4Mn6dT0g1kM1QpwG
+	 GdnvqviV+d+HB3C6rIQNy8ohmS1d6E6fpASIaiBso41P/SjLfI5r9zO69+w0Oh6hz3
+	 QxWXsE6zHY9sexaXtINuC0rnDTr+cyu3mbr5RSpRPedZXPR1Xesqo2NZsQ1ftDOrA9
+	 Qo+ZP0CMzq9G7wy5C2SKxD++6fNXvrnlsKOMVRDKV/Q7NMvOvy6ZS1Mme1FtLWBOmj
+	 u32AKj/xywBhg==
+Message-ID: <a02e472c-f206-44d3-9a6b-d921e73110fd@kernel.org>
+Date: Mon, 23 Sep 2024 14:53:02 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,46 +50,65 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] arm64: dts: imx: Add imx8mp-iota2-lumpy board
-To: Fabio Estevam <festevam@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+Subject: Re: [PATCH] dt-bindings: usb: add missing compatible arraylist
+To: Karan Sanghavi <karansanghvi98@gmail.com>, Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Shawn Guo <shawnguo@kernel.org>, Petr Benes <petr.benes@ysoft.com>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Herburger <gregor.herburger@ew.tq-group.com>,
- Hiago De Franco <hiago.franco@toradex.com>,
- Hugo Villeneuve <hvilleneuve@dimonoff.com>,
- Joao Paulo Goncalves <joao.goncalves@toradex.com>,
- Michael Walle <mwalle@kernel.org>,
- Alexander Stein <alexander.stein@ew.tq-group.com>,
- Mathieu Othacehe <m.othacehe@gmail.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-References: <20240920080154.1595808-1-michal.vokac@ysoft.com>
- <20240920080154.1595808-3-michal.vokac@ysoft.com>
- <CAOMZO5BrmuWdiEo6xi8ChT01jfLMaLAb88iUhS1kt6qqr_h7pQ@mail.gmail.com>
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ZvBNLRc8xnAoGvoc@Emma>
 Content-Language: en-US
-From: =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
-In-Reply-To: <CAOMZO5BrmuWdiEo6xi8ChT01jfLMaLAb88iUhS1kt6qqr_h7pQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <ZvBNLRc8xnAoGvoc@Emma>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 21. 09. 24 14:24, Fabio Estevam wrote:
-> Hi Michal,
-> 
-> On Fri, Sep 20, 2024 at 5:02 AM Michal Vokáč <michal.vokac@ysoft.com> wrote:
-> 
->> +&usb_dwc3_1 {
->> +       dr_mode = "host";
->> +       pinctrl-names = "default";
-> 
-> Per Rob's robot message, this pinctrl-names entry should be removed.
+On 22/09/2024 20:00, Karan Sanghavi wrote:
+> Added the vice versa order for compatible property in the yaml file so
+> that the dtb can parse for the order mentioned in the dts file
+> k3-am642-sk.dts for ti,j721e-usb.yaml
 
-Thanks a lot Fabio. I could not really figure out what is wrong and
-thought that all the three warnings are issues of the imx8mp.dtsi.
-Will be fixed in v3.
+k3-am642-sk.dts does not introduce any nodes with the said compatibles.
 
-Michal
+"ti,am64-usb" compatible is introduced by k3-am642-main.dtsi.
+There is only one compatible introduced so there is nothing to do about
+order here.
+
+i.e.
+        usbss0: cdns-usb@f900000 {
+                compatible = "ti,am64-usb";
+                reg = <0x00 0xf900000 0x00 0x100>;
+
+What is the functional problem you are facing? Maybe then someone
+can point you in the right direction.
+
+> 
+> This is highly ambiguous to me as where exactly the changes needs to be
+> added is it in the dts file or is the yaml where we have to reverse the
+> order already mentioned or do we have to add the another order as I have
+> done ?
+> 
+> Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> index 95ff9791baea..822653217c43 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> @@ -17,6 +17,9 @@ properties:
+>        - items:
+>            - const: ti,j721e-usb
+>            - const: ti,am64-usb
+> +      - items:
+> +          - const: ti,am64-usb
+> +          - const: ti,j721e-usb
+>  
+>    reg:
+>      maxItems: 1
+
+-- 
+cheers,
+-roger
 
