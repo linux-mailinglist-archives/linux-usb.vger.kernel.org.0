@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-15332-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D17A983929
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 23:39:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A00398392E
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 23:43:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B6B8282258
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 21:39:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08EC61F22027
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2024 21:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118C484D29;
-	Mon, 23 Sep 2024 21:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2796F84DF5;
+	Mon, 23 Sep 2024 21:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GkD97GND"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nu9eSSmn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E218584A52
-	for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 21:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8E983A09
+	for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 21:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727127568; cv=none; b=ClWFNRQcOTGRqfZG6o8vCl8wwxVfB0beLcxrRKpfwtxpPRPTOClyng7QzrE898BQivZCzaObmSQKFnhVjpyprGrFN16fqjuEwRCyPiyss8IRtgU2VJEsdHd/lwnRgzc+R0otP3Q5E+pytQkZRh6P5sb3zjFL01vYN1DHK2qUkJ4=
+	t=1727127813; cv=none; b=DltQyhzaev12NK09L3IY+e6sjiWkx+d7QqQ4IxmF0H5HU/O5TagDCTkqEROIVeV3SRSLCyNJ7eoRAuOHj/rtlepLSasLMSyQ2SuC92zgePvS7FbjHwfI0At6EAtTRE78jxOmmRaPYg3ZNRhqvFDbkFLYohBLCE2qRA77hDfSemU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727127568; c=relaxed/simple;
-	bh=6XmUQ3cJyqt2R/6p7uLjw39TQ/gdGFhvCF1o3UQ5m+M=;
+	s=arc-20240116; t=1727127813; c=relaxed/simple;
+	bh=okkRFY8RfzSdIpKjFnMzEfSppfhHZcOGLUhJIfuYOqs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=DRaeZGVC29tcQ+qsNM5f3wLTMA/DWO+XxF9X35HTiL8AvgiprOH4HnLaRaU3qxDq8+ean39CyZAJWbjP4cJXQgSq+rEBN8bKWoBoSzBe0FDtUb8J9j2XHMgcrrq0J9cG/WKoWaaiYyven+Rn0NXoHKW/Pgx6PoSn4chwvzz2yrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GkD97GND; arc=none smtp.client-ip=209.85.128.52
+	 In-Reply-To:Content-Type; b=K5kHF15NKlOdt3I/h+4wTr4ZKXHYMkX247Zeu8NfbC0xykkm2uhibtYQerjZ3EYhzzy062ejSDAnYfV1tvkzQoqmRpSkdCsge/BLCwjPwaN9DJ7hedfHV34FHSb581LLXwWYd/zdRjKbcJnJWPeaaDO/x7Ltq/FiV7op0UBubik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nu9eSSmn; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cacabd2e0so41078375e9.3
-        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 14:39:26 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37a33e55d01so3649331f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2024 14:43:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727127565; x=1727732365; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727127810; x=1727732610; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=krA/VuN2cYrLhv9U4hoJfGRz1u+CRYl4Vv/0++F+WjI=;
-        b=GkD97GNDBRd1RioJ5TC/or357ad1oBlZSHo4CtN+8VuuXAyFKbYDitO35TNRAfuSxK
-         oash2nDUoYyAAsyia4IRUKuTKPgDDORu8Pq1b42QkYDF8WQkrd/E72NL8Mkiy4ZU4Gpm
-         4cW8E55gLMpPPw8jsErUM+vlRvL0ZFswOkHYobzsHZc+tEg8B/5DTsdVltDrJLSgT0xU
-         jnhGhwgnO/pYpMGj9UYcPaeQt3YcU94SsUKjHFqbe9WTCa4TZPp2vMa17aLr+YI24FFQ
-         VQBNgZgDeI9nruBsX6HQ0HcrrowhvSQlbhgRNlVWDv9RRL7F894/0v9o2MWBU+A92rNm
-         XcAQ==
+        bh=okkRFY8RfzSdIpKjFnMzEfSppfhHZcOGLUhJIfuYOqs=;
+        b=Nu9eSSmnS03J9cTdte/Vt+/J83E7UOJ5gYvxVfFnX5lvIyi+v2hPVW3rUmi7iQqoAZ
+         6dJN2W+UTne+C2ns1P509xvGQc629b515RkKCcJELGG0FtC3/SZ/WFh19B2s8MDWK9JE
+         T2kEIu61/Uy+3KSm/79g/SppSU6PKrNz78aXe6lx7pUcqqZ7M/9YSjqjuc9bEnXe98LV
+         jawObyJyHoDhanRoLfCOZfSoYuPdVogxFe7qzEmBr3HBXpBAdEd0DLHDWXZLF5zgn1cA
+         m2V1yd6Ngne9ttqMr1+bbTNYmANGI5uMs1I68Jri3yNWDFtMVoC+0qoUZr19us1NhDBe
+         IxFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727127565; x=1727732365;
+        d=1e100.net; s=20230601; t=1727127810; x=1727732610;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=krA/VuN2cYrLhv9U4hoJfGRz1u+CRYl4Vv/0++F+WjI=;
-        b=CKPp6oULNJqqVvh0NyIJfbg8MWnCRmtKGjlTfbVq4vI9Vm4SkT+ewBOrkiRhqeGkMl
-         r8sMLm85+Emv1oSfITbzf5H8ePNjibs9Ozjm4CouqEeqvRKpExVbkfdDXtZOC//185Op
-         eI5yWlp9MvRGVmR5GmD1nEZO2YZXq2DggZsSiimPmtdW9ezSF2rrBPSX3kn38cioJMVo
-         EMXVF0bHX83eIpwUnTm9tbCTZ44Grw9cAWEVaNzEbocWZYjlNHZHVT8gPz5X5hQDanZl
-         Rj3QTzVJlkIc14N4ceCe9fCrdUpB0n3uglP99XAubwK7hlXxgZVe7X1rWTW9EznwmMep
-         85mA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtvN+bPuTYjGsjoIEQ1qUIEBGf0Ozvk/KOKEfJ9QKcVZQ7/tQKwZ5Jz4O8xhH6cOUU7gEyrkbAj4c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU2KOmcpMqGbMFXhjtNeZbcBSduR/setR/S7OqhSZt15sDCR5C
-	1R9msJryiN06pxhDRS3X06KAklviUFEFIZu8sTSkr8M2Qw3IbK9h
-X-Google-Smtp-Source: AGHT+IEXztwIWPC5b9/73L8VIjf0qwyiWN7Ej1ieNIbR2wjHjiA2UkvLC0aOis6QVTkPo7Yc9qYKKA==
-X-Received: by 2002:a05:600c:1546:b0:42c:de9b:a1b5 with SMTP id 5b1f17b1804b1-42e7adac9f4mr86537935e9.32.1727127564783;
-        Mon, 23 Sep 2024 14:39:24 -0700 (PDT)
+        bh=okkRFY8RfzSdIpKjFnMzEfSppfhHZcOGLUhJIfuYOqs=;
+        b=X3rSsMld1ncTb+e0JYtJfNKsAeH4psGyUsPef9VrBLeWTHv+Oo0YW4R3uQiPhpl4jh
+         qA4NQNOrUd/oTFB96QRrT2FaQPKM8B/rZHy1j3diVNrOoZOee1S/MSgk49GKuFE9lfuD
+         ihAYr6ZBjgNK7ng+dkk9p0a/T4zO/Y4AMiaWZSwmHah47tp5J/EfwmZkW1TlEu+MYXeP
+         UdMb2lSTNDeLLhuGMlGi+Rk4Vc3Vt3/17Z+J89lGb7FAqe4Bj2XvRTe+yKRBYdnvlIjc
+         Z7jfqPpczQK5GbZQeaqMBiBJSBbX1djVkiNxg8NjLE7PLdsooAwdJz9h/bBEk/TvmUNe
+         Mmbw==
+X-Forwarded-Encrypted: i=1; AJvYcCWdz1ZgOvXzhtpSO9oV2rKhAu9KEzcUpx+4S928wS8ASsaUBXw2NmezV4aZxvaI1/JYwd1i56tBR1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGt5VvC9EHEvZ6seNqT3rhBRvoIu6hyOLDPckBQl/aw7sGJhdj
+	J5Fe0YGBaD08eOQZQmnEk44ffm/LVbE7Uz4Obme5cZv5ufOI7YfM
+X-Google-Smtp-Source: AGHT+IGWjoMFIf2lJ6hWSBvDalhqqpDi6zHDItRIKA6JNO/uteNs99W9Ly9RYy77jaIMqF0rLrLgIA==
+X-Received: by 2002:a5d:6a11:0:b0:378:a935:482 with SMTP id ffacd0b85a97d-37a431bee5bmr5536228f8f.58.1727127810124;
+        Mon, 23 Sep 2024 14:43:30 -0700 (PDT)
 Received: from [192.168.1.190] (71.red-81-33-253.dynamicip.rima-tde.net. [81.33.253.71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e75450aa0sm136613455e9.22.2024.09.23.14.39.23
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cbc2a8bedsm54563f8f.19.2024.09.23.14.43.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Sep 2024 14:39:24 -0700 (PDT)
-Message-ID: <b6e4bd54-198c-4d96-9ceb-86d0e2b4fbea@gmail.com>
-Date: Mon, 23 Sep 2024 23:39:23 +0200
+        Mon, 23 Sep 2024 14:43:29 -0700 (PDT)
+Message-ID: <0c51aa7d-a86b-490b-bf7c-0894b43d6652@gmail.com>
+Date: Mon, 23 Sep 2024 23:43:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,53 +81,24 @@ To: Sergey Shtylyov <s.shtylyov@omp.ru>, Greg KH
  <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
  Mathias Nyman <mathias.nyman@intel.com>
 References: <20240919184202.22249-1-jose.alberto.reguero@gmail.com>
- <2544903d-26c4-ca4f-b67b-5ef68e7c2e21@omp.ru>
+ <77fbfb75-2b6c-d7e3-f53b-42bea0f544c4@omp.ru>
 Content-Language: es-ES
 From: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
-In-Reply-To: <2544903d-26c4-ca4f-b67b-5ef68e7c2e21@omp.ru>
+In-Reply-To: <77fbfb75-2b6c-d7e3-f53b-42bea0f544c4@omp.ru>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-
-El 19/09/2024 a las 21:18, Sergey Shtylyov escribió:
-> On 9/19/24 21:42, Jose Alberto Reguero wrote:
+El 19/09/2024 a las 21:22, Sergey Shtylyov escribió:
+> The subject doesn't look well yet, consider s/th like:
 >
->> I have a ASUS PN51 S mini pc that has two xhci devices. One from AMD, and other
->> from ASMEDIA. The one from ASMEDIA have problems when resume from suspend, and
->> keep broken until unplug the  power cord. I use this kernel parameter:
->> xhci-hcd.quirks=128 and then it works ok. I make a path to reset only the
->> ASMEDIA xhci.
->>
->>
->> Signed-off-by: Jose Alberto Reguero <jose.alberto.reguero@gmail.com>
->>
->> ---
->>   drivers/usb/host/xhci-pci.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index dc1e345ab67e..8f075ab63f65 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
-> [...]
->> @@ -447,6 +448,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->>   		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
->>   		xhci->quirks |= XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
->>   
->> +	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
->> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_3042_XHCI)
->     Hum, please either add 1 more tab here or start the continuation line
-> under pdev jn the broken up line. The *if* expression should not blend with
-> code in the branch.
+> usb: host: xhci-pci: fix problem with resuming from suspend
+>
+> MBR, Sergey
 
-I do in the next version.
+I look at it in the next version.
 
 Thanks for reviewing.
 
->> +		xhci->quirks |= XHCI_RESET_ON_RESUME;
->> +
->>   	if (pdev->vendor == PCI_VENDOR_ID_TI && pdev->device == 0x8241)
->>   		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_7;
-> MBR, Sergey
 Jose Alberto Reguero
+
 
