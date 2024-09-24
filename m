@@ -1,112 +1,84 @@
-Return-Path: <linux-usb+bounces-15373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0E92984DC0
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 00:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3007B984EAA
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 01:06:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9393D1F240C5
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 22:26:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9DEF1F23769
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 23:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A176147C79;
-	Tue, 24 Sep 2024 22:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29052186E2E;
+	Tue, 24 Sep 2024 23:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=limotek.co.za header.i=@limotek.co.za header.b="hp2IllXf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIMSly7w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.limotek.co.za (mail.limotek.co.za [93.104.209.83])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB248146D6E
-	for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 22:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.209.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCFE84037;
+	Tue, 24 Sep 2024 23:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727216804; cv=none; b=uHfKhDn82ArhFuVtYBfnc7qoNe9z9wSOKY7OSNaVjxSkcgFDZcbTC+uogDcGE72lEcVjmkSCtJ4kLr0JAM5KmX05bCRHnh+prdo6l2h895CqFPOEStOYHSH4jsesADaoXCgudXFHbYZi7LFoT+/KB/2CnbKRK7g1lq6awo5uZEU=
+	t=1727219068; cv=none; b=LwiySRjbLFPnLmrwxqvYyf3qA3LWvYtqJQkJHIOIf3YLTkcTisVtfrtj/rg7RsrOcRycGSzzFz7Z3vJ3uZ6jOiiTimZ4mAq3SYThXfQtJTO0c8jYksGlTXvRKJJju/5Nxh9E7FW+xIzxq7OyGHYsC+6o4KLkI6jC8rIhkOK9Uv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727216804; c=relaxed/simple;
-	bh=kMqEKYs79GBdVtW1kcZL6y7oX7Hgi9e8Q6D8iw/FYJs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type; b=mT5vBL+Faa5IMvqw1H6uPy5/KtQaqjUc+E3TOeZQk1SnAz5y0OMSdlDJ5IlT08OPv8lo/J8aOCvHWq51mCutcsZ2KoYN9hLaGZIwqrwA94u8ISVOzMBxRAK/qF+KGSAGrtaBvPwe7QcskxCuALAcNiEGmBlS6w4tPdq3PeIZ3tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=limotek.co.za; spf=pass smtp.mailfrom=limotek.co.za; dkim=pass (2048-bit key) header.d=limotek.co.za header.i=@limotek.co.za header.b=hp2IllXf; arc=none smtp.client-ip=93.104.209.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=limotek.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=limotek.co.za
-Received: from localhost (localhost [127.0.0.1])
-	by mail.limotek.co.za (Postfix) with ESMTP id B25612A99333
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 00:26:38 +0200 (SAST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=limotek.co.za; h=
-	content-transfer-encoding:content-type:content-type
-	:content-language:subject:subject:from:from:user-agent
-	:mime-version:date:date:message-id; s=default; t=1727216798; x=
-	1729031199; bh=kMqEKYs79GBdVtW1kcZL6y7oX7Hgi9e8Q6D8iw/FYJs=; b=h
-	p2IllXfA8whlwTR9KboMPvtZ51W4bzHjDnMf+WGTnyc7vuRvYySqGVFJwF0+ZqHD
-	fLD/IY6P+L0kVa6Q4ugBIKAWk5xDsjdkzO1bVvciBE22yHm8OlZNuHNjoH/XnWqe
-	Jxk3DqsmoKleddhnXnd0F7C917pMrUR583grJwaHiUrZn8KQHkIvs35jD7essGKW
-	P6jzS2l5rPiOXpdU+FyFxxUg1HdQUgijNBTw3LTJ3u1fkyiMaGMp9USPIgm+uP5c
-	tg8c/OW2KHzhDPzC8RtDSrqLu74/5Q2YiyRynHfRq6bxeTL0OrpRxpVXi15u7X8o
-	aeHMSIXgDkxyX82Zd/a/Q==
-X-Virus-Scanned: Debian amavisd-new at mail.limotek.co.za
-Received: from mail.limotek.co.za ([127.0.0.1])
-	by localhost (mail.limotek.co.za [127.0.0.1]) (amavisd-new, port 10026)
-	with LMTP id KBmN8d_HIvmz for <linux-usb@vger.kernel.org>;
-	Wed, 25 Sep 2024 00:26:38 +0200 (SAST)
-Received: from [192.168.1.101] (197-99-39-233.ip.broadband.is [197.99.39.233])
-	(Authenticated sender: lukas@limotek.co.za)
-	by mail.limotek.co.za (Postfix) with ESMTPSA id BE7972A992A7
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 00:26:37 +0200 (SAST)
-Message-ID: <daa4f855-6492-447b-bf49-a21fd2d2f077@limotek.co.za>
-Date: Wed, 25 Sep 2024 00:26:35 +0200
+	s=arc-20240116; t=1727219068; c=relaxed/simple;
+	bh=omR4aQo5N8hQp2ef7WhVX5x82/fg/iIJ02ElNWRIix4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AuWohx1s8VhXXBDcT2rjUgLfZ/Ckbp1i/fO3wXgjzkSsVS2sncdbjZdV3O1/GEfTLm410BnAdQFXrdaBCTmh0D7lBAoAfJ5DvMz1LQr6CrkaxFzsSgGeVYTWD6ICvPLPzYRaZqkTcz15oQ1wYuwAThx1g+1C8kSwCXzYLSReUlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIMSly7w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 120AFC4CEC4;
+	Tue, 24 Sep 2024 23:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727219068;
+	bh=omR4aQo5N8hQp2ef7WhVX5x82/fg/iIJ02ElNWRIix4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uIMSly7wo/1uWpc2ce6SwgvjZJ0wHi2j31aIsjIuVxamrjnu28FjvRi7ibeWI4DJO
+	 M623vedlYsTCsDPSa49Q4JegdSjpxNavcPpBU59t0VZRbeuhiwwZykQ5KXS/X57VzB
+	 Dx1PVT/+9N/P9spcfQrloRHcA+224579akx2k/sIFwUc0qdQ3K+HyKwi4uRE6K6Jqq
+	 KY/e6DV89pOu18w5AuX21Hw5RcbPZboS7wM49MlVETdAWWWw+H4gU2tFJnzhYm1NYt
+	 3PsD3gwywTV/CountrkrgT67amNgGR0SbjmY7ZhozIJlHONuBR2u6VlQ0qsLPaaUuk
+	 KHSbgykOtdxeQ==
+Date: Tue, 24 Sep 2024 18:04:27 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: badhri@google.com, dmitry.baryshkov@linaro.org, kyletso@google.com,
+	gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, rdbabiera@google.com,
+	linux-kernel@vger.kernel.org, heikki.krogerus@linux.intel.com
+Subject: Re: [RFC v3 1/2] dt-bindings: connector: Add properties to define
+ time values
+Message-ID: <172721906660.459503.12738294708498951192.robh@kernel.org>
+References: <20240923224059.3674414-1-amitsd@google.com>
+ <20240923224059.3674414-2-amitsd@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: "Lukas M. Oosthuizen" <lukas@limotek.co.za>
-Subject: Add Nations N32g43x usb to serial driver
-To: linux-usb@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-Hi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240923224059.3674414-2-amitsd@google.com>
 
 
-Can you please add the following device to a proper driver:
+On Mon, 23 Sep 2024 15:40:50 -0700, Amit Sunil Dhamne wrote:
+> This commit adds the following properties:
+>   * sink-wait-cap-time-ms
+>   * ps-source-off-time-ms
+>   * cc-debounce-time-ms
+> 
+> This is to enable setting of platform/board specific timer values as
+> these timers have a range of acceptable values.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ---
+>  .../bindings/connector/usb-connector.yaml     | 35 ++++++++++++++++++-
+>  1 file changed, 34 insertions(+), 1 deletion(-)
+> 
 
-*/[  149.554092] usb 1-1.4: new full-speed USB device number 3 using 
-xhci_hcd
-[  149.661456] usb 1-1.4: New USB device found, idVendor=19f5, 
-idProduct=3245, bcdDevice= 1.00
-[  149.661476] usb 1-1.4: New USB device strings: Mfr=1, Product=2, 
-SerialNumber=3
-[  149.661489] usb 1-1.4: Product: N32g43xCustm HID
-[  149.661499] usb 1-1.4: Manufacturer: NATIONS
-[  149.661508] usb 1-1.4: SerialNumber: N32g43x
-[  149.681694] input: NATIONS N32g43xCustm HID as 
-/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.4/1-1.4:1.0/0003:19F5:3245.0001/input/input4
-[  149.741001] hid-generic 0003:19F5:3245.0001: input,hidraw0: USB HID 
-v1.10 Keyboard [NATIONS N32g43xCustm HID] on usb-0000:01:00.0-1.4/input0
-[  149.794848] usbcore: registered new interface driver cdc_acm
-[  149.794862] cdc_acm: USB Abstract Control Model driver for USB modems 
-and ISDN adapters
-[  187.072026] usbcore: registered new interface driver usbserial_generic
-[  187.072095] usbserial: USB Serial support registered for generic
-[  187.072186] usbserial_generic 1-1.4:1.1: The "generic" usb-serial 
-driver is only for testing and one-off prototypes.
-[  187.072199] usbserial_generic 1-1.4:1.1: Tell 
-linux-usb@vger.kernel.org to add your device to a proper driver.
-[  187.072211] usbserial_generic 1-1.4:1.1: device has no bulk endpoints
-[  187.072268] usbserial_generic 1-1.4:1.2: The "generic" usb-serial 
-driver is only for testing and one-off prototypes.
-[  187.072278] usbserial_generic 1-1.4:1.2: Tell 
-linux-usb@vger.kernel.org to add your device to a proper driver.
-[  187.072287] usbserial_generic 1-1.4:1.2: generic converter detected
-[  187.072943] usb 1-1.4: generic converter now attached to ttyUSB0/*
-
-*/
-/*
-
-Please let me know if you require anything else from my side.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
