@@ -1,568 +1,148 @@
-Return-Path: <linux-usb+bounces-15357-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15358-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9EB3984440
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 13:10:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B16459844E1
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 13:36:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64E6E1F22625
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 11:10:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D40141C21875
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 11:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76D01A4F16;
-	Tue, 24 Sep 2024 11:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F8A1A7059;
+	Tue, 24 Sep 2024 11:32:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E1D1A4F04
-	for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 11:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B247C86277;
+	Tue, 24 Sep 2024 11:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727176235; cv=none; b=J0asXbXSsALG5gni1hvLAc9BuGVaQ4pREzhjCWMmsgGtXKxnwrCEDlB6KeoybL3vDGOy6xdWtjLb5L2+UF9p55+QBQTWFDdKGid0wEjKVDTeBeVTHFvGKcBZxjWjKgbaX+hTkrK1w4AwfksZACAyfF0cWRp3hJ1H6TKxsYGl/2U=
+	t=1727177542; cv=none; b=oPvfTIHXhCiJfsues6mcUDhexkzOS9wbRmEwhcnJhlYMDcDtdDXNzRDb6z2pZGlb3a1/QcPYRpRITlEeeCKvCR2+YtYJWAyp1iRr83mGSVeJXhg7+gktnQ4dhsu6SbaQXZ+CJD5H5oq8P9JaBD1gUQ7gPpJJYF1tMctlmMvKIeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727176235; c=relaxed/simple;
-	bh=ZXUJOK6LC65an+xFR6w4OjtiGvur6MmHeQyFmJs/tBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mGxoikimqlTQkY6+uWgoDdJcC+INt93kdByg5pDXg74uHEKe8BcHVyr0TxlAnNg6lnS7SFis5EDGAouikdY0J5eenRefHvs/SEp5eKmU94YqVguPjqjk/QfhuuWtW6u3uZw7hCEZH2VEwsK1X55XLju8ur7bU4lqfT7aky5s/0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1st3Qs-00078L-IA; Tue, 24 Sep 2024 13:10:14 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1st3Qp-001C1H-OP; Tue, 24 Sep 2024 13:10:11 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1st3Qp-009Qd9-24;
-	Tue, 24 Sep 2024 13:10:11 +0200
-Date: Tue, 24 Sep 2024 13:10:11 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>, Petr Benes <petr.benes@ysoft.com>,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	Michael Walle <mwalle@kernel.org>, imx@lists.linux.dev,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Mathieu Othacehe <m.othacehe@gmail.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	linux-kernel@vger.kernel.org,
-	Hiago De Franco <hiago.franco@toradex.com>,
-	Herburger <gregor.herburger@ew.tq-group.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 2/2] arm64: dts: imx: Add imx8mp-iota2-lumpy board
-Message-ID: <20240924111011.tyqjqicy7wppq43c@pengutronix.de>
-References: <20240924103941.1729061-1-michal.vokac@ysoft.com>
- <20240924103941.1729061-3-michal.vokac@ysoft.com>
+	s=arc-20240116; t=1727177542; c=relaxed/simple;
+	bh=274mWF5yEg9y+wkgxhf4U9sHZqXg34pBvu3HEUVXSrE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GEPQvljxFpebMkMFcQpo9O8nDqVpIrewVK3fqO8iXPiStl80GXLysSub6I0tCgVz+hmZhYW5pQw904VpTsXn2tR9sxQCAWo34YNOlUTwqAYjy54gMr4JxHp/2nMS1Y8dbT6EHDnjE6zSRFkH7bnbl2/ZCj7P1/xTxUvsJYdMCwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e1a9463037cso4304698276.2;
+        Tue, 24 Sep 2024 04:32:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727177539; x=1727782339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jm6h96BED8DQTfet2QAIovV1CqCtWAjpatPZ7/UosWI=;
+        b=O+FdUPxWG3BBt8tugF2UAreSMvSpqGm3qBzno0F/nxwd1e0810kPCFVNI721Dee6k0
+         /kejpfHO6bN6qMZUOEoOGL6WAX3s7J3GOzWuihkbg872ePFfzg3fxJOWObWU+8WXDvDU
+         5bRO9Izbpl3gS/1xjmSQ67wpvWovW9J4C/t7hkAxnLKcxkeFpbED44NLzGdgi2Op9Gyo
+         Qp0KUwdGc6A1KuKzAP7fRlWcq7CMc9vLidelweyahE3xTGTbJ0OwR70IuZYOUrgnpWYe
+         b6izvWhaSWTfmq1lYEjVOmhFu05kdaSBZAxkyjtL1jT+EJ6kEtvoQKJnY2oMgzEI9xqA
+         RBEw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5P6ccXBzvGpHDE7MQHd0YrV2PvUZmFiRMszkplB1hzIg1WGXOGLtSyogf/0e4+UTMqCQnUM2vzCs=@vger.kernel.org, AJvYcCUMPNGoZorrpCJmLYbBYDhogP9IW4IGF+WMJpXQ3W2kQcJ2H5FbEeykrzSE5YtMF/1iHYFoXtKoexAy@vger.kernel.org, AJvYcCVGNliva32m4NIL3A8qRoUBKpB3MgX4c2T9vfHa8iBLXMwoxJZ47A6fmHUU01ZXuCxGKMCMH9tN7WPCrGREuRHltiE=@vger.kernel.org, AJvYcCVjizAiX2k1eUb9uRFmKnfrVdnzdG8UT5qCiWTwEkXYSnr6R4WY7pUZz+AbYSd4trMmTZ2Pyl7KuroJ@vger.kernel.org, AJvYcCX/84m2rNLWcyKJm5F9lRlq7WVa/bHtE/J8TsvnpEq9sJoJBxu0IqPbs0Aqh1XDPPVGfZ0bRoAqCaQK@vger.kernel.org, AJvYcCXwRd/1MEmNlP97mK/dXRYsJrxRddzQg03FuBycpibRSYWitdOkWL5Y4s8ox7KVgE0MVewKdSFr8q6BVYfl@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1V+5qE++4ULbYMEDrqV2LzjuMNgiPetjWP4vfRo8qfMZ8ozJL
+	9/RWpt90UVe+kJOQvCv1uCd3iX0XOwLFNm87ipseox1zgSWySRia27dDwie2
+X-Google-Smtp-Source: AGHT+IGd1dnlMbgebNUguoCcxM9oWkJXb0wuXHGJaBip1RtFNA0UIc2YRhkqnwJTUIzowHL1bZkcCg==
+X-Received: by 2002:a05:690c:2507:b0:647:7782:421a with SMTP id 00721157ae682-6dfef019bb1mr70492647b3.45.1727177538769;
+        Tue, 24 Sep 2024 04:32:18 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e20d2a7b4asm2117897b3.143.2024.09.24.04.32.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Sep 2024 04:32:17 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6da395fb97aso40617217b3.0;
+        Tue, 24 Sep 2024 04:32:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUeckDrUJBOL1K0zfCMg/uLugj4l6mcROczcwmycRmFIcBibsXEneeObLw8GZT4Tjp9nzlSSrvOLxJxtqg0C+J/VeA=@vger.kernel.org, AJvYcCUm1yLINOEa2+aQnyN46koR6dLCw5WhdvzkpL3ZHf9JFvpFzw1OYdWMHAJwzDuMudslYo3Xij6e1jmO@vger.kernel.org, AJvYcCV5ef23bMFkoIIf9rfPquqml7hVw5DkEJ1B1QKQq+3B55eqtvfRDSEFX0NnTqc6golq+88vlXzywUfX@vger.kernel.org, AJvYcCVxnEAcO7i7cxzBdVLLGzpOuEnH2+Wlf0im4jWjEYX2S7rcj5MVfu3sZnosi3DdHNrMPXiki1RQ8iE=@vger.kernel.org, AJvYcCWk1ZnXAolXPZx5b0vIowIiOI7Rt+Ph2/UNceHvOUsVL6FRPXDpsAR7A12sftELdIi7BinoEYKq7RaP@vger.kernel.org, AJvYcCWwZI/P5NQvoQdOI55FVLfA48XhbIYpPtVJKiEtWDFjKQO9djJAwE3tLaVuVo+bcpMvSNTMhB79v43m4dV5@vger.kernel.org
+X-Received: by 2002:a05:690c:48c1:b0:6af:eaaf:2527 with SMTP id
+ 00721157ae682-6dfeed87f8cmr127931067b3.18.1727177537112; Tue, 24 Sep 2024
+ 04:32:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240924103941.1729061-3-michal.vokac@ysoft.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com> <20240822152801.602318-5-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-5-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 24 Sep 2024 13:32:04 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
+Message-ID: <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
+Subject: Re: [PATCH 04/16] soc: renesas: Add SYSC driver for Renesas RZ/G3S
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be, 
+	magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com, 
+	biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org, 
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24-09-24, Michal Vokáč wrote:
-> The IOTA2 Lumpy board is based on the i.MX8MPlus EVK.
-> 
-> Basic features are:
-> - 4GB LPDDR4
-> - 64GB eMMC
-> - 2x 1GB Ethernet
-> - USB 3.0 Type-C dual role port, without power delivery
-> - USB 3.0 Type-A host port
-> - RGB LED - PWM driven
-> - speaker - PWM driven
-> - RTC with super capacitor backup
-> 
-> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+Hi Claudiu,
 
-LGTM, feel free to add my:
+On Thu, Aug 22, 2024 at 5:28=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> The RZ/G3S SYS Controller has 2 registers (one for PCIE one for USB) that
+> need to be configured before/after powering off/on the PCI or USB
+> ares. The bits in these registers control signals to PCIE and USB that
+> need to be de-asserted/asserted after/before power on/off event. For this
+> add SYSC controller driver that registers a reset controller driver on
+> auxiliary bus which allows USB, PCIE drivers to control these signals.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+Thanks for your patch!
 
-> ---
-> v4:
-> - Moved the iomuxc node to the end of the file.
-> - Moved the bus-width and non-removeable properties below
->   the pinctrl-* properties in &usdhc3 node.
-> - Moved the fsl,ext-reset-output below the pinctrl-* properties
->   in &wdog1 node.
-> v3:
-> - Dropped pinctrl-names property from &usb_dwc3_1 node.
-> v2:
-> - Dropped unused property from pwm4 node.
-> - Sorted all nodes and properties using dt-format tool from Frank.
-> 
->  arch/arm64/boot/dts/freescale/Makefile        |   1 +
->  .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 423 ++++++++++++++++++
->  2 files changed, 424 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> index 9d3df8b218a2..aa26a50b7bb4 100644
-> --- a/arch/arm64/boot/dts/freescale/Makefile
-> +++ b/arch/arm64/boot/dts/freescale/Makefile
-> @@ -171,6 +171,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
-> +dtb-$(CONFIG_ARCH_MXC) += imx8mp-iota2-lumpy.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-navqp.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> new file mode 100644
-> index 000000000000..9eb58e818dc7
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> @@ -0,0 +1,423 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +++ b/drivers/reset/reset-rzg3s-sysc.c
+> @@ -0,0 +1,140 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Copyright 2023 Y Soft
+> + * Renesas RZ/G3S SYSC reset driver
+> + *
+> + * Copyright (C) 2024 Renesas Electronics Corp.
 > + */
 > +
-> +/dts-v1/;
-> +
-> +#include "imx8mp.dtsi"
-> +
-> +/ {
-> +	compatible = "ysoft,imx8mp-iota2-lumpy", "fsl,imx8mp";
-> +	model = "Y Soft i.MX8MPlus IOTA2 Lumpy board";
-> +
-> +	beeper {
-> +		compatible = "pwm-beeper";
-> +		pwms = <&pwm4 0 500000 0>;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = &uart2;
-> +	};
-> +
-> +	gpio_keys: gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-0 = <&pinctrl_gpio_keys>;
-> +		pinctrl-names = "default";
-> +
-> +		button-reset {
-> +			gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
-> +			label = "Factory RESET";
-> +			linux,code = <BTN_0>;
-> +		};
-> +	};
-> +
-> +	reg_usb_host: regulator-usb-host {
-> +		compatible = "regulator-fixed";
-> +		enable-active-high;
-> +		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-0 = <&pinctrl_usb_host_vbus>;
-> +		pinctrl-names = "default";
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-name = "usb-host";
-> +	};
-> +
-> +	memory@40000000 {
-> +		reg = <0x0 0x40000000 0 0x80000000>,
-> +		      <0x1 0x00000000 0 0x80000000>;
-> +		device_type = "memory";
-> +	};
-> +};
-> +
-> +&A53_0 {
-> +	cpu-supply = <&reg_arm>;
-> +};
-> +
-> +&A53_1 {
-> +	cpu-supply = <&reg_arm>;
-> +};
-> +
-> +&A53_2 {
-> +	cpu-supply = <&reg_arm>;
-> +};
-> +
-> +&A53_3 {
-> +	cpu-supply = <&reg_arm>;
-> +};
-> +
-> +&eqos {
-> +	phy-handle = <&ethphy0>;
-> +	phy-mode = "rgmii-id";
-> +	pinctrl-0 = <&pinctrl_eqos>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	mdio {
-> +		compatible = "snps,dwmac-mdio";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		ethphy0: ethernet-phy@0 {
-> +			reg = <0>;
-> +			interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-> +			interrupt-parent = <&gpio3>;
-> +			micrel,led-mode = <0>;
-> +			pinctrl-0 = <&pinctrl_ethphy0>;
-> +			pinctrl-names = "default";
-> +			reset-assert-us = <1000>;
-> +			reset-deassert-us = <1000>;
-> +			reset-gpios = <&gpio3 22 GPIO_ACTIVE_LOW>;
-> +		};
-> +	};
-> +};
-> +
-> +&fec {
-> +	fsl,magic-packet;
-> +	phy-handle = <&ethphy1>;
-> +	phy-mode = "rgmii-id";
-> +	pinctrl-0 = <&pinctrl_fec>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	mdio {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		ethphy1: ethernet-phy@0 {
-> +			reg = <0>;
-> +			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
-> +			interrupt-parent = <&gpio3>;
-> +			micrel,led-mode = <0>;
-> +			pinctrl-0 = <&pinctrl_ethphy1>;
-> +			pinctrl-names = "default";
-> +			reset-assert-us = <1000>;
-> +			reset-deassert-us = <1000>;
-> +			reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
-> +		};
-> +	};
-> +};
-> +
-> +&i2c1 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	pmic@25 {
-> +		compatible = "nxp,pca9450c";
-> +		reg = <0x25>;
-> +		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio1>;
-> +		pinctrl-0 = <&pinctrl_pmic>;
-> +		pinctrl-names = "default";
-> +
-> +		regulators {
-> +			BUCK1 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <1000000>;
-> +				regulator-min-microvolt = <720000>;
-> +				regulator-name = "BUCK1";
-> +				regulator-ramp-delay = <3125>;
-> +			};
-> +
-> +			reg_arm: BUCK2 {
-> +				nxp,dvs-run-voltage = <950000>;
-> +				nxp,dvs-standby-voltage = <850000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <1025000>;
-> +				regulator-min-microvolt = <720000>;
-> +				regulator-name = "BUCK2";
-> +				regulator-ramp-delay = <3125>;
-> +			};
-> +
-> +			BUCK4 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <3600000>;
-> +				regulator-min-microvolt = <3000000>;
-> +				regulator-name = "BUCK4";
-> +			};
-> +
-> +			BUCK5 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <1950000>;
-> +				regulator-min-microvolt = <1650000>;
-> +				regulator-name = "BUCK5";
-> +			};
-> +
-> +			BUCK6 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <1155000>;
-> +				regulator-min-microvolt = <1045000>;
-> +				regulator-name = "BUCK6";
-> +			};
-> +
-> +			LDO1 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <1950000>;
-> +				regulator-min-microvolt = <1650000>;
-> +				regulator-name = "LDO1";
-> +			};
-> +
-> +			LDO3 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <1890000>;
-> +				regulator-min-microvolt = <1710000>;
-> +				regulator-name = "LDO3";
-> +			};
-> +
-> +			LDO4 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <950000>;
-> +				regulator-min-microvolt = <850000>;
-> +				regulator-name = "LDO4";
-> +			};
-> +
-> +			LDO5 {
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-name = "LDO5";
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-0 = <&pinctrl_i2c2>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	rtc: rtc@68 {
-> +		compatible = "dallas,ds1341";
-> +		reg = <0x68>;
-> +	};
-> +};
-> +
-> +&pwm4 {
-> +	pinctrl-0 = <&pinctrl_pwm4>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
-> +&uart2 {
-> +	pinctrl-0 = <&pinctrl_uart2>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
-> +&usb3_1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb3_phy1 {
-> +	vbus-supply = <&reg_usb_host>;
-> +	status = "okay";
-> +};
-> +
-> +&usb_dwc3_1 {
-> +	dr_mode = "host";
-> +	status = "okay";
-> +};
-> +
-> +&usdhc3 {
-> +	assigned-clocks = <&clk IMX8MP_CLK_USDHC3>;
-> +	assigned-clock-rates = <400000000>;
-> +	pinctrl-0 = <&pinctrl_usdhc3>;
-> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	bus-width = <8>;
-> +	non-removable;
-> +	status = "okay";
-> +};
-> +
-> +&wdog1 {
-> +	pinctrl-0 = <&pinctrl_wdog>;
-> +	pinctrl-names = "default";
-> +	fsl,ext-reset-output;
-> +	status = "okay";
-> +};
-> +
-> +&iomuxc {
-> +	pinctrl_eqos: eqosgrp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC		0x2
-> +			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO		0x2
-> +			MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0	0x90
-> +			MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1	0x90
-> +			MX8MP_IOMUXC_ENET_RD2__ENET_QOS_RGMII_RD2	0x90
-> +			MX8MP_IOMUXC_ENET_RD3__ENET_QOS_RGMII_RD3	0x90
-> +			MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL	0x90
-> +			MX8MP_IOMUXC_ENET_RXC__CCM_ENET_QOS_CLOCK_GENERATE_RX_CLK	0x90
-> +			MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0	0x16
-> +			MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1	0x16
-> +			MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2	0x16
-> +			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3	0x16
-> +			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL	0x16
-> +			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x16
-> +		>;
-> +	};
-> +
-> +	pinctrl_ethphy0: ethphy0grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21		0x10
-> +			MX8MP_IOMUXC_SAI5_RXD1__GPIO3_IO22		0x10
-> +		>;
-> +	};
-> +
-> +	pinctrl_ethphy1: ethphy1grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_SAI5_RXFS__GPIO3_IO19		0x10
-> +			MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20		0x10
-> +		>;
-> +	};
-> +
-> +	pinctrl_fec: fecgrp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_SAI1_RXD2__ENET1_MDC		0x2
-> +			MX8MP_IOMUXC_SAI1_RXD3__ENET1_MDIO		0x2
-> +			MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0		0x90
-> +			MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1		0x90
-> +			MX8MP_IOMUXC_SAI1_RXD6__ENET1_RGMII_RD2		0x90
-> +			MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3		0x90
-> +			MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC		0x90
-> +			MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL	0x90
-> +			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0		0x16
-> +			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1		0x16
-> +			MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2		0x16
-> +			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3		0x16
-> +			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x16
-> +			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC		0x16
-> +		>;
-> +	};
-> +
-> +	pinctrl_gpio_keys: gpiokeysgrp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07	0x80
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1: i2c1grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c2
-> +			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c2
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2: i2c2grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL		0x400001c2
-> +			MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA		0x400001c2
-> +		>;
-> +	};
-> +
-> +	pinctrl_pmic: pmicgrp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03	0x1c0
-> +		>;
-> +	};
-> +
-> +	pinctrl_pwm4: pwm4grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_SAI3_MCLK__PWM4_OUT	0x102
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart2: uart2grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x0
-> +			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usb_host_vbus: usb1grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR	0x0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x194
-> +			MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD	0x1d4
-> +			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d4
-> +			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d4
-> +			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d4
-> +			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d4
-> +			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d4
-> +			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d4
-> +			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d4
-> +			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d4
-> +			MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE	0x194
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x196
-> +			MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD	0x1d6
-> +			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d6
-> +			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d6
-> +			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d6
-> +			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d6
-> +			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d6
-> +			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d6
-> +			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d6
-> +			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d6
-> +			MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE	0x196
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3: usdhc3grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x190
-> +			MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD	0x1d0
-> +			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d0
-> +			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d0
-> +			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d0
-> +			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d0
-> +			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d0
-> +			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d0
-> +			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d0
-> +			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d0
-> +			MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE	0x190
-> +		>;
-> +	};
-> +
-> +	pinctrl_wdog: wdoggrp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_GPIO1_IO02__WDOG1_WDOG_B	0x166
-> +		>;
-> +	};
-> +};
-> -- 
-> 2.43.0
-> 
-> 
-> 
+> +#include <linux/auxiliary_bus.h>
+
+Using the Auxiliary Bus requires selecting AUXILIARY_BUS.
+Elsse you might run into build failures:
+
+aarch64-linux-gnu-ld: drivers/soc/renesas/rzg3s-sysc.o: in function
+`rzg3s_sysc_probe':
+rzg3s-sysc.c:(.text+0x21c): undefined reference to `auxiliary_device_init'
+aarch64-linux-gnu-ld: rzg3s-sysc.c:(.text+0x264): undefined reference
+to `__auxiliary_device_add'
+aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
+`rzg3s_sysc_reset_driver_init':
+reset-rzg3s-sysc.c:(.init.text+0x1c): undefined reference to
+`__auxiliary_driver_register'
+aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
+`rzg3s_sysc_reset_driver_exit':
+reset-rzg3s-sysc.c:(.exit.text+0x10): undefined reference to
+`auxiliary_driver_unregister'
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
