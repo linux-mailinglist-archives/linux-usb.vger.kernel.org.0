@@ -1,66 +1,62 @@
-Return-Path: <linux-usb+bounces-15342-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15343-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AED8984053
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 10:21:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C148984056
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 10:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 300F91F23A67
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 08:21:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CB7F1C20A21
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 08:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678EE14D2A7;
-	Tue, 24 Sep 2024 08:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE63A14D2BD;
+	Tue, 24 Sep 2024 08:22:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OEu0yoNQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iWEVrvSy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FE722315;
-	Tue, 24 Sep 2024 08:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D16822315;
+	Tue, 24 Sep 2024 08:22:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727166074; cv=none; b=qd/xR4kk36RBue+xhbgxuG3PPIlOimR1JmMpUoCwqwUC6IlEu4MqrDZPHeC5KvdWolNm9wQU7m1yI1jdlOzzoPkg0haFC1FzTb4fcE/Jb3XVQtx89eILzyPkTbU/WwFx9xUh4J6DN4LuFkN4OrhpJkuAuJUYi70CMo4Se5iVHD4=
+	t=1727166165; cv=none; b=aUVcF6rThLc/MycFmaHopfAd1O6Pl7ojuj2boEo494lKCoy+dDQlVdrvAyFlug926pDVba+oQDPeVOStNzcdIH5QG+r1d2nBekx+pkD4nkJiWqqKyTW9EccqLzRaTUcJaxLx30zgVKbYxZO2P6rfg2pXzFKzEtEYRRGGrbCWX8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727166074; c=relaxed/simple;
-	bh=JQjvqoJf883IdrKR/BHOby0lgQEkNGqZuxt3j5rHrMw=;
+	s=arc-20240116; t=1727166165; c=relaxed/simple;
+	bh=1k2BvdlSnKvudqdu6QNfjXKlDapz+vpyQHbc72gBgqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fhykrCnpC11Vb/xyiP6Fh3HzfXgFaUgmx263EdvPvsCfiooYNmlRR68aoiS5PCEeB2+BB7Iz2Qi4b2cIdwMaRjYV4GcmOCUQds8fe1a80hp1OZis6RM7p1EGCQ/MX525pABYbUVDWNrq69Nsw6OSb8tvdJwh5jM6t89L94BsZNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OEu0yoNQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FD3C4CEC4;
-	Tue, 24 Sep 2024 08:21:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ij05jGMFdNLEHuEybbFaysXx0BwdbFbLJOCNNL1Gasx88qHuRmOwv5SBSW2RUMcOiJxSSG0jJlKLcz8Ugbcn6VVu6yFyl4XV3rKp6+EkIq0N/LVGixDdNh8ZZ0dmi/9H2v/hVGmE5Yx7ZcRzpHJEL7TO7XLcTUTuNW5M637EbCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iWEVrvSy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF33C4CEC4;
+	Tue, 24 Sep 2024 08:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727166073;
-	bh=JQjvqoJf883IdrKR/BHOby0lgQEkNGqZuxt3j5rHrMw=;
+	s=k20201202; t=1727166164;
+	bh=1k2BvdlSnKvudqdu6QNfjXKlDapz+vpyQHbc72gBgqs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OEu0yoNQEtnu12CV5Jxf2HXFewCRoTBXeKrxlTyr68xmwuQq4ziZVx/gxve4imrFn
-	 7aWlCUdxfk2H6L45dxE4/9saGfhvmKwngY2BPwJNc3xuOuDct3IEHzv8HffL/ePFSs
-	 3C4oCtOlOm/CMNP6sfVA6uVyv10bSbe/bHMjnU9jO1jkNZrJSi9R0EWZinBwykg1bA
-	 O2P4tnUt9eCnTKK2ov6Lzm8PEWdZpPJR3l16Ikz8AfiM7a88BRjNROBh6ELu0lwcGb
-	 L/fvcZYgzEv3wnIfI2f+OXiJF2QyYKtyeDSvIXF4XpHOcgLbA0605TTPaPNq+ZOCyY
-	 jF994HRBmQ77g==
-Date: Tue, 24 Sep 2024 10:21:09 +0200
+	b=iWEVrvSyYOCIUtt0WwFq55vgbUxepj9MO1pdJZtO6UdbpZ4GHA9XYtT0RTVAURm8o
+	 EVE6tV2eIMMPhNztX7rm061OslHAWVPFc5rd+TDoqbIK1Qgm7djByqzpt2h6L/NGe4
+	 rZX5odGgjvlM92gRMMsMs98FHIJ20aRtxBiyTLmaDSsC3dhUgCoO333a4me8Qu/NlH
+	 oj42sgqspBzafTLtr7NxvUuoeHg11fmH+1DV1VvEmEwxTcRlkPPCAEGbsekfCXXbR8
+	 esOjnp9DIBNtIkl1egIyJ61sYDezhXRx2r+HmyUJR2AHMXetCcPqVYr3Qmf1VRD8Dq
+	 bmlJW0DvPsmKA==
+Date: Tue, 24 Sep 2024 10:22:40 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Petr Benes <petr.benes@ysoft.com>, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Michael Walle <mwalle@kernel.org>, imx@lists.linux.dev, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Mathieu Othacehe <m.othacehe@gmail.com>, Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
-	linux-kernel@vger.kernel.org, Hiago De Franco <hiago.franco@toradex.com>, 
-	Herburger <gregor.herburger@ew.tq-group.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Joao Paulo Goncalves <joao.goncalves@toradex.com>, Fabio Estevam <festevam@gmail.com>, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 3/4] dt-bindings: usb: Add Diodes Incorporated
- PI5USB30213A Type-C Controller
-Message-ID: <6hy6sl53ducvdjuppzg3xebh6oyxvs75vz4ua2qe2jhuuoowhp@h5jbfu2wqysc>
+To: Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Petr Benes <petr.benes@ysoft.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Herburger <gregor.herburger@ew.tq-group.com>, Hiago De Franco <hiago.franco@toradex.com>, 
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>, Joao Paulo Goncalves <joao.goncalves@toradex.com>, 
+	Michael Walle <mwalle@kernel.org>, Alexander Stein <alexander.stein@ew.tq-group.com>, 
+	Mathieu Othacehe <m.othacehe@gmail.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/4] Add support for new IMX8MP based board
+Message-ID: <vghktkih6pdjrui7sjs2gn2elfcdlplh37ahzcm2xnqin3rh4g@cck4xniyourm>
 References: <20240923151417.1665431-1-michal.vokac@ysoft.com>
- <20240923151417.1665431-4-michal.vokac@ysoft.com>
- <20240924072436.gya7hvmlpb7fk5ou@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -70,36 +66,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240924072436.gya7hvmlpb7fk5ou@pengutronix.de>
+In-Reply-To: <20240923151417.1665431-1-michal.vokac@ysoft.com>
 
-On Tue, Sep 24, 2024 at 09:24:36AM +0200, Marco Felsch wrote:
-> On 24-09-23, Michal Vok=C3=A1=C4=8D wrote:
-> > From: Petr Benes <petr.benes@ysoft.com>
-> >=20
-> > Diodes Incorporated PI5USB30213A Type-C Controller supports host,
-> > device, and dual-role mode based on voltage levels detected on CC
-> > pin. Supports dual differential channel, 2:1 USB 3.0 Mux/Demux,
-> > USB Type-C specification 1.1.
-> >=20
-> > Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > Signed-off-by: Petr Benes <petr.benes@ysoft.com>
-> > Signed-off-by: Michal Vok=C3=A1=C4=8D <michal.vokac@ysoft.com>
-> > ---
-> > v3:
-> > - Collected R-b tag from Krzysztof.
-> > v2:
-> > - Moved maintainers before description: block.
-> > - Used full paths for references.
-> > - Removed unneeded items form connector property.
-> > - Fixed example.
-> >=20
-> >  .../bindings/usb/diodes,pi5usb30213a.yaml     | 88 +++++++++++++++++++
+On Mon, Sep 23, 2024 at 05:14:13PM +0200, Michal Vok=C3=A1=C4=8D wrote:
+> Hi,
 >=20
-> I suppose the driver is part of an other patchset?
+> this series adds support for a new member in our IOTA=C2=A0platform.
+> The board is based on the i.MX8MP SoC. The first two patches
+> add support for most of the board functionality except USB Type-C
+> port and some other minor things.
+>=20
+> [PATCH 3] adds new device tree binding for a Diodes Incorporated
+> PI5USB30213A Type-C Controller and [PATCH 4] enables that port on
+> the IOTA2 Lumpy board.
+>=20
+> We also wrote a driver for that Type-C port controller. I would like
+> to get that driver upstream as well but I expect it will take much
+> more iterations and effort to get it into mainline-ready shape so
+> I intentionally excluded it from this series. AFAIK it should not
+> be a problem to accept a device tree binding for a HW that does not
+> have a driver in the kernel yet.
 
-Hm, indeed, where is the driver?
-
-This patch should not be here.
+It's unusual but okay. It will be however more difficult for you - any
+changes in the binding in the future (when writing driver) will be
+rejected on basis of breaking ABI, even if Linux does not use that ABI.
 
 Best regards,
 Krzysztof
