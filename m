@@ -1,173 +1,86 @@
-Return-Path: <linux-usb+bounces-15345-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32EBD9840DA
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 10:44:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15BAC984154
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 11:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E59F0287F0A
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 08:44:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B35A41F23A50
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 09:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EA7150981;
-	Tue, 24 Sep 2024 08:44:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7E11428F3;
+	Tue, 24 Sep 2024 09:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="WA+S9Btw";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Dr8RsPwC"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jdAbu7Ye"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7743D15381F;
-	Tue, 24 Sep 2024 08:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8EEDDA8
+	for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 09:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727167462; cv=none; b=P0iSKUCvofGJiJeEpjxt3mE65//QLAIx+MNBKcGVeaFZzntVbUp4x+LONeYMxe/kTU1I5FOkRF+O+9BSzZULC8kEc5G9MdqIFgljtBi3zXSM7g/9iERFxrEXdCsVaTKDLF4pqXvhnTnk4w4FhSTPzp7VUHFJiTArTRsQ9QwlJwo=
+	t=1727168463; cv=none; b=KrFWl5qz7NYsK/Zxc+m1qFM9kVd/LnOeKwYewurxg1TgOVuagUa6VVtKihInI94l/mh14BozLBJDD5fCYCzv2dcnWCgx/f0m/7hJ3pq/n221Kh5xMvIVenNJk4Eqzn+gOi27pFBkbMOpBdgM424An5z0acTRIb+6hmjLsOEa0m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727167462; c=relaxed/simple;
-	bh=iUvcV1AO+x2dwAvCRVsFAHn407sb5o2UaGfcf3tmW84=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LyEX2OcEkNqpBQ+ZjkIky4+gip3DWr1vDR7ugG6jUwSUdppLyoxFPv7mZNADaOAFOJ61Wvid0gkbuUQiQw/eArbAHxRl8rJLlcF0eUQKscaPjJMYAXIqHhlDTvTXhYDS8ZtIPIYRtAtFww2ZnCXiqjweYPQbQLvPfZk3bI4GWu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=WA+S9Btw; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Dr8RsPwC; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6B14D2122C;
-	Tue, 24 Sep 2024 08:44:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1727167458; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=OJ6DiioJcBSkZacAGniMJvAV4UxnnfYlO18vC5BmkJE=;
-	b=WA+S9BtwhGJKiblq4ajTJf2+YR2p1XupbbbmDze6b18vKA3ZxsumwRQ0GPUsxsj1PRIb4I
-	+M8uUWrN1LDhOn0KmDCdVEZdm0EE3EFYao5IlXouCgu4E0LIc57NQ12dA8rRSEp8Ny+aaz
-	Zf/xLZbe3uCC/QdlA89Bp0QdbtX9V2k=
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=Dr8RsPwC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1727167457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=OJ6DiioJcBSkZacAGniMJvAV4UxnnfYlO18vC5BmkJE=;
-	b=Dr8RsPwCmBvSyhgmykapcF/shcjtzbfOMu+iHdqRzEm+OGEV93gxwIB0Jqtv0gBzXdDu9d
-	rs9Sm8FV4PpQAICRmyd8ITMzyo+9VpX/H9a6xxYIFSnA03iq+jQMLxF3wdJTb3ZHMvDIjo
-	rbcHv6V6a6n9YkVX95WM0ll4N2k9wXQ=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 487E81386E;
-	Tue, 24 Sep 2024 08:44:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id sBWEEOF78matewAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Tue, 24 Sep 2024 08:44:17 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv2] usb: yurex: make waiting on yurex_write interruptible
-Date: Tue, 24 Sep 2024 10:43:45 +0200
-Message-ID: <20240924084415.300557-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.46.1
+	s=arc-20240116; t=1727168463; c=relaxed/simple;
+	bh=cbR7TTlsosW1c4C6VA9hsbIKq4DdcL3B1WfjeY/jhvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c+YXRIoV57/EQyJt04R0nrK9TS79S4jBDcGh2igB2p4O0IpiLx/9tkdng8znHLtgaGW+zVEXCA3q+UhuOsFbEWiSlZHvpiJY85LhY/ACax8w6ebxScrarfkX5J7X5ZsTuemXCHQ2IIhZKS9+9u1V9ZigdP6jPJ8LXzKtNpKimJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jdAbu7Ye; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19458C4CEC4;
+	Tue, 24 Sep 2024 09:01:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1727168462;
+	bh=cbR7TTlsosW1c4C6VA9hsbIKq4DdcL3B1WfjeY/jhvA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jdAbu7Ye1ZcIlJbS91ozpw9kml48jk3D0uKrzlF0FxzcBynhSKwM2pQRMt+HZA65w
+	 SxqBRUGNpbwTP+jVlSIyZ04v1wRBfEcfaUSFGMugWb9YLrmT+O8g/s6jHh8lyZZG+A
+	 1+EBSpegeCFeH6yZkD2oyA/RD+PmCKBmBSmsWsMs=
+Date: Tue, 24 Sep 2024 11:00:34 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: Switch back to struct platform_driver::remove()
+Message-ID: <2024092418-utensil-albatross-930c@gregkh>
+References: <20240924084329.53094-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 6B14D2122C
-X-Spam-Score: -3.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DWL_DNSWL_BLOCKED(0.00)[suse.com:dkim];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCPT_COUNT_THREE(0.00)[4];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+In-Reply-To: <20240924084329.53094-2-u.kleine-koenig@baylibre.com>
 
-The IO yurex_write() needs to wait for in order to have a device
-ready for writing again can take a long time time.
-Consequently the sleep is done in an interruptible state.
-Therefore others waiting for yurex_write() itself to finish should
-use mutex_lock_interruptible.
+On Tue, Sep 24, 2024 at 10:43:29AM +0200, Uwe Kleine-König wrote:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
+> 
+> Convert all platform drivers below drivers/usb to use .remove(), with
+> the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+> ---
+> Hello Greg,
+> 
+> given the simplicity of the individual changes I do this all in a single
+> patch. Please tell and I will happily split it for an improved commit
+> count :-) I based this on today's next, feel free to drop changes that
+> result in a conflict when you come around to apply this. I'll care for
+> the fallout at a later time then. (Having said that, if you use b4 am -3
+> and git am -3, there should be hardly any fallout.)
+> 
+> Note I didn't Cc: all the individual driver maintainers to not trigger
+> sending limits and spam filters.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Fixes: 6bc235a2e24a5 ("USB: add driver for Meywa-Denki & Kayac YUREX")
----
+I'll take this after -rc1 is out, no worries.  thanks for the patch!
 
-v2: fix uninitialized variable
-
- drivers/usb/misc/iowarrior.c | 4 ----
- drivers/usb/misc/yurex.c     | 5 ++++-
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-index cfc985001e5b..65cc53431976 100644
---- a/drivers/usb/misc/iowarrior.c
-+++ b/drivers/usb/misc/iowarrior.c
-@@ -892,7 +892,6 @@ static int iowarrior_probe(struct usb_interface *interface,
- static void iowarrior_disconnect(struct usb_interface *interface)
- {
- 	struct iowarrior *dev = usb_get_intfdata(interface);
--	int minor = dev->minor;
- 
- 	usb_deregister_dev(interface, &iowarrior_class);
- 
-@@ -916,9 +915,6 @@ static void iowarrior_disconnect(struct usb_interface *interface)
- 		mutex_unlock(&dev->mutex);
- 		iowarrior_delete(dev);
- 	}
--
--	dev_info(&interface->dev, "I/O-Warror #%d now disconnected\n",
--		 minor - IOWARRIOR_MINOR_BASE);
- }
- 
- /* usb specific object needed to register this driver with the usb subsystem */
-diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
-index 4a9859e03f6b..316634f782c6 100644
---- a/drivers/usb/misc/yurex.c
-+++ b/drivers/usb/misc/yurex.c
-@@ -444,7 +444,10 @@ static ssize_t yurex_write(struct file *file, const char __user *user_buffer,
- 	if (count == 0)
- 		goto error;
- 
--	mutex_lock(&dev->io_mutex);
-+	retval = mutex_lock_interruptible(&dev->io_mutex);
-+	if (retval < 0)
-+		return -EINTR;
-+
- 	if (dev->disconnected) {		/* already disconnected */
- 		mutex_unlock(&dev->io_mutex);
- 		retval = -ENODEV;
--- 
-2.46.1
-
+greg k-h
 
