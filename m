@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-15367-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15368-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABAA09849FC
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 18:50:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71244984A0A
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 18:57:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 516751F21CC1
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 16:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1AD61C21D17
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2024 16:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6276A1ABEB5;
-	Tue, 24 Sep 2024 16:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B001D1AC423;
+	Tue, 24 Sep 2024 16:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GOiyMw6W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="syKhrKGe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E091E1AAE24
-	for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 16:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9121ABEB5
+	for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 16:56:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727196626; cv=none; b=PC/QSyf0QBcWrF8+f2uRdsIyReQ9Ky1CeiyLEE7NTZhUzysRt+rHLzyEw2wxiO1uN7xoG9pvO22qnBYgldp0F/hlOSXIo4WOVoLlVAuT/XW01iv35mehtY826NFrWz9qquSYUTVTkyya1DvUoNB16bBMtL9ZJqxiEera/OWwumI=
+	t=1727197016; cv=none; b=uJcEt4N6O5LOZWRdv9lRvBM7SIu6gTSq2+NAbdBCZtcwJXXNdSVRHIktpPxZv7iesXZfMT16PeCv69TYjT6A5khzkeYzyuqfon/8fwYit1sOdKp6KESprIV+zSBJxuvMs1GXbi+9VCscEBNAw5RY0s5B4hfM/8abCiuAllLHF9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727196626; c=relaxed/simple;
-	bh=RZooAcoy1sP/EarVhXdJ3w3UjYU+CBmBKFMJLd3OmV8=;
+	s=arc-20240116; t=1727197016; c=relaxed/simple;
+	bh=HoNtl0FsX6PkZ/u3iMHuq62S6/DyL6nbK8SQZJQPwOg=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qPX01TqIlrjTC8p1ngoBd3T+NvIJz5GPO1zdwzMiED3OgVjYjMIU09Y/g2sFFRLEZ5LdnnU674TalsytlUR4tHMHboM1JS4Ni257pk+tq1G5MF1HK0rTMEQWSa7wyIltHFXBacIgm9kTQCmUq9ySXP9FgJBC8W+F318o3cyeP7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GOiyMw6W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7687C4CED2
-	for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 16:50:25 +0000 (UTC)
+	 Content-Type:MIME-Version; b=iavhvhUlrDoUhqo3GYxljCuEd3FjYV1OOBCFb4G3dgXAfxxmWMFjHvJqkGtTdROtA3TIZdDVGyJkpGDmz0fOw3Aw/9BxQbL6XBThPOFJy18+ImKgzX0y/ni9kwfwY2pyvQkd1qZSu5bsD3axHJGOlnGCiXjbu3MK5PJ/bpP32zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=syKhrKGe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE2D3C4CED0
+	for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 16:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727196625;
-	bh=RZooAcoy1sP/EarVhXdJ3w3UjYU+CBmBKFMJLd3OmV8=;
+	s=k20201202; t=1727197015;
+	bh=HoNtl0FsX6PkZ/u3iMHuq62S6/DyL6nbK8SQZJQPwOg=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=GOiyMw6W7OZ38GdLDQNqwN6Eo/Eifp5AQZ+IunodIzcMgYVGfjJ7sN6VXEOrxACBW
-	 zlc6WObzxwSlA56K/crlomrhKy9RAWJ+UCzW0ciKg6vl5Vk8b3stcVrMONOMGC7Il9
-	 P758YhEM2zozQo+k1avh5+ula9YfB4cChR+nD1JpAc4cNLvqQ4zHWErWocwfK9gN1C
-	 oa2Z2Bx7EuqizLKGcetDSlYTItpooH97Dt6P7a2/CIpAqMTh12tX8ko0fiBTBS8ycE
-	 tsoHyAYaBqpo4H2cD6BQobbenRjx5YGasZsHN5S81Qs9TI36XZyerQ7WaLNuynZRXU
-	 cNH6xVzdGWmIQ==
+	b=syKhrKGe9euqhsuZ+jVfn+QAVuO+/jx/2P6Pk++/ESiRrVipE7UgQD07asRIIvoxp
+	 GFXP7S78WLH2dWzQ4edgPHtF4wrxGQfJi6Rp1a9IiWedKlgkPs7pM2mVExLoaP3ijT
+	 YgaI4tqe8gL4uiSiYcSVQef6VZ1pNW1S1c94od9hiFD+MpNUINkz7wTb9cFMzBi6RO
+	 iTFec10proJgH/jcp9CTKi0M/TnVxqXulZbpW23INlEwyaw8FhlqYANYy2dht79e1k
+	 JoO54CQvk1V/rr4SA8mis6g/40xY18Ok2U/isM0N/1IhQwrGrnJkxqCaLRefNNZTpF
+	 zMyJC5oF7aM4Q==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id B19FCC53BC5; Tue, 24 Sep 2024 16:50:25 +0000 (UTC)
+	id A5F56C53BC3; Tue, 24 Sep 2024 16:56:55 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
  EEXIST, overlapping mappings aren't supported
-Date: Tue, 24 Sep 2024 16:50:25 +0000
+Date: Tue, 24 Sep 2024 16:56:55 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215740-208809-5zr9HeYrQy@https.bugzilla.kernel.org/>
+Message-ID: <bug-215740-208809-y6enYzLifr@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
 References: <bug-215740-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,18 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
 
---- Comment #39 from Andy Shevchenko (andy.shevchenko@gmail.com) ---
-@Alan, others, so what is the status of affairs? What's the conclusion? I s=
-till
-get the warning almost every time I boot my boards.
+--- Comment #40 from Andy Shevchenko (andy.shevchenko@gmail.com) ---
+Also note, the boards are not limited to Intel Merrifield based ones, I have
+the same stacktrace on different Intel SoCs, like Apollo Lake (Joule).
+
+[    0.145195] smpboot: CPU0: Intel(R) Atom(TM) Processor T5700 @ 1.70GHz
+(family: 0x6, model: 0x5c, stepping: 0x2)
+...
+[    2.740381] ------------[ cut here ]------------
+[    2.741675] DMA-API: xhci_hcd 0000:00:15.0: cacheline tracking EEXIST,
+overlapping mappings aren't supported
+[    2.744345] WARNING: CPU: 0 PID: 64 at kernel/dma/debug.c:607
+add_dma_entry+0x219/0x350
 
 --=20
 You may reply to this email to add a comment.
