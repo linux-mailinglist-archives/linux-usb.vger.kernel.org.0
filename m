@@ -1,125 +1,109 @@
-Return-Path: <linux-usb+bounces-15463-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15466-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F01D98653B
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 18:55:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 238A898657D
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:14:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2122CB23225
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 16:55:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B73AAB25AF2
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:14:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53B9A57880;
-	Wed, 25 Sep 2024 16:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A144F61FD8;
+	Wed, 25 Sep 2024 17:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KEIBzNPj"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="RH94mpxk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35430219E0
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 16:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC095134BD;
+	Wed, 25 Sep 2024 17:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727283294; cv=none; b=FCP4rMKC4i7ulS0xm9BoZ3Sl2IB2zUF545hIBJXpeBO7AE5hDpD5V50nu2o+lMNo3jDHz7wZFtFcaeSNyswYPUhGjpFELiaBtXemViR7ZFrjtkcp9kZXa4SQsCHxmHdOroVtlk4CYGQihQ/sZyzYHDy0Rwhvl64IRTmPOrMUAiA=
+	t=1727284487; cv=none; b=cr4PmVaoeigCym/UyOSnjrNBwxBLF7FnytZoP52YSWZZ5QwiuRQeyEeG3mt7vI6G5IyZtnCTAUzPRLm/9M6DkNc7bSWOa8JrY3qyNymG/R1nNKVK/Mss5aYZYkkrBX3aYNkWzaI34P3u8gjI2szhekhntvMvESwYAOQTY+gxWoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727283294; c=relaxed/simple;
-	bh=/iLPgj4TgYR6zK/EXYJGwX6BILDDsI6Z4336i4QtFwQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mtz29NKVo4VL9IXCCkO28kmrS1kAgdhHY1+q+gu5tINBdtW0daa8FcVg7I55Wy9DgbeRXXQawWc6ee04Y7Q8QWQGZrv5laGyJyAT2hrEiYTLoMkFGr1uflRfNJAEekZYVNwGHcw8qop1c6J5kwOtG4N2pvDO0svkxyzHbpa/QUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KEIBzNPj; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2f78b28ddb6so601771fa.0
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 09:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727283291; x=1727888091; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1IlESbvCtsozYGqIWP4A8GOe0yGJ0eMmcD1MWPRH068=;
-        b=KEIBzNPjkdofMb4Dbvopc1Znir28MvO6HjYkpEu6g8Dc+47CD5CKAsiB7kpeFjwM55
-         Zq3bR74gcXRo76lbtQdagEF8mDxGyuNg4PFf63l/8nymEoyhGmMkKoI/VRKyHJP0TVrT
-         UK8pATtDA0vGzwKwFRg+P2JYqSB9ZIxIydhtClmWcgXT8BX689bwS756QzVpaMXjxyMD
-         /pgaemfA2FlqogDR+xdODmkkaTCOZNYK4GLStzDJC8mlaxZLzPawV9LJhdT8IMbhzoUs
-         IefZIScqnwT95ljAQAk2GleKrBgfWpi5s6luClPla6AH+NjN1hBGNr+xp9Rngk/wP8ge
-         YGSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727283291; x=1727888091;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1IlESbvCtsozYGqIWP4A8GOe0yGJ0eMmcD1MWPRH068=;
-        b=UvBAOfiVoe4P5dHVRqiu420CVOt6OIQT/80oQ7zcNh5zSaD1ba+BaURpHsuwuwqfJF
-         8B3afNC1hqtvIwIlpBK2HHS/AEEf0ArWLJNN3EdYjb+vaQH6midFLCyJxeBeKYgSqkxC
-         r1FDzp0iuTCA+TvojxXPoCzoQiAp8ZnDxFVtNuspTfoQU0SV7z2tE29fzKro0VbrGtf8
-         K51Elb+4XnGDTs9BYkLkwhQeM61ksVJrSFYCQJx8z0smzC0hjwmavU67OPoT8ynglEnG
-         U0iLYlFi8oEaJ/ZQwAb3GJ15EnsATf4Si9wTOq+vWH5ZnTzfeOoMfvO2M4Uu9SwLMRT+
-         xx8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWp8xSWBvem39yaDkrNu66PeJtlgSFsOCkeZYy4KCOSNsU2vKO71/FLMyzEuKFuG0kG6HNcRe3wBlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfH2nw1o32EkF9oov/JGzL0DmO8yGibCqlHwAn7yT1WBMv57zc
-	+xag9B4sCaWLATPbay57sA8aq2CM3hZTLGojw6DEUTpBF3exxRbC6dcuHfmy9Ls=
-X-Google-Smtp-Source: AGHT+IFC8+iguBkPY2hlX/42by6M71fGPgkoAf4V8t7QcKM5Kqno4xffyH88fuIqCHiJ13r+fVSzcQ==
-X-Received: by 2002:a05:651c:210d:b0:2f7:6653:8044 with SMTP id 38308e7fff4ca-2f916019192mr22080881fa.20.1727283291132;
-        Wed, 25 Sep 2024 09:54:51 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f8d288e2c8sm5715931fa.92.2024.09.25.09.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 09:54:48 -0700 (PDT)
-Date: Wed, 25 Sep 2024 19:54:45 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org, jthies@google.com, 
-	pmalani@chromium.org, akuchynski@google.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/8] usb: typec: altmode_match should handle
- TYPEC_ANY_MODE
-Message-ID: <oedfq4fkjlbalytba7fxg462tyutgxxk5wnhg2mhkfevclv33q@ugc472nkwpo6>
-References: <20240925162513.435177-1-abhishekpandit@chromium.org>
- <20240925092505.2.Ie0d37646f18461234777d88b4c3e21faed92ed4f@changeid>
+	s=arc-20240116; t=1727284487; c=relaxed/simple;
+	bh=aIW1QfRYwvuDJbIY3ZHeD9wGhOVohwX859RGPoS1nQs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dywOxllQSWM8XJMKuBsp6rfNmdPmmxfUZzvTEHlC4haTMlL6F2On/0MkyxcpMrUqxaY3fTIwNl718yw6L2nwwIlrbAm1baBYmejDYxzcn3dny2QZRgUw9yN/06pNa12pUbSkirJQfAFYAIu85uwaIwggVigyE8uqzwNoxJwrNos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=RH94mpxk; arc=none smtp.client-ip=166.84.1.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
+	(No client certificate requested)
+	by l2mail1.panix.com (Postfix) with ESMTPS id 4XDNCF2nF7zDQj;
+	Wed, 25 Sep 2024 12:55:37 -0400 (EDT)
+Received: from [192.168.80.67] (unknown [207.7.121.250])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4XDNC55w34zl2J;
+	Wed, 25 Sep 2024 12:55:29 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1727283330; bh=aIW1QfRYwvuDJbIY3ZHeD9wGhOVohwX859RGPoS1nQs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=RH94mpxk3EVikiQBZ1bjTttZbakCa8GRtM46BdWBji+xmCV9HMcCnb9vv83DEjwca
+	 fl1W/jyqYBWNmmw7RlpXdEIW/qQ6/sOgA2YAVXrHf/gOa/E2YD241Cuc4hv472ZfDq
+	 q7GRkY2Q8ZhpPmGrhhgNuksq8nQhzXTg2IP1ujdM=
+Message-ID: <985893c0-ade3-4b23-b452-6f416e7ff2a1@panix.com>
+Date: Wed, 25 Sep 2024 09:55:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925092505.2.Ie0d37646f18461234777d88b4c3e21faed92ed4f@changeid>
+User-Agent: Mozilla Thunderbird
+Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
+ Thunderbolt additions when coming out of suspend or hibernate
+To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
+Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ linux-pci@vger.kernel.org
+References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
+ <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
+ <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
+ <20240904122835.GG1532424@black.fi.intel.com>
+ <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+ <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
+ <20240913052540.GN275077@black.fi.intel.com>
+ <7ac9a400-fdb2-4d78-bacf-2e502c7338e8@panix.com>
+ <ad0458ee-b75c-46f9-a012-1e0615aecf53@panix.com>
+ <b29b8750-5235-4097-a880-d8620da2520a@panix.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <b29b8750-5235-4097-a880-d8620da2520a@panix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 25, 2024 at 09:25:03AM GMT, Abhishek Pandit-Subedi wrote:
-> altmode_match is used when searching for the first port altmode that
-> matches the partner or plug altmode. If the port registered with mode
-> set to TYPEC_ANY_MODE, it should always match if the SVID matches.
-> 
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-Fixes?
 
-> ---
+On 9/15/24 17:14, Kenneth Crudup wrote:
+
+> ... and it turns out that my crashes on the CalDigit TB4 dock are 
+> probably related to a Thunderbolt-to-NVMe enclosure that was always 
+> plugged into to the dock; apparently when resuming "something" was 
+> waiting for the now-disconnected NVMe drive to come back, leading to the 
+> hangs. Disconnecting the enclosure from the dock seems to prevent the 
+> resume crashes.
 > 
->  drivers/usb/typec/class.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 9262fcd4144f..179856503d5d 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -230,7 +230,8 @@ static int altmode_match(struct device *dev, void *data)
->  	if (!is_typec_altmode(dev))
->  		return 0;
->  
-> -	return ((adev->svid == id->svid) && (adev->mode == id->mode));
-> +	return ((adev->svid == id->svid) &&
-> +		(adev->mode == id->mode || adev->mode == TYPEC_ANY_MODE));
->  }
->  
->  static void typec_altmode_set_partner(struct altmode *altmode)
-> -- 
-> 2.46.0.792.g87dc391469-goog
-> 
+> I may try and root-cause that issue later, if I have time.
+
+So I've determined this problem happened somewhere between 6.10.8 and 
+6.10.9; I don't always have the affected hardware so it'll take me a 
+couple of days to bisect the issue, but at least I have an idea on where 
+the problem is.
+
+What's interesting is testing using the NVMe-to-TB adaptor directly into 
+the laptop isn't enough to trigger the crashes, it has to be plugged 
+into the CalDigit TB4 dock at suspend time to trigger a hang on resume 
+if the CalDigit dock is disconnected in between.
+
+-Kenny
 
 -- 
-With best wishes
-Dmitry
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
 
