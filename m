@@ -1,149 +1,135 @@
-Return-Path: <linux-usb+bounces-15444-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15446-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE6E6986133
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 16:42:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E32B986350
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:23:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B1801C2695B
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 14:42:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E72F528B595
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 15:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27ED9187344;
-	Wed, 25 Sep 2024 14:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BA322EE4;
+	Wed, 25 Sep 2024 15:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jm2x4cJD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U9Fe9Oh8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F043F190470
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 14:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08141D5AAA;
+	Wed, 25 Sep 2024 15:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727272941; cv=none; b=TWyn4D0OKgY8oGqkiW2BdKuIy691XN4Zxc7A5Sg5NiYyeNGT1zgmSUc7e0+dOoNAq5BfFG4tu3k2vkX6RyN2PaNqivpqalYV0rvisd202kKNirbHCAJq/EOKxJ4R8F8X4Jv5+35MfYYvLL8hGiP4LltI7o5rYYkJDWrS3aHrNYs=
+	t=1727276708; cv=none; b=fMYRLdOblJbZDD+MbTiFhC8KRIAPH4/v3TpoC0I3pChTA9lrAEcEWikq5tnezkzrPEItiKxebdqlm6XVHXwWBRmvy4XNojYyh+8HsMgxwb2xn0FslqWmlWYwz88gFO2IrBE6D9wNbLlSALtpV/dAyM/1qsJMwNP52xCHUxLzKEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727272941; c=relaxed/simple;
-	bh=8YDbIe30UvCTr+iYs9UYlXuVaHXcwLqJ6aCT2H4HVPQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NZG2S28X0qt9qv0CGGLJ5GgG0RxTSGQANRZXtZ6SskO4VvQuP93R3r13XiYFcPcUBs6X8zuWWbwfOQXDhdnlx78mckfpQ9qj0sYeeSkTo1HCFNlcaHS6zDcY/BVa88/yI0b7r2A1PNPtVx1x7fNTNquPqjqOCa9rBSZS9m5hqt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jm2x4cJD; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6d9f65f9e3eso59784417b3.3
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 07:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727272939; x=1727877739; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ToUKIzEuriYR9o6QD0qmgl4Fmelj6t2JR4wuG3YJ1Ec=;
-        b=Jm2x4cJDhL9aeCvoBj26hX7AJYtpH28Rw6yhcsDcFUtiyoskD4xT/cVvWWm9k4wHNL
-         ytsm7ISRQritfJidLUZBAbALxSZu5/djTbg5P/KKe/LfNJCmNiiBIdu2nJc5kcWCm7xD
-         HkbEfW38ePft7IMtJFF06W1vT3gnWHtwsUBlmwbwAekUpon7b/hZjLM1LGD84tUOEarL
-         pELarkq7fhcdfw2DK1zgUWeFxLwaeWwLYHcMKgquR4Uj3oIjByZFzaMFruu1lRRuaVVI
-         F8akQ1LfsllfeUk6dU/Am8Vv7EPdP/MiGm7HXYsZCqBvMFnXkvi24Wo8gF1YubBHd57w
-         +efA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727272939; x=1727877739;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ToUKIzEuriYR9o6QD0qmgl4Fmelj6t2JR4wuG3YJ1Ec=;
-        b=ngr/Qv7KjXtmWcX4TMoI4EQwMvGMprfBKvfdtZebWB62kmKrQ3sV+uA+Zo58ML2SYx
-         nzhdUgwA7mBIr7hddaoJxwSNj5iIw7/bxrbbLVo5x26v2eZW/fSU+fScU6l/OhI5Lubc
-         2X5qmQ1bv5Rmfb8Edimwc0S3b+jlQeJxngm1iNEvFRDw4jueRbE5mamj6GCdjZCPIJIT
-         Cxmlj8EmGfv3mA5RNkRCNcT34nACbuGWCBxSdxngqZUrH1KZ0JwJ4Gu7UoDfBmS/P1IB
-         Uy5IsBm3PG84civjHQjQH6uImIy7DE7CrLItx+ryfKtDSbDj5efTq/hP+1vwbIhpcUZ7
-         /78Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVjqNkyejsg9miQ50pB4aGg/jLzzWUdSg31Wxgjt/06u41uUl+Xo/3ULvcywwaE0Jvb73LTC96zsHA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNrwZ1UIi/N+c0EcMj16XIvCvF15cQLxMgfT23hHxMJtoess1X
-	BzaT4OHy7JiswFmyMrJz/s8Ps7V9mKWHQttwcOpY9cRFyTqeGruvBMUjwQOUuDl2aC0qddAhvRM
-	CFN0ieJEYXrOH2/o+/ihu0bPjueIjbAQbWQCDkA==
-X-Google-Smtp-Source: AGHT+IE841pjxIKVha/+JpcEn2ee0Lx4ty464a7C8jVO8vOObnE+8Yr/dOWMzAzJZ++Do5wiVDiWTFPS1iajgW2vevE=
-X-Received: by 2002:a05:690c:67c7:b0:6dd:bcfd:f168 with SMTP id
- 00721157ae682-6e21d833475mr25994197b3.18.1727272938607; Wed, 25 Sep 2024
- 07:02:18 -0700 (PDT)
+	s=arc-20240116; t=1727276708; c=relaxed/simple;
+	bh=7vCwXwDG+bsxtvd02iytviiUSMi6iO6Ybyp3t8WIe5Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EQu8t/nznrNR3OkpPm6MsAyiFJv4qtrSfl63IbksG79098MUJJAQGF5apIT32M5yxf7DTU+/qv3K1WbeJ6EADbYo8zcuUVphfpBSv62zKej6/VJLMxx/a6vjzygD8AAD1z3pYvHJCb4BVHAi8UlGtgO3BqkXB8kF65K3WyF0JiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U9Fe9Oh8; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727276707; x=1758812707;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7vCwXwDG+bsxtvd02iytviiUSMi6iO6Ybyp3t8WIe5Y=;
+  b=U9Fe9Oh85bH/PdB5ZG1jCEY+QRRj55hwj7XIodC22A7jYo4Avc+wg1mO
+   PGMKuVlUAk2Yp5qlPefe8EQdkgRtupzwPWIcsCkpdcxTJA86bMYKunnBY
+   0BhcRhC9H13g8i/TvbEMBS8B5UEMqZUWaGkeCRnCRlP2zFI7FWfUOq/Uu
+   DPXzVp1MPW4DZkBiWIxamV+QfzF9setHH/7SDNONg3wVw91hAwssItPVR
+   e4lVtB4qJsUaXtnSa1sweti1avul1ZL7dNvtl0yhuMFIsELtciHHRhyNj
+   grt1cIIuCfbZsx+h4CN5cqrePfF7gLO2suIhGO5RRfarndugLf/vbd+Ms
+   Q==;
+X-CSE-ConnectionGUID: dhq0LvMBQ+SbeGGKCscbqQ==
+X-CSE-MsgGUID: 8a9LlwOmQGekzzPceke9SQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="26482876"
+X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
+   d="scan'208";a="26482876"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 08:05:06 -0700
+X-CSE-ConnectionGUID: KkJZz6O4SrW69iXt+QA+QQ==
+X-CSE-MsgGUID: dfMikm4UR6+Y2DTcJrvcFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
+   d="scan'208";a="76317626"
+Received: from kniemiec-mobl1.ger.corp.intel.com (HELO [10.245.246.30]) ([10.245.246.30])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 08:05:01 -0700
+Message-ID: <52f10356-ecf7-4c92-b0c3-78f7a63ae85c@linux.intel.com>
+Date: Wed, 25 Sep 2024 16:22:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240826081900.2284-1-liulei.rjpt@vivo.com>
-In-Reply-To: <20240826081900.2284-1-liulei.rjpt@vivo.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 25 Sep 2024 16:01:41 +0200
-Message-ID: <CAPDyKFqJAwr7S9nMywnEica77+UeT9pbbcZ05g7+xmT_1Xtd7Q@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] usb drivers use devm_clk_get_enabled() helpers
-To: Lei Liu <liulei.rjpt@vivo.com>
-Cc: Neal Liu <neal_liu@aspeedtech.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Daniel Mack <daniel@zonque.org>, 
-	Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
-	Conor Dooley <conor.dooley@microchip.com>, Daire McNamara <daire.mcnamara@microchip.com>, 
-	Bin Liu <b-liu@ti.com>, =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v28 12/32] ALSA: usb-audio: Save UAC sample size
+ information
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
+ lgirdwood@gmail.com, tiwai@suse.com, krzk+dt@kernel.org,
+ Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, robh@kernel.org,
+ gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-doc@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20240925010000.2231406-1-quic_wcheng@quicinc.com>
+ <20240925010000.2231406-13-quic_wcheng@quicinc.com>
+Content-Language: en-US
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20240925010000.2231406-13-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 26 Aug 2024 at 10:19, Lei Liu <liulei.rjpt@vivo.com> wrote:
->
-> The devm_clk_get_enabled() helpers:
->     - call devm_clk_get()
->     - call clk_prepare_enable() and register what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
->
-> This simplifies the code and avoids calls to clk_disable_unprepare().
 
-As I stated on another thread too [1], using devm_clk_get_enabled()
-isn't solely a nice cleanup of the code. It may actually introduce a
-change in behaviour. Therefore, I would not recommend applying that
-kind of changes, unless some of the maintainers acks it or it gets
-tested on real HW.
 
-Kind regards
-Uffe
+On 9/25/24 02:59, Wesley Cheng wrote:
+> Within the UAC descriptor, there is information describing the size of a
+> sample (bSubframeSize/bSubslotSize) and the number of relevant bits
+> (bBitResolution).  Currently, fmt_bits carries only the bit resolution,
+> however, some offloading entities may also require the overall size of the
+> sample.  Save this information in a separate parameter, as depending on the
+> UAC format type, the sample size can not easily be decoded from other
+> existing parameters.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 
-[1]
-https://lore.kernel.org/all/20240827074857.2671808-1-xirui.zhang@vivo.com/
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
->
 > ---
-> version 3 changes
-> Fix the email thread.
->
-> ---
-> version 2 changes
->
-> The files ux500.c, mpfs.c, and pxa27x_udc.c have incorrect usage of
-> certain interfaces due to the lack of synchronization during the
-> commit updates. These issues have been corrected in the v1 version.
->
-> 1.ux500: Incorrect usage of clk_prepare_enable() should be corrected to
->   devm_clk_get_enabled().
-> 2.mpfs: Incorrect usage of devm_clk_get_enable() should be corrected to
->   devm_clk_get_enabled().
-> 3.pxa27x_udc: Incorrect usage of clk_prepare_enable() should be
->   corrected to devm_clk_get_enabled().
->
-> Lei Liu (5):
->   usb: aspeed_udc: Use devm_clk_get_enabled() helpers
->   usb: pxa27x_udc: Use devm_clk_get_enabled() helpers
->   usb: r8a66597-udc: Use devm_clk_get_enabled() helpers
->   usb: mpfs: Use devm_clk_get_enabled() helpers
->   sb: ux500: Use devm_clk_get_enabled() helpers
->
->  drivers/usb/gadget/udc/aspeed_udc.c   |  9 +--------
->  drivers/usb/gadget/udc/pxa27x_udc.c   |  6 +-----
->  drivers/usb/gadget/udc/r8a66597-udc.c | 16 ++++------------
->  drivers/usb/musb/mpfs.c               | 22 ++++++----------------
->  drivers/usb/musb/ux500.c              | 18 ++++--------------
->  5 files changed, 16 insertions(+), 55 deletions(-)
->
-> --
-> 2.34.1
->
->
+>  sound/usb/card.h   | 1 +
+>  sound/usb/format.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/sound/usb/card.h b/sound/usb/card.h
+> index 4f4f3f39b7fa..b65163c60176 100644
+> --- a/sound/usb/card.h
+> +++ b/sound/usb/card.h
+> @@ -15,6 +15,7 @@ struct audioformat {
+>  	unsigned int channels;		/* # channels */
+>  	unsigned int fmt_type;		/* USB audio format type (1-3) */
+>  	unsigned int fmt_bits;		/* number of significant bits */
+> +	unsigned int fmt_sz;		/* overall audio sub frame/slot size */
+>  	unsigned int frame_size;	/* samples per frame for non-audio */
+>  	unsigned char iface;		/* interface number */
+>  	unsigned char altsetting;	/* corresponding alternate setting */
+> diff --git a/sound/usb/format.c b/sound/usb/format.c
+> index 3b45d0ee7693..5fde543536a8 100644
+> --- a/sound/usb/format.c
+> +++ b/sound/usb/format.c
+> @@ -80,6 +80,7 @@ static u64 parse_audio_format_i_type(struct snd_usb_audio *chip,
+>  	}
+>  
+>  	fp->fmt_bits = sample_width;
+> +	fp->fmt_sz = sample_bytes;
+>  
+>  	if ((pcm_formats == 0) &&
+>  	    (format == 0 || format == (1 << UAC_FORMAT_TYPE_I_UNDEFINED))) {
+
 
