@@ -1,134 +1,137 @@
-Return-Path: <linux-usb+bounces-15470-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15472-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A6F79865A2
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:31:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E2619865A5
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:33:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBF7AB22DBB
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:31:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CACFB1F21836
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:32:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF53E57880;
-	Wed, 25 Sep 2024 17:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6477C7D3F1;
+	Wed, 25 Sep 2024 17:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="M4mDH0/i"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Fq251lVT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD7722EE8
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 17:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058B712E71;
+	Wed, 25 Sep 2024 17:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727285509; cv=none; b=dTvtp0xjWe00OGF3YFpO2+LwnQtMesuvoKMu1kFmcuf0ZExQgZCJnUcasDrjWuOSMuKLg4tze7LlvYYrrEyCsi4LVwydjvITcC2MIZ1kKYxH0dmmlWis1l3zWIq0xk6cIAnYXD33CRMIN39W5YQ3eqH5XeI+eFAtnci7e7BMHsQ=
+	t=1727285571; cv=none; b=jqbxOPgFLSh0dsnPxfC+711JdizcVXsV4pQ8yocTDlGrpO50zbwzRf42uTvdfUsIDTYi3+SQ73K7Mv7NpttvwKp95CxCMAtVTYQuOfKZMC7CWJbIHvfKxWAFts+aeutXwU1iYrZv3XZRH1EYZnlpyEugGadog72Ploy86tKXsC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727285509; c=relaxed/simple;
-	bh=AsiidYyDiQ7aCzf8VNXogBUE8Ky+6+7IQkomdzNyO1Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nkq6PXzx5WII6zYRZAgUUIXZlbpAjwYlt4R/YwdPf+m3DTV0pIYO6GDkqlS6EcL4pK3Z27MtXRKCDZiRAKuRdorLDzx4auIoqZ/8DBVCZPGTmPvwaS5hl9ATFZzNXk+GeqaHxoMXakzygdD9921g0giU3Ej20Aun+rtWjCtqgNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=M4mDH0/i; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e1a90780f6dso102012276.0
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 10:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1727285507; x=1727890307; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=foQOdpYay332QgWU2K1U9huYqUmxout+sEt9nqJbTuc=;
-        b=M4mDH0/iypWi+S+UHz7k2z1zL/YZcTrFCs8Mw8YDRCIa7vQ+5PLkt3t9Zzda14oR6n
-         J9to4j6u5WdJydlM9vIKODWRbLF0xRmkzOef9ipDd5CG6BC3yUKheVtnfLCZCCh2Ur4w
-         4Y71qDK6S0Ze5pSoI5F1UCjQuP6qst8n3nnFw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727285507; x=1727890307;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=foQOdpYay332QgWU2K1U9huYqUmxout+sEt9nqJbTuc=;
-        b=YH8OzivgKsbJJCohnF/oUHSrC5npnGswoemrhAftDsHI9Xs4DVa8ssfv51rbdE/Qz+
-         HA/+pfVvGj0CutBroK4H70f8MprDFeqQKu5P0bw2vqR2tX0QSBaFpYiLW6f2oZpOBTZ4
-         37w+Ugm8Tdx4D7lZWlPJu9KI3Ue1E1zY9jC460bVbYPU7rxXcrL1laYjv5GsGe45h8CX
-         WIsUHuQpefhAJKQVnY4RHlyB9Pb05m/J7wm71ulLY1KWasIWyU7LrPLMfPKRZ0klCS4e
-         o+t6T505Zr2yS9znryZSC02eDDltb61oPNHLtdfKmOA+veVb9pjtkfBcnYTRPkkn0hXi
-         Fxlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWGtPgA5/V9pibLXNSmeBWCDCON7hMqTBg63BMTq5+qM1bjxzFllSOeliDlZWCVxHxHyqKZCftUlIE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVQNMfEJ5HzfLXGZyWyhFTH1ct47K9r542bOXqaGQYmaeCkqe0
-	4vsDR2ZSCCI7bfXM5BYx2o/mEHZb6Jlej6QefoABLujVKwysKllZgVDMYOMXukkFb5qVHbNa1GV
-	sq6j33kdsgwiJJQcuoaL2XzIyQ4tRbYusHI6L
-X-Google-Smtp-Source: AGHT+IGDyjRSElFnaMnXIeXsT+1r7wgSbMDhOYbLu5UUMTpYavmhKmGkvO/4gbtslkfwpxqyNkClPrrpGW6Xol0KjPs=
-X-Received: by 2002:a05:690c:2e88:b0:6e2:413:f19 with SMTP id
- 00721157ae682-6e21d84c892mr27692897b3.27.1727285506776; Wed, 25 Sep 2024
- 10:31:46 -0700 (PDT)
+	s=arc-20240116; t=1727285571; c=relaxed/simple;
+	bh=e740feuL2tObzG4lWI+nWxD4GvdBQTkreTYN1D1Sphc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=qyfdsAiXJ0tUYZ4j/a7wWROdbdEC5UAtoIEEnL6KJpZT3ikHqRdMEacPIXu3NGfRsDEcMBQmU9rGtwmaMfQo+3fljv8wEwoP0RqIQh6ckONe67PElpiawH7XV843iaRwljSFE0DvdsN5hf3CJYj4j3s+dn5hw1ZrTVoRkmJkBkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Fq251lVT; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1727285554; x=1727890354; i=markus.elfring@web.de;
+	bh=eFB3Ldx/KWMS5UjoX9kHPfNx7iFSTxjpoJqpFKbcd5M=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=Fq251lVTbYzER3E+YygByzuy56H74TNfG2P369lFjmnap7LX719JBW+WayVNgugy
+	 vwOkWQ4bYP9cG7mv72Z4QH813A4/jQP5bLIEULzY+kW9JewAph5qtUoDrB8Mt81AO
+	 FzmmCy/PwIKzZtv78g+2ZJrthuBxBrv3ewZEI3rrEWpzg09yiRFvC9hP2ZZEuso+i
+	 KrRtlXW8+sl0X+AjSDhY76Qx+tGZ0LVTV1y3c3yUBrs/vlGored6A/f3wkZsBeAVq
+	 INq9I7we7SJMoizGW5z7W27kIfc8Pj7zCygsDxAAIl/XuKGOqpqHvcDWPrRObQtDe
+	 J1XLgK1n3mWJHMQarQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mrfou-1s6D5C1Mcm-00nAO9; Wed, 25
+ Sep 2024 19:32:34 +0200
+Message-ID: <983e8bde-513c-4053-b33e-06a1b10eef87@web.de>
+Date: Wed, 25 Sep 2024 19:32:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925162513.435177-1-abhishekpandit@chromium.org>
- <20240925092505.2.Ie0d37646f18461234777d88b4c3e21faed92ed4f@changeid> <oedfq4fkjlbalytba7fxg462tyutgxxk5wnhg2mhkfevclv33q@ugc472nkwpo6>
-In-Reply-To: <oedfq4fkjlbalytba7fxg462tyutgxxk5wnhg2mhkfevclv33q@ugc472nkwpo6>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Wed, 25 Sep 2024 10:31:33 -0700
-Message-ID: <CANFp7mXEx370EpWPcsFpiN9jW0iJzjr1povO89bTRX91dZ3XQQ@mail.gmail.com>
-Subject: Re: [PATCH 2/8] usb: typec: altmode_match should handle TYPEC_ANY_MODE
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org, jthies@google.com, 
-	pmalani@chromium.org, akuchynski@google.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH 1/2] usb: typec: ucsi: ccg: Use common code in ccg_write()
+From: Markus Elfring <Markus.Elfring@web.de>
+To: linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Haotien Hsu <haotienh@nvidia.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Utkarsh Patel <utkarsh.h.patel@intel.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Wolfram Sang <wsa@the-dreams.de>
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
+References: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
+Content-Language: en-GB
+In-Reply-To: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:IS6aRcqyCh4ShCkWylyOYBJFLKIHIsPmw51lV+PVy2VffuHddwz
+ 9DfuAXkv/mZs+P5r168V1HOr5HgfWNyaqlh1c+wP1/geHJ35qPgfCG7VAoKYUettkZNDEPb
+ rX1iMf/vc9nL4taL91b5GwJ8CB6j3TXU12kNUiwIhc4/jHqPThGozGjdGfr+939yeMmEVWb
+ wy2/eCqrRmcoItRMQojpw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:eo/eXcNSpAs=;0Z8ZaXSpKKLNG4DTj6kFFrSzBPk
+ d6Qq1wrRM2zCMQAWCwaX4fiT8mYiY+EYrO0Pj/4zLOfdDBoXsDJzA7eEVf724es49RyTho4+u
+ NOQBrV0qvKYd469NrIQZTnDuddNm73Wa37kUQrAbfOlo/j/iTS90rsBsBRJMNCVfVCm+Ldsux
+ thzzYN2tQoR1lvpgJEuxdO0/sRQ3822TlfZOfNa9TEjo3S0uYGDP7YoJAJaW2UGeyZ2iixT2r
+ acWDTXsS1mwtCyQYj00fmcyDDJybQ6q+qpDVSsUw15UFcrK3XsGSbMAXAXiHgLMoPPOYLKbyT
+ j6iuw7QQXiCAS/guV0YIJQ0tz0IXVE7+JVuLzDMllS+m6ZR9lFAzJyL3tc3OK1oc2sg2fjKhO
+ G3cw6WTCxb+bSouc7LJt93Yj5R7dFguLNtcuF+n1CbstGNqy99gVb4WZxkc4cH61mnKuK3HH9
+ l2bvsbsBx1NWn72xAx1Ux+rx/IPq/8gye5HnZSEcqalfR5Jgqbo3yXhvJkIKqKd8nfnkiWQM7
+ 2B3i1JDjJAF37yPmhxioMUb5b1Irk9UzzphqUr7tfvBCZlUoNct919KoZGnnlto0ex6VTZLvu
+ 0d7V8D8K1cAfw0DLY3w7T1j+76QWPd17TJMZYZlfliIZs6C1WnZ3jyeTb7E7zt1I6VURGck8/
+ BCP14+fzflYjJRGhhb5stawpVSH4cOl+twtIhcowrbQhb60++6jmIOQBE0dLc918pPfCZrxA5
+ rj9ef9sea869Xzkpdh+fLu2+qO/ZSJEwi4ztFu18ajlNbwRosTEtFI+fRwtiLjkFwgRh7pz73
+ McMwiu2JxsADQU3ab3tjLPXg==
 
-On Wed, Sep 25, 2024 at 9:54=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Wed, Sep 25, 2024 at 09:25:03AM GMT, Abhishek Pandit-Subedi wrote:
-> > altmode_match is used when searching for the first port altmode that
-> > matches the partner or plug altmode. If the port registered with mode
-> > set to TYPEC_ANY_MODE, it should always match if the SVID matches.
-> >
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> Fixes?
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Wed, 25 Sep 2024 19:00:23 +0200
 
-This is new for Thunderbolt which registers as TYPEC_ANY_MODE so
-there's no FIXES. I think Heikki may need to chime in on how the
-`mode` is supposed to be used.
+Add a label so that three statements can be better reused at the end of
+this function implementation.
 
-IMO, it may be appropriate to get rid of the mode check entirely.
+This issue was detected by using the Coccinelle software.
 
->
-> > ---
-> >
-> >  drivers/usb/typec/class.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> > index 9262fcd4144f..179856503d5d 100644
-> > --- a/drivers/usb/typec/class.c
-> > +++ b/drivers/usb/typec/class.c
-> > @@ -230,7 +230,8 @@ static int altmode_match(struct device *dev, void *=
-data)
-> >       if (!is_typec_altmode(dev))
-> >               return 0;
-> >
-> > -     return ((adev->svid =3D=3D id->svid) && (adev->mode =3D=3D id->mo=
-de));
-> > +     return ((adev->svid =3D=3D id->svid) &&
-> > +             (adev->mode =3D=3D id->mode || adev->mode =3D=3D TYPEC_AN=
-Y_MODE));
-> >  }
-> >
-> >  static void typec_altmode_set_partner(struct altmode *altmode)
-> > --
-> > 2.46.0.792.g87dc391469-goog
-> >
->
-> --
-> With best wishes
-> Dmitry
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/uc=
+si_ccg.c
+index b3ec799fc873..ed075a403d87 100644
+=2D-- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -306,14 +306,14 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, c=
+onst u8 *data, u32 len)
+ 	status =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+ 	if (status < 0) {
+ 		dev_err(uc->dev, "i2c_transfer failed %d\n", status);
+-		pm_runtime_put_sync(uc->dev);
+-		kfree(buf);
+-		return status;
++		goto put_sync;
+ 	}
+
++	status =3D 0;
++put_sync:
+ 	pm_runtime_put_sync(uc->dev);
+ 	kfree(buf);
+-	return 0;
++	return status;
+ }
+
+ static int ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
+=2D-
+2.46.1
+
 
