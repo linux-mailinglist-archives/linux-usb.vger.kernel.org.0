@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-15472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15473-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E2619865A5
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:33:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BAF59865AA
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:34:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CACFB1F21836
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:32:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01E79285D9F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6477C7D3F1;
-	Wed, 25 Sep 2024 17:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB6881AD2;
+	Wed, 25 Sep 2024 17:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Fq251lVT"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="xCZF/620"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058B712E71;
-	Wed, 25 Sep 2024 17:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501851D5AC0;
+	Wed, 25 Sep 2024 17:34:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727285571; cv=none; b=jqbxOPgFLSh0dsnPxfC+711JdizcVXsV4pQ8yocTDlGrpO50zbwzRf42uTvdfUsIDTYi3+SQ73K7Mv7NpttvwKp95CxCMAtVTYQuOfKZMC7CWJbIHvfKxWAFts+aeutXwU1iYrZv3XZRH1EYZnlpyEugGadog72Ploy86tKXsC8=
+	t=1727285643; cv=none; b=bgg/tE5I4BGKS1pwHz2sllghNWXnmb296XGw2ct/0Yvj6IgCnw7KfdISVkt0kOwlPRPfQKfnxuX7A9uxYTlzWT2ZVtqEHIJPptbhc6XtfAdtTswNY1WAGKgqu3tGcL9bSaw7fkPicgK3vbWkw8d6DukdF1ZwUCLXnV0rcqb4qBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727285571; c=relaxed/simple;
-	bh=e740feuL2tObzG4lWI+nWxD4GvdBQTkreTYN1D1Sphc=;
+	s=arc-20240116; t=1727285643; c=relaxed/simple;
+	bh=4/NEIAsBtB7blCG4wuSJkRPHzgJJT3t+tm/XzE92nXg=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=qyfdsAiXJ0tUYZ4j/a7wWROdbdEC5UAtoIEEnL6KJpZT3ikHqRdMEacPIXu3NGfRsDEcMBQmU9rGtwmaMfQo+3fljv8wEwoP0RqIQh6ckONe67PElpiawH7XV843iaRwljSFE0DvdsN5hf3CJYj4j3s+dn5hw1ZrTVoRkmJkBkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Fq251lVT; arc=none smtp.client-ip=212.227.15.14
+	 In-Reply-To:Content-Type; b=Lsi+x/TsOy294pdz7rmgZqydVeW4ejwpS9ALNO4lXjq2ZQo+TfO4tlKI1G/742DFQlb/oTz3tTy0FeO2v1Wx0mN8Nx+6fO13jhSoocNdTuAR8bjxDUOW95+qv0YDrqauZCEitisZkOsPo5RAmYYIEexcSTYJPslChWFd5XkrMTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=xCZF/620; arc=none smtp.client-ip=212.227.15.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1727285554; x=1727890354; i=markus.elfring@web.de;
-	bh=eFB3Ldx/KWMS5UjoX9kHPfNx7iFSTxjpoJqpFKbcd5M=;
+	s=s29768273; t=1727285629; x=1727890429; i=markus.elfring@web.de;
+	bh=Ncba3K1JtxujF8pca90omffguLowNeWnysl8nMmFl3c=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
 	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
 	 cc:content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=Fq251lVTbYzER3E+YygByzuy56H74TNfG2P369lFjmnap7LX719JBW+WayVNgugy
-	 vwOkWQ4bYP9cG7mv72Z4QH813A4/jQP5bLIEULzY+kW9JewAph5qtUoDrB8Mt81AO
-	 FzmmCy/PwIKzZtv78g+2ZJrthuBxBrv3ewZEI3rrEWpzg09yiRFvC9hP2ZZEuso+i
-	 KrRtlXW8+sl0X+AjSDhY76Qx+tGZ0LVTV1y3c3yUBrs/vlGored6A/f3wkZsBeAVq
-	 INq9I7we7SJMoizGW5z7W27kIfc8Pj7zCygsDxAAIl/XuKGOqpqHvcDWPrRObQtDe
-	 J1XLgK1n3mWJHMQarQ==
+	b=xCZF/620fc4fEot+ULALOvhqAkDQZSJTP7uknZnnq7J68A0xsRm0fW6if9SC0apW
+	 V3aoi870KiaPuJg9dAS+8MJVQ+RGUF4RvWy75xNYj4iInPKNuy6nPaCTFnPXjf6ZA
+	 5SikgAlBzr02scTMQLM/eGkERQsiQKcHXE9JMqQD3yihDp6HBDkHJjhP4lvdmcGuQ
+	 WmRCW4fZL2hrKpeXcCSA2KyQGVHIsW1funj1T1Bb/TIjnZ9jmE77Vlo6VBWl547ZG
+	 Jwdyge7AckuIsywPjcIY4IpDpGes6Iamohia4ZlMYXqdY/HDHZSJmOOgdro5MB67B
+	 A4YU1/AS5bR8zQMDAA==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
 Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mrfou-1s6D5C1Mcm-00nAO9; Wed, 25
- Sep 2024 19:32:34 +0200
-Message-ID: <983e8bde-513c-4053-b33e-06a1b10eef87@web.de>
-Date: Wed, 25 Sep 2024 19:32:32 +0200
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N30dV-1rvOFc0j0v-012ma3; Wed, 25
+ Sep 2024 19:33:49 +0200
+Message-ID: <a4087943-ee25-4e05-80c4-02a77196848b@web.de>
+Date: Wed, 25 Sep 2024 19:33:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 1/2] usb: typec: ucsi: ccg: Use common code in ccg_write()
+Subject: [PATCH 2/2] usb: typec: ucsi: ccg: Use common code in ccg_read()
 From: Markus Elfring <Markus.Elfring@web.de>
 To: linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>,
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -74,63 +74,63 @@ Content-Language: en-GB
 In-Reply-To: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:IS6aRcqyCh4ShCkWylyOYBJFLKIHIsPmw51lV+PVy2VffuHddwz
- 9DfuAXkv/mZs+P5r168V1HOr5HgfWNyaqlh1c+wP1/geHJ35qPgfCG7VAoKYUettkZNDEPb
- rX1iMf/vc9nL4taL91b5GwJ8CB6j3TXU12kNUiwIhc4/jHqPThGozGjdGfr+939yeMmEVWb
- wy2/eCqrRmcoItRMQojpw==
+X-Provags-ID: V03:K1:SsNe3ae79w4xuRU/j0Q+YcQzcKuXPrio8gkoBUw9g0TxFTtZ6Lb
+ rZoT2n2dS1CHwTok3vGHwiPETf1xplcXlfwSG4bYSYMHj0lgBowKWMKB3Iuu2QcnTDbomAG
+ 7o2nFC6fHxRMgTqYnpjKoU22hFm1DCsJMF79vVqI7Pf2mOoc7gRgSc3/uT6xkssxLbTNdwk
+ EXYN0ES3O2n4ye65YID3g==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:eo/eXcNSpAs=;0Z8ZaXSpKKLNG4DTj6kFFrSzBPk
- d6Qq1wrRM2zCMQAWCwaX4fiT8mYiY+EYrO0Pj/4zLOfdDBoXsDJzA7eEVf724es49RyTho4+u
- NOQBrV0qvKYd469NrIQZTnDuddNm73Wa37kUQrAbfOlo/j/iTS90rsBsBRJMNCVfVCm+Ldsux
- thzzYN2tQoR1lvpgJEuxdO0/sRQ3822TlfZOfNa9TEjo3S0uYGDP7YoJAJaW2UGeyZ2iixT2r
- acWDTXsS1mwtCyQYj00fmcyDDJybQ6q+qpDVSsUw15UFcrK3XsGSbMAXAXiHgLMoPPOYLKbyT
- j6iuw7QQXiCAS/guV0YIJQ0tz0IXVE7+JVuLzDMllS+m6ZR9lFAzJyL3tc3OK1oc2sg2fjKhO
- G3cw6WTCxb+bSouc7LJt93Yj5R7dFguLNtcuF+n1CbstGNqy99gVb4WZxkc4cH61mnKuK3HH9
- l2bvsbsBx1NWn72xAx1Ux+rx/IPq/8gye5HnZSEcqalfR5Jgqbo3yXhvJkIKqKd8nfnkiWQM7
- 2B3i1JDjJAF37yPmhxioMUb5b1Irk9UzzphqUr7tfvBCZlUoNct919KoZGnnlto0ex6VTZLvu
- 0d7V8D8K1cAfw0DLY3w7T1j+76QWPd17TJMZYZlfliIZs6C1WnZ3jyeTb7E7zt1I6VURGck8/
- BCP14+fzflYjJRGhhb5stawpVSH4cOl+twtIhcowrbQhb60++6jmIOQBE0dLc918pPfCZrxA5
- rj9ef9sea869Xzkpdh+fLu2+qO/ZSJEwi4ztFu18ajlNbwRosTEtFI+fRwtiLjkFwgRh7pz73
- McMwiu2JxsADQU3ab3tjLPXg==
+UI-OutboundReport: notjunk:1;M01:P0:LLjNEI7QT00=;SyukQnnyxKKbHKL5rqOs3YFLnLN
+ vYuobNYilTJr95eChQ32Oyz1D7CtDGSZOZ2Oc87msTlM9vywRIMmuhSwSXKrR6nhHC0XTOGf0
+ IJ5aeF/zC8nDGosILKxZFnR8dqUSRVXikJ8kL8GujNKcMnrLmkWirbsFkKqYFcuVtyIJYKMdD
+ IF+RiC7bsZvdsOKJfuCmW7gWi2o82Qtp70yOE7kEtRTS+Cx9hNXDdgNUponoGPld1tgn+oNDh
+ 3Naeb5TifBSVtm5FFr6nLPeBoeYcqEEZrWXTKDNMllN6uPnlmmefr/gxFvjLSjixJEGTOMYrf
+ mE2hAVtLsDia/m21IhuCx19jdQVFeGeAorx+6G4V2Y69J4YefeXYWuG5p/De+ZV+0SLWEtyhO
+ fuye036+oOn2TM/11hV29yz73lJ7SjXT0jBhmnHUjgRzzK3EpQk7VXZ9JP4cSK5+ssuWYaNkW
+ zLPB/UH+ILf4xSV7l743pTXQn+91MYrbH/lT01/ZKLE20OyRAVOTp+dd+HOHH89TxqEebQ4HA
+ HSIB38ETeAzBboNO4AwdmKkLTU7dzQpwhVwcGEQADc1c/zzlYo3jrau0xHoPTJjYivsTxUGlM
+ S2yM5r17ai6dm8BSK13N1KnJQbZ/IwB+wN2cP5DZDA7cjTD/4cBZohGCDcA5eyDe+yHjA/44Z
+ 6zMRbeonGpcbB1aY4jO/Tqdli6sU60gS/p9qfdA7oMhT2lMETWbtqBvf3CLymq+PN3iScaVWa
+ 1mASUeORGph3CTnEkWbqpaftmqAk7e8CzBIvMHYOulr0d7UYWRgPPp0AqYA+tXkLzyXCMW02j
+ PFyKoVk10sA9QwAVKv2wgktA==
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Wed, 25 Sep 2024 19:00:23 +0200
+Date: Wed, 25 Sep 2024 19:08:07 +0200
 
-Add a label so that three statements can be better reused at the end of
+Add a label so that two statements can be better reused at the end of
 this function implementation.
-
-This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/usb/typec/ucsi/ucsi_ccg.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/uc=
 si_ccg.c
-index b3ec799fc873..ed075a403d87 100644
+index ed075a403d87..e3850c42583e 100644
 =2D-- a/drivers/usb/typec/ucsi/ucsi_ccg.c
 +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -306,14 +306,14 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, c=
-onst u8 *data, u32 len)
- 	status =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
- 	if (status < 0) {
- 		dev_err(uc->dev, "i2c_transfer failed %d\n", status);
--		pm_runtime_put_sync(uc->dev);
--		kfree(buf);
--		return status;
-+		goto put_sync;
+@@ -269,15 +269,16 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8=
+ *data, u32 len)
+ 		status =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+ 		if (status < 0) {
+ 			dev_err(uc->dev, "i2c_transfer failed %d\n", status);
+-			pm_runtime_put_sync(uc->dev);
+-			return status;
++			goto put_sync;
+ 		}
+ 		rab +=3D rlen;
+ 		rem_len -=3D rlen;
  	}
 
 +	status =3D 0;
 +put_sync:
  	pm_runtime_put_sync(uc->dev);
- 	kfree(buf);
 -	return 0;
 +	return status;
  }
 
- static int ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
+ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 le=
+n)
 =2D-
 2.46.1
 
