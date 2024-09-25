@@ -1,129 +1,233 @@
-Return-Path: <linux-usb+bounces-15409-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15410-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 122A398510C
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 04:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4522B98511B
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 04:51:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4295C1C21753
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 02:44:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67A951C22CE5
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 02:51:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BC01494C3;
-	Wed, 25 Sep 2024 02:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MtAgPLJ/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1D3149C4B;
+	Wed, 25 Sep 2024 02:51:03 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CD6647
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 02:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B0F647;
+	Wed, 25 Sep 2024 02:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727232267; cv=none; b=Ypp3vt8IJ8KQPf63MoDoFA56g6gxhzw96sAV0vTH3uuYvRShVjs5Hy5GYGxRE7uLyf+YXrOtMvUDhHQQd6EfU0wZonyJfxo4pyOvWQMxWQBH++6UkGPqL3i9mLwHXTh/xDpIiUkD5sU04FpGM6JY+w0G4NGFu4OP5XrXPUGmzqk=
+	t=1727232663; cv=none; b=NMWz+6b7Jcs7jCweBHxQ8aVob1lSUFAWkDKBjBpXVdcgwstXW1aqDF/ofCKAsmtcclca8wGoV14EJrX47AbEabP+TaDiFCwuMOkE92cMthzutC+x8xFFgQylqIcEnw9w+rPqJfQgBhbmyp/ARUBnDueJaoaS+IkCYqYz70LM1jQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727232267; c=relaxed/simple;
-	bh=n4vzVMJk/wnTZoLjPI6/94113lyUB4lEeWRcZRd99M4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgrlpFkWfxUDEj6epCh0v+uljIcLwCDgi4UTywb+j7Q2/ZqnrwFJyaOrowSXdqRG7EnktieuXm9aUNbg/T8Z8aLZlynKEfImlMHoJDaPOmEHfmb4muBYxB/53VtitFWhZ6W6us+hjS08FLU5qmLjO30x1Qa1NPoymnGKrnEpQCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MtAgPLJ/; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20b01da232aso930025ad.1
-        for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2024 19:44:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727232264; x=1727837064; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5u9fJUNtEJazJzPyTQOtG1FO6Z7cS1MgX+7pZ8RK+ts=;
-        b=MtAgPLJ/8BNj+j2n9NpzgVXS/nyxj2z1pFBVCFeRJUWGOoZBxWjaO66AKIce/xlX3k
-         L2jF2mNAmIvH9XI9h6/Djskf461Zxa+me8ksgNS5cb0Kgd16NsljUIen50E+ReCWhtUK
-         YOaR9rZzKUHbEOKCRbXA9NIBQcmO1vomUxxNXqPBTzYocYdWrQhndHZsPX7S9fiYIYja
-         shjcrrC56nlpOT/7hk0hbtKB10SUcxUizR3rpDrmHpSX6ua5IojtY6K3iNW8jd5y5YkW
-         7B+Jtr1SpOVS/HcDI+tUZyPNP2QrHBSb3JiXqIgzaW+5mGnhDek9V9IGhOgmMvOV/o3G
-         DBYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727232264; x=1727837064;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5u9fJUNtEJazJzPyTQOtG1FO6Z7cS1MgX+7pZ8RK+ts=;
-        b=AATydDP9+FHay11cdGfYKrJzHFE0LMrJg0AnW5uIh/qSGOOA1m9/SE4bNgzmVL/BJl
-         GW5RUV8CzASxoLpBl3pJT/KRTec55qqOVqC4a5vKXY6fZyhYguJeWnZNqG1gG12o2dBh
-         3JH02ko9ygbD51Ct4YbK713Ebp9slFXQA6rK9CU8iVuGckdvWvS9dg6E/v2mtD/df7Tb
-         m3imKOcCo7iu4V+UNKeKFHocbFPgBz54Mec+MQVk9h8zWU12rBUYJ5/HtMeLChzk9U89
-         hH3TpYlQSgzAhnOpztl57mSwoRO4sbiVt0REI9dg569E6AACJZ18sWq/4wPCfFTpKnya
-         LWrg==
-X-Forwarded-Encrypted: i=1; AJvYcCX6oY5aXFHPcdT5YSqLqqoE+CnSLgbqZgKbqWocyGtfyf2kUSkin6OiGdcqpc6Fxrz/ARlXo6u02K8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeMXWZH56uT21j6j2FqG4V1aBmgW/q09X57AXiO/+kAcYGCBhC
-	7x8AnGrDXcdSpKbA6+adY2FjwEiG3PR+2I+QAxR71i1kXIJmpu5VMPFKqWAtDQ==
-X-Google-Smtp-Source: AGHT+IFOu3sATw4O+ghyS7x5azvPQ4AJoo6YIcBuz/3H73r9HL0ro3DSjKBapUQ9ynom5wab2GLyuQ==
-X-Received: by 2002:a17:902:f644:b0:207:3a4c:8c6f with SMTP id d9443c01a7336-20afc436639mr16594225ad.29.1727232264093;
-        Tue, 24 Sep 2024 19:44:24 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:8:32ad:6c37:2d1:220a? ([2a00:79e0:2e14:8:32ad:6c37:2d1:220a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20af1859c00sm15796035ad.286.2024.09.24.19.44.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Sep 2024 19:44:23 -0700 (PDT)
-Message-ID: <d72cc89a-7f73-4294-927e-48e647e37310@google.com>
-Date: Tue, 24 Sep 2024 19:44:19 -0700
+	s=arc-20240116; t=1727232663; c=relaxed/simple;
+	bh=X4i0ZHgtKU7Kwg4TLW6QIIbvLLD68f4+T4tliHc1Q8s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SMVtvhzEir5tJp8eHDWalG5TB0S1jq5JBp5F9vm5ShgtrplTdiUQexD8gFjsQEbkzyZjDmITApkbaA5GBSK1G61UofFKNVn5h56TSOaIgHywdw1P2CZLpWovgwoy3DrqP02jK70K06ea659bn8mw81nFrUZkntRWWAS1umL7nQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f7d466be7ae811efa216b1d71e6e1362-20240925
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
+	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
+	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_UNTRUSTED, SA_LOWREP, SA_EXISTED, SN_UNTRUSTED, SN_UNFAMILIAR
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF
+	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
+	AMN_C_TI, AMN_C_BU
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:18718b90-26fc-4408-8b40-5aaaf0e9f18f,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-30
+X-CID-INFO: VERSION:1.1.38,REQID:18718b90-26fc-4408-8b40-5aaaf0e9f18f,IP:0,URL
+	:0,TC:0,Content:-25,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-30
+X-CID-META: VersionHash:82c5f88,CLOUDID:eff6b00a5657bc2d841e4c61fd906f9e,BulkI
+	D:240925105050B74JZEQX,BulkQuantity:0,Recheck:0,SF:66|38|17|19|102,TC:nil,
+	Content:0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:
+	0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-UUID: f7d466be7ae811efa216b1d71e6e1362-20240925
+X-User: dengjie03@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <dengjie03@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1752275317; Wed, 25 Sep 2024 10:50:48 +0800
+From: dengjie <dengjie03@kylinos.cn>
+To: rafael@kernel.org,
+	pavel@ucw.cz,
+	len.brown@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	xiehongyu1@kylinos.cn,
+	duanchenghao@kylinos.cn,
+	xiongxin@kylinos.cn,
+	dengjie <dengjie03@kylinos.cn>
+Subject: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
+Date: Wed, 25 Sep 2024 10:50:41 +0800
+Message-Id: <20240925025041.149206-1-dengjie03@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240923100553.119324-1-dengjie03@kylinos.cn>
+References: <20240923100553.119324-1-dengjie03@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v3 2/2] usb: typec: tcpm: Add support for parsing time dt
- properties
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, dmitry.baryshkov@linaro.org,
- badhri@google.com, kyletso@google.com, rdbabiera@google.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20240923224059.3674414-1-amitsd@google.com>
- <20240923224059.3674414-3-amitsd@google.com>
- <ZvK2slBHR8PhzaMt@kuha.fi.intel.com>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <ZvK2slBHR8PhzaMt@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Heikki,
+Reproduction of the problem: During the S4 stress test, when a USB device is inserted or
+removed, there is a probability that the S4 wakeup will turn into a reboot.The following
+two points describe how to analyze and locate the problem points:
 
-On 9/24/24 5:55 AM, Heikki Krogerus wrote:
-> Hi,
->
->> @@ -7611,10 +7650,13 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->>   	err = tcpm_fw_get_caps(port, tcpc->fwnode);
->>   	if (err < 0)
->>   		goto out_destroy_wq;
->> +
->
-> This extra newline is not relevant or necessary. Otherwise this LGTM:
+1. During the boot stage when S4 is awakened, after the USB RootHub is initialized,
+it will enter the runtime suspend state. From then on, whenever an xhci port change
+event occurs, it will trigger a remote wakeup request event and add wakeup_work
+to pm_wq, where the subsequent RootHub runtime resume process will be handled by pm_wq.
 
-Thanks for reviewing! Please let me know if I should upload a new set or 
-this is alright at this time?
+xhci runtime suspend flow：
+S4 boot
+   |->xhci init
+       |->register_root_hub
+	   |->hub_probe
+	       |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
 
---
+xhci runtime resume flow ：
+xhci_irq()
+    |->xhci_handle_event()
+	|->handle_port_status()
+   	    |->if(hcd->state == HC_STATE_SUSPENDED)
+		 |->usb_hcd_resume_root_hub()
+		    |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
+  		    |->queue_work(pm_wq, &hcd->wakeup_work)
+			|->hcd_resume_work()			       /* hcd->wakeup_work */
+			    |->usb_remote_wakeup()
+				|->callback = RPM_GET_CALLBACK(dev, runtime_resume)
+				    |->usb_runtime_resume()            /* usb runtime resume  */
+					|->generic_resume()
+					    |->hcd_bus_resume()
+						|->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+						  /* wakeup pending signal to be clear */
 
-Amit
+2. However, during the quiesce phase of S4 wakeup, freeze_kernel_threads() will freeze this pm_wq,
+and between freeze_kernel_threads() and dpm_suspend_start(), there exists a very time-consuming
+S4 image loading process. This leads to a situation where, if an xhci port change event occurs
+after freeze_kernel_threads(), triggering the wakeup pending signal to be set,but it cannot
+be processed by pm_wq to clear this wakeup_pending bit, it will result in a subsequent
+dpm_suspend_start() where USB suspend_common() detects the wakeup pending signal being
+set and returns an -EBUSY error, interrupting the S4 quiesce process and reverting to a reboot.
 
->
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->
->>   	err = tcpm_fw_get_snk_vdos(port, tcpc->fwnode);
->>   	if (err < 0)
->>   		goto out_destroy_wq;
->>   
->> +	tcpm_fw_get_timings(port, tcpc->fwnode);
->> +
->>   	port->try_role = port->typec_caps.prefer_role;
->>   
->>   	port->typec_caps.revision = 0x0120;	/* Type-C spec release 1.2 */
-> thanks,
->
+S4 wakeup
+    |->resume_store
+	|->software_resume()
+	    |->freeze_kernel_threads()		/* will freeze pm_wq */
+	    |->load_image_and_restore()
+		  |->swsusp_read()    	        /* S4 image loading: time-consuming .
+When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
+However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
+   		  |->hibernation_restore
+			|->dpm_suspend_start(PMSG_QUIESCE)
+			    |->hcd_pci_suspend()
+				|->suspend_common()
+				    |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
+
+Below is a description of the countermeasures taken to address this issue:
+1. Considering the restore process that occurs after the quiesce phase during S4 wakeup,
+which essentially resets all root hubs,checking this wakeup pending status in USB suspend_common()
+during the quiesce phase is of little significance and should therefore be filtered out.
+
+S4 wakeup restore phase
+    |->dpm_resume(PMSG_RESTORE)
+	|->hcd_pci_restore()
+	    |->xhci_resume()		       /* reset all root hubs */
+
+Fixes: 3904bdf0821c ("PM: hibernate: Freeze kernel threads in software_resume()")
+Signed-off-by: dengjie <dengjie03@kylinos.cn>
+---
+v2:
+	* Fix the formatting issues and function naming conventions in the v1 patch.
+v1:
+	* USB: Fix the issue of S4 wakeup queisce phase where task resumption fails
+ 	   due to USB status.
+---
+
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index fb4d18a0b185..7723e7082a36 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -559,6 +559,11 @@ bool dev_pm_may_skip_resume(struct device *dev)
+ 	return !dev->power.must_resume && pm_transition.event != PM_EVENT_RESTORE;
+ }
+ 
++bool pm_event_is_queisce(void)
++{
++	return pm_transition.event == PM_EVENT_QUIESCE;
++}
++
+ static pm_callback_t dpm_subsys_resume_noirq_cb(struct device *dev,
+ 						pm_message_t state,
+ 						const char **info_p)
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index 77830f120834..af2c60049e4a 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -456,18 +456,25 @@ static int suspend_common(struct device *dev, bool do_wakeup)
+ 		/* Optimization: Don't suspend if a root-hub wakeup is
+ 		 * pending and it would cause the HCD to wake up anyway.
+ 		 */
+-		if (do_wakeup && HCD_WAKEUP_PENDING(hcd))
+-			return -EBUSY;
+-		if (do_wakeup && hcd->shared_hcd &&
+-				HCD_WAKEUP_PENDING(hcd->shared_hcd))
++		/* Considering the restore process that occurs after
++		 * the quiesce phase during S4 wakeup, which essentially
++		 * resets all root hubs,checking this wakeup pending status
++		 * in USB suspend_common() during the quiesce phase is of
++		 * little significance and should therefore be filtered out.
++		 */
++		if (!pm_event_is_queisce() && do_wakeup &&
++		    (HCD_WAKEUP_PENDING(hcd) ||
++		     (hcd->shared_hcd &&
++		      HCD_WAKEUP_PENDING(hcd->shared_hcd))))
+ 			return -EBUSY;
+ 		retval = hcd->driver->pci_suspend(hcd, do_wakeup);
+ 		suspend_report_result(hcd->driver->pci_suspend, retval);
+ 
+ 		/* Check again in case wakeup raced with pci_suspend */
+-		if ((retval == 0 && do_wakeup && HCD_WAKEUP_PENDING(hcd)) ||
+-				(retval == 0 && do_wakeup && hcd->shared_hcd &&
+-				 HCD_WAKEUP_PENDING(hcd->shared_hcd))) {
++		if (retval == 0 && !pm_event_is_queisce() && do_wakeup &&
++		    (HCD_WAKEUP_PENDING(hcd) ||
++		     (hcd->shared_hcd &&
++		      HCD_WAKEUP_PENDING(hcd->shared_hcd)))) {
+ 			if (hcd->driver->pci_resume)
+ 				hcd->driver->pci_resume(hcd, false);
+ 			retval = -EBUSY;
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index 4c441be03079..dad87c9ecfee 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -758,6 +758,7 @@ extern void pm_generic_complete(struct device *dev);
+ 
+ extern bool dev_pm_may_skip_resume(struct device *dev);
+ extern bool dev_pm_smart_suspend_and_suspended(struct device *dev);
++extern bool pm_event_is_queisce(void);
+ 
+ #else /* !CONFIG_PM_SLEEP */
+ 
+-- 
+2.25.1
+
 
