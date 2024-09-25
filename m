@@ -1,137 +1,102 @@
-Return-Path: <linux-usb+bounces-15473-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15474-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BAF59865AA
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:34:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FAB89865B8
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01E79285D9F
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:34:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3932DB226FF
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:35:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB6881AD2;
-	Wed, 25 Sep 2024 17:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1F613698E;
+	Wed, 25 Sep 2024 17:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="xCZF/620"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpOLuYnE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501851D5AC0;
-	Wed, 25 Sep 2024 17:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2A777117;
+	Wed, 25 Sep 2024 17:35:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727285643; cv=none; b=bgg/tE5I4BGKS1pwHz2sllghNWXnmb296XGw2ct/0Yvj6IgCnw7KfdISVkt0kOwlPRPfQKfnxuX7A9uxYTlzWT2ZVtqEHIJPptbhc6XtfAdtTswNY1WAGKgqu3tGcL9bSaw7fkPicgK3vbWkw8d6DukdF1ZwUCLXnV0rcqb4qBY=
+	t=1727285701; cv=none; b=WgG8IkuRYJe/PUb5Zy0p/019zya2eX/xiiFN06NP9WYvkW4yhTRY/IHASic/PQ3S5jpEA+6rZp28O1DYJoy5SUAC5MBv0qBnJoQFQq6d+is/OfY3tRFUHSG+LR9y3htL63RGj7p5ESlmHGZFyyUXGZoYqYGOhvRdbfwvTQ4lPxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727285643; c=relaxed/simple;
-	bh=4/NEIAsBtB7blCG4wuSJkRPHzgJJT3t+tm/XzE92nXg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Lsi+x/TsOy294pdz7rmgZqydVeW4ejwpS9ALNO4lXjq2ZQo+TfO4tlKI1G/742DFQlb/oTz3tTy0FeO2v1Wx0mN8Nx+6fO13jhSoocNdTuAR8bjxDUOW95+qv0YDrqauZCEitisZkOsPo5RAmYYIEexcSTYJPslChWFd5XkrMTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=xCZF/620; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1727285629; x=1727890429; i=markus.elfring@web.de;
-	bh=Ncba3K1JtxujF8pca90omffguLowNeWnysl8nMmFl3c=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
-	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=xCZF/620fc4fEot+ULALOvhqAkDQZSJTP7uknZnnq7J68A0xsRm0fW6if9SC0apW
-	 V3aoi870KiaPuJg9dAS+8MJVQ+RGUF4RvWy75xNYj4iInPKNuy6nPaCTFnPXjf6ZA
-	 5SikgAlBzr02scTMQLM/eGkERQsiQKcHXE9JMqQD3yihDp6HBDkHJjhP4lvdmcGuQ
-	 WmRCW4fZL2hrKpeXcCSA2KyQGVHIsW1funj1T1Bb/TIjnZ9jmE77Vlo6VBWl547ZG
-	 Jwdyge7AckuIsywPjcIY4IpDpGes6Iamohia4ZlMYXqdY/HDHZSJmOOgdro5MB67B
-	 A4YU1/AS5bR8zQMDAA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1N30dV-1rvOFc0j0v-012ma3; Wed, 25
- Sep 2024 19:33:49 +0200
-Message-ID: <a4087943-ee25-4e05-80c4-02a77196848b@web.de>
-Date: Wed, 25 Sep 2024 19:33:47 +0200
+	s=arc-20240116; t=1727285701; c=relaxed/simple;
+	bh=PknjQbNiw/djMdS+Y91wxat2ymt8KIh6qfLthVSx4Q8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hrqbECa8OEvpzXSGZl2HBkpoPCd1IVhpDrGdC1mCLzqRBqa70IUjMh51zF98I6KHzaETRGpJd0gDnsTyty4e8q5EEzW2IWSDaWP9k70e/lC5SPWacK4iUoVEnaC6ikyHi8k2W5u3j/YIVXflp2ATkRm5TTWnb037uRRYCE9JIpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpOLuYnE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06190C4CEC3;
+	Wed, 25 Sep 2024 17:35:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727285701;
+	bh=PknjQbNiw/djMdS+Y91wxat2ymt8KIh6qfLthVSx4Q8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CpOLuYnEVuBqG5+nGYhe7T7sNmET3vgLmGFyG1CN1K6PDMiNc9EyvVzd70iX927Fa
+	 QOJnyK1pYwMvkYNcvRoXyMxqiSpZJWdTev/E6VkmI0xlTYIUVVtCr47YPILf92e28c
+	 F2zR7kTf718Z+3+cJgf9aIOXQZNBhFpAnKArK1tkiUElnH9UpnT7rV1bscpUOs45Vk
+	 SezbAKow1yxH6VjcgarP2MU29zs5tvpTWgtO9CvHGehI5mmbQ5kUHWxwVHiGDwv9Nj
+	 84UFgKLZHzVYWMjfprs3qz/QgYGne8ZdnwmZe/ah0ci5Zi26yg8m3LhnpADcQmyD8v
+	 5VhaiPJ9YKONw==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wayne Chang <waynec@nvidia.com>
+Cc: linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: cypress,cypd4226: Drop Tegra specific GPIO defines
+Date: Wed, 25 Sep 2024 12:34:48 -0500
+Message-ID: <20240925173449.1906586-1-robh@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/2] usb: typec: ucsi: ccg: Use common code in ccg_read()
-From: Markus Elfring <Markus.Elfring@web.de>
-To: linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Haotien Hsu <haotienh@nvidia.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Utkarsh Patel <utkarsh.h.patel@intel.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Wolfram Sang <wsa@the-dreams.de>
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
-References: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
-Content-Language: en-GB
-In-Reply-To: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SsNe3ae79w4xuRU/j0Q+YcQzcKuXPrio8gkoBUw9g0TxFTtZ6Lb
- rZoT2n2dS1CHwTok3vGHwiPETf1xplcXlfwSG4bYSYMHj0lgBowKWMKB3Iuu2QcnTDbomAG
- 7o2nFC6fHxRMgTqYnpjKoU22hFm1DCsJMF79vVqI7Pf2mOoc7gRgSc3/uT6xkssxLbTNdwk
- EXYN0ES3O2n4ye65YID3g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:LLjNEI7QT00=;SyukQnnyxKKbHKL5rqOs3YFLnLN
- vYuobNYilTJr95eChQ32Oyz1D7CtDGSZOZ2Oc87msTlM9vywRIMmuhSwSXKrR6nhHC0XTOGf0
- IJ5aeF/zC8nDGosILKxZFnR8dqUSRVXikJ8kL8GujNKcMnrLmkWirbsFkKqYFcuVtyIJYKMdD
- IF+RiC7bsZvdsOKJfuCmW7gWi2o82Qtp70yOE7kEtRTS+Cx9hNXDdgNUponoGPld1tgn+oNDh
- 3Naeb5TifBSVtm5FFr6nLPeBoeYcqEEZrWXTKDNMllN6uPnlmmefr/gxFvjLSjixJEGTOMYrf
- mE2hAVtLsDia/m21IhuCx19jdQVFeGeAorx+6G4V2Y69J4YefeXYWuG5p/De+ZV+0SLWEtyhO
- fuye036+oOn2TM/11hV29yz73lJ7SjXT0jBhmnHUjgRzzK3EpQk7VXZ9JP4cSK5+ssuWYaNkW
- zLPB/UH+ILf4xSV7l743pTXQn+91MYrbH/lT01/ZKLE20OyRAVOTp+dd+HOHH89TxqEebQ4HA
- HSIB38ETeAzBboNO4AwdmKkLTU7dzQpwhVwcGEQADc1c/zzlYo3jrau0xHoPTJjYivsTxUGlM
- S2yM5r17ai6dm8BSK13N1KnJQbZ/IwB+wN2cP5DZDA7cjTD/4cBZohGCDcA5eyDe+yHjA/44Z
- 6zMRbeonGpcbB1aY4jO/Tqdli6sU60gS/p9qfdA7oMhT2lMETWbtqBvf3CLymq+PN3iScaVWa
- 1mASUeORGph3CTnEkWbqpaftmqAk7e8CzBIvMHYOulr0d7UYWRgPPp0AqYA+tXkLzyXCMW02j
- PFyKoVk10sA9QwAVKv2wgktA==
+Content-Transfer-Encoding: 8bit
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Wed, 25 Sep 2024 19:08:07 +0200
+The Tegra GPIO define is a problem for the magic code which extracts
+the examples and fixes up the interrupt provider. This was partially
+worked around by putting #interrupt-cells in the parent. However,
+that's incomplete and causes a warning when dtc "interrupt_provider"
+check is enabled. Just drop the Tegra specific define and simplify
+the example.
 
-Add a label so that two statements can be better reused at the end of
-this function implementation.
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/usb/typec/ucsi/ucsi_ccg.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/uc=
-si_ccg.c
-index ed075a403d87..e3850c42583e 100644
-=2D-- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -269,15 +269,16 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8=
- *data, u32 len)
- 		status =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
- 		if (status < 0) {
- 			dev_err(uc->dev, "i2c_transfer failed %d\n", status);
--			pm_runtime_put_sync(uc->dev);
--			return status;
-+			goto put_sync;
- 		}
- 		rab +=3D rlen;
- 		rem_len -=3D rlen;
- 	}
-
-+	status =3D 0;
-+put_sync:
- 	pm_runtime_put_sync(uc->dev);
--	return 0;
-+	return status;
- }
-
- static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 le=
-n)
-=2D-
-2.46.1
+diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+index 89fc9a434d05..0620d82508c1 100644
+--- a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
++++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+@@ -61,18 +61,15 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-    #include <dt-bindings/gpio/tegra194-gpio.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     i2c {
+       #address-cells = <1>;
+       #size-cells = <0>;
+-      #interrupt-cells = <2>;
+ 
+       typec@8 {
+         compatible = "cypress,cypd4226";
+         reg = <0x08>;
+-        interrupt-parent = <&gpio_aon>;
+-        interrupts = <TEGRA194_AON_GPIO(BB, 2) IRQ_TYPE_LEVEL_LOW>;
++        interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
+         firmware-name = "nvidia,jetson-agx-xavier";
+         #address-cells = <1>;
+         #size-cells = <0>;
+-- 
+2.45.2
 
 
