@@ -1,140 +1,286 @@
-Return-Path: <linux-usb+bounces-15432-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15433-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DABAC9857EC
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 13:19:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B5FF9857FE
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 13:30:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5600DB238E5
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 11:19:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C14431F217AB
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 11:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895A91662F7;
-	Wed, 25 Sep 2024 11:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE6C1591F1;
+	Wed, 25 Sep 2024 11:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GeaFx9Yx"
+	dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b="K2ZB8PiQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2A915AAB6;
-	Wed, 25 Sep 2024 11:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131AF13A884;
+	Wed, 25 Sep 2024 11:30:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.3.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727263129; cv=none; b=TRRITFz9R4JFmIVBcz9Vcd2EKu8c1M6YxnwyzKoz8Nqt7IQOszbWK6tAAf+rNV3gAKsbxT/J9eZjunPLEKbRWQhpLVpO+z9M0zQqyxVNwGw04/DHPu6Hv9gpmhifv3eurY3xg9HhwjygOXyHbu9tfKIz1Hjy3WCCAQJ9UlanPis=
+	t=1727263843; cv=none; b=SMoXn0kqRBkdYm3qF4VRhNqQCVtmxyTSoOxM1LgJkTBxDX7JZ00oNGR3TMQ+yp60DQNcBNX1bLbcUSrlBbtmvTyWH0Z8wdaO7VxS8EDPQH8BahusK5McZfU8lUJNQIw1B0jGFp0aHgJGR/oAlzsl1lQNTfqYm4f0l/20mOCLUyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727263129; c=relaxed/simple;
-	bh=hxbnpZILYLfhpFIePux7F3TZ1IaKkzgGbm4ZXDk/BZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eRxglqGqMjD2EE27gYDaBiABjzUQ0WbxSpzHOeuncjbIDHxTEKsiQ9wQftmweG1aG/Cjm2cJSEoydYZSKsmvI0HpHQnmDF+pp4prlO2hmdef8b0BDd3rRMp+9SQBfQLkJmHzNv1gbdEofldMOuUociV9zlkA1278Vwcb13ClWDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GeaFx9Yx; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727263127; x=1758799127;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hxbnpZILYLfhpFIePux7F3TZ1IaKkzgGbm4ZXDk/BZk=;
-  b=GeaFx9YxD/sdEyr8wVd5Dwqrn7egUUntQPx51bGM9xw1wnrQf5OBnebn
-   4f5x/ECikpE+IN6H33CUSlyXMzQITCdxi5Rcz/IqzUzUzZofME7DfRhli
-   SmtFYbVQYAvY0rzt8aDTVP7OCSXaRgpq5jO86lcfiWTMHLhKWmnNg1LJD
-   1jjqEN8riQ9E/7eVfuo2OcLkLldWlJzn6PeALbZGsUTAt7IUuR8e+Uwk2
-   TMe18AXcTB6noB7AwOcf4mwMND4mRBBOdbV/OFRYZL7pt6rZW6vub4h4W
-   8LjXC6AY5/t9zQWPRRF5UYoWcpMIGoT8DSdYY/Ep5NNQFrupbnVuTNydn
-   A==;
-X-CSE-ConnectionGUID: L35UuXa/Sja3EX0hiZ0qxw==
-X-CSE-MsgGUID: O94ObgXiQ+KZ77nkwGYgGg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="36882963"
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="36882963"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 04:18:46 -0700
-X-CSE-ConnectionGUID: obFrx28UTsKDOymWZ0OkMA==
-X-CSE-MsgGUID: Wde9/ASRTMah02v3auHlPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="95064325"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa002.fm.intel.com with SMTP; 25 Sep 2024 04:18:43 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 25 Sep 2024 14:18:42 +0300
-Date: Wed, 25 Sep 2024 14:18:42 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Yu Jiaoliang <yujiaoliang@vivo.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	RD Babiera <rdbabiera@google.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Kyle Tso <kyletso@google.com>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v1] usb: typec: Fix typo in comment
-Message-ID: <ZvPxkvq8BTOBpP_l@kuha.fi.intel.com>
-References: <20240919014646.1635774-1-yujiaoliang@vivo.com>
+	s=arc-20240116; t=1727263843; c=relaxed/simple;
+	bh=kH3tIv8Rti5+DuHw8zFtAnwwGg+1JNCj8v1UnbudLJE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=THAxb9Cu+kOR0ivWJObVY5dVLn8xjMVPqsFicLmpfuVQMn9HmaKeSL4f7QWdGgVxaNPOj/2qYi8Z2qwdP4ytsGo9WwOssEOlsqDuP1ly5oHp9BVtkrDbhkUynDhG7AWKSB/0dbEFQThOzxMNjTcXMkFW++UD2ku22p884xnU3HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com; spf=pass smtp.mailfrom=ysoft.com; dkim=pass (1024-bit key) header.d=ysoft.com header.i=@ysoft.com header.b=K2ZB8PiQ; arc=none smtp.client-ip=81.19.3.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ysoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ysoft.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+	s=20160406-ysoft-com; t=1727263832;
+	bh=hxagW0FnMKA1WsvZNBxUuoXtqQsT77XoKbAVByUrEvw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=K2ZB8PiQCH0Of/+V6shxnF1wQSHyYoF7T3dCeTs1dCkPe5oGFH9UsRFKj4XdkIjLV
+	 MV1Ip/5AON2FxDr5Q8yIN26v8XuSeUU3S+aA725nCw7HPZ9D9enfRpAeZWI3fQlh/u
+	 XjlIVrz02VBW2l1EmRk9iFsTw2+ovlipoZkpfg/A=
+Received: from [10.1.8.111] (unknown [10.1.8.111])
+	by uho.ysoft.cz (Postfix) with ESMTP id DF20CA025E;
+	Wed, 25 Sep 2024 13:30:31 +0200 (CEST)
+Message-ID: <87980643-44b4-4df9-9eb7-1583b5074bdd@ysoft.com>
+Date: Wed, 25 Sep 2024 13:30:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240919014646.1635774-1-yujiaoliang@vivo.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] arm64: dts: imx: Add imx8mp-iota2-lumpy board
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Fabio Estevam <festevam@gmail.com>, Michael Walle <mwalle@kernel.org>,
+ devicetree@vger.kernel.org, Alexander Stein
+ <alexander.stein@ew.tq-group.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Mathieu Othacehe <m.othacehe@gmail.com>,
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>, linux-kernel@vger.kernel.org,
+ Hiago De Franco <hiago.franco@toradex.com>,
+ Herburger <gregor.herburger@ew.tq-group.com>,
+ Petr Benes <petr.benes@ysoft.com>, linux-usb@vger.kernel.org,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Joao Paulo Goncalves <joao.goncalves@toradex.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, imx@lists.linux.dev,
+ Shawn Guo <shawnguo@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ Frank Li <Frank.li@nxp.com>
+References: <20240924103941.1729061-1-michal.vokac@ysoft.com>
+ <20240924103941.1729061-3-michal.vokac@ysoft.com>
+ <ZvLXenqG/++AR4We@lizhi-Precision-Tower-5810>
+ <20240924173714.qxxkhn6wscze7q5n@pengutronix.de>
+Content-Language: en-US
+From: =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
+In-Reply-To: <20240924173714.qxxkhn6wscze7q5n@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 19, 2024 at 09:46:26AM +0800, Yu Jiaoliang wrote:
-> Fix typos:
-> reseet->reset,
-> reaach->reach,
-> compatiple->compatible.
+On 24. 09. 24 19:37, Marco Felsch wrote:
+> Hi Frank,
 > 
-> Signed-off-by: Yu Jiaoliang <yujiaoliang@vivo.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 2 +-
->  drivers/usb/typec/tcpm/tcpm.c            | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> On 24-09-24, Frank Li wrote:
+>> On Tue, Sep 24, 2024 at 12:39:41PM +0200, Michal Vokáč wrote:
+>>> The IOTA2 Lumpy board is based on the i.MX8MPlus EVK.
+>>>
+>>> Basic features are:
+>>> - 4GB LPDDR4
+>>> - 64GB eMMC
+>>> - 2x 1GB Ethernet
+>>> - USB 3.0 Type-C dual role port, without power delivery
+>>> - USB 3.0 Type-A host port
+>>> - RGB LED - PWM driven
+>>> - speaker - PWM driven
+>>> - RTC with super capacitor backup
+>>>
+>>> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+>>> ---
+>>> v4:
+>>> - Moved the iomuxc node to the end of the file.
+>>> - Moved the bus-width and non-removeable properties below
+>>>    the pinctrl-* properties in &usdhc3 node.
+>>> - Moved the fsl,ext-reset-output below the pinctrl-* properties
+>>>    in &wdog1 node.
+>>> v3:
+>>> - Dropped pinctrl-names property from &usb_dwc3_1 node.
+>>> v2:
+>>> - Dropped unused property from pwm4 node.
+>>> - Sorted all nodes and properties using dt-format tool from Frank.
+>>>
+>>>   arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>>>   .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 423 ++++++++++++++++++
+>>
+>> Suggest use https://github.com/lznuaa/dt-format
+>> sort node. any issue, let me know.
 > 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 92cc1b136120..2f03190a9873 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -729,7 +729,7 @@ int dp_altmode_probe(struct typec_altmode *alt)
->  
->  	/* FIXME: Port can only be DFP_U. */
->  
-> -	/* Make sure we have compatiple pin configurations */
-> +	/* Make sure we have compatible pin configurations */
->  	if (!(DP_CAP_PIN_ASSIGN_DFP_D(port->vdo) &
->  	      DP_CAP_PIN_ASSIGN_UFP_D(alt->vdo)) &&
->  	    !(DP_CAP_PIN_ASSIGN_UFP_D(port->vdo) &
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index fc619478200f..b6486beda6ab 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5270,7 +5270,7 @@ static void run_state_machine(struct tcpm_port *port)
->  		tcpm_set_state(port, SRC_UNATTACHED, PD_T_PS_SOURCE_ON);
->  		break;
->  	case SNK_HARD_RESET_SINK_OFF:
-> -		/* Do not discharge/disconnect during hard reseet */
-> +		/* Do not discharge/disconnect during hard reset */
->  		tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
->  		memset(&port->pps_data, 0, sizeof(port->pps_data));
->  		tcpm_set_vconn(port, false);
-> @@ -6066,7 +6066,7 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
->  		break;
->  	case SNK_ATTACH_WAIT:
->  	case SNK_DEBOUNCED:
-> -		/* Do nothing, as TCPM is still waiting for vbus to reaach VSAFE5V to connect */
-> +		/* Do nothing, as TCPM is still waiting for vbus to reach VSAFE5V to connect */
->  		break;
->  
->  	case SNK_NEGOTIATE_CAPABILITIES:
-> -- 
-> 2.34.1
+> Thanks for the link :) would be nice to have this script to be part of
+> the kernel. The script follows the rules in [1] I'm just used to have
+> common properties like pinctrl-* in front of the device specific
+> properties e.g. "enable-active-high". But this rule is not part of [1]
+> so I can't blame the script.
+> 
+> Regards,
+>    Marco
+> 
+> [1] https://docs.kernel.org/devicetree/bindings/dts-coding-style.html#order-of-properties-in-device-node
 
--- 
-heikki
+Thank you for the review Frank & Marco.
+I quickly went through the file again and found another few properties
+that could be better ordered according to the kernel documentation [1].
+
+>>>   2 files changed, 424 insertions(+)
+>>>   create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+>>>
+>>> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+>>> index 9d3df8b218a2..aa26a50b7bb4 100644
+>>> --- a/arch/arm64/boot/dts/freescale/Makefile
+>>> +++ b/arch/arm64/boot/dts/freescale/Makefile
+>>> @@ -171,6 +171,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
+>>>   dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
+>>>   dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
+>>>   dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
+>>> +dtb-$(CONFIG_ARCH_MXC) += imx8mp-iota2-lumpy.dtb
+>>>   dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
+>>>   dtb-$(CONFIG_ARCH_MXC) += imx8mp-navqp.dtb
+>>>   dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
+>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+>>> new file mode 100644
+>>> index 000000000000..9eb58e818dc7
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+>>> @@ -0,0 +1,423 @@
+>>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>>> +/*
+>>> + * Copyright 2023 Y Soft
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +
+>>> +#include "imx8mp.dtsi"
+>>> +
+>>> +/ {
+>>> +	compatible = "ysoft,imx8mp-iota2-lumpy", "fsl,imx8mp";
+>>> +	model = "Y Soft i.MX8MPlus IOTA2 Lumpy board";
+>>> +
+>>> +	beeper {
+>>> +		compatible = "pwm-beeper";
+>>> +		pwms = <&pwm4 0 500000 0>;
+>>> +	};
+>>> +
+>>> +	chosen {
+>>> +		stdout-path = &uart2;
+>>> +	};
+>>> +
+>>> +	gpio_keys: gpio-keys {
+>>> +		compatible = "gpio-keys";
+>>> +		pinctrl-0 = <&pinctrl_gpio_keys>;
+>>> +		pinctrl-names = "default";
+>>> +
+>>> +		button-reset {
+>>> +			gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
+>>> +			label = "Factory RESET";
+>>> +			linux,code = <BTN_0>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	reg_usb_host: regulator-usb-host {
+>>> +		compatible = "regulator-fixed";
+>>> +		enable-active-high;
+>>> +		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+
+The enable-active-high and gpio should go bellow regulator-*.
+
+>>> +		pinctrl-0 = <&pinctrl_usb_host_vbus>;
+>>> +		pinctrl-names = "default";
+>>> +		regulator-max-microvolt = <5000000>;
+>>> +		regulator-min-microvolt = <5000000>;
+>>> +		regulator-name = "usb-host";
+>>> +	};
+>>> +
+>>> +	memory@40000000 {
+>>> +		reg = <0x0 0x40000000 0 0x80000000>,
+>>> +		      <0x1 0x00000000 0 0x80000000>;
+>>> +		device_type = "memory";
+>>> +	};
+>>> +};
+>>> +
+>>> +&A53_0 {
+>>> +	cpu-supply = <&reg_arm>;
+>>> +};
+>>> +
+>>> +&A53_1 {
+>>> +	cpu-supply = <&reg_arm>;
+>>> +};
+>>> +
+>>> +&A53_2 {
+>>> +	cpu-supply = <&reg_arm>;
+>>> +};
+>>> +
+>>> +&A53_3 {
+>>> +	cpu-supply = <&reg_arm>;
+>>> +};
+>>> +
+>>> +&eqos {
+>>> +	phy-handle = <&ethphy0>;
+>>> +	phy-mode = "rgmii-id";
+>>> +	pinctrl-0 = <&pinctrl_eqos>;
+>>> +	pinctrl-names = "default";
+>>> +	status = "okay";
+>>> +
+>>> +	mdio {
+>>> +		compatible = "snps,dwmac-mdio";
+>>> +		#address-cells = <1>;
+>>> +		#size-cells = <0>;
+>>> +
+>>> +		ethphy0: ethernet-phy@0 {
+>>> +			reg = <0>;
+>>> +			interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
+>>> +			interrupt-parent = <&gpio3>;
+>>> +			micrel,led-mode = <0>;
+
+The micrel,* is a vendor specific property. It should go bellow the reset-*.
+
+>>> +			pinctrl-0 = <&pinctrl_ethphy0>;
+>>> +			pinctrl-names = "default";
+>>> +			reset-assert-us = <1000>;
+>>> +			reset-deassert-us = <1000>;
+>>> +			reset-gpios = <&gpio3 22 GPIO_ACTIVE_LOW>;
+>>> +		};
+>>> +	};
+>>> +};
+>>> +
+>>> +&fec {
+>>> +	fsl,magic-packet;
+>>> +	phy-handle = <&ethphy1>;
+>>> +	phy-mode = "rgmii-id";
+>>> +	pinctrl-0 = <&pinctrl_fec>;
+>>> +	pinctrl-names = "default";
+>>> +	status = "okay";
+>>> +
+>>> +	mdio {
+>>> +		#address-cells = <1>;
+>>> +		#size-cells = <0>;
+>>> +
+>>> +		ethphy1: ethernet-phy@0 {
+>>> +			reg = <0>;
+>>> +			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+>>> +			interrupt-parent = <&gpio3>;
+>>> +			micrel,led-mode = <0>;
+
+Same as above, micrel,* should go bellow common properties.
+I will send a v5 with these fixed.
+
+Michal
+
+>>> +			pinctrl-0 = <&pinctrl_ethphy1>;
+>>> +			pinctrl-names = "default";
+>>> +			reset-assert-us = <1000>;
+>>> +			reset-deassert-us = <1000>;
+>>> +			reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
+>>> +		};
+>>> +	};
+>>> +};
+>>> +
 
