@@ -1,48 +1,75 @@
-Return-Path: <linux-usb+bounces-15420-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15421-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 831CC985483
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 09:50:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B838C98548D
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 09:50:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7EADB20ABE
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 07:50:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E96A31C20F00
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 07:50:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 102E4157490;
-	Wed, 25 Sep 2024 07:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04BC815854F;
+	Wed, 25 Sep 2024 07:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EbJ7PpjM"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qTaOKFwu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87957154BF5;
-	Wed, 25 Sep 2024 07:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBED157490
+	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 07:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727250610; cv=none; b=HMfxSl4/twSyPDJxjG2Vwsf1zGrG1W4uLKtB7m/lAbGMO6XjOb4EYOjSK4lhtZtrZ8ONwxOw4qfpgPhVx8dnOrSFxCv3YlF9OUSXJjUeinnokKY9Ff9gfd0Pdk5Iu50YzqvB5ODHuaB+vwbUxEpcBLgbnsdyrUqBrSiTZ9DiKPc=
+	t=1727250634; cv=none; b=KvgBc2PH1coNVMCDAbd7lfn8VUEB+PShGN+KE1QKjN8UGx6uOtghGwKdTU5yj9xzSwwEsdATPwje/Q4GdyJY1xIn4Xw32h5Jv+dbf66pN6nsoQNYRwl3t1uyq9zvCSBHnbBhJPAEL9zQN0TKN/FDbZ3KyuuoQc8O3SPDrZjikLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727250610; c=relaxed/simple;
-	bh=RpG2dBj8JzsPbVubKdeAOPINRsigi7wT+7vUn6efoPc=;
+	s=arc-20240116; t=1727250634; c=relaxed/simple;
+	bh=LQJL9XnZ7aqpWYvsQHqnHYPGaY781b2/pcH4k8tMXf0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mvmkjDs08XMUbgpX53RI5PrhA4OhwxFds2hPzJMQFbtV1xBQWBkkEelSUXie/fQvn7GzzkkHCeG40we4sn7WqmDkm9SpDiX9iGr7snQpH24YvtiThzfbWdplp3HSloscYfLRCDsQ+gdignq/WYwEJhe+Hhaq4UD5rO/LPdD36mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EbJ7PpjM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC96DC4CEC3;
-	Wed, 25 Sep 2024 07:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727250610;
-	bh=RpG2dBj8JzsPbVubKdeAOPINRsigi7wT+7vUn6efoPc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EbJ7PpjMZU3x1C8IXfT7LnSzo23xBZ6mcXeuI86g7aJHUtGCEFghI4i+W9RF3nVRU
-	 VdNlqS1FDvb/J8P2PWklcpoK9b7CG2+Zxov+Wo/ItG8wI4k9YFXh0CkDFRvD46wVXK
-	 gctWIf2+e0/mw0z72mcWyGsEx81AQW8y3H/qqJYaGVHqYZm6bk9T7mPK+eCcpqQ/ms
-	 zo4YoBu0cV6jYzjYB5yQSlW6LsPBBaaGt5EMKoCuL+gntGYtyoH727ntJsVCZiVT8N
-	 5DkUmHNLTrsQhgYoz77ztNB1mM7As9eMMSeLRWKOT7F9Yi9w45MQdd2u1P+sEES38E
-	 YckBdViuXSyBg==
-Message-ID: <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
-Date: Wed, 25 Sep 2024 10:50:05 +0300
+	 In-Reply-To:Content-Type; b=SzjycOwwYYaSzBI2r+mKai0WHK8nr+jx+bbKGO0BzpzOVmqGln3TILzsPPENx3xZtOn0LNFBTqEDzQ2ObI1FpkPYOKaAC2dvIvnrgBfnD0gTG0R+h1lZz5gQFHoatSN9uphypfSeDw4JA+z/VobBivAv61wTbxOb2CgO9IWHfno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qTaOKFwu; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-375e5c12042so3364035f8f.3
+        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 00:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1727250629; x=1727855429; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YFiXClqbPRW4CJclRDKGkw40xsL++a9HxAmJhaouAR4=;
+        b=qTaOKFwur8NWzwTTOKUrLm2/lHaFRxfR3ELJKonQIhw+faVILbQrhWbbHFlQgiRd+4
+         o6pLBn+8gKElH5zchy3DKzfCY7waSwihtH1rOyWFkOv1i7Bl8MqLzaIKwaBHS4Mok+/m
+         SBTcQF6DT1edztz9ppNB8L4bTaem7rhnL5ooU6NV/39Oz+21dGxY2om7OhSlqzK+7VHu
+         qUBtovz2P508UiV0Odjs+yNPwKRYCWp7oaAXMC+txQ/Jzxvn5aDDC0R4dXetWNV+F+Ns
+         OhYMZLEpKunfm6ct24sL3wHb7Ud/u9ql5C98gadYlpIQO95GLGJCkTq99XI1FCm9f+70
+         9Adw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727250629; x=1727855429;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YFiXClqbPRW4CJclRDKGkw40xsL++a9HxAmJhaouAR4=;
+        b=XFj9vB+jGKy+oKGRchop7VzCTL61mpH+peCYczjgr+hmx83CaFLeyL8Z/9u1tN4T+a
+         XP/IoOPYxrDCQz//yCMsJAuJ3di1nozNKwAEP+TiHdbWQpyNsD9P7hYx0Y6sEtT7U+F1
+         4N6SbotSS5u7zYqaBKwQ1x5kMcTQMNvAL9wdfCBr7HFF5BC4PmlJoDOaCEWmXLSnHxjz
+         p+dBdxCdaEVC1C/mCsip67OuUIHXsWDohpcBw5A4ZH09vkaEEFmOwWqv++MHcZRxCXpb
+         1dZiJsxyPTk3NKMFu5J3LkKVahyg1UmTNZSJLIiVlqCZKOZiryKmJJfRoVDQpiNYOZs9
+         80xw==
+X-Forwarded-Encrypted: i=1; AJvYcCUfZ6xZIrnmuM0SRpLCPzpYnzVELUK3rYtI45kQ/aQS0a+bx7nozhdxp5qyzwUbvuw8AaTGu21YDZg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr5rnVyYSIU0+CnI3hEplog40zHLMYi3yDtLqU4sNTQflSzr4b
+	eM90hiSYnnPcYYup5kf8s1zMsP+/+fkvezeLuALg9f/21pOrxdDmDjS2sVX6/h4zFMfU9cndEMY
+	t
+X-Google-Smtp-Source: AGHT+IFSqrWOgvLYloNvVXm1vEQkjP+JD1QteKQEPhT8fVsIjwexzPr+xFJfYUTXmrkXaAxZ4I2zWw==
+X-Received: by 2002:adf:f58e:0:b0:36d:2984:ef6b with SMTP id ffacd0b85a97d-37cc2466ff9mr1203849f8f.11.1727250629008;
+        Wed, 25 Sep 2024 00:50:29 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.115])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e969feb45sm10046135e9.20.2024.09.25.00.50.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Sep 2024 00:50:27 -0700 (PDT)
+Message-ID: <23531a70-cf50-4b32-a9fd-81e6cfcbcf9d@tuxon.dev>
+Date: Wed, 25 Sep 2024 10:50:24 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,336 +77,82 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: dwc3: core: Prevent phy suspend during init
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: John Youn <John.Youn@synopsys.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>, msp@baylibre.com,
- "Vardhan, Vibhore" <vibhore@ti.com>,
- "Govindarajan, Sriramakrishnan" <srk@ti.com>, Dhruva Gole <d-gole@ti.com>,
- Vishal Mahaveer <vishalm@ti.com>
-References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
- <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH 04/16] soc: renesas: Add SYSC driver for Renesas RZ/G3S
 Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
+ sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+ biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
+ linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-5-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hello Thinh,
+Hi, Geert,
 
-On 17/04/2024 02:41, Thinh Nguyen wrote:
-> GUSB3PIPECTL.SUSPENDENABLE and GUSB2PHYCFG.SUSPHY should be cleared
-> during initialization. Suspend during initialization can result in
-> undefined behavior due to clock synchronization failure, which often
-> seen as core soft reset timeout.
+On 24.09.2024 14:32, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
-> The programming guide recommended these bits to be cleared during
-> initialization for DWC_usb3.0 version 1.94 and above (along with
-> DWC_usb31 and DWC_usb32). The current check in the driver does not
-> account if it's set by default setting from coreConsultant.
+> On Thu, Aug 22, 2024 at 5:28 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> The RZ/G3S SYS Controller has 2 registers (one for PCIE one for USB) that
+>> need to be configured before/after powering off/on the PCI or USB
+>> ares. The bits in these registers control signals to PCIE and USB that
+>> need to be de-asserted/asserted after/before power on/off event. For this
+>> add SYSC controller driver that registers a reset controller driver on
+>> auxiliary bus which allows USB, PCIE drivers to control these signals.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> This is especially the case for DRD when switching mode to ensure the
-> phy clocks are available to change mode. Depending on the
-> platforms/design, some may be affected more than others. This is noted
-> in the DWC_usb3x programming guide under the above registers.
+> Thanks for your patch!
 > 
-> Let's just disable them during driver load and mode switching. Restore
-> them when the controller initialization completes.
+>> --- /dev/null
+>> +++ b/drivers/reset/reset-rzg3s-sysc.c
+>> @@ -0,0 +1,140 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Renesas RZ/G3S SYSC reset driver
+>> + *
+>> + * Copyright (C) 2024 Renesas Electronics Corp.
+>> + */
+>> +
+>> +#include <linux/auxiliary_bus.h>
 > 
-> Note that some platforms workaround this issue by disabling phy suspend
-> through "snps,dis_u3_susphy_quirk" and "snps,dis_u2_susphy_quirk" when
-> they should not need to.
+> Using the Auxiliary Bus requires selecting AUXILIARY_BUS.
+
+Thank you for pointing it. I'll adjust it in the next version, if it will
+be one.
+
+
+> Elsse you might run into build failures:
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 9ba3aca8fe82 ("usb: dwc3: Disable phy suspend after power-on reset")
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-
-This patch is causing system suspend failures on TI AM62 platforms [1]
-
-I will try to explain why.
-Before this patch, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
-bits (hence forth called 2 SUSPHY bits) were being set during initialization
-and even during re-initialization after a system suspend/resume.
-
-These bits are required to be set for system suspend/resume to work correctly
-on AM62 platforms.
-
-After this patch, the bits are only set when Host controller starts or
-when Gadget driver starts.
-
-On AM62 platform we have 2 USB controllers, one in Host and one in Dual role.
-Just after boot, for the Host controller we have the 2 SUSPHY bits set but
-for the Dual-Role controller, as no role has started the 2 SUSPHY bits are
-not set. Thus system suspend resume will fail.
-
-On the other hand, if we load a gadget driver just after boot then both
-controllers have the 2 SUSPHY bits set and system suspend resume works for
-the first time.
-However, after system resume, the core is re-initialized so the 2 SUSPHY bits
-are cleared for both controllers. For host controller it is never set again.
-For gadget controller as gadget start is called, the 2 SUSPHY bits are set
-again. The second system suspend resume will still fail as one controller
-(Host) doesn't have the 2 SUSPHY bits set.
-
-To summarize, the existing solution is not sufficient for us to have a
-reliable behavior. We need the 2 SUSPHY bits to be set regardless of what
-role we are in or whether the role has started or not.
-
-My suggestion is to move back the SUSPHY enable to end of dwc3_core_init().
-Then if SUSPHY needs to be disabled for DRD role switching, it should be
-disabled and enabled exactly there.
-
-What do you suggest?
-
-[1] - https://lore.kernel.org/linux-arm-kernel/20240904194229.109886-1-msp@baylibre.com/
-
--- 
-cheers,
--roger
-
-> ---
->  drivers/usb/dwc3/core.c   | 90 +++++++++++++++++----------------------
->  drivers/usb/dwc3/core.h   |  1 +
->  drivers/usb/dwc3/gadget.c |  2 +
->  drivers/usb/dwc3/host.c   | 27 ++++++++++++
->  4 files changed, 68 insertions(+), 52 deletions(-)
+> aarch64-linux-gnu-ld: drivers/soc/renesas/rzg3s-sysc.o: in function
+> `rzg3s_sysc_probe':
+> rzg3s-sysc.c:(.text+0x21c): undefined reference to `auxiliary_device_init'
+> aarch64-linux-gnu-ld: rzg3s-sysc.c:(.text+0x264): undefined reference
+> to `__auxiliary_device_add'
+> aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
+> `rzg3s_sysc_reset_driver_init':
+> reset-rzg3s-sysc.c:(.init.text+0x1c): undefined reference to
+> `__auxiliary_driver_register'
+> aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
+> `rzg3s_sysc_reset_driver_exit':
+> reset-rzg3s-sysc.c:(.exit.text+0x10): undefined reference to
+> `auxiliary_driver_unregister'
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 31684cdaaae3..100041320e8d 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -104,6 +104,27 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
->  	return 0;
->  }
->  
-> +void dwc3_enable_susphy(struct dwc3 *dwc, bool enable)
-> +{
-> +	u32 reg;
-> +
-> +	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
-> +	if (enable && !dwc->dis_u3_susphy_quirk)
-> +		reg |= DWC3_GUSB3PIPECTL_SUSPHY;
-> +	else
-> +		reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
-> +
-> +	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
-> +
-> +	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> +	if (enable && !dwc->dis_u2_susphy_quirk)
-> +		reg |= DWC3_GUSB2PHYCFG_SUSPHY;
-> +	else
-> +		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
-> +
-> +	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-> +}
-> +
->  void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
->  {
->  	u32 reg;
-> @@ -585,11 +606,8 @@ static int dwc3_core_ulpi_init(struct dwc3 *dwc)
->   */
->  static int dwc3_phy_setup(struct dwc3 *dwc)
->  {
-> -	unsigned int hw_mode;
->  	u32 reg;
->  
-> -	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> -
->  	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
->  
->  	/*
-> @@ -599,21 +617,16 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
->  	reg &= ~DWC3_GUSB3PIPECTL_UX_EXIT_PX;
->  
->  	/*
-> -	 * Above 1.94a, it is recommended to set DWC3_GUSB3PIPECTL_SUSPHY
-> -	 * to '0' during coreConsultant configuration. So default value
-> -	 * will be '0' when the core is reset. Application needs to set it
-> -	 * to '1' after the core initialization is completed.
-> -	 */
-> -	if (!DWC3_VER_IS_WITHIN(DWC3, ANY, 194A))
-> -		reg |= DWC3_GUSB3PIPECTL_SUSPHY;
-> -
-> -	/*
-> -	 * For DRD controllers, GUSB3PIPECTL.SUSPENDENABLE must be cleared after
-> -	 * power-on reset, and it can be set after core initialization, which is
-> -	 * after device soft-reset during initialization.
-> +	 * Above DWC_usb3.0 1.94a, it is recommended to set
-> +	 * DWC3_GUSB3PIPECTL_SUSPHY to '0' during coreConsultant configuration.
-> +	 * So default value will be '0' when the core is reset. Application
-> +	 * needs to set it to '1' after the core initialization is completed.
-> +	 *
-> +	 * Similarly for DRD controllers, GUSB3PIPECTL.SUSPENDENABLE must be
-> +	 * cleared after power-on reset, and it can be set after core
-> +	 * initialization.
->  	 */
-> -	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
-> -		reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
-> +	reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
->  
->  	if (dwc->u2ss_inp3_quirk)
->  		reg |= DWC3_GUSB3PIPECTL_U2SSINP3OK;
-> @@ -639,9 +652,6 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
->  	if (dwc->tx_de_emphasis_quirk)
->  		reg |= DWC3_GUSB3PIPECTL_TX_DEEPH(dwc->tx_de_emphasis);
->  
-> -	if (dwc->dis_u3_susphy_quirk)
-> -		reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
-> -
->  	if (dwc->dis_del_phy_power_chg_quirk)
->  		reg &= ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
->  
-> @@ -689,24 +699,15 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
->  	}
->  
->  	/*
-> -	 * Above 1.94a, it is recommended to set DWC3_GUSB2PHYCFG_SUSPHY to
-> -	 * '0' during coreConsultant configuration. So default value will
-> -	 * be '0' when the core is reset. Application needs to set it to
-> -	 * '1' after the core initialization is completed.
-> -	 */
-> -	if (!DWC3_VER_IS_WITHIN(DWC3, ANY, 194A))
-> -		reg |= DWC3_GUSB2PHYCFG_SUSPHY;
-> -
-> -	/*
-> -	 * For DRD controllers, GUSB2PHYCFG.SUSPHY must be cleared after
-> -	 * power-on reset, and it can be set after core initialization, which is
-> -	 * after device soft-reset during initialization.
-> +	 * Above DWC_usb3.0 1.94a, it is recommended to set
-> +	 * DWC3_GUSB2PHYCFG_SUSPHY to '0' during coreConsultant configuration.
-> +	 * So default value will be '0' when the core is reset. Application
-> +	 * needs to set it to '1' after the core initialization is completed.
-> +	 *
-> +	 * Similarly for DRD controllers, GUSB2PHYCFG.SUSPHY must be cleared
-> +	 * after power-on reset, and it can be set after core initialization.
->  	 */
-> -	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
-> -		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
-> -
-> -	if (dwc->dis_u2_susphy_quirk)
-> -		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
-> +	reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
->  
->  	if (dwc->dis_enblslpm_quirk)
->  		reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
-> @@ -1227,21 +1228,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
->  	if (ret)
->  		goto err_exit_phy;
->  
-> -	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD &&
-> -	    !DWC3_VER_IS_WITHIN(DWC3, ANY, 194A)) {
-> -		if (!dwc->dis_u3_susphy_quirk) {
-> -			reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
-> -			reg |= DWC3_GUSB3PIPECTL_SUSPHY;
-> -			dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
-> -		}
-> -
-> -		if (!dwc->dis_u2_susphy_quirk) {
-> -			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> -			reg |= DWC3_GUSB2PHYCFG_SUSPHY;
-> -			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-> -		}
-> -	}
-> -
->  	dwc3_core_setup_global_control(dwc);
->  	dwc3_core_num_eps(dwc);
->  
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 7e80dd3d466b..180dd8d29287 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1580,6 +1580,7 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc);
->  void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
->  
->  int dwc3_core_soft_reset(struct dwc3 *dwc);
-> +void dwc3_enable_susphy(struct dwc3 *dwc, bool enable);
->  
->  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
->  int dwc3_host_init(struct dwc3 *dwc);
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 4df2661f6675..f94f68f1e7d2 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2924,6 +2924,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
->  	dwc3_ep0_out_start(dwc);
->  
->  	dwc3_gadget_enable_irq(dwc);
-> +	dwc3_enable_susphy(dwc, true);
->  
->  	return 0;
->  
-> @@ -4690,6 +4691,7 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
->  	if (!dwc->gadget)
->  		return;
->  
-> +	dwc3_enable_susphy(dwc, false);
->  	usb_del_gadget(dwc->gadget);
->  	dwc3_gadget_free_endpoints(dwc);
->  	usb_put_gadget(dwc->gadget);
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index 0204787df81d..a171b27a7845 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -10,10 +10,13 @@
->  #include <linux/irq.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> +#include <linux/usb.h>
-> +#include <linux/usb/hcd.h>
->  
->  #include "../host/xhci-port.h"
->  #include "../host/xhci-ext-caps.h"
->  #include "../host/xhci-caps.h"
-> +#include "../host/xhci-plat.h"
->  #include "core.h"
->  
->  #define XHCI_HCSPARAMS1		0x4
-> @@ -57,6 +60,24 @@ static void dwc3_power_off_all_roothub_ports(struct dwc3 *dwc)
->  	}
->  }
->  
-> +static void dwc3_xhci_plat_start(struct usb_hcd *hcd)
-> +{
-> +	struct platform_device *pdev;
-> +	struct dwc3 *dwc;
-> +
-> +	if (!usb_hcd_is_primary_hcd(hcd))
-> +		return;
-> +
-> +	pdev = to_platform_device(hcd->self.controller);
-> +	dwc = dev_get_drvdata(pdev->dev.parent);
-> +
-> +	dwc3_enable_susphy(dwc, true);
-> +}
-> +
-> +static const struct xhci_plat_priv dwc3_xhci_plat_quirk = {
-> +	.plat_start = dwc3_xhci_plat_start,
-> +};
-> +
->  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->  					int irq, char *name)
->  {
-> @@ -167,6 +188,11 @@ int dwc3_host_init(struct dwc3 *dwc)
->  		}
->  	}
->  
-> +	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_quirk,
-> +				       sizeof(struct xhci_plat_priv));
-> +	if (ret)
-> +		goto err;
-> +
->  	ret = platform_device_add(xhci);
->  	if (ret) {
->  		dev_err(dwc->dev, "failed to register xHCI device\n");
-> @@ -192,6 +218,7 @@ void dwc3_host_exit(struct dwc3 *dwc)
->  	if (dwc->sys_wakeup)
->  		device_init_wakeup(&dwc->xhci->dev, false);
->  
-> +	dwc3_enable_susphy(dwc, false);
->  	platform_device_unregister(dwc->xhci);
->  	dwc->xhci = NULL;
->  }
-
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
