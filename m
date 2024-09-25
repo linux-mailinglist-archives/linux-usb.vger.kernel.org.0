@@ -1,103 +1,126 @@
-Return-Path: <linux-usb+bounces-15422-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15423-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A89A985517
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 10:06:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B25B98551F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 10:08:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 529C91F249B7
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 08:06:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19347281B31
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 08:08:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95AD158D94;
-	Wed, 25 Sep 2024 08:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A25F158D7B;
+	Wed, 25 Sep 2024 08:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HE9835vO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C6614D2BB;
-	Wed, 25 Sep 2024 08:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69421591FC;
+	Wed, 25 Sep 2024 08:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727251603; cv=none; b=K+1NZnQJ++jaImyCFZ7PH1/fDIppj+gfrB0B/qE55LYfMXWa7cQjMI20qLossv42/B//Sm3DEOrppGaUn8INEFgmETe0UTL/mcD1uL4+eoGOtyl7OMpHeHOtKppJRB89XLaWIlHQF1wx9PMy7tEkWrRnI71voA+l3Simg2iDfso=
+	t=1727251682; cv=none; b=sNwEGQvr9ZvsPV1sZVfVVdQ7aD0wO+8yW1PeMoumc954Xeqyw+mnZc48bZChuwmLPy2jxeOZfRGSiOlCb7v7Wxrj+p4NS24sV8cSZET8o24SUfSwuQsWuJFlF9QMsi22hdqA/zc5n/zDO+QoArcjKJFK8FXcC2uNXxlVP6qD0xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727251603; c=relaxed/simple;
-	bh=yR8ZPzlojOuGQMgdvt6zlMZL1XkH4oy3FViFpSpTb2E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tccD4+4egIZypebCDA0PqpQ5BGfxqSNQc9dDATtN8jBnpOnrQeTS0g+1BaTyh8oEeHIw0EmmjYfg+D0/5t42HiJeDvb22bAVm67SXr1ItHZLynE/Vb3W3MWjq33WjwenRIvF+RZomIIHBO/i3/yzQMiOiOZnZQRhF9z1aBi36NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 0e5eb41c7b1511efa216b1d71e6e1362-20240925
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_UNTRUSTED, SA_LOWREP, SA_EXISTED, SN_UNTRUSTED, SN_UNFAMILIAR
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:b315c855-bf32-4aa4-94cb-13f25471b335,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:20
-X-CID-INFO: VERSION:1.1.38,REQID:b315c855-bf32-4aa4-94cb-13f25471b335,IP:0,URL
-	:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:20
-X-CID-META: VersionHash:82c5f88,CLOUDID:bd4ce6a220f2334224fd08cd28e9d75c,BulkI
-	D:240925144023207KTES0,BulkQuantity:5,Recheck:0,SF:66|17|19|102,TC:nil,Con
-	tent:0,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
-	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-UUID: 0e5eb41c7b1511efa216b1d71e6e1362-20240925
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1980744408; Wed, 25 Sep 2024 16:06:23 +0800
-From: dengjie <dengjie03@kylinos.cn>
-To: gregkh@linuxfoundation.org
-Cc: rafael@kernel.org,
-	pavel@ucw.cz,
-	len.brown@intel.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	xiehongyu1@kylinos.cn,
-	duanchenghao@kylinos.cn,
-	xiongxin@kylinos.cn
-Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
-Date: Wed, 25 Sep 2024 16:06:18 +0800
-Message-Id: <20240925080618.188429-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2024092543-enforcer-quaintly-9f3e@gregkh>
-References: <2024092543-enforcer-quaintly-9f3e@gregkh>
+	s=arc-20240116; t=1727251682; c=relaxed/simple;
+	bh=lTFOVzuAlya0UbOyBgHH6STpD6xx219ysmuap5hgg10=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BH6dZJQC5PslzwDBdQM4vhHcHTTf8aRxOawwFkWbejQhjPencMWpqj65JQhIXazvYO4tiFPtacvfRa6aNEklxOeeS6ILkW5SA4V+hctbgzTvuUbqrtBpHRKBw/eYPydhb3/w4FXiEg4fnVcKgD0NpUTLMTIE5xyXg6Vp/MKSH54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HE9835vO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63529C4CEC3;
+	Wed, 25 Sep 2024 08:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1727251681;
+	bh=lTFOVzuAlya0UbOyBgHH6STpD6xx219ysmuap5hgg10=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HE9835vOVFjuYgmNZaecgjKRTThlBL1JXzrDbLYqhVKaP5exW3JMNlq6ZGYUIbs98
+	 A7xvKUj7DqT7euUp/pAsPtRhMSqYiZm5ZMUxMDA45/eVa9BkFHMffcRTPQE1CYjDqf
+	 tNi+ktGqGmZtqYBoryPZcZXf1DbQGV5K+6kQR16s=
+Date: Wed, 25 Sep 2024 10:07:57 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Michal Simek <michal.simek@amd.com>
+Cc: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>, mka@chromium.org,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	wentong.wu@intel.com, oneukum@suse.com,
+	javier.carrasco@wolfvision.net, matthias@kaehlcke.net,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, git@amd.com
+Subject: Re: [PATCH] usb: misc: onboard_usb_dev: introduce new config symbol
+ for usb5744 SMBus support
+Message-ID: <2024092553-conclude-rebuild-5541@gregkh>
+References: <1727187551-3772897-1-git-send-email-radhey.shyam.pandey@amd.com>
+ <2024092551-fiddle-flatterer-e643@gregkh>
+ <4da1353f-1209-43ba-930e-7b4f4a0cb2eb@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4da1353f-1209-43ba-930e-7b4f4a0cb2eb@amd.com>
 
->> Fixes: 3904bdf0821c ("PM: hibernate: Freeze kernel threads in software_resume()")
->> Signed-off-by: dengjie <dengjie03@kylinos.cn>
+On Wed, Sep 25, 2024 at 08:59:00AM +0200, Michal Simek wrote:
+> 
+> 
+> On 9/25/24 08:33, Greg KH wrote:
+> > On Tue, Sep 24, 2024 at 07:49:11PM +0530, Radhey Shyam Pandey wrote:
+> > > Introduce new kernel config symbol for Microchip usb5744 SMBus programming
+> > > support. Since usb5744 i2c initialization routine uses i2c SMBus APIs these
+> > > APIs should only be invoked when kernel has I2C support. This new kernel
+> > > config describes the dependency on I2C kernel support and fix the below
+> > > build issues when USB_ONBOARD_DEV=y and CONFIG_I2C=m.
+> > > 
+> > > riscv64-linux-ld: drivers/usb/misc/onboard_usb_dev.o:
+> > > undefined reference to `i2c_find_device_by_fwnode'
+> > > drivers/usb/misc/onboard_usb_dev.c:408:(.text+0xb24): undefined
+> > > reference to `i2c_smbus_write_block_data'
+> > > <snip>
+> > > 
+> > > Parsing of the i2c-bus bus handle is not put under usb5744 kernel config
+> > > check as the intention is to report an error when DT is configured for
+> > > usb5744 SMBus support and kernel has USB_ONBOARD_DEV_USB5744 disabled.
+> > > 
+> > > Fixes: 6782311d04df ("usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support")
+> > > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> > > Suggested-by: Matthias Kaehlcke <matthias@kaehlcke.net>
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/oe-kbuild-all/202409140539.3Axwv38m-lkp@intel.com/
+> > > ---
+> > >   drivers/usb/misc/Kconfig           | 11 +++++++++++
+> > >   drivers/usb/misc/onboard_usb_dev.c |  6 ++++--
+> > >   2 files changed, 15 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> > > index 50b86d531701..29976a93f122 100644
+> > > --- a/drivers/usb/misc/Kconfig
+> > > +++ b/drivers/usb/misc/Kconfig
+> > > @@ -331,3 +331,14 @@ config USB_ONBOARD_DEV
+> > >   	  this config will enable the driver and it will automatically
+> > >   	  match the state of the USB subsystem. If this driver is a
+> > >   	  module it will be called onboard_usb_dev.
+> > > +
+> > > +config USB_ONBOARD_DEV_USB5744
+> > > +	bool "Onboard USB Microchip usb5744 hub with SMBus support"
+> > > +	depends on (USB_ONBOARD_DEV && I2C=y) || (USB_ONBOARD_DEV=m && I2C=m)
+> > > +	default y
+> > 
+> > "default y" is if you can not boot without this option enabled for all
+> > Linux systems.  I doubt that is the case here :(
+> 
+> Intention is to have it enabled when USB_ONBOARD_DEV is enabled with all
+> other conditions. In our case where our HW guys started to use this usb hub
+> with usb-sd convertor where rootfs is on it. Without usb hub initialization
+> via i2c we are not able to boot our system.
 
->What happened to the other authorship information?
->
-I'm very sorry, the information of other authors was 
-accidentally added when I was using the script template.
+That's fine, so say so in the Kconfig text and your depends line should
+be fine for that to be correct.  But don't do "default y" as it is not
+normal for drivers.
 
->And again, please use your name, not an email alias.
->
-My name is Deng Jie, and dengjie03@kylinos.cn is the 
-email account registered with my name, where "03" is 
-added to avoid the problem of having the same name.
+thanks,
 
-Thanks,
-
-dengjie
+greg k-h
 
