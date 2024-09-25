@@ -1,135 +1,131 @@
-Return-Path: <linux-usb+bounces-15446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15445-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E32B986350
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83A359861CA
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:02:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E72F528B595
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 15:23:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47CD028A024
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 15:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BA322EE4;
-	Wed, 25 Sep 2024 15:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1539518DF71;
+	Wed, 25 Sep 2024 14:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U9Fe9Oh8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FuMy2Gdi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08141D5AAA;
-	Wed, 25 Sep 2024 15:05:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8499418D65D;
+	Wed, 25 Sep 2024 14:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276708; cv=none; b=fMYRLdOblJbZDD+MbTiFhC8KRIAPH4/v3TpoC0I3pChTA9lrAEcEWikq5tnezkzrPEItiKxebdqlm6XVHXwWBRmvy4XNojYyh+8HsMgxwb2xn0FslqWmlWYwz88gFO2IrBE6D9wNbLlSALtpV/dAyM/1qsJMwNP52xCHUxLzKEo=
+	t=1727275001; cv=none; b=ABZRqJhO/1uWw6A4w+LdkOKJupNcgkF5FtFH65x7DdnEc3u8nKOlCS8Zpyyps3YtSMkHOKZJUdB+doB1zHzV5hb8Jjx7KQ8gWdDFliTBqam4Rlc1YYRShmUbA8KFCDg69nyon80DLwWOsFERRSnLP0KUT1179otZe94GmXmfciI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276708; c=relaxed/simple;
-	bh=7vCwXwDG+bsxtvd02iytviiUSMi6iO6Ybyp3t8WIe5Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EQu8t/nznrNR3OkpPm6MsAyiFJv4qtrSfl63IbksG79098MUJJAQGF5apIT32M5yxf7DTU+/qv3K1WbeJ6EADbYo8zcuUVphfpBSv62zKej6/VJLMxx/a6vjzygD8AAD1z3pYvHJCb4BVHAi8UlGtgO3BqkXB8kF65K3WyF0JiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U9Fe9Oh8; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727276707; x=1758812707;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7vCwXwDG+bsxtvd02iytviiUSMi6iO6Ybyp3t8WIe5Y=;
-  b=U9Fe9Oh85bH/PdB5ZG1jCEY+QRRj55hwj7XIodC22A7jYo4Avc+wg1mO
-   PGMKuVlUAk2Yp5qlPefe8EQdkgRtupzwPWIcsCkpdcxTJA86bMYKunnBY
-   0BhcRhC9H13g8i/TvbEMBS8B5UEMqZUWaGkeCRnCRlP2zFI7FWfUOq/Uu
-   DPXzVp1MPW4DZkBiWIxamV+QfzF9setHH/7SDNONg3wVw91hAwssItPVR
-   e4lVtB4qJsUaXtnSa1sweti1avul1ZL7dNvtl0yhuMFIsELtciHHRhyNj
-   grt1cIIuCfbZsx+h4CN5cqrePfF7gLO2suIhGO5RRfarndugLf/vbd+Ms
-   Q==;
-X-CSE-ConnectionGUID: dhq0LvMBQ+SbeGGKCscbqQ==
-X-CSE-MsgGUID: 8a9LlwOmQGekzzPceke9SQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="26482876"
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="26482876"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 08:05:06 -0700
-X-CSE-ConnectionGUID: KkJZz6O4SrW69iXt+QA+QQ==
-X-CSE-MsgGUID: dfMikm4UR6+Y2DTcJrvcFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="76317626"
-Received: from kniemiec-mobl1.ger.corp.intel.com (HELO [10.245.246.30]) ([10.245.246.30])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 08:05:01 -0700
-Message-ID: <52f10356-ecf7-4c92-b0c3-78f7a63ae85c@linux.intel.com>
-Date: Wed, 25 Sep 2024 16:22:57 +0200
+	s=arc-20240116; t=1727275001; c=relaxed/simple;
+	bh=IRWh34M9eLXn2sq7ps5dZpSuJotvBM24SKsU7Cln6A4=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=Oa6hyqqR/gUwtgGp7ksT3KNvXWgM4Cm+GJ8vQeEluokJbWHPs90oB5b1uxySAlAFAPdpDIYcdfna4Y2pPEa7WOyXYlUb1hmaPQeWwsJDmt5nZvLvBj7TEHZxugnsDPZIdKrBImZCnIRSQdpYE3yw5f4Bz+ISFjgQsF2digdCAxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FuMy2Gdi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16B4C4CEC7;
+	Wed, 25 Sep 2024 14:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727275001;
+	bh=IRWh34M9eLXn2sq7ps5dZpSuJotvBM24SKsU7Cln6A4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=FuMy2Gdi2xZhtaAjCok4TyOR1e3AHrcBxcbEfwcuNW83WBV6jQuFJjiXMGjoN7ctk
+	 gaTBEnfoeUp6d7mgie3TcBqBDoPctPCoDYGX35Ozskt0ml67i7ZIBUl3icOAlLqxOS
+	 AedfPM/Ji5si+wMnUBD42Uhsw3BRSiRucgb3ms8JXCydPLxkbpqLNJZremaBFgQmYS
+	 CzN+YmRV12NpR+e1O/KOitU8+zRw14Rwaw7fSaE7h70yF1X7dNtdDExdzCwTdrnhau
+	 xLOHk6boUuRky+qbYiIeQfPf7+FUpO4GQCuOirREWyo1cJQeWNHVu74P5X4HxQpwjG
+	 B+RgNJYV23+0Q==
+Date: Wed, 25 Sep 2024 09:36:40 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v28 12/32] ALSA: usb-audio: Save UAC sample size
- information
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
- lgirdwood@gmail.com, tiwai@suse.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, robh@kernel.org,
- gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-doc@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20240925010000.2231406-1-quic_wcheng@quicinc.com>
- <20240925010000.2231406-13-quic_wcheng@quicinc.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20240925010000.2231406-13-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: =?utf-8?q?Michal_Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Cc: Michael Walle <mwalle@kernel.org>, 
+ Herburger <gregor.herburger@ew.tq-group.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>, linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-usb@vger.kernel.org, 
+ Mathieu Othacehe <m.othacehe@gmail.com>, 
+ Joao Paulo Goncalves <joao.goncalves@toradex.com>, 
+ Fabio Estevam <festevam@gmail.com>, imx@lists.linux.dev, 
+ Conor Dooley <conor+dt@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Petr Benes <petr.benes@ysoft.com>, Shawn Guo <shawnguo@kernel.org>, 
+ Marco Felsch <m.felsch@pengutronix.de>, 
+ Alexander Stein <alexander.stein@ew.tq-group.com>, 
+ Hiago De Franco <hiago.franco@toradex.com>
+In-Reply-To: <20240925124903.1837869-1-michal.vokac@ysoft.com>
+References: <20240925124903.1837869-1-michal.vokac@ysoft.com>
+Message-Id: <172727480975.1214083.15009186129806772241.robh@kernel.org>
+Subject: Re: [PATCH v5 0/2] Add support for new IMX8MP based board
 
 
-
-On 9/25/24 02:59, Wesley Cheng wrote:
-> Within the UAC descriptor, there is information describing the size of a
-> sample (bSubframeSize/bSubslotSize) and the number of relevant bits
-> (bBitResolution).  Currently, fmt_bits carries only the bit resolution,
-> however, some offloading entities may also require the overall size of the
-> sample.  Save this information in a separate parameter, as depending on the
-> UAC format type, the sample size can not easily be decoded from other
-> existing parameters.
+On Wed, 25 Sep 2024 14:49:01 +0200, Michal Vokáč wrote:
+> Hi,
+> this series adds support for a new member in our IOTA platform.
+> The board is based on the i.MX8MP SoC. It adds support for most
+> of the board functionality except USB Type-C port and some other
+> minor things.
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-> ---
->  sound/usb/card.h   | 1 +
->  sound/usb/format.c | 1 +
->  2 files changed, 2 insertions(+)
+> This series originally included the dt-binding for that Type-C
+> port controller but I finally removed it based on a good comment
+> from Krzysztof. I will post the Type-C binding including the driver
+> in a followup series.
 > 
-> diff --git a/sound/usb/card.h b/sound/usb/card.h
-> index 4f4f3f39b7fa..b65163c60176 100644
-> --- a/sound/usb/card.h
-> +++ b/sound/usb/card.h
-> @@ -15,6 +15,7 @@ struct audioformat {
->  	unsigned int channels;		/* # channels */
->  	unsigned int fmt_type;		/* USB audio format type (1-3) */
->  	unsigned int fmt_bits;		/* number of significant bits */
-> +	unsigned int fmt_sz;		/* overall audio sub frame/slot size */
->  	unsigned int frame_size;	/* samples per frame for non-audio */
->  	unsigned char iface;		/* interface number */
->  	unsigned char altsetting;	/* corresponding alternate setting */
-> diff --git a/sound/usb/format.c b/sound/usb/format.c
-> index 3b45d0ee7693..5fde543536a8 100644
-> --- a/sound/usb/format.c
-> +++ b/sound/usb/format.c
-> @@ -80,6 +80,7 @@ static u64 parse_audio_format_i_type(struct snd_usb_audio *chip,
->  	}
->  
->  	fp->fmt_bits = sample_width;
-> +	fp->fmt_sz = sample_bytes;
->  
->  	if ((pcm_formats == 0) &&
->  	    (format == 0 || format == (1 << UAC_FORMAT_TYPE_I_UNDEFINED))) {
+> Michal
+> 
+> Michal Vokáč (2):
+>   dt-bindings: arm: Add i.MX8MP IOTA2 Lumpy board
+>   arm64: dts: imx: Add imx8mp-iota2-lumpy board
+> 
+>  .../devicetree/bindings/arm/fsl.yaml          |   1 +
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 423 ++++++++++++++++++
+>  3 files changed, 425 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> 
+> --
+> 2.43.0
+> 
+> 
+
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y freescale/imx8mp-iota2-lumpy.dtb' for 20240925124903.1837869-1-michal.vokac@ysoft.com:
+
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: pcie-ep@33800000: reg: [[864026624, 4194304], [402653184, 134217728]] is too short
+	from schema $id: http://devicetree.org/schemas/pci/fsl,imx6q-pcie-ep.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dtb: pcie-ep@33800000: reg-names: ['dbi', 'addr_space'] is too short
+	from schema $id: http://devicetree.org/schemas/pci/fsl,imx6q-pcie-ep.yaml#
+
+
+
+
 
 
