@@ -1,109 +1,116 @@
-Return-Path: <linux-usb+bounces-15466-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15464-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 238A898657D
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:14:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA89E986546
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:04:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B73AAB25AF2
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:14:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1C8A1F265E8
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:04:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A144F61FD8;
-	Wed, 25 Sep 2024 17:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F5E49624;
+	Wed, 25 Sep 2024 17:04:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="RH94mpxk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R8ytr4DO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC095134BD;
-	Wed, 25 Sep 2024 17:14:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CC01F94C
+	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 17:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727284487; cv=none; b=cr4PmVaoeigCym/UyOSnjrNBwxBLF7FnytZoP52YSWZZ5QwiuRQeyEeG3mt7vI6G5IyZtnCTAUzPRLm/9M6DkNc7bSWOa8JrY3qyNymG/R1nNKVK/Mss5aYZYkkrBX3aYNkWzaI34P3u8gjI2szhekhntvMvESwYAOQTY+gxWoY=
+	t=1727283893; cv=none; b=kb/gqTInODYPT8xP+3pJmBh5bqFD2pnhXzuC9d9CLKoGXEzGkfEkoxhPFIyOz2ivkqNWF3e5ghymX4DlUCWAsq2MXCoialdobaestSvqXpQb2685zntJPgzfAanpu4GMR9oMfkbhJBhzpTMX8isSFrA1DtqTy8yICUrdepTU95Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727284487; c=relaxed/simple;
-	bh=aIW1QfRYwvuDJbIY3ZHeD9wGhOVohwX859RGPoS1nQs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dywOxllQSWM8XJMKuBsp6rfNmdPmmxfUZzvTEHlC4haTMlL6F2On/0MkyxcpMrUqxaY3fTIwNl718yw6L2nwwIlrbAm1baBYmejDYxzcn3dny2QZRgUw9yN/06pNa12pUbSkirJQfAFYAIu85uwaIwggVigyE8uqzwNoxJwrNos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=RH94mpxk; arc=none smtp.client-ip=166.84.1.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
-	(No client certificate requested)
-	by l2mail1.panix.com (Postfix) with ESMTPS id 4XDNCF2nF7zDQj;
-	Wed, 25 Sep 2024 12:55:37 -0400 (EDT)
-Received: from [192.168.80.67] (unknown [207.7.121.250])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4XDNC55w34zl2J;
-	Wed, 25 Sep 2024 12:55:29 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1727283330; bh=aIW1QfRYwvuDJbIY3ZHeD9wGhOVohwX859RGPoS1nQs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=RH94mpxk3EVikiQBZ1bjTttZbakCa8GRtM46BdWBji+xmCV9HMcCnb9vv83DEjwca
-	 fl1W/jyqYBWNmmw7RlpXdEIW/qQ6/sOgA2YAVXrHf/gOa/E2YD241Cuc4hv472ZfDq
-	 q7GRkY2Q8ZhpPmGrhhgNuksq8nQhzXTg2IP1ujdM=
-Message-ID: <985893c0-ade3-4b23-b452-6f416e7ff2a1@panix.com>
-Date: Wed, 25 Sep 2024 09:55:28 -0700
+	s=arc-20240116; t=1727283893; c=relaxed/simple;
+	bh=8htXylArPWCddqvf+J0dcpViSY2vryMcT/YAeNTS0LU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LpSwy+hJJ0MGw1D1U90LFX1e7ADhT34f8+bWJkIyMpg4GYrpioNKnbgq3Nq1OXmOCiHG4f5pC3gxbIbDXKJL5XWdBq9FWwmwbjdILaGE1UAoEce9oW4feyWq1sG+waGYaEVwQcz/6p0I8ED/ztpdy1or1hedx77d/5hbgImPWhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R8ytr4DO; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-537a2a2c74fso1130779e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 10:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727283890; x=1727888690; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=V2R4XJj4ap59FotkDKZ4Pzl2VkV0YoUjK1G8PYQt3fY=;
+        b=R8ytr4DOhzQ7lpjs72KL2Bq5oXwDnYQ4FLISeDVur5NJvjMRvCoXuZG/B8JluDHgHv
+         eIA8jIfAq7hbFoEgnXhvadjlkLifGKDP0o/UBBzGj7nPJ0tY2sOKf15wqxWoVB1C+Cpd
+         m5uHDQL9VGkswx6Ous7Vv5A6mFlMiTjGB0pnVBgC1T6vYNBcrF0noqBzt0CLBf+Jj5a1
+         q3hKTgMZsty7WZlzFkHALoSYAACRb80uG/Wb3/T0FRwmEOob4IcdFq11QrU+Cg9r5u9k
+         qs74T91TwnmIgcThVeBSmI5oK4eKd5OfSWDPStH9NkHRQEjeijs4SHwCCnBawisC3O8w
+         YhUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727283890; x=1727888690;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V2R4XJj4ap59FotkDKZ4Pzl2VkV0YoUjK1G8PYQt3fY=;
+        b=jATSAGpqq0SbDeF2ysaVPZbmBToaNp5Eq96pEab95/lhFbgDmtdkvRPqHngeKFIlN2
+         msKp6TR2C58yRWFFdyYwPocZH21TBj1NLF9fUHpeYp9JTpPqIbyK+2tSlTxU372305fT
+         2lGFQJprTgdy4rDxSEoGXw+lws7HUgmZtjsyoz8oe7ikriuAY5j9zkNiQeWABFQt4XSk
+         LkYWKDDI2bMJa84tl4DJSqf7h+0fd8zL/rf2vDK5AcyDYLJkaxG11sEHK8UBUoepgist
+         W2+9FhmFLmoV/MPDUDCehvdUXc5aDesTkvlcrFouwc79YECHNz8NhSyh1AMS55eHFVRt
+         fzQg==
+X-Forwarded-Encrypted: i=1; AJvYcCXye2YpkMdjd+zjaIa1IGNmrCcQeNeJCO7yQG6+qmuKPh/zbXj8t2DNaebtWxySjYejWxoQJjTKmbM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFcxDNrMxxxo/3JO9jV9z51hlcA0qodTKrKdyvRgkb+c9qK/of
+	wn5I8mI3GT2Z4wTWqyKyhymQXUaLT73htm+pNU9v0hEVl66i9IBMJNwyL1HPeDw=
+X-Google-Smtp-Source: AGHT+IGtoM0NgqWQa2JzRXVwBmyXvSTpUmC3TfaVStQslIHuIU9YRDspCg6CF9GzIcIQ/etCenGkhw==
+X-Received: by 2002:a05:6512:2c8d:b0:533:3fc8:43fb with SMTP id 2adb3069b0e04-53896b91cd0mr136961e87.0.1727283889782;
+        Wed, 25 Sep 2024 10:04:49 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-537a864d7a2sm570052e87.249.2024.09.25.10.04.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2024 10:04:48 -0700 (PDT)
+Date: Wed, 25 Sep 2024 20:04:47 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: ucsi: glink: use
+ device_for_each_child_node_scoped()
+Message-ID: <erdwuk77ju5tvixlyxjjcapgg6x6mpwcswjs26shj36wrypmjo@dhxdh4cvvv7k>
+References: <20240925-ucsi_glink-scoped-v2-1-a661585fff35@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
- Thunderbolt additions when coming out of suspend or hibernate
-To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
-Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- linux-pci@vger.kernel.org
-References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
- <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
- <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
- <20240904122835.GG1532424@black.fi.intel.com>
- <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
- <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
- <20240913052540.GN275077@black.fi.intel.com>
- <7ac9a400-fdb2-4d78-bacf-2e502c7338e8@panix.com>
- <ad0458ee-b75c-46f9-a012-1e0615aecf53@panix.com>
- <b29b8750-5235-4097-a880-d8620da2520a@panix.com>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <b29b8750-5235-4097-a880-d8620da2520a@panix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240925-ucsi_glink-scoped-v2-1-a661585fff35@gmail.com>
 
-
-
-On 9/15/24 17:14, Kenneth Crudup wrote:
-
-> ... and it turns out that my crashes on the CalDigit TB4 dock are 
-> probably related to a Thunderbolt-to-NVMe enclosure that was always 
-> plugged into to the dock; apparently when resuming "something" was 
-> waiting for the now-disconnected NVMe drive to come back, leading to the 
-> hangs. Disconnecting the enclosure from the dock seems to prevent the 
-> resume crashes.
+On Wed, Sep 25, 2024 at 05:49:46PM GMT, Javier Carrasco wrote:
+> Use the scoped variant of `device_for_each_child_node()` to
+> automatically handle early exits.
 > 
-> I may try and root-cause that issue later, if I have time.
+> This prevents memory leaks if new error paths are introduced,
+> as no explicit refcount decrement via `fwnode_handle_put()` is needed.
+> 
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+> This patch is a follow-up to the recently introduced commit c68942624e25
+> ("usb: typec: ucsi: glink: fix child node release in probe function")
+> to account for a safer approach to iterating over child nodes.
+> ---
+> Changes in v2:
+> - Rebase onto v6.11 to apply without errors due to the previous
+>   patch mentioned in the cover letter.
+> - Link to v1: https://lore.kernel.org/r/20240623-ucsi_glink-scoped-v1-1-f0fdcfec69bb@gmail.com
+> ---
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 
-So I've determined this problem happened somewhere between 6.10.8 and 
-6.10.9; I don't always have the affected hardware so it'll take me a 
-couple of days to bisect the issue, but at least I have an idea on where 
-the problem is.
 
-What's interesting is testing using the NVMe-to-TB adaptor directly into 
-the laptop isn't enough to trigger the crashes, it has to be plugged 
-into the CalDigit TB4 dock at suspend time to trigger a hang on resume 
-if the CalDigit dock is disconnected in between.
-
--Kenny
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
-
+With best wishes
+Dmitry
 
