@@ -1,83 +1,80 @@
-Return-Path: <linux-usb+bounces-15478-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15479-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF9F1986848
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 23:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2968E9869F5
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 02:00:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BEF51C21906
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 21:26:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44C6D1C23B3B
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 23:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D82EA156236;
-	Wed, 25 Sep 2024 21:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221631A3BCA;
+	Wed, 25 Sep 2024 23:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IYDBYT3Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d3PNbchF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EDA14B95A
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 21:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621EC14AD24;
+	Wed, 25 Sep 2024 23:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727299592; cv=none; b=jAPhf2ILz+OsHcrx9Hb+r50oiKW+b7Ta/kSp+hvSQsL1sDooJ+SmdgzYzfwbz8C7ZyagVmJlPyVOTa6z5pH9Uh1QlJNnNC3AIuaKeg7ENhzPvNHOtCnt3MjsxA6pX3R583Claww2Z71bU08wZhqdnTvgFoRf+kujdjf50EzFp6I=
+	t=1727308789; cv=none; b=B8lxxBQBhO2O61ncKU+/dMxjPNbl55E+FbjlV3WkKBn6NqOQaxdtMMADN70d0BblWxW+sxWKpDoh46aPmftpfpOFiW+nCeaeKlP3XFu7JlHqHo8AuOYTktMC5j+OR5zVX5jXGZKjZgJRoE9cadLpVcg0skGrWnnCET+VACij/2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727299592; c=relaxed/simple;
-	bh=zaF/Dm1tDIioJLLUoaqqYW8eTsn35uabr/Gky5vZDuM=;
+	s=arc-20240116; t=1727308789; c=relaxed/simple;
+	bh=CSK//gxzmcctiDTYayy7uXe9etmH2AVe0UsRHlfWu8k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oLyzpwhlPcpAEJ+1AX+kZSRdS5oxzdQsZBx4/4Pk6M9sji/a9REPEuLGx4qjbWffeo/hiK/v+mayUiNTlCMhfQ8XMHD6GMEomOXdoJjOLydIMFYXxnARCOObkUS03KySNjYihx3U4uV3ILAYd8r7TQM4f/KW8Sjga7kSD1WcF9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IYDBYT3Q; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2f75c0b78fbso3185211fa.1
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 14:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727299589; x=1727904389; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TOYkNpvty++FfWXgNtcgpq0qmRgQhoDIUQ1gLZ+9OCs=;
-        b=IYDBYT3QZccc47c255acGbPbeCeA+UsAO4OW/go653zzSD55oGeNex13I0DxH0uDfM
-         W2tvCFIbrJJBP67oW2g32v0uXJCO83eazpjL0ki6HK8Mt5ZjhECjtRS5o8/aPgT2rYet
-         um6fiquUnnVUQEyyy5/GQe62VYRoaD6PI3pJwLih+CsbLacVzGr5nxyGY89di9q3Aw5C
-         pD2zMHDSBZJ2SiYhBxjOmfTQTMUYCO4G6GoQd8gG05+iuGT7VdhAVX1xwP6JVsC03Bh5
-         squw75JwzPOSJszDX1WqAcg5AmLCm56Rt93pXxSFJzwogwkvScDQZqdYGy/3nfFdsguX
-         2tfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727299589; x=1727904389;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TOYkNpvty++FfWXgNtcgpq0qmRgQhoDIUQ1gLZ+9OCs=;
-        b=ayCWp+KN6Zdn+oWnY6b5KXB7j3CX1SuoJx63yRh0WTnur9z54IMcHIZzMffcdwJF0N
-         HJL0glfu4aZGYQ2Pww15/IO8McqycxgszE0PqslC3feWUS6FJ3Uh1mUku5SxFrbvVxEn
-         AxcRkvi8mlJFZBrbkwj2fALInGqlN/LjaWxK/DmpCe1O3BzoCDTEKdLFRT5pYWoEKWeL
-         ELQh+lZXDCsux+wfDBESKPRI/sb8KVYjoV06HyZW9hwPRk6HTQ0Ezl2FVci8gXLywOyH
-         HIrguzSmsZB31+C/UnORLCqg2ISyKt2ayneGYfd56pEfMev3OVELx3g+bChIAoCUgpa5
-         lM/w==
-X-Gm-Message-State: AOJu0Yz1w5iwSFpucFPmozbd2IUz4G9j3k16PVbOcXIUcDDOlZ3gBTdL
-	QpdUgvhRiNIMLI++8AxsHU1T/wr7o21ZBGQQkq7PD/Ml0Kn93uyahWxuNUMfuWQ=
-X-Google-Smtp-Source: AGHT+IEmV7veckkGCnJaS53c+RIOeWgYMFU3i3KFTcPwIhFLJpfjINi6uUsM/Jg8x2BKOpYRIDVosw==
-X-Received: by 2002:a05:651c:50f:b0:2f7:939f:a47f with SMTP id 38308e7fff4ca-2f915fdbbe0mr29744371fa.11.1727299588616;
-        Wed, 25 Sep 2024 14:26:28 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f8d289b61fsm6086821fa.111.2024.09.25.14.26.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 14:26:27 -0700 (PDT)
-Date: Thu, 26 Sep 2024 00:26:24 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Haotien Hsu <haotienh@nvidia.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Utkarsh Patel <utkarsh.h.patel@intel.com>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Wolfram Sang <wsa@the-dreams.de>, LKML <linux-kernel@vger.kernel.org>, 
+	 Content-Type:Content-Disposition:In-Reply-To; b=WsKDEyjMklCeH5DYrjEjt0i8ciqT41Ake31dojkiDCALQ5uLgdWPneiNghpltBhOty0/kYuShlZY1aAY/uk1cQieDNbHG+Y9pAKJepDQk7nbGSoxLeLi86DQCV555sFKMxsPvsWgGfztH6zmQ70PnaLvKJxzgLNqZS86aNog0nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d3PNbchF; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727308788; x=1758844788;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CSK//gxzmcctiDTYayy7uXe9etmH2AVe0UsRHlfWu8k=;
+  b=d3PNbchFeDeLQd/UEWJsx+QkJQ28TUYTn8lOJO0GYNTLpeChNDGnpmVK
+   S05aZ16r9wzqUg37NelxxLeuZ6DnsXgLQA/IS0Mln1dcGibkAJXNZz/sb
+   XkYtx7e4Wzjir36mJEhFzxFCm3rJH2ZOToGKb3HZmb78vt/xYSaO4MmFi
+   dFBtGMpmiIujEEjRFHSraFreHZns3+QYyvrENlPM0HMo8ELVb03gjFuuv
+   R68YSAFzTxcaadP/VWljpKDmNXBh2K/BFGA5YRSSQTocJVyAiHC2GvEhl
+   4SVvNNToEuGvyunYmFNiP7AUIgNsCu/6MzzoiEwwz2clI4WasYZdLQZSi
+   g==;
+X-CSE-ConnectionGUID: j4bGU+6pQoCmsqkkxdOMvQ==
+X-CSE-MsgGUID: S4KVrQ1xSNy6R91C+jLyBg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="29275787"
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
+   d="scan'208";a="29275787"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 16:59:47 -0700
+X-CSE-ConnectionGUID: fpWLMYKYTqGUW+XR2+GQ3Q==
+X-CSE-MsgGUID: nczqUb9DS+6lSCV651UHeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
+   d="scan'208";a="76327756"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 25 Sep 2024 16:59:44 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1stbv4-000K3N-11;
+	Wed, 25 Sep 2024 23:59:42 +0000
+Date: Thu, 26 Sep 2024 07:58:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Markus Elfring <Markus.Elfring@web.de>, linux-usb@vger.kernel.org,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
 	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 0/2] usb: typec: ucsi: ccg: Adjustments for common code
- in two functions
-Message-ID: <jjsbnitbajdw7dc4plkbb55ezl2cdbnrfws7hnoigbzasvdzua@puhrwwlu4lvv>
-References: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
+Subject: Re: [PATCH] thunderbolt: Use common error handling code in
+ update_property_block()
+Message-ID: <202409260728.uNVNmTvy-lkp@intel.com>
+References: <26b7f215-4f83-413c-9dab-737d790053c0@web.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,27 +83,107 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
+In-Reply-To: <26b7f215-4f83-413c-9dab-737d790053c0@web.de>
 
-On Wed, Sep 25, 2024 at 07:31:04PM GMT, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Wed, 25 Sep 2024 19:19:01 +0200
-> 
-> A few update suggestions were taken into account
-> from static source code analysis.
-> 
-> Markus Elfring (2):
->   Use common code in ccg_write()
->   Use common code in ccg_read()
-> 
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+Hi Markus,
 
-For the series:
+kernel test robot noticed the following build errors:
 
-Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+[auto build test ERROR on westeri-thunderbolt/next]
+[also build test ERROR on linus/master v6.11 next-20240925]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/thunderbolt-Use-common-error-handling-code-in-update_property_block/20240925-161308
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+patch link:    https://lore.kernel.org/r/26b7f215-4f83-413c-9dab-737d790053c0%40web.de
+patch subject: [PATCH] thunderbolt: Use common error handling code in update_property_block()
+config: arc-randconfig-001-20240926 (https://download.01.org/0day-ci/archive/20240926/202409260728.uNVNmTvy-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409260728.uNVNmTvy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409260728.uNVNmTvy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/thunderbolt/xdomain.c: In function 'update_property_block':
+>> drivers/thunderbolt/xdomain.c:703:30: error: 'dir' undeclared (first use in this function); did you mean 'idr'?
+     703 |         tb_property_free_dir(dir);
+         |                              ^~~
+         |                              idr
+   drivers/thunderbolt/xdomain.c:703:30: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +703 drivers/thunderbolt/xdomain.c
+
+   645	
+   646	static void update_property_block(struct tb_xdomain *xd)
+   647	{
+   648		mutex_lock(&xdomain_lock);
+   649		mutex_lock(&xd->lock);
+   650		/*
+   651		 * If the local property block is not up-to-date, rebuild it now
+   652		 * based on the global property template.
+   653		 */
+   654		if (!xd->local_property_block ||
+   655		    xd->local_property_block_gen < xdomain_property_block_gen) {
+   656			struct tb_property_dir *dir;
+   657			int ret, block_len;
+   658			u32 *block;
+   659	
+   660			dir = tb_property_copy_dir(xdomain_property_dir);
+   661			if (!dir) {
+   662				dev_warn(&xd->dev, "failed to copy properties\n");
+   663				goto out_unlock;
+   664			}
+   665	
+   666			/* Fill in non-static properties now */
+   667			tb_property_add_text(dir, "deviceid", utsname()->nodename);
+   668			tb_property_add_immediate(dir, "maxhopid", xd->local_max_hopid);
+   669	
+   670			ret = tb_property_format_dir(dir, NULL, 0);
+   671			if (ret < 0) {
+   672				dev_warn(&xd->dev, "local property block creation failed\n");
+   673				goto out_free_dir;
+   674			}
+   675	
+   676			block_len = ret;
+   677			block = kcalloc(block_len, sizeof(*block), GFP_KERNEL);
+   678			if (!block)
+   679				goto out_free_dir;
+   680	
+   681			ret = tb_property_format_dir(dir, block, block_len);
+   682			if (ret) {
+   683				dev_warn(&xd->dev, "property block generation failed\n");
+   684				kfree(block);
+   685				goto out_free_dir;
+   686			}
+   687	
+   688			tb_property_free_dir(dir);
+   689			/* Release the previous block */
+   690			kfree(xd->local_property_block);
+   691			/* Assign new one */
+   692			xd->local_property_block = block;
+   693			xd->local_property_block_len = block_len;
+   694			xd->local_property_block_gen = xdomain_property_block_gen;
+   695		}
+   696	
+   697	out_unlock:
+   698		mutex_unlock(&xd->lock);
+   699		mutex_unlock(&xdomain_lock);
+   700		return;
+   701	
+   702	out_free_dir:
+ > 703		tb_property_free_dir(dir);
+   704		goto out_unlock;
+   705	}
+   706	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
