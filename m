@@ -1,170 +1,165 @@
-Return-Path: <linux-usb+bounces-15451-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15452-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 714D4986369
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:26:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D3439863C4
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:39:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 383CC289092
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 15:26:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E2FA1C26E3F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 15:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44FCE183CAF;
-	Wed, 25 Sep 2024 15:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA62134BD;
+	Wed, 25 Sep 2024 15:38:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ZEsCmHCj"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Dk//1uWw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [217.72.192.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F991D5AA8
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 15:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3E9DDC5;
+	Wed, 25 Sep 2024 15:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276857; cv=none; b=SPatzD/Kuh0lDyeSDPOzzDbsJmQIecil6+2p/fGMExqVA/XSin7aLDj0zMTYeyhruykJ75y8LfyiJGX89w0/hgt0wLyAYqxwLUOC0q6fL/zLjWMggychBwRv+h8XuTZ5okUbnOIWQ/fDz9/YwKgrd1iNhn+0HGZnOzQVbVfqFZw=
+	t=1727278737; cv=none; b=ulWXk8/PKN+RhvJtc2Vir9QqUWnZWmdSk9NGWCD1M09xMWbVyMXK+fKSyvco38UAzF/t1/ssNhw82Yq8BNrv+DwxE0Pg9CqTXkW2d4unDb9uA4k7rGVtHaesdtMTKQYncKgjhQJqZc1vfkgxq4xA5FMG0rdDyuuoz5TWE7LOMdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276857; c=relaxed/simple;
-	bh=WsCh6ssXxMdWFTiE+4Zre6Ax1+Bve0twBDDs58T2ZRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hKER8YAVgyRdSW4h8WLTJjANLfv9vFp0T6zdbdkta9Zo+hUiWcsPXQjoDlRX8rY2vuGoeT/9mxeSTaPsjz4WfEy0e62ByKovkMxYMawJaNDrPcqTyR8NGrGyhvSMBkfDSySYN2ZMO3o0v09oCazKCOVkfmkaPVOb8WGBQ4Lu4us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ZEsCmHCj; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42cae102702so56541895e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 08:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1727276854; x=1727881654; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DWF83HMoN2Ea7DGvk+6V2CllZTFpJS9ca4WBd4vItNM=;
-        b=ZEsCmHCj3lrnFRi8vjShxG34AysoU5V+qkOFhYEUn8SCCLowq4X2IXZcUm/h9E9HFM
-         cuL3PwVbEHUzrs7VE+sh7GocG2V78AoDZk3pKrPI/QqjuaKchng1AtLBSedyUj+delBG
-         47BOwoepMeSXTank4RQY+x5NkaWOsoEuv1kr1BKwLfRhEA6SHLaaSbM4UvssHZ8W8ORA
-         6ooDuZ7l97JDMCqr8ptjzbRM6KnGscM5UwJFDn1zvvfaY3xjmT/srTg2ru9rX7MOCuCT
-         LbdYYqlh+PypQ3TGAd63lhoiHMLltEVDmTsS2/6YT6LCteupM92p6blD0A7qMi8fNoSE
-         XLPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276854; x=1727881654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DWF83HMoN2Ea7DGvk+6V2CllZTFpJS9ca4WBd4vItNM=;
-        b=eVsDWrih62pgeftOhWJz1/D3+wFecfZMMxrIr3Vp6dR9M//GvzTgirlMSPaQ3YuE9W
-         oIcoVRLwWVO+d8XPkTKeX9XnGgsyHYC9CXaIiRGU7m8crvQ6gNzyAKVAMfkuV0ow9srm
-         VzSNFm4CGJC+/Xl57KGM5dABb2NA0l3n1zpoFl8BtAIa7zGlwk6L/5cF+M3tjZckfxJ/
-         DIrYpfjYhnm0hkSYD0XSFENQ+CmoxLcmYnTk9N7LB8O9Cq+hw8QWLr+t5a3gglyekYwd
-         5Ayxyv+fI0nMhLrVOR4lsKzcpmk4/CUKXhzPVI5rjAd1cSPpj66jgrod2GgR1sVt9TVE
-         GfTw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8OgMMYXNi5Ia7wJURvUell5OOXH0ummo7R80mJ1NzZTYcE/Zqo4oe7pEkx8GcsgjOWAukAGFHqdM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFqOv1oqvwA35RrganY0n5s8qAb5eIpDZ3vQOUgXwKvv7lG75l
-	FW9xqcVJBr4KzzliQ4uyWQLZVi9APazlbRDL112P4D/sE1vgnRjfCawNlZxbGak=
-X-Google-Smtp-Source: AGHT+IGip3sOgl+bQOmdyqaao7YVehMer8d8+AYC1VqOmcY2i0t8OPHuGhScpGVwZxC3FqSYI+aIsw==
-X-Received: by 2002:a05:600c:470e:b0:42b:a7c7:5667 with SMTP id 5b1f17b1804b1-42e96144a7cmr19014655e9.25.1727276853820;
-        Wed, 25 Sep 2024 08:07:33 -0700 (PDT)
-Received: from localhost (amontpellier-556-1-151-252.w109-210.abo.wanadoo.fr. [109.210.7.252])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a52308sm21474945e9.43.2024.09.25.08.07.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 08:07:33 -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:07:32 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Lei Liu <liulei.rjpt@vivo.com>
-Cc: Neal Liu <neal_liu@aspeedtech.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH v3 1/5] usb: aspeed_udc: Use devm_clk_get_enabled()
- helpers
-Message-ID: <zi5lq44bc4vd33y42zkmn7hr7rw64wfxe2rvuvkekola6ctckc@buv7ybvq5skt>
-References: <20240826081900.2284-1-liulei.rjpt@vivo.com>
- <20240826082140.2311-1-liulei.rjpt@vivo.com>
+	s=arc-20240116; t=1727278737; c=relaxed/simple;
+	bh=93cxj6Cr+VPnS1DFo8zzQfPXtg13oFKJuewmGZN28fc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=rL97JZ2WMgLGXp9WrWr+KIfKKGPzagau7l4QIUMOwwtOVIkhgwqbNI1Erwq658pBXMjaxe1fms5kpnksUdLD4WUHEMDxkwu/WsOj6/YqYV4RldfSbbpPwGxOIctXB/XKuzRJmqvxL/hxCYDP6Yc81/E55piQ8u0SRaajktzlZc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Dk//1uWw; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1727278720; x=1727883520; i=markus.elfring@web.de;
+	bh=/BF/n008MTXnPCnTy2Tzf/W95fPNGj+i5tDXPuhc4/g=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=Dk//1uWwJCm+GNNhpNKI12pGiZICAlzBZNRi6Jop3VV16DTGdsYQTnm5OVQkaCCo
+	 Gc2UpLhnpGJZMoQzYgCJGB4u+TyTjQOTqz17ffz2iBHsGawYxCuuqZBR+qdieQsX8
+	 0WFG/qYIERsnDTvNvVi/rc+csfnVViTBddss3komN2kL4MU/M2DH31dpNvhFjborR
+	 erYj1jBA44e1x6JJRN27+ayxnNwEbJBO5JnYKM8PgDkI3GQd9vFhKT4GE6PTvW2zO
+	 HRzgTSRaNDQIg4v+/oxQy6HzcSWegH0tyoE3fiDkv/o16ZR9ViADO/Uu0NR4NcRbW
+	 0f6SFq7py5E4XGtXaA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MTOha-1sUCxY0a3Y-00R1uX; Wed, 25
+ Sep 2024 17:38:40 +0200
+Message-ID: <59fadd5a-6574-4379-98ac-cc4f11b675cc@web.de>
+Date: Wed, 25 Sep 2024 17:38:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6dsn6gbwes7baogl"
-Content-Disposition: inline
-In-Reply-To: <20240826082140.2311-1-liulei.rjpt@vivo.com>
-
-
---6dsn6gbwes7baogl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jeff Johnson <quic_jjohnson@quicinc.com>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] usb: gadget: eem: Use common error handling code in
+ eem_unwrap()
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:MeUPnH0sS8NaAjzkZtCgjeUspcEHrkiTqOp61I/CfLq64WMzRa2
+ 4vuTdbQkQyiTzn09j3nXY6XzuEOvcN6uKto3VpYz2rNged6uXX+R+a9q27Vof4cXLKwb9N+
+ mKWwlPRYTYH+tp3tCno8xABVG2NI9NMcXYjfZRpRA4d6GD7vgQ+jrttyIG0G4yCAXV85GhV
+ juwGmgGqhuURyAfg5mTgw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:WCT5LJdfDHo=;jH7Uz4t1nuoKWXTB/e6FmWstsa3
+ XDsoH1RH8myevKcPIT6aG6V1JNz4hR9p4U3g1rHH+NBrP13mOzz7V+XuvEKDZpxXP8WTIG45Q
+ r/IHhSC0MwglRbCSv3H7LCwwpY9zyfrkRPYSHbXE3/bNh1XUjS66/9So/yisTu4ceS800jwYp
+ CQtIqcsLwfZkZmwBI8WNNWkCGD1G8gHio9Ami6iVpbUzS4otAWQsZijmvvci1Mk8zHpuvMH8R
+ pDuJ/cQb41pm4OddMUd0LbbGF9eHmVDP1EauV8y8XJhbbeccvg3fQyxJhsd9hgdk2VUCJNJhy
+ DeMfcVFZtYUK7Gw56zwFwhK8B8vz+0ZrynKhftjSsWDRz5qsSCWXp+Ezd8Hs8zMWpQY0As5A/
+ J1ZiHPwEhbm9x7kcJPLrC9yG5iR7gqg4pDV6Pq0/GioVT5vx9K7aH9GPROfcqWW0Vfx86dOzr
+ 4EcSqGqMsmIm0unG7Ky1idSLMok4zs++WbPMcMI/K0j2Fh+Tp8WmaFtuo8ODEXLz6FWBkVTVf
+ W6KdGaqa6Zt+j3SJrUSHvne1A3C5CBVn4V7GtP7Um4Q/EymZKUVmKPhLBYzy32psgdqbfXKwC
+ PGTg48GhgglYS5MLdaXHupcDPkmA8qHZ+SrS8Ok4Tl+17WtY0w0sYQS9KkeTXqsFeNq0MeW8o
+ bsHP8NX8VRot4x3lmBXholsyW2v78lpQ9vU7CLMv9+MgZdkO87o/qgDXfTlQEtgCP4E3f/Dze
+ 7duhSwr3+4/F2EoDhQw0qgYsRg9BwYYMfk9HY1ox9Is11mcl0HsiTPtbdCv+Q6LjxdMUsXUL1
+ KUI7ibW1pV5YOzwQy53bjkIA==
 
-Hello,
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Wed, 25 Sep 2024 17:26:40 +0200
 
-On Mon, Aug 26, 2024 at 04:21:39PM +0800, Lei Liu wrote:
-> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc=
-/aspeed_udc.c
-> index f4781e611aaa..a362e31f7550 100644
-> --- a/drivers/usb/gadget/udc/aspeed_udc.c
-> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
-> @@ -1459,8 +1459,6 @@ static void ast_udc_remove(struct platform_device *=
-pdev)
->  	ctrl =3D ast_udc_read(udc, AST_UDC_FUNC_CTRL) & ~USB_UPSTREAM_EN;
->  	ast_udc_write(udc, ctrl, AST_UDC_FUNC_CTRL);
-> =20
-> -	clk_disable_unprepare(udc->clk);
-> -
->  	spin_unlock_irqrestore(&udc->lock, flags);
+Add jump targets so that a bit of exception handling can be better reused
+at the end of this function implementation.
 
-Isn't it broken to call clk_disable_unprepare() while holding a
-spinlock?
+This issue was detected by using the Coccinelle software.
 
-I guess that means that the remove path is untested in practise and this
-patches fixes a sleep-in-atomic. IMHO this invalidates Ulf's concern in
-his reply to the cover letter for this patch at least.
- =20
->  	if (udc->ep0_buf)
-> @@ -1500,16 +1498,11 @@ static int ast_udc_probe(struct platform_device *=
-pdev)
-> =20
->  	platform_set_drvdata(pdev, udc);
-> =20
-> -	udc->clk =3D devm_clk_get(&pdev->dev, NULL);
-> +	udc->clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
->  	if (IS_ERR(udc->clk)) {
->  		rc =3D PTR_ERR(udc->clk);
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/usb/gadget/function/f_eem.c | 30 ++++++++++++++---------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
-An error message here would be nice. Something like
+diff --git a/drivers/usb/gadget/function/f_eem.c b/drivers/usb/gadget/func=
+tion/f_eem.c
+index 6de81ea17274..b1be23e947dc 100644
+=2D-- a/drivers/usb/gadget/function/f_eem.c
++++ b/drivers/usb/gadget/function/f_eem.c
+@@ -450,24 +450,17 @@ static int eem_unwrap(struct gether *port,
 
-	rc =3D dev_err_probe(&pdev->dev, PTR_ERR(udc->clk), "Failed to get clock\n=
-");
+ 				ep =3D port->in_ep;
+ 				req =3D usb_ep_alloc_request(ep, GFP_ATOMIC);
+-				if (!req) {
+-					dev_kfree_skb_any(skb2);
+-					goto next;
+-				}
++				if (!req)
++					goto free_skb;
 
-should work.
+ 				req->buf =3D kmalloc(skb2->len, GFP_KERNEL);
+-				if (!req->buf) {
+-					usb_ep_free_request(ep, req);
+-					dev_kfree_skb_any(skb2);
+-					goto next;
+-				}
++				if (!req->buf)
++					goto free_request;
 
->  		goto err;
->  	}
-> -	rc =3D clk_prepare_enable(udc->clk);
-> -	if (rc) {
-> -		dev_err(&pdev->dev, "Failed to enable clock (0x%x)\n", rc);
-> -		goto err;
-> -	}
-> =20
->  	/* Check if we need to limit the HW to USB1 */
->  	max_speed =3D usb_get_maximum_speed(&pdev->dev);
+ 				ctx =3D kmalloc(sizeof(*ctx), GFP_KERNEL);
+ 				if (!ctx) {
+ 					kfree(req->buf);
+-					usb_ep_free_request(ep, req);
+-					dev_kfree_skb_any(skb2);
+-					goto next;
++					goto free_request;
+ 				}
+ 				ctx->skb =3D skb2;
+ 				ctx->ep =3D ep;
+@@ -536,10 +529,9 @@ static int eem_unwrap(struct gether *port,
+ 						NET_IP_ALIGN,
+ 						0,
+ 						GFP_ATOMIC);
+-			if (unlikely(!skb3)) {
+-				dev_kfree_skb_any(skb2);
+-				goto next;
+-			}
++			if (unlikely(!skb3))
++				goto free_skb;
++
+ 			dev_kfree_skb_any(skb2);
+ 			skb_queue_tail(list, skb3);
+ 		}
+@@ -550,6 +542,12 @@ static int eem_unwrap(struct gether *port,
+ error:
+ 	dev_kfree_skb_any(skb);
+ 	return status;
++
++free_request:
++	usb_ep_free_request(ep, req);
++free_skb:
++	dev_kfree_skb_any(skb2);
++	goto next;
+ }
 
-Best regards
-Uwe
+ static inline struct f_eem_opts *to_f_eem_opts(struct config_item *item)
+=2D-
+2.46.1
 
---6dsn6gbwes7baogl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmb0JzEACgkQj4D7WH0S
-/k7BAggAkHqZteCrETJY7VyuZN1rZlaLtOcZtOwWhGS/VU77rZ3XggeRv3m4vC47
-hPTn3yyiJND47OJu6fIC9tSLUrY8K1HNI1kZ03J3SiDOrPevc0wzDlNITQCENVL4
-Nc4lAtMYR1ZfCzNJ7+MK0PXCHZGkREp7DF8RLnvp2EOqdSadL6ZOexvONaOp0z2w
-fI+4yzo1++k7+EBuSnnL7xVwk+T55OezIBpcy0cLeQRgcjOrbhPd7Evo8VtyGLAe
-ZkZW3RhxSAIMpu1Kux0lFaFV+0Zp+piZSwYUIet5L87cJhdOy5gKFnSDTQp1U+tk
-RwwyaG8WrFuECHX+T+NlpPRYc0btYw==
-=rUO+
------END PGP SIGNATURE-----
-
---6dsn6gbwes7baogl--
 
