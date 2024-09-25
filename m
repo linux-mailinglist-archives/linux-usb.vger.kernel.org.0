@@ -1,142 +1,84 @@
-Return-Path: <linux-usb+bounces-15426-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15427-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 459B79855C7
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 10:45:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A80B9855E5
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 10:55:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F00321F21309
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 08:45:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA25528504E
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 08:55:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A53815B135;
-	Wed, 25 Sep 2024 08:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F144E15747D;
+	Wed, 25 Sep 2024 08:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNr6MoI6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EBWAuV/A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDCF15B104;
-	Wed, 25 Sep 2024 08:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6350B156222;
+	Wed, 25 Sep 2024 08:54:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727253907; cv=none; b=cxNgKabUJXRRv+UPA6g5kSy8XPd4wc13SNBY4cEA8r/XDNDN23ANeYFX8/QO1mgsXBhRxf70BqfP8pLIF4pKnGDpRqRkSFbuIojSqtul2Wkos12ts2xzwhFYCZpN+cwok+IxMq9O27cT2iQcyDcmOQb5yhUEpGaTE3jOStH5AQE=
+	t=1727254496; cv=none; b=rc0LWD6OtdXUwOW666JIM8rETLE0ENhC5UDQW6icUyLyURO7TuUhV8Cv0MIeRWe7bC9sf9nn2V5LJ2ZO8g8W2VjsSbbZQdOGDniSvSSLMNiEpm/9ewMMFgvo80q3Emt3ayPmBobNxIKaTvyfzOibW593gWqlgBmKzxVZdruISSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727253907; c=relaxed/simple;
-	bh=u49MkBsrEVyat/nSqnmiVuo+lAAzaF2zEZQwaCaUPJk=;
+	s=arc-20240116; t=1727254496; c=relaxed/simple;
+	bh=1FOp92KBJPupmba1Mm9f9uzhUy5JB5JjPCZW7EGMWL0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u+QHKvz7/iVEMYqQidUYcN8WO6DfHLAn03//Wu8otV3BDh3dWkRauYNoUahTew8fk2fpl2mpxqO61LhqudW4szYefcIFfALV3qtm2eCFCpxuh1NyCh2QrqX8zbrs4V0tD9eEKUFMSRxk58cCiqcgRw+xQWW0LtgRLRJ+hDziwrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNr6MoI6; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727253906; x=1758789906;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u49MkBsrEVyat/nSqnmiVuo+lAAzaF2zEZQwaCaUPJk=;
-  b=mNr6MoI6ndplyIc3/XRfJRjxEmWZw3GwkAhP7PlU+vZXDaA8lJTGE5Ol
-   HtUBzzog/KBy3ArEQmgsFmVl3YPRD8c1byAolxwfGJh6/BhlQCZy6o1/X
-   ALBubL6FNWhsHGDZIS4Rvq3kAzkfm64rEZ0XGoXfLzfuxmzPC8ifqBaa0
-   ORJTUl5rhRHHhCQVnwNnKoeM6fmiUeLmT1+qy+JC6JqXTDsVmEi7VhnqK
-   eiKRWzgJ+naw8YL2Mx0kvbGqIsD+jeGvrzJQY7kovvVQj9xYPurc3eAx0
-   +Iz/0OYEpoUTHTsKsOYs6OxskgTP5W6pemGGDBg6zGcSE+DWpIgFTTkH9
-   Q==;
-X-CSE-ConnectionGUID: PsGGAUxcRIuGWTcCtYcUPw==
-X-CSE-MsgGUID: 2/+czE6uRnevD0sLNJEmLA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="13913785"
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="13913785"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 01:45:05 -0700
-X-CSE-ConnectionGUID: UGcvfzunQtyjTha5afLKig==
-X-CSE-MsgGUID: 16rf9qmjTzq/BZmK4YHtCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="76630188"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 25 Sep 2024 01:45:03 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id C5E86565; Wed, 25 Sep 2024 11:45:01 +0300 (EEST)
-Date: Wed, 25 Sep 2024 11:45:01 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-usb@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Use common error handling code in
- update_property_block()
-Message-ID: <20240925084501.GY275077@black.fi.intel.com>
-References: <26b7f215-4f83-413c-9dab-737d790053c0@web.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gl5e3F0n3g606LcwkYUdTcgMSwyM620vpmRWVmB8WU0uCtXaHhwOMGBbv3AfeAF03zMWfmf5IyN1ENwGi6iozSegRAJOKwwBeW4PQ8xIP9Jjj9vJZLx2lIX0Mp5q2hb4ar4oNJrmeFyxNBXgNWTSwyK7RDSR+3bjgRHGlgQqPV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EBWAuV/A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6D0C4CEC3;
+	Wed, 25 Sep 2024 08:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1727254495;
+	bh=1FOp92KBJPupmba1Mm9f9uzhUy5JB5JjPCZW7EGMWL0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EBWAuV/Au7O5eNiyzx8rAflBIfIsJ+spS8nHYZxW3ZMoWnG/4r0ZUX6wOswRIxHiM
+	 998+n6c0+o3noyUm7pZzgbCKAp7szbjwynmmpgKWUeKFUE7mrTAv6K4dBh3d8boW9f
+	 W4i68A4Y1Ut+L5OsadjLTCLALlkyQiH26r3tux6s=
+Date: Wed, 25 Sep 2024 10:54:52 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: dengjie <dengjie03@kylinos.cn>
+Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, xiehongyu1@kylinos.cn,
+	duanchenghao@kylinos.cn, xiongxin@kylinos.cn
+Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where
+ task resumption fails due to USB status
+Message-ID: <2024092525-envision-impotency-c1a6@gregkh>
+References: <2024092543-enforcer-quaintly-9f3e@gregkh>
+ <20240925080618.188429-1-dengjie03@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <26b7f215-4f83-413c-9dab-737d790053c0@web.de>
+In-Reply-To: <20240925080618.188429-1-dengjie03@kylinos.cn>
 
-On Wed, Sep 25, 2024 at 10:10:38AM +0200, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Wed, 25 Sep 2024 09:39:16 +0200
+On Wed, Sep 25, 2024 at 04:06:18PM +0800, dengjie wrote:
+> >> Fixes: 3904bdf0821c ("PM: hibernate: Freeze kernel threads in software_resume()")
+> >> Signed-off-by: dengjie <dengjie03@kylinos.cn>
 > 
-> Add a jump target so that a bit of exception handling can be better reused
-> at the end of this function implementation.
+> >What happened to the other authorship information?
+> >
+> I'm very sorry, the information of other authors was 
+> accidentally added when I was using the script template.
 > 
-> This issue was detected by using the Coccinelle software.
-> 
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  drivers/thunderbolt/xdomain.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-> index 11a50c86a1e4..8e3cf95ca99c 100644
-> --- a/drivers/thunderbolt/xdomain.c
-> +++ b/drivers/thunderbolt/xdomain.c
-> @@ -670,23 +670,19 @@ static void update_property_block(struct tb_xdomain *xd)
->  		ret = tb_property_format_dir(dir, NULL, 0);
->  		if (ret < 0) {
->  			dev_warn(&xd->dev, "local property block creation failed\n");
-> -			tb_property_free_dir(dir);
-> -			goto out_unlock;
-> +			goto out_free_dir;
->  		}
-> 
->  		block_len = ret;
->  		block = kcalloc(block_len, sizeof(*block), GFP_KERNEL);
-> -		if (!block) {
-> -			tb_property_free_dir(dir);
-> -			goto out_unlock;
-> -		}
-> +		if (!block)
-> +			goto out_free_dir;
-> 
->  		ret = tb_property_format_dir(dir, block, block_len);
->  		if (ret) {
->  			dev_warn(&xd->dev, "property block generation failed\n");
-> -			tb_property_free_dir(dir);
->  			kfree(block);
-> -			goto out_unlock;
-> +			goto out_free_dir;
->  		}
-> 
->  		tb_property_free_dir(dir);
-> @@ -701,6 +697,11 @@ static void update_property_block(struct tb_xdomain *xd)
->  out_unlock:
->  	mutex_unlock(&xd->lock);
->  	mutex_unlock(&xdomain_lock);
-> +	return;
-> +
-> +out_free_dir:
-> +	tb_property_free_dir(dir);
-> +	goto out_unlock;
+> >And again, please use your name, not an email alias.
+> >
+> My name is Deng Jie, and dengjie03@kylinos.cn is the 
+> email account registered with my name, where "03" is 
+> added to avoid the problem of having the same name.
 
-No way, this kind of spaghetti is really hard to follow.
+Great, please use "Deng Jie" as the From: line and the signed-off-by
+line as is required.
+
+thanks,
+
+greg k-h
 
