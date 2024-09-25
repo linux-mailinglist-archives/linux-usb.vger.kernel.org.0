@@ -1,121 +1,117 @@
-Return-Path: <linux-usb+bounces-15429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15430-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E50198566C
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 11:35:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ADA3985688
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 11:40:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AD861C20D21
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 09:35:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04C0E285725
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 09:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3083E15CD4A;
-	Wed, 25 Sep 2024 09:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418CB15F3EF;
+	Wed, 25 Sep 2024 09:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W21+6nzi"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="E8yLEu7F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1130E13AA53;
-	Wed, 25 Sep 2024 09:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A93115CD58;
+	Wed, 25 Sep 2024 09:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727256946; cv=none; b=Hy0fgtQXHtp5tU+HtKZJVaMoNCsJhUBo6tQwhmRPc1zjiG3vGPff+j+SgzAoqj0G50gsiLFVkbzs0GUzNwbkHWe9Tiw+VY9crRA+GsTUYmgP0GxZuic0h9M3eZsPhuD67lnBf45wD2YPmVCprV/wM5OFqPgQyJs8DHC7WM1pnfA=
+	t=1727257222; cv=none; b=BXom9PUiKVcF6nZ8KHyiMlu9v5wHKq4JDYb6w+ACwbxbmseDxj5/e5n5xEv586n75jvDjq6/e96q43PA1Ju6iEnKz49hSj/xA1Y9cBlfTFdcViHvWq9b9MFrdrCMQK4hWFPa1i97j2e3T/yxoneTWvM5E1bv6GEoQPNM5wYCWXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727256946; c=relaxed/simple;
-	bh=2GPgVJ0/g0Ha/YUnhKpQQX58Iusuhm5y+hBXDyEaAws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GPANP4VoLS7sm3wiUp3MADv0dz+XIAKijOS2YsMs6VpLeMc8pkICfi0F57+Cuxykb6kHXO9P3O8olWd4iy9iG121fZCy3LnDF8DET00YlmDBuraLuxFrHVrXT0oYY9FF3mrJJowQ/IdU4/xpsW25vCdbgdnRJyumeJflS9k9Ws0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W21+6nzi; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727256945; x=1758792945;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2GPgVJ0/g0Ha/YUnhKpQQX58Iusuhm5y+hBXDyEaAws=;
-  b=W21+6nzipnMoeUG0YcMiJinTl0IoYMYYB0rIzKefjKuV3PhsUydh6YuD
-   3E9h8+HYb9KC612/CkdakXpGsKpIx9wFL+KtZIG1UKHJfyTH8LgFa8yXm
-   EvkpvERPCU1McoR1iRsQ46d8WqsN7dYhLIvp/oMOiJGYE5YZBSgxPoSgl
-   X9XynId3u7h2UBfEar4u3IwoNPs9yBu96rJoFKy3vFR4oW97xMJ3KVwlL
-   SCe7LlrscuN56DEwUHxQk41waX4yj2SWHqSKIzU5djqax3R+hYg9KTzgm
-   3CuSy2Kl6UuPHSI7iso4ZZtOeryazNdSzEtFiI3NfjZpmpWDtccL+vx4W
-   A==;
-X-CSE-ConnectionGUID: CQw6tMsTQwWmf1gRKBD05w==
-X-CSE-MsgGUID: b5TqQ1Y2QTKZkxBeJLlk8g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="26392362"
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="26392362"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 02:35:42 -0700
-X-CSE-ConnectionGUID: pfCtISnXTGKtj/ucoT2vHA==
-X-CSE-MsgGUID: E5+kPXTmQUO44qA4CcqoTQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="71859389"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Sep 2024 02:35:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 93AAF565; Wed, 25 Sep 2024 12:35:38 +0300 (EEST)
-Date: Wed, 25 Sep 2024 12:35:38 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-usb@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Use common error handling code in
- update_property_block()
-Message-ID: <20240925093538.GZ275077@black.fi.intel.com>
-References: <26b7f215-4f83-413c-9dab-737d790053c0@web.de>
- <20240925084501.GY275077@black.fi.intel.com>
- <a0c37886-cf9e-4c4c-8ff2-db8735f97cb6@web.de>
+	s=arc-20240116; t=1727257222; c=relaxed/simple;
+	bh=9JcTWZqdyUkw9D5W1wOFl5tb0M/8+b45giHbTu/CGIk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WwxM2pa8T3MYrm8pMqFvWdFg3WGruCQzf9elhADkMZ/eXMUmJeUE+mosdYhbGT+wr/U995oXBCdkbjHbxW0TvMBhKsshpDL69xj2rVjg59J6/EHAk4eZLuK83jbZTJMMgUR8l4ZKW2OXr9s8VeuS/j0i3LXXtynsd1aZUFTSEbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=E8yLEu7F; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1727257211; x=1727862011; i=markus.elfring@web.de;
+	bh=JflRnbTAwwYWL3y5oWx7wGiYjsQVpc/xMlKSLBk/HRc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=E8yLEu7FU8+2tDJqD/EKZjQHi/Vb5oGkoEiDBGi/P3zkiAoj/ihG810MP1W+UACd
+	 Zda4Bod+epcva02wFn0vm06yC63CcyKFaskwbKs6NzibixyEMuMWSGYeHdGyrLjlv
+	 rXhPu09zzISd20qq2/g21NCkkQHJ9Sh2Dvx/nNaP9GDfv5NIZ/4o98MmbUE0GV4zO
+	 0dUfMKPBg6uTxznD3hug3/RELi9E9uCptBE2QL64m14jDXyfM/RgpUy5Fwb+6fF8q
+	 gkAUWMZuvTKw8yLH318sdphOZaueOIA8hLXyEOBFlXAl0PUgpO4kKXPTCiLFaDJrx
+	 PMkh06yRG58DeXCclQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MY5bT-1sRZ8Y2oaD-00Jwv9; Wed, 25
+ Sep 2024 11:40:11 +0200
+Message-ID: <10630d7d-9cea-40e1-8140-eb79c06f5c0f@web.de>
+Date: Wed, 25 Sep 2024 11:40:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a0c37886-cf9e-4c4c-8ff2-db8735f97cb6@web.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: thunderbolt: Use common error handling code in
+ update_property_block()
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ linux-usb@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
+References: <26b7f215-4f83-413c-9dab-737d790053c0@web.de>
+ <20240925084501.GY275077@black.fi.intel.com>
+ <a0c37886-cf9e-4c4c-8ff2-db8735f97cb6@web.de>
+ <20240925093538.GZ275077@black.fi.intel.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240925093538.GZ275077@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:BpApNrneg0PqqKe8Lfpr90/NbtkrYAXQvlKdrz/EXBTzCMG7zsV
+ gNERbm/xgFT9pnfUyJ7IE4/M3G+cuXsHA7gnyGrX8uFOIuA3WnGgTxEV+MBVrKUkReALkMD
+ mUROheayjo0eYaZnZR8qwq/zVC4q51rEpopmkhlP0HK1ZhukISNADq32Se9M8WO94daWbcT
+ /Y+edDcnykb1oI7fZah/g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:WWIKu+TKs7Q=;d0hkRn2emdyj2FjcdS52EL4fYeo
+ ef8cCvlqbEvuRoLjTX6hf/i+U6TpfGzjC8odzDKaCWfprDKZUFeSgwOgUkejlIhQwZFI4SIYJ
+ M+JGQlQQeLnEOUDufVZQzKxYfVt5J85lcl1CiBJkjGOr5rQU3wHbDM2nJIhSk7qtLEccZbOIz
+ NvvP76cHPr4lCAxKjNf8bKvqgr46iELtJ8AyQNqrNNwZevy3lVieI9XqxX/obO5JZsuKiDPR3
+ kHuqAk1/rEvvf7wnSOy9dy/FN2071+35TaijMa5atRXmYtTt1YOBnEozLNzKEwIfHNr+o+ts6
+ MV5ZH/2vEdAXPLVM7gdxpzHifpa7HYS9+kuwCxuWwPwakpMq3w9usb9UwvGZDlEYa8A5qeqcQ
+ 13FYB/U0vNeCqNi2xWv/ddfkwlZ7j4ceN5L9K6DdWRaWtozlYLkNoMVsZJu9+mRyV012rZYKW
+ 72Ai+5EtKzhgOtoq/pVjGJervuDgTjkKrkGDE6q0ZxfMdZDSPMomTCzLfJIzB61jGQIeLMPfM
+ mJ3+o598xaXvFkYkfYlaKExkiBlJZmXxgWgNOLfzuWi4D/sig1GBMN8nmeLkGLw9ietWOwgBH
+ vNWDI6r1L0+/cVOZR7Rq/XTO2f4l0XRMB9twgsVDyEdXjeM8bjti5t9ZBF1v0E3f5aaXi9wr7
+ V87Pp6uiX0IeD98NTOEY+L0Q91XGbPI4q9fSVxBTjHadD85mALonCoTjfneEjPW6Sl1OV0ftm
+ woUpjPwWm6bmMqVEUc5cl4ggAo+8WPSDSm5r3P92TI4XbnlJJJyfrdlBWT3896JSD0mB9l3xQ
+ DyqXwWvo76WP3qFRKbAPfAfA==
 
-On Wed, Sep 25, 2024 at 11:20:45AM +0200, Markus Elfring wrote:
-> >>  out_unlock:
-> >>  	mutex_unlock(&xd->lock);
-> >>  	mutex_unlock(&xdomain_lock);
-> >> +	return;
-> >> +
-> >> +out_free_dir:
-> >> +	tb_property_free_dir(dir);
-> >> +	goto out_unlock;
-> >
-> > No way, this kind of spaghetti is really hard to follow.
-> 
-> Under which circumstances would you follow advice more from the section
-> “7) Centralized exiting of functions” (according to a well-known information source)?
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?h=v6.11#n526
-> 
-> How do you think about to increase the application of scope-based resource management?
+> It is fine to use goto as it is described in the document you linked but
+> this what you are doing is certainly not fine, at least in the code I'm
+> maintaining:
+>
+> out_unlock:
+>  	mutex_unlock(&xd->lock);
+>   	mutex_unlock(&xdomain_lock);
+> 	return;
+>
+> out_free_dir:
+> 	tb_property_free_dir(dir);
+> 	goto out_unlock;
+>
+> This "goto out_unlock" adds another goto to upwards which makes it
+> really hard to follow because the flow is not anymore just downwards.
 
-It is fine to use goto as it is described in the document you linked but
-this what you are doing is certainly not fine, at least in the code I'm
-maintaining:
+Would you like to benefit any more from the application of
+scope-based resource management?
 
-out_unlock:
- 	mutex_unlock(&xd->lock);
-  	mutex_unlock(&xdomain_lock);
-	return;
-
-out_free_dir:
-	tb_property_free_dir(dir);
-	goto out_unlock;
-
-This "goto out_unlock" adds another goto to upwards which makes it
-really hard to follow because the flow is not anymore just downwards.
+Regards,
+Markus
 
