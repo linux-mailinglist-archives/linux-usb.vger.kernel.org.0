@@ -1,153 +1,110 @@
-Return-Path: <linux-usb+bounces-15468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15469-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFB0C98659B
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:30:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C30239865A0
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BAB4282032
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:30:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67302B22C84
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3773D81AD2;
-	Wed, 25 Sep 2024 17:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FD6E6E614;
+	Wed, 25 Sep 2024 17:31:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YLDjk6BW"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="GZTtTwK0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7316F30E
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 17:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5AA28F0;
+	Wed, 25 Sep 2024 17:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727285401; cv=none; b=W3mQtuUVzV7FR7E2pSO2t+g2FxgkRIowdEHcOMsfiW5ybHb2MPdOz1+Qa5txxLbCGf64uzUforePV1sKx29MhXfzvTVHlONQ9iVKtfepEcUCe4Sfot6Ja4vH7FsaC5O81NpEtpf8iJF8oz/KwvsNMLw60UOUEp1IxFLvwYT3Md8=
+	t=1727285491; cv=none; b=YlXf1p9hRZ5VcgjAA7bhettWCBcMjKfWXIj3HHFYEUbpTGYUUiRI2S28yZoNJZJmCv+vnc+vN3IpW94LFpMOukzuoAKx/rD3w68Sde6IYo+UGDbvYYqhTOqgT2lGkf3wtKSK3mpqU+LUYBCTqIg3YCN+aUj1WhMLENxRVqu4J+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727285401; c=relaxed/simple;
-	bh=S3foybS1q/OA+MvBiFZY5r1m2O/kN5+WeazHlK5he04=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BumiL/L61EV2EN798BS1QWqs52pYUhoMNBc1HGuTNrFeeQGTBEj86GbGPdS++FjyBNzpCpx69GM/WgR6PMBf9u0vLMQYZT5arcXLmfDYMUShGLfPXucfQByoc5eibdkxaMe7aIrybS93H4GGgeyPVP5iJsBbsTW+FYxIaWnz+20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YLDjk6BW; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6dbb24ee34dso1201547b3.2
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 10:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1727285399; x=1727890199; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j/V7CxHWV1Tser1qk57X7xlPUJc/6s+EPJGxMPkOcP0=;
-        b=YLDjk6BWLGpl11iCrSIqHzhcozlE7aH7Z/7MnD9zndIh1hiYFRiDj6wdJUpXOfci9u
-         LwMHfh5Rt6hA4XK1y4v2gQuIm7SZA8USa61q94+gR1uP2xYTqo5LHAfPljlRaAZ6F81h
-         k/FO2AFGoj1/OZebNUBAnjJteY9MX/HRorMwQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727285399; x=1727890199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j/V7CxHWV1Tser1qk57X7xlPUJc/6s+EPJGxMPkOcP0=;
-        b=g8OHbYKl2+pKlcbUDnRqISBsVqRiKP3oN5ERHI3sNiErN0kOT9DIQrc9YO0La7Jtco
-         C6/uthTmMFzir7CCKPtcNuaqSbTLUhd0dUCNEj8zGJiyUB5jLEc1x9BKFFdeM7r1UWWG
-         8MiqkS6ivY6aN6oxi31MvoIscgfkgYJYVcOfV9YtTdg/+bUuntI+hdWTAndGQsmthJRx
-         FlQT1TaP/kFZI7e/d4ZzT0R4P1+8cFAdw4susrFVtnUexbwQljATZPDzkBAgxgf0GUcc
-         hS1due0pn5I4FBsvJs98BPWFYcX2v01AlX8Nfwdacf5OKF349ps5AFORtf+yeSvM+q6U
-         8SJw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVBar3dQOXE40iOCa1YbXyPCr1bG1YqwXiDuUmweCHugV5TaSAP0NGEq4+C50kfJ7UOhklQhTbhB4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfHzaMxdP9OlWOZPJFH6y+0APOB4Z7pWdNkNb3fh4D2TZUkzIc
-	V3Nm7QnJtIbEl0r2gNTQ2jDRakgDoavKsKBLqGTEqR2JywE9u9umd0Yl2ZBmoPYIuZ8Uoikon7Y
-	V8ncnnajWsCKf7nszYnYLklEHisVMe8bUlZ1k
-X-Google-Smtp-Source: AGHT+IEEJk0hLmkYSqK37kVBafdY8v3m2TYyb4PkKS+wmM4CoQEd1qC9celbMVCKx7Czv9htT4lCXpG6HWI/tNvq/v0=
-X-Received: by 2002:a05:690c:660e:b0:6e2:1336:55d8 with SMTP id
- 00721157ae682-6e21d6ed513mr37998667b3.10.1727285399187; Wed, 25 Sep 2024
- 10:29:59 -0700 (PDT)
+	s=arc-20240116; t=1727285491; c=relaxed/simple;
+	bh=rGQkSpdq0qrZpkr5gjjKCECjESAYk4AF9OzJ9Z8h/hA=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Bd1ZlBhz5AFhnQ8FhPskbLrGtLUhOcAbz1uUF98Lv7EK2fcsIFxWi87P9/ivoL2K+QlflO0/Q/tNtvl3B8AuOKKq+C2Pdqpgph2b2z6Mg6GjfPgT36w43fFX5cw9KzNEERMano6/Gs4dEB4Md4yQkliUZGUVndjy4mxlZndnJow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=GZTtTwK0; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1727285471; x=1727890271; i=markus.elfring@web.de;
+	bh=207BIIINoQhtIpwZzzJgEApvnp6eKuNSLHH5ebki+cE=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=GZTtTwK08IUdhz2CPXB2HZeSRtuQFvewf3KxHC38oi8tOxwBUEQNGUazEU6Gb0K4
+	 YfuzloxRusv4XcD3Z7ouMKrJM5eyr69n3HkCs67EoXEJZp37noZRrJ/Slszoa6Tlq
+	 SErRh/LCVrvNH6BnHjvB93TY+6dXT0YMP0VB6Jryk0sVk9LEgFLNixYIOyOtw1Wi1
+	 2mqRdkKpROR/PipWTrN15f8T0r/z+HuK2hOWSOSLNIlb6zdyE0gIN4P0ThIAHhH+u
+	 8JPSVOdOTdHSeqZvFcEDwfM97YLCVB/QkZgty88qgGnrbfiSlC9bpVZVRGKWBYWE8
+	 rN/J3Qr2ps/qjnvhDg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MZB01-1sOyPn3re5-00QTQ5; Wed, 25
+ Sep 2024 19:31:10 +0200
+Message-ID: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
+Date: Wed, 25 Sep 2024 19:31:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925162513.435177-1-abhishekpandit@chromium.org>
- <20240925092505.3.Ib7a83adb069df1cb0a40dcddff29618bf3255700@changeid> <xzk3yjkf4zew4p3f4jo6an3cnp4qe2vcvdbu6eq4ths5q4aqmp@4d2qfvrdwym5>
-In-Reply-To: <xzk3yjkf4zew4p3f4jo6an3cnp4qe2vcvdbu6eq4ths5q4aqmp@4d2qfvrdwym5>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Wed, 25 Sep 2024 10:29:45 -0700
-Message-ID: <CANFp7mXwOXhkOSCwCME_ZbzvNP20OVZYX5sE-7+WtC5buSxTrw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] usb: typec: intel_pmc_mux: Null check before use
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org, jthies@google.com, 
-	pmalani@chromium.org, akuchynski@google.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Haotien Hsu <haotienh@nvidia.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Utkarsh Patel <utkarsh.h.patel@intel.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Wolfram Sang <wsa@the-dreams.de>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH 0/2] usb: typec: ucsi: ccg: Adjustments for common code in two
+ functions
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:TFAqIEFqOpdD0fBdHiffephnUl82Q8HRfVswmzf7M217X0UULud
+ 2HzryejYHDe/OGLyl/c221b7ZktCfbKUTckYsjgLtJw/79xXnISh+1Hh25ejQvn83Kvw0qG
+ PfXKad+z8tNLE4KL37OGgfR6/hbx/FS2jo8kprMS9P2CEZ37bPrdMSuC783dYSI/iRnzqor
+ KRK2T5Yog5hzx0318allg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:pKmsBhDT8VY=;6gyJXxnvADJxpgd9bY90hCU8lEi
+ 5oTzzPxn3lPBy8HIPpIjkkgPvMsNzhqUIyG3dadc4xSEgLW6oevIpzYtRoPwJouOXrIcCN0Wo
+ qAgrZj2OMUA5snPxEpT42z7vY/dhlbcQBOk5gsrxrc9CbAO9SZMIdi4YQFTfJUk2GDCvuWDO/
+ L3VcBFm/q03oALpqdtENbKVZQsIN7pfPRS157VnosBQT9lc83yQmHa0unREEJF7qrA0IZHl1w
+ MHSEs8r+yDel6862QAh7XL9YOtKSq8M1JMecRDSyJDuVlF9ly9OdWtatZev/oKUJEM9rYiYJv
+ bWWAOS4IHGOudF9Pk8tAyC8xQ602MuYhvuQTW6rtxvAE70kFCMnINUSuULXwARytUfUNyphkx
+ lFW1vCMZwxvez307OoIIaf45XLVgWCy6w3LhFEaeLI6CbgezWhWwZndTmu5nnxLvfEOqvnYmY
+ aOfYce8ZOnOHr5doTSGkMklykxuZo/tuAbEB+G/8Dmq+Bw6P14z8H7KHzK3Ir2H6ycuIRXg85
+ FMyq/+L49yLpeCtJH8owJKVshbbDKyXIiIzPEanVe87xjUSwJWqOEBeyElj+IoTblSf6DXP3I
+ dFsuRD7opvLolNaFHerpLa7ar3n/GGNRXSw/g0VPt/zaAfUYTfiCi5yUO85lSdHgdnVn+ATAD
+ FEOGTcuvyg1VDBTgYfjPxVWGSkDSLvZVq+yJPTEyhKI3IbNVx9SaCNCZgyXvykFZYFBODKbzM
+ VSEWioxFVxiAvgWC9sU+swhNVmmjdM0JhjABCuYO1NabmdPp9KTaVX2WTpfMrnJiC8gBJmRxG
+ atwfIMmsY80f9+oRX1m5i6OA==
 
-On Wed, Sep 25, 2024 at 9:54=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Wed, Sep 25, 2024 at 09:25:04AM GMT, Abhishek Pandit-Subedi wrote:
-> > Make sure the data pointer in typec_mux_state is not null before
-> > accessing it.
-> >
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> Is the a fix for an actual issue or just good-to-have thing? In the
-> former case it lacks a description of how the issue can be triggered and
-> a Fixes tag.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Wed, 25 Sep 2024 19:19:01 +0200
 
-This fixes a segfault that occurs when the new Thunderbolt driver is
-used because it calls `typec_altmode_notify` with null data. I'm not
-sure if that needs a `Fixes` since what's currently running upstream
-doesn't actually trigger this error.
+A few update suggestions were taken into account
+from static source code analysis.
 
-I'll update the description with why this is needed. i.e.
----
-Make sure the data pointer in typec_mux_state is not null before
-accessing it. The new Thunderbolt driver calls typec_altmode_notify
-with a NULL pointer for data which can cause this mux configuration
-to crash.
+Markus Elfring (2):
+  Use common code in ccg_write()
+  Use common code in ccg_read()
 
->
-> > ---
-> >
-> >  drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/=
-mux/intel_pmc_mux.c
-> > index 56989a0d0f43..4283fead9a69 100644
-> > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > @@ -331,14 +331,19 @@ static int
-> >  pmc_usb_mux_tbt(struct pmc_usb_port *port, struct typec_mux_state *sta=
-te)
-> >  {
-> >       struct typec_thunderbolt_data *data =3D state->data;
-> > -     u8 cable_rounded =3D TBT_CABLE_ROUNDED_SUPPORT(data->cable_mode);
-> > -     u8 cable_speed =3D TBT_CABLE_SPEED(data->cable_mode);
-> > +     u8 cable_rounded, cable_speed;
-> >       struct altmode_req req =3D { };
-> >
-> > +     if (!data)
-> > +             return 0;
-> > +
-> >       if (IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) ||
-> >           IOM_PORT_ACTIVITY_IS(port->iom_status, ALT_MODE_TBT_USB))
-> >               return 0;
-> >
-> > +     cable_rounded =3D TBT_CABLE_ROUNDED_SUPPORT(data->cable_mode);
-> > +     cable_speed =3D TBT_CABLE_SPEED(data->cable_mode);
-> > +
-> >       req.usage =3D PMC_USB_ALT_MODE;
-> >       req.usage |=3D port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
-> >       req.mode_type =3D PMC_USB_MODE_TYPE_TBT << PMC_USB_MODE_TYPE_SHIF=
-T;
-> > --
-> > 2.46.0.792.g87dc391469-goog
-> >
->
-> --
-> With best wishes
-> Dmitry
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+=2D-
+2.46.1
+
 
