@@ -1,129 +1,140 @@
-Return-Path: <linux-usb+bounces-15465-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15467-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0928A986564
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:13:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 276B9986588
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:20:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 892CAB255AE
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:13:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2E962868AA
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:20:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F9913B5AF;
-	Wed, 25 Sep 2024 17:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681F855785;
+	Wed, 25 Sep 2024 17:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OdrF2Xy+"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QSdzqXCw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE3282499
-	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 17:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825281EEE9
+	for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 17:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727284329; cv=none; b=bpOOI5oyzw4uxXwDJJRRJEYwTO4SHtGXzPnjKc5t9N31zTvatF0LhRi2z5FrlgfMPKgzEb8xWuGENAeNjlpwLWbMNIqKhi9V6n8T80um17Zj20711vpLvrOmr85Q2LWkINMTAgc5YD8E5g5/BOq/CC4hETMUkomztVnK+61j8tQ=
+	t=1727284828; cv=none; b=sht591uJUTm5m4qSOgcINfvYIluYziNqavFjciD8qMclqDRB0zAVQSdiUPHg5C3YhlQ6zh8u1J3tMnCpER24ju5d3V1ShwimOgz34lSMY1Lqn/u2vfguFt8+TAsk2f+WOSXcap20pou0Yvr/ILqv61NfrZKCPjwoOgL3pyt0tGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727284329; c=relaxed/simple;
-	bh=bIoWbL8+cQIvftkQhhhS5aGeLo30gcPHnKNxeaE3haM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZY4OoQGOtgGwr6b3/R3u1cZPsECNfaRWuaUjgljuQvTkUSw/j7Tm0rUGGp2Svwk/98xicyjls0SckYsoXRdwjIw012fyrnZB4EffafQY9q1xn3POexqTjYGFnCXvDfio+YOgso8vs7Em5sIMgu+i8U6XVwigeI/6dUaLFm3LEdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OdrF2Xy+; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-536a2759f0eso144574e87.3
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 10:12:06 -0700 (PDT)
+	s=arc-20240116; t=1727284828; c=relaxed/simple;
+	bh=hQ6Mhx7JIWYkKXo1pfm6XkI5thrxHDL7hWgwl7eQsKM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SnwFcfLSFIIxb2ZIpnNz3LriTIxHr/912VdkJ3K+0vfuZCvuvJC4CbvObc/s5uFS9gbEpheK9uSsAYv54GqU6OE3hU11ELYxumsJrI208hZF8wHzyIesLGswLOgr2QMG74t1rDP+uf0YYvDUoYWD9WU0SqVtkniTRJGxWHF6rhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QSdzqXCw; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6b747f2e2b7so1114587b3.3
+        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2024 10:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727284325; x=1727889125; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s4Z/qrw/8ifzhH4AWTm4LO9RxwBj17vLbr7zbvp6uIk=;
-        b=OdrF2Xy+54e01alroweUoc7T0cOqAwiXrLotIIkAUOvhjUaCLA4h3U98i3ad3MlRFb
-         pmQqnX1MxR6uHsdB2J25qPynbrfnz1421N2jSZTIuO8gkf7BYhmbs5pekvfn/sUiJgDc
-         zxMqGRktYOlmGA2rPEplhJucT3V1QmSI7OohqAp7nTAGl+UpA4yYZhW8arpYunULdGNq
-         03UyXj/BEiVOaxRaRR3Bre2T/jkvvvtEQjuLe4pr5zns7GIrgqd7wdG9onOnoKFTLWDC
-         DG3gesATDCnEYaLCkMqQ2B4mSsIqiMPQDpUn0VqvEPd3jV190mJE1eKNWHKio72GPX8/
-         IdxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727284325; x=1727889125;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1727284825; x=1727889625; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s4Z/qrw/8ifzhH4AWTm4LO9RxwBj17vLbr7zbvp6uIk=;
-        b=FrwEUa4P6O0/1Wr3gAQIfFITcH30mKkLMMvZ4Q0WY1FdOd/UCTPkfoYKjgGwxhiQjT
-         Ri1YNyHTACOPAW4ULTY6637QzVYZuoSl5uBRy8ckylNuIDfKiwpD3slsKlQe5dVfQlzy
-         19p+KbF11Q6pm81oAm91JA4Nby8IQIlxEg4ARRcIissnypj22y0rO8ubYUQ23qQpJo7Q
-         P3U7Y+DeUqFM3PqTdZAj8x3nPBLBHvoXFmpAFUCfQzCb/k1RimhHHIZ65DRmlp/iOxWB
-         ysQID6cC076GV2CBwenP2v9LlxS3xHQSkH4uh1gk6A+T0+RGdH1PtTc10z67B5yQn33H
-         uFBg==
-X-Forwarded-Encrypted: i=1; AJvYcCWP0k4/VOAhqrAur4IMfLzrxgh4zUTJJWj8WaRjJ5CpvLGrFQ2+FLxNXnC3mJ00hq+sZtIk6E0ZEiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywj2dxHFWX0zpt/KtNQPdIckZinrYN1KmVJ8VlpSlryggQck2Dj
-	x339uEuVv4pGkeb9kgELhzhG1D82q8uvgcpJnt5qLv+rfbHcynWz1jG69/yi8So=
-X-Google-Smtp-Source: AGHT+IH88Z9ewx3HV2rusn4TYxo6thy54qxZ0Rzi5KZL1FRdRnJgljKSZzpDn1p7xLduuWwez5myRw==
-X-Received: by 2002:a05:6512:3d26:b0:52f:d15f:d46b with SMTP id 2adb3069b0e04-53870498352mr2214537e87.14.1727284324994;
-        Wed, 25 Sep 2024 10:12:04 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-537a86402adsm572113e87.169.2024.09.25.10.12.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 10:12:03 -0700 (PDT)
-Date: Wed, 25 Sep 2024 20:12:01 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org, jthies@google.com, 
-	pmalani@chromium.org, akuchynski@google.com, Benson Leung <bleung@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck <groeck@chromium.org>, 
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/8] Thunderbolt and DP altmode support for cros-ec-typec
-Message-ID: <6flxq7m7fdcpajdg5sthar6xlnpn2b3nzzwgp55jlqrjw5ubge@kdym7c2kv5fm>
-References: <20240925162513.435177-1-abhishekpandit@chromium.org>
+        bh=PafzcKiIYdF6wysKKVXDWlev4TmPRalpGq31nVBCo8A=;
+        b=QSdzqXCwQzAOb4nvUmNnzqvGmagJH003yTDo0t1v6nyXeaBNRW4E2Ys7hvqAKTGEDn
+         0Bd3lkIf33hdv1vZVb0X4lI5WxboQ2V8GRv17YgR0l//iy4mb4D7fclaoilgThE2IF2L
+         /D4A/mypEBIiLMMBQT8zH4UVU7LgE7y26Ywbc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727284825; x=1727889625;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PafzcKiIYdF6wysKKVXDWlev4TmPRalpGq31nVBCo8A=;
+        b=PvdJK/ymQd8JZht3AFQcYlbqhGE8MVLg+a7iDha+lWdPWVI7JN2tXI+mJXjGy2xVeU
+         rQ33Tbw0zufWrk3POxsp/qAnsvw54mvjXmcOX+zZ+QIGF3vlqLoKz7uF9I4CbPVVcW15
+         xtQbXRSxTWqEiDkoecQkVpfd6IUTaq7269bPxkkA/uHyU84/rVDvIlWNZoJiA4KWvcUL
+         WOzETylx4E4BGZguxveueMTH13VJEC130HVcpcbBrLu/Pgm29SFsumIMzhgq48KPVEIP
+         oCkJbZn5rfsYPbgz6zeACR+l4usS5BVzqXns+8+nBh7yzX3kPCy/lX+LRMsFhHVV1meJ
+         0Gzw==
+X-Forwarded-Encrypted: i=1; AJvYcCV9YvRm6eaJcitmuOthcSRTJWR4FOaHWRfDNcozYFouqcDBA/EtKfBBtejj2aNfZQoGmUadMQ1HgpE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTO3o0h/37VI7dJ3H8rPNB7oxygE2CRporvXSEfLIMWe1DhiZu
+	RLkzIXpNA6fdOgzWBR4AvxId3M/JHSKCky0nIxNf9vgaQ78ZgJLkmYCrhnBRXcCeadk74/wX6oS
+	BKSompsfEYhh/89c7Q+4AkCDlCAg5X5egEglo
+X-Google-Smtp-Source: AGHT+IFjmckSuZuIgDBXmTJDYZfvAetoI6vwE8y2Iqb2LxyaCa3iZ6YcdfrQOslLC71B/t87NgCAsOdDnccL5zxJrrM=
+X-Received: by 2002:a05:690c:f10:b0:6be:54e1:f1f3 with SMTP id
+ 00721157ae682-6e21d0cea24mr38881507b3.0.1727284825475; Wed, 25 Sep 2024
+ 10:20:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925162513.435177-1-abhishekpandit@chromium.org>
+References: <20240925162513.435177-1-abhishekpandit@chromium.org> <6flxq7m7fdcpajdg5sthar6xlnpn2b3nzzwgp55jlqrjw5ubge@kdym7c2kv5fm>
+In-Reply-To: <6flxq7m7fdcpajdg5sthar6xlnpn2b3nzzwgp55jlqrjw5ubge@kdym7c2kv5fm>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Wed, 25 Sep 2024 10:20:11 -0700
+Message-ID: <CANFp7mU8d4LfXD9p4dbdNs0CGPeYnrQdtLheh_LWD2VwT2Vt9w@mail.gmail.com>
+Subject: Re: [PATCH 0/8] Thunderbolt and DP altmode support for cros-ec-typec
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org, jthies@google.com, 
+	pmalani@chromium.org, akuchynski@google.com, 
+	Benson Leung <bleung@chromium.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 25, 2024 at 09:25:01AM GMT, Abhishek Pandit-Subedi wrote:
-> 
-> Hi Heikki, Tzung-Bi et al,
-> 
-> This patch series adds support for alternate mode entry for the
-> cros-ec-typec driver for Displayport and Thunderbolt.
-> 
-> Thunderbolt support is added by adapting an RFC Heikki had posted
-> previously:
-> 
-> https://lore.kernel.org/linux-usb/20191230152857.43917-1-heikki.krogerus@linux.intel.com/
-> 
-> A few comments on the series:
-> 
-> * The cros-ec interface will not accept any VDOs/VDMs so we simply
->   ignore any configurations we are passed (i.e. DPConfigure). This means
->   the sysfs control of DP lanes won't work.
-> * ChromeOS has two modes of operation for alt-modes: entirely EC driven
->   or AP-driven from userspace (via the typec daemon). Thus, we never
->   expect the kernel alt-mode drivers to auto-enter modes.
-> 
-> This was tested on kernel 6.6 with a ChromeOS Brya device and compile
-> tested against linux-usb (with allmodconfig).
+On Wed, Sep 25, 2024 at 10:12=E2=80=AFAM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Wed, Sep 25, 2024 at 09:25:01AM GMT, Abhishek Pandit-Subedi wrote:
+> >
+> > Hi Heikki, Tzung-Bi et al,
+> >
+> > This patch series adds support for alternate mode entry for the
+> > cros-ec-typec driver for Displayport and Thunderbolt.
+> >
+> > Thunderbolt support is added by adapting an RFC Heikki had posted
+> > previously:
+> >
+> > https://lore.kernel.org/linux-usb/20191230152857.43917-1-heikki.krogeru=
+s@linux.intel.com/
+> >
+> > A few comments on the series:
+> >
+> > * The cros-ec interface will not accept any VDOs/VDMs so we simply
+> >   ignore any configurations we are passed (i.e. DPConfigure). This mean=
+s
+> >   the sysfs control of DP lanes won't work.
+> > * ChromeOS has two modes of operation for alt-modes: entirely EC driven
+> >   or AP-driven from userspace (via the typec daemon). Thus, we never
+> >   expect the kernel alt-mode drivers to auto-enter modes.
+> >
+> > This was tested on kernel 6.6 with a ChromeOS Brya device and compile
+> > tested against linux-usb (with allmodconfig).
+>
+> Please test on top of the linux-usb or linux-next. 6.6 is nine months
+> old kernel.
 
-Please test on top of the linux-usb or linux-next. 6.6 is nine months
-old kernel.
+Ack -- I'm going to try to load the upstream kernel on my ChromeOS
+device + test.
 
-Also for v2 please consider CC'ing both lists for all patches. Otherwise
-it's hard to follow the changes.
+>
+> Also for v2 please consider CC'ing both lists for all patches. Otherwise
+> it's hard to follow the changes.
 
-> 
-> Thanks,
-> Abhishek
-> 
-> 
-> 
+Really sorry about that. I'm using patman to send patches and didn't
+realize it would split the patch series between the two. v2 will send
+all 8 patches to both lists.
 
--- 
-With best wishes
-Dmitry
+>
+> >
+> > Thanks,
+> > Abhishek
+> >
+> >
+> >
+>
+> --
+> With best wishes
+> Dmitry
 
