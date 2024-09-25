@@ -1,296 +1,204 @@
-Return-Path: <linux-usb+bounces-15475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15476-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F6109866D0
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 21:22:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE22986706
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 21:38:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2FB48B224EE
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:22:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1C811F2463E
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 19:38:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEA61442F2;
-	Wed, 25 Sep 2024 19:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18723145FF9;
+	Wed, 25 Sep 2024 19:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NfLeg7fw"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OdC+XLrF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9E31428F1;
-	Wed, 25 Sep 2024 19:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6823145323;
+	Wed, 25 Sep 2024 19:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727292160; cv=none; b=h+p/xCquqMjOeOuHF8qLOXHJVlYXlTv7pEfinjKriYq9xB1i/96aLg/QNOySBXbq4HpB8PtMZcScLwK92enJFrRHAk5FtS+YXrM6+zyviIvMO4/hw17bs3H6MZiz56vNa4FM6xk3P5+0AAhsDWkUFfAxJtIon2zxzGJnrMe2O7w=
+	t=1727293092; cv=none; b=FIlsM1vzxt9uqToLZ+kOKZmK9SwfMGBn/EKW/LDasug1Tm/LxGTl/NwyoH2MCNLnx8Vj2DTUIUxvJV8WUqKnokjp2cmpu7PwKgIgCcKmnX+4bncuX0XC1CQ569QvJo2gBmohBkpVLe4tOhZK5+k6jgcmqwiXzULhUB+cooK7N3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727292160; c=relaxed/simple;
-	bh=S0urNNv3r0yAEJslZ4kLYfAM0lYjoGfeqneTwEkgSqA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j2BMBE+DFr62p9t7Hxcodch/fBo279Bj8DKNka7JTHe25w368o9Xh2dUXYri7y8iQtyAe4IQBHfzfF/B6FMs8DuXq3dpPXzFH9ymmDH5vzYBvINX1qToOAUofaxJjwh6UwrnkiI7DwDR8TPj95EbD+l086CKNOwNMD7/ypb4Qak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NfLeg7fw; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727292158; x=1758828158;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S0urNNv3r0yAEJslZ4kLYfAM0lYjoGfeqneTwEkgSqA=;
-  b=NfLeg7fw2QyQIPLPItX24v6l6nFRkftPwW87+j4qu7u8IyYr5XBUmwWo
-   /q8aUcQR19kSKP3bUmFb+U2WnXi/VbE4Jdh0bxkAsUjU8LQG+q61eyh/8
-   4ILhThoSKRuxoEw7+EqM1vC2VaXpA4Sz4i0DqoUh7DtO+r27bEvGeXsms
-   YsV66weeJnY7oRyR8QGwObvaPN9MXbtgDyB8hQ7/3JdruioJoXHTHeeb9
-   oaPGjt59sK6Pg/lJTZ8fCboTHcf+Nl9rkCCAWUJSgkeWTRywxtQJfTSHP
-   +/dZIRK1mzxg5s4acR3Nou9BcIPpjmLaTrkpcqsWa/t8ngaLvvoQnrmXE
-   w==;
-X-CSE-ConnectionGUID: TRvrs5/FTbOz0lH7pQDGEg==
-X-CSE-MsgGUID: ineW/4EKQNWIMJazCNXKag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="37038047"
-X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
-   d="scan'208";a="37038047"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 12:22:37 -0700
-X-CSE-ConnectionGUID: 89qIKqssR/OJ8tdOF/G8Ew==
-X-CSE-MsgGUID: eD+PAUJIRDuarBhelvaQFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
-   d="scan'208";a="76395509"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 25 Sep 2024 12:22:35 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stXaq-000Ju7-2K;
-	Wed, 25 Sep 2024 19:22:32 +0000
-Date: Thu, 26 Sep 2024 03:22:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] usb: typec: stusb160x: Make use of
- i2c_get_match_data()
-Message-ID: <202409260206.UbcSQv4S-lkp@intel.com>
-References: <20240925133952.1067949-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1727293092; c=relaxed/simple;
+	bh=L9UkjFM/t+HZ0+yEiCMKoS3dswfBRu7l2ZkM2TfB1OY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=FLfJRlQAs/XPkyYysDmgSKqWZfUURe9BDH9t6TS5j5nq4swFV5M6lhvXKAo/2bDmWCER4aKeRh6ttRze2OvlS++z9LDXjOictinnSIIaSrJBUK+IsoZvhmiEjuoMo+88LIpGG3g4JbZd0mNAagnUc6xt+yTNTB29kaOQ1xs/8fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OdC+XLrF; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48PH5Khx032247;
+	Wed, 25 Sep 2024 19:37:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	s3AUR6RT3W7ulZeQVB8mK8Whtlk2Nz8uCdeZZVxJqR0=; b=OdC+XLrF6+MAEd4I
+	UdBLUurgC2n9ERvqbhydfmELwTI1Zl47ONV5wHIouDAUvPWYSh8sGjIlM+PmC5Dq
+	UKPlqraCjBdyht+iZ/NVu+LOLfIoQM8gIjuHM4UJW27rolrkYT/+9UWb1VTWy7U9
+	WJeOJTPgNyymyodDOxC8LzfaA3mTewzXHsi3CKIcPufUWd1zYfcpKlyPRqGonBVZ
+	0iVbOy4LoxyL5IoolwDtm1TY/XS6dgJKWk++AwOSuonGlNn3g23y1jIZwKTPcao6
+	jIMPKqL6WcFg7TFt6WwcPVmheVtmDyweq6Sjt+9Suf+y0vZJTHziGuqhDpKhUczO
+	epgKuw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41sp7unf8e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Sep 2024 19:37:48 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48PJbkX3019291
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Sep 2024 19:37:46 GMT
+Received: from [10.71.115.66] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 25 Sep
+ 2024 12:37:46 -0700
+Message-ID: <818bb1b9-facc-4d2a-9959-5e1b4befafbd@quicinc.com>
+Date: Wed, 25 Sep 2024 12:37:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925133952.1067949-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v28 30/32] ALSA: usb-audio: Add USB offload route kcontrol
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <tiwai@suse.com>, <krzk+dt@kernel.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <robh@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
+References: <20240925010000.2231406-1-quic_wcheng@quicinc.com>
+ <20240925010000.2231406-31-quic_wcheng@quicinc.com>
+ <8bb65adc-e995-443e-80c9-36e9b5d8eee3@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <8bb65adc-e995-443e-80c9-36e9b5d8eee3@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: J5pod1Ub2q3G-aVUEEhvipnr7QZjPzhz
+X-Proofpoint-ORIG-GUID: J5pod1Ub2q3G-aVUEEhvipnr7QZjPzhz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=999 mlxscore=0 phishscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2408220000 definitions=main-2409250139
 
-Hi Andy,
+Hi Pierre,
 
-kernel test robot noticed the following build errors:
+On 9/25/2024 7:54 AM, Pierre-Louis Bossart wrote:
+>
+>
+>> +static int
+>> +snd_usb_offload_route_get(struct snd_kcontrol *kcontrol,
+>> +			  struct snd_ctl_elem_value *ucontrol)
+>> +{
+>> +	struct device *sysdev = snd_kcontrol_chip(kcontrol);
+>> +	int ret;
+>> +
+>> +	ret = snd_soc_usb_update_offload_route(sysdev,
+>> +					       CARD_IDX(kcontrol->private_value),
+>> +					       PCM_IDX(kcontrol->private_value),
+>> +					       SNDRV_PCM_STREAM_PLAYBACK,
+>> +					       ucontrol->value.integer.value);
+>> +	if (ret < 0) {
+>> +		ucontrol->value.integer.value[0] = -1;
+>> +		ucontrol->value.integer.value[1] = -1;
+>> +	}
+> well this invalidates again what I understood from the last patch and
+> goes back to what I understood initially: the error code is never
+> returned to higher levels - when offload is not supported the kcontrol
+> values are encoded to the -1 magic value.
+Yes, higher levels won't get an error code when they try to fetch for the kcontrol value, and if say...there is no callback to update the offload route then the -1 values are passed back.  I don't think we would want to return an error code.  We just want to communicate the current mapping of the offload path.
+>> +	return 0;
+> and this begs the question if this helper should return a void value.
+This is the registered callback for the .get() call for the kcontrol, so it has to follow the definition below:
+    typedef int (snd_kcontrol_get_t) (struct snd_kcontrol * kcontrol, struct snd_ctl_elem_value * ucontrol)
+>> +}
+>> +
+>> +static int snd_usb_offload_route_info(struct snd_kcontrol *kcontrol,
+>> +				      struct snd_ctl_elem_info *uinfo)
+>> +{
+>> +	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
+>> +	uinfo->count = 2;
+>> +	uinfo->value.integer.min = -1;
+>> +	/* Arbitrary max value, as there is no 'limit' on number of PCM devices */
+>> +	uinfo->value.integer.max = 0xff;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct snd_kcontrol_new snd_usb_offload_mapped_ctl = {
+>> +	.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+>> +	.access = SNDRV_CTL_ELEM_ACCESS_READ,
+>> +	.info = snd_usb_offload_route_info,
+>> +	.get = snd_usb_offload_route_get,
+>> +};
+>> +
+>> +/**
+>> + * snd_usb_offload_create_ctl() - Add USB offload bounded mixer
+>> + * @chip - USB SND chip device
+>> + *
+>> + * Creates a sound control for a USB audio device, so that applications can
+>> + * query for if there is an available USB audio offload path, and which
+>> + * card is managing it.
+>> + */
+>> +int snd_usb_offload_create_ctl(struct snd_usb_audio *chip)
+>> +{
+>> +	struct usb_device *udev = chip->dev;
+>> +	struct snd_kcontrol_new *chip_kctl;
+>> +	struct snd_usb_substream *subs;
+>> +	struct snd_usb_stream *as;
+>> +	char ctl_name[37];
+> that's quite a magic value.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.11 next-20240925]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Ah, will fix this.  Should be 34 ("USB Offload Playback Route PCM#" [31] + max pcm index[3]).  From past discussions, technically there isn't an upper limit defined for PCM devices, but the above snd_usb_offload_route_info() has it set to 0xff, so I'll be consistent here as well and assume that if we have more than 255 PCM devices for one device, then we won't create further kcontrols. (probably still overkill, but who knows what USB audio devices are out there)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/usb-typec-stusb160x-Make-use-of-i2c_get_match_data/20240925-223551
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20240925133952.1067949-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] usb: typec: stusb160x: Make use of i2c_get_match_data()
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20240926/202409260206.UbcSQv4S-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409260206.UbcSQv4S-lkp@intel.com/reproduce)
+Thanks
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409260206.UbcSQv4S-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/usb/typec/stusb160x.c: In function 'stusb160x_probe':
->> drivers/usb/typec/stusb160x.c:647:44: error: passing argument 1 of 'i2c_get_match_data' from incompatible pointer type [-Wincompatible-pointer-types]
-     647 |         regmap_config = i2c_get_match_data(&client->dev);
-         |                                            ^~~~~~~~~~~~
-         |                                            |
-         |                                            struct device *
-   In file included from drivers/usb/typec/stusb160x.c:10:
-   include/linux/i2c.h:360:57: note: expected 'const struct i2c_client *' but argument is of type 'struct device *'
-     360 | const void *i2c_get_match_data(const struct i2c_client *client);
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+Wesley Cheng
 
 
-vim +/i2c_get_match_data +647 drivers/usb/typec/stusb160x.c
-
-   633	
-   634	static int stusb160x_probe(struct i2c_client *client)
-   635	{
-   636		const struct regmap_config *regmap_config;
-   637		struct stusb160x *chip;
-   638		struct fwnode_handle *fwnode;
-   639		int ret;
-   640	
-   641		chip = devm_kzalloc(&client->dev, sizeof(struct stusb160x), GFP_KERNEL);
-   642		if (!chip)
-   643			return -ENOMEM;
-   644	
-   645		i2c_set_clientdata(client, chip);
-   646	
- > 647		regmap_config = i2c_get_match_data(&client->dev);
-   648	
-   649		chip->regmap = devm_regmap_init_i2c(client, regmap_config);
-   650		if (IS_ERR(chip->regmap)) {
-   651			ret = PTR_ERR(chip->regmap);
-   652			dev_err(&client->dev,
-   653				"Failed to allocate register map:%d\n", ret);
-   654			return ret;
-   655		}
-   656	
-   657		chip->dev = &client->dev;
-   658	
-   659		chip->vsys_supply = devm_regulator_get_optional(chip->dev, "vsys");
-   660		if (IS_ERR(chip->vsys_supply)) {
-   661			ret = PTR_ERR(chip->vsys_supply);
-   662			if (ret != -ENODEV)
-   663				return ret;
-   664			chip->vsys_supply = NULL;
-   665		}
-   666	
-   667		chip->vdd_supply = devm_regulator_get_optional(chip->dev, "vdd");
-   668		if (IS_ERR(chip->vdd_supply)) {
-   669			ret = PTR_ERR(chip->vdd_supply);
-   670			if (ret != -ENODEV)
-   671				return ret;
-   672			chip->vdd_supply = NULL;
-   673		}
-   674	
-   675		chip->vconn_supply = devm_regulator_get_optional(chip->dev, "vconn");
-   676		if (IS_ERR(chip->vconn_supply)) {
-   677			ret = PTR_ERR(chip->vconn_supply);
-   678			if (ret != -ENODEV)
-   679				return ret;
-   680			chip->vconn_supply = NULL;
-   681		}
-   682	
-   683		fwnode = device_get_named_child_node(chip->dev, "connector");
-   684		if (!fwnode)
-   685			return -ENODEV;
-   686	
-   687		/*
-   688		 * This fwnode has a "compatible" property, but is never populated as a
-   689		 * struct device. Instead we simply parse it to read the properties.
-   690		 * This it breaks fw_devlink=on. To maintain backward compatibility
-   691		 * with existing DT files, we work around this by deleting any
-   692		 * fwnode_links to/from this fwnode.
-   693		 */
-   694		fw_devlink_purge_absent_suppliers(fwnode);
-   695	
-   696		/*
-   697		 * When both VDD and VSYS power supplies are present, the low power
-   698		 * supply VSYS is selected when VSYS voltage is above 3.1 V.
-   699		 * Otherwise VDD is selected.
-   700		 */
-   701		if (chip->vdd_supply &&
-   702		    (!chip->vsys_supply ||
-   703		     (regulator_get_voltage(chip->vsys_supply) <= 3100000)))
-   704			chip->main_supply = chip->vdd_supply;
-   705		else
-   706			chip->main_supply = chip->vsys_supply;
-   707	
-   708		if (chip->main_supply) {
-   709			ret = regulator_enable(chip->main_supply);
-   710			if (ret) {
-   711				dev_err(chip->dev,
-   712					"Failed to enable main supply: %d\n", ret);
-   713				goto fwnode_put;
-   714			}
-   715		}
-   716	
-   717		/* Get configuration from chip */
-   718		ret = stusb160x_get_caps(chip);
-   719		if (ret) {
-   720			dev_err(chip->dev, "Failed to get port caps: %d\n", ret);
-   721			goto main_reg_disable;
-   722		}
-   723	
-   724		/* Get optional re-configuration from device tree */
-   725		ret = stusb160x_get_fw_caps(chip, fwnode);
-   726		if (ret) {
-   727			dev_err(chip->dev, "Failed to get connector caps: %d\n", ret);
-   728			goto main_reg_disable;
-   729		}
-   730	
-   731		ret = stusb160x_chip_init(chip);
-   732		if (ret) {
-   733			dev_err(chip->dev, "Failed to init port: %d\n", ret);
-   734			goto main_reg_disable;
-   735		}
-   736	
-   737		chip->port = typec_register_port(chip->dev, &chip->capability);
-   738		if (IS_ERR(chip->port)) {
-   739			ret = PTR_ERR(chip->port);
-   740			goto all_reg_disable;
-   741		}
-   742	
-   743		/*
-   744		 * Default power operation mode initialization: will be updated upon
-   745		 * attach/detach interrupt
-   746		 */
-   747		typec_set_pwr_opmode(chip->port, chip->pwr_opmode);
-   748	
-   749		if (client->irq) {
-   750			chip->role_sw = fwnode_usb_role_switch_get(fwnode);
-   751			if (IS_ERR(chip->role_sw)) {
-   752				ret = dev_err_probe(chip->dev, PTR_ERR(chip->role_sw),
-   753						    "Failed to get usb role switch\n");
-   754				goto port_unregister;
-   755			}
-   756	
-   757			ret = stusb160x_irq_init(chip, client->irq);
-   758			if (ret)
-   759				goto role_sw_put;
-   760		} else {
-   761			/*
-   762			 * If Source or Dual power role, need to enable VDD supply
-   763			 * providing Vbus if present. In case of interrupt support,
-   764			 * VDD supply will be dynamically managed upon attach/detach
-   765			 * interrupt.
-   766			 */
-   767			if (chip->port_type != TYPEC_PORT_SNK && chip->vdd_supply) {
-   768				ret = regulator_enable(chip->vdd_supply);
-   769				if (ret) {
-   770					dev_err(chip->dev,
-   771						"Failed to enable VDD supply: %d\n",
-   772						ret);
-   773					goto port_unregister;
-   774				}
-   775				chip->vbus_on = true;
-   776			}
-   777		}
-   778	
-   779		fwnode_handle_put(fwnode);
-   780	
-   781		return 0;
-   782	
-   783	role_sw_put:
-   784		if (chip->role_sw)
-   785			usb_role_switch_put(chip->role_sw);
-   786	port_unregister:
-   787		typec_unregister_port(chip->port);
-   788	all_reg_disable:
-   789		if (stusb160x_get_vconn(chip))
-   790			stusb160x_set_vconn(chip, false);
-   791	main_reg_disable:
-   792		if (chip->main_supply)
-   793			regulator_disable(chip->main_supply);
-   794	fwnode_put:
-   795		fwnode_handle_put(fwnode);
-   796	
-   797		return ret;
-   798	}
-   799	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>> +	int ret;
+>> +
+>> +	list_for_each_entry(as, &chip->pcm_list, list) {
+>> +		subs = &as->substream[SNDRV_PCM_STREAM_PLAYBACK];
+>> +		if (!subs->ep_num)
+>> +			continue;
+>> +
+>> +		chip_kctl = &snd_usb_offload_mapped_ctl;
+>> +		chip_kctl->count = 1;
+>> +		/*
+>> +		 * Store the associated USB SND card number and PCM index for
+>> +		 * the kctl.
+>> +		 */
+>> +		chip_kctl->private_value = as->pcm_index |
+>> +					  chip->card->number << 16;
+>> +		sprintf(ctl_name, "USB Offload Playback Route PCM#%d",
+>> +			as->pcm_index);
+>> +		chip_kctl->name = ctl_name;
+>> +		ret = snd_ctl_add(chip->card, snd_ctl_new1(chip_kctl,
+>> +				  udev->bus->sysdev));
+>> +		if (ret < 0)
+>> +			break;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
 
