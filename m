@@ -1,165 +1,170 @@
-Return-Path: <linux-usb+bounces-15452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D3439863C4
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:39:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C4598641E
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 17:50:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E2FA1C26E3F
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 15:39:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 425801F26E85
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 15:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA62134BD;
-	Wed, 25 Sep 2024 15:38:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41333282FD;
+	Wed, 25 Sep 2024 15:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Dk//1uWw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LBj12M/0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3E9DDC5;
-	Wed, 25 Sep 2024 15:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC61E1BC23;
+	Wed, 25 Sep 2024 15:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727278737; cv=none; b=ulWXk8/PKN+RhvJtc2Vir9QqUWnZWmdSk9NGWCD1M09xMWbVyMXK+fKSyvco38UAzF/t1/ssNhw82Yq8BNrv+DwxE0Pg9CqTXkW2d4unDb9uA4k7rGVtHaesdtMTKQYncKgjhQJqZc1vfkgxq4xA5FMG0rdDyuuoz5TWE7LOMdg=
+	t=1727279394; cv=none; b=GM1tafehOeke4513uECogqblhVf3CFR4a/f+QGNlEZzgzMru/trlMTR7zaaaqVhcnzhgqnxO5DEIH6aD6WSxaYfuylExmrJAz8etlN7CKtwFVSeRQUe9DEDov32L5zRibSFRBC/tfkDTlsGM7SFuQZ5vVmJaGSr92RIrcN3x4+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727278737; c=relaxed/simple;
-	bh=93cxj6Cr+VPnS1DFo8zzQfPXtg13oFKJuewmGZN28fc=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=rL97JZ2WMgLGXp9WrWr+KIfKKGPzagau7l4QIUMOwwtOVIkhgwqbNI1Erwq658pBXMjaxe1fms5kpnksUdLD4WUHEMDxkwu/WsOj6/YqYV4RldfSbbpPwGxOIctXB/XKuzRJmqvxL/hxCYDP6Yc81/E55piQ8u0SRaajktzlZc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Dk//1uWw; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1727278720; x=1727883520; i=markus.elfring@web.de;
-	bh=/BF/n008MTXnPCnTy2Tzf/W95fPNGj+i5tDXPuhc4/g=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
-	 Subject:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Dk//1uWwJCm+GNNhpNKI12pGiZICAlzBZNRi6Jop3VV16DTGdsYQTnm5OVQkaCCo
-	 Gc2UpLhnpGJZMoQzYgCJGB4u+TyTjQOTqz17ffz2iBHsGawYxCuuqZBR+qdieQsX8
-	 0WFG/qYIERsnDTvNvVi/rc+csfnVViTBddss3komN2kL4MU/M2DH31dpNvhFjborR
-	 erYj1jBA44e1x6JJRN27+ayxnNwEbJBO5JnYKM8PgDkI3GQd9vFhKT4GE6PTvW2zO
-	 HRzgTSRaNDQIg4v+/oxQy6HzcSWegH0tyoE3fiDkv/o16ZR9ViADO/Uu0NR4NcRbW
-	 0f6SFq7py5E4XGtXaA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MTOha-1sUCxY0a3Y-00R1uX; Wed, 25
- Sep 2024 17:38:40 +0200
-Message-ID: <59fadd5a-6574-4379-98ac-cc4f11b675cc@web.de>
-Date: Wed, 25 Sep 2024 17:38:39 +0200
+	s=arc-20240116; t=1727279394; c=relaxed/simple;
+	bh=5fEuuU3XfUFHtBatfpDH6icGp8TZ4uJv28CJVwS77Lo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YiXjswH3FHFxRQYsfylRLTpjwF8xLoRpCJwZCGPIXlkvmThFVGRpCYxmrLBIvzO//yx65MJKgMaBWwMuC/LwC3V0qCPUdgEQBofqRQpJJvJOnzqTTVFgJC0+oQOygHeEgMHcvnpOENReUmvuKvdLXTbuG1d8H9OacwTrYqfjwfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LBj12M/0; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a8d100e9ce0so810416666b.2;
+        Wed, 25 Sep 2024 08:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727279390; x=1727884190; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gwgu5WoJ6DYspehiMzjPYMRnAGWQtukEgNDYWoU759Y=;
+        b=LBj12M/0NhZj5fwCc4MF+PGIO/qgGout3GItJwr6nDayzJ37lWdWY4UB5GsdWbFuGZ
+         R+j0FrWemc6jR5aoeliswMle/fj9mQpnCaFVPLF6icXhPfk2VkgF9Crp/dED5x2oiEpz
+         dGYACC9uWx59KwIWzbV2/Qx7YvJA14+mLCi0pRGqKsDw5OEKDzN6GaQENpAqN7ACq52x
+         iezebD8n67ju8uv9k+jr5erzDzwINPWp01tjwMTqNz2M8972utOZZR+imeJ884zpqttg
+         Yj/CPqQP2+Psr9rK6YpUmj1waw3lHlz/xnZu5tQHNvlN7SY98CT/OiyR8BN8wyFaYzzZ
+         78/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727279390; x=1727884190;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gwgu5WoJ6DYspehiMzjPYMRnAGWQtukEgNDYWoU759Y=;
+        b=meKN22P3L7GsYpehrKSTIF1/dXmAFFHMheCUe+wTybpV8t29x0bIhQW8zNZ6FaeOLj
+         WGFz7LsvkqnMTagZR0ZceCOVEgjWQGb/rPJSdFm6UIMEPpBbWHX7i+ybjr9nAZv2DOXU
+         rJYWc5QFuU/BZAcfYs0kD4QgSdG217qzPjO8FjZADcqwtsnTV6F7NDl3nkG3iMBOkWXz
+         k0lIevV55H9fYSUhg6VOKVC+QiKN+S+t1SEKowtU7S7Wmdqp84EPDSQHJw9XZ8VpgT85
+         CxDDsIwoXD6hmfSYoVHv8Pgc661UsjpdOVfEYtbhaZ3bj/KVKUO/CwCl7XB8DUfeQmfi
+         EnyA==
+X-Forwarded-Encrypted: i=1; AJvYcCVbuY+ysYSoUzBHeQCi/V7dF5GtXSogfVeJ2B/qsM5e5wZpQh5BjwbGe2ate27xyPO8tuPWE3SGa4vmzT4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYxwvrO7EtSqNmN0oVe6uCZPdp4GG0RFm0XwfdwWpuTunwx6N1
+	v/rs2LIl7WJjwhQkyzD7P95AWZqC7SvGpHn6HSqR+y3XaTH/tiK5BtgxcQ6m
+X-Google-Smtp-Source: AGHT+IEJn4NvuVmT2YgjFUtwDpmAS42/4xefB/HbkI3jQZFEYj0g8ju/mrnE64021PgivlAsjOhXng==
+X-Received: by 2002:a17:906:c113:b0:a8a:7549:2a25 with SMTP id a640c23a62f3a-a93a03c6e29mr271429166b.36.1727279390028;
+        Wed, 25 Sep 2024 08:49:50 -0700 (PDT)
+Received: from [127.0.1.1] ([213.208.157.67])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9393133c51sm222861166b.189.2024.09.25.08.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2024 08:49:48 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Wed, 25 Sep 2024 17:49:46 +0200
+Subject: [PATCH v2] usb: typec: ucsi: glink: use
+ device_for_each_child_node_scoped()
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-usb@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jeff Johnson <quic_jjohnson@quicinc.com>
-Content-Language: en-GB
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
-From: Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] usb: gadget: eem: Use common error handling code in
- eem_unwrap()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MeUPnH0sS8NaAjzkZtCgjeUspcEHrkiTqOp61I/CfLq64WMzRa2
- 4vuTdbQkQyiTzn09j3nXY6XzuEOvcN6uKto3VpYz2rNged6uXX+R+a9q27Vof4cXLKwb9N+
- mKWwlPRYTYH+tp3tCno8xABVG2NI9NMcXYjfZRpRA4d6GD7vgQ+jrttyIG0G4yCAXV85GhV
- juwGmgGqhuURyAfg5mTgw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:WCT5LJdfDHo=;jH7Uz4t1nuoKWXTB/e6FmWstsa3
- XDsoH1RH8myevKcPIT6aG6V1JNz4hR9p4U3g1rHH+NBrP13mOzz7V+XuvEKDZpxXP8WTIG45Q
- r/IHhSC0MwglRbCSv3H7LCwwpY9zyfrkRPYSHbXE3/bNh1XUjS66/9So/yisTu4ceS800jwYp
- CQtIqcsLwfZkZmwBI8WNNWkCGD1G8gHio9Ami6iVpbUzS4otAWQsZijmvvci1Mk8zHpuvMH8R
- pDuJ/cQb41pm4OddMUd0LbbGF9eHmVDP1EauV8y8XJhbbeccvg3fQyxJhsd9hgdk2VUCJNJhy
- DeMfcVFZtYUK7Gw56zwFwhK8B8vz+0ZrynKhftjSsWDRz5qsSCWXp+Ezd8Hs8zMWpQY0As5A/
- J1ZiHPwEhbm9x7kcJPLrC9yG5iR7gqg4pDV6Pq0/GioVT5vx9K7aH9GPROfcqWW0Vfx86dOzr
- 4EcSqGqMsmIm0unG7Ky1idSLMok4zs++WbPMcMI/K0j2Fh+Tp8WmaFtuo8ODEXLz6FWBkVTVf
- W6KdGaqa6Zt+j3SJrUSHvne1A3C5CBVn4V7GtP7Um4Q/EymZKUVmKPhLBYzy32psgdqbfXKwC
- PGTg48GhgglYS5MLdaXHupcDPkmA8qHZ+SrS8Ok4Tl+17WtY0w0sYQS9KkeTXqsFeNq0MeW8o
- bsHP8NX8VRot4x3lmBXholsyW2v78lpQ9vU7CLMv9+MgZdkO87o/qgDXfTlQEtgCP4E3f/Dze
- 7duhSwr3+4/F2EoDhQw0qgYsRg9BwYYMfk9HY1ox9Is11mcl0HsiTPtbdCv+Q6LjxdMUsXUL1
- KUI7ibW1pV5YOzwQy53bjkIA==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240925-ucsi_glink-scoped-v2-1-a661585fff35@gmail.com>
+X-B4-Tracking: v=1; b=H4sIABkx9GYC/32NQQ6CMBBFr0JmbQ0tBIMr70GIKdNpmQiUtEo0p
+ He3cgCX7yX//R0iBaYI12KHQBtH9ksGdSoAR704EmwygypVXTaqEi+MfHcTLw8R0a9khDK1vFh
+ stTUV5N0ayPL7aHZ95pHj04fPcbHJn/1X26SQwpbWoCVs2mG4uVnzdEY/Q59S+gJHwKUzsgAAA
+ A==
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727279388; l=2431;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=5fEuuU3XfUFHtBatfpDH6icGp8TZ4uJv28CJVwS77Lo=;
+ b=LmmyM+PjqIMF9yhYIe8WG4Jkw3i596y34lPHm3q9zy87UTIfQc98HEe3XXg4eN014LXk2exE4
+ 0HCML1RST9dDszTvjWgw6Xv6190QLoUpE4Hx92yXKIOMODPsDgCSsR/
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Wed, 25 Sep 2024 17:26:40 +0200
+Use the scoped variant of `device_for_each_child_node()` to
+automatically handle early exits.
 
-Add jump targets so that a bit of exception handling can be better reused
-at the end of this function implementation.
+This prevents memory leaks if new error paths are introduced,
+as no explicit refcount decrement via `fwnode_handle_put()` is needed.
 
-This issue was detected by using the Coccinelle software.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+This patch is a follow-up to the recently introduced commit c68942624e25
+("usb: typec: ucsi: glink: fix child node release in probe function")
+to account for a safer approach to iterating over child nodes.
+---
+Changes in v2:
+- Rebase onto v6.11 to apply without errors due to the previous
+  patch mentioned in the cover letter.
+- Link to v1: https://lore.kernel.org/r/20240623-ucsi_glink-scoped-v1-1-f0fdcfec69bb@gmail.com
+---
+ drivers/usb/typec/ucsi/ucsi_glink.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/usb/gadget/function/f_eem.c | 30 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_eem.c b/drivers/usb/gadget/func=
-tion/f_eem.c
-index 6de81ea17274..b1be23e947dc 100644
-=2D-- a/drivers/usb/gadget/function/f_eem.c
-+++ b/drivers/usb/gadget/function/f_eem.c
-@@ -450,24 +450,17 @@ static int eem_unwrap(struct gether *port,
-
- 				ep =3D port->in_ep;
- 				req =3D usb_ep_alloc_request(ep, GFP_ATOMIC);
--				if (!req) {
--					dev_kfree_skb_any(skb2);
--					goto next;
--				}
-+				if (!req)
-+					goto free_skb;
-
- 				req->buf =3D kmalloc(skb2->len, GFP_KERNEL);
--				if (!req->buf) {
--					usb_ep_free_request(ep, req);
--					dev_kfree_skb_any(skb2);
--					goto next;
--				}
-+				if (!req->buf)
-+					goto free_request;
-
- 				ctx =3D kmalloc(sizeof(*ctx), GFP_KERNEL);
- 				if (!ctx) {
- 					kfree(req->buf);
--					usb_ep_free_request(ep, req);
--					dev_kfree_skb_any(skb2);
--					goto next;
-+					goto free_request;
- 				}
- 				ctx->skb =3D skb2;
- 				ctx->ep =3D ep;
-@@ -536,10 +529,9 @@ static int eem_unwrap(struct gether *port,
- 						NET_IP_ALIGN,
- 						0,
- 						GFP_ATOMIC);
--			if (unlikely(!skb3)) {
--				dev_kfree_skb_any(skb2);
--				goto next;
--			}
-+			if (unlikely(!skb3))
-+				goto free_skb;
-+
- 			dev_kfree_skb_any(skb2);
- 			skb_queue_tail(list, skb3);
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index 6aace19d595b..41db51e486e0 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -322,7 +322,6 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ 	struct pmic_glink_ucsi *ucsi;
+ 	struct device *dev = &adev->dev;
+ 	const struct of_device_id *match;
+-	struct fwnode_handle *fwnode;
+ 	int ret;
+ 
+ 	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
+@@ -354,14 +353,13 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ 
+ 	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+ 
+-	device_for_each_child_node(dev, fwnode) {
++	device_for_each_child_node_scoped(dev, fwnode) {
+ 		struct gpio_desc *desc;
+ 		u32 port;
+ 
+ 		ret = fwnode_property_read_u32(fwnode, "reg", &port);
+ 		if (ret < 0) {
+ 			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
+-			fwnode_handle_put(fwnode);
+ 			return ret;
  		}
-@@ -550,6 +542,12 @@ static int eem_unwrap(struct gether *port,
- error:
- 	dev_kfree_skb_any(skb);
- 	return status;
+ 
+@@ -376,11 +374,10 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ 		if (!desc)
+ 			continue;
+ 
+-		if (IS_ERR(desc)) {
+-			fwnode_handle_put(fwnode);
++		if (IS_ERR(desc))
+ 			return dev_err_probe(dev, PTR_ERR(desc),
+ 					     "unable to acquire orientation gpio\n");
+-		}
 +
-+free_request:
-+	usb_ep_free_request(ep, req);
-+free_skb:
-+	dev_kfree_skb_any(skb2);
-+	goto next;
- }
+ 		ucsi->port_orientation[port] = desc;
+ 	}
+ 
 
- static inline struct f_eem_opts *to_f_eem_opts(struct config_item *item)
-=2D-
-2.46.1
+---
+base-commit: 98f7e32f20d28ec452afb208f9cffc08448a2652
+change-id: 20240623-ucsi_glink-scoped-2d417fc9afd3
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
 
