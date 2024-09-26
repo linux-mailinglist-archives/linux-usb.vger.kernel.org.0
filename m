@@ -1,326 +1,171 @@
-Return-Path: <linux-usb+bounces-15486-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15487-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D21A986CB7
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 08:45:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A45E986CDF
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 08:50:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D5711F248E2
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 06:45:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D61A1C21DC8
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 06:49:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943A018BC11;
-	Thu, 26 Sep 2024 06:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5472518C336;
+	Thu, 26 Sep 2024 06:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="uwC1nm9r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPDVaXvX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0CF188A24;
-	Thu, 26 Sep 2024 06:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D7C18784C;
+	Thu, 26 Sep 2024 06:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727333110; cv=none; b=DDvt7NMKT4dmQh5bMyiz8knWSwLF/KelhiqBqQqokBUUN3vBqFZZwBknL9iOAbxsbaXFRGHA0Ox4YZCejsRjKm585xevocRu1+lciIvo3vz7u/jkcEQlD/QDr7hXLxG7Zp7avWZjwsmOjXH9n4ULE8OtFgN5F2mrDKAAZ/MqY3A=
+	t=1727333373; cv=none; b=D8fROLNiOqu7Fh5bLIfWAixPAK0LQC7PwGYAmz3ucElf9rUatzYaPxqgyrYCdawmN0tEXts7mpMC4pxn8Ao3s1BjSFKnQNdXjeNExNx2QFuJKHGFAtd1jQNyZwjG0HUwgVoG9r3ngUwbWVlVT0eAnSzWB69AJPVhRwnjoqY6n/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727333110; c=relaxed/simple;
-	bh=hI7MxCsXIaf/DJ2R19U6ihtCmaNvnKryrnUH8gfcTs8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cq336snj50LE2l0jTPLlrSCSWXNrgG3hGJIPkzbpoiL9454QVO2W+jHET1oZQP1UiOWHfRI9jd468DQnjC80paDKtqtX1O7LITDuUxNRF2S/HWst2/w7WhDPytHCe8tw3nizvifnupQ3REBPDRyjuAGE3CPtz3EfoekBobYKbn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=uwC1nm9r; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1727333083; x=1727937883; i=markus.elfring@web.de;
-	bh=td1T6mw4fo/ZEDQgLAOm/azIcVsIehVrPWSwP32/MKc=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=uwC1nm9rkC+LNYjzZYhs0JFTUAKqxw5/ZThiSPQ8ScTITFaVtUr7QER3m15WipNL
-	 eVYrCWjxpL5UDtKXBlqDZeJEGy5Nd2EQwsv7d1MeonrPOR7uLVPBYlB3QfoN9Pv7Q
-	 uTNsB4ft0JPp/ne/qyit8i+c9MAgWzJ8eKS1qldqdboSKpxRlrxvT4LgdRYyWxt20
-	 U+BtMBYvTTNCEzGBxxeuf7gs3Yc4vw9ot4V7c2KWWqL7gVqYimrBLWrCyhjsrdCrF
-	 MQ8+niT8u1U9antnnW0t0wTRKotmXzO5cqBnjxjyyuOpbAIjLDcqDFHGOaAODYVU8
-	 hc7oTvOghUrCR9SGNA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mtgyj-1s4VYz447j-00rKLN; Thu, 26
- Sep 2024 08:44:43 +0200
-Message-ID: <cbcc0872-1bac-45d2-acfa-920b15225711@web.de>
-Date: Thu, 26 Sep 2024 08:44:41 +0200
+	s=arc-20240116; t=1727333373; c=relaxed/simple;
+	bh=2EjaJgg2Kh6R0gxzcs4CAsn7s9mMpxxHU4F/8eBHY6U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=f7UeGvsyqNK3+R95fxIBPxCIyNfuQmlVfizsnRv72CYwDYCgrPyOUqli4ZtMa8TpbJeqhJ4c2YYvNKsEN1c9kijbrXWTZO0mV9D+7DZPlxN++vz2r40RYGTVocrm+6o4Vs4l+Tkq5RkpMDePb00LrsoZ4Vk9zIMPXPSrT8ztPWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPDVaXvX; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5356aa9a0afso883313e87.2;
+        Wed, 25 Sep 2024 23:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727333370; x=1727938170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgnMrzwynFba1wRhjzmjE2vkGb+mgPFEdtMaT9NIW6g=;
+        b=HPDVaXvX/7T65pYAIxQboWcgJino+ytesBwHPSBhvjC4lrbdrB0zMhPeaWd0md5+OQ
+         nNsIAMoU9q0FGZxo/jSJob451Kjiiqbsx4YpQzBub3XF8x6RPwJzZw5SpfkSJj2ztyc+
+         jO4mrF/sG8alW3avlEMOa6WFTBaQWfSkYTbF6dCHF8pldESrjzvchoeY77N0Sc9yjnvA
+         UPsks8kApAqLJ/sNVvPs7agE2P9WDW7nMK3Q6FwfKV90YsD2fJVRBwCWi56VhsLkRCtm
+         di3O6w5q+Yhx28zMNU/2Ns0AEFgKegH0iz/80GZpU5UbnhMAY2AkbmSTW7wiLIBimcbj
+         LBfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727333370; x=1727938170;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zgnMrzwynFba1wRhjzmjE2vkGb+mgPFEdtMaT9NIW6g=;
+        b=i/69Qdt5cqzkIhJGwxafv2Px152ioF+4Qo6UmTwWVRzoQs1xxSSmA/MrR6oOyVtfsK
+         7EiDCsVVmeI0367GoH4CmRbhAio/BQHdDYIS/H+0iyJ0kAOJSEvimjOoGUw9Z5tTovh5
+         RhK82fecNSxmNQUSo1ohSu7CCToPrmod6ZCplIFOAdbui71Wqr5Ak2XJyG98feDd7LGM
+         PVFRZUb6L0jyB0xo+qz4UZRifB7k/xZ/I/4ywWsbzWlnS/z01wmSYbvxfNqSmu5ARTZQ
+         pzZesFe8XDWckgqZKysdbrgPh0Ud5OdGAm1Iqe047JWh6LiRD7n+r40st4uANyMbuYJM
+         rP3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVxrGz/Qnmjn2wtA3MUotqff1BlB80SIBQcv5qiRC51Tk8EZZtJnLibQzJ7KF/nBlZEnbWNJDqdIjO9iyc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycTfWHot8LbS66bObQrHkN9jtIWlgVS5anXycsum+TpEKOvY9d
+	FNUXIUE68fGsNdY8N3Z7v/s6O7M+uVMB4/AtJe+9xFKqnCfpo2qpaeCfiyDJcKo=
+X-Google-Smtp-Source: AGHT+IGINfmXa3fp+xYx2jyAcimsm+PlqF9Wd1CFn0DOqYt9akL49L/Iq8d75aTSQFCui0F5um3MQQ==
+X-Received: by 2002:a05:6512:687:b0:536:a695:9414 with SMTP id 2adb3069b0e04-5387048aa60mr4984849e87.6.1727333369711;
+        Wed, 25 Sep 2024 23:49:29 -0700 (PDT)
+Received: from hubert.. (89-72-184-222.dynamic.chello.pl. [89.72.184.222])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93931340b5sm309691266b.190.2024.09.25.23.49.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2024 23:49:29 -0700 (PDT)
+From: hbuczynski <hubert.buczynski94@gmail.com>
+To: balbi@kernel.org,
+	gregkh@linuxfoundation.org,
+	quic_prashk@quicinc.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"hubert.buczynski" <Hubert.Buczynski.ext@feig.de>
+Subject: [PATCH] usb: gadget: u_serial: fix null-ptr-deref in gs_start_io
+Date: Thu, 26 Sep 2024 08:49:10 +0200
+Message-Id: <20240926064910.17429-1-hubert.buczynski94@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: eem: Use common error handling code in
- eem_unwrap()
-To: kernel test robot <lkp@intel.com>, linux-usb@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
- kernel-janitors@vger.kernel.org
-References: <59fadd5a-6574-4379-98ac-cc4f11b675cc@web.de>
- <202409261347.SAA10KGy-lkp@intel.com>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <202409261347.SAA10KGy-lkp@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:bvDn6nDl8JGrelDP5Jvbw5rbFnwNr0pvItKnARmw9bnuKopSgq9
- 7kNJyh/enR1RMCKHK3odvXs8pNvELREQW0ri0Da+on1fGgl6TeUS1ZZnNvbQeRSYsIngnpA
- 9PP7jG7Gu7t3I45UxXA8QZiuB0yuD/10BAOQ3Klqr2cIxrmIKmrpO5G2NjuHVI3kFiO1/8l
- HiwztrTaeVcOnSuiXDVtA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:OwT1nADSO7w=;cSsYFZdCpE40dkT3PWOtVL0hP2K
- /ZwuZyRwWNfTTV8rSgF/Jl5GpGbP5qcoCqy7+wPWZ/4Yeb3SpEa33EYsw8JNcYS0iW8aSpo0i
- rcStmcYkZ/MiiBF2cB2v1rUxbavkQ43rJiaKhrAyQ/AA1oiyVdhl97lzi0d/zH1nbI/MMuGAD
- ejfwk2I4bkaOYQ+zxHhtizXALkApJYuyu+99CWe5xDSOzhzjy6nls5Z4YJTf+tqU63gb5Qcc5
- 98p2KIk6q5zHmwiedb4UvXv7RvDKeeg53EVddEFXIyUMGYhe1QUmGM8Csn8f0fSE3dMLhKYl8
- 4F7GYnGKDYcazvUFN30exi9ZXxguNF+QCbEld0G8LiNthfs49hNydT18tUnd/iI5R5DeGbVhc
- odHSQS055hOMWwmNp6HGS66PSg1U97tXnfIsJfhHCaAJCfLZm1vNffzk42sDp8wkjij6V3ETk
- 3lWQdMi0bXNpTPyXD0n0y43OWgT08CIcBUOEGOJnCWCSpf66JeID1JXr3m/VLeDfHIvZBYLLg
- 3bvLVXQXT9zX8Q5HanRsAOXQzWv9TTsd9BETwZ75FlbqHra+z8WZnCZb/iyOg4x4YvesLfVEW
- ClOhKID7ygaIX+jHFH9V3MNAJ/1XMeDmNYyzg4qQgUqPijTMTM93ZxhBJsbNV/nZuFPJwJEyt
- p+1Hh3qNFHdj/rRpqjjclHGJSsgN46mQuCBNNMbR4BJwWAP8k4Ey9AWlqXY4rJO1w9tne80VJ
- LX9rTT+Mp3+H1nd5ZUUGyaZq5HdiEWOzz0SztlMdUzf05KXEQjoiDwH+5YByrXosrxlCGrt1s
- PebXD8PRhq9ayUmIqcgij3xA==
+Content-Transfer-Encoding: 8bit
 
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on usb/usb-testing]
-> [also build test ERROR on usb/usb-next usb/usb-linus westeri-thunderbolt=
-/next linus/master v6.11 next-20240925]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/us=
-b-gadget-eem-Use-common-error-handling-code-in-eem_unwrap/20240925-233931
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git u=
-sb-testing
-> patch link:    https://lore.kernel.org/r/59fadd5a-6574-4379-98ac-cc4f11b=
-675cc%40web.de
-> patch subject: [PATCH] usb: gadget: eem: Use common error handling code =
-in eem_unwrap()
-> config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/2024=
-0926/202409261347.SAA10KGy-lkp@intel.com/config)
-> compiler: alpha-linux-gcc (GCC) 13.3.0
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arch=
-ive/20240926/202409261347.SAA10KGy-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new ver=
-sion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202409261347.SAA10KGy-lk=
-p@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    drivers/usb/gadget/function/f_eem.c: In function 'eem_unwrap':
->>> drivers/usb/gadget/function/f_eem.c:547:29: error: 'ep' undeclared (fi=
-rst use in this function); did you mean 'up'?
->      547 |         usb_ep_free_request(ep, req);
->          |                             ^~
->          |                             up
->    drivers/usb/gadget/function/f_eem.c:547:29: note: each undeclared ide=
-ntifier is reported only once for each function it appears in
->>> drivers/usb/gadget/function/f_eem.c:547:33: error: 'req' undeclared (f=
-irst use in this function); did you mean 'rq'?
->      547 |         usb_ep_free_request(ep, req);
->          |                                 ^~~
->          |                                 rq
->>> drivers/usb/gadget/function/f_eem.c:549:27: error: 'skb2' undeclared (=
-first use in this function); did you mean 'skb'?
->      549 |         dev_kfree_skb_any(skb2);
->          |                           ^~~~
->          |                           skb
+From: "hubert.buczynski" <Hubert.Buczynski.ext@feig.de>
 
-Is there development support to adjust the scope for mentioned local varia=
-bles?
+The commit "5a444bea usb: gadget: u_serial: Set start_delayed during
+suspend" caused invocation of the gs_start_io in the gserial_resume.
+The gs_start_io doesn't check the ptr of the 'port.tty'. As a result, the
+tty_wakeup function is passed on to the NULL ptr causing kernel panic.
 
+There is a deterministic scenario leading to the kernel error:
+1. Set the device in peripheral OTG mode.
+2. Attach the USB cable to the host.
+3. Do not take any action on the host side.
+4. Send data to the host, for example:
+$ echo "hello\n" > /dev/ttyGS0
+5. Disconnect the USB cable.
+6. Connect the USB cable and the kernel panic should be visible.
 
-> vim +547 drivers/usb/gadget/function/f_eem.c
->
->    387
->    388	/*
->    389	 * Remove the EEM header.  Note that there can be many EEM packet=
-s in a single
->    390	 * USB transfer, so we need to break them out and handle them ind=
-ependently.
->    391	 */
->    392	static int eem_unwrap(struct gether *port,
->    393				struct sk_buff *skb,
->    394				struct sk_buff_head *list)
->    395	{
->    396		struct usb_composite_dev	*cdev =3D port->func.config->cdev;
->    397		int				status =3D 0;
->    398
->    399		do {
->    400			struct sk_buff	*skb2;
->    401			u16		header;
->    402			u16		len =3D 0;
->    403
->    404			if (skb->len < EEM_HLEN) {
->    405				status =3D -EINVAL;
->    406				DBG(cdev, "invalid EEM header\n");
->    407				goto error;
->    408			}
->    409
->    410			/* remove the EEM header */
->    411			header =3D get_unaligned_le16(skb->data);
->    412			skb_pull(skb, EEM_HLEN);
->    413
->    414			/* EEM packet header format:
->    415			 * b0..14:	EEM type dependent (data or command)
->    416			 * b15:		bmType (0 =3D=3D data, 1 =3D=3D command)
->    417			 */
->    418			if (header & BIT(15)) {
->    419				struct usb_request	*req;
->    420				struct in_context	*ctx;
->    421				struct usb_ep		*ep;
->    422				u16			bmEEMCmd;
->    423
->    424				/* EEM command packet format:
->    425				 * b0..10:	bmEEMCmdParam
->    426				 * b11..13:	bmEEMCmd
->    427				 * b14:		reserved (must be zero)
->    428				 * b15:		bmType (1 =3D=3D command)
->    429				 */
->    430				if (header & BIT(14))
->    431					continue;
->    432
->    433				bmEEMCmd =3D (header >> 11) & 0x7;
->    434				switch (bmEEMCmd) {
->    435				case 0: /* echo */
->    436					len =3D header & 0x7FF;
->    437					if (skb->len < len) {
->    438						status =3D -EOVERFLOW;
->    439						goto error;
->    440					}
->    441
->    442					skb2 =3D skb_clone(skb, GFP_ATOMIC);
->    443					if (unlikely(!skb2)) {
->    444						DBG(cdev, "EEM echo response error\n");
->    445						goto next;
->    446					}
->    447					skb_trim(skb2, len);
->    448					put_unaligned_le16(BIT(15) | BIT(11) | len,
->    449								skb_push(skb2, 2));
->    450
->    451					ep =3D port->in_ep;
->    452					req =3D usb_ep_alloc_request(ep, GFP_ATOMIC);
->    453					if (!req)
->    454						goto free_skb;
->    455
->    456					req->buf =3D kmalloc(skb2->len, GFP_KERNEL);
->    457					if (!req->buf)
->    458						goto free_request;
->    459
->    460					ctx =3D kmalloc(sizeof(*ctx), GFP_KERNEL);
->    461					if (!ctx) {
->    462						kfree(req->buf);
->    463						goto free_request;
->    464					}
->    465					ctx->skb =3D skb2;
->    466					ctx->ep =3D ep;
->    467
->    468					skb_copy_bits(skb2, 0, req->buf, skb2->len);
->    469					req->length =3D skb2->len;
->    470					req->complete =3D eem_cmd_complete;
->    471					req->zero =3D 1;
->    472					req->context =3D ctx;
->    473					if (usb_ep_queue(port->in_ep, req, GFP_ATOMIC))
->    474						DBG(cdev, "echo response queue fail\n");
->    475					break;
->    476
->    477				case 1:  /* echo response */
->    478				case 2:  /* suspend hint */
->    479				case 3:  /* response hint */
->    480				case 4:  /* response complete hint */
->    481				case 5:  /* tickle */
->    482				default: /* reserved */
->    483					continue;
->    484				}
->    485			} else {
->    486				u32		crc, crc2;
->    487				struct sk_buff	*skb3;
->    488
->    489				/* check for zero-length EEM packet */
->    490				if (header =3D=3D 0)
->    491					continue;
->    492
->    493				/* EEM data packet format:
->    494				 * b0..13:	length of ethernet frame
->    495				 * b14:		bmCRC (0 =3D=3D sentinel, 1 =3D=3D calculated)
->    496				 * b15:		bmType (0 =3D=3D data)
->    497				 */
->    498				len =3D header & 0x3FFF;
->    499				if ((skb->len < len)
->    500						|| (len < (ETH_HLEN + ETH_FCS_LEN))) {
->    501					status =3D -EINVAL;
->    502					goto error;
->    503				}
->    504
->    505				/* validate CRC */
->    506				if (header & BIT(14)) {
->    507					crc =3D get_unaligned_le32(skb->data + len
->    508								- ETH_FCS_LEN);
->    509					crc2 =3D ~crc32_le(~0,
->    510							skb->data, len - ETH_FCS_LEN);
->    511				} else {
->    512					crc =3D get_unaligned_be32(skb->data + len
->    513								- ETH_FCS_LEN);
->    514					crc2 =3D 0xdeadbeef;
->    515				}
->    516				if (crc !=3D crc2) {
->    517					DBG(cdev, "invalid EEM CRC\n");
->    518					goto next;
->    519				}
->    520
->    521				skb2 =3D skb_clone(skb, GFP_ATOMIC);
->    522				if (unlikely(!skb2)) {
->    523					DBG(cdev, "unable to unframe EEM packet\n");
->    524					goto next;
->    525				}
->    526				skb_trim(skb2, len - ETH_FCS_LEN);
->    527
->    528				skb3 =3D skb_copy_expand(skb2,
->    529							NET_IP_ALIGN,
->    530							0,
->    531							GFP_ATOMIC);
->    532				if (unlikely(!skb3))
->    533					goto free_skb;
->    534
->    535				dev_kfree_skb_any(skb2);
->    536				skb_queue_tail(list, skb3);
->    537			}
->    538	next:
->    539			skb_pull(skb, len);
->    540		} while (skb->len);
->    541
->    542	error:
->    543		dev_kfree_skb_any(skb);
->    544		return status;
->    545
->    546	free_request:
->  > 547		usb_ep_free_request(ep, req);
->    548	free_skb:
->  > 549		dev_kfree_skb_any(skb2);
->    550		goto next;
->    551	}
->    552
+Fragment of the kernel panic log message:
 
-Would any other software design options become acceptable for the reductio=
-n of duplicate statements
-(according to resource management)?
+Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Tainted: P O 5.15.166 #88
+Hardware name: STM32 hDevice Tree Support)
+PC is at tty_wakeup+0x8/0x5c
+LR is at gs_start_io+0x90/0xdc
+pc : [<c0623f74>]    lr : [<c083eeac>]    psr: 60010193
+sp : c1001da0  ip : c32e6944  fp : 80000000
+r10: c32e6934  r9 : c32e6928  r8 : c32e68ec
+r7 : c32e68e0  r6 : c2be6c40  r5 : 00000000  r4 : 00000000
+r3 : 00000000  r2 : 00000000  r1 : 60010193  r0 : 00000000
+Flags: nZC»  IRQs off  FIQs on  Mode SVC_32  ISA ARM Segment none
+Control: 10c5387d  Table: c3ac406a  DAC: 00000051
+Register r0 information: NULL pointer
+Register r1 information: non-paged memory
+Register r2 information: NULL pointer
+Register r3 information: NULL pointer
+Register r4 information: NULL pointer
+Register r5 information: NULL pointer
+[<c0623f74>] (tty_wakeup) from [<c083eeac>] (gs_start_io+0x90/0xdc)
+[<c083eeac>] (gs_start_io) from [<c083f0c0>](gserial_resume+0x6c/0xd4)
+[<c083f0c0>] (gserial_resume) from [<c082a35c>] (composite_resume+0x70/0x10c)
+[<c082a35c>] (composite_resume) from [<c082d668>] (configfs_composite_resume+0x54/0x64)
+[<c082d668>] (configfs_composite_resume) from [<c07c26c4>] (dwc2_handle_wakeup_detected_intr+0x15c/0x2e8)
+[<c07c26c4>] (dwc2_handle_wakeup_detected_intr) from [<c07c2c74>] (dwc2_handle_common_intr+0x424/0x630)
+[<c07c2c74>] (dwc2_handle_common_intr) from [<c0190168>] (__handle_irq_event_percpu+0x50/0x250)
+[<c0190168>] (__handle_irq_event_percpu) from [<c0190440>] (handle_irq_event+0x58/0xc4)
+[<c0190440>] (handle_irq_event) from [<c0194f9c>] (handle_fasteoi_irq+0x9c/0x204)
+[<c0194f9c>] (handle_fasteoi_irq) from [<c018fb2c>] (handle_domain_irq+0x58/0x74)
+[<c018fb2c>] (handle_domain_irq) from [<c0101328>] (gic_handle_irq+0x7c/0x90)
+[<c0101328>] (gic_handle_irq) from [<c0100b7c>] (__irq_svc+0x5c/0x90)
 
-Regards,
-Markus
+If the device sends data and does not receive msg from the host then the
+field port->read_started contains a positive value. After disconnecting
+the cable, gserial_suspend() is invoked and the port->start_delayed is set
+to true. Connecting the cable again causes invocation of the
+gserial_resume().
+The callstack after connecting the cable looks like the following:
+gserial_resume()
+  --> gs_start_io()
+    --> tty_wakeup() - with NULL argument
+
+Fixes: 5a444bea37e2 ("usb: gadget: u_serial: Set start_delayed during suspend")
+
+Signed-off-by: hubert.buczynski <Hubert.Buczynski.ext@feig.de>
+---
+ drivers/usb/gadget/function/u_serial.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index 5111fcc0cac3..384f219fe01d 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -564,7 +564,7 @@ static int gs_start_io(struct gs_port *port)
+ 	port->n_read = 0;
+ 	started = gs_start_rx(port);
+ 
+-	if (started) {
++	if (started && port->port.tty) {
+ 		gs_start_tx(port);
+ 		/* Unblock any pending writes into our circular buffer, in case
+ 		 * we didn't in gs_start_tx() */
+-- 
+2.25.1
+
 
