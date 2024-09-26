@@ -1,100 +1,121 @@
-Return-Path: <linux-usb+bounces-15498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BE719872B5
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 13:19:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A63987356
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 14:12:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FE9DB278D8
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 11:18:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFABF1F28229
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 12:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B748B18EFCC;
-	Thu, 26 Sep 2024 11:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D7417A5A6;
+	Thu, 26 Sep 2024 12:12:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QntDWOam"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bS6C7Ne0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43EF171675;
-	Thu, 26 Sep 2024 11:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B00078C90;
+	Thu, 26 Sep 2024 12:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727349487; cv=none; b=MH7qJG3z+TEY+vW8CpLu5wXqfAoFKtMJZ8biP8n+XuA8A0gd58gPgD/kX6pj72BEs4PMWcEbrl9N5gSWUljnqImCtdkNrz44oW/lgpspS6RNV2Ytdr+CkYHOxVgwUD/+l7oyV4JMZsKcpr6hc3NbztVafBmfvp6kk71DOcWixeQ=
+	t=1727352757; cv=none; b=Ellv1PLUQvtvoL3tvXlT8nokDZLH3mf4PMHMt/WaRBrwQKN6kRxTkxoJ+tR237xgTOrtkenzqMxBwk7I2mfUz3AG3gp/UVu65kzSnrmKMjDnt2l5BR/vkUysek3VAh5BVtyMXzJrTrI2f4eSQn2UuzPN4TwZ9HVOmOhmkFz+a/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727349487; c=relaxed/simple;
-	bh=Va9TLPbDkDpIMZW36nzPnHJ5cnNZE++54X9BH+sCIoI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=diGC1WXtaRIP07h0gc3MDaGFRbZs0PkUGJAx2cX1Qi2Reufl6US3+i9u7PXvZ4BTaqxeXdF6lP1svRYdAlO1SXzi9He4HWmdffC8Jevra90Df/o3IlI52IY/3aV0wJHYSxygnj266o9Z2avMQhtrU2DxTJmdxb1mc9j5OBwt5oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QntDWOam; arc=none smtp.client-ip=209.85.222.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-84ea1e5e964so294170241.0;
-        Thu, 26 Sep 2024 04:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727349484; x=1727954284; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Va9TLPbDkDpIMZW36nzPnHJ5cnNZE++54X9BH+sCIoI=;
-        b=QntDWOampSBuReBA2pRL8q+pOgCnXkv2CmUpZwkQJbSul3d1MzyQ01gIqW6VnyO3Qm
-         gbsljX56p+cF2IsNHZAaPT7Jh2QYD5/RPHblZ3u9aHxGVTQJz1aIy7fO6/UUl7cHyk0E
-         ZBqubbGSDdlfE/RIF3hUzPxrqLNFlY+WEgcSrsDCVeWTZfg2t+suj+3BRLuKRmaZ3hMt
-         E62LwD361b2S2/HzgNVdfgWIFy1QDqlYwBNnMs2+l4MmWRV1G36MaYHvYHnaKzaP3NkJ
-         EF60ErPegDclhrcoLv1Nt+BQxmbq4SCZDbQYNQU1de5Vvtcog6aHA4GmPTdp8KX1+DhG
-         YAVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727349484; x=1727954284;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Va9TLPbDkDpIMZW36nzPnHJ5cnNZE++54X9BH+sCIoI=;
-        b=Gto+Cz7bCl8qR/2JEmixYZ+saYdYl/b9D4/xY6qcN8HlStzoKigVVlZ6Kq7E6LAe5S
-         0UCkaY0yPxmwDUYwLIDEDNGPnZBe1ew0kOJ4Dj20HUVZlZDzFFyrnaOW7v1MFj4KxMBZ
-         kYajhzws527vKKiGJtuO/b4aLEqunho3+gzdY8fX3scxCiTa3EZGG3vf7vxooRF/x5Gg
-         fiisU9y3gw0S7kyNQ0m4EHkCFrWny7vKR4lf+GUnUCfYgNVI1GM3fLu0Wvi4mKLj0ES6
-         KMZZGkqn8EHtO4y3MqSzDcTGz7ZDuZWdKlQYtKRUS3aDVVrBDC3dR/LrmFAAvglAtQH8
-         uC4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV08IXdO4k4gFm2AYMK323UQGxA6KDMDwrgHnEyM1DcZKFjORCsLu2WgGgf9bW+UsyS+/AhLmrBjmtk@vger.kernel.org, AJvYcCXfWnPxclZJeA2AuDbl4xG9XxNkxX5JG9brKE8XfvrgYvyiikEy0DDCA8unnxpCTDJU4Bu/HzGy6OVcXJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBxybA7x57ed0mF5QLBcBQhpOZz3bu6TomZc0EqXiyYHbjAVgN
-	NDJyXw8tvUlIskZ2hq8xca5AvD51QJ6/sUv2ZCMA6M5w+V51iyRsM2Q1+45teJy+pOW8sPfp0Qr
-	AkdK//9ga2RFre3bYkK7LUUVJFWU=
-X-Google-Smtp-Source: AGHT+IEOmvguJqT35U5zy7I0t+U+ujuM7WdKorBYOvZNAcXgqarn0kPmdq01T3AhX/8/OzG1YjzeecAC08OQJnmAYB0=
-X-Received: by 2002:a05:6122:a0e:b0:4f5:312a:6573 with SMTP id
- 71dfb90a1353d-5074b77c4f8mr2127415e0c.5.1727349484616; Thu, 26 Sep 2024
- 04:18:04 -0700 (PDT)
+	s=arc-20240116; t=1727352757; c=relaxed/simple;
+	bh=3f2PlrxlmtzV9bX8QaJPEWHju7M5P+yDbVSMqF02t3g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fSWcxx+Ba0l8EC0gIPO3I7hEr4VWUElZtfY+j8wMDkCwVFo7Odw3tpZXratFFVOTw9T6KwkEbt/Sb26loiuxjsJLE7snToVamXAF/gUZOZWlzAgU9qhAj9l63me6n7bdu9oIRTZikqMTV4beCVWHdYEyG27/XudQSd9xAZX/Ju0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bS6C7Ne0; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727352755; x=1758888755;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3f2PlrxlmtzV9bX8QaJPEWHju7M5P+yDbVSMqF02t3g=;
+  b=bS6C7Ne0padragF3UhIWDYjKNJnalKjFNKM7gE6LYsWBRGh0m5zhGE0T
+   HCnwK2+BVpVvYDPmlhkMya7BGdxlS3469EV7PA/mzbvRK/x3qRjKkDhC8
+   8h2qbR7zzijalIfXP0ZkmbsouBrbrvLqzjA+j7qtsDh8kMWvlJ8o6NVfW
+   gnTrGMQXpHPNkqTLDwoe1zZCKNPb6+n6I697trpMkl4m8phMAt8BMIxI3
+   4IdQLC5qsmdI3pS+bfBozlyn4a+8zWmczv+vHlew3y2pP34vG98VdD5Od
+   Mb5dESoYx1h1ejZK5oPNzIYu5VX+0QL13VFSYfQc9GyDUPPrLA90yuU6M
+   g==;
+X-CSE-ConnectionGUID: 42oz2T67T92UjghuArd4cQ==
+X-CSE-MsgGUID: jf5arXABTRa8jEt1TPLGQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="26579854"
+X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
+   d="scan'208";a="26579854"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2024 05:12:10 -0700
+X-CSE-ConnectionGUID: XUaBbbtrQf+w9SVZVGuJPQ==
+X-CSE-MsgGUID: 6uWSaNQUTgaXk7bdCwqo8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
+   d="scan'208";a="77050081"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2024 05:12:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1stnLo-0000000DBma-1Xhj;
+	Thu, 26 Sep 2024 15:12:04 +0300
+Date: Thu, 26 Sep 2024 15:12:04 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Markus Elfring <Markus.Elfring@web.de>, linux-usb@vger.kernel.org,
+	Ajay Gupta <ajayg@nvidia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Haotien Hsu <haotienh@nvidia.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Utkarsh Patel <utkarsh.h.patel@intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Wolfram Sang <wsa@the-dreams.de>,
+	LKML <linux-kernel@vger.kernel.org>,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 0/2] usb: typec: ucsi: ccg: Adjustments for common code
+ in two functions
+Message-ID: <ZvVPlInCFajkeFy9@smile.fi.intel.com>
+References: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
+ <jjsbnitbajdw7dc4plkbb55ezl2cdbnrfws7hnoigbzasvdzua@puhrwwlu4lvv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240926064910.17429-1-hubert.buczynski94@gmail.com> <47689c2e-505e-461c-88dd-d178a7fdd087@quicinc.com>
-In-Reply-To: <47689c2e-505e-461c-88dd-d178a7fdd087@quicinc.com>
-From: =?UTF-8?Q?Hubert_Buczy=C5=84ski?= <hubert.buczynski94@gmail.com>
-Date: Thu, 26 Sep 2024 13:17:53 +0200
-Message-ID: <CAJUMw3uOsSQfiPfn8iW-+TkbcsN21fpM0WNp_xy-6QJPktf4sg@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: u_serial: fix null-ptr-deref in gs_start_io
-To: Prashanth K <quic_prashk@quicinc.com>
-Cc: balbi@kernel.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	"hubert.buczynski" <Hubert.Buczynski.ext@feig.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jjsbnitbajdw7dc4plkbb55ezl2cdbnrfws7hnoigbzasvdzua@puhrwwlu4lvv>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-> Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
-> gs_start_io") fixed this issue. Please try adding it into your builds.
->
-> Regards,
-> Prashanth K
+On Thu, Sep 26, 2024 at 12:26:24AM +0300, Dmitry Baryshkov wrote:
+> On Wed, Sep 25, 2024 at 07:31:04PM GMT, Markus Elfring wrote:
+> > From: Markus Elfring <elfring@users.sourceforge.net>
+> > Date: Wed, 25 Sep 2024 19:19:01 +0200
+> > 
+> > A few update suggestions were taken into account
+> > from static source code analysis.
+> > 
+> > Markus Elfring (2):
+> >   Use common code in ccg_write()
+> >   Use common code in ccg_read()
+> > 
+> >  drivers/usb/typec/ucsi/ucsi_ccg.c | 15 ++++++++-------
+> >  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> For the series:
+> 
+> Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Thanks for the quick response. Indeed, the commit ffd603f21423
-("usb: gadget: u_serial: Add null pointer check in gs_start_io")
-solves the problem. Sorry for not checking the newest version.
+I believe there is no-one to take it, but in any case the thing is that kfree()
+probably can be done using __free(). Then PM runtime handled differently.
 
-I wonder whether it should also be applied to the LTS v5.15.167.
-The bug is still present there.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Best Regards
-Hubert
+
 
