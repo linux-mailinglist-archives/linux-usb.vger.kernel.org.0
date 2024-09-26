@@ -1,171 +1,321 @@
-Return-Path: <linux-usb+bounces-15487-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15488-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A45E986CDF
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 08:50:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9DEA986E31
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 09:51:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D61A1C21DC8
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 06:49:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76FF92854A0
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 07:51:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5472518C336;
-	Thu, 26 Sep 2024 06:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPDVaXvX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24B67192586;
+	Thu, 26 Sep 2024 07:50:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D7C18784C;
-	Thu, 26 Sep 2024 06:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201831990BB
+	for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2024 07:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727333373; cv=none; b=D8fROLNiOqu7Fh5bLIfWAixPAK0LQC7PwGYAmz3ucElf9rUatzYaPxqgyrYCdawmN0tEXts7mpMC4pxn8Ao3s1BjSFKnQNdXjeNExNx2QFuJKHGFAtd1jQNyZwjG0HUwgVoG9r3ngUwbWVlVT0eAnSzWB69AJPVhRwnjoqY6n/Q=
+	t=1727337044; cv=none; b=ePEO//6reOkAAKTRIFAl6pnvoSWVk2kQ7loIuffbL4Jj54Vg17o1IuScgybAlqM2IsMZvGEJOEdZWQ55RtOJulk1eG/NjTqyD57v/16Ai+0FNRUTvDuwZND/BuLaUMmpx9RoXlf+AeMyme8qLEOJ/+NZOfEeAPZKh5o8yMFouYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727333373; c=relaxed/simple;
-	bh=2EjaJgg2Kh6R0gxzcs4CAsn7s9mMpxxHU4F/8eBHY6U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=f7UeGvsyqNK3+R95fxIBPxCIyNfuQmlVfizsnRv72CYwDYCgrPyOUqli4ZtMa8TpbJeqhJ4c2YYvNKsEN1c9kijbrXWTZO0mV9D+7DZPlxN++vz2r40RYGTVocrm+6o4Vs4l+Tkq5RkpMDePb00LrsoZ4Vk9zIMPXPSrT8ztPWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPDVaXvX; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5356aa9a0afso883313e87.2;
-        Wed, 25 Sep 2024 23:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727333370; x=1727938170; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zgnMrzwynFba1wRhjzmjE2vkGb+mgPFEdtMaT9NIW6g=;
-        b=HPDVaXvX/7T65pYAIxQboWcgJino+ytesBwHPSBhvjC4lrbdrB0zMhPeaWd0md5+OQ
-         nNsIAMoU9q0FGZxo/jSJob451Kjiiqbsx4YpQzBub3XF8x6RPwJzZw5SpfkSJj2ztyc+
-         jO4mrF/sG8alW3avlEMOa6WFTBaQWfSkYTbF6dCHF8pldESrjzvchoeY77N0Sc9yjnvA
-         UPsks8kApAqLJ/sNVvPs7agE2P9WDW7nMK3Q6FwfKV90YsD2fJVRBwCWi56VhsLkRCtm
-         di3O6w5q+Yhx28zMNU/2Ns0AEFgKegH0iz/80GZpU5UbnhMAY2AkbmSTW7wiLIBimcbj
-         LBfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727333370; x=1727938170;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zgnMrzwynFba1wRhjzmjE2vkGb+mgPFEdtMaT9NIW6g=;
-        b=i/69Qdt5cqzkIhJGwxafv2Px152ioF+4Qo6UmTwWVRzoQs1xxSSmA/MrR6oOyVtfsK
-         7EiDCsVVmeI0367GoH4CmRbhAio/BQHdDYIS/H+0iyJ0kAOJSEvimjOoGUw9Z5tTovh5
-         RhK82fecNSxmNQUSo1ohSu7CCToPrmod6ZCplIFOAdbui71Wqr5Ak2XJyG98feDd7LGM
-         PVFRZUb6L0jyB0xo+qz4UZRifB7k/xZ/I/4ywWsbzWlnS/z01wmSYbvxfNqSmu5ARTZQ
-         pzZesFe8XDWckgqZKysdbrgPh0Ud5OdGAm1Iqe047JWh6LiRD7n+r40st4uANyMbuYJM
-         rP3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVxrGz/Qnmjn2wtA3MUotqff1BlB80SIBQcv5qiRC51Tk8EZZtJnLibQzJ7KF/nBlZEnbWNJDqdIjO9iyc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycTfWHot8LbS66bObQrHkN9jtIWlgVS5anXycsum+TpEKOvY9d
-	FNUXIUE68fGsNdY8N3Z7v/s6O7M+uVMB4/AtJe+9xFKqnCfpo2qpaeCfiyDJcKo=
-X-Google-Smtp-Source: AGHT+IGINfmXa3fp+xYx2jyAcimsm+PlqF9Wd1CFn0DOqYt9akL49L/Iq8d75aTSQFCui0F5um3MQQ==
-X-Received: by 2002:a05:6512:687:b0:536:a695:9414 with SMTP id 2adb3069b0e04-5387048aa60mr4984849e87.6.1727333369711;
-        Wed, 25 Sep 2024 23:49:29 -0700 (PDT)
-Received: from hubert.. (89-72-184-222.dynamic.chello.pl. [89.72.184.222])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93931340b5sm309691266b.190.2024.09.25.23.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 23:49:29 -0700 (PDT)
-From: hbuczynski <hubert.buczynski94@gmail.com>
-To: balbi@kernel.org,
-	gregkh@linuxfoundation.org,
-	quic_prashk@quicinc.com
-Cc: linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1727337044; c=relaxed/simple;
+	bh=Hi9Dm9bHtr/nU89VigzpFVOj84iRJ07qjg1yUVHkIVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XwPb5QDWKiznv8UFsNldJsvSU8cfGjNH3fmIrgu2nvcX9DQBNnSXw/auHFE9Q/TMdB13aqCvDbd5+aBWsRdW2MUYPChWtlY5masQDAf+Zn4eqNp8ocWnAfpAj5dYnlvkhX9+4G6ET8QVD2L30gxmDK3p82dQfU5+TZ+NBLqq5Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1stjGc-0001MC-VD; Thu, 26 Sep 2024 09:50:26 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1stjGb-001dUm-1u; Thu, 26 Sep 2024 09:50:25 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1stjGa-00D7UJ-32;
+	Thu, 26 Sep 2024 09:50:24 +0200
+Date: Thu, 26 Sep 2024 09:50:24 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Walle <mwalle@kernel.org>, devicetree@vger.kernel.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Mathieu Othacehe <m.othacehe@gmail.com>,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
 	linux-kernel@vger.kernel.org,
-	"hubert.buczynski" <Hubert.Buczynski.ext@feig.de>
-Subject: [PATCH] usb: gadget: u_serial: fix null-ptr-deref in gs_start_io
-Date: Thu, 26 Sep 2024 08:49:10 +0200
-Message-Id: <20240926064910.17429-1-hubert.buczynski94@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	Hiago De Franco <hiago.franco@toradex.com>,
+	Herburger <gregor.herburger@ew.tq-group.com>,
+	Petr Benes <petr.benes@ysoft.com>, linux-usb@vger.kernel.org,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, imx@lists.linux.dev,
+	Shawn Guo <shawnguo@kernel.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 2/2] arm64: dts: imx: Add imx8mp-iota2-lumpy board
+Message-ID: <20240926075024.777bdooiqd5myv3v@pengutronix.de>
+References: <20240924103941.1729061-1-michal.vokac@ysoft.com>
+ <20240924103941.1729061-3-michal.vokac@ysoft.com>
+ <ZvLXenqG/++AR4We@lizhi-Precision-Tower-5810>
+ <20240924173714.qxxkhn6wscze7q5n@pengutronix.de>
+ <87980643-44b4-4df9-9eb7-1583b5074bdd@ysoft.com>
+ <ZvQ5O553E0QFvced@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZvQ5O553E0QFvced@lizhi-Precision-Tower-5810>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-From: "hubert.buczynski" <Hubert.Buczynski.ext@feig.de>
+On 24-09-25, Frank Li wrote:
+> On Wed, Sep 25, 2024 at 01:30:31PM +0200, Michal Vokáč wrote:
+> > On 24. 09. 24 19:37, Marco Felsch wrote:
+> > > Hi Frank,
+> > >
+> > > On 24-09-24, Frank Li wrote:
+> > > > On Tue, Sep 24, 2024 at 12:39:41PM +0200, Michal Vokáč wrote:
+> > > > > The IOTA2 Lumpy board is based on the i.MX8MPlus EVK.
+> > > > >
+> > > > > Basic features are:
+> > > > > - 4GB LPDDR4
+> > > > > - 64GB eMMC
+> > > > > - 2x 1GB Ethernet
+> > > > > - USB 3.0 Type-C dual role port, without power delivery
+> > > > > - USB 3.0 Type-A host port
+> > > > > - RGB LED - PWM driven
+> > > > > - speaker - PWM driven
+> > > > > - RTC with super capacitor backup
+> > > > >
+> > > > > Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+> > > > > ---
+> > > > > v4:
+> > > > > - Moved the iomuxc node to the end of the file.
+> > > > > - Moved the bus-width and non-removeable properties below
+> > > > >    the pinctrl-* properties in &usdhc3 node.
+> > > > > - Moved the fsl,ext-reset-output below the pinctrl-* properties
+> > > > >    in &wdog1 node.
+> > > > > v3:
+> > > > > - Dropped pinctrl-names property from &usb_dwc3_1 node.
+> > > > > v2:
+> > > > > - Dropped unused property from pwm4 node.
+> > > > > - Sorted all nodes and properties using dt-format tool from Frank.
+> > > > >
+> > > > >   arch/arm64/boot/dts/freescale/Makefile        |   1 +
+> > > > >   .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 423 ++++++++++++++++++
+> > > >
+> > > > Suggest use https://github.com/lznuaa/dt-format
+> > > > sort node. any issue, let me know.
+> > >
+> > > Thanks for the link :) would be nice to have this script to be part of
+> > > the kernel.
+> 
+> It depend on how much people like and use it.
 
-The commit "5a444bea usb: gadget: u_serial: Set start_delayed during
-suspend" caused invocation of the gs_start_io in the gserial_resume.
-The gs_start_io doesn't check the ptr of the 'port.tty'. As a result, the
-tty_wakeup function is passed on to the NULL ptr causing kernel panic.
+I don't see any reason why the kernel shouldn't have such a script, it
+makes the life easier for all of us (incl. the dt-maintainers). By that
+I mean the idea of having such a script since I actually didn't looked
+into your code.
 
-There is a deterministic scenario leading to the kernel error:
-1. Set the device in peripheral OTG mode.
-2. Attach the USB cable to the host.
-3. Do not take any action on the host side.
-4. Send data to the host, for example:
-$ echo "hello\n" > /dev/ttyGS0
-5. Disconnect the USB cable.
-6. Connect the USB cable and the kernel panic should be visible.
+> >> The script follows the rules in [1] I'm just used to have
+> > > common properties like pinctrl-* in front of the device specific
+> > > properties e.g. "enable-active-high". But this rule is not part of [1]
+> > > so I can't blame the script.
+> 
+> I just write it. Not 100% align order-of-properties-in-device-node yet.
+> Some propertiy need special treated. Thank you provide the feedback.
+> 
+> I push change, enable-active-high and gpio will after regulator*.
 
-Fragment of the kernel panic log message:
+:) Thank you!
 
-Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Tainted: P O 5.15.166 #88
-Hardware name: STM32 hDevice Tree Support)
-PC is at tty_wakeup+0x8/0x5c
-LR is at gs_start_io+0x90/0xdc
-pc : [<c0623f74>]    lr : [<c083eeac>]    psr: 60010193
-sp : c1001da0  ip : c32e6944  fp : 80000000
-r10: c32e6934  r9 : c32e6928  r8 : c32e68ec
-r7 : c32e68e0  r6 : c2be6c40  r5 : 00000000  r4 : 00000000
-r3 : 00000000  r2 : 00000000  r1 : 60010193  r0 : 00000000
-Flags: nZC»  IRQs off  FIQs on  Mode SVC_32  ISA ARM Segment none
-Control: 10c5387d  Table: c3ac406a  DAC: 00000051
-Register r0 information: NULL pointer
-Register r1 information: non-paged memory
-Register r2 information: NULL pointer
-Register r3 information: NULL pointer
-Register r4 information: NULL pointer
-Register r5 information: NULL pointer
-[<c0623f74>] (tty_wakeup) from [<c083eeac>] (gs_start_io+0x90/0xdc)
-[<c083eeac>] (gs_start_io) from [<c083f0c0>](gserial_resume+0x6c/0xd4)
-[<c083f0c0>] (gserial_resume) from [<c082a35c>] (composite_resume+0x70/0x10c)
-[<c082a35c>] (composite_resume) from [<c082d668>] (configfs_composite_resume+0x54/0x64)
-[<c082d668>] (configfs_composite_resume) from [<c07c26c4>] (dwc2_handle_wakeup_detected_intr+0x15c/0x2e8)
-[<c07c26c4>] (dwc2_handle_wakeup_detected_intr) from [<c07c2c74>] (dwc2_handle_common_intr+0x424/0x630)
-[<c07c2c74>] (dwc2_handle_common_intr) from [<c0190168>] (__handle_irq_event_percpu+0x50/0x250)
-[<c0190168>] (__handle_irq_event_percpu) from [<c0190440>] (handle_irq_event+0x58/0xc4)
-[<c0190440>] (handle_irq_event) from [<c0194f9c>] (handle_fasteoi_irq+0x9c/0x204)
-[<c0194f9c>] (handle_fasteoi_irq) from [<c018fb2c>] (handle_domain_irq+0x58/0x74)
-[<c018fb2c>] (handle_domain_irq) from [<c0101328>] (gic_handle_irq+0x7c/0x90)
-[<c0101328>] (gic_handle_irq) from [<c0100b7c>] (__irq_svc+0x5c/0x90)
+Regards,
+  Marco
 
-If the device sends data and does not receive msg from the host then the
-field port->read_started contains a positive value. After disconnecting
-the cable, gserial_suspend() is invoked and the port->start_delayed is set
-to true. Connecting the cable again causes invocation of the
-gserial_resume().
-The callstack after connecting the cable looks like the following:
-gserial_resume()
-  --> gs_start_io()
-    --> tty_wakeup() - with NULL argument
-
-Fixes: 5a444bea37e2 ("usb: gadget: u_serial: Set start_delayed during suspend")
-
-Signed-off-by: hubert.buczynski <Hubert.Buczynski.ext@feig.de>
----
- drivers/usb/gadget/function/u_serial.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 5111fcc0cac3..384f219fe01d 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -564,7 +564,7 @@ static int gs_start_io(struct gs_port *port)
- 	port->n_read = 0;
- 	started = gs_start_rx(port);
- 
--	if (started) {
-+	if (started && port->port.tty) {
- 		gs_start_tx(port);
- 		/* Unblock any pending writes into our circular buffer, in case
- 		 * we didn't in gs_start_tx() */
--- 
-2.25.1
-
+> 
+> Frank
+> 
+> > >
+> > > Regards,
+> > >    Marco
+> > >
+> > > [1] https://docs.kernel.org/devicetree/bindings/dts-coding-style.html#order-of-properties-in-device-node
+> >
+> > Thank you for the review Frank & Marco.
+> > I quickly went through the file again and found another few properties
+> > that could be better ordered according to the kernel documentation [1].
+> >
+> > > > >   2 files changed, 424 insertions(+)
+> > > > >   create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> > > > >
+> > > > > diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> > > > > index 9d3df8b218a2..aa26a50b7bb4 100644
+> > > > > --- a/arch/arm64/boot/dts/freescale/Makefile
+> > > > > +++ b/arch/arm64/boot/dts/freescale/Makefile
+> > > > > @@ -171,6 +171,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
+> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
+> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
+> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
+> > > > > +dtb-$(CONFIG_ARCH_MXC) += imx8mp-iota2-lumpy.dtb
+> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
+> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-navqp.dtb
+> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
+> > > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> > > > > new file mode 100644
+> > > > > index 000000000000..9eb58e818dc7
+> > > > > --- /dev/null
+> > > > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
+> > > > > @@ -0,0 +1,423 @@
+> > > > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > > > > +/*
+> > > > > + * Copyright 2023 Y Soft
+> > > > > + */
+> > > > > +
+> > > > > +/dts-v1/;
+> > > > > +
+> > > > > +#include "imx8mp.dtsi"
+> > > > > +
+> > > > > +/ {
+> > > > > +	compatible = "ysoft,imx8mp-iota2-lumpy", "fsl,imx8mp";
+> > > > > +	model = "Y Soft i.MX8MPlus IOTA2 Lumpy board";
+> > > > > +
+> > > > > +	beeper {
+> > > > > +		compatible = "pwm-beeper";
+> > > > > +		pwms = <&pwm4 0 500000 0>;
+> > > > > +	};
+> > > > > +
+> > > > > +	chosen {
+> > > > > +		stdout-path = &uart2;
+> > > > > +	};
+> > > > > +
+> > > > > +	gpio_keys: gpio-keys {
+> > > > > +		compatible = "gpio-keys";
+> > > > > +		pinctrl-0 = <&pinctrl_gpio_keys>;
+> > > > > +		pinctrl-names = "default";
+> > > > > +
+> > > > > +		button-reset {
+> > > > > +			gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
+> > > > > +			label = "Factory RESET";
+> > > > > +			linux,code = <BTN_0>;
+> > > > > +		};
+> > > > > +	};
+> > > > > +
+> > > > > +	reg_usb_host: regulator-usb-host {
+> > > > > +		compatible = "regulator-fixed";
+> > > > > +		enable-active-high;
+> > > > > +		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+> >
+> > The enable-active-high and gpio should go bellow regulator-*.
+> >
+> > > > > +		pinctrl-0 = <&pinctrl_usb_host_vbus>;
+> > > > > +		pinctrl-names = "default";
+> > > > > +		regulator-max-microvolt = <5000000>;
+> > > > > +		regulator-min-microvolt = <5000000>;
+> > > > > +		regulator-name = "usb-host";
+> > > > > +	};
+> > > > > +
+> > > > > +	memory@40000000 {
+> > > > > +		reg = <0x0 0x40000000 0 0x80000000>,
+> > > > > +		      <0x1 0x00000000 0 0x80000000>;
+> > > > > +		device_type = "memory";
+> > > > > +	};
+> > > > > +};
+> > > > > +
+> > > > > +&A53_0 {
+> > > > > +	cpu-supply = <&reg_arm>;
+> > > > > +};
+> > > > > +
+> > > > > +&A53_1 {
+> > > > > +	cpu-supply = <&reg_arm>;
+> > > > > +};
+> > > > > +
+> > > > > +&A53_2 {
+> > > > > +	cpu-supply = <&reg_arm>;
+> > > > > +};
+> > > > > +
+> > > > > +&A53_3 {
+> > > > > +	cpu-supply = <&reg_arm>;
+> > > > > +};
+> > > > > +
+> > > > > +&eqos {
+> > > > > +	phy-handle = <&ethphy0>;
+> > > > > +	phy-mode = "rgmii-id";
+> > > > > +	pinctrl-0 = <&pinctrl_eqos>;
+> > > > > +	pinctrl-names = "default";
+> > > > > +	status = "okay";
+> > > > > +
+> > > > > +	mdio {
+> > > > > +		compatible = "snps,dwmac-mdio";
+> > > > > +		#address-cells = <1>;
+> > > > > +		#size-cells = <0>;
+> > > > > +
+> > > > > +		ethphy0: ethernet-phy@0 {
+> > > > > +			reg = <0>;
+> > > > > +			interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
+> > > > > +			interrupt-parent = <&gpio3>;
+> > > > > +			micrel,led-mode = <0>;
+> >
+> > The micrel,* is a vendor specific property. It should go bellow the reset-*.
+> >
+> > > > > +			pinctrl-0 = <&pinctrl_ethphy0>;
+> > > > > +			pinctrl-names = "default";
+> > > > > +			reset-assert-us = <1000>;
+> > > > > +			reset-deassert-us = <1000>;
+> > > > > +			reset-gpios = <&gpio3 22 GPIO_ACTIVE_LOW>;
+> > > > > +		};
+> > > > > +	};
+> > > > > +};
+> > > > > +
+> > > > > +&fec {
+> > > > > +	fsl,magic-packet;
+> > > > > +	phy-handle = <&ethphy1>;
+> > > > > +	phy-mode = "rgmii-id";
+> > > > > +	pinctrl-0 = <&pinctrl_fec>;
+> > > > > +	pinctrl-names = "default";
+> > > > > +	status = "okay";
+> > > > > +
+> > > > > +	mdio {
+> > > > > +		#address-cells = <1>;
+> > > > > +		#size-cells = <0>;
+> > > > > +
+> > > > > +		ethphy1: ethernet-phy@0 {
+> > > > > +			reg = <0>;
+> > > > > +			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+> > > > > +			interrupt-parent = <&gpio3>;
+> > > > > +			micrel,led-mode = <0>;
+> >
+> > Same as above, micrel,* should go bellow common properties.
+> > I will send a v5 with these fixed.
+> >
+> > Michal
+> >
+> > > > > +			pinctrl-0 = <&pinctrl_ethphy1>;
+> > > > > +			pinctrl-names = "default";
+> > > > > +			reset-assert-us = <1000>;
+> > > > > +			reset-deassert-us = <1000>;
+> > > > > +			reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
+> > > > > +		};
+> > > > > +	};
+> > > > > +};
+> > > > > +
+> 
 
