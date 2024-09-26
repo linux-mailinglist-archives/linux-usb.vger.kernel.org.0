@@ -1,133 +1,79 @@
-Return-Path: <linux-usb+bounces-15513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D829C9877F2
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 18:57:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C407A98783F
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 19:25:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F8051F25516
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 16:57:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A93D1F22260
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 17:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB30915B12A;
-	Thu, 26 Sep 2024 16:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B9515B118;
+	Thu, 26 Sep 2024 17:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhj9tCcD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVv3oHvP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57528158853;
-	Thu, 26 Sep 2024 16:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47271136337;
+	Thu, 26 Sep 2024 17:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727369815; cv=none; b=lW/ir2KIIEpAz3oS1XSTmSGp5ojFskY8RFJy0lr7p+R7x6EzWiayDHQjuzR5/dAgUbfP+WFoqD6eHQRNe1f1dAHgnmB5Vg17JNTnTkazI9uBKi8t71g3Unmtkryzoqq4Us88oJkGdjsPc64F6oWLM7zjP/HRxYZrI0LRjTy112I=
+	t=1727371531; cv=none; b=NU4oM8XgOk5RCbeYPDgR/sAAtu43nXecNpS+3ODvjTUWTqWash8eiO6tca7R3YPYT3tEF1FaLJqugbOrygVMEnLdaTqptHfl4Khc1RKLz9FoA6mskuWbjYOzbukCv/SrCllp/CxRLVIbM+Z5W6ZA/iDHfucQ/XFe8XKwGO33THM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727369815; c=relaxed/simple;
-	bh=EEXMZ5BTfHmxlTIWPOb6TPeSVlPnjEBarDCP+2U+KJA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AUt80unfNwnaOwwQVTJkVAor2WUlxs51bcL0red0+4jLeOCxIllfL8cLrI9d+tBK/hI9eBqS5Ikh1+XFzTrfN2kW2CWTNq0B0EVgTKlG4xSOVyj3RCBx66ctPBKo+uCXB0A5fo0zpYNNESpCpUGGQPb7x0gyBjM0xMDy3zJ0CQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhj9tCcD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 222D8C4CEC5;
-	Thu, 26 Sep 2024 16:56:52 +0000 (UTC)
+	s=arc-20240116; t=1727371531; c=relaxed/simple;
+	bh=2+c7ETv7UM6TiuuOrVXVzya94vU1TRsAQGrkGgKMvdE=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=byr+l/aV9n4uS7Jj7NotCAL3dTGrnr820FtStmPO2s75KReTc12DMmOXe0LdZBT8cLRlU+6J9vOu1UokrULCUKNSmjg+ii1brCCROhcnhyNR0tyCT6hgNwVPN7EWrPJR8fci4aBhIsENbGDxfQuL4eDzF/uuYFp2QEq7ddaEOHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVv3oHvP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2514DC4CEC5;
+	Thu, 26 Sep 2024 17:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727369814;
-	bh=EEXMZ5BTfHmxlTIWPOb6TPeSVlPnjEBarDCP+2U+KJA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bhj9tCcDOwf6jthplt9hPGRxBlFy8SD8TQK90HErECG8QSltwzV4cAEPWidr5TReC
-	 P4LhdiBQKdorvD7sftMrTja0iIJvyE0UA7MGjyLKwBUwUPAJoarIPtDgt8gMIQ4wKf
-	 HCJoky5shks/rjMOZLjaDBxF0F21CTphHmfuS1qOS4j9+fRRY05cmHuR06rEP7ZwGt
-	 hbOnRZqfrg4WKOZCaGJssYYRFJkDZfXG6jxeklv5Z08SWQockqFSGdKi99lfdn19w5
-	 VSPhA7dYWWRiQDMe8S3nRqLTf3R6s16wggAwjATGpYTTGZ5n5He7vaNRTwtG3EaW57
-	 n55j5m9pQ6Unw==
-Date: Thu, 26 Sep 2024 17:56:50 +0100
-From: Conor Dooley <conor@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Wayne Chang <waynec@nvidia.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: cypress,cypd4226: Drop Tegra specific
- GPIO defines
-Message-ID: <20240926-anybody-purify-f4befab2be4b@spud>
-References: <20240925173449.1906586-1-robh@kernel.org>
+	s=k20201202; t=1727371531;
+	bh=2+c7ETv7UM6TiuuOrVXVzya94vU1TRsAQGrkGgKMvdE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=VVv3oHvPcZSjZJNPIOI30Vv5noixiAk7eypCbirFAF8acyjjaeqdAeE9KfejO1bBU
+	 /aZ93f2DP4Hh3UoYgCYG4Vv7RjODJ9I8kr24zP/m0jAVlgDPM/y5PpsHn5wKC3bKom
+	 jBEpcOR49IMJtl1b7CnMdWBykiLrJ+gzeKWSvYzqQb+pjN6sEmq3h7WuoADb7HuwFp
+	 SlZK6upnZNCGLYf6fzUgprQku94ODk+c4RvlZPq4EYfl+XdKauQEGU12R46YXrb1pa
+	 Acqfj+wsxMJyaU8LuiH66aVpVb7RFk8MY5yY27wNHL2+qaxGdjhLksHPg8W+R+mEHu
+	 2aAA9ZT3velfg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB1663809A8F;
+	Thu, 26 Sep 2024 17:25:34 +0000 (UTC)
+Subject: Re: [GIT PULL] USB/Thunderbolt driver changes for 6.12-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZvU13hRnFM4PbH73@kroah.com>
+References: <ZvU13hRnFM4PbH73@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZvU13hRnFM4PbH73@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.12-rc1
+X-PR-Tracked-Commit-Id: 68d4209158f43a558c5553ea95ab0c8975eab18c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4965ddb166992557a25848049f1a70e56050eb7a
+Message-Id: <172737153362.1334950.13681698271692121059.pr-tracker-bot@kernel.org>
+Date: Thu, 26 Sep 2024 17:25:33 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="kkMV/3HYf1xN56hr"
-Content-Disposition: inline
-In-Reply-To: <20240925173449.1906586-1-robh@kernel.org>
 
+The pull request you sent on Thu, 26 Sep 2024 12:22:22 +0200:
 
---kkMV/3HYf1xN56hr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.12-rc1
 
-On Wed, Sep 25, 2024 at 12:34:48PM -0500, Rob Herring (Arm) wrote:
-> The Tegra GPIO define is a problem for the magic code which extracts
-> the examples and fixes up the interrupt provider. This was partially
-> worked around by putting #interrupt-cells in the parent. However,
-> that's incomplete and causes a warning when dtc "interrupt_provider"
-> check is enabled. Just drop the Tegra specific define and simplify
-> the example.
->=20
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4965ddb166992557a25848049f1a70e56050eb7a
 
-Right, there's no need to have a tegra specific thing here at all, its
-just an example..
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Thank you!
 
-
->  Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml =
-b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> index 89fc9a434d05..0620d82508c1 100644
-> --- a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> @@ -61,18 +61,15 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    #include <dt-bindings/gpio/tegra194-gpio.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->      i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> -      #interrupt-cells =3D <2>;
-> =20
->        typec@8 {
->          compatible =3D "cypress,cypd4226";
->          reg =3D <0x08>;
-> -        interrupt-parent =3D <&gpio_aon>;
-> -        interrupts =3D <TEGRA194_AON_GPIO(BB, 2) IRQ_TYPE_LEVEL_LOW>;
-> +        interrupts =3D <2 IRQ_TYPE_LEVEL_LOW>;
->          firmware-name =3D "nvidia,jetson-agx-xavier";
->          #address-cells =3D <1>;
->          #size-cells =3D <0>;
-> --=20
-> 2.45.2
->=20
-
---kkMV/3HYf1xN56hr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvWSUgAKCRB4tDGHoIJi
-0k5qAP4iz34mSweP66n+p3/FePwauGkQ0mhw8qmxVpY3UNyJ4gD/XzzJf0H5yNaY
-IENON2ztQeIib7y4j1NZ3mWF4QWIjQs=
-=zFVI
------END PGP SIGNATURE-----
-
---kkMV/3HYf1xN56hr--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
