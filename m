@@ -1,75 +1,81 @@
-Return-Path: <linux-usb+bounces-15508-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15509-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C459875C1
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 16:37:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C799987603
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 16:54:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3139A1C227C4
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 14:37:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B691A28BE35
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 14:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2820130E4A;
-	Thu, 26 Sep 2024 14:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A80152165;
+	Thu, 26 Sep 2024 14:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LhiGLQd+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O2IL8Zqj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEB45258;
-	Thu, 26 Sep 2024 14:37:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275014085D;
+	Thu, 26 Sep 2024 14:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727361460; cv=none; b=e+dkLyKuJFJK1tuWmRHNovk1+tKkqNriKo511OO2GeNgvuNflhh/+hWEsaPRGqEx6S/UW6i2o3xxY1HlAkmHu4agSIJ7FrUDWicfPSm+NbebnVGYp7mqrpbkW/L7/MtgEUNOKWBrmv4QL3kQiURL30ncxBu3ghseCUKrcD5m4uw=
+	t=1727362431; cv=none; b=hQ1jGtGjznwid2V4o2D3/OwRSwNlXY/GJ4TR5phUrXyvNKt8SCnvhpb9iOAohbuwY11F9lFqL9FuXAa0QkBEE3oii7F9zk5a2ORbV9FhXVt/2BcbbYj+8O8PJ3fR2SO3/zlMlFdlOehonX3nrEfPXMOOKQbPGerKBqvg+uFwBd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727361460; c=relaxed/simple;
-	bh=xK9pFpMvJOrIVwGvp9GSZ6j28+YbgCV3+bdue2q871U=;
+	s=arc-20240116; t=1727362431; c=relaxed/simple;
+	bh=XtruzNw/WcaM8w7TPDqDyCX+r4bbPswhk/xGZfsC/BY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XZ9G/kXbikdGdhKYGRoff1lM2k27aTnwlwFa8C9alsmwnI2CVw8LxVOT01iplFnXnZL3CV4tTEcYrVURlQnWHix5sG7qY9xqsd3nRMGt8x8JgGmBOq3CufB3Otnt6IiLalrNHHpJZk/V1UnG/rOQCCXKbFc/OR4Usfq9zvUsWZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LhiGLQd+; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=Biq/d+nVPO5J56QZcMGh7k4HTh++XPwmf+w4kaPGT5ZhuZiEiPMIe7uyNWyrFCxRPywSW0wxeNDhM+cTBiOZdI+sMkAyZqTFepATj9b16Epp8ItW/6QwXFuKD5wv3TlTiOXUfOjQu/CkQK2Euz9+lZX4OHcspdGUe1R+CjCAS7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O2IL8Zqj; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727361459; x=1758897459;
+  t=1727362430; x=1758898430;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xK9pFpMvJOrIVwGvp9GSZ6j28+YbgCV3+bdue2q871U=;
-  b=LhiGLQd+UZBKwh8OLWch4ULqL2Z/avAfIWVrHgnWIGav6/Zq/FP8dw/0
-   nfjsz6thBMOgly2DZ5Tdt5m59KNs1Y0e+l5mc78+JOMLptC3AVi86Ikif
-   6Y6jk0dSMPk+D2WmKQz00TQI8jhkVWMEsic91+4P4c1w7uJwWZWWZ54hL
-   tc5cXWzvvqQHXIeIhDNhGz/KRT/87VhJJw3/6uWxchJmFFHlZ4dF5jGoK
-   xio3myjIc0XDLfopx38rzIceKeN1REHs5qCA0PahW8J8zm1PhGwjB7wIx
-   cbL1zqjLzv7R/dZxC4+bXriuxAU0FBpT0sTe+5AjBBGmKPMciS8AKQDux
+  bh=XtruzNw/WcaM8w7TPDqDyCX+r4bbPswhk/xGZfsC/BY=;
+  b=O2IL8Zqj60aQgIoozfw93anMT5jGFCRIntTWbEGH+6s5D0F9gyfG1569
+   3LIDv/s39tU7jttIWTtfZi48/qHqh9f4CDOCsCzfrq1VudcG4Q47XOPtb
+   PzGnJVwyVpNTFaoyYXm/fVaWKxI/GWPAeWCLPekCmCGDr0lxdMGYj71Al
+   0nfgjVMN2Oh4dK0iC6wYdJdbt5PKna+ktCRlxQQYsx6Pi/d3vX2fvKhPd
+   Ptwy3+JC1GzvxQ8kEYZOKSdTSYDMrrn1oTn3DrTnr7GiM5elAgQvZB23l
+   bCtVjBXrhA32aAmlHntfEq3BPd2oCn9tT2kCPq/v+eNGAokxnGQd9GBEN
    A==;
-X-CSE-ConnectionGUID: LfMXfEAvRh2SiByNATm6pQ==
-X-CSE-MsgGUID: 11CI7xV1S7SwXfgbs08Z4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="37044563"
+X-CSE-ConnectionGUID: T4xN9fQbRgGR9ykX3u06+g==
+X-CSE-MsgGUID: A7iMAc9jTzyECLLq9QqgnA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="37133823"
 X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
-   d="scan'208";a="37044563"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2024 07:37:06 -0700
-X-CSE-ConnectionGUID: UIFGZD3fRaqXwU+r6fOLuA==
-X-CSE-MsgGUID: tRLtcEk0SvSTCvQR2B2x+A==
+   d="scan'208";a="37133823"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2024 07:53:49 -0700
+X-CSE-ConnectionGUID: 08tJRF8tRtSIaChfgOSgjQ==
+X-CSE-MsgGUID: S6kjXJtCSOmOpRttyAzDCg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
-   d="scan'208";a="72469879"
+   d="scan'208";a="72626084"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa006.jf.intel.com with SMTP; 26 Sep 2024 07:37:02 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 26 Sep 2024 17:37:01 +0300
-Date: Thu, 26 Sep 2024 17:37:01 +0300
+  by orviesa007.jf.intel.com with SMTP; 26 Sep 2024 07:53:45 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 26 Sep 2024 17:53:44 +0300
+Date: Thu, 26 Sep 2024 17:53:44 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: tzungbi@kernel.org, jthies@google.com, pmalani@chromium.org,
-	akuchynski@google.com,
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/8] usb: typec: intel_pmc_mux: Null check before use
-Message-ID: <ZvVxjTcfG0Gm-mmB@kuha.fi.intel.com>
-References: <20240925162513.435177-1-abhishekpandit@chromium.org>
- <20240925092505.3.Ib7a83adb069df1cb0a40dcddff29618bf3255700@changeid>
+	Haotien Hsu <haotienh@nvidia.com>,
+	Utkarsh Patel <utkarsh.h.patel@intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Wolfram Sang <wsa@the-dreams.de>,
+	LKML <linux-kernel@vger.kernel.org>,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: ccg: Use common code in ccg_write()
+Message-ID: <ZvV1eBoM95w3mT8A@kuha.fi.intel.com>
+References: <b890361e-e99b-43da-8571-7478b5eab475@web.de>
+ <983e8bde-513c-4053-b33e-06a1b10eef87@web.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,48 +84,50 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240925092505.3.Ib7a83adb069df1cb0a40dcddff29618bf3255700@changeid>
+In-Reply-To: <983e8bde-513c-4053-b33e-06a1b10eef87@web.de>
 
-On Wed, Sep 25, 2024 at 09:25:04AM -0700, Abhishek Pandit-Subedi wrote:
-> Make sure the data pointer in typec_mux_state is not null before
-> accessing it.
+On Wed, Sep 25, 2024 at 07:32:32PM +0200, Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Wed, 25 Sep 2024 19:00:23 +0200
+> 
+> Add a label so that three statements can be better reused at the end of
+> this function implementation.
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-This really should not be necessary.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 > ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
->  drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index b3ec799fc873..ed075a403d87 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -306,14 +306,14 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
+>  	status = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+>  	if (status < 0) {
+>  		dev_err(uc->dev, "i2c_transfer failed %d\n", status);
+> -		pm_runtime_put_sync(uc->dev);
+> -		kfree(buf);
+> -		return status;
+> +		goto put_sync;
+>  	}
 > 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 56989a0d0f43..4283fead9a69 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -331,14 +331,19 @@ static int
->  pmc_usb_mux_tbt(struct pmc_usb_port *port, struct typec_mux_state *state)
->  {
->  	struct typec_thunderbolt_data *data = state->data;
-> -	u8 cable_rounded = TBT_CABLE_ROUNDED_SUPPORT(data->cable_mode);
-> -	u8 cable_speed = TBT_CABLE_SPEED(data->cable_mode);
-> +	u8 cable_rounded, cable_speed;
->  	struct altmode_req req = { };
->  
-> +	if (!data)
-> +		return 0;
-> +
->  	if (IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) ||
->  	    IOM_PORT_ACTIVITY_IS(port->iom_status, ALT_MODE_TBT_USB))
->  		return 0;
->  
-> +	cable_rounded = TBT_CABLE_ROUNDED_SUPPORT(data->cable_mode);
-> +	cable_speed = TBT_CABLE_SPEED(data->cable_mode);
-> +
->  	req.usage = PMC_USB_ALT_MODE;
->  	req.usage |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
->  	req.mode_type = PMC_USB_MODE_TYPE_TBT << PMC_USB_MODE_TYPE_SHIFT;
-> -- 
-> 2.46.0.792.g87dc391469-goog
+> +	status = 0;
+> +put_sync:
+>  	pm_runtime_put_sync(uc->dev);
+>  	kfree(buf);
+> -	return 0;
+> +	return status;
+>  }
+> 
+>  static int ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
+> --
+> 2.46.1
 
 -- 
 heikki
