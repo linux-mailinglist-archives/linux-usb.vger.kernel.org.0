@@ -1,79 +1,80 @@
-Return-Path: <linux-usb+bounces-15479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2968E9869F5
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 02:00:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E489986AC5
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 03:53:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44C6D1C23B3B
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2024 23:59:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90FB11C21433
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 01:52:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221631A3BCA;
-	Wed, 25 Sep 2024 23:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F39417335E;
+	Thu, 26 Sep 2024 01:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d3PNbchF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I9mozbNF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621EC14AD24;
-	Wed, 25 Sep 2024 23:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060DA1684A1;
+	Thu, 26 Sep 2024 01:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727308789; cv=none; b=B8lxxBQBhO2O61ncKU+/dMxjPNbl55E+FbjlV3WkKBn6NqOQaxdtMMADN70d0BblWxW+sxWKpDoh46aPmftpfpOFiW+nCeaeKlP3XFu7JlHqHo8AuOYTktMC5j+OR5zVX5jXGZKjZgJRoE9cadLpVcg0skGrWnnCET+VACij/2g=
+	t=1727315572; cv=none; b=cJZEOBfe6HMrec1FAvwTh9LDhFZkxJCUxn+pJrIjjC5ZiVMpjrdCU7C5sB04AFo1lnrk/htSJAgZO8qV0tVRL1ariaQu++OUsrcGMIZ2qNkcKk1081h1YB9v4P+ObMDxtDTV3EgLpa7LxsqYp+LlVp+UP3k7giXtUoKD5k6WHNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727308789; c=relaxed/simple;
-	bh=CSK//gxzmcctiDTYayy7uXe9etmH2AVe0UsRHlfWu8k=;
+	s=arc-20240116; t=1727315572; c=relaxed/simple;
+	bh=MobofQEzC8dRo1cojab5fJxNwAfwEILkvkDNv3fGzuQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WsKDEyjMklCeH5DYrjEjt0i8ciqT41Ake31dojkiDCALQ5uLgdWPneiNghpltBhOty0/kYuShlZY1aAY/uk1cQieDNbHG+Y9pAKJepDQk7nbGSoxLeLi86DQCV555sFKMxsPvsWgGfztH6zmQ70PnaLvKJxzgLNqZS86aNog0nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d3PNbchF; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=LND9sYK3dJPhfZA8F1goFbM5Z7mxEeoT7KEkoV8b94aJEGbgOKYNRSowTcbb2Kj8mdV6I7r3ZH5WqMJe+IFaWMN1gHeCdEiLoqr4LDb5GUmKfx6ZLQfla22LI6MWRZ+2IIqt70n++wDMA4Hl4Khw40AyD6nKsEbZ/XT7TuC9isY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I9mozbNF; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727308788; x=1758844788;
+  t=1727315570; x=1758851570;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CSK//gxzmcctiDTYayy7uXe9etmH2AVe0UsRHlfWu8k=;
-  b=d3PNbchFeDeLQd/UEWJsx+QkJQ28TUYTn8lOJO0GYNTLpeChNDGnpmVK
-   S05aZ16r9wzqUg37NelxxLeuZ6DnsXgLQA/IS0Mln1dcGibkAJXNZz/sb
-   XkYtx7e4Wzjir36mJEhFzxFCm3rJH2ZOToGKb3HZmb78vt/xYSaO4MmFi
-   dFBtGMpmiIujEEjRFHSraFreHZns3+QYyvrENlPM0HMo8ELVb03gjFuuv
-   R68YSAFzTxcaadP/VWljpKDmNXBh2K/BFGA5YRSSQTocJVyAiHC2GvEhl
-   4SVvNNToEuGvyunYmFNiP7AUIgNsCu/6MzzoiEwwz2clI4WasYZdLQZSi
+  bh=MobofQEzC8dRo1cojab5fJxNwAfwEILkvkDNv3fGzuQ=;
+  b=I9mozbNFiUJFDI78SH6SSSEnn99JQWGGEMUPX7Es+OW8cvlUNbQ6Hktu
+   mPGMhrmRW1kEokli5+3jVgKNzfcVZp6jAli/rNVTRef0qo5USdzPNUBU3
+   ti8RjL+V5fWtdv5OnskCqI0foOo6cFXqiZHe5plgNJH90GiynwPxYBUoL
+   DoRFHwGFX3uPg3Lzr22wGF814cFwr9UpC5vJ1ZYeGmWUS5eIh08NiBfcU
+   2Ri4t+LZ4a1U80NkWvfzyLfji4wWhST0tcAYGl1+hkiCWi6mKWlJyHfMX
+   +IMtfB3Z/cxEf1DkhVvWOEt68qznT38RZW5vFSusB/HZdQqv79+QlFSFW
    g==;
-X-CSE-ConnectionGUID: j4bGU+6pQoCmsqkkxdOMvQ==
-X-CSE-MsgGUID: S4KVrQ1xSNy6R91C+jLyBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="29275787"
-X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
-   d="scan'208";a="29275787"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 16:59:47 -0700
-X-CSE-ConnectionGUID: fpWLMYKYTqGUW+XR2+GQ3Q==
-X-CSE-MsgGUID: nczqUb9DS+6lSCV651UHeg==
+X-CSE-ConnectionGUID: 1vfozYSLQ3eWMafRA2UO2Q==
+X-CSE-MsgGUID: MiNKAX1eQt+JT1IqLTaMXg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="26518043"
+X-IronPort-AV: E=Sophos;i="6.10,259,1719903600"; 
+   d="scan'208";a="26518043"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 18:52:50 -0700
+X-CSE-ConnectionGUID: bRS9d/eLT6Gaz/RuY1wobA==
+X-CSE-MsgGUID: YCWhNJfnQQKYiczHLwlnNQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
-   d="scan'208";a="76327756"
+X-IronPort-AV: E=Sophos;i="6.10,259,1719903600"; 
+   d="scan'208";a="71635267"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 25 Sep 2024 16:59:44 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 25 Sep 2024 18:52:46 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1stbv4-000K3N-11;
-	Wed, 25 Sep 2024 23:59:42 +0000
-Date: Thu, 26 Sep 2024 07:58:49 +0800
+	id 1stdgS-000K7X-1n;
+	Thu, 26 Sep 2024 01:52:44 +0000
+Date: Thu, 26 Sep 2024 09:52:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: Markus Elfring <Markus.Elfring@web.de>, linux-usb@vger.kernel.org,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Michael Jamet <michael.jamet@intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>,
 	Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc: oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>,
 	kernel-janitors@vger.kernel.org
 Subject: Re: [PATCH] thunderbolt: Use common error handling code in
  update_property_block()
-Message-ID: <202409260728.uNVNmTvy-lkp@intel.com>
+Message-ID: <202409260928.qBlg2dBU-lkp@intel.com>
 References: <26b7f215-4f83-413c-9dab-737d790053c0@web.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -99,26 +100,24 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/thunderbol
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
 patch link:    https://lore.kernel.org/r/26b7f215-4f83-413c-9dab-737d790053c0%40web.de
 patch subject: [PATCH] thunderbolt: Use common error handling code in update_property_block()
-config: arc-randconfig-001-20240926 (https://download.01.org/0day-ci/archive/20240926/202409260728.uNVNmTvy-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409260728.uNVNmTvy-lkp@intel.com/reproduce)
+config: x86_64-randconfig-001-20240926 (https://download.01.org/0day-ci/archive/20240926/202409260928.qBlg2dBU-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409260928.qBlg2dBU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409260728.uNVNmTvy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409260928.qBlg2dBU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/thunderbolt/xdomain.c: In function 'update_property_block':
->> drivers/thunderbolt/xdomain.c:703:30: error: 'dir' undeclared (first use in this function); did you mean 'idr'?
+>> drivers/thunderbolt/xdomain.c:703:23: error: use of undeclared identifier 'dir'
      703 |         tb_property_free_dir(dir);
-         |                              ^~~
-         |                              idr
-   drivers/thunderbolt/xdomain.c:703:30: note: each undeclared identifier is reported only once for each function it appears in
+         |                              ^
+   1 error generated.
 
 
-vim +703 drivers/thunderbolt/xdomain.c
+vim +/dir +703 drivers/thunderbolt/xdomain.c
 
    645	
    646	static void update_property_block(struct tb_xdomain *xd)
