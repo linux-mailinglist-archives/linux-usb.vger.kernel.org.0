@@ -1,321 +1,218 @@
-Return-Path: <linux-usb+bounces-15488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15489-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9DEA986E31
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 09:51:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2A9B986E69
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 10:00:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76FF92854A0
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 07:51:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 001F61C21D29
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 08:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24B67192586;
-	Thu, 26 Sep 2024 07:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1E918BC1F;
+	Thu, 26 Sep 2024 08:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="d9z6kFDK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2088.outbound.protection.outlook.com [40.107.255.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201831990BB
-	for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2024 07:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727337044; cv=none; b=ePEO//6reOkAAKTRIFAl6pnvoSWVk2kQ7loIuffbL4Jj54Vg17o1IuScgybAlqM2IsMZvGEJOEdZWQ55RtOJulk1eG/NjTqyD57v/16Ai+0FNRUTvDuwZND/BuLaUMmpx9RoXlf+AeMyme8qLEOJ/+NZOfEeAPZKh5o8yMFouYk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727337044; c=relaxed/simple;
-	bh=Hi9Dm9bHtr/nU89VigzpFVOj84iRJ07qjg1yUVHkIVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XwPb5QDWKiznv8UFsNldJsvSU8cfGjNH3fmIrgu2nvcX9DQBNnSXw/auHFE9Q/TMdB13aqCvDbd5+aBWsRdW2MUYPChWtlY5masQDAf+Zn4eqNp8ocWnAfpAj5dYnlvkhX9+4G6ET8QVD2L30gxmDK3p82dQfU5+TZ+NBLqq5Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1stjGc-0001MC-VD; Thu, 26 Sep 2024 09:50:26 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1stjGb-001dUm-1u; Thu, 26 Sep 2024 09:50:25 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1stjGa-00D7UJ-32;
-	Thu, 26 Sep 2024 09:50:24 +0200
-Date: Thu, 26 Sep 2024 09:50:24 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Walle <mwalle@kernel.org>, devicetree@vger.kernel.org,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Mathieu Othacehe <m.othacehe@gmail.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9588B192B69;
+	Thu, 26 Sep 2024 08:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727337610; cv=fail; b=O9LKhMxd7G9pZNSgO7rYY29okS642hbZ8QXgIQIJIk3EVkxW6N1cVcsyiu3B4SAcASWhNJiR3yg8QJPguqY+7LukHsdQXPF60105pgXMAXLVPbE1oBmF35VRrpWMfV+998lelhAjuUpKkaf0uG+HYe3Y/Mz0G2IVThWko8O8i2w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727337610; c=relaxed/simple;
+	bh=r3OKKBxQerRXGZUalzSaDOsxwGMZaKQMimERuF4SN3U=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=MZzKWQHwrtKSbXieMs46XGeq4zl6YCEy+4q9glnIV5OYG7hvvqa4u8SEnfq/wu+1gqBFiNQse9eRAk8O8VXnCB/p4BAAdOXgi5kkMJZCgqsTk4qJSwsmkFatSEcbJogGESzfTUQQ/yHZJOomvChciWbHZ0jshcDP9Yq08bOJ08k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=d9z6kFDK; arc=fail smtp.client-ip=40.107.255.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Q8YF5guQf2nHFmFtYpKxmRu5ieHg6Zy74f7Rm5FLvfYWYRMcCf+W4ppdl/rGijlBKDL1AZfMpH5QbneeXdeLhlKWpW92q34uu52oHo/DqDboTjj0QsyLbMizxqNKgXIhyPtCP1+CVUL1TMKJQ0GQ/vu8G9oc9x9Au80RJfZqAkQKdPEPTb3tUYleqhKsuiLPV2aBw6FQDKxYp6Q+d2H2juWzY5p2eIDKYX/0cDrSxkE4yjrKkOWbOXIG63U+2MYkAIqUK5xkIgS5ygok6h081VZQrn1CF2euMRcgmxtjzJY86YzalcmH0zUlXOY/w5XT7vnV/hvAEhbgYR9GF3hUQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gYxkJs39FULyBbtnj5bqMyOdp6ms7R7KDbDvtiRLj5k=;
+ b=NNfRDVRmngBgIXoNyxtrAI5nakKy7tY55cgj1AmElRmBWqC70jACEw9nHU/4l7AbFBuoxMLASMqzZbtsr5nYFHJLB2i/XtKV3KJXFWCaptY3rcD+sUZYjCP22J+64AqOhTZEpkVUzdxqTG/AzUMMQpiRw+m2rhx8TT629UFBocStd2+W1JN3Z0rSVkRHTsbHR8rY8LWXDYVs2YX+PL2O3HvuWnEG5zOuNVS4aQ93lgGZL9GfXekRgrtuyjbz2sUOZWyh4NtH7G8I4jYiVqchOzOzDDvYImsXBYNsGOzV/Yn60B6rGZl6aPRXC0LryBfVkpd9ylWtSEtSO79TH/zm9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gYxkJs39FULyBbtnj5bqMyOdp6ms7R7KDbDvtiRLj5k=;
+ b=d9z6kFDK2fmyBNnpt87S3ItWRpJMtUI98MPGuVfUhu/wucYYb2I8fKuRvYjOipUy2soI5TiC90tf/e3AHungfLTbJJ9+vpVOOAS3j8mWpVAaAmB/RsQW1B9EizhEKQwwhVAgJAHb8pTGosLKogiz9L15s+wIqYhvY/vkR0F17riVSIkf0DbmwiWD782/RtDlqgQ5lEAZdiBfoJ2fvrrmc0zxN0/3oJeNmlBEQGH7eQ3OWtsuD6r7wwg+Y/EIoDaPb3gnsi3GTPOVEOhi5ZulweIkLtqMXldC3O0wHcpEhBQD01BZICRJ4KO3ZS7Ucf1/WSI9dLuQ4ZQwyw8N8d9p+g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5899.apcprd06.prod.outlook.com (2603:1096:101:e3::16)
+ by SEYPR06MB6484.apcprd06.prod.outlook.com (2603:1096:101:171::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.25; Thu, 26 Sep
+ 2024 08:00:05 +0000
+Received: from SEZPR06MB5899.apcprd06.prod.outlook.com
+ ([fe80::8bfc:f1ee:8923:77ce]) by SEZPR06MB5899.apcprd06.prod.outlook.com
+ ([fe80::8bfc:f1ee:8923:77ce%3]) with mapi id 15.20.7982.022; Thu, 26 Sep 2024
+ 08:00:05 +0000
+From: Shen Lichuan <shenlichuan@vivo.com>
+To: castet.matthieu@free.fr,
+	stf_xl@wp.pl,
+	gregkh@linuxfoundation.org,
+	duncan.sands@free.fr
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Hiago De Franco <hiago.franco@toradex.com>,
-	Herburger <gregor.herburger@ew.tq-group.com>,
-	Petr Benes <petr.benes@ysoft.com>, linux-usb@vger.kernel.org,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, imx@lists.linux.dev,
-	Shawn Guo <shawnguo@kernel.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 2/2] arm64: dts: imx: Add imx8mp-iota2-lumpy board
-Message-ID: <20240926075024.777bdooiqd5myv3v@pengutronix.de>
-References: <20240924103941.1729061-1-michal.vokac@ysoft.com>
- <20240924103941.1729061-3-michal.vokac@ysoft.com>
- <ZvLXenqG/++AR4We@lizhi-Precision-Tower-5810>
- <20240924173714.qxxkhn6wscze7q5n@pengutronix.de>
- <87980643-44b4-4df9-9eb7-1583b5074bdd@ysoft.com>
- <ZvQ5O553E0QFvced@lizhi-Precision-Tower-5810>
+	opensource.kernel@vivo.com,
+	Shen Lichuan <shenlichuan@vivo.com>
+Subject: [PATCH v1] usb: atm: Correct some typos
+Date: Thu, 26 Sep 2024 15:59:55 +0800
+Message-Id: <20240926075955.10199-1-shenlichuan@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0025.apcprd02.prod.outlook.com
+ (2603:1096:4:195::21) To SEZPR06MB5899.apcprd06.prod.outlook.com
+ (2603:1096:101:e3::16)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZvQ5O553E0QFvced@lizhi-Precision-Tower-5810>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5899:EE_|SEYPR06MB6484:EE_
+X-MS-Office365-Filtering-Correlation-Id: 427ddaab-1812-4b06-b700-08dcde013b3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|52116014|376014|1800799024|38350700014|41080700001;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?pYjpDCEMSRFBlwCx26ZkYZIS9s5NhPsmTnuxk1MAvMcekTwe+G9+WOuKM9Sc?=
+ =?us-ascii?Q?KvMg++EhfniVsUYg71bfvm8eXdW6uan9JmupiYupwEvUkPRQOYgISTs0+Z7N?=
+ =?us-ascii?Q?lZtsM3tbKeTya9C6q8Pvr9kqtnEZscZMQaUkxN9ypbSl0u8aiTu7/TlNE5gV?=
+ =?us-ascii?Q?7BEbCXDqjzcQy6P+hCepboLpzbsHa6X1OijvSou9pSFMneO/8TQdP/ZWdhQz?=
+ =?us-ascii?Q?C5T27TJlEujSPP7Clb4droG45e+xiRIm+F4gXEAFJZsWwjzr9EgQjdYRiP71?=
+ =?us-ascii?Q?FA24l6OiTIM8PA3Vh1SOd2eqCOTZ3SclcWbi04JanG5EXArNgJ3Mif6pf35H?=
+ =?us-ascii?Q?WB9gALNxIItvN2jt8LzC+Uzy4NH+YUdxqBzag/dWdVmddysRx3YA780zRjXm?=
+ =?us-ascii?Q?z+omKL7yUn+ycAPjaG1298RNzijAiy7lVoQDPvrwnBC3XJCH9llS1ia/V2ue?=
+ =?us-ascii?Q?TK+ob8gfEU4cVYTcz+zKr0Dfc5UnFonbpzKoRM7xh4Y9fVuapmWG55GSzLkZ?=
+ =?us-ascii?Q?qfK+E9XfyBEdrn8RmB2OMxA48qDd0S2wCnhr/HjF+p9dr0pfNXzuU6LYIDQj?=
+ =?us-ascii?Q?5U5c4zLZbwt60NjZJaErXTB/6Pum3/d7mFu5/iMdJp/8U8V0UEp/+78FixAe?=
+ =?us-ascii?Q?3XGj5fLB4cHDmhNoyJ6g0c23h9olOHdfYihRRG0bUp1L2pZBLp0yh5TrFUwT?=
+ =?us-ascii?Q?dxVYyXjl2c+gy36JrOoIE3KBWJeWg5FJvEMXGFul7pEMBcde2dzwsXSRsUPJ?=
+ =?us-ascii?Q?gi+moR0fGb9OmDfF5yDoYtz1dYLEooCwTOoXcoZ2zBV2yq9uukJpUJAoNOUB?=
+ =?us-ascii?Q?kBoI9xLXD8j5NrqzkHztcSsJyaGSkeScrh1qHI+jnvRCJrfMrE1zYPrlErtK?=
+ =?us-ascii?Q?hnJkKT+/LKyFT+QmLEp6TnP+b1XaVPXG/mHZn13VBUswIrJZop1kztiJehaV?=
+ =?us-ascii?Q?ed+XzXjgBLpZIW6bGFexJWhmHMsjOipxCtKVW8reuR9bvfPwFWDQPzctmVcY?=
+ =?us-ascii?Q?gsQ2EpWZ3fiZq3/9Zbtcv4oqSPiomlr7sG9iXt2JCKIcUcrMqD/GwZhtpkc8?=
+ =?us-ascii?Q?9tl6IOjKk2MgK6qhYDgImcvPMzEdfqMpWSyLCJVb7vivpzjNtUUEdYaR/t14?=
+ =?us-ascii?Q?IgDq/4j+HbhqOAeJDXNq5LK8JvvEZcQ4pbbPQjRxkVpfCDIAF28BXIb+Z8Vd?=
+ =?us-ascii?Q?tNeZXD3d3E9ClldT/EwMF7jklAozlr7HbfpJ7+WoSz0eCYYD0l5SBmPhkSr+?=
+ =?us-ascii?Q?FkrpNL2G5tabC6azgmp7GDRBU+VDzJlQBzLUzp+Fa0idyFb2TP43M8AMgdlW?=
+ =?us-ascii?Q?HWI4Zu8QaPXXl0+XAQQokQY12+z11qoGUcKi5+0NNoXz7VNQMpivV03DeS7m?=
+ =?us-ascii?Q?/t6udK9AAnKmHvI7zmknhBY8w8rja6gbla3BLtTpQrdCWv0kCeUtV286Cg9A?=
+ =?us-ascii?Q?f+sKUmTCCoa1gizk4qz7GeMuDdK4mD4f?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5899.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(376014)(1800799024)(38350700014)(41080700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?W71dEZIrufC8EjXb5Ic48PKdLSxRGmLHDeEKZIYNlH+FOeJsGSA6ONALxlak?=
+ =?us-ascii?Q?Qoe4gL7v12a1k25crabFoppL8GaluSS4nnzbdqUGB4wtdjxGrF/PNWc1o2Zq?=
+ =?us-ascii?Q?uUgIy4rGNI/N7HuG1LzW7s7uzIxrFRaucR6Xdb/SH+w8KtVtZLNEXPjeTKLS?=
+ =?us-ascii?Q?XxcDzUj3PlaprzfYW1XfaRAAv79sFJHVIIDPaCyojhQRJBvzR9QzymRW3WL8?=
+ =?us-ascii?Q?HSwxpuqQ3Fc181I1QGaSdjVxvyAvZace6DbGAdeJws4OuiLtGVfjMXmfZyvc?=
+ =?us-ascii?Q?OD65Uq3pkR9I0mStrjIq5Ux8xOaZ6RiS32vGZqNoGnXzItIxGjUn6gz6cFg3?=
+ =?us-ascii?Q?CKYgcBiJLwk4dnyIqH/ZATPKfauRUJpLROXevEPvcPIKoBKgIIm0HK0IB0+K?=
+ =?us-ascii?Q?bMYD6xE6Y7MmfI158Ty+eP3XB+nbjh9ubEaEmfNUA6dSr6mQlznPrNyHV4YO?=
+ =?us-ascii?Q?mbNX3YbqaZMi0YujPpO7je15RVyOhLWXsUfmfUkNOTOy9DYkjxzGzuChJUVK?=
+ =?us-ascii?Q?SikjVy0qO/ce5CklWggEqNwjF/rWwOkAcoGOFgrFNxcdC7khaxq8zByiF8KF?=
+ =?us-ascii?Q?a0RaHrLo4FO0twu1lPtbg2PZJ6KY4DsU5xStv5D4iHSX2ru7/1FOsHNbmdUW?=
+ =?us-ascii?Q?zfmUob0BjHZ/i3EozqrZBbpATgAJdJqe5DA7VYv/5jpHCgVLVQCXbZ/yBehv?=
+ =?us-ascii?Q?X1IG33IwMu+WyzwmBvjiTa3BUpJLG+jcHjI/NtETw0povm2rG+Wiyj0PQ0j6?=
+ =?us-ascii?Q?ZPtpp9bmeoStABxs8gdnBNuwZf5d+3X6CuBx1l1TjpbZqJwFiS2zRZ4XijVl?=
+ =?us-ascii?Q?ImF5xNIrAhCVnxzDDooPciHtP/HWpaxDW0YI1vhRQCMFFtlP2sgumxILY5pD?=
+ =?us-ascii?Q?x128d9uocx849RhpwQXXvkiolsw2VwQN8LupZ8fNH/UlJDj0RCQ1NgMlCzz9?=
+ =?us-ascii?Q?fQFUw6V1cMA8IcHSseZOHaMnjJO51AJuEGtB3/6ryk6jvQ4s2cSgJvokHt2l?=
+ =?us-ascii?Q?ndUG92OSjhhTJyX22CzDEDkZSXMqD2dnUjyzyjcuopmAsMDrKoCauMn+Vgcd?=
+ =?us-ascii?Q?Dd8IutIFJSU9yAC1lCGxk3YqYlQLeOWl0pdN2ZTTTRMTSGuZA6qZD4SG3tge?=
+ =?us-ascii?Q?y2iPJLZ8wcRyPXli6FwwbMMPZpZEfMkmDk+2w3KtqUtUfC8XAYizp7uRmX1z?=
+ =?us-ascii?Q?vNgzI6z75UgxtuXTBh+WI3+hijNloM3+nVE0xp6Qbwq9e71JPR8vmu8M6Tbp?=
+ =?us-ascii?Q?xbvCk0lrjMRwU6JAI0pNJRMkcb87zxGguanaMlcGsHTBM3xq3OMY8aFiUInm?=
+ =?us-ascii?Q?nnksUKDhw1H/7yPc3q0Kq7Jv9TFA0d0a/5v/bttuhAUQoqsLly/GSQlzLEuQ?=
+ =?us-ascii?Q?St5QKPWsoyYEfGsTq3cGZbISaNnFmXVYwxAzYFe4JdywIwjfYLZPLRwkDB1U?=
+ =?us-ascii?Q?WE5A178VM8U2u4bxExCUEeFzddak4aB9ESYWmIvN1c2vYJJE9xGPprY0j6kE?=
+ =?us-ascii?Q?6qPF+1UrUvbsvICCf/6jjjg3jG+aIPJ/VUKdZ4TEYiic7bgT7EEazdwNr7s3?=
+ =?us-ascii?Q?Q6lh169I3ug0+PApqarsxIsVHXD4kL3XRLjnlof6?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 427ddaab-1812-4b06-b700-08dcde013b3f
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5899.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2024 08:00:05.1869
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IUxUrR8ItBtz+rnIE+ywijnBRm56rYxCx1J+ekDTStf5r8PGhlNaURDg8DYiQlUfHtmweMmpnS9QORE47v8v+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6484
 
-On 24-09-25, Frank Li wrote:
-> On Wed, Sep 25, 2024 at 01:30:31PM +0200, Michal Vokáč wrote:
-> > On 24. 09. 24 19:37, Marco Felsch wrote:
-> > > Hi Frank,
-> > >
-> > > On 24-09-24, Frank Li wrote:
-> > > > On Tue, Sep 24, 2024 at 12:39:41PM +0200, Michal Vokáč wrote:
-> > > > > The IOTA2 Lumpy board is based on the i.MX8MPlus EVK.
-> > > > >
-> > > > > Basic features are:
-> > > > > - 4GB LPDDR4
-> > > > > - 64GB eMMC
-> > > > > - 2x 1GB Ethernet
-> > > > > - USB 3.0 Type-C dual role port, without power delivery
-> > > > > - USB 3.0 Type-A host port
-> > > > > - RGB LED - PWM driven
-> > > > > - speaker - PWM driven
-> > > > > - RTC with super capacitor backup
-> > > > >
-> > > > > Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
-> > > > > ---
-> > > > > v4:
-> > > > > - Moved the iomuxc node to the end of the file.
-> > > > > - Moved the bus-width and non-removeable properties below
-> > > > >    the pinctrl-* properties in &usdhc3 node.
-> > > > > - Moved the fsl,ext-reset-output below the pinctrl-* properties
-> > > > >    in &wdog1 node.
-> > > > > v3:
-> > > > > - Dropped pinctrl-names property from &usb_dwc3_1 node.
-> > > > > v2:
-> > > > > - Dropped unused property from pwm4 node.
-> > > > > - Sorted all nodes and properties using dt-format tool from Frank.
-> > > > >
-> > > > >   arch/arm64/boot/dts/freescale/Makefile        |   1 +
-> > > > >   .../boot/dts/freescale/imx8mp-iota2-lumpy.dts | 423 ++++++++++++++++++
-> > > >
-> > > > Suggest use https://github.com/lznuaa/dt-format
-> > > > sort node. any issue, let me know.
-> > >
-> > > Thanks for the link :) would be nice to have this script to be part of
-> > > the kernel.
-> 
-> It depend on how much people like and use it.
+Fixed some confusing typos that were currently identified with codespell,
+the details are as follows:
 
-I don't see any reason why the kernel shouldn't have such a script, it
-makes the life easier for all of us (incl. the dt-maintainers). By that
-I mean the idea of having such a script since I actually didn't looked
-into your code.
+drivers/usb/atm/ueagle-atm.c:811: endianes ==> endianness
+drivers/usb/atm/ueagle-atm.c:1279: timming ==> timing
+drivers/usb/atm/ueagle-atm.c:1975: preambule ==> preamble
+drivers/usb/atm/usbatm.c:1161: alloced ==> allocated
 
-> >> The script follows the rules in [1] I'm just used to have
-> > > common properties like pinctrl-* in front of the device specific
-> > > properties e.g. "enable-active-high". But this rule is not part of [1]
-> > > so I can't blame the script.
-> 
-> I just write it. Not 100% align order-of-properties-in-device-node yet.
-> Some propertiy need special treated. Thank you provide the feedback.
-> 
-> I push change, enable-active-high and gpio will after regulator*.
+Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
+---
+ drivers/usb/atm/ueagle-atm.c | 6 +++---
+ drivers/usb/atm/usbatm.c     | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-:) Thank you!
+diff --git a/drivers/usb/atm/ueagle-atm.c b/drivers/usb/atm/ueagle-atm.c
+index 16703815be0c..62bfdf142aa0 100644
+--- a/drivers/usb/atm/ueagle-atm.c
++++ b/drivers/usb/atm/ueagle-atm.c
+@@ -808,7 +808,7 @@ static int check_dsp_e4(const u8 *dsp, int len)
+ 			if (l > len)
+ 				return 1;
+ 
+-		/* zero is zero regardless endianes */
++		/* zero is zero regardless endianness */
+ 		} while (blockidx->NotLastBlock);
+ 	}
+ 
+@@ -1276,7 +1276,7 @@ static void uea_set_bulk_timeout(struct uea_softc *sc, u32 dsrate)
+ 	    sc->stats.phy.dsrate == dsrate)
+ 		return;
+ 
+-	/* Original timming (1Mbit/s) from ADI (used in windows driver) */
++	/* Original timing (1Mbit/s) from ADI (used in windows driver) */
+ 	timeout = (dsrate <= 1024*1024) ? 0 : 1;
+ 	ret = uea_request(sc, UEA_SET_TIMEOUT, timeout, 0, NULL);
+ 	uea_info(INS_TO_USBDEV(sc), "setting new timeout %d%s\n",
+@@ -1972,7 +1972,7 @@ static void uea_dispatch_cmv_e1(struct uea_softc *sc, struct intr_pkt *intr)
+ 	if (cmv->bDirection != E1_MODEMTOHOST)
+ 		goto bad1;
+ 
+-	/* FIXME : ADI930 reply wrong preambule (func = 2, sub = 2) to
++	/* FIXME : ADI930 reply wrong preamble (func = 2, sub = 2) to
+ 	 * the first MEMACCESS cmv. Ignore it...
+ 	 */
+ 	if (cmv->bFunction != dsc->function) {
+diff --git a/drivers/usb/atm/usbatm.c b/drivers/usb/atm/usbatm.c
+index 2da6615fbb6f..d1e622bb1406 100644
+--- a/drivers/usb/atm/usbatm.c
++++ b/drivers/usb/atm/usbatm.c
+@@ -1158,7 +1158,7 @@ int usbatm_usb_probe(struct usb_interface *intf, const struct usb_device_id *id,
+ 		if (i >= num_rcv_urbs)
+ 			list_add_tail(&urb->urb_list, &channel->list);
+ 
+-		vdbg(&intf->dev, "%s: alloced buffer 0x%p buf size %u urb 0x%p",
++		vdbg(&intf->dev, "%s: allocated buffer 0x%p buf size %u urb 0x%p",
+ 		     __func__, urb->transfer_buffer, urb->transfer_buffer_length, urb);
+ 	}
+ 
+-- 
+2.17.1
 
-Regards,
-  Marco
-
-> 
-> Frank
-> 
-> > >
-> > > Regards,
-> > >    Marco
-> > >
-> > > [1] https://docs.kernel.org/devicetree/bindings/dts-coding-style.html#order-of-properties-in-device-node
-> >
-> > Thank you for the review Frank & Marco.
-> > I quickly went through the file again and found another few properties
-> > that could be better ordered according to the kernel documentation [1].
-> >
-> > > > >   2 files changed, 424 insertions(+)
-> > > > >   create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> > > > >
-> > > > > diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> > > > > index 9d3df8b218a2..aa26a50b7bb4 100644
-> > > > > --- a/arch/arm64/boot/dts/freescale/Makefile
-> > > > > +++ b/arch/arm64/boot/dts/freescale/Makefile
-> > > > > @@ -171,6 +171,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
-> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
-> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
-> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
-> > > > > +dtb-$(CONFIG_ARCH_MXC) += imx8mp-iota2-lumpy.dtb
-> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
-> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-navqp.dtb
-> > > > >   dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
-> > > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> > > > > new file mode 100644
-> > > > > index 000000000000..9eb58e818dc7
-> > > > > --- /dev/null
-> > > > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-iota2-lumpy.dts
-> > > > > @@ -0,0 +1,423 @@
-> > > > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > > > > +/*
-> > > > > + * Copyright 2023 Y Soft
-> > > > > + */
-> > > > > +
-> > > > > +/dts-v1/;
-> > > > > +
-> > > > > +#include "imx8mp.dtsi"
-> > > > > +
-> > > > > +/ {
-> > > > > +	compatible = "ysoft,imx8mp-iota2-lumpy", "fsl,imx8mp";
-> > > > > +	model = "Y Soft i.MX8MPlus IOTA2 Lumpy board";
-> > > > > +
-> > > > > +	beeper {
-> > > > > +		compatible = "pwm-beeper";
-> > > > > +		pwms = <&pwm4 0 500000 0>;
-> > > > > +	};
-> > > > > +
-> > > > > +	chosen {
-> > > > > +		stdout-path = &uart2;
-> > > > > +	};
-> > > > > +
-> > > > > +	gpio_keys: gpio-keys {
-> > > > > +		compatible = "gpio-keys";
-> > > > > +		pinctrl-0 = <&pinctrl_gpio_keys>;
-> > > > > +		pinctrl-names = "default";
-> > > > > +
-> > > > > +		button-reset {
-> > > > > +			gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
-> > > > > +			label = "Factory RESET";
-> > > > > +			linux,code = <BTN_0>;
-> > > > > +		};
-> > > > > +	};
-> > > > > +
-> > > > > +	reg_usb_host: regulator-usb-host {
-> > > > > +		compatible = "regulator-fixed";
-> > > > > +		enable-active-high;
-> > > > > +		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
-> >
-> > The enable-active-high and gpio should go bellow regulator-*.
-> >
-> > > > > +		pinctrl-0 = <&pinctrl_usb_host_vbus>;
-> > > > > +		pinctrl-names = "default";
-> > > > > +		regulator-max-microvolt = <5000000>;
-> > > > > +		regulator-min-microvolt = <5000000>;
-> > > > > +		regulator-name = "usb-host";
-> > > > > +	};
-> > > > > +
-> > > > > +	memory@40000000 {
-> > > > > +		reg = <0x0 0x40000000 0 0x80000000>,
-> > > > > +		      <0x1 0x00000000 0 0x80000000>;
-> > > > > +		device_type = "memory";
-> > > > > +	};
-> > > > > +};
-> > > > > +
-> > > > > +&A53_0 {
-> > > > > +	cpu-supply = <&reg_arm>;
-> > > > > +};
-> > > > > +
-> > > > > +&A53_1 {
-> > > > > +	cpu-supply = <&reg_arm>;
-> > > > > +};
-> > > > > +
-> > > > > +&A53_2 {
-> > > > > +	cpu-supply = <&reg_arm>;
-> > > > > +};
-> > > > > +
-> > > > > +&A53_3 {
-> > > > > +	cpu-supply = <&reg_arm>;
-> > > > > +};
-> > > > > +
-> > > > > +&eqos {
-> > > > > +	phy-handle = <&ethphy0>;
-> > > > > +	phy-mode = "rgmii-id";
-> > > > > +	pinctrl-0 = <&pinctrl_eqos>;
-> > > > > +	pinctrl-names = "default";
-> > > > > +	status = "okay";
-> > > > > +
-> > > > > +	mdio {
-> > > > > +		compatible = "snps,dwmac-mdio";
-> > > > > +		#address-cells = <1>;
-> > > > > +		#size-cells = <0>;
-> > > > > +
-> > > > > +		ethphy0: ethernet-phy@0 {
-> > > > > +			reg = <0>;
-> > > > > +			interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-> > > > > +			interrupt-parent = <&gpio3>;
-> > > > > +			micrel,led-mode = <0>;
-> >
-> > The micrel,* is a vendor specific property. It should go bellow the reset-*.
-> >
-> > > > > +			pinctrl-0 = <&pinctrl_ethphy0>;
-> > > > > +			pinctrl-names = "default";
-> > > > > +			reset-assert-us = <1000>;
-> > > > > +			reset-deassert-us = <1000>;
-> > > > > +			reset-gpios = <&gpio3 22 GPIO_ACTIVE_LOW>;
-> > > > > +		};
-> > > > > +	};
-> > > > > +};
-> > > > > +
-> > > > > +&fec {
-> > > > > +	fsl,magic-packet;
-> > > > > +	phy-handle = <&ethphy1>;
-> > > > > +	phy-mode = "rgmii-id";
-> > > > > +	pinctrl-0 = <&pinctrl_fec>;
-> > > > > +	pinctrl-names = "default";
-> > > > > +	status = "okay";
-> > > > > +
-> > > > > +	mdio {
-> > > > > +		#address-cells = <1>;
-> > > > > +		#size-cells = <0>;
-> > > > > +
-> > > > > +		ethphy1: ethernet-phy@0 {
-> > > > > +			reg = <0>;
-> > > > > +			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
-> > > > > +			interrupt-parent = <&gpio3>;
-> > > > > +			micrel,led-mode = <0>;
-> >
-> > Same as above, micrel,* should go bellow common properties.
-> > I will send a v5 with these fixed.
-> >
-> > Michal
-> >
-> > > > > +			pinctrl-0 = <&pinctrl_ethphy1>;
-> > > > > +			pinctrl-names = "default";
-> > > > > +			reset-assert-us = <1000>;
-> > > > > +			reset-deassert-us = <1000>;
-> > > > > +			reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
-> > > > > +		};
-> > > > > +	};
-> > > > > +};
-> > > > > +
-> 
 
