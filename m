@@ -1,349 +1,171 @@
-Return-Path: <linux-usb+bounces-15515-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15516-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F66B9879AC
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 21:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC777987A57
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 23:05:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CF0D1C208DF
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 19:39:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDDFE1C225A1
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2024 21:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79322175D2C;
-	Thu, 26 Sep 2024 19:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CGXbESF4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78C7185B43;
+	Thu, 26 Sep 2024 21:05:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08254522A;
-	Thu, 26 Sep 2024 19:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BF617BEB8
+	for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2024 21:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727379555; cv=none; b=a4TpYmoZ6+CI2eAVDRliWNjDpDVAmwxvfFYwzknjBvUpVm6wuFZTIYp4DUcwK6Danqgvs1zku7hCtMNqtzGE2NXY0FMt8HAKpGgFL6FJ8Q7qA2euMefi1ESEvSwZji2ldat6vkkTTcdV78AZs7G6Dc8bgwEAr4v39B7PxkQmYRE=
+	t=1727384734; cv=none; b=rzxWWKGijZpIej/sSgwyaZNFFoKZmJQzBOLFPzHg+x8PP2KtNhRV40rf5R8W9kjQ+aKafS3qiFcr5S97lD9dtrnTNUFrg+8EItI6ZaJXcaHzTzyZbX1uIS0x/K9vuu03fNjmUw159zjAM/rs9XFm7CjbN+LtEjZirqXYcb09b/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727379555; c=relaxed/simple;
-	bh=OnsHxzsvJUKVagK+k6nkcXv8x+HQNGynu7T7W/6HJZE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C67hEEfjNVXsHozSjczT3souMdtWJzI4WgiaX6CAU2Kiq0g+NGp0UQDTXUIXR6jg5pRdpcRcLuxy3mWHGPanPvozFnuASUCxBSzLO5YAIaQlu4T6cNPKMbffuCB2F0OQvDptdv77e0ttlAK3PgLhwgmzw6GbqVEJtkyqkx3NA4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CGXbESF4; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-537a399e06dso1910519e87.1;
-        Thu, 26 Sep 2024 12:39:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727379551; x=1727984351; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2MciWzCk1jzFPzsM2tRkc2YYuhGD6BibWAqbbvB9dWk=;
-        b=CGXbESF4MFXgk0BBnB0H+RmHlIWjKqtvWeigBcXh0Zw18NqZvyvAE9Mt/EQ7d9nQwD
-         EYiw2Any4gd+r+UQRjR2VXluAUQ5I0Qq3i7qftLDjsUURS6Y86N1NSNa0meiov43B+WL
-         Q0Cmpy5G2mjP8mxvx2OZdOQqottY2eYBO2fK82CJKhbaEY2dD9or1XBSqSTlur3beOu7
-         I3HDv8OIn5M5gVgIycXm/j1J4QXR+Fz23ESFl3+LbTD23LmtdwVQ6aM/cX3aJKFwlYWJ
-         BwxL2DYM8CabrdoTl+v+G4O3ncKsVm2utw5jzjjQUt6T+CgRWpvRfpCh14K6OqLomcad
-         f22A==
+	s=arc-20240116; t=1727384734; c=relaxed/simple;
+	bh=XA6FmM8VynUQG3FKsFO+R62dgS4F62xrqyj4ENVK6i4=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=FqpE+6IPtRjWi0Jce5IsGJdNTqAPGUZMcx8HLjLfShvZTy1bs9eVZ+bTn6cy4BY85dvmJIw05zJJzeaP5gLdDoJHDO68xTlc7Ki6RfTxW40D4fD3DnDDqOMDKlvyXG4ZSja8ht4wUsdGshJBxupwonHpxHttRryNgQ9uhZVgcD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-82ad9fca5fcso146973439f.0
+        for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2024 14:05:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727379551; x=1727984351;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=1e100.net; s=20230601; t=1727384730; x=1727989530;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2MciWzCk1jzFPzsM2tRkc2YYuhGD6BibWAqbbvB9dWk=;
-        b=hivsbwSvPOzMUaiP5L1zfr1+HYvEdPya/jIrr22cGS3OGdILXqKDwGaAHf84Dtqqem
-         WrCU7WEuiputHUuqKnn4An6J9/lrx7WWkNlVu1ZmFFETyQdcpYutVfNaicozVbgsI9PB
-         zlcyLWk/uOIFYrEAvaNqlF0yipAIUvGhStqdjymqQ8jFM279uCzEE8XAsqA/LfDWNaUD
-         dqlJYMpodEEB/ZZC0lCI6LZ0TvKiGSbadWSN4tSBBP2EMa0+/RLGW9Y5mB6eTWfUwcsC
-         QMJUc2/DNrarxrlAWCNgyzrJ/I++cwhOD0FMZrt/CKc+o7JHS0YnDwi+/9PTaJxi0CIm
-         Vn4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWuwX/epTMWObWvE1QW6vYcs/T9oyHSBMS2+eoPZ2cJeIyRHZSFoE6OqwVohWFUy5PWgJbDCka/Tsxv@vger.kernel.org, AJvYcCWzFYeyyOJroBxhPxYX1Tw0PVvAYpbTATrHF7rkmk/6HST+IAPJq/MnwaD8hgH0eQ9JsW42FPdI/LnR9e4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlZ+93LcHG1UNlRmGbKV6tGAahqzu0mLB0+IIuSMroAiue+G49
-	IA1IFrVpxvBrf09jSH7qYltv20Bq6zpiK0s/QQZjtbvvZNjzh7Uc
-X-Google-Smtp-Source: AGHT+IGk/ZRClYtyhiAAk712Mp2XmTYm5KTzjo2Jyct5WSiJnsDHZPeSUj7xII5HaYpANtmP3+b9fg==
-X-Received: by 2002:a05:6512:6283:b0:530:ea2b:1a92 with SMTP id 2adb3069b0e04-5389fc643abmr517881e87.43.1727379550595;
-        Thu, 26 Sep 2024 12:39:10 -0700 (PDT)
-Received: from [192.168.216.101] (public-gprs228163.centertel.pl. [31.60.38.132])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93c29974fcsm30805266b.205.2024.09.26.12.39.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Sep 2024 12:39:10 -0700 (PDT)
-Message-ID: <1be4dce841c6e5de076864102aca2e131d1aafe1.camel@gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: u_ether: Use __netif_rx() in
- rx_callback()
-From: Hubert =?UTF-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ferry Toth	
- <ftoth@exalondelft.nl>, Hardik Gajjar <hgajjar@de.adit-jv.com>, Kees Cook	
- <kees@kernel.org>, Justin Stitt <justinstitt@google.com>, Richard Acayan	
- <mailingradian@gmail.com>, Jeff Johnson <quic_jjohnson@quicinc.com>, 
- "Ricardo B. Marliere"	 <ricardo@marliere.net>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet	 <edumazet@google.com>, Toke
- =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?=	 <toke@redhat.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 26 Sep 2024 21:39:07 +0200
-In-Reply-To: <20240917143618.jPgAwF3M@linutronix.de>
-References: <155be9e56e650dd7f7baf1c7e193e1a3d85e7141.camel@gmail.com>
-		 <20240917143618.jPgAwF3M@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.0 
+        bh=Ys6ZbznNF95xTdG+X2OkrYhpB+iMBdnUaUn5+59grIE=;
+        b=gv5zXBn0M9lRSi6au9WmP6gXXNE7TNZNZpLEQy6OOpaw3uZLYhbd4w2tmLZ9Ae0mL/
+         qT2NyQLPGtTo9vEPUQN7PIhk6KjUDKqJXJFFJx7AfZwK6a9WscbZcG54j96FKTHR4kDB
+         7kufu/utu74BskNGTA/YKbAYc2AtWn4RbJVgxNPzlnflJAMt7LJXOC8122lgPMzF1/RG
+         5MVnlSrjThI61zs5Xyz0QNi7tLLTIPNXxEW4fmIJdHfRcZ1+V665QfPCTBb/PUnVmQni
+         3k8uQkFcHtVprI1aKNnAEVndRAZZGUxZO4m/Q5TcfKCBzm1nSxJ6gFH3XS4it5XH/Oea
+         9HBg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmY5JG1eOTrG18PUJi051A70tRCeljzLu9mHSSav38vOcdpPStY4aAV2Wv7/5q+h246b/00FRfRoU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNh8j5pJZ/MqLzamITr/KyfPrWk+SaXsU8BE4qrQVDF0mJjXrR
+	s4nsTHrCcjqbOXumAg65eqCHWJVgD0oPnCy2NvVunl+Az0SptBl+ldFT1zLZTCakp3DLwVzecC9
+	mHgr/o332tPk2C5E+yHif4OvGRfqdqemJ+dXIursWq9DMLgPuqYSn5to=
+X-Google-Smtp-Source: AGHT+IEeoZ9D9oAwx/f7EIq7dD+wCKVJaV7FnFXl3CITfKFqABW6HnPp93rESWhiN0bheEMk4uOybUjywSuBzyLtjpK/xJr8Xd+Z
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Received: by 2002:a92:ca47:0:b0:3a0:9050:702a with SMTP id
+ e9e14a558f8ab-3a3451bc245mr7875195ab.17.1727384730077; Thu, 26 Sep 2024
+ 14:05:30 -0700 (PDT)
+Date: Thu, 26 Sep 2024 14:05:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <66f5cc9a.050a0220.46d20.0004.GAE@google.com>
+Subject: [syzbot] [media?] WARNING in iguanair_probe/usb_submit_urb (2)
+From: syzbot <syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 2024-09-17 at 16:36 +0200, Sebastian Andrzej Siewior wrote:
-> On 2024-09-17 15:56:33 [+0200], Hubert Wi=C5=9Bniewski wrote:
-> > netif_rx() now disables bottom halves, which causes the USB gadget to b=
-e
-> > unable to receive frames if the interface is not brought up quickly eno=
-ugh
-> > after being created by the driver (a bug confirmed on AM3352 SoC).
-> >=20
-> > Replacing netif_rx() with __netif_rx() restores the old behavior and fi=
-xes
-> > the bug. This can be done since rx_callback() is called from the interr=
-upt
-> > context.
-> >=20
-> > Fixes: baebdf48c360 ("net: dev: Makes sure netif_rx() can be invoked in=
- any context.")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.co=
-m>
->=20
-> Now that I see v3, my v2 question stands.
-> This supposed only to disable BH if invoked from from non-interrupt.
-> hardirq and softirq should be good. A backtrace would be nice and further
-> explanation how this becomes a problem. Also lockdep should complain at
-> some point.
->=20
-> Sebastian
+Hello,
 
-This lockup seems to occur only on AM335x SoCs. If the interface is brought
-up immediately after it is created:
+syzbot found the following issue on:
 
-# modprobe g_ether; ip link set usb0 up
+HEAD commit:    68d4209158f4 sub: cdns3: Use predefined PCI vendor ID cons..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=160d3ca9980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cb61872d4d8c5df9
+dashboard link: https://syzkaller.appspot.com/bug?extid=ffba8e636870dac0e0c0
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-it works fine. But if there is some delay:
+Unfortunately, I don't have any reproducer for this issue yet.
 
-# modprobe g_ether; sleep 5; ip link set usb0 up
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c69290425359/disk-68d42091.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/caf4f26a3e85/vmlinux-68d42091.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3acdec4b62e6/bzImage-68d42091.xz
 
-the interface is unable to receive any frames from the USB host (but the
-outgoing frames are sent correctly).
-This becomes a problem when the g_ether module is loaded early in the boot
-process or it is built in, and the interface is configured later (e.g. by
-ifupdown).
-The same thing happens when using configfs to create and configure an
-Ethernet gadget.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com
 
-
-I have built the kernel with CONFIG_PROVE_LOCKING=3Dy and got the following
-messages upon bringing the interface up:
-
-Backtrace (timestamps stripped):
-
- WARNING: CPU: 0 PID: 86 at kernel/softirq.c:362 __local_bh_enable_ip+0x118=
-/0x198
- CPU: 0 UID: 0 PID: 86 Comm: ip Not tainted 6.11.0 #3
- Hardware name: Generic AM33XX (Flattened Device Tree)
- Call trace:
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x68/0x88
-  dump_stack_lvl from __warn+0x70/0x1ac
-  __warn from warn_slowpath_fmt+0x12c/0x1c4
-  warn_slowpath_fmt from __local_bh_enable_ip+0x118/0x198
-  __local_bh_enable_ip from netif_rx+0x118/0x208
-  netif_rx from rx_complete+0x140/0x27c
-  rx_complete from musb_g_giveback+0xf0/0x1d8
-  musb_g_giveback from musb_ep_restart_resume_work+0x8/0x10
-  musb_ep_restart_resume_work from musb_gadget_queue+0x1c8/0x498
-  musb_gadget_queue from usb_ep_queue+0x38/0x134
-  usb_ep_queue from rx_submit+0xdc/0x1cc
-  rx_submit from rx_fill+0x7c/0xa0
-  rx_fill from eth_start+0x30/0x54
-  eth_start from eth_open+0x40/0x80
-  eth_open from __dev_open+0xe0/0x174
-  __dev_open from __dev_change_flags+0x160/0x1d0
-  __dev_change_flags from dev_change_flags+0x1c/0x58
-  dev_change_flags from devinet_ioctl+0x6d0/0x884
-  devinet_ioctl from inet_ioctl+0x1ac/0x2bc
-  inet_ioctl from sock_ioctl+0x2c0/0x3b8
-  sock_ioctl from sys_ioctl+0x194/0xf88
-  sys_ioctl from ret_fast_syscall+0x0/0x1c
- Exception stack(0xe1485fa8 to 0xe1485ff0)
- 5fa0:                   000b3630 00000001 00000003 00008914 be802cd8 be802=
-c90
- 5fc0: 000b3630 00000001 00000003 00000036 ffffffff ffffffff ffffffff be802=
-ed4
- 5fe0: 000c74cc be802c80 00028000 b6e7d14c
- irq event stamp: 2581
- hardirqs last  enabled at (2579): [<c13e10cc>] _raw_spin_unlock_irqrestore=
-+0x44/0x48
- hardirqs last disabled at (2580): [<c13e0e94>] _raw_spin_lock_irqsave+0x64=
-/0x68
- softirqs last  enabled at (2558): [<c0e727b0>] __dev_change_flags+0x7c/0x1=
-d0
- softirqs last disabled at (2581): [<c0e68dd8>] netif_rx+0xa4/0x208
-
-
-
-Lockdep:
-
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
- WARNING: inconsistent lock state
- 6.11.0 #3 Tainted: G        W
- --------------------------------
- inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
- ip/86 [HC0[0]:SC0[0]:HE1:SE1] takes:
- c3e54050 (&musb->lock){?.-.}-{2:2}, at: musb_g_giveback+0xf8/0x1d8
- {IN-HARDIRQ-W} state was registered at:
-   lock_acquire+0x108/0x358
-   _raw_spin_lock_irqsave+0x4c/0x68
-   dsps_interrupt+0x28/0x278
-   __handle_irq_event_percpu+0xa0/0x2f4
-   handle_irq_event_percpu+0xc/0x40
-   handle_irq_event+0x38/0xcc
-   handle_level_irq+0xb4/0x13c
-   handle_irq_desc+0x1c/0x2c
-   generic_handle_arch_irq+0x2c/0x64
-   call_with_stack+0x18/0x20
-   __irq_svc+0x9c/0xbc
-   console_flush_all+0x25c/0x5c0
-   console_unlock+0x80/0x114
-   vprintk_emit+0x248/0x354
-   dev_vprintk_emit+0x110/0x144
-   dev_printk_emit+0x28/0x50
-   __dev_printk+0x74/0x90
-   _dev_warn+0x3c/0x68
-   _regulator_get+0x1f8/0x31c
-   sdhci_omap_regulator_get_caps+0x8/0x84
-   sdhci_omap_probe+0x208/0x788
-   platform_probe+0x58/0xb8
-   really_probe+0xc4/0x28c
-   __driver_probe_device+0x84/0x194
-   driver_probe_device+0x30/0xc8
-   __device_attach_driver+0xa4/0xe0
-   bus_for_each_drv+0x80/0xd0
-   __device_attach_async_helper+0xa8/0xdc
-   async_run_entry_fn+0x20/0xb4
-   process_scheduled_works+0x254/0x6e8
-   worker_thread+0x13c/0x340
-   kthread+0xf4/0x114
-   ret_from_fork+0x14/0x24
- irq event stamp: 2649
- hardirqs last  enabled at (2649): [<c13e10cc>] _raw_spin_unlock_irqrestore=
-+0x44/0x48
- hardirqs last disabled at (2648): [<c13e0e94>] _raw_spin_lock_irqsave+0x64=
-/0x68
- softirqs last  enabled at (2644): [<c014b410>] handle_softirqs+0x260/0x45c
- softirqs last disabled at (2613): [<c1385f28>] call_with_stack+0x18/0x20
-
- other info that might help us debug this:
-  Possible unsafe locking scenario:
-
-        CPU0
-        ----
-   lock(&musb->lock);
-   <Interrupt>
-     lock(&musb->lock);
-
-  *** DEADLOCK ***
-
- 1 lock held by ip/86:
-  #0: c1d60ca4 (rtnl_mutex){+.+.}-{3:3}, at: devinet_ioctl+0xc4/0x884
-
- stack backtrace:
- CPU: 0 UID: 0 PID: 86 Comm: ip Tainted: G        W          6.11.0 #3
- Tainted: [W]=3DWARN
- Hardware name: Generic AM33XX (Flattened Device Tree)
- Call trace:
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x68/0x88
-  dump_stack_lvl from mark_lock.part.17+0x3cc/0x440
-  mark_lock.part.17 from __lock_acquire+0x44c/0x22b0
-  __lock_acquire from lock_acquire+0x108/0x358
-  lock_acquire from _raw_spin_lock+0x38/0x48
-  _raw_spin_lock from musb_g_giveback+0xf8/0x1d8
-  musb_g_giveback from musb_ep_restart_resume_work+0x8/0x10
-  musb_ep_restart_resume_work from musb_gadget_queue+0x1c8/0x498
-  musb_gadget_queue from usb_ep_queue+0x38/0x134
-  usb_ep_queue from rx_submit+0xdc/0x1cc
-  rx_submit from rx_fill+0x7c/0xa0
-  rx_fill from eth_start+0x30/0x54
-  eth_start from eth_open+0x40/0x80
-  eth_open from __dev_open+0xe0/0x174
-  __dev_open from __dev_change_flags+0x160/0x1d0
-  __dev_change_flags from dev_change_flags+0x1c/0x58
-  dev_change_flags from devinet_ioctl+0x6d0/0x884
-  devinet_ioctl from inet_ioctl+0x1ac/0x2bc
-  inet_ioctl from sock_ioctl+0x2c0/0x3b8
-  sock_ioctl from sys_ioctl+0x194/0xf88
-  sys_ioctl from ret_fast_syscall+0x0/0x1c
- Exception stack(0xe1485fa8 to 0xe1485ff0)
- 5fa0:                   000b3630 00000001 00000003 00008914 be802cd8 be802=
-c90
- 5fc0: 000b3630 00000001 00000003 00000036 ffffffff ffffffff ffffffff be802=
-ed4
- 5fe0: 000c74cc be802c80 00028000 b6e7d14c
+------------[ cut here ]------------
+URB ffff888101efbe00 submitted while active
+WARNING: CPU: 1 PID: 8831 at drivers/usb/core/urb.c:379 usb_submit_urb+0x14da/0x1730 drivers/usb/core/urb.c:379
+Modules linked in:
+CPU: 1 UID: 0 PID: 8831 Comm: kworker/1:3 Not tainted 6.11.0-rc7-syzkaller-00152-g68d4209158f4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0x14da/0x1730 drivers/usb/core/urb.c:379
+Code: fe eb cb bb fe ff ff ff e9 c1 f3 ff ff e8 ae c6 fc fc c6 05 e6 26 ee 05 01 90 48 c7 c7 a0 60 a0 87 48 89 de e8 a7 c7 c2 fc 90 <0f> 0b 90 90 e9 b6 fe ff ff bb f8 ff ff ff e9 91 f3 ff ff 48 89 ef
+RSP: 0018:ffffc90011c07040 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888101efbe00 RCX: ffffc9000c704000
+RDX: 0000000000100000 RSI: ffffffff811a9646 RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000303be0 R12: ffff888101efbe00
+R13: ffff8881118ab830 R14: ffff8881118ab8a8 R15: ffff88812faf1000
+FS:  0000000000000000(0000) GS:ffff8881f5900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbcecdf6440 CR3: 0000000128104000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ iguanair_send drivers/media/rc/iguanair.c:193 [inline]
+ iguanair_get_features drivers/media/rc/iguanair.c:218 [inline]
+ iguanair_probe+0xe78/0x22a0 drivers/media/rc/iguanair.c:438
+ usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
+ call_driver_probe drivers/base/dd.c:578 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
+ device_add+0x114b/0x1a70 drivers/base/core.c:3682
+ usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:254
+ usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:294
+ call_driver_probe drivers/base/dd.c:578 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
+ device_add+0x114b/0x1a70 drivers/base/core.c:3682
+ usb_new_device+0xd90/0x1a10 drivers/usb/core/hub.c:2651
+ hub_port_connect drivers/usb/core/hub.c:5521 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
+ port_event drivers/usb/core/hub.c:5821 [inline]
+ hub_event+0x2e58/0x4f40 drivers/usb/core/hub.c:5903
+ process_one_work+0x9c5/0x1b40 kernel/workqueue.c:3231
+ process_scheduled_works kernel/workqueue.c:3312 [inline]
+ worker_thread+0x6c8/0xed0 kernel/workqueue.c:3389
+ kthread+0x2c1/0x3a0 kernel/kthread.c:389
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Surprisingly, with the patch I suggested, there is still a backtrace
-generated, but without lockdep warning:
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
- WARNING: CPU: 0 PID: 87 at net/core/dev.c:5207 __netif_rx+0xd4/0x210
- CPU: 0 UID: 0 PID: 87 Comm: ip Not tainted 6.11.0-dirty #4
- Hardware name: Generic AM33XX (Flattened Device Tree)
- Call trace:
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x68/0x88
-  dump_stack_lvl from __warn+0x70/0x1ac
-  __warn from warn_slowpath_fmt+0x12c/0x1c4
-  warn_slowpath_fmt from __netif_rx+0xd4/0x210
-  __netif_rx from rx_complete+0x140/0x27c
-  rx_complete from musb_g_giveback+0xf0/0x1d8
-  musb_g_giveback from musb_ep_restart_resume_work+0x8/0x10
-  musb_ep_restart_resume_work from musb_gadget_queue+0x1c8/0x498
-  musb_gadget_queue from usb_ep_queue+0x38/0x134
-  usb_ep_queue from rx_submit+0xdc/0x1cc
-  rx_submit from rx_fill+0x7c/0xa0
-  rx_fill from eth_start+0x30/0x54
-  eth_start from eth_open+0x40/0x80
-  eth_open from __dev_open+0xe0/0x174
-  __dev_open from __dev_change_flags+0x160/0x1d0
-  __dev_change_flags from dev_change_flags+0x1c/0x58
-  dev_change_flags from devinet_ioctl+0x6d0/0x884
-  devinet_ioctl from inet_ioctl+0x1ac/0x2bc
-  inet_ioctl from sock_ioctl+0x2c0/0x3b8
-  sock_ioctl from sys_ioctl+0x194/0xf88
-  sys_ioctl from ret_fast_syscall+0x0/0x1c
- Exception stack(0xe148dfa8 to 0xe148dff0)
- dfa0:                   000b3630 00000001 00000003 00008914 be8c8cd8 be8c8=
-c90
- dfc0: 000b3630 00000001 00000003 00000036 ffffffff ffffffff ffffffff be8c8=
-ed4
- dfe0: 000c74cc be8c8c80 00028000 b6ed614c
- irq event stamp: 2542
- hardirqs last  enabled at (2541): [<c13e10cc>] _raw_spin_unlock_irqrestore=
-+0x44/0x48
- hardirqs last disabled at (2542): [<c13e0e94>] _raw_spin_lock_irqsave+0x64=
-/0x68
- softirqs last  enabled at (2520): [<c0e727b0>] __dev_change_flags+0x7c/0x1=
-d0
- softirqs last disabled at (2518): [<c0e7236c>] dev_set_rx_mode+0x0/0x40
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-I'm a bit at loss here. The deadlock seems to be unrelated to netif_rx()
-(which is not being called in the interrupt context after all), yet
-replacing it with __netif_rx() fixes the lockup (though a warning is still
-generated, which suggests that the patch does not completely fix the
-issue).
-
---=20
-Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.com>
+If you want to undo deduplication, reply with:
+#syz undup
 
