@@ -1,193 +1,140 @@
-Return-Path: <linux-usb+bounces-15536-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15537-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57A8F98851B
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 14:34:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA133988652
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 15:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AB991C22F84
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 12:34:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 008DC1F23E45
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 13:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6952D18BBA0;
-	Fri, 27 Sep 2024 12:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B443A18CBF7;
+	Fri, 27 Sep 2024 13:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfcOevUe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CIXZmY+L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAA63C3C;
-	Fri, 27 Sep 2024 12:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C5B282FA;
+	Fri, 27 Sep 2024 13:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727440448; cv=none; b=fQKzXxL1W6nRiNNTLQy3sPazwkdG2fOBPNJE0XRjLT6kC5uV4BCW//37dQmjiejl9qED9wgakZJdk1aCFSzYBNYP6WrKq8n5b4/cF9GIgSXbmIx7ORZB6nydqu52kw3RgTlXsJDHKbSkZ6zi0TjhTdih8GAvSN2ZS/pvZo5AtHc=
+	t=1727444022; cv=none; b=CBqMHarfEHJ2eIrv2Lk6GlCStCErQQNwE1700Ca7ydeqhK16cLCF/HGnOXNVsVU188CoFSBw5jRRodRo8v/xfh4ubWnOnzGfhuz8pGHXzoWx7CKTeFVB4r46qyB2dvyLiw+puIB/trIMpUJY7Mhq4YfwEyLGpMEpxl8XVW/SjD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727440448; c=relaxed/simple;
-	bh=y2+iNA2lOOacXErWskhZ/dVv2cX2grJVPD4gDrjCuIo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t6bF27X1MRShXzq9jMVh4dddP8YVPcNtIjvL28Qv37vA3U5W50GAs0wD6mYrr9K8qW0g7HBh24/kEMhpZWabBks0ddrKLnKVOPUfoBjDVj4CCCJnGoPQJQOKI86wJwmArVW7znMRu+dlISMbF0deAoulQ7rMXAg4xhGNv9U78aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfcOevUe; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1727444022; c=relaxed/simple;
+	bh=58dVGBDkYc1bQrbFn0evrCXV59qaZdxh8FX3yDtbClk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FL6V/DlPiv+/F3kU11bns8nklBTN5sHmMBvNJ6dQ9CqybWNfnZH+O1mzMJJ/aC57Ef0DMPUvTIw80aUAmCiK4t8Cpaex3PffZgfuu7LEegmaNso4w7aAGe1yF3eZkoNKs1B4DtvCN2coA/im2dXzL0RMxHxrIilYcSJKpcee05o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CIXZmY+L; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42ca6ba750eso13350575e9.0;
-        Fri, 27 Sep 2024 05:34:06 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a8d6ac24a3bso393886366b.1;
+        Fri, 27 Sep 2024 06:33:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727440445; x=1728045245; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=evjj42qW7BNFDPe1+RqgY/x7L3058jeNFIesKHV3B1M=;
-        b=dfcOevUewbU/P+aB2FeawqgY2weTn+YUYtb8YvNxE7ZTdStalbrNJDYQ5YVNm9Oo6g
-         0nUVEUc3uGt2C1nVhHgFVRiQOOEsxJIgSlKpIXYQv3T5iYsZG0jdeasKnCVZcUqw06Rq
-         VH5Kwr48fNI3yeo4NjQjkSGMhZc96DKrUKnzQwQFuu4wFEdsp2gf4L/04sfeEeeUtyAt
-         3tH5ti++QKUQnqXJkOhnGxx0JvnSgUGscANBH+1YZrzP+Vadm/+KYZFCWkzcx/n3Xf/v
-         +/MJdVQ27RDcUdyMpM7rptkJb4POIjGAIl0KQbdBEMI02Y3PBSKAjb6OvPi36iDwLm8F
-         7qZQ==
+        d=gmail.com; s=20230601; t=1727444019; x=1728048819; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=58dVGBDkYc1bQrbFn0evrCXV59qaZdxh8FX3yDtbClk=;
+        b=CIXZmY+Lg5f6q92y7Ndc4CGJQJcZDi+8HpjTrLgqlticw+NVDVZfJQko1mijhYXEla
+         CwBb7Cbf8AiV2jjWjrHUzFzTJYXLvid8Nq681y3Nq2Ixk7ATV3kxfxJUs8itfj6UwicJ
+         YmLB4IK525+zg4aOtcaT646dF+PVF4H4Zjo4e2tVDdogh94YbHiIAAseECfzWpCdl+GH
+         2dY0ktM8AjA321g9OMvd56Ve+3PGwyXd2lpcTsKIbbJp3QpuGIxN/RtkGJfM39xiKNbq
+         Wd07P0yDgx1xgO8ky73T/b9i9WWPpeGfFikPfgGn2kFqvygEd+U7GMfCjMjZTLma/JfJ
+         emNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727440445; x=1728045245;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=evjj42qW7BNFDPe1+RqgY/x7L3058jeNFIesKHV3B1M=;
-        b=jFXDJ9U3AzW47j5MBTP8EIaW30blUZPrT2O/wd22vYSQYRhbR6zm9fSiqF57BWtU2e
-         OSNXXE3zxmm/G5z10yohOt5EDWJd4GIo/B442Z6j0Ku9OrtBeqi8KsPvO15IlUWgKjdV
-         6hfN0HvUZSYdGKtAsHZHlDANSbDRhEj7SXrOI3ItgAOz9AIbK6J2FZ8yGMaQeRV9H+Md
-         N1moWLegVrhz1pzKQKkqroWTEU05uHPu5fI9Eto0Fao532GwcEK8lvwCIu2wMjibmQC+
-         zPdT4JgxYPDhcuDHP4qrzfaxlS3QjKyjAkRx0DxmpPT8YE2EsOTs54UX4YPi1x6IW6qU
-         +IAA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6BnbGm+Dcu5Ln9GRidvlRvoQx9QgPnMgHJBFCp51QFcnBp2DDzySaXnTAA4Zg7wL5fn2jRR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/mR61puoVo1ZIpylTlWz4LDn3qimG5k4iYXP2UiaSSBnB82PK
-	dXM27KUVtoOjAgo88qKzFXJgaGay0SVrADjrx0D4a4XbHE3mJHc2USqJ7A==
-X-Google-Smtp-Source: AGHT+IHhRNlzlXso40rovMU1RzZD+DZQwus7OixqfK79YLqIQVA3/MCZDLjqV5F3Y8YpHeaQxeaVlA==
-X-Received: by 2002:a05:600c:5252:b0:424:8743:86b4 with SMTP id 5b1f17b1804b1-42f521ce279mr41196315e9.6.1727440445154;
-        Fri, 27 Sep 2024 05:34:05 -0700 (PDT)
-Received: from ThinkStation-P340.tmt.telital.com ([2a01:7d0:4800:7:51bd:682:aaba:6770])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f57e3008bsm25447475e9.43.2024.09.27.05.34.04
+        d=1e100.net; s=20230601; t=1727444019; x=1728048819;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=58dVGBDkYc1bQrbFn0evrCXV59qaZdxh8FX3yDtbClk=;
+        b=jup0E/guL3aZQgEvX9SIdICYbIRKjVUajg4Ni8j0ofJEJ2stOUKcSPVr61sIvgvATy
+         fcXdBL8YxHQrjQXeevhn19hQmQCLIx57HpfhKRTt23FXdF5dDKR/jDpdhK6kR0mKE4Rj
+         3D9u4ssFQMtHxPAx97oh2ipvI5A8ECV4Fp9t50Hdz7rQcRdl+BVzNy2LmvGJj0BbwRhJ
+         oOL/UgL71U5JU/hwWQid+Fy1JlnAhl6JtIlvZ00gCe96M7I6i+3oOJW+H7GRNxE7CoI7
+         lRczGA1pRTiQSfC2kZItOihwUmIYKY+coJqtN59nzOUq8pIUq61CaT1qcxHhufypEv46
+         Z3+w==
+X-Forwarded-Encrypted: i=1; AJvYcCVuRxsV7KAs4WPVMwQ4TIoJdZkzbtcz0ocz1A+MeQF9XXb4jQLWCCZN2PMXUoJWhXrKKwqWda+l1IF7@vger.kernel.org, AJvYcCX4kRlEzEkBqP1FHh2q/zl+a/1rQMy7Y2qR42mKRfDOMZUUCokhyiTdcqCD8UJrWEhMVzklra1ji5iL0tE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSVZFnfWYh1ZpRNBLA6bxUcPou0U2/EGhdPlVIUiHP2VJCV4vS
+	UNNXsHoC1pj/77IGFdouAxWiK1dXaHU6EcMwsOXCOkAv21TL00Gz
+X-Google-Smtp-Source: AGHT+IHEu9DsqK5Yj66Nid9o12FSNP//HJoLGp5cWV5+adVs65AqKnY9y+QC4K3s5b9z7+Kfst+aRA==
+X-Received: by 2002:a17:907:6095:b0:a8d:65f4:c7c6 with SMTP id a640c23a62f3a-a93b165dabdmr734891566b.24.1727444018678;
+        Fri, 27 Sep 2024 06:33:38 -0700 (PDT)
+Received: from [192.168.216.101] (public-gprs35668.centertel.pl. [91.94.11.108])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93c2947a86sm135051866b.124.2024.09.27.06.33.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 05:34:04 -0700 (PDT)
-From: Daniele Palmas <dnlplm@gmail.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	stable@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>
-Subject: [PATCH 1/1] USB: serial: option: add Telit FN920C04 MBIM compositions
-Date: Fri, 27 Sep 2024 14:28:16 +0200
-Message-Id: <20240927122816.1436915-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Fri, 27 Sep 2024 06:33:38 -0700 (PDT)
+Message-ID: <a7a132ff61a4533ce463ec088e15e3156c3ce39b.camel@gmail.com>
+Subject: Re: [PATCH v3] usb: gadget: u_ether: Use __netif_rx() in
+ rx_callback()
+From: Hubert =?UTF-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ferry Toth
+ <ftoth@exalondelft.nl>, Hardik Gajjar <hgajjar@de.adit-jv.com>, Kees Cook
+ <kees@kernel.org>, Justin Stitt <justinstitt@google.com>, Richard Acayan
+ <mailingradian@gmail.com>, Jeff Johnson <quic_jjohnson@quicinc.com>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Toke
+ =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Fri, 27 Sep 2024 15:33:35 +0200
+In-Reply-To: <1be4dce841c6e5de076864102aca2e131d1aafe1.camel@gmail.com>
+References: <155be9e56e650dd7f7baf1c7e193e1a3d85e7141.camel@gmail.com>
+	 <20240917143618.jPgAwF3M@linutronix.de>
+	 <1be4dce841c6e5de076864102aca2e131d1aafe1.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add the following Telit FN920C04 compositions:
+On Thu, 2024-09-26 at 21:39 +0200, Hubert Wi=C5=9Bniewski wrote:
+> I'm a bit at loss here. The deadlock seems to be unrelated to netif_rx()
+> (which is not being called in the interrupt context after all), yet
+> replacing it with __netif_rx() fixes the lockup (though a warning is stil=
+l
+> generated, which suggests that the patch does not completely fix the
+> issue).
 
-0x10a2: MBIM + tty (AT/NMEA) + tty (AT) + tty (diag)
-T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 17 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=10a2 Rev=05.15
-S:  Manufacturer=Telit Cinterion
-S:  Product=FN920
-S:  SerialNumber=92c4c4d8
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Well, never mind. After some investigation, I think the problem is as
+follows:
 
-0x10a7: MBIM + tty (AT) + tty (AT) + tty (diag)
-T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 18 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=10a7 Rev=05.15
-S:  Manufacturer=Telit Cinterion
-S:  Product=FN920
-S:  SerialNumber=92c4c4d8
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+1. musb_g_giveback() releases the musb lock using spin_unlock(). The lock
+is now released, but hardirqs are still disabled.
 
-0x10aa: MBIM + tty (AT) + tty (diag) + DPL (data packet logging) + adb
-T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 15 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=10aa Rev=05.15
-S:  Manufacturer=Telit Cinterion
-S:  Product=FN920
-S:  SerialNumber=92c4c4d8
-C:  #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+2. Then, usb_gadget_giveback_request() is called, which in turn calls
+rx_complete(). This does not happen in the interrupt context, so netif_rx()
+disables bottom havles, then enables them using local_bh_enable().
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
----
- drivers/usb/serial/option.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+3. This leads to calling __local_bh_enable_ip(), which gives off a warning
+(the first backtrace) that hardirqs are disabled. Then, hardirqs are
+disabled (again?), and then enabled (as they should have been in the first
+place).
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 176f38750ad5..6dcb73586e0b 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1380,10 +1380,16 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a0, 0xff),	/* Telit FN20C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a2, 0xff),	/* Telit FN920C04 (MBIM) */
-+	  .driver_info = NCTRL(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a4, 0xff),	/* Telit FN20C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a7, 0xff),	/* Telit FN920C04 (MBIM) */
-+	  .driver_info = NCTRL(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a9, 0xff),	/* Telit FN20C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10aa, 0xff),	/* Telit FN920C04 (MBIM) */
-+	  .driver_info = NCTRL(3) | RSVD(4) | RSVD(5) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
--- 
-2.37.1
+4. After usb_gadget_giveback_request() returns, musb_g_giveback() acquires
+the musb lock using spin_lock(). This does not disable hardirqs, so they
+are still enabled.
 
+5. While the musb lock is acquired, an interrupt occurs. It is handled by
+dsps_interrupt(), which acquires the musb lock. A deadlock occurs.
+
+Replacing netif_rx() with __netif_rx() apparently fixes this part, as it
+does not lead to any change of hardirq state. There is still one problem
+though: rx_complete() is usually called from the interrupt context, except
+when the network interface is brought up.
+
+I think one solution would be to make musb_g_giveback() use
+spin_unlock_irqrestore() and spin_lock_irqsave(), but I would need to pass
+the flags to it somehow. Also, I am not sure how that would influence other
+drivers using musb.
+
+--=20
+Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.com>
 
