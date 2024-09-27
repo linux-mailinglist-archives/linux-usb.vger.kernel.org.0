@@ -1,175 +1,193 @@
-Return-Path: <linux-usb+bounces-15535-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15536-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F049881E0
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 11:52:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57A8F98851B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 14:34:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BCBA1F226DC
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 09:52:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AB991C22F84
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 12:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB041BB6BD;
-	Fri, 27 Sep 2024 09:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6952D18BBA0;
+	Fri, 27 Sep 2024 12:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SewGu2qO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfcOevUe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261871BB6AC;
-	Fri, 27 Sep 2024 09:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAA63C3C;
+	Fri, 27 Sep 2024 12:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727430744; cv=none; b=qpJSvjnewvfjLe7ChmWFfCGa1GAcKtaqOWRQIQXtlB4EtInAJyBtkQ6uS53KsJZA4chXpceH1Nr76qGRgsLsIlGViArUOi2LsrUESzIIll3w/WDLo+0+x+ibK+n+XvPlwrP3zLOxszzxl9sO+dxZa/BPFxSqVpcpiMKx76xqALg=
+	t=1727440448; cv=none; b=fQKzXxL1W6nRiNNTLQy3sPazwkdG2fOBPNJE0XRjLT6kC5uV4BCW//37dQmjiejl9qED9wgakZJdk1aCFSzYBNYP6WrKq8n5b4/cF9GIgSXbmIx7ORZB6nydqu52kw3RgTlXsJDHKbSkZ6zi0TjhTdih8GAvSN2ZS/pvZo5AtHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727430744; c=relaxed/simple;
-	bh=gh3HxbhmkIkR+faLyEwUhDkIWcudrr+ZDgyMz+iog4M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=emO00tgFY4ff5b9uV1OWHYP0oMIMAtdRvJhDHofPnYEiOkx4xCvMcXmVHM+H1ZQeMMmfAUjVpHRfqJh9eQh9XloXC0dmqR0B1+6tMB7UxB+g2CCxl60VavNkOW9grhvd07VFiEnoKdYrfgGvYTbhy89uOvJdX0dej4iUUflsizY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SewGu2qO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F44C4CECD;
-	Fri, 27 Sep 2024 09:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727430743;
-	bh=gh3HxbhmkIkR+faLyEwUhDkIWcudrr+ZDgyMz+iog4M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SewGu2qO24Wsq/Fqb0IZJkF5HlreubY1jzAYEEJm8J/VeGUr5QwmaoM88wz9uF2Io
-	 f5jtKwb1lqm0uvLuzDvMYqC9Mnu/HxLmlMMbfx0kBWM6TA9PRxymTDpD7KPBSnxtD9
-	 SxPzl15FRpGXdRLqDRJ2Kr3EQW9OB2YY4yx689Ae1cXgvc/i6yoUNXtcIanoMP/sWE
-	 lJ10Pt15ob/53d7LxJ/ownwvVjAtzaz/GC+FPGLqZRsVqF9Cv57Z9uv3PnfEInz9mS
-	 fIo0Km2Jmy9/AH0kv+ILVDz4BbH+//Jrgs/GEMiefD8Pzw+hHC/UElrpwutVnWmux1
-	 hoVzKcMwFwc6A==
-Message-ID: <8e3e34d3-9034-4701-9fe9-baa43daf23b5@kernel.org>
-Date: Fri, 27 Sep 2024 12:52:18 +0300
+	s=arc-20240116; t=1727440448; c=relaxed/simple;
+	bh=y2+iNA2lOOacXErWskhZ/dVv2cX2grJVPD4gDrjCuIo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t6bF27X1MRShXzq9jMVh4dddP8YVPcNtIjvL28Qv37vA3U5W50GAs0wD6mYrr9K8qW0g7HBh24/kEMhpZWabBks0ddrKLnKVOPUfoBjDVj4CCCJnGoPQJQOKI86wJwmArVW7znMRu+dlISMbF0deAoulQ7rMXAg4xhGNv9U78aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfcOevUe; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42ca6ba750eso13350575e9.0;
+        Fri, 27 Sep 2024 05:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727440445; x=1728045245; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=evjj42qW7BNFDPe1+RqgY/x7L3058jeNFIesKHV3B1M=;
+        b=dfcOevUewbU/P+aB2FeawqgY2weTn+YUYtb8YvNxE7ZTdStalbrNJDYQ5YVNm9Oo6g
+         0nUVEUc3uGt2C1nVhHgFVRiQOOEsxJIgSlKpIXYQv3T5iYsZG0jdeasKnCVZcUqw06Rq
+         VH5Kwr48fNI3yeo4NjQjkSGMhZc96DKrUKnzQwQFuu4wFEdsp2gf4L/04sfeEeeUtyAt
+         3tH5ti++QKUQnqXJkOhnGxx0JvnSgUGscANBH+1YZrzP+Vadm/+KYZFCWkzcx/n3Xf/v
+         +/MJdVQ27RDcUdyMpM7rptkJb4POIjGAIl0KQbdBEMI02Y3PBSKAjb6OvPi36iDwLm8F
+         7qZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727440445; x=1728045245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=evjj42qW7BNFDPe1+RqgY/x7L3058jeNFIesKHV3B1M=;
+        b=jFXDJ9U3AzW47j5MBTP8EIaW30blUZPrT2O/wd22vYSQYRhbR6zm9fSiqF57BWtU2e
+         OSNXXE3zxmm/G5z10yohOt5EDWJd4GIo/B442Z6j0Ku9OrtBeqi8KsPvO15IlUWgKjdV
+         6hfN0HvUZSYdGKtAsHZHlDANSbDRhEj7SXrOI3ItgAOz9AIbK6J2FZ8yGMaQeRV9H+Md
+         N1moWLegVrhz1pzKQKkqroWTEU05uHPu5fI9Eto0Fao532GwcEK8lvwCIu2wMjibmQC+
+         zPdT4JgxYPDhcuDHP4qrzfaxlS3QjKyjAkRx0DxmpPT8YE2EsOTs54UX4YPi1x6IW6qU
+         +IAA==
+X-Forwarded-Encrypted: i=1; AJvYcCV6BnbGm+Dcu5Ln9GRidvlRvoQx9QgPnMgHJBFCp51QFcnBp2DDzySaXnTAA4Zg7wL5fn2jRR8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/mR61puoVo1ZIpylTlWz4LDn3qimG5k4iYXP2UiaSSBnB82PK
+	dXM27KUVtoOjAgo88qKzFXJgaGay0SVrADjrx0D4a4XbHE3mJHc2USqJ7A==
+X-Google-Smtp-Source: AGHT+IHhRNlzlXso40rovMU1RzZD+DZQwus7OixqfK79YLqIQVA3/MCZDLjqV5F3Y8YpHeaQxeaVlA==
+X-Received: by 2002:a05:600c:5252:b0:424:8743:86b4 with SMTP id 5b1f17b1804b1-42f521ce279mr41196315e9.6.1727440445154;
+        Fri, 27 Sep 2024 05:34:05 -0700 (PDT)
+Received: from ThinkStation-P340.tmt.telital.com ([2a01:7d0:4800:7:51bd:682:aaba:6770])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f57e3008bsm25447475e9.43.2024.09.27.05.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2024 05:34:04 -0700 (PDT)
+From: Daniele Palmas <dnlplm@gmail.com>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	stable@vger.kernel.org,
+	Daniele Palmas <dnlplm@gmail.com>
+Subject: [PATCH 1/1] USB: serial: option: add Telit FN920C04 MBIM compositions
+Date: Fri, 27 Sep 2024 14:28:16 +0200
+Message-Id: <20240927122816.1436915-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: dwc3: core: Prevent phy suspend during init
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- John Youn <John.Youn@synopsys.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- "msp@baylibre.com" <msp@baylibre.com>, "Vardhan, Vibhore" <vibhore@ti.com>,
- "Govindarajan, Sriramakrishnan" <srk@ti.com>, Dhruva Gole <d-gole@ti.com>,
- Vishal Mahaveer <vishalm@ti.com>
-References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
- <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
- <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
- <20240926215141.6xqngt7my6ffp753@synopsys.com>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20240926215141.6xqngt7my6ffp753@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Add the following Telit FN920C04 compositions:
 
+0x10a2: MBIM + tty (AT/NMEA) + tty (AT) + tty (diag)
+T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 17 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10a2 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN920
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-On 27/09/2024 00:51, Thinh Nguyen wrote:
-> Hi Roger,
-> 
-> On Wed, Sep 25, 2024, Roger Quadros wrote:
->> Hello Thinh,
->>
->> On 17/04/2024 02:41, Thinh Nguyen wrote:
->>> GUSB3PIPECTL.SUSPENDENABLE and GUSB2PHYCFG.SUSPHY should be cleared
->>> during initialization. Suspend during initialization can result in
->>> undefined behavior due to clock synchronization failure, which often
->>> seen as core soft reset timeout.
->>>
->>> The programming guide recommended these bits to be cleared during
->>> initialization for DWC_usb3.0 version 1.94 and above (along with
->>> DWC_usb31 and DWC_usb32). The current check in the driver does not
->>> account if it's set by default setting from coreConsultant.
->>>
->>> This is especially the case for DRD when switching mode to ensure the
->>> phy clocks are available to change mode. Depending on the
->>> platforms/design, some may be affected more than others. This is noted
->>> in the DWC_usb3x programming guide under the above registers.
->>>
->>> Let's just disable them during driver load and mode switching. Restore
->>> them when the controller initialization completes.
->>>
->>> Note that some platforms workaround this issue by disabling phy suspend
->>> through "snps,dis_u3_susphy_quirk" and "snps,dis_u2_susphy_quirk" when
->>> they should not need to.
->>>
->>> Cc: stable@vger.kernel.org
->>> Fixes: 9ba3aca8fe82 ("usb: dwc3: Disable phy suspend after power-on reset")
->>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>
->> This patch is causing system suspend failures on TI AM62 platforms [1]
->>
->> I will try to explain why.
->> Before this patch, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
->> bits (hence forth called 2 SUSPHY bits) were being set during initialization
->> and even during re-initialization after a system suspend/resume.
->>
->> These bits are required to be set for system suspend/resume to work correctly
->> on AM62 platforms.
-> 
-> Is it only for suspend or both suspend and resume?
+0x10a7: MBIM + tty (AT) + tty (AT) + tty (diag)
+T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 18 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10a7 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN920
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-I'm sure about suspend. It is not possible to toggle those bits while in system
-suspend so we can't really say if it is required exclusively for system resume or not.
+0x10aa: MBIM + tty (AT) + tty (diag) + DPL (data packet logging) + adb
+T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 15 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10aa Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN920
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-> 
->>
->> After this patch, the bits are only set when Host controller starts or
->> when Gadget driver starts.
->>
->> On AM62 platform we have 2 USB controllers, one in Host and one in Dual role.
->> Just after boot, for the Host controller we have the 2 SUSPHY bits set but
->> for the Dual-Role controller, as no role has started the 2 SUSPHY bits are
->> not set. Thus system suspend resume will fail.
->>
->> On the other hand, if we load a gadget driver just after boot then both
->> controllers have the 2 SUSPHY bits set and system suspend resume works for
->> the first time.
->> However, after system resume, the core is re-initialized so the 2 SUSPHY bits
->> are cleared for both controllers. For host controller it is never set again.
->> For gadget controller as gadget start is called, the 2 SUSPHY bits are set
->> again. The second system suspend resume will still fail as one controller
->> (Host) doesn't have the 2 SUSPHY bits set.
->>
->> To summarize, the existing solution is not sufficient for us to have a
->> reliable behavior. We need the 2 SUSPHY bits to be set regardless of what
->> role we are in or whether the role has started or not.
->>
->> My suggestion is to move back the SUSPHY enable to end of dwc3_core_init().
->> Then if SUSPHY needs to be disabled for DRD role switching, it should be
->> disabled and enabled exactly there.
->>
->> What do you suggest?
->>
->> [1] - https://urldefense.com/v3/__https://lore.kernel.org/linux-arm-kernel/20240904194229.109886-1-msp@baylibre.com/__;!!A4F2R9G_pg!Y10q3gwCzryOoiXpk6DMGn74iFQIg6GloY10J16kWCbqwgS1Algo5HRg05vm38dMw8n47qmKpqJlyXt9Kqlm$ 
->>
-> 
-> Thanks for reporting the issue.
-> 
-> This is quite an interesting behavior. As you said, we will need to
-> isolate this change to only during DRD role switch.
-> 
-> We may not necessarily just enable at the end of dwc3_core_init() since
-> that would keep the SUSPHY bits on during the DRD role switch. If this
-> issue only occurs before suspend, perhaps we can check and set these
-> bits during suspend or dwc3_core_exit() instead?
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+---
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-dwc3_core_exit() is not always called in the system suspend path so it
-may not be sufficient.
-
-Any issues if we set this these bits at the end of dwc3_suspend_common()
-irrespective of runtime suspend or system suspend and operating role?
-And should we restore these bits in dwc3_resume_common() to the state they
-were before dwc3_suspend_common()?
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 176f38750ad5..6dcb73586e0b 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1380,10 +1380,16 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a0, 0xff),	/* Telit FN20C04 (rmnet) */
+ 	  .driver_info = RSVD(0) | NCTRL(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a2, 0xff),	/* Telit FN920C04 (MBIM) */
++	  .driver_info = NCTRL(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a4, 0xff),	/* Telit FN20C04 (rmnet) */
+ 	  .driver_info = RSVD(0) | NCTRL(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a7, 0xff),	/* Telit FN920C04 (MBIM) */
++	  .driver_info = NCTRL(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a9, 0xff),	/* Telit FN20C04 (rmnet) */
+ 	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10aa, 0xff),	/* Telit FN920C04 (MBIM) */
++	  .driver_info = NCTRL(3) | RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 -- 
-cheers,
--roger
+2.37.1
+
 
