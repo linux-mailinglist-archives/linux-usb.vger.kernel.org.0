@@ -1,301 +1,858 @@
-Return-Path: <linux-usb+bounces-15541-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15542-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C65A9887DA
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 17:03:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47E54988837
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 17:22:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1C5E1F21BC8
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 15:03:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 010DD282D36
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 15:22:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E26F1C0DDB;
-	Fri, 27 Sep 2024 15:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504091C1736;
+	Fri, 27 Sep 2024 15:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a0wBAZkC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2574D39AD6
-	for <linux-usb@vger.kernel.org>; Fri, 27 Sep 2024 15:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C15149C6D;
+	Fri, 27 Sep 2024 15:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727449413; cv=none; b=OSnRVThvqGktmLRrMyAqZP5Fs+UNuTnEa4ZTUy5sEeunGfUZ7ub/NjwuTEnIJYevmcURrEcl5wv55MwWQz7SB9RXDZkXHHnBesiA2gEpN19+0f2Vahb5B4IIoVY+rsxWgyacD5Gr4b3iq4Zz4v72b+HHylUyBoohV0UpXujT9G4=
+	t=1727450556; cv=none; b=ti2gFCrdl3JYgXCgULEoDEVtdeP1TercXKvdcPn2/GTJRkscGQaPWmxQuqRW8Z2QjiIgi8mmRmH0rBXaHibPxUL4uYJ9XD8EdlEsuTm2MXwx14hzNf1cQa5B0EecrdngkIygZnC11sntZG8QcBJQx+PuQ5KaraVe+jmki0N5yM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727449413; c=relaxed/simple;
-	bh=KNKpCkBpckWdA0w4g5GLWTqy3bNk2kwRAUvaIkRBazs=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=MManyE+yXdEaCi0479Zo+rgpPmqsqIi0ZmZPzIUgETxgRXcLqb2zSCqmnn0n23Zf+XtgEVEzwLAXrz1fv2Gj08+L3l0QKGN1dDu1QRYy/TktXSbkiN5sNI+PJ1fUvf5va/bBctFhGu+pKPs/SL9vg0FL6OZTVbS4v3V5lJBaTBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a1a8b992d3so30812275ab.0
-        for <linux-usb@vger.kernel.org>; Fri, 27 Sep 2024 08:03:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727449411; x=1728054211;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NHHLauxXI1mLj4bhx6Ogen5Vfu/mamG0DCToncfTmZg=;
-        b=qzinsC6xYHJBmCPuskqiVEUuSltj3Y1auOkfpXyPkegCGAxz1e0iQDHrd8nnxYN+wu
-         boN6oraXrZ5CIvBn0OkpWGqWaNUCP4hE3iGtRPUTLvg/Yx8RcCJ0ytXeTq3MPkR5T9nh
-         FPX3nwjpL8obwC4Has6FotiHpuoRNnmGmoyV2oTDa496UL8dZdU0jPBUctsmobe9jSK/
-         m4MVjwwg1dzkbDVV2qai/fFRA2mDZxdF4nFmczV94LIGiXJPYqvGa0X4taTluLoEfeRb
-         i1H2g0A3aUNe+tvlYRDDjdcM+RouqkXu+vBnf9eIr/agGFevuuENwcbw6nIOijKx8MYU
-         Zr3w==
-X-Forwarded-Encrypted: i=1; AJvYcCXTiOsIqDSYyJAR8sspY3D1krZbbb2GYR93txXzOl5WDjvCXIMx+C1kr93WsiZoy0URNsJmkCzV/M0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkFHx1s/4citO5KC0mIAnzY7/AUujkGh+DKxllqw1UNdt3r9yQ
-	O1ZjBeNz+dmctap/cvMNT1Pm8bgzCDEBJ/MlgnXzqCfClph/GqNH2HG5b3VbV2D9lmIElqCFczU
-	BWhiJy2E3hsZw19aDDUfh/DR47PtaTa2qh9YH5xe4RiNuQE+JumPl3Vw=
-X-Google-Smtp-Source: AGHT+IH02B4wPj0wpQYbNhEBGrVfoB1Ecno3Ar4Vggo//9jNHeo/XFbKLw5FOol0EyjfM/pz/7nyuZmFLQtB6xeWOvNplLx6YUI3
+	s=arc-20240116; t=1727450556; c=relaxed/simple;
+	bh=Z23+G7mPee2zuA9JCRsVSEWFoggcyeK/wonPDXsB49Q=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bvtzQ6jR8sJsOcVe2LZk+JWQT6SSLl4N+FT5ThIm0zKzhC0O3laORBlEu+hCV9fWLHEa1pHgS9D33bZKX+ECPTlLYgkmCC7vHmto/8MzJV56fN4KFQ+tZxyKrnQDdRkE9oLXurX4uuS+V6sd/gvz2fLifiKHwJZZEphm/nmsJ20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a0wBAZkC; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48RFDuPL026381;
+	Fri, 27 Sep 2024 15:22:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=xnFW1svEdvEpYi0CJlDfQ6zH263RrZetg070gOA/tbk=; b=a0
+	wBAZkCrBTx8d4m8RO3ssIACboKrDPEUT9sWKopKCOa721LBGfCvoJYwb6cseutRB
+	XW1Ce2ol5UC24C6v9XWObebwMRsN59oSq3WtgE/r/UkaRVV1QYs3pvWk0fs3L8zx
+	QpEALi9t4OPF4bEqrZuPfTug3I4MsQOGEkHbyUL01udIj4Xm2UVNb3WKVQJlqmuy
+	8A1JOayHBYHWlXftLSjW0ivjCok2ekt5IkPfGLb683liX6voncDbLQ2e9pC3PgyQ
+	tZhm+1uSguPz6sacU83/hZGYz6GOedaPZCsEO/zPglQOeS7E/297vyj342HoM5QZ
+	JIvXXnRDIhai1/nJ4Q2w==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41snfhbmqn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Sep 2024 15:22:25 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48RFMO9Z000487
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Sep 2024 15:22:24 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 27 Sep 2024 08:22:17 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, Jack Pham
+	<quic_jackp@quicinc.com>,
+        <kernel@quicinc.com>, Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>
+CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar <quic_akakum@quicinc.com>
+Subject: [PATCH v3] usb: gadget: uvc: configfs: Add frame-based frame format support
+Date: Fri, 27 Sep 2024 20:51:38 +0530
+Message-ID: <20240927152138.31416-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c29:b0:3a2:6d54:33df with SMTP id
- e9e14a558f8ab-3a27685a0fcmr42773305ab.4.1727449411246; Fri, 27 Sep 2024
- 08:03:31 -0700 (PDT)
-Date: Fri, 27 Sep 2024 08:03:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <66f6c943.050a0220.46d20.001d.GAE@google.com>
-Subject: [syzbot] [usb?] KASAN: slab-use-after-free Read in chaoskey_disconnect
-From: syzbot <syzbot+422188bce66e76020e55@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, keithp@keithp.com, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JcLVtBATsMH0XueYreBty6jf2D9pJQtL
+X-Proofpoint-GUID: JcLVtBATsMH0XueYreBty6jf2D9pJQtL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 phishscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409270110
 
-Hello,
+Add support for frame-based frame format, which can be used to support
+multiple formats like H264 or H265, in addition to MJPEG and YUV frames.
 
-syzbot found the following issue on:
+The frame-based format is set to H264 by default, but it can be updated
+to other formats by modifying the GUID through the guid configfs
+attribute. Different structures are used for all three formats, as
+H264 has a different structure compared to MJPEG and uncompressed
+formats. These structures will be passed to the frame make function
+based on the active format, using a common frame structure with
+additional parameters needed only for frame-based formats. These
+parameters are handled at runtime in the UVC driver.
 
-HEAD commit:    0babf683783d Merge tag 'pinctrl-v6.11-4' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=176f749f980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=28869f34c32848cf
-dashboard link: https://syzkaller.appspot.com/bug?extid=422188bce66e76020e55
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-0babf683.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a0a995951c96/vmlinux-0babf683.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0aa5ce1558ab/bzImage-0babf683.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+422188bce66e76020e55@syzkaller.appspotmail.com
-
-usb 7-1: USB disconnect, device number 8
-==================================================================
-BUG: KASAN: slab-use-after-free in debug_spin_lock_before kernel/locking/spinlock_debug.c:86 [inline]
-BUG: KASAN: slab-use-after-free in do_raw_spin_lock+0x271/0x2c0 kernel/locking/spinlock_debug.c:115
-Read of size 4 at addr ffff8880272b801c by task kworker/2:1/64
-
-CPU: 2 UID: 0 PID: 64 Comm: kworker/2:1 Not tainted 6.11.0-rc7-syzkaller-00149-g0babf683783d #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:93 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:119
- print_address_description mm/kasan/report.c:377 [inline]
- print_report+0xc3/0x620 mm/kasan/report.c:488
- kasan_report+0xd9/0x110 mm/kasan/report.c:601
- debug_spin_lock_before kernel/locking/spinlock_debug.c:86 [inline]
- do_raw_spin_lock+0x271/0x2c0 kernel/locking/spinlock_debug.c:115
- __mutex_unlock_slowpath+0x197/0x650 kernel/locking/mutex.c:937
- chaoskey_disconnect+0x18b/0x290 drivers/usb/misc/chaoskey.c:245
- usb_unbind_interface+0x1e8/0x970 drivers/usb/core/driver.c:461
- device_remove drivers/base/dd.c:568 [inline]
- device_remove+0x122/0x170 drivers/base/dd.c:560
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
- bus_remove_device+0x22f/0x420 drivers/base/bus.c:574
- device_del+0x396/0x9f0 drivers/base/core.c:3871
- usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1418
- usb_disconnect+0x2e1/0x920 drivers/usb/core/hub.c:2304
- hub_port_connect drivers/usb/core/hub.c:5361 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x1da5/0x4e10 drivers/usb/core/hub.c:5903
- process_one_work+0x9c5/0x1b40 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3393
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-Allocated by task 1799:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
- __kasan_kmalloc+0xaa/0xb0 mm/kasan/common.c:387
- kmalloc_noprof include/linux/slab.h:681 [inline]
- kzalloc_noprof include/linux/slab.h:807 [inline]
- chaoskey_probe+0x1f9/0xc30 drivers/usb/misc/chaoskey.c:144
- usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
- device_add+0x114b/0x1a70 drivers/base/core.c:3682
- usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:254
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:294
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
- device_add+0x114b/0x1a70 drivers/base/core.c:3682
- usb_new_device+0xd90/0x1a10 drivers/usb/core/hub.c:2651
- hub_port_connect drivers/usb/core/hub.c:5521 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x2d9a/0x4e10 drivers/usb/core/hub.c:5903
- process_one_work+0x9c5/0x1b40 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3393
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-
-Freed by task 7645:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:579
- poison_slab_object+0xf7/0x160 mm/kasan/common.c:240
- __kasan_slab_free+0x32/0x50 mm/kasan/common.c:256
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2256 [inline]
- slab_free mm/slub.c:4477 [inline]
- kfree+0x12a/0x3b0 mm/slub.c:4598
- chaoskey_free+0xce/0x150 drivers/usb/misc/chaoskey.c:102
- chaoskey_release+0x14c/0x290 drivers/usb/misc/chaoskey.c:304
- __fput+0x408/0xbb0 fs/file_table.c:422
- task_work_run+0x14e/0x250 kernel/task_work.c:228
- resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:114 [inline]
- exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
- __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
- syscall_exit_to_user_mode+0x27b/0x2a0 kernel/entry/common.c:218
- do_syscall_64+0xda/0x250 arch/x86/entry/common.c:89
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-The buggy address belongs to the object at ffff8880272b8000
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 28 bytes inside of
- freed 1024-byte region [ffff8880272b8000, ffff8880272b8400)
-
-The buggy address belongs to the physical page:
-page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x272b8
-head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-anon flags: 0xfff00000000040(head|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xfdffffff(slab)
-raw: 00fff00000000040 ffff88801ac42dc0 0000000000000000 dead000000000001
-raw: 0000000000000000 0000000000100010 00000001fdffffff 0000000000000000
-head: 00fff00000000040 ffff88801ac42dc0 0000000000000000 dead000000000001
-head: 0000000000000000 0000000000100010 00000001fdffffff 0000000000000000
-head: 00fff00000000003 ffffea00009cae01 ffffffffffffffff 0000000000000000
-head: 0000000000000008 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2820(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5341, tgid 5341 (syz-executor), ts 50543123558, free_ts 50455071523
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x2d1/0x350 mm/page_alloc.c:1500
- prep_new_page mm/page_alloc.c:1508 [inline]
- get_page_from_freelist+0x1351/0x2e50 mm/page_alloc.c:3446
- __alloc_pages_noprof+0x22b/0x2460 mm/page_alloc.c:4702
- __alloc_pages_node_noprof include/linux/gfp.h:269 [inline]
- alloc_pages_node_noprof include/linux/gfp.h:296 [inline]
- alloc_slab_page+0x4e/0xf0 mm/slub.c:2325
- allocate_slab mm/slub.c:2488 [inline]
- new_slab+0x84/0x260 mm/slub.c:2541
- ___slab_alloc+0xdac/0x1870 mm/slub.c:3727
- __slab_alloc.constprop.0+0x56/0xb0 mm/slub.c:3817
- __slab_alloc_node mm/slub.c:3870 [inline]
- slab_alloc_node mm/slub.c:4029 [inline]
- __do_kmalloc_node mm/slub.c:4161 [inline]
- __kmalloc_node_track_caller_noprof+0x355/0x430 mm/slub.c:4181
- kmalloc_reserve+0xef/0x2c0 net/core/skbuff.c:605
- __alloc_skb+0x164/0x380 net/core/skbuff.c:674
- alloc_skb include/linux/skbuff.h:1320 [inline]
- nlmsg_new include/net/netlink.h:1015 [inline]
- inet6_rt_notify+0xf0/0x2c0 net/ipv6/route.c:6180
- fib6_add_rt2node net/ipv6/ip6_fib.c:1266 [inline]
- fib6_add+0x2524/0x4b50 net/ipv6/ip6_fib.c:1495
- __ip6_ins_rt net/ipv6/route.c:1314 [inline]
- ip6_route_add+0x8d/0x1c0 net/ipv6/route.c:3857
- addrconf_prefix_route+0x2fe/0x510 net/ipv6/addrconf.c:2486
- inet6_addr_add+0x698/0xbc0 net/ipv6/addrconf.c:3063
- inet6_rtm_newaddr+0x11d1/0x1aa0 net/ipv6/addrconf.c:5048
-page last free pid 5382 tgid 5382 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1101 [inline]
- free_unref_page+0x64a/0xe40 mm/page_alloc.c:2619
- qlink_free mm/kasan/quarantine.c:163 [inline]
- qlist_free_all+0x4e/0x140 mm/kasan/quarantine.c:179
- kasan_quarantine_reduce+0x192/0x1e0 mm/kasan/quarantine.c:286
- __kasan_slab_alloc+0x69/0x90 mm/kasan/common.c:322
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slub.c:3992 [inline]
- slab_alloc_node mm/slub.c:4041 [inline]
- __do_kmalloc_node mm/slub.c:4161 [inline]
- __kmalloc_node_track_caller_noprof+0x1c1/0x430 mm/slub.c:4181
- kmalloc_reserve+0xef/0x2c0 net/core/skbuff.c:605
- __alloc_skb+0x164/0x380 net/core/skbuff.c:674
- alloc_skb include/linux/skbuff.h:1320 [inline]
- alloc_skb_with_frags+0xe4/0x710 net/core/skbuff.c:6526
- sock_alloc_send_pskb+0x7f1/0x980 net/core/sock.c:2815
- sock_alloc_send_skb include/net/sock.h:1778 [inline]
- mld_newpack.isra.0+0x1ed/0x790 net/ipv6/mcast.c:1746
- add_grhead+0x299/0x340 net/ipv6/mcast.c:1849
- add_grec+0x111e/0x1670 net/ipv6/mcast.c:1987
- mld_send_cr net/ipv6/mcast.c:2113 [inline]
- mld_ifc_work+0x41f/0xca0 net/ipv6/mcast.c:2650
- process_one_work+0x9c5/0x1b40 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3393
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
-
-Memory state around the buggy address:
- ffff8880272b7f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880272b7f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8880272b8000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                            ^
- ffff8880272b8080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880272b8100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes for v3:
+Added framebased format support without impacting existing formats
+and used same frame structure and handled the different paramters
+within the uvc driver code so userspace libraries not need to
+change.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes for v2:
+https://lore.kernel.org/all/20240711082304.1363-1-quic_akakum@quicinc.com/
+Added Documentation for new format details.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+Changes for v1:
+https://lore.kernel.org/all/20240708041328.1942-1-quic_akakum@quicinc.com/
+Added framebased format support.
+---
+ .../ABI/testing/configfs-usb-gadget-uvc       |  64 ++++
+ drivers/usb/gadget/function/uvc_configfs.c    | 348 +++++++++++++++++-
+ drivers/usb/gadget/function/uvc_configfs.h    |  16 +
+ drivers/usb/gadget/function/uvc_v4l2.c        |  11 +-
+ include/uapi/linux/usb/video.h                |  58 +++
+ 5 files changed, 485 insertions(+), 12 deletions(-)
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+index 4feb692c4c1d..b6720768d63d 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+@@ -342,6 +342,70 @@ Description:	Specific uncompressed frame descriptors
+ 					   support
+ 		=========================  =====================================
+ 
++What:           /config/usb-gadget/gadget/functions/uvc.name/streaming/framebased
++Date:           Sept 2024
++KernelVersion:  5.15
++Description:    Framebased format descriptors
++
++What:           /config/usb-gadget/gadget/functions/uvc.name/streaming/framebased/name
++Date:           Sept 2024
++KernelVersion:  5.15
++Description:    Specific framebased format descriptors
++
++                ==================      =======================================
++                bFormatIndex            unique id for this format descriptor;
++                                        only defined after parent header is
++                                        linked into the streaming class;
++                                        read-only
++                bmaControls             this format's data for bmaControls in
++                                        the streaming header
++                bmInterlaceFlags        specifies interlace information,
++                                        read-only
++                bAspectRatioY           the X dimension of the picture aspect
++                                        ratio, read-only
++                bAspectRatioX           the Y dimension of the picture aspect
++                                        ratio, read-only
++                bDefaultFrameIndex      optimum frame index for this stream
++                bBitsPerPixel           number of bits per pixel used to
++                                        specify color in the decoded video
++                                        frame
++                guidFormat              globally unique id used to identify
++                                        stream-encoding format
++                ==================      =======================================
++
++What:           /config/usb-gadget/gadget/functions/uvc.name/streaming/framebased/name/name
++Date:           Sept 2024
++KernelVersion:  5.15
++Description:    Specific framebased frame descriptors
++
++                =========================  =====================================
++                bFrameIndex                unique id for this framedescriptor;
++                                           only defined after parent format is
++                                           linked into the streaming header;
++                                           read-only
++                dwFrameInterval            indicates how frame interval can be
++                                           programmed; a number of values
++                                           separated by newline can be specified
++                dwDefaultFrameInterval     the frame interval the device would
++                                           like to use as default
++                dwBytesPerLine             Specifies the number of bytes per line
++                                           of video for packed fixed frame size
++                                           formats, allowing the receiver to
++                                           perform stride alignment of the video.
++                                           If the bVariableSize value (above) is
++                                           TRUE (1), or if the format does not
++                                           permit such alignment, this value shall
++                                           be set to zero (0).
++                dwMaxBitRate               the maximum bit rate at the shortest
++                                           frame interval in bps
++                dwMinBitRate               the minimum bit rate at the longest
++                                           frame interval in bps
++                wHeight                    height of decoded bitmap frame in px
++                wWidth                     width of decoded bitmam frame in px
++                bmCapabilities             still image support, fixed frame-rate
++                                           support
++                =========================  =====================================
++
+ What:		/config/usb-gadget/gadget/functions/uvc.name/streaming/header
+ Date:		Dec 2014
+ KernelVersion:	4.0
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 6fac696ea846..f131943254a4 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -1566,11 +1566,13 @@ static const struct uvcg_config_group_type uvcg_control_grp_type = {
+ /* -----------------------------------------------------------------------------
+  * streaming/uncompressed
+  * streaming/mjpeg
++ * streaming/framebased
+  */
+ 
+ static const char * const uvcg_format_names[] = {
+ 	"uncompressed",
+ 	"mjpeg",
++	"framebased",
+ };
+ 
+ static struct uvcg_color_matching *
+@@ -1777,6 +1779,9 @@ static int uvcg_streaming_header_allow_link(struct config_item *src,
+ 	target_fmt = container_of(to_config_group(target), struct uvcg_format,
+ 				  group);
+ 
++	if (!target_fmt)
++		goto out;
++
+ 	uvcg_format_set_indices(to_config_group(target));
+ 
+ 	format_ptr = kzalloc(sizeof(*format_ptr), GFP_KERNEL);
+@@ -1816,6 +1821,9 @@ static void uvcg_streaming_header_drop_link(struct config_item *src,
+ 	target_fmt = container_of(to_config_group(target), struct uvcg_format,
+ 				  group);
+ 
++	if (!target_fmt)
++		goto out;
++
+ 	list_for_each_entry_safe(format_ptr, tmp, &src_hdr->formats, entry)
+ 		if (format_ptr->fmt == target_fmt) {
+ 			list_del(&format_ptr->entry);
+@@ -1826,6 +1834,7 @@ static void uvcg_streaming_header_drop_link(struct config_item *src,
+ 
+ 	--target_fmt->linked;
+ 
++out:
+ 	mutex_unlock(&opts->lock);
+ 	mutex_unlock(su_mutex);
+ }
+@@ -2022,6 +2031,7 @@ UVCG_FRAME_ATTR(dw_min_bit_rate, dwMinBitRate, 32);
+ UVCG_FRAME_ATTR(dw_max_bit_rate, dwMaxBitRate, 32);
+ UVCG_FRAME_ATTR(dw_max_video_frame_buffer_size, dwMaxVideoFrameBufferSize, 32);
+ UVCG_FRAME_ATTR(dw_default_frame_interval, dwDefaultFrameInterval, 32);
++UVCG_FRAME_ATTR(dw_bytes_perline, dwBytesPerLine, 32);
+ 
+ #undef UVCG_FRAME_ATTR
+ 
+@@ -2035,7 +2045,7 @@ static ssize_t uvcg_frame_dw_frame_interval_show(struct config_item *item,
+ 	int result, i;
+ 	char *pg = page;
+ 
+-	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
++	mutex_lock(su_mutex);	/* for navigating configfs hierarchy */
+ 
+ 	opts_item = frm->item.ci_parent->ci_parent->ci_parent->ci_parent;
+ 	opts = to_f_uvc_opts(opts_item);
+@@ -2105,7 +2115,7 @@ static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
+ 
+ UVC_ATTR(uvcg_frame_, dw_frame_interval, dwFrameInterval);
+ 
+-static struct configfs_attribute *uvcg_frame_attrs[] = {
++static struct configfs_attribute *uvcg_frame_attrs1[] = {
+ 	&uvcg_frame_attr_b_frame_index,
+ 	&uvcg_frame_attr_bm_capabilities,
+ 	&uvcg_frame_attr_w_width,
+@@ -2118,12 +2128,31 @@ static struct configfs_attribute *uvcg_frame_attrs[] = {
+ 	NULL,
+ };
+ 
+-static const struct config_item_type uvcg_frame_type = {
++static struct configfs_attribute *uvcg_frame_attrs2[] = {
++	&uvcg_frame_attr_b_frame_index,
++	&uvcg_frame_attr_bm_capabilities,
++	&uvcg_frame_attr_w_width,
++	&uvcg_frame_attr_w_height,
++	&uvcg_frame_attr_dw_min_bit_rate,
++	&uvcg_frame_attr_dw_max_bit_rate,
++	&uvcg_frame_attr_dw_default_frame_interval,
++	&uvcg_frame_attr_dw_frame_interval,
++	&uvcg_frame_attr_dw_bytes_perline,
++	NULL,
++};
++
++static const struct config_item_type uvcg_frame_type1 = {
+ 	.ct_item_ops	= &uvcg_config_item_ops,
+-	.ct_attrs	= uvcg_frame_attrs,
++	.ct_attrs	= uvcg_frame_attrs1,
+ 	.ct_owner	= THIS_MODULE,
+ };
+ 
++static const struct config_item_type uvcg_frame_type2 = {
++	.ct_item_ops    = &uvcg_config_item_ops,
++	.ct_attrs       = uvcg_frame_attrs2,
++	.ct_owner       = THIS_MODULE,
++};
++
+ static struct config_item *uvcg_frame_make(struct config_group *group,
+ 					   const char *name)
+ {
+@@ -2145,6 +2174,7 @@ static struct config_item *uvcg_frame_make(struct config_group *group,
+ 	h->frame.dw_max_bit_rate		= 55296000;
+ 	h->frame.dw_max_video_frame_buffer_size	= 460800;
+ 	h->frame.dw_default_frame_interval	= 666666;
++	h->frame.dw_bytes_perline		= 0;
+ 
+ 	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;
+ 	opts = to_f_uvc_opts(opts_item);
+@@ -2157,6 +2187,9 @@ static struct config_item *uvcg_frame_make(struct config_group *group,
+ 	} else if (fmt->type == UVCG_MJPEG) {
+ 		h->frame.b_descriptor_subtype = UVC_VS_FRAME_MJPEG;
+ 		h->fmt_type = UVCG_MJPEG;
++	} else if (fmt->type == UVCG_FRAMEBASED) {
++		h->frame.b_descriptor_subtype = UVC_VS_FRAME_FRAME_BASED;
++		h->fmt_type = UVCG_FRAMEBASED;
+ 	} else {
+ 		mutex_unlock(&opts->lock);
+ 		kfree(h);
+@@ -2175,7 +2208,10 @@ static struct config_item *uvcg_frame_make(struct config_group *group,
+ 	++fmt->num_frames;
+ 	mutex_unlock(&opts->lock);
+ 
+-	config_item_init_type_name(&h->item, name, &uvcg_frame_type);
++	if (fmt->type == UVCG_FRAMEBASED)
++		config_item_init_type_name(&h->item, name, &uvcg_frame_type2);
++	else
++		config_item_init_type_name(&h->item, name, &uvcg_frame_type1);
+ 
+ 	return &h->item;
+ }
+@@ -2215,9 +2251,6 @@ static void uvcg_format_set_indices(struct config_group *fmt)
+ 	list_for_each_entry(ci, &fmt->cg_children, ci_entry) {
+ 		struct uvcg_frame *frm;
+ 
+-		if (ci->ci_type != &uvcg_frame_type)
+-			continue;
+-
+ 		frm = to_uvcg_frame(ci);
+ 		frm->frame.b_frame_index = i++;
+ 	}
+@@ -2677,6 +2710,251 @@ static const struct uvcg_config_group_type uvcg_mjpeg_grp_type = {
+ 	.name = "mjpeg",
+ };
+ 
++/* -----------------------------------------------------------------------------
++ * streaming/framebased/<NAME>
++ */
++
++static struct configfs_group_operations uvcg_framebased_group_ops = {
++	.make_item              = uvcg_frame_make,
++	.drop_item              = uvcg_frame_drop,
++};
++
++#define UVCG_FRAMEBASED_ATTR_RO(cname, aname, bits)			\
++static ssize_t uvcg_framebased_##cname##_show(struct config_item *item,	\
++		char *page)						\
++{									\
++	struct uvcg_framebased *u = to_uvcg_framebased(item);		\
++	struct f_uvc_opts *opts;					\
++	struct config_item *opts_item;					\
++	struct mutex *su_mutex = &u->fmt.group.cg_subsys->su_mutex;	\
++	int result;							\
++									\
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */	\
++									\
++	opts_item = u->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;\
++	opts = to_f_uvc_opts(opts_item);				\
++									\
++	mutex_lock(&opts->lock);					\
++	result = sprintf(page, "%u\n", le##bits##_to_cpu(u->desc.aname));\
++	mutex_unlock(&opts->lock);					\
++									\
++	mutex_unlock(su_mutex);						\
++	return result;							\
++}									\
++									\
++UVC_ATTR_RO(uvcg_framebased_, cname, aname)
++
++#define UVCG_FRAMEBASED_ATTR(cname, aname, bits)			\
++static ssize_t uvcg_framebased_##cname##_show(struct config_item *item,	\
++		char *page)						\
++{									\
++	struct uvcg_framebased *u = to_uvcg_framebased(item);		\
++	struct f_uvc_opts *opts;					\
++	struct config_item *opts_item;					\
++	struct mutex *su_mutex = &u->fmt.group.cg_subsys->su_mutex;	\
++	int result;							\
++									\
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */	\
++									\
++	opts_item = u->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;\
++	opts = to_f_uvc_opts(opts_item);				\
++									\
++	mutex_lock(&opts->lock);					\
++	result = sprintf(page, "%u\n", le##bits##_to_cpu(u->desc.aname));\
++	mutex_unlock(&opts->lock);					\
++									\
++	mutex_unlock(su_mutex);						\
++	return result;							\
++}									\
++									\
++static ssize_t								\
++uvcg_framebased_##cname##_store(struct config_item *item,		\
++		const char *page, size_t len)				\
++{									\
++	struct uvcg_framebased *u = to_uvcg_framebased(item);		\
++	struct f_uvc_opts *opts;					\
++	struct config_item *opts_item;					\
++	struct mutex *su_mutex = &u->fmt.group.cg_subsys->su_mutex;	\
++	int ret;							\
++	u8 num;								\
++									\
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */	\
++									\
++	opts_item = u->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;\
++	opts = to_f_uvc_opts(opts_item);				\
++									\
++	mutex_lock(&opts->lock);					\
++	if (u->fmt.linked || opts->refcnt) {				\
++		ret = -EBUSY;						\
++		goto end;						\
++	}								\
++									\
++	ret = kstrtou8(page, 0, &num);					\
++	if (ret)							\
++		goto end;						\
++									\
++	if (num > 255) {						\
++		ret = -EINVAL;						\
++		goto end;						\
++	}								\
++	u->desc.aname = num;						\
++	ret = len;							\
++end:									\
++	mutex_unlock(&opts->lock);					\
++	mutex_unlock(su_mutex);						\
++	return ret;							\
++}									\
++									\
++UVC_ATTR(uvcg_framebased_, cname, aname)
++
++UVCG_FRAMEBASED_ATTR_RO(b_format_index, bFormatIndex, 8);
++UVCG_FRAMEBASED_ATTR_RO(b_bits_per_pixel, bBitsPerPixel, 8);
++UVCG_FRAMEBASED_ATTR(b_default_frame_index, bDefaultFrameIndex, 8);
++UVCG_FRAMEBASED_ATTR_RO(b_aspect_ratio_x, bAspectRatioX, 8);
++UVCG_FRAMEBASED_ATTR_RO(b_aspect_ratio_y, bAspectRatioY, 8);
++UVCG_FRAMEBASED_ATTR_RO(bm_interface_flags, bmInterfaceFlags, 8);
++
++#undef UVCG_FRAMEBASED_ATTR
++#undef UVCG_FRAMEBASED_ATTR_RO
++
++static ssize_t uvcg_framebased_guid_format_show(struct config_item *item,
++						char *page)
++{
++	struct uvcg_framebased *ch = to_uvcg_framebased(item);
++	struct f_uvc_opts *opts;
++	struct config_item *opts_item;
++	struct mutex *su_mutex = &ch->fmt.group.cg_subsys->su_mutex;
++
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
++
++	opts_item = ch->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;
++	opts = to_f_uvc_opts(opts_item);
++
++	mutex_lock(&opts->lock);
++	memcpy(page, ch->desc.guidFormat, sizeof(ch->desc.guidFormat));
++	mutex_unlock(&opts->lock);
++
++	mutex_unlock(su_mutex);
++
++	return sizeof(ch->desc.guidFormat);
++}
++
++static ssize_t uvcg_framebased_guid_format_store(struct config_item *item,
++						 const char *page, size_t len)
++{
++	struct uvcg_framebased *ch = to_uvcg_framebased(item);
++	struct f_uvc_opts *opts;
++	struct config_item *opts_item;
++	struct mutex *su_mutex = &ch->fmt.group.cg_subsys->su_mutex;
++	int ret;
++
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
++
++	opts_item = ch->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;
++	opts = to_f_uvc_opts(opts_item);
++
++	mutex_lock(&opts->lock);
++	if (ch->fmt.linked || opts->refcnt) {
++		ret = -EBUSY;
++		goto end;
++	}
++
++	memcpy(ch->desc.guidFormat, page,
++	       min(sizeof(ch->desc.guidFormat), len));
++	ret = sizeof(ch->desc.guidFormat);
++
++end:
++	mutex_unlock(&opts->lock);
++	mutex_unlock(su_mutex);
++	return ret;
++}
++
++UVC_ATTR(uvcg_framebased_, guid_format, guidFormat);
++
++static inline ssize_t
++uvcg_framebased_bma_controls_show(struct config_item *item, char *page)
++{
++	struct uvcg_framebased *u = to_uvcg_framebased(item);
++
++	return uvcg_format_bma_controls_show(&u->fmt, page);
++}
++
++static inline ssize_t
++uvcg_framebased_bma_controls_store(struct config_item *item,
++				   const char *page, size_t len)
++{
++	struct uvcg_framebased *u = to_uvcg_framebased(item);
++
++	return uvcg_format_bma_controls_store(&u->fmt, page, len);
++}
++
++UVC_ATTR(uvcg_framebased_, bma_controls, bmaControls);
++
++static struct configfs_attribute *uvcg_framebased_attrs[] = {
++	&uvcg_framebased_attr_b_format_index,
++	&uvcg_framebased_attr_b_default_frame_index,
++	&uvcg_framebased_attr_b_bits_per_pixel,
++	&uvcg_framebased_attr_b_aspect_ratio_x,
++	&uvcg_framebased_attr_b_aspect_ratio_y,
++	&uvcg_framebased_attr_bm_interface_flags,
++	&uvcg_framebased_attr_bma_controls,
++	&uvcg_framebased_attr_guid_format,
++	NULL,
++};
++
++static const struct config_item_type uvcg_framebased_type = {
++	.ct_item_ops    = &uvcg_config_item_ops,
++	.ct_group_ops   = &uvcg_framebased_group_ops,
++	.ct_attrs       = uvcg_framebased_attrs,
++	.ct_owner       = THIS_MODULE,
++};
++
++static struct config_group *uvcg_framebased_make(struct config_group *group,
++						 const char *name)
++{
++	static char guid[] = { /*Declear frame based as H264 format*/
++		'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00,
++		0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
++	};
++	struct uvcg_framebased *h;
++
++	h = kzalloc(sizeof(*h), GFP_KERNEL);
++	if (!h)
++		return ERR_PTR(-ENOMEM);
++
++	h->desc.bLength                 = UVC_DT_FORMAT_FRAMEBASED_SIZE;
++	h->desc.bDescriptorType         = USB_DT_CS_INTERFACE;
++	h->desc.bDescriptorSubType      = UVC_VS_FORMAT_FRAME_BASED;
++	memcpy(h->desc.guidFormat, guid, sizeof(guid));
++	h->desc.bBitsPerPixel           = 0;
++	h->desc.bDefaultFrameIndex      = 1;
++	h->desc.bAspectRatioX           = 0;
++	h->desc.bAspectRatioY           = 0;
++	h->desc.bmInterfaceFlags        = 0;
++	h->desc.bCopyProtect            = 0;
++	h->desc.bVariableSize           = 1;
++
++	INIT_LIST_HEAD(&h->fmt.frames);
++	h->fmt.type = UVCG_FRAMEBASED;
++	config_group_init_type_name(&h->fmt.group, name,
++				    &uvcg_framebased_type);
++
++	return &h->fmt.group;
++}
++
++static struct configfs_group_operations uvcg_framebased_grp_ops = {
++	.make_group             = uvcg_framebased_make,
++};
++
++static const struct uvcg_config_group_type uvcg_framebased_grp_type = {
++	.type = {
++		.ct_item_ops    = &uvcg_config_item_ops,
++		.ct_group_ops   = &uvcg_framebased_grp_ops,
++		.ct_owner       = THIS_MODULE,
++	},
++	.name = "framebased",
++};
++
+ /* -----------------------------------------------------------------------------
+  * streaming/color_matching/default
+  */
+@@ -2912,6 +3190,7 @@ static int __uvcg_iter_strm_cls(struct uvcg_streaming_header *h,
+ 		if (ret)
+ 			return ret;
+ 		grp = &f->fmt->group;
++		j = 0;
+ 		list_for_each_entry(item, &grp->cg_children, ci_entry) {
+ 			frm = to_uvcg_frame(item);
+ 			ret = fun(frm, priv2, priv3, j++, UVCG_FRAME);
+@@ -2965,6 +3244,11 @@ static int __uvcg_cnt_strm(void *priv1, void *priv2, void *priv3, int n,
+ 				container_of(fmt, struct uvcg_mjpeg, fmt);
+ 
+ 			*size += sizeof(m->desc);
++		} else if (fmt->type == UVCG_FRAMEBASED) {
++			struct uvcg_framebased *f =
++				container_of(fmt, struct uvcg_framebased, fmt);
++
++			*size += sizeof(f->desc);
+ 		} else {
+ 			return -EINVAL;
+ 		}
+@@ -2975,6 +3259,11 @@ static int __uvcg_cnt_strm(void *priv1, void *priv2, void *priv3, int n,
+ 		int sz = sizeof(frm->dw_frame_interval);
+ 
+ 		*size += sizeof(frm->frame);
++		/*
++		 * framebased has duplicate member with uncompressed and
++		 * mjpeg, so minus it
++		 */
++		*size -= sizeof(u32);
+ 		*size += frm->frame.b_frame_interval_type * sz;
+ 	}
+ 	break;
+@@ -2991,6 +3280,27 @@ static int __uvcg_cnt_strm(void *priv1, void *priv2, void *priv3, int n,
+ 	return 0;
+ }
+ 
++static int __uvcg_copy_framebased_desc(void *dest, struct uvcg_frame *frm,
++				       int sz)
++{
++	struct uvc_frame_framebased *desc = dest;
++
++	desc->bLength = frm->frame.b_length;
++	desc->bDescriptorType = frm->frame.b_descriptor_type;
++	desc->bDescriptorSubType = frm->frame.b_descriptor_subtype;
++	desc->bFrameIndex = frm->frame.b_frame_index;
++	desc->bmCapabilities = frm->frame.bm_capabilities;
++	desc->wWidth = frm->frame.w_width;
++	desc->wHeight = frm->frame.w_height;
++	desc->dwMinBitRate = frm->frame.dw_min_bit_rate;
++	desc->dwMaxBitRate = frm->frame.dw_max_bit_rate;
++	desc->dwDefaultFrameInterval = frm->frame.dw_default_frame_interval;
++	desc->bFrameIntervalType = frm->frame.b_frame_interval_type;
++	desc->dwBytesPerLine = frm->frame.dw_bytes_perline;
++
++	return 0;
++}
++
+ /*
+  * Fill an array of streaming descriptors.
+  *
+@@ -3045,6 +3355,15 @@ static int __uvcg_fill_strm(void *priv1, void *priv2, void *priv3, int n,
+ 			m->desc.bNumFrameDescriptors = fmt->num_frames;
+ 			memcpy(*dest, &m->desc, sizeof(m->desc));
+ 			*dest += sizeof(m->desc);
++		} else if (fmt->type == UVCG_FRAMEBASED) {
++			struct uvcg_framebased *f =
++				container_of(fmt, struct uvcg_framebased,
++					     fmt);
++
++			f->desc.bFormatIndex = n + 1;
++			f->desc.bNumFrameDescriptors = fmt->num_frames;
++			memcpy(*dest, &f->desc, sizeof(f->desc));
++			*dest += sizeof(f->desc);
+ 		} else {
+ 			return -EINVAL;
+ 		}
+@@ -3054,8 +3373,11 @@ static int __uvcg_fill_strm(void *priv1, void *priv2, void *priv3, int n,
+ 		struct uvcg_frame *frm = priv1;
+ 		struct uvc_descriptor_header *h = *dest;
+ 
+-		sz = sizeof(frm->frame);
+-		memcpy(*dest, &frm->frame, sz);
++		sz = sizeof(frm->frame) - 4;
++		if (frm->fmt_type != UVCG_FRAMEBASED)
++			memcpy(*dest, &frm->frame, sz);
++		else
++			__uvcg_copy_framebased_desc(*dest, frm, sz);
+ 		*dest += sz;
+ 		sz = frm->frame.b_frame_interval_type *
+ 			sizeof(*frm->dw_frame_interval);
+@@ -3066,7 +3388,10 @@ static int __uvcg_fill_strm(void *priv1, void *priv2, void *priv3, int n,
+ 				frm->frame.b_frame_interval_type);
+ 		else if (frm->fmt_type == UVCG_MJPEG)
+ 			h->bLength = UVC_DT_FRAME_MJPEG_SIZE(
+-				frm->frame.b_frame_interval_type);
++					frm->frame.b_frame_interval_type);
++		else if (frm->fmt_type == UVCG_FRAMEBASED)
++			h->bLength = UVC_DT_FRAME_FRAMEBASED_SIZE(
++					frm->frame.b_frame_interval_type);
+ 	}
+ 	break;
+ 	case UVCG_COLOR_MATCHING: {
+@@ -3285,6 +3610,7 @@ static const struct uvcg_config_group_type uvcg_streaming_grp_type = {
+ 		&uvcg_streaming_header_grp_type,
+ 		&uvcg_uncompressed_grp_type,
+ 		&uvcg_mjpeg_grp_type,
++		&uvcg_framebased_grp_type,
+ 		&uvcg_color_matching_grp_type,
+ 		&uvcg_streaming_class_grp_type,
+ 		NULL,
+diff --git a/drivers/usb/gadget/function/uvc_configfs.h b/drivers/usb/gadget/function/uvc_configfs.h
+index c6a690158138..2f78cd4f396f 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.h
++++ b/drivers/usb/gadget/function/uvc_configfs.h
+@@ -49,6 +49,7 @@ container_of(group_ptr, struct uvcg_color_matching, group)
+ enum uvcg_format_type {
+ 	UVCG_UNCOMPRESSED = 0,
+ 	UVCG_MJPEG,
++	UVCG_FRAMEBASED,
+ };
+ 
+ struct uvcg_format {
+@@ -105,6 +106,7 @@ struct uvcg_frame {
+ 		u32	dw_max_video_frame_buffer_size;
+ 		u32	dw_default_frame_interval;
+ 		u8	b_frame_interval_type;
++		u32     dw_bytes_perline;
+ 	} __attribute__((packed)) frame;
+ 	u32 *dw_frame_interval;
+ };
+@@ -142,6 +144,20 @@ static inline struct uvcg_mjpeg *to_uvcg_mjpeg(struct config_item *item)
+ 	return container_of(to_uvcg_format(item), struct uvcg_mjpeg, fmt);
+ }
+ 
++/* -----------------------------------------------------------------------------
++ * streaming/framebased/<NAME>
++ */
++
++struct uvcg_framebased {
++	struct uvcg_format              fmt;
++	struct uvc_format_framebased    desc;
++};
++
++static inline struct uvcg_framebased *to_uvcg_framebased(struct config_item *item)
++{
++	return container_of(to_uvcg_format(item), struct uvcg_framebased, fmt);
++}
++
+ /* -----------------------------------------------------------------------------
+  * control/extensions/<NAME>
+  */
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index de1736f834e6..836b91c73f18 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -31,13 +31,22 @@ static const struct uvc_format_desc *to_uvc_format(struct uvcg_format *uformat)
+ {
+ 	char guid[16] = UVC_GUID_FORMAT_MJPEG;
+ 	const struct uvc_format_desc *format;
+-	struct uvcg_uncompressed *unc;
+ 
+ 	if (uformat->type == UVCG_UNCOMPRESSED) {
++		struct uvcg_uncompressed *unc;
++
+ 		unc = to_uvcg_uncompressed(&uformat->group.cg_item);
+ 		if (!unc)
+ 			return ERR_PTR(-EINVAL);
+ 
++		memcpy(guid, unc->desc.guidFormat, sizeof(guid));
++	} else if (uformat->type == UVCG_FRAMEBASED) {
++		struct uvcg_framebased *unc;
++
++		unc = to_uvcg_framebased(&uformat->group.cg_item);
++		if (!unc)
++			return ERR_PTR(-EINVAL);
++
+ 		memcpy(guid, unc->desc.guidFormat, sizeof(guid));
+ 	}
+ 
+diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
+index 2ff0e8a3a683..526b5155e23c 100644
+--- a/include/uapi/linux/usb/video.h
++++ b/include/uapi/linux/usb/video.h
+@@ -597,5 +597,63 @@ struct UVC_FRAME_MJPEG(n) {				\
+ 	__le32 dwFrameInterval[n];			\
+ } __attribute__ ((packed))
+ 
++/* Frame Based Payload - 3.1.1. Frame Based Video Format Descriptor */
++struct uvc_format_framebased {
++	__u8  bLength;
++	__u8  bDescriptorType;
++	__u8  bDescriptorSubType;
++	__u8  bFormatIndex;
++	__u8  bNumFrameDescriptors;
++	__u8  guidFormat[16];
++	__u8  bBitsPerPixel;
++	__u8  bDefaultFrameIndex;
++	__u8  bAspectRatioX;
++	__u8  bAspectRatioY;
++	__u8  bmInterfaceFlags;
++	__u8  bCopyProtect;
++	__u8  bVariableSize;
++} __attribute__((__packed__));
++
++#define UVC_DT_FORMAT_FRAMEBASED_SIZE                  28
++
++/* Frame Based Payload - 3.1.2. Frame Based Video Frame Descriptor */
++struct uvc_frame_framebased {
++	__u8  bLength;
++	__u8  bDescriptorType;
++	__u8  bDescriptorSubType;
++	__u8  bFrameIndex;
++	__u8  bmCapabilities;
++	__u16 wWidth;
++	__u16 wHeight;
++	__u32 dwMinBitRate;
++	__u32 dwMaxBitRate;
++	__u32 dwDefaultFrameInterval;
++	__u8  bFrameIntervalType;
++	__u32 dwBytesPerLine;
++	__u32 dwFrameInterval[];
++} __attribute__((__packed__));
++
++#define UVC_DT_FRAME_FRAMEBASED_SIZE(n)                        (26+4*(n))
++
++#define UVC_FRAME_FRAMEBASED(n) \
++	uvc_frame_framebased_##n
++
++#define DECLARE_UVC_FRAME_FRAMEBASED(n)			\
++struct UVC_FRAME_FRAMEBASED(n) {			\
++	__u8  bLength;					\
++	__u8  bDescriptorType;				\
++	__u8  bDescriptorSubType;                       \
++	__u8  bFrameIndex;                              \
++	__u8  bmCapabilities;                           \
++	__u16 wWidth;                                   \
++	__u16 wHeight;                                  \
++	__u32 dwMinBitRate;                             \
++	__u32 dwMaxBitRate;                             \
++	__u32 dwDefaultFrameInterval;                   \
++	__u8  bFrameIntervalType;                       \
++	__u32 dwBytesPerLine;                           \
++	__u32 dwFrameInterval[n];                       \
++} __attribute__ ((packed))
++
+ #endif /* __LINUX_USB_VIDEO_H */
+ 
+-- 
+2.17.1
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
