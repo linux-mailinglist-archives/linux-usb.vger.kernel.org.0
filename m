@@ -1,123 +1,175 @@
-Return-Path: <linux-usb+bounces-15534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C79619881C2
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 11:48:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95F049881E0
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 11:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 565CC2857D7
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 09:48:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BCBA1F226DC
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 09:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FD641C63;
-	Fri, 27 Sep 2024 09:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB041BB6BD;
+	Fri, 27 Sep 2024 09:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJU3nTSl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SewGu2qO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C4218756A;
-	Fri, 27 Sep 2024 09:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261871BB6AC;
+	Fri, 27 Sep 2024 09:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727430420; cv=none; b=M95T8RQ6RlVsbpS8GHwn9BXUY5ekMFz7AGFEzUQ/M1SGXWb97XipTxQ4KVvB26h6Svkk77zsqrxFsRsT4yJ7QQOp5Io3DCVed5wAl7hlh7QyVSnhjCMB44nyGTLMq521QP1muSB8OFXlhLm8WnUVYI0zOnbOmap6Zb+RNtPhaBg=
+	t=1727430744; cv=none; b=qpJSvjnewvfjLe7ChmWFfCGa1GAcKtaqOWRQIQXtlB4EtInAJyBtkQ6uS53KsJZA4chXpceH1Nr76qGRgsLsIlGViArUOi2LsrUESzIIll3w/WDLo+0+x+ibK+n+XvPlwrP3zLOxszzxl9sO+dxZa/BPFxSqVpcpiMKx76xqALg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727430420; c=relaxed/simple;
-	bh=bX37R5ZLSZqTwnDOVmSnI1kKRm7LKRBsIvjfkpf7tP8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RBfbRs7U7Hs9mbPtwe7O0WfqBRiZCv+VUlPwjFIeKUFIA+MpGSZQiI4oAHtcwUhhbRB6XaI8iKtrmkUfWRuzahNbLl4e91oQJx97BOhfqM0s5WvTYVHEA2mw05dF+DFcVlp1X0CNIakJOO1mn8wE/JmB4jDjIq9L28UXJEpjgO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJU3nTSl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B645C4CEC9;
-	Fri, 27 Sep 2024 09:46:59 +0000 (UTC)
+	s=arc-20240116; t=1727430744; c=relaxed/simple;
+	bh=gh3HxbhmkIkR+faLyEwUhDkIWcudrr+ZDgyMz+iog4M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=emO00tgFY4ff5b9uV1OWHYP0oMIMAtdRvJhDHofPnYEiOkx4xCvMcXmVHM+H1ZQeMMmfAUjVpHRfqJh9eQh9XloXC0dmqR0B1+6tMB7UxB+g2CCxl60VavNkOW9grhvd07VFiEnoKdYrfgGvYTbhy89uOvJdX0dej4iUUflsizY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SewGu2qO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F44C4CECD;
+	Fri, 27 Sep 2024 09:52:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727430419;
-	bh=bX37R5ZLSZqTwnDOVmSnI1kKRm7LKRBsIvjfkpf7tP8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gJU3nTSlFool2P3OOwD/cgEZg6cbWR2XzD314ACL0uOYuxoaGu3sYs1TWnI19jKJh
-	 KMD8pbfpjMltSmRDsTycGc8E82a7KWx1+VVncdBxVG14Jz9k9m0mYtpm5pwtKkyozX
-	 kXV8Gbpf937JyUszVk6QVHD7iRYXd2k8PNpIKMeUBP1fIIejBDxdXOjtJJUOK0Q8R/
-	 J2yxOZXmwVx45E5ZfyQnJS87jO1Sb1T07x6eLaHjNzEMrD7K7shutwssK4v7CXQFGN
-	 FLukl2B8ROlIAm3j1PxDzNC7DadOrXh9aV0j2CB126/lN+Re56hdWIrsooOpLU0oiH
-	 bNcT7LINNCXZw==
-Date: Fri, 27 Sep 2024 11:46:57 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Michael Wu <michael@allwinnertech.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, Thinh.Nguyen@synopsys.com, balbi@kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: dwc3: core: add Gen2 polarity detection support
-Message-ID: <5gxoahmmyhzl2ruai6nvmdodhi5r5xq4cwpgaw3td7b23xyfb6@ucjqoxitosnd>
-References: <20240927072557.74194-1-michael@allwinnertech.com>
+	s=k20201202; t=1727430743;
+	bh=gh3HxbhmkIkR+faLyEwUhDkIWcudrr+ZDgyMz+iog4M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SewGu2qO24Wsq/Fqb0IZJkF5HlreubY1jzAYEEJm8J/VeGUr5QwmaoM88wz9uF2Io
+	 f5jtKwb1lqm0uvLuzDvMYqC9Mnu/HxLmlMMbfx0kBWM6TA9PRxymTDpD7KPBSnxtD9
+	 SxPzl15FRpGXdRLqDRJ2Kr3EQW9OB2YY4yx689Ae1cXgvc/i6yoUNXtcIanoMP/sWE
+	 lJ10Pt15ob/53d7LxJ/ownwvVjAtzaz/GC+FPGLqZRsVqF9Cv57Z9uv3PnfEInz9mS
+	 fIo0Km2Jmy9/AH0kv+ILVDz4BbH+//Jrgs/GEMiefD8Pzw+hHC/UElrpwutVnWmux1
+	 hoVzKcMwFwc6A==
+Message-ID: <8e3e34d3-9034-4701-9fe9-baa43daf23b5@kernel.org>
+Date: Fri, 27 Sep 2024 12:52:18 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240927072557.74194-1-michael@allwinnertech.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] usb: dwc3: core: Prevent phy suspend during init
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ John Youn <John.Youn@synopsys.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ "msp@baylibre.com" <msp@baylibre.com>, "Vardhan, Vibhore" <vibhore@ti.com>,
+ "Govindarajan, Sriramakrishnan" <srk@ti.com>, Dhruva Gole <d-gole@ti.com>,
+ Vishal Mahaveer <vishalm@ti.com>
+References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
+ <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
+ <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
+ <20240926215141.6xqngt7my6ffp753@synopsys.com>
+Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20240926215141.6xqngt7my6ffp753@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 27, 2024 at 03:25:56PM +0800, Michael Wu wrote:
-> According to the DWC31 Enhanced SuperSpeed USB3.1 Controller Programming
-> Guide, for Gen2 polarity detection, link uses data block (0011b) sync
-> header for SYNC OS instead of control block (1100b).
+
+
+On 27/09/2024 00:51, Thinh Nguyen wrote:
+> Hi Roger,
 > 
-> Added 'snps,inv-sync-hdr-quirk' a DT property to set this bit 30 of
-> LLUCTL if the third-party PHY doesn't correct the sync header of the
-> SYNC OS in the case of inverse polarity.
+> On Wed, Sep 25, 2024, Roger Quadros wrote:
+>> Hello Thinh,
+>>
+>> On 17/04/2024 02:41, Thinh Nguyen wrote:
+>>> GUSB3PIPECTL.SUSPENDENABLE and GUSB2PHYCFG.SUSPHY should be cleared
+>>> during initialization. Suspend during initialization can result in
+>>> undefined behavior due to clock synchronization failure, which often
+>>> seen as core soft reset timeout.
+>>>
+>>> The programming guide recommended these bits to be cleared during
+>>> initialization for DWC_usb3.0 version 1.94 and above (along with
+>>> DWC_usb31 and DWC_usb32). The current check in the driver does not
+>>> account if it's set by default setting from coreConsultant.
+>>>
+>>> This is especially the case for DRD when switching mode to ensure the
+>>> phy clocks are available to change mode. Depending on the
+>>> platforms/design, some may be affected more than others. This is noted
+>>> in the DWC_usb3x programming guide under the above registers.
+>>>
+>>> Let's just disable them during driver load and mode switching. Restore
+>>> them when the controller initialization completes.
+>>>
+>>> Note that some platforms workaround this issue by disabling phy suspend
+>>> through "snps,dis_u3_susphy_quirk" and "snps,dis_u2_susphy_quirk" when
+>>> they should not need to.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: 9ba3aca8fe82 ("usb: dwc3: Disable phy suspend after power-on reset")
+>>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>>
+>> This patch is causing system suspend failures on TI AM62 platforms [1]
+>>
+>> I will try to explain why.
+>> Before this patch, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
+>> bits (hence forth called 2 SUSPHY bits) were being set during initialization
+>> and even during re-initialization after a system suspend/resume.
+>>
+>> These bits are required to be set for system suspend/resume to work correctly
+>> on AM62 platforms.
 > 
-> Signed-off-by: Michael Wu <michael@allwinnertech.com>
-> ---
->  drivers/usb/dwc3/core.c | 24 ++++++++++++++++--------
->  drivers/usb/dwc3/core.h |  6 ++++++
->  2 files changed, 22 insertions(+), 8 deletions(-)
+> Is it only for suspend or both suspend and resume?
+
+I'm sure about suspend. It is not possible to toggle those bits while in system
+suspend so we can't really say if it is required exclusively for system resume or not.
+
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 734de2a8bd212..72fddfcbdd0c3 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1434,15 +1434,20 @@ static int dwc3_core_init(struct dwc3 *dwc)
->  
->  	dwc3_config_threshold(dwc);
->  
-> -	/*
-> -	 * Modify this for all supported Super Speed ports when
-> -	 * multiport support is added.
-> -	 */
-> -	if (hw_mode != DWC3_GHWPARAMS0_MODE_GADGET &&
-> -	    (DWC3_IP_IS(DWC31)) &&
-> -	    dwc->maximum_speed == USB_SPEED_SUPER) {
-> +	if (DWC3_IP_IS(DWC31)) {
->  		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
-> -		reg |= DWC3_LLUCTL_FORCE_GEN1;
-> +
-> +		/*
-> +		 * Modify this for all supported Super Speed ports when
-> +		 * multiport support is added.
-> +		 */
-> +		if (hw_mode != DWC3_GHWPARAMS0_MODE_GADGET &&
-> +		    dwc->maximum_speed == USB_SPEED_SUPER)
-> +			reg |= DWC3_LLUCTL_FORCE_GEN1;
-> +
-> +		if (dwc->inv_sync_hdr_quirk)
-> +			reg |= DWC3_LLUCTL_INV_SYNC_HDR;
-> +
->  		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
->  	}
->  
-> @@ -1774,6 +1779,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->  	dwc->dis_split_quirk = device_property_read_bool(dev,
->  				"snps,dis-split-quirk");
->  
-> +	dwc->inv_sync_hdr_quirk = device_property_read_bool(dev,
-> +				"snps,inv-sync-hdr-quirk");
+>>
+>> After this patch, the bits are only set when Host controller starts or
+>> when Gadget driver starts.
+>>
+>> On AM62 platform we have 2 USB controllers, one in Host and one in Dual role.
+>> Just after boot, for the Host controller we have the 2 SUSPHY bits set but
+>> for the Dual-Role controller, as no role has started the 2 SUSPHY bits are
+>> not set. Thus system suspend resume will fail.
+>>
+>> On the other hand, if we load a gadget driver just after boot then both
+>> controllers have the 2 SUSPHY bits set and system suspend resume works for
+>> the first time.
+>> However, after system resume, the core is re-initialized so the 2 SUSPHY bits
+>> are cleared for both controllers. For host controller it is never set again.
+>> For gadget controller as gadget start is called, the 2 SUSPHY bits are set
+>> again. The second system suspend resume will still fail as one controller
+>> (Host) doesn't have the 2 SUSPHY bits set.
+>>
+>> To summarize, the existing solution is not sufficient for us to have a
+>> reliable behavior. We need the 2 SUSPHY bits to be set regardless of what
+>> role we are in or whether the role has started or not.
+>>
+>> My suggestion is to move back the SUSPHY enable to end of dwc3_core_init().
+>> Then if SUSPHY needs to be disabled for DRD role switching, it should be
+>> disabled and enabled exactly there.
+>>
+>> What do you suggest?
+>>
+>> [1] - https://urldefense.com/v3/__https://lore.kernel.org/linux-arm-kernel/20240904194229.109886-1-msp@baylibre.com/__;!!A4F2R9G_pg!Y10q3gwCzryOoiXpk6DMGn74iFQIg6GloY10J16kWCbqwgS1Algo5HRg05vm38dMw8n47qmKpqJlyXt9Kqlm$ 
+>>
+> 
+> Thanks for reporting the issue.
+> 
+> This is quite an interesting behavior. As you said, we will need to
+> isolate this change to only during DRD role switch.
+> 
+> We may not necessarily just enable at the end of dwc3_core_init() since
+> that would keep the SUSPHY bits on during the DRD role switch. If this
+> issue only occurs before suspend, perhaps we can check and set these
+> bits during suspend or dwc3_core_exit() instead?
 
-Bindings are *always* before their users.
+dwc3_core_exit() is not always called in the system suspend path so it
+may not be sufficient.
 
-Best regards,
-Krzysztof
+Any issues if we set this these bits at the end of dwc3_suspend_common()
+irrespective of runtime suspend or system suspend and operating role?
+And should we restore these bits in dwc3_resume_common() to the state they
+were before dwc3_suspend_common()?
 
+-- 
+cheers,
+-roger
 
