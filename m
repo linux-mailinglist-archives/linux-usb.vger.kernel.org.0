@@ -1,197 +1,119 @@
-Return-Path: <linux-usb+bounces-15545-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15546-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 736D2988B07
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 22:01:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5483988DA4
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Sep 2024 04:54:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E87161F2413F
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2024 20:01:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62ED328333E
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Sep 2024 02:54:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DCF11C1AC9;
-	Fri, 27 Sep 2024 20:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B938199EB1;
+	Sat, 28 Sep 2024 02:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OZhhuBD+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PRhx80tP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EF51474B5;
-	Fri, 27 Sep 2024 20:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984DB19994E;
+	Sat, 28 Sep 2024 02:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727467309; cv=none; b=PevSOg1sQIJn81HRxVvpGG5HkrybMCteFTfe+kOpgzDj6iIYPkdpBrWVKLbOKHlqg9A9/yo5u93md051KAbleoghjFqVelEYFbCA+ksPCNThzwVPvc29jytqLb11lxJ5JGahBgjiCTzaMlDyY/iRWq7PkFwAATg2L18J7CeEwZA=
+	t=1727492043; cv=none; b=cPCxI3dyVED/R11Y6ZtEO+itgX8yI1zGIV8Cs8U9yjIoXT4q8a2UhSxa7PjDtdfXlcENPRs41TBbveNL/yzkLiUsdYujjBk8dqta9z+vEVhnqu/1owbMQjhlZ/ip51Xj03HZ98hPLBaeoy1wIGqpsj+uIoU64DZhkUDS/ujwwJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727467309; c=relaxed/simple;
-	bh=11FvQvVXpaqDbgp/b53D1t2JXve7XhlDytqm6uJ6IoA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TKvCCrGMkT1wTNwVn+Fyv2EeEJUahcLPHr+mi2dDs9V0LtEzQ3SCOojhA23eR572tiRV9HnCCOV8eKaNSrSZ+g7wGCaTYfYt9Jg8vkWwtGYsph149/vxBcDx1se6sGDNxyRcjMysjmwOSYzm03UcvIEy54Nct2LJhyyolisWZkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OZhhuBD+; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48RGaE1S026541;
-	Fri, 27 Sep 2024 20:00:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=nhINB1xMacCu66SjMnFSJo
-	NBhLUvyaCk83CZgr3I6+g=; b=OZhhuBD+mh0ZfLjON8dBCtBkFy3VhMQZePgu+C
-	EG5HR0RtIlHt9XZON3nYkWQDDlt7s4q6kYStynF8Q2/ckLzhD+WfseDN+IEfWsMC
-	gZ04fdwpZdawBvPG1+F8m0DoiXHuEhyRVwI3sL0BKP/VFWfFkX0Ye988gAZao5Ow
-	8bj3PgtrMTUXRxFLEPlUvX8vWFJKxxMZQkKQvSQmP0yeX59ppHJLEctTnfkNgz0L
-	E/sHjS82wjas12QN0IzeslD1ZaEn0WJxFE7V71FGrGhChXE32Qj5vXDGanDzJyqE
-	00eeXdS20T9fSGLl8vjmvmEWdWbIExVCF1BmFKfvKYzC2IjA==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41sn5c44js-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Sep 2024 20:00:30 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48RK0T09010834
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Sep 2024 20:00:29 GMT
-Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 27 Sep 2024 13:00:21 -0700
-From: Akash Kumar <quic_akakum@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Jing Leng <jleng@ambarella.com>, Felipe Balbi
-	<balbi@kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>,
-        Daniel Scally
-	<dan.scally@ideasonboard.com>
-CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Akash Kumar <quic_akakum@quicinc.com>
-Subject: [PATCH v5] usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
-Date: Sat, 28 Sep 2024 01:29:31 +0530
-Message-ID: <20240927195931.10404-1-quic_akakum@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1727492043; c=relaxed/simple;
+	bh=L/4ztKUmR2hY9BORg5sinYR4OqxxO8+qKgs09g1Q7iA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rZXr1u92NrK/IzqCXg8rOXjuWr8lC0/MBLB7S5jabJApi6KjFjJf35u32Ekgkm5AMZRR3q42Wg014Ig0/hd5C8iKJbkWGxM0bb0gzc4YqFyyFnIMxJ0lIdZJSrLEd3P9+aShIiFxv4shXInEk7CQlddRieE9Fu//yqPSGKrGKnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PRhx80tP; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727492041; x=1759028041;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L/4ztKUmR2hY9BORg5sinYR4OqxxO8+qKgs09g1Q7iA=;
+  b=PRhx80tPUMxtu/JQSHqMQky7mTB009nEJf2MLbrW34G3mEhwDA5KK/T0
+   HgceKIaZfj0VTbj2ZOhglXbOruDJRNS3tiLFe0tx4OsC8CsZO9CJJOC7H
+   oGqijRpgSf8uzdJz+fJcQTyyVm+CPcjdI+fQZcIaib6GuyK1A7k9GLh0U
+   y7dAlUJdkguTdEjXl54jpJMOEIvFqsqQB/AwgP5y811uryG5RGMvDV58J
+   AVy6uu+jEDeWF7gCRY3uNcrZh0FKCtkj0YRPlAL+Y60izVMgzC/TwoYlK
+   IoOvSS9gqOVIL5aZSZU4fn2EU3XlJ36XdBdddUYkIKG/zJSKIA0pHEbey
+   A==;
+X-CSE-ConnectionGUID: TrmiaAsQTymT0eshmAVG8A==
+X-CSE-MsgGUID: 8onLslsIQaium7bmDT55fQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="26779795"
+X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
+   d="scan'208";a="26779795"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 19:54:00 -0700
+X-CSE-ConnectionGUID: KFmS8c7gQuSlY+Pxl/vwwA==
+X-CSE-MsgGUID: dvlsoNVgQO6q7/UFTPhPlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
+   d="scan'208";a="73513459"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 27 Sep 2024 19:53:57 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1suNal-000MrY-0m;
+	Sat, 28 Sep 2024 02:53:55 +0000
+Date: Sat, 28 Sep 2024 10:53:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Avichal Rakesh <arakesh@google.com>,
+	Jayant Chowdhary <jchowdhary@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: Re: [PATCH v5 8/9] usb: gadget: uvc: add trace of enqueued and
+ completed requests
+Message-ID: <202409281004.YHy0SVaY-lkp@intel.com>
+References: <20240403-uvc_request_length_by_interval-v5-8-2de78794365c@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QQToKkZCANCB7g-XiZKU0QXItQbvwbVG
-X-Proofpoint-GUID: QQToKkZCANCB7g-XiZKU0QXItQbvwbVG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409270146
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403-uvc_request_length_by_interval-v5-8-2de78794365c@pengutronix.de>
 
-The current logic is rigid, setting num_fifos to fixed values.
-3 for any maxburst greater than 1.
-tx_fifo_resize_max_num for maxburst greater than 6.
-Additionally, it did not differentiate much between bulk and
-isochronous transfers, applying similar logic to both.
+Hi Michael,
 
-The updated logic is more flexible and specifically designed to meet
-the unique requirements of both bulk and isochronous transfers. We
-have made every effort to satisfy all needs and requirements,
-verified on our specific platform and application.
+kernel test robot noticed the following build errors:
 
-The updated logic is more flexible and specifically designed to meet
-the unique requirements of both bulk and isochronous transfers. We
-have made every effort to satisfy all needs and requirements, verified
-on our specific platform and application.
+[auto build test ERROR on 68d4209158f43a558c5553ea95ab0c8975eab18c]
 
-Bulk Transfers: Ensures that num_fifos is optimized by considering both
-the maxburst and DT property tx_fifo_resize_max_num for super speed and
-above. For high-speed and below bulk endpoints, a 2K TxFIFO allocation
-is used to meet efficient data transfer needs, considering
-FIFO-constrained platforms.
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Grzeschik/usb-gadget-uvc-wake-pump-everytime-we-update-the-free-list/20240927-074027
+base:   68d4209158f43a558c5553ea95ab0c8975eab18c
+patch link:    https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v5-8-2de78794365c%40pengutronix.de
+patch subject: [PATCH v5 8/9] usb: gadget: uvc: add trace of enqueued and completed requests
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240928/202409281004.YHy0SVaY-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281004.YHy0SVaY-lkp@intel.com/reproduce)
 
-Isochronous Transfers: Ensures that num_fifos is sufficient by considering
-the maximum packet multiplier for HS and maxburst for SS, along with a
-constraint with the DT property tx_fifo_resize_max_num.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409281004.YHy0SVaY-lkp@intel.com/
 
-This change aims to optimize the allocation of Tx FIFOs for both bulk
-and isochronous endpoints, potentially improving data transfer efficiency
-and overall performance. It also enhances support for all use cases,
-which can be tweaked with DT parameters and the endpoint’s maxburst and
-maxpacket.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
----
-Changes for v5:
-Update Calculation for HS and below bulk and isoc eps based on
-suggestion and fixed at 2k for bulk eps considering fifo
-constrained platforms.
+>> ERROR: modpost: "__tracepoint_uvcg_video_complete" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
+>> ERROR: modpost: "__traceiter_uvcg_video_complete" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
+>> ERROR: modpost: "__tracepoint_uvcg_video_queue" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
+>> ERROR: modpost: "__traceiter_uvcg_video_queue" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
 
-Changes for v4:
-Updated commit message as per review comments to clarify that it has
-been tested on specific platforms only and tried best to match all
-expectations.
-
-Changes for v3:
-Redefine logic for resizing tx fifos,added check based on  operating
-speed and used maxp for HS and maxburst for SS  and defined max
-allocation based on dt property.
-
-Changes for v2:
-Redefine logic for resizing tx fifos, handled fifo based on  minimum
-of maxp and maxburts.
-
-Changes for v1:
-Added additional condition to allocate tx fifo for hs isoc  eps,
-keeping the other resize logic same.
----
- drivers/usb/dwc3/gadget.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 291bc549935b..035d49155d57 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -771,15 +771,21 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
- 
- 	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
- 
--	if ((dep->endpoint.maxburst > 1 &&
--	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
--	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
--		num_fifos = 3;
-+	if (dwc->gadget->speed <= USB_SPEED_HIGH) {
-+		if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
-+			num_fifos = 2;
-+		if (usb_endpoint_xfer_isoc(dep->endpoint.desc))
-+			num_fifos = min_t(unsigned int,
-+					  usb_endpoint_maxp_mult(dep->endpoint.desc) + 1,
-+					  dwc->tx_fifo_resize_max_num);
-+	}
- 
--	if (dep->endpoint.maxburst > 6 &&
-+	if (dwc->gadget->speed > USB_SPEED_HIGH &&
- 	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
--	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
--		num_fifos = dwc->tx_fifo_resize_max_num;
-+	     usb_endpoint_xfer_isoc(dep->endpoint.desc)))
-+		num_fifos = min_t(unsigned int,
-+				  dep->endpoint.maxburst,
-+				  dwc->tx_fifo_resize_max_num);
- 
- 	/* FIFO size for a single buffer */
- 	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
