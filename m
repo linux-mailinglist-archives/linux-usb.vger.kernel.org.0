@@ -1,129 +1,80 @@
-Return-Path: <linux-usb+bounces-15570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15580-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 902E99896F7
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2024 20:59:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7FFA989869
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 01:29:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43259B2100D
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2024 18:59:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 131741C20EDF
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2024 23:29:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C89F77DA76;
-	Sun, 29 Sep 2024 18:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA46B17E8E2;
+	Sun, 29 Sep 2024 23:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="CTj3BBL2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D916F073
-	for <linux-usb@vger.kernel.org>; Sun, 29 Sep 2024 18:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55EAB17E00B;
+	Sun, 29 Sep 2024 23:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727636380; cv=none; b=uhtt9jlXlEzwFbkulCSUVmPRuHTd9Xeomt/IqzseESc7xvoXT84Gm94vKSCh4FIY9IZDh3Y1pB/YuLiUyH31byRONzRNqO9953L36h2iZ7dh8rDhfEgWUZlUK4Hi1vDCXuydb3AHFjoUD6JY+02lZ6F2GQJc4O3XBOwHTRaAkdk=
+	t=1727652587; cv=none; b=EY9EpRapf17vwbokUdrbTSK5rs+nO8ASais7XzXo65WWFJ53JaPxVaewaf77/e4XHGEHWMpg28wel3j7HTMawUjl5b6yKdjxAlEkh7Sco9tQVfXyqlUV4qBcWX0zl/txD8pAe33rtRN0dQwN+bMRF9Ct3A/vQ9eJmaObUhabCPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727636380; c=relaxed/simple;
-	bh=7S+aPuRPGUbYnkcvuKpuMWRYvF73uV3ggRsPg/mMG5o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UkTs1hHKo3rnDYGEZI0ZgHRtci2zO2z4U67gQ3EdpWA7fjV2YpSZBTylNwczcYTmrbH9lVSKBJ7Tk04REp3gYJMBeXRa4xe2Di5xbcYsSSXrJVa9ez95tzkpM2KvGvUBN3mZr2Bn4m7HgPY6fSusg8osA4/t1BPnAhMtlFI1Gd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1suz8l-00053t-KL; Sun, 29 Sep 2024 20:59:31 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1suz8l-002RoB-1D; Sun, 29 Sep 2024 20:59:31 +0200
-Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
-	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1suz8k-0029Vj-33;
-	Sun, 29 Sep 2024 20:59:30 +0200
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Sun, 29 Sep 2024 20:59:29 +0200
-Subject: [PATCH v6 9/9] usb: gadget: uvc: dont call
- usb_composite_setup_continue when not streaming
+	s=arc-20240116; t=1727652587; c=relaxed/simple;
+	bh=xSpe1d7cQVMTNSIqoym1nDp/5/hAhTRAAuBR8M6wIKA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rAbN/c8RwIzsoLC2tOoHNu9Bpwu8sMb+naI3BG4XwHZ763qeQqdqNuxiqB8T3l/TBkDWCANikbcDrPhkvLWM59pKjncSjz4AW4N/DUrTW0AEvPBDc3qzvSJ8Zj4gG1r/7Ln/x3VmW5w6aQYgBIyuZhlAEI1KY3Aqoi1kNEpuiBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=CTj3BBL2; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1727652575;
+	bh=xSpe1d7cQVMTNSIqoym1nDp/5/hAhTRAAuBR8M6wIKA=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=CTj3BBL2f55wdDTXiZktnMK3dqSnOUZ7VnxaXoVQw6BD/HL8Q+Youfoqf29Dgn0XR
+	 y8eYvQ2Yh8uZ59+02zUkYEhOcrdYtshyUcQ3xPm2hPaCFN0reqapLHKDwo3Uvgx36M
+	 6LzMUte85tIRNiMS8rB86VYj/4quaCYpOjN6Zu84V5efLu8eVx8iyqeg/AdVyMB71m
+	 vw7PxLGyzBKRRIH+j6gIlQ1Mt+C02diAf/KE3Ar1jyVvg1e7lXoRqlX39sq2V0Yxms
+	 J4nmphqq9ZBoNWsP/g2Z9X9kWJgL1eaj9OX2zhCsU2EkAUvhGwvg/4xfy2R7Q8hLgi
+	 CUy+mifxz5qeQ==
+Received: from [192.168.68.112] (ppp118-210-187-56.adl-adc-lon-bras34.tpg.internode.on.net [118.210.187.56])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id A1CC06511E;
+	Mon, 30 Sep 2024 07:29:32 +0800 (AWST)
+Message-ID: <d63ce770e3f633292b771b46a45ffb46a70e5521.camel@codeconstruct.com.au>
+Subject: Re: [PATCH] usb: gadget: Add check devm_kasprintf() returned value
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Charles Han <hanchunchao@inspur.com>, benh@kernel.crashing.org, 
+	gregkh@linuxfoundation.org, joel@jms.id.au
+Cc: felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org
+Date: Mon, 30 Sep 2024 08:59:31 +0930
+In-Reply-To: <20240929031423.40630-1-hanchunchao@inspur.com>
+References: <20240929031423.40630-1-hanchunchao@inspur.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240403-uvc_request_length_by_interval-v6-9-08c05522e1f5@pengutronix.de>
-References: <20240403-uvc_request_length_by_interval-v6-0-08c05522e1f5@pengutronix.de>
-In-Reply-To: <20240403-uvc_request_length_by_interval-v6-0-08c05522e1f5@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Daniel Scally <dan.scally@ideasonboard.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Avichal Rakesh <arakesh@google.com>, 
- Jayant Chowdhary <jchowdhary@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel@pengutronix.de, Michael Grzeschik <m.grzeschik@pengutronix.de>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1116;
- i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=7S+aPuRPGUbYnkcvuKpuMWRYvF73uV3ggRsPg/mMG5o=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBm+aOSKRNJf2gHyr9LAFLASPoX8Ve4fvtg2MTYI
- kxp29wUvUyJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZvmjkgAKCRC/aVhE+XH0
- q1hyEAC9Ir5VllmE3JkSMXYslr0pvNe7lSHQR4q6gEsFYaviIKdKz/ufdT9Cqnv16+GgzpVRT0F
- TL3M17aKRLreii0Jnc3CvpcBd+YD4htM2s+m5muwx6PrQH1Hi7HsfzEgJcpruWVFsRxxGEobNWg
- l8huJfX7l4aQeg3gq7vcwiGoFfSSN9HxbFAfRAX08TQem77kavX4wzzT72BRvb7UtoiAckRb3TM
- q4jFllw9FJtkfytNOF7W7Y7B9y+q3ZSo5YdHvJ2k2KQ9MsJsQtyqMazrCdY9Wl+Pj2hJkKRTvV6
- v22uXItUzb3GiL0PEX/8XvLO/JA+xYXsoyXUW+2MeVigBRdTQdat2p7+uIDvKIHuprNZv8HX/er
- 8EkJKkGJgFghvVXdAhHH54mefZ7+GD+16A0gSsIQVjnSwZFPFwMqb1x7yaSkcZV34RSXkSn9ErU
- 55svaoCTXsu2nVXTtMNyKUdJAzGeG7j+8d4Jt3WVcELDkgBkLW1Jo2kZaq2dYNo3N5ZYT0tT7LE
- h5D3P4W03/vv8onzx/9Nb0NYktsb06VpEl13JjBY8oFBK/FRTnKbFtv5XSLruEviufe4XXhlsnP
- v3U32J8eqhl0neIRJKkLPIp+Hj58gxoUuMSHfZJB/lzgXzmlVV6sFXq2gc8oV6OzveYqmvDsngn
- 7puAuykchMJ/Exw==
-X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
- fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-If the streamoff call was triggered by some previous disconnect
-or userspace application shutdown the uvc_function_setup_continue
-should not be called and the state should not be overwritten.
+On Sun, 2024-09-29 at 11:14 +0800, Charles Han wrote:
+> devm_kasprintf() can return a NULL pointer on failure but this
+> returned value in ast_vhub_init_dev() is not checked.
+>=20
+> Fixes: 7ecca2a4080c ("usb/gadget: Add driver for Aspeed SoC virtual hub")
+> Signed-off-by: Charles Han <hanchunchao@inspur.com>
 
-For this situation the set_alt(0) was never called and the streaming ep
-has no USB_GADGET_DELAYED_STATUS pending.
+You should consider Greg's bot's reply to your other patch here also:
 
-Since the state then was already updated before we also omit the state
-update.
+https://lore.kernel.org/all/2024092910-mobility-waking-758f@gregkh/
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
----
-v5 -> v6: -
-v1 -> v5: - new patch
----
- drivers/usb/gadget/function/uvc_v4l2.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index ab89f1630acb0..3492855f0fb29 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -546,6 +546,9 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
- 	if (ret < 0)
- 		return ret;
- 
-+	if (uvc->state != UVC_STATE_STREAMING)
-+		return 0;
-+
- 	uvc->state = UVC_STATE_CONNECTED;
- 	uvc_function_setup_continue(uvc, 1);
- 	return 0;
-
--- 
-2.39.5
-
+Andrew
 
