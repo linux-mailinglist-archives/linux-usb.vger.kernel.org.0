@@ -1,129 +1,168 @@
-Return-Path: <linux-usb+bounces-15569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15572-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BFB69894A4
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2024 11:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8D699896F8
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2024 21:00:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B0041C21DD1
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2024 09:55:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D21411C20A5D
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2024 19:00:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644F314A636;
-	Sun, 29 Sep 2024 09:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10127152E1C;
+	Sun, 29 Sep 2024 18:59:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECA4184D;
-	Sun, 29 Sep 2024 09:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC9F71747
+	for <linux-usb@vger.kernel.org>; Sun, 29 Sep 2024 18:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727603753; cv=none; b=oDDgEcgHO0yYksHTKkmzNYqKX7x4arQxDY7XD5UmZHLdsX2xbLj4eZ5S4aCXEFIy3hjFNUOwdx41ht/KZbybA5QZ3OvczW1AQ5GUB07MEUN9ZxRWYDEAQpexqHelJgCKG0yThgwjfepi8uQlsWJFxRNst5cI20WiJ4iRR6i1YtM=
+	t=1727636380; cv=none; b=qu6oqtv2GyTO5Kde7fLRDVJ8iaWYZkjLh4ZNngQQp6fIKxGYRsD36t5trDCTmqZvoEoMnyPPu2NlPno6OXfQ0B4MOqjW2msAkwNSmH96rXxPRwwljoNopHlk7L59JQ2dsEMUk4IRR6N4AvvTIzViBhxMewhB2tPulNF38TFVlcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727603753; c=relaxed/simple;
-	bh=O/2rmvKR+5NtdVY6ebVwSsa91Od+zulBtCCMr/wTOAY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=VDj6Pt1RE2hGlZyU08cqlOv3+4XwenC6W7rRqYKn2TkLZdtvrtQswjmwpFvpyfI20r+UzcN3aYPUwgmgecZp8ZhQ8KD8VUk1l7G+BTtlgOajz3WhoAOY7sg7GFpt55puGgPXKF2QNqSD13V3BWTnajPoKE9u7AbwIQ4wWt47pIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.2.100] (213.87.160.79) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Sun, 29 Sep
- 2024 12:40:27 +0300
-Message-ID: <6591a368-e2aa-fa8b-c3d0-2a438f52c126@omp.ru>
-Date: Sun, 29 Sep 2024 12:40:25 +0300
+	s=arc-20240116; t=1727636380; c=relaxed/simple;
+	bh=DBByY8mttVZ5H5VD0vsSgB1v9bTYRyRgpVk1H6Ih54o=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tjVBzcHoFMZf3S8ZoR8HOIsbtoCnJbHY6Ieynb6oJfhG9H4Hc2cvkYQq1tw84iCVsrKJfF8hmmaTg2wvFaHP3mAho7vuvsH0WXZNNwaVnLON2TC4A//9lYSv9kt0b1oz8aEoc7QuWn67XK5Lbd+zxypRXIDjYBFX5duwLDHOLFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1suz8l-00053m-KL; Sun, 29 Sep 2024 20:59:31 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1suz8k-002Ro3-V6; Sun, 29 Sep 2024 20:59:30 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1suz8k-0029Vj-2u;
+	Sun, 29 Sep 2024 20:59:30 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH v6 0/9] usb: gadget: uvc: effectively fill the udc isoc
+ pipeline with available video buffers and fixes
+Date: Sun, 29 Sep 2024 20:59:20 +0200
+Message-Id: <20240403-uvc_request_length_by_interval-v6-0-08c05522e1f5@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v1] usb: dwc3: Correct some typos in comments
-Content-Language: en-US
-To: Shen Lichuan <shenlichuan@vivo.com>, <Thinh.Nguyen@synopsys.com>,
-	<gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<opensource.kernel@vivo.com>
-References: <20240929075856.11516-1-shenlichuan@vivo.com>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20240929075856.11516-1-shenlichuan@vivo.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 09/29/2024 09:26:41
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 19
-X-KSE-AntiSpam-Info: Lua profiles 188067 [Sep 29 2024]
-X-KSE-AntiSpam-Info: Version: 6.1.0.4
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 34 0.3.34
- 8a1fac695d5606478feba790382a59668a4f0039
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.160.79 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info:
-	omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.160.79
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 19
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 09/29/2024 09:31:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 9/29/2024 7:05:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-B4-Tracking: v=1; b=H4sIAIij+WYC/5XQwWrEIBAG4FdZPNdiRqNJT32PUoLRcSMEs1Uju
+ yx595q9Nofm+A/D9w/zJAmjx0Q+Lk8Ssfjkl1CDfLsQM+lwReptzQQYCCYYp2sxQ8SfFVMeZgz
+ XPA3jY/AhYyx6plqhs22nbC85qcioE9Ix6mCmyoR1nuvwFtH5+6v167vmyae8xMfriNLs03/3l
+ YYy2gsujVCNBM4/b3VpzXEJ/v5ukex+gXMmVLMB2TOnNKBzhyY/Z/JqCqsV49xa0XWHpjhnimo
+ aDeA4FwASD832nNlWEyyqTu1fbc0fc9u2X2MfXbk2AgAA
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Daniel Scally <dan.scally@ideasonboard.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Avichal Rakesh <arakesh@google.com>, 
+ Jayant Chowdhary <jchowdhary@google.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3952;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=DBByY8mttVZ5H5VD0vsSgB1v9bTYRyRgpVk1H6Ih54o=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBm+aOJ6Clr2ObwoIh4xGvNowwqlHTJlni7HlcT/
+ 9RRsLxwcteJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZvmjiQAKCRC/aVhE+XH0
+ q1z6EACFu7AhcbV9rv4dVQsb3lTO7Q3hcTyuvv0Vd14QwcIFbDfmoxPMA1/Y7N6YL61JEpCCzez
+ 2aS+Ao2lmzKtsIwwcRFws8Df+HIPH4Hdc6Ic4MkNRXdb0l6HWaszuos7q9jn6snPWk0rv/6L/xw
+ ZpF+x8EY5Yscu9RXr0h+Lv0tV5svCgxQ8wtNeAG+/Dbiv6IU+y/q8HG54EEkXA81q3WKzqkJTim
+ i0UG6FyE+9NnQC5aqDhBklTIFd9oMbcu6cy5qYWKCT9fpeqL7yuqc4DMBNWB/qTZ+t0z2oouKHs
+ 5pRkwai40ivBVqX8S6sZKcz3q4lQ7dMxQ4zKEwIyvtFtRtcrg5oLrEjXL2BOKfSW3BPcHFYo//H
+ s2t9ibJ8cq7dHj1R5rf0WlRkrPSGZzYpBGrTdFqKPqjgCisaozzlPa2zVR/6VmcDXO8StEynLhm
+ TdDywgDLPJijCWLeSnQIMUP6V2/6lB5kZzypn5evIMsqW6Oh8kjff3zgfv8Xzdw4QdFSzdT1zkB
+ yy4ue+uynWVAZeDptXmT4WbsUW9pF2GpF/ztpdoOHXUcSnLC0t6XLjxPXrva9pE7G4/Cz2gkS77
+ 8hzLpu1l5ZHwH0mbryZunkA9zrP3lKj3gRBiu6Nts3doAuUEzS7yZ9jJ/GhzpDYZvqXAtTl7YrS
+ a+G6uLi7TczdNlQ==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On 9/29/24 10:58, Shen Lichuan wrote:
+This patch series is improving the size calculation and allocation of
+the uvc requests. Using the selected frame duration of the stream it is
+possible to calculate the number of requests based on the interval
+length.
 
-> Fixed some confusing typos that were currently identified with codespell,
-> the details are as follows:
-> 
-> -in the code comments:
-> drivers/usb/dwc3/core.c:1406: feild ==> field
-> drivers/usb/dwc3/core.h:84: boundries ==> boundaries
-> drivers/usb/dwc3/ep0.c:148: issueing ==> issuing
-> drivers/usb/dwc3/host.c:38: temperary ==> temporary
-> 
-> Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
-[...]
+It also precalculates the request length based on the actual per frame
+size for compressed formats.
 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index e0533cee6870..60f7a55e1ea3 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -35,7 +35,7 @@ static void dwc3_power_off_all_roothub_ports(struct dwc3 *dwc)
->  	u32 reg;
->  	int i;
->  
-> -	/* xhci regs is not mapped yet, do it temperary here */
-> +	/* xhci regs is not mapped yet, do it temporary here */
+For this calculations to work it was needed to rework the request
+queueing by moving the encoding to one extra thread (in this case we
+chose the qbuf) context.
 
-   s/is/are/. And maybe "temporarily"? :-)
+Next it was needed to move the actual request enqueueing to one extra
+thread which is kept busy to fill the isoc queue in the udc.
 
->  	if (dwc->xhci_resources[0].start) {
->  		xhci_regs = ioremap(dwc->xhci_resources[0].start, DWC3_XHCI_REGS_END);
->  		if (!xhci_regs) {
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+Changes in v6:
+- fixes in: ("usb: gadget: uvc: add trace of enqueued and completed requests")
+- Link to v5: https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v5-0-2de78794365c@pengutronix.de
 
-MBR, Sergey
+Changes in v5:
+- dropped: ('usb: gadget: uvc: remove pump worker and enqueue all buffers per frame in qbuf')
+- squashed ('usb: gadget: uvc: rework to enqueue in pump worker from encoded queue') and ('usb: gadget: uvc: remove uvc_video_ep_queue_initial_requests'))
+- squashed ('usb: gadget: uvc: set req_size once when the vb2 queue is calculated') and ('usb: gadget: uvc: set req_size and n_requests based on the frame interval')
+- replaced ('usb: gadget: uvc: add min g_ctrl vidioc and set min buffs to 4') with ('usb: gadget: uvc: set nbuffers to minimum STREAMING_MIN_BUFFERS in uvc_queue_setup')
+- added ('usb: gadget: uvc: wake pump everytime we update the free list')
+- added ('usb: gadget: uvc: add trace of enqueued and completed requests')
+- added ('usb: gadget: uvc: dont call usb_composite_setup_continue when not streamin')
+- some patch reordering
+- Link to v4: https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v4-0-ca22f334226e@pengutronix.de
+
+Changes in v4:
+- fixed exit path in uvc_enqueue_buffer on loop break
+- Link to v3: https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v3-0-4da7033dd488@pengutronix.de
+
+Changes in v3:
+- Added more patches necessary to properly rework the request queueing
+- Link to v2: https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v2-0-12690f7a2eff@pengutronix.de
+
+Changes in v2:
+- added header size into calculation of request size
+- Link to v1: https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v1-0-9436c4716233@pengutronix.de
+
+---
+Michael Grzeschik (9):
+      usb: gadget: uvc: wake pump everytime we update the free list
+      usb: gadget: uvc: only enqueue zero length requests in potential underrun
+      usb: gadget: uvc: rework to enqueue in pump worker from encoded queue
+      usb: gadget: uvc: add g_parm and s_parm for frame interval
+      usb: gadget: uvc: set req_size and n_requests based on the frame interval
+      usb: gadget: uvc: set req_length based on payload by nreqs instead of req_size
+      usb: gadget: uvc: set nbuffers to minimum STREAMING_MIN_BUFFERS in uvc_queue_setup
+      usb: gadget: uvc: add trace of enqueued and completed requests
+      usb: gadget: uvc: dont call usb_composite_setup_continue when not streaming
+
+ drivers/usb/gadget/function/Makefile    |   3 +
+ drivers/usb/gadget/function/f_uvc.c     |   2 +
+ drivers/usb/gadget/function/uvc.h       |  13 ++
+ drivers/usb/gadget/function/uvc_queue.c |  26 ++--
+ drivers/usb/gadget/function/uvc_queue.h |   2 +
+ drivers/usb/gadget/function/uvc_trace.c |  11 ++
+ drivers/usb/gadget/function/uvc_trace.h |  60 ++++++++
+ drivers/usb/gadget/function/uvc_v4l2.c  |  55 +++++++
+ drivers/usb/gadget/function/uvc_video.c | 264 +++++++++++++++++++-------------
+ 9 files changed, 316 insertions(+), 120 deletions(-)
+---
+base-commit: 68d4209158f43a558c5553ea95ab0c8975eab18c
+change-id: 20240403-uvc_request_length_by_interval-a7efd587d963
+
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 
