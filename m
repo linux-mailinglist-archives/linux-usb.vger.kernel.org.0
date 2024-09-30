@@ -1,152 +1,99 @@
-Return-Path: <linux-usb+bounces-15585-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15586-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9302F989ACF
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 08:45:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AC54989CB1
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 10:23:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5539D283992
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 06:45:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A3F81C219D6
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 08:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805DD15C144;
-	Mon, 30 Sep 2024 06:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5836E170A0C;
+	Mon, 30 Sep 2024 08:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lbFEEjKs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YBg7DGf6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4AB15383D
-	for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2024 06:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDFE4204B
+	for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2024 08:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727678623; cv=none; b=VD1bw9Bgr03dvCB681YkNbtCgqCwqjvWcz9FuhhbTX/Zd34tzKhwhmHpf2Et+AuF971OI8mduUFr+avVxDN/LqZeqfs/5bM6Iq8jSZczoK63sMIC+wGKH60hSiXPoxD9NApuTnfLPK47uefFv0rKO2NdnSudXxE7iBJajNhG0kw=
+	t=1727684625; cv=none; b=W0TC3p5C4AumJAMKFAOL4eufoAkq6Yf/SjkFkbWXOoCtFVC253ZAx9U1hhXO4gBz7elXKMUNyxGTPFOBKHidkuIa9MelsUDnKfb4BcF4WqcNpEDZCuLVT/KFYCmyf9YDomjTI5XOfd9gFHe+d6kkqIvb+yNz8iHFUSB4l/HsDo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727678623; c=relaxed/simple;
-	bh=W22rFMM5kbxYsbJthyJDo3+5ln33GfHyahSbuwpm1Aw=;
-	h=From:Date:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aprNCzPtxx9k+cR4r/uVkKNDyVU7F8qFq7V2okrbkiFv50QNNjdEpGHHXliyeGGXPWd5R/qTlo0qDqm9VN89ZL0O37pqTDLVVujidaau4hQhBhwLVImrOdz09yMtFbxKx72f9k7747nLtHB06E4HW6HRCIWt6xMwg081GNmLOAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lbFEEjKs; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-718ebb01fd2so569658b3a.2
-        for <linux-usb@vger.kernel.org>; Sun, 29 Sep 2024 23:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727678620; x=1728283420; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ssncNfbvoyXne2wtyTSVe+df367fyD46ctgwaaucNT4=;
-        b=lbFEEjKseGf2KJz5xFYL+BYmiMyyYqclQzT7wIJEfni4oYe+gdllFxO2MsXlhMHp5/
-         oEU7+2/KboKCErV8UP4otLHZZoBzAjSQ3e3Dlo9bKRxcqL9sTGRd1VSbTvbE7dIek94R
-         XPhZYUfnIVCReXO7lKiSqVAaE5lK8fnYgP8T69FvcP2ZpNnq8vvAwbVJnRnUhITp43cb
-         SR8e6gIIYdbP3PEa1+E/FE4cvBcH6ogEC4CeTeollavY7SfIjymMHCHuZv/qd2NzGtuL
-         U8SlcGdCkfGzIjA5AT8Vs+l3oxC8KmxKgmkI7LU/J673vWpm9rUCAyW3VxeTvk1qr5JS
-         7TpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727678620; x=1728283420;
-        h=content-disposition:mime-version:message-id:subject:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ssncNfbvoyXne2wtyTSVe+df367fyD46ctgwaaucNT4=;
-        b=OP73keEoh0L1BdYOqHSRZDVF9xANp3kJ/7DjUJ0SUm1sBtloPh3EAZnnIg7H4FdLeh
-         fDWfN8krRO5ToBw8Xw7qX7lTsJ6gyjojrqGUaRZdh87Bjg9/XZ2dKLY5XVMhQiEt6x++
-         PRgExvfezvwiwAJe/7yqzPR/a8hi2OkctpnwqDrYXiPVfU967u7J7r6jmfKZQGRf8uvW
-         8XKtJOR+rURs9uRJ1kyCktZ4mN4jd8cVDMJQcMWihjxAlqi4OKUxgp6vz78xthmC3HyR
-         93BJ4lgWdGY4ybk06RMklYALR2rm0rkIwmTYNEy19hwRxOvZqifA8etPFlSHMuuOWGpb
-         QxrA==
-X-Gm-Message-State: AOJu0YxTopzrBLP+6iEooDR88x0xbRyuFGILg2FHkqoI+vl0ZqZ5Bd5I
-	RVARUmklVIqvk8+5dVL5a/ZS6RO5E7BtP4ChX/FYm+i+7n2gwrCHKXTnzyU9XBA=
-X-Google-Smtp-Source: AGHT+IHxxAF9+YHqZO5ZJlF8a3qMRGxpgKqfsUF9hE3j9oTofWq0XgrfJRYM0eR+RwHKzNaxrBa5fw==
-X-Received: by 2002:a05:6a21:328a:b0:1cf:4dae:2258 with SMTP id adf61e73a8af0-1d4fa6444d8mr7740213637.2.1727678620113;
-        Sun, 29 Sep 2024 23:43:40 -0700 (PDT)
-Received: from mikeseo-0-1 ([27.122.242.78])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e6db294ebdsm5722579a12.19.2024.09.29.23.43.39
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Sep 2024 23:43:39 -0700 (PDT)
-From: "mike.seo" <mikeseohyungjin@gmail.com>
-X-Google-Original-From: "mike.seo" <mike.seo@lge.com>
-Date: Mon, 30 Sep 2024 15:43:37 +0900
-To: linux-usb@vger.kernel.org
-Subject: [PATCH] r8152: Add mac address pass-thru for lg laptops
-Message-ID: <ZvpImQ_8jh5fyorl@mikeseo-0-1>
+	s=arc-20240116; t=1727684625; c=relaxed/simple;
+	bh=J87psKeoVU00tfUHQ/zu/Lwm1CEI7WfVAmat/vdOqDQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i1HjzvgXNPEMRDJrNt+Wb8h78YppaaLksZDM95OilGsVfzI0raNSJTzMRq2s0XDdEXwD6koQ0EZp5QftdbDANCfQc3v1trLEAwDXzzhgft4YMPdHSFqv5apPmu0/PoRFGUkIoxK16m+rPI1/aoUfNxO4Te/kVp6hNyu4XCz13pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YBg7DGf6; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727684625; x=1759220625;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=J87psKeoVU00tfUHQ/zu/Lwm1CEI7WfVAmat/vdOqDQ=;
+  b=YBg7DGf6oeaA+iWmgjRloUtTKRZvc73UbjYAOf8a51Wtg3WKSGRl4YzM
+   Q+RbLaPlGacqT5h9/dehTqnhF+mZIbUPOlMghIIyUr1MZNRaYKFeMUexO
+   BbJJQyhuK9/UgXDfZxVsUhj0E3vqu5GRxrMbgVK0C0ATzf77njMhaj/XO
+   yOcj61B77ObDMl+c4qTONvmc6moF3YMqmu9oAzVd4Qp5K7k931H3OwFJH
+   xqU9KD8QjOcO6CrzB1uZIN7sohkiF7skQdy3XZBa7LstDkzGk9Drnz+OU
+   wkcCt640xfBEuF0EHbFaZDifpvLBJBr9UdyXkPxp1/zMCrQfXywbrUC6H
+   A==;
+X-CSE-ConnectionGUID: 7mg7+PGeTc2OxdIv/ZF8mw==
+X-CSE-MsgGUID: 9R0HyDw9QqWHOChyGD3JTQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="14383920"
+X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
+   d="scan'208";a="14383920"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:23:43 -0700
+X-CSE-ConnectionGUID: N79CofDoSVqSsbMpVkns9Q==
+X-CSE-MsgGUID: ppWztQD4TeWLeYTJ+5NzMw==
+X-Ironport-Invalid-End-Of-Message: True
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
+   d="scan'208";a="104015900"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa001.fm.intel.com with ESMTP; 30 Sep 2024 01:23:41 -0700
+Message-ID: <4e2775ca-7a5b-4c7c-81c4-4db3778e4568@linux.intel.com>
+Date: Mon, 30 Sep 2024 11:25:50 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] xhci: Change pm_runtime_forbid to pm_runtime_disable
+To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc: Mario Limonciello <mario.limonciello@amd.com>
+References: <20240925161520.2736895-1-Basavaraj.Natikar@amd.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20240925161520.2736895-1-Basavaraj.Natikar@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
- LG gram laptops support mac address pass-thru with usb lan adapter
-rtl8153b-2 devices using Realtek USB ethernet Vendor and Product IDs.
-ACPI objects of the gram laptops are safisfied to -AD.
+On 25.9.2024 19.15, Basavaraj Natikar wrote:
+> Change pm_runtime_forbid to pm_runtime_disable to disable RPM on
+> platforms that don't support runtime D3, as re-enabling it through sysfs
+> auto power control may cause the controller to malfunction. This can lead
+> to issues such as hotplug devices not being detected due to failed
+> interrupt generation.
+> 
+> Fixes: a5d6264b638e ("xhci: Enable RPM on controllers that support low-power states")
+> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> ---
 
-Signed-off-by: mike.seo <mike.seo@lge.com>
----
- drivers/net/usb/r8152.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Added to queue
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index a5612c799f5e..3d4ffc582730 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -29,6 +29,7 @@
- #include <crypto/hash.h>
- #include <linux/usb/r8152.h>
- #include <net/gso.h>
-+#include <linux/dmi.h>
- 
- /* Information for net-next */
- #define NETNEXT_VERSION		"12"
-@@ -949,6 +950,7 @@ struct r8152 {
- 
- 	u32 support_2500full:1;
- 	u32 lenovo_macpassthru:1;
-+	u32 lg_macpassthru:1;
- 	u32 dell_tb_rx_agg_bug:1;
- 	u16 ocp_base;
- 	u16 speed;
-@@ -1724,7 +1726,7 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
- 	} else {
- 		/* test for -AD variant of RTL8153 */
- 		ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0);
--		if ((ocp_data & AD_MASK) == 0x1000) {
-+		if ((ocp_data & AD_MASK) == 0x1000 || tp->lg_macpassthru) {
- 			/* test for MAC address pass-through bit */
- 			ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, EFUSE);
- 			if ((ocp_data & PASS_THRU_MASK) != 1) {
-@@ -9798,6 +9800,19 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
- 	return 0;
- }
- 
-+static bool rtl8152_supports_lg_macpassthru(struct usb_device *udev)
-+{
-+	int product_id = le16_to_cpu(udev->descriptor.idProduct);
-+	int vendor_id = le16_to_cpu(udev->descriptor.idVendor);
-+	const char *board = dmi_get_system_info(DMI_BOARD_VENDOR);
-+
-+	if (!strncmp("LG Electronics", board, sizeof("LG Electronics"))) {
-+		if (vendor_id == VENDOR_ID_REALTEK && product_id == 0x8153)
-+			return 1;
-+	}
-+	return 0;
-+}
-+
- static int rtl8152_probe_once(struct usb_interface *intf,
- 			      const struct usb_device_id *id, u8 version)
- {
-@@ -9872,6 +9887,7 @@ static int rtl8152_probe_once(struct usb_interface *intf,
- 	}
- 
- 	tp->lenovo_macpassthru = rtl8152_supports_lenovo_macpassthru(udev);
-+	tp->lg_macpassthru = rtl8152_supports_lg_macpassthru(udev);
- 
- 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
- 	    (!strcmp(udev->serial, "000001000000") ||
--- 
-2.43.0
+Thanks
+-Mathias
 
 
