@@ -1,197 +1,124 @@
-Return-Path: <linux-usb+bounces-15598-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15599-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB9298AD07
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 21:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80FF398AFD0
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 00:29:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31946282B3D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 19:38:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24AE22836FD
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 22:28:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D2C199E9A;
-	Mon, 30 Sep 2024 19:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1432518891E;
+	Mon, 30 Sep 2024 22:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="LrSlqcwe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nub6gil8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B1114F9D9
-	for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2024 19:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9B9186E56
+	for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2024 22:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727725119; cv=none; b=D9lscb3ldUX06lDw9bwE328vv70/CMAGoSVGnL26KzQCPLIdUEmp+0ftX1kAIdnkyEPhyb2pPLHHIVFptDeCdA4Cd4G3ijQcK4ZvdWitI682WvuxfLYRoMNCNegn65xbI0jaNjUebmR74j8aVwNl26lrXlaLJKzaVWkb2ddiMiI=
+	t=1727735330; cv=none; b=nAZp/scycyjUi2uZIacOSo9dwZyuiErgwC4/j82W/DCopCIt4Tgl51GCFRozSqsHKo7B7p3uH7JB7Dr+lJRh0xgjJqVbqEsrtGIGbOy/jryRDL11AALZqmKKnDV8Mc4NYajtKe7LLGkmrUMUFqzExQURSXCl1t7u1IRm62X57oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727725119; c=relaxed/simple;
-	bh=IXmSMKiXKdaiCbcxxxBg2lE24aJBrS5+YZB+0XqXjMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yd50js317cuIEX2uwZ55jRv2w+b3NuCz6R5W3mfLW0Ja1dEWBMe/aCJoXIdU6XPsg03T0lQNz3oXA0KFn3dISE4epoaYsFbNJSqMG41QDffuTwqK/VbPQuC9zkufSLNHMLekRGX2dWsSR1X/YOUmk/RdpAlX069cbB69/adNSjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=LrSlqcwe; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6d6891012d5so40265467b3.2
-        for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2024 12:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1727725117; x=1728329917; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Igar7HUQ0HxrMn2e/eYcDg+h6hVnRcsuB41ALV0g+i4=;
-        b=LrSlqcweExmFzZgjEYQnTDLcg/IxqsSN/0Zb8ldf5IF073cPy6+bgOSdyGgnFy0NjJ
-         A1WZJbA9b0fx1jZg6+B2tZPZkOHrWCRkZzOzeVxqki+IJRr+6Ab6YFCjfHegEkj2KAfL
-         +l7d2Ygq90eex9gShwVUmtMS26IHS4WYQam/utL3RnEz1/WuiTBkvX8DAbBQcC1z/ei3
-         aifHmWs/GGL/UgYHPJcOjLprtDj+hVJQNexgDm+mdSz/JruwGSJV2W9EkacVYGkCyQSF
-         kpUbMGKKXXtNIiUvu+e2sgXeHJ/ySf88VektL6Ac1b6UkBaxX/e3LdfkirQD6V7E6Oco
-         Etiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727725117; x=1728329917;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Igar7HUQ0HxrMn2e/eYcDg+h6hVnRcsuB41ALV0g+i4=;
-        b=pWiPp95FJZkpWPO2MCbkKmljXndAFoALnOQ8oAzdJk+EkE+Jgg6rYx7B/+Fkq53BWw
-         NrHBJqbeVTggodC4XKYOSqg5pipn7jmG6Te+iJ2g73Fu9lwt4myb2v9CJ+Ei09ehgR/y
-         r8q0gmBUL2lOEmeNBFYVxyg5nXwX1L7mXucn1XfXKWz9dkP4CBMfaJD/HBY+u1cVo7KV
-         EAvKbIo2lLa/taZTLgf2QvyGiYOAVMcZw2IErB1QTk1CSjG0K3gESGo3E+t6wmZvo1Lb
-         MhQDDTHokgsRBc7tK8r2l6eAqdaUJYIMJT/lUQT7wUDEg6tjOsxIWRykiFjbiwypQNPE
-         1P3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVC5Yjj/yfXn6eTSiqv2zcyIWuDJr9aholvD68m31j5SnidfXgErCAW6FcBULSZDAvft5jUXZNKJhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJXaKz7/bEk0XTtZGSXyJSI5CwCz3NCCgT00jHlvMCWvjjgWWb
-	8y1/qcYoguFlWhiG98h6u95q6UUB7Ou75I7IvgtB1FQMniPY1R4/VCHuwwI3Zg==
-X-Google-Smtp-Source: AGHT+IF34IrJOIZeVqWCJ7ovVHULCc7AXBhsCuxkTeKum0GTFJS3HFjhLYri9Qs5KtKystdVYdg0ZQ==
-X-Received: by 2002:a05:690c:85:b0:6b9:d327:9ad6 with SMTP id 00721157ae682-6e24760050cmr98338037b3.33.1727725116931;
-        Mon, 30 Sep 2024 12:38:36 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::5638])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cb3b60f8f4sm42545376d6.33.2024.09.30.12.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 12:38:36 -0700 (PDT)
-Date: Mon, 30 Sep 2024 15:38:32 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: dengjie <dengjie03@kylinos.cn>
-Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	xiehongyu1@kylinos.cn, duanchenghao@kylinos.cn, xiongxin@kylinos.cn
-Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where
- task resumption fails due to USB status
-Message-ID: <85105e45-3553-4a8c-b132-3875c4657c4b@rowland.harvard.edu>
-References: <20240923100553.119324-1-dengjie03@kylinos.cn>
- <20240925025041.149206-1-dengjie03@kylinos.cn>
+	s=arc-20240116; t=1727735330; c=relaxed/simple;
+	bh=7NwUkH1tT98GV1cI9nMb4lF//erX/dOlelGNl3SbDX4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SvbZHjHVB6jmWY8f4aZA4ifCnhtzf8dC7vpzW/UUXvd8HGGE9X/e+BnsKxVkEVeCmD4us26OwTetp8E1M0qbEP0Wr1oknsoCJcd9WI2gu4qTuHWQsnLf4cIePbJpynPDfa2Y3dXVAM/4DLaV0H6PmDS9+s58ZPlmxpDlu7ZOy08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nub6gil8; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727735328; x=1759271328;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7NwUkH1tT98GV1cI9nMb4lF//erX/dOlelGNl3SbDX4=;
+  b=nub6gil8oFbucHFeGgi0PJTg2UecHxXAnGvbHH5spDYgDxCIPcybS9rK
+   bQMeRmVq3AivRMVUtFA+VqhKfOV3UVtNLmcWHhkcl23H4RV/6O4k/gmJf
+   sdnG1PApBctDHmLXmiR1zpnfrQckT34OHdgZbdc02QCgyh6KokDEq6jIT
+   baC09b99XRmWQMSIW2D05+NjOk4jMf9vyjSm0AjIZ9uhs6lQirMp5hZvm
+   ORwbbga1BRT1ZKoc0z56MomVEtcMtMudrYoQ2HRkGfWeAGx1H+MD7GZQP
+   rtWh2pfqG7rtYpx9Ta3JPR4Lftcc9Tm7uUf7y5TiaY4ZMZw9AB2pzFo/1
+   g==;
+X-CSE-ConnectionGUID: L2qUksVCRSe2NSGSok1MYA==
+X-CSE-MsgGUID: hm8wiaxBQ92BCDGL+rib+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="30734333"
+X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
+   d="scan'208";a="30734333"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 15:28:47 -0700
+X-CSE-ConnectionGUID: oW+7MxraTB+SDSP+57Kb0Q==
+X-CSE-MsgGUID: 4uM9wuABSkWOh9plUghnNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
+   d="scan'208";a="73494550"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa009.jf.intel.com with ESMTP; 30 Sep 2024 15:28:46 -0700
+Message-ID: <028c8515-3e7a-4862-9a8f-3885405511a0@linux.intel.com>
+Date: Tue, 1 Oct 2024 01:30:54 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240925025041.149206-1-dengjie03@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] xhci: Change pm_runtime_forbid to pm_runtime_disable
+To: Johan Hovold <johan@kernel.org>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, Mario Limonciello <mario.limonciello@amd.com>
+References: <20240925161520.2736895-1-Basavaraj.Natikar@amd.com>
+ <ZvqgINVgkYf_r6hY@hovoldconsulting.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <ZvqgINVgkYf_r6hY@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-I'm very sorry it has taken so long for me to respond to this...
-
-On Wed, Sep 25, 2024 at 10:50:41AM +0800, dengjie wrote:
-> Reproduction of the problem: During the S4 stress test, when a USB device is inserted or
-> removed, there is a probability that the S4 wakeup will turn into a reboot.The following
-> two points describe how to analyze and locate the problem points:
+On 30.9.2024 15.57, Johan Hovold wrote:
+> On Wed, Sep 25, 2024 at 09:45:20PM +0530, Basavaraj Natikar wrote:
+>> Change pm_runtime_forbid to pm_runtime_disable to disable RPM on
+>> platforms that don't support runtime D3, as re-enabling it through sysfs
+>> auto power control may cause the controller to malfunction. This can lead
+>> to issues such as hotplug devices not being detected due to failed
+>> interrupt generation.
+>>
+>> Fixes: a5d6264b638e ("xhci: Enable RPM on controllers that support low-power states")
+>> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+>> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+>> ---
+>>   drivers/usb/host/xhci-pci.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+>> index dc1e345ab67e..39ab32fed3f4 100644
+>> --- a/drivers/usb/host/xhci-pci.c
+>> +++ b/drivers/usb/host/xhci-pci.c
+>> @@ -635,7 +635,7 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>>   	pm_runtime_put_noidle(&dev->dev);
+>>   
+>>   	if (pci_choose_state(dev, PMSG_SUSPEND) == PCI_D0)
+>> -		pm_runtime_forbid(&dev->dev);
+>> +		pm_runtime_disable(&dev->dev);
 > 
-> 1. During the boot stage when S4 is awakened, after the USB RootHub is initialized,
-> it will enter the runtime suspend state. From then on, whenever an xhci port change
-> event occurs, it will trigger a remote wakeup request event and add wakeup_work
-> to pm_wq, where the subsequent RootHub runtime resume process will be handled by pm_wq.
+> This looks broken. Runtime PM enable/disable should always be balanced,
+> and unlike forbid(), disable() doesn't make sure that the device is
+> actually active.
 > 
-> xhci runtime suspend flow：
-> S4 boot
->    |->xhci init
->        |->register_root_hub
-> 	   |->hub_probe
-> 	       |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
-> 
-> xhci runtime resume flow ：
-> xhci_irq()
->     |->xhci_handle_event()
-> 	|->handle_port_status()
->    	    |->if(hcd->state == HC_STATE_SUSPENDED)
-> 		 |->usb_hcd_resume_root_hub()
-> 		    |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
->   		    |->queue_work(pm_wq, &hcd->wakeup_work)
-> 			|->hcd_resume_work()			       /* hcd->wakeup_work */
-> 			    |->usb_remote_wakeup()
-> 				|->callback = RPM_GET_CALLBACK(dev, runtime_resume)
-> 				    |->usb_runtime_resume()            /* usb runtime resume  */
-> 					|->generic_resume()
-> 					    |->hcd_bus_resume()
-> 						|->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
-> 						  /* wakeup pending signal to be clear */
-> 
-> 2. However, during the quiesce phase of S4 wakeup, freeze_kernel_threads() will freeze this pm_wq,
-> and between freeze_kernel_threads() and dpm_suspend_start(), there exists a very time-consuming
-> S4 image loading process. This leads to a situation where, if an xhci port change event occurs
-> after freeze_kernel_threads(), triggering the wakeup pending signal to be set,but it cannot
-> be processed by pm_wq to clear this wakeup_pending bit, it will result in a subsequent
-> dpm_suspend_start() where USB suspend_common() detects the wakeup pending signal being
-> set and returns an -EBUSY error, interrupting the S4 quiesce process and reverting to a reboot.
-> 
-> S4 wakeup
->     |->resume_store
-> 	|->software_resume()
-> 	    |->freeze_kernel_threads()		/* will freeze pm_wq */
-> 	    |->load_image_and_restore()
-> 		  |->swsusp_read()    	        /* S4 image loading: time-consuming .
-> When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
-> However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
->    		  |->hibernation_restore
-> 			|->dpm_suspend_start(PMSG_QUIESCE)
-> 			    |->hcd_pci_suspend()
-> 				|->suspend_common()
-> 				    |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
+> If you want to prevent the device from runtime suspending you can just
+> increment the usage counter here in probe() and drop it in remove().
 
-At this point, do_wakeup is supposed to be 0 and so the "return -EBUSY" 
-error should not occur.
+Good point.
+Adding a pm_runtime_get() here, and pm_runtime_put() in remove sounds much better
+The PCI code should have set it active and enabled it already.
 
-You can see that this is true by reading choose_wakeup() in 
-drivers/usb/core/driver.c.  At the start of the function it says:
+Dropping this
 
-	/*
-	 * For FREEZE/QUIESCE, disable remote wakeups so no interrupts get
-	 * generated.
-	 */
-	if (msg.event == PM_EVENT_FREEZE || msg.event == PM_EVENT_QUIESCE) {
-		w = 0;
-
-and at the end it does:
-
-	udev->do_remote_wakeup = w;
-
-Therefore the problem you are describing should not happen and your 
-patch should not be needed.
-
-Now maybe things are't working the way they are supposed to.  If that's 
-so then you should submit a patch fixing the code so that it _does_ work 
-this way.
-
-For instance, in suspend_common(), do_wakeup is derived from 
-device_may_wakeup(rhdev), which is determined by 
-rhdev->power.should_wakeup -- see the definition in 
-include/linux/pm_wakeup.h.  Maybe this flag isn't getting cleared 
-properly.  (In fact, at the moment I don't see where that flag gets set 
-or cleared at all...)
-
-> Below is a description of the countermeasures taken to address this issue:
-> 1. Considering the restore process that occurs after the quiesce phase during S4 wakeup,
-> which essentially resets all root hubs,checking this wakeup pending status in USB suspend_common()
-> during the quiesce phase is of little significance and should therefore be filtered out.
-> 
-> S4 wakeup restore phase
->     |->dpm_resume(PMSG_RESTORE)
-> 	|->hcd_pci_restore()
-> 	    |->xhci_resume()		       /* reset all root hubs */
-
-The wakeup-pending status is checked only if wakeup is enabled.  And 
-during the quiesce phase, wakeup is not supposed to be enabled.  So 
-nothing needs to be filtered out.
-
-Alan Stern
+Thanks
+Mathias
 
