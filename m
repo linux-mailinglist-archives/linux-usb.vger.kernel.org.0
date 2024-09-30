@@ -1,71 +1,100 @@
-Return-Path: <linux-usb+bounces-15595-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15596-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 104E398A493
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 15:20:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BBAC98A59A
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 15:42:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41D3A1C23166
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 13:20:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1C3B2833FD
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2024 13:42:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A99F190674;
-	Mon, 30 Sep 2024 13:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1EB717CA04;
+	Mon, 30 Sep 2024 13:41:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MsCBkIzj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYJO/IKp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16BF19049E
-	for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2024 13:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A3915C15E;
+	Mon, 30 Sep 2024 13:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727702346; cv=none; b=GQhJMWCAs+f3SRTQifdL+E7OmS4s6ybzFVEqqFDHKh0Ik5mRg4bhzUjLtalK2P0Xfaowyo8x1ZlY5GI/ciAwlpyUzQCatdd24XegTJnkDChEi8eRwA71tqxetJ2T5br/xNTVLZSPT/edwmDu5vSOz3hwX5/FXLdlg/NHnQX+W/c=
+	t=1727703714; cv=none; b=hYTyAqkQL/RnHfhNlPfSP1VSAPJRpPO/o43Y2mIoYDry0I7NJq/lzz2UK7iSHFPfNg8kNO6h61htNKE2s3Hn07AHapBX6388ioHzVSo+vQyAT8UBaNTtuonlOlAKjjBGpl1YqNO7Z2CXbl7VlMLx1VP0idIYpUCW4J35MM1JDG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727702346; c=relaxed/simple;
-	bh=hFuCtYwBu/1Qdw61marcwHu8i9uwDeekCGNm0+UL5OI=;
+	s=arc-20240116; t=1727703714; c=relaxed/simple;
+	bh=kkTbjYmmUtL4o0lZr/q/BfPDhvqxwi4Q0kpgSrt4B54=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=taFGnWNqiG9r6fU38ke2leC6JJK6d3mZI3vWXYWw/kyqKI09Q6kAwplElzjPoCNpmFb0R/3KKOZjc+pyjvZvZDChzhXnkAAiRkH4k2WYjGuKug7MrN7FO3GI8wO6u5jYnVrkOTTMcZOa29BT0BLe9BYLDLuq4yYW7IS6iXXJdlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MsCBkIzj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F12DEC4CED2;
-	Mon, 30 Sep 2024 13:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1727702346;
-	bh=hFuCtYwBu/1Qdw61marcwHu8i9uwDeekCGNm0+UL5OI=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=EXg9wF/y2wafSHwhI8cXgDl4+ZNe79WP5p8d7vDYpJTEUnkdRvYWu1Ny/PIbIjvF9cbXjYzJoFzyYrK11mbLRKQs3VmDUmAloZTn4fZSZCMoS+zV0CeD1NwFHXO6yCdKNfUGuNnNRJrTHJqCMfoUdN5m3VhNaUhzTG2hzeP1BBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYJO/IKp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C107C4CEC7;
+	Mon, 30 Sep 2024 13:41:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727703713;
+	bh=kkTbjYmmUtL4o0lZr/q/BfPDhvqxwi4Q0kpgSrt4B54=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MsCBkIzj0sBcqzjkEOScdnMKnCEljkiyXKa6Lg3vre/Ydutgj8nlRlTPkgWaU6dsH
-	 hx2tAvZL9Fu0Mc3YgARBt/uquTnvXSvjrOq6LkvHaZ2OrcYZF36IFiWNAdHdZZqNES
-	 JwnIf//7NDHUYijvUy6zzoR6PF7XtR3fPtcYCwjg=
-Date: Mon, 30 Sep 2024 15:19:03 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: "mike.seo" <mikeseohyungjin@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH] r8152: Add mac address pass-thru for lg laptops
-Message-ID: <2024093038-tameness-vastness-9a76@gregkh>
-References: <ZvpImQ_8jh5fyorl@mikeseo-0-1>
+	b=QYJO/IKpnHnqxuBvWEZyRrcWjYWYASGSyvReh6IYUyAOGwvUA0AbzUh1a1Wb9u/nF
+	 ymAclTW+qvRnOUHODtsoM4pzXfJLUpKd6HYoDMVNulv9+AQmUBkk7xXxN3t6r49HWp
+	 CMdl0/kVmMxK3Q9GT+s3PuQNsip4DDkZXX0e9i4q9nvsYZNkk3/hQewWlocQT9cDfL
+	 rFwckZKo9C38qkyVOXVPNrtEX+otW0g08F6F4IqpiPoQPkHDgtlbcp96NqvHoYsJTq
+	 GpcjK+PEHbWHzQ6tszEdA9fM6AfPynRehvgNRBrQMRtZuXjn1shwZfccrQ3jqE3O+d
+	 lJFfo9r4ONCPA==
+Date: Mon, 30 Sep 2024 14:41:46 +0100
+From: Conor Dooley <conor@kernel.org>
+To: pierre-henry.moussay@microchip.com
+Cc: Linux4Microchip@microchip.com,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [linux][PATCH v2 02/20] dt-bindings: usb: add PIC64GX
+ compatibility to mpfs-musb driver
+Message-ID: <20240930-retake-limpness-e4146e07b5cd@spud>
+References: <20240930095449.1813195-1-pierre-henry.moussay@microchip.com>
+ <20240930095449.1813195-3-pierre-henry.moussay@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ThiFJzVa0Ijeb/Ca"
+Content-Disposition: inline
+In-Reply-To: <20240930095449.1813195-3-pierre-henry.moussay@microchip.com>
+
+
+--ThiFJzVa0Ijeb/Ca
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZvpImQ_8jh5fyorl@mikeseo-0-1>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 30, 2024 at 03:43:37PM +0900, mike.seo wrote:
->  LG gram laptops support mac address pass-thru with usb lan adapter
-> rtl8153b-2 devices using Realtek USB ethernet Vendor and Product IDs.
-> ACPI objects of the gram laptops are safisfied to -AD.
-> 
-> Signed-off-by: mike.seo <mike.seo@lge.com>
+On Mon, Sep 30, 2024 at 10:54:31AM +0100, pierre-henry.moussay@microchip.co=
+m wrote:
+> From: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>
+>=20
+> PIC64GX musb is compatible with mpfs-musb, just update compatibility
+> with fallback
+>=20
+> Signed-off-by: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>
 
-Please use your name, not your email alias, for this.  It also does not
-match your "From:" line, so that means we can't take it either way :(
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-thanks,
+--ThiFJzVa0Ijeb/Ca
+Content-Type: application/pgp-signature; name="signature.asc"
 
-greg k-h
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvqqmQAKCRB4tDGHoIJi
+0oneAP9p9DNiQsEO0OewaLjqzJNAamer1DJKYTVugtYz1mJ1GwD+JCtZJC6yIA3N
+S0GXaSJQBlLlCemMVODAO4MziXC4HQU=
+=xPIy
+-----END PGP SIGNATURE-----
+
+--ThiFJzVa0Ijeb/Ca--
 
