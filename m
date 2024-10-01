@@ -1,53 +1,59 @@
-Return-Path: <linux-usb+bounces-15604-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15605-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AD5C98B584
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 09:30:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C38AF98B60D
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 09:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C22DFB2141E
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 07:30:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 866C6281730
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 07:47:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449AB1BD4E5;
-	Tue,  1 Oct 2024 07:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Q2EtqIs1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BE1E1BDA8F;
+	Tue,  1 Oct 2024 07:47:14 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DDE1ACDE3;
-	Tue,  1 Oct 2024 07:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE691BBBCB
+	for <linux-usb@vger.kernel.org>; Tue,  1 Oct 2024 07:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727767799; cv=none; b=cW6rVYJeqkngm4clo1KQsUyJ1kqfg/UK4xLfvD9RBWirE+BjMnqjTaZZFFMK/ZhW+ZyJ092ar96Ncv8XURBJk4UndBTXogfTPJCybiM9vJFKmxP3ari0MpabFSdaqm8OXpeLpdYbZY6PVXkmLO9x6r5oaQI9xtF7KLZRdooJYRg=
+	t=1727768833; cv=none; b=gRB9E12psJh5T4R4Gugaw9MnUeGDyMjScKF3Syj3iNa6HsRLlF4M9T/bmYvMs+mH2ptsGkPJq9+1rQJxMEPUNUHnci32G+mqWRXGKs9SbxmceRT/enH3RYmzDw+IdwfWOWBLQQlaRVhQe/jpuawyX/IdsZtUhNrSnFmCryilNTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727767799; c=relaxed/simple;
-	bh=yT84ekL+hl6tF8lC3SdrEWmhtB1mVIHa8fq/Svq3ucs=;
+	s=arc-20240116; t=1727768833; c=relaxed/simple;
+	bh=kqqvKQHwGcK5dvxhg4sDEbtgeaTSZPxRLhJEhl+Zghk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=slCrikMVnQ5Q9QzH2YwvmcghzrsVEGDMRDYzh1Fl9jGCLuNgqNd9NnCFttss5oFdENmZ/9y1vk5N3jIQErOURftTaJkFt+04uX24Eh7LalbrXvWE4mm6IUGbxfApai8ryG06fr0iRk/hstVivS1sWiKqJQA4YIgGwH4vw9j/ikg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Q2EtqIs1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B23BC4CEC6;
-	Tue,  1 Oct 2024 07:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1727767799;
-	bh=yT84ekL+hl6tF8lC3SdrEWmhtB1mVIHa8fq/Svq3ucs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q2EtqIs1WYE/BHq4SWprvzdvlRDrGNPWuSoHP2C4y6o8ixX1T6vFko2r6U0AVXlC/
-	 0NGeaQbgNM3tp+Db0uvpKPKujTCWHpARFabwdFlWNLqoqkQlWv+X14CZug9U56sbJZ
-	 M2RAp852UkC0rYslRHvSUnrWzmnrvfNsoMajsfdI=
-Date: Tue, 1 Oct 2024 09:29:56 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Marco Felsch <m.felsch@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ffn7K59Qi/U3y50jxdNv6bkVFf/1x+ny98vRuQk7palHmGuxF2DIB1T+bwscBHlviZzvPQWeR4p/XC0nPfKbcOiYhsB9nDfu5T36BuwvBokFNagbZKK5/+Jv8m4h76oQRzzKDqVX20m2g7skONKiU0FG6U7iF6UWifbMG5NfCME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1svXb6-00022d-R1; Tue, 01 Oct 2024 09:47:04 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1svXb6-002pFI-Cu; Tue, 01 Oct 2024 09:47:04 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1svXb6-004u4N-0z;
+	Tue, 01 Oct 2024 09:47:04 +0200
+Date: Tue, 1 Oct 2024 09:47:04 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Rob Herring <robh@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
 	Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Subject: Re: [PATCH 0/3] USB-Serial serdev support
-Message-ID: <2024100109-maker-ravine-7c65@gregkh>
+Message-ID: <20241001074704.kb4dus7rdrfc4v5c@pengutronix.de>
 References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
  <20241001072453.3xv5sqxaj4zjprnz@pengutronix.de>
+ <2024100109-maker-ravine-7c65@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,21 +62,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241001072453.3xv5sqxaj4zjprnz@pengutronix.de>
+In-Reply-To: <2024100109-maker-ravine-7c65@gregkh>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Tue, Oct 01, 2024 at 09:24:53AM +0200, Marco Felsch wrote:
-> Hi,
+On 24-10-01, Greg Kroah-Hartman wrote:
+> On Tue, Oct 01, 2024 at 09:24:53AM +0200, Marco Felsch wrote:
+> > Hi,
+> > 
+> > gentle ping as this is series is two months old now.
 > 
-> gentle ping as this is series is two months old now.
+> And it was rejected as serdev does not support hotplug which of course,
+> usb-serial does.
 
-And it was rejected as serdev does not support hotplug which of course,
-usb-serial does.
+I just read concerns which I tried to explain/argue but didn't saw it as
+rejected.
 
-So until serdev is fixed up to handle that correctly, this is not going
-anywhere, nor should you want it to as then you would be in charge of
-code that does not work properly :)
+> So until serdev is fixed up to handle that correctly, this is not going
+> anywhere, nor should you want it to as then you would be in charge of
+> code that does not work properly :)
 
-thanks,
+Sure as always :)
 
-greg k-h
+Regards,
+  Marco
 
