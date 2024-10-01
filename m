@@ -1,212 +1,184 @@
-Return-Path: <linux-usb+bounces-15614-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15615-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C84C098BF00
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 16:07:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18E4A98C144
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 17:12:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DF97B2320E
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 14:07:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F2861F21B3C
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 15:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25A021C6898;
-	Tue,  1 Oct 2024 14:07:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C0B1C9DF7;
+	Tue,  1 Oct 2024 15:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDrL9gYR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhXZBah1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FEC17FD;
-	Tue,  1 Oct 2024 14:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224601C5782;
+	Tue,  1 Oct 2024 15:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727791624; cv=none; b=Wt/DCDmXUj9Uj8xcsw4h8PxjSMEIgqAKjzLC1rZ77L7H8ODuQaxtXMTN0aqwl3SY/XlzVdT9UlXXQb6wvmE0rqJMGEW08knglbKWSIcHkupchDP+uUQwnVdAtWZ1E0wup0whnK3wefSpaDojvAJmAERyPfaQJIGPq7tlGz7ejY8=
+	t=1727795545; cv=none; b=J3k7cVXB0tjq6SQSVrw5Xf1jWClURgJPxPytafDaNvs7p7eVpvXySHAtwvyZj8zFsraZzWC0A3kI2YuU1QAKWmeoM/kKLRZ3NSKFX1URoVZOVzdWoZeGSmJRnSflRvS7jWdo3GdPa4UiNZiqdPV8q5afoE4LWLwLSth24iJKhWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727791624; c=relaxed/simple;
-	bh=JRFZrG/5NUng0sccWPPm8RiEYNy1MorF0Bs/T0dYICg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dQ/7yyOS+QKIdmDYv3t8e7n4p13kvZZOXavA9nI4LpXqcBCvUNoP5XhQzmqLNcdwk48ipD2O7OfRZEyBlJaFAzW7SDpSJ4BRiGLiwJRr1P38lTE8koCNvTRZ1299IAHkqHiIa2rBqWzYkILTYKjm2IyRkgSCYfm6NcKERj0e7dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDrL9gYR; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42cbc38a997so33809775e9.1;
-        Tue, 01 Oct 2024 07:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727791621; x=1728396421; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JRFZrG/5NUng0sccWPPm8RiEYNy1MorF0Bs/T0dYICg=;
-        b=jDrL9gYR7zO6htQ73n3lGKmNgWcD88Pocmp84ehPNlh6RJb+5IGXtxUuEhPlt2O+Jo
-         tp8z2HBdkyvLtoPK+WrCbY/7DukG7CguJewT4Z8rY2+YBggWZLbzVAwl0mdo/NwE+ky8
-         HDR8NWJPdFW4aFKVr84JNQEdkl0Ktf5RBeuMWe9OGVYNr/t6jezW1NlZkHICWwyVJvok
-         fc18dNfSJm+oCLx96tphKQni0xv6nnamPu4Cclzo22t4+u+myVZ3Csa/vjbyInJig06y
-         R74K73dHz1vD2UO+IyQXkWSYYwvK3sYhpeAUz2DU0ihhWHH5lOBlJ9WT58YVF+yBsmlO
-         dh3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727791621; x=1728396421;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JRFZrG/5NUng0sccWPPm8RiEYNy1MorF0Bs/T0dYICg=;
-        b=d6rdDov3bhGbn6pV8HtwzfLNGPv9s26J8torPnKp/zLx5g5r/w/DUPttpNm2DGz99V
-         jjXPQ/1q+qXCmMU7y8nkt06zXPhMm/8Tg4HglWwP3/a81E/Is06nw1bWrxtCpVbhiqO3
-         1NT5sU8BLojUeAQJW9lwar//Eaty1pj/waFWP0O0jrMf7I7to03dpeVDlwv8lPlYCwx+
-         Z/QBVJ3u9MqHbn/D5TLy+z0JKySJL/uvnv2giJGPoN+oq/0sL4uD0z9ruCyJ7NSZDW99
-         CFnOqvZaOXz/TpRfthgwEuwTylIfR/3y9coLU9a0kZ/vLXdUoBWwkgqlg6a7dWme43jO
-         Upzg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4tbwT4UFxeRsKXTsWcg/BopMIncFyuYTLKmWCPKJRAVjYOZu7WLRU3r7aw52OediNdk0LQz2y4r1y@vger.kernel.org, AJvYcCXNFRB6u3jK84IHXymNirJLq6KXf9nVJeYk+iynRQUGhkqERThSlKR1OxWVHNNpZdQ9NY9Qo/KG3CnxGuE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX99P16FYPbNRFAJIApwW6SUhUVbYYpoOFOy9y7MpRgJhwoJlv
-	Y4pd8mU30/FYCNdU7tSqdxyaA1oNl1NFhzS96Fpi/I0kdFH4B90D
-X-Google-Smtp-Source: AGHT+IFoFXZDGK/A4lVFzGr8ixo72USnBmWQQQQlE+tQLDgXYafG8FOKyH14msFuzbu+dzjkvf0I5A==
-X-Received: by 2002:a05:600c:3504:b0:42c:b68f:38fb with SMTP id 5b1f17b1804b1-42f7133c837mr22807575e9.7.1727791620563;
-        Tue, 01 Oct 2024 07:07:00 -0700 (PDT)
-Received: from [192.168.216.101] (public-gprs35668.centertel.pl. [91.94.11.108])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e969ddb1fsm181483205e9.3.2024.10.01.07.06.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2024 07:07:00 -0700 (PDT)
-Message-ID: <2f91f72fad8a71164957ba359b26a4a2d8b05ed6.camel@gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: u_ether: Use __netif_rx() in
- rx_callback()
-From: Hubert =?UTF-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ferry Toth
- <ftoth@exalondelft.nl>, Hardik Gajjar <hgajjar@de.adit-jv.com>, Kees Cook
- <kees@kernel.org>, Justin Stitt <justinstitt@google.com>, Richard Acayan
- <mailingradian@gmail.com>, Jeff Johnson <quic_jjohnson@quicinc.com>, 
- "Ricardo B. Marliere" <ricardo@marliere.net>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Toke
- =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 01 Oct 2024 16:06:57 +0200
-In-Reply-To: <20240927141200.xMZ53xm5@linutronix.de>
-References: <155be9e56e650dd7f7baf1c7e193e1a3d85e7141.camel@gmail.com>
-	 <20240917143618.jPgAwF3M@linutronix.de>
-	 <1be4dce841c6e5de076864102aca2e131d1aafe1.camel@gmail.com>
-	 <a7a132ff61a4533ce463ec088e15e3156c3ce39b.camel@gmail.com>
-	 <20240927141200.xMZ53xm5@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1727795545; c=relaxed/simple;
+	bh=vOb2cBg3YKOeU1ZQj9lyC4Y3LiyaLbKnBFaVZsWE8tU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=efReEvhenN6yW4bXJmJIIdgZBu923tfbZVlgcEfode4D2Hb9VSwcmm3ddxdDP7i+FNmg0uabwjLhc3+bbg+pdzY1osQcSb6IfKkkBAGaxWB0wfrxJDUCmOzXMDukfza+8ZxvDEMJt6zjvn0GIWwofO6+YbQ1/+xlwOKRt+KKR9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhXZBah1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C3CC4CEC6;
+	Tue,  1 Oct 2024 15:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727795544;
+	bh=vOb2cBg3YKOeU1ZQj9lyC4Y3LiyaLbKnBFaVZsWE8tU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=GhXZBah1Y6sKXkPJI7tFDxk20ayMPtxsnaNyUwQeoVsKfqciNGf3JYQKHL7WGbOoG
+	 E+JIbvZcF6g0ido/TbG24JklHmVPopw0iuZ8sMbADdQlsBFUpWyWt7zlbZDsgkXZLX
+	 u69IvToo3r30hSgP+lhik7L/DGTzfPCpqELVAIByURdU698WQMxQm7WiGX0VseyC/e
+	 BlUBl7s17UKGtZw82x0GdjBKVENNfjQ0FKJbu2WS7QiWYv3faisL8A+E6BcqJRGBzC
+	 KWbFSRV3pcweX59QdzEowGU0MiZAua6SSrtvUaBXvhauK0FIlDi8Nt9Ck/1Jx9Kfir
+	 23JK5jbUiDa9Q==
+From: Roger Quadros <rogerq@kernel.org>
+Date: Tue, 01 Oct 2024 18:12:18 +0300
+Subject: [PATCH] usb: dwc3: core: Fix system suspend on TI AM62 platforms
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFER/GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSyNj3cRcMyPdnIJc3dLiJN00EyMDS0PzpBRzA3MloJaCotS0zAqwcdG
+ xtbUAp0RjS14AAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>, 
+ Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>, 
+ msp@baylibre.com, srk@ti.com, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-usb@vger.kernel.org, stable@vger.kernel.org, 
+ Roger Quadros <rogerq@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3335; i=rogerq@kernel.org;
+ h=from:subject:message-id; bh=vOb2cBg3YKOeU1ZQj9lyC4Y3LiyaLbKnBFaVZsWE8tU=;
+ b=owEBbQKS/ZANAwAIAdJaa9O+djCTAcsmYgBm/BFUmouOCKLwG6BHWujLlPbceU+uDh1JXzuaN
+ T5ReiYdaGeJAjMEAAEIAB0WIQRBIWXUTJ9SeA+rEFjSWmvTvnYwkwUCZvwRVAAKCRDSWmvTvnYw
+ k+9iEADHF+B7kkPnLXj5BsQ6N26i2Onk+8W6BI9VD6ucCARaZaNEOAxf+PHo+mo0srj2T3ad+C4
+ eWghHfB0UrOK9uSQ6vW+pGxJFVJttdgx2o+QPMMrQiyVK6vnZ2YMGI8WgPE/EndyWClyuVLCB0Z
+ cdihhJWLOObontSlsdwbjCNTjGMIjdgzSCFMH9x7fFE+ypmXHbJxvaNDH7XwqOMANfjS32db925
+ isHnZvzNcrdJ5lD4IR3HXq2qK+aN2ln6AThY6EVi2qeEd8Db2vZSq6W30BzTjsLLY7Rg2/4qlHz
+ HTQGgHye1in1Yvk4y0D2W6Yr532LcFz0GmlhTt7u4xAKnxkb8dmuNezTsZTUcJpKt7jFP/kJSby
+ eGuykYnZHzKANbAuzBjipu18wYPgNa4hi8zfsyOAyJM15L2MLoK4sEnnkBZTmO/c0UzypUQZUNQ
+ yiokqis4ws4QC4g6XeH3u5awmFEhaKsepnpQyTcsYTuQ6W60Ir8z477YAVEJVSTRJS3dFe+HUyC
+ E6fdGtfrKK6h+Ey7uL0dqxR172US/ToOURzaZLVtzQOQUUkrkCOC4qWUiOZlCiC0vj1/v1sKPRv
+ VbXY0Y3easAjSPRIbur2BAPFqzfQ2mdicU1RxXcqg5hcmqI7LJ9WX9/pD6NBE+UBnCbF+GbTesJ
+ UE802tTXBsx4Rvg==
+X-Developer-Key: i=rogerq@kernel.org; a=openpgp;
+ fpr=412165D44C9F52780FAB1058D25A6BD3BE763093
 
-On Fri, 2024-09-27 at 16:12 +0200, Sebastian Andrzej Siewior wrote:
-> On 2024-09-27 15:33:35 [+0200], Hubert Wi=C5=9Bniewski wrote:
-> > On Thu, 2024-09-26 at 21:39 +0200, Hubert Wi=C5=9Bniewski wrote:
-> > > I'm a bit at loss here. The deadlock seems to be unrelated to netif_r=
-x()
-> > > (which is not being called in the interrupt context after all), yet
-> > > replacing it with __netif_rx() fixes the lockup (though a warning is =
-still
-> > > generated, which suggests that the patch does not completely fix the
-> > > issue).
-> >=20
-> > Well, never mind. After some investigation, I think the problem is as
-> > follows:
-> >=20
-> > 1. musb_g_giveback() releases the musb lock using spin_unlock(). The lo=
-ck
-> > is now released, but hardirqs are still disabled.
-> >=20
-> > 2. Then, usb_gadget_giveback_request() is called, which in turn calls
-> > rx_complete(). This does not happen in the interrupt context, so netif_=
-rx()
-> > disables bottom havles, then enables them using local_bh_enable().
-> >=20
-> > 3. This leads to calling __local_bh_enable_ip(), which gives off a warn=
-ing
-> > (the first backtrace) that hardirqs are disabled. Then, hardirqs are
-> > disabled (again?), and then enabled (as they should have been in the fi=
-rst
-> > place).
-> >=20
-> > 4. After usb_gadget_giveback_request() returns, musb_g_giveback() acqui=
-res
-> > the musb lock using spin_lock(). This does not disable hardirqs, so the=
-y
-> > are still enabled.
-> >=20
-> > 5. While the musb lock is acquired, an interrupt occurs. It is handled =
-by
-> > dsps_interrupt(), which acquires the musb lock. A deadlock occurs.
->=20
-> This all makes sense so far.
+Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
+system suspend is broken on AM62 TI platforms.
 
-I have done more testing on this. It seems that this deadlock possibility
-reported by lockdep is not the cause, but just a symptom.
+Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
+bits (hence forth called 2 SUSPHY bits) were being set during core
+initialization and even during core re-initialization after a system
+suspend/resume.
 
-For now, my conclusion is that the problem lies in the MUSB gadget driver
-itself. Interrupts (in peripheral mode) on Rx endpoints are handled by
-musb_g_rx(), which pulls requests from EP request queue. If there is no
-request queued, it just returns without clearing the RXPKTRDY flag in the
-RXCSR register (but the interrupt flag in the glue layer register has been
-already cleared by the glue layer IRQ handler). This makes the received
-packet wait for the next interrupt. If the Rx FIFO is full, no more packets
-are received and no more interrupts are generated. The EP stays locked up
-forever (or until the RXPKTRDY flag is cleared manually :)).
+These bits are required to be set for system suspend/resume to work correctly
+on AM62 platforms.
 
-From what I have learned, the request queue being empty just happens
-sometimes and it is not en error.
+Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
+driver is not loaded and started.
+For Host mode, the 2 SUSPHY bits are set before the first system suspend but
+get cleared at system resume during core re-init and are never set again.
 
-This bug became exposed by the new behaviour of netif_rx(). When BHs are
-enabled, hardirqs are enabled too (for a moment) which causes the Rx
-interrupt to be handled before a request is enqueued. If there are enough
-such unhandled packets, the EP gets locked up.
+This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
+before system suspend and restored to the original state during system resume.
 
-> > Replacing netif_rx() with __netif_rx() apparently fixes this part, as i=
-t
-> > does not lead to any change of hardirq state. There is still one proble=
-m
-> > though: rx_complete() is usually called from the interrupt context, exc=
-ept
-> > when the network interface is brought up.
->=20
-> __netif_rx() has an assert which should complain if you use
-> __netif_rx(). Further in this case you pass the skb to backlog but never
-> kick it for processing. Which means it is delayed until a random
-> interrupt notices and processes it.
+Cc: stable@vger.kernel.org # v6.9+
+Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
+Link: https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+---
+ drivers/usb/dwc3/core.c | 16 ++++++++++++++++
+ drivers/usb/dwc3/core.h |  2 ++
+ 2 files changed, 18 insertions(+)
 
-Now I see that it was a bad idea. I just found this using git bisect.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9eb085f359ce..1233922d4d54 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2336,6 +2336,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 	u32 reg;
+ 	int i;
+ 
++	dwc->susphy_state = !!(dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
++			    DWC3_GUSB2PHYCFG_SUSPHY);
++
+ 	switch (dwc->current_dr_role) {
+ 	case DWC3_GCTL_PRTCAP_DEVICE:
+ 		if (pm_runtime_suspended(dwc->dev))
+@@ -2387,6 +2390,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 		break;
+ 	}
+ 
++	if (!PMSG_IS_AUTO(msg)) {
++		if (!dwc->susphy_state)
++			dwc3_enable_susphy(dwc, true);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -2454,6 +2462,14 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+ 		break;
+ 	}
+ 
++	if (!PMSG_IS_AUTO(msg)) {
++		/* dwc3_core_init_for_resume() disables SUSPHY so just handle
++		 * the enable case
++		 */
++		if (dwc->susphy_state)
++			dwc3_enable_susphy(dwc, true);
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index c71240e8f7c7..b2ed5aba4c72 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1150,6 +1150,7 @@ struct dwc3_scratchpad_array {
+  * @sys_wakeup: set if the device may do system wakeup.
+  * @wakeup_configured: set if the device is configured for remote wakeup.
+  * @suspended: set to track suspend event due to U3/L2.
++ * @susphy_state: state of DWC3_GUSB2PHYCFG_SUSPHY before PM suspend.
+  * @imod_interval: set the interrupt moderation interval in 250ns
+  *			increments or 0 to disable.
+  * @max_cfg_eps: current max number of IN eps used across all USB configs.
+@@ -1382,6 +1383,7 @@ struct dwc3 {
+ 	unsigned		sys_wakeup:1;
+ 	unsigned		wakeup_configured:1;
+ 	unsigned		suspended:1;
++	unsigned		susphy_state:1;
+ 
+ 	u16			imod_interval;
+ 
 
-> > I think one solution would be to make musb_g_giveback() use
-> > spin_unlock_irqrestore() and spin_lock_irqsave(), but I would need to p=
-ass
-> > the flags to it somehow. Also, I am not sure how that would influence o=
-ther
-> > drivers using musb.
->=20
-> I would also suggest to do this since the other solution is not safe/
-> correct. There is the ->busy assignment which should cover for the most
-> cases. If you drop the lock without enabling interrupts then the
-> interrupt can't do anything to the EP and other enqueue/ dequeue
-> invocation is not possible if run on UP. On the other hand am335x was
-> used on PREEMPT_RT and it runs a UP machine into SMP so that should be
-> covered :)
->=20
-> While looking at it, dequeue/ enqueue during complete callback looks
-> safe due to the busy flag.
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20240923-am62-lpm-usb-f420917bd707
 
-I think it is not needed now. After I have modified the interrupt handling
-code to clear the RXPKTRDY flag if there is no request queued and the FIFO
-is full, neither __local_bh_enable_ip() nor lockdep complain (tested on SMP
-and UP, with and without PREEMPT, on AM3358 and A64).
+Best regards,
+-- 
+Roger Quadros <rogerq@kernel.org>
 
-It would probably by nicer to ensure that no MUSB interrupts are handled
-when a MUSB request callback is invoked from musb_g_giveback() (e.g. by
-disabling MUSB interrupts before releasing the lock and enabling them after
-acquiring it), but that could cause some side effects if the callback
-relied on MUSB interrupts being enabled. And since there are no warnings
-and everything works... I guess it is time to submit another patch then and
-to forget about this one.
-
-Thank you for your time!
---=20
-Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.com>
 
