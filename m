@@ -1,134 +1,163 @@
-Return-Path: <linux-usb+bounces-15611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99B9C98BDE7
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 15:36:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27EF198BE57
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 15:49:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC20F1C215C2
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 13:36:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEA13B2382D
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 13:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB66F1C3F36;
-	Tue,  1 Oct 2024 13:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D611C6F4C;
+	Tue,  1 Oct 2024 13:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="eKD1ssUu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HNwkIeX2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547761C4606
-	for <linux-usb@vger.kernel.org>; Tue,  1 Oct 2024 13:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572B81C579F;
+	Tue,  1 Oct 2024 13:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727789751; cv=none; b=D0IsTL170i8Lu4hDLqFifr8eK1vl8j3bky/e2LcDWimAvcFdZS3Wv79zP4ACY4K4inAf29sW3wAtMwxEIv3g0US2lKd7GVuH1M/75neqvz23t0H7CZsdwNmPVCgPRFdAdLpxQ2GY8yno5Dr5FfIpPzEw+lrw9vqAYzkj68QG8I4=
+	t=1727790513; cv=none; b=LxUy62IptB7/GSENaoNABA5amEdSq1+Fw2NORTEEPraIidDo1Xe5Sg4eH+C4nxbuTSU81DRUombF31nOZWLZ2CxFd+LUtFkIi9P2vTF2GOKPN2KqdYpvFuBbjR3cxdqtSt4zNTy/FRvDG9Ys1OEQGRA4CHd9hxmFswo21zw6JBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727789751; c=relaxed/simple;
-	bh=U8pY5rep/DxZyRN/3K4NlXXTJfyp2pzoEXOGBzwi//k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VQFFiV0QMlRs4+5pjBhVSOD1vkpM6R3L5BVTSt3PicxjiDdIIxv11z/ZrwIPflIXpzlSPZg31sygN68uz+Rdge7aUa/xOyziE4HXT8vVyz+qVfL+ooBfB7hQNMpi6SEkNE3/HfX+B6QMJHz1UzdwdVQtQrkKAZSL6y7joejy85c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=eKD1ssUu; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-458366791aaso27294961cf.1
-        for <linux-usb@vger.kernel.org>; Tue, 01 Oct 2024 06:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1727789748; x=1728394548; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BEopdWMDpCRUeGsoK3NceMIpTW9rD6Z+uCQDxg21ocg=;
-        b=eKD1ssUu9Jf1OhaTfX7uJKOQ369znCxtHihp8TRH7o2YecD2LMwusjAxFCM++TR6fb
-         Iwq6Xk8MVgldFaYcuvAyhvHMAlmfYNmxxyzWZC0hnywIWKjC9uRMMezifc4hzwjfD1pR
-         TsLjjEVwjG0wZcwQ7Fl3oETtmZhg86wu1DaVdDZzpqg8QgP0RlRI+aukTeSxTrBJFrLW
-         9tOkQnN/n6LxU48/hOpKGGzUjUxsS5n+eBHDhNPnA03zWf8SLfweL8SWnpLXzq45+puj
-         lU9bDu79DGZxepxFTWy4CPOvo3GmzurVZZ9YO3DiuNZ8gRimEoIwkR2Gq70+hednY/Of
-         9yzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727789748; x=1728394548;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BEopdWMDpCRUeGsoK3NceMIpTW9rD6Z+uCQDxg21ocg=;
-        b=nhearv0PVxcQCS/7wq45+lEP4R68YWVvqq4mP1IFA4XOgyV0CrbnDymaGHyE47aLZN
-         VCwTUqNNppjL2wMv7Yt+TAWOkjP9WhhifkDCXtxlSvOlsyNgUGmlXMRI0MQyFDd/80r2
-         ZiYNaU0I/AWv5npraCewwTmUWDf6Ep+LR6AzJkFR5AvY6v+j/e5YMEzBnvPwLbSRx2iF
-         PBaoLvMwUgBtw3Ury4g0GTHGQixPZ1OQlCCj9LDc6henIare+g7XTZMVydH4ONUbwSPI
-         R6vDzl4+xtIsLXUyFTqWnE4aEnS+IRwmI4NUb1r0i9mG2ARETfF2ooqgZhrRwllo8byO
-         u0Pw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0RUVkWw5SooMBWjAkAPXYdaxWJp2L2/B5JbUEPnvn1if92nvCPS0RJIA0atApBN7p6J2l7rGlk0k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+LwmFKWYMLxby+7HAy6n5tVkSVb1u5CmlJIW1I1qw8AviabaM
-	9hVQoj6bStZVXL4DDmlU0QEOUxWVbtgkXI2bOF2bX2sfZMNV+PwQYrZUxjaJsQ==
-X-Google-Smtp-Source: AGHT+IFhon3dVznzTI1PMzAnQix3pUVNFQbs135O2xwWuH6/TZXs3oH4K63Bz/B0EV10SolMHOyrOA==
-X-Received: by 2002:a05:622a:4b0f:b0:45c:aa3c:6b21 with SMTP id d75a77b69052e-45caa3c6bcdmr179463541cf.19.1727789748037;
-        Tue, 01 Oct 2024 06:35:48 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::5638])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45d7aad57c5sm4079281cf.63.2024.10.01.06.35.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2024 06:35:47 -0700 (PDT)
-Date: Tue, 1 Oct 2024 09:35:44 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Icenowy Zheng <uwu@icenowy.me>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: storage: ignore bogus device raised by JieLi BR21
- USB sound chip
-Message-ID: <5d5c516e-ad45-4533-912a-80cdf85aaed1@rowland.harvard.edu>
-References: <20241001083407.8336-1-uwu@icenowy.me>
+	s=arc-20240116; t=1727790513; c=relaxed/simple;
+	bh=hYg0Fu0D6IoftEUgUjWbcBn5SdluW6xHgOAg9+UBNzA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fJ17iRkkELM23Ux+20ljUFWpSL26/ghYtXc4VKEGxZ+rOOmzWXiQrDnGCCajH2aOQJ4coo9FH4KsP1qRE9Tv1E1hxXILg8JJZLPNZzJbE+PQEe+jlpDwwj2Nk//Pgc+2koZ6JF1nNutW1ttQHDCrR6h/+G+SZJE1G3m52VgeUAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HNwkIeX2; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727790513; x=1759326513;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hYg0Fu0D6IoftEUgUjWbcBn5SdluW6xHgOAg9+UBNzA=;
+  b=HNwkIeX2M3ZbW84YnM698zxb087PJN++6JW31D4Mddf+hb1rVpFzKQPo
+   PYthRGh/rsHH+VheNasG0bnVN+fzVm3cfH5TPP2+0980ISaPlRE6MuTmZ
+   /8WPez2+kp5T3Z+OzGuqD8aQZObJoijCkR+WVEzEYcY1yS7XAQ75ae7Yy
+   E8H0GrhCHoGUzRVbauGSHPhsXbkJguhkFju3TwMNzWvE5VQLV/0ZlNwxE
+   rnXndD5EhFZ6YqF9UbLZuy+HhdeZlDcXe5SIG6hrzfFRPyJ/Xh+ZkU4pk
+   k2/HKFn/2aWrnDMybh7/SwZA7fFx0hJyFXytW6w+Eozv6OsXnepK3Ygo7
+   Q==;
+X-CSE-ConnectionGUID: CEurDm+zSXK1F7c5n/RCQQ==
+X-CSE-MsgGUID: LhkMJ57JTpaK8Wjlv+nc/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11212"; a="27018698"
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="27018698"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 06:48:31 -0700
+X-CSE-ConnectionGUID: vvOEWfuOQp6aUElZPlvVAw==
+X-CSE-MsgGUID: jKRp70E6QsmfnSnjQ90fUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="78534228"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.94.0.53]) ([10.94.0.53])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 06:48:25 -0700
+Message-ID: <04f17b40-cb63-4758-80fb-91996f71a07c@linux.intel.com>
+Date: Tue, 1 Oct 2024 15:48:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241001083407.8336-1-uwu@icenowy.me>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v28 18/32] ASoC: doc: Add documentation for SOC USB
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
+ lgirdwood@gmail.com, tiwai@suse.com, krzk+dt@kernel.org,
+ pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
+ bgoswami@quicinc.com, robh@kernel.org, gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-doc@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20240925010000.2231406-1-quic_wcheng@quicinc.com>
+ <20240925010000.2231406-19-quic_wcheng@quicinc.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
+ <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20240925010000.2231406-19-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 01, 2024 at 04:34:07PM +0800, Icenowy Zheng wrote:
-> JieLi tends to use SCSI via USB Mass Storage to implement their own
-> proprietary commands instead of implementing another USB interface.
-
-What a strange thing to do.  I wonder why they chose that approach?
-
-> Enumerating it as a generic mass storage device will lead to a Hardware
-> Error sense key get reported.
+On 9/25/2024 2:59 AM, Wesley Cheng wrote:
+> With the introduction of the soc-usb driver, add documentation highlighting
+> details on how to utilize the new driver and how it interacts with
+> different components in USB SND and ASoC.  It provides examples on how to
+> implement the drivers that will need to be introduced in order to enable
+> USB audio offloading.
 > 
-> Ignore this bogus device to prevent appearing a unusable sdX device
-> file.
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+...
 
->  drivers/usb/storage/unusual_devs.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> index fd68204374f2c..e5ad23d86833d 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -2423,6 +2423,17 @@ UNUSUAL_DEV(  0xc251, 0x4003, 0x0100, 0x0100,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_NOT_LOCKABLE),
->  
-> +/*
-> + * Reported by Icenowy Zheng <uwu@icenowy.me>
-> + * This is an interface for vendor-specific cryptic commands instead
-> + * of real USB storage device.
-> + */
-> +UNUSUAL_DEV(  0xe5b7, 0x0811, 0x0100, 0x0100,
-> +		"ZhuHai JieLi Technology",
-> +		"JieLi BR21",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_DEVICE),
+> +USB Offload Related Kcontrols
+> +=============================
+> +Details
+> +-------
+> +A set of kcontrols can be utilized by applications to help select the proper sound
+> +devices to enable USB audio offloading.  SOC USB exposes the get_offload_dev()
+> +callback that designs can use to ensure that the proper indices are returned to the
+> +application.
 > +
->  /* Reported by Andrew Simmons <andrew.simmons@gmail.com> */
->  UNUSUAL_DEV(  0xed06, 0x4500, 0x0001, 0x0001,
->  		"DataStor",
-> -- 
-> 2.46.2
-> 
+> +Implementation
+> +--------------
+> +
+> +**Example:**
+> +
+> +  **Sound Cards**:
+> +
+> +	::
+> +
+> +	  0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+> +						SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+> +	  1 [Seri           ]: USB-Audio - Plantronics Blackwire 3225 Seri
+> +						Plantronics Plantronics Blackwire
+> +						3225 Seri at usb-xhci-hcd.1.auto-1.1,
+> +						full sp
+> +	  2 [C320M          ]: USB-Audio - Plantronics C320-M
+> +                      Plantronics Plantronics C320-M at usb-xhci-hcd.1.auto-1.2, full speed
+> +
+> +  **USB Sound Card** - card#1:
+> +
+> +	::
+> +
+> +	  USB Offload Playback Route PCM#0        -1, -1 (range -1->255)
+> +
+> +  **USB Sound Card** - card#2:
+> +
+> +	::
+> +
+> +	  USB Offload Playback Route PCM#0        0, 1 (range -1->255)
+> +
+> +The above example shows a scenario where the system has one ASoC platform card
+> +(card#0) and two USB sound devices connected (card#1 and card#2).  When reading
+> +the available kcontrols for each USB audio device, the following kcontrol lists
+> +the mapped offload path for the specific device:
+> +
+> +	``USB Offload Playback Route#*``
+> +
+
+Those examples would probably be easier to follow if you also provided 
+something similar to "aplay -l" output in addition to above sound card list.
+
+> +The kcontrol is indexed, because a USB audio device could potentially have
+> +several PCM devices.  The above kcontrols are defined as:
+> +
+> +  - ``USB Offload Playback Route PCM`` **(R)**: Returns the ASoC platform sound
+> +    card and PCM device index.  The output **"0, 1"** (card index, PCM device index)
+> +    signifies that there is an available offload path for the USB SND device
+> +    through card#0 - PCM device#1.  If **"-1, -1"** is seen, then no offload path is
+> +    available for the USB SND device.
+> +
+
+
 
