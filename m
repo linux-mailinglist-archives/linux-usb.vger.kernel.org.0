@@ -1,190 +1,266 @@
-Return-Path: <linux-usb+bounces-15606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0622F98B630
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 09:53:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B69F998B6E4
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 10:27:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD7A3281BD9
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 07:53:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65EB228263D
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2024 08:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC8519992D;
-	Tue,  1 Oct 2024 07:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6681519AD5C;
+	Tue,  1 Oct 2024 08:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFEtljCD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F4oVN2P2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2891BDA8F;
-	Tue,  1 Oct 2024 07:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D84B19AD6C
+	for <linux-usb@vger.kernel.org>; Tue,  1 Oct 2024 08:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727769182; cv=none; b=inlGo4ha/Ie15NG8vJf+V2hU2VMWlRPeHc+JnGM5/h5uWRWBXi787LrVmCIVwjmC157u98ts116nnI2+QjfZ87b0GKeRzyI9CMK9giW+C/bAvP4NJRnmfFA+YJ86d9rKSp1T+QZBdC8i0V7Tjm8qsrNDQ6gm69BAptpdizWyedw=
+	t=1727771225; cv=none; b=hLHFHXIgul9CP5lB+26Ld0LyrHGUe78jq0Rj3adzboENoyBsBN/FemMu8ggZRQIj93N55vYlMPStcaElpikY0bwI3+7OpvZ4A6ni6X20HNfa2tYFhQuFaBuoXUN8inHCZsa6jjfp5MLu5l/B8zlU+68Xp/JWdomcz18GsneNrBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727769182; c=relaxed/simple;
-	bh=QX21DTYmnkZd7LYTUhC/voBhhqHZz5HJOC2n2hd8m+g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IDFxo3DU/sb68womyc3q5eghL9eVDvMFGNAFiWfk3JD32ashs6CppMefZwqmbUYtrqDQUeApTJA9hiIsb/kuBy0GLl4QygHRGuyma0Jw74ucHBqCTL+Ppp8HMDASsXOm/5pF8EAPmGtO9LohLvpU9Ct4qXkrgBjz2hZsJxlGCsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFEtljCD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A7BC4CEC6;
-	Tue,  1 Oct 2024 07:52:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727769181;
-	bh=QX21DTYmnkZd7LYTUhC/voBhhqHZz5HJOC2n2hd8m+g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RFEtljCDpwVIUQNxezB92zYK4WB9hSXfimbCBeVubyQYEDC6Gf4qQfuf9ePUvfhed
-	 ud1uMEzyD2HMGTk6zSSF7hJR3N5TiNEfKjvDeXdOYXs95kMuYjdG4QDmBExgxpiEcE
-	 3Hrj50gjkOVJ2WkKppz+a0C1p5/0yuTaoEhuXsLZ5TupMlZRUo6WD5rSXvKz48DetK
-	 HCPB26QnLqxVl8ODwaoVB/HnT4pUsGFRXPCPCeQDbOsOOKuTtEUf1L/f5VC5C8HZKG
-	 49DNZdFMWWkkVsG97BitpbE0En98977+3TbedU3cKBA0mdpi+vMHmLayGEOoMahAaE
-	 DmcGAQCUIZVRA==
-Message-ID: <2008c020-d011-4999-96f2-5262a3a11da3@kernel.org>
-Date: Tue, 1 Oct 2024 10:52:57 +0300
+	s=arc-20240116; t=1727771225; c=relaxed/simple;
+	bh=/63zi0gJyqssiOfV+tdF9BbJtNY0hyfIC+bzSWWBAEE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RR+S6Ua1JY/+f+VGiTTxGpqjNM1VYQEL/M3HpMdghwZnpzYF/u2E2qV+V3SE7lz29VwpMMwdYcHNbklLyUAmML8EQ3JkipT40vq1sZDzfIzgZWrmNsdsjuf4xHOMPIewrReZCkTM21ZM457fsBU2X3V35ZkW+yvEvkq1ds1RQJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F4oVN2P2; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727771223; x=1759307223;
+  h=date:from:to:cc:subject:message-id;
+  bh=/63zi0gJyqssiOfV+tdF9BbJtNY0hyfIC+bzSWWBAEE=;
+  b=F4oVN2P2HS9U5vk/OLu/1s5CBXoOi3K9EUO6u0cm8zQs0wzc7FMAR7sF
+   cREjOcfAoCQeJnPEmKverJv5WNk47WEp3nkJincUf7Wy0bgyj3Dr0W+CC
+   ZSkWne2bGjQfvG63E0eonJOLouaDrjQxNxSVi/tu0c2RHN3EDRuyUfcx5
+   pBgvAgPUw+fwCHGiqGO3UQEigt91wBdDJZAMMFWvC2+qjR7PVQIfNETVp
+   8YNt7cZm6JeiwxBifIRaewyS6Uegq+1clHSDgC5HmKz07Lyof0aa+vizE
+   kI6xdMqHRLmzIeYOzMVMy5v0wU/kokt5gBWdo0j8RW9qFYRs348vv4hYh
+   Q==;
+X-CSE-ConnectionGUID: 8m99MmrbTduUhLTde0+8Eg==
+X-CSE-MsgGUID: kBVT8wCSTxe9tcC6JTz5SA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="30682715"
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="30682715"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 01:27:03 -0700
+X-CSE-ConnectionGUID: qpiHAKpKTLiB1jQoNPzoAQ==
+X-CSE-MsgGUID: XbGCMFpmSMuSoZSwriGTTQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="74366521"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 01 Oct 2024 01:27:02 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1svYDj-000QR1-22;
+	Tue, 01 Oct 2024 08:26:59 +0000
+Date: Tue, 01 Oct 2024 16:26:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:rndis-removal] BUILD SUCCESS
+ 1c8a324d7f6edf32b24f9a9c23b5409a5c1879fc
+Message-ID: <202410011658.wXm7Od3Z-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: dwc3: core: Prevent phy suspend during init
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- John Youn <John.Youn@synopsys.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- "msp@baylibre.com" <msp@baylibre.com>, "Vardhan, Vibhore" <vibhore@ti.com>,
- "Govindarajan, Sriramakrishnan" <srk@ti.com>, Dhruva Gole <d-gole@ti.com>,
- Vishal Mahaveer <vishalm@ti.com>
-References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
- <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
- <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
- <20240926215141.6xqngt7my6ffp753@synopsys.com>
- <8e3e34d3-9034-4701-9fe9-baa43daf23b5@kernel.org>
- <20241001010029.pr6dqais2qpql7rl@synopsys.com>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20241001010029.pr6dqais2qpql7rl@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
+branch HEAD: 1c8a324d7f6edf32b24f9a9c23b5409a5c1879fc  USB: disable all RNDIS protocol drivers
 
+elapsed time: 1166m
 
-On 01/10/2024 04:00, Thinh Nguyen wrote:
-> On Fri, Sep 27, 2024, Roger Quadros wrote:
->>
->>
->> On 27/09/2024 00:51, Thinh Nguyen wrote:
->>> Hi Roger,
->>>
->>> On Wed, Sep 25, 2024, Roger Quadros wrote:
->>>> Hello Thinh,
->>>>
->>>> On 17/04/2024 02:41, Thinh Nguyen wrote:
->>>>> GUSB3PIPECTL.SUSPENDENABLE and GUSB2PHYCFG.SUSPHY should be cleared
->>>>> during initialization. Suspend during initialization can result in
->>>>> undefined behavior due to clock synchronization failure, which often
->>>>> seen as core soft reset timeout.
->>>>>
->>>>> The programming guide recommended these bits to be cleared during
->>>>> initialization for DWC_usb3.0 version 1.94 and above (along with
->>>>> DWC_usb31 and DWC_usb32). The current check in the driver does not
->>>>> account if it's set by default setting from coreConsultant.
->>>>>
->>>>> This is especially the case for DRD when switching mode to ensure the
->>>>> phy clocks are available to change mode. Depending on the
->>>>> platforms/design, some may be affected more than others. This is noted
->>>>> in the DWC_usb3x programming guide under the above registers.
->>>>>
->>>>> Let's just disable them during driver load and mode switching. Restore
->>>>> them when the controller initialization completes.
->>>>>
->>>>> Note that some platforms workaround this issue by disabling phy suspend
->>>>> through "snps,dis_u3_susphy_quirk" and "snps,dis_u2_susphy_quirk" when
->>>>> they should not need to.
->>>>>
->>>>> Cc: stable@vger.kernel.org
->>>>> Fixes: 9ba3aca8fe82 ("usb: dwc3: Disable phy suspend after power-on reset")
->>>>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>>>
->>>> This patch is causing system suspend failures on TI AM62 platforms [1]
->>>>
->>>> I will try to explain why.
->>>> Before this patch, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
->>>> bits (hence forth called 2 SUSPHY bits) were being set during initialization
->>>> and even during re-initialization after a system suspend/resume.
->>>>
->>>> These bits are required to be set for system suspend/resume to work correctly
->>>> on AM62 platforms.
->>>
->>> Is it only for suspend or both suspend and resume?
->>
->> I'm sure about suspend. It is not possible to toggle those bits while in system
->> suspend so we can't really say if it is required exclusively for system resume or not.
->>
->>>
->>>>
->>>> After this patch, the bits are only set when Host controller starts or
->>>> when Gadget driver starts.
->>>>
->>>> On AM62 platform we have 2 USB controllers, one in Host and one in Dual role.
->>>> Just after boot, for the Host controller we have the 2 SUSPHY bits set but
->>>> for the Dual-Role controller, as no role has started the 2 SUSPHY bits are
->>>> not set. Thus system suspend resume will fail.
->>>>
->>>> On the other hand, if we load a gadget driver just after boot then both
->>>> controllers have the 2 SUSPHY bits set and system suspend resume works for
->>>> the first time.
->>>> However, after system resume, the core is re-initialized so the 2 SUSPHY bits
->>>> are cleared for both controllers. For host controller it is never set again.
->>>> For gadget controller as gadget start is called, the 2 SUSPHY bits are set
->>>> again. The second system suspend resume will still fail as one controller
->>>> (Host) doesn't have the 2 SUSPHY bits set.
->>>>
->>>> To summarize, the existing solution is not sufficient for us to have a
->>>> reliable behavior. We need the 2 SUSPHY bits to be set regardless of what
->>>> role we are in or whether the role has started or not.
->>>>
->>>> My suggestion is to move back the SUSPHY enable to end of dwc3_core_init().
->>>> Then if SUSPHY needs to be disabled for DRD role switching, it should be
->>>> disabled and enabled exactly there.
->>>>
->>>> What do you suggest?
->>>>
->>>> [1] - https://urldefense.com/v3/__https://lore.kernel.org/linux-arm-kernel/20240904194229.109886-1-msp@baylibre.com/__;!!A4F2R9G_pg!Y10q3gwCzryOoiXpk6DMGn74iFQIg6GloY10J16kWCbqwgS1Algo5HRg05vm38dMw8n47qmKpqJlyXt9Kqlm$ 
->>>>
->>>
->>> Thanks for reporting the issue.
->>>
->>> This is quite an interesting behavior. As you said, we will need to
->>> isolate this change to only during DRD role switch.
->>>
->>> We may not necessarily just enable at the end of dwc3_core_init() since
->>> that would keep the SUSPHY bits on during the DRD role switch. If this
->>> issue only occurs before suspend, perhaps we can check and set these
->>> bits during suspend or dwc3_core_exit() instead?
->>
->> dwc3_core_exit() is not always called in the system suspend path so it
->> may not be sufficient.
->>
->> Any issues if we set this these bits at the end of dwc3_suspend_common()
->> irrespective of runtime suspend or system suspend and operating role?
-> 
-> There should be no issue at this point. The problem occurs during
-> initialization that involves initializing the usb role.
-> 
->> And should we restore these bits in dwc3_resume_common() to the state they
->> were before dwc3_suspend_common()?
->>
-> 
-> Sounds good to me! Would you mind send a fix patch?
+configs tested: 173
+configs skipped: 3
 
-Thanks for your suggestions. Yes, I will send a fix soon.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--- 
-cheers,
--roger
+tested configs:
+alpha                             allnoconfig    gcc-13.3.0
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    clang-20
+alpha                            allyesconfig    gcc-13.3.0
+alpha                               defconfig    gcc-14.1.0
+arc                              allmodconfig    clang-20
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                              allyesconfig    gcc-13.2.0
+arc                          axs103_defconfig    gcc-14.1.0
+arc                                 defconfig    gcc-14.1.0
+arc                    vdk_hs38_smp_defconfig    clang-20
+arm                              allmodconfig    clang-20
+arm                              allmodconfig    gcc-14.1.0
+arm                               allnoconfig    clang-20
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                              allyesconfig    gcc-14.1.0
+arm                         at91_dt_defconfig    clang-20
+arm                          collie_defconfig    gcc-14.1.0
+arm                     davinci_all_defconfig    gcc-14.1.0
+arm                                 defconfig    gcc-14.1.0
+arm                          exynos_defconfig    clang-20
+arm                      jornada720_defconfig    clang-20
+arm                         lpc18xx_defconfig    gcc-14.1.0
+arm                            mmp2_defconfig    clang-20
+arm                          pxa910_defconfig    clang-20
+arm                         s5pv210_defconfig    clang-20
+arm                        shmobile_defconfig    clang-20
+arm                       versatile_defconfig    gcc-14.1.0
+arm                         wpcm450_defconfig    clang-20
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+arm64                               defconfig    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+csky                                defconfig    gcc-14.1.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+hexagon                             defconfig    gcc-14.1.0
+i386                             allmodconfig    clang-18
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-18
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-18
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241001    clang-18
+i386        buildonly-randconfig-002-20241001    clang-18
+i386        buildonly-randconfig-002-20241001    gcc-12
+i386        buildonly-randconfig-003-20241001    clang-18
+i386        buildonly-randconfig-004-20241001    clang-18
+i386        buildonly-randconfig-004-20241001    gcc-12
+i386        buildonly-randconfig-005-20241001    clang-18
+i386        buildonly-randconfig-006-20241001    clang-18
+i386        buildonly-randconfig-006-20241001    gcc-12
+i386                                defconfig    clang-18
+i386                  randconfig-001-20241001    clang-18
+i386                  randconfig-001-20241001    gcc-12
+i386                  randconfig-002-20241001    clang-18
+i386                  randconfig-003-20241001    clang-18
+i386                  randconfig-004-20241001    clang-18
+i386                  randconfig-004-20241001    gcc-12
+i386                  randconfig-005-20241001    clang-18
+i386                  randconfig-006-20241001    clang-18
+i386                  randconfig-011-20241001    clang-18
+i386                  randconfig-011-20241001    gcc-12
+i386                  randconfig-012-20241001    clang-18
+i386                  randconfig-012-20241001    gcc-12
+i386                  randconfig-013-20241001    clang-18
+i386                  randconfig-013-20241001    gcc-12
+i386                  randconfig-014-20241001    clang-18
+i386                  randconfig-014-20241001    gcc-11
+i386                  randconfig-015-20241001    clang-18
+i386                  randconfig-015-20241001    gcc-12
+i386                  randconfig-016-20241001    clang-18
+i386                  randconfig-016-20241001    gcc-12
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+loongarch                           defconfig    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                                defconfig    gcc-14.1.0
+m68k                        mvme147_defconfig    clang-20
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+microblaze                          defconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                      bmips_stb_defconfig    clang-20
+mips                         db1xxx_defconfig    gcc-14.1.0
+mips                           ip32_defconfig    clang-20
+mips                      maltasmvp_defconfig    clang-20
+mips                        maltaup_defconfig    clang-20
+mips                        omega2p_defconfig    clang-20
+mips                           rs90_defconfig    gcc-14.1.0
+mips                           xway_defconfig    clang-20
+nios2                             allnoconfig    gcc-14.1.0
+nios2                               defconfig    gcc-14.1.0
+openrisc                          allnoconfig    gcc-14.1.0
+openrisc                         allyesconfig    gcc-14.1.0
+openrisc                            defconfig    gcc-12
+openrisc                  or1klitex_defconfig    clang-20
+openrisc                  or1klitex_defconfig    gcc-14.1.0
+parisc                           allmodconfig    gcc-14.1.0
+parisc                            allnoconfig    gcc-14.1.0
+parisc                           allyesconfig    gcc-14.1.0
+parisc                              defconfig    gcc-12
+parisc                generic-64bit_defconfig    clang-20
+parisc64                            defconfig    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    gcc-14.1.0
+powerpc                          allyesconfig    clang-20
+powerpc                          allyesconfig    gcc-14.1.0
+powerpc                 canyonlands_defconfig    clang-20
+powerpc                 canyonlands_defconfig    gcc-14.1.0
+powerpc                        cell_defconfig    gcc-14.1.0
+powerpc                        fsp2_defconfig    gcc-14.1.0
+powerpc                        icon_defconfig    clang-20
+powerpc                   motionpro_defconfig    clang-20
+powerpc                 mpc834x_itx_defconfig    clang-20
+powerpc               mpc834x_itxgp_defconfig    gcc-14.1.0
+powerpc                         wii_defconfig    gcc-14.1.0
+riscv                            allmodconfig    clang-20
+riscv                            allmodconfig    gcc-14.1.0
+riscv                             allnoconfig    gcc-14.1.0
+riscv                            allyesconfig    clang-20
+riscv                            allyesconfig    gcc-14.1.0
+riscv                               defconfig    gcc-12
+s390                             allmodconfig    clang-20
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+s390                                defconfig    gcc-12
+sh                               alldefconfig    gcc-14.1.0
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                                  defconfig    gcc-12
+sh                ecovec24-romimage_defconfig    gcc-14.1.0
+sh                 kfr2r09-romimage_defconfig    clang-20
+sh                     magicpanelr2_defconfig    clang-20
+sh                          r7780mp_defconfig    clang-20
+sh                      rts7751r2d1_defconfig    clang-20
+sh                          sdk7780_defconfig    clang-20
+sh                          sdk7786_defconfig    clang-20
+sh                           se7750_defconfig    clang-20
+sh                        sh7785lcr_defconfig    clang-20
+sh                            titan_defconfig    gcc-14.1.0
+sh                              ul2_defconfig    gcc-14.1.0
+sparc                            allmodconfig    gcc-14.1.0
+sparc64                             defconfig    gcc-12
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-17
+um                               allyesconfig    clang-20
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                           x86_64_defconfig    gcc-12
+x86_64                           alldefconfig    clang-20
+x86_64                            allnoconfig    clang-18
+x86_64                           allyesconfig    clang-18
+x86_64                              defconfig    clang-18
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-18
+x86_64                                  kexec    gcc-12
+x86_64                               rhel-8.3    gcc-12
+x86_64                          rhel-8.3-rust    clang-18
+xtensa                            allnoconfig    gcc-14.1.0
+xtensa                    smp_lx200_defconfig    clang-20
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
