@@ -1,131 +1,104 @@
-Return-Path: <linux-usb+bounces-15638-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15639-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7D9098CD5E
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 08:51:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47CF098CDC8
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 09:35:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F9091F23276
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 06:51:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7BFE283A43
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 07:35:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D598418BC20;
-	Wed,  2 Oct 2024 06:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wp.pl header.i=@wp.pl header.b="qYlBYeG/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB92A19343D;
+	Wed,  2 Oct 2024 07:35:19 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B37433A9
-	for <linux-usb@vger.kernel.org>; Wed,  2 Oct 2024 06:50:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D6A13D51B
+	for <linux-usb@vger.kernel.org>; Wed,  2 Oct 2024 07:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727851856; cv=none; b=t14YgQ/DJP4hwm7MBigrog79ewYma2pO3a5pya2+qKnHYPYZAmTzjsOcAmTgfCCJ3A7IdbzhIt1jdXXCSFX7zAihEddA8nRcpmfPtNn0CVDndVsAx3ZUB+LdaTsDvrtgeV3LxUH8uedJsypnuyROhEByiRntg2IWPw2J1C7S0PE=
+	t=1727854519; cv=none; b=ZIrUw05jyaB9PSC6aGUNeHwJfWSiRWv99E6cW5dxGGA31kZCLLQm92ZPydusERO6YnH58IpEieEioBcWBh//oyNBXIDFeozprbZYkor1eNB4u6Fe5+wMBAvmthSctGiKGnoajJ0m97w61mxwD+bd8ZTs1Hz+sjOZTSMC3vTl3wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727851856; c=relaxed/simple;
-	bh=D2ylYm/qCWVeQBP3Ott9YPWRh/hNn2rqjmwBNfYl1es=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J78qWaoOFaNOg/CnImIDsSkf50obynduOGHFXVawUgtyknif3D85ZAq8C47ksJWkzpMIUq32drWn8pflM8nsjtD5H++hMxw2lv4MDdyhaLbGt6MHMMx9196HCtspy/C6X7U/wDvKLSZRszmze7TYmnrvKQcarfmFf8vAkvzKVO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (1024-bit key) header.d=wp.pl header.i=@wp.pl header.b=qYlBYeG/; arc=none smtp.client-ip=212.77.101.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 39084 invoked from network); 2 Oct 2024 08:50:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1727851850; bh=pM7MPo7q4CUQUZT/fr1FSPPzJ2GCODHzKTENf6VMC5o=;
-          h=From:To:Cc:Subject;
-          b=qYlBYeG/MALvT9gHo8OASk+jbfB5LNbwiavyz5IXV/2xK70Ke6an/IUZ32Iqk3Eq9
-           SFcNnEW45uuGrHomzD6yPaFJDW2xkc5pdl670JE3fLoPvWTnzTexhqckwYqn94rr1P
-           eW96PnkZupdVsmR0D+2Qw7cNW4zQ5bsPNT5eae1k=
-Received: from 89-64-14-248.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.14.248])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <shenlichuan@vivo.com>; 2 Oct 2024 08:50:49 +0200
-Date: Wed, 2 Oct 2024 08:50:49 +0200
-From: Stanislaw Gruszka <stf_xl@wp.pl>
-To: Shen Lichuan <shenlichuan@vivo.com>
-Cc: castet.matthieu@free.fr, gregkh@linuxfoundation.org,
-	duncan.sands@free.fr, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH v1] usb: atm: Correct some typos
-Message-ID: <20241002065049.GB15679@wp.pl>
-References: <20240926075955.10199-1-shenlichuan@vivo.com>
+	s=arc-20240116; t=1727854519; c=relaxed/simple;
+	bh=T1TASvHPB5TBEZP95zPqinwhLF589z9m+uCKirPEb78=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ljm2QZjklZ3BP+0qS4XmqnFqMfJ4K24edgre/qo/rZl1w86ltabsceEdEvYV62G1N46DRDYSC0AplezsiSvYFlb+xfEBXlAqAHsyZrLjhW810iHuqoKYINVIpOs85FFBzHJaaqtbFTNEK7fp40ThvfQ3jc/T5mSb+LFPcM74TWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:80d:3d68:c8fe:1932])
+	by michel.telenet-ops.be with cmsmtp
+	id KKbF2D00Q4Qoffy06KbFwM; Wed, 02 Oct 2024 09:35:16 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1svtt5-0016ye-7g;
+	Wed, 02 Oct 2024 09:35:15 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1svttD-003taz-EI;
+	Wed, 02 Oct 2024 09:35:15 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/2] usb: renesas_usbhs: Deprecate renesas,enable-gpio
+Date: Wed,  2 Oct 2024 09:35:11 +0200
+Message-Id: <cover.1727853953.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240926075955.10199-1-shenlichuan@vivo.com>
-X-WP-MailID: 973ec0b2f732ee7726c0b9b3e3bae0f8
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [4YN0]                               
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 26, 2024 at 03:59:55PM +0800, Shen Lichuan wrote:
-> Fixed some confusing typos that were currently identified with codespell,
-> the details are as follows:
-> 
-> drivers/usb/atm/ueagle-atm.c:811: endianes ==> endianness
-> drivers/usb/atm/ueagle-atm.c:1279: timming ==> timing
-> drivers/usb/atm/ueagle-atm.c:1975: preambule ==> preamble
-> drivers/usb/atm/usbatm.c:1161: alloced ==> allocated
-> 
->Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
-Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+	Hi all,
 
-> ---
->  drivers/usb/atm/ueagle-atm.c | 6 +++---
->  drivers/usb/atm/usbatm.c     | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/atm/ueagle-atm.c b/drivers/usb/atm/ueagle-atm.c
-> index 16703815be0c..62bfdf142aa0 100644
-> --- a/drivers/usb/atm/ueagle-atm.c
-> +++ b/drivers/usb/atm/ueagle-atm.c
-> @@ -808,7 +808,7 @@ static int check_dsp_e4(const u8 *dsp, int len)
->  			if (l > len)
->  				return 1;
->  
-> -		/* zero is zero regardless endianes */
-> +		/* zero is zero regardless endianness */
->  		} while (blockidx->NotLastBlock);
->  	}
->  
-> @@ -1276,7 +1276,7 @@ static void uea_set_bulk_timeout(struct uea_softc *sc, u32 dsrate)
->  	    sc->stats.phy.dsrate == dsrate)
->  		return;
->  
-> -	/* Original timming (1Mbit/s) from ADI (used in windows driver) */
-> +	/* Original timing (1Mbit/s) from ADI (used in windows driver) */
->  	timeout = (dsrate <= 1024*1024) ? 0 : 1;
->  	ret = uea_request(sc, UEA_SET_TIMEOUT, timeout, 0, NULL);
->  	uea_info(INS_TO_USBDEV(sc), "setting new timeout %d%s\n",
-> @@ -1972,7 +1972,7 @@ static void uea_dispatch_cmv_e1(struct uea_softc *sc, struct intr_pkt *intr)
->  	if (cmv->bDirection != E1_MODEMTOHOST)
->  		goto bad1;
->  
-> -	/* FIXME : ADI930 reply wrong preambule (func = 2, sub = 2) to
-> +	/* FIXME : ADI930 reply wrong preamble (func = 2, sub = 2) to
->  	 * the first MEMACCESS cmv. Ignore it...
->  	 */
->  	if (cmv->bFunction != dsc->function) {
-> diff --git a/drivers/usb/atm/usbatm.c b/drivers/usb/atm/usbatm.c
-> index 2da6615fbb6f..d1e622bb1406 100644
-> --- a/drivers/usb/atm/usbatm.c
-> +++ b/drivers/usb/atm/usbatm.c
-> @@ -1158,7 +1158,7 @@ int usbatm_usb_probe(struct usb_interface *intf, const struct usb_device_id *id,
->  		if (i >= num_rcv_urbs)
->  			list_add_tail(&urb->urb_list, &channel->list);
->  
-> -		vdbg(&intf->dev, "%s: alloced buffer 0x%p buf size %u urb 0x%p",
-> +		vdbg(&intf->dev, "%s: allocated buffer 0x%p buf size %u urb 0x%p",
->  		     __func__, urb->transfer_buffer, urb->transfer_buffer_length, urb);
->  	}
->  
-> -- 
-> 2.17.1
-> 
+The "gpio" suffix for GPIO consumers was deprecated a while ago, in
+favor of the "gpios" suffix.  However, there are still several users of
+the "renesas,enable-gpio" property, in DT bindings and DT source files.
+
+Hence this series deprecates the old property in the DT bindings, and
+converts all users in DTS files to the new property.  No driver changes
+are needed, as devm_gpiod_get_optional() as called from usbhs_probe()
+tries all suffixes.
+
+The first patch is targeted for the DT or USB tree.
+The second patch is targeted for the Renesas DTS tree.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (2):
+  dt-bindings: usb: renesas,usbhs: Deprecate renesas,enable-gpio
+  ARM: dts: renesas: rcar-gen2: Switch HS-USB to renesas,enable-gpios
+
+ Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 4 ++++
+ arch/arm/boot/dts/renesas/r8a7790-lager.dts              | 2 +-
+ arch/arm/boot/dts/renesas/r8a7791-koelsch.dts            | 2 +-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
