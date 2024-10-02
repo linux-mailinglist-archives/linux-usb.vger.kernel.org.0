@@ -1,78 +1,145 @@
-Return-Path: <linux-usb+bounces-15643-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15644-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE83B98D09A
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 11:57:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8584698D0C0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 12:04:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12DF31C20E04
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 09:57:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 481AA2850AF
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 10:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38FB11E4123;
-	Wed,  2 Oct 2024 09:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009991E493F;
+	Wed,  2 Oct 2024 10:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rZFZV8xG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c16mpe1y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17D71E2035;
-	Wed,  2 Oct 2024 09:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8C0194A67;
+	Wed,  2 Oct 2024 10:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727863039; cv=none; b=Wvr5F3yuZQ420eI9zll4D4+5MLsTuaAPAGvtpg91LedpoyNUuyQNJSI2TK4jaj3LBgdeZOXltHUM9INrHES2xqH6weywgSrquPovxQsIIb79SfL4LHuM9PgYwToViOQBo+wt8CmqraGjSRN0lkXMiOw/5nbgZpGIUslbwa5t8hI=
+	t=1727863489; cv=none; b=olHRTwu7mr+3VgqDObPKXC4Znvm3Mi4nqswI8sEh2uTfNp9BDRjdIvhCaVYur6UrQOV+pwqLkTbyZwpuv5VVd3r0aIRYcwnNb4unCR+lfo5qehHqUh66zh844ryvyAxd9jcvpv62cr0wYGsgDFk62tkk94Tocbs6dqgo4qnj49Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727863039; c=relaxed/simple;
-	bh=GONPKzWPvV6hlNqW13i39eZXWmID+K60+OzAQ97VKQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VQSYb7yZAuw8yiTYEM/ryxaj2zz+uLtNzXEYqDp93akDWY710mJWT7zeEN6ijslEiQaamb7yqeidc/nv1iibtGI1iTPdVvq3tEoE+VPOfEU6/HU7bIuL8k/uqUvKBpg+o2zNS2lDPjbKKAlJijFxS/MIWipIuZod55E60NPa82w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rZFZV8xG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9564C4CECD;
-	Wed,  2 Oct 2024 09:57:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1727863039;
-	bh=GONPKzWPvV6hlNqW13i39eZXWmID+K60+OzAQ97VKQM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rZFZV8xGTwZhXTn5d4ovHZ9HsMI8HxHmNb9IC7bJsD6kd10ApWsI6a7wqiVRQb/TG
-	 cgSAzcmXAmcKwbO48LcR/ZcA6vWTEHIjAzupd6tCoejpbpboeb7RvPho4QlYXaLilF
-	 1Dx1Mup+63e2ZhOYVJ+/TNr16QtjABzqncekNwzY=
-Date: Wed, 2 Oct 2024 11:56:48 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Alexandru Gagniuc <alexandru.gagniuc@hp.com>
-Cc: stable@vger.kernel.org, qin.wan@hp.com, andreas.noever@gmail.com,
-	michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Subject: Re: [PATCH 6.6 00/14] Backport thunderbolt fix(es) from v6.9
-Message-ID: <2024100236-carload-oblong-d631@gregkh>
-References: <20241001173109.1513-1-alexandru.gagniuc@hp.com>
+	s=arc-20240116; t=1727863489; c=relaxed/simple;
+	bh=fJc9vV8gI5k6M6PxFXD0s9yqXw92V7Acdvf0rZmyf2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=U1UljrRqB2slZIUJ9wzpSZw93nESlHRDzboKMAQ0nbu1UvO+soaTRjyautADtCzsYjxFUTLLjnsUPzXbG5IaslXExq0A7R2nPXdOX6FGHR0xZ1B/UCaHho3+PBG5aneCEmhOyewdspMvXS61s14FLTjlm0HTTHbIQUhnyzI+Ju4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c16mpe1y; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5398e3f43f3so4644499e87.2;
+        Wed, 02 Oct 2024 03:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727863486; x=1728468286; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SkjqrOL4x76Vv3+CE0zybVVmdJ/QHdT5VFP4DcsC72Q=;
+        b=c16mpe1yWg6VNMpWJn+ZgawkIxkMwI4Ib6ZXqgmJlqCnUkwKoegSc6v2BN1LmUqdru
+         airp8PbA3q3XeUbQshzibNw8wwLH8oObY3gC5QhpTwYuiHRbw93G59+jbemRuOBLo2Y0
+         LTEAtLJcalichuEFJb67hxQ2OErp8vKeymtGLpSE6FloXOFNNZts8DCkb5RFXbe4Q+q+
+         6/nrsIm3fTtw32x3lsl3wT+Q890DTalCl6TBIYwykYGGIUpb1hsZTCgCqEuL67YZoHYu
+         p/lMoTzJ6Tx8n9JupDuFAn8p8mH36ELp+abytDP8nMJQwdtLDGo09/PNTK1rRmiYh+2W
+         zTIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727863486; x=1728468286;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SkjqrOL4x76Vv3+CE0zybVVmdJ/QHdT5VFP4DcsC72Q=;
+        b=qjfBihHvUhsgBNwMhw0aDyE3PcB0+6vS2jzuO7fctri3HlxlMF9IygQgqFG1h+0GGv
+         uGbDjJwyK/cAHBfDfLG+j3mSt4ifM4o95ONddtn+PDG2Vy4cQ7xazVuS7HkKXKWdBbwl
+         nKBI0QSTBqoQExmlKw+vVVa3iQkPqYazAzBGpojb85ydYczNQwy/bo97CQm/OWfT4R+R
+         ov3nsbPGOeK/pDaIgG7e3vrgopUG8jVe5VcbW41f5tjrZxng29jHzhm4d+LMf1TgQVDi
+         mAzjOsXk+7i4ETi8XsED+uwwlZ6xHNFAfE67XDe+4mfqYsblTQ2ZZ6U9L0+HfWJhHZm5
+         hR4A==
+X-Forwarded-Encrypted: i=1; AJvYcCUaw8mIhZ8AI0GqmaO6tv2UCTVBcvD89hpVGyd6teKpDmg1Ketg72HWx7dl2VFOBXCpQ9N3AWB7Fo8Tw48=@vger.kernel.org, AJvYcCWGlh13Fmxr3zGwuvRn6YzrFcpLenntldFwKwsemYxaJGKMcUIWIDYzMQUYJ9Tlws/OXsGnzQQEE7Fj@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLi7wyeVhsmDkvOKri+MqaMaicff75/KiR9bJwuyUItolSXFhP
+	5mKlYACqCVdQ/rIjohB5GKj8T2wWU/jbbNPLNsIWCSz5uKX8xfCX
+X-Google-Smtp-Source: AGHT+IGZtmAPeFh2cKRRVSJwfBZvvqMG77MYKub0AvmtHhjwAxc6HNVQm2rlWcID6p8CuO7VUgqwFQ==
+X-Received: by 2002:a05:6512:2348:b0:536:54db:ddd0 with SMTP id 2adb3069b0e04-539a05fffa9mr1422560e87.0.1727863485656;
+        Wed, 02 Oct 2024 03:04:45 -0700 (PDT)
+Received: from foxbook (bfk18.neoplus.adsl.tpnet.pl. [83.28.48.18])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5389fd539f2sm1860264e87.36.2024.10.02.03.04.43
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 02 Oct 2024 03:04:44 -0700 (PDT)
+Date: Wed, 2 Oct 2024 12:04:39 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: islituo@gmail.com
+Cc: baijiaju1990@gmail.com, gregkh@linuxfoundation.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ mathias.nyman@intel.com
+Subject: Re: [PATCH] usb: xhci: fix a possible null-pointer dereference in
+ xhci_setup_device()
+Message-ID: <20241002120439.077afc90@foxbook>
+In-Reply-To: <20241001194526.25757-1-islituo@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241001173109.1513-1-alexandru.gagniuc@hp.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 01, 2024 at 05:30:55PM +0000, Alexandru Gagniuc wrote:
-> From: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Hi,
+
+> There is a possible null-pointer dereference related to the
+> wait-completion synchronization mechanism in the function
+> xhci_setup_device().
 > 
-> These patches resolve thunderbolt issues on Intel Raptor Lake systems.
-> With a monitor connected to a HP Thunderbolt G4 dock, the display
-> sometimes stops working after resume.
+> Consider the following execution scenario:
 > 
-> The kernel reports an issue with the DisplayPort MST topology, the
-> full backtrace being pasted below. This failure is since v6.9-rc1 by
-> commit b4734507ac55 ("thunderbolt: Improve DisplayPort tunnel setup
-> process to be more robust"). The other commits are dependencies such
-> that all changes apply cleanly without needing modification.
+> in drivers/usb/host/xhci-mem.c:
+>   xhci_mem_init()       // 2381
+>     if (!xhci->dcbaa)   // 2431  xhci->dcbaa can be NULL
+>     xhci_mem_cleanup()  // 2548
+>       xhci_cleanup_command_queue()        // 1888
+> in drivers/usb/host/xhci-ring.c
+>         xhci_complete_del_and_free_cmd()  // 1619
+>           complete(cmd->completion);      // 1608
+> 
+> The variable xhci->dcbaa is checked by an if statement at Line 2431.
+> If xhci->dcbaa is NULL, xhci_mem_cleanup() will be called at Line
+> 2548, which eventually leads to complete() at Line 1608 that wakes up
+> the wait_for_completion().
+> 
+> Consider the wait_for_completion() in drivers/usb/host/xhci.c
+>   xhci_setup_device()
+>     wait_for_completion(command->completion);       // 4179
+>     le64_to_cpu(xhci->dcbaa->dev_context_ptrs...)); // 4237
+> 
+> The variable xhci->dcbaa is dereferenced (without being rechecked)
+> after the wait_for_completion(), which can introduce a possible
+> null-pointer dereference.
 
-All now queued up, thanks!
+I think it's a false positive, because xhci_mem_init() is only called
+on driver initialization and on resume from suspend, immediately after
+an explicit xhci_mem_cleanup(), which would have woken up any waiting
+tasks (and likely made them crash), but there shouldn't be any.
 
-greg k-h
+By the way, is your analyzer not finding the issue that any call to
+xhci_mem_cleanup() wakes up everybody waiting on the command queue and
+then sets a bunch of things (including xhci->dcbaa) to NULL shortly
+thereafter? This race looks like it shouldn't be harder to detect than
+the things you are doing already.
+
+Of course, all of that would bring more false positives too. Basically,
+you discovered that calling a cleanup function while something else is
+still pending, or having some work already pending while initialization
+isn't yet complete, may not end well.
+
+> To address this issue, a NULL check is added to ensure the variable
+> xhci->dcbaa is not NULL when xhci_dbg_trace() is called.
+
+That's still just bandaid and not a real fix. With static analysis one
+must always review the output and ask if the problem is real, what it
+really means for the code and what to do about it. Simply ignoring the
+missing pointer is rarely the right solution.
+
+Regards,
+Michal
 
