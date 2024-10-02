@@ -1,145 +1,163 @@
-Return-Path: <linux-usb+bounces-15644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8584698D0C0
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 12:04:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C889D98D2D6
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 14:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 481AA2850AF
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 10:04:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED2561C21C31
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2024 12:11:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009991E493F;
-	Wed,  2 Oct 2024 10:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c16mpe1y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07031CF7AE;
+	Wed,  2 Oct 2024 12:10:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8C0194A67;
-	Wed,  2 Oct 2024 10:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E21B1CF5F7;
+	Wed,  2 Oct 2024 12:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727863489; cv=none; b=olHRTwu7mr+3VgqDObPKXC4Znvm3Mi4nqswI8sEh2uTfNp9BDRjdIvhCaVYur6UrQOV+pwqLkTbyZwpuv5VVd3r0aIRYcwnNb4unCR+lfo5qehHqUh66zh844ryvyAxd9jcvpv62cr0wYGsgDFk62tkk94Tocbs6dqgo4qnj49Y=
+	t=1727871041; cv=none; b=OIfQgDQMsigQawfIjsvhu5XxToymRIPa6I4P2/Cby5hDF183z2sAyEFkCgJVFfCxA49mHJ27dFas0XBaepz4VAyLEdP+m1+P/qE5+U9+DyJQD7bCgI6U2SHfRYVlkSFJYE4Jb31+KJ9eYWZBhHPOhDBhxmYoAdN9S6gBHo/Hp2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727863489; c=relaxed/simple;
-	bh=fJc9vV8gI5k6M6PxFXD0s9yqXw92V7Acdvf0rZmyf2Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=U1UljrRqB2slZIUJ9wzpSZw93nESlHRDzboKMAQ0nbu1UvO+soaTRjyautADtCzsYjxFUTLLjnsUPzXbG5IaslXExq0A7R2nPXdOX6FGHR0xZ1B/UCaHho3+PBG5aneCEmhOyewdspMvXS61s14FLTjlm0HTTHbIQUhnyzI+Ju4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c16mpe1y; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1727871041; c=relaxed/simple;
+	bh=Fvksa0iNMILeoXAqia39QdOl44rPJDo58115/hLsNVg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oFoIfcfP3TmiQHsPE74OHB2JRYnt3V95rN2KYaNigUQHdtdwyLRMNOxu9QXsE96YsSXjUb7cAsatTlAMgvFF8wjv8bpWrJVv5gh8GeUG26u91E3oA/gsADWJFuLK+06zjaAp/u3MNSxKkHPFmnx8xShWUyYQaxtfJVSBZIya47E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5398e3f43f3so4644499e87.2;
-        Wed, 02 Oct 2024 03:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727863486; x=1728468286; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SkjqrOL4x76Vv3+CE0zybVVmdJ/QHdT5VFP4DcsC72Q=;
-        b=c16mpe1yWg6VNMpWJn+ZgawkIxkMwI4Ib6ZXqgmJlqCnUkwKoegSc6v2BN1LmUqdru
-         airp8PbA3q3XeUbQshzibNw8wwLH8oObY3gC5QhpTwYuiHRbw93G59+jbemRuOBLo2Y0
-         LTEAtLJcalichuEFJb67hxQ2OErp8vKeymtGLpSE6FloXOFNNZts8DCkb5RFXbe4Q+q+
-         6/nrsIm3fTtw32x3lsl3wT+Q890DTalCl6TBIYwykYGGIUpb1hsZTCgCqEuL67YZoHYu
-         p/lMoTzJ6Tx8n9JupDuFAn8p8mH36ELp+abytDP8nMJQwdtLDGo09/PNTK1rRmiYh+2W
-         zTIQ==
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e25d405f255so5686352276.2;
+        Wed, 02 Oct 2024 05:10:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727863486; x=1728468286;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SkjqrOL4x76Vv3+CE0zybVVmdJ/QHdT5VFP4DcsC72Q=;
-        b=qjfBihHvUhsgBNwMhw0aDyE3PcB0+6vS2jzuO7fctri3HlxlMF9IygQgqFG1h+0GGv
-         uGbDjJwyK/cAHBfDfLG+j3mSt4ifM4o95ONddtn+PDG2Vy4cQ7xazVuS7HkKXKWdBbwl
-         nKBI0QSTBqoQExmlKw+vVVa3iQkPqYazAzBGpojb85ydYczNQwy/bo97CQm/OWfT4R+R
-         ov3nsbPGOeK/pDaIgG7e3vrgopUG8jVe5VcbW41f5tjrZxng29jHzhm4d+LMf1TgQVDi
-         mAzjOsXk+7i4ETi8XsED+uwwlZ6xHNFAfE67XDe+4mfqYsblTQ2ZZ6U9L0+HfWJhHZm5
-         hR4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUaw8mIhZ8AI0GqmaO6tv2UCTVBcvD89hpVGyd6teKpDmg1Ketg72HWx7dl2VFOBXCpQ9N3AWB7Fo8Tw48=@vger.kernel.org, AJvYcCWGlh13Fmxr3zGwuvRn6YzrFcpLenntldFwKwsemYxaJGKMcUIWIDYzMQUYJ9Tlws/OXsGnzQQEE7Fj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLi7wyeVhsmDkvOKri+MqaMaicff75/KiR9bJwuyUItolSXFhP
-	5mKlYACqCVdQ/rIjohB5GKj8T2wWU/jbbNPLNsIWCSz5uKX8xfCX
-X-Google-Smtp-Source: AGHT+IGZtmAPeFh2cKRRVSJwfBZvvqMG77MYKub0AvmtHhjwAxc6HNVQm2rlWcID6p8CuO7VUgqwFQ==
-X-Received: by 2002:a05:6512:2348:b0:536:54db:ddd0 with SMTP id 2adb3069b0e04-539a05fffa9mr1422560e87.0.1727863485656;
-        Wed, 02 Oct 2024 03:04:45 -0700 (PDT)
-Received: from foxbook (bfk18.neoplus.adsl.tpnet.pl. [83.28.48.18])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5389fd539f2sm1860264e87.36.2024.10.02.03.04.43
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 02 Oct 2024 03:04:44 -0700 (PDT)
-Date: Wed, 2 Oct 2024 12:04:39 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: islituo@gmail.com
-Cc: baijiaju1990@gmail.com, gregkh@linuxfoundation.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- mathias.nyman@intel.com
-Subject: Re: [PATCH] usb: xhci: fix a possible null-pointer dereference in
- xhci_setup_device()
-Message-ID: <20241002120439.077afc90@foxbook>
-In-Reply-To: <20241001194526.25757-1-islituo@gmail.com>
+        d=1e100.net; s=20230601; t=1727871038; x=1728475838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ROuhH03n70iPDo/dg44LqUM9nlyhbM0k6XFT26deFGQ=;
+        b=caek+e8i0VRLLuYTAgNqTw8QDnUUJ6JIOVAfQY5gTAsryGmvg7AigFRDaOqIJ20c/r
+         Y5+H/vHr+Jr99VNQOuvKPeqjeKx2e6i+INb9DEtidBJr1wiXIuikMQRyqFkgF6WOcbkE
+         Mj+Ge7t6EExpP0VomL9b0YETDaF8gLB0MaixVTB6EfhHBhisSfJJGGXAAVxpRG40kAlG
+         ivJ8EFurMbkT0kf3G8X/xtdXUdhwCd93MkvQfus7k7qjqQQnbA127EzErMaaZM1beazw
+         ueGRxqq5Vy1JcbNFX2tWzRas4SnWf5N1a8Wt+3SqfWThjysZ7cqX9AefrbBwgE3n8+Hj
+         xTRA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4hC9XE5FC+U+Pbn6ugC4pbEe8d8lTNIb7MFORsGNURLJzDAtxRPG8PrbsiOgYzp0zE6lhiIx2BlXfpQ==@vger.kernel.org, AJvYcCUWxhd82DfJ62HNeTTX/Er4BEWDqcjux1q2m4NXInqWBTY5U7gb8i84pNE/J7a0y/WA4IwUwWopMSxo4Zzcq8E0M4c=@vger.kernel.org, AJvYcCVokRoS3ndDyWeiPJa5Ln/NrqqDtmoQ3nIH8uiaGcklz61uRlb60EUC+AyRXXw2NIcgFXC0Kquv4V8J@vger.kernel.org, AJvYcCX+Z2oNxgvloJ4HP5Pazc+O2BGaAXJ7aQC6vwUJP1zZZRfQv6PKjmvy31G2ybTIcASSRPYIYGZvnJYN@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK9XzLccmvSTI2tVOH6OtNvkuM6OeGBa/xvNjG/8c/6b5/vfiJ
+	qTD1XVNJkOk4px03jNVkO6qPHfqdLjfPc4JCtrs4aTwrBalaRoPJ89biED/O
+X-Google-Smtp-Source: AGHT+IErh1o9KMEPemeD2Jh5pwZ1GQZR5uJPgjiechB7xlKWS8fRhZZKKeZQmUCmjwDABsf4K25Erw==
+X-Received: by 2002:a05:690c:6610:b0:686:1240:621a with SMTP id 00721157ae682-6e2a2ddcdfbmr24156087b3.31.1727871037963;
+        Wed, 02 Oct 2024 05:10:37 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e24538d646sm24213237b3.124.2024.10.02.05.10.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Oct 2024 05:10:37 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e26048d1235so4611633276.0;
+        Wed, 02 Oct 2024 05:10:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUkuJGYtLPL2cvH3HaBoshGwoL4krUDjRr8n4/bTptdmQdwEESpnppPIPFPFJtXVoec43jQuCx9Fm+nzw==@vger.kernel.org, AJvYcCVCNKpCeUQsuPd2WBjk4rjgt2OE6AjR0773ZdcB3neMVlWwzken+wriQ6gjan5aexOF8du5SqGaVurH@vger.kernel.org, AJvYcCVze0ax+UXCy5Ipbum9UVwB4RCv9sF5KksP/QH6eVBw/ZqpJTpUseI0aNiBQJObyWkkN4u3z7G0dHBR@vger.kernel.org, AJvYcCW9CYzojT/LBmkWBOG5VHsxG0vFt98c7DSG8N+nBWZIeJaXKgKtWoHV4gHzbJdEWwneACKyoeRkiDPETOlHY4it/6M=@vger.kernel.org
+X-Received: by 2002:a05:690c:6610:b0:686:1240:621a with SMTP id
+ 00721157ae682-6e2a2ddcdfbmr24155357b3.31.1727871036883; Wed, 02 Oct 2024
+ 05:10:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <cover.1727853953.git.geert+renesas@glider.be> <e9cf476ffac794bad7b0860dc89afd62a9ebc812.1727853953.git.geert+renesas@glider.be>
+ <Zvz8yA4sIKpKP8eD@ninjato>
+In-Reply-To: <Zvz8yA4sIKpKP8eD@ninjato>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 2 Oct 2024 14:10:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXGZPa8R78YjCd5izycug_t3o5wF0Kk_SpAw=k6uxpeZQ@mail.gmail.com>
+Message-ID: <CAMuHMdXGZPa8R78YjCd5izycug_t3o5wF0Kk_SpAw=k6uxpeZQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: renesas,usbhs: Deprecate renesas,enable-gpio
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, 
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Wolfram,
 
-> There is a possible null-pointer dereference related to the
-> wait-completion synchronization mechanism in the function
-> xhci_setup_device().
-> 
-> Consider the following execution scenario:
-> 
-> in drivers/usb/host/xhci-mem.c:
->   xhci_mem_init()       // 2381
->     if (!xhci->dcbaa)   // 2431  xhci->dcbaa can be NULL
->     xhci_mem_cleanup()  // 2548
->       xhci_cleanup_command_queue()        // 1888
-> in drivers/usb/host/xhci-ring.c
->         xhci_complete_del_and_free_cmd()  // 1619
->           complete(cmd->completion);      // 1608
-> 
-> The variable xhci->dcbaa is checked by an if statement at Line 2431.
-> If xhci->dcbaa is NULL, xhci_mem_cleanup() will be called at Line
-> 2548, which eventually leads to complete() at Line 1608 that wakes up
-> the wait_for_completion().
-> 
-> Consider the wait_for_completion() in drivers/usb/host/xhci.c
->   xhci_setup_device()
->     wait_for_completion(command->completion);       // 4179
->     le64_to_cpu(xhci->dcbaa->dev_context_ptrs...)); // 4237
-> 
-> The variable xhci->dcbaa is dereferenced (without being rechecked)
-> after the wait_for_completion(), which can introduce a possible
-> null-pointer dereference.
+CC gpio
 
-I think it's a false positive, because xhci_mem_init() is only called
-on driver initialization and on resume from suspend, immediately after
-an explicit xhci_mem_cleanup(), which would have woken up any waiting
-tasks (and likely made them crash), but there shouldn't be any.
+On Wed, Oct 2, 2024 at 9:56=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > +  renesas,enable-gpios:
+>
+> Isn't this a good occasion to drop the "renesas"-prefix? Binding docs
+> are full of plain "enable-gpios".
 
-By the way, is your analyzer not finding the issue that any call to
-xhci_mem_cleanup() wakes up everybody waiting on the command queue and
-then sets a bunch of things (including xhci->dcbaa) to NULL shortly
-thereafter? This race looks like it shouldn't be harder to detect than
-the things you are doing already.
+Well, that's of course another option (actually 3 ;-)
+Compared to simply switching from "renesas,enable-gpio" to
+"renesas,enable-gpios", dropping the vendor prefix requires changes to
+the HS-USB driver and/or to gpiolib.  Worse, this would also become
+a hard dependency for updating the DTS files.
 
-Of course, all of that would bring more false positives too. Basically,
-you discovered that calling a cleanup function while something else is
-still pending, or having some work already pending while initialization
-isn't yet complete, may not end well.
+Option A: Add a call to devm_gpiod_get_optional(dev, "enable", GPIOD_IN)
+as a fallback to usbhs_probe().
 
-> To address this issue, a NULL check is added to ensure the variable
-> xhci->dcbaa is not NULL when xhci_dbg_trace() is called.
+Option B: Switch usbhs_probe() from "renesas,enable" to "enable"
+and add quirks to of_find_gpio_rename():
 
-That's still just bandaid and not a real fix. With static analysis one
-must always review the output and ask if the problem is real, what it
-really means for the code and what to do about it. Simply ignoring the
-missing pointer is rarely the right solution.
+    #if IS_ENABLED(CONFIG_USB_RENESAS_USBHS)
+                   /*
+                    * The Renesas HS-USB DT bindings happened before
+enable-gpios
+                    * was established as a generic property
+                    */
+                   { "enable",     "renesas,enable-gpio",
+"renesas,rza1-usbhs" },
+                   { "enable",     "renesas,enable-gpio",
+"renesas,rza2-usbhs" },
+                   { "enable",     "renesas,enable-gpio",
+"renesas,rzg2l-usbhs" },
+                   { "enable",     "renesas,enable-gpio",
+"renesas,rcar-gen2-usbhs" },
+                   { "enable",     "renesas,enable-gpio",
+"renesas,rcar-gen3-usbhs" },
+     #endif
 
-Regards,
-Michal
+Option C: Add a generic "strip vendor prefix" fallback to
+of_find_gpio():
+
+    const char *stripped;
+
+    if (gpiod_not_found(desc) && con_id &&
+        (stripped =3D strchr(con_id, ',')) && *(++stripped)) {
+            for_each_gpio_property_name(propname, stripped) {
+                    desc =3D of_get_named_gpiod_flags(np, propname, idx,
+&of_flags);
+                    if (!gpiod_not_found(desc))
+                            break;
+            }
+    }
+
+Option B adds a bit too much to my liking.
+Option C may be useful for others (e.g. {ti,nxp,maxim},enable-gpio(s)),
+but might be considered too dangerous as a general fallback?
+
+Thoughts?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
