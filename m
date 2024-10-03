@@ -1,128 +1,196 @@
-Return-Path: <linux-usb+bounces-15655-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15656-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 734D398E982
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 07:47:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CE9F98EC69
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 11:44:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A4A128663C
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 05:47:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 402C71C21578
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 09:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0759A224D1;
-	Thu,  3 Oct 2024 05:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7588C146D55;
+	Thu,  3 Oct 2024 09:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eP1810i6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1hPrRxr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068B51F5FF
-	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 05:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F8713D245;
+	Thu,  3 Oct 2024 09:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727934429; cv=none; b=mGF0lpYHJnrlNAs0I8cuJklDoP1Glrydx1xRLCX35KSgLbi/IWEIKzB7YyDZX6H0qunhwhbToOFPEq8j4BRmk/EhP7mrOeSp+B2cyynCEPPl6rSfNyR/a6AbZvo2gN+mXoLFczY5MV6BrxkjmAlKD5519UT/GpXD77NiN6sqbfc=
+	t=1727948682; cv=none; b=D+lXmPlwbWcjjV8taoCInntFEBJWW0iQ0yT0nScebeYhwxoikItlcMxtdYMHE0lulGsNevUbq8EsprcehUfXhQ76FFAw3Y8zR2ZwTfQBj5BMRF0Hxe9itszEbHphCipl5302pxGHU8geBUdhPKBWfAYtwqejh3GDmG2YsoKRz3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727934429; c=relaxed/simple;
-	bh=1U4maC12kMzIFQqFpHkuvcqqRovo+/2oME69fl3a/ak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B42vYW/CErZA9tAtbWmnl7piC/4eA1uz6aBh+J6NlHk1RNcp50pqGXDO2gedsQo8Pke73VAs/+PX27WSHVHt8i668QmAMvDDXuAfcaPeollNJ5fJ68kVrMCrrZUFep6FiLtz/lcHKsqn4yH5UhK8j4LQyEcUjeYNidxcUUP0hNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eP1810i6; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727934428; x=1759470428;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1U4maC12kMzIFQqFpHkuvcqqRovo+/2oME69fl3a/ak=;
-  b=eP1810i6hgQhfEwn9aucptWbdAT1A29KUGizAuEnzrSWBtdarf0YGhlJ
-   y5vpBPPbw3KBnU5GKX/kX3k6lHFipSJNLBAbWbXf1bILSDqUtYU+dRUfn
-   2qtlc4cNr7xhvf17lmV0qD0cs8OZAuvz4oQc4qEf0qtm8TqtfygNIV/5f
-   CVhf+ojuWwPE1jxtk7/0Hz8GWfcWAzHX9WWFn4Ooju7XZ5A6wlPqZg4QT
-   E3Gx1c64rInllo41J1QU+KpapdQzn6b7fdX+NpffJLAlrd5q8xt2Myd2A
-   YFw3UWWwAlV4iM80s9eT5kXZ5TmZ5jq4zzb58qpP46eANWoQ9uB7NOPbq
-   Q==;
-X-CSE-ConnectionGUID: FsUl6ouuRSa0ZkVmSqNLUA==
-X-CSE-MsgGUID: iTTSTrZKRwKaqHpJQLs5gQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="49643702"
-X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
-   d="scan'208";a="49643702"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 22:47:08 -0700
-X-CSE-ConnectionGUID: y3yNkVjARRSFaKTS8/hSPA==
-X-CSE-MsgGUID: 3apkzQj2RwW7UoZWOpwuCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
-   d="scan'208";a="74355760"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 02 Oct 2024 22:47:05 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 6C0A7144; Thu, 03 Oct 2024 08:47:04 +0300 (EEST)
-Date: Thu, 3 Oct 2024 08:47:04 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Harry Wentland <harry.wentland@amd.com>
-Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
-	regressions@lists.linux.dev,
-	"Limonciello, Mario" <Mario.Limonciello@amd.com>,
-	Raju.Rangoju@amd.com, Sanath.S@amd.com,
-	Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [REGRESSION] usb: acpi: add device link between tunneled USB3
- device and USB4 Host Interface
-Message-ID: <20241003054704.GM275077@black.fi.intel.com>
-References: <cf45e722-144f-4d06-8dd9-2f7f54283fbc@amd.com>
+	s=arc-20240116; t=1727948682; c=relaxed/simple;
+	bh=zvwO+uTYIUArZlAsewDn79jlHzrlnXEBD1R5PV45YlE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A4F3WEpIDUPh8pki4SOpMo4ksqWExgnvSPLqf0zYz3/Iac9FDxvtmKY6EvitSDNmLV6QDRh8jILQBw80Vux7etDfpSyF+3Cnknb1sNB5VLMzy4YVTWJV+MjPBqVi9BPiHGxiVu7CrC017erk9u2mNYwC3osheSeiDfEEFmzVhGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1hPrRxr; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-37cc810ce73so480922f8f.1;
+        Thu, 03 Oct 2024 02:44:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727948679; x=1728553479; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PD+cl4Rq0cd9OPRqOEQVp1GO7TQIhF7bbYyDEPfTQAs=;
+        b=G1hPrRxrCaPu1p+/8qtFFfAyT/JlUmB23/0VDuxGG/IfHEAeRMDDCdMbRo963OIn3a
+         f8F1Ycy6js6XOME7vvCwDwWFx5ZSwMu2NH7OLp9/PnnL+2B8slR2JcCUg3r7Ge0ThzDS
+         H/M7XcgqpyVybT6BfHb+Efxt4F3k140/xulsP28cFJnTL6WBGvAgYhcSjQsSAoHGONuK
+         NT405V5j9+NAXfSlWNYGDyOiLvhUGXAuuTqTL7o9R1Ssow+hQSaQ0BnR5kUmT4gNOKGg
+         dgAidbp4USM+OKnPK3TmpN9lwlA889WahZWhBJBrMTHNqSmnRm5jUlcT2QoooSdOsKBw
+         o5Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727948679; x=1728553479;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PD+cl4Rq0cd9OPRqOEQVp1GO7TQIhF7bbYyDEPfTQAs=;
+        b=m+9+C0siWUwa8kyFkMBdOA4FsOfPsCr9bMJ+62Z8OIZTU9clbZVWoxCBRdbrDYVFaO
+         wSP/dG9Z0B4gNtgrP2V2LoQQ8Pwg/Aw9UBZXTPofEOMeojlJqx4PTQ8traIxb5FeoElU
+         MuvIa3AOwV6nrIYDwLvuF7p9xqxx+RaZKPAR/3n5fwPe43w6UYx4SlQVGJVCZFdvVnzd
+         mf43QUC6sBosVvtX+NKNFq4+tpvMEXqk9Om4f3SCFUHNaf24CdiWjTntlVZqw9jnmjKt
+         X2WWvGPFtCotYn1iegNKuLAcWtoH1S2uMcmv2AO2a5Od9YFIATtBwB8jd1eLAllIuqS3
+         2etw==
+X-Forwarded-Encrypted: i=1; AJvYcCWVwICNMYdzXw9NzmF+vJn+QvtcyhJJNEhm98Pc03FDQe48il47IBDOE+E9kiZKnsClTvtzQ7U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw35Eio/ojIvP2VJ8011aZw2rL+AZkeCZs4m+SftGJeSNsmyTb5
+	qGKVfP9saETCLpGNAHuhw8eSq7YME0jZOTqv5lFTU7rCJp2rJJJKEK8uAA==
+X-Google-Smtp-Source: AGHT+IHy0Q2/5GIOK4nn1TRvMpj7ihy6bBcHIYMdtcKkppEtLk5trgpDonw7KPFYUrgcmd8F7sdDnQ==
+X-Received: by 2002:a5d:4991:0:b0:37c:d569:97b with SMTP id ffacd0b85a97d-37cfb8b57e2mr2873534f8f.19.1727948678331;
+        Thu, 03 Oct 2024 02:44:38 -0700 (PDT)
+Received: from ThinkStation-P340.tmt.telital.com ([2a01:7d0:4800:7:198b:a993:ba45:4c30])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d082d58absm869585f8f.108.2024.10.03.02.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2024 02:44:37 -0700 (PDT)
+From: Daniele Palmas <dnlplm@gmail.com>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	Daniele Palmas <dnlplm@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2 1/1] USB: serial: option: add Telit FN920C04 MBIM compositions
+Date: Thu,  3 Oct 2024 11:38:08 +0200
+Message-Id: <20241003093808.1628436-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cf45e722-144f-4d06-8dd9-2f7f54283fbc@amd.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Harry,
+Add the following Telit FN920C04 compositions:
 
-On Wed, Oct 02, 2024 at 01:42:29PM -0400, Harry Wentland wrote:
-> I was checking out the 6.12 rc1 (through drm-next) kernel and found
-> my system hung at boot. No meaningful message showed on the kernel
-> boot screen.
-> 
-> A bisect revealed the culprit to be
-> 
-> commit f1bfb4a6fed64de1771b43a76631942279851744 (HEAD)
-> Author: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Date:   Fri Aug 30 18:26:29 2024 +0300
-> 
->     usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface
-> 
-> A revert of this single patch "fixes" the issue and I can boot again.
->     
-> The system in question is a Thinkpad T14 with a Ryzen 7 PRO 6850U CPU.
-> It's running Arch Linux but I doubt that's of consequence.
-> 
-> lspci output:
->     https://gist.github.com/hwentland/59aef63d9b742b7b64d2604aae9792e0
-> acpidump:
->     https://gist.github.com/hwentland/4824afc8d712c3d600be5c291f7f1089
-> 
-> Mario suggested I try modprobe.blacklist=xhci-hcd but that did nothing.
-> Another suggestion to do usbcore.nousb lets me boot to the desktop
-> on a kernel with the faulty patch, without USB functionality, obviously.
-> 
-> I'd be happy to try any patches, provide more data, or run experiments.
+0x10a2: MBIM + tty (AT/NMEA) + tty (AT) + tty (diag)
+T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 17 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10a2 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN920
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Do you boot with any device connected?
+0x10a7: MBIM + tty (AT) + tty (AT) + tty (diag)
+T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 18 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10a7 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN920
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Second thing that I noticed, though I'm not familiar with AMD hardware,
-but from your lspci dump, I do not see the PCIe ports that are being
-used to tunnel PCIe. Does this system have PCIe tunneling disabled
-somehow?
+0x10aa: MBIM + tty (AT) + tty (diag) + DPL (data packet logging) + adb
+T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 15 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10aa Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN920
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-You don't see anything on the console? It's all blank or it just hangs
-after some messages?
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Cc: stable@vger.kernel.org
+---
+v2: add the stable tag to the signed-off area (kernel test robot)
 
-Can you also provide full dmesg with that commit reverted with
-"thunderbolt.dyndbg=+p" in the kernel command line?
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 176f38750ad5..6dcb73586e0b 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1380,10 +1380,16 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a0, 0xff),	/* Telit FN20C04 (rmnet) */
+ 	  .driver_info = RSVD(0) | NCTRL(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a2, 0xff),	/* Telit FN920C04 (MBIM) */
++	  .driver_info = NCTRL(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a4, 0xff),	/* Telit FN20C04 (rmnet) */
+ 	  .driver_info = RSVD(0) | NCTRL(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a7, 0xff),	/* Telit FN920C04 (MBIM) */
++	  .driver_info = NCTRL(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a9, 0xff),	/* Telit FN20C04 (rmnet) */
+ 	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10aa, 0xff),	/* Telit FN920C04 (MBIM) */
++	  .driver_info = NCTRL(3) | RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
+-- 
+2.37.1
+
 
