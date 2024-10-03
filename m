@@ -1,229 +1,190 @@
-Return-Path: <linux-usb+bounces-15665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6A1098F0C7
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 15:47:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C64698F357
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 17:56:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FB7BB21938
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 13:47:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36C281C2102F
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 15:56:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0480F19CCED;
-	Thu,  3 Oct 2024 13:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798771A4E91;
+	Thu,  3 Oct 2024 15:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dgkeIf53"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXVQv6BV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ACF199945
-	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 13:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6129C1A0722;
+	Thu,  3 Oct 2024 15:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727963269; cv=none; b=cIznBuVy4GaFXIHtMQPaFi51/wW8hYM/Fyzhmx3SI90cEaxpHXgOUwDaLIsfpg8g8NxfsDUs0tpVUv/kdw1ytZ4AyxuPYvW+JYNFEB9VuEk8snNYompB2QRPDZ+ta65CcHHy+elkOj0cQrAc912jAdxRURMojT09N5J+3KMatt0=
+	t=1727971008; cv=none; b=ZBm/gxiPLLX/ikWPjR2wUuyiTseHpzfNXKV6ZJIa/+QAq5Nu7L7dJzgsy6uYopoVJo72CcEBQsAlkFjwE3ISP2bAAOzrrniB7NQZZVZt4PEhSDQNRkMXUYYZqEsJxlhuveeCIe/IvnCEr7CekfyNLTEeQ9da8MGk7nXGEJ1R+Aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727963269; c=relaxed/simple;
-	bh=fHy/YcuLQEXGDCdgADRD7flqRemnkaQmpKv/WseNZzE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fWmr7ZBw3LG1B7F0VEJ4zSKNrHJG3K1MLkRWkewphQc8tYmEIP+RI+5X5CjPvw36EWOrhsOWistpuPorD3cF+EYyOsyZNXxcf+ygtOvBOz/wxkjnk8DYBo70LvVzhz9ITFkiRUSt0qkP6e39Bzm0juZ9xRUxiCA43rzUW5va56U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dgkeIf53; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727963268; x=1759499268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fHy/YcuLQEXGDCdgADRD7flqRemnkaQmpKv/WseNZzE=;
-  b=dgkeIf53EdbXKW6Fs6o0+dn9Vy8VvHT5CBhiOwNto7qRAeYsLnXBLGlX
-   J/kkpZ5aYLFL0K00N+gU2c+XnuEnsZ6hCvjK3X+tEbSSwKP+4mBnkUbHq
-   a7foh/Nwtx0TMur145QrLL2MaKy8T+xEBeKJ8k3G5Q8osr1tyA8WVc+TT
-   m+TB9Rk8XedStgA50ScW313+Q57ZGlwm6B/7b6GttLNcSTn6v5fCOoRfG
-   i9HKHlm9lt+52HhDRPFoQWziPUL5MISdVACmvknrPoGHQ6pTBgZujXeKo
-   /E1VqDzXavle1Jgr/+N8Cn0Yjeb9dkHzGWD5pyvax4sa9HWc1aQoGebUi
-   g==;
-X-CSE-ConnectionGUID: 0cxfSiZMSYe0ZjYKFEJudQ==
-X-CSE-MsgGUID: fJL4xDxFRK6NrNdrSDY97A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="27286757"
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="27286757"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 06:47:48 -0700
-X-CSE-ConnectionGUID: x1TBu/fZTTGACdPhxOdlyQ==
-X-CSE-MsgGUID: MT6/jeB1QomADxkInXyVlw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="78356851"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 03 Oct 2024 06:47:45 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 530093A3; Thu, 03 Oct 2024 16:47:43 +0300 (EEST)
-Date: Thu, 3 Oct 2024 16:47:43 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Harry Wentland <harry.wentland@amd.com>, linux-usb@vger.kernel.org,
-	mathias.nyman@linux.intel.com, regressions@lists.linux.dev,
-	Raju.Rangoju@amd.com, Sanath.S@amd.com,
-	Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [REGRESSION] usb: acpi: add device link between tunneled USB3
- device and USB4 Host Interface
-Message-ID: <20241003134743.GO275077@black.fi.intel.com>
-References: <cf45e722-144f-4d06-8dd9-2f7f54283fbc@amd.com>
- <20241003054704.GM275077@black.fi.intel.com>
- <01bf9a3a-6277-4b57-83ed-82c4bfb62dd2@amd.com>
- <20241003132726.GN275077@black.fi.intel.com>
- <797f52fa-ab9d-45c5-828b-9dcaf75fcc83@amd.com>
+	s=arc-20240116; t=1727971008; c=relaxed/simple;
+	bh=CWe3qeSufdkyrtmtM6u+5P9ovbXu+ZiAiRirvxh41Bc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=StudgJGUN43O4Z5BlH52TJs0zCa0ox59f2fzni/Ns41UuBVyoP3Kwf5VT7fmq972PBeltIeg7Vb5RdM5auXrzD7Q4txq69pMNVI70WPxhMJvWL+A7IycR2Ruc/QcLr3qEw6Hq15L1GLKq/yS4i1FJ5fvKnthcVAbnnccyYJPMEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WXVQv6BV; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37cfa129074so890803f8f.1;
+        Thu, 03 Oct 2024 08:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727971005; x=1728575805; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oqkDUAEikU7mCD/D2xA0iEcZc4afdA+pWc3yCDGeyLg=;
+        b=WXVQv6BVE2poxj8UskTqB3m+KJj0yyeb15coHc/iliQG6Jr8MGVN1mTbb9wgyzk7sf
+         VhZtyEKDNFOD51baykqk4FkPWSRoO1NHu+K7Ka2R3ff7OdBI4LuMqYdlJQt7pDl9ssc3
+         8y2V1w7dB8zlgWT0N4e/gehAxu8j2YSZ+iBeFmN76qOdjR4mTOktjAv/4mhidUIbqhet
+         QwCm1fa1fdl/kETjKH1EKU4XN9LoKTjYbRsDaAHBu0WGgKDs+hPvRDIbf/g9ljnHCTe5
+         n9alzPdUkNODaBrZeGo+Yxp9EeoM9bS1PobFrVFxlG9kzvMRBqMlPcV9nxzaGHcToWsY
+         xMwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727971005; x=1728575805;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oqkDUAEikU7mCD/D2xA0iEcZc4afdA+pWc3yCDGeyLg=;
+        b=crik/g6KCHlxDCxDRwuyJYZ+kVqZPk1RTppEbp3HPI0SGokPwKlYZeLnlb/hOMqyT0
+         8hfkHUtEgWnLr/CFNr5aBY/9/M8i+E2e+tGCu3TLKfdBXWPdZkJqy4iEAfSnhcKn86pb
+         Ou2xjXlWEeg4JwfU1zvUwg+1W9jrxC0ADnWvlxr+SaA3ilUKoMfg3os4sXi5VI9z3RXg
+         1rF8YASb07UneZhavJwgN3QGVvWxvnFKTyo/g8Lsmqe0jHgLEJKeXROcZTxGRq3U3JL5
+         2JEBoUpyBzNo+3QNnkX4VszKo0bicem6NgWP9MVrmFn7nwUPVYXzEy+8AZhw6BCy2Wpj
+         qglw==
+X-Forwarded-Encrypted: i=1; AJvYcCVqLOdDpS8PLGqOY6qmcp1gvzTTpar6C0cjbKpyNFbDlrnerPnYxMsCvKBjtLlUX7qYuSstG8/qHkSu@vger.kernel.org, AJvYcCXcC4im2Zn+YDLS5Ioxts4GfQVW0RFSYcjHK+tvLRTS3QHxeaADSmHyk3FcsphZqBX6ruEyTVJP@vger.kernel.org, AJvYcCXzDFCaILN3Wfnz5jzNfg1y+N8Vsw77fsLOSHv62m0cnHUmGoevbLoO3LuHhvgBdSqaex9Zn4m6rRwZapA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJb31EvAgqJwkxjnSPmuIr9qc1O+/thQ6MWjriuG+Yp+YzTv7/
+	8/XrGxuU/05ExzYhurzKdL/fq3Dga5SQy3UeUJY2jAGkPATQWN9n
+X-Google-Smtp-Source: AGHT+IEHt4U6AwWWR+y0XGh0T1w/8a/hdJB31k+osCqnhbAzcTQfuLKVBacOPG/TZgTthZ6jsxTPRQ==
+X-Received: by 2002:adf:e784:0:b0:37c:cca1:b1e3 with SMTP id ffacd0b85a97d-37cfba078a4mr5505442f8f.41.1727971004547;
+        Thu, 03 Oct 2024 08:56:44 -0700 (PDT)
+Received: from ubuntu-20.04.myguest.virtualbox.org ([77.137.66.252])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-37d0822995fsm1563588f8f.38.2024.10.03.08.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2024 08:56:44 -0700 (PDT)
+From: Liel Harel <liel.harel@gmail.com>
+To: 
+Cc: liel.harel@gmail.com,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	UNGLinuxDriver@microchip.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] smsc95xx: Fix some coding style issues
+Date: Thu,  3 Oct 2024 18:56:23 +0300
+Message-Id: <20241003155624.55998-1-liel.harel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <797f52fa-ab9d-45c5-828b-9dcaf75fcc83@amd.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 03, 2024 at 08:42:21AM -0500, Mario Limonciello wrote:
-> On 10/3/2024 08:27, Mika Westerberg wrote:
-> > On Thu, Oct 03, 2024 at 08:10:11AM -0500, Mario Limonciello wrote:
-> > > On 10/3/2024 00:47, Mika Westerberg wrote:
-> > > > Hi Harry,
-> > > > 
-> > > > On Wed, Oct 02, 2024 at 01:42:29PM -0400, Harry Wentland wrote:
-> > > > > I was checking out the 6.12 rc1 (through drm-next) kernel and found
-> > > > > my system hung at boot. No meaningful message showed on the kernel
-> > > > > boot screen.
-> > > > > 
-> > > > > A bisect revealed the culprit to be
-> > > > > 
-> > > > > commit f1bfb4a6fed64de1771b43a76631942279851744 (HEAD)
-> > > > > Author: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > > > > Date:   Fri Aug 30 18:26:29 2024 +0300
-> > > > > 
-> > > > >       usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface
-> > > > > 
-> > > > > A revert of this single patch "fixes" the issue and I can boot again.
-> > > > > The system in question is a Thinkpad T14 with a Ryzen 7 PRO 6850U CPU.
-> > > > > It's running Arch Linux but I doubt that's of consequence.
-> > > > > 
-> > > > > lspci output:
-> > > > >       https://gist.github.com/hwentland/59aef63d9b742b7b64d2604aae9792e0
-> > > > > acpidump:
-> > > > >       https://gist.github.com/hwentland/4824afc8d712c3d600be5c291f7f1089
-> > > > > 
-> > > > > Mario suggested I try modprobe.blacklist=xhci-hcd but that did nothing.
-> > > > > Another suggestion to do usbcore.nousb lets me boot to the desktop
-> > > > > on a kernel with the faulty patch, without USB functionality, obviously.
-> > > > > 
-> > > > > I'd be happy to try any patches, provide more data, or run experiments.
-> > > > 
-> > > > Do you boot with any device connected?
-> > > > > Second thing that I noticed, though I'm not familiar with AMD hardware,
-> > > > but from your lspci dump, I do not see the PCIe ports that are being
-> > > > used to tunnel PCIe. Does this system have PCIe tunneling disabled
-> > > > somehow?
-> > > 
-> > > On some OEM systems it's possible to lock down from BIOS to turn off PCIe
-> > > tunneling, and I agree that looks like the most common cause.
-> > > 
-> > > This is what you would see on a system that has tunnels (I checked on my
-> > > side w/ Z series laptop w/ Rembrandt and a dock connected):
-> > > 
-> > >             +-03.0
-> > >             +-03.1-[03-32]--
-> > >             +-04.0
-> > >             +-04.1-[33-62]----00.0-[34-62]--+-02.0-[35]----00.0
-> > >             |                               \-04.0-[36-62]--
-> > > 
-> > > 00:03.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
-> > > 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
-> > > 00:03.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h
-> > > USB4/Thunderbolt PCIe tunnel [1022:14cd]
-> > > 00:04.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
-> > > 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
-> > > 00:04.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h
-> > > USB4/Thunderbolt PCIe tunnel [1022:14cd]
-> > 
-> > Okay this is more like what I expected, although probably not the
-> > reason here.
-> > 
-> > Are you able to replicate the issue if you disable PCIe tunneling from
-> > the BIOS on your reference system? (Probably not but just in case).
-> 
-> I checked on the Lenovo Z13 laptop I have and turned off "USB port" in BIOS
-> setup and this caused the endpoints 3.1 and 4.1 I listed above to disappear
-> but the system still boots up just fine for me on 6.12-rc1.
+Fix some coding style issues in drivers/net/usb/smsc95xx.c that
+checkpatch.pl script reported.
 
-Okay thanks for checking!
+Signed-off-by: Liel Harel <liel.harel@gmail.com>
+---
+ drivers/net/usb/smsc95xx.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-> > > > You don't see anything on the console? It's all blank or it just hangs
-> > > > after some messages?
-> > > 
-> > > I guess it is getting stuck on fwnode_find_reference() because it never
-> > > finds the given node?
-> > 
-> > Looking at the code, I don't see where it could get stuck. If for some
-> > reason there is no such reference (there is based on the ACPI dump) then
-> > it should not affect the boot. It only matters when power management is
-> > involved.
-> 
-> Nothing jumps out to me either.  Maybe this is a situation that Harry can
-> sprinkle a bunch of printk's all over usb_acpi_add_usb4_devlink() to
-> enlighten what's going on (assuming the console output is "working" when
-> this happened).
-
-There are couple of places there that may cause it to crash, I think.
-And the __free() magic is something I cannot wrap my head around :(
-
-Anyways, Harry can you try the below patch and see if it makes any
-difference? Also if it does please provide dmesg.
-
-diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
-index 21585ed89ef8..90360f7ca905 100644
---- a/drivers/usb/core/usb-acpi.c
-+++ b/drivers/usb/core/usb-acpi.c
-@@ -157,6 +157,7 @@ EXPORT_SYMBOL_GPL(usb_acpi_set_power_state);
-  */
- static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index 8e82184be..000a11818 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -137,7 +137,8 @@ static int __must_check smsc95xx_write_reg(struct usbnet *dev, u32 index,
+ }
+ 
+ /* Loop until the read is completed with timeout
+- * called with phy_mutex held */
++ * called with phy_mutex held
++ */
+ static int __must_check smsc95xx_phy_wait_not_busy(struct usbnet *dev)
  {
-+	struct fwnode_handle *nhi_fwnode;
- 	const struct device_link *link;
- 	struct usb_port *port_dev;
- 	struct usb_hub *hub;
-@@ -165,11 +166,12 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
- 		return 0;
+ 	unsigned long start_time = jiffies;
+@@ -470,7 +471,8 @@ static int __must_check smsc95xx_write_reg_async(struct usbnet *dev, u16 index,
  
- 	hub = usb_hub_to_struct_hub(udev->parent);
--	port_dev = hub->ports[udev->portnum - 1];
-+	if (WARN_ON(!hub))
-+		return 0;
+ /* returns hash bit number for given MAC address
+  * example:
+- * 01 00 5E 00 00 01 -> returns bit number 31 */
++ * 01 00 5E 00 00 01 -> returns bit number 31
++ */
+ static unsigned int smsc95xx_hash(char addr[ETH_ALEN])
+ {
+ 	return (ether_crc(ETH_ALEN, addr) >> 26) & 0x3f;
+@@ -882,7 +884,7 @@ static int smsc95xx_reset(struct usbnet *dev)
+ 	u32 read_buf, burst_cap;
+ 	int ret = 0, timeout;
  
--	struct fwnode_handle *nhi_fwnode __free(fwnode_handle) =
--		fwnode_find_reference(dev_fwnode(&port_dev->dev), "usb4-host-interface", 0);
-+	port_dev = hub->ports[udev->portnum - 1];
+-	netif_dbg(dev, ifup, dev->net, "entering smsc95xx_reset\n");
++	netif_dbg(dev, ifup, dev->net, "entering %s\n", __func__);
  
-+	nhi_fwnode = fwnode_find_reference(dev_fwnode(&port_dev->dev), "usb4-host-interface", 0);
- 	if (IS_ERR(nhi_fwnode))
- 		return 0;
- 
-@@ -180,12 +182,14 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
- 	if (!link) {
- 		dev_err(&port_dev->dev, "Failed to created device link from %s to %s\n",
- 			dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
-+		fwnode_handle_put(nhi_fwnode);
- 		return -EINVAL;
+ 	ret = smsc95xx_write_reg(dev, HW_CFG, HW_CFG_LRST_);
+ 	if (ret < 0)
+@@ -1065,7 +1067,7 @@ static int smsc95xx_reset(struct usbnet *dev)
+ 		return ret;
  	}
  
--	dev_dbg(&port_dev->dev, "Created device link from %s to %s\n",
--		dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
-+	dev_info(&port_dev->dev, "Created device link from %s to %s\n",
-+		 dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
- 
-+	fwnode_handle_put(nhi_fwnode);
+-	netif_dbg(dev, ifup, dev->net, "smsc95xx_reset, return 0\n");
++	netif_dbg(dev, ifup, dev->net, "%s, return 0\n", __func__);
  	return 0;
  }
  
+@@ -1076,7 +1078,7 @@ static const struct net_device_ops smsc95xx_netdev_ops = {
+ 	.ndo_tx_timeout		= usbnet_tx_timeout,
+ 	.ndo_change_mtu		= usbnet_change_mtu,
+ 	.ndo_get_stats64	= dev_get_tstats64,
+-	.ndo_set_mac_address 	= eth_mac_addr,
++	.ndo_set_mac_address = eth_mac_addr,
+ 	.ndo_validate_addr	= eth_validate_addr,
+ 	.ndo_eth_ioctl		= smsc95xx_ioctl,
+ 	.ndo_set_rx_mode	= smsc95xx_set_multicast,
+@@ -1471,7 +1473,8 @@ static int smsc95xx_autosuspend(struct usbnet *dev, u32 link_up)
+ 		/* link is down so enter EDPD mode, but only if device can
+ 		 * reliably resume from it.  This check should be redundant
+ 		 * as current FEATURE_REMOTE_WAKEUP parts also support
+-		 * FEATURE_PHY_NLP_CROSSOVER but it's included for clarity */
++		 * FEATURE_PHY_NLP_CROSSOVER but it's included for clarity
++		 */
+ 		if (!(pdata->features & FEATURE_PHY_NLP_CROSSOVER)) {
+ 			netdev_warn(dev->net, "EDPD not supported\n");
+ 			return -EBUSY;
+@@ -1922,11 +1925,11 @@ static u32 smsc95xx_calc_csum_preamble(struct sk_buff *skb)
+  */
+ static bool smsc95xx_can_tx_checksum(struct sk_buff *skb)
+ {
+-       unsigned int len = skb->len - skb_checksum_start_offset(skb);
++	unsigned int len = skb->len - skb_checksum_start_offset(skb);
+ 
+-       if (skb->len <= 45)
+-	       return false;
+-       return skb->csum_offset < (len - (4 + 1));
++	if (skb->len <= 45)
++		return false;
++	return skb->csum_offset < (len - (4 + 1));
+ }
+ 
+ static struct sk_buff *smsc95xx_tx_fixup(struct usbnet *dev,
+@@ -1955,7 +1958,8 @@ static struct sk_buff *smsc95xx_tx_fixup(struct usbnet *dev,
+ 	if (csum) {
+ 		if (!smsc95xx_can_tx_checksum(skb)) {
+ 			/* workaround - hardware tx checksum does not work
+-			 * properly with extremely small packets */
++			 * properly with extremely small packets
++			 */
+ 			long csstart = skb_checksum_start_offset(skb);
+ 			__wsum calc = csum_partial(skb->data + csstart,
+ 				skb->len - csstart, 0);
+-- 
+2.25.1
 
 
