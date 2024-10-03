@@ -1,196 +1,158 @@
-Return-Path: <linux-usb+bounces-15656-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15657-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CE9F98EC69
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 11:44:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D1BA98EDFF
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 13:22:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 402C71C21578
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 09:44:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3965DB23BE5
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 11:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7588C146D55;
-	Thu,  3 Oct 2024 09:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E44D152166;
+	Thu,  3 Oct 2024 11:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1hPrRxr"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="DQ8ZXzub"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F8713D245;
-	Thu,  3 Oct 2024 09:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CFF13D25E
+	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 11:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727948682; cv=none; b=D+lXmPlwbWcjjV8taoCInntFEBJWW0iQ0yT0nScebeYhwxoikItlcMxtdYMHE0lulGsNevUbq8EsprcehUfXhQ76FFAw3Y8zR2ZwTfQBj5BMRF0Hxe9itszEbHphCipl5302pxGHU8geBUdhPKBWfAYtwqejh3GDmG2YsoKRz3Q=
+	t=1727954536; cv=none; b=dGsieGtQZG3RtvCQDAkgDLjPXApc11l/JJQRKnSXbUnOKzFpuMxcsm0ekK3trdcQrN9XzBvvFaK8xIU6XLIbtWkv7gomfgM9fiWkiHUDYZkbZGm2gvMj2U1am1CAqRiEr5rboTMOpu2HNs6jK+lzeapAwDu5nfU+CHhNHkPnHV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727948682; c=relaxed/simple;
-	bh=zvwO+uTYIUArZlAsewDn79jlHzrlnXEBD1R5PV45YlE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A4F3WEpIDUPh8pki4SOpMo4ksqWExgnvSPLqf0zYz3/Iac9FDxvtmKY6EvitSDNmLV6QDRh8jILQBw80Vux7etDfpSyF+3Cnknb1sNB5VLMzy4YVTWJV+MjPBqVi9BPiHGxiVu7CrC017erk9u2mNYwC3osheSeiDfEEFmzVhGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1hPrRxr; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-37cc810ce73so480922f8f.1;
-        Thu, 03 Oct 2024 02:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727948679; x=1728553479; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PD+cl4Rq0cd9OPRqOEQVp1GO7TQIhF7bbYyDEPfTQAs=;
-        b=G1hPrRxrCaPu1p+/8qtFFfAyT/JlUmB23/0VDuxGG/IfHEAeRMDDCdMbRo963OIn3a
-         f8F1Ycy6js6XOME7vvCwDwWFx5ZSwMu2NH7OLp9/PnnL+2B8slR2JcCUg3r7Ge0ThzDS
-         H/M7XcgqpyVybT6BfHb+Efxt4F3k140/xulsP28cFJnTL6WBGvAgYhcSjQsSAoHGONuK
-         NT405V5j9+NAXfSlWNYGDyOiLvhUGXAuuTqTL7o9R1Ssow+hQSaQ0BnR5kUmT4gNOKGg
-         dgAidbp4USM+OKnPK3TmpN9lwlA889WahZWhBJBrMTHNqSmnRm5jUlcT2QoooSdOsKBw
-         o5Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727948679; x=1728553479;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PD+cl4Rq0cd9OPRqOEQVp1GO7TQIhF7bbYyDEPfTQAs=;
-        b=m+9+C0siWUwa8kyFkMBdOA4FsOfPsCr9bMJ+62Z8OIZTU9clbZVWoxCBRdbrDYVFaO
-         wSP/dG9Z0B4gNtgrP2V2LoQQ8Pwg/Aw9UBZXTPofEOMeojlJqx4PTQ8traIxb5FeoElU
-         MuvIa3AOwV6nrIYDwLvuF7p9xqxx+RaZKPAR/3n5fwPe43w6UYx4SlQVGJVCZFdvVnzd
-         mf43QUC6sBosVvtX+NKNFq4+tpvMEXqk9Om4f3SCFUHNaf24CdiWjTntlVZqw9jnmjKt
-         X2WWvGPFtCotYn1iegNKuLAcWtoH1S2uMcmv2AO2a5Od9YFIATtBwB8jd1eLAllIuqS3
-         2etw==
-X-Forwarded-Encrypted: i=1; AJvYcCWVwICNMYdzXw9NzmF+vJn+QvtcyhJJNEhm98Pc03FDQe48il47IBDOE+E9kiZKnsClTvtzQ7U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw35Eio/ojIvP2VJ8011aZw2rL+AZkeCZs4m+SftGJeSNsmyTb5
-	qGKVfP9saETCLpGNAHuhw8eSq7YME0jZOTqv5lFTU7rCJp2rJJJKEK8uAA==
-X-Google-Smtp-Source: AGHT+IHy0Q2/5GIOK4nn1TRvMpj7ihy6bBcHIYMdtcKkppEtLk5trgpDonw7KPFYUrgcmd8F7sdDnQ==
-X-Received: by 2002:a5d:4991:0:b0:37c:d569:97b with SMTP id ffacd0b85a97d-37cfb8b57e2mr2873534f8f.19.1727948678331;
-        Thu, 03 Oct 2024 02:44:38 -0700 (PDT)
-Received: from ThinkStation-P340.tmt.telital.com ([2a01:7d0:4800:7:198b:a993:ba45:4c30])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d082d58absm869585f8f.108.2024.10.03.02.44.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Oct 2024 02:44:37 -0700 (PDT)
-From: Daniele Palmas <dnlplm@gmail.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2 1/1] USB: serial: option: add Telit FN920C04 MBIM compositions
-Date: Thu,  3 Oct 2024 11:38:08 +0200
-Message-Id: <20241003093808.1628436-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.37.1
+	s=arc-20240116; t=1727954536; c=relaxed/simple;
+	bh=xyFRk2u3FB1vanhTrrJPTi7kAt8YUFVYSaoeCZ9Eoyw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=et06f2SUpNJ6h3Fk490Bk2jIrQmEdAXcpiC6Z/82Znmu+yx5lRIECikJHEOzbHWGFfQVEPM3fQDuakrrBOePBgKwZsbbHHQyTXl4iBlX/wCd/hEUBHeIDtpaj6yR1MEWZ+DSPCklfjr/aD6GDQKn8VxJw7Fk8VAOIq33L2vRPRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=DQ8ZXzub; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1727954510; x=1728559310; i=wahrenst@gmx.net;
+	bh=xyFRk2u3FB1vanhTrrJPTi7kAt8YUFVYSaoeCZ9Eoyw=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=DQ8ZXzubKetDeWYLkBzBfIzf+wmK4ErsUypfZ0o4jA77oW+zwEg/T/rpA2KYQ3I+
+	 n8VB4QxEnWa0cZtuevGFuo4f25wNRSxdZ9sQhI5pO7TjQeI6UFD5V3gxfzgt5kKgJ
+	 cEHE509KvLdwWj0kwyZo5O5/z3pMze9ZIeHtAu7U2EHzbk/sD6ZBT9u0ilTrhSYMR
+	 sqHQ8Ns+WnAWYV0bo4CBzLlTwzlXZ+IStJ6364I8lLzC0GbcrmT8o+2eBAyJG2F1G
+	 iwnz4YupPHPwL/x4R4KDadHR19wReUxi1gdZ76vclr+NVVr1vR+vMhs+x3W8cMLcl
+	 Q9eA0MkYwec4tua2qw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.104] ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M2O6e-1ssSHY3Jmw-007tNv; Thu, 03
+ Oct 2024 13:21:50 +0200
+Message-ID: <2c9b6e0c-cb7d-4ab2-9d7a-e2f90e642bd1@gmx.net>
+Date: Thu, 3 Oct 2024 13:21:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: dwc2: Raspberry Pi 3 B Plus stuck in lx_state DWC2_L2 since Linux
+ 6.12-rc1
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Minas Harutyunyan <hminas@synopsys.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Tomas Marek <tomas.marek@elrest.cz>, Shawn Shao
+ <shawn.shao@jaguarmicro.com>, Douglas Anderson <dianders@chromium.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>
+References: <a4cb3fe4-3d0f-4bf9-a2b1-7f422ba277c8@gmx.net>
+Content-Language: en-US
+In-Reply-To: <a4cb3fe4-3d0f-4bf9-a2b1-7f422ba277c8@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:IttnAT8gBvwoVXhNN4E0l10SQO8IY6lY/c7bjmI6SyrMnDsd0r1
+ kkl2ijp14qj2RZTkD/xW05NABLaiiLXqxhDzVON9hrsqfEKNiYebZyKoO6ed2A74qeEOyYR
+ HT10pFlD5xCbfysnLCr/tdVbr+P2B2s0vXO7MPq5nA35qCzQ2sgcV+14UJCXMIvkpBgGjHa
+ q8i2ZXnzEdlLaRCr5rAfQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:IsrkLFNdlSc=;PJt6/FGn5C2S/ALolIG3oNdBu+a
+ viv5sO2GQkhnPFzMFbYnWRupHnxwttWXXTDyMYuvuEAKzEvJjyHIGTPZNrjTpuQ2iq9X0o+uq
+ rU8W6j8T8a4NlAgxVnKHuKgpOTd6ju+1QvK9cqg2X35HVFvQIPNrpCBNp9kAajhxAGzjPvlMx
+ fOskJhIPFdqv1VGKmIMS7HIW4/nQtM8agnBivZ0NlUFXx1olX6x/kJi2/oKnvL2pQwi13bfAM
+ W/f7dvaX5tOQQFVn1hU0bYGx4E4Gh9NrifDNxBBOyMWer+n0W7RLYpxAgyZY7rHRdzChkNoiA
+ IOMF4CarOCHo76zQAShg+r+hJJrGfZLtQb1FfpOUaX1psWnRL2+UCCVHdh8JIfRoK99WVXyk+
+ 9TFsYCiDSwdMfMvzzn1Gc5dZcFW0SxDP/C5n/ccMKgZscamAfhdDXtqFptlR3jrwiuk+yr4xh
+ oEi11FO2HG0kRQI3qS2QW3409GDlsZ47kDngzEikdMer9cfsh6wbK65exVUafVWqf8UKjSngA
+ jh/dmgZ9HTmJU466z6DHzCU360Qcx34ydjFmyxZAbCC6ED6PUIix4ICWNftph5Uo/5TqJ//vO
+ GLWQK5OD46pDv93IUr0RNRz0mXhxDn0IT7LH4GNY//Vr5yaXptU3PPpOxjprUuBdQl55z3lbb
+ aB5PLXg+JVDlUEfIDf5i69+0gNUt0FkAp2LkK0TWmu8pV51v1AJ4FNp8FqGFgNE6BFOiYr1CY
+ EeneiFVPtwhRe7kzUr46OUoG9QolnueJez0EG097mxAusPlf4iGhqs/J0pmlMWYZNPfltQzrE
+ Spsj9N03YxMpwtZc8M4Gu0Bg==
 
-Add the following Telit FN920C04 compositions:
+Am 30.09.24 um 08:27 schrieb Stefan Wahren:
+> Hi,
+>
+> recently i submitted the commit d483f034f032 ("usb: dwc2: Skip clock
+> gating on Broadcom SoCs") in order to fix an issue with suspend
+> handling. But this change reveals another issue at least on Raspberry
+> Pi 3 B (arm64/defconfig) for the following scenario:
+>
+> 1. Power off and Disconnect all external USB from Raspberry Pi 3 B Plus
+> 2. Power on Raspberry Pi
+> 3. Wait until successfully booted
+> 4. Connect USB devices like keyboard
+>
+> The expected behavior would be that all devices are enumerated, but
+> this doesn't happend. Instead i observe that the DWC2 stays in
+> lx_state DWC2_L2 forever (bad case):
+>
+> [=C2=A0=C2=A0=C2=A0 2.334366] dwc2 3f980000.usb: supply vusb_d not found=
+, using dummy
+> regulator
+> [=C2=A0=C2=A0=C2=A0 2.341892] dwc2 3f980000.usb: supply vusb_a not found=
+, using dummy
+> regulator
+> [=C2=A0=C2=A0=C2=A0 2.400027] dwc2 3f980000.usb: DWC OTG Controller
+> [=C2=A0=C2=A0=C2=A0 2.404868] dwc2 3f980000.usb: new USB bus registered,=
+ assigned bus
+> number 1
+> [=C2=A0=C2=A0=C2=A0 2.412087] dwc2 3f980000.usb: irq 51, io mem 0x3f9800=
+00
+> [=C2=A0=C2=A0=C2=A0 2.711826] usb 1-1: new high-speed USB device number =
+2 using dwc2
+> [=C2=A0=C2=A0=C2=A0 3.195838] usb 1-1.1: new high-speed USB device numbe=
+r 3 using dwc2
+> [=C2=A0=C2=A0=C2=A0 3.435829] dwc2 3f980000.usb: dwc2_port_suspend
+> [=C2=A0=C2=A0=C2=A0 3.459914] dwc2 3f980000.usb: _dwc2_hcd_suspend
+> [=C2=A0=C2=A0=C2=A0 9.009743] dwc2 3f980000.usb: _dwc2_hcd_resume
+> [=C2=A0=C2=A0=C2=A0 9.030667] dwc2 3f980000.usb: dwc2_port_suspend
+> [=C2=A0=C2=A0=C2=A0 9.044137] dwc2 3f980000.usb: _dwc2_hcd_suspend
+> [=C2=A0=C2=A0=C2=A0 9.044222] dwc2 3f980000.usb: _dwc2_hcd_resume
+> [=C2=A0=C2=A0=C2=A0 9.354370] usb 1-1.1: new high-speed USB device numbe=
+r 4 using dwc2
+> [=C2=A0=C2=A0=C2=A0 9.584095] dwc2 3f980000.usb: dwc2_port_suspend
+> [=C2=A0=C2=A0=C2=A0 9.599997] dwc2 3f980000.usb: _dwc2_hcd_suspend
 
-0x10a2: MBIM + tty (AT/NMEA) + tty (AT) + tty (diag)
-T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 17 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=10a2 Rev=05.15
-S:  Manufacturer=Telit Cinterion
-S:  Product=FN920
-S:  SerialNumber=92c4c4d8
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Now i spend several hours into investigating this issue and gained at
+least some insights. The reason why the DWC2 stuck in the suspend state
+is because the relevant irq 51 doesn't fire anymore in the bad case. I
+didn't figure out what's causing this, but i suspect this is related to
+the call of dwc2_port_suspend() by dwc2_hcd_hub_control(). According to
+the implementation it looks like that dwc2_hcd_hub_control assumes that
+if dwc2_port_suspend() returns 0 the bus is suspended, but for the
+corner case (hsotg->params.power_down =3D=3D DWC2_POWER_DOWN_PARAM_NONE &&
+hsotg->params.no_clock_gating) the function returns 0 but bus_suspended
+stays false. So it seems to me that usb/core and dwc2 becomes async
+about their states.
 
-0x10a7: MBIM + tty (AT) + tty (AT) + tty (diag)
-T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 18 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=10a7 Rev=05.15
-S:  Manufacturer=Telit Cinterion
-S:  Product=FN920
-S:  SerialNumber=92c4c4d8
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+As a hack i made dwc2_port_suspend() to return an error for this corner
+case, which prevents this issue but also pm_runtime.
 
-0x10aa: MBIM + tty (AT) + tty (diag) + DPL (data packet logging) + adb
-T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 15 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=10aa Rev=05.15
-S:  Manufacturer=Telit Cinterion
-S:  Product=FN920
-S:  SerialNumber=92c4c4d8
-C:  #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Maybe this is a relevant side node: in the bad case the onboard Ethernet
+chip LAN7800 is also not probed after startup (just root and the hubs).
+It looks like a race between LAN7800 enumeration and pm_runtime.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Cc: stable@vger.kernel.org
----
-v2: add the stable tag to the signed-off area (kernel test robot)
-
- drivers/usb/serial/option.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 176f38750ad5..6dcb73586e0b 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1380,10 +1380,16 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a0, 0xff),	/* Telit FN20C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a2, 0xff),	/* Telit FN920C04 (MBIM) */
-+	  .driver_info = NCTRL(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a4, 0xff),	/* Telit FN20C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a7, 0xff),	/* Telit FN920C04 (MBIM) */
-+	  .driver_info = NCTRL(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a9, 0xff),	/* Telit FN20C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10aa, 0xff),	/* Telit FN920C04 (MBIM) */
-+	  .driver_info = NCTRL(3) | RSVD(4) | RSVD(5) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
--- 
-2.37.1
-
+Another hint why this seems only happen on the Raspberry Pi is because
+there is no PHY or clock control available to Linux.
 
