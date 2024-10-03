@@ -1,250 +1,345 @@
-Return-Path: <linux-usb+bounces-15676-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15677-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D6B298F5BF
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 20:03:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E98EE98F5F7
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 20:23:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EA751C21F2A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 18:03:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 132811C2188C
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 18:23:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A392B1AAE25;
-	Thu,  3 Oct 2024 18:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688871A707D;
+	Thu,  3 Oct 2024 18:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Of1J8Hvy"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="O9Vky0c1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8715E1A76B7
-	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 18:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727978576; cv=none; b=SYy4Z6DpjzxIzRuIKul1iv7iUHTdLh/xqIQ/i6Yak6HAklcbnbbyHiqd3JEp/3Zm4p6pa0TZVjJoIAka1le+nSiCUYOOHRVWFDq8rPSIumiMe/Ao7D/8WuoQ3qR7LpvNiLWvqjvjXta9FIuuk8kJDSvh2I1PlIX8Npnki7K44BU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727978576; c=relaxed/simple;
-	bh=LNXHnZ3MJTRGkhaxV719B4uyyapg1cSteIU3lrzILyY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H4iGOvnq2InKeT+logUjXpaJd1dz5RFVBKGv3eXAVqngKzvOBsR5zjlXPjY/znmGsjI19yGmKA+pdhXBdZW5vE0Gzt9lOFQK5D28E3pEHb0/s2JJ6Tr30m5T8+NUe+Rhq9Fvmse7sOA88Y+uImbuRL007/Zo0PjxEX4AXb4IFpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Of1J8Hvy; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1727978573;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LoB0gVV5ljS71U6qY/mcjDVPFZ4CZEqwYkfhM8ibUYo=;
-	b=Of1J8HvywBb1k8ZGAJx/JNinSXFgbhWuqAa3J6zscqKcumtqlJ7uAZXHB8yRTCYYMOJfFj
-	GsjkyQCISJZ8IBleouFFRsQ4Eai/dLf91KmxByQQvw4qcMC9f6C4hqTi7yQIeja6twO50l
-	x6rxd+PpGzbeheo9yKAXM3L2RK43o44=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-125-UNlnOtHPORaQtU38FnS7Ww-1; Thu, 03 Oct 2024 14:02:52 -0400
-X-MC-Unique: UNlnOtHPORaQtU38FnS7Ww-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a8d2f475416so84163566b.0
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2024 11:02:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727978571; x=1728583371;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LoB0gVV5ljS71U6qY/mcjDVPFZ4CZEqwYkfhM8ibUYo=;
-        b=roPI8J7fahCv/cYKZB7wFNY8vlfUw0WwpRCKBQdxs5LnSBlP51eGQ+R7izyE49JXKA
-         jDPrTSwRS5TE3tKeOmrI87CoxcFO4eQrjjSQkWInIpuCM591hcESC66WsPBEk6iPUR1A
-         odbVJfMrKTuNiyF8x4uG57DBrw3kxdogpCGk1uhZFJakZvvGJiIapAUnzUo4PI9nCPon
-         Mm+jqMg8GIWUCph3/2QRF/SsK4dFj0InR31SHpQneUuGtKCHIFJnFlDKwXDMZCP5R41Y
-         gPRYI87kJx3v0hIqQxR3axaqA2i2fwMiAlC8VnT+H9U0OzUiRykDne+O/Hdn1kOiyoUI
-         nm5w==
-X-Forwarded-Encrypted: i=1; AJvYcCWcpOZs9QdFXGKldN3sOkIFKKC97JJ4VlLCy30Qp5W+e3GEbQa6jk2ltFi5y2e/VeKaiICxjny4Zm0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuQ/B2TohP4z3kqgNfkbrO+/fLvpUDR6HWlSrf4xSRSEeT26sM
-	ArnN1RRTzcesfs0NwbZ6AGqSjkBbokH6nApLZqa1UpBm8NNDZYwl4supfJX1ND3ZII7QvR4D2p1
-	BUJasytv8UtbtKbIYTqSiqefiiOPjR5aA353Ze5A0nLr9MjqWuMTSRC7u7A==
-X-Received: by 2002:a17:907:e89:b0:a8d:44a5:1c2f with SMTP id a640c23a62f3a-a991bce3ac7mr20421266b.6.1727978571009;
-        Thu, 03 Oct 2024 11:02:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH6n7NcOHAAmMOq2VOS/f3DZ6xSz0sT97JwLchZBMGQYGRM+Fp8/kX9HVDKXUACimFwhcWCQg==
-X-Received: by 2002:a17:907:e89:b0:a8d:44a5:1c2f with SMTP id a640c23a62f3a-a991bce3ac7mr20418966b.6.1727978570560;
-        Thu, 03 Oct 2024 11:02:50 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9910472f96sm116305766b.146.2024.10.03.11.02.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2024 11:02:50 -0700 (PDT)
-Message-ID: <b230f7a0-618c-4ebb-913c-93602fb64cd2@redhat.com>
-Date: Thu, 3 Oct 2024 20:02:49 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A2D8BF0
+	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 18:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727979824; cv=fail; b=P5YM80vY84QS3N0q5PH++kkv3+mXrD2nZ94FspWCz9KDgEixJEXoyfww2HEYzA0Oxy3jLYqQLgHujn1TTdelDun4EmFsW1yqJEAymhQZwcQaccgeljdv3JVLnJ7TbD/E5qm4eb5rqnJC3rHg2Aisa1klsGf92pDT6Za0H7QJtbw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727979824; c=relaxed/simple;
+	bh=Wdl6kg96+qJuLmh2X8bhz33LWUuSho47AZxFb4bu7UM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=oAbmHI7D0kRwugNvoWtPVw1rFCkDK8IO1XD1yR3aIjwNL3Ug30CFk8iBVNfguf7LzaPlD36JDkHLHdZuXy9WLObb2NDngJxzbnKHI2zo7Qq5khO4zD2pA420LStJkX7TgVHKTLqC2WSX42RZdDBuiPV54wjNLO2PaqcQlaPpNS0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=O9Vky0c1; arc=fail smtp.client-ip=40.107.244.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FyHFauqMJ4vpKQwh2FtBYy4jwjHJsOKMVUFTOF1pf2z5PTK9xtXUhbIFgv0tjZsNtNLtocMmETcIBkwSgPXK59ECf4nLb3HA/51fHecNQHe9lpQrFZTxU8FJRk7iaexQEoCF+B6Ie1LuDkOcezGQ2JCWWvZD5scKHtfwQVMPq7YRKzLMImsQEdRzoLrYyc8LXK0nLpv/LEDeeZKe2CaRendYkyQ4rhul7l2jze3O8Vnye2rw0VD7MC7eg7fEvIZCzYhHQaSBjnAxpZC9fSkXOg1kLmyhWdsBTUYKSyojcUdu17BXmIaJo4O58Bmqx3zyogNGTDS9YdIGbjUZRpIQ6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JtsF85wvKXTbSweeyabst8Fp5x2L6uCc83ISerQItQM=;
+ b=ZyhyqGtFc71m5MSr4mIBtsnscTxI7+nu0j7Ii85tkGMcUNq/2iuPJou7GfHgaMzT58fksUMvPJF5e6z2jqPrl9raR/KRKCaIbNzOhgNVSPnLl9gUU52xJwnFtyfDCs7SzZ4AtjaZM6/su52W9qwlIti+rctFAI8GManRk4xERzeYAS3+xEFcSljepTsHbnnAKN2Jl3waOiSdoXAOI2cUZAONpX9FCjdTKICP9C5Ipy55meWxY8WTPj2GWAZouHIq7rOeHPwlAQJF4ciHT0AM2eQmtBuzF9yYAZYlu9DtV4w9p+5kkxOql9GO88iZw2zBresZ2a7QZ50GMLfc1q3uEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JtsF85wvKXTbSweeyabst8Fp5x2L6uCc83ISerQItQM=;
+ b=O9Vky0c1yQlAstpmJvcSrAW7J7fgrPOK+1p4afSkvyuDP+XwmSTmUAJVkOwtCgcRshOE/J6Ji4Atv7RwCz13JozK0Y/k4pcAjGVqt5lH7MjICplZxcrBsFB+qcpVrqPchjsLh5JKAMfJl9DvP7ubXSQ7b8lTzePfUcaVCZAE8TE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5431.namprd12.prod.outlook.com (2603:10b6:8:34::8) by
+ PH7PR12MB6788.namprd12.prod.outlook.com (2603:10b6:510:1ae::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.16; Thu, 3 Oct
+ 2024 18:23:39 +0000
+Received: from DM8PR12MB5431.namprd12.prod.outlook.com
+ ([fe80::6cd6:bbdf:298b:7d20]) by DM8PR12MB5431.namprd12.prod.outlook.com
+ ([fe80::6cd6:bbdf:298b:7d20%6]) with mapi id 15.20.8026.017; Thu, 3 Oct 2024
+ 18:23:39 +0000
+Message-ID: <afb91d66-55b2-466d-87c6-5de196b326d8@amd.com>
+Date: Thu, 3 Oct 2024 14:23:37 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] usb: acpi: add device link between tunneled USB3
+ device and USB4 Host Interface
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
+ regressions@lists.linux.dev, Raju.Rangoju@amd.com, Sanath.S@amd.com,
+ Greg KH <gregkh@linuxfoundation.org>
+References: <cf45e722-144f-4d06-8dd9-2f7f54283fbc@amd.com>
+ <20241003054704.GM275077@black.fi.intel.com>
+ <01bf9a3a-6277-4b57-83ed-82c4bfb62dd2@amd.com>
+ <20241003132726.GN275077@black.fi.intel.com>
+ <797f52fa-ab9d-45c5-828b-9dcaf75fcc83@amd.com>
+ <20241003134743.GO275077@black.fi.intel.com>
+Content-Language: en-US
+From: Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20241003134743.GO275077@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0333.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:6b::26) To DM8PR12MB5431.namprd12.prod.outlook.com
+ (2603:10b6:8:34::8)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/4] mfd: intel_soc_pmic_bxtwc: Use IRQ domain for TMU
- device
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-usb@vger.kernel.org
-Cc: Andy Shevchenko <andy@kernel.org>, Lee Jones <lee@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Zhang Ning <zhangn1985@outlook.com>
-References: <20241003174252.1190628-2-andriy.shevchenko@linux.intel.com>
- <20241003174252.1190628-4-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20241003174252.1190628-4-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5431:EE_|PH7PR12MB6788:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82d33242-1cd9-4020-4ee1-08dce3d880f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TnJUMTg1UDZabTZXczZESHVVd2VVeHVJZXNqV3d6d3ZDUFVzN3lwd0ppZ0RJ?=
+ =?utf-8?B?U1RtWjgzVVM4dnZVZTJJbmNOQVcydDI5aTBrTnpmRDcreExUQ05kVTZRMDFw?=
+ =?utf-8?B?MHlwc0tuSEFxNHJybmZ1UEplbWJMdVl2QmVGOXdlNG9YekFKMEdRYnAzV2dE?=
+ =?utf-8?B?Sk9WMGdxS2FuTElpeDlKbTA1QXduNStMOStheFh1MFRBbk1SaS9pZXJ0RUJl?=
+ =?utf-8?B?dytjZ0VpWUg5UmlyUG1GbXh1eWVlNzNkeklxSlE5U3VFTGxPSld2NysxcG1a?=
+ =?utf-8?B?eFc4QmVtS1lIaUk1Um1pbTgwWngvZ0FtVForZkZmeGtOZHB1RzVaY25GdURj?=
+ =?utf-8?B?SHN1TjlwVHdrSmp1SWhEYmE4Q0hNNGZrRlkyZG91Nlp6dk1JSEVWa2YwU0g3?=
+ =?utf-8?B?MU1EVXZpNVI4RHVGQnlZeWticlVNZWQwanhkbEVIYmx1WEl4RFhjT0RCZGhP?=
+ =?utf-8?B?UG9WM2UzZ0FkSVVwazNRTlV1bkg1RzlWaVZ3NlNwbzJnSzFicTBXTjFjS0l4?=
+ =?utf-8?B?NGVFdGVTK0FhaGlDUU5OZFAvbGpsdWlhTHNjdUdyM2JNaW5xMTdUMTl3YUtT?=
+ =?utf-8?B?TzBOdmpKcVB0S2pmZTVHekNVbXA5M2I1SEZEOUs3bktEcWRWbmZON2JDZll5?=
+ =?utf-8?B?elljQmFCT045NGVRM2xLOVpiU2daT1VDVlhZVE5oSWc0cExSWk1QV1Fmczgr?=
+ =?utf-8?B?cEx4NVBPMFVIcTZKVXJoVkdwNWpkdU9VUmVRWlJReXNwTG1MendkSXA5bzhh?=
+ =?utf-8?B?dkNUTlBQTnJTQisxWE9YbFVnbmt2VzRLdnRWWnRPeVR3M0NLQkhNTzA5ai9V?=
+ =?utf-8?B?N3dYa3NqdXBPaWdlUk1rbWhOM1VEZnNucmg1Y1RWUHJ4dmpnKzFLL09nVm5L?=
+ =?utf-8?B?NHVXTysrWjJZYjF1VGh5Nm5WaVJURGtOREN6U0Jma01vdDVYd2pUYStYSytK?=
+ =?utf-8?B?L2RvdFRqN1RDYThObGVJTjk0VVRPYjZVOGRIZVplam1kRkQxOHI3b2hnRW05?=
+ =?utf-8?B?R3dNQnRVd2tlNHQrQU11K3RXbFg4eXhveGpBNkEvNkpqZnNLeUsrbUpnejV3?=
+ =?utf-8?B?VTN2cDF0dVBEM3BPWmFla090ZUZiVDJja2ljSTloUGN4SzZKNGpzRlFaUjkw?=
+ =?utf-8?B?L2Y1a2VjSlFycXNheXNRVWdYcjdhNFlBcGhjQkRDS1VqMHg5eUY3QXl0MGNa?=
+ =?utf-8?B?K1pZd09jRWY2RGtMYk9pUXM1TlpLaGhCMzZkcVZaakpuckpWbEV3ZFFXcGkz?=
+ =?utf-8?B?Uk1GTHI1TzRnL2w4MFJvTzBZVXpMdDdQYjZFUHZnK3VOd1NvdEUrbkdqYVBE?=
+ =?utf-8?B?eHlLNnBBZXByUklYMzVDTnd5dHQ3UEs0UUF4NkRYVVNPV3JwOGdzcWQ5WkI4?=
+ =?utf-8?B?SjNHVUF3cFhTVDhKVzFGYytwbkNXK1psY2RLVnJBUCtGSCtuck1ac1JxMlFF?=
+ =?utf-8?B?U2dPV2dvY0xkSFNoVStValhzRVFMUi9samZwMlppNTJseFlpY0tMVENyc3FD?=
+ =?utf-8?B?TDNDUkN2M1NFc2kvbTdIcmVNdnphWWNHeFFqNzM1eEFBNHUvNllrMnRsUURs?=
+ =?utf-8?B?ZG9BbU9JVHg4MC9sRGhOd1V1Snd5UURadC90ZmRqZ1ZBdS9EUnNONmk4Unh1?=
+ =?utf-8?Q?sABd8wJ+HLIp+XBuUl3C1klut05iOL59Az0HEYPH7j9c=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5431.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZTZESnlRTWgvVkhYeVhYUzdzbjk0NVJKNkFvYlJjN295MDdFa3BXSVJ0Z2Zp?=
+ =?utf-8?B?anA4eUxzOFJjWmpPQks1Q1dLWUJrSWdtNjBCbHhLNUdFNzArZUpBbXlFYzUz?=
+ =?utf-8?B?UndsT3RsZzB1RnVIWWhGVVFhSEExMXhEcWN6ZGo2djEzdTJjeGwyWUJ5VXdO?=
+ =?utf-8?B?UzI4dTdKYmtpaDIwVndoR1FwMm5URWtLL00wQlZhMjk0R2NpNll0bDJwOG5l?=
+ =?utf-8?B?V0pJUEtkWHFvUndnNE1KWGIvSXo2T0kxcTcyYXNzYnVoOXdFajM1bG5hUlNZ?=
+ =?utf-8?B?a3FCeW0wRXNPUnBkeG5QRzZjT2ZJbFA5Nk5UVjVrcjA1YVNGWFkreTdkQ0VK?=
+ =?utf-8?B?V0krdjBRMUhUQUtoZ0UyZVREejdVOVQ4RW4vUVMvU0xHdCtwM3dyQzJYODVX?=
+ =?utf-8?B?TUJIaWhUbmlJMGcxdU1SamRuT2h0SzlqSDdrako1TzFHdkIrc254Z25XNzVu?=
+ =?utf-8?B?eWtEbVBsQm00WVBoRGwrSDNISytjUVBhQ2t1MjNOOEIwWFFZSUhqVVBicXNq?=
+ =?utf-8?B?WmFFcFhWelkyR2I1cVNKZHZpK2ZWTFNyM3FyaVgwcnA0UTI4TzN5dGlvNFMz?=
+ =?utf-8?B?Tm13b3NDZHlNT0RzQWMxU1NzOG1QbEhXNlNpdm9QYm0rOTcvRkFzOWR1RE5F?=
+ =?utf-8?B?Z0FVczN4N0UvNUwvR3c5SzhkQ1NiaGdybjVYNzNtUzlwOTRoZUoxVWJZSFZP?=
+ =?utf-8?B?TWlwNzFreGJkZmlqVEQzL3A4U045cWE5UytxOVQxakhma0prMkowcERRZ1Jk?=
+ =?utf-8?B?L2VYN0hENkc4anhLQmF3U0x0THJNR0FOUm9FdGUxNEpyRjloSEJ2dUtqVUhN?=
+ =?utf-8?B?Nkt2aW5BblZUMnlFbmJkZy9IVnZtYXJDTGhXOVlENTBrQUk2WUthVjZ2NlZR?=
+ =?utf-8?B?NjJTSXNFZDZqOTQrcHJ0RHRDcFJGZGhENXFUdVc2ZUdpdzBsWXZoQ0ZHRTUw?=
+ =?utf-8?B?Qk1ZM0o2T2FDQ2VFOWdIOU90YndtTE5xYnU3aVgvcEFoUlB0K2orK2crR3Jn?=
+ =?utf-8?B?eWtuVFN1VFJKS3hWSHMxNUdBUkZtK3FsWjlOVzF0UFdwNU1YbVBuaVB3Y1cv?=
+ =?utf-8?B?TmlKSEJ1OUprcWJZVXRWemdWanVDZWViMzQxcDVkblhaTUxNSVBVUXRMTDM2?=
+ =?utf-8?B?WWtPRjRIN052SkhwbW9TS3VVVXl5UnpZR2gvaFkremZYbG8rbXFORktRWHN2?=
+ =?utf-8?B?dWlkOWl6dUNyUDFJSEtUY0R3Z2pJSlZrVndFWUhHWlNBKzl3M2hPeUJBT3RY?=
+ =?utf-8?B?UktRelpPZDRQZ0Jwb1JSU2NjUENERWFHZ2xCMVdpK010YkdGanFJNzJMeEYr?=
+ =?utf-8?B?V2Zua2RhUVNGY1hkR2FQelB6S3JPOWtEd2RmNXorVlVTdDV5NG9iazVOeUJH?=
+ =?utf-8?B?dWRUSHkyNGhsVDFoczhjNkZjSXVkaWp2NUs3d2VxRXV2T1Nubi9DOC9wQWw3?=
+ =?utf-8?B?NnFTV3NGazhpOWUyUXF3RHNmVUlFZElkbXhUZVBFMWVScktmYmhKQTdZMnkr?=
+ =?utf-8?B?KzVkeDg2Y1RKamswdlZ3Y1V2OXkvVFVYMmJtcUtUczY5OUZkeXM1bUZvZmpZ?=
+ =?utf-8?B?dTY0UkI2NVBDQUNkQlN5L2J0cDRBTmw5RHU4eTNzUzR2eUNFUUEwV2o0R2o3?=
+ =?utf-8?B?K1ZTNE01NkxUWWNOMCsrL1dvOWlBL2lOYktZbjlGTExaU2VYZE5MRHd2Q3N2?=
+ =?utf-8?B?UFlBVWMxZkN0d1BNMThDNHF4Z1ZqRnd0RU84Y0tMR0Q2OHFkd0I5WXBFdWFL?=
+ =?utf-8?B?UlF5amprK1hJZzduQlI2MXR2UU9VNlVrckQ2UUhnN0Q2alN6VGc5d3U5eHBZ?=
+ =?utf-8?B?dk1PYVBTRnpWM1hZZGNGUWtUbi9rMGZGcHB6andMaEkzR0loejJVOHgrRzVW?=
+ =?utf-8?B?enFlTHlMMUV4SG8rTHljLyt6b1I5cnB4Y0tlUzVERzg3ZTNSejRBUlVOelpv?=
+ =?utf-8?B?KzJxS2o4UWMzS2wxMjVXbG10NjBTYjdydDF1a0J1QmFRTkNEK0VXVWk5d0JO?=
+ =?utf-8?B?ZXFKTzNCcnFyTFRpdkV1V1dZeDhuWm1tcmUzbnVyeEF4aTN5RDFEQi9mSEJX?=
+ =?utf-8?B?ZENJdTBEWHIxc0d2Wis0YzBGRGUyV3lpZnJsNWpYeGd5bjZuZHpmNFcxV01S?=
+ =?utf-8?Q?Is2O77KuqpNM+MUVGE2YpSX2F?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82d33242-1cd9-4020-4ee1-08dce3d880f0
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5431.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2024 18:23:39.7506
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BK9DyBwTsARJXjcPaUAniRZt6R+eqwcdR8dU8otA3k4aQXr/GcW+y3WVHsTKJnYKHev+LUdfVuB8H6j9UaohCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6788
 
-Hi,
 
-On 3-Oct-24 7:32 PM, Andy Shevchenko wrote:
-> While design wise the idea of converting the driver to use
-> the hierarchy of the IRQ chips is correct, the implementation
-> has (inherited) flaws. This was unvelead when platform_get_irq()
-> had started WARN() on IRQ 0 that is supposed to be a Linux
-> IRQ number (also known as vIRQ).
+
+On 2024-10-03 09:47, Mika Westerberg wrote:
+> On Thu, Oct 03, 2024 at 08:42:21AM -0500, Mario Limonciello wrote:
+>> On 10/3/2024 08:27, Mika Westerberg wrote:
+>>> On Thu, Oct 03, 2024 at 08:10:11AM -0500, Mario Limonciello wrote:
+>>>> On 10/3/2024 00:47, Mika Westerberg wrote:
+>>>>> Hi Harry,
+>>>>>
+>>>>> On Wed, Oct 02, 2024 at 01:42:29PM -0400, Harry Wentland wrote:
+>>>>>> I was checking out the 6.12 rc1 (through drm-next) kernel and found
+>>>>>> my system hung at boot. No meaningful message showed on the kernel
+>>>>>> boot screen.
+>>>>>>
+>>>>>> A bisect revealed the culprit to be
+>>>>>>
+>>>>>> commit f1bfb4a6fed64de1771b43a76631942279851744 (HEAD)
+>>>>>> Author: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>>>> Date:   Fri Aug 30 18:26:29 2024 +0300
+>>>>>>
+>>>>>>       usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface
+>>>>>>
+>>>>>> A revert of this single patch "fixes" the issue and I can boot again.
+>>>>>> The system in question is a Thinkpad T14 with a Ryzen 7 PRO 6850U CPU.
+>>>>>> It's running Arch Linux but I doubt that's of consequence.
+>>>>>>
+>>>>>> lspci output:
+>>>>>>       https://gist.github.com/hwentland/59aef63d9b742b7b64d2604aae9792e0
+>>>>>> acpidump:
+>>>>>>       https://gist.github.com/hwentland/4824afc8d712c3d600be5c291f7f1089
+>>>>>>
+>>>>>> Mario suggested I try modprobe.blacklist=xhci-hcd but that did nothing.
+>>>>>> Another suggestion to do usbcore.nousb lets me boot to the desktop
+>>>>>> on a kernel with the faulty patch, without USB functionality, obviously.
+>>>>>>
+>>>>>> I'd be happy to try any patches, provide more data, or run experiments.
+>>>>>
+>>>>> Do you boot with any device connected?
+
+Great question. A Thinkpad USB-C dock. When I unplug the dock at boot it
+boots fine and when I plug it in later the laptop charges from it and the
+dock's audio output work fine.
+
+In the midst of my experiments I also noticed at one point the dock
+wasn't charging my laptop and hard-resetting the laptop didn't fix that.
+I had to unplug the dock from the wall and plug it back. So there is
+likely some interaction going on with this particular dock that must've
+sent the dock's FW into a bad state.
+
+The dmesg with the revert and thunderbolt.dyndbg=+p is here
+https://gist.github.com/hwentland/7e25dedd3e707fdae1185d65224d4d66
+
+I don't see any PCIe tunneling option in my BIOS.
+
+>>>>>> Second thing that I noticed, though I'm not familiar with AMD hardware,
+>>>>> but from your lspci dump, I do not see the PCIe ports that are being
+>>>>> used to tunnel PCIe. Does this system have PCIe tunneling disabled
+>>>>> somehow?
+>>>>
+>>>> On some OEM systems it's possible to lock down from BIOS to turn off PCIe
+>>>> tunneling, and I agree that looks like the most common cause.
+>>>>
+>>>> This is what you would see on a system that has tunnels (I checked on my
+>>>> side w/ Z series laptop w/ Rembrandt and a dock connected):
+>>>>
+>>>>             +-03.0
+>>>>             +-03.1-[03-32]--
+>>>>             +-04.0
+>>>>             +-04.1-[33-62]----00.0-[34-62]--+-02.0-[35]----00.0
+>>>>             |                               \-04.0-[36-62]--
+>>>>
+>>>> 00:03.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
+>>>> 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
+>>>> 00:03.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h
+>>>> USB4/Thunderbolt PCIe tunnel [1022:14cd]
+>>>> 00:04.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
+>>>> 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
+>>>> 00:04.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h
+>>>> USB4/Thunderbolt PCIe tunnel [1022:14cd]
+>>>
+>>> Okay this is more like what I expected, although probably not the
+>>> reason here.
+>>>
+>>> Are you able to replicate the issue if you disable PCIe tunneling from
+>>> the BIOS on your reference system? (Probably not but just in case).
+>>
+>> I checked on the Lenovo Z13 laptop I have and turned off "USB port" in BIOS
+>> setup and this caused the endpoints 3.1 and 4.1 I listed above to disappear
+>> but the system still boots up just fine for me on 6.12-rc1.
 > 
-> Rework the driver to respect IRQ domain when creating each MFD
-> device separately, as the domain is not the same for all of them.
+> Okay thanks for checking!
 > 
-> Fixes: 957ae5098185 ("platform/x86: Add Whiskey Cove PMIC TMU support")
-> Fixes: 57129044f504 ("mfd: intel_soc_pmic_bxtwc: Use chained IRQs for second level IRQ chips")
-> Reported-by: Zhang Ning <zhangn1985@outlook.com>
-> Closes: https://lore.kernel.org/r/TY2PR01MB3322FEDCDC048B7D3794F922CDBA2@TY2PR01MB3322.jpnprd01.prod.outlook.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>>>> You don't see anything on the console? It's all blank or it just hangs
+>>>>> after some messages?
+>>>>
 
-Thanks, patch looks good to me:
+It hangs after some messages.
 
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-
-Please feel free to merge this through the MFD tree as suggested in
-the cover-letter.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/mfd/intel_soc_pmic_bxtwc.c     | 31 ++++++++++++++------------
->  drivers/platform/x86/intel/bxtwc_tmu.c | 22 +++++-------------
->  2 files changed, 23 insertions(+), 30 deletions(-)
+>>>> I guess it is getting stuck on fwnode_find_reference() because it never
+>>>> finds the given node?
+>>>
+>>> Looking at the code, I don't see where it could get stuck. If for some
+>>> reason there is no such reference (there is based on the ACPI dump) then
+>>> it should not affect the boot. It only matters when power management is
+>>> involved.
+>>
+>> Nothing jumps out to me either.  Maybe this is a situation that Harry can
+>> sprinkle a bunch of printk's all over usb_acpi_add_usb4_devlink() to
+>> enlighten what's going on (assuming the console output is "working" when
+>> this happened).
 > 
-> diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
-> index d72995a9e820..628108dcf545 100644
-> --- a/drivers/mfd/intel_soc_pmic_bxtwc.c
-> +++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
-> @@ -245,12 +245,6 @@ static struct mfd_cell bxt_wc_dev[] = {
->  		.num_resources = ARRAY_SIZE(bcu_resources),
->  		.resources = bcu_resources,
->  	},
-> -	{
-> -		.name = "bxt_wcove_tmu",
-> -		.num_resources = ARRAY_SIZE(tmu_resources),
-> -		.resources = tmu_resources,
-> -	},
-> -
->  	{
->  		.name = "bxt_wcove_gpio",
->  		.num_resources = ARRAY_SIZE(gpio_resources),
-> @@ -261,6 +255,14 @@ static struct mfd_cell bxt_wc_dev[] = {
->  	},
->  };
->  
-> +static const struct mfd_cell bxt_wc_tmu_dev[] = {
-> +	{
-> +		.name = "bxt_wcove_tmu",
-> +		.num_resources = ARRAY_SIZE(tmu_resources),
-> +		.resources = tmu_resources,
-> +	},
-> +};
-> +
->  static struct mfd_cell bxt_wc_chgr_dev[] = {
->  	{
->  		.name = "bxt_wcove_usbc",
-> @@ -489,6 +491,15 @@ static int bxtwc_probe(struct platform_device *pdev)
->  	if (ret)
->  		return dev_err_probe(dev, ret, "Failed to add IRQ chip\n");
->  
-> +	ret = bxtwc_add_chained_devices(pmic, bxt_wc_tmu_dev, ARRAY_SIZE(bxt_wc_tmu_dev),
-> +					pmic->irq_chip_data,
-> +					BXTWC_TMU_LVL1_IRQ,
-> +					IRQF_ONESHOT,
-> +					&bxtwc_regmap_irq_chip_tmu,
-> +					&pmic->irq_chip_data_tmu);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = bxtwc_add_chained_irq_chip(pmic, pmic->irq_chip_data,
->  					 BXTWC_PWRBTN_LVL1_IRQ,
->  					 IRQF_ONESHOT,
-> @@ -497,14 +508,6 @@ static int bxtwc_probe(struct platform_device *pdev)
->  	if (ret)
->  		return dev_err_probe(dev, ret, "Failed to add PWRBTN IRQ chip\n");
->  
-> -	ret = bxtwc_add_chained_irq_chip(pmic, pmic->irq_chip_data,
-> -					 BXTWC_TMU_LVL1_IRQ,
-> -					 IRQF_ONESHOT,
-> -					 &bxtwc_regmap_irq_chip_tmu,
-> -					 &pmic->irq_chip_data_tmu);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "Failed to add TMU IRQ chip\n");
-> -
->  	/* Add chained IRQ handler for BCU IRQs */
->  	ret = bxtwc_add_chained_irq_chip(pmic, pmic->irq_chip_data,
->  					 BXTWC_BCU_LVL1_IRQ,
-> diff --git a/drivers/platform/x86/intel/bxtwc_tmu.c b/drivers/platform/x86/intel/bxtwc_tmu.c
-> index d0e2a3c293b0..9ac801b929b9 100644
-> --- a/drivers/platform/x86/intel/bxtwc_tmu.c
-> +++ b/drivers/platform/x86/intel/bxtwc_tmu.c
-> @@ -48,9 +48,8 @@ static irqreturn_t bxt_wcove_tmu_irq_handler(int irq, void *data)
->  static int bxt_wcove_tmu_probe(struct platform_device *pdev)
+> There are couple of places there that may cause it to crash, I think.
+> And the __free() magic is something I cannot wrap my head around :(
+> 
+> Anyways, Harry can you try the below patch and see if it makes any
+> difference? Also if it does please provide dmesg.
+> 
+
+The patch doesn't seem to make a difference. Same hang on boot.
+
+Harry
+
+> diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+> index 21585ed89ef8..90360f7ca905 100644
+> --- a/drivers/usb/core/usb-acpi.c
+> +++ b/drivers/usb/core/usb-acpi.c
+> @@ -157,6 +157,7 @@ EXPORT_SYMBOL_GPL(usb_acpi_set_power_state);
+>   */
+>  static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
 >  {
->  	struct intel_soc_pmic *pmic = dev_get_drvdata(pdev->dev.parent);
-> -	struct regmap_irq_chip_data *regmap_irq_chip;
->  	struct wcove_tmu *wctmu;
-> -	int ret, virq, irq;
-> +	int ret;
+> +	struct fwnode_handle *nhi_fwnode;
+>  	const struct device_link *link;
+>  	struct usb_port *port_dev;
+>  	struct usb_hub *hub;
+> @@ -165,11 +166,12 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
+>  		return 0;
 >  
->  	wctmu = devm_kzalloc(&pdev->dev, sizeof(*wctmu), GFP_KERNEL);
->  	if (!wctmu)
-> @@ -59,27 +58,18 @@ static int bxt_wcove_tmu_probe(struct platform_device *pdev)
->  	wctmu->dev = &pdev->dev;
->  	wctmu->regmap = pmic->regmap;
+>  	hub = usb_hub_to_struct_hub(udev->parent);
+> -	port_dev = hub->ports[udev->portnum - 1];
+> +	if (WARN_ON(!hub))
+> +		return 0;
 >  
-> -	irq = platform_get_irq(pdev, 0);
-> -	if (irq < 0)
-> -		return irq;
-> +	wctmu->irq = platform_get_irq(pdev, 0);
-> +	if (wctmu->irq < 0)
-> +		return wctmu->irq;
+> -	struct fwnode_handle *nhi_fwnode __free(fwnode_handle) =
+> -		fwnode_find_reference(dev_fwnode(&port_dev->dev), "usb4-host-interface", 0);
+> +	port_dev = hub->ports[udev->portnum - 1];
 >  
-> -	regmap_irq_chip = pmic->irq_chip_data_tmu;
-> -	virq = regmap_irq_get_virq(regmap_irq_chip, irq);
-> -	if (virq < 0) {
-> -		dev_err(&pdev->dev,
-> -			"failed to get virtual interrupt=%d\n", irq);
-> -		return virq;
-> -	}
-> -
-> -	ret = devm_request_threaded_irq(&pdev->dev, virq,
-> +	ret = devm_request_threaded_irq(&pdev->dev, wctmu->irq,
->  					NULL, bxt_wcove_tmu_irq_handler,
->  					IRQF_ONESHOT, "bxt_wcove_tmu", wctmu);
->  	if (ret) {
->  		dev_err(&pdev->dev, "request irq failed: %d,virq: %d\n",
-> -							ret, virq);
-> +			ret, wctmu->irq);
->  		return ret;
+> +	nhi_fwnode = fwnode_find_reference(dev_fwnode(&port_dev->dev), "usb4-host-interface", 0);
+>  	if (IS_ERR(nhi_fwnode))
+>  		return 0;
+>  
+> @@ -180,12 +182,14 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
+>  	if (!link) {
+>  		dev_err(&port_dev->dev, "Failed to created device link from %s to %s\n",
+>  			dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
+> +		fwnode_handle_put(nhi_fwnode);
+>  		return -EINVAL;
 >  	}
-> -	wctmu->irq = virq;
 >  
->  	/* Unmask TMU second level Wake & System alarm */
->  	regmap_update_bits(wctmu->regmap, BXTWC_MTMUIRQ_REG,
+> -	dev_dbg(&port_dev->dev, "Created device link from %s to %s\n",
+> -		dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
+> +	dev_info(&port_dev->dev, "Created device link from %s to %s\n",
+> +		 dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
+>  
+> +	fwnode_handle_put(nhi_fwnode);
+>  	return 0;
+>  }
+>  
+> 
 
 
