@@ -1,120 +1,242 @@
-Return-Path: <linux-usb+bounces-15661-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15662-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C99F98EEFA
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 14:18:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 658E398F00B
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 15:10:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E12D284C28
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 12:18:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7D6FB22818
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 13:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A6B199391;
-	Thu,  3 Oct 2024 12:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2369199386;
+	Thu,  3 Oct 2024 13:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NXjcTk/3"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zPZJQvHs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2077.outbound.protection.outlook.com [40.107.236.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA8718593E;
-	Thu,  3 Oct 2024 12:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727957867; cv=none; b=Lvx7sOFFzQoKZk6wQzeWQS5qn86G1rqAb3VwNT/ys9OW/dM+1Fgcs8muzSmtf8h7q81Q2G0C0t96CtgGWoSrKI0ouHoMhHoC7K7reiJ7y5DKydDCOM3ThqWS42G20fZvcO94zlE6C6qkzWFwWojCQPmZU5xD25SVr8M7fQ4aI48=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727957867; c=relaxed/simple;
-	bh=aGQ7+SR9U7HF7iLueB7DH4Z3T9tvu3SmVEYNeNRliE4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eOy5znc8KfBmtIT07i+uqXPavB9OZPFOWX6mCHpUP+mbpe42K42Al8dbRLuo9wEQSgPU3GFrXaHHAXbSFxbYha2Us/BTY0gAVk8Q9r9mdpbthdbkyYzequu6nRyWjf+B5yjuN+/7mAP4fJlhRi+D05UZJ1i6Rt5Fe0gB5bnkaNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NXjcTk/3; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727957866; x=1759493866;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aGQ7+SR9U7HF7iLueB7DH4Z3T9tvu3SmVEYNeNRliE4=;
-  b=NXjcTk/3FmrIJ+UcoDTCJZcbiOCQQ2+Oza3I5r0WjuuPAwYEDZWvnpp4
-   jRMPsMrjT/v1Fyt5U8DeStknrt0250MPAqyPl+DpgjEMkOYeXD8QVPiOG
-   WE075lyy930uxy2w9VTby4pRzqR26GC/Xmit+li6YYjRy0hY9BZiJLwJR
-   hM4ZlhHWe3vHF3ldBQFxkrqjc3JN6xKERhpT1VHWGpF5PhgMVXZS948Pd
-   UzRpJ4/xCY7o4oRgmnpGFEVPaf2sn5ZSue3BJ7pgeZL0nvYOXsohtdmHI
-   4rYPE2EHOcffgbUzwLaWAH1L0L3HjbOPfRdYGRIb6/mjiUHu0NC+tNrfV
-   w==;
-X-CSE-ConnectionGUID: iP+0WW/wQH6BsJ9GiJqzVg==
-X-CSE-MsgGUID: w01VOoNESHmYg6JJLAW69g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="37705720"
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="37705720"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 05:17:43 -0700
-X-CSE-ConnectionGUID: qrFFcryMQVS07sLTy0Alsw==
-X-CSE-MsgGUID: Ikt77AB3RLusenKZkhVhtQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="78746177"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Oct 2024 05:17:41 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 350A337D; Thu, 03 Oct 2024 15:17:40 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 3/3] xhci: pci: Fix indentation in the PCI device ID definitions
-Date: Thu,  3 Oct 2024 15:14:46 +0300
-Message-ID: <20241003121729.3867216-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20241003121729.3867216-1-andriy.shevchenko@linux.intel.com>
-References: <20241003121729.3867216-1-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90662186E3C
+	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 13:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727961019; cv=fail; b=tTebgWTpRFpmDZD3Qafn5420C3RTJlVBKrVkg6YaDpi0By6MUeTa7dP5Qzb97Og9TyXakFnvHwRdi1O8kVHYs3+UEaqS55tTGSKxrM8TstRYBVbQ3B5Up/YCoO1OH279zoUEJ8XimzUxttOlFYx5B3iFmQX6w0LYCALrTwgR0wE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727961019; c=relaxed/simple;
+	bh=d3OnQO3Q1ovLawuuReEeIbyf67TQxMmAod2e4OnnI90=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=C0bby2pxxBpx2/mMVvfZbrPLJ4oouWBCCkFdc3xNDP4s4nKjFzjewYjAtvvPhhars02Dv3K7TWO/mnytRr8YJs/f2bBTNSr/hcqg1pHQVxxv8MfyZkRmX4vbgyYa1gHM9KrGsMf4El9Q5r01iT3LY82xihuhBCwHTHDLLAu8LCE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=zPZJQvHs; arc=fail smtp.client-ip=40.107.236.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=moYyy2HWKl9hsoeRVkcvvqAPH2P1icy5D0jlJB5PiYpFotD2f7f/intylXuoblVg7IHY8UZPi+vezrpEhqsYBqao7+NKmr0PSOlj4CPhhO0zPwdK8EuZ+OxmKxO6H+wjqx59xasbBsdj/FHNkWe5kCWMi6GQwo9u/P+1FKZLw7O9DCIy4Sr5axdPb6MifWX/12xt0OHYoeUWWVY1uf7kYD+6aNdNjSkldm3/fEsxlqUY4ERdKZ64Uw8dDzSE6NsdPZZwW/plZssa8nDhQDHLY1LX2PgH9c8UvVwzg4Nr4FYX32CVY2P+UeEN4oDs+23vUVuhsp4L4rhC7oOLXPRSlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H0IOKvIJIAhUDm2NiqC/w6YxMJTLrRBgyLL27ln3sEY=;
+ b=xxPZSTvcM+bZS72Fp8nNVFJ5LY2YBYRxyIbkA74jGCFeCuuAc6hUS2x7frKIf4yKvFmojr14iQfQQHwGwghvXHqxxEzCcxUisksx+hgNtFN/1xNjGF2QvxEMZgNTnsZrknut4qSlwf9+bgqhIc6SnkCvFrPWJiE11oVSnbf0NT06h2Z+vU31ow46zq9iw6Pi+ZbVVmuIJh7Y9kVAlRPvopgjNMw1bipg9tzf5ZDFgz4PoGWs0c8CGfwusFcr0KqyVjDjfjAiJJ/Mir1WNBJra1FktXxs+0DzMHiv5CjTOq51xeRS5LO+rcQOCvZiuVQ5sHgqYoytMfByxCUoBBYfkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H0IOKvIJIAhUDm2NiqC/w6YxMJTLrRBgyLL27ln3sEY=;
+ b=zPZJQvHsrTACSy3eyQ23/B8sIS5SWP/2PiOkYH7fwo+h7kb8dr/fHR2/JOesByskfzob7P4kVF6HGyDnP7WlIKelhzKO+oHdLanxio+bwe3dQnzgwTSywP8wP2pQuseGeiAbFM2gzYEOzPLUqtEotu5PxFmMOn2azeVbE4vrFIo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by IA1PR12MB6185.namprd12.prod.outlook.com (2603:10b6:208:3e7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.16; Thu, 3 Oct
+ 2024 13:10:14 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.8026.017; Thu, 3 Oct 2024
+ 13:10:14 +0000
+Message-ID: <01bf9a3a-6277-4b57-83ed-82c4bfb62dd2@amd.com>
+Date: Thu, 3 Oct 2024 08:10:11 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] usb: acpi: add device link between tunneled USB3
+ device and USB4 Host Interface
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Harry Wentland <harry.wentland@amd.com>
+Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
+ regressions@lists.linux.dev, Raju.Rangoju@amd.com, Sanath.S@amd.com,
+ Greg KH <gregkh@linuxfoundation.org>
+References: <cf45e722-144f-4d06-8dd9-2f7f54283fbc@amd.com>
+ <20241003054704.GM275077@black.fi.intel.com>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20241003054704.GM275077@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1PR02CA0010.namprd02.prod.outlook.com
+ (2603:10b6:806:2cf::16) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|IA1PR12MB6185:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb959f25-f6fb-4a13-3a26-08dce3acb7f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OVU0OUFySDljclNyb2FjeDE5MVo4eGJSdUdjNkwyNzhJODlsTG5CeWFOajJ0?=
+ =?utf-8?B?VkZSQ1FlQ2taSktTbEVMM1NFdG9YOWJZMVYvZ2UydlJrMk53T0J6bitCKzFv?=
+ =?utf-8?B?N1dHZjJGeEtHS3I3M3loUTErVnBKbGcydDJaOE1BUjE1OGpLOUhuR2ZQY210?=
+ =?utf-8?B?ditpemlwNWhyZlJrVnBJMVlOU3BMR0tnOUJmRFN1cmFOTGpjQkhLZUFFT2Rh?=
+ =?utf-8?B?Nkt4aDNrbkZQOE9XSzc2cklJZUhFeWgxZ2cxMGdwOG5xZHV3c25ENTcyYmJL?=
+ =?utf-8?B?V1Q4WXplQnZxeGhsQUxEZG1XRkEyQjJUVVpmS1ZPYWlEMzJZTitPRHVvRWV0?=
+ =?utf-8?B?Q3JNcksreElvekNUVlJRTXU3Mm44Wk5ySmd5TmRtd0dzVG5XODU1Wi9jalJ4?=
+ =?utf-8?B?VG5pMHVLRE9jMXJVVE9ncEVDakFqTHhzV210QmdTVWRXQXRhNnhienl2U3J5?=
+ =?utf-8?B?dSsxeGtvZ1NCZm15QUNNeEY1Mjg3TkFPUUcvQWFOYTNpQVJId29vVEZIamlL?=
+ =?utf-8?B?MC9rQ0VFM0pib1hhNzNFZGtabHo5Z2VHcEJUeU9oVEkrK3BHV0l4eWw5Z1h0?=
+ =?utf-8?B?ZzMxOXZhbzJKVG92aC93RDNNNEZHZnZ5TnJNUWJBNkl5ZitrTkRXb2JBWElp?=
+ =?utf-8?B?YW1OMUJKWklpVDVwOHBjdDdlRUtiN1RJT2dLOEptSG0wZTUrOTFVemdNTm40?=
+ =?utf-8?B?QjkvSzVCZTBaSVBmU004bnNmbWVhdUJkaG5VLzg4Q0NqTXBRajVtWFpnb2Fn?=
+ =?utf-8?B?ZmhGRmo2RUd6Ty9kWnZjZThHSFJGbEJPUE5ScFRPWkVZNmhQeG9Ga3I4UU9W?=
+ =?utf-8?B?dERvYzFGaWdqNkJnL2poRjFRQnZndFFVOUFGL3RQeVoyN3FKL0pXeGg4Qkhx?=
+ =?utf-8?B?b3VHdlJFZWlxK2NTemJMNmdRbURkWTU2bm9EQllXeXNTdVFqdDlKb295dVd0?=
+ =?utf-8?B?WTdzVVBMQU5yejBhQXRJbnozbU9VMlVib0NKV3MvRzBuSVJlK1RNazd5aDZu?=
+ =?utf-8?B?R3huZUZsUThOZEU5YVczbnVYeUdtQm9sV242YkRVWTJ5Nm53Z0FlWHJQQTVG?=
+ =?utf-8?B?R3l6NXlNbjRSS00vQVRFb09DZjQrMnh4OGVkQ1BESkRQeWZGYjE1S1lOdUw0?=
+ =?utf-8?B?NGdIVS81eGJIbGJYd2NJV2t2QnEzbXNqNFF1eUg3ZENsSHd3WGxSWnB5a1Zm?=
+ =?utf-8?B?YlNOT1pqQTZLOWxUMVFOK2gxd3dlbUorOXNRVWpRTXB0dHB2ek9SV1M2bFFT?=
+ =?utf-8?B?WTBabE9YZG1SMmhqK01QbVJGTXBLd2lrTWxGZDRQNHVnUzllcEpybVp3c2xz?=
+ =?utf-8?B?Wk9idjdMUm1mRDZZNUdFNmkrcS9GUk9QSFdMbU8vWm9YQ2E5anE3bzBEMmVX?=
+ =?utf-8?B?RmhsQWJCQzRYMXc2ZHFvMXcwM21LZmdYYjdYNm1MdDBRaXVkdjNjMjRSeTQv?=
+ =?utf-8?B?dG5rWENOQklsaEtmZ2NCQ0NFTzZCNGR0OUFhVWR1UEJpZ2dQeElaVFVFV1lm?=
+ =?utf-8?B?c3dKYUZ1aDZ3ZWFzOW02WmdhTGltUkx2SFNqWDZtTE9BSVVGZDByYUJrUnk0?=
+ =?utf-8?B?djhtRmR5SnI0dEdGV2NySTFyZGExeTNEdWd2KzMvYm9SUUxHWTZpc216MFdB?=
+ =?utf-8?Q?VgYIGcTN6DTBu6KVu4XMdVFSxjqvcNGwRH2wjEfv5qC4=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YWZqd3N2Zlhhb0NQUXJhRUZoMnNZYzF0U0hvSUVQZWNIVEd1VHJPR2c5cUxC?=
+ =?utf-8?B?V2xwckZ6b2N1VEZlYXFzUXg1dVhWcTRKVkkvRVpjNjdLVDZPcmRHV01BNXE4?=
+ =?utf-8?B?QUZJLzRpb3RTNDBSVG04b3pPVVBmRzFtUGZFVTNETEhXanVDVUxTck1FS0pW?=
+ =?utf-8?B?RnYrNTE1NW5naHNaUzRXMjhMdTFxeTAzcTlhTHZPY0UvajBmNk9XTWM2WlUr?=
+ =?utf-8?B?aVBOektSL0hFc1VGaWpTSzJwemZOcWxDS2h1QlcvMHIvdjVSWHdTTC9pTkZG?=
+ =?utf-8?B?Y3ZJcDFoVlpHbHNRSHdxWnovOEhQNmNrMUMzOGpqTng2V2JyN3RTUm9kb25H?=
+ =?utf-8?B?K3FNTGtKWXJYYzlxQXRnN09zbjAwZzFZRC95d2xEUUtXOWJlcVZ3cWhPcGFI?=
+ =?utf-8?B?d2xiTDQ5RW9uVDMwSjg4cE00aUFSMml3NmppZGhlbHRhNmF3eU9EL1FYT09F?=
+ =?utf-8?B?bVdXUUJPTDhGMUVVeHF3bk5nOWkvc0drazFRUmF4R2REVElMbkVrSlNVcTQw?=
+ =?utf-8?B?MFoyZnRENDdRdFY4RVptK3ZEN0Z3N1B2S1ZuczNZZG5rQlZvT2xTb2lNc3Vq?=
+ =?utf-8?B?dWdKM3NHMXM4TVNoSGRyRFdiVnRjR0ZjaXVTbW5qeUM2bDlqUkMralBrd0R1?=
+ =?utf-8?B?NzY2Mkc1emRqN0NpSzRNZ1RRVFVXL2hadzVVdzJ0TVJpdythNlltd3YyaG5V?=
+ =?utf-8?B?aGlvK1BvY21Mczk2SlVuVkFHNm5mNGlCWjIwTm94Vm1UbDE5UEY3bi8xWGo1?=
+ =?utf-8?B?MVJnWFZTSnVvb3hkaXNGZ2dGZmFKa1QwMTFYOUx0aUhQbkxiaXN4NWROZFVN?=
+ =?utf-8?B?OVptNkJ5Z0xGK3RnamVtcExaSGVmZkdZaUtHL1JDTnhKT2txcGtZTHZwUXRp?=
+ =?utf-8?B?dlIweXhLb09EWEVPYmY5dW0rblQ0Yit6a25rVnY4Y0FMSjU5QlFEWGgzMEFV?=
+ =?utf-8?B?aXRzdVYwMCtGYUlRT1ZoQ3J3a1BUVmZzWExrNFc4SE9mRk9SZXJhY21LQ0l1?=
+ =?utf-8?B?UW5kMm9lNC9lemlXU0I2cnVia3pLcmhVNTZXSTVSNDE4eCsxUEVsZ29xVkFL?=
+ =?utf-8?B?cXlhTFZmR3BNcnpFQ1lKdGtWZ255Sko5amNMK1FmV1dqRVI4cGhsNFZJK2RM?=
+ =?utf-8?B?MnVvcCtHM0krS3AwVElsQ3lJaHNiZldBRTJZM1U4SkFNMGI0T25yblJsa3Fw?=
+ =?utf-8?B?NWcwbXplVHJ0Y3pXRlVDY1hkbXVDMUtPOGpIQjQxaUJHa2tSQ0cvUkpVRExo?=
+ =?utf-8?B?alZ4R01uM1g1dHhhRE5hSjhDU3hOU1VhM3JnUThKWERKSGtPbnBzRWRLd3BH?=
+ =?utf-8?B?MDlLbGpOVldwS0kzN29lRzVselhpRTRYam1Hekh3QWVUUVM3U0RlNWV4WXA1?=
+ =?utf-8?B?eTVkbnZnVU1qRy96QWZQekF2Y0RrbEVVb09QbkplZTIvc2ZsaVNBTElWeWFL?=
+ =?utf-8?B?REdoYmpDQlFrWXBlOWdDbWk1RXNBWXoxNVBSWm9EMkk4blBYRHh1VXJyd3Bv?=
+ =?utf-8?B?aCtLWmtHY2R3WVczS2YzcGZ0SmJaRzlMbThMNGI5TXlKUkRiU2dSUmtJcjRG?=
+ =?utf-8?B?WVh6aE5aa1ZPem9EMklxazhKM2FLSVdPSnY1UGRpY3A0cmhLSm1MeXZFZCtH?=
+ =?utf-8?B?KzM1c0pFRFB4SmR4RXErSktNK29HSHdOYktqZTRDZDV2MGpOVmRXdTBuTUdE?=
+ =?utf-8?B?cmxZQm9obUlMeFBoNlcvUWhTaEgyVnpham00YmpnWEw2aXoxZWRLai9GZ1ZP?=
+ =?utf-8?B?QUJEOEZPQlBzSE14MVRyZ3VqR0Y2V1JSRDU0cncvcjBSQnlKMFc3K1kzemxy?=
+ =?utf-8?B?QnU4N1RzYi9rUmRmSFNPNzhJd3VnNGtuODhsTjI0dVN5NkhPMHI0SS9JeVBu?=
+ =?utf-8?B?bGxnWTJIZVFBRVlJcThTMFM1U2FZc0t5QTBFSVFvWEtSNTJuRUtUYllleW1C?=
+ =?utf-8?B?a21mRDIvTDl2NnBXRk9JZjhvaDR2TTZDc3QxK2M5MWFhYnZYU0JqV3hpK1lQ?=
+ =?utf-8?B?UFNpQWkvdU91OUR2SzZVQVNDYVBZTlV3UHZXam1iaVV0bnVTZkQ1Z1hQNWhS?=
+ =?utf-8?B?aFNubjhya1lwcytRT2dlRW9UQTZTdURZSXMxc3o5aitJbURWTmd3bUNMM3hy?=
+ =?utf-8?Q?HIK8OasvphR9BF3h6IpzZYusv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb959f25-f6fb-4a13-3a26-08dce3acb7f2
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2024 13:10:14.1574
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XdCtIWjUoY0AUqWoLIXkmyDYpxZAGLekfkGiCfxJNXW05FaIzi8OVMoNeH5oyHXXQGvvWI5LUQ0o0W/rSgsNSw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6185
 
-Some of the definitions are missing the one TAB, add it to them.
+On 10/3/2024 00:47, Mika Westerberg wrote:
+> Hi Harry,
+> 
+> On Wed, Oct 02, 2024 at 01:42:29PM -0400, Harry Wentland wrote:
+>> I was checking out the 6.12 rc1 (through drm-next) kernel and found
+>> my system hung at boot. No meaningful message showed on the kernel
+>> boot screen.
+>>
+>> A bisect revealed the culprit to be
+>>
+>> commit f1bfb4a6fed64de1771b43a76631942279851744 (HEAD)
+>> Author: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Date:   Fri Aug 30 18:26:29 2024 +0300
+>>
+>>      usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface
+>>
+>> A revert of this single patch "fixes" the issue and I can boot again.
+>>      
+>> The system in question is a Thinkpad T14 with a Ryzen 7 PRO 6850U CPU.
+>> It's running Arch Linux but I doubt that's of consequence.
+>>
+>> lspci output:
+>>      https://gist.github.com/hwentland/59aef63d9b742b7b64d2604aae9792e0
+>> acpidump:
+>>      https://gist.github.com/hwentland/4824afc8d712c3d600be5c291f7f1089
+>>
+>> Mario suggested I try modprobe.blacklist=xhci-hcd but that did nothing.
+>> Another suggestion to do usbcore.nousb lets me boot to the desktop
+>> on a kernel with the faulty patch, without USB functionality, obviously.
+>>
+>> I'd be happy to try any patches, provide more data, or run experiments.
+> 
+> Do you boot with any device connected?
+ > > Second thing that I noticed, though I'm not familiar with AMD hardware,
+> but from your lspci dump, I do not see the PCIe ports that are being
+> used to tunnel PCIe. Does this system have PCIe tunneling disabled
+> somehow?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/host/xhci-pci.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On some OEM systems it's possible to lock down from BIOS to turn off 
+PCIe tunneling, and I agree that looks like the most common cause.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 1f7333a5e9a9..4b0378a9b584 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -28,8 +28,8 @@
- #define SPARSE_CNTL_ENABLE	0xC12C
- 
- /* Device for a quirk */
--#define PCI_VENDOR_ID_FRESCO_LOGIC	0x1b73
--#define PCI_DEVICE_ID_FRESCO_LOGIC_PDK	0x1000
-+#define PCI_VENDOR_ID_FRESCO_LOGIC		0x1b73
-+#define PCI_DEVICE_ID_FRESCO_LOGIC_PDK		0x1000
- #define PCI_DEVICE_ID_FRESCO_LOGIC_FL1009	0x1009
- #define PCI_DEVICE_ID_FRESCO_LOGIC_FL1100	0x1100
- #define PCI_DEVICE_ID_FRESCO_LOGIC_FL1400	0x1400
-@@ -38,8 +38,8 @@
- #define PCI_DEVICE_ID_ETRON_EJ168		0x7023
- #define PCI_DEVICE_ID_ETRON_EJ188		0x7052
- 
--#define PCI_DEVICE_ID_INTEL_LYNXPOINT_XHCI	0x8c31
--#define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_XHCI	0x9c31
-+#define PCI_DEVICE_ID_INTEL_LYNXPOINT_XHCI		0x8c31
-+#define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_XHCI		0x9c31
- #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_LP_XHCI	0x9cb1
- #define PCI_DEVICE_ID_INTEL_CHERRYVIEW_XHCI		0x22b5
- #define PCI_DEVICE_ID_INTEL_SUNRISEPOINT_H_XHCI		0xa12f
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+This is what you would see on a system that has tunnels (I checked on my 
+side w/ Z series laptop w/ Rembrandt and a dock connected):
+
+            +-03.0
+            +-03.1-[03-32]--
+            +-04.0
+            +-04.1-[33-62]----00.0-[34-62]--+-02.0-[35]----00.0
+            |                               \-04.0-[36-62]--
+
+00:03.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family 
+17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
+00:03.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h 
+USB4/Thunderbolt PCIe tunnel [1022:14cd]
+00:04.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family 
+17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
+00:04.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h 
+USB4/Thunderbolt PCIe tunnel [1022:14cd]
+
+> 
+> You don't see anything on the console? It's all blank or it just hangs
+> after some messages?
+
+I guess it is getting stuck on fwnode_find_reference() because it never 
+finds the given node?
+
+> 
+> Can you also provide full dmesg with that commit reverted with
+> "thunderbolt.dyndbg=+p" in the kernel command line?
 
 
