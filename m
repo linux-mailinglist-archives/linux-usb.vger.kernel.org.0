@@ -1,160 +1,250 @@
-Return-Path: <linux-usb+bounces-15674-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15676-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A860498F57B
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 19:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D6B298F5BF
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 20:03:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5FC41C21CA3
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 17:44:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EA751C21F2A
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 18:03:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF1B1AB6F5;
-	Thu,  3 Oct 2024 17:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A392B1AAE25;
+	Thu,  3 Oct 2024 18:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="keU7xXlv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Of1J8Hvy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4148E1AAE2D;
-	Thu,  3 Oct 2024 17:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8715E1A76B7
+	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 18:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727977425; cv=none; b=JBceo3lwYljd4S70AWWWZa1xniXvqKIyMza1lHHvUvJ07ay6YaJ30TWUyx8CZvdmhRtjSkkGH85u+Un1iSCF479in5TrPi0xyVFlWywr6yWE6SSpk2UCt3EIyGS9lOD76cerG7vqLrqmOjUpTrqoIoQ6KFNrY8gxQecPwbj8XHA=
+	t=1727978576; cv=none; b=SYy4Z6DpjzxIzRuIKul1iv7iUHTdLh/xqIQ/i6Yak6HAklcbnbbyHiqd3JEp/3Zm4p6pa0TZVjJoIAka1le+nSiCUYOOHRVWFDq8rPSIumiMe/Ao7D/8WuoQ3qR7LpvNiLWvqjvjXta9FIuuk8kJDSvh2I1PlIX8Npnki7K44BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727977425; c=relaxed/simple;
-	bh=j5C+wV8o7xDlVdCIwvLduo0gXkkzc8nwnFr1kOxnNR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jpumBujd20lTdqRw7f+r9Owmd4w1WkBgxd1COFihyBdJ7Fc7ZIn0j2BbvdN+l7Ry2an2wklMbL1n26BRQ/RRSS7HEk9zrnQWZ085nRFyAWYW6H4SGFAYXKKPBa0Q8K6qVESF6Qylon8l9XbpVJp/YHxHNo+ZehQb+dNQGxqR8sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=keU7xXlv; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727977424; x=1759513424;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=j5C+wV8o7xDlVdCIwvLduo0gXkkzc8nwnFr1kOxnNR8=;
-  b=keU7xXlv6ymiDWseLVuLs0hxnxR86ydOF3cRhB/73D/VtD2pMdlpk7r6
-   osPJln9w6hXIOa6sGGUM1UxLBjW5Dg69gnr7u1PIuQT7BmEXrgOkdtYTA
-   5KIHaWndqrunFoc7fb5BGX63RWuFi4dfyeJmWoVHtAK0B/J08ww54n+iP
-   1nV5h8mBxy0yBEHgHWE8cGVySWOI9w2+9DxyH43mAiWxQ3XwIK330C6QF
-   GLDlJCeVjBZ03NePrbFQ7wj5nwnwXq65v/RUV4TnICVyw6b4R2QyqstBv
-   5+uJFa72sX2Aa7Ba91XZl6LdohPTDAw8csZR/nfNSur6QbejA5kNgHaJ6
-   Q==;
-X-CSE-ConnectionGUID: TliylAcqQMyXaNdkLj0tvQ==
-X-CSE-MsgGUID: GpNvwQEfTlydpbFMvJlXFw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="49714622"
-X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="49714622"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 10:43:41 -0700
-X-CSE-ConnectionGUID: 0WbymxU2RRSjeLBmm5JsKg==
-X-CSE-MsgGUID: R/O/8tVdQAy5YID+WLAu8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="79396010"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 03 Oct 2024 10:43:39 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id AE6B93E3; Thu, 03 Oct 2024 20:43:37 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Andy Shevchenko <andy@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v1 4/4] mfd: intel_soc_pmic_bxtwc: Fix IRQ domain names duplication
-Date: Thu,  3 Oct 2024 20:32:04 +0300
-Message-ID: <20241003174252.1190628-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20241003174252.1190628-2-andriy.shevchenko@linux.intel.com>
-References: <20241003174252.1190628-2-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1727978576; c=relaxed/simple;
+	bh=LNXHnZ3MJTRGkhaxV719B4uyyapg1cSteIU3lrzILyY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H4iGOvnq2InKeT+logUjXpaJd1dz5RFVBKGv3eXAVqngKzvOBsR5zjlXPjY/znmGsjI19yGmKA+pdhXBdZW5vE0Gzt9lOFQK5D28E3pEHb0/s2JJ6Tr30m5T8+NUe+Rhq9Fvmse7sOA88Y+uImbuRL007/Zo0PjxEX4AXb4IFpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Of1J8Hvy; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1727978573;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LoB0gVV5ljS71U6qY/mcjDVPFZ4CZEqwYkfhM8ibUYo=;
+	b=Of1J8HvywBb1k8ZGAJx/JNinSXFgbhWuqAa3J6zscqKcumtqlJ7uAZXHB8yRTCYYMOJfFj
+	GsjkyQCISJZ8IBleouFFRsQ4Eai/dLf91KmxByQQvw4qcMC9f6C4hqTi7yQIeja6twO50l
+	x6rxd+PpGzbeheo9yKAXM3L2RK43o44=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-125-UNlnOtHPORaQtU38FnS7Ww-1; Thu, 03 Oct 2024 14:02:52 -0400
+X-MC-Unique: UNlnOtHPORaQtU38FnS7Ww-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a8d2f475416so84163566b.0
+        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2024 11:02:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727978571; x=1728583371;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LoB0gVV5ljS71U6qY/mcjDVPFZ4CZEqwYkfhM8ibUYo=;
+        b=roPI8J7fahCv/cYKZB7wFNY8vlfUw0WwpRCKBQdxs5LnSBlP51eGQ+R7izyE49JXKA
+         jDPrTSwRS5TE3tKeOmrI87CoxcFO4eQrjjSQkWInIpuCM591hcESC66WsPBEk6iPUR1A
+         odbVJfMrKTuNiyF8x4uG57DBrw3kxdogpCGk1uhZFJakZvvGJiIapAUnzUo4PI9nCPon
+         Mm+jqMg8GIWUCph3/2QRF/SsK4dFj0InR31SHpQneUuGtKCHIFJnFlDKwXDMZCP5R41Y
+         gPRYI87kJx3v0hIqQxR3axaqA2i2fwMiAlC8VnT+H9U0OzUiRykDne+O/Hdn1kOiyoUI
+         nm5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWcpOZs9QdFXGKldN3sOkIFKKC97JJ4VlLCy30Qp5W+e3GEbQa6jk2ltFi5y2e/VeKaiICxjny4Zm0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuQ/B2TohP4z3kqgNfkbrO+/fLvpUDR6HWlSrf4xSRSEeT26sM
+	ArnN1RRTzcesfs0NwbZ6AGqSjkBbokH6nApLZqa1UpBm8NNDZYwl4supfJX1ND3ZII7QvR4D2p1
+	BUJasytv8UtbtKbIYTqSiqefiiOPjR5aA353Ze5A0nLr9MjqWuMTSRC7u7A==
+X-Received: by 2002:a17:907:e89:b0:a8d:44a5:1c2f with SMTP id a640c23a62f3a-a991bce3ac7mr20421266b.6.1727978571009;
+        Thu, 03 Oct 2024 11:02:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH6n7NcOHAAmMOq2VOS/f3DZ6xSz0sT97JwLchZBMGQYGRM+Fp8/kX9HVDKXUACimFwhcWCQg==
+X-Received: by 2002:a17:907:e89:b0:a8d:44a5:1c2f with SMTP id a640c23a62f3a-a991bce3ac7mr20418966b.6.1727978570560;
+        Thu, 03 Oct 2024 11:02:50 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9910472f96sm116305766b.146.2024.10.03.11.02.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Oct 2024 11:02:50 -0700 (PDT)
+Message-ID: <b230f7a0-618c-4ebb-913c-93602fb64cd2@redhat.com>
+Date: Thu, 3 Oct 2024 20:02:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/4] mfd: intel_soc_pmic_bxtwc: Use IRQ domain for TMU
+ device
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Cc: Andy Shevchenko <andy@kernel.org>, Lee Jones <lee@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Zhang Ning <zhangn1985@outlook.com>
+References: <20241003174252.1190628-2-andriy.shevchenko@linux.intel.com>
+ <20241003174252.1190628-4-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20241003174252.1190628-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-For all of the devices regmap IRQ may try to created the folder
-with the same name which is impossible and fails with:
+Hi,
 
-  debugfs: File '\_SB.IPC1.PMIC' in directory 'domains' already present!
+On 3-Oct-24 7:32 PM, Andy Shevchenko wrote:
+> While design wise the idea of converting the driver to use
+> the hierarchy of the IRQ chips is correct, the implementation
+> has (inherited) flaws. This was unvelead when platform_get_irq()
+> had started WARN() on IRQ 0 that is supposed to be a Linux
+> IRQ number (also known as vIRQ).
+> 
+> Rework the driver to respect IRQ domain when creating each MFD
+> device separately, as the domain is not the same for all of them.
+> 
+> Fixes: 957ae5098185 ("platform/x86: Add Whiskey Cove PMIC TMU support")
+> Fixes: 57129044f504 ("mfd: intel_soc_pmic_bxtwc: Use chained IRQs for second level IRQ chips")
+> Reported-by: Zhang Ning <zhangn1985@outlook.com>
+> Closes: https://lore.kernel.org/r/TY2PR01MB3322FEDCDC048B7D3794F922CDBA2@TY2PR01MB3322.jpnprd01.prod.outlook.com
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Add domain_suffix to all of the IRQ chips driver registers to solve
-the issue.
+Thanks, patch looks good to me:
 
-Fixes: 39d047c0b1c8 ("mfd: add Intel Broxton Whiskey Cove PMIC driver")
-Fixes: 957ae5098185 ("platform/x86: Add Whiskey Cove PMIC TMU support")
-Fixes: 57129044f504 ("mfd: intel_soc_pmic_bxtwc: Use chained IRQs for second level IRQ chips")
-Depends-on: dde286ee5770 ("regmap: Allow setting IRQ domain name suffix")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/mfd/intel_soc_pmic_bxtwc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Acked-by: Hans de Goede <hdegoede@redhat.com>
 
-diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
-index fefbeb4164fd..b7204072e93e 100644
---- a/drivers/mfd/intel_soc_pmic_bxtwc.c
-+++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
-@@ -148,6 +148,7 @@ static const struct regmap_irq_chip bxtwc_regmap_irq_chip = {
- 
- static const struct regmap_irq_chip bxtwc_regmap_irq_chip_pwrbtn = {
- 	.name = "bxtwc_irq_chip_pwrbtn",
-+	.domain_suffix = "PWRBTN",
- 	.status_base = BXTWC_PWRBTNIRQ,
- 	.mask_base = BXTWC_MPWRBTNIRQ,
- 	.irqs = bxtwc_regmap_irqs_pwrbtn,
-@@ -157,6 +158,7 @@ static const struct regmap_irq_chip bxtwc_regmap_irq_chip_pwrbtn = {
- 
- static const struct regmap_irq_chip bxtwc_regmap_irq_chip_tmu = {
- 	.name = "bxtwc_irq_chip_tmu",
-+	.domain_suffix = "TMU",
- 	.status_base = BXTWC_TMUIRQ,
- 	.mask_base = BXTWC_MTMUIRQ,
- 	.irqs = bxtwc_regmap_irqs_tmu,
-@@ -166,6 +168,7 @@ static const struct regmap_irq_chip bxtwc_regmap_irq_chip_tmu = {
- 
- static const struct regmap_irq_chip bxtwc_regmap_irq_chip_bcu = {
- 	.name = "bxtwc_irq_chip_bcu",
-+	.domain_suffix = "BCU",
- 	.status_base = BXTWC_BCUIRQ,
- 	.mask_base = BXTWC_MBCUIRQ,
- 	.irqs = bxtwc_regmap_irqs_bcu,
-@@ -175,6 +178,7 @@ static const struct regmap_irq_chip bxtwc_regmap_irq_chip_bcu = {
- 
- static const struct regmap_irq_chip bxtwc_regmap_irq_chip_adc = {
- 	.name = "bxtwc_irq_chip_adc",
-+	.domain_suffix = "ADC",
- 	.status_base = BXTWC_ADCIRQ,
- 	.mask_base = BXTWC_MADCIRQ,
- 	.irqs = bxtwc_regmap_irqs_adc,
-@@ -184,6 +188,7 @@ static const struct regmap_irq_chip bxtwc_regmap_irq_chip_adc = {
- 
- static const struct regmap_irq_chip bxtwc_regmap_irq_chip_chgr = {
- 	.name = "bxtwc_irq_chip_chgr",
-+	.domain_suffix = "CHGR",
- 	.status_base = BXTWC_CHGR0IRQ,
- 	.mask_base = BXTWC_MCHGR0IRQ,
- 	.irqs = bxtwc_regmap_irqs_chgr,
-@@ -193,6 +198,7 @@ static const struct regmap_irq_chip bxtwc_regmap_irq_chip_chgr = {
- 
- static const struct regmap_irq_chip bxtwc_regmap_irq_chip_crit = {
- 	.name = "bxtwc_irq_chip_crit",
-+	.domain_suffix = "CRIT",
- 	.status_base = BXTWC_CRITIRQ,
- 	.mask_base = BXTWC_MCRITIRQ,
- 	.irqs = bxtwc_regmap_irqs_crit,
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+Please feel free to merge this through the MFD tree as suggested in
+the cover-letter.
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/mfd/intel_soc_pmic_bxtwc.c     | 31 ++++++++++++++------------
+>  drivers/platform/x86/intel/bxtwc_tmu.c | 22 +++++-------------
+>  2 files changed, 23 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
+> index d72995a9e820..628108dcf545 100644
+> --- a/drivers/mfd/intel_soc_pmic_bxtwc.c
+> +++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
+> @@ -245,12 +245,6 @@ static struct mfd_cell bxt_wc_dev[] = {
+>  		.num_resources = ARRAY_SIZE(bcu_resources),
+>  		.resources = bcu_resources,
+>  	},
+> -	{
+> -		.name = "bxt_wcove_tmu",
+> -		.num_resources = ARRAY_SIZE(tmu_resources),
+> -		.resources = tmu_resources,
+> -	},
+> -
+>  	{
+>  		.name = "bxt_wcove_gpio",
+>  		.num_resources = ARRAY_SIZE(gpio_resources),
+> @@ -261,6 +255,14 @@ static struct mfd_cell bxt_wc_dev[] = {
+>  	},
+>  };
+>  
+> +static const struct mfd_cell bxt_wc_tmu_dev[] = {
+> +	{
+> +		.name = "bxt_wcove_tmu",
+> +		.num_resources = ARRAY_SIZE(tmu_resources),
+> +		.resources = tmu_resources,
+> +	},
+> +};
+> +
+>  static struct mfd_cell bxt_wc_chgr_dev[] = {
+>  	{
+>  		.name = "bxt_wcove_usbc",
+> @@ -489,6 +491,15 @@ static int bxtwc_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return dev_err_probe(dev, ret, "Failed to add IRQ chip\n");
+>  
+> +	ret = bxtwc_add_chained_devices(pmic, bxt_wc_tmu_dev, ARRAY_SIZE(bxt_wc_tmu_dev),
+> +					pmic->irq_chip_data,
+> +					BXTWC_TMU_LVL1_IRQ,
+> +					IRQF_ONESHOT,
+> +					&bxtwc_regmap_irq_chip_tmu,
+> +					&pmic->irq_chip_data_tmu);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = bxtwc_add_chained_irq_chip(pmic, pmic->irq_chip_data,
+>  					 BXTWC_PWRBTN_LVL1_IRQ,
+>  					 IRQF_ONESHOT,
+> @@ -497,14 +508,6 @@ static int bxtwc_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return dev_err_probe(dev, ret, "Failed to add PWRBTN IRQ chip\n");
+>  
+> -	ret = bxtwc_add_chained_irq_chip(pmic, pmic->irq_chip_data,
+> -					 BXTWC_TMU_LVL1_IRQ,
+> -					 IRQF_ONESHOT,
+> -					 &bxtwc_regmap_irq_chip_tmu,
+> -					 &pmic->irq_chip_data_tmu);
+> -	if (ret)
+> -		return dev_err_probe(dev, ret, "Failed to add TMU IRQ chip\n");
+> -
+>  	/* Add chained IRQ handler for BCU IRQs */
+>  	ret = bxtwc_add_chained_irq_chip(pmic, pmic->irq_chip_data,
+>  					 BXTWC_BCU_LVL1_IRQ,
+> diff --git a/drivers/platform/x86/intel/bxtwc_tmu.c b/drivers/platform/x86/intel/bxtwc_tmu.c
+> index d0e2a3c293b0..9ac801b929b9 100644
+> --- a/drivers/platform/x86/intel/bxtwc_tmu.c
+> +++ b/drivers/platform/x86/intel/bxtwc_tmu.c
+> @@ -48,9 +48,8 @@ static irqreturn_t bxt_wcove_tmu_irq_handler(int irq, void *data)
+>  static int bxt_wcove_tmu_probe(struct platform_device *pdev)
+>  {
+>  	struct intel_soc_pmic *pmic = dev_get_drvdata(pdev->dev.parent);
+> -	struct regmap_irq_chip_data *regmap_irq_chip;
+>  	struct wcove_tmu *wctmu;
+> -	int ret, virq, irq;
+> +	int ret;
+>  
+>  	wctmu = devm_kzalloc(&pdev->dev, sizeof(*wctmu), GFP_KERNEL);
+>  	if (!wctmu)
+> @@ -59,27 +58,18 @@ static int bxt_wcove_tmu_probe(struct platform_device *pdev)
+>  	wctmu->dev = &pdev->dev;
+>  	wctmu->regmap = pmic->regmap;
+>  
+> -	irq = platform_get_irq(pdev, 0);
+> -	if (irq < 0)
+> -		return irq;
+> +	wctmu->irq = platform_get_irq(pdev, 0);
+> +	if (wctmu->irq < 0)
+> +		return wctmu->irq;
+>  
+> -	regmap_irq_chip = pmic->irq_chip_data_tmu;
+> -	virq = regmap_irq_get_virq(regmap_irq_chip, irq);
+> -	if (virq < 0) {
+> -		dev_err(&pdev->dev,
+> -			"failed to get virtual interrupt=%d\n", irq);
+> -		return virq;
+> -	}
+> -
+> -	ret = devm_request_threaded_irq(&pdev->dev, virq,
+> +	ret = devm_request_threaded_irq(&pdev->dev, wctmu->irq,
+>  					NULL, bxt_wcove_tmu_irq_handler,
+>  					IRQF_ONESHOT, "bxt_wcove_tmu", wctmu);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "request irq failed: %d,virq: %d\n",
+> -							ret, virq);
+> +			ret, wctmu->irq);
+>  		return ret;
+>  	}
+> -	wctmu->irq = virq;
+>  
+>  	/* Unmask TMU second level Wake & System alarm */
+>  	regmap_update_bits(wctmu->regmap, BXTWC_MTMUIRQ_REG,
 
 
