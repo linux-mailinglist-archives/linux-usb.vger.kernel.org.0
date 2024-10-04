@@ -1,175 +1,129 @@
-Return-Path: <linux-usb+bounces-15726-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15727-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8712B990875
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 18:05:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 035A7990B95
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 20:31:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6443CB25165
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 16:03:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 986BD1F2114C
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 18:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C081C3059;
-	Fri,  4 Oct 2024 16:02:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7951E1C05;
+	Fri,  4 Oct 2024 18:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r3jNf24c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cyhuJwOF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95501E3765;
-	Fri,  4 Oct 2024 16:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5341E048D;
+	Fri,  4 Oct 2024 18:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728057746; cv=none; b=K2fIwALzhqemd5wqd04E7nrED0S+kBmeUa5XnizRWjWzUWUHQNVV3xBlmVN5GXtBHLrRc4gK3EWqZlYBfZ5vMqV462dja8VX4XQzJ5Nr3xacpdNbReI6bGujaCY5N0caZr9FtznCfwskdCU37vBkmzBu0gpVVMGDb2G7mgt8U/U=
+	t=1728066006; cv=none; b=SUgSYGjkUeN0kC/r/cVASBNIZRVUqLFq3S5ytoM3iNisIyf1sUsIJox4tqGGZzWOlVw8KsKr9TkCJJGI4YmcCX73ehXcphexhTEtxp4aN56eajdZQtHi4FcRMCpX5g+fYVAkBluokWRDdFVSlXHafSwBx6Xt6Xyy+CZrakz0o7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728057746; c=relaxed/simple;
-	bh=33tPyCvrAOcvV+7O6+RLla52zkKYuAa9S3xf+ijQPTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LtfiCoyvQ/pFaPDVLPrYrFNTiqoGQdi8lgnDX9xoGqIpRjV+O+wpzCc466Itmb4POQ0qkoWJqyiom0ptmhMRlqTihyMwHM4cCYRvL6coyulTnQbna9aMtsP5V0t8RUvjFZB/vM/KAHVgOAIUnCUlj6FDxeKVsX9bQdENWKMp4Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r3jNf24c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC82C4CEC6;
-	Fri,  4 Oct 2024 16:02:23 +0000 (UTC)
+	s=arc-20240116; t=1728066006; c=relaxed/simple;
+	bh=oS1uGqXfnmXPlpnneZZ4xz7G/bFx9yxxFcyIXw9vlaE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qWN0GeDVzQtAjRzr9jYCtIdTduhODzrurb9sYuTdLQZBaxHxPt6u7lMTJ8r0cIG34JmJYd31k0m9BBY/imlOyXkwseCYouaGbKD64XnrvzcQkQz+IiPtaFa8KD4e+0Vx2EJFNUqsvX9v3eiYx/7awrjtBr6Imu6E+nS+7pg0W80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cyhuJwOF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D381C4CECC;
+	Fri,  4 Oct 2024 18:20:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728057745;
-	bh=33tPyCvrAOcvV+7O6+RLla52zkKYuAa9S3xf+ijQPTk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r3jNf24cXdAIg8YTKOl5JpyTemjP/MP1fzObQ1SRsxOeQGaTc7LP2/Bk80LQMTkQV
-	 NW3T7+EM41usYFJF838Lpcv/NbFdihIRR0TiFsk22ud3DxA21HsYDfl6sTgzBPnUZS
-	 ARh75ISqVZumJLceZN5fJjYtnTEMJBLemy836mdYflIdFMSxXvdiZuMUTJt9uSD+zl
-	 UT+7bUt6Nobx9+MTz7cW/tcEZM521+lgdbq7ZNngoduaFIWWmq4wdAbf7VYfbWKo7E
-	 EJdgAsYRj5YNeKjxLsb3bNGaVdbTF2Ys3okiCG8vBGAQfLVXovAoSn8k8VIAPZqwgD
-	 B0AmfixzObzBA==
-Date: Fri, 4 Oct 2024 17:02:21 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	Parth Pancholi <parth.pancholi@toradex.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: usb: add TUSB73x0 PCIe
-Message-ID: <20241004-subtitle-bulk-a56af82de67a@spud>
-References: <20241004124521.53442-1-francesco@dolcini.it>
- <20241004124521.53442-2-francesco@dolcini.it>
- <20241004-calzone-sitcom-0f755e244497@spud>
- <ZwAKOKQ96sCoxsMN@gaggiata.pivistrello.it>
+	s=k20201202; t=1728066005;
+	bh=oS1uGqXfnmXPlpnneZZ4xz7G/bFx9yxxFcyIXw9vlaE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=cyhuJwOF8LzQY1DzoeNOdL+S6SPC5gngIa4u1y3l3oyfUpE/241q7sDTQcywU4kf4
+	 gTyhXO2W8UMkMgd7sEv7LSQHTq9d1nLykaBBz1DJrzrj7Ia4cKkfJf0/h/kjbjw8nm
+	 E1yncpP4V1hzeKSNaZYGQUndO8A3tnGf63+qVMhpAH8yXEN7TxSssQGdgawm4qGsAP
+	 wG437zcEd0jlhFEcfNY1PDKVvgUJ3c/hUwANTXmZ2cPBxa0axNNRRwX7tebxT/ZqyK
+	 n3FoiDnMoVFMkwq/Q9o2iA0nO/q78Jxm/GjlzUJmOI4Uf3GmTssj9ZyXz+6OZb88Hf
+	 DJxEXE8MqHXhg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Wadim Egorov <w.egorov@phytec.de>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	javier.carrasco@wolfvision.net,
+	abdelalkuor@geotab.com,
+	harshit.m.mogalapalli@oracle.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.11 51/76] usb: typec: tipd: Free IRQ only if it was requested before
+Date: Fri,  4 Oct 2024 14:17:08 -0400
+Message-ID: <20241004181828.3669209-51-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241004181828.3669209-1-sashal@kernel.org>
+References: <20241004181828.3669209-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="WlmiziZ1ocnCX/fq"
-Content-Disposition: inline
-In-Reply-To: <ZwAKOKQ96sCoxsMN@gaggiata.pivistrello.it>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.11.2
+Content-Transfer-Encoding: 8bit
 
+From: Wadim Egorov <w.egorov@phytec.de>
 
---WlmiziZ1ocnCX/fq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit db63d9868f7f310de44ba7bea584e2454f8b4ed0 ]
 
-On Fri, Oct 04, 2024 at 05:31:04PM +0200, Francesco Dolcini wrote:
-> Hello Conor,
->=20
-> On Fri, Oct 04, 2024 at 04:23:18PM +0100, Conor Dooley wrote:
-> > On Fri, Oct 04, 2024 at 02:45:20PM +0200, Francesco Dolcini wrote:
-> > > From: Parth Pancholi <parth.pancholi@toradex.com>
-> > >=20
-> > > Add device tree bindings for TI's TUSB73x0 PCIe-to-USB 3.0 xHCI
-> > > host controller. The controller supports software configuration
-> > > through PCIe registers, such as controlling the PWRONx polarity
-> > > via the USB control register (E0h).
-> > >=20
-> > > Similar generic PCIe-based bindings can be found as qcom,ath11k-pci.y=
-aml
-> > > as an example.
-> > >=20
-> > > Datasheet: https://www.ti.com/lit/ds/symlink/tusb7320.pdf
-> > > Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
-> > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > ---
-> > >  .../bindings/usb/ti,tusb73x0-pci.yaml         | 60 +++++++++++++++++=
-++
-> > >  1 file changed, 60 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/usb/ti,tusb73x0=
--pci.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.ya=
-ml b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-> > > new file mode 100644
-> > > index 000000000000..bcb619b08ad3
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-> > > @@ -0,0 +1,60 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/usb/ti,tusb73x0-pci.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: TUSB73x0 USB 3.0 xHCI Host Controller (PCIe)
-> > > +
-> > > +maintainers:
-> > > +  - Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > +
-> > > +description:
-> > > +  TUSB73x0 USB 3.0 xHCI Host Controller via PCIe x1 Gen2 interface.
-> > > +  The TUSB7320 supports up to two downstream ports, the TUSB7340 sup=
-ports up
-> > > +  to four downstream ports.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: pci104C,8241
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  ti,tusb7320-pwron-polarity-invert:
-> >=20
-> > To me, "polarity-invert" makes less sense than calling this "active-hig=
-h"
-> > making the property a flag. active-low would then be the case where the
-> > property is not provided. Given you don't make the property required,
-> > what you've got here is effectively a flag anyway.
->=20
-> We had the same doubt when deciding which property name to propose, looki=
-ng
-> at the existing bindings it seemed that "polarity-invert" was more common.
->=20
-> FTR the datasheet explicetly name the signals with a # suffix (PWRON1#,
-> PWRON2#, ...), they are defined as active-low by default.
->=20
-> With that said, if we prefer to have `ti,tusb7320-pwron-active-high`, I a=
-m 100%
-> good with it.
+In polling mode, if no IRQ was requested there is no need to free it.
+Call devm_free_irq() only if client->irq is set. This fixes the warning
+caused by the tps6598x module removal:
 
-I think "active-high" is more explicit about what it does, but I'm not
-too bothered about it. Given it isn't a required property and the
-absence of the property means active-low (for backwards compatibility
-and alignment with the default hardware behaviour) the property is a
-flag, not a boolean, so it does need a type change at the very least.
+WARNING: CPU: 2 PID: 333 at kernel/irq/devres.c:144 devm_free_irq+0x80/0x8c
+...
+...
+Call trace:
+  devm_free_irq+0x80/0x8c
+  tps6598x_remove+0x28/0x88 [tps6598x]
+  i2c_device_remove+0x2c/0x9c
+  device_remove+0x4c/0x80
+  device_release_driver_internal+0x1cc/0x228
+  driver_detach+0x50/0x98
+  bus_remove_driver+0x6c/0xbc
+  driver_unregister+0x30/0x60
+  i2c_del_driver+0x54/0x64
+  tps6598x_i2c_driver_exit+0x18/0xc3c [tps6598x]
+  __arm64_sys_delete_module+0x184/0x264
+  invoke_syscall+0x48/0x110
+  el0_svc_common.constprop.0+0xc8/0xe8
+  do_el0_svc+0x20/0x2c
+  el0_svc+0x28/0x98
+  el0t_64_sync_handler+0x13c/0x158
+  el0t_64_sync+0x190/0x194
 
-Cheers,
-Conor.
+Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20240816124150.608125-1-w.egorov@phytec.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/typec/tipd/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---WlmiziZ1ocnCX/fq
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index dd51a25480bfb..256b0c054e9a9 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -1465,8 +1465,9 @@ static void tps6598x_remove(struct i2c_client *client)
+ 
+ 	if (!client->irq)
+ 		cancel_delayed_work_sync(&tps->wq_poll);
++	else
++		devm_free_irq(tps->dev, client->irq, tps);
+ 
+-	devm_free_irq(tps->dev, client->irq, tps);
+ 	tps6598x_disconnect(tps, 0);
+ 	typec_unregister_port(tps->port);
+ 	usb_role_switch_put(tps->role_sw);
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZwARjQAKCRB4tDGHoIJi
-0h3NAP917btguu42PpJH87OJzJXq3Vt4fBleinmRdbEH7aPZ6gD+Jrb8ReHNCB7F
-dmbiAbKvHr+Bw+EwddORsppu5ZcICgU=
-=sN0O
------END PGP SIGNATURE-----
-
---WlmiziZ1ocnCX/fq--
 
