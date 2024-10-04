@@ -1,142 +1,122 @@
-Return-Path: <linux-usb+bounces-15751-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15752-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 966D1990F82
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 22:01:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE60990F9B
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 22:03:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C0FB1F24B7B
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 20:01:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A752A282B70
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 20:03:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DBE1F9A99;
-	Fri,  4 Oct 2024 19:04:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D9F1AE01C;
+	Fri,  4 Oct 2024 19:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hcd0bE5h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S2WDZQJp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAE41F9A82;
-	Fri,  4 Oct 2024 19:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68651AE010;
+	Fri,  4 Oct 2024 19:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728068671; cv=none; b=q3Q/5ujOfSn6BvyP3DT+3R6oMsnwNMIPFiht9LHJWaoqbaSgajBvTUKay2/klFqmGoJfgms9XcV1IbJaEaUtHaxfi6DrnYKBLoa0blCCx5CK5yKgPopreeypEaAopBNZKsFDjaQEBCrVvgdQUMPrhEfqoEADG5aDmz5SS33DDLo=
+	t=1728069286; cv=none; b=h2qlzARjimwX3DlQVjvnQWfpcGyFs/2IzZkgLi9At8D1n7pICVX4GE0PjnVTknsxSljmUy1Q5oaLcRw/S1iMeL0GqbUTdo4tJsizrBt9EE5WXkNcP9Ce9HuSCB+Z3vVHTA6J/i4IKHmlSog7eLRAlcj8Co9wOVjDe0mkXZ3VGB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728068671; c=relaxed/simple;
-	bh=38FWtjNG7ztTk0vyl9goaMmj7S+4vdzAmiAK1g8t8Pc=;
+	s=arc-20240116; t=1728069286; c=relaxed/simple;
+	bh=Vm5cwzVRBb2+9hU6XAIcq43yYLjs8dd8c1WLVKtaLP8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dx2/gIa7nPt62mNCV9y1TvcBOmjCAJZMKuZ+2nIoDaKJSCKsXJ9yHwQMJGXsw/GhUo6bDypJIV7G8W6MXgTnc1kq3VbJvmiLRmiT3rwDVG2QlraSnlPhShfb8r8DAo23zaHXSP/c3LYkBqOsXzYqsuA+0NydHD0FTqlWXwxtWuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hcd0bE5h; arc=none smtp.client-ip=209.85.221.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=sJx9oI7zVvfKz2pJUAzzkIxGN74DWCbF6Aex0o0qicuiD+hSTazfM2bj67nNYZsOr3Eu6+8DAMF6LxL5Ujx9P2OlncSJ3LYN0NGb/WzBrd8svwfqjgWGyR1eLYIZ/jPVlIJNk0LH9PsAwzQQfmj5ciPEZBqDm5e6Wk+UHvop8kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S2WDZQJp; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-37cdbdbbb1cso1312357f8f.3;
-        Fri, 04 Oct 2024 12:04:30 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42cb5b3c57eso23760185e9.2;
+        Fri, 04 Oct 2024 12:14:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728068668; x=1728673468; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uR17DBK3CgvuTP/A+YeEkLOp8ykg0LTLmIaNQYIZdOk=;
-        b=Hcd0bE5hkximu3zCNYhsb8uSZoDDio3JeyKtXxsJy0ZYlNImgSfEpJDHKY2XtPqoOB
-         YFRwIQVgq/MaDiz305Ytp6Eb5i2nAn8G3ssWM7VEUziQdsFfIUsNws6OfloABPqm44D1
-         +UlwwwQBjBcUb9xfziOw9RTd0qQh4lfdq/h9O25z/IepN1XQgs1i7YORc+Ygsr07kut5
-         NyXyjj2VOdt/bM1sXLtGnAAbckpJ56qfur3BmPg2C4gE/sTUdl2UuD/X4iCaCZbxQvHC
-         tVyJELn24FhJ3WcL9qjo3KNcd3HeZ4UqT4N4Iw0/ABrhO6KO/4dhj6Qk81ps0qb6dYsC
-         EyMA==
+        d=gmail.com; s=20230601; t=1728069283; x=1728674083; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8CycWNZFawBP96zK96WEn+kWaW4vTJKQJHVIc0au9Ow=;
+        b=S2WDZQJpY+B5HhYqkKNrcwTd8uqWJKPVI41nZyWsCNzOfYxLcnsCdiK+VEyU/M5LS/
+         fieCyL+LvW4aafa/SMG8IwWnqbmGMt+eQ0JkVJ6nCLzpf2RuXB90mM45qXoIVYlhV9M1
+         ItSRqm85eb7hqsX/BXS910lHAD/N5f3uJrG7UBqe+5v/PNpv/gUu8eu0NLUFLgdDWBTc
+         0GDea8i3q1bRpLd0LjWISLEW2fiWNgZ0OZqjqTbyZAinsX92TH//dug4+elxzpIthBQM
+         pdCMyQ+nJ5TIBjqU5iUnW6klGrhQjl7TGUd+DBMxzpU0IJ+DMMTqBPHUxiBHTH7xgenp
+         tU5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728068668; x=1728673468;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uR17DBK3CgvuTP/A+YeEkLOp8ykg0LTLmIaNQYIZdOk=;
-        b=szQZGI1Xb1n8QDKCA9fnLJhC9KjrHnk8Z1IFCznJ6f+Ie0L2Wa2OfD4nWTGurSjWb9
-         4CbJpgbLU6YRFAxMzN7kY5V317RGo6gW0jTtmDq6Ti3DnLxIB38lVuaSD9kjJLdFM1j/
-         kpxcsXMDPrtttKts1MsTZVHJ2PwDGQw4S80cTMMVDYT5OsA5pYcVrtbtYx2inFjvtm+c
-         600CnVrHYHX+7a4WXIGpt9pcRhpSGQEIL+o1oBaEwrykqpEV70KToGvlRYYtqzRZ15U2
-         /ZP2XcrjN8X/22VWP9HGbVT7Oc2wZAtELDa+GeCIj0wahXjyG9LRonozZuajESQMmLR5
-         dZ/g==
-X-Forwarded-Encrypted: i=1; AJvYcCWJn4rrrrmt4nlqWdxRM5F3X1h5MNmF8hfk79cZ3YKMbt1yYWRrXQaUbCiuvjGzrgrK6x6r0ldTgbZy@vger.kernel.org, AJvYcCX18F4Pjn6EvmBr3v3eWWNbO9zqD7B1hlwOiW8VbTzoQgRlrUoUjtL5YFmYRblDrxzyC0wP99VvoYpPuUk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyz1y6DKvu3iI4Fp6bFaJBXBrRMqjJi+1aFJra3UsWIiw0peyIh
-	rVPSoZw8/6CjqjC3U4wLCD0zF3nQQEGFzI9qX+tgTOaMop9U8pAqT+pR5PSd0oo=
-X-Google-Smtp-Source: AGHT+IHXWeyAT0Q319kx0ragpDZHMmJzNX5IYvRvTuXIDWVixgz79SC/7C2QuZGKUee2/7nBHGGdlQ==
-X-Received: by 2002:a5d:6149:0:b0:37c:cd71:2ba2 with SMTP id ffacd0b85a97d-37d0e7bcdf8mr2106125f8f.38.1728068668374;
-        Fri, 04 Oct 2024 12:04:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728069283; x=1728674083;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8CycWNZFawBP96zK96WEn+kWaW4vTJKQJHVIc0au9Ow=;
+        b=be3tAXwUMcbCJgczNiId/OExjf6KH1mVvJaFvF8Xe2my6xcrY80FJpRjMcpOL43WO5
+         iQmPbQuQ/hQEjTbNNxTLJp6tXI2Rrf2iaKTv63/u1R8+1jwFy56anvDtQmp9Jxu/DsdM
+         asXwdQQph+7v7CFT0DwcNNfEEB2FNIftln8n8eL1blIuJSLe9GU1eoj5evRi6b0LUj5E
+         BlYmuEIEFNTfV5JJExACdor5AHYK3wMKLALNuknmSTtydLibPYRCbgtEy2Ka+AbTbdLR
+         WvzZeKSx8xOTf0Say4ygr+lbUGyzhhPUyl6vo2hu9Rl2ASaT3w6bhqiJCfwFhUmALyQ4
+         El1w==
+X-Forwarded-Encrypted: i=1; AJvYcCVV/JHj6b9MHyEqoAAxVL4UuZFtmYRZQagM/Im3evcghrDKZyrjBocnNuy60tHcRJgHG12H3QR9DDVw@vger.kernel.org, AJvYcCXlNYac2a0YtgAFHPQtbLBYhJr0NS9hGkCJQ/kpjRndlrJQoVVUUHTWAw8W1mD5nI+KX+sAFb1Zwx9E2bo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFr3D+WoINOBZy3AeVcapr2O+LhAnQyYhw6WyyiaUW1UiNXnEA
+	KeDwDmtkwZkYobBLPPzLkCx6mDwZRoQm8EDQLEBGG3nRzmUttnZ3
+X-Google-Smtp-Source: AGHT+IGCBOY3jHzzlTONE1G+8e4KYsJ+Y2gkCxsC/PCJoAHiPiLj0M+8frbC93RAc9jZzeID3U5I7Q==
+X-Received: by 2002:a05:600c:474a:b0:42f:6d3d:399f with SMTP id 5b1f17b1804b1-42f85ac193fmr29861845e9.21.1728069282796;
+        Fri, 04 Oct 2024 12:14:42 -0700 (PDT)
 Received: from freebase (oliv-cloud.duckdns.org. [78.196.47.215])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d16920549sm247106f8f.54.2024.10.04.12.04.26
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f89eac29dsm4271285e9.26.2024.10.04.12.14.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2024 12:04:27 -0700 (PDT)
-Date: Fri, 4 Oct 2024 21:04:25 +0200
+        Fri, 04 Oct 2024 12:14:41 -0700 (PDT)
+Date: Fri, 4 Oct 2024 21:14:39 +0200
 From: Olivier Dautricourt <olivierdautricourt@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, mathias.nyman@intel.com
 Subject: Re: [PATCH] usb: xhci: xhci_setup_port_arrays: early -ENODEV if
  maxports is 0.
-Message-ID: <ZwA8OWFJhAuvWDJh@freebase>
+Message-ID: <ZwA-n56XlNkkLNXM@freebase>
 References: <20240930052336.80589-1-olivierdautricourt@gmail.com>
- <2024100407-hatless-goofy-bf12@gregkh>
+ <20241004125716.75c857ae@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2024100407-hatless-goofy-bf12@gregkh>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241004125716.75c857ae@foxbook>
 
 Hello,
 
-On Fri, Oct 04, 2024 at 10:07:01AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Sep 30, 2024 at 07:23:29AM +0200, Olivier Dautricourt wrote:
+On Fri, Oct 04, 2024 at 12:57:16PM +0200, Michał Pecio wrote:
+> Hi,
+> 
 > > If the controller reports HCSPARAMS1.maxports==0 then we can skip the
 > > whole function: it would fail later after doing a bunch of unnecessary
 > > stuff. It can occur on a buggy hardware (the value is driven by external
 > > signals).
 > 
-> What "buggy hardware" is this that can not pass the USB testing for this
-> type of issue?
-
-This is a behaviour found while debugging a custom firmware where this
-value happen to be controlled here, i don't know any hardware out there
-with such issue, this change should be seen as a software nitpick and is
-not trying to fix a specific hardware.
-
+> This function runs once during HC initialization, so what's the benefit
+> of bypassing it? Does it take unusually long time? Does it panic?
 > 
-> > 
-> > Signed-off-by: Olivier Dautricourt <olivierdautricourt@gmail.com>
-> > ---
-> >  drivers/usb/host/xhci-mem.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> > index d2900197a49e..e8406db78782 100644
-> > --- a/drivers/usb/host/xhci-mem.c
-> > +++ b/drivers/usb/host/xhci-mem.c
-> > @@ -2160,6 +2160,11 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
-> >  	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-> >  
-> >  	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
-> > +	if (num_ports == 0) {
-> > +		xhci_warn(xhci, "Host controller has no port enabled\n");
-> > +		return -ENODEV;
-> > +	}
-> 
-> Should this be backported to older kernels, if so, how far back if this
-> is common hardware?
+> It seems to alreday be written to handle such abnormal cases gracefully.
 
-I don't think this would have to be ported to stable trees: The function
-handles the case without failure: the 0 value is propagated until line
-2220 and fails on condition:
+That is correct, the case is handled without panic, but the 0 value gets
+silently propagated until it eventually fails on line 2220:
 	if (xhci->usb2_rhub.num_ports == 0 && xhci->usb3_rhub.num_ports == 0) {
 		xhci_warn(xhci, "No ports on the roothubs?\n");
 		return -ENODEV;
 	}
+The benefits are only:
+  - Reporting a more precise issue
+  - Avoids iterating through the capability structures of the controller
+  - failsafe if future changes
 
-The change merely avoids passing 0 value through kcalloc_node calls and
-unnecessary accesses to the capability structures of the controller.
+This is totally a nitpick as the case is unusual, if you think it is not
+worth taking it upstream i'll understand.
+
 
 Kr,
 Olivier
