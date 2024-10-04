@@ -1,63 +1,63 @@
-Return-Path: <linux-usb+bounces-15718-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15719-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC87A990541
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 16:04:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D53990542
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 16:05:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3CB51C22A7A
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 14:04:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 217611C22AC3
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 14:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3A22141A2;
-	Fri,  4 Oct 2024 14:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E90E2101B2;
+	Fri,  4 Oct 2024 14:04:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j1gRfwzp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WIh3Trp2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109642139DA
-	for <linux-usb@vger.kernel.org>; Fri,  4 Oct 2024 14:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550C72141A5
+	for <linux-usb@vger.kernel.org>; Fri,  4 Oct 2024 14:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728050689; cv=none; b=cOplJJQKakRA6lyduS7GxDIH2XWAbTb45ywuG0T395m9dRHxA4JeEpW7wkwuZu5WVGhboY1ndN9o3Ne3vO3VmL/19yc9Okn4bG+9nAYANeQokcf1NcMhkweaN//9ZLCrEqPyBqF05lXmZlv1hsxgMo3JrqO2Ac/K/Bjo31BfCRQ=
+	t=1728050691; cv=none; b=BStlW1wSSKvLE1mOGvBz5OHOqTSUZdwIg4EMrcL1uGDT5D5ZfaYmm3gC1PL32k+ytUbsYYXgD+US2/qUrzCwLFoCqAmEpaTfo/wbYxFt0V7EqOmgPs41IY7MqUaO+8kU6uaK8slSF8l00tOZ5JohLTmBiUaviCNB/D9yRadY63o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728050689; c=relaxed/simple;
-	bh=mcDMBZC9KFfgr3RFmYzyHDHyewfTPMs/Vrf5a+HRfys=;
+	s=arc-20240116; t=1728050691; c=relaxed/simple;
+	bh=bsJVu6U+CWgKuqGdDNSUGylr44XzfVpfOWkjMKwS8oE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lULyCiXfq65ux6NAjgskyvtBoT+Z0+Teruw2u6hEodM/VQnWIs3aPPGc9tMnrZRQuDYcMHdvq5DxDhh1y8+jhcHT0KD6qLpqrBbO4lv31LjK1MTxsJTnZhCNsnNZNhy7UBK3BqYRwuUP8x9PcaJsbHRdn2gYa44o04w1iK5RJ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j1gRfwzp; arc=none smtp.client-ip=192.198.163.19
+	 MIME-Version; b=o9patfgDCcEKOrGac1UvGbX1NBxnPEf0Oejl5WpADnCayk6LFIhoaYvsHJqeRvKSEUCJ42EgvpdVsq5fj7YY1Ca394zWcKbz0+I/KopBmOVOErpHPglluW/ar2QMzsWSdCNg/NLXpnKmcWyw9x6P6IvXdjDIuHhcWXAmiP3Wr7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WIh3Trp2; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728050688; x=1759586688;
+  t=1728050690; x=1759586690;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mcDMBZC9KFfgr3RFmYzyHDHyewfTPMs/Vrf5a+HRfys=;
-  b=j1gRfwzpgwSVLtdLB9Sr7Qxot8lkHUGJvYm5EP1vM6OT4BOtgmTHiC0u
-   i+w02AnI8Bw2l3LCJ/tGsKCPmB2PPScMj06WWSzzv+L2drMsJIgSfqu1z
-   1GnKlrZv6NtQFBwUmhVTssjLu2HGJQW/6MQxRT/Hl+WQf7GvsLXvz6q/w
-   kbhvVQb6NcpT8pIG/m49pw48Id3zxxiqSqDr58WF8LTBrU56nrTo7YwRh
-   DMHUpPvQzmEfUrKkPbignnQfjtWfSnJvs7fQbyUlJJ8AbLa6o/MzA6tjH
-   K5zkR61G/fDqi28Sj6b3bX27pTqAyiyHCiXp0ZF1+xQZcC4Lb7bmjpCpr
-   A==;
-X-CSE-ConnectionGUID: s6YHipZ0QwSW0m+g/poVHA==
-X-CSE-MsgGUID: fzODjJ/ISVe8+GihuWcIDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="26780802"
+  bh=bsJVu6U+CWgKuqGdDNSUGylr44XzfVpfOWkjMKwS8oE=;
+  b=WIh3Trp2UViG/xW7qO7z2fJlN9BiK0LemMOirJ8KYKQM3y0fXeUBxZP7
+   K/F1YNXSEcng8Ij+0aOvW/DLOwxD7TGHE97VFCsv41+ZzQzbvuWiE6l5E
+   DwiPJ6Y1sciKNrADHu4MH8jL33EuNXPZlB2CWaRuxAaGsKT3hOGA+tm7G
+   zn6s4DD2x9mAbe1xEep2e5Sn17AUbp/Arl9F5Ub4nfuP0Upn9mD/mcn+t
+   /yK+OEH/BnCoQeF80Wi1fziz61SuE6dY6MJ/k+PsO/C1epR9TVTB8OyHw
+   /HgPUMipNtd9Gg3lyB8wiV7QZ+Qk3jnTpPjNCF805Q+36xtvxMBInlo3R
+   Q==;
+X-CSE-ConnectionGUID: E3+BKLxlS5aSAgkNFoppug==
+X-CSE-MsgGUID: HHsg/KEBRjaw/RGzWeLprA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="26780810"
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="26780802"
+   d="scan'208";a="26780810"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:04:48 -0700
-X-CSE-ConnectionGUID: x31wB/KgQaCT2p3t0mrq2Q==
-X-CSE-MsgGUID: FlBI4mdlRTm+mFjyG0n6iw==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:04:50 -0700
+X-CSE-ConnectionGUID: DIPd7kD0QBeuR7sS6lkcLg==
+X-CSE-MsgGUID: SmlXqr5NRwCnypJCnHzFMg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="79144223"
+   d="scan'208";a="79144225"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmviesa005.fm.intel.com with ESMTP; 04 Oct 2024 07:04:45 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 04 Oct 2024 07:04:48 -0700
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -66,9 +66,9 @@ Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Jameson Thies <jthies@google.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org
-Subject: [PATCH v1 2/4] usb: typec: Add attribute file showing the USB Modes of the partner
-Date: Fri,  4 Oct 2024 17:04:37 +0300
-Message-ID: <20241004140440.1882311-3-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v1 3/4] usb: typec: ucsi: Supply the USB capabilities to the ports
+Date: Fri,  4 Oct 2024 17:04:38 +0300
+Message-ID: <20241004140440.1882311-4-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241004140440.1882311-1-heikki.krogerus@linux.intel.com>
 References: <20241004140440.1882311-1-heikki.krogerus@linux.intel.com>
@@ -80,293 +80,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This attribute file shows the supported USB modes (USB 2.0,
-USB 3.0 and USB4) of the partner, and the currently active
-mode.
-
-The active mode is determined primarily by checking the
-speed of the enumerated USB device. When USB Power Delivery
-is supported, the active USB mode should be always the mode
-that was used with the Enter_USB Message, regardless of the
-result of the USB enumeration. The port drivers can
-separately assign the mode with a dedicated API.
-
-If USB Power Delivery Identity is supplied for the partner
-device, the supported modes are extracted from it.
+The USB capabilities can be extracted from the response to
+the Get Connector Capability command. USB2 and USB3 support
+can be checked from the Operation Mode field, and USB4
+support from the Extended Operation Mode field.
 
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- Documentation/ABI/testing/sysfs-class-typec |  14 +++
- drivers/usb/typec/class.c                   | 123 +++++++++++++++++++-
- drivers/usb/typec/class.h                   |   2 +
- include/linux/usb/typec.h                   |   5 +
- 4 files changed, 140 insertions(+), 4 deletions(-)
+ drivers/usb/typec/ucsi/ucsi.c | 7 +++++++
+ drivers/usb/typec/ucsi/ucsi.h | 8 ++++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index 7c307f02d99e..866865ffeb66 100644
---- a/Documentation/ABI/testing/sysfs-class-typec
-+++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -233,6 +233,20 @@ Description:
- 		directory exists, it will have an attribute file for every VDO
- 		in Discover Identity command result.
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index e0f3925e401b..13c739d334c4 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1588,6 +1588,13 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+ 	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
+ 		*accessory = TYPEC_ACCESSORY_DEBUG;
  
-+What:		/sys/class/typec/<port>-partner/usb_mode
-+Date:		February 2024
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:	The USB Modes that the partner device supports. The active mode
-+		is disaplayed in brackets. The active USB mode can be changed by
-+		writing to this file when the port driver is able to send Data
-+		Reset Message to the partner. That requires USB Power Delivery
-+		contract between the partner and the port.
++	if (UCSI_CONCAP_USB2_SUPPORT(con))
++		cap->usb_capability |= USB_CAPABILITY_USB2;
++	if (UCSI_CONCAP_USB3_SUPPORT(con))
++		cap->usb_capability |= USB_CAPABILITY_USB3;
++	if (UCSI_CONCAP_USB4_SUPPORT(con))
++		cap->usb_capability |= USB_CAPABILITY_USB4;
 +
-+		Valid values:
-+		- usb2 (USB 2.0)
-+		- usb3 (USB 3.2)
-+		- usb4 (USB4)
-+
- USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
+ 	cap->driver_data = con;
+ 	cap->ops = &ucsi_ops;
  
- Note: Electronically Marked Cables will have a device also for one cable plug
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 9c26d2ad40df..5d35a263a2bf 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -618,6 +618,74 @@ EXPORT_SYMBOL_GPL(typec_unregister_altmode);
- /* ------------------------------------------------------------------------- */
- /* Type-C Partners */
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 4a017eb6a65b..f6a3287cdc06 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -286,6 +286,14 @@ struct ucsi_connector_capability {
+ 	UCSI_SPEC_REVISION_TO_BCD(UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_))
+ } __packed;
  
-+/**
-+ * typec_partner_set_usb_mode - Assign active USB Mode for the partner
-+ * @partner: USB Type-C partner
-+ * @mode: USB Mode (USB2, USB3 or USB4)
-+ *
-+ * The port drivers can use this function to assign the active USB Mode to
-+ * @partner. The USB Mode can change for example due to Data Reset.
-+ */
-+void typec_partner_set_usb_mode(struct typec_partner *partner, enum usb_mode usb_mode)
-+{
-+	if (!partner || partner->usb_mode == usb_mode)
-+		return;
++#define UCSI_CONCAP_USB2_SUPPORT(_con_) ((_con_)->cap.op_mode & UCSI_CONCAP_OPMODE_USB2)
++#define UCSI_CONCAP_USB3_SUPPORT(_con_) ((_con_)->cap.op_mode & UCSI_CONCAP_OPMODE_USB3)
++#define UCSI_CONCAP_USB4_SUPPORT(_con_)					\
++	((_con_)->ucsi->version >= UCSI_VERSION_2_0 &&			\
++	 ((_con_)->cap.flags & (UCSI_CONCAP_EX_OP_MODE_USB4_GEN2 |	\
++				UCSI_CONCAP_EX_OP_MODE_USB4_GEN3 |	\
++				UCSI_CONCAP_EX_OP_MODE_USB4_GEN4)))
 +
-+	partner->usb_capability |= BIT(usb_mode - 1);
-+	partner->usb_mode = usb_mode;
-+	sysfs_notify(&partner->dev.kobj, NULL, "usb_mode");
-+}
-+EXPORT_SYMBOL_GPL(typec_partner_set_usb_mode);
-+
-+static ssize_t
-+usb_mode_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct typec_partner *partner = to_typec_partner(dev);
-+	int len = 0;
-+	int i;
-+
-+	for (i = USB_MODE_USB2; i < USB_MODE_USB4 + 1; i++) {
-+		if (!(BIT(i - 1) & partner->usb_capability))
-+			continue;
-+
-+		if (i == partner->usb_mode)
-+			len += sysfs_emit_at(buf, len, "[%s] ", usb_modes[i]);
-+		else
-+			len += sysfs_emit_at(buf, len, "%s ", usb_modes[i]);
-+	}
-+
-+	buf[len - 1] = '\n';
-+	return len;
-+}
-+
-+static ssize_t usb_mode_store(struct device *dev, struct device_attribute *attr,
-+			      const char *buf, size_t size)
-+{
-+	struct typec_partner *partner = to_typec_partner(dev);
-+	struct typec_port *port = to_typec_port(dev->parent);
-+	int mode;
-+	int ret;
-+
-+	if (!port->ops || !port->ops->data_reset)
-+		return -EOPNOTSUPP;
-+
-+	mode = sysfs_match_string(usb_modes, buf);
-+	if (mode < 0)
-+		return mode;
-+
-+	if (mode == partner->usb_mode)
-+		return size;
-+
-+	ret = port->ops->data_reset(port, mode);
-+	if (ret)
-+		return ret;
-+
-+	typec_partner_set_usb_mode(partner, mode);
-+
-+	return size;
-+}
-+static DEVICE_ATTR_RW(usb_mode);
-+
- static ssize_t accessory_mode_show(struct device *dev,
- 				   struct device_attribute *attr,
- 				   char *buf)
-@@ -664,6 +732,7 @@ static struct attribute *typec_partner_attrs[] = {
- 	&dev_attr_supports_usb_power_delivery.attr,
- 	&dev_attr_number_of_alternate_modes.attr,
- 	&dev_attr_type.attr,
-+	&dev_attr_usb_mode.attr,
- 	&dev_attr_usb_power_delivery_revision.attr,
- 	NULL
- };
-@@ -671,6 +740,14 @@ static struct attribute *typec_partner_attrs[] = {
- static umode_t typec_partner_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n)
- {
- 	struct typec_partner *partner = to_typec_partner(kobj_to_dev(kobj));
-+	struct typec_port *port = to_typec_port(partner->dev.parent);
-+
-+	if (attr == &dev_attr_usb_mode.attr) {
-+		if (!partner->usb_capability)
-+			return 0;
-+		if (!port->ops || !port->ops->data_reset)
-+			return 0444;
-+	}
- 
- 	if (attr == &dev_attr_number_of_alternate_modes.attr) {
- 		if (partner->num_altmodes < 0)
-@@ -744,10 +821,33 @@ static void typec_partner_unlink_device(struct typec_partner *partner, struct de
-  */
- int typec_partner_set_identity(struct typec_partner *partner)
- {
--	if (!partner->identity)
-+	u8 usb_capability = partner->usb_capability;
-+	struct device *dev = &partner->dev;
-+	struct usb_pd_identity *id;
-+
-+	id = get_pd_identity(dev);
-+	if (!id)
- 		return -EINVAL;
- 
--	typec_report_identity(&partner->dev);
-+	if (to_typec_port(dev->parent)->data_role == TYPEC_HOST)  {
-+		u32 devcap = PD_VDO_UFP_DEVCAP(id->vdo[0]);
-+
-+		if (devcap & (DEV_USB2_CAPABLE | DEV_USB2_BILLBOARD))
-+			usb_capability |= USB_CAPABILITY_USB2;
-+		if (devcap & DEV_USB3_CAPABLE)
-+			usb_capability |= USB_CAPABILITY_USB3;
-+		if (devcap & DEV_USB4_CAPABLE)
-+			usb_capability |= USB_CAPABILITY_USB4;
-+	} else {
-+		usb_capability = PD_VDO_DFP_HOSTCAP(id->vdo[0]);
-+	}
-+
-+	if (partner->usb_capability != usb_capability) {
-+		partner->usb_capability = usb_capability;
-+		sysfs_notify(&dev->kobj, NULL, "usb_mode");
-+	}
-+
-+	typec_report_identity(dev);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(typec_partner_set_identity);
-@@ -917,6 +1017,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
- 	partner->usb_pd = desc->usb_pd;
- 	partner->accessory = desc->accessory;
- 	partner->num_altmodes = -1;
-+	partner->usb_capability = desc->usb_capability;
- 	partner->pd_revision = desc->pd_revision;
- 	partner->svdm_version = port->cap->svdm_version;
- 	partner->attach = desc->attach;
-@@ -936,6 +1037,15 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
- 	partner->dev.type = &typec_partner_dev_type;
- 	dev_set_name(&partner->dev, "%s-partner", dev_name(&port->dev));
- 
-+	if (port->usb2_dev) {
-+		partner->usb_capability |= USB_CAPABILITY_USB2;
-+		partner->usb_mode = USB_MODE_USB2;
-+	}
-+	if (port->usb3_dev) {
-+		partner->usb_capability |= USB_CAPABILITY_USB2 | USB_CAPABILITY_USB3;
-+		partner->usb_mode = USB_MODE_USB3;
-+	}
-+
- 	ret = device_register(&partner->dev);
- 	if (ret) {
- 		dev_err(&port->dev, "failed to register partner (%d)\n", ret);
-@@ -1935,13 +2045,18 @@ static void typec_partner_attach(struct typec_connector *con, struct device *dev
- 	struct typec_port *port = container_of(con, struct typec_port, con);
- 	struct typec_partner *partner = typec_get_partner(port);
- 	struct usb_device *udev = to_usb_device(dev);
-+	enum usb_mode usb_mode;
- 
--	if (udev->speed < USB_SPEED_SUPER)
-+	if (udev->speed < USB_SPEED_SUPER) {
-+		usb_mode = USB_MODE_USB2;
- 		port->usb2_dev = dev;
--	else
-+	} else {
-+		usb_mode = USB_MODE_USB3;
- 		port->usb3_dev = dev;
-+	}
- 
- 	if (partner) {
-+		typec_partner_set_usb_mode(partner, usb_mode);
- 		typec_partner_link_device(partner, dev);
- 		put_device(&partner->dev);
- 	}
-diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-index 85bc50aa54f7..b3076a24ad2e 100644
---- a/drivers/usb/typec/class.h
-+++ b/drivers/usb/typec/class.h
-@@ -35,6 +35,8 @@ struct typec_partner {
- 	int				num_altmodes;
- 	u16				pd_revision; /* 0300H = "3.0" */
- 	enum usb_pd_svdm_ver		svdm_version;
-+	enum usb_mode			usb_mode;
-+	u8				usb_capability;
- 
- 	struct usb_power_delivery	*pd;
- 
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index d8999472212d..c35221b0e164 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -220,6 +220,7 @@ struct typec_cable_desc {
-  * @accessory: Audio, Debug or none.
-  * @identity: Discover Identity command data
-  * @pd_revision: USB Power Delivery Specification Revision if supported
-+ * @usb_capability: Supported USB Modes
-  * @attach: Notification about attached USB device
-  * @deattach: Notification about removed USB device
-  *
-@@ -237,6 +238,7 @@ struct typec_partner_desc {
- 	enum typec_accessory	accessory;
- 	struct usb_pd_identity	*identity;
- 	u16			pd_revision; /* 0300H = "3.0" */
-+	u8			usb_capability;
- 
- 	void (*attach)(struct typec_partner *partner, struct device *dev);
- 	void (*deattach)(struct typec_partner *partner, struct device *dev);
-@@ -252,6 +254,7 @@ struct typec_partner_desc {
-  * @pd_get: Get available USB Power Delivery Capabilities.
-  * @pd_set: Set USB Power Delivery Capabilities.
-  * @usb_mode_set: Set the USB Mode to be used with Enter_USB message
-+ * @data_reset: Set new USB mode by using the Data Reset message
-  */
- struct typec_operations {
- 	int (*try_role)(struct typec_port *port, int role);
-@@ -263,6 +266,7 @@ struct typec_operations {
- 	struct usb_power_delivery **(*pd_get)(struct typec_port *port);
- 	int (*pd_set)(struct typec_port *port, struct usb_power_delivery *pd);
- 	int (*usb_mode_set)(struct typec_port *port, enum usb_mode mode);
-+	int (*data_reset)(struct typec_port *port, enum usb_mode mode);
- };
- 
- enum usb_pd_svdm_ver {
-@@ -365,6 +369,7 @@ int typec_port_set_usb_power_delivery(struct typec_port *port, struct usb_power_
- int typec_partner_set_usb_power_delivery(struct typec_partner *partner,
- 					 struct usb_power_delivery *pd);
- 
-+void typec_partner_set_usb_mode(struct typec_partner *partner, enum usb_mode usb_mode);
- void typec_port_set_usb_mode(struct typec_port *port, enum usb_mode mode);
- 
- /**
+ struct ucsi_altmode {
+ 	u16 svid;
+ 	u32 mid;
 -- 
 2.45.2
 
