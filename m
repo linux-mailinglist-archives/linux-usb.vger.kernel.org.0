@@ -1,52 +1,59 @@
-Return-Path: <linux-usb+bounces-15689-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15690-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F5EF98FEA9
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 10:12:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE1C98FF73
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 11:15:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E13AAB20EA7
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 08:12:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A8F91C22926
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 09:15:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C8D13C8E8;
-	Fri,  4 Oct 2024 08:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A044D146A87;
+	Fri,  4 Oct 2024 09:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tNEi/nkp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XN5QeAqC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C158017758;
-	Fri,  4 Oct 2024 08:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2D513F43B;
+	Fri,  4 Oct 2024 09:15:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728029530; cv=none; b=ZD3sSmuSDhu1khjPhqXsn+2p/qTro1AYsSnSy8EFpr6C447kIxXSGCGnaxypuFmiVVWj9MUAOU3y+StkSdn99XR+Sw4h9tp8LOlFecWEjbMhF5aRN1Qsvp6p6n7iatl1Lpdcbc5IGJZKQr0VvSWEJL/BM25jXZ9vx+2dVr3fqwU=
+	t=1728033309; cv=none; b=OacgObVKIBaeNP1TB99ziSXAaFeiurhhGJj8xgCt1LB6ZlxmXkFQ3pqO23N4g5ayZD5kHNli0uxb27T4edKk8ejHv2/OU/tXkl/ub2XU60noqkDwkmprQchu8zvyK0VqzG2x5EyVb1sQoPJ4uAzjpldDdTMjCyvxzSKnj+5tM1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728029530; c=relaxed/simple;
-	bh=27vdyBwZrOTnjtEnm92fTx/uIulW8vv6bAvMEt++eiU=;
+	s=arc-20240116; t=1728033309; c=relaxed/simple;
+	bh=tm+1zIioYKE3BIjVPiXN0fmqWViNiymIUgwTepl5wiE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lJtkxQXJ9VU7aGtmTtD0hFCJAb5fICvLmQ/E1Z3+yRx2zlPMVp6GEGmIXy3DejcE5pt+9nQ3ZDiGCvayLtZvvc2j11ue2qOtXHjfPPf7q7qPRy9dEabVPGKtyll7eKZdnNMxxNdzroJdsBgJYsfQrXkoq3NGApHtVKuk1SRmbiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tNEi/nkp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36D3C4CECC;
-	Fri,  4 Oct 2024 08:12:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728029530;
-	bh=27vdyBwZrOTnjtEnm92fTx/uIulW8vv6bAvMEt++eiU=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=NJzHYFi5G5nr6KMT84M+lUT2Tv/0U84El1saVOaBHHSKEB1uoCCr1KzaPqWXkAoVy1BGnmzLtjf96DNGWT+2q+ER6/XiMBJ3m3/XPLpqHrCFeZKzRUU4Hj8U9/WC0OiaxZyZbkSAi9s08B/Pkq4clTTjQpy1bXHU4yIPLo/JBwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XN5QeAqC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA51C4CEC6;
+	Fri,  4 Oct 2024 09:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728033308;
+	bh=tm+1zIioYKE3BIjVPiXN0fmqWViNiymIUgwTepl5wiE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tNEi/nkpZnf9gHaw5GEFi5YYEKgxD3JhdEcrjdkTXAI3aTIWzA2PJ1M2j3nS5VSbG
-	 W9RBAOZO1Oq04gBBj5ZlLlFwdSxHLr22JwQrS/caL9wGiRqdYih7gfAHxwRqDG5YNt
-	 MHrB+sxbB0zFd6cIPLMF6hV4/XfrVRFQ3Oa44zQo=
-Date: Fri, 4 Oct 2024 10:12:07 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Dipendra Khadka <kdipendra88@gmail.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: tipd: Fix dereferencing freed memory 'fw
- in core.c
-Message-ID: <2024100444-unwound-poppy-97ec@gregkh>
-References: <20240923092625.2673-1-kdipendra88@gmail.com>
+	b=XN5QeAqCxV1mem1qDfcSupaxpwYUt5z39In+C0rcLYS/H4xfD9/XnONFFYdQs/zAt
+	 3gNzciJHMWFIMeq4zXmC0mKrI7mMsGthApi4/9ctn0Fi4fZs2qELw5mIyYenzeWTjF
+	 JIT1aR7Dxpg2Bl1hA5pFnB4RcsZ/jKSbkCeXhvG4sArqcx2kuVJJ1BJH0pMPmDrqEU
+	 ydl1cef7ruxIWm00nD/tvAENPARcmqRxbBoHZkyknHoCS2dNrpdK1XjW/Dt/+MFjId
+	 O8U54DFWakrn6+wKgH8bBE6ji5sL5gd+a8xL1bWHWJ8gvnkp558IMOmIoXPtcuq5pc
+	 PDgMTKWMdPc9g==
+Date: Fri, 4 Oct 2024 10:15:04 +0100
+From: Simon Horman <horms@kernel.org>
+To: Liel Harel <liel.harel@gmail.com>
+Cc: Steve Glendinning <steve.glendinning@shawell.net>,
+	UNGLinuxDriver@microchip.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, mailing-list-name@vger.kernel.org
+Subject: Re: [PATCH] smsc95xx: Fix some coding style issues
+Message-ID: <20241004091504.GB1310185@kernel.org>
+References: <20241003161610.58050-1-liel.harel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,43 +62,27 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240923092625.2673-1-kdipendra88@gmail.com>
+In-Reply-To: <20241003161610.58050-1-liel.harel@gmail.com>
 
-On Mon, Sep 23, 2024 at 09:26:24AM +0000, Dipendra Khadka wrote:
-> Smatch reported dereferencing freed memory 'fw' in tps6598x_apply_patch().
+On Thu, Oct 03, 2024 at 07:16:10PM +0300, Liel Harel wrote:
+> Fix some coding style issues in drivers/net/usb/smsc95xx.c that
+> checkpatch.pl script reported.
 > 
-> Invoking relrease_firmware(fw) just after checking ret.
-> 
-> Fixes: 916b8e5fa73d ("usb: typec: tipd: add error log to provide firmware name and size")
-> Signed-off-by: Dipendra Khadka <kdipendra88@gmail.com>
-> ---
-> v2:
->  - Updated patch subject.
->  - Updated patch description.
->  - Added Fixes tag.
-> v1: 
->  drivers/usb/typec/tipd/core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index ea768b19a7f1..70bf8023ea35 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -1191,12 +1191,13 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
->  	dev_info(tps->dev, "Firmware update succeeded\n");
->  
->  release_fw:
-> -	release_firmware(fw);
->  	if (ret) {
->  		dev_err(tps->dev, "Failed to write patch %s of %zu bytes\n",
->  			firmware_name, fw->size);
->  	}
->  
-> +	relrease_firmware(fw);
+> Signed-off-by: Liel Harel <liel.harel@gmail.com>
 
-Any specific reason why you did not even compile this version of the
-patch?
+Hi Liel,
 
-{sigh}
+Thanks for your patch.
 
+Unfortunately stand-alone cleanup patches of this nature are not
+taken into upstream for Networking code.
+
+Also, if you plan to send more Networking patches in future, please read
+the process document, and understanding of which should help with a smooth
+review process.
+
+https://docs.kernel.org/process/maintainer-netdev.html
+
+-- 
+pw-bot: rejected
 
