@@ -1,62 +1,63 @@
-Return-Path: <linux-usb+bounces-15738-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15739-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5612A990CAE
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 20:55:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA74990D57
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 21:08:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18D7C282736
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 18:55:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE4491C22CB4
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 19:08:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CDD61FCC43;
-	Fri,  4 Oct 2024 18:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E043206E73;
+	Fri,  4 Oct 2024 18:26:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDcN2Gky"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vo+GYqJs"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24AE21F410;
-	Fri,  4 Oct 2024 18:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0430D206E69;
+	Fri,  4 Oct 2024 18:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066235; cv=none; b=fEMXQoiDoQojF209EQHJSOYYZ/YphJvG6wo+3Otc3pQdM3O+VO3a2qM5sERvD/HkP/uu9BVLOg10+zAc4F/aoqPObXJrfxqHYME0ZhCpUV+M7XYQrKBOF0FEPqg+C6GmTK4polIvik1NbP3G0awkyZR7vht3ZH4+Jw0IVxYNY1g=
+	t=1728066379; cv=none; b=rRS9e1QnWzc4xURZoTKNi8XncdItwsyK4HRonn/6W5Uu05YaspA3Y7yngWJJnMgr81I8qXVnpUtyVcrEtoulH739AJzgf+jiFOVrpgkXTofUEic4kXPVn+mNExACg2aEEfHTf6ueOKU0GY4JDVybNxePLTMjSLQBvVCsEfLjka0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066235; c=relaxed/simple;
-	bh=9v4AkEzJHgd60Poe0PjrYbXzP1mJjJjuDEM+8aex0fY=;
+	s=arc-20240116; t=1728066379; c=relaxed/simple;
+	bh=oY4AkKK3cNYSXzwmeEH5JZe1WS6YZTk1cFuE/iN7Uhw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LQgTUP5/OuSt015+yHf1eD3lWpFzVvm43P4c0Sahqr9FsfeKf6PbiHldSe5uKKFTXfTV2vfj/bjmLrdCaz43dz7h/KAaWsBypyWNFP5tD7Xl318xAqCOjrklbGJ5R5JFKSsZyVlC2YzcIrvQ/e5rw1/lso3p9JsVAYdV58Th42g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDcN2Gky; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D50C4CEC6;
-	Fri,  4 Oct 2024 18:23:54 +0000 (UTC)
+	 MIME-Version; b=Lt6AWRYs/fwk+ne3KAoRkBzuQZOQe8AG6S/ufh9AN/G6kCuCyQTwoYWA1V2nH1sCPffwtfcoi8M1Icx+hOVrUQKdZ0X1qtNWAuEJkxv+cUOkCp2286YF7oV5be4pYXwwR55C+Q9wKnot6bXM4n6cYByRP21HPZiQdLlm4luUuYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vo+GYqJs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F780C4CEC6;
+	Fri,  4 Oct 2024 18:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728066235;
-	bh=9v4AkEzJHgd60Poe0PjrYbXzP1mJjJjuDEM+8aex0fY=;
+	s=k20201202; t=1728066378;
+	bh=oY4AkKK3cNYSXzwmeEH5JZe1WS6YZTk1cFuE/iN7Uhw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cDcN2GkyaPKSLq1XPzOriMrLuVZtmJEolY+ZL0cY/rqvYqrDfEauk9f0CDCpkXSr1
-	 E/vmxCKjeAnW22pGQTVcdCv4OlbEP79uDjx02fDl00IbJu9RNsoHDrLMW/HzVz7JEx
-	 nGIIMKRSyrmJD/Ps2O9wdx4Rrj4yfjsR7b9ioYgKb4k9wW4/4PZFHMyYRKNCzWMao3
-	 +KRONDgWpU4M6PoAFOzQUWCmKdHfQLTtjNlMuupv0mSCmL9zaQssl30ykHv1yE4oc3
-	 yO8ZQwZQq6dPpeyx9oXTO7IDwj3fvHnOgV9uQfje0m53ZzjZ1P5L+ETn68YoRBiXgl
-	 HYoRdIm40K9vQ==
+	b=Vo+GYqJsCH4P6R5sPM2A++jPr/Qhzgay0JNJlsfOFjyWEZgCKmBHOqfByIklaI18N
+	 lybDHex/Bb1f1+uNCix/hDrYOvdZS8CmjvU0TqpsJzZ8gaiSjtI6ttV6tb/77sTKMP
+	 ryTNssLh3oIizTgSMAoIouXy4D+4mfwABRROm+7xOekDhUpespQMEVydws9g9wm+jc
+	 PdZAL0inArbaLTOrMbhxjzKN1pv2ePkp/tKDw6NvzaZAIRN/iq68H2qwf2pR0kqlV+
+	 rcLf5jPRSlS/cVSigoWKmGkmWYHgpalBQ/JMp/t5mPi7Ng8xXDoOGj4FX9yQ9vcCC3
+	 ZAYcRtImFA3mw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Abhishek Tamboli <abhishektamboli9@gmail.com>,
+Cc: Wadim Egorov <w.egorov@phytec.de>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	arakesh@google.com,
-	dan.scally@ideasonboard.com,
-	m.grzeschik@pengutronix.de,
+	javier.carrasco@wolfvision.net,
+	abdelalkuor@geotab.com,
+	harshit.m.mogalapalli@oracle.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.10 58/70] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
-Date: Fri,  4 Oct 2024 14:20:56 -0400
-Message-ID: <20241004182200.3670903-58-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 41/58] usb: typec: tipd: Free IRQ only if it was requested before
+Date: Fri,  4 Oct 2024 14:24:14 -0400
+Message-ID: <20241004182503.3672477-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004182200.3670903-1-sashal@kernel.org>
-References: <20241004182200.3670903-1-sashal@kernel.org>
+In-Reply-To: <20241004182503.3672477-1-sashal@kernel.org>
+References: <20241004182503.3672477-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,79 +66,61 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.10.13
+X-stable-base: Linux 6.6.54
 Content-Transfer-Encoding: 8bit
 
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
+From: Wadim Egorov <w.egorov@phytec.de>
 
-[ Upstream commit a7bb96b18864225a694e3887ac2733159489e4b0 ]
+[ Upstream commit db63d9868f7f310de44ba7bea584e2454f8b4ed0 ]
 
-Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
-and uvc_v4l2_enum_format().
+In polling mode, if no IRQ was requested there is no need to free it.
+Call devm_free_irq() only if client->irq is set. This fixes the warning
+caused by the tps6598x module removal:
 
-Fix the following smatch errors:
+WARNING: CPU: 2 PID: 333 at kernel/irq/devres.c:144 devm_free_irq+0x80/0x8c
+...
+...
+Call trace:
+  devm_free_irq+0x80/0x8c
+  tps6598x_remove+0x28/0x88 [tps6598x]
+  i2c_device_remove+0x2c/0x9c
+  device_remove+0x4c/0x80
+  device_release_driver_internal+0x1cc/0x228
+  driver_detach+0x50/0x98
+  bus_remove_driver+0x6c/0xbc
+  driver_unregister+0x30/0x60
+  i2c_del_driver+0x54/0x64
+  tps6598x_i2c_driver_exit+0x18/0xc3c [tps6598x]
+  __arm64_sys_delete_module+0x184/0x264
+  invoke_syscall+0x48/0x110
+  el0_svc_common.constprop.0+0xc8/0xe8
+  do_el0_svc+0x20/0x2c
+  el0_svc+0x28/0x98
+  el0t_64_sync_handler+0x13c/0x158
+  el0t_64_sync+0x190/0x194
 
-drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
-error: 'fmtdesc' dereferencing possible ERR_PTR()
-
-drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
-error: 'fmtdesc' dereferencing possible ERR_PTR()
-
-Also, fix similar issue in uvc_v4l2_try_format() for potential
-dereferencing of ERR_PTR().
-
-Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
-Link: https://lore.kernel.org/r/20240815102202.594812-1-abhishektamboli9@gmail.com
+Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20240816124150.608125-1-w.egorov@phytec.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/uvc_v4l2.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tipd/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index a024aecb76dc3..de1736f834e6b 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
- 	list_for_each_entry(format, &uvc->header->formats, entry) {
- 		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 125269f39f83a..01db27cbf1d10 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -907,6 +907,8 @@ static void tps6598x_remove(struct i2c_client *client)
  
-+		if (IS_ERR(fmtdesc))
-+			continue;
-+
- 		if (fmtdesc->fcc == pixelformat) {
- 			uformat = format->fmt;
- 			break;
-@@ -240,6 +243,7 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	struct uvc_video *video = &uvc->video;
- 	struct uvcg_format *uformat;
- 	struct uvcg_frame *uframe;
-+	const struct uvc_format_desc *fmtdesc;
- 	u8 *fcc;
+ 	if (!client->irq)
+ 		cancel_delayed_work_sync(&tps->wq_poll);
++	else
++		devm_free_irq(tps->dev, client->irq, tps);
  
- 	if (fmt->type != video->queue.queue.type)
-@@ -277,7 +281,10 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 		fmt->fmt.pix.height = uframe->frame.w_height;
- 		fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
- 		fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
--		fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
-+		fmtdesc = to_uvc_format(uformat);
-+		if (IS_ERR(fmtdesc))
-+			return PTR_ERR(fmtdesc);
-+		fmt->fmt.pix.pixelformat = fmtdesc->fcc;
- 	}
- 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
- 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-@@ -389,6 +396,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- 		return -EINVAL;
- 
- 	fmtdesc = to_uvc_format(uformat);
-+	if (IS_ERR(fmtdesc))
-+		return PTR_ERR(fmtdesc);
-+
- 	f->pixelformat = fmtdesc->fcc;
- 
- 	return 0;
+ 	tps6598x_disconnect(tps, 0);
+ 	typec_unregister_port(tps->port);
 -- 
 2.43.0
 
