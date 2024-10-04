@@ -1,120 +1,116 @@
-Return-Path: <linux-usb+bounces-15683-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15684-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BDBF98F91C
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 23:43:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F47398FC8B
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 05:36:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE6901C21459
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2024 21:43:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3226283D1C
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 03:36:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040281C2334;
-	Thu,  3 Oct 2024 21:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F278D49641;
+	Fri,  4 Oct 2024 03:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M672gzI/"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="ftCQMSqW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from sonic304-20.consmr.mail.ne1.yahoo.com (sonic304-20.consmr.mail.ne1.yahoo.com [66.163.191.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BE01C242D
-	for <linux-usb@vger.kernel.org>; Thu,  3 Oct 2024 21:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D95335A5
+	for <linux-usb@vger.kernel.org>; Fri,  4 Oct 2024 03:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.191.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727991788; cv=none; b=CmGpuU80b6vu6PW2Oq7Tylza0KLVpWjdD4WavnSou8z49FwDAQbdBCS5RMGnmNQU09csfYBTcrqrp+ihASHMNAUyxb7cAnTlq0yM0BG5RKZgKp17PHAzTUaHpNwlAFsEoTQTPGvmRAqi1aKho8VJhHyds/zf/0ux3Bf9Nlv5kTA=
+	t=1728012968; cv=none; b=kv+QwibF/jtlxsSOei2bN0A+xp4JjeKRsTVsUtK+7LIA1M3U+ME41qd4jTI4/0kSlLDoJh6WnBUG1qzHJpb3m7v0TfS/oNBxLErsvpYNsTTQxCvOGc0kTweVwxo1ljwFdtXaTvbW5V0HgQ/+XIiFhw1wkM/v9NtURG1SdQcU4hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727991788; c=relaxed/simple;
-	bh=VDXJk6/dnSS8sn9qohZVdF+AvHEy5J4pjidawrVOoHk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ktuoMulg+njm6/3aN3wvwzdpFcvEU1nLujTRgU/hSP00EJwlXkpGT29VFjiBMWPBqfh9ZI0PDAhWKM+erp+/EbCTrOgDuFPOsdSmb+p5Fh/g0I6JXwL7fa7oxRmUbng6p64MfJX1uMvYIwmuxjKhdFsYLJhc4zRS01HwvEhzHS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M672gzI/; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5398d171fa2so1819013e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2024 14:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727991785; x=1728596585; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VDXJk6/dnSS8sn9qohZVdF+AvHEy5J4pjidawrVOoHk=;
-        b=M672gzI/0h8FL0P/XL39+/2bJ3VAXhh5Q6pCDaCQqX4CHXnWmu6kUz+kHKp7lnCM8H
-         3ZdjQ8/xxFqC61CeuXaspQWDhjwwPg4cWFOZDEG5QxwgCzcdjMtQf+GrhYJuzgKBZ/GS
-         5Y1wKMGCGGVDGuWCDLWwwxG+q2cm1zjG+iDikuHcRUVF0v40g/TK/zG2Q+yCzHvXGrwb
-         m/J6A+QXJ3k6VI2v+XYUxPMIffhwbJGIJMkR7Fsfgfub0EFoj16fzPSWn81O2vzStvXy
-         k5XVIU/971eG+H6I7CZbXuQtKQRYT8BwUUAlQeLB6Yz+VFZtP/P8UO1Ql6utlPYCA2E2
-         Iw9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727991785; x=1728596585;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VDXJk6/dnSS8sn9qohZVdF+AvHEy5J4pjidawrVOoHk=;
-        b=bHN34iithFolaDznQvrQIlziXGupxyp5whbok6BrNvKqLw/PuBwbVQ5smhVox7xUCR
-         d6ck3MN4GlNH4sMsOVPxWiDGD8Z1zZKX43GpMp4rM0siktl8d+/euDad9pR24UbhMh7n
-         S44DnTWESdckxiIcXGPyvRkYjVG43QhzNTVeVt+EFqlJGUkc35D0Ub1gmdalLYJL+mSQ
-         RfVSaZ90fQUwVP8q3N3nih/jDgeKmoNz4/Q/EyAsOhd/aSKkB/LbSnwkz3Cm/8GvnbNP
-         acUqurXCQLoOrIc6cPE1M2ThTsazdkzzY7qDzV0i93qhZDoooGRr/PltorY/QjAeK2f8
-         BxTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJv9GgyHN9dwh0ZyAvh0NyVrIxR7rc+dGP7OIs/TfREk5r7i48gbCDgysrGrfvZgVHmgUw5ms8o/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSad/KTHQqYTAGZDzLGc/aBzCsCzzaOqDkn2RUxrLd5zHM+uCb
-	kxhwHIeWUXqn3xSXP2IhuJKA2sKIR7FkOeIybQIekmIBIp2EcLEh
-X-Google-Smtp-Source: AGHT+IHgY/sKkr2jZT5s5Fvv9m89t/4drKmCvgrDFQwI2KFMP/IgkeOS8RulT8F0pGYHdHoA/l4nfQ==
-X-Received: by 2002:a05:6512:b94:b0:539:8f4d:a7c9 with SMTP id 2adb3069b0e04-539ab9de2fcmr474571e87.41.1727991784536;
-        Thu, 03 Oct 2024 14:43:04 -0700 (PDT)
-Received: from foxbook (bfk18.neoplus.adsl.tpnet.pl. [83.28.48.18])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539a82974dcsm264903e87.166.2024.10.03.14.43.00
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 03 Oct 2024 14:43:01 -0700 (PDT)
-Date: Thu, 3 Oct 2024 23:42:57 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Harry Wentland <harry.wentland@amd.com>
-Cc: Raju.Rangoju@amd.com, Sanath.S@amd.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, mario.limonciello@amd.com,
- mathias.nyman@linux.intel.com, mika.westerberg@linux.intel.com,
- regressions@lists.linux.dev
-Subject: Re: [REGRESSION] usb: acpi: add device link between tunneled USB3
- device and USB4 Host Interface
-Message-ID: <20241003234257.7e87b675@foxbook>
-In-Reply-To: <82aa97b6-4b3a-48d3-a022-04563eb01e45@amd.com>
-References: <20241003214827.4edb8731@foxbook>
-	<82aa97b6-4b3a-48d3-a022-04563eb01e45@amd.com>
+	s=arc-20240116; t=1728012968; c=relaxed/simple;
+	bh=VJuuzroqJgZYENLBrsW3aheh2WTfa0sOcRL9hbIbKUc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=b9HANw4cairDWbIi8GO2ASFPa+/NQB8DEcQxP9zIsZBiox7Xy2iREW494RChrk3S45v3Zf4uUBvu729dXsE1m8r2R399m0SGD83G+FUXPdSCrlZQ/0xBigOIZPXhIId82J80QpTrkCrCCNbiO+cxNqdVjLj17LKOyErs8DHMZSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=ftCQMSqW; arc=none smtp.client-ip=66.163.191.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1728012966; bh=fxOLENbaZk22qLVdZz3DCzbj36kx6WCUGmr+2MaK+U8=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=ftCQMSqWF9HOTeiI3juuOOfGc5FoAK0MQVKYveRYGRCIxjynq4uz6BqVfEpMfC0JxeNV1SLjK7CvE5/zJruAbFCchLCfwqBbDsoQtRpMD8i4rqJxAOUi7z1mjuIdwz0kkLmQjARq08Dy0010fktPQXM0UNElhwWOKutus4GYXt6njRsnrs5zk1W7VhimhDTdRHDAwAD4AiOVcgSi8Zjr1xxqOg0RYYI/0bAya3KwD/i4kt9Lgu65CEx4odgUiSpDycg3jGE6A+1GR99gsVJ14Z5oG2hyX9CIdi68n07MltnFXb7d1hK3ZMJ+qxbov+bWqjcNnesACFyiTwlFVOViKw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1728012966; bh=pNM1RNmIQ+QVaufB/zULdZmXxbuwINg59KiT/e/nhcB=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=Kh5xuVrTYNP6rEtTKrpIVbp0UMnq3cziDECBjPGqg1p9ArCxP3WjoiZJQ1iUCEw0EU/bOj007eDdnA/8LQ+CQpolPJU9TOj5IAnfhwqqnUH/iKxYWMhthiqtyDM8fianA4oNX8dwKsVz08kltCPXn+UjLssqg9yDKQsQO9db2DwVm3RI11zpsQhLvsXujlz6m6Ywj69Liz55Ubd7cQ3+J/2gH1S61zxrV9beQe6we27K2lBcnHFm4nEx0jWHKkni+AJyNse+jCg7zMVR1iRSDx68EQr8PZUj9Yc9xvKHRa5SnYSW8r/fSsf88vNHRQ54ZBHdYbjWcnOAF+W1R8T8Wg==
+X-YMail-OSG: xCE0O_0VM1n_xotxNcZHDv19peA5qp5wy4JsF8ze8yFcUc0YIOVGwt.6dzFIq_P
+ Z52fsYrNv61YGF__DbjgNkEYykhuFJ1qTfO8YpBeEtYmd0hHI3bZ5iry54IqiJBv47Mgdx60Plmd
+ AfHHKCQWw3trF8xxPZMUpAzw8ryRLJLdVyerJiHM_abK2NPGVcCJaxyCOjpNVmKOidF63RjzR4SM
+ g16UEZkYHQ51tPb.ZW6lK5X_Keg21XUJ50eHDclD7AIFfTtozyaWKbzXsDtRMsiM53j.MoHL5bt.
+ BgupeJVjoMN0fiQXq3Oxy5FUAtfso89MYiu0WkKAqfEuYd1lVxhtoXWAKZDtvQKAe3ZUVsCf8czN
+ p6WKNO9j3rFw0HzsWiKfbKoxV5pRxtU2hbne1LXatKNgYyyZCP4Ioao0g993MQicZgF00MOa3ecr
+ 8b5Bmdsjmi_8RqLB65X_mhVLvWxB4lZZihPlDQ9RlY._L3cU7CeU5nwOOEF5ef8DZhgYF6Rnz9mg
+ LqeRtsL1t8OkFEuFn0yr96robJMC0oJML..dh.qWB3Iw0VqyO4s2FPLRv6RzvfoWlfLwBH1qW8H_
+ .SdeZrkn4Ms8LhSFWE0IH1KpWh2OEDRQA3eN7DoVqmtFTmfpeKDahCIrSE3Kx7kO1_F1lNho6crq
+ 2VskS_QnWXD.HcaUt.EwiStOCmCFzKp8thzFAILqTZpt7eEZSvbQxUl3_GR.EVAJPKiyy.rm.3T3
+ m9um4c8mfNpmlJEQxoPZ28i_iVBR7JJjZAXUGeTnRH7LiOqwlP8iU52Lwm7W0vGva.KLk_O0LlvE
+ 5osZlHj.Nqc8qhxaBjs2oSkkEWPRhfLgtTBBT_lBvjUePoyJJmTgw1Tgk_iSsLwLuBziWTjevs0M
+ qvgKM2gQb93P5NcdJSpKf7lFq5SnveCgbKGKYeNMN90AkA8qyDru51ujtFDYBnxu_R5et6ZtSdIZ
+ yijs097FA51Zcc6osh9pKqQX2wDr8NUNkGL_UV4SufUG.7rlm6nEi7fQZDahgjOicngmCAn0r4bQ
+ tgLAK7DP8mlP80TpIZ4gFJ8aeVPt_6yzj2fp7IqGVkJINp2yWHh59SdE92Yd.1s0YEVKihMs4RvF
+ JA2_zMVDapo5D1UbqgAph.APvQQUSnYhiVT.rOjCODRLGCH7CvB4SYpW5MxgVDptDvq21He8K.Jo
+ Jd7N8V7blO79BOCfqb60kQmXzRTgd5BSRQ67VW9xJXP9TtyGDBl5xJbByfQSKcjtxD5vGHMFc_qF
+ 1Q70a7BKb2SXo5TILXd6nCeqaMUZ0UnHyFPNSmUWN6qvVAddhHvQtisscv095Hku6qXADM_iEe1Z
+ fW1TizvcBhtGT_u9EEURr2fw9ZYnmo4ZI1dPxFEuwu2u.a1.pT3L7ZYe_Xs9QSqeTmdGSMgXsqqS
+ E6CeONvx_J3_HkFlaxnczzfXCOfWHWSElvTrlqOxxKMkuAjHDnzXFD6cFOds6gQwmGw04_RWFliV
+ 8kJfVh0y6RM.CZbc8aGHCjIy8Jdc_Hu6s7IXFR9NItH.fA0sJchUESqQqubQ4NZCnp8uzHNkuuB5
+ AGA1dYNfuf1EvtxLdI5K.yPyFCS2K5CNqoAchlrMpZQ5mjR63jW6cnsedUo3Tq6qMb.mFvpdFcFs
+ YkQm2VwpJ73H2PUkscPHC5o9cGFER_SqtlLJAg6H.QAww3CnkZ7BAzDLbslUtiToWkb51.woRifm
+ NukZuf5GJFrL61cH1qrCXZCJbnFj6h4ouHp2EIUY_SPf9ePPcHcgnUQ5_LvbJtuvb2ZPm9ZfxSQI
+ NWKoGl.Y92rEL1O7TZ1fPcdrpkdR44cjARTSlXt_jWMq358zQs_fi8YwnJy04AckJWiAf3Y6vjhs
+ CS5jEmAwGQx2ke5gbuaYSdgdp8ZsRCklWAEtzhspn7dVkHr.HfpWMxdnxAgspaYkp5Vxfbl.qIc6
+ myfgNysfR0zDj7cBce7zgF1cTQmukiVVkQLZBu0X38FMEYLmjN79Jdq.kvbipdBbdiqqCTfJyf0X
+ UWMWLdr4zFEyby5ARfKp.dnG89D.RjcmNnRovae0simqIbG7DeAV4yC077vAopeGT_tKhYDizW7R
+ NQ4IetVtDF6fvjR5tMjN2gbjk0rIT43DmnOy9eWqdPRiqa8Oo1WicJLIlD.3cdgQLUgvHStZ15Q9
+ 1O4EWp6jCBNxBMgvgB9mkcoOjh9OFR3fcs7_NOSD6eZQnB5ye2lvWkdENv3Y0kCjckUsdmwLQP7I
+ 1v3zC0HB9iBOSXhex1InKnEc9M3ueVlFAYX69INSTQa8SD5m.HLYKlA9cjqPXhOk-
+X-Sonic-MF: <sakunix@yahoo.com>
+X-Sonic-ID: 091dc0ee-1610-478a-ba36-5e008efc94f0
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Fri, 4 Oct 2024 03:36:06 +0000
+Received: by hermes--production-gq1-5d95dc458-5n5gs (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 976521b2d41838e24b741dfbee830839;
+          Fri, 04 Oct 2024 03:05:38 +0000 (UTC)
+From: Manuel Quintero F <sakunix@yahoo.com>
+To: duncan.sands@free.fr
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Manuel Quintero F <sakunix@yahoo.com>
+Subject: [PATCH] USB: atm: speedtch: do not use assignment in if condition
+Date: Thu,  3 Oct 2024 20:05:12 -0700
+Message-ID: <20241004030512.2036-1-sakunix@yahoo.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+References: <20241004030512.2036-1-sakunix.ref@yahoo.com>
 
-> No 'quiet' option and with loglevel at 4 I still don't seem to see
-> any prints.
-What's the loglevel of your printks? If they are INFO, NOTICE or DEBUG
-they will not appear on loglevel 4. In particular, the patch you are
-testing added a dev_info, which is INFO and will not show on level 4.
-I would simply change it to dev_err, then it should show.
+Fix checkpatch error "do not use assignment in if condition"
 
-> Interestingly if I set loglevel to 6 my boot gets much farther but
-> then gets stuck at "A start job is running for Load Kernel Modules
-> with ever increasing timeout values".
-So the kernel isn't crashing, but probably some module gets stuck on
-initialization and 'modprobe' never completes.
+Signed-off-by: Manuel Quintero F <sakunix@yahoo.com>
+Signed-off-by: Manuel Quintero F <sakunix@yahoo.com>
+---
+ drivers/usb/atm/speedtch.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Not sure if it really gets much further or simply prints more noise?
+diff --git a/drivers/usb/atm/speedtch.c b/drivers/usb/atm/speedtch.c
+index 973548b5c15c..dfd362abf602 100644
+--- a/drivers/usb/atm/speedtch.c
++++ b/drivers/usb/atm/speedtch.c
+@@ -324,7 +324,9 @@ static int speedtch_upload_firmware(struct speedtch_instance_data *instance,
+ 	   because we're in our own kernel thread anyway. */
+ 	msleep_interruptible(1000);
+ 
+-	if ((ret = usb_set_interface(usb_dev, INTERFACE_DATA, instance->params.altsetting)) < 0) {
++	ret = usb_set_interface(usb_dev, INTERFACE_DATA, instance->params.altsetting
++
++	if (ret < 0) {
+ 		usb_err(usbatm, "%s: setting interface to %d failed (%d)!\n", __func__, instance->params.altsetting, ret);
+ 		goto out_free;
+ 	}
+-- 
+2.45.2
 
-If Magic SysRq doesn't work, maybe systemd simply disabled it? It does
-so by default, unless overriden by custom config files. It looks like
-your root FS gets mounted, so those configs may work.
-
-You could also try blacklisting xhci_pci. I don't know what sort of
-kernel config you are using, but on Arch Linux xhci_hcd is built-in so
-your blacklisting attempt failed, but xhci_pci is a loadable module.
-
-If this helps, then the next logical step is to 'modprobe xhci_pci'
-while running 'dmesg -w' and see what happens.
-
-Regards,
-Michal
 
