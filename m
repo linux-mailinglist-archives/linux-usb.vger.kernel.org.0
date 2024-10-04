@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-15688-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15689-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94F7A98FEA0
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 10:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F5EF98FEA9
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 10:12:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35BC2B22C3C
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 08:08:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E13AAB20EA7
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 08:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E1017758;
-	Fri,  4 Oct 2024 08:07:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C8D13C8E8;
+	Fri,  4 Oct 2024 08:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IwMhlpyQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tNEi/nkp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A121881ACA;
-	Fri,  4 Oct 2024 08:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C158017758;
+	Fri,  4 Oct 2024 08:12:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728029224; cv=none; b=nMQhlDh2NVznUcHoIftw+nyRBQGEcGygfb4n4jTtTR7QPT671Xr8A5KO2rDeeiYseIy+ltXtiacMCJHa1GS7zak5UPT5OOTNpDXCAKR028DZzU1zB4pLr9pJl19G/b1ynvvtK1njvnIQofttnQOZVy7/HOlWInFuCC8EvDlvy5Q=
+	t=1728029530; cv=none; b=ZD3sSmuSDhu1khjPhqXsn+2p/qTro1AYsSnSy8EFpr6C447kIxXSGCGnaxypuFmiVVWj9MUAOU3y+StkSdn99XR+Sw4h9tp8LOlFecWEjbMhF5aRN1Qsvp6p6n7iatl1Lpdcbc5IGJZKQr0VvSWEJL/BM25jXZ9vx+2dVr3fqwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728029224; c=relaxed/simple;
-	bh=fgmGAPdGNi7136BgDzr91cgBaR36Uz6sUXwgQM355gM=;
+	s=arc-20240116; t=1728029530; c=relaxed/simple;
+	bh=27vdyBwZrOTnjtEnm92fTx/uIulW8vv6bAvMEt++eiU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=krVcSCNHGdSUzw707CUhd/YzPj/yPcIMQbxfaP25sYaYezga95XNecLw5GMXr++IvkzRmnTrvOdgL+YIXaqM62/cUZKFJVRTHaj3t/LZrstrkyuTaJFim0sH7BwztbOb7g6bHskkiYlvC2vRO353Kz2eIcOpDYs5yXKJ1SOjgQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IwMhlpyQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57D9C4CEC6;
-	Fri,  4 Oct 2024 08:07:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lJtkxQXJ9VU7aGtmTtD0hFCJAb5fICvLmQ/E1Z3+yRx2zlPMVp6GEGmIXy3DejcE5pt+9nQ3ZDiGCvayLtZvvc2j11ue2qOtXHjfPPf7q7qPRy9dEabVPGKtyll7eKZdnNMxxNdzroJdsBgJYsfQrXkoq3NGApHtVKuk1SRmbiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tNEi/nkp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36D3C4CECC;
+	Fri,  4 Oct 2024 08:12:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728029224;
-	bh=fgmGAPdGNi7136BgDzr91cgBaR36Uz6sUXwgQM355gM=;
+	s=korg; t=1728029530;
+	bh=27vdyBwZrOTnjtEnm92fTx/uIulW8vv6bAvMEt++eiU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IwMhlpyQnT61owbiMSyPvjMM5iZn9b1MnBaP5FPI9pSHnU2KXcuM0wJxUA5XtKRGc
-	 9pseGEJyX1QjxYhc/bFalW+JVB1fLnc4MFLHpobQIlXqtRaIufp7uSoLyX6IOYsuzi
-	 o4Dyi12dJ5lzvqkTgi+jHreKloWmYmoOIyUoyQfI=
-Date: Fri, 4 Oct 2024 10:07:01 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Olivier Dautricourt <olivierdautricourt@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	b=tNEi/nkpZnf9gHaw5GEFi5YYEKgxD3JhdEcrjdkTXAI3aTIWzA2PJ1M2j3nS5VSbG
+	 W9RBAOZO1Oq04gBBj5ZlLlFwdSxHLr22JwQrS/caL9wGiRqdYih7gfAHxwRqDG5YNt
+	 MHrB+sxbB0zFd6cIPLMF6hV4/XfrVRFQ3Oa44zQo=
+Date: Fri, 4 Oct 2024 10:12:07 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Dipendra Khadka <kdipendra88@gmail.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: xhci_setup_port_arrays: early -ENODEV if
- maxports is 0.
-Message-ID: <2024100407-hatless-goofy-bf12@gregkh>
-References: <20240930052336.80589-1-olivierdautricourt@gmail.com>
+Subject: Re: [PATCH v2] usb: typec: tipd: Fix dereferencing freed memory 'fw
+ in core.c
+Message-ID: <2024100444-unwound-poppy-97ec@gregkh>
+References: <20240923092625.2673-1-kdipendra88@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,40 +55,43 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240930052336.80589-1-olivierdautricourt@gmail.com>
+In-Reply-To: <20240923092625.2673-1-kdipendra88@gmail.com>
 
-On Mon, Sep 30, 2024 at 07:23:29AM +0200, Olivier Dautricourt wrote:
-> If the controller reports HCSPARAMS1.maxports==0 then we can skip the
-> whole function: it would fail later after doing a bunch of unnecessary
-> stuff. It can occur on a buggy hardware (the value is driven by external
-> signals).
-
-What "buggy hardware" is this that can not pass the USB testing for this
-type of issue?
-
+On Mon, Sep 23, 2024 at 09:26:24AM +0000, Dipendra Khadka wrote:
+> Smatch reported dereferencing freed memory 'fw' in tps6598x_apply_patch().
 > 
-> Signed-off-by: Olivier Dautricourt <olivierdautricourt@gmail.com>
+> Invoking relrease_firmware(fw) just after checking ret.
+> 
+> Fixes: 916b8e5fa73d ("usb: typec: tipd: add error log to provide firmware name and size")
+> Signed-off-by: Dipendra Khadka <kdipendra88@gmail.com>
 > ---
->  drivers/usb/host/xhci-mem.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> v2:
+>  - Updated patch subject.
+>  - Updated patch description.
+>  - Added Fixes tag.
+> v1: 
+>  drivers/usb/typec/tipd/core.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index d2900197a49e..e8406db78782 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -2160,6 +2160,11 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
->  	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index ea768b19a7f1..70bf8023ea35 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -1191,12 +1191,13 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
+>  	dev_info(tps->dev, "Firmware update succeeded\n");
 >  
->  	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
-> +	if (num_ports == 0) {
-> +		xhci_warn(xhci, "Host controller has no port enabled\n");
-> +		return -ENODEV;
-> +	}
+>  release_fw:
+> -	release_firmware(fw);
+>  	if (ret) {
+>  		dev_err(tps->dev, "Failed to write patch %s of %zu bytes\n",
+>  			firmware_name, fw->size);
+>  	}
+>  
+> +	relrease_firmware(fw);
 
-Should this be backported to older kernels, if so, how far back if this
-is common hardware?
+Any specific reason why you did not even compile this version of the
+patch?
 
-thanks,
+{sigh}
 
-greg k-h
 
