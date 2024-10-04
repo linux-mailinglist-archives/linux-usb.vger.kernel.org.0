@@ -1,55 +1,51 @@
-Return-Path: <linux-usb+bounces-15704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C232F990365
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 14:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A0B29903B5
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 15:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8D301C221DC
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 12:58:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A50F1C21646
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 13:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E2220FAA5;
-	Fri,  4 Oct 2024 12:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF4B21018D;
+	Fri,  4 Oct 2024 13:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Fwh8uVgw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="c0nEwFMn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6E269D2B;
-	Fri,  4 Oct 2024 12:58:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DECBC156872;
+	Fri,  4 Oct 2024 13:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728046725; cv=none; b=SpfxrFN9gxsyDOV8AdgbIMdaD1MZkyfjYDJSHMwgt+QHO2O+uwjeJbumJyv9bmFdO8hAljrKhiVtUY5uJVWjl0i/OLdodcetkYpmmJiTqyL1P7bSSHyrMAXJiUxpTMVeHfLvLPQVBw67dYDSHOaJfah6FRnjF3bLAPFMrrLIT/I=
+	t=1728047874; cv=none; b=PUpN0mtdTxYF3Pz587AbD58Ld2WcWbSGeCE8S3el7jUNJ7F+I8aH3S2R0EgT8rY7ZXuRK00i8cHNr69jPdmuPSO6JLXvWk/qTPdv6YatwXm78Um7Xp64emjw/7MleCYjTDTCDk4N9x2b6/Z56IHAM6Wz5CT682pag/CJEz125OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728046725; c=relaxed/simple;
-	bh=8zprOAacVeILdhEy4RFDOUPtFBD2SkQh0UJOidOIk/0=;
+	s=arc-20240116; t=1728047874; c=relaxed/simple;
+	bh=+BMi8p2VPJ0k07UMh8XhjkiYB9Jq/ZpP3dhU9HbsOm8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hcr3a9+bmVdjLYm1ERe1sWkp/LU9cdfUUUHNoL428pIqoIOy03oPBLBUZky9VlO8IMDIGOwFOag40fVMk1Q2MI0WaMdvy/O3oqnuW+QiZeKU0YnWNpGQAHTstxpS0SWRtrMlRRQC67Yc9rmDFbrqHLB2RcCatPvKFs7LpjA1wKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Fwh8uVgw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94991C4CEC6;
-	Fri,  4 Oct 2024 12:58:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dwah7mokKt8QmDP5pmaeNmb3Mbpid0fepMFi1W+rjtAmgFLXPOOwH77Opf71QVhISoF5781f9b/YwtYrkc+XKMEjhdFOZl9UnN5UsHrkpqIUZQJ3WjANUUPT0Y3g9qgB1DRTidxqoCh8A4YRNiQzd09JtS8C5nISS4nGSFluqQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=c0nEwFMn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E8BC4CEC6;
+	Fri,  4 Oct 2024 13:17:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728046725;
-	bh=8zprOAacVeILdhEy4RFDOUPtFBD2SkQh0UJOidOIk/0=;
+	s=korg; t=1728047873;
+	bh=+BMi8p2VPJ0k07UMh8XhjkiYB9Jq/ZpP3dhU9HbsOm8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fwh8uVgwv8aLAaWVCsdnBLnk6DUebSrkn0aFO1aj1RKMhCsRBYeJ2n9D3/volqyQt
-	 Hnwg+O6adB192izynehf76EufnSWNnozv1MGTKDaYtOsxKuWzj8Vxq2Wm7EUpxMJRY
-	 lDzGhGaHRnXhPgwIrmaYGEOF6CAb+GuERmPse14c=
-Date: Fri, 4 Oct 2024 14:58:42 +0200
+	b=c0nEwFMn2JKK5SEUmowprmHdY0IX/EbHdubE0S43srCgOjcwfyAiyvHHBKVD46t4x
+	 tKwRlfT87Nhh9OOMLLEDu7xbcdkcw2Qa01o8b9ejCrajUqbNndau3H3q915tJD7GDL
+	 wbrk32DWpLnj9zzmdgXtr/9JTqBnVrO2r03mSm5g=
+Date: Fri, 4 Oct 2024 15:17:50 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Pimyn@web.codeaurora.org, Girgis@web.codeaurora.org,
-	bemenboshra2001@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com, nogikh@google.com,
-	glider@google.com, dvyukov@google.com, elver@google.com,
-	pimyn@google.com,
-	syzbot+8f282cce71948071c335@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: usbtmc: initialize memory written to device
-Message-ID: <2024100421-emerald-player-e331@gregkh>
-References: <20241004123313.2463701-1-bemenboshra2001@gmail.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: keithp@keithp.com, stable@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzbot+422188bce66e76020e55@syzkaller.appspotmail.com
+Subject: Re: [PATCH] USB: chaoskey: fail open after removal
+Message-ID: <2024100408-cedar-debug-5b28@gregkh>
+References: <20241002132201.552578-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,43 +54,29 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241004123313.2463701-1-bemenboshra2001@gmail.com>
+In-Reply-To: <20241002132201.552578-1-oneukum@suse.com>
 
-On Fri, Oct 04, 2024 at 12:33:13PM +0000, Pimyn@web.codeaurora.org wrote:
-> Avoid kernel-usb-infoleak by initializing all memory written to device.
-> The buffer length uses 32bit alignment which might cause some buffer
-> data to be read without any initialization.
+On Wed, Oct 02, 2024 at 03:21:41PM +0200, Oliver Neukum wrote:
+> chaoskey_open() takes the lock only to increase the
+> counter of openings. That means that the mutual exclusion
+> with chaoskey_disconnect() cannot prevent an increase
+> of the counter and chaoskey_open() returning a success.
 > 
-> Reported-by: syzbot+8f282cce71948071c335@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/0000000000006f6622061eb52dba@google.com/T/
-> Signed-off-by: Pimyn Girgis <bemenboshra2001@gmail.com> (Google)
-> ---
->  drivers/usb/class/usbtmc.c | 3 +++
->  1 file changed, 3 insertions(+)
+> If that race is hit, chaoskey_disconnect() will happily
+> free all resources associated with the device after
+> it has dropped the lock, as it has read the counter
+> as zero.
 > 
-> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-> index ffc9c6fdd7e1..d79a08dfb54d 100644
-> --- a/drivers/usb/class/usbtmc.c
-> +++ b/drivers/usb/class/usbtmc.c
-> @@ -21,6 +21,7 @@
->  #include <linux/usb.h>
->  #include <linux/compat.h>
->  #include <linux/usb/tmc.h>
-> +#include <linux/string.h>
->  
->  /* Increment API VERSION when changing tmc.h with new flags or ioctls
->   * or when changing a significant behavior of the driver.
-> @@ -1169,6 +1170,8 @@ static ssize_t usbtmc_generic_write(struct usbtmc_file_data *file_data,
->  		 * (size + 3 & ~3) rounds up and simplifies user code
->  		 */
->  		aligned = (this_part + 3) & ~3;
-> +		/* Initialize the remaining part of the buffer */
-> +		memzero_explicit(buffer + this_part, aligned - this_part);
+> To prevent this race chaoskey_open() has to check
+> the presence of the device under the lock.
+> However, the current per device lock cannot be used,
+> because it is a part of the data structure to be
+> freed. Hence an additional global mutex is needed.
+> The issue is as old as the driver.
 
-Why "explicit"?
-
-Also, what about commit 625fa77151f0 ("USB: usbtmc: prevent
-kernel-usb-infoleak"), doesn't that solve the issue here?
+I'll take this, but really, the driver should not care about how many
+times it is opened.  That change can happen later, I'll try to dig up
+the device I have for this driver so that I can test it out...
 
 thanks,
 
