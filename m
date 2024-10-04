@@ -1,123 +1,143 @@
-Return-Path: <linux-usb+bounces-15750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15751-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC61990F23
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 21:49:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 966D1990F82
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 22:01:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AA6C282684
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 19:49:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C0FB1F24B7B
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 20:01:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3661F230E0F;
-	Fri,  4 Oct 2024 18:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DBE1F9A99;
+	Fri,  4 Oct 2024 19:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQf0aqBi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hcd0bE5h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84AD7230DF8;
-	Fri,  4 Oct 2024 18:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAE41F9A82;
+	Fri,  4 Oct 2024 19:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066731; cv=none; b=gN5y500Th1CpAdB5UX28t5w2ClWhnB9trEFpvn6Cur7RQ90o2c+AOae1g/qaJ+6W9uKnP/kHhiBmElaQePWCtoGaGerTQShi6yuIpRjlx0qpWBe3wE2hrgv1ryJUgabXLc7iHNjUq/E74bb2OoUPynB/WyOe+oc1TIkSjF5VPVk=
+	t=1728068671; cv=none; b=q3Q/5ujOfSn6BvyP3DT+3R6oMsnwNMIPFiht9LHJWaoqbaSgajBvTUKay2/klFqmGoJfgms9XcV1IbJaEaUtHaxfi6DrnYKBLoa0blCCx5CK5yKgPopreeypEaAopBNZKsFDjaQEBCrVvgdQUMPrhEfqoEADG5aDmz5SS33DDLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066731; c=relaxed/simple;
-	bh=hyDw1l3XAa2qhiMVPI224fKp6u0AkjplnujYGbkdQPo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MVp/yumoHKIiil10fhDom119cndDAMIA6/ytMu0t1kSpYiqvJGyKXUbeiZVe83V7LNWa1VGZ64CIIB7ZnF8ln8GOVpkoJY04dml45ZGRmAAS0XkCNIUP1dxOYd8KVdTkfImyzVmLeuFvET/Oj8J8L+yXnJty3wWuM3W2SQrTMkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQf0aqBi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95647C4CECE;
-	Fri,  4 Oct 2024 18:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728066731;
-	bh=hyDw1l3XAa2qhiMVPI224fKp6u0AkjplnujYGbkdQPo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KQf0aqBio6oOXcxBFnzF2zskQVIo/+L9DvsB421GidtYWFpq0+vw0OeHQISltUnjt
-	 bFRAmQmwnajJpX4M8jDQzhXOJfd120U2+fC+ELJmctcJ3Z2rWhdXynofYVJIiP3B/T
-	 fVJ1vHW8yRlQRSnNr3iNWm1RGfajRjxMb8T5vBVOiThT+F5tx9lCWqk9TrWhCtppU3
-	 lK4Uu/OTORjVryAkjKIZeuZziEtYOiihY/OH+lrZdvj4amTuQ+G+B36icwiam56AOx
-	 Co0W9MhJPt8/XGFfnya/hlI6iJPKXQbeBaj7pCmYAa+iqA5HeuxEk8sfYJAzo1qxV1
-	 4jUv1jiC5O99w==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Xu Yang <xu.yang_2@nxp.com>,
-	Peter Chen <peter.chen@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 13/16] usb: chipidea: udc: enable suspend interrupt after usb reset
-Date: Fri,  4 Oct 2024 14:31:40 -0400
-Message-ID: <20241004183150.3676355-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004183150.3676355-1-sashal@kernel.org>
-References: <20241004183150.3676355-1-sashal@kernel.org>
+	s=arc-20240116; t=1728068671; c=relaxed/simple;
+	bh=38FWtjNG7ztTk0vyl9goaMmj7S+4vdzAmiAK1g8t8Pc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dx2/gIa7nPt62mNCV9y1TvcBOmjCAJZMKuZ+2nIoDaKJSCKsXJ9yHwQMJGXsw/GhUo6bDypJIV7G8W6MXgTnc1kq3VbJvmiLRmiT3rwDVG2QlraSnlPhShfb8r8DAo23zaHXSP/c3LYkBqOsXzYqsuA+0NydHD0FTqlWXwxtWuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hcd0bE5h; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-37cdbdbbb1cso1312357f8f.3;
+        Fri, 04 Oct 2024 12:04:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728068668; x=1728673468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uR17DBK3CgvuTP/A+YeEkLOp8ykg0LTLmIaNQYIZdOk=;
+        b=Hcd0bE5hkximu3zCNYhsb8uSZoDDio3JeyKtXxsJy0ZYlNImgSfEpJDHKY2XtPqoOB
+         YFRwIQVgq/MaDiz305Ytp6Eb5i2nAn8G3ssWM7VEUziQdsFfIUsNws6OfloABPqm44D1
+         +UlwwwQBjBcUb9xfziOw9RTd0qQh4lfdq/h9O25z/IepN1XQgs1i7YORc+Ygsr07kut5
+         NyXyjj2VOdt/bM1sXLtGnAAbckpJ56qfur3BmPg2C4gE/sTUdl2UuD/X4iCaCZbxQvHC
+         tVyJELn24FhJ3WcL9qjo3KNcd3HeZ4UqT4N4Iw0/ABrhO6KO/4dhj6Qk81ps0qb6dYsC
+         EyMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728068668; x=1728673468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uR17DBK3CgvuTP/A+YeEkLOp8ykg0LTLmIaNQYIZdOk=;
+        b=szQZGI1Xb1n8QDKCA9fnLJhC9KjrHnk8Z1IFCznJ6f+Ie0L2Wa2OfD4nWTGurSjWb9
+         4CbJpgbLU6YRFAxMzN7kY5V317RGo6gW0jTtmDq6Ti3DnLxIB38lVuaSD9kjJLdFM1j/
+         kpxcsXMDPrtttKts1MsTZVHJ2PwDGQw4S80cTMMVDYT5OsA5pYcVrtbtYx2inFjvtm+c
+         600CnVrHYHX+7a4WXIGpt9pcRhpSGQEIL+o1oBaEwrykqpEV70KToGvlRYYtqzRZ15U2
+         /ZP2XcrjN8X/22VWP9HGbVT7Oc2wZAtELDa+GeCIj0wahXjyG9LRonozZuajESQMmLR5
+         dZ/g==
+X-Forwarded-Encrypted: i=1; AJvYcCWJn4rrrrmt4nlqWdxRM5F3X1h5MNmF8hfk79cZ3YKMbt1yYWRrXQaUbCiuvjGzrgrK6x6r0ldTgbZy@vger.kernel.org, AJvYcCX18F4Pjn6EvmBr3v3eWWNbO9zqD7B1hlwOiW8VbTzoQgRlrUoUjtL5YFmYRblDrxzyC0wP99VvoYpPuUk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyz1y6DKvu3iI4Fp6bFaJBXBrRMqjJi+1aFJra3UsWIiw0peyIh
+	rVPSoZw8/6CjqjC3U4wLCD0zF3nQQEGFzI9qX+tgTOaMop9U8pAqT+pR5PSd0oo=
+X-Google-Smtp-Source: AGHT+IHXWeyAT0Q319kx0ragpDZHMmJzNX5IYvRvTuXIDWVixgz79SC/7C2QuZGKUee2/7nBHGGdlQ==
+X-Received: by 2002:a5d:6149:0:b0:37c:cd71:2ba2 with SMTP id ffacd0b85a97d-37d0e7bcdf8mr2106125f8f.38.1728068668374;
+        Fri, 04 Oct 2024 12:04:28 -0700 (PDT)
+Received: from freebase (oliv-cloud.duckdns.org. [78.196.47.215])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d16920549sm247106f8f.54.2024.10.04.12.04.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2024 12:04:27 -0700 (PDT)
+Date: Fri, 4 Oct 2024 21:04:25 +0200
+From: Olivier Dautricourt <olivierdautricourt@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Subject: Re: [PATCH] usb: xhci: xhci_setup_port_arrays: early -ENODEV if
+ maxports is 0.
+Message-ID: <ZwA8OWFJhAuvWDJh@freebase>
+References: <20240930052336.80589-1-olivierdautricourt@gmail.com>
+ <2024100407-hatless-goofy-bf12@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.322
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024100407-hatless-goofy-bf12@gregkh>
 
-From: Xu Yang <xu.yang_2@nxp.com>
+Hello,
 
-[ Upstream commit e4fdcc10092fb244218013bfe8ff01c55d54e8e4 ]
+On Fri, Oct 04, 2024 at 10:07:01AM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Sep 30, 2024 at 07:23:29AM +0200, Olivier Dautricourt wrote:
+> > If the controller reports HCSPARAMS1.maxports==0 then we can skip the
+> > whole function: it would fail later after doing a bunch of unnecessary
+> > stuff. It can occur on a buggy hardware (the value is driven by external
+> > signals).
+> 
+> What "buggy hardware" is this that can not pass the USB testing for this
+> type of issue?
 
-Currently, suspend interrupt is enabled before pullup enable operation.
-This will cause a suspend interrupt assert right after pullup DP. This
-suspend interrupt is meaningless, so this will ignore such interrupt
-by enable it after usb reset completed.
+This is a behaviour found while debugging a custom firmware where this
+value happen to be controlled here, i don't know any hardware out there
+with such issue, this change should be seen as a software nitpick and is
+not trying to fix a specific hardware.
 
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Link: https://lore.kernel.org/r/20240823073832.1702135-1-xu.yang_2@nxp.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/chipidea/udc.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> > 
+> > Signed-off-by: Olivier Dautricourt <olivierdautricourt@gmail.com>
+> > ---
+> >  drivers/usb/host/xhci-mem.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> > index d2900197a49e..e8406db78782 100644
+> > --- a/drivers/usb/host/xhci-mem.c
+> > +++ b/drivers/usb/host/xhci-mem.c
+> > @@ -2160,6 +2160,11 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+> >  	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+> >  
+> >  	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
+> > +	if (num_ports == 0) {
+> > +		xhci_warn(xhci, "Host controller has no port enabled\n");
+> > +		return -ENODEV;
+> > +	}
+> 
+> Should this be backported to older kernels, if so, how far back if this
+> is common hardware?
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 3bda856ff2cab..6a626f41cded1 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -81,7 +81,7 @@ static int hw_device_state(struct ci_hdrc *ci, u32 dma)
- 		hw_write(ci, OP_ENDPTLISTADDR, ~0, dma);
- 		/* interrupt, error, port change, reset, sleep/suspend */
- 		hw_write(ci, OP_USBINTR, ~0,
--			     USBi_UI|USBi_UEI|USBi_PCI|USBi_URI|USBi_SLI);
-+			     USBi_UI|USBi_UEI|USBi_PCI|USBi_URI);
- 	} else {
- 		hw_write(ci, OP_USBINTR, ~0, 0);
- 	}
-@@ -748,6 +748,7 @@ __releases(ci->lock)
- __acquires(ci->lock)
- {
- 	int retval;
-+	u32 intr;
- 
- 	spin_unlock(&ci->lock);
- 	if (ci->gadget.speed != USB_SPEED_UNKNOWN)
-@@ -761,6 +762,11 @@ __acquires(ci->lock)
- 	if (retval)
- 		goto done;
- 
-+	/* clear SLI */
-+	hw_write(ci, OP_USBSTS, USBi_SLI, USBi_SLI);
-+	intr = hw_read(ci, OP_USBINTR, ~0);
-+	hw_write(ci, OP_USBINTR, ~0, intr | USBi_SLI);
-+
- 	ci->status = usb_ep_alloc_request(&ci->ep0in->ep, GFP_ATOMIC);
- 	if (ci->status == NULL)
- 		retval = -ENOMEM;
--- 
-2.43.0
+I don't think this would have to be ported to stable trees: The function
+handles the case without failure: the 0 value is propagated until line
+2220 and fails on condition:
+	if (xhci->usb2_rhub.num_ports == 0 && xhci->usb3_rhub.num_ports == 0) {
+		xhci_warn(xhci, "No ports on the roothubs?\n");
+		return -ENODEV;
+	}
 
+The change merely avoids passing 0 value through kcalloc_node calls and
+unnecessary accesses to the capability structures of the controller.
+
+Kr,
+Olivier
 
