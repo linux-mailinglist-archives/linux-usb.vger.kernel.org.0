@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-15749-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15750-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA85C990EF2
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 21:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ABC61990F23
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 21:49:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DC2A2831B4
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 19:45:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AA6C282684
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2024 19:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D305122DBAC;
-	Fri,  4 Oct 2024 18:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3661F230E0F;
+	Fri,  4 Oct 2024 18:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVfUQ2Ri"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQf0aqBi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF991E105F;
-	Fri,  4 Oct 2024 18:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84AD7230DF8;
+	Fri,  4 Oct 2024 18:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066696; cv=none; b=Savm96yUReAf8NrEbHzFoiYTbNgSMlOLb9t8h82EOtFDz5oD/2oUygYy7gdAGG9dB0SDznaG7ALdZR5yX/BszH9j9+TG2LkUlaOu+5/3D5okB5e5XtaMa84Yeto0iPBpM7w6MbUtt6ztllkXF5MO5j547qlxf0BdbyYZe8jhwhw=
+	t=1728066731; cv=none; b=gN5y500Th1CpAdB5UX28t5w2ClWhnB9trEFpvn6Cur7RQ90o2c+AOae1g/qaJ+6W9uKnP/kHhiBmElaQePWCtoGaGerTQShi6yuIpRjlx0qpWBe3wE2hrgv1ryJUgabXLc7iHNjUq/E74bb2OoUPynB/WyOe+oc1TIkSjF5VPVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066696; c=relaxed/simple;
-	bh=nGNiYIjZSXut+aGfHt7CxIGumz9ID2G0x+w7lKmNCko=;
+	s=arc-20240116; t=1728066731; c=relaxed/simple;
+	bh=hyDw1l3XAa2qhiMVPI224fKp6u0AkjplnujYGbkdQPo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V1uPKYgdTLnxy9eAkS1ope2RscuARWQrwavUwGY8ASqwbD/WUgdarkd5jdOvKs257SLUiFhUnqNflzRIREv7jQv4QCB84bfi2kShroKRIwkAs1S4L6DiwhJe8MRtRqMe3SVNPgpZ70fxM9JaObNI2AbLC8H3Kut+Kjy3mdFuCic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVfUQ2Ri; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11905C4CEC6;
-	Fri,  4 Oct 2024 18:31:34 +0000 (UTC)
+	 MIME-Version; b=MVp/yumoHKIiil10fhDom119cndDAMIA6/ytMu0t1kSpYiqvJGyKXUbeiZVe83V7LNWa1VGZ64CIIB7ZnF8ln8GOVpkoJY04dml45ZGRmAAS0XkCNIUP1dxOYd8KVdTkfImyzVmLeuFvET/Oj8J8L+yXnJty3wWuM3W2SQrTMkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQf0aqBi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95647C4CECE;
+	Fri,  4 Oct 2024 18:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728066695;
-	bh=nGNiYIjZSXut+aGfHt7CxIGumz9ID2G0x+w7lKmNCko=;
+	s=k20201202; t=1728066731;
+	bh=hyDw1l3XAa2qhiMVPI224fKp6u0AkjplnujYGbkdQPo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BVfUQ2RiSkgHujksJv7Mr3PflOjmwf/L+5v1WMCgQxV/knazPnY0fIBhBKFNq97kj
-	 o7AMfBKdUbcwW1P9vZPsoqDfc/bPQibGmzBBh0tOivEXy4mmNrtr+daHaXP+or9LGg
-	 OU4e3g7oPjjxrYo6+Ppy3oaQYNHd0hHKBzHoUCDOmwOALY6hcVyfVMukgINyMxtRWX
-	 jqDOjKM4vz7381j9htiYgJLiZ9P3S5OHLKRVAG8tmxg8IcK6CzCLqJNRQHI9rcm8HI
-	 B9A/vJfvXqaCYybV50CIx/a/quSJvbDHIvrZwSGbOZRACuqiF28yxN+Xp4wWzXRlY2
-	 kk77ornvms3BA==
+	b=KQf0aqBio6oOXcxBFnzF2zskQVIo/+L9DvsB421GidtYWFpq0+vw0OeHQISltUnjt
+	 bFRAmQmwnajJpX4M8jDQzhXOJfd120U2+fC+ELJmctcJ3Z2rWhdXynofYVJIiP3B/T
+	 fVJ1vHW8yRlQRSnNr3iNWm1RGfajRjxMb8T5vBVOiThT+F5tx9lCWqk9TrWhCtppU3
+	 lK4Uu/OTORjVryAkjKIZeuZziEtYOiihY/OH+lrZdvj4amTuQ+G+B36icwiam56AOx
+	 Co0W9MhJPt8/XGFfnya/hlI6iJPKXQbeBaj7pCmYAa+iqA5HeuxEk8sfYJAzo1qxV1
+	 4jUv1jiC5O99w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Shawn Shao <shawn.shao@jaguarmicro.com>,
+Cc: Xu Yang <xu.yang_2@nxp.com>,
+	Peter Chen <peter.chen@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	hminas@synopsys.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 17/21] usb: dwc2: Adjust the timing of USB Driver Interrupt Registration in the Crashkernel Scenario
-Date: Fri,  4 Oct 2024 14:30:52 -0400
-Message-ID: <20241004183105.3675901-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 13/16] usb: chipidea: udc: enable suspend interrupt after usb reset
+Date: Fri,  4 Oct 2024 14:31:40 -0400
+Message-ID: <20241004183150.3676355-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004183105.3675901-1-sashal@kernel.org>
-References: <20241004183105.3675901-1-sashal@kernel.org>
+In-Reply-To: <20241004183150.3676355-1-sashal@kernel.org>
+References: <20241004183150.3676355-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,125 +63,60 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.284
+X-stable-base: Linux 4.19.322
 Content-Transfer-Encoding: 8bit
 
-From: Shawn Shao <shawn.shao@jaguarmicro.com>
+From: Xu Yang <xu.yang_2@nxp.com>
 
-[ Upstream commit 4058c39bd176daf11a826802d940d86292a6b02b ]
+[ Upstream commit e4fdcc10092fb244218013bfe8ff01c55d54e8e4 ]
 
-The issue is that before entering the crash kernel, the DWC USB controller
-did not perform operations such as resetting the interrupt mask bits.
-After entering the crash kernel,before the USB interrupt handler
-registration was completed while loading the DWC USB driver,an GINTSTS_SOF
-interrupt was received.This triggered the misroute_irq process within the
-GIC handling framework,ultimately leading to the misrouting of the
-interrupt,causing it to be handled by the wrong interrupt handler
-and resulting in the issue.
+Currently, suspend interrupt is enabled before pullup enable operation.
+This will cause a suspend interrupt assert right after pullup DP. This
+suspend interrupt is meaningless, so this will ignore such interrupt
+by enable it after usb reset completed.
 
-Summary:In a scenario where the kernel triggers a panic and enters
-the crash kernel,it is necessary to ensure that the interrupt mask
-bit is not enabled before the interrupt registration is complete.
-If an interrupt reaches the CPU at this moment,it will certainly
-not be handled correctly,especially in cases where this interrupt
-is reported frequently.
-
-Please refer to the Crashkernel dmesg information as follows
-(the message on line 3 was added before devm_request_irq is
-called by the dwc2_driver_probe function):
-[    5.866837][    T1] dwc2 JMIC0010:01: supply vusb_d not found, using dummy regulator
-[    5.874588][    T1] dwc2 JMIC0010:01: supply vusb_a not found, using dummy regulator
-[    5.882335][    T1] dwc2 JMIC0010:01: before devm_request_irq  irq: [71], gintmsk[0xf300080e], gintsts[0x04200009]
-[    5.892686][    C0] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.10.0-jmnd1.2_RC #18
-[    5.900327][    C0] Hardware name: CMSS HyperCard4-25G/HyperCard4-25G, BIOS 1.6.4 Jul  8 2024
-[    5.908836][    C0] Call trace:
-[    5.911965][    C0]  dump_backtrace+0x0/0x1f0
-[    5.916308][    C0]  show_stack+0x20/0x30
-[    5.920304][    C0]  dump_stack+0xd8/0x140
-[    5.924387][    C0]  pcie_xxx_handler+0x3c/0x1d8
-[    5.930121][    C0]  __handle_irq_event_percpu+0x64/0x1e0
-[    5.935506][    C0]  handle_irq_event+0x80/0x1d0
-[    5.940109][    C0]  try_one_irq+0x138/0x174
-[    5.944365][    C0]  misrouted_irq+0x134/0x140
-[    5.948795][    C0]  note_interrupt+0x1d0/0x30c
-[    5.953311][    C0]  handle_irq_event+0x13c/0x1d0
-[    5.958001][    C0]  handle_fasteoi_irq+0xd4/0x260
-[    5.962779][    C0]  __handle_domain_irq+0x88/0xf0
-[    5.967555][    C0]  gic_handle_irq+0x9c/0x2f0
-[    5.971985][    C0]  el1_irq+0xb8/0x140
-[    5.975807][    C0]  __setup_irq+0x3dc/0x7cc
-[    5.980064][    C0]  request_threaded_irq+0xf4/0x1b4
-[    5.985015][    C0]  devm_request_threaded_irq+0x80/0x100
-[    5.990400][    C0]  dwc2_driver_probe+0x1b8/0x6b0
-[    5.995178][    C0]  platform_drv_probe+0x5c/0xb0
-[    5.999868][    C0]  really_probe+0xf8/0x51c
-[    6.004125][    C0]  driver_probe_device+0xfc/0x170
-[    6.008989][    C0]  device_driver_attach+0xc8/0xd0
-[    6.013853][    C0]  __driver_attach+0xe8/0x1b0
-[    6.018369][    C0]  bus_for_each_dev+0x7c/0xdc
-[    6.022886][    C0]  driver_attach+0x2c/0x3c
-[    6.027143][    C0]  bus_add_driver+0xdc/0x240
-[    6.031573][    C0]  driver_register+0x80/0x13c
-[    6.036090][    C0]  __platform_driver_register+0x50/0x5c
-[    6.041476][    C0]  dwc2_platform_driver_init+0x24/0x30
-[    6.046774][    C0]  do_one_initcall+0x50/0x25c
-[    6.051291][    C0]  do_initcall_level+0xe4/0xfc
-[    6.055894][    C0]  do_initcalls+0x80/0xa4
-[    6.060064][    C0]  kernel_init_freeable+0x198/0x240
-[    6.065102][    C0]  kernel_init+0x1c/0x12c
-
-Signed-off-by: Shawn Shao <shawn.shao@jaguarmicro.com>
-Link: https://lore.kernel.org/r/20240830031709.134-1-shawn.shao@jaguarmicro.com
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://lore.kernel.org/r/20240823073832.1702135-1-xu.yang_2@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/platform.c | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+ drivers/usb/chipidea/udc.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 4f640c0c51b39..717fd0c0bccca 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -407,18 +407,6 @@ static int dwc2_driver_probe(struct platform_device *dev)
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 3bda856ff2cab..6a626f41cded1 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -81,7 +81,7 @@ static int hw_device_state(struct ci_hdrc *ci, u32 dma)
+ 		hw_write(ci, OP_ENDPTLISTADDR, ~0, dma);
+ 		/* interrupt, error, port change, reset, sleep/suspend */
+ 		hw_write(ci, OP_USBINTR, ~0,
+-			     USBi_UI|USBi_UEI|USBi_PCI|USBi_URI|USBi_SLI);
++			     USBi_UI|USBi_UEI|USBi_PCI|USBi_URI);
+ 	} else {
+ 		hw_write(ci, OP_USBINTR, ~0, 0);
+ 	}
+@@ -748,6 +748,7 @@ __releases(ci->lock)
+ __acquires(ci->lock)
+ {
+ 	int retval;
++	u32 intr;
  
- 	spin_lock_init(&hsotg->lock);
- 
--	hsotg->irq = platform_get_irq(dev, 0);
--	if (hsotg->irq < 0)
--		return hsotg->irq;
--
--	dev_dbg(hsotg->dev, "registering common handler for irq%d\n",
--		hsotg->irq);
--	retval = devm_request_irq(hsotg->dev, hsotg->irq,
--				  dwc2_handle_common_intr, IRQF_SHARED,
--				  dev_name(hsotg->dev), hsotg);
--	if (retval)
--		return retval;
--
- 	hsotg->vbus_supply = devm_regulator_get_optional(hsotg->dev, "vbus");
- 	if (IS_ERR(hsotg->vbus_supply)) {
- 		retval = PTR_ERR(hsotg->vbus_supply);
-@@ -454,6 +442,20 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	spin_unlock(&ci->lock);
+ 	if (ci->gadget.speed != USB_SPEED_UNKNOWN)
+@@ -761,6 +762,11 @@ __acquires(ci->lock)
  	if (retval)
- 		goto error;
+ 		goto done;
  
-+	hsotg->irq = platform_get_irq(dev, 0);
-+	if (hsotg->irq < 0) {
-+		retval = hsotg->irq;
-+		goto error;
-+	}
++	/* clear SLI */
++	hw_write(ci, OP_USBSTS, USBi_SLI, USBi_SLI);
++	intr = hw_read(ci, OP_USBINTR, ~0);
++	hw_write(ci, OP_USBINTR, ~0, intr | USBi_SLI);
 +
-+	dev_dbg(hsotg->dev, "registering common handler for irq%d\n",
-+		hsotg->irq);
-+	retval = devm_request_irq(hsotg->dev, hsotg->irq,
-+				  dwc2_handle_common_intr, IRQF_SHARED,
-+				  dev_name(hsotg->dev), hsotg);
-+	if (retval)
-+		goto error;
-+
- 	/*
- 	 * For OTG cores, set the force mode bits to reflect the value
- 	 * of dr_mode. Force mode bits should not be touched at any
+ 	ci->status = usb_ep_alloc_request(&ci->ep0in->ep, GFP_ATOMIC);
+ 	if (ci->status == NULL)
+ 		retval = -ENOMEM;
 -- 
 2.43.0
 
