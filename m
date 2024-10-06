@@ -1,83 +1,88 @@
-Return-Path: <linux-usb+bounces-15779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15780-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB904991F54
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 17:25:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EBB0991F57
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 17:25:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC0F91C21131
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 15:25:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEFC4281CF9
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 15:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED80717BB0A;
-	Sun,  6 Oct 2024 15:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925DC17BB3C;
+	Sun,  6 Oct 2024 15:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tPIp/nZI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GCrgXx51"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13DE13635D
-	for <linux-usb@vger.kernel.org>; Sun,  6 Oct 2024 15:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB5E17B4FA
+	for <linux-usb@vger.kernel.org>; Sun,  6 Oct 2024 15:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728228296; cv=none; b=dlKU3QPT/wgwtrUw68IgFDYRN4cfwEMQ2UjIP1cEpngO/ct7M/FmqVYmuUYkUTwSJ8cvP80XZxoAKHhEMZzW9xlrcCsIocbhEy0aBB/jGTXEneBsDKuxb8e7LW9Jud5ktPcLm1Y5ZuwRZSR7+bgsD0tmgyLmCdDfNiHxAqOSTPo=
+	t=1728228352; cv=none; b=anwmFxB10IpOo4cywAL5jJDWcoTjmJLtkBkdc9E/pcn4y6NWq6sLumFPWgOrEhV4ErBGI4LlvL9TjS0FCfwAcBwVupxzjWaQJOqXHvSeNgsb/5ON8dth5B3JvRv56dBLJ7nFKy1RLKIGU04kKF3tNypREKbMogi4nYtL31VbuCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728228296; c=relaxed/simple;
-	bh=Ddw5/PI06BBB+5QwUVlAEzwgRmfx8TzJX9+qsstiV9I=;
+	s=arc-20240116; t=1728228352; c=relaxed/simple;
+	bh=r3/3Q+KPDWKzqkcmOcj+LaYbC9Z/u1HiilUN8TEN3Os=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H7c8T4xlHjcrgtgJy/scq/SEr7tBmk1XbvXF0/AfOTP0J8EbElBPPU3ruWgxfeaYcxqJMxpgNNq5owdQDtrSMem7eJwjivBjOyetY2nzOoA78b9trYq+hSNuXAJlWYRMYVeTiHfmg/FHzGeVthMOqFcpIBjBeMSOFxxcwnoxrf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tPIp/nZI; arc=none smtp.client-ip=209.85.167.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=sgiRBEodQZE2Sz2hIbAce1MA7EXL9EKUgvDw06k9F24bFrbKsD+YMu5XzEIeDeQqOPa9whD9dHgdnffndkh2PaTFMj6Jh+NzN4L/8fsvhoSSEIzvNY7rAkyGcOM5Sj1FE+maU5gJWkjQPsG6U8XPx2KTAG7oOEQr+gTXHe6o2hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GCrgXx51; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5389e24a4d1so4350567e87.3
-        for <linux-usb@vger.kernel.org>; Sun, 06 Oct 2024 08:24:54 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5389917ef34so4076788e87.2
+        for <linux-usb@vger.kernel.org>; Sun, 06 Oct 2024 08:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728228293; x=1728833093; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1728228348; x=1728833148; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WpxzUFBpM6jj79F7ZqgEaOqBGXguLzjUAwq2RqwFc74=;
-        b=tPIp/nZIFnbUr1wynDjqonxXW5m+0AtF4uuBrUTNV8vOfR3MAU2fTSP8nF/uoF5dNB
-         VjuiHLvZlU3c61AsulOueGLa/NuzrFMzl6jXS7jibRSM8UmnJHfSXzdd0FhJ0MPCKKOR
-         L3rLM9CteyvqcWiBhlN4nmzJabdU0knrzgIrBQNDQSr1+oGOXISOZvsFSYPQIyhUNt7t
-         DCldHW+eBbDGcn33q2INh2BbYsp6SSK5hgHDY+cuQK81ia5yCa76q5283tDRdpQbsNeP
-         Ll1XEH6TOAR+rqjcgsu3AnvfdvmRgU9r0E+JnNkyHxfZdgMZO9eJa3bXzGBsjqGO5pn2
-         Nnhg==
+        bh=ZzLI2qsMavyzh3cAqBP4z+YvAku625MAo0+XLbe9zaQ=;
+        b=GCrgXx51Vo4YYCCGFHXdlKqXRIbp/oSS05qOIXw+ILAR6WBq8WbG/OyiGZOT0X7Okg
+         VkyUDRsLq3r8GATMiT32SWWOKWyu9iPXcZv6mf/tMKnFqvffZFFXQX1zDHqwmiKHKVER
+         sRboJOcSezOd8mJ8/T5DEqQ6v+dtfn43sUPmujU9aQwlVlB99Dxtft4vYssVSWbiyYT6
+         pw3fDKRmbgO+o82qBI5We9oZNJcuBzJvSRy8K8CeNVaYUO1WXnwL3vnXzBX2d64W9wT4
+         GsZmQKJe4h6o00O0Z3AZw2iIdoKBb+6/MdolBIiIEOVHrLsOtTXReKa2e+hSd0hF7IhY
+         XTSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728228293; x=1728833093;
+        d=1e100.net; s=20230601; t=1728228348; x=1728833148;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WpxzUFBpM6jj79F7ZqgEaOqBGXguLzjUAwq2RqwFc74=;
-        b=SIbCk/kZrJJAwOz6q2wQ6AlxYo5b+iW5YVIEXLKursZZPbQVtQbjNYMbnnmrVB+wQG
-         sFtK86Vn5Ri3/pFzm5bdzDCv9JwAwcLkkNMUeJVZNCBjMmnsxt4fMyk44hn+mr9MNlZy
-         hbnCuD0qb7fkRCH02mMhO3ZMfNrFIouIR/qqhEU2DNDulDmV2tsBC6O3j5eu9IlQ5yIn
-         86G+F8V+QvGLjcJ4ykXk/UdxvWXkRqvwVoM6YZNCGdl+yE3xy6qNiqRmcjvDJ5DXA1gC
-         ExYO/LMZd5bu+Gwk8BGmbKSzdZ/Org9Fd2zV1CLFdIxH7ZTiiOr/0RkaqBbHknQQDqTi
-         3P2g==
-X-Forwarded-Encrypted: i=1; AJvYcCWUSiI0cwhmZQkx4Dk3Q6TneVobLKYHh5BqpSEZr+Tcrfof+g75mB5QxsHVR6yCAPqEMik6vMlFIk0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGQ7sCReKInWoM7OK8SnRh9pZvdXf9+hyju0TqycONogBUHsa2
-	gXIrBlzktyQiimgtKT46DK9nH5Nmh52cfT0Bwry91fbtwymmqtqNDxUH1tTTgF5tIhr1hQngvk/
-	NPEKuSz+k
-X-Google-Smtp-Source: AGHT+IEz2NN9I4YEcGZDTK1sMn0DbRO+Jpbp85v+1I8NHlwSLv9mIX9SsVNIPu8OUzXhMi6soAaKRA==
-X-Received: by 2002:a05:6512:2313:b0:539:8c02:64d5 with SMTP id 2adb3069b0e04-539ab873368mr4286410e87.27.1728228292618;
-        Sun, 06 Oct 2024 08:24:52 -0700 (PDT)
+        bh=ZzLI2qsMavyzh3cAqBP4z+YvAku625MAo0+XLbe9zaQ=;
+        b=cOZI0b7gxnp2sGZlekIz+5aTNwQ1uU74LkzI3zOki8rw7FGptQ5AXh5ykJmyi0eKoD
+         Yw7BaQhMODXwdYYdFN5qbY5RIGiwDXCfsYuNuwYkh+EMa+sY9UU5apBk5VTSQj/dOXyM
+         PtXM6DH7SZXugDlnHRC4XHADZQjMzBJs8YI5jZW5mI3OnPKjik1g7c3I2YpvCFlq8sP/
+         SZaR8YyM8+tJl0SHlt434ymc7MI4zUL3B8Z7RDDIMn47gk6Z5DbIz91q50tFHZRGUEwl
+         lIDHviVQt7nCCqp5YHcPy3SHgF+p8+3EG1QIz7BzBl2fM+4TfLUbkf4ibsGIMqSUyA4P
+         UrWw==
+X-Forwarded-Encrypted: i=1; AJvYcCX2bMUMMSEm6uns25DpVkLbxxviR53G+Roig1Gzr2RX+O4oJmWlThv1bTVZlrpTPob4+XtKzxmU8Xs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHGzOtK/dFlt+iprpRyzRXv6EO3odgfr2esLK13+ZS/nKp/A4K
+	VB/pq5Z5A0SOK2RIEmUtStZ1lDxLa7b0DG1YIUHzZ7PI7nhfQ5yC9CUhPbZ0LRM=
+X-Google-Smtp-Source: AGHT+IECldVZJLRbyUEw77R1QJexgzcuQYlKntI6amyprskw3YHEivis+8i/CE2tRuSfiTaei9K84Q==
+X-Received: by 2002:a05:6512:3d0c:b0:533:d3e:16f5 with SMTP id 2adb3069b0e04-539ab9cf3cemr4241785e87.38.1728228348478;
+        Sun, 06 Oct 2024 08:25:48 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00-89ea-67f6-92cd-b49.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:89ea:67f6:92cd:b49])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539aff28f10sm549816e87.303.2024.10.06.08.24.51
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539afec15d7sm547115e87.26.2024.10.06.08.25.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Oct 2024 08:24:52 -0700 (PDT)
-Date: Sun, 6 Oct 2024 18:24:50 +0300
+        Sun, 06 Oct 2024 08:25:48 -0700 (PDT)
+Date: Sun, 6 Oct 2024 18:25:46 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	kernel-dev@igalia.com
-Subject: Re: [PATCH] usb: typec: altmode should keep reference to parent
-Message-ID: <ywdn3gf3vx2xlew75pvahx4ye3ciq5y7mapmbc2uoonfyeanow@oj4gilgq5mkx>
-References: <20241004123738.2964524-1-cascardo@igalia.com>
- <Zv_23J-1U5pZ6rgT@kuha.fi.intel.com>
- <Zv/43ewc3n5aSEUO@quatroqueijos.cascardo.eti.br>
+To: Rob Herring <robh@kernel.org>
+Cc: Abel Vesa <abel.vesa@linaro.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Rajendra Nayak <quic_rjendra@quicinc.com>, 
+	Sibi Sankar <quic_sibis@quicinc.com>, Johan Hovold <johan@kernel.org>, 
+	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Parade PS8830 Type-C
+ retimer bindings
+Message-ID: <trfcqmexznp7igf7t345q2eb7qwjwwgg2qgke77urlwrf2wh3r@4e5bsfv3nuar>
+References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
+ <20241004-x1e80100-ps8830-v2-1-5cd8008c8c40@linaro.org>
+ <20241005173647.GA429341-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,69 +91,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zv/43ewc3n5aSEUO@quatroqueijos.cascardo.eti.br>
+In-Reply-To: <20241005173647.GA429341-robh@kernel.org>
 
-On Fri, Oct 04, 2024 at 11:17:01AM GMT, Thadeu Lima de Souza Cascardo wrote:
-> On Fri, Oct 04, 2024 at 05:08:28PM +0300, Heikki Krogerus wrote:
-> > On Fri, Oct 04, 2024 at 09:37:38AM -0300, Thadeu Lima de Souza Cascardo wrote:
-> > > The altmode device release refers to its parent device, but without keeping
-> > > a reference to it.
-> > > 
-> > > When registering the altmode, get a reference to the parent and put it in
-> > > the release function.
-> > > 
-> > > Before this fix, when using CONFIG_DEBUG_KOBJECT_RELEASE, we see issues
-> > > like this:
+On Sat, Oct 05, 2024 at 12:36:47PM GMT, Rob Herring wrote:
+> On Fri, Oct 04, 2024 at 04:57:37PM +0300, Abel Vesa wrote:
+> > Document bindings for the Parade PS8830 Type-C retimer. This retimer is
+> > currently found on all boards featuring Qualcomm Snapdragon X Elite SoCs
+> > and it is needed to provide altmode muxing between DP and USB, but also
+> > connector orientation handling between.
 > > 
-> > Let me study what's going on in the drivers code. The children should
-> > _not_ be cleaned first before the parent. I'll have to come back to
-> > this on Monday.
-> > 
-> > This really should not be necessary.
-> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> >  .../devicetree/bindings/usb/parade,ps8830.yaml     | 129 +++++++++++++++++++++
+> >  1 file changed, 129 insertions(+)
 > 
-> Well, they are likely not. But driver core API states that either way, you
-> should keep such references. And one way to test it is using
-> CONFIG_DEBUG_KOBJECT_RELEASE. That delays the actual release/cleanup of the
-> struct device, so:
-> 
-> 
-> > > [   43.572860] kobject: 'port0.0' (ffff8880057ba008): kobject_release, parent 0000000000000000 (delayed 3000)
-> > > [   43.573532] kobject: 'port0.1' (ffff8880057bd008): kobject_release, parent 0000000000000000 (delayed 1000)
-> > > [   43.574407] kobject: 'port0' (ffff8880057b9008): kobject_release, parent 0000000000000000 (delayed 3000)
-> > > [   43.575059] kobject: 'port1.0' (ffff8880057ca008): kobject_release, parent 0000000000000000 (delayed 4000)
-> > > [   43.575908] kobject: 'port1.1' (ffff8880057c9008): kobject_release, parent 0000000000000000 (delayed 4000)
-> 
-> 1) children (port1.0 and port1.1) last reference are put, but their actual
-> release is delayed 4s.
-> 
-> > > [   43.576908] kobject: 'typec' (ffff8880062dbc00): kobject_release, parent 0000000000000000 (delayed 4000)
-> > > [   43.577769] kobject: 'port1' (ffff8880057bf008): kobject_release, parent 0000000000000000 (delayed 3000)
-> 
-> 2) parent (port1) is put, but release is delayed 3s.
-> 
-> Just in the order you would expect, but because of the delays:
-> 
-> 3) 3s later, port1 release is called and it is freed.
-> 4) 4s later, port1.0 release is called and it refers to the freed parent,
-> port1.
-> 
-> Having the references, what happens now is:
-> 
-> 1) port1 is put, but this is not its last reference.
-> 2) port1.0 and port1.1 are put, cleanup delayed 4s.
-> 3) 4s later, port1.0 and port1.1 releases are called, but now they put the
-> last reference to port1.
-> 4) port1 last reference has now been called, cleanup delayed 3s.
-> 5) 3s later, port1 release is called, then freed.
-> 
-> No UAF in such case.
+> Missing R-by from Krzysztof?
 
-Usually we don't use this config option, maybe I should also start using
-it for some of my tests. Nevertheless the description is pretty clear
-(although it might be better to add it to the commit message).
+Quoting the changelog:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Didn't pick Krzysztof's R-b tag because the bindings changed w.r.t
+supplies
 
 -- 
 With best wishes
