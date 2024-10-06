@@ -1,202 +1,190 @@
-Return-Path: <linux-usb+bounces-15790-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15791-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A25C99211F
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 22:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F362199218A
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 23:05:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB1B31F2165C
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 20:29:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 856741F20A9D
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 21:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05DB618B483;
-	Sun,  6 Oct 2024 20:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E9C218BB82;
+	Sun,  6 Oct 2024 21:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Fwj0nePp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2064E189917
-	for <linux-usb@vger.kernel.org>; Sun,  6 Oct 2024 20:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3041743AB3;
+	Sun,  6 Oct 2024 21:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728246563; cv=none; b=CKfymGVT75dQTpEFJTs24iqXUxJdi7DPJCmiT3i9dx/5IpDU0Ot5IvVmLkcIo7r4lRJNjWgou3jgh52S3JCpzqPnhB8QdIG8Hd94Y81bRBsdl8t9hWGUU7apn37bsD/7DvfwC8GW/DpKOULNag3qI/EFouX6fk8Jqqp4TnKdnyk=
+	t=1728248721; cv=none; b=Gkv6Q28DJOH1UwUoHDD23F42f1hjhP7k6emOCvEXvViemAtAWqb9FK4DMKCOMJLAfbj6pvBtf9whHAsmFLXXlvJvXvT2l7fEzE+AxMW3AJ+XV6wiXsU0ZqumaFDjNqpeVXngIHXKJZH5eOUR0EsQhjgdsRoZ+YpUdoArGzYjV84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728246563; c=relaxed/simple;
-	bh=iYfwJstBaVu5MTqnq9X5NFMNs2X86vai3ZG2KmwCRj0=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=qIAiKePJ5P25MOBO+CCCHruwb0qcm2nELwd2boJVB+V8NPxU2BwDu2n4ZKAmuLGPySs/LyuY2gyu8kwAybNu/oCeBwqIWZdhGTV4U1xeO3GKfG2aTO5SjL6UG1geSiQgczCw7Xn60Oouzmj6BuSR81hFjGP8SIhhtuqd+fGFnRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a344da7987so51144965ab.1
-        for <linux-usb@vger.kernel.org>; Sun, 06 Oct 2024 13:29:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728246561; x=1728851361;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7CleT7+sNlz+JT2qm4E26adZvKV7aCEN7kRiObhKhaA=;
-        b=bs3E5OWtWhulhU9P9nv6pXIM5mN/F4a5ghPyfREjO8VvTT2BGcKGnoq8B9/cg7lE5b
-         DTrBUbYTaSrWbW5SaxWtWCWbzvCiteinF1YdRAJbR9mStXNqrX86haXlr8Cviash3+iw
-         TtDerM467Vel4mN9ejscYVvsWuL2tJZHkXo3mRqjUfd2J9De3ojEZCaEYLLvh60QUiot
-         zDwAAWPcWWpzEAFoxDkwcpd0Qd0n29swhqdZvpscEE7hI7VCASVZ1lVGmiZeNBTjc6Zm
-         YSOxSswJWoTPkfCwPch4N3wv1r5Nik4QWgycV2WXuMmJVpZ8ay+cxAlq2PkF3H6zPzWH
-         JapQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbMWCUOdP64xJ1/wYfh7fkA8MB6GERaRVzKMc4Cx4LLAH8ToZs9lLIGD9AsaroThpaKliVnxq0fMw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkdXg1ksWpzO9mbZvb6PNTR3w5YNt7XRGQvSpHhJ7vVzKzHts5
-	fR3MwnF2dlP62BYxzObI+jbZmm4WbbahT1w/mOvlnwVHewBBsbjpWCy1MQYb34ku3K2yeN/SlSN
-	3zAgEJlL9pLpvFmU9bf52twqRulB34xiGKjMhHyQgMioVl0aisay+yho=
-X-Google-Smtp-Source: AGHT+IF4i4b8/3f2LFyDUymacx9KOWwPSyM3kKwHDoZB/O4Ytr7hm4su/P4nKq1tZ6KT12vS8CZuVyObogeUIVA7Xja1PWqBW21/
+	s=arc-20240116; t=1728248721; c=relaxed/simple;
+	bh=1b4rtbL7OW5DpMpVeQL5yzdrfaWV0z6syuOt+xVm06w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yx9k286x1vp1FzrMdfCv/7FSlN+cOybSTk2peiGZ/4kHhkUHne7inLAPh5Y6VlkUEDBZbtwpD7mIIc3YO0giy8aiheiH0xek3QtYrdSsBdMT+S6p+Xq/PDfJAwzRGWAEPiNy3qpxqHq05sOpI5d7opJNHXtDWymHVNOyZjdIG3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Fwj0nePp; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=1JAkRDqm08ZTr5id+HbGcpelsGCywNBvISK0F54yzvs=; b=Fwj0nePpEB4mfpoplLqmEnA+r/
+	DqfnJaBvNu+UKzsu8F6nlfoH0CXY9NRFSQBdm+Bs8Y5oKFvzwgAx5DYaesyCyTh10eXC/IYvF94dx
+	tS8TfC6lDHo3YUzrV4Wh17ig8IqyKgMAXNWBT33h6IIhgF30C4vZFKsTM4iNJteC2Wwk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sxYR5-009CtP-LB; Sun, 06 Oct 2024 23:05:03 +0200
+Date: Sun, 6 Oct 2024 23:05:03 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Liel Harel <liel.harel@gmail.com>
+Cc: Steve Glendinning <steve.glendinning@shawell.net>,
+	UNGLinuxDriver@microchip.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] smsc95xx: Add implementation for set_pauseparam for
+ enabling to pause RX path.
+Message-ID: <659a571e-2760-4028-ba08-0040aeea4aff@lunn.ch>
+References: <20241004112000.421681-1-liel.harel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1447:b0:39f:5efe:ae73 with SMTP id
- e9e14a558f8ab-3a375978e7bmr79657355ab.5.1728246561280; Sun, 06 Oct 2024
- 13:29:21 -0700 (PDT)
-Date: Sun, 06 Oct 2024 13:29:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6702f321.050a0220.49194.04e3.GAE@google.com>
-Subject: [syzbot] [mm?] [usb?] INFO: rcu detected stall in kswapd (3)
-From: syzbot <syzbot+bcc7fa5044343fc35941@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241004112000.421681-1-liel.harel@gmail.com>
 
-Hello,
+On Fri, Oct 04, 2024 at 02:20:00PM +0300, Liel Harel wrote:
+> Enable userspace applications to pause RX path by IOCTL.
 
-syzbot found the following issue on:
+The legacy API probably does still work, but netlink is used now a
+days for pause.
 
-HEAD commit:    e32cde8d2bd7 Merge tag 'sched_ext-for-6.12-rc1-fixes-1' of..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1460a3d0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=286b31f2cf1c36b5
-dashboard link: https://syzkaller.appspot.com/bug?extid=bcc7fa5044343fc35941
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1570339f980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1260a3d0580000
+>  
+>  /* Loop until the read is completed with timeout
+> - * called with phy_mutex held */
+> + * called with phy_mutex held
+> + */
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7feb34a89c2a/non_bootable_disk-e32cde8d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9c681f5609bc/vmlinux-e32cde8d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/00b4d54de1d9/bzImage-e32cde8d.xz
+Please don't mix checkpatch style changes with functional changes in
+one patch. Please break this up into a patchset.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bcc7fa5044343fc35941@syzkaller.appspotmail.com
+>  static int __must_check smsc95xx_phy_wait_not_busy(struct usbnet *dev)
+>  {
+>  	unsigned long start_time = jiffies;
+> @@ -470,7 +471,8 @@ static int __must_check smsc95xx_write_reg_async(struct usbnet *dev, u16 index,
+>  
+>  /* returns hash bit number for given MAC address
+>   * example:
+> - * 01 00 5E 00 00 01 -> returns bit number 31 */
+> + * 01 00 5E 00 00 01 -> returns bit number 31
+> + */
+>  static unsigned int smsc95xx_hash(char addr[ETH_ALEN])
+>  {
+>  	return (ether_crc(ETH_ALEN, addr) >> 26) & 0x3f;
+> @@ -772,6 +774,45 @@ static int smsc95xx_ethtool_get_sset_count(struct net_device *ndev, int sset)
+>  	}
+>  }
+>  
+> +/* Starts the Receive path */
+> +static int smsc95xx_start_rx_path(struct usbnet *dev)
+> +{
+> +	struct smsc95xx_priv *pdata = dev->driver_priv;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&pdata->mac_cr_lock, flags);
+> +	pdata->mac_cr |= MAC_CR_RXEN_;
+> +	spin_unlock_irqrestore(&pdata->mac_cr_lock, flags);
+> +
+> +	return smsc95xx_write_reg(dev, MAC_CR, pdata->mac_cr);
+> +}
+> +
+> +/* Stops the Receive path */
+> +static int smsc95xx_stop_rx_path(struct usbnet *dev)
+> +{
+> +	struct smsc95xx_priv *pdata = dev->driver_priv;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&pdata->mac_cr_lock, flags);
+> +	pdata->mac_cr &= ~MAC_CR_RXEN_;
+> +	spin_unlock_irqrestore(&pdata->mac_cr_lock, flags);
+> +
+> +	return smsc95xx_write_reg(dev, MAC_CR, pdata->mac_cr);
+> +}
+> +
+> +static int smsc95xx_ethtool_set_pauseparam(struct net_device *netdev,
+> +									struct ethtool_pauseparam *pause)
 
-rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-0): P76/1:b..l
-rcu: 	(detected by 0, t=10502 jiffies, g=21325, q=180 ncpus=1)
-task:kswapd0         state:R  running task     stack:21424 pid:76    tgid:76    ppid:2      flags:0x00004000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5315 [inline]
- __schedule+0x1895/0x4b30 kernel/sched/core.c:6675
- preempt_schedule_irq+0xfb/0x1c0 kernel/sched/core.c:6997
- irqentry_exit+0x5e/0x90 kernel/entry/common.c:354
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
-RIP: 0010:lru_gen_shrink_node mm/vmscan.c:4957 [inline]
-RIP: 0010:shrink_node+0x36c0/0x3de0 mm/vmscan.c:5937
-Code: 49 8d 9c 24 c8 f9 ff ff 48 89 d8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df 80 3c 08 00 74 08 48 89 df e8 03 6e 26 00 4c 8b 2b <49> 8d 84 24 10 fa ff ff 48 89 44 24 38 4c 89 ef e8 fb 88 fe ff 84
-RSP: 0018:ffffc90000e477a0 EFLAGS: 00000246
-RAX: 1ffff11002624000 RBX: ffff888013120000 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000002
-RBP: ffffc90000e47a50 R08: ffffffff81d81eb7 R09: 1ffffffff2858b00
-R10: dffffc0000000000 R11: fffffbfff2858b01 R12: ffff888013120638
-R13: ffff88804fab4000 R14: 0000000000000002 R15: 0000000000000000
- kswapd_shrink_node mm/vmscan.c:6765 [inline]
- balance_pgdat mm/vmscan.c:6957 [inline]
- kswapd+0x1ca3/0x3700 mm/vmscan.c:7226
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-rcu: rcu_preempt kthread timer wakeup didn't happen for 10499 jiffies! g21325 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
-rcu: 	Possible timer handling issue on cpu=0 timer-softirq=12782
-rcu: rcu_preempt kthread starved for 10500 jiffies! g21325 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=0
-rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-rcu: RCU grace-period kthread stack dump:
-task:rcu_preempt     state:I stack:26352 pid:17    tgid:17    ppid:2      flags:0x00004000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5315 [inline]
- __schedule+0x1895/0x4b30 kernel/sched/core.c:6675
- __schedule_loop kernel/sched/core.c:6752 [inline]
- schedule+0x14b/0x320 kernel/sched/core.c:6767
- schedule_timeout+0x1be/0x310 kernel/time/timer.c:2615
- rcu_gp_fqs_loop+0x2df/0x1330 kernel/rcu/tree.c:2045
- rcu_gp_kthread+0xa7/0x3b0 kernel/rcu/tree.c:2247
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-rcu: Stack dump where RCU GP kthread last ran:
-CPU: 0 UID: 0 PID: 5313 Comm: syz-executor407 Not tainted 6.12.0-rc1-syzkaller-00031-ge32cde8d2bd7 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
-RIP: 0010:xas_store+0xf9/0x1890 lib/xarray.c:847
-Code: 83 e6 03 31 ff e8 07 6e d4 f5 48 89 d8 48 83 e0 03 74 1d e8 19 69 d4 f5 48 8b 44 24 60 48 83 c4 78 5b 41 5c 41 5d 41 5e 41 5f <5d> c3 cc cc cc cc 48 89 df 48 85 db 48 89 5c 24 10 0f 84 af 00 00
-RSP: 0018:ffffc9000b4e78f0 EFLAGS: 00000282
-RAX: 0000000000000000 RBX: 1ffff9200169cf27 RCX: ffff88803c872440
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 1ffff9200169cf27 R08: ffffffff8bc07289 R09: 0000000000000000
-R10: ffffc9000b4e7940 R11: fffff5200169cf2b R12: dffffc0000000000
-R13: 1ffff9200169cf20 R14: ffffc9000b4e7920 R15: ffffc9000b4e7938
-FS:  00007f32942b66c0(0000) GS:ffff88801fc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f329436f363 CR3: 000000001e2ca000 CR4: 0000000000352ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- </IRQ>
- <TASK>
- __xa_erase+0x135/0x220 lib/xarray.c:1511
- sock_devmem_dontneed+0x37b/0x740 net/core/sock.c:1089
- sk_setsockopt+0x73c/0x33b0 net/core/sock.c:1280
- do_sock_setsockopt+0x2fb/0x720 net/socket.c:2325
- __sys_setsockopt+0x1a2/0x250 net/socket.c:2352
- __do_sys_setsockopt net/socket.c:2361 [inline]
- __se_sys_setsockopt net/socket.c:2358 [inline]
- __x64_sys_setsockopt+0xb5/0xd0 net/socket.c:2358
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f329430cf69
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 1f 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f32942b6238 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 00007f32943941a8 RCX: 00007f329430cf69
-RDX: 0000000000000050 RSI: 0000000000000001 RDI: 0000000000000003
-RBP: 00007f32943941a0 R08: 0000000000000010 R09: 00007f32942b66c0
-R10: 0000000020000000 R11: 0000000000000246 R12: 00007f32943941ac
-R13: 0000000000000016 R14: 00007ffc9990f2c0 R15: 00007ffc9990f3a8
- </TASK>
+indentation is wrong here.
 
+> +{
+> +	struct usbnet *dev = netdev_priv(netdev);
+> +
+> +	if (!pause->tx_pause || !pause->autoneg)
+> +		return -EINVAL;
+> +
+> +	if (pause->rx_pause)
+> +		return smsc95xx_start_rx_path(dev);
+> +	return smsc95xx_stop_rx_path(dev);
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+This does not make much sense to me. What does pause mean to you?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> +}
+> +
+>  static const struct ethtool_ops smsc95xx_ethtool_ops = {
+>  	.get_link	= smsc95xx_get_link,
+>  	.nway_reset	= phy_ethtool_nway_reset,
+> @@ -791,6 +832,7 @@ static const struct ethtool_ops smsc95xx_ethtool_ops = {
+>  	.self_test	= net_selftest,
+>  	.get_strings	= smsc95xx_ethtool_get_strings,
+>  	.get_sset_count	= smsc95xx_ethtool_get_sset_count,
+> +	.set_pauseparam = smsc95xx_ethtool_set_pauseparam,
+>  };
+>  
+>  static int smsc95xx_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
+> @@ -863,26 +905,13 @@ static int smsc95xx_start_tx_path(struct usbnet *dev)
+>  	return smsc95xx_write_reg(dev, TX_CFG, TX_CFG_ON_);
+>  }
+>  
+> -/* Starts the Receive path */
+> -static int smsc95xx_start_rx_path(struct usbnet *dev)
+> -{
+> -	struct smsc95xx_priv *pdata = dev->driver_priv;
+> -	unsigned long flags;
+> -
+> -	spin_lock_irqsave(&pdata->mac_cr_lock, flags);
+> -	pdata->mac_cr |= MAC_CR_RXEN_;
+> -	spin_unlock_irqrestore(&pdata->mac_cr_lock, flags);
+> -
+> -	return smsc95xx_write_reg(dev, MAC_CR, pdata->mac_cr);
+> -}
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+If you need to move a function earlier in the code, please do that as
+a separate patch, making it clear in the commit message that all it is
+doing is moving code.
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+You want lots of small patches which are obviously correct.
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+> @@ -1076,7 +1105,7 @@ static const struct net_device_ops smsc95xx_netdev_ops = {
+>  	.ndo_tx_timeout		= usbnet_tx_timeout,
+>  	.ndo_change_mtu		= usbnet_change_mtu,
+>  	.ndo_get_stats64	= dev_get_tstats64,
+> -	.ndo_set_mac_address 	= eth_mac_addr,
+> +	.ndo_set_mac_address = eth_mac_addr,
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+This hunk looks wrong.
 
-If you want to undo deduplication, reply with:
-#syz undup
+	Andrew
 
