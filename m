@@ -1,120 +1,156 @@
-Return-Path: <linux-usb+bounces-15778-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15779-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7AB9991E17
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 13:21:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB904991F54
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 17:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 598D91F21B9A
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 11:21:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC0F91C21131
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 15:25:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91BF9176226;
-	Sun,  6 Oct 2024 11:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED80717BB0A;
+	Sun,  6 Oct 2024 15:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZRFLoBjT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tPIp/nZI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343B7184F
-	for <linux-usb@vger.kernel.org>; Sun,  6 Oct 2024 11:21:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13DE13635D
+	for <linux-usb@vger.kernel.org>; Sun,  6 Oct 2024 15:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728213683; cv=none; b=Lqu27MkbkPgBg9G96MgvKU8XA6WanVpUSG2nbDWJJBpqOdXM5xUgGM6qpQ6J//5kbG+NsxM8f/wRcE79FQ8MqsAbJ7dDL7kEpT7nNlKJie97ZWknG4KWZEssIIdYJrI4YJVOoTmSDhpfclxinA6hAN/4hSMkL4s33cWVxpaLD5w=
+	t=1728228296; cv=none; b=dlKU3QPT/wgwtrUw68IgFDYRN4cfwEMQ2UjIP1cEpngO/ct7M/FmqVYmuUYkUTwSJ8cvP80XZxoAKHhEMZzW9xlrcCsIocbhEy0aBB/jGTXEneBsDKuxb8e7LW9Jud5ktPcLm1Y5ZuwRZSR7+bgsD0tmgyLmCdDfNiHxAqOSTPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728213683; c=relaxed/simple;
-	bh=kAkf6NIhOlen6xkgkrgYREOsdkIOiEOGqa3LkxwXAz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=natIHydp5j/66Pfj/XW+sAtExd/Oa8mAXYGFLF+U7y0K70enYcnb8YobWQLDtiaPJytPqD3CAkj0La0WGtWnhb9TZxSuMsx7/etBLRSLJqJw+HnvBbuVeVYldPrrRSRGYIOwDeWKWI+ZR3LpBzOhIdc8EMC5WO3cELthL3U8lG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZRFLoBjT; arc=none smtp.client-ip=209.85.218.48
+	s=arc-20240116; t=1728228296; c=relaxed/simple;
+	bh=Ddw5/PI06BBB+5QwUVlAEzwgRmfx8TzJX9+qsstiV9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H7c8T4xlHjcrgtgJy/scq/SEr7tBmk1XbvXF0/AfOTP0J8EbElBPPU3ruWgxfeaYcxqJMxpgNNq5owdQDtrSMem7eJwjivBjOyetY2nzOoA78b9trYq+hSNuXAJlWYRMYVeTiHfmg/FHzGeVthMOqFcpIBjBeMSOFxxcwnoxrf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tPIp/nZI; arc=none smtp.client-ip=209.85.167.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a8d6ac24a3bso664495866b.1
-        for <linux-usb@vger.kernel.org>; Sun, 06 Oct 2024 04:21:19 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5389e24a4d1so4350567e87.3
+        for <linux-usb@vger.kernel.org>; Sun, 06 Oct 2024 08:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728213678; x=1728818478; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IaSdlUzNDNfxslBW/OGrSNOxQF3vX0DH7/KKjL0CWFE=;
-        b=ZRFLoBjTG8F3mnbaxzhEVD5mJKaLx5/2TTk+hrgvD3rdpHcyXkH0aj+uPy1cA8D4wx
-         Af23dzdoNOYTNwpzbbqx46oCw8/n8HpYvCKG1Qd+xvl8BSGIOil2iyAT7QvsXKizpBWK
-         PUXOoo12LpxhY6HIQIaMCZEtPE64TkBWJVK0J7zpihvQSrhbh8HcbSzL/aR1ETUhORfS
-         2A0I9OMJxJSQTiRQF+1Z2nVOqA5BgPNRE8IO3JZUOLi3TXRC8vcy1KPbR4lAwlXjrpWc
-         Av9hGEa16S8jbnKt+ZESVTlwP8Ygdj36R8Ao5EERaSF78gTr0fKlAQ2mnoeFD0K+6tI1
-         8fqA==
+        d=linaro.org; s=google; t=1728228293; x=1728833093; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WpxzUFBpM6jj79F7ZqgEaOqBGXguLzjUAwq2RqwFc74=;
+        b=tPIp/nZIFnbUr1wynDjqonxXW5m+0AtF4uuBrUTNV8vOfR3MAU2fTSP8nF/uoF5dNB
+         VjuiHLvZlU3c61AsulOueGLa/NuzrFMzl6jXS7jibRSM8UmnJHfSXzdd0FhJ0MPCKKOR
+         L3rLM9CteyvqcWiBhlN4nmzJabdU0knrzgIrBQNDQSr1+oGOXISOZvsFSYPQIyhUNt7t
+         DCldHW+eBbDGcn33q2INh2BbYsp6SSK5hgHDY+cuQK81ia5yCa76q5283tDRdpQbsNeP
+         Ll1XEH6TOAR+rqjcgsu3AnvfdvmRgU9r0E+JnNkyHxfZdgMZO9eJa3bXzGBsjqGO5pn2
+         Nnhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728213678; x=1728818478;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IaSdlUzNDNfxslBW/OGrSNOxQF3vX0DH7/KKjL0CWFE=;
-        b=ayNIsEtwsRt4GRKivwK3ESSd1qEXRDeAgLtCe06UNBpGy2ML4SqmRIDvhKyDkcsJxY
-         QoxCYtnQ36adVdh1d+BRrLYvNNRw+Op+Y6whp0NuTdHc8+6GD4dCd5zxmK43C96fS77O
-         qp2ADsCHp8sR1I6LybRiRb++FDfHWygfjgcwaPedAXnyE6jGzkrUtJxr9hcojsrnoaIN
-         AFu9ffiDj/Lstnuj2ZrqINaE55uB2GOwcKI01ovMRkfu08mwKayyqTOQKcSpthJmqDqu
-         qf5T1hlupYQbE4wvx475lYohXNeOYH9VYIoYw9PBZv1Y7pHILGueLhpLbsN6NVNqrCmF
-         Uc3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXn9H36TuJaR+Lm6a5r7kdjp+b4yZ+Gvg8Fn09vP/RT8qvB5uyfPZN7KwaINkOTx6JVuWSOxzh3Xww=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxN68ifmfD7gCyAOW7G6245vIvTsE1DxAgdMQcPO6bXQH74oCBv
-	9VQgQg9/mjfJgab3E0u5b06j6q7QFxpLWOhys56/0bZK7XLOdRO4z1loPBeTQ/A=
-X-Google-Smtp-Source: AGHT+IGhNzL6F7Y3Basq1U7UYWMAXnxAome0GeoM6oq+0r0hVBAogjvQax1Al72V/SfzYXj8LXhFpw==
-X-Received: by 2002:a17:907:360e:b0:a8d:4e69:4030 with SMTP id a640c23a62f3a-a990a0606a4mr1387180166b.19.1728213678283;
-        Sun, 06 Oct 2024 04:21:18 -0700 (PDT)
-Received: from [192.168.0.15] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a992e7860cbsm242410866b.120.2024.10.06.04.21.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Oct 2024 04:21:17 -0700 (PDT)
-Message-ID: <b9e1c0ae-5651-418a-9b71-897cd739ed0c@linaro.org>
-Date: Sun, 6 Oct 2024 12:21:17 +0100
+        d=1e100.net; s=20230601; t=1728228293; x=1728833093;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WpxzUFBpM6jj79F7ZqgEaOqBGXguLzjUAwq2RqwFc74=;
+        b=SIbCk/kZrJJAwOz6q2wQ6AlxYo5b+iW5YVIEXLKursZZPbQVtQbjNYMbnnmrVB+wQG
+         sFtK86Vn5Ri3/pFzm5bdzDCv9JwAwcLkkNMUeJVZNCBjMmnsxt4fMyk44hn+mr9MNlZy
+         hbnCuD0qb7fkRCH02mMhO3ZMfNrFIouIR/qqhEU2DNDulDmV2tsBC6O3j5eu9IlQ5yIn
+         86G+F8V+QvGLjcJ4ykXk/UdxvWXkRqvwVoM6YZNCGdl+yE3xy6qNiqRmcjvDJ5DXA1gC
+         ExYO/LMZd5bu+Gwk8BGmbKSzdZ/Org9Fd2zV1CLFdIxH7ZTiiOr/0RkaqBbHknQQDqTi
+         3P2g==
+X-Forwarded-Encrypted: i=1; AJvYcCWUSiI0cwhmZQkx4Dk3Q6TneVobLKYHh5BqpSEZr+Tcrfof+g75mB5QxsHVR6yCAPqEMik6vMlFIk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGQ7sCReKInWoM7OK8SnRh9pZvdXf9+hyju0TqycONogBUHsa2
+	gXIrBlzktyQiimgtKT46DK9nH5Nmh52cfT0Bwry91fbtwymmqtqNDxUH1tTTgF5tIhr1hQngvk/
+	NPEKuSz+k
+X-Google-Smtp-Source: AGHT+IEz2NN9I4YEcGZDTK1sMn0DbRO+Jpbp85v+1I8NHlwSLv9mIX9SsVNIPu8OUzXhMi6soAaKRA==
+X-Received: by 2002:a05:6512:2313:b0:539:8c02:64d5 with SMTP id 2adb3069b0e04-539ab873368mr4286410e87.27.1728228292618;
+        Sun, 06 Oct 2024 08:24:52 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00-89ea-67f6-92cd-b49.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:89ea:67f6:92cd:b49])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539aff28f10sm549816e87.303.2024.10.06.08.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Oct 2024 08:24:52 -0700 (PDT)
+Date: Sun, 6 Oct 2024 18:24:50 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	kernel-dev@igalia.com
+Subject: Re: [PATCH] usb: typec: altmode should keep reference to parent
+Message-ID: <ywdn3gf3vx2xlew75pvahx4ye3ciq5y7mapmbc2uoonfyeanow@oj4gilgq5mkx>
+References: <20241004123738.2964524-1-cascardo@igalia.com>
+ <Zv_23J-1U5pZ6rgT@kuha.fi.intel.com>
+ <Zv/43ewc3n5aSEUO@quatroqueijos.cascardo.eti.br>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: qcom-pmic-typec: fix sink status being
- overwritten with RP_DEF
-To: Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Caleb Connolly <caleb.connolly@linaro.org>,
- Guenter Roeck <linux@roeck-us.net>,
- "open list:QUALCOMM TYPEC PORT MANAGER DRIVER" <linux-usb@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <20241005144146.2345-1-jonathan@marek.ca>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20241005144146.2345-1-jonathan@marek.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zv/43ewc3n5aSEUO@quatroqueijos.cascardo.eti.br>
 
-On 05/10/2024 15:41, Jonathan Marek wrote:
-> This line is overwriting the result of the above switch-case.
+On Fri, Oct 04, 2024 at 11:17:01AM GMT, Thadeu Lima de Souza Cascardo wrote:
+> On Fri, Oct 04, 2024 at 05:08:28PM +0300, Heikki Krogerus wrote:
+> > On Fri, Oct 04, 2024 at 09:37:38AM -0300, Thadeu Lima de Souza Cascardo wrote:
+> > > The altmode device release refers to its parent device, but without keeping
+> > > a reference to it.
+> > > 
+> > > When registering the altmode, get a reference to the parent and put it in
+> > > the release function.
+> > > 
+> > > Before this fix, when using CONFIG_DEBUG_KOBJECT_RELEASE, we see issues
+> > > like this:
+> > 
+> > Let me study what's going on in the drivers code. The children should
+> > _not_ be cleaned first before the parent. I'll have to come back to
+> > this on Monday.
+> > 
+> > This really should not be necessary.
+> > 
 > 
-> This fixes the tcpm driver getting stuck in a "Sink TX No Go" loop.
+> Well, they are likely not. But driver core API states that either way, you
+> should keep such references. And one way to test it is using
+> CONFIG_DEBUG_KOBJECT_RELEASE. That delays the actual release/cleanup of the
+> struct device, so:
 > 
-> Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-> ---
->   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c | 1 -
->   1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> index a747baa297849..c37dede62e12c 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> @@ -432,7 +432,6 @@ static int qcom_pmic_typec_port_get_cc(struct tcpc_dev *tcpc,
->   			val = TYPEC_CC_RP_DEF;
->   			break;
->   		}
-> -		val = TYPEC_CC_RP_DEF;
->   	}
->   
->   	if (misc & CC_ORIENTATION)
+> > > [   43.572860] kobject: 'port0.0' (ffff8880057ba008): kobject_release, parent 0000000000000000 (delayed 3000)
+> > > [   43.573532] kobject: 'port0.1' (ffff8880057bd008): kobject_release, parent 0000000000000000 (delayed 1000)
+> > > [   43.574407] kobject: 'port0' (ffff8880057b9008): kobject_release, parent 0000000000000000 (delayed 3000)
+> > > [   43.575059] kobject: 'port1.0' (ffff8880057ca008): kobject_release, parent 0000000000000000 (delayed 4000)
+> > > [   43.575908] kobject: 'port1.1' (ffff8880057c9008): kobject_release, parent 0000000000000000 (delayed 4000)
+> 
+> 1) children (port1.0 and port1.1) last reference are put, but their actual
+> release is delayed 4s.
+> 
+> > > [   43.576908] kobject: 'typec' (ffff8880062dbc00): kobject_release, parent 0000000000000000 (delayed 4000)
+> > > [   43.577769] kobject: 'port1' (ffff8880057bf008): kobject_release, parent 0000000000000000 (delayed 3000)
+> 
+> 2) parent (port1) is put, but release is delayed 3s.
+> 
+> Just in the order you would expect, but because of the delays:
+> 
+> 3) 3s later, port1 release is called and it is freed.
+> 4) 4s later, port1.0 release is called and it refers to the freed parent,
+> port1.
+> 
+> Having the references, what happens now is:
+> 
+> 1) port1 is put, but this is not its last reference.
+> 2) port1.0 and port1.1 are put, cleanup delayed 4s.
+> 3) 4s later, port1.0 and port1.1 releases are called, but now they put the
+> last reference to port1.
+> 4) port1 last reference has now been called, cleanup delayed 3s.
+> 5) 3s later, port1 release is called, then freed.
+> 
+> No UAF in such case.
 
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Usually we don't use this config option, maybe I should also start using
+it for some of my tests. Nevertheless the description is pretty clear
+(although it might be better to add it to the commit message).
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+-- 
+With best wishes
+Dmitry
 
