@@ -1,122 +1,116 @@
-Return-Path: <linux-usb+bounces-15813-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15814-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B214992EA3
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 16:16:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BED0C992EBB
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 16:17:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC98028519D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 14:16:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A97B1F22448
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 14:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A9B11D5ABE;
-	Mon,  7 Oct 2024 14:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF501D619E;
+	Mon,  7 Oct 2024 14:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KNzQ4tcX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j9H/0q6D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD034433CA
-	for <linux-usb@vger.kernel.org>; Mon,  7 Oct 2024 14:16:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E871D359A;
+	Mon,  7 Oct 2024 14:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728310594; cv=none; b=ZQUnsLIAWG1YIHkDBcjxEDm0ZbJQBk/GP4PCqJqQKnqbgSG8oRfqpbiiG5sFPhaUvqTu8Pgslxym933PVVZ7LDsV++vtvINLEa+NH2BIsrx2NTe0rlakDqpAiSwOrr8LiayGOgigBnj/8QpkDzpJMfRNLwh5oPJ4MAS/v5zYJfs=
+	t=1728310610; cv=none; b=ut6kQqtzmyIwBGSAPvYpq7/PsaURb81DFIl1HhmjnvlOn8llKjn8IRIqNjqqBFEJoy6EgKBMFFvhOEcY67qRb/vjGfd83JdolheN3DyUXJX/2bBq1jLU+Gh2tMtMRzOWA/V/vAkpiWLTa9nqkqkCSLFtiPRbpEbnqWi5rDFFES8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728310594; c=relaxed/simple;
-	bh=WHTwqV6tDRa6dj7SWK8VezUucQdP1t0l/GdZU3cB/1o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IH3DkocQQ2Ex7KjNBlOeGN9/snRukFIrwCVCsMpCxDGy95rzzGiG2I1KBF4U//lih4Hl16a8mvDNYhbWItGs0vAttDkZY0FBgw0eJd/wZnuwJ5/0dTtaNKstpTb/k5wb7BUR6garzAFavlMN255zwawqDfua58jhnOCXDXW6PXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KNzQ4tcX; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2fabe5c8c26so40003881fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2024 07:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1728310589; x=1728915389; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cxVbsU1/6PlRbliGY4tsEIOFuRRavVmNqKCjLC4eEs0=;
-        b=KNzQ4tcXFZmaZpxfiPsDWrxsSTalmt68/KbvoabZjVw5DAiguniN2RutUecv+POEtq
-         n2Nmn81Juiiw8WTl9b4B6OHO7pi5XWZR3Y+wLS1EXeB3H7/vCwKliMAmtsfBQ11zQGLi
-         2/mIHKsXAT76IaOORhzDdnPlH44gHRSaaSUb0sCklCH2EssPmMSJPbXqhdsMaHGNjTaf
-         rX7Uy1bV474mQxk/KZtJa5XUf87ajaQol3KP+8F0jOqyAHcQynRcUsT/POZ0ArZ3/61B
-         m3ELmVVs4VeKDe4TQgfcG1zm5eD+SXTOPR3bpFN5S6RpUW6MtpudotWbhnATC1H39M9A
-         g1JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728310589; x=1728915389;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cxVbsU1/6PlRbliGY4tsEIOFuRRavVmNqKCjLC4eEs0=;
-        b=WcYQwt9w5AEjNNyYUEji2znQF7dfQ0DP5dDrUb5faHPnWdXs+LTuQCViBwt3xKTh3O
-         agZVRYKVeDYrW4AMDN/CrZ2zkFaVpq4Ngc+Ed1RgvcXCzVj6DLCMDjPzq1VzCdy2Vn5R
-         V3e+xA7F8YDAxH7qvZpWDkgy80fAsx02AwpYJN2cULp/6MvZ+YBsgvQLeZzTXzR36Udy
-         qvR8xIuIeOe+ReGW93JlNMz4ytWsQk6Famca+nVHby9dTFAIBEbHL1elqaz+61xkDo4e
-         AIQGYV9fyf3dM2YxNK7/G2zCzZf/Iv8GutXwn/6ir9ELtsWRKEUWwS1ppUzwPfjmSgzG
-         vwow==
-X-Forwarded-Encrypted: i=1; AJvYcCWyFcfrIrO936lToTvalkeK2iZTiI7zBYOiPO3Ed3msy772VOePR+xzCbjCxVYzuxexxYpjnzn0rtg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsahYO8l52NO3nD1XJAABoA3CD0lAfRNP2H7Hiw06UkRlVS06v
-	i2UwQQJK+0FQoWvkpNS/ZKlxvDsVvuWG8wHAD/QEGB0GCR1S6hR73rNWfLezawGEMcAmhzVxCRq
-	h
-X-Google-Smtp-Source: AGHT+IEPRUuIot87bqEBFnZBoR54B02LoDCRIyfJ2/1E0D11LEH0v3cn2FItdSgJHKxr3q6YTB5cGA==
-X-Received: by 2002:a2e:a99d:0:b0:2f7:58bc:f497 with SMTP id 38308e7fff4ca-2faf3d7380bmr55287811fa.28.1728310588723;
-        Mon, 07 Oct 2024 07:16:28 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1370:2201:dbf:8c7d:e87d:3baf? ([2001:a61:1370:2201:dbf:8c7d:e87d:3baf])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c8e05eb357sm3204024a12.69.2024.10.07.07.16.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Oct 2024 07:16:28 -0700 (PDT)
-Message-ID: <b60f922a-5c10-4983-9404-ad18bdd86c67@suse.com>
-Date: Mon, 7 Oct 2024 16:16:27 +0200
+	s=arc-20240116; t=1728310610; c=relaxed/simple;
+	bh=90k/Q9Evo9k4FMfYcIURyr4AYubRR4XOFCioFwJxfN4=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=dhmKqj03ipGs3tXbgBIHgMQGixR5CZE3z04xbLhRN+bnguxYEAgW/SVWaASEesMnTCH1vVaAXhp8+qzgY13MOMTayW0iayQClzH3Yodms3bHWdw2zUGLa2rysY6q1OR19geZv5EAWv6jwqEKdcHfM/Y1gcmSI4T7kdKaPMHRQjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j9H/0q6D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54838C4CEC6;
+	Mon,  7 Oct 2024 14:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728310609;
+	bh=90k/Q9Evo9k4FMfYcIURyr4AYubRR4XOFCioFwJxfN4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=j9H/0q6DBVb5JsTnG+U4ySQqUCsXGWSB99um4CQxA6FsdMMzDdqn9bmPxa9H8g/8j
+	 ObURpSMCvznlOdw70aRxYBO4lfHlK83TunQ7cLZf2lVB/tPAlXP+oQbZPKkRarECWp
+	 9+IC6HYkwe4SZlG5ctHBMRE7U4vN5Xwczywng8Aea8pmXlf1Qj1AcdAbTYPgtlBT2A
+	 aDtyNed8SBmMw7pm0vdmxYc0utZeAuRcC+YMp1UQJK80EHWzHJI9/3LVgDlm/ntIt0
+	 ccues13Uu5Pa+NdCIbgSCJYf6fspkpyeLnZbXniVRY0KzQVkgrqNo8/9LEwN5wLuKj
+	 W3y+2HONDq+ZQ==
+Date: Mon, 07 Oct 2024 09:16:48 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev (2)
-To: syzbot <syzbot+a194ded97ce38690073f@syzkaller.appspotmail.com>,
- gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <6703c076.050a0220.49194.0505.GAE@google.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <6703c076.050a0220.49194.0505.GAE@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: linux-kernel@vger.kernel.org, 
+ Parth Pancholi <parth.pancholi@toradex.com>, 
+ Mathias Nyman <mathias.nyman@intel.com>, 
+ Francesco Dolcini <francesco.dolcini@toradex.com>, 
+ devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+In-Reply-To: <20241007093205.27130-2-francesco@dolcini.it>
+References: <20241007093205.27130-1-francesco@dolcini.it>
+ <20241007093205.27130-2-francesco@dolcini.it>
+Message-Id: <172831060758.15259.15265542019562102842.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: add TUSB73x0 PCIe
 
 
+On Mon, 07 Oct 2024 11:32:04 +0200, Francesco Dolcini wrote:
+> From: Parth Pancholi <parth.pancholi@toradex.com>
+> 
+> Add device tree bindings for TI's TUSB73x0 PCIe-to-USB 3.0 xHCI
+> host controller. The controller supports software configuration
+> through PCIe registers, such as controlling the PWRONx polarity
+> via the USB control register (E0h).
+> 
+> Similar generic PCIe-based bindings can be found as qcom,ath11k-pci.yaml
+> as an example.
+> 
+> Datasheet: https://www.ti.com/lit/ds/symlink/tusb7320.pdf
+> Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> ---
+> v2: rename property to ti,tusb7320-pwron-active-high and change type to flag
+> ---
+>  .../bindings/usb/ti,tusb73x0-pci.yaml         | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
+> 
 
-On 07.10.24 13:05, syzbot wrote:
+My bot found errors running 'make dt_binding_check' on your patch:
 
-> INFO: task kworker/1:0:25 blocked for more than 144 seconds.
->        Not tainted 6.12.0-rc1-next-20241003-syzkaller #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/1:0     state:D stack:20416 pid:25    tgid:25    ppid:2      flags:0x00004000
-> Workqueue: pm pm_runtime_work
-> Call Trace:
->   <TASK>
->   context_switch kernel/sched/core.c:5315 [inline]
->   __schedule+0x1895/0x4b30 kernel/sched/core.c:6675
->   __schedule_loop kernel/sched/core.c:6752 [inline]
->   schedule+0x14b/0x320 kernel/sched/core.c:6767
->   usb_poison_urb+0x1bc/0x2e0 drivers/usb/core/urb.c:763
+yamllint warnings/errors:
 
-This points to a bug in the HCD.
-usb_poison_urb() is guaranteed to make progress.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.example.dtb: pcie@0: usb@0:compatible: ['pci104C,8241'] does not contain items matching the given schema
+	from schema $id: http://devicetree.org/schemas/pci/pci-bus-common.yaml#
 
->   poison_urbs drivers/usb/class/cdc-wdm.c:342 [inline]
->   wdm_suspend+0x174/0x380 drivers/usb/class/cdc-wdm.c:1271
->   usb_suspend_interface drivers/usb/core/driver.c:1328 [inline]
->   usb_suspend_both+0x2a5/0x1140 drivers/usb/core/driver.c:1433
->   usb_runtime_suspend+0x59/0x100 drivers/usb/core/driver.c:1968
+doc reference errors (make refcheckdocs):
 
-What HC is used for these tests?
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241007093205.27130-2-francesco@dolcini.it
 
-	Regards
-		Oliver
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
