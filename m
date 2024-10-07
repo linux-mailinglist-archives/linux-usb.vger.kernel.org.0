@@ -1,80 +1,81 @@
-Return-Path: <linux-usb+bounces-15793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15794-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90348992240
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 01:27:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BED1499238E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 06:22:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44615281836
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2024 23:27:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4331D1F21067
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 04:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F3D318BC23;
-	Sun,  6 Oct 2024 23:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B479502BE;
+	Mon,  7 Oct 2024 04:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lenbrook.com header.i=@lenbrook.com header.b="FGvqXUqk"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="A+IRqNbw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021087.outbound.protection.outlook.com [40.107.192.87])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2050.outbound.protection.outlook.com [40.107.95.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98FF218B482;
-	Sun,  6 Oct 2024 23:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45E412B64;
+	Mon,  7 Oct 2024 04:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728257215; cv=fail; b=ZyQQl7NI7Nq674t775N/pMVAzQygYe/aEkeqZfhL4/Tz28ILb5kR8C71y3Z6q8BKB0PtLKHhu56Wa1DR5LuLInndAxHsHaNfWbMFXu/ubqqLBhDjTY1vbNrdiOTPHIMYZ0MmV6+mJ1xghY1Q/MkCrIvsTstIJ8uDcyhG4lsxKNI=
+	t=1728274934; cv=fail; b=mYxAeMEM3k6BZM4YcyQnBeI5CAlVhdQvBviK89c2s3jZUut+/rv0wKxpSedCcvgYVtiMSmYZOyvPj6PQ4AbaatA+/6m/3lyw+Iv54qw9fOHWRq4r5YIHjtr5/B9q/wVHWtw6vQcKpng/RAuW6BrgQPaxNlzG9CtT5VwL2NkkMxk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728257215; c=relaxed/simple;
-	bh=rb1kZrKXbzelXQhaDGgwadO/K0qdJXgGi2hrtDEYDO4=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=e5c+XSoTzuShVKGPk4c5qZ0ofvqrcJI51uuSVXYd+K4MBkNm03evCEnYM07JslCq3lUfCkP0II4h+Kgc0zwAdJNNdG+wy1A3B4SzDdxBBph7AsGaqFiUiFhBNvf3oRFnhnwQwSlJvZo0ItVwyz9tj+gNsLUbslpU+SCub5RQphA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lenbrook.com; spf=pass smtp.mailfrom=lenbrook.com; dkim=pass (1024-bit key) header.d=lenbrook.com header.i=@lenbrook.com header.b=FGvqXUqk; arc=fail smtp.client-ip=40.107.192.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lenbrook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lenbrook.com
+	s=arc-20240116; t=1728274934; c=relaxed/simple;
+	bh=U/TdnHdwAcdwwTeRPgO1WwVH9ed54irb0OPHdYeu6eE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=aRqWtj/T3HK9pZRuZ2tG7yE7kcovDuUjDBhG1FDMIHp+sYDnK8ICGMNz1wk14gP4DliZeL2WkSxjxofLEGcWkR+CSzvM6YtacHxSko95Y046j+Vlwdn8k/0r5t+VqAiHLNXLATGyAxIuB9WVV2B5Rn1l4/nIKuRXRRS5Dny4pQE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=A+IRqNbw; arc=fail smtp.client-ip=40.107.95.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xZrMwnwI8bdtb7j1wQbf7aJUdWek9T9VdiR8wNBeayBYWZ5dkVBRfmde6QRUQCKxkmKp1eyF6D9IXfuGEGemt7WWkGr79dV7sRCxo3RJw1bWxSUZPh/lVR6CMpipeqNspceyP+AlJxSWSDDzWFs133K8r+hHoVkq91/YMxFDLwx4fAN8vAqRmMfntc/xBMA/gc0oVbnlkREr/BzicgOGBrPNPZ3j8mWY5p2JD+LE0dPPdow1KUM8jVWvGIMPrOgciYTjoBjVnSUobApCtUeBDykKfTe5n/grq79n8xMdVHrh0fC2gcXUYbxnwcrd0q7IrssAAXGtrinW5lITbqJV7g==
+ b=rYYr0kzInyQhRKq+j5QYULgq79XtyPVColyEmjusYqyaWkl0VHMR/6p+HpSYW0Ro7EC65jlMgPzpDMtkSqdvomss6uZQWtLkPSXruqvFKUMh0PeS1FLcTEnzPxbHhU9c3XkGd+1JwKuTBamVaxHsS05BWpeDJ7jw8EAdYWhN1CD4Mdnq4vntnJ4ORbL+vcfeXdlxjmtrIVG4rYl0ktzINa5EiWZ8RLGDVY+le5z329kqbIYuijvuzYKgkp0gq6gPu+hKyvWMIwriRvqH14ik/YMf4M62UBclw7Ycp5w6wkrcJamiodWMF51G/1+BQzYffi+jVkMH8ir/JgMDiP5hxQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vmYumSOwhaHx5JlbpnL9DvXBZMdUyeQUseqBxgUqH/o=;
- b=CuQ4Gn/lClDKRS1SWXztrRIGms9El7qwRuf1WYBgCuikZ7cBrpLcjm88D4Tgw/tnXoQCFfB5P6TlWbWLxswWqEGzTAuiZQ3HKX3x7K8j3OSrDyttI7bLvIpM+oLMHUORM/pLJWK9mS+BuM2s2Ixvh/fgeKOCbLFKgq80SGl+QEN3MYIN7+Aq7iAvBBTiAPBg64vzba0VTSRGrZqRQFhFeNtvm4bsQhJUnB2Bll2dOelsxYK+brqdaiydp3JT8Bh16yZK6qYJ9Pqgbmxd3MYDH6pBFoBfyKVFCfXpxQiZvtDjnhbHU092+RdwVxJb4T9CO0ern17EWFoDpCBNhdxxVA==
+ bh=KxQBYo3exzPFpf6lDlrUc9C+7QRkztAgM2vMJnzaY/M=;
+ b=A33Cw2JNzV6RLAY2WbZrLoErjRlOpwKrpXfilZ28UcyCi1DbxnYXJSNFoL5P9VYYpXGVA3c4eURZmCASQFVjENficPtPw21RImdnNAEBOt7OYgw9ZSTcfq6V6lsYeMbVn5bEuMAvO/KdEfaixXL3q1HB4yvMjytr+hNJclaoDiB40IyjFUW9oW+B82D/cBhoYtRTt/AYu3ObdrXwo4B0ag0D1duhp3hMBTbhlfX0Q7/nmEiizxmUwZKpIcPJJtXh5u9upHz9BTmvesHXM8WoL9D9dh5/jOYoLl+QQ7H89Y7VQiXuabbKz8AQZHWXi/MN8jf6gn4s/YcHHtJ7sAQNjw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=lenbrook.com; dmarc=pass action=none header.from=lenbrook.com;
- dkim=pass header.d=lenbrook.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenbrook.com;
- s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vmYumSOwhaHx5JlbpnL9DvXBZMdUyeQUseqBxgUqH/o=;
- b=FGvqXUqkurPLOoA9Ckfy9shd2ev3aJT3gyIQSQo6jZ4BWB8NDDnfIB5ApZs6FKF9dibJBiEGYFdjPx1dMG7Rp/nMwRjEGBj1FpurIsbX6I/pZzHMUYBuSseIS+PuUJYJn2KIT1FT681+Ih7h7OiDqBT01nf6wUwCZ+SrioBR0VE=
+ bh=KxQBYo3exzPFpf6lDlrUc9C+7QRkztAgM2vMJnzaY/M=;
+ b=A+IRqNbwS7VWZdGw54wmuQLhoVWXPI6OxMp+YNvRjNtOEFdXnWgDrw9Z6jGtS07sn1HUjLuUtD/2OyNh93XGHaxl6nDUnlRHt9GgMOCz9SfAIrXUOCuKcA85f/aRU2AhK5gIqcuN+AkI7UFeLpZk77bOOQKL9xPGnKJI/SXW6Pt7Pm++rFjoFCq0JgsGyKgI045ex1x8vazhHb6nIK3E0GJNJyDsmUSOTp3wdkNqou07KxmKWTeS2rghDgYzmLLcTxzF6I/urtYecQAJu7mV85vCkbjsxIBU2uGrFFREdOhqp/jqRB5Cm7ixR9WQUQB8LLWP457k1tB53RLLAbq/fg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=lenbrook.com;
-Received: from YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::12)
- by YT4PR01MB9688.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e6::18) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7PR12MB7914.namprd12.prod.outlook.com (2603:10b6:510:27d::13)
+ by PH7PR12MB7378.namprd12.prod.outlook.com (2603:10b6:510:20d::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.22; Sun, 6 Oct
- 2024 23:26:47 +0000
-Received: from YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::1646:7ee4:f637:6449]) by YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::1646:7ee4:f637:6449%4]) with mapi id 15.20.8026.020; Sun, 6 Oct 2024
- 23:26:47 +0000
-From: Kevin Groeneveld <kgroeneveld@lenbrook.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Chris Wulff <Chris.Wulff@biamp.com>,
-	Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	John Keeping <jkeeping@inmusicbrands.com>,
-	Lee Jones <lee@kernel.org>,
-	Yunhao Tian <t123yh.xyz@gmail.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_uac2: fix return value for UAC2_ATTRIBUTE_STRING store
-Date: Sun,  6 Oct 2024 19:26:31 -0400
-Message-ID: <20241006232637.4267-1-kgroeneveld@lenbrook.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YT1PR01CA0097.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2c::6) To YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:e8::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.22; Mon, 7 Oct
+ 2024 04:22:09 +0000
+Received: from PH7PR12MB7914.namprd12.prod.outlook.com
+ ([fe80::8998:fe5c:833c:f378]) by PH7PR12MB7914.namprd12.prod.outlook.com
+ ([fe80::8998:fe5c:833c:f378%4]) with mapi id 15.20.8026.020; Mon, 7 Oct 2024
+ 04:22:08 +0000
+Message-ID: <f6b62a45-c44f-492f-8f79-96b4fd54555e@nvidia.com>
+Date: Mon, 7 Oct 2024 12:22:02 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] platform/x86/hp: Avoid spurious wakeup on HP ProOne
+ 440
+To: Hans de Goede <hdegoede@redhat.com>, ilpo.jarvinen@linux.intel.com,
+ gregkh@linuxfoundation.org, jorge.lopez2@hp.com
+Cc: acelan.kao@canonical.com, platform-driver-x86@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240906053047.459036-1-kai.heng.feng@canonical.com>
+ <87d40775-9bd4-4f22-81da-4e670236c15e@redhat.com>
+Content-Language: en-US
+From: Kai-Heng Feng <kaihengf@nvidia.com>
+In-Reply-To: <87d40775-9bd4-4f22-81da-4e670236c15e@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR03CA0111.apcprd03.prod.outlook.com
+ (2603:1096:4:91::15) To PH7PR12MB7914.namprd12.prod.outlook.com
+ (2603:10b6:510:27d::13)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,121 +83,283 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB9670:EE_|YT4PR01MB9688:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61af9dfa-79e1-4478-3749-08dce65e58fd
+X-MS-TrafficTypeDiagnostic: PH7PR12MB7914:EE_|PH7PR12MB7378:EE_
+X-MS-Office365-Filtering-Correlation-Id: 08c15b21-1f53-46d7-5828-08dce6879b9c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?HOTgSVWvnKXT3sY3gmsuVFKFkEDmQDjhIjxMYuqxIgPH3/BylaXBkxm08kHA?=
- =?us-ascii?Q?O4aOlhmCVXjtel08ckTyo6bdOlKJVB8HADcMoX6jZJwIHZoifkvH/hTk94RO?=
- =?us-ascii?Q?QFrH2U/ih5a+nXx4z3hOw/U8oNzfch+moimeNGSXTxtmwq3o9C1JbNmRLVyH?=
- =?us-ascii?Q?SEJLEjzpm4/DdYv8fGDltYkCkJtqBae1CYPWLXA4cHlSMkbBHowYS+UBwXm6?=
- =?us-ascii?Q?I79FBZMrIs8OssE8YT1Yg0P6EdzdMKf7K9aAS1rd3XR5N9l2v491CigjIPZr?=
- =?us-ascii?Q?pKbc8fC/eqctWk0e6aZvdLE52D7lvo9XfKrikJ6ywVMpz4Ni4btfYK2RWk0k?=
- =?us-ascii?Q?Pvn4hW1v66LyO4WeTscC0Fx6G2Th7LZL2eKLsc1fMgLz6diDOYlAXudIfcS0?=
- =?us-ascii?Q?hrswdef+Kcdv3tKD25mDHaGRc1s4sDIUj+e6fgS1tUQw72aQg0t2xvg0VZdj?=
- =?us-ascii?Q?MOPhrwrKO/gVMa42NdVtpNJlEb40p0K6L0F1CrK/WDt8x/cw7dszmh6HxgfH?=
- =?us-ascii?Q?IojeSqNvGaqf8KZd/4hN8TjaBgj/HRSMz6DONnEDZ9XNQQ4DnUSCwAcaDHqL?=
- =?us-ascii?Q?2LcVAGrmBM6/agZoLPTQ0oYRkAeG2MaWngKtLcvhN4Mx4RjyC6uyF3FSAot5?=
- =?us-ascii?Q?lRA74RagwSC6EceqSeOZQ21MCgdlu4/QztKARTY/lROFKi0bdydsHXJOU7FV?=
- =?us-ascii?Q?3aMSm3G5qvKawfRlMYEeXzgxmzO4drgKXN1FbybtC7C6PahN+hn8Um3MJlga?=
- =?us-ascii?Q?zRqd29o1+6Pi9GBnO6KxtGB437UKzGb2+6VZJ/3nv1X8AFgMiRqfLT/Vz+Wf?=
- =?us-ascii?Q?lIZGWKtpY+dwpz11WAOLkv2YgAY7b99X1XXLL/YKZkQ8IXHRydxK4jWqqPiP?=
- =?us-ascii?Q?6X1HcJWnkXrq+hHXZ9L6cXCu1KfAnM1mooz7rPMGitX66oy5diMbi3C+F933?=
- =?us-ascii?Q?2Bf+GCgxeloHRS8aLX41Xs8OZGCvq+WzDsOX4hEK8v0JF6UWuN4fDK8QyToP?=
- =?us-ascii?Q?vIEH5agxg+CzYwMTcvVRcB69/unuu9tRpRtP2HxvfeKXR/lgQhjrn50T//D2?=
- =?us-ascii?Q?vO1c8PKFwkSsWV4OTcPC2tDokCkEttT9+bQiQRlOvzyN40BdnVIv5wz7vCe7?=
- =?us-ascii?Q?ga/LmAUqb8ZB6vH4weVnEpvf2cUj+sH+ZXrU1Schkd6fVEU2NxI31jXMjrNi?=
- =?us-ascii?Q?uJaAK6+SQWG8n/FChJe54Tbwm/XjuHG2OWB+gmF9DI12XWIMyrIQE/oZ/kZe?=
- =?us-ascii?Q?dNKV4EJCU0DFOZJrVQfR6CovB72HRoTqNCow7UhlJQ=3D=3D?=
+	=?utf-8?B?UWhJd25HUlFEa3hMRGJmaWNjTlhqL1JJNEN2N3FHS05mcXRxMEdCVnI0NzYx?=
+ =?utf-8?B?ZC9lbUV1dHpRdGZjNzFNb1EyUjU0dnlqbERVQlFha2Nmc2g1cXAvY0RmNmVS?=
+ =?utf-8?B?S0ZxbjkwTkJiaDZFRXRnVXhYczRtK0p4NG1HNTVPbm9scy9OUkVOYTY1ay9Z?=
+ =?utf-8?B?YzZ4eGFpK0IvN2ZEaU1Wck5hQzBvckV3Wnc4OTJxYXRTVUZZUERSWjVOZFNl?=
+ =?utf-8?B?Vm03eThjczEyNWFPNnJqcFBJZHdMUWVXZytWN2hGZ2VlYit0MU90Uy9tRWlq?=
+ =?utf-8?B?bE50UmNFQUg2RDRrVXJaTlhiekxNYXprcG5MdkhVSFdiZHkvUmQ0Tm50Q1Z3?=
+ =?utf-8?B?UW1FTVYvdFVwOVFGMDFVYWh4RkpKTW9MYzRZYkxGd2l6cDB2NWwyMjBCL1lT?=
+ =?utf-8?B?WlFyYmdRK2ozRG5Zc1VrenZWd1ZDRlRYZmRyWkVIaWZZY0xLbzNtZjF4bUIz?=
+ =?utf-8?B?bDBQdnBTUjhjdGRRTlQwaDVLK01PUS9oSUpQQ3g2UkpOSlpwK3ptSkJHYnJQ?=
+ =?utf-8?B?ZHk4ODNZL2V3ekhFVWZDZzgyQnJRUWcvYmd0NnIyZENtL2JGZTJ0c3hlWTZJ?=
+ =?utf-8?B?azAwcmVDREg3c29Tems5WTloaGZKZUNVdWt0V1Awd2kzd2JPVzEvelRxaDBH?=
+ =?utf-8?B?SVg2K0dkZ2laVFhjd3kvaHMxNzZKZU5ZMTNuY3BidlVPN1N4V1FlVFB6QXBV?=
+ =?utf-8?B?OEhENzFhOHpOaTlwSjRYUWNZbS9kQlVMdnZtaDUyWGhwOXRJQ1UybG5rQkVr?=
+ =?utf-8?B?RCt5dnRIWEg3SlUxSFlPZEZWcnUyVUtUU3k3WmZyNmwyeDJKSFRZaThTdkp4?=
+ =?utf-8?B?RzFicGRlV3NxbUtuSDNjRnQ3a2g0dUhybkVqSzdCdlpUQk9BVGtJdEhiYU9E?=
+ =?utf-8?B?YmdzRTNxZXc0MkY3aUZIaVc3RlRBaXBaRUp6SHZFa01yWXA5ajlITzk1VHlX?=
+ =?utf-8?B?OXZTVDg2NDJyMjY2S0xDbm1MUmd6MlJZTTlDUXRlTUl0ZDhKb2RtUlhoNjZK?=
+ =?utf-8?B?eW8ramhEUWIwQ3NMeXppeXZlL0RmMHMyVGtZWGNSVHJ0MTNFOGkxdS9jelhB?=
+ =?utf-8?B?WVJWZVY5RDJFbXprczJmeVAyT1hJSlJ1NS9GTlBHYXF1ZjFVMFBmQ1JhNkJn?=
+ =?utf-8?B?d2V0bWFUWnJvaUVrbk9vSVdrb2Y2eTcyS0NpTnBZZlhqN3RHbVpaRVdJQUNq?=
+ =?utf-8?B?aklwSmtyanRDMFh5c3VzYmV1MlJndU1jUDNGc3ZNV2w3ZVlWNTJDMWVpWFVV?=
+ =?utf-8?B?NFZnbGZsNTN6YVVJVlpPYUttMEhFT1djRHdsVEhXdXYyakYzOGRjS2gvSEd0?=
+ =?utf-8?B?bDA0V0J2eEIvTTFZaFBIMG5aRWVYUTh5a29qclh2UHp3Z3VKZnZmTW9XR2hl?=
+ =?utf-8?B?RG9XRHlJajR3cFBUMjdRcWdnQjZYQ0ZrckdzUzZVTEdPYWpKV0pYaFdkRC9h?=
+ =?utf-8?B?VjBFYlZvbEpZcllLVkdWWW1YRFVFSFJGZ21xUzVUK3ZMREJ0a2lvZ3pjZ3Vl?=
+ =?utf-8?B?YVNWZHg2NUNwWC9BU1N0eDlKZjRGTTRPdjBRbnJlWkxnZW93eGF2MWVaOTlw?=
+ =?utf-8?B?d0JxUGZtOWRDckg4SDBpSEtsQmtwT090L0UrOXBWZ2dIN0RQalRRMnpmYnBo?=
+ =?utf-8?B?K0NZQ21sM1JnQlRSb1EvZGNkRXV1MXFoUjZuVW9sRHVGZ0UxbTFVQ3pjWUwx?=
+ =?utf-8?B?b1lILzA2dWMzUjBYUEt1blNMYmxEbzFFdGlkdlNNdVhXanlZRnEyVEVnPT0=?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB7914.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?a/M+kqPd5THotVvVbzBkzCKvdz+7h41bryqWDtCOMY5mGESyVG9DI43QILBg?=
- =?us-ascii?Q?sVVBWUd4NacLR/8ZVvx90+qPoFcu16a155/djezsNcHRPsybc5g4PfkJPWDY?=
- =?us-ascii?Q?cSCeG/6y2cG9M25dgcodP72CiSOVYflVxKJV7P+cw0y/eHRTboI3xd8ruiYZ?=
- =?us-ascii?Q?h0/i5+ljgaSCgrRVPHM/VXtaY5o7Qw+USPNKM3RLNHqO2Gp752Vw2cTi/tHH?=
- =?us-ascii?Q?g124tAyvZcVNCK7gv5Bp/mg/ZkVOZTD5/QzpEVDZLSkEVVceL416KPIjdanN?=
- =?us-ascii?Q?Djnt+yq4IJ8jVeUnOT5L4Jtpbtf8NoillNwWOqAEb5ub6fsF8X/oG2dyzTm8?=
- =?us-ascii?Q?N1eL+unk2aHvfYErZgFdultd0iB+0X3ZzFg/+veCzQa0tX1RKkjqgDsTAeCC?=
- =?us-ascii?Q?Wqk/bCmBICbL5mnPCGIIYHgaz1ZAbAx16TBcLCd0jqtrn2g+5BB0uA6wPUOJ?=
- =?us-ascii?Q?gPFdtnclRJ+mTJZhBM2QZZGjR6REti/f5qr98pj4tbpyKHeMZdx0k0taRmYf?=
- =?us-ascii?Q?PC+AkVGX26lnp3mbH9dO7FJ4AbRzsAyKpjIi46xSUGPVq0o9pDYlkdE9Phxc?=
- =?us-ascii?Q?eFkd/UqmlWB5wgUz1n0u1B8Vryvy+3TfzNQn4Y6MLraTVUv8+npF//k50Uh8?=
- =?us-ascii?Q?BC5xD2YGWVCYNAIYH+a72fNqFB4hyAaoA8CBA7gDVXfp7t6AUl4H06ncAW85?=
- =?us-ascii?Q?iN8Az3Y51ELVClL0FGGzVNd4H2DjZh3AjTOD04cAM3H3WJ3Nl7kF2GS2Qio9?=
- =?us-ascii?Q?J81Lk/c0B9iI2x0P8PKxE+PGXjqH92wp3U/xMCZQQ1dZW5wykCZcT+ju9MGF?=
- =?us-ascii?Q?xTOb9ZWnDDhZlSlIqgdPKp8XytNJlzwb5tRc3Aos2g1NR3jeIYLd1oYokROC?=
- =?us-ascii?Q?Qq21FeI7hHjtMkjSGui/0s/ywN1AYOLo3VbExtKGmt3gzXPGIisZ85a6B3iC?=
- =?us-ascii?Q?wNPld/1VsPIJxKIoCAipKZi9KfQctSxNwkvvkKd+PPSmRwOzDpbYx/LEZZRv?=
- =?us-ascii?Q?syMOOsBx1Fq5DRdxcn4ynE5jwvoqjwc/chcIuzW5LBLXW9gDR8/Pj8X/pq7P?=
- =?us-ascii?Q?cK5fZnjz+kfK/VbKkRRbYHNt3dwG8gzlJlM4f/GkYpbpIxlDh9WSyjlrLu8Y?=
- =?us-ascii?Q?q2nfecBi77RtZDGuUKrv70g+3cfCIjpx/CSmoHiOzoLExoO5yt0HRggxxGfs?=
- =?us-ascii?Q?fzzJhcAfk6nVQQ/bfML2xMp/uM+m6nmNF64NNb47PUY+RTPGYFCWuaQFn930?=
- =?us-ascii?Q?YGgHULNUSL0UuNx4TnIGYpgSTEqCvmWOMMyyx4ScKAKVXXTxyjlkDwSf9vUd?=
- =?us-ascii?Q?OS4qQTmtMNmGRL7RbulRadbHgVp6pOstdhq79jUD5+uPKrg07g9mncZmYd48?=
- =?us-ascii?Q?Xmf0T4uuFdIYGs/PrDnUKZxvEnCcmyc6YiO4yTyyuXcYdZVfeEKBGzeSuRoI?=
- =?us-ascii?Q?MCMHiCSvR1P2eS+z6FH4+CxCSFGgquR7Vg1cAahDj3Lz6zymnhIJngffliKg?=
- =?us-ascii?Q?7fqZxO4AGBXlmTx6coOXJWS3JbBLOOhfItP6DyZjEg4vfdUdjWJWdUYPfDj4?=
- =?us-ascii?Q?l5lqTbf8VDgFZpXqN3vFcF9cyp227bUHeuBSspcnG+jWW+yF5i/CUa4sr9bv?=
- =?us-ascii?Q?5Q=3D=3D?=
-X-OriginatorOrg: lenbrook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61af9dfa-79e1-4478-3749-08dce65e58fd
-X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
+	=?utf-8?B?cEhYZm05RlBVekRZalQzUU16KzZaTVkxLzFjNUN1VlBkcEpkWWhxcXlwekhQ?=
+ =?utf-8?B?YmJCc0ZNVFdsUDJ3OEhIMkozU0FjZzNtTUNVVUtUVlc2TFJxeHgzUWowSFZX?=
+ =?utf-8?B?cjRCSzc0NXIyczBIL3FWeXczTmVHbFB1eis0TFR5WWtqeFkwdTFkSlh3K0RJ?=
+ =?utf-8?B?WllPSk5PNGtQNGFnbmdBMFNzZ0p1aWxoOGdHRHVaTEJ6Q2c1clhGV0lsRjZs?=
+ =?utf-8?B?MFBLakNYanJ6eEJCYU80Y1pvSTVrdDRYQjdjcWJoTXVnZGZobkFCVjk4SnRz?=
+ =?utf-8?B?SHNSR3c3eCtzU29jQW5jUXdwMjVldng3by9idDdVNXBjaHBJNnExUHZTb1dH?=
+ =?utf-8?B?RzdudTlMS3ZxNVNRU2hDenJOR1Y2Y0dEL2toampPeU01TjhXbHd5V3hhbUhy?=
+ =?utf-8?B?KzVRTlFGNzVNUWlGRm9sbllQVnY0NktudkRRYlRzMnNXRTlaVjYvWlUyd2Yz?=
+ =?utf-8?B?Y0tOeVNTa0h3TEVnaTdnZGZsVkpPN0xJODFucisxRXlnVWVuanIwYi92UVRP?=
+ =?utf-8?B?WnRxRWIxeVV1WVVFb0lZWkY1RmRVNHQrYmNSTE9BRW81cUdCSzQxVSs4M091?=
+ =?utf-8?B?R1dXUnBHTis2VndidU1WTmZZQnFrQitBemJKd2RieFlacktWbGRSRStJWVUr?=
+ =?utf-8?B?VmhyVG9UeXN0ZEhTRXNpdXVmNy96NVl6S2o5aTFpRmtZVkpKOEVaZDczczgz?=
+ =?utf-8?B?WWN5RGhTMmhYdFFleU4vTnFXbUJjWW9Namhza0VWWW9KS1cyWkxSNnFjTWpZ?=
+ =?utf-8?B?a0NxVkM0bERZZ1FKWnN6UDBobGlwR1NKdzhyT05pTGJmVmlpbnorRUNIQ2hM?=
+ =?utf-8?B?UWdHL2xWRWtYMlc1SG1wM2RXeWJ2ZzJzOVppdm9jbWVjOUVxUUNLSUN4eTBa?=
+ =?utf-8?B?N29IOHN1ZnlzM0pQQTJYSXcwUldReFh2eGhJRVlWbGhnSThyN05mc2ZtVG41?=
+ =?utf-8?B?Y2JLUnBUZzUrOHpjL3dicVlINXlzY2RKR3JtMEdZcGRQQWtqaFUrRGNmRHl1?=
+ =?utf-8?B?czluRjlYckt5OU14eXhuTjl4NzE3ZHB3dmVKMFR5YlZpQkxkaDBSRnk3ck95?=
+ =?utf-8?B?OUxFOU1Vall0b0NrNUx6Z29zaWRpY2Zhc1VYdlEyLy84R2lTemw5aFBkZGNn?=
+ =?utf-8?B?clBEWjNwWno0c1U1ZGFjZjlKL2tYWG9oZW5OK3dHaHU0WktKeG5QTk5xcHVE?=
+ =?utf-8?B?M2pNaUpXY3g4dUEyenhvenBNb0ZxVVJxOVVZTXEzdmdyZHZnQXE1emYrbDFo?=
+ =?utf-8?B?a0F5bWxxek15Y2dXbVR0WTVPd2V3TzZXTWNEWjBBSHVrSy9aazlzZVAvdTQy?=
+ =?utf-8?B?a3Q0YlZDZ3JFamZGdEdIZGM3Y3R3MXFHbElyZ1krOElBUWVKZkwzdlRPRmFn?=
+ =?utf-8?B?eFFJZGVSMThicm9HSmJkd1l0eVB6UUtRQWQ5cXUzemduOUpFNHBsck03MURM?=
+ =?utf-8?B?TUxtNDNPS1V5Y2tob3pKZExuTGtydGYxT1VlOHJBZ0NtNklYWDRLY2M0SzlO?=
+ =?utf-8?B?ajhHM1BhQUJqdkpEUC8zNlF6bDZId0IyWjZjcEhRdnFaUGlpd3dyUUIyK05n?=
+ =?utf-8?B?SjQ4UVVYLzVMRFVkcmRGYUx5VkdvQzVYZzlMcS9SQXRYaE1PcElzQngzTVBZ?=
+ =?utf-8?B?RTc0M1hHTWxnbjlseVYrS2hnSU5jTFhSY2d4a3hnSko2SlNOUFA0bUNjM3lO?=
+ =?utf-8?B?cXBFaldkakpQN3c0ZjZhWk91cjY5TllUN0JGdnZVTUMxTEdqSUF5TEYzMHI4?=
+ =?utf-8?B?ZVNGc0hDT2RzZU9iQlNybWxoSWdLWm5OSUVEN0pkRWJpVWlHSnlvNEh4Sjlu?=
+ =?utf-8?B?MXFuQnRzK21PUkNtdjJUalg4cHFEQ1o4NWNiYUd0QzdMM2htTURDZFZlYjJ2?=
+ =?utf-8?B?UUpCZi9tT1NYcU04bUlYYnhTNUVRMUM5WG1KWG1WV3RpSUx1d1BSWjFiS1l5?=
+ =?utf-8?B?dVh3ams2U3F6cVgwYkM5NUZPL0pjTGtoU2tNQlk1dkkzZjZ5M0VlUmVsc016?=
+ =?utf-8?B?VXpuVU1aM0JwNUtGMU9CYjVqN0F4NjEvWWlCdENPbHpwU0xCeWxQNktJRlpP?=
+ =?utf-8?B?M3JWVVZBOFFCT0MwRzNyUUJ1Wno3Q3dGUlM5YTZUcVFQbndoK1JRdHp6d2I1?=
+ =?utf-8?Q?EUd2TIkHHaeu94s2N5g7f94Pq?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08c15b21-1f53-46d7-5828-08dce6879b9c
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB7914.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2024 23:26:47.4762
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2024 04:22:08.8342
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3089fb55-f9f3-4ac8-ba44-52ac0e467cb6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JkSDuRGhWsEmEo7IXjFzDI9raHGVz/pPxJlK517J3RtOxlQNAqSUvpwSrhgE6i6IKs1M1b/WpnNG4GN8rKalfY89wuxB2dy5ENgxo0XEk+g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT4PR01MB9688
+X-MS-Exchange-CrossTenant-UserPrincipalName: 01VIqtO2ipkBxUkDD9uic6Qt7rGSAnU0j/T2rz4CjnNqLrQ1gGgTISXcwhx5OZR0fJAnbw8+wBXivZC84wdRZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7378
 
-The configfs store callback should return the number of bytes consumed
-not the total number of bytes we actually stored. These could differ if
-for example the passed in string had a newline we did not store.
+Hi Hans,
 
-If the returned value does not match the number of bytes written the
-writer might assume a failure or keep trying to write the remaining bytes.
+On 2024/10/5 10:25 PM, Hans de Goede wrote:
+> Hi Kai-Heng,
+> 
+> On 6-Sep-24 7:30 AM, Kai-Heng Feng wrote:
+>> The HP ProOne 440 has a power saving design that when the display is
+>> off, it also cuts the USB touchscreen device's power off.
+>>
+>> This can cause system early wakeup because cutting the power off the
+>> touchscreen device creates a disconnect event and prevent the system
+>> from suspending:
+>> [  445.814574] hub 2-0:1.0: hub_suspend
+>> [  445.814652] usb usb2: bus suspend, wakeup 0
+>> [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
+>> [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
+>> [  445.824651] xhci_hcd 0000:00:14.0: handle_port_status: starting usb1 port polling.
+>> [  445.844039] xhci_hcd 0000:00:14.0: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x20 returns -16
+>> [  445.844058] xhci_hcd 0000:00:14.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
+>> [  445.844072] xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
+>> [  446.276101] PM: Some devices failed to suspend, or early wake event detected
+>>
+>> So add a quirk to make sure the following is happening:
+>> 1. Let the i915 driver suspend first, to ensure the display is off so
+>>     system also cuts the USB touchscreen's power.
+>> 2. Wait a while to let the USB disconnect event fire and get handled.
+>> 3. Since the disconnect event already happened, the xhci's suspend
+>>     routine won't be interrupted anymore.
+>>
+>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> 
+> I was wondering if there is any progress in trying to come up with
+> a more generic fix at the USB hub level for this as discussed in
+> other emails in this thread ?
 
-For example the following command will hang trying to write the final
-newline over and over again (tested on bash 2.05b):
+This patch fixes this issue and IMO quite generic:
+https://lore.kernel.org/linux-usb/20240906030548.845115-1-duanchenghao@kylinos.cn/
 
-  echo foo > function_name
+> 
+> Also have you seen this series:
+> 
+> [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls outside suspend (fixes ROG Ally suspend)
+> https://lore.kernel.org/platform-driver-x86/20240922172258.48435-1-lkml@antheas.dev/
+> 
+> ?
+> 
+> I wonder if that is relevant. If the touchscreen gets turned off when
+> the GPU enters D3 then this will not help, but if it gets turned off
+> by the system wide Display Off call as described in that series then
+> that series + extending patch 3 to maybe also include the HP ProOne 440
+> might be another (cleaner) way to fix this ?
 
-Fixes: 993a44fa85c1 ("usb: gadget: f_uac2: allow changing interface name via configfs")
-Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
----
- drivers/usb/gadget/function/f_uac2.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The series won't help. The display was turned off when i915 turning off 
+CRTCs, so it's much earlier than the LPI's Display Off.
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 1cdda44455b3..ce5b77f89190 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -2061,7 +2061,7 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 					  const char *page, size_t len)	\
- {									\
- 	struct f_uac2_opts *opts = to_f_uac2_opts(item);		\
--	int ret = 0;							\
-+	int ret = len;							\
- 									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
-@@ -2072,8 +2072,8 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 	if (len && page[len - 1] == '\n')				\
- 		len--;							\
- 									\
--	ret = scnprintf(opts->name, min(sizeof(opts->name), len + 1),	\
--			"%s", page);					\
-+	scnprintf(opts->name, min(sizeof(opts->name), len + 1),		\
-+		  "%s", page);						\
- 									\
- end:									\
- 	mutex_unlock(&opts->lock);					\
--- 
-2.43.0
+If the the touchsreen is turned off by Display Off, then the issue 
+shouldn't exist at all, as .suspend_noirq for xHCI is already called.
+
+Kai-Heng
+
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+>> ---
+>> v3:
+>>   - Use dev_dbg() instead of dev_info().
+>>
+>> v2:
+>>   - Remove the part that searching for the touchscreen device.
+>>   - Wording.
+>>
+>>   drivers/platform/x86/hp/hp-wmi.c | 59 +++++++++++++++++++++++++++++++-
+>>   1 file changed, 58 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+>> index 876e0a97cee1..92cb02b50dfc 100644
+>> --- a/drivers/platform/x86/hp/hp-wmi.c
+>> +++ b/drivers/platform/x86/hp/hp-wmi.c
+>> @@ -30,6 +30,8 @@
+>>   #include <linux/rfkill.h>
+>>   #include <linux/string.h>
+>>   #include <linux/dmi.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/pci.h>
+>>   
+>>   MODULE_AUTHOR("Matthew Garrett <mjg59@srcf.ucam.org>");
+>>   MODULE_DESCRIPTION("HP laptop WMI driver");
+>> @@ -1708,6 +1710,14 @@ static void __exit hp_wmi_bios_remove(struct platform_device *device)
+>>   		platform_profile_remove();
+>>   }
+>>   
+>> +static int hp_wmi_suspend_handler(struct device *device)
+>> +{
+>> +	/* Let the xhci have time to handle disconnect event */
+>> +	msleep(200);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int hp_wmi_resume_handler(struct device *device)
+>>   {
+>>   	/*
+>> @@ -1745,7 +1755,7 @@ static int hp_wmi_resume_handler(struct device *device)
+>>   	return 0;
+>>   }
+>>   
+>> -static const struct dev_pm_ops hp_wmi_pm_ops = {
+>> +static struct dev_pm_ops hp_wmi_pm_ops = {
+>>   	.resume  = hp_wmi_resume_handler,
+>>   	.restore  = hp_wmi_resume_handler,
+>>   };
+>> @@ -1871,6 +1881,51 @@ static int hp_wmi_hwmon_init(void)
+>>   	return 0;
+>>   }
+>>   
+>> +static int lg_usb_touchscreen_quirk(const struct dmi_system_id *id)
+>> +{
+>> +	struct pci_dev *vga, *xhci;
+>> +	struct device_link *vga_link, *xhci_link;
+>> +
+>> +	vga = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, NULL);
+>> +
+>> +	xhci = pci_get_class(PCI_CLASS_SERIAL_USB_XHCI, NULL);
+>> +
+>> +	if (vga && xhci) {
+>> +		xhci_link = device_link_add(&hp_wmi_platform_dev->dev, &xhci->dev,
+>> +				      DL_FLAG_STATELESS);
+>> +		if (xhci_link)
+>> +			dev_dbg(&hp_wmi_platform_dev->dev, "Suspend before %s\n",
+>> +				 pci_name(xhci));
+>> +		else
+>> +			return 1;
+>> +
+>> +		vga_link = device_link_add(&vga->dev, &hp_wmi_platform_dev->dev,
+>> +					   DL_FLAG_STATELESS);
+>> +		if (vga_link)
+>> +			dev_dbg(&hp_wmi_platform_dev->dev, "Suspend after %s\n",
+>> +				 pci_name(vga));
+>> +		else {
+>> +			device_link_del(xhci_link);
+>> +			return 1;
+>> +		}
+>> +	}
+>> +
+>> +	hp_wmi_pm_ops.suspend = hp_wmi_suspend_handler;
+>> +
+>> +	return 1;
+>> +}
+>> +
+>> +static const struct dmi_system_id hp_wmi_quirk_table[] = {
+>> +	{
+>> +		.callback = lg_usb_touchscreen_quirk,
+>> +		.matches = {
+>> +			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
+>> +			DMI_MATCH(DMI_PRODUCT_NAME, "HP ProOne 440 23.8 inch G9 All-in-One Desktop PC"),
+>> +		},
+>> +	},
+>> +	{}
+>> +};
+>> +
+>>   static int __init hp_wmi_init(void)
+>>   {
+>>   	int event_capable = wmi_has_guid(HPWMI_EVENT_GUID);
+>> @@ -1909,6 +1964,8 @@ static int __init hp_wmi_init(void)
+>>   			goto err_unregister_device;
+>>   	}
+>>   
+>> +	dmi_check_system(hp_wmi_quirk_table);
+>> +
+>>   	return 0;
+>>   
+>>   err_unregister_device:
+> 
 
 
