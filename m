@@ -1,230 +1,184 @@
-Return-Path: <linux-usb+bounces-15805-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15806-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 334FB992A8F
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 13:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B917992D9A
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 15:42:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8ABDAB238F5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 11:44:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE06DB2256E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 13:42:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E8F1D2229;
-	Mon,  7 Oct 2024 11:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2A51D359A;
+	Mon,  7 Oct 2024 13:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p4lTXEaF"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="RDdeIify"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF915199235;
-	Mon,  7 Oct 2024 11:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7F714AD17
+	for <linux-usb@vger.kernel.org>; Mon,  7 Oct 2024 13:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728301483; cv=none; b=QzwtzfPyIZ+LTt/6Pg1Xde8erCnLkYFmekTiupyAGN/SQ9ur0pZSCHx3/u1S2iwNf3r5ysLstl2y+JbjnNT7pzSgzpNwhfs17fRskRXjrdaaWUly0JHsRVSzoYHVzpm6FSvHkjuzNtAX99Cozn54sg8axf/L7uGa9OZFycOHKIo=
+	t=1728308550; cv=none; b=Ho52S5kg4WqQQoLPJEgSU5ofQCrOxmzJd4WcJgenpOyqgzE7E2BLEuJIlAGbd+yVLjm1hHcIrUGGNusl8uwBnuXmKFuChVPqoZFBbCA0hrAR9v6gM1ojjxN3WyabF1DlkgaGCPDuZqh4oiMt97s38LWP2L7cX6eQonITjLG3SYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728301483; c=relaxed/simple;
-	bh=BdagRc9kDm8QW5L4yx71h6tv7jwW8Ojd8Q3cbF5c6CU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gs31NWBukt6brdmIguYCBhObZgSQpMofGflXlt4J0TBYIPRjcfpAUjsf0GbJklWZmp75kvSVWcq4f7rbSCg7LVnXJTNrrTTfS3vytIWu88iSritNedfZXnqbSUqYSGv515+meTE/WVvIIOJf+CvTnvQ40J6QAiaFm0EuoYlHdEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p4lTXEaF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27D7C4CEC6;
-	Mon,  7 Oct 2024 11:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728301482;
-	bh=BdagRc9kDm8QW5L4yx71h6tv7jwW8Ojd8Q3cbF5c6CU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p4lTXEaFcv2P0OnXd5GZOTtWQLLF+wfcvWE0on94SJrz+Sn2Yzoc05REKGvvsLA+2
-	 U6jk9UL9xpE0OTLvMPvpOmMgOAHGGAwwo6GL4GqK8UlMOiSbZ1lxYomsaXLqiJCic0
-	 rRUKVHX+ua1Fz1HIn7rryFLRP/+jnCJ7YfKrEMrl7OJQjJo/eLdG5pr5xjb4XFygur
-	 gk3o0GNq8o4aukr0tIt+k/nSrBF+dUOVtc/GHSwelRzSplndQgqnUyklBsH65EQSmm
-	 jIb1QJ0yg4HpclchjPUmDrXyD6rbf1vVIHX3Tnyh/fSvRGIufkvDHRLI4FhaBHGuM4
-	 uWWLQVAcrZAxA==
-Message-ID: <5e6bb315-7896-4e63-86aa-1a219b7a7fb3@kernel.org>
-Date: Mon, 7 Oct 2024 14:44:35 +0300
+	s=arc-20240116; t=1728308550; c=relaxed/simple;
+	bh=lIMqxwrhN71b751Drczv519BdGje7foITAD8EREFCp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=otY6TIzHROtlkBkodiKn8D6bzPJ3mFwBSsAtuo1IWZvZktko7D7sD7jkmk5HUh7JAENG5sll5PJcp494ttlHst8o9Sd1ZDAVK1VKApw4MCeUIrX3YQlKLPdM3HPAsvnpHWzAVzTVt10u8s+CCoTcqFr4aSUb7IpwGhuJGsbgtpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=RDdeIify; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=jubWh9O6J+2Fsa6nIDdHWTIXL7FTXun5xZ4nlsw3wdg=; b=RDdeIifyVw0YRaXOKAM1PXEu6j
+	55QyiAnWDWxqw3678YEk4HhfcgP9V0BXXheyEkwa3Oi+8E7+TTWXBdBhCdQ5aJXaTqHWENgbFEjqp
+	0r8a4Lx+9NwQmnxp5nU0UnMFIfW/SoZL+58X5Qp6E9LenIICqy2vwJfmvvrxG8dr7ireujyG41w4+
+	KV1Vkov6WvagXYjpnXKq60jv5wo6e9FM9TlaMWFC8NgUYJSGZXzbOpyCqx9Mw39OIZZAIHVfaA50g
+	ZDQYpVBk6pOueYzR1py5R7KWptfSaRnrnlA50i5ebWffY+DNGiGnpdAqTS0AtFJ2lzUIzgjLlKIeG
+	HyCdTWoA==;
+Received: from 179-125-64-236-dinamico.pombonet.net.br ([179.125.64.236] helo=quatroqueijos.cascardo.eti.br)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1sxo0E-0069Xy-Bq; Mon, 07 Oct 2024 15:42:22 +0200
+Date: Mon, 7 Oct 2024 10:42:18 -0300
+From: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	kernel-dev@igalia.com
+Subject: Re: [PATCH] usb: typec: altmode should keep reference to parent
+Message-ID: <ZwPlOrQ+8FYe/lto@quatroqueijos.cascardo.eti.br>
+References: <20241004123738.2964524-1-cascardo@igalia.com>
+ <ZwPA_5_8URgb2ekl@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: core: Fix system suspend on TI AM62 platforms
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>,
- Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
- Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>,
- "msp@baylibre.com" <msp@baylibre.com>, "srk@ti.com" <srk@ti.com>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org>
- <20241005010355.zyb54bbqjmpdjnce@synopsys.com>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20241005010355.zyb54bbqjmpdjnce@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZwPA_5_8URgb2ekl@kuha.fi.intel.com>
 
-Hi,
+On Mon, Oct 07, 2024 at 02:07:43PM +0300, Heikki Krogerus wrote:
+> On Fri, Oct 04, 2024 at 09:37:38AM -0300, Thadeu Lima de Souza Cascardo wrote:
+> > The altmode device release refers to its parent device, but without keeping
+> > a reference to it.
+> > 
+> > When registering the altmode, get a reference to the parent and put it in
+> > the release function.
+> > 
+> > Before this fix, when using CONFIG_DEBUG_KOBJECT_RELEASE, we see issues
+> > like this:
+> > 
+> > [   43.572860] kobject: 'port0.0' (ffff8880057ba008): kobject_release, parent 0000000000000000 (delayed 3000)
+> > [   43.573532] kobject: 'port0.1' (ffff8880057bd008): kobject_release, parent 0000000000000000 (delayed 1000)
+> > [   43.574407] kobject: 'port0' (ffff8880057b9008): kobject_release, parent 0000000000000000 (delayed 3000)
+> > [   43.575059] kobject: 'port1.0' (ffff8880057ca008): kobject_release, parent 0000000000000000 (delayed 4000)
+> > [   43.575908] kobject: 'port1.1' (ffff8880057c9008): kobject_release, parent 0000000000000000 (delayed 4000)
+> > [   43.576908] kobject: 'typec' (ffff8880062dbc00): kobject_release, parent 0000000000000000 (delayed 4000)
+> > [   43.577769] kobject: 'port1' (ffff8880057bf008): kobject_release, parent 0000000000000000 (delayed 3000)
+> > [   46.612867] ==================================================================
+> > [   46.613402] BUG: KASAN: slab-use-after-free in typec_altmode_release+0x38/0x129
+> > [   46.614003] Read of size 8 at addr ffff8880057b9118 by task kworker/2:1/48
+> > [   46.614538]
+> > [   46.614668] CPU: 2 UID: 0 PID: 48 Comm: kworker/2:1 Not tainted 6.12.0-rc1-00138-gedbae730ad31 #535
+> > [   46.615391] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 04/01/2014
+> > [   46.616042] Workqueue: events kobject_delayed_cleanup
+> > [   46.616446] Call Trace:
+> > [   46.616648]  <TASK>
+> > [   46.616820]  dump_stack_lvl+0x5b/0x7c
+> > [   46.617112]  ? typec_altmode_release+0x38/0x129
+> > [   46.617470]  print_report+0x14c/0x49e
+> > [   46.617769]  ? rcu_read_unlock_sched+0x56/0x69
+> > [   46.618117]  ? __virt_addr_valid+0x19a/0x1ab
+> > [   46.618456]  ? kmem_cache_debug_flags+0xc/0x1d
+> > [   46.618807]  ? typec_altmode_release+0x38/0x129
+> > [   46.619161]  kasan_report+0x8d/0xb4
+> > [   46.619447]  ? typec_altmode_release+0x38/0x129
+> > [   46.619809]  ? process_scheduled_works+0x3cb/0x85f
+> > [   46.620185]  typec_altmode_release+0x38/0x129
+> > [   46.620537]  ? process_scheduled_works+0x3cb/0x85f
+> > [   46.620907]  device_release+0xaf/0xf2
+> > [   46.621206]  kobject_delayed_cleanup+0x13b/0x17a
+> > [   46.621584]  process_scheduled_works+0x4f6/0x85f
+> > [   46.621955]  ? __pfx_process_scheduled_works+0x10/0x10
+> > [   46.622353]  ? hlock_class+0x31/0x9a
+> > [   46.622647]  ? lock_acquired+0x361/0x3c3
+> > [   46.622956]  ? move_linked_works+0x46/0x7d
+> > [   46.623277]  worker_thread+0x1ce/0x291
+> > [   46.623582]  ? __kthread_parkme+0xc8/0xdf
+> > [   46.623900]  ? __pfx_worker_thread+0x10/0x10
+> > [   46.624236]  kthread+0x17e/0x190
+> > [   46.624501]  ? kthread+0xfb/0x190
+> > [   46.624756]  ? __pfx_kthread+0x10/0x10
+> > [   46.625015]  ret_from_fork+0x20/0x40
+> > [   46.625268]  ? __pfx_kthread+0x10/0x10
+> > [   46.625532]  ret_from_fork_asm+0x1a/0x30
+> > [   46.625805]  </TASK>
+> > [   46.625953]
+> > [   46.626056] Allocated by task 678:
+> > [   46.626287]  kasan_save_stack+0x24/0x44
+> > [   46.626555]  kasan_save_track+0x14/0x2d
+> > [   46.626811]  __kasan_kmalloc+0x3f/0x4d
+> > [   46.627049]  __kmalloc_noprof+0x1bf/0x1f0
+> > [   46.627362]  typec_register_port+0x23/0x491
+> > [   46.627698]  cros_typec_probe+0x634/0xbb6
+> > [   46.628026]  platform_probe+0x47/0x8c
+> > [   46.628311]  really_probe+0x20a/0x47d
+> > [   46.628605]  device_driver_attach+0x39/0x72
+> > [   46.628940]  bind_store+0x87/0xd7
+> > [   46.629213]  kernfs_fop_write_iter+0x1aa/0x218
+> > [   46.629574]  vfs_write+0x1d6/0x29b
+> > [   46.629856]  ksys_write+0xcd/0x13b
+> > [   46.630128]  do_syscall_64+0xd4/0x139
+> > [   46.630420]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > [   46.630820]
+> > [   46.630946] Freed by task 48:
+> > [   46.631182]  kasan_save_stack+0x24/0x44
+> > [   46.631493]  kasan_save_track+0x14/0x2d
+> > [   46.631799]  kasan_save_free_info+0x3f/0x4d
+> > [   46.632144]  __kasan_slab_free+0x37/0x45
+> > [   46.632474]  kfree+0x1d4/0x252
+> > [   46.632725]  device_release+0xaf/0xf2
+> > [   46.633017]  kobject_delayed_cleanup+0x13b/0x17a
+> > [   46.633388]  process_scheduled_works+0x4f6/0x85f
+> > [   46.633764]  worker_thread+0x1ce/0x291
+> > [   46.634065]  kthread+0x17e/0x190
+> > [   46.634324]  ret_from_fork+0x20/0x40
+> > [   46.634621]  ret_from_fork_asm+0x1a/0x30
+> > 
+> > Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+> > Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+> 
+> I tried to go through the code and the logs, but I did not really find
+> any explanation why we couldn't keep the device release order in sync
+> for all devices that need it. I'll see if we can improve that somehow
+> in the core, but we can fix this one in the meantime.
+> 
+> But this is a case of use-after-free, so shouldn't this go to the
+> stable trees?
 
-On 05/10/2024 04:04, Thinh Nguyen wrote:
-> Hi,
-> 
-> On Tue, Oct 01, 2024, Roger Quadros wrote:
->> Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
->> system suspend is broken on AM62 TI platforms.
->>
->> Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
->> bits (hence forth called 2 SUSPHY bits) were being set during core
->> initialization and even during core re-initialization after a system
->> suspend/resume.
->>
->> These bits are required to be set for system suspend/resume to work correctly
->> on AM62 platforms.
->>
->> Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
->> driver is not loaded and started.
->> For Host mode, the 2 SUSPHY bits are set before the first system suspend but
->> get cleared at system resume during core re-init and are never set again.
->>
->> This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
->> before system suspend and restored to the original state during system resume.
->>
->> Cc: stable@vger.kernel.org # v6.9+
->> Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
->> Link: https://urldefense.com/v3/__https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/__;!!A4F2R9G_pg!ahChm4MaKd6VGYqbnM4X1_pY_jqavYDv5HvPFbmicKuhvFsBwlEFi1xO5itGuHmfjbRuUSzReJISf5-1gXpr$ 
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  drivers/usb/dwc3/core.c | 16 ++++++++++++++++
->>  drivers/usb/dwc3/core.h |  2 ++
->>  2 files changed, 18 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 9eb085f359ce..1233922d4d54 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -2336,6 +2336,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>  	u32 reg;
->>  	int i;
->>  
->> +	dwc->susphy_state = !!(dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
->> +			    DWC3_GUSB2PHYCFG_SUSPHY);
->> +
->>  	switch (dwc->current_dr_role) {
->>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>  		if (pm_runtime_suspended(dwc->dev))
->> @@ -2387,6 +2390,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>  		break;
->>  	}
->>  
->> +	if (!PMSG_IS_AUTO(msg)) {
->> +		if (!dwc->susphy_state)
->> +			dwc3_enable_susphy(dwc, true);
->> +	}
->> +
->>  	return 0;
->>  }
->>  
->> @@ -2454,6 +2462,14 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>  		break;
->>  	}
->>  
->> +	if (!PMSG_IS_AUTO(msg)) {
->> +		/* dwc3_core_init_for_resume() disables SUSPHY so just handle
->> +		 * the enable case
->> +		 */
-> 
-> Can we note that this is a particular behavior needed for AM62 here?
-> And can we use this comment style:
-> 
-> /*
->  * xxxxx
->  * xxxxx
->  */
+Agreed. I am fine if Cc: stable@vger.kernel.org get added when this is
+applied. But otherwise, I can keep track in case the Fixes line does not
+trigger its inclusion.
 
-OK.
-
-> 
-> 
->> +		if (dwc->susphy_state)
-> 
-> Shouldn't we check for if (!dwc->susphy_state) and clear the susphy
-> bits?
-
-In that case it would have already been cleared so no need to check
-and clear again.
+Thanks.
+Cascardo.
 
 > 
->> +			dwc3_enable_susphy(dwc, true);
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > 
-> The dwc3_enable_susphy() set and clear both GUSB3PIPECTL_SUSPHY and
-> GUSB2PHYCFG_SUSPHY, perhaps we should split that function out so we can
-> only need to set for GUSB2PHYCFG_SUSPHY since you only track for that.
-
-As  dwc3_enable_susphy() sets and clears both GUSB3PIPECTL_SUSPHY and
-GUSB2PHYCFG_SUSPHY together it doesn't really help to track both
-separately, but just complicates things.
-
+> thanks,
 > 
->> +	}
->> +
->>  	return 0;
->>  }
->>  
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index c71240e8f7c7..b2ed5aba4c72 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -1150,6 +1150,7 @@ struct dwc3_scratchpad_array {
->>   * @sys_wakeup: set if the device may do system wakeup.
->>   * @wakeup_configured: set if the device is configured for remote wakeup.
->>   * @suspended: set to track suspend event due to U3/L2.
->> + * @susphy_state: state of DWC3_GUSB2PHYCFG_SUSPHY before PM suspend.
->>   * @imod_interval: set the interrupt moderation interval in 250ns
->>   *			increments or 0 to disable.
->>   * @max_cfg_eps: current max number of IN eps used across all USB configs.
->> @@ -1382,6 +1383,7 @@ struct dwc3 {
->>  	unsigned		sys_wakeup:1;
->>  	unsigned		wakeup_configured:1;
->>  	unsigned		suspended:1;
->> +	unsigned		susphy_state:1;
->>  
->>  	u16			imod_interval;
->>  
->>
->> ---
->> base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
->> change-id: 20240923-am62-lpm-usb-f420917bd707
->>
->> Best regards,
->> -- 
->> Roger Quadros <rogerq@kernel.org>
->>
+> -- 
+> heikki
 > 
-> <rant/>
-> While reviewing your change, I see that we misuse the
-> dis_u2_susphy_quirk to make this property a conditional thing during
-> suspend and resume for certain platform. That bugs me because we can't
-> easily change it without the reported hardware to test.
-> </rant>
-
-No it is not conditional. if dis_u2_susphy_quirk or dis_u3_susphy_quirk
-is set then we never enable the respective U2/U3 SUSPHY bit.
-
-> 
-> Thanks for the patch!
-> 
-> BR,
-> Thinh
-
--- 
-cheers,
--roger
 
