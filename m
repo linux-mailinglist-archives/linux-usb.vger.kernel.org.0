@@ -1,69 +1,82 @@
-Return-Path: <linux-usb+bounces-15819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F7C399323F
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 17:58:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE7F499335F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 18:36:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 813D21C22B1D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 15:58:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BA39B22AD8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 16:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 426C81DA2EC;
-	Mon,  7 Oct 2024 15:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 843241DB530;
+	Mon,  7 Oct 2024 16:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="fjeq+Nak"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ZfyGwqq/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C461D6DBE;
-	Mon,  7 Oct 2024 15:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7186C1D61B9
+	for <linux-usb@vger.kernel.org>; Mon,  7 Oct 2024 16:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728316602; cv=none; b=P3+ysPENKaRPbTr/8UU8mUvBhA87VzGprKNM5AMZlkrX4l+tYB3N8AL+jPApkIz0q4SAPiO3W91/JqWzl6npXxqpTgw+0iGuTyaRNzUh/vFqP76VQb3XFUz2FOLiG5dOgZNkafj8koBiorARwf/8j8j3N2WVLtALrDKP2sjkLf0=
+	t=1728318951; cv=none; b=MvXFgejVmfgRUuG3ns2kwWQySdUIx0KD6q5fXY7Sk653Q5cWGC3lAAIr3oGLktBkgzcRu2TGi2HkXTRk0/IxmjpIG5ohnukBSGn6tzJu//PdUWnCPm9RX3qVTljBst2ZkX4Jr7m6LqMP8K5bLd6ePfbD3X0HPjtnBRjwV5mFK58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728316602; c=relaxed/simple;
-	bh=BAAmypm2Wp8ggdTRwMnI/KeBZkWEBwMWMDWVLW6Rf+8=;
+	s=arc-20240116; t=1728318951; c=relaxed/simple;
+	bh=6lKjgQHMd4NGPHit4J/OsomfblS+4HFIsoEkB0mfEVM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yi/41wFGb1oZDjmFbPF7ZXpwqVwSO9vWWlZu+nlu+nLSUrzz33e4O7xBm68s1/8W4z7aJcGf0NjzGAX1XjxXhUlyV1vzI44XKTMeAwErEqxK5SdV/olGTV/Qh5NOMWgugVa5Juej4O6Bnk4XZ/0ZWdEQ3qaxdb1b3VoWsYuGzko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=fjeq+Nak; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 7D88F22208;
-	Mon,  7 Oct 2024 17:56:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1728316597;
-	bh=uAtU2I4ToJzDBdBMFerruZCUaBN2qFNGahYJOM+LPIg=;
-	h=Received:From:To:Subject;
-	b=fjeq+NakiUJVT5F7/Xz70vOYZnOycKcOE7tKEFu7BGMDWR+1rwm7hVI5A7fPe/dBt
-	 9CL9MifUyUMa7BwynGKrRpgxkKZikJQKaC/Atkvdl0KYmpVUhrOU1+aO8QTNpqsZos
-	 FrCnTEnk6YxoEV938wFn774656/Mskjvx0ISrkMH18yHYCVQv8xEf4OkswzI3hrwjA
-	 Xw19vZRKEHZIdc1G+Flm1enQwpjUw672hds8aG5x446B1Uuo+i6+LQGFbAnVE+uIp6
-	 MRPOhBedIxX5KWt02np66UPFuTkaWtMfmatxURa+JveZ5u3haubgAFIprSuk6VgWIv
-	 4qlUzNVJtMd/w==
-Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
-	id 2D1BF7F918; Mon,  7 Oct 2024 17:56:37 +0200 (CEST)
-Date: Mon, 7 Oct 2024 17:56:37 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Rob Herring <robh@kernel.org>
-Cc: Francesco Dolcini <francesco@dolcini.it>, linux-kernel@vger.kernel.org,
-	Parth Pancholi <parth.pancholi@toradex.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: add TUSB73x0 PCIe
-Message-ID: <ZwQEtXp5Hr0UL_mh@gaggiata.pivistrello.it>
-References: <20241007093205.27130-1-francesco@dolcini.it>
- <20241007093205.27130-2-francesco@dolcini.it>
- <172831060758.15259.15265542019562102842.robh@kernel.org>
- <20241007142920.GA60623@francesco-nb>
- <20241007154446.GA726246-robh@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gKeXJ/a9qs8BzV59fmMjHWWxfGN256LLodbE23NaSVJwzumIm1vq+msBSgEzoe8cITp9UCxW0c3LUhfunO5p68wDLgxM5RELLL4rheEjv9jbb3iz3l4OjQgiun2t6APUbUJCOwmigrhJ1F0610S1VzkjfIX0HmMcl/3BLWZ+HMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ZfyGwqq/; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6e25f3748e0so45529127b3.0
+        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2024 09:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1728318947; x=1728923747; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lJp16n6SAZ1v7EFU+43ke8Wi0cIKtqnbpYISUuWVtLc=;
+        b=ZfyGwqq/VSW3Mx6KtEZyzrOlPKS+nYSQKDb/FOzi+olAkb59Oo0uzVRIy8Pf0M2XVJ
+         V0i10FUmb5tAwhCO7GYtYk5GffWbxkaXQv7iwqLBEJihh1/VOYH8bJpAsgpu2pQRnIP5
+         H+ZDpivTXmsWAzMjMvnXtpRmfMxXeHpHM57+noffEn9MWDQZlNE/2PDElr34ra0R5Cqa
+         d6S4ZEbdNNuUNwJ261YEhI7I5EdIJbucTrYbJbPKv9PiGb15qHFGTM63ctb8o3BA1PYI
+         GrSsptLHvMI36kiNZyIiWbQ1EWgJk0T88xuZrUwgi9AcJGxBbWxpOONpoAj86YcF/u05
+         et5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728318947; x=1728923747;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lJp16n6SAZ1v7EFU+43ke8Wi0cIKtqnbpYISUuWVtLc=;
+        b=Q+gmXpXtQa5VhB6S8wUzH6HQY0RI196MKpUEXfhgpFkYOm8CpArSyASObguc/dFVVR
+         XDFJYmMf0DYvQoHVmrJPu+XtDRZEW0HoxkRgQejG/8fj7ZOsa+Qlf4Ok79CtljgTVPui
+         k02YFanW0FOgcIthEzawWevfV6CKh0OgVCi57KQ8MYd45rJQMexO81fd6CYdbnrjpUMc
+         qXkxCEBfmy6SWVAak7t/UN5RTaPepsMlDoK0lUI4RimvNMias0Rj39k5tygtH4ckTkxl
+         1vC1PLCHTi/zYU51cvh+Gs3oOFB2MMc/WDWX2rcbjikrzgPExEbm1/evD2/lTVQ+L+Y0
+         98EA==
+X-Forwarded-Encrypted: i=1; AJvYcCXYkSbbOZsJZDOs7ZIzO+5nyOAv7Z7DHG3xei/7onpR6dlg/EsA6ezXq/W4lP4zFfXxMsClBmNnfLw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0blgh6rbVtu/v9WdESaVOJGs2/9KqSo5j9+T9yd17n129wckX
+	YNPZqzn0tORBADpyNdluYB94eL/q4MDlVlRORfHIZRohJ2gMLPx7TjC1TEXasQ==
+X-Google-Smtp-Source: AGHT+IHkIVn1+wrMA3Z6rrGLzcHjNvyMxtcS2w3ZQfr2QINyWvoy7PhmxJgqrf4FLSGYNJ+3zDccIw==
+X-Received: by 2002:a05:690c:6e07:b0:6e2:1062:9b90 with SMTP id 00721157ae682-6e2c72b6587mr106900347b3.44.1728318947362;
+        Mon, 07 Oct 2024 09:35:47 -0700 (PDT)
+Received: from rowland.harvard.edu (wrls-249-137-9.wrls-client.fas.harvard.edu. [140.247.12.9])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cba46cd10asm27229956d6.16.2024.10.07.09.35.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 09:35:47 -0700 (PDT)
+Date: Mon, 7 Oct 2024 12:35:44 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: syzbot <syzbot+a194ded97ce38690073f@syzkaller.appspotmail.com>,
+	Marcello Sylvester Bauer <sylv@sylv.io>, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev (2)
+Message-ID: <24c3555b-577e-4d0e-8540-7b1f009cb7d3@rowland.harvard.edu>
+References: <6703c076.050a0220.49194.0505.GAE@google.com>
+ <b60f922a-5c10-4983-9404-ad18bdd86c67@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -72,68 +85,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241007154446.GA726246-robh@kernel.org>
+In-Reply-To: <b60f922a-5c10-4983-9404-ad18bdd86c67@suse.com>
 
-On Mon, Oct 07, 2024 at 10:44:46AM -0500, Rob Herring wrote:
-> On Mon, Oct 07, 2024 at 04:29:20PM +0200, Francesco Dolcini wrote:
-> > On Mon, Oct 07, 2024 at 09:16:48AM -0500, Rob Herring (Arm) wrote:
-> > > On Mon, 07 Oct 2024 11:32:04 +0200, Francesco Dolcini wrote:
-> > > > From: Parth Pancholi <parth.pancholi@toradex.com>
-> > > > 
-> > > > Add device tree bindings for TI's TUSB73x0 PCIe-to-USB 3.0 xHCI
-> > > > host controller. The controller supports software configuration
-> > > > through PCIe registers, such as controlling the PWRONx polarity
-> > > > via the USB control register (E0h).
-> > > > 
-> > > > Similar generic PCIe-based bindings can be found as qcom,ath11k-pci.yaml
-> > > > as an example.
-> > > > 
-> > > > Datasheet: https://www.ti.com/lit/ds/symlink/tusb7320.pdf
-> > > > Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
-> > > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > > ---
-> > > > v2: rename property to ti,tusb7320-pwron-active-high and change type to flag
-> > > > ---
-> > > >  .../bindings/usb/ti,tusb73x0-pci.yaml         | 60 +++++++++++++++++++
-> > > >  1 file changed, 60 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-> > > > 
-> > > 
-> > > My bot found errors running 'make dt_binding_check' on your patch:
-> > > 
-> > > yamllint warnings/errors:
-> > > 
-> > > dtschema/dtc warnings/errors:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.example.dtb: pcie@0: usb@0:compatible: ['pci104C,8241'] does not contain items matching the given schema
-> > > 	from schema $id: http://devicetree.org/schemas/pci/pci-bus-common.yaml#
-> > > 
-> > > doc reference errors (make refcheckdocs):
-> > > 
-> > > See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241007093205.27130-2-francesco@dolcini.it
-> > > 
-> > > The base for the series is generally the latest rc1. A different dependency
-> > > should be noted in *this* patch.
-> > > 
-> > > If you already ran 'make dt_binding_check' and didn't see the above
-> > > error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> > > date:
-> > > 
-> > > pip3 install dtschema --upgrade
-> > 
-> > I do not have this error locally, and I am not sure I see the issue in
-> > the yaml file ...
-> > 
-> > $ make dt_binding_check W=1 DT_SCHEMA_FILES=ti,tusb73x0-pci.yaml
+On Mon, Oct 07, 2024 at 04:16:27PM +0200, Oliver Neukum wrote:
 > 
-> DT_SCHEMA_FILES limits what is tested.
 > 
-> The issue is your compatible string should be lowercase hex.
+> On 07.10.24 13:05, syzbot wrote:
+> 
+> > INFO: task kworker/1:0:25 blocked for more than 144 seconds.
+> >        Not tainted 6.12.0-rc1-next-20241003-syzkaller #0
+> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > task:kworker/1:0     state:D stack:20416 pid:25    tgid:25    ppid:2      flags:0x00004000
+> > Workqueue: pm pm_runtime_work
+> > Call Trace:
+> >   <TASK>
+> >   context_switch kernel/sched/core.c:5315 [inline]
+> >   __schedule+0x1895/0x4b30 kernel/sched/core.c:6675
+> >   __schedule_loop kernel/sched/core.c:6752 [inline]
+> >   schedule+0x14b/0x320 kernel/sched/core.c:6767
+> >   usb_poison_urb+0x1bc/0x2e0 drivers/usb/core/urb.c:763
+> 
+> This points to a bug in the HCD.
+> usb_poison_urb() is guaranteed to make progress.
+> 
+> >   poison_urbs drivers/usb/class/cdc-wdm.c:342 [inline]
+> >   wdm_suspend+0x174/0x380 drivers/usb/class/cdc-wdm.c:1271
+> >   usb_suspend_interface drivers/usb/core/driver.c:1328 [inline]
+> >   usb_suspend_both+0x2a5/0x1140 drivers/usb/core/driver.c:1433
+> >   usb_runtime_suspend+0x59/0x100 drivers/usb/core/driver.c:1968
+> 
+> What HC is used for these tests?
 
-Whoops, thanks for helping out.
+Although the test's console log doesn't say, the test apparently used 
+the raw gadget driver, which generally is run with dummy-hcd.  That 
+driver has been having unexplained problems ever since commit 
+a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer 
+scheduler"), although I don't know if they are related to this issue.
 
-I'll wait for more feedback (on this, and on patch 2/2) before sending a v3,
-let me know if there is anything else that would need to be adjusted.
+You could try asking syzbot to run the test with a patch reverting that 
+commit.
 
-Francesco
-
+Alan Stern
 
