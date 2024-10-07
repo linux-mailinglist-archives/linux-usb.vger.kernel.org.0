@@ -1,171 +1,133 @@
-Return-Path: <linux-usb+bounces-15811-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15812-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67CD5992DF5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 15:56:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B37B992E14
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 16:00:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 062AF282751
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 13:56:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D6F41C22FE8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 14:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9762E1D79A5;
-	Mon,  7 Oct 2024 13:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A0441D5CCC;
+	Mon,  7 Oct 2024 13:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p5evg8+M"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="X1JsBmzn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DFC1D7992
-	for <linux-usb@vger.kernel.org>; Mon,  7 Oct 2024 13:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2455C1D47BD
+	for <linux-usb@vger.kernel.org>; Mon,  7 Oct 2024 13:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728309335; cv=none; b=bjhzQPh0BONVEJinegTfOLag8nT7NftPt7NOU6/M7dCoUVf0yxkYiDY/UJ4o3OXZAqZxs4YjQwC8T1HAxW7RR89tC37w5wJw/ErhaA7MclhZqzQuoVCV5HEAZ0937SwG9CubFFGSUulmYKmx7wpRuuLuxbk6fFB3tqZ/Uxcnue0=
+	t=1728309593; cv=none; b=iv5HIiWbJuKihJUQ7C9giUER1J8LTHMeexNa9Drd1jiIJyUpruo2uuikya5+PBkJ0DKwnewKq6xW6pQOzDaRtXN9Dl2QhlSpL0GYr4N1OVHAMQ3xrsDK4w+nwB+T5FoyAzUfhJBwsLYIYXhJsoen955oKtVETOP4hLue1qiLUMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728309335; c=relaxed/simple;
-	bh=hozD34R+1r+AOEtpIL+3KZ2W+shD6S4TBvGWV06zetk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=r8dhqWFmeFx+2Xj2roUs1EUIWNafU9dvKJZEVMTZp1QNVwBRlxdjHSTgIOTiENQn0RjpEwv/v7RmomHgk0KzI1RqbbijTxoQOcYY3SjU2Lo2kyxrbYnL3rmzGeNCwN6GuwikReZDtrc99ALI/w+ycMSHK2Hm+yl3966SfAortFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p5evg8+M; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-690404fd230so18542047b3.3
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2024 06:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728309333; x=1728914133; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LUZWXIYmMgx7eQT8FX3UW0dYEBsjOxQkFr0vicKGH/A=;
-        b=p5evg8+MRSv5KkN7vv90IGdRQpXLMn9Y9F0I2CQu4ovN0sN76svBpHba1udyJM0tCV
-         qJGgftQBwWe/zYSMpiBtlRo54MuksLoYGCG6ZrivMvOCx1E/KaSfFBub4q/TMFPgRJW1
-         jfIBd5+EUF7irkunOLSzAoyWgjCzSRFM7fGLPzAX9ib15GMWFKpMYXlRQAtbnirzbPRe
-         DBvPwln6jvY+kZshT6fwSqkS3flhNF2HLvLl1FI1t36IlM/FCRVZkbV+JcWFeXJQ1Q4Y
-         N5UTodH0k17tfL2fdnH+GOOjYqDham3F8Qwv9uEOQJJ/sQO7W4QyJcL7/qMml8rTtEUd
-         J0pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728309333; x=1728914133;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LUZWXIYmMgx7eQT8FX3UW0dYEBsjOxQkFr0vicKGH/A=;
-        b=wZl/1/JiT9NZkxiLum5U/bHaJZJaVTpy9BMT4aVl9bj9WPZxun3spc5mLLACgm3wLg
-         e2akTavz0DhpXEzP+JEIF4Z9bP0JWV4DjpvBfE4hztVVk3faliGG0LTtVu/2sHMkr1em
-         gA/tj7rMDQi/farVUsII5Ql1Za/cTAINl0xXlxwneVRGR8b7Hfjvu/Yt5vK6wWy52vjm
-         T+glyVL7VIXT1D0X/5D0HN4ViCtcxMzacS302RK2wz0MmCP8DYZhFiHfLexzp6TbNkuW
-         kAzSA08CVW/vOXfOgo5iIlIHivjpuKwWyQ+Ao8Yv/fKJzJB/ihv7HZHpKAF8ts/+1g3Q
-         adZg==
-X-Gm-Message-State: AOJu0YyxuRFffkdCZ9yNFBu8SG/Rdb3pnHAOEXCVISbFjXiKOZc9mvdz
-	owbERXz1xuIDb8oqGVNFOWI4WI+6Aq56iJ57Ly5eep/xNcAS+bc4YPGXqFz1iofKX/VVerX4b/f
-	Sx+rS+KErWA==
-X-Google-Smtp-Source: AGHT+IHfzB+j+raL3YfEPrA/7E6aJxT/LOBbbgaPT9rP/noUUvfUlHVKB44G7oC3F1FuusFkgKByAeWn9pVWWQ==
-X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a05:690c:d84:b0:6e2:371f:4aef with SMTP
- id 00721157ae682-6e2c7289a65mr408327b3.3.1728309332607; Mon, 07 Oct 2024
- 06:55:32 -0700 (PDT)
-Date: Mon,  7 Oct 2024 13:55:08 +0000
-In-Reply-To: <20241007135508.3143756-1-joychakr@google.com>
+	s=arc-20240116; t=1728309593; c=relaxed/simple;
+	bh=tKYBzFkKPp79i03Dm8syiDfV36gFIXsUZsW/ygSiprs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RBUp3SW8FDN8ZGzxL8Ae5ms0SA9YuEbWKIzmdCVF4JXSs2htnQadvHALhmzrkWdZQocl1tDGePH96kC0zlkJUWOA9sWs3VBmNXfh/7jAP3IBNYDT+b3ZatRtG6XIGgGXYnpF6U+dhcPio5ZFf1D+8TvE1FwXhO5NM+Ifocv3++c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=X1JsBmzn; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Z5S2SkVPPj94N/f8zkfvc4+J6l3XHXCJGE+ckfMMtiM=; b=X1JsBmzn31twfhwP8j7s1kIKrg
+	G9nYaAeSrjFWFeky4yt2rzP75UudHxLK8TT5uAUaNpd7W+MBYgFaJCAX5BHGteLhL6KbigYk03yk/
+	dZ3+EMvLnvhwW7qhEP79BWmsn9T4blyuxXTAaIsxtB4Uwz6PGsdKIO03cXxwCxN6KkxuNkaiMK3bC
+	86jeHoN0XUBxTempTn8VvKD3ZUWxNosbaNpUI8GD/CF/XvkARiJl3ehoyrc+7rmisjYHOZMBtTNrq
+	CtRbBy6cPl98J4BYndCkvoa9bPM2/cEmeOMPeZwd/Qci5snBmE25EWj1bq/Toa7LrphSOjFrHxM11
+	Lr3rmxDQ==;
+Received: from 179-125-64-236-dinamico.pombonet.net.br ([179.125.64.236] helo=quatroqueijos.cascardo.eti.br)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1sxoH4-0069t6-HX; Mon, 07 Oct 2024 15:59:47 +0200
+Date: Mon, 7 Oct 2024 10:59:42 -0300
+From: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	kernel-dev@igalia.com
+Subject: Re: [PATCH] usb: typec: altmode should keep reference to parent
+Message-ID: <ZwPpTtQ1CG4NV8UR@quatroqueijos.cascardo.eti.br>
+References: <20241004123738.2964524-1-cascardo@igalia.com>
+ <Zv_23J-1U5pZ6rgT@kuha.fi.intel.com>
+ <Zv/43ewc3n5aSEUO@quatroqueijos.cascardo.eti.br>
+ <ZwOcxWOftFJxpMbo@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241007135508.3143756-1-joychakr@google.com>
-X-Mailer: git-send-email 2.47.0.rc0.187.ge670bccf7e-goog
-Message-ID: <20241007135508.3143756-5-joychakr@google.com>
-Subject: [PATCH 2/2] usb: dwc3: Program USB Gen2 De-emphasis defined in PIPE4 spec
-From: Joy Chakraborty <joychakr@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Joy Chakraborty <joychakr@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZwOcxWOftFJxpMbo@kuha.fi.intel.com>
 
-Set 18bit TxDeemph[17:0] in LCSR_TX_DEEMPH(n) register for USB3 Gen2
-Normal Operation as defined in PIPE4 spec based on dt quirk
-"snps,tx_gen2_de_emphasis_quirk" and "snps,tx_gen2_de_emphasis".
+On Mon, Oct 07, 2024 at 11:33:09AM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> On Fri, Oct 04, 2024 at 11:17:01AM -0300, Thadeu Lima de Souza Cascardo wrote:
+> > On Fri, Oct 04, 2024 at 05:08:28PM +0300, Heikki Krogerus wrote:
+> > > On Fri, Oct 04, 2024 at 09:37:38AM -0300, Thadeu Lima de Souza Cascardo wrote:
+> > > > The altmode device release refers to its parent device, but without keeping
+> > > > a reference to it.
+> > > > 
+> > > > When registering the altmode, get a reference to the parent and put it in
+> > > > the release function.
+> > > > 
+> > > > Before this fix, when using CONFIG_DEBUG_KOBJECT_RELEASE, we see issues
+> > > > like this:
+> > > 
+> > > Let me study what's going on in the drivers code. The children should
+> > > _not_ be cleaned first before the parent. I'll have to come back to
+> > > this on Monday.
+> > > 
+> > > This really should not be necessary.
+> > > 
+> > 
+> > Well, they are likely not. But driver core API states that either way, you
+> > should keep such references. And one way to test it is using
+> > CONFIG_DEBUG_KOBJECT_RELEASE. That delays the actual release/cleanup of the
+> > struct device, so:
+> 
+> What I want to understand is, what is the rationale for this behaviour
+> in the core. If this is something that the drivers can do, then why is
+> the core not doing it for everything? Why is the core decrementing the
+> parent reference count already in device_del() instead of
+> device_release()?
+> 
+> I'm probable missing something, but I really want to understand this.
+> There are other drivers also need resources from their parent, so if
+> there is nothing preventing this from being handled in the core, then
+> that's where it really should be handled.
+> 
+> thanks,
+> 
+> -- 
+> heikki
+> 
 
-Signed-off-by: Joy Chakraborty <joychakr@google.com>
----
- drivers/usb/dwc3/core.c | 13 +++++++++++++
- drivers/usb/dwc3/core.h |  6 ++++++
- 2 files changed, 19 insertions(+)
+It has been like that for 20+ years, it seems. I noticed that you have
+changed the behavior in the case of kobject parent lifetime relatively
+recently (back in 2020).
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 9eb085f359ce..25e19aea364a 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -693,6 +693,11 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
- 
- 	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(index), reg);
- 
-+	if (dwc->tx_gen2_de_emphasis_quirk) {
-+		reg = dwc->tx_gen2_de_emphasis;
-+		dwc3_writel(dwc->regs, DWC3_LCSR_TX_DEEMPH(index), reg);
-+	}
-+
- 	return 0;
- }
- 
-@@ -1654,6 +1659,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 	u8			tx_thr_num_pkt_prd = 0;
- 	u8			tx_max_burst_prd = 0;
- 	u8			tx_fifo_resize_max_num;
-+	u32			tx_gen2_de_emphasis = 0;
- 	const char		*usb_psy_name;
- 	int			ret;
- 
-@@ -1797,8 +1803,15 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 	dwc->dis_split_quirk = device_property_read_bool(dev,
- 				"snps,dis-split-quirk");
- 
-+	dwc->tx_gen2_de_emphasis_quirk = device_property_read_bool(dev,
-+								   "snps,tx_gen2_de_emphasis_quirk");
-+	if (dwc->tx_gen2_de_emphasis_quirk)
-+		device_property_read_u32(dev, "snps,tx_gen2_de_emphasis",
-+					 &tx_gen2_de_emphasis);
-+
- 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
- 	dwc->tx_de_emphasis = tx_de_emphasis;
-+	dwc->tx_gen2_de_emphasis = tx_gen2_de_emphasis;
- 
- 	dwc->hird_threshold = hird_threshold;
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index c71240e8f7c7..fa9db38b7e15 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -179,7 +179,9 @@
- #define DWC3_OEVTEN		0xcc0C
- #define DWC3_OSTS		0xcc10
- 
-+/* Link Registers */
- #define DWC3_LLUCTL		0xd024
-+#define DWC3_LCSR_TX_DEEMPH(n)	(0xd060 + ((n) * 0x80))
- 
- /* Bit fields */
- 
-@@ -1145,6 +1147,8 @@ struct dwc3_scratchpad_array {
-  *	1	- -3.5dB de-emphasis
-  *	2	- No de-emphasis
-  *	3	- Reserved
-+ * @tx_gen2_de_emphasis_quirk: set if we enable USB Gen2 Tx de-emphasis quirk
-+ * @tx_gen2_de_emphasis: Tx de-emphasis value used in USB Gen2 with PIPE4
-  * @dis_metastability_quirk: set to disable metastability quirk.
-  * @dis_split_quirk: set to disable split boundary.
-  * @sys_wakeup: set if the device may do system wakeup.
-@@ -1374,6 +1378,8 @@ struct dwc3 {
- 
- 	unsigned		tx_de_emphasis_quirk:1;
- 	unsigned		tx_de_emphasis:2;
-+	unsigned		tx_gen2_de_emphasis_quirk:1;
-+	unsigned		tx_gen2_de_emphasis:18;
- 
- 	unsigned		dis_metastability_quirk:1;
- 
--- 
-2.47.0.rc0.187.ge670bccf7e-goog
+One potential challenge of changing this is that dev->parent is usually set
+even before device_initialize gets called. At least, the reference must be
+get there at device_initialize. A quick glance here shows that the parent
+may be set between device_initialize and device_add, including in
+device_create_groups_vargs.
 
+Around 315 calls would need to be inspected, I would guess more than 100
+callsites would need to be "fixed" for this change in the API.
+
+And, then, how many really need to keep the reference to the parent, and
+wouldn't keep such a reference cause any problems in any of these cases?
+
+Cascardo.
 
