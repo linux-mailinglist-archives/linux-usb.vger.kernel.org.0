@@ -1,194 +1,270 @@
-Return-Path: <linux-usb+bounces-15831-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15832-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48BDC993A47
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 00:35:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C918993B2C
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 01:26:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2C981F23736
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 22:35:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5723284EE4
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2024 23:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AD918FC7C;
-	Mon,  7 Oct 2024 22:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559A718DF65;
+	Mon,  7 Oct 2024 23:26:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e3VL5Ud8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="moI+ss5o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6134C18C91B
-	for <linux-usb@vger.kernel.org>; Mon,  7 Oct 2024 22:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA2E18CBFD
+	for <linux-usb@vger.kernel.org>; Mon,  7 Oct 2024 23:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728340529; cv=none; b=c82FltaLl69sd70tMVHUCHDw3yAlUeKlnxvQRKBgDcpPfetKnwtywHQK4lyEhHDRQd1IuqRNjua4ivzCfOZ9ghIY1AjIjWUkgQb59xtp3nGpzJ/EQv6zJ67BesEUQ0Zj1cJtPJ1cnu1lhQ6dWJ3j2a7UpqFKpUN6PpDevM2FUhM=
+	t=1728343585; cv=none; b=eS4K54DhjH03y7/nzb+5HNqEw8QO/JGD5IOlH7ZZFc4ASXwAJ8QfH59iJgO6srPZQqwb/kLTiW5tBT9dWG3rPNXe7HyJ7C/VVp8DiXyhLOp5QhAwuL+1k/yHLB1d/Lw6qIPuTGYmPzmFEM8oSB4FIwoi5Y0/keH7Mh6jdbpeyKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728340529; c=relaxed/simple;
-	bh=gesjil9Y0RZgbcjmX5qHd/S97rHztDCcedkOm+1cl0k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J5jJ1GE1mcF8Pn3apuZcNbHtQ9J30CE+QfArQn9I6FclTXXYajo+yQEMfhVjp+RH6Wc4QCnwVFcaBgM2+9pRoMYuca8nqbSzBrnvvZgMKLtsKBYSFbT8H9D/YFonclOG2wbHB2CIv92JMUx32dr0c2eeddHLbd5ImcGT6gO4t8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e3VL5Ud8; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e026a2238d8so4471278276.0
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2024 15:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728340526; x=1728945326; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gesjil9Y0RZgbcjmX5qHd/S97rHztDCcedkOm+1cl0k=;
-        b=e3VL5Ud84GLI+E2x3bA8ztpqvuFMv57yd9aYEVQJXCzdGLPTTmXpQqv3Opq72bJmux
-         KBHMo3MVO1HOzdmTO8H+pcTCfVPqaiTDnPTpbQzl0qQR7IL44jHkwS4bzBufrjeR8qhe
-         DDLiaWivcex7UxcVlthWRdgNLBWzi+M8qTeDx57baSkDWFH1agIYPgvRPadbYLCLtjZu
-         06qTHbdte5aRDCOnGRwQe0feCJbqguEWevqetTaa5WoZI91EWlvvh0bLcBUS4nMqHsf9
-         D1KWrNcsh7YIcTiYbXUJhkPijHa5aKTMIfa20aY8luGYazLflzR5ecy/UydbOSAfiQM/
-         3TDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728340526; x=1728945326;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gesjil9Y0RZgbcjmX5qHd/S97rHztDCcedkOm+1cl0k=;
-        b=Pi6G5oDdeNgw7d0vrY0cDn9DLuncnQfBNDR9PZVm42BibQvBV+xUQEcyN7sraYPZ0x
-         hTfkoyhbyl6efIVZDfa1WkPskLRATbxvBxnWHWz5RgvakZ0NX0PywTPQa6ez3r+Ghgc0
-         /uFrmHBnEjY5fbEjbJt+Xe4Q5nfehUrGOZ4gKuaYM7IgVXE9l+SdR6M6bb7oI9d+hf2v
-         LNsSSzEBX2SwrbuGkUVhdRqqAV99C9f8s6TKqP5HrG7miHwJC9En0ZjERkyLB8qYEMVI
-         jQsNtDsPikBPfC+hMyeFdq19AJSxYtok4wv3JcV+2Tf7PDeTDjg9vZ+NFTeMHclr1Utb
-         mI7g==
-X-Forwarded-Encrypted: i=1; AJvYcCWluSjTApP9jYDmuKkdtztLAjcyN7YVZSK/2wFyFlDl9BXg8JPHHFjv/5p6o5bLhSRtmxVlHxIiBp0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC8VT14U0ffOftuq9x3Qq0l922SmluAQEBVYXCN6sKe4PrGFDM
-	UaUvGlGlYYURt/eiKhXKYDT2wWiE33XL/UkmXggICSGPuSvP1L5mLiL9WLuOrviCXoPO94fytCN
-	k6g0YO38bmjaYm3wwzS2hiZql0rMd1QRQusZqUQ==
-X-Google-Smtp-Source: AGHT+IGYLLRVc3CeXKReIUVnntYlZ+ULRb29gPUl3UTx4hoqAUGdx6q2aFDzdnacRWqcM/cOYseo4GoEdp7e3a8qLZE=
-X-Received: by 2002:a05:6902:2305:b0:e28:6ec7:4353 with SMTP id
- 3f1490d57ef6-e2893964043mr10612649276.54.1728340526338; Mon, 07 Oct 2024
- 15:35:26 -0700 (PDT)
+	s=arc-20240116; t=1728343585; c=relaxed/simple;
+	bh=fZHTsXlDSh8DweoazGb9oWLWDpJnknt/JmFXJX7Umzg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=WlONj97pfKDKhQ2t3L59GYx6J+LNrRN5COLogbJCn5Zca6cluWdA3l05+YDe6CaV72TzI+XX04vHPThG7qzfD0+2bwLM4zfJBDy940o65hf7JPprW90A+0bszs5SK/XsnbOqetn41YJSoEKTR4idvS1gzJl6k6p9gkHGsp9Tw7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=moI+ss5o; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728343584; x=1759879584;
+  h=date:from:to:cc:subject:message-id;
+  bh=fZHTsXlDSh8DweoazGb9oWLWDpJnknt/JmFXJX7Umzg=;
+  b=moI+ss5oTjmna+0ev7oAWv8k0s75vJ7GonwxyI/LnqYtz6yzT+gEO4OK
+   FQWxrL8ZFYF2kFqKHalb7vdn/wnCMO0+/ECRzykZNQrb7l18A67ZYq+a8
+   i9OiEXcu3ihZKw1TzhJ3QAGLcaqtXgMIEsoy7l/RpPxYr8fLRae4onRbG
+   EMMY3uS6ZiDy+nw4W6j1M50VJytAbV/dZnNOLf8UCEUh8oVleEVH3z2GK
+   bhFHlx3T0/6SX4Bsg7XQVebivYqaZCLCpeDoE59Gab+z6YOxzf2ui9rf4
+   O8eiyEukzY/f4DKQU/6CutFTZEU+/vFZWQ0kkW0+agZqViKvDRQx42yIF
+   g==;
+X-CSE-ConnectionGUID: IAFafYVZRheJlnfg7lAB3w==
+X-CSE-MsgGUID: YhhVr2OFSzaFTErLeOB6Yg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="50043815"
+X-IronPort-AV: E=Sophos;i="6.11,185,1725346800"; 
+   d="scan'208";a="50043815"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 16:26:23 -0700
+X-CSE-ConnectionGUID: sVE/VoGHRg6N/2C+8BgYxg==
+X-CSE-MsgGUID: 25iIer3pTbSIrI16V1lq4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,185,1725346800"; 
+   d="scan'208";a="75474143"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 07 Oct 2024 16:26:23 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sxx7M-0005f4-1R;
+	Mon, 07 Oct 2024 23:26:20 +0000
+Date: Tue, 08 Oct 2024 07:25:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 39845764a0ca01a89dca4ff5b4e9d896ee410054
+Message-ID: <202410080722.LoB0wNjP-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241004094101.113349-1-sakari.ailus@linux.intel.com>
- <CAPDyKFp0N6UJhnHS164Tdf=xkWB0jzq65L9TdvYazeBQ-6WjeQ@mail.gmail.com>
- <20241007184924.GH14766@pendragon.ideasonboard.com> <CAPDyKFpQVnF7eQv3dup8k-3EijnMjuveCG9sZ=Rpey1Y6MBJEg@mail.gmail.com>
- <20241007222502.GG30699@pendragon.ideasonboard.com>
-In-Reply-To: <20241007222502.GG30699@pendragon.ideasonboard.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 8 Oct 2024 00:34:49 +0200
-Message-ID: <CAPDyKFrGNwna6Y2pqSRaBbRYHKRaD2ayqQHLtoqLPOu9Et7qTg@mail.gmail.com>
-Subject: Re: [PATCH 00/51] treewide: Switch to __pm_runtime_put_autosuspend()
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
-	linux-i3c@lists.infradead.org, linux-iio@vger.kernel.org, 
-	linux-input@vger.kernel.org, patches@opensource.cirrus.com, 
-	iommu@lists.linux.dev, imx@lists.linux.dev, 
-	linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, 
-	linux-serial@vger.kernel.org, greybus-dev@lists.linaro.org, 
-	asahi@lists.linux.dev, rafael@kernel.org, 
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 8 Oct 2024 at 00:25, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ulf,
->
-> On Tue, Oct 08, 2024 at 12:08:24AM +0200, Ulf Hansson wrote:
-> > On Mon, 7 Oct 2024 at 20:49, Laurent Pinchart wrote:
-> > > On Fri, Oct 04, 2024 at 04:38:36PM +0200, Ulf Hansson wrote:
-> > > > On Fri, 4 Oct 2024 at 11:41, Sakari Ailus wrote:
-> > > > >
-> > > > > Hello everyone,
-> > > > >
-> > > > > This set will switch the users of pm_runtime_put_autosuspend() to
-> > > > > __pm_runtime_put_autosuspend() while the former will soon be re-purposed
-> > > > > to include a call to pm_runtime_mark_last_busy(). The two are almost
-> > > > > always used together, apart from bugs which are likely common. Going
-> > > > > forward, most new users should be using pm_runtime_put_autosuspend().
-> > > > >
-> > > > > Once this conversion is done and pm_runtime_put_autosuspend() re-purposed,
-> > > > > I'll post another set to merge the calls to __pm_runtime_put_autosuspend()
-> > > > > and pm_runtime_mark_last_busy().
-> > > >
-> > > > That sounds like it could cause a lot of churns.
-> > > >
-> > > > Why not add a new helper function that does the
-> > > > pm_runtime_put_autosuspend() and the pm_runtime_mark_last_busy()
-> > > > things? Then we can start moving users over to this new interface,
-> > > > rather than having this intermediate step?
-> > >
-> > > I think the API would be nicer if we used the shortest and simplest
-> > > function names for the most common use cases. Following
-> > > pm_runtime_put_autosuspend() with pm_runtime_mark_last_busy() is that
-> > > most common use case. That's why I like Sakari's approach of repurposing
-> > > pm_runtime_put_autosuspend(), and introducing
-> > > __pm_runtime_put_autosuspend() for the odd cases where
-> > > pm_runtime_mark_last_busy() shouldn't be called.
-> >
-> > Okay, so the reason for this approach is because we couldn't find a
-> > short and descriptive name that could be used in favor of
-> > pm_runtime_put_autosuspend(). Let me throw some ideas at it and maybe
-> > you like it - or not. :-)
->
-> I like the idea at least :-)
->
-> > I don't know what options you guys discussed, but to me the entire
-> > "autosuspend"-suffix isn't really that necessary in my opinion. There
-> > are more ways than calling pm_runtime_put_autosuspend() that triggers
-> > us to use the RPM_AUTO flag for rpm_suspend(). For example, just
-> > calling pm_runtime_put() has the similar effect.
->
-> To be honest, I'm lost there. pm_runtime_put() calls
-> __pm_runtime_idle(RPM_GET_PUT | RPM_ASYNC), while
-> pm_runtime_put_autosuspend() calls __pm_runtime_suspend(RPM_GET_PUT |
-> RPM_ASYNC | RPM_AUTO).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 39845764a0ca01a89dca4ff5b4e9d896ee410054  USB: yurex: kill needless initialization in yurex_read
 
-__pm_runtime_idle() ends up calling rpm_idle(), which may call
-rpm_suspend() - if it succeeds to idle the device. In that case, it
-tags on the RPM_AUTO flag in the call to rpm_suspend(). Quite similar
-to what is happening when calling pm_runtime_put_autosuspend().
+elapsed time: 729m
 
->
-> >
-> > Moreover, it's similar for pm_runtime_mark_last_busy(), it's called
-> > during rpm_resume() too, for example. So why bother about having
-> > "mark_last_busy" in the new name too.
-> >
-> > That said, my suggestion is simply "pm_runtime_put_suspend".
->
-> Can we do even better, and make pm_runtime_put() to handle autosuspend
-> automatically when autosuspend is enabled ?
+configs tested: 177
+configs skipped: 3
 
-As stated above, this is already the case.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->
-> > If you don't like it, I will certainly not object to your current
-> > approach, even if I think it leads to unnecessary churns.
-> >
-> > [...]
-> >
-> > Kind regards
-> > Uffe
->
-> --
-> Regards,
->
-> Laurent Pinchart
+tested configs:
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    clang-20
+alpha                               defconfig    gcc-14.1.0
+arc                              allmodconfig    clang-20
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                                 defconfig    gcc-14.1.0
+arc                     nsimosci_hs_defconfig    gcc-13.2.0
+arc                   randconfig-001-20241008    gcc-14.1.0
+arc                   randconfig-002-20241008    gcc-14.1.0
+arm                              allmodconfig    clang-20
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                                 defconfig    gcc-14.1.0
+arm                          moxart_defconfig    gcc-13.2.0
+arm                   randconfig-001-20241008    gcc-14.1.0
+arm                   randconfig-002-20241008    gcc-14.1.0
+arm                   randconfig-003-20241008    gcc-14.1.0
+arm                   randconfig-004-20241008    gcc-14.1.0
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+arm64                               defconfig    gcc-14.1.0
+arm64                 randconfig-001-20241008    gcc-14.1.0
+arm64                 randconfig-002-20241008    gcc-14.1.0
+arm64                 randconfig-003-20241008    gcc-14.1.0
+arm64                 randconfig-004-20241008    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+csky                                defconfig    gcc-14.1.0
+csky                  randconfig-001-20241008    gcc-14.1.0
+csky                  randconfig-002-20241008    gcc-14.1.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+hexagon                             defconfig    gcc-14.1.0
+hexagon               randconfig-001-20241008    gcc-14.1.0
+hexagon               randconfig-002-20241008    gcc-14.1.0
+i386                             allmodconfig    clang-18
+i386                              allnoconfig    clang-18
+i386                             allyesconfig    clang-18
+i386        buildonly-randconfig-001-20241008    clang-18
+i386        buildonly-randconfig-002-20241008    clang-18
+i386        buildonly-randconfig-003-20241008    clang-18
+i386        buildonly-randconfig-004-20241008    clang-18
+i386        buildonly-randconfig-005-20241008    clang-18
+i386        buildonly-randconfig-006-20241008    clang-18
+i386                                defconfig    clang-18
+i386                  randconfig-001-20241008    clang-18
+i386                  randconfig-002-20241008    clang-18
+i386                  randconfig-003-20241008    clang-18
+i386                  randconfig-004-20241008    clang-18
+i386                  randconfig-005-20241008    clang-18
+i386                  randconfig-006-20241008    clang-18
+i386                  randconfig-011-20241008    clang-18
+i386                  randconfig-012-20241008    clang-18
+i386                  randconfig-013-20241008    clang-18
+i386                  randconfig-014-20241008    clang-18
+i386                  randconfig-015-20241008    clang-18
+i386                  randconfig-016-20241008    clang-18
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+loongarch                           defconfig    gcc-14.1.0
+loongarch             randconfig-001-20241008    gcc-14.1.0
+loongarch             randconfig-002-20241008    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                                defconfig    gcc-14.1.0
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+microblaze                          defconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                          ath25_defconfig    gcc-13.2.0
+mips                      bmips_stb_defconfig    gcc-13.2.0
+mips                          eyeq5_defconfig    gcc-13.2.0
+mips                           ip27_defconfig    gcc-13.2.0
+mips                           ip30_defconfig    gcc-13.2.0
+nios2                             allnoconfig    gcc-14.1.0
+nios2                               defconfig    gcc-14.1.0
+nios2                 randconfig-001-20241008    gcc-14.1.0
+nios2                 randconfig-002-20241008    gcc-14.1.0
+openrisc                          allnoconfig    clang-20
+openrisc                          allnoconfig    gcc-14.1.0
+openrisc                         allyesconfig    gcc-14.1.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.1.0
+parisc                            allnoconfig    clang-20
+parisc                            allnoconfig    gcc-14.1.0
+parisc                           allyesconfig    gcc-14.1.0
+parisc                              defconfig    gcc-12
+parisc                randconfig-001-20241008    gcc-14.1.0
+parisc                randconfig-002-20241008    gcc-14.1.0
+parisc64                            defconfig    gcc-14.1.0
+powerpc                     akebono_defconfig    gcc-13.2.0
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    clang-20
+powerpc                           allnoconfig    gcc-14.1.0
+powerpc                          allyesconfig    gcc-14.1.0
+powerpc                 linkstation_defconfig    gcc-13.2.0
+powerpc                 mpc8313_rdb_defconfig    gcc-13.2.0
+powerpc                 mpc836x_rdk_defconfig    gcc-13.2.0
+powerpc               randconfig-001-20241008    gcc-14.1.0
+powerpc               randconfig-002-20241008    gcc-14.1.0
+powerpc               randconfig-003-20241008    gcc-14.1.0
+powerpc                    sam440ep_defconfig    gcc-13.2.0
+powerpc64             randconfig-001-20241008    gcc-14.1.0
+powerpc64             randconfig-002-20241008    gcc-14.1.0
+powerpc64             randconfig-003-20241008    gcc-14.1.0
+riscv                            allmodconfig    gcc-14.1.0
+riscv                             allnoconfig    clang-20
+riscv                             allnoconfig    gcc-14.1.0
+riscv                            allyesconfig    gcc-14.1.0
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20241008    gcc-14.1.0
+riscv                 randconfig-002-20241008    gcc-14.1.0
+s390                             alldefconfig    gcc-13.2.0
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20241008    gcc-14.1.0
+s390                  randconfig-002-20241008    gcc-14.1.0
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                                  defconfig    gcc-12
+sh                          r7780mp_defconfig    gcc-13.2.0
+sh                    randconfig-001-20241008    gcc-14.1.0
+sh                    randconfig-002-20241008    gcc-14.1.0
+sh                      rts7751r2d1_defconfig    gcc-13.2.0
+sh                     sh7710voipgw_defconfig    gcc-13.2.0
+sparc                            allmodconfig    gcc-14.1.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20241008    gcc-14.1.0
+sparc64               randconfig-002-20241008    gcc-14.1.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-17
+um                                allnoconfig    clang-20
+um                               allyesconfig    clang-20
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20241008    gcc-14.1.0
+um                    randconfig-002-20241008    gcc-14.1.0
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-18
+x86_64                           allyesconfig    clang-18
+x86_64      buildonly-randconfig-001-20241008    gcc-12
+x86_64      buildonly-randconfig-002-20241008    gcc-12
+x86_64      buildonly-randconfig-003-20241008    gcc-12
+x86_64      buildonly-randconfig-004-20241008    gcc-12
+x86_64      buildonly-randconfig-005-20241008    gcc-12
+x86_64      buildonly-randconfig-006-20241008    gcc-12
+x86_64                              defconfig    clang-18
+x86_64                                  kexec    gcc-12
+x86_64                randconfig-001-20241008    gcc-12
+x86_64                randconfig-002-20241008    gcc-12
+x86_64                randconfig-003-20241008    gcc-12
+x86_64                randconfig-004-20241008    gcc-12
+x86_64                randconfig-005-20241008    gcc-12
+x86_64                randconfig-006-20241008    gcc-12
+x86_64                randconfig-011-20241008    gcc-12
+x86_64                randconfig-012-20241008    gcc-12
+x86_64                randconfig-013-20241008    gcc-12
+x86_64                randconfig-014-20241008    gcc-12
+x86_64                randconfig-015-20241008    gcc-12
+x86_64                randconfig-016-20241008    gcc-12
+x86_64                randconfig-071-20241008    gcc-12
+x86_64                randconfig-072-20241008    gcc-12
+x86_64                randconfig-073-20241008    gcc-12
+x86_64                randconfig-074-20241008    gcc-12
+x86_64                randconfig-075-20241008    gcc-12
+x86_64                randconfig-076-20241008    gcc-12
+x86_64                               rhel-8.3    gcc-12
+x86_64                          rhel-8.3-rust    clang-18
+xtensa                            allnoconfig    gcc-14.1.0
+xtensa                randconfig-001-20241008    gcc-14.1.0
+xtensa                randconfig-002-20241008    gcc-14.1.0
 
-Kind regards
-Uffe
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
