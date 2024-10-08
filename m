@@ -1,192 +1,177 @@
-Return-Path: <linux-usb+bounces-15850-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15851-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA351994CF5
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 15:00:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA762994F47
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 15:26:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 108031C251A8
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 13:00:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB5BA1C2351C
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 13:26:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 594A21DF73C;
-	Tue,  8 Oct 2024 12:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGQvqiYn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57B341E0DE0;
+	Tue,  8 Oct 2024 13:23:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8534189910;
-	Tue,  8 Oct 2024 12:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA181E0DCC;
+	Tue,  8 Oct 2024 13:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728392374; cv=none; b=lFn7MAxtoG5LTgdRuSbMRoYo/yqGXJlT1h38YOXsZqxB5vPOq4ebVG9wuYN7g6+Bs2x4Yx5nIrFVR/DRcL2uA3uuNWuahEzaCgumZxNjaLQDMgS0sMg5a/EduyLPQDS0SupRADZmURJL+ApoGk1tycBIl6wl1ST/unHvBOMxYAY=
+	t=1728393827; cv=none; b=jLHB3ZO+wr5+LMw+dQX6Ig/4Pif3bu2mdQYacSIKj2OqzsqhaWbKax2GiOb3gDBXGbyaN/g4kr26qQrYaTwhse6j9ZpHXxlt3zao1fs7NHW5IWLeIOLWKVjipmpOlbdHKx65WoBd4M6mcrMwui68AvD8a2vqdoBsPHwJIaIExNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728392374; c=relaxed/simple;
-	bh=S56vPNMgcKpiszKMqZFy08jLIhyiOgKXegYXxUqdUv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LE7vHxarIB4xGov06Wkn45nOD02gkLd9pZAwL94PKjFgU4trgVnOz38HKYm9JJ0ClCWswx9wJbr6NEStBSOj/o/nLfg/HrnqoOaJOYgK59m4DTCVIbmhc2ZtoXhfu4GYBpxe3aOU7FS+IcQ6x6BQ0Tf0CiMMiiVEujDdI3zgP5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGQvqiYn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36146C4CECC;
-	Tue,  8 Oct 2024 12:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728392374;
-	bh=S56vPNMgcKpiszKMqZFy08jLIhyiOgKXegYXxUqdUv0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DGQvqiYnUQqm1++vTmmeOYOgYX4yh8/Yd9XnPeelfDlbep6b6ttPpzowX8PPnjQU0
-	 1eJDis+2dieb2WfhD9oxtXjlPnTYPsyiWfO4k1k0aHQwO3E4WqcXcYyjUKrJ4L5tb3
-	 ezA1fOIwLMq8wP1ACqq8sdSpEonhOeZiqco1yY7p/zWOhnS+COCAE5KmXwp7n8l+ty
-	 esBIr+RP8TFK8AL0XUJzmsEFu2FYslCKpkliYQw15Zct0H7CpTSbuGiKzqXPBCYlNb
-	 wMtR4q08yzk8VprrJz/XGVNs4b04HLtTaFFD4kmKP3c5kJ/osRfDgN+9jaRM+YESmh
-	 IEXkhxhUOw8nA==
-Message-ID: <19bdc074-7f48-4df4-87c0-117f4cff54f0@kernel.org>
-Date: Tue, 8 Oct 2024 14:59:28 +0200
+	s=arc-20240116; t=1728393827; c=relaxed/simple;
+	bh=6OT1XfjuaTyy8T43dxZOB3hKvdIL46jtJEZ9BIPIx3g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s5Mvxhv34we/u8zsg4MEqbfbue71PpFyQ8I23j9d+/hFHWLYVHkGbzSHKBm6bTgaw9jiiPhpwxq7m8fk9mHW0ncDha9yMKh9cXjIV3hswL2e3V0cMhK47m50DRggiZPEhwD3QN7phmDyBdeJ0KFuLhpCCq+xL0IgWwRMm4gGUuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6e2772f7df9so44484607b3.2;
+        Tue, 08 Oct 2024 06:23:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728393822; x=1728998622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nCY3NIx/eYd1xSXTQBGOOuko+7cH0vhvxDiWRgqK6Zw=;
+        b=kwuoWMoz3kmf5t9es67h8pKIUnY4N+UxQCj9IMNCnOFIRDroLfNfQowlCp8Pe4ItrK
+         1vzDhG0FahnwbAw8C6AWnKhccGf6HK72WwRLu8vxrc/bn08KeJo0pLw1OcYe810eqGIR
+         x1nbVpuTFJ29fEqpnKl8ZHSjCEqRaLKUjMQU9M+gY062HOtrHPAijiP04mZwdqj62sgA
+         BXzznyHqpBwsBpXbIqM/1yz0hHyY2xkefEMrAYMC9mXBKxY+yXGEJKWoFQPZlg+BLRUZ
+         v/mX13LSbeOm7xhyR4y8X1dlsAMrYmCk6nJDzm3JWsy279nC85xFkVKRPpYujblwcPt1
+         papw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4tVXB4qs1L90tAF9/XfDq0gBlk7Wc7cfBtPMnpNp3iPq1Z9a51/4GRTQ+KNMS0eIHvhEDM//UGXdR@vger.kernel.org, AJvYcCVIR3fm7XmJPUwShnhMH1U1H9NdeMS7hSl1jrqP/eTxfDE7NHaBmDD31BzqIljhuGLzvXP2psyi5c9ugdsoUJsHqL0=@vger.kernel.org, AJvYcCVT07qWShDnqiKeN7j5kA7ujMrCRNOCp9cDSgQR+TtdudhvvsokwZtbPuGKuWZELVq2DVulXI1OpFUP@vger.kernel.org, AJvYcCVd9hnf+jkTSS2WfMv+bt8GaYUtbNJRX8wuDLLUQix8GnEweJRZFXLrt+Oz1GRXk2SmsEbeOOvpboZT@vger.kernel.org, AJvYcCW5tiAHIRJGbVBWZD1RP9RpRkmbLYesZ3daboDQIWjOM30ABimvcxwoFbYgzieOAgxCXB7vgyrucINiWiRx@vger.kernel.org, AJvYcCW7mSOGxncShBgLXIAym4DoUowgagEkGo0qwUkqCkEecmC8LhzpedD81o5GXA0ccwFdmzCEGqXhWtA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxvsvd9xn1lzCsqkTrmTjOQpyp3baME0OimBDE6FZpNJXGreECa
+	8iEGBTeCGpia7rdb+ucT9+5dKzZrWq8x0XZREbxFq5wYmtGQtml4IUQdlVaQ
+X-Google-Smtp-Source: AGHT+IG9lW3ss6lvHQzkqBRDQWf2Spp+0t7ZgvbHru6AqYI2VcjL0BvfVU2pFedGmTNyKCwJrhXoeQ==
+X-Received: by 2002:a05:690c:3010:b0:6db:d7c9:c97b with SMTP id 00721157ae682-6e2c72b2c50mr100116867b3.40.1728393822212;
+        Tue, 08 Oct 2024 06:23:42 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e2d93f7d31sm14189067b3.135.2024.10.08.06.23.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Oct 2024 06:23:40 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6dde476d3dfso44521347b3.3;
+        Tue, 08 Oct 2024 06:23:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+ISYAIBhuY0g8rE9c8T93ziHCl6aI76ouUTyfgRgHuNI/fgX+ZFedU9ByRlxqdJl4qb0Z0W4dtRs2@vger.kernel.org, AJvYcCUF1LhhaKBvVaHpkjMMbNq9fP2bK68iFLpKHeg8hNoyw9l1VlyniCwLd6CNgytoCH1G+3Qz3GA58kc=@vger.kernel.org, AJvYcCULMidi62rLg1Ft1WgrxSvPid2Kz3EbMWFzz8a9qd7yAXm5yW2IXdDIjTzddbU7Eyr42cHA7svj8Xyk@vger.kernel.org, AJvYcCWICvtZdLkyDvJj/OntEyhNXA+zXg1fhqGWJJtTtSjveehBeJQ7qUi8vpmprQJZ5IZ1IEP4O0+Hsjh72JPX@vger.kernel.org, AJvYcCWwGF9qYeLNNNO7aC9pULxGUXDquM8O+BdN32SrgPJbzmMxQP6hwrK6Woz+efe38HibgvYkJ/kzaK5TkXsWdh7gCgI=@vger.kernel.org, AJvYcCXybXbIoAec9rn4061dvYucXnbh+D49ldnga1Pl9KmdT8zaxwbYGqSXPrj3hXfdoaJ7RZ3jC09gHtJ6@vger.kernel.org
+X-Received: by 2002:a05:690c:fc2:b0:6e2:1090:af31 with SMTP id
+ 00721157ae682-6e2c6fc7e31mr116307267b3.3.1728393819734; Tue, 08 Oct 2024
+ 06:23:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add binding for USB Gen2
- de-emphasis
-To: Joy Chakraborty <joychakr@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen
- <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241007135508.3143756-1-joychakr@google.com>
- <20241007135508.3143756-2-joychakr@google.com>
- <c98ece5f-c105-41ca-af1a-bddc61893071@kernel.org>
- <CAOSNQF148N5meoFZkbGKoMXMZ62kf=JOV+1r0GCsep3DPP_Lrw@mail.gmail.com>
- <1bc2c476-9d7b-4c87-924b-ecaed0f721de@kernel.org>
- <CAOSNQF0b--3o5bseU05Eu3a2zDiTTYfbnQNONFo3imw3HnaONA@mail.gmail.com>
- <502d7a1f-0bac-496f-8fbe-b8924cd0ce31@kernel.org>
- <CAOSNQF1A_gsXeRuuR4qeZQi9FicrsPxYfjvLpmgxkaGq0-mZmA@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CAOSNQF1A_gsXeRuuR4qeZQi9FicrsPxYfjvLpmgxkaGq0-mZmA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com> <20240822152801.602318-6-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-6-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 8 Oct 2024 15:23:26 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU_kyPb9VAosStrwmQg9vOMgyogQu==u1XQEBWFQLbSdQ@mail.gmail.com>
+Message-ID: <CAMuHMdU_kyPb9VAosStrwmQg9vOMgyogQu==u1XQEBWFQLbSdQ@mail.gmail.com>
+Subject: Re: [PATCH 05/16] soc: renesas: sysc: Move RZ/G3S SoC detection on
+ SYSC driver
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, p.zabel@pengutronix.de, magnus.damm@gmail.com, 
+	gregkh@linuxfoundation.org, mturquette@baylibre.com, sboyd@kernel.org, 
+	yoshihiro.shimoda.uh@renesas.com, biju.das.jz@bp.renesas.com, 
+	ulf.hansson@linaro.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 08/10/2024 14:40, Joy Chakraborty wrote:
-> On Tue, Oct 8, 2024 at 5:40 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 08/10/2024 13:59, Joy Chakraborty wrote:
->>>>>
->>>>>>
->>>>>>> +    description: When set core will set Tx de-emphasis for USB Gen2
->>>>>>
->>>>>> And why it cannot be implied by compatible?
->>>>>
->>>>> As per my understanding these are tuning coefficients for de-emphasis
->>>>> particular to a platform and not the dwc3 controller, hence should not
->>>>> be a controller compatible.
->>>>
->>>> Platforms must have specific compatible, so this should be implied by
->>>> compatible.
->>>
->>> Maybe I am using the word "platform" incorrectly here, what I
->>> understand is that the same controller(in a chip) when used on 2
->>> different physical form factors might need different deemphasis
->>
->> You mean boards? This is board-level property?
-> 
-> Yes, the USB controller can be paired with different phys in a SoC and
+Hi Claudiu,
 
-That's not board specific, but SoC.
+On Thu, Aug 22, 2024 at 5:28=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> Now that we have a driver for SYSC driver for RZ/G3S move the SoC detecti=
+on
+> for RZ/G3S in SYSC driver.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-> used on different board layouts where we should be able to drive
-> different de-emphasis coefficients to the phy as per the link
-> equalization requirements is my understanding.
+Thanks for your patch!
 
-You keep mixing different stories, so I am not convinced.
+> --- a/drivers/soc/renesas/rzg3s-sysc.c
+> +++ b/drivers/soc/renesas/rzg3s-sysc.c
+> @@ -85,6 +97,39 @@ static int rzg3s_sysc_probe(struct platform_device *pd=
+ev)
+>         sysc->dev =3D dev;
+>         spin_lock_init(&sysc->lock);
+>
+> +       compatible =3D of_get_property(dev->of_node, "compatible", NULL);
+> +       if (!compatible)
+> +               return -ENODEV;
 
-> 
->>
->>> coefficient values to be passed to its Phy. Someone could correct me
->>> from the USB link stand point if I am mistaken here.
->>>
->>
->> Then please point me to the upstream DTS boards using these properties.
->> Lore link is enough, if board or DTS change is being upstreamed.
->>
-> 
-> The DTS change is not being upstreamed currently.
+Please use of_match_device() and of_device_id.compatible instead.
 
-Why do we want code without any user?
+> +
+> +       soc_id_start =3D strchr(compatible, ',') + 1;
+> +       soc_id_end =3D strchr(compatible, '-');
+> +       size =3D soc_id_end - soc_id_start;
+> +       if (size > 32)
+> +               size =3D 32;
+> +       strscpy(soc_id, soc_id_start, size);
+> +
+> +       soc_dev_attr =3D devm_kzalloc(dev, sizeof(*soc_dev_attr), GFP_KER=
+NEL);
+> +       if (!soc_dev_attr)
+> +               return -ENOMEM;
+> +
+> +       soc_dev_attr->family =3D "RZ/G3S";
+> +       soc_dev_attr->soc_id =3D devm_kstrdup(dev, soc_id, GFP_KERNEL);
+> +       if (!soc_dev_attr->soc_id)
+> +               return -ENOMEM;
+> +
+> +       devid =3D readl(sysc->base + RZG3S_SYS_LSI_DEVID);
+> +       revision =3D FIELD_GET(RZG3S_SYS_LSI_DEVID_REV, devid);
+> +       soc_dev_attr->revision =3D devm_kasprintf(dev, GFP_KERNEL, "%u", =
+revision);
+> +       if (!soc_dev_attr->revision)
+> +               return -ENOMEM;
+> +
+> +       dev_info(dev, "Detected Renesas %s %s Rev %s\n", soc_dev_attr->fa=
+mily,
+> +                soc_dev_attr->soc_id, soc_dev_attr->revision);
+> +
+> +       soc_dev =3D soc_device_register(soc_dev_attr);
+> +       if (IS_ERR(soc_dev))
+> +               return PTR_ERR(soc_dev);
+> +
+>         return rzg3s_sysc_reset_probe(sysc, "reset", 0);
+>  }
 
-> But this change would help bring up a new or development board where
-> USB compliance is being run and this parameter needs tuning,  hence
-> being able to upstream this would help.
+My first thought was "oh no, now this is handled/duplicated in two
+places", but if you later migrate the chip identification support for
+the rest of RZ/G2L devices to here, it may start to look better ;-)
 
-To me whatever Google or any other vendor is doing downstream does not
-matter, just "does not exist".
+One caveat is that soc_device_match() can be called quite early in
+the boot process, hence renesas_soc_init() is an early_initcall().
+So registering the soc_device from a platform_driver might be too late,
+especially since fw_devlinks won't help you in this particular case.
+However, I think all real early calls to soc_device_match() are gone
+since the removal of the support for R-Car H3 ES1.x, and all remaining
+calls impact only R-Car and RZ/Gx (not G2L) SoCs.
 
-Upstream the DTS so we can verify how this is exactly used.
+Gr{oetje,eeting}s,
 
-To me it looks so far as SoC specific and your earlier comment about
-pairing USB controller with phy is confirming this.
+                        Geert
 
-That's a common practice from Google (but not Chromium folks, they are
-awesome!) and few other vendors to upstream whatever they have in their
-GKI downstream, regardless whether it is right or not, whether it
-follows rules or not, whether there is any user or not (and again: users
-are upstream). Rationale for all this is the same - "we have downstream
-some crap thus we want it".
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-Nah, upstream your stuff to be considered as a user.
-
-That's a NAK, sorry.
-
-Best regards,
-Krzysztof
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
