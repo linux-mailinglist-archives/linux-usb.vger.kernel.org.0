@@ -1,101 +1,99 @@
-Return-Path: <linux-usb+bounces-15872-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15873-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB7C899540F
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 18:10:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F75E995428
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 18:13:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 863BFB28108
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 16:10:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4D26287C2C
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 16:13:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E941E04A9;
-	Tue,  8 Oct 2024 16:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AEE61DF73A;
+	Tue,  8 Oct 2024 16:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JKD6qWZE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oouJLHXZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B0A64A8F;
-	Tue,  8 Oct 2024 16:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148D817578
+	for <linux-usb@vger.kernel.org>; Tue,  8 Oct 2024 16:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728403813; cv=none; b=SC9UJR98wvhQEmksPnricK3SROGVq55uazkUu9g1Qdj/xp40BOPrR6i5yE//nKWwCeVdXCGaFO0j9o6eKADkxFcW4aRWdzhcKCoLte9OQNFeYhd2c+2gaJqIFrwpArsMFkW7BunRfKtlGFk5tKDL3fPlSgEvA3ZfGmimp+A46xA=
+	t=1728404025; cv=none; b=Rz8HFdUvM8i+8WPUa9wFGIxRXoqnXPyFmkq87JEPYfHkFGSbh2/qzQR/JkYfb+pN3fmnCN3zfej/YLCaAOUs1o0xDTlr2R7BPn/5jRv6kIGDBhWRwR1ifkp/uaIYbEjFObcCapcI4K1hABhS95dsAlKy0onMAA2jxbRPHzcNkfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728403813; c=relaxed/simple;
-	bh=Jqt51uv11WaJ2wYSsFLauwhBG+IqYiIyY54lrvUrEx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Own++pXpb+NZoUawz1JMoE8/gFBamj0syYBDNlQkXPThbB1mnJjr7MDXHgiLVwtHDpLTp5XaENqcKIFHUsZ8pQjcqOQKzpXQ/npgawXRxXaG9IIG7/EFZpATu1hxFXJ4mMCoH2uBsfVXM8yeDadJ8MqLsHj80nHCjoloOIV3ptg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JKD6qWZE; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728403812; x=1759939812;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jqt51uv11WaJ2wYSsFLauwhBG+IqYiIyY54lrvUrEx4=;
-  b=JKD6qWZE+xSdNg4wevb20GfhDx3tbctPcQElQB6v6OriF8oZCNG9tPWk
-   QFcc6VmaXnJasHSbcW0tQqnIktlojsdT8B529wiaPwaks/izMi2hYo9Mb
-   7bWwS3MZSpY/al0mqbD+WiLTRSdFQlrKh3EyEurTzojyIRoSRBOVlS8PZ
-   IMyi+IQGxo32NaWFlKryk1b3zwHMbxzhuO84bflTPsBqmQPuwW2EUSBo4
-   dJ1qD9vk1dmA0p5GHdkOXY7lpDdIs54XjALMJz3uoAkft4RWDkam5Qqw+
-   t874SDW/XD0ByxOv34K1wTK/jFpWucYmrDm9X2gquBBfpjDPphd9A9C2O
-   Q==;
-X-CSE-ConnectionGUID: jM2giKVYSaiAZfnm1veloA==
-X-CSE-MsgGUID: tLwP50HxS/mp8T7TrioZ+w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="38183801"
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="38183801"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 09:10:11 -0700
-X-CSE-ConnectionGUID: rfMMT9K5RoC2YZkugt0plA==
-X-CSE-MsgGUID: w/X4QyNoRCi52Jz8Sqd5DA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="99223278"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Oct 2024 09:10:10 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 5CC1720F; Tue, 08 Oct 2024 19:10:08 +0300 (EEST)
-Date: Tue, 8 Oct 2024 19:10:08 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: [PATCH v2 1/3] xhci: pci: Aling the naming for Cadence PCI ID
- 0x0200
-Message-ID: <ZwVZYOu78QX-lYXg@black.fi.intel.com>
-References: <20241003121729.3867216-1-andriy.shevchenko@linux.intel.com>
- <20241003121729.3867216-2-andriy.shevchenko@linux.intel.com>
- <2024100417-graveness-irritably-d31c@gregkh>
+	s=arc-20240116; t=1728404025; c=relaxed/simple;
+	bh=7Qjr7MNe/kWCUov6eBJUC5RRvQmjaXLL1O7Lpv39DVA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kFSgWM+vtCWwv3SoSDUBqAXzbduDbnLaQBMyliF7cwMZ28cxlSgSQ1WffMu9hJ5qMu7GeWJOaEdIslCMkQ+xxcOZdYUmX3mWO12m8MMq+Fpcx/8rfdiYMUGDAgYXLW+SEdt/RrcokXblWk+5BnS6gRiDgO9nMxCBr0x3kyC4s38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oouJLHXZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A2B71C4CEC7
+	for <linux-usb@vger.kernel.org>; Tue,  8 Oct 2024 16:13:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728404023;
+	bh=7Qjr7MNe/kWCUov6eBJUC5RRvQmjaXLL1O7Lpv39DVA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=oouJLHXZq+VJapn/e6ZszPHTSZICAQD5vUZ7Xqd84NVbPUOHW8ndOIkMG/8Kz23UV
+	 cJv5BscbmGgNnJnRISXnz/FxgV1WUwxgE6PleR52fEK+B/Kc4hj2RorHFsK3K9FX+s
+	 D8B5YyB26DslG+fD2biRtHx153IS5JKHtLv3M3962sp7zl1GJyJhFAvDCEKnCAGeqy
+	 tzZVtV9AuqDZO2tjjYbfAv8AcG4VtGo287U3iJ7ylkrm6Pmp8pToCYvRc4MOlbTEyD
+	 fSHD8FqYFodJ8VQpcmx9Im1kGNzVW15aSaNn6pnOc33cOKJNjjTMIoR2XSvLfQ6UFH
+	 G11rX/c4kk9+Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 8B33BC53BC1; Tue,  8 Oct 2024 16:13:43 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219362] USB SATA does not correctly shutdown the SSD upon
+ poweroff causing data loss
+Date: Tue, 08 Oct 2024 16:13:43 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219362-208809-w0KNubZdAQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219362-208809@https.bugzilla.kernel.org/>
+References: <bug-219362-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024100417-graveness-irritably-d31c@gregkh>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Oct 04, 2024 at 09:48:35AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Oct 03, 2024 at 03:14:44PM +0300, Andy Shevchenko wrote:
-> > Rename the PCI device ID to match what's used in another driver.
-> 
-> If the same device id is in multiple drivers, why not add it to
-> pci_ids.h like is normal to do?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219362
 
-Also an option. So, Mathias, please, skip the first patch, seems we can
-do better.
+--- Comment #9 from Alan Stern (stern@rowland.harvard.edu) ---
+The sysrq commands were originally implemented before drive controllers for=
+ PCs
+contained any significant state.  Maybe they need some updating.
 
--- 
-With Best Regards,
-Andy Shevchenko
+More generally, these questions should be posed to the SCSI maintainers,
+because it is the SCSI subsystem which is responsible for sending the comma=
+nds
+you're talking about.  The USB driver does nothing more than relay the comm=
+ands
+and their results between the SCSI subsystem and the storage device.
 
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
