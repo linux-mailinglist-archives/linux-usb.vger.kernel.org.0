@@ -1,246 +1,434 @@
-Return-Path: <linux-usb+bounces-15877-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15878-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D465A99582D
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 22:10:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A421F995833
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 22:11:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 545CA1F219E4
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 20:10:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F2AD1F21E95
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2024 20:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC3AA21500C;
-	Tue,  8 Oct 2024 20:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32AF5215004;
+	Tue,  8 Oct 2024 20:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="kMRjwYXQ"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="QgN4srhA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2049.outbound.protection.outlook.com [40.107.22.49])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1354A20CCF7;
-	Tue,  8 Oct 2024 20:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728418200; cv=fail; b=fmLSuXEQsSIKm8Y+RG2DozAIYFW+X24/0iV5oK4NSTumCvr+7H2O6xlMU7AEgBIBwq3JRPBqjTTmtXi4StDBg9unOavQpMAaFDv6rlLAVu+Jfk9kiHB7beE0D/BdQIaIFtWyeuFDKTeLix6I4aCkKL+eak74xG5Ksi71F2BAF7c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728418200; c=relaxed/simple;
-	bh=1GW5fgvxQO5QAYnmuV2Hs2L7faplbrMuFiLzCQ0wokE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=uJMb3kEPT+2pSLk749Z7wg2vf+bjrXuujKmBud2jMNxjmvYysy953qk8UFYPbTwHvlR8U6RkKqOk/XvkXhfDIcSfkiyZrEkuQZ6XLRHoRHQ8ja42zAq7UsDU0eLl+2mXyAKXKhpzDYZ5qN6iDD6nO9BLEaTF5G492md/H2btAV4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=kMRjwYXQ; arc=fail smtp.client-ip=40.107.22.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SjP1/RUqA7Lc9ni6Zv5QGV/IycIwodF+joTq52+gmts9HhwIwDeWFWs8rV/I5LR+sFrlCW28eBDYNXizcdr/72rmAkkm80HRc8h6z+i6J/Rbyxd2hY/sBYhe8g43rAzSuuvH1BKuwSSHv5OtUt68+aobHYrogfhgzKmIQyILaFMcX/YBRYACL9E4x3VFuLIKdsYkOP9NSerzUjkQVGUsc0WRFrvySy8Wcl6fz1IubBsMN1NemlY+eFUNyalOfifDPJANFiIeSuZTfxQjfm8vqlpIgR82DanvTW8uVc4NVyzAlEnwoRFYu9ONUmeqe8/At8CvgnJWRc1xAg+1KHMetg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2ls5buFucBZ5jJe9UmhFWr+aTdk7frj8BsQRHjZ7YOk=;
- b=odcefle2a7TiNmA7kIiuU5r2QfHhwEiTbSTAiaxjxeh2i+ykRf9zjzHht7xdV08t2WYDNi0Je06R/auWyEznOtYFbK+3AF8mFKk+5K21lfzt8wQrNZdQcC9Q7dRGYMEBX54757ZYTMGCjcd8E2cAjSK6lqg4w2HX2SJxjicI/ySn3Gg6lWf+ba1qHKXG3Y6dunLXblCu7UUERl2hSj1UNzC4WC8R9dxJr2FaQorkFrpbRy/u3JUYlczhke0/e8jrbrdmJd7kSJJcTNeoWKOpEUtJxky22BdSYucMwljk3HnnBp/zcacaCHHxTYpbShYDF3Pu7c3POdMEkMswxULGwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2ls5buFucBZ5jJe9UmhFWr+aTdk7frj8BsQRHjZ7YOk=;
- b=kMRjwYXQMvFxhIgW1Xt4eIPOSnkh/kgRj6Ydwf5rsYnLv8wqEpNkn/JqwHpl0eC/EA2ylZKS9MgfVS7TKRHOmc4iA+92hKI5br3qxEdljq3bqtDKPNLTab29kVCBQVsKT/a7Et3y/XuaQHs7aNw1YD+OzjEPbGBbDkZRNfnQWfcp3mw3KmuCsmG+Fe00j2WYWmMxrrefpOxN9OXkQK7SNdMi8pkVpHZV5VHyA20xVfTM7QZai6rfn7l5kW2Aiarn8cwRjaSGBxQRdaMinf4Wy5nq4A3CEwoXJEI2D123tPfcBndLAEu8cbZ+fN6EpnYA8nupcPHRc0pKROAnINl9EQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
- by PA4PR04MB9685.eurprd04.prod.outlook.com (2603:10a6:102:26e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.22; Tue, 8 Oct
- 2024 20:09:54 +0000
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::e81:b393:ebc5:bc3d]) by DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::e81:b393:ebc5:bc3d%3]) with mapi id 15.20.8026.019; Tue, 8 Oct 2024
- 20:09:54 +0000
-Date: Tue, 8 Oct 2024 16:09:45 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <quic_bjorande@quicinc.com>
-Subject: Re: [PATCH v2 0/7] usb: dwc3: qcom: Flatten dwc3 structure
-Message-ID: <ZwWRieC0D3Q13VW7@lizhi-Precision-Tower-5810>
-References: <20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com>
- <ZrugxSqzhzxvVqV3@lizhi-Precision-Tower-5810>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZrugxSqzhzxvVqV3@lizhi-Precision-Tower-5810>
-X-ClientProxiedBy: BYAPR06CA0055.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::32) To DB9PR04MB9626.eurprd04.prod.outlook.com
- (2603:10a6:10:309::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2512B213EFF
+	for <linux-usb@vger.kernel.org>; Tue,  8 Oct 2024 20:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728418245; cv=none; b=st9ZbdsF9rQV41aNk5ppmGO5PtVoDFMiWtw0gGs4Ej/hddEE9/Pks18OBwMZst05i3JYLH0KnrCjILxfsIvQInT7XuMgp4gH/L7k+Jhn/DS3mAHnL1VcJ1W8Z20+XCilqwCfMVCSWuTQCGYFoZ49Hkf7oWqGpT6TEB2im2P6Ld0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728418245; c=relaxed/simple;
+	bh=wPWy6AB6BqRQIOq7T/xwM/mO3B7Hm8hW2Pmc0xFKs44=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=N3lfGvL/dmI3CPjlvOM+oVZVLNBn67kW+CQQO77YDSXkGTiwm7SXs23MXaTOPv6uHcg1XL2+XzBxRW2SJco8YJnjpUGu36g5WFkHo/MWJsKjM0HyTHUqcNz6apDbqsPfyWctZtBVS2RU1JMiR73Taaw6U+mCrONcnoRBPICK1N0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=QgN4srhA; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1728418222; x=1729023022; i=wahrenst@gmx.net;
+	bh=wPWy6AB6BqRQIOq7T/xwM/mO3B7Hm8hW2Pmc0xFKs44=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=QgN4srhAqdWyFISGR+p6TySEg0U4jYrGp2d5klkeUFUz3PuA9lmmE89ORCN705nS
+	 vKhETboOkdN4T46mjQsyyWDy0j/7CJcu/6Svl5mB5P21Vo1LVVV+oD4PUIvnoxwkN
+	 0YLDQK37IRPmMUyur55PXpzabHUPldxBBk7T7wW0EfA6xMKwuVYg30B4npb/Gcnuw
+	 LU1A0PjwkDUo2a5JvaIBqXzWzrEoLlPbRk7mD5qdtIPullRmrqiks6bueHkmXJrLJ
+	 vnV57r5FiF+fceEeVNLOTYTY1DaA5YyKJIoPbWfSZ3B3Pysr5TrFN8pBv29KKKp/Z
+	 /Bpu5vyDOJq668a4Rw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.104] ([37.4.248.43]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MBDjA-1t8lRg0n5q-0098t3; Tue, 08
+ Oct 2024 22:10:22 +0200
+Message-ID: <324b1a66-714d-4bcb-87d7-ec45e86dd55a@gmx.net>
+Date: Tue, 8 Oct 2024 22:10:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|PA4PR04MB9685:EE_
-X-MS-Office365-Filtering-Correlation-Id: 143a8442-7639-4609-0c9e-08dce7d52cae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|7416014|1800799024|376014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?WPUO+lPWzl3KAkGsO5GaeyboXv9gW9wIZQJqfwF8q4dFxB+EZCnWlw663JzP?=
- =?us-ascii?Q?QZFQyZkpHZRVX1GkMn+HRZuh1/dublNzm6bIreJLq/5mfdnTGsm/VEHnrDAw?=
- =?us-ascii?Q?rUmtyoJINdHtsQrxSRGLIeEXN9/LjIqT2BPFh/rGF3mQkthKG7eIZBREZGKJ?=
- =?us-ascii?Q?Yicq+v53YWsB/pyWcdc4nL40rxB519v5wJzz6JVOMlG8oHopC1Q+9V2jQJLa?=
- =?us-ascii?Q?r9cXRvgth4rRA6KwF0hfeGEiRROrmbpkulxbrHOfv9pchqRCnlE/eV9CG9r+?=
- =?us-ascii?Q?KkELc0axyY2r8pQfSKUsE0SZ8rtH1l2LigQcwQfr+jl27VTFHAc2C/hpUY/g?=
- =?us-ascii?Q?yK4ywQnElKVxxQrNLVxdWdVWvgpfx48iW4e/5HKPIYZz7DVysPc0b41AMgqL?=
- =?us-ascii?Q?b5lmbtwuPogeXdC5j1AiwSgsFZZW9+iHSBUxe1SdaMvjA9XQOHlRIZK/qY6m?=
- =?us-ascii?Q?VbXBooPbWhaFCF7V8e5LdPED24tgqTPFbcA+hjF2oiwn+JRbjEhR4u5nVmaX?=
- =?us-ascii?Q?mLjrxYab7d0wpCnFwTGsNmimGgGdb/wgEMwA4rZ0K9DNDk1KaZdfOIhVxZQx?=
- =?us-ascii?Q?JMEC6QPpmtoNdr7oo2/632++xUMgTjfBlLPf4exz/Zfw2veFGy3jLRRQHmA0?=
- =?us-ascii?Q?juUNDDp6HAuVQuw17//MHVlqeLW7SKQicb+QUcIhSyOZa42QiISKSX3EPEwC?=
- =?us-ascii?Q?gbFBIghlNP6EP2Yx5FS2xoYwiyl1xdfA++gFMAptdvt42hzzZ0N6oqy2sZ/N?=
- =?us-ascii?Q?FjwyVJg5Y7VOOslWqeP5NwG30XrGaScOqPTHPURxPiDa+uFpUw7Swmp5wl4e?=
- =?us-ascii?Q?RiZoql9l5Mh19bvhjj21cCmX5Amz2VQoyDB0ZfSRUTggbSsVN6Mq1BEfmTeA?=
- =?us-ascii?Q?OV2H/W1MggG0tHZQ4PiNwbG1Z02KAKOf498LcrASPZUV1txwoqnqJmwKfbU3?=
- =?us-ascii?Q?aqKylgs++NJIZxbPJs8wsHOhgQGJwNPlSYhnsff1vtfLrZ6ZLn12j8G4IadF?=
- =?us-ascii?Q?yBYVLkZ8O0J/88uLfH11NcDY8y+FW7BzNfTR7UIwUqGAxVxJcgrg3pVXGk4I?=
- =?us-ascii?Q?Q1QadcI2REtlDIL+k+oWaUMbrmJBkRnb+l2cz2gDP5vCSOmyoFeMz6K+TRT/?=
- =?us-ascii?Q?ncUcAgh1aaOdN1VqnK9X8gwT3fPwpp6WTlqlpCLsz4F/+in7QEGrZzSXTHI8?=
- =?us-ascii?Q?b5Fp1WTX6xfjYTwNTm1Io+i3+Is2k5lHCCsXvAnOxfdTSOfzAu2dm21IvsAm?=
- =?us-ascii?Q?lAtAPYZ28egZUQyBW4H6x/Qb6A+STzF6ermOQXvvUKrsk/QJCtqKv9R2IuTe?=
- =?us-ascii?Q?2nPSijpFe5ifl/DmbVQB2bdgBuvh8ZUpWEOQ5vgLsC4G4A=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(1800799024)(376014)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?xxhwje+dAr5q5zbhlmjpEpbn0q3NOPZr2y9PYTY2tqN8UVtYpiqo/uduVWpa?=
- =?us-ascii?Q?dpJIRU0Yp4dncEWXsqO2RS0eEKFCHYW4eXxRK2/T9QjwhjuaIeJDNG8aGl3R?=
- =?us-ascii?Q?XGrsEN5zHtc3nms//K6VPBhYP6+Jf5CaknXx9aL5GbDFLcIXpBg7VQLVJw03?=
- =?us-ascii?Q?qigSwkRlgCbIXu4ec4QU0U+McuYL2VLZbJ9Lo+TgmYH6vG7h3I7Ikgqwh8RG?=
- =?us-ascii?Q?9iVddWG9UGLjtwoOaCymUUWkLIMwBLdI3pEvSWeekj1C0HZrm5hf8bIUURdI?=
- =?us-ascii?Q?FONahv+ChiEn7kXGNwTa/gN7SQneX2pXuRTH7P6pTFRZUDFeis3Uu9LvGjcL?=
- =?us-ascii?Q?UveY1InnzwG1LHfVA2La9PL0uuaYMOX/t+CYA0ayBmX+SXD0mpr8JCh4IiOi?=
- =?us-ascii?Q?8jr/OD90tB1/grTCV9riL0IuxmaaXPq5M6EcCxA5rId9uiifbnqxfNE4+ceC?=
- =?us-ascii?Q?Xu+YaPRVTUB1Bzf7vt4Gry4PH0+X7dr4jzB00o+L2RQJw+kv4/pFcylMhAEs?=
- =?us-ascii?Q?Ryd7pmSlVDeUM0p/2CV8oE2h0sm8+K9EDSTI33vBytmoNZzemOTJMEx1DMst?=
- =?us-ascii?Q?n+OvS2+aalX8oYM6xiMA2kUuij+wsJZOi1cOY8vDEuv1MhHCHLmMaU03/WVz?=
- =?us-ascii?Q?Pp+RXzyTjBEycr9T82x9x08iLbdbJOfNMv/OtlU7kHTlwxgaHxtrb2Omn5m+?=
- =?us-ascii?Q?igE1r43ckBPkMiAvSBZKn+7LDZUaYZCaLgXBEbJILlh4VNDeajYiNAzysiVZ?=
- =?us-ascii?Q?hVNS6lNgGuXM+FE8qvNzOFshUAX13lUiQTYnwrS4lJ5rWjWOxYSsOkb1k/kb?=
- =?us-ascii?Q?31B3MTyFdbLum88eVsCklxWbFrKfqtaMyY726NMD4+eAKxaeMg/ABcd54tRl?=
- =?us-ascii?Q?5PHXZdcQTZ3K4Ze+K00DNlVOufzM0dhY8Ub+KwOyePzLNwnUDOdQyg0CepsD?=
- =?us-ascii?Q?Wuky0XuzD5xnUsT2RncqevzQnoP58PIi5M0JsYnVWUdRMZRmtx4JV6QwHnJE?=
- =?us-ascii?Q?25BRFWgwYL9wRvoqinzStCApbhrLV0Q6Kj0pXMkmUFc1QQgrUNHw6+fgWHFn?=
- =?us-ascii?Q?zNp7Tm6I9OpFFPXqmrMm5DxNo+EWy0oxmNDuy7ASr7r8Pn5+eoA2NUCGcX8y?=
- =?us-ascii?Q?5MNBqYgRCRqEn8Hkdq35ljnTFFJKE8mGIDj5ktn9x+t6ZJwjvbsqHB4EcMOm?=
- =?us-ascii?Q?RMLjghlO7AhFSs51JctlnO4HUf4rh/M8OewDFeRaXwFumW49wMMOQ1YZZR2f?=
- =?us-ascii?Q?L4XPjTNLGN5sIQW1gZnISok7MD672ga3cqLH4iVcf+LHfogsYfH0ql4ipuwN?=
- =?us-ascii?Q?pg3TrjOrWYV8ItbxahnPaqKfg0/NyhCR7yUi6AURJZZMk3GgOPPhS8nE1xdx?=
- =?us-ascii?Q?zdBOAFbXS7xrVn22RYvZ6D+H6yTRjd4rZ/kgdBkbvBk2pz1Yu7gFSupPQ78i?=
- =?us-ascii?Q?h8SzSVqKXuhlXyo+AdEp2ehvFKIf8mY8dHNDcWAi+vsoDu6uN6QWqF1Lx8s0?=
- =?us-ascii?Q?hJ2l2MsZqoQHZhCEmShUvqV29lPE8JGNZvXi3Vm5mlhEeAqS0+XtysuMbwQH?=
- =?us-ascii?Q?e60zS5xslK13sIsjJ5g=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 143a8442-7639-4609-0c9e-08dce7d52cae
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9626.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2024 20:09:54.4680
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: guvuqErQVDdM3DwXQda2yOFcoWNOo1dV3czx/mjCFuNcXZbYsRoZUXoPyA00ALXFRKLmYGtyUnIa5Dg27yCr7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9685
+User-Agent: Mozilla Thunderbird
+Subject: Re: dwc2: Raspberry Pi 3 B Plus stuck in lx_state DWC2_L2 since Linux
+ 6.12-rc1
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alan Stern <stern@rowland.harvard.edu>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ Tomas Marek <tomas.marek@elrest.cz>, Shawn Shao
+ <shawn.shao@jaguarmicro.com>, Douglas Anderson <dianders@chromium.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Minas Harutyunyan <hminas@synopsys.com>
+References: <a4cb3fe4-3d0f-4bf9-a2b1-7f422ba277c8@gmx.net>
+ <2c9b6e0c-cb7d-4ab2-9d7a-e2f90e642bd1@gmx.net>
+ <68428f15-73ad-4d42-81ce-ed28f1387028@gmx.net>
+Content-Language: en-US
+In-Reply-To: <68428f15-73ad-4d42-81ce-ed28f1387028@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:oLyC/d38+xZhAPlTHoCSy+OM3atBOepMTvvoFIlhYYyp1rPZkBl
+ KjadH2Tkdr86znSCj/z0B++1jt5OCwUVjSRd00Q5v4y7rSMOu26K/uY5koy3Pu/ggJSRkcx
+ 5yF6urhY1+KFRh1T2WpPihxSrh2C0BWx7gd6WiNflQ9uiD+QkTm2U1gl2iaQljdLRQKbmsk
+ pdc3PsSjfImGBmeaay8wg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:h7/slJIEthM=;8cFPALOVTpel83FWqjVFvF+abho
+ Z9R1zQZ6CtT/Ak3eKiujV3XxhlRJT7cA+a73977etYq+lesVHpCF4Z7BpSdf1FqH7K2tFUrlP
+ 2sFicvoZbZt9avckHwoaiGXNiLN8tJdfSUhNC6f3FqMv6k6yQuuwOMpKEgZKk77wx+3PE43HQ
+ 6neL6vUWxigdtnMsXh2gP785TB/rG3bsBHcphNIAWEzAF7SJJkkHF0jB/Hf9JVYiNWHHKBp4A
+ dZScpEnYQh9cjc3A510kMExQ5rrZ9998pny86Wz2Rbrk5+QSGNsSto4hHWQWKkksFQkilDCWw
+ O8YgKUzh00sc8WN02j8UUD6cRqdMsHFcKYF9jr5QYUgNmOVElRjdSTgGbeicjT4vPP44HWBan
+ vHkUB+7sGFuSC73KlXfnF+TyXQGs0QK+g5i1v2zGC88b18Ld/dWoTWQThi8kj/8tlQp2keuc5
+ k1ZDyyGq+b4nA4EBve4Qtu5eZT3ZUjCEQ75Fvfi6U9tHo0X8SwWWl5U+l929Mi1Y03toJhueM
+ bSfh9KvdrB2+lSOCI+01Wx88t8B/juzklzWo/p8FoIw85pPcIecb/AAd3Wu9woLQJqknIQpod
+ c9r74R2TFjmo1PgDnpo32HH7/NYm6pWI7qrb5RE1hgp6hzJymR3vVSj9GmYVo7pyHbTNaR5+C
+ jC8prUHiF5bDtDLXzA1bpgXDl/dttR20Fg5JCrHkvZCSvdr7claWCMe+sqzOFhro8fyQ3vnT1
+ GJRQqRjEU7OAoI8q9cRfaG63q5NhhS1iG7XU3ne1BfM0VPlG1jrtuc9EzrXj/qiNTJaVU/CFp
+ Vx5ZLYzgbsqI16YLQdSoWhJw==
 
-On Tue, Aug 13, 2024 at 02:07:01PM -0400, Frank Li wrote:
-> On Sun, Aug 11, 2024 at 08:11:57PM -0700, Bjorn Andersson wrote:
-> > The USB IP-block found in most Qualcomm platforms is modelled in the
-> > Linux kernel as 3 different independent device drivers, but as shown by
-> > the already existing layering violations in the Qualcomm glue driver
-> > they can not be operated independently.
-> >
-> > With the current implementation, the glue driver registers the core and
-> > has no way to know when this is done. As a result, e.g. the suspend
-> > callbacks needs to guard against NULL pointer dereferences when trying
-> > to peek into the struct dwc3 found in the drvdata of the child.
-> >
-> > Missing from the upstream Qualcomm USB support is handling of role
-> > switching, in which the glue needs to be notified upon DRD mode changes.
-> > Several attempts has been made through the years to register callbacks
-> > etc, but they always fall short when it comes to handling of the core's
-> > probe deferral on resources etc.
-> >
-> > Furhtermore, the DeviceTree binding is a direct representation of the
-> > Linux driver model, and doesn't necessarily describe "the USB IP-block".
-> >
-> > This series therefor attempts to flatten the driver split, and operate
-> > the glue and core out of the same platform_device instance. And in order
-> > to do this, the DeviceTree representation of the IP block is flattened.
+Hi,
+
+since Minas didn't replied to any of my last mails, i hope some of the
+other USB guys can help here.
+
+Am 05.10.24 um 23:46 schrieb Stefan Wahren:
+> Am 03.10.24 um 13:21 schrieb Stefan Wahren:
+>> Maybe this is a relevant side node: in the bad case the onboard
+>> Ethernet chip LAN7800 is also not probed after startup (just root and
+>> the hubs). It looks like a race between LAN7800 enumeration and
+>> pm_runtime.
+>>
 >
+Okay, now it's clear that the missing enumeration of Microchip LAN7800
+is related to power management, i enabled DEBUG for drivers/usb/core/hub.c
 
-Bjorn Andersson:
-	Any follow up on this thread?
+This results in the following kernel log (bad case, LAN7800 never
+enumerated):
 
-Frank
+[=C2=A0=C2=A0=C2=A0 2.344302] dwc2 3f980000.usb: supply vusb_d not found, =
+using dummy
+regulator
+[=C2=A0=C2=A0=C2=A0 2.351797] dwc2 3f980000.usb: supply vusb_a not found, =
+using dummy
+regulator
+[=C2=A0=C2=A0=C2=A0 2.409961] dwc2 3f980000.usb: DWC OTG Controller
+[=C2=A0=C2=A0=C2=A0 2.414821] dwc2 3f980000.usb: new USB bus registered, a=
+ssigned bus
+number 1
+[=C2=A0=C2=A0=C2=A0 2.422040] dwc2 3f980000.usb: irq 51, io mem 0x3f980000
+[=C2=A0=C2=A0=C2=A0 2.427698] usb usb1: udev 1, busnum 1, minor =3D 0
+[=C2=A0=C2=A0=C2=A0 2.428501] hub 1-0:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 2.432384] hub 1-0:1.0: 1 port detected
+[=C2=A0=C2=A0=C2=A0 2.436401] hub 1-0:1.0: standalone hub
+[=C2=A0=C2=A0=C2=A0 2.436415] hub 1-0:1.0: ganged power switching
+[=C2=A0=C2=A0=C2=A0 2.436427] hub 1-0:1.0: individual port over-current pr=
+otection
+[=C2=A0=C2=A0=C2=A0 2.436440] hub 1-0:1.0: Single TT
+[=C2=A0=C2=A0=C2=A0 2.436453] hub 1-0:1.0: TT requires at most 8 FS bit ti=
+mes (666 ns)
+[=C2=A0=C2=A0=C2=A0 2.436469] hub 1-0:1.0: power on to power good time: 2m=
+s
+[=C2=A0=C2=A0=C2=A0 2.436536] hub 1-0:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 2.436662] usb usb1-port1: DeviceRemovable is changed t=
+o 1 according
+to platform information.
+[=C2=A0=C2=A0=C2=A0 2.436681] hub 1-0:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 2.443963] usb usb1-port1: status 0101 change 0001
+[=C2=A0=C2=A0=C2=A0 2.723887] usb 1-1: new high-speed USB device number 2 =
+using dwc2
+[=C2=A0=C2=A0=C2=A0 2.920166] usb 1-1: udev 2, busnum 1, minor =3D 1
+[=C2=A0=C2=A0=C2=A0 2.921003] hub 1-1:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 2.924983] hub 1-1:1.0: 4 ports detected
+[=C2=A0=C2=A0=C2=A0 2.929105] hub 1-1:1.0: compound device; port removable=
+ status: FRRR
+[=C2=A0=C2=A0=C2=A0 2.929120] hub 1-1:1.0: individual port power switching
+[=C2=A0=C2=A0=C2=A0 2.929134] hub 1-1:1.0: individual port over-current pr=
+otection
+[=C2=A0=C2=A0=C2=A0 2.929302] hub 1-1:1.0: TT per port
+[=C2=A0=C2=A0=C2=A0 2.929317] hub 1-1:1.0: TT requires at most 8 FS bit ti=
+mes (666 ns)
+[=C2=A0=C2=A0=C2=A0 2.929334] hub 1-1:1.0: power on to power good time: 10=
+0ms
+[=C2=A0=C2=A0=C2=A0 2.929487] hub 1-1:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 2.929922] hub 1-1:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 2.930446] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 00=
+02
+[=C2=A0=C2=A0=C2=A0 2.930513] usb usb1-port1: enable change, status 000005=
+03
+[=C2=A0=C2=A0=C2=A0 3.031980] usb 1-1-port1: status 0101 change 0001
+[=C2=A0=C2=A0=C2=A0 3.135941] hub 1-1:1.0: state 7 ports 4 chg 0002 evt 00=
+00
+[=C2=A0=C2=A0=C2=A0 3.136174] usb 1-1-port1: status 0101, change 0000, 12 =
+Mb/s
+[=C2=A0=C2=A0=C2=A0 3.207894] usb 1-1.1: new high-speed USB device number =
+3 using dwc2
+[=C2=A0=C2=A0=C2=A0 3.228029] usb 1-1-port1: not reset yet, waiting 10ms
+[=C2=A0=C2=A0=C2=A0 3.316285] usb 1-1.1: udev 3, busnum 1, minor =3D 2
+[=C2=A0=C2=A0=C2=A0 3.317234] hub 1-1.1:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 3.321396] hub 1-1.1:1.0: 3 ports detected
+[=C2=A0=C2=A0=C2=A0 3.325689] hub 1-1.1:1.0: compound device; port removab=
+le status: FRR
+[=C2=A0=C2=A0=C2=A0 3.325706] hub 1-1.1:1.0: individual port power switchi=
+ng
+[=C2=A0=C2=A0=C2=A0 3.325719] hub 1-1.1:1.0: individual port over-current =
+protection
+[=C2=A0=C2=A0=C2=A0 3.325983] hub 1-1.1:1.0: TT per port
+[=C2=A0=C2=A0=C2=A0 3.325999] hub 1-1.1:1.0: TT requires at most 8 FS bit =
+times (666 ns)
+[=C2=A0=C2=A0=C2=A0 3.326017] hub 1-1.1:1.0: power on to power good time: =
+100ms
+[=C2=A0=C2=A0=C2=A0 3.326268] hub 1-1.1:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 3.326577] hub 1-1.1:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 3.430578] hub 1-1.1:1.0: state 7 ports 3 chg 0000 evt =
+0000
+[=C2=A0=C2=A0=C2=A0 3.430627] hub 1-1.1:1.0: hub_suspend
+[=C2=A0=C2=A0=C2=A0 3.431012] usb 1-1.1: usb auto-suspend, wakeup 1
+[=C2=A0=C2=A0=C2=A0 3.443902] hub 1-1:1.0: hub_suspend
+[=C2=A0=C2=A0=C2=A0 3.444117] usb 1-1: usb auto-suspend, wakeup 1
+[=C2=A0=C2=A0=C2=A0 3.460127] hub 1-0:1.0: hub_suspend
 
-> Thanks, we faced the same problem. Can you cc me next time?
->
-> Frank
-> >
-> > ---
-> > Changes in v2:
-> > - Rewrite after ACPI removal, multiport support and interrupt fixes
-> > - Completely changed strategy for DeviceTree binding, as previous idea
-> >   of using snps,dwc3 as a generic fallback required unreasonable changes
-> >   to that binding.
-> > - Abandoned idea of supporting both flattened and unflattened device
-> >   model in the one driver. As Johan pointed out, it will leave the race
-> >   condition holes and will make the code harder to understand.
-> >   Furthermore, the role switching logic that we intend to introduce
-> >   following this would have depended on the user updating their
-> >   DeviceTree blobs.
-> > - Per above, introduced the dynamic DeviceTree rewrite
-> > - Link to v1: https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
-> >
-> > ---
-> > Bjorn Andersson (7):
-> >       dt-bindings: usb: snps,dwc3: Split core description
-> >       dt-bindings: usb: Introduce qcom,snps-dwc3
-> >       of: dynamic: Don't discard children upon node attach
-> >       usb: dwc3: core: Expose core driver as library
-> >       usb: dwc3: qcom: Don't reply on drvdata during probe
-> >       usb: dwc3: qcom: Transition to flattened model
-> >       arm64: dts: qcom: sc8280x: Flatten the USB nodes
-> >
-> >  .../devicetree/bindings/usb/qcom,dwc3.yaml         |  13 +-
-> >  .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 608 +++++++++++++++++++++
-> >  .../devicetree/bindings/usb/snps,dwc3-common.yaml  | 417 ++++++++++++++
-> >  .../devicetree/bindings/usb/snps,dwc3.yaml         | 391 +------------
-> >  arch/arm64/boot/dts/qcom/sa8295p-adp.dts           |  12 +-
-> >  arch/arm64/boot/dts/qcom/sa8540p-ride.dts          |   5 +-
-> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |  12 +-
-> >  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |  11 +-
-> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 138 +++--
-> >  drivers/of/dynamic.c                               |   1 -
-> >  drivers/usb/dwc3/core.c                            | 169 ++++--
-> >  drivers/usb/dwc3/core.h                            |   3 +
-> >  drivers/usb/dwc3/dwc3-qcom.c                       | 323 ++++++++---
-> >  13 files changed, 1483 insertions(+), 620 deletions(-)
-> > ---
-> > base-commit: 864b1099d16fc7e332c3ad7823058c65f890486c
-> > change-id: 20231016-dwc3-refactor-931e3b08a8b9
-> >
-> > Best regards,
-> > --
-> > Bjorn Andersson <quic_bjorande@quicinc.com>
-> >
+After that i connect a USB mouse and rebooted (good case, LAN7800
+enumerate as dev 5):
+
+[=C2=A0=C2=A0=C2=A0 2.354524] dwc2 3f980000.usb: supply vusb_d not found, =
+using dummy
+regulator
+[=C2=A0=C2=A0=C2=A0 2.361984] dwc2 3f980000.usb: supply vusb_a not found, =
+using dummy
+regulator
+[=C2=A0=C2=A0=C2=A0 2.420112] dwc2 3f980000.usb: DWC OTG Controller
+[=C2=A0=C2=A0=C2=A0 2.424969] dwc2 3f980000.usb: new USB bus registered, a=
+ssigned bus
+number 1
+[=C2=A0=C2=A0=C2=A0 2.432193] dwc2 3f980000.usb: irq 51, io mem 0x3f980000
+[=C2=A0=C2=A0=C2=A0 2.437851] usb usb1: udev 1, busnum 1, minor =3D 0
+[=C2=A0=C2=A0=C2=A0 2.438669] hub 1-0:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 2.442553] hub 1-0:1.0: 1 port detected
+[=C2=A0=C2=A0=C2=A0 2.446570] hub 1-0:1.0: standalone hub
+[=C2=A0=C2=A0=C2=A0 2.446584] hub 1-0:1.0: ganged power switching
+[=C2=A0=C2=A0=C2=A0 2.446597] hub 1-0:1.0: individual port over-current pr=
+otection
+[=C2=A0=C2=A0=C2=A0 2.446610] hub 1-0:1.0: Single TT
+[=C2=A0=C2=A0=C2=A0 2.446623] hub 1-0:1.0: TT requires at most 8 FS bit ti=
+mes (666 ns)
+[=C2=A0=C2=A0=C2=A0 2.446639] hub 1-0:1.0: power on to power good time: 2m=
+s
+[=C2=A0=C2=A0=C2=A0 2.446706] hub 1-0:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 2.446861] usb usb1-port1: DeviceRemovable is changed t=
+o 1 according
+to platform information.
+[=C2=A0=C2=A0=C2=A0 2.446880] hub 1-0:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 2.453091] usb usb1-port1: status 0101 change 0001
+[=C2=A0=C2=A0=C2=A0 2.557069] hub 1-0:1.0: state 7 ports 1 chg 0002 evt 00=
+00
+[=C2=A0=C2=A0=C2=A0 2.557170] usb usb1-port1: status 0101, change 0000, 12=
+ Mb/s
+[=C2=A0=C2=A0=C2=A0 2.733021] usb 1-1: new high-speed USB device number 2 =
+using dwc2
+[=C2=A0=C2=A0=C2=A0 2.929282] usb 1-1: udev 2, busnum 1, minor =3D 1
+[=C2=A0=C2=A0=C2=A0 2.930190] hub 1-1:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 2.934181] hub 1-1:1.0: 4 ports detected
+[=C2=A0=C2=A0=C2=A0 2.938311] hub 1-1:1.0: compound device; port removable=
+ status: FRRR
+[=C2=A0=C2=A0=C2=A0 2.938328] hub 1-1:1.0: individual port power switching
+[=C2=A0=C2=A0=C2=A0 2.938341] hub 1-1:1.0: individual port over-current pr=
+otection
+[=C2=A0=C2=A0=C2=A0 2.938538] hub 1-1:1.0: TT per port
+[=C2=A0=C2=A0=C2=A0 2.938554] hub 1-1:1.0: TT requires at most 8 FS bit ti=
+mes (666 ns)
+[=C2=A0=C2=A0=C2=A0 2.938571] hub 1-1:1.0: power on to power good time: 10=
+0ms
+[=C2=A0=C2=A0=C2=A0 2.938725] hub 1-1:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 2.939128] hub 1-1:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 2.939621] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 00=
+02
+[=C2=A0=C2=A0=C2=A0 2.939709] usb usb1-port1: enable change, status 000005=
+03
+[=C2=A0=C2=A0=C2=A0 3.041138] usb 1-1-port1: status 0101 change 0001
+[=C2=A0=C2=A0=C2=A0 3.041367] usb 1-1-port3: status 0301 change 0001
+[=C2=A0=C2=A0=C2=A0 3.145072] hub 1-1:1.0: state 7 ports 4 chg 000a evt 00=
+00
+[=C2=A0=C2=A0=C2=A0 3.145310] usb 1-1-port1: status 0101, change 0000, 12 =
+Mb/s
+[=C2=A0=C2=A0=C2=A0 3.217022] usb 1-1.1: new high-speed USB device number =
+3 using dwc2
+[=C2=A0=C2=A0=C2=A0 3.237176] usb 1-1-port1: not reset yet, waiting 10ms
+[=C2=A0=C2=A0=C2=A0 3.325425] usb 1-1.1: udev 3, busnum 1, minor =3D 2
+[=C2=A0=C2=A0=C2=A0 3.326447] hub 1-1.1:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 3.330665] hub 1-1.1:1.0: 3 ports detected
+[=C2=A0=C2=A0=C2=A0 3.334953] hub 1-1.1:1.0: compound device; port removab=
+le status: FRR
+[=C2=A0=C2=A0=C2=A0 3.334968] hub 1-1.1:1.0: individual port power switchi=
+ng
+[=C2=A0=C2=A0=C2=A0 3.334982] hub 1-1.1:1.0: individual port over-current =
+protection
+[=C2=A0=C2=A0=C2=A0 3.335237] hub 1-1.1:1.0: TT per port
+[=C2=A0=C2=A0=C2=A0 3.335253] hub 1-1.1:1.0: TT requires at most 8 FS bit =
+times (666 ns)
+[=C2=A0=C2=A0=C2=A0 3.335270] hub 1-1.1:1.0: power on to power good time: =
+100ms
+[=C2=A0=C2=A0=C2=A0 3.335533] hub 1-1.1:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 3.335843] hub 1-1.1:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 3.336658] usb 1-1-port3: status 0301, change 0000, 1.5=
+ Mb/s
+[=C2=A0=C2=A0=C2=A0 3.349213] usb 1-1-port3: not reset yet, waiting 10ms
+[=C2=A0=C2=A0=C2=A0 3.421017] usb 1-1.3: new low-speed USB device number 4=
+ using dwc2
+[=C2=A0=C2=A0=C2=A0 3.437449] hub 1-1.1:1.0: state 7 ports 3 chg 0000 evt =
+0000
+[=C2=A0=C2=A0=C2=A0 3.440409] hub 1-1.1:1.0: hub_suspend
+[=C2=A0=C2=A0=C2=A0 3.440766] usb 1-1.1: usb auto-suspend, wakeup 1
+[=C2=A0=C2=A0=C2=A0 3.521800] usb 1-1.3: udev 4, busnum 1, minor =3D 3
+[=C2=A0=C2=A0=C2=A0 3.526564] input: PixArt Microsoft USB Optical Mouse as
+/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:045E:00CB=
+.0001/input/input0
+[=C2=A0=C2=A0=C2=A0 3.540708] hid-generic 0003:045E:00CB.0001: input: USB =
+HID v1.11
+Mouse [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.3/input0
+[=C2=A0=C2=A0=C2=A0 3.913456] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 00=
+02
+[=C2=A0=C2=A0=C2=A0 3.929063] usb 1-1.1: usb wakeup-resume
+[=C2=A0=C2=A0=C2=A0 3.945030] usb 1-1.1: Waited 0ms for CONNECT
+[=C2=A0=C2=A0=C2=A0 3.945066] usb 1-1.1: finish resume
+[=C2=A0=C2=A0=C2=A0 3.945405] hub 1-1.1:1.0: hub_resume
+[=C2=A0=C2=A0=C2=A0 3.945533] usb 1-1.1-port1: status 0101 change 0001
+[=C2=A0=C2=A0=C2=A0 4.053058] usb 1-1-port1: resume, status 0
+[=C2=A0=C2=A0=C2=A0 4.053114] hub 1-1.1:1.0: state 7 ports 3 chg 0002 evt =
+0000
+[=C2=A0=C2=A0=C2=A0 4.053311] usb 1-1.1-port1: status 0101, change 0000, 1=
+2 Mb/s
+[=C2=A0=C2=A0=C2=A0 4.129033] usb 1-1.1.1: new high-speed USB device numbe=
+r 5 using dwc2
+[=C2=A0=C2=A0=C2=A0 4.149190] usb 1-1.1-port1: not reset yet, waiting 10ms
+[=C2=A0=C2=A0=C2=A0 4.241681] usb 1-1.1.1: udev 5, busnum 1, minor =3D 4
+
+Finally i applied the following hack and disconnect the mouse before
+reboot (also good case, LAN7800 enumerate as dev 4)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 4b93c0bd1d4b..3111c0e60876 100644
+=2D-- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5956,6 +5958,11 @@ static const struct usb_device_id hub_id_table[] =
+=3D {
+ =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .idProduct =3D USB_PRODUCT_USB5534B,
+ =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .bInterfaceClass =3D USB_CLASS_HUB,
+ =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .driver_info =3D HUB_QUIRK_DISABLE_A=
+UTOSUSPEND},
++=C2=A0=C2=A0=C2=A0 { .match_flags =3D USB_DEVICE_ID_MATCH_VENDOR
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | USB_DEVICE_ID_MATCH_PRODUCT,
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .idVendor =3D USB_VENDOR_SMSC,
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .idProduct =3D 0x2514,
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .driver_info =3D HUB_QUIRK_DISABLE_AUTOSUS=
+PEND},
+ =C2=A0=C2=A0=C2=A0=C2=A0 { .match_flags =3D USB_DEVICE_ID_MATCH_VENDOR
+ =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | USB_DEVICE_ID_MATCH_PRODUCT,
+ =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .idVendor =3D USB_VENDOR_CYPRESS,
+
+[=C2=A0=C2=A0=C2=A0 2.350924] dwc2 3f980000.usb: supply vusb_d not found, =
+using dummy
+regulator
+[=C2=A0=C2=A0=C2=A0 2.358389] dwc2 3f980000.usb: supply vusb_a not found, =
+using dummy
+regulator
+[=C2=A0=C2=A0=C2=A0 2.416527] dwc2 3f980000.usb: DWC OTG Controller
+[=C2=A0=C2=A0=C2=A0 2.421366] dwc2 3f980000.usb: new USB bus registered, a=
+ssigned bus
+number 1
+[=C2=A0=C2=A0=C2=A0 2.428583] dwc2 3f980000.usb: irq 51, io mem 0x3f980000
+[=C2=A0=C2=A0=C2=A0 2.434245] usb usb1: udev 1, busnum 1, minor =3D 0
+[=C2=A0=C2=A0=C2=A0 2.435011] hub 1-0:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 2.438893] hub 1-0:1.0: 1 port detected
+[=C2=A0=C2=A0=C2=A0 2.442911] hub 1-0:1.0: standalone hub
+[=C2=A0=C2=A0=C2=A0 2.442925] hub 1-0:1.0: ganged power switching
+[=C2=A0=C2=A0=C2=A0 2.442938] hub 1-0:1.0: individual port over-current pr=
+otection
+[=C2=A0=C2=A0=C2=A0 2.442950] hub 1-0:1.0: Single TT
+[=C2=A0=C2=A0=C2=A0 2.442962] hub 1-0:1.0: TT requires at most 8 FS bit ti=
+mes (666 ns)
+[=C2=A0=C2=A0=C2=A0 2.442979] hub 1-0:1.0: power on to power good time: 2m=
+s
+[=C2=A0=C2=A0=C2=A0 2.443047] hub 1-0:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 2.443175] usb usb1-port1: DeviceRemovable is changed t=
+o 1 according
+to platform information.
+[=C2=A0=C2=A0=C2=A0 2.443194] hub 1-0:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 2.449893] usb usb1-port1: status 0101 change 0001
+[=C2=A0=C2=A0=C2=A0 2.553873] hub 1-0:1.0: state 7 ports 1 chg 0002 evt 00=
+00
+[=C2=A0=C2=A0=C2=A0 2.553974] usb usb1-port1: status 0101, change 0000, 12=
+ Mb/s
+[=C2=A0=C2=A0=C2=A0 2.729813] usb 1-1: new high-speed USB device number 2 =
+using dwc2
+[=C2=A0=C2=A0=C2=A0 2.926128] usb 1-1: udev 2, busnum 1, minor =3D 1
+[=C2=A0=C2=A0=C2=A0 2.927003] hub 1-1:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 2.930960] hub 1-1:1.0: 4 ports detected
+[=C2=A0=C2=A0=C2=A0 2.935075] hub 1-1:1.0: compound device; port removable=
+ status: FRRR
+[=C2=A0=C2=A0=C2=A0 2.935093] hub 1-1:1.0: individual port power switching
+[=C2=A0=C2=A0=C2=A0 2.935106] hub 1-1:1.0: individual port over-current pr=
+otection
+[=C2=A0=C2=A0=C2=A0 2.935307] hub 1-1:1.0: TT per port
+[=C2=A0=C2=A0=C2=A0 2.935324] hub 1-1:1.0: TT requires at most 8 FS bit ti=
+mes (666 ns)
+[=C2=A0=C2=A0=C2=A0 2.935341] hub 1-1:1.0: power on to power good time: 10=
+0ms
+[=C2=A0=C2=A0=C2=A0 2.935494] hub 1-1:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 2.935875] hub 1-1:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 2.936328] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 00=
+02
+[=C2=A0=C2=A0=C2=A0 2.936412] usb usb1-port1: enable change, status 000005=
+03
+[=C2=A0=C2=A0=C2=A0 3.037922] usb 1-1-port1: status 0101 change 0001
+[=C2=A0=C2=A0=C2=A0 3.141878] hub 1-1:1.0: state 7 ports 4 chg 0002 evt 00=
+00
+[=C2=A0=C2=A0=C2=A0 3.142017] usb 1-1-port1: status 0101, change 0000, 12 =
+Mb/s
+[=C2=A0=C2=A0=C2=A0 3.213812] usb 1-1.1: new high-speed USB device number =
+3 using dwc2
+[=C2=A0=C2=A0=C2=A0 3.233999] usb 1-1-port1: not reset yet, waiting 10ms
+[=C2=A0=C2=A0=C2=A0 3.322291] usb 1-1.1: udev 3, busnum 1, minor =3D 2
+[=C2=A0=C2=A0=C2=A0 3.323214] hub 1-1.1:1.0: USB hub found
+[=C2=A0=C2=A0=C2=A0 3.327362] hub 1-1.1:1.0: 3 ports detected
+[=C2=A0=C2=A0=C2=A0 3.331651] hub 1-1.1:1.0: compound device; port removab=
+le status: FRR
+[=C2=A0=C2=A0=C2=A0 3.331668] hub 1-1.1:1.0: individual port power switchi=
+ng
+[=C2=A0=C2=A0=C2=A0 3.331681] hub 1-1.1:1.0: individual port over-current =
+protection
+[=C2=A0=C2=A0=C2=A0 3.331947] hub 1-1.1:1.0: TT per port
+[=C2=A0=C2=A0=C2=A0 3.331963] hub 1-1.1:1.0: TT requires at most 8 FS bit =
+times (666 ns)
+[=C2=A0=C2=A0=C2=A0 3.331980] hub 1-1.1:1.0: power on to power good time: =
+100ms
+[=C2=A0=C2=A0=C2=A0 3.332230] hub 1-1.1:1.0: local power source is good
+[=C2=A0=C2=A0=C2=A0 3.332529] hub 1-1.1:1.0: enabling power on all ports
+[=C2=A0=C2=A0=C2=A0 3.434279] hub 1-1.1:1.0: state 7 ports 3 chg 0000 evt =
+0000
+[=C2=A0=C2=A0=C2=A0 3.691359] hub 1-1.1:1.0: state 7 ports 3 chg 0000 evt =
+0002
+[=C2=A0=C2=A0=C2=A0 3.691728] usb 1-1.1-port1: status 0101, change 0001, 1=
+2 Mb/s
+[=C2=A0=C2=A0=C2=A0 3.818035] usb 1-1.1-port1: debounce total 100ms stable=
+ 100ms status
+0x101
+[=C2=A0=C2=A0=C2=A0 3.889848] usb 1-1.1.1: new high-speed USB device numbe=
+r 4 using dwc2
+[=C2=A0=C2=A0=C2=A0 3.910007] usb 1-1.1-port1: not reset yet, waiting 10ms
+[=C2=A0=C2=A0=C2=A0 4.002506] usb 1-1.1.1: udev 4, busnum 1, minor =3D 3
+
+Does the last log provide some useful information about the root cause
+why the hubs are usually suspended before Microchip LAN7800 could be
+enumerated?
+
+Best regards
 
