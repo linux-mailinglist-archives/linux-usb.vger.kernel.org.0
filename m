@@ -1,126 +1,148 @@
-Return-Path: <linux-usb+bounces-15907-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15908-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0E94996307
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 10:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1812A996392
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 10:48:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6897A1F25598
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 08:38:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C48DA1F2614B
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 08:48:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A98A518EFEB;
-	Wed,  9 Oct 2024 08:34:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62DDC18C327;
+	Wed,  9 Oct 2024 08:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aL/aeRHr"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="N3MsA3xX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF26918E05C
-	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 08:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA81E18A6C6
+	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 08:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728462882; cv=none; b=R2CRYm/di6u0pVbWYEn/A6F+yJUR6Rx0C0UdCF5usK4sapXbf4oXh2PZN+Sj2SOf7Vgtp/wIzDTgUMSjLVvnkLFvuBII68ZF9cSe2XZdBoYRSpV7TruIv80HDfrjJX9phJOHCS82aG4DrPbY8mgAW7m74WZsfXXfdQ80QUt7K54=
+	t=1728463366; cv=none; b=hNUM9huzOCbdCJab+QkKcmnDgcOyMw2+SWoQ1CDqw7nWgX1O6rynDGheV91u4fKCDXMZc/FRPoClqfoE4vNIsq9no4V5twj976zE29QxQx7HNDad9Zw+Z+MXWuJssKPcpbpQeaTJhCxNEi7z5Uilbgw9a+bAstcXFRNNB8wiiKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728462882; c=relaxed/simple;
-	bh=VjqjANdnWb9XHbMfVbaIxeA05EVekq4twqSd8NMHtwY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=INg+te9KRkifvEhUIt30u3hxXHaU7rsymhpWmfOgs+x73h1Q2sFsT2oTjV8R9GfVrH4S8/aK6W1xj2/QdD5yBZhsjdN8s/A0bWMudLPq9ojYpS9oIvsCLQ+2aisxYjskbC/HihNQqL5/Cj6r114+fwfDF+frWC2gCMinh+3Ikro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aL/aeRHr; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728462880; x=1759998880;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VjqjANdnWb9XHbMfVbaIxeA05EVekq4twqSd8NMHtwY=;
-  b=aL/aeRHrsNTW7yiAF+ttxb6DhP2LAZRw34WYjjlgUlzc0fqP6GCVIH53
-   vWDdNdX2RiJJooDlfe3FUGZNAUL4to0e7RJiKG53AHOjco2JlftG9FJx6
-   djg0/QECpFCLMxTHt/Vut80DfdRq17t1ooMFAIutblAei0CkB50bAPN1Y
-   TgF8xoMP/5O748gz4rrbudI9xf7tecVIdstehzPZGVTnhGGXPqffaBZEJ
-   hp4ra4EGPdNukHqZDvgcXJStwE24zhwThy9gruTRSYdiqi6XnLXmpkvBj
-   NPMrubLlP2NuxBqP2cP8Y9IsKogGXd1W7EOzibn3y7DnMXtt4W6JIJMkA
-   g==;
-X-CSE-ConnectionGUID: NnFwPHmmTweP2cnHiqocDw==
-X-CSE-MsgGUID: 6voPG2rpSISoMZX7MhVCcA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27226809"
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="27226809"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 01:34:40 -0700
-X-CSE-ConnectionGUID: YrzbEK49QUqmUO1gPdZU9A==
-X-CSE-MsgGUID: FoIglA0UT8CeTQuPHPJWsw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="76405432"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa006.jf.intel.com with SMTP; 09 Oct 2024 01:34:37 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Oct 2024 11:34:36 +0300
-Date: Wed, 9 Oct 2024 11:34:36 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] usb: typec: Add attribute file showing the USB
- Modes of the partner
-Message-ID: <ZwZAHE9q9IGYOa80@kuha.fi.intel.com>
-References: <20241004140440.1882311-1-heikki.krogerus@linux.intel.com>
- <20241004140440.1882311-3-heikki.krogerus@linux.intel.com>
- <quqy7fpn4e5hrikekfjirnid2joskyezzj72jgfkz2t6th7z7o@tknlic5vlywq>
+	s=arc-20240116; t=1728463366; c=relaxed/simple;
+	bh=XhJiHPGo1+eCnZwKrwKtZoj+qGtS2ActqBF7GqOTjZQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tXk385DgHv+9qn43EnJ/TP4STrIUbtJSf8OOU2Qs/jQe+4nDzZGRFLnwc3TpyvJy7cQeK/SHeqANdaQABkHF68eVWw0IXKjiSrbLQrDOKCiTTx1qCoUzaKs4wBxIdPj19e09eNLREkA9D8BdmACcLTh75npxSdVYJcaqgLSVg3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=N3MsA3xX; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a99650da839so298584066b.2
+        for <linux-usb@vger.kernel.org>; Wed, 09 Oct 2024 01:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1728463363; x=1729068163; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NCo1GlPGMO9qRjYk6NqblAPH+ivDBMcmdikYhCEoAX0=;
+        b=N3MsA3xXYhA8BGicfckJzTKfIILQJylZFKBHAuYRpUMZCEwA/MGo1xlfMjbYrppwMZ
+         1ABbNIaLsfWy+n8Jmcp8wGFMp3p0uj+e1t3wYhI4qL9QNlpICl5LZX23lNnVkMmbaHBv
+         DEp/Ve+HON0bMnYDM8TZ1DjHpQ9m3QPEuyubq4S6VFwJ1cWDVuFZc2s02I1dWMgjGU0D
+         i6gu7v4tWYpiAjOym8BXENecX5/8vPT46O4acX3v8gMjc51e0O2rc5avmUq9JgCtisGp
+         lrggl7V+vqye8HtVY5xMd67EFvelC/sNNaMhrfo/TW+jzqv8cJhyNmH606Mqlv595Z+q
+         xSGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728463363; x=1729068163;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NCo1GlPGMO9qRjYk6NqblAPH+ivDBMcmdikYhCEoAX0=;
+        b=xIQy7osl1cid5jehJe8SxaESs7yNlWDdrtewKNGmjNtNBxGPj9hPUWuURN+zwu0bMS
+         JaYcXv7lYMTcyHc2fyx54U0ncMRKDNxOFdqKZ8GdN+JVrdVUPC1aruNJUFPW272v+rif
+         S2WNiN3WN8dnoTU1n2AarvhVbJzVgcICk8c8Cj7yIc+Ksg+/a0pHfWBB/9QQ5ZzGzHlS
+         0qOuTOsENgYWJw5C7byPTDcKFvJEF6EuI3A0tVK9hGoT3BR0tJkoeIS2xuGLWkUhnKDz
+         S29EFZIApI6xa+V6O6diznprcEhEl/YBPiAeiKPhAsl3fPz9SmN8lOir03NhFf8ZDgui
+         aSQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF7Kn/jbmjV8c/DWp7G2cUoSchMnq4PuZWRAa1W1kpQcIYMejhTdJBQjHh1VSCoSyo5OcaRu87fYU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmWvRAeZvmx2l4Q/9TJ5HlaZtNRC1+jea8W4j+WnnftEbpggyz
+	Sw5nE72rj+L5hwI3hiFtfmdxwlMX8HXSsEpv23vQlYsPj0xbTDL0b5ERUNNJNsY=
+X-Google-Smtp-Source: AGHT+IH65Py6ZoVFXJXAzrfoxCpg11Zu8PXx18r+jrhrvKhS9cBYCLJYMJJAgnToJzsiU/Uro8/0AA==
+X-Received: by 2002:a17:906:6a05:b0:a77:c95e:9b1c with SMTP id a640c23a62f3a-a998d1f6694mr148213966b.27.1728463363024;
+        Wed, 09 Oct 2024 01:42:43 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.23])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9957c683d1sm365002866b.203.2024.10.09.01.42.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Oct 2024 01:42:42 -0700 (PDT)
+Message-ID: <cbb9d3ab-ed61-43f6-aca1-8d35316c4ff6@tuxon.dev>
+Date: Wed, 9 Oct 2024 11:42:40 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <quqy7fpn4e5hrikekfjirnid2joskyezzj72jgfkz2t6th7z7o@tknlic5vlywq>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 15/16] arm64: dts: renesas: rzg3s-smarc: Enable USB
+ support
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, magnus.damm@gmail.com,
+ gregkh@linuxfoundation.org, mturquette@baylibre.com, sboyd@kernel.org,
+ yoshihiro.shimoda.uh@renesas.com, biju.das.jz@bp.renesas.com,
+ ulf.hansson@linaro.org, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-16-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdXbNRO--0ZGO4owi3At5n1dTMMWo4PTaubyNWEkVnPFFA@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdXbNRO--0ZGO4owi3At5n1dTMMWo4PTaubyNWEkVnPFFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Oct 06, 2024 at 07:22:42PM +0300, Dmitry Baryshkov wrote:
-> On Fri, Oct 04, 2024 at 05:04:37PM GMT, Heikki Krogerus wrote:
-> > This attribute file shows the supported USB modes (USB 2.0,
-> > USB 3.0 and USB4) of the partner, and the currently active
-> > mode.
-> > 
-> > The active mode is determined primarily by checking the
-> > speed of the enumerated USB device. When USB Power Delivery
-> > is supported, the active USB mode should be always the mode
-> > that was used with the Enter_USB Message, regardless of the
-> > result of the USB enumeration. The port drivers can
-> > separately assign the mode with a dedicated API.
-> > 
-> > If USB Power Delivery Identity is supplied for the partner
-> > device, the supported modes are extracted from it.
-> > 
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-typec |  14 +++
-> >  drivers/usb/typec/class.c                   | 123 +++++++++++++++++++-
-> >  drivers/usb/typec/class.h                   |   2 +
-> >  include/linux/usb/typec.h                   |   5 +
-> >  4 files changed, 140 insertions(+), 4 deletions(-)
+Hi, Geert,
+
+On 08.10.2024 18:16, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
-> I think the use of port->usbN_dev is racy and not always obviouos.
-> For example  on Qualcomm devices I ended up with no partner's
-> usb_capability and just 'usb2' in usb_mode even though the partner uses
-> USB3 mode. Maybe it's better to hide usb_mode completely if we can not
-> properly determine the actual mode?
+> On Thu, Aug 22, 2024 at 5:28 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Enable USB support (host, device, USB PHYs and sysc).
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> (On Qualcomm devices there is no working ACPI, so there is no USB <->
-> typec correlationship (yet)).
+> Thanks for your patch!
+> 
+>> --- a/arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi
+>> +++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi
+>> @@ -144,3 +188,20 @@ &sdhi1 {
+>>         max-frequency = <125000000>;
+>>         status = "okay";
+>>  };
+>> +
+>> +&sysc {
+>> +       status = "okay";
+>> +};
+>> +
+> 
+> To avoid regressions (/sys/devices/soc0/ disappearing), enabling sysc
+> is a dependency for "[PATCH 05/16] soc: renesas: sysc: Move RZ/G3S
+> SoC detection on SYSC driver", so I think it makes sense to change
+> its status to "okay" in r9a08g045.dtsi instead, and spin that off into
+> its own patch. 
 
-Sure. Let's keep it hidden in that case.
+Good point! I'll add the dtsi changes into "[PATCH 05/16] soc: renesas:
+sysc: Move RZ/G3S SoC detection on SYSC driver".
 
-thanks,
+Thank you,
+Claudiu Beznea
 
--- 
-heikki
+ I am not super-worried, so doing the driver and DTS
+> changes in separate patches should be fine, as long as they meet each
+> other in next or upstream.
+> 
+> The rest LGTM.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
