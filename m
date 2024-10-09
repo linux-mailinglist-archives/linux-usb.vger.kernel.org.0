@@ -1,172 +1,185 @@
-Return-Path: <linux-usb+bounces-15922-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15923-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36A53996940
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 13:51:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46942996A9E
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 14:49:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCD1FB21FAD
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 11:51:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A90F1B2586D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 12:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7A1194ACB;
-	Wed,  9 Oct 2024 11:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B4FE1E103E;
+	Wed,  9 Oct 2024 12:44:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNcGUxTn"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OzRA5rmr"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A81192B89;
-	Wed,  9 Oct 2024 11:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094291990DC;
+	Wed,  9 Oct 2024 12:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728474629; cv=none; b=pf/kJ5pWx70+jvpcg1o1+usBNmfdoj8Xubj0sD0Nh6ti1A6jZIVUCMee1r0cPHwrB1MWaYVBAm/dKsnwA7p9i4/eIWBpYCmdrD4nHrSInrwqZdnOY4r0XgGOnO36NIEXW4S1axr+2OHR/gYebXcO+lDNRqpzEalKECGdZA3YKac=
+	t=1728477847; cv=none; b=rgX4h1GoaXMXJtiasJXHbYX6KJeQGo4QqelbamdZg0VrGaX34k0o4Y+i2Pn7WxPRQ6ueP2hPV3ijU0NbA6iUD86gHhJDQ7ot1nOuwC377QczhQ1whQXnb0EkUIMgfqpaMnu8o3UkVS9o5gzHnUmZxewlS4LwGHyuikxm8U9a0b8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728474629; c=relaxed/simple;
-	bh=dGswqfuoU6DO4cYJ0FthosnuJrBUDxI3B2K+sH8atgU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VHcsslyROgrUVRsdmb9e/5yLnjdyMWNnfWB/zAP61KSiOqg6m3zyp8yQtisrRXLezyBmXdtZDAv/qHvjg2AMlziqNvIxynq53cJu1zynBNUrZpfkcQc0VtK0j/q2x8itWng2dQ52PteAKw3FM6JwXQA5vFS+j9JKmfDyohhMZik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNcGUxTn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 393FEC4CECD;
-	Wed,  9 Oct 2024 11:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728474628;
-	bh=dGswqfuoU6DO4cYJ0FthosnuJrBUDxI3B2K+sH8atgU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NNcGUxTnIb8XVByvRuL/z1me0iaECCZ1AuAjulMjZi5tIH7ke7OTJcBcW9gq8nHNY
-	 kniriD0uu+01d8c7uXWWutmOZnNqKwJFZerW7epQuseaVHibz2w4W9l41ZhrTExYSz
-	 AxFPVD7cv3KmZp/0j11lKyOPTaklnt1Z121qzcdOOlwMWCvnVd4UX22rpbAc7gT5fL
-	 1XGFt8UTQ9FP2jkX91BVvXuKmpM+xujG7FnJlcErHLce0NwrBQa+O8ALon4wTPB9OE
-	 tgCl8DWWfRsQOSucL1aK0sFFKdADv6BghCwWRCqxBNm6tZBJd0m0sBH+qSq6SNX7mL
-	 jTtrb4lJKmzMQ==
-Message-ID: <ebe0b4dd-0603-4ef5-8007-d0a768561e95@kernel.org>
-Date: Wed, 9 Oct 2024 14:50:22 +0300
+	s=arc-20240116; t=1728477847; c=relaxed/simple;
+	bh=wFYuyt9To9IclCi28xRLUhh0EhmLXvdTmFGdhpypMOY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YnXFHq0qIVbDkOnt0xvsPpCL8ywvuDxf6k1oJaqyGmfgAv9Ha3hmQv2IumN1M+BJIuYsVOatvs5C9LNYbeSBAHPZd/WMKFW/fScQrPqVNg8KlDbQ4jt5w6iyZQRZ20XVCHTg2+y18cvsxJge8eC3VWjnH/CKjJqeNKYVpWGq37Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OzRA5rmr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA321C4CECD;
+	Wed,  9 Oct 2024 12:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1728477846;
+	bh=wFYuyt9To9IclCi28xRLUhh0EhmLXvdTmFGdhpypMOY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OzRA5rmrB6OQxuFf/JL058gW6cezttmCH71A9xUwAyQLr9+JgJwcp9piNCqy9wLlD
+	 kjg0VokzAVUURBKq3xIKnJaFUN1pxsFIGI9Raj0P9WnXzhMnFp3p77FAnprHV+u/40
+	 NbTgDkB+bHy5mVRngpQ4KoNdyuAR3WAnQCkCf9xc=
+Date: Wed, 9 Oct 2024 14:44:03 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: Thinh.Nguyen@synopsys.com, mathias.nyman@intel.com,
+	stern@rowland.harvard.edu, elder@kernel.org, oneukum@suse.com,
+	yajun.deng@linux.dev, dianders@chromium.org, kekrby@gmail.com,
+	perex@perex.cz, tiwai@suse.com, tj@kernel.org,
+	stanley_chang@realtek.com, andreyknvl@gmail.com,
+	christophe.jaillet@wanadoo.fr, quic_jjohnson@quicinc.com,
+	ricardo@marliere.net, grundler@chromium.org, niko.mauno@vaisala.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org, badhri@google.com,
+	albertccwang@google.com, quic_wcheng@quicinc.com,
+	pumahsu@google.com
+Subject: Re: [PATCH v4 3/5] usb: add apis for sideband uasge tracking
+Message-ID: <2024100941-limping-dislodge-5c74@gregkh>
+References: <20241009054429.3970438-1-guanyulin@google.com>
+ <20241009054429.3970438-4-guanyulin@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: core: Fix system suspend on TI AM62 platforms
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>,
- Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
- Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>,
- "msp@baylibre.com" <msp@baylibre.com>, "srk@ti.com" <srk@ti.com>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org>
- <20241005010355.zyb54bbqjmpdjnce@synopsys.com>
- <85f1805b-e4c8-48c4-8e99-c36d20182a13@kernel.org>
- <20241008205315.64cxff22uckoich5@synopsys.com>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20241008205315.64cxff22uckoich5@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009054429.3970438-4-guanyulin@google.com>
 
-
-
-On 08/10/2024 23:53, Thinh Nguyen wrote:
-> Hi Roger,
+On Wed, Oct 09, 2024 at 05:42:57AM +0000, Guan-Yu Lin wrote:
+> Introduce sb_usage_count and corresponding apis to track sideband usage
+> on each usb_device. A sideband refers to the co-processor that accesses
+> the usb_device via shared control on the same USB host controller. To
+> optimize power usage, it's essential to monitor whether ther sideband is
+> actively using the usb_device. This information is vital when
+> determining if a usb_device can be safely suspended during system power
+> state transitions.
 > 
-> On Tue, Oct 08, 2024, Roger Quadros wrote:
->> Hi Thinh,
->>
->> On 05/10/2024 04:04, Thinh Nguyen wrote:
->>> Hi,
->>>
->>> On Tue, Oct 01, 2024, Roger Quadros wrote:
->>>> Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
->>>> system suspend is broken on AM62 TI platforms.
->>>>
->>>> Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
->>>> bits (hence forth called 2 SUSPHY bits) were being set during core
->>>> initialization and even during core re-initialization after a system
->>>> suspend/resume.
->>>>
->>>> These bits are required to be set for system suspend/resume to work correctly
->>>> on AM62 platforms.
->>>>
->>>> Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
->>>> driver is not loaded and started.
->>>> For Host mode, the 2 SUSPHY bits are set before the first system suspend but
->>>> get cleared at system resume during core re-init and are never set again.
->>>>
->>>> This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
->>>> before system suspend and restored to the original state during system resume.
->>>>
->>>> Cc: stable@vger.kernel.org # v6.9+
->>>> Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
->>>> Link: https://urldefense.com/v3/__https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/__;!!A4F2R9G_pg!ahChm4MaKd6VGYqbnM4X1_pY_jqavYDv5HvPFbmicKuhvFsBwlEFi1xO5itGuHmfjbRuUSzReJISf5-1gXpr$ 
->>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>>> ---
->>>>  drivers/usb/dwc3/core.c | 16 ++++++++++++++++
->>>>  drivers/usb/dwc3/core.h |  2 ++
->>>>  2 files changed, 18 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>> index 9eb085f359ce..1233922d4d54 100644
->>>> --- a/drivers/usb/dwc3/core.c
->>>> +++ b/drivers/usb/dwc3/core.c
->>>> @@ -2336,6 +2336,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>>>  	u32 reg;
->>>>  	int i;
->>>>  
->>>> +	dwc->susphy_state = !!(dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
->>>> +			    DWC3_GUSB2PHYCFG_SUSPHY);
->>>> +
->>>>  	switch (dwc->current_dr_role) {
->>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>>>  		if (pm_runtime_suspended(dwc->dev))
->>>> @@ -2387,6 +2390,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>>>  		break;
->>>>  	}
->>>>  
->>>> +	if (!PMSG_IS_AUTO(msg)) {
->>>> +		if (!dwc->susphy_state)
->>>> +			dwc3_enable_susphy(dwc, true);
->>>> +	}
->>>> +
->>>>  	return 0;
->>>>  }
->>>>  
->>>> @@ -2454,6 +2462,14 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>>>  		break;
->>>>  	}
->>>>  
->>>> +	if (!PMSG_IS_AUTO(msg)) {
->>>> +		/* dwc3_core_init_for_resume() disables SUSPHY so just handle
->>>> +		 * the enable case
->>>> +		 */
->>>
->>> Can we note that this is a particular behavior needed for AM62 here?
->>> And can we use this comment style:
->>
->> Looking at this again, this fix is not specific to AM62 but for all platforms.
->> e.g. if Host Role was already started when going to system suspend, SUSPHY bits
->> were enabled, then after system resume SUSPHY bits are cleared at dwc3_core_init_for_resume().
->>
->> Host stop/start was not called so SUSPHY bits remain cleared. So here
->> we deal with enabling SUSPHY.
->>
+> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+> ---
+>  drivers/usb/core/driver.c | 54 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/usb.h       | 13 ++++++++++
+>  2 files changed, 67 insertions(+)
 > 
-> It's true that we have a bug where the SUSPHY bits remain disabled after
-> suspend. However, the SUSPHY bits needing to be set during suspend is
-> unique to AM62. Let's add this note in the dwc3_suspend_common() check.
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index 0c3f12daac79..c1ba5ed15214 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -1673,6 +1673,60 @@ void usb_disable_autosuspend(struct usb_device *udev)
+>  }
+>  EXPORT_SYMBOL_GPL(usb_disable_autosuspend);
+>  
+> +/**
+> + * usb_sideband_get - notify usb driver there's a new active sideband
+> + * @udev: the usb_device which has an active sideband
+> + *
+> + * An active sideband indicates that another entity is currently using the usb
+> + * device. Notify the usb device by increasing the sb_usage_count. This allows
+> + * usb driver to adjust power management policy based on sideband activities.
+> + */
+> +void usb_sideband_get(struct usb_device *udev)
+> +{
+> +	struct usb_device *parent = udev;
+> +
+> +	do {
+> +		atomic_inc(&parent->sb_usage_count);
 
-Yes I will do that. Thanks!
+As this is a reference count, use refcount_t please.
 
--- 
-cheers,
--roger
+> +		parent = parent->parent;
+> +	} while (parent);
+
+Woah, walking up the device chain?  That should not be needed, or if so,
+then each device's "usage count" is pointless.
+
+> +}
+> +EXPORT_SYMBOL_GPL(usb_sideband_get);
+> +
+> +/**
+> + * usb_sideband_put - notify usb driver there's a sideband deactivated
+> + * @udev: the usb_device which has a sideband deactivated
+> + *
+> + * The inverse operation of usb_sideband_get, which notifies the usb device by
+> + * decreasing the sb_usage_count. This allows usb driver to adjust power
+> + * management policy based on sideband activities.
+> + */
+> +void usb_sideband_put(struct usb_device *udev)
+> +{
+> +	struct usb_device *parent = udev;
+> +
+> +	do {
+> +		atomic_dec(&parent->sb_usage_count);
+> +		parent = parent->parent;
+> +	} while (parent);
+> +}
+> +EXPORT_SYMBOL_GPL(usb_sideband_put);
+> +
+> +/**
+> + * usb_sideband_check - check sideband activities on the host controller
+> + * @udev: the usb_device which has a sideband deactivated
+> + *
+> + * Check if there are any sideband activity on the USB device right now. This
+> + * information could be used for power management or other forms or resource
+> + * management.
+> + *
+> + * Returns true on any active sideband existence, false otherwise
+> + */
+> +bool usb_sideband_check(struct usb_device *udev)
+> +{
+> +	return !!atomic_read(&udev->sb_usage_count);
+
+And what happens if it changes right after you make this call?  This
+feels racy and broken.
+
+> +}
+> +EXPORT_SYMBOL_GPL(usb_sideband_check);
+> +
+>  /**
+>   * usb_autosuspend_device - delayed autosuspend of a USB device and its interfaces
+>   * @udev: the usb_device to autosuspend
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index 672d8fc2abdb..5b9fea378960 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -645,6 +645,7 @@ struct usb3_lpm_parameters {
+>   *	parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
+>   *	Will be used as wValue for SetIsochDelay requests.
+>   * @use_generic_driver: ask driver core to reprobe using the generic driver.
+> + * @sb_usage_count: number of active sideband accessing this usb device.
+>   *
+>   * Notes:
+>   * Usbcore drivers should not set usbdev->state directly.  Instead use
+> @@ -731,6 +732,8 @@ struct usb_device {
+>  
+>  	u16 hub_delay;
+>  	unsigned use_generic_driver:1;
+> +
+> +	atomic_t sb_usage_count;
+
+Why is this on the device and not the interface that is bound to the
+driver that is doing this work?
+
+thanks,
+
+greg k-h
 
