@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-15918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15919-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C747A99677F
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 12:41:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CDBA996787
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 12:45:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29670B2248A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 10:41:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 973FCB23EFD
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 10:45:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78C918F2DA;
-	Wed,  9 Oct 2024 10:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56F718FDC8;
+	Wed,  9 Oct 2024 10:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9CC9gpn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TVBB5EZ6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DEB18E751
-	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 10:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6C618E36E
+	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 10:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728470501; cv=none; b=eGeLoqhsVlMptF4A7vXAxOFtnFBntyTtmkyCF3i23TWpuN6ef9nFJvDshZV8YqCLhY5ZnSEVCbiOn+4JuuMSX7MKWHt4NkzEOpCpAoovSPOj0m21mc/oWMKYMaamS5db3NYu8WL9wTTA1qw7yiElEdI3xNCB914cEUPy1Z+P4PY=
+	t=1728470696; cv=none; b=HYk6Ql7LDV7fc0Ui9dmuljW5iRA5m4vsqk+qU/ONzWUQsxTLjOJ3FvHhyNxpaIKJRCYuRhALUrut+bselN1BuFKrIKBNCCG8u+UWzpVFeE7CDDjOUIGKMPILvpUNFR2spzGd4yN4GRyyNxItVQpaSGfAv4V4/C3ckAo+jh/Vals=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728470501; c=relaxed/simple;
-	bh=bBopqJzJnoYVPRnqjd+7UpMxANx5WhFlV/HIB9FVHx0=;
+	s=arc-20240116; t=1728470696; c=relaxed/simple;
+	bh=8cvwqAM5MjAISrIhCzc6aoouQAdkums74ENAefY7US4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OetpHDQoFJja3LAGLoJz4rWm1p6qrVyvNczSYbKEh1WzQB3iN7OB1zRKSBBgHhO18hc9HlfU8e6Mr3zhvt476RmPgQbvxle+79vgO8uV/pcNTGtR9q2b8lmQDNrycyiWWJIf86TlfYCMhmh7WQpifLbd+wScx3LfNav+mUGcv7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9CC9gpn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2DCEC4CEC5
-	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 10:41:40 +0000 (UTC)
+	 Content-Type:MIME-Version; b=GTvq+txG6rnl9xrUjSrUgnjKGUst6CTnwObPnDhRm/v+cehe4KTjmqKwlL87cPiC6B3H2MOk5HEHs4dd6gC8yUR5UKFhP/vTu204Kb2dUDH4q+wF66hrOSKzfiRzFCQoUqAR+X7xMfMHMEcEvrcWUATxPxYGlcuzaPNDYEcWDK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TVBB5EZ6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1F59BC4CEC5
+	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 10:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728470501;
-	bh=bBopqJzJnoYVPRnqjd+7UpMxANx5WhFlV/HIB9FVHx0=;
+	s=k20201202; t=1728470696;
+	bh=8cvwqAM5MjAISrIhCzc6aoouQAdkums74ENAefY7US4=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=G9CC9gpnUs7jd1bI0vfSbjtRFOjv/Q0dQH6rMapbK3GLC+4f4WO4INjXJVQMOHr62
-	 qZdhj1mnPVDKeypvoQPJVlzzt41H6IpKBwogf3S3MGir52ZDqQd1nF7gg/1H0YFXPS
-	 6BrwJdWa+yt7Y9gtXvgO+Q1MrkjMYJa/I6A7WyOZhXtc1U+f13axjqmFz1W49oj5aG
-	 dWWCd/0OUD2YkXWc1vbqSk3WExFNYbqUrXUHhFmmt+WRZ9grANBuwfitlP6k1m46Z+
-	 p+BThtKTr0RwfUe9j7ETJccvVlZIYShyi5bVordSTKiNAa4EGE6N7JRd1QYyjZtx7J
-	 OiirA5/2DtF2A==
+	b=TVBB5EZ65NfrQFi7gcpI/kYJCdua9pn6r2tcEDL2oVheA0L0ZU+GjD7leHhfl9m1B
+	 /DuK6QYUplhEtiYJZU7SywxgCln8T3Fh8kNDahnvDwT5vAN1saXU7Qs8O4KPlhBTbh
+	 VUYVY3y7ykMT6/XibKXtNO1JdU1+6rOXLnzPF5Efm9/DWrx4HXUVkhzLlbPK/Eziyg
+	 CkeVmBSi88vkZvK7HigbYpJ5SVkN77eFMrCx4GgVmsl0yWSeHSJO6f41PTIz72eWNR
+	 U0VTkKPQ0/SB71IEXEsQiH8eE47dnQvaq8Tqxi2vUa2zP6HuLI+zh8L5iZImBTjNqu
+	 LKGNX7goTfogw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E59F1C53BBF; Wed,  9 Oct 2024 10:41:40 +0000 (UTC)
+	id 06950C53BC1; Wed,  9 Oct 2024 10:44:55 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 219362] USB SATA does not correctly shutdown the SSD upon
  poweroff causing data loss
-Date: Wed, 09 Oct 2024 10:41:40 +0000
+Date: Wed, 09 Oct 2024 10:44:55 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219362-208809-oJRp7WbAWL@https.bugzilla.kernel.org/>
+Message-ID: <bug-219362-208809-AZrRBqL7Kg@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219362-208809@https.bugzilla.kernel.org/>
 References: <bug-219362-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,11 +79,20 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219362
 
---- Comment #12 from Tomas Mudrunka (harviecz@gmail.com) ---
-But i want to be 100% sure no userspace will be involved in the shutdown. I=
-f i
-do proper shutdown the init will be doing stuff and i cannot achieve the
-shutdown on time before the backup capacitors discharge...
+--- Comment #13 from Tomas Mudrunka (harviecz@gmail.com) ---
+For example manapage for "poweroff -f" says following:
+
+       -f, --force
+           Force immediate power-off, halt, or reboot. If specified, the
+command does not contact the init system. In most cases, filesystems are not
+properly unmounted before shutdown. For example, the command
+           reboot -f is mostly equivalent to systemctl reboot -ff, instead =
+of
+systemctl reboot -f.
+
+
+
+when compared to sysrq... sysrq can at least unmount the filesystems...
 
 --=20
 You may reply to this email to add a comment.
