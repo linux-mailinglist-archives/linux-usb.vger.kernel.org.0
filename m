@@ -1,147 +1,237 @@
-Return-Path: <linux-usb+bounces-15889-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15890-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 120C3995DF2
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 04:55:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A1BC995DF7
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 05:00:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88E4C1F24928
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 02:55:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D06EF28330A
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 03:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A2813F43A;
-	Wed,  9 Oct 2024 02:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="keQhcz4t"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138DB13D8A4;
+	Wed,  9 Oct 2024 03:00:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DEC20B0F;
-	Wed,  9 Oct 2024 02:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289ED26AEC
+	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 03:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728442507; cv=none; b=bhGSFDcYJK0YcJWwzNegBWdt9Sqwjmj+LiiVB9AaQeuPYhNKeg7h2XzFEqIKD9JjoA1fcqatmxG6VDR+j9Dge37wtcV1xCVEkc3XHf56PEiItpqp0/RFb7KfYrsRzUbzprCkIwiV5Rqp/gtGoXHjiO1nGkU1vSvNXpP/Qv3aP5Q=
+	t=1728442826; cv=none; b=G/mjHYBWUwFjPNUKaFJD86alJ+fFFg0zIc+mVJwmZ32LUD76WzraQJwE3oWiMgqRAKPI+tmZBJTka3WOvkhC5dlKLwuDJnQvLIgKSh8gwcxnizIpdJ9NlvZfPeG6Z5UgQNRuRMcWjePlP3uSe0saifUmgntb3KKupVsLsipd8QU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728442507; c=relaxed/simple;
-	bh=oxm1Ff3vxNyn1mbJxKeZbnMvDmPaCTYcZp501d21ls8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f9MeVUfuHZAJlAbw9tiRREFFwKVYWyixMRPrvs8L3i9b4dS1TLQKXvXFEPAakZ3qE/7Atjunfyaee0p5SkLmGHvs1Ipi/NRk5MzhDSxQvhvE8N0puO7KhyKkw+6R1m0ffFoIHa27ONgVnw6QC08wNr1+w7qMq1rsilIl9v0nu5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=keQhcz4t; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498D2kbj010523;
-	Wed, 9 Oct 2024 02:54:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=vfgF9EMGlGzSd0FlTmezTu1P
-	DT0ku04Q94Tou5aFIy4=; b=keQhcz4tVzSyxE5TJUxXWBCQPQY7IkV4j9hlypoe
-	7LGPBZ/xPgXRmUFhy32sm5CJ68Q+Q3dRS25kkTgdaguBNVmBp5Ds137eCd9ndk7X
-	OMGmmt+G1s3oMcpWHJGCP66HSquiwla/W1l6SummKoUaQbpW8ZahsmwKEljoGqwO
-	ylSug5VPFa9VM0LAIef1aiGNwTLm662wFGNbkmCmAge1JMJO9PFIhM1JUo6rwFE1
-	n2UDyVHrlTEeYhKKTWhRAtZFrCL/TyrMTB9B4YTaTq4a2Jn6pDVxx8Cvkj4R2mOh
-	ydUv60+MD+iH12gV3sTyW+s5xiaZpheOzRU80cm2cy4tMA==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 424x7ru93e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Oct 2024 02:54:51 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4992sofX016702
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 9 Oct 2024 02:54:50 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 8 Oct 2024 19:54:49 -0700
-Date: Tue, 8 Oct 2024 19:54:48 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Frank Li <Frank.li@nxp.com>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, "Felipe
- Balbi" <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Saravana
- Kannan" <saravanak@google.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2 0/7] usb: dwc3: qcom: Flatten dwc3 structure
-Message-ID: <ZwXweChRh5bjc1nS@hu-bjorande-lv.qualcomm.com>
-References: <20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com>
- <ZrugxSqzhzxvVqV3@lizhi-Precision-Tower-5810>
- <ZwWRieC0D3Q13VW7@lizhi-Precision-Tower-5810>
+	s=arc-20240116; t=1728442826; c=relaxed/simple;
+	bh=EKzSe3l127c0FtgaRrCDVcFSxZngZ1yfjID+uenub1I=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=WaSKDn+WCCuDQH362q43wkiHKZXZrBw4k0QFjnNinSHYC7vt9aKrg6tToiS8Jc4TVnQDm2koLnJMMCj0Dl1MIgcoBioKckGxU2ECv+H8ENORG2/LPpWxS1CN35anhPrEjsOom9TcbAd6gXHIoU5PxK45jHIyH2yYSbGGP0mZtlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a3440fc2d3so56525215ab.2
+        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2024 20:00:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728442824; x=1729047624;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WuNXNID054cE2rPIWs4gRPFDIc54AZtiC25l+hHN73Y=;
+        b=SuzqN8IWNhP9oCcxT3SsvTATBQP42KDGJ6U/KLz0EIEAdIaJqeMA/OFJsObUH1H6Sy
+         Ki1kbQcj119Qz3XycaqY2GzqbDpwckucmHOEUy6yE8FZkh9qTqVu8bC8rsjNs/DaTS57
+         pjy/fQASUvKBtnA0PSjfpnq05VErQdYnLwhnilwZjhOiRxYjceDtO1GgLMHYKsX9k0cW
+         q9q4Vyjw+CSQzBHGzOX72ehh/d4L8aU0n5zPe9tE8dduSHJKi0tdowrOvOn6DyT4psFA
+         /2bto34oNhXCqTsYst8vxA0rfzXPPuCeateS1Li+F0ukA8JpRHKmxPJCyRCDjUlkWr5M
+         md1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXUUh9VzewD7YceLsxC0GdDMr456/uHlNgAXuu9JGsEosyZ3OsRAXoEH9cAjENqme3GaGuASFZmzAI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbKwjr4cbsrNMkxjRD7JDAdyji1NonjVazZq9R5pAaxmFYvmuW
+	jLq4QlaqHqgqhTb8d810//jJaIEGuonCNWG4lTH8D4ENYhoduK3qgraXJAH9phKSb2+E6ItY2ac
+	Go/8iDXmws0n31h2HlNHgjWQ2PPcuuhAJyWDQlEE5SZc/+u5mTohNQa8=
+X-Google-Smtp-Source: AGHT+IE+RPoXlva5bWFY8C9q2RKuxt4rLyZtyaJurioxaKBqXnjNcDIafHDhIaFSyNzVyFsya2dXNEAsUzPUCdrqhoXG1+Ha1qL/
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZwWRieC0D3Q13VW7@lizhi-Precision-Tower-5810>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZM-Qi9yHp8KQBwteTcbygHTHuEph1dtt
-X-Proofpoint-ORIG-GUID: ZM-Qi9yHp8KQBwteTcbygHTHuEph1dtt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxlogscore=845 spamscore=0 clxscore=1011 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410090017
+X-Received: by 2002:a05:6e02:1541:b0:3a0:9b27:7d52 with SMTP id
+ e9e14a558f8ab-3a397d0fc81mr7872275ab.20.1728442824282; Tue, 08 Oct 2024
+ 20:00:24 -0700 (PDT)
+Date: Tue, 08 Oct 2024 20:00:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6705f1c8.050a0220.22840d.000c.GAE@google.com>
+Subject: [syzbot] [usb?] possible deadlock in chaoskey_open
+From: syzbot <syzbot+5f1ce62e956b7b19610e@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, keithp@keithp.com, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 08, 2024 at 04:09:45PM -0400, Frank Li wrote:
-> On Tue, Aug 13, 2024 at 02:07:01PM -0400, Frank Li wrote:
-> > On Sun, Aug 11, 2024 at 08:11:57PM -0700, Bjorn Andersson wrote:
-> > > The USB IP-block found in most Qualcomm platforms is modelled in the
-> > > Linux kernel as 3 different independent device drivers, but as shown by
-> > > the already existing layering violations in the Qualcomm glue driver
-> > > they can not be operated independently.
-> > >
-> > > With the current implementation, the glue driver registers the core and
-> > > has no way to know when this is done. As a result, e.g. the suspend
-> > > callbacks needs to guard against NULL pointer dereferences when trying
-> > > to peek into the struct dwc3 found in the drvdata of the child.
-> > >
-> > > Missing from the upstream Qualcomm USB support is handling of role
-> > > switching, in which the glue needs to be notified upon DRD mode changes.
-> > > Several attempts has been made through the years to register callbacks
-> > > etc, but they always fall short when it comes to handling of the core's
-> > > probe deferral on resources etc.
-> > >
-> > > Furhtermore, the DeviceTree binding is a direct representation of the
-> > > Linux driver model, and doesn't necessarily describe "the USB IP-block".
-> > >
-> > > This series therefor attempts to flatten the driver split, and operate
-> > > the glue and core out of the same platform_device instance. And in order
-> > > to do this, the DeviceTree representation of the IP block is flattened.
-> >
-> 
-> Bjorn Andersson:
-> 	Any follow up on this thread?
-> 
+Hello,
 
-Thanks for reaching out, Frank. I did pick this up again a few days
-back.
+syzbot found the following issue on:
 
-I'm struggling with Rob's request for not peeking into struct property
-and/or utilizing overlays. Hoping to figure this out shortly, so I can
-get v3 in shape.
+HEAD commit:    4a9fe2a8ac53 dt-bindings: usb: dwc3-imx8mp: add compatible..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1184d307980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4510af5d637450fb
+dashboard link: https://syzkaller.appspot.com/bug?extid=5f1ce62e956b7b19610e
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1601d380580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1584479f980000
 
-Regards,
-Bjorn
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/883c5319cb52/disk-4a9fe2a8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/caf4421ed2ef/vmlinux-4a9fe2a8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d8e3beb01d49/bzImage-4a9fe2a8.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5f1ce62e956b7b19610e@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.12.0-rc1-syzkaller-00027-g4a9fe2a8ac53 #0 Not tainted
+------------------------------------------------------
+syz-executor233/2673 is trying to acquire lock:
+ffffffff89b120e8 (chaoskey_list_lock){+.+.}-{3:3}, at: chaoskey_open+0xdd/0x220 drivers/usb/misc/chaoskey.c:274
+
+but task is already holding lock:
+ffffffff899dadb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x23/0x220 drivers/usb/core/file.c:38
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (minor_rwsem){++++}-{3:3}:
+       down_write+0x93/0x200 kernel/locking/rwsem.c:1577
+       usb_deregister_dev+0x7c/0x1e0 drivers/usb/core/file.c:186
+       chaoskey_disconnect+0xb7/0x2a0 drivers/usb/misc/chaoskey.c:236
+       usb_unbind_interface+0x1e8/0x970 drivers/usb/core/driver.c:461
+       device_remove drivers/base/dd.c:569 [inline]
+       device_remove+0x122/0x170 drivers/base/dd.c:561
+       __device_release_driver drivers/base/dd.c:1273 [inline]
+       device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1296
+       bus_remove_device+0x22f/0x420 drivers/base/bus.c:576
+       device_del+0x396/0x9f0 drivers/base/core.c:3864
+       usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1418
+       usb_disconnect+0x2e1/0x920 drivers/usb/core/hub.c:2304
+       hub_port_connect drivers/usb/core/hub.c:5361 [inline]
+       hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
+       port_event drivers/usb/core/hub.c:5821 [inline]
+       hub_event+0x1bed/0x4f40 drivers/usb/core/hub.c:5903
+       process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3229
+       process_scheduled_works kernel/workqueue.c:3310 [inline]
+       worker_thread+0x6c8/0xf00 kernel/workqueue.c:3391
+       kthread+0x2c1/0x3a0 kernel/kthread.c:389
+       ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+-> #0 (chaoskey_list_lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3161 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3280 [inline]
+       validate_chain kernel/locking/lockdep.c:3904 [inline]
+       __lock_acquire+0x250b/0x3ce0 kernel/locking/lockdep.c:5202
+       lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5825
+       __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+       __mutex_lock+0x175/0x9c0 kernel/locking/mutex.c:752
+       chaoskey_open+0xdd/0x220 drivers/usb/misc/chaoskey.c:274
+       usb_open+0x186/0x220 drivers/usb/core/file.c:47
+       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
+       do_dentry_open+0x6cb/0x1390 fs/open.c:958
+       vfs_open+0x82/0x3f0 fs/open.c:1088
+       do_open fs/namei.c:3774 [inline]
+       path_openat+0x1e6a/0x2d60 fs/namei.c:3933
+       do_filp_open+0x1dc/0x430 fs/namei.c:3960
+       do_sys_openat2+0x17a/0x1e0 fs/open.c:1415
+       do_sys_open fs/open.c:1430 [inline]
+       __do_sys_openat fs/open.c:1446 [inline]
+       __se_sys_openat fs/open.c:1441 [inline]
+       __x64_sys_openat+0x175/0x210 fs/open.c:1441
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(minor_rwsem);
+                               lock(chaoskey_list_lock);
+                               lock(minor_rwsem);
+  lock(chaoskey_list_lock);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor233/2673:
+ #0: ffffffff899dadb0 (minor_rwsem){++++}-{3:3}, at: usb_open+0x23/0x220 drivers/usb/core/file.c:38
+
+stack backtrace:
+CPU: 1 UID: 0 PID: 2673 Comm: syz-executor233 Not tainted 6.12.0-rc1-syzkaller-00027-g4a9fe2a8ac53 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_circular_bug+0x41c/0x610 kernel/locking/lockdep.c:2074
+ check_noncircular+0x31a/0x400 kernel/locking/lockdep.c:2206
+ check_prev_add kernel/locking/lockdep.c:3161 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3280 [inline]
+ validate_chain kernel/locking/lockdep.c:3904 [inline]
+ __lock_acquire+0x250b/0x3ce0 kernel/locking/lockdep.c:5202
+ lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5825
+ __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+ __mutex_lock+0x175/0x9c0 kernel/locking/mutex.c:752
+ chaoskey_open+0xdd/0x220 drivers/usb/misc/chaoskey.c:274
+ usb_open+0x186/0x220 drivers/usb/core/file.c:47
+ chrdev_open+0x237/0x6a0 fs/char_dev.c:414
+ do_dentry_open+0x6cb/0x1390 fs/open.c:958
+ vfs_open+0x82/0x3f0 fs/open.c:1088
+ do_open fs/namei.c:3774 [inline]
+ path_openat+0x1e6a/0x2d60 fs/namei.c:3933
+ do_filp_open+0x1dc/0x430 fs/namei.c:3960
+ do_sys_openat2+0x17a/0x1e0 fs/open.c:1415
+ do_sys_open fs/open.c:1430 [inline]
+ __do_sys_openat fs/open.c:1446 [inline]
+ __se_sys_openat fs/open.c:1441 [inline]
+ __x64_sys_openat+0x175/0x210 fs/open.c:1441
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fab087d4e91
+Code: 75 57 89 f0 25 00 00 41 00 3d 00 00 41 00 74 49 80 3d fa a1 07 00 00 74 6d 89 da 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 93 00 00 00 48 8b 54 24 28 64 48 2b 14 25
+RSP: 002b:00007ffe8b2c7190 EFLAGS: 00000202 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fab087d4e91
+RDX: 0000000000000002 RSI: 00007ffe8b2c7210 RDI: 00000000ffffff9c
+RBP: 00007ffe8b2c7210 R08: 000000000000000f R09: 00007ffe8b2c6fa7
+R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffe8b2c72cc
+R13: 00007ffe8b2c7300 R14: 00007ffe8b2c72e0 R15: 0000000000000002
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
