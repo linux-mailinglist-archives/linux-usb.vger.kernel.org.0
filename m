@@ -1,236 +1,150 @@
-Return-Path: <linux-usb+bounces-15893-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15894-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5C67995F1A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 07:42:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7889995F28
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 07:45:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3597FB24FE2
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 05:42:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 206F728348C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 05:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97405169AE6;
-	Wed,  9 Oct 2024 05:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3B7166F25;
+	Wed,  9 Oct 2024 05:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q+vGaNNk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nPeRRPYS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95608161313;
-	Wed,  9 Oct 2024 05:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993C3136327
+	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 05:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728452484; cv=none; b=G0e2/AAggZ08z3by3UMSQXkh6hjitkapJfjXQrsqVs6Jp2htrxp4FeinDbgCc+vnm2oLonB/EocOgeeoHVFjvT3Vno0ryuJpfc0bLgHQDodkcjxbtJV0YUsRU2GUTF0SpledNt3NY6HRkiknUbTQgj4ELPlUvieIJkt7uMzWVp0=
+	t=1728452714; cv=none; b=BEqN1NriKhObEiib/T95D95nUg4qac0sTcdZQN65aWH1jHOaZ4s3+UiukGUWPYx217Q5M/Gy65MSCR/U0gTwB3Wo1mB/xrICMoJ0ISAxNVZuEcVl+gTypXFB9pzaS/Rx7PAZt5Vg7756KC2YdhgbCpvykFPH3d4GVsvykUOL0Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728452484; c=relaxed/simple;
-	bh=AALkzm2IfLJecbBptAntMUQ1tTSCPkw2XpvjH+G4xXg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BqNCY8s6dV2Zfu/ve2lSNlWSxR0GM6RGVXkFb28W2RjznNkCJuzqh0CmGe4O5erWB4ZlW4/kokpvGvvI0PEBlbjFvt/Nbb5HWc4fmm5GyWvjLPUIGTYbQukdVddcK4nyIUJE7Ku9EEOoHdu1RUSIbO/g2PwrzZ8aV6YJC0TTSnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q+vGaNNk; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e03be0d92so2142957b3a.3;
-        Tue, 08 Oct 2024 22:41:22 -0700 (PDT)
+	s=arc-20240116; t=1728452714; c=relaxed/simple;
+	bh=+BTCQ0PUkDQsZaHM85ifIgxYY/Dc9P+yTGat716rR8E=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=o2CwNNIFi085hG9HnoWZZg/gD2HRMyveaXxlkGZG0yQAOC0CpW9Hfz6J65CbpHGhzuSHfACp5fXJFAWM6JqfWcM+B0rWHu2MPl+1Relb8RM9XQ+itG5t7X3NvJW0qC4H+0k5f4FhsfkS4oONUZHbvBRUS8w/bvc7hVTthNbEj+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nPeRRPYS; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e26ba37314so48407047b3.0
+        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2024 22:45:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728452482; x=1729057282; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aMdEytBktHvtBAPR9LNmHr8eXRV2mGTH7HPRArNPzcE=;
-        b=Q+vGaNNktZ6ku5zHPFqAlqXhOnaDSj7Nunegy84YihkAr5iMESCZXIM2uF8Juv2k9L
-         qrNqsuyr4PvGg3FYsOJ+JCw7e0baOLr1/GwU3zxuiBAdH1NGnWiJmy/S3/cc7ezQmGpv
-         H5nk3y4moP8g3C6XaIgNhGLKi4s9+vNWm+TrRI7NMH742Ms6c+vCQPKZ9rivaqqEtiwK
-         BGBHlUPZP94BMF6zJje7dmMlE1/laFpdCTCBtR/TPT8n9hX51HbngW4SLYYZPbtoG1ZP
-         GYl8sKK+7evpKhkaZV52DuSBkLkvPszhDbhq7u8v/6ls/yFwr1s/XVWwkgTMOez5Hxze
-         A7vQ==
+        d=google.com; s=20230601; t=1728452711; x=1729057511; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PiDuNikJa50xX1llUd7AeY3ATX9u0RAJOKDPy46wYBY=;
+        b=nPeRRPYS+F72m1z8+Q+7qy6Yrbn3a6E6t4+xT19NuzRYQLqL/FL473zRIWmMes7tYo
+         p1QZeWLPdZvpVtJYgABOB5VYu5k6rUpnbYNeAf/2TcZxE+/XcwMhhkkLNW7E+9dzwrUa
+         /eEXlQKFmRBQN2FzdLH8ReIt3qe/H/3aUH7vYKgZiTES7HfnIoveGOLMhvEOc5tC/S5H
+         Qm49xOLmFLKsDr//uDcjvO1EJTExJsnBHRFbqWVMf2c9J3Oi+3FG3wcOSf4RwJbk27kv
+         Ql0B0RAdxpmaoo3jc5mx6GkQB0EhXr7eiPSAMDVk4cLFO4/IY8291Duz+xg1SBQOIURG
+         Rhsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728452482; x=1729057282;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aMdEytBktHvtBAPR9LNmHr8eXRV2mGTH7HPRArNPzcE=;
-        b=nHjxhJQnJnxEJKUGCCgeLNBUTjgfurZywS1uUadV/627gCB5Eur4IaJf4CnyzDQC/F
-         WGebGcyNI0OOSVkt2fh9rkMNQGLpGd46swHrbNjBTi/3EzsJM5S0y9C+ob0MrmAp5Wxz
-         +rlJhqxYONh23uLagXm+rodvPNhGEgRVWTX1c5Uob0qOB6Rsz773+OfMVyyAJOcmPOWq
-         AlpY6kiVYsaDKUSNLuINRQTxo2sQQLgD/ulvHdXXaUwHpR0/bLmeqFo0+TrQlN+R0Mcf
-         xM6IIKXWOLczcouiCEaSyTwTMTDtojOI8vKOFm9zXaTKWu4zK9BwxekhVMZ78hmq+OVD
-         +2CA==
-X-Forwarded-Encrypted: i=1; AJvYcCVha5qa/4rLOiY/QwGoW/m1XbdpEiC6QXbLb2m4RF63f+CCZ7BbNQpZOPgnzhX8HjbmtoNvQ6Ws@vger.kernel.org, AJvYcCVpPEx+eh3M4OgAoa0hAPNBsnMx6Swg9CwksNrJCf2w7NYYFZqfU8TIsZonfvOrXI+F1ldxxW9WG6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzltU0D02QvFvV1K+jjKhs+YiuqTMRqZURiI0iYJToSELYlVywO
-	RxlewUFir6SWUIG5oWNJ8FaF/l+k7gn6ozBke+uk7oDjwtuNDMtki3tVL/Xk
-X-Google-Smtp-Source: AGHT+IGBW9LxAlN/QvWHCEwnwhOR+3P9vxJ7njGShnCT6Ut9pX/tEzhE3WqQAksrKbefAb77rZ3RyA==
-X-Received: by 2002:a05:6a20:4a17:b0:1d8:a759:5260 with SMTP id adf61e73a8af0-1d8a7595392mr577663637.44.1728452481715;
-        Tue, 08 Oct 2024 22:41:21 -0700 (PDT)
-Received: from kernelexploit-virtual-machine.localdomain ([121.185.186.233])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e2a5963c96sm644129a91.39.2024.10.08.22.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2024 22:41:21 -0700 (PDT)
-From: Jeongjun Park <aha310510@gmail.com>
-To: oneukum@suse.com
-Cc: gregkh@linuxfoundation.org,
-	keithp@keithp.com,
-	linux-usb@vger.kernel.org,
-	stable@vger.kernel.org,
-	syzbot+422188bce66e76020e55@syzkaller.appspotmail.com
-Subject: Re: [PATCH] USB: chaoskey: fail open after removal
-Date: Wed,  9 Oct 2024 14:41:17 +0900
-Message-Id: <20241009054117.33535-1-aha310510@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241002132201.552578-1-oneukum@suse.com>
-References: <20241002132201.552578-1-oneukum@suse.com>
+        d=1e100.net; s=20230601; t=1728452711; x=1729057511;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PiDuNikJa50xX1llUd7AeY3ATX9u0RAJOKDPy46wYBY=;
+        b=C+mF6rj/kLfEoli58ESmwSsq3x9iiOf22qls/Vr+zHsnVQPSPCwt4cxayEJupF+TLJ
+         f2sjtSs3sMjLd9PmlpsqBlVSnZQKz0MR6CZ1fKVZjqrieeidiCOfOo/ADQ9U05t0Zyd8
+         h6yHF5mW1xNdMCarietITQbSx5reNKLilSMTeXV7ySuqF9idkf4KYDfqjikv29wlai+W
+         y7L2bb2+i1+tYYTQHR05EfDyUendD/19YerwblxLdrwBtlFhPY9CsPiM8uJ40F3mzsAV
+         XvuAXnKHR/VHAy4kig8l2j6Gj2vOsf1ncQuC9/AQUofb6MpMtbbaKHwow6sq7rz310Vb
+         w29g==
+X-Gm-Message-State: AOJu0Yxpqb/5wHPrt/VxIfgazotacTxhxum4hH/WbSNv+IrWEMiIGukY
+	FSEpPwV/cgRuh093EKlVuuxdYgGmxV3l56oIXcYi1VsYtpCZBHIm7tN4wex2q+12sBtbzr5TyzQ
+	gBXzhf28psRFkVg==
+X-Google-Smtp-Source: AGHT+IFAdtbaCD2+euCYcocpkcRI7vVB9WTSltof4jpixDozK9ZQRUBAoBW7ahCtF6q1tP5317kIACf9RUK8soQ=
+X-Received: from guanyulin.c.googlers.com ([fda3:e722:ac3:cc00:131:cd17:ac11:19c7])
+ (user=guanyulin job=sendgmr) by 2002:a05:690c:4a91:b0:6dd:bcce:7cbe with SMTP
+ id 00721157ae682-6e3220de42bmr24407b3.2.1728452711549; Tue, 08 Oct 2024
+ 22:45:11 -0700 (PDT)
+Date: Wed,  9 Oct 2024 05:42:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.rc1.288.g06298d1525-goog
+Message-ID: <20241009054429.3970438-1-guanyulin@google.com>
+Subject: [PATCH v4 0/5] Support system sleep with offloaded usb transfers
+From: Guan-Yu Lin <guanyulin@google.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	mathias.nyman@intel.com, stern@rowland.harvard.edu, elder@kernel.org, 
+	oneukum@suse.com, yajun.deng@linux.dev, dianders@chromium.org, 
+	kekrby@gmail.com, perex@perex.cz, tiwai@suse.com, tj@kernel.org, 
+	stanley_chang@realtek.com, andreyknvl@gmail.com, 
+	christophe.jaillet@wanadoo.fr, quic_jjohnson@quicinc.com, 
+	ricardo@marliere.net, grundler@chromium.org, niko.mauno@vaisala.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sound@vger.kernel.org, badhri@google.com, albertccwang@google.com, 
+	quic_wcheng@quicinc.com, pumahsu@google.com, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-> chaoskey_open() takes the lock only to increase the
-> counter of openings. That means that the mutual exclusion
-> with chaoskey_disconnect() cannot prevent an increase
-> of the counter and chaoskey_open() returning a success.
-> 
-> If that race is hit, chaoskey_disconnect() will happily
-> free all resources associated with the device after
-> it has dropped the lock, as it has read the counter
-> as zero.
-> 
-> To prevent this race chaoskey_open() has to check
-> the presence of the device under the lock.
-> However, the current per device lock cannot be used,
-> because it is a part of the data structure to be
-> freed. Hence an additional global mutex is needed.
-> The issue is as old as the driver.
-> 
+Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+to handle some USB transfers, potentially allowing the main system to
+sleep and save power. However, Linux's power management system halts the
+USB host controller when the main system isn't managing any USB transfers.
+To address this, the proposal modifies the system to recognize offloaded
+USB transfers and manage power accordingly.
 
-There were 3 deadlock reports uploaded by syzbot due to this patch. It seems
-like this patch should be fixed or reverted in its entirety.
+This involves two key steps:
+1. Transfer Status Tracking: Propose xhci_sideband_get and
+xhci_sideband_put to track USB transfers on the co-processor, ensuring the
+system is aware of any ongoing activity.
+2. Power Management Adjustment:  Modifications to the USB driver stack
+(dwc3 controller driver, xhci host controller driver, and USB device
+drivers) allow the system to sleep without disrupting co-processor managed
+USB transfers. This involves adding conditional checks to bypass some
+power management operations.
 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> Reported-by: syzbot+422188bce66e76020e55@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=422188bce66e76020e55
-> Fixes: 66e3e591891da ("usb: Add driver for Altus Metrum ChaosKey device (v2)")
-> ---
->  drivers/usb/misc/chaoskey.c | 35 ++++++++++++++++++++++++-----------
->  1 file changed, 24 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
-> index 6fb5140e29b9..e8b63df5f975 100644
-> --- a/drivers/usb/misc/chaoskey.c
-> +++ b/drivers/usb/misc/chaoskey.c
-> @@ -27,6 +27,8 @@ static struct usb_class_driver chaoskey_class;
->  static int chaoskey_rng_read(struct hwrng *rng, void *data,
->  			     size_t max, bool wait);
->  
-> +static DEFINE_MUTEX(chaoskey_list_lock);
-> +
->  #define usb_dbg(usb_if, format, arg...) \
->  	dev_dbg(&(usb_if)->dev, format, ## arg)
->  
-> @@ -230,6 +232,7 @@ static void chaoskey_disconnect(struct usb_interface *interface)
->  	if (dev->hwrng_registered)
->  		hwrng_unregister(&dev->hwrng);
->  
-> +	mutex_lock(&chaoskey_list_lock);
->  	usb_deregister_dev(interface, &chaoskey_class);
->  
->  	usb_set_intfdata(interface, NULL);
-> @@ -244,6 +247,7 @@ static void chaoskey_disconnect(struct usb_interface *interface)
->  	} else
->  		mutex_unlock(&dev->lock);
->  
-> +	mutex_unlock(&chaoskey_list_lock);
->  	usb_dbg(interface, "disconnect done");
->  }
->  
-> @@ -251,6 +255,7 @@ static int chaoskey_open(struct inode *inode, struct file *file)
->  {
->  	struct chaoskey *dev;
->  	struct usb_interface *interface;
-> +	int rv = 0;
->  
->  	/* get the interface from minor number and driver information */
->  	interface = usb_find_interface(&chaoskey_driver, iminor(inode));
-> @@ -266,18 +271,23 @@ static int chaoskey_open(struct inode *inode, struct file *file)
->  	}
->  
->  	file->private_data = dev;
-> +	mutex_lock(&chaoskey_list_lock);
->  	mutex_lock(&dev->lock);
-> -	++dev->open;
-> +	if (dev->present)
-> +		++dev->open;
-> +	else
-> +		rv = -ENODEV;
->  	mutex_unlock(&dev->lock);
-> +	mutex_unlock(&chaoskey_list_lock);
->  
-> -	usb_dbg(interface, "open success");
-> -	return 0;
-> +	return rv;
->  }
->  
->  static int chaoskey_release(struct inode *inode, struct file *file)
->  {
->  	struct chaoskey *dev = file->private_data;
->  	struct usb_interface *interface;
-> +	int rv = 0;
->  
->  	if (dev == NULL)
->  		return -ENODEV;
-> @@ -286,14 +296,15 @@ static int chaoskey_release(struct inode *inode, struct file *file)
->  
->  	usb_dbg(interface, "release");
->  
-> +	mutex_lock(&chaoskey_list_lock);
->  	mutex_lock(&dev->lock);
->  
->  	usb_dbg(interface, "open count at release is %d", dev->open);
->  
->  	if (dev->open <= 0) {
->  		usb_dbg(interface, "invalid open count (%d)", dev->open);
-> -		mutex_unlock(&dev->lock);
-> -		return -ENODEV;
-> +		rv = -ENODEV;
-> +		goto bail;
->  	}
->  
->  	--dev->open;
-> @@ -302,13 +313,15 @@ static int chaoskey_release(struct inode *inode, struct file *file)
->  		if (dev->open == 0) {
->  			mutex_unlock(&dev->lock);
->  			chaoskey_free(dev);
-> -		} else
-> -			mutex_unlock(&dev->lock);
-> -	} else
-> -		mutex_unlock(&dev->lock);
-> -
-> +			goto destruction;
-> +		}
-> +	}
-> +bail:
-> +	mutex_unlock(&dev->lock);
-> +destruction:
-> +	mutex_lock(&chaoskey_list_lock);
+patches depends on series "Introduce QC USB SND audio offloading support" 
+https://lore.kernel.org/lkml/20240925010000.2231406-11-quic_wcheng@quicinc.com/T/
 
-Shouldn't we use mutex_unlock here? I don't know if there's a special reason
-for writing it this way or if it's a mistake, but doing it this way causes a
-deadlock due to recursive locking.
+changelog
+----------
+Changes in v4:
+- Isolate the feature into USB driver stack.
+- Integrate with series "Introduce QC USB SND audio offloading support"
 
-Regards,
+Changes in v3:
+- Integrate the feature with the pm core framework.
 
-Jeongjun Park
+Changes in v2:
+- Cosmetics changes on coding style.
 
->  	usb_dbg(interface, "release success");
-> -	return 0;
-> +	return rv;
->  }
->  
->  static void chaos_read_callback(struct urb *urb)
-> -- 
-> 2.46.1
->
+[v3] PM / core: conditionally skip system pm in device/driver model
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
+---
+
+Guan-Yu Lin (5):
+  usb: dwc3: separate dev_pm_ops for each pm_event
+  usb: xhci-plat: separate dev_pm_ops for each pm_event
+  usb: add apis for sideband uasge tracking
+  xhci: sideband: add api to trace sideband usage
+  usb: host: enable sideband transfer during system sleep
+
+ drivers/usb/core/driver.c         | 64 ++++++++++++++++++++++
+ drivers/usb/core/hcd.c            |  1 +
+ drivers/usb/core/usb.c            |  1 +
+ drivers/usb/dwc3/core.c           | 90 ++++++++++++++++++++++++++++++-
+ drivers/usb/dwc3/core.h           |  8 +++
+ drivers/usb/host/xhci-plat.c      | 38 +++++++++++--
+ drivers/usb/host/xhci-plat.h      |  7 +++
+ drivers/usb/host/xhci-sideband.c  | 74 +++++++++++++++++++++++++
+ include/linux/usb.h               | 13 +++++
+ include/linux/usb/hcd.h           |  4 ++
+ include/linux/usb/xhci-sideband.h |  5 ++
+ sound/usb/qcom/qc_audio_offload.c |  3 ++
+ 12 files changed, 303 insertions(+), 5 deletions(-)
+
+-- 
+2.47.0.rc0.187.ge670bccf7e-goog
+
 
