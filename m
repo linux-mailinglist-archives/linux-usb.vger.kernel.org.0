@@ -1,207 +1,200 @@
-Return-Path: <linux-usb+bounces-16012-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16057-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC60999687
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 02:12:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F8799998EB
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 03:16:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0FE428A702
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 00:12:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92E6D1C21D79
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 01:16:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01D1219E96A;
-	Fri, 11 Oct 2024 00:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TTafVq1j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033F8C13D;
+	Fri, 11 Oct 2024 01:16:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927BC194089;
-	Fri, 11 Oct 2024 00:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7657D4A31;
+	Fri, 11 Oct 2024 01:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728605257; cv=none; b=X30HxrdGFbvbVu1qfIlSAKv/oZ8VBu1Hega5WkbbGjPahAIRSB8br501wBcx3bgrF7Bxsdub4ceE2gfw2OlXnFLLTD1pECIWQ4JZfGnJd688ydepKofwPh/lqQd4QxUws6q/od4qxutAl8SgdN7Zlc/4Z86iya0G9UGq44RUupo=
+	t=1728609364; cv=none; b=EBIqvXftUQbDqv7I2snunaAfMuum9a5JQ+/GlJe7gHQlyh+XsWPFeA7gH4d7CgWuf351xfnylo4hXwy5bHe4C+t+/84hUjr08g4sDYJ+NByoHTRYjwX7N4M8FUpc4XH7lwpvpXml/qg4SLU2oYIlhgWNUOFQzQ2qIrSXvi7I5C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728605257; c=relaxed/simple;
-	bh=t7n8rhO3AEi7st/FJuPVX9s4BxgP3J6zupir+2XpTCw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n7xTLVf/3L/VHnQfMn2rK+FesH/u0akf7pVfd3AB2/4PyDhvOl4N+/MgpZdfyTBLqGB5dHgC/M7G8YXwWvOavCMEiA5Jv2nmxiKAD7Wh4R0x/E9VizXozP3BzV3DLHddV6+yHC6AXMBO2d87V9a1U3RL1NygrMdPKGLGXdfcbrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TTafVq1j; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49AHLBQ7024403;
-	Fri, 11 Oct 2024 00:07:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	swybFnIRHPLzluHHFQvvDyLicOhSUsPc7nkVL7emCFI=; b=TTafVq1jRYl8uQvS
-	Rx1z0RXwWY+MMeyTlX5LKqLM6QE2OH9WY6BMsk8hKUUC1j4A5Kkbotjegbq+KUsb
-	h84tC1xKxCaQ9GivS9S1yPR6gHtmwJmFwYh1o6Mu4AbWueoNJpCPpSet8x9CtXAm
-	yqY1xFwrTy6vaEmxMwR+tiFQE5dX1kNBGHDt5YlyqdaB+cFI+48VaS+tvZ4ax3j2
-	Z+aaaAhZzzTUzuLvIw0Q3j5Gs0hGybG0CVENnTSxJAS1K2PIHwDM3cc6WdJolsMz
-	sXklCQAjA+IwLTkFbpP5+EU52I6+KbEZxS4XxyUlgM3r5iN8X4rg47UNMxL/XwiG
-	aaMTtw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 426adhjdnx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Oct 2024 00:07:13 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49B07C8u015320
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Oct 2024 00:07:12 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 10 Oct 2024 17:07:12 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <tiwai@suse.com>, <krzk+dt@kernel.org>,
-        <pierre-louis.bossart@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>
-Subject: [PATCH v28 17/32] ASoC: usb: Fetch ASoC card and pcm device information
-Date: Thu, 10 Oct 2024 17:06:19 -0700
-Message-ID: <20241011000650.2585600-35-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241011000650.2585600-1-quic_wcheng@quicinc.com>
-References: <20241011000650.2585600-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1728609364; c=relaxed/simple;
+	bh=X0fdnhlNWN3WChTKv5072MtcWTbFVZrq4OyGc5KN0lU=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 MIME-Version:Date; b=hxy3glZlNYrVLeLcVARllMByErq+856rOF0xuATiNUuFX+MwTafRb/MWpMiHD0jyAt8G1/4NDkothM3XvPfOBy7WfjScQgUpjSOYSWtwSL3qbVrbD/DbJUjEgRCT+DmAF6krN03VlT9DeBcuLDvMD+Xn3sEFNXrG256XacgIdVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 5b0f078e876e11efa216b1d71e6e1362-20241011
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_QP
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_TRUSTED, SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:c626f364-f2b2-4676-9331-f0793413ca62,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+	N:release,TS:23
+X-CID-INFO: VERSION:1.1.38,REQID:c626f364-f2b2-4676-9331-f0793413ca62,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTION:
+	release,TS:23
+X-CID-META: VersionHash:82c5f88,CLOUDID:a781ed74474aa5932de4f4e26ca4023d,BulkI
+	D:2409062205428B690IWE,BulkQuantity:42,Recheck:0,SF:64|66|38|17|19|102,TC:
+	nil,Content:1|-5,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:40|20,QS:nil,BEC
+	:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_OBB,TF_CID_SPAM_FCD,TF_CID_SPAM_ULS,TF_CID_SPAM_SNR,
+	TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-UUID: 5b0f078e876e11efa216b1d71e6e1362-20241011
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 469428937; Fri, 11 Oct 2024 09:15:51 +0800
+Message-ID: <075bed9dc766b31291a57805d2e4a3c72619e3c8.camel@kylinos.cn>
+Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: Alan Stern <stern@rowland.harvard.edu>, "Rafael J. Wysocki"
+	 <rafael@kernel.org>
+Cc: Hongyu Xie <xy521521@gmail.com>, gregkh@linuxfoundation.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz, 
+ stanley_chang@realtek.com, tj@kernel.org, Hongyu Xie <xiehongyu1@kylinos.cn>
+In-Reply-To: <2c368013-8363-4a4e-bfee-2f0b14d01162@rowland.harvard.edu>
+References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+	 <1725931490447646.3.seg@mailgw.kylinos.cn>
+	 <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+	 <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
+	 <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+	 <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
+	 <bddecd4e-d3c8-448e-8a22-84bbc98c4d1b@kylinos.cn>
+	 <b2ec107d4797f6e1e8e558f97c0ad1be6d46572c.camel@kylinos.cn>
+	 <84a4f66a-5b0e-46a8-8746-be6cd7d49629@rowland.harvard.edu>
+	 <fa347849defa66a7d4af23ac6317ae5b37357ea4.camel@kylinos.cn>
+	 <2c368013-8363-4a4e-bfee-2f0b14d01162@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4SLCCg8hUpH4QgYhx696zIWz2XYe_nBT
-X-Proofpoint-ORIG-GUID: 4SLCCg8hUpH4QgYhx696zIWz2XYe_nBT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 mlxscore=0 impostorscore=0 phishscore=0
- bulkscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2410100159
+Date: Thu, 10 Oct 2024 13:53:49 +0800
+User-Agent: Evolution 3.44.4-0ubuntu2 
 
-USB SND needs to know how the USB offload path is being routed.  This would
-allow for applications to open the corresponding sound card and pcm device
-when it wants to take the audio offload path.  This callback should return
-the mapped indexes based on the USB SND device information.
+Hi Alan,
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- include/sound/soc-usb.h | 16 ++++++++++++++++
- sound/soc/soc-usb.c     | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 50 insertions(+)
+=E5=9C=A8 2024-10-09=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 11:50 -0400=EF=BC=
+=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> On Wed, Oct 09, 2024 at 10:35:05AM +0800, duanchenghao wrote:
+> > Hi Alan,
+> >=20
+> > These are two patches, each addressing the same issue. The current
+> > patch is a direct solution to the problem of the interrupt bottom
+> > half
+> > being frozen. The patch you replied with is another, alternative
+> > solution to the same problem. Please review which solution is more
+> > suitable, or if there are any other revised proposals.
+> >=20
+> >=20
+> > Please review the patch I mentioned:
+> > https://lore.kernel.org/all/0a4dc46ae767c28dd207ae29511ede747f05539a.ca=
+mel@kylinos.cn/
+>=20
+> I still think your whole approach is wrong.=C2=A0 There is no need to
+> change=20
+> the way the HCD_FLAG_WAKEUP_PENDING flag gets set or cleared; that's
+> not=20
+> the reason for the problem you're seeing.
+>=20
 
-diff --git a/include/sound/soc-usb.h b/include/sound/soc-usb.h
-index b32af08030ae..4c6af57291d8 100644
---- a/include/sound/soc-usb.h
-+++ b/include/sound/soc-usb.h
-@@ -36,6 +36,11 @@ struct snd_soc_usb_device {
-  * @list - list head for SND SOC struct list
-  * @component - reference to ASoC component
-  * @connection_status_cb - callback to notify connection events
-+ * @update_offload_route_info - callback to fetch mapped ASoC card and pcm
-+ *				device pair.  This is unrelated to the concept
-+ *				of DAPM route.  The "route" argument carries
-+ *				an array used for a kcontrol output and should
-+ *				contain two integers, card and pcm device index
-  * @priv_data - driver data
-  **/
- struct snd_soc_usb {
-@@ -44,6 +49,9 @@ struct snd_soc_usb {
- 	int (*connection_status_cb)(struct snd_soc_usb *usb,
- 				    struct snd_soc_usb_device *sdev,
- 				    bool connected);
-+	int (*update_offload_route_info)(struct snd_soc_component *component,
-+					 int card, int pcm, int direction,
-+					 long *route);
- 	void *priv_data;
- };
- 
-@@ -59,6 +67,8 @@ void *snd_soc_usb_find_priv_data(struct device *usbdev);
- int snd_soc_usb_setup_offload_jack(struct snd_soc_component *component,
- 				   struct snd_soc_jack *jack);
- int snd_soc_usb_disable_offload_jack(struct snd_soc_component *component);
-+int snd_soc_usb_update_offload_route(struct device *dev, int card, int pcm,
-+				     int direction, long *route);
- 
- struct snd_soc_usb *snd_soc_usb_allocate_port(struct snd_soc_component *component,
- 					      void *data);
-@@ -101,6 +111,12 @@ static inline int snd_soc_usb_disable_offload_jack(struct snd_soc_component *com
- 	return 0;
- }
- 
-+static int snd_soc_usb_update_offload_route(struct device *dev, int card, int pcm,
-+					    int direction, long *route)
-+{
-+	return -ENODEV;
-+}
-+
- static inline struct snd_soc_usb *
- snd_soc_usb_allocate_port(struct snd_soc_component *component, void *data)
- {
-diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
-index 70d8f854c017..f88ccf90df32 100644
---- a/sound/soc/soc-usb.c
-+++ b/sound/soc/soc-usb.c
-@@ -118,6 +118,40 @@ int snd_soc_usb_disable_offload_jack(struct snd_soc_component *component)
- }
- EXPORT_SYMBOL_GPL(snd_soc_usb_disable_offload_jack);
- 
-+/**
-+ * snd_soc_usb_update_offload_route - Find active USB offload path
-+ * @dev - USB device to get offload status
-+ * @card - USB card index
-+ * @pcm - USB PCM device index
-+ * @direction - playback or capture direction
-+ * @route - pointer to route output array
-+ *
-+ * Fetch the current status for the USB SND card and PCM device indexes
-+ * specified.  The "route" argument should be an array of integers being
-+ * used for a kcontrol output.  The first element should have the selected
-+ * card index, and the second element should have the selected pcm device
-+ * index.
-+ */
-+int snd_soc_usb_update_offload_route(struct device *dev, int card, int pcm,
-+				     int direction, long *route)
-+{
-+	struct snd_soc_usb *ctx;
-+	int ret;
-+
-+	ctx = snd_soc_find_usb_ctx(dev);
-+	if (!ctx)
-+		return -ENODEV;
-+
-+	mutex_lock(&ctx_mutex);
-+	if (ctx && ctx->update_offload_route_info)
-+		ret = ctx->update_offload_route_info(ctx->component, card, pcm,
-+						     direction, route);
-+	mutex_unlock(&ctx_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(snd_soc_usb_update_offload_route);
-+
- /**
-  * snd_soc_usb_find_priv_data() - Retrieve private data stored
-  * @usbdev: device reference
+Thank you very much for your evaluation of the scheme. I have a
+question regarding why the set_bit operation for the
+HCD_FLAG_WAKEUP_PENDING flag is performed in the top half of an
+interrupt handler, while the clear_bit operation is done in the bottom
+half. This seems to contradict conventional practices. The issue is not
+limited to S4; if other processes freeze the work queue in the bottom
+half, the same problem may arise.
+
+The solution you described below should be able to resolve the current
+S4 issue, but for now, we haven't identified any other scenarios that
+require the same operation. Based on my understanding, the USB device
+is woken up in the bottom half of the interrupt, and both the set_bit
+and clear_bit operations for the HCD_FLAG_WAKEUP_PENDING flag should be
+executed within the same thread in the bottom half. May I ask if there
+are any other reasons why the set_bit is executed in the top half?
+
+> The problem occurs because when suspend_common() in=20
+> drivers/usb/core/hcd-pci.c sets do_wakeup, it does so by calling=20
+> device_may_wakeup(), and the value that function returns is not what
+> we=20
+> want.=C2=A0 The value is based on whether the controller's power/wakeup=
+=20
+> attribute is set, but we also have to take into account the type of=20
+> suspend that's happening.
+>=20
+> Basically, if msg is one of the suspend types for which wakeups
+> should=20
+> always be disabled, then do_wakeup should be set to false.=C2=A0 There
+> isn't=20
+> a macro to test for these things, but there should be.=C2=A0 Something
+> like=20
+> PMSG_IS_AUTO() in include/linux/pm.h; maybe call it
+> PMSG_NO_WAKEUP().=C2=A0=20
+> This macro should return true if the PM_EVENT_FREEZE or
+> PM_EVENT_QUIESCE=20
+> bits are set in msg.event.
+>=20
+> Rafael, please correct me if I got any of this wrong.
+>=20
+> So the right way to fix the problem is to add to pm.h:
+>=20
+> #define PMSG_NO_WAKEUP(msg)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(((msg.event) & =
+\
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0(PM_EVENT_FREEZE | PM_EVENT_QUIESCE)) !=3D 0)
+>=20
+> and in suspend_common():
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (PMSG_IS_AUTO(msg))
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0do_wakeup =3D true;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else if (PMSG_NO_WAKEUP(m=
+sg))
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0do_wakeup =3D false;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0do_wakeup =3D device_may_wakeup(dev);
+>=20
+> Then with do_wakeup set to false, none of the HCD_WAKEUP_PENDING()
+> tests=20
+> in the following code will be executed, so the routine won't fail
+> during=20
+> the freeze or restore phase with -EBUSY.
+>=20
+> You'll also have to define an hcd_pci_freeze() routine, just=20
+> like hcd_pci_suspend() except that it uses PMSG_FREEZE instead of=20
+> PMSG_SUSPEND.=C2=A0 And the .freeze callback in usb_hcd_pci_pm_ops should
+> be=20
+> changed to hcd_pci_freeze.
+>=20
+> In fact, it looks like choose_wakeup() in drivers/usb/core/driver.c=20
+> could also use the new macro, instead of checking for FREEZE or
+> QUIESCE=20
+> directly the way it does now.
+>=20
+> Alan Stern
+
 
