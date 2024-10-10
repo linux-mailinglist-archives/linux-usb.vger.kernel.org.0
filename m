@@ -1,204 +1,338 @@
-Return-Path: <linux-usb+bounces-15963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15964-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AF4A9979C7
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 02:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56CC9997A87
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 04:23:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE32F1C22343
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 00:47:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59F781C213E9
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 02:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D3914293;
-	Thu, 10 Oct 2024 00:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2060C6F30F;
+	Thu, 10 Oct 2024 02:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="joB5Lwy2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C05B224EF;
-	Thu, 10 Oct 2024 00:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728521232; cv=none; b=F0JWUjYmBSZRda2k3E06NHr7y6ZHEbz4bnVxK8BQ5UzMGpO1DNr6oBVU1vtcDtTCyZYb9Dq2eRMqaQvZv8s0onv4Aa3xQyvFarnFN6XokJZvzWH+Ht3C4LC55uQYP0UTao9ATwOjG5hgwHhJjCPN/to7UTi9J64z1VP0npccM4M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728521232; c=relaxed/simple;
-	bh=XLoZVWOMfKt89VV8RNx0MGgo5pk6fXaVTBOOuuco2zI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KfvPSBjZsH3bj/D1N2YM1QJaqxs2EQbVxtAOoXs834anKDJMDRKt0x4s6qoEFfROu+mIdUBDVLaFkjogzQhx6BPyNgxLOZlYoIo0cSjd7JBETdFfnEOZEv7G2rNKDxfDGhoJ1D5LPkW+vqi8Q2IqkAr5n+vQXB0dj6D98IIXwIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 286df56086a111efa216b1d71e6e1362-20241010
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:0560a972-691e-4dee-a4f7-ce20381c9831,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:2,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-3
-X-CID-INFO: VERSION:1.1.38,REQID:0560a972-691e-4dee-a4f7-ce20381c9831,IP:0,URL
-	:0,TC:0,Content:0,EDM:0,RT:2,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:-3
-X-CID-META: VersionHash:82c5f88,CLOUDID:d228c99d6b4b369ec39ab1020f4ee98a,BulkI
-	D:240925144023207KTES0,BulkQuantity:21,Recheck:0,SF:19|64|66|38|17|102,TC:
-	nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,C
-	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_OBB
-X-UUID: 286df56086a111efa216b1d71e6e1362-20241010
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1464132761; Thu, 10 Oct 2024 08:46:59 +0800
-From: Deng Jie <dengjie03@kylinos.cn>
-To: stern@rowland.harvard.edu,
-	rafael@kernel.org
-Cc: dengjie03@kylinos.cn,
-	gregkh@linuxfoundation.org,
-	len.brown@intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	pavel@ucw.cz,
-	xiehongyu1@kylinos.cn,
-	xiongxin@kylinos.cn,
-	duanchenghao@kylinos.cn
-Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
-Date: Thu, 10 Oct 2024 08:46:55 +0800
-Message-Id: <20241010004655.9382-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <85105e45-3553-4a8c-b132-3875c4657c4b@rowland.harvard.edu>
-References: <85105e45-3553-4a8c-b132-3875c4657c4b@rowland.harvard.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFA52AEFC
+	for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2024 02:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728526997; cv=fail; b=hL18wikK8qKZB2Aau8mLVgus+tfHGSwRPN7O3bJ/CPtLzQNjlM9Ce5EqbTb04F9MrZkLEO3ZfFjbDV4fBDEgsqkmH0sRUhFXDwfl7NbQ80De3emtE2cRBQ+YvP4XO+uLgEonhq75ZWS7X+EcIz9bp/Ma+aEev6esAWd5kEAnhS0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728526997; c=relaxed/simple;
+	bh=hfRO3Rs8npazua3zk+Eye56fRuEgMz6bis/6hTcz1Bw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=o6JAOs/cdIUrLWvaNjvBMnsrmhlTK9XIQEZ++U/NEUHxOX2/MqPgf7ja7g3JjQ7WSHdnnyHfyCHjG8D51/oDzYUfhA49Ipr2tG7Gh+oMh8YIwx/qrfc7vQXR5qMPc/qnyAc61I5dqQZ7eaPPFhAmxBJJd/RNONK+dV+9Hwh8wTs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=joB5Lwy2; arc=fail smtp.client-ip=40.107.94.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YpZkrAND7/6719qpF2xR0yhlF3k3syrm/kKZ3kvu4+xnFcDowNrCetZ/DZJl38Wkc8ah45ri0UvcQ1lPaR+7G3jS9llPBTNBk3NWpA9aOBzAU7tWS/63nfm8WzK/05ldh+VhlqioxQOZ5ct18+fKhhsqHq0SuTYy3JePlbFrecaehfH/sPcpyp85RlDs/fCP2SQMhLLMY1V48t0Z5s0f0d2sllDgUvMaXuS0ho2x/3Yiz8SFqT4Ldg3IiK7WhitwgrtGcRWl/vqmWb+ZFEgeapUv97Ozi2eH378XkpxSpc3BYOIKJXCG4j8GqJ4gk9MmB6eS1oBmOkmXTiK4NnBpxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JUSA/hkxFIpjqj8/wqOXBAnsxQT0km9ePskSMFV9Byg=;
+ b=STyFxIYFY5qrmxJcfilHgb2Ox7xBc49na30sGqIR1zGyYM1rIFC9ZjRC9pbePQOtHYPw8Uw2RES5ILAGmlw+34144fW3rB/WFA2XGcshgyAqIJKcb+ucqF7gKtd7NKNXbA4Ysrf1EnFgU7X7yqwWYnajzoBj93TjDae4TIKy7uFKOo1axpLwuO93BoRZ4SlLzzrpgw7yMwrPgJ5UIjg89cSLtCJxj0Fvwu9PMLDKHHVoH3UJqOHI4cFTNZyQyHfRM2JrqlHgC1zkg2wFTSO//XdqoBxr1zzJQY8jDM3Otk5K8eqVxgxST9Pc5vHVW47rDL1TOFSeJuOreEvgyLbixA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JUSA/hkxFIpjqj8/wqOXBAnsxQT0km9ePskSMFV9Byg=;
+ b=joB5Lwy2Rm1Jd86slEs97LMuG8BDQadpjWMGBh60kqKQh3tQ1BxJIjSPxaUnEql0zpwnw8LGYu/E/jwIvAwjvOPNmtocn/RKKlNeknvwVFky/Wdw/0cMXOdLCgm1A+suW+UrXGF6sTlJhqGwM2e/yJpiMvbl+pdXcBqdgZdO/uQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS0PR12MB8044.namprd12.prod.outlook.com (2603:10b6:8:148::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.16; Thu, 10 Oct
+ 2024 02:23:13 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.8026.020; Thu, 10 Oct 2024
+ 02:23:13 +0000
+Message-ID: <c5209c31-9263-4fe7-b387-319bbaac866d@amd.com>
+Date: Wed, 9 Oct 2024 21:23:10 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] usb: acpi: add device link between tunneled USB3
+ device and USB4 Host Interface
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ "<Harry Wentland" <harry.wentland@amd.com>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+ Raju.Rangoju@amd.com, Sanath.S@amd.com, Greg KH <gregkh@linuxfoundation.org>
+References: <cf45e722-144f-4d06-8dd9-2f7f54283fbc@amd.com>
+ <20241003054704.GM275077@black.fi.intel.com>
+ <01bf9a3a-6277-4b57-83ed-82c4bfb62dd2@amd.com>
+ <20241003132726.GN275077@black.fi.intel.com>
+ <797f52fa-ab9d-45c5-828b-9dcaf75fcc83@amd.com>
+ <20241003134743.GO275077@black.fi.intel.com>
+ <cee28cb3-a157-4d26-a68a-7b5a99161d1a@linux.intel.com>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <cee28cb3-a157-4d26-a68a-7b5a99161d1a@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SA9PR10CA0001.namprd10.prod.outlook.com
+ (2603:10b6:806:a7::6) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB8044:EE_
+X-MS-Office365-Filtering-Correlation-Id: 59fc55a3-b6b1-4aee-173f-08dce8d27dd9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Z0FJQy9WTHB0M09BYzRrNkw0R0p1ZG4zbkxZZmtRYnk2dzFoTDFWRWdqYXVv?=
+ =?utf-8?B?RzF6bW9XNjFPKzNrdURDSXYvOTZERnFjeHpFNzlySVZSUUlkcXZvQ2N3U21L?=
+ =?utf-8?B?dTBqeHZuOFpxR1ZrU2tzRjFwblBIb09ROEhISzBrM0xneGp2Q0V0VEFVaWVW?=
+ =?utf-8?B?MEdvSkRHelgzeXdaZXRjc0svNjcrR3RrU1kyZERUOFBmcndRQTk1VnlUano0?=
+ =?utf-8?B?QnV0WUFOa2c2NldPQUR3Qy9HZGNLR3BFY0NaTHZZT0NzTy9vYXZYb1kwOUFY?=
+ =?utf-8?B?RXRFd29LSG54ODRjV1FWbUlGaTdFd0x6c0t3WlhKS0VsWjNRaEZuSlVPeGtN?=
+ =?utf-8?B?TVc4T3p1c1JieFl0d0RJM01Ic0lrYjA5bEVPVUVhT21iS0Y5RnM1Mk5hMUlE?=
+ =?utf-8?B?UVNIWDhDSTdUbFIyMmgzZFN6S0ZRc1Q2SDBUdXZMUFNjSTQ1bjhwdE1yWmtF?=
+ =?utf-8?B?RFpJcllWZUVpQnRVMnJKWlJTSHhkVkJ3dEk4cEZtc0dxRVEyOUVsMWRmbVdx?=
+ =?utf-8?B?bFNRMW1IZmZSRXgzK3lPaEU2VVhacDBwZ2JhQ0JDdHZ1VXNyTEYraGdoanJG?=
+ =?utf-8?B?V2lZWFFSNVIweU5nRDVoZEM2Q1VzSG1RaDJJSE80L1VORWFaUmIxYmxKMGI3?=
+ =?utf-8?B?anc1dytzK205emd3cm1RVHZZbGMwWnJQWHZGRFJtVUYrbUVlQUlSblI5UVFW?=
+ =?utf-8?B?N3Mzd0pRVUJkbUN3aWNqby9EdTVKdmJIM1NNdzJmT0N1QTdvOVFCVTQwblFx?=
+ =?utf-8?B?WjBnZW1qeWs3NGdtOHBOZFFZYllub3EwYlVHeXpobkpHeFpzYlk3bGxjb0Iz?=
+ =?utf-8?B?QVJPc1cyVzJVSFRZR1p0RGJPRldQUFNhSmZybmk1Z2dUWW54NFh3TUM0ZDBP?=
+ =?utf-8?B?Y0RxYitSNU54cjBTV21SaGVtZjhpblFsaEZQeGF6eGFWYjNxSUc1SVE0dnNP?=
+ =?utf-8?B?a2ZaMlU2d1BoeGlSeTdKQXFQTFhiWklKNCtGb2xiMjdac3d0TngyMU9FQlo0?=
+ =?utf-8?B?aDFqRXIrRXROcFRpc1ZNU05LMnhVOExOQ2FFMytPdGxCK2tiZkNZaGFUYlJB?=
+ =?utf-8?B?OWN6REQ4QjAzQ2lEdW9GdmgxNmlkSk05cE5yRGsvdHUydjkxNWttODJnRnFl?=
+ =?utf-8?B?d0haRmxiZVYvcWNYVHpwUGZWZHZzWm1wanRMZHRueWthTW5wdG55WEF0SkVR?=
+ =?utf-8?B?dDFRYlVnQm94MmI1ZTlLRUJmWk54ZXVJY1dqYnlacmE0ZzZSeWp4YmdNWW5m?=
+ =?utf-8?B?ci9ueGEwZi9zajE4REI1QzVzdlAzbVF3WEpwMzErdXhzQVpiQnpXS29SRnhC?=
+ =?utf-8?B?TmN1WjVvclRESURJNUpXN1B1SGZRRGxDZnNFQzROejhjQWRTcDhaVU81Nkhn?=
+ =?utf-8?B?dHR0cnJiZWppNHJrWDJpN24wSGJ4MjZsdGRqNlZSdXRQV2pndHhqRTRPY2JN?=
+ =?utf-8?B?aWEvSE9NY21nbWJDMGJ5dzJzWkpvN2dSMkVPWG5Uc1pCRkcxVTA2cVFEVHEv?=
+ =?utf-8?B?aTU2MUtrVHBza2dhWHJiWSszd1ljdjE2aWxQUUMxdGhJd2ZzWllQa01pVjE5?=
+ =?utf-8?B?S0tJTGc1LzFaSHh0ZWoybmtDZDRwRVVtVUFJbVljOGVld09RQzJiTytjZFJh?=
+ =?utf-8?Q?J5ZCSeQCoOwsIVdplPrc2LsO9N5NoekjidN9e4haQVGw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SHhKeElFTFVTRStKSmYzSUNkVzdLTE9uZHJINSsyUFZyVXlMbjBibmQ5d3hY?=
+ =?utf-8?B?RmpJK1NWY0lieTZLU2Uxb1NSSXZGVVhMcCtwenA5UDR1Q1ZCQklMeXplMlVD?=
+ =?utf-8?B?UEJYS0JrZjZVSTJEZGxoN3Q5S3VkSG9RcCtlRzNUU0dJUVI4Ti91OHlyQWo3?=
+ =?utf-8?B?akUzb2xEOHdUWUZvUVdhTkRzQUVwUGdQVlRsTzhUKzZDVGVDdTRaZEtJc2xx?=
+ =?utf-8?B?bWxJZ3Q1alNXdlRHbkdFYnRLOUdrclphRVo0L2hKUllGak5peUNYdkpBQnps?=
+ =?utf-8?B?cSs1ZG0yZFZyUzlZQTdFd0NTOHhtZXkybzhNaXFiWHhIbjgxWXpaREdhWDdG?=
+ =?utf-8?B?SGlTTFNoVmZEdUlsUytuYU5qdGlZMVE4djE5dlZ1TGFUZjhub3BFWmx0Nkk2?=
+ =?utf-8?B?R3FKU3lCNjBoN3pqdDFxNTFnUWRhTDhjZmNINGRqQ0lCSnNNMjlYUjNQV3ZQ?=
+ =?utf-8?B?eXpmbStGeVZkQXJ5ZEtIeTBjcXFwRFJicm01L3N2NEJtWW9lWmdsbGtDWXln?=
+ =?utf-8?B?c05NOEtCcUI2L2NOUnFjOVdxQUhrdWhYcUNZTjlHVmFqRmZ0RlVzRElhWkhi?=
+ =?utf-8?B?TDJnZ2JnUnBqdHF1bjVnREcxUVp1TGE0UVZFeVZjNDVQYlZoYVFKMmdwTXRs?=
+ =?utf-8?B?RmQvTVBvTmFDVGFraXZvQ3FNOEptQVlhVjlXWGNlQ056WTUwcnBoY3pXWDB3?=
+ =?utf-8?B?a3AvanJOaWRGdWdwc2M0WGJOTFdlR05tbmNKUjhYZWEwYldsQXJwaXBocDhx?=
+ =?utf-8?B?UFlwTGMxODIxYkhyYy9YcjM4YkhCRDU0S2ludWxkNTVuSWQxLzVzZkRMT2dp?=
+ =?utf-8?B?VysyLzFwTU1jZVI2ZG90bUJrRVR4WUMrT093K2U4Y2lobkFWemlxKzVRVDZo?=
+ =?utf-8?B?OTIrQWdqUC8rMEhHQ2ZGckZNcEZ1WWJXbk95N1J3Mm5acGNwRGhITGdtYkxt?=
+ =?utf-8?B?VHVkam14bEdhaTB4K1VYN0RFY3Q1S3hsdnVVMTl4U0cwZkk3cG1vRUxydmVE?=
+ =?utf-8?B?WEpCOEx0b0tnOXZnRFdic0NRa0orMlFOdSt5ZGF2ejZkSnB5ZE1YNlZjSEVj?=
+ =?utf-8?B?Q2FUVURMMUdDVFhVZ0F0cDVMWEwwcVlmVko4VzUxbnRsQmY4bHpsaXlWZGdM?=
+ =?utf-8?B?QXAyeHVYbVBwNkk5N0pvU3B1YWdyWnlSbWQ2MlNqMVBkbEpxQ2g3bGJOME1p?=
+ =?utf-8?B?QnFrYmxKek8xYVRacVRmWUxCaTlaRjlKZFhvSkQvSkV2Tm5VVWVqMlpIR0V6?=
+ =?utf-8?B?R09EQWJJU2hwN1dTb2JNcFQva0N6WGlaRU1BYTJDOXNYMm1UZDg5MHJQdTda?=
+ =?utf-8?B?alRXaGJpQ2xjY21hS0llZHlMNzFPdGpKalVOaFJZQnYrMzV5ZU1PSFk5bGJE?=
+ =?utf-8?B?RlNKb245UHJTN2FIbTRmWG9vcER2M3p1VnRHMVovQUJKMmZIRjlPeXk2Y081?=
+ =?utf-8?B?MzF1cWxPSG96N3hQSzF3eVdYSU83RFdDaWJlVEtBSG5yNEw4cnZzVkhHK3Z5?=
+ =?utf-8?B?NTYwRzE5UVpWZS9pV1FGWWxPWHFrc211NlVnMmxOYTZZY20ra2ppTlM1b2dN?=
+ =?utf-8?B?aTdrNFc4S2g2QnpZWU1yL2JtKzh5S0dUR3g0WExuL0ZReVh4R2hiS1BVR2NB?=
+ =?utf-8?B?VmVvQVVXTVBMY2U4bXVtUlRwbWxvTE9UdU44WW5sTjl2TG8wM2J0bHJIbmt2?=
+ =?utf-8?B?T05ycFBnNGhHTXhVQ3djZHkwRVpTb0lJYVVpZVhpSVZBcG1pUzBWNzZENjZ4?=
+ =?utf-8?B?R3h1a1JVMUV0WTlUdnNxdENxNnY1bXo4WkExaG5VR0J6ZGNRVUxaSWdBb0xO?=
+ =?utf-8?B?bU1ycFlkeGU4Ri90SldUd1p0QTR1cWh6OFV4MWZyRGM1T1NINHVpNkxUYWFO?=
+ =?utf-8?B?WnRFb05YbURDYTBvTVBXZ2d4cXVpSmdndUlYamZJOWZZeENEV2ZrWEJRYnVl?=
+ =?utf-8?B?Z2ZJM2JUWGk1UTRWZjZrMko3N04yV0ZmOXBsL0NEU2UzZG5HdytoSzBMaXFP?=
+ =?utf-8?B?akV1R29xQ2lwdFUzTXhwa1AySFBTaGJraTVqdXNVb3dyOHMvSG9WSUI4N3Z6?=
+ =?utf-8?B?UG5PT1dDQk9rU1l1bGlDb2VhaW9HdjZjT2p6OFMzK284UGJBVVlnTGY1dXFq?=
+ =?utf-8?Q?LspG2rBjmJ4jyEFkAAvuxdkU+?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59fc55a3-b6b1-4aee-173f-08dce8d27dd9
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2024 02:23:13.3184
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jBO49fH5nlj3vIWN9Bj/wCob1u99A61j509+rcI96LhyVkSsSkajY4N6WxkaBp+JwaAaQLWBntgZyk+6OQ79UQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8044
 
-Hi Alan
-  I'm thrilled to receive your reply. Thank you very much.
-Sorry for the late response due to the holiday.
->
->> Reproduction of the problem: During the S4 stress test, when a USB device is inserted or
->> removed, there is a probability that the S4 wakeup will turn into a reboot.The following
->> two points describe how to analyze and locate the problem points:
+On 10/9/2024 16:52, Mathias Nyman wrote:
+> On 3.10.2024 16.47, Mika Westerberg wrote:
+>> On Thu, Oct 03, 2024 at 08:42:21AM -0500, Mario Limonciello wrote:
+>>> On 10/3/2024 08:27, Mika Westerberg wrote:
+>>>> On Thu, Oct 03, 2024 at 08:10:11AM -0500, Mario Limonciello wrote:
+>>>>> On 10/3/2024 00:47, Mika Westerberg wrote:
+>>>>>> Hi Harry,
+>>>>>>
+>>>>>> On Wed, Oct 02, 2024 at 01:42:29PM -0400, Harry Wentland wrote:
+>>>>>>> I was checking out the 6.12 rc1 (through drm-next) kernel and found
+>>>>>>> my system hung at boot. No meaningful message showed on the kernel
+>>>>>>> boot screen.
+>>>>>>>
+>>>>>>> A bisect revealed the culprit to be
+>>>>>>>
+>>>>>>> commit f1bfb4a6fed64de1771b43a76631942279851744 (HEAD)
+>>>>>>> Author: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>>>>> Date:   Fri Aug 30 18:26:29 2024 +0300
+>>>>>>>
+>>>>>>>        usb: acpi: add device link between tunneled USB3 device 
+>>>>>>> and USB4 Host Interface
+>>>>>>>
+>>>>>>> A revert of this single patch "fixes" the issue and I can boot 
+>>>>>>> again.
+>>>>>>> The system in question is a Thinkpad T14 with a Ryzen 7 PRO 6850U 
+>>>>>>> CPU.
+>>>>>>> It's running Arch Linux but I doubt that's of consequence.
+>>>>>>>
+>>>>>>> lspci output:
+>>>>>>>        https://gist.github.com/ 
+>>>>>>> hwentland/59aef63d9b742b7b64d2604aae9792e0
+>>>>>>> acpidump:
+>>>>>>>        https://gist.github.com/ 
+>>>>>>> hwentland/4824afc8d712c3d600be5c291f7f1089
+>>>>>>>
+>>>>>>> Mario suggested I try modprobe.blacklist=xhci-hcd but that did 
+>>>>>>> nothing.
+>>>>>>> Another suggestion to do usbcore.nousb lets me boot to the desktop
+>>>>>>> on a kernel with the faulty patch, without USB functionality, 
+>>>>>>> obviously.
+>>>>>>>
+>>>>>>> I'd be happy to try any patches, provide more data, or run 
+>>>>>>> experiments.
+>>>>>>
+>>>>>> Do you boot with any device connected?
+>>>>>>> Second thing that I noticed, though I'm not familiar with AMD 
+>>>>>>> hardware,
+>>>>>> but from your lspci dump, I do not see the PCIe ports that are being
+>>>>>> used to tunnel PCIe. Does this system have PCIe tunneling disabled
+>>>>>> somehow?
+>>>>>
+>>>>> On some OEM systems it's possible to lock down from BIOS to turn 
+>>>>> off PCIe
+>>>>> tunneling, and I agree that looks like the most common cause.
+>>>>>
+>>>>> This is what you would see on a system that has tunnels (I checked 
+>>>>> on my
+>>>>> side w/ Z series laptop w/ Rembrandt and a dock connected):
+>>>>>
+>>>>>              +-03.0
+>>>>>              +-03.1-[03-32]--
+>>>>>              +-04.0
+>>>>>              +-04.1-[33-62]----00.0-[34-62]--+-02.0-[35]----00.0
+>>>>>              |                               \-04.0-[36-62]--
+>>>>>
+>>>>> 00:03.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
+>>>>> 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
+>>>>> 00:03.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] 
+>>>>> Family 19h
+>>>>> USB4/Thunderbolt PCIe tunnel [1022:14cd]
+>>>>> 00:04.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
+>>>>> 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
+>>>>> 00:04.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] 
+>>>>> Family 19h
+>>>>> USB4/Thunderbolt PCIe tunnel [1022:14cd]
+>>>>
+>>>> Okay this is more like what I expected, although probably not the
+>>>> reason here.
+>>>>
+>>>> Are you able to replicate the issue if you disable PCIe tunneling from
+>>>> the BIOS on your reference system? (Probably not but just in case).
+>>>
+>>> I checked on the Lenovo Z13 laptop I have and turned off "USB port" 
+>>> in BIOS
+>>> setup and this caused the endpoints 3.1 and 4.1 I listed above to 
+>>> disappear
+>>> but the system still boots up just fine for me on 6.12-rc1.
 >>
->> 1. During the boot stage when S4 is awakened, after the USB RootHub is initialized,
->> it will enter the runtime suspend state. From then on, whenever an xhci port change
->> event occurs, it will trigger a remote wakeup request event and add wakeup_work
->> to pm_wq, where the subsequent RootHub runtime resume process will be handled by pm_wq.
+>> Okay thanks for checking!
 >>
->> xhci runtime suspend flow：
->> S4 boot
->>    |->xhci init
->>        |->register_root_hub
->>         |->hub_probe
->>             |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
+>>>>>> You don't see anything on the console? It's all blank or it just 
+>>>>>> hangs
+>>>>>> after some messages?
+>>>>>
+>>>>> I guess it is getting stuck on fwnode_find_reference() because it 
+>>>>> never
+>>>>> finds the given node?
+>>>>
+>>>> Looking at the code, I don't see where it could get stuck. If for some
+>>>> reason there is no such reference (there is based on the ACPI dump) 
+>>>> then
+>>>> it should not affect the boot. It only matters when power management is
+>>>> involved.
+>>>
+>>> Nothing jumps out to me either.  Maybe this is a situation that Harry 
+>>> can
+>>> sprinkle a bunch of printk's all over usb_acpi_add_usb4_devlink() to
+>>> enlighten what's going on (assuming the console output is "working" when
+>>> this happened).
 >>
->> xhci runtime resume flow ：
->> xhci_irq()
->>     |->xhci_handle_event()
->>      |->handle_port_status()
->>          |->if(hcd->state == HC_STATE_SUSPENDED)
->>               |->usb_hcd_resume_root_hub()
->>                  |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
->>                  |->queue_work(pm_wq, &hcd->wakeup_work)
->>                      |->hcd_resume_work()                           /* hcd->wakeup_work */
->>                          |->usb_remote_wakeup()
->>                              |->callback = RPM_GET_CALLBACK(dev, runtime_resume)
->>                                  |->usb_runtime_resume()            /* usb runtime resume  */
->>                                      |->generic_resume()
->>                                          |->hcd_bus_resume()
->>                                              |->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
->>                                                /* wakeup pending signal to be clear */
->>
->> 2. However, during the quiesce phase of S4 wakeup, freeze_kernel_threads() will freeze this pm_wq,
->> and between freeze_kernel_threads() and dpm_suspend_start(), there exists a very time-consuming
->> S4 image loading process. This leads to a situation where, if an xhci port change event occurs
->> after freeze_kernel_threads(), triggering the wakeup pending signal to be set,but it cannot
->> be processed by pm_wq to clear this wakeup_pending bit, it will result in a subsequent
->> dpm_suspend_start() where USB suspend_common() detects the wakeup pending signal being
->> set and returns an -EBUSY error, interrupting the S4 quiesce process and reverting to a reboot.
->>
->> S4 wakeup
->>     |->resume_store
->>      |->software_resume()
->>          |->freeze_kernel_threads()          /* will freeze pm_wq */
->>          |->load_image_and_restore()
->>                |->swsusp_read()              /* S4 image loading: time-consuming .
->> When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
->> However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
->>                |->hibernation_restore
->>                      |->dpm_suspend_start(PMSG_QUIESCE)
->>                          |->hcd_pci_suspend()
->>                              |->suspend_common()
->>                                  |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
->
->At this point, do_wakeup is supposed to be 0 and so the "return -EBUSY"
->error should not occur.
->
->You can see that this is true by reading choose_wakeup() in
->drivers/usb/core/driver.c.  At the start of the function it says:
->
->       /*
->        * For FREEZE/QUIESCE, disable remote wakeups so no interrupts get
->        * generated.
->        */
->       if (msg.event == PM_EVENT_FREEZE || msg.event == PM_EVENT_QUIESCE) {
->               w = 0;
->
->and at the end it does:
->
->       udev->do_remote_wakeup = w;
->
->Therefore the problem you are describing should not happen and your
->patch should not be needed.
->
+>> There are couple of places there that may cause it to crash, I think.
+> 
+> Its possible we end up trying to create a device link during usb3 device
+> "consumer" enumeration before the "supplier" NHI device is properly 
+> bound to a driver.
+> 
+> This is something driver-api/device_link.rst states can cause issues.
+> 
+> This could happen if xhci isn't capable of detecting tunneled devices,
+> but ACPI tables contain all info needed to assume device might be tunneled.
+> i.e. udev->tunnel_mode == USB_LINK_UNKNOWN.
+> 
+> Harry, could you test if the code below helps?
+> 
+> diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+> index 21585ed89ef8..94c335a7b933 100644
+> --- a/drivers/usb/core/usb-acpi.c
+> +++ b/drivers/usb/core/usb-acpi.c
+> @@ -173,6 +173,13 @@ static int usb_acpi_add_usb4_devlink(struct 
+> usb_device *udev)
+>          if (IS_ERR(nhi_fwnode))
+>                  return 0;
+> 
+> +       if (!nhi_fwnode->dev || !device_is_bound(nhi_fwnode->dev)) {
+> +               dev_info(&port_dev->dev, "%s not tunneled as it probed 
+> before USB4 Host Interface\n",
 
-1. Although during the S4 quiesce phase, the do_remote_wakeup flag is set
-to 0 within the usb_suspend->choose_wakeup function, the subsequent sequence
-of usb_suspend->usb_suspend_both->usb_suspend_device->hcd_bus_suspend->
-xhci_bus_suspend will disable remote wakeup for the RootHub port.
-2. However, during the loading image phase prior to the S4 quiesce phase,
-the USB device may have generated an interrupt, setting the WAKEUP_PENDING flag.
-Additionally, due to the execution of freeze_kernel_threads before the loading
-image phase, the USB interrupt generated during the loading image phase is
-unable to execute its interrupt handler's bottom half, resulting in the
-WAKEUP_PENDING flag remaining uncleared.
-3. Therefore, even though the remote wakeup for the RootHub is disabled in
-usb_suspend_both() during the quiesce phase, due to the WAKEUP_PENDING flag not
-being cleared, the xhci still believes that the RootHub has generated a wakeup
-event when it attempts to suspend. Consequently, the xhci suspend function
-returns an -EBUSY error and does not proceed with the suspend operation.
+I'm aware this message is mostly to prove whether this is the actual 
+issue but I do want to say if this patch indeed helps Harry's problem 
+and you keep a message in what goes upstream I don't think this is 
+accurate for all cases.
 
->Now maybe things are't working the way they are supposed to.  If that's
->so then you should submit a patch fixing the code so that it _does_ work
->this way.
->
->For instance, in suspend_common(), do_wakeup is derived from
->device_may_wakeup(rhdev), which is determined by
->rhdev->power.should_wakeup -- see the definition in
->include/linux/pm_wakeup.h.  Maybe this flag isn't getting cleared
->properly.  (In fact, at the moment I don't see where that flag gets set
->or cleared at all...)
+If you have a Pre-OS CM, it might build tunnels and those could be 
+active until the USB4 CM loads and resets them (by the default behavior).
 
-After configuring CONFIG_PM_SLEEP, the return value of device_may_wakeup
-should be equal to dev->power.can_wakeup && !!dev->power.wakeup.
+So I think a more accurate message would just be "%s probed before USB4 
+host interface".
 
-Thanks,
-
-Deng Jie
+> +                        dev_name(&port_dev->child->dev));
+> +               udev->tunnel_mode = USB_LINK_NATIVE;
+> +               return 0;
+> +       }
+> +
+>          link = device_link_add(&port_dev->child->dev, nhi_fwnode->dev,
+>                                 DL_FLAG_AUTOREMOVE_CONSUMER |
+>                                 DL_FLAG_RPM_ACTIVE |
+> 
+> 
+> 
+> 
 
 
