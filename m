@@ -1,167 +1,212 @@
-Return-Path: <linux-usb+bounces-15969-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15970-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81A04997C68
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 07:30:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65D6B997CC4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 07:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CA411C20FD9
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 05:30:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C697BB21D1D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 05:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D336819E836;
-	Thu, 10 Oct 2024 05:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z2HHIU/n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975701A00EE;
+	Thu, 10 Oct 2024 05:59:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B286717BB32
-	for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2024 05:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E5A3A268;
+	Thu, 10 Oct 2024 05:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728538230; cv=none; b=Zkr3tNepiq4IAg69mO2E9HGDTai9Gm4P6o+JLFsG27sH18/vl65ZsD/TMhg2iZGtYfaPR8CHixs7009PjXGhE5skOKXy1Vy3KBbmQZTF3b1fSv9tCqsi9wMFWUdgeMcTuL59IJuc16cuV0aSl+yXB0+F/hZktT/zwoV1Dvy3AUk=
+	t=1728539972; cv=none; b=IyK+RFsIe8BXhmtO9jCrx5jTbWGcGLDHqfSWmINJgbsrUPEI4hLWUooUUhNc4tlJ/Ywmp0IRlov7N6Fwr/7P0wGt4SkEiYyxMk8TU9QxX/FI8rvHC3qywHOx8TJzQIV+8nxYcx6cmtOGR2040/PV48NVAy1SX2MlWATHBfO9i6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728538230; c=relaxed/simple;
-	bh=8vrimWluOky7+aW1AAmoRPcEh4YVHM2VIY8aApW/HZE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sIEsE8WgLeMc/pHtxU3FEzbIcqP0W54iiRJxu1mg4xUMZ7nOFR3A9LA32KSXxIHqP3yQCdcuqqtoo2rybsRFTGX9N4gfXz4JeXo0CQvOvBLe/PfOxOUqtHAfAMUAiWIp4GUIDSXU2+iSgpXH32BPc6nFEcBSubWp0AZjQxfq+/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z2HHIU/n; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43111d23e29so94605e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 09 Oct 2024 22:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728538226; x=1729143026; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Vsbn1te+zu6FOdxZ9pZKFB7CXsrSwAH4ylvWDXfwvY=;
-        b=z2HHIU/n2aBAKKWCVeuWNYwBobqKgIz4HQ6ZiX8GDLe9iaTDCqU73JRYNkTrUv1WHs
-         3EhoR2rK1nEh2q+H5ShTlt0QrW0MqNo/qShNozrDxrW9xM4Y2Pa8uFrIN0RxM1ow7szK
-         WU3EwPR8BWLODS4qmptJE5pFSf5/hZEFtjkQqyamx7AuNcoh3X53IFeOuJGx7ArRROq0
-         wHPQhAmGqlLOsTMtrMxo9gP+dZ+nlsxcNo1rNJTSXK6WVogW9GcpjwQ0GjXvsfPWvhWH
-         m9QqFcefl3ZFRDircUHVkcUCvazxLoF1ubYHLhIJuSfg5yog2ke+tN6FjUl1aq9IrCb5
-         jN/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728538226; x=1729143026;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5Vsbn1te+zu6FOdxZ9pZKFB7CXsrSwAH4ylvWDXfwvY=;
-        b=JoEHVujT+VmkjvxBN9uo5gKHfVD7mjwDxhBdZnqspEB2qK9Igm/DrCbUzNIMHk/w9H
-         P5CFb1UCsQ5mXsp43k0vW8Wh1D0THfrLoQirRmJyZ7DfsX0SvqN/g7OIQzU4BWy/7XJo
-         fLyzOfpnh0qtV+vJjpAZ/dHbLGhIY7PH0gJY6w+obvyRKCx3wUdfNczNKCU1t3z7JhXs
-         8m3BeOljxiRaCQan942tXFlcmUIQv8PodAwDsfNvG0wauSREfWA1HXanjnF+Nf9FJ2Gb
-         vZlhhbbTQnjMrkMfqKT+yDCW66VQiZEhyizsXH9ZI74qK8eJ/nLuvFFmNtTN3eQ+NBQ9
-         jIzg==
-X-Forwarded-Encrypted: i=1; AJvYcCVjQ+KC17ab3Il5+l3kKNalIBZgAiMcaoaXLXHEIovMK4aPtplW+GvpJ/V03kVw0UftBGluQmXOgME=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/eiBKlP0k1LxPCc+9Gg6nFKpb5Dbeex/F1r+3Nz1cqbjD/0gc
-	uNoxWQwLxBULHgIcAJxAC47BrSx1krdnTFi7XOwj9egSAj/35b8SoqFEE1AGQxDl8qHaDlxMKQt
-	MV5TBcXMZJtN7zLm7ArdN2gNYhPgVVP5B/zsc
-X-Google-Smtp-Source: AGHT+IExR+gZgJ9+ZjEm/14g9BXJdiE3901d7DoQIau1dkDL3xiK2Bq9ZBBLMMTnoABIwrRyI5YGN5iG92XsC0UWHcA=
-X-Received: by 2002:a05:600c:3d88:b0:42c:9e35:cde6 with SMTP id
- 5b1f17b1804b1-431161221eemr2758015e9.2.1728538225796; Wed, 09 Oct 2024
- 22:30:25 -0700 (PDT)
+	s=arc-20240116; t=1728539972; c=relaxed/simple;
+	bh=cp+aGe2QQNVvpt/reaHlSSqkoGtiQBoT7HMWL7oJcDs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OYG2jej+ZXZTwy2jC2xE5705/mAn5dyM/7nVuiIDc4g5NQKwwE6D6SG3tGfEv+vxqiMiTjBhZmAyzd1SFyZpdHD1WTgrxNdyUUggJ9c36/3NpYDSg+jwwlovwUvk7+P20339cNhzGCsN+U/xkQNiNfUJm9+Bscb2WBpfDNvDhds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c8f8e3ac86cc11efa216b1d71e6e1362-20241010
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_QP
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:cb75e74b-01e6-444f-9b59-aaae8a0fe0d1,IP:15,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:28,RULE:Release_Ham,ACT
+	ION:release,TS:28
+X-CID-INFO: VERSION:1.1.38,REQID:cb75e74b-01e6-444f-9b59-aaae8a0fe0d1,IP:15,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+	N:release,TS:28
+X-CID-META: VersionHash:82c5f88,CLOUDID:b12e1dcf33b9fb9d30aee613fce78312,BulkI
+	D:2409062205428B690IWE,BulkQuantity:37,Recheck:0,SF:44|64|66|38|24|17|19|1
+	02,TC:nil,Content:1|-5,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:40|20,QS:ni
+	l,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
+	TF_CID_SPAM_OBB,TF_CID_SPAM_FCD,TF_CID_SPAM_ULS
+X-UUID: c8f8e3ac86cc11efa216b1d71e6e1362-20241010
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(39.156.73.13)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 915648642; Thu, 10 Oct 2024 13:59:17 +0800
+Message-ID: <5f2f6b979e95e4c2bc33ea0277112939164f6024.camel@kylinos.cn>
+Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: Alan Stern <stern@rowland.harvard.edu>, "Rafael J. Wysocki"
+	 <rafael@kernel.org>
+Cc: Hongyu Xie <xy521521@gmail.com>, gregkh@linuxfoundation.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz, 
+ stanley_chang@realtek.com, tj@kernel.org, Hongyu Xie <xiehongyu1@kylinos.cn>
+Date: Thu, 10 Oct 2024 13:59:08 +0800
+In-Reply-To: <2c368013-8363-4a4e-bfee-2f0b14d01162@rowland.harvard.edu>
+References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+	 <1725931490447646.3.seg@mailgw.kylinos.cn>
+	 <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+	 <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
+	 <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+	 <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
+	 <bddecd4e-d3c8-448e-8a22-84bbc98c4d1b@kylinos.cn>
+	 <b2ec107d4797f6e1e8e558f97c0ad1be6d46572c.camel@kylinos.cn>
+	 <84a4f66a-5b0e-46a8-8746-be6cd7d49629@rowland.harvard.edu>
+	 <fa347849defa66a7d4af23ac6317ae5b37357ea4.camel@kylinos.cn>
+	 <2c368013-8363-4a4e-bfee-2f0b14d01162@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241009054429.3970438-1-guanyulin@google.com>
- <20241009054429.3970438-4-guanyulin@google.com> <2024100941-limping-dislodge-5c74@gregkh>
-In-Reply-To: <2024100941-limping-dislodge-5c74@gregkh>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Thu, 10 Oct 2024 13:30:00 +0800
-Message-ID: <CAOuDEK0a43yLhCoA8iq=stj+QQAmKTCVWGKHvKM6-GPEaN9C3g@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] usb: add apis for sideband uasge tracking
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Thinh.Nguyen@synopsys.com, mathias.nyman@intel.com, 
-	stern@rowland.harvard.edu, elder@kernel.org, oneukum@suse.com, 
-	yajun.deng@linux.dev, dianders@chromium.org, kekrby@gmail.com, perex@perex.cz, 
-	tiwai@suse.com, tj@kernel.org, stanley_chang@realtek.com, 
-	andreyknvl@gmail.com, christophe.jaillet@wanadoo.fr, 
-	quic_jjohnson@quicinc.com, ricardo@marliere.net, grundler@chromium.org, 
-	niko.mauno@vaisala.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, badhri@google.com, 
-	albertccwang@google.com, quic_wcheng@quicinc.com, pumahsu@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 9, 2024 at 8:44=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
- wrote:
->
-> On Wed, Oct 09, 2024 at 05:42:57AM +0000, Guan-Yu Lin wrote:
-> > +void usb_sideband_get(struct usb_device *udev)
-> > +{
-> > +     struct usb_device *parent =3D udev;
-> > +
-> > +     do {
-> > +             atomic_inc(&parent->sb_usage_count);
->
-> As this is a reference count, use refcount_t please.
+Hi Alan,
 
-Acknowledged, will change it in the next patch. Thanks for the guidance.
+=E5=9C=A8 2024-10-09=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 11:50 -0400=EF=BC=
+=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> > On Wed, Oct 09, 2024 at 10:35:05AM +0800, duanchenghao wrote:
+> > > > Hi Alan,
+> > > >=20
+> > > > These are two patches, each addressing the same issue. The
+> > > > current
+> > > > patch is a direct solution to the problem of the interrupt
+> > > > bottom
+> > > > half
+> > > > being frozen. The patch you replied with is another,
+> > > > alternative
+> > > > solution to the same problem. Please review which solution is
+> > > > more
+> > > > suitable, or if there are any other revised proposals.
+> > > >=20
+> > > >=20
+> > > > Please review the patch I mentioned:
+> > > > https://lore.kernel.org/all/0a4dc46ae767c28dd207ae29511ede747f05539=
+a.camel@kylinos.cn/
+> >=20
+> > I still think your whole approach is wrong.=C2=A0 There is no need to
+> > change=20
+> > the way the HCD_FLAG_WAKEUP_PENDING flag gets set or cleared;
+> > that's
+> > not=20
+> > the reason for the problem you're seeing.
+> >=20
 
->
-> > +             parent =3D parent->parent;
-> > +     } while (parent);
->
-> Woah, walking up the device chain?  That should not be needed, or if so,
-> then each device's "usage count" is pointless.
->
+Thank you very much for your evaluation of the scheme. I have a
+question regarding why the set_bit operation for the
+HCD_FLAG_WAKEUP_PENDING flag is performed in the top half of an
+interrupt handler, while the clear_bit operation is done in the bottom
+half. This seems to contradict conventional practices. The issue is not
+limited to S4; if other processes freeze the work queue in the bottom
+half, the same problem may arise.
 
-Say a hub X with usb devices A,B,C attached on it, where usb device A
-is actively used by sideband now. We'd like to introduce a mechanism
-so that hub X won't have to iterate through all its children to
-determine sideband activities under this usb device tree. This problem
-is similar to runtime suspending a device, where rpm uses
-power.usage_count for tracking activity of the device itself and
-power.child_count to check the children's activity. In our scenario,
-we don't see the need to separate activities on the device itself or
-on its children. So we combine two counters in rpm as sb_usage_count,
-denoting the sideband activities under a specific usb device. We have
-to keep a counter in each device so that we won't influence the usb
-devices that aren't controlled by a sideband.
-When sideband activity changes on a usb device, its usb device parents
-should all get notified to maintain the correctness of sb_usage_count.
-This notifying process creates the procedure to walk up the device
-chain.
+The solution you described below should be able to resolve the current
+S4 issue, but for now, we haven't identified any other scenarios that
+require the same operation. Based on my understanding, the USB device
+is woken up in the bottom half of the interrupt, and both the set_bit
+and clear_bit operations for the HCD_FLAG_WAKEUP_PENDING flag should be
+executed within the same thread in the bottom half. May I ask if there
+are any other reasons why the set_bit is executed in the top half?
 
-> > +bool usb_sideband_check(struct usb_device *udev)
-> > +{
-> > +     return !!atomic_read(&udev->sb_usage_count);
->
-> And what happens if it changes right after you make this call?  This
-> feels racy and broken.
->
+Thanks
+Duanchenghao
 
-Seems like we need a mechanism to block any new sideband access after
-the usb device has been suspended. How about adding a lock during the
-period when the usb device is suspended? Do you think this is the
-correct direction to address the race condition?
+> > The problem occurs because when suspend_common() in=20
+> > drivers/usb/core/hcd-pci.c sets do_wakeup, it does so by calling=20
+> > device_may_wakeup(), and the value that function returns is not
+> > what
+> > we=20
+> > want.=C2=A0 The value is based on whether the controller's power/wakeup=
+=20
+> > attribute is set, but we also have to take into account the type of
+> > suspend that's happening.
+> >=20
+> > Basically, if msg is one of the suspend types for which wakeups
+> > should=20
+> > always be disabled, then do_wakeup should be set to false.=C2=A0 There
+> > isn't=20
+> > a macro to test for these things, but there should be.=C2=A0 Something
+> > like=20
+> > PMSG_IS_AUTO() in include/linux/pm.h; maybe call it
+> > PMSG_NO_WAKEUP().=C2=A0=20
+> > This macro should return true if the PM_EVENT_FREEZE or
+> > PM_EVENT_QUIESCE=20
+> > bits are set in msg.event.
+> >=20
+> > Rafael, please correct me if I got any of this wrong.
+> >=20
+> > So the right way to fix the problem is to add to pm.h:
+> >=20
+> > #define PMSG_NO_WAKEUP(msg)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(((msg.event) =
+& \
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0(PM_EVENT_FREEZE | PM_EVENT_QUIESCE)) !=3D 0)
+> >=20
+> > and in suspend_common():
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (PMSG_IS_AUTO(msg))
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0do_wakeup =3D true;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else if (PMSG_NO_WAKEUP=
+(msg))
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0do_wakeup =3D false;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0do_wakeup =3D device_may_wakeup(dev);
+> >=20
+> > Then with do_wakeup set to false, none of the HCD_WAKEUP_PENDING()
+> > tests=20
+> > in the following code will be executed, so the routine won't fail
+> > during=20
+> > the freeze or restore phase with -EBUSY.
+> >=20
+> > You'll also have to define an hcd_pci_freeze() routine, just=20
+> > like hcd_pci_suspend() except that it uses PMSG_FREEZE instead of=20
+> > PMSG_SUSPEND.=C2=A0 And the .freeze callback in usb_hcd_pci_pm_ops
+> > should
+> > be=20
+> > changed to hcd_pci_freeze.
+> >=20
+> > In fact, it looks like choose_wakeup() in drivers/usb/core/driver.c
+> > could also use the new macro, instead of checking for FREEZE or
+> > QUIESCE=20
+> > directly the way it does now.
+> >=20
+> > Alan Stern
 
-> > @@ -731,6 +732,8 @@ struct usb_device {
-> >
-> >       u16 hub_delay;
-> >       unsigned use_generic_driver:1;
-> > +
-> > +     atomic_t sb_usage_count;
->
-> Why is this on the device and not the interface that is bound to the
-> driver that is doing this work?
->
-> thanks,
->
-> greg k-h
 
-If the count is bound on the usb interface, I'm afraid that the
-sideband information couldn't be broadcasted across its usb device
-parents. Do you have some insight on how we can achieve this?
-
-Regards,
-Guan-Yu
 
