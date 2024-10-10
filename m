@@ -1,292 +1,236 @@
-Return-Path: <linux-usb+bounces-15985-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15986-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56F3C998A8D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 16:56:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 531EE998D2D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 18:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E19A2895D2
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 14:56:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1513EB2AF35
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 16:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C7C282FB;
-	Thu, 10 Oct 2024 14:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF6D1CDFAE;
+	Thu, 10 Oct 2024 16:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JWkr02sN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wNkYgeIA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2074.outbound.protection.outlook.com [40.107.220.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E57B38DE1;
-	Thu, 10 Oct 2024 14:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728571521; cv=fail; b=uQJSy93p+PJROOr4UdSMwDs62gydgBdQCYrJMKfAusxTxE/2VbNXQSlKwFmy7hciroxk7ON9w7L34f1yL4/bsrzWjIaR1jPDnNyZpQwu5NeLWRdrgqt2w2TKEf41EBuqIzT8M5AV6JGDnvcyBDcUp86vJnFLRFuHQMll9BZVQQc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728571521; c=relaxed/simple;
-	bh=gBoILY7mDu4h+0PSedFLCguJh81ZqxELpzQTvX1kK3w=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=cDqWHUAX9dotolW4cK22cBYlPB99rmfb5R6T7EiSNycHg4JygogkDLHQOQP91LI/xKYet8Q8GSs5lnnwRNOqzDaePkkkLLIjfWGDDl+XYwNk7clGlbxtgzG4c/fwp787+Xkgrq+iWX0pllhLMzNfJ4TZZGghzQ9anU8ST5+g9mg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JWkr02sN; arc=fail smtp.client-ip=40.107.220.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FLi9UU5lfUZH4EntI+WhAI6h/aa49OljlhYj2PbsfRSGyz7CcjM/sjGNon6n5CHXqn9iMwm/3AcQcbmjQDLK7/BsVPDcKiHrRreVtNm9eWHxOzNS2Gi1q5ZKM1BQMGo5F4xZMyBUf8Ur1RV2hYhegygtVHQ61/a8zG5uwAQmw5lR4V+ZVKCKvsbBYWy3IBx7nLSUlxa0gekyyWjqx9op0HJ4sM1bEhZ1iYHAUafj3hSGeCmkL5N8AMwX/rYFdg5yXHTZCy3YxyoVLuJore6RpEtLTY3afHIJ1XYUJlyTRtDh7JaATcQOzsSgbFy7o+8GSf130cnXwJAm5SGN1I1iGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XjcX62rl1b4ObC03QIGg2DEVCXw0D0hmuBMU0oEyKno=;
- b=xPZV2piBunjbRZXQ65qpPkoNJsM2qHV1Gloy61+tZb6ew6w/xJ/MlLZhLW6b/+0cwWp7nfrABJEFzlEwnN1MkuTEWVOw2sAC6+VQ6zI2a3ujTOQ/+tN0aA67xXU6nY2VEDzKzhgTjQKycFC+yiSrRALiTOxAXSP2V5EcxihYwHCkmxQAm7xOZWzqPmV5S97lHfkQueh8gXGvOauLgF8XHD65VRCWXh2YD46WndIYvERVgvqL1siQlCH4y2qFN0+dTgqK5NBkTQSDSfuDQd98R3YoHBcStfiYj6EgHfA9/WzxaHxTOsOlx/tCeeLLP/EYVgZZhNvv46s2SrKOR/VW7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XjcX62rl1b4ObC03QIGg2DEVCXw0D0hmuBMU0oEyKno=;
- b=JWkr02sNHnw0JsOhOgyA+BiO7S0II/HG8wQXmxMO+4pKYBuekPuYbZ6toNqRjGPUraWIDJ4MRWOyGuaieUySoq6nv5A8oPfXyFfMV4b/SQUyX/mF+0GDBkX3Gt8uGKqEQszi2bbO3T4N/jTgKIs6YJPlKZTfxLhDMJteepk46TOxD0kVmW5MxnpbDUtcoKf2Xog59JOiK2iuDDP7vCiQBucuMq0de3aUZIiKbZfgaxaH0z59fhh4oODF4bLsNtLUOzN8RbJK5U469I/nrAgQ7KLBwMfxPdMoFH+Vzzlcm3UyeofE4v1sjFrdz+lIHwOWKY05Y0Kp8sVVSndZslnaAw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by CH3PR12MB8332.namprd12.prod.outlook.com (2603:10b6:610:131::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Thu, 10 Oct
- 2024 14:45:15 +0000
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9%5]) with mapi id 15.20.8048.013; Thu, 10 Oct 2024
- 14:45:15 +0000
-Message-ID: <d5e79487-0f99-4ff2-8f49-0c403f1190af@nvidia.com>
-Date: Thu, 10 Oct 2024 15:45:09 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: Disable USB3 LPM at shutdown
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>, gregkh@linuxfoundation.org
-Cc: stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
- oneukum@suse.com, Roy Luo <royluo@google.com>,
- Heiner Kallweit <hkallweit1@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20240305065140.66801-1-kai.heng.feng@canonical.com>
-From: Jon Hunter <jonathanh@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <20240305065140.66801-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0080.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2bd::10) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1071CEADB
+	for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2024 16:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728576891; cv=none; b=E7whB123w5fOCcVqXEKfqLo55RrlT4dbWM7bzrgowGlJR8KKmCyUp3iaeXyXw5UhbrYLvOl3oXrQ3UUoUgzPWl1dHj0EMvFpamaLDjXvDjWktrdoRulkmt7UT2xUq94sr7iQ5e0X5SE5RRJ2V2CBvm2scVGofrAc0zV35M8ITwc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728576891; c=relaxed/simple;
+	bh=OBL7S4ZPXi4nh1gvreOkVV7mExAlKQxlmb2J6M+OuX0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K7vQGvlD/1K3Mvn3beQTd3c3X0Wx9sAXrgYvtpoduUDQXNgeKRu+N6M4TgwXLZLYXkGfioOhMFRaNxx3EhKEQY40JG4+8YQLXf84aQKuCCe4c2JM5Y8DHTqfq8hpqhAKNLgFkdfRAcr3vWgYMV6QmaDVrDxZpTdD/EAtManeRog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wNkYgeIA; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-431157f7e80so260655e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2024 09:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728576887; x=1729181687; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J2rpMQ1Sj1SZzdAaEbTPTB8P6Feg0PtFH01l/+GOddc=;
+        b=wNkYgeIAV8GYFz8IN2oNbgbQYWvs7VUHUOH564FUPY1PEHR+qUYtf8xaVxeP2RG5FL
+         d3gS14H4heTcdjVfQM7kpSjAMFdOPXWy2D9yRyRrBJV9mDH2UDKwzxCzxYejUJddp/WO
+         fA86wHLgeQ9egHqcjxqwzb+SZKOSaDsEu50IpW44+IdC78y43sgGxdIkbww3URPQa7V3
+         RPVrhh9vNOEHPV2GZFT3Sk85k4aMe8TZfm42KbwnX9JpVNR5MnxOx1lqmgWW2LtMGA+v
+         lECgf4U9GvsHzQp3KuTtaeMWY78zuMkszfdz4k6qmkMGlhB1AGQfbqWZhCxeSUcjaI+i
+         nMpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728576887; x=1729181687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J2rpMQ1Sj1SZzdAaEbTPTB8P6Feg0PtFH01l/+GOddc=;
+        b=Q9SLq14+pO66FXDcPDJxZE+nBL9vd5b3dwJlOO/RkyAxMvpyrMiwSACw+N/LSAscal
+         KOqYx3uRbmbz+Ddtwx+D64bhQHdTwUma5QHoRdBvCE6kx2pdy2QCbNlHoNQ8D6tQYhl4
+         jjy0K3cZfmFe0xtx09Hjh69KubpklbP3pvd9Rn0403BkSIIrOEJfdC0Yb88BY7+1yISr
+         QJBmhGU9FDih2+SsdVS0rRfPwGe0xV3Joj3zyDrGURUTq+3QIoEKmV6S6iH2fgrvo3tg
+         jslHEuXjiASxTbKGRDbMP0tnsaBkwUFrNwzbVdI3jUwZoMoDwFtPM6uPDZUa1m9aA1lI
+         1g/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVoHxW+Txa1eUTpjtzkswUZwFuqoLzNC5jMVYYypVSAb/94ro/IpX9IC6sLBMrcHWSlp3Ejcuqnk3k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb7feHpMOaUd5dlzRTxM4gLV83RUFT5CbkLAmnGQ32vJaqpWRP
+	9fFf4Mdywh8ZFSbS0g9qXetgRWd2wD2O3yXlEQ0Cwbctz2/vAeggXxWYCG3KPmB/zz7N5y2jIK4
+	1phWKFLf1zCJS5OzXM4VScWgQTDTTl2HLMi9/
+X-Google-Smtp-Source: AGHT+IFCoXuxIhYmSezUFTHTbGhBv5UKJoGGRBf5ZC/uoCvUww9Rczr0gkl6wURytQVhyXkN7Iku3rEVM5JKdKcfHbc=
+X-Received: by 2002:a05:600c:3482:b0:426:66a0:6df6 with SMTP id
+ 5b1f17b1804b1-431160a6792mr5412705e9.0.1728576887148; Thu, 10 Oct 2024
+ 09:14:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|CH3PR12MB8332:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18f9e4e5-0f8f-491f-5a9d-08dce93a26d1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Z09xQUZWK3dkNmVMVnlxK05FV3NISnlGMVE2L09LTi9zU0xmRnIxWC9qdDBh?=
- =?utf-8?B?V05CNjdieXEwdHZFSVRFdEl4T0wvRmJwaFUwcmV1MEVLZmtEYnd6NmhFYU9z?=
- =?utf-8?B?Yi9YU2ZGaXZud3lUYWtTdDJXWXFHUTRKWVRGc25YVGZWcS9HTXVHOWVtT2xu?=
- =?utf-8?B?Z1U4U1hCRkpHalZEYUNCek5WaittMEpWZEpSZXc5b25GSHNVeFR2L2VHY2Y1?=
- =?utf-8?B?czVyZmtBOUNhNE44ek95MWlmZnprc2lFNkFSRXdxMmJ1MFBZYm1EaGtmM3lB?=
- =?utf-8?B?VVMwTi9nT2hFc0hiOUJJVTlXQldISnpDTEVqV0xWT0dlbEpvUWVoaGIvdmhE?=
- =?utf-8?B?QXh0UjM2TUpMU29KVnl2UGtCNFJkQ1lRU01lQys4N1hNamhwemVDUGdBQVBG?=
- =?utf-8?B?NnZxSWVkSE5GQWNHNzZ0ZmJ5VTdlQXNXYlJWTHBDQkJkRUZlWk1kemsxSjh3?=
- =?utf-8?B?dDk3c3N2alUzdkptWWZDZFhNcGVJenFNUEhzUVZiL1Y0QldzV2ZmR1lwNkZp?=
- =?utf-8?B?QUpFUVFGUCtHcFlrOU5wSldUb0d4c3dnVmp4QlUwS1VRRkR4VkJSaFBiSTE0?=
- =?utf-8?B?OGdQb3NIZHNWZTVoNVpYaUs0MFY4UmVPN1pBNno4Y2cwMDE3RjZSdElPa0Zo?=
- =?utf-8?B?dmUxNXdKK3VEeERTaGRQamVGRU11SG00ODd4OG5VREF4NnJKWXJ2bWNPYmVo?=
- =?utf-8?B?eW9wWnJDL3pmYy9ldWRnNXBHK2FJREVvRUdtL1lvQ1hINXFHZUtWYjFPdmNt?=
- =?utf-8?B?cTdsa2ZBWEtmQTZmdG9iOGZMcG91MG1UYktvdUtjR20rMm56Q3VKZm1RSy9i?=
- =?utf-8?B?bWptTDJjbkVMZmJYZWVKZEFDb3BuSWdQMUtRb1g2RStldVJvZGtwSHAxdXUx?=
- =?utf-8?B?MHIwOEE1VjNKcFNxYlU2SjVnVXFwaGYrNVhRUkZCV0Y3eUg0UG5ab0NRcnNl?=
- =?utf-8?B?S29saGIwcHlJQUZZN2dDb0ZBUStBOU15TkV0c3hLcE1jdGlxQnl1M1QxY3JB?=
- =?utf-8?B?Rnd2VmhURURnYjNxUXVMR3k0RTlML3Y1RFc2TXYzbVpyTjZPTmtXTVh0SmEv?=
- =?utf-8?B?RVRpdUw5cm8wMFluS1BTb2Z3RGx4blJGamdwUGdRaUtjbDZ0a3V5amV6KzZz?=
- =?utf-8?B?OWYwTktSS285d1dkTHF1K0FhTURrVjAzeWhxdk8zRlk0ZHZlLzFvQTRVSDhX?=
- =?utf-8?B?VVZBaldIRTlIZ3Q5ZGlMZCtGeEdLUjlJb2V2cUk2MmpZbFhMaEhQQkx1bVkx?=
- =?utf-8?B?UlBNUkV6ejJNcjZhTFF2QnNnck5BbEZCdlFYM1FVdE1QeWRmYkgyTGxEUlFt?=
- =?utf-8?B?UEM3N2JFRC8vSXdQQ3RQczNVTEtlU25meEZSSDFyUWZjTEZLcEE4RlNSS08x?=
- =?utf-8?B?bFhiakdTZmYrWjV2emVxUEwxTjNxWFFIZzNMdUtPR0pWVGhOYS9kS250OHJL?=
- =?utf-8?B?RHR3aHBSZzB2YTNISGV3em9TOXNGZ1dCb0ROclBFTFZmUEQ1NnlyLzIybWN0?=
- =?utf-8?B?S0RYalo2UmNrekdpNEtVell0S3J2dnZCcUR6VlRTaUJqNW85bmRLaVV3alVk?=
- =?utf-8?B?a2I5Wit4SHlnRGFVYnBlMHFndmMrQWRxc2V4V0s1b2VBTkNKWkVFdkxEN1hH?=
- =?utf-8?B?Vk96UmRsREVLYVhpVlNzRlVqM1BoTklxNHZZWW1jcWtMNUZ3QVZYY3hzOUJs?=
- =?utf-8?B?Y3lyM21Ua3VVSmhEQVYwRjhyVXdxazVaYVFBTFVjVk1YZnFQaUJEa09BPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QXBVK3ZXUFJEQmdYK1V0VTVNbTAzM0FxUFBXNDdiMkJoUWthc3MrSFVVVHZR?=
- =?utf-8?B?QnduMEJ5WEZHOXRPTDlwU2RnUm5ITW1UT2ZWWEE4bmRpeElNSCs1TUNSTS8v?=
- =?utf-8?B?R01MRkRYQTRBY2FEVlNxajh5Q0haYm12cWcxTDhkTjdPbEpscUMxbVhLaXVM?=
- =?utf-8?B?OEJ1Mk9DQ1RwaGZiTFlzVFI4S3pJSVFkUk5yRmorcTYxK0hmMUt3YXViWEtt?=
- =?utf-8?B?L3ZTRmNaN1duQlJlYUYycUtBRHJBUjZ0OTcrZkFRZ0dydHRvMmV2aXVDRERy?=
- =?utf-8?B?UE4vV3J1RDJBeVFOOHBBNHVRaWhxNHhtaHFvR0FvaThWYnV3SHZtaFBLRmlk?=
- =?utf-8?B?SmNib0VCRkhaamU5V05DdDJza0lzNXZqK2ozeGd3eTBvaHRiVUY3WTl3RGg2?=
- =?utf-8?B?eEM0QVdEZEFsVHZURjRjV2htbHh2dHZPV1FUaXl4c3dTdEJwQ1hWczhnRFQw?=
- =?utf-8?B?NmxIRzA4NXVSRi9PV1o1aGI4TmJ3MXlLUjIzZlJ5ZkE3d3ZDZk0ydFdERmhz?=
- =?utf-8?B?QkcrUjQvUDh0UDdWMmtaZ1hwQXFibVhWUlhDdXY2TTVMRG5VU3VVMmNuQ3BO?=
- =?utf-8?B?d1QyZHBuT2RTcjFxV2dGUGMrVnUrODB2NGZPZndyRXRqeE5FRXNQMWU4SEx2?=
- =?utf-8?B?T0VwVUtZcmlNNmlJQWNEUjBUSHNsZEZTVmpSMUt4emVmYVlEL285T3VHTGxF?=
- =?utf-8?B?aUdsa2taV0daSm1mUjY2bVA5QVNDR1ZHdGwrZ1cyd0RQY21BeW5SMjY5Szls?=
- =?utf-8?B?K2tIdURaUkh6NHlRTEZKN3BSRHFyMGw5ZUpuUmZkSjVWdkJNQ3cwNFZrU29U?=
- =?utf-8?B?VWpPdW5yS0o1TmdWTldyMkM5WDJCVnVlVXhIZWk4TlozQnA4Ry9yTng3QjFI?=
- =?utf-8?B?ZFVocmw3OU5ndDVnVHFWYkxTUk0xOW8xVlcycEJhNHA2SG9EMytVb2tYK0o2?=
- =?utf-8?B?bFg5OHUweXZZVkZueVF1eUxKMHA2cS9WT3Y1Ti9JMFhnRnVlaW15bmlaT3hK?=
- =?utf-8?B?WS9yMVVkNUF1YjRLTVdVeHlqZFQ0Q3NOMkpnWXk2dGd1bHkvaFhPSk9MMGw5?=
- =?utf-8?B?bTc0Nkpab3pnc1Ria0lRMWtrNWtaa25uWjJEamRadGF0czdtbnVwZDZJL3B3?=
- =?utf-8?B?NkdGUVB5SEpLMFl5amh6blh6b0h3bmJxcWo0SUpxdk1LV0E3NlpWOUpOREJY?=
- =?utf-8?B?Um5iNk9FZnlPbDVEdG1YZ3NjdjhERUovR3MzeDNNdkFxNmcyL0xSYUltaE40?=
- =?utf-8?B?d3VGakM5R010TGNJc0JHQ1lsRkYxbEJmZWU1SXlkV3RkY0liU25aTis3TCsx?=
- =?utf-8?B?a3prRktJQUI5R3lUVGlOQTk0bmdqSzJ1NGZaaERJMVVqbEpmN1prRWRZRDJB?=
- =?utf-8?B?V2tQNFc2cGRnWWFMV1RzTHVKMHFJSlhHTnR0Z2kxZ1M5OGNoWVV6Z3pabHND?=
- =?utf-8?B?ODFwN1o4dXN4bkpPanpzdlNKL0RKdkFldUZmOVFBTkFNeGhhUUticitLVUpP?=
- =?utf-8?B?cGN0bjNwbzlRZkFuTVZlaE0vczlPU0tEcDh3a3VXOHNOa3RTdlQzRXlYeFR2?=
- =?utf-8?B?Zlhvc2lEMzdrc3NLdjRCaEdFYkVmTmdEV1psNWpFL0gyOTFzcDV3SFlGdTZG?=
- =?utf-8?B?bUU4ZlpTTjM2ejVpajZvMlJ6OTBybkdBUHRPaERQUmtPakhnbk9PYlBBbmd2?=
- =?utf-8?B?VGNocmVzTFZFRWVLNDFEK3R6NkUyekp2N05ZSkRpR3hBcExEeHhxM2xRUzFv?=
- =?utf-8?B?UWc1dUJieWo3TnNHRUpDV1lGZE1zQjVkWG9yVWZmKzZEOUlRRUpiNncyUzRy?=
- =?utf-8?B?bVJ3Y3IrMGdSam5Ib2l5bDJrT3dOWUZHbjZuOHl4SzNQc2U1WWJ5SHhQWFJE?=
- =?utf-8?B?QysrUFRiZWtUTlR6cURzb1VPblVFa0p6eFpnck1aTklSVFNXVzRFcVZRVGNz?=
- =?utf-8?B?Mi9JUTBtSlpNMXJiNXMrdmd1dWFFdHE5R2N4NVpwUWI5djhRa1ZvOGhlYTRJ?=
- =?utf-8?B?cXVSRk05dklTMVIxTGFqWURWbHZOUzZ4dTE1MmpjVzJFcGRHeXZvaDIyYlND?=
- =?utf-8?B?UCs1R0dhaWJOSnR2ZXp4Y2U3UTR0MlBIQldTQ3BHT3NpOWhNVU9haTNhQno3?=
- =?utf-8?Q?xBDw2eP54+uyRY+q7pw1zO2IQ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18f9e4e5-0f8f-491f-5a9d-08dce93a26d1
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2024 14:45:15.0827
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kNBBnkr642GpnTI7LesZWPpbWbvFysdc5T89v4LF3ST+fX9M1CWqhiBBDImwGexXvStBXe1KXxVqWSAu61612Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8332
+References: <20241009054429.3970438-1-guanyulin@google.com>
+ <20241009054429.3970438-4-guanyulin@google.com> <2024100941-limping-dislodge-5c74@gregkh>
+ <CAOuDEK0a43yLhCoA8iq=stj+QQAmKTCVWGKHvKM6-GPEaN9C3g@mail.gmail.com> <2024101021-vertigo-gopher-e487@gregkh>
+In-Reply-To: <2024101021-vertigo-gopher-e487@gregkh>
+From: Guan-Yu Lin <guanyulin@google.com>
+Date: Fri, 11 Oct 2024 00:14:00 +0800
+Message-ID: <CAOuDEK01Ke9KZqPf6KOfXaAQRRvw-y0Vagd9NrP8e8_EG-w52g@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] usb: add apis for sideband uasge tracking
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, mathias.nyman@intel.com, 
+	stern@rowland.harvard.edu, elder@kernel.org, oneukum@suse.com, 
+	yajun.deng@linux.dev, dianders@chromium.org, kekrby@gmail.com, perex@perex.cz, 
+	tiwai@suse.com, tj@kernel.org, stanley_chang@realtek.com, 
+	andreyknvl@gmail.com, christophe.jaillet@wanadoo.fr, 
+	quic_jjohnson@quicinc.com, ricardo@marliere.net, grundler@chromium.org, 
+	niko.mauno@vaisala.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, badhri@google.com, 
+	albertccwang@google.com, quic_wcheng@quicinc.com, pumahsu@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kai-Heng,
+On Thu, Oct 10, 2024 at 2:33=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Thu, Oct 10, 2024 at 01:30:00PM +0800, Guan-Yu Lin wrote:
+> > On Wed, Oct 9, 2024 at 8:44=E2=80=AFPM Greg KH <gregkh@linuxfoundation.=
+org> wrote:
+> > >
+> > > On Wed, Oct 09, 2024 at 05:42:57AM +0000, Guan-Yu Lin wrote:
+> > > > +             parent =3D parent->parent;
+> > > > +     } while (parent);
+> > >
+> > > Woah, walking up the device chain?  That should not be needed, or if =
+so,
+> > > then each device's "usage count" is pointless.
+> > >
+> >
+> > Say a hub X with usb devices A,B,C attached on it, where usb device A
+> > is actively used by sideband now. We'd like to introduce a mechanism
+> > so that hub X won't have to iterate through all its children to
+> > determine sideband activities under this usb device tree.
+>
+> Why would a hub care?
+>
 
-On 05/03/2024 06:51, Kai-Heng Feng wrote:
-> SanDisks USB3 storage may disapper after system reboot:
-> 
-> usb usb2-port3: link state change
-> xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-> usb usb2-port3: do warm reset, port only
-> xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping usb2 port polling
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-> usb usb2-port3: not warm reset yet, waiting 50ms
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2f0, return 0x2f0
-> usb usb2-port3: not warm reset yet, waiting 200ms
-> ...
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x6802c0, return 0x7002c0
-> usb usb2-port3: not warm reset yet, waiting 200ms
-> xhci_hcd 0000:00:14.0: clear port3 reset change, portsc: 0x4802c0
-> xhci_hcd 0000:00:14.0: clear port3 warm(BH) reset change, portsc: 0x4002c0
-> xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2c0, return 0x2c0
-> usb usb2-port3: not enabled, trying warm reset again...
-> 
-> This is due to the USB device still cause port change event after xHCI is
-> shuted down:
-> 
-> xhci_hcd 0000:38:00.0: // Setting command ring address to 0xffffe001
-> xhci_hcd 0000:38:00.0: xhci_resume: starting usb3 port polling.
-> xhci_hcd 0000:38:00.0: xhci_hub_status_data: stopping usb4 port polling
-> xhci_hcd 0000:38:00.0: xhci_hub_status_data: stopping usb3 port polling
-> xhci_hcd 0000:38:00.0: hcd_pci_runtime_resume: 0
-> xhci_hcd 0000:38:00.0: xhci_shutdown: stopping usb3 port polling.
-> xhci_hcd 0000:38:00.0: // Halt the HC
-> xhci_hcd 0000:38:00.0: xhci_shutdown completed - status = 1
-> xhci_hcd 0000:00:14.0: xhci_shutdown: stopping usb1 port polling.
-> xhci_hcd 0000:00:14.0: // Halt the HC
-> xhci_hcd 0000:00:14.0: xhci_shutdown completed - status = 1
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x1203, return 0x203
-> xhci_hcd 0000:00:14.0: set port reset, actual port 2-3 status  = 0x1311
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x201203, return 0x100203
-> xhci_hcd 0000:00:14.0: clear port3 reset change, portsc: 0x1203
-> xhci_hcd 0000:00:14.0: clear port3 warm(BH) reset change, portsc: 0x1203
-> xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x1203
-> xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x1203
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x1203, return 0x203
-> usb 2-3: device not accepting address 2, error -108
-> xhci_hcd 0000:00:14.0: xHCI dying or halted, can't queue_command
-> xhci_hcd 0000:00:14.0: Set port 2-3 link state, portsc: 0x1203, write 0x11261
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x1263, return 0x263
-> xhci_hcd 0000:00:14.0: set port reset, actual port 2-3 status  = 0x1271
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x12b1, return 0x2b1
-> usb usb2-port3: not reset yet, waiting 60ms
-> ACPI: PM: Preparing to enter system sleep state S5
-> xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x12f1, return 0x2f1
-> usb usb2-port3: not reset yet, waiting 200ms
-> reboot: Restarting system
-> 
-> The port change event is caused by LPM transition, so disabling LPM at shutdown
-> to make sure the device is in U0 for warmboot.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->   drivers/usb/core/port.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index c628c1abc907..c50266d7ce9d 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -418,8 +418,10 @@ static void usb_port_shutdown(struct device *dev)
->   {
->   	struct usb_port *port_dev = to_usb_port(dev);
->   
-> -	if (port_dev->child)
-> +	if (port_dev->child) {
->   		usb_disable_usb2_hardware_lpm(port_dev->child);
-> +		usb_unlocked_disable_lpm(port_dev->child);
-> +	}
->   }
->   
->   static const struct dev_pm_ops usb_port_pm_ops = {
+Without the information of sideband activities on the usb devices
+connected to the hub, the hub couldn't determine if it could suspend
+or not.
 
+> > This problem
+> > is similar to runtime suspending a device, where rpm uses
+> > power.usage_count for tracking activity of the device itself and
+> > power.child_count to check the children's activity. In our scenario,
+> > we don't see the need to separate activities on the device itself or
+> > on its children.
+>
+> But that's exactly what is needed here, if a hub wants to know what is
+> happening on a child device, it should just walk the list of children
+> and look :)
+>
+> > So we combine two counters in rpm as sb_usage_count,
+>
+> Combining counters is almost always never a good idea and will come back
+> to bite you in the end.  Memory isn't an issue here, speed isn't an
+> issue here, so why not just do it properly?
+>
 
-Since this commit landed we have noticed that when rebooting our Jetson 
-AGX Orin platform we see the following error messages if there are no 
-USB devices connected ...
+By combining the two comments above, my understanding is that we should eit=
+her:
+1. separating the counter to one recording the sideband activity of
+itself, one for its children.
+2. walk the list of children to check sideband activities on demand.
+Please correct me if I mistake your messages.
 
-[   59.503154] usb 2-3: Failed to set U1 timeout to 0x0,error code -113 
- 
- 
+> > denoting the sideband activities under a specific usb device. We have
+> > to keep a counter in each device so that we won't influence the usb
+> > devices that aren't controlled by a sideband.
+>
+> I can understand that for the device being "controlled" by a sideband,
+> but that's it.
+>
+> > When sideband activity changes on a usb device, its usb device parents
+> > should all get notified to maintain the correctness of sb_usage_count.
+>
+> Why "should" they?  They shouldn't really care.
+>
 
-[   59.509768] usb 2-3: Failed to set U1 timeout to 0xa,error code -113 
- 
- 
+Hubs need the sideband activity information on downstream usb devices,
+so that the hub won't suspend the upstream usb port when there is a
+sideband accessing the usb device connected to it.
 
-[   59.516381] usb 2-3: Failed to set U2 timeout to 0x4,error code -113
+> > This notifying process creates the procedure to walk up the device
+> > chain.
+>
+> You aren't notifying anyone, you are just incrementing a count that can
+> change at any moment in time.
+>
 
-Now if there is no USB device we do not see the above. If I revert this 
-change then I don't see any errors.
+Apologies for the misleading word selection, by notify I mean changing
+the counter.
 
-The board has a realtek hub ...
+> > > > +bool usb_sideband_check(struct usb_device *udev)
+> > > > +{
+> > > > +     return !!atomic_read(&udev->sb_usage_count);
+> > >
+> > > And what happens if it changes right after you make this call?  This
+> > > feels racy and broken.
+> > >
+> >
+> > Seems like we need a mechanism to block any new sideband access after
+> > the usb device has been suspended. How about adding a lock during the
+> > period when the usb device is suspended? Do you think this is the
+> > correct direction to address the race condition?
+>
+> I don't know, as I don't know exactly what you are going to do with this
+> information.  But as-is, you can't just go "let's put an atomic variable
+> in there to make it race free" as that's just not going to work.
+>
 
-$ lsusb
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 001 Device 002: ID 13d3:3549 IMC Networks Bluetooth Radio
-Bus 001 Device 003: ID 0bda:5420 Realtek Semiconductor Corp. 4-Port USB 
-2.0 Hub
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 002 Device 002: ID 0bda:0420 Realtek Semiconductor Corp. 4-Port USB 
-3.0 Hub
+Agree that changing the variable to atomic wouldn't resolve race
+conditions. Let me identify and mark critical sections in the next
+patchset.
 
-This uses the generic USB hub driver. AFAICT the host is not shutdown 
-before the hub, but the hub is failing to set this timeout. If you have 
-any thoughts, let me know.
+> > > > @@ -731,6 +732,8 @@ struct usb_device {
+> > > >
+> > > >       u16 hub_delay;
+> > > >       unsigned use_generic_driver:1;
+> > > > +
+> > > > +     atomic_t sb_usage_count;
+> > >
+> > > Why is this on the device and not the interface that is bound to the
+> > > driver that is doing this work?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > If the count is bound on the usb interface, I'm afraid that the
+> > sideband information couldn't be broadcasted across its usb device
+> > parents. Do you have some insight on how we can achieve this?
+>
+> But the driver that is "sideband" is bound to the interface, not the
+> device, right?  Or is it the device?
+>
+> And again, nothing is being "broadcasted" here, it's just a variable to
+> be read at random times and can change randomly :)
+>
+> thanks,
+>
+> greg k-h
 
-Jon
+By looking at the comment in xhci-sideband.c, I think the sideband is
+bound to an usb device instead of an usb interface. Maybe Mathias or
+Wesley could provide more details on this.
+/**
+ * xhci_sideband_register - register a sideband for a usb device
+ * @udev: usb device to be accessed via sideband
+...
+ */
 
--- 
-nvpublic
+Regards,
+Guan-Yu
 
