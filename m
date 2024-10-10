@@ -1,429 +1,204 @@
-Return-Path: <linux-usb+bounces-15962-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2586997859
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 00:16:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AF4A9979C7
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 02:47:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 114F0B22423
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2024 22:16:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE32F1C22343
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 00:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33071E283C;
-	Wed,  9 Oct 2024 22:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GABqVh/Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D3914293;
+	Thu, 10 Oct 2024 00:47:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4560E17A584
-	for <linux-usb@vger.kernel.org>; Wed,  9 Oct 2024 22:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C05B224EF;
+	Thu, 10 Oct 2024 00:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728512209; cv=none; b=DvyzGBg3O9fVwkzLAa3MpgP/HIYmWzxWUXHTfT8OzRffeUzhQWEGGUnEN30Fy3gQbZyQ+pdbgOn+fN+Zr05omucK+ZoWM9nCo0yEj5FbE2537D5Kug1DzGeY7bygFDG1X5CH0UBUEMKX7F2atmFx6u9wVG8HJVqJxpI0QHe4Tkk=
+	t=1728521232; cv=none; b=F0JWUjYmBSZRda2k3E06NHr7y6ZHEbz4bnVxK8BQ5UzMGpO1DNr6oBVU1vtcDtTCyZYb9Dq2eRMqaQvZv8s0onv4Aa3xQyvFarnFN6XokJZvzWH+Ht3C4LC55uQYP0UTao9ATwOjG5hgwHhJjCPN/to7UTi9J64z1VP0npccM4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728512209; c=relaxed/simple;
-	bh=6Fy21HDXPF12ql5oFq1ahU/CQ9//HQA6tMLw+2EXNew=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T3bQhaCpuEs0fKiBqJap3mJ5b6fMCBjRrsfedsJ9HEnSnf1X1IPW3hJhIHU2fpZo8MvB/f50GjAhi9y6KMjUYlONgqCzw6TtjTw413QIFCnbiHJv1jQ/xO4fsVOBAX/WQom2qGchcoXSWHo2+KCRO+ppcKRs3q1gy51jgQmYOUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GABqVh/Z; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e25d164854dso244850276.2
-        for <linux-usb@vger.kernel.org>; Wed, 09 Oct 2024 15:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1728512205; x=1729117005; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T00Ts4P5hBA6ZiHJHjOLgm66qyl5ylu7UukIPZRahNU=;
-        b=GABqVh/ZlR83J8dZTF6ap/xj5uoobngqiIvUNl0AgrhQt47twowrExdFRfc48zdKr3
-         yZC8OeXGTDP5c8m0qm9pLPXo8BV2lLzOrNxNI5TkzFIqhmAh301TahGfBob0DmQeXdhg
-         R7LiFF1QU5Kp+qQGUWTsanHAgs0n14gvyW60M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728512205; x=1729117005;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T00Ts4P5hBA6ZiHJHjOLgm66qyl5ylu7UukIPZRahNU=;
-        b=HVo2sCifCoTcIqIhLPqJicx92HjiX/lhX4YD1fGG8xpf3t+hrd2kUSGfxDAWs19Xs7
-         hBo5ujUxUp/uoNm2KGkGlYwCZtHBBdjTWCuJ30gkuPvRKnytsZIGVvDX3M2LsKo/Lcs3
-         qq8XuN+87ktf3H39nguIEE2viGGneOxGSvbsvBdXDkA0Q7KGzoUzd28nLQCXCflOtUbp
-         7JQ9NwnyiCCQFhf3Tm0B7SHgKzqOku10Ks3UxE+w+Y2j8h++S9pFDK1afRtxgM79OZuB
-         fkJKGU+XEvAwq0FTBVti/gUg8fj6ofFE0uTS7LaYS4lEONRow2zcMTg294P3YCyJ4H39
-         Di8A==
-X-Forwarded-Encrypted: i=1; AJvYcCVtYEgC6YvBh36ibYf2ZEeZMdXJFMPD00FlxRZUNmVtcopnbRWxiksSFh41S91BdC1QvpiY77+zIPk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT/dIwVj2G3hj+p2uhYAQhINWsKcYbP02MPjj+DBkR/+yBPeyK
-	atWhF534LZYrDlLHP509ilp7a5EmvIZk0Xldp8Nq1KLE+gbJEmrxpNp2M2JSHSQtlZSeA9QYwpb
-	Vo44iUf1uMUtHCQoBQPhqQDO7OGXs/mUnTNvC
-X-Google-Smtp-Source: AGHT+IE8SAN7n9ce8DTD6bs8V19l4Rc35+8GA7PSwVonlqNx38AHIucbRarOwWVz6IKhEiFPIQrm+hravVJLxCHLqRs=
-X-Received: by 2002:a05:690c:768c:b0:6dd:bb05:3137 with SMTP id
- 00721157ae682-6e322121867mr38438977b3.12.1728512205080; Wed, 09 Oct 2024
- 15:16:45 -0700 (PDT)
+	s=arc-20240116; t=1728521232; c=relaxed/simple;
+	bh=XLoZVWOMfKt89VV8RNx0MGgo5pk6fXaVTBOOuuco2zI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KfvPSBjZsH3bj/D1N2YM1QJaqxs2EQbVxtAOoXs834anKDJMDRKt0x4s6qoEFfROu+mIdUBDVLaFkjogzQhx6BPyNgxLOZlYoIo0cSjd7JBETdFfnEOZEv7G2rNKDxfDGhoJ1D5LPkW+vqi8Q2IqkAr5n+vQXB0dj6D98IIXwIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 286df56086a111efa216b1d71e6e1362-20241010
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:0560a972-691e-4dee-a4f7-ce20381c9831,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:2,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-3
+X-CID-INFO: VERSION:1.1.38,REQID:0560a972-691e-4dee-a4f7-ce20381c9831,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:2,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:-3
+X-CID-META: VersionHash:82c5f88,CLOUDID:d228c99d6b4b369ec39ab1020f4ee98a,BulkI
+	D:240925144023207KTES0,BulkQuantity:21,Recheck:0,SF:19|64|66|38|17|102,TC:
+	nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,C
+	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_OBB
+X-UUID: 286df56086a111efa216b1d71e6e1362-20241010
+X-User: dengjie03@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <dengjie03@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1464132761; Thu, 10 Oct 2024 08:46:59 +0800
+From: Deng Jie <dengjie03@kylinos.cn>
+To: stern@rowland.harvard.edu,
+	rafael@kernel.org
+Cc: dengjie03@kylinos.cn,
+	gregkh@linuxfoundation.org,
+	len.brown@intel.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	pavel@ucw.cz,
+	xiehongyu1@kylinos.cn,
+	xiongxin@kylinos.cn,
+	duanchenghao@kylinos.cn
+Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
+Date: Thu, 10 Oct 2024 08:46:55 +0800
+Message-Id: <20241010004655.9382-1-dengjie03@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <85105e45-3553-4a8c-b132-3875c4657c4b@rowland.harvard.edu>
+References: <85105e45-3553-4a8c-b132-3875c4657c4b@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241009154557.2836656-1-heikki.krogerus@linux.intel.com> <20241009154557.2836656-3-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20241009154557.2836656-3-heikki.krogerus@linux.intel.com>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Wed, 9 Oct 2024 15:16:34 -0700
-Message-ID: <CANFp7mVuGabGvLd5M5WYK60sMMnkS1sD3noiVYc=k0Q=Vg4rdg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] usb: typec: Add attribute file showing the USB
- Modes of the partner
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>, 
-	Benson Leung <bleung@chromium.org>, Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 9, 2024 at 8:46=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+Hi Alan
+  I'm thrilled to receive your reply. Thank you very much.
+Sorry for the late response due to the holiday.
 >
-> This attribute file shows the supported USB modes (USB 2.0,
-> USB 3.0 and USB4) of the partner, and the currently active
-> mode.
+>> Reproduction of the problem: During the S4 stress test, when a USB device is inserted or
+>> removed, there is a probability that the S4 wakeup will turn into a reboot.The following
+>> two points describe how to analyze and locate the problem points:
+>>
+>> 1. During the boot stage when S4 is awakened, after the USB RootHub is initialized,
+>> it will enter the runtime suspend state. From then on, whenever an xhci port change
+>> event occurs, it will trigger a remote wakeup request event and add wakeup_work
+>> to pm_wq, where the subsequent RootHub runtime resume process will be handled by pm_wq.
+>>
+>> xhci runtime suspend flow：
+>> S4 boot
+>>    |->xhci init
+>>        |->register_root_hub
+>>         |->hub_probe
+>>             |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
+>>
+>> xhci runtime resume flow ：
+>> xhci_irq()
+>>     |->xhci_handle_event()
+>>      |->handle_port_status()
+>>          |->if(hcd->state == HC_STATE_SUSPENDED)
+>>               |->usb_hcd_resume_root_hub()
+>>                  |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
+>>                  |->queue_work(pm_wq, &hcd->wakeup_work)
+>>                      |->hcd_resume_work()                           /* hcd->wakeup_work */
+>>                          |->usb_remote_wakeup()
+>>                              |->callback = RPM_GET_CALLBACK(dev, runtime_resume)
+>>                                  |->usb_runtime_resume()            /* usb runtime resume  */
+>>                                      |->generic_resume()
+>>                                          |->hcd_bus_resume()
+>>                                              |->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+>>                                                /* wakeup pending signal to be clear */
+>>
+>> 2. However, during the quiesce phase of S4 wakeup, freeze_kernel_threads() will freeze this pm_wq,
+>> and between freeze_kernel_threads() and dpm_suspend_start(), there exists a very time-consuming
+>> S4 image loading process. This leads to a situation where, if an xhci port change event occurs
+>> after freeze_kernel_threads(), triggering the wakeup pending signal to be set,but it cannot
+>> be processed by pm_wq to clear this wakeup_pending bit, it will result in a subsequent
+>> dpm_suspend_start() where USB suspend_common() detects the wakeup pending signal being
+>> set and returns an -EBUSY error, interrupting the S4 quiesce process and reverting to a reboot.
+>>
+>> S4 wakeup
+>>     |->resume_store
+>>      |->software_resume()
+>>          |->freeze_kernel_threads()          /* will freeze pm_wq */
+>>          |->load_image_and_restore()
+>>                |->swsusp_read()              /* S4 image loading: time-consuming .
+>> When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
+>> However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
+>>                |->hibernation_restore
+>>                      |->dpm_suspend_start(PMSG_QUIESCE)
+>>                          |->hcd_pci_suspend()
+>>                              |->suspend_common()
+>>                                  |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
 >
-> The active mode is determined primarily by checking the
-> speed of the enumerated USB device. When USB Power Delivery
-> is supported, the active USB mode should be always the mode
-> that was used with the Enter_USB Message, regardless of the
-> result of the USB enumeration. The port drivers can
-> separately assign the mode with a dedicated API.
+>At this point, do_wakeup is supposed to be 0 and so the "return -EBUSY"
+>error should not occur.
 >
-> If USB Power Delivery Identity is supplied for the partner
-> device, the supported modes are extracted from it.
+>You can see that this is true by reading choose_wakeup() in
+>drivers/usb/core/driver.c.  At the start of the function it says:
 >
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  Documentation/ABI/testing/sysfs-class-typec |  14 +++
->  drivers/usb/typec/class.c                   | 123 +++++++++++++++++++-
->  drivers/usb/typec/class.h                   |   2 +
->  include/linux/usb/typec.h                   |   5 +
->  4 files changed, 140 insertions(+), 4 deletions(-)
+>       /*
+>        * For FREEZE/QUIESCE, disable remote wakeups so no interrupts get
+>        * generated.
+>        */
+>       if (msg.event == PM_EVENT_FREEZE || msg.event == PM_EVENT_QUIESCE) {
+>               w = 0;
 >
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/=
-ABI/testing/sysfs-class-typec
-> index 7c307f02d99e..866865ffeb66 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -233,6 +233,20 @@ Description:
->                 directory exists, it will have an attribute file for ever=
-y VDO
->                 in Discover Identity command result.
+>and at the end it does:
 >
-> +What:          /sys/class/typec/<port>-partner/usb_mode
-> +Date:          February 2024
-> +Contact:       Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> +Description:   The USB Modes that the partner device supports. The activ=
-e mode
-> +               is disaplayed in brackets. The active USB mode can be cha=
-nged by
-spelling: displayed
+>       udev->do_remote_wakeup = w;
+>
+>Therefore the problem you are describing should not happen and your
+>patch should not be needed.
+>
 
-> +               writing to this file when the port driver is able to send=
- Data
-> +               Reset Message to the partner. That requires USB Power Del=
-ivery
-> +               contract between the partner and the port.
-> +
-> +               Valid values:
-> +               - usb2 (USB 2.0)
-> +               - usb3 (USB 3.2)
-> +               - usb4 (USB4)
-> +
->  USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
->
->  Note: Electronically Marked Cables will have a device also for one cable=
- plug
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 9c26d2ad40df..f25cc20a2024 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -618,6 +618,74 @@ EXPORT_SYMBOL_GPL(typec_unregister_altmode);
->  /* ---------------------------------------------------------------------=
----- */
->  /* Type-C Partners */
->
-> +/**
-> + * typec_partner_set_usb_mode - Assign active USB Mode for the partner
-> + * @partner: USB Type-C partner
-> + * @mode: USB Mode (USB2, USB3 or USB4)
-> + *
-> + * The port drivers can use this function to assign the active USB Mode =
-to
-> + * @partner. The USB Mode can change for example due to Data Reset.
-> + */
-> +void typec_partner_set_usb_mode(struct typec_partner *partner, enum usb_=
-mode mode)
-> +{
-> +       if (!partner || partner->usb_mode =3D=3D mode)
-> +               return;
-> +
-> +       partner->usb_capability |=3D BIT(mode - 1);
-> +       partner->usb_mode =3D mode;
-> +       sysfs_notify(&partner->dev.kobj, NULL, "usb_mode");
-> +}
-> +EXPORT_SYMBOL_GPL(typec_partner_set_usb_mode);
-> +
-> +static ssize_t
-> +usb_mode_show(struct device *dev, struct device_attribute *attr, char *b=
-uf)
-> +{
-> +       struct typec_partner *partner =3D to_typec_partner(dev);
-> +       int len =3D 0;
-> +       int i;
-> +
-> +       for (i =3D USB_MODE_USB2; i < USB_MODE_USB4 + 1; i++) {
-> +               if (!(BIT(i - 1) & partner->usb_capability))
-> +                       continue;
-> +
-> +               if (i =3D=3D partner->usb_mode)
-> +                       len +=3D sysfs_emit_at(buf, len, "[%s] ", usb_mod=
-es[i]);
-> +               else
-> +                       len +=3D sysfs_emit_at(buf, len, "%s ", usb_modes=
-[i]);
-> +       }
-> +
-> +       buf[len - 1] =3D '\n';
-> +       return len;
-> +}
-> +
-> +static ssize_t usb_mode_store(struct device *dev, struct device_attribut=
-e *attr,
-> +                             const char *buf, size_t size)
-> +{
-> +       struct typec_partner *partner =3D to_typec_partner(dev);
-> +       struct typec_port *port =3D to_typec_port(dev->parent);
-> +       int mode;
-> +       int ret;
-> +
-> +       if (!port->ops || !port->ops->data_reset)
-> +               return -EOPNOTSUPP;
-> +
-> +       mode =3D sysfs_match_string(usb_modes, buf);
-> +       if (mode < 0)
-> +               return mode;
-> +
-> +       if (mode =3D=3D partner->usb_mode)
-> +               return size;
-> +
-> +       ret =3D port->ops->data_reset(port, mode);
-> +       if (ret)
-> +               return ret;
-> +
-> +       typec_partner_set_usb_mode(partner, mode);
-> +
-> +       return size;
-> +}
-> +static DEVICE_ATTR_RW(usb_mode);
-> +
->  static ssize_t accessory_mode_show(struct device *dev,
->                                    struct device_attribute *attr,
->                                    char *buf)
-> @@ -664,6 +732,7 @@ static struct attribute *typec_partner_attrs[] =3D {
->         &dev_attr_supports_usb_power_delivery.attr,
->         &dev_attr_number_of_alternate_modes.attr,
->         &dev_attr_type.attr,
-> +       &dev_attr_usb_mode.attr,
->         &dev_attr_usb_power_delivery_revision.attr,
->         NULL
->  };
-> @@ -671,6 +740,14 @@ static struct attribute *typec_partner_attrs[] =3D {
->  static umode_t typec_partner_attr_is_visible(struct kobject *kobj, struc=
-t attribute *attr, int n)
->  {
->         struct typec_partner *partner =3D to_typec_partner(kobj_to_dev(ko=
-bj));
-> +       struct typec_port *port =3D to_typec_port(partner->dev.parent);
-> +
-> +       if (attr =3D=3D &dev_attr_usb_mode.attr) {
-> +               if (!partner->usb_capability)
-> +                       return 0;
-> +               if (!port->ops || !port->ops->data_reset)
-> +                       return 0444;
-> +       }
->
->         if (attr =3D=3D &dev_attr_number_of_alternate_modes.attr) {
->                 if (partner->num_altmodes < 0)
-> @@ -744,10 +821,33 @@ static void typec_partner_unlink_device(struct type=
-c_partner *partner, struct de
->   */
->  int typec_partner_set_identity(struct typec_partner *partner)
->  {
-> -       if (!partner->identity)
-> +       u8 usb_capability =3D partner->usb_capability;
-> +       struct device *dev =3D &partner->dev;
-> +       struct usb_pd_identity *id;
-> +
-> +       id =3D get_pd_identity(dev);
-> +       if (!id)
->                 return -EINVAL;
->
-> -       typec_report_identity(&partner->dev);
-> +       if (to_typec_port(dev->parent)->data_role =3D=3D TYPEC_HOST)  {
-> +               u32 devcap =3D PD_VDO_UFP_DEVCAP(id->vdo[0]);
-> +
-> +               if (devcap & (DEV_USB2_CAPABLE | DEV_USB2_BILLBOARD))
-> +                       usb_capability |=3D USB_CAPABILITY_USB2;
-> +               if (devcap & DEV_USB3_CAPABLE)
-> +                       usb_capability |=3D USB_CAPABILITY_USB3;
-> +               if (devcap & DEV_USB4_CAPABLE)
-> +                       usb_capability |=3D USB_CAPABILITY_USB4;
-> +       } else {
-> +               usb_capability =3D PD_VDO_DFP_HOSTCAP(id->vdo[0]);
-> +       }
-> +
-> +       if (partner->usb_capability !=3D usb_capability) {
-> +               partner->usb_capability =3D usb_capability;
-> +               sysfs_notify(&dev->kobj, NULL, "usb_mode");
-> +       }
-> +
-> +       typec_report_identity(dev);
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(typec_partner_set_identity);
-> @@ -917,6 +1017,7 @@ struct typec_partner *typec_register_partner(struct =
-typec_port *port,
->         partner->usb_pd =3D desc->usb_pd;
->         partner->accessory =3D desc->accessory;
->         partner->num_altmodes =3D -1;
-> +       partner->usb_capability =3D desc->usb_capability;
->         partner->pd_revision =3D desc->pd_revision;
->         partner->svdm_version =3D port->cap->svdm_version;
->         partner->attach =3D desc->attach;
-> @@ -936,6 +1037,15 @@ struct typec_partner *typec_register_partner(struct=
- typec_port *port,
->         partner->dev.type =3D &typec_partner_dev_type;
->         dev_set_name(&partner->dev, "%s-partner", dev_name(&port->dev));
->
-> +       if (port->usb2_dev) {
-> +               partner->usb_capability |=3D USB_CAPABILITY_USB2;
-> +               partner->usb_mode =3D USB_MODE_USB2;
-> +       }
-> +       if (port->usb3_dev) {
-> +               partner->usb_capability |=3D USB_CAPABILITY_USB2 | USB_CA=
-PABILITY_USB3;
-> +               partner->usb_mode =3D USB_MODE_USB3;
-> +       }
-> +
->         ret =3D device_register(&partner->dev);
->         if (ret) {
->                 dev_err(&port->dev, "failed to register partner (%d)\n", =
-ret);
-> @@ -1935,13 +2045,18 @@ static void typec_partner_attach(struct typec_con=
-nector *con, struct device *dev
->         struct typec_port *port =3D container_of(con, struct typec_port, =
-con);
->         struct typec_partner *partner =3D typec_get_partner(port);
->         struct usb_device *udev =3D to_usb_device(dev);
-> +       enum usb_mode usb_mode;
->
-> -       if (udev->speed < USB_SPEED_SUPER)
-> +       if (udev->speed < USB_SPEED_SUPER) {
-> +               usb_mode =3D USB_MODE_USB2;
->                 port->usb2_dev =3D dev;
-> -       else
-> +       } else {
-> +               usb_mode =3D USB_MODE_USB3;
->                 port->usb3_dev =3D dev;
-> +       }
->
->         if (partner) {
-> +               typec_partner_set_usb_mode(partner, usb_mode);
->                 typec_partner_link_device(partner, dev);
->                 put_device(&partner->dev);
->         }
-> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-> index 85bc50aa54f7..b3076a24ad2e 100644
-> --- a/drivers/usb/typec/class.h
-> +++ b/drivers/usb/typec/class.h
-> @@ -35,6 +35,8 @@ struct typec_partner {
->         int                             num_altmodes;
->         u16                             pd_revision; /* 0300H =3D "3.0" *=
-/
->         enum usb_pd_svdm_ver            svdm_version;
-> +       enum usb_mode                   usb_mode;
-> +       u8                              usb_capability;
->
->         struct usb_power_delivery       *pd;
->
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index d8999472212d..c35221b0e164 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -220,6 +220,7 @@ struct typec_cable_desc {
->   * @accessory: Audio, Debug or none.
->   * @identity: Discover Identity command data
->   * @pd_revision: USB Power Delivery Specification Revision if supported
-> + * @usb_capability: Supported USB Modes
->   * @attach: Notification about attached USB device
->   * @deattach: Notification about removed USB device
->   *
-> @@ -237,6 +238,7 @@ struct typec_partner_desc {
->         enum typec_accessory    accessory;
->         struct usb_pd_identity  *identity;
->         u16                     pd_revision; /* 0300H =3D "3.0" */
-> +       u8                      usb_capability;
->
->         void (*attach)(struct typec_partner *partner, struct device *dev)=
-;
->         void (*deattach)(struct typec_partner *partner, struct device *de=
-v);
-> @@ -252,6 +254,7 @@ struct typec_partner_desc {
->   * @pd_get: Get available USB Power Delivery Capabilities.
->   * @pd_set: Set USB Power Delivery Capabilities.
->   * @usb_mode_set: Set the USB Mode to be used with Enter_USB message
-> + * @data_reset: Set new USB mode by using the Data Reset message
->   */
->  struct typec_operations {
->         int (*try_role)(struct typec_port *port, int role);
-> @@ -263,6 +266,7 @@ struct typec_operations {
->         struct usb_power_delivery **(*pd_get)(struct typec_port *port);
->         int (*pd_set)(struct typec_port *port, struct usb_power_delivery =
-*pd);
->         int (*usb_mode_set)(struct typec_port *port, enum usb_mode mode);
-> +       int (*data_reset)(struct typec_port *port, enum usb_mode mode);
+1. Although during the S4 quiesce phase, the do_remote_wakeup flag is set
+to 0 within the usb_suspend->choose_wakeup function, the subsequent sequence
+of usb_suspend->usb_suspend_both->usb_suspend_device->hcd_bus_suspend->
+xhci_bus_suspend will disable remote wakeup for the RootHub port.
+2. However, during the loading image phase prior to the S4 quiesce phase,
+the USB device may have generated an interrupt, setting the WAKEUP_PENDING flag.
+Additionally, due to the execution of freeze_kernel_threads before the loading
+image phase, the USB interrupt generated during the loading image phase is
+unable to execute its interrupt handler's bottom half, resulting in the
+WAKEUP_PENDING flag remaining uncleared.
+3. Therefore, even though the remote wakeup for the RootHub is disabled in
+usb_suspend_both() during the quiesce phase, due to the WAKEUP_PENDING flag not
+being cleared, the xhci still believes that the RootHub has generated a wakeup
+event when it attempts to suspend. Consequently, the xhci suspend function
+returns an -EBUSY error and does not proceed with the suspend operation.
 
-I have a problem with the naming of these two functions,
-"usb_mode_set" and "data_reset".
-
-The former, usb_mode_set, seems to exist to set the default USB mode
-on data reset. The latter, data_reset, seems to really be Data Reset +
-Enter_USB.
-
-The former, "usb_mode_set", seems mostly useful to in-kernel TCPM to
-be able to set the default USB response after a data reset. UCSI (and
-cros_ec_typec on ChromeOS) doesn't expose this level of control.
-
-A better declaration may be:
-* int (*default_usb_mode_set)(struct typec_port *port, enum usb_mode mode);
-* int (*enter_usb_mode)(struct typec_port *port, enum usb_mode mode);
-
->  };
+>Now maybe things are't working the way they are supposed to.  If that's
+>so then you should submit a patch fixing the code so that it _does_ work
+>this way.
 >
->  enum usb_pd_svdm_ver {
-> @@ -365,6 +369,7 @@ int typec_port_set_usb_power_delivery(struct typec_po=
-rt *port, struct usb_power_
->  int typec_partner_set_usb_power_delivery(struct typec_partner *partner,
->                                          struct usb_power_delivery *pd);
->
-> +void typec_partner_set_usb_mode(struct typec_partner *partner, enum usb_=
-mode usb_mode);
->  void typec_port_set_usb_mode(struct typec_port *port, enum usb_mode mode=
-);
->
->  /**
-> --
-> 2.45.2
->
+>For instance, in suspend_common(), do_wakeup is derived from
+>device_may_wakeup(rhdev), which is determined by
+>rhdev->power.should_wakeup -- see the definition in
+>include/linux/pm_wakeup.h.  Maybe this flag isn't getting cleared
+>properly.  (In fact, at the moment I don't see where that flag gets set
+>or cleared at all...)
+
+After configuring CONFIG_PM_SLEEP, the return value of device_may_wakeup
+should be equal to dev->power.can_wakeup && !!dev->power.wakeup.
 
 Thanks,
-Abhishek
+
+Deng Jie
+
 
