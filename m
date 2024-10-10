@@ -1,144 +1,111 @@
-Return-Path: <linux-usb+bounces-15981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-15982-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48776998774
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 15:19:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED364998878
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 15:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C738BB21287
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 13:19:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29A371C233A7
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2024 13:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F861C9DE5;
-	Thu, 10 Oct 2024 13:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11BC41CB322;
+	Thu, 10 Oct 2024 13:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qGlJF3OJ";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qGlJF3OJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dV7wFJjX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4121BE245;
-	Thu, 10 Oct 2024 13:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1C51C9DE9
+	for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2024 13:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728566382; cv=none; b=k9QDPWWISJLsPVaAuhKtRTjrWNTOd2t2SP0IOReZPFFO3yacAnWxuIYAYaeHq0NdJ0FuqDV3AgymqqGlWuadB/mP2NtLmu+ObxNesLumRE1dmTVlFSx0NZFIHT1QW619R7fiAOeouCsbOdQNJpOef2dD/X4mIfUmQlNdvIh6lAU=
+	t=1728568596; cv=none; b=cslTERcsNcdKG0L0RRZ/jo4aE9DPsR28BDZH3cgV5fJXvmTyqOgtBhQrAd57rw+91RTi2REFQRjzFgr0ki1Ohvhgwvx7CS3lZaIgkogYer8VwOeS4It+Tv+qyfxzR1qmNrogEHo7kCi6jBjMUms0rIUqFRxJOOBRE6Ns2l+DDsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728566382; c=relaxed/simple;
-	bh=Kip+g3NUeabI/R2YzpRmlSwA0m5LSlFdee3BzrAlaPw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RWIYCwZ9VnzHixNQfTtjDWyNjvmeuWoPT/VpXYOY/C1ck2nOHlM+akn2Kdsus2QmJzdPN1mdriiH289kJLjPZ1FdpBQxzUgCbYajZq8PUYShuJJoFglNPIHhmIlKJYtnc+3X5JEsR686gGho5LpqPpGABhqmacpi+o81dfRL5gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qGlJF3OJ; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qGlJF3OJ; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B996C1F45A;
-	Thu, 10 Oct 2024 13:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1728566377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=yDqItrqmUk+6wjzIhXJNTmX7NNV0awuFoUw0XQgqWkA=;
-	b=qGlJF3OJVLrfjXd/fKZcRjIFd6h7nIqFcznaYFxHs7Z+pDNfo5wi5XmkjT4hiY4llslFa2
-	zZJouCZplHfuW8eTgamjVa4FlOL/UBp8KWHPsdcZS3LcTzQxWC3jC0NiZBCZMnbfwtPQNv
-	LgPmYLM2kWdFMcXzSAO4TFxerD5XTCU=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=qGlJF3OJ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1728566377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=yDqItrqmUk+6wjzIhXJNTmX7NNV0awuFoUw0XQgqWkA=;
-	b=qGlJF3OJVLrfjXd/fKZcRjIFd6h7nIqFcznaYFxHs7Z+pDNfo5wi5XmkjT4hiY4llslFa2
-	zZJouCZplHfuW8eTgamjVa4FlOL/UBp8KWHPsdcZS3LcTzQxWC3jC0NiZBCZMnbfwtPQNv
-	LgPmYLM2kWdFMcXzSAO4TFxerD5XTCU=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 791F213A6E;
-	Thu, 10 Oct 2024 13:19:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id c8JkHGnUB2fvUQAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Thu, 10 Oct 2024 13:19:37 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH net] net: usb: usbnet: fix race in probe failure
-Date: Thu, 10 Oct 2024 15:19:14 +0200
-Message-ID: <20241010131934.1499695-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.46.1
+	s=arc-20240116; t=1728568596; c=relaxed/simple;
+	bh=6ItZX102qFw2YAGORz1YdvSGeh/1I8+3VDC2XaOcCIo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T+x0cq5fBUR3/YGEn7hsu5jJ1ttZIdhCpvqlEY/XIFX1AVCOWlfvx04Lc74olwVqV8QD17fiZiZS36EZcG2SpglK4HKmc55K0m5P1IdJ7OD0nd879syBR/xh6CENj1kY1yOvMn7o4Zm/k3xbKzlaBB0JIshdbUc02bh6Lpkvn0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dV7wFJjX; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53959a88668so1248484e87.2
+        for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2024 06:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728568593; x=1729173393; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MgEbP4QzXn0AIXKMH5GH9V//Wmvbs5ys1mABYvpoE90=;
+        b=dV7wFJjXyhd6pbNi1SeeW9kj+XhjrFhpMNlFW49bSF+MnGBcrBDF1bIy+LzhpBlrw+
+         SdBjU5582XyZ2W0eYdJbQIosyyoTuKEtMd/V2DaugRpHhpPMot9ndIxGslSiCRmxQnKm
+         KDal00caZB9zyCwVXH3rmyY1H4z2uYeRnZ7eM+LagjVts52Ok5yyn6BBDa1fapTwi02+
+         tvF4BEDeX5MSSMkVjHwiuO09skeOtL/91vJWjfzFriIN9oFXssZbLNgXzDaU+Xt/FZ1L
+         EL+whtfN6PDkmDayVz1XR15YTFvGZn4e/nVTOnGzOZCjLmnmUbm+6f+vvhWy9N83vKxS
+         y6Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728568593; x=1729173393;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MgEbP4QzXn0AIXKMH5GH9V//Wmvbs5ys1mABYvpoE90=;
+        b=hl/EZNTmQqFAGPjUtifwRS0KcOVrRoRWahCN822WfkguVFrOv42SqnzUdMotaoq6sx
+         nNbwQCBegw4ndpjdPqhQ3lzZ8wABf1AGUePzkjVw03tNCVxz4IB9wGLV62DvsaDiz3wg
+         7RHdjq8f3noccHdITzrsXAeTAoLof9DdBGYU364wwHL3FS2ttgDVkoqqy+7vWljGMK3h
+         mSH76CPBNeHiGm/r2v2qMma7K3/FcuZQ1NkerjLa9k0W9pPFzK6pU6mfc6JoISxtzPiD
+         qthCkkn1RvL1ZZfAfOo5m2uPg5p/guimj6gTyodCXbknlN9r0ACaKpKAGwaoIJJiUBqA
+         mLGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoFTMZlODjgWhESs+MDEJDbw7DrkLLoQUL9JHJSHgQArySw8aM1V2PS0EcFpE8rzN8hYK/w51sQAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlinV1uJVkDeVfyEjSvYQ7PNkllq/A0WSvRSE8Inw4Le4HLERJ
+	h/nX7a49uyqX4TgwnkSnUpULgH6Hle8MdUnCpK5yczNaHLtyVcz28OGKGlGvfiA=
+X-Google-Smtp-Source: AGHT+IFRJFs0J18XIpOr4N2kPvG4CArMIUph3kbLtDpAlLjw8FFX7qYAc57/vRjXHgekvKWF8dqMFQ==
+X-Received: by 2002:a05:6512:acb:b0:52e:fd75:f060 with SMTP id 2adb3069b0e04-539c497940emr3386887e87.61.1728568592899;
+        Thu, 10 Oct 2024 06:56:32 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539cb8d8181sm260912e87.147.2024.10.10.06.56.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 06:56:32 -0700 (PDT)
+Date: Thu, 10 Oct 2024 16:56:30 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Vinod Koul <vkoul@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Bjorn Andersson <quic_bjorande@quicinc.com>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Mantas Pucka <mantas@8devices.com>, 
+	Abel Vesa <abel.vesa@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-phy@lists.infradead.org, quic_ppratap@quicinc.com, 
+	quic_jackp@quicinc.com
+Subject: Re: [PATCH 4/4] phy: qcom: qmp: Add qmp configuration for QCS8300
+Message-ID: <cdhcojf4xypiym4icdkvwgqrsickw4qlwlp4vmovun5t3gc6mz@eqzgylg2z6uo>
+References: <20241009195348.2649368-1-quic_kriskura@quicinc.com>
+ <20241009195348.2649368-5-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: B996C1F45A
-X-Spam-Score: -3.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009195348.2649368-5-quic_kriskura@quicinc.com>
 
-The same bug as in the disconnect code path also exists
-in the case of a failure late during the probe process.
-The flag must also be set.
+On Thu, Oct 10, 2024 at 01:23:48AM GMT, Krishna Kurapati wrote:
+> Add qmp configuration for QCS8300. It is similar to SA8775P and
+> SC8280XP except for some Lane configuration settings specific to
+> QCS8300.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 65 +++++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+> 
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
----
- drivers/net/usb/usbnet.c | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 2506aa8c603e..ee1b5fd7b491 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1870,6 +1870,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 	 * may trigger an error resubmitting itself and, worse,
- 	 * schedule a timer. So we kill it all just in case.
- 	 */
-+	usbnet_mark_going_away(dev);
- 	cancel_work_sync(&dev->kevent);
- 	del_timer_sync(&dev->delay);
- 	free_netdev(net);
 -- 
-2.46.1
-
+With best wishes
+Dmitry
 
