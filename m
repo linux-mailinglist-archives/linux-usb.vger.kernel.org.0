@@ -1,194 +1,244 @@
-Return-Path: <linux-usb+bounces-16097-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16098-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D952D99A6F4
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:52:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECD5C99A702
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:55:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B7C01F240AC
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 14:52:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76E361F21CDC
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 14:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0151719415E;
-	Fri, 11 Oct 2024 14:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E5018787F;
+	Fri, 11 Oct 2024 14:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="N1RjSbuc"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="P1WAoWd3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2046.outbound.protection.outlook.com [40.107.236.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com [209.85.222.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E3317BA2;
-	Fri, 11 Oct 2024 14:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728658297; cv=fail; b=LTN/EK2LitaQgyiohDqGqBVEhgdQ3oJ9p5XXahZTVVUIB0xfAoHH9ehnRzwMwC70idok/Zl8p20038uP9l9bOduIWJJlcmumvW6Rg4ZeQErtLfuZnTlJBffoTHHnX0KicJ2MRtVvgVIwsOURRjjHT1nAav7R9cQxAsCfzgjKbHE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728658297; c=relaxed/simple;
-	bh=+mu2GDPluc0pBHO469Vog6TiDWn7NC+1DK6wjyPtlrY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HGUUPls1we1fHGL+eFTRlGt/rCqj6/O5aPXwG5kneFV8h600hNpngEzxI1O5NDKCWVyt2fCgmv3yiixDOgZkv/kchO2EaaVe5EfeYTGB4De5iJstM5rxw535W6wqHReHyxfZe+1ipOfct5hxJslIeRFx4y77ovlX3Iu9J1ckY8I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=N1RjSbuc; arc=fail smtp.client-ip=40.107.236.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XpdgNCDiWbnBykTxoU8lpjgzBuSSvgEa9pT49Spfun0hETwlqrUbD5PWmmg/dckgN2r0LXQSYhxeFW255+SXmaKdwMWPaixiPyHMThobWH6j79L/8pIxzC+u+HlQ2Q6JeRGqL7n8NiyubickH1dvaAXMbWyFzTwc+CefeKHAPka25J8q331fpLnuoK8aYOsUv5tRClLnM5FWDNRr0Y1HXUUzb+niutwv1P7BObVMHhM1AN8ZDJXVkpTLff/3zMf/POtXc6A4MAre4oXAigyh0fbk9088fdVxBdZO2NxBiDPuqicvNM+XO4c102irAfHPiIRxzJZ6zBBVKcvJulkX+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v6xoX9kSWcxgWe7jjjkJ9VAokdmmNJYa3m0sswo96PI=;
- b=b+bbi5EdWt0RJAD3y+necwMtrmYAAs9UP0B5oNUmqw6JiUp18dbREQH+XowRgbW+618nwatSDcpzm2qqWyTm3ZbWtrjkPt26v00RTNYqHWbRv6lEh8/OkGIci4njp/YVuAtLBee9aTYHiT3yI/Y/+AJKb0zGD2Fs8nLsHOm+aEBi9/fQJHpcyaPQuvlL90ZHv/PhSSyQn4NPoU3TTZKQCavtLgkdwZ9BKLn9NOITKWoSM+WHo6a0I0kub6jSId9EAawabQNkKNpejF9wbqXRT7Jo2eug54jSSaPMIXMJcqE1LtIhqKMLPsEDO3FJIJI7SI4KLYNe78kU0cCnstLvog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v6xoX9kSWcxgWe7jjjkJ9VAokdmmNJYa3m0sswo96PI=;
- b=N1RjSbuc2/lsS/lRS1uJ73wO99uo4QrQ6N5LPhfwlHA7a8neQeENI7b1P7u+sRO7Oe+F9w8KJtF1vFbVxzCp7RWlEfBPzEl7l56WGnxIcAl1vnUQP5kL1ws5p2AD7ETf1l/hjuqvQ0MT3ZgQih/mXKg/yWm+nFI2hg5EOabij2N8JclAX/fJNUVTAXJXB4S4KPbDyF+KsocR15whPgXFz+h4aF5vpNUdLKu3FiqTb7+lJ8uepvFWr4RTJKyjI0SfVqL5w/MoBtWU1Kb9tGcPXhh4VEJoB8z9UcFUxkRa5cnRHQDCO/D993zDBMJvmFzkEiVuATyurEDiDJTzePgrNw==
-Received: from MN0PR03CA0014.namprd03.prod.outlook.com (2603:10b6:208:52f::30)
- by PH7PR12MB5928.namprd12.prod.outlook.com (2603:10b6:510:1db::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Fri, 11 Oct
- 2024 14:51:31 +0000
-Received: from BN1PEPF0000467F.namprd03.prod.outlook.com
- (2603:10b6:208:52f:cafe::2d) by MN0PR03CA0014.outlook.office365.com
- (2603:10b6:208:52f::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.20 via Frontend
- Transport; Fri, 11 Oct 2024 14:51:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN1PEPF0000467F.mail.protection.outlook.com (10.167.243.84) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8048.13 via Frontend Transport; Fri, 11 Oct 2024 14:51:30 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 11 Oct
- 2024 07:51:19 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Fri, 11 Oct 2024 07:51:19 -0700
-Received: from henryl-vm.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Fri, 11 Oct 2024 07:51:17 -0700
-From: Henry Lin <henryl@nvidia.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, Jim Lin <jilin@nvidia.com>, "Petlozu
- Pravareshwar" <petlozup@nvidia.com>, <linux-usb@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <henryl@nvidia.com>, <stable@vger.kernel.org>
-Subject: [PATCH v3] xhci: tegra: fix checked USB2 port number
-Date: Fri, 11 Oct 2024 22:51:14 +0800
-Message-ID: <20241011145114.8905-1-henryl@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64885130A7D
+	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 14:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728658528; cv=none; b=H6iKjPPz7OGE1IAvM1vumjOLanXfM7dA1eAfYl1ASBVByLwHi0+BK3en2RUkIexjjZui/fZHKrT2HNy/86OIxlEgsWU9mMG+OCYxq0Iq3wPOWDKLNsTOdLIwQb9eZWRIUsF221INbfOn18Qac0xz1LTQODuObnbfl+d/+uOICM0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728658528; c=relaxed/simple;
+	bh=aHZMY9R/W7f0WVRPhNJljkS9waE6ViiKOSOCw+2gghY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J1KKDhyTIQMC1ZaLXSYfBxE4lQ3ZjZiTPwEBOPVSsTmyMMe1hz2OwgvfJ610TXVm+jdAsDxw/Ke7skAf9TPGrLG+njHIs0hmHVhhcRovdl/yvPk6IbgUVqIVWHxXTUXTMJORxgAbEJ4GgsOgOWFq/rvrJ1tLPXp2Ml4MdoBh6RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=P1WAoWd3; arc=none smtp.client-ip=209.85.222.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f194.google.com with SMTP id af79cd13be357-7ae3e3db294so106856485a.2
+        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 07:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1728658525; x=1729263325; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tfXt/0V3gGz/Nl53n2+SwqZesc7IYnQqnW1L9TAWte0=;
+        b=P1WAoWd3aBUx8TbkavEjFrcmgVQJYcki8d5TpK3TgvHQe1HV2ufEYp3XMVhTs3Xb4K
+         7fMeeLXxiRz1WnrcjZdxZgOY+X6QIrdwn/b9jIL6z/M59J70G2tIeVvydSa/QaRnx5sT
+         U2QjILtyGY3Cy0KD9ESNH6GfCJIMFl5D40e6JDHwP1vVCnjJmWFxd/IzOcGT3iMLaQMq
+         eTgG5eTx938xS/jLQA/fMBUChtirSOWHdxOWQ/57X8w8CcB3U/ZcHcm+EIyy76tn/u9g
+         Mzk5EcylUvvCsrjUDdo0BG3ijZ/JPG4DT14s6CcfCYCzysJ7fhYsOVn37Vm1XnsrNiJX
+         0umw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728658525; x=1729263325;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tfXt/0V3gGz/Nl53n2+SwqZesc7IYnQqnW1L9TAWte0=;
+        b=FeEG8AnYQULlZlwZBNCDLZWi01o10uVmCgrAzF+LRiBC5e/9m7FNluqLlJZE79s2ck
+         9mEsGXuu2tvCO2EMCCxkVkDnuzzDKp1BxmvfN5vBj4Hk4F66xuXRLddpJ4O4XSz7OrAc
+         3W5v4a6oIcJsBlh9ccenpsEPKL9nfiZbcUOrd/LSAJTgbCqH1SdaHndnDI8Yka0xLGIL
+         BFPuqibwd7hTrCMJWzSYycicS/GTqOwBqk2lI0+v8UR28XOolGStCWgzzieLbR0yX1WO
+         DuN1XX2JwfGCtqVyobpMPCoaiMeC5TkCozhpLSGM9CR+PsfKK1aGjobsjAcf/EQ6/uq/
+         WfVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVV6MSGggVHU6S9Cl+zUIiBshm62wT7KsS+jm+C8Zk7JWRCspvJMnXvwOEqqta7YfrrgF2OF+ZA4ow=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjEqjXeej5QQuw/NwVfCx0JXa+XkC3XSsJfhzKj+vAfjiDOCVS
+	+fvZQQfPeLECbcmGe/yaTpRA2FbU5a/2uwZEfPPqAi4ooJYY60GKP3nLgq53r5u92n8z+5Hcpu5
+	wXb3y
+X-Google-Smtp-Source: AGHT+IFG6nBmcE9lldQyQmN3k3AEJupi5pM/juawXFnijvZk8oP90eN1Kb+XkygHtzIsYs12ex6d3Q==
+X-Received: by 2002:a05:6214:4587:b0:6cb:e52c:c8e6 with SMTP id 6a1803df08f44-6cbf0040c52mr44070816d6.31.1728658525268;
+        Fri, 11 Oct 2024 07:55:25 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:2501:2805:c6d5:fe22:7fa3:ec54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cbe8608e90sm16235646d6.99.2024.10.11.07.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2024 07:55:24 -0700 (PDT)
+Date: Fri, 11 Oct 2024 10:55:22 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+f342ea16c9d06d80b585@syzkaller.appspotmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, sylv@sylv.io,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_port_suspend
+Message-ID: <9cc382bd-debc-42d6-977e-559d48b82f58@rowland.harvard.edu>
+References: <d65e2258-2901-486a-ab83-ff57e9868a91@rowland.harvard.edu>
+ <67093796.050a0220.3e960.0012.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF0000467F:EE_|PH7PR12MB5928:EE_
-X-MS-Office365-Filtering-Correlation-Id: 79a9610a-b2a2-4ca5-7b69-08dcea04318a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sQnjUN2ydezHpn5uXvWxdmZsFdMLhHDRo22B4GiV7SyX8+MpjoVkMY+KJwrx?=
- =?us-ascii?Q?nBW6iVM405QBZFHsJNFH8zvXrC0jMiEjMont6l9jDDr0o8TyO5q7bNeI+rbP?=
- =?us-ascii?Q?MW0LvVznJCIkxK2wFWLNBcYuyJ8ZBJLOQ7paqAlzr8vDt05CshkHaL2m6UrT?=
- =?us-ascii?Q?BTHqI9or22lonKY08t7OWAEa4itoEOpTD3VeGGPSvxRIyC5pMA27TB3RkDt+?=
- =?us-ascii?Q?JHxQuSQuWIIsOXHk94anPkPXEYMkyGCi70BzArYQIU1RKcKDBUmlfknXX5FU?=
- =?us-ascii?Q?d5BBsST0XeJuNlcFAfKa4hNYQVebXG2kNdl+eVGomRFiGTuDQ+jAicueUuuH?=
- =?us-ascii?Q?PN+n1ZHpUtJcVetb42qSLycy3RSYZ/6swQOvn35pYsQZ6NLG6kaZ5ejg7vP9?=
- =?us-ascii?Q?mPofGiR10vzWkpCoXjV5JltJNwYnLNhxEUrpRJ8dVa4jdLCTtNUwT0lyPZg2?=
- =?us-ascii?Q?3rTTFMwutpECUkPBJKiG4PjTTDdKyByifxSHpuOv1/mrVDPY5kJ2Pu8spZf8?=
- =?us-ascii?Q?hJVBuzb+8Udckwfu0IpPeKl7MaH1D0+Ewm5Wd2PiHtfgQ/l/eQQ/g/SW3D0N?=
- =?us-ascii?Q?FHQJp/EJd7nnbUdFqhMIeojvquz2udovpgCbiZdHjv4X/Z7O71U5Fzf10xD0?=
- =?us-ascii?Q?410kYWwPS6w758IL5WQQqvyNoJ5g3oJsATFkgvWPHSxJMSW+8xbzN+KK1giK?=
- =?us-ascii?Q?8mg9+YCVRVk5wryf7k52TLEbZTK6t1l/Lx73n2cJcndn2AliQglRNClYEwgv?=
- =?us-ascii?Q?XroYyJo60jgOQujUNBSunx1nI7ILPq2KoUGiazRW7ZjKaV2HIEeKq+6ZCvt/?=
- =?us-ascii?Q?5mEvGOgvMwerL/2Zg+3S0fKgRjoNr7vLbixTNSROSuD0SX+RaMhp2RmoWGSg?=
- =?us-ascii?Q?QAGMj+CsqyYZKTMMGour5I6ulrhZXYdrx36H7MTL+GpMSKux3pN4MlAsLC8c?=
- =?us-ascii?Q?LKsYVGqt4CWWb/jhWNwijpEpyx83vx22dA8tLwVJ0+yucfgZFgELOUygdVSN?=
- =?us-ascii?Q?6GvrUEcdS0T+glCgyEiQMpv8LKMEZQFxseoNMbJ3YQbGgQLSW6f/y5ByuMQe?=
- =?us-ascii?Q?oTPB9OZKN6FEafNVv2jo3wwmhOAWPDbXigDDaltB2IL4pMS/Cz0GurEogewd?=
- =?us-ascii?Q?aeRzPSCA37sdpbs+HsL09kYeYykcMN5KD6FUvyrUgIvsaRwN+XOFOWT6qeD4?=
- =?us-ascii?Q?rnJ3ZbYkaJDkWrDW+DMETSQRinL+Qr6HvknfaoQ4LDxKerKDpY0nvt9Ga886?=
- =?us-ascii?Q?lTYBa+xpCtFsdBQD1Zgr1aegEp+9y7Eh7CLfX8v5YGl6DPMK3T4AfvlOLlxU?=
- =?us-ascii?Q?fjj/hnw2CaPX29ZDB968FBINTf6tiYz1lk7gRUy88fPOUG2uqYP5BhCYYZaf?=
- =?us-ascii?Q?gKXy4DA=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2024 14:51:30.9976
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79a9610a-b2a2-4ca5-7b69-08dcea04318a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF0000467F.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5928
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67093796.050a0220.3e960.0012.GAE@google.com>
 
-If USB virtualizatoin is enabled, USB2 ports are shared between all
-Virtual Functions. The USB2 port number owned by an USB2 root hub in
-a Virtual Function may be less than total USB2 phy number supported
-by the Tegra XUSB controller.
+On Fri, Oct 11, 2024 at 07:35:02AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot tried to test the proposed patch but the build/boot failed:
 
-Using total USB2 phy number as port number to check all PORTSC values
-would cause invalid memory access.
-
-[  116.923438] Unable to handle kernel paging request at virtual address 006c622f7665642f
 ...
-[  117.213640] Call trace:
-[  117.216783]  tegra_xusb_enter_elpg+0x23c/0x658
-[  117.222021]  tegra_xusb_runtime_suspend+0x40/0x68
-[  117.227260]  pm_generic_runtime_suspend+0x30/0x50
-[  117.232847]  __rpm_callback+0x84/0x3c0
-[  117.237038]  rpm_suspend+0x2dc/0x740
-[  117.241229] pm_runtime_work+0xa0/0xb8
-[  117.245769]  process_scheduled_works+0x24c/0x478
-[  117.251007]  worker_thread+0x23c/0x328
-[  117.255547]  kthread+0x104/0x1b0
-[  117.259389]  ret_from_fork+0x10/0x20
-[  117.263582] Code: 54000222 f9461ae8 f8747908 b4ffff48 (f9400100)
 
-Cc: <stable@vger.kernel.org> # v6.3+
-Fixes: a30951d31b25 ("xhci: tegra: USB2 pad power controls")
-Signed-off-by: Henry Lin <henryl@nvidia.com>
----
- drivers/usb/host/xhci-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Tested on:
+> 
+> commit:         920e7522 usb: gadget: function: Remove usage of the de..
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 6246d5ad1468..76f228e7443c 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -2183,7 +2183,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
- 		goto out;
+All right, let's try again with an explicit patch to undo the timer 
+changes in dummy_hcd.c.
+
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -30,7 +30,7 @@
+ #include <linux/slab.h>
+ #include <linux/errno.h>
+ #include <linux/init.h>
+-#include <linux/hrtimer.h>
++#include <linux/timer.h>
+ #include <linux/list.h>
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
+@@ -50,8 +50,6 @@
+ #define POWER_BUDGET	500	/* in mA; use 8 for low-power port testing */
+ #define POWER_BUDGET_3	900	/* in mA */
+ 
+-#define DUMMY_TIMER_INT_NSECS	125000 /* 1 microframe */
+-
+ static const char	driver_name[] = "dummy_hcd";
+ static const char	driver_desc[] = "USB Host+Gadget Emulator";
+ 
+@@ -242,7 +240,7 @@ enum dummy_rh_state {
+ struct dummy_hcd {
+ 	struct dummy			*dum;
+ 	enum dummy_rh_state		rh_state;
+-	struct hrtimer			timer;
++	struct timer_list		timer;
+ 	u32				port_status;
+ 	u32				old_status;
+ 	unsigned long			re_timeout;
+@@ -1303,8 +1301,8 @@ static int dummy_urb_enqueue(
+ 		urb->error_count = 1;		/* mark as a new urb */
+ 
+ 	/* kick the scheduler, it'll do the rest */
+-	if (!hrtimer_active(&dum_hcd->timer))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS), HRTIMER_MODE_REL);
++	if (!timer_pending(&dum_hcd->timer))
++		mod_timer(&dum_hcd->timer, jiffies + 1);
+ 
+  done:
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+@@ -1325,7 +1323,7 @@ static int dummy_urb_dequeue(struct usb_
+ 	rc = usb_hcd_check_unlink_urb(hcd, urb, status);
+ 	if (!rc && dum_hcd->rh_state != DUMMY_RH_RUNNING &&
+ 			!list_empty(&dum_hcd->urbp_list))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
++		mod_timer(&dum_hcd->timer, jiffies);
+ 
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+ 	return rc;
+@@ -1779,7 +1777,7 @@ static int handle_control_request(struct
+  * drivers except that the callbacks are invoked from soft interrupt
+  * context.
+  */
+-static enum hrtimer_restart dummy_timer(struct hrtimer *t)
++static void dummy_timer(struct timer_list *t)
+ {
+ 	struct dummy_hcd	*dum_hcd = from_timer(dum_hcd, t, timer);
+ 	struct dummy		*dum = dum_hcd->dum;
+@@ -1810,6 +1808,8 @@ static enum hrtimer_restart dummy_timer(
+ 		break;
  	}
  
--	for (i = 0; i < tegra->num_usb_phys; i++) {
-+	for (i = 0; i < xhci->usb2_rhub.num_ports; i++) {
- 		if (!xhci->usb2_rhub.ports[i])
- 			continue;
- 		portsc = readl(xhci->usb2_rhub.ports[i]->addr);
--- 
-2.25.1
++	/* FIXME if HZ != 1000 this will probably misbehave ... */
++
+ 	/* look at each urb queued by the host side driver */
+ 	spin_lock_irqsave(&dum->lock, flags);
+ 
+@@ -1817,7 +1817,7 @@ static enum hrtimer_restart dummy_timer(
+ 		dev_err(dummy_dev(dum_hcd),
+ 				"timer fired with no URBs pending?\n");
+ 		spin_unlock_irqrestore(&dum->lock, flags);
+-		return HRTIMER_NORESTART;
++		return;
+ 	}
+ 	dum_hcd->next_frame_urbp = NULL;
+ 
+@@ -1995,12 +1995,10 @@ return_urb:
+ 		dum_hcd->udev = NULL;
+ 	} else if (dum_hcd->rh_state == DUMMY_RH_RUNNING) {
+ 		/* want a 1 msec delay here */
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS), HRTIMER_MODE_REL);
++		mod_timer(&dum_hcd->timer, jiffies + msecs_to_jiffies(1));
+ 	}
+ 
+ 	spin_unlock_irqrestore(&dum->lock, flags);
+-
+-	return HRTIMER_NORESTART;
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+@@ -2389,7 +2387,7 @@ static int dummy_bus_resume(struct usb_h
+ 		dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 		set_link_state(dum_hcd);
+ 		if (!list_empty(&dum_hcd->urbp_list))
+-			hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
++			mod_timer(&dum_hcd->timer, jiffies);
+ 		hcd->state = HC_STATE_RUNNING;
+ 	}
+ 	spin_unlock_irq(&dum_hcd->dum->lock);
+@@ -2467,8 +2465,7 @@ static DEVICE_ATTR_RO(urbs);
+ 
+ static int dummy_start_ss(struct dummy_hcd *dum_hcd)
+ {
+-	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	dum_hcd->timer.function = dummy_timer;
++	timer_setup(&dum_hcd->timer, dummy_timer, 0);
+ 	dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 	dum_hcd->stream_en_ep = 0;
+ 	INIT_LIST_HEAD(&dum_hcd->urbp_list);
+@@ -2497,8 +2494,7 @@ static int dummy_start(struct usb_hcd *h
+ 		return dummy_start_ss(dum_hcd);
+ 
+ 	spin_lock_init(&dum_hcd->dum->lock);
+-	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	dum_hcd->timer.function = dummy_timer;
++	timer_setup(&dum_hcd->timer, dummy_timer, 0);
+ 	dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 
+ 	INIT_LIST_HEAD(&dum_hcd->urbp_list);
+@@ -2517,11 +2513,8 @@ static int dummy_start(struct usb_hcd *h
+ 
+ static void dummy_stop(struct usb_hcd *hcd)
+ {
+-	struct dummy_hcd	*dum_hcd = hcd_to_dummy_hcd(hcd);
+-
+-	hrtimer_cancel(&dum_hcd->timer);
+-	device_remove_file(dummy_dev(dum_hcd), &dev_attr_urbs);
+-	dev_info(dummy_dev(dum_hcd), "stopped\n");
++	device_remove_file(dummy_dev(hcd_to_dummy_hcd(hcd)), &dev_attr_urbs);
++	dev_info(dummy_dev(hcd_to_dummy_hcd(hcd)), "stopped\n");
+ }
+ 
+ /*-------------------------------------------------------------------------*/
 
 
