@@ -1,122 +1,431 @@
-Return-Path: <linux-usb+bounces-16095-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16096-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E028399A5C4
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:08:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BCDB99A668
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:35:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6227C1F22608
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 14:08:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31F251C22321
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 14:35:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6032185B0;
-	Fri, 11 Oct 2024 14:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="T/SXrMoC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9582C181;
+	Fri, 11 Oct 2024 14:35:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com [209.85.222.194])
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAADD517
-	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 14:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0064FC12
+	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 14:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728655704; cv=none; b=fW3WSzOMabF3CJVFityfrRYNHVn+c5FU6UFLU4veI4JR5htNNf8fa80S90zpvO3sZwrWjbosGY/ObO9knC2Kt+loecr6j+lke+CqIGi0T2XFuZoZdTG/MTNv4US888ISB57P4Pi3AW3G8lWXcP24eBBU1obGe4JpnCp0etF47+4=
+	t=1728657304; cv=none; b=rXEhQALfqxJjneAsygheXEJR49xDS7aGnAjSfYfaXRXswio3mVvkUZfO3iXPjPVaw23DATwPkOS8x/R/bvY6nteWJHgIF5Q4ia8fbmH2DqA3o1kvu1UPYc/WydXjwmwHd2Q+9drFjrmcF4zP+/br2lCWRdc9uv/mNe9VclD5B4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728655704; c=relaxed/simple;
-	bh=KNHg690VzbGD19D6SFkkzazgVGxbtQ0FFBYN6fII+NE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cvFlcxQd2dzynQpdkJLIIwiGP+skjgdswfUL1cq28zgeMRBbC/ei6KxO8MT06b7eKirqRQb52M9zAiFNCLkTg0dffGzvO4nK183hDIoAe5BkNJvZZEN3rRnkvDW/ObZT3izZiMk024d8zyNSTGbjQ2zVb3JQKmf5Qio5prliiBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=T/SXrMoC; arc=none smtp.client-ip=209.85.222.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f194.google.com with SMTP id af79cd13be357-7afcf9f3c96so208822785a.1
-        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 07:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1728655702; x=1729260502; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBHgSLmotPuWavg7bxJdcfW6VGuP7eov0LOsjiXZhFA=;
-        b=T/SXrMoCcQdRoKjcj2os4N0Nk5Na308FNgJUuO3z1k729ZoFsldQUbWNm96Fve9lUh
-         tGq9xX8LcqZzGyaq3HU9wsJocfLaGKoe7uOlCN5LbEf6OE8b/JTlGyts4XnpVa+Cuxoq
-         P0yFri2WZX+DJ/EaNCuOsLntbFKePYSZAVkCE2d3iGC/vdGgPIegeApqazytjhoWmBWA
-         5hmW7qoeJHLgKmXDRJoNmAqCt0moOlvhNbXPSowuqtFbU4yx/Ljj062y9R+YI4QQwQTk
-         V4jP2rzRsvbiGUDsFUWg/mPyXu2K8wEzmePYn3ucU5OArfU2KXziGUXDuQ0qJDfPQ68Q
-         +gew==
+	s=arc-20240116; t=1728657304; c=relaxed/simple;
+	bh=GpPaqfOPZMM3Uw3iVn3LWSeRydG3U7Z7yINjl9Bdjjg=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=f/sH//jHXsqDOgxwyEI5FKJnJfBoyba6bYAF20j0OFlIc8NVHYSw9A2xVi2P/jdAlfbjLPBU1T0JdACKaq4/F/ZWtucv4ZMozywGvKkBbkA9nlLy7CiYS9HeNsCX6yrhL1zY8tGFuFiX61LRleSkJejx6I9Dy1seHO3ihMRd8N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a3b7b13910so7397905ab.1
+        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 07:35:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728655702; x=1729260502;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1728657302; x=1729262102;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SBHgSLmotPuWavg7bxJdcfW6VGuP7eov0LOsjiXZhFA=;
-        b=kbGXJfJTG+T0RCh5U5K5swe5L7/E24os8jVPkGcD45eEevjxRAuyAm9WmNV/wk4Xx2
-         xolpjCb2ZY4A6l3Y1X54TTQy2nU1SXEmhhTieXY/F8KuBTfWwi7pgNUjHGCTwJhY7QAF
-         41KRa7unpvYauk2dZzSzsPxzypZ4gLn79OOPuNugGMkWZKpj9baeaicBvzJNe4yvQB8e
-         +/pUdtb77UaYkg10ifxj06qmF6v3RtaRAS6akW8Tc/vb9KT7U6yZCv8uwLBSwDQ8R9ps
-         aJprKT0PADURrXXUL1jjiQnnBVj/Ob/5qdua59BsT/9qY0pMsq2vgibDOc0xUa4QKPDI
-         A5aw==
-X-Forwarded-Encrypted: i=1; AJvYcCWEwNTeZLLiT3A+JOoAgdUp2tb5/rT10sdklkjqunX/gOj4N1uRK0pS2QvGUtN830GbW37l9Usw7CY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0XSTtIMQSVyL67XfSVbvzlsPpUHcmb8dC+pLCzyEtmAo4e/iy
-	fABSx51bjuQRwAsiH3q0GtEXf+so6KBicg49NbaNY/WsB5IwY5apeKq3gGRF8Q==
-X-Google-Smtp-Source: AGHT+IHlTJKVJzss8TaMUZYn5xavVAh8mhokFlmIZWPVm1h4q2IsF8y5D6J03eYFVwIpAG+wgv1f+g==
-X-Received: by 2002:a05:620a:4727:b0:7b1:161c:ef44 with SMTP id af79cd13be357-7b11a3c5c99mr409852885a.60.1728655702078;
-        Fri, 11 Oct 2024 07:08:22 -0700 (PDT)
-Received: from rowland.harvard.edu ([2607:fb60:2501:2805:c6d5:fe22:7fa3:ec54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b1148f07d3sm133610485a.59.2024.10.11.07.08.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 07:08:21 -0700 (PDT)
-Date: Fri, 11 Oct 2024 10:08:19 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+f342ea16c9d06d80b585@syzkaller.appspotmail.com>
-Cc: Marcello Sylvester Bauer <sylv@sylv.io>, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_port_suspend
-Message-ID: <d65e2258-2901-486a-ab83-ff57e9868a91@rowland.harvard.edu>
-References: <6709234e.050a0220.3e960.0011.GAE@google.com>
+        bh=kwmqvMb4AfCz+Pu7zxZ3v3euFBRpDQu88oKicvoEfq4=;
+        b=DmqmdQlC/Z5NggQzvP19o5qwYrGFyx/fVNZcjIiRciow+w7VeEVA4Qc6bhTCEB9iws
+         wR7gXtCclnvS506StziarHjr/6PKIyCwJ0DgRDUGUWs8T3sOUG6rrLZcfsXV6mYi6Gij
+         v0O4cmxqT2tSLBl87s9TzrLpB0q7pwiV+wsJvw3WLX+/5tHY+xxp9Gb/Hz530oDCYXuZ
+         vAcqU03lQBS0wC+pjCmu8ODal/ZBO93z1DQO8mqwC9isaTvm25a8rAdTxXolr3I5lWTi
+         6iIGzFc6W84asPEDIdnKU8Z6nTEVWrhMubDnhvH/CrtOcNhIx0YBXB/E0O3qUP8o03LW
+         LhvA==
+X-Forwarded-Encrypted: i=1; AJvYcCWWmFab/MI54pr1se63n0B9/tNKtjKk5U1P/NaO7o+Bhx3bhzGq8MSv5iQ4HRRIq2f55fCaMDi/F5M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxj9CvRx13UKprFGKRUlOuC70r+zFXP+2rPNeRHmfNn/q6TV4aG
+	UyaleOnY/U+xoFn0XbU/jDsrvb8n/4u8yXeK8fREo8VBvB3kRvYv+lxU6bmFADfwprYR0mZGke3
+	U6QrBCrDj/8JUK+E+oL1RtNw3mY27RXw/4yT6xPL8pD4TCKTE0PhWXBc=
+X-Google-Smtp-Source: AGHT+IEF5Hdp5F3dddqHgVS22ev0mDpli+6NfXZBzRUTRVUo00XWcsP2wW8Yxh2xmAT8XfveOWvfCHC10M3kCBcsitkLIS97CgKH
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6709234e.050a0220.3e960.0011.GAE@google.com>
+X-Received: by 2002:a05:6e02:1aa8:b0:3a3:4391:24e9 with SMTP id
+ e9e14a558f8ab-3a3b603e0dbmr16380425ab.20.1728657302041; Fri, 11 Oct 2024
+ 07:35:02 -0700 (PDT)
+Date: Fri, 11 Oct 2024 07:35:02 -0700
+In-Reply-To: <d65e2258-2901-486a-ab83-ff57e9868a91@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67093796.050a0220.3e960.0012.GAE@google.com>
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_port_suspend
+From: syzbot <syzbot+f342ea16c9d06d80b585@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, sylv@sylv.io, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 11, 2024 at 06:08:30AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    4a9fe2a8ac53 dt-bindings: usb: dwc3-imx8mp: add compatible..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17d067d0580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4510af5d637450fb
-> dashboard link: https://syzkaller.appspot.com/bug?extid=f342ea16c9d06d80b585
-> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1312c327980000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/883c5319cb52/disk-4a9fe2a8.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/caf4421ed2ef/vmlinux-4a9fe2a8.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/d8e3beb01d49/bzImage-4a9fe2a8.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+f342ea16c9d06d80b585@syzkaller.appspotmail.com
-> 
-> INFO: task kworker/1:0:24 blocked for more than 143 seconds.
->       Not tainted 6.12.0-rc1-syzkaller-00027-g4a9fe2a8ac53 #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/1:0     state:D stack:23808 pid:24    tgid:24    ppid:2      flags:0x00004000
-> Workqueue: pm pm_runtime_work
+Hello,
 
-Let's try to verify that this problem really was caused by the timer 
-changes to dummy-hcd.  The following commit is the one preceding those 
-changes.
+syzbot tried to test the proposed patch but the build/boot failed:
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 920e7522e3ba
+ice)
+[    3.002225][    T1] ACPI: Added _OSI(3.0 _SCP Extensions)
+[    3.003059][    T1] ACPI: Added _OSI(Processor Aggregator Device)
+[    3.085420][   T12] Callback from call_rcu_tasks() invoked.
+[    3.276952][    T1] ACPI: 2 ACPI AML tables successfully acquired and lo=
+aded
+[    3.314462][    T1] ACPI: _OSC evaluation for CPUs failed, trying _PDC
+[    3.348039][    T1] ACPI: Interpreter enabled
+[    3.350335][    T1] ACPI: PM: (supports S0 S3 S4 S5)
+[    3.352134][    T1] ACPI: Using IOAPIC for interrupt routing
+[    3.354599][    T1] PCI: Using host bridge windows from ACPI; if necessa=
+ry, use "pci=3Dnocrs" and report a bug
+[    3.355296][    T1] PCI: Ignoring E820 reservations for host bridge wind=
+ows
+[    3.367249][    T1] ACPI: Enabled 16 GPEs in block 00 to 0F
+[    3.746048][    T1] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff=
+])
+[    3.747443][    T1] acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Seg=
+ments MSI HPX-Type3]
+[    3.749086][    T1] acpi PNP0A03:00: _OSC: not requesting OS control; OS=
+ requires [ExtendedConfig ASPM ClockPM MSI]
+[    3.753239][    T1] acpi PNP0A03:00: fail to add MMCONFIG information, c=
+an't access extended configuration space under this bridge
+[    3.790190][    T1] PCI host bridge to bus 0000:00
+[    3.791637][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf=
+7 window]
+[    3.792856][    T1] pci_bus 0000:00: root bus resource [io  0x0d00-0xfff=
+f window]
+[    3.794311][    T1] pci_bus 0000:00: root bus resource [mem 0x000a0000-0=
+x000bffff window]
+[    3.795302][    T1] pci_bus 0000:00: root bus resource [mem 0xc0000000-0=
+xfebfefff window]
+[    3.797357][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    3.800192][    T1] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000=
+ conventional PCI endpoint
+[    3.811190][    T1] pci 0000:00:01.0: [8086:7110] type 00 class 0x060100=
+ conventional PCI endpoint
+[    3.851850][    T1] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000=
+ conventional PCI endpoint
+[    3.879292][    T1] pci 0000:00:01.3: quirk: [io  0xb000-0xb03f] claimed=
+ by PIIX4 ACPI
+[    3.890132][    T1] pci 0000:00:03.0: [1af4:1004] type 00 class 0x000000=
+ conventional PCI endpoint
+[    3.902150][    T1] pci 0000:00:03.0: BAR 0 [io  0xc000-0xc03f]
+[    3.912077][    T1] pci 0000:00:03.0: BAR 1 [mem 0xfe800000-0xfe80007f]
+[    3.943377][    T1] pci 0000:00:04.0: [1af4:1000] type 00 class 0x020000=
+ conventional PCI endpoint
+[    3.955285][    T1] pci 0000:00:04.0: BAR 0 [io  0xc040-0xc07f]
+[    3.963126][    T1] pci 0000:00:04.0: BAR 1 [mem 0xfe801000-0xfe80107f]
+[    3.989371][    T1] pci 0000:00:05.0: [1ae0:a002] type 00 class 0x030000=
+ conventional PCI endpoint
+[    3.999276][    T1] pci 0000:00:05.0: BAR 0 [mem 0xfe000000-0xfe7fffff]
+[    4.030695][    T1] pci 0000:00:05.0: Video device with shadowed ROM at =
+[mem 0x000c0000-0x000dffff]
+[    4.040832][    T1] pci 0000:00:06.0: [1af4:1002] type 00 class 0x00ff00=
+ conventional PCI endpoint
+[    4.052403][    T1] pci 0000:00:06.0: BAR 0 [io  0xc080-0xc09f]
+[    4.083310][    T1] pci 0000:00:07.0: [1af4:1005] type 00 class 0x00ff00=
+ conventional PCI endpoint
+[    4.098317][    T1] pci 0000:00:07.0: BAR 0 [io  0xc0a0-0xc0bf]
+[    4.107225][    T1] pci 0000:00:07.0: BAR 1 [mem 0xfe802000-0xfe80203f]
+[    4.200337][    T1] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+[    4.213761][    T1] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+[    4.227312][    T1] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+[    4.241372][    T1] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+[    4.248294][    T1] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+[    4.283168][    T1] iommu: Default domain type: Translated
+[    4.284430][    T1] iommu: DMA domain TLB invalidation policy: lazy mode
+[    4.291847][    T1] SCSI subsystem initialized
+[    4.298163][    T1] ACPI: bus type USB registered
+[    4.300417][    T1] usbcore: registered new interface driver usbfs
+[    4.302000][    T1] usbcore: registered new interface driver hub
+[    4.303838][    T1] usbcore: registered new device driver usb
+[    4.308961][    T1] mc: Linux media interface: v0.10
+[    4.310673][    T1] videodev: Linux video capture interface: v2.00
+[    4.314068][    T1] pps_core: LinuxPPS API ver. 1 registered
+[    4.315288][    T1] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 =
+Rodolfo Giometti <giometti@linux.it>
+[    4.317429][    T1] PTP clock support registered
+[    4.321082][    T1] EDAC MC: Ver: 3.0.0
+[    4.331906][    T1] Advanced Linux Sound Architecture Driver Initialized=
+.
+[    4.345666][    T1] Bluetooth: Core ver 2.22
+[    4.347724][    T1] NET: Registered PF_BLUETOOTH protocol family
+[    4.349885][    T1] Bluetooth: HCI device and connection manager initial=
+ized
+[    4.352264][    T1] Bluetooth: HCI socket layer initialized
+[    4.353522][    T1] Bluetooth: L2CAP socket layer initialized
+[    4.355359][    T1] Bluetooth: SCO socket layer initialized
+[    4.357435][    T1] NET: Registered PF_ATMPVC protocol family
+[    4.359810][    T1] NET: Registered PF_ATMSVC protocol family
+[    4.362356][    T1] NetLabel: Initializing
+[    4.363887][    T1] NetLabel:  domain hash size =3D 128
+[    4.365276][    T1] NetLabel:  protocols =3D UNLABELED CIPSOv4 CALIPSO
+[    4.368668][    T1] NetLabel:  unlabeled traffic allowed by default
+[    4.375910][    T1] nfc: nfc_init: NFC Core ver 0.1
+[    4.378232][    T1] NET: Registered PF_NFC protocol family
+[    4.380020][    T1] PCI: Using ACPI for IRQ routing
+[    4.383469][    T1] pci 0000:00:05.0: vgaarb: setting as boot VGA device
+[    4.385257][    T1] pci 0000:00:05.0: vgaarb: bridge control possible
+[    4.385257][    T1] pci 0000:00:05.0: vgaarb: VGA device added: decodes=
+=3Dio+mem,owns=3Dio+mem,locks=3Dnone
+[    4.385284][    T1] vgaarb: loaded
+[    4.406926][    T1] clocksource: Switched to clocksource kvm-clock
+[    4.415109][    T1] VFS: Disk quotas dquot_6.6.0
+[    4.415313][    T1] VFS: Dquot-cache hash table entries: 512 (order 0, 4=
+096 bytes)
+[    4.420224][    T1] pnp: PnP ACPI init
+[    4.469015][    T1] pnp: PnP ACPI: found 7 devices
+[    4.555551][    T1] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xf=
+fffff, max_idle_ns: 2085701024 ns
+[    4.571683][    T1] NET: Registered PF_INET protocol family
+[    4.577543][    T1] IP idents hash table entries: 131072 (order: 8, 1048=
+576 bytes, linear)
+[    4.593539][    T1] ------------[ cut here ]------------
+[    4.595293][    T1] refcount_t: decrement hit 0; leaking memory.
+[    4.596951][    T1] WARNING: CPU: 0 PID: 1 at lib/refcount.c:31 refcount=
+_warn_saturate+0x1ed/0x210
+[    4.599957][    T1] Modules linked in:
+[    4.601156][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc2-=
+syzkaller-00078-g920e7522e3ba #0
+[    4.603368][    T1] Hardware name: Google Google Compute Engine/Google C=
+ompute Engine, BIOS Google 09/13/2024
+[    4.606363][    T1] RIP: 0010:refcount_warn_saturate+0x1ed/0x210
+[    4.609070][    T1] Code: 87 e8 27 0e ce fe 90 0f 0b 90 90 e9 c3 fe ff f=
+f e8 d8 d6 07 ff c6 05 11 98 b3 07 01 90 48 c7 c7 40 02 26 87 e8 04 0e ce f=
+e 90 <0f> 0b 90 90 e9 a0 fe ff ff 48 89 ef e8 42 f7 5c ff e9 44 fe ff ff
+[    4.613673][    T1] RSP: 0000:ffffc9000001fba0 EFLAGS: 00010282
+[    4.614899][    T1] RAX: 0000000000000000 RBX: 0000000000000000 RCX: fff=
+fffff811a05b9
+[    4.616158][    T1] RDX: ffff8881012a8000 RSI: ffffffff811a05c6 RDI: 000=
+0000000000001
+[    4.618038][    T1] RBP: ffff88810a6a06cc R08: 0000000000000001 R09: 000=
+0000000000000
+[    4.619549][    T1] R10: 0000000000000000 R11: 0000000000000001 R12: fff=
+f88810a6a06cc
+[    4.620938][    T1] R13: 0000000000000000 R14: 0000000000d60059 R15: fff=
+f8881068d5f28
+[    4.622631][    T1] FS:  0000000000000000(0000) GS:ffff8881f5800000(0000=
+) knlGS:0000000000000000
+[    4.624581][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    4.625763][    T1] CR2: ffff88823ffff000 CR3: 000000000889e000 CR4: 000=
+00000003506f0
+[    4.627528][    T1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000=
+0000000000000
+[    4.628776][    T1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000=
+0000000000400
+[    4.631108][    T1] Call Trace:
+[    4.631680][    T1]  <TASK>
+[    4.632515][    T1]  ? show_regs+0x8c/0xa0
+[    4.633661][    T1]  ? __warn+0xe5/0x3c0
+[    4.635168][    T1]  ? __wake_up_klogd.part.0+0x99/0xf0
+[    4.636612][    T1]  ? refcount_warn_saturate+0x1ed/0x210
+[    4.637520][    T1]  ? report_bug+0x3c0/0x580
+[    4.638548][    T1]  ? handle_bug+0x3d/0x70
+[    4.639596][    T1]  ? exc_invalid_op+0x17/0x50
+[    4.640935][    T1]  ? asm_exc_invalid_op+0x1a/0x20
+[    4.642371][    T1]  ? __warn_printk+0x199/0x350
+[    4.643107][    T1]  ? __warn_printk+0x1a6/0x350
+[    4.644886][    T1]  ? refcount_warn_saturate+0x1ed/0x210
+[    4.645992][    T1]  __reset_page_owner+0x2ea/0x370
+[    4.646949][    T1]  __free_pages_ok+0x5db/0xbf0
+[    4.648332][    T1]  ? __split_page_owner+0xdd/0x120
+[    4.649331][    T1]  make_alloc_exact+0x165/0x260
+[    4.650432][    T1]  alloc_large_system_hash+0x4e0/0x640
+[    4.651653][    T1]  inet_hashinfo2_init+0x4b/0xd0
+[    4.653240][    T1]  tcp_init+0xba/0x9f0
+[    4.654195][    T1]  inet_init+0x419/0x6f0
+[    4.655067][    T1]  ? __pfx_inet_init+0x10/0x10
+[    4.656148][    T1]  do_one_initcall+0x128/0x700
+[    4.657254][    T1]  ? __pfx_do_one_initcall+0x10/0x10
+[    4.658290][    T1]  ? trace_kmalloc+0x2d/0xe0
+[    4.659168][    T1]  ? __kmalloc+0x213/0x400
+[    4.659995][    T1]  kernel_init_freeable+0x69d/0xca0
+[    4.661086][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    4.662386][    T1]  kernel_init+0x1c/0x2b0
+[    4.663173][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    4.664120][    T1]  ret_from_fork+0x45/0x80
+[    4.665027][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    4.665837][    T1]  ret_from_fork_asm+0x1a/0x30
+[    4.666808][    T1]  </TASK>
+[    4.667817][    T1] Kernel panic - not syncing: kernel: panic_on_warn se=
+t ...
+[    4.669094][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc2-=
+syzkaller-00078-g920e7522e3ba #0
+[    4.670996][    T1] Hardware name: Google Google Compute Engine/Google C=
+ompute Engine, BIOS Google 09/13/2024
+[    4.672099][    T1] Call Trace:
+[    4.672099][    T1]  <TASK>
+[    4.672099][    T1]  dump_stack_lvl+0x3d/0x1f0
+[    4.672099][    T1]  panic+0x6f5/0x7a0
+[    4.672099][    T1]  ? __pfx_panic+0x10/0x10
+[    4.672099][    T1]  ? show_trace_log_lvl+0x363/0x500
+[    4.672099][    T1]  ? check_panic_on_warn+0x1f/0xb0
+[    4.672099][    T1]  ? refcount_warn_saturate+0x1ed/0x210
+[    4.672099][    T1]  check_panic_on_warn+0xab/0xb0
+[    4.672099][    T1]  __warn+0xf1/0x3c0
+[    4.672099][    T1]  ? __wake_up_klogd.part.0+0x99/0xf0
+[    4.672099][    T1]  ? refcount_warn_saturate+0x1ed/0x210
+[    4.672099][    T1]  report_bug+0x3c0/0x580
+[    4.672099][    T1]  handle_bug+0x3d/0x70
+[    4.672099][    T1]  exc_invalid_op+0x17/0x50
+[    4.672099][    T1]  asm_exc_invalid_op+0x1a/0x20
+[    4.672099][    T1] RIP: 0010:refcount_warn_saturate+0x1ed/0x210
+[    4.672099][    T1] Code: 87 e8 27 0e ce fe 90 0f 0b 90 90 e9 c3 fe ff f=
+f e8 d8 d6 07 ff c6 05 11 98 b3 07 01 90 48 c7 c7 40 02 26 87 e8 04 0e ce f=
+e 90 <0f> 0b 90 90 e9 a0 fe ff ff 48 89 ef e8 42 f7 5c ff e9 44 fe ff ff
+[    4.672099][    T1] RSP: 0000:ffffc9000001fba0 EFLAGS: 00010282
+[    4.672099][    T1] RAX: 0000000000000000 RBX: 0000000000000000 RCX: fff=
+fffff811a05b9
+[    4.672099][    T1] RDX: ffff8881012a8000 RSI: ffffffff811a05c6 RDI: 000=
+0000000000001
+[    4.672099][    T1] RBP: ffff88810a6a06cc R08: 0000000000000001 R09: 000=
+0000000000000
+[    4.672099][    T1] R10: 0000000000000000 R11: 0000000000000001 R12: fff=
+f88810a6a06cc
+[    4.672099][    T1] R13: 0000000000000000 R14: 0000000000d60059 R15: fff=
+f8881068d5f28
+[    4.672099][    T1]  ? __warn_printk+0x199/0x350
+[    4.672099][    T1]  ? __warn_printk+0x1a6/0x350
+[    4.672099][    T1]  __reset_page_owner+0x2ea/0x370
+[    4.672099][    T1]  __free_pages_ok+0x5db/0xbf0
+[    4.672099][    T1]  ? __split_page_owner+0xdd/0x120
+[    4.672099][    T1]  make_alloc_exact+0x165/0x260
+[    4.672099][    T1]  alloc_large_system_hash+0x4e0/0x640
+[    4.672099][    T1]  inet_hashinfo2_init+0x4b/0xd0
+[    4.672099][    T1]  tcp_init+0xba/0x9f0
+[    4.672099][    T1]  inet_init+0x419/0x6f0
+[    4.672099][    T1]  ? __pfx_inet_init+0x10/0x10
+[    4.672099][    T1]  do_one_initcall+0x128/0x700
+[    4.672099][    T1]  ? __pfx_do_one_initcall+0x10/0x10
+[    4.672099][    T1]  ? trace_kmalloc+0x2d/0xe0
+[    4.721681][    T1]  ? __kmalloc+0x213/0x400
+[    4.721681][    T1]  kernel_init_freeable+0x69d/0xca0
+[    4.721681][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    4.721681][    T1]  kernel_init+0x1c/0x2b0
+[    4.721681][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    4.721681][    T1]  ret_from_fork+0x45/0x80
+[    4.721681][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    4.721681][    T1]  ret_from_fork_asm+0x1a/0x30
+[    4.721681][    T1]  </TASK>
+[    4.721681][    T1] Rebooting in 86400 seconds..
 
-Alan Stern
+
+syzkaller build log:
+go env (err=3D<nil>)
+GO111MODULE=3D'auto'
+GOARCH=3D'amd64'
+GOBIN=3D''
+GOCACHE=3D'/syzkaller/.cache/go-build'
+GOENV=3D'/syzkaller/.config/go/env'
+GOEXE=3D''
+GOEXPERIMENT=3D''
+GOFLAGS=3D''
+GOHOSTARCH=3D'amd64'
+GOHOSTOS=3D'linux'
+GOINSECURE=3D''
+GOMODCACHE=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod'
+GONOPROXY=3D''
+GONOSUMDB=3D''
+GOOS=3D'linux'
+GOPATH=3D'/syzkaller/jobs-2/linux/gopath'
+GOPRIVATE=3D''
+GOPROXY=3D'https://proxy.golang.org,direct'
+GOROOT=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod/golang.org/toolchain@v0.0.=
+1-go1.22.1.linux-amd64'
+GOSUMDB=3D'sum.golang.org'
+GOTMPDIR=3D''
+GOTOOLCHAIN=3D'auto'
+GOTOOLDIR=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod/golang.org/toolchain@v0=
+.0.1-go1.22.1.linux-amd64/pkg/tool/linux_amd64'
+GOVCS=3D''
+GOVERSION=3D'go1.22.1'
+GCCGO=3D'gccgo'
+GOAMD64=3D'v1'
+AR=3D'ar'
+CC=3D'gcc'
+CXX=3D'g++'
+CGO_ENABLED=3D'1'
+GOMOD=3D'/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/go.=
+mod'
+GOWORK=3D''
+CGO_CFLAGS=3D'-O2 -g'
+CGO_CPPFLAGS=3D''
+CGO_CXXFLAGS=3D'-O2 -g'
+CGO_FFLAGS=3D'-O2 -g'
+CGO_LDFLAGS=3D'-O2 -g'
+PKG_CONFIG=3D'pkg-config'
+GOGCCFLAGS=3D'-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=3D0=
+ -ffile-prefix-map=3D/tmp/go-build204408742=3D/tmp/go-build -gno-record-gcc=
+-switches'
+
+git status (err=3D<nil>)
+HEAD detached at d7906effc2
+nothing to commit, working tree clean
+
+
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sy=
+s/syz-sysgen
+make .descriptions
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+bin/syz-sysgen
+go fmt ./sys/... >/dev/null
+touch .descriptions
+GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3Dd7906effc263366a8b067258cec67072b29aa5e0 -X '=
+github.com/google/syzkaller/prog.gitRevisionDate=3D20241003-062913'" "-tags=
+=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execpr=
+og github.com/google/syzkaller/tools/syz-execprog
+mkdir -p ./bin/linux_amd64
+g++ -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wfr=
+ame-larger-than=3D16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-forma=
+t-overflow -Wno-unused-but-set-variable -Wno-unused-command-line-argument -=
+static-pie -std=3Dc++17 -I. -Iexecutor/_include -fpermissive -w -DGOOS_linu=
+x=3D1 -DGOARCH_amd64=3D1 \
+	-DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"d7906effc263366a8b067258cec67072b2=
+9aa5e0\"
+/usr/bin/ld: /tmp/ccI6z2y7.o: in function `test_cover_filter()':
+executor.cc:(.text+0x1424b): warning: the use of `tempnam' is dangerous, be=
+tter use `mkstemp'
+/usr/bin/ld: /tmp/ccI6z2y7.o: in function `Connection::Connect(char const*,=
+ char const*)':
+executor.cc:(.text._ZN10Connection7ConnectEPKcS1_[_ZN10Connection7ConnectEP=
+KcS1_]+0x104): warning: Using 'gethostbyname' in statically linked applicat=
+ions requires at runtime the shared libraries from the glibc version used f=
+or linking
+
+
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=3D12ac2840580000
+
+
+Tested on:
+
+commit:         920e7522 usb: gadget: function: Remove usage of the de..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.=
+git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3D5508c3b3c58f53
+dashboard link: https://syzkaller.appspot.com/bug?extid=3Df342ea16c9d06d80b=
+585
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Deb=
+ian) 2.40
+
+Note: no patches were applied.
 
