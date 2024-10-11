@@ -1,266 +1,113 @@
-Return-Path: <linux-usb+bounces-16108-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16109-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1D0199AACE
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 20:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EB9099AD02
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 21:45:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CFB71F221A4
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 18:03:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54F701F2231A
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 19:45:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492D51BFDFE;
-	Fri, 11 Oct 2024 18:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C801D1E202D;
+	Fri, 11 Oct 2024 19:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="gw8uBxt9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gwmg2FJj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D1181723
-	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 18:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12821DB55C
+	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 19:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728669773; cv=none; b=PLaRxcdmzmb90KRQNIdZE6j1wSOjjhLG6ntm0vu1FQiypHxbGTm6uPSxNa4ZIYVB0qPWw3wwiTM0MO6ISkBpnpL0oPC4EZv6E743TKZjgYklEUm2KWOloLqLqJ/j3hDcQ7ia3G2MonabHk7g1hY+xzWbr1cApMprHAcMqF0BK1Q=
+	t=1728675838; cv=none; b=tWnToVBX5uD4GknW3+6zXNE+2E00dbNkbeUj0gMMGI1T8GBtdOxXm3ldmfu0dccpdDelGttEHq/TGcTyFd5+rRajSIrWx36cL6QWTBiRGAxcEgjwrtvCtBULCgecPuxrGY1bAOTW5JgsBjE3V0i329SOKOSBOko61G5YFrxl3hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728669773; c=relaxed/simple;
-	bh=2tArKpkGxRE5rK5oKWjfHXAVkMI5Qd73dmAKgEbLPnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NzQ5N3w+rO2BL6cSqxGxBDOYhK3y5+b7y0qsTOeRrepXEyWWeG4BLdypgXbKEXmrMANW3rbxePgF5lw99O0pkHy8cfGdtCpJ4sCGyl+GKZWJlqean0He19Qe4w08SIFLcYhAzZTJwauAdzQf/XCzXMdGeb9ekdg53o7NH3w4pq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=gw8uBxt9; arc=none smtp.client-ip=209.85.166.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-8369b14fb91so64817439f.3
-        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 11:02:51 -0700 (PDT)
+	s=arc-20240116; t=1728675838; c=relaxed/simple;
+	bh=EyQBti8iRGrfy5Kq8qTYI9BU1x64Ao0+x6jgz0KJsPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tdc4nEDXnJqHkwR4YuTh7MGDuwjagEWJBEuoLv/k65WrwDmeoqVf9FotmFDMHxBkqhjSyrKkJz/q9V2xtDHce3uW2RZr4C9S5VpLBt9717wO0y+HxFfcCCPplthoyO26AtZQwo1em/V3hDDX8GBtd182hzIGwWxmvibJdkwv4+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gwmg2FJj; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fad5024b8dso28036641fa.1
+        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 12:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1728669771; x=1729274571; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pMcYkWpWyeivAbqZtP5UVS1GNqQj2sCC24l0/oqkyqw=;
-        b=gw8uBxt9aQ5hvtDDr4eykgJrGlGcxT295HcZpW5jnEx6z8hJA4ps26MrXBd0DEbGzN
-         3NXXqr6RS4wC7r2VAK/z8oGH3C6JlTHAPO8O94EJkMOpPZDdvray9+ycS9CIgm9Qa3b/
-         OmH0k2sa4hL8Atj/VqGU14l/SenMkDDe20feXF+ry95o+ANxvZlO6ZBzk/2J51qnxdV8
-         B1JTxnuPq6CE1GsZcgfNMw2RvM6au2wdTKR5JNSmbwC/3ZzUlvg6DekkgfJJIbeZYqCO
-         dZa9N2UCPfH/Wg1d+2njsciKUKSxTKEfTJQDUVmuCP8t4rewdJpeLVwthWeZJf8Kg+0e
-         yPyQ==
+        d=linaro.org; s=google; t=1728675835; x=1729280635; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VSBzE7LOUj+VcQ2h3x7qcMaBBc1aP+9+KQqW/9SwLIk=;
+        b=gwmg2FJjPGh7PD0tIdhQpqt0/j/L+W04DVP+1bvH1VMH96m2BpBY97Rb7/IojwB+le
+         aFq0CKhwCc2S6FOFi1JDWkhZneQZYWFSE1tlA3Ni89X2tB/G+TRqWHyVXk9BvHZ4B86A
+         KrKRIUmY5sMfyhx2t4yZcG6ldOWeu0BCIquaMR16FXGGcasFdExtxp5/i5TrfQKiK1PV
+         3Iy0xIAdKNHMGpLFZuAv4vyN0v1vwUu2fGiuEGfpWONg3rD9l/umMBHIb7Bwv/A7ba9O
+         iYXF2D0BAKDQU8tTYVjObw4p87I/SDGwbfiQbSJ0996fIfJr9TMk5bS0Oz0pAOtKfesV
+         GKuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728669771; x=1729274571;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pMcYkWpWyeivAbqZtP5UVS1GNqQj2sCC24l0/oqkyqw=;
-        b=tZMsDe3b93KbivNiSoQ2a+CC2MyFzCnhNSbwBoAto3UDXgO7ucys7Nh1NTlLXUs21L
-         W0CyTIKPg3W6p80qqur4INadScsddOxRzZGEIW630GupW0RI3HG5Cs+J2owdyhxJeQca
-         aB/xFoCnGMnqwDgFHXr00VUG4f8djIhJemMQiP438QJYi46Y0zoxgOm9OS7y7TOO91eB
-         5xsY6QXp9NMJyk5wi/j8YHNF2hfm4yfWYqBAgmhxwkhxdPMBG+U9kXmeu0uks4ZK0Xgz
-         7FKv3csyhDIQjYDs/LRWERFZ78p92k2XrC8zjxYQs3oKfMRe1TwJZqXlCtOIqOzXop39
-         Qbxw==
-X-Forwarded-Encrypted: i=1; AJvYcCVC2P1B/n47Hg16YiDFd0ksq8dgdf8u1LQmYKplNpF8PSNDpDn7DSeqKa7wrHMWJYJ6H+Y7U8y1NaQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbJ5i3EQVt4K1gbhHKg1r3tmypvowxZJGHs9kDFGaDbXkFLAMs
-	hgxDjE/fwNxH2dtdcT2GXTVGsPQPbwM4k1/TwQ+Gf6+gdbUzy2cH3k/31C2Zv1A=
-X-Google-Smtp-Source: AGHT+IEvpIPXGIzRQMNxeQzv+bllsHSO8I28ATmLkyTfJ1qdrsOYd4bmRd3IJXHaNWBjb0h5DG/K+Q==
-X-Received: by 2002:a05:6e02:1809:b0:3a3:b593:83a4 with SMTP id e9e14a558f8ab-3a3b5f9e4e3mr27520305ab.14.1728669770445;
-        Fri, 11 Oct 2024 11:02:50 -0700 (PDT)
-Received: from localhost ([172.59.225.52])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbad9f13cbsm729879173.75.2024.10.11.11.02.49
+        d=1e100.net; s=20230601; t=1728675835; x=1729280635;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VSBzE7LOUj+VcQ2h3x7qcMaBBc1aP+9+KQqW/9SwLIk=;
+        b=bbcMKIT2mm92z3Xj4kiKUpgBx7GrW3ILmi+TY6VQHBag7W5M7/hZ99rKeMYD/F1juZ
+         f+DxQo6dyVqQrlg+J+TaMyIVRznoBxbNeFKVeNFpegGzaykV2RhUPJbHzUWr9anTcFoF
+         D2bX1Kz1oK14g5h1Z1aMJT2HJZWWFAkqA4XlpphB0uKCVaProotvZLxL9tKf8NyHP6EL
+         WuGarDDNRzWQB2/lb0isJdhTNmdM8FtT7D2VrmFeK+Xh/2fMzOnPvaxUN2Skdr9YLMLi
+         31bpOvNk148nsnnJf+OOFDa49uNRIYrx+GKaxr0J9P8NDPj6FoCfByKt+lpZomXtjjlp
+         7bkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVOcGiplnt0aRX9q6GBDi74Q3VJBpfDkDRaAu2ccvYXiEtb6ADh0wq27XhMNwjtvsEfsH1RIjmWEHI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZHMhOK3Vcy2QzKjZMxSSBaMpxwbWZ6Ik1QG7PGfdcAGfDvWIZ
+	wo5d0vO9jJ/iD2hMHzKOGTezgg7a8Sui2PlXdX5NqmNZsTpC1sD0Qc1aQjmoXno=
+X-Google-Smtp-Source: AGHT+IEu1mhLVmze0TtnRFPpPlvy+z4vxQGWp3cGFcMGePx9vX4WB7qzF6iBduA1lrvZ+FXR5JVQyg==
+X-Received: by 2002:a2e:712:0:b0:2f5:11f6:1b24 with SMTP id 38308e7fff4ca-2fb327423bdmr16197361fa.18.1728675834921;
+        Fri, 11 Oct 2024 12:43:54 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431182ffd7esm50175075e9.19.2024.10.11.12.43.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 11:02:50 -0700 (PDT)
-Date: Fri, 11 Oct 2024 14:02:45 -0400
-From: Aaron Rainbolt <arainbolt@kfocus.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
- andreas.noever@gmail.com, linux-usb@vger.kernel.org, mmikowski@kfocus.org,
- linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>
-Subject: Re: USB-C DisplayPort display failing to stay active with Intel
- Barlow Ridge USB4 controller, power-management related issue?
-Message-ID: <20241011140245.3d86e79b@kfocus.org>
-In-Reply-To: <20241011163811.GU275077@black.fi.intel.com>
-References: <20241009220118.70bfedd0@kf-ir16>
-	<20241010044919.GD275077@black.fi.intel.com>
-	<20241010232656.7fc6359e@kf-ir16>
-	<20241011163811.GU275077@black.fi.intel.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+        Fri, 11 Oct 2024 12:43:54 -0700 (PDT)
+Date: Fri, 11 Oct 2024 22:43:50 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: Keith Packard <keithp@keithp.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH next] USB: chaoskey: fix deadlock in release
+Message-ID: <8c34cb8d-faaf-4134-851d-78db678d535f@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-On Fri, 11 Oct 2024 19:38:11 +0300
-Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+This lock should was intended to be an unlock.  It will lead to a hang.
 
-> Hi,
-> 
-> On Thu, Oct 10, 2024 at 11:26:56PM -0500, Aaron Rainbolt wrote:
-> > > Can you share full dmesg with the repro and
-> > > "thunderbolt.dyndbg=+p" in the kernel command line?  
-> > 
-> > The full log is very long, so I've included it as an email
-> > attachment. The exact steps taken after booting with the requested
-> > kernel parameter were:
-> > 
-> > 1. boot with thunderbolt.dyndbg=+p kernel param, no USB-C plugged
-> > in. 2. After login, hot-plug two USB-C cables. This time, the
-> > displays came up and stayed resident (this happens sometimes)
-> > 3. Unplugged both cables.
-> > 4. Replugged both. This time, the displays did not show anything.
-> > 5. lspci -k "jiggled" the displays and they came back on.
-> > 6. After ~15s, the displays blacked out again.
-> > 7. Save to the demsg file after about 30s.
-> > 
-> > The laptop's firmware is fully up-to-date. One of the fixes we tried
-> > was installing Windows 11, updating the firmware, and then
-> > re-installing Kubuntu 24.04. This had no effect on the issue.
-> > 
-> > Notes:
-> > 
-> > * Kernel 6.1 does not exhibit this time out. 6.5 and later do.
-> > * Windows 11 had very similar behavior before installing Windows
-> >   updates. After update, it was fixed.
-> > * All distros and W11 were tested on the same hardware with the
-> > latest firmware, so we know this is not a hardware failure.  
-> 
-> Thanks for the logs and steps!
-> 
-> I now realize that
-> 
->   a75e0684efe5 ("thunderbolt: Keep the domain powered when USB4 port
-> is in redrive mode")
-> 
-> was half-baked. Yes it deals with the situation where plugging in
-> monitor when the domain is powered. However, it completely misses
-> these cases:
-> 
-> * Plug in monitor to the Type-C port when the controller is runtime
->    suspended.
-> * Boot with monitor plugged in to the Type-C port.
-> 
-> At the end of this email there is a hack patch that tries to solve
-> this. Can you try it out? I will be on vacation next week but I'm
-> copying my colleague Gil who is familiar with this too. He should be
-> able to help you out during my absense.
+Fixes: 422dc0a4d12d ("USB: chaoskey: fail open after removal")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+From static analysis.  Not tested.
 
-Thank you so much! We have applied the patch to our kernel and are
-recompiling now. I'll report back the results when testing is complete.
+ drivers/usb/misc/chaoskey.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Couple of notes about the dmesg you shared. They don't affect this
-> issue but may cause other issues:
-> 
-> > [    1.382718] thunderbolt 0000:06:00.0: device links to tunneled
-> > native ports are missing!  
-> 
-> This is means the BIOS does not implement the USB4 power contract
-> which means that USB 3.x and PCIe tunnels will not work as expected
-> after power transition.
-
-Good to know, thank you.
-
-> > [    1.416488] thunderbolt 0000:06:00.0: 0: NVM version 14.86  
-> 
-> This is really old firmware version. My development system for example
-> has 56.x so yours might have a bunch of issues that are solved in the
-> later versions.
-
-Ah, ok. The machine used for reproducing the issue for generating the
-dmesg log was *not* the same machine as the one we did our initial
-testing on, though it was the exact same model. We used Windows to fully
-update the firmware on the machine where we did the bulk of our
-testing, and the exact same symptoms were observed with the latest
-firmware. We'll try to update the firmware on any machines we use for
-future log gathering.
-
-Thanks again for your help with this!
-
-> The hack patch below:
-> 
-> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> index 07a66594e904..0e424b7661be 100644
-> --- a/drivers/thunderbolt/tb.c
-> +++ b/drivers/thunderbolt/tb.c
-> @@ -2113,6 +2113,37 @@ static void tb_exit_redrive(struct tb_port
-> *port) }
->  }
->  
-> +static void tb_switch_enter_redrive(struct tb_switch *sw)
-> +{
-> +	struct tb_port *port;
-> +
-> +	tb_switch_for_each_port(sw, port)
-> +		tb_enter_redrive(port);
-> +}
-> +
-> +/*
-> + * Called during system and runtime suspend to forcefully exit
-> redrive
-> + * mode without querying whether the resource is available.
-> + */
-> +static void tb_switch_exit_redrive(struct tb_switch *sw)
-> +{
-> +	struct tb_port *port;
-> +
-> +	if (!(sw->quirks & QUIRK_KEEP_POWER_IN_DP_REDRIVE))
-> +		return;
-> +
-> +	tb_switch_for_each_port(sw, port) {
-> +		if (!tb_port_is_dpin(port))
-> +			continue;
-> +
-> +		if (port->redrive) {
-> +			port->redrive = false;
-> +			pm_runtime_put(&sw->dev);
-> +			tb_port_dbg(port, "exit redrive mode\n");
-> +		}
-> +	}
-> +}
-> +
->  static void tb_dp_resource_unavailable(struct tb *tb, struct tb_port
-> *port, const char *reason)
->  {
-> @@ -2987,6 +3018,7 @@ static int tb_start(struct tb *tb, bool reset)
->  	tb_create_usb3_tunnels(tb->root_switch);
->  	/* Add DP IN resources for the root switch */
->  	tb_add_dp_resources(tb->root_switch);
-> +	tb_switch_enter_redrive(tb->root_switch);
->  	/* Make the discovered switches available to the userspace */
->  	device_for_each_child(&tb->root_switch->dev, NULL,
->  			      tb_scan_finalize_switch);
-> @@ -3002,6 +3034,7 @@ static int tb_suspend_noirq(struct tb *tb)
->  
->  	tb_dbg(tb, "suspending...\n");
->  	tb_disconnect_and_release_dp(tb);
-> +	tb_switch_exit_redrive(tb->root_switch);
->  	tb_switch_suspend(tb->root_switch, false);
->  	tcm->hotplug_active = false; /* signal tb_handle_hotplug to
-> quit */ tb_dbg(tb, "suspend finished\n");
-> @@ -3094,6 +3127,7 @@ static int tb_resume_noirq(struct tb *tb)
->  		tb_dbg(tb, "tunnels restarted, sleeping for
-> 100ms\n"); msleep(100);
->  	}
-> +	tb_switch_enter_redrive(tb->root_switch);
->  	 /* Allow tb_handle_hotplug to progress events */
->  	tcm->hotplug_active = true;
->  	tb_dbg(tb, "resume finished\n");
-> @@ -3157,6 +3191,8 @@ static int tb_runtime_suspend(struct tb *tb)
->  	struct tb_cm *tcm = tb_priv(tb);
->  
->  	mutex_lock(&tb->lock);
-> +	tb_disconnect_and_release_dp(tb);
-> +	tb_switch_exit_redrive(tb->root_switch);
->  	tb_switch_suspend(tb->root_switch, true);
->  	tcm->hotplug_active = false;
->  	mutex_unlock(&tb->lock);
-> @@ -3188,6 +3224,7 @@ static int tb_runtime_resume(struct tb *tb)
->  	tb_restore_children(tb->root_switch);
->  	list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list)
->  		tb_tunnel_activate(tunnel);
-> +	tb_switch_enter_redrive(tb->root_switch);
->  	tcm->hotplug_active = true;
->  	mutex_unlock(&tb->lock);
->  
+diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
+index e8b63df5f975..4025f386ba6b 100644
+--- a/drivers/usb/misc/chaoskey.c
++++ b/drivers/usb/misc/chaoskey.c
+@@ -319,7 +319,7 @@ static int chaoskey_release(struct inode *inode, struct file *file)
+ bail:
+ 	mutex_unlock(&dev->lock);
+ destruction:
+-	mutex_lock(&chaoskey_list_lock);
++	mutex_unlock(&chaoskey_list_lock);
+ 	usb_dbg(interface, "release success");
+ 	return rv;
+ }
+-- 
+2.45.2
 
 
