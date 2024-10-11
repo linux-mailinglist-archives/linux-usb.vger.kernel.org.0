@@ -1,134 +1,116 @@
-Return-Path: <linux-usb+bounces-16086-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16087-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F96A99A423
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 14:44:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B127E99A471
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 15:07:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9254B22CF3
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 12:44:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 172AC1F22CF2
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 13:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA122178FF;
-	Fri, 11 Oct 2024 12:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A06CB2185AB;
+	Fri, 11 Oct 2024 13:07:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hnL8YcyH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iZRO6BPx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23781218588
-	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 12:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241D3216A14
+	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 13:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728650659; cv=none; b=pyLkeyGSFhqcSVnNfbhTTyke3B1zqd61TUK0dG5nhH0Ayb0nOkn5yoL3ImwgTxlxPxgSmt+NEBSTB+53z09fywP/QKO6rG55KiWvMfsMd9KcdLGOVSFuU9nlQ10Lx10DUpjDwnZsSWP3juVUzjDnQO/PJGw+8YymV7Tkf7F4/M4=
+	t=1728652045; cv=none; b=p/gLLrVa/7C9On/SPH9yF6Yloy4AFXie5h6Kz07VC28aWps16c15WG/CLa3+D2n4Q0uxvUFiMKOq9afgduIrfxy/EpK/akxrkiloMe6E9hOl5Mw7ZFSfj85RXtIckQnv8evIpyCnx7HmwK0O8AL5aHhURzLiw+Zz+lLPzCO5B1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728650659; c=relaxed/simple;
-	bh=+oqTaLNbD0nIAK3DWOlcr9M1G8NAByjPH9PR2kehoSA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nojkhAIJ+LzhaygAiuXbrPg5cBoPt5Iz9helcAfcJKaMJ24PT5HVA/8eT/4+JeShXUh8ZLm3r6VsXK7irZ83LSN/Lkgflpghmcr70JKdew0aSfzxwxhdzvOYSAlg4jFM7BIEIXahpL9ze9aim2bbltUeSGWYjOBlndO9E/hTZT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hnL8YcyH; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728650657; x=1760186657;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+oqTaLNbD0nIAK3DWOlcr9M1G8NAByjPH9PR2kehoSA=;
-  b=hnL8YcyH2mRXqhUkYmWXBgglFIfAlM9O9oPBynlVpbXIb624ERgE+11S
-   4d4tIAI3PPqiG0FhiBalKKkQHAgNe8qWmpDwy7w1EVb+CKmCVqkH6uiN+
-   8QOc2YzKuYML6RonfkPiWuIPWALAwl7ryRHNIk7JEYcAP47/MCHNbdDdM
-   SnCpzLyBBh3efgbp5vPK9SU3ldmo1iQUfiO72TqB45OwKWEZJG3y8tRA8
-   V95Zsm3PgBRmL8vB3xlEhyOkotSxYfW04SMuPRg1mOIUGVsw0PnwK+7jT
-   6f94nRE+Ov5U1vq6dfs7TQLZG4g/2jlTEDjH9yDpg1VHy+CBPsZj+d+WP
-   w==;
-X-CSE-ConnectionGUID: Tdf7N5kUQS6/BwQLg5LgJQ==
-X-CSE-MsgGUID: XF4BCsUlRcamMguueNEJhw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="31957718"
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="31957718"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 05:44:15 -0700
-X-CSE-ConnectionGUID: L5gSKwwyQ5umHTnxdM+uPg==
-X-CSE-MsgGUID: QGH0FIFrRO27FQfMYkzDpw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="77716194"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orviesa008.jf.intel.com with ESMTP; 11 Oct 2024 05:44:12 -0700
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	s=arc-20240116; t=1728652045; c=relaxed/simple;
+	bh=y3fww4BWYLXJVTA9YyShOWMRPXxoqpDDvENzVUv5TBU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KjJuvzI4vx3vJUPkCzoPnCy2/4Lqiz8As+HoT6MhoRfTwdxVOJDfWDtNE9LCpwpGa3chdwGxgPxWFae1/x6wIpTvX+cesa1//JLByvGEejLpsjXQyijjPIF/Cmhu5W0lNMDxP+tFeLpCHmkdKnTXBP9bsfh1u73BsROdjQmbpyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iZRO6BPx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21404C4CECC;
+	Fri, 11 Oct 2024 13:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1728652044;
+	bh=y3fww4BWYLXJVTA9YyShOWMRPXxoqpDDvENzVUv5TBU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iZRO6BPxUMsNM93qoK2U9Tiva0bgnGptF+M1htUgKvCQM3AYyjHFG3ZcXBN93LBuF
+	 VopOzkw7pj7B+fMjck/YkMJOr8U3APgcNbvsTc/tsJyCCudISD362MPbd6bOQO3Z6y
+	 elO8Qv3weFDwzwYudXyrl+PEA16YE+soaeIA+Q3E=
+Date: Fri, 11 Oct 2024 15:07:21 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
 	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v3 4/4] usb: typec: ucsi: Add support for the partner USB Modes
-Date: Fri, 11 Oct 2024 15:44:02 +0300
-Message-ID: <20241011124402.3306994-5-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241011124402.3306994-1-heikki.krogerus@linux.intel.com>
+	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] usb: typec: Add attribute file showing the
+ supported USB modes of the port
+Message-ID: <2024101155-goes-demote-f6f6@gregkh>
 References: <20241011124402.3306994-1-heikki.krogerus@linux.intel.com>
+ <20241011124402.3306994-2-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241011124402.3306994-2-heikki.krogerus@linux.intel.com>
 
-UCSI does not share the contents of the Enter_USB Message
-that was used, so the active mode still has to be always
-determined from the enumerated USB device. However, after
-UCSI v2.0 it is possible to check separately is USB4 the
-active mode.
+On Fri, Oct 11, 2024 at 03:43:59PM +0300, Heikki Krogerus wrote:
+> +What:		/sys/class/typec/<port>/usb_capability
+> +Date:		May 2024
 
-So with USB2 and USB3 the mode is always determined from the
-result of the USB enumeration, and when USB4 USB Mode is
-active, UCSI driver can assign the mode directly.
+It's a bit past May 2024 :)
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
- drivers/usb/typec/ucsi/ucsi.h | 2 ++
- 2 files changed, 10 insertions(+)
+> +static ssize_t
+> +usb_capability_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	enum usb_mode mode = to_typec_port(dev)->usb_mode;
+> +	u8 cap = to_typec_port(dev)->cap->usb_capability;
+> +	int len = 0;
+> +	int i;
+> +
+> +	for (i = USB_MODE_USB2; i < USB_MODE_USB4 + 1; i++) {
+> +		if (!(BIT(i - 1) & cap))
+> +			continue;
+> +
+> +		if (i == mode)
+> +			len += sysfs_emit_at(buf, len, "[%s] ", usb_modes[i]);
+> +		else
+> +			len += sysfs_emit_at(buf, len, "%s ", usb_modes[i]);
+> +	}
+> +
+> +	buf[len - 1] = '\n';
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 13c739d334c4..804f7f9b35ea 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1057,6 +1057,14 @@ static int ucsi_register_partner(struct ucsi_connector *con)
- 
- 	con->partner = partner;
- 
-+	if (con->ucsi->version >= UCSI_VERSION_3_0)
-+		if (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
-+		    UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN4)
-+			typec_partner_set_usb_mode(partner, USB_MODE_USB4);
-+	if (con->ucsi->version >= UCSI_VERSION_2_0)
-+		if (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
-+		    UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN3)
-+			typec_partner_set_usb_mode(partner, USB_MODE_USB4);
- 	return 0;
- }
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index a1f4b9b568c8..d850073e8d0a 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -346,6 +346,8 @@ struct ucsi_connector_status {
- #define UCSI_CONSTAT_PARTNER_FLAGS(_f_)		(((_f_) & GENMASK(12, 5)) >> 5)
- #define   UCSI_CONSTAT_PARTNER_FLAG_USB		1
- #define   UCSI_CONSTAT_PARTNER_FLAG_ALT_MODE	2
-+#define   UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN3	4
-+#define   UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN4	8
- #define UCSI_CONSTAT_PARTNER_TYPE(_f_)		(((_f_) & GENMASK(15, 13)) >> 13)
- #define   UCSI_CONSTAT_PARTNER_TYPE_DFP		1
- #define   UCSI_CONSTAT_PARTNER_TYPE_UFP		2
--- 
-2.45.2
+Nit, shouldn't this be another call to sysfs_emit_at()?
 
+> @@ -240,6 +251,7 @@ struct typec_partner_desc {
+>   * @port_type_set: Set port type
+>   * @pd_get: Get available USB Power Delivery Capabilities.
+>   * @pd_set: Set USB Power Delivery Capabilities.
+> + * @default_usb_mode_set: USB Mode to be used by default with Enter_USB Message
+>   */
+>  struct typec_operations {
+>  	int (*try_role)(struct typec_port *port, int role);
+> @@ -250,6 +262,7 @@ struct typec_operations {
+>  			     enum typec_port_type type);
+>  	struct usb_power_delivery **(*pd_get)(struct typec_port *port);
+>  	int (*pd_set)(struct typec_port *port, struct usb_power_delivery *pd);
+> +	int (*default_usb_mode_set)(struct typec_port *port, enum usb_mode mode);
+
+Naming is hard, but usually it's "noun_verb" so wouldn't this be just
+"mode_set_default"?  We know it's usb :)
+
+But why default, why not just "mode_set"?  or "set_mode" given you have
+"try_role" here, but then you have "pd_set".  Ick, I don't know, it's
+your code, so your call, nevermind...
+
+thanks,
+
+greg k-h
 
