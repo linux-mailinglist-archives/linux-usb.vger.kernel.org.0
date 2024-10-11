@@ -1,431 +1,194 @@
-Return-Path: <linux-usb+bounces-16096-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16097-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BCDB99A668
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:35:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D952D99A6F4
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:52:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31F251C22321
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 14:35:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B7C01F240AC
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 14:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9582C181;
-	Fri, 11 Oct 2024 14:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0151719415E;
+	Fri, 11 Oct 2024 14:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="N1RjSbuc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2046.outbound.protection.outlook.com [40.107.236.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0064FC12
-	for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 14:35:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728657304; cv=none; b=rXEhQALfqxJjneAsygheXEJR49xDS7aGnAjSfYfaXRXswio3mVvkUZfO3iXPjPVaw23DATwPkOS8x/R/bvY6nteWJHgIF5Q4ia8fbmH2DqA3o1kvu1UPYc/WydXjwmwHd2Q+9drFjrmcF4zP+/br2lCWRdc9uv/mNe9VclD5B4w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728657304; c=relaxed/simple;
-	bh=GpPaqfOPZMM3Uw3iVn3LWSeRydG3U7Z7yINjl9Bdjjg=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=f/sH//jHXsqDOgxwyEI5FKJnJfBoyba6bYAF20j0OFlIc8NVHYSw9A2xVi2P/jdAlfbjLPBU1T0JdACKaq4/F/ZWtucv4ZMozywGvKkBbkA9nlLy7CiYS9HeNsCX6yrhL1zY8tGFuFiX61LRleSkJejx6I9Dy1seHO3ihMRd8N8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a3b7b13910so7397905ab.1
-        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2024 07:35:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728657302; x=1729262102;
-        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kwmqvMb4AfCz+Pu7zxZ3v3euFBRpDQu88oKicvoEfq4=;
-        b=DmqmdQlC/Z5NggQzvP19o5qwYrGFyx/fVNZcjIiRciow+w7VeEVA4Qc6bhTCEB9iws
-         wR7gXtCclnvS506StziarHjr/6PKIyCwJ0DgRDUGUWs8T3sOUG6rrLZcfsXV6mYi6Gij
-         v0O4cmxqT2tSLBl87s9TzrLpB0q7pwiV+wsJvw3WLX+/5tHY+xxp9Gb/Hz530oDCYXuZ
-         vAcqU03lQBS0wC+pjCmu8ODal/ZBO93z1DQO8mqwC9isaTvm25a8rAdTxXolr3I5lWTi
-         6iIGzFc6W84asPEDIdnKU8Z6nTEVWrhMubDnhvH/CrtOcNhIx0YBXB/E0O3qUP8o03LW
-         LhvA==
-X-Forwarded-Encrypted: i=1; AJvYcCWWmFab/MI54pr1se63n0B9/tNKtjKk5U1P/NaO7o+Bhx3bhzGq8MSv5iQ4HRRIq2f55fCaMDi/F5M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxj9CvRx13UKprFGKRUlOuC70r+zFXP+2rPNeRHmfNn/q6TV4aG
-	UyaleOnY/U+xoFn0XbU/jDsrvb8n/4u8yXeK8fREo8VBvB3kRvYv+lxU6bmFADfwprYR0mZGke3
-	U6QrBCrDj/8JUK+E+oL1RtNw3mY27RXw/4yT6xPL8pD4TCKTE0PhWXBc=
-X-Google-Smtp-Source: AGHT+IEF5Hdp5F3dddqHgVS22ev0mDpli+6NfXZBzRUTRVUo00XWcsP2wW8Yxh2xmAT8XfveOWvfCHC10M3kCBcsitkLIS97CgKH
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E3317BA2;
+	Fri, 11 Oct 2024 14:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728658297; cv=fail; b=LTN/EK2LitaQgyiohDqGqBVEhgdQ3oJ9p5XXahZTVVUIB0xfAoHH9ehnRzwMwC70idok/Zl8p20038uP9l9bOduIWJJlcmumvW6Rg4ZeQErtLfuZnTlJBffoTHHnX0KicJ2MRtVvgVIwsOURRjjHT1nAav7R9cQxAsCfzgjKbHE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728658297; c=relaxed/simple;
+	bh=+mu2GDPluc0pBHO469Vog6TiDWn7NC+1DK6wjyPtlrY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HGUUPls1we1fHGL+eFTRlGt/rCqj6/O5aPXwG5kneFV8h600hNpngEzxI1O5NDKCWVyt2fCgmv3yiixDOgZkv/kchO2EaaVe5EfeYTGB4De5iJstM5rxw535W6wqHReHyxfZe+1ipOfct5hxJslIeRFx4y77ovlX3Iu9J1ckY8I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=N1RjSbuc; arc=fail smtp.client-ip=40.107.236.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XpdgNCDiWbnBykTxoU8lpjgzBuSSvgEa9pT49Spfun0hETwlqrUbD5PWmmg/dckgN2r0LXQSYhxeFW255+SXmaKdwMWPaixiPyHMThobWH6j79L/8pIxzC+u+HlQ2Q6JeRGqL7n8NiyubickH1dvaAXMbWyFzTwc+CefeKHAPka25J8q331fpLnuoK8aYOsUv5tRClLnM5FWDNRr0Y1HXUUzb+niutwv1P7BObVMHhM1AN8ZDJXVkpTLff/3zMf/POtXc6A4MAre4oXAigyh0fbk9088fdVxBdZO2NxBiDPuqicvNM+XO4c102irAfHPiIRxzJZ6zBBVKcvJulkX+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v6xoX9kSWcxgWe7jjjkJ9VAokdmmNJYa3m0sswo96PI=;
+ b=b+bbi5EdWt0RJAD3y+necwMtrmYAAs9UP0B5oNUmqw6JiUp18dbREQH+XowRgbW+618nwatSDcpzm2qqWyTm3ZbWtrjkPt26v00RTNYqHWbRv6lEh8/OkGIci4njp/YVuAtLBee9aTYHiT3yI/Y/+AJKb0zGD2Fs8nLsHOm+aEBi9/fQJHpcyaPQuvlL90ZHv/PhSSyQn4NPoU3TTZKQCavtLgkdwZ9BKLn9NOITKWoSM+WHo6a0I0kub6jSId9EAawabQNkKNpejF9wbqXRT7Jo2eug54jSSaPMIXMJcqE1LtIhqKMLPsEDO3FJIJI7SI4KLYNe78kU0cCnstLvog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v6xoX9kSWcxgWe7jjjkJ9VAokdmmNJYa3m0sswo96PI=;
+ b=N1RjSbuc2/lsS/lRS1uJ73wO99uo4QrQ6N5LPhfwlHA7a8neQeENI7b1P7u+sRO7Oe+F9w8KJtF1vFbVxzCp7RWlEfBPzEl7l56WGnxIcAl1vnUQP5kL1ws5p2AD7ETf1l/hjuqvQ0MT3ZgQih/mXKg/yWm+nFI2hg5EOabij2N8JclAX/fJNUVTAXJXB4S4KPbDyF+KsocR15whPgXFz+h4aF5vpNUdLKu3FiqTb7+lJ8uepvFWr4RTJKyjI0SfVqL5w/MoBtWU1Kb9tGcPXhh4VEJoB8z9UcFUxkRa5cnRHQDCO/D993zDBMJvmFzkEiVuATyurEDiDJTzePgrNw==
+Received: from MN0PR03CA0014.namprd03.prod.outlook.com (2603:10b6:208:52f::30)
+ by PH7PR12MB5928.namprd12.prod.outlook.com (2603:10b6:510:1db::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Fri, 11 Oct
+ 2024 14:51:31 +0000
+Received: from BN1PEPF0000467F.namprd03.prod.outlook.com
+ (2603:10b6:208:52f:cafe::2d) by MN0PR03CA0014.outlook.office365.com
+ (2603:10b6:208:52f::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.20 via Frontend
+ Transport; Fri, 11 Oct 2024 14:51:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN1PEPF0000467F.mail.protection.outlook.com (10.167.243.84) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8048.13 via Frontend Transport; Fri, 11 Oct 2024 14:51:30 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 11 Oct
+ 2024 07:51:19 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Fri, 11 Oct 2024 07:51:19 -0700
+Received: from henryl-vm.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Fri, 11 Oct 2024 07:51:17 -0700
+From: Henry Lin <henryl@nvidia.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>, Jim Lin <jilin@nvidia.com>, "Petlozu
+ Pravareshwar" <petlozup@nvidia.com>, <linux-usb@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <henryl@nvidia.com>, <stable@vger.kernel.org>
+Subject: [PATCH v3] xhci: tegra: fix checked USB2 port number
+Date: Fri, 11 Oct 2024 22:51:14 +0800
+Message-ID: <20241011145114.8905-1-henryl@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aa8:b0:3a3:4391:24e9 with SMTP id
- e9e14a558f8ab-3a3b603e0dbmr16380425ab.20.1728657302041; Fri, 11 Oct 2024
- 07:35:02 -0700 (PDT)
-Date: Fri, 11 Oct 2024 07:35:02 -0700
-In-Reply-To: <d65e2258-2901-486a-ab83-ff57e9868a91@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67093796.050a0220.3e960.0012.GAE@google.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_port_suspend
-From: syzbot <syzbot+f342ea16c9d06d80b585@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, sylv@sylv.io, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF0000467F:EE_|PH7PR12MB5928:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79a9610a-b2a2-4ca5-7b69-08dcea04318a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?sQnjUN2ydezHpn5uXvWxdmZsFdMLhHDRo22B4GiV7SyX8+MpjoVkMY+KJwrx?=
+ =?us-ascii?Q?nBW6iVM405QBZFHsJNFH8zvXrC0jMiEjMont6l9jDDr0o8TyO5q7bNeI+rbP?=
+ =?us-ascii?Q?MW0LvVznJCIkxK2wFWLNBcYuyJ8ZBJLOQ7paqAlzr8vDt05CshkHaL2m6UrT?=
+ =?us-ascii?Q?BTHqI9or22lonKY08t7OWAEa4itoEOpTD3VeGGPSvxRIyC5pMA27TB3RkDt+?=
+ =?us-ascii?Q?JHxQuSQuWIIsOXHk94anPkPXEYMkyGCi70BzArYQIU1RKcKDBUmlfknXX5FU?=
+ =?us-ascii?Q?d5BBsST0XeJuNlcFAfKa4hNYQVebXG2kNdl+eVGomRFiGTuDQ+jAicueUuuH?=
+ =?us-ascii?Q?PN+n1ZHpUtJcVetb42qSLycy3RSYZ/6swQOvn35pYsQZ6NLG6kaZ5ejg7vP9?=
+ =?us-ascii?Q?mPofGiR10vzWkpCoXjV5JltJNwYnLNhxEUrpRJ8dVa4jdLCTtNUwT0lyPZg2?=
+ =?us-ascii?Q?3rTTFMwutpECUkPBJKiG4PjTTDdKyByifxSHpuOv1/mrVDPY5kJ2Pu8spZf8?=
+ =?us-ascii?Q?hJVBuzb+8Udckwfu0IpPeKl7MaH1D0+Ewm5Wd2PiHtfgQ/l/eQQ/g/SW3D0N?=
+ =?us-ascii?Q?FHQJp/EJd7nnbUdFqhMIeojvquz2udovpgCbiZdHjv4X/Z7O71U5Fzf10xD0?=
+ =?us-ascii?Q?410kYWwPS6w758IL5WQQqvyNoJ5g3oJsATFkgvWPHSxJMSW+8xbzN+KK1giK?=
+ =?us-ascii?Q?8mg9+YCVRVk5wryf7k52TLEbZTK6t1l/Lx73n2cJcndn2AliQglRNClYEwgv?=
+ =?us-ascii?Q?XroYyJo60jgOQujUNBSunx1nI7ILPq2KoUGiazRW7ZjKaV2HIEeKq+6ZCvt/?=
+ =?us-ascii?Q?5mEvGOgvMwerL/2Zg+3S0fKgRjoNr7vLbixTNSROSuD0SX+RaMhp2RmoWGSg?=
+ =?us-ascii?Q?QAGMj+CsqyYZKTMMGour5I6ulrhZXYdrx36H7MTL+GpMSKux3pN4MlAsLC8c?=
+ =?us-ascii?Q?LKsYVGqt4CWWb/jhWNwijpEpyx83vx22dA8tLwVJ0+yucfgZFgELOUygdVSN?=
+ =?us-ascii?Q?6GvrUEcdS0T+glCgyEiQMpv8LKMEZQFxseoNMbJ3YQbGgQLSW6f/y5ByuMQe?=
+ =?us-ascii?Q?oTPB9OZKN6FEafNVv2jo3wwmhOAWPDbXigDDaltB2IL4pMS/Cz0GurEogewd?=
+ =?us-ascii?Q?aeRzPSCA37sdpbs+HsL09kYeYykcMN5KD6FUvyrUgIvsaRwN+XOFOWT6qeD4?=
+ =?us-ascii?Q?rnJ3ZbYkaJDkWrDW+DMETSQRinL+Qr6HvknfaoQ4LDxKerKDpY0nvt9Ga886?=
+ =?us-ascii?Q?lTYBa+xpCtFsdBQD1Zgr1aegEp+9y7Eh7CLfX8v5YGl6DPMK3T4AfvlOLlxU?=
+ =?us-ascii?Q?fjj/hnw2CaPX29ZDB968FBINTf6tiYz1lk7gRUy88fPOUG2uqYP5BhCYYZaf?=
+ =?us-ascii?Q?gKXy4DA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2024 14:51:30.9976
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79a9610a-b2a2-4ca5-7b69-08dcea04318a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF0000467F.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5928
 
-Hello,
+If USB virtualizatoin is enabled, USB2 ports are shared between all
+Virtual Functions. The USB2 port number owned by an USB2 root hub in
+a Virtual Function may be less than total USB2 phy number supported
+by the Tegra XUSB controller.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+Using total USB2 phy number as port number to check all PORTSC values
+would cause invalid memory access.
 
-ice)
-[    3.002225][    T1] ACPI: Added _OSI(3.0 _SCP Extensions)
-[    3.003059][    T1] ACPI: Added _OSI(Processor Aggregator Device)
-[    3.085420][   T12] Callback from call_rcu_tasks() invoked.
-[    3.276952][    T1] ACPI: 2 ACPI AML tables successfully acquired and lo=
-aded
-[    3.314462][    T1] ACPI: _OSC evaluation for CPUs failed, trying _PDC
-[    3.348039][    T1] ACPI: Interpreter enabled
-[    3.350335][    T1] ACPI: PM: (supports S0 S3 S4 S5)
-[    3.352134][    T1] ACPI: Using IOAPIC for interrupt routing
-[    3.354599][    T1] PCI: Using host bridge windows from ACPI; if necessa=
-ry, use "pci=3Dnocrs" and report a bug
-[    3.355296][    T1] PCI: Ignoring E820 reservations for host bridge wind=
-ows
-[    3.367249][    T1] ACPI: Enabled 16 GPEs in block 00 to 0F
-[    3.746048][    T1] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff=
-])
-[    3.747443][    T1] acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Seg=
-ments MSI HPX-Type3]
-[    3.749086][    T1] acpi PNP0A03:00: _OSC: not requesting OS control; OS=
- requires [ExtendedConfig ASPM ClockPM MSI]
-[    3.753239][    T1] acpi PNP0A03:00: fail to add MMCONFIG information, c=
-an't access extended configuration space under this bridge
-[    3.790190][    T1] PCI host bridge to bus 0000:00
-[    3.791637][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf=
-7 window]
-[    3.792856][    T1] pci_bus 0000:00: root bus resource [io  0x0d00-0xfff=
-f window]
-[    3.794311][    T1] pci_bus 0000:00: root bus resource [mem 0x000a0000-0=
-x000bffff window]
-[    3.795302][    T1] pci_bus 0000:00: root bus resource [mem 0xc0000000-0=
-xfebfefff window]
-[    3.797357][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
-[    3.800192][    T1] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000=
- conventional PCI endpoint
-[    3.811190][    T1] pci 0000:00:01.0: [8086:7110] type 00 class 0x060100=
- conventional PCI endpoint
-[    3.851850][    T1] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000=
- conventional PCI endpoint
-[    3.879292][    T1] pci 0000:00:01.3: quirk: [io  0xb000-0xb03f] claimed=
- by PIIX4 ACPI
-[    3.890132][    T1] pci 0000:00:03.0: [1af4:1004] type 00 class 0x000000=
- conventional PCI endpoint
-[    3.902150][    T1] pci 0000:00:03.0: BAR 0 [io  0xc000-0xc03f]
-[    3.912077][    T1] pci 0000:00:03.0: BAR 1 [mem 0xfe800000-0xfe80007f]
-[    3.943377][    T1] pci 0000:00:04.0: [1af4:1000] type 00 class 0x020000=
- conventional PCI endpoint
-[    3.955285][    T1] pci 0000:00:04.0: BAR 0 [io  0xc040-0xc07f]
-[    3.963126][    T1] pci 0000:00:04.0: BAR 1 [mem 0xfe801000-0xfe80107f]
-[    3.989371][    T1] pci 0000:00:05.0: [1ae0:a002] type 00 class 0x030000=
- conventional PCI endpoint
-[    3.999276][    T1] pci 0000:00:05.0: BAR 0 [mem 0xfe000000-0xfe7fffff]
-[    4.030695][    T1] pci 0000:00:05.0: Video device with shadowed ROM at =
-[mem 0x000c0000-0x000dffff]
-[    4.040832][    T1] pci 0000:00:06.0: [1af4:1002] type 00 class 0x00ff00=
- conventional PCI endpoint
-[    4.052403][    T1] pci 0000:00:06.0: BAR 0 [io  0xc080-0xc09f]
-[    4.083310][    T1] pci 0000:00:07.0: [1af4:1005] type 00 class 0x00ff00=
- conventional PCI endpoint
-[    4.098317][    T1] pci 0000:00:07.0: BAR 0 [io  0xc0a0-0xc0bf]
-[    4.107225][    T1] pci 0000:00:07.0: BAR 1 [mem 0xfe802000-0xfe80203f]
-[    4.200337][    T1] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
-[    4.213761][    T1] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
-[    4.227312][    T1] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
-[    4.241372][    T1] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
-[    4.248294][    T1] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
-[    4.283168][    T1] iommu: Default domain type: Translated
-[    4.284430][    T1] iommu: DMA domain TLB invalidation policy: lazy mode
-[    4.291847][    T1] SCSI subsystem initialized
-[    4.298163][    T1] ACPI: bus type USB registered
-[    4.300417][    T1] usbcore: registered new interface driver usbfs
-[    4.302000][    T1] usbcore: registered new interface driver hub
-[    4.303838][    T1] usbcore: registered new device driver usb
-[    4.308961][    T1] mc: Linux media interface: v0.10
-[    4.310673][    T1] videodev: Linux video capture interface: v2.00
-[    4.314068][    T1] pps_core: LinuxPPS API ver. 1 registered
-[    4.315288][    T1] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 =
-Rodolfo Giometti <giometti@linux.it>
-[    4.317429][    T1] PTP clock support registered
-[    4.321082][    T1] EDAC MC: Ver: 3.0.0
-[    4.331906][    T1] Advanced Linux Sound Architecture Driver Initialized=
-.
-[    4.345666][    T1] Bluetooth: Core ver 2.22
-[    4.347724][    T1] NET: Registered PF_BLUETOOTH protocol family
-[    4.349885][    T1] Bluetooth: HCI device and connection manager initial=
-ized
-[    4.352264][    T1] Bluetooth: HCI socket layer initialized
-[    4.353522][    T1] Bluetooth: L2CAP socket layer initialized
-[    4.355359][    T1] Bluetooth: SCO socket layer initialized
-[    4.357435][    T1] NET: Registered PF_ATMPVC protocol family
-[    4.359810][    T1] NET: Registered PF_ATMSVC protocol family
-[    4.362356][    T1] NetLabel: Initializing
-[    4.363887][    T1] NetLabel:  domain hash size =3D 128
-[    4.365276][    T1] NetLabel:  protocols =3D UNLABELED CIPSOv4 CALIPSO
-[    4.368668][    T1] NetLabel:  unlabeled traffic allowed by default
-[    4.375910][    T1] nfc: nfc_init: NFC Core ver 0.1
-[    4.378232][    T1] NET: Registered PF_NFC protocol family
-[    4.380020][    T1] PCI: Using ACPI for IRQ routing
-[    4.383469][    T1] pci 0000:00:05.0: vgaarb: setting as boot VGA device
-[    4.385257][    T1] pci 0000:00:05.0: vgaarb: bridge control possible
-[    4.385257][    T1] pci 0000:00:05.0: vgaarb: VGA device added: decodes=
-=3Dio+mem,owns=3Dio+mem,locks=3Dnone
-[    4.385284][    T1] vgaarb: loaded
-[    4.406926][    T1] clocksource: Switched to clocksource kvm-clock
-[    4.415109][    T1] VFS: Disk quotas dquot_6.6.0
-[    4.415313][    T1] VFS: Dquot-cache hash table entries: 512 (order 0, 4=
-096 bytes)
-[    4.420224][    T1] pnp: PnP ACPI init
-[    4.469015][    T1] pnp: PnP ACPI: found 7 devices
-[    4.555551][    T1] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xf=
-fffff, max_idle_ns: 2085701024 ns
-[    4.571683][    T1] NET: Registered PF_INET protocol family
-[    4.577543][    T1] IP idents hash table entries: 131072 (order: 8, 1048=
-576 bytes, linear)
-[    4.593539][    T1] ------------[ cut here ]------------
-[    4.595293][    T1] refcount_t: decrement hit 0; leaking memory.
-[    4.596951][    T1] WARNING: CPU: 0 PID: 1 at lib/refcount.c:31 refcount=
-_warn_saturate+0x1ed/0x210
-[    4.599957][    T1] Modules linked in:
-[    4.601156][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc2-=
-syzkaller-00078-g920e7522e3ba #0
-[    4.603368][    T1] Hardware name: Google Google Compute Engine/Google C=
-ompute Engine, BIOS Google 09/13/2024
-[    4.606363][    T1] RIP: 0010:refcount_warn_saturate+0x1ed/0x210
-[    4.609070][    T1] Code: 87 e8 27 0e ce fe 90 0f 0b 90 90 e9 c3 fe ff f=
-f e8 d8 d6 07 ff c6 05 11 98 b3 07 01 90 48 c7 c7 40 02 26 87 e8 04 0e ce f=
-e 90 <0f> 0b 90 90 e9 a0 fe ff ff 48 89 ef e8 42 f7 5c ff e9 44 fe ff ff
-[    4.613673][    T1] RSP: 0000:ffffc9000001fba0 EFLAGS: 00010282
-[    4.614899][    T1] RAX: 0000000000000000 RBX: 0000000000000000 RCX: fff=
-fffff811a05b9
-[    4.616158][    T1] RDX: ffff8881012a8000 RSI: ffffffff811a05c6 RDI: 000=
-0000000000001
-[    4.618038][    T1] RBP: ffff88810a6a06cc R08: 0000000000000001 R09: 000=
-0000000000000
-[    4.619549][    T1] R10: 0000000000000000 R11: 0000000000000001 R12: fff=
-f88810a6a06cc
-[    4.620938][    T1] R13: 0000000000000000 R14: 0000000000d60059 R15: fff=
-f8881068d5f28
-[    4.622631][    T1] FS:  0000000000000000(0000) GS:ffff8881f5800000(0000=
-) knlGS:0000000000000000
-[    4.624581][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    4.625763][    T1] CR2: ffff88823ffff000 CR3: 000000000889e000 CR4: 000=
-00000003506f0
-[    4.627528][    T1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000=
-0000000000000
-[    4.628776][    T1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000=
-0000000000400
-[    4.631108][    T1] Call Trace:
-[    4.631680][    T1]  <TASK>
-[    4.632515][    T1]  ? show_regs+0x8c/0xa0
-[    4.633661][    T1]  ? __warn+0xe5/0x3c0
-[    4.635168][    T1]  ? __wake_up_klogd.part.0+0x99/0xf0
-[    4.636612][    T1]  ? refcount_warn_saturate+0x1ed/0x210
-[    4.637520][    T1]  ? report_bug+0x3c0/0x580
-[    4.638548][    T1]  ? handle_bug+0x3d/0x70
-[    4.639596][    T1]  ? exc_invalid_op+0x17/0x50
-[    4.640935][    T1]  ? asm_exc_invalid_op+0x1a/0x20
-[    4.642371][    T1]  ? __warn_printk+0x199/0x350
-[    4.643107][    T1]  ? __warn_printk+0x1a6/0x350
-[    4.644886][    T1]  ? refcount_warn_saturate+0x1ed/0x210
-[    4.645992][    T1]  __reset_page_owner+0x2ea/0x370
-[    4.646949][    T1]  __free_pages_ok+0x5db/0xbf0
-[    4.648332][    T1]  ? __split_page_owner+0xdd/0x120
-[    4.649331][    T1]  make_alloc_exact+0x165/0x260
-[    4.650432][    T1]  alloc_large_system_hash+0x4e0/0x640
-[    4.651653][    T1]  inet_hashinfo2_init+0x4b/0xd0
-[    4.653240][    T1]  tcp_init+0xba/0x9f0
-[    4.654195][    T1]  inet_init+0x419/0x6f0
-[    4.655067][    T1]  ? __pfx_inet_init+0x10/0x10
-[    4.656148][    T1]  do_one_initcall+0x128/0x700
-[    4.657254][    T1]  ? __pfx_do_one_initcall+0x10/0x10
-[    4.658290][    T1]  ? trace_kmalloc+0x2d/0xe0
-[    4.659168][    T1]  ? __kmalloc+0x213/0x400
-[    4.659995][    T1]  kernel_init_freeable+0x69d/0xca0
-[    4.661086][    T1]  ? __pfx_kernel_init+0x10/0x10
-[    4.662386][    T1]  kernel_init+0x1c/0x2b0
-[    4.663173][    T1]  ? __pfx_kernel_init+0x10/0x10
-[    4.664120][    T1]  ret_from_fork+0x45/0x80
-[    4.665027][    T1]  ? __pfx_kernel_init+0x10/0x10
-[    4.665837][    T1]  ret_from_fork_asm+0x1a/0x30
-[    4.666808][    T1]  </TASK>
-[    4.667817][    T1] Kernel panic - not syncing: kernel: panic_on_warn se=
-t ...
-[    4.669094][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc2-=
-syzkaller-00078-g920e7522e3ba #0
-[    4.670996][    T1] Hardware name: Google Google Compute Engine/Google C=
-ompute Engine, BIOS Google 09/13/2024
-[    4.672099][    T1] Call Trace:
-[    4.672099][    T1]  <TASK>
-[    4.672099][    T1]  dump_stack_lvl+0x3d/0x1f0
-[    4.672099][    T1]  panic+0x6f5/0x7a0
-[    4.672099][    T1]  ? __pfx_panic+0x10/0x10
-[    4.672099][    T1]  ? show_trace_log_lvl+0x363/0x500
-[    4.672099][    T1]  ? check_panic_on_warn+0x1f/0xb0
-[    4.672099][    T1]  ? refcount_warn_saturate+0x1ed/0x210
-[    4.672099][    T1]  check_panic_on_warn+0xab/0xb0
-[    4.672099][    T1]  __warn+0xf1/0x3c0
-[    4.672099][    T1]  ? __wake_up_klogd.part.0+0x99/0xf0
-[    4.672099][    T1]  ? refcount_warn_saturate+0x1ed/0x210
-[    4.672099][    T1]  report_bug+0x3c0/0x580
-[    4.672099][    T1]  handle_bug+0x3d/0x70
-[    4.672099][    T1]  exc_invalid_op+0x17/0x50
-[    4.672099][    T1]  asm_exc_invalid_op+0x1a/0x20
-[    4.672099][    T1] RIP: 0010:refcount_warn_saturate+0x1ed/0x210
-[    4.672099][    T1] Code: 87 e8 27 0e ce fe 90 0f 0b 90 90 e9 c3 fe ff f=
-f e8 d8 d6 07 ff c6 05 11 98 b3 07 01 90 48 c7 c7 40 02 26 87 e8 04 0e ce f=
-e 90 <0f> 0b 90 90 e9 a0 fe ff ff 48 89 ef e8 42 f7 5c ff e9 44 fe ff ff
-[    4.672099][    T1] RSP: 0000:ffffc9000001fba0 EFLAGS: 00010282
-[    4.672099][    T1] RAX: 0000000000000000 RBX: 0000000000000000 RCX: fff=
-fffff811a05b9
-[    4.672099][    T1] RDX: ffff8881012a8000 RSI: ffffffff811a05c6 RDI: 000=
-0000000000001
-[    4.672099][    T1] RBP: ffff88810a6a06cc R08: 0000000000000001 R09: 000=
-0000000000000
-[    4.672099][    T1] R10: 0000000000000000 R11: 0000000000000001 R12: fff=
-f88810a6a06cc
-[    4.672099][    T1] R13: 0000000000000000 R14: 0000000000d60059 R15: fff=
-f8881068d5f28
-[    4.672099][    T1]  ? __warn_printk+0x199/0x350
-[    4.672099][    T1]  ? __warn_printk+0x1a6/0x350
-[    4.672099][    T1]  __reset_page_owner+0x2ea/0x370
-[    4.672099][    T1]  __free_pages_ok+0x5db/0xbf0
-[    4.672099][    T1]  ? __split_page_owner+0xdd/0x120
-[    4.672099][    T1]  make_alloc_exact+0x165/0x260
-[    4.672099][    T1]  alloc_large_system_hash+0x4e0/0x640
-[    4.672099][    T1]  inet_hashinfo2_init+0x4b/0xd0
-[    4.672099][    T1]  tcp_init+0xba/0x9f0
-[    4.672099][    T1]  inet_init+0x419/0x6f0
-[    4.672099][    T1]  ? __pfx_inet_init+0x10/0x10
-[    4.672099][    T1]  do_one_initcall+0x128/0x700
-[    4.672099][    T1]  ? __pfx_do_one_initcall+0x10/0x10
-[    4.672099][    T1]  ? trace_kmalloc+0x2d/0xe0
-[    4.721681][    T1]  ? __kmalloc+0x213/0x400
-[    4.721681][    T1]  kernel_init_freeable+0x69d/0xca0
-[    4.721681][    T1]  ? __pfx_kernel_init+0x10/0x10
-[    4.721681][    T1]  kernel_init+0x1c/0x2b0
-[    4.721681][    T1]  ? __pfx_kernel_init+0x10/0x10
-[    4.721681][    T1]  ret_from_fork+0x45/0x80
-[    4.721681][    T1]  ? __pfx_kernel_init+0x10/0x10
-[    4.721681][    T1]  ret_from_fork_asm+0x1a/0x30
-[    4.721681][    T1]  </TASK>
-[    4.721681][    T1] Rebooting in 86400 seconds..
+[  116.923438] Unable to handle kernel paging request at virtual address 006c622f7665642f
+...
+[  117.213640] Call trace:
+[  117.216783]  tegra_xusb_enter_elpg+0x23c/0x658
+[  117.222021]  tegra_xusb_runtime_suspend+0x40/0x68
+[  117.227260]  pm_generic_runtime_suspend+0x30/0x50
+[  117.232847]  __rpm_callback+0x84/0x3c0
+[  117.237038]  rpm_suspend+0x2dc/0x740
+[  117.241229] pm_runtime_work+0xa0/0xb8
+[  117.245769]  process_scheduled_works+0x24c/0x478
+[  117.251007]  worker_thread+0x23c/0x328
+[  117.255547]  kthread+0x104/0x1b0
+[  117.259389]  ret_from_fork+0x10/0x20
+[  117.263582] Code: 54000222 f9461ae8 f8747908 b4ffff48 (f9400100)
 
+Cc: <stable@vger.kernel.org> # v6.3+
+Fixes: a30951d31b25 ("xhci: tegra: USB2 pad power controls")
+Signed-off-by: Henry Lin <henryl@nvidia.com>
+---
+ drivers/usb/host/xhci-tegra.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzkaller build log:
-go env (err=3D<nil>)
-GO111MODULE=3D'auto'
-GOARCH=3D'amd64'
-GOBIN=3D''
-GOCACHE=3D'/syzkaller/.cache/go-build'
-GOENV=3D'/syzkaller/.config/go/env'
-GOEXE=3D''
-GOEXPERIMENT=3D''
-GOFLAGS=3D''
-GOHOSTARCH=3D'amd64'
-GOHOSTOS=3D'linux'
-GOINSECURE=3D''
-GOMODCACHE=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod'
-GONOPROXY=3D''
-GONOSUMDB=3D''
-GOOS=3D'linux'
-GOPATH=3D'/syzkaller/jobs-2/linux/gopath'
-GOPRIVATE=3D''
-GOPROXY=3D'https://proxy.golang.org,direct'
-GOROOT=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod/golang.org/toolchain@v0.0.=
-1-go1.22.1.linux-amd64'
-GOSUMDB=3D'sum.golang.org'
-GOTMPDIR=3D''
-GOTOOLCHAIN=3D'auto'
-GOTOOLDIR=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod/golang.org/toolchain@v0=
-.0.1-go1.22.1.linux-amd64/pkg/tool/linux_amd64'
-GOVCS=3D''
-GOVERSION=3D'go1.22.1'
-GCCGO=3D'gccgo'
-GOAMD64=3D'v1'
-AR=3D'ar'
-CC=3D'gcc'
-CXX=3D'g++'
-CGO_ENABLED=3D'1'
-GOMOD=3D'/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/go.=
-mod'
-GOWORK=3D''
-CGO_CFLAGS=3D'-O2 -g'
-CGO_CPPFLAGS=3D''
-CGO_CXXFLAGS=3D'-O2 -g'
-CGO_FFLAGS=3D'-O2 -g'
-CGO_LDFLAGS=3D'-O2 -g'
-PKG_CONFIG=3D'pkg-config'
-GOGCCFLAGS=3D'-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=3D0=
- -ffile-prefix-map=3D/tmp/go-build204408742=3D/tmp/go-build -gno-record-gcc=
--switches'
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 6246d5ad1468..76f228e7443c 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -2183,7 +2183,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ 		goto out;
+ 	}
+ 
+-	for (i = 0; i < tegra->num_usb_phys; i++) {
++	for (i = 0; i < xhci->usb2_rhub.num_ports; i++) {
+ 		if (!xhci->usb2_rhub.ports[i])
+ 			continue;
+ 		portsc = readl(xhci->usb2_rhub.ports[i]->addr);
+-- 
+2.25.1
 
-git status (err=3D<nil>)
-HEAD detached at d7906effc2
-nothing to commit, working tree clean
-
-
-tput: No value for $TERM and no -T specified
-tput: No value for $TERM and no -T specified
-Makefile:31: run command via tools/syz-env for best compatibility, see:
-Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
-ing.md#using-syz-env
-go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sy=
-s/syz-sysgen
-make .descriptions
-tput: No value for $TERM and no -T specified
-tput: No value for $TERM and no -T specified
-Makefile:31: run command via tools/syz-env for best compatibility, see:
-Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
-ing.md#using-syz-env
-bin/syz-sysgen
-go fmt ./sys/... >/dev/null
-touch .descriptions
-GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/google=
-/syzkaller/prog.GitRevision=3Dd7906effc263366a8b067258cec67072b29aa5e0 -X '=
-github.com/google/syzkaller/prog.gitRevisionDate=3D20241003-062913'" "-tags=
-=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execpr=
-og github.com/google/syzkaller/tools/syz-execprog
-mkdir -p ./bin/linux_amd64
-g++ -o ./bin/linux_amd64/syz-executor executor/executor.cc \
-	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wfr=
-ame-larger-than=3D16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-forma=
-t-overflow -Wno-unused-but-set-variable -Wno-unused-command-line-argument -=
-static-pie -std=3Dc++17 -I. -Iexecutor/_include -fpermissive -w -DGOOS_linu=
-x=3D1 -DGOARCH_amd64=3D1 \
-	-DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"d7906effc263366a8b067258cec67072b2=
-9aa5e0\"
-/usr/bin/ld: /tmp/ccI6z2y7.o: in function `test_cover_filter()':
-executor.cc:(.text+0x1424b): warning: the use of `tempnam' is dangerous, be=
-tter use `mkstemp'
-/usr/bin/ld: /tmp/ccI6z2y7.o: in function `Connection::Connect(char const*,=
- char const*)':
-executor.cc:(.text._ZN10Connection7ConnectEPKcS1_[_ZN10Connection7ConnectEP=
-KcS1_]+0x104): warning: Using 'gethostbyname' in statically linked applicat=
-ions requires at runtime the shared libraries from the glibc version used f=
-or linking
-
-
-Error text is too large and was truncated, full error text is at:
-https://syzkaller.appspot.com/x/error.txt?x=3D12ac2840580000
-
-
-Tested on:
-
-commit:         920e7522 usb: gadget: function: Remove usage of the de..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.=
-git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3D5508c3b3c58f53
-dashboard link: https://syzkaller.appspot.com/bug?extid=3Df342ea16c9d06d80b=
-585
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Deb=
-ian) 2.40
-
-Note: no patches were applied.
 
