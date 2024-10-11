@@ -1,138 +1,236 @@
-Return-Path: <linux-usb+bounces-16102-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16103-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A60699A8CC
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 18:21:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6968C99A906
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 18:38:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCCFD284BBE
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:21:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CBB81C2131C
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2024 16:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60EB1990C5;
-	Fri, 11 Oct 2024 16:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F3B219AD87;
+	Fri, 11 Oct 2024 16:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IFUORUP/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QnHzVntw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A3E197A9F;
-	Fri, 11 Oct 2024 16:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F36199932;
+	Fri, 11 Oct 2024 16:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728663677; cv=none; b=k/iC2PQiIPntvN5KoQ7jQnN7g3sH30r8yJZQRp6TZFRGDxr3pcZy8lGPYmWB1Qhy7xj/RIMMw8Lcegp9zCvi945EnDhGEB1LSLjr/htozNUrQhU1keLzflVw+fVOtGubEgZZPVBNISmCL+7e+hx8rL2u7AGPdl4OfAv1InCR0rg=
+	t=1728664698; cv=none; b=KV6HH+t3jqhUVYH3jF5ZNQOb1g30BdFIGFk+L7sjDT0Irx+QnGqJloeHy02wa295jRDHlf8zcNjW0S07mTtcGYu/xUvVgeVAKVSohmKnh1EZKaBnAWTjFmO14eCaNr2mcRN7S2ClxjjIKK2boHh9Pp7ilUo5ls8LTt5M1sOPj70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728663677; c=relaxed/simple;
-	bh=e0IgrgfAy2k6xh3Yqren2YbQRGCgO+FuF0ouSDtFGz4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AaW2Hz68r/iBClTVggbIPl63PyUYa2sEE8zbObQyn3n0DEujDL9bGXKoR6cKqJt/x1LYF1dTEfaCqiUHK2TKFZ6DZ69DAH532uMw35JaR8blKM5l57oasJmWPtRNEus2c5JZu/hpHwWxPx6cPROaA8yyvJqlusWSnYjL1VWqL38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IFUORUP/; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7e6b38088f6so341928a12.1;
-        Fri, 11 Oct 2024 09:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728663675; x=1729268475; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qJiFiR3O9fG38qEyqOGvM97ohhy8ftQAOcumkcvgPs4=;
-        b=IFUORUP/Zj7d4J2TxsyT1SRSWq7lcOnapgK2RY15GslD5BvEjprmLI56cykMbx1y7b
-         pwPSa1L1NNpj7JLp7QvH6yEjKyRN1oQ9Nj80l0rxxlbV3VvxLk1UgVOqeL1Yg1Hn+mlM
-         AxxA18Fe0uCgDDExM1cB55EfJZz0dVbbizS3qSeUYyIfCGA8V8Rd8W4uWYLhn3jQ8qDz
-         wFgr4TTCOPTcAyHnR8kiGltwNjwrPeH8S9vjtOUldutrqkd8JYxYgrYw2bG2rG6okjRL
-         eBMwD6DRoVykeZyjN9zsq6CG+bFu9bLqjcVzxsIbIqI3HcuRBDzNsywkn/5O3dWXMpZo
-         CoDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728663675; x=1729268475;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qJiFiR3O9fG38qEyqOGvM97ohhy8ftQAOcumkcvgPs4=;
-        b=N+G1ESkMFa+7nJtTavqDZ97+SKHUjQOQXGzung/Y/B9v8qAFUskPHhXnpvlQ5QwyMK
-         YBdKRSMXv+R1tMIzdFPapeuZcNGcDOONw0iCDH1syGLUUHpfujLU3yNsad1K9TJ0kJIw
-         M1GEgvFv/KizIZKT7hcbMPQSKzcH6nyt6YDEck4cL0yodM4ifpoWiOeVUtelkKPo2tj3
-         tIGU3pYzr9i/mj25ZnzuLH/49LB3Fjcn3mo+m/8syNSZQvXppd3f3xAMrjY3Na7j60P8
-         IJS0FEo/Qt4HlMZSTzlLra9TTxFjVztYtDhwmqlE4k+p31Gtdq1AynfBAKkV0476h1HH
-         VjeA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTJG6XKrms867Ku2zbTXahhPfCwZRiIpoHEyC3EI/5fRyTrPo4gOWtNDIDPpasSMWrG8c6kMenzenD4w==@vger.kernel.org, AJvYcCXkbgRMJ6b34smTQPk1eDAG3qcq+zDRv1nO3VzMxSD4+NHusiUrZ6IxhlqauouEh/nL3f6V5M8/5vUE@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjZBeTSj3kl6SrMQ1Qd/q3o/E2BGcrR5PPS7B4zzXUo5VAW1q3
-	FU95kknEgYyzNjKuFhANpzyNhBSlfdpTR+0l0HOeRY0uBUCsKsz2eC3CbuqgFl7L4JekxYsqT6B
-	4tEr9sqsqkLRWciKcqtKSaLGUVg==
-X-Google-Smtp-Source: AGHT+IH6sWnHuQxvD7h9xPoiOBgHmqmtVWvAaoBVxMpVOSDQuSjnpVB+OpccvwNhPiZmJ2gPJMJb8kwUCUygKN5lxSo=
-X-Received: by 2002:a17:902:d48b:b0:20c:8cc4:cf24 with SMTP id
- d9443c01a7336-20ca172c966mr15878385ad.15.1728663675232; Fri, 11 Oct 2024
- 09:21:15 -0700 (PDT)
+	s=arc-20240116; t=1728664698; c=relaxed/simple;
+	bh=W9FTFxeHKW+H3zO9bJftr6UAwVhKYCVBgdeNnVC55Aw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZsNwU3rwSAl4SoD+sT0eA7YsTu84vk4BgnTX5aBbbni2aqVYUBGfBMqGFYRbO48PtWbD3ILOe0/sL9iJnY5k/FXMXEEzzr6AAWs9SIyv5S5dTYY9tQh1xItTMzPgCIc7/SYuMFqjEKNyATQ19VEnL/jdqN0t07SU5PyHEx7igvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QnHzVntw; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728664696; x=1760200696;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W9FTFxeHKW+H3zO9bJftr6UAwVhKYCVBgdeNnVC55Aw=;
+  b=QnHzVntwocP5omFrMpSTg/d/ENOrD9KleAi67A92vWFMmAxBeyrkswKp
+   DQY72uKGCrlHzzFUpaJBW0VJan14u7F++0t62F0LmvulC8/S8N+EbfRIP
+   2iiNfiw9WTEGHwpZcc2T84eOvIZdxH3T7gWotCguIT9v/syLKUyZWYz/H
+   qoYW4z6VTUUYoDIGOGFaxfYTVE2jh7eGVXvNKW5FV0yL74jpI9btYauAF
+   fy76rJ7yHoL9ji31bKxlYcLGUBzFwQ9Oes2Z5yDxw2CJBfSoB3z0J0jfF
+   IxkobIfKxDfT4KSsJW6moWeCbFK1xr6wO42tENinwasSLtPor9xTu4jYv
+   Q==;
+X-CSE-ConnectionGUID: agZ6dnKyRoq8/X/+wywpJQ==
+X-CSE-MsgGUID: 0kyCEa2ASH+vp9tmPMMxrA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="15697845"
+X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
+   d="scan'208";a="15697845"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 09:38:15 -0700
+X-CSE-ConnectionGUID: dbe8p01jQPW8OG00bSVVXw==
+X-CSE-MsgGUID: MGnya2K1QnGO4qFC2EvJyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
+   d="scan'208";a="76855011"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa009.jf.intel.com with ESMTP; 11 Oct 2024 09:38:14 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id BAD45807; Fri, 11 Oct 2024 19:38:11 +0300 (EEST)
+Date: Fri, 11 Oct 2024 19:38:11 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Aaron Rainbolt <arainbolt@kfocus.org>
+Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
+	andreas.noever@gmail.com, linux-usb@vger.kernel.org,
+	mmikowski@kfocus.org, linux-kernel@vger.kernel.org,
+	Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: USB-C DisplayPort display failing to stay active with Intel
+ Barlow Ridge USB4 controller, power-management related issue?
+Message-ID: <20241011163811.GU275077@black.fi.intel.com>
+References: <20241009220118.70bfedd0@kf-ir16>
+ <20241010044919.GD275077@black.fi.intel.com>
+ <20241010232656.7fc6359e@kf-ir16>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALGdzuq9qr5wBpJFg1eNbv0NoMSDM=umusZF6r5T5_i=Foxdiw@mail.gmail.com>
- <2024101107-pry-reflex-8bc2@gregkh>
-In-Reply-To: <2024101107-pry-reflex-8bc2@gregkh>
-From: Chenyuan Yang <chenyuan0y@gmail.com>
-Date: Fri, 11 Oct 2024 11:21:04 -0500
-Message-ID: <CALGdzuooWHVS54xOFj7n=MPohy6xMEALet3Q_9EGZ6fRk6Z+_A@mail.gmail.com>
-Subject: Re: [drivers/usb/usbip] BUG: corrupted list in vep_queue
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me, 
-	linux-usb@vger.kernel.org, Zijie Zhao <zzjas98@gmail.com>, syzkaller@googlegroups.com, 
-	linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241010232656.7fc6359e@kf-ir16>
 
-Hi Greg,
+Hi,
 
-I'm curious about the best approach to fix this issue. I'm unsure if
-adding a spinlock or mutex around the code would be good to ensure
-that only one thread can modify the list at a time (then fix this
-issue).
+On Thu, Oct 10, 2024 at 11:26:56PM -0500, Aaron Rainbolt wrote:
+> > Can you share full dmesg with the repro and "thunderbolt.dyndbg=+p" in
+> > the kernel command line?
+> 
+> The full log is very long, so I've included it as an email attachment.
+> The exact steps taken after booting with the requested kernel parameter
+> were:
+> 
+> 1. boot with thunderbolt.dyndbg=+p kernel param, no USB-C plugged in.
+> 2. After login, hot-plug two USB-C cables. This time, the displays came
+>   up and stayed resident (this happens sometimes)
+> 3. Unplugged both cables.
+> 4. Replugged both. This time, the displays did not show anything.
+> 5. lspci -k "jiggled" the displays and they came back on.
+> 6. After ~15s, the displays blacked out again.
+> 7. Save to the demsg file after about 30s.
+> 
+> The laptop's firmware is fully up-to-date. One of the fixes we tried
+> was installing Windows 11, updating the firmware, and then
+> re-installing Kubuntu 24.04. This had no effect on the issue.
+> 
+> Notes:
+> 
+> * Kernel 6.1 does not exhibit this time out. 6.5 and later do.
+> * Windows 11 had very similar behavior before installing Windows
+>   updates. After update, it was fixed.
+> * All distros and W11 were tested on the same hardware with the latest
+>   firmware, so we know this is not a hardware failure.
 
-Alternatively, we could check if the entry is already in the list
-within the vep_queue function:
-```
-if (!list_empty(&new_entry->list)) {
-    // Entry is already in the list, handle it (e.g., log an error or ignor=
-e)
-    return -EEXIST; // Or another appropriate error code
-}
+Thanks for the logs and steps!
 
-// Safe to add the entry to the list
-list_add_tail(&new_entry->list, &queue->list);
-```
+I now realize that
 
-This approach would avoid unnecessary locking overhead if the entry is
-not already in the list.
+  a75e0684efe5 ("thunderbolt: Keep the domain powered when USB4 port is in redrive mode")
 
-Please let me know your thoughts on these options or if you have any
-other suggestions.
+was half-baked. Yes it deals with the situation where plugging in
+monitor when the domain is powered. However, it completely misses these
+cases:
 
-Best,
-Chenyuan
+* Plug in monitor to the Type-C port when the controller is runtime
+   suspended.
+* Boot with monitor plugged in to the Type-C port.
 
-On Fri, Oct 11, 2024 at 12:21=E2=80=AFAM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
->
-> On Fri, Oct 11, 2024 at 12:13:53AM -0500, Chenyuan Yang wrote:
-> > Dear Linux Developers for USB OVER IP DRIVER,
-> >
-> > We encountered "BUG: corrupted list in vep_queue" when testing the
-> > DVB driver with Syzkaller and our generated specifications.
-> >
-> > Linux version: Linux 6.12-rc2 (8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b=
-)
-> > Configuration is attached.
-> > Syz and C reproducers are as below:
->
->
-> Great, can you please send us a patch to resolve this issue as you can
-> test it easily?
->
-> thanks,
->
-> greg k-h
+At the end of this email there is a hack patch that tries to solve this.
+Can you try it out? I will be on vacation next week but I'm copying my
+colleague Gil who is familiar with this too. He should be able to help
+you out during my absense.
+
+Couple of notes about the dmesg you shared. They don't affect this issue
+but may cause other issues:
+
+> [    1.382718] thunderbolt 0000:06:00.0: device links to tunneled native ports are missing!
+
+This is means the BIOS does not implement the USB4 power contract which
+means that USB 3.x and PCIe tunnels will not work as expected after
+power transition.
+
+> [    1.416488] thunderbolt 0000:06:00.0: 0: NVM version 14.86
+
+This is really old firmware version. My development system for example
+has 56.x so yours might have a bunch of issues that are solved in the
+later versions.
+
+The hack patch below:
+
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 07a66594e904..0e424b7661be 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -2113,6 +2113,37 @@ static void tb_exit_redrive(struct tb_port *port)
+ 	}
+ }
+ 
++static void tb_switch_enter_redrive(struct tb_switch *sw)
++{
++	struct tb_port *port;
++
++	tb_switch_for_each_port(sw, port)
++		tb_enter_redrive(port);
++}
++
++/*
++ * Called during system and runtime suspend to forcefully exit redrive
++ * mode without querying whether the resource is available.
++ */
++static void tb_switch_exit_redrive(struct tb_switch *sw)
++{
++	struct tb_port *port;
++
++	if (!(sw->quirks & QUIRK_KEEP_POWER_IN_DP_REDRIVE))
++		return;
++
++	tb_switch_for_each_port(sw, port) {
++		if (!tb_port_is_dpin(port))
++			continue;
++
++		if (port->redrive) {
++			port->redrive = false;
++			pm_runtime_put(&sw->dev);
++			tb_port_dbg(port, "exit redrive mode\n");
++		}
++	}
++}
++
+ static void tb_dp_resource_unavailable(struct tb *tb, struct tb_port *port,
+ 				       const char *reason)
+ {
+@@ -2987,6 +3018,7 @@ static int tb_start(struct tb *tb, bool reset)
+ 	tb_create_usb3_tunnels(tb->root_switch);
+ 	/* Add DP IN resources for the root switch */
+ 	tb_add_dp_resources(tb->root_switch);
++	tb_switch_enter_redrive(tb->root_switch);
+ 	/* Make the discovered switches available to the userspace */
+ 	device_for_each_child(&tb->root_switch->dev, NULL,
+ 			      tb_scan_finalize_switch);
+@@ -3002,6 +3034,7 @@ static int tb_suspend_noirq(struct tb *tb)
+ 
+ 	tb_dbg(tb, "suspending...\n");
+ 	tb_disconnect_and_release_dp(tb);
++	tb_switch_exit_redrive(tb->root_switch);
+ 	tb_switch_suspend(tb->root_switch, false);
+ 	tcm->hotplug_active = false; /* signal tb_handle_hotplug to quit */
+ 	tb_dbg(tb, "suspend finished\n");
+@@ -3094,6 +3127,7 @@ static int tb_resume_noirq(struct tb *tb)
+ 		tb_dbg(tb, "tunnels restarted, sleeping for 100ms\n");
+ 		msleep(100);
+ 	}
++	tb_switch_enter_redrive(tb->root_switch);
+ 	 /* Allow tb_handle_hotplug to progress events */
+ 	tcm->hotplug_active = true;
+ 	tb_dbg(tb, "resume finished\n");
+@@ -3157,6 +3191,8 @@ static int tb_runtime_suspend(struct tb *tb)
+ 	struct tb_cm *tcm = tb_priv(tb);
+ 
+ 	mutex_lock(&tb->lock);
++	tb_disconnect_and_release_dp(tb);
++	tb_switch_exit_redrive(tb->root_switch);
+ 	tb_switch_suspend(tb->root_switch, true);
+ 	tcm->hotplug_active = false;
+ 	mutex_unlock(&tb->lock);
+@@ -3188,6 +3224,7 @@ static int tb_runtime_resume(struct tb *tb)
+ 	tb_restore_children(tb->root_switch);
+ 	list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list)
+ 		tb_tunnel_activate(tunnel);
++	tb_switch_enter_redrive(tb->root_switch);
+ 	tcm->hotplug_active = true;
+ 	mutex_unlock(&tb->lock);
+ 
 
