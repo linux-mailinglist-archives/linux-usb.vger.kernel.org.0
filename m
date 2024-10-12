@@ -1,149 +1,188 @@
-Return-Path: <linux-usb+bounces-16133-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16134-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57E7099B475
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 13:52:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD2BA99B4DA
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 14:39:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 886621C22D78
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 11:52:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 275DB1F222D0
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 12:39:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555B6207A12;
-	Sat, 12 Oct 2024 11:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D63317837A;
+	Sat, 12 Oct 2024 12:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gAcDOLvX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1+zM6JUL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE3E206E6F;
-	Sat, 12 Oct 2024 11:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B92538DF9;
+	Sat, 12 Oct 2024 12:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728732615; cv=none; b=cKELY5L2Xg2V+3vSGbLdOtu93lFmQoQ+5unofhXiXQWgK+g1swe7zqXpmyZQPYrm4PNfeexkxNIMS8tm4u3oFUu7P7C5TaaObQ/3RdDHN1rsyFxWpdMlMbyytWkN4Rbf0PbM1wTSTdR1AmRUL30+Nv/74F0fpFCHCvTb00ttDs4=
+	t=1728736779; cv=none; b=fXV6JjZIgWSjbk2j40z9kcPA29iJFPOjS3S8j+O6evROiUIV+viedSYSwEiEN9uXhtPB1HWC8WcP+tD3wuBSFXx3RX2A710hWYndUwaNqM0MDdgP3IZzsTX+1Ue5wms/Iw98uaY+RvPKLkKDuLzozvdUk8ZgIWDNDzTU1b3tzKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728732615; c=relaxed/simple;
-	bh=Nb2BbHq+1efjpAn+GbZjGdJrBasAPm8DiOu7LApyvV0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ehOq16DV5+mG1xXn5BSyJUrQ+0dEfkbqdC06OfLmB7bYCUvffWi2SsTEijK74djHg/IOmrv060qNfLxmowuN2uuYSyuTStIG7+mElLPM6tJE828Z5+I92RPC0h96A0HIMfVUVc+ZD5POHg/TE33t9++6NzFnfYhia/cHqKqgxqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAcDOLvX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349FBC4CEC6;
-	Sat, 12 Oct 2024 11:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728732615;
-	bh=Nb2BbHq+1efjpAn+GbZjGdJrBasAPm8DiOu7LApyvV0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gAcDOLvXge8ewaL0HgF+xwY2CY1vgB3nZo3QN/lnYPBEPpbOZRUajUgddl/yQOW5f
-	 ug00INiCo5BZ1wRWetbxF7lZpL6Jm9Iyuf3m6n+LgGPZrbOvZ23Q8DpROTBG0ITa6t
-	 wtpJ4U5KoHpgM+9XbazwptWE+okP5M0o7rgMXk98iiftOL/Lgd9fBhvWq+/9MJ1Mu4
-	 t4v0dbvaOkyxBk/sur9leG76IvAeMe/V+eVnWtFU0RwBw/C4RkAg6RVH2RlyPWnCjv
-	 caln5RSa4yZUO7MhxOX7/97tX6RDKzwOnvn/uB+/3z2RyNvf1VldlEMsTePIqx5Y9R
-	 biHWrpvW+L7lg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Foster Snowhill <forst@pen.gy>,
-	Georgi Valkov <gvalkov@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Sasha Levin <sashal@kernel.org>,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	oneukum@suse.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 2/6] usbnet: ipheth: fix carrier detection in modes 1 and 4
-Date: Sat, 12 Oct 2024 07:29:59 -0400
-Message-ID: <20241012113009.1764620-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241012113009.1764620-1-sashal@kernel.org>
-References: <20241012113009.1764620-1-sashal@kernel.org>
+	s=arc-20240116; t=1728736779; c=relaxed/simple;
+	bh=Vrj4K0uK7xHkOtHOFrZzsAQEV8qw/S/KlFdTRd+vFyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AylSYBARUpwCHbeWqpslfwcWuYMNO0iR/zxhqSMOhg1TptQU+NwJnB8gz6m8kLzDYm1rG2BQniNWSFdRzO3YCaAGkIkPE2yZYiYcJOBWbvmxdThuh7/Vs9VOXRNrYhv+eW6xxPLVoWBGgi2fKecwrcCsCzys55Cedw8z5A3VyhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1+zM6JUL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCD2C4CEC6;
+	Sat, 12 Oct 2024 12:39:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1728736779;
+	bh=Vrj4K0uK7xHkOtHOFrZzsAQEV8qw/S/KlFdTRd+vFyU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1+zM6JULcckggmSvkqp3PIL7TBxzsWAgV4hiIRxWMGTad9qjtf3Ywq1yJQh3LWeDm
+	 +YolpnmtxEL5se/jgrIjJDfd72wD6k/fTKZ+tl2TVgZ9EB46MoUdceZmgmYwo1bwG5
+	 IJwieZdacj4AeRORVFeyzCwpbHsnsJ7zS7xbw2+Y=
+Date: Sat, 12 Oct 2024 14:39:34 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Duan Chenghao <duanchenghao@kylinos.cn>
+Cc: stern@rowland.harvard.edu, rafael@kernel.org, pavel@ucw.cz,
+	len.brown@intel.com, linux-usb@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org,
+	xiehongyu1@kylinos.cn, xy521521@gmail.com
+Subject: Re: [PATCH v3] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+Message-ID: <2024101215-congenial-petticoat-324c@gregkh>
+References: <b8eb28f3-504d-4d26-8b02-ca1ae7309a70@rowland.harvard.edu>
+ <20241012094633.126736-1-duanchenghao@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.322
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241012094633.126736-1-duanchenghao@kylinos.cn>
 
-From: Foster Snowhill <forst@pen.gy>
+On Sat, Oct 12, 2024 at 05:46:33PM +0800, Duan Chenghao wrote:
+> When a device is inserted into the USB port and an S4 wakeup is initiated,
+> after the USB-hub initialization is completed, it will automatically enter
+> suspend mode. Upon detecting a device on the USB port, it will proceed with
+> resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state. During the S4
+> wakeup process, peripherals are put into suspend mode, followed by task
+> recovery. However, upon detecting that the hcd is in the
+> HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status, causing the
+> S4 suspend to fail and subsequent task recovery to not proceed.
+> -
+> [   27.594598][ 1]  PM: pci_pm_freeze(): hcd_pci_suspend+0x0/0x28 returns -16
+> [   27.594601][ 1]  PM: dpm_run_callback(): pci_pm_freeze+0x0/0x100 returns -16
+> [   27.603420][ 1]  ehci-pci 0000:00:04.1: pci_pm_freeze+0x0/0x100 returned 0 after 3 usecs
+> [   27.612233][ 1]  ehci-pci 0000:00:05.1: pci_pm_freeze+0x0/0x100 returned -16 after 17223 usecs
+> [   27.810067][ 1]  PM: Device 0000:00:05.1 failed to quiesce async: error -16
+> [   27.816988][ 1]  PM: quiesce of devices aborted after 1833.282 msecs
+> [   27.823302][ 1]  PM: start quiesce of devices aborted after 1839.975 msecs
+> ......
+> [   31.303172][ 1]  PM: recover of devices complete after 3473.039 msecs
+> [   31.309818][ 1]  PM: Failed to load hibernation image, recovering.
+> [   31.348188][ 1]  PM: Basic memory bitmaps freed
+> [   31.352686][ 1]  OOM killer enabled.
+> [   31.356232][ 1]  Restarting tasks ... done.
+> [   31.360609][ 1]  PM: resume from hibernation failed (0)
+> [   31.365800][ 1]  PM: Hibernation image not present or could not be loaded.
+> 
+> The "do_wakeup" is determined based on whether the controller's
+> power/wakeup attribute is set. The current issue necessitates considering
+> the type of suspend that is occurring. If the suspend type is either
+> PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should be set to
+> false.
+> 
+> Co-authored-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
+> ---
+>  drivers/usb/core/hcd-pci.c | 14 ++++++++++++--
+>  include/linux/pm.h         |  3 ++-
+>  2 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index a08f3f228e6d..2c7d4446b82e 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -422,7 +422,12 @@ static int suspend_common(struct device *dev, pm_message_t msg)
+>  	bool			do_wakeup;
+>  	int			retval;
+>  
+> -	do_wakeup = PMSG_IS_AUTO(msg) ? true : device_may_wakeup(dev);
+> +	if (PMSG_IS_AUTO(msg))
+> +		do_wakeup = true;
+> +	else if (PMSG_NO_WAKEUP(msg))
+> +		do_wakeup = false;
+> +	else
+> +		do_wakeup = device_may_wakeup(dev);
+>  
+>  	/* Root hub suspend should have stopped all downstream traffic,
+>  	 * and all bus master traffic.  And done so for both the interface
+> @@ -521,6 +526,11 @@ static int hcd_pci_suspend(struct device *dev)
+>  	return suspend_common(dev, PMSG_SUSPEND);
+>  }
+>  
+> +static int hcd_pci_freeze(struct device *dev)
+> +{
+> +	return suspend_common(dev, PMSG_FREEZE);
+> +}
+> +
+>  static int hcd_pci_suspend_noirq(struct device *dev)
+>  {
+>  	struct pci_dev		*pci_dev = to_pci_dev(dev);
+> @@ -624,7 +634,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+>  	.suspend_noirq	= hcd_pci_suspend_noirq,
+>  	.resume_noirq	= hcd_pci_resume_noirq,
+>  	.resume		= hcd_pci_resume,
+> -	.freeze		= hcd_pci_suspend,
+> +	.freeze		= hcd_pci_freeze,
+>  	.freeze_noirq	= check_root_hub_suspended,
+>  	.thaw_noirq	= NULL,
+>  	.thaw		= hcd_pci_resume,
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index 97b0e23363c8..0dd7f559188b 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -570,7 +570,8 @@ const struct dev_pm_ops name = { \
+>  					{ .event = PM_EVENT_AUTO_RESUME, })
+>  
+>  #define PMSG_IS_AUTO(msg)	(((msg).event & PM_EVENT_AUTO) != 0)
+> -
+> +#define PMSG_NO_WAKEUP(msg)	(((msg.event) & \
+> +				(PM_EVENT_FREEZE | PM_EVENT_QUIESCE)) != 0)
+>  /*
+>   * Device run-time power management status.
+>   *
+> -- 
+> 2.34.1
+> 
+> 
 
-[ Upstream commit 67927a1b255d883881be9467508e0af9a5e0be9d ]
+Hi,
 
-Apart from the standard "configurations", "interfaces" and "alternate
-interface settings" in USB, iOS devices also have a notion of
-"modes". In different modes, the device exposes a different set of
-available configurations.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Depending on the iOS version, and depending on the current mode, the
-length and contents of the carrier state control message differs:
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-* 1 byte (seen on iOS 4.2.1, 8.4):
-    * 03: carrier off (mode 0)
-    * 04: carrier on (mode 0)
-* 3 bytes (seen on iOS 10.3.4, 15.7.6):
-    * 03 03 03: carrier off (mode 0)
-    * 04 04 03: carrier on (mode 0)
-* 4 bytes (seen on iOS 16.5, 17.6):
-    * 03 03 03 00: carrier off (mode 0)
-    * 04 03 03 00: carrier off (mode 1)
-    * 06 03 03 00: carrier off (mode 4)
-    * 04 04 03 04: carrier on (mode 0 and 1)
-    * 06 04 03 04: carrier on (mode 4)
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
-Before this change, the driver always used the first byte of the
-response to determine carrier state.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-From this larger sample, the first byte seems to indicate the number of
-available USB configurations in the current mode (with the exception of
-the default mode 0), and in some cases (namely mode 1 and 4) does not
-correlate with the carrier state.
+thanks,
 
-Previous logic erroneously counted `04 03 03 00` as "carrier on" and
-`06 04 03 04` as "carrier off" on iOS versions that support mode 1 and
-mode 4 respectively.
-
-Only modes 0, 1 and 4 expose the USB Ethernet interfaces necessary for
-the ipheth driver.
-
-Check the second byte of the control message where possible, and fall
-back to checking the first byte on older iOS versions.
-
-Signed-off-by: Foster Snowhill <forst@pen.gy>
-Tested-by: Georgi Valkov <gvalkov@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/ipheth.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index c762335587a43..43db0f37f1951 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -307,13 +307,14 @@ static int ipheth_carrier_set(struct ipheth_device *dev)
- 			0x02, /* index */
- 			dev->ctrl_buf, IPHETH_CTRL_BUF_SIZE,
- 			IPHETH_CTRL_TIMEOUT);
--	if (retval < 0) {
-+	if (retval <= 0) {
- 		dev_err(&dev->intf->dev, "%s: usb_control_msg: %d\n",
- 			__func__, retval);
- 		return retval;
- 	}
- 
--	if (dev->ctrl_buf[0] == IPHETH_CARRIER_ON) {
-+	if ((retval == 1 && dev->ctrl_buf[0] == IPHETH_CARRIER_ON) ||
-+	    (retval >= 2 && dev->ctrl_buf[1] == IPHETH_CARRIER_ON)) {
- 		netif_carrier_on(dev->net);
- 		if (dev->tx_urb->status != -EINPROGRESS)
- 			netif_wake_queue(dev->net);
--- 
-2.43.0
-
+greg k-h's patch email bot
 
