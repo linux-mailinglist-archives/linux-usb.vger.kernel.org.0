@@ -1,65 +1,62 @@
-Return-Path: <linux-usb+bounces-16129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 418EA99B41F
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 13:43:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D83C99B449
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 13:47:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0140928B6F2
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 11:43:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D2561C21681
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2024 11:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC871F9A97;
-	Sat, 12 Oct 2024 11:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE0F201258;
+	Sat, 12 Oct 2024 11:29:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wku8tvmW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPQab3xa"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8A819E81F;
-	Sat, 12 Oct 2024 11:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15A520110A;
+	Sat, 12 Oct 2024 11:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728732568; cv=none; b=YVztDqLaAs2paQAPAhQ/Gs/J2p2667q98+UDkO0iz4nGmuLDp7EEUN9mErH9c92spB4fUvXAYYjVaD1lkTYabqfPYPv2um+BSQ6am3PO5B/PgaJmPzMNlTP6pHATfOKzPeCq21a/RYDK8nhCX6QrPMRWBeyAIuezxPffzGcb1Xs=
+	t=1728732592; cv=none; b=GPHQzXVndxVbxgZfmsueJyiesanLnpB/8i6xYm21yiJFLlVhiM9qS76ilr96P5Dt2tYpcdXoc0ROh0b2XVN+KpeRIN+TTA6brkzqpuuv9+bmQGFGHqFlSj7tYAxPaYN81LoJR+JQ+O0+nQTZoVMG3sIoC1ruyTMo8Mzs/V6SXZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728732568; c=relaxed/simple;
-	bh=ZtJBZ21JgBr59B5PxLW0G9CRbTRmQ5A1MdTYH/IYFhQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s/P+vYLtVFYWey8qAaAC2czxV8hXZ8EyxRUjTkSUpkZI1T0u2GhfJu+SMZUn19ijc9N2qpQwEcT0o7+KVSzNgEXEk5O7CNgQz9oEzKK7QCqOOU0akrzNlbZdVSeGFuR9c2Mn9ZavVsiqS2I8OPhsW1xSYvALz0Mgf7EgPasYEV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wku8tvmW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1124FC4CEC6;
-	Sat, 12 Oct 2024 11:29:26 +0000 (UTC)
+	s=arc-20240116; t=1728732592; c=relaxed/simple;
+	bh=i6H85g7iWTCKvOl28Kd9R/lEDQAsUzGltT4u0pdJOT8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MQoBOESIR6WL9alJ/0vt5Qwh8pDNrilfCw8K1oeEcM+A5Y2m1rU5dD8gfxm9SjtI0+ypp9YGEK5OqI+W0QyyWms7VQzXa5McjI7LTJQ3VgkdLbn70I5n9dUZCjAfvkdtl6ZDA4kJC6nYtAjq0qu3BsQ8rnDpUxjRNKRD9ssEizo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPQab3xa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A739C4CECF;
+	Sat, 12 Oct 2024 11:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728732568;
-	bh=ZtJBZ21JgBr59B5PxLW0G9CRbTRmQ5A1MdTYH/IYFhQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Wku8tvmWs1l5KlnMGdobd4jwlwNdaLPMj4PbpMQKNGdH7Tx7ZRQ7co3Iu89NqwiH1
-	 nWsoO0UXY9c9/cOxObEbKDVGPLsCmg6/5e8FfBHGJwruzp3/0oAfhZeATPyoMqbcc/
-	 hyfQGjWpTkvpmNZLaPdusZg2OBvePr8UgMY9P1ywpe08RK6cIQ6XMhcLlf3lefOqzo
-	 qf5ZDvlS4dN3T+xOBvOyzGUSGsrtpXpOfdhYSo2OJds4SfKsn4YpjdX1h+NnnUf+uh
-	 Z5O+/p/xFuIPTDbcAgLTAgZKIBPJ9ktPJvKh0u6gpkkxBuBGIieOoIzlwE/ZGPSkzq
-	 j6dhLRpAh6mSw==
+	s=k20201202; t=1728732591;
+	bh=i6H85g7iWTCKvOl28Kd9R/lEDQAsUzGltT4u0pdJOT8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RPQab3xaJwhyKdwCSkbr7PIE98e2OXHqE2BCLUUT8MJB/EAn8RU82nE3I8r5/33dn
+	 59pPze3uBG91LZCN9rWiAZa/L8huzYztsLyiSJCEqpaxvalZbNbhfKYnK3YypmQAOF
+	 FUzdnw8tWpbaY2cpLsz2DkWg1aJduTl4J3lIexKbT0gFvKgTqBBZafTEkD1I4dswFK
+	 6xHPF7VtdGEIlVIUCIk1wLoyffIDVwrBVI1dI5iIqvPXXBWsLfy6YrLRi1oXzebppY
+	 i32YY8FfulTLjXnx63nGtrmktdWnBP0VPID5oDZ2LALRaSm7YBUjWRBdclpWcJRAOd
+	 4arlFJrixoIRg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Foster Snowhill <forst@pen.gy>,
+Cc: Oliver Neukum <oneukum@suse.com>,
+	Foster Snowhill <forst@pen.gy>,
 	Georgi Valkov <gvalkov@gmail.com>,
 	"David S . Miller" <davem@davemloft.net>,
 	Sasha Levin <sashal@kernel.org>,
 	edumazet@google.com,
 	kuba@kernel.org,
 	pabeni@redhat.com,
-	oneukum@suse.com,
 	linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 2/9] usbnet: ipheth: fix carrier detection in modes 1 and 4
-Date: Sat, 12 Oct 2024 07:29:07 -0400
-Message-ID: <20241012112922.1764240-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/7] usbnet: ipheth: race between ipheth_close and error handling
+Date: Sat, 12 Oct 2024 07:29:36 -0400
+Message-ID: <20241012112948.1764454-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241012112922.1764240-1-sashal@kernel.org>
-References: <20241012112922.1764240-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,81 +65,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.226
+X-stable-base: Linux 5.4.284
 Content-Transfer-Encoding: 8bit
 
-From: Foster Snowhill <forst@pen.gy>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 67927a1b255d883881be9467508e0af9a5e0be9d ]
+[ Upstream commit e5876b088ba03a62124266fa20d00e65533c7269 ]
 
-Apart from the standard "configurations", "interfaces" and "alternate
-interface settings" in USB, iOS devices also have a notion of
-"modes". In different modes, the device exposes a different set of
-available configurations.
+ipheth_sndbulk_callback() can submit carrier_work
+as a part of its error handling. That means that
+the driver must make sure that the work is cancelled
+after it has made sure that no more URB can terminate
+with an error condition.
 
-Depending on the iOS version, and depending on the current mode, the
-length and contents of the carrier state control message differs:
+Hence the order of actions in ipheth_close() needs
+to be inverted.
 
-* 1 byte (seen on iOS 4.2.1, 8.4):
-    * 03: carrier off (mode 0)
-    * 04: carrier on (mode 0)
-* 3 bytes (seen on iOS 10.3.4, 15.7.6):
-    * 03 03 03: carrier off (mode 0)
-    * 04 04 03: carrier on (mode 0)
-* 4 bytes (seen on iOS 16.5, 17.6):
-    * 03 03 03 00: carrier off (mode 0)
-    * 04 03 03 00: carrier off (mode 1)
-    * 06 03 03 00: carrier off (mode 4)
-    * 04 04 03 04: carrier on (mode 0 and 1)
-    * 06 04 03 04: carrier on (mode 4)
-
-Before this change, the driver always used the first byte of the
-response to determine carrier state.
-
-From this larger sample, the first byte seems to indicate the number of
-available USB configurations in the current mode (with the exception of
-the default mode 0), and in some cases (namely mode 1 and 4) does not
-correlate with the carrier state.
-
-Previous logic erroneously counted `04 03 03 00` as "carrier on" and
-`06 04 03 04` as "carrier off" on iOS versions that support mode 1 and
-mode 4 respectively.
-
-Only modes 0, 1 and 4 expose the USB Ethernet interfaces necessary for
-the ipheth driver.
-
-Check the second byte of the control message where possible, and fall
-back to checking the first byte on older iOS versions.
-
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 Signed-off-by: Foster Snowhill <forst@pen.gy>
 Tested-by: Georgi Valkov <gvalkov@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/ipheth.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/usb/ipheth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 0774d753dd316..208336c871be5 100644
+index 73ad78f47763c..7814856636907 100644
 --- a/drivers/net/usb/ipheth.c
 +++ b/drivers/net/usb/ipheth.c
-@@ -253,13 +253,14 @@ static int ipheth_carrier_set(struct ipheth_device *dev)
- 			0x02, /* index */
- 			dev->ctrl_buf, IPHETH_CTRL_BUF_SIZE,
- 			IPHETH_CTRL_TIMEOUT);
--	if (retval < 0) {
-+	if (retval <= 0) {
- 		dev_err(&dev->intf->dev, "%s: usb_control_msg: %d\n",
- 			__func__, retval);
- 		return retval;
- 	}
+@@ -353,8 +353,8 @@ static int ipheth_close(struct net_device *net)
+ {
+ 	struct ipheth_device *dev = netdev_priv(net);
  
--	if (dev->ctrl_buf[0] == IPHETH_CARRIER_ON) {
-+	if ((retval == 1 && dev->ctrl_buf[0] == IPHETH_CARRIER_ON) ||
-+	    (retval >= 2 && dev->ctrl_buf[1] == IPHETH_CARRIER_ON)) {
- 		netif_carrier_on(dev->net);
- 		if (dev->tx_urb->status != -EINPROGRESS)
- 			netif_wake_queue(dev->net);
+-	cancel_delayed_work_sync(&dev->carrier_work);
+ 	netif_stop_queue(net);
++	cancel_delayed_work_sync(&dev->carrier_work);
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
