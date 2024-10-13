@@ -1,124 +1,128 @@
-Return-Path: <linux-usb+bounces-16149-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16150-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EDA499B983
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 15:07:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8E0399B9B5
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 16:25:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3E00B211B0
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 13:07:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6CB91C20984
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 14:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1331448E6;
-	Sun, 13 Oct 2024 13:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652F41459F7;
+	Sun, 13 Oct 2024 14:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VK9miEWS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RG1IJ424"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEC41E51D;
-	Sun, 13 Oct 2024 13:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD1713B5AF;
+	Sun, 13 Oct 2024 14:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728824854; cv=none; b=U4LgtjTuifFR1SttqB7SL1MXOs1upHdDUj+PgChOHISPhmWxF1Bqx/qkgZpaTwCnJfkLzEeKo72Adb0gdBGBQi3kf8sf8Ic1QuLVs29S22LOVMah5Buvnzdi7i1l9jKAB64DP3qKq8Q7CLberBu0bwGVWQt7ghfC2BnNKrtIXEs=
+	t=1728829521; cv=none; b=Xut2rEJySsEm+tGyU17rDipnZyN3nwXvj4O+2GoQd9cYzF+ptLN1dwPZeeGwH/MxW4Kjy1RS2oNgbGWSnlUnwXJEewJ+JqlApRbPdWcD3lYm8qHgVIjU6mPhN7uWWVLPz8yxuv+bNrA45FXunbPUmC3STigfbfjmXNHOwIn/Kvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728824854; c=relaxed/simple;
-	bh=S0emHyOBplzudHjncpQHCCSowxt0qEptdekaohNEJHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=igHPDsO5QtfMELcTfV+IPNDs/8Dipwm9guC13BenvliMTnB17NiKnifREvD1a46IQg3WuIUIM/eW8NQ7kHvxWuW6pkrS01io2/nr7hC45tTCCS+GGgk6cfgeYrdSbOr4pVzgPRUsQPS2JZYyRS5asfCUAky/WrFoiqqPqREMapM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VK9miEWS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBAADC4CEC5;
-	Sun, 13 Oct 2024 13:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728824854;
-	bh=S0emHyOBplzudHjncpQHCCSowxt0qEptdekaohNEJHw=;
-	h=Date:From:To:Cc:Subject:From;
-	b=VK9miEWSCHWM824iwRxvDPz8whHzImjg4vByt/0KJTQ8LaTtndNs9TnLD1QZpYxOR
-	 89gqvtXLO4TkjzO0yxFeBDAGDKpA1uwB0hPokD7cVYyBZaLJKgVR0cGPVIoASE8opl
-	 zlGzIKO8y8NqJmhwxB/EgV2laKa72ptAcUjvJzDA=
-Date: Sun, 13 Oct 2024 15:07:29 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 6.12-rc3
-Message-ID: <ZwvGEV3LouMEb3L1@kroah.com>
+	s=arc-20240116; t=1728829521; c=relaxed/simple;
+	bh=jMPj2QKOfEDbQLxjjZXHfPkOYmbyJE9CFwFNUtvx/KM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I5okoKieCGmKHh7uy6XGsOZjHRGYvrG9br//3Xcd20aOObeJgGk6S4gAZUwD3r2EthNC70X/ksFvXX6Yi5CQ0l6Mf/J4Cwz+Mv/Ht9MLmLpwa4v8ZGFWxtf+iYLMvGUm1y93OPIStOYyFJFYcV0Q4YqRaKgrvpAW+nwaZtfIL0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RG1IJ424; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20c7edf2872so26175375ad.1;
+        Sun, 13 Oct 2024 07:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728829520; x=1729434320; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5qBaw6WcetARAK786CwFtGAjmur6yWCok1z7OMhs38g=;
+        b=RG1IJ424AG+GRLcT4yGo5x9bRZqna0LSksSLmTJBopRT2lPsHnoK8eZZcNxGlBDeL4
+         pK6JZmKowzSCC26c1qfd8XKM4JkSppJjRXyNxebZT+uPcsvkRnaeTFe/NxCp4CXzpdWr
+         uQcO8VP4bOVmddKsPer7FzI+yfF4jeXhHvwVWA3d0uG+5lZTWjzKTDRg6sO728DKQIjb
+         c/5YYVS/KKmQ/AAZpbfvzB6NKu8SPfmN6nBlgDB2Acc35v7TnsC1MVBYDrKkIpvwkp3w
+         tWeTaZ3eFs5q/vqqE5Z4aKX3hJykGxuY8Q8KH3xOiKITXNa71xAJ99M7i+U4SNStlcmB
+         FGfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728829520; x=1729434320;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5qBaw6WcetARAK786CwFtGAjmur6yWCok1z7OMhs38g=;
+        b=jiyUgcpDb2MOT/m/ec7iKls5CFZbmV1sTqQlcq9hXtoCgM/vZ4ftJbgoGHgGUjmDk5
+         16P2jAe6s9oxE9jljZhKT84pPg4nSKmI2NlCykg1hmAwskVkwEkFuHmofM9Dq3637Rm+
+         NfSumdHpirwECrcQMBr5P2W/4mdTmtVGd4+aubFUR+Uf0zUOWaU/h3xIbfjeBjl3UKp7
+         qE++SKZOb4/qVZ8PjaPFH5tZXCbcJ2wSrFA09Nz4G4Qz5EEWdBKMCYQUe42UEzKordb0
+         4XnbQtC5hlwsvj/B8dAEMQ0dSuhMCc8PVWI3KS2OtnBe4W9JgxUCbxfCF301CW6lTvgS
+         i6wg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0M39RNNuSagPUBVY0eJcLrD1we5rMi6bBUV/UYavpmzqskmJVIjJ6m9gPTL+l3lA0lKNAoH5KiGOeTGo=@vger.kernel.org, AJvYcCV7stUGnkmAg86TyEmIycxXOqCxcF62IwFCaSvEI/07OA9vSrmy15viWvlFwEnuyCeP/nz7/vU6w8JG@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHL8JyKQQvIaWNd7Lgxit3+9N3TW3IJsZO89JLLulRbLqi5EnG
+	KYsBcx8Qn1/9B4sc+30tCsscFvaLLXu3WpbLyyuIIR1MzTkSaSF9
+X-Google-Smtp-Source: AGHT+IE8oOFbATlhJ4vqkaMSGeyjZrtaqiRX69LpT6qy6t2Tpr3Icc6I4joA6l0T8gsW+SLawQvoEg==
+X-Received: by 2002:a17:902:f686:b0:20c:68af:a4e3 with SMTP id d9443c01a7336-20ca03d67dfmr136140215ad.22.1728829519569;
+        Sun, 13 Oct 2024 07:25:19 -0700 (PDT)
+Received: from embed-PC.. ([2401:4900:1c26:6cc5:3690:fda3:d7c5:f949])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0eb44dsm50244985ad.148.2024.10.13.07.25.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Oct 2024 07:25:19 -0700 (PDT)
+From: Abhishek Tamboli <abhishektamboli9@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: Frank.Li@nxp.com,
+	m.grzeschik@pengutronix.de,
+	dan.scally@ideasonboard.com,
+	andrzej.p@collabora.com,
+	quic_jjohnson@quicinc.com,
+	shuzhenwang@google.com,
+	arakesh@google.com,
+	skhan@linuxfoundation.org,
+	rbmarliere@gmail.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: uvc: Remove extra semicolon from the macro
+Date: Sun, 13 Oct 2024 19:55:11 +0530
+Message-Id: <20241013142511.9946-1-abhishektamboli9@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Remove the extra semicolon after the
+do {} while (0) in UVC_COPY_DESCRIPTOR macro.
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+Fix the following checkpatch.pl warning
 
-are available in the Git repository at:
+WARNING: do {} while (0) macros should not be semicolon terminated
++#define UVC_COPY_DESCRIPTOR(mem, dst, desc) \
++	do { \
++		memcpy(mem, desc, (desc)->bLength); \
++		*(dst)++ = mem; \
++		mem += (desc)->bLength; \
++	} while (0);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.12-rc3
+Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
+---
+ drivers/usb/gadget/function/f_uvc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-for you to fetch changes up to faa34159d08089036b6119c85e279fb36abb8bb5:
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 40187b7112e7..edf0355d712c 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -465,7 +465,7 @@ uvc_register_video(struct uvc_device *uvc)
+ 		memcpy(mem, desc, (desc)->bLength); \
+ 		*(dst)++ = mem; \
+ 		mem += (desc)->bLength; \
+-	} while (0);
++	} while (0)
 
-  net/9p/usbg: Fix build error (2024-10-09 09:56:40 +0200)
+ #define UVC_COPY_DESCRIPTORS(mem, dst, src) \
+ 	do { \
+--
+2.34.1
 
-----------------------------------------------------------------
-USB fixes for 6.12-rc3
-
-Here are some small USB fixes for some reported problems for 6.12-rc3.
-Include in here is:
-  - fix for yurex driver that was caused in -rc1
-  - build error fix for usbg network filesystem code
-  - onboard_usb_dev build fix
-  - dwc3 driver fixes for reported errors
-  - gadget driver fix
-  - new USB storage driver quirk
-  - xhci resume bugfix
-
-All of these have been in linux-next for a while with no reported
-issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Icenowy Zheng (1):
-      usb: storage: ignore bogus device raised by JieLi BR21 USB sound chip
-
-Jinjie Ruan (1):
-      net/9p/usbg: Fix build error
-
-John Keeping (1):
-      usb: gadget: core: force synchronous registration
-
-Jose Alberto Reguero (1):
-      usb: xhci: Fix problem with xhci resume from suspend
-
-Oliver Neukum (2):
-      Revert "usb: yurex: Replace snprintf() with the safer scnprintf() variant"
-      USB: yurex: kill needless initialization in yurex_read
-
-Radhey Shyam Pandey (1):
-      usb: misc: onboard_usb_dev: introduce new config symbol for usb5744 SMBus support
-
-Roy Luo (1):
-      usb: dwc3: re-enable runtime PM after failed resume
-
-Selvarasu Ganesan (1):
-      usb: dwc3: core: Stop processing of pending events if controller is halted
-
- drivers/usb/dwc3/core.c            | 30 ++++++++++++++++++++++--------
- drivers/usb/dwc3/core.h            |  4 ----
- drivers/usb/dwc3/gadget.c          | 11 -----------
- drivers/usb/gadget/udc/core.c      |  1 +
- drivers/usb/host/xhci-pci.c        |  5 +++++
- drivers/usb/misc/Kconfig           | 12 ++++++++++++
- drivers/usb/misc/onboard_usb_dev.c |  6 ++++--
- drivers/usb/misc/yurex.c           | 21 +++++++++------------
- drivers/usb/storage/unusual_devs.h | 11 +++++++++++
- net/9p/Kconfig                     |  2 ++
- 10 files changed, 66 insertions(+), 37 deletions(-)
 
