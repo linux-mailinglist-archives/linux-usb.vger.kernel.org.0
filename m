@@ -1,52 +1,50 @@
-Return-Path: <linux-usb+bounces-16148-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16149-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CE6799B94F
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 14:04:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EDA499B983
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 15:07:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 110381C20BA9
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 12:04:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3E00B211B0
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 13:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95DBF140360;
-	Sun, 13 Oct 2024 12:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1331448E6;
+	Sun, 13 Oct 2024 13:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KUs6IFh0"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VK9miEWS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55CF13AD0F;
-	Sun, 13 Oct 2024 12:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEC41E51D;
+	Sun, 13 Oct 2024 13:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728821036; cv=none; b=rVozAB1wxnT9yZL/jMei9cEcXNdcYB6mb295VNQjsifwStcYljpk6silI3+ZDU9mJjA0WsFJdbfkVYTFfEdBHrllWHogm+cHcuf0bY2UtZ9YgE0rx+70hQN/fvpKEi09QWatzpoXXcLR2QzPHdRbPdNJksbxDqoJM1r2Z9s9DWQ=
+	t=1728824854; cv=none; b=U4LgtjTuifFR1SttqB7SL1MXOs1upHdDUj+PgChOHISPhmWxF1Bqx/qkgZpaTwCnJfkLzEeKo72Adb0gdBGBQi3kf8sf8Ic1QuLVs29S22LOVMah5Buvnzdi7i1l9jKAB64DP3qKq8Q7CLberBu0bwGVWQt7ghfC2BnNKrtIXEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728821036; c=relaxed/simple;
-	bh=GXhoBn8G3dY7XSzGK0FJllzywqPAP+aarGbodaM40WI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H/fLaqkh628Ibkh1rDV9hlqXhzJc4UxjghDohD4KiAnesjMOX4kXiedM2RMsCvK3tuyd50alq6JOlg/z+8qIKYjTwkKQonHNs68l3+gb25X+Z2SzXExGDxnCta/ONJ6DAK7nGhDIt/CXDIJ6J8R1ffBWle1C0li8qOjCCQULIIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KUs6IFh0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E1EC4CEC5;
-	Sun, 13 Oct 2024 12:03:54 +0000 (UTC)
+	s=arc-20240116; t=1728824854; c=relaxed/simple;
+	bh=S0emHyOBplzudHjncpQHCCSowxt0qEptdekaohNEJHw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=igHPDsO5QtfMELcTfV+IPNDs/8Dipwm9guC13BenvliMTnB17NiKnifREvD1a46IQg3WuIUIM/eW8NQ7kHvxWuW6pkrS01io2/nr7hC45tTCCS+GGgk6cfgeYrdSbOr4pVzgPRUsQPS2JZYyRS5asfCUAky/WrFoiqqPqREMapM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VK9miEWS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBAADC4CEC5;
+	Sun, 13 Oct 2024 13:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728821035;
-	bh=GXhoBn8G3dY7XSzGK0FJllzywqPAP+aarGbodaM40WI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KUs6IFh0j5SzhKAECbba9AyRoNFAagcZjrD/L8RihoLhmGoXW8Pus6Vjkb4M5gjak
-	 R0GIOQlez8DSTFyy7dmetGAoToYq70ZzgDCbXvDt5IW33eUVRO26+PdK81r/2zqh4W
-	 eN789HnqFC0idrjmO5d2q7Qg9DEC2+6gbj8Bhsx0=
-Date: Sun, 13 Oct 2024 14:03:50 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Oliver Neukum <oneukum@suse.com>, Keith Packard <keithp@keithp.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] USB: chaoskey: fix deadlock in release
-Message-ID: <2024101330-atom-womanhood-456a@gregkh>
-References: <8c34cb8d-faaf-4134-851d-78db678d535f@stanley.mountain>
+	s=korg; t=1728824854;
+	bh=S0emHyOBplzudHjncpQHCCSowxt0qEptdekaohNEJHw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VK9miEWSCHWM824iwRxvDPz8whHzImjg4vByt/0KJTQ8LaTtndNs9TnLD1QZpYxOR
+	 89gqvtXLO4TkjzO0yxFeBDAGDKpA1uwB0hPokD7cVYyBZaLJKgVR0cGPVIoASE8opl
+	 zlGzIKO8y8NqJmhwxB/EgV2laKa72ptAcUjvJzDA=
+Date: Sun, 13 Oct 2024 15:07:29 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 6.12-rc3
+Message-ID: <ZwvGEV3LouMEb3L1@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,39 +53,72 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8c34cb8d-faaf-4134-851d-78db678d535f@stanley.mountain>
 
-On Fri, Oct 11, 2024 at 10:43:50PM +0300, Dan Carpenter wrote:
-> This lock should was intended to be an unlock.  It will lead to a hang.
-> 
-> Fixes: 422dc0a4d12d ("USB: chaoskey: fail open after removal")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
-> >From static analysis.  Not tested.
-> 
->  drivers/usb/misc/chaoskey.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
-> index e8b63df5f975..4025f386ba6b 100644
-> --- a/drivers/usb/misc/chaoskey.c
-> +++ b/drivers/usb/misc/chaoskey.c
-> @@ -319,7 +319,7 @@ static int chaoskey_release(struct inode *inode, struct file *file)
->  bail:
->  	mutex_unlock(&dev->lock);
->  destruction:
-> -	mutex_lock(&chaoskey_list_lock);
-> +	mutex_unlock(&chaoskey_list_lock);
->  	usb_dbg(interface, "release success");
->  	return rv;
->  }
-> -- 
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-The commit at:
-	https://lore.kernel.org/r/tencent_84EB865C89862EC22EE94CB3A7C706C59206@qq.com
-was tested, so I'll take that one :)
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
-thanks,
+are available in the Git repository at:
 
-greg k-h
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.12-rc3
+
+for you to fetch changes up to faa34159d08089036b6119c85e279fb36abb8bb5:
+
+  net/9p/usbg: Fix build error (2024-10-09 09:56:40 +0200)
+
+----------------------------------------------------------------
+USB fixes for 6.12-rc3
+
+Here are some small USB fixes for some reported problems for 6.12-rc3.
+Include in here is:
+  - fix for yurex driver that was caused in -rc1
+  - build error fix for usbg network filesystem code
+  - onboard_usb_dev build fix
+  - dwc3 driver fixes for reported errors
+  - gadget driver fix
+  - new USB storage driver quirk
+  - xhci resume bugfix
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Icenowy Zheng (1):
+      usb: storage: ignore bogus device raised by JieLi BR21 USB sound chip
+
+Jinjie Ruan (1):
+      net/9p/usbg: Fix build error
+
+John Keeping (1):
+      usb: gadget: core: force synchronous registration
+
+Jose Alberto Reguero (1):
+      usb: xhci: Fix problem with xhci resume from suspend
+
+Oliver Neukum (2):
+      Revert "usb: yurex: Replace snprintf() with the safer scnprintf() variant"
+      USB: yurex: kill needless initialization in yurex_read
+
+Radhey Shyam Pandey (1):
+      usb: misc: onboard_usb_dev: introduce new config symbol for usb5744 SMBus support
+
+Roy Luo (1):
+      usb: dwc3: re-enable runtime PM after failed resume
+
+Selvarasu Ganesan (1):
+      usb: dwc3: core: Stop processing of pending events if controller is halted
+
+ drivers/usb/dwc3/core.c            | 30 ++++++++++++++++++++++--------
+ drivers/usb/dwc3/core.h            |  4 ----
+ drivers/usb/dwc3/gadget.c          | 11 -----------
+ drivers/usb/gadget/udc/core.c      |  1 +
+ drivers/usb/host/xhci-pci.c        |  5 +++++
+ drivers/usb/misc/Kconfig           | 12 ++++++++++++
+ drivers/usb/misc/onboard_usb_dev.c |  6 ++++--
+ drivers/usb/misc/yurex.c           | 21 +++++++++------------
+ drivers/usb/storage/unusual_devs.h | 11 +++++++++++
+ net/9p/Kconfig                     |  2 ++
+ 10 files changed, 66 insertions(+), 37 deletions(-)
 
