@@ -1,128 +1,184 @@
-Return-Path: <linux-usb+bounces-16150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16151-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8E0399B9B5
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 16:25:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BA3999B9C0
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 16:30:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6CB91C20984
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 14:25:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF3FC281B4D
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2024 14:30:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652F41459F7;
-	Sun, 13 Oct 2024 14:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C75146017;
+	Sun, 13 Oct 2024 14:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RG1IJ424"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Q+Nv4bS9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD1713B5AF;
-	Sun, 13 Oct 2024 14:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C441EB2E
+	for <linux-usb@vger.kernel.org>; Sun, 13 Oct 2024 14:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728829521; cv=none; b=Xut2rEJySsEm+tGyU17rDipnZyN3nwXvj4O+2GoQd9cYzF+ptLN1dwPZeeGwH/MxW4Kjy1RS2oNgbGWSnlUnwXJEewJ+JqlApRbPdWcD3lYm8qHgVIjU6mPhN7uWWVLPz8yxuv+bNrA45FXunbPUmC3STigfbfjmXNHOwIn/Kvc=
+	t=1728829829; cv=none; b=KScsvldlJxUp/BhYM0bOA32ICq4fiA7ORyNg9MiuOZfK+J+NcRYZzFOVlYFb1zJ8oVGC7k3dcUtqL9thq0iJAWt5sOK65hQOzBT4zHn3Ji3wVqH55ghiVScLGLyUJfgZ1vLICfL4FpFfxIThNlL/w8gkpgu97dneK3pXlLAZKJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728829521; c=relaxed/simple;
-	bh=jMPj2QKOfEDbQLxjjZXHfPkOYmbyJE9CFwFNUtvx/KM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I5okoKieCGmKHh7uy6XGsOZjHRGYvrG9br//3Xcd20aOObeJgGk6S4gAZUwD3r2EthNC70X/ksFvXX6Yi5CQ0l6Mf/J4Cwz+Mv/Ht9MLmLpwa4v8ZGFWxtf+iYLMvGUm1y93OPIStOYyFJFYcV0Q4YqRaKgrvpAW+nwaZtfIL0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RG1IJ424; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20c7edf2872so26175375ad.1;
-        Sun, 13 Oct 2024 07:25:20 -0700 (PDT)
+	s=arc-20240116; t=1728829829; c=relaxed/simple;
+	bh=KeXv3hCzSFiidY4IrwMesS2T/dxagoQkhkn6CIR4PMk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nVhWsEOgPvuATbu0c0uPsvew+LXqEairKEzkD+mWaupImbL/pqZ6rd1JHCA9FuGGAIBdKIWnQ7U8VKLLVbu0zjarKl9NnrFS7Ax0oUVljxGZ6YiL/DMUzV7N0j71v+8Vxx4xImzb0mshI0ZGsyCMR6CrW/oLz7Tn+3090/G1JPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Q+Nv4bS9; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6cbcd49b833so30141376d6.3
+        for <linux-usb@vger.kernel.org>; Sun, 13 Oct 2024 07:30:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728829520; x=1729434320; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5qBaw6WcetARAK786CwFtGAjmur6yWCok1z7OMhs38g=;
-        b=RG1IJ424AG+GRLcT4yGo5x9bRZqna0LSksSLmTJBopRT2lPsHnoK8eZZcNxGlBDeL4
-         pK6JZmKowzSCC26c1qfd8XKM4JkSppJjRXyNxebZT+uPcsvkRnaeTFe/NxCp4CXzpdWr
-         uQcO8VP4bOVmddKsPer7FzI+yfF4jeXhHvwVWA3d0uG+5lZTWjzKTDRg6sO728DKQIjb
-         c/5YYVS/KKmQ/AAZpbfvzB6NKu8SPfmN6nBlgDB2Acc35v7TnsC1MVBYDrKkIpvwkp3w
-         tWeTaZ3eFs5q/vqqE5Z4aKX3hJykGxuY8Q8KH3xOiKITXNa71xAJ99M7i+U4SNStlcmB
-         FGfA==
+        d=rowland.harvard.edu; s=google; t=1728829825; x=1729434625; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uABAPjV9+/b3KG2CCvAjSvJfENsBnDWYVNvtO1z0LFc=;
+        b=Q+Nv4bS9Atty4pfERk47aMaY6Wr/TQ030WufD787axiWPTcfPPDDnXOwcpMDJLUY54
+         DVGXpGwZogfm4jR6aAio8zyxtw1xEtjUOy/GS0MkFfiMwttkab9ejbWNQZP1FdX3jS1I
+         E1w0HzncYF2bimFZ6TioGipbQLyZPnuhneSVVXXAX9rl3z2btTTaCeVoyw7vF7NusTL4
+         73hojoybn3YsbXoOzVa2jhQztynFxiJXKpTKFG9yt0H+JchBI6J244xDfI4sQMB0G3z5
+         PBlaDuHQYqE0g64uyKQLjfzvXJec1op3Bbao4sMOzzeV+HhvVz1V05gBVwkMFk2FCHTX
+         29iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728829520; x=1729434320;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5qBaw6WcetARAK786CwFtGAjmur6yWCok1z7OMhs38g=;
-        b=jiyUgcpDb2MOT/m/ec7iKls5CFZbmV1sTqQlcq9hXtoCgM/vZ4ftJbgoGHgGUjmDk5
-         16P2jAe6s9oxE9jljZhKT84pPg4nSKmI2NlCykg1hmAwskVkwEkFuHmofM9Dq3637Rm+
-         NfSumdHpirwECrcQMBr5P2W/4mdTmtVGd4+aubFUR+Uf0zUOWaU/h3xIbfjeBjl3UKp7
-         qE++SKZOb4/qVZ8PjaPFH5tZXCbcJ2wSrFA09Nz4G4Qz5EEWdBKMCYQUe42UEzKordb0
-         4XnbQtC5hlwsvj/B8dAEMQ0dSuhMCc8PVWI3KS2OtnBe4W9JgxUCbxfCF301CW6lTvgS
-         i6wg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0M39RNNuSagPUBVY0eJcLrD1we5rMi6bBUV/UYavpmzqskmJVIjJ6m9gPTL+l3lA0lKNAoH5KiGOeTGo=@vger.kernel.org, AJvYcCV7stUGnkmAg86TyEmIycxXOqCxcF62IwFCaSvEI/07OA9vSrmy15viWvlFwEnuyCeP/nz7/vU6w8JG@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHL8JyKQQvIaWNd7Lgxit3+9N3TW3IJsZO89JLLulRbLqi5EnG
-	KYsBcx8Qn1/9B4sc+30tCsscFvaLLXu3WpbLyyuIIR1MzTkSaSF9
-X-Google-Smtp-Source: AGHT+IE8oOFbATlhJ4vqkaMSGeyjZrtaqiRX69LpT6qy6t2Tpr3Icc6I4joA6l0T8gsW+SLawQvoEg==
-X-Received: by 2002:a17:902:f686:b0:20c:68af:a4e3 with SMTP id d9443c01a7336-20ca03d67dfmr136140215ad.22.1728829519569;
-        Sun, 13 Oct 2024 07:25:19 -0700 (PDT)
-Received: from embed-PC.. ([2401:4900:1c26:6cc5:3690:fda3:d7c5:f949])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0eb44dsm50244985ad.148.2024.10.13.07.25.14
+        d=1e100.net; s=20230601; t=1728829825; x=1729434625;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uABAPjV9+/b3KG2CCvAjSvJfENsBnDWYVNvtO1z0LFc=;
+        b=pTyJ+PnI4g/pTIB+DRCzIxSr2hAb2eqi7p1/k/Uf0L1sS7Ww/Sf2Cg8z+SimNUhFxB
+         XLr7fYtzPmFUrWhlP/FYN6udAecHDmVrlklnuqJQS4EC1TtCyAW8qBQ8eWaIi8dKbzuP
+         IsqGVq8tURo/nc43oVYblb1WVoy7h1MPWOmBbrqSfSO8i8oNgecQYP5iyw9c9P9dLL2U
+         lXxLnOjRvZ7fzHHX59RAUClQ4NLG5D5Fume+4Gg3CIHrwwN6cFQS8ZtJDOKYgT2+KaRK
+         VvO43rKweHLa2iBvV/lhwGxdiH5IMso4AOiNCRMQLwl7u5ZByk/Ubwq36JYRklnBjJXt
+         wmYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFh/kU1GqsgCqUPHYln4N9YY+2S+MicMeB2BVyVd7THmOVXEkpykA67dbJYSyZeaqn+6AY5m3j/Zo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxGRc3j79MWgfzOr31r8kH2CcAIodv19IB0iw81Vpbg2ibTAbz
+	wrsspnIFrefncIbOGPIuTPx884M2VgXcu5A6/A/Smyqz9dY4GFcyEEv79HUnITvKVqCo+EgLB3k
+	=
+X-Google-Smtp-Source: AGHT+IFl/5QKdPn+p65hu1eNNc2nrOM30wd1T0WBClKGGFxfpqpQH7woUzTY6u3DzdyX670dvk5t7w==
+X-Received: by 2002:a05:6214:44a1:b0:6cb:9b65:5c75 with SMTP id 6a1803df08f44-6cbf9e76eb2mr89835136d6.32.1728829824934;
+        Sun, 13 Oct 2024 07:30:24 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::267d])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cbe85b7767sm35506776d6.34.2024.10.13.07.30.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Oct 2024 07:25:19 -0700 (PDT)
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: Frank.Li@nxp.com,
-	m.grzeschik@pengutronix.de,
-	dan.scally@ideasonboard.com,
-	andrzej.p@collabora.com,
-	quic_jjohnson@quicinc.com,
-	shuzhenwang@google.com,
-	arakesh@google.com,
-	skhan@linuxfoundation.org,
-	rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: uvc: Remove extra semicolon from the macro
-Date: Sun, 13 Oct 2024 19:55:11 +0530
-Message-Id: <20241013142511.9946-1-abhishektamboli9@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 13 Oct 2024 07:30:24 -0700 (PDT)
+Date: Sun, 13 Oct 2024 10:30:20 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+f342ea16c9d06d80b585@syzkaller.appspotmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, sylv@sylv.io,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_port_suspend
+Message-ID: <5d7f23a2-dd39-432c-9908-174f6fffda0b@rowland.harvard.edu>
+References: <d6ec3898-b225-4c92-a381-46b111b6ddcf@rowland.harvard.edu>
+ <670b38de.050a0220.3e960.0032.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <670b38de.050a0220.3e960.0032.GAE@google.com>
 
-Remove the extra semicolon after the
-do {} while (0) in UVC_COPY_DESCRIPTOR macro.
+On Sat, Oct 12, 2024 at 08:05:02PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> INFO: task hung in usb_register_dev
 
-Fix the following checkpatch.pl warning
+That wasn't particularly helpful.  In fact, it gives the impression
+that the problem is caused by something else, not a bad dequeue.  None
+of the tasks listed in the console log are waiting inside usb_kill_urb().
 
-WARNING: do {} while (0) macros should not be semicolon terminated
-+#define UVC_COPY_DESCRIPTOR(mem, dst, desc) \
-+	do { \
-+		memcpy(mem, desc, (desc)->bLength); \
-+		*(dst)++ = mem; \
-+		mem += (desc)->bLength; \
-+	} while (0);
+This time let's see all the enqueues, dequeues, and givebacks for
+non-control URBs.  I don't know that the problem is related to a
+non-control URB, but I do know that a bunch of control URBs succeed so
+it might help to keep the focus away from them.
 
-Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
----
- drivers/usb/gadget/function/f_uvc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Alan Stern
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 40187b7112e7..edf0355d712c 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -465,7 +465,7 @@ uvc_register_video(struct uvc_device *uvc)
- 		memcpy(mem, desc, (desc)->bLength); \
- 		*(dst)++ = mem; \
- 		mem += (desc)->bLength; \
--	} while (0);
-+	} while (0)
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 
- #define UVC_COPY_DESCRIPTORS(mem, dst, src) \
- 	do { \
---
-2.34.1
-
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -50,7 +50,7 @@
+ #define POWER_BUDGET	500	/* in mA; use 8 for low-power port testing */
+ #define POWER_BUDGET_3	900	/* in mA */
+ 
+-#define DUMMY_TIMER_INT_NSECS	125000 /* 1 microframe */
++#define DUMMY_INT_KTIME	ns_to_ktime(125000)	 /* 1 microframe */
+ 
+ static const char	driver_name[] = "dummy_hcd";
+ static const char	driver_desc[] = "USB Host+Gadget Emulator";
+@@ -1301,10 +1301,12 @@ static int dummy_urb_enqueue(
+ 		dum_hcd->next_frame_urbp = urbp;
+ 	if (usb_pipetype(urb->pipe) == PIPE_CONTROL)
+ 		urb->error_count = 1;		/* mark as a new urb */
++	else
++		dev_info(dummy_dev(dum_hcd), "Enqueue %p\n", urb);
+ 
+ 	/* kick the scheduler, it'll do the rest */
+ 	if (!hrtimer_active(&dum_hcd->timer))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
++		hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
+ 				HRTIMER_MODE_REL_SOFT);
+ 
+  done:
+@@ -1325,9 +1327,15 @@ static int dummy_urb_dequeue(struct usb_
+ 
+ 	rc = usb_hcd_check_unlink_urb(hcd, urb, status);
+ 	if (!rc && dum_hcd->rh_state != DUMMY_RH_RUNNING &&
+-			!list_empty(&dum_hcd->urbp_list))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL_SOFT);
+-
++			!list_empty(&dum_hcd->urbp_list)) {
++		if (usb_pipetype(urb->pipe) != PIPE_CONTROL)
++			dev_info(dummy_dev(dum_hcd), "Dequeue restart %p\n", urb);
++		hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
++				HRTIMER_MODE_REL_SOFT);
++	} else if (usb_pipetype(urb->pipe) != PIPE_CONTROL) {
++		dev_info(dummy_dev(dum_hcd), "Dequeue norestart: %d %p\n",
++				rc, urb);
++	}
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+ 	return rc;
+ }
+@@ -1984,6 +1992,8 @@ return_urb:
+ 			ep->already_seen = ep->setup_stage = 0;
+ 
+ 		usb_hcd_unlink_urb_from_ep(dummy_hcd_to_hcd(dum_hcd), urb);
++		if (usb_pipetype(urb->pipe) != PIPE_CONTROL)
++			dev_info(dummy_dev(dum_hcd), "Giveback %p\n", urb);
+ 		spin_unlock(&dum->lock);
+ 		usb_hcd_giveback_urb(dummy_hcd_to_hcd(dum_hcd), urb, status);
+ 		spin_lock(&dum->lock);
+@@ -1995,8 +2005,7 @@ return_urb:
+ 		usb_put_dev(dum_hcd->udev);
+ 		dum_hcd->udev = NULL;
+ 	} else if (dum_hcd->rh_state == DUMMY_RH_RUNNING) {
+-		/* want a 1 msec delay here */
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
++		hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
+ 				HRTIMER_MODE_REL_SOFT);
+ 	}
+ 
+@@ -2391,7 +2400,8 @@ static int dummy_bus_resume(struct usb_h
+ 		dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 		set_link_state(dum_hcd);
+ 		if (!list_empty(&dum_hcd->urbp_list))
+-			hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL_SOFT);
++			hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
++					HRTIMER_MODE_REL_SOFT);
+ 		hcd->state = HC_STATE_RUNNING;
+ 	}
+ 	spin_unlock_irq(&dum_hcd->dum->lock);
 
