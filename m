@@ -1,152 +1,135 @@
-Return-Path: <linux-usb+bounces-16190-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16191-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0E5C99D475
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 18:16:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D0B99D481
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 18:20:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2C16B28110
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 16:14:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C81CCB24A99
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 16:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3ED1AB507;
-	Mon, 14 Oct 2024 16:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD391B4F1C;
+	Mon, 14 Oct 2024 16:20:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="hEWCJdsg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KxIp1gy7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62B61AC8A2
-	for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 16:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA641AB525
+	for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 16:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728922442; cv=none; b=eHzcx6dZA1Y5DwTUikJiE5Xnj1wIbUK3GeUHmxfMHz8R6ODJJuXWmW8ii8m5ivRVZA4iRoITyu+lqktqKl+ELP36xy4iCLNIJ9rsYnv4C6I8L75B4aCwd+wtbDFzO10oameXAN7D52ZgF+Ve1G3qxj3/9GVKxa0nocjm8ErKtyg=
+	t=1728922822; cv=none; b=B+8J4zMFTTcNEXlbksrpS1/MebAqfmf90FO8JuqnnahzwH7I/km8MIszHkPXnSU1qGjTqBmTwKKFI3EqPOqiazjARafX1AnzoizM2PvCU9ikJHKIptMU4jFPkVgfQyyRh1HiM3dSYfiGvpfy0thu7cjKVP1rkiOpDe+LcAjRsmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728922442; c=relaxed/simple;
-	bh=bPKOF9hLp1gLmish3JLHjV9xayYIgOc9dRCesRJ75gw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oj2bVVhcDAQl4PMAY3P5yacbl1O9XpeHH+MXu6CGJREtVb1J05nbK7grHV7CEMs4ixRGjZe/sErz+5jvsGUEA/lotFJd/IFjaTxSFA4U5mRhY0jGGCovfqo/ku2gyw+nq2D3d5cykDKN+YbVKTLI9xNa1w5OLZTsSKUNLVzYDmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=hEWCJdsg; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a99ebb390a5so376249866b.1
-        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 09:13:59 -0700 (PDT)
+	s=arc-20240116; t=1728922822; c=relaxed/simple;
+	bh=gKvXh/I3PdZE3GR9krNhCfohoX6IveIuFUNNLJAJzdE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EsyI4TC7fps8cWTNpJP44ctAR+AvFYQvTW52M/GeDT3avqHejsP0n4Xkz6uE9v/Ho87XrlE+YGWWy4jYaQ4SPQx65Miq4ZXbtUYPb4BeHYpSwFz59A6DDcSPE+vnemRyuPgc0itIGgatnSkD2d5E52yeSKvYy1KVUa3GXvEjGjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KxIp1gy7; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-539e681ba70so24272e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 09:20:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1728922438; x=1729527238; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bPKOF9hLp1gLmish3JLHjV9xayYIgOc9dRCesRJ75gw=;
-        b=hEWCJdsgZ3T9dNYjNVdVp+vbg429E9OaIER2h6MjYwo8CTs5CDTDoKGVPyQIieQbFN
-         5wnseuG/rYl/gIwzwcVyXWxoeADFIKXUqTLt4t1kKgl5y0tx6fu6kn3X6N/J60mziFDF
-         oq8OW0/Oz662DCilomFWBkY0ys+42+Qvwz8fLHAnZhTOVNB4rnO0ibhRrEYQF1OPaCGD
-         CrZOXbCehQuXceJwZNbz8hteSapOXPOhVKRCHKrdybz+ghlMUC08jcy3yFt7jd8NxFit
-         1gT8Ii6u32xs0zwpWm0mb6rqZX1Xe4pyT6zxjerCk0QuEQk544W8J9fe+Zvdz/8kbRA4
-         lCig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728922438; x=1729527238;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1728922817; x=1729527617; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bPKOF9hLp1gLmish3JLHjV9xayYIgOc9dRCesRJ75gw=;
-        b=RuVuk5Ki9KJ+nh4yCpLsQGkjdxzSS/9pdnk49p7iUzHSN4OCcYBHubSjNtxqOArU6d
-         tIXu8qpB7kc3yCv2cEwpILczUuZanedyhpjSzUzsKjDSawZvOX8aebxmho624nb/X2C4
-         NlN3yJS7YYy4dLNRgiHNx7Nqnev9s53Hes/sY24x7X8eJV2TrydN0KXcF/GzKOQuVBXz
-         +SlF1uwOXJG0LCanUL7R7z22tqTzcxX878mEXVrBzjlXLhsd5Huf2sge4dxjNVcAr91o
-         GoCO1GEO+KQVBvAXQAlYCPl8z4V5hW4DmtFAuWflCX2zIZKfhYAfl7OLOhYsiYtxGJu2
-         DGqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVXYOnu2+6MFc8FyJ22GZBNc/l/zDtGjHd+9LVFygHh6al59/YVPWpgVHnfyck6eQ5dtD+jY21tOo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0x8eJYFhzUSr/xj58hoeR7F0+MecYa/d/sYAv7RZGSu/TltR/
-	bUNUW9Lle5M9ARII6n7mYY4NmkUETPyNuiZILAB1ibWykYKZkOr/mkcbLdWztu8=
-X-Google-Smtp-Source: AGHT+IEFuTZaIGMTYsWaft98HaU5lwquKpMe/kwiufftguLSaKzTtM+rH5m2/C/7LkYKed1FDU7iJw==
-X-Received: by 2002:a17:906:c114:b0:a9a:cf0:8fd4 with SMTP id a640c23a62f3a-a9a0cf09147mr410208166b.18.1728922438063;
-        Mon, 14 Oct 2024 09:13:58 -0700 (PDT)
-Received: from localhost ([2001:4090:a244:83ae:c75a:6d73:cead:b69a])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a06169946sm236846866b.204.2024.10.14.09.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2024 09:13:57 -0700 (PDT)
-Date: Mon, 14 Oct 2024 18:13:56 +0200
-From: Markus Schneider-Pargmann <msp@baylibre.com>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, 
-	Santosh Shilimkar <ssantosh@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>, srk@ti.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: dwc3: core: Fix system suspend on TI AM62
- platforms
-Message-ID: <fl5znng7ed2cgqmtrigra5y4e7ozorffozjxsg2ipeayzfubxd@cijl65vuutxx>
-References: <20241011-am62-lpm-usb-v3-1-562d445625b5@kernel.org>
+        bh=gKvXh/I3PdZE3GR9krNhCfohoX6IveIuFUNNLJAJzdE=;
+        b=KxIp1gy70J57FSxV/5Ju7yRNFsi9uGMqBpizNikBdqrRhST3EfZwjR9tmN/MWBQbtP
+         NqfMo2w366X+cTV8HDKetekPPd7VQlLHWBQh+nEHWhJ6fkYrUyLlSPyj5DgR+ql0cX/j
+         hRq2rkmbLw8uFpLO8FaqDyirLFqO11o3sNnTwAadOJhY4JRJvibJwErA1xL+XJyzpeU/
+         lbKxh6mowvlToN5u1WFhR1IP0nhLWrNxQlwab0vLXeDaUFW6Ne4/RicJgbQ8dTg59kDB
+         4x7fgxZRvC2hoQ9Nxou/o7DMYoGXpREUZSla48S8Tq8NcU3kB4z3ZI5KebvGYc3nbNva
+         Ziww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728922817; x=1729527617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gKvXh/I3PdZE3GR9krNhCfohoX6IveIuFUNNLJAJzdE=;
+        b=EdCdpuV+xoWRpURMd97JnxCcjRPY2mjgu28vjv0sUN5jidh8lxe0z6jSwdMwdKdQ4U
+         DWfmAvOJwbsrGTbIHR5x58JYBbN/1vgzIpLvFlZrMo2BCWw2+Tm3DbaTd6hBzwpc6soT
+         Ru9+AZ45W6Wf/j9cgFwDmqr2037PF9QY/uCMy8qQrEBYpYecCcbUk58BUNQvvzqVYpqm
+         WIC+tri9B7LaAHyGK1VF1vg6PF45WYchs1GbmKW0umS9tlhOlz4a+iWv+96uRTAsd5gu
+         2F0sFYcvXN+TOtI9FfbZIh7O4NcxTawUo00drfpUP6v+CKLlkGbvhei8fo3+fYSFR0r0
+         YX2A==
+X-Forwarded-Encrypted: i=1; AJvYcCVik3jRQT4En5HkyRTHTMbbhkK4C4fgschtuz378ZqQTuQtuM2V9SfT0DGRRz+wSqc45eQlN8Hq96Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1rLRa9FS1OeCGmcCfxOYB6gAF+F+KyGvpFWJ/UqJfKnaKzLCL
+	UY4t6qxRUiXr/1/fF9uc+1vg7Y3gKtXyaR1asTNL2EenSF79vRDxH52e/FGAX4zFDPBDXhwOU1m
+	AkQnZ7Pn0ENCfrI18+qXnwo62T//Qn++FK3q5
+X-Google-Smtp-Source: AGHT+IHzzT5Xql/B/YM8yku8j1FfwE05VlFhBxx9961bqHFWjZxX7Ej6fRWAUlINENXZDwDsDBwPpWmPq5lKA+HjF7E=
+X-Received: by 2002:a05:6512:2821:b0:535:3d14:1313 with SMTP id
+ 2adb3069b0e04-539e5e762e7mr553189e87.0.1728922817154; Mon, 14 Oct 2024
+ 09:20:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h4nmdfp7tndyngpt"
-Content-Disposition: inline
-In-Reply-To: <20241011-am62-lpm-usb-v3-1-562d445625b5@kernel.org>
-
-
---h4nmdfp7tndyngpt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20241014085816.1401364-1-guanyulin@google.com>
+ <20241014085816.1401364-6-guanyulin@google.com> <afc9fa53-b7f2-45d0-bd30-8681b71beef5@linux.intel.com>
+In-Reply-To: <afc9fa53-b7f2-45d0-bd30-8681b71beef5@linux.intel.com>
+From: Guan-Yu Lin <guanyulin@google.com>
+Date: Tue, 15 Oct 2024 00:19:00 +0800
+Message-ID: <CAOuDEK0QomQfXqzmP6g8QRdbE5dXob2cuhM3viErUoDHURaB-Q@mail.gmail.com>
+Subject: Re: [PATCH v5 5/5] usb: host: enable sideband transfer during system sleep
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	mathias.nyman@intel.com, stern@rowland.harvard.edu, yajun.deng@linux.dev, 
+	sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com, 
+	dianders@chromium.org, perex@perex.cz, tiwai@suse.com, niko.mauno@vaisala.com, 
+	andreyknvl@gmail.com, christophe.jaillet@wanadoo.fr, tj@kernel.org, 
+	stanley_chang@realtek.com, quic_jjohnson@quicinc.com, ricardo@marliere.net, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sound@vger.kernel.org, badhri@google.com, albertccwang@google.com, 
+	quic_wcheng@quicinc.com, pumahsu@google.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 11, 2024 at 01:53:24PM GMT, Roger Quadros wrote:
-> Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during i=
-nit"),
-> system suspend is broken on AM62 TI platforms.
->=20
-> Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SU=
-SPHY
-> bits (hence forth called 2 SUSPHY bits) were being set during core
-> initialization and even during core re-initialization after a system
-> suspend/resume.
->=20
-> These bits are required to be set for system suspend/resume to work corre=
-ctly
-> on AM62 platforms.
->=20
-> Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if g=
-adget
-> driver is not loaded and started.
-> For Host mode, the 2 SUSPHY bits are set before the first system suspend =
-but
-> get cleared at system resume during core re-init and are never set again.
->=20
-> This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
-> before system suspend and restored to the original state during system re=
-sume.
->=20
-> Cc: stable@vger.kernel.org # v6.9+
-> Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
-> Link: https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@ke=
-rnel.org/
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+On Mon, Oct 14, 2024 at 9:06=E2=80=AFPM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> On 14.10.2024 11.50, Guan-Yu Lin wrote:
+> > Sharing a USB controller with another entity via xhci-sideband driver
+> > creates power management complexities. To prevent the USB controller
+> > from being inadvertently deactivated while in use by the other entity, =
+a
+> > usage-count based mechanism is implemented. This allows the system to
+> > manage power effectively, ensuring the controller remains available
+> > whenever needed.
+>
+> I don't think all this is needed to prevent USB controller from being
+> deactivated while sideband is in use. The modified audio class driver
+> that uses sideband is still bound to a usb interface device, and all
+> normal pm reference counting should work.
+>
+> To me it looks like this code is tricking pm framework into believing
+> the usb device and host controller have successfully suspended during
+> system suspend when they in reality are fully up and running.
+>
+> I'm not sure I fully understand the case this series is solving.
+>
+> Thanks
+> Mathias
+>
 
-Tested-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Your understanding is correct; this series aims to keep necessary
+devices running while the system is suspended. The goal is to keep USB
+transfer available via sideband when the main system is asleep. Since
+we're offloading some USB transfers to another audio DSP, the Linux
+driver is not involved in queueing transfer TRBs, handling event TRBs,
+etc., in some specific "offloaded" USB endpoints. The sideband might
+be bound to a USB interface device to prevent the device from going
+into runtime suspend, but it seems this doesn't prevent devices from
+suspending when the system goes into system-wide suspend. So the main
+purpose of this series is to prevent some related devices being
+suspended during system suspend.
 
-Thanks for fixing!
-
-Best
-Markus
-
---h4nmdfp7tndyngpt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTd8KHufh7XoFiu4kEkjLTi1BWuPwUCZw1DPQAKCRAkjLTi1BWu
-P/92AP9J1CFYQTr245Jv5ZxCyp/AAlTLgGGRp3SBiliOMn2cvAEA+vFrFVBosl4v
-mTio+KqIdSttNo+JNteWPelEI0uGpQM=
-=FbId
------END PGP SIGNATURE-----
-
---h4nmdfp7tndyngpt--
+Regards,
+Guan-Yu
 
