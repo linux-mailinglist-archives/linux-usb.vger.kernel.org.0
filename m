@@ -1,119 +1,175 @@
-Return-Path: <linux-usb+bounces-16196-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16197-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 514DE99D70C
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 21:11:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5128499D7CC
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 22:00:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C06A2839DF
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 19:11:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9A30B22166
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 20:00:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15F791CC158;
-	Mon, 14 Oct 2024 19:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B5B1CF5C9;
+	Mon, 14 Oct 2024 19:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CV4eOpdj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B4A4UoLv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0220C231C83
-	for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 19:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14401CF28B
+	for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 19:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728933091; cv=none; b=JDrA+8TNtOegzK3lp8cwvacEIqNzOOuQHTu4stxT5IYJgsNsHMCBFafGkwz2UnRi/690Y9ZqDZyz0yThwqOJggfhquDHu0QPnCI1AzKUzs3xYIUH6cuFf7xdF3fWw2OIftYjRWnXTU9tZ59SsjYWwSRDRwGa+rVImUXE7BIs5Pk=
+	t=1728935991; cv=none; b=eLnDzRZBT8tkN3Wz3QKbNs2pR1A7Zb6XzUAGNF7ukUS/YHEgB/tpl124cRjhSCmFftpKZMKF85wi1OXVs0fnT8WDAVMmLvLQzd6q0NgKMqA677q1wAeCyljWR3pCm939RaShy3jXDkfDdDcsDni33apVq4idBA47g3QjK3GUJ+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728933091; c=relaxed/simple;
-	bh=1AYIHJSpJh14tBrc3Ys8p22E2Im9tFbWdQZh9k97sHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Sbjn9PiPBweDQ0eISoeLuR4HEFFRd/saxEyfu/wWqOop7jqM3QP3t3DxJVZwGQK5YyvH/sPmvdh1Unn5z3IUG9iqmTumTnbZbOUFN1ptXSeoW94cbd9baojevRLfAQXJEKc4s1zZUHBxoPnN+AtOq+xVJSDM4jDvXKHAFSPKWTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CV4eOpdj; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-539f0f9ee49so1739701e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 12:11:29 -0700 (PDT)
+	s=arc-20240116; t=1728935991; c=relaxed/simple;
+	bh=u9uV9JChogphVwKk7EEyRzAoG4DZeAhoQVoDLrLr6d0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qxroinkLmGIxamHEEW43FS6/N+TcFzGcdgsMt9qaYEZVgLW0xSbOfgH6TueKN/G8mJ64gI1Su9WTKVuxUw4Pdd1VihdYXbpyDHSv6FR/sa7bO5iaycNR9PhNnlye1T4Eq/jmy1pp/7gdgCaMTHDUoRYZE1vmFDd/i28uh9yJNkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B4A4UoLv; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a99ffeea60bso272072166b.3
+        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 12:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728933088; x=1729537888; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1728935988; x=1729540788; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YOwYcmRXYNdjT3Unt6w0j33ZegmKcYuSEHukuwkGS2g=;
-        b=CV4eOpdjc9DcPtC8cqojC/KJxmnvTorko4A/qTRdyQdyj/sn0FQJ+z6PSfTPUz4VHN
-         SO5asEn+og5OlYr2f4APK6yjJAR7S/V8V9ycvBoc+oHsLP52T4VNn3AJsYUbxErOjGRt
-         cELgnJJTWMbUeE8i+w/Dvt6ssJ+gtjTYYACvJzyvG9vG32rpC/6XGY2cH4yJgST3GoHu
-         wRGSAjUCQXpXHe5KR2GfrM67w1wgBmJWZ3iejG4khRz/8t8z+N+DS24z3G3t5uqlDn/J
-         IqCWscpR8rsZ0HQhoNvqUOUFEsVTKWjguRpvjZai9ZKtIeWQ2a+zCyjdZo1E97WAf1OD
-         v0sQ==
+        bh=Qlz+q0/TK0V+xCzZbAzvbZ/eVxqxyV9wT+tFG3h7ujI=;
+        b=B4A4UoLvg0gRApu15+rqotHnY5gY1YOC3MNcJQO8oyku9FkQvz1+ro5x3oMnvYrq8C
+         Fq0Wo4FwCkPeP6skXgh10EfYJWJkp+8gbLHq5EjHG24aaQs87t6sl+muJ2veiV/ucpEP
+         uPhOuD4V1AHEfDi9VICdGDBdAAfFvI1xupc3R1BOI1fIRRwMKU0dOe9/kSL+fJXLZPcj
+         wG7WTJdqWuXhaozYscL1n5DI9lcVwCaBvfWnObEh7i2ZH8NlkfkqWUYs7tWjpe0BxD7L
+         Mfbysg1S75m9i216/ITnTq5sC8nd4u2SmYJvrI1Fb8/2EbNtt1jjAO2ALiUPU+4FseTb
+         HBFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728933088; x=1729537888;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1728935988; x=1729540788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YOwYcmRXYNdjT3Unt6w0j33ZegmKcYuSEHukuwkGS2g=;
-        b=GX+GS0dcMI+bzsa+NAoIsbg8mrWeHy/qcj40Tmos2MSH+8xtrbiO+laGJw8mSfe2Cy
-         z+Q/flT0hBBSxroG/lTUjbJjtHW3+1Lcvlg23OvqEdAOKYNXQiIlyYKp+bfoW35NWQ1r
-         Dirn2N34eQGU4Q3duH7NNVC0RBkPekL7bZo7dHrNfJCgYnwWWD07trARBQuSwEyXu4qd
-         RKBreem/TRZ45d1q8CQ4rQMAlUaZGek76tinTUACtPaPP2LpRG40bitTXqAX3tt5GS/L
-         XcylC+mpu8NoU097w2jO4B6IgJZOYXk7btSANkjIeoVTQry9oRK80C54JtLddNoGcmxO
-         dCeA==
-X-Gm-Message-State: AOJu0YyoTaIBqbRimRG0HqgvRIn0lTwzKz0eU1ky94n0cT6fzQTbLPGg
-	Rtaxx+5fo7RZR0VoXw/8dsuhZ6GsK8dChuJQw21a9sMS7pEpWZlU
-X-Google-Smtp-Source: AGHT+IGzzvGz/j+W7ZuEOpkTascHOd5M1oGHbb1Ei9lC2W73QfEpKrsDPBd9JncgCc9/r/QaAbYyTw==
-X-Received: by 2002:a05:6512:2212:b0:539:a353:279c with SMTP id 2adb3069b0e04-539da4ccf94mr5797385e87.28.1728933087786;
-        Mon, 14 Oct 2024 12:11:27 -0700 (PDT)
-Received: from foxbook (bfe48.neoplus.adsl.tpnet.pl. [83.28.42.48])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539eb912069sm786695e87.62.2024.10.14.12.11.24
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 14 Oct 2024 12:11:26 -0700 (PDT)
-Date: Mon, 14 Oct 2024 21:11:22 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [PATCH 2/2] usb: xhci: Warn about suspected "start-stop" bugs in
- HCs
-Message-ID: <20241014211122.7cb5b133@foxbook>
-In-Reply-To: <20241014210840.5941d336@foxbook>
-References: <20241014210840.5941d336@foxbook>
+        bh=Qlz+q0/TK0V+xCzZbAzvbZ/eVxqxyV9wT+tFG3h7ujI=;
+        b=OnQgLoY8YirL5+JB9ZjQVrkKRFGtiJ/1zGHwxGlS00GCgeFcSEUP+u0mPFnhjR5Dur
+         lysyvwnz7AwxNFUXmvLoPtNxtNhv/VgAL880yde7Pg6vdfCyix0Jj+n3fca9jPkKo00A
+         jLFCaETdtcjvA4S+l7c/c5KPNXIE2YGv266PfWrtfw3w49+emdH2OLj/FdDT7LDAUV6H
+         JHFTEJEqJcEVnbeuxVyQPvWK4d/LBK+twBUFgkQq1RbU41Z8TJzAEsPeEelrr6lv7Wkl
+         iI3RT3/8VjmqUA46UHvzGRj4iJoEZDolTESd5CAzN92iecibSednR6NpR7tJuwm0eQlS
+         h7mA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcnqIE2HTfTV3xjQrlmQJcQtlIwmhWW0eAlN3jYoggp8RT0zA5sThKZV50ySsiQaIUjYwkAOHA5S4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCucpU9MG08iVhoy79Tm6weMGUp3Jaj/+K4IqyqQoVBqN61LxY
+	yDn0XkVwGPkCksUXwIfH7HbyqTh1lymzcpBVxTB+RWHM05mJuZu8kwy8E1KEyJWDIsmRKk8qhGe
+	pSm4lTYUZduUwfOFzpTZ6+TfevvCYzTyRUyS1rpqpuE/rcA6RZyQC
+X-Google-Smtp-Source: AGHT+IEqEDaLUpXMT18RBsLBogUI7VV3LWh52gRwoZvp1NdHc8GYVSpA84mcVyFFOwzawVw0wQVA/81PbA0ZoTNlK4A=
+X-Received: by 2002:a17:907:9709:b0:a9a:4d1:460 with SMTP id
+ a640c23a62f3a-a9a04d10662mr502667566b.63.1728935987853; Mon, 14 Oct 2024
+ 12:59:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20240829175201.670718-1-oneukum@suse.com>
+In-Reply-To: <20240829175201.670718-1-oneukum@suse.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 14 Oct 2024 21:59:33 +0200
+Message-ID: <CANn89i+m69mWQw+V6XWCzmF84s6uQV15m_YdkPDQptoxUks4=w@mail.gmail.com>
+Subject: Re: [PATCHv2 net] usbnet: modern method to get random MAC
+To: Oliver Neukum <oneukum@suse.com>
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@kernel.org, 
+	John Sperbeck <jsperbeck@google.com>, Brian Vazquez <brianvv@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-NEC controllers have a bug, where stopping an endpoint soon after it
-has been restarted doesn't quite work as expected. This forces us to
-track whether each Stop Endpoint command is expected to fail or not.
+On Thu, Aug 29, 2024 at 7:52=E2=80=AFPM Oliver Neukum <oneukum@suse.com> wr=
+ote:
+>
+> The driver generates a random MAC once on load
+> and uses it over and over, including on two devices
+> needing a random MAC at the same time.
+>
+> Jakub suggested revamping the driver to the modern
+> API for setting a random MAC rather than fixing
+> the old stuff.
+>
+> The bug is as old as the driver.
+>
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+>
+> ---
+>
+> v2: Correct commentary style
+>
+>  drivers/net/usb/usbnet.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index dfc37016690b..40536e1cb4df 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -61,9 +61,6 @@
+>
+>  /*----------------------------------------------------------------------=
+---*/
+>
+> -// randomly generated ethernet address
+> -static u8      node_id [ETH_ALEN];
+> -
+>  /* use ethtool to change the level for any given device */
+>  static int msg_level =3D -1;
+>  module_param (msg_level, int, 0);
+> @@ -1743,7 +1740,6 @@ usbnet_probe (struct usb_interface *udev, const str=
+uct usb_device_id *prod)
+>
+>         dev->net =3D net;
+>         strscpy(net->name, "usb%d", sizeof(net->name));
+> -       eth_hw_addr_set(net, node_id);
+>
+>         /* rx and tx sides can use different message sizes;
+>          * bind() should set rx_urb_size in that case.
+> @@ -1819,9 +1815,9 @@ usbnet_probe (struct usb_interface *udev, const str=
+uct usb_device_id *prod)
+>                 goto out4;
+>         }
+>
+> -       /* let userspace know we have a random address */
+> -       if (ether_addr_equal(net->dev_addr, node_id))
+> -               net->addr_assign_type =3D NET_ADDR_RANDOM;
+> +       /* this flags the device for user space */
+> +       if (!is_valid_ether_addr(net->dev_addr))
+> +               eth_hw_addr_random(net);
+>
+>         if ((dev->driver_info->flags & FLAG_WLAN) !=3D 0)
+>                 SET_NETDEV_DEVTYPE(net, &wlan_type);
+> @@ -2229,7 +2225,6 @@ static int __init usbnet_init(void)
+>         BUILD_BUG_ON(
+>                 sizeof_field(struct sk_buff, cb) < sizeof(struct skb_data=
+));
+>
+> -       eth_random_addr(node_id);
+>         return 0;
+>  }
+>  module_init(usbnet_init);
+> --
+> 2.45.2
+>
 
-Reuse this infrastracture to warn about similar bugs on other chips,
-if any are found.
+As diagnosed by John Sperbeck :
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
- drivers/usb/host/xhci-ring.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+This patch implies all ->bind() method took care of populating net->dev_add=
+r ?
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index c0efb4d34ab9..c326b86d713c 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1186,8 +1186,11 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
- 			 * So keep retrying until the command clearly succeeds.
- 			 * Not clear what to do if other HCs have similar bugs.
- 			 */
--			if (!(xhci->quirks & XHCI_NEC_HOST))
-+			if (!(xhci->quirks & XHCI_NEC_HOST)) {
-+				xhci_warn(xhci, "Unhandled Stop Endpoint failure on slot %d ep_index %d\n",
-+						slot_id, ep_index);
- 				break;
-+			}
- 			fallthrough;
- 
- 		case EP_STATE_RUNNING:
--- 
-2.43.0
+Otherwise the following existing heuristic is no longer working
 
+// heuristic:  "usb%d" for links we know are two-host,
+// else "eth%d" when there's reasonable doubt.  userspace
+// can rename the link if it knows better.
+if ((dev->driver_info->flags & FLAG_ETHER) !=3D 0 &&
+    ((dev->driver_info->flags & FLAG_POINTTOPOINT) =3D=3D 0 ||
+     (net->dev_addr [0] & 0x02) =3D=3D 0))
+strscpy(net->name, "eth%d", sizeof(net->name));
 
