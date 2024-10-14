@@ -1,108 +1,112 @@
-Return-Path: <linux-usb+bounces-16184-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16185-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F392399C841
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 13:11:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3332499CAFB
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 15:06:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A50491F24729
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 11:11:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 621F41C23739
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 13:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2872115350B;
-	Mon, 14 Oct 2024 11:02:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B5C1AA79A;
+	Mon, 14 Oct 2024 13:06:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nXH3F2iq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SahEqF1d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04561DDA35
-	for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 11:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DF71A4F20;
+	Mon, 14 Oct 2024 13:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728903742; cv=none; b=sxw4UnbdmrnQiJSOtdAthPQvqtKXgOTsyjQKYbTZ1auWpqo7PUv63tujravYbwrDAUmvLQJohlV9YxAtAGr6TpM1kkiiuO1iR+7h6aCNVnO6v11Z9bVPT82E8UBqS4jtsKUQjwaoAmUZlmKLVbdU9jgoSmtftJkpQZ2GrCJlaAk=
+	t=1728911204; cv=none; b=QhPIf86oSv/u66UAUBSQb+0AgCOLpwxkPgoaWIZA44zWZqCmCQJ8CK19x37axg4nfBol18aAFPJPzIquN0K9Uk3SWc3pIPDUUcWNnWFJQl43RNdOTkTA4e2rC6UpXhX2nRVEHbCn3fevsGdmZXwegyfi5GjIZ6/yE9+dtkwuKL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728903742; c=relaxed/simple;
-	bh=DNk+6cHiqUVl2uCNmV7ktND/12rjOLXT6Lm+hcSTZWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FZ1Hp+b8Nmc2LG+3UPbhlBpB7PoajCZoQu/UK2kfMj8CzbMc3jhPVjvOxmD+b8KoC4OCq6srZMmowOCnIt3Fvv9vfzw4utBFiPDDiabD/7AHUmZVgU9IthvB/rH69nucqN+l4C4RW48x+wZMJQIRYnNy+ithd6yMdDl9oF0XHxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nXH3F2iq; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539e5c15fd3so1570395e87.3
-        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 04:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728903739; x=1729508539; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YPG5syvQmdIElZ3OPvKI1tUxnKFtCrmS600/6uIfwrs=;
-        b=nXH3F2iqB5Q9XkW2V1IfBuLKZ5GBhUTCRQRXyWUvcTcJdIm8quAiGuFaE+fZm2nI8s
-         DaCJPvV+lFcd3JAD7awkkSh3gJInkZlzph/EhozhNnMXunkKFgdI+u9Fus2J2gZHOnCF
-         cZvE6Va57OVpBZ0d1jxrE2i0bR26OZoFx45bz3xfXZOKG4ewxWwfz/nOoqtlYq8vFA9K
-         L8Yh63pk2WLaGbv1OKbNgvnoU89DPMIqTctZGzCUx74GM9c9A4sF20jQNJ/FahD6yKcu
-         mi9ZcyWDpi38a5LsroJWnoGcuj/WqqYUnsmuCqzA4jyS0lh23ERLZfd0CrMGRtpYv0me
-         r1+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728903739; x=1729508539;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YPG5syvQmdIElZ3OPvKI1tUxnKFtCrmS600/6uIfwrs=;
-        b=jIAdDYkf6X4AETEkmV74rs/5m+6sjCPonQKAH5IUSsnXk/jI0S66xuxWKavw/cJmfk
-         nporxNprVMD8fRLS1wnFqCJmb0SQWSsz9+9MWPzSuDIPIyrUIf64zAKPVnk8FfX6Zuhk
-         hCiITgS5nBu5jmgZx3LAMDHCHx5WMNpFlZa81tTddSiLjakWhdaPVYuNFYvp78t1So9h
-         yH9tLu7seYVDTK72cE01N2hm5aid0LA/57/7bxOwrojsUFE7lPFKYBbl63c/ud3OoCVU
-         tljPUmh2yZsiWhvZEG3AjwCnXtYRCd9IHZtyk0jW1mQa5Wl/r+oSZKISesPl56879h4e
-         0M9w==
-X-Forwarded-Encrypted: i=1; AJvYcCU4Ds+rpjLY4HTFBpKXdf1uTTUz6bVuLWwvl+mNllqCzvkhiEkkaD+pnJ8lfij/0fLpbZOSpel18/Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwX/i16k8S1tHn3FPG0jtaDsDDs9H99IAuyT1BJ0neP5J8zgOZB
-	OIg+R4g60MBNOALaqNLeMkjSkrrN3nW9NLZMwYOLas6fVVNBRXEc2hCM9ws3sIg=
-X-Google-Smtp-Source: AGHT+IEuiWssWlxRsSEt59sxgm4J1iwV9VrCy52qiaQ6PWdHX7Ga7KTuh7tgvmtXbf+UOvM8fdAF8w==
-X-Received: by 2002:a05:6512:a93:b0:535:6ba7:7725 with SMTP id 2adb3069b0e04-539da3b6c23mr5260919e87.3.1728903738909;
-        Mon, 14 Oct 2024 04:02:18 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539e44b766esm1031460e87.239.2024.10.14.04.02.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2024 04:02:17 -0700 (PDT)
-Date: Mon, 14 Oct 2024 14:02:15 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Vinod Koul <vkoul@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Bjorn Andersson <quic_bjorande@quicinc.com>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-phy@lists.infradead.org, 
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-Subject: Re: [PATCH 5/5] phy: qcom: qmp-usbc: Add qmp configuration for QCS615
-Message-ID: <arqe2egym2ljme75lpb52mkkchn7ojs7xkozbgdw2jn3lmhiry@oixcxrsteszy>
-References: <20241014084432.3310114-1-quic_kriskura@quicinc.com>
- <20241014084432.3310114-6-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1728911204; c=relaxed/simple;
+	bh=PTBOYMEy5sDrtcwT6alRgPl5WDMXK8h4WMrdqBbUtyI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eqPgtn+mQmej73Mgam19roOtaUKsKZP+ykUP/LjjUzKbVilCo23r4zsc/YtmlVasd+rTMk28DxXbDKwScAb67Br3x2hgmLjbA6PbTO4CXJ8x46B9qq6xy+CzG5skLrsbiDv2WUgloDyNcCWmOGzBScpA9gzDTtZyF7wG/N5mIbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SahEqF1d; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728911203; x=1760447203;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PTBOYMEy5sDrtcwT6alRgPl5WDMXK8h4WMrdqBbUtyI=;
+  b=SahEqF1dxhBQi2YZ07lUHo55+o6bkqydkvG/rvAu99YqrdH31xR/YiZn
+   yokMsqafjjbKb50aVmO0Ihuchp60SlpE2cyxqkJca9isRPoBSliIeW6vJ
+   BbemQ86VrbPmktJdB+TAC1jufZYTeuROL7LsOmDw3oVUJuPaj1KIRugkI
+   sJKdlcWdSQb9ooJ9TZMO1Fw3jytU5jgptF6H1p7cGBdSyGF4e/2qlSfWq
+   +zwKFfQhZ+KcCnMNbJRX8qTnbZDd4Yl+r7zXh6kW3ppWupVoFENSmUSZi
+   suzFRR2ET0fEXFJPX/FJ7qKfSIZ6zpal3IUlhs6cszZh3WoFGzWPLHQMZ
+   Q==;
+X-CSE-ConnectionGUID: tK0wPuleRpSBv+uQjJErnQ==
+X-CSE-MsgGUID: 1bUvLy8nTj++GxlgQ16oNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="53678612"
+X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; 
+   d="scan'208";a="53678612"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 06:06:42 -0700
+X-CSE-ConnectionGUID: E9t8hJZtRi+7bkSsKuDGBg==
+X-CSE-MsgGUID: mzLeac+ZReall9eN25SgHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; 
+   d="scan'208";a="82192851"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa004.fm.intel.com with ESMTP; 14 Oct 2024 06:06:36 -0700
+Message-ID: <afc9fa53-b7f2-45d0-bd30-8681b71beef5@linux.intel.com>
+Date: Mon, 14 Oct 2024 16:08:47 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241014084432.3310114-6-quic_kriskura@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 5/5] usb: host: enable sideband transfer during system
+ sleep
+To: Guan-Yu Lin <guanyulin@google.com>, Thinh.Nguyen@synopsys.com,
+ gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+ stern@rowland.harvard.edu, yajun.deng@linux.dev, sumit.garg@linaro.org,
+ kekrby@gmail.com, oneukum@suse.com, dianders@chromium.org, perex@perex.cz,
+ tiwai@suse.com, niko.mauno@vaisala.com, andreyknvl@gmail.com,
+ christophe.jaillet@wanadoo.fr, tj@kernel.org, stanley_chang@realtek.com,
+ quic_jjohnson@quicinc.com, ricardo@marliere.net
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-sound@vger.kernel.org, badhri@google.com, albertccwang@google.com,
+ quic_wcheng@quicinc.com, pumahsu@google.com
+References: <20241014085816.1401364-1-guanyulin@google.com>
+ <20241014085816.1401364-6-guanyulin@google.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20241014085816.1401364-6-guanyulin@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 14, 2024 at 02:14:32PM +0530, Krishna Kurapati wrote:
-> Provide PHY configuration for the USB QMP PHY for QCS615 Platform.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-usbc.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+On 14.10.2024 11.50, Guan-Yu Lin wrote:
+> Sharing a USB controller with another entity via xhci-sideband driver
+> creates power management complexities. To prevent the USB controller
+> from being inadvertently deactivated while in use by the other entity, a
+> usage-count based mechanism is implemented. This allows the system to
+> manage power effectively, ensuring the controller remains available
+> whenever needed.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I don't think all this is needed to prevent USB controller from being
+deactivated while sideband is in use. The modified audio class driver
+that uses sideband is still bound to a usb interface device, and all
+normal pm reference counting should work.
 
--- 
-With best wishes
-Dmitry
+To me it looks like this code is tricking pm framework into believing
+the usb device and host controller have successfully suspended during
+system suspend when they in reality are fully up and running.
+
+I'm not sure I fully understand the case this series is solving.
+
+Thanks
+Mathias
+
 
