@@ -1,130 +1,155 @@
-Return-Path: <linux-usb+bounces-16174-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16175-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6871599C3F3
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 10:47:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3997299C475
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 10:59:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 902931C2215C
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 08:47:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6153F1C225A3
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2024 08:59:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9F315B0EE;
-	Mon, 14 Oct 2024 08:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F6F156F3B;
+	Mon, 14 Oct 2024 08:58:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WGdDFhzT"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vyR7KvOW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB73156641;
-	Mon, 14 Oct 2024 08:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EDE156F27
+	for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 08:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728895532; cv=none; b=MrJ9sD30q/nj+7RPm0BbzJepmT9OUnDKOS23c+xX9uwmuha5CGQGAg10tfHU8XCDLocHMwwkcNgboG23HSvh1wSoW1n2Z6EN0Ao7jNctS4XKwn0c13S4nFIPcPloRCcorjKNgOGqxXswIqoVXQgyjntJTlgxC2snHlpYXezyB7E=
+	t=1728896315; cv=none; b=lyIy+UnaVSpjGRy/Kn45Eiv48X3Xv49Pr5F23tz6b73LyMKittHyVFfsiF110v6yRh8PIV+oDk8ipdzzB63zCSWAvY2ECzttV9N3mb4O4tqQFgMVYNOKZ1vb4mqV+tejTKjS2JR1J6ex2O8yxMbz+JAWxza8l3UHmjw8DE/+hJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728895532; c=relaxed/simple;
-	bh=1NXTAUIZPHpQV0iTWnZb+mSUoOt320gCJRRk4Ny4i/Y=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uF696Zrc4Ks+f04Q6tl5fQ9LrvuVgF5smQzxgRgyUjoSuj0CQP1BQedokBJAWdML3C/2RGzX5PESIRYV4sp2IIPkDjbWUEBu2wlljAlyGFiyOgJ6KXeAVcmt5xiSjDhpvZCbPYAPECbjmVY/fcHrrVKPLu4iYZfSEXey+gpel7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WGdDFhzT; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49DMIos3017717;
-	Mon, 14 Oct 2024 08:45:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	tg50neo91I1Ml92AJ6CH82fyhGKZUQP6P9hE22pxrXo=; b=WGdDFhzT7YA65iqP
-	SRKKtxeD1tGLdChsxigpRI3YV4DXbsf20bmk9NBwmOTBRXo3sZ3zTrjN9xC0k/GM
-	jzjH/ZT4Lo9ajsqCSrOQY8aTDyiZcba8FCkOkDut9aIYsxQ/BFuWBUFc96nQeBQo
-	q4JgPdcHAP8RQah3YNpTFlMWd1rPXauohOBxUvKH6QFSphCEvkYzQDMxL2vAmids
-	Qo1GVcT0OnZR7whf97AKYSTur4qegg1t9PvQezmST7fWAujaqEUpbiDyHZKQKI79
-	aoP+WZebO/PJQ6tfTLQ5oMGyni79fBNS9Wkhoq7UDM00fsemoTtm2GgUF9YU8lp/
-	Ru3BzA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 427hvfur24-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Oct 2024 08:45:23 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49E8jNkU017088
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Oct 2024 08:45:23 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 14 Oct 2024 01:45:17 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Vinod Koul <vkoul@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        "Dmitry
- Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH 5/5] phy: qcom: qmp-usbc: Add qmp configuration for QCS615
-Date: Mon, 14 Oct 2024 14:14:32 +0530
-Message-ID: <20241014084432.3310114-6-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241014084432.3310114-1-quic_kriskura@quicinc.com>
-References: <20241014084432.3310114-1-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1728896315; c=relaxed/simple;
+	bh=MMmxOqDhjHtTHjEFNTHIGe5QUnWTlaXxSiuoBkNwdls=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Yo/fmGiJiXQmqRdxmCCEZIbd02mAET1uCaoQi3nZ1OcGdDaDkfLWZ8e6GqqCVFFMP4z31SVxSAQotlCLNU5jyrEe3GW8DTTSYE4/npybEyWMFlrT9z8aeOMaZUffngETRQY+Vw+FrbgiX0hFalLUIqWlFcEi/uR3VVsuGSEq5tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vyR7KvOW; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e2939e25402so2162251276.2
+        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 01:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728896312; x=1729501112; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tJDj6k1vZWgUdDR2yBxvdFEmNrvt6dXxlhPApMDJeNQ=;
+        b=vyR7KvOWOewMpOqi2HAHxDueYFNKU4yoHUQGRPbGBtVK1kBAcCMQcHDKUOWgnzmOKQ
+         SoopcLPBdcuzugGZ/zMF7GFDFBm2/RKHHDBb8hDW1BpesiyBLFLqVbr/RiL2KifNaXIr
+         ut/w9zaWRcV8xkfQ3tKxz93pFdTU2yN4YKcJWqSO+ek8oqJm4C5RFw67Yxo5NtKn2u2/
+         1Ydh1jUYzGPL4TZQKx4P6uGCKAnJR81gfkiaMygcqdvxg7oe4CZZszKW9xrFz4M5wtlV
+         8w2K6KmzMDf7SMXdH0QvMl0RUzy/AABdcrXEfg9ozEZI7pfrwibWo4bwJzvhtj02EXt3
+         /tmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728896312; x=1729501112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tJDj6k1vZWgUdDR2yBxvdFEmNrvt6dXxlhPApMDJeNQ=;
+        b=B9tDoh+O0D0mtl5I6vsbo+zmwcQSKvp4oiZxb3XpaNPvBbCJL/5VWmzc16Tqo2D41H
+         GFZIvN3OT2Y/QzV0I5DRuT408u0SZHZnzdHlXQggnXRjsUBvsP9wYq5CsHlrdl+LBUw0
+         oadKv26Xd45IMj7CnpRcNKuRXGthzNjJNgR5JSYl0bHHG5gwj5Mstc2ezrD39bbKFkox
+         oOnoIRQFllcVwwOKVxM/wkUiP77K89/TJNBjDLh6HsiC48dwGQrFP+PfaiDtSlNRHy2Q
+         hbHoGv1Dk9V9fqA5aMk+bMeuaSVceix95KW4UzjI/qi1bJAuyLEaeCAvfeECTGwIDusX
+         UTMw==
+X-Gm-Message-State: AOJu0YwtQXqGp4v1ieh98fwb+poKLsahg9CJ3lpE0GU1qQUrpwr3BWi/
+	R0OAYvXvK0v/FhjyAboXCCoOJFyKMdB+3oaCVomqLcHIC7d0ID3624/Ayqijwo1JUhSIrCXwzxC
+	fW1rv3kM5bP4MGg==
+X-Google-Smtp-Source: AGHT+IF5SavWo6HiF0EKk/WneTyIT4aMwJqzb9YpJJYmmLH93XV8Gx3OlSgXCUZByk5zE4gjAPphiwPmqmu7LFo=
+X-Received: from guanyulin.c.googlers.com ([fda3:e722:ac3:cc00:131:cd17:ac11:19c7])
+ (user=guanyulin job=sendgmr) by 2002:a25:3607:0:b0:e1d:2043:da46 with SMTP id
+ 3f1490d57ef6-e2919dd4d81mr44625276.3.1728896312291; Mon, 14 Oct 2024 01:58:32
+ -0700 (PDT)
+Date: Mon, 14 Oct 2024 08:50:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eAvBqUPlbYoXRvFfG5PwrIh2bOVi4RNm
-X-Proofpoint-ORIG-GUID: eAvBqUPlbYoXRvFfG5PwrIh2bOVi4RNm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
- clxscore=1015 adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410140063
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.rc1.288.g06298d1525-goog
+Message-ID: <20241014085816.1401364-1-guanyulin@google.com>
+Subject: [PATCH v5 0/5] Support system sleep with offloaded usb transfers
+From: Guan-Yu Lin <guanyulin@google.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	mathias.nyman@intel.com, stern@rowland.harvard.edu, yajun.deng@linux.dev, 
+	sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com, 
+	dianders@chromium.org, perex@perex.cz, tiwai@suse.com, niko.mauno@vaisala.com, 
+	andreyknvl@gmail.com, christophe.jaillet@wanadoo.fr, tj@kernel.org, 
+	stanley_chang@realtek.com, quic_jjohnson@quicinc.com, ricardo@marliere.net
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sound@vger.kernel.org, badhri@google.com, albertccwang@google.com, 
+	quic_wcheng@quicinc.com, pumahsu@google.com, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Provide PHY configuration for the USB QMP PHY for QCS615 Platform.
+Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+to handle some USB transfers, potentially allowing the main system to
+sleep and save power. However, Linux's power management system halts the
+USB host controller when the main system isn't managing any USB transfers.
+To address this, the proposal modifies the system to recognize offloaded
+USB transfers and manage power accordingly.
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+This involves two key steps:
+1. Transfer Status Tracking: Propose xhci_sideband_get and
+xhci_sideband_put to track USB transfers on the co-processor, ensuring the
+system is aware of any ongoing activity.
+2. Power Management Adjustment:  Modifications to the USB driver stack
+(dwc3 controller driver, xhci host controller driver, and USB device
+drivers) allow the system to sleep without disrupting co-processor managed
+USB transfers. This involves adding conditional checks to bypass some
+power management operations.
+
+patches depends on series "Introduce QC USB SND audio offloading support" 
+https://lore.kernel.org/lkml/20240925010000.2231406-11-quic_wcheng@quicinc.com/T/
+
+changelog
+----------
+Changes in v5:
+- Walk through the USB children in usb_sideband_check() to determine the
+  sideband activity under the specific USB device. 
+- Replace atomic_t by refcount_t.
+- Reduce logs by using dev_dbg & remove __func__.
+
+Changes in v4:
+- Isolate the feature into USB driver stack.
+- Integrate with series "Introduce QC USB SND audio offloading support"
+
+Changes in v3:
+- Integrate the feature with the pm core framework.
+
+Changes in v2:
+- Cosmetics changes on coding style.
+
+[v3] PM / core: conditionally skip system pm in device/driver model
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-usbc.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c b/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-index d4fa1063ea61..c56ba8468538 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-@@ -1123,6 +1123,9 @@ static const struct of_device_id qmp_usbc_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,qcm2290-qmp-usb3-phy",
- 		.data = &qcm2290_usb3phy_cfg,
-+	}, {
-+		.compatible = "qcom,qcs615-qmp-usb3-phy",
-+		.data = &qcm2290_usb3phy_cfg,
- 	}, {
- 		.compatible = "qcom,sdm660-qmp-usb3-phy",
- 		.data = &sdm660_usb3phy_cfg,
+Guan-Yu Lin (5):
+  usb: dwc3: separate dev_pm_ops for each pm_event
+  usb: xhci-plat: separate dev_pm_ops for each pm_event
+  usb: add apis for sideband usage tracking
+  xhci: sideband: add api to trace sideband usage
+  usb: host: enable sideband transfer during system sleep
+
+ drivers/usb/core/driver.c         | 63 ++++++++++++++++++++++
+ drivers/usb/core/hcd.c            |  1 +
+ drivers/usb/core/usb.c            |  1 +
+ drivers/usb/dwc3/core.c           | 90 ++++++++++++++++++++++++++++++-
+ drivers/usb/dwc3/core.h           |  8 +++
+ drivers/usb/host/xhci-plat.c      | 38 +++++++++++--
+ drivers/usb/host/xhci-plat.h      |  7 +++
+ drivers/usb/host/xhci-sideband.c  | 74 +++++++++++++++++++++++++
+ include/linux/usb.h               | 13 +++++
+ include/linux/usb/hcd.h           |  4 ++
+ include/linux/usb/xhci-sideband.h |  5 ++
+ sound/usb/qcom/qc_audio_offload.c |  3 ++
+ 12 files changed, 302 insertions(+), 5 deletions(-)
+
 -- 
-2.34.1
+2.47.0.rc1.288.g06298d1525-goog
 
 
