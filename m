@@ -1,89 +1,136 @@
-Return-Path: <linux-usb+bounces-16212-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16213-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C49F099DEB7
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 08:48:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6827999DFA2
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 09:49:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 020BC1C2193F
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 06:48:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C657281F6A
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 07:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2632E18BB9B;
-	Tue, 15 Oct 2024 06:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD0C1A3042;
+	Tue, 15 Oct 2024 07:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0kEBBViw"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="g9rf4uN4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA4E189BBF;
-	Tue, 15 Oct 2024 06:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811D37F7FC
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 07:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728974890; cv=none; b=GVUqRCtWMPuhymz5eDjmlu86leJnJtKSz+3CVN3xM7H/dlsTGeg+8NdPqgNsyCIRzEl/sRxPciIxGMH/Yv17qNQc3TQ67JntuyT8YuAT5R2G5TqJ5JuhoW0MSidkTQ93oGRHqXJbAbcFiNCAAV9kPxE808zys3OXJUotnhoF+dI=
+	t=1728978542; cv=none; b=M9lbxa8Enzda2YfDYzoJemuRE2TCvQ+9MtRgB6Fr5cOBar1oUrmVtNhH53p9ktCpDlri6hYgr4bd06scvgAcOmqgxswjYBUaODqCm9FcyYe9W/OrfAywkQ1mqaqwyW6evu9sP11EPzvmwtcB8QsS5Gmf9hc7yF0+UTvAVNJiqko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728974890; c=relaxed/simple;
-	bh=Mciw6yhCANdXF5sjQVXRJKl08/eUKEIsu2jyoWqK8uw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RT8q8dwrtX7MXFTFJgK2xeNGajCi2r8Fa3ythU7r6/jOqfFMK/BnLyMC7hk67qS6LpThG05FGldX6S2hw4QL16N67jUxME/FjFiXjkKKozJMyFW7jQXqe1fzjoKNe0Vtejy59g8tfduUu4fDBM8NQ+aV0U8PD5TdUDUZs9FsjwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0kEBBViw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D3A5C4CEC7;
-	Tue, 15 Oct 2024 06:48:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728974890;
-	bh=Mciw6yhCANdXF5sjQVXRJKl08/eUKEIsu2jyoWqK8uw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0kEBBViwGucY+T//4KaFg6XYuQDpM4aKae1jn7orluthv9c7oKjAbFco858au0N6b
-	 1MKPdTl8j+RRpoPHCyOCt+yBv+KFWJ/KSgrg6xg5MMSHsRxbWys/ZDfucBzpAGmK+n
-	 v+zomLwruUhm3W5X07H1gtzInHO7T1kBgLsDOF0E=
-Date: Tue, 15 Oct 2024 08:48:04 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Hui Guo <guohui.study@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, Alex Elder <elder@kernel.org>,
-	Aditya Garg <gargaditya08@live.com>,
-	Grant Grundler <grundler@chromium.org>,
-	Kerem Karabay <kekrby@gmail.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Oliver Neukum <oneukum@suse.com>, Yajun Deng <yajun.deng@linux.dev>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: WARNING: refcount bug in put_device
-Message-ID: <2024101515-helmet-stoic-1c97@gregkh>
-References: <CAHOo4gL5BYS53rd2bJiKmL1XSg94hn0u4yCPut7NqZ0XZMNf3A@mail.gmail.com>
+	s=arc-20240116; t=1728978542; c=relaxed/simple;
+	bh=iIUbLt9kvCLkI557/g86IlmJZITOMGz9tInCY/BfK5k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ie8QSm8Unh7kja8Iz0wRrTSM5JPoeJ0LfOajP2K2VFrEBRmsx7iAeg8mhzOfaTFPPAGHcd706lD/cZ8+86TrRG2GrKwZgwPU3ym6tw0vePIA2NjBCMcqXDgGrJ5TFP4V7AAlpODSLk4r83btW1VOIIL8F30aCguISXTZ4pXqnxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=g9rf4uN4; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5c96b2a11e7so3263386a12.3
+        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 00:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1728978539; x=1729583339; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BOJdjyePrT3s5NTIWoXorfasxWwZGTRkmpxbaaJbdio=;
+        b=g9rf4uN4DvBBRZl/2u+qMWZjF5FZW+DwlJRM5k46w6uHk08rqfwT3xlAyEPTZz5jLw
+         wzHMHZQxCSKv+2OoOBZinRtO/hg7H8C97o2D7UYS1lXpw9R80DmceN5VSOR56n+tWqgk
+         JjBXEytnAwF/Mj/2K3ubRi27tMhCTRfNdWIHP3eBKRiC6LzdDTAbbrtelfHw+8GJkLjT
+         lu54Jf2ECUaQuD8m6FfAQEoVVFViI4/zLYZOakWFlcDy9LA6IiCRGurhoBsod8Qb08n/
+         6kIlW20p49DVMmk7ErdpcGUj5UT0OgBbEUmd6UDaB/v/UtoOuTSZigOo/RXAYmjOoaIG
+         ebOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728978539; x=1729583339;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BOJdjyePrT3s5NTIWoXorfasxWwZGTRkmpxbaaJbdio=;
+        b=Oe3ANUbukDOO5VFD28KZmt6CagOxgO1BvWvSjOsg9NYVyUqVI/kAqeUNd+3Qh8Vu1P
+         C5Q0jaDUAs3ssbSuRryJVC3Wdi3+fOQoUJ7WufNo2h+OujHAcuNbBCZfK/Lu7DA/L36h
+         NyZUk0lFaglaLsnUJnv4qBaDigkOJK0vGAqOMbPrlO0/sPZO25GJ/ocR9G84eTCv+FJK
+         1X3WrDnqSuygYoheB7jufdF+FRuFSNHEHhJSM0GJIf/l0DtV7sv9lMKS3D8By88ooXOA
+         B/f87sJj5Img8tp8uM0jgoAmuo+r7iMm1vkogkU3hU83Xy0QncE3QsDhKFdyTr5SnPV6
+         DENw==
+X-Forwarded-Encrypted: i=1; AJvYcCUkEPysFxF+Gb7IymsbL3PgHdCFmkdiYCt//2Z+0giywsNOdBChL6ef04t5hMp+xhT1kusYxRgKyDs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyT9BLRJOqqxFhF58posB7LMpX35YAEbheLcbPFji6BOsOPyN35
+	PVrFovE/f0QRL23IpQ02e/MFXf9FM0Ssq1WcmPPk+Sg7WhofoGE+KZcQtbOVOTQ=
+X-Google-Smtp-Source: AGHT+IGtJZCKtA9eEpUdQE2A13JrPU/h/W+a6q4VltO9TMaYnvQRXRkysIb/+243uS0AJxvtyHBoHQ==
+X-Received: by 2002:a17:907:1b24:b0:a99:4601:b9d8 with SMTP id a640c23a62f3a-a99e3ea6502mr1121252966b.63.1728978538888;
+        Tue, 15 Oct 2024 00:48:58 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13a7:a01:4f03:92b2:1779:9aa4? ([2001:a61:13a7:a01:4f03:92b2:1779:9aa4])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a2974db0fsm37838966b.83.2024.10.15.00.48.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Oct 2024 00:48:58 -0700 (PDT)
+Message-ID: <93a8a951-7e0f-4504-8407-15d920236f9c@suse.com>
+Date: Tue, 15 Oct 2024 09:48:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHOo4gL5BYS53rd2bJiKmL1XSg94hn0u4yCPut7NqZ0XZMNf3A@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv2 net] usbnet: modern method to get random MAC
+To: Eric Dumazet <edumazet@google.com>, Oliver Neukum <oneukum@suse.com>
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@kernel.org,
+ John Sperbeck <jsperbeck@google.com>, Brian Vazquez <brianvv@google.com>
+References: <20240829175201.670718-1-oneukum@suse.com>
+ <CANn89i+m69mWQw+V6XWCzmF84s6uQV15m_YdkPDQptoxUks4=w@mail.gmail.com>
+ <fd906211-7f31-4daf-8935-2be1378a75f8@suse.com>
+ <CANn89iJWATVhMVDgq3fcV9zpZRt8nd_bWp3=qRHo8L3tJP==Kg@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CANn89iJWATVhMVDgq3fcV9zpZRt8nd_bWp3=qRHo8L3tJP==Kg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 15, 2024 at 02:37:47PM +0800, Hui Guo wrote:
-> Hi Kernel Maintainers,
-> we found a crash "WARNING: refcount bug in put_device" in upstream, we
-> also have successfully reproduced it manually:
+
+
+On 15.10.24 01:00, Eric Dumazet wrote:
+> On Tue, Oct 15, 2024 at 12:24 AM Oliver Neukum <oneukum@suse.com> wrote:
+>>
+>> On 14.10.24 21:59, Eric Dumazet wrote:
+>>
+>>> As diagnosed by John Sperbeck :
+>>>
+>>> This patch implies all ->bind() method took care of populating net->dev_addr ?
+>>>
+>>> Otherwise the following existing heuristic is no longer working
+>>>
+>>> // heuristic:  "usb%d" for links we know are two-host,
+>>> // else "eth%d" when there's reasonable doubt.  userspace
+>>> // can rename the link if it knows better.
+>>> if ((dev->driver_info->flags & FLAG_ETHER) != 0 &&
+>>>       ((dev->driver_info->flags & FLAG_POINTTOPOINT) == 0 ||
+>>>        (net->dev_addr [0] & 0x02) == 0))
+>>> strscpy(net->name, "eth%d", sizeof(net->name));
+>>>
+>>
+>> Hi,
+>>
+>> you need to have a MAC to be an ethernet device, don't you?
 > 
-> HEAD Commit: 9852d85ec9d492ebef56dc5f229416c925758edc(tag 'v6.12-rc1')
-> kernel config: https://raw.githubusercontent.com/androidAppGuard/KernelBugs/main/6.12.config
+> Before or after your patch, there was/is a MAC address, eventually random.
 > 
-> console output:
-> https://raw.githubusercontent.com/androidAppGuard/KernelBugs/main/9852d85ec9d492ebef56dc5f229416c925758edc/83e10c2b482009dbb3b32ece907dcc361978f9b9/log0
-> repro report: https://raw.githubusercontent.com/androidAppGuard/KernelBugs/main/9852d85ec9d492ebef56dc5f229416c925758edc/83e10c2b482009dbb3b32ece907dcc361978f9b9/repro.report
-> syz reproducer:
-> https://raw.githubusercontent.com/androidAppGuard/KernelBugs/main/9852d85ec9d492ebef56dc5f229416c925758edc/83e10c2b482009dbb3b32ece907dcc361978f9b9/repro.prog
-> c reproducer: https://raw.githubusercontent.com/androidAppGuard/KernelBugs/main/9852d85ec9d492ebef56dc5f229416c925758edc/83e10c2b482009dbb3b32ece907dcc361978f9b9/repro.cprog
+> The problem is about the test, which is now done while dev->dev_addr
+> is full of zeroes, which is not a valid address,
+> as shown by :
 
-As this is using a "fake" yealink device, odds are there's some
-reference counting bug on the disconnect path that you have found.  Care
-to send a patch to fix it up as you can test it easily?
+Hi,
 
-thanks,
+I am sorry I misunderstood you. Yes, I overlooked the test for whether
+the MAC has been altered. I am preparing a patch. Could you give me
+John Perbeck's address, so I can include him in "reported-by"?
 
-greg k-h
+	Sorry
+		Oliver
+
 
