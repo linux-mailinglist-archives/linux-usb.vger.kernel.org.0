@@ -1,138 +1,114 @@
-Return-Path: <linux-usb+bounces-16240-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16241-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67E4599EFE8
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 16:43:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B04B099F027
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 16:52:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 111211F21AE1
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 14:43:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65C181F2246E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 14:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88CBC1C07D1;
-	Tue, 15 Oct 2024 14:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A221C4A19;
+	Tue, 15 Oct 2024 14:52:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="DR785tQf"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="vdEXvOI4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E051B218F
-	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 14:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746E41FC7EC
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 14:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729003402; cv=none; b=cS/3H5Vp99Q2W4xdoo+1lKPr596oHH6SYzaVk3pKiO6LTUTGUD1rfsgSN9TYeqSxY6/kF00Tydu55XJ6x5qWGFHmKm/y0aILsZyRx8oWh7Q62B+ZKrkIMKuUbJO6JGJaZ3xezIcW1bPdgjDU4i2Q00yScskMJaGyY6j+D72XXXI=
+	t=1729003924; cv=none; b=SVHyuBuUgRYpR/n+tXY0dw2snRvSB12Ie8+jnL5vyUwb+NmbnWOSddHQkWK0oLKnmegtco8JEJdsO2sL7CSvxSV38wpAEJC7FIhc9sQplWMUeJBKmWqKyViY0w5cWfRYO/ETQytnWTw8rZs7ZA1RqRcjRtH+f8/sStESkjeHKoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729003402; c=relaxed/simple;
-	bh=3zG8ijviAh3UNaecnSyBL0gw5syOhcN7O0Z2Z+3aryo=;
+	s=arc-20240116; t=1729003924; c=relaxed/simple;
+	bh=nV6IBRvVB3L6bbjM3kqvUJhYSOkzqzpUisPomN0rTMM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L/Nr4Yb9IbFLEc9zirYKzhAXQ8CGdboWOLPSBCT/Cs6DqL0VWiyVZ17J8pE/5IkrfLDJrKfNdrWPn7gBBtc0rYReHCEj9EuN5yzP48IyI99H9JxMTKvoBdiaMP5TyZQs2y2OBcelsRis9bKmpTP6aUvc89q7HN4KGTBSzrMi594=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=DR785tQf; arc=none smtp.client-ip=209.85.219.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=SGavdT2rwOMu28y7aJeRml2NtDZKh8UukLyeFAij3mJSEMEYnPfb5ZcejOhWuxOmxN6fAFReT3XdzI1N43nWl/B3QeDKU5HiO5Sc1rT3l5ycNSOdlC43s+6ddhLWrZZDloC3GhQYyCNlpBueMudEwvNhRkD8vWOKwx2Q2m4I/5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=vdEXvOI4; arc=none smtp.client-ip=209.85.219.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6cbd00dd21cso35359156d6.3
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 07:43:20 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6cbf347dc66so26778996d6.3
+        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 07:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1729003399; x=1729608199; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xi1uocso5/NdgZpE7t6HMxVGnFAWW+NbbBS6pPLwquk=;
-        b=DR785tQfGwJEWbg4OHMkXh+e3KqPMsKYSWF4NAJhBif9uuZzCU/sMGSV7OAk++JUbG
-         By17IuVFTxzvztpnRHsT160/tZYcFdARE+JT3cqmZrKEeBnlU2qLuGl7yFPeQPWqqEK5
-         IANNA6frJFsFOtz6GoGFtzqIRIzghzEiENCIVlpgjCL7Xt3fzNm7kihTwhxIcjJahRNL
-         0Yj/aI7wj+EAeA/GwE4j0JjNAtEz740G2E3rPV0nq/mCSeeqiOWpKs324p40T10QyYcS
-         W8Aj9npm4f0NmIxhWtoq1Kgf0NJTa0Tths4+WvddLf/FKYd7qTqtTgbMoS8OO1PARvqz
-         tsVQ==
+        d=rowland.harvard.edu; s=google; t=1729003921; x=1729608721; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OZRjwaTyxDSgqfNv/Mla0zqDHE6AD4bv+YLsNbvhMSI=;
+        b=vdEXvOI4SlpzbbDDxOyz/uDE3wLxwQPw6o0f0eIMZP6W3cET7hWkgdMT37OGpXovhO
+         Wpb49AyrYxPaR7+b1eWO8kFhWvlKzSpc3Thf55igMqnyL4dZcFrBTYn1V0vKFVBVsQyX
+         bSKMZvDvf34dHZi85F1OYlDtdOdZo6VmMDBGyr4RAV2NdFLXMsu51CmpJ4akvKUWceDt
+         BTZswcu7bs+JGNgK8kKLQDr5Aza5tcqhrWwOl+0X5MMvWDZsIv6WYDnXzFf/P69DniBc
+         8lgrOpgo2aFK67XyDsYV+i+5fsHKUlHrhCWQL2klveU+IFLIMeuNn/8jMBgQCutF3pUQ
+         t8Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729003399; x=1729608199;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xi1uocso5/NdgZpE7t6HMxVGnFAWW+NbbBS6pPLwquk=;
-        b=g1wENhs8UynxJWOEkvZdbRYIBhhfJIbTAjAsd3meD9iDqctqrD8Hp/Wks1KA/VdT2t
-         paJx5lN7jnUSljhKsBvcyCfI4Rh3dd09rInNuPr9Xz4UHyftWy6HO5B9M972OzTSBli+
-         8o0ACBjniVG7VDiQc58zyfVkJQEXCeBDuzJ23K6Y+qv1WTpTBz2nSAFl3m5qeo0EZ0JT
-         UmxEgU7SOksUghZ5K6tg2rHQICZYNo2k1fxAdDuqOnw+My+2do1O+aK7ZIbCSwN6ldtz
-         T4o96zdkmMVMv9htcic1ksdMVk6QuZgAcuDDMvRgINOtGNnW7foQH8rUBQL2CCXaZ2Ng
-         SYrg==
-X-Forwarded-Encrypted: i=1; AJvYcCV7SmsS7QaKrofITXiGF6/azexirxjiE01ItG7iYp+gbPfB+rpY6iVch+EQseiU6L0InA1Tg31PPkk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8mlecuhNt6VKQe9Fo0+KmDIIMbTVKIzADooaCOHUk222MaKNz
-	ox/Hb3zAXpl+eu4nPRzulq5RQRU9hS0/NZApInAkgykNU4yKCFvpcb7vtOvJtw==
-X-Google-Smtp-Source: AGHT+IHlwqwj2zLwxFP+7TNul9Pxh1d5Xd7nG3ml8Ey1XcTIoXlwe4sCsZV0vRFmkVLRCXSSsyvq1Q==
-X-Received: by 2002:a05:6214:5d11:b0:6cb:e76b:d90 with SMTP id 6a1803df08f44-6cbf0044b74mr186884986d6.13.1729003399548;
-        Tue, 15 Oct 2024 07:43:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729003921; x=1729608721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OZRjwaTyxDSgqfNv/Mla0zqDHE6AD4bv+YLsNbvhMSI=;
+        b=ZiGHZBuNlB43otL79sb+KmwCcdZpCvVG+AR9S1pENW2+oWyTap2MK9ZVkN9Ibt/JrG
+         1NJeffjt5p2O+mQm/a7WOZdpjOsnAy8Q2qCAVlU8Kp7Cg8EVvugZ6i6OVrq4Jooerb3H
+         VqiQbRVkUwblsu/i8OJjJkIrwTnW+DmHedb73l4XsGGPHcT6AiP84RXn4cVAxhYnmET7
+         AzeeATSM7Fmjc3T9ox1I4CmdL7jQTiuFmQgeusLDc4v280cWSL1gmz/1nAY/0i1J8Xj5
+         DM+c6LTdw4PoWHuWZPxplyfpnTpqldDCzVHpbAqHRDe005qiaTSakFnpRjqgxpnTm+1t
+         NofA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqEfoCtr+o0/ZRAfl4bxvnEPq0jyJgpOGSFojFdhy3EMI3ewRZHNNMt0J9hIO78tZ0/z8wntmE1Jw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8E0PfqDAvqwmP9kkrSn+IC6Ip/ykP2LvuxwIN6N+6SucsrEq+
+	9UWrGMaAncfw7aUr9XLcUgMrg5oLImDQMBPODIir0dFvy9N0VnaTGcnbyw/z1A==
+X-Google-Smtp-Source: AGHT+IGLrsivmqsJg9LHQaj6aPNfkxmOGLUMt3qtxb+Ug6XJLRfcpyW+WRj1TcA1fRD8ZJkPhqZoTw==
+X-Received: by 2002:a05:6214:5709:b0:6cb:ee73:6926 with SMTP id 6a1803df08f44-6cbf9d2da20mr149169866d6.20.1729003921387;
+        Tue, 15 Oct 2024 07:52:01 -0700 (PDT)
 Received: from rowland.harvard.edu ([2607:fb60:2501:2805:c6d5:fe22:7fa3:ec54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cc22961b92sm7297386d6.120.2024.10.15.07.43.17
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cc22990427sm7288236d6.134.2024.10.15.07.52.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 07:43:18 -0700 (PDT)
-Date: Tue, 15 Oct 2024 10:43:15 -0400
+        Tue, 15 Oct 2024 07:52:00 -0700 (PDT)
+Date: Tue, 15 Oct 2024 10:51:58 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-	mathias.nyman@intel.com, yajun.deng@linux.dev,
-	sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com,
-	dianders@chromium.org, perex@perex.cz, tiwai@suse.com,
-	niko.mauno@vaisala.com, andreyknvl@gmail.com,
-	christophe.jaillet@wanadoo.fr, tj@kernel.org,
-	stanley_chang@realtek.com, quic_jjohnson@quicinc.com,
-	ricardo@marliere.net, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org,
-	badhri@google.com, albertccwang@google.com, quic_wcheng@quicinc.com,
-	pumahsu@google.com
-Subject: Re: [PATCH v5 5/5] usb: host: enable sideband transfer during system
- sleep
-Message-ID: <fddf19f6-d03a-469e-a56f-ef390c099902@rowland.harvard.edu>
-References: <20241014085816.1401364-1-guanyulin@google.com>
- <20241014085816.1401364-6-guanyulin@google.com>
- <9b5fe5d2-77a7-40b7-b260-856c35d9dcec@rowland.harvard.edu>
- <CAOuDEK2f_mtfiye7MdnOqEkq3pYW1kcdkwEMMBC5CkkQ1OGu3A@mail.gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Michal Pecio <michal.pecio@gmail.com>,
+	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fix the NEC stop bug workaround
+Message-ID: <6825b1a2-d611-40c6-a7f1-bc9c3d45d30e@rowland.harvard.edu>
+References: <20241014210840.5941d336@foxbook>
+ <e3f8e58d-d132-430f-875f-283d8055b6c0@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOuDEK2f_mtfiye7MdnOqEkq3pYW1kcdkwEMMBC5CkkQ1OGu3A@mail.gmail.com>
+In-Reply-To: <e3f8e58d-d132-430f-875f-283d8055b6c0@linux.intel.com>
 
-On Tue, Oct 15, 2024 at 11:56:00AM +0800, Guan-Yu Lin wrote:
-> On Mon, Oct 14, 2024 at 11:56 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > I'm not so sure about this.  By returning early, you prevent the drivers
-> > bound to this device from suspending.  But they can't operate properly
-> > when the system is in a low-power mode.  Won't that cause problems?
-> >
-> > Maybe this really belongs in usb_suspend_device(), and its counterpart
-> > belongs in usb_resume_device().
-> >
+On Tue, Oct 15, 2024 at 03:23:23PM +0300, Mathias Nyman wrote:
+> In addition to fixing this NEC case we could think about avoiding these
+> cases, some could be avoided by adding a new ".flush_endpoint()" callback to
+> the USB host side API. Usb core itself has a usb_hcd_flush_endpoint() function
+> that calls .urb_dequeue() in a loop for each queued URB, causing host to
+> issue the stop, move deq and ring doorbell for every URB.
 > 
-> To my understanding, after the system is suspended, the USB driver
-> will do nothing as the main processor has been suspended. May I check
-> what forms of low power mode and operation we are discussing here?
+> If usbcore knows all URBs will be cancelled it could let host do it in one go.
+> i.e. stop endpoint once.
 
-S3 suspend.  You are right that the driver will do nothing while the
-CPU is suspended.  But what about the times before and after that,
-while the suspend and resume procedures are underway?  The driver
-needs to be told to cancel any ongoing transfers while the system
-suspends and then restart them while the system resumes.
+Indeed, this makes a lot of sense, and I have long thought that the
+API should have been designed this way from the beginning.  At least
+for non-Control transfers, unlinking a single URB somewhere inside a
+sequence of URBs seems pointless.  I doubt that it ever happens in the
+kernel.
 
-> usb_suspend_device() did close the required port/bus to maintain usb
-> transfer.
+(On the other hand, it _is_ reasonable to do this for Control
+transfers, because they can come from several different sources, not
+just from the device's driver.  The source for a Control URB might
+want to unlink it while not affecting the URBs from other sources.)
 
-I don't know what you mean by that.
-
->  However, there are additional usb_hcd_flush_endpoint() calls
-> aside from usb_suspend_device(). Maybe we should consider not doing
-> those also since some of the endpoints are now handled by the
-> sideband.
-
-Those calls should not be skipped.  If the sideband controller wants
-to handle the endpoints on its own, it can go right ahead.  The main
-controller and the USB core need to know that they shouldn't use the
-endpoint while the system is suspending.
+Furthermore, I suspect this is what Windows does and what the USBIF
+originally had in mind for URB management.  (It's harder to tell what
+they thought about Control transfers, though.)
 
 Alan Stern
 
