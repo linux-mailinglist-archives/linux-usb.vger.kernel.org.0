@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-16234-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16235-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A779099EA44
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 14:48:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ED0B99EB1E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 15:03:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8CB51C2158A
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 12:48:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D27AE2863EF
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 13:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4EC31AF0BF;
-	Tue, 15 Oct 2024 12:48:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840F21E7653;
+	Tue, 15 Oct 2024 13:03:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWVUQEiv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cxB3zVvi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587831C07E0;
-	Tue, 15 Oct 2024 12:48:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4971C07CC;
+	Tue, 15 Oct 2024 13:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728996495; cv=none; b=mpD90ZA/UDGkpMxIszY8OyLIYaYpfZgceekzLtla+V+/LA2pquaJULFroilZkKoL3uRHt9WRiOT+4Wkbi1vtVpolxDMVLASj5CZxrQ3VUhKJr+yi9bhtg/20Poy58Dw+l5L3wIv5q+gCMd2ztWZ2A+jlrdDlt68wA1KXl9q9l04=
+	t=1728997391; cv=none; b=i52kcpRMVZthrZZKkjve5hlMVxXFG7yF2eodOV30ezQzDUW/Oawzm7MkE/v3lL+PyjMrxUBU7e6+4u4B7HaTEdWvpaJmgh/03rJyApG8eoaf3XY+xCq3OfblKsqIWILQ+N0aTDdgUH4BMFtPdCnheVVP2LQViSNDDadK3oZRaL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728996495; c=relaxed/simple;
-	bh=wsTS2WCqFOpO0DvNwr7sz9CyhmcJQl/xQAKXdzpLRqI=;
+	s=arc-20240116; t=1728997391; c=relaxed/simple;
+	bh=t0SVeMaFeLptyQZY6kf8K9Klv71EhjMArzwWv0typlk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N4/yH3cy+cXr/jcaa34QUF9F0lErl20gB/T6bndtPmxKfSS+Kb0uFkAgMmIo+Azv1aRSXWTCmbp7bHy9m5UTujZrJIKNdZkFjeTaP+sUEbxmfjMFzba48USKw+vxSauYiJHDgKDqamPU3mxANWPzv/pB9QvXxXi7l5ly/V/5pDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWVUQEiv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2C9C4CED1;
-	Tue, 15 Oct 2024 12:48:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WT8bxxUvclX8LDnro1HJSVQR/U8InGi9SOErZMu8riXHGDajVA7cO5P/bDZP0mnMKdUoHA9USNNlU85jdORr8PjAxYxdxDS4cxiJC51AudW8UcD/VLQrELJa+Q4zUMGv5rnmZkxVzBvsq507xNz9AXVtIhAXQsUojuMGdhW5KZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cxB3zVvi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957BDC4CECE;
+	Tue, 15 Oct 2024 13:03:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728996494;
-	bh=wsTS2WCqFOpO0DvNwr7sz9CyhmcJQl/xQAKXdzpLRqI=;
+	s=k20201202; t=1728997390;
+	bh=t0SVeMaFeLptyQZY6kf8K9Klv71EhjMArzwWv0typlk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VWVUQEiv5lwhjRg9Kk6XU34TBrmeKBVaNSD9I/VAYSlKhXhMavscUFgFmaNQT31RD
-	 TPSMxgDSxUqbRgHs1tjTfKUCDHLySZa9m4qQoWmkSNClgIeS5yVG/wMcq/f79d5k1E
-	 R2m87bIysPWEC5VyFZI2NK3UIjWPBuC2Ze88U49PbDYMp3N6+SZhm00E5A4QmxA9a/
-	 OxHXiztUx0hb0FHg34uI4V16GRdlDzVqkgPRnqTgd3GOV//IIPeyuoF5sf0DQA6RTK
-	 NvZdqXff5PSaFgKj2OV77MCC3cIXufZJ+SQL9a1q1nklY8XOgjm6H6wjC5b2EGDP8b
-	 Z0rx+NO1xBz9Q==
+	b=cxB3zVvi8S3/qPg70+K8CuDh4ODOr4D3OZSHdhh0X7FQcnLCWEbT9DqqZRrxcrM+h
+	 iMlIcqQ6SpSj/9ydKyWIO+J7UK2bBVnQe50XkwgPDhVNXPqlU85iPzwjvth4ZuVaAn
+	 BnEu1LG2qSLuO9SJzRrOvvuRQJ6WtPIxv/ahMkY34sUMKXDVzhd0kJ41FJsLd1Ls93
+	 Q1JMiAHw1Zk8ryYAVtwTCLjz2d5z8jPoNLX+iBjhxdhcYUDDryx15gldNlbwz5Mo0f
+	 7F7yPTxNGJzhD542e3HHSrbKWAJ9thK32ji2REMSAL98Tw6A1LQblzRk7SxlAqJRtZ
+	 u1H3ysmpTRHNw==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1t0gyI-000000004da-3YUb;
-	Tue, 15 Oct 2024 14:48:19 +0200
-Date: Tue, 15 Oct 2024 14:48:18 +0200
+	id 1t0hCl-000000004va-2l17;
+	Tue, 15 Oct 2024 15:03:15 +0200
+Date: Tue, 15 Oct 2024 15:03:15 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Abel Vesa <abel.vesa@linaro.org>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -60,11 +60,11 @@ Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Parade PS8830 Type-C
- retimer bindings
-Message-ID: <Zw5kkhkT62pDoW8I@hovoldconsulting.com>
+Subject: Re: [PATCH v2 2/2] usb: typec: Add support for Parade PS8830 Type-C
+ Retimer
+Message-ID: <Zw5oEyMj6cPGFDEI@hovoldconsulting.com>
 References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
- <20241004-x1e80100-ps8830-v2-1-5cd8008c8c40@linaro.org>
+ <20241004-x1e80100-ps8830-v2-2-5cd8008c8c40@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,114 +73,176 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241004-x1e80100-ps8830-v2-1-5cd8008c8c40@linaro.org>
+In-Reply-To: <20241004-x1e80100-ps8830-v2-2-5cd8008c8c40@linaro.org>
 
-On Fri, Oct 04, 2024 at 04:57:37PM +0300, Abel Vesa wrote:
-> Document bindings for the Parade PS8830 Type-C retimer. This retimer is
-> currently found on all boards featuring Qualcomm Snapdragon X Elite SoCs
-> and it is needed to provide altmode muxing between DP and USB, but also
-> connector orientation handling between.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+On Fri, Oct 04, 2024 at 04:57:38PM +0300, Abel Vesa wrote:
 
-> +  clocks:
-> +    items:
-> +      - description: XO Clock
+> +static int ps8830_enable_vregs(struct ps8830_retimer *retimer)
+> +{
+
+> +	return 0;
 > +
-> +  clock-names:
-> +    items:
-> +      - const: xo
-
-> +  vdd-supply:
-> +    description: power supply (1.07V)
+> +err_vddat_disable:
+> +	regulator_disable(retimer->vddat_supply);
 > +
-> +  vdd33-supply:
-> +    description: power supply (3.3V)
+
+Nit: I'd drop the empty lines between the errors cases here.
+
+> +err_vddar_disable:
+> +	regulator_disable(retimer->vddar_supply);
 > +
-> +  vdd33-cap-supply:
-> +    description: power supply (3.3V)
+> +err_vdd_disable:
+> +	regulator_disable(retimer->vdd_supply);
 > +
-> +  vddar-supply:
-> +    description: power supply (1.07V)
+> +err_vdd33_cap_disable:
+> +	regulator_disable(retimer->vdd33_cap_supply);
 > +
-> +  vddat-supply:
-> +    description: power supply (1.07V)
+> +err_vdd33_disable:
+> +	regulator_disable(retimer->vdd33_supply);
 > +
-> +  vddio-supply:
-> +    description: power supply (1.2V or 1.8V)
+> +	return ret;
+> +}
 
-> +required:
-> +  - compatible
-> +  - reg
-
-Presumably all of the supplies are also required.
-
-Similar for clocks, etc.
-
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
+> +static int ps8830_retimer_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct typec_switch_desc sw_desc = { };
+> +	struct typec_retimer_desc rtmr_desc = { };
+> +	struct ps8830_retimer *retimer;
+> +	int ret;
 > +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
+> +	retimer = devm_kzalloc(dev, sizeof(*retimer), GFP_KERNEL);
+> +	if (!retimer)
+> +		return -ENOMEM;
 > +
-> +        typec-mux@8 {
-> +            compatible = "parade,ps8830";
-> +            reg = <0x8>;
+> +	retimer->client = client;
 > +
-> +            vdd-supply = <&vreg_rtmr_1p15>;
-> +            vdd33-supply = <&vreg_rtmr_3p3>;
-> +            vdd33-cap-supply = <&vreg_rtmr_3p3>;
-> +            vddar-supply = <&vreg_rtmr_1p15>;
-> +            vddat-supply = <&vreg_rtmr_1p15>;
-> +            vddio-supply = <&vreg_rtmr_1p8>;
+> +	mutex_init(&retimer->lock);
 > +
-> +            reset-gpios = <&pm8550_gpios 10 GPIO_ACTIVE_HIGH>;
+> +	retimer->regmap = devm_regmap_init_i2c(client, &ps8830_retimer_regmap);
+> +	if (IS_ERR(retimer->regmap)) {
+> +		dev_err(dev, "failed to allocate register map\n");
 
-The reset line is active low.
+Please make sure to log the errno as well here and below.
+
+> +		return PTR_ERR(retimer->regmap);
+> +	}
+> +
+> +	ret = ps8830_get_vregs(retimer);
+> +	if (ret)
+> +		return ret;
+> +
+> +	retimer->xo_clk = devm_clk_get(dev, "xo");
+> +	if (IS_ERR(retimer->xo_clk))
+> +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
+> +				     "failed to get xo clock\n");
+> +
+> +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+
+The reset line is active low and should be described as such in DT. So
+here you want to request it as logically low if you want to deassert
+reset.
+
+Is there now timing requirements on when you deassert reset after
+enabling the supplies?
+
+> +	if (IS_ERR(retimer->reset_gpio))
+> +		return dev_err_probe(dev, PTR_ERR(retimer->reset_gpio),
+> +				     "failed to get reset gpio\n");
+> +
+> +	retimer->typec_switch = fwnode_typec_switch_get(dev->fwnode);
+> +	if (IS_ERR(retimer->typec_switch)) {
+> +		dev_err(dev, "failed to acquire orientation-switch\n");
+
+I saw the driver fail here once, but not sure what the errno was since
+it was not printed. Presumably it was a probe deferral and then this
+should be a dev_err_probe() as well:
+
+	ps8830_retimer 2-0008: failed to acquire orientation-switch
+
+> +		return PTR_ERR(retimer->typec_switch);
+> +	}
+> +
+> +	retimer->typec_mux = fwnode_typec_mux_get(dev->fwnode);
+> +	if (IS_ERR(retimer->typec_mux)) {
+> +		dev_err(dev, "failed to acquire mode-mux\n");
+
+Similar here perhaps?
+
+> +		goto err_switch_put;
+> +	}
+> +
+> +	sw_desc.drvdata = retimer;
+> +	sw_desc.fwnode = dev_fwnode(dev);
+> +	sw_desc.set = ps8830_sw_set;
+> +
+> +	ret = drm_aux_bridge_register(dev);
+> +	if (ret)
+> +		goto err_mux_put;
+> +
+> +	retimer->sw = typec_switch_register(dev, &sw_desc);
+> +	if (IS_ERR(retimer->sw)) {
+> +		dev_err(dev, "failed to register typec switch\n");
+> +		goto err_aux_bridge_unregister;
+> +	}
+> +
+> +	rtmr_desc.drvdata = retimer;
+> +	rtmr_desc.fwnode = dev_fwnode(dev);
+> +	rtmr_desc.set = ps8830_retimer_set;
+> +
+> +	retimer->retimer = typec_retimer_register(dev, &rtmr_desc);
+> +	if (IS_ERR(retimer->retimer)) {
+> +		dev_err(dev, "failed to register typec retimer\n");
+> +		goto err_switch_unregister;
+> +	}
+> +
+> +	ret = clk_prepare_enable(retimer->xo_clk);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable XO: %d\n", ret);
+> +		goto err_retimer_unregister;
+> +	}
+
+Should you really enable the clock before the regulators?
 
 > +
-> +            retimer-switch;
-> +            orientation-switch;
+> +	ret = ps8830_enable_vregs(retimer);
+> +	if (ret)
+> +		goto err_clk_disable;
 > +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
+> +	/* delay needed as per datasheet */
+> +	usleep_range(4000, 14000);
 > +
-> +                port@0 {
-> +                    reg = <0>;
+> +	gpiod_set_value(retimer->reset_gpio, 1);
 
-Please add a newline before each child node for readability.
+Here you only deassert reset in case the line is incorrectly described
+as active high in DT.
 
-> +                    usb_con_ss: endpoint {
+> +	return 0;
+> +
+> +err_clk_disable:
+> +	clk_disable_unprepare(retimer->xo_clk);
+> +
+> +err_retimer_unregister:
+> +	typec_retimer_unregister(retimer->retimer);
+> +
+> +err_switch_unregister:
+> +	typec_switch_unregister(retimer->sw);
+> +
+> +err_aux_bridge_unregister:
+> +	gpiod_set_value(retimer->reset_gpio, 0);
+> +	clk_disable_unprepare(retimer->xo_clk);
+> +
+> +err_mux_put:
+> +	typec_mux_put(retimer->typec_mux);
+> +
+> +err_switch_put:
+> +	typec_switch_put(retimer->typec_switch);
 
-We typically avoid adding unused labels to the examples, but perhaps
-here it serves as documentation?
+Drop newlines before labels?
 
-> +                        remote-endpoint = <&typec_con_ss>;
-> +                    };
-> +                };
-
-Add newline here too, and similar below.
-
-> +                port@1 {
-> +                    reg = <1>;
-> +                    phy_con_ss: endpoint {
-> +                        remote-endpoint = <&usb_phy_ss>;
-> +                        data-lanes = <3 2 1 0>;
-> +                    };
-> +                };
-> +                port@2 {
-> +                    reg = <2>;
-> +                    usb_con_sbu: endpoint {
-> +                        remote-endpoint = <&typec_dp_aux>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
+> +
+> +	return ret;
+> +}
 
 Johan
 
