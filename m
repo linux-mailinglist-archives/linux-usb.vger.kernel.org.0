@@ -1,139 +1,113 @@
-Return-Path: <linux-usb+bounces-16214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1030F99E00F
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 09:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C9799E131
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 10:33:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41EF81C21818
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 07:59:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA1651C2193F
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 08:33:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C27401AE005;
-	Tue, 15 Oct 2024 07:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SiFa5Dgm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5871D0F42;
+	Tue, 15 Oct 2024 08:33:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BED189BB1
-	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 07:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F511C877E
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 08:33:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728979170; cv=none; b=fBsY5p8pFZ26j7nep8WwI3JyGLKJR7n63jCmyMUVfMCr6I6Wy+mhHv00EKvpeETD+LfVUcEVn2JsXZwzPKgt4uolp7aj9B5yhi4JkSOywfL1sw7MPuyldrVIdYTGsCHHHzuGX/0ssrrVP/CK7uP5sNVhUwKcKhmWpoSzMJg6q4o=
+	t=1728981209; cv=none; b=ECSSxzCaQS2IRPOLjahsZiJpIEe0Qlfs6SFH2849Ca5YBis4Di6a+h3K6hvV8ez+5koInG27YHaPVPw2t6l5z2EF6hf0A8mXx/y4z6afkKb3QXdk4/KZ+Ms8+Aevu4M6freQ8LQJuPdtzMgNc3c2a7koPL8tBPiBSNutmrELua8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728979170; c=relaxed/simple;
-	bh=xlWlC3kfibrqAbBKaNacGr6U8U95C9Eu0+PCs1qPnmo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=As55pMrLnx3Sp2QHWjTa9BLwkmkUgHaCwHbvH+riNuXq7Zw9B0qCD207ntq16me1QaUmkaetgBSrkgrYprxGt1Xz5YNCds5MydHl02xyw7CC4JN8wpl0UCKlQ1+EgJVMiP83ZUrEdSlMm8iMmspk63ypfoCeU5fHn73PgzZOHjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SiFa5Dgm; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a9a1b71d7ffso182166266b.1
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 00:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728979167; x=1729583967; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VlZNzs803DGWbhd4/eehLQQE+sTqtjOgRm3We4JvNr8=;
-        b=SiFa5DgmQ7UlmefOtdUY+NjFZblzP0IHwFgwUPR9WyDkxFyNTSKPFkALiQ1/3zNUh7
-         nM4mgr4qt91dsMhgt1s+W0wCx+dTPrwlqLL22JsZSNgII5i0lzCzZgab1wPZAAhNDoLI
-         uWLgXrOXNQKkMQLsoZ/OzP9im9LgwAZ1WMqrcbV/L/zDutuq7xOaIuYivLanx7Fo6Af0
-         RBe9awkfi+v6kFBN7odFxCSzBLe2ZKqrjlzEWyBJzQ6+gKn4t31L7xoG0KkLVVy3RVjS
-         X9US4kK83eK9gbdrvzg3d49m+6Y6tz35VcF9BFIH4axW7E//Nsg6fbQez3+XIGnS1hd0
-         0vwA==
+	s=arc-20240116; t=1728981209; c=relaxed/simple;
+	bh=IFYFgGM3Odbd7g/GlONKnZB16g4OU8N2BUQmoNmX1/Y=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NX6KnqdxccecCA9zoOe6lzLrOmb1UcgLLaMf4qaN61geCxht36Wfd0Xk5OQIP/eY7YMBbykAHtIp+0g0kUGEioZabpMmvBf40QBkKNFTwJmPXYQp3VlPnoloL5pDnZ7Ib/BfuBA+nhT2tCg6jnw++SVhzodqrp6twO8PvPt532A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a3b4395dedso40304025ab.1
+        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 01:33:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728979167; x=1729583967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VlZNzs803DGWbhd4/eehLQQE+sTqtjOgRm3We4JvNr8=;
-        b=UuIBPT29U56P21Z1vmqBgbv/R7W5uN/E4UFXoHnu/awefvaZuGjVoap88DJwfDf/se
-         i0/QcUk+Vd4O4CfFPlnoLGK/z2sMHF0hbP0LyBfXumi1txlsZocoqTYIFr03/R/gcknD
-         Ad9D2YH1utAmeTL//OEFad08hfJ3LogI9tElRLevlRc5yJS4XZwsa80XWUvTcUFDPdBl
-         5PXHT1Z6rQwUlJ4tWAHRQhIb6ttXlt8Z3AgFi1ihLEDKQ5sqSaE5niV8Ljt0wqFjF2fv
-         7UqCwJodmhhd4NOvbL/01A8ZFRBKskQkcMkZShDHDVHg/pBCtUukvtWzGXQwL+Ew/Cpv
-         TuVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUAdkjMuo2S5W/dp9kC5TBIVCBLjjmISh47+Ot8gVl7Kzril6CX0sfWDXN7qfUimnjRs8oXcgwnTwg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylNzDwtOKQP/VSQMSMvhZa/1Cpz5BKc+rqWSQuFOw2duvh5Tgm
-	x/8E8kVYqHIb3nFECOnMc4VGkWJQzfHPbr7a6bFBM50FXreecLqFcScoO9YIma8EDqM267QGK07
-	meaYDymg2vxvRP98lihkzBvxF5zNMcLMt82oT
-X-Google-Smtp-Source: AGHT+IE1CTqjAPxPfWw8B1+o+7xBm/fZYJ4PStZ0AWyQHdTmksS1YwK0UPfLXtTSfQ09srrvtufXUoIMZwedHghjPLo=
-X-Received: by 2002:a17:906:7312:b0:a9a:139:5ef3 with SMTP id
- a640c23a62f3a-a9a01396165mr773988466b.55.1728979167060; Tue, 15 Oct 2024
- 00:59:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728981205; x=1729586005;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R6gVaDSriwF5S9akQhORqAm27YecOFxvdJ7AKvsc18w=;
+        b=FLscj8lNNokgggAT4lt/QfPN/iSCGVHeMad3HrzHL+YmhaNhN5AwrUmUX3M60nIpPD
+         vrsY/J958r3JTtVE6fMSfHfMMVuN/JyBSVCSUd2D0wy7jYbMXyoSQ53czAST7303bq+I
+         NKwFQbNiEbck1taF4GrHTgCswxCvamvlHArDyLneoulyBJXU0tgZqQbDuv9qkruHlkov
+         n/hIJF7F08/r6mxuXjIVxzOrgBvzdtCHtghOhzrxWpzt4jsR88XiEdZnjqyeTQ/ONG3Y
+         JHzBVBktdwv9uwIR+lBukiVxvt8ERKhu3tcT4itXLGNStJ6kjC7DK4+ymRKxGEkhU4XZ
+         ZnNg==
+X-Forwarded-Encrypted: i=1; AJvYcCV0q7rN5myqBkAgnERtq4NXGEB6J3NT+fOM1f2BKczj4AIWutnj2Ep09PSziYfX85YwP5yaYSO0i0g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyrel5U4fBCC4n3MTSYkDLGFgPZ2KZwJs11XOkR5hvlpLCvB7LY
+	muNcFM82CQZYNGDwRyIZ6C/aFNSPyHiazgrc+eoycT/M4tEC+x/zgX+W4koXGnHut2bsmlrqJiF
+	G6FdIb0zkZMJjfJb3patekv2KyD4U33RcuNaiU4jDg1w3eDcK6t84eT4=
+X-Google-Smtp-Source: AGHT+IEORFQpPPxNbNTUlO8T10ipbkVE6iPIvUK7JpxTN8XQMmau24jR5XiLTVQAI90UXX7g+yde1bySx4kZDR+VJH80pYA7gl+Q
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240829175201.670718-1-oneukum@suse.com> <CANn89i+m69mWQw+V6XWCzmF84s6uQV15m_YdkPDQptoxUks4=w@mail.gmail.com>
- <fd906211-7f31-4daf-8935-2be1378a75f8@suse.com> <CANn89iJWATVhMVDgq3fcV9zpZRt8nd_bWp3=qRHo8L3tJP==Kg@mail.gmail.com>
- <93a8a951-7e0f-4504-8407-15d920236f9c@suse.com>
-In-Reply-To: <93a8a951-7e0f-4504-8407-15d920236f9c@suse.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 15 Oct 2024 09:59:15 +0200
-Message-ID: <CANn89iJn_irj15UBeKZja7k9ViLGTxL3+fkgCERoAS2NM1hOZg@mail.gmail.com>
-Subject: Re: [PATCHv2 net] usbnet: modern method to get random MAC
-To: Oliver Neukum <oneukum@suse.com>
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@kernel.org, 
-	John Sperbeck <jsperbeck@google.com>, Brian Vazquez <brianvv@google.com>
+X-Received: by 2002:a05:6e02:16cf:b0:3a0:8edc:d133 with SMTP id
+ e9e14a558f8ab-3a3b5f94601mr122862275ab.9.1728981205423; Tue, 15 Oct 2024
+ 01:33:25 -0700 (PDT)
+Date: Tue, 15 Oct 2024 01:33:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <670e28d5.050a0220.f16b.0008.GAE@google.com>
+Subject: [syzbot] Monthly usb report (Oct 2024)
+From: syzbot <syzbot+listba1ecd1770f23c38128a@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 15, 2024 at 9:49=E2=80=AFAM Oliver Neukum <oneukum@suse.com> wr=
-ote:
->
->
->
-> On 15.10.24 01:00, Eric Dumazet wrote:
-> > On Tue, Oct 15, 2024 at 12:24=E2=80=AFAM Oliver Neukum <oneukum@suse.co=
-m> wrote:
-> >>
-> >> On 14.10.24 21:59, Eric Dumazet wrote:
-> >>
-> >>> As diagnosed by John Sperbeck :
-> >>>
-> >>> This patch implies all ->bind() method took care of populating net->d=
-ev_addr ?
-> >>>
-> >>> Otherwise the following existing heuristic is no longer working
-> >>>
-> >>> // heuristic:  "usb%d" for links we know are two-host,
-> >>> // else "eth%d" when there's reasonable doubt.  userspace
-> >>> // can rename the link if it knows better.
-> >>> if ((dev->driver_info->flags & FLAG_ETHER) !=3D 0 &&
-> >>>       ((dev->driver_info->flags & FLAG_POINTTOPOINT) =3D=3D 0 ||
-> >>>        (net->dev_addr [0] & 0x02) =3D=3D 0))
-> >>> strscpy(net->name, "eth%d", sizeof(net->name));
-> >>>
-> >>
-> >> Hi,
-> >>
-> >> you need to have a MAC to be an ethernet device, don't you?
-> >
-> > Before or after your patch, there was/is a MAC address, eventually rand=
-om.
-> >
-> > The problem is about the test, which is now done while dev->dev_addr
-> > is full of zeroes, which is not a valid address,
-> > as shown by :
->
-> Hi,
->
-> I am sorry I misunderstood you. Yes, I overlooked the test for whether
-> the MAC has been altered. I am preparing a patch. Could you give me
-> John Perbeck's address, so I can include him in "reported-by"?
->
+Hello usb maintainers/developers,
 
-Reported-by: Greg Thelen <gthelen@google.com>
-Diagnosed-by: John Sperbeck <jsperbeck@google.com>
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-Thank you.
+During the period, 13 new issues were detected and 0 were fixed.
+In total, 92 issues are still open and 357 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  8249    Yes   KASAN: slab-use-after-free Read in hdm_disconnect
+                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
+<2>  4105    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<3>  1286    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
+                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
+<4>  1138    Yes   INFO: rcu detected stall in hub_event
+                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+<5>  881     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<6>  874     Yes   general protection fault in ir_raw_event_store_with_filter
+                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<7>  862     Yes   INFO: task hung in usb_get_descriptor (2)
+                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+<8>  807     Yes   KASAN: invalid-free in dev_free
+                   https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c
+<9>  656     Yes   INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+<10> 652     Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
