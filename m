@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-16230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C88399E936
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 14:14:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B6399E94B
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 14:15:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA47C1F24712
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 12:14:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BF7B1C22E24
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 12:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A77F71F12E2;
-	Tue, 15 Oct 2024 12:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81D41F7070;
+	Tue, 15 Oct 2024 12:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YS5gVRyO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V8V1pbat"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD7E1EBA0A
-	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 12:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26311EF08E
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 12:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728994355; cv=none; b=r9ORCl5kjXheabf5GJ6A8J2uhzVhZObvNFqycWt7cuodXlSaShjn27K6/7ExV89JIoq2n2wJAfvpS2djwPO++PjptxKl/SJJZGTYJoN1UQpIVaZtowgn9nHCoymz1ssSWEnvJvEYMdfkh6dWxLO4CtvDXs54hpYm+Jyy/vGBB38=
+	t=1728994422; cv=none; b=UkZc97GyLYwdWFRrHKColfvmq+IwRCsQzTgAzIHIfGcAud5171VzelT0+yvTD0uEJ0/XSunfd1ZSnD4qhagXyqwomRc24I7JNWQNrOi4gxwYNhb4m2tmKV68RltAgPpqXX08mSfJwHtosw9ep4ssezguOZo607G20E3Qmb8CG0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728994355; c=relaxed/simple;
-	bh=kOPCwHZuLHCix8J0l1ASzg+/n3Z8S8YiN6ISgVS/n8Q=;
+	s=arc-20240116; t=1728994422; c=relaxed/simple;
+	bh=hcN1wVA8u4ZOReFbc9qb+CjCpeuZKBAKtc+VCaBMNuU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XJxxyckw2alsdconJe5hg0MQVRKBI0cVr5x9VQN4PvMcg/3zgUrScPslsbbOqhbrvLg2Mk87372BcPzJ2RxNmJiQcs3roAAH7zbwXLDBDPadQ9udxYgb7xoBUyIo8LIrz4lWVykk/r45DZW2NTJSgiUfUQ0prGE4u7gtvOendUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YS5gVRyO; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=eKzeXLwBmbs6AQyssg/dLsinYL29F3A4bCxN97gQpfBoc+3oWgTalCxzTjc99lCrDgUbJyopuTD4QeMWtaa87NganvCFThluxTPr32YXsSdBBF1CgoF4mL5Z14WiaBZFWkT2e4OXXL8tP/AA+ABSoYiWYekTmL3HlImhJypPPFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V8V1pbat; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728994354; x=1760530354;
+  t=1728994420; x=1760530420;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kOPCwHZuLHCix8J0l1ASzg+/n3Z8S8YiN6ISgVS/n8Q=;
-  b=YS5gVRyObW9y2Oqg+Ivi3di9oS0J5jaR3MrNF31QgCaudWCSs09Ux1Lb
-   bKRresw+1f50wFHqbWr7D3H46XpWRA0ORbBZDjrx7aNgPiXnqrJeXE98t
-   oZfrnAg9PuOmC51JqPuNDAJ/bUig89pp7PwK+QJPWOnuRk6qvyvyQHtd/
-   DM3llbdlS2dVAeZHER6M1X+/4qg1xZp3ubCLIu4VXVIJa7pmU3CmPEKrF
-   wibSA/sQeG0jXCMTAkrNhtJk86UeSTKkMZj6A8NiOw+SkjZY2rJH8+IO0
-   NT1E5R0cwiRGzZKB45rYkKDa6e8yqQfdXfK4WLFTL79lTaJeviBB3k8g0
-   A==;
-X-CSE-ConnectionGUID: ZmVC+lmPQl+fad2f4aBq+g==
-X-CSE-MsgGUID: I8W97l71TFi8pNXQ2yoJ/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28172919"
+  bh=hcN1wVA8u4ZOReFbc9qb+CjCpeuZKBAKtc+VCaBMNuU=;
+  b=V8V1pbatV/fNQBpqyCUhpV2Q/u8VPdLZIklJ6CP/wuTnMwwgeV40rwYy
+   67rlEs2e4iHRtugbkmP1A68yU2U3wiKxcvSGx7UQW6+LePSiDq8ffLoLV
+   7dPCbdf7yx4ovUTsIu/KeYVIN5hU2lsxrjLUEzEputqCOImAxCkgSXb7S
+   m63YDyAMK7zvGwJZaSMnwFWKkS9+NfydTQIl1BtttVAwpyPbV8T7aoUa0
+   BhYO94aW43buuX3mXEtrLFxusGUbzsg1joFFoOTulhnnD9/irq9FolpTA
+   xoXfwoTLmq091PvShHVuAcog1AvDU4u2UtqiZ7dDkBdIBm5/GWtxETLPF
+   Q==;
+X-CSE-ConnectionGUID: qz7ionFURx+y/8iwhjH7Ng==
+X-CSE-MsgGUID: FXd+qDYxQyWr79hoVGX4og==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28472537"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28172919"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 05:12:34 -0700
-X-CSE-ConnectionGUID: 6dKvTPEgT1WTxNcede5tAA==
-X-CSE-MsgGUID: eGmKZi6wSq2cmKyn1N4CaA==
+   d="scan'208";a="28472537"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 05:13:40 -0700
+X-CSE-ConnectionGUID: LipcZwUjSem3IB2j8D6LTw==
+X-CSE-MsgGUID: dBkG2QEySHed/AvkyOd7XA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
-   d="scan'208";a="82665238"
+   d="scan'208";a="108670640"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa005.jf.intel.com with SMTP; 15 Oct 2024 05:12:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Oct 2024 15:12:29 +0300
-Date: Tue, 15 Oct 2024 15:12:29 +0300
+  by orviesa002.jf.intel.com with SMTP; 15 Oct 2024 05:13:37 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Oct 2024 15:13:36 +0300
+Date: Tue, 15 Oct 2024 15:13:36 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -67,14 +67,14 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
 	Benson Leung <bleung@chromium.org>,
 	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] usb: typec: Add attribute file showing the
- supported USB modes of the port
-Message-ID: <Zw5cLZkRtvyaCzJE@kuha.fi.intel.com>
+Subject: Re: [PATCH v3 2/4] usb: typec: Add attribute file showing the USB
+ Modes of the partner
+Message-ID: <Zw5ccOM8hAfLFd2U@kuha.fi.intel.com>
 References: <20241011124402.3306994-1-heikki.krogerus@linux.intel.com>
- <20241011124402.3306994-2-heikki.krogerus@linux.intel.com>
- <2024101155-goes-demote-f6f6@gregkh>
- <ZwkvJkOZHvvLMxvj@kuha.fi.intel.com>
- <CANFp7mU3NPEio2NE3TRXf1C_Ckd-5wPbxnvRnNSjRyTozKDPEA@mail.gmail.com>
+ <20241011124402.3306994-3-heikki.krogerus@linux.intel.com>
+ <2024101149-body-urologist-6262@gregkh>
+ <ZwkwXWCD0xval8Wu@kuha.fi.intel.com>
+ <CANFp7mXLWhnX2KST-OkWXMQ32RP=eiFYrGfxdgZuvjbpkq4w7Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,40 +83,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANFp7mU3NPEio2NE3TRXf1C_Ckd-5wPbxnvRnNSjRyTozKDPEA@mail.gmail.com>
+In-Reply-To: <CANFp7mXLWhnX2KST-OkWXMQ32RP=eiFYrGfxdgZuvjbpkq4w7Q@mail.gmail.com>
 
-> > > > @@ -240,6 +251,7 @@ struct typec_partner_desc {
-> > > >   * @port_type_set: Set port type
-> > > >   * @pd_get: Get available USB Power Delivery Capabilities.
-> > > >   * @pd_set: Set USB Power Delivery Capabilities.
-> > > > + * @default_usb_mode_set: USB Mode to be used by default with Enter_USB Message
-> > > >   */
-> > > >  struct typec_operations {
-> > > >     int (*try_role)(struct typec_port *port, int role);
-> > > > @@ -250,6 +262,7 @@ struct typec_operations {
-> > > >                          enum typec_port_type type);
-> > > >     struct usb_power_delivery **(*pd_get)(struct typec_port *port);
-> > > >     int (*pd_set)(struct typec_port *port, struct usb_power_delivery *pd);
-> > > > +   int (*default_usb_mode_set)(struct typec_port *port, enum usb_mode mode);
+> > > > +void typec_partner_set_usb_mode(struct typec_partner *partner, enum usb_mode mode)
+> > > > +{
+> > > > +   if (!partner || partner->usb_mode == mode)
+> > > > +           return;
+> > > > +
+> > > > +   partner->usb_capability |= BIT(mode - 1);
+> > > > +   partner->usb_mode = mode;
+> > > > +   sysfs_notify(&partner->dev.kobj, NULL, "usb_mode");
 > > >
-> > > Naming is hard, but usually it's "noun_verb" so wouldn't this be just
-> > > "mode_set_default"?  We know it's usb :)
-> > >
-> > > But why default, why not just "mode_set"?  or "set_mode" given you have
-> > > "try_role" here, but then you have "pd_set".  Ick, I don't know, it's
-> > > your code, so your call, nevermind...
+> > > Who is listening for this and what are they going to do with the
+> > > information?
 > >
-> > I think I'll just change it this back to the way it was in the last
-> > version, and drop "default" from the name.
+> > I'll drop it, unless Abhishek, you guys would have use for it. Let me
+> > know. I'll send v4 next week.
 > 
-> What's being set underneath is what USB mode to enter on the next
-> reset or attach -- i.e. the default USB mode to enter. So appropriate
-> naming here may be one of usb_set_default, usb_set_next. Dropping
-> "usb" makes less sense vs dropping "mode", which could also refer to
-> alternate modes so I'd prefer we don't call it mode_set.
+> I think you are ok to remove this. We would care about this value when
+> registering the partner and when activating a specific USB mode. With
+> the latter, we can just depend on the synchronous nature of
+> usb_mode_store (i.e. we can check the result after writing to the
+> sysfs file).
 
-I'll keep it the way it is now. This is kernel internal stuff, so we
-can always change it later.
+Okay. I'll drop it.
 
 thanks,
 
