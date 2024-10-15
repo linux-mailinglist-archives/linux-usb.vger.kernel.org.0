@@ -1,175 +1,280 @@
-Return-Path: <linux-usb+bounces-16246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16247-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDCF199F6CC
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 21:10:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF96A99F733
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 21:23:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F3DA1F24110
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 19:10:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F5B31C208A3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 19:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1381F80D1;
-	Tue, 15 Oct 2024 19:10:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6A11EC006;
+	Tue, 15 Oct 2024 19:23:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTLT/HXu"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="j24sqayp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com [209.85.160.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D5A1F585D;
-	Tue, 15 Oct 2024 19:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309D71F80D7
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 19:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729019422; cv=none; b=NI0D+PhcETZj+yrMj9wFz769B6DU45M7KXAVs9doSPQZqKqn8TPBARovUS8D7vM7E4IaVTtjTV7J37HMX4rz8dLOAowzaBWGuk+TBsEix1VHp8E49IoTDL9kR6/IdPpK5zWu6srmoATISp0vwG0auOjeRrwChw6s9+dQmWkWqcc=
+	t=1729020191; cv=none; b=U3pRGUaQWdAjbutjiNvNRRgB7ylJJtAZst+o0ME5WWsD8mYL0gfvf5Q6HW3I0qmXR7JGrf2t18Ue5tEZX2mvI4VX1AK2VUuMIwwC2hHMlmMbUVIyIvA8bgD3UYKq7ccy44kJ4mQf8GmKjwn56lK4ashLrr05ZvxurIEnZ7B/boc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729019422; c=relaxed/simple;
-	bh=ihmSNqolTKBiiiM70WcLuZBVNYQgdPlqo5c5+tAg6Ks=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CfRNLdpj2z8c/BW7Gyc+mjvRJCEtUDUuCJLURujFBhJE76Uj47oTGwVx9L8ihpscA2pm5Ouyar5yqZnA3e4ROEtqDBNjqer9wEsllHgavtDCTuWX3JGhOiCF+wCsxwqN4EXvQ4R4DWTmWwUJvOiYj8dTsD45igF7IJE7m97TtvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTLT/HXu; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4311c285bc9so41979525e9.3;
-        Tue, 15 Oct 2024 12:10:20 -0700 (PDT)
+	s=arc-20240116; t=1729020191; c=relaxed/simple;
+	bh=nuqVM5Pa10hgz7nFmmFVgpfYVQK/w/7stNQsizNYTCA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MYQTdxuGgOWxDTKS6Mh8VtV5QOiUUTTR3YrmwmkwQN2b6tUKiUAzu1KCZdg6pm0rH5OAxIMSXZdfNEcLF7dKDLNlkQEZ5yBAxxYxxjzvZ+OkXjukehhHiRNAu7X1n6izz/Hp2yKROO7mBvp+eGUpSmWnuOE2mOzZfivL+QKMhiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=j24sqayp; arc=none smtp.client-ip=209.85.160.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f196.google.com with SMTP id d75a77b69052e-4604b48293dso1785821cf.0
+        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 12:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729019419; x=1729624219; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=OGKWsuddELHtQYb9bXGQDuBGzTg8aShe2wjuaHBaImE=;
-        b=HTLT/HXuhdRaeWJEmk3cab6xHMAnKPkPMHShhLEL7FU1DiW/HE+oUlEyWRtYjYxeVe
-         xOyyNfRdsnhcMQRkkLyY9ZqaJOF2GtdtPVi83MNOpdS0HqzLo4TmZ1mDz5Yk7YBsGAr1
-         OKbmpz5CcKXLeonG1uH0cTEGolaiL4lfvY7WxpPjpv805g+pRnljhfsWSxeJ3AfZfWNx
-         1Q5TBRCp8SVoXbE6l5E8I7WbQ/EZdEydHN/Jykg9ZpVimB3DibbZH9T9fekMg5BuVukU
-         CNCGPZ7H/7X8C5yl5xFN+sQ7dSp9Iqrv9zmEBXXnMvFjNPUGm7YfJHjkM2WhkVtbkBZN
-         htRQ==
+        d=rowland.harvard.edu; s=google; t=1729020187; x=1729624987; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X7dB0pxitQeFgVMBRDLTWgDRQeKiGn5TxSEiu8/oYsk=;
+        b=j24sqaypQsHAZpYbBD5eymoPomxCMouELlnwaHUtTAlFX517tTU31ifg1sAmN3GhOW
+         FaEkv652ye3abptu3JNUfYYhSKRNiOlC3HiMaa6i0WWXv9Nbbs0tHR1RvdSf3VoJZHPP
+         5Z7BnOjQ5T6QBkDBfb/0CGNxrHnKKdQ3qZaHfM0ccVWIVS6ooIsXIMouP9kzhHewKSr8
+         n0bzJhcoA4TsZpFTkiaExDoqfIw9Yujti9QQ0w1hau6Omd+gH0ekt7MQRfMwz5OrKKrK
+         JwkWCDClbAqlASxe8JAUEYzphVoWUHS+a07NeUksQCLA90xKwiUOku7RHzfuo+nJjTVU
+         ADuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729019419; x=1729624219;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1729020187; x=1729624987;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OGKWsuddELHtQYb9bXGQDuBGzTg8aShe2wjuaHBaImE=;
-        b=s24FSZJkbMiD95RCUDwIDM9KO1dTYIH8zQ6bZnZRWyeo2+41edcohjugFRu+H/Nj8M
-         tOeajRmv/Wj8odaMyDrlOjBSxqQtnWgLOmIG3U2TsCbKJwq5ySlHe/YEQ0FUac27mUG5
-         y29Hq6jYj6O6Hr0bx79DGpgjId+hmyYGrrnQy+Tn4hKGwksiA6KAsrvCxENUOlWZrLtd
-         YLgcIXm64oC0OTlRMWr4JWuwUceQHGTG1wwDEIfuzPw9XdxRpGjG56uBHT+wMPoGKVP7
-         WcrovCpf0HyKF24LQXVOl3FHfvWYdsrEbtpeay63YgF4CFe0yDyaarzFG0SQc82go2fd
-         EuKA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNJG8+s8r0XF61rW7eFGn8VSPG2w3uppF1DkMK+DfI3JGi2uodG6eWcQi6k1XAoqX5un2PONMKG0Jn3vHk@vger.kernel.org, AJvYcCXEQWu0/5uWVUX9iezzoNhB9g+iY6Oj1a7HgQWHym1ffzyd4i1ZGTjZHp/DTfiHu5f6ARHBCDN0EvLHnOmPng==@vger.kernel.org, AJvYcCXVWsy0CYyM1Xau6nXY/+TbpDJ2fvV+TmF12UH56uuQvfu/Gu/6zGBJm14Lb2jJ6WYIVKxM/bcPBbHC@vger.kernel.org, AJvYcCXs0g4MLEydftGigRGxyrybSxTYUP5lrhYvHGsHpqojaoQ6XLiNI4POm99xayAjAFI46kWfOjIL45/r@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpB8k9mOuGvVYdhaxu2cxgKqpcVdMbK56aG2um/aCL30Y7MoTZ
-	CcpaZWBEZKDXk4Rr3Cvte5pFPpf177HtRgNwbLqjy+bYPcT1VWZMmw4U8Qrc
-X-Google-Smtp-Source: AGHT+IEutnNqynOG4Wf+eWTXk6+7XPReQX7ZugZvNO8APwPPG8HOjRVLgcYFJj/SKks39PcSHfcQWg==
-X-Received: by 2002:a05:600c:41d1:b0:431:3bec:4390 with SMTP id 5b1f17b1804b1-4313bec447emr35470135e9.1.1729019418403;
-        Tue, 15 Oct 2024 12:10:18 -0700 (PDT)
-Received: from [10.66.66.2] (9.ip-51-91-159.eu. [51.91.159.9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4313f56eb0bsm25737835e9.22.2024.10.15.12.10.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Oct 2024 12:10:17 -0700 (PDT)
-Message-ID: <2ed80ba6-e64f-4122-a6bc-c224c4e92e0f@gmail.com>
-Date: Tue, 15 Oct 2024 21:10:12 +0200
+        bh=X7dB0pxitQeFgVMBRDLTWgDRQeKiGn5TxSEiu8/oYsk=;
+        b=ml/h4EMJQgrutlfCts25Q1sQeqzxeHEFnTaKSkfB4bXAe4DQJvygvIp1ptdjBsztNb
+         J40VAet4g9xKq3h/j28H33YxM6H2UUHzu3KJBws0ore07ZbwJtzpZ5dHLmJHw730OsD3
+         ihmtlc8GDAvW4iMQfBipRUbbuDtsI1Z5ilYhEuCyqGlrB5NeLWKOHxWF1aLZCmwh1O4y
+         hD54D5PFYHFkSdiLqMMreaiUbFS5JGzPBg+ifmRzWdHlYOptB8kPa4+lHX4QMATSe6hR
+         L5dHEkp1dtXQAusasgnB99gw0tpi8ejD+KgJLmZFo8klHtjaXzi2VRtwU7xJksN3UNc7
+         pSmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWZavF4hIyVl1TO1P2u/7kR6Ij4b3MT/juW3YhaPRQRJrSJEq73B2kxDRy+5vdJ1IFM/vggeBbnMNc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQXulgMAFIR5OpkjJv5aDrE5tnJv6FcUy/DaR7LSAI1tLeS+mH
+	iEz6cfSYoLasru5arw49w1v+AG/UFC1QnIW7xtIYzSj/3W5Lc2Rp8J4lkpijnA==
+X-Google-Smtp-Source: AGHT+IEVMyd7eXgnEAfRqhwHnQdq3N+kpUIcnL/4s3rKrsYnYBtTrSPgs4TfkC0BqoBAVv/3K1YqoA==
+X-Received: by 2002:a05:622a:c4:b0:458:3162:2262 with SMTP id d75a77b69052e-46089ada3f9mr30640441cf.4.1729020186916;
+        Tue, 15 Oct 2024 12:23:06 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:2501:2805:c6d5:fe22:7fa3:ec54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4607d89942csm9261411cf.54.2024.10.15.12.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2024 12:23:06 -0700 (PDT)
+Date: Tue, 15 Oct 2024 15:23:03 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+f342ea16c9d06d80b585@syzkaller.appspotmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_port_suspend
+Message-ID: <c3d59f87-bb72-46d9-94b8-7441b837bf13@rowland.harvard.edu>
+References: <6ae97ef8-bcbe-448a-9276-ad21631e43dc@rowland.harvard.edu>
+ <670e820b.050a0220.d5849.0007.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] usb: typec: Add new driver for Parade PS8830
- Type-C Retimer
-To: Abel Vesa <abel.vesa@linaro.org>, Johan Hovold <johan@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Rajendra Nayak <quic_rjendra@quicinc.com>,
- Sibi Sankar <quic_sibis@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
- <Zw5i9dcSMOG4n3PW@hovoldconsulting.com> <Zw5oOUeN/v+tz+SY@linaro.org>
-Content-Language: en-US
-From: Konrad Dybcio <konradybcio@gmail.com>
-Autocrypt: addr=konradybcio@gmail.com; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <Zw5oOUeN/v+tz+SY@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <670e820b.050a0220.d5849.0007.GAE@google.com>
 
-
-
-On 10/15/24 15:03, Abel Vesa wrote:
-> On 24-10-15 14:41:25, Johan Hovold wrote:
->> On Fri, Oct 04, 2024 at 04:57:36PM +0300, Abel Vesa wrote:
->>> The Parade PS8830 is a Type-C multi-protocol retimer that is controlled
->>> via I2C. It provides altmode and orientation handling and usually sits
->>> between the Type-C port and the PHY.
->>>
->>> It is currently used alongside Qualcomm Snapdragon X Elite SoCs on quite
->>> a few laptops already.
->>>
->>> This new driver adds support for the following 3 modes:
->>>   - DP 4lanes (pin assignments C and E)
->>>   - DP 2lanes + USB3 (pin assignment D)
->>>   - USB3
->>>
->>> This retimer is a LTTPR (Link-Training Tunable PHY Repeater) which means
->>> it can support link training from source to itself. This means that the
->>> DP driver needs to be aware of the repeater presence and to handle
->>> the link training accordingly. This is currently missing from msm dp
->>> driver, but there is already effort going on to add it. Once done,
->>> full external DP will be working on all X1E laptops that make use of
->>> this retimer.
->>
->> I was gonna ask you to include the devicetree changes that enables the
->> retimers as part of this series (to facilitate review and testing), but
->> perhaps you should indeed not post them again until LTTPR support is in
->> place.
+On Tue, Oct 15, 2024 at 07:54:03AM -0700, syzbot wrote:
+> Hello,
 > 
-> I was thinking maybe we should not wait for LTTPR support as this series
-> brings orientation support as is.
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
 
-It also happens to bring an undesired crash-on-unplug feature when
-DP is enabled.. I suppose it's fine to bring this series in if you
-separate enabling the retimer on devices from wiring DP up.
+No good; the console log shows that the timer must have been activated
+and then stopped during a period that wasn't printed in the log.  This
+next patch tries to print out more of the history.  Will it be enough?
 
-Konrad
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git v6.12-rc3
+
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -50,7 +50,7 @@
+ #define POWER_BUDGET	500	/* in mA; use 8 for low-power port testing */
+ #define POWER_BUDGET_3	900	/* in mA */
+ 
+-#define DUMMY_TIMER_INT_NSECS	125000 /* 1 microframe */
++#define DUMMY_INT_KTIME	ns_to_ktime(125000)	 /* 1 microframe */
+ 
+ static const char	driver_name[] = "dummy_hcd";
+ static const char	driver_desc[] = "USB Host+Gadget Emulator";
+@@ -239,6 +239,12 @@ enum dummy_rh_state {
+ 	DUMMY_RH_RUNNING
+ };
+ 
++struct alaninfo {
++	const char *		str;
++	int			starts, stops;
++};
++#define MAX_INFO	16
++
+ struct dummy_hcd {
+ 	struct dummy			*dum;
+ 	enum dummy_rh_state		rh_state;
+@@ -257,6 +263,10 @@ struct dummy_hcd {
+ 	unsigned			active:1;
+ 	unsigned			old_active:1;
+ 	unsigned			resuming:1;
++
++	struct alaninfo			alaninfo[MAX_INFO];
++	int				alanindex;
++	int				starts, stops;
+ };
+ 
+ struct dummy {
+@@ -323,6 +333,44 @@ static inline struct dummy *gadget_dev_t
+ 	return container_of(dev, struct dummy, gadget.dev);
+ }
+ 
++void alandbg(struct dummy_hcd *dum_hcd, const char *str, int type);
++void alandbg(struct dummy_hcd *dum_hcd, const char *str, int type)
++{
++	int			i = dum_hcd->alanindex;
++	struct alaninfo		*info = &dum_hcd->alaninfo[i];
++
++	if (type == 1)
++		++dum_hcd->starts;
++	else if (type == 2)
++		++dum_hcd->stops;
++	info->str = str;
++	info->starts = dum_hcd->starts;
++	info->stops = dum_hcd->stops;
++
++	if (++i >= MAX_INFO)
++		i = 0;
++	dum_hcd->alanindex = i;
++}
++
++void alandump(struct dummy_hcd *dum_hcd);
++void alandump(struct dummy_hcd *dum_hcd)
++{
++	int			i = dum_hcd->alanindex;
++	int			j;
++	struct alaninfo		*info = &dum_hcd->alaninfo[i];
++	char			*p, buf[4 * 24];
++
++	p = buf;
++	for (j = 0; j < 4; ++j) {
++		if (--i < 0)
++			i = MAX_INFO - 1;
++		info = &dum_hcd->alaninfo[i];
++		p += sprintf(p, "%s %d %d  ",
++				info->str, info->starts, info->stops);
++	}
++	dev_info(dummy_dev(dum_hcd), "%s\n", p);
++}
++
+ /*-------------------------------------------------------------------------*/
+ 
+ /* DEVICE/GADGET SIDE UTILITY ROUTINES */
+@@ -1303,9 +1351,11 @@ static int dummy_urb_enqueue(
+ 		urb->error_count = 1;		/* mark as a new urb */
+ 
+ 	/* kick the scheduler, it'll do the rest */
+-	if (!hrtimer_active(&dum_hcd->timer))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
++	if (!hrtimer_active(&dum_hcd->timer)) {
++		alandbg(dum_hcd, "start1", 1);
++		hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
+ 				HRTIMER_MODE_REL_SOFT);
++	}
+ 
+  done:
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+@@ -1325,9 +1375,17 @@ static int dummy_urb_dequeue(struct usb_
+ 
+ 	rc = usb_hcd_check_unlink_urb(hcd, urb, status);
+ 	if (!rc && dum_hcd->rh_state != DUMMY_RH_RUNNING &&
+-			!list_empty(&dum_hcd->urbp_list))
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL_SOFT);
+-
++			!list_empty(&dum_hcd->urbp_list)) {
++		hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
++				HRTIMER_MODE_REL_SOFT);
++		alandbg(dum_hcd, "start2", 1);
++	} else {
++		int active = hrtimer_active(&dum_hcd->timer);
++		dev_info(dummy_dev(dum_hcd), "Dequeue norestart: %d %d active %d\n",
++				rc, list_empty(&dum_hcd->urbp_list), active);
++		if (rc == 0 && !active)
++			alandump(dum_hcd);
++	}
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+ 	return rc;
+ }
+@@ -1813,10 +1871,12 @@ static enum hrtimer_restart dummy_timer(
+ 
+ 	/* look at each urb queued by the host side driver */
+ 	spin_lock_irqsave(&dum->lock, flags);
++	alandbg(dum_hcd, "handler1", 0);
+ 
+ 	if (!dum_hcd->udev) {
+ 		dev_err(dummy_dev(dum_hcd),
+ 				"timer fired with no URBs pending?\n");
++		alandbg(dum_hcd, "handler2", 2);
+ 		spin_unlock_irqrestore(&dum->lock, flags);
+ 		return HRTIMER_NORESTART;
+ 	}
+@@ -1994,10 +2054,13 @@ return_urb:
+ 	if (list_empty(&dum_hcd->urbp_list)) {
+ 		usb_put_dev(dum_hcd->udev);
+ 		dum_hcd->udev = NULL;
++		alandbg(dum_hcd, "handler3", 2);
+ 	} else if (dum_hcd->rh_state == DUMMY_RH_RUNNING) {
+-		/* want a 1 msec delay here */
+-		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS),
++		alandbg(dum_hcd, "handler-start", 1);
++		hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
+ 				HRTIMER_MODE_REL_SOFT);
++	} else {
++		alandbg(dum_hcd, "handler4", 2);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&dum->lock, flags);
+@@ -2390,8 +2453,11 @@ static int dummy_bus_resume(struct usb_h
+ 	} else {
+ 		dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 		set_link_state(dum_hcd);
+-		if (!list_empty(&dum_hcd->urbp_list))
+-			hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL_SOFT);
++		if (!list_empty(&dum_hcd->urbp_list)) {
++			alandbg(dum_hcd, "start3", 1);
++			hrtimer_start(&dum_hcd->timer, DUMMY_INT_KTIME,
++					HRTIMER_MODE_REL_SOFT);
++			}
+ 		hcd->state = HC_STATE_RUNNING;
+ 	}
+ 	spin_unlock_irq(&dum_hcd->dum->lock);
+@@ -2490,6 +2556,10 @@ static int dummy_start(struct usb_hcd *h
+ {
+ 	struct dummy_hcd	*dum_hcd = hcd_to_dummy_hcd(hcd);
+ 
++	int i;
++	for (i = 0; i < MAX_INFO; ++i)
++		dum_hcd->alaninfo[i].str = "";
++
+ 	/*
+ 	 * HOST side init ... we emulate a root hub that'll only ever
+ 	 * talk to one device (the gadget side).  Also appears in sysfs,
+@@ -2521,6 +2591,7 @@ static void dummy_stop(struct usb_hcd *h
+ {
+ 	struct dummy_hcd	*dum_hcd = hcd_to_dummy_hcd(hcd);
+ 
++	alandbg(dum_hcd, "cancel", 0);
+ 	hrtimer_cancel(&dum_hcd->timer);
+ 	device_remove_file(dummy_dev(dum_hcd), &dev_attr_urbs);
+ 	dev_info(dummy_dev(dum_hcd), "stopped\n");
 
