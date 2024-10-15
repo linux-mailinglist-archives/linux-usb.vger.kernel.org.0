@@ -1,115 +1,119 @@
-Return-Path: <linux-usb+bounces-16231-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16232-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49B6399E94B
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 14:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8794C99E99F
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 14:21:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BF7B1C22E24
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 12:15:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9B4A1C21889
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 12:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81D41F7070;
-	Tue, 15 Oct 2024 12:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC9D11EBA1E;
+	Tue, 15 Oct 2024 12:21:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V8V1pbat"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k3pmeaIf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26311EF08E
-	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 12:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3504A16EC0E
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 12:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728994422; cv=none; b=UkZc97GyLYwdWFRrHKColfvmq+IwRCsQzTgAzIHIfGcAud5171VzelT0+yvTD0uEJ0/XSunfd1ZSnD4qhagXyqwomRc24I7JNWQNrOi4gxwYNhb4m2tmKV68RltAgPpqXX08mSfJwHtosw9ep4ssezguOZo607G20E3Qmb8CG0g=
+	t=1728994876; cv=none; b=DzD/3qkgYBNJVo+EOYOqwoDTVC1d+farD2l5ARpEMOARQmHWQpqT2Y+0rDeGSxoK9+a+2fpB/65H7O+hAfMFEWGFKBlt/noyuJKnt0TVNfigX4/QxO8ai16gEARjRkFshHoaebwXCuxJNFCjNnsuF0aQA3B+xkr3BmyMpytW6IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728994422; c=relaxed/simple;
-	bh=hcN1wVA8u4ZOReFbc9qb+CjCpeuZKBAKtc+VCaBMNuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eKzeXLwBmbs6AQyssg/dLsinYL29F3A4bCxN97gQpfBoc+3oWgTalCxzTjc99lCrDgUbJyopuTD4QeMWtaa87NganvCFThluxTPr32YXsSdBBF1CgoF4mL5Z14WiaBZFWkT2e4OXXL8tP/AA+ABSoYiWYekTmL3HlImhJypPPFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V8V1pbat; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1728994876; c=relaxed/simple;
+	bh=wXiAiTSS/Obb0BefZEEUWKr0v43/BD/fgV1tBRzJyDY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ESOSV+t1x3Qj+X7PHNIlCnqdgfsj750DoWECjTU9t1aD0uD5DONvGE+8fxqCKqRjSHQkUZ3NIkOa37cFxpZOKGuMGiedkzAuS9uDwLd+tXi9GtiPbf+yiTPcSf5rVTs497EELdzh+cq6vkXz0WyAAhL0eBMZtVozRPOCOIFDdPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k3pmeaIf; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728994420; x=1760530420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hcN1wVA8u4ZOReFbc9qb+CjCpeuZKBAKtc+VCaBMNuU=;
-  b=V8V1pbatV/fNQBpqyCUhpV2Q/u8VPdLZIklJ6CP/wuTnMwwgeV40rwYy
-   67rlEs2e4iHRtugbkmP1A68yU2U3wiKxcvSGx7UQW6+LePSiDq8ffLoLV
-   7dPCbdf7yx4ovUTsIu/KeYVIN5hU2lsxrjLUEzEputqCOImAxCkgSXb7S
-   m63YDyAMK7zvGwJZaSMnwFWKkS9+NfydTQIl1BtttVAwpyPbV8T7aoUa0
-   BhYO94aW43buuX3mXEtrLFxusGUbzsg1joFFoOTulhnnD9/irq9FolpTA
-   xoXfwoTLmq091PvShHVuAcog1AvDU4u2UtqiZ7dDkBdIBm5/GWtxETLPF
+  t=1728994875; x=1760530875;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wXiAiTSS/Obb0BefZEEUWKr0v43/BD/fgV1tBRzJyDY=;
+  b=k3pmeaIf7ZuvaneKgGw7gjV57tUD6I1aeefly4XbTr9ryVkXtuQC48Dv
+   /N4UIREpAd95/WQ7Zj/PQuYzYrT51N6qt5sdmKPcGwt/Dpn2jcvyKXcuf
+   1jzzC1lbmvTMwLL8iKtZ0K1fjFATwJyN815XWwRxzJiL0dGtcjQ411guD
+   oPc23wbtZa6dxpyUBPtw8KlfGAvJIgytYLqW/eztx6UuNvWB+m6hIQKBL
+   /DPK+DRmZJLWdLKU1WvDAB7FtN6IV6VH7hYY+6/k48uwdyijpqrDnkXpc
+   zjiyDlt21pnn8958OnOYba5HQVKh5YNTn2ZqdTp1l+siIVyk41tZJfrkH
    Q==;
-X-CSE-ConnectionGUID: qz7ionFURx+y/8iwhjH7Ng==
-X-CSE-MsgGUID: FXd+qDYxQyWr79hoVGX4og==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28472537"
+X-CSE-ConnectionGUID: qmLIQjWySi2MeO2jqV7Cdw==
+X-CSE-MsgGUID: 3OM8qcC6SbyB/hGkRRtm3w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28336969"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28472537"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 05:13:40 -0700
-X-CSE-ConnectionGUID: LipcZwUjSem3IB2j8D6LTw==
-X-CSE-MsgGUID: dBkG2QEySHed/AvkyOd7XA==
+   d="scan'208";a="28336969"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 05:21:14 -0700
+X-CSE-ConnectionGUID: QswSxGRvT8GeZ2dRbGfuTw==
+X-CSE-MsgGUID: ljE4PGpcTPSTWgAIRcjOxA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
-   d="scan'208";a="108670640"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa002.jf.intel.com with SMTP; 15 Oct 2024 05:13:37 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Oct 2024 15:13:36 +0300
-Date: Tue, 15 Oct 2024 15:13:36 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] usb: typec: Add attribute file showing the USB
- Modes of the partner
-Message-ID: <Zw5ccOM8hAfLFd2U@kuha.fi.intel.com>
-References: <20241011124402.3306994-1-heikki.krogerus@linux.intel.com>
- <20241011124402.3306994-3-heikki.krogerus@linux.intel.com>
- <2024101149-body-urologist-6262@gregkh>
- <ZwkwXWCD0xval8Wu@kuha.fi.intel.com>
- <CANFp7mXLWhnX2KST-OkWXMQ32RP=eiFYrGfxdgZuvjbpkq4w7Q@mail.gmail.com>
+   d="scan'208";a="82668153"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa005.jf.intel.com with ESMTP; 15 Oct 2024 05:21:13 -0700
+Message-ID: <e3f8e58d-d132-430f-875f-283d8055b6c0@linux.intel.com>
+Date: Tue, 15 Oct 2024 15:23:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANFp7mXLWhnX2KST-OkWXMQ32RP=eiFYrGfxdgZuvjbpkq4w7Q@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] Fix the NEC stop bug workaround
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org
+References: <20241014210840.5941d336@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20241014210840.5941d336@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> > > > +void typec_partner_set_usb_mode(struct typec_partner *partner, enum usb_mode mode)
-> > > > +{
-> > > > +   if (!partner || partner->usb_mode == mode)
-> > > > +           return;
-> > > > +
-> > > > +   partner->usb_capability |= BIT(mode - 1);
-> > > > +   partner->usb_mode = mode;
-> > > > +   sysfs_notify(&partner->dev.kobj, NULL, "usb_mode");
-> > >
-> > > Who is listening for this and what are they going to do with the
-> > > information?
-> >
-> > I'll drop it, unless Abhishek, you guys would have use for it. Let me
-> > know. I'll send v4 next week.
+On 14.10.2024 22.08, Michal Pecio wrote:
+> Hi,
 > 
-> I think you are ok to remove this. We would care about this value when
-> registering the partner and when activating a specific USB mode. With
-> the latter, we can just depend on the synchronous nature of
-> usb_mode_store (i.e. we can check the result after writing to the
-> sysfs file).
+> I found an unfortunate problem with my workaround for this hardware bug.
+> 
+> To recap, Stop Endpoint sometimes fails, the Endpoint Context says the
+> EP is Stopped, but cancelled TRBs are still executed. I found this bug
+> earlier this year and submitted a workaround, which retries the command
+> (sometimes a few times) and all is good.
+> 
+> This works fine for common cases, but what if the endpoint is really
+> stopped? Then Stop Endpoint is supposed to fail and fail it does. The
+> workaround code doesn't know that it happened and retries infinitely.
+> 
+> I have never seen it in normal use, but I devised a reliable repro.
+> The effect isn't pretty - no URBs can be cancelled, device gets stuck,
+> if unplugged it locks up connections/disconnections on the whole bus.
+> 
+> With some experimentation I found that the bug is a variant of the old
+> "stop after restart" issue - the doorbell ring is internally reordered
+> after the subsequent command. By busy-waiting I confirmed that EP state
+> which is initially seen as Stopped becomes Running some time later.
+> 
 
-Okay. I'll drop it.
+Seems host controllers aren't designed to stop, move dequeue, and restart
+an endpoint in quick succession.
 
-thanks,
+In addition to fixing this NEC case we could think about avoiding these
+cases, some could be avoided by adding a new ".flush_endpoint()" callback to
+the USB host side API. Usb core itself has a usb_hcd_flush_endpoint() function
+that calls .urb_dequeue() in a loop for each queued URB, causing host to
+issue the stop, move deq and ring doorbell for every URB.
 
--- 
-heikki
+If usbcore knows all URBs will be cancelled it could let host do it in one go.
+i.e. stop endpoint once.
+
+Thanks
+Mathias
 
