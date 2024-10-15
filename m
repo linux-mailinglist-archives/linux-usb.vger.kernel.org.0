@@ -1,170 +1,122 @@
-Return-Path: <linux-usb+bounces-16236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16237-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D49D99EB31
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 15:04:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE7F699ED79
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 15:28:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A74701F23698
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 13:04:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4AAD9B22245
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 13:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6701E377E;
-	Tue, 15 Oct 2024 13:04:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 085481FC7D2;
+	Tue, 15 Oct 2024 13:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GFQMCrj9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/O+o5EC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82F51CFEA9
-	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 13:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E979C1FC7CB
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 13:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728997439; cv=none; b=S6THiIqlOSG1A4GH66op3fnI4w8YiTKpyOoLcJl5iNDix0rioGULzODff9qnfVEqIPWdg3i2msM1k+Xu6g58XDP+/bk84Am6Z4fhDQcIycImC3lZyo3PtNODx7nL6Fcoiqdejyf8IkJlt79ufMC0kaWiFTFXzXm1uD6pKMS1oEI=
+	t=1728998877; cv=none; b=XoJHBjXXdTRBQXljgGHJojQb4gJUM7NdfFAfgvikKCZYzDKQYi5SQHmXTvf1MuGgOdsNBwbSBESMR5zvcn114VxUB6mngnpmhUDQYycGTeezaYsbgIxK1YUmoW3WlD1RnGj/29/yjb1tc4N0ESEdWlEpXGPg+D15q17NqwJjnl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728997439; c=relaxed/simple;
-	bh=Lm5YIENHSH8hxbG0wrGckxliJKkAAMXevVGs6pPXiPU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WvybAr2DxrpYC1i/c5VxyltYXuZXsi/RsFjVUmHQuuXLIsZrJEpKvez4fvpzrvp6ILdBhFHmRej639jAvw0FiSY1QwSc0b+nNnqy64ghAmjL08FjwNP7VMlUoQO+C9T+HoizoknTqg6ZbH6Ww5bN7trT5v7RTvrSrD556f1ALyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GFQMCrj9; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-37d4c482844so3078992f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 06:03:57 -0700 (PDT)
+	s=arc-20240116; t=1728998877; c=relaxed/simple;
+	bh=vauM4zjJone8uwTMY1Kmew0FvHO3TZzK6IQ2usMsibw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bifEZ+o7far6xRKVceDFbmK2VM/mK8xEtcuYsBwUVAXpgNqAZ+lw3MibE8bE135m8NdkzCvJKixZ5qZKVRbCDqEZni1KCvElaaC5bBwbHJ2o+VrGTNIrlCQgs93Dm2Sbttu6gF4UFVOHbHX+7MeXYGss1iqcDWa/rkKEb0U/nbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/O+o5EC; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539e59dadebso3898527e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 06:27:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728997436; x=1729602236; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EfIzmMIc+jdVgSYVjow3yI+R+7mv8rjwXVSvx3G/YCI=;
-        b=GFQMCrj9COIog/XbFbp4xW5FY823b5ZkIPcHIIn9h0T85dJLfx4QzUtE/vpyhJDqyV
-         LtSpydD8rAC6+AcEynhiaV/tzdxsid67cSGFg1ZTv57FQQEdep59+AfMLqG8RcmqNRW6
-         jQy54wd17RLGUnC/RCX228zvb1eb7Mehg5cOerVeyeX0xtJt41yf7W4JXff7rFelgm/f
-         0wGcT5+yNfEP688deutdnfIUBMRKeQOPMaCVsMtk8P7fVVFALdJG+Bta/fpV4NSvlCWO
-         TpbzXCwCV5po3jHhh4wv1y6OLKjDv4U/PaDQuVKcrpQXfPP8ijX1ajQUDLmBZiIrdBWQ
-         Idfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728997436; x=1729602236;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1728998874; x=1729603674; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EfIzmMIc+jdVgSYVjow3yI+R+7mv8rjwXVSvx3G/YCI=;
-        b=pT4SYXgvMgpjSoUpp+x6AObwG+JqV7Vj5kBdLbd53bJkUVK+Z7rpkZuzxOEd30hkNH
-         snn9Rfc6awESbdmYHoSK3dQjNhCCZYabU2D0v68nJT6kI+sxS78aFEnNyb1w2sKzzBRS
-         SFmObseYhJh59MxSbzdRbn6L7AGPfgVp+XeqhNXL3bGp+ZSVEYR8zAWVtphxQyw45gvS
-         8ay8Vtmr3HsIoIXeJc0GT2X4mpslcrUWZhwEXw8EmnOZQeLL8FheC/bnlWJrTzqueJSN
-         maSg32097PB0gU74dnv330QRuG1f6c/B/OiaqwdKLqzZgrQBMNDRlnukx+ALBYn5BBx5
-         lnVg==
-X-Forwarded-Encrypted: i=1; AJvYcCX9v7cbdWUkLs2UwOyPz9xJWCXokirVZVfvobbddvo+rsgN+XC64pXcebx+EifnOwZ24Mpjbw5ITpY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzE0TYqE2Olk7VJsVtLgGDGNNLQw9WeQpuTeEoM63XqMtSLrjE
-	JKJ6OTi3uD8P8/6Y0a2bWR1Xc5jeyYikdIEaiku5zCNN01FDcW1nZ6YxSDVhWzI=
-X-Google-Smtp-Source: AGHT+IHKKw5qg6qbRVjnDX1hYY/Pzy5t1f9uZ94XN/UZxWzYk2Hnf7NTq3WQyOH5g/aqVcr2jdVcjw==
-X-Received: by 2002:a05:6000:1869:b0:37d:4f1b:35d with SMTP id ffacd0b85a97d-37d86d69878mr159053f8f.48.1728997435755;
-        Tue, 15 Oct 2024 06:03:55 -0700 (PDT)
-Received: from linaro.org ([82.76.168.176])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4313f55dfa8sm17806825e9.6.2024.10.15.06.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 06:03:55 -0700 (PDT)
-Date: Tue, 15 Oct 2024 16:03:53 +0300
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] usb: typec: Add new driver for Parade PS8830
- Type-C Retimer
-Message-ID: <Zw5oOUeN/v+tz+SY@linaro.org>
-References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
- <Zw5i9dcSMOG4n3PW@hovoldconsulting.com>
+        bh=ReVTDH/zso/y6fy9TN41NtzGqkgMEXDn7lHVl3mQ6HQ=;
+        b=Q/O+o5ECp/wg1bdFs21LS+cHNQQ5DnkzM0mQ7Pqp3bAp0+54KadIUVrEn6VFDjRHGv
+         SScbJuqN7MyMNb86L87bvlm8qWKdR1jvNJWS4lK+14Az5ShvSvVPQIBXMZ2OTs84wxDs
+         xnrBQcCROEmFt1EEbBX1KHb08FBMj7jx0pfJbtKlwc4y7IoWilfOFwLhij49X8P0BHVF
+         1OGuNTluKgS/di527+Ux+yEtsdTe0f/PCvFcesIJurBouDDsjs0gDiFn62z+w/J5prgc
+         912meRyVtvOpWdkuz18YCNH17L8D6aKOKHQ1nQGZTcobj+F6DTQ0t7oUDkIW9ujqj3L2
+         2l7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728998874; x=1729603674;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ReVTDH/zso/y6fy9TN41NtzGqkgMEXDn7lHVl3mQ6HQ=;
+        b=p1yzWCfVK+6OOEf7JdGrBt2L5etSDwJCzKFDeCFA9TVi/DwHt4ZzXpb6x+XT3AsmFq
+         ZPv3FdmC3bXp7TsiCKxXJURgd76PA6x5tsqWP41WMX6eXQp2GSYRLtnmtMWeHSUOVOyv
+         O/HwTZe5HSyeiNOmfv57B8YOB6qoQOdmWHmu2NrgiFBQslPXve5VurHMs/h36I4maa1R
+         KHnCCMgH/Hs/UgidDQr7Pq/euUbEZ26EjyeFJbiYtRlCsyWz8vROKmJDv2rZDI5g8sBe
+         VVrBxIXa/lnQDOf6L7aBWFHQzrrTTLRZAwkRoE3z1gnkjyDqQRWK1tng0iS2xQM98t6m
+         J4kw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLMcvG95Bg9lA5ZAKcoScJa3nwpJQwlU3/hGs90HU4MCagGjzQchh/Jvxi/w/f5AXAnVffN4vWvD4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwRo+Qi/suWIk2BVmgNOYmVoyFuTvcd/pw8/OS1MqS/5I5/SHb
+	Xii4quCPbyKXvQOwWNn38ZH5ET5d+w62eYKwWDIEToRTL3UZNAmA
+X-Google-Smtp-Source: AGHT+IF8hddtPYHlqfbJs+f+wSagtO6fHmviKrm0p9IDyQFay7q6w585ktU/hcePwU5gdDIbdcZ5yw==
+X-Received: by 2002:a05:6512:1256:b0:536:7a88:6185 with SMTP id 2adb3069b0e04-53a03f185c1mr259152e87.15.1728998873565;
+        Tue, 15 Oct 2024 06:27:53 -0700 (PDT)
+Received: from foxbook (bfe48.neoplus.adsl.tpnet.pl. [83.28.42.48])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539ffff3a05sm168310e87.166.2024.10.15.06.27.52
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 15 Oct 2024 06:27:53 -0700 (PDT)
+Date: Tue, 15 Oct 2024 15:27:48 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: xhci: Fix the NEC stop bug workaround
+Message-ID: <20241015152748.3d339c66@foxbook>
+In-Reply-To: <033e1f4e-c64c-4e8e-b249-02303e75baa8@linux.intel.com>
+References: <20241014210840.5941d336@foxbook>
+	<20241014211005.07562933@foxbook>
+	<033e1f4e-c64c-4e8e-b249-02303e75baa8@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zw5i9dcSMOG4n3PW@hovoldconsulting.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 24-10-15 14:41:25, Johan Hovold wrote:
-> On Fri, Oct 04, 2024 at 04:57:36PM +0300, Abel Vesa wrote:
-> > The Parade PS8830 is a Type-C multi-protocol retimer that is controlled
-> > via I2C. It provides altmode and orientation handling and usually sits
-> > between the Type-C port and the PHY.
-> > 
-> > It is currently used alongside Qualcomm Snapdragon X Elite SoCs on quite
-> > a few laptops already.
-> > 
-> > This new driver adds support for the following 3 modes:
-> >  - DP 4lanes (pin assignments C and E)
-> >  - DP 2lanes + USB3 (pin assignment D)
-> >  - USB3
-> > 
-> > This retimer is a LTTPR (Link-Training Tunable PHY Repeater) which means
-> > it can support link training from source to itself. This means that the
-> > DP driver needs to be aware of the repeater presence and to handle
-> > the link training accordingly. This is currently missing from msm dp
-> > driver, but there is already effort going on to add it. Once done,
-> > full external DP will be working on all X1E laptops that make use of
-> > this retimer.
+> Can we skip the new flag and just check for the correct flags here
+> directly?
 > 
-> I was gonna ask you to include the devicetree changes that enables the
-> retimers as part of this series (to facilitate review and testing), but
-> perhaps you should indeed not post them again until LTTPR support is in
-> place.
+> if (ep->ep_state & (SET_DEQ_PENDING | EP_HALTED | EP_CLEARING_TT)
+> 	break;
 
-I was thinking maybe we should not wait for LTTPR support as this series
-brings orientation support as is. I still need to figure out how to
-strip out the DP parts of it in such a way that orientation should still
-be working but DP should not (until LTTPR is in).
+Unfortunately not, because those pending operations may (and usually
+will) complete before our handler runs. They will not restart the EP
+because we set EP_STOP_CMD_PENDING, but they will clear their flags.
+So we know that Stop Endpoint is guaranteed to fail, but its handler
+will not see those flags and will have no clue why it failed, hence
+we store this one bit of knowledge specially for its use.
 
-> 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> > Changes in v2:
-> > - Addressed all comments from Johan and Konrad.
-> > - Reworked the handling of the vregs so it would be more cleaner.
-> >   Dropped the usage of bulk regulators API and handled them separately.
-> >   Also discribed all regulators according to data sheet.
-> > - Added all delays according to data sheet.
-> > - Fixed coldplug (on boot) orientation detection.
-> 
-> Coldplug orientation detection still does not work here with this series
-> applied.
-> 
-> I'm not entirely sure this whether worked better with v1, but with v2
-> my SuperSpeed ethernet device shows up as a HighSpeed device in one
-> orientation. It is also not disconnected an re-enumerated as SS as is
-> the case on the X13s (and possibly with v1):
-> 
-> 	usb 1-1: new high-speed USB device number 2 using xhci-hcd
+But you raise a valid point. If Stop EP fails on a Halted endpoint and
+somebody else resets it before Stop EP handler runs, the handler will
+see EP_HALTED, because Reset EP handler must run later if the commands
+were queued and executed in this order.
 
-For coldplug, this series does the right thing as it leaves the retimer
-initialized if it was left enabled at boot. There is a second part
-needed for the coldplug to work. That is the regulator-boot-on property
-in retimer's vregs nodes. That will ensure that the regulator is not
-disabled until retimer driver probes and will keep the retimer initialized
-until USB device is enumerated.
+So if Stop EP handler tests for EP_HALTED, nobody needs to worry about
+updating EP_STOP_CMD_REDUNDANT for us. The helper function can go out,
+the patch is shorter, and the solution more robust against any changes
+to halt recovery code that anyone might do. All that "redundant" logic
+becomes concentrated in queue/handle _stop_endpoint() functions.
 
-> 
-> > - Didn't pick Krzysztof's R-b tag because the bindings changed w.r.t
-> >   supplies.
-> > - Link to v1: https://lore.kernel.org/r/20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org
-> > 
-> > ---
-> > Abel Vesa (2):
-> >       dt-bindings: usb: Add Parade PS8830 Type-C retimer bindings
-> >       usb: typec: Add support for Parade PS8830 Type-C Retimer
-> 
-> Johan
+I think I will do a v2.
+
+
+By the way, is this list of conditions complete? There are other flags
+like GETTING_STREAMS or CLEAR_TOGGLE, but I'm under impression that they
+are valid only with no queued URBs, so nothing can be cancelled then.
+
+Regards,
+Michal
 
