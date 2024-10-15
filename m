@@ -1,151 +1,106 @@
-Return-Path: <linux-usb+bounces-16277-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16287-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F35799F9D7
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 23:37:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 659E099FB46
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 00:21:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 447182841C4
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 21:37:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5FE1B22120
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 22:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321AF1B0F0B;
-	Tue, 15 Oct 2024 21:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A33991D63DE;
+	Tue, 15 Oct 2024 22:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="f2tMuNF4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJ5OWFOg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0614E20E028;
-	Tue, 15 Oct 2024 21:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EBF185B47;
+	Tue, 15 Oct 2024 22:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729027810; cv=none; b=NUNKSpI5nhvXhWsE8a8FSgoHjQgJmL0qcKg10mblUp/6lFrPK6+7PGD+fd5/HYX4QHKY6QWMGMiAbXCGEDW97VxXPwMdXRaJgGZAsLGL8kSZOnc7BMSCYYiOVxlTVgM3ufIOMmnIz/9y+QjN5hyWlEuQsT7NfVo2f7kpjcOzGUc=
+	t=1729030848; cv=none; b=YPtHEeRv7hNUXdxR5oQXWhwkU8g0VSKKYd9Fc+VOrHw11F5KCI6FNYRVzX4ljmSRToCVF72+L0jjsZEmXOY929GteseXZM8ID1llt9TtpE89t9ZyoXzoV5rNgbVbnAGpNIBONfER+NRVZIy4IE3npJoRMvBJNJw8/nVGsv6plWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729027810; c=relaxed/simple;
-	bh=qU0dUNxFUuN/ND2hfWc0/b53f/OYr4+0HIcF9EoyLxI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IsVM7bkl7ZB5zRj8jqy6gO/5jfXmrdAnA/x6UN7P56HCyqJWABKD6HBHQZADpfnKhAQRptqoM/flbjV3IHDzNgesc7COVQLrO8uPIQN4YYSxJ4AZvJtJn/+nWXuC2XC1w1InZu+4MhQm4LpkygdeANeis8u+3/wlukiVhetGu7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=f2tMuNF4; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FG0st4022433;
-	Tue, 15 Oct 2024 21:29:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	M4IGsOidRHFIubeJL9OdlEYfFZx1GNBQBMy1HdndUaw=; b=f2tMuNF42vXkVMdF
-	desTF0/M6ewcPC08DKVUMdLdOpI9Pfi2vhqn9iVID91xpooBq/RTtAzC+W42Sa0L
-	MslWurW3IL/6hxWOVQs5pPYjgONYWYyRd85o8JuCzMznieQdG7MX+BzQm5ELj31m
-	wTDfNwayHnyr4TnoaC0ZgcKzYmb1RWG/rL5ITRmJCVrHlM2zJ7XAuScRF3q39mr2
-	tq82JxxRoGGBY6+g6TASJWfwFIcOWhqTxArnfVvocXykr1yYf4zfctHXb43asgda
-	XcDSl7h/e53ecQbKYCSVYyanhxoL+S8bWcBUe28kCubAE66V2kqAS7+ntBPcMP4n
-	RySPXA==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 429jrfah4f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 21:29:37 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49FLTagg022414
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 21:29:36 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 15 Oct 2024 14:29:35 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>
-Subject: [PATCH v29 33/33] ASoC: usb: Rediscover USB SND devices on USB port add
-Date: Tue, 15 Oct 2024 14:29:15 -0700
-Message-ID: <20241015212915.1206789-34-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241015212915.1206789-1-quic_wcheng@quicinc.com>
-References: <20241015212915.1206789-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1729030848; c=relaxed/simple;
+	bh=cz0wcw3Y7yNv81Eqmq/jRhBRalPGnIOBsVA8ozyzCVI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LZy9Bfi4z3j+I8HXhZXlF8p1PHezXB6Gr5qiQJjGC+tOkjbkTh+iWB30gcvq8ERU97ubYjkvqzMcmJlaA3AQFdvdxI8VmN5TKVmBGecPEvtG5Ye8XE6TLggY8v62WLBSYVjOepm+nLsSNN0BZb31CU3taMv5OlhKuPGT9mjn7uU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJ5OWFOg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F57FC4CEC6;
+	Tue, 15 Oct 2024 22:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729030847;
+	bh=cz0wcw3Y7yNv81Eqmq/jRhBRalPGnIOBsVA8ozyzCVI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QJ5OWFOgkkbenFSC429aGainB2dB4o0Q1vBAUtQN81RS+VdC7+NpsQcZaLWnrJu+N
+	 4/M8AGaJGNfzask2wpXq4U9kC2eZ6g+ZKzHkJ++CXumOaNt2Jk2AkWMWsNeFoqYciM
+	 sYYvXSbooEjQgj5oYEjH3Fkab210ZGDzdwoeqfxmtLVG6gmH61DMfc4GvcC3ngxaOg
+	 k73Ht2ipOfeaooBnACRFeOPJPk9nKiVjxBXA44plZvh5BhM7dS8/DzlQUr37Y5FhTM
+	 uv/KZcWhx/zMKVPaaJ8aAYyecBQPV9scgLLS2W3fFlV0SZvruGCX4BCpDiyo8X6Siv
+	 Ap/ZZCi9S8Jcg==
+Date: Tue, 15 Oct 2024 17:20:46 -0500
+From: Rob Herring <robh@kernel.org>
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	ChiYuan Huang <cy_huang@richtek.com>, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	Chris-qj chen <chris-qj.chen@mediatek.com>
+Subject: Re: [PATCH] dt-bindings: usb: mtu3: add mediatek,usb3-drd property
+Message-ID: <20241015222046.GA2164669-robh@kernel.org>
+References: <20241015172100.15150-1-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JVvQOaJwyXwMJ44vtvzxisdPyv94LuQr
-X-Proofpoint-ORIG-GUID: JVvQOaJwyXwMJ44vtvzxisdPyv94LuQr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- spamscore=0 malwarescore=0 suspectscore=0 phishscore=0 impostorscore=0
- clxscore=1015 mlxlogscore=999 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410150143
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241015172100.15150-1-macpaul.lin@mediatek.com>
 
-In case the USB backend device has not been initialized/probed, USB SND
-device connections can still occur.  When the USB backend is eventually
-made available, previous USB SND device connections are not communicated to
-the USB backend.  Call snd_usb_rediscover_devices() to generate the connect
-callbacks for all USB SND devices connected.  This will allow for the USB
-backend to be updated with the current set of devices available.
+On Wed, Oct 16, 2024 at 01:21:00AM +0800, Macpaul Lin wrote:
+> Add optional 'mediatek,usb3-drd' property to MediaTek MTU3 DT Schema.
+> This flag specify whether it is a USB3 Dual-role device hardware.
+> 
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> index d4e187c78a0b..1e70af0dac82 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> @@ -155,6 +155,12 @@ properties:
+>        property is used. See graph.txt
+>      $ref: /schemas/graph.yaml#/properties/port
+>  
+> +  mediatek,usb3-drd:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Specify whether it is a USB3 Dual-role device hardware.
+> +    type: boolean
+> +
 
-The chip array entries are all populated and removed while under the
-register_mutex, so going over potential race conditions:
+Don't the standard properties such as usb-role-switch or dr_mode work 
+for you?
 
-Thread#1:
-  q6usb_component_probe()
-    --> snd_soc_usb_add_port()
-      --> snd_usb_rediscover_devices()
-        --> mutex_lock(register_mutex)
-
-Thread#2
-  --> usb_audio_disconnect()
-    --> mutex_lock(register_mutex)
-
-So either thread#1 or thread#2 will complete first.  If
-
-Thread#1 completes before thread#2:
-  SOC USB will notify DPCM backend of the device connection.  Shortly
-  after, once thread#2 runs, we will get a disconnect event for the
-  connected device.
-
-Thread#2 completes before thread#1:
-  Then during snd_usb_rediscover_devices() it won't notify of any
-  connection for that particular chip index.
-
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/soc/soc-usb.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
-index e56826f1df71..ee566ca7c675 100644
---- a/sound/soc/soc-usb.c
-+++ b/sound/soc/soc-usb.c
-@@ -279,6 +279,8 @@ void snd_soc_usb_add_port(struct snd_soc_usb *usb)
- 	mutex_lock(&ctx_mutex);
- 	list_add_tail(&usb->list, &usb_ctx_list);
- 	mutex_unlock(&ctx_mutex);
-+
-+	snd_usb_rediscover_devices();
- }
- EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
- 
+>    enable-manual-drd:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description:
+> -- 
+> 2.45.2
+> 
 
