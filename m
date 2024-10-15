@@ -1,171 +1,233 @@
-Return-Path: <linux-usb+bounces-16206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46D5199DD0F
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 05:58:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB23299DD13
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 06:07:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE5E81F23D74
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 03:58:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 701A2283012
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2024 04:07:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F70170828;
-	Tue, 15 Oct 2024 03:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B508B1714C9;
+	Tue, 15 Oct 2024 04:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R4HznoaE"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DCXNdYqz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FC7170826
-	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 03:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF2215380A
+	for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2024 04:07:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728964684; cv=none; b=awyFHMaUPzOsrdHJ/VdlMcztOz6/P1q2lmZpjZB/tJ2ofgepX9Okgz//CKVuwAu4CEmxLFfCzNGpbDFcvkoG7iHuvBT01xM8LZYJLLLGHKUwcRtv6GBk7QMzTBmajqYmHP125DqEYDDQpbxQxpwFgHCNANfRh98PsB6oUR8gy8A=
+	t=1728965272; cv=none; b=XJ+1Vah/iXl57Q6+4MxevHbs6K7FbKp6SY9CBQPXDCVN8VACd4zVNGihebbAIxBvzkG34L/1Vh+VwCzedp4JUcej0p+DJ8aJewHcykBBxCcwxw4yMUE1l2mc7i0esb4Cc/vJIY8/euIv3YAJsKIpbO3hbXLcWM79oH5LwAEDe1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728964684; c=relaxed/simple;
-	bh=N40ZSNWwPk28dZ+LQrxhSO5jACT0zCPufmoUUaRuVJw=;
+	s=arc-20240116; t=1728965272; c=relaxed/simple;
+	bh=MoJXsq8dEH4VBJh/CUe6Ed26awrVNV7yW+awr03B0PE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DyfxHjw5UJMaL21TCSukxjtkWfmBdrGCJFSCkqw7TnNbAFA4MHB9WpI8wWMMNfzIGc1wZB2DfIRO3sCX04nyuB6dd/9llem6OnyPifm/oU5opVETjxJl5PdmiInNE5EX6kCk+G/TRaL98UYu3AZK4i088lY/agUQbkXh07C6Pg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R4HznoaE; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c93e9e701fso32389a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 20:58:02 -0700 (PDT)
+	 To:Cc:Content-Type; b=krcCx/YbysCoLZWf325ErA/3mYjWI48JI/la+2JIElzo9JGWqdvC260zFeT2isNdKV3mjrZ0HhQMrJ1MrTpH3vbI2IcgZtxqO/IlqLABEPordmf99KVv9aXivkKDoqVHtU0f8Lge9u6y7eSbByGoVW3SiwVq5+VNqy7lzT6ztew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DCXNdYqz; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6e35fb3792eso28421907b3.3
+        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2024 21:07:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728964681; x=1729569481; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1728965269; x=1729570069; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p9QWKZtDdFz4L73hcRjBFd+xD0iZq8pzY5qOSjjFSZc=;
-        b=R4HznoaEDlNPDF6EM7qoHkybgoUZcuH9su7oJQBvY0oqXKrBxJHr/8cCndMM+uLrAh
-         8ersWRigFXsZ0/Vi4gpvK9eUrKIDCcNarKZxA/VDQTGxgmh3r3csUFuUJ+LCGKzaGLe4
-         8YxjzI7xba9K+TWqNpvkbitMVq6FkGOcX7tihNMsqd0T3zRlOkQbXZReDgAp6kxMoQvQ
-         Vj6zA22p/6fymGOR8wINgR9vShNrGpjf9SJCLr8cdyol5/cKtgWWb8L5Pa1/UXG/lrRg
-         CZdFbEAh6mmGOg209D8Sab4Ol2RJqj4CeeKZSr9z4x6MT6K9fsxIOTA2vLQpDrukssE+
-         AF2A==
+        bh=WfzVaK5twKDRUDTf0TwZdd+BhU0CAT+vZIEQ2Yq6FjM=;
+        b=DCXNdYqz8at0UF57KB15GwL+jazUM3z50+tOytVcwoJqUsrGOBW1ej6FJRuE6UH7Y7
+         cwVLmxKPH/PaLb+GFx+VM00AZ8zrtZCYMJqNUehPwNA6NYZVcupfqO3pyrwzfRx2dwXL
+         xQREt9Q4PenFANPlWbn5zMiqy0UdpwX+Ol3rY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728964681; x=1729569481;
+        d=1e100.net; s=20230601; t=1728965269; x=1729570069;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p9QWKZtDdFz4L73hcRjBFd+xD0iZq8pzY5qOSjjFSZc=;
-        b=Ug71F5rLS8sC/4tuoXJUrOmAh4XxIdbTe5lkvjnw1vyjT4Q8ZBQGabyMcYdfI9u7Uh
-         lJF6VvpYB67Jus63s66NdJPbmr7JmdFqWwEHSVbPo4iGgImwlwSLl963aQMq5ElfHSPX
-         8ED24mENei6TuKGxtGxc5JdbAgcOOCBatduCEmoRwTEZnkymqgNeSR1g0EZPdaB4yvGg
-         ynSLYXuq+bu9YNjS4ZxeyLE9tSmZrZDLQ+sV8IrAqH2z9s9YCZWU7giu5HcLIfo3RKCU
-         Rd30DRJq5z0wKF5T7c3/Z0FIbMCfQXJAN7uFyZ1NbpPZ5zd/uYHkMErTuFbyWJYOdvQo
-         S25Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVbtnsAylHbBV8bv3X2wuBzn93XBvYNFsOAOaTnNuMig3kag3agxrjBpiDWGS80HEPh9nnEJqwxyoU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNfWQiy9YdPOWY2Ilag2ieVB4jUeI/TrDA4vY6kTmluaJ9RT3/
-	qhqwJCd8P5JzJJ+ZPKncYHQSUUjr4mt/BVy+jfluP1ZBMEnGL9u4H3r7LULNzZxJYGuxDZmOmpu
-	UudldClVAs0qSyDAhAInFPM0y44fgQRk9fLTS
-X-Google-Smtp-Source: AGHT+IE/Mbk48UdN6n+R06D0061d9x0T4HYynAxMG9ehl5kqxUTk/rg+uyWs8G1J3z3EpkLDqsneJzTbxqupOe4TGro=
-X-Received: by 2002:a05:6402:26c1:b0:5c2:5641:af79 with SMTP id
- 4fb4d7f45d1cf-5c95b0bd39amr641707a12.0.1728964680865; Mon, 14 Oct 2024
- 20:58:00 -0700 (PDT)
+        bh=WfzVaK5twKDRUDTf0TwZdd+BhU0CAT+vZIEQ2Yq6FjM=;
+        b=wbwyNU4fusjILf7RansrmtukS+nUiHxDVk8acEyhJFclKt5JlNKPFYvp1Gnvfk5nNB
+         6ky1c3N6sj8yQ7WpUQCiMU0xkpHperuC2I5e3pOPauyjmuPK+vLdEPlXC3O8da15zmng
+         wBPUVHUwEHBtJ4qCfdekQDqUIV+X46KxHFAXaWglaa115I44W90pjww6FxFeGy0PuflO
+         SbEiCLK8l4fCJfwDqtc+s/NuelbYQGisaUiNkvimBa+viGogdvA6x8J7n4uEpBzpGQml
+         pNzOCAhozTEvTW7ROh9VgltMHlEG7NIz8APflGk5YhpyIoBXx6gNJ4l1FBU/X5Cd0BWk
+         lmXg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6sImb0WYEU/sqnswcVczGgIsznSMSF9UQQ/4lB8j5SqJOryN0f5MvtLsll1Wk/SFG/X1z134mo5c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtqhW2WOFieU/g5q5D68wdcfML11naOJxoAYxEstFod92bKlEC
+	YctVZVcr3GReUv3/Cm8jDjjXgSdxbuvOxYkzYu3eaeG+VWSPTaWDgLZBkJzNkqSCqL/bdCbtpNc
+	mmmZm3SVEXon+8+ZNxMATZNhypoyE3lxC/GgwE78Gx97q0BQ=
+X-Google-Smtp-Source: AGHT+IGRDb8LQN6fKpPjgq52Dz8udXlvY4+PRV1uFz10QuLbxJL23SC9QGqCLsSX1GqaVg5JRUoq6j/u06fj3UDm6l8=
+X-Received: by 2002:a05:690c:4a91:b0:6e2:b263:105b with SMTP id
+ 00721157ae682-6e347c4e3c8mr71979777b3.41.1728965269465; Mon, 14 Oct 2024
+ 21:07:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014085816.1401364-1-guanyulin@google.com>
- <20241014085816.1401364-6-guanyulin@google.com> <9b5fe5d2-77a7-40b7-b260-856c35d9dcec@rowland.harvard.edu>
-In-Reply-To: <9b5fe5d2-77a7-40b7-b260-856c35d9dcec@rowland.harvard.edu>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Tue, 15 Oct 2024 11:56:00 +0800
-Message-ID: <CAOuDEK2f_mtfiye7MdnOqEkq3pYW1kcdkwEMMBC5CkkQ1OGu3A@mail.gmail.com>
-Subject: Re: [PATCH v5 5/5] usb: host: enable sideband transfer during system sleep
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
-	mathias.nyman@intel.com, yajun.deng@linux.dev, sumit.garg@linaro.org, 
-	kekrby@gmail.com, oneukum@suse.com, dianders@chromium.org, perex@perex.cz, 
-	tiwai@suse.com, niko.mauno@vaisala.com, andreyknvl@gmail.com, 
-	christophe.jaillet@wanadoo.fr, tj@kernel.org, stanley_chang@realtek.com, 
-	quic_jjohnson@quicinc.com, ricardo@marliere.net, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, badhri@google.com, 
-	albertccwang@google.com, quic_wcheng@quicinc.com, pumahsu@google.com
+References: <20241011124402.3306994-1-heikki.krogerus@linux.intel.com>
+ <20241011124402.3306994-3-heikki.krogerus@linux.intel.com>
+ <2024101149-body-urologist-6262@gregkh> <ZwkwXWCD0xval8Wu@kuha.fi.intel.com>
+In-Reply-To: <ZwkwXWCD0xval8Wu@kuha.fi.intel.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Mon, 14 Oct 2024 21:07:38 -0700
+Message-ID: <CANFp7mXLWhnX2KST-OkWXMQ32RP=eiFYrGfxdgZuvjbpkq4w7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] usb: typec: Add attribute file showing the USB
+ Modes of the partner
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>, 
+	Benson Leung <bleung@chromium.org>, Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 14, 2024 at 11:56=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
-edu> wrote:
+On Fri, Oct 11, 2024 at 7:04=E2=80=AFAM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
 >
-> On Mon, Oct 14, 2024 at 08:50:29AM +0000, Guan-Yu Lin wrote:
+> On Fri, Oct 11, 2024 at 03:09:57PM +0200, Greg Kroah-Hartman wrote:
+> > On Fri, Oct 11, 2024 at 03:44:00PM +0300, Heikki Krogerus wrote:
+> > > This attribute file shows the supported USB modes (USB 2.0,
+> > > USB 3.0 and USB4) of the partner, and the currently active
+> > > mode.
+> > >
+> > > The active mode is determined primarily by checking the
+> > > speed of the enumerated USB device. When USB Power Delivery
+> > > is supported, the active USB mode should be always the mode
+> > > that was used with the Enter_USB Message, regardless of the
+> > > result of the USB enumeration. The port drivers can
+> > > separately assign the mode with a dedicated API.
+> > >
+> > > If USB Power Delivery Identity is supplied for the partner
+> > > device, the supported modes are extracted from it.
+> > >
+> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > ---
+> > >  Documentation/ABI/testing/sysfs-class-typec |  14 +++
+> > >  drivers/usb/typec/class.c                   | 123 ++++++++++++++++++=
++-
+> > >  drivers/usb/typec/class.h                   |   2 +
+> > >  include/linux/usb/typec.h                   |   5 +
+> > >  4 files changed, 140 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentat=
+ion/ABI/testing/sysfs-class-typec
+> > > index 7c307f02d99e..a3afe04b2688 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-typec
+> > > +++ b/Documentation/ABI/testing/sysfs-class-typec
+> > > @@ -233,6 +233,20 @@ Description:
+> > >             directory exists, it will have an attribute file for ever=
+y VDO
+> > >             in Discover Identity command result.
+> > >
+> > > +What:              /sys/class/typec/<port>-partner/usb_mode
+> > > +Date:              February 2024
 > >
-> > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> > index e713cf9b3dd2..eb85cbb1a2ff 100644
-> > --- a/drivers/usb/core/driver.c
-> > +++ b/drivers/usb/core/driver.c
-> > @@ -1583,6 +1583,11 @@ int usb_suspend(struct device *dev, pm_message_t=
- msg)
-> >       struct usb_device       *udev =3D to_usb_device(dev);
-> >       int r;
+> > It's later than this :)
+>
+> Indeed. I'm sorry.
+>
 > >
-> > +     if (msg.event =3D=3D PM_EVENT_SUSPEND && usb_sideband_check(udev)=
-) {
-> > +             dev_dbg(dev, "device accessed via sideband\n");
-> > +             return 0;
-> > +     }
->
-> I'm not so sure about this.  By returning early, you prevent the drivers
-> bound to this device from suspending.  But they can't operate properly
-> when the system is in a low-power mode.  Won't that cause problems?
->
-> Maybe this really belongs in usb_suspend_device(), and its counterpart
-> belongs in usb_resume_device().
->
-
-To my understanding, after the system is suspended, the USB driver
-will do nothing as the main processor has been suspended. May I check
-what forms of low power mode and operation we are discussing here?
-
-usb_suspend_device() did close the required port/bus to maintain usb
-transfer. However, there are additional usb_hcd_flush_endpoint() calls
-aside from usb_suspend_device(). Maybe we should consider not doing
-those also since some of the endpoints are now handled by the
-sideband.
-
-> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > index 1ff7d901fede..9876b3940281 100644
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -2593,6 +2593,7 @@ struct usb_hcd *__usb_create_hcd(const struct hc_=
-driver *driver,
-> >       timer_setup(&hcd->rh_timer, rh_timer_func, 0);
-> >  #ifdef CONFIG_PM
-> >       INIT_WORK(&hcd->wakeup_work, hcd_resume_work);
-> > +     refcount_set(&hcd->sb_usage_count, 0);
->
-> Did I miss something?  I didn't notice this field in any of the earlier
-> patches.  Was it already created by the prerequisite series?  If so, why
-> didn't that series do this initialization?
->
-> >  #endif
+> > > +Contact:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > +Description:       The USB Modes that the partner device supports. T=
+he active mode
+> > > +           is displayed in brackets. The active USB mode can be chan=
+ged by
+> > > +           writing to this file when the port driver is able to send=
+ Data
+> > > +           Reset Message to the partner. That requires USB Power Del=
+ivery
+> > > +           contract between the partner and the port.
+> > > +
+> > > +           Valid values:
+> > > +           - usb2 (USB 2.0)
+> > > +           - usb3 (USB 3.2)
+> > > +           - usb4 (USB4)
 > >
-> >       INIT_WORK(&hcd->died_work, hcd_died_work);
-> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> > index 0b4685aad2d5..d315d066a56b 100644
-> > --- a/drivers/usb/core/usb.c
-> > +++ b/drivers/usb/core/usb.c
-> > @@ -671,6 +671,7 @@ struct usb_device *usb_alloc_dev(struct usb_device =
-*parent,
-> >       dev->state =3D USB_STATE_ATTACHED;
-> >       dev->lpm_disable_count =3D 1;
-> >       atomic_set(&dev->urbnum, 0);
-> > +     refcount_set(&dev->sb_usage_count, 0);
+> > We should probably add all of this info to 'lsusb' one of these days.
+> > I'll add it to my todo list...
+> >
+> > > +
+> > >  USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
+> > >
+> > >  Note: Electronically Marked Cables will have a device also for one c=
+able plug
+> > > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> > > index ea9ee47bb246..a6fedafc9c86 100644
+> > > --- a/drivers/usb/typec/class.c
+> > > +++ b/drivers/usb/typec/class.c
+> > > @@ -618,6 +618,74 @@ EXPORT_SYMBOL_GPL(typec_unregister_altmode);
+> > >  /* -----------------------------------------------------------------=
+-------- */
+> > >  /* Type-C Partners */
+> > >
+> > > +/**
+> > > + * typec_partner_set_usb_mode - Assign active USB Mode for the partn=
+er
+> > > + * @partner: USB Type-C partner
+> > > + * @mode: USB Mode (USB2, USB3 or USB4)
+> > > + *
+> > > + * The port drivers can use this function to assign the active USB M=
+ode to
+> > > + * @partner. The USB Mode can change for example due to Data Reset.
+> > > + */
+> > > +void typec_partner_set_usb_mode(struct typec_partner *partner, enum =
+usb_mode mode)
+> > > +{
+> > > +   if (!partner || partner->usb_mode =3D=3D mode)
+> > > +           return;
+> > > +
+> > > +   partner->usb_capability |=3D BIT(mode - 1);
+> > > +   partner->usb_mode =3D mode;
+> > > +   sysfs_notify(&partner->dev.kobj, NULL, "usb_mode");
+> >
+> > Who is listening for this and what are they going to do with the
+> > information?
 >
-> And doesn't this belong in the 3/5 patch, the one that creates the
-> sb_usage_count field?
+> I'll drop it, unless Abhishek, you guys would have use for it. Let me
+> know. I'll send v4 next week.
+
+I think you are ok to remove this. We would care about this value when
+registering the partner and when activating a specific USB mode. With
+the latter, we can just depend on the synchronous nature of
+usb_mode_store (i.e. we can check the result after writing to the
+sysfs file).
+
 >
-> Alan Stern
-
-Thanks for the suggestion, I'll move this, as well as the
-initialization of hcd->sb_usage_count, to corresponding earlier
-patches.
-
-Regards,
-Guan-Yu
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(typec_partner_set_usb_mode);
+> > > +
+> > > +static ssize_t
+> > > +usb_mode_show(struct device *dev, struct device_attribute *attr, cha=
+r *buf)
+> > > +{
+> > > +   struct typec_partner *partner =3D to_typec_partner(dev);
+> > > +   int len =3D 0;
+> > > +   int i;
+> > > +
+> > > +   for (i =3D USB_MODE_USB2; i < USB_MODE_USB4 + 1; i++) {
+> > > +           if (!(BIT(i - 1) & partner->usb_capability))
+> > > +                   continue;
+> > > +
+> > > +           if (i =3D=3D partner->usb_mode)
+> > > +                   len +=3D sysfs_emit_at(buf, len, "[%s] ", usb_mod=
+es[i]);
+> > > +           else
+> > > +                   len +=3D sysfs_emit_at(buf, len, "%s ", usb_modes=
+[i]);
+> > > +   }
+> > > +
+> > > +   buf[len - 1] =3D '\n';
+> >
+> > Again, sysfs_emit_at()?
+>
+> Yes. These are going back to the internal review. Too many mistakes.
+> Sorry.
+>
+> thanks,
+>
+> --
+> heikki
 
