@@ -1,169 +1,139 @@
-Return-Path: <linux-usb+bounces-16315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16316-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1CB89A0ABC
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 14:51:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BA229A0B3F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 15:19:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1394B283A3
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 12:51:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B35F1C215ED
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4C1208D9A;
-	Wed, 16 Oct 2024 12:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8568520C022;
+	Wed, 16 Oct 2024 13:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHYlyTJW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jl+4zy82"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546D9208D96
-	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 12:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D06620A5C6
+	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 13:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729083096; cv=none; b=dAFe+svcJ2XqwpFyb3VCODplXI7vCSMx3eYjHSJcbCZvUoJuOiQfWRGtaEx3vyC5bywNW3MOtCg5+Yxo2EtyxiEppuxe4FrWJIvUZo9gg4d32eRF2y630U4RP3GSBfGauBbvAwhqRDxQdAxMv4l7NviWbYhe8DLRbdYkYGp3G4c=
+	t=1729084720; cv=none; b=CvtN98CpVfGZ/Hm720B9PG4OEUD2RJL7WGuOl4AHXvGuFceUx6jqRttNbEeBC4XIFoTikcOiq8/bShy/8mBuK/XMo31xHQ/p+i06/T/5RVoCk0K0y235Fqp6TzRwd5vnPjcpqcLtk2Uq1El0c2NSl4B1pG3mso0MA7Yb+aJBQ/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729083096; c=relaxed/simple;
-	bh=BEtTK4azvAPR8a5g57xTdtbn93n1Q4PfNrmtQvKQLj0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ocftOR/gxBscMuyXXyduphLZX7paA9Si23VUFWWJvBCWsT6l1J3YCpmzhO9MiiQvnUWyvVe8B/9AefjjLM9x1H0KoSB/PQLgl+dbmRhW48ECQnKMHa5k5UDZ52Wtj9vwC5FgxgBpY2uS67Il+qC6DDa650GX7abpc6DIiFy3mpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHYlyTJW; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d5689eea8so3233623f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 05:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729083092; x=1729687892; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h67SeTWZnAw2r6MS8kpA655AhW0wef7/mgwfLB1NXto=;
-        b=BHYlyTJW6FUEVAASjiQ9fDBBAtMIbDuCsu9qCAaaZVNf8it2rd10e/GBJE9rimkEuo
-         NODDdYfgTRMtete2+/Wj9VkwmtXO8rqjfsBAM41FpTyQYw1RZXrGBCF4/o5RlrgqMZcg
-         DmyCpAC+Svmn4rtet35ns21ko1j64o7zg8L0mAgfwxQhd8hKCzEsOwSBehh9DTZta+Ec
-         9buybq1LujmBqRwf+8pfJHLjSW66Yj9K2eZJOxUVuiA354IFAFp+CLqw7BjpS9touIxb
-         lVOTXQ+ydcyCr8hm3to6Dx5q/L0TdaNSNNezGIW3nK2WUX1baXWLSIZUpltxlFi3QKsX
-         LU/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729083092; x=1729687892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h67SeTWZnAw2r6MS8kpA655AhW0wef7/mgwfLB1NXto=;
-        b=bi2gI1vYjsk/W/Pwljib74sFLGl5AoDypC5kUHxuK6YJtfEVFfQOWtC54DwyVzhMbH
-         sv13zPU0Gboa6egQXKxai+cxTsKBJH1gP/NeFQ32Sgx2OFQARXldqQijKBat/QkopaRm
-         Km7bP7hOBYKcCHZ+5z4Eo9XfVYahs1XmMG8bbJv5jXC3CdvJbytVR77xpD/MGQJFXw5Q
-         c4ApXfuiD1FUYxx3b1/lgkOxZqUatu9FWtQv+aYQWd9ppHDVaQBZAvLKTpb4KxSW34X0
-         H74zeeglJyw/ugqM56SYY3XR+Pm5+tjSh56wGYX8RlcwTUGgZsUAvdlSRPMAwogZEpaw
-         VO6g==
-X-Gm-Message-State: AOJu0Yw1Z1O3r2EKQzJnZG5uPAl0Lyu2XCrUNhkvM8w/fQDS/BIQfq9Y
-	qMQk+H8wt5OdCZ08YfxQzHT0uD2Fu7+rZKmi5cpgKs7RZDye7riS
-X-Google-Smtp-Source: AGHT+IHaC3nt9ONpIplR9HLU5Vpi75fQxFFxLgck2sziHQaqoskprZk0pVSier5Ow8mw/MgxldHztQ==
-X-Received: by 2002:adf:a413:0:b0:37d:5338:8733 with SMTP id ffacd0b85a97d-37d86d3cb35mr2193415f8f.37.1729083092216;
-        Wed, 16 Oct 2024 05:51:32 -0700 (PDT)
-Received: from fedora ([78.211.67.14])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4313f56eab2sm48258725e9.26.2024.10.16.05.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2024 05:51:29 -0700 (PDT)
-Date: Wed, 16 Oct 2024 14:51:24 +0200
-From: Fabio Luongo <f.langufo.l@gmail.com>
-To: Greg KH <greg@kroah.com>
-Cc: linux-usb@vger.kernel.org, oneukum@suse.com
-Subject: Re: [PATCH] Add support for JULABO PRESTO to cdc_acm
-Message-ID: <Zw-2m7gQTNEkovBi@fedora>
-References: <20240927134404.110284-1-f.langufo.l@gmail.com>
- <2024101624-stimulate-unbend-89a8@gregkh>
+	s=arc-20240116; t=1729084720; c=relaxed/simple;
+	bh=B7zru37GjlcqEhrpSC8JIzeD5ENalABLQe/L2XFfU2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MppEjUuqe0JoOpJmMSCmYKFaUULkyzve/CWc/nsC8MDMfQ6O5nFhuUomuJYa66CJtBZamn19ID5VU3RrEo17pj9hJj55cPlCBy4LLj3Mavjraz0PIomDBlr14V7ZZ7O27L0L6+plBGtGgITHuX4ayMpbj5cXCZW2RAuJ4E44Nc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jl+4zy82; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729084719; x=1760620719;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B7zru37GjlcqEhrpSC8JIzeD5ENalABLQe/L2XFfU2M=;
+  b=jl+4zy82ts8dxd+gwGvt7g+1CgR3IcAaW0kIDl5qcRyGy6ejfVTqgI59
+   m0roHaWPy0kVHAmTbwOr1H0Ae2ViGXSMQCOvOAO5KLV6vjoc2XzVhOiC6
+   Q10uKOa9JXGO7eMpO3AXuavl6ugvadotzwVQym/MWu2+mtXdbShNNItg0
+   5ujTGvqZCEQUCk53KnHBHVkqaXRpNI3tPhGLZBRsSqwWZ/FiwphwdlDyn
+   QGuzvY3hULmiz4JNO+7/Brlc+n6xRjaCp5/ZH+R4QvmkVeI+69C3G0aZ2
+   Mpm/SB9RNURpQPtbsbP4rs8fvMmOyVqU3Y2hwm27+ijPyaZ+Ui+rt5EYb
+   A==;
+X-CSE-ConnectionGUID: pDEuCzlARneKccs0lKJ0jw==
+X-CSE-MsgGUID: NrHyNe6YSEOq9EPTSmcRCQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39077750"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="39077750"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:18:38 -0700
+X-CSE-ConnectionGUID: wBSJxYIIT7GYxvraqBNdkg==
+X-CSE-MsgGUID: 2Id6rfphTV+QhPClh03ZXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
+   d="scan'208";a="83300015"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by orviesa004.jf.intel.com with ESMTP; 16 Oct 2024 06:18:36 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v4 0/4] usb: typec: USB Modes
+Date: Wed, 16 Oct 2024 16:18:30 +0300
+Message-ID: <20241016131834.898599-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024101624-stimulate-unbend-89a8@gregkh>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 16, 2024 at 10:11:15AM +0200, Greg KH wrote:
-> On Fri, Sep 27, 2024 at 03:44:04PM +0200, Fabio Luongo wrote:
-> > JULABO PRESTO chillers on Windows use the usbser.sys driver
-> > for communication, so the same functionality should be achievable
-> > on Linux using the cdc_acm driver.
-> > 
-> > However, cdc_acm does not accomodate the quirkness of these devices,
-> > as they fail normal probing ("Zero length descriptor references"),
-> > but they also feature a single USB interface instead of two.
-> > 
-> > This patch extends the effect of the `NO_UNION_NORMAL` quirk
-> > to cover the features of JULABO PRESTO devices.
-> > 
-> > Signed-off-by: Fabio Luongo <f.langufo.l@gmail.com>
-> > ---
-> >  drivers/usb/class/cdc-acm.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> > index 605fea461102..d77c84c6e878 100644
-> > --- a/drivers/usb/class/cdc-acm.c
-> > +++ b/drivers/usb/class/cdc-acm.c
-> > @@ -1210,6 +1210,8 @@ static int acm_probe(struct usb_interface *intf,
-> >  	if (quirks == NO_UNION_NORMAL) {
-> >  		data_interface = usb_ifnum_to_if(usb_dev, 1);
-> >  		control_interface = usb_ifnum_to_if(usb_dev, 0);
-> > +		if (!data_interface)
-> > +			data_interface = control_interface;
-> 
-> That feels wrong, how can we send data out both for different things?
+Hi,
 
-My understanding is that we still have the correct number of (i.e. 3) endpoints
-as in the case of properly implemented CDC devices, except they all belong
-to the same interface, instead of being split across two,
-so it should only be a matter of identifying which EP is for control and
-which EPs are for data.
+Changed since v3:
+- Fixed the dates in the ABI documentation - Greg
+- Now using sysfs_emit_at() everywhere - Greg
 
-Indeed, I think this is what the current driver does via the call to
-`usb_find_common_endpoints`.
+Changed since v2:
+- Renamed the callbacks - Abhishek
 
-> 
-> >  		/* we would crash */
-> >  		if (!data_interface || !control_interface)
-> >  			return -ENODEV;
-> > @@ -1284,6 +1286,8 @@ static int acm_probe(struct usb_interface *intf,
-> >  	if (data_intf_num != call_intf_num)
-> >  		dev_dbg(&intf->dev, "Separate call control interface. That is not fully supported.\n");
-> >  
-> > +skip_normal_probe:
-> > +
-> >  	if (control_interface == data_interface) {
-> >  		/* some broken devices designed for windows work this way */
-> >  		dev_warn(&intf->dev,"Control and data interfaces are not separated!\n");
-> > @@ -1303,8 +1307,6 @@ static int acm_probe(struct usb_interface *intf,
-> >  		goto made_compressed_probe;
-> >  	}
-> >  
-> > -skip_normal_probe:
-> 
-> Why the movement of the goto tag?
-
-Since `NO_UNION_NORMAL` allows for collapsed interfaces for data and control
-after these changes, the label was moved to the `if`
-that stands just above its current position,
-where the case `control_interface == data_interface` is handled.
-
-As a general comment, my understanding is that these changes
-should not affect the devices which the driver already supports:
-the `data_interface = control_interface` assignment is done only
-as a last attempt to save a probing that would fail with ENODEV;
-the extra `if` from the `goto` label movement should not get executed
-by the currently supported devices, as they should have distinct interfaces.
+Changed since v1:
+- Leaving the usb_mode file hidden if the usb capabilities are not known - Dmitriy
+- Fixed kernel doc warning - kernel test robot
 
 
+This was originally a proposal of mine that I posted back in 2019 as
+an RFC [1].
 
-Thanks,
+The goal is to expose the USB Mode - USB Mode as defined in the USB
+Type-C and USB Power Delivery specifications - to the user via sysfs.
 
-Fabio L
+With ports the mode will show the supported and the default USB Mode,
+which is the mode that is (or should be) used in the next Enter_USB
+Message.
 
-> 
-> thanks,
-> 
-> greg k-h
+With the partners the mode will show similarly the supported USB
+modes, and also the active mode. Changing the active mode should cause
+Data Reset (as described in the USB Power Delivery spec.). This should
+happen even if there is no active USB Mode (in Alternate Mode).
+
+I've modified the original RFC patches based on comments I've received
+(offline). The major change is that I renamed the sysfs attribute file
+for the port from "usb_mode" to "usb_capability".
+
+I'm taking the USB mode in use in the UCSI driver with these, but I
+did not add support for the "Set USB" UCSI command yet. I have no way
+of testing it. Also, I don't really like that we have to construct the
+Enter_USB Message from the abstracted information that UCSI supplies.
+The interface should supply the Enter_USB Message that was used as is.
+
+[1] https://lore.kernel.org/linux-usb/20191230152857.43917-1-heikki.krogerus@linux.intel.com/
+
+Heikki Krogerus (4):
+  usb: typec: Add attribute file showing the supported USB modes of the
+    port
+  usb: typec: Add attribute file showing the USB Modes of the partner
+  usb: typec: ucsi: Supply the USB capabilities to the ports
+  usb: typec: ucsi: Add support for the partner USB Modes
+
+ Documentation/ABI/testing/sysfs-class-typec |  27 +++
+ drivers/usb/typec/class.c                   | 205 +++++++++++++++++++-
+ drivers/usb/typec/class.h                   |   3 +
+ drivers/usb/typec/ucsi/ucsi.c               |  16 ++
+ drivers/usb/typec/ucsi/ucsi.h               |  10 +
+ include/linux/usb/typec.h                   |  22 +++
+ 6 files changed, 279 insertions(+), 4 deletions(-)
+
+-- 
+2.45.2
+
 
