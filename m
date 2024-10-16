@@ -1,71 +1,73 @@
-Return-Path: <linux-usb+bounces-16324-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16325-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 840379A0C0C
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 15:58:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98F069A0C0E
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 15:58:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 132FC1F24568
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:58:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4A3A1C229C5
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:58:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5425420C029;
-	Wed, 16 Oct 2024 13:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1910D20C035;
+	Wed, 16 Oct 2024 13:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QPaJ75P9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ti4ZmQVl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A87120C025
-	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 13:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1097D20C000;
+	Wed, 16 Oct 2024 13:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729087084; cv=none; b=h/aEgjx3+96TfHQt9NotsHo7eW7oz6OrRLJoF1KCsek9RcZj9Fm1fVVJIO4WlwqQqM4xgLyKJwyb4DLRJfWZe91beSy//8ZKhJM98sgvHp9IDznZyRwad3PTmIMUGSOawENZ20ifAotNgWUWIGix+4ysRIjUTbjF4wGCfgn5QYc=
+	t=1729087086; cv=none; b=IisAmP10QM76Sn3KrkVJV5U/YOcmas185Dv6m9yPXdba8/V/9zDWR6YzHZrHouVYh+hmEebxeyF9iMsK1OGWhx9b47tZxP45OZMysaYrUz8D7sU+44zs6HFGxD1vbzkq/59Z7xmI6hNJ3mKxwfuovCsqTrU4eSTFswpVxyA0O1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729087084; c=relaxed/simple;
-	bh=PpLVJHCs/Lsa4JXqIq9mfDwKCRL9WHKJbDQ+XqqtlOY=;
+	s=arc-20240116; t=1729087086; c=relaxed/simple;
+	bh=CNhKFwL3hrGpnciMqwCTYZJcQC1POF4XejApSmQzBg4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Pl0nWKXgtXYiJUc9wlGSr71mcnQEGeK6ITflbsaRFCUplCpvrFGXRuNHls+wLatK9uUG0QeFe9LKC/rqPgBLNZeoAB6IQ3j9kdWuUPjYnXQ8Xj0yZ4wvGMQRKEOGOFyUggrpwo2HFLDYfTIYRUgeCZwoIJ+88UdMiQkTb/AxC3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QPaJ75P9; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version:Content-Type; b=WpBYsoviG1BQiVPTIZHf5C+/Qix9803UbBaLkV3FBpzocLuEz8r1XHL1adKf9trFTrVvGoWDk33i14qbwNipsGJfpqGoM1Sg29V/ctzLOgm0/7SINNvEy2e3ByGzAqOhMXUQ/PrKKjnj9G3NHWHzWChOWAsCOk43QgSVKqdjzlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ti4ZmQVl; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729087083; x=1760623083;
+  t=1729087085; x=1760623085;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PpLVJHCs/Lsa4JXqIq9mfDwKCRL9WHKJbDQ+XqqtlOY=;
-  b=QPaJ75P9jHSFAIx72I33x/Btvju06ARrddC4eveZplC/xr62SRgllXW6
-   bikpjqKdizTIpljR9qOZnNbG/Xb56R3Kii4w+nnwGIVUDyBui4cgUuuKf
-   mKUy8H6QOZoyNn1uDGEoiuTOojFvuyL3hhJU1uiYwgCR8esFQx2e6VG41
-   S3ABMhHUAB/V2sKNHOMfC+1mMux7udE+fmfTpz1uDxxAJLan6fN6wtSt4
-   qPRGa9Tzr2PHhZFzAQ6KL0TKxp6P3a2lE3QL7DslpbNSspk4fe809dg4b
-   op2DbYsBpqnwGYgNKG4KxqZueiHtRDeKj/Ca4mbh1IGp9Vezoe3xkTK0o
-   g==;
-X-CSE-ConnectionGUID: XsYf4EgjSuqmelg+7cuIBg==
-X-CSE-MsgGUID: r5yo7d8hT4SSH7EASAd9gg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="28664028"
+  bh=CNhKFwL3hrGpnciMqwCTYZJcQC1POF4XejApSmQzBg4=;
+  b=Ti4ZmQVlbOGWLNF2meVcjTeLREwDtYG6VRW6ah5uLk1ybFsvvfKAFvJj
+   eXwbg0sCzHAofQ5D9pZEgpYdbqG9Idy59zgbPOOy3Dd5qpI67cIqB6qXC
+   MK7mpIXt1rM8GGB2U23AfInYFTySpSGKVnUdbStLqxdbzz6d4Ss8iOqcN
+   w+KLgCeS8azZmCR2Izom0tFkvzg2mgCv88feXW6jwp7j+/wxTMZYqUpsE
+   XHRKBPVA0H8SMeAJimhYXpXkenr202ojLsdIIIlwGiuAcUtkNRb/T80iE
+   GkVFWLh5hd74I9VqYR199Fatv+LikNLQ4Snq6VvcrBU5o/ICyLbFpph+6
+   w==;
+X-CSE-ConnectionGUID: +xFbyDECRNOG0FJnkbaDug==
+X-CSE-MsgGUID: M+47JckCQkehGUiRe/UmPQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="28664031"
 X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="28664028"
+   d="scan'208";a="28664031"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:58:02 -0700
-X-CSE-ConnectionGUID: y0YE+u3YTgqA0qYJePdoMg==
-X-CSE-MsgGUID: F5zpf+4GQ+udnP5Cqe1kjw==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:58:04 -0700
+X-CSE-ConnectionGUID: 8fqjvmOfT06QbzPHiOM3bA==
+X-CSE-MsgGUID: xxuISZWUTZ+WQRp/S8w9gw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="82776224"
+   d="scan'208";a="82776245"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa005.fm.intel.com with ESMTP; 16 Oct 2024 06:58:01 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 16 Oct 2024 06:58:02 -0700
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
-	Michal Pecio <michal.pecio@gmail.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 3/4] usb: xhci: Fix handling errors mid TD followed by other errors
-Date: Wed, 16 Oct 2024 16:59:59 +0300
-Message-Id: <20241016140000.783905-4-mathias.nyman@linux.intel.com>
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Uday M Bhat <uday.m.bhat@intel.com>,
+	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
+	stable@vger.kernel.org
+Subject: [PATCH 4/4] xhci: dbc: honor usb transfer size boundaries.
+Date: Wed, 16 Oct 2024 17:00:00 +0300
+Message-Id: <20241016140000.783905-5-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241016140000.783905-1-mathias.nyman@linux.intel.com>
 References: <20241016140000.783905-1-mathias.nyman@linux.intel.com>
@@ -75,138 +77,140 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Michal Pecio <michal.pecio@gmail.com>
+Treat each completed full size write to /dev/ttyDBC0 as a separate usb
+transfer. Make sure the size of the TRBs matches the size of the tty
+write by first queuing as many max packet size TRBs as possible up to
+the last TRB which will be cut short to match the size of the tty write.
 
-Some host controllers fail to produce the final completion event on an
-isochronous TD which experienced an error mid TD. We deal with it by
-flagging such TDs and checking if the next event points at the flagged
-TD or at the next one, and giving back the flagged TD if the latter.
+This solves an issue where userspace writes several transfers back to
+back via /dev/ttyDBC0 into a kfifo before dbgtty can find available
+request to turn that kfifo data into TRBs on the transfer ring.
 
-This is not enough, because the next TD may be missed by the xHC. Or
-there may be no next TD but a ring underrun. We also need to get such
-TD quickly out of the way, or errors on later TDs may be handled wrong.
+The boundary between transfer was lost as xhci-dbgtty then turned
+everyting in the kfifo into as many 'max packet size' TRBs as possible.
 
-If the next TD experiences a Missed Service Error, we will set the skip
-flag on the endpoint and then attempt skipping TDs when yet another
-event arrives. In such scenario, we ought to report the 'error mid TD'
-transfer as such rather than skip it.
+DbC would then send more data to the host than intended for that
+transfer, causing host to issue a babble error.
 
-Another problem case are Stopped events. If we see one after an error
-mid TD, we naively assume that it's a Force Stopped Event because it
-doesn't match the pending TD, but in reality it might be an ordinary
-Stopped event for the next TD, which we fail to recognize and handle.
+Refuse to write more data to kfifo until previous tty write data is
+turned into properly sized TRBs with data size boundaries matching tty
+write size
 
-Fix this by moving error mid TD handling before the whole TD skipping
-loop. Remove unnecessary conditions, always give back the TD if the new
-event points to any TRB outside it or if the pointer is NULL, as may be
-the case in Ring Underrun and Overrun events on 1st gen hardware. Only
-if the pending TD isn't flagged, consider other actions like skipping.
-
-As a side effect of reordering with skip and FSE cases, error mid TD is
-reordered with last_td_was_short check. This is harmless, because the
-two cases are mutually exclusive - only one can happen in any given run
-of handle_tx_event().
-
-Tested on the NEC host and a USB camera with flaky cable. Dynamic debug
-confirmed that Transaction Errors are sometimes seen, sometimes mid-TD,
-sometimes followed by Missed Service. In such cases, they were finished
-properly before skipping began.
-
-[Rebase on 6.12-rc1 -Mathias]
-
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Tested-by: Uday M Bhat <uday.m.bhat@intel.com>
+Tested-by: Łukasz Bartosik <ukaszb@chromium.org>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 66 ++++++++++++++++--------------------
- 1 file changed, 29 insertions(+), 37 deletions(-)
+ drivers/usb/host/xhci-dbgcap.h |  1 +
+ drivers/usb/host/xhci-dbgtty.c | 55 ++++++++++++++++++++++++++++++----
+ 2 files changed, 51 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 7dedf31bbddd..b6eb928e260f 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2775,6 +2775,29 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 		return 0;
- 	}
+diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
+index 8ec813b6e9fd..9dc8f4d8077c 100644
+--- a/drivers/usb/host/xhci-dbgcap.h
++++ b/drivers/usb/host/xhci-dbgcap.h
+@@ -110,6 +110,7 @@ struct dbc_port {
+ 	struct tasklet_struct		push;
  
-+	/*
-+	 * xhci 4.10.2 states isoc endpoints should continue
-+	 * processing the next TD if there was an error mid TD.
-+	 * So host like NEC don't generate an event for the last
-+	 * isoc TRB even if the IOC flag is set.
-+	 * xhci 4.9.1 states that if there are errors in mult-TRB
-+	 * TDs xHC should generate an error for that TRB, and if xHC
-+	 * proceeds to the next TD it should genete an event for
-+	 * any TRB with IOC flag on the way. Other host follow this.
-+	 *
-+	 * We wait for the final IOC event, but if we get an event
-+	 * anywhere outside this TD, just give it back already.
-+	 */
-+	td = list_first_entry_or_null(&ep_ring->td_list, struct xhci_td, td_list);
+ 	struct list_head		write_pool;
++	unsigned int			tx_boundary;
+ 
+ 	bool				registered;
+ };
+diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
+index b8e78867e25a..d719c16ea30b 100644
+--- a/drivers/usb/host/xhci-dbgtty.c
++++ b/drivers/usb/host/xhci-dbgtty.c
+@@ -24,6 +24,29 @@ static inline struct dbc_port *dbc_to_port(struct xhci_dbc *dbc)
+ 	return dbc->priv;
+ }
+ 
++static unsigned int
++dbc_kfifo_to_req(struct dbc_port *port, char *packet)
++{
++	unsigned int	len;
 +
-+	if (td && td->error_mid_td && !trb_in_td(xhci, td, ep_trb_dma, false)) {
-+		xhci_dbg(xhci, "Missing TD completion event after mid TD error\n");
-+		ep_ring->dequeue = td->last_trb;
-+		ep_ring->deq_seg = td->last_trb_seg;
-+		inc_deq(xhci, ep_ring);
-+		xhci_td_cleanup(xhci, td, ep_ring, td->status);
++	len = kfifo_len(&port->port.xmit_fifo);
++
++	if (len == 0)
++		return 0;
++
++	len = min(len, DBC_MAX_PACKET);
++
++	if (port->tx_boundary)
++		len = min(port->tx_boundary, len);
++
++	len = kfifo_out(&port->port.xmit_fifo, packet, len);
++
++	if (port->tx_boundary)
++		port->tx_boundary -= len;
++
++	return len;
++}
++
+ static int dbc_start_tx(struct dbc_port *port)
+ 	__releases(&port->port_lock)
+ 	__acquires(&port->port_lock)
+@@ -36,7 +59,7 @@ static int dbc_start_tx(struct dbc_port *port)
+ 
+ 	while (!list_empty(pool)) {
+ 		req = list_entry(pool->next, struct dbc_request, list_pool);
+-		len = kfifo_out(&port->port.xmit_fifo, req->buf, DBC_MAX_PACKET);
++		len = dbc_kfifo_to_req(port, req->buf);
+ 		if (len == 0)
+ 			break;
+ 		do_tty_wake = true;
+@@ -200,14 +223,32 @@ static ssize_t dbc_tty_write(struct tty_struct *tty, const u8 *buf,
+ {
+ 	struct dbc_port		*port = tty->driver_data;
+ 	unsigned long		flags;
++	unsigned int		written = 0;
+ 
+ 	spin_lock_irqsave(&port->port_lock, flags);
+-	if (count)
+-		count = kfifo_in(&port->port.xmit_fifo, buf, count);
+-	dbc_start_tx(port);
++
++	/*
++	 * Treat tty write as one usb transfer. Make sure the writes are turned
++	 * into TRB request having the same size boundaries as the tty writes.
++	 * Don't add data to kfifo before previous write is turned into TRBs
++	 */
++	if (port->tx_boundary) {
++		spin_unlock_irqrestore(&port->port_lock, flags);
++		return 0;
 +	}
 +
- 	if (list_empty(&ep_ring->td_list)) {
- 		/*
- 		 * Don't print wanings if ring is empty due to a stopped endpoint generating an
-@@ -2836,44 +2859,13 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 				return 0;
- 			}
++	if (count) {
++		written = kfifo_in(&port->port.xmit_fifo, buf, count);
++
++		if (written == count)
++			port->tx_boundary = kfifo_len(&port->port.xmit_fifo);
++
++		dbc_start_tx(port);
++	}
++
+ 	spin_unlock_irqrestore(&port->port_lock, flags);
  
--			/*
--			 * xhci 4.10.2 states isoc endpoints should continue
--			 * processing the next TD if there was an error mid TD.
--			 * So host like NEC don't generate an event for the last
--			 * isoc TRB even if the IOC flag is set.
--			 * xhci 4.9.1 states that if there are errors in mult-TRB
--			 * TDs xHC should generate an error for that TRB, and if xHC
--			 * proceeds to the next TD it should genete an event for
--			 * any TRB with IOC flag on the way. Other host follow this.
--			 * So this event might be for the next TD.
--			 */
--			if (td->error_mid_td &&
--			    !list_is_last(&td->td_list, &ep_ring->td_list)) {
--				struct xhci_td *td_next = list_next_entry(td, td_list);
--
--				ep_seg = trb_in_td(xhci, td_next, ep_trb_dma, false);
--				if (ep_seg) {
--					/* give back previous TD, start handling new */
--					xhci_dbg(xhci, "Missing TD completion event after mid TD error\n");
--					ep_ring->dequeue = td->last_trb;
--					ep_ring->deq_seg = td->last_trb_seg;
--					inc_deq(xhci, ep_ring);
--					xhci_td_cleanup(xhci, td, ep_ring, td->status);
--					td = td_next;
--				}
--			}
--
--			if (!ep_seg) {
--				/* HC is busted, give up! */
--				xhci_err(xhci,
--					"ERROR Transfer event TRB DMA ptr not "
--					"part of current TD ep_index %d "
--					"comp_code %u\n", ep_index,
--					trb_comp_code);
--				trb_in_td(xhci, td, ep_trb_dma, true);
-+			/* HC is busted, give up! */
-+			xhci_err(xhci,
-+				 "ERROR Transfer event TRB DMA ptr not part of current TD ep_index %d comp_code %u\n",
-+				 ep_index, trb_comp_code);
-+			trb_in_td(xhci, td, ep_trb_dma, true);
+-	return count;
++	return written;
+ }
  
--				return -ESHUTDOWN;
--			}
-+			return -ESHUTDOWN;
- 		}
+ static int dbc_tty_put_char(struct tty_struct *tty, u8 ch)
+@@ -241,6 +282,10 @@ static unsigned int dbc_tty_write_room(struct tty_struct *tty)
  
- 		if (ep->skip) {
+ 	spin_lock_irqsave(&port->port_lock, flags);
+ 	room = kfifo_avail(&port->port.xmit_fifo);
++
++	if (port->tx_boundary)
++		room = 0;
++
+ 	spin_unlock_irqrestore(&port->port_lock, flags);
+ 
+ 	return room;
 -- 
 2.25.1
 
