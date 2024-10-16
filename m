@@ -1,126 +1,214 @@
-Return-Path: <linux-usb+bounces-16312-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16313-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC6B19A07D8
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 12:53:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 569299A07FD
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:04:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41DE9B22F17
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 10:53:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 757A61C22759
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 11:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B4E207209;
-	Wed, 16 Oct 2024 10:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B289207216;
+	Wed, 16 Oct 2024 11:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="m6+rhatk"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="e8WH66Tm";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="XI2MQPm+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE422071EE;
-	Wed, 16 Oct 2024 10:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0FB2071F8;
+	Wed, 16 Oct 2024 11:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729075974; cv=none; b=VN5JWZyw4Atw7PInrpQ1g+Fh/W+RkPt0gHj9pVDn3TsTR0fHfUyKlnkSxIiciFr+QqCuGJ2EU3hJKW4x7PG+i2/mz3Lo4siK0LHLVbO3qa9ep1BUtV7NwCSfP+ibFEVn2tMDx3214pPNx2z2lZl5s7WIgL1zNwRKtKaZAUN4AgM=
+	t=1729076652; cv=none; b=dDdpjQpWG89ZM8xyqm3Y5/aRFlaVPN2zd8dtfq/9fqSp78XqwMBkPRNBqRZtV8czxEMUmFg31ETzTQSc2P5gHMilapAOO24k8ZOVBjT8wZZPA67Zf8JkhxCF1IfdBrvJU0uSsCrMUlAd8HJUEDgsBDBHuF884dhJaXnJ44Tabbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729075974; c=relaxed/simple;
-	bh=Mcip5Kx6I/TZnEO16HfE6x3mJQievwxkLL2RftHqPKk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mQgBgwNL00efuYYJvwiRqn2FEV7REG8+fUsrymFs39QaQoEA5m9rrBfzR0wqLXCfn6NQVpoR3PCnriNVJ65oZS/BWe4mbIOEk3M84+asCMkImVRbuRJLCiu2q43UwWdWp+/IL6IbYFoEymaAjp+NKgp8vC7DozPveTF0gckDYvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=m6+rhatk; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1729075971;
-	bh=Mcip5Kx6I/TZnEO16HfE6x3mJQievwxkLL2RftHqPKk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=m6+rhatk3ym6roLIghMdE6YlIB4cpCEqsL7OTebXgMEMlVtwwAmU9na0VY2eDGeZn
-	 yYcngAECMKOv43li7ASMN5NZG+4TQbfsv/ERifiBUkrBBTpOESfWBqfyUAZWPZewEb
-	 utux2BWotQz1Uzs/8grjtC24WZUfbv4EcZpF6lr6kXjNdXdZIHM06ouCBeDjkb73Z6
-	 kS01ddCgoxfJLMZNKXNMOapo5QuEb3SXXZ2UqifgxR/nI1K1txrms1UdgvH3G43AST
-	 tnr+Zh118aNqtKQ7CZs+yW2Bx0kLDBRejEKao4AEje4HNNoPKzr8sHvz/C2MYu9fDJ
-	 KwVYlwu+7FgBA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 6B6E717E10B5;
-	Wed, 16 Oct 2024 12:52:50 +0200 (CEST)
-Message-ID: <7865e7ee-d894-4ef4-89c4-5ea3a90ac6f1@collabora.com>
-Date: Wed, 16 Oct 2024 12:52:50 +0200
+	s=arc-20240116; t=1729076652; c=relaxed/simple;
+	bh=j7uqkslzjH6CNz0CR36nqNmHhVeQAxFmnElgWhQTsrY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=buX2ddmtpyzOwmRbMxzN7eIotT5jEnPeAaUPJ1YEQOI8V/X2dJykXIvMicUnhuf5pg5Vvd0tPNXYtuGawiGXyfUBth/DdOVrTYowf03VyXlIjXFo56pFDx7dqeL46iPNThdXhjJiDNrcWtub3r9NLvzawRY/c6ZrkNs8P6LsfZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=e8WH66Tm; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=XI2MQPm+ reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1729076649; x=1760612649;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UQnSqYqpBfUV+6/cvpHKfQx6TgwRy+1JDtpQMvdUWAY=;
+  b=e8WH66TmofbeTntJ5onHovsqJLOEu0vQu3OBsaJ210n76uIggIsRiCGI
+   4Vm0mHRjH1en0Z5No9zh3LGh8eKJ4yzYBqVa5PHp3xh7OreBpn9ipbJHO
+   vNOUy74Op6gULUBXNgyxwI4dwDXqAwu+943qAeJ52vDbEEAI8HeTogCA/
+   e9kRjPu8XTsID/d6KS/eB+vo0Cvz+7FOpRN6JDUe3dnDm7b8IfnngPted
+   k0X34tFXhyTAs/ZUkCjebDki1KL0M3ua7Gg42P9vpdMUc+HCLRXXZqDa6
+   IIPovpa3AjbUlMCL8B+mVbYGoJ8Hdh6bog4JImGSzw/xJ63x+IXMEfy/q
+   A==;
+X-CSE-ConnectionGUID: 4/UoR85oRzeG0PblB3UK6Q==
+X-CSE-MsgGUID: YU0fFkq7QwqVGtD9L/F5uw==
+X-IronPort-AV: E=Sophos;i="6.11,207,1725314400"; 
+   d="scan'208";a="39492910"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 16 Oct 2024 13:04:00 +0200
+X-CheckPoint: {670F9DA0-E-21611FC3-DAD22B0C}
+X-MAIL-CPID: 7354DE9C6207C2B376A359CA9647EA1D_4
+X-Control-Analysis: str=0001.0A682F1E.670F9DA0.00D7,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3D9C116853D;
+	Wed, 16 Oct 2024 13:03:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1729076635;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=UQnSqYqpBfUV+6/cvpHKfQx6TgwRy+1JDtpQMvdUWAY=;
+	b=XI2MQPm+Mb/NIn/vSlonjdjH9uLgzitytNffKH4fG82nU/9taJXmCN4sJ/t2FzcSPgaNP4
+	XRgidS1bmOo2sLA+p8MAGqjA6j9wAOU+rM1ufpkxT5Fi3kpMZBlICZToZPblxy5kISnejT
+	ltUEKOB2f+q3JYvaP1ebe561GvmJyVrygQOXO9swUbWkzQ34dGqAXse3nJRhBefmPya+Re
+	oV3q2cbZPzVXOST2dHeS/hT7WgCLUsLAyhVsnV4hjbpAykUth8RHN/FBPVz+e4/02ga163
+	qA6ialNJio94VChL6mUXQGKZ+GFHW72i8KIq3tt8M47szxmlG/XhFeFCk41BhQ==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, gregkh@linuxfoundation.org, peter.chen@kernel.org, herve.codina@bootlin.com, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, jun.li@nxp.com
+Subject: Re: [PATCH v8 2/3] arm64: dts: imx95: add usb3 related nodes
+Date: Wed, 16 Oct 2024 13:03:53 +0200
+Message-ID: <3252989.5fSG56mABF@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20241016104140.rjmszgplmql4hwrs@hippo>
+References: <20241015111018.2388913-1-xu.yang_2@nxp.com> <22464382.EfDdHjke4D@steina-w> <20241016104140.rjmszgplmql4hwrs@hippo>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: mtu3: add mediatek,usb3-drd property
-To: Rob Herring <robh@kernel.org>, Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- ChiYuan Huang <cy_huang@richtek.com>, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
- Macpaul Lin <macpaul@gmail.com>,
- Project_Global_Chrome_Upstream_Group@mediatek.com,
- Chris-qj chen <chris-qj.chen@mediatek.com>
-References: <20241015172100.15150-1-macpaul.lin@mediatek.com>
- <20241015222046.GA2164669-robh@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20241015222046.GA2164669-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Last-TLS-Session-Version: TLSv1.3
 
-Il 16/10/24 00:20, Rob Herring ha scritto:
-> On Wed, Oct 16, 2024 at 01:21:00AM +0800, Macpaul Lin wrote:
->> Add optional 'mediatek,usb3-drd' property to MediaTek MTU3 DT Schema.
->> This flag specify whether it is a USB3 Dual-role device hardware.
->>
->> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
->> ---
->>   Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
->> index d4e187c78a0b..1e70af0dac82 100644
->> --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
->> @@ -155,6 +155,12 @@ properties:
->>         property is used. See graph.txt
->>       $ref: /schemas/graph.yaml#/properties/port
->>   
->> +  mediatek,usb3-drd:
->> +    $ref: /schemas/types.yaml#/definitions/flag
->> +    description:
->> +      Specify whether it is a USB3 Dual-role device hardware.
->> +    type: boolean
->> +
-> 
-> Don't the standard properties such as usb-role-switch or dr_mode work
-> for you?
-> 
+Hi,
 
-They do - and in fact, the upstream MTU3 driver doesn't even support parsing
-the proposed property because it does parse the standard usb-role-switch property.
+Am Mittwoch, 16. Oktober 2024, 12:41:40 CEST schrieb Xu Yang:
+> On Wed, Oct 16, 2024 at 10:53:50AM +0200, Alexander Stein wrote:
+> > Hi,
+> >=20
+> > another thing I just noticed.
+> >=20
+> > Am Dienstag, 15. Oktober 2024, 13:10:17 CEST schrieb Xu Yang:
+> > > Add usb3 phy and controller nodes for imx95.
+> > >=20
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > >=20
+> > > ---
+> > > Changes in v2:
+> > >  - no changes
+> > > Changes in v3:
+> > >  - no changes
+> > > Changes in v4:
+> > >  - reorder nodes
+> > > Changes in v5:
+> > >  - no changes
+> > > Changes in v6:
+> > >  - rebase to latest
+> > > Changes in v7:
+> > >  - no changes
+> > > Changes in v8:
+> > >  - no changes
+> > > ---
+> > >  arch/arm64/boot/dts/freescale/imx95.dtsi | 43 ++++++++++++++++++++++=
+++
+> > >  1 file changed, 43 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm64/boot/dts/freescale/imx95.dtsi b/arch/arm64/bo=
+ot/dts/freescale/imx95.dtsi
+> > > index 03661e76550f..e3faa8462759 100644
+> > > --- a/arch/arm64/boot/dts/freescale/imx95.dtsi
+> > > +++ b/arch/arm64/boot/dts/freescale/imx95.dtsi
+> > > @@ -1473,6 +1473,49 @@ smmu: iommu@490d0000 {
+> > >  			};
+> > >  		};
+> > > =20
+> > > +		usb3: usb@4c010010 {
+> > > +			compatible =3D "fsl,imx95-dwc3", "fsl,imx8mp-dwc3";
+> > > +			reg =3D <0x0 0x4c010010 0x0 0x04>,
+> > > +			      <0x0 0x4c1f0000 0x0 0x20>;
+> > > +			clocks =3D <&scmi_clk IMX95_CLK_HSIO>,
+> > > +				 <&scmi_clk IMX95_CLK_32K>;
+> > > +			clock-names =3D "hsio", "suspend";
+> > > +			interrupts =3D <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
+> > > +			#address-cells =3D <2>;
+> > > +			#size-cells =3D <2>;
+> > > +			ranges;
+> > > +			power-domains =3D <&scmi_devpd IMX95_PD_HSIO_TOP>;
+> > > +			dma-ranges =3D <0x0 0x0 0x0 0x0 0x10 0x0>;
+> > > +			status =3D "disabled";
+> > > +
+> > > +			usb3_dwc3: usb@4c100000 {
+> > > +				compatible =3D "snps,dwc3";
+> > > +				reg =3D <0x0 0x4c100000 0x0 0x10000>;
+> > > +				clocks =3D <&scmi_clk IMX95_CLK_HSIO>,
+> > > +					 <&scmi_clk IMX95_CLK_24M>,
+> > > +					 <&scmi_clk IMX95_CLK_32K>;
+> > > +				clock-names =3D "bus_early", "ref", "suspend";
+> > > +				interrupts =3D <GIC_SPI 175 IRQ_TYPE_LEVEL_HIGH>;
+> > > +				phys =3D <&usb3_phy>, <&usb3_phy>;
+> > > +				phy-names =3D "usb2-phy", "usb3-phy";
+> > > +				snps,gfladj-refclk-lpm-sel-quirk;
+> > > +				snps,parkmode-disable-ss-quirk;
+> > > +				iommus =3D <&smmu 0xe>;
+> > > +			};
+> > > +		};
+> > > +
+> > > +		usb3_phy: phy@4c1f0040 {
+> > > +			compatible =3D "fsl,imx95-usb-phy", "fsl,imx8mp-usb-phy";
+> > > +			reg =3D <0x0 0x4c1f0040 0x0 0x40>,
+> > > +			      <0x0 0x4c1fc000 0x0 0x100>;
+> > > +			clocks =3D <&scmi_clk IMX95_CLK_HSIO>;
+> > > +			clock-names =3D "phy";
+> > > +			#phy-cells =3D <0>;
+> > > +			power-domains =3D <&scmi_devpd IMX95_PD_HSIO_TOP>;
+> > > +			orientation-switch;
+> > > +			status =3D "disabled";
+> >=20
+> > I got these dtbs check warnings:
+> >=20
+> > arch/arm64/boot/dts/freescale/imx95-tqma9596sa-mb-smarc-2.dtb:
+> >  phy@4c1f0040: 'oneOf' conditional failed, one must be fixed:
+> >         'port' is a required property
+> >         'ports' is a required property
+> >         from schema $id: http://devicetree.org/schemas/phy/fsl,imx8mq-u=
+sb-phy.yaml#
+> > arch/arm64/boot/dts/freescale/imx95-tqma9596sa-mb-smarc-2.dtb:=20
+> >  phy@4c1f0040: Unevaluated properties are not allowed ('orientation-swi=
+tch' was unexpected)
+> >         from schema $id: http://devicetree.org/schemas/phy/fsl,imx8mq-u=
+sb-phy.yaml#
+>=20
+> Are you checking on usb tree? You need below two dt-binding patch.
+>=20
+>  - dt-bindings: usb: dwc3-imx8mp: add compatible string for imx95
+>  - dt-bindings: phy: imx8mq-usb: add compatible "fsl,imx95-usb-phy"
 
-This means that this commit is not needed at all.
+Yes, these patches are already in linux-next. I'm on next-20241016.
 
-Cheers,
-Angelo
+> >=20
+> >=20
+> > How am I supposed to specify a port when the usb3 is used in host mode,=
+ thus
+> > no USB Type-C connector and no 'port' OF-graph accordingly?
+>=20
+> Host-only mode with Type-A connector? No Typec-C connector?
+> Sorry, I do not get your meaning.
 
->>     enable-manual-drd:
->>       $ref: /schemas/types.yaml#/definitions/flag
->>       description:
->> -- 
->> 2.45.2
->>
+Yes, no Type-C connector. Actually not even a Type-A as there is an
+on-board USB hub attached to this host.
+
+Best regards,
+Alexander
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
 
 
