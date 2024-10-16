@@ -1,319 +1,164 @@
-Return-Path: <linux-usb+bounces-16346-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16347-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D90DF9A12E3
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 21:48:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 615819A164A
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 01:55:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F120C1C223ED
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 19:48:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 170E41F21F15
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 23:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC262141A1;
-	Wed, 16 Oct 2024 19:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 702AA1D517A;
+	Wed, 16 Oct 2024 23:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Tvw/oJom"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GENuveHC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2045.outbound.protection.outlook.com [40.107.236.45])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223FA18CC16
-	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 19:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729108112; cv=fail; b=jfL0broSY/JIVmRoTGBY2S70nNtefKsa5vGpzNmRETjqnj9tGkX8ifClw1H8XUR8gvCnT0wYPR2MtYTZWkbIJjVad0CuwV1Q5icPsuhGPeU98xoAZyMHg/tQbSs19r4lMhCtv8ZLgf+Zm45br0RbeIgoG9f3bl/JfNA9jEnSAS4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729108112; c=relaxed/simple;
-	bh=hax3lSULx8Mvrn/0crtAQrHLiDVfwcQQ/Iy6mjtfZcs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=uQ3gPMqKz052+2G5nVTOH6gjuKmAIN2M5daZBo0xZiiuq3Kjb9KRqErnf9kR9Vjq3INrWMmQTQcQFnlP6so5zT+MHjGMpXcAcp8IHMrAf7TDpdtg+c59PTzxp54s9HRzOvGG6TmhZKu0U3ZFhZLr8NukYV7Rgu6lwD1i30l4GOs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Tvw/oJom; arc=fail smtp.client-ip=40.107.236.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oKqqzhSnWYtEutnZccUJvUYfk2VMIyMxBfKzkgbtNuVDmiceO2ePNUlNMRart5mlFQ/I2UGJagAm9n8ceHPAzjudoZ+9nUzBiHPAKHwMS9UGnoO0YaBRz9RX8IKidVTTqGc7fnxV86A15e0NIGxb0ZTc/FNV7u9tvsSgItg4QuctKTx/JRh/OlWxGdi9cUG8m8+tnYBKNB/PMYBzv3rQZjpcCRzjJX+4WMQ4hZxKpYIo5bnjYNy2Fm77eJo83b6q50qji2b6wXL0l7yA6mjbJGxDUaHrPGFWVDfPtZcPvbV+0hJUgUynhU1jBvWSq2iWF5F2wJ/x+T9TEEBOJ1mEMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mmHMaS6/GgFSGNj3eqdZ+XS7Ki7bHMRyguxzGUf6tXA=;
- b=BRujdj4bQpIn7e9xAg1VT1FPN/5XhOO2ip/3RLlCxKq0uO1OzLSOjyXsxKTNP9bQaegvpk3e2j68rIlbdsjNwnF/B7xMUyQZ4L5HhkwHH2lXp4Nha8v7kIt+WT/+qiHaUOS7e4R/+zbtFdOTu/widyP94SxIIzhqkFKbcw2PE0GOjW9AQKqX37vK8I2+UxGcm2a5PxgXiTDNPtJjdUQSyPtYA4WgPS3cax4l+bcGZ9NvIdGZjzMVNkxXTdj257gxD1v+S+mnTo7cUGBSRokLJoY5QkZoChpsRv1J54DG6s/6zRBAcZxEpW0sZHJREvLyuAVL95WLSkkDTapd5D0xLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mmHMaS6/GgFSGNj3eqdZ+XS7Ki7bHMRyguxzGUf6tXA=;
- b=Tvw/oJomRXhqtoEOHv51fCQQImvC2IHTt16EwLALp3rlBpyPiRoN6Dw0lu43JPKM9cyTANTCICXfVGcMxip0Je21tO6FxMuB0P86Hr7udVaap3CH1qodUnOye/LhtANLOgx85/r4NNi3G2YZW+8NraIIB0pomjsM8YDQEO90gfE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SJ0PR12MB5438.namprd12.prod.outlook.com (2603:10b6:a03:3ba::23)
- by DS7PR12MB5791.namprd12.prod.outlook.com (2603:10b6:8:76::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Wed, 16 Oct
- 2024 19:48:27 +0000
-Received: from SJ0PR12MB5438.namprd12.prod.outlook.com
- ([fe80::65b2:12d5:96ba:dd44]) by SJ0PR12MB5438.namprd12.prod.outlook.com
- ([fe80::65b2:12d5:96ba:dd44%7]) with mapi id 15.20.8048.029; Wed, 16 Oct 2024
- 19:48:27 +0000
-Message-ID: <eecb9408-1c20-47ef-a8b9-56fcee1dc610@amd.com>
-Date: Wed, 16 Oct 2024 15:48:23 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] usb: acpi: add device link between tunneled USB3
- device and USB4 Host Interface
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
- Raju.Rangoju@amd.com, Sanath.S@amd.com, Greg KH <gregkh@linuxfoundation.org>
-References: <cf45e722-144f-4d06-8dd9-2f7f54283fbc@amd.com>
- <20241003054704.GM275077@black.fi.intel.com>
- <01bf9a3a-6277-4b57-83ed-82c4bfb62dd2@amd.com>
- <20241003132726.GN275077@black.fi.intel.com>
- <797f52fa-ab9d-45c5-828b-9dcaf75fcc83@amd.com>
- <20241003134743.GO275077@black.fi.intel.com>
- <cee28cb3-a157-4d26-a68a-7b5a99161d1a@linux.intel.com>
- <c5209c31-9263-4fe7-b387-319bbaac866d@amd.com>
- <dc9bcfa6-885f-4ae2-a6be-832a985bc80e@linux.intel.com>
-Content-Language: en-US
-From: Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <dc9bcfa6-885f-4ae2-a6be-832a985bc80e@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQXPR0101CA0031.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::44) To SJ0PR12MB5438.namprd12.prod.outlook.com
- (2603:10b6:a03:3ba::23)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9430B282FA
+	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 23:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729122946; cv=none; b=I4gfvFplLxTO4VJsdZ60UWt2uCZhh6AFHQU9Le/hk8s4EpGhNosyyZnWSZDuuxsRDdcd4vNnUp5TIYNPUhbYTdqKdH3OfaaIjCkTSXjjt5SBk5Od4j/qQPdytuig2QeCR3vICuMN+UQAOVqCHjgOsAPslGAL5ip2gZrLY2bQR8g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729122946; c=relaxed/simple;
+	bh=SLBc+yIfU0DzILVM3pYWEOp3m55RHBcnaag9iY1gl0c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=rR6VdF1tsoptSaWXpYASDCm+7B0e0bLFqvy7CTMRyveDXRBgfLGPPdM6iVyrF4Ngaf8fj8cLy1xWow2EJGooINQ4pyzabyZam4AB18GR0K+w8ulT+E7eVUXmmUiYO7MAE0RtpkD4KqEx2RL95TP47pjdXEYcFjlnvH4L52g4Eho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GENuveHC; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49GLAPhG011275;
+	Wed, 16 Oct 2024 23:55:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4xDI88iUIgAlyaFHAdspR3r1YnA8gsDv9xKc02LDJEc=; b=GENuveHC6HhJxUpc
+	vgnVpEEnUbafVSDG/Jg9QVe7uL1lsAxvdGY0VLo0C/bwD8kLLzv/CzBEcnaksBDX
+	1v1SSVYCznOB3jP0vC2esxqvVEnChMb/EpbNOncBtqAW83K8FKFqvuvT6LyhUBgK
+	KsWbn/0Fs8fk0hCZWrqrE9gpzfSWl3v6i4Xc+l8dD5cGpMYvFRl+OfS8hdufqWNk
+	YW8VWFlwr9GBwjYTZfnHBsRih+e6bL2epgZ3ysdM356tVQ/wOZkjReQo1EJ82Rf8
+	jj5aZjzT10FTW1AyJBS2rVlvpISeaf/3Ku6MowykPP1LuwIY8/O2piibeBYtvCff
+	rcl4eg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42abm5j5f5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 23:55:37 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49GNtaS5029115
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 23:55:36 GMT
+Received: from [10.110.33.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 16 Oct
+ 2024 16:55:36 -0700
+Message-ID: <9918669c-3bfd-4d42-93c4-218e9364b7cc@quicinc.com>
+Date: Wed, 16 Oct 2024 16:55:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5438:EE_|DS7PR12MB5791:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f943ddb-8681-4149-1b55-08dcee1b8057
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YXNNbzV5RExndks1TkN4QVlrM0IxSGg3T0FYdmV1MzhkMVVOWklHblRRajMw?=
- =?utf-8?B?SXpCTmVRZmpuTy85eXl2YVJPTGlxak9RL2dJRnBaZEkzWVgyOVVzcVYvY242?=
- =?utf-8?B?WThLSlcvZ2dmWk5PeFYweEtwajk0ZjNUa3o4dVlmaXREb1NERVFjbW5MZVZq?=
- =?utf-8?B?L0ZQcmV6UkFrY08yUEVHVjZ3MEVseE1kQVh2aWZNYUxPM0V1cy9KWWFJLzQ4?=
- =?utf-8?B?QW92NU4ralkyQXk1cVZhQytmeFp4OVRjbVNYUGpYdjFoL0ZOY2hIN0VlWlYv?=
- =?utf-8?B?RGdMendBUXJMTUNXUVVBMndZLzlGSmVBQVJNVXIwbXg5elcwZVpwcmJnY1BY?=
- =?utf-8?B?dDgrNzdzdjUzdDdzTVpFQU95VkhTN1pDcmFGY2VqNDFQQUVMOEJPQ0hoV2Ex?=
- =?utf-8?B?d3YxeXhMSGhvODFETFJoQ0YwNGdFTi82am1NTS9LQWxYUzd1NkFUZEVJWE5P?=
- =?utf-8?B?OUxVRnVEVktLR2ZNbWJNelhGNlVyaWJYakFpTFJrQzNIRzd4SFJoclh2RURl?=
- =?utf-8?B?NThndkpZTTArM1JGRFI2N3RVWFFhdm5VRGZmbENSOFdiLy82djRYZWtwWTVE?=
- =?utf-8?B?RzZoUEdkeTNLZk15SW9WZDJmUmYxeVVRN3FWQUhBRFdjUG9XZnVRa3pkUjVB?=
- =?utf-8?B?UzJDbjRXd05jcGtNclBrNGJUNnVsWnEvbVUralVmMmxvaWIwd1RZK3VpY2xL?=
- =?utf-8?B?WkpDTG82NUZqUkVpVHk2UFo0c1hCVitrL0UyMWtlZEVpZ0R5VG1sdjVzYmRo?=
- =?utf-8?B?MHZZL2kvQ1lXVmFhSnRTeHM4ZUNjblh4S2tucUdXNndZSlhQcm1iNmxOdlhM?=
- =?utf-8?B?SXAzU3BHZ2ZwVkJPdFpWbmFIdUZMQWd2eGI1RVAvbFB0SjkyMkdSRjhhbUNs?=
- =?utf-8?B?a0lqS0NYQ0RlaGY5SzBJZXdjTjNQWjZTVWZvTjN6NWtuN2VxbVhBb0xsTCtG?=
- =?utf-8?B?aGVSNEdLeGREL1RMTk5vWWtjcksyTEFwWUhuU05hRU50dEkyUGdxMlRNSU4v?=
- =?utf-8?B?Tm5ucXp3UU5reXJxVytoNEdTem1KNWVHKzdWcU13aFVodGJQRXMyaisraUhH?=
- =?utf-8?B?QnVLZEdqVjNDdzZMZGQzcnRhUUZ3RTM5NmRQb3hndloyZE9mb1JlYUNDeTlR?=
- =?utf-8?B?NWFobHh4dmlhU2NHNlZta3Bra2tSNnJ4eGdoZ3RRZTZtSDRBYnNYb2VtTGxT?=
- =?utf-8?B?dlJNb0lsYWVTOTlEb0ZZRko3V3FaQ3p1M1R5ZGlwNFFSUGtXeE40VDIrZkQv?=
- =?utf-8?B?Ykl5MzY4Q2tDMHNLMGc3bzQ2cmY2cHp3TElBbXNpVzZIRkc0YnliZG1kTndV?=
- =?utf-8?B?bXdnbjhKemdEc3V1Y3kxRGE5WGptOWNIRXlITU1vYkNpTlIxMENSYnU1UHR3?=
- =?utf-8?B?L3dLVkJjK0p0aHh4NHBSVFZ1aGpsNTdEbWlYZmhtRVZFRWlsZTU5YVh4Mi82?=
- =?utf-8?B?aDJNZDNLV3FMOWR5ZE4wVnJCQXpCUTRvQlJ2TmdlTjRKUHAySEwwZmlWZ2Zk?=
- =?utf-8?B?N3J1cVdSUEh2VlkwVDNFaVBWVk5zQW1ibXo5eU92YzY2TnZ0OTg3dTV5VjhP?=
- =?utf-8?B?cXFVdGcySGxxeERlTmxreFJQM3FYeTdSVG5ONVBROTdha2Q5UElOUkJGVE5S?=
- =?utf-8?B?aG5YVWFjc25aVFJJU1p3M0dnMjIrSGc9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5438.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Yjk1c0FBRTJvSkNlWEtzQUFQOVVteGtuM0dOYTYrOXVoc3pIM2x0cmZGV2dk?=
- =?utf-8?B?TGhzYm5TSzNCQm40cEVVWWZqODhFZk1JL3BEd3pDZDM1Q3VQazdkTnFoQ1gw?=
- =?utf-8?B?MnI0dlcwWXRQVS8vYlBmNTQ5MWp1Zmw0Z2JtWURQWmhUN1NweXZyWXpLNjhB?=
- =?utf-8?B?YmVKMGFGa0JCVVg5ZmZWdTYxS1NTbXp3bWI3cElvK3FGQ3hnNFEvQ2FJRU5E?=
- =?utf-8?B?U2tOZTJCK3ZHOU5sRTg4ZU5Ccm1PMzlWQUprR2RkaVFpVDRSTGxVbmVvTU5q?=
- =?utf-8?B?MS9FZ3Jhb2tkR21pM09wdHNyN0VabFdEVko5R0piZmhxYWQrRjVuQ0pQYkdv?=
- =?utf-8?B?RWFXYnZ6Nk9yQ1grMjM4NEY5aHo3ZklGbTFGT2kvWURlbDh6dWpyaDM4RVBq?=
- =?utf-8?B?azlqSUQ2VnVJRXV3Um8rVjdCdUlGYkVXZG9talpESDRtTmtaK1ZCSkFNWmNW?=
- =?utf-8?B?OE0xazJKeVdRZms5OElJS01FdnZHOHVibWRGWGVUV3luYlluQkt4ck5sUW5k?=
- =?utf-8?B?d2h3Z01SUU4xRUVJZ05uNFZDYlhDM2ROTTlrOXFxai9nRnZlSnRpUzF6alps?=
- =?utf-8?B?TStaWXl5aTdPVUJiR0N1QVYzMGNXQXd4UkdRcy94cEt1Y3lqblUxS2RDZm9D?=
- =?utf-8?B?SWwxQldvK0FSVlFuNGI0SThJamFpSUxjbXpNbTM3VjIraVFXY0VuYkUyMHJr?=
- =?utf-8?B?RlY5bWhNbjRLbXRZZ1FFUmwxcWRCa2ZJTWVXWVNCdkRpUmljdy9ySXR1RjRw?=
- =?utf-8?B?OC9SbzFRTFdBMHJ3SHVoQ3J6Wm5hRWV5aUpocnFvVkl6enh3OC9NdkpMWGNL?=
- =?utf-8?B?ZjFXWXZ3V1V0azZTZkZ6VWFvRXNyUC96Y3VJVUtlSHRObHVYeGNZQ3NyREkz?=
- =?utf-8?B?VDE1NmNwQis2YzgyRldMUHp1K2tUbS9ZRDIrcktaZytZWVcvcE1lblJmWHR3?=
- =?utf-8?B?bEg1c3pIQ3RKZFRQUTlGOEtQYzhCaUtuejRHalJZWVBKeExTdG0zVWdlMWdW?=
- =?utf-8?B?SmhrdHhiNk12bWx4V1hpdmxLNEg2S1pLM1hsdDd1dittY0xKRmlBbkxUY2Fk?=
- =?utf-8?B?ZU5KT2Y3emp3UmYzTldYL1crcEtrMFZXZUpQc050U24rc1dtWmt6N0JkRkd5?=
- =?utf-8?B?ZzZ0ZGRtSGtLTzFjb2k2NEFHS3JwTWNMblAyVEcvUGlCWFEyWXdzbDhtWXFQ?=
- =?utf-8?B?WUN0Z3pRWEJhZGNRQlZMWE9Dc201c3RVMWxFK0xZTEthUVhFb3R4aWdyYlFv?=
- =?utf-8?B?SkpRR2g2M3RTWVpSQ0RjYkR1RU9kU2t1ellMVzRpcUE0Snp6YWRqT3k0WEFT?=
- =?utf-8?B?VHM2YUVoRWI1ZFJJWmVPZWFqMTQ5TUVvRHJoMkdzcjNwbEpCbklrTHZjY0lR?=
- =?utf-8?B?aHFpdi9QNll5K3VDRkphTWpUOEtqZnY0Q29KNVdHZ3piTDJBbHVla3JEUTBW?=
- =?utf-8?B?cDJrS3Jmc2tuYmowajAxMXN2Q2RZeUlrT3N1Y2JCOTVQZUFmYzZWOVZNcWpK?=
- =?utf-8?B?SDFNU1NjTjJlelQxZmtiYWI0a2ZkMEh1MkFVRnJvV096dFFCbVowaitYNDhQ?=
- =?utf-8?B?MU5oWE51c1F6TVhxUUFZa1l2U2ZPNFFGTzhCZmNER3RsaEplMVNVMDFHbm5N?=
- =?utf-8?B?c3VGODh5V3FCYXdhSkUwc0NKV0pjVnZQekpsYkdjWURtdDc2MHlJaEtJRWZY?=
- =?utf-8?B?dWtPRGZQMTFpeFMvaEE5UVhnU3hzZFlia0lrMlFPTHZVS0w1dDZlTE4yQURI?=
- =?utf-8?B?c0JONzk3MC9Say9qbE5aZTdXdUR0OGJ6NUdEVVVaMUpYNXpDL2hIWXpwSU9z?=
- =?utf-8?B?b1Q5TDhETEZCcnRBbnl0Z3lFNlJtZmVVRUpNTUdjYTNqZWN4TlJYcjJxdFho?=
- =?utf-8?B?MWNYaW0yNC9TMHpHWVFrNmU3WnJMNU44Zkx3anRXZXBpVGhoZTFyNnBveVlK?=
- =?utf-8?B?RThHWEpGbG5aSWVYNC9QZUlqcGJmTDBTZXZ2OW9ZY1cxL0crbnBJdkFQdVNF?=
- =?utf-8?B?WGIyUGRNR3JocTQvUXJKaThaWUlQaEhPb0IwR3ZUWHNEYUl5SVRaZU5kWXNi?=
- =?utf-8?B?MlVxQXQ4Y3FpaWtCZExUUzd1cURzTzlsVkJpdUFBbkgvYmc4YVNSQmxUMi9I?=
- =?utf-8?Q?qIl48YzXxOQ8Mac4c+Xkvk1B+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f943ddb-8681-4149-1b55-08dcee1b8057
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5438.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 19:48:27.0644
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1aRwCA0wSSt25Pyj5E2OcchJRykt9Ka08byYQa1Xab5H1K7xPnr7PNxkELTW8QMij2PvUvU+ljINBsmPDQO1xw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5791
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Revert "usb: gadget: composite: fix OS descriptors
+ w_value
+To: Greg KH <greg@kroah.com>, Peter Korsgaard <peter@korsgaard.com>
+CC: "Vodicka, Michal" <michal.vodicka@hidglobal.com>,
+        "balbi@kernel.org"
+	<balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Vrastil, Michal" <michal.vrastil@hidglobal.com>,
+        "stable@kernel.org"
+	<stable@kernel.org>
+References: <AS8PR05MB10129E57ED13CF18746FC4BE18A9B2@AS8PR05MB10129.eurprd05.prod.outlook.com>
+ <5f8cdcac-6927-429a-8ef5-0891c90e8efd@korsgaard.com>
+ <2024100457-able-sake-47fd@gregkh>
+Content-Language: en-US
+From: Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <2024100457-able-sake-47fd@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UCEcIWl562FJnA-3SiVHfupfctBbn1PK
+X-Proofpoint-GUID: UCEcIWl562FJnA-3SiVHfupfctBbn1PK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ clxscore=1011 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=729 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410160154
 
 
 
-On 2024-10-10 08:01, Mathias Nyman wrote:
-> On 10.10.2024 5.23, Mario Limonciello wrote:
->> On 10/9/2024 16:52, Mathias Nyman wrote:
->>> On 3.10.2024 16.47, Mika Westerberg wrote:
->>>> On Thu, Oct 03, 2024 at 08:42:21AM -0500, Mario Limonciello wrote:
->>>>> On 10/3/2024 08:27, Mika Westerberg wrote:
->>>>>> On Thu, Oct 03, 2024 at 08:10:11AM -0500, Mario Limonciello wrote:
->>>>>>> On 10/3/2024 00:47, Mika Westerberg wrote:
->>>>>>>> Hi Harry,
->>>>>>>>
->>>>>>>> On Wed, Oct 02, 2024 at 01:42:29PM -0400, Harry Wentland wrote:
->>>>>>>>> I was checking out the 6.12 rc1 (through drm-next) kernel and found
->>>>>>>>> my system hung at boot. No meaningful message showed on the kernel
->>>>>>>>> boot screen.
->>>>>>>>>
->>>>>>>>> A bisect revealed the culprit to be
->>>>>>>>>
->>>>>>>>> commit f1bfb4a6fed64de1771b43a76631942279851744 (HEAD)
->>>>>>>>> Author: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>>>>>>> Date:   Fri Aug 30 18:26:29 2024 +0300
->>>>>>>>>
->>>>>>>>>        usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface
->>>>>>>>>
->>>>>>>>> A revert of this single patch "fixes" the issue and I can boot again.
->>>>>>>>> The system in question is a Thinkpad T14 with a Ryzen 7 PRO 6850U CPU.
->>>>>>>>> It's running Arch Linux but I doubt that's of consequence.
->>>>>>>>>
->>>>>>>>> lspci output:
->>>>>>>>>        https://gist.github.com/ hwentland/59aef63d9b742b7b64d2604aae9792e0
->>>>>>>>> acpidump:
->>>>>>>>>        https://gist.github.com/ hwentland/4824afc8d712c3d600be5c291f7f1089
->>>>>>>>>
->>>>>>>>> Mario suggested I try modprobe.blacklist=xhci-hcd but that did nothing.
->>>>>>>>> Another suggestion to do usbcore.nousb lets me boot to the desktop
->>>>>>>>> on a kernel with the faulty patch, without USB functionality, obviously.
->>>>>>>>>
->>>>>>>>> I'd be happy to try any patches, provide more data, or run experiments.
->>>>>>>>
->>>>>>>> Do you boot with any device connected?
->>>>>>>>> Second thing that I noticed, though I'm not familiar with AMD hardware,
->>>>>>>> but from your lspci dump, I do not see the PCIe ports that are being
->>>>>>>> used to tunnel PCIe. Does this system have PCIe tunneling disabled
->>>>>>>> somehow?
->>>>>>>
->>>>>>> On some OEM systems it's possible to lock down from BIOS to turn off PCIe
->>>>>>> tunneling, and I agree that looks like the most common cause.
->>>>>>>
->>>>>>> This is what you would see on a system that has tunnels (I checked on my
->>>>>>> side w/ Z series laptop w/ Rembrandt and a dock connected):
->>>>>>>
->>>>>>>              +-03.0
->>>>>>>              +-03.1-[03-32]--
->>>>>>>              +-04.0
->>>>>>>              +-04.1-[33-62]----00.0-[34-62]--+-02.0-[35]----00.0
->>>>>>>              |                               \-04.0-[36-62]--
->>>>>>>
->>>>>>> 00:03.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
->>>>>>> 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
->>>>>>> 00:03.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h
->>>>>>> USB4/Thunderbolt PCIe tunnel [1022:14cd]
->>>>>>> 00:04.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Family
->>>>>>> 17h-19h PCIe Dummy Host Bridge [1022:14b7] (rev 01)
->>>>>>> 00:04.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Family 19h
->>>>>>> USB4/Thunderbolt PCIe tunnel [1022:14cd]
->>>>>>
->>>>>> Okay this is more like what I expected, although probably not the
->>>>>> reason here.
->>>>>>
->>>>>> Are you able to replicate the issue if you disable PCIe tunneling from
->>>>>> the BIOS on your reference system? (Probably not but just in case).
->>>>>
->>>>> I checked on the Lenovo Z13 laptop I have and turned off "USB port" in BIOS
->>>>> setup and this caused the endpoints 3.1 and 4.1 I listed above to disappear
->>>>> but the system still boots up just fine for me on 6.12-rc1.
->>>>
->>>> Okay thanks for checking!
->>>>
->>>>>>>> You don't see anything on the console? It's all blank or it just hangs
->>>>>>>> after some messages?
->>>>>>>
->>>>>>> I guess it is getting stuck on fwnode_find_reference() because it never
->>>>>>> finds the given node?
->>>>>>
->>>>>> Looking at the code, I don't see where it could get stuck. If for some
->>>>>> reason there is no such reference (there is based on the ACPI dump) then
->>>>>> it should not affect the boot. It only matters when power management is
->>>>>> involved.
->>>>>
->>>>> Nothing jumps out to me either.  Maybe this is a situation that Harry can
->>>>> sprinkle a bunch of printk's all over usb_acpi_add_usb4_devlink() to
->>>>> enlighten what's going on (assuming the console output is "working" when
->>>>> this happened).
->>>>
->>>> There are couple of places there that may cause it to crash, I think.
+On 10/4/2024 6:33 AM, Greg KH wrote:
+> On Fri, Sep 13, 2024 at 05:39:21PM +0200, Peter Korsgaard wrote:
+>> On 9/11/24 03:32, Vodicka, Michal wrote:
+>>>> Hmm, very odd. How are you testing this on the host side?
 >>>
->>> Its possible we end up trying to create a device link during usb3 device
->>> "consumer" enumeration before the "supplier" NHI device is properly bound to a driver.
+>>> We just attach the device and check the registry values created by OS
+>>> for our device. As
+>>> HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\USB\VID_XXXX&PID_YYYY&MI_NN\<device_instance>\Device Parameters.
+>>> When it works our extended properties are created there.
 >>>
->>> This is something driver-api/device_link.rst states can cause issues.
+>>> We check the communication using USB analyzer which clearly shows
+>>> wValue bytes are in opposite order than documented. This is SETUP
+>>> packet captured:
 >>>
->>> This could happen if xhci isn't capable of detecting tunneled devices,
->>> but ACPI tables contain all info needed to assume device might be tunneled.
->>> i.e. udev->tunnel_mode == USB_LINK_UNKNOWN.
+>>> Offset  0   1   2   3   4   5   6   7
+>>> 0x000   C1  A1  02  00  05  00  0A  00
 >>>
->>> Harry, could you test if the code below helps?
->>>
->>> diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
->>> index 21585ed89ef8..94c335a7b933 100644
->>> --- a/drivers/usb/core/usb-acpi.c
->>> +++ b/drivers/usb/core/usb-acpi.c
->>> @@ -173,6 +173,13 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
->>>          if (IS_ERR(nhi_fwnode))
->>>                  return 0;
->>>
->>> +       if (!nhi_fwnode->dev || !device_is_bound(nhi_fwnode->dev)) {
->>> +               dev_info(&port_dev->dev, "%s not tunneled as it probed before USB4 Host Interface\n",
+>>> As you can see, this is interface request and out interface number was
+>>> 2 which is in the low byte of wValue.
 >>
->> I'm aware this message is mostly to prove whether this is the actual issue but I do want to say if this patch indeed helps Harry's problem and you keep a message in what goes upstream I don't think this is accurate for all cases.
+>> OK, annoying. I am traveling for conferences this/next week so I cannot
+>> verify here, but presumably you are correct. Do you perhaps have a more
+>> complete capture you can share?
 >>
->> If you have a Pre-OS CM, it might build tunnels and those could be active until the USB4 CM loads and resets them (by the default behavior).
 >>
->> So I think a more accurate message would just be "%s probed before USB4 host interface".
+>>>
+>>>> Could it be that you are running into the WinUSB bug described here:
+>>>
+>>> No. The mentioned bug is in wIndex and out problem is wValue. Also,
+>>> MSOS descriptors are read before WinUsb is even run.
+>>
+>> Ahh yes, indeed.
+>>
+>>
+>>> What Windows version were you using and have you used USB analyzer to
+>>> check the communication?
+>>
+>> It's been a while, but I believe Windows 10. In the end I ended up shuffling
+>> the interfaces around so the one with the MSOS descriptors was interface 0
+>> for better compatibility, so it is possible that something went wrong with
+>> my interface != 0 tests.
+>>
+>> If so, then I am fine with reverting, but we should probably add a comment
+>> explaining that the documentation is wrong.
 > 
-> Makes sense, I'll tune the message in the final patch if this works
+> Ok, Michal, can you add some text tothe changelog and send a v2 for
+> this?
 > 
 
-Apologies for the late response. I was traveling last week.
+HI Michal
 
-This patch does the trick, i.e., no more hangs on boot when
-connected to the Lenovo USB dock.
+I am facing a similar issue where the Windows host is unable to fetch OS descriptor from the device running v6.9 kernel with Android mainline. Tested your patch and it fixes the issue.
 
-Harry
+Host Machine: Windows10 22H2
+Composite device: NCM+Android Debugger (ADB)
+Issue: Windows host is unable to fetch the OS descriptor for ADB interface and hence ADB functionality is failing.
 
+Also checked the USB analyzer output and it shows wValue bytes in opposite order than documented i.e interface number is in the lower bytes (for Extended Properties OS Desc)
 
-> Thanks
-> Mathias
-> 
-
+Thanks
+Elson 
 
