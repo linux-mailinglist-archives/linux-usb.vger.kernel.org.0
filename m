@@ -1,62 +1,63 @@
-Return-Path: <linux-usb+bounces-16316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA229A0B3F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 15:19:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA8F59A0B40
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 15:19:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B35F1C215ED
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:19:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03878B25E73
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8568520C022;
-	Wed, 16 Oct 2024 13:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9053520C028;
+	Wed, 16 Oct 2024 13:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jl+4zy82"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gs5BJ6JK"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D06620A5C6
-	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 13:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626ED20A5C6
+	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 13:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729084720; cv=none; b=CvtN98CpVfGZ/Hm720B9PG4OEUD2RJL7WGuOl4AHXvGuFceUx6jqRttNbEeBC4XIFoTikcOiq8/bShy/8mBuK/XMo31xHQ/p+i06/T/5RVoCk0K0y235Fqp6TzRwd5vnPjcpqcLtk2Uq1El0c2NSl4B1pG3mso0MA7Yb+aJBQ/o=
+	t=1729084723; cv=none; b=WLSffFSeSNT/rYfg02aVArt53N/UaTnlWmqfhdI96NoIZUG3D1quAjjwXtBaDYKu3tzvYaka7GABehWBYot/M5vo0dZFrML+lIXAlAcbIYjDrXZZ0sMqeSFi0M5NVxvF5REsqCijcJVeBl5Nf0stBtYoSpCiT7qc+PnbOK7SWLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729084720; c=relaxed/simple;
-	bh=B7zru37GjlcqEhrpSC8JIzeD5ENalABLQe/L2XFfU2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MppEjUuqe0JoOpJmMSCmYKFaUULkyzve/CWc/nsC8MDMfQ6O5nFhuUomuJYa66CJtBZamn19ID5VU3RrEo17pj9hJj55cPlCBy4LLj3Mavjraz0PIomDBlr14V7ZZ7O27L0L6+plBGtGgITHuX4ayMpbj5cXCZW2RAuJ4E44Nc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jl+4zy82; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1729084723; c=relaxed/simple;
+	bh=jnwXOjUMN/79EuS4b1CaQzceJD3MVxOJQBmfvEUxzPs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rnBl06OmliIMT1bU83krr01uviXMx2ALMlQd3hjHUPEvQqUTFBJVyaJXbR4FsnIJrIqXGZ6BGFMfvu4g99C29ATeExrgufADbcpYcqmlc8rP4IqYVRrYV9A326JCiVSXoGGBOH4eB+1kQNPsW4PbM2PgdVh38oROZDHo+GDoK5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gs5BJ6JK; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729084719; x=1760620719;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=B7zru37GjlcqEhrpSC8JIzeD5ENalABLQe/L2XFfU2M=;
-  b=jl+4zy82ts8dxd+gwGvt7g+1CgR3IcAaW0kIDl5qcRyGy6ejfVTqgI59
-   m0roHaWPy0kVHAmTbwOr1H0Ae2ViGXSMQCOvOAO5KLV6vjoc2XzVhOiC6
-   Q10uKOa9JXGO7eMpO3AXuavl6ugvadotzwVQym/MWu2+mtXdbShNNItg0
-   5ujTGvqZCEQUCk53KnHBHVkqaXRpNI3tPhGLZBRsSqwWZ/FiwphwdlDyn
-   QGuzvY3hULmiz4JNO+7/Brlc+n6xRjaCp5/ZH+R4QvmkVeI+69C3G0aZ2
-   Mpm/SB9RNURpQPtbsbP4rs8fvMmOyVqU3Y2hwm27+ijPyaZ+Ui+rt5EYb
-   A==;
-X-CSE-ConnectionGUID: pDEuCzlARneKccs0lKJ0jw==
-X-CSE-MsgGUID: NrHyNe6YSEOq9EPTSmcRCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39077750"
+  t=1729084722; x=1760620722;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jnwXOjUMN/79EuS4b1CaQzceJD3MVxOJQBmfvEUxzPs=;
+  b=Gs5BJ6JKYbPjhGR0S+erOq9hJvU9u5HPbLKhnfX19+BKQN7kJl7e46yB
+   USj5aqMjCNLiYMGPTGUwEiUuu5Mszk0toBnQyETFTOCpJIdMMWUNhAQhW
+   OkhcGCGyE1hidpOmy3PYjgL4Di7p0cnRrDCI0xoXENJVXgl2DCyajiKcd
+   F8RfnUl9bOvlEw1Sp2e2P/bKqvs3Ysimud9MbKD5FxdPgHjC1kKCDhMgA
+   6Tmij5/XqH5/NaejX55JaPZaaaR4W31F/EnTNp5oH7UtQLjJ+1yb+s/Zb
+   ZGh3OT0oPfQ4LqPCvvf1cRVTDvJtUUBfHnoSy5lkdyVsqUm5Zmz+I2KpY
+   w==;
+X-CSE-ConnectionGUID: eWjJFwPKQIu42+J8ZUZ2wg==
+X-CSE-MsgGUID: 53D5GuTqTiC9tZLSGYEZDQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39077759"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="39077750"
+   d="scan'208";a="39077759"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:18:38 -0700
-X-CSE-ConnectionGUID: wBSJxYIIT7GYxvraqBNdkg==
-X-CSE-MsgGUID: 2Id6rfphTV+QhPClh03ZXQ==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:18:41 -0700
+X-CSE-ConnectionGUID: tgaFx6LoRwiNR+U/RduZ+g==
+X-CSE-MsgGUID: 7BabyPa2QMiN6ebgew/9kA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="83300015"
+   d="scan'208";a="83300037"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 16 Oct 2024 06:18:36 -0700
+  by orviesa004.jf.intel.com with ESMTP; 16 Oct 2024 06:18:39 -0700
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
@@ -65,10 +66,12 @@ Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
 	Benson Leung <bleung@chromium.org>,
 	Jameson Thies <jthies@google.com>,
 	linux-usb@vger.kernel.org
-Subject: [PATCH v4 0/4] usb: typec: USB Modes
-Date: Wed, 16 Oct 2024 16:18:30 +0300
-Message-ID: <20241016131834.898599-1-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v4 1/4] usb: typec: Add attribute file showing the supported USB modes of the port
+Date: Wed, 16 Oct 2024 16:18:31 +0300
+Message-ID: <20241016131834.898599-2-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241016131834.898599-1-heikki.krogerus@linux.intel.com>
+References: <20241016131834.898599-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,62 +80,238 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+This attribute file, named "usb_capability", will show the
+supported USB modes, which are USB 2.0, USB 3.2 and USB4.
+These modes are defined in the USB Type-C (R2.0) and USB
+Power Delivery (R3.0 V2.0) Specifications.
 
-Changed since v3:
-- Fixed the dates in the ABI documentation - Greg
-- Now using sysfs_emit_at() everywhere - Greg
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ Documentation/ABI/testing/sysfs-class-typec | 13 ++++
+ drivers/usb/typec/class.c                   | 81 +++++++++++++++++++++
+ drivers/usb/typec/class.h                   |  1 +
+ include/linux/usb/typec.h                   | 17 +++++
+ 4 files changed, 112 insertions(+)
 
-Changed since v2:
-- Renamed the callbacks - Abhishek
-
-Changed since v1:
-- Leaving the usb_mode file hidden if the usb capabilities are not known - Dmitriy
-- Fixed kernel doc warning - kernel test robot
-
-
-This was originally a proposal of mine that I posted back in 2019 as
-an RFC [1].
-
-The goal is to expose the USB Mode - USB Mode as defined in the USB
-Type-C and USB Power Delivery specifications - to the user via sysfs.
-
-With ports the mode will show the supported and the default USB Mode,
-which is the mode that is (or should be) used in the next Enter_USB
-Message.
-
-With the partners the mode will show similarly the supported USB
-modes, and also the active mode. Changing the active mode should cause
-Data Reset (as described in the USB Power Delivery spec.). This should
-happen even if there is no active USB Mode (in Alternate Mode).
-
-I've modified the original RFC patches based on comments I've received
-(offline). The major change is that I renamed the sysfs attribute file
-for the port from "usb_mode" to "usb_capability".
-
-I'm taking the USB mode in use in the UCSI driver with these, but I
-did not add support for the "Set USB" UCSI command yet. I have no way
-of testing it. Also, I don't really like that we have to construct the
-Enter_USB Message from the abstracted information that UCSI supplies.
-The interface should supply the Enter_USB Message that was used as is.
-
-[1] https://lore.kernel.org/linux-usb/20191230152857.43917-1-heikki.krogerus@linux.intel.com/
-
-Heikki Krogerus (4):
-  usb: typec: Add attribute file showing the supported USB modes of the
-    port
-  usb: typec: Add attribute file showing the USB Modes of the partner
-  usb: typec: ucsi: Supply the USB capabilities to the ports
-  usb: typec: ucsi: Add support for the partner USB Modes
-
- Documentation/ABI/testing/sysfs-class-typec |  27 +++
- drivers/usb/typec/class.c                   | 205 +++++++++++++++++++-
- drivers/usb/typec/class.h                   |   3 +
- drivers/usb/typec/ucsi/ucsi.c               |  16 ++
- drivers/usb/typec/ucsi/ucsi.h               |  10 +
- include/linux/usb/typec.h                   |  22 +++
- 6 files changed, 279 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+index 281b995beb05..3ee757208122 100644
+--- a/Documentation/ABI/testing/sysfs-class-typec
++++ b/Documentation/ABI/testing/sysfs-class-typec
+@@ -149,6 +149,19 @@ Description:
+ 		advertise to the partner. The currently used capabilities are in
+ 		brackets. Selection happens by writing to the file.
+ 
++What:		/sys/class/typec/<port>/usb_capability
++Date:		November 2024
++Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
++Description:	Lists the supported USB Modes. The default USB mode that is used
++		next time with the Enter_USB Message is in brackets. The default
++		mode can be changed by writing to the file when supported by the
++		driver.
++
++		Valid values:
++		- usb2 (USB 2.0)
++		- usb3 (USB 3.2)
++		- usb4 (USB4)
++
+ USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+ 
+ What:		/sys/class/typec/<port>-partner/accessory_mode
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 9262fcd4144f..2f12269d1465 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -219,6 +219,13 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
+ 						char *buf);
+ static DEVICE_ATTR_RO(usb_power_delivery_revision);
+ 
++static const char * const usb_modes[] = {
++	[USB_MODE_NONE] = "none",
++	[USB_MODE_USB2] = "usb2",
++	[USB_MODE_USB3] = "usb3",
++	[USB_MODE_USB4] = "usb4"
++};
++
+ /* ------------------------------------------------------------------------- */
+ /* Alternate Modes */
+ 
+@@ -1289,6 +1296,67 @@ EXPORT_SYMBOL_GPL(typec_unregister_cable);
+ /* ------------------------------------------------------------------------- */
+ /* USB Type-C ports */
+ 
++/**
++ * typec_port_set_usb_mode - Set the operational USB mode for the port
++ * @port: USB Type-C port
++ * @mode: USB Mode (USB2, USB3 or USB4)
++ *
++ * @mode will be used with the next Enter_USB message. Existing connections are
++ * not affected.
++ */
++void typec_port_set_usb_mode(struct typec_port *port, enum usb_mode mode)
++{
++	port->usb_mode = mode;
++}
++EXPORT_SYMBOL_GPL(typec_port_set_usb_mode);
++
++static ssize_t
++usb_capability_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct typec_port *port = to_typec_port(dev);
++	int len = 0;
++	int i;
++
++	for (i = USB_MODE_USB2; i < USB_MODE_USB4 + 1; i++) {
++		if (!(BIT(i - 1) & port->cap->usb_capability))
++			continue;
++
++		if (i == port->usb_mode)
++			len += sysfs_emit_at(buf, len, "[%s] ", usb_modes[i]);
++		else
++			len += sysfs_emit_at(buf, len, "%s ", usb_modes[i]);
++	}
++
++	sysfs_emit_at(buf, len - 1, "\n");
++
++	return len;
++}
++
++static ssize_t
++usb_capability_store(struct device *dev, struct device_attribute *attr,
++		     const char *buf, size_t size)
++{
++	struct typec_port *port = to_typec_port(dev);
++	int ret = 0;
++	int mode;
++
++	if (!port->ops || !port->ops->default_usb_mode_set)
++		return -EOPNOTSUPP;
++
++	mode = sysfs_match_string(usb_modes, buf);
++	if (mode < 0)
++		return mode;
++
++	ret = port->ops->default_usb_mode_set(port, mode);
++	if (ret)
++		return ret;
++
++	port->usb_mode = mode;
++
++	return size;
++}
++static DEVICE_ATTR_RW(usb_capability);
++
+ /**
+  * typec_port_set_usb_power_delivery - Assign USB PD for port.
+  * @port: USB Type-C port.
+@@ -1757,6 +1825,7 @@ static struct attribute *typec_attrs[] = {
+ 	&dev_attr_vconn_source.attr,
+ 	&dev_attr_port_type.attr,
+ 	&dev_attr_orientation.attr,
++	&dev_attr_usb_capability.attr,
+ 	NULL,
+ };
+ 
+@@ -1790,6 +1859,11 @@ static umode_t typec_attr_is_visible(struct kobject *kobj,
+ 		if (port->cap->orientation_aware)
+ 			return 0444;
+ 		return 0;
++	} else if (attr == &dev_attr_usb_capability.attr) {
++		if (!port->cap->usb_capability)
++			return 0;
++		if (!port->ops || !port->ops->default_usb_mode_set)
++			return 0444;
+ 	}
+ 
+ 	return attr->mode;
+@@ -2428,6 +2502,13 @@ struct typec_port *typec_register_port(struct device *parent,
+ 	port->con.attach = typec_partner_attach;
+ 	port->con.deattach = typec_partner_deattach;
+ 
++	if (cap->usb_capability & USB_CAPABILITY_USB4)
++		port->usb_mode = USB_MODE_USB4;
++	else if (cap->usb_capability & USB_CAPABILITY_USB3)
++		port->usb_mode = USB_MODE_USB3;
++	else if (cap->usb_capability & USB_CAPABILITY_USB2)
++		port->usb_mode = USB_MODE_USB2;
++
+ 	device_initialize(&port->dev);
+ 	port->dev.class = &typec_class;
+ 	port->dev.parent = parent;
+diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
+index 7485cdb9dd20..85bc50aa54f7 100644
+--- a/drivers/usb/typec/class.h
++++ b/drivers/usb/typec/class.h
+@@ -55,6 +55,7 @@ struct typec_port {
+ 	enum typec_role			vconn_role;
+ 	enum typec_pwr_opmode		pwr_opmode;
+ 	enum typec_port_type		port_type;
++	enum usb_mode			usb_mode;
+ 	struct mutex			port_type_lock;
+ 
+ 	enum typec_orientation		orientation;
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index 549275f8ac1b..f7edced5b10b 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -87,6 +87,17 @@ enum typec_orientation {
+ 	TYPEC_ORIENTATION_REVERSE,
+ };
+ 
++enum usb_mode {
++	USB_MODE_NONE,
++	USB_MODE_USB2,
++	USB_MODE_USB3,
++	USB_MODE_USB4
++};
++
++#define USB_CAPABILITY_USB2	BIT(0)
++#define USB_CAPABILITY_USB3	BIT(1)
++#define USB_CAPABILITY_USB4	BIT(2)
++
+ /*
+  * struct enter_usb_data - Enter_USB Message details
+  * @eudo: Enter_USB Data Object
+@@ -240,6 +251,7 @@ struct typec_partner_desc {
+  * @port_type_set: Set port type
+  * @pd_get: Get available USB Power Delivery Capabilities.
+  * @pd_set: Set USB Power Delivery Capabilities.
++ * @default_usb_mode_set: USB Mode to be used by default with Enter_USB Message
+  */
+ struct typec_operations {
+ 	int (*try_role)(struct typec_port *port, int role);
+@@ -250,6 +262,7 @@ struct typec_operations {
+ 			     enum typec_port_type type);
+ 	struct usb_power_delivery **(*pd_get)(struct typec_port *port);
+ 	int (*pd_set)(struct typec_port *port, struct usb_power_delivery *pd);
++	int (*default_usb_mode_set)(struct typec_port *port, enum usb_mode mode);
+ };
+ 
+ enum usb_pd_svdm_ver {
+@@ -267,6 +280,7 @@ enum usb_pd_svdm_ver {
+  * @svdm_version: USB PD Structured VDM version if supported
+  * @prefer_role: Initial role preference (DRP ports).
+  * @accessory: Supported Accessory Modes
++ * @usb_capability: Supported USB Modes
+  * @fwnode: Optional fwnode of the port
+  * @driver_data: Private pointer for driver specific info
+  * @pd: Optional USB Power Delivery Support
+@@ -283,6 +297,7 @@ struct typec_capability {
+ 	int			prefer_role;
+ 	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
+ 	unsigned int		orientation_aware:1;
++	u8			usb_capability;
+ 
+ 	struct fwnode_handle	*fwnode;
+ 	void			*driver_data;
+@@ -350,6 +365,8 @@ int typec_port_set_usb_power_delivery(struct typec_port *port, struct usb_power_
+ int typec_partner_set_usb_power_delivery(struct typec_partner *partner,
+ 					 struct usb_power_delivery *pd);
+ 
++void typec_port_set_usb_mode(struct typec_port *port, enum usb_mode mode);
++
+ /**
+  * struct typec_connector - Representation of Type-C port for external drivers
+  * @attach: notification about device removal
 -- 
 2.45.2
 
