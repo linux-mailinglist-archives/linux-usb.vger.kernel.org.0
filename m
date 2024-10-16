@@ -1,214 +1,212 @@
-Return-Path: <linux-usb+bounces-16313-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16314-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 569299A07FD
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 951569A0838
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:19:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 757A61C22759
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 11:04:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F5CE1C203E1
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 11:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B289207216;
-	Wed, 16 Oct 2024 11:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9AC2071F0;
+	Wed, 16 Oct 2024 11:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="e8WH66Tm";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="XI2MQPm+"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fEZ0jHwO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0FB2071F8;
-	Wed, 16 Oct 2024 11:04:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5150A15C147;
+	Wed, 16 Oct 2024 11:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729076652; cv=none; b=dDdpjQpWG89ZM8xyqm3Y5/aRFlaVPN2zd8dtfq/9fqSp78XqwMBkPRNBqRZtV8czxEMUmFg31ETzTQSc2P5gHMilapAOO24k8ZOVBjT8wZZPA67Zf8JkhxCF1IfdBrvJU0uSsCrMUlAd8HJUEDgsBDBHuF884dhJaXnJ44Tabbc=
+	t=1729077577; cv=none; b=DnDUID4xAQgf0OOD6zPuA8KmOtjKSr6FEfAintZXd4p9ghsiyXyGjqRNZNlW5qBWB44MExqk1KeMssPqveI2qrAFRsALtA72qgEJbOR+Z6fUIGmvAVutPd/O1ZW2V0yoM14P6QhMrK8ZEMkfLRRomOv5oujqBdyEybcPrayco+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729076652; c=relaxed/simple;
-	bh=j7uqkslzjH6CNz0CR36nqNmHhVeQAxFmnElgWhQTsrY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=buX2ddmtpyzOwmRbMxzN7eIotT5jEnPeAaUPJ1YEQOI8V/X2dJykXIvMicUnhuf5pg5Vvd0tPNXYtuGawiGXyfUBth/DdOVrTYowf03VyXlIjXFo56pFDx7dqeL46iPNThdXhjJiDNrcWtub3r9NLvzawRY/c6ZrkNs8P6LsfZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=e8WH66Tm; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=XI2MQPm+ reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1729076649; x=1760612649;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UQnSqYqpBfUV+6/cvpHKfQx6TgwRy+1JDtpQMvdUWAY=;
-  b=e8WH66TmofbeTntJ5onHovsqJLOEu0vQu3OBsaJ210n76uIggIsRiCGI
-   4Vm0mHRjH1en0Z5No9zh3LGh8eKJ4yzYBqVa5PHp3xh7OreBpn9ipbJHO
-   vNOUy74Op6gULUBXNgyxwI4dwDXqAwu+943qAeJ52vDbEEAI8HeTogCA/
-   e9kRjPu8XTsID/d6KS/eB+vo0Cvz+7FOpRN6JDUe3dnDm7b8IfnngPted
-   k0X34tFXhyTAs/ZUkCjebDki1KL0M3ua7Gg42P9vpdMUc+HCLRXXZqDa6
-   IIPovpa3AjbUlMCL8B+mVbYGoJ8Hdh6bog4JImGSzw/xJ63x+IXMEfy/q
-   A==;
-X-CSE-ConnectionGUID: 4/UoR85oRzeG0PblB3UK6Q==
-X-CSE-MsgGUID: YU0fFkq7QwqVGtD9L/F5uw==
-X-IronPort-AV: E=Sophos;i="6.11,207,1725314400"; 
-   d="scan'208";a="39492910"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 16 Oct 2024 13:04:00 +0200
-X-CheckPoint: {670F9DA0-E-21611FC3-DAD22B0C}
-X-MAIL-CPID: 7354DE9C6207C2B376A359CA9647EA1D_4
-X-Control-Analysis: str=0001.0A682F1E.670F9DA0.00D7,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3D9C116853D;
-	Wed, 16 Oct 2024 13:03:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1729076635;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=UQnSqYqpBfUV+6/cvpHKfQx6TgwRy+1JDtpQMvdUWAY=;
-	b=XI2MQPm+Mb/NIn/vSlonjdjH9uLgzitytNffKH4fG82nU/9taJXmCN4sJ/t2FzcSPgaNP4
-	XRgidS1bmOo2sLA+p8MAGqjA6j9wAOU+rM1ufpkxT5Fi3kpMZBlICZToZPblxy5kISnejT
-	ltUEKOB2f+q3JYvaP1ebe561GvmJyVrygQOXO9swUbWkzQ34dGqAXse3nJRhBefmPya+Re
-	oV3q2cbZPzVXOST2dHeS/hT7WgCLUsLAyhVsnV4hjbpAykUth8RHN/FBPVz+e4/02ga163
-	qA6ialNJio94VChL6mUXQGKZ+GFHW72i8KIq3tt8M47szxmlG/XhFeFCk41BhQ==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, gregkh@linuxfoundation.org, peter.chen@kernel.org, herve.codina@bootlin.com, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, jun.li@nxp.com
-Subject: Re: [PATCH v8 2/3] arm64: dts: imx95: add usb3 related nodes
-Date: Wed, 16 Oct 2024 13:03:53 +0200
-Message-ID: <3252989.5fSG56mABF@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20241016104140.rjmszgplmql4hwrs@hippo>
-References: <20241015111018.2388913-1-xu.yang_2@nxp.com> <22464382.EfDdHjke4D@steina-w> <20241016104140.rjmszgplmql4hwrs@hippo>
+	s=arc-20240116; t=1729077577; c=relaxed/simple;
+	bh=FVtPvUPf+eIervD2QjqfFImVj/2vV5aXuTQ4YdK4MKY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=udbpgkoPYqKLpp1bvU+fYqTMxebIteLmUU3Jd9ge7VmlMe9UQFtdI+OQZr8eoUZdaS2htUP4dwbH/HDwfaRFUyRN/bvcmb/NUj7iMIo9+0IFnMdeyNAXPEip92BUvjJbt+eSegULsVE4m5V6Qs1ba2MdUWtXMgk/Z/RAmbtBK3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fEZ0jHwO; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49GAIHZw011617;
+	Wed, 16 Oct 2024 11:19:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=qMP0Mu8JZbyT1a4ltNfBCk
+	sjG5mXh/8pQFvUu3S9POs=; b=fEZ0jHwOPCfFzHkhHqe4D8l+cdJ+qXtUbv5HDh
+	53hVnWZJcT/cJaCSmEMD7iv80jleYJXOO4kx7TQaDnGk8Ju4RjRtv/a5TnaYjHhG
+	x8yyMA5wYKYWbL/W+GxtqBeJg9wb2Q0WhqySYXy2aVjuWYMNz6vDcA6SiAO6/lQf
+	8aijaAMyAXXSuMDEYuMk5/L8vISLElDIGAZriYiQPF49XwO/equEA7zxEs+B16C4
+	JVqyRAk1o2F6dNi/dvaAOtjBHLcaw2Fgin/iDYqky3CebboM/aySE58dGmWlUHEV
+	IDfuokQDeM61tM6zOtkqXA/Vx+XJpVFI72pJl8Cn2xE6CXqw==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42abm5g5c3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 11:19:27 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49GBJQw5003553
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 11:19:26 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 16 Oct 2024 04:19:18 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Jing Leng <jleng@ambarella.com>, Felipe Balbi
+	<balbi@kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Daniel Scally
+	<dan.scally@ideasonboard.com>
+CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar <quic_akakum@quicinc.com>
+Subject: [PATCH v6] usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
+Date: Wed, 16 Oct 2024 16:49:04 +0530
+Message-ID: <20241016111904.11375-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: qIIjMZ7WK2Q7GbA-_AmQiRXRQUIEj6KM
+X-Proofpoint-GUID: qIIjMZ7WK2Q7GbA-_AmQiRXRQUIEj6KM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ clxscore=1011 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410160070
 
-Hi,
+The current logic is rigid, setting num_fifos to fixed values.
+3 for any maxburst greater than 1.
+tx_fifo_resize_max_num for maxburst greater than 6.
+Additionally, it did not differentiate much between bulk and
+isochronous transfers, applying similar logic to both.
 
-Am Mittwoch, 16. Oktober 2024, 12:41:40 CEST schrieb Xu Yang:
-> On Wed, Oct 16, 2024 at 10:53:50AM +0200, Alexander Stein wrote:
-> > Hi,
-> >=20
-> > another thing I just noticed.
-> >=20
-> > Am Dienstag, 15. Oktober 2024, 13:10:17 CEST schrieb Xu Yang:
-> > > Add usb3 phy and controller nodes for imx95.
-> > >=20
-> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > >=20
-> > > ---
-> > > Changes in v2:
-> > >  - no changes
-> > > Changes in v3:
-> > >  - no changes
-> > > Changes in v4:
-> > >  - reorder nodes
-> > > Changes in v5:
-> > >  - no changes
-> > > Changes in v6:
-> > >  - rebase to latest
-> > > Changes in v7:
-> > >  - no changes
-> > > Changes in v8:
-> > >  - no changes
-> > > ---
-> > >  arch/arm64/boot/dts/freescale/imx95.dtsi | 43 ++++++++++++++++++++++=
-++
-> > >  1 file changed, 43 insertions(+)
-> > >=20
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx95.dtsi b/arch/arm64/bo=
-ot/dts/freescale/imx95.dtsi
-> > > index 03661e76550f..e3faa8462759 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx95.dtsi
-> > > +++ b/arch/arm64/boot/dts/freescale/imx95.dtsi
-> > > @@ -1473,6 +1473,49 @@ smmu: iommu@490d0000 {
-> > >  			};
-> > >  		};
-> > > =20
-> > > +		usb3: usb@4c010010 {
-> > > +			compatible =3D "fsl,imx95-dwc3", "fsl,imx8mp-dwc3";
-> > > +			reg =3D <0x0 0x4c010010 0x0 0x04>,
-> > > +			      <0x0 0x4c1f0000 0x0 0x20>;
-> > > +			clocks =3D <&scmi_clk IMX95_CLK_HSIO>,
-> > > +				 <&scmi_clk IMX95_CLK_32K>;
-> > > +			clock-names =3D "hsio", "suspend";
-> > > +			interrupts =3D <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
-> > > +			#address-cells =3D <2>;
-> > > +			#size-cells =3D <2>;
-> > > +			ranges;
-> > > +			power-domains =3D <&scmi_devpd IMX95_PD_HSIO_TOP>;
-> > > +			dma-ranges =3D <0x0 0x0 0x0 0x0 0x10 0x0>;
-> > > +			status =3D "disabled";
-> > > +
-> > > +			usb3_dwc3: usb@4c100000 {
-> > > +				compatible =3D "snps,dwc3";
-> > > +				reg =3D <0x0 0x4c100000 0x0 0x10000>;
-> > > +				clocks =3D <&scmi_clk IMX95_CLK_HSIO>,
-> > > +					 <&scmi_clk IMX95_CLK_24M>,
-> > > +					 <&scmi_clk IMX95_CLK_32K>;
-> > > +				clock-names =3D "bus_early", "ref", "suspend";
-> > > +				interrupts =3D <GIC_SPI 175 IRQ_TYPE_LEVEL_HIGH>;
-> > > +				phys =3D <&usb3_phy>, <&usb3_phy>;
-> > > +				phy-names =3D "usb2-phy", "usb3-phy";
-> > > +				snps,gfladj-refclk-lpm-sel-quirk;
-> > > +				snps,parkmode-disable-ss-quirk;
-> > > +				iommus =3D <&smmu 0xe>;
-> > > +			};
-> > > +		};
-> > > +
-> > > +		usb3_phy: phy@4c1f0040 {
-> > > +			compatible =3D "fsl,imx95-usb-phy", "fsl,imx8mp-usb-phy";
-> > > +			reg =3D <0x0 0x4c1f0040 0x0 0x40>,
-> > > +			      <0x0 0x4c1fc000 0x0 0x100>;
-> > > +			clocks =3D <&scmi_clk IMX95_CLK_HSIO>;
-> > > +			clock-names =3D "phy";
-> > > +			#phy-cells =3D <0>;
-> > > +			power-domains =3D <&scmi_devpd IMX95_PD_HSIO_TOP>;
-> > > +			orientation-switch;
-> > > +			status =3D "disabled";
-> >=20
-> > I got these dtbs check warnings:
-> >=20
-> > arch/arm64/boot/dts/freescale/imx95-tqma9596sa-mb-smarc-2.dtb:
-> >  phy@4c1f0040: 'oneOf' conditional failed, one must be fixed:
-> >         'port' is a required property
-> >         'ports' is a required property
-> >         from schema $id: http://devicetree.org/schemas/phy/fsl,imx8mq-u=
-sb-phy.yaml#
-> > arch/arm64/boot/dts/freescale/imx95-tqma9596sa-mb-smarc-2.dtb:=20
-> >  phy@4c1f0040: Unevaluated properties are not allowed ('orientation-swi=
-tch' was unexpected)
-> >         from schema $id: http://devicetree.org/schemas/phy/fsl,imx8mq-u=
-sb-phy.yaml#
->=20
-> Are you checking on usb tree? You need below two dt-binding patch.
->=20
->  - dt-bindings: usb: dwc3-imx8mp: add compatible string for imx95
->  - dt-bindings: phy: imx8mq-usb: add compatible "fsl,imx95-usb-phy"
+The updated logic is more flexible and specifically designed to meet
+the unique requirements of both bulk and isochronous transfers. We
+have made every effort to satisfy all needs and requirements, verified
+on our specific platform and application.
 
-Yes, these patches are already in linux-next. I'm on next-20241016.
+Bulk Transfers: Ensures that num_fifos is optimized by considering both
+the maxburst and DT property "tx-fifo-max-num" for super speed and
+above. For high-speed and below bulk endpoints, a 2K TxFIFO allocation
+is used to meet efficient data transfer needs, considering
+FIFO-constrained platforms.
 
-> >=20
-> >=20
-> > How am I supposed to specify a port when the usb3 is used in host mode,=
- thus
-> > no USB Type-C connector and no 'port' OF-graph accordingly?
->=20
-> Host-only mode with Type-A connector? No Typec-C connector?
-> Sorry, I do not get your meaning.
+Isochronous Transfers: Ensures that num_fifos is sufficient by
+considering the maximum packet multiplier for HS and below and maxburst
+for Super-speed and above eps, along with a constraint with the DT
+property "tx-fifo-max-num".
 
-Yes, no Type-C connector. Actually not even a Type-A as there is an
-on-board USB hub attached to this host.
+This change aims to optimize the allocation of Tx FIFOs for both bulk
+and isochronous endpoints, potentially improving data transfer efficiency
+and overall performance. It also enhances support for all use cases,
+which can be tweaked with DT parameters and the endpoint’s maxburst and
+maxpacket. This structured approach ensures that the appropriate number
+of FIFOs is allocated based on the endpoint type and USB speed.
 
-Best regards,
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+---
+Changes for v6:
+The code has been refactored to replace multiple if checks with a
+switch-case structure based on the USB speed. This change improves
+readability and maintainability by clearly defining behavior for
+different USB speeds. This structured approach ensures that the
+appropriate number of FIFOs is allocated based on the endpoint type
+and USB speed.
 
+Changes for v5:
+Update Calculation for HS and below bulk and isoc eps based on
+suggestion and fixed at 2k for bulk eps considering fifo constrained
+platforms.
+
+Changes for v4:
+Updated commit message as per review comments to clarify that it has
+been tested on specific platforms only and tried best to match all
+expectations.
+
+Changes for v3:
+Redefine logic for resizing tx fifos,added check based on  operating
+speed and used maxp for HS and maxburst for SS  and defined max
+allocation based on dt property.
+
+Changes for v2:
+Redefine logic for resizing tx fifos, handled fifo based on  minimum
+of maxp and maxburts.
+
+Changes for v1:
+Added additional condition to allocate tx fifo for hs isoc  eps,
+keeping the other resize logic same
+---
+ drivers/usb/dwc3/gadget.c | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 10178e5eda5a..dc62d0626e53 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -771,15 +771,30 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 
+ 	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+ 
+-	if ((dep->endpoint.maxburst > 1 &&
+-	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
++	switch (dwc->gadget->speed) {
++	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER:
++	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+ 	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
+-		num_fifos = 3;
+-
+-	if (dep->endpoint.maxburst > 6 &&
+-	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+-	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+-		num_fifos = dwc->tx_fifo_resize_max_num;
++		num_fifos = min_t(unsigned int,
++				  dep->endpoint.maxburst,
++				  dwc->tx_fifo_resize_max_num);
++		break;
++	case USB_SPEED_HIGH:
++	if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
++		num_fifos = min_t(unsigned int,
++				  usb_endpoint_maxp_mult(dep->endpoint.desc) + 1,
++				  dwc->tx_fifo_resize_max_num);
++		break;
++	}
++		fallthrough;
++	case USB_SPEED_FULL:
++	if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
++		num_fifos = 2;
++		break;
++	default:
++		break;
++	}
+ 
+ 	/* FIFO size for a single buffer */
+ 	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
+-- 
+2.17.1
 
 
