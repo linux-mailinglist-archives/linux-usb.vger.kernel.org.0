@@ -1,212 +1,169 @@
-Return-Path: <linux-usb+bounces-16314-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16315-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 951569A0838
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 13:19:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1CB89A0ABC
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 14:51:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F5CE1C203E1
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 11:19:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1394B283A3
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2024 12:51:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9AC2071F0;
-	Wed, 16 Oct 2024 11:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4C1208D9A;
+	Wed, 16 Oct 2024 12:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fEZ0jHwO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHYlyTJW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5150A15C147;
-	Wed, 16 Oct 2024 11:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546D9208D96
+	for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 12:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729077577; cv=none; b=DnDUID4xAQgf0OOD6zPuA8KmOtjKSr6FEfAintZXd4p9ghsiyXyGjqRNZNlW5qBWB44MExqk1KeMssPqveI2qrAFRsALtA72qgEJbOR+Z6fUIGmvAVutPd/O1ZW2V0yoM14P6QhMrK8ZEMkfLRRomOv5oujqBdyEybcPrayco+U=
+	t=1729083096; cv=none; b=dAFe+svcJ2XqwpFyb3VCODplXI7vCSMx3eYjHSJcbCZvUoJuOiQfWRGtaEx3vyC5bywNW3MOtCg5+Yxo2EtyxiEppuxe4FrWJIvUZo9gg4d32eRF2y630U4RP3GSBfGauBbvAwhqRDxQdAxMv4l7NviWbYhe8DLRbdYkYGp3G4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729077577; c=relaxed/simple;
-	bh=FVtPvUPf+eIervD2QjqfFImVj/2vV5aXuTQ4YdK4MKY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=udbpgkoPYqKLpp1bvU+fYqTMxebIteLmUU3Jd9ge7VmlMe9UQFtdI+OQZr8eoUZdaS2htUP4dwbH/HDwfaRFUyRN/bvcmb/NUj7iMIo9+0IFnMdeyNAXPEip92BUvjJbt+eSegULsVE4m5V6Qs1ba2MdUWtXMgk/Z/RAmbtBK3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fEZ0jHwO; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49GAIHZw011617;
-	Wed, 16 Oct 2024 11:19:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=qMP0Mu8JZbyT1a4ltNfBCk
-	sjG5mXh/8pQFvUu3S9POs=; b=fEZ0jHwOPCfFzHkhHqe4D8l+cdJ+qXtUbv5HDh
-	53hVnWZJcT/cJaCSmEMD7iv80jleYJXOO4kx7TQaDnGk8Ju4RjRtv/a5TnaYjHhG
-	x8yyMA5wYKYWbL/W+GxtqBeJg9wb2Q0WhqySYXy2aVjuWYMNz6vDcA6SiAO6/lQf
-	8aijaAMyAXXSuMDEYuMk5/L8vISLElDIGAZriYiQPF49XwO/equEA7zxEs+B16C4
-	JVqyRAk1o2F6dNi/dvaAOtjBHLcaw2Fgin/iDYqky3CebboM/aySE58dGmWlUHEV
-	IDfuokQDeM61tM6zOtkqXA/Vx+XJpVFI72pJl8Cn2xE6CXqw==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42abm5g5c3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Oct 2024 11:19:27 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49GBJQw5003553
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Oct 2024 11:19:26 GMT
-Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 16 Oct 2024 04:19:18 -0700
-From: Akash Kumar <quic_akakum@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Jing Leng <jleng@ambarella.com>, Felipe Balbi
-	<balbi@kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>,
-        Daniel Scally
-	<dan.scally@ideasonboard.com>
-CC: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Akash Kumar <quic_akakum@quicinc.com>
-Subject: [PATCH v6] usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
-Date: Wed, 16 Oct 2024 16:49:04 +0530
-Message-ID: <20241016111904.11375-1-quic_akakum@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1729083096; c=relaxed/simple;
+	bh=BEtTK4azvAPR8a5g57xTdtbn93n1Q4PfNrmtQvKQLj0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ocftOR/gxBscMuyXXyduphLZX7paA9Si23VUFWWJvBCWsT6l1J3YCpmzhO9MiiQvnUWyvVe8B/9AefjjLM9x1H0KoSB/PQLgl+dbmRhW48ECQnKMHa5k5UDZ52Wtj9vwC5FgxgBpY2uS67Il+qC6DDa650GX7abpc6DIiFy3mpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHYlyTJW; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d5689eea8so3233623f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2024 05:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729083092; x=1729687892; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h67SeTWZnAw2r6MS8kpA655AhW0wef7/mgwfLB1NXto=;
+        b=BHYlyTJW6FUEVAASjiQ9fDBBAtMIbDuCsu9qCAaaZVNf8it2rd10e/GBJE9rimkEuo
+         NODDdYfgTRMtete2+/Wj9VkwmtXO8rqjfsBAM41FpTyQYw1RZXrGBCF4/o5RlrgqMZcg
+         DmyCpAC+Svmn4rtet35ns21ko1j64o7zg8L0mAgfwxQhd8hKCzEsOwSBehh9DTZta+Ec
+         9buybq1LujmBqRwf+8pfJHLjSW66Yj9K2eZJOxUVuiA354IFAFp+CLqw7BjpS9touIxb
+         lVOTXQ+ydcyCr8hm3to6Dx5q/L0TdaNSNNezGIW3nK2WUX1baXWLSIZUpltxlFi3QKsX
+         LU/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729083092; x=1729687892;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h67SeTWZnAw2r6MS8kpA655AhW0wef7/mgwfLB1NXto=;
+        b=bi2gI1vYjsk/W/Pwljib74sFLGl5AoDypC5kUHxuK6YJtfEVFfQOWtC54DwyVzhMbH
+         sv13zPU0Gboa6egQXKxai+cxTsKBJH1gP/NeFQ32Sgx2OFQARXldqQijKBat/QkopaRm
+         Km7bP7hOBYKcCHZ+5z4Eo9XfVYahs1XmMG8bbJv5jXC3CdvJbytVR77xpD/MGQJFXw5Q
+         c4ApXfuiD1FUYxx3b1/lgkOxZqUatu9FWtQv+aYQWd9ppHDVaQBZAvLKTpb4KxSW34X0
+         H74zeeglJyw/ugqM56SYY3XR+Pm5+tjSh56wGYX8RlcwTUGgZsUAvdlSRPMAwogZEpaw
+         VO6g==
+X-Gm-Message-State: AOJu0Yw1Z1O3r2EKQzJnZG5uPAl0Lyu2XCrUNhkvM8w/fQDS/BIQfq9Y
+	qMQk+H8wt5OdCZ08YfxQzHT0uD2Fu7+rZKmi5cpgKs7RZDye7riS
+X-Google-Smtp-Source: AGHT+IHaC3nt9ONpIplR9HLU5Vpi75fQxFFxLgck2sziHQaqoskprZk0pVSier5Ow8mw/MgxldHztQ==
+X-Received: by 2002:adf:a413:0:b0:37d:5338:8733 with SMTP id ffacd0b85a97d-37d86d3cb35mr2193415f8f.37.1729083092216;
+        Wed, 16 Oct 2024 05:51:32 -0700 (PDT)
+Received: from fedora ([78.211.67.14])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4313f56eab2sm48258725e9.26.2024.10.16.05.51.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2024 05:51:29 -0700 (PDT)
+Date: Wed, 16 Oct 2024 14:51:24 +0200
+From: Fabio Luongo <f.langufo.l@gmail.com>
+To: Greg KH <greg@kroah.com>
+Cc: linux-usb@vger.kernel.org, oneukum@suse.com
+Subject: Re: [PATCH] Add support for JULABO PRESTO to cdc_acm
+Message-ID: <Zw-2m7gQTNEkovBi@fedora>
+References: <20240927134404.110284-1-f.langufo.l@gmail.com>
+ <2024101624-stimulate-unbend-89a8@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qIIjMZ7WK2Q7GbA-_AmQiRXRQUIEj6KM
-X-Proofpoint-GUID: qIIjMZ7WK2Q7GbA-_AmQiRXRQUIEj6KM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- clxscore=1011 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410160070
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024101624-stimulate-unbend-89a8@gregkh>
 
-The current logic is rigid, setting num_fifos to fixed values.
-3 for any maxburst greater than 1.
-tx_fifo_resize_max_num for maxburst greater than 6.
-Additionally, it did not differentiate much between bulk and
-isochronous transfers, applying similar logic to both.
+On Wed, Oct 16, 2024 at 10:11:15AM +0200, Greg KH wrote:
+> On Fri, Sep 27, 2024 at 03:44:04PM +0200, Fabio Luongo wrote:
+> > JULABO PRESTO chillers on Windows use the usbser.sys driver
+> > for communication, so the same functionality should be achievable
+> > on Linux using the cdc_acm driver.
+> > 
+> > However, cdc_acm does not accomodate the quirkness of these devices,
+> > as they fail normal probing ("Zero length descriptor references"),
+> > but they also feature a single USB interface instead of two.
+> > 
+> > This patch extends the effect of the `NO_UNION_NORMAL` quirk
+> > to cover the features of JULABO PRESTO devices.
+> > 
+> > Signed-off-by: Fabio Luongo <f.langufo.l@gmail.com>
+> > ---
+> >  drivers/usb/class/cdc-acm.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+> > index 605fea461102..d77c84c6e878 100644
+> > --- a/drivers/usb/class/cdc-acm.c
+> > +++ b/drivers/usb/class/cdc-acm.c
+> > @@ -1210,6 +1210,8 @@ static int acm_probe(struct usb_interface *intf,
+> >  	if (quirks == NO_UNION_NORMAL) {
+> >  		data_interface = usb_ifnum_to_if(usb_dev, 1);
+> >  		control_interface = usb_ifnum_to_if(usb_dev, 0);
+> > +		if (!data_interface)
+> > +			data_interface = control_interface;
+> 
+> That feels wrong, how can we send data out both for different things?
 
-The updated logic is more flexible and specifically designed to meet
-the unique requirements of both bulk and isochronous transfers. We
-have made every effort to satisfy all needs and requirements, verified
-on our specific platform and application.
+My understanding is that we still have the correct number of (i.e. 3) endpoints
+as in the case of properly implemented CDC devices, except they all belong
+to the same interface, instead of being split across two,
+so it should only be a matter of identifying which EP is for control and
+which EPs are for data.
 
-Bulk Transfers: Ensures that num_fifos is optimized by considering both
-the maxburst and DT property "tx-fifo-max-num" for super speed and
-above. For high-speed and below bulk endpoints, a 2K TxFIFO allocation
-is used to meet efficient data transfer needs, considering
-FIFO-constrained platforms.
+Indeed, I think this is what the current driver does via the call to
+`usb_find_common_endpoints`.
 
-Isochronous Transfers: Ensures that num_fifos is sufficient by
-considering the maximum packet multiplier for HS and below and maxburst
-for Super-speed and above eps, along with a constraint with the DT
-property "tx-fifo-max-num".
+> 
+> >  		/* we would crash */
+> >  		if (!data_interface || !control_interface)
+> >  			return -ENODEV;
+> > @@ -1284,6 +1286,8 @@ static int acm_probe(struct usb_interface *intf,
+> >  	if (data_intf_num != call_intf_num)
+> >  		dev_dbg(&intf->dev, "Separate call control interface. That is not fully supported.\n");
+> >  
+> > +skip_normal_probe:
+> > +
+> >  	if (control_interface == data_interface) {
+> >  		/* some broken devices designed for windows work this way */
+> >  		dev_warn(&intf->dev,"Control and data interfaces are not separated!\n");
+> > @@ -1303,8 +1307,6 @@ static int acm_probe(struct usb_interface *intf,
+> >  		goto made_compressed_probe;
+> >  	}
+> >  
+> > -skip_normal_probe:
+> 
+> Why the movement of the goto tag?
 
-This change aims to optimize the allocation of Tx FIFOs for both bulk
-and isochronous endpoints, potentially improving data transfer efficiency
-and overall performance. It also enhances support for all use cases,
-which can be tweaked with DT parameters and the endpoint’s maxburst and
-maxpacket. This structured approach ensures that the appropriate number
-of FIFOs is allocated based on the endpoint type and USB speed.
+Since `NO_UNION_NORMAL` allows for collapsed interfaces for data and control
+after these changes, the label was moved to the `if`
+that stands just above its current position,
+where the case `control_interface == data_interface` is handled.
 
-Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
----
-Changes for v6:
-The code has been refactored to replace multiple if checks with a
-switch-case structure based on the USB speed. This change improves
-readability and maintainability by clearly defining behavior for
-different USB speeds. This structured approach ensures that the
-appropriate number of FIFOs is allocated based on the endpoint type
-and USB speed.
+As a general comment, my understanding is that these changes
+should not affect the devices which the driver already supports:
+the `data_interface = control_interface` assignment is done only
+as a last attempt to save a probing that would fail with ENODEV;
+the extra `if` from the `goto` label movement should not get executed
+by the currently supported devices, as they should have distinct interfaces.
 
-Changes for v5:
-Update Calculation for HS and below bulk and isoc eps based on
-suggestion and fixed at 2k for bulk eps considering fifo constrained
-platforms.
 
-Changes for v4:
-Updated commit message as per review comments to clarify that it has
-been tested on specific platforms only and tried best to match all
-expectations.
 
-Changes for v3:
-Redefine logic for resizing tx fifos,added check based on  operating
-speed and used maxp for HS and maxburst for SS  and defined max
-allocation based on dt property.
+Thanks,
 
-Changes for v2:
-Redefine logic for resizing tx fifos, handled fifo based on  minimum
-of maxp and maxburts.
+Fabio L
 
-Changes for v1:
-Added additional condition to allocate tx fifo for hs isoc  eps,
-keeping the other resize logic same
----
- drivers/usb/dwc3/gadget.c | 31 +++++++++++++++++++++++--------
- 1 file changed, 23 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 10178e5eda5a..dc62d0626e53 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -771,15 +771,30 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
- 
- 	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
- 
--	if ((dep->endpoint.maxburst > 1 &&
--	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
-+	switch (dwc->gadget->speed) {
-+	case USB_SPEED_SUPER_PLUS:
-+	case USB_SPEED_SUPER:
-+	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
- 	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
--		num_fifos = 3;
--
--	if (dep->endpoint.maxburst > 6 &&
--	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
--	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
--		num_fifos = dwc->tx_fifo_resize_max_num;
-+		num_fifos = min_t(unsigned int,
-+				  dep->endpoint.maxburst,
-+				  dwc->tx_fifo_resize_max_num);
-+		break;
-+	case USB_SPEED_HIGH:
-+	if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
-+		num_fifos = min_t(unsigned int,
-+				  usb_endpoint_maxp_mult(dep->endpoint.desc) + 1,
-+				  dwc->tx_fifo_resize_max_num);
-+		break;
-+	}
-+		fallthrough;
-+	case USB_SPEED_FULL:
-+	if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
-+		num_fifos = 2;
-+		break;
-+	default:
-+		break;
-+	}
- 
- 	/* FIFO size for a single buffer */
- 	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
--- 
-2.17.1
-
+> 
+> thanks,
+> 
+> greg k-h
 
