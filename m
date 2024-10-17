@@ -1,120 +1,94 @@
-Return-Path: <linux-usb+bounces-16352-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16353-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B2F39A1ACE
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 08:40:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91A019A1AD3
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 08:40:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93BEEB256C1
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 06:40:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCBECB257EC
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 06:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4731A189906;
-	Thu, 17 Oct 2024 06:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827951991C3;
+	Thu, 17 Oct 2024 06:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1xMEpS7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="qL1dy/+S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A5C18E04E;
-	Thu, 17 Oct 2024 06:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FB015FD16;
+	Thu, 17 Oct 2024 06:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729147218; cv=none; b=XS6kmMcfYBuKdxmoGqoQZ3NMdxmXJ8gIUEj2SlKcmW0gFa/1qY3nprfEsJPvB43s4Hhjik7BogSj6oKJMNVIAc1tAET8MbNfNzM7sO6BW6bG14/bok89DQ33uB7paKPwqzwrWZJNrUUtczOFUSWhU87xswQbKGIe+NLXL/VJZ4U=
+	t=1729147223; cv=none; b=N35cQQtpbTcVdgSxHLBraDR+TGFyQRcmiAD9wH4MHA4B+x/nFyofrTBA5XFQ/mzQYMjWiR06FIYqOW/LuHtzpCWUm5yW4VUzlEg9qrA/zycHsf3u4kddMbv98NdPIkXlQchFc3AIfxZR2VBrFB9t0hMloem64+gyfM799oN3ZGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729147218; c=relaxed/simple;
-	bh=2YyJyIHpbw/ARRGDInFV/7E3zxs45BxhiW+EcM9tHQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=t/TtlwyTCrQnx/CjqNdIsVjkET2zmlT7MQHxsZQ6UaWGFmiDmjAhYel2WzTScUlhGyqmyErbgAash8l5kpDt/2dLhcHFOpLLeyJOm0B+iki9VDbEMzSXEcxfkPDeMl277fnC7sUHxIAjqYFHWhHztZkrQB9eBfDDfN60jjZhHYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B1xMEpS7; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb599aac99so6324091fa.1;
-        Wed, 16 Oct 2024 23:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729147215; x=1729752015; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PLE6veHA1Kkn15tlyXnPmyzYpEI6mKCKEODo76UdfKc=;
-        b=B1xMEpS71W8FbFdTQGYvehFrM9LRhroZ4YHcPZHGa++/hRdKrcdfIIENyXp8ycqxFG
-         IyANjRdKkmEp9qUQj6iOsjj+360R5jE7O/1731kokit1Tgif8yuZDRmaLf2yFHpSYZ7N
-         IVsIMPBGubRNnc17z+xVDs+WNj9PtDKogL3w36fejJ1IRRyaG9O9NaWjWjB10WKiZXsx
-         isWHXSj6TAWqsZjHINPhpbknQHYX4OQDThqfLRHCDcJWNEYH7FkZc4ZCasQMsyNTpBGV
-         QgvCW0+9OxcQbHOUG6fBjURm2Q+66fXAvL62SLPuF7Cx9HUNUHQX0nejSiebdKXeoTPL
-         q8Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729147215; x=1729752015;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PLE6veHA1Kkn15tlyXnPmyzYpEI6mKCKEODo76UdfKc=;
-        b=tMwsdHbcT3fyu1Yeze8P8ItVRSeZg5dq7rOrxoaM37kxS6PRFaQyawMbhNg8D6YoNH
-         nuW5LI8dlFsnNKur91vQzfu8Yjr/2sEiWg3FOKSx3r4O53B5BzHY1l2d+ng+UPHH+wzL
-         VEHijcAmO9E93M3j8PUTS/c2KrS4R+foAUrVUx9lLBEFa3iBXG5BfWHJusGng3mOA1ry
-         e9o1fIiLjx+IolwC/43EkC89WX7mwF9opzlzyno0QDY4BAlcdqiWgWyW7LPqsxXAkw4E
-         g5DOra4pwi2oMXg4GAPfM5rLfT93RT0i6DKnqpp5j5AXydSrrXqaqpZAd1RomUD+mplF
-         vOtg==
-X-Forwarded-Encrypted: i=1; AJvYcCU73L6RiJFewlONf3mXf/T4oP2JOhN0I1NKuZ4YwjQKvyvxCIkxCj5rutzNYSaXyafM7/XboHztTkg=@vger.kernel.org, AJvYcCV2t1yxQ+xNiTgZkGgjnLJLcB4YG7FjmzxyFcH+p3vSBcysyDR6kfysPtPLt3fHZeMXiryE/sZ+@vger.kernel.org
-X-Gm-Message-State: AOJu0YytjlwPkjTOJQREiuLRjBYmxBk8zh8VXOBBbB4JzF5trIaDBEBd
-	M0lFu/Ea1WLFgOSJyl7c9Gs8vSKYwL9GyhayNTVQ0Y49s/+IiXxbm3F6Gw==
-X-Google-Smtp-Source: AGHT+IGZ02R+YlMxFD6YKq1Z1f78AWYeREwohxNopenGCr27YxhjrtwLPwQZuhBxFmiFqGgV2XZp6w==
-X-Received: by 2002:a2e:bc27:0:b0:2fb:5bf1:ca5e with SMTP id 38308e7fff4ca-2fb5bf1cbfbmr56455301fa.42.1729147214720;
-        Wed, 16 Oct 2024 23:40:14 -0700 (PDT)
-Received: from foxbook (bgw164.neoplus.adsl.tpnet.pl. [83.28.86.164])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fb5d0fb51esm6381281fa.19.2024.10.16.23.40.11
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 16 Oct 2024 23:40:13 -0700 (PDT)
-Date: Thu, 17 Oct 2024 08:40:07 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: mathias.nyman@linux.intel.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org
-Subject: Re: [PATCH 2/4] xhci: Mitigate failed set dequeue pointer commands
-Message-ID: <20241017084007.53d3fedd@foxbook>
-In-Reply-To: <20241016140000.783905-3-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1729147223; c=relaxed/simple;
+	bh=Q3YK1YytJHA4b0L4yocqevQZD3SkUiTtzwE9kUxDuBM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+L5vsjpnprCR7iTnemxLUPLXQVSCzpVNosjBz15JuqDRv9oBznY4kpV2SARtX58Mo5LldRSjBrguwtC/xoR19Lanx4X9EiAFV90tqEh7ywg3NHuW90KQ6kGqbew2Rcv4SEaRof1xeiw8T4a5bxRwDuRFxIobWg+IcCY8cjAYyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=qL1dy/+S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8F3C4CEC3;
+	Thu, 17 Oct 2024 06:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1729147222;
+	bh=Q3YK1YytJHA4b0L4yocqevQZD3SkUiTtzwE9kUxDuBM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qL1dy/+SiO5IHzdVF2yCqHnZHdolQ6tyRxX+MU5LSoT3iEkA8qdNuM4z/ywhAcId9
+	 U9vv61Hha1JlFE5EFH1L5zCcLCLg6hbvXqbxDwerRvz9Hqm3OiOdRYe5tl+16JfuqS
+	 DjjK7Q9a7gzIEbD7bVNjJS64a4NYJJHZ6P/0tQ9g=
+Date: Thu, 17 Oct 2024 08:40:17 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: srinivas.kandagatla@linaro.org, mathias.nyman@intel.com, perex@perex.cz,
+	conor+dt@kernel.org, dmitry.torokhov@gmail.com, corbet@lwn.net,
+	lgirdwood@gmail.com, tiwai@suse.com, krzk+dt@kernel.org,
+	pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
+	broonie@kernel.org, bgoswami@quicinc.com, robh@kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-doc@vger.kernel.org, alsa-devel@alsa-project.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v29 01/33] xhci: support setting interrupt moderation
+ IMOD for secondary interrupters
+Message-ID: <2024101747-defog-squiggly-ef54@gregkh>
+References: <20241015212915.1206789-1-quic_wcheng@quicinc.com>
+ <20241015212915.1206789-2-quic_wcheng@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241015212915.1206789-2-quic_wcheng@quicinc.com>
 
-> Avoid xHC host from processing a cancelled URB by always turning
-> cancelled URB TDs into no-op TRBs before queuing a 'Set TR Deq'
-> command.
->
-> If the command fails then xHC will start processing the cancelled TD
-> instead of skipping it once endpoint is restarted, causing issues like
-> Babble error.
->
-> This is not a complete solution as a failed 'Set TR Deq' command does
-> not guarantee xHC TRB caches are cleared.
+On Tue, Oct 15, 2024 at 02:28:43PM -0700, Wesley Cheng wrote:
+> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+> 
+> Allow creators of xHCI secondary interrupters to specify the interrupt
+> moderation interval value in nanoseconds when creating the interrupter.
+> 
+> If not sure what value to use then use the xhci driver default
+> xhci->imod_interval
+> 
+> Suggested-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Link: https://lore.kernel.org/r/20240905143300.1959279-13-mathias.nyman@linux.intel.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/host/xhci-mem.c | 8 +++++++-
+>  drivers/usb/host/xhci.c     | 4 ++--
+>  drivers/usb/host/xhci.h     | 5 ++++-
+>  3 files changed, 13 insertions(+), 4 deletions(-)
 
-Hmm, wouldn't a long and partially cached TD basically become corrupted
-by this overwrite?
+This is already in 6.12-rc1, which makes me confused as to what tree you
+made this series against.
 
-For instance, No Op following a chain bit TRB is prohibited by 4.11.7.
+thanks,
 
-4.11.5.1 even goes as far as saying that there are no constraints on
-the order in which TRBs are fetched from the ring, not sure how much
-"out of order" it can be and if a cached TD could be left with a hole?
-
-If the reason of Set TR Deq failure is an earlier Stop Endpoint failure,
-the xHC is executing this TD right now. Or maybe the next one - I guess 
-the driver already risks UB when it misses any Stop EP failure.
-
-If it didn't fail, xHC may store some "state" which allows it to restart
-a TRB stopped in the middle. It might not expect the TRB to change.
-
-
-Actually, it would *almost* be better to deal with it by simply leaving
-the TRB on the ring and waiting for it to complete. Problem is when it
-doesn't execute soon, or ever, leaving the urb_dequeue() caller hanging.
-
-Regards,
-Michal
+greg k-h
 
