@@ -1,141 +1,87 @@
-Return-Path: <linux-usb+bounces-16379-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16380-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DD059A2325
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 15:10:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AD169A2532
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 16:36:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05DCD282738
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 13:10:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CF651C2334E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 14:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6977A1DE2AF;
-	Thu, 17 Oct 2024 13:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3DC1DE4ED;
+	Thu, 17 Oct 2024 14:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b3ypqPW9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JA+x8+lk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7CD1DE2B6;
-	Thu, 17 Oct 2024 13:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5B210F2
+	for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2024 14:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729170511; cv=none; b=U+fmxTuBv89gWlu1jiqT7n4/Uw9JTNhj+qUp4asWyWQTzvmybEQU17XPPDpNFf+Wa/TG5LJxGqxvrxZ1ns7o1Ywd1pUTQdrBA7izBZJgZKNn0EidAUqD4wImlxQPpOWcDNxTQ2uvgWqhDchKN+iZbjNGRn+TovTcy/KFuOJAl/E=
+	t=1729175796; cv=none; b=VjoSzjNQZQsgKYvFK0/PySvTMAsjBZ6D6nbcHs4B6VF1txy0daLGhMt6P0fY4WdY22Ke/q6aZkFiD7UC+ilm7SF2oE4Frp5WTk+82bb+ggmmxBuslcucI/KB2AZCcGejU7V3671Wdl4dK+Cup+rru49kRFXnISH91zlOLjMN30E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729170511; c=relaxed/simple;
-	bh=KI8IpkDA4rsz6+i5p8MLcjGQGumtY5C+/cAQpTRz0w0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DcKzktUyRwa/bSWHq915foa2woo9QrM7L1dvbizjupesY7RWnnjk2OxU2cA5Th7lyp34WeDVWAXoAy15MR5wMSKKqRLGXdLFHbO55vavtIm/pKpf5OGT9ooAcgMzrwXmk0fSLPt/FDwm5x5t3ZsUzBybqAiHPYadU6m6EEKvq3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b3ypqPW9; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729170510; x=1760706510;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KI8IpkDA4rsz6+i5p8MLcjGQGumtY5C+/cAQpTRz0w0=;
-  b=b3ypqPW9/6fuHm0hI4BBWJBXXcUw//CppUf7ZNMpWvTueCTyCVugSlOL
-   MP+WewtfTWMIz71zTiGqTmAzvN+mtcmL15uZFrNseDd1pOmVu423AiQ4F
-   xLqaFnQVlf/JllYeaz1iBU5xZjBGTsnQrlIrnN4AaWMFs1cWLHq5Ev4Ky
-   HHzrDJiljKmco5UYdeaQj2ewo2VwZ7sAyZUSq6QAipT+ugb8SiIzUFHhD
-   M3BjgGIPMVAsY36DoP03pARSAqVQCBG+4pJrw3paZ7SkCE7nQuESM3L+Q
-   OigZkJfgipVZV8G4pGxMVKzenj/zCvj22J8DKfRaYym4UHGNbuA7tVtIL
-   A==;
-X-CSE-ConnectionGUID: B7mFVLDPRXiYJc/9POkRQw==
-X-CSE-MsgGUID: 4kdP5bXBScSiukly2Odp3Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="28745551"
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="28745551"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 06:08:29 -0700
-X-CSE-ConnectionGUID: l6bFCh3fQVKY7K2w59fNFw==
-X-CSE-MsgGUID: YyzwQCMtSxKIE/KlM14LPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="101850280"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa002.fm.intel.com with ESMTP; 17 Oct 2024 06:08:28 -0700
-Message-ID: <3a22e31a-12bc-4fdc-90d2-e09a7f9d067f@linux.intel.com>
-Date: Thu, 17 Oct 2024 16:10:39 +0300
+	s=arc-20240116; t=1729175796; c=relaxed/simple;
+	bh=Ax+INfVbNJxR3C7JkO/tYlM2hVe3trTQltvhP8oUoW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s6uMNBIzH9NNQR07FNh8UFZCbmauoc4Twbkm6pJjOr9GE37uETdYOJrTzb6kU7S1GyjFpw1cf5F1g2kmu4NL+WzSi1ayxoPtb6wkDNL3ewpaEK431ZZl3dtHCguTLvvfCPBPXoB5HvnTE7VsaFRksbyIXU5yRg0wJ2odFL0U8/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JA+x8+lk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EC47C4CEC3;
+	Thu, 17 Oct 2024 14:36:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729175796;
+	bh=Ax+INfVbNJxR3C7JkO/tYlM2hVe3trTQltvhP8oUoW0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JA+x8+lkUzEkhJwoPFhmKXlL5ZzcKYTLpivDDmI76l6fkdg4QIu6K472qgGwJoZAS
+	 kqbvX/U4PjAAT5nCgBuOWl6Kv7qf9GeQqJyVI67HSgdStyOH1EHKxThfgJmzTLggFG
+	 E4KpZh4if+F0OPCIbbOeto5WOWUw5sqy0C2LY2979JU0ju00TN00R1ZYxOaEEfjT3j
+	 caW/HVsH94qnHwnpXH9OuCEk1yzEBv4KOKVxb6sb0mI4QZhuDj7vf9h6D54jt8p66G
+	 3wg6IjzEraKSgag1o/0D+LVFCVe2hkqd/1qkxxPg404E2HRTSjLlabyO2WLPCv648R
+	 JnFUJVCvFaesQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t1RcJ-000000003t4-335O;
+	Thu, 17 Oct 2024 16:36:44 +0200
+Date: Thu, 17 Oct 2024 16:36:43 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Lars Melin <larsm17@gmail.com>
+Cc: "Benjamin B. Frost" <benjamin@geanix.com>, sean@geanix.com,
+	martin@geanix.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: option: support for Quectel EG916Q-GL
+Message-ID: <ZxEg-_HH48-Jr6s-@hovoldconsulting.com>
+References: <d4b02fcb-6476-4a67-bc07-e6a224891b20@gmail.com>
+ <20240911085405.319899-1-benjamin@geanix.com>
+ <8b356c79-3300-4fa8-a6e5-1556e2f6579e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] xhci: Mitigate failed set dequeue pointer commands
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org
-References: <20241017084007.53d3fedd@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241017084007.53d3fedd@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b356c79-3300-4fa8-a6e5-1556e2f6579e@gmail.com>
 
-On 17.10.2024 9.40, Michał Pecio wrote:
->> Avoid xHC host from processing a cancelled URB by always turning
->> cancelled URB TDs into no-op TRBs before queuing a 'Set TR Deq'
->> command.
->>
->> If the command fails then xHC will start processing the cancelled TD
->> instead of skipping it once endpoint is restarted, causing issues like
->> Babble error.
->>
->> This is not a complete solution as a failed 'Set TR Deq' command does
->> not guarantee xHC TRB caches are cleared.
-> 
-> Hmm, wouldn't a long and partially cached TD basically become corrupted
-> by this overwrite?
+On Wed, Sep 11, 2024 at 06:46:24PM +0700, Lars Melin wrote:
+> On 2024-09-11 15:54, Benjamin B. Frost wrote:
+> > Add Quectel EM916Q-GL with product ID 0x6007
 
-Unlikely but not impossible.
-We already turn all cancelled TDs that we don't stop on into no-ops, so those
-would already now experience the same problem.
+> That was much better, now it is correct.
+> Reviewed-by: Lars Melin <larsm17@gmail.com>
 
-We stopped the endpoint, and issued a 'Set TR deq' command which is supposed
-to clear xHC TRB cache.  I find it hard to believe xHC would continue
-by caching some select TRBs of a TD to cache.
+Thanks for reviewing, Lars.
 
-But lets say we end up corrupting the TD. It might still be better than
-allowing xHC to process the TRBs and write to DMA addresses that might be
-freed/reused already.
-   
-> 
-> For instance, No Op following a chain bit TRB is prohibited by 4.11.7.
-> 
-> 4.11.5.1 even goes as far as saying that there are no constraints on
-> the order in which TRBs are fetched from the ring, not sure how much
-> "out of order" it can be and if a cached TD could be left with a hole?
-> 
-> If the reason of Set TR Deq failure is an earlier Stop Endpoint failure,
-> the xHC is executing this TD right now. Or maybe the next one - I guess
-> the driver already risks UB when it misses any Stop EP failure.
-> 
-> If it didn't fail, xHC may store some "state" which allows it to restart
-> a TRB stopped in the middle. It might not expect the TRB to change.
+> additional info
+> MI_00 Quectel USB Diag Port
+> MI_01 Quectel USB NMEA Port
+> MI_02 Quectel USB AT Port
+> MI_03 Quectel USB Modem Port
+> MI_04 Quectel USB Net Port
 
-This should not be an issue.
-We don't queue a 'Set TR Deq' command if we intend to continue processing
-a stopped TD, as the 'Set TR Deq' is designed to dump all transfer related
-state of the endpoint.
+Now applied with this interface info added to the commit message.
 
-> 
-> 
-> Actually, it would *almost* be better to deal with it by simply leaving
-> the TRB on the ring and waiting for it to complete. Problem is when it
-> doesn't execute soon, or ever, leaving the urb_dequeue() caller hanging.
-
-We need to give back the cancelled URB at some point, and 'Set TR Deq'
-command completion is the latest reasonable place to do it.
-
-After this we should prevent xHC hw from accessing URB DMA pointers.
-
-Thanks
-Mathias
-
+Johan
 
