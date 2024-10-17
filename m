@@ -1,131 +1,141 @@
-Return-Path: <linux-usb+bounces-16378-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16379-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF249A231F
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 15:09:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DD059A2325
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 15:10:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DA711F21759
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 13:09:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05DCD282738
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 13:10:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 953F61DE8AD;
-	Thu, 17 Oct 2024 13:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6977A1DE2AF;
+	Thu, 17 Oct 2024 13:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OckzIXay"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b3ypqPW9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC7A1DDC3E;
-	Thu, 17 Oct 2024 13:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7CD1DE2B6;
+	Thu, 17 Oct 2024 13:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729170491; cv=none; b=PFQwejXJrYXYkPLcBOktIEKXzYcHyrHLmgaNxLYR/WUlqXprBHaRYCuEWQaZ+ABMUjxUwRKNc+GJ0vfykEaYAUeT5/LQj5qcpFv7pd3Xv/Ym1s3s9po7Aq7NX1q3CFwM9and4HXi8l4FcUgjlpQoy0iR+akTMTpqwLoMMly1Q+k=
+	t=1729170511; cv=none; b=U+fmxTuBv89gWlu1jiqT7n4/Uw9JTNhj+qUp4asWyWQTzvmybEQU17XPPDpNFf+Wa/TG5LJxGqxvrxZ1ns7o1Ywd1pUTQdrBA7izBZJgZKNn0EidAUqD4wImlxQPpOWcDNxTQ2uvgWqhDchKN+iZbjNGRn+TovTcy/KFuOJAl/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729170491; c=relaxed/simple;
-	bh=bVSl6OqyC6bvvHQaA0wesJOPT9Ert1tX8MWXTsMgKvQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Aa1UCLVd57bdhojcxJBnIVx6sfRRu5HC3e8CilZBDVd2vkHq1aRQAAQikdYXj6l37IcJtEyYN+fVHXnaITmY31ytOavjgN9oee2PB+G85OORbs1UvgujFeujAHIL4d0IZMxj8xe5b7bb/gfM7fG7plDCGFos9m69qO/Voeca0SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OckzIXay; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49H6YFGP007366;
-	Thu, 17 Oct 2024 13:07:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	oi59k/Am2QH9mckTRcUaJMxF+gr/1Jz2M+U5WLTwC+A=; b=OckzIXaybq37L+cq
-	BrRfr/8NixWl8cBap7KDwb/sLMWAP/El3nPY3JWNB6xqwhltCldqJQ4iabqnPUjp
-	Q9mfVdN580cd4LLUkI2r+51MPH0/D9ag4QOnpaMp8JN7jlWRWeACRDEECWFtc/he
-	PhQ2E2rCF6VQVvLGCXieETehLJY5Ww2rI6ILb0MprMnpRtrufDsV73rV7YYsByMw
-	wyOngsrH8PjaxArXx73h7y/qJIs0PWHgNB+EPbFvkXon1YYKULbd0+nxbqaBlawJ
-	HKz8sESEIvMhCVYVcVHOTyXpv/WAAmnpAB+UaufAVcxVHYDzKB8wNYNt0RkUmUD8
-	mHGcRA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 429mjy87ey-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Oct 2024 13:07:54 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49HD7rUv004024
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Oct 2024 13:07:53 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 17 Oct 2024 06:07:47 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Vinod Koul <vkoul@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        "Dmitry
- Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v2 5/5] phy: qcom: qmp-usbc: Add qmp configuration for QCS615
-Date: Thu, 17 Oct 2024 18:37:01 +0530
-Message-ID: <20241017130701.3301785-6-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241017130701.3301785-1-quic_kriskura@quicinc.com>
-References: <20241017130701.3301785-1-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1729170511; c=relaxed/simple;
+	bh=KI8IpkDA4rsz6+i5p8MLcjGQGumtY5C+/cAQpTRz0w0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DcKzktUyRwa/bSWHq915foa2woo9QrM7L1dvbizjupesY7RWnnjk2OxU2cA5Th7lyp34WeDVWAXoAy15MR5wMSKKqRLGXdLFHbO55vavtIm/pKpf5OGT9ooAcgMzrwXmk0fSLPt/FDwm5x5t3ZsUzBybqAiHPYadU6m6EEKvq3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b3ypqPW9; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729170510; x=1760706510;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KI8IpkDA4rsz6+i5p8MLcjGQGumtY5C+/cAQpTRz0w0=;
+  b=b3ypqPW9/6fuHm0hI4BBWJBXXcUw//CppUf7ZNMpWvTueCTyCVugSlOL
+   MP+WewtfTWMIz71zTiGqTmAzvN+mtcmL15uZFrNseDd1pOmVu423AiQ4F
+   xLqaFnQVlf/JllYeaz1iBU5xZjBGTsnQrlIrnN4AaWMFs1cWLHq5Ev4Ky
+   HHzrDJiljKmco5UYdeaQj2ewo2VwZ7sAyZUSq6QAipT+ugb8SiIzUFHhD
+   M3BjgGIPMVAsY36DoP03pARSAqVQCBG+4pJrw3paZ7SkCE7nQuESM3L+Q
+   OigZkJfgipVZV8G4pGxMVKzenj/zCvj22J8DKfRaYym4UHGNbuA7tVtIL
+   A==;
+X-CSE-ConnectionGUID: B7mFVLDPRXiYJc/9POkRQw==
+X-CSE-MsgGUID: 4kdP5bXBScSiukly2Odp3Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="28745551"
+X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
+   d="scan'208";a="28745551"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 06:08:29 -0700
+X-CSE-ConnectionGUID: l6bFCh3fQVKY7K2w59fNFw==
+X-CSE-MsgGUID: YyzwQCMtSxKIE/KlM14LPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
+   d="scan'208";a="101850280"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa002.fm.intel.com with ESMTP; 17 Oct 2024 06:08:28 -0700
+Message-ID: <3a22e31a-12bc-4fdc-90d2-e09a7f9d067f@linux.intel.com>
+Date: Thu, 17 Oct 2024 16:10:39 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] xhci: Mitigate failed set dequeue pointer commands
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20241017084007.53d3fedd@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20241017084007.53d3fedd@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EeWTeSAuzEm4vOvlpjfEgABAn_HX8sQs
-X-Proofpoint-ORIG-GUID: EeWTeSAuzEm4vOvlpjfEgABAn_HX8sQs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- mlxscore=0 lowpriorityscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 clxscore=1015 spamscore=0 suspectscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410170090
 
-Provide PHY configuration for the USB QMP PHY for QCS615 Platform.
+On 17.10.2024 9.40, Michał Pecio wrote:
+>> Avoid xHC host from processing a cancelled URB by always turning
+>> cancelled URB TDs into no-op TRBs before queuing a 'Set TR Deq'
+>> command.
+>>
+>> If the command fails then xHC will start processing the cancelled TD
+>> instead of skipping it once endpoint is restarted, causing issues like
+>> Babble error.
+>>
+>> This is not a complete solution as a failed 'Set TR Deq' command does
+>> not guarantee xHC TRB caches are cleared.
+> 
+> Hmm, wouldn't a long and partially cached TD basically become corrupted
+> by this overwrite?
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-usbc.c | 3 +++
- 1 file changed, 3 insertions(+)
+Unlikely but not impossible.
+We already turn all cancelled TDs that we don't stop on into no-ops, so those
+would already now experience the same problem.
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c b/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-index d4fa1063ea61..c56ba8468538 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-@@ -1123,6 +1123,9 @@ static const struct of_device_id qmp_usbc_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,qcm2290-qmp-usb3-phy",
- 		.data = &qcm2290_usb3phy_cfg,
-+	}, {
-+		.compatible = "qcom,qcs615-qmp-usb3-phy",
-+		.data = &qcm2290_usb3phy_cfg,
- 	}, {
- 		.compatible = "qcom,sdm660-qmp-usb3-phy",
- 		.data = &sdm660_usb3phy_cfg,
--- 
-2.34.1
+We stopped the endpoint, and issued a 'Set TR deq' command which is supposed
+to clear xHC TRB cache.  I find it hard to believe xHC would continue
+by caching some select TRBs of a TD to cache.
+
+But lets say we end up corrupting the TD. It might still be better than
+allowing xHC to process the TRBs and write to DMA addresses that might be
+freed/reused already.
+   
+> 
+> For instance, No Op following a chain bit TRB is prohibited by 4.11.7.
+> 
+> 4.11.5.1 even goes as far as saying that there are no constraints on
+> the order in which TRBs are fetched from the ring, not sure how much
+> "out of order" it can be and if a cached TD could be left with a hole?
+> 
+> If the reason of Set TR Deq failure is an earlier Stop Endpoint failure,
+> the xHC is executing this TD right now. Or maybe the next one - I guess
+> the driver already risks UB when it misses any Stop EP failure.
+> 
+> If it didn't fail, xHC may store some "state" which allows it to restart
+> a TRB stopped in the middle. It might not expect the TRB to change.
+
+This should not be an issue.
+We don't queue a 'Set TR Deq' command if we intend to continue processing
+a stopped TD, as the 'Set TR Deq' is designed to dump all transfer related
+state of the endpoint.
+
+> 
+> 
+> Actually, it would *almost* be better to deal with it by simply leaving
+> the TRB on the ring and waiting for it to complete. Problem is when it
+> doesn't execute soon, or ever, leaving the urb_dequeue() caller hanging.
+
+We need to give back the cancelled URB at some point, and 'Set TR Deq'
+command completion is the latest reasonable place to do it.
+
+After this we should prevent xHC hw from accessing URB DMA pointers.
+
+Thanks
+Mathias
 
 
