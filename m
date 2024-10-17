@@ -1,149 +1,130 @@
-Return-Path: <linux-usb+bounces-16382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 905519A27D4
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 18:02:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B8F9A2839
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 18:15:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46BC01F22A26
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 16:02:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7B9EB22472
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 16:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F211DFD89;
-	Thu, 17 Oct 2024 16:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA0C1DED7F;
+	Thu, 17 Oct 2024 16:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W9I52Vqr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TpZg5/nd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5B41DFD81
-	for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2024 16:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6931D95B5;
+	Thu, 17 Oct 2024 16:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729180885; cv=none; b=OtpseTLn1WOX/e0O+EeQS2oDQO1F9hMKOrdFJbMsK/2TPqAMtYBKi00K1IqwvWzxcsWGxc5IsRX4KOsmqoXsdL4v4xasGLirqiVY4JD97crLxqshB/PH7XCEbvjKqGUCSG3a0pw/hQByjn+cJ9oAwo5u6m3vAAs9FZOvDVccJx8=
+	t=1729181699; cv=none; b=I3APtjarXGZd/JorKTQunny7IcdGMlKUgX821EHYgMVf1KjoDJqixEndN9mHQQitl5K5Td/oGjlPsQ31FsnFBJOdko5JtTQdp4WgEQqqx4AFAJtnEv0jRAoRLHWkis4WjyBZ/S+6ilSlcj1+sL8HQ4Bbrrd78vlpyRi2ozgaW1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729180885; c=relaxed/simple;
-	bh=8tYhk1/X9rTC5CRRriMRdyo9FAY7gz/olIfFEpVUSqo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iLPOjjs5WOJduvIurI9gN5/uZpPJjLukddu0EvSSgxbx6tpT07VvDFAYk8k6SBr4hn0pDGflU8b9lHU9odmR/Fo/iy9RcbmNnFwK02czCHqUk37xwt9frKrVHZ13/jHgxky9CuGh4vtAThVzc4FrA6Ry7nHxoqeSQ80IcjJxS0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=W9I52Vqr; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4315839a7c9so12138075e9.3
-        for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2024 09:01:20 -0700 (PDT)
+	s=arc-20240116; t=1729181699; c=relaxed/simple;
+	bh=tpShQNHtumSM41nXef2olRvTjih43wzhUc+kzri07sM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TXlNIZDJZW30dTfgp9kyKukNg3KeCZaXFI1JcguD+bugSggjSavwJkDN2+gHiEn3mezreoUEde8C3PpfBxXmNQKaw7tNV1RaLWUkZcUOjMGDa1tlyBU2fGBroS/OAG9Xrh+AORbYDPQV+LN6iumksyx/IDw6ZWBLZf+yRJoqFMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TpZg5/nd; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fb5740a03bso14530431fa.1;
+        Thu, 17 Oct 2024 09:14:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729180879; x=1729785679; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N17aF7uxh0G6GGML6WHZ8HBEXLTUCV/jQt7rlNZei0A=;
-        b=W9I52VqrAwjAtlvNPFc8Uf7KCI1P2Ijd/p6YEmTf0Nfu28fyX6X+ywK7VIhCtnCfzI
-         mRXjM0zuieWktR62QRf5PK7+EUKIuSf5N5E0xfPMJ22AFQZE+9HNki/Fw+SufAe114FG
-         tCCdFgJ0ad9cQM8N+MKia9wQMgoJLRt41h6S0ByTwMEQQK5lFomPl4isZvCldirqbvI9
-         BLcz9bEU4oWW7GS/ngbffLw686OEgJwBC/yyiNB2sd/00IA8bVIekN85W37hfc9e5Nwe
-         mkP2B4F3L8nHL5OyUYYRqEu937EGIvWs16z5PWTYOIbsT1aO7+ZTccFbojIUvzRKUIrB
-         F8vA==
+        d=gmail.com; s=20230601; t=1729181696; x=1729786496; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p4hXvrT2L3+xEGILS6wPWbu2sYf1CJ6fKS6oVacPkSk=;
+        b=TpZg5/ndZ4gVxkXhZnh1g7emy47zQ5Tj7imiqScQVgmU78cl3/x53sYMD9Fx2HVjS3
+         hitq0VePcPdrjLHsCwRmqtuPb/B6p5KdrkKh6EJ9tX/LQn1WqrQ+qm874viK6nP+2DdI
+         tKiOOwZpqX8aXIKEIaH8OYnUvtfc6e50MiM5sfTjHotWRZeTIdpkDdzfxWgABYtbD00D
+         q7tJ9h480ZgltqRvipq7KJn6/T1lObH5T9qoGV/f+ppqLMvCQEaY2Rw/ng2jjCOX9Zfl
+         HwV/ivsK/aiyB63P/VR8YpILq4si59QWzMygbfk0PeXCRwcGqxROKXvNS4+Zc3P5HCm5
+         bsBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729180879; x=1729785679;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N17aF7uxh0G6GGML6WHZ8HBEXLTUCV/jQt7rlNZei0A=;
-        b=cfjL5VXZaukOFsUNJkdGa/F30PwTqaYRq3M9cu9QAoy+KOUAcyKQvcacliaFFw3zyk
-         8A3NrOvKBlHzUb1sFa0uI5hG5Bq0jBnNMX0XV1FZulLuER7BKlSkuKbLqscQKOZnX+qh
-         KqkkAvcy2dxRtg8Juyf1uGPXUhVRjHV1zJprHi3cyjDLr0w7HVYXaKicIj9MeqMR3UoE
-         F/gGm9rIppA2dz+kxRhEmGuLWRtR5EdXEkIirHCQZYh9RW0gN0Ed6c3KvhoE+2xyhUko
-         r4oKc5ki6HFWvCukS0SNwgg5R22w2BKK6t7my+fofSXG05A8wc7YJhhiMayJH1lkmwmh
-         OKYA==
-X-Forwarded-Encrypted: i=1; AJvYcCW0mErXn7T9KVSV9Fuq7i1qKAguGxMMgvNf+L10jSby8a9ZcDfQyyMyXJwyIAjqkHu8qwiq4R7qraU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBhcsL0NyL2E1vqQZ9lm7Sb3PNMu6yqfqN3EtjdvfntubqydaO
-	LzwHGXN/6LHj1j3LuHbQTsHShpzHQReDtlPeQGhihHlKVONlejgjbarFp4fT8Y4=
-X-Google-Smtp-Source: AGHT+IFBPyquqYu3U/ycusam+CJOvnQy8PGDhkcYeNxarlFbkDu6daoyWAcSns52Jl1oBt3KtvI9ig==
-X-Received: by 2002:adf:e405:0:b0:37d:50f8:a801 with SMTP id ffacd0b85a97d-37d86d64357mr5772759f8f.47.1729180878429;
-        Thu, 17 Oct 2024 09:01:18 -0700 (PDT)
-Received: from [127.0.1.1] ([82.76.168.176])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d94626094sm2879927f8f.88.2024.10.17.09.01.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2024 09:01:18 -0700 (PDT)
-From: Abel Vesa <abel.vesa@linaro.org>
-Date: Thu, 17 Oct 2024 19:01:01 +0300
-Subject: [PATCH RFC] usb: typec: ucsi: Set orientation as none when
- connector is unplugged
+        d=1e100.net; s=20230601; t=1729181696; x=1729786496;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p4hXvrT2L3+xEGILS6wPWbu2sYf1CJ6fKS6oVacPkSk=;
+        b=wlfq5h4uUiI+/eau0kFoCl63Raa9hARMcza+OVGx6/sC8q/ZfHiOVrKDiToCtTNg73
+         FHj4GBhvo4sn9kFfH0tqLUmy1RRoN4Twx1v/gNtdaZWqbYpp6fNSrMv8607LmM7UB5Je
+         IACorCUiW+jyY4FEel6dUwLHFT8nEMWMCVRNDW1idKBEXfuFecqKW/SLungeP9HbmJQ7
+         GZqgevXUw0SFRLyLVEmuJqKptoFXX/8VFANs2VhZCvsO6DMSqzRCN+ETWE9d3BBGBKGj
+         IwAg1md3zPMDkjdRMdo7+/caYePVBcjbqAhpjbiN9MeFtmP+LfGDkcDJLyTwwasS9AKU
+         kalw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYe112YI+QD9F8IEEIE4VN26hDGRTFT4D0dx1VxwfVOVarmlkMMgbvfk/93v9b9uiMnFCTzQ28btg=@vger.kernel.org, AJvYcCXkBgfa+cZj2N38Mh7BgvCuFWxNo8RkW/doNqNVf/Utk4Xklr9AU6dW3F97rJJb8Hz9VvZcdRCP@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGxgHomKm1tLH/wHsLoH6fakgi8Kxzy86/QpiYkhcBOVL56JYv
+	u+RCC2HbIvrEmOKtnxuLljnWhCRUHAyM5WiGUL/rHGwz/RF6aFMp
+X-Google-Smtp-Source: AGHT+IHJfXtYAifz9j8MAhDmADXqOMXK4adNhFkG4S35c53KZQDvkQpW1o1tPoZPRjVqwbo5O4qsRQ==
+X-Received: by 2002:a2e:be15:0:b0:2fb:5723:c9ea with SMTP id 38308e7fff4ca-2fb5723cc2emr73836691fa.30.1729181695580;
+        Thu, 17 Oct 2024 09:14:55 -0700 (PDT)
+Received: from foxbook (bgw164.neoplus.adsl.tpnet.pl. [83.28.86.164])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fb5d1a86c4sm7416211fa.107.2024.10.17.09.14.51
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 17 Oct 2024 09:14:53 -0700 (PDT)
+Date: Thu, 17 Oct 2024 18:14:47 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH 2/4] xhci: Mitigate failed set dequeue pointer commands
+Message-ID: <20241017181447.7c712c4b@foxbook>
+In-Reply-To: <3a22e31a-12bc-4fdc-90d2-e09a7f9d067f@linux.intel.com>
+References: <20241017084007.53d3fedd@foxbook>
+	<3a22e31a-12bc-4fdc-90d2-e09a7f9d067f@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241017-usb-typec-ucsi-glink-add-orientation-none-v1-1-0fdc7e49a7e7@linaro.org>
-X-B4-Tracking: v=1; b=H4sIALw0EWcC/x3NQQrCMBBA0auUWTvQRKXEreABuhUXMZnUQZmUJ
- BWl9O4OLv/m/RUqFaYKp26FQm+unEXD7DoIDy8TIUdtsL09mN4MuNQ7tu9MAZdQGacXyxN9jJj
- VkeabAihZCId9MskerXXOgXpzocSf/+sK4+UMt237AdrDBXiAAAAA
-X-Change-ID: 20241017-usb-typec-ucsi-glink-add-orientation-none-73f1f2522999
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- Abel Vesa <abel.vesa@linaro.org>
-X-Mailer: b4 0.15-dev-dedf8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1460; i=abel.vesa@linaro.org;
- h=from:subject:message-id; bh=8tYhk1/X9rTC5CRRriMRdyo9FAY7gz/olIfFEpVUSqo=;
- b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBnETTA/U3r6RWF7+v6bA21+7iIdUM8vuV+1T/kR
- i+7DtVoe4CJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZxE0wAAKCRAbX0TJAJUV
- VrEkEACGayQYM4WKq/w2n8qQIvjm0A8YPWxzcHKPdeNPeAVefJ9k8RYxWVIX3ZPfT+2PwIeC9Ll
- 7Hv+ApTjaa/1uT0nliWXnusInWEJS0aYw9lwtO4FvG90B/39qfnEdQpTI0ZVub/KWxmDlYUoaoF
- KniXIHpjI4QakeD9xQkYublNGsG1r0YXJzyxy2GH2G0JrYk0/UjPB9zptGtLzeCJnv4S+LYKrZY
- R+dPwKQcHkVOnfsvX1ix3bkNP1x6CQ7hfxNvH5/igiIu5bXPkSJ9Ak7ku153c3axRHJTXjT+27u
- HSjiSXniIdb8N+VnPskurc1/amV1316MfggfpVmKrl65d+/KFvTni8WSzARxhI3Wo/2AfxMrE8G
- TGpSHJwq1rm06XkUJPDtZsx/NViyNQhCGaRsvvhuzHoRhV/5NmjKvmiTvgSzEfxO003dXhxFgGA
- zZNkqgcba0vyl2JdS71rxSv7KPlMAvMDs6Dd/Kor9iIUpaxZJLv1iXgQO+hjEp8LMGbeYyP682H
- XQPrxJE1eEisob+2YlT1cemmH1+Ic/cthIAoYn/L+hw1IMBd2nqIerqyEAoB7wiydlPFymx1oqm
- PZ5ns2yAAcV0x7mGL9RIRw/loRimIWxnFrissjuuWyz1DhooOj41b14BsFhal1gSqf9vT84Ztzu
- XSRSc02Jv2kccwg==
-X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
- fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
 
-Currently, the ucsi glink client is only reporting orientation normal or
-reversed, based on the level of the gpio. On unplug, it defaults to
-orientation normal instead of none. This confuses some of the orientation
-switches drivers as they might rely on orientation none in order to
-configure the HW in some sort of safe mode. So propagate the orientation
-none instead when the connector status flags says cable is disconnected.
+On Thu, 17 Oct 2024 16:10:39 +0300, Mathias Nyman wrote:
+> > Hmm, wouldn't a long and partially cached TD basically become
+> > corrupted by this overwrite?  
+> 
+> Unlikely but not impossible.
+> We already turn all cancelled TDs that we don't stop on into no-ops,
+> so those would already now experience the same problem.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/usb/typec/ucsi/ucsi_glink.c | 5 +++++
- 1 file changed, 5 insertions(+)
+No, I think they wouldn't. Note in xHCI 1.2, 4.6.9, on page 135 states
+clearly that xHC shall invalidate cached TRBs besides the current TD.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 3e4d88ab338e50d4265df15fc960907c36675282..b3bc02e4b0427a894c5b5df470af47433145243e 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -185,6 +185,11 @@ static void pmic_glink_ucsi_connector_status(struct ucsi_connector *con)
- 	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(con->ucsi);
- 	int orientation;
- 
-+	if (!(con->status.flags & UCSI_CONSTAT_CONNECTED)) {
-+		typec_set_orientation(con->port, TYPEC_ORIENTATION_NONE);
-+		return;
-+	}
-+
- 	if (con->num >= PMIC_GLINK_MAX_PORTS ||
- 	    !ucsi->port_orientation[con->num - 1])
- 		return;
+Same page, point 3, mentions that software "may not modify" the current
+TD, whatever on earth is that supposed to mean. Unfortunately, I can't
+find a clear "shall not" in 4.6.9, but I would see it as such.
 
----
-base-commit: d61a00525464bfc5fe92c6ad713350988e492b88
-change-id: 20241017-usb-typec-ucsi-glink-add-orientation-none-73f1f2522999
+> We stopped the endpoint, and issued a 'Set TR deq' command which is
+> supposed to clear xHC TRB cache.  I find it hard to believe xHC would
+> continue by caching some select TRBs of a TD to cache.
 
-Best regards,
--- 
-Abel Vesa <abel.vesa@linaro.org>
+The idea is, if Set TR Deq fails, the xHC preserves transfer state and
+cache and tries to continue. If the TD wasn't fully cached when the xHC
+stopped, it remains incomplete. Missing TRBs will be filled with No Ops
+when it restarts, yielding an ivalid TD (e.g. No Op chained at the end).
 
+So it may turn out that instead of "EP TRB ptr not part of current TD"
+something else would show up, perhaps TRB Errors.
+
+> But lets say we end up corrupting the TD. It might still be better
+> than allowing xHC to process the TRBs and write to DMA addresses that
+> might be freed/reused already.
+
+There is some truth to that, I guess. It's bummer that those bugs are
+here in the first place and no one seems to know where they come from.
+
+
+Was this tested on HW? I suppose it wouldn't be hard to corrupt a Set
+TR Deq command to make it fail, stream 0xffff or something like that.
+It may be harder to come up with a realistic test case with long TDs.
+
+Regards,
+Michal
 
