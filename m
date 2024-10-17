@@ -1,68 +1,68 @@
-Return-Path: <linux-usb+bounces-16349-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16350-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AF159A1960
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 05:41:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5D139A197D
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 05:51:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E43971F21E1C
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 03:41:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64727281B33
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2024 03:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA248139D13;
-	Thu, 17 Oct 2024 03:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93EDE1422A8;
+	Thu, 17 Oct 2024 03:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hbCpHLJr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MIQ4A8Vx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9486BFC0;
-	Thu, 17 Oct 2024 03:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354A061FD8;
+	Thu, 17 Oct 2024 03:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729136463; cv=none; b=LFBy3JtKNpEzENeBDgCgPK80gwriX7wHCCixE8E+oZmu03mIK9ILXD6epbvJRRyEYqpHg2n0s8rN3P7UXhuP7tm+yXuFod5xws86d70N/7QXYZJuKpwSL9i+UpBJSuNs2PG265GjNKCzUhzn9VQ6j/i6Epsr/ZH+36dQap75Eg8=
+	t=1729137062; cv=none; b=uzRD7fK89OuQSQciz7luq4WeYHT+nzzN6ZvdNeFFGkvg45yJTS4M5lJsHoQR+YyN0TD7AWehMonX8i7FAk6QMsaE1tB6oeC6W6ifbR15y8D7HlaW+jnJl+3MEl4sZlDhcVqs7tO9bteS78b24joMNspUW7V47CfUNSozNhsMwRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729136463; c=relaxed/simple;
-	bh=45r/f6zHYsf75aIYLkWTtuHTjv7CR+2OaVS7vuRvwyo=;
+	s=arc-20240116; t=1729137062; c=relaxed/simple;
+	bh=beJn5IycSLX4sg7z/JwH2+KUaHgTimetgZVNFzZQzb8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dw83as0WJbVU6Tc9NvuC/eAOJLdO/smPiqjQZQ5paMyyepS8pK0f/OhkN9nvFyDHt+w7VKawxSMJzdTptN20G7y6oxWx+y5URA6Nz42bKsRo7mQc0vfCkXrbtjhgDLgUFxSBBlpdcDqQH3sUufU2mgJk/lcVx5bOENhv1s7DSkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hbCpHLJr; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=GjE7ExhIrl/q3JLFxTsp6c620X1iqJ/U8q100/iOcoKRPBqb5JEg2H9znEwNOTOefL3cEpWL52a2oZhCkZRxRx4qIKOaZX9X5eaC2aU0qZNGttH/EqwF3eolf+Wd+B7B1lRGXC1Any4puOpUqDZtq17sI0sRhJ1dApVF6pIfYA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MIQ4A8Vx; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729136459; x=1760672459;
+  t=1729137059; x=1760673059;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=45r/f6zHYsf75aIYLkWTtuHTjv7CR+2OaVS7vuRvwyo=;
-  b=hbCpHLJr7bJJTRYSdTjYr/ZYNpac/IZE8LQZsah752udtiRSK5gWYrfw
-   /2dZ1aVVWpzi3xU3sNIU+3UEPgXuc4kPIjiEuGwhNUR0s15lk16F3uocI
-   0qpoTM3JGduqrfuAEebUiHLQJRrKHhQD9h2hLpxZOhABhUHdEZqeP0znf
-   FqcJ054jqOWddm6YsVvDWbIIn39IVwfDC3S2DeKJJ61PCoq8hRvKxhg2Q
-   XHfvx0AwbXursYWxjPglWzGpwqMK2cdgAohj2SpQuC2aJYbwqK7bISz76
-   6n67v9r5ggJotdSKqh3FvqRKLRJIZjugJl85/oJX8zlvL6kfoRXtSfKoS
-   w==;
-X-CSE-ConnectionGUID: Nz7VUbGBRA6v3iVYJEUq0g==
-X-CSE-MsgGUID: t9a/XDpFSVSC1kSKDJw4OA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="51153619"
+  bh=beJn5IycSLX4sg7z/JwH2+KUaHgTimetgZVNFzZQzb8=;
+  b=MIQ4A8VxM9a3k/LiDAA7cY/A326ynZooqgc2F3QV6zNAnDALTSa8G0ck
+   A7Ai5PRYyA/0kqkLtE6wkvppOoHNcapYFnvxeGnJf9XLFKK7EnYhY3DZE
+   5nxOJAzVa9lHmmBZ9mm6LYWZTw/7mgeHxsmnPP3WFvParpmL0B13CGwBs
+   8RWMrkdwWxVbhnjCG5FRpbcuyPLVgBZhlq/bfuGdx6GYCaxu/ge9ivsbR
+   ImVdyX6p0ssrSu7qnF996tuPXh4J6O2IacxFQ0US47YQxnsE9OEFFJpnH
+   +PuWfCer1TmsFXq20ddoNzn/il69eTp3t++EImxZhGkwXUIThD9yE2aEE
+   g==;
+X-CSE-ConnectionGUID: JI7cHl1rToyS77nZEfp6SA==
+X-CSE-MsgGUID: 5LlmoCCmTg23Ny2kHDSV6A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28497596"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="51153619"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 20:40:58 -0700
-X-CSE-ConnectionGUID: N7ntuFpoQL+5FZp9hcWqDg==
-X-CSE-MsgGUID: RKhRDllQTpCefkvGiFKGng==
+   d="scan'208";a="28497596"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 20:50:59 -0700
+X-CSE-ConnectionGUID: Fe6o3H0HS/qntUAqC0BLkw==
+X-CSE-MsgGUID: kye1m7slQT2+lnbDBnIKIw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="83485047"
+   d="scan'208";a="78453959"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 16 Oct 2024 20:40:55 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 16 Oct 2024 20:50:55 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t1HNc-000Lh0-1s;
-	Thu, 17 Oct 2024 03:40:52 +0000
-Date: Thu, 17 Oct 2024 11:39:57 +0800
+	id 1t1HXI-000Lhb-36;
+	Thu, 17 Oct 2024 03:50:52 +0000
+Date: Thu, 17 Oct 2024 11:50:15 +0800
 From: kernel test robot <lkp@intel.com>
 To: Akash Kumar <quic_akakum@quicinc.com>,
 	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -72,14 +72,14 @@ To: Akash Kumar <quic_akakum@quicinc.com>,
 	Wesley Cheng <quic_wcheng@quicinc.com>,
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Daniel Scally <dan.scally@ideasonboard.com>
-Cc: oe-kbuild-all@lists.linux.dev,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
 	Krishna Kurapati <quic_kriskura@quicinc.com>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Akash Kumar <quic_akakum@quicinc.com>
 Subject: Re: [PATCH v6] usb: dwc3: gadget: Refine the logic for resizing Tx
  FIFOs
-Message-ID: <202410171133.eGVTBDtP-lkp@intel.com>
+Message-ID: <202410171121.i9xLy4CF-lkp@intel.com>
 References: <20241016111904.11375-1-quic_akakum@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -105,33 +105,33 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Akash-Kumar/usb-dwc3-gadg
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 patch link:    https://lore.kernel.org/r/20241016111904.11375-1-quic_akakum%40quicinc.com
 patch subject: [PATCH v6] usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
-config: i386-buildonly-randconfig-001-20241017 (https://download.01.org/0day-ci/archive/20241017/202410171133.eGVTBDtP-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241017/202410171133.eGVTBDtP-lkp@intel.com/reproduce)
+config: i386-buildonly-randconfig-003-20241017 (https://download.01.org/0day-ci/archive/20241017/202410171121.i9xLy4CF-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241017/202410171121.i9xLy4CF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410171133.eGVTBDtP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410171121.i9xLy4CF-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/usb/dwc3/gadget.c: In function 'dwc3_gadget_resize_tx_fifos':
->> drivers/usb/dwc3/gadget.c:777:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
-     777 |         if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
-         |         ^~
-   drivers/usb/dwc3/gadget.c:782:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+>> drivers/usb/dwc3/gadget.c:782:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
      782 |                 break;
-         |                 ^~~~~
-   drivers/usb/dwc3/gadget.c:792:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
-     792 |         if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
-         |         ^~
-   drivers/usb/dwc3/gadget.c:794:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+         |                 ^
+   drivers/usb/dwc3/gadget.c:777:2: note: previous statement is here
+     777 |         if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+         |         ^
+   drivers/usb/dwc3/gadget.c:794:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
      794 |                 break;
-         |                 ^~~~~
+         |                 ^
+   drivers/usb/dwc3/gadget.c:792:2: note: previous statement is here
+     792 |         if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
+         |         ^
+   2 warnings generated.
 
 
-vim +/if +777 drivers/usb/dwc3/gadget.c
+vim +/if +782 drivers/usb/dwc3/gadget.c
 
    726	
    727	/*
@@ -184,12 +184,12 @@ vim +/if +777 drivers/usb/dwc3/gadget.c
    774		switch (dwc->gadget->speed) {
    775		case USB_SPEED_SUPER_PLUS:
    776		case USB_SPEED_SUPER:
- > 777		if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+   777		if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
    778		    usb_endpoint_xfer_isoc(dep->endpoint.desc))
    779			num_fifos = min_t(unsigned int,
    780					  dep->endpoint.maxburst,
    781					  dwc->tx_fifo_resize_max_num);
-   782			break;
+ > 782			break;
    783		case USB_SPEED_HIGH:
    784		if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
    785			num_fifos = min_t(unsigned int,
