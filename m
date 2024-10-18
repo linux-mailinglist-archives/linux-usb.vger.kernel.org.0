@@ -1,154 +1,91 @@
-Return-Path: <linux-usb+bounces-16403-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16404-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CCAC9A3AAC
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 11:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D1CA9A3AD5
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 12:06:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 877941C225EE
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 09:59:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B85A1C2017E
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 10:06:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B78201020;
-	Fri, 18 Oct 2024 09:58:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1A920101F;
+	Fri, 18 Oct 2024 10:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UHpz/Owd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdDpLPar"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257B9201001;
-	Fri, 18 Oct 2024 09:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D6D1F12EB;
+	Fri, 18 Oct 2024 10:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729245537; cv=none; b=mJzCEpTvzRQ6eP0H9fBGRW7/6RKbiqUdXjTKzq0qppYf1/9gXQAwjXVwiH1bf4g1cwzujWFPkDpQqPrwoFh8W0HMs338XjACTfw8kdQw6zMuKKiV6D4WbTOcdMUMvAKRt9X8k3xVK1E4dmOSMvCQ20BoHVRy9gfDMa2wcNRFLy0=
+	t=1729245961; cv=none; b=h4PcCyse6UVf2T2/Rgj91Bj0HJBVY/xgdrPwlo0jZc7kZS/FhDoNjSD+d5wazYsrpAjUw3MZl6TU+Ja9FfxqSJdWE9zz2kJaoiNDgh5mhHLlc0mqhQ7N0QCBsjlTfji17AePeotIwZmODnwC7hzBhJ/7ygp4qERsYApnn9rzr5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729245537; c=relaxed/simple;
-	bh=QocDQEkDbOeRe7oxzKER+TAS7g0oyVxoxpoy6EMUxfk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CENz6nmUYDan/TR+GdHpDeEDnny+ewKyQJc05AeT+zUE4oPfMNFyT1hmQTG2bUE6UT+649v3S/H52IDYoyGWpoAENM3j1IWboww52BhGBXSiT8jc62PcZUeICygAOAxeG+bleA3ir0mcgn/RfmZFPbH5pv0kq4gJeFBoKTZLrCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UHpz/Owd; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729245537; x=1760781537;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QocDQEkDbOeRe7oxzKER+TAS7g0oyVxoxpoy6EMUxfk=;
-  b=UHpz/Owd5mSnDJjOEBgwN+A5mIIauE5hpILlAiHi3RrkHo5Gz+iOagvs
-   VovQxAhzhfHuOXOm1xhacpVE4JeblLDxzeFdaz4yE4jIqLEBNjNraVjN5
-   B2AiPH1KCIp8diCU8l0NphbuLwDhaPwF9TP1zpNSKBmm6rG9uUaoBkAqr
-   FhmsxZy6vJe5LxaDs4ThlKp1BfskJggu4mmemSITxdOhrEqob2p5HlNXh
-   I7iz44HjuE8WwX8lAjq+VNiQGCO94T6293A8jm7y/pAN7egQrhJIYSI5M
-   Mibl9NP/xbvkiL9y05C49zqYnzCESv8TOwR5oyuV0PzCrc5I2F0/6ix1Y
-   Q==;
-X-CSE-ConnectionGUID: sirEz1AuQByJpQqwEVUosg==
-X-CSE-MsgGUID: na+rgOUySLqP5GSD51ybqg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="28862950"
-X-IronPort-AV: E=Sophos;i="6.11,213,1725346800"; 
-   d="scan'208";a="28862950"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 02:57:06 -0700
-X-CSE-ConnectionGUID: buxrekH4TF2FcDsibYBfWw==
-X-CSE-MsgGUID: Nje6VC/eTGiUxFz3cvVSUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,213,1725346800"; 
-   d="scan'208";a="109641627"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 18 Oct 2024 02:57:04 -0700
-Message-ID: <50e69123-a38e-4e0f-a166-8756a18033ba@linux.intel.com>
-Date: Fri, 18 Oct 2024 12:59:15 +0300
+	s=arc-20240116; t=1729245961; c=relaxed/simple;
+	bh=NgkioI19Na5ZnEfXhq5rfeVLYlydrQkCU6hBQ2+bx0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tItZmEoZ/CUoxDaRHao1FAjyqzbcWGWSXItvDvkxno4Tbqufavrr6KhiMNnunOwDAwSw4VnekgQaCIHaH8PrunNcQu4KRmBzsR2hbXDwl4U9vKWKlDf81jJaGuwl41pAcrODO36VtEk1IdKGCD3Y0SSAyc6GqeK5LFgV1SF8QHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdDpLPar; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776E0C4CEC3;
+	Fri, 18 Oct 2024 10:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729245961;
+	bh=NgkioI19Na5ZnEfXhq5rfeVLYlydrQkCU6hBQ2+bx0Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=QdDpLParPUiFuff/ZFe7+IIFM7jNG2m9TaOAtca8M5+sYE/0ni0mwKvOtvWgNmVfx
+	 k0TR01rsJ/BEEaDNsqKRyxWNz9GmAHir9Yafio5kmPByM+naBvvbqWdxByqqWhMYgS
+	 /1Y/+kj7e8bLefW40zu5chCp9k/WrcSGvUfTRQgDuX45qHUy96aT5W10PxgrtbNxyM
+	 51eA6QkIZZIYZbgnl3D+RrltqvBUvcyQJafoJYc5jXaYnDXjEU7UHuTv2fGzc8IgZr
+	 vvDRon7/ltubVjCRfRdH9syHXm7MRnzaVwKvRMDXLTBSJm6FruYL1Heaz5CkBy4FpT
+	 2FK4ojyLwwAZw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t1js3-000000002yd-1Skv;
+	Fri, 18 Oct 2024 12:06:11 +0200
+Date: Fri, 18 Oct 2024 12:06:11 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial device ids for 6.12-rc4
+Message-ID: <ZxIzE4E8iwpVvpFj@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] xhci: Mitigate failed set dequeue pointer commands
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org, Marc SCHAEFER <schaefer@alphanet.ch>
-References: <20241017084007.53d3fedd@foxbook>
- <3a22e31a-12bc-4fdc-90d2-e09a7f9d067f@linux.intel.com>
- <20241017181447.7c712c4b@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241017181447.7c712c4b@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 17.10.2024 19.14, Michał Pecio wrote:
-> On Thu, 17 Oct 2024 16:10:39 +0300, Mathias Nyman wrote:
->>> Hmm, wouldn't a long and partially cached TD basically become
->>> corrupted by this overwrite?
->>
->> Unlikely but not impossible.
->> We already turn all cancelled TDs that we don't stop on into no-ops,
->> so those would already now experience the same problem.
-> 
-> No, I think they wouldn't. Note in xHCI 1.2, 4.6.9, on page 135 states
-> clearly that xHC shall invalidate cached TRBs besides the current TD.
-> 
-> Same page, point 3, mentions that software "may not modify" the current
-> TD, whatever on earth is that supposed to mean. Unfortunately, I can't
-> find a clear "shall not" in 4.6.9, but I would see it as such.
-> 
+The following changes since commit 8e929cb546ee42c9a61d24fae60605e9e3192354:
 
-Ok, I think we are talking about two different things here.
+  Linux 6.12-rc3 (2024-10-13 14:33:32 -0700)
 
-Point 3 you mentioned is about modifying TDs on the ring, and then continue.
-And you are right, xHC should in this case invalidate all future TDs, but
-not the current one it stopped on.
+are available in the Git repository at:
 
-I'm talking about point 2, about aborting the current TD where we know
-we are queuing a "Set TR Deq" command. Same section states that
-Set TD Deq may be used to force xHC to dump any internal state it has for
-the ring.
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.12-rc4
 
->> We stopped the endpoint, and issued a 'Set TR deq' command which is
->> supposed to clear xHC TRB cache.  I find it hard to believe xHC would
->> continue by caching some select TRBs of a TD to cache.
-> 
-> The idea is, if Set TR Deq fails, the xHC preserves transfer state and
-> cache and tries to continue. If the TD wasn't fully cached when the xHC
-> stopped, it remains incomplete. Missing TRBs will be filled with No Ops
-> when it restarts, yielding an ivalid TD (e.g. No Op chained at the end).
-> 
-> So it may turn out that instead of "EP TRB ptr not part of current TD"
-> something else would show up, perhaps TRB Errors.
+for you to fetch changes up to 6d951576ee16430822a8dee1e5c54d160e1de87d:
 
-If this is how xHC behaves on failed Set TR Deq commands, then yes,
-TRB errors are possible.
+  USB: serial: option: add Telit FN920C04 MBIM compositions (2024-10-17 16:38:02 +0200)
 
-But if xHC does clear TD cache on failed Set TR Deq command then it's
-smooth sailing.
+----------------------------------------------------------------
+USB-serial device ids for 6.12-rc4
 
-If we don't turn the TD to no-op then xHC is more likely to write to
-freed DMA address in both cases above, which I think is worse.
+Here are some new modem device ids.
 
-> 
->> But lets say we end up corrupting the TD. It might still be better
->> than allowing xHC to process the TRBs and write to DMA addresses that
->> might be freed/reused already.
-> 
-> There is some truth to that, I guess. It's bummer that those bugs are
-> here in the first place and no one seems to know where they come from.
-> 
-> 
-> Was this tested on HW? I suppose it wouldn't be hard to corrupt a Set
-> TR Deq command to make it fail, stream 0xffff or something like that.
-> It may be harder to come up with a realistic test case with long TDs.
+Everything has been in linux-next over night with no reported issues.
 
-Unfortunately no, this patch is an attempt to mitigate the issue seen in
-"Strange issues with USB device" [1]. That discussion continued off-list
-with a lot more testing and debugging, but I ran out of testing goodwill
-before I came up with this partial solution.
+----------------------------------------------------------------
+Benjamin B. Frost (1):
+      USB: serial: option: add support for Quectel EG916Q-GL
 
-1. https://lore.kernel.org/linux-usb/ZsjgmCjHdzck9UKd@alphanet.ch/
+Daniele Palmas (1):
+      USB: serial: option: add Telit FN920C04 MBIM compositions
 
-Thanks
-Mathias
+ drivers/usb/serial/option.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
