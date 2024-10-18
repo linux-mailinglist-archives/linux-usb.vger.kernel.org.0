@@ -1,59 +1,57 @@
-Return-Path: <linux-usb+bounces-16394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16395-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1F1F9A355D
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 08:27:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBBC59A36FE
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 09:21:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A411C2821D5
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 06:27:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 255F41C224C2
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 07:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233AE185B67;
-	Fri, 18 Oct 2024 06:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFFDE188917;
+	Fri, 18 Oct 2024 07:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xo+Ri8yX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXBNxpwi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E7B183CBB;
-	Fri, 18 Oct 2024 06:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A507186284;
+	Fri, 18 Oct 2024 07:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729232856; cv=none; b=lWSAm+b7xWa7+8bQ6Wb/+HlUhjUleq2OswucCbsK1xMPAW+xMdLMs/4Dx1m5kqdgJJClBEdBW2KcMzjVt4rsVkv8eyyUFoQZWc3cTDaKQ+SFKbxpIcYjFHRoF5IBoSTwKF9hWMYfa+Jnb+9UafjI5Ge4aSSBBa7yAaN+VdxUjss=
+	t=1729236088; cv=none; b=lStNj+IP/6dLnDotf/dWBMrXosYrAbuTHeDkAXPNRmptnYYUFV02MX+aSNbTGHVqgWQzPM+ZjbVKYwUnD21KnC6yYR1n8duHIJBb0DaxKRSyOhSTEI7WTg1WH51EARHFlVGDzZHjj6+FqwXUyCT+kroORwQQDDhTqAqWTP95D+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729232856; c=relaxed/simple;
-	bh=atv7BrdRaONTCagKXG9yPnrfvP+k64GtF/0tHBoRiwo=;
+	s=arc-20240116; t=1729236088; c=relaxed/simple;
+	bh=gjhO2fB4TN7F/i0LDb8ZvEwTCFrjhrrk/Q2kozKnmMc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qtk4z6pORgWTuf4mkFvP3quYZG01KPt5KhB/Xw+gW+vAlXgycvG1n4SvscT4CY9lrlQ0xaVkv9Z9Jepaau7T5UsGkBGifaPjjDhsDPoM6IQeXYb9imrdb/T9Jh9UMGSdadsY+IL5J8ZZcHz+i87VEJ76J4XHDGORgzTkQZumDzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xo+Ri8yX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF0AC4CEC3;
-	Fri, 18 Oct 2024 06:27:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fFy1e1EWSjzr8V/+mE7C5zPf3TWihZL6PhCpGHFOYJc/r9XmCsVC6TcrgwVFEWeMPG+3KT4joJDthODwr8HA/UerJF+8jj1PKuCR3BTvVVocA/UKs0CzCw91tEXCVdtFsxqbvLH6cYbVqnV2w+HGw+9qVEZxB4C7JfaIqOB0ukc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXBNxpwi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0003C4CEC3;
+	Fri, 18 Oct 2024 07:21:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729232856;
-	bh=atv7BrdRaONTCagKXG9yPnrfvP+k64GtF/0tHBoRiwo=;
+	s=k20201202; t=1729236087;
+	bh=gjhO2fB4TN7F/i0LDb8ZvEwTCFrjhrrk/Q2kozKnmMc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xo+Ri8yXBdAaJL2c9J3nlgPFv6xiqdzm+8eMMMfL40UFF1jKFX0d8Wg+KhnS4nqlL
-	 D/MJt9G3Id1Vft0nOKGdKiniMiY/maAj7CuY1Y9N6NRCdQckYcpB113Hl8Tc59KJ/q
-	 UF7Ygoffd0b+4Xro/YNuBRs/DZspcmIrt/T+FMXVlAaWbNaIr5LMzVO5m7OHnBJewo
-	 DOs5SuiAJxNXzK6liEPkVsc6+xep/nR3SKk352uP//E14j4jv0G2yzJh2oYGgeQV2G
-	 ignecnwgNMy+/HqSLypTBGSVqFemuVKVQowU3gKvHn1gFpr2rbJl46GmxIM54SFXim
-	 c7aN0lLAFcv+Q==
-Date: Fri, 18 Oct 2024 08:27:32 +0200
+	b=IXBNxpwiIieoRgLIqpXdCdV9gHoUYIgPfRveR5QyrXxiPe2Yd2pEUZfTRbgYtJeas
+	 PFELF97cXHpDPeY2f7rpJs2KM7cCPy+8W3SvESoVyoeJTlY67WQHBPcJWJjt4SSDjM
+	 mn/RUQjmYfgEaIy/GJOQEtbUuHikZds/PqFsrr0XgLZvnKULx22YKeUTu7uqnuJQQi
+	 xlBHcBmKKlsVjT/3vrQlgL7qal/uAjveg2w24YxSV74WPEHms/amCReCd1l8ThdiBW
+	 lJ6fZQd44TqY8f3rizON6+CbyBWrcyM8tk7sEJgxejARGOJmEe586EKmbGFP5v7Yyp
+	 9q5KJ8s06iPAA==
+Date: Fri, 18 Oct 2024 09:21:24 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Felipe Balbi <balbi@kernel.org>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: snps,dwc3: Add
- snps,filter-se0-fsls-eop quirk
-Message-ID: <gclvciv5cmrcut6qvo3kh3ycutqt5sot5k4i2nwics6myhuxvq@cf6ajwflxdlc>
-References: <20241017114055.13971-1-quic_uaggarwa@quicinc.com>
- <20241017114055.13971-2-quic_uaggarwa@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: Add SAR2130P compatible
+Message-ID: <shzy24hayj6ee72pwc5lxk7yflzawx5f3uaqql4fwb55idbxci@qgi2fr7pvb5m>
+References: <20241017-sar2130p-usb-v1-1-21e01264b70e@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,38 +60,18 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241017114055.13971-2-quic_uaggarwa@quicinc.com>
+In-Reply-To: <20241017-sar2130p-usb-v1-1-21e01264b70e@linaro.org>
 
-On Thu, Oct 17, 2024 at 05:10:54PM +0530, Uttkarsh Aggarwal wrote:
-> Adding a new 'snps,filter-se0-fsls-eop quirk' DT quirk to dwc3 core to set
-> GUCTL1 BIT 29. When set, controller will ignore single SE0 glitch on the
-> linestate during transmission. Only two or more SE0 is considered as
-> valid EOP on FS/LS port. This bit is applicable only in FS in device mode
-> and FS/LS mode of operation in host mode.
-
-Why this is not device/compatible specific? Just like all other quirks
-pushed last one year.
-
+On Thu, Oct 17, 2024 at 09:16:38PM +0300, Dmitry Baryshkov wrote:
+> Document compatible for the Synopsys DWC3 USB Controller on SAR2130P
+> platform.
 > 
-> Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 1cd0ca90127d..d9e813bbcd80 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -180,6 +180,12 @@ properties:
->      description: When set core will set Tx de-emphasis value
->      type: boolean
->  
-> +  snps,filter-se0-fsls-eop-quirk:
-> +    description:
-> +      When set controller will ignore single SE0 glitch on the linestate during transmit
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Does not look like wrapped according to coding style (checkpatch is not
-a coding style document).
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
