@@ -1,176 +1,102 @@
-Return-Path: <linux-usb+bounces-16416-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16417-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9138C9A3DB1
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 14:00:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF159A3FAD
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 15:31:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAFAC1C253B4
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 12:00:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E872AB22E7A
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 13:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAFB917555;
-	Fri, 18 Oct 2024 12:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 266351DFDA0;
+	Fri, 18 Oct 2024 13:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s68rtUgk"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GEoVn5Zi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8533B1D545
-	for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2024 12:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD16433B5;
+	Fri, 18 Oct 2024 13:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729252802; cv=none; b=gc8pQENpDhvPrEDbZHZxut8fGZY/1m8vW6EiiDA3nWmeb4Qhh/B18vgpjNFKI0t1dATFDS/z54EbSA/nVpNEI+jLH3gr1dkwjKaNoYk1BIjjTArRo6Vayco3TeyBgrKzSQrF0vI225qbMBrSOA2/Q91VG2vz9lAr1XvOCQ4ht8M=
+	t=1729258273; cv=none; b=jZdcv22aaQZNsw+jjVEcFp0G76eXHckUNv5XEkm8JHo/HwvBwpfck2+zpqaPicjEy6GOzraZ2HdJeiHQPeAPs1j8NEwDeSvSCiXqeJ7im9GveTI3YPBhSkCrBdDy+7sE3tX5CfyvyGL5D1mBL0DdHeWJEEg/Wvza1kRC417uRak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729252802; c=relaxed/simple;
-	bh=IZ+ktM1q4VjLBkIUgFdG4NXu1mtAQptlV8rWNSJ9QOM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f8P8YX6zvBOMsq0c+yKqIaQaqfZ0vQW5fFX3Dm6lf5MFnSGz5gYXowAuGvPr3k3ljoe2q0/V+TfxGuurHVOzLmzr4CGbiG0Sts19IujHvnAdn0pYo9Q4NAvbNDfH7GpksEJIHnnpt+0gQNcTC2CqyqNZghJeuYDIk+FZmnILTh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s68rtUgk; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539e617ef81so8893e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2024 05:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729252799; x=1729857599; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NFVJy1qmuzdcCDjWiX1hq6jLw4k+NEA+Um1zz1+jP9c=;
-        b=s68rtUgkNbX1p1E40ZOCyuVvSnFNWqp46FsdKDSHWtcKrjpljSIbb3Pe4GevTSoqlL
-         ppEFgsgNcSxTwQE0AcnT/YK/wqEjlNJKVxvK3BJ7VCx/mvmsegDfevoiki9VmjzynVhN
-         vQz256YumXKcSkBXMZ/kx8zb0J7d4vl+KJ58TzdoxANFnftYWa8Nymu94LDaTp5fh45O
-         UG1yc1+9Tscythw+5g2QNCOArU1RUZB6HI7pLOJir3cW8yxWjMlCtHXi69+/GtGGLsZs
-         FLnk5api5G9D0O0S/cQxbUgplEXo42DWKWoXw86dNJv4LRmCPMVm45OosetEP4m2kouz
-         0MuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729252799; x=1729857599;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NFVJy1qmuzdcCDjWiX1hq6jLw4k+NEA+Um1zz1+jP9c=;
-        b=jVj4Igf/Xe0TvPF2ECjDVJ8EItFOJLUsJM8v4s0vjRmskzP5qqEn1xIISn3/wpzShJ
-         +BzvARtDe382/HL13F1+AYpHjlvMpAIZxuKhJMa/EK0AORqfQ84YuG46cC8IATmtp4Jj
-         ao4ha4X0O+WWYEzXbPnwljgFEtY5k20SNaXeeouWUvtexHt4ZFQ1m5X1YWBayMR75Mxq
-         VwBTpWYwUhTKI2NfLKi/G+7iM0jfGuKJPD0x5oxR4bnaHPWtpHzx7wGJQFGF1/sRaiYL
-         JJdbmz5gcFWRhZ2wLjaBYTNAlQgVth+qinOvjhyQuNfP5R0WkV2UFu59zuFHvDsPBc2R
-         cfIw==
-X-Forwarded-Encrypted: i=1; AJvYcCUJFxzdQ9S84tHAVjIrnu8YqXlEZLRoxAqaWCVkTcqA5rsa/f3CxknK+TtBSR9Er8549dX6vWx7veI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtqWt5d1Ximnm7cGzKkcG7ncfVh+8tETyEQymOeMU4t5TdzPQq
-	CzKux7qK4MXxrtzHeMBGXJeQ38sbqSLTqNiUshSqplLZ6Kuyb9awcZgE4b83eERZiHRtymt0Qf8
-	13XwpHi8DA7Wdmor55E4B5+jfV+qwh42tB0Ek
-X-Google-Smtp-Source: AGHT+IFMpq1BY2E3+83Zu4jQvyCMGZh1ayMrgGbPO35zQuto/FrYqXwDdz8RQvz525bpc+0e4k6UsPfpkEZSfRt6ITA=
-X-Received: by 2002:a05:6512:1294:b0:536:52dc:291f with SMTP id
- 2adb3069b0e04-53a1575907amr148028e87.1.1729252798334; Fri, 18 Oct 2024
- 04:59:58 -0700 (PDT)
+	s=arc-20240116; t=1729258273; c=relaxed/simple;
+	bh=UypE5YTifqNi8LVaHaWGFhy4RZPAjKcgx16DwVQcQc0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=V3MXN5Htdv9MIjjeOof/9MSl/iwudq4RE4ceCXojEW5jVg1cwtu/V8IejM/fcpoD4VnvADCJzeIKHfH4klWutWuCnnGPVeyCTYQbkVI40tN/Aq/yvPTZsv9DmfS4yR4pIoRSLhjLCII1a3b282qyhQ8qwAhtpk2717wtWIMYSCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GEoVn5Zi; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A18B7FF802;
+	Fri, 18 Oct 2024 13:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1729258263;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=e+T9+sV4VYe1A4VswfmwUjhqeHNzCFwIhnWxyoj4wrI=;
+	b=GEoVn5ZibtC/ms0hzfF18nov0+MZyZH8wem4V/FcFcp1Nme+IG7AAdmfcsl2avCsRTRGo0
+	IQ/Z1bwlapOuqoHQLe4BsC2+/JkaZuod89YVL5660At7urdP5DNW1JS9VGaIuz2i0KyytH
+	JdjUPoL0Pprn0j14h1QKb0hGkGf+ADNBVeu9/JDwVDe7R4wnOEPQ1QUctCDLZPjV9QHprE
+	O3YJzVxfIimwJOmTtUQu5MKpfUxN0fWZ3slqocSSxsOvB7I2gQFES6YMJz/V+k1hTldKqv
+	MiwRoK18FGq3srESubzKD5eoSkelNIS+EGbxKFgNyDBpsEOQdh6OQwl3tRCt3Q==
+From: Romain Gantois <romain.gantois@bootlin.com>
+Subject: [PATCH 0/2] Add support for the TUSB1046-DCI Type-C crosspoint
+ switch
+Date: Fri, 18 Oct 2024 15:30:47 +0200
+Message-Id: <20241018-tusb1046-v1-0-a38312f18691@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014085816.1401364-1-guanyulin@google.com>
- <20241014085816.1401364-6-guanyulin@google.com> <9b5fe5d2-77a7-40b7-b260-856c35d9dcec@rowland.harvard.edu>
- <CAOuDEK2f_mtfiye7MdnOqEkq3pYW1kcdkwEMMBC5CkkQ1OGu3A@mail.gmail.com>
- <fddf19f6-d03a-469e-a56f-ef390c099902@rowland.harvard.edu>
- <CAOuDEK3mmR9052FWEJAVBkUanVJ1MLLebZoANiasUpD9TDBjfg@mail.gmail.com> <003263c8-c901-496b-ae04-7cccd7f3cfa2@rowland.harvard.edu>
-In-Reply-To: <003263c8-c901-496b-ae04-7cccd7f3cfa2@rowland.harvard.edu>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Fri, 18 Oct 2024 19:59:00 +0800
-Message-ID: <CAOuDEK2U1Ok=a=X36R_xjkW7MJm2kQ=G7ohh_oC=+f=rGa2eiA@mail.gmail.com>
-Subject: Re: [PATCH v5 5/5] usb: host: enable sideband transfer during system sleep
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
-	mathias.nyman@intel.com, yajun.deng@linux.dev, sumit.garg@linaro.org, 
-	kekrby@gmail.com, oneukum@suse.com, dianders@chromium.org, perex@perex.cz, 
-	tiwai@suse.com, niko.mauno@vaisala.com, andreyknvl@gmail.com, 
-	christophe.jaillet@wanadoo.fr, tj@kernel.org, stanley_chang@realtek.com, 
-	quic_jjohnson@quicinc.com, ricardo@marliere.net, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, badhri@google.com, 
-	albertccwang@google.com, quic_wcheng@quicinc.com, pumahsu@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAhjEmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDA0MT3ZLS4iRDAxMz3dSkFAMLIzMTcwvLFCWg8oKi1LTMCrBR0bG1tQB
+ isbKIWgAAAA==
+X-Change-ID: 20241014-tusb1046-ebd08264789d
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Romain Gantois <romain.gantois@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: romain.gantois@bootlin.com
 
-On Wed, Oct 16, 2024 at 10:45=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
-edu> wrote:
->
-> On Wed, Oct 16, 2024 at 03:40:00PM +0800, Guan-Yu Lin wrote:
-> > On Tue, Oct 15, 2024 at 10:43=E2=80=AFPM Alan Stern <stern@rowland.harv=
-ard.edu> wrote:
-> > >
-> > > On Tue, Oct 15, 2024 at 11:56:00AM +0800, Guan-Yu Lin wrote:
-> > > > On Mon, Oct 14, 2024 at 11:56=E2=80=AFPM Alan Stern <stern@rowland.=
-harvard.edu> wrote:
-> > > > > I'm not so sure about this.  By returning early, you prevent the =
-drivers
-> > > > > bound to this device from suspending.  But they can't operate pro=
-perly
-> > > > > when the system is in a low-power mode.  Won't that cause problem=
-s?
-> > > > >
-> > > > > Maybe this really belongs in usb_suspend_device(), and its counte=
-rpart
-> > > > > belongs in usb_resume_device().
-> > > > >
-> > > >
-> > > > To my understanding, after the system is suspended, the USB driver
-> > > > will do nothing as the main processor has been suspended. May I che=
-ck
-> > > > what forms of low power mode and operation we are discussing here?
-> > >
-> > > S3 suspend.  You are right that the driver will do nothing while the
-> > > CPU is suspended.  But what about the times before and after that,
-> > > while the suspend and resume procedures are underway?  The driver
-> > > needs to be told to cancel any ongoing transfers while the system
-> > > suspends and then restart them while the system resumes.
-> > >
-> >
-> > Regarding the cancellation of ongoing transfers during suspend, I
-> > believe usb_hcd_flush_endpoint() handles this as discussed below.
->
-> There's more to it than that.  If you cancel ongoing transfers by
-> calling usb_hcd_flush_endpoint() without informing the driver first, the
-> driver will get very confused and think the device has failed.
->
-> > Besides calling usb_hcd_flush_endpoint(), are there any other
-> > necessary changes before suspending the driver in our scenario? Maybe
-> > we could discuss setting usb_device_state to USB_STATE_SUSPENDED.
-> > However, my understanding is that this variable reflects the actual
-> > device state. Since the device remains active via the sideband in our
-> > case,  changing usb_device_state seems unnecessary.
->
-> That's right.
->
-> I don't think anything else is needed.  Just call
-> usb_suspend_interface() like the normal pathway in usb_suspend_both()
-> does, but skip calling usb_suspend_device().
->
-> Alan Stern
+Hello everyone,
 
-Thanks for the suggestions, let me address them in the next version.
-After some local development, our experiments suggest it may be
-necessary to skip usb_suspend_interface() & usb_hcd_flush_endpoint()
-for connection changes behind a hub and HID events in our scenario.
+This series adds support for a Type-C linear redriver crosspoint switch which
+can function as a Type-C switch and DisplayPort altmode multiplexer.
 
-Typically, when the system sleeps, the hub uses remote wakeup to
-reactivate upstream devices and resume the interface to handle
-connection changes. However, our current conclusion is to maintain the
-device in an active state while suspending the interface. This
-deviates from the norm, as remote wakeup is designed to function when
-devices and links are suspended. We're concerned that this discrepancy
-might interfere with the remote wakeup mechanism.
-To address this, we're currently bypassing usb_suspend_interface() and
-usb_hcd_flush_endpoint(). This effectively simulates an "active
-system" state, allowing the USB controller to notify the kernel about
-connection changes via interrupts. This workaround applies to HID
-events as well.
+Best Regards,
 
-Which approach do you recommend? Should we invest in integrating with
-the remote wakeup framework, or is it acceptable to keep necessary
-components active, mirroring an "active system" state?
+Romain Gantois
 
-Regards,
-Guan-Yu
+Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+---
+Romain Gantois (2):
+      dt-bindings: usb: Describe TUSB1046 crosspoint switch
+      usb: typec: mux: Add support for the TUSB1046 crosspoint switch
+
+ .../devicetree/bindings/usb/ti,tusb1046.yaml       |  49 +++++++
+ MAINTAINERS                                        |   7 +
+ drivers/usb/typec/mux/Kconfig                      |   9 ++
+ drivers/usb/typec/mux/Makefile                     |   1 +
+ drivers/usb/typec/mux/tusb1046.c                   | 161 +++++++++++++++++++++
+ 5 files changed, 227 insertions(+)
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20241014-tusb1046-ebd08264789d
+
+Best regards,
+-- 
+Romain Gantois <romain.gantois@bootlin.com>
+
 
