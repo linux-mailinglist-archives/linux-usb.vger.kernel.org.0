@@ -1,180 +1,112 @@
-Return-Path: <linux-usb+bounces-16432-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16433-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 401499A4782
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 22:00:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 214069A48CB
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 23:15:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1DAB286976
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 20:00:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50AC21C23052
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 21:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8DA205144;
-	Fri, 18 Oct 2024 20:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BEC218DF7C;
+	Fri, 18 Oct 2024 21:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZrDlXiZS"
+	dkim=pass (1024-bit key) header.d=arcor.de header.i=@arcor.de header.b="xdkWELzP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mr4.vodafonemail.de (mr4.vodafonemail.de [145.253.228.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE371877;
-	Fri, 18 Oct 2024 20:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D469818DF71
+	for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2024 21:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.253.228.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729281619; cv=none; b=sCTgdOtIs/B+7J3F2t/bB0NMP0XQ6hN8xDn0Ke42gxT9etsOxsFSUJLZcgVk3jOEfVkPoZilmI46NxSFpUqukDdukf1j4/4I8Tja1APuAavfMsmEqsK8LPaen3KPN4PaFn7jQrx7c+3iBaLxeXidXl/v+VYbtKLRO1LnYEu2Iaw=
+	t=1729286130; cv=none; b=QcsWr5CgeSSEuX7ZwvV/msNgt1AEuvgs3grxqzEChhsVdEq9vODdoDUC5LO9wLxXS1/agrL50lH/7+/TsFmtUyJLuG4OL7rrHGMI8xNFAdkmAmtmqI4A1LcnVqPn0istAZUL1acmxTOkQrMq+iO/Uo0hyU8VDIaX1nKO4xFWKU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729281619; c=relaxed/simple;
-	bh=XZdx80R+JV76F0/LJjVqwGe0jn8KTRoxU7CYNqxUYcA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ix8AXX9Z7t/OLvSVU+zuZRgsOXFiLne3FRXLmPqHAnA6Q72O23uxe9xokoUsHmHbuHtVqW15FCYgb8n2bqHktUZSY0ojJsL7Cnpc3wxXhicZj/JeGLdM4aKvNGmPd7IXc449A3jjoNkToYSY0YCaO96WFr3rXSX1sfRZXQh5qR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZrDlXiZS; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49IBapUZ019324;
-	Fri, 18 Oct 2024 20:00:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:message-id:mime-version:subject:to; s=
-	qcppdkim1; bh=mRufhj+cCRiCu3UD9OFgEbw5uqeGE4+lTUYy/QM5NbI=; b=Zr
-	DlXiZSshaVxto6i7WiuAIiuNHGun3wCTPqUzhbkAd0+PKGKpE/UL4xDEqfyae0qF
-	h3G1ScUxBmGnxMIvI6yMGRdZJ8s9If3uJ3teMqqDyj5S6yNpXbYTWqmL0sv96cgO
-	7sR57TtQ5edm/3hh8axt5plsZ/D0tCdotHZCbl9hxGTtND+m6eEnRFK0OOTz6pim
-	KLaREpYdGT/dFefm2aQgIA88WapfjWvDFPKgEMfcGKuDNDqN4rv/1fThsOKcKrkm
-	IBy39+IXw9+od5PA8pKG/SofxYXraDUFfhCM7qngVLFWI9ZI2ruWym1JsWQZR76o
-	ZLaM2oQBFOYiI1PqGY/A==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42bexpasfx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 20:00:12 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49IK0CHc004281
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 20:00:12 GMT
-Received: from hu-faisalh-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 18 Oct 2024 13:00:10 -0700
-From: Faisal Hassan <quic_faisalh@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman
-	<mathias.nyman@intel.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Faisal Hassan
-	<quic_faisalh@quicinc.com>, <stable@vger.kernel.org>
-Subject: [PATCH] xhci: Fix Link TRB DMA in command ring stopped completion event
-Date: Sat, 19 Oct 2024 01:29:53 +0530
-Message-ID: <20241018195953.12315-1-quic_faisalh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1729286130; c=relaxed/simple;
+	bh=KzvAb7w5HrPlphyMTJpPmFzu4EatsvJt75TwNDsd1vI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jTJKuF5GD9KpT1Qul81tjDfrpN6tHanPyimhulofR3N/Zwo1WpK555TNnhibpHTSB+JdQhOWPYLa3fYqzlu5s2Qi84a4lfPeZUYgAxhcMSWnD5FrjJixY6hsI0MoqALoZF9jEclkcyqk9nwhG0DkkZoV0B+5BWzYX7q4PfcNYDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arcor.de; spf=pass smtp.mailfrom=arcor.de; dkim=pass (1024-bit key) header.d=arcor.de header.i=@arcor.de header.b=xdkWELzP; arc=none smtp.client-ip=145.253.228.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arcor.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arcor.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
+	s=vfde-mb-mr2-23sep; t=1729285642;
+	bh=au9LnIOagWT+Rv4GMpuAaBl2WcqmbrBiV9qebnRTTng=;
+	h=Date:From:To:Subject:Message-ID:Content-Type:From;
+	b=xdkWELzPalpwkiSzOPDwD+lal+/OoQuFL075AlOEGF35gecaYoDWwmotx/e/8spaZ
+	 ed9ARBIWqitHP8vH/4fFnFDmMcceBXgj3Qfs7wi4LCAwk5Vc1p5ZROGvnbN1gr9Tk4
+	 HnYMJuiKqHuTsgVBF9y/9D3cW/QKHq53320p80vk=
+Received: from smtp.vodafone.de (unknown [10.0.0.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by mr4.vodafonemail.de (Postfix) with ESMTPS id 4XVcj637mfz1y4J;
+	Fri, 18 Oct 2024 21:07:22 +0000 (UTC)
+Received: from arcor.de (p57a23786.dip0.t-ipconnect.de [87.162.55.134])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.vodafone.de (Postfix) with ESMTPSA id 4XVchz1H8sz8sWs;
+	Fri, 18 Oct 2024 21:07:12 +0000 (UTC)
+Date: Fri, 18 Oct 2024 23:07:06 +0200
+From: Reinhard Speyerer <rspmn@arcor.de>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [PATCH] USB: serial: option: add Fibocom FG132 0x0112 composition
+Message-ID: <ZxLN-sb0ujuap36t@arcor.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oZcW8brLnMJCeoNee-EXtQu9dp8QcZRr
-X-Proofpoint-ORIG-GUID: oZcW8brLnMJCeoNee-EXtQu9dp8QcZRr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- clxscore=1011 spamscore=0 lowpriorityscore=0 mlxlogscore=947 adultscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410180127
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-purgate-type: clean
+X-purgate: clean
+X-purgate-size: 2183
+X-purgate-ID: 155817::1729285638-48FF8441-B011F77C/0/0
 
-During the aborting of a command, the software receives a command
-completion event for the command ring stopped, with the TRB pointing
-to the next TRB after the aborted command.
+Add Fibocom FG132 0x0112 composition:
 
-If the command we abort is located just before the Link TRB in the
-command ring, then during the 'command ring stopped' completion event,
-the xHC gives the Link TRB in the event's cmd DMA, which causes a
-mismatch in handling command completion event.
+T:  Bus=03 Lev=02 Prnt=06 Port=01 Cnt=02 Dev#= 10 Spd=12   MxCh= 0
+D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2cb7 ProdID=0112 Rev= 5.15
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=Fibocom Module
+S:  SerialNumber=xxxxxxxx
+C:* #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
 
-To handle this situation, an additional check has been added to ignore
-the mismatch error and continue the operation.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
+Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
 ---
- drivers/usb/host/xhci-ring.c | 38 +++++++++++++++++++++++++++++++++---
- 1 file changed, 35 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index b2950c35c740..43926c378df9 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -126,6 +126,32 @@ static void inc_td_cnt(struct urb *urb)
- 	urb_priv->num_tds_done++;
- }
- 
-+/*
-+ * Return true if the DMA is pointing to a Link TRB in the ring;
-+ * otherwise, return false.
-+ */
-+static bool is_dma_link_trb(struct xhci_ring *ring, dma_addr_t dma)
-+{
-+	struct xhci_segment *seg;
-+	union xhci_trb *trb;
-+	dma_addr_t trb_dma;
-+	int i;
-+
-+	seg = ring->first_seg;
-+	do {
-+		for (i = 0; i < TRBS_PER_SEGMENT; i++) {
-+			trb = &seg->trbs[i];
-+			trb_dma = seg->dma + (i * sizeof(union xhci_trb));
-+
-+			if (trb_is_link(trb) && trb_dma == dma)
-+				return true;
-+		}
-+		seg = seg->next;
-+	} while (seg != ring->first_seg);
-+
-+	return false;
-+}
-+
- static void trb_to_noop(union xhci_trb *trb, u32 noop_type)
- {
- 	if (trb_is_link(trb)) {
-@@ -1718,13 +1744,21 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 
- 	trace_xhci_handle_command(xhci->cmd_ring, &cmd_trb->generic);
- 
-+	cmd_comp_code = GET_COMP_CODE(le32_to_cpu(event->status));
- 	cmd_dequeue_dma = xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg,
- 			cmd_trb);
- 	/*
- 	 * Check whether the completion event is for our internal kept
- 	 * command.
-+	 * For the 'command ring stopped' completion event, there is a
-+	 * risk of a mismatch in dequeue pointers if we abort the command
-+	 * just before the link TRB in the command ring. In this scenario,
-+	 * the cmd_dma in the event would point to a link TRB, while the
-+	 * software dequeue pointer circles back to the start.
- 	 */
--	if (!cmd_dequeue_dma || cmd_dma != (u64)cmd_dequeue_dma) {
-+	if ((!cmd_dequeue_dma || cmd_dma != (u64)cmd_dequeue_dma) &&
-+	    !(cmd_comp_code == COMP_COMMAND_RING_STOPPED &&
-+	      is_dma_link_trb(xhci->cmd_ring, cmd_dma))) {
- 		xhci_warn(xhci,
- 			  "ERROR mismatched command completion event\n");
- 		return;
-@@ -1734,8 +1768,6 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 
- 	cancel_delayed_work(&xhci->cmd_timer);
- 
--	cmd_comp_code = GET_COMP_CODE(le32_to_cpu(event->status));
--
- 	/* If CMD ring stopped we own the trbs between enqueue and dequeue */
- 	if (cmd_comp_code == COMP_COMMAND_RING_STOPPED) {
- 		complete_all(&xhci->cmd_ring_stop_completion);
--- 
-2.17.1
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index eb0731992ca9..756a6ba06ec2 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2312,6 +2312,9 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0xff, 0x30) },	/* Fibocom FG150 Diag */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0, 0) },		/* Fibocom FG150 AT */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0111, 0xff) },			/* Fibocom FM160 (MBIM mode) */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0112, 0xff, 0xff, 0x30) },	/* Fibocom FG132 DIAG */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0112, 0xff, 0xff, 0x40) },	/* Fibocom FG132 AT */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0112, 0xff, 0, 0) },		/* Fibocom FG132 NMEA */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0115, 0xff),			/* Fibocom FM135 (laptop MBIM) */
+ 	  .driver_info = RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
 
