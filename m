@@ -1,108 +1,70 @@
-Return-Path: <linux-usb+bounces-16392-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16393-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66CE79A34A4
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 07:54:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF0F29A34D1
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 07:58:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F11C62852A6
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 05:54:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 569291F23ECE
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 05:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B700E185B54;
-	Fri, 18 Oct 2024 05:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2D618132A;
+	Fri, 18 Oct 2024 05:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cSyiPMGN"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JQXNzGZl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C8E1822E5;
-	Fri, 18 Oct 2024 05:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D5517BB34
+	for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2024 05:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729230759; cv=none; b=KLaxR2uap01bStcKZ4NNN9NRVzKAha2Yw3UBDxvVryDVWCQl5IrVA6E0KHzEd6vX+zy7nx999hx4gygOBK9DneXc8DL7Xxbix8xfAMchN9RcLdffbPQvdcneMDOGJrUJ2aSr4ZfzmcNZafHI6aqzxaXoLDbZPkOpghvjEnzO3gc=
+	t=1729230835; cv=none; b=HZwOgYdb2LOkCWVK7h5Aq6Mee1YHAQF1gEm/3MkACWdKWm1r4ODIrF3BdLSOFApHWjaqvGcTuzkbBLa6sGsjfivXzeDAHZKmCHyTcqTTaZ2UcPapIejNnsBscRNYn68Zw53vVSi+9T7wCDUy8e20+SzSDmBXCN8Y+VR0PfiWjT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729230759; c=relaxed/simple;
-	bh=t72qPYFH5qW9CSTUoUWBfe21Vq2ukayl51YEp/oosEA=;
+	s=arc-20240116; t=1729230835; c=relaxed/simple;
+	bh=eY9mLY7DHFsvxyvst8BnMl+yqM2Shgbp7trC3jANch4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KP8m7lUDSGSs+1YiUVSA0Q/FSK63GCzmNXK0sz3/hJ17lYNrRYWMjxQuYKRP1v0IIVsk9h/+ILwYRTEKR+JSL0bQfBCzpOAZPmvTjpwIP0vxyPmw6pvoF21FscAt8xknOauKK9g/F8bsUwbZlqC3iFm5uDdGC8OKA/XV6psX/Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cSyiPMGN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB8EAC4CEC3;
-	Fri, 18 Oct 2024 05:52:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=SaYgCdkld6fmq8RLoGt5Vu4rI1BVWw9JauknZNgvRkWREF27nDx6Qpq9SEZC4TePLiP92z9cyTBTR20I/Cgt8MXzUOPimOOG6nK8Nm5CZRNOZbabh4Pd1jIzx3I95oybroBVY6a39PfDwR0joZsC26QjgSYjB3BtgH8IbTBVxpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JQXNzGZl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87A0C4CEC3;
+	Fri, 18 Oct 2024 05:53:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1729230758;
-	bh=t72qPYFH5qW9CSTUoUWBfe21Vq2ukayl51YEp/oosEA=;
+	s=korg; t=1729230835;
+	bh=eY9mLY7DHFsvxyvst8BnMl+yqM2Shgbp7trC3jANch4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cSyiPMGNKU212TJ+q0GtMzycjpfO32+6AkR/8bwoCghlU21012x0Aoki6eVJI1/U+
-	 6iELNc2vLqcqt7GQZsDvXNrVAYO8yAWTNuDglWB8WFpY0dGOUQxr22xiyNl/HZRJ2C
-	 zYMq/2SyFRgLmomkI7ENxVvBoXwiCQGZBe4D5gqY=
-Date: Fri, 18 Oct 2024 07:52:35 +0200
+	b=JQXNzGZlCZcnr/B9eDpjxIyJfPUxI0Szv63zRpkwtyqXP+0vRJ97lY8ynWSzo04Ub
+	 20jP2BsO+CbncIK5hqi3Sq08G8m/kd5K9Jkl8zlhT52eSvacxHBFCL8lZFxBPF+KTO
+	 TFDSJM7YuVNoay7tLHWy5Afy2aKPzuC1vA41KDew=
+Date: Fri, 18 Oct 2024 07:53:51 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: srinivas.kandagatla@linaro.org, mathias.nyman@intel.com, perex@perex.cz,
-	conor+dt@kernel.org, dmitry.torokhov@gmail.com, corbet@lwn.net,
-	lgirdwood@gmail.com, tiwai@suse.com, krzk+dt@kernel.org,
-	pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
-	broonie@kernel.org, bgoswami@quicinc.com, robh@kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-doc@vger.kernel.org, alsa-devel@alsa-project.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v29 01/33] xhci: support setting interrupt moderation
- IMOD for secondary interrupters
-Message-ID: <2024101824-hammock-elastic-8d38@gregkh>
-References: <20241015212915.1206789-1-quic_wcheng@quicinc.com>
- <20241015212915.1206789-2-quic_wcheng@quicinc.com>
- <2024101747-defog-squiggly-ef54@gregkh>
- <5847c380-75ce-492a-9a30-0899b7ebe98c@quicinc.com>
+To: Angel D Raygoza <9bea5cde-4b55-4b34-b91a-37dbd16ce68e@startmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Usb IP Failing to connect depending of program being runned even
+ when the connection talks are identical
+Message-ID: <2024101824-shakable-portfolio-9cfb@gregkh>
+References: <50f9a086-d873-44d2-bdda-a8e00dd2421e@startmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <5847c380-75ce-492a-9a30-0899b7ebe98c@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <50f9a086-d873-44d2-bdda-a8e00dd2421e@startmail.com>
 
-On Thu, Oct 17, 2024 at 05:07:12PM -0700, Wesley Cheng wrote:
-> Hi Greg,
+On Thu, Oct 17, 2024 at 03:05:43PM -0600, Angel D Raygoza wrote:
+> Dear USB Linux Mailing List.
 > 
-> On 10/16/2024 11:40 PM, Greg KH wrote:
-> > On Tue, Oct 15, 2024 at 02:28:43PM -0700, Wesley Cheng wrote:
-> >> From: Mathias Nyman <mathias.nyman@linux.intel.com>
-> >>
-> >> Allow creators of xHCI secondary interrupters to specify the interrupt
-> >> moderation interval value in nanoseconds when creating the interrupter.
-> >>
-> >> If not sure what value to use then use the xhci driver default
-> >> xhci->imod_interval
-> >>
-> >> Suggested-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> >> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> >> Link: https://lore.kernel.org/r/20240905143300.1959279-13-mathias.nyman@linux.intel.com
-> >> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >> ---
-> >>  drivers/usb/host/xhci-mem.c | 8 +++++++-
-> >>  drivers/usb/host/xhci.c     | 4 ++--
-> >>  drivers/usb/host/xhci.h     | 5 ++++-
-> >>  3 files changed, 13 insertions(+), 4 deletions(-)
-> > This is already in 6.12-rc1, which makes me confused as to what tree you
-> > made this series against.
-> 
-> Sorry, I didn't fetch the latest changes from usb-next.
+> I have been trying to write a USB IP Virtual Device  as your protocol
+> (https://docs.kernel.org/usb/usbip_protocol.html).
 
-It wasn't even usb-next, it was 6.12-rc1, so I don't know what tree you
-based this on :(
-
-> In this case, should I rebase and resbumit?
-
-As the series can't be applied as-is, probably.  But I think you might
-want to collect some acks from the sound people and xhci developers, as
-I can't do anything with this until they look at the changes.
+Why not just use the in-kernel device code instead of creating your own?
+Is there something wrong with that implementation?
 
 thanks,
 
