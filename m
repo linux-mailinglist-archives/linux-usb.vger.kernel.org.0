@@ -1,65 +1,96 @@
-Return-Path: <linux-usb+bounces-16422-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16423-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 922519A40F8
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 16:19:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFFE99A4163
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 16:41:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48D7D1F2479A
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 14:19:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D16F71C23391
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2024 14:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A761F4260;
-	Fri, 18 Oct 2024 14:19:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4DAC1F4287;
+	Fri, 18 Oct 2024 14:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="lVIzDg8I"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="jGbvE+Ye"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C7D6BFCA;
-	Fri, 18 Oct 2024 14:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC171F4286
+	for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2024 14:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729261141; cv=none; b=fNthKOBW/Ze+QCVbdgeOpiTcE+y2vGZJFE1thjkx3Z+iHDr6dLtlyzyvDZY7o3IqS65hsWMa5axODTXDiJDJtSKdW6hGsr6TQWL0gNUb/XU/eSdpWg480GoR4AQeOB0Oy2Chbwylp3KdZetlXLMvpowfwHU/ilgpyMHd6C+BwwU=
+	t=1729262469; cv=none; b=ey6PmNM8hM/j6+kiPUwUiUYQ/c+lpUuz5m8IIdVgYQIY8lDk3GZ+HCBCEVzUST86evaO8M93Mq492fMtHF5VdWT+PMUTa+kZIpoQSTISacNZjWNXnWyr8h6/UVs0qKOhiKTExCMe8uQn7DeUgTbJONLA22FBjVvGi0JTDeIBIXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729261141; c=relaxed/simple;
-	bh=8Ay7Hj5OZgQ7MGqy5i7LUi6fdznUG66vs92kGE3WWYE=;
+	s=arc-20240116; t=1729262469; c=relaxed/simple;
+	bh=IbhpVSRXoHp+AFpiEZf0r+beixbxaoTPmsDASpo3j0A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZOYRiisZPma4zQELGQ3AuIM34WWL6R6Q8tfiumNysd8fSUsxw/WIMOXB1YSlhJUsumcb6F8Hcd6sr2IyUtoekLTAhBAiohjtNn4tbqoDtojkXr+/soOq1tyCBbXo5A7wFTKH8NkrPICWU5ns5GXuKa5ILGxCTyA7kDPv/8WLsMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=lVIzDg8I; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id C43E222909;
-	Fri, 18 Oct 2024 16:18:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1729261127;
-	bh=kMMaRKGZ6ngPRcX/Zv1+XoEwbVnv1U3vYYkh/ZUsUq0=; h=From:To:Subject;
-	b=lVIzDg8IpqceAxis4t3wHm1bshLDCxgQPc5pmoqr2JPPeiSaNw5L3Ve46BZy8+3ke
-	 ycfUJ4U0U3vp/ixn38OEX4uH0d+Eb0cTYaaoNBo2O0vzMuw+TrSJ4x5ntoxZLx0Hqu
-	 tZBh1RDZHy4lTk0IojP80p/RhJroVtAf2LNBVV7TWyZhmeRIojL88qEvN30KJXHxj8
-	 ggUhurQe5IzDObqOKt03yl+2ScczfA0HJ/sK81tskGwUXbyGTtMDQ9ozjhxRUJNrqi
-	 zM3kVl1i/LtLg5sFN3S3IastDgMx5QZAntIw5jvsmQ0y0NyzXheTWBpcOCNk4SMAB5
-	 SOrF8qidLj9Lw==
-Date: Fri, 18 Oct 2024 16:18:42 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Rob Herring <robh@kernel.org>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	Parth Pancholi <parth.pancholi@toradex.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: add TUSB73x0 PCIe
-Message-ID: <20241018141825.GA46391@francesco-nb>
-References: <20241018105505.28005-1-francesco@dolcini.it>
- <20241018105505.28005-2-francesco@dolcini.it>
- <20241018140743.GA98324-robh@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QFJGKtfFiC6Y2mQfXfWflsbbR71gyJx9akXj2riI3OdR3gpAjgecyxJxzI6mUecmFCVy4huYUqpfrmMvnnKxPFuU0agQKojA/Fgoi3HMa4NGJ3HBYo7tLJtdNuv3VQ09qt8zq3Me/zFZmE7KnIrxS8Bxagv4mAEQ+0b6PWhYt68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=jGbvE+Ye; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7180e07185bso947621a34.3
+        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2024 07:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1729262466; x=1729867266; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D8YdydRMs5ZuJN3KTpZl2ndLhC/IwZhLxMPrFhDw1pQ=;
+        b=jGbvE+YezPZ4nYTjHw2nwZzny07zyJ9E0dbNL5qlgxsQLAohtiok9y+5FEraQghFWW
+         d3EXR6dZQzS0QBYG0gzf8cHSpK7mEP5C1x0mPmSI8RSC3Y1nNsuWD5RoYE4bnct1rBE3
+         xSwz9fhw5zTOwd3NtL/QTn1hU693/MjjevArv+nVtDhT4XUj+v860jJ/G1LS3fFop4FO
+         TAH12BFGKfv9QTcynXctlkzYLsx1fqCVKYvJnkluQwrIAqDvFLpT0C23rrhYw4JFca6M
+         acBqeJ7Ang0Cu4DcfeT9U5GGwnj0GcTbtgABivvxX9SpIukpZiyfGJpoMBmhNO7kkU6e
+         gikQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729262466; x=1729867266;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D8YdydRMs5ZuJN3KTpZl2ndLhC/IwZhLxMPrFhDw1pQ=;
+        b=pc6lAtseUwo2F8G2LRi+6cbZeZm3IoPyqlUGaQgX2ajjaJGv6oYryTsrcox69pVJKZ
+         oUEQeFXnDj4YBkE80Gj+J3H9w75/tA2ugfvLYut77Hqg2/tN3JKItNAmJxCo+g7QtT3h
+         CrM4AFNPkJy3NF2KcmMS0ZlwFFbOz1cLRqr6wrfH2Exe0rwA7lvt/Wt6ujN+Z4NBx3BF
+         +ejVrJgcOQOP4xI51H6P8LpitG5adusTFo78SBloiX06HrQKDvL/7PFpDmkb2dLD5Vnc
+         kWBgLN5YscKlTctZbvfnW9+m8gmxA28/LOZbldNT9Qr2e9goaWYRfOSYbb4IcvOd4Jqk
+         zX7g==
+X-Forwarded-Encrypted: i=1; AJvYcCXnULEScroauzuBP+ZZJsPkmJYzYTj48JoWmg5QkKoWwFhXrbGHGgk0Rf8RyXRc2YqCUzdySRAizL0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywew6ioDZ1lmRurFGnLhf04R3FM6Hkq+kGjssDmhmN1Z/kAY/mj
+	N+m5bZh7hLcbEbFqmPVYzg03TDU24k7qA4G4281HZIU29gT8F2fb1yVw9nvToQ==
+X-Google-Smtp-Source: AGHT+IGdvNRCnoIQrcGPoQnsogsIrxwKdaJB0XeTFqOFbVa0uVXdKHhq3gqEzGp12uvN6jIHUo3tgw==
+X-Received: by 2002:a05:6359:6d4a:b0:1b8:3283:ec6e with SMTP id e5c5f4694b2df-1c39e046828mr101920655d.24.1729262466532;
+        Fri, 18 Oct 2024 07:41:06 -0700 (PDT)
+Received: from rowland.harvard.edu (ool-18bba9aa.dyn.optonline.net. [24.187.169.170])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b156fe59c7sm74426385a.84.2024.10.18.07.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Oct 2024 07:41:06 -0700 (PDT)
+Date: Fri, 18 Oct 2024 10:41:03 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com, yajun.deng@linux.dev,
+	sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com,
+	dianders@chromium.org, perex@perex.cz, tiwai@suse.com,
+	niko.mauno@vaisala.com, andreyknvl@gmail.com,
+	christophe.jaillet@wanadoo.fr, tj@kernel.org,
+	stanley_chang@realtek.com, quic_jjohnson@quicinc.com,
+	ricardo@marliere.net, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org,
+	badhri@google.com, albertccwang@google.com, quic_wcheng@quicinc.com,
+	pumahsu@google.com
+Subject: Re: [PATCH v5 5/5] usb: host: enable sideband transfer during system
+ sleep
+Message-ID: <cc900c5b-32e6-4147-a5c7-923bfa13686a@rowland.harvard.edu>
+References: <20241014085816.1401364-1-guanyulin@google.com>
+ <20241014085816.1401364-6-guanyulin@google.com>
+ <9b5fe5d2-77a7-40b7-b260-856c35d9dcec@rowland.harvard.edu>
+ <CAOuDEK2f_mtfiye7MdnOqEkq3pYW1kcdkwEMMBC5CkkQ1OGu3A@mail.gmail.com>
+ <fddf19f6-d03a-469e-a56f-ef390c099902@rowland.harvard.edu>
+ <CAOuDEK3mmR9052FWEJAVBkUanVJ1MLLebZoANiasUpD9TDBjfg@mail.gmail.com>
+ <003263c8-c901-496b-ae04-7cccd7f3cfa2@rowland.harvard.edu>
+ <CAOuDEK2U1Ok=a=X36R_xjkW7MJm2kQ=G7ohh_oC=+f=rGa2eiA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,79 +99,41 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241018140743.GA98324-robh@kernel.org>
+In-Reply-To: <CAOuDEK2U1Ok=a=X36R_xjkW7MJm2kQ=G7ohh_oC=+f=rGa2eiA@mail.gmail.com>
 
-Hello Rob,
-thanks for the review.
-
-On Fri, Oct 18, 2024 at 09:07:43AM -0500, Rob Herring wrote:
-> On Fri, Oct 18, 2024 at 12:55:04PM +0200, Francesco Dolcini wrote:
-> > From: Parth Pancholi <parth.pancholi@toradex.com>
-> > 
-> > Add device tree bindings for TI's TUSB73x0 PCIe-to-USB 3.0 xHCI
-> > host controller. The controller supports software configuration
-> > through PCIe registers, such as controlling the PWRONx polarity
-> > via the USB control register (E0h).
-> > 
-> > Similar generic PCIe-based bindings can be found as qcom,ath11k-pci.yaml
-> > as an example.
-> > 
-> > Datasheet: https://www.ti.com/lit/ds/symlink/tusb7320.pdf
-> > Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
-> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > ---
-> > v3: use lowercase hex in compatible
-> > v2: rename property to ti,tusb7320-pwron-active-high and change type to flag
-> > ---
-> >  .../bindings/usb/ti,tusb73x0-pci.yaml         | 60 +++++++++++++++++++
-> >  1 file changed, 60 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-> > new file mode 100644
-> > index 000000000000..7083e24d279c
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-> > @@ -0,0 +1,60 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/ti,tusb73x0-pci.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: TUSB73x0 USB 3.0 xHCI Host Controller (PCIe)
-> > +
-> > +maintainers:
-> > +  - Francesco Dolcini <francesco.dolcini@toradex.com>
-> > +
-> > +description:
-> > +  TUSB73x0 USB 3.0 xHCI Host Controller via PCIe x1 Gen2 interface.
-> > +  The TUSB7320 supports up to two downstream ports, the TUSB7340 supports up
-> > +  to four downstream ports.
+On Fri, Oct 18, 2024 at 07:59:00PM +0800, Guan-Yu Lin wrote:
+> Thanks for the suggestions, let me address them in the next version.
+> After some local development, our experiments suggest it may be
+> necessary to skip usb_suspend_interface() & usb_hcd_flush_endpoint()
+> for connection changes behind a hub and HID events in our scenario.
 > 
-> XHCI controller, should be referencing usb-xhci.yaml.
+> Typically, when the system sleeps, the hub uses remote wakeup to
+> reactivate upstream devices and resume the interface to handle
+> connection changes. However, our current conclusion is to maintain the
+> device in an active state while suspending the interface. This
+> deviates from the norm, as remote wakeup is designed to function when
+> devices and links are suspended. We're concerned that this discrepancy
+> might interfere with the remote wakeup mechanism.
+> To address this, we're currently bypassing usb_suspend_interface() and
+> usb_hcd_flush_endpoint(). This effectively simulates an "active
+> system" state, allowing the USB controller to notify the kernel about
+> connection changes via interrupts. This workaround applies to HID
+> events as well.
 > 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: pci104c,8241
-> 
-> 2 parts mentioned above, but only 1 PCI ID?
+> Which approach do you recommend? Should we invest in integrating with
+> the remote wakeup framework, or is it acceptable to keep necessary
+> components active, mirroring an "active system" state?
 
-Exactly. Let me know if there is something we should do in this regard
-(something in the commit message? or in the description?).
+It's hard to answer those questions because I don't have a clear idea of 
+how the sideband system is meant to work.  For instance, what does the 
+sideband system do when a port-connect change is detected in a hub that 
+sits between the computer and the audio device?  If the sideband system 
+decides to change the audio device's settings, how does the regular 
+audio driver learn about the change?  And so on.
 
-From the datasheet:
-  This 16-bit read only register contains the value 8241h,
-  which is the device ID assigned by TI to the TUSB73X0
+It's worth pointing out that allowing two different drivers to control 
+the same device is generally not a good idea.  More likely than not they 
+will end up interfering with each other at some stage.
 
-And one more confirmation, in the Linux code you have quirks for this
-device that just check for a single device id:
-
-drivers/usb/host/xhci-pci.c:459
-  if (pdev->vendor == PCI_VENDOR_ID_TI && pdev->device == 0x8241)         
-    xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_7;                 
-
-Francesco
-
+Alan Stern
 
