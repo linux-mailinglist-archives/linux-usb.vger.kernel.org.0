@@ -1,166 +1,127 @@
-Return-Path: <linux-usb+bounces-16442-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16443-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD5269A4F96
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 18:09:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D11259A4FF7
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 19:23:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F1D02873C1
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 16:09:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86AD71F27177
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 17:23:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09627188A18;
-	Sat, 19 Oct 2024 16:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C1518E022;
+	Sat, 19 Oct 2024 17:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KvvaeNvA"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NcRZyRV6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 284852F3E;
-	Sat, 19 Oct 2024 16:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25016BA38;
+	Sat, 19 Oct 2024 17:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729354193; cv=none; b=j3hSYjtygvzJhqVeIcYG0WZ0dH2hu3SsV9sBpIR2DT1QNGfsAy5jimaNsCcVWVyKb2/znGaO5vShanL0y5dVY/izZdPgNIS86pJKms2XuH1cb6XEo5mAw+1p57bGBt0yDcgzTFNNEU7y/3gT62UMHolWf5WFgDUbKFtuYT8hmYs=
+	t=1729358609; cv=none; b=mPXXzBcOWS/pChIZq1bCb8dxBEMQQs6kd6bYC+qCECGfW9uYlcNlXaD6xjsGqqDZyCkG4jAF8cK2PEdJKQTcuy+wfRYO8KwaIUDNj7WEEFGi1IHAzjnoiIxLAkcoSwMr+apvbmUgRq4muRzSgN6afpR+tGZjv3ofMnUMiwM0Bq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729354193; c=relaxed/simple;
-	bh=Y2o35mOQRiYxgDsfAod1PSAbtNHLv+FsmzP1zrcG+U4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ui7cUC416xRnlKuxNS3gUO1RQxDPlgeTWrUzW/yzGspQax7NiitvGkhZjRZvZ152x3ZU7QL7B338m2Uj5JUQNW05iTaYWr2C0ACOlypGHcX7JnGQqaSOAL30kA0OpIZ+ShDLHz96i0ueWVunhUAIKlK4QDNAVPiCxtsVezGXCYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KvvaeNvA; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/nbGo
-	3iWxU6M38i9I2wk5DzIIidP1/C0p11d4f3XdLo=; b=KvvaeNvA0vkVfW+4DeNHV
-	UCFbe+UlxmY3OUxBEc8O6jstVibziWjSSBEyrGgLVFZmMt9pWZvF/ckY5ePoqrg5
-	O6+CmKxtTAhrvXpkk8nk3xamWqKgdyMk2Vma4p/q/8xzHAmMtxRQQYEMrZypUSTT
-	0/1p/gioheq0akAXLD780A=
-Received: from localhost.localdomain (unknown [114.253.22.201])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wCnz6a32RNn7NcBCA--.25777S2;
-	Sun, 20 Oct 2024 00:09:31 +0800 (CST)
-From: Dingyan Li <18500469033@163.com>
-To: stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] usb: storage: use US_BULK_FLAG_OUT instead of constant values
-Date: Sun, 20 Oct 2024 00:08:22 +0800
-Message-Id: <20241019160822.6862-1-18500469033@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1729358609; c=relaxed/simple;
+	bh=yCTG/ZGkPufBNrSxH4NGdIHIAM26o78L+mVBb+rIYpA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WhOYqH55dQYc5iWirVaXodb1vosEB/7eeV+7+bc1jf9OJiljYmefEDRIc47Wauid4OIKJ1JOBEuKpwnfnmKF4W0jJv895wazIhaiATXRxGFBvwR2GCbf9Egw/CSumG9nhDo+E7R/CcX9GdigBL4vtkaeYs2MSeNtDEMWS/bnJKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NcRZyRV6; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49JGuMs7027799;
+	Sat, 19 Oct 2024 17:23:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	MNGRH4QVt97DFI6pbxYB0EsSMa6hnh7LzKJUtb2ke54=; b=NcRZyRV63FdenZ05
+	4iSdDA1hGWS6LwaV+WhXeOu3ziMWQnLBdIx7ddaLp61JOAF1JBfa7+Gw2cdNd8De
+	ECCsUdihPOFilo2m/Vp5/2QNBJjU6Kb+3XwpnC7Zxh+raS4F1ak96lTwvG6F+k5e
+	djhyfy+8bsXrB+jeP4lyhVyZcQL6ZkpGgbVAlIia/gp7EDHj3iLCBfVrhgnatsyq
+	gAB06/aK50R99j58vgW0ZZIH24WcxLDgaCeitcrY7mJUXyZGToN7ybGyy07OWM4g
+	VN9ky/GDgrh3AQQ4PB1FAjPgjeOUFV0r+KJjaqPNyUhduNX3Fuffmw/TwHfy7i5v
+	k9/B2g==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42c6w1gw79-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 19 Oct 2024 17:23:23 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49JHNNZh029459
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 19 Oct 2024 17:23:23 GMT
+Received: from [10.216.44.170] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 19 Oct
+ 2024 10:23:21 -0700
+Message-ID: <fbfa824b-cb28-40fa-b447-30ed5832fe82@quicinc.com>
+Date: Sat, 19 Oct 2024 22:53:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCnz6a32RNn7NcBCA--.25777S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZr4DGrWUuFy3uryrCFWDtwb_yoWrur4Upa
-	yDA3y5CFyrKF4Fvw4DJw4UCFWrAwnYgr9rKFWfC3s5ur9xZa48GF90kFZ8Xw1rWrnrZFy2
-	kr4qqF4UCryFgwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnMa8UUUUU=
-X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBZwp9y2cTyut26gAAsS
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] xhci: Fix Link TRB DMA in command ring stopped completion
+ event
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Mathias Nyman <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+References: <20241018195953.12315-1-quic_faisalh@quicinc.com>
+ <2024101914-upheld-dander-d1af@gregkh>
+Content-Language: en-US
+From: Faisal Hassan <quic_faisalh@quicinc.com>
+In-Reply-To: <2024101914-upheld-dander-d1af@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: G0cgGNEKkhL6eObg_PZ4IyVdArIFnj6l
+X-Proofpoint-ORIG-GUID: G0cgGNEKkhL6eObg_PZ4IyVdArIFnj6l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=789 suspectscore=0 mlxscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410190127
 
-Macros with good names offer better readability. Besides, fix an error
-in the comments. In the flags, direction is in bit 7 instead of bit 0.
 
-Signed-off-by: Dingyan Li <18500469033@163.com>
----
- drivers/usb/storage/ene_ub6250.c | 8 ++++----
- drivers/usb/storage/realtek_cr.c | 4 ++--
- drivers/usb/storage/transport.c  | 2 +-
- include/linux/usb/storage.h      | 2 +-
- 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
-index a4bfbecbf16c..fd46e81388d2 100644
---- a/drivers/usb/storage/ene_ub6250.c
-+++ b/drivers/usb/storage/ene_ub6250.c
-@@ -737,7 +737,7 @@ static int sd_scsi_write(struct us_data *us, struct scsi_cmnd *srb)
- 	memset(bcb, 0, sizeof(struct bulk_cb_wrap));
- 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
- 	bcb->DataTransferLength = blenByte;
--	bcb->Flags  = 0x00;
-+	bcb->Flags  = US_BULK_FLAG_OUT;
- 	bcb->CDB[0] = 0xF0;
- 	bcb->CDB[5] = (unsigned char)(bnByte);
- 	bcb->CDB[4] = (unsigned char)(bnByte>>8);
-@@ -1163,7 +1163,7 @@ static int ms_read_copyblock(struct us_data *us, u16 oldphy, u16 newphy,
- 	memset(bcb, 0, sizeof(struct bulk_cb_wrap));
- 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
- 	bcb->DataTransferLength = 0x200*len;
--	bcb->Flags = 0x00;
-+	bcb->Flags = US_BULK_FLAG_OUT;
- 	bcb->CDB[0] = 0xF0;
- 	bcb->CDB[1] = 0x08;
- 	bcb->CDB[4] = (unsigned char)(oldphy);
-@@ -1759,7 +1759,7 @@ static int ms_scsi_write(struct us_data *us, struct scsi_cmnd *srb)
- 		memset(bcb, 0, sizeof(struct bulk_cb_wrap));
- 		bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
- 		bcb->DataTransferLength = blenByte;
--		bcb->Flags  = 0x00;
-+		bcb->Flags  = US_BULK_FLAG_OUT;
- 		bcb->CDB[0] = 0xF0;
- 		bcb->CDB[1] = 0x04;
- 		bcb->CDB[5] = (unsigned char)(bn);
-@@ -1931,7 +1931,7 @@ static int ene_load_bincode(struct us_data *us, unsigned char flag)
- 	memset(bcb, 0, sizeof(struct bulk_cb_wrap));
- 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
- 	bcb->DataTransferLength = sd_fw->size;
--	bcb->Flags = 0x00;
-+	bcb->Flags = US_BULK_FLAG_OUT;
- 	bcb->CDB[0] = 0xEF;
- 
- 	result = ene_send_scsi_cmd(us, FDIR_WRITE, buf, 0);
-diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-index 0c423916d7bf..54ffff86c6fa 100644
---- a/drivers/usb/storage/realtek_cr.c
-+++ b/drivers/usb/storage/realtek_cr.c
-@@ -212,7 +212,7 @@ static int rts51x_bulk_transport(struct us_data *us, u8 lun,
- 	/* set up the command wrapper */
- 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
- 	bcb->DataTransferLength = cpu_to_le32(buf_len);
--	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : 0;
-+	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : US_BULK_FLAG_OUT;
- 	bcb->Tag = ++us->tag;
- 	bcb->Lun = lun;
- 	bcb->Length = cmd_len;
-@@ -301,7 +301,7 @@ static int rts51x_bulk_transport_special(struct us_data *us, u8 lun,
- 	/* set up the command wrapper */
- 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
- 	bcb->DataTransferLength = cpu_to_le32(buf_len);
--	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : 0;
-+	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : US_BULK_FLAG_OUT;
- 	bcb->Tag = ++us->tag;
- 	bcb->Lun = lun;
- 	bcb->Length = cmd_len;
-diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-index 7449e379077a..9d767f6bf722 100644
---- a/drivers/usb/storage/transport.c
-+++ b/drivers/usb/storage/transport.c
-@@ -1133,7 +1133,7 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
- 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
- 	bcb->DataTransferLength = cpu_to_le32(transfer_length);
- 	bcb->Flags = srb->sc_data_direction == DMA_FROM_DEVICE ?
--		US_BULK_FLAG_IN : 0;
-+		US_BULK_FLAG_IN : US_BULK_FLAG_OUT;
- 	bcb->Tag = ++us->tag;
- 	bcb->Lun = srb->device->lun;
- 	if (us->fflags & US_FL_SCM_MULT_TARG)
-diff --git a/include/linux/usb/storage.h b/include/linux/usb/storage.h
-index 2827ce72e502..8539956bc2be 100644
---- a/include/linux/usb/storage.h
-+++ b/include/linux/usb/storage.h
-@@ -53,7 +53,7 @@ struct bulk_cb_wrap {
- 	__le32	Signature;		/* contains 'USBC' */
- 	__u32	Tag;			/* unique per command id */
- 	__le32	DataTransferLength;	/* size of data */
--	__u8	Flags;			/* direction in bit 0 */
-+	__u8	Flags;			/* direction in bit 7 */
- 	__u8	Lun;			/* LUN normally 0 */
- 	__u8	Length;			/* length of the CDB */
- 	__u8	CDB[16];		/* max command */
--- 
-2.25.1
+On 10/19/2024 12:04 PM, Greg Kroah-Hartman wrote:
+> On Sat, Oct 19, 2024 at 01:29:53AM +0530, Faisal Hassan wrote:
+>> During the aborting of a command, the software receives a command
+>> completion event for the command ring stopped, with the TRB pointing
+>> to the next TRB after the aborted command.
+>>
+>> If the command we abort is located just before the Link TRB in the
+>> command ring, then during the 'command ring stopped' completion event,
+>> the xHC gives the Link TRB in the event's cmd DMA, which causes a
+>> mismatch in handling command completion event.
+>>
+>> To handle this situation, an additional check has been added to ignore
+>> the mismatch error and continue the operation.
+>>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
+> 
+> What commit id does this fix?
+> 
+> thanks,
+> 
+> greg k-h
 
+This does not fix any specific commit. It appears that the
+implementation has been missing since the very beginning of xhci-ring.c.
+Therefore, can I reference the first commit in the Fixes tag:
+7f84eef0dafb ("USB: xhci: No-op command queueing and irq handler.")?
+
+Thanks,
+Faisal
 
