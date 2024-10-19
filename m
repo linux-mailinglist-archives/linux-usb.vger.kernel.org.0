@@ -1,154 +1,123 @@
-Return-Path: <linux-usb+bounces-16437-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16438-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D24B39A4BD0
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 09:20:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E71DC9A4E5C
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 15:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 946D92852AE
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 07:20:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A2A91C2151B
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 13:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6BE1DDC17;
-	Sat, 19 Oct 2024 07:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938251773D;
+	Sat, 19 Oct 2024 13:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gr2sYeJr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z+lUdLdk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A8F1D54D3;
-	Sat, 19 Oct 2024 07:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E63620E31D
+	for <linux-usb@vger.kernel.org>; Sat, 19 Oct 2024 13:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729322433; cv=none; b=YRNB2bap5iKmi6kC9hlpRAHmjoWI7krGd0yvl9dOgRoFv1qtBsAsGLZqw9iBuvGtjumg9sqPvkGKzkvHwE/xPBB5J+D+VIdaf1idG/L3Ymr1zH1r0rN2wqYC2MdjygUrBBmIHw4sY0FrgfdoAzww/AhC/91w6EdxwSUEbR5nsoI=
+	t=1729345674; cv=none; b=Mg+H6xFIWUtzItR9EUnsrbOqtBDGMNy4k2aZ8TbH5T/aMtjG3aU+MtZBossudduJ3euT8bjZT5RK9sHUDwFHikVUUPubmtsg5WNJgufYV2HC+NlXF0BVg6rIY63pyi283Xl86XadiRnek2WCeswv1aDjPn9OCyQHW64XVoyCmIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729322433; c=relaxed/simple;
-	bh=NrAzHRiXxKtj6O5GYtWbKzt+uZBxQwqk1QpwVk2wTbE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=rnrr1HhArJy4xwVCKhVGiSXOARlV289noBn1kTrxJKqIQthEH+mfLnOFvl83kH2th91kWsgdIxN3EAWz1YT26WuNWRAfBRRO9IR8HzbXdkLxPPogr0CW1C5IBMR1iDd6XB1iDSF9jtFoER8crIjeJsl2QQE2h+MD02ubvmH3NQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gr2sYeJr; arc=none smtp.client-ip=209.85.167.41
+	s=arc-20240116; t=1729345674; c=relaxed/simple;
+	bh=QFtHsDAo8eRdXVeE+8gtAOyR7d7qibbOmOneluxUPEM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=ZKoNZ482M++HviP56PolJcqJysQgYmw3ts3SNYL3sGTkYoV/PHvxG+zpriNTOYKerpLlqGO9XiiqggCwZos0xf9zcKbBo7sjJuGnvkdq4vzTazkzAoLX00aC+c05scy6Wqy+UfR6H0ERdz/rpFkbCE0+FSD9ZF8HOO+ayDAFH6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z+lUdLdk; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53a007743e7so3554250e87.1;
-        Sat, 19 Oct 2024 00:20:30 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a998a5ca499so368027166b.0
+        for <linux-usb@vger.kernel.org>; Sat, 19 Oct 2024 06:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729322429; x=1729927229; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HOSgqBuptd5/+pKaXDmre/ntgdJaEZmL2tgWZn9tjU0=;
-        b=Gr2sYeJrrNLbITb2ay1TvlyPHibj4G1KWY91X7CMM5R4a1JUAwIQ2cwLQTGVevahmf
-         rjXDifhqC01UEaaZWK4oPXRZq0EwaDR5QJ+tCnkDDGgBmYx0slk764KEa0rLaCojnMa7
-         c8ppE9RaBkpyyqp2puDDW+Tn2Ec6FYDxWiFkLlT/W8b60qpbdz3nAiO0IDNMpm6Qvu5i
-         O0wFn8YFdoCwdGJmtl8Pt2r/va9e2Y+g99npygoDAGaZAfmP8fwQEi+Rs9EG9ZpEs2Ml
-         EQXAGDcYX2PFyN/owIfi+lbkZf6/1Fz4fnrv+tXmidJoWlD5vY3oHRjuJyK0gJO4auHP
-         fiRg==
+        d=gmail.com; s=20230601; t=1729345668; x=1729950468; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=veqyDiLHY0j8V5KXFhB1SozGnZEPx4o32q6Ee4fVrCI=;
+        b=Z+lUdLdkzKNKz8tzMvRD/SZZzlmGEQJZ0KRu0AOJvPznTDnlG+n0eKpU/OoB0YFV3F
+         ExOYryVG9Q1ORLwJdVWFXWT/F7NgmFgogeCKkqqyOySbg5bdlSNkvzd7En+mjap9gO45
+         JKwL8FdscArBLqHlAAkil0BG06Ko2ghXNynxxyDLGlRXVOw5wAc26S+iudMNn4gwZ36F
+         vO2GTnuOo2nBcWjVbYjb22/iauo7ns3pKv1+X19evZaGJ6iPpyKfs6F/oFenBaZPpjoJ
+         TTMo85EvXlK6d+UHR6+Pa2IcOdq8L9gShi8k7KZ3SqV8Xk501+hLL+/sc6eeRVdZdrVS
+         pwWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729322429; x=1729927229;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HOSgqBuptd5/+pKaXDmre/ntgdJaEZmL2tgWZn9tjU0=;
-        b=boTOB8I8qrPLUpmz8PrneIR/v5WSOMEa+pP0A40aoPGh/LtLCIrz+CyYvw3cmPrron
-         DRP7ZEsl8jiwmOB0htVl7J7ZOg3z+gky7T1KzY63CNUZwd4gCQ6/f6GU/Ssvza8RCFPn
-         HCfMQr//AP+t3UnjWbF0I6J2+FEkh266P+RuWKwH4WRwmpF3cjrb9P5mVSF5YQrrpv8K
-         q3LJaRJ0PDDpLdziGv0H8Iv/TdWwg381nOPGKWGR/AqXKQAFghoW4qwxsrMbv3wsHjiY
-         UDRrHntXyUGGe3mOWrKUsSjAwyYrwQEqMJ0e7RkS0UJUtyNwEoaUhm6fLGDeovW1MjTy
-         RJlw==
-X-Forwarded-Encrypted: i=1; AJvYcCUonmIKZ64tS9WpBMqwpV85qxGOVYXOvyoVWZ8unn7FGp7mG10Ce381E22BkAiwYZQxsiMVp7Bst9UR@vger.kernel.org, AJvYcCUss1RpNFrejjZEJwYsFZj6gmheqmpDKS4nO0NYRG8dEnyGKi5NQgDzwjmDFmmCvbg7ftQ2CbNsrGeNZ80=@vger.kernel.org, AJvYcCWBFd0DoIhNxPK1ydR1oJllLTl2SO0BChZh2qGx2mur4tywqQ/srEWdCwFmin/rMuwf2Vm1Fvm3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya/pMnqRG0uj4nH+INqgc4u71/3xTygordDSKJHEtzEPPzyxfn
-	2sYp5W3J7DwHBZJ6JOxSGKNit19eg2PKJpPRaShiIee++02lAIcXn7EzhQ==
-X-Google-Smtp-Source: AGHT+IHUzG5ypUus5uLhkbQT4EyrzUgEy8gdbwiHOwwVV1bpsUKbdfCLljMWbxL0x9RFKubWPR5KXg==
-X-Received: by 2002:a05:6512:3985:b0:539:f23b:59c3 with SMTP id 2adb3069b0e04-53a154b3094mr2557177e87.34.1729322428554;
-        Sat, 19 Oct 2024 00:20:28 -0700 (PDT)
-Received: from foxbook (bgw235.neoplus.adsl.tpnet.pl. [83.28.86.235])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53a151b9d40sm438219e87.117.2024.10.19.00.20.26
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sat, 19 Oct 2024 00:20:27 -0700 (PDT)
-Date: Sat, 19 Oct 2024 09:20:23 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: quic_faisalh@quicinc.com
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH] xhci: Fix Link TRB DMA in command ring stopped
- completion event
-Message-ID: <20241019092023.5d987d7e@foxbook>
-In-Reply-To: <20241018195953.12315-1-quic_faisalh@quicinc.com>
+        d=1e100.net; s=20230601; t=1729345668; x=1729950468;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=veqyDiLHY0j8V5KXFhB1SozGnZEPx4o32q6Ee4fVrCI=;
+        b=BJRRkuKTclEhl6LQRUBm5Wa9wyugEI1ywva31R9QQMZiP5OCXtJr6/anhmeSK63wRT
+         qd5AXHmVn9mgyXiPXPGeqPuW9B3Dcw9cKsMnXqPq/m/fkJP/TRJh+ZvaacHnrD/SrZKa
+         oAo65R3NDTH8ZFTePozQrVtdwaR1XGfCMQn0eOJHBKXEm1G5SDJr+F/rJjs7QsR5jX2a
+         Eim/8asVKkM3kTE+7LYZhIFhHg6ZEua6fkKvi4iZsmRRoTTvAvwMhFNTjIY9u4qPRoVO
+         fo+mmIANXKPWaIhlVA5JYIlRmmoaKth3BSdVfn4XoHH+UJx9Q7DpqRl/T6GgN99GjP9l
+         qcoA==
+X-Gm-Message-State: AOJu0YzFqaoN1mRD52o4HPKUHK8JhMC5+LUN1x4X+oT+fRTWke5sWv8e
+	cxKtPiA3/Ig2LJWhdu8DaeE4bvRj0C/SWvxj6AdSjgHfgDNovCNP4mQioZHx/WPnkdJlhbc4U6R
+	lzRvCJbfB8il74XvdorLO45/cM8rYuEndOrI=
+X-Google-Smtp-Source: AGHT+IFKAGqL9ymx+9+yJwneQaaS0URmUX/SG9hjk/WRAMj8Mmp9ZKfmBYSDfeDd0bF+Q3bxqrkTqA0HiH+y0WHFgpA=
+X-Received: by 2002:a17:906:c106:b0:a87:31c:c6c4 with SMTP id
+ a640c23a62f3a-a9a69a681bbmr566549366b.24.1729345667704; Sat, 19 Oct 2024
+ 06:47:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+From: Mario Marietto <marietto2008@gmail.com>
+Date: Sat, 19 Oct 2024 15:47:08 +0200
+Message-ID: <CA+1FSihHXW8TWSG8x5xTPShvNOQ2-0RK8xOEt9rKz93apv-Z2Q@mail.gmail.com>
+Subject: Information request for your "android_external_usbip"
+To: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hello man.
 
-> During the aborting of a command, the software receives a command
-> completion event for the command ring stopped, with the TRB pointing
-> to the next TRB after the aborted command.
->
-> If the command we abort is located just before the Link TRB in the
-> command ring, then during the 'command ring stopped' completion event,
-> the xHC gives the Link TRB in the event's cmd DMA, which causes a
-> mismatch in handling command completion event.
->
-> To handle this situation, an additional check has been added to ignore
-> the mismatch error and continue the operation.
+I need to have some specific information regarding your tool called
+"android_external_usbip" from here :
 
-Thanks, I remember having some issues with command aborts, but I blamed
-them on my own bugs, although I never found what the problem was. I may
-take a look at it later, but I'm currently busy with other things.
+https://github.com/trevd/android_external_usbip
 
-No comment about validity of this patch for now, but a few remarks:
+I may need to install it,to accomplish the project that I'm working on.
 
->+static bool is_dma_link_trb(struct xhci_ring *ring, dma_addr_t dma)
->+{
->+	struct xhci_segment *seg;
->+	union xhci_trb *trb;
->+	dma_addr_t trb_dma;
->+	int i;
->+
->+	seg = ring->first_seg;
->+	do {
->+		for (i = 0; i < TRBS_PER_SEGMENT; i++) {
->+			trb = &seg->trbs[i];
->+			trb_dma = seg->dma + (i * sizeof(union xhci_trb));
->+
->+			if (trb_is_link(trb) && trb_dma == dma)
->+				return true;
->+		}
+What I want to do is export an USB device from Linux and import it
+inside a specific version of Android,version 7.1.1 and I'm forced to
+use that. I can't use another version of Android. Basically on Linux
+is attached one USB to PCI controller that has 4 ports :
 
-You don't need to iterate the array. Something like this should work:
-do {
-	if (in_range(dma, seg->dma, TRB_SEGMENT_SIZE)) {
-		/* found the TRB, check if it's link */
-		trb = &seg->trbs[(dma - seg->dma) / sizeof(*trb)];
-		return trb_is_link(trb);
-	}
-	// try next seg, while (blah blah), return false
 
-We should probably have a helper for (ring, dma)->trb lookups, but
-for stable it may be sensible to do it without excess complication.
+06:00.0 USB controller: Renesas Electronics Corp. uPD720202 USB 3.0
+Host Controller (rev 02)
 
->+	if ((!cmd_dequeue_dma || cmd_dma != (u64)cmd_dequeue_dma) &&
->+	    !(cmd_comp_code == COMP_COMMAND_RING_STOPPED &&
->+	      is_dma_link_trb(xhci->cmd_ring, cmd_dma))) {
+07:00.0 USB controller: Renesas Electronics Corp. uPD720202 USB 3.0
+Host Controller (rev 02)
 
-This if statement is quite complex now. I would be tempted to write
-it this way instead:
+08:00.0 USB controller: Renesas Electronics Corp. uPD720202 USB 3.0
+Host Controller (rev 02)
 
-/* original comment */
-if (cmd_dma != dequeue_dma) {
-	/* your new comment */
-	if (! (RING_STOPPED && is_link)) {
-		warn();
-		return;
-	}
-}
+09:00.0 USB controller: Renesas Electronics Corp. uPD720202 USB 3.0
+Host Controller (rev 02)
 
-Regards,
-Michal
+
+On the port 6 I have attached a mouse and I've passed it to the Linux
+VM using the bhyve hypervisor.
+
+So I want to export that port or the whole USB controller with the
+devices attached to another VM,this time is Android 7,with the goal to
+move the mouse inside the Desktop Environment of Android. If I have
+understood well,this can be done using your tool.
+
+Another aspect that I didn't understand is in the scenario that I've
+explained,does your tool act as a client and server ?
+
+Because I read that there is only the client. But I need to install
+the client on Android and the server on Linux...
+
+Thanks.
+
+-- 
+Mario.
 
