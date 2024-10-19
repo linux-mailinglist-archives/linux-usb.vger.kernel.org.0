@@ -1,214 +1,166 @@
-Return-Path: <linux-usb+bounces-16441-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16442-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ED339A4F95
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 18:08:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD5269A4F96
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 18:09:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 861311C23912
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 16:08:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F1D02873C1
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2024 16:09:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C86718B48B;
-	Sat, 19 Oct 2024 16:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09627188A18;
+	Sat, 19 Oct 2024 16:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S6fp5kXu"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KvvaeNvA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2032F3E
-	for <linux-usb@vger.kernel.org>; Sat, 19 Oct 2024 16:08:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 284852F3E;
+	Sat, 19 Oct 2024 16:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729354122; cv=none; b=p3ZMJaSjuyTXONqXNuuiaCK25cs+Qm8Ngh1eIWHjhXBVZyH/VnHjyWyA330Mj4VBgWfIOTnoPM4fhgdYXCTf1153U5xHFJMFq3FOFQzvrwgp4G5AmERx0VazEFFpyEV1FgONiXtR0vYvHdhgDkTnc2S77dB98Y7TobQ1gQn8VUg=
+	t=1729354193; cv=none; b=j3hSYjtygvzJhqVeIcYG0WZ0dH2hu3SsV9sBpIR2DT1QNGfsAy5jimaNsCcVWVyKb2/znGaO5vShanL0y5dVY/izZdPgNIS86pJKms2XuH1cb6XEo5mAw+1p57bGBt0yDcgzTFNNEU7y/3gT62UMHolWf5WFgDUbKFtuYT8hmYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729354122; c=relaxed/simple;
-	bh=Pt+b3BjGGmUjv+VLmrLajZ5SkBU5QlryjRqBcbDbiJI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Ai8T2ZvEBBm34+n1WDhdhFKJsv+R10G1t5Pp2jGc8YMspEh+C/g0NbOS3pqCH+f8r/ypreldab2k67YlNvihnMD/aM97oMBouSw6OGoVCO1Lpc4XTuvsfendPv666MIS2VcNR1ALDiuWrrmbK0OjzNWIAW+lv4evQwzBM1+afsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S6fp5kXu; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729354120; x=1760890120;
-  h=date:from:to:cc:subject:message-id;
-  bh=Pt+b3BjGGmUjv+VLmrLajZ5SkBU5QlryjRqBcbDbiJI=;
-  b=S6fp5kXuLJxr9/DtSuqeY+PSLZalmK0Ai9dFqp9Tr/xitDtYB5iiWI0h
-   DWSEizr6Ki/lkblxGXE2KzfSys1b7wbjMZbqdLeoAWPpi9OZSz5unfjg+
-   EMBVa4xGisaB+Ue7M2iMiDT0YR/qRQFMMum6YpHvyg9tjIpoMnBGvS1Hx
-   EinJMl97youAXgqix8uAFG7jWHUjaifY8X/NElKglvq4ENmP4P8a4QhNt
-   q47Q3dGffESzQuHAg+WkbGTVmqSv2sEpigYbJiMeqPePeqH1qbka5+xhy
-   fInySQs2OEAL3/Jw/02QI3vP77cC/2FhJ/qrk0AM9B0b/1uZ8KQDOgQ8I
-   g==;
-X-CSE-ConnectionGUID: OXERA79tT7aYs62d3fvhIQ==
-X-CSE-MsgGUID: gse2x/cQRw+tBOQFvyDFww==
-X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="54290396"
-X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="54290396"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 09:08:39 -0700
-X-CSE-ConnectionGUID: uyK3OFmzQ8GjBDQKuYK9WQ==
-X-CSE-MsgGUID: PXEH48nfSgSiB3XvdsK/Zg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="78721833"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 19 Oct 2024 09:08:38 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t2C0K-000P8v-18;
-	Sat, 19 Oct 2024 16:08:36 +0000
-Date: Sun, 20 Oct 2024 00:07:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 1154a599214c655c8138b540f13845257f1952fd
-Message-ID: <202410200037.cP2P7191-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1729354193; c=relaxed/simple;
+	bh=Y2o35mOQRiYxgDsfAod1PSAbtNHLv+FsmzP1zrcG+U4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ui7cUC416xRnlKuxNS3gUO1RQxDPlgeTWrUzW/yzGspQax7NiitvGkhZjRZvZ152x3ZU7QL7B338m2Uj5JUQNW05iTaYWr2C0ACOlypGHcX7JnGQqaSOAL30kA0OpIZ+ShDLHz96i0ueWVunhUAIKlK4QDNAVPiCxtsVezGXCYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KvvaeNvA; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/nbGo
+	3iWxU6M38i9I2wk5DzIIidP1/C0p11d4f3XdLo=; b=KvvaeNvA0vkVfW+4DeNHV
+	UCFbe+UlxmY3OUxBEc8O6jstVibziWjSSBEyrGgLVFZmMt9pWZvF/ckY5ePoqrg5
+	O6+CmKxtTAhrvXpkk8nk3xamWqKgdyMk2Vma4p/q/8xzHAmMtxRQQYEMrZypUSTT
+	0/1p/gioheq0akAXLD780A=
+Received: from localhost.localdomain (unknown [114.253.22.201])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wCnz6a32RNn7NcBCA--.25777S2;
+	Sun, 20 Oct 2024 00:09:31 +0800 (CST)
+From: Dingyan Li <18500469033@163.com>
+To: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] usb: storage: use US_BULK_FLAG_OUT instead of constant values
+Date: Sun, 20 Oct 2024 00:08:22 +0800
+Message-Id: <20241019160822.6862-1-18500469033@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCnz6a32RNn7NcBCA--.25777S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZr4DGrWUuFy3uryrCFWDtwb_yoWrur4Upa
+	yDA3y5CFyrKF4Fvw4DJw4UCFWrAwnYgr9rKFWfC3s5ur9xZa48GF90kFZ8Xw1rWrnrZFy2
+	kr4qqF4UCryFgwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnMa8UUUUU=
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBZwp9y2cTyut26gAAsS
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 1154a599214c655c8138b540f13845257f1952fd  Merge tag 'usb-serial-6.12-rc4' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+Macros with good names offer better readability. Besides, fix an error
+in the comments. In the flags, direction is in bit 7 instead of bit 0.
 
-elapsed time: 1785m
+Signed-off-by: Dingyan Li <18500469033@163.com>
+---
+ drivers/usb/storage/ene_ub6250.c | 8 ++++----
+ drivers/usb/storage/realtek_cr.c | 4 ++--
+ drivers/usb/storage/transport.c  | 2 +-
+ include/linux/usb/storage.h      | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-configs tested: 121
-configs skipped: 5
+diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
+index a4bfbecbf16c..fd46e81388d2 100644
+--- a/drivers/usb/storage/ene_ub6250.c
++++ b/drivers/usb/storage/ene_ub6250.c
+@@ -737,7 +737,7 @@ static int sd_scsi_write(struct us_data *us, struct scsi_cmnd *srb)
+ 	memset(bcb, 0, sizeof(struct bulk_cb_wrap));
+ 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
+ 	bcb->DataTransferLength = blenByte;
+-	bcb->Flags  = 0x00;
++	bcb->Flags  = US_BULK_FLAG_OUT;
+ 	bcb->CDB[0] = 0xF0;
+ 	bcb->CDB[5] = (unsigned char)(bnByte);
+ 	bcb->CDB[4] = (unsigned char)(bnByte>>8);
+@@ -1163,7 +1163,7 @@ static int ms_read_copyblock(struct us_data *us, u16 oldphy, u16 newphy,
+ 	memset(bcb, 0, sizeof(struct bulk_cb_wrap));
+ 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
+ 	bcb->DataTransferLength = 0x200*len;
+-	bcb->Flags = 0x00;
++	bcb->Flags = US_BULK_FLAG_OUT;
+ 	bcb->CDB[0] = 0xF0;
+ 	bcb->CDB[1] = 0x08;
+ 	bcb->CDB[4] = (unsigned char)(oldphy);
+@@ -1759,7 +1759,7 @@ static int ms_scsi_write(struct us_data *us, struct scsi_cmnd *srb)
+ 		memset(bcb, 0, sizeof(struct bulk_cb_wrap));
+ 		bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
+ 		bcb->DataTransferLength = blenByte;
+-		bcb->Flags  = 0x00;
++		bcb->Flags  = US_BULK_FLAG_OUT;
+ 		bcb->CDB[0] = 0xF0;
+ 		bcb->CDB[1] = 0x04;
+ 		bcb->CDB[5] = (unsigned char)(bn);
+@@ -1931,7 +1931,7 @@ static int ene_load_bincode(struct us_data *us, unsigned char flag)
+ 	memset(bcb, 0, sizeof(struct bulk_cb_wrap));
+ 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
+ 	bcb->DataTransferLength = sd_fw->size;
+-	bcb->Flags = 0x00;
++	bcb->Flags = US_BULK_FLAG_OUT;
+ 	bcb->CDB[0] = 0xEF;
+ 
+ 	result = ene_send_scsi_cmd(us, FDIR_WRITE, buf, 0);
+diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+index 0c423916d7bf..54ffff86c6fa 100644
+--- a/drivers/usb/storage/realtek_cr.c
++++ b/drivers/usb/storage/realtek_cr.c
+@@ -212,7 +212,7 @@ static int rts51x_bulk_transport(struct us_data *us, u8 lun,
+ 	/* set up the command wrapper */
+ 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
+ 	bcb->DataTransferLength = cpu_to_le32(buf_len);
+-	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : 0;
++	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : US_BULK_FLAG_OUT;
+ 	bcb->Tag = ++us->tag;
+ 	bcb->Lun = lun;
+ 	bcb->Length = cmd_len;
+@@ -301,7 +301,7 @@ static int rts51x_bulk_transport_special(struct us_data *us, u8 lun,
+ 	/* set up the command wrapper */
+ 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
+ 	bcb->DataTransferLength = cpu_to_le32(buf_len);
+-	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : 0;
++	bcb->Flags = (dir == DMA_FROM_DEVICE) ? US_BULK_FLAG_IN : US_BULK_FLAG_OUT;
+ 	bcb->Tag = ++us->tag;
+ 	bcb->Lun = lun;
+ 	bcb->Length = cmd_len;
+diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+index 7449e379077a..9d767f6bf722 100644
+--- a/drivers/usb/storage/transport.c
++++ b/drivers/usb/storage/transport.c
+@@ -1133,7 +1133,7 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
+ 	bcb->Signature = cpu_to_le32(US_BULK_CB_SIGN);
+ 	bcb->DataTransferLength = cpu_to_le32(transfer_length);
+ 	bcb->Flags = srb->sc_data_direction == DMA_FROM_DEVICE ?
+-		US_BULK_FLAG_IN : 0;
++		US_BULK_FLAG_IN : US_BULK_FLAG_OUT;
+ 	bcb->Tag = ++us->tag;
+ 	bcb->Lun = srb->device->lun;
+ 	if (us->fflags & US_FL_SCM_MULT_TARG)
+diff --git a/include/linux/usb/storage.h b/include/linux/usb/storage.h
+index 2827ce72e502..8539956bc2be 100644
+--- a/include/linux/usb/storage.h
++++ b/include/linux/usb/storage.h
+@@ -53,7 +53,7 @@ struct bulk_cb_wrap {
+ 	__le32	Signature;		/* contains 'USBC' */
+ 	__u32	Tag;			/* unique per command id */
+ 	__le32	DataTransferLength;	/* size of data */
+-	__u8	Flags;			/* direction in bit 0 */
++	__u8	Flags;			/* direction in bit 7 */
+ 	__u8	Lun;			/* LUN normally 0 */
+ 	__u8	Length;			/* length of the CDB */
+ 	__u8	CDB[16];		/* max command */
+-- 
+2.25.1
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                                 defconfig    gcc-14.1.0
-arc                     haps_hs_smp_defconfig    clang-20
-arc                           tb10x_defconfig    clang-20
-arc                        vdk_hs38_defconfig    clang-20
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                                 defconfig    gcc-14.1.0
-arm                       imx_v6_v7_defconfig    clang-20
-arm                             mxs_defconfig    clang-20
-arm                         nhk8815_defconfig    clang-20
-arm                       omap2plus_defconfig    clang-20
-arm                             pxa_defconfig    clang-20
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                               defconfig    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-hexagon                          alldefconfig    clang-20
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.1.0
-i386                             allmodconfig    clang-18
-i386                              allnoconfig    clang-18
-i386                             allyesconfig    clang-18
-i386        buildonly-randconfig-001-20241019    clang-18
-i386        buildonly-randconfig-002-20241019    clang-18
-i386        buildonly-randconfig-003-20241019    clang-18
-i386        buildonly-randconfig-004-20241019    clang-18
-i386        buildonly-randconfig-005-20241019    clang-18
-i386        buildonly-randconfig-006-20241019    clang-18
-i386                                defconfig    clang-18
-i386                  randconfig-001-20241019    clang-18
-i386                  randconfig-002-20241019    clang-18
-i386                  randconfig-003-20241019    clang-18
-i386                  randconfig-004-20241019    clang-18
-i386                  randconfig-005-20241019    clang-18
-i386                  randconfig-006-20241019    clang-18
-i386                  randconfig-011-20241019    clang-18
-i386                  randconfig-012-20241019    clang-18
-i386                  randconfig-013-20241019    clang-18
-i386                  randconfig-014-20241019    clang-18
-i386                  randconfig-015-20241019    clang-18
-i386                  randconfig-016-20241019    clang-18
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch                           defconfig    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                                defconfig    gcc-14.1.0
-m68k                        m5307c3_defconfig    clang-20
-m68k                        m5407c3_defconfig    clang-20
-m68k                       m5475evb_defconfig    clang-20
-m68k                          sun3x_defconfig    clang-20
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                          defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                          ath79_defconfig    clang-20
-mips                          eyeq5_defconfig    clang-20
-mips                           gcw0_defconfig    clang-20
-mips                         rt305x_defconfig    clang-20
-nios2                             allnoconfig    gcc-14.1.0
-nios2                               defconfig    gcc-14.1.0
-openrisc                          allnoconfig    clang-20
-openrisc                            defconfig    gcc-12
-parisc                            allnoconfig    clang-20
-parisc                              defconfig    gcc-12
-parisc                generic-32bit_defconfig    clang-20
-parisc                generic-64bit_defconfig    clang-20
-parisc64                            defconfig    gcc-14.1.0
-powerpc                           allnoconfig    clang-20
-powerpc                   currituck_defconfig    clang-20
-powerpc                       eiger_defconfig    clang-20
-powerpc                       holly_defconfig    clang-20
-powerpc                    mvme5100_defconfig    clang-20
-powerpc                     tqm8541_defconfig    clang-20
-riscv                             allnoconfig    clang-20
-riscv                               defconfig    gcc-12
-s390                             alldefconfig    clang-20
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                                  defconfig    gcc-12
-sh                             espt_defconfig    clang-20
-sh                      rts7751r2d1_defconfig    clang-20
-sh                           se7780_defconfig    clang-20
-sh                              ul2_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-18
-x86_64                           allyesconfig    clang-18
-x86_64                              defconfig    clang-18
-x86_64                                  kexec    clang-18
-x86_64                                  kexec    gcc-12
-x86_64                               rhel-8.3    gcc-12
-x86_64                           rhel-8.3-bpf    clang-18
-x86_64                         rhel-8.3-kunit    clang-18
-x86_64                           rhel-8.3-ltp    clang-18
-x86_64                          rhel-8.3-rust    clang-18
-xtensa                            allnoconfig    gcc-14.1.0
-xtensa                  cadence_csp_defconfig    clang-20
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
