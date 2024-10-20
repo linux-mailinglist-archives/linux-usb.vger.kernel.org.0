@@ -1,86 +1,77 @@
-Return-Path: <linux-usb+bounces-16451-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16452-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4105D9A5308
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 09:49:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CC6B9A5334
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 11:03:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D893AB22ABD
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 07:49:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50F041C20F74
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 09:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC672A1D8;
-	Sun, 20 Oct 2024 07:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E56885FB95;
+	Sun, 20 Oct 2024 09:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="P55lH9gd"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ABnqR4/D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3D32B9C6;
-	Sun, 20 Oct 2024 07:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1BA38382;
+	Sun, 20 Oct 2024 09:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729410558; cv=none; b=hxEARvg7uCe2EqzqsrWPRlapxv1RaMnxnSz+CMzDh5WdZJCYcX3fA1jKNpgWvh87xKrzMvFoewT9Gi8OsMN2ViThcvcfqIa6wex4ey/t2j8D9GKdpEAtaauw25TfJomLbzm10vvA/tGiaq1B96vx5k/iEnRR10ux4HWBK7np20Q=
+	t=1729415027; cv=none; b=AhoMVogd3QDz2XqEF9CTiP/ZheJgNxU/ol/Gi2AysIRYsfzVgloYKkX0qqUKbZXerfVDfj1hJZJ8FssGjo0/nT3POuG02IMwAIfJRZ5Kf0UVamaVeLgX3DF5G0I7ZKSkULIvU7QjaRvcM0q1wtaqb/Mvu4vpylLLZsXGSpNaMS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729410558; c=relaxed/simple;
-	bh=2/4nBV3EbJg4VYgdxH1vnXvH/rfZWUnk7Ke5IscmR6A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oV/O+J3yk0pBF9TA1fUDOtr6LKPGk460SNNxmDZwDgdCLCmh5Dd4PfoMhzn8Pasmd3YL8dW9F7aXF9J6Nqsx8NCP4dZ7SIhQO/FK76uSaa+DweGpdPlhlCtvsbFS3Gd4HuwMXhp8UTJuEMJp57GVNJE6V7UTMOQu8XCbsZcTfyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=P55lH9gd; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=x4NTp
-	GjZzFN6SUgygF3qJkYQtZICM+89+U+jSj6asRw=; b=P55lH9gdNXdjAH4BK1M/4
-	Q2iLWqF/8u2ata3tfN+A2/gd3akMk8QZSjGdzaXbIZbNRNS3KCf2h6DCP4+hXBJ/
-	qp+xQBVDIXb4QMBPuzic5X8E3EpkEpWdNTQJ6s1VBe62mlRyORo10DB+Zdtn2U7Y
-	W9YfQGoFb9uqz9DNfJyapg=
-Received: from localhost.localdomain (unknown [114.253.22.201])
-	by gzsmtp4 (Coremail) with SMTP id PygvCgDnRlvZtRRnTWTBAg--.44212S2;
-	Sun, 20 Oct 2024 15:48:42 +0800 (CST)
-From: Dingyan Li <18500469033@163.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] usb: storage: fix wrong comments for struct bulk_cb_wrap
-Date: Sun, 20 Oct 2024 15:47:21 +0800
-Message-Id: <20241020074721.26905-1-18500469033@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1729415027; c=relaxed/simple;
+	bh=2FqtVqGI5ALEUUBzHiKJhLOhJHZebbxW2hSGJcknpSM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YuoP4kKZOk/p9HGpuuSUHzfcSfysncIj9RPg4Av3Vzk7c6y47MalnIwTNDc3jNIqpy5Fa9/DPP5W+3SeW8olFXVgrX8PSj5ylm7AaWJv9bViAwNFfIwdVJpVImbOmO1w/zV7DtmWyg9QeBA5ndKIgIxE/6CzS1XGbRuOZak+/Io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ABnqR4/D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE79C4CEC6;
+	Sun, 20 Oct 2024 09:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1729415026;
+	bh=2FqtVqGI5ALEUUBzHiKJhLOhJHZebbxW2hSGJcknpSM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ABnqR4/DcIl4vZxXQEgGmlBaIwwirdWADfje4NogCAwXrfQ2PlOdhh5cbTCBeNh50
+	 S4aYxT2CS/8EN1AYcU2xaSLJ1Rknk6mkQCU+NUF4A84DZFF8+J8jAkxzoNgeXk44hS
+	 1KWcnM2LoTF12xlNFH9tJpS4jBuGzBG9SKFQ47I4=
+Date: Sun, 20 Oct 2024 11:03:38 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Benjamin Grosse <ste3ls@gmail.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/net/usb: Lenovo Mini Dock, add support for new
+ USB device ID 0x17EF:0x3098 for the r8152 driver
+Message-ID: <2024102054-unclog-anime-05e5@gregkh>
+References: <CAPvBWb=L6FVwSk7iZX21Awez+dwhLMAoGe39f__VC=g7g6H2+g@mail.gmail.com>
+ <2024102028-postnasal-cruelty-8da9@gregkh>
+ <CAPvBWb=roBghdC38d59V-OBBA9Z9ACCqtAVm-S_TX9WXzuR0fQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PygvCgDnRlvZtRRnTWTBAg--.44212S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruF47Cr4UXr4UCr1UJF4xJFb_yoW3WFbE9w
-	1xK348ArWrArW7Jw13tFnavF17K348JFsFg3WrtrW3Z390vws5u3s7AFnFqFW3G3W7GrZx
-	u3WkWryfJrySyjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUb1lk3UUUUU==
-X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/1tbiNhV+y2cUnJX3NwAAss
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPvBWb=roBghdC38d59V-OBBA9Z9ACCqtAVm-S_TX9WXzuR0fQ@mail.gmail.com>
 
-In the flags, direction is in bit 7 instead of bit 0 based
-on the specification.
+Oops, you sent html email to the lists, which get rejected...
 
-Signed-off-by: Dingyan Li <18500469033@163.com>
----
- include/linux/usb/storage.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Oct 20, 2024 at 09:59:11AM +0100, Benjamin Grosse wrote:
+> OMG sorry about that garbage part, it's my first time submitting a
+> patch, should I resend the email (for some automatic processing or
+> something) or is it easy enough to be ignored?
 
-diff --git a/include/linux/usb/storage.h b/include/linux/usb/storage.h
-index 2827ce72e502..8539956bc2be 100644
---- a/include/linux/usb/storage.h
-+++ b/include/linux/usb/storage.h
-@@ -53,7 +53,7 @@ struct bulk_cb_wrap {
- 	__le32	Signature;		/* contains 'USBC' */
- 	__u32	Tag;			/* unique per command id */
- 	__le32	DataTransferLength;	/* size of data */
--	__u8	Flags;			/* direction in bit 0 */
-+	__u8	Flags;			/* direction in bit 7 */
- 	__u8	Lun;			/* LUN normally 0 */
- 	__u8	Length;			/* length of the CDB */
- 	__u8	CDB[16];		/* max command */
--- 
-2.25.1
+Also, please don't top-post :(
 
+But yes, you do need to resend it, our tools do not strip that out.
+
+thanks,
+
+greg k-h
 
