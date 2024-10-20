@@ -1,115 +1,93 @@
-Return-Path: <linux-usb+bounces-16463-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16464-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F29879A5567
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 19:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01A6F9A55B0
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 20:12:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7E3C1F2230B
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 17:41:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EE3F1F22587
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 18:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884E019538D;
-	Sun, 20 Oct 2024 17:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hmhjz0ek"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60756194C85;
+	Sun, 20 Oct 2024 18:12:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CC64431;
-	Sun, 20 Oct 2024 17:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0F77462
+	for <linux-usb@vger.kernel.org>; Sun, 20 Oct 2024 18:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729446100; cv=none; b=ZDWdSChF6w69xy0+0nM+MN71LLvf17oLIge/OQTKpo33TgPkRIUPK4tt6z11NtjVyoKpCRd7Okzhy85+RM9OTB1nv4Bdy/kGq76xcF94YcQydiOy4xWwnh+hnn5HEp1nHo5bEeIUVtCRd8lW9xWzlSIq2gXK/+BCvXctnA36vLo=
+	t=1729447927; cv=none; b=k7Bk1I1iFNFT4eXapqfOdZR1m/tPKW98vBn8d4wj99G+fXHETvJotDai3/52Ih1mGtH9TWvGSVqvLs+HYbcBsjVB+ele4SCNyjJSyAwkPehINVrEki98Ia4EeFQ9HeMHOtt2Y2eVXFxPGrI0Mh6c/IlsyHuWcxyhNO09ndTKGAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729446100; c=relaxed/simple;
-	bh=q+wdm6egVDwjBW+1n+K1DM13AKNIQm5RrbrjL39kHfs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=f+lj4EzF9vJkm8j+mRDDDmLiPUwSU0XX5g/YbffE2ZPG2usPfZRbuYEUVO4mhYlSjBAOTrijMbXg/FNf3Y+cj0mVLJyIXQJOw9v/IoyurZxNLsAiccBdigs6WABu5zSpF+MjPEs9ah5vYnKE7LTyUP7DRvQRaN3iM0JwR7IWFnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hmhjz0ek; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-431481433bdso38740945e9.3;
-        Sun, 20 Oct 2024 10:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729446096; x=1730050896; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fiDr2EgAXSV5r56uzap2YtxynjiRZajySX4Brk5lIlY=;
-        b=hmhjz0ekUaYhM3a7P7e5+WeJKHdnPD8yM5XJLSFI/04Pvz+93lc+7TzY3XcGVG4bBN
-         JUxdkEyryfkla4Rm4/W9NB05Q1AVDVODP74VHKM6k/fUetEnEXsyOcTWfd9xk2CkbMBh
-         Iyhyo/rk+LhgVg7UWs+Xtfif9a6/Y1dPsVnhveK7NxaaL83Cnd9arO2RYjUDJydTRlxi
-         LAvljwcqXeNNsvlbx6kYi3yJa5VnLRRA2E/JPCnfJ+grzMTsdBAO7/1vxQz0Oslggu9y
-         etK7aTZcXiDcmDriEu2JgJgYc2xLR/M3ryb6JEbzsjfhQqSacZ+3tK4UM6XM+j6wI8e7
-         SCWA==
+	s=arc-20240116; t=1729447927; c=relaxed/simple;
+	bh=0kdGTm27vaQn2TkIRItbudHFnl/kmcbl+QDOl2Jg11E=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=B2nmNes0s1PEZz+ZP3WACAFzYyCqRcL+FHA2y6nQH2s/Jq6B5+DTtNHH3gRUnoeqfVHNbS/GbK+4lUtb+oZMNHJ5GjPe6pQ67eHBkI03YPTFEjXoigdaKejdicBLz6dmGRHiYfdOUjj2TTe2wYnSnBkQszLsxfkD4ppaQcugEFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a3c27c72d5so31560895ab.2
+        for <linux-usb@vger.kernel.org>; Sun, 20 Oct 2024 11:12:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729446096; x=1730050896;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fiDr2EgAXSV5r56uzap2YtxynjiRZajySX4Brk5lIlY=;
-        b=o7g9BabYrZpzshmlGsJfyni+xr7eAIssjBVEZsZ7qWQgFDUza5kto0+LiD4hyQw8/g
-         OXAekbFEQEa0kkrh3ZtxEq+TMNP1fl3oBYecg72G6eaHAD30vlq4Dmjc5w7o3Wq7FQl8
-         a46vOIpYnr0NTB4NdKzNMdElzks/8e81nBS6KytyjH1XHEJePq8s7t5QuCHFLB0b3EFF
-         iBfnB7IPIRSt7ZfLzGONSwjSTX3pomg0FVRptS7z2Wxu++Hn4fd9HGS1UmwrPhlAwcpC
-         jEMB7/+bPaZGd2XTEJpFIzEelApu0F2y6SPBn3xVS6DbAsnwVP+fAN8fXYpq7ZZqnVzh
-         Ehfw==
-X-Forwarded-Encrypted: i=1; AJvYcCVie5ELBWQzb1Z4hRLroxZsDrEbo2H9KQcsqlSDd74yrBN6rKo6vwq5kRSuSq8QQH1VmDqm64C/2dV6RAg=@vger.kernel.org, AJvYcCWKj1zsZhM2kHn+eXqnVtVIRzkYCOKZrNnrPFhpFkYiYgeUIqkeHFmB3cnX874kfEpqbrrFXZZf@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFc5juq2Zicdl1CZQwu5qWjrySBlf1uNfqgqIToafpVk+hJLaZ
-	CpLIt8huJ5kyU2oiYkJl7RAX2AI37aQaMc6Z94xU+6QzNtwPB1/i
-X-Google-Smtp-Source: AGHT+IEjdb1hjiYAr224xsUcd/twtKCJPqEUHlaY3Xc9qGyDFR5gNZqKzpYNwMrWHqNH4Gu9MoSQnA==
-X-Received: by 2002:a05:600c:4f15:b0:42c:b187:bde9 with SMTP id 5b1f17b1804b1-4316168ffb3mr76253005e9.30.1729446096042;
-        Sun, 20 Oct 2024 10:41:36 -0700 (PDT)
-Received: from localhost.localdomain ([212.231.124.9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f5c2b46sm29647445e9.36.2024.10.20.10.41.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2024 10:41:35 -0700 (PDT)
-From: =?UTF-8?q?Benjamin=20Gro=C3=9Fe?= <ste3ls@gmail.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Benjamin=20Gro=C3=9Fe?= <ste3ls@gmail.com>
-Subject: [PATCH] usb: add support for new USB device ID 0x17EF:0x3098 for the r8152 driver
-Date: Sun, 20 Oct 2024 18:41:28 +0100
-Message-ID: <20241020174128.160898-1-ste3ls@gmail.com>
-X-Mailer: git-send-email 2.44.1
+        d=1e100.net; s=20230601; t=1729447924; x=1730052724;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8QAZccqRwz7JcdERXlsfYo5Amz76jomyg/R0CbjXGM=;
+        b=LgtH8v3NwHEI/rnpaDGIxhrMdDkThDHcAYeTTMPi3w/N47a1Ngh4uQt4JUu1n39EVn
+         e8u8QD94IfW0ohEMvfeEYYeieasQtXFKvCviqk9ZAB6b/snKQB8s+YSSAdBzl0gd/QC/
+         8rfAKY2GF3bXJU9/4Pu0Ob1Oa0qZiVsMqSLC3fzKWb8GgqeNgJSiPomVO66Joq5YnKnI
+         JRvea9P3JZ2jOPW0uCtMDgdkvG300VG5kMljHk+gZaRL3i0Nj618brMhJb+Rr1193fI5
+         GPi/jmX0QBU+/Uv7higEqU9uE1M2IZ9bk5q0nJ2pBPC8jz0IjtkS+mLlV/Lcdm2OlWRW
+         p6VA==
+X-Forwarded-Encrypted: i=1; AJvYcCVOk+YW5RTZUrOY+ZZprHfnbXuaGaLBmtt/ZrjeFnlUsh3YXSp/kSFEzxWTwcmKKey6010ToXJ61v4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzF6Bd9baqhZFBa386mZKmOZmH091gd/p3m/2hEV9iMw4pCYHl
+	AIa5qVCp7HdLOgWVBaZD50L6+bFN44d9Da1ukxsnyN/6iPuAN1YQBKEy9gV0YUhp1XEW4XVOQ2x
+	zi1Zp0nbR2oROrja7tuFXOnRyBkmNo3XlyOs35wVVh0jl8rsWKDgZsvk=
+X-Google-Smtp-Source: AGHT+IHxFULUh2WfaDEzwwv3dhCh4UHvJD1yb+hBECZ/uvFS08R7wFelVAdOjp7rgFfJ88saFCbLT4YCwdT6Hpdhbl+B6Y7JcSh4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:12c6:b0:3a0:4a91:224f with SMTP id
+ e9e14a558f8ab-3a3f40474d0mr67332645ab.1.1729447924296; Sun, 20 Oct 2024
+ 11:12:04 -0700 (PDT)
+Date: Sun, 20 Oct 2024 11:12:04 -0700
+In-Reply-To: <000000000000ade4f305fc36868f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <671547f4.050a0220.1e4b4d.0049.GAE@google.com>
+Subject: Re: [syzbot] [usb] kernel BUG in __page_table_check_zero
+From: syzbot <syzbot+7a9bbb158a7a1071eb27@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, jannh@google.com, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-usb@vger.kernel.org, pasha.tatashin@soleen.com, 
+	syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org, 
+	yuran.pereira@hotmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-This patch adds support for another Lenovo Mini dock 0x17EF:0x3098 to the
-r8152 driver. The device has been tested on NixOS, hotplugging and sleep
-included.
+syzbot suspects this issue was fixed by commit:
 
-Signed-off-by: Benjamin Große <ste3ls@gmail.com>
----
- drivers/net/usb/r8152.c | 1 +
- 1 file changed, 1 insertion(+)
+commit 79a61cc3fc0466ad2b7b89618a6157785f0293b3
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu Sep 12 00:11:23 2024 +0000
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index a5612c799..468c73974 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -10069,6 +10069,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3069) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3082) },
-+	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3098) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7205) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
--- 
-2.44.1
+    mm: avoid leaving partial pfn mappings around in error case
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11f76c87980000
+start commit:   cbf3a2cb156a Merge tag 'nfs-for-6.6-3' of git://git.linux-..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=57da1ac039c4c78a
+dashboard link: https://syzkaller.appspot.com/bug?extid=7a9bbb158a7a1071eb27
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15394721680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152b7af6680000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: mm: avoid leaving partial pfn mappings around in error case
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
