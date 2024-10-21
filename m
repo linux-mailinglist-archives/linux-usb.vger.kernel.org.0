@@ -1,76 +1,58 @@
-Return-Path: <linux-usb+bounces-16469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F87D9A5A99
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 08:43:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA1B69A5DC8
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 09:58:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7909F1C20F5B
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 06:43:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B78F280C79
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 07:58:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F46B1CF5DA;
-	Mon, 21 Oct 2024 06:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587921E1026;
+	Mon, 21 Oct 2024 07:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AA2KNmqF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYad8ACA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF7C1CF291
-	for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2024 06:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4181E1028;
+	Mon, 21 Oct 2024 07:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729493019; cv=none; b=PFRBWi2GBh3dzzJqNP/XAXzzesif6xqP+2/v+a885toRn3ivRWanj8ibzPZOK52jJI7p38u2HDn8TqddpOcEfFLRLnV0CrmVsNQmG551IFIjuhWciKnaNn74X3vsL4YYJV1DDIqtv1U8RwlK0VgkPz6Tm/RExQneIxIYqF0qD4I=
+	t=1729497515; cv=none; b=CDh6DTyQY5UZ8B+WP4DOfvGBcuNJAtIomlbbsg3l99kLjin1xvLB53RsOgHeYCkQSCnoeIck1WVri4wGCwK1FbKiCj/fYl2kY3N/KXiz0WbE8suB+jxD6CtXZaSmhTLnSkosGHUURaDhyI97C7y6xsinEo0NqfzhdgCh2xLS3l8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729493019; c=relaxed/simple;
-	bh=rEKbJiIk96MORRyOJ73dz25V9tNXlzLv+aPzi6iQY6c=;
+	s=arc-20240116; t=1729497515; c=relaxed/simple;
+	bh=BF6N0Tw9m2cqoYjZKr6+wjglNc9USslZtMlpF8ZL0F8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F6xvepz17SyvjzGBkzmM76DjLgYJ0c9Ehk4nIY+ySmIWbDNyAmJreBHk6aYW+Ojj748WDtszzKsWn1fb9Jik2sEnMB+EU2u2KlmzQdspMX3HPwFxAqrKHnUj2JRY8l1W+4vKlOfln9zfh09H/+R4NJz7jJinoXibSOtBIX+a7jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AA2KNmqF; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729493017; x=1761029017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rEKbJiIk96MORRyOJ73dz25V9tNXlzLv+aPzi6iQY6c=;
-  b=AA2KNmqFvDVEVQHH3R3FrJuenF0zJ0nreMWvwUS9hqFetG3wRY5ffIjg
-   fxhQhPkx0zF9yW3uA+CzzNOznELP/9hyM9/BsGbziMW5/cFxtLPitue/m
-   caNovrFtoTFCB8aqyOyeQiBMdgSIEZpTA6H6JWAQOZ1IwSIivrIY+wSK9
-   D/9n09afx86F+XFnHacZ7Mr1Aj4ZkN5UxvGPQqIYKTGPPu16u7Ej4gf0H
-   3xo/vna3ZjJqIDHQzEgviW6qZ0Amu5V/nuZPQhxj4U5uoSmPw8y4AiVZ2
-   uv9MyW06yyvsMCd88nLT39EcTQupxy/kNT61oXN/1Uw41MmEi9cL7huB1
-   g==;
-X-CSE-ConnectionGUID: 4n4qTqs2ThGClf2meAeiCg==
-X-CSE-MsgGUID: vbaEyB4zS2qywcQCI3FXyA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11231"; a="32878078"
-X-IronPort-AV: E=Sophos;i="6.11,220,1725346800"; 
-   d="scan'208";a="32878078"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 23:43:36 -0700
-X-CSE-ConnectionGUID: mtJ1T2/dSDCbiF4L7/Z5uA==
-X-CSE-MsgGUID: PAIAi44DThqH2So0ypsWVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,220,1725346800"; 
-   d="scan'208";a="79501020"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Oct 2024 23:43:35 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 768FF301; Mon, 21 Oct 2024 09:43:33 +0300 (EEST)
-Date: Mon, 21 Oct 2024 09:43:33 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Cc: Gil Fine <gil.fine@linux.intel.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Honor TMU requirements in the domain when
- setting TMU mode
-Message-ID: <20241021064333.GV275077@black.fi.intel.com>
-References: <20241011113133.3286723-1-mika.westerberg@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CVv/9cOo6vLcVxEGggcqEQjbG6jUAI3SUUeafAC2HU7XV2IJzJ+DQ22adRJMylJ9JPFWGtiHp/eohpjUzWXCEhcqpaBpTU+M6jMvAMZ67mdztt21ktVRr+Eo9sMKYmPPxDs/MFCsxV+/KvGkmLIs7yJONMPIOrzDV0sql8s+Dd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYad8ACA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38E7C4CEC3;
+	Mon, 21 Oct 2024 07:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729497515;
+	bh=BF6N0Tw9m2cqoYjZKr6+wjglNc9USslZtMlpF8ZL0F8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uYad8ACA85Qv0eqX9qLoavhjKucHVcdevtM1iV4B40hhzw9Lna6vN1xrYWbnx1V6T
+	 STPxuhI1UC9dm/Xtmp3ljrC2c9cN960SPGh/N8z0VBgw9+1FJif8PF5KrZsQK7ntH9
+	 asS7kwyqKZxn9V6mWoDEA9FOp4mukvjsuPAjhoiTsatK1IBT7ax2LQphkuUSAI5cdi
+	 gN70/j5Ie1vYWHqQNemRCF4HXvaVaJ5/x+AvkBzA/+Bj4Mo58rqZwbmzBnopqVeL7k
+	 VDLfkKXGQJtK3CldsijDl6PHIwur6S1mdBKH9c32DExJ+SqlUD4CR+bXjdjmP+OJ1R
+	 hsuSq4VS+gUyQ==
+Date: Mon, 21 Oct 2024 09:58:32 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Describe TUSB1046 crosspoint switch
+Message-ID: <l5guykbgo23s4fw52cen3vuewqe4lqtf2zbdt6gxmlkatm4ecx@wpi6so6okizf>
+References: <20241018-tusb1046-v1-0-a38312f18691@bootlin.com>
+ <20241018-tusb1046-v1-1-a38312f18691@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,50 +61,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241011113133.3286723-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20241018-tusb1046-v1-1-a38312f18691@bootlin.com>
 
-On Fri, Oct 11, 2024 at 02:31:33PM +0300, Mika Westerberg wrote:
-> From: Gil Fine <gil.fine@linux.intel.com>
-> 
-> Currently, when configuring TMU (Time Management Unit) mode of a given
-> router, we take into account only its own TMU requirements ignoring
-> other routers in the domain. This is problematic if the router we are
-> configuring has lower TMU requirements than what is already configured
-> in the domain.
-> 
-> In the scenario below, we have a host router with two USB4 ports: A and
-> B. Port A connected to device router #1 (which supports CL states) and
-> existing DisplayPort tunnel, thus, the TMU mode is HiFi uni-directional.
-> 
-> 1. Initial topology
-> 
->           [Host]
->          A/
->          /
->  [Device #1]
->    /
-> Monitor
-> 
-> 2. Plug in device #2 (that supports CL states) to downstream port B of
->    the host router
-> 
->          [Host]
->         A/    B\
->         /       \
->  [Device #1]    [Device #2]
->    /
-> Monitor
-> 
-> The TMU mode on port B and port A will be configured to LowRes which is
-> not what we want and will cause monitor to start flickering.
-> 
-> To address this we first scan the domain and search for any router
-> configured to HiFi uni-directional mode, and if found, configure TMU
-> mode of the given router to HiFi uni-directional as well.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Fri, Oct 18, 2024 at 03:30:48PM +0200, Romain Gantois wrote:
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        typec-mux@44 {
+> +            compatible = "ti,tusb1046";
+> +            reg = <0x44>;
+> +
+> +            mode-switch;
+> +            orientation-switch;
+> +
+> +            port {
+> +              endpoint {
+> +                remote-endpoint = <&typec_controller>;
 
-Applied to thunderbolt.git/fixes.
+Use consistent indentation for DTS, preferred is 4 space.
+
+With above fixed:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
