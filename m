@@ -1,107 +1,128 @@
-Return-Path: <linux-usb+bounces-16468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16469-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFE2C9A56AC
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 22:32:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F87D9A5A99
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 08:43:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7EA41C20C91
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2024 20:32:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7909F1C20F5B
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 06:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F0E198853;
-	Sun, 20 Oct 2024 20:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F46B1CF5DA;
+	Mon, 21 Oct 2024 06:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PgrMi6DK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AA2KNmqF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501A12B9A5
-	for <linux-usb@vger.kernel.org>; Sun, 20 Oct 2024 20:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF7C1CF291
+	for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2024 06:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729456338; cv=none; b=WLit8Qyeb2ffsd2VljepxJCfjY1yiVwMBFTjF2YSTmWJbiddKLU7fa2fVMrGvOYQ9/KMAlxel5rMBHnnvIaQeO7R35A3rqlcj3Q+p9nSebHq65xHcddDptBGLHAC8CNSaqD6rMwKzwhu6mLHOl+Xqn910g+G0bWeJGQSXwFhh0A=
+	t=1729493019; cv=none; b=PFRBWi2GBh3dzzJqNP/XAXzzesif6xqP+2/v+a885toRn3ivRWanj8ibzPZOK52jJI7p38u2HDn8TqddpOcEfFLRLnV0CrmVsNQmG551IFIjuhWciKnaNn74X3vsL4YYJV1DDIqtv1U8RwlK0VgkPz6Tm/RExQneIxIYqF0qD4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729456338; c=relaxed/simple;
-	bh=5KsaVPwSNkqnf2P7EKz+CUfRfxa0d6AyaHKLgaaVY+M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RkhiloLKlvSl0onAIcmlMlV0nP9mDwv8F5q6tJiGLPwLKgRqnOU/1hMri103KaWmtO+ApX4SKSJTAYB1SEQeQInJQtJ6tE1bcLlkN1d6/d2GUkcmfouBvVhdIPSIZfQwPN1C8xjbiD50Czcreu5s66KBpDyk7+Crvq4UQUH9IZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PgrMi6DK; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4314fa33a35so38212215e9.1
-        for <linux-usb@vger.kernel.org>; Sun, 20 Oct 2024 13:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1729456334; x=1730061134; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5lvT2MXCIdvwUG35lAosjgIyGiktDbNjMaRiV7eIfm8=;
-        b=PgrMi6DKjTkqb5NweHBHqq1D6KteiFrfPc+kJhTd4yhT4RIGacZiLSE+bpNaP35mnO
-         Mw4EC7AfnrP9bqWIC0i1EMzYs7A7yk0i12nEWsjnsxOmFAIB8b/s0wnyzex0HcQhQ7tA
-         +/kcHM4YeJyncdzsceGjtTYuJynKjGybjRrLw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729456334; x=1730061134;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5lvT2MXCIdvwUG35lAosjgIyGiktDbNjMaRiV7eIfm8=;
-        b=HVmwWLaFttE+rWEhd2o9gnmhB1wKek6LcPQvOAAaKuPxg6L4LQemr+df3Pd6nIPsoz
-         udHag9oJvepP+mjbB0mzQnwJiQlx5kLb1h5Y2LE9O0Fl/WRTeVehnvRSCpqsaa9Psykq
-         vYXMRa0o4T69f6M0LM39wKFws/Bb7lUoP2gOqdK85j1iTQnNFTjnAnd6D0aX3lf1Nd6G
-         70t38NTF31eMDsFyOoPZ3uKxv+4JtEE0CAlfxbYoJPW7CaSoylGIiDXRPBWxYVEgV+by
-         O25IspMvZ2ixSWsIs4FJDyvjhZu4o3q9lWzKnl4mWE9BjMDHADjyLR7I/P+pnofVk2sC
-         1lhg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVXgWy+aANthYpbKUz9LaYkwd3GZLp3IvMyvX0ZU00+sZyTXpbuQnrBIyn2CKIYaE5qZNnFEjrxSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLDHFsX1BdHYAYgmynYZ4jVZEEp3Wvhxl5LgJ4xUF8V+cJplqV
-	CG5ZhiHyRPkm5JcUKKcKy9ULxujeuZVJudIfwnN6cpb7yAlEjmLrGHWz73dbTUEA/+FIZaG48Nv
-	h411DeA==
-X-Google-Smtp-Source: AGHT+IEVGxwBFNnA3Bthrx5DHLcOE4QuFrXFgO+2DRgikMbcoG8/Rlsy+Vq096gRTno0He14yjmbWw==
-X-Received: by 2002:a5d:5692:0:b0:37d:45ab:422b with SMTP id ffacd0b85a97d-37eab6ef2b7mr5998902f8f.31.1729456334381;
-        Sun, 20 Oct 2024 13:32:14 -0700 (PDT)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cb66a653d0sm1201588a12.24.2024.10.20.13.32.12
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Oct 2024 13:32:13 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a9a1b71d7ffso606498466b.1
-        for <linux-usb@vger.kernel.org>; Sun, 20 Oct 2024 13:32:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXVClR0WjeSdQ2bPJs4eJvr0frDrm5gAt3Nn70xT4tEvVcwQ7k9tHaFoy1iYKbEYL70WtoYnqwvXrQ=@vger.kernel.org
-X-Received: by 2002:a17:907:728c:b0:a9a:6855:1820 with SMTP id
- a640c23a62f3a-a9a69a7616cmr1110187966b.15.1729456332287; Sun, 20 Oct 2024
- 13:32:12 -0700 (PDT)
+	s=arc-20240116; t=1729493019; c=relaxed/simple;
+	bh=rEKbJiIk96MORRyOJ73dz25V9tNXlzLv+aPzi6iQY6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F6xvepz17SyvjzGBkzmM76DjLgYJ0c9Ehk4nIY+ySmIWbDNyAmJreBHk6aYW+Ojj748WDtszzKsWn1fb9Jik2sEnMB+EU2u2KlmzQdspMX3HPwFxAqrKHnUj2JRY8l1W+4vKlOfln9zfh09H/+R4NJz7jJinoXibSOtBIX+a7jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AA2KNmqF; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729493017; x=1761029017;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rEKbJiIk96MORRyOJ73dz25V9tNXlzLv+aPzi6iQY6c=;
+  b=AA2KNmqFvDVEVQHH3R3FrJuenF0zJ0nreMWvwUS9hqFetG3wRY5ffIjg
+   fxhQhPkx0zF9yW3uA+CzzNOznELP/9hyM9/BsGbziMW5/cFxtLPitue/m
+   caNovrFtoTFCB8aqyOyeQiBMdgSIEZpTA6H6JWAQOZ1IwSIivrIY+wSK9
+   D/9n09afx86F+XFnHacZ7Mr1Aj4ZkN5UxvGPQqIYKTGPPu16u7Ej4gf0H
+   3xo/vna3ZjJqIDHQzEgviW6qZ0Amu5V/nuZPQhxj4U5uoSmPw8y4AiVZ2
+   uv9MyW06yyvsMCd88nLT39EcTQupxy/kNT61oXN/1Uw41MmEi9cL7huB1
+   g==;
+X-CSE-ConnectionGUID: 4n4qTqs2ThGClf2meAeiCg==
+X-CSE-MsgGUID: vbaEyB4zS2qywcQCI3FXyA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11231"; a="32878078"
+X-IronPort-AV: E=Sophos;i="6.11,220,1725346800"; 
+   d="scan'208";a="32878078"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 23:43:36 -0700
+X-CSE-ConnectionGUID: mtJ1T2/dSDCbiF4L7/Z5uA==
+X-CSE-MsgGUID: PAIAi44DThqH2So0ypsWVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,220,1725346800"; 
+   d="scan'208";a="79501020"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa008.fm.intel.com with ESMTP; 20 Oct 2024 23:43:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 768FF301; Mon, 21 Oct 2024 09:43:33 +0300 (EEST)
+Date: Mon, 21 Oct 2024 09:43:33 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: Gil Fine <gil.fine@linux.intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Honor TMU requirements in the domain when
+ setting TMU mode
+Message-ID: <20241021064333.GV275077@black.fi.intel.com>
+References: <20241011113133.3286723-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000ade4f305fc36868f@google.com> <671547f4.050a0220.1e4b4d.0049.GAE@google.com>
-In-Reply-To: <671547f4.050a0220.1e4b4d.0049.GAE@google.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 20 Oct 2024 13:31:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj0HM6Cj24+2mQBU-LmhR2-GBmtA=y80DhKwETsKxnrAQ@mail.gmail.com>
-Message-ID: <CAHk-=wj0HM6Cj24+2mQBU-LmhR2-GBmtA=y80DhKwETsKxnrAQ@mail.gmail.com>
-Subject: Re: [syzbot] [usb] kernel BUG in __page_table_check_zero
-To: syzbot <syzbot+7a9bbb158a7a1071eb27@syzkaller.appspotmail.com>
-Cc: akpm@linux-foundation.org, jannh@google.com, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-usb@vger.kernel.org, pasha.tatashin@soleen.com, 
-	syzkaller-bugs@googlegroups.com, yuran.pereira@hotmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241011113133.3286723-1-mika.westerberg@linux.intel.com>
 
-#syz fix: mm: avoid leaving partial pfn mappings around in error case
+On Fri, Oct 11, 2024 at 02:31:33PM +0300, Mika Westerberg wrote:
+> From: Gil Fine <gil.fine@linux.intel.com>
+> 
+> Currently, when configuring TMU (Time Management Unit) mode of a given
+> router, we take into account only its own TMU requirements ignoring
+> other routers in the domain. This is problematic if the router we are
+> configuring has lower TMU requirements than what is already configured
+> in the domain.
+> 
+> In the scenario below, we have a host router with two USB4 ports: A and
+> B. Port A connected to device router #1 (which supports CL states) and
+> existing DisplayPort tunnel, thus, the TMU mode is HiFi uni-directional.
+> 
+> 1. Initial topology
+> 
+>           [Host]
+>          A/
+>          /
+>  [Device #1]
+>    /
+> Monitor
+> 
+> 2. Plug in device #2 (that supports CL states) to downstream port B of
+>    the host router
+> 
+>          [Host]
+>         A/    B\
+>         /       \
+>  [Device #1]    [Device #2]
+>    /
+> Monitor
+> 
+> The TMU mode on port B and port A will be configured to LowRes which is
+> not what we want and will cause monitor to start flickering.
+> 
+> To address this we first scan the domain and search for any router
+> configured to HiFi uni-directional mode, and if found, configure TMU
+> mode of the given router to HiFi uni-directional as well.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Because even if I wasn't aware of the syzbot report, it does look like
-a match for what the commit was meant to fix (and may have been the
-source of Jann's report).
-
-             Linus
-
-On Sun, 20 Oct 2024 at 11:12, syzbot
-<syzbot+7a9bbb158a7a1071eb27@syzkaller.appspotmail.com> wrote:
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: mm: avoid leaving partial pfn mappings around in error case
+Applied to thunderbolt.git/fixes.
 
