@@ -1,175 +1,169 @@
-Return-Path: <linux-usb+bounces-16476-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16477-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40C089A68F2
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 14:47:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA8A49A6920
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 14:52:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5C681F2153C
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 12:47:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EAC7CB2A435
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 12:48:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEBE21F80D2;
-	Mon, 21 Oct 2024 12:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67AA31F4FA0;
+	Mon, 21 Oct 2024 12:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MIdTjn6Z"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Mga2vFLt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B761F76D0;
-	Mon, 21 Oct 2024 12:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8A81D3590;
+	Mon, 21 Oct 2024 12:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729514790; cv=none; b=IVdxYl7yDdIIVvMUUh6rRErq+6CYuLaxh6SlJavzQ83lgLiUyS7sueWX6diC+ufOgZWFKTPuiqKEca1rj8Yyw8kLmVUHis0s+S63MCZuQPhYKTTer/VkpwK8HHGiKIzO9gGF25ywM6jDkkYAzRqimhOeR7zgeKQePwHHlG9TdQo=
+	t=1729514891; cv=none; b=eRY18sVlMcQrh+ZVOMQv0SKpYvAluf3v76jjQ7WSDME9NIFWKuEtpIxhWt9k1BZ7Z5n0LMDbzrZ6EdoaQEQicgspHdYoUuM2Q6FecH0OB+mw30jSs+Fpgft0fwGkVp3LK8baxFVkyU3m7u2jCX4qY6WNjBMp0Ce7U0Le9pYDdSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729514790; c=relaxed/simple;
-	bh=xTfEykVBfqYI2JgbgfPsBPAISsdZz05BmImPaVUH/vw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r1c7UBTEZkHBIxV0+qAfpxFcUZnk5BtXZz87lN/9zj9yiGVIrp2DzAHTwChvbiq222DWF3AJDmm2Uc2TMQyE9IAceJAtCXYzA5R3DYj3fwmLFH7y1VbMjFNu/YXYrjyET6ucq74GrYVbX6910Z5ahAgYDaZeBvCuvlAY3xqFm/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MIdTjn6Z; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-37d49ffaba6so3101716f8f.0;
-        Mon, 21 Oct 2024 05:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729514786; x=1730119586; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2tNgkXKwLXOYj2vcfpM51UGck7gc6AsRRag9xxhq4aM=;
-        b=MIdTjn6ZWld3fH+tfoX7L01M0HJt2MFk9BUS3+X8IkSvL55gG537D9U45uWvV9sM6E
-         nRyJhyAgnfQeneHyPfuIYGRUlsomzszxpQRfR+rt5zYcFmNh3x3uKPO8V95lkexW8LeN
-         G9E7EgccvcdtSvMFXpoeKnM4QN5qD82PWEfm0iO/olBUotqkibmSTKXGQmaj81RhBMk2
-         mT6bGWzawHsp5PFVnmmT/kJCEWuoJfOt6+hhlQzpm+4m+VaWJvHp7o10MeYnkNTKccKg
-         PqtAn/t+yiMpU3bRJQz3e+xfqebfO5duNRs2YNubeBlhdNTbnVwa6e6V1TD0xMAg8GjZ
-         5kjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729514786; x=1730119586;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2tNgkXKwLXOYj2vcfpM51UGck7gc6AsRRag9xxhq4aM=;
-        b=UkKK3guNW+kMcTGaSsAKLRwaZ99ab29qxmx5qxpcZ7H1m6wFJZyhb3Hf8VtcqSJi37
-         uOjxdmqpb9UaUWdO47xvcl3qGmiZ68+Kh5wAgioyfi2CChHykGYOj0ZLgz8F+Mhe2lL6
-         ptBfOkGD2h8fGaX/0RZIs/Fb2CNCHd3ciBeBdT9P1WTQ9Xs9lrawDIib9tV4RgC5JzLb
-         8TZ65ueOHE3DRV9685AqwtRO1o8akEMrEwptaNrykUvnV8Wms3hK3l0GeB+5eDOEGpID
-         Tb4icgoNxSUn+fgn1NeFc8GMbBoryIY8VFfUMRWgB2ITZIeaWyT40bimu4aeANbFyiPI
-         HI4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUhufmy6h5ZGOHA8DwaV1T8sQZxDdCMZSB9WrgkH9BP/chwKLgTDSUCFiDEs6b2sLI94MOwZCqCiFAgDyA=@vger.kernel.org, AJvYcCWj32LUXxEBwq3HyYHjCnMtsMQYP4Aqgl870rZWXSrJ9yUKCyt+mBTNy6szl8D4YCO9DHoK/xdR@vger.kernel.org, AJvYcCX0sykXKPG2MXeXEkrWbcoX/pABCZ/VsnkaEFB+f5O+0erP1DQoCIIQknr3JdZNAIgLYuKvkjRGKv5L@vger.kernel.org, AJvYcCXVFmjtGByXBtR1nBo3xS05am0wwZBF9EOnxAXPsH81xAnuVOcapG3WDcBhd/MKZ30CQ31eZ8ztukfZ4rk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydYxvU4cXO9Z7MOC9hvwL/xgPOvcl3489s9za6q3k07THuo6FS
-	5F+VqcscBV7Q7JMMetncZOlOFj3K8kQIKAaNy5YXNiyivdxB0hC1WrO7/Ber
-X-Google-Smtp-Source: AGHT+IF8yYylXofo4xb4ihzBJmGnKtLzqF98xqMY3Cs7Cdm1hv3lJGPTKXEJqP56KuRk3nu/ZFyplw==
-X-Received: by 2002:a05:6000:109:b0:37c:cca1:b1e3 with SMTP id ffacd0b85a97d-37eb48701a8mr6745329f8f.41.1729514786320;
-        Mon, 21 Oct 2024 05:46:26 -0700 (PDT)
-Received: from orome (p200300e41f26ec00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f26:ec00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f570f7esm56668325e9.10.2024.10.21.05.46.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2024 05:46:25 -0700 (PDT)
-Date: Mon, 21 Oct 2024 14:46:24 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Henry Lin <henryl@nvidia.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Petlozu Pravareshwar <petlozup@nvidia.com>, Jim Lin <jilin@nvidia.com>, linux-usb@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v4] xhci: tegra: fix checked USB2 port number
-Message-ID: <lfjrdb5hx7ytm5kfolsidfa6pfbatocznejedyo4nsxjziouse@6bjo5huzciwa>
-References: <20241014042134.27664-1-henryl@nvidia.com>
+	s=arc-20240116; t=1729514891; c=relaxed/simple;
+	bh=dcwsrDYAarJ2dsbZUYaldSwnwfwiSjhedCj7X3eiXZ8=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=EBexAIdHJ3RIgzkYjbSwXTV+04ljeN1zDYrdRc1aAz5vxocYzQpiwomc7km46M+Kyxg/Dfpz4sCVAmh8pk4MTIwit54gXKzIyBDV8a2CuPp00e5bhj2MukTW23lnfZ+0GU9mzL4nWUIatG5QUes/q+pr4c9B8ol+mPEHfTydfSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Mga2vFLt; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=S29G+BHUzKxODCYlrD
+	MsOh8+n3v/qlCoAc25CmxuWtQ=; b=Mga2vFLthllg7HCcKDY7YerdHB9bhmlEAH
+	Z0imRJ12K13VdMNnba0vDHfMHVV2sr423BCffGy2cOG1OMFWsxcnDB8LnrLdYmTH
+	6ULEknwh7s15xTpr+djLoWaSAsg9xi8Lao3lhvN/eSPCia/m1y3/O6YhUsCp9LLN
+	MHRSmIVN4=
+Received: from localhost.localdomain (unknown [111.48.58.10])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgD336x1TRZnmIsqAA--.12297S2;
+	Mon, 21 Oct 2024 20:47:50 +0800 (CST)
+From: huanglei814 <huanglei814@163.com>
+To: gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	huanglei <huanglei@kylinos.cn>
+Subject: [PATCH] usb: core: adds support for PM control of specific USB dev skip suspend.
+Date: Mon, 21 Oct 2024 20:47:41 +0800
+Message-Id: <20241021124741.6014-1-huanglei814@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:PSgvCgD336x1TRZnmIsqAA--.12297S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuryxKw4DJrW5AF45ZrWDurg_yoWrJry5pF
+	4qyFWYkrsxGr1Iv34aya1kuF1rWanYkayjk3sakw1Ygw17J395Gr10yFy5Xwnxur9xAFy7
+	trsrG3yUCrW7GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UBBTrUUUUU=
+X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbiLAJ-9mcV2zOcIgABsC
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="fplnjns5szlhev77"
-Content-Disposition: inline
-In-Reply-To: <20241014042134.27664-1-henryl@nvidia.com>
 
+From: huanglei <huanglei@kylinos.cn>
 
---fplnjns5szlhev77
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4] xhci: tegra: fix checked USB2 port number
-MIME-Version: 1.0
+All USB devices are brought into suspend power state after system suspend.
+It is desirable for some specific manufacturers buses to keep their devices
+in normal state even after system suspend.
 
-On Mon, Oct 14, 2024 at 12:21:34PM +0800, Henry Lin wrote:
-> If USB virtualizatoin is enabled, USB2 ports are shared between all
-> Virtual Functions. The USB2 port number owned by an USB2 root hub in
-> a Virtual Function may be less than total USB2 phy number supported
-> by the Tegra XUSB controller.
->=20
-> Using total USB2 phy number as port number to check all PORTSC values
-> would cause invalid memory access.
->=20
-> [  116.923438] Unable to handle kernel paging request at virtual address =
-006c622f7665642f
-> ...
-> [  117.213640] Call trace:
-> [  117.216783]  tegra_xusb_enter_elpg+0x23c/0x658
-> [  117.222021]  tegra_xusb_runtime_suspend+0x40/0x68
-> [  117.227260]  pm_generic_runtime_suspend+0x30/0x50
-> [  117.232847]  __rpm_callback+0x84/0x3c0
-> [  117.237038]  rpm_suspend+0x2dc/0x740
-> [  117.241229] pm_runtime_work+0xa0/0xb8
-> [  117.245769]  process_scheduled_works+0x24c/0x478
-> [  117.251007]  worker_thread+0x23c/0x328
-> [  117.255547]  kthread+0x104/0x1b0
-> [  117.259389]  ret_from_fork+0x10/0x20
-> [  117.263582] Code: 54000222 f9461ae8 f8747908 b4ffff48 (f9400100)
->=20
-> Cc: <stable@vger.kernel.org> # v6.3+
-> Fixes: a30951d31b25 ("xhci: tegra: USB2 pad power controls")
-> Signed-off-by: Henry Lin <henryl@nvidia.com>
-> ---
-> V1 -> V2: Add Fixes tag and the cc stable line
-> V2 -> V3: Update commit message to clarify issue
-> V3 -> V4: Resend for patch changelogs that are missing in V3
->=20
->  drivers/usb/host/xhci-tegra.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index 6246d5ad1468..76f228e7443c 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -2183,7 +2183,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb =
-*tegra, bool runtime)
->  		goto out;
->  	}
-> =20
-> -	for (i =3D 0; i < tegra->num_usb_phys; i++) {
-> +	for (i =3D 0; i < xhci->usb2_rhub.num_ports; i++) {
->  		if (!xhci->usb2_rhub.ports[i])
->  			continue;
->  		portsc =3D readl(xhci->usb2_rhub.ports[i]->addr);
+Signed-off-by: huanglei <huanglei@kylinos.cn>
+---
+ drivers/usb/core/Kconfig     | 12 ++++++++++++
+ drivers/usb/core/driver.c    | 14 ++++++++++++++
+ drivers/usb/host/xhci-plat.c |  7 +++++++
+ include/linux/usb.h          |  9 +++++++++
+ 4 files changed, 42 insertions(+)
 
-Given that the size of usb2_rhub.ports is given by usb2_rhub.num_ports,
-this seems the right thing to do regardless of virtualization.
+diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
+index 58e3ca7e4793..fe178c90d167 100644
+--- a/drivers/usb/core/Kconfig
++++ b/drivers/usb/core/Kconfig
+@@ -143,3 +143,15 @@ config USB_DEFAULT_AUTHORIZATION_MODE
+ 	  ACPI selecting value 2 is analogous to selecting value 0.
+ 
+ 	  If unsure, keep the default value.
++
++config USB_SKIP_SUSPEND
++	bool "Vendor USB support skip suspend"
++	depends on USB
++	default n
++	help
++	  Select this the associate USB devices will skip suspend when pm control.
++
++	  This option adds support skip suspend for PM control of USB devices
++	  in specific manufacturers platforms.
++
++	  If unsure, keep the default value.
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 0c3f12daac79..05fe921f8297 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1583,6 +1583,15 @@ int usb_suspend(struct device *dev, pm_message_t msg)
+ 	struct usb_device	*udev = to_usb_device(dev);
+ 	int r;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_SUSPEND)) {
++		if (udev->state != USB_STATE_SUSPENDED)
++			dev_err(dev, "abort suspend\n");
++
++		return 0;
++	}
++#endif
++
+ 	unbind_no_pm_drivers_interfaces(udev);
+ 
+ 	/* From now on we are sure all drivers support suspend/resume
+@@ -1619,6 +1628,11 @@ int usb_resume(struct device *dev, pm_message_t msg)
+ 	struct usb_device	*udev = to_usb_device(dev);
+ 	int			status;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_RESUME))
++		return 0;
++#endif
++
+ 	/* For all calls, take the device back to full power and
+ 	 * tell the PM core in case it was autosuspended previously.
+ 	 * Unbind the interfaces that will need rebinding later,
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index ecaa75718e59..8cbc666ab5c6 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -265,6 +265,13 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+ 		if (device_property_read_bool(tmpdev, "xhci-skip-phy-init-quirk"))
+ 			xhci->quirks |= XHCI_SKIP_PHY_INIT;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++		if (device_property_read_bool(tmpdev, "usb-skip-suspend")) {
++			hcd_to_bus(hcd)->skip_suspend = true;
++			hcd_to_bus(xhci->shared_hcd)->skip_suspend = true;
++		}
++#endif
++
+ 		device_property_read_u32(tmpdev, "imod-interval-ns",
+ 					 &xhci->imod_interval);
+ 	}
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 672d8fc2abdb..5f88850fc42d 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -487,6 +487,15 @@ struct usb_bus {
+ 	struct mon_bus *mon_bus;	/* non-null when associated */
+ 	int monitored;			/* non-zero when monitored */
+ #endif
++
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	unsigned int skip_suspend;	/* All USB devices are brought into suspend
++					 * power state after system suspend. It is
++					 * desirable for some specific manufacturers
++					 * buses to keep their devices in normal
++					 * state even after system suspend.
++					 */
++#endif
+ };
+ 
+ struct usb_dev_state;
+-- 
+2.17.1
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---fplnjns5szlhev77
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmcWTR8ACgkQ3SOs138+
-s6HZUg/9HIVjVuZFYW96ytxOAoCNpEL/mi1p3WBpkcl8jBg4F9w4LWOWBpvfwoAd
-zIvSaFJXKqbi8/LcMvNCpSknAWDot14Lp2ZBnR9Uq4NcLpoZ3mU9eu3Kc/ZmMDRJ
-08itUmZX+FjhTmRevrYz88nc2QgMOWMcFAvWcMsdqrTX6AqFOqna3LhxzY6qX+V0
-KQLjy9DpxjdPxQY1O9B4TTd5K5BUawdPzJMQCSwayrWF3izL2qFqJ9cOQI6UnF1h
-EL1eq+2WDuCKq3AyurTAeRVFE/Gs30l1Qhzn15GzLhdF88s5fCjf3ZDZE8qG2VFq
-7pOcbMfWENhioQYncFUHnnsVju5+A3XXMs/DCUcyjHV57QnaDJA7wCiIdnP4hWBo
-IQI4UpweJRHtjArSAt6GS4T9n/TiGzstoIj1x6lvwJJuWDbV41fvr95eXAKDZ601
-0+hhTor75YN5IAoJZGNleU4OA9q3dcNTwr4lMCBNKIA6qUmJVrUUKl+RivXL0MfN
-OLP9XkP1Dn+dKFHL2zggK1MzdSQ1l+8PS+vTkmvAiYtPXDY8JZbbnxAVycweWrzi
-ocb5E93LIbrRaR2SfSXsmmdaYRMbtSUXcUlrG+fevHrzv/mUB0FWiZFH4sVwzQbO
-MMGCOcmcaXGXJqQr0sF4HQmcFWR9eze6+iyPofzVj7ryDMaTLc4=
-=IcrR
------END PGP SIGNATURE-----
-
---fplnjns5szlhev77--
 
