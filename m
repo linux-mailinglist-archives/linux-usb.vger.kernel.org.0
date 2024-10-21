@@ -1,96 +1,144 @@
-Return-Path: <linux-usb+bounces-16488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16489-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD43D9A6BE9
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 16:18:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D593B9A6BF2
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 16:20:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5344F1F21543
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 14:18:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9645C28153D
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 14:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE3D1F940F;
-	Mon, 21 Oct 2024 14:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47861F9AA2;
+	Mon, 21 Oct 2024 14:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2AVE7x3E"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzftFcnM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98E41F4731
-	for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2024 14:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817F11F473C;
+	Mon, 21 Oct 2024 14:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729520288; cv=none; b=Gjx4FBC/GquyraHLnnLGpsdyQjXMXHpVkTCFQHpO+69cjRDhtIr5cOQ3Wpl7wbZlKcGXW38+7jImCCRVTa1eopOu8TMOczzTR4i3raNeoHlIu9gn3iE26vgtOF7K8UUv81IBO0YGHtaz1/Jm2LJkOvX/+3fryA8gnqHfE8eqlaw=
+	t=1729520423; cv=none; b=CD7jKfufg9ViVesZwFZG9Ef9mrOsRAPpXmAIBwEaHFHTN+GXdffnqBH3S9WSrnNXw0SlSmwaqEFyafAUQ4h9lulYPz/Xw1JmHKFIC6Wpy8/hJPKGZ74o/ej6T/VygDUJ490x0d0/JtT0SCMB+Lr4Fwz7z2qB75ddiOL1zKbqc9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729520288; c=relaxed/simple;
-	bh=WvthH4I73+wIKSdt8grbcNUj+S7QHVBvdB0AaMMt1YY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZXb2AfkMgWTSukg+0iTLfsqknBoZJXecBn79Jr1c7/0aJ5hwhoGC3MiinPz6TqPAajwPOPrl8h2uMT7Wvg+vaQAgkYRc33Nl7FgsQd4xMsdl3C4BkvlNcs56bmUtBmqtOUGLSCGrkc4ckocabXVWtx9RrwfGBhSjl/lkDN9CiNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2AVE7x3E; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43150ea2db6so186765e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2024 07:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729520285; x=1730125085; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WvthH4I73+wIKSdt8grbcNUj+S7QHVBvdB0AaMMt1YY=;
-        b=2AVE7x3EzD/4fJXlhV53XQXWnv/11ett4aPGOMwE1crAk0kl59mYi0JinvILE1QDp9
-         fjQNM5s2Ldm4XvDG/21gCDQYBetfqh4c75jZoxmn0sjFvOyE4oMiUQcC8PPOjbc2wMyF
-         yBR11+t6iPF3K2HPgQSS25LWbGFD8V+xOxEWqKFJXUlJMNo/m66CNFnv/J9nDxrDIxxm
-         JlzlpcnLGAoc4581b9NBGpLjdkLBFe32wtbaYfHY7tUrpFKKHelOmnXsiJidLE+REbIf
-         8RXVhxAxk8cUCUHHVnEAVJc+vdoiA/MByXtV8Zqepkitb7SOPXtZUMDMjtdsy2dLPrpv
-         O4Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729520285; x=1730125085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WvthH4I73+wIKSdt8grbcNUj+S7QHVBvdB0AaMMt1YY=;
-        b=KHTCf3Awyf2yuDrgaKQRFKs474SUb2bSIDQ6rS89sgB+mE7/c4+RtPgH6OywTvl9cA
-         oyG9DXAGZLgrdt2VDOZ3vjviC/Gdswq25FS4hIF6bwmEDdRNmpYZhNujQ3sDZKZlcBX/
-         Q0Sh/vxmYrqcGHmmWwju8On9UdU81nu/XrTlqDesH/ET9lK2ByatrZ1FtPk+JWuPyxT8
-         JVAASKjjY1mA5V85/vQn7T2ZFMtHmW0c5ssE3Qytvy2PBrFTI78XATrNWZZt/zQk88Gs
-         sHzz0ka8hDrjUcLdHD8f98/YX0TGDcZDWZsf9hlYc7F1n4xxdqVJb+b4y3aVmuQNR0uQ
-         +/CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXCmNmKJ2Q6srapORWCw2/xreNx4eOf4TJZwrCiGctZX4NBcs8qGIJN7CfraQuIfWf/AoIlEq3QbRY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yziy0WQtKr3OMwCfgHTe/u8pn1xru6lF8nfTjAafW6pSs8tq7rx
-	efld9b+2UdJeGG+nFU96iQdxff4K3GuCmlcv8ay5faVjRWQj9LrhLuhioH5oX52hmgaS5N/hGZJ
-	ei1x5SpdthT77KD90+4gaYgIHLpj1ttSpBgVv
-X-Google-Smtp-Source: AGHT+IFgruKJHbzOj8bavpoyjtoJLRB2itu4iY2MB8zphTynxvbFJGxBHXgBw+gN2sPVXofXeLTRW9U93NiGjxCHVSc=
-X-Received: by 2002:a05:600c:a08d:b0:426:6edd:61a7 with SMTP id
- 5b1f17b1804b1-43168ddcbedmr3664875e9.7.1729520284634; Mon, 21 Oct 2024
- 07:18:04 -0700 (PDT)
+	s=arc-20240116; t=1729520423; c=relaxed/simple;
+	bh=s+Pesid7NRqakfpMfcpLT6dSCI9G+GssV6W02f8Qe3M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A4u+9zYzkfTHIcoJ+JNKx3Xd88XtBPC2Uf/Jh3GXzrC++y6jSNuKk8mTknV87y8d7lrGVrVkvJUkmfsaeWxqkMF1HytNI9phkF4IfP/WDzUfuEPg/f7SGGPxbZfc0aykm0xM17aGMIa3XLQk9IWNOh/+l4Q5h4BGQVqF/tFc+Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzftFcnM; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729520422; x=1761056422;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s+Pesid7NRqakfpMfcpLT6dSCI9G+GssV6W02f8Qe3M=;
+  b=UzftFcnMtekQO40fxikXuwBugU9W04h4XlAXxhAKRYgLBAJmj/SctlZz
+   f7baSemo1AUB07RXNWw9S7taATrC065UbTbdWZBcFZwINvmGKN8BcL33A
+   kIjgSWOYGQarvRufMCzBfXZPdtBWMcIDEovu3vSD94CYFoFz9GODxGzRi
+   ZblgI3vO5blFbKcvuysN6PAMlKv9KR7pLTGYwLoDi1IdaIrit2a03c/Kw
+   7S6zM8UMcR/yROuJJnq5XKfZfrvZF3vz/LWd31rI5M7VBE6PU3ZY+nCd4
+   toq7bMt8xMdnfjwwwW54zZjwCp247nd1Zrjj+h/tPXJ7Fq8oPemCG8Dgc
+   w==;
+X-CSE-ConnectionGUID: zzhuMOspSjStX3khw4ZKpw==
+X-CSE-MsgGUID: yY2AxqrNShKPFCrWnRCnWw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="46472114"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="46472114"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 07:20:21 -0700
+X-CSE-ConnectionGUID: 1aMRdTogQoS0b809mkUqGQ==
+X-CSE-MsgGUID: JTwiPuZ1Rg+exI3PofddfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,221,1725346800"; 
+   d="scan'208";a="79484811"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa009.jf.intel.com with SMTP; 21 Oct 2024 07:20:19 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Oct 2024 17:20:17 +0300
+Date: Mon, 21 Oct 2024 17:20:17 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: fix unreleased fwnode_handle in
+ typec_port_register_altmodes()
+Message-ID: <ZxZjIa8lB3Xvx3xN@kuha.fi.intel.com>
+References: <20241019-typec-class-fwnode_handle_put-v1-1-a3b5a0a02795@gmail.com>
+ <ZxZPS7jt4mI1TUG-@kuha.fi.intel.com>
+ <ZxZaRUmZS4upPvv8@kuha.fi.intel.com>
+ <d5733f9e-6eb5-4b03-b264-a3f9f35791f6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000ade4f305fc36868f@google.com> <671547f4.050a0220.1e4b4d.0049.GAE@google.com>
- <CAHk-=wj0HM6Cj24+2mQBU-LmhR2-GBmtA=y80DhKwETsKxnrAQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wj0HM6Cj24+2mQBU-LmhR2-GBmtA=y80DhKwETsKxnrAQ@mail.gmail.com>
-From: Jann Horn <jannh@google.com>
-Date: Mon, 21 Oct 2024 16:17:25 +0200
-Message-ID: <CAG48ez0SVmoofg5J9E1=4kd0VRHxov1jMTsqG7uZubjr4TP3hw@mail.gmail.com>
-Subject: Re: [syzbot] [usb] kernel BUG in __page_table_check_zero
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: syzbot <syzbot+7a9bbb158a7a1071eb27@syzkaller.appspotmail.com>, 
-	akpm@linux-foundation.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-usb@vger.kernel.org, pasha.tatashin@soleen.com, 
-	syzkaller-bugs@googlegroups.com, yuran.pereira@hotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5733f9e-6eb5-4b03-b264-a3f9f35791f6@gmail.com>
 
-On Sun, Oct 20, 2024 at 10:32=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> Because even if I wasn't aware of the syzbot report, it does look like
-> a match for what the commit was meant to fix (and may have been the
-> source of Jann's report).
+On Mon, Oct 21, 2024 at 04:06:30PM +0200, Javier Carrasco wrote:
+> On 21/10/2024 15:42, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > On Mon, Oct 21, 2024 at 03:55:43PM +0300, Heikki Krogerus wrote:
+> >> On Sat, Oct 19, 2024 at 10:40:19PM +0200, Javier Carrasco wrote:
+> >>> The 'altmodes_node' fwnode_handle is never released after it is no
+> >>> longer required, which leaks the resource.
+> >>>
+> >>> Add the required call to fwnode_handle_put() when 'altmodes_node' is no
+> >>> longer required.
+> >>>
+> >>> Cc: stable@vger.kernel.org
+> >>> Fixes: 7b458a4c5d73 ("usb: typec: Add typec_port_register_altmodes()")
+> >>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> >>
+> >> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> >>
+> >>> ---
+> >>>  drivers/usb/typec/class.c | 1 +
+> >>>  1 file changed, 1 insertion(+)
+> >>>
+> >>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> >>> index d61b4c74648d..1eb240604cf6 100644
+> >>> --- a/drivers/usb/typec/class.c
+> >>> +++ b/drivers/usb/typec/class.c
+> >>> @@ -2341,6 +2341,7 @@ void typec_port_register_altmodes(struct typec_port *port,
+> >>>  		altmodes[index] = alt;
+> >>>  		index++;
+> >>>  	}
+> >>> +	fwnode_handle_put(altmodes_node);
+> >>>  }
+> >>>  EXPORT_SYMBOL_GPL(typec_port_register_altmodes);
+> > 
+> > Sorry to go back to this, but I guess we should actually use those
+> > scope based helpers with fwnodes in this case. So instead of a
+> > dedicated fwnode_handle_put() call like that, just introduce
+> > altmodes_node like this:
+> > 
+> >         ...
+> >         struct fwnode_handle *altmodes_node __free(fwnode_handle) =
+> >                 device_get_named_child_node(&port->dev, "altmodes");
+> > 
+> >         if (IS_ERR(altmodes_node))
+> >                 return;
+> > 
+> >         fwnode_for_each_child_node(altmodes_node, child) {
+> >         ...
+> > 
+> > thanks,
+> > 
+> 
+> That would have to be a second patch, because it does not apply to all
+> affected stable kernels. I can send it separately, though.
 
-Huh, I had no idea syzkaller had already found this one... neat.
+Great, thanks!
+
+-- 
+heikki
 
