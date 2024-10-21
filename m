@@ -1,144 +1,188 @@
-Return-Path: <linux-usb+bounces-16489-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16490-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D593B9A6BF2
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 16:20:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED8849A6E54
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 17:37:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9645C28153D
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 14:20:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28D891C227E0
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 15:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47861F9AA2;
-	Mon, 21 Oct 2024 14:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262381C4600;
+	Mon, 21 Oct 2024 15:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzftFcnM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jH5m0p4e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817F11F473C;
-	Mon, 21 Oct 2024 14:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AADD1C32EC;
+	Mon, 21 Oct 2024 15:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729520423; cv=none; b=CD7jKfufg9ViVesZwFZG9Ef9mrOsRAPpXmAIBwEaHFHTN+GXdffnqBH3S9WSrnNXw0SlSmwaqEFyafAUQ4h9lulYPz/Xw1JmHKFIC6Wpy8/hJPKGZ74o/ej6T/VygDUJ490x0d0/JtT0SCMB+Lr4Fwz7z2qB75ddiOL1zKbqc9s=
+	t=1729525016; cv=none; b=fiDKsDv3VQoFstOy5DlVO0oYSFndONR13C7IxfL3xu3Yai6vNgC7gc9/faNdRTTcXKW9vRy+DfMc2IVQNMR5UPM28sLD6fw25Zl6Pl4YiHviDnjxflnOtTTRLlIgprcSaSeJt3hC7DvgfkygOu58jHHscjVMy3W1s4hr+0Aer1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729520423; c=relaxed/simple;
-	bh=s+Pesid7NRqakfpMfcpLT6dSCI9G+GssV6W02f8Qe3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A4u+9zYzkfTHIcoJ+JNKx3Xd88XtBPC2Uf/Jh3GXzrC++y6jSNuKk8mTknV87y8d7lrGVrVkvJUkmfsaeWxqkMF1HytNI9phkF4IfP/WDzUfuEPg/f7SGGPxbZfc0aykm0xM17aGMIa3XLQk9IWNOh/+l4Q5h4BGQVqF/tFc+Uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzftFcnM; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1729525016; c=relaxed/simple;
+	bh=iG8UoLDE9OO5zAzlZpMo6rLD6ZMjgHZMdsip5GxdtP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UZH2EuVuTDkebcu4KJt0tGpkLVtDZZMHSG5upvz2CGZ5hq3gBjdombgqRdjBC6wTuYlnQdbc0r37XxkEaspWyCYvQi+x/7db/qz5ZyHnmYIirmL7m3bvKAlTN+XR6mivvOhEZ8l+YbcOdEvnEIzyEP/iF9onqTRxrWZDZyz/v+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jH5m0p4e; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729520422; x=1761056422;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s+Pesid7NRqakfpMfcpLT6dSCI9G+GssV6W02f8Qe3M=;
-  b=UzftFcnMtekQO40fxikXuwBugU9W04h4XlAXxhAKRYgLBAJmj/SctlZz
-   f7baSemo1AUB07RXNWw9S7taATrC065UbTbdWZBcFZwINvmGKN8BcL33A
-   kIjgSWOYGQarvRufMCzBfXZPdtBWMcIDEovu3vSD94CYFoFz9GODxGzRi
-   ZblgI3vO5blFbKcvuysN6PAMlKv9KR7pLTGYwLoDi1IdaIrit2a03c/Kw
-   7S6zM8UMcR/yROuJJnq5XKfZfrvZF3vz/LWd31rI5M7VBE6PU3ZY+nCd4
-   toq7bMt8xMdnfjwwwW54zZjwCp247nd1Zrjj+h/tPXJ7Fq8oPemCG8Dgc
-   w==;
-X-CSE-ConnectionGUID: zzhuMOspSjStX3khw4ZKpw==
-X-CSE-MsgGUID: yY2AxqrNShKPFCrWnRCnWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="46472114"
+  t=1729525014; x=1761061014;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iG8UoLDE9OO5zAzlZpMo6rLD6ZMjgHZMdsip5GxdtP0=;
+  b=jH5m0p4edqEnxeIslQwGlbG+O67EjtEa9wGCOOrmVcm/J3o8+7BLy8GF
+   62vgkcMBzJHfKHvNik/8I9TMUJx+j/nYS8B0CtKOCCzpIWstfJhT7OksN
+   sM+VQRy2kjP/BPpZIAC/hb9GkAOac9FSYdkODN1O5re99ADXdNuC7QGh1
+   AQV6cSNdIejQ1ewnpT+4O5118A/obuDpT+OwsOJJmsZfxmUv/6VracWGm
+   +BFVHmDwYwafoVE3nJHfH64d3HslXASp1o0DcfHA85TFcL1Ueo8EpRQST
+   iDW3wGGj3NBlwU36J4s9gY6O2TAZYrrNTcxfPYTpq6IXlq7GJORYlVpTE
+   g==;
+X-CSE-ConnectionGUID: WQxmZmNhTqO+ESTShOxhfg==
+X-CSE-MsgGUID: jnXe3dl0TuijNisEfgZyDA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28966787"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="46472114"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 07:20:21 -0700
-X-CSE-ConnectionGUID: 1aMRdTogQoS0b809mkUqGQ==
-X-CSE-MsgGUID: JTwiPuZ1Rg+exI3PofddfA==
+   d="scan'208";a="28966787"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 08:36:53 -0700
+X-CSE-ConnectionGUID: oGI7i789S/WjwgjjUre7Dg==
+X-CSE-MsgGUID: wsJtD0j4Sn28e+VWjO3L6w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,221,1725346800"; 
-   d="scan'208";a="79484811"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa009.jf.intel.com with SMTP; 21 Oct 2024 07:20:19 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Oct 2024 17:20:17 +0300
-Date: Mon, 21 Oct 2024 17:20:17 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fix unreleased fwnode_handle in
- typec_port_register_altmodes()
-Message-ID: <ZxZjIa8lB3Xvx3xN@kuha.fi.intel.com>
-References: <20241019-typec-class-fwnode_handle_put-v1-1-a3b5a0a02795@gmail.com>
- <ZxZPS7jt4mI1TUG-@kuha.fi.intel.com>
- <ZxZaRUmZS4upPvv8@kuha.fi.intel.com>
- <d5733f9e-6eb5-4b03-b264-a3f9f35791f6@gmail.com>
+   d="scan'208";a="110318540"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa001.fm.intel.com with ESMTP; 21 Oct 2024 08:36:52 -0700
+Message-ID: <51a0598a-2618-4501-af40-f1e9a1463bca@linux.intel.com>
+Date: Mon, 21 Oct 2024 18:39:04 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5733f9e-6eb5-4b03-b264-a3f9f35791f6@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] xhci: Fix Link TRB DMA in command ring stopped
+ completion event
+To: Faisal Hassan <quic_faisalh@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20241021131904.20678-1-quic_faisalh@quicinc.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20241021131904.20678-1-quic_faisalh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 21, 2024 at 04:06:30PM +0200, Javier Carrasco wrote:
-> On 21/10/2024 15:42, Heikki Krogerus wrote:
-> > Hi,
-> > 
-> > On Mon, Oct 21, 2024 at 03:55:43PM +0300, Heikki Krogerus wrote:
-> >> On Sat, Oct 19, 2024 at 10:40:19PM +0200, Javier Carrasco wrote:
-> >>> The 'altmodes_node' fwnode_handle is never released after it is no
-> >>> longer required, which leaks the resource.
-> >>>
-> >>> Add the required call to fwnode_handle_put() when 'altmodes_node' is no
-> >>> longer required.
-> >>>
-> >>> Cc: stable@vger.kernel.org
-> >>> Fixes: 7b458a4c5d73 ("usb: typec: Add typec_port_register_altmodes()")
-> >>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> >>
-> >> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >>
-> >>> ---
-> >>>  drivers/usb/typec/class.c | 1 +
-> >>>  1 file changed, 1 insertion(+)
-> >>>
-> >>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> >>> index d61b4c74648d..1eb240604cf6 100644
-> >>> --- a/drivers/usb/typec/class.c
-> >>> +++ b/drivers/usb/typec/class.c
-> >>> @@ -2341,6 +2341,7 @@ void typec_port_register_altmodes(struct typec_port *port,
-> >>>  		altmodes[index] = alt;
-> >>>  		index++;
-> >>>  	}
-> >>> +	fwnode_handle_put(altmodes_node);
-> >>>  }
-> >>>  EXPORT_SYMBOL_GPL(typec_port_register_altmodes);
-> > 
-> > Sorry to go back to this, but I guess we should actually use those
-> > scope based helpers with fwnodes in this case. So instead of a
-> > dedicated fwnode_handle_put() call like that, just introduce
-> > altmodes_node like this:
-> > 
-> >         ...
-> >         struct fwnode_handle *altmodes_node __free(fwnode_handle) =
-> >                 device_get_named_child_node(&port->dev, "altmodes");
-> > 
-> >         if (IS_ERR(altmodes_node))
-> >                 return;
-> > 
-> >         fwnode_for_each_child_node(altmodes_node, child) {
-> >         ...
-> > 
-> > thanks,
-> > 
+On 21.10.2024 16.19, Faisal Hassan wrote:
+> During the aborting of a command, the software receives a command
+> completion event for the command ring stopped, with the TRB pointing
+> to the next TRB after the aborted command.
 > 
-> That would have to be a second patch, because it does not apply to all
-> affected stable kernels. I can send it separately, though.
+> If the command we abort is located just before the Link TRB in the
+> command ring, then during the 'command ring stopped' completion event,
+> the xHC gives the Link TRB in the event's cmd DMA, which causes a
+> mismatch in handling command completion event.
+> 
+> To handle this situation, an additional check has been added to ignore
+> the mismatch error and continue the operation.
+> 
+> Fixes: 7f84eef0dafb ("USB: xhci: No-op command queueing and irq handler.")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
+> ---
+> Changes in v2:
+> - Removed traversing of TRBs with in_range() API.
+> - Simplified the if condition check.
+> 
+> v1 link:
+> https://lore.kernel.org/all/20241018195953.12315-1-quic_faisalh@quicinc.com
+> 
+>   drivers/usb/host/xhci-ring.c | 43 +++++++++++++++++++++++++++++++-----
+>   1 file changed, 38 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index b2950c35c740..de375c9f08ca 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -126,6 +126,29 @@ static void inc_td_cnt(struct urb *urb)
+>   	urb_priv->num_tds_done++;
+>   }
+>   
+> +/*
+> + * Return true if the DMA is pointing to a Link TRB in the ring;
+> + * otherwise, return false.
+> + */
+> +static bool is_dma_link_trb(struct xhci_ring *ring, dma_addr_t dma)
+> +{
+> +	struct xhci_segment *seg;
+> +	union xhci_trb *trb;
+> +
+> +	seg = ring->first_seg;
+> +	do {
+> +		if (in_range(dma, seg->dma, TRB_SEGMENT_SIZE)) {
+> +			/* found the TRB, check if it's link */
+> +			trb = &seg->trbs[(dma - seg->dma) / sizeof(*trb)];
+> +			return trb_is_link(trb);
+> +		}
+> +
+> +		seg = seg->next;
+> +	} while (seg != ring->first_seg);
+> +
+> +	return false;
+> +}
+> +
+>   static void trb_to_noop(union xhci_trb *trb, u32 noop_type)
+>   {
+>   	if (trb_is_link(trb)) {
+> @@ -1718,6 +1741,7 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
+>   
+>   	trace_xhci_handle_command(xhci->cmd_ring, &cmd_trb->generic);
+>   
+> +	cmd_comp_code = GET_COMP_CODE(le32_to_cpu(event->status));
+>   	cmd_dequeue_dma = xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg,
+>   			cmd_trb);
+>   	/*
+> @@ -1725,17 +1749,26 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
+>   	 * command.
+>   	 */
+>   	if (!cmd_dequeue_dma || cmd_dma != (u64)cmd_dequeue_dma) {
+> -		xhci_warn(xhci,
+> -			  "ERROR mismatched command completion event\n");
+> -		return;
+> +		/*
+> +		 * For the 'command ring stopped' completion event, there
+> +		 * is a risk of a mismatch in dequeue pointers if we abort
+> +		 * the command just before the link TRB in the command ring.
+> +		 * In this scenario, the cmd_dma in the event would point
+> +		 * to a link TRB, while the software dequeue pointer circles
+> +		 * back to the start.
+> +		 */
+> +		if (!(cmd_comp_code == COMP_COMMAND_RING_STOPPED &&
+> +		      is_dma_link_trb(xhci->cmd_ring, cmd_dma))) {
 
-Great, thanks!
 
--- 
-heikki
+Do we in this COMP_COMMAND_RING_STOPPED case even need to check if
+cmd_dma != (u64)cmd_dequeue_dma, or if command ring stopped on a link TRB?
+
+Could we just move the COMP_COMMAND_RING_STOPPED handling a bit earlier?
+
+if (cmd_comp_code == COMP_COMMAND_RING_STOPPED) {
+	complete_all(&xhci->cmd_ring_stop_completion);
+         return;
+}
+
+If I remember correctly it should just turn aborted command TRBs into no-ops,
+and restart the command ring
+
+Thanks
+Mathias
+
 
