@@ -1,74 +1,79 @@
-Return-Path: <linux-usb+bounces-16479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0169C9A6929
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 14:55:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 746AA9A6967
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 15:01:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B75942823F9
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 12:55:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EB3C1C227AF
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2024 13:01:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752231F5834;
-	Mon, 21 Oct 2024 12:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4991EF953;
+	Mon, 21 Oct 2024 13:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBlnGlc+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mr7Mmsg9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D388A83A19;
-	Mon, 21 Oct 2024 12:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B005A1E511;
+	Mon, 21 Oct 2024 13:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729515346; cv=none; b=K7le15OXt1acsVtYKXamfNGFNkuEKvHcZl/ND1/OCBTHXLgnlmMzCLBHR6ORIbQmicjOJ6MJuynUCc9F5FWeyA8ax5mBhX/JUBxaO6WHe+q3Tu7JCGnpL7GgQqfSrxqFEKfcWM+5eS3VbgUyZRV8wn1lezobK0D50TSqyfo5i94=
+	t=1729515673; cv=none; b=CIlGnn7yowjvBKxL/xUyYP3+0y/oKSTymVWlt5MEXd20S9ApTXY/P6Xxplzqreb9DKKJqEMQV9MRNEeT3CO8HNkcBme2bGWiuItaFBqrpijigWbLJnkkaPKFwk1mmaKL9Su/fAtbt9HImggrtDJFnI4phebKKdOqh14xHVL0Jo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729515346; c=relaxed/simple;
-	bh=fEaE8f018pV07d6XEEeVpgv+m4EDKoKjC6oZtA9qIgI=;
+	s=arc-20240116; t=1729515673; c=relaxed/simple;
+	bh=ej3qu3+gaDVBh2zajSPGQQs7YptzCBhIISJg5FqP5Ys=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g07TbF9A19qRc0uuoJ3hVOOcPi0nGG3d5HA71u+1xz+YyAMMIvAfmuvOMMdiaYSbzxMc0ZetczZvD5YYiR1fsd39F0U3ipBpKU5cqbhdbxv2S6tkfN4p4oJlw12uiFjuHcmpDcNWjwKYIzSQC+ZsktV0ae+7C/cuBbkuLoiCzDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBlnGlc+; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=N5ZtuoIcg0SaY/bUg6AxnNeeVoE5gKwRXe1BGTnhmTvevYeIzGar/FL/MJUEaiHtlJAT1DdRLSzHQZ7IfDnJxuDeNC2nbc6R7tCivHUPqQg6vdfsZe2Ik1ccE40ofcyOmCzHJS6EveFi59rj7VrYcGJiv+onrpfXyUUtzcrQt14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mr7Mmsg9; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729515344; x=1761051344;
+  t=1729515672; x=1761051672;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fEaE8f018pV07d6XEEeVpgv+m4EDKoKjC6oZtA9qIgI=;
-  b=nBlnGlc+ubKESDuKVN0v1GlzfJ77VkOLE3pyueWu20sMgWs1J9NS9vuJ
-   pBWgQfp2MIoIyUShkPMyM4KZoP7mDmIBEJwPOGdgxKWbmiUYDUq8zhOmL
-   u+gpsx7s+WkrtrR3sA78azDf+UbumYn9gYXj3RTqbJOfPexX5xoqqZU68
-   NcdVHvaIbowA/AKnUJ4aKi/ptZwhg1I7XsTqJLmU5TvtqpOHM4arE/gHl
-   sHpt4cArS26T/GpCwVDWNwkZEgBvE90VC+BtLpEkVQkvG/a1TyM5REXYD
-   YCkDP+isrXNFWz2Xd6gPS518oH/PcJxXhSCthwED65tMh79ioLvPW0kEe
-   Q==;
-X-CSE-ConnectionGUID: 269840pkTaC5TC2TEhanuQ==
-X-CSE-MsgGUID: k2v8qNGHT0m/VpjcB3OK5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11232"; a="29092573"
-X-IronPort-AV: E=Sophos;i="6.11,220,1725346800"; 
-   d="scan'208";a="29092573"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 05:55:44 -0700
-X-CSE-ConnectionGUID: rRMg32xfQZCwmFFa627Wmw==
-X-CSE-MsgGUID: coehfDKnRweZleZGgFbgWA==
+  bh=ej3qu3+gaDVBh2zajSPGQQs7YptzCBhIISJg5FqP5Ys=;
+  b=Mr7Mmsg9MXZzJkKHMP9+WvMb+mz93qt9QnjuND8Q8X+v3BMp+vP8gaeW
+   31hWq9jkBze2zicISOWWv4FMtofRLzG/E88AO+/fdicJ6Qr1YWlniLolq
+   eXG6tZwZuSMA90SLWzWZg0yfZCKeZdq9L2wOjbiJZvFZm7W87QfUvMfVo
+   Q4WdoBexXfHiOmUDIRZBvo1KkcWAhkNBF7gcRnreLRZA9tiovlFA0QQqs
+   i7XCOicWKd+5OQHTGPbk47YCTDOglUcLQ1av8dfKHIg/GZn4Xf6jBEK7u
+   6FH0r4nb9nlteIVMY6PwZVj58QwWcc8kubtAaEm9zeKV9qgcI/RVyyPRj
+   g==;
+X-CSE-ConnectionGUID: SSPZ41cCQn+dXCJq9kjd3A==
+X-CSE-MsgGUID: 3AT0bh6jSGy0U90EEV1wSQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29162840"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29162840"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 06:01:12 -0700
+X-CSE-ConnectionGUID: Ff3P9/pOT8ipqVHXPAl0nQ==
+X-CSE-MsgGUID: pm4T5JBTSeeKY95E78IYqQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,220,1725346800"; 
-   d="scan'208";a="79463877"
+   d="scan'208";a="79871502"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa010.jf.intel.com with SMTP; 21 Oct 2024 05:55:40 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Oct 2024 15:55:39 +0300
-Date: Mon, 21 Oct 2024 15:55:39 +0300
+  by fmviesa010.fm.intel.com with SMTP; 21 Oct 2024 06:01:07 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Oct 2024 16:01:06 +0300
+Date: Mon, 21 Oct 2024 16:01:06 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fix unreleased fwnode_handle in
- typec_port_register_altmodes()
-Message-ID: <ZxZPS7jt4mI1TUG-@kuha.fi.intel.com>
-References: <20241019-typec-class-fwnode_handle_put-v1-1-a3b5a0a02795@gmail.com>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Caleb Connolly <caleb.connolly@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: typec: qcom-pmic-typec: use
+ fwnode_handle_put() to release fwnodes
+Message-ID: <ZxZQks8_rkYge-yf@kuha.fi.intel.com>
+References: <20241020-qcom_pmic_typec-fwnode_remove-v2-0-7054f3d2e215@gmail.com>
+ <20241020-qcom_pmic_typec-fwnode_remove-v2-1-7054f3d2e215@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,38 +82,53 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241019-typec-class-fwnode_handle_put-v1-1-a3b5a0a02795@gmail.com>
+In-Reply-To: <20241020-qcom_pmic_typec-fwnode_remove-v2-1-7054f3d2e215@gmail.com>
 
-On Sat, Oct 19, 2024 at 10:40:19PM +0200, Javier Carrasco wrote:
-> The 'altmodes_node' fwnode_handle is never released after it is no
-> longer required, which leaks the resource.
+On Sun, Oct 20, 2024 at 02:56:34PM +0200, Javier Carrasco wrote:
+> The right function to release a fwnode acquired via
+> device_get_named_child_node() is fwnode_handle_put(), and not
+> fwnode_remove_software_node(), as no software node is being handled.
 > 
-> Add the required call to fwnode_handle_put() when 'altmodes_node' is no
-> longer required.
+> Replace the calls to fwnode_remove_software_node() with
+> fwnode_handle_put() in qcom_pmic_typec_probe() and
+> qcom_pmic_typec_remove().
 > 
 > Cc: stable@vger.kernel.org
-> Fixes: 7b458a4c5d73 ("usb: typec: Add typec_port_register_altmodes()")
+> Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/class.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index d61b4c74648d..1eb240604cf6 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -2341,6 +2341,7 @@ void typec_port_register_altmodes(struct typec_port *port,
->  		altmodes[index] = alt;
->  		index++;
->  	}
-> +	fwnode_handle_put(altmodes_node);
->  }
->  EXPORT_SYMBOL_GPL(typec_port_register_altmodes);
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> index 2201eeae5a99..73a159e67ec2 100644
+> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> @@ -123,7 +123,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
+>  port_unregister:
+>  	tcpm_unregister_port(tcpm->tcpm_port);
+>  fwnode_remove:
+> -	fwnode_remove_software_node(tcpm->tcpc.fwnode);
+> +	fwnode_handle_put(tcpm->tcpc.fwnode);
 >  
+>  	return ret;
+>  }
+> @@ -135,7 +135,7 @@ static void qcom_pmic_typec_remove(struct platform_device *pdev)
+>  	tcpm->pdphy_stop(tcpm);
+>  	tcpm->port_stop(tcpm);
+>  	tcpm_unregister_port(tcpm->tcpm_port);
+> -	fwnode_remove_software_node(tcpm->tcpc.fwnode);
+> +	fwnode_handle_put(tcpm->tcpc.fwnode);
+>  }
+>  
+>  static const struct pmic_typec_resources pm8150b_typec_res = {
 > 
+> -- 
+> 2.43.0
 
 -- 
 heikki
