@@ -1,133 +1,160 @@
-Return-Path: <linux-usb+bounces-16538-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16539-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0D199AB25B
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 17:44:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E8BE9AB2E5
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 17:57:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77F06B22865
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 15:44:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E1AE1C22448
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 15:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14EA71A264C;
-	Tue, 22 Oct 2024 15:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1AB81A3BC0;
+	Tue, 22 Oct 2024 15:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=581238.xyz header.i=@581238.xyz header.b="XzSmL3Bg"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fWQt4ge7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.581238.xyz (86-95-37-93.fixed.kpn.net [86.95.37.93])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19BA51A070D;
-	Tue, 22 Oct 2024 15:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=86.95.37.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CB019F10A;
+	Tue, 22 Oct 2024 15:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729611861; cv=none; b=UktGzh5hZNRX1mHBt9u9UVmoIEDjerUlMNIGAKCZ6ugERTD7IG0Dy+O+bv64UHYzwccWRtaV14gM9pSQP9l2NhQEg1AE0RtBC4y5+ZSaN8WJqfZRWiUox7xEU1NTpjUoj/QlJ7GLYLTOIho52dAo665Mxj1zgid4l2OKFgovPVg=
+	t=1729612612; cv=none; b=Ah/B0DmNT33A7UJXcAhYcRUXKibmhonVhXcqqUheL9atw0l5Pax9TrsCLl0QFf1IvPV7r6Jfo0RuGyG0lSeIsRZzp3udt7dBQqzNafTZs7qN/ZPvqFCTU21JZshvVVfyqLyBW1YuHOhyMBTaJXzFRfJThG38ZUec43XvLOi5yXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729611861; c=relaxed/simple;
-	bh=YtDLOlpLRRBvDmLW/cArjrA+sbMExZ1uTkluU2L1WL8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PqKx7ah4GaohGLhYpajaOa7tlkwCEHOCoMb4+Jev4lTNwiJymT+09b65prev60ji85XZfS4IT4P7+I1LeEDIN0I/hDOL3DvdCe8vhmUaZmKqihR0iPmtUYaLoAtWQqqnY+n05QKh4AaTEQzM5OCoazIPHs7JJsszagTV2Vn8Dqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=581238.xyz; spf=pass smtp.mailfrom=581238.xyz; dkim=pass (1024-bit key) header.d=581238.xyz header.i=@581238.xyz header.b=XzSmL3Bg; arc=none smtp.client-ip=86.95.37.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=581238.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=581238.xyz
-Received: from [192.168.1.14] (Laptop.internal [192.168.1.14])
-	by mail.581238.xyz (Postfix) with ESMTPSA id 5123D43088FB;
-	Tue, 22 Oct 2024 17:44:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=581238.xyz; s=dkim;
-	t=1729611858; bh=YtDLOlpLRRBvDmLW/cArjrA+sbMExZ1uTkluU2L1WL8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=XzSmL3Bg4KaaWhmNZkNMIOG0iNeTva2qOyq6Hjl1YyrOyBaRP8dodAnv6zE0Qql1W
-	 02bOEPjsCQR7Rm96NRtD/NsOZtoLJ4jWnrl8zR6AdW/mmXTg26v0wyTEuxRgiybFPG
-	 mYk3kZAIlsdtr7kt4hdOXBp79oaxD7oKB3b8lLnY=
-Message-ID: <22415e85-9397-42db-9030-43fc5f1c7b35@581238.xyz>
-Date: Tue, 22 Oct 2024 17:44:18 +0200
+	s=arc-20240116; t=1729612612; c=relaxed/simple;
+	bh=z13NicMcF9ZVpeE1GItwW03x9gDbBSHe3X3Sx9kV7Io=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=vEsD3+1HuyNMbLs8fwTMIh+r5Q9XsVk6UqGbyYS3l8mHb9OSJSas79dNLhEoDqNYPPjHN6T49ojouWblVRBqJ5r8UMSVaOFeBPpLDbwwEASq/mOZRyhdJjL+hcyEjyZaPg+ux/goffLOMWis/507qcnqvhUQ8pYvTDitVVkyFrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fWQt4ge7; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49M9amGJ005187;
+	Tue, 22 Oct 2024 15:56:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=+HbAaa1q9bAdAu7D05Pl04/COhM7iX9rJ+WJMiME4Fw=; b=fW
+	Qt4ge7LMYp790WOogpb8YXokhcmpLis/b4Dz3L5RLOiuLwad9Tc7KTAlah6BZQDP
+	KldtQMI3OgeuQDLBfWRArJaiTLop3xvGM1vAwpRbvOryJZtsPes1luw1CFXzg1xw
+	yGJ9BYITV8s1G10fHfoCpZ9ALzCpY6oVEwf/C+TSZEgXpBvPNBBfT/PuGsSBlj3M
+	KAqmWfo/W8ZbCCCqXoauk0gyXqR899qRWE9gYnDK60udjfCM5IOu23iPzvT+fmBR
+	I/5x6krrXkON0ujjaexfeBAY8MxheKrialzbNxMSZaG6x+hn+fsUyeVvleKl/Cy+
+	V9xMuhF4ge5nBc/4EdLw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42c6rbgwfg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 22 Oct 2024 15:56:44 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49MFuhR6030859
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 22 Oct 2024 15:56:43 GMT
+Received: from hu-faisalh-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 22 Oct 2024 08:56:41 -0700
+From: Faisal Hassan <quic_faisalh@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman
+	<mathias.nyman@intel.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Faisal Hassan
+	<quic_faisalh@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH v3] xhci: Fix Link TRB DMA in command ring stopped completion event
+Date: Tue, 22 Oct 2024 21:26:31 +0530
+Message-ID: <20241022155631.1185-1-quic_faisalh@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
-To: Mario Limonciello <mario.limonciello@amd.com>,
- mika.westerberg@linux.intel.com
-Cc: Sanath.S@amd.com, christian@heusel.eu, fabian@fstab.de,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- regressions@lists.linux.dev, stable@vger.kernel.org
-References: <000f01db247b$d10e1520$732a3f60$@581238.xyz>
- <96560f8e-ab9f-4036-9b4d-6ff327de5382@amd.com>
-Content-Language: en-US
-From: Rick <rick@581238.xyz>
-In-Reply-To: <96560f8e-ab9f-4036-9b4d-6ff327de5382@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: XTd4BBODkolSvOCLlI_s99UZf9GHG1Xk
+X-Proofpoint-GUID: XTd4BBODkolSvOCLlI_s99UZf9GHG1Xk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0
+ impostorscore=0 phishscore=0 mlxlogscore=966 lowpriorityscore=0
+ clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410220102
 
-Hi Mario,
+During the aborting of a command, the software receives a command
+completion event for the command ring stopped, with the TRB pointing
+to the next TRB after the aborted command.
 
-I apologize. I think I mixed up the versions between linux-lts and linux 
-kernel.
+If the command we abort is located just before the Link TRB in the
+command ring, then during the 'command ring stopped' completion event,
+the xHC gives the Link TRB in the event's cmd DMA, which causes a
+mismatch in handling command completion event.
 
-linux-6.6.28-1-lts works: 
-https://gist.github.com/ricklahaye/610d137b4816370cd6c4062d391e9df5
-linux-6.6.57-1-lts works: 
-https://gist.github.com/ricklahaye/48d5a44467fc29abe2b4fd04050309d7
+To address this situation, move the 'command ring stopped' completion
+event check slightly earlier, since the specific command it stopped
+on isn't of significant concern.
 
-linux-6.11.4-arch2-1 doesn't work: 
-https://gist.github.com/ricklahaye/3b13a093e707acd0882203a56e184d3f
-linux-6.11.4-arch2-1 with host_reset on 0 also doesn't work: 
-https://gist.github.com/ricklahaye/ea2f4a04f7b9bedcbcce885df09a0388
+Fixes: 7f84eef0dafb ("USB: xhci: No-op command queueing and irq handler.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
+---
 
-Kind regards,
+Changes in v3:
+- Skip dma check for the cmd ring stopped event
+- v2 link:
+https://lore.kernel.org/all/20241021131904.20678-1-quic_faisalh@quicinc.com
 
-Rick
+Changes in v2:
+- Added Fixes tag
+- Removed traversing of TRBs with in_range() API.
+- Simplified the if condition check.
+- v1 link:
+https://lore.kernel.org/all/20241018195953.12315-1-quic_faisalh@quicinc.com
 
+ drivers/usb/host/xhci-ring.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-On 22-10-2024 14:55, Mario Limonciello wrote:
-> On 10/22/2024 07:13, rick@581238.xyz wrote:
->> Hi all,
->>
->> I am having the exact same issue.
->>
->> linux-lts-6.6.28-1 works, anything above doesn't.
->>
->> When kernel above linux-lts-6.6.28-1:
->> - Boltctl does not show anything
->> - thunderbolt.host_reset=0 had no impact
->> - triggers following errors:
->>    [   50.627948] ucsi_acpi USBC000:00: unknown error 0
->>    [   50.627957] ucsi_acpi USBC000:00: UCSI_GET_PDOS failed (-5)
->>
->> Gists:
->> - https://gist.github.com/ricklahaye/83695df8c8273c30d2403da97a353e15 
->> dmesg
->> with "Linux system 6.11.4-arch1-1 #1 SMP PREEMPT_DYNAMIC Thu, 17 Oct 
->> 2024
->> 20:53:41 +0000 x86_64 GNU/Linux" where thunderbolt dock does not work
->> - https://gist.github.com/ricklahaye/79e4040abcd368524633e86addec1833 
->> dmesg
->> with "Linux system 6.6.28-1-lts #1 SMP PREEMPT_DYNAMIC Wed, 17 Apr 2024
->> 10:11:09 +0000 x86_64 GNU/Linux" where thunderbolt does work
->> - https://gist.github.com/ricklahaye/c9a7b4a7eeba5e7900194eecf9fce454
->> boltctl with "Linux system 6.6.28-1-lts #1 SMP PREEMPT_DYNAMIC Wed, 
->> 17 Apr
->> 2024 10:11:09 +0000 x86_64 GNU/Linux" where thunderbolt does work
->>
->>
->> Kind regards,
->> Rick
->>
->> Ps: sorry for resend; this time with plain text format
->>
->>
->
-> Can you please share a log with 'thunderbolt.host_reset=0 
-> thunderbolt.dyndbg' on the kernel command line in a kernel that it 
-> doesn't work?  This should make the behavior match 6.6.28 and we can 
-> compare.
->
-> Maybe the best thing would be:
-> * 6.6.28 w/ thunderbolt.dyndbg
-> * 6.6.29 w/ thunderbolt.dyndbg thunderbolt.host_reset=0
->
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index b2950c35c740..1ffc69c48eac 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1718,6 +1718,14 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
+ 
+ 	trace_xhci_handle_command(xhci->cmd_ring, &cmd_trb->generic);
+ 
++	cmd_comp_code = GET_COMP_CODE(le32_to_cpu(event->status));
++
++	/* If CMD ring stopped we own the trbs between enqueue and dequeue */
++	if (cmd_comp_code == COMP_COMMAND_RING_STOPPED) {
++		complete_all(&xhci->cmd_ring_stop_completion);
++		return;
++	}
++
+ 	cmd_dequeue_dma = xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg,
+ 			cmd_trb);
+ 	/*
+@@ -1734,14 +1742,6 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
+ 
+ 	cancel_delayed_work(&xhci->cmd_timer);
+ 
+-	cmd_comp_code = GET_COMP_CODE(le32_to_cpu(event->status));
+-
+-	/* If CMD ring stopped we own the trbs between enqueue and dequeue */
+-	if (cmd_comp_code == COMP_COMMAND_RING_STOPPED) {
+-		complete_all(&xhci->cmd_ring_stop_completion);
+-		return;
+-	}
+-
+ 	if (cmd->command_trb != xhci->cmd_ring->dequeue) {
+ 		xhci_err(xhci,
+ 			 "Command completion event does not match command\n");
+-- 
+2.17.1
+
 
