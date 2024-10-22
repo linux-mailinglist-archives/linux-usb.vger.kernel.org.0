@@ -1,76 +1,89 @@
-Return-Path: <linux-usb+bounces-16500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 073759A9830
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 07:14:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF88A9A9A40
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 08:50:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E9B3B22A1B
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 05:14:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ADE21C21596
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 06:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF7412F588;
-	Tue, 22 Oct 2024 05:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7985E145B24;
+	Tue, 22 Oct 2024 06:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jvBrUj0r"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="jVu2CFeb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DADF84DF8;
-	Tue, 22 Oct 2024 05:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ADC1C8FE;
+	Tue, 22 Oct 2024 06:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729574077; cv=none; b=NbTVkOG7G/4bBQXJum2nAomYQEpibnCjeqqCmDNyWdBfVguPB3G8quOtLw2ZICQ3AhVscjVUXSFB+OnHHoI671bz9sPqM/HrJ8u9pcRrCZ1dTCQK+25K0ExvFsCMnr1+2E69zESLoJ9EktA6oGiYp5+DnznTqJQYUcqLU49kDhE=
+	t=1729579805; cv=none; b=ADO6GjRJc+msX6iP+XGDM+sI+ok629Q4m0gUKCQCTfpcf6MJlIVHGnSOCGsmgBk4zKEqwxyg8e/fL9dUpUflVjJzdyqDSeikKj6nSOt5Gi2cMM0M+zQk/2A/NoM2f8kKCPfqXCVIGfZj2lAoAceaduQa7hJJeYYC7Qyp8artfFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729574077; c=relaxed/simple;
-	bh=1jkNlwMF4vkDOF+NAig94pV+JFYv3I+EouVkRAryLIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a+CPL47l9bVq04XnEIncJPa3UMa9xIxZJJ6MQJtw8pxN2g4c4tAQiN9KUyCjuq+LBBMHhG14w1X0p8oaA41naFFrvkklyaIH8iT33dT65tqGj7EACyvOEOyndDKbj29gDjqJJ+nClssrdswAfbKtsesSUDZTLjdEMNFCi4gYZ6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jvBrUj0r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52F9C4CEC3;
-	Tue, 22 Oct 2024 05:14:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1729574076;
-	bh=1jkNlwMF4vkDOF+NAig94pV+JFYv3I+EouVkRAryLIE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jvBrUj0rq78ucLBXAjb54jQLXXn05hvFy3MMulvN4EsytoOEKhLsItEwy+6fqDxVp
-	 PaPA4+IUQs8viN2t7ZoC8ebM3DqxHYnpNCdjNeZ346/d6fbpkpqyjLzY5BmkUtmo0j
-	 /QVZfmybmRt9qh50yLR23d+NKWRQyZEEhRv1CaRA=
-Date: Tue, 22 Oct 2024 07:14:26 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: robh@kernel.org, heikki.krogerus@linux.intel.com, krzk+dt@kernel.org,
-	conor+dt@kernel.org, badhri@google.com, kyletso@google.com,
-	rdbabiera@google.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	dmitry.baryshkov@linaro.org
-Subject: Re: [RFC v4 0/2] Add support for time DT property in TCPM
-Message-ID: <2024102250-citric-dropout-17c7@gregkh>
-References: <20240925031135.1101048-1-amitsd@google.com>
- <cf0f9a77-4981-48af-8fda-76e57f8a54fa@google.com>
+	s=arc-20240116; t=1729579805; c=relaxed/simple;
+	bh=gAgxmfdP2jyUpNQG51UsfINhavCuMPmSuDngPIlM+gw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UPkVEdJC+i10bISmerS2JggG04QHDwwtiO1iOT7aiWrGZw2jSbwcpaiQPmweqFKuIPk27XcDKx2QG2gZ15UgMdoEsVRkeHbofzMxuf5zVtkMyH/dmBZiqYaHwHSbcxffvrhXhY1bCDSrsj3CIHAIIbf+WdGhgBSNddHGsblQHZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=jVu2CFeb; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=t9HfF
+	lGMV6vlGQ1vROC5AV/hdJqyGhuWNLp4zGqDEtY=; b=jVu2CFebWN+DE5i3o7GQS
+	CXXfaj31+L9n9FHtQUZ6SuFl5BvlBVSw1jgXoZmL7d20PtVOzgh92simUpv9JBGt
+	CAgEP+Ar+6MHJ/0IWn8sPKPWKrPiJ7jviGsut55yz0HgwdskVS/ls8k27OHVeLdB
+	Zbo0DLgiSVMqfAF1fwv6ec=
+Received: from thinkpadx13gen2i.. (unknown [111.48.58.12])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgBHhy4CSxdnVG+dAw--.41336S2;
+	Tue, 22 Oct 2024 14:49:39 +0800 (CST)
+From: Zongmin Zhou <min_halo@163.com>
+To: valentina.manea.m@gmail.com,
+	shuah@kernel.org,
+	i@zenithal.me
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: [PATCH] usbip: tools: update return status when failed
+Date: Tue, 22 Oct 2024 14:48:56 +0800
+Message-Id: <20241022064856.4098350-1-min_halo@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf0f9a77-4981-48af-8fda-76e57f8a54fa@google.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgBHhy4CSxdnVG+dAw--.41336S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtry3XFy7ur4xur1DuFy8Zrb_yoWxCrc_C3
+	y5Wr4kWrWYka45KF1DGFy8Cryrt3Z8WrZ8Ja1UKr1fG3Wqywn5JFyDA397CF18ur1qqFnx
+	twn0qwn8uan5ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8x-BtUUUUU==
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbixxqAq2cXQVKpZwABsa
 
-On Mon, Oct 21, 2024 at 04:01:10PM -0700, Amit Sunil Dhamne wrote:
-> Hi,
-> 
-> I had a process related question. Once an RFC patchset gets a Reviewed-by
-> tag, do I need to send a formal [PATCH] or is an RFC patch sufficient for
-> being accepted?
+From: Zongmin Zhou <zhouzongmin@kylinos.cn>
 
-You need to send a real series (and please do not top-post), for it to
-be considered for being accepted.
+Have to set "ret" before return when found a invalid port.
 
-thanks,
+Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+---
+ tools/usb/usbip/src/usbip_detach.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-greg k-h
+diff --git a/tools/usb/usbip/src/usbip_detach.c b/tools/usb/usbip/src/usbip_detach.c
+index b29101986b5a..6b78d4a81e95 100644
+--- a/tools/usb/usbip/src/usbip_detach.c
++++ b/tools/usb/usbip/src/usbip_detach.c
+@@ -68,6 +68,7 @@ static int detach_port(char *port)
+ 	}
+ 
+ 	if (!found) {
++		ret = -1;
+ 		err("Invalid port %s > maxports %d",
+ 			port, vhci_driver->nports);
+ 		goto call_driver_close;
+-- 
+2.34.1
+
 
