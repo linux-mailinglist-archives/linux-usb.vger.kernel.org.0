@@ -1,171 +1,79 @@
-Return-Path: <linux-usb+bounces-16513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48D0C9A9DF4
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 11:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 334519A9EB3
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 11:39:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEC3D1F27450
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:09:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFF8C1F2293F
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:39:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3B9194C9E;
-	Tue, 22 Oct 2024 09:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA1E1990A7;
+	Tue, 22 Oct 2024 09:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KjwYwEjV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZbgU/VSk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9858922083;
-	Tue, 22 Oct 2024 09:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237EF155330;
+	Tue, 22 Oct 2024 09:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729588165; cv=none; b=ms9CBk7BKbMyDuGfp2BnU8zRIh4fWsCGNMmIBUeUDH/c8ETg8O/r/F2bCi/VsZBpfFCj1dQE/dTHOMf1LiVxnnZDGtJgc0z5I6o8WitKCqbXAJ6w1LZVSwNYIrVFoyGbJRBEaIgG/P/FXpnPbx/w8Q4dy7pIp93UbPyBNZh3cU0=
+	t=1729589955; cv=none; b=Qxnb5FcxwoxwAy7fue/x6iTWEu+NHhu1tdOR5uKmPgJfDcm+TUFALFY/baGQyQjM2FS/GL7YR3RbMC9F6DZAVOebdw+RBJ2eQ4MMPmnQr6gIUCUwk+roOzRgLxNvpZjpqaqfW2W89zeusPG2+kgNIvYMdXLG4B8G5QA+/ejVEmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729588165; c=relaxed/simple;
-	bh=fG7n/rClPSyVCFZ9BkdrIS04RymnXShn9QUy9/w9ib0=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=nR+aJqiINwPNwUM4/htkOroOSVQ5C/dazWGpxx0kHPT8ShyxL5o2uRU1N8JoQi3TGFL38EQinpOZiD6+UQHuAOcBttnO5fIhzkIAg09KfopPl7nd4OHX8draL86DrKOQ98fMN9MmO0LwF0u0kxwNKxNl7/AaftI36DIoOHMD2qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KjwYwEjV; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=/zKgrV2wVhIQZ7vubU
-	9nP6A/zQIVoNr8bUD3sblRl1U=; b=KjwYwEjV3D5ogLDDw6aCnyAa3P7/4rqkzN
-	AS9tMbzxsz2o/lXBL0/cj/DgmG8qFJXNjS9WldHOxmOSxDrjiu+5NlNFlmcCa/PZ
-	AuAjgoLsXPtSzBReogdSOzWj5KEE3jztbvoOFzzej2+r1hj3AeAFtvbXHz3vSxTN
-	RI1RdHmlY=
-Received: from localhost.localdomain (unknown [111.48.58.10])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgC3Zp2zaxdnQgSMAA--.40749S2;
-	Tue, 22 Oct 2024 17:09:08 +0800 (CST)
-From: huanglei814 <huanglei814@163.com>
-To: gregkh@linuxfoundation.org,
-	mathias.nyman@intel.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	huanglei <huanglei@kylinos.cn>
-Subject: [PATCH v3] usb: core: adds support for PM control of specific USB dev skip suspend.
-Date: Tue, 22 Oct 2024 17:09:05 +0800
-Message-Id: <20241022090905.9806-1-huanglei814@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:PSgvCgC3Zp2zaxdnQgSMAA--.40749S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF1DJFy5JFW3tr1kKFyrCrg_yoWrJFW5pF
-	4qyFWFkrsxGr1Iq34aya18uF1rWanYkayjk3sakw1Ygw17Ja95Gr1jyFy5Xwnxur9xAFyU
-	tFsrG3yUCrW7GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U9a9fUUUUU=
-X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbi7g6A9mcXZAG6bQAAsU
+	s=arc-20240116; t=1729589955; c=relaxed/simple;
+	bh=Rni9goMB3zxSM7Y/0slwXKaptGNj+eHzLCZ1kyAubNc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YJNvx+3/Mb1rhV3N8t/Pdgt3zDdtnTUFbZ8FdmAXp7UhRn1ZfBlbPbcXwL2agzHAYmohDYxjvxuIsBe2EzC0Z+m+VJdU79xQmx9kq5GL8lzhOMArd82VDkwJUiO+Gn1eqgmJTMOAfXSmikAeOU5nz1nii4GhAkJbMpYCr09ed3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZbgU/VSk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB3FC4CEC3;
+	Tue, 22 Oct 2024 09:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1729589954;
+	bh=Rni9goMB3zxSM7Y/0slwXKaptGNj+eHzLCZ1kyAubNc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZbgU/VSkCq+B45uM5b4/l9PWGqV4RNWWTi1RwL7KpTH/pajzrqxX+vmILDkLTcbNo
+	 Hv2ChyRF1PtdHJ/Fo+e/GHwEnXVXDFXK4QhxRroFwg5V2yU5RXyHa6i/twHGDDa9Q+
+	 9WhzlzI0q/alBN1PzMDw52z1g+vziKd2RWw/QOpY=
+Date: Tue, 22 Oct 2024 11:39:12 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: huanglei814 <huanglei814@163.com>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
+Subject: Re: [PATCH v3] usb: core: adds support for PM control of specific
+ USB dev skip suspend.
+Message-ID: <2024102239-stainable-favored-558b@gregkh>
+References: <20241022090905.9806-1-huanglei814@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241022090905.9806-1-huanglei814@163.com>
 
-From: huanglei <huanglei@kylinos.cn>
+On Tue, Oct 22, 2024 at 05:09:05PM +0800, huanglei814 wrote:
+> From: huanglei <huanglei@kylinos.cn>
+> 
+> All USB devices are brought into suspend power state after system suspend.
+> It is desirable for some specific manufacturers buses to keep their devices
+> in normal state even after system suspend.
+> 
+> v2: Change to bool type for skip_suspend.
+> v3: Rebase and update commit message.
 
-All USB devices are brought into suspend power state after system suspend.
-It is desirable for some specific manufacturers buses to keep their devices
-in normal state even after system suspend.
+As per the documentation, this needs to go below the --- line.  Also,
+you changed more than just the bool type in v2 :(
 
-v2: Change to bool type for skip_suspend.
-v3: Rebase and update commit message.
+Please fix up and do a v4 after waiting a while for others to review
+this.
 
-Signed-off-by: huanglei <huanglei@kylinos.cn>
----
- drivers/usb/core/Kconfig     | 11 +++++++++++
- drivers/usb/core/driver.c    | 14 ++++++++++++++
- drivers/usb/host/xhci-plat.c |  7 +++++++
- include/linux/usb.h          |  9 +++++++++
- 4 files changed, 41 insertions(+)
+thanks,
 
-diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
-index 58e3ca7e4793..69778aa7b913 100644
---- a/drivers/usb/core/Kconfig
-+++ b/drivers/usb/core/Kconfig
-@@ -143,3 +143,14 @@ config USB_DEFAULT_AUTHORIZATION_MODE
- 	  ACPI selecting value 2 is analogous to selecting value 0.
- 
- 	  If unsure, keep the default value.
-+
-+config USB_SKIP_SUSPEND
-+	bool "Vendor USB support skip suspend"
-+	depends on USB
-+	help
-+	  Select this the associate USB devices will skip suspend when pm control.
-+
-+	  This option adds support skip suspend for PM control of USB devices
-+	  in specific manufacturers platforms.
-+
-+	  If unsure, keep the default value.
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 0c3f12daac79..05fe921f8297 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1583,6 +1583,15 @@ int usb_suspend(struct device *dev, pm_message_t msg)
- 	struct usb_device	*udev = to_usb_device(dev);
- 	int r;
- 
-+#ifdef CONFIG_USB_SKIP_SUSPEND
-+	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_SUSPEND)) {
-+		if (udev->state != USB_STATE_SUSPENDED)
-+			dev_err(dev, "abort suspend\n");
-+
-+		return 0;
-+	}
-+#endif
-+
- 	unbind_no_pm_drivers_interfaces(udev);
- 
- 	/* From now on we are sure all drivers support suspend/resume
-@@ -1619,6 +1628,11 @@ int usb_resume(struct device *dev, pm_message_t msg)
- 	struct usb_device	*udev = to_usb_device(dev);
- 	int			status;
- 
-+#ifdef CONFIG_USB_SKIP_SUSPEND
-+	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_RESUME))
-+		return 0;
-+#endif
-+
- 	/* For all calls, take the device back to full power and
- 	 * tell the PM core in case it was autosuspended previously.
- 	 * Unbind the interfaces that will need rebinding later,
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index ecaa75718e59..8cbc666ab5c6 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -265,6 +265,13 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		if (device_property_read_bool(tmpdev, "xhci-skip-phy-init-quirk"))
- 			xhci->quirks |= XHCI_SKIP_PHY_INIT;
- 
-+#ifdef CONFIG_USB_SKIP_SUSPEND
-+		if (device_property_read_bool(tmpdev, "usb-skip-suspend")) {
-+			hcd_to_bus(hcd)->skip_suspend = true;
-+			hcd_to_bus(xhci->shared_hcd)->skip_suspend = true;
-+		}
-+#endif
-+
- 		device_property_read_u32(tmpdev, "imod-interval-ns",
- 					 &xhci->imod_interval);
- 	}
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 672d8fc2abdb..3074c89ed921 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -487,6 +487,15 @@ struct usb_bus {
- 	struct mon_bus *mon_bus;	/* non-null when associated */
- 	int monitored;			/* non-zero when monitored */
- #endif
-+
-+#ifdef CONFIG_USB_SKIP_SUSPEND
-+	bool skip_suspend;		/* All USB devices are brought into suspend
-+					 * power state after system suspend. It is
-+					 * desirable for some specific manufacturers
-+					 * buses to keep their devices in normal
-+					 * state even after system suspend.
-+					 */
-+#endif
- };
- 
- struct usb_dev_state;
--- 
-2.17.1
-
+greg k-h
 
