@@ -1,84 +1,75 @@
-Return-Path: <linux-usb+bounces-16533-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16534-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B5F29AB07E
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 16:12:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89F389AB090
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 16:14:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3E4DB220B7
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 14:12:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 407E91F23E46
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 14:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA221A01B8;
-	Tue, 22 Oct 2024 14:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F02D11A38C4;
+	Tue, 22 Oct 2024 14:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="faZ/P8XJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nRnVCrx/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE0C19E96A;
-	Tue, 22 Oct 2024 14:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792F81A070D;
+	Tue, 22 Oct 2024 14:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729606313; cv=none; b=sTFID2yP+1LBacYvpeUdZYTIn2kmVGr6Jvqdvf5E5OcxjFqq/+VYR0jo2MVu981uxh41VxjTnVudQXrRYR8d8k3APXmE73EwBGZXypWJ+D4oAQAMOFN9MtsVaDP+j6C/i4GLmYJACSNU2sVEHLxsMcM4iFc82k37Qfr7O7GaTXw=
+	t=1729606371; cv=none; b=pMIrfYa592qQ1hlNaaHaNo3e8FVKKHWk8yM+RKexPShSVa4C2bOrtCXKtfe7s3O+axpIhLah8qszro0KFP+TLjmjC7Qgu18xfCW/x7S4A5fUjiaiLk7NWArDPStBfdiI/Cl+e7+D2PzebT/1l2zILqlNNuhErLDGfchDDfVW5lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729606313; c=relaxed/simple;
-	bh=98iJScxQ5+xWTfcAyb0DIQja42BOHYt0I6p6JMozmpY=;
+	s=arc-20240116; t=1729606371; c=relaxed/simple;
+	bh=erUdRP/wSJOt0yc9hZpXjQRva3XVjQinT99xAB7yPXs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bXepJhRrClyiGuWlNpuczFStxWiDpXZVww7ON3OmomtrnPts8o/hdmONkmWt+HDFjEDrFHT9WeGZIRJVBtOtgP8VxPhxCnR8crh1u51CQilUZ378Gp5aIivJiXAQhBHahpMPE8KfnykpFPlmkm1/91AxxoNnk9KFKp9w85of7VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=faZ/P8XJ; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=M94nUxckjhLWzII9XIVR5t9PK+kRRuoproF3bhYOSbKNqLZP0fRW/DN6K48TqG3WNQud5lNciy7yO3fogInxwRZVv2HdxPNVsUPvCM580memRXA9zrmiLOXQzt/d9Umw3bZb/T87d2Zim40Sjjqw9Gg3YJGFf50OmJZnPX8cd8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nRnVCrx/; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729606311; x=1761142311;
+  t=1729606370; x=1761142370;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=98iJScxQ5+xWTfcAyb0DIQja42BOHYt0I6p6JMozmpY=;
-  b=faZ/P8XJdXXwnVi7jihDA5t4IlXPjzCIif2FpZrlUIxWGfGo7AxZtcCJ
-   Mc00Q9kCJBWnuU1i/Cb/IIKziGOZUsWcrWouLLaiZ0RCe2waICP7Yq4G0
-   dHwLlfOftT1RP0+0knfuCIElKrK+xgZ2TUXRN2WUDFAF5qidf/5ojIn3o
-   npaYAAz1OsyvKyOwFqm7Z+OjCUxcwlK4gA0dC2OcnFYBgFxb6IjCCJr5s
-   xxvs8AwTpAcr5ZUqYzra7+ITvDq+1ytHg7GYJyVD7kNFVYhyRVK0CUYm4
-   pw5nWEg8uiYy745A8pYHZ1xgPDyc3PDp8mVdjSzODQFiQyrzQBVQE9HqK
+  bh=erUdRP/wSJOt0yc9hZpXjQRva3XVjQinT99xAB7yPXs=;
+  b=nRnVCrx/KGZMwz6jL5nrk0dGXv74xA0yvaBmdvgVzYnHt7Cx3xR49b6V
+   nnyEWuJEvMib1fmk/fmm/a23ePYW0DQyWZ74keUdWm5B/SOX2d9cVqkKF
+   BmyJt5AviCEy1Tp1yDyFuL7X4LrzN/KykKsdOgZd6/VOpZjR3EvYKK7S/
+   3OtRdgJi+IT9TxmbUr7E3gasS1ah114jGgH4zvvDJBKTsgFTdK9lFEpK+
+   u9QjR/vQxx0nkAJTgOUPQAzDF+DoJzO5gVVztW/wXS8KMTn+mkmC6N854
+   TlZxzCMlruvx6Bf/ZbbPshqQR2hI8ydq1zoRe6DSVtEPZ2230VNtiZsD+
    w==;
-X-CSE-ConnectionGUID: JoENZd9GSHWWaie42rLh0w==
-X-CSE-MsgGUID: RGxeN4xOQNKixWEFm+VDrA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="39761579"
+X-CSE-ConnectionGUID: CiO1yxFgR9GFONsv0Ot6Rg==
+X-CSE-MsgGUID: TeLs8nSITCWYEdPfWej/KQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="54549341"
 X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="39761579"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 07:11:50 -0700
-X-CSE-ConnectionGUID: La+zPVeBSeOmWFkXwGEz8Q==
-X-CSE-MsgGUID: EGreTNpuRkiixkh4YmEXrA==
+   d="scan'208";a="54549341"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 07:12:49 -0700
+X-CSE-ConnectionGUID: KaV1t5eqSuSrYp/Fh0Bo7Q==
+X-CSE-MsgGUID: BdX3WIWOTlKtRa3FYsH9BQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="83862597"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="84700329"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa003.fm.intel.com with SMTP; 22 Oct 2024 07:11:46 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 22 Oct 2024 17:11:45 +0300
-Date: Tue, 22 Oct 2024 17:11:45 +0300
+  by orviesa003.jf.intel.com with SMTP; 22 Oct 2024 07:12:47 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 22 Oct 2024 17:12:45 +0300
+Date: Tue, 22 Oct 2024 17:12:45 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abel Vesa <abel.vesa@linaro.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Johan Hovold <johan@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <ZxeyoRYPZP3Feg6T@kuha.fi.intel.com>
-References: <20241022-x1e80100-ps8830-v3-0-68a95f351e99@linaro.org>
- <20241022-x1e80100-ps8830-v3-2-68a95f351e99@linaro.org>
+	Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usb: typec: use cleanup facility for
+ 'altmodes_node'
+Message-ID: <Zxey3Y9YkFATfwB2@kuha.fi.intel.com>
+References: <20241021-typec-class-fwnode_handle_put-v2-0-3281225d3d27@gmail.com>
+ <20241021-typec-class-fwnode_handle_put-v2-2-3281225d3d27@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,139 +78,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241022-x1e80100-ps8830-v3-2-68a95f351e99@linaro.org>
+In-Reply-To: <20241021-typec-class-fwnode_handle_put-v2-2-3281225d3d27@gmail.com>
 
-Hi,
+On Mon, Oct 21, 2024 at 10:45:30PM +0200, Javier Carrasco wrote:
+> Use the __free() macro for 'altmodes_node' to automatically release the
+> node when it goes out of scope, removing the need for explicit calls to
+> fwnode_handle_put().
+> 
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-Couple of nitpicks.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-On Tue, Oct 22, 2024 at 01:26:55PM +0300, Abel Vesa wrote:
-> +static int ps8830_retimer_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct typec_switch_desc sw_desc = { };
-> +	struct typec_retimer_desc rtmr_desc = { };
-> +	struct ps8830_retimer *retimer;
-> +	bool skip_reset = false;
-> +	int ret;
+> ---
+>  drivers/usb/typec/class.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 1eb240604cf6..58f40156de56 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -2293,7 +2293,7 @@ void typec_port_register_altmodes(struct typec_port *port,
+>  	const struct typec_altmode_ops *ops, void *drvdata,
+>  	struct typec_altmode **altmodes, size_t n)
+>  {
+> -	struct fwnode_handle *altmodes_node, *child;
+> +	struct fwnode_handle *child;
+>  	struct typec_altmode_desc desc;
+>  	struct typec_altmode *alt;
+>  	size_t index = 0;
+> @@ -2301,7 +2301,9 @@ void typec_port_register_altmodes(struct typec_port *port,
+>  	u32 vdo;
+>  	int ret;
+>  
+> -	altmodes_node = device_get_named_child_node(&port->dev, "altmodes");
+> +	struct fwnode_handle *altmodes_node  __free(fwnode_handle) =
+> +		device_get_named_child_node(&port->dev, "altmodes");
 > +
-> +	retimer = devm_kzalloc(dev, sizeof(*retimer), GFP_KERNEL);
-> +	if (!retimer)
-> +		return -ENOMEM;
-> +
-> +	retimer->client = client;
-> +
-> +	mutex_init(&retimer->lock);
-> +
-> +	if (of_property_read_bool(dev->of_node, "ps8830,boot-on"))
-> +		skip_reset = true;
-
-        skip_reset = device_property_present(dev, "ps8830,boot-on");
-
-> +	retimer->regmap = devm_regmap_init_i2c(client, &ps8830_retimer_regmap);
-> +	if (IS_ERR(retimer->regmap)) {
-> +		ret = PTR_ERR(retimer->regmap);
-> +		dev_err(dev, "failed to allocate register map: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = ps8830_get_vregs(retimer);
-> +	if (ret)
-> +		return ret;
-> +
-> +	retimer->xo_clk = devm_clk_get(dev, "xo");
-> +	if (IS_ERR(retimer->xo_clk))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
-> +				     "failed to get xo clock\n");
-> +
-> +	retimer->reset_gpio = devm_gpiod_get(dev, "reset",
-> +					     skip_reset ? GPIOD_OUT_LOW : GPIOD_OUT_HIGH);
-> +	if (IS_ERR(retimer->reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->reset_gpio),
-> +				     "failed to get reset gpio\n");
-> +
-> +	retimer->typec_switch = fwnode_typec_switch_get(dev->fwnode);
-
-	retimer->typec_switch = typec_switch_get(dev);
-
-> +	if (IS_ERR(retimer->typec_switch))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->typec_switch),
-> +				     "failed to acquire orientation-switch\n");
-> +
-> +	retimer->typec_mux = fwnode_typec_mux_get(dev->fwnode);
-
-	retimer->typec_mux = typec_mux_get(dev);
-
-> +	if (IS_ERR(retimer->typec_mux)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(retimer->typec_mux),
-> +				    "failed to acquire mode-mux\n");
-> +		goto err_switch_put;
-> +	}
-> +
-> +	sw_desc.drvdata = retimer;
-> +	sw_desc.fwnode = dev_fwnode(dev);
-> +	sw_desc.set = ps8830_sw_set;
-> +
-> +	ret = drm_aux_bridge_register(dev);
-> +	if (ret)
-> +		goto err_mux_put;
-> +
-> +	retimer->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(retimer->sw)) {
-> +		ret = PTR_ERR(retimer->sw);
-> +		dev_err(dev, "failed to register typec switch: %d\n", ret);
-> +		goto err_aux_bridge_unregister;
-> +	}
-> +
-> +	rtmr_desc.drvdata = retimer;
-> +	rtmr_desc.fwnode = dev_fwnode(dev);
-> +	rtmr_desc.set = ps8830_retimer_set;
-> +
-> +	retimer->retimer = typec_retimer_register(dev, &rtmr_desc);
-> +	if (IS_ERR(retimer->retimer)) {
-> +		ret = PTR_ERR(retimer->retimer);
-> +		dev_err(dev, "failed to register typec retimer: %d\n", ret);
-> +		goto err_switch_unregister;
-> +	}
-> +
-> +	ret = clk_prepare_enable(retimer->xo_clk);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable XO: %d\n", ret);
-> +		goto err_retimer_unregister;
-> +	}
-> +
-> +	ret = ps8830_enable_vregs(retimer);
-> +	if (ret)
-> +		goto err_clk_disable;
-> +
-> +	/* delay needed as per datasheet */
-> +	usleep_range(4000, 14000);
-> +
-> +	if (!skip_reset)
-> +		gpiod_set_value(retimer->reset_gpio, 0);
-> +
-> +	return 0;
-> +
-> +err_clk_disable:
-> +	clk_disable_unprepare(retimer->xo_clk);
-> +err_retimer_unregister:
-> +	typec_retimer_unregister(retimer->retimer);
-> +err_switch_unregister:
-> +	typec_switch_unregister(retimer->sw);
-> +err_aux_bridge_unregister:
-> +	if (!skip_reset)
-> +		gpiod_set_value(retimer->reset_gpio, 1);
-> +
-> +	clk_disable_unprepare(retimer->xo_clk);
-> +err_mux_put:
-> +	typec_mux_put(retimer->typec_mux);
-> +err_switch_put:
-> +	typec_switch_put(retimer->typec_switch);
-> +
-> +	return ret;
-> +}
-
-thanks,
+>  	if (!altmodes_node)
+>  		return; /* No altmodes specified */
+>  
+> @@ -2341,7 +2343,6 @@ void typec_port_register_altmodes(struct typec_port *port,
+>  		altmodes[index] = alt;
+>  		index++;
+>  	}
+> -	fwnode_handle_put(altmodes_node);
+>  }
+>  EXPORT_SYMBOL_GPL(typec_port_register_altmodes);
+>  
 
 -- 
 heikki
