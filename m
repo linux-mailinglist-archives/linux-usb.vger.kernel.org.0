@@ -1,176 +1,168 @@
-Return-Path: <linux-usb+bounces-16506-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16507-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F281F9A9AFA
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:27:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B37749A9B20
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81E481F2237E
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 07:27:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74B522829B9
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 07:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AFB214BF8F;
-	Tue, 22 Oct 2024 07:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B54514EC51;
+	Tue, 22 Oct 2024 07:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="UF784dD1"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="j7c337sa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF49884A22;
-	Tue, 22 Oct 2024 07:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC721A269;
+	Tue, 22 Oct 2024 07:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729582056; cv=none; b=hLgnmWiEuxTp93FtpGIK/KSLZXb3EUCvWNsgoIdv+lbzUR7oi/UwROuH17ykH2T/gOM21yrm8tvP1HDi4QJs62Q5Jf8eun+wBu/Sw/yFrZciR+XmmObr64RfMTCXvtgsuTCc5z3pbK2TDzsltKGgl2TzDbNlMVlb+pVqLgc8O2w=
+	t=1729582425; cv=none; b=RxYNXEo6KCi04qCr29PwWWsIdrlSbBhluA2fEGu/3E5nbJ8JWg7cabl6xqx7G3rHGJobRUjeVaPDaZqIQN92u+jzaUfrlb2z7m53MiI/Id91McQAYtFftE4NkDcto7J7mcXzwuL/0wsWnKueEPUP5xrmZ0kVEyntXU39AUl1Iws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729582056; c=relaxed/simple;
-	bh=01B++NvgIL0N0Ddex7xe7H0oHb3CA1TQp+B4pqpklGE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=Q5Uc50w4/xNABltzJRCi/QankEzy2d1a9Ck4ctk/KqsdQRQGX6ey/2qACh+txoO4zajT/A0r8cp3XBiZby41M+b+2CxX/QjnDlV/boDEqBOqresFG4T9yPZ2mOx9h/9MKmv/Mc+HkEiC0LPU6F73MguRhLaQqL4HsBIeyianrao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=UF784dD1 reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.3
+	s=arc-20240116; t=1729582425; c=relaxed/simple;
+	bh=Q6XUxR3l4CTdj7wM8TsZkViUkMnpBxA00YX4Ayj+3mw=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=DDRPD5mGOwBeJunGs8nnkfvhlwlU33XRWoYBmByEV1hYDA3v9KqAsauh7MWdKcRo3G+S+PFkcaiNroM5FZVDPS4vF8BmB9nbGfYRfdufCOKYnM+5hJqs6G+Ep0cCYHe8KBRxfqjuz3eHaz7wDOHsXrPuh33b5JL7TY6N751jy+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=j7c337sa; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=kKf6+MYAPWfsA7MPoyjW+7PggZn4EDzxHa3E9V4toOA=; b=U
-	F784dD1MpOnnvPWf9ba/i0JKwml8Dhf1DDO4oy1DBUCp2rBlJTQjJukDSoQSIOzv
-	YolLJTLqZ47mWjpde1X79RJ1NnrNocmPjdxgFx5i2wpSkDS3jXkcrgTUtZIiqouz
-	MViOnyijwSUx7t7b1esOusWZYPG5taoRz4OfHm9+E8=
-Received: from huanglei814$163.com ( [111.48.58.10] ) by
- ajax-webmail-wmsvr-40-132 (Coremail) ; Tue, 22 Oct 2024 15:26:36 +0800
- (CST)
-Date: Tue, 22 Oct 2024 15:26:36 +0800 (CST)
-From: huanglei  <huanglei814@163.com>
-To: "Greg KH" <gregkh@linuxfoundation.org>
-Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
-Subject: Re:Re: [PATCH] usb: core: adds support for PM control of specific
- USB dev skip suspend.
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <2024102137-senate-yarn-34ed@gregkh>
-References: <20241021124741.6014-1-huanglei814@163.com>
- <2024102137-senate-yarn-34ed@gregkh>
-X-NTES-SC: AL_Qu2ZC/mTvkEi4CCZYekfm0cTguY+X8W4uv0h2IVSPJ5+jAPo3QIrU25SJXzJ9ce0FCeMmgmGdgZy6PRIf5tAf7kQv8SqSpZACAWyCCSKtcIsiw==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=s110527; h=From:Subject:Date:Message-Id; bh=rp3TEHWhcoB7Ymo/TJ
+	glmynBnJb6QWn0ZIrwb4T3v+8=; b=j7c337saX2DbkpqzuLueThiKLx1WE4jsKb
+	n+HvJigs5DHgHV6FIT2XiSL8Ec5jXMJz5t0bgYibxY8GBiDK6NoCzR9PWG2beTwn
+	9+4EC7QtS1BkCrBfde73eJUaoA89/A6eA+aw0jXKxnHHyZZjY57GVNUAYNKfgSAX
+	5bIQmSWCc=
+Received: from localhost.localdomain (unknown [111.48.58.10])
+	by gzsmtp3 (Coremail) with SMTP id sigvCgDnarZIVRdnVxPcBA--.35035S2;
+	Tue, 22 Oct 2024 15:33:28 +0800 (CST)
+From: huanglei814 <huanglei814@163.com>
+To: gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	huanglei <huanglei@kylinos.cn>
+Subject: [PATCH v2] usb: core: adds support for PM control of specific USB dev skip suspend.
+Date: Tue, 22 Oct 2024 15:33:22 +0800
+Message-Id: <20241022073322.6150-1-huanglei814@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:sigvCgDnarZIVRdnVxPcBA--.35035S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuryxKw4DJryUAr45CrWruFg_yoWrJr1xpF
+	4qyFWYkrsxGr1Iq34aya18uF1rWanYkayjk3sakw1Ygw17J395Gr1jyFy5Xwnxur9xAFyU
+	tFsrG3yUCrW7GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UvsjnUUUUU=
+X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbixwiA9mcXTTLP1AAAst
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-ID: <486c8e2a.6c89.192b31ed7f7.Coremail.huanglei814@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:hCgvCgD3_5qsUxdn8jEWAA--.43582W
-X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbiLBCA9mcXCyaGJAAFsw
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-ClRoYW5rIHlvdSBmb3IgeW91ciByZXBsee+8gQoKSW4gc29tZSBpbmR1c3RyaWFsIGNvbnRyb2wg
-ZmllbGRzLCBpdCBpcyBub3QgZGVzaXJhYmxlIGZvciBVU0IgZGV2aWNlcyB0byBwb3dlciBvZmYg
-YWZ0ZXIgdGhlIHN5c3RlbSBhdXRvbWF0aWNhbGx5IGVudGVyIHN1c3BlbmQgbW9kZTsKClRoZXJl
-IGFyZSBhbHNvIHNvbWUgc2NlbmVz77yMIHRoZSBTT0MgaW50ZWdyYXRlZCBwbGF0Zm9ybSBVU0Ig
-Y29udHJvbGxlcnMgZGV2ZWxvcGVkIGJ5IGN1c3RvbSBtYW51ZmFjdHVyZXJzIHRvIGF2b2lkIGV4
-dGVybmFsIFVTQiBkZXZpY2VzIGVudGVyIHN1c3BlbmQgbW9kZSwgd2hpY2ggY2FuIHByZXZlbnQg
-c3RhYmlsaXR5IGlzc3VlcyB3aXRoIHRoZSBjb250cm9sbGVyOyBBbmQgSXQgY2FuIGFsc28gYmUg
-dXNlZCBmb3IgZGVidWdnaW5nIFVTQiBjb250cm9sbGVyczsKClRoZSB1c2Vyc3BhY2UgY2Fubm90
-IGRvIGl0IGJlY2F1c2UgaXQgbmVlZHMgdG8gZGV0ZXJtaW5lIHdoZXRoZXIgdG8gZW5hYmxlIHRo
-aXMgZmVhdHVyZSBiYXNlZCBvbiB0aGUgdXNiX3NraXBfc3VzcGVuZCBmaWVsZCBkZXNjcmliaW5n
-IHRoZSBjb250cm9sbGVyIGR0c++8mwoKSW4gYWRkaXRpb24sIFVzZXJTcGFjZSBwcm92aWRlcyBh
-IHJ1bnRpbWUgUE0gbWVjaGFuaXNtIHRoYXQgY2FuIHN0b3AgYXV0b21hdGljIHN1c3BlbmQsIGJ1
-dCBpdHMgZnVuY3Rpb24gaXMgZGlmZmVyZW50IGZyb20gdGhpcyBwYXRjaC4gVGhpcyBwYXRjaCBj
-b21wbGV0ZWx5IGF2b2lkcyBhbGwgZGV2aWNlcyB1bmRlciB0aGUgVVNCIGNvbnRyb2xsZXIgYnVz
-IHRvIGVudGVyIHN1c3BlbmQuCgoKdGhhbmtz77yMCmJlc3QgcmVnYXJkc++8gQoKCuWcqCAyMDI0
-LzEwLzIxIDIxOjAxLCBHcmVnIEtIIOWGmemBkzoKPiBPbiBNb24sIE9jdCAyMSwgMjAyNCBhdCAw
-ODo0Nzo0MVBNICswODAwLCBodWFuZ2xlaTgxNCB3cm90ZToKPj4gRnJvbTogaHVhbmdsZWkgPGh1
-YW5nbGVpQGt5bGlub3MuY24+Cj4+Cj4+IEFsbCBVU0IgZGV2aWNlcyBhcmUgYnJvdWdodCBpbnRv
-IHN1c3BlbmQgcG93ZXIgc3RhdGUgYWZ0ZXIgc3lzdGVtIHN1c3BlbmQuCj4+IEl0IGlzIGRlc2ly
-YWJsZSBmb3Igc29tZSBzcGVjaWZpYyBtYW51ZmFjdHVyZXJzIGJ1c2VzIHRvIGtlZXAgdGhlaXIg
-ZGV2aWNlcwo+PiBpbiBub3JtYWwgc3RhdGUgZXZlbiBhZnRlciBzeXN0ZW0gc3VzcGVuZC4KPgo+
-IFdoeSBpcyBpdCBkZXNpcmVhYmxlIHRvIGRvIHRoYXQ/wqAgV2h5IGNhbid0IHlvdSBqdXN0IGRv
-IHNvIGZyb20KPiB1c2Vyc3BhY2UgdG9kYXk/Cj4KPiBXaGF0IGhhcmR3YXJlIHJlcXVpcmVzIHRo
-aXM/Cj4KPj4gU2lnbmVkLW9mZi1ieTogaHVhbmdsZWkgPGh1YW5nbGVpQGt5bGlub3MuY24+Cj4+
-IC0tLQo+PsKgIGRyaXZlcnMvdXNiL2NvcmUvS2NvbmZpZ8KgwqDCoMKgIHwgMTIgKysrKysrKysr
-KysrCj4+wqAgZHJpdmVycy91c2IvY29yZS9kcml2ZXIuY8KgwqDCoCB8IDE0ICsrKysrKysrKysr
-KysrCj4+wqAgZHJpdmVycy91c2IvaG9zdC94aGNpLXBsYXQuYyB8wqAgNyArKysrKysrCj4+wqAg
-aW5jbHVkZS9saW51eC91c2IuaMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgOSArKysrKysrKysKPj7C
-oCA0IGZpbGVzIGNoYW5nZWQsIDQyIGluc2VydGlvbnMoKykKPj4KPj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvdXNiL2NvcmUvS2NvbmZpZyBiL2RyaXZlcnMvdXNiL2NvcmUvS2NvbmZpZwo+PiBpbmRl
-eCA1OGUzY2E3ZTQ3OTMuLmZlMTc4YzkwZDE2NyAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy91c2Iv
-Y29yZS9LY29uZmlnCj4+ICsrKyBiL2RyaXZlcnMvdXNiL2NvcmUvS2NvbmZpZwo+PiBAQCAtMTQz
-LDMgKzE0MywxNSBAQCBjb25maWcgVVNCX0RFRkFVTFRfQVVUSE9SSVpBVElPTl9NT0RFCj4+wqDC
-oMKgwqDCoMKgwqAgQUNQSSBzZWxlY3RpbmcgdmFsdWUgMiBpcyBhbmFsb2dvdXMgdG8gc2VsZWN0
-aW5nIHZhbHVlIDAuCj4+IMKgCj4+wqDCoMKgwqDCoMKgwqAgSWYgdW5zdXJlLCBrZWVwIHRoZSBk
-ZWZhdWx0IHZhbHVlLgo+PiArCj4+ICtjb25maWcgVVNCX1NLSVBfU1VTUEVORAo+PiArwqDCoMKg
-IGJvb2wgIlZlbmRvciBVU0Igc3VwcG9ydCBza2lwIHN1c3BlbmQiCj4+ICvCoMKgwqAgZGVwZW5k
-cyBvbiBVU0IKPj4gK8KgwqDCoCBkZWZhdWx0IG4KPgo+IE5vIG5lZWQgZm9yIHRoaXMgbGluZSwg
-J24nIGlzIHRoZSBkZWZhdWx0LsKgIFBBVENIIFYyIGhhcyBtb2RpZnkKPgo+PiArwqDCoMKgIGhl
-bHAKPj4gK8KgwqDCoMKgwqAgU2VsZWN0IHRoaXMgdGhlIGFzc29jaWF0ZSBVU0IgZGV2aWNlcyB3
-aWxsIHNraXAgc3VzcGVuZCB3aGVuIHBtIGNvbnRyb2wuCj4+ICsKPj4gK8KgwqDCoMKgwqAgVGhp
-cyBvcHRpb24gYWRkcyBzdXBwb3J0IHNraXAgc3VzcGVuZCBmb3IgUE0gY29udHJvbCBvZiBVU0Ig
-ZGV2aWNlcwo+PiArwqDCoMKgwqDCoCBpbiBzcGVjaWZpYyBtYW51ZmFjdHVyZXJzIHBsYXRmb3Jt
-cy4KPj4gKwo+PiArwqDCoMKgwqDCoCBJZiB1bnN1cmUsIGtlZXAgdGhlIGRlZmF1bHQgdmFsdWUu
-Cj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jb3JlL2RyaXZlci5jIGIvZHJpdmVycy91c2Iv
-Y29yZS9kcml2ZXIuYwo+PiBpbmRleCAwYzNmMTJkYWFjNzkuLjA1ZmU5MjFmODI5NyAxMDA2NDQK
-Pj4gLS0tIGEvZHJpdmVycy91c2IvY29yZS9kcml2ZXIuYwo+PiArKysgYi9kcml2ZXJzL3VzYi9j
-b3JlL2RyaXZlci5jCj4+IEBAIC0xNTgzLDYgKzE1ODMsMTUgQEAgaW50IHVzYl9zdXNwZW5kKHN0
-cnVjdCBkZXZpY2UgKmRldiwgcG1fbWVzc2FnZV90IG1zZykKPj7CoMKgwqDCoMKgIHN0cnVjdCB1
-c2JfZGV2aWNlwqDCoMKgICp1ZGV2ID0gdG9fdXNiX2RldmljZShkZXYpOwo+PsKgwqDCoMKgwqAg
-aW50IHI7Cj4+IMKgCj4+ICsjaWZkZWYgQ09ORklHX1VTQl9TS0lQX1NVU1BFTkQKPj4gK8KgwqDC
-oCBpZiAodWRldi0+YnVzLT5za2lwX3N1c3BlbmQgJiYgKG1zZy5ldmVudCA9PSBQTV9FVkVOVF9T
-VVNQRU5EKSkgewo+PiArwqDCoMKgwqDCoMKgwqAgaWYgKHVkZXYtPnN0YXRlICE9IFVTQl9TVEFU
-RV9TVVNQRU5ERUQpCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRldl9lcnIoZGV2LCAiYWJv
-cnQgc3VzcGVuZFxuIik7Cj4+ICsKPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiAwOwo+PiArwqDC
-oMKgIH0KPj4gKyNlbmRpZgo+Cj4gUGxlYXNlIGRvIG5vdCBwdXQgI2lmZGVmIGxpbmVzIGluIC5j
-IGZpbGVzIGlmIGF0IGFsbCBwb3NzaWJsZS7CoMKgIFRoZSB1c2Ugb2YgI2lmZGVmIGlzIHRvIGVu
-c3VyZSB0aGF0IGl0IGRvZXMgbm90IGhhdmUgYW55IGltcGFjdCBvbiB0aGUga2VybmVsIHdoZW4g
-dGhpcyBmZWF0dXJlIGlzIG5vdCBzdXBwb3J0ZWQKPgo+PiArCj4+wqDCoMKgwqDCoCB1bmJpbmRf
-bm9fcG1fZHJpdmVyc19pbnRlcmZhY2VzKHVkZXYpOwo+PiDCoAo+PsKgwqDCoMKgwqAgLyogRnJv
-bSBub3cgb24gd2UgYXJlIHN1cmUgYWxsIGRyaXZlcnMgc3VwcG9ydCBzdXNwZW5kL3Jlc3VtZQo+
-PiBAQCAtMTYxOSw2ICsxNjI4LDExIEBAIGludCB1c2JfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRl
-diwgcG1fbWVzc2FnZV90IG1zZykKPj7CoMKgwqDCoMKgIHN0cnVjdCB1c2JfZGV2aWNlwqDCoMKg
-ICp1ZGV2ID0gdG9fdXNiX2RldmljZShkZXYpOwo+PsKgwqDCoMKgwqAgaW50wqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBzdGF0dXM7Cj4+IMKgCj4+ICsjaWZkZWYgQ09ORklHX1VTQl9TS0lQX1NVU1BF
-TkQKPj4gK8KgwqDCoCBpZiAodWRldi0+YnVzLT5za2lwX3N1c3BlbmQgJiYgKG1zZy5ldmVudCA9
-PSBQTV9FVkVOVF9SRVNVTUUpKQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDA7Cj4+ICsjZW5k
-aWYKPj4gKwo+PsKgwqDCoMKgwqAgLyogRm9yIGFsbCBjYWxscywgdGFrZSB0aGUgZGV2aWNlIGJh
-Y2sgdG8gZnVsbCBwb3dlciBhbmQKPj7CoMKgwqDCoMKgwqAgKiB0ZWxsIHRoZSBQTSBjb3JlIGlu
-IGNhc2UgaXQgd2FzIGF1dG9zdXNwZW5kZWQgcHJldmlvdXNseS4KPj7CoMKgwqDCoMKgwqAgKiBV
-bmJpbmQgdGhlIGludGVyZmFjZXMgdGhhdCB3aWxsIG5lZWQgcmViaW5kaW5nIGxhdGVyLAo+PiBk
-aWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLXBsYXQuYyBiL2RyaXZlcnMvdXNiL2hv
-c3QveGhjaS1wbGF0LmMKPj4gaW5kZXggZWNhYTc1NzE4ZTU5Li44Y2JjNjY2YWI1YzYgMTAwNjQ0
-Cj4+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1wbGF0LmMKPj4gKysrIGIvZHJpdmVycy91
-c2IvaG9zdC94aGNpLXBsYXQuYwo+PiBAQCAtMjY1LDYgKzI2NSwxMyBAQCBpbnQgeGhjaV9wbGF0
-X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYsIHN0cnVjdCBkZXZpY2UgKnN5c2Rl
-diwgY29uc3Qgcwo+PsKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoZGV2aWNlX3Byb3BlcnR5X3JlYWRf
-Ym9vbCh0bXBkZXYsICJ4aGNpLXNraXAtcGh5LWluaXQtcXVpcmsiKSkKPj7CoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCB4aGNpLT5xdWlya3MgfD0gWEhDSV9TS0lQX1BIWV9JTklUOwo+PiDCoAo+
-PiArI2lmZGVmIENPTkZJR19VU0JfU0tJUF9TVVNQRU5ECj4+ICvCoMKgwqDCoMKgwqDCoCBpZiAo
-ZGV2aWNlX3Byb3BlcnR5X3JlYWRfYm9vbCh0bXBkZXYsICJ1c2Itc2tpcC1zdXNwZW5kIikpIHsK
-Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaGNkX3RvX2J1cyhoY2QpLT5za2lwX3N1c3BlbmQg
-PSB0cnVlOwo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBoY2RfdG9fYnVzKHhoY2ktPnNoYXJl
-ZF9oY2QpLT5za2lwX3N1c3BlbmQgPSB0cnVlOwo+PiArwqDCoMKgwqDCoMKgwqAgfQo+PiArI2Vu
-ZGlmCj4KPiBXaHkgYXJlIHlvdSBvbmx5IGRvaW5nIHRoaXMgZm9yIHhoY2kgcGxhdGZvcm0gZHJp
-dmVycz/CoMKgwqDCoCB0aGlzIGlzc3VlIGZpbmQgb25seSBvbsKgIFNPQyBpbnRlZ3JhdGVkIHho
-Y2kgcGxhdGZvcm3CoCBjb250cm9sbGVyLgo+Cj4KPj4gKwo+PsKgwqDCoMKgwqDCoMKgwqDCoCBk
-ZXZpY2VfcHJvcGVydHlfcmVhZF91MzIodG1wZGV2LCAiaW1vZC1pbnRlcnZhbC1ucyIsCj4+wqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgJnhoY2ktPmltb2RfaW50
-ZXJ2YWwpOwo+PsKgwqDCoMKgwqAgfQo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC91c2Iu
-aCBiL2luY2x1ZGUvbGludXgvdXNiLmgKPj4gaW5kZXggNjcyZDhmYzJhYmRiLi41Zjg4ODUwZmM0
-MmQgMTAwNjQ0Cj4+IC0tLSBhL2luY2x1ZGUvbGludXgvdXNiLmgKPj4gKysrIGIvaW5jbHVkZS9s
-aW51eC91c2IuaAo+PiBAQCAtNDg3LDYgKzQ4NywxNSBAQCBzdHJ1Y3QgdXNiX2J1cyB7Cj4+wqDC
-oMKgwqDCoCBzdHJ1Y3QgbW9uX2J1cyAqbW9uX2J1czvCoMKgwqAgLyogbm9uLW51bGwgd2hlbiBh
-c3NvY2lhdGVkICovCj4+wqDCoMKgwqDCoCBpbnQgbW9uaXRvcmVkO8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgLyogbm9uLXplcm8gd2hlbiBtb25pdG9yZWQgKi8KPj7CoCAjZW5kaWYKPj4gKwo+PiAr
-I2lmZGVmIENPTkZJR19VU0JfU0tJUF9TVVNQRU5ECj4+ICvCoMKgwqAgdW5zaWduZWQgaW50IHNr
-aXBfc3VzcGVuZDvCoMKgwqAgLyogQWxsIFVTQiBkZXZpY2VzIGFyZSBicm91Z2h0IGludG8gc3Vz
-cGVuZAo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIHBvd2Vy
-IHN0YXRlIGFmdGVyIHN5c3RlbSBzdXNwZW5kLiBJdCBpcwo+PiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIGRlc2lyYWJsZSBmb3Igc29tZSBzcGVjaWZpYyBtYW51
-ZmFjdHVyZXJzCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICog
-YnVzZXMgdG8ga2VlcCB0aGVpciBkZXZpY2VzIGluIG5vcm1hbAo+PiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIHN0YXRlIGV2ZW4gYWZ0ZXIgc3lzdGVtIHN1c3Bl
-bmQuCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4KPiBT
-aG91bGRuJ3QgdGhpcyBiZSBhIGJvb2xlYW4/wqDCoMKgIFBBVENIIFYyIGhhcyBtb2RpZnkKPgo+
-IHRoYW5rcywKPgo+IGdyZWcgay1oCg==
+From: huanglei <huanglei@kylinos.cn>
+
+All USB devices are brought into suspend power state after system suspend.
+It is desirable for some specific manufacturers buses to keep their devices
+in normal state even after system suspend.
+
+Signed-off-by: huanglei <huanglei@kylinos.cn>
+---
+ drivers/usb/core/Kconfig     | 11 +++++++++++
+ drivers/usb/core/driver.c    | 14 ++++++++++++++
+ drivers/usb/host/xhci-plat.c |  7 +++++++
+ include/linux/usb.h          |  9 +++++++++
+ 4 files changed, 41 insertions(+)
+
+diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
+index 58e3ca7e4793..69778aa7b913 100644
+--- a/drivers/usb/core/Kconfig
++++ b/drivers/usb/core/Kconfig
+@@ -143,3 +143,14 @@ config USB_DEFAULT_AUTHORIZATION_MODE
+ 	  ACPI selecting value 2 is analogous to selecting value 0.
+ 
+ 	  If unsure, keep the default value.
++
++config USB_SKIP_SUSPEND
++	bool "Vendor USB support skip suspend"
++	depends on USB
++	help
++	  Select this the associate USB devices will skip suspend when pm control.
++
++	  This option adds support skip suspend for PM control of USB devices
++	  in specific manufacturers platforms.
++
++	  If unsure, keep the default value.
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 0c3f12daac79..05fe921f8297 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1583,6 +1583,15 @@ int usb_suspend(struct device *dev, pm_message_t msg)
+ 	struct usb_device	*udev = to_usb_device(dev);
+ 	int r;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_SUSPEND)) {
++		if (udev->state != USB_STATE_SUSPENDED)
++			dev_err(dev, "abort suspend\n");
++
++		return 0;
++	}
++#endif
++
+ 	unbind_no_pm_drivers_interfaces(udev);
+ 
+ 	/* From now on we are sure all drivers support suspend/resume
+@@ -1619,6 +1628,11 @@ int usb_resume(struct device *dev, pm_message_t msg)
+ 	struct usb_device	*udev = to_usb_device(dev);
+ 	int			status;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_RESUME))
++		return 0;
++#endif
++
+ 	/* For all calls, take the device back to full power and
+ 	 * tell the PM core in case it was autosuspended previously.
+ 	 * Unbind the interfaces that will need rebinding later,
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index ecaa75718e59..8cbc666ab5c6 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -265,6 +265,13 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+ 		if (device_property_read_bool(tmpdev, "xhci-skip-phy-init-quirk"))
+ 			xhci->quirks |= XHCI_SKIP_PHY_INIT;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++		if (device_property_read_bool(tmpdev, "usb-skip-suspend")) {
++			hcd_to_bus(hcd)->skip_suspend = true;
++			hcd_to_bus(xhci->shared_hcd)->skip_suspend = true;
++		}
++#endif
++
+ 		device_property_read_u32(tmpdev, "imod-interval-ns",
+ 					 &xhci->imod_interval);
+ 	}
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 672d8fc2abdb..3074c89ed921 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -487,6 +487,15 @@ struct usb_bus {
+ 	struct mon_bus *mon_bus;	/* non-null when associated */
+ 	int monitored;			/* non-zero when monitored */
+ #endif
++
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	bool skip_suspend;		/* All USB devices are brought into suspend
++					 * power state after system suspend. It is
++					 * desirable for some specific manufacturers
++					 * buses to keep their devices in normal
++					 * state even after system suspend.
++					 */
++#endif
+ };
+ 
+ struct usb_dev_state;
+-- 
+2.17.1
+
 
