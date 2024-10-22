@@ -1,320 +1,171 @@
-Return-Path: <linux-usb+bounces-16512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16513-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 498AF9A9DC8
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 11:01:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48D0C9A9DF4
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 11:09:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E737B23683
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:01:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEC3D1F27450
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4121E1917E9;
-	Tue, 22 Oct 2024 09:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3B9194C9E;
+	Tue, 22 Oct 2024 09:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M+JzADzm"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KjwYwEjV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39DB1547E9
-	for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2024 09:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9858922083;
+	Tue, 22 Oct 2024 09:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729587679; cv=none; b=AjuD4q2isDnCpMSyGPxbT2aItZusrYowBca2HSFWnGA3egZi2n9eBtH7GDBOPjOlAGMCBLdbKNnHb5SnxjWoU97GvIuTwSRvASvavlJVRCGPiY/iO79zTzWkBqxJB2Q/B2RLuVA7doxZwnooSgMMnktr3ThWT7xjtTtFrn4Z/Yk=
+	t=1729588165; cv=none; b=ms9CBk7BKbMyDuGfp2BnU8zRIh4fWsCGNMmIBUeUDH/c8ETg8O/r/F2bCi/VsZBpfFCj1dQE/dTHOMf1LiVxnnZDGtJgc0z5I6o8WitKCqbXAJ6w1LZVSwNYIrVFoyGbJRBEaIgG/P/FXpnPbx/w8Q4dy7pIp93UbPyBNZh3cU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729587679; c=relaxed/simple;
-	bh=YHNeQy+Gb09kRog+hJNRWpW815XE2iQrmhqT0ezNi08=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jJY9PyDW80Z9R1yvgkSeLgAp9yO94eU+immZraXnCE2jsKUCiSBal3GgCP/s0w86HG3f5ISc4RxNVruLmUzv9k1fMJMMp6kI0+tE5Wewyx9c1qO708wvfjcGDg5KNsa9XsnPby11wl5tmsAJuFHAQ5teYy5f6DjAsYRBzu3jmSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=M+JzADzm; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-42f6bec84b5so59731115e9.1
-        for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2024 02:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729587676; x=1730192476; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6/0uwFU7QS3ULtUk30D33huoCZ8wSxBsNaZesrFmH4Y=;
-        b=M+JzADzmDy2kAnnpswLitxMSSeerj8rJ6C24+9jOc5ruTMEcEzk+H3FVTWvp218Bc+
-         6hgyhenJ8FvYE6MoOtgroGRPV76BaeqU2mOA8UhcJMmIDH6YJTwvcTHG7GKdEnm3GqNT
-         VodKBJX/CiU2mU5kX9ANojWdmL1OUTrKlh78H9/avyUbn+ctpru5fPjLAGNZd0Nl5K4s
-         UPfbWb/MAw5VQP2kgo83KveozzOxwu43HPdp/QYQAIZjAVoMyLS9/jNgm1itfIwcarj5
-         YPu7yyzgv9U1fAFlKHEGyHrf9++Bx/93sbGMZz5ZVXJYsqXaOMwChFp4O0MmxjD9L+e8
-         srJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729587676; x=1730192476;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6/0uwFU7QS3ULtUk30D33huoCZ8wSxBsNaZesrFmH4Y=;
-        b=YADVkTzbRWSzZY0Ctyd9b6WYRJ1Jka0Ncz/axtBp9iy5n2LdWBzSYyDPWcFwAgubzx
-         jwIx8E4vHfnedFajSq4em6VIgJrx88OnZI8HAYoB1YHdOy6wyj3kUpThxDK+ldD7PJho
-         +6r6iXZyXNYSIHqs3y6nXwnweb3hFy0HVimZLlCaAaW/8GcdVWtUzuepwrOmB2qUNBi1
-         LjTX3QuN791mcHxAZpXWTyH9ZjaFTxCrH4X/9lKiJwnD54lB3xkGaPC6i9MNDd5TSqcr
-         VvofqEu1ggzUyNhq8jnw0npjXUAcmrFt5WddNOPZ8RaeGrXO3WUt1NoTQxgIB2vthi/K
-         hYIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUj4mvBXPSSL/+BgNxlAvT8m3FayELDKymTKnx33KnV9KtYXBTgGJDZhZen11rI9I36TVsJnMhJySI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGGgG+bOg5zesv02Hs1P7v7He1+uS5uNo1zJb9UsNMMfHCnJ27
-	L6Xe11FZ+sRZTrKEqB/DH6GTb0D2C+bmzC8PBJraW43cFVdnWVzFOSManqpsfu4=
-X-Google-Smtp-Source: AGHT+IG9nn8Y+opUXK/jzmtyqOYnvXx/g5R4ITP+6pKF3OzW0Yk5PYNV4zNyh5rh+oEJ4F1hZ59ooA==
-X-Received: by 2002:a05:600c:1e28:b0:42c:b750:1a1e with SMTP id 5b1f17b1804b1-431615991f4mr115572795e9.0.1729587676087;
-        Tue, 22 Oct 2024 02:01:16 -0700 (PDT)
-Received: from linaro.org ([82.76.168.176])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f570b99sm83040255e9.2.2024.10.22.02.01.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2024 02:01:15 -0700 (PDT)
-Date: Tue, 22 Oct 2024 12:01:14 +0300
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <Zxdp2vHzREJAFkwj@linaro.org>
-References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
- <20241004-x1e80100-ps8830-v2-2-5cd8008c8c40@linaro.org>
- <Zw5oEyMj6cPGFDEI@hovoldconsulting.com>
+	s=arc-20240116; t=1729588165; c=relaxed/simple;
+	bh=fG7n/rClPSyVCFZ9BkdrIS04RymnXShn9QUy9/w9ib0=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=nR+aJqiINwPNwUM4/htkOroOSVQ5C/dazWGpxx0kHPT8ShyxL5o2uRU1N8JoQi3TGFL38EQinpOZiD6+UQHuAOcBttnO5fIhzkIAg09KfopPl7nd4OHX8draL86DrKOQ98fMN9MmO0LwF0u0kxwNKxNl7/AaftI36DIoOHMD2qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KjwYwEjV; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=/zKgrV2wVhIQZ7vubU
+	9nP6A/zQIVoNr8bUD3sblRl1U=; b=KjwYwEjV3D5ogLDDw6aCnyAa3P7/4rqkzN
+	AS9tMbzxsz2o/lXBL0/cj/DgmG8qFJXNjS9WldHOxmOSxDrjiu+5NlNFlmcCa/PZ
+	AuAjgoLsXPtSzBReogdSOzWj5KEE3jztbvoOFzzej2+r1hj3AeAFtvbXHz3vSxTN
+	RI1RdHmlY=
+Received: from localhost.localdomain (unknown [111.48.58.10])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgC3Zp2zaxdnQgSMAA--.40749S2;
+	Tue, 22 Oct 2024 17:09:08 +0800 (CST)
+From: huanglei814 <huanglei814@163.com>
+To: gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	huanglei <huanglei@kylinos.cn>
+Subject: [PATCH v3] usb: core: adds support for PM control of specific USB dev skip suspend.
+Date: Tue, 22 Oct 2024 17:09:05 +0800
+Message-Id: <20241022090905.9806-1-huanglei814@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:PSgvCgC3Zp2zaxdnQgSMAA--.40749S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF1DJFy5JFW3tr1kKFyrCrg_yoWrJFW5pF
+	4qyFWFkrsxGr1Iq34aya18uF1rWanYkayjk3sakw1Ygw17Ja95Gr1jyFy5Xwnxur9xAFyU
+	tFsrG3yUCrW7GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U9a9fUUUUU=
+X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbi7g6A9mcXZAG6bQAAsU
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zw5oEyMj6cPGFDEI@hovoldconsulting.com>
 
-On 24-10-15 15:03:15, Johan Hovold wrote:
-> On Fri, Oct 04, 2024 at 04:57:38PM +0300, Abel Vesa wrote:
-> 
-> > +static int ps8830_enable_vregs(struct ps8830_retimer *retimer)
-> > +{
-> 
-> > +	return 0;
-> > +
-> > +err_vddat_disable:
-> > +	regulator_disable(retimer->vddat_supply);
-> > +
-> 
-> Nit: I'd drop the empty lines between the errors cases here.
+From: huanglei <huanglei@kylinos.cn>
 
-Will drop.
+All USB devices are brought into suspend power state after system suspend.
+It is desirable for some specific manufacturers buses to keep their devices
+in normal state even after system suspend.
 
-> 
-> > +err_vddar_disable:
-> > +	regulator_disable(retimer->vddar_supply);
-> > +
-> > +err_vdd_disable:
-> > +	regulator_disable(retimer->vdd_supply);
-> > +
-> > +err_vdd33_cap_disable:
-> > +	regulator_disable(retimer->vdd33_cap_supply);
-> > +
-> > +err_vdd33_disable:
-> > +	regulator_disable(retimer->vdd33_supply);
-> > +
-> > +	return ret;
-> > +}
-> 
-> > +static int ps8830_retimer_probe(struct i2c_client *client)
-> > +{
-> > +	struct device *dev = &client->dev;
-> > +	struct typec_switch_desc sw_desc = { };
-> > +	struct typec_retimer_desc rtmr_desc = { };
-> > +	struct ps8830_retimer *retimer;
-> > +	int ret;
-> > +
-> > +	retimer = devm_kzalloc(dev, sizeof(*retimer), GFP_KERNEL);
-> > +	if (!retimer)
-> > +		return -ENOMEM;
-> > +
-> > +	retimer->client = client;
-> > +
-> > +	mutex_init(&retimer->lock);
-> > +
-> > +	retimer->regmap = devm_regmap_init_i2c(client, &ps8830_retimer_regmap);
-> > +	if (IS_ERR(retimer->regmap)) {
-> > +		dev_err(dev, "failed to allocate register map\n");
-> 
-> Please make sure to log the errno as well here and below.
+v2: Change to bool type for skip_suspend.
+v3: Rebase and update commit message.
 
-Will add.
+Signed-off-by: huanglei <huanglei@kylinos.cn>
+---
+ drivers/usb/core/Kconfig     | 11 +++++++++++
+ drivers/usb/core/driver.c    | 14 ++++++++++++++
+ drivers/usb/host/xhci-plat.c |  7 +++++++
+ include/linux/usb.h          |  9 +++++++++
+ 4 files changed, 41 insertions(+)
 
-> 
-> > +		return PTR_ERR(retimer->regmap);
-> > +	}
-> > +
-> > +	ret = ps8830_get_vregs(retimer);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	retimer->xo_clk = devm_clk_get(dev, "xo");
-> > +	if (IS_ERR(retimer->xo_clk))
-> > +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
-> > +				     "failed to get xo clock\n");
-> > +
-> > +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-> 
-> The reset line is active low and should be described as such in DT. So
-> here you want to request it as logically low if you want to deassert
-> reset.
-
-This is being reworked in v3 as we need to support cases where the
-retimer has been left enabled and initialized by bootloader and we want
-to keep that state until unplug event for the cold-plug orientation
-to work properly.
-
-On top of that, we don't want to deassert the reset here. We do that
-via gpiod_set_value() call below, after the clocks and regulators have
-been enabled.
-
-> 
-> Is there now timing requirements on when you deassert reset after
-> enabling the supplies?
-
-So based on my comment above, this is actually asserting the reset.
-No timing requirements for that.
-
-> 
-> > +	if (IS_ERR(retimer->reset_gpio))
-> > +		return dev_err_probe(dev, PTR_ERR(retimer->reset_gpio),
-> > +				     "failed to get reset gpio\n");
-> > +
-> > +	retimer->typec_switch = fwnode_typec_switch_get(dev->fwnode);
-> > +	if (IS_ERR(retimer->typec_switch)) {
-> > +		dev_err(dev, "failed to acquire orientation-switch\n");
-> 
-> I saw the driver fail here once, but not sure what the errno was since
-> it was not printed. Presumably it was a probe deferral and then this
-> should be a dev_err_probe() as well:
-> 
-> 	ps8830_retimer 2-0008: failed to acquire orientation-switch
-
-Will use dev_err_probe.
-
-> 
-> > +		return PTR_ERR(retimer->typec_switch);
-> > +	}
-> > +
-> > +	retimer->typec_mux = fwnode_typec_mux_get(dev->fwnode);
-> > +	if (IS_ERR(retimer->typec_mux)) {
-> > +		dev_err(dev, "failed to acquire mode-mux\n");
-> 
-> Similar here perhaps?
-
-Same.
-
-> 
-> > +		goto err_switch_put;
-> > +	}
-> > +
-> > +	sw_desc.drvdata = retimer;
-> > +	sw_desc.fwnode = dev_fwnode(dev);
-> > +	sw_desc.set = ps8830_sw_set;
-> > +
-> > +	ret = drm_aux_bridge_register(dev);
-> > +	if (ret)
-> > +		goto err_mux_put;
-> > +
-> > +	retimer->sw = typec_switch_register(dev, &sw_desc);
-> > +	if (IS_ERR(retimer->sw)) {
-> > +		dev_err(dev, "failed to register typec switch\n");
-> > +		goto err_aux_bridge_unregister;
-> > +	}
-> > +
-> > +	rtmr_desc.drvdata = retimer;
-> > +	rtmr_desc.fwnode = dev_fwnode(dev);
-> > +	rtmr_desc.set = ps8830_retimer_set;
-> > +
-> > +	retimer->retimer = typec_retimer_register(dev, &rtmr_desc);
-> > +	if (IS_ERR(retimer->retimer)) {
-> > +		dev_err(dev, "failed to register typec retimer\n");
-> > +		goto err_switch_unregister;
-> > +	}
-> > +
-> > +	ret = clk_prepare_enable(retimer->xo_clk);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to enable XO: %d\n", ret);
-> > +		goto err_retimer_unregister;
-> > +	}
-> 
-> Should you really enable the clock before the regulators?
-
-So maybe in this case it might not really matter. But in principle,
-the HW might be affected by clock glitches and such when IP block
-is powered up but unclocked. Even more so if the clock enabling
-(prepare, to be more exact) involves switching to a new PLL.
-
-So clock first, then power up. At least that's my understanding of HW
-in general.
-
-> 
-> > +
-> > +	ret = ps8830_enable_vregs(retimer);
-> > +	if (ret)
-> > +		goto err_clk_disable;
-> > +
-> > +	/* delay needed as per datasheet */
-> > +	usleep_range(4000, 14000);
-> > +
-> > +	gpiod_set_value(retimer->reset_gpio, 1);
-> 
-> Here you only deassert reset in case the line is incorrectly described
-> as active high in DT.
-
-Yes, this needs to be 0 instead of 1. And in v3 it will depend on
-a DT property called ps8830,boot-on, meaning if we want to keep it
-enabled and configured as left by bootloader, by using that property
-we will skip the resetting altogether.
-
-> 
-> > +	return 0;
-> > +
-> > +err_clk_disable:
-> > +	clk_disable_unprepare(retimer->xo_clk);
-> > +
-> > +err_retimer_unregister:
-> > +	typec_retimer_unregister(retimer->retimer);
-> > +
-> > +err_switch_unregister:
-> > +	typec_switch_unregister(retimer->sw);
-> > +
-> > +err_aux_bridge_unregister:
-> > +	gpiod_set_value(retimer->reset_gpio, 0);
-> > +	clk_disable_unprepare(retimer->xo_clk);
-> > +
-> > +err_mux_put:
-> > +	typec_mux_put(retimer->typec_mux);
-> > +
-> > +err_switch_put:
-> > +	typec_switch_put(retimer->typec_switch);
-> 
-> Drop newlines before labels?
-
-Will do.
-
-> 
-> > +
-> > +	return ret;
-> > +}
-> 
-> Johan
-
-Thanks for reviewing.
-
-Abel
+diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
+index 58e3ca7e4793..69778aa7b913 100644
+--- a/drivers/usb/core/Kconfig
++++ b/drivers/usb/core/Kconfig
+@@ -143,3 +143,14 @@ config USB_DEFAULT_AUTHORIZATION_MODE
+ 	  ACPI selecting value 2 is analogous to selecting value 0.
+ 
+ 	  If unsure, keep the default value.
++
++config USB_SKIP_SUSPEND
++	bool "Vendor USB support skip suspend"
++	depends on USB
++	help
++	  Select this the associate USB devices will skip suspend when pm control.
++
++	  This option adds support skip suspend for PM control of USB devices
++	  in specific manufacturers platforms.
++
++	  If unsure, keep the default value.
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 0c3f12daac79..05fe921f8297 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1583,6 +1583,15 @@ int usb_suspend(struct device *dev, pm_message_t msg)
+ 	struct usb_device	*udev = to_usb_device(dev);
+ 	int r;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_SUSPEND)) {
++		if (udev->state != USB_STATE_SUSPENDED)
++			dev_err(dev, "abort suspend\n");
++
++		return 0;
++	}
++#endif
++
+ 	unbind_no_pm_drivers_interfaces(udev);
+ 
+ 	/* From now on we are sure all drivers support suspend/resume
+@@ -1619,6 +1628,11 @@ int usb_resume(struct device *dev, pm_message_t msg)
+ 	struct usb_device	*udev = to_usb_device(dev);
+ 	int			status;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_RESUME))
++		return 0;
++#endif
++
+ 	/* For all calls, take the device back to full power and
+ 	 * tell the PM core in case it was autosuspended previously.
+ 	 * Unbind the interfaces that will need rebinding later,
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index ecaa75718e59..8cbc666ab5c6 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -265,6 +265,13 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+ 		if (device_property_read_bool(tmpdev, "xhci-skip-phy-init-quirk"))
+ 			xhci->quirks |= XHCI_SKIP_PHY_INIT;
+ 
++#ifdef CONFIG_USB_SKIP_SUSPEND
++		if (device_property_read_bool(tmpdev, "usb-skip-suspend")) {
++			hcd_to_bus(hcd)->skip_suspend = true;
++			hcd_to_bus(xhci->shared_hcd)->skip_suspend = true;
++		}
++#endif
++
+ 		device_property_read_u32(tmpdev, "imod-interval-ns",
+ 					 &xhci->imod_interval);
+ 	}
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 672d8fc2abdb..3074c89ed921 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -487,6 +487,15 @@ struct usb_bus {
+ 	struct mon_bus *mon_bus;	/* non-null when associated */
+ 	int monitored;			/* non-zero when monitored */
+ #endif
++
++#ifdef CONFIG_USB_SKIP_SUSPEND
++	bool skip_suspend;		/* All USB devices are brought into suspend
++					 * power state after system suspend. It is
++					 * desirable for some specific manufacturers
++					 * buses to keep their devices in normal
++					 * state even after system suspend.
++					 */
++#endif
+ };
+ 
+ struct usb_dev_state;
+-- 
+2.17.1
 
 
