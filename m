@@ -1,79 +1,93 @@
-Return-Path: <linux-usb+bounces-16514-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16515-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 334519A9EB3
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 11:39:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A7029A9EDD
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 11:45:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFF8C1F2293F
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:39:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14A9E1C2211E
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2024 09:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA1E1990A7;
-	Tue, 22 Oct 2024 09:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337E619922A;
+	Tue, 22 Oct 2024 09:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZbgU/VSk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZLg1VXtB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237EF155330;
-	Tue, 22 Oct 2024 09:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA84157487;
+	Tue, 22 Oct 2024 09:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729589955; cv=none; b=Qxnb5FcxwoxwAy7fue/x6iTWEu+NHhu1tdOR5uKmPgJfDcm+TUFALFY/baGQyQjM2FS/GL7YR3RbMC9F6DZAVOebdw+RBJ2eQ4MMPmnQr6gIUCUwk+roOzRgLxNvpZjpqaqfW2W89zeusPG2+kgNIvYMdXLG4B8G5QA+/ejVEmI=
+	t=1729590302; cv=none; b=EJGKk15hQOeAqf5a3ChMa9x6PHnGhroSKuzWjh3T2Ou9iXpbhQf/J077oWhLNrTRWTm2XeR/0LoIlagC/SLWvN508cq7/MJN+WbCjb3v6WrMfT/KXt53tj+nkBSG2HWqCicXlnfWaLD9nnNLtHlQoVfsJNBG9UjP0JVOZCFW6Fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729589955; c=relaxed/simple;
-	bh=Rni9goMB3zxSM7Y/0slwXKaptGNj+eHzLCZ1kyAubNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YJNvx+3/Mb1rhV3N8t/Pdgt3zDdtnTUFbZ8FdmAXp7UhRn1ZfBlbPbcXwL2agzHAYmohDYxjvxuIsBe2EzC0Z+m+VJdU79xQmx9kq5GL8lzhOMArd82VDkwJUiO+Gn1eqgmJTMOAfXSmikAeOU5nz1nii4GhAkJbMpYCr09ed3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZbgU/VSk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB3FC4CEC3;
-	Tue, 22 Oct 2024 09:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1729589954;
-	bh=Rni9goMB3zxSM7Y/0slwXKaptGNj+eHzLCZ1kyAubNc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZbgU/VSkCq+B45uM5b4/l9PWGqV4RNWWTi1RwL7KpTH/pajzrqxX+vmILDkLTcbNo
-	 Hv2ChyRF1PtdHJ/Fo+e/GHwEnXVXDFXK4QhxRroFwg5V2yU5RXyHa6i/twHGDDa9Q+
-	 9WhzlzI0q/alBN1PzMDw52z1g+vziKd2RWw/QOpY=
-Date: Tue, 22 Oct 2024 11:39:12 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: huanglei814 <huanglei814@163.com>
-Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
-Subject: Re: [PATCH v3] usb: core: adds support for PM control of specific
- USB dev skip suspend.
-Message-ID: <2024102239-stainable-favored-558b@gregkh>
-References: <20241022090905.9806-1-huanglei814@163.com>
+	s=arc-20240116; t=1729590302; c=relaxed/simple;
+	bh=mcsX0WXJKznvm/bkuqTU0BEtWKHXgcusKVsmdF542js=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=N64E5CD/nme6Fp8cLJK/TxlnZG9t01ZhG/JZdjrGiyEpD0toLSdVmfsljLSVfI/WZzVOBBKNA6LMrkCgQRJ2C64Cue2dvg9sgVUUfqNFF1+wO8yIFWPmuMzo6zL6VaOaNLSYRVFYimefME/YuhRNPwDCAsXYB+3x1qQe0sf6WVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZLg1VXtB; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ea8c4ce232so4541074a12.0;
+        Tue, 22 Oct 2024 02:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729590301; x=1730195101; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mcsX0WXJKznvm/bkuqTU0BEtWKHXgcusKVsmdF542js=;
+        b=ZLg1VXtBuBSHWcqP3QFnHxYWZE/uWvPWNvTAm5BJPez0fLS52QL1PcV6TFh28PVKi/
+         7EQV7lmg9thqj2GepYl354f19hLaAbs1hn1H+xWPIGeEj/qMFBTUTcIXMW3/VtNqvpdl
+         M8swFEEK18u4pChCdRqFyIksYzA57fKDPwGa9KEjhptAPIZjTfhBCAYdiQBI4cI0S0/+
+         ErsY9LjNEyx7n/QboU2N/SB6LgFel3FkAMCsrc+931a3LquRVCUhRoO8SqthYgo3KrAM
+         Znky+tT9XPhacI4WXa/6CK0OgKRiZOmMJbCSFPQabVGyoxFsP+moD5uGXrDJnPUSf9cw
+         uJBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729590301; x=1730195101;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mcsX0WXJKznvm/bkuqTU0BEtWKHXgcusKVsmdF542js=;
+        b=kCsa48UoePWWPRNYmj6tgLjhwBBxbjQGqVj2GzANKdMEJ2jr3b1mPqLvZJNLyYRuuL
+         n7paYjXNRE5XNYhBYpjWcz6mzpwMfIYcFUFF8EARaQRZ0opLn5asfDIqZhFhgkZo/E9Y
+         w01PyDgP18+5SSWFnw4P1b8s8xw8PFA0AX2EqG5shleC9gCV1A59WRYAHcZAgKlMNLjc
+         xzR1abwmAZO+d0cmjODh6GfZTXSc+sylO9JMl/gnwuAqBekSMFoOvXg7BbN65C0Zf390
+         fFFUjOcARKG95yMIurjpzM64UU4EOiITxWEsuJUz7NVngngB0VX9zGmwhb90pvQzzewp
+         vvkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUX5E9po7iuSwUtaxKNrM3uKzYjni5M6V+e6bi4i1utrNvDxPypFPJCKz+A2wN8kF1HOARs8Y+/kQ5@vger.kernel.org, AJvYcCXWXc/sWXX2RxXPIfeIzMzMtakACD6uBsNtO2hMREyE2Dxr0uDHLHLrcc5CWG2SMg3yOAA8PLPCvZdzZw0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvtU2JcvYCr2waVFBmdlA/J4ozctsx65AgfGBVgllJPN1YcbDZ
+	GcFQO00mdj5L/lhXAkUi9r767Esg/uPBR/506zWONM1ctXct4bOR782NpmNR9EM=
+X-Google-Smtp-Source: AGHT+IE9ZtbPOVFuRu/8X3sBmrBHZxh56xKV93Z4BQzQt2cOqB7MCeZw280LRnCNLa6bCuPEXvaoBg==
+X-Received: by 2002:a05:6a20:b283:b0:1d9:3955:6e6a with SMTP id adf61e73a8af0-1d939556e8emr13101540637.22.1729590300517;
+        Tue, 22 Oct 2024 02:45:00 -0700 (PDT)
+Received: from asix-MS-7816.. ([2403:c300:5f03:e344:38d9:d69:6b54:1f6])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec13d7638sm4348000b3a.120.2024.10.22.02.44.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Oct 2024 02:45:00 -0700 (PDT)
+From: Tony Chung <tony467913@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: johan@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	tony467913@gmail.com
+Subject: Re: [PATCH] usb: serial: mos7840: Add more kinds of baud rate support
+Date: Tue, 22 Oct 2024 17:40:43 +0800
+Message-Id: <20241022094041.70314-1-tony467913@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2024102207-unmixed-caregiver-b9eb@gregkh>
+References: <2024102207-unmixed-caregiver-b9eb@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241022090905.9806-1-huanglei814@163.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 22, 2024 at 05:09:05PM +0800, huanglei814 wrote:
-> From: huanglei <huanglei@kylinos.cn>
-> 
-> All USB devices are brought into suspend power state after system suspend.
-> It is desirable for some specific manufacturers buses to keep their devices
-> in normal state even after system suspend.
-> 
-> v2: Change to bool type for skip_suspend.
-> v3: Rebase and update commit message.
+Thanks for informing me. I'll split it and resend the patches.
 
-As per the documentation, this needs to go below the --- line.  Also,
-you changed more than just the bool type in v2 :(
-
-Please fix up and do a v4 after waiting a while for others to review
-this.
-
-thanks,
-
-greg k-h
+Tony Chung
 
