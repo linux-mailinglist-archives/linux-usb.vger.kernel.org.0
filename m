@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-16599-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16600-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01DC89AC893
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 13:08:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A3A9AC987
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 14:00:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31B801C21AC0
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 11:08:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98AFB1F21F10
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 12:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CA61A2C0E;
-	Wed, 23 Oct 2024 11:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94D071A0B0E;
+	Wed, 23 Oct 2024 12:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="d/ifaD7m"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="gBRLw9kT"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD301531F9;
-	Wed, 23 Oct 2024 11:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022B61A00FA;
+	Wed, 23 Oct 2024 12:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729681633; cv=none; b=ZoS+01LyuD4o7411ICSpRI/44QUiIjvSJQZjfx82cqPxfXjBIhEca2gWhNI1aT/TFvaY6KDqRqkcJWCo8sXpsNCLstcmivt8xxpXgsaHSjys8R4hPJPl+IvzD4hA3KMXEx0QKXVJSD/cmXpqoEk+bcLADKH9lmUPY4zxWjHXUtE=
+	t=1729684810; cv=none; b=LwdWciCR6I84KwXjRI1eKbQZgYxMs974nxj/ybh4Hpd+HRsiASut4Bt5BcDqsEK481/AoRukhwbaH+jHu/ZWXMltq9OrQRRPC3BYg6xFD8WyBsZRmzaPn1kmWgUeXtfEFmE1pN6xRvxtyP+bt6c8snNNbbncvTwC5pAX1V32pPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729681633; c=relaxed/simple;
-	bh=8e9uBwaZxAnoAdX6FU+kL2IHiXRh0zZ7Wcs7TopuVBE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ws4SgWvCza9DHn6nP9ldhbpDU3hkzAoCrPWJV0i2RCJ11KihrsCkthKJhLp7WDJMXRQbLYODi1fqCceZtijJItIGTXvFJVzb8Dm6ZQZtUmkC3rxydhW4b0MthPYxUHGaNzJSI+L9WYEJKmftb/yQ+6RG7TkZGjEaip//6fjlb+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=d/ifaD7m; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1729684810; c=relaxed/simple;
+	bh=YsnnC89A5gG5taNxdFfwRDiDUBabJ4GU+8bvLB1ZD5w=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=I9cKnLmh7OwY7jdJJhfT/ZqlX1sW0Z671mzohTVwde4sUo5KPAyA/hmNsa2ZiimQMXL/yhba8hmTgz7ckEptM+X45hzT/8sPnTCtNVkFGuJSv7Pzs+NVKaaDEzg0vz1Edm1PxeMYd2FNVQWF1g1M31cZSOE/UF/JRA5CvYyvpmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=gBRLw9kT; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1729681629;
-	bh=8e9uBwaZxAnoAdX6FU+kL2IHiXRh0zZ7Wcs7TopuVBE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=d/ifaD7mUx7X3IC0sUiN+TzLsGOnIissTUtkkov9oiM6M80qbQb8Wdw8uNu3VN3ya
-	 KSaLoOPBAbdkn80Dl1v7+TffChDjMZx6lY5eaxKp901LQSgDikS1pYR3sy1fJXFQWH
-	 Kdw4xCBaTDj0BQQpc3VKsfi/taKkGbi6NACPAR2qSFP5Bdpgv+0D1YK8jNUl8p+Dj0
-	 GgT9RVuEeQv0eTz3bfIICC1eAJTL9qOKKVgvcdpcZ7/6Q2jm38yinigR0f2/mVj41E
-	 +Lh3v5zBBfy3oq9/wLBTQ0OlmfWeY+NEHlWI+HQe/RUP77qCjKPkVTicwrWG78AOL1
-	 5G2OsIYIKQNcQ==
+	s=mail; t=1729684806;
+	bh=YsnnC89A5gG5taNxdFfwRDiDUBabJ4GU+8bvLB1ZD5w=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=gBRLw9kTv3fziHc4h4k7qEYeu32mlEZA3U2um/eMRnzaPDOpJphDgjsxQJAm1YnP7
+	 +qUt67lE490Sf+5TnsmmXnhqXBr+5IAAgAD00FKkt3s9ql15JkAwB+c10Hds08IDpB
+	 GckUsF1kjzDi90yhjBd0VhQ36+gegDAKWwghmKltkQ+KwApmruRYM6ku2PGYZRAE1Q
+	 LniEC8VL+oQYdBL4xRCNZqrn/NfHazBGWS6D2mUHYYLyoq4hchC4YZ0jOYJx7m2kB8
+	 ZrHGDjV8B+vCmSOXcnLZYSZxbOKJK4buIafzPNN9Gtlw6RH89PLYELEGW181S5jANi
+	 bVecgYavEdT6Q==
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B624217E1576;
-	Wed, 23 Oct 2024 13:07:08 +0200 (CEST)
-Message-ID: <c4b5e78e-5337-464c-9dca-9d4e5353cc46@collabora.com>
-Date: Wed, 23 Oct 2024 13:07:08 +0200
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5669517E35E9;
+	Wed, 23 Oct 2024 14:00:05 +0200 (CEST)
+Message-ID: <ba44b369-bcd7-4226-b75a-f3c5000e97ec@collabora.com>
+Date: Wed, 23 Oct 2024 14:00:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,6 +59,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/2] arm64: dts: mediatek: mt8395-genio-1200-evk: add
  support for TCPC port
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: Macpaul Lin <macpaul.lin@mediatek.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
@@ -73,154 +74,216 @@ Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
  Yow-Shin Liou <yow-shin.liou@mediatek.com>,
  Simon Sun <simon.sun@yunjingtech.com>
 References: <20241023080912.15349-1-macpaul.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+ <c4b5e78e-5337-464c-9dca-9d4e5353cc46@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20241023080912.15349-1-macpaul.lin@mediatek.com>
+In-Reply-To: <c4b5e78e-5337-464c-9dca-9d4e5353cc46@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 23/10/24 10:09, Macpaul Lin ha scritto:
-> From: Fabien Parent <fparent@baylibre.com>
+Il 23/10/24 13:07, AngeloGioacchino Del Regno ha scritto:
+> Il 23/10/24 10:09, Macpaul Lin ha scritto:
+>> From: Fabien Parent <fparent@baylibre.com>
+>>
+>> Enable USB Type-C support on MediaTek MT8395 Genio 1200 EVK by adding
+>> configuration for TCPC Port, USB-C connector, and related settings.
+>>
+>> Configure dual role switch capability, set up PD (Power Delivery) profiles,
+>> and establish endpoints for SSUSB (SuperSpeed USB).
+>>
+>> Update pinctrl configurations for U3 P0 VBus default pins and set dr_mode
+>> to "otg" for OTG (On-The-Go) mode operation.
+>>
+>> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+>> Signed-off-by: Yow-Shin Liou <yow-shin.liou@mediatek.com>
+>> Signed-off-by: Simon Sun <simon.sun@yunjingtech.com>
+>> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+>> ---
+>>   .../dts/mediatek/mt8395-genio-1200-evk.dts    | 54 +++++++++++++++++++
+>>   1 file changed, 54 insertions(+)
+>>
+>> Changes for v2:
+>>   - Drop the no need '1/2' DT Schema update patch in the 1st version.
+>>   - Fix intent for 'ports' node, it should under the 'connector' node.
+>>   - Correct the index for 'port@0' and 'port@1' node.
+>>
+>> Changes for v3:
+>>   - Correct the order between new added nodes.
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts b/arch/arm64/ 
+>> boot/dts/mediatek/mt8395-genio-1200-evk.dts
+>> index 5f16fb820580..83d520226302 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
+>> @@ -335,6 +335,43 @@ mt6360_ldo7: ldo7 {
+>>                   regulator-always-on;
+>>               };
+>>           };
+>> +
+>> +        tcpc {
+>> +            compatible = "mediatek,mt6360-tcpc";
+>> +            interrupts-extended = <&pio 17 IRQ_TYPE_LEVEL_LOW>;
+>> +            interrupt-names = "PD_IRQB";
+>> +
+>> +            connector {
+>> +                compatible = "usb-c-connector";
+>> +                label = "USB-C";
+>> +                data-role = "dual";
 > 
-> Enable USB Type-C support on MediaTek MT8395 Genio 1200 EVK by adding
-> configuration for TCPC Port, USB-C connector, and related settings.
+> op-sink-microwatt goes here
 > 
-> Configure dual role switch capability, set up PD (Power Delivery) profiles,
-> and establish endpoints for SSUSB (SuperSpeed USB).
+>> +                power-role = "dual";
+>> +                try-power-role = "sink";
+>> +                source-pdos = <PDO_FIXED(5000, 1000, \
+>> +                           PDO_FIXED_DUAL_ROLE | \
+>> +                           PDO_FIXED_DATA_SWAP)>;
 > 
-> Update pinctrl configurations for U3 P0 VBus default pins and set dr_mode
-> to "otg" for OTG (On-The-Go) mode operation.
+> Please fix the indentation (and also you don't need the escaping)
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Yow-Shin Liou <yow-shin.liou@mediatek.com>
-> Signed-off-by: Simon Sun <simon.sun@yunjingtech.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->   .../dts/mediatek/mt8395-genio-1200-evk.dts    | 54 +++++++++++++++++++
->   1 file changed, 54 insertions(+)
+>                  source-pdos = <PDO_FIXED(5000, 1000,
+>                               PDO_FIXED_DUAL_ROLE |
+>                               PDO_FIXED_DATA_SWAP)>;
 > 
-> Changes for v2:
->   - Drop the no need '1/2' DT Schema update patch in the 1st version.
->   - Fix intent for 'ports' node, it should under the 'connector' node.
->   - Correct the index for 'port@0' and 'port@1' node.
+>> +                sink-pdos = <PDO_FIXED(5000, 2000, \
+>> +                         PDO_FIXED_DUAL_ROLE | \
+>> +                         PDO_FIXED_DATA_SWAP)>;
+>> +                op-sink-microwatt = <10000000>;
+>> +
+>> +                ports {
+>> +                    #address-cells = <1>;
+>> +                    #size-cells = <0>;
+>> +
+>> +                    port@0 {
+>> +                        reg = <0>;
 > 
-> Changes for v3:
->   - Correct the order between new added nodes.
+> Just to make sure that this is ok: are you sure that this port supports
+> SuperSpeed (physical connector too) and that it's not limited to HighSpeed?
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
-> index 5f16fb820580..83d520226302 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
-> @@ -335,6 +335,43 @@ mt6360_ldo7: ldo7 {
->   				regulator-always-on;
->   			};
->   		};
-> +
-> +		tcpc {
-> +			compatible = "mediatek,mt6360-tcpc";
-> +			interrupts-extended = <&pio 17 IRQ_TYPE_LEVEL_LOW>;
-> +			interrupt-names = "PD_IRQB";
-> +
-> +			connector {
-> +				compatible = "usb-c-connector";
-> +				label = "USB-C";
-> +				data-role = "dual";
+> I have seen Rob's comment stating that ssusb_ep goes to port@1, but I think
+> that his comment came after reading "ss" in "ssusb": while the controller
+> does surely support SS, if the port does not, this should still go to port@0.
+> 
+> P.S.: I didn't check the schematics - just please make sure it's correct, and
+>        that this actually works.
+> 
 
-op-sink-microwatt goes here
+Sorry for the double email, but I've done some fast research on this as something
+came to mind right after sending this review.
 
-> +				power-role = "dual";
-> +				try-power-role = "sink";
-> +				source-pdos = <PDO_FIXED(5000, 1000, \
-> +					       PDO_FIXED_DUAL_ROLE | \
-> +					       PDO_FIXED_DATA_SWAP)>;
+usb-connector.yaml says that the `ports` property models a data bus to the USB
+connector, and that a single connector can have multiple data buses, of course.
 
-Please fix the indentation (and also you don't need the escaping)
+The last statement doesn't come as a surprise, and actually makes me think about
+what MTU3 actually provides: a High Speed data bus, and a SuperSpeed data bus.
 
-				source-pdos = <PDO_FIXED(5000, 1000,
-							 PDO_FIXED_DUAL_ROLE |
-							 PDO_FIXED_DATA_SWAP)>;
+Now, I see in MTU3 that only `port` is allowed and that only the HS part is
+is exposed... so to resolve this, you want to add a binding to connect the
+data bus of the MTU3 controller to the usb-c-connector, and obviously only then
+you should use it here.
 
-> +				sink-pdos = <PDO_FIXED(5000, 2000, \
-> +					     PDO_FIXED_DUAL_ROLE | \
-> +					     PDO_FIXED_DATA_SWAP)>;
-> +				op-sink-microwatt = <10000000>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
+That should look like this:
 
-Just to make sure that this is ok: are you sure that this port supports
-SuperSpeed (physical connector too) and that it's not limited to HighSpeed?
+mediatek,mtu3.yaml:
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
 
-I have seen Rob's comment stating that ssusb_ep goes to port@1, but I think
-that his comment came after reading "ss" in "ssusb": while the controller
-does surely support SS, if the port does not, this should still go to port@0.
+     properties:
+       port@0:
+         $ref: /schemas/graph.yaml#/properties/port
+         description: High Speed (HS) data bus.
 
-P.S.: I didn't check the schematics - just please make sure it's correct, and
-       that this actually works.
+       port@1:
+         $ref: /schemas/graph.yaml#/properties/port
+         description: Super Speed (SS) data bus.
 
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						mt6360_ssusb_ep: endpoint {
-> +							remote-endpoint = <&ssusb_ep>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
->   	};
->   };
->   
-> @@ -770,6 +807,13 @@ pins-reset {
->   		};
->   	};
->   
-> +	u3_p0_vbus: u3-p0-vbus-default-pins {
-> +		pins-cmd-dat {
+some_devicetree.dts
+&ssusb0 {
+	ports {
+		port@0 {
+			reg = <0>;
 
-That's not a command nor data pin.
+			/* High Speed data bus */
+			mtu3_hs0_ep: endpoint {
+				/* connects to port@0 (HS) of usb-c-connector */
+				remote-endpoint = <&typec_con_hs>;
+			}
+		};
 
-pins-vbus {
+		port@1 {
+			reg = <1>;
 
-> +			pinmux = <PINMUX_GPIO63__FUNC_VBUSVALID>;
-> +			input-enable;
-> +		};
-> +	};
-> +
->   	uart0_pins: uart0-pins {
->   		pins {
->   			pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
-> @@ -900,8 +944,18 @@ &ufsphy {
->   };
->   
->   &ssusb0 {
-> +	dr_mode = "otg";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&u3_p0_vbus>;
+			/* SuperSpeed data bus */
+			mtu3_ss0_ep: endpoint {
+				/* connects to port@1 (SS) of usb-c-connector */
+				remote-endpoint = <&typec_con_sss>;
+			}
+		};
+	};
+};
 
-Is this port usb host by default? If it is:
-
-	role-switch-default-mode = "host";
+I don't have time to do any testing in this precise moment, so, if you want
+to go on and test - cool; otherwise, I can check that at a later time, but
+on Genio 700 EVK instead (which is the same thing for this specific topic anyway).
 
 Cheers,
 Angelo
 
-> +	usb-role-switch;
->   	vusb33-supply = <&mt6359_vusb_ldo_reg>;
->   	status = "okay";
-> +
-> +	port {
-> +		ssusb_ep: endpoint {
-> +			remote-endpoint = <&mt6360_ssusb_ep>;
-> +		};
-> +	};
->   };
->   
->   &ssusb2 {
+>> +                    };
+>> +
+>> +                    port@1 {
+>> +                        reg = <1>;
+>> +                        mt6360_ssusb_ep: endpoint {
+>> +                            remote-endpoint = <&ssusb_ep>;
+>> +                        };
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>>       };
+>>   };
+>> @@ -770,6 +807,13 @@ pins-reset {
+>>           };
+>>       };
+>> +    u3_p0_vbus: u3-p0-vbus-default-pins {
+>> +        pins-cmd-dat {
+> 
+> That's not a command nor data pin.
+> 
+> pins-vbus {
+> 
+>> +            pinmux = <PINMUX_GPIO63__FUNC_VBUSVALID>;
+>> +            input-enable;
+>> +        };
+>> +    };
+>> +
+>>       uart0_pins: uart0-pins {
+>>           pins {
+>>               pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
+>> @@ -900,8 +944,18 @@ &ufsphy {
+>>   };
+>>   &ssusb0 {
+>> +    dr_mode = "otg";
+>> +    pinctrl-names = "default";
+>> +    pinctrl-0 = <&u3_p0_vbus>;
+> 
+> Is this port usb host by default? If it is:
+> 
+>      role-switch-default-mode = "host";
+> 
+> Cheers,
+> Angelo
+> 
+>> +    usb-role-switch;
+>>       vusb33-supply = <&mt6359_vusb_ldo_reg>;
+>>       status = "okay";
+>> +
+>> +    port {
+>> +        ssusb_ep: endpoint {
+>> +            remote-endpoint = <&mt6360_ssusb_ep>;
+>> +        };
+>> +    };
+>>   };
+>>   &ssusb2 {
+> 
+
 
 
