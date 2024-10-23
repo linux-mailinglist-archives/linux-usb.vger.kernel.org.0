@@ -1,207 +1,112 @@
-Return-Path: <linux-usb+bounces-16604-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16605-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D929ACC3A
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 16:25:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8DD39ACFC1
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 18:10:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48A022846CF
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 14:25:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C706F1C210E4
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 16:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FC71BFE10;
-	Wed, 23 Oct 2024 14:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54771CB325;
+	Wed, 23 Oct 2024 16:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="LTQmnv+L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQUSGdFt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03491B86CC
-	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 14:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469FA7D07D;
+	Wed, 23 Oct 2024 16:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729693542; cv=none; b=mRKbDrXL7n4RJh0SWrhUfNlNj01xNxN0OxD4Xvo9kUGMZiLgaZrS2q3X9W7/OXaCyxA0WxaVc2PUE/D85enoE5jB6vxBZNgFnlF9ih3mGvkHQVYvm4Xtcd5EIOjl+y3yTEDddigWVs8pp6RHKAbAgJE8Pw8Eq+9V41D9fQyWXUM=
+	t=1729699846; cv=none; b=GzePGfA+BlICb0tpGS8/qPeyjgNH6kNXAKgz2h1lQjTwYQw9ThmvpsSlnJ9YxiUww/2P2OkQ1P2w11uDOS3q1uudJTuRytaIdmTNGjqoBslIskmv+FXf2OWBu5glYw7dNnnYMb53NPcD5E79Wqb/s2Q2itUnBR6ZipzvEHEIteo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729693542; c=relaxed/simple;
-	bh=mldi5V/iyoRjQuEdXOitTnbsaq+TjOnrAbgtqHLTJ30=;
+	s=arc-20240116; t=1729699846; c=relaxed/simple;
+	bh=qxn9zzMc9LTHjJoCIJ5wmgWIscOldp9qfo6Yu6dG7vY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c3QI3YibkFZVKuj1RbkU0OeAYkhfpYGIuE7Vc4eRM5zvQU/ZzgjBe6zHcSPy/pw3h+mjy9LQIBuJypEBe3B3dJAo7U4DF8M9QskZYiwDU9c7+K3JwxYVBrlI7trFhnE6NIVuO91sY+TeH/XwLHRoRi27c2UdemJ2cX05pCRJBig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=LTQmnv+L; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5ebc1af8f10so1578636eaf.2
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 07:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1729693540; x=1730298340; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=B1TunOSUY+zMcZnzhxxb/mRlqYBNrCsm3sL0XW/YmUg=;
-        b=LTQmnv+LpP/v7T2vSnTNuMJ8LuXEnxQqYc8rOVbkPiILlqMjBe1uhCTGizMJNVy0So
-         erdYqBniZsUeL2D9ccHvFLpqa6qL+m8cI/OSz9RGmoJFuNjE/WCoG4e2/6lidD0A/7CR
-         2HrJiIDQ7RdGEqavxKbnl5gG4I6e3WiQxb1/OFtdUPYFUplHzMWyKNwa8EM4Cnojr86N
-         x1TdpXkCvdn3TNEFOs1pwTiTPG00fQPKhCZhO60dWhWhXXE1rRKbEMm26PFsIx6Q7uF5
-         1uvE/cbaptODY5iPh63fz87IERLqmL2C36/9K8ilV6+yAhOLSBzMr2a//XznKVCQqyKj
-         PFlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729693540; x=1730298340;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B1TunOSUY+zMcZnzhxxb/mRlqYBNrCsm3sL0XW/YmUg=;
-        b=Ipy7D+oRXJjPgy4yhZic6oEp61lJK7Ku8dA6YdnHUmc4hKl1EJ92aBvIxAJy1lNDcQ
-         FhJopFX97c+fSj4LKzSqFZzmMr28DZlGTQeVctP769Z5vegGVvdXl9XDkOt+BdQ78g0F
-         Gb2BEZyBaKB0/ciCdYDBpN1EgxJZPl3jRdgHLbfR866cdoNG2VQOz81tNym0JwVZDdbz
-         GWKPtGqVzfwi0MqwUjkH0lpSX+t0U/r59wFHyDKDwtMoSRVVczTBDHF3IAyC2cNEmw7G
-         jV6h2aiTACg2F8zJhH5/2VXQ4rEgKZ11jdYdc1b2UQT1bcU+QSrTojIqdJC7E6QlmBRe
-         xCQw==
-X-Forwarded-Encrypted: i=1; AJvYcCVm6EK8KQ2MIxxp4ax9UV68DW+NYZpmOYrqTzDefsgsv7kf/MWtVsZr8T/5HXFE1roP08vfNTL9SUo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkCmv5nLkXGjV+ZoCdU8pEnv8i3YPtj0wem+ywJiXrZoFoV+XO
-	AOI0IK049RWLDQ6LDJJhgkPLnQdfM40S3xD20d8/iCpEYuvGVjWYSns7KuhwHA==
-X-Google-Smtp-Source: AGHT+IHYKkMzrgJ8geOTyZkUGs29y+cOzXjZq6Vwva4wzvjm6iVhWr15fLwm/y6UHA0sXzEu/VeScg==
-X-Received: by 2002:a05:6358:63a9:b0:1c2:f60c:7347 with SMTP id e5c5f4694b2df-1c3d81bc7fbmr163166555d.27.1729693539921;
-        Wed, 23 Oct 2024 07:25:39 -0700 (PDT)
-Received: from rowland.harvard.edu ([2607:fb60:2501:2805:c6d5:fe22:7fa3:ec54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-460d3d71664sm41141291cf.71.2024.10.23.07.25.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 07:25:39 -0700 (PDT)
-Date: Wed, 23 Oct 2024 10:25:37 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: huanglei814 <huanglei814@163.com>
-Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	huanglei <huanglei@kylinos.cn>
-Subject: Re: [PATCH v4] usb: core: adds support for PM control of specific
- USB dev skip suspend.
-Message-ID: <561a32d3-a37a-4b16-a214-8f4bacc17b8a@rowland.harvard.edu>
-References: <20241023034457.13241-1-huanglei814@163.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=l2Krk8Tbnrs91Yz3FW3ypTBV/M5ikH7PK7GgqHn5a19wIszF1+L+kcf6XY5FX6GiNPsx7JUuI3ZsE3lYFHYTwT0nKfbXg3VVfjHgikoIbZ/arnORfl4qv1DvA3GATE+0UvMwfDXvmuHlMjvYTmJ8hb5xFHfETZ5bIvGEmAlvPy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQUSGdFt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD458C4CEC6;
+	Wed, 23 Oct 2024 16:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729699845;
+	bh=qxn9zzMc9LTHjJoCIJ5wmgWIscOldp9qfo6Yu6dG7vY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hQUSGdFtqZ1RMW2CnRROfvUOOGt3R5YoAhDzqhNqaDeZ66s00e4BVtrVO3e31Xb+J
+	 SNmT8uJ6SxKI1FMFssrq6lLl4NnRqWpyhDklSvh5CjOdKNUMFEAU1Fubt/0gyc0kVS
+	 OvnfRblqCbHMl92090KtWXVhx93rPGtSrJU0HMOebBsIUe6Cn6Wzx2UMr7cibXrxJh
+	 zJ4IobIVdbvebHA34/nNwt7B4p/3tfRzvyvXTsYjamcSYZPe5WqyQPrbMkK31GLnp1
+	 TfsfFlhHrCKf95nZKt4oiSi4EB78rwILUf38y51u0b5uAqdPZ+SOeBX3+zSMJJH3fR
+	 6UtshLNdFN75A==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t3dwo-000000005rA-35XM;
+	Wed, 23 Oct 2024 18:10:58 +0200
+Date: Wed, 23 Oct 2024 18:10:58 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usb: typec: Add support for Parade PS8830 Type-C
+ Retimer
+Message-ID: <ZxkgEjptmmHpQpfB@hovoldconsulting.com>
+References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
+ <20241004-x1e80100-ps8830-v2-2-5cd8008c8c40@linaro.org>
+ <Zw5oEyMj6cPGFDEI@hovoldconsulting.com>
+ <Zxdp2vHzREJAFkwj@linaro.org>
+ <Zxif6vmh8BE_C-_n@hovoldconsulting.com>
+ <ZximeTNi7huc95te@linaro.org>
+ <ZxirM9HJELXGWVqv@hovoldconsulting.com>
+ <ZxiuFRFnZFlcdMPs@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241023034457.13241-1-huanglei814@163.com>
+In-Reply-To: <ZxiuFRFnZFlcdMPs@linaro.org>
 
-On Wed, Oct 23, 2024 at 11:44:57AM +0800, huanglei814 wrote:
-> From: huanglei <huanglei@kylinos.cn>
+On Wed, Oct 23, 2024 at 11:04:37AM +0300, Abel Vesa wrote:
+> On 24-10-23 09:52:19, Johan Hovold wrote:
+
+> > I'm talking about an I/O pin here, you must generally not drive those
+> > high before powering on the IC.
+> > 
+> > And AFAIU the same applies to clocks even though the risk of damage
+> > there is lower.
 > 
-> All USB devices are brought into suspend power state after system suspend.
-> It is desirable for some specific manufacturers buses to keep their devices
-> in normal state even after system suspend.
+> As I stated before, enabling (or rather preparing, from kernel's point
+> of view) will definitely glitch due to PLL switcing (unless the mux is
+> glitchless from design). And there is literally no risk of enabling or
+> keeping a clock enabled even if the consumer is powered off.
 
-Here you should explain _why_ this is desirable.  People will want to 
-know, so that they can judge whether this is a good thing to do.
+That's a separate discussion from whether you should supply clocks to an
+unpowered IC, and you can get around that by making sure the IC is held
+in reset until the clock is stable.
 
-> Signed-off-by: huanglei <huanglei@kylinos.cn>
-> ---
-> v3->v4:
-> - Cancel SUSPENDED state judgment when enter suspend，because udev will not enter.
-> - Change "usb-skip-suspend" to "usb-never-suspend"
-> - Change dev_err to dev_info.
-> - Remove Kconfig option, it's redundant indeed.
-> - Update commit message style.
-> v2->v3:
-> - Rebase and update commit message.
-> v1->v2:
-> - Change to bool type for skip_suspend.
-> - Kconfig remove "default n", 'n' is the default.
-> ---
->  drivers/usb/core/driver.c    | 8 ++++++++
->  drivers/usb/host/xhci-plat.c | 5 +++++
->  include/linux/usb.h          | 7 +++++++
->  3 files changed, 20 insertions(+)
-> 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index 0c3f12daac79..93137c7c34df 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -1583,6 +1583,11 @@ int usb_suspend(struct device *dev, pm_message_t msg)
->  	struct usb_device	*udev = to_usb_device(dev);
->  	int r;
->  
-> +	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_SUSPEND)) {
-> +		dev_info(dev, "abort suspend\n");
-> +		return 0;
+What does the datasheet say about the XTALO_REFCLK_IN pin? What's the
+max voltage specified as?
 
-Do you really need this message at all?  Maybe it should be dev_dbg, 
-because it's useful only to developers, not to normal users.
+And since the machine we are currently working on do not using a crystal
+oscillator here, do you need to configure the device to use a clock
+instead somehow?
 
-Also, you're not really aborting the suspend; you're skipping it.
+Is there any mention of the refclk in the power-on sequence?
 
-> +	}
-> +
->  	unbind_no_pm_drivers_interfaces(udev);
->  
->  	/* From now on we are sure all drivers support suspend/resume
-> @@ -1619,6 +1624,9 @@ int usb_resume(struct device *dev, pm_message_t msg)
->  	struct usb_device	*udev = to_usb_device(dev);
->  	int			status;
->  
-> +	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_RESUME))
-> +		return 0;
-> +
->  	/* For all calls, take the device back to full power and
->  	 * tell the PM core in case it was autosuspended previously.
->  	 * Unbind the interfaces that will need rebinding later,
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index ecaa75718e59..35062aa19a32 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -265,6 +265,11 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
->  		if (device_property_read_bool(tmpdev, "xhci-skip-phy-init-quirk"))
->  			xhci->quirks |= XHCI_SKIP_PHY_INIT;
->  
-> +		if (device_property_read_bool(tmpdev, "usb-never-suspend")) {
-
-Hmmm.  "usb-never-suspend" implies that the bus won't even be put into 
-runtime suspend, but that's not what you mean.  What you really mean is 
-more like "stay-powered-during-system-suspend", but that name is a bit 
-long.  Maybe you can think of something better.
-
-Also, this sounds more like the manufacturer's policy decision rather 
-than a hardware limitation.  Is that correct?  If it is, I doubt that 
-the setting really belongs in DT.
-
-> +			hcd_to_bus(hcd)->skip_suspend = true;
-> +			hcd_to_bus(xhci->shared_hcd)->skip_suspend = true;
-> +		}
-> +
->  		device_property_read_u32(tmpdev, "imod-interval-ns",
->  					 &xhci->imod_interval);
->  	}
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 672d8fc2abdb..c854d1f622ec 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -487,6 +487,13 @@ struct usb_bus {
->  	struct mon_bus *mon_bus;	/* non-null when associated */
->  	int monitored;			/* non-zero when monitored */
->  #endif
-> +
-> +	bool skip_suspend;		/* All USB devices are brought into suspend
-> +					 * power state after system suspend. It is
-> +					 * desirable for some specific manufacturers
-> +					 * buses to keep their devices in normal
-> +					 * state even after system suspend.
-> +					 */
-
-This is not a good comment.  It doesn't say what the skip_suspend flag 
-means.  You don't need to explain the reason for the flag here; just 
-explain what it does.
-
-Alan Stern
-
->  };
->  
->  struct usb_dev_state;
-> -- 
-> 2.17.1
-> 
-> 
+Johan
 
