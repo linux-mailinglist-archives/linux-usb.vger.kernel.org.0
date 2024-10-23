@@ -1,97 +1,107 @@
-Return-Path: <linux-usb+bounces-16587-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16588-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99A189AC74C
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 12:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 270819AC784
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 12:11:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 235D3B2228E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 10:04:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C34C3B26CBB
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 10:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B732B19E7F8;
-	Wed, 23 Oct 2024 10:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58CE19F46D;
+	Wed, 23 Oct 2024 10:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e21v5Slt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jpat998d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2526B174EFC;
-	Wed, 23 Oct 2024 10:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06B71A08A0
+	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 10:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729677874; cv=none; b=D6XeBEIJiusyTZgzYyWugNpMMVvDiEudLi3nbK5LmmdSOsdAwxYugfij4+++PPd++4j3J5WNLFUTJpx1Rg7/7qxQ6M71tkdjDzl0I6qvcdUKzN4xW54HiUOFbgCu32P12bvDs5loTa4BmU5DGB6P0+j/tIj1juV52mKLCkRxthY=
+	t=1729678277; cv=none; b=lreRI1QSMIJyHewfexWdGBJirB4zIigLn0j45+Z3NJQU9tawYXwEtuORaMBxmSX6m/Tm7LYD6WeTtRrbTy9Zk5mHKl7EtwUwD31TzZx4RkSZKVzMqYNRInY+GfGh/iLm4PunxChb3/SGO1Ee5qxKd8fO7mGGawMMgNdq6LqBczY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729677874; c=relaxed/simple;
-	bh=xCx3jsjzrOByOzC4EI6X1N+HxVOj1x9mXT+HTjDqNf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gvmLxQgPdOsJL0GCi1SfdlHeM2bRheaGC0pawU1lTT8ZlmA2R4Fxej/5tU3to614bkHZX95/vn/g7pUOeovC2ooQq67rrzLONq8NygLE/ns9Ph0ubd09CHCziI/Pld4N9JGaUgStYQsh8zJE4uvndDUBxcDYZuo8eFmqbVXEwkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e21v5Slt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831C1C4CEC6;
-	Wed, 23 Oct 2024 10:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1729677873;
-	bh=xCx3jsjzrOByOzC4EI6X1N+HxVOj1x9mXT+HTjDqNf0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e21v5Slt8BPPi98ubJombH5sgfSMajJwUUfZ07rTfZNczQjy8PbV6x2cv39fH/0jP
-	 2F7GwTA1eN6dty+HVGbQ8BPAtA3GHDu3Wm7brkrte42xey0AadUrJarfxbtT69AlAV
-	 +t/ZzvRDYFMmw+h43gmT9TvivNRJlGZgAL5NoFr4=
-Date: Wed, 23 Oct 2024 12:04:23 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Tony Chung <tony467913@gmail.com>
-Cc: johan@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: serial: mos7840: Fix coding style warnings
-Message-ID: <2024102308-gorged-wrench-48e9@gregkh>
-References: <20241023091414.18098-1-tony467913@gmail.com>
+	s=arc-20240116; t=1729678277; c=relaxed/simple;
+	bh=CQwHmAcu3MK6VCQBcSdjI2oqDD7Wf/1tUuAYJdJ10P8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=t+fG+xL0FrQ+svj8381RACcNY4T2oSawW+oz/o8tgXt4VnyOlNoQ+iZEf9miOjav+f3QfLRebKqAJf1AS+eWNdOMkZd/vWoYISAAw+7scKTKiOs2NkyQv7TgYYwLIkh8cSxJqH8fiBDfmIGjcr7JPEa09AKml+gON7n09Ir/y3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jpat998d; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729678276; x=1761214276;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CQwHmAcu3MK6VCQBcSdjI2oqDD7Wf/1tUuAYJdJ10P8=;
+  b=jpat998dQo3m/vdPbducg9yOnbIQmQPXSr3FNkI1Td8sXb7MyAiBF/Zn
+   Lu4zXEiKdUV38JREZYqd+wmJfy0/tAw35j6QqdAB9M/2uT0HFzkNR+sml
+   m+ELqrnD8gRR5w6WcIhgvhe1JW38XtdR91KIW2nK1vXWqS2/F2GAj7dny
+   UP+fRkrXi9hUozSMJoQdeE1mVW6bv47Kfosvqiuxnv863lriys8bn1EuU
+   zVZtVj/rtQSJSbM9zFbUaYwlKVS95vlsV6z+zMGhzs5bgk66oQ5JDMP5f
+   Lb7xTiRqhWJ6qC03H97wEdhxJ0vBgGekPxtPdgSxebLvK3BB93b/vRMWA
+   A==;
+X-CSE-ConnectionGUID: TxtCxu3gT8inNQbMlpggNw==
+X-CSE-MsgGUID: xusuEYhDR0u+LijUExuwGQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="29149601"
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="29149601"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 03:11:15 -0700
+X-CSE-ConnectionGUID: hyT84XtKSHmuJJLTkT1xhA==
+X-CSE-MsgGUID: 5fCe5r6ESJW37CEVB3mp6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="84954597"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa005.jf.intel.com with ESMTP; 23 Oct 2024 03:11:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 01366343; Wed, 23 Oct 2024 13:11:11 +0300 (EEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Aapo Vienamo <aapo.vienamo@iki.fi>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 0/8] thunderbolt: Add support for USB4 v2 Gen 4 lane margining
+Date: Wed, 23 Oct 2024 13:11:03 +0300
+Message-ID: <20241023101111.3418311-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241023091414.18098-1-tony467913@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 23, 2024 at 05:14:15PM +0800, Tony Chung wrote:
-> This commit fix the coding style warnings shown by checkpatch.pl
-> 
-> Signed-off-by: Tony Chung <tony467913@gmail.com>
-> ---
->  drivers/usb/serial/mos7840.c | 50 ++++++++++++++++++++++--------------
->  1 file changed, 31 insertions(+), 19 deletions(-)
-> 
+Hi all,
 
-Hi,
+This series from Aapo adds support for USB4 v2 Gen 4 link symmetric and
+asymmetric receiver lane margining. Useful for instance on manufacturing
+floor to check stability of the electrical signaling.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Aapo Vienamo (8):
+  thunderbolt: Don't hardcode margining capabilities size
+  thunderbolt: debugfs: Add USB4 Gen 4 margining capabilities
+  thunderbolt: debugfs: Implement Gen 4 margining eye selection
+  thunderbolt: debugfs: Replace "both lanes" with "all lanes"
+  thunderbolt: debugfs: Replace margining lane numbers with an enum
+  thunderbolt: debugfs: Refactor hardware margining result parsing
+  thunderbolt: debugfs: Don't hardcode margining results size
+  thunderbolt: debugfs: Implement asymmetric lane margining
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+ drivers/thunderbolt/debugfs.c | 504 +++++++++++++++++++++++++---------
+ drivers/thunderbolt/sb_regs.h |  32 ++-
+ drivers/thunderbolt/tb.h      |  16 +-
+ drivers/thunderbolt/usb4.c    |  18 +-
+ 4 files changed, 412 insertions(+), 158 deletions(-)
 
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
+-- 
+2.45.2
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
