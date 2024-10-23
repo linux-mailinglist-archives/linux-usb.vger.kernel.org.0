@@ -1,183 +1,185 @@
-Return-Path: <linux-usb+bounces-16568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 006A79AC013
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 09:20:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 834C99AC04B
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 09:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0A4A2827C1
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 07:20:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DB3F1C22A51
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 07:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55A5C153824;
-	Wed, 23 Oct 2024 07:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B5715687D;
+	Wed, 23 Oct 2024 07:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="u82jhDzQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rnzPosid"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A12A145B0B;
-	Wed, 23 Oct 2024 07:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14111154C17
+	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 07:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729668002; cv=none; b=aXAPOucWwd6thwXiO9cYoTzhmB2GND3Ql8Mngm3Cttsi9t+Rkj9hrRmn1gw4iEjGTTEbIfQG9VXlJYoFBXGFqFbiPVut+ju+XVXxJ5BiPNWXAaEG7eEAl7xWMHSmi2uZZ7Ytk4gesepD4Ptp3P/JruEdeS4BaQE4SWzC59XzUA8=
+	t=1729668735; cv=none; b=EOVGpXxGF8UBU6s2xCXcxljwc6lThB2DTvJv/GU33UGy75xYu9yC2HzKs6q0YuJba20svuevj1DXnX67xYp95qkpPYxkiW0HmLAEmzreXtaVG87QMvsT/je76Xuh1jJm074uJUqdVJMza3L+X4MbDKXp6nf7IRKZdVjAFpdZISU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729668002; c=relaxed/simple;
-	bh=W5/8zUzhBSXkmFa+iPt1HdRhskdX6rnozZGjUR2YwoY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=hlv/tEA7km7hwuwZrTtApIsqP7X2EY882ebnTegaQaIj/MS5aoBAiBEr4RHZo92NAxsCt3XdGU0FAkcgypcZUwATzcCc4vWxKZJiH93zzT9s9HzeYAzQDY1ofWj8OLDsZTXfuWFjCNPUM5RXhTR6LEMyNcBNU7TYQ+VpaW/lu+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=u82jhDzQ; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 2da889a0910f11efb88477ffae1fc7a5-20241023
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=jhHEEh0SNtmeYF/HiL8jMitAzbQi3ryoKk6ZYK6HnO8=;
-	b=u82jhDzQVKVgdv4PJhwPUT+6y8OxI7wGCcWvmCebdfDeUEKVoD4A3KseoQmwFUYw+p/JVQsxpP/JEuwmubzSSXQNN2oweXGp0w1+zZVBVVGtP+xLD3g7qWZ13BKu6l4UoQ/HIn22ZtH6NAhMmtnaCfNulNeCFfXvMnIwrhjNU34=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.42,REQID:ed820678-f4d6-4416-8f30-ad3ed031b789,IP:0,U
-	RL:0,TC:0,Content:1,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:1
-X-CID-META: VersionHash:b0fcdc3,CLOUDID:e535b341-8751-41b2-98dd-475503d45150,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:4|-5,EDM:-3,IP:ni
-	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2da889a0910f11efb88477ffae1fc7a5-20241023
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 222065180; Wed, 23 Oct 2024 15:19:44 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 23 Oct 2024 15:19:42 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Wed, 23 Oct 2024 15:19:41 +0800
-Message-ID: <7bed09f4-b792-4587-2c08-df8e6aa9a314@mediatek.com>
-Date: Wed, 23 Oct 2024 15:19:41 +0800
+	s=arc-20240116; t=1729668735; c=relaxed/simple;
+	bh=UG6ihVAcJ5pYreWh3xW3jBvz7qOrrWyU52nZm6ikEK0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SVmS0Z5dYksBL4gDJjKizEPhg72ZDUEMw9NkMPhbyDFAI60MWdR6UlM0b+UVTqkQvCd/GX7f7GVYtJBpTMa7Xcz+dSPO2R19MtVDsVY+BIsPBlwYdTXXmna3H9KpjwP0VOeD9nDl9Vq++dz99gYAR1ckwmmLAiHQS8m24onhQtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rnzPosid; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d4c482844so4367904f8f.0
+        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 00:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729668732; x=1730273532; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ByOuflTVuw6FqNFCU6UPV6W286vup+uWGJ9ZYP4mkM=;
+        b=rnzPosidsZfkKP9K0Lvs+r9sC6NLuAmZf0Bz99r3WvVrlT3tJt1Um0S/JhhOL2DBmi
+         UfpsTzFMXricAvlVtD95Ra5TetnGrGG9nuQqO70H4idTM3rTtqe8LN8gvYex/qa5b36M
+         6zuOEWgrzeYOWvLDJmeBp4O9mfK8dl9JebGzIj+cbg4jQ7zwjoRVF7hd6bEL0dlex+mp
+         +CAGNr5eDHPuJBRwnV1Y9lFuFImrgXK07ZJiEGw/AOyKUp4mAN1k6FAehreau6PQG24K
+         jbpe12thcixDm9hTbxLc4DgQqJdZ7iEUciDfabUXTPZURSGhZWS7JELA8pOZyagWMRNC
+         eQrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729668732; x=1730273532;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0ByOuflTVuw6FqNFCU6UPV6W286vup+uWGJ9ZYP4mkM=;
+        b=AiEU6MSq6t6Z4eGEPlufhjfKgunkkhe9VIg0g9THiuzAa9IQyVJObnn5uqn2SDpnjN
+         SYnuF9scxAA23VZdGS9Jl+rYL6zyKs+iyie6SsvVUGhsKYflXtHP4KAkGdZMfztg0w/t
+         WmVBEoQSsaOTLJhoPIpN+CUl3ForUOF7mciKVJwDWPpf+DNcVfn53QH8EKjmvM0+4E7q
+         yly83RfkYSAmlFRANzxjAY/yWAY+a0zOImSrHvWRnWd30HoQW73THHydB71lp71cX3Ix
+         rZ7OJ7MwALtim1I4IlQWO2GETSs99346smtyra7wjagiKMiETPPriqHXVLBWpK9IAASI
+         D3OA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfoiGgfRULBpMH3pQ/inmEgU0yYYFBOEbxDgGx8R+jXrTcED9Oz9wi2Ylqp1dPJzdEqfhXWf564IU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybJwFMfgZcJDsA3oZVFU+CWrzk8G0ISM9Bq99ZjnuriZHrpDYf
+	LXniEAag6iyco3iICA/INV0c54hqV1jvTubXzFXDaIX3k+auUFKw9O60bkJXcGQ=
+X-Google-Smtp-Source: AGHT+IHjIA8gmyjHXms77rT5Sn14lEAq7Alni4DB4J5+vDcwterfp4ljbKgcAnTOfUwgEtKEJq9FJA==
+X-Received: by 2002:adf:ea46:0:b0:37d:529f:ac1e with SMTP id ffacd0b85a97d-37efcf9c1a9mr938910f8f.53.1729668732225;
+        Wed, 23 Oct 2024 00:32:12 -0700 (PDT)
+Received: from linaro.org ([82.76.168.176])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a4ac2esm8276357f8f.44.2024.10.23.00.32.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2024 00:32:11 -0700 (PDT)
+Date: Wed, 23 Oct 2024 10:32:09 +0300
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usb: typec: Add support for Parade PS8830 Type-C
+ Retimer
+Message-ID: <ZximeTNi7huc95te@linaro.org>
+References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
+ <20241004-x1e80100-ps8830-v2-2-5cd8008c8c40@linaro.org>
+ <Zw5oEyMj6cPGFDEI@hovoldconsulting.com>
+ <Zxdp2vHzREJAFkwj@linaro.org>
+ <Zxif6vmh8BE_C-_n@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] arm64: dts: mediatek: mt8395-genio-1200-evk: add
- support for TCPC port
-Content-Language: en-US
-To: Rob Herring <robh@kernel.org>
-CC: Chunfeng Yun <chunfeng.yun@mediatek.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	"Conor Dooley" <conor+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, "ChiYuan Huang"
-	<cy_huang@richtek.com>, <linux-usb@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Bear Wang
-	<bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin
-	<macpaul@gmail.com>, <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	Chris-qj chen <chris-qj.chen@mediatek.com>, Fabien Parent
-	<fparent@baylibre.com>, Simon Sun <simon.sun@yunjingtech.com>
-References: <20241015103337.20479-1-macpaul.lin@mediatek.com>
- <20241015103337.20479-2-macpaul.lin@mediatek.com>
- <20241015205637.GB1934266-robh@kernel.org>
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <20241015205637.GB1934266-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--16.862100-8.000000
-X-TMASE-MatchedRID: y/2oPz6gbvgOwH4pD14DsPHkpkyUphL9meN8m2FdGic3xO2R3boBWFbu
-	qIY+/skQkABPgKBt/0rfEt9Ay9zO7sc+qKbgAFCSoxWB033D5MLUqhJbkmLVe3PBWZjlMys293R
-	/67MIvJx0vTAlSptNlcBI1OxqxxNMFzzGUz0QhoXCDMQhoerulx3fOSCz34UdnQqircTOm4d7nq
-	zzG+5SELfpIvb2AFnm3nZ2IBXOo3afT/zxNL8LPgs9VkfCh3uArrEvQogcy/ET7lsB95pa6vz8v
-	ajouc6X6P2jQ8ymte8QDZh9tV+I0RgHZ8655DOPOX/V8P8ail1ZDL1gLmoa/PoA9r2LThYYKrau
-	Xd3MZDV82cyBsUWY5/1f/6848J/TsxrUDvSmaei2e+KVzCqZbVB9yLVq2hBC
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--16.862100-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	C4B433C839EC422FF41D031EF6CA4B98F32CA080A736DEE76F1B765FDBBD3F9C2000:8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zxif6vmh8BE_C-_n@hovoldconsulting.com>
 
-
-
-On 10/16/24 04:56, Rob Herring wrote:
-> 	
+On 24-10-23 09:04:10, Johan Hovold wrote:
+> On Tue, Oct 22, 2024 at 12:01:14PM +0300, Abel Vesa wrote:
+> > On 24-10-15 15:03:15, Johan Hovold wrote:
+> > > On Fri, Oct 04, 2024 at 04:57:38PM +0300, Abel Vesa wrote:
 > 
-> External email : Please do not click links or open attachments until you 
-> have verified the sender or the content.
+> > > > +	ret = ps8830_get_vregs(retimer);
+> > > > +	if (ret)
+> > > > +		return ret;
+> > > > +
+> > > > +	retimer->xo_clk = devm_clk_get(dev, "xo");
+> > > > +	if (IS_ERR(retimer->xo_clk))
+> > > > +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
+> > > > +				     "failed to get xo clock\n");
+> > > > +
+> > > > +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+> > > 
+> > > The reset line is active low and should be described as such in DT. So
+> > > here you want to request it as logically low if you want to deassert
+> > > reset.
+> > 
+> > This is being reworked in v3 as we need to support cases where the
+> > retimer has been left enabled and initialized by bootloader and we want
+> > to keep that state until unplug event for the cold-plug orientation
+> > to work properly.
+> > 
+> > On top of that, we don't want to deassert the reset here. We do that
+> > via gpiod_set_value() call below, after the clocks and regulators have
+> > been enabled.
 > 
-> On Tue, Oct 15, 2024 at 06:33:37PM +0800, Macpaul Lin wrote:
->> From: Fabien Parent <fparent@baylibre.com>
->> 
->> Enable USB Type-C support on MediaTek MT8395 Genio 1200 EVK by adding
->> configuration for TCPC Port, USB-C connector, and related settings.
->> 
->> Configure dual role switch capability, set up PD (Power Delivery) profiles,
->> and establish endpoints for SSUSB (SuperSpeed USB).
->> 
->> Update pinctrl configurations for U3 P0 VBus default pins and set dr_mode
->> to "otg" for OTG (On-The-Go) mode operation.
->> 
->> Signed-off-by: Fabien Parent <fparent@baylibre.com>
->> Signed-off-by: Simon Sun <simon.sun@yunjingtech.com>
->> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
->> ---
->>  .../dts/mediatek/mt8395-genio-1200-evk.dts    | 51 +++++++++++++++++++
->>  1 file changed, 51 insertions(+)
->> 
->> diff --git a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
->> index 5f16fb820580..b91a46f4a702 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
->> +++ b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
->> @@ -249,6 +249,39 @@ mt6360: pmic@34 {
->>  #interrupt-cells = <1>;
->>  pinctrl-0 = <&mt6360_pins>;
->>  
->> +tcpc {
->> +compatible = "mediatek,mt6360-tcpc";
->> +interrupts-extended = <&pio 17 IRQ_TYPE_LEVEL_LOW>;
->> +interrupt-names = "PD_IRQB";
->> +
->> +connector {
->> +compatible = "usb-c-connector";
->> +label = "USB-C";
->> +data-role = "dual";
->> +power-role = "dual";
->> +try-power-role = "sink";
->> +source-pdos = <PDO_FIXED(5000, 1000, \
->> +       PDO_FIXED_DUAL_ROLE | \
->> +       PDO_FIXED_DATA_SWAP)>;
->> +sink-pdos = <PDO_FIXED(5000, 2000, \
->> +     PDO_FIXED_DUAL_ROLE | \
->> +     PDO_FIXED_DATA_SWAP)>;
->> +op-sink-microwatt = <10000000>;
->> +};
->> +
->> +ports {
->> +#address-cells = <1>;
->> +#size-cells = <0>;
->> +
->> +port@0 {
->> +reg = <0>;
->> +mt6360_ssusb_ep: endpoint {
->> +remote-endpoint = <&ssusb_ep>;
-> 
-> No, this is wrong. This should go to 'port@1' in the connector node.
-> That is the SS connection.
-> 
-> Rob
+> Ok, but you should generally not drive an input high before powering on
+> the device as that can damage the IC (more below).
 
-This wrong index and wrong intent for the whole 'ports' node will be
-fixed in patch v2.
+This is just not true, generally. Think of top level XTALs which feed in
+clocks (and can't be disabled) before ICs are enabled.
 
-Thanks for the review.
-Macpaul Lin
+> 
+> That is, in this case, you should not deassert reset before making sure
+> the supplies are enabled.
+
+Wrong. Even the data sheet of this retimer shows in the timigs plot the
+reset as being asserted before the supplies are enabled.
+
+And generally speaking, the reset needs to be asserted before the
+supplies are up, so that the IC doesn't start doing any work until
+the SW decides it needs to.
+
+> 
+> > > > +	ret = clk_prepare_enable(retimer->xo_clk);
+> > > > +	if (ret) {
+> > > > +		dev_err(dev, "failed to enable XO: %d\n", ret);
+> > > > +		goto err_retimer_unregister;
+> > > > +	}
+> > > 
+> > > Should you really enable the clock before the regulators?
+> > 
+> > So maybe in this case it might not really matter. But in principle,
+> > the HW might be affected by clock glitches and such when IP block
+> > is powered up but unclocked. Even more so if the clock enabling
+> > (prepare, to be more exact) involves switching to a new PLL.
+> > 
+> > So clock first, then power up. At least that's my understanding of HW
+> > in general.
+> 
+> I think you got that backwards as inputs are typically rated for some
+> maximum voltage based on the supply voltage. 
+
+Yes, but that's done at board design stage.
+
+> That applies also to the
+> reset line as I also mentioned above.
+> 
+> What does the datasheet say?
+
+As mentioned above, datasheet shows reset asserted before the supplies
+are being enabled.
+
+> 
+> > > > +
+> > > > +	ret = ps8830_enable_vregs(retimer);
+> > > > +	if (ret)
+> > > > +		goto err_clk_disable;
+> 
+> Johan
 
