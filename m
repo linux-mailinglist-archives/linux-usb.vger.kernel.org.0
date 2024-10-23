@@ -1,58 +1,57 @@
-Return-Path: <linux-usb+bounces-16578-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E5B59AC128
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 10:12:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDBEE9AC172
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 10:25:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D2081C2150D
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 08:12:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E7E6282794
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 08:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1564B1586C8;
-	Wed, 23 Oct 2024 08:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D7B15855C;
+	Wed, 23 Oct 2024 08:25:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4271C2BD;
-	Wed, 23 Oct 2024 08:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525AE156883;
+	Wed, 23 Oct 2024 08:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729671161; cv=none; b=q6elvAbk4WmwvmrknjZuPlhViubYHK9YKNDG30s3hQBhT/1YYO+9ydN5qj7SjOSHKfiU51nMSNujnosZYAhQhsAHfMHeSiAmyL9JmfxIB7F0ICnjLNwEP+PuYpROJ2NxElXbnr19jzUm+sYaLxNqCQvksanJGe6uZ+gGg39qUQA=
+	t=1729671907; cv=none; b=hZ6syOeWf05Y6id0RCoTw5KacUUlwNGxrkby4TTaoXzWanV74hLfNnqrpN53dYNaQM8c+tg/LyIfQbvGZKCQn6L+mrxEhTmZzHD7RWJBPDudHy+5QXNYyEDhh0nmXgkG+PtQhTUvE0ZoKmuSjA4yNzzvCT7njBg6GRcuOgXxcxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729671161; c=relaxed/simple;
+	s=arc-20240116; t=1729671907; c=relaxed/simple;
 	bh=Ov3tGUEtS22P6qXPo42rF4eR4kaaLgxJ5X5EIsh9g/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OSSWnJnKKyZHoF6rk57vqnwx/JN37llZAYZOTUundcbztJylnVxazPFec/SwAUtpEkIvipUcVYHxCgD2gL6+IQEfplrUGT5M61+QMnXB5hCY61FKRANl3TqL7QzXi+PsTqd4ZLHaQIn6IdWIDr9zMh+A+kwyvV+OF6/7WfHCke0=
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eMMD/XkdGkWGh6lt+Dl6u4aVuw1mNE7+VE/LbI5vYeTb67sTUwJEo4N9iSpLHM/sUSjRLo9Xq8p3W+YIlWwYywwpdykSUkJu0s1LzxxYUBhb4zbpk4f5KG6okncC6WioBXp8wHtFd9leTOhOkzT9gdCmTk+9qE0ViwDIAR3RsIk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 8c90631e911611efa216b1d71e6e1362-20241023
-X-CID-CACHE: Type:Local,Time:202410231524+08,HitQuantity:1
+X-UUID: 473df6c6911811efa216b1d71e6e1362-20241023
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:3c29d85a-8015-4ade-ab91-b0dddc7d3215,IP:0,U
+X-CID-O-INFO: VERSION:1.1.38,REQID:28c7d316-7334-4249-b031-aac7b32b7fb7,IP:0,U
 	RL:0,TC:0,Content:-25,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
 	ION:release,TS:-50
-X-CID-META: VersionHash:82c5f88,CLOUDID:6cf6a58cf1939cde1e9cd929ab6835ca,BulkI
+X-CID-META: VersionHash:82c5f88,CLOUDID:ae3de7a4329d0d04dbcb10de4b20ed5c,BulkI
 	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:1,IP:nil,URL:0,
 	File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:N
 	O,DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 8c90631e911611efa216b1d71e6e1362-20241023
+X-UUID: 473df6c6911811efa216b1d71e6e1362-20241023
 Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
 	(envelope-from <lijiayi@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 1346884670; Wed, 23 Oct 2024 16:12:30 +0800
+	with ESMTP id 435306672; Wed, 23 Oct 2024 16:24:53 +0800
 Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id 212F216002082;
-	Wed, 23 Oct 2024 16:12:30 +0800 (CST)
-X-ns-mid: postfix-6718AFED-9678747262
+	by node4.com.cn (NSMail) with SMTP id 06E9416002084;
+	Wed, 23 Oct 2024 16:24:53 +0800 (CST)
+X-ns-mid: postfix-6718B2D4-8723187383
 Received: from kylin-pc.. (unknown [172.25.130.133])
-	by node4.com.cn (NSMail) with ESMTPA id 6FEC316002082;
-	Wed, 23 Oct 2024 08:12:28 +0000 (UTC)
+	by node4.com.cn (NSMail) with ESMTPA id 78A5116002084;
+	Wed, 23 Oct 2024 08:24:52 +0000 (UTC)
 From: Jiayi Li <lijiayi@kylinos.cn>
 To: gregkh@linuxfoundation.org,
 	stern@rowland.harvard.edu,
@@ -60,8 +59,8 @@ To: gregkh@linuxfoundation.org,
 	linux-kernel@vger.kernel.org
 Cc: lijiayi@kylinos.cn
 Subject: [PATCH v1] usb: core: use sysfs_emit() instead of sprintf()
-Date: Wed, 23 Oct 2024 16:12:08 +0800
-Message-ID: <20241023081208.2425876-1-lijiayi@kylinos.cn>
+Date: Wed, 23 Oct 2024 16:24:38 +0800
+Message-ID: <20241023082439.2430696-1-lijiayi@kylinos.cn>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
