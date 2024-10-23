@@ -1,153 +1,121 @@
-Return-Path: <linux-usb+bounces-16555-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16556-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C929ABC63
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 05:45:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E50E59ABC7E
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 05:56:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DFA91F21CAB
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 03:45:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85833B21F69
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 03:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E20132103;
-	Wed, 23 Oct 2024 03:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C78B13AA2F;
+	Wed, 23 Oct 2024 03:55:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="o6CCnoHG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bmNzdM//"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58DD520323;
-	Wed, 23 Oct 2024 03:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B89130E58
+	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 03:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729655131; cv=none; b=QL4H4GUjJ6KQm5lgXI2vz3l/WnleuweE9ufj65ow/TL5QKLeEdJ8nboyloNn2a/LvYAvfxRzknr2w30OgZ9OUem7JYJDxENHSeGXCE2h+PEiPBC1gpwC4UQzHF+UQHx7Y4SuG9bCoqyrcf29m65ZBwzL/uoR/OP2/xmkSJRmjeA=
+	t=1729655753; cv=none; b=N9iAOL+dZ9a7i02FD9XN9DJMtzQPeaBeri5W9H4UJAF7K+JXshYxlBxRs99y6MOJiNyxse6TR+kW7ykS2wcAKm3kDB94rp/oVB1VtODpdnAb0ORfUok9paqttkGFtLuXvD0YKMxE5/EPdhZrfJyNbA8YDCWKT933GjOiHGdagfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729655131; c=relaxed/simple;
-	bh=ECzsDGr6vFEVPn6aqoqG+EAoMOQpMKvdM8XgMq02btM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ncmXduJGzE83BuoXAaFr/4JGatc/HlHZ0v33XpJFNKAcpneI9jr99I+UKopONTSGitztW4ED7uWSPM+D3diq9qEOUVyiz1tJiZ/7nkrQIcKawUBDlkZwbqmmzAlPVJJxYSHlcu7PLRBR4FxiGxDIQQzzDRJM1V/2UOVL/T8kMEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=o6CCnoHG; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
-	Content-Type; bh=aUZrrWFwQHgv9+Ik6AodjN8Lu6pe2mDlXP06fCRQf8o=;
-	b=o6CCnoHG25vWrQgWFAmadUJpTKaR+hVuw0THMpa9gKv7uEqqqIn/GX2SwXXYxj
-	W3sLU5M2/U5RrP5iNW+JvZGQswgM2pO44+5kcQrHtpzRqHhlNDZnexPVMrBELJSa
-	ntBd0S2kUqmOJsx6YUPeUFV5GJwwwxNd3/qFhkjhAKfcY=
-Received: from localhost.localdomain (unknown [111.48.58.10])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCn7zs6cRhnIERGCw--.47310S2;
-	Wed, 23 Oct 2024 11:44:59 +0800 (CST)
-From: huanglei814 <huanglei814@163.com>
-To: gregkh@linuxfoundation.org,
-	mathias.nyman@intel.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	huanglei <huanglei@kylinos.cn>
-Subject: [PATCH v4] usb: core: adds support for PM control of specific USB dev skip suspend.
-Date: Wed, 23 Oct 2024 11:44:57 +0800
-Message-Id: <20241023034457.13241-1-huanglei814@163.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1729655753; c=relaxed/simple;
+	bh=rQK7gWxJRbkk3/XjsQg40ZMmcbV1ZzdgRRVvnvpPn74=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=BM9/S9SXaePioT3dgQrKHziMvyxN/Vxk21UPnurFtCg/8DowDIKvbG1B3E6mkkvRpBH8jkPSCIXbFl0IVA+9h1UzctqFxj5KF1s4m9x9toXnsVj3s1j49eK8o2zllyPSb/scDPunHHei32fL7xRLaweto2OhLnhdnEDK8oByirU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bmNzdM//; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e1fbe2a6b1so114591837b3.2
+        for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2024 20:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729655750; x=1730260550; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GmI7Soq3roDCUAnbE0COUFZpGZsP+EnUANl8dSnaRwU=;
+        b=bmNzdM//XPpZ6jkGh5C9gEXwgFsP239CdsnQCejuW37rVPeYxb0tzztn8q0YzbbHiF
+         ezl/zOz66elITlOEEmeb07y8Iqhv/suUIdZATGuFoMP4erPJt3C16jq2IJcLBiHwPt6j
+         tWEjp/tofZFw1EhXFXVolXf8jgLO/4nzjDsFLOU+9tgPqazmyyxddFA2dVpUYuCz02Uj
+         KmmO8mElDQMdYltIk0O+ZOoMgcm1B+XF9rdEIweWvEruQCWGmAvVPO7nhoZHwNzj01Yc
+         Tgc0SYbUvSrrOIIWxgzH8azWnMDVplrb6Wdr+iSl8TDJ8oQwuwmH4m/bmlkzoDG4+mE4
+         sXsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729655750; x=1730260550;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GmI7Soq3roDCUAnbE0COUFZpGZsP+EnUANl8dSnaRwU=;
+        b=wX2kOMkwzEmasRZ5rguXkte1IcUYqbbxjQpvx5La4XzP3HV3Y/Tyus8GVlSEo4F2Sh
+         7f/GJ4vpd4EWLKpbpH3e55J9sRgHRnjeSSzupNVr5S7dmoDklNdkBKngUbqZO7WweAk1
+         Vsq6AcInLezkDxnJV3JdKy/XGCuGN+NlYKzF+y7FugWlD+JAekxzAQQIFaLW+Adg5z/d
+         gBwOsBdSRn1Z5M9nQuUINzzCzhxfyO1JeYG/e5nIZMddfKHc7QNNGlyTcU7gAUe0fH/y
+         Fb7jYjrzAi01ph+LVQIuznbKO0jFH9r6db8gcQplHeVpX6Dc6MDrDxZcVsnC6xdTg+0Y
+         J5Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCVUhpi2OHmZCt76hiuko6ukpiESuKAfrvZVRRhbHasHhTdVTHqiv4BisZLwyoZpSwPNWFiJqqDjV7g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9E8cvWskqhJNdaW9nuhbqiPDNOcY0OntKa4jjiya5uyw9NMvU
+	YAOGhYoC1QtDGskj2nvin2MYb2stcXQTpnqOBCkU4AN+lIDCNZOZUqIEpOdQkr9vy96i7ZdG5ep
+	2Ow==
+X-Google-Smtp-Source: AGHT+IFwM7FsOs33Bm6JoIK39+oXfBykLbhJ1raXYq//FeA3l6SBgfdQIZAUAQ8v3qbIAYaoTToB5BzkchM=
+X-Received: from amitsd-gti.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:827])
+ (user=amitsd job=sendgmr) by 2002:a05:690c:7488:b0:6e3:1023:3645 with SMTP id
+ 00721157ae682-6e7f0fd1f99mr182307b3.8.1729655750550; Tue, 22 Oct 2024
+ 20:55:50 -0700 (PDT)
+Date: Tue, 22 Oct 2024 20:55:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCn7zs6cRhnIERGCw--.47310S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxuryfZr48XFyDJw4DZw1DJrb_yoW5CFy8pF
-	4qyFW5Krs8Gr1I9wnFk3W8ZFn5Ww4Fkayjk3sakw1Ygw17J3s5Kw4ktF15uws3uryfAF17
-	tF47K3y5CFW7WFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UPcTdUUUUU=
-X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbi7guB9mcYbWFoeAAAsx
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAMNzGGcC/x3MTQqAIBBA4avIrBvQoT+6SrSwnGoWpWhEIN09a
+ fkt3suQOAonGFSGyLck8WeBqRQsuz03RnHFQJpqo4kwOHQXXnIwhuhDQtP0XavnlVpLULIQeZX nX47T+36ptcVUYgAAAA==
+X-Mailer: b4 0.13.0
+Message-ID: <20241022-pd-dt-time-props-v1-0-fea96f51b302@google.com>
+Subject: [PATCH 0/2] Add support for time DT property in TCPM
+From: Amit Sunil Dhamne <amitsd@google.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>, 
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+	Amit Sunil Dhamne <amitsd@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-From: huanglei <huanglei@kylinos.cn>
+USB PD specification defines a bunch of timers that can have a range of
+acceptable values instead of specific values. These values have to be
+tuned based on the platform. However, TCPM currently sets them to a
+default value without providing a mechanism to set platform specific
+values.
 
-All USB devices are brought into suspend power state after system suspend.
-It is desirable for some specific manufacturers buses to keep their devices
-in normal state even after system suspend.
+This patchset adds new DT properties per timer to allow users to define
+platform specific values.
 
-Signed-off-by: huanglei <huanglei@kylinos.cn>
+The RFC patchset for this was already reviewed and no changes have been
+made since. The link is:
+https://lore.kernel.org/linux-usb/20240925031135.1101048-1-amitsd@google.com/
+Because of this, I have retained the Reviewed-by tags. If you  think
+they should be cleared since this is a more formal [PATCH], please
+let me know and I'll do so.
+
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 ---
-v3->v4:
-- Cancel SUSPENDED state judgment when enter suspend，because udev will not enter.
-- Change "usb-skip-suspend" to "usb-never-suspend"
-- Change dev_err to dev_info.
-- Remove Kconfig option, it's redundant indeed.
-- Update commit message style.
-v2->v3:
-- Rebase and update commit message.
-v1->v2:
-- Change to bool type for skip_suspend.
-- Kconfig remove "default n", 'n' is the default.
----
- drivers/usb/core/driver.c    | 8 ++++++++
- drivers/usb/host/xhci-plat.c | 5 +++++
- include/linux/usb.h          | 7 +++++++
- 3 files changed, 20 insertions(+)
+Amit Sunil Dhamne (2):
+      dt-bindings: connector: Add properties to define time values
+      usb: typec: tcpm: Add support for parsing time dt properties
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 0c3f12daac79..93137c7c34df 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1583,6 +1583,11 @@ int usb_suspend(struct device *dev, pm_message_t msg)
- 	struct usb_device	*udev = to_usb_device(dev);
- 	int r;
- 
-+	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_SUSPEND)) {
-+		dev_info(dev, "abort suspend\n");
-+		return 0;
-+	}
-+
- 	unbind_no_pm_drivers_interfaces(udev);
- 
- 	/* From now on we are sure all drivers support suspend/resume
-@@ -1619,6 +1624,9 @@ int usb_resume(struct device *dev, pm_message_t msg)
- 	struct usb_device	*udev = to_usb_device(dev);
- 	int			status;
- 
-+	if (udev->bus->skip_suspend && (msg.event == PM_EVENT_RESUME))
-+		return 0;
-+
- 	/* For all calls, take the device back to full power and
- 	 * tell the PM core in case it was autosuspended previously.
- 	 * Unbind the interfaces that will need rebinding later,
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index ecaa75718e59..35062aa19a32 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -265,6 +265,11 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		if (device_property_read_bool(tmpdev, "xhci-skip-phy-init-quirk"))
- 			xhci->quirks |= XHCI_SKIP_PHY_INIT;
- 
-+		if (device_property_read_bool(tmpdev, "usb-never-suspend")) {
-+			hcd_to_bus(hcd)->skip_suspend = true;
-+			hcd_to_bus(xhci->shared_hcd)->skip_suspend = true;
-+		}
-+
- 		device_property_read_u32(tmpdev, "imod-interval-ns",
- 					 &xhci->imod_interval);
- 	}
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 672d8fc2abdb..c854d1f622ec 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -487,6 +487,13 @@ struct usb_bus {
- 	struct mon_bus *mon_bus;	/* non-null when associated */
- 	int monitored;			/* non-zero when monitored */
- #endif
-+
-+	bool skip_suspend;		/* All USB devices are brought into suspend
-+					 * power state after system suspend. It is
-+					 * desirable for some specific manufacturers
-+					 * buses to keep their devices in normal
-+					 * state even after system suspend.
-+					 */
- };
- 
- struct usb_dev_state;
+ .../bindings/connector/usb-connector.yaml          | 35 ++++++++++-
+ drivers/usb/typec/tcpm/tcpm.c                      | 73 +++++++++++++++++-----
+ 2 files changed, 91 insertions(+), 17 deletions(-)
+---
+base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+change-id: 20241022-pd-dt-time-props-158760bf26a2
+
+Best regards,
 -- 
-2.17.1
+Amit Sunil Dhamne <amitsd@google.com>
 
 
