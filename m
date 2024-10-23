@@ -1,70 +1,70 @@
-Return-Path: <linux-usb+bounces-16557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5B289ABC82
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 05:56:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99C579ABC84
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 05:56:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6C51B22344
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 03:56:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FBB5283D89
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 03:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC6113CABC;
-	Wed, 23 Oct 2024 03:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B67213EFF3;
+	Wed, 23 Oct 2024 03:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s7ZJ8wi9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4imKsYKf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AD513A3F3
-	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 03:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B3B13BC0D
+	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 03:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729655755; cv=none; b=BVDvtJHggeLSR+DpO/lQY/4ifv1m+ph+gPEQpEYZjIlBka2g52Iws54BngKMXzAW+FGAzUF4U9xEpPiXipEQ3n5SzaHHn6CwCF4S4Bw36TN+Zf4mPiF6YOZENdY1JAxTPoXBDmEY0E3clwCer0833svX3/gvMJWGIk0YVuwdDnU=
+	t=1729655756; cv=none; b=TRYpicYl88X3TV/euDd6kIJUbhncz9lTSxz4WEfKh8ntsfPljF+XEgx8sDr3hnk/E68nOFe/9yiuSCBNpR9HOozGTiH0gjXiAGYgwxH6ZAtddkZyXYPERhcziED+8p43yXcad0XT0q6oj8IBtH+++kgJIX5Bjun5PLT0CHQ7bTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729655755; c=relaxed/simple;
-	bh=sr1da177nMKJ/Vsh/2ykOlfrWElYkCVx5H9q1E23rWQ=;
+	s=arc-20240116; t=1729655756; c=relaxed/simple;
+	bh=FH6U7KnXlg0DlsMxo9+D3f1OK3GjUce6b7dLB/Q3Kf8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=D7eL5zovlmpZKNx9j85g4S6v4Zkgg6wAo4VjMEeT5rCPXzrUV7cuBn7B+BGuV8AVctsvhMY/evWTYOeMNCk1FpEa/B0YiiAq5hWi/b82pys9teyxVcDU/RmJfl13zqPiTBvcllQ7gRbHFEzbzawoBATUciQxvI1Uf+1ngRHvcEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s7ZJ8wi9; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=Mt5W7hAFAzB3dzt7sWwuEyMPOm3nGEdUzIwnC3tqWmaCrN3ui9YA9W66dyWCqCtd2VTcEgECvCk7yQBZk1uDCdZmeALUlT3G5iD1OQGQHtetVLiBPXzH7vkQwlSqIHEJ1dGZAN1+WNY+xGWQ83BqSN7b25v8cH+0fIY4H/jSzlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4imKsYKf; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e2974759f5fso647509276.0
-        for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2024 20:55:53 -0700 (PDT)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e2904d0cad0so10724731276.1
+        for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2024 20:55:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729655752; x=1730260552; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729655754; x=1730260554; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8NOW9r0NeL3hg4pXGOJ9bNEj8VFlhidqkHS6u4oIJM=;
-        b=s7ZJ8wi9oRKfp36hOgXxKI9D9cGtyUOca4b5pUNgsSNOTkTy2eNdLyDBpP+LfJGsMm
-         47UEpTlcIVKABzC2EYTOSF272xRY3/hL13zmaaHFA8CB2Ke1FgY3PknWWzTrU1hJBpZv
-         qUC4YhUr2lTCnF/v4WQbECw/DbTT28lo37Lsck9g7ach542TLDXQECCh3ivqRoQz60kv
-         RR8nP/yMdOWVt0cyTwZtmVefYXXhBEPdOPn7Vy1R4RQl1PEMY/dt4ibeGlV9EJ6ii+26
-         42lGwx4ioM4b/P06PojyXocXmb6YGhrkA+vA0pCuQV/jIfg9+kjPPg7M8PKJuFGRd12M
-         AbMQ==
+        bh=FOsBZgZOATojNbhZl/5sR+Os5FryhOZouU4YxFGVGZA=;
+        b=4imKsYKfMGQ8AKuQL4YWAMFnCKMuFXVoj6/qJ77fR8grR5xi9BxptfSXpnsTSIy0CJ
+         ZKtJ3CQEFiPrU9ZX/iY2uTMSUfC0DvN7FJeWq38VHdrGk6cCxuUGXlvJUH8ibmFoGnNL
+         8y5Na1EsLHLsb/0Jc74RRBADe943ZEsYppTp6YSXgpBDj+5KKK7qVofp9NLosV5fa1vL
+         py9ecu5HyEygliBTAjPwXwaKBEeiCdg54SHqen9ICdnyyTIdKoqDruPW4yUp48OKSRR6
+         Gv+V55/TBkKUrWq+/BDxYsMU0+5OL/ltmQLuGs+0h6q7uDMF8mMvfvK3F/PCwScQthAq
+         mltg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729655752; x=1730260552;
+        d=1e100.net; s=20230601; t=1729655754; x=1730260554;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8NOW9r0NeL3hg4pXGOJ9bNEj8VFlhidqkHS6u4oIJM=;
-        b=AWSBt3A35ZaD9pThfm/wmt1wP69iUO0ES2DjSuiUfi5NeMuZxQyCEs9pa4wySSYI+3
-         FekOD/onnaVQp4rK9x6N2THuaduOrAvCePEWhSUnnojp135RV8rA909q/FvtcLFp2DOO
-         V/Uy2FlEPRq1M+A+tRmj7kl4SHnGnI695HjKtmjhnwHf+bKrHiJ8LsAYEket+URngFKJ
-         VxyP1f1YeQhuMl5Dy8rWfGRksintogU0Twgo9yANcuWmQ8KWo0ZBwz4wuZ+MX9AKXFSQ
-         hhXv0vi/RwkRJVpdOjlW8FrUAVM6HmGaTpzzrPxfiq1gi/Rs3kq6+uTQHYApcyI1YqiU
-         Uwzw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCDHdcX2bhriSiFuXTBOHYCgQTR1Y6GTsunPMS4yrkLh1wndnYqa8AQD34IC76GzJcioBmE51u4FM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlXo64Nnt1dibY3RBqgstS8jyz0b2D+ada52f4BozlwYsN/SXr
-	vmMtb5dhQNYutTy4G+iUf1cVg8QJTzh/9lx6rErrjPzZT4UrIkMEusumYlymkY0/3W4Ek4dPQ5J
-	Png==
-X-Google-Smtp-Source: AGHT+IHF16XCapmTGj83fmOd6YDMeRXK+zt7yj7Rd/dEGndzeE1M+dnbq+eF2jqvK+HHDBYhTXpq5zRGHLI=
+        bh=FOsBZgZOATojNbhZl/5sR+Os5FryhOZouU4YxFGVGZA=;
+        b=lbZFQhwMu9Pb8XsF1a9IR8J4qf9N7s8Y9QwPFNfVgL+a2oj+DoQYwHjOhAqLXFZ1q3
+         XCYtC6D0guR/icPf7++mkU5tKvotzNiyrLwDys0PExqAkXH0hDL5/Y/tIdFFSAokLgTd
+         iGBXVI0yx4A3V5OrxdiXpy+9Gt5u28xv8wVXKezKK4KrCNgOjOR3I9Lu6aV8xhAEYP3J
+         zEbhKKSGP+rb44voUBaQSmh4Q/Jum0p/GQ/1BOSDUsieHsFbZu0v6k92bZWuVCbFrYYl
+         u+QTaXsR20fX+ANTsB83R8pp6ap9pOAnvx04aqhOsqmiL+Dh9I8JNUuvBwL7XdVySTOT
+         w+AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVw3QXSZg0QJk7YOXShSSnNB0DYBbPbYTXqkXiRTOAfdd0Kox2yMeMnSz/xzMfLhL0gogeN0WC5bZI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDTlQxpVfDK+FF01HwX414Mvebboiunz4hSrxUYjdpSkjV8rgw
+	JH7ooFr3i9BjX8W9m29yvNfake8hZXlIXXV1vec4QPtJBgWW8hKC5AupbbOiaZWFa6g9Ou0AtBw
+	pJg==
+X-Google-Smtp-Source: AGHT+IEPAncleUxLaPGBvDbqXaopuR/zIMh3negnEP7jgItbB+b/QOlStSXnodJeBdj0I3b32obPQJz65QU=
 X-Received: from amitsd-gti.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:827])
- (user=amitsd job=sendgmr) by 2002:a25:dc4f:0:b0:e2b:db24:905e with SMTP id
- 3f1490d57ef6-e2e39d50bbemr14978276.5.1729655752269; Tue, 22 Oct 2024 20:55:52
+ (user=amitsd job=sendgmr) by 2002:a5b:bc3:0:b0:e24:a00a:518e with SMTP id
+ 3f1490d57ef6-e2e3a6b42fcmr1188276.7.1729655753833; Tue, 22 Oct 2024 20:55:53
  -0700 (PDT)
-Date: Tue, 22 Oct 2024 20:55:48 -0700
+Date: Tue, 22 Oct 2024 20:55:49 -0700
 In-Reply-To: <20241022-pd-dt-time-props-v1-0-fea96f51b302@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241022-pd-dt-time-props-v1-0-fea96f51b302@google.com>
 X-Mailer: b4 0.13.0
-Message-ID: <20241022-pd-dt-time-props-v1-1-fea96f51b302@google.com>
-Subject: [PATCH 1/2] dt-bindings: connector: Add properties to define time values
+Message-ID: <20241022-pd-dt-time-props-v1-2-fea96f51b302@google.com>
+Subject: [PATCH 2/2] usb: typec: tcpm: Add support for parsing time dt properties
 From: Amit Sunil Dhamne <amitsd@google.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
 	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
@@ -86,80 +86,222 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Amit Sunil Dhamne <amitsd@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-This commit adds the following properties:
-  * sink-wait-cap-time-ms
-  * ps-source-off-time-ms
-  * cc-debounce-time-ms
-
-This is to enable setting of platform/board specific timer values as
-these timers have a range of acceptable values.
+Add support for DT time properties to allow users to define platform
+specific timing deadlines of certain timers rather than using hardcoded
+ones. For values that have not been explicitly defined in DT using this
+property, default values will be set therefore, making this change
+backward compatible.
 
 Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- .../bindings/connector/usb-connector.yaml          | 35 +++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/tcpm.c | 73 +++++++++++++++++++++++++++++++++----------
+ 1 file changed, 57 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-index fb216ce68bb3..21a0c58c65cd 100644
---- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-+++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-@@ -253,6 +253,36 @@ properties:
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index fc619478200f..b3d5d1d48937 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -310,6 +310,17 @@ struct pd_data {
+ 	unsigned int operating_snk_mw;
+ };
  
-     additionalProperties: false
- 
-+  sink-wait-cap-time-ms:
-+    description: Represents the max time in ms that USB Type-C port (in sink
-+      role) should wait for the port partner (source role) to send source caps.
-+      SinkWaitCap timer starts when port in sink role attaches to the source.
-+      This timer will stop when sink receives PD source cap advertisement before
-+      timeout in which case it'll move to capability negotiation stage. A
-+      timeout leads to a hard reset message by the port.
-+    minimum: 310
-+    maximum: 620
-+    default: 310
++/*
++ * @sink_wait_cap_time: Deadline (in ms) for tTypeCSinkWaitCap timer
++ * @ps_src_wait_off_time: Deadline (in ms) for tPSSourceOff timer
++ * @cc_debounce_time: Deadline (in ms) for tCCDebounce timer
++ */
++struct pd_timings {
++	u32 sink_wait_cap_time;
++	u32 ps_src_off_time;
++	u32 cc_debounce_time;
++};
 +
-+  ps-source-off-time-ms:
-+    description: Represents the max time in ms that a DRP in source role should
-+      take to turn off power after the PsSourceOff timer starts. PsSourceOff
-+      timer starts when a sink's PHY layer receives EOP of the GoodCRC message
-+      (corresponding to an Accept message sent in response to a PR_Swap or a
-+      FR_Swap request). This timer stops when last bit of GoodCRC EOP
-+      corresponding to the received PS_RDY message is transmitted by the PHY
-+      layer. A timeout shall lead to error recovery in the type-c port.
-+    minimum: 750
-+    maximum: 920
-+    default: 920
-+
-+  cc-debounce-time-ms:
-+    description: Represents the max time in ms that a port shall wait to
-+      determine if it's attached to a partner.
-+    minimum: 100
-+    maximum: 200
-+    default: 200
-+
- dependencies:
-   sink-vdos-v1: [ sink-vdos ]
-   sink-vdos: [ sink-vdos-v1 ]
-@@ -380,7 +410,7 @@ examples:
-     };
+ struct tcpm_port {
+ 	struct device *dev;
  
-   # USB-C connector attached to a typec port controller(ptn5110), which has
--  # power delivery support and enables drp.
-+  # power delivery support, explicitly defines time properties and enables drp.
-   - |
-     #include <dt-bindings/usb/pd.h>
-     typec: ptn5110 {
-@@ -393,6 +423,9 @@ examples:
-             sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
-                          PDO_VAR(5000, 12000, 2000)>;
-             op-sink-microwatt = <10000000>;
-+            sink-wait-cap-time-ms = <465>;
-+            ps-source-off-time-ms = <835>;
-+            cc-debounce-time-ms = <101>;
-         };
-     };
+@@ -552,6 +563,9 @@ struct tcpm_port {
+ 	 */
+ 	unsigned int message_id_prime;
+ 	unsigned int rx_msgid_prime;
++
++	/* Timer deadline values configured at runtime */
++	struct pd_timings timings;
+ #ifdef CONFIG_DEBUG_FS
+ 	struct dentry *dentry;
+ 	struct mutex logbuffer_lock;	/* log buffer access lock */
+@@ -4639,15 +4653,15 @@ static void run_state_machine(struct tcpm_port *port)
+ 	case SRC_ATTACH_WAIT:
+ 		if (tcpm_port_is_debug(port))
+ 			tcpm_set_state(port, DEBUG_ACC_ATTACHED,
+-				       PD_T_CC_DEBOUNCE);
++				       port->timings.cc_debounce_time);
+ 		else if (tcpm_port_is_audio(port))
+ 			tcpm_set_state(port, AUDIO_ACC_ATTACHED,
+-				       PD_T_CC_DEBOUNCE);
++				       port->timings.cc_debounce_time);
+ 		else if (tcpm_port_is_source(port) && port->vbus_vsafe0v)
+ 			tcpm_set_state(port,
+ 				       tcpm_try_snk(port) ? SNK_TRY
+ 							  : SRC_ATTACHED,
+-				       PD_T_CC_DEBOUNCE);
++				       port->timings.cc_debounce_time);
+ 		break;
  
+ 	case SNK_TRY:
+@@ -4698,7 +4712,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		}
+ 		break;
+ 	case SRC_TRYWAIT_DEBOUNCE:
+-		tcpm_set_state(port, SRC_ATTACHED, PD_T_CC_DEBOUNCE);
++		tcpm_set_state(port, SRC_ATTACHED, port->timings.cc_debounce_time);
+ 		break;
+ 	case SRC_TRYWAIT_UNATTACHED:
+ 		tcpm_set_state(port, SNK_UNATTACHED, 0);
+@@ -4901,7 +4915,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		    (port->cc1 != TYPEC_CC_OPEN &&
+ 		     port->cc2 == TYPEC_CC_OPEN))
+ 			tcpm_set_state(port, SNK_DEBOUNCED,
+-				       PD_T_CC_DEBOUNCE);
++				       port->timings.cc_debounce_time);
+ 		else if (tcpm_port_is_disconnected(port))
+ 			tcpm_set_state(port, SNK_UNATTACHED,
+ 				       PD_T_PD_DEBOUNCE);
+@@ -4941,7 +4955,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		break;
+ 	case SNK_TRYWAIT:
+ 		tcpm_set_cc(port, TYPEC_CC_RD);
+-		tcpm_set_state(port, SNK_TRYWAIT_VBUS, PD_T_CC_DEBOUNCE);
++		tcpm_set_state(port, SNK_TRYWAIT_VBUS, port->timings.cc_debounce_time);
+ 		break;
+ 	case SNK_TRYWAIT_VBUS:
+ 		/*
+@@ -5014,7 +5028,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		break;
+ 	case SNK_DISCOVERY_DEBOUNCE:
+ 		tcpm_set_state(port, SNK_DISCOVERY_DEBOUNCE_DONE,
+-			       PD_T_CC_DEBOUNCE);
++			       port->timings.cc_debounce_time);
+ 		break;
+ 	case SNK_DISCOVERY_DEBOUNCE_DONE:
+ 		if (!tcpm_port_is_disconnected(port) &&
+@@ -5041,10 +5055,10 @@ static void run_state_machine(struct tcpm_port *port)
+ 		if (port->vbus_never_low) {
+ 			port->vbus_never_low = false;
+ 			tcpm_set_state(port, SNK_SOFT_RESET,
+-				       PD_T_SINK_WAIT_CAP);
++				       port->timings.sink_wait_cap_time);
+ 		} else {
+ 			tcpm_set_state(port, SNK_WAIT_CAPABILITIES_TIMEOUT,
+-				       PD_T_SINK_WAIT_CAP);
++				       port->timings.sink_wait_cap_time);
+ 		}
+ 		break;
+ 	case SNK_WAIT_CAPABILITIES_TIMEOUT:
+@@ -5066,7 +5080,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 		if (tcpm_pd_send_control(port, PD_CTRL_GET_SOURCE_CAP, TCPC_TX_SOP))
+ 			tcpm_set_state_cond(port, hard_reset_state(port), 0);
+ 		else
+-			tcpm_set_state(port, hard_reset_state(port), PD_T_SINK_WAIT_CAP);
++			tcpm_set_state(port, hard_reset_state(port),
++				       port->timings.sink_wait_cap_time);
+ 		break;
+ 	case SNK_NEGOTIATE_CAPABILITIES:
+ 		port->pd_capable = true;
+@@ -5203,7 +5218,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 			tcpm_set_state(port, ACC_UNATTACHED, 0);
+ 		break;
+ 	case AUDIO_ACC_DEBOUNCE:
+-		tcpm_set_state(port, ACC_UNATTACHED, PD_T_CC_DEBOUNCE);
++		tcpm_set_state(port, ACC_UNATTACHED, port->timings.cc_debounce_time);
+ 		break;
+ 
+ 	/* Hard_Reset states */
+@@ -5420,7 +5435,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		tcpm_set_state(port, ERROR_RECOVERY, 0);
+ 		break;
+ 	case FR_SWAP_SNK_SRC_TRANSITION_TO_OFF:
+-		tcpm_set_state(port, ERROR_RECOVERY, PD_T_PS_SOURCE_OFF);
++		tcpm_set_state(port, ERROR_RECOVERY, port->timings.ps_src_off_time);
+ 		break;
+ 	case FR_SWAP_SNK_SRC_NEW_SINK_READY:
+ 		if (port->vbus_source)
+@@ -5475,7 +5490,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		tcpm_set_cc(port, TYPEC_CC_RD);
+ 		/* allow CC debounce */
+ 		tcpm_set_state(port, PR_SWAP_SRC_SNK_SOURCE_OFF_CC_DEBOUNCED,
+-			       PD_T_CC_DEBOUNCE);
++			       port->timings.cc_debounce_time);
+ 		break;
+ 	case PR_SWAP_SRC_SNK_SOURCE_OFF_CC_DEBOUNCED:
+ 		/*
+@@ -5510,7 +5525,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 						       port->pps_data.active, 0);
+ 		tcpm_set_charge(port, false);
+ 		tcpm_set_state(port, hard_reset_state(port),
+-			       PD_T_PS_SOURCE_OFF);
++			       port->timings.ps_src_off_time);
+ 		break;
+ 	case PR_SWAP_SNK_SRC_SOURCE_ON:
+ 		tcpm_enable_auto_vbus_discharge(port, true);
+@@ -5666,7 +5681,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 	case PORT_RESET_WAIT_OFF:
+ 		tcpm_set_state(port,
+ 			       tcpm_default_state(port),
+-			       port->vbus_present ? PD_T_PS_SOURCE_OFF : 0);
++			       port->vbus_present ? port->timings.ps_src_off_time : 0);
+ 		break;
+ 
+ 	/* AMS intermediate state */
+@@ -6157,7 +6172,7 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+ 	case SRC_ATTACH_WAIT:
+ 		if (tcpm_port_is_source(port))
+ 			tcpm_set_state(port, tcpm_try_snk(port) ? SNK_TRY : SRC_ATTACHED,
+-				       PD_T_CC_DEBOUNCE);
++				       port->timings.cc_debounce_time);
+ 		break;
+ 	case SRC_STARTUP:
+ 	case SRC_SEND_CAPABILITIES:
+@@ -7053,6 +7068,30 @@ static int tcpm_port_register_pd(struct tcpm_port *port)
+ 	return ret;
+ }
+ 
++static void tcpm_fw_get_timings(struct tcpm_port *port, struct fwnode_handle *fwnode)
++{
++	int ret;
++	u32 val;
++
++	ret = fwnode_property_read_u32(fwnode, "sink-wait-cap-time-ms", &val);
++	if (!ret)
++		port->timings.sink_wait_cap_time = val;
++	else
++		port->timings.sink_wait_cap_time = PD_T_SINK_WAIT_CAP;
++
++	ret = fwnode_property_read_u32(fwnode, "ps-source-off-time-ms", &val);
++	if (!ret)
++		port->timings.ps_src_off_time = val;
++	else
++		port->timings.ps_src_off_time = PD_T_PS_SOURCE_OFF;
++
++	ret = fwnode_property_read_u32(fwnode, "cc-debounce-time-ms", &val);
++	if (!ret)
++		port->timings.cc_debounce_time = val;
++	else
++		port->timings.cc_debounce_time = PD_T_CC_DEBOUNCE;
++}
++
+ static int tcpm_fw_get_caps(struct tcpm_port *port, struct fwnode_handle *fwnode)
+ {
+ 	struct fwnode_handle *capabilities, *child, *caps = NULL;
+@@ -7610,6 +7649,8 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+ 	if (err < 0)
+ 		goto out_destroy_wq;
+ 
++	tcpm_fw_get_timings(port, tcpc->fwnode);
++
+ 	port->try_role = port->typec_caps.prefer_role;
+ 
+ 	port->typec_caps.revision = 0x0120;	/* Type-C spec release 1.2 */
 
 -- 
 2.47.0.105.g07ac214952-goog
