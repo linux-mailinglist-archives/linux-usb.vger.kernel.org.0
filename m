@@ -1,185 +1,161 @@
-Return-Path: <linux-usb+bounces-16569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16570-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 834C99AC04B
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 09:32:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 479C69AC078
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 09:39:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DB3F1C22A51
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 07:32:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7E601F25026
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 07:39:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B5715687D;
-	Wed, 23 Oct 2024 07:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51D99155345;
+	Wed, 23 Oct 2024 07:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rnzPosid"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A4kL/S5T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14111154C17
-	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 07:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC46EAC5;
+	Wed, 23 Oct 2024 07:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729668735; cv=none; b=EOVGpXxGF8UBU6s2xCXcxljwc6lThB2DTvJv/GU33UGy75xYu9yC2HzKs6q0YuJba20svuevj1DXnX67xYp95qkpPYxkiW0HmLAEmzreXtaVG87QMvsT/je76Xuh1jJm074uJUqdVJMza3L+X4MbDKXp6nf7IRKZdVjAFpdZISU=
+	t=1729669176; cv=none; b=vBtBr58A9ITLLMR2FZU+rDxuejOGrbKz62ZLho6GkFptFP8zLHy8y9qRMimAcRRNXImDafZg67ylskf6AY3cM9DFle46R+tF/ja0/LCBTdyQGC892yjBe6GSTdB+LIAgty1ArdAHAW76bzfRErzAbJmdoBacmE++HxQRfcA2cZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729668735; c=relaxed/simple;
-	bh=UG6ihVAcJ5pYreWh3xW3jBvz7qOrrWyU52nZm6ikEK0=;
+	s=arc-20240116; t=1729669176; c=relaxed/simple;
+	bh=d/K/oikKHdRYGNSRuNdQtZND2v5wk+xzH8NwdIk4RwM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SVmS0Z5dYksBL4gDJjKizEPhg72ZDUEMw9NkMPhbyDFAI60MWdR6UlM0b+UVTqkQvCd/GX7f7GVYtJBpTMa7Xcz+dSPO2R19MtVDsVY+BIsPBlwYdTXXmna3H9KpjwP0VOeD9nDl9Vq++dz99gYAR1ckwmmLAiHQS8m24onhQtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rnzPosid; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d4c482844so4367904f8f.0
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 00:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729668732; x=1730273532; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ByOuflTVuw6FqNFCU6UPV6W286vup+uWGJ9ZYP4mkM=;
-        b=rnzPosidsZfkKP9K0Lvs+r9sC6NLuAmZf0Bz99r3WvVrlT3tJt1Um0S/JhhOL2DBmi
-         UfpsTzFMXricAvlVtD95Ra5TetnGrGG9nuQqO70H4idTM3rTtqe8LN8gvYex/qa5b36M
-         6zuOEWgrzeYOWvLDJmeBp4O9mfK8dl9JebGzIj+cbg4jQ7zwjoRVF7hd6bEL0dlex+mp
-         +CAGNr5eDHPuJBRwnV1Y9lFuFImrgXK07ZJiEGw/AOyKUp4mAN1k6FAehreau6PQG24K
-         jbpe12thcixDm9hTbxLc4DgQqJdZ7iEUciDfabUXTPZURSGhZWS7JELA8pOZyagWMRNC
-         eQrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729668732; x=1730273532;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ByOuflTVuw6FqNFCU6UPV6W286vup+uWGJ9ZYP4mkM=;
-        b=AiEU6MSq6t6Z4eGEPlufhjfKgunkkhe9VIg0g9THiuzAa9IQyVJObnn5uqn2SDpnjN
-         SYnuF9scxAA23VZdGS9Jl+rYL6zyKs+iyie6SsvVUGhsKYflXtHP4KAkGdZMfztg0w/t
-         WmVBEoQSsaOTLJhoPIpN+CUl3ForUOF7mciKVJwDWPpf+DNcVfn53QH8EKjmvM0+4E7q
-         yly83RfkYSAmlFRANzxjAY/yWAY+a0zOImSrHvWRnWd30HoQW73THHydB71lp71cX3Ix
-         rZ7OJ7MwALtim1I4IlQWO2GETSs99346smtyra7wjagiKMiETPPriqHXVLBWpK9IAASI
-         D3OA==
-X-Forwarded-Encrypted: i=1; AJvYcCXfoiGgfRULBpMH3pQ/inmEgU0yYYFBOEbxDgGx8R+jXrTcED9Oz9wi2Ylqp1dPJzdEqfhXWf564IU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybJwFMfgZcJDsA3oZVFU+CWrzk8G0ISM9Bq99ZjnuriZHrpDYf
-	LXniEAag6iyco3iICA/INV0c54hqV1jvTubXzFXDaIX3k+auUFKw9O60bkJXcGQ=
-X-Google-Smtp-Source: AGHT+IHjIA8gmyjHXms77rT5Sn14lEAq7Alni4DB4J5+vDcwterfp4ljbKgcAnTOfUwgEtKEJq9FJA==
-X-Received: by 2002:adf:ea46:0:b0:37d:529f:ac1e with SMTP id ffacd0b85a97d-37efcf9c1a9mr938910f8f.53.1729668732225;
-        Wed, 23 Oct 2024 00:32:12 -0700 (PDT)
-Received: from linaro.org ([82.76.168.176])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a4ac2esm8276357f8f.44.2024.10.23.00.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 00:32:11 -0700 (PDT)
-Date: Wed, 23 Oct 2024 10:32:09 +0300
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <ZximeTNi7huc95te@linaro.org>
-References: <20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org>
- <20241004-x1e80100-ps8830-v2-2-5cd8008c8c40@linaro.org>
- <Zw5oEyMj6cPGFDEI@hovoldconsulting.com>
- <Zxdp2vHzREJAFkwj@linaro.org>
- <Zxif6vmh8BE_C-_n@hovoldconsulting.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ci7Kl0jIjkPeeaQkfbU392Frs6Pj/JaiJgjYE6CId2dtVbpY676ARdvtFdx7WL4sksoU9mDuCXJfi5ywNSZVO5aoNEVJxZvnpNJSI8fHOALne5FklKP8W6FZ45LrFy5Oc4EcjZEnQZRNkJejJgDunx/OYX0b7hFBGnF5UyQJpvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A4kL/S5T; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729669175; x=1761205175;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d/K/oikKHdRYGNSRuNdQtZND2v5wk+xzH8NwdIk4RwM=;
+  b=A4kL/S5T7s9z2lgdEBDL5YtruZUTYTlscAcL4lR1TJFvk92VxIO0lssK
+   IUO3IO+XMLYYhQjH9sj527SUuGU4lP9yf5b3vhTsLj51IgtFYz0uNipRr
+   Bb6eLPcLKGrmxBeyeR4u2BkEmvPJa1pTJFqHk+xy9D+O20kFWp24L5ok4
+   vnF77zj5p0HTvuoWJ/3Jk+x2u9l0+5HJwESgQTkGJNlRA8BUzxfBagPkH
+   1MDmDlT9+uC9keg/yXUBcjh0F5qUswTgdTbnoJ1qge73CNWMc6ctD79Ul
+   VEx0kK3EvuZS6yjdOfraOUJVf/0HCnB30eWR8eaouogKAJTBa7HnnUcOl
+   Q==;
+X-CSE-ConnectionGUID: 9kHkDUCzRGmjVOCz6CHVGQ==
+X-CSE-MsgGUID: /OmWxgvLSbiSiPG2JvSkDg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29022062"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29022062"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 00:39:34 -0700
+X-CSE-ConnectionGUID: XikBXNJlRtqFBb43X+A4GQ==
+X-CSE-MsgGUID: puU3MuQ3R7eyrNYE0MtkBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="103402252"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa002.fm.intel.com with ESMTP; 23 Oct 2024 00:39:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 5E19E301; Wed, 23 Oct 2024 10:39:31 +0300 (EEST)
+Date: Wed, 23 Oct 2024 10:39:31 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Aaron Rainbolt <arainbolt@kfocus.org>
+Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
+	andreas.noever@gmail.com, linux-usb@vger.kernel.org,
+	mmikowski@kfocus.org, linux-kernel@vger.kernel.org,
+	Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: USB-C DisplayPort display failing to stay active with Intel
+ Barlow Ridge USB4 controller, power-management related issue?
+Message-ID: <20241023073931.GH275077@black.fi.intel.com>
+References: <20241009220118.70bfedd0@kf-ir16>
+ <20241010044919.GD275077@black.fi.intel.com>
+ <20241010232656.7fc6359e@kf-ir16>
+ <20241011163811.GU275077@black.fi.intel.com>
+ <20241011183751.7d27c59c@kf-ir16>
+ <20241023062737.GG275077@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Zxif6vmh8BE_C-_n@hovoldconsulting.com>
+In-Reply-To: <20241023062737.GG275077@black.fi.intel.com>
 
-On 24-10-23 09:04:10, Johan Hovold wrote:
-> On Tue, Oct 22, 2024 at 12:01:14PM +0300, Abel Vesa wrote:
-> > On 24-10-15 15:03:15, Johan Hovold wrote:
-> > > On Fri, Oct 04, 2024 at 04:57:38PM +0300, Abel Vesa wrote:
+On Wed, Oct 23, 2024 at 09:27:37AM +0300, Mika Westerberg wrote:
+> So at this point we are not in "redrive" mode anymore and the domain is
+> allowed to runtime suspend.
 > 
-> > > > +	ret = ps8830_get_vregs(retimer);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	retimer->xo_clk = devm_clk_get(dev, "xo");
-> > > > +	if (IS_ERR(retimer->xo_clk))
-> > > > +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
-> > > > +				     "failed to get xo clock\n");
-> > > > +
-> > > > +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-> > > 
-> > > The reset line is active low and should be described as such in DT. So
-> > > here you want to request it as logically low if you want to deassert
-> > > reset.
-> > 
-> > This is being reworked in v3 as we need to support cases where the
-> > retimer has been left enabled and initialized by bootloader and we want
-> > to keep that state until unplug event for the cold-plug orientation
-> > to work properly.
-> > 
-> > On top of that, we don't want to deassert the reset here. We do that
-> > via gpiod_set_value() call below, after the clocks and regulators have
-> > been enabled.
+> > [  353.611933] thunderbolt 0000:06:00.0: looking for DP IN <-> DP OUT pairs:
+> > [  353.612076] thunderbolt 0000:06:00.0: 0:14: DP IN available
+> > [  353.612258] thunderbolt 0000:06:00.0: 0:13: DP IN available
+> > [  353.612264] thunderbolt 0000:06:00.0: no suitable DP OUT adapter available, not tunneling
+> > [  372.362496] thunderbolt 0000:06:00.0: 0: suspending switch
+> > [  372.362506] thunderbolt 0000:06:00.0: 0: enabling wakeup: 0x3f
+> > [  372.363480] thunderbolt 0000:06:00.0: stopping RX ring 0
+> > [  372.363497] thunderbolt 0000:06:00.0: disabling interrupt at register 0x38200 bit 12 (0x1001 -> 0x1)
+> > [  372.363523] thunderbolt 0000:06:00.0: stopping TX ring 0
+> > [  372.363539] thunderbolt 0000:06:00.0: disabling interrupt at register 0x38200 bit 0 (0x1 -> 0x0)
+> > [  372.363558] thunderbolt 0000:06:00.0: control channel stopped
 > 
-> Ok, but you should generally not drive an input high before powering on
-> the device as that can damage the IC (more below).
-
-This is just not true, generally. Think of top level XTALs which feed in
-clocks (and can't be disabled) before ICs are enabled.
-
+> Which is what happens here.
 > 
-> That is, in this case, you should not deassert reset before making sure
-> the supplies are enabled.
+> I think the driver does the correct thing but why you don't see anything
+> in the screen is beyond me. Can reproduce just this case with the patch
+> and then run "xrandr" and see if the monitors are visible there?
 
-Wrong. Even the data sheet of this retimer shows in the timigs plot the
-reset as being asserted before the supplies are enabled.
+The other option is that there is no wake when you plugged in the
+monitors and it only wakes up when you did this:
 
-And generally speaking, the reset needs to be asserted before the
-supplies are up, so that the IC doesn't start doing any work until
-the SW decides it needs to.
+> 8. Open a terminal and run 'lspci -k' 
+>     - Both displays are activated and remain active.
+>     - There is no timeout.
+>     - This is desired behavior.
 
-> 
-> > > > +	ret = clk_prepare_enable(retimer->xo_clk);
-> > > > +	if (ret) {
-> > > > +		dev_err(dev, "failed to enable XO: %d\n", ret);
-> > > > +		goto err_retimer_unregister;
-> > > > +	}
-> > > 
-> > > Should you really enable the clock before the regulators?
-> > 
-> > So maybe in this case it might not really matter. But in principle,
-> > the HW might be affected by clock glitches and such when IP block
-> > is powered up but unclocked. Even more so if the clock enabling
-> > (prepare, to be more exact) involves switching to a new PLL.
-> > 
-> > So clock first, then power up. At least that's my understanding of HW
-> > in general.
-> 
-> I think you got that backwards as inputs are typically rated for some
-> maximum voltage based on the supply voltage. 
+There is one such wake in the dmesg, this:
 
-Yes, but that's done at board design stage.
+[   60.126328] thunderbolt 0000:06:00.0: control channel starting...
+[   60.126332] thunderbolt 0000:06:00.0: starting TX ring 0
+[   60.126337] thunderbolt 0000:06:00.0: enabling interrupt at register 0x38200 bit 0 (0x0 -> 0x1)
+[   60.126339] thunderbolt 0000:06:00.0: starting RX ring 0
+[   60.126344] thunderbolt 0000:06:00.0: enabling interrupt at register 0x38200 bit 12 (0x1 -> 0x1001)
+[   60.126347] thunderbolt 0000:06:00.0: 0: resuming switch
+[   60.126348] thunderbolt 0000:06:00.0: restoring Switch at 0x0 (depth: 0, up port: 15)
+[   60.128535] thunderbolt 0000:06:00.0: 0: disabling wakeup
+[   60.129481] thunderbolt 0000:06:00.0: acking hot plug event on 0:13
+[   60.129601] thunderbolt 0000:06:00.0: acking hot plug event on 0:14
+[   60.129730] thunderbolt 0000:06:00.0: acking hot plug event on 0:16
 
-> That applies also to the
-> reset line as I also mentioned above.
-> 
-> What does the datasheet say?
+but here we get plug event for all the DP IN adapters (13, 14, 16) which
+tells me that there is nothing connected to the Type-C ports. Otherwise
+it would not send the plug event. This may be due the older firmware.
 
-As mentioned above, datasheet shows reset asserted before the supplies
-are being enabled.
+[   60.137467] thunderbolt 0000:06:00.0: 0: TMU: supports uni-directional mode
+[   60.137478] thunderbolt 0000:06:00.0: 0: TMU: supports enhanced uni-directional mode
+[   60.137589] thunderbolt 0000:06:00.0: 0: TMU: current mode: off
+[   60.137591] thunderbolt 0000:06:00.0: 0: TMU: mode change off -> bi-directional, HiFi requested
+[   60.138102] thunderbolt 0000:06:00.0: 0: TMU: mode set to: bi-directional, HiFi
+[   60.139778] thunderbolt 0000:06:00.0: 0:13: DP IN resource available after hotplug
+[   60.139783] thunderbolt 0000:06:00.0: looking for DP IN <-> DP OUT pairs:
+[   60.139895] thunderbolt 0000:06:00.0: 0:13: DP IN available
+[   60.139896] thunderbolt 0000:06:00.0: no suitable DP OUT adapter available, not tunneling
+[   60.140018] thunderbolt 0000:06:00.0: 0:14: DP IN resource available after hotplug
+[   60.140021] thunderbolt 0000:06:00.0: looking for DP IN <-> DP OUT pairs:
+[   60.140145] thunderbolt 0000:06:00.0: 0:13: DP IN available
+[   60.140277] thunderbolt 0000:06:00.0: 0:14: DP IN available
+[   60.140278] thunderbolt 0000:06:00.0: no suitable DP OUT adapter available, not tunneling
+[   78.863111] thunderbolt 0000:06:00.0: 0: suspending switch
+[   78.863125] thunderbolt 0000:06:00.0: 0: enabling wakeup: 0x3f
+[   78.864812] thunderbolt 0000:06:00.0: stopping RX ring 0
+[   78.864825] thunderbolt 0000:06:00.0: disabling interrupt at register 0x38200 bit 12 (0x1001 -> 0x1)
+[   78.864849] thunderbolt 0000:06:00.0: stopping TX ring 0
+[   78.864857] thunderbolt 0000:06:00.0: disabling interrupt at register 0x38200 bit 0 (0x1 -> 0x0)
+[   78.864870] thunderbolt 0000:06:00.0: control channel stopped
 
-> 
-> > > > +
-> > > > +	ret = ps8830_enable_vregs(retimer);
-> > > > +	if (ret)
-> > > > +		goto err_clk_disable;
-> 
-> Johan
+There is no unplug at all here so the domain can go back to runtime
+suspend.
 
