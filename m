@@ -1,168 +1,124 @@
-Return-Path: <linux-usb+bounces-16559-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16560-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 084D39ABDA8
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 07:08:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E059ABE6D
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 08:09:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAA0C283AF3
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 05:08:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 907991C24008
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 06:09:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3F013F43B;
-	Wed, 23 Oct 2024 05:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3F9F146D7F;
+	Wed, 23 Oct 2024 06:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yUyag7Hi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ynw25g+U"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9561D39ACC;
-	Wed, 23 Oct 2024 05:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353C8EAC5;
+	Wed, 23 Oct 2024 06:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729660130; cv=none; b=kT9JawcbrxT/xmTgYkdYrf/WZEZh1cIZui10BmLT1IBrxunt++Sj6YqyomvozIDCDuRAEhUQSURV65jbjRrFTj1pubXtaFah0dJv2eLCcF4MTOJnKM7xO9qSfDDSxZDw7dgHD7yNW4K+kRZ/oMfuTWUc7LlcRmbdjOH3Rg4mB1E=
+	t=1729663781; cv=none; b=vFta3crnPFiD1SiBXc205a1mfvdo5+CjggXcxCyMkYHgrV5CeohxUH68OutxuzbJSeGP0Vqhll2YOD+S1+S8NlFKvEN2en+kmy1g85SGtXuNuC1NiWkYC+uyiwlZf+tFJezio5IQisTW40I5gKzeIRUL/XG4jWhPW1xl+n4qcas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729660130; c=relaxed/simple;
-	bh=VlvjQ5pm6dXxL9Fy5LEyuCp7Ox6YWVM3nZDTbgO5YjY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ml3M7kKxY+GbOXu5dHTpf9PALc5heJBEBOhgGZ4jSATFxfidhJOie5WOWQYJVPlPQlVlWEoHTlQHidvB2vhIo6FnF2Ou5Cx38DOGco4MMFze8TDeMeCsWHiAZyasCIFp6hAXxLueBhk60hZvHrpfrlx1jT7wRdxqCPd87bXrEAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yUyag7Hi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DB2C4CEC6;
-	Wed, 23 Oct 2024 05:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1729660130;
-	bh=VlvjQ5pm6dXxL9Fy5LEyuCp7Ox6YWVM3nZDTbgO5YjY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yUyag7HiNVutWY0dgeJ1jW8HPJCPMsG9vwgUTkHWdb15pAlfmRVHzwzrQIQ8fHGpa
-	 pua75cCVU7neQfYof7+oxzB96hHPuqM2sBCogNV3nRHMuzwvdpbv6kN1tFPgDDQtA2
-	 OJQUluivlF/wJawAzGkIcKP7S6Rsey4T8T7fQjz0=
-Date: Wed, 23 Oct 2024 07:08:47 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: Yanik Fuchs <Yanik.fuchs@mbv.ch>
-Cc: "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-	"m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
-	"rdbabiera@google.com" <rdbabiera@google.com>,
-	"u.kleine-koenig@baylibre.com" <u.kleine-koenig@baylibre.com>,
-	Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: typec: tcpci: Add FAULT_ALERT handling
-Message-ID: <2024102343-onset-entangled-1047@gregkh>
-References: <GVAP278MB0662D8077733604B9B103187974C2@GVAP278MB0662.CHEP278.PROD.OUTLOOK.COM>
+	s=arc-20240116; t=1729663781; c=relaxed/simple;
+	bh=U1ovBUN9k7cVpjnClNMLPpEoODTsIuJ83Y2AqLN0+cY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gsTrlss4tUV68Po5OrPSILZW40bVqgJYGIex0cAuRdTZGWAcwLpf+9zhv74iCrfqRGuIaqrR57Q72TEcIBHfxBLK+dPVDdoe0rKbuz21fjl635q/6qgvtch8IHlyH16T9VLaMeUS80MXX80kP27m1p8mHv4KfpM677iBRNtWuSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ynw25g+U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF39C4CEC6;
+	Wed, 23 Oct 2024 06:09:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729663781;
+	bh=U1ovBUN9k7cVpjnClNMLPpEoODTsIuJ83Y2AqLN0+cY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Ynw25g+Utm3Xfu3sWKVw4tpPVty1RFHtg00DhDzU0HnSU+tm+UbXa4lMIl96PaNvI
+	 8z2exy5r7/EKFeBDtHbXc8hxgROhqfJSzh/7OZe+tEvYI9PQdbtce/dDkwWa9/z71V
+	 oyx6az34GvbdnWtlqz5aSFQHntZXadJofjWg6itdgObGLGgBMp9U58naH3ldHdCHvG
+	 sO3l1UAUPLDbHTzY/54m0KxB5CApNaixOsvQNo+l4lDubBWdZbcEFcvLxd4ob867VB
+	 BcARhMvnLv4vGARP9vE1n3cKgPAydiQ6zbPNo4tumyT1Q/fN6paqPmdyAjHogZNUt7
+	 a/ZckXYWg3Zpg==
+Message-ID: <bae8ac11-ed3e-4fc1-8e07-b63282905557@kernel.org>
+Date: Wed, 23 Oct 2024 08:09:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <GVAP278MB0662D8077733604B9B103187974C2@GVAP278MB0662.CHEP278.PROD.OUTLOOK.COM>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: core: adds support for PM control of specific USB
+ dev skip suspend.
+To: huanglei <huanglei814@163.com>
+Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ huanglei <huanglei@kylinos.cn>
+References: <20241022090905.9806-1-huanglei814@163.com>
+ <3691558b-55d2-43f1-ac77-5f15843f2f80@kernel.org>
+ <78620d2f.3fa2.192b76ed5f6.Coremail.huanglei814@163.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <78620d2f.3fa2.192b76ed5f6.Coremail.huanglei814@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 22, 2024 at 05:06:46PM +0000, Yanik Fuchs wrote:
-> Good Evening
+On 23/10/2024 05:32, huanglei wrote:
 > 
-> This is my first Pull request for the Linux Kernel, I hope, I have formatted it correctly.
-> The info about the Patch should be clear from the message I added, I hope.
-> 
-> 
-> Freundliche Grüsse
-> 
-> Best regards
-> 
-> 
-> Yanik Fuchs
-> [cid:239faadc-5aa5-4417-b69c-5afc0ce01589]<https://www.mbv.ch/en/>
-> MBV AG
-> Microbiology and Bioanalytic
-> Industriestrasse 9, CH-8712 Stäfa
-> [cid:a21e1738-fbcb-44ca-b6ba-611f60800d18]<https://www.linkedin.com/company/25071130/>  [cid:9c47fbef-89db-4406-89ee-a2b4487eeaf2] <https://www.youtube.com/channel/UC3vLuuteeanNc1wX9OTARDQ>     Legal disclaimer<https://www.mbv.ch/en/about-us/imprint/>
-> 
-> [cid:bc59151f-ea88-4e9b-ac75-03cfb28b780f]<https://www.mbv.ch/en/about-mbv/events/>
-> 
-> >From 133cda1dff7e87f999506164533bbb1cfaf8fe7e Mon Sep 17 00:00:00 2001
-> From: yfu <yanikfuchs@me.com>
-> Date: Tue, 22 Oct 2024 18:27:49 +0200
-> Subject: [PATCH] usb: typec: tcpci: Add FAULT_ALERT handling
->  message
-> 
-> I encountered an issue, where I was not able to communicate with other
-> i2c devices, if ptn5110 was initiated while it was seeing Vbus.
-> 
-> i2c analysis did show, that ALERT_FAULT pin is asserted and
-> reasserts on try to acknowledge it, because there is still an asserted
-> pin in FAULT_STATUS. This results in Alert GPIO being always low.
-> 
-> With this Commit, I add a function to the IRQ handler, which acknowledges
-> all asserted Pins in FAULT_STATUS register. With this patch, ALERT_STATUS can be acknowledged without issues.
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index ed32583829be..eb885aa4171c 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -714,6 +714,13 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->     irq_ret = status & tcpci->alert_mask;
-> 
->  process_status:
-> +   /*
-> +   * some chips asert fault alert, even if it is masked.
-> +   * The FAULT_STATUS is read and
-> +   */
-> +   if (status & TCPC_ALERT_FAULT)
-> +       regmap_read(tcpci->regmap, TCPC_FAULT_STATUS, &raw);
-> +       regmap_write(tcpci->regmap, TCPC_FAULT_STATUS, raw);
->     /*
->      * Clear alert status for everything except RX_STATUS, which shouldn't
->      * be cleared until we have successfully retrieved message.
-> --
-> 2.34.1
-> 
-> 
-> 
+>   Yes, to be precise, it's a hardware feature, not an OS/driver policy.
 
+??? No, you did not describe it as hardware features. You need to fix this.
 
+It's a NAK so far.
 
-Hi,
+Please don't top-post.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Best regards,
+Krzysztof
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch was sent in html email format, making it impossible to
-  apply and automatically rejected by the mailing lists.
-
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
-
-- Your patch was attached, please place it inline so that it can be
-  applied directly from the email message itself.
-
-- Your patch does not have a Signed-off-by: line.  Please read the
-  kernel file, Documentation/process/submitting-patches.rst and resend
-  it after adding that line.  Note, the line needs to be in the body of
-  the email, before the patch, not at the bottom of the patch or in the
-  email signature.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
