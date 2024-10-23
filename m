@@ -1,34 +1,34 @@
-Return-Path: <linux-usb+bounces-16593-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16594-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0B5B9AC789
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 12:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 478DF9AC78A
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 12:12:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44D531F23541
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 10:12:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C120F1F23505
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2024 10:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF6C1A7045;
-	Wed, 23 Oct 2024 10:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318C61A3A95;
+	Wed, 23 Oct 2024 10:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e4ZwnjjS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U4/I2BGt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26831A38E3
-	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 10:11:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DB11A3BA1
+	for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2024 10:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729678281; cv=none; b=ufZL11UjaGM4VpMFxmjw5a+CWI997QWV/lDly0fTcOOqydvt3oyYxpXp8dumEfYHvmA0JY/sCX243uSwfdTZjiLZLtxwLmRQD/vNcfVRNNLYLFYE6LQpFhj023J/Hs064jBuj2Xb/q0fBf9K+bF7rQ6dVaXpB8iFWgkNv75mVXE=
+	t=1729678281; cv=none; b=TZ1RlpNpNvf9Fr1ITfPx4pRgxsYu15clxC+MrUr0fCg5E0ldmmWc+GKkLISvrL6cJYvs9QMERato5TOEvXxjZl/GUqYrHzrJVtlYzGMNIL/Gg5bvUybJmF+XBhcFULfIJpEad4/BMzdrBVIyoAh4eyNK7kJLn7twV+gwsWEv+Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729678281; c=relaxed/simple;
-	bh=9cZqaJ0msn7y4/dfoIXoe7Dselzmf+2DHyvcYbyJWrM=;
+	bh=n378+DJm8s5oZJQ6X44LLO6UKYdj720LUK5JhDZITOc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gpA/T8dr/uTl42mSkK3sQSZAC+t/6Lvy/iQaS/I4WHJ0gFGP5JED4mMkcX1z9u4sJxXiRhAb3yDrvdM46eq5ce738pRw3bfUxZciUmXPvVU4d00G5WQMZ4vSHzZXZNZQ1LGF2MCdvGoISUwBFYC/kKgILGTsSRJBAtNXQRxYhUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e4ZwnjjS; arc=none smtp.client-ip=192.198.163.17
+	 MIME-Version; b=hEsMnKurq/7wfJ04zjgOLvwJHSsQ/fQOORfBd2PWALN+DSoolJdOew15FsbnCiOohZOtTkwcKZ0SMDd38x6W3d1FvfSbTnhkFyPZs8J/TavDDbcD411BrTIv7kzWDhz5rFDl2m2wL57CUSnTNmxN+2jeH+vg/YvBprt2NYo4abQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U4/I2BGt; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,30 +36,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1729678280; x=1761214280;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9cZqaJ0msn7y4/dfoIXoe7Dselzmf+2DHyvcYbyJWrM=;
-  b=e4ZwnjjSXD4bqGG0Kc/ZDXSSQoIf3FEt3VEY1c7yDRHgUp9W1DdV36pO
-   Q0Pb4oRH+OlwZOpvD0ih28PM9tHi2CtG4rxIwu1j+E4OPpP86C4AvUorW
-   4N4UHqp/zyK8VOwp+28xGJT1H+Hw78QONnnXzqNSLHTjWL+5f3mFveDIZ
-   nrLTtAwhG1Clv1uycDq1Gyzrk/pAgpRz+TtW67+eV45bb2u4WWALqJh/E
-   4DSAAcX4TKbESMSxsijSRaQuXX2MPRggzf5XthdwACxCAMxizBexvl+Pf
-   SihbAmrBGOI5Sz8ch+/ttkhFRTB13/OMn6hqt+UqkjDT+gzauxR1XG29b
-   g==;
-X-CSE-ConnectionGUID: cN47MBfwRgeKc4gJ+WXlVg==
-X-CSE-MsgGUID: /UL2xRe2SYmfJQvX/ZAG/A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="29149618"
+  bh=n378+DJm8s5oZJQ6X44LLO6UKYdj720LUK5JhDZITOc=;
+  b=U4/I2BGtFICB+8iENW0JzJHS/BsIyYKoERPyfsgG12+JJa/5CV50XCpz
+   2TrCOnKebF1XZ0WeJ6gGQ3NNSigVyNrP5IxdUmAM52e7OVlyTnBRZYNCp
+   X8jXgyFOTUJTRVfJ7HfXWQRNWzjuOqkNPCcwbkp3Nf8aHUw5rqxrlLDKM
+   R9EcX3x09Rt3yw2HAlVtrvmsdmi4+/06YGVlhyRAIhABroE7wlN6KLe+H
+   pIdIrbVJwGz7zVtD5iEaeZfEdWrwQ38geEUoG8Me33zfgtJgmGfBgLq2i
+   GMxhBNdv01xw+frgKeC9B1K0A0qfrhrBdCvJmJmT564srsmnA10060u/X
+   Q==;
+X-CSE-ConnectionGUID: Iv99sRNZSi+Dr2/0Q1V8ag==
+X-CSE-MsgGUID: fxA3GjLLQ2O8fQvKxcrM2Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="32116773"
 X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
-   d="scan'208";a="29149618"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 03:11:18 -0700
-X-CSE-ConnectionGUID: XKEyBxxoRZqskIjP4YL3iw==
-X-CSE-MsgGUID: gxeaXhrDSEuGqB/OB++Amg==
+   d="scan'208";a="32116773"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 03:11:18 -0700
+X-CSE-ConnectionGUID: KeBFnSe7QJyI3U3wMmj9gg==
+X-CSE-MsgGUID: zOpS7CYjS8Wbj5iApwx0Cg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
-   d="scan'208";a="84954633"
+   d="scan'208";a="80084202"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 23 Oct 2024 03:11:16 -0700
+  by orviesa010.jf.intel.com with ESMTP; 23 Oct 2024 03:11:16 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 551FA7B8; Wed, 23 Oct 2024 13:11:12 +0300 (EEST)
+	id 6287D8C4; Wed, 23 Oct 2024 13:11:12 +0300 (EEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -68,9 +68,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Aapo Vienamo <aapo.vienamo@iki.fi>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 6/8] thunderbolt: debugfs: Refactor hardware margining result parsing
-Date: Wed, 23 Oct 2024 13:11:09 +0300
-Message-ID: <20241023101111.3418311-7-mika.westerberg@linux.intel.com>
+Subject: [PATCH 7/8] thunderbolt: debugfs: Don't hardcode margining results size
+Date: Wed, 23 Oct 2024 13:11:10 +0300
+Message-ID: <20241023101111.3418311-8-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241023101111.3418311-1-mika.westerberg@linux.intel.com>
 References: <20241023101111.3418311-1-mika.westerberg@linux.intel.com>
@@ -84,174 +84,95 @@ Content-Transfer-Encoding: 8bit
 
 From: Aapo Vienamo <aapo.vienamo@iki.fi>
 
-Make the result parsing and formatting code less repetitive in
-preparation for adding another result for Gen 4 asymmetric link support.
+Use ARRAY_SIZE() when available or pass in the array size derived from
+it. This is in preparation for adding another result data word for
+supporting Gen 4 asymmetric links with an additional lane.
 
 Signed-off-by: Aapo Vienamo <aapo.vienamo@iki.fi>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/debugfs.c | 99 ++++++++++++++++++-----------------
- drivers/thunderbolt/sb_regs.h | 12 ++---
- 2 files changed, 56 insertions(+), 55 deletions(-)
+ drivers/thunderbolt/debugfs.c | 8 ++++----
+ drivers/thunderbolt/tb.h      | 2 +-
+ drivers/thunderbolt/usb4.c    | 7 ++++---
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
-index 3404237d167b..2f9756c201b6 100644
+index 2f9756c201b6..9899d88b7371 100644
 --- a/drivers/thunderbolt/debugfs.c
 +++ b/drivers/thunderbolt/debugfs.c
-@@ -1238,10 +1238,10 @@ static void voltage_margin_show(struct seq_file *s,
- {
- 	unsigned int tmp, voltage;
+@@ -1191,7 +1191,7 @@ static int margining_run_write(void *data, u64 val)
+ 			    margining->lanes);
  
--	tmp = FIELD_GET(USB4_MARGIN_HW_RES_1_MARGIN_MASK, val);
-+	tmp = FIELD_GET(USB4_MARGIN_HW_RES_MARGIN_MASK, val);
- 	voltage = tmp * margining->max_voltage_offset / margining->voltage_steps;
- 	seq_printf(s, "%u mV (%u)", voltage, tmp);
--	if (val & USB4_MARGIN_HW_RES_1_EXCEEDS)
-+	if (val & USB4_MARGIN_HW_RES_EXCEEDS)
- 		seq_puts(s, " exceeds maximum");
- 	seq_puts(s, "\n");
- 	if (margining->optional_voltage_offset_range)
-@@ -1253,14 +1253,53 @@ static void time_margin_show(struct seq_file *s,
- {
- 	unsigned int tmp, interval;
+ 		ret = usb4_port_hw_margin(port, margining->target, margining->index, &params,
+-					  margining->results);
++					  margining->results, ARRAY_SIZE(margining->results));
+ 	}
  
--	tmp = FIELD_GET(USB4_MARGIN_HW_RES_1_MARGIN_MASK, val);
-+	tmp = FIELD_GET(USB4_MARGIN_HW_RES_MARGIN_MASK, val);
- 	interval = tmp * margining->max_time_offset / margining->time_steps;
- 	seq_printf(s, "%u mUI (%u)", interval, tmp);
--	if (val & USB4_MARGIN_HW_RES_1_EXCEEDS)
-+	if (val & USB4_MARGIN_HW_RES_EXCEEDS)
- 		seq_puts(s, " exceeds maximum");
- 	seq_puts(s, "\n");
- }
+ 	if (down_sw)
+@@ -1219,8 +1219,7 @@ static ssize_t margining_results_write(struct file *file,
+ 		return -ERESTARTSYS;
  
-+static u8 margining_hw_result_val(const u32 *results,
-+				  enum usb4_margining_lane lane,
-+				  bool right_high)
-+{
-+	u32 val;
-+
-+	if (lane == USB4_MARGINING_LANE_RX0)
-+		val = results[1];
-+	else if (lane == USB4_MARGINING_LANE_RX1)
-+		val = results[1] >> USB4_MARGIN_HW_RES_LANE_SHIFT;
-+	else
-+		val = 0;
-+
-+	return right_high ? val : val >> USB4_MARGIN_HW_RES_LL_SHIFT;
-+}
-+
-+static void margining_hw_result_format(struct seq_file *s,
-+				       const struct tb_margining *margining,
-+				       enum usb4_margining_lane lane)
-+{
-+	u8 val;
-+
-+	if (margining->time) {
-+		val = margining_hw_result_val(margining->results, lane, true);
-+		seq_printf(s, "# lane %u right time margin: ", lane);
-+		time_margin_show(s, margining, val);
-+		val = margining_hw_result_val(margining->results, lane, false);
-+		seq_printf(s, "# lane %u left time margin: ", lane);
-+		time_margin_show(s, margining, val);
-+	} else {
-+		val = margining_hw_result_val(margining->results, lane, true);
-+		seq_printf(s, "# lane %u high voltage margin: ", lane);
-+		voltage_margin_show(s, margining, val);
-+		val = margining_hw_result_val(margining->results, lane, false);
-+		seq_printf(s, "# lane %u low voltage margin: ", lane);
-+		voltage_margin_show(s, margining, val);
-+	}
-+}
-+
- static int margining_results_show(struct seq_file *s, void *not_used)
- {
- 	struct tb_margining *margining = s->private;
-@@ -1273,54 +1312,16 @@ static int margining_results_show(struct seq_file *s, void *not_used)
+ 	/* Just clear the results */
+-	margining->results[0] = 0;
+-	margining->results[1] = 0;
++	memset(margining->results, 0, sizeof(margining->results));
+ 
+ 	if (margining->software) {
+ 		/* Clear the error counters */
+@@ -1312,7 +1311,8 @@ static int margining_results_show(struct seq_file *s, void *not_used)
  	seq_printf(s, "0x%08x\n", margining->results[0]);
  	/* Only the hardware margining has two result dwords */
  	if (!margining->software) {
--		unsigned int val;
--
- 		seq_printf(s, "0x%08x\n", margining->results[1]);
+-		seq_printf(s, "0x%08x\n", margining->results[1]);
++		for (int i = 1; i < ARRAY_SIZE(margining->results); i++)
++			seq_printf(s, "0x%08x\n", margining->results[i]);
  
--		if (margining->time) {
--			if (margining->lanes == USB4_MARGINING_LANE_RX0 ||
--			    margining->lanes == USB4_MARGINING_LANE_ALL) {
--				val = margining->results[1];
--				seq_puts(s, "# lane 0 right time margin: ");
--				time_margin_show(s, margining, val);
--				val = margining->results[1] >>
--					USB4_MARGIN_HW_RES_1_L0_LL_MARGIN_SHIFT;
--				seq_puts(s, "# lane 0 left time margin: ");
--				time_margin_show(s, margining, val);
--			}
--			if (margining->lanes == USB4_MARGINING_LANE_RX1 ||
--			    margining->lanes == USB4_MARGINING_LANE_ALL) {
--				val = margining->results[1] >>
--					USB4_MARGIN_HW_RES_1_L1_RH_MARGIN_SHIFT;
--				seq_puts(s, "# lane 1 right time margin: ");
--				time_margin_show(s, margining, val);
--				val = margining->results[1] >>
--					USB4_MARGIN_HW_RES_1_L1_LL_MARGIN_SHIFT;
--				seq_puts(s, "# lane 1 left time margin: ");
--				time_margin_show(s, margining, val);
--			}
-+		if (margining->lanes == USB4_MARGINING_LANE_ALL) {
-+			margining_hw_result_format(s, margining,
-+						   USB4_MARGINING_LANE_RX0);
-+			margining_hw_result_format(s, margining,
-+						   USB4_MARGINING_LANE_RX1);
- 		} else {
--			if (margining->lanes == USB4_MARGINING_LANE_RX0 ||
--			    margining->lanes == USB4_MARGINING_LANE_ALL) {
--				val = margining->results[1];
--				seq_puts(s, "# lane 0 high voltage margin: ");
--				voltage_margin_show(s, margining, val);
--				val = margining->results[1] >>
--					USB4_MARGIN_HW_RES_1_L0_LL_MARGIN_SHIFT;
--				seq_puts(s, "# lane 0 low voltage margin: ");
--				voltage_margin_show(s, margining, val);
--			}
--			if (margining->lanes == USB4_MARGINING_LANE_RX1 ||
--			    margining->lanes == USB4_MARGINING_LANE_ALL) {
--				val = margining->results[1] >>
--					USB4_MARGIN_HW_RES_1_L1_RH_MARGIN_SHIFT;
--				seq_puts(s, "# lane 1 high voltage margin: ");
--				voltage_margin_show(s, margining, val);
--				val = margining->results[1] >>
--					USB4_MARGIN_HW_RES_1_L1_LL_MARGIN_SHIFT;
--				seq_puts(s, "# lane 1 low voltage margin: ");
--				voltage_margin_show(s, margining, val);
--			}
-+			margining_hw_result_format(s, margining,
-+						   margining->lanes);
- 		}
- 	} else {
- 		u32 lane_errors, result;
-diff --git a/drivers/thunderbolt/sb_regs.h b/drivers/thunderbolt/sb_regs.h
-index 91c6333d08c8..7b5521ea0f74 100644
---- a/drivers/thunderbolt/sb_regs.h
-+++ b/drivers/thunderbolt/sb_regs.h
-@@ -89,12 +89,12 @@ enum usb4_sb_opcode {
- #define USB4_MARGIN_HW_OPT_VOLTAGE		BIT(10)
+ 		if (margining->lanes == USB4_MARGINING_LANE_ALL) {
+ 			margining_hw_result_format(s, margining,
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index fb2e1f089169..0954b8bafada 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1398,7 +1398,7 @@ int usb4_port_margining_caps(struct tb_port *port, enum usb4_sb_target target,
+ 			     u8 index, u32 *caps, size_t ncaps);
+ int usb4_port_hw_margin(struct tb_port *port, enum usb4_sb_target target,
+ 			u8 index, const struct usb4_port_margining_params *params,
+-			u32 *results);
++			u32 *results, size_t nresults);
+ int usb4_port_sw_margin(struct tb_port *port, enum usb4_sb_target target,
+ 			u8 index, const struct usb4_port_margining_params *params,
+ 			u32 *results);
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 985f24b044b3..05985b18834e 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -1655,14 +1655,15 @@ int usb4_port_margining_caps(struct tb_port *port, enum usb4_sb_target target,
+  * @target: Sideband target
+  * @index: Retimer index if taget is %USB4_SB_TARGET_RETIMER
+  * @params: Parameters for USB4 hardware margining
+- * @results: Array with at least two elements to hold the results
++ * @results: Array to hold the results
++ * @nresults: Number of elements in the results array
+  *
+  * Runs hardware lane margining on USB4 port and returns the result in
+  * @results.
+  */
+ int usb4_port_hw_margin(struct tb_port *port, enum usb4_sb_target target,
+ 			u8 index, const struct usb4_port_margining_params *params,
+-			u32 *results)
++			u32 *results, size_t nresults)
+ {
+ 	u32 val;
+ 	int ret;
+@@ -1691,7 +1692,7 @@ int usb4_port_hw_margin(struct tb_port *port, enum usb4_sb_target target,
+ 		return ret;
  
- /* Applicable to all margin values */
--#define USB4_MARGIN_HW_RES_1_MARGIN_MASK	GENMASK(6, 0)
--#define USB4_MARGIN_HW_RES_1_EXCEEDS		BIT(7)
--/* Different lane margin shifts */
--#define USB4_MARGIN_HW_RES_1_L0_LL_MARGIN_SHIFT	8
--#define USB4_MARGIN_HW_RES_1_L1_RH_MARGIN_SHIFT	16
--#define USB4_MARGIN_HW_RES_1_L1_LL_MARGIN_SHIFT	24
-+#define USB4_MARGIN_HW_RES_MARGIN_MASK		GENMASK(6, 0)
-+#define USB4_MARGIN_HW_RES_EXCEEDS		BIT(7)
-+
-+/* Shifts for parsing the lane results */
-+#define USB4_MARGIN_HW_RES_LANE_SHIFT		16
-+#define USB4_MARGIN_HW_RES_LL_SHIFT		8
+ 	return usb4_port_sb_read(port, target, index, USB4_SB_DATA, results,
+-				 sizeof(*results) * 2);
++				 sizeof(*results) * nresults);
+ }
  
- /* USB4_SB_OPCODE_RUN_SW_LANE_MARGINING */
- #define USB4_MARGIN_SW_LANES_MASK		GENMASK(2, 0)
+ /**
 -- 
 2.45.2
 
