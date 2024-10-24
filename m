@@ -1,144 +1,211 @@
-Return-Path: <linux-usb+bounces-16665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16671-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 553CD9AF298
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 21:23:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A30D9AF388
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 22:19:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AF5128B88E
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 19:23:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D0231C23EDD
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 20:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D550E22B660;
-	Thu, 24 Oct 2024 19:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D472178EF;
+	Thu, 24 Oct 2024 20:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="rlrONhmw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3636822B64A;
-	Thu, 24 Oct 2024 19:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9A51AF0B4;
+	Thu, 24 Oct 2024 20:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729797770; cv=none; b=Hjd9tCMXpcmrTqSF0f1SZyi+Zy//+eRVLpvLjC5FccX8J4+epXFCyUTE2hFsL5vxzl0yPN/tH1hyD0cghbEKXNoYBySP8x7EsK54ysT9AJkcrkLyK3iiS6rgx40aUxba0I8Wnx1LtDMZKWSRtNWmDFGDWvNseSq5fKSp6snnDh0=
+	t=1729801149; cv=none; b=SOUwqOWX48JGZRhxPj4mD4f77QnXJGyqss4Uu/CiodK1RH10zcpOc6yjDADUhonbd1EyiYCFM8bANrDIr46FA7SeyHImLnJmTvOhJoBaP2y85Yg3ZLSK6jt3n+zONipuecSzu7/QMtFCC+V27PrP1kQIrOP+VagoSkyL0fmqOQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729797770; c=relaxed/simple;
-	bh=jKh3x40WQHuOT3OY0nTrMeMhafdVjif4nBSUcncQMQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S2KQCI1IE8f0ZATsiugIkyn+yW3LTKlkv2Ip4T9pynDyVJRSra9YTmTKy7lq77Jm/MT7l27BGBnvh0AF5Su+nf5+3tQ73nnovqQu26GHsSSEFnRb/SBsDK5eMtk54lY49kdNBBAC2G+jLLNz1R+FPH//8Q6k4ErU/tTYWIt9Xns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05BC0339;
-	Thu, 24 Oct 2024 12:23:16 -0700 (PDT)
-Received: from minigeek.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6E593F528;
-	Thu, 24 Oct 2024 12:22:42 -0700 (PDT)
-Date: Thu, 24 Oct 2024 20:22:33 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Cody Eksal <masterr3c0rd@epochal.quest>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, Vinod Koul <vkoul@kernel.org>, Kishon Vijay
- Abraham I <kishon@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Yangtao
- Li <frank@allwinnertech.com>, Florian Fainelli
- <florian.fainelli@broadcom.com>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Parthiban <parthiban@linumiz.com>, Linus
- Walleij <linus.walleij@linaro.org>, Thierry Reding <treding@nvidia.com>,
- Maxime Ripard <mripard@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Yangtao Li <tiny.windzz@gmail.com>, Viresh
- Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 06/13] phy: sun4i-usb: add support for A100 USB PHY
-Message-ID: <20241024202216.6cded8c4@minigeek.lan>
-In-Reply-To: <20241024170540.2721307-7-masterr3c0rd@epochal.quest>
-References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
-	<20241024170540.2721307-7-masterr3c0rd@epochal.quest>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+	s=arc-20240116; t=1729801149; c=relaxed/simple;
+	bh=chFReANjoFbR/EOWjbngDVwAhvRT0iFTXIz7TOSRJ9Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=CAqulrK7/unphW3XCr+1aVOUTPYLA4cqfKnyZL9q6F4Jtdh8d8NsdTP3y4l/CfPJzQwFpZds456NHRf9g4a9vPU2yUPSXOqJo36JTC0rkptKf6tvLXY+qykr67UiEEcNEWnvJZ6J44q/H2ZZt7wl4JMf9KfBdtFfkM1plkhG6i4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=rlrONhmw; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1729801124; x=1730405924; i=wahrenst@gmx.net;
+	bh=PtKUSt76TFKjgPtCZaStNyJsHewdsH1Gq+qwbgfGJx8=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=rlrONhmwbFBMDJKoPv7/3S8ucoq8BpWiyXHArNOD0qLSPPtmuOdxfF5EgxBpuKW/
+	 9J8DJigZKKNrYZEXIRBe3yNMRK7QZ/3IsDgwdCCCzu9qZ/mlk4MyXa2VX6wJMGysh
+	 /QzYMnsQWwCIefYg+hkM3LDl1aWPYJUPJBg5daPca9ebtbXurkoK+g7NOCNi9R1gq
+	 MrSRcmaGX7uAwM39FYWcpwLG/7T1q9VujvmfSydAaskfkYtE3wW93Z6MsYMUGl8Pp
+	 +zJQqun4VaiD5Lswu3XuSLtZmBHbkmfpfAb5nIOcmV5Ota2hk1b76GOGtU56pZ2vo
+	 DvQAy9UWLM8c+dRdZw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6KUd-1txFAw4ArR-011077; Thu, 24
+ Oct 2024 22:18:44 +0200
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Russell King <linux@armlinux.org.uk>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Lukas Wunner <lukas@wunner.de>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kernel-list@raspberrypi.com,
+	bcm-kernel-feedback-list@broadcom.com,
+	dmaengine@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V4 0/9] ARM: bcm2835: Implement initial S2Idle for Raspberry Pi
+Date: Thu, 24 Oct 2024 22:18:28 +0200
+Message-Id: <20241024201837.79927-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rosCn8TgOlNX2wametBtbGfMR3eZDUEXXPwiriDu32upykHIbic
+ fmHLinS3U/6xb+TnrijjccDbOy+PuE0qo0vcUD9UtfC9SmhV9YbRTPes6pCbNTV1hbWQboi
+ xmultiPaTtGtOyJy61yd0l119nB0C0do3BVrwBk82iyWX3nTK+yiTZfrGVYxqo9ejRvrGab
+ 6EPxyxEReps4d5ikwEaWA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:YfEKRit8jiw=;FeQV+C8u75T71joCCUHYJpSuo6j
+ dVoyWYKoS64cdQrsUzi0FsUvSdGAk/T1M/7fwBroYoNSLEa8CvbGkhN2+kK91aHnbaEJP1cc3
+ +6ExxHSs9l3GqKSR1Iiu2XQ3nR5gqVuYOAhcLUdqeLwlyvCWr5lhUMOF3GdImaACDmHdFXHqm
+ 8KVM2wa7osHrv0rZ7qIHFwu1SKcDbxL8i/escMhPsDrqWQtqDH1WSiCOgM1GeLsOYtUeW4qHT
+ 70fW0CPWf/gTkkk7cs2UY2V0DYTqoqqO9g1DLnoI48e2b9kjwa9WADZ1JWpJ7iQwq77ApHpYl
+ qV3zzPup9/LVMrMG1CTokPj46b3+jGAwjqMvTtrMRAtYgfnqHLyvWwuT4hO6wp2V5Q6qd8pbd
+ b5fK328iuukzfE+JcB5DEc/QyvfdKGoska/uGfCRQzIRry0IXOK+LOj7T9SDyU9SgxxuVhjT7
+ og0TKRETaSmIHqkL3TEyEmPqJRevP2Hd3qphEJGPHj92gjF3WrZejLVHD9VjBhF4ReXJ+TLFA
+ OrKqYMwBBHk9eeuBMMskVvZfUn4Faj3PyjM7r8X7S7c1YaK2Uwv34TGLQATfujU8laIrFHnrX
+ M09gxJ2Q3L+Tt8MpImar/ZFxBalNlRLwygr0N5KMGYoJRNm44qo8N9deqlqEYEuaPFY3yiTIe
+ hYz/yvcwu2HRRPi3SRchyJs3n8YcDPRlQl4j3dUGIUprkDkShRDP+AyjEV49CKwE5TZ5vEP35
+ t6xQN8THJqHtCSsQNADz33RFMbILsmzCSXtn34T9YzAHWiHb3l+ahvRs265N+Ct8L4gNhU0EF
+ oWEiNGofT+7kXgM7XfobRyDA==
 
-On Thu, 24 Oct 2024 14:05:24 -0300
-Cody Eksal <masterr3c0rd@epochal.quest> wrote:
+This series implement the initial S2Idle support for
+the Raspberry Pi, which was a long time on my TODO list [1]. The
+changes allow to suspend and resume the Raspberry Pi via debug UART.
+The focus is on the BCM2835 SoC, because it's less complex than its
+successors and have enough documentation.
 
-Hi,
+Now the VC4 part has been split from the series [4], because of some issue=
+s
+in that part.
 
-> From: Yangtao Li <frank@allwinnertech.com>
-> 
-> Add support for a100's usb phy, which with 2 PHYs.
-> 
-> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
-> [masterr3c0rd@epochal.quest: modified to use quirk flags]
-> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
-> ---
->  drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
-> index b0f19e950601..a3942b2ee90b 100644
-> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
-> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
-> @@ -1006,6 +1006,16 @@ static const struct sun4i_usb_phy_cfg sun50i_a64_cfg = {
->  	.phy0_dual_route = true,
->  };
->  
-> +static const struct sun4i_usb_phy_cfg sun50i_a100_cfg = {
-> +	.num_phys = 2,
-> +	.disc_thresh = 3,
+Cherry-picking of patches should be fine.
 
-This member is never used when .siddq_in_base is true (and yes, this is
-wrong for the H616 too), ...
+Test steps:
+- configure debug console (pl011 or mini UART) as wakeup source
+- send system to idle state
 
-> +	.phyctl_offset = REG_PHYCTL_A33,
-> +	.dedicated_clocks = true,
-> +	.hci_phy_ctl_clear = PHY_CTL_SIDDQ,
-> +	.phy0_dual_route = true,
-> +	.siddq_in_base = true,
+  echo freeze > /sys/power/state
 
-... which makes this whole description identical to the D1 version.
-So at the very least we wouldn't this new a100_cfg, but instead just
-point to the existing d1_cfg.
+- wakeup system by console traffic
 
-> +};
-> +
->  static const struct sun4i_usb_phy_cfg sun50i_h6_cfg = {
->  	.num_phys = 4,
->  	.phyctl_offset = REG_PHYCTL_A33,
-> @@ -1040,6 +1050,7 @@ static const struct of_device_id sun4i_usb_phy_of_match[] = {
->  	{ .compatible = "allwinner,sun20i-d1-usb-phy", .data = &sun20i_d1_cfg },
->  	{ .compatible = "allwinner,sun50i-a64-usb-phy",
->  	  .data = &sun50i_a64_cfg},
-> +	{ .compatible = "allwinner,sun50i-a100-usb-phy", .data = &sun50i_a100_cfg },
+The clock gating must be restored, because otherwise we have a
+regression on Raspberry Pi 3 B+ . Luckily the disabling of clock gating
+isn't necessary anymore. Thanks to the rest of the DWC2 patches which
+based on an idea of Doug Anderson. The USB domain is now powered down
+and the USB devices are still usable after resume. There might be room
+for improvements, but at least the system won't freeze forever as before.
 
-And this also brings up the question whether we need a new compatible
-string. As it stands now, we could also use:
-	compatible = "allwinner,sun50i-a100-usb-phy",
-		     "allwinner,sun20i-d1-usb-phy";
+Here are some figures for the Raspberry Pi 1 (without any
+devices connected except of a debug UART):
 
-and wouldn't need any driver changes at all. Which would have the neat
-side effect to make USB work already with v5.18 kernels.
+running but CPU idle =3D 1.67 W
+S2Idle               =3D 1.33 W
 
-The only downside is the somewhat weird ordering of the compatible
-strings, with the much newer chip as the fallback.
+In comparison with HDMI & USB keyboard connected (but neither active
+nor wakeup source):
 
-What do other people think here?
+running but CPU idle =3D 1.82 W
+S2Idle               =3D 1.33 W
 
-Cheers,
-Andre
+The series has been successfully tested on the following platforms:
+Raspberry Pi 1 B
+Raspberry Pi 3 B+
 
+Changes in V4:
+- added Reviewed-by from Doug
+- dropped applied VC4 improvement patches
+- fix DWC2 register backup
+- add revert because of Raspberry Pi 3B+ regression
+- add suspend/resume support for DMA & eMMC to be on the safe side
 
->  	{ .compatible = "allwinner,sun50i-h6-usb-phy", .data = &sun50i_h6_cfg },
->  	{ .compatible = "allwinner,sun50i-h616-usb-phy", .data = &sun50i_h616_cfg },
->  	{ .compatible = "allwinner,suniv-f1c100s-usb-phy",
+Changes in V3:
+- added Reviewed-by & Acked-by from Florian & Ma=C3=ADra
+- dropped applied pmdomain & bcm2835aux patches
+- address comments by Ma=C3=ADra (patch 3 & 5)
+- replace old USB recovery patch with canary approach [3], which should
+  work with other platforms
+
+Changes in V2:
+- rebased against todays mainline
+- added Reviewed-by from Florian
+- added Acked-by from Minas
+- dropped "irqchip/bcm2835: Enable SKIP_SET_WAKE and MASK_ON_SUSPEND"
+  because it has been applied by Thomas Gleixner
+- dropped "pmdomain: raspberrypi-power: Avoid powering down USB"
+  because this workaround has been replaced by patch 14
+- use drm_err_once instead of DRM_ERROR and return connector_status_unknow=
+n
+  in patch 6
+- add new patch in order to clean-up all DRM_ERROR
+- add new patch to improve raspberrypi-power logging
+- add new patch to simplify V3D clock retrieval
+- add new patch 5 to avoid power down of wakeup devices
+- add new patch 12 to avoid confusion about ACPI ID of BCM283x USB
+- add new patch 8 & 10 which address the problem that HDMI
+  is not functional after s2idle
+- add more links and fix typo in patch 13
+- add new WIP patch 14 which recover DWC2 register after power down
+- take care of UART clock in patch 15 as commented by Florian
+- use SYSTEM_SLEEP_PM_OPS in patch 15
+
+[1] - https://github.com/lategoodbye/rpi-zero/issues/9
+[2] - https://bugzilla.redhat.com/show_bug.cgi?id=3D2283978
+[3] - https://lore.kernel.org/linux-usb/CAD=3DFV=3DW7sdi1+SHfhY6RrjK32r8iA=
+Ge4w+O_u5Sp982vgBU6EQ@mail.gmail.com/
+[4] - https://lore.kernel.org/dri-devel/20241003124107.39153-1-wahrenst@gm=
+x.net/
+
+Stefan Wahren (9):
+  Revert "usb: dwc2: Skip clock gating on Broadcom SoCs"
+  dmaengine: bcm2835-dma: add suspend/resume pm support
+  mmc: bcm2835: Fix type of current clock speed
+  mmc: bcm2835: Introduce proper clock handling
+  mmc: bcm2835: add suspend/resume pm support
+  usb: dwc2: gadget: Introduce register restore flags
+  usb: dwc2: Refactor backup/restore of registers
+  usb: dwc2: Implement recovery after PM domain off
+  ARM: bcm2835_defconfig: Enable SUSPEND
+
+ arch/arm/configs/bcm2835_defconfig |   2 -
+ drivers/dma/bcm2835-dma.c          |  30 ++++++++
+ drivers/mmc/host/bcm2835.c         |  56 +++++++++++---
+ drivers/usb/dwc2/core.c            |   1 +
+ drivers/usb/dwc2/core.h            |  23 +++++-
+ drivers/usb/dwc2/gadget.c          | 116 +++++++++++++++--------------
+ drivers/usb/dwc2/hcd.c             |  99 ++++++++++++------------
+ drivers/usb/dwc2/params.c          |   1 -
+ drivers/usb/dwc2/platform.c        |  38 ++++++++++
+ 9 files changed, 245 insertions(+), 121 deletions(-)
+
+=2D-
+2.34.1
 
 
