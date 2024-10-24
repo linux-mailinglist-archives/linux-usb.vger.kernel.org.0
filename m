@@ -1,65 +1,71 @@
-Return-Path: <linux-usb+bounces-16640-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16641-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 756309AE73B
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 16:05:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E13809AE868
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 16:24:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2227B1F23B02
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 14:05:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5A0428FC29
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 14:24:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9187F1E3DD0;
-	Thu, 24 Oct 2024 14:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEFB41FBF4E;
+	Thu, 24 Oct 2024 14:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k8EbJ+OJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VBbRUG4B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016871D9A72;
-	Thu, 24 Oct 2024 14:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4431EB9EA
+	for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 14:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729778677; cv=none; b=ucGoNzyyxX2iwplTvPsDNY2SxxWupSuaoPr2N4AjmRMDHDo1JpFioR/3KUS2JFPkkrbCD7U1M2h0b6jv0WQyHJgjqRwIHsYumc94qQHdaG70TnYzAKsy4qK6sNZr8VT0NWeNXsZ+sIMJrT3AYaGyl5wIvexwGGV2Tn6mTvcsF+Y=
+	t=1729779427; cv=none; b=JDoMqqYrKbwSQodnZOxvknl+AAUCiJSBraVwV1hm5xG4V4OqMySOmL49hHqo6R9OTq6G0GSmDxbdgsTlFPH+8vGaNExRmWsEL+XQTdPe6JXEk9ECs7L3XGWqUrSNf1sdI9ZE7n8e6CAA8xiwbLqbsh3vhNj8ZQd5O0OWmn6S5NQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729778677; c=relaxed/simple;
-	bh=PxlSbdihMOCWyqL5OYT1sFyA5dFCXHEJ923BMDFDebg=;
+	s=arc-20240116; t=1729779427; c=relaxed/simple;
+	bh=ZHLpxCaABJIHGEakW/HkEnnmvVY3qa2023G4Rw5DXYg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Azc2TMn5FWM2yp7f/flcUYMVYEWxs0RBqI5EyR6EO4oaJSiJQBIw48qLSplkIiX5AgIpt9JEXKKC+5og448Y4DpXG1qR46iVuzVPsY22T/kpuxsZ3ifL74hBn+U5uUNymBAmAymPFkHDTl2TZsRfvLJ07eahTUUf7ilEI+HleQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k8EbJ+OJ; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729778675; x=1761314675;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PxlSbdihMOCWyqL5OYT1sFyA5dFCXHEJ923BMDFDebg=;
-  b=k8EbJ+OJ6ztgdxTiqxqbXFM3bUgyVxKilhSTajjgXBctH78b3Fl8SN5c
-   gcZlr7YewsMWuhXrpvdXoQxKjEyAczevjdKrouKd2NzRR9DENlmBaK6Ma
-   N1HaJ7El1QZxomY72yPg91V4SRsoeBteBTDg8E7FEnyZd10eobsor+JnI
-   e0w38Lh4rKx8azUt6kdyubumdWLmYm3FnAlTp5fWNf2Fyu7leRqJtoa8O
-   NRvc05kKlOtxlpIsoY6KSkUalpR/0Z3BYMzV+3QvcnCaPPgOmkT53MnLj
-   IHhcFQom6bL9Ssj48Ts7JCxHTigRaDkqF6or9IAuIRcedzeo8t94Hyi0u
-   Q==;
-X-CSE-ConnectionGUID: a7ZeMmhUQD6+qJ42AGg9iA==
-X-CSE-MsgGUID: WbTBRsNcSyGp3c3xY4NPjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="40801965"
-X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
-   d="scan'208";a="40801965"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 07:04:33 -0700
-X-CSE-ConnectionGUID: Zm+uqjMLSwqqOYDlpadmEA==
-X-CSE-MsgGUID: fvrBW4KfT++SHKXld5sTjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
-   d="scan'208";a="118058291"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa001.jf.intel.com with ESMTP; 24 Oct 2024 07:04:31 -0700
-Message-ID: <f9a2eb47-512e-4718-a83a-4742e09be85b@linux.intel.com>
-Date: Thu, 24 Oct 2024 17:06:44 +0300
+	 In-Reply-To:Content-Type; b=sq7SBm7uaUVI8Wt7YVMcRV+ag+jO/WkkYj9REc+4xtTbOzqJnP66363+RzawbVUROAEv9qd0mK/cAH9/ZsTBmOMxZvkNgx1XwcriIFnbSmPP57z6ey/ML4WG5gy0frwYe0aLcsPWvSJK+xY28u47rNCrcooH15YHkO/RzX50iiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VBbRUG4B; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-83aac75fcceso36979939f.0
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 07:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1729779423; x=1730384223; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b64qypICVOVPLQ4AT6WFJut9ohzO7ijv8p58Gwp22hw=;
+        b=VBbRUG4Bvo1DmnzjypQFjM2b01McsUrTxuz3qJ23To/DYh2X+2426I+gaKTnh0lSTK
+         oMoxXAjdohz0qro0tqFwyMd8XJWA8szSBJ21KNvT6FI97/Cbw+9KiE1O7QWT6bh1yYal
+         uPKbYxVoOasNuohZSOqFxbyCv8fo5pwZHUdlc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729779423; x=1730384223;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b64qypICVOVPLQ4AT6WFJut9ohzO7ijv8p58Gwp22hw=;
+        b=pvpM4644uPYYw3avm1100agiLuQvJQw3pWyQ5czeYbMMH5M1t4sVPaJAqto4a0pK2O
+         gyE+m2/pblp/vFi1WdF9pM6/84FMvUulI1RJ1VSKsCP2YkPWawlhyKgYddG1iYUqlKjn
+         zDIk0FFxK877YoKDhs1skJdS8VEY2FHpJUy9bfsCzYwLCKzhoYX/vn/eXhrK/fZZiGDt
+         83HOWSjpAbJrkwUZVQDH2X8DhbM2QOD0lnSKBg3kSt2YZknDk6oE6IAagSFAeqsEAt//
+         I0cvdJtwRmF9QYiTgpQ6OpFw8tqA/fg0RrJ396I1Jj0aSuD8s50gQk/HXB7hhFgba+dr
+         hkHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGkdl+0+Mo5dHjHRIxm+bgWYFhEoCdb17Iojv4IAdcHJ98aRcerMqNVP15M57dbZPIOHDQ6OdQAaM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGTSIvOM78Kuq4R+AU4H8UR6lmoLc/ROiE2v/GzH6e8iETvEpl
+	JTR6lSOIuhrCe+u7fPAjATs5Habu24Jw43VkehNWjSzyTsagscWzB/mABaxWVQ4=
+X-Google-Smtp-Source: AGHT+IG3V+qH2hGCoVjFpiCSG8OO5Klo/NaqFQGsT0YDjdqVv5Wth0Ol89M3HnkpPrHKa/QvmQmlpg==
+X-Received: by 2002:a05:6602:2cc4:b0:82d:18d:bab with SMTP id ca18e2360f4ac-83af63f9e29mr745899339f.15.1729779423028;
+        Thu, 24 Oct 2024 07:17:03 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83ad1dfb919sm271119439f.53.2024.10.24.07.17.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Oct 2024 07:17:02 -0700 (PDT)
+Message-ID: <6b3bc049-4cc3-4d7d-a9b2-17d4132ebc50@linuxfoundation.org>
+Date: Thu, 24 Oct 2024 08:17:01 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,44 +73,53 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] xhci: Fix Link TRB DMA in command ring stopped
- completion event
-To: Faisal Hassan <quic_faisalh@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20241022155631.1185-1-quic_faisalh@quicinc.com>
+Subject: Re: [PATCH v2] usbip: tools: Fix detach_port() invalid port error
+ path
+To: Zongmin Zhou <min_halo@163.com>
+Cc: i@zenithal.me, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ shuah@kernel.org, valentina.manea.m@gmail.com,
+ Zongmin Zhou <zhouzongmin@kylinos.cn>, stable@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <8d1a298c-78e4-4dfd-a5fb-5dd96fb22e81@linuxfoundation.org>
+ <20241024022700.1236660-1-min_halo@163.com>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241022155631.1185-1-quic_faisalh@quicinc.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241024022700.1236660-1-min_halo@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 22.10.2024 18.56, Faisal Hassan wrote:
-> During the aborting of a command, the software receives a command
-> completion event for the command ring stopped, with the TRB pointing
-> to the next TRB after the aborted command.
+On 10/23/24 20:27, Zongmin Zhou wrote:
+> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
 > 
-> If the command we abort is located just before the Link TRB in the
-> command ring, then during the 'command ring stopped' completion event,
-> the xHC gives the Link TRB in the event's cmd DMA, which causes a
-> mismatch in handling command completion event.
+> The detach_port() doesn't return error
+> when detach is attempted on an invalid port.
 > 
-> To address this situation, move the 'command ring stopped' completion
-> event check slightly earlier, since the specific command it stopped
-> on isn't of significant concern.
-> 
-> Fixes: 7f84eef0dafb ("USB: xhci: No-op command queueing and irq handler.")
+> Fixes: 40ecdeb1a187 ("usbip: usbip_detach: fix to check for invalid ports")
 > Cc: stable@vger.kernel.org
-> Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
+> Reviewed-by: Hongren Zheng <i@zenithal.me>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+> ---
+>   tools/usb/usbip/src/usbip_detach.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/usb/usbip/src/usbip_detach.c b/tools/usb/usbip/src/usbip_detach.c
+> index b29101986b5a..6b78d4a81e95 100644
+> --- a/tools/usb/usbip/src/usbip_detach.c
+> +++ b/tools/usb/usbip/src/usbip_detach.c
+> @@ -68,6 +68,7 @@ static int detach_port(char *port)
+>   	}
+>   
+>   	if (!found) {
+> +		ret = -1;
+>   		err("Invalid port %s > maxports %d",
+>   			port, vhci_driver->nports);
+>   		goto call_driver_close;
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Thank you.
 
-Greg, would you like to take this directly to usb-linus (6.12)?
-If not I'll send it as part of series to usb-next later
+Greg, Please pick this up.
 
-Thanks
-Mathias
-
+thanks,
+-- Shuah
 
