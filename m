@@ -1,101 +1,166 @@
-Return-Path: <linux-usb+bounces-16648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16660-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6D359AEC45
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 18:35:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F7EB9AEDB8
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 19:20:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 063D71C24B64
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 16:35:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D471BB26AAB
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 17:20:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF97B1F8920;
-	Thu, 24 Oct 2024 16:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB3C1FF7AE;
+	Thu, 24 Oct 2024 17:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Le1LiewZ"
+	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="XV3L7CAW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C091F81B2;
-	Thu, 24 Oct 2024 16:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C47C1FB3C2;
+	Thu, 24 Oct 2024 17:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729787672; cv=none; b=YY/K9FW6zFOuluTWPg/Z6t3jwd8W3qZhw+Ve0bXSWGzNuT+9pMAd+q7fP0BnFjhVecaiVf7tZ7y7Cldb3yYNGkgBOAA+JCrHRx5Wq6WxM6CgBXHh+Z7DTqOlkJ4+s8YmLZwQ2h264DREmcB7buTYCmo4mKpxiNqYk0L7ll2fYxk=
+	t=1729790356; cv=none; b=J7Y4q7DSXLCnQsmP3Z3O93WmeX91kaQfrf+lbCmcP7Ue5+lVLUMlfuhRr7WDkBUeetBwFFkRzitzFTJYmVUtev7YveGauWpFunaoG1fI+thguCJ5x//h1Gtmzh0Mk/iPEawfgzspLc91LTMl3xWYIQbv4xWjvuwHyk0NwLvCK64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729787672; c=relaxed/simple;
-	bh=mXsRP0QURTXN2spewue/9HY90nPBosT7LhadWuOXHCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GgZcyN6ptTXVtBGLT844AQrbSbGAJv2LXiwqPcQj0itPKYyMnTjg8vFDybfA0YVT4h5XBhS1Ts4U74t8uLAS33EGd0gwhqCEFCvf5brRGVw4g657OFt1lAOVFEzWA+I3R6Isu4n0z8rgbfdvgGnTFpG6Iuz52qgMU1vFgZA/98I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Le1LiewZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A954AC4CEC7;
-	Thu, 24 Oct 2024 16:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729787671;
-	bh=mXsRP0QURTXN2spewue/9HY90nPBosT7LhadWuOXHCk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Le1LiewZ3qiFd9CaqiMoRqCJGHOZK7EgFzWCJcO3VR7bGJkuHxoD6gCnciWAh+iil
-	 UMzPTD1LbKy6ZFGGyFsfYGh6bAYFYpu/HPR8kdHXoEY75/Ql74p4iJKFG4tg9kdv2g
-	 n+/tBC0RIkWbEPCwrim0NF7kSdSLPOFz+YFIv7hoFvkIzl3h/S93G0PE77eaLxWveQ
-	 DMtVGJAndGoEYaAT1isRDjOP889pOBCuB4D1aqkhICKy4OatlNhHP19UKEXI4OyKPO
-	 xLsAG7ti6QI5KnU7D5AysdQ8OA4EtnktHwkX7dHfNu+/UtiBnbq+LegR5irfmTuUrf
-	 O4zw3pwKDDnAQ==
-Date: Thu, 24 Oct 2024 17:34:27 +0100
-From: Simon Horman <horms@kernel.org>
-To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@gmx.fr>
-Cc: =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: add Quectel RG650V
-Message-ID: <20241024163427.GD1202098@kernel.org>
-References: <20241024151113.53203-1-benoit.monin@gmx.fr>
+	s=arc-20240116; t=1729790356; c=relaxed/simple;
+	bh=s7xzMFvJ4Cag5AvnrOIpgkj1EGCgsWQbCxPj4HldfhU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mM12+j4rgDcfqe9zgi7y0ZQ3GnEfQCTfuI8LqY4Y+j1P1BgS5ZP6DzOKBn2LxBYaby/uA3JCIFGRpdoJsbUVqQsu6kKUYpCsjV+M1YOHcge96tSM/dnbrOWmf9PMxyupD9A2oGLhFlRtqvFjqdkg/As5TRFEMLrzPXgtVDaUWYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=XV3L7CAW; arc=none smtp.client-ip=51.222.15.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
+	s=default; t=1729789781;
+	bh=s7xzMFvJ4Cag5AvnrOIpgkj1EGCgsWQbCxPj4HldfhU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XV3L7CAWsqfMo1+ztn5WJZFeVtrIN2TalAaxLuOyWtU0K6CierjqNvMA7qIxXIygT
+	 /3edWKT7iFdUrQQeitM9eKoXXPz/1+YTBxLPnE6AGmGSbguryxK+m0ao7t0RhgVlwh
+	 djaT0WBOlfhLbDGAah2KRenKKJG7MWaW+MpcVAnNOYI2XKCGNV6CbxajODgBEAG4Xs
+	 g4fxBfMffN8VuFIi84Bj0lRJswbnM1rjyhSluGgSpPmzeflhMOTqDQ7CYKEAj0KpYz
+	 QInLLVqWJP39DHxkarJgZmFkAZRuO0LAtXUr5gOQyGBVstgjUdtd27JnkYOmSXCRSM
+	 vbs5ewMt05EeQ==
+X-Virus-Scanned: by epochal.quest
+From: Cody Eksal <masterr3c0rd@epochal.quest>
+To: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org
+Cc: Cody Eksal <masterr3c0rd@epochal.quest>,
+	Andre Przywara <andre.przywara@arm.com>,
+	Parthiban <parthiban@linumiz.com>,
+	Yangtao Li <frank@allwinnertech.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Thierry Reding <treding@nvidia.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH 00/13] sunxi: A100/A133 second stage support
+Date: Thu, 24 Oct 2024 14:05:18 -0300
+Message-ID: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241024151113.53203-1-benoit.monin@gmx.fr>
 
-On Thu, Oct 24, 2024 at 05:11:13PM +0200, Benoît Monin wrote:
-> Add support for Quectel RG650V which is based on Qualcomm SDX65 chip.
-> The composition is DIAG / NMEA / AT / AT / QMI.
-> 
-> T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0122 Rev=05.15
-> S:  Manufacturer=Quectel
-> S:  Product=RG650V-EU
-> S:  SerialNumber=xxxxxxx
-> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-> I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
-> I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
-> I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=9ms
-> Signed-off-by: Benoît Monin <benoit.monin@gmx.fr>
+Hello! This is my first submission, so please be gentle :)
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Back in 2020, two Allwinner employees, Yangtao Li and Shuosheng Huang, each
+submitted a patch series for the A100 series of SoCs; [1] intended to add
+support for the watchdog, ARM PMU, DMA, USB, and (e)MMC controller, and [2]
+implemented DVFS support. Some patches from the first series landed, but
+the rest were seemingly abandoned.
+
+Although references to the A100 have been removed by Allwinner, it is
+believed that the A133 and A133 Plus, which are still available, are simply
+better binned variants of the A100; no other differences have been noted
+thus far, and the drivers for the A100 work on the A133 without any
+additional modifications. There has been a resurgence of interest in the
+A133; patches to allow mainline U-Boot to run on these devices are
+currently in progress.
+
+I have rebased the patches that failed to land, applying the feedback
+provided by maintainers at the time. Some DT binding patches were added, as
+there were a few cases where compatibles were used without being
+documented. Minor reworks were necessary to apply certain patches, as the
+drivers they modified have matured over time.
+
+Patches 1 and 2 add PMU and watchdog nodes to the device tree. This is
+followed by patches 3-8, which implement support for the USB host and OTG
+peripherals. Patches 9 and 10 add MMC nodes, rounding out what originally
+made up the first patch series; support for these already exists from
+earlier patches. Patches 11-13 finish the job of the second original
+series and this series, implementing OPP and enabling DVFS on these SoCs.
+
+This series is also available on GitHub [3].
+
+A sincere thanks to Andre for encouraging me to submit these patches,
+Parthiban for testing this tree on his board, and to the linux-sunxi
+community and its resources for pointing me to these abandoned series in
+the first place [4].
+
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=380887&archive=both&state=*
+[2] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=396055&archive=both&state=*
+[3] https://github.com/BrokenR3C0RD/linux-a100/compare/c2ee9f59..allwinner-a100
+[4] https://linux-sunxi.org/Linux_mainlining_effort#Work_In_Progress
+
+Cody Eksal (4):
+  dt-bindings: phy: sun50i-a64: add a100 compatible
+  dt-bindings: usb: Add A100 compatible string
+  dt-bindings: usb: sunxi-musb: Add A100 compatible string
+  dt-bindings: opp: h6: Add A100 operating points
+
+Shuosheng Huang (2):
+  cpufreq: sun50i: add a100 cpufreq support
+  arm64: dts: allwinner: a100: Add CPU Operating Performance Points
+    table
+
+Yangtao Li (7):
+  arm64: dts: allwinner: A100: Add PMU mode
+  arm64: dts: allwinner: a100: add watchdog node
+  phy: sun4i-usb: add support for A100 USB PHY
+  arm64: dts: allwinner: a100: add usb related nodes
+  arm64: allwinner: A100: enable EHCI, OHCI and USB PHY nodes in Perf1
+  arm64: allwinner: a100: Add MMC related nodes
+  arm64: dts: allwinner: a100: perf1: Add eMMC and MMC node
+
+ .../allwinner,sun50i-h6-operating-points.yaml |   1 +
+ .../phy/allwinner,sun50i-a64-usb-phy.yaml     |   1 +
+ .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
+ .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+ .../allwinner/sun50i-a100-allwinner-perf1.dts |  59 ++++++
+ .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    |  90 ++++++++
+ .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 193 +++++++++++++++++-
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  28 +++
+ drivers/phy/allwinner/phy-sun4i-usb.c         |  11 +
+ 10 files changed, 383 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
+
+
+base-commit: c2ee9f594da826bea183ed14f2cc029c719bf4da
+-- 
+2.47.0
 
 
