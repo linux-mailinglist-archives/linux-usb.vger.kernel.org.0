@@ -1,145 +1,130 @@
-Return-Path: <linux-usb+bounces-16644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECD879AE9FE
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 17:12:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 462D09AEA5D
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 17:27:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B012A2830E4
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 15:12:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9525E284CCC
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 15:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1A041EF955;
-	Thu, 24 Oct 2024 15:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695B31EC00E;
+	Thu, 24 Oct 2024 15:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.fr header.i=benoit.monin@gmx.fr header.b="goYxWV3v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KzvnDCJk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C391EC01D;
-	Thu, 24 Oct 2024 15:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A431EF085
+	for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 15:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729782697; cv=none; b=KDYHqNRKy4YeODSxCOz12kN9MEWZmIyr3mKsTetB6CguQclGtVxLjVKFuXM8Sd/GGiuQBseeYRqr9uuzpGMaPx3JPkTCHhcB9VeN7WipJI8s3qmhQbUp3kP+56i/ncCHfx53/MIC/hyBmhShN9Vkjmmq/JOnCUXJjUBB0RtIPcc=
+	t=1729783642; cv=none; b=lVdWB4r7B9JeddxdSOxvDa/IPSwOo1OXSpHMLzpA51yOGNtEG/4C2/DuHgj9QFEKKKi1DbXNXc/nLJj+jAuR55C4PT3LRh+wIF5KVA3P8uIRVYrMgwNV9daBQWjrsAWkmoqSeFHxZ0lrjNFhPBAmG2ZhWmhE9qTfuM+kEwE/Prk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729782697; c=relaxed/simple;
-	bh=kupkq+e0iXwoyEx+Mu/kldwf8T6QO/wDfPkuWUHdpWg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b38tGRfpejwHPQcBDz4ejvl9cyMp0A7uX0I8RiXEHGf75sSP8rzcYlKB98R97qT0XMSYGMVPz+tK9UmXwHlCxQvW9tzgKCCdOkmHCL8yvBoCaqpjcYmvnwoe1v4wXfjr7mb1+GepooGeQArOR8chzrp3l5gPPb1Na973BBd5c6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.fr; spf=pass smtp.mailfrom=gmx.fr; dkim=pass (2048-bit key) header.d=gmx.fr header.i=benoit.monin@gmx.fr header.b=goYxWV3v; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.fr
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.fr;
-	s=s31663417; t=1729782676; x=1730387476; i=benoit.monin@gmx.fr;
-	bh=h5r7XlNzCKWUXlhx2b6D+ImaHyu9K2mtKbQlo6p47pE=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=goYxWV3v8zKbox0ZhWAeFTAV9qcOnLTw1PAK2ymprishR43fnggh86ry0ddK+v1e
-	 /KdheEkm4PZUOtRlMaEpkjeBmsPmEKLKJe5udqTbpl+BFVPc3PSEUT7fbQ1u9O4vC
-	 bgBnOTzXydiAiGg6C1hA9cvxQbwOGDS0ib/vpQ3YJpzBIdcUuBwX9/Fc6kwJjOD2l
-	 SdhEZHC7JXtRugEx3fXfa9ZEMFJRznqWW7u5rbojiEeEhnh3XE+1d/8onErtoQjzK
-	 7aNBvh7Jb1cq3nLFKuOaZVJ4nJkZISOsFO9uwVEiNWZKzUUTty7qGvA+OxCs4Bz3b
-	 WDxkR8ttXXlbewBexg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from pianobar.pianonet ([176.145.30.241]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MXXyJ-1tOXSG3Yw3-00PNjA; Thu, 24
- Oct 2024 17:11:15 +0200
-From: =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>
-To: =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>
-Subject: [PATCH] net: usb: qmi_wwan: add Quectel RG650V
-Date: Thu, 24 Oct 2024 17:11:13 +0200
-Message-ID: <20241024151113.53203-1-benoit.monin@gmx.fr>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1729783642; c=relaxed/simple;
+	bh=0tHTRCeDq5lghr4oSIfliKtZu1eeZZFCVK36DSv46v8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=girv26535DW/LC6G3mKPkvYK8HX3uPxA55mIU1Me4NeGYk45LjsCvB26A4DwZ4LdH2gvrdMh4tH3ObHH0oygoaFO0D3el4y9lzaGLGCP1dwLfBfcnmLps72EulYA77yxkC91aY5PT0gKIQZ0RcOGlgvd884GBay3XZO5pzPmWqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KzvnDCJk; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729783640; x=1761319640;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0tHTRCeDq5lghr4oSIfliKtZu1eeZZFCVK36DSv46v8=;
+  b=KzvnDCJk9+MaW1T9+E/eA2fc72CRwPjTgtj+1ZTeJXvjkPPCMLqbe+D4
+   BLhQo4sj4clukkLKS93kgl+LR2zDK8vk0+Vvmlb2bmjW77kNA9xx1Fpz9
+   iQcreSRE53mC8d+d0jR/HbZyd2fDzLfMzoPX4R1cevcMO4xuN1P9gP2hd
+   rA3CtfT/CV4MRU1ZzWlheWg036nuEqDkhdSwJ7e/tIepoMZpDajgFfm9l
+   TKp1Uc/84AGNYGuI2S8s5/UHHIweilYJE9sdl85ILajecmoxATkqk18sO
+   xF2IrLmDPcjp/iVKbhdwMvRWjIsZqwks7r35kO6bnXUMKTQ4t34bWucd9
+   g==;
+X-CSE-ConnectionGUID: rEzKPGHFQBeKJzZPg8Qr6g==
+X-CSE-MsgGUID: A/NygMBlTLmnKjnkZmi7+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="29526080"
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="29526080"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 08:27:20 -0700
+X-CSE-ConnectionGUID: d5mMQgYHTN2BRl5v7aymXA==
+X-CSE-MsgGUID: N0av2Hq/TUCLBsIREf9mQw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="80544681"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa010.jf.intel.com with ESMTP; 24 Oct 2024 08:27:19 -0700
+Message-ID: <1c54f2f7-46bb-4ab3-b447-04a07318d200@linux.intel.com>
+Date: Thu, 24 Oct 2024 18:29:31 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SoRCAwhh/gT1I0eJpud+LzerQvoUSVq4SKYdpFyeNZ2ddxstT4h
- M8yJitFp95yViOgHaYoeaLHaqY+Q+e4XO2isOLss+pcf1kPH4n6stvv6gx8mIMeKxcQ2J1o
- SBfKf20Y/n9HilZ99PE+lkMScGXMu8UDUcOz5QKILeqEzK6L+6IlokLAhFTq7JwunS52e+M
- QnQvCJ1L2XTR35jVsAVXQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:aS/qKiG/jn4=;ju14ffzvFIklat2khKgaHYdA3Vd
- r74zdrPbaVrSVfu4uiESo6gppmha/+cCknsEBZtymEWPl8Y0ndOshGDe/ccXdkQRgeE86HWZ6
- n/ETtorimTCUnowh2zSxvMZGT6tHUlj5uGgxqMapEU+q45Xai8NRqCSgunSKfGjE7f1IVfq4H
- 2WWPVIWWE54sv54H32tBsXRPQI3O4ejBe0tpr3k5k0+iGMAudlK7r5BlVxUtMH3EdCQOXtYcH
- A30dA3EAnN6nkBaltKt1oHHrq/lRrwYZ6u+nJ2sGpLcv+iRLhDntHLB5D7Rmbjn3jJl67scz6
- t+eG+0voClLrYMZcKkhKObZZxXbE5vdPQtad3K96gm3vSHNdoEhLbQwr50vxtJkG65/aBspU9
- XKOz7RedNJOY84uNVWNy+TE/3EN2Hm1I6NQ+KefiH5s21oS+KafrCZu1ptqYsInbSBMiYk0cF
- tLqnYPn4Pv8e5eJCU8ZYFXtLtmJ6eC3I4uvLpt7e5BtcFVyrTEBtKPVhrxQ0JArv/mlDMTNRm
- DR3FQzX7XRagywLG9XuDumORwkhRfDzNsVrr8e4bszWFjNOiHUUMu7viUhYpAz4C00Fl0SUQp
- g8pYcrsCK2RjlQVRmav3YjgvlLUkx5oJvILUoiOuU57su1ANoD2WMCIBQ9hqZR+irTdrr2BEo
- MMLtdPkILWq+qOoLnJuyuVFIX6cHdvpIl8nYILKSILVINYgEceeH7W75xrBk/fbD8oRTBkF6R
- o5LIB+FHfJn2LwPo5umuD6Row4hGg5haHdR0e0o7SdIG/52JZjrUk5wxhftFA/Vmeo7f0+EXX
- dr5rf3bbv5Ml0Mc/glzl3vZD67n002hTG3YpPR0EkQW68=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] Fix the NEC stop bug workaround
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+References: <20241014210840.5941d336@foxbook>
+ <e3f8e58d-d132-430f-875f-283d8055b6c0@linux.intel.com>
+ <20241016074711.247ff14e@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20241016074711.247ff14e@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Add support for Quectel RG650V which is based on Qualcomm SDX65 chip.
-The composition is DIAG / NMEA / AT / AT / QMI.
+On 16.10.2024 8.47, Michał Pecio wrote:
+>>> With some experimentation I found that the bug is a variant of the
+>>> old "stop after restart" issue - the doorbell ring is internally
+>>> reordered after the subsequent command. By busy-waiting I confirmed
+>>> that EP state which is initially seen as Stopped becomes Running
+>>> some time later.
+>>
+>> Seems host controllers aren't designed to stop, move dequeue, and
+>> restart an endpoint in quick succession.
+> 
+> As it was you who added the Running case handling, do you know hardware
+> other than NEC which triggers this? Or could it be just a single vendor
+> who screwed up once 15 years ago and caused all the chaos?
+> 
+> NEC sometimes triggers the Running case too and it is obvious why. I'm
+> not sure how I missed it back in January and assumed it's some sort of
+> random failure for no reason.
+> 
+> BTW, the NEC problem appears to be limited to periodic endpoints. I am
+> unable to reproduce it on bulk. I thought that I reproduced it on bulk
+> back then, but on second thought it may have been interrupt, which that
+> device also has. Unfortunatel I wasn't printing endpoint numbers then.
+> 
+> Regards,
+> Michal
 
-T:  Bus=3D02 Lev=3D01 Prnt=3D01 Port=3D03 Cnt=3D01 Dev#=3D  4 Spd=3D5000 M=
-xCh=3D 0
-D:  Ver=3D 3.20 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D 9 #Cfgs=3D  1
-P:  Vendor=3D2c7c ProdID=3D0122 Rev=3D05.15
-S:  Manufacturer=3DQuectel
-S:  Product=3DRG650V-EU
-S:  SerialNumber=3Dxxxxxxx
-C:  #Ifs=3D 5 Cfg#=3D 1 Atr=3Da0 MxPwr=3D896mA
-I:  If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
-=3Doption
-E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-I:  If#=3D 1 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-I:  If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D9ms
-I:  If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D85(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D86(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D9ms
-I:  If#=3D 4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Dqmi_wwan
-E:  Ad=3D05(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D87(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-E:  Ad=3D88(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D9ms
-Signed-off-by: Beno=C3=AEt Monin <benoit.monin@gmx.fr>
-=2D--
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+Sorry about the reply delay.
+I don't think this is a NEC only issue.
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 4823dbdf5465..2b84d7211b13 100644
-=2D-- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1076,6 +1076,7 @@ static const struct usb_device_id products[] =3D {
- 		USB_DEVICE_AND_INTERFACE_INFO(0x03f0, 0x581d, USB_CLASS_VENDOR_SPEC, 1,=
- 7),
- 		.driver_info =3D (unsigned long)&qmi_wwan_info,
- 	},
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0122)},	/* Quectel RG650V */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini P=
-CIe */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
+I was originally fixing halted endpoints at stop endpoint command completion,
+did some stress testing, and was able to hit that running case on Intel
+xHC controllers
+
+See:
+9ebf30007858 xhci: Fix halted endpoint at stop endpoint command completion
+1174d44906d5 xhci: handle stop endpoint command completion with endpoint in running state.
+
+I also just got a report off-list about an exactly similar case as yours, endpoint
+stopped with ctx error, endpoint state was still stopped even if doorbell was
+already rung.
+
+This caused Set TR Deq command to fail with context error as endpoint was running
+by the time this command was processed.
+
+This was on a Intel host, se we need a generic solution to this.
+
+Thanks
+-Mathias
 
