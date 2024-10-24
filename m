@@ -1,188 +1,87 @@
-Return-Path: <linux-usb+bounces-16633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D65D49AE559
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 14:48:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 787D89AE5AD
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 15:08:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 944CA2846D9
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 12:48:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B4471F24E0F
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 13:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291C91D5AB8;
-	Thu, 24 Oct 2024 12:48:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74151DD0D0;
+	Thu, 24 Oct 2024 13:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rHmWzLnu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FDE1B0F16;
-	Thu, 24 Oct 2024 12:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2681D90CD
+	for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 13:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729774124; cv=none; b=XdXR2HY3dCUOhcPqLs81dRF9U5MXea9mU4Yi5YNWAZpLNhE9LHH3vjR3CRQQcgfw2BihSHt/hV2iLIqV1ocRkoa3naRoBDG71cfLRbEMcdEHv4cxCJet7y4Ot5ZbKJJeFHpysQxoi1+8ZSwHOvPARUbcJpVyC+DpPXTRKqkh2Kk=
+	t=1729775189; cv=none; b=ZmToyKtbhnFtXaJfnnIAVgA2ypVtvXQuso6wX7oSUrytW925mDFMJrDlkbjf/+HbNY1fO+q8D77YrZP5xiv/BR2paB6REynuKtJMgYf/1SqCXAbYR3yJbqk3sH+vj6fXblCs2dmnkK4wSobDCh413BJqe63a2dXtIBy7/mMzy5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729774124; c=relaxed/simple;
-	bh=MdggDXIi+w1JotD/hWApURsDP2o4HDuEtCr+Bi9lOC8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=b6KZwUM+YRYm3p6x2Sdwjnr36gK/Y4KOYPix+/xKUOR0RZUdyWzsxhoHJiHD2Me+q908hEBPWapyFCOX3Z53Zp6t80Z1UpWAfMr12eXzJaBxtPBCZXSfI685U/GNEbwQ64cewbUccztAdLvYLBDqRup4msJjeWJ9Na/Nj6s/Gkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 328F261E5FE05;
-	Thu, 24 Oct 2024 14:48:10 +0200 (CEST)
-Message-ID: <598d4118-3f63-44dd-b0da-e19efbb73933@molgen.mpg.de>
-Date: Thu, 24 Oct 2024 14:48:09 +0200
+	s=arc-20240116; t=1729775189; c=relaxed/simple;
+	bh=c0TsvaEv6VuRgDZrO0YATpD6rxLgit1A1mX/GADcaPk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NoIK88TWDh5LVysnL0nzYXKplPyi6Ar3+QNbuEq/1+GWJmp5FDf/3BMnMIcQNM7fEMSMFqXp2MwXNmTT+AxzLmVzEQ9hK2DpUFV8wnBUcNurKwcAiNKSt3GNRGm/BJPpzqAP7ce3NY+G9rEoRb0tM5zWh3jhUgP4vuT/TlCuvlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rHmWzLnu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9ECC4CEC7;
+	Thu, 24 Oct 2024 13:06:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729775188;
+	bh=c0TsvaEv6VuRgDZrO0YATpD6rxLgit1A1mX/GADcaPk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rHmWzLnuKIJwhylGRse9l7rHwSnM8vdKpG//vNvno7X1pLUup9Ji2XqFF+SBPJuJf
+	 kHoZQwhCzzTsMLtyDnSLnX8HRUCG2CA4Ft3dNWb5Y8+NZyR8a4Pr4jjjFu7sDfizC4
+	 7uqwJTKAZa0ccRVXFXKnoZHJgEjbZZfNalZe14sbtSoemApvQrR4OcP1yIC6ThEzPr
+	 t00NNsGnSdy67Qmgc7yrNAB1T59IO/wpKnNoa7A273qOV+KgR3bxTVK8Yk/85Uhygz
+	 m/GIvP9hXFd1JDz9VBA9WvaaGUum4O5p2dUdNziaEGqqjYTYt2eTCDUSHEGB/g0O1f
+	 0zmFM2d1XDLfA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t3xY3-000000003Py-2ToM;
+	Thu, 24 Oct 2024 15:06:44 +0200
+Date: Thu, 24 Oct 2024 15:06:43 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] xhci: Use pm_runtime_get to prevent RPM on unsupported
+ systems
+Message-ID: <ZxpGY_RgP3M7VTv-@hovoldconsulting.com>
+References: <20241024112117.723413-1-Basavaraj.Natikar@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar
- <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
- <87o7ak411y.fsf@somnus> <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
- <87sezv7ytw.fsf@somnus> <1cf78f6f-af21-48bc-a9d8-755dd7bf8503@molgen.mpg.de>
- <9de8ebd1-53fc-48d7-af11-b5c1ed828b3d@molgen.mpg.de>
-Content-Language: en-US
-In-Reply-To: <9de8ebd1-53fc-48d7-af11-b5c1ed828b3d@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024112117.723413-1-Basavaraj.Natikar@amd.com>
 
-Dear Anna-Maria,
-
-
-Am 21.08.24 um 23:01 schrieb Paul Menzel:
-> [Added URLs for files.]
+On Thu, Oct 24, 2024 at 04:51:17PM +0530, Basavaraj Natikar wrote:
+> Use pm_runtime_put in the remove function and pm_runtime_get to disable
+> RPM on platforms that don't support runtime D3, as re-enabling it through
+> sysfs auto power control may cause the controller to malfunction. This
+> can lead to issues such as hotplug devices not being detected due to
+> failed interrupt generation.
 > 
-> Am 21.08.24 um 10:20 schrieb Paul Menzel:
->> Dear Anna-Maria,
->>
->>
->> Thank you very much for the support. I was finally able to collect the 
->> data you asked for.
->>
->> Am 09.04.24 um 09:57 schrieb Anna-Maria Behnsen:
->>> Paul Menzel writes:
->>
->> […]
->>
->>>> Am 08.04.24 um 12:10 schrieb Anna-Maria Behnsen:
->>>>
->>>>> Paul Menzel writes:
->>>>
->>>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 
->>>>>> 6.9- rc2+
->>>>>> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of
->>>>>> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 
->>>>>> stopped
->>>>>> working (only the Ethernet port was used). Linux logged:
->>>>>
->>>>> thanks for the report. Can you please provide a trace beside the dmesg
->>>>> output? The following trace events should be enabled (via kernel 
->>>>> command
->>>>> line):
->>>>>
->>>>> trace_event=timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit
->>>> Unfortunately I haven’t been able to reproduce it until now. Should it
->>>> happen again, I am going to try your suggestion.
->>>
->>> Thanks for letting me know.
->>
->> I wanted to configure that in the running system, but wasn’t able to 
->> set all of these at once with `set_event`:
->>
->>      echo 'timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit' | sudo tee /sys/kernel/tracing/set_event
->>
->> For some reason setting them individually also did *not* work:
->>
->>      for e in timer:* timer_migration:* sched:sched_switch sched:sched_wakeup sched:sched_process_hang irq:softirq_entry irq:softirq_raise irq:softirq_exit'; do echo "$e" | sudo tee -a /sys/ kernel/tracing/set_event; done
->>
->> I then used
->>
->>      echo 1 | sudo tee /sys/kernel/tracing/events/timer/enable
->>      echo 1 | sudo tee /sys/kernel/tracing/events/timer_migration/enable
->>      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_switch/enable
->>      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_wakeup/enable
->>      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_process_hang/enable
->>      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_entry/enable
->>      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_raise/enable
->>      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_exit/enable
->>
->> and also had to increase the buffer to bridge the gap between the 
->> event and me noticing it:
->>
->>      echo 96000 | sudo tee /sys/kernel/tracing/buffer_size_kb
->>
->> Then, with Linux v6.11-rc4-11-g521b1e7f4cf0b, I was able to get the 
->> trace for the event below:
->>
->>      [ 7542.706299] NOHZ tick-stop error: local softirq work is pending, handler #08!!!
->>
->> $ sudo cat /sys/kernel/tracing/trace
->> […]
->>   MediaPD~der #28-14000   [000] d..1.  7542.703768: hrtimer_cancel: hrtimer=000000008d2c9f3f
->>   MediaPD~der #28-14000   [000] .....  7542.703810: hrtimer_init: hrtimer=00000000c6f259e7 clockid=CLOCK_MONOTONIC mode=ABS
->>   MediaPD~der #28-14000   [000] d..1.  7542.703812: hrtimer_start:hrtimer=00000000c6f259e7 function=hrtimer_wakeup expires=7602581538204 softexpires=7602581488204 mode=ABS
->>   MediaPD~der #28-14000   [000] d..2.  7542.703821: sched_switch: prev_comm=MediaPD~der #28 prev_pid=14000 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>            <idle>-0       [000] dN.2.  7542.703931: sched_wakeup: comm=ImageBridgeChld pid=6041 prio=120 target_cpu=000
->>            <idle>-0       [000] d..2.  7542.703937: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ImageBridgeChld next_pid=6041 next_prio=120
->>   ImageBridgeChld-6041    [000] d..2.  7542.704041: sched_switch: prev_comm=ImageBridgeChld prev_pid=6041 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>            <idle>-0       [000] dN.2.  7542.704174: sched_wakeup: comm=Renderer pid=4113 prio=120 target_cpu=000
->>            <idle>-0       [000] d..2.  7542.704179: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Renderer next_pid=4113 next_prio=120
->>          Renderer-4113    [000] d..2.  7542.704245: sched_switch: prev_comm=Renderer prev_pid=4113 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>            <idle>-0       [000] dNh2.  7542.704260: sched_wakeup: comm=IPC I/O Child pid=6029 prio=120 target_cpu=000
->>            <idle>-0       [000] d..2.  7542.704267: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==>  next_comm=IPC I/O Child next_pid=6029 next_prio=120
->>     IPC I/O Child-6029    [000] d..2.  7542.704340: sched_switch: prev_comm=IPC I/O Child prev_pid=6029 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>            <idle>-0       [000] dN.2.  7542.704786: sched_wakeup: comm=Compositor pid=4123 prio=120 target_cpu=000
->>            <idle>-0       [000] d..2.  7542.704791: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Compositor next_pid=4123 next_prio=120
->>        Compositor-4123    [000] d..2.  7542.704944: sched_switch: prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>            <idle>-0       [000] dN.2.  7542.705943: sched_wakeup: comm=Compositor pid=4123 prio=120 target_cpu=000
->>            <idle>-0       [000] d..2.  7542.705950: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Compositor next_pid=4123 next_prio=120
->>        Compositor-4123    [000] d..2.  7542.706105: sched_switch: prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>            <idle>-0       [000] d.h2.  7542.706328: hrtimer_cancel: hrtimer=000000009bbda66a
->>            <idle>-0       [000] d.h1.  7542.706329: hrtimer_expire_entry: hrtimer=000000009bbda66a function=tick_nohz_handler now=7542584007490
->>            <idle>-0       [000] d.h1.  7542.706333: softirq_raise: vec=9 [action=RCU]
->>            <idle>-0       [000] d.h1.  7542.706338: softirq_raise: vec=7 [action=SCHED]
->>            <idle>-0       [000] d.h1.  7542.706339: hrtimer_expire_exit: hrtimer=000000009bbda66a
->>            <idle>-0       [000] d.h2.  7542.706340: hrtimer_start: hrtimer=000000009bbda66a function=tick_nohz_handler expires=7542588000000 softexpires=7542588000000 mode=ABS
->>            <idle>-0       [000] ..s1.  7542.706345: softirq_entry: vec=7 [action=SCHED]
->>            <idle>-0       [000] ..s1.  7542.706359: softirq_exit: vec=7 [action=SCHED]
->>            <idle>-0       [000] ..s1.  7542.706360: softirq_entry: vec=9 [action=RCU]
->>            <idle>-0       [000] ..s1.  7542.706362: softirq_exit: vec=9 [action=RCU]
->>            <idle>-0       [000] dNh4.  7542.707672: sched_wakeup:  comm=irq/51-DLL075B: pid=194 prio=49 target_cpu=000
->>            <idle>-0       [000] d..2.  7542.707685: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=irq/51-DLL075B: next_pid=194 next_prio=49
->>   irq/51-DLL075B:-194     [000] .....  7542.707708: timer_init: timer=00000000630ae178
->>   irq/51-DLL075B:-194     [000] d..1.  7542.707710: timer_start: timer=00000000630ae178 function=process_timeout expires=4296778179 [timeout=250] bucket_expiry=4296778184 cpu=0 idx=121 flags=
->>   irq/51-DLL075B:-194     [000] d..2.  7542.707718: sched_switch: prev_comm=irq/51-DLL075B: prev_pid=194 prev_prio=49 prev_state=D ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>            <idle>-0       [000] dN.2.  7542.709072: sched_wakeup: comm=AudioIP~ent RPC pid=6671 prio=120 target_cpu=000
->> […]
->>
->> The trace file is 320 MB big. If you need the full trace and log, 
->> please tell me, and I’ll upload it somewhere.
-> 
-> https://owww.molgen.mpg.de/~pmenzel/20240821--linux-6.10-rc4+.txt
-> https://owww.molgen.mpg.de/~pmenzel/20240821--soft-irq--trace.7z
+> Fixes: a5d6264b638e ("xhci: Enable RPM on controllers that support low-power states")
+> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> ---
 
-Just for the record, I am still seeing this with 
-6.12.0-rc4-00047-gc2ee9f594da8 (KVM: selftests: Fix build on on non-x86 
-architectures).
+This is a new version of this patch:
 
+	https://lore.kernel.org/all/20240925161520.2736895-1-Basavaraj.Natikar@amd.com/
 
-Kind regards,
+so please resend a v3 with a changelog here.
 
-Paul
+Also remember to CC people reviewing your patches when resubmitting.
+
+Johan
 
