@@ -1,280 +1,132 @@
-Return-Path: <linux-usb+bounces-16630-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16631-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A4C99AE254
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 12:18:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DB8B9AE323
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 12:54:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6019282185
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 10:18:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D3221C222B9
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2024 10:54:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4991C4A1D;
-	Thu, 24 Oct 2024 10:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902741C2DA2;
+	Thu, 24 Oct 2024 10:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FTFYgM4s"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="amiXParX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75541BD028;
-	Thu, 24 Oct 2024 10:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B679014831C
+	for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 10:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729765066; cv=none; b=UE8XJDDrDIAJlqa5xIWR5Hz2HMj3DzgwBjm9GCQ3NJfSdNUJWAmJu4VlknaOjqV+4ZsdFOIDuiFdLAvhQ1dObnoTFdrnSkTqiYaZ6wQlI/hGNFUeHw65Ai7IcJdO5yvh0vCbdz2/foNNl0YXUEO+S+RA0bfIbkwwqoNFKTqI0N4=
+	t=1729767294; cv=none; b=t3Sa82t2MK9nrlVyHn/+69X51iVp1+n4wEW04shVbCb2hbu7ZAeujeuyKmx1gZgZJK98PbtT9vL8Q0GAMigN19kfIcLm8P25poMrJujSXH3U3S6XwuVVR1Av6WflRykvU5C9nDVYoh6ehsvL81n6BWUCAdwch/7lzMeWPY4BVDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729765066; c=relaxed/simple;
-	bh=c8Jg98xcpFACVY6GOIH4a4vVaCnNTNjpk0qmHzOUfHU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mXCqjgL89Oofm6mNg2I9J3XdZOlFyMumiLdNs428r7UMjS1f5XuUfGsQpKsOInFfChSCrFv6AzzR9nFZEWU2RJy93dwyOqfeTkUm3R2kjClpcCeAwr0QK8yAclV7Thh96oSZNY7sP6l9nNGQQ7sYstN0eZ5dU2i0pChsSXATgag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FTFYgM4s; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20cf6eea3c0so5334725ad.0;
-        Thu, 24 Oct 2024 03:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729765063; x=1730369863; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SMncn0KiFbXEwxO5HGVMTGntCAI1pNF6ZkKXsjmzxls=;
-        b=FTFYgM4sBaYJhVvQ7whjlURP9KNZzg8haue8D63Ga4UifYZzg/FtmLwH6upQSaejw0
-         sncESwiVFQtqUwuN52aMZRRlmbGuRLvZMou9FJFrwWgrFCuaDStzChn77FszzlUt1EFE
-         W+c+eHRLIJvUqVjnBGEAzaj/9IZImaEW2eBSZi2uOwHyqClSpsX7xKeF4zSJKflTmXRw
-         Vpc7F5QtyAtQ+G8ehT16TKAH6g87DyxHC+Mv9yU89aE14WwGoopKwCNOTDgsDLxBnC8M
-         fvyZKwNVJ4OTESTJZ0/8ipSGalyYQJDbN7ManRajNP2GP2xnNjVuWFBgKBqDdhA4EpOk
-         DFaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729765063; x=1730369863;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SMncn0KiFbXEwxO5HGVMTGntCAI1pNF6ZkKXsjmzxls=;
-        b=uEk8ZqT9UTEG3Z1cSamMYs1CnfsKZptqzEDCfBbq6PA4tuIuje4nYbQTIEgCYj3JGK
-         83AdVGzICdbexcKVEexXVGipUzPsuQK8Z2xVPbs2sznjOb2AwwPkVZWeO3h7QdTjzLZr
-         qCPvMTmtVmqm7eVcDsKIS0sYVIRrLILv3FhR0oHZvO0aPGSbqGjW8zeyv/0yL+Xu3/7R
-         lQZrtURkqtxFcPcvHct0AM7lQlQ8psGkRQTh/9GKo5oUwrNChnEhwrttX9ND3lsPG8ZO
-         zzaq6ypAdhLlzvE1WeBO8nl8Ay1clCXi52qhw7r9RMq4i8+uSJGZ5JiRIsdHlEP8OQmV
-         oZ6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVCDGU1jvB82jzYI21i5zHfFkJ3h1/dJILKMKshjUqNjCbOc026wEwJOVEH3VM52Nb9w8aW+ii8Qefv@vger.kernel.org, AJvYcCXPjwd7xt9LzhncN107kBeJmk3YzXq4NHMPQBpm3oICpXw663KgOWna8RIERmNPH6NCxDgO88OdSCQcpZs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoJaZKprrkWHqgvb+nkxSrW86jXVNDePsMGFCW8bI8JRfAowWQ
-	8e20mJRm5pIkzKPfLaLrTIeyoPKBO8ZFx9E798gdvy641fqBfDtB
-X-Google-Smtp-Source: AGHT+IE0ZZptJeQNZ2yXYdqjWFys5LQ0dbKILrWDy93GpnNpyjTIxetByYZKitPhqyz8t3FSH+xpaA==
-X-Received: by 2002:a17:902:d2d0:b0:20c:6b11:deef with SMTP id d9443c01a7336-20fb9addb15mr12813925ad.48.1729765062847;
-        Thu, 24 Oct 2024 03:17:42 -0700 (PDT)
-Received: from asix-MS-7816.. ([2403:c300:5606:d914:fec1:9dc9:d21d:9b02])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0bd376sm69782065ad.132.2024.10.24.03.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 03:17:42 -0700 (PDT)
-From: Tony Chung <tony467913@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: johan@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Tony Chung <tony467913@gmail.com>
-Subject: [PATCH 3/3] driver: usb: serial: mos7840: add more baudrate options
-Date: Thu, 24 Oct 2024 18:09:05 +0800
-Message-Id: <20241024100901.69883-4-tony467913@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241024100901.69883-1-tony467913@gmail.com>
-References: <20241024100901.69883-1-tony467913@gmail.com>
+	s=arc-20240116; t=1729767294; c=relaxed/simple;
+	bh=2nH4MxGrrZz43q1yccnlhT1n0I/jg0YWnn4+2OXOn6M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ONxDI9ZQLIqvY/JJmYwQQoEzYKJc8PCaMNUfxSfYU7SvUfqmB7TehtcKHSXnSGQ7x70XYvoqqfHjwlqy1gW8R9mbf5bkpz/4c9NvyVZltyypmcT+BzMLv80bXoYyFw1nouOI5rtYne/a/pqfgshHtuUPik2T6Bwb/Iw/EzuHrkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=amiXParX; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729767292; x=1761303292;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2nH4MxGrrZz43q1yccnlhT1n0I/jg0YWnn4+2OXOn6M=;
+  b=amiXParXG9CtKeNIseIUs6I5+ZgfD1Zc022s/AbYPccVYQmobUqnHdvz
+   XzHbIFD+vUEiDH+DQEzVKvVe/EiAeWMzx6df7jfg5MjkOXo9CXp8yZ1JK
+   4fk/aYsjF6LxZLZ1JCQnd6jOTiUrUvqYyz2Z34w4vxgtn+vlTPLuwYZWe
+   tjMiBu2UEgjds74d8suw7lXQ6WzQX7o5xKVZV2ybV8b+O34lKydk1/rcV
+   XSl4hxafZ+0S677ng3FOVrJzc9MhWErmDb5UC5dr8RnnA2XWZ2O+ExxH5
+   X9xIKQkP/mChyWRxf8DzrEyrDmD4RHBHJhjFsXI8sg8gO15qSEFkhKisF
+   A==;
+X-CSE-ConnectionGUID: rEAhY+vPQROukuWv9Vl3fw==
+X-CSE-MsgGUID: peD2M9lMTfiRxDpDgDBMfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11234"; a="33296662"
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="33296662"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 03:54:51 -0700
+X-CSE-ConnectionGUID: ffpk2TV+TAGNT1NO6b2TTQ==
+X-CSE-MsgGUID: JrnTM38nRvudGhaH5Vf4GA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="85116221"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa005.fm.intel.com with ESMTP; 24 Oct 2024 03:54:49 -0700
+Message-ID: <8c72a211-06aa-40f5-a478-aa2d2604143c@linux.intel.com>
+Date: Thu, 24 Oct 2024 13:57:02 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: acpi: fix boot hang due to early incorrect
+ 'tunneled' USB3 device links
+To: Harry Wentland <harry.wentland@amd.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+References: <20241022123742.3045707-1-mathias.nyman@linux.intel.com>
+ <20241022132232.GD275077@black.fi.intel.com>
+ <2b4708a0-d8b0-4e8b-9cf8-11552527eb14@linux.intel.com>
+ <f40888a4-e9ef-423e-8ac3-e6bf4ecc242c@amd.com>
+ <126c429f-7c55-4d7e-9d3a-1fa5c5ab1369@amd.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <126c429f-7c55-4d7e-9d3a-1fa5c5ab1369@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Adds more baud rate options using 96M/30M/External clock sources.
-To use these clock sources,
-set through Clk_Select_Reg1 and Clk_Select_Reg2.
+On 23.10.2024 21.07, Harry Wentland wrote:
+> 
+> 
+> On 2024-10-23 12:50, Mario Limonciello wrote:
+>> On 10/23/2024 07:12, Mathias Nyman wrote:
+>>> On 22.10.2024 16.22, Mika Westerberg wrote:
+>>>> The test case would be something like this:
+>>>>
+>>>> 1. Add "thunderbolt.host_reset=0" in the kernel command line.
+>>>> 2. Boot with USB4 device connected (and so that it has USB 3.x device
+>>>>      connected such as USB 3 memory stick).
+>>>> 3. Since there is no device link Thunderbolt/USB4 can runtime suspend
+>>>> freely.
+>>>> 4. Once that happens the tunnels are gone, including the USB 3.x tunnel
+>>>>      so the xHCI might see disconnect here.
+>>>>
+>>>> Also on resume path it will not be recreating the tunnel before xHCI
+>>>> because there is no device link. I can try this on my side too if you
+>>>> like.
+>>>>
+>>>
+>>> You are right, I was able to reproduce it.
+>>>
+>>> Device link won't be created if BIOS created the tunnel, thunderbolt driver
+>>> probes after this usb device is created, and "thunderbolt.host_reset=0" is set.
+>>>
+>>> Turning the device link "stateless" could possible help.
+>>> It removes driver presence dependency but keeps correct suspend/resume and
+>>> shutdown ordering.
+>>> It should also help with boot hang/probe issues seen on the AMD platforms.
+>>>
+>>> Mario, Harry, does the following work for you?
+>>
+>> I didn't repro Harry's problem, but I did try on two OEM systems (Rembrandt and Phoenix based) with this change in place on a 6.12-rc4 base and didn't notice anything worse happening.
+> 
+> Yeah, the following diff works for me.
+> 
+> If you create a patch feel free to add my
+> Tested-by: Harry Wentland <harry.wentland@amd.com>
+> 
+> Harry
 
-Signed-off-by: Tony Chung <tony467913@gmail.com>
----
- drivers/usb/serial/mos7840.c | 156 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 155 insertions(+), 1 deletion(-)
+Thanks for testing, I'll turn this into a proper v2 patch
 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index acc16737b..70ee4a638 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1169,6 +1169,37 @@ static int mos7840_calc_baud_rate_divisor(struct usb_serial_port *port,
- 		*divisor = 0x01;		// DLM=0, DLL=0x01
- 		*clk_sel_val = 0x60;	// clock source=24M
- 
-+	/* below are using 96M or 30M clock source
-+	 * will determine the clock source later
-+	 * in function mos7840_send_cmd_write_baud_rate
-+	 */
-+	} else if (baudRate == 6000000) {
-+		*divisor = 0x01;		// DLM=0, DLL=0x01
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-+	} else if (baudRate == 2000000) {
-+		*divisor = 0x03;		// DLM=0, DLL=0x03
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-+	} else if (baudRate == 403200) {
-+		*divisor = 0x0f;		// DLM=0, DLL=0x0f
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-+	} else if (baudRate == 225000) {
-+		*divisor = 0x1b;		// DLM=0, DLL=0x1b
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-+	} else if (baudRate == 153600) {
-+		*divisor = 0x27;		// DLM=0, DLL=0x27
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-+
-+	} else if (baudRate == 10000) {
-+		*divisor = 0xbb;		// DLM=0, DLL=0xbb
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
-+	} else if (baudRate == 125000) {
-+		*divisor = 0x0f;		// DLM=0, DLL=0x0f
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
-+	} else if (baudRate == 625000) {
-+		*divisor = 0x03;		// DLM=0, DLL=0x03
-+		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
-+
-+
- 	} else if (baudRate <= 115200) {
- 		*divisor = 115200 / baudRate;
- 		*clk_sel_val = 0x0;
-@@ -1246,11 +1277,134 @@ static int mos7840_send_cmd_write_baud_rate(struct moschip_port *mos7840_port,
- 
- 	}
- 
--	if (1) {		/* baudRate <= 115200) */
-+	if (1) {
- 		clk_sel_val = 0x0;
- 		Data = 0x0;
- 		status = mos7840_calc_baud_rate_divisor(port, baudRate, &divisor,
- 						   &clk_sel_val);
-+		if (status < 0) {
-+			dev_dbg(&port->dev, "%s failed in set_serial_baud\n", __func__);
-+			return -1;
-+		}
-+
-+		/* Write clk_sel_val to SP_Reg or Clk_Select_Reg*/
-+		// check clk_sel_val before setting the clk_sel_val
-+		if (clk_sel_val == 0x80) {
-+		// clk_sel_val is DUMMY value -> Write the corresponding value to Clk_Select_Reg
-+			// 0x01:30M, 0x02:96M, 0x05:External Clock
-+			if (baudRate == 125000 || baudRate == 625000 || baudRate == 10000) {
-+				clk_sel_val = 0x01;
-+			} else if (baudRate == 153600 || baudRate == 225000 || baudRate == 403200 ||
-+					baudRate == 2000000 || baudRate == 6000000) {
-+				clk_sel_val = 0x02;
-+			} else {
-+				clk_sel_val = 0x05; // externel clk for custom case.
-+			}
-+
-+			// needs to set clock source through
-+			// Clk_Select_Reg1(offset 0x13) & Clk_Select_Reg2(offset 0x14)
-+			// Clk_Select_Reg1 for port1,2		Clk_Select_Reg2 for port3,4
-+			if (mos7840_port->port_num <= 2) {
-+				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG1, &Data);
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-+					return -1;
-+				}
-+				if (mos7840_port->port_num == 1) {
-+					Data = (Data & 0xf8) | clk_sel_val;
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-+				} else if (mos7840_port->port_num == 2) {
-+					Data = (Data & 0xc7) | (clk_sel_val<<3);
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-+				}
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-+					return -1;
-+				}
-+			} else if (mos7840_port->port_num <= 4) {
-+				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG2, &Data);
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-+					return -1;
-+				}
-+				if (mos7840_port->port_num == 3) {
-+					Data = (Data & 0xf8) | clk_sel_val;
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-+				} else if (mos7840_port->port_num == 4) {
-+					Data = (Data & 0xc7) | (clk_sel_val<<3);
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-+				}
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-+					return -1;
-+				}
-+			}
-+		} else {
-+		// clk_sel_val is not DUMMY value -> Write the corresponding value to SP_Reg
-+
-+			/* First, needs to write default value to
-+			 * Clk_Select_Reg1(offset 0x13) & Clk_Select_Reg2(offset 0x14)
-+			 * Clk_Select_Reg1 for port1,2		Clk_Select_Reg2 for port3,4
-+			 */
-+			if (mos7840_port->port_num <= 2) {
-+				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG1, &Data);
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-+					return -1;
-+				}
-+				if (mos7840_port->port_num == 1) {
-+					Data = (Data & 0xf8) | 0x00;
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-+				} else if (mos7840_port->port_num == 2) {
-+					Data = (Data & 0xc7) | (0x00<<3);
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-+				}
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-+					return -1;
-+				}
-+			} else if (mos7840_port->port_num <= 4) {
-+				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG2, &Data);
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-+					return -1;
-+				}
-+				if (mos7840_port->port_num == 3) {
-+					Data = (Data & 0xf8) | 0x00;
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-+				} else if (mos7840_port->port_num == 4) {
-+					Data = (Data & 0xc7) | (0x00<<3);
-+					status =
-+						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-+				}
-+				if (status < 0) {
-+					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-+					return -1;
-+				}
-+			}
-+			// select clock source by writing clk_sel_val to SPx_Reg
-+			status = mos7840_get_reg_sync(port, mos7840_port->SpRegOffset,
-+									 &Data);
-+			if (status < 0) {
-+				dev_dbg(&port->dev, "reading spreg failed in set_serial_baud\n");
-+				return -1;
-+			}
-+			Data = (Data & 0x8f) | clk_sel_val;
-+			status = mos7840_set_reg_sync(port, mos7840_port->SpRegOffset,
-+									Data);
-+			if (status < 0) {
-+				dev_dbg(&port->dev, "Writing spreg failed in set_serial_baud\n");
-+				return -1;
-+			}
-+		}
-+
- 		status = mos7840_get_reg_sync(port, mos7840_port->SpRegOffset,
- 								 &Data);
- 		if (status < 0) {
--- 
-2.34.1
-
+-Mathias
 
