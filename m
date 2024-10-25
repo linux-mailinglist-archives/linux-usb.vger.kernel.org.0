@@ -1,187 +1,130 @@
-Return-Path: <linux-usb+bounces-16716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16717-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F4CC9B04B5
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 15:55:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E23269B07D7
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 17:19:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 326421C221D7
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 13:55:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6A08282D44
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 15:19:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751811F757C;
-	Fri, 25 Oct 2024 13:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27DFA231CBB;
+	Fri, 25 Oct 2024 15:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="namopyTX"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Co4YLX8B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f67.google.com (mail-qv1-f67.google.com [209.85.219.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45231F7552;
-	Fri, 25 Oct 2024 13:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365EA231CAF
+	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 15:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729864521; cv=none; b=jmiCkb0rfMROkMp0aXaaiv90XNjbPwQBHknJ5n19wQAFYfDwjfo2eKQMpu1CJcekxQcZXo9xgTPMGnjfuOdlAs5VPR4svl0apzECcLabvZtv+yUFcclR306eDlJ1TBvYrVUE8LyQMpp+Tfx3lli3epSm3MrW7en7se9uVJWZMaw=
+	t=1729869220; cv=none; b=Xxnu0fDMD5PwoDYGEJdx2dvWUcx6NA+YYzMba3wipke98LxR6BHGXTwW1KAydPl3+nVPy+kWw9TPyGlT7s9h0H7wA0QqfJrEGngjQ1Zlk1g0ZdDBBRY0q0KU/x4GtJl/om6ELPOwLp3EUG/8fW5iQz7qDzFFrl6Mn6+kkpqW8Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729864521; c=relaxed/simple;
-	bh=sP9ddLOzD4XD7oJ2gtfjgcFVXKonwqzmaiwnFgWwUl0=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=SS3lBhAGQfvU/ifzMxKmQok42jCOy+6ZybIm+2gFaLbqD+NRz9SLJhTIEB5T+yb5CHHYgr8UPfI13H+rWNtdi+tljIcUEAGZ/vV8xB4z15QnKGEPg0ekGaShr7rPSduSsAiwRWtw1XihxhIZj2fg0iErvCsoM5jJfS+c24nRzwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=namopyTX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A9F1C4CECD;
-	Fri, 25 Oct 2024 13:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729864520;
-	bh=sP9ddLOzD4XD7oJ2gtfjgcFVXKonwqzmaiwnFgWwUl0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=namopyTXYcR+34VhDW1DJIeNZwRgeHEHzEyji0zywrSQfrpLnmi4N0g858xJziiRR
-	 6zTQo1Ekfw2dF157XXMsOV+u1y7gZY7WSnLI7Uz01DHRdU+wK1aMxF7qSgY6K3Rn5C
-	 5v72aoRCh1oYtyP2potY5imnUGIYgPf5EPQIgbXgRgBcJ8bmRLzW8/52XekJ9R/Ye2
-	 0bDdVeawSgA84pWaZVFz9HmHwVm5u8V+sq4C529Qjq6ANnVGMiu4OYKbUT8r/cPcjw
-	 HDPCCknnrEqiTWcra0NeX7UVlQbC2bSQVsaMPleqhVXO0/ttgsKa/NR6SFue4b7zWA
-	 GOKW2dvPYviLQ==
-Date: Fri, 25 Oct 2024 08:55:19 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1729869220; c=relaxed/simple;
+	bh=jjhEJPptethgjzwbLQgHQEbpgTKW93lbhZcDW+yg5Rc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i8E3YYgSQO5IDO9V7EmDEAcGswSpGJw7CcV7jzUKFcN4KKMDwiSSqsu5fE27EbkNIxdyehYYcpIAfgdXpl9pzvljjtZvNu/1PbClOheIQu5LElRAaQScSq4fjuw9JforlBoE728g+Yp49d5qqybKCHvZoqPCPjs9HATuQuMOlXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Co4YLX8B; arc=none smtp.client-ip=209.85.219.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f67.google.com with SMTP id 6a1803df08f44-6cb82317809so13069336d6.0
+        for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 08:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1729869217; x=1730474017; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ob9J20yg1EvtCmSQIYYm4VaG6/BYPtCl9JLxfLLlhDA=;
+        b=Co4YLX8BAkzwoA9girfLCTeYlFzTGG6qnSKrTGrNHYc0R3yh2nllHeaWJ5Q1PFzUdP
+         uQlRIHjsSp1usZGuhmp++GoKoHFB9kpfiTLHksjD08e1Euty5nxamKnIpmmUmqjFVIbi
+         eFtPK596lW91fDIH+33Y5ClnnwOlbdkGe22fSpav98pQdRkV3eLb08WVX3BXoAD30YsU
+         +zSIM91wiuAlh9VeqWMNAp9jEjaR/129JjqcnFcsbt92i9ipPfmu3de44t9Lav4q18uH
+         cXqJxlFizrH5IsG8f+7znD4vDwoGddjTWGoSVZKk/Tr+ko99JsfLH6+bLi4ft9MQINFg
+         IZoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729869217; x=1730474017;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ob9J20yg1EvtCmSQIYYm4VaG6/BYPtCl9JLxfLLlhDA=;
+        b=Q/d4xQz66Bnm4FhqwnP7+09S10bNixEDE8RQoizQxg3a93gzkLfZEd6v9QHVzH1zkI
+         LIUoDtOR6vWcNZzHwuiTbPXYk3hw7wTibiQSQlS9p4//c+j4H3pjdwwh1HFp13L0F8bI
+         6AzBvmw+Jq2z3r7nGzzCza7QBGznuFZxbA8amuVi8LP7myLyu7Y7k/RNsDE4Gs/EdkV/
+         63NgaGPCFyhYkFynXd7yj4lKTADFwk0+jMegSi2uGi6c7NjgUvZ6cHCa7PVW87s3vAZ+
+         LI63MdTXxdgT0/uTiY7Nmj5LLfmnu+uHjm56jANMwp+TmHz4uCcxODLumqNyntWF3nkZ
+         R7AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2jw7eMF6ViCbAgCa8Uk3Z2/Yt2daL5U5NRbXfB1Tjeir2ogjEIxbkWGvTc2ebx7rzm37NH9WtNY4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQJvlbgP5oLQzwUfen2qzHMeeeyNbrmu9jHRicwA50SQ8q5n8Q
+	8tm7ibmJA2F7SLpdPat2p1kIWMLDHY1Cq1fAbp4j6SITNKbR8PnCcR22g3RyYg==
+X-Google-Smtp-Source: AGHT+IFRC0zpJ4ztR+NlXTGogQURe8G0MbwFZddw+Mqy2FLyvvPsPABgZ1YxFaEmRVPEcniozaRZvw==
+X-Received: by 2002:a05:6214:2dc5:b0:6cc:44b:1060 with SMTP id 6a1803df08f44-6ce342d2640mr129470286d6.32.1729869216999;
+        Fri, 25 Oct 2024 08:13:36 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:2501:2805:c6d5:fe22:7fa3:ec54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d179a5660asm6443376d6.140.2024.10.25.08.13.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 08:13:36 -0700 (PDT)
+Date: Fri, 25 Oct 2024 11:13:33 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: syzbot <syzbot+0ca979b86eaec7337a89@syzkaller.appspotmail.com>,
+	Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+	jannh@google.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	vbabka@suse.cz, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [syzbot] [mm?] INFO: rcu detected stall in
+ vms_complete_munmap_vmas
+Message-ID: <967f3aa0-447a-4121-b80b-299c926a33f5@rowland.harvard.edu>
+References: <671b7fb2.050a0220.2e773.0000.GAE@google.com>
+ <832afb0c-98b7-4d29-8436-1ff6a65133b8@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Cody Eksal <masterr3c0rd@epochal.quest>
-Cc: linux-arm-kernel@lists.infradead.org, 
- Yangtao Li <frank@allwinnertech.com>, linux-usb@vger.kernel.org, 
- linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Samuel Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, linux-sunxi@lists.linux.dev, 
- Thierry Reding <treding@nvidia.com>, Viresh Kumar <vireshk@kernel.org>, 
- devicetree@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>, 
- Andre Przywara <andre.przywara@arm.com>, Stephen Boyd <sboyd@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
- Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>
-In-Reply-To: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
-References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
-Message-Id: <172986441154.1907923.9460630831085493840.robh@kernel.org>
-Subject: Re: [PATCH 00/13] sunxi: A100/A133 second stage support
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <832afb0c-98b7-4d29-8436-1ff6a65133b8@lucifer.local>
 
+On Fri, Oct 25, 2024 at 12:37:36PM +0100, Lorenzo Stoakes wrote:
+> On Fri, Oct 25, 2024 at 04:23:30AM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    c6d9e43954bf Merge 6.12-rc4 into usb-next
+> > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=139f225f980000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=4a2bb21f91d75c65
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=0ca979b86eaec7337a89
+> > compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=179f225f980000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/3bf4a453ec2f/disk-c6d9e439.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/e4a2db2a5d95/vmlinux-c6d9e439.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/8eb8e481b288/bzImage-c6d9e439.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+0ca979b86eaec7337a89@syzkaller.appspotmail.com
+> >
+> 
+> Isn't this just the same thing as [0]?
+> 
+> Again I think we're just happening to hit a stall in the unmap logic rather than
+> this being an mm thing.
+> 
+> We retried that one a few times and it didn't hit any mm code after the
+> first time.
+> 
+> Greg mentioned there was some weirdness with the dummy usb hcd controller
+> in [1].
 
-On Thu, 24 Oct 2024 14:05:18 -0300, Cody Eksal wrote:
-> Hello! This is my first submission, so please be gentle :)
-> 
-> Back in 2020, two Allwinner employees, Yangtao Li and Shuosheng Huang, each
-> submitted a patch series for the A100 series of SoCs; [1] intended to add
-> support for the watchdog, ARM PMU, DMA, USB, and (e)MMC controller, and [2]
-> implemented DVFS support. Some patches from the first series landed, but
-> the rest were seemingly abandoned.
-> 
-> Although references to the A100 have been removed by Allwinner, it is
-> believed that the A133 and A133 Plus, which are still available, are simply
-> better binned variants of the A100; no other differences have been noted
-> thus far, and the drivers for the A100 work on the A133 without any
-> additional modifications. There has been a resurgence of interest in the
-> A133; patches to allow mainline U-Boot to run on these devices are
-> currently in progress.
-> 
-> I have rebased the patches that failed to land, applying the feedback
-> provided by maintainers at the time. Some DT binding patches were added, as
-> there were a few cases where compatibles were used without being
-> documented. Minor reworks were necessary to apply certain patches, as the
-> drivers they modified have matured over time.
-> 
-> Patches 1 and 2 add PMU and watchdog nodes to the device tree. This is
-> followed by patches 3-8, which implement support for the USB host and OTG
-> peripherals. Patches 9 and 10 add MMC nodes, rounding out what originally
-> made up the first patch series; support for these already exists from
-> earlier patches. Patches 11-13 finish the job of the second original
-> series and this series, implementing OPP and enabling DVFS on these SoCs.
-> 
-> This series is also available on GitHub [3].
-> 
-> A sincere thanks to Andre for encouraging me to submit these patches,
-> Parthiban for testing this tree on his board, and to the linux-sunxi
-> community and its resources for pointing me to these abandoned series in
-> the first place [4].
-> 
-> [1] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=380887&archive=both&state=*
-> [2] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=396055&archive=both&state=*
-> [3] https://github.com/BrokenR3C0RD/linux-a100/compare/c2ee9f59..allwinner-a100
-> [4] https://linux-sunxi.org/Linux_mainlining_effort#Work_In_Progress
-> 
-> Cody Eksal (4):
->   dt-bindings: phy: sun50i-a64: add a100 compatible
->   dt-bindings: usb: Add A100 compatible string
->   dt-bindings: usb: sunxi-musb: Add A100 compatible string
->   dt-bindings: opp: h6: Add A100 operating points
-> 
-> Shuosheng Huang (2):
->   cpufreq: sun50i: add a100 cpufreq support
->   arm64: dts: allwinner: a100: Add CPU Operating Performance Points
->     table
-> 
-> Yangtao Li (7):
->   arm64: dts: allwinner: A100: Add PMU mode
->   arm64: dts: allwinner: a100: add watchdog node
->   phy: sun4i-usb: add support for A100 USB PHY
->   arm64: dts: allwinner: a100: add usb related nodes
->   arm64: allwinner: A100: enable EHCI, OHCI and USB PHY nodes in Perf1
->   arm64: allwinner: a100: Add MMC related nodes
->   arm64: dts: allwinner: a100: perf1: Add eMMC and MMC node
-> 
->  .../allwinner,sun50i-h6-operating-points.yaml |   1 +
->  .../phy/allwinner,sun50i-a64-usb-phy.yaml     |   1 +
->  .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
->  .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
->  .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
->  .../allwinner/sun50i-a100-allwinner-perf1.dts |  59 ++++++
->  .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    |  90 ++++++++
->  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 193 +++++++++++++++++-
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  28 +++
->  drivers/phy/allwinner/phy-sun4i-usb.c         |  11 +
->  10 files changed, 383 insertions(+), 3 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
-> 
-> 
-> base-commit: c2ee9f594da826bea183ed14f2cc029c719bf4da
-> --
-> 2.47.0
-> 
-> 
-> 
+For what it's worth, that weirdness has been fixed in 6.12-rc4 by commit 
+5189df7b8088 ("USB: gadget: dummy-hcd: Fix "task hung" problem").
 
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y allwinner/sun50i-a100-allwinner-perf1.dtb' for 20241024170540.2721307-1-masterr3c0rd@epochal.quest:
-
-arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dtb: cpu-opp-table: $nodename:0: 'cpu-opp-table' does not match '^opp-table(-[a-z0-9]+)?$'
-	from schema $id: http://devicetree.org/schemas/opp/allwinner,sun50i-h6-operating-points.yaml#
-arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dtb: cpu-opp-table: 'opp@1080000000', 'opp@1200000000', 'opp@1320000000', 'opp@1464000000', 'opp@408000000', 'opp@600000000', 'opp@816000000' do not match any of the regexes: '^opp-[0-9]+$', 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/allwinner,sun50i-h6-operating-points.yaml#
-
-
-
-
-
+Alan Stern
 
