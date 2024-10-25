@@ -1,181 +1,119 @@
-Return-Path: <linux-usb+bounces-16690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63FDA9AFB79
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 09:49:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A719AFFC2
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 12:13:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CBA11C22854
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 07:49:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 076071C23F49
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 10:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56C7B1C07E7;
-	Fri, 25 Oct 2024 07:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dlE9BJ6g"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCF81E501B;
+	Fri, 25 Oct 2024 10:09:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F60199FD0;
-	Fri, 25 Oct 2024 07:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DFA1E00BF;
+	Fri, 25 Oct 2024 10:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729842592; cv=none; b=LkN7j/Ls/Y0QFfkxHqf3YiZoBg+x8M3oPOlwbXDggcTsmp5HIrx94kVnRL8djlqjOIFrhl5WLrbWEXbCC0GrJ9EJrxiUm0vFDWtaUkQDHrX3WHrTkzhjkCeLm4OcNLhZ3MEC/dX2LIkzs4LflW+jiHRScMz43IJ+aRHtv8fL8Fw=
+	t=1729850978; cv=none; b=qMHWiTGW47CwgqLZ1SI7RNHfI4qV+xQIaMP/F5hVqFxi3bz9KBqWJ7ekmiKduU6Qe3y7cBvek0y3idO/RGYzJhvp13uG806D4aB14pGu8uqhj1rbaJzkbxCiUxnelmmxcpvJyStcoj3+VuSYcJOvc7klWEtuOUCPqHy/n3buvyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729842592; c=relaxed/simple;
-	bh=952y0NPkhwarQKxJG1f+kljQakJhI+T6e79joVRiUcg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CvQxSwv24BBv4Iaf9W2Y67FodQMn3GKfwyhfprR4FQTb9YRaMUAlYtfNrWHTLxH9/4xEKGoJrYpLMMmPIhSjg9D+z76rg1JdVGJp6yeRacfiXwRRRueugzuQjOzbSWoK+FwbBoYnKUlLdFSkUlaQn5GMShAOV0r0auVTQSjhHT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dlE9BJ6g; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729842590; x=1761378590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=952y0NPkhwarQKxJG1f+kljQakJhI+T6e79joVRiUcg=;
-  b=dlE9BJ6gs0n1UBEtIr2AFy+VYd12dRolotRoOGvadNXWg4oFT0mqxMDV
-   O3m64Czms3d+YJhQrzW4H8QAsIXYHFjDcN3D56B9OIvVvzjFFUJBdk5fZ
-   Z5s/qEYl9Z9cT1ngWqMraTqLQ5towQFKfGuzyQBqPbxVHaxyIsB3ABYpg
-   tetbBNg75GQXceMJSKPQZQ7PUBwCZMdtsIkvDIFQK/OOqy7OWunvHtjbP
-   mf9Nsj/gitET/KBcu+7zuPplNBNcJ93oZjmLRMubh0NBziBsyfGc6wiV2
-   FBVoIEZdjsOqfC46dC4HDKh06cKvdt2kGvBmUBQafcsU/rdywjsZMTkU7
-   A==;
-X-CSE-ConnectionGUID: qQ49ByMYSA+zxTkOfujb7w==
-X-CSE-MsgGUID: UZj+t1rCQ3Gbj56b81fcWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="40090468"
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="40090468"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 00:49:50 -0700
-X-CSE-ConnectionGUID: 5CsphyJ0QgaztpFi6nXfbw==
-X-CSE-MsgGUID: YazC/HHFR3Cepcl9LasKHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="80848388"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 25 Oct 2024 00:49:48 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t4F4r-000XnR-2f;
-	Fri, 25 Oct 2024 07:49:45 +0000
-Date: Fri, 25 Oct 2024 15:49:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tony Chung <tony467913@gmail.com>, johan@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Tony Chung <tony467913@gmail.com>
-Subject: Re: [PATCH] usb: serial: mos7840: Fix coding style warnings
-Message-ID: <202410251501.9hTgSYCH-lkp@intel.com>
-References: <20241023091414.18098-1-tony467913@gmail.com>
+	s=arc-20240116; t=1729850978; c=relaxed/simple;
+	bh=2vKwd6wWS/n65Df3WGJ4gT9phN2JjJYt4uGnJUT3MYE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FBqAN38V/wpo5ZNTq5DTH2K9OcU3LdS7JEtbifv1grUy048Zs/AXCG3cGI5ltZiF7UhCIqjR2KHGBv+1lqDuzobMz8d0QWbVUUZx5h9YWi8MEyjRxZsepubAMhBNS8FOLeT4nfGxJmOs3Mw7yyAW+Ny0XlAk/LV2vawI2L7LfEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F00F3339;
+	Fri, 25 Oct 2024 03:10:03 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8419C3F73B;
+	Fri, 25 Oct 2024 03:09:29 -0700 (PDT)
+Date: Fri, 25 Oct 2024 11:09:26 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Cody Eksal <masterr3c0rd@epochal.quest>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, "linux-sunxi@lists.linux.dev"
+ <linux-sunxi@lists.linux.dev>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-phy@lists.infradead.org"
+ <linux-phy@lists.infradead.org>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Parthiban <parthiban@linumiz.com>, Yangtao Li <frank@allwinnertech.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Vinod Koul
+ <vkoul@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Thierry
+ Reding <treding@nvidia.com>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Maxime
+ Ripard <mripard@kernel.org>, Yangtao Li <tiny.windzz@gmail.com>, Viresh
+ Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd
+ <sboyd@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
+ Holland <samuel@sholland.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 04/13] dt-bindings: usb: Add A100 compatible string
+Message-ID: <20241025110926.6e033dfc@donnerap.manchester.arm.com>
+In-Reply-To: <20241024170540.2721307-5-masterr3c0rd@epochal.quest>
+References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
+	<20241024170540.2721307-5-masterr3c0rd@epochal.quest>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241023091414.18098-1-tony467913@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Tony,
+On Thu, 24 Oct 2024 18:05:22 +0100
+Cody Eksal <masterr3c0rd@epochal.quest> wrote:
 
-kernel test robot noticed the following build errors:
+> The Allwinner A100 contains two fully OHCI/EHCI compatible USB host
+> controllers. Add their compatible strings to the list of
+> generic OHCI/EHCI controllers.
+> 
+> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
 
-[auto build test ERROR on johan-usb-serial/usb-next]
-[also build test ERROR on johan-usb-serial/usb-linus usb/usb-testing usb/usb-next usb/usb-linus tty/tty-testing tty/tty-next tty/tty-linus linus/master v6.12-rc4 next-20241024]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tony-Chung/usb-serial-mos7840-Fix-coding-style-warnings/20241023-171615
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20241023091414.18098-1-tony467913%40gmail.com
-patch subject: [PATCH] usb: serial: mos7840: Fix coding style warnings
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20241025/202410251501.9hTgSYCH-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410251501.9hTgSYCH-lkp@intel.com/reproduce)
+Cheers,
+Andre
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410251501.9hTgSYCH-lkp@intel.com/
+> ---
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 1 +
+>  Documentation/devicetree/bindings/usb/generic-ohci.yaml | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> index 2ed178f16a78..e00e98dd04af 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -30,6 +30,7 @@ properties:
+>                - allwinner,sun4i-a10-ehci
+>                - allwinner,sun50i-a64-ehci
+>                - allwinner,sun50i-h6-ehci
+> +              - allwinner,sun50i-a100-ehci
+>                - allwinner,sun50i-h616-ehci
+>                - allwinner,sun5i-a13-ehci
+>                - allwinner,sun6i-a31-ehci
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> index b9576015736b..6ce81979781b 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> @@ -17,6 +17,7 @@ properties:
+>                - allwinner,sun4i-a10-ohci
+>                - allwinner,sun50i-a64-ohci
+>                - allwinner,sun50i-h6-ohci
+> +              - allwinner,sun50i-a100-ohci
+>                - allwinner,sun50i-h616-ohci
+>                - allwinner,sun5i-a13-ohci
+>                - allwinner,sun6i-a31-ohci
 
-All error/warnings (new ones prefixed by >>):
-
-   drivers/usb/serial/mos7840.c: In function 'mos7840_write':
->> drivers/usb/serial/mos7840.c:923:39: warning: missing terminating " character
-     923 |                 dev_err_console(port, "%s - usb_submit_urb(write bulk) failed
-         |                                       ^
-   drivers/usb/serial/mos7840.c:924:43: warning: missing terminating " character
-     924 |                         with status = %d\n", __func__, status);
-         |                                           ^
->> drivers/usb/serial/mos7840.c:1832:23: error: unterminated argument list invoking macro "dev_err_console"
-    1832 | MODULE_LICENSE("GPL");
-         |                       ^
->> drivers/usb/serial/mos7840.c:923:17: error: 'dev_err_console' undeclared (first use in this function); did you mean 'dev_err_probe'?
-     923 |                 dev_err_console(port, "%s - usb_submit_urb(write bulk) failed
-         |                 ^~~~~~~~~~~~~~~
-         |                 dev_err_probe
-   drivers/usb/serial/mos7840.c:923:17: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/usb/serial/mos7840.c:923:32: error: expected ';' at end of input
-     923 |                 dev_err_console(port, "%s - usb_submit_urb(write bulk) failed
-         |                                ^
-         |                                ;
-   ......
->> drivers/usb/serial/mos7840.c:923:17: error: expected declaration or statement at end of input
-     923 |                 dev_err_console(port, "%s - usb_submit_urb(write bulk) failed
-         |                 ^~~~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:923:17: error: expected declaration or statement at end of input
->> drivers/usb/serial/mos7840.c:887:25: error: label 'exit' used but not defined
-     887 |                         goto exit;
-         |                         ^~~~
->> drivers/usb/serial/mos7840.c:856:13: warning: variable 'bytes_sent' set but not used [-Wunused-but-set-variable]
-     856 |         int bytes_sent = 0;
-         |             ^~~~~~~~~~
-   drivers/usb/serial/mos7840.c: At top level:
->> drivers/usb/serial/mos7840.c:849:12: warning: 'mos7840_write' defined but not used [-Wunused-function]
-     849 | static int mos7840_write(struct tty_struct *tty, struct usb_serial_port *port,
-         |            ^~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:820:21: warning: 'mos7840_write_room' defined but not used [-Wunused-function]
-     820 | static unsigned int mos7840_write_room(struct tty_struct *tty)
-         |                     ^~~~~~~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:795:12: warning: 'mos7840_break' defined but not used [-Wunused-function]
-     795 | static int mos7840_break(struct tty_struct *tty, int break_state)
-         |            ^~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:764:13: warning: 'mos7840_close' defined but not used [-Wunused-function]
-     764 | static void mos7840_close(struct usb_serial_port *port)
-         |             ^~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:737:21: warning: 'mos7840_chars_in_buffer' defined but not used [-Wunused-function]
-     737 | static unsigned int mos7840_chars_in_buffer(struct tty_struct *tty)
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:516:12: warning: 'mos7840_open' defined but not used [-Wunused-function]
-     516 | static int mos7840_open(struct tty_struct *tty, struct usb_serial_port *port)
-         |            ^~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:410:13: warning: 'mos7840_led_flag_off' defined but not used [-Wunused-function]
-     410 | static void mos7840_led_flag_off(struct timer_list *t)
-         |             ^~~~~~~~~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:400:13: warning: 'mos7840_led_off' defined but not used [-Wunused-function]
-     400 | static void mos7840_led_off(struct timer_list *t)
-         |             ^~~~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:391:13: warning: 'mos7840_set_led_sync' defined but not used [-Wunused-function]
-     391 | static void mos7840_set_led_sync(struct usb_serial_port *port, __u16 reg,
-         |             ^~~~~~~~~~~~~~~~~~~~
->> drivers/usb/serial/mos7840.c:337:13: warning: 'mos7840_dump_serial_port' defined but not used [-Wunused-function]
-     337 | static void mos7840_dump_serial_port(struct usb_serial_port *port,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/dev_err_console +1832 drivers/usb/serial/mos7840.c
-
-3f5429746d91f2 Paul B Schroeder 2006-08-31  1830  
-3f5429746d91f2 Paul B Schroeder 2006-08-31  1831  MODULE_DESCRIPTION(DRIVER_DESC);
-3f5429746d91f2 Paul B Schroeder 2006-08-31 @1832  MODULE_LICENSE("GPL");
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
