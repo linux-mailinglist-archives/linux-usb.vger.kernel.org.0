@@ -1,116 +1,168 @@
-Return-Path: <linux-usb+bounces-16685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16686-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B9E99AF9DE
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:21:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9597C9AFA21
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:37:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C89BAB22A2A
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:21:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DCB91F230BB
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:37:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F9D1B0F07;
-	Fri, 25 Oct 2024 06:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A22B71AF0BA;
+	Fri, 25 Oct 2024 06:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yozff18C"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GYs7q0Xf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8AB1AF0CA;
-	Fri, 25 Oct 2024 06:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83CD199FD3
+	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 06:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729837240; cv=none; b=Mn/dGeEHWxX5ncJWB3W2mbzr7KSEidRMWA+5BKWpIl4HNiXodWZgFcZFC5TxDhuzp7cIjreRzFPlCoHPPKe49EDap6biSox9jiWgvzmIR5z0ylB2TrfhOwZIIM3g/XXv3FgPR15GIxemcwqtcg004OEPLdnqhZa8adyHDclHQSA=
+	t=1729838222; cv=none; b=la4bGdnaIruRaIiFgAUbBXOmqRyCM2LBaFiD8BCR6F0AVJUF7FePLAYJoUPXsQxtJljpKUmDgBlzwhGqYrib1W8xX82cS9RWqSYRO1mbuH8O7ITrtJ8rD7Qy8ZFy2HMjDDtmGofpRM1RJDK9P2ifEvCAE5Ef+05NlcF9AMxfKZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729837240; c=relaxed/simple;
-	bh=hF5GrOs/71tmQ86vyjwtkUojfhnj2UiQabC1Ht7tW2I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c7f8RUT59LtX2d17nkA53ifolUg8eeZXmIbBYGab7mvfspzDwwfhE959Ea9nZUHWk2VQA/X/EaI7lo8kU+ZqB17yi4LaSUBcqKv+YzSVhKiveljMDMDtEu6z1z+I2Mr9WzMvsBdVPDLW+/REqC7Hm8HJnSDCGGMLnlJEcvu29DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yozff18C; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7ea9739647bso1118256a12.0;
-        Thu, 24 Oct 2024 23:20:38 -0700 (PDT)
+	s=arc-20240116; t=1729838222; c=relaxed/simple;
+	bh=76iF+HoeaObIOvzYVxcE5SrRSGI44xQ5VLVhbj7HBHw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oNmshJcMANpdwr37A9PqYF7ZsacGUTq1khDuysvouZQOBRb5YDeYRRvd7sxxsfoIke32wstuoLsnrywE5AqE+E0IzAw5o9lTRMCpDcvY0siffnscQ/gE7mLGb7pX8c0Um0lC6sHB7f9Ht6Iks8Gu+MxPJ57t+q58v3XqEFup+l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GYs7q0Xf; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539e7e73740so1522355e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 23:36:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729837237; x=1730442037; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9tYNG+78DBNn93GWBi+9KVe/Zt15FWTJVd95+HyWo90=;
-        b=Yozff18CiMx5KeKHSV2FJlozoDCztWSsvwSEPvNIwWkfcK9AKMiLorZmNWZ7hU9dGR
-         ih0N6iZXcxeJoyI7EecemG7bltDXH9XfsoiL8mGAznn4Gy4A3ZllA/vG6I2pPcK8Z4qe
-         iohC4iiuhs8K3fQ/zh2ZuRVhla8A2M7Fh0G519i/KAA3K4hY9PZ0GIRSMhZBdaFWJ1UF
-         saULnbeflR426e8iQskzGmy4U6Z548zP/azb5bbZd9OMP+V0X7Xfx5Bi8xFbn69IXVfT
-         oiD975awq/GbVKDWlsp0xbcpbY3UGLgkIdDJ0M1NnsNV+lMEEMzoAlUaXkfeE02z2CAz
-         Gr2Q==
+        d=linaro.org; s=google; t=1729838217; x=1730443017; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Db9W0DcUi/dDjwgp0S1+zwbk/KalyyaD0ylTsRWE1NQ=;
+        b=GYs7q0XfOvlwoMF2SSTCedPhsAh7B7f9WmfNIzEBNIfbaxwQysPvEIo+uAvfDNREJZ
+         TqF9NMvUuH7870whJdZ4kcIMipDYedq8cOJYlhclHzaf+5tCb7RR+eYIyE41Q1a5gGDC
+         AvgDCYwlkhd2gjcVGRJhGF4rlq63LBT4qx/yjbBRSmLedTVua6qTqgKRGZA7mqLFeSJl
+         /NzaGK2Kw2eOs8xygTqcsyWA8/XJwP6/CrfXGlDkJBkRxaIuLrxTHn/iyBJJuKQTQV6d
+         xLCGJerYbznOao6iPX8eq23hub15ckbvAa9kSkBzShWq7NEmK64FXnjYqZo4HxtmEP8R
+         rIyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729837237; x=1730442037;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9tYNG+78DBNn93GWBi+9KVe/Zt15FWTJVd95+HyWo90=;
-        b=mSt7GIFmvHEiJKmtVFbg3r0d+UKEdDuHWub3JxO/GrVCMdr8XWWnUK6Ahm3vwykcRs
-         OTI3QQwcV4cjkXaTJfVL6b2bYUSbMTjKJKVi+fRlSddi0Rw5t/FSqtcfW0L/of4x+zkj
-         RnQRyaPYtlgSwKGuIxyEBn3HaG7CnlpxHvthY9AK9crE6guMgXhww+s4oPzxSKMjIJtX
-         k0ZuFBEDwCXcDDYKapa95SUcF0r8YzBhsDIONS/KaPBHza2aATVtTzxRI0Am36OzOgsa
-         vSaMmd9ENLcFx4bdY2rrGuW/8AtGvdlECwmpsEf+aGVr2vqGP9+irfkojOGkPMuepXcs
-         RiNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUzreDXCxQqtvbQn44Gu1wmAWnXPRA0k7t3Qh3Tl9m6vBygYxlRv7fKdMm6GxD8nnt+Imp6ztOTuHOir0s=@vger.kernel.org, AJvYcCVIj2+LXK30rhR0q9mId9DDI5MXUf+WzvYWOqPPDmYBnn0WuFc4DO6TRfncEoN1FiwIdMK61ykSXj4h@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuwlduJOF/Ls5qyfbh5X3srUc+p3NiHCl5EnsgNST/wfkJHcgq
-	wajhpQJfq/oZZpMl7Pt1sSWx0HVFq7cFmIIBz2jFAizxDOKgFvlE
-X-Google-Smtp-Source: AGHT+IGSsmBebJa0EIwShAd8d+WR0b3Fy7UirrEelOmW5ccH+xCGPrdFCKThKORHx4Bd4qrDPbQl5A==
-X-Received: by 2002:a05:6a21:6282:b0:1d9:2694:44df with SMTP id adf61e73a8af0-1d989d20f14mr5373119637.43.1729837237498;
-        Thu, 24 Oct 2024 23:20:37 -0700 (PDT)
-Received: from asix-MS-7816.. ([2403:c300:550b:d387:a102:1511:5e8b:8a24])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e578001sm2566697a91.43.2024.10.24.23.20.35
+        d=1e100.net; s=20230601; t=1729838217; x=1730443017;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Db9W0DcUi/dDjwgp0S1+zwbk/KalyyaD0ylTsRWE1NQ=;
+        b=V7XSl+QtAes9qheDknSraClXDf5MwOfuPQ7Dp/rMxGGqAMxANMOdhBmTdSX3eJpYks
+         Dc3IqMF5rIu2OMHhgk95ovsrVtLrTMRwG7Ll4xn8y+GQj3gq7Jhl82DuHAIZF1ZQhTzF
+         ilvMa46WlfTX7PcZ5+SxyAQ72x5mgepLE+Nx2VCi8rME1kLwFy6AXgmea1EmTUiJACiC
+         fCdf129wwGXo1pt1kojg9Df3UQ8zXMbOQZ3brUPgwOVw+kY5ozdIYJdFbx+sMy6yPNLb
+         g1LaEDLz7+6lfOmEQFywgALs3dkxy/P60+QQ4FZ+aqY15Lw3KJZdGwntBtq17XEh4o/a
+         tzKw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVuo3BZaouylHt9Dr2l2Kkt7Bm8xW3f47ILeum0IjGkT8niPYRgho6Xj+bc5/SNSZ9dxZVHdQZLqg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+E/2WGo4eYJNff70sSw9e31Jp4IoHWSkSW+XeQtGSRLrbTWFz
+	K7yhUv+jhrI9fqp0U+mOBJGae31gfQpD+9xtqyuBYbGaXanrkk8YTbFcmVADXUE=
+X-Google-Smtp-Source: AGHT+IHWV57T+/9EhAWqxTiykSOfZ5lc9WHgI9sMVd6VKkCShvL2exL1I+UVy6hyP0AKb8v0iecgSw==
+X-Received: by 2002:a05:6512:3e0d:b0:52e:9fe0:bee4 with SMTP id 2adb3069b0e04-53b1a2fe533mr5111135e87.9.1729838216924;
+        Thu, 24 Oct 2024 23:36:56 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e10a53csm72820e87.55.2024.10.24.23.36.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 23:20:37 -0700 (PDT)
-From: Tony Chung <tony467913@gmail.com>
-To: johan@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Tony Chung <tony467913@gmail.com>
-Subject: [PATCH v2 6/6] drivers: usb: serial: mos7840: fix the quoted string split across lines
-Date: Fri, 25 Oct 2024 14:17:18 +0800
-Message-Id: <20241025061711.198933-7-tony467913@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <202410250141.AEkzzW60-lkp@intel.com>
-References: <202410250141.AEkzzW60-lkp@intel.com>
+        Thu, 24 Oct 2024 23:36:54 -0700 (PDT)
+Date: Fri, 25 Oct 2024 09:36:51 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Stephen Boyd <swboyd@chromium.org>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev, devicetree@vger.kernel.org, 
+	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, 
+	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org, 
+	Guenter Roeck <groeck@chromium.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
+	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
+	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 13/18] dt-bindings: usb-switch: Extend for DisplayPort
+ altmode
+Message-ID: <yatu2snt2w7lrveftlfbkw6yfvso3jbsma5v6jij4rn7v37hjt@ww42wer6bytj>
+References: <20240901040658.157425-1-swboyd@chromium.org>
+ <20240901040658.157425-14-swboyd@chromium.org>
+ <27acewh6h2xcwp63z5o3tgrjmimf4d3mftpnmkvhdhv273zgsp@i6i5ke4btdqx>
+ <CAE-0n53S2dFz74_rgx22_1i_bbEC6kj1SL5LAEq_F2wrdCgBNg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n53S2dFz74_rgx22_1i_bbEC6kj1SL5LAEq_F2wrdCgBNg@mail.gmail.com>
 
-fix the coding style warning: quoted string split across lines
+On Thu, Oct 10, 2024 at 06:43:35PM -0400, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2024-09-19 03:40:19)
+> > On Sat, Aug 31, 2024 at 09:06:51PM GMT, Stephen Boyd wrote:
+> > > diff --git a/Documentation/devicetree/bindings/usb/usb-switch.yaml b/Documentation/devicetree/bindings/usb/usb-switch.yaml
+> > > index f5dc7e23b134..816f295f322f 100644
+> > > --- a/Documentation/devicetree/bindings/usb/usb-switch.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/usb-switch.yaml
+> > > @@ -52,6 +52,14 @@ properties:
+> > >            endpoint:
+> > >              $ref: '#/$defs/usbc-in-endpoint'
+> > >
+> > > +      port@2:
+> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +        unevaluatedProperties: false
+> > > +
+> > > +        properties:
+> > > +          endpoint:
+> > > +            $ref: '#/$defs/dp-endpoint'
+> >
+> > Is it a separate port or is it an endpoint of the same upstream-facing
+> > (non-connector-facing) SS port?
+> 
+> I don't quite follow this comment. This is an input DP endpoint/port.
 
-Signed-off-by: Tony Chung <tony467913@gmail.com>
----
- drivers/usb/serial/mos7840.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+This is the question: is this a separate port or just an endpoint on the
+port?
 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index d2cae6619..e3100ebbc 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -920,8 +920,9 @@ static int mos7840_write(struct tty_struct *tty, struct usb_serial_port *port,
- 
- 	if (status) {
- 		mos7840_port->busy[i] = 0;
--		dev_err_console(port, "%s - usb_submit_urb(write bulk) failed "
--			"with status = %d\n", __func__, status);
-+		dev_err_console(port,
-+			"%s - usb_submit_urb(write bulk) failed with status = %d\n",
-+			__func__, status);
- 		bytes_sent = status;
- 		goto exit;
- 	}
+> 
+> >
+> > > +
+> > >  oneOf:
+> > >    - required:
+> > >        - port
+> > > @@ -65,6 +73,19 @@ $defs:
+> > >      $ref: /schemas/graph.yaml#/$defs/endpoint-base
+> > >      description: Super Speed (SS) output endpoint to a type-c connector
+> > >      unevaluatedProperties: false
+> > > +    properties:
+> > > +      data-lanes:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> > > +        description: |
+> > > +          An array of physical USB Type-C data lane indexes.
+> > > +          - 0 is SSRX1 lane
+> > > +          - 1 is SSTX1 lane
+> > > +          - 2 is SSTX2 lane
+> > > +          - 3 is SSRX2 lane
+> > > +        minItems: 4
+> > > +        maxItems: 4
+> > > +        items:
+> > > +          maximum: 3
+> >
+> > What is the usecase to delare less than 4 lanes going to the USB-C
+> > connector?
+> 
+> I'm not aware of any usecase. The 'maximum: 3' is the max value in the
+> cell, i.e. 0, 1, 2, or 3.
+
 -- 
-2.34.1
-
+With best wishes
+Dmitry
 
