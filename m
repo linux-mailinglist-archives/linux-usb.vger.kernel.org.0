@@ -1,117 +1,112 @@
-Return-Path: <linux-usb+bounces-16678-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16679-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B33999AF9B6
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:15:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52BC29AF9C5
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:18:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E0FB1F24791
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:15:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 847831C2202D
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820DD192B65;
-	Fri, 25 Oct 2024 06:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F33711AF0BA;
+	Fri, 25 Oct 2024 06:18:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W4RR8J98"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFnRCFou"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287175FEE6
-	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 06:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8FE18BC1C;
+	Fri, 25 Oct 2024 06:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729836949; cv=none; b=Cb9hhnZ2x9zIsUyo/42c8wPAJ58IjoKb90rwChicfp9sC7FwWHMXXmGdrkFrKd/r0wOqcDf45gxouJjXCbJ92b9aFijA9pqrjd9bJ8KAqIPbNH1kokSJDY0aVNV1ZW6QqzshEGmXWFDP5+Boj9Oa07olHpP8rfL8h9Bm7/U1/uM=
+	t=1729837095; cv=none; b=l3yOUdqtYYAeBNhRxleeV7Q5iXgj77q9kdL6Ny7PyQi+LdRPpS/Vqj8DuHZU0hpnPv0p32j9kjzSJPkLgtWFro4q9wBW7rdfYgg4l59vPJoZGXh6s2WwsoIBSMmmhfxN+HVLfkc1UIieIMSQOIC9RGxn5fQ5s5IWCF8xZL3Lk2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729836949; c=relaxed/simple;
-	bh=UBoZ4IXiNwkOugi2clKDHY4eaW+yIlWOxRhdsIS3mis=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=G7suph9pSKw4/RNoR4P3zts9x0Fnh2OVCIirIq2we0F7IhbF1mG0iNuj7+9zvAWh5KzRlkEJx1TlI3H2Nyc82i81aZ/jbPg5FfVrFuW9Uiy6YShdNFt1+X6KsxURECWL2LzPElmqAye/28Iniu6/+Ai/63b+sxlcKbqtLDoLPtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W4RR8J98; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729836947; x=1761372947;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UBoZ4IXiNwkOugi2clKDHY4eaW+yIlWOxRhdsIS3mis=;
-  b=W4RR8J98rnsWSH2IlzbsXHl7TJrY0lu/CmVfNZfnc0BBOpSzwZ2Yjwub
-   umGImIZVQQTSvfe9Oin4os6HPoUQjLe/pE/o1N/7q1QMaLE7FTP4gxCy7
-   gXxKeIVnRsoanCMIN8l4aJI0eS2z7b3B7lx2K2rol69jJ76+443tRZjMY
-   x/iZGXMUNLdHbAmbd8WyhQ9xDy1KA4zCSDENhPZGJTerV6D9KHJ7mw9Hs
-   vd8g5REi/HgCAWJZhXC5FLRgb7C6/27NLSeuBDpfmO3JecGshbQLtDUVd
-   38mgJBPqqXakpkUy7x1gHl5gZeHDnvIkcWG9WEAMx6fXn2R0ubTsaSG4I
-   w==;
-X-CSE-ConnectionGUID: 1v+PXmxXS4aV0jQxpf5QtQ==
-X-CSE-MsgGUID: 53JwKkG2SSqHEk1M7cwpMg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29621626"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29621626"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 23:15:46 -0700
-X-CSE-ConnectionGUID: ZmgEHBwURVmhrKZKI4Q83Q==
-X-CSE-MsgGUID: hC6OVzO7SQmm03vNtgu8Qw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="80738261"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa009.jf.intel.com with ESMTP; 24 Oct 2024 23:15:44 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id EF0072D0; Fri, 25 Oct 2024 09:15:42 +0300 (EEST)
-Date: Fri, 25 Oct 2024 09:15:42 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
+	s=arc-20240116; t=1729837095; c=relaxed/simple;
+	bh=JkVxwSDcENFPZn6K/Zydj5utJ9l/HWBLCiLZGioBY8Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=SzZCYhPQhIfXkBvPPW1Z6wEg3n8tW2/spBXvt59AxKvrLtJ2Drog61EP8mKxUqb4kGzNpgBzk1JjkJ9e6gbsXUe8wnUZ/nOOh06gyA+xCux6a9qKeD7ZC6mQpJzf+rhrLSFgYjksfQ7Na91vaYhZQDP8XEQVDIYt9tVG4FmFS3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFnRCFou; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7204dff188eso749922b3a.1;
+        Thu, 24 Oct 2024 23:18:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729837093; x=1730441893; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WK5Duui3kASIa3spQTKNW2Jk5UI33TuOf9RbloI8uF8=;
+        b=eFnRCFouB3cgWKzMdg1kJo9qIte0znbVJ1Bk59Q9yVlx6MPJ/1cCywlW/bOHbyt9VM
+         P28iF9kMusbiCj8dJn556bsExEWeCLdznrYc93c3YCFnzZcM0yI9SlPzTLhxPGwb3NQ7
+         XA0dfzbdZdYSmLvygNMsK6tDInWRmLB49zKplTPFtRyrUfL7mcfNNAg+LT/UZNSNkDVN
+         NbimdUtoYHeAMOXJxzjWdEcAsxcWjh79u+NdVRhIuL31DXgxcydHcTA2bT6UTsVSFSPH
+         7sLspPL7/3F/09BIQr6ZxSODrRe6aZ7/yWUui8HJ6Zc35EkcxAchhOrMarOhuodqoxnm
+         RA5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729837093; x=1730441893;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WK5Duui3kASIa3spQTKNW2Jk5UI33TuOf9RbloI8uF8=;
+        b=l2vdu0I2pGXoB/5GwdJ8YlkIFO4sYwuEXGMFlYTgg4X6ZoiOjsR+p5ghQGE210T4Y+
+         Q9gvGcXxMu5K8p+7V6Dx7hUIdr0Ub11K+xWTgeqPEL2dkV8tcXNlzZck8/AWEA9cGb+z
+         nnWfmFdwJIjo9tgIDnoBv0N9ideH++Ll7FHhal+ApeX103Q8CNirhTodnlQvHZj5UMFb
+         SFExPsM/TrSTmQdf3HupyEo8YEfzB/WzLDGf6kSqdXV2oBkmgUnuJfDEhLHaGnm7u5MX
+         mQ8DDRximvHNfB4Lfjten6l45zhq6ETuatXDth+A+JqddsqI0M9X+U+pHIO8zzUeqYvd
+         mxpA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3j4pCglw1GeJMb6chy/GjzgJlVrlrQ5UI2p6y4cY+vblfWp013n5gfVFHbZryq27FDpI4IUJpNqAcXS8=@vger.kernel.org, AJvYcCXCWLrijfAOR4e4Z0a9i62rk8cOR8ORjf2gs11muFTX9K316z7P74CJKWSq3CMzrH20tsM6n0mHaUHJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhNRUtqdWZNz9teJqkg/iEWv4V91E9VPdqmWOOJHFj1u9cv7+Z
+	JsjJVlLq36zIRkbItJ4jcpfHy1sEKpAspnnPmlIUISBAlWv3f+Mm
+X-Google-Smtp-Source: AGHT+IGClwPG64o4YQmzYjwcEeV5Myw0rkXK2XjZWq9Wyfrdf2P7deYzyVIYwf9Wx2RwqVh2DIHrrQ==
+X-Received: by 2002:a05:6a21:9d91:b0:1d9:18b7:48c with SMTP id adf61e73a8af0-1d978aebd41mr10693971637.6.1729837093014;
+        Thu, 24 Oct 2024 23:18:13 -0700 (PDT)
+Received: from asix-MS-7816.. ([2403:c300:550b:d387:a102:1511:5e8b:8a24])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e578001sm2566697a91.43.2024.10.24.23.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 23:18:12 -0700 (PDT)
+From: Tony Chung <tony467913@gmail.com>
+To: johan@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [GIT PULL] USB4/Thunderbolt fixes for v6.12-rc5
-Message-ID: <20241025061542.GL275077@black.fi.intel.com>
+	Tony Chung <tony467913@gmail.com>
+Subject: [PATCH v2 0/6] usb: serial: mos7840: Fix coding style warnings
+Date: Fri, 25 Oct 2024 14:17:06 +0800
+Message-Id: <20241025061711.198933-1-tony467913@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <202410250141.AEkzzW60-lkp@intel.com>
+References: <202410250141.AEkzzW60-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Greg,
+This patch series fix all the coding style warnings shown by checkpatch.pl
 
-The following changes since commit 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b:
+I have tested Patch v2 and it has no driver build warnings.
+Please have a look and let me know if something is wrong. Thanks.
 
-  Linux 6.12-rc2 (2024-10-06 15:32:27 -0700)
+Tony Chung (6):
+  driver: usb: serial: mos7840: fix warnings "no space before tabs"
+  drivers: usb: serial: mos7840: Fix Block comments coding style
+    warnings
+  drivers: usb: serial: mos7840: fix coding style warnings
+  drivers: usb: serial: mos7840: using '__func__' to replace function
+    name in dbg message
+  drivers: usb: serial: mos7840: replace 'unsigned' w/ 'unsigned int'
+  drivers: usb: serial: mos7840: fix the quoted string split across
+    lines
 
-are available in the Git repository at:
+ drivers/usb/serial/mos7840.c | 49 +++++++++++++++++++++++-------------
+ 1 file changed, 31 insertions(+), 18 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.12-rc5
+-- 
+2.34.1
 
-for you to fetch changes up to 3cea8af2d1a9ae5869b47c3dabe3b20f331f3bbd:
-
-  thunderbolt: Honor TMU requirements in the domain when setting TMU mode (2024-10-21 09:42:42 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Fixes for v6.12-rc5
-
-This includes following USB4/Thunderbolt fixes for v6.12-rc5:
-
-  - Fix KASAN reported stack out-of-bounds read
-  - Honor Time Management Unit (TMU) requirements in the domain when
-    configuring TMU mode of a newly plugged router.
-
-Both have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Gil Fine (1):
-      thunderbolt: Honor TMU requirements in the domain when setting TMU mode
-
-Mika Westerberg (1):
-      thunderbolt: Fix KASAN reported stack out-of-bounds read in tb_retimer_scan()
-
- drivers/thunderbolt/retimer.c |  5 +++--
- drivers/thunderbolt/tb.c      | 48 +++++++++++++++++++++++++++++++++++++------
- 2 files changed, 45 insertions(+), 8 deletions(-)
 
