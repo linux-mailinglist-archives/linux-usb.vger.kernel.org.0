@@ -1,197 +1,431 @@
-Return-Path: <linux-usb+bounces-16721-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16722-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEBAD9B0A62
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 18:55:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B010E9B0EDB
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 21:23:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EB4D1C22752
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 16:55:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73A66286CE4
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 19:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35611F7550;
-	Fri, 25 Oct 2024 16:55:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E687F215C44;
+	Fri, 25 Oct 2024 19:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="g7/DMDLo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqRzlPmy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED9915ADAB;
-	Fri, 25 Oct 2024 16:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729875318; cv=pass; b=ZKovqU/uEq5P79KFvL6xocXghrBMfdvc5+VSiPQlrCHDPjDKs+f9pf6zmn6nizAIHqL/EcjTcwgPoNw4GzXrEb9wIu67HBaUbZ6UP7l+foMYz2yO0QKvS52cVGUDxWLAEfpZmnwuG42OkX2Qpw48j20j0MTvmp3kK5zXOoxaf8M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729875318; c=relaxed/simple;
-	bh=TkHNarZS4pSLxIgyzxiNyeSWF41bzLLV19/JuUBB2s8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nS4fdZi5cKeUKdRdgPhBToOU+FZ3Ape23sQBrMjMFKey4vCz+mqhiKRl9+ZiHj8Y7dnOcQ+k/Pcymra2xvqUALuId2d6Vaq334/rYjW64yK6PGplYQKqda8bXNwiHCVRJv9mLHXPpYsAOSfuMM83klnX8xiu8icyd6HuKLAquRs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=g7/DMDLo; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1729875298; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=YUmaYjF4Ps/jgwwt8/w3jiVpmXPW2tS7pX9mbRYmKXRZK39X0LzUbrpNsAW/PfGnOyUoKypbs5AXCtCFJy1PdrOIi3dM8jDm4WJEm2KC2GHliBd57mz5h0uUEtCoAAG5BQejcx9rEz3Y9u0VyLsDHstJR7lhjVknQdo8yNRTNcg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1729875298; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Jr7SWzsSYm+eYx+rG17jTZS+t8t8d9UsF7LOAdFCyXQ=; 
-	b=FBpNYlBPzft95xuA6saSFAM8If2KmlhJyq1gTBwMJ1rPlkGLtWCzLwOMd58g6rmXtGoHy/D+izL67aHT8pQcIVW2GXdMou6+jkTEZcTBC4GChPeX+Zmm0hG/uHRW0RNpIk3imdjFnSEBBactOCQshAiO0H/nONYt5TwuMUoF4eQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1729875298;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=Jr7SWzsSYm+eYx+rG17jTZS+t8t8d9UsF7LOAdFCyXQ=;
-	b=g7/DMDLoZaY/789N1WdT8gQwVjsqsZs1RHPJ/kd1nslYuOnUFIDAgI3lET6SIKDF
-	tDoc/rylfl3nprWWf4j6YfXzpTcJH1Fu4NANAm4kJ/YlINsT6c+ZJQyUF0ltSGA41NO
-	1mQkP13kaW0Jy/ntB7L5hNbkxju3IoMXpkyBPtCs=
-Received: by mx.zohomail.com with SMTPS id 1729875295395343.5082836686537;
-	Fri, 25 Oct 2024 09:54:55 -0700 (PDT)
-Received: by mercury (Postfix, from userid 1000)
-	id 6BA4510603F9; Fri, 25 Oct 2024 18:54:51 +0200 (CEST)
-Date: Fri, 25 Oct 2024 18:54:51 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	rdbabiera@google.com, badhri@google.com, xu.yang_2@nxp.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: restrict
- SNK_WAIT_CAPABILITIES_TIMEOUT transitions to non self-powered devices
-Message-ID: <qycbz2nxyh2i2yebmuvzzixxou2jvrojvqlfyfx334qxozu27n@uwge5gudmttn>
-References: <20241024022233.3276995-1-amitsd@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B1D20F3D1;
+	Fri, 25 Oct 2024 19:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729884025; cv=none; b=aV0g1fLWsRVpGX5i2iYQadmVcHQDWRfY4CxOb80Es6QHwr2/4D4ndG4Lp3EwDVCBvaGm5MZRMfmemie6urgrPEbhCzejBRWmTXaFrU8Yo21Z4LIL0Ya5Icy7jMkNLZotuYeA/ATNivKYzPOUqASdHy59rj9bF9n5GLaGw6mN8DA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729884025; c=relaxed/simple;
+	bh=Xu9HGCl8UFyPZhTCUp/wywSbuIuwcn9JbwKVh+4VYHY=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LqeIjIto/IcFDQ8kxUZgwIveEhEUFnNxkOSq3m9iRph4cD1IdOwXdmYo+/b7DC7uYchSeMIe16L48OnZgpRZYz7Fbi/E+Z7RN/C2pPjuWz1yvBgYbiQtHdCfYh2Qkla4VCVeJmeGLHDSF+FWioFc9FI55Q6QhH36dCpQUCbHGiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RqRzlPmy; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3e605ffe10cso1421926b6e.3;
+        Fri, 25 Oct 2024 12:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729884021; x=1730488821; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UFiCFtyXCtM0cfXvBWureE7jstH1bP+NqgjN2z9rdyw=;
+        b=RqRzlPmyj5B34wHRJ9r/dhouJyL1nJpiYr938ekSYjJTvTx31AZxdbn16EXCmC5hh0
+         57XEt+mUPytVC+EC6iAHLyWtxx+hccY0nwErEOJP0B7xsQaIS3npIgo6i50v1emnJ1/0
+         ogo4w2RJmR4lr4hDiavAu1ZBes4oJ7Fgbf5x0maUuvoXTXhetowxVlrHKKBMpekrmzrg
+         yZkyafZoawJMMI6rQnmWBTj6wUWB+2YG8CDVu8byAJF/YJFCHd0KT8dRCV5K0ijOJ40o
+         Pfq1T2Ybhv5+7cBi/SlLJLczn+x1M08iwPFeUZpzCRuLAGmjlxMbRT1qT5+xYEfyoJ/u
+         +AWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729884021; x=1730488821;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UFiCFtyXCtM0cfXvBWureE7jstH1bP+NqgjN2z9rdyw=;
+        b=VyhmA1kCme5JU18UrKnO0ocrSr+B25+8L1Mnu6XJ+KECfyPDJhwNWRoxW9rD0LI30g
+         9leOP66KxMSx+usTQOUsPlH2SAMMn7QXgzB0PSVZqxvtK2LpX+YP8x3hXLwNhSr8QUi0
+         dnRFbN2bNhRXgSDX1RoPlSaCoB8uzCcqE5v1D0bcg621E5rh11DNLsFd6bwueIeyPfZu
+         oC/UWNcNG949htvIpy43W1A/dpgB7HN3G8k7mC6KZdv1SrOrZpv3BYr4/j4K5ZPx0As7
+         NfBvcSkGhrlI9+IxWC1BRoOod8xr4xuxB7TCdceMrGKq/NmC9cE/ZMp1cgJ2w7jzjJzj
+         s1tA==
+X-Forwarded-Encrypted: i=1; AJvYcCUC1pfH/17BnwFvB0dprIaeSKwf5jBkI/L8oG3YQWaz6unQHH5OTbZdMjkCrUlzrAx4t6Oc6pPsMAA=@vger.kernel.org, AJvYcCWxN6VNWvcxd77HPYTg7EYWV7OWR8riXf1YWvqgyiZL+Mqxp2GGAWF4n+TQM/donC0rUQN1VWVK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0RcTEJyRRXo5bnDhHAylbWLd6Uud3rPyexwCK1mVf/ofzCiSz
+	qsSnGk3DkYTXzuPtHQg8zn45mE9wdliRUKLC4dVnIdcskQIpIOKM
+X-Google-Smtp-Source: AGHT+IHOU/yoWxT8qW/MXMQq/wMel6zgqBgbkv9VBifq5zyHr7GCtzsN1GvySw7RXKuVZa+ZXeUxxw==
+X-Received: by 2002:a05:6808:3097:b0:3e5:fbdc:ba03 with SMTP id 5614622812f47-3e63848a0d3mr761378b6e.30.1729884021461;
+        Fri, 25 Oct 2024 12:20:21 -0700 (PDT)
+Received: from neuromancer. ([2600:1700:fb0:1bcf:5f0:c09c:9b2f:306d])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e6324957afsm349778b6e.32.2024.10.25.12.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 12:20:21 -0700 (PDT)
+Message-ID: <671bef75.050a0220.e4bcd.1821@mx.google.com>
+X-Google-Original-Message-ID: <Zxvvc6F3eg9B2wH6@neuromancer.>
+Date: Fri, 25 Oct 2024 14:20:19 -0500
+From: Chris Morgan <macroalpha82@gmail.com>
+To: Roger Quadros <rogerq@kernel.org>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	John Youn <John.Youn@synopsys.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, msp@baylibre.com,
+	"Vardhan, Vibhore" <vibhore@ti.com>,
+	"Govindarajan, Sriramakrishnan" <srk@ti.com>,
+	Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>,
+	heiko@sntech.de, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 2/2] usb: dwc3: core: Prevent phy suspend during init
+References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
+ <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
+ <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="a4nnbsddgl3uyol6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241024022233.3276995-1-amitsd@google.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/229.360.92
-X-ZohoMailClient: External
+In-Reply-To: <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
 
+On Wed, Sep 25, 2024 at 10:50:05AM +0300, Roger Quadros wrote:
+> Hello Thinh,
+> 
+> On 17/04/2024 02:41, Thinh Nguyen wrote:
+> > GUSB3PIPECTL.SUSPENDENABLE and GUSB2PHYCFG.SUSPHY should be cleared
+> > during initialization. Suspend during initialization can result in
+> > undefined behavior due to clock synchronization failure, which often
+> > seen as core soft reset timeout.
+> > 
+> > The programming guide recommended these bits to be cleared during
+> > initialization for DWC_usb3.0 version 1.94 and above (along with
+> > DWC_usb31 and DWC_usb32). The current check in the driver does not
+> > account if it's set by default setting from coreConsultant.
+> > 
+> > This is especially the case for DRD when switching mode to ensure the
+> > phy clocks are available to change mode. Depending on the
+> > platforms/design, some may be affected more than others. This is noted
+> > in the DWC_usb3x programming guide under the above registers.
+> > 
+> > Let's just disable them during driver load and mode switching. Restore
+> > them when the controller initialization completes.
+> > 
+> > Note that some platforms workaround this issue by disabling phy suspend
+> > through "snps,dis_u3_susphy_quirk" and "snps,dis_u2_susphy_quirk" when
+> > they should not need to.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 9ba3aca8fe82 ("usb: dwc3: Disable phy suspend after power-on reset")
+> > Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> This patch is causing system suspend failures on TI AM62 platforms [1]
+> 
+> I will try to explain why.
+> Before this patch, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
+> bits (hence forth called 2 SUSPHY bits) were being set during initialization
+> and even during re-initialization after a system suspend/resume.
+> 
+> These bits are required to be set for system suspend/resume to work correctly
+> on AM62 platforms.
+> 
+> After this patch, the bits are only set when Host controller starts or
+> when Gadget driver starts.
+> 
+> On AM62 platform we have 2 USB controllers, one in Host and one in Dual role.
+> Just after boot, for the Host controller we have the 2 SUSPHY bits set but
+> for the Dual-Role controller, as no role has started the 2 SUSPHY bits are
+> not set. Thus system suspend resume will fail.
+> 
+> On the other hand, if we load a gadget driver just after boot then both
+> controllers have the 2 SUSPHY bits set and system suspend resume works for
+> the first time.
+> However, after system resume, the core is re-initialized so the 2 SUSPHY bits
+> are cleared for both controllers. For host controller it is never set again.
+> For gadget controller as gadget start is called, the 2 SUSPHY bits are set
+> again. The second system suspend resume will still fail as one controller
+> (Host) doesn't have the 2 SUSPHY bits set.
+> 
+> To summarize, the existing solution is not sufficient for us to have a
+> reliable behavior. We need the 2 SUSPHY bits to be set regardless of what
+> role we are in or whether the role has started or not.
+> 
+> My suggestion is to move back the SUSPHY enable to end of dwc3_core_init().
+> Then if SUSPHY needs to be disabled for DRD role switching, it should be
+> disabled and enabled exactly there.
+> 
+> What do you suggest?
+> 
+> [1] - https://lore.kernel.org/linux-arm-kernel/20240904194229.109886-1-msp@baylibre.com/
+> 
+> -- 
+> cheers,
+> -roger
+> 
+> > ---
+> >  drivers/usb/dwc3/core.c   | 90 +++++++++++++++++----------------------
+> >  drivers/usb/dwc3/core.h   |  1 +
+> >  drivers/usb/dwc3/gadget.c |  2 +
+> >  drivers/usb/dwc3/host.c   | 27 ++++++++++++
+> >  4 files changed, 68 insertions(+), 52 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 31684cdaaae3..100041320e8d 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -104,6 +104,27 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+> >  	return 0;
+> >  }
+> >  
+> > +void dwc3_enable_susphy(struct dwc3 *dwc, bool enable)
+> > +{
+> > +	u32 reg;
+> > +
+> > +	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
+> > +	if (enable && !dwc->dis_u3_susphy_quirk)
+> > +		reg |= DWC3_GUSB3PIPECTL_SUSPHY;
+> > +	else
+> > +		reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
+> > +
+> > +	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
+> > +
+> > +	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > +	if (enable && !dwc->dis_u2_susphy_quirk)
+> > +		reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+> > +	else
+> > +		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+> > +
+> > +	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> > +}
+> > +
+> >  void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+> >  {
+> >  	u32 reg;
+> > @@ -585,11 +606,8 @@ static int dwc3_core_ulpi_init(struct dwc3 *dwc)
+> >   */
+> >  static int dwc3_phy_setup(struct dwc3 *dwc)
+> >  {
+> > -	unsigned int hw_mode;
+> >  	u32 reg;
+> >  
+> > -	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> > -
+> >  	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
+> >  
+> >  	/*
+> > @@ -599,21 +617,16 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
+> >  	reg &= ~DWC3_GUSB3PIPECTL_UX_EXIT_PX;
+> >  
+> >  	/*
+> > -	 * Above 1.94a, it is recommended to set DWC3_GUSB3PIPECTL_SUSPHY
+> > -	 * to '0' during coreConsultant configuration. So default value
+> > -	 * will be '0' when the core is reset. Application needs to set it
+> > -	 * to '1' after the core initialization is completed.
+> > -	 */
+> > -	if (!DWC3_VER_IS_WITHIN(DWC3, ANY, 194A))
+> > -		reg |= DWC3_GUSB3PIPECTL_SUSPHY;
+> > -
+> > -	/*
+> > -	 * For DRD controllers, GUSB3PIPECTL.SUSPENDENABLE must be cleared after
+> > -	 * power-on reset, and it can be set after core initialization, which is
+> > -	 * after device soft-reset during initialization.
+> > +	 * Above DWC_usb3.0 1.94a, it is recommended to set
+> > +	 * DWC3_GUSB3PIPECTL_SUSPHY to '0' during coreConsultant configuration.
+> > +	 * So default value will be '0' when the core is reset. Application
+> > +	 * needs to set it to '1' after the core initialization is completed.
+> > +	 *
+> > +	 * Similarly for DRD controllers, GUSB3PIPECTL.SUSPENDENABLE must be
+> > +	 * cleared after power-on reset, and it can be set after core
+> > +	 * initialization.
+> >  	 */
+> > -	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
+> > -		reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
+> > +	reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
+> >  
+> >  	if (dwc->u2ss_inp3_quirk)
+> >  		reg |= DWC3_GUSB3PIPECTL_U2SSINP3OK;
+> > @@ -639,9 +652,6 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
+> >  	if (dwc->tx_de_emphasis_quirk)
+> >  		reg |= DWC3_GUSB3PIPECTL_TX_DEEPH(dwc->tx_de_emphasis);
+> >  
+> > -	if (dwc->dis_u3_susphy_quirk)
+> > -		reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
+> > -
+> >  	if (dwc->dis_del_phy_power_chg_quirk)
+> >  		reg &= ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
+> >  
+> > @@ -689,24 +699,15 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
+> >  	}
+> >  
+> >  	/*
+> > -	 * Above 1.94a, it is recommended to set DWC3_GUSB2PHYCFG_SUSPHY to
+> > -	 * '0' during coreConsultant configuration. So default value will
+> > -	 * be '0' when the core is reset. Application needs to set it to
+> > -	 * '1' after the core initialization is completed.
+> > -	 */
+> > -	if (!DWC3_VER_IS_WITHIN(DWC3, ANY, 194A))
+> > -		reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+> > -
+> > -	/*
+> > -	 * For DRD controllers, GUSB2PHYCFG.SUSPHY must be cleared after
+> > -	 * power-on reset, and it can be set after core initialization, which is
+> > -	 * after device soft-reset during initialization.
+> > +	 * Above DWC_usb3.0 1.94a, it is recommended to set
+> > +	 * DWC3_GUSB2PHYCFG_SUSPHY to '0' during coreConsultant configuration.
+> > +	 * So default value will be '0' when the core is reset. Application
+> > +	 * needs to set it to '1' after the core initialization is completed.
+> > +	 *
+> > +	 * Similarly for DRD controllers, GUSB2PHYCFG.SUSPHY must be cleared
+> > +	 * after power-on reset, and it can be set after core initialization.
+> >  	 */
+> > -	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
+> > -		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+> > -
+> > -	if (dwc->dis_u2_susphy_quirk)
+> > -		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+> > +	reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+> >  
+> >  	if (dwc->dis_enblslpm_quirk)
+> >  		reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
+> > @@ -1227,21 +1228,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> >  	if (ret)
+> >  		goto err_exit_phy;
+> >  
+> > -	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD &&
+> > -	    !DWC3_VER_IS_WITHIN(DWC3, ANY, 194A)) {
+> > -		if (!dwc->dis_u3_susphy_quirk) {
+> > -			reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
+> > -			reg |= DWC3_GUSB3PIPECTL_SUSPHY;
+> > -			dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
+> > -		}
+> > -
+> > -		if (!dwc->dis_u2_susphy_quirk) {
+> > -			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > -			reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+> > -			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> > -		}
+> > -	}
+> > -
+> >  	dwc3_core_setup_global_control(dwc);
+> >  	dwc3_core_num_eps(dwc);
+> >  
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 7e80dd3d466b..180dd8d29287 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -1580,6 +1580,7 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc);
+> >  void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
+> >  
+> >  int dwc3_core_soft_reset(struct dwc3 *dwc);
+> > +void dwc3_enable_susphy(struct dwc3 *dwc, bool enable);
+> >  
+> >  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+> >  int dwc3_host_init(struct dwc3 *dwc);
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 4df2661f6675..f94f68f1e7d2 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2924,6 +2924,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+> >  	dwc3_ep0_out_start(dwc);
+> >  
+> >  	dwc3_gadget_enable_irq(dwc);
+> > +	dwc3_enable_susphy(dwc, true);
+> >  
+> >  	return 0;
+> >  
+> > @@ -4690,6 +4691,7 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+> >  	if (!dwc->gadget)
+> >  		return;
+> >  
+> > +	dwc3_enable_susphy(dwc, false);
+> >  	usb_del_gadget(dwc->gadget);
+> >  	dwc3_gadget_free_endpoints(dwc);
+> >  	usb_put_gadget(dwc->gadget);
+> > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > index 0204787df81d..a171b27a7845 100644
+> > --- a/drivers/usb/dwc3/host.c
+> > +++ b/drivers/usb/dwc3/host.c
+> > @@ -10,10 +10,13 @@
+> >  #include <linux/irq.h>
+> >  #include <linux/of.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/usb.h>
+> > +#include <linux/usb/hcd.h>
+> >  
+> >  #include "../host/xhci-port.h"
+> >  #include "../host/xhci-ext-caps.h"
+> >  #include "../host/xhci-caps.h"
+> > +#include "../host/xhci-plat.h"
+> >  #include "core.h"
+> >  
+> >  #define XHCI_HCSPARAMS1		0x4
+> > @@ -57,6 +60,24 @@ static void dwc3_power_off_all_roothub_ports(struct dwc3 *dwc)
+> >  	}
+> >  }
+> >  
+> > +static void dwc3_xhci_plat_start(struct usb_hcd *hcd)
+> > +{
+> > +	struct platform_device *pdev;
+> > +	struct dwc3 *dwc;
+> > +
+> > +	if (!usb_hcd_is_primary_hcd(hcd))
+> > +		return;
+> > +
+> > +	pdev = to_platform_device(hcd->self.controller);
+> > +	dwc = dev_get_drvdata(pdev->dev.parent);
+> > +
+> > +	dwc3_enable_susphy(dwc, true);
+> > +}
+> > +
+> > +static const struct xhci_plat_priv dwc3_xhci_plat_quirk = {
+> > +	.plat_start = dwc3_xhci_plat_start,
+> > +};
+> > +
+> >  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> >  					int irq, char *name)
+> >  {
+> > @@ -167,6 +188,11 @@ int dwc3_host_init(struct dwc3 *dwc)
+> >  		}
+> >  	}
+> >  
+> > +	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_quirk,
+> > +				       sizeof(struct xhci_plat_priv));
+> > +	if (ret)
+> > +		goto err;
+> > +
+> >  	ret = platform_device_add(xhci);
+> >  	if (ret) {
+> >  		dev_err(dwc->dev, "failed to register xHCI device\n");
+> > @@ -192,6 +218,7 @@ void dwc3_host_exit(struct dwc3 *dwc)
+> >  	if (dwc->sys_wakeup)
+> >  		device_init_wakeup(&dwc->xhci->dev, false);
+> >  
+> > +	dwc3_enable_susphy(dwc, false);
+> >  	platform_device_unregister(dwc->xhci);
+> >  	dwc->xhci = NULL;
+> >  }
+> 
 
---a4nnbsddgl3uyol6
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1] usb: typec: tcpm: restrict
- SNK_WAIT_CAPABILITIES_TIMEOUT transitions to non self-powered devices
-MIME-Version: 1.0
+This patch seems to break system suspend on at least the Rockchip
+RK3566 platform. I noticed that I was no longer able to suspend
+and git bisect led me to this patch.
 
-Hi,
+My kernel message log shows the following, at which point it freezes
+and does not allow me to resume from suspend:
 
-On Wed, Oct 23, 2024 at 07:22:30PM -0700, Amit Sunil Dhamne wrote:
-> PD3.1 spec ("8.3.3.3.3 PE_SNK_Wait_for_Capabilities State") mandates
-> that the policy engine perform a hard reset when SinkWaitCapTimer
-> expires. Instead the code explicitly does a GET_SOURCE_CAP when the
-> timer expires as part of SNK_WAIT_CAPABILITIES_TIMEOUT. Due to this the
-> following compliance test failures are reported by the compliance tester
-> (added excerpts from the PD Test Spec):
->=20
-> * COMMON.PROC.PD.2#1:
->   The Tester receives a Get_Source_Cap Message from the UUT. This
->   message is valid except the following conditions: [COMMON.PROC.PD.2#1]
->     a. The check fails if the UUT sends this message before the Tester
->        has established an Explicit Contract
->     ...
->=20
-> * TEST.PD.PROT.SNK.4:
->   ...
->   4. The check fails if the UUT does not send a Hard Reset between
->     tTypeCSinkWaitCap min and max. [TEST.PD.PROT.SNK.4#1] The delay is
->     between the VBUS present vSafe5V min and the time of the first bit
->     of Preamble of the Hard Reset sent by the UUT.
->=20
-> For the purpose of interoperability, restrict the quirk introduced in
-> https://lore.kernel.org/all/20240523171806.223727-1-sebastian.reichel@col=
-labora.com/
-> to only non self-powered devices as battery powered devices will not
-> have the issue mentioned in that commit.
->=20
-> Cc: stable@vger.kernel.org
-> Fixes: 122968f8dda8 ("usb: typec: tcpm: avoid resets for missing source c=
-apability messages")
-> Reported-by: Badhri Jagan Sridharan <badhri@google.com>
-> Closes: https://lore.kernel.org/all/CAPTae5LAwsVugb0dxuKLHFqncjeZeJ785nkY=
-4Jfd+M-tCjHSnQ@mail.gmail.com/
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
+[   27.235049] PM: suspend entry (deep)
+[   27.871641] Filesystems sync: 0.636 seconds
+[   27.885320] Freezing user space processes
+[   27.886932] Freezing user space processes completed (elapsed 0.001 seconds)
+[   27.887642] OOM killer disabled.
+[   27.887981] Freezing remaining freezable tasks
+[   27.889655] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
 
-I actually had this constrained to the !self_powered use-case
-originally (before sending to the ML). Since I didn't see a good
-reason for the extra check, I decided to keep the code simple :)
-
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/usb/typec/tcpm/tcpm.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index d6f2412381cf..c8f467d24fbb 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4515,7 +4515,8 @@ static inline enum tcpm_state hard_reset_state(stru=
-ct tcpm_port *port)
->  		return ERROR_RECOVERY;
->  	if (port->pwr_role =3D=3D TYPEC_SOURCE)
->  		return SRC_UNATTACHED;
-> -	if (port->state =3D=3D SNK_WAIT_CAPABILITIES_TIMEOUT)
-> +	if (port->state =3D=3D SNK_WAIT_CAPABILITIES ||
-> +	    port->state =3D=3D SNK_WAIT_CAPABILITIES_TIMEOUT)
->  		return SNK_READY;
->  	return SNK_UNATTACHED;
->  }
-> @@ -5043,8 +5044,11 @@ static void run_state_machine(struct tcpm_port *po=
-rt)
->  			tcpm_set_state(port, SNK_SOFT_RESET,
->  				       PD_T_SINK_WAIT_CAP);
->  		} else {
-> -			tcpm_set_state(port, SNK_WAIT_CAPABILITIES_TIMEOUT,
-> -				       PD_T_SINK_WAIT_CAP);
-> +			if (!port->self_powered)
-> +				upcoming_state =3D SNK_WAIT_CAPABILITIES_TIMEOUT;
-> +			else
-> +				upcoming_state =3D hard_reset_state(port);
-> +			tcpm_set_state(port, upcoming_state, PD_T_SINK_WAIT_CAP);
->  		}
->  		break;
->  	case SNK_WAIT_CAPABILITIES_TIMEOUT:
->=20
-> base-commit: c6d9e43954bfa7415a1e9efdb2806ec1d8a8afc8
-> --=20
-> 2.47.0.105.g07ac214952-goog
->=20
-
---a4nnbsddgl3uyol6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmcbzVgACgkQ2O7X88g7
-+pqdCg//QuiUnHno4TZ9ZYeLw5BBTQwTtXLKErchyyfuJVYMWza1tDQMwWGLNMeh
-g+hvjmcGWSJZwKnZd/kBAW4muF+qbhx58FgCfRQ/WwwXkf5i+Um7h0cwOoq6hMFx
-DkqsER04hCx4skB4tDUSC9T4/PWnnWVQBwi4h7Ugb0VYeCUdGmQqLrbamqh+6aAR
-BFZUxZ/UJZyUrJJJrTKL3BNpEe9ZfFYo73lSTetis4coFXBy0bhBpIVczEoJDA+w
-q7iMtYoDzLZ7O3MGAeIhqgg6Kaie0V2JeQr0OoXa3viHrC6i/LyZ0J+PGlFIbsDo
-No/eUsozAY1lBO/d9tKSY4Z62NYtssbcpiqMrLU3kIn8u/32oCyG4GgHogHzZBiK
-npbyV/kVKamGRgmwVAFk46g1qtb8IanSuo8kBWS0H9EKahH08IUhoac004wyF1yB
-9Aoc8cFBXV0KXV9vyUsQMOsxWyadgUjjPRGOrwMaYN9CkDxwvxdJyyMSaAl0PxSN
-W1x0WojnTz0g6EtJ/xM+AZtO3mDgqKDFceRxABaBdPnR2khROViF8xNxAs7RHLAY
-KF3dZSAjEo5wLdZOIB+0Evj0g307ikf9hH1k29zCVz8s4w6N50h1/F8sM/2tsBd2
-1jwGZS3/9nanoTFksabwt3pDzvZ7BHcHQF8tL/HDDh/f105WNXs=
-=2MN7
------END PGP SIGNATURE-----
-
---a4nnbsddgl3uyol6--
+Thank you,
+Chris
 
