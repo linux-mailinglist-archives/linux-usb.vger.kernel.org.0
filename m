@@ -1,100 +1,84 @@
-Return-Path: <linux-usb+bounces-16686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16687-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9597C9AFA21
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:37:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C67FA9AFA2E
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:40:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DCB91F230BB
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:37:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BDBC1F228CB
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A22B71AF0BA;
-	Fri, 25 Oct 2024 06:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340BB18C935;
+	Fri, 25 Oct 2024 06:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GYs7q0Xf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JlHhTt9i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83CD199FD3
-	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 06:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1D318F2F7
+	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 06:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729838222; cv=none; b=la4bGdnaIruRaIiFgAUbBXOmqRyCM2LBaFiD8BCR6F0AVJUF7FePLAYJoUPXsQxtJljpKUmDgBlzwhGqYrib1W8xX82cS9RWqSYRO1mbuH8O7ITrtJ8rD7Qy8ZFy2HMjDDtmGofpRM1RJDK9P2ifEvCAE5Ef+05NlcF9AMxfKZc=
+	t=1729838402; cv=none; b=U9g/Dj7Vlt1TMBeRuln4eZt6nU6zI6u2le6fuLnTc4RN7J2S0R6dznvjz2yGfarxSBcPhu9STioNZQHOM5W/L6/Dki3yy/M1rUxPNT1kLHW5tj9aHgtRHXzB40fnuevADd5ZjhADNkpA+k8i8DIkD3DNzNLR/8JqqLrdQbesLpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729838222; c=relaxed/simple;
-	bh=76iF+HoeaObIOvzYVxcE5SrRSGI44xQ5VLVhbj7HBHw=;
+	s=arc-20240116; t=1729838402; c=relaxed/simple;
+	bh=vvNeUBceby2LkjeytOXgOCzY+ewoI+Yt1QSkzCdkeTQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oNmshJcMANpdwr37A9PqYF7ZsacGUTq1khDuysvouZQOBRb5YDeYRRvd7sxxsfoIke32wstuoLsnrywE5AqE+E0IzAw5o9lTRMCpDcvY0siffnscQ/gE7mLGb7pX8c0Um0lC6sHB7f9Ht6Iks8Gu+MxPJ57t+q58v3XqEFup+l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GYs7q0Xf; arc=none smtp.client-ip=209.85.167.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=M2qH48Vd9DqiWTBzcDAp/5LVyvNLxPele8mB3TkwhPp3V0kw42+hIHWGKoiFpMKHB5/CrqoVQk0s26wH4/H17KpKA6ZbADveDPMm2ttmLfwrtC4spiMXAG1INcIkIATophyo1ePbXyhK11XBDpgYaKTnz9NSTibgD0qLr93CPlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JlHhTt9i; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539e7e73740so1522355e87.3
-        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 23:36:58 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539e690479cso1743477e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 23:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729838217; x=1730443017; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1729838398; x=1730443198; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Db9W0DcUi/dDjwgp0S1+zwbk/KalyyaD0ylTsRWE1NQ=;
-        b=GYs7q0XfOvlwoMF2SSTCedPhsAh7B7f9WmfNIzEBNIfbaxwQysPvEIo+uAvfDNREJZ
-         TqF9NMvUuH7870whJdZ4kcIMipDYedq8cOJYlhclHzaf+5tCb7RR+eYIyE41Q1a5gGDC
-         AvgDCYwlkhd2gjcVGRJhGF4rlq63LBT4qx/yjbBRSmLedTVua6qTqgKRGZA7mqLFeSJl
-         /NzaGK2Kw2eOs8xygTqcsyWA8/XJwP6/CrfXGlDkJBkRxaIuLrxTHn/iyBJJuKQTQV6d
-         xLCGJerYbznOao6iPX8eq23hub15ckbvAa9kSkBzShWq7NEmK64FXnjYqZo4HxtmEP8R
-         rIyQ==
+        bh=cBTuSfKMwpmHgJlpGmRTFa3GtgGOzkEl+PqDUCX14JU=;
+        b=JlHhTt9ia6FyFZxgQkIHW8QgnjMdEBsfhnIU2naidwmYBoUt7zCQN4T+Y/XvMCbpP0
+         GZLvPA7dFD96RmDTwfigWsbA2Gkj+KjXwmh2ptpa8Evm/Qx7PUEMZar72Q9ftfM7c65l
+         fvTGp9OWDgEkxke2h/t3LjPkWM/qBfH4tNo0rjNCUfjf4IMgDkKmRsDHrS9S65X43Uu4
+         PU85GWDKDzk/qwCVTLhs254+TfopZgciYo7aeolwiPxunOMVu3BAXOGM/UoL6KLnSZuy
+         AEZmOI+KwRPRqr6pj8HgK3/ne1jKAqmBnxdvU/WRWDnc2XYsGQYkm9rRt2ml8xVzHaGB
+         XJIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729838217; x=1730443017;
+        d=1e100.net; s=20230601; t=1729838398; x=1730443198;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Db9W0DcUi/dDjwgp0S1+zwbk/KalyyaD0ylTsRWE1NQ=;
-        b=V7XSl+QtAes9qheDknSraClXDf5MwOfuPQ7Dp/rMxGGqAMxANMOdhBmTdSX3eJpYks
-         Dc3IqMF5rIu2OMHhgk95ovsrVtLrTMRwG7Ll4xn8y+GQj3gq7Jhl82DuHAIZF1ZQhTzF
-         ilvMa46WlfTX7PcZ5+SxyAQ72x5mgepLE+Nx2VCi8rME1kLwFy6AXgmea1EmTUiJACiC
-         fCdf129wwGXo1pt1kojg9Df3UQ8zXMbOQZ3brUPgwOVw+kY5ozdIYJdFbx+sMy6yPNLb
-         g1LaEDLz7+6lfOmEQFywgALs3dkxy/P60+QQ4FZ+aqY15Lw3KJZdGwntBtq17XEh4o/a
-         tzKw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVuo3BZaouylHt9Dr2l2Kkt7Bm8xW3f47ILeum0IjGkT8niPYRgho6Xj+bc5/SNSZ9dxZVHdQZLqg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+E/2WGo4eYJNff70sSw9e31Jp4IoHWSkSW+XeQtGSRLrbTWFz
-	K7yhUv+jhrI9fqp0U+mOBJGae31gfQpD+9xtqyuBYbGaXanrkk8YTbFcmVADXUE=
-X-Google-Smtp-Source: AGHT+IHWV57T+/9EhAWqxTiykSOfZ5lc9WHgI9sMVd6VKkCShvL2exL1I+UVy6hyP0AKb8v0iecgSw==
-X-Received: by 2002:a05:6512:3e0d:b0:52e:9fe0:bee4 with SMTP id 2adb3069b0e04-53b1a2fe533mr5111135e87.9.1729838216924;
-        Thu, 24 Oct 2024 23:36:56 -0700 (PDT)
+        bh=cBTuSfKMwpmHgJlpGmRTFa3GtgGOzkEl+PqDUCX14JU=;
+        b=qga2G2dcYrAzEI3YfQnBojSrPWJdJylTktyzYhw3FSBfRVRmlEqVfpUL+AI1ip63gV
+         /r1RNa16tOrdl/DjrFBYb4tzEnkKg8aFTWSmozKUXrs8dkWGL8AUcN+QcaYATqjw1xaq
+         gRhEdjorVm9nMtUPBhmf3dGOTTur2mT2+g6nu8uorV+iBvr1ppZ3Dz44s29pZG/vocwO
+         mH1ZYq1DqiFIwjf/RbGEDdoWInVShOEFSAaPsniuPjElk7UN4R4mWXayN5zmoSWZfwrM
+         aG6LWyQ4u3HnYqRx7cdTUy6EAAWq8mxiVvlw0/Nf/RkXY5MXK/kqGZBbrZ/8QJ3nF1mP
+         JHhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXz5pUOm4n15J+sMYj/7dqFQ5cVSTqkJVJfIfbezXH8MSVtq3CjQ64eTSSb4z5BUl3MHCBjG2BmWD0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTYM6MuG0IeE7Z+jVUF0MxXrSiKjLkQVOzWxZvV89vrjvoKCSP
+	TAw7s5dc+JjhyztNq/2RcFXT2HYg+TvxC0C5lMiYdE5p1WfzUOXkJk2zYVNORAk=
+X-Google-Smtp-Source: AGHT+IGkjnVZ3Ubnw9yW+YH3VlW13l86h86MFbTJUKG0oDr1/YC+rV98IHDNH0U8PjgYky6NyZRJxA==
+X-Received: by 2002:ac2:4e05:0:b0:535:82eb:21d1 with SMTP id 2adb3069b0e04-53b1a375c16mr4426940e87.57.1729838398360;
+        Thu, 24 Oct 2024 23:39:58 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e10a53csm72820e87.55.2024.10.24.23.36.53
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e1f317bsm71393e87.286.2024.10.24.23.39.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 23:36:54 -0700 (PDT)
-Date: Fri, 25 Oct 2024 09:36:51 +0300
+        Thu, 24 Oct 2024 23:39:56 -0700 (PDT)
+Date: Fri, 25 Oct 2024 09:39:54 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Stephen Boyd <swboyd@chromium.org>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, devicetree@vger.kernel.org, 
-	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, 
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org, 
-	Guenter Roeck <groeck@chromium.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
-	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Daniel Scally <djrscally@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
-	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 13/18] dt-bindings: usb-switch: Extend for DisplayPort
- altmode
-Message-ID: <yatu2snt2w7lrveftlfbkw6yfvso3jbsma5v6jij4rn7v37hjt@ww42wer6bytj>
-References: <20240901040658.157425-1-swboyd@chromium.org>
- <20240901040658.157425-14-swboyd@chromium.org>
- <27acewh6h2xcwp63z5o3tgrjmimf4d3mftpnmkvhdhv273zgsp@i6i5ke4btdqx>
- <CAE-0n53S2dFz74_rgx22_1i_bbEC6kj1SL5LAEq_F2wrdCgBNg@mail.gmail.com>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usb: typec: mux: Add support for the TUSB1046
+ crosspoint switch
+Message-ID: <bgqmq4kehejgud2eymcwusbu6ks4jnaeasr6ad735czxxazyht@ppzrbmce5mog>
+References: <20241024-tusb1046-v2-0-d031b1a43e6d@bootlin.com>
+ <20241024-tusb1046-v2-2-d031b1a43e6d@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -103,64 +87,172 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE-0n53S2dFz74_rgx22_1i_bbEC6kj1SL5LAEq_F2wrdCgBNg@mail.gmail.com>
+In-Reply-To: <20241024-tusb1046-v2-2-d031b1a43e6d@bootlin.com>
 
-On Thu, Oct 10, 2024 at 06:43:35PM -0400, Stephen Boyd wrote:
-> Quoting Dmitry Baryshkov (2024-09-19 03:40:19)
-> > On Sat, Aug 31, 2024 at 09:06:51PM GMT, Stephen Boyd wrote:
-> > > diff --git a/Documentation/devicetree/bindings/usb/usb-switch.yaml b/Documentation/devicetree/bindings/usb/usb-switch.yaml
-> > > index f5dc7e23b134..816f295f322f 100644
-> > > --- a/Documentation/devicetree/bindings/usb/usb-switch.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/usb-switch.yaml
-> > > @@ -52,6 +52,14 @@ properties:
-> > >            endpoint:
-> > >              $ref: '#/$defs/usbc-in-endpoint'
-> > >
-> > > +      port@2:
-> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +        unevaluatedProperties: false
-> > > +
-> > > +        properties:
-> > > +          endpoint:
-> > > +            $ref: '#/$defs/dp-endpoint'
-> >
-> > Is it a separate port or is it an endpoint of the same upstream-facing
-> > (non-connector-facing) SS port?
+On Thu, Oct 24, 2024 at 10:54:17AM +0200, Romain Gantois wrote:
+> The TUSB1046-DCI is a USB-C linear redriver crosspoint switch, which can
+> mux SuperSpeed lanes from a Type-C connector to a USB3.0 data lane or up to
+> 4 display port lanes.
 > 
-> I don't quite follow this comment. This is an input DP endpoint/port.
+> Add support for driving the TUSB1046 as a Type-C orientation switch and
+> DisplayPort altmode multiplexer.
+> 
+> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> ---
+>  MAINTAINERS                      |   7 ++
+>  drivers/usb/typec/mux/Kconfig    |   9 ++
+>  drivers/usb/typec/mux/Makefile   |   1 +
+>  drivers/usb/typec/mux/tusb1046.c | 196 +++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 213 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c27f3190737f8b85779bde5489639c8b899f4fd8..c880588b63f27d628edeec09fa7d904eeabbde92 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -24142,6 +24142,13 @@ L:	linux-usb@vger.kernel.org
+>  S:	Orphan
+>  F:	drivers/usb/typec/tcpm/
+>  
+> +USB TYPEC TUSB1046 MUX DRIVER
+> +M:	Romain Gantois <romain.gantois@bootlin.com>
+> +L:	linux-usb@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/usb/ti,tusb1046.yaml
+> +F:	drivers/usb/typec/mux/tusb1046.c
+> +
+>  USB UHCI DRIVER
+>  M:	Alan Stern <stern@rowland.harvard.edu>
+>  L:	linux-usb@vger.kernel.org
+> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+> index ce7db6ad30572a0a74890f5f11944fb3ff07f635..67381b4ef4f68f4a6e73f157365ee24d0ab7109a 100644
+> --- a/drivers/usb/typec/mux/Kconfig
+> +++ b/drivers/usb/typec/mux/Kconfig
+> @@ -66,6 +66,15 @@ config TYPEC_MUX_PTN36502
+>  	  Say Y or M if your system has a NXP PTN36502 Type-C redriver chip
+>  	  found on some devices with a Type-C port.
+>  
+> +config TYPEC_MUX_TUSB1046
+> +	tristate "TI TUSB1046 Type-C crosspoint switch driver"
+> +	depends on I2C
+> +	help
+> +	  Driver for the Texas Instruments TUSB1046-DCI crosspoint switch.
+> +	  Supports flipping USB-C SuperSpeed lanes to adapt to orientation
+> +	  changes, as well as muxing DisplayPort and sideband signals to a
+> +	  common Type-C connector.
+> +
+>  config TYPEC_MUX_WCD939X_USBSS
+>  	tristate "Qualcomm WCD939x USBSS Analog Audio Switch driver"
+>  	depends on I2C
+> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
+> index bb96f30267af05b33b9277dcf1cc0e1527d2dcdd..60879446da9365183567d3374a2fb7b5171fb3d7 100644
+> --- a/drivers/usb/typec/mux/Makefile
+> +++ b/drivers/usb/typec/mux/Makefile
+> @@ -7,4 +7,5 @@ obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
+>  obj-$(CONFIG_TYPEC_MUX_IT5205)		+= it5205.o
+>  obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
+>  obj-$(CONFIG_TYPEC_MUX_PTN36502)	+= ptn36502.o
+> +obj-$(CONFIG_TYPEC_MUX_TUSB1046)	+= tusb1046.o
+>  obj-$(CONFIG_TYPEC_MUX_WCD939X_USBSS)	+= wcd939x-usbss.o
+> diff --git a/drivers/usb/typec/mux/tusb1046.c b/drivers/usb/typec/mux/tusb1046.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..b4f45c217b59fe033551e8e6379ad2d33ebedbcb
+> --- /dev/null
+> +++ b/drivers/usb/typec/mux/tusb1046.c
+> @@ -0,0 +1,196 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Driver for the TUSB1046-DCI USB Type-C crosspoint switch
+> + *
+> + * Copyright (C) 2024 Bootlin
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/i2c.h>
+> +#include <linux/usb/typec_mux.h>
+> +#include <linux/usb/typec_dp.h>
+> +#include <linux/usb/typec_altmode.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/err.h>
+> +#include <linux/of_device.h>
+> +#include <linux/device.h>
+> +#include <linux/mutex.h>
+> +
+> +#define TUSB1046_REG_GENERAL 0xa
+> +
+> +/* General register bits */
+> +#define TUSB1046_GENERAL_FLIPSEL BIT(2)
+> +#define TUSB1046_GENERAL_CTLSEL  GENMASK(1, 0)
+> +
+> +/* Mux modes */
+> +#define TUSB1046_CTLSEL_DISABLED          0x0
+> +#define TUSB1046_CTLSEL_USB3              0x1
+> +#define TUSB1046_CTLSEL_4LANE_DP          0x2
+> +#define TUSB1046_CTLSEL_USB3_AND_2LANE_DP 0x3
+> +
+> +struct tusb1046_priv {
+> +	struct i2c_client *client;
+> +	struct typec_switch_dev *sw;
+> +	struct typec_mux_dev *mux;
+> +
+> +	/* Lock General register during accesses */
+> +	struct mutex general_reg_lock;
+> +};
+> +
+> +static int tusb1046_mux_set(struct typec_mux_dev *mux,
+> +			    struct typec_mux_state *state)
+> +{
+> +	struct tusb1046_priv *priv = typec_mux_get_drvdata(mux);
+> +	struct i2c_client *client = priv->client;
+> +	struct device *dev = &client->dev;
+> +	int mode, val, ret = 0;
+> +
+> +	if (state->mode >= TYPEC_STATE_MODAL &&
+> +	    state->alt->svid != USB_TYPEC_DP_SID)
+> +		return -EINVAL;
+> +
+> +	dev_dbg(dev, "mux mode requested: %lu\n", state->mode);
+> +
+> +	mutex_lock(&priv->general_reg_lock);
+> +
+> +	val = i2c_smbus_read_byte_data(client, TUSB1046_REG_GENERAL);
+> +	if (val < 0) {
+> +		dev_err(dev, "failed to read ctlsel status, err %d\n", val);
+> +		ret = val;
+> +		goto out_unlock;
+> +	}
+> +
+> +	switch (state->mode) {
+> +	case TYPEC_STATE_USB:
+> +		mode = TUSB1046_CTLSEL_USB3;
+> +		break;
+> +	case TYPEC_DP_STATE_C:
 
-This is the question: is this a separate port or just an endpoint on the
-port?
+These are only valid if you have checked that altmode SVID is a
+DisplayPort SVID.
 
-> 
-> >
-> > > +
-> > >  oneOf:
-> > >    - required:
-> > >        - port
-> > > @@ -65,6 +73,19 @@ $defs:
-> > >      $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> > >      description: Super Speed (SS) output endpoint to a type-c connector
-> > >      unevaluatedProperties: false
-> > > +    properties:
-> > > +      data-lanes:
-> > > +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > +        description: |
-> > > +          An array of physical USB Type-C data lane indexes.
-> > > +          - 0 is SSRX1 lane
-> > > +          - 1 is SSTX1 lane
-> > > +          - 2 is SSTX2 lane
-> > > +          - 3 is SSRX2 lane
-> > > +        minItems: 4
-> > > +        maxItems: 4
-> > > +        items:
-> > > +          maximum: 3
-> >
-> > What is the usecase to delare less than 4 lanes going to the USB-C
-> > connector?
-> 
-> I'm not aware of any usecase. The 'maximum: 3' is the max value in the
-> cell, i.e. 0, 1, 2, or 3.
+> +	case TYPEC_DP_STATE_E:
+> +		mode = TUSB1046_CTLSEL_4LANE_DP;
+> +		break;
+> +	case TYPEC_DP_STATE_D:
+> +		mode = TUSB1046_CTLSEL_USB3_AND_2LANE_DP;
+> +		break;
+> +	case TYPEC_STATE_SAFE:
+> +	default:
+> +		mode = TUSB1046_CTLSEL_DISABLED;
+> +		break;
+> +	}
+> +
+> +	val &= ~TUSB1046_GENERAL_CTLSEL;
+> +	val |= mode;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, TUSB1046_REG_GENERAL, val);
+> +
+> +out_unlock:
+> +	mutex_unlock(&priv->general_reg_lock);
+> +	return ret;
+> +}
+> +
 
 -- 
 With best wishes
