@@ -1,260 +1,106 @@
-Return-Path: <linux-usb+bounces-16687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C67FA9AFA2E
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:40:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C52A39AFA5A
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 08:52:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BDBC1F228CB
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:40:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84A29283C42
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 06:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340BB18C935;
-	Fri, 25 Oct 2024 06:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JlHhTt9i"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E7D1A7ADE;
+	Fri, 25 Oct 2024 06:52:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1D318F2F7
-	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 06:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEED1175D5D
+	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 06:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729838402; cv=none; b=U9g/Dj7Vlt1TMBeRuln4eZt6nU6zI6u2le6fuLnTc4RN7J2S0R6dznvjz2yGfarxSBcPhu9STioNZQHOM5W/L6/Dki3yy/M1rUxPNT1kLHW5tj9aHgtRHXzB40fnuevADd5ZjhADNkpA+k8i8DIkD3DNzNLR/8JqqLrdQbesLpo=
+	t=1729839141; cv=none; b=HzgrbX/TesSC5bfX3VehwXFk/eSwX0i85QRM0HsmWKzu9jafNN+uS5VW2m8n+JyjmoTKD3vN3tTQ3IRvpK9HM8YGEfhB2C2edG0Y7QApQOteSvSLuSs78/w8qkqGhCQhvzl/asfzrawFRrBWtcUBqUZVTj0YiV9YyPNMXDAeNAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729838402; c=relaxed/simple;
-	bh=vvNeUBceby2LkjeytOXgOCzY+ewoI+Yt1QSkzCdkeTQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M2qH48Vd9DqiWTBzcDAp/5LVyvNLxPele8mB3TkwhPp3V0kw42+hIHWGKoiFpMKHB5/CrqoVQk0s26wH4/H17KpKA6ZbADveDPMm2ttmLfwrtC4spiMXAG1INcIkIATophyo1ePbXyhK11XBDpgYaKTnz9NSTibgD0qLr93CPlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JlHhTt9i; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539e690479cso1743477e87.3
-        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2024 23:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729838398; x=1730443198; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cBTuSfKMwpmHgJlpGmRTFa3GtgGOzkEl+PqDUCX14JU=;
-        b=JlHhTt9ia6FyFZxgQkIHW8QgnjMdEBsfhnIU2naidwmYBoUt7zCQN4T+Y/XvMCbpP0
-         GZLvPA7dFD96RmDTwfigWsbA2Gkj+KjXwmh2ptpa8Evm/Qx7PUEMZar72Q9ftfM7c65l
-         fvTGp9OWDgEkxke2h/t3LjPkWM/qBfH4tNo0rjNCUfjf4IMgDkKmRsDHrS9S65X43Uu4
-         PU85GWDKDzk/qwCVTLhs254+TfopZgciYo7aeolwiPxunOMVu3BAXOGM/UoL6KLnSZuy
-         AEZmOI+KwRPRqr6pj8HgK3/ne1jKAqmBnxdvU/WRWDnc2XYsGQYkm9rRt2ml8xVzHaGB
-         XJIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729838398; x=1730443198;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cBTuSfKMwpmHgJlpGmRTFa3GtgGOzkEl+PqDUCX14JU=;
-        b=qga2G2dcYrAzEI3YfQnBojSrPWJdJylTktyzYhw3FSBfRVRmlEqVfpUL+AI1ip63gV
-         /r1RNa16tOrdl/DjrFBYb4tzEnkKg8aFTWSmozKUXrs8dkWGL8AUcN+QcaYATqjw1xaq
-         gRhEdjorVm9nMtUPBhmf3dGOTTur2mT2+g6nu8uorV+iBvr1ppZ3Dz44s29pZG/vocwO
-         mH1ZYq1DqiFIwjf/RbGEDdoWInVShOEFSAaPsniuPjElk7UN4R4mWXayN5zmoSWZfwrM
-         aG6LWyQ4u3HnYqRx7cdTUy6EAAWq8mxiVvlw0/Nf/RkXY5MXK/kqGZBbrZ/8QJ3nF1mP
-         JHhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXz5pUOm4n15J+sMYj/7dqFQ5cVSTqkJVJfIfbezXH8MSVtq3CjQ64eTSSb4z5BUl3MHCBjG2BmWD0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTYM6MuG0IeE7Z+jVUF0MxXrSiKjLkQVOzWxZvV89vrjvoKCSP
-	TAw7s5dc+JjhyztNq/2RcFXT2HYg+TvxC0C5lMiYdE5p1WfzUOXkJk2zYVNORAk=
-X-Google-Smtp-Source: AGHT+IGkjnVZ3Ubnw9yW+YH3VlW13l86h86MFbTJUKG0oDr1/YC+rV98IHDNH0U8PjgYky6NyZRJxA==
-X-Received: by 2002:ac2:4e05:0:b0:535:82eb:21d1 with SMTP id 2adb3069b0e04-53b1a375c16mr4426940e87.57.1729838398360;
-        Thu, 24 Oct 2024 23:39:58 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e1f317bsm71393e87.286.2024.10.24.23.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 23:39:56 -0700 (PDT)
-Date: Fri, 25 Oct 2024 09:39:54 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: typec: mux: Add support for the TUSB1046
- crosspoint switch
-Message-ID: <bgqmq4kehejgud2eymcwusbu6ks4jnaeasr6ad735czxxazyht@ppzrbmce5mog>
-References: <20241024-tusb1046-v2-0-d031b1a43e6d@bootlin.com>
- <20241024-tusb1046-v2-2-d031b1a43e6d@bootlin.com>
+	s=arc-20240116; t=1729839141; c=relaxed/simple;
+	bh=iCWj6sVUqOXbsNqNixtvvkdSWeqwOsoWqDpFi9QlmsM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iTP/fAVihBtI/YbnQeqWlA9IX0QPYzkbGHNyeHW30q6cEjL835oN0z9cutjZKHmKYkn0747SjhoGLt57UX4d8jMo0ndtNCnnc4V11irihNllVOvpzdBS5qZwlZZ47pDDDCq4M/mqjnW4lb4sec3VhH8C/z22b0B4HXiPwIajumY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XZYNp4Db8z4f3lVx
+	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 14:51:54 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id E142E1A018D
+	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 14:52:12 +0800 (CST)
+Received: from hulk-vt.huawei.com (unknown [10.67.174.121])
+	by APP4 (Coremail) with SMTP id gCh0CgDHRsMQQBtnr2RAFA--.62886S2;
+	Fri, 25 Oct 2024 14:52:12 +0800 (CST)
+From: Chen Ridong <chenridong@huaweicloud.com>
+To: peter.chen@kernel.org,
+	pawell@cadence.com,
+	rogerq@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	chenridong@huawei.com,
+	wangweiyang2@huawei.com
+Subject: [PATCH] usb: cdns3: avoid possible null_ptr_deref in cdns3_gadget_ep_queue
+Date: Fri, 25 Oct 2024 06:43:31 +0000
+Message-Id: <20241025064331.1049538-1-chenridong@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024-tusb1046-v2-2-d031b1a43e6d@bootlin.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDHRsMQQBtnr2RAFA--.62886S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw17Xry7tF4fuFW8Xw4ktFb_yoWDXFX_Cw
+	18uwnrKrW5X34kJw15C343Cry0kFsrZ3WDXFsrKa43A34jgrs7Cry8Zrn5CF17ZF4xGr1k
+	A34rKanxuFnxtjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
+	7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On Thu, Oct 24, 2024 at 10:54:17AM +0200, Romain Gantois wrote:
-> The TUSB1046-DCI is a USB-C linear redriver crosspoint switch, which can
-> mux SuperSpeed lanes from a Type-C connector to a USB3.0 data lane or up to
-> 4 display port lanes.
-> 
-> Add support for driving the TUSB1046 as a Type-C orientation switch and
-> DisplayPort altmode multiplexer.
-> 
-> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
-> ---
->  MAINTAINERS                      |   7 ++
->  drivers/usb/typec/mux/Kconfig    |   9 ++
->  drivers/usb/typec/mux/Makefile   |   1 +
->  drivers/usb/typec/mux/tusb1046.c | 196 +++++++++++++++++++++++++++++++++++++++
->  4 files changed, 213 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c27f3190737f8b85779bde5489639c8b899f4fd8..c880588b63f27d628edeec09fa7d904eeabbde92 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -24142,6 +24142,13 @@ L:	linux-usb@vger.kernel.org
->  S:	Orphan
->  F:	drivers/usb/typec/tcpm/
->  
-> +USB TYPEC TUSB1046 MUX DRIVER
-> +M:	Romain Gantois <romain.gantois@bootlin.com>
-> +L:	linux-usb@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/usb/ti,tusb1046.yaml
-> +F:	drivers/usb/typec/mux/tusb1046.c
-> +
->  USB UHCI DRIVER
->  M:	Alan Stern <stern@rowland.harvard.edu>
->  L:	linux-usb@vger.kernel.org
-> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> index ce7db6ad30572a0a74890f5f11944fb3ff07f635..67381b4ef4f68f4a6e73f157365ee24d0ab7109a 100644
-> --- a/drivers/usb/typec/mux/Kconfig
-> +++ b/drivers/usb/typec/mux/Kconfig
-> @@ -66,6 +66,15 @@ config TYPEC_MUX_PTN36502
->  	  Say Y or M if your system has a NXP PTN36502 Type-C redriver chip
->  	  found on some devices with a Type-C port.
->  
-> +config TYPEC_MUX_TUSB1046
-> +	tristate "TI TUSB1046 Type-C crosspoint switch driver"
-> +	depends on I2C
-> +	help
-> +	  Driver for the Texas Instruments TUSB1046-DCI crosspoint switch.
-> +	  Supports flipping USB-C SuperSpeed lanes to adapt to orientation
-> +	  changes, as well as muxing DisplayPort and sideband signals to a
-> +	  common Type-C connector.
-> +
->  config TYPEC_MUX_WCD939X_USBSS
->  	tristate "Qualcomm WCD939x USBSS Analog Audio Switch driver"
->  	depends on I2C
-> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-> index bb96f30267af05b33b9277dcf1cc0e1527d2dcdd..60879446da9365183567d3374a2fb7b5171fb3d7 100644
-> --- a/drivers/usb/typec/mux/Makefile
-> +++ b/drivers/usb/typec/mux/Makefile
-> @@ -7,4 +7,5 @@ obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
->  obj-$(CONFIG_TYPEC_MUX_IT5205)		+= it5205.o
->  obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
->  obj-$(CONFIG_TYPEC_MUX_PTN36502)	+= ptn36502.o
-> +obj-$(CONFIG_TYPEC_MUX_TUSB1046)	+= tusb1046.o
->  obj-$(CONFIG_TYPEC_MUX_WCD939X_USBSS)	+= wcd939x-usbss.o
-> diff --git a/drivers/usb/typec/mux/tusb1046.c b/drivers/usb/typec/mux/tusb1046.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..b4f45c217b59fe033551e8e6379ad2d33ebedbcb
-> --- /dev/null
-> +++ b/drivers/usb/typec/mux/tusb1046.c
-> @@ -0,0 +1,196 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Driver for the TUSB1046-DCI USB Type-C crosspoint switch
-> + *
-> + * Copyright (C) 2024 Bootlin
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/i2c.h>
-> +#include <linux/usb/typec_mux.h>
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/typec_altmode.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/err.h>
-> +#include <linux/of_device.h>
-> +#include <linux/device.h>
-> +#include <linux/mutex.h>
-> +
-> +#define TUSB1046_REG_GENERAL 0xa
-> +
-> +/* General register bits */
-> +#define TUSB1046_GENERAL_FLIPSEL BIT(2)
-> +#define TUSB1046_GENERAL_CTLSEL  GENMASK(1, 0)
-> +
-> +/* Mux modes */
-> +#define TUSB1046_CTLSEL_DISABLED          0x0
-> +#define TUSB1046_CTLSEL_USB3              0x1
-> +#define TUSB1046_CTLSEL_4LANE_DP          0x2
-> +#define TUSB1046_CTLSEL_USB3_AND_2LANE_DP 0x3
-> +
-> +struct tusb1046_priv {
-> +	struct i2c_client *client;
-> +	struct typec_switch_dev *sw;
-> +	struct typec_mux_dev *mux;
-> +
-> +	/* Lock General register during accesses */
-> +	struct mutex general_reg_lock;
-> +};
-> +
-> +static int tusb1046_mux_set(struct typec_mux_dev *mux,
-> +			    struct typec_mux_state *state)
-> +{
-> +	struct tusb1046_priv *priv = typec_mux_get_drvdata(mux);
-> +	struct i2c_client *client = priv->client;
-> +	struct device *dev = &client->dev;
-> +	int mode, val, ret = 0;
-> +
-> +	if (state->mode >= TYPEC_STATE_MODAL &&
-> +	    state->alt->svid != USB_TYPEC_DP_SID)
-> +		return -EINVAL;
-> +
-> +	dev_dbg(dev, "mux mode requested: %lu\n", state->mode);
-> +
-> +	mutex_lock(&priv->general_reg_lock);
-> +
-> +	val = i2c_smbus_read_byte_data(client, TUSB1046_REG_GENERAL);
-> +	if (val < 0) {
-> +		dev_err(dev, "failed to read ctlsel status, err %d\n", val);
-> +		ret = val;
-> +		goto out_unlock;
-> +	}
-> +
-> +	switch (state->mode) {
-> +	case TYPEC_STATE_USB:
-> +		mode = TUSB1046_CTLSEL_USB3;
-> +		break;
-> +	case TYPEC_DP_STATE_C:
+From: Chen Ridong <chenridong@huawei.com>
 
-These are only valid if you have checked that altmode SVID is a
-DisplayPort SVID.
+The cdns3_gadget_ep_alloc_request functions may return NULL
+when memory is out of use. To void possible null_ptr_deref,
+return ENOMEM when cdns3_gadget_ep_alloc_request returns NULL.
 
-> +	case TYPEC_DP_STATE_E:
-> +		mode = TUSB1046_CTLSEL_4LANE_DP;
-> +		break;
-> +	case TYPEC_DP_STATE_D:
-> +		mode = TUSB1046_CTLSEL_USB3_AND_2LANE_DP;
-> +		break;
-> +	case TYPEC_STATE_SAFE:
-> +	default:
-> +		mode = TUSB1046_CTLSEL_DISABLED;
-> +		break;
-> +	}
-> +
-> +	val &= ~TUSB1046_GENERAL_CTLSEL;
-> +	val |= mode;
-> +
-> +	ret = i2c_smbus_write_byte_data(client, TUSB1046_REG_GENERAL, val);
-> +
-> +out_unlock:
-> +	mutex_unlock(&priv->general_reg_lock);
-> +	return ret;
-> +}
-> +
+Signed-off-by: Chen Ridong <chenridong@huawei.com>
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index fd1beb10bba7..982e8e0759e8 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2657,6 +2657,10 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+ 		struct cdns3_request *priv_req;
+ 
+ 		zlp_request = cdns3_gadget_ep_alloc_request(ep, GFP_ATOMIC);
++		if (!zlp_request) {
++			spin_unlock_irqrestore(&priv_dev->lock, flags);
++			return -ENOMEM;
++		}
+ 		zlp_request->buf = priv_dev->zlp_buf;
+ 		zlp_request->length = 0;
+ 
 -- 
-With best wishes
-Dmitry
+2.34.1
+
 
