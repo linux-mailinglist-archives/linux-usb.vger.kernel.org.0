@@ -1,128 +1,259 @@
-Return-Path: <linux-usb+bounces-16706-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16709-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74A9F9B004D
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 12:37:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE059B0077
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 12:49:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EB63B241BF
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 10:37:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0CDD2843F7
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 10:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3D81DAC90;
-	Fri, 25 Oct 2024 10:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76A018BC0B;
+	Fri, 25 Oct 2024 10:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="q/qrI706"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UO4WOclT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EFD1F76DA;
-	Fri, 25 Oct 2024 10:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA781DAC90
+	for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 10:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729852617; cv=none; b=DLJUC6/3KjdWO660bW+jexgDkD9MZH8V9hYNyfuutQ0wiOF0Q7uq4qyYmdSvxMGxRCsWJaeHBIV0F4wNLB8cne5bDdj7c2FU9G2HD5zw5V+duvJ3FXxUR5erMkubVTwaun1PG7csPYnG4FswXETgk+3Wz8ogtp0zhzRt4213DJM=
+	t=1729853383; cv=none; b=CPv0Y9viwPfTSW0EAuOA5+oJVpAvV44+VvRY1HlkJtxvD4S02aDA+nVstWkjx8MJsM0jtVG+5UpckAS63amp7paihL59Nafpfsvv5jtT8SLIXGE77n4nTacouU4c4krBnekD92dOmthjbIhITMyGvF/psG6a/+VjIF56JWLRkSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729852617; c=relaxed/simple;
-	bh=EIb/0BVQLAIWTGsSf2exEUrI6S97uVc10LsFQOB7HdM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Wi1j7ZMwZgRN62g9cTnfJC6EkWlZh6VEMyM7Z6r4LbRXfXCg1YV9tn3iasFGamXv9cG7sOVAbe7DjTB8NVoS4BgInrPYFILoHKw0dkFDt66I9dFW+bX0xXobJfPxmuzX9qQljqcTk0B5IKa+rjctVO0U71AcqVGC6XNNZyxJxwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=q/qrI706; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1729852596; x=1730457396; i=wahrenst@gmx.net;
-	bh=EIb/0BVQLAIWTGsSf2exEUrI6S97uVc10LsFQOB7HdM=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=q/qrI70695V/9bTDqyidpR3DqN7SvtuI9udN3qlYdVTHhjTe3pdXukCgXVr4eSZT
-	 oVpVSWvm9Ht8gJZWw6h3QFcW/FmIZvn6x1IdOeioU5edI3X9axkQUaZ7MR3YgJWAr
-	 zx6prtedcexgJh39RlANFrBey61daP9eSO6kyYmiDdSpdYj3E5KxY+EI3YfqL0qCf
-	 B5FAXvAWQc6+wmANqG2oK83TG/NapT1C7OwePVWRlDh4bK5uvTLsWMsEUJJDdI42e
-	 PDpB87erwL4DhJEMrtWAEMgZV2OmisPUU2T9IXxSzIhyeJimpVfAFdK0+1uGor7M9
-	 lIyWrRTn32WWWWA19w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McH5Q-1tcWVM2Kx2-00mIdc; Fri, 25
- Oct 2024 12:36:36 +0200
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Russell King <linux@armlinux.org.uk>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Minas Harutyunyan <hminas@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Lukas Wunner <lukas@wunner.de>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	"Ivan T . Ivanov" <iivanov@suse.de>,
-	linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com,
-	bcm-kernel-feedback-list@broadcom.com,
-	dmaengine@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V5 9/9] ARM: bcm2835_defconfig: Enable SUSPEND
-Date: Fri, 25 Oct 2024 12:36:21 +0200
-Message-Id: <20241025103621.4780-10-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241025103621.4780-1-wahrenst@gmx.net>
-References: <20241025103621.4780-1-wahrenst@gmx.net>
+	s=arc-20240116; t=1729853383; c=relaxed/simple;
+	bh=aCNAiagby3VBg8WVJeXCrYPX9K57S5WDB9gDJXTj/qI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nvrbLoYKQ6DI/P1GqOuyiDvynUJwfLhL+gcK1uZEa6tdYHAJtk4lMoCXRjYfKYTJTe3qAbu+A0+RV3/etKBjxWz8+TVS/GZ5dmQzY1K4fUlMhMs+G8rCxdu5dSK8EFUjvma1Y9w/9mwkar+TAvlEeq1e0cUiLmblr+y34+VSddw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UO4WOclT; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539f4d8ef66so2708215e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2024 03:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729853379; x=1730458179; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tyqVh/eFIyYHOhM+diCDUXlgQP3U/MFtE2DeLsQCTPY=;
+        b=UO4WOclTbmHNjEpB2aPCOL++opnWaSONTq8hyfPEwqCrXJNQ9StmLWo2DRvJf6aelk
+         mZ3ojr+bg1G4igOnNym978x0gxLC6EwRX9KBOQRH6tnuZ9Fyyi114X7woWdvYJHn+zEK
+         Fz8BKK4Yqh/ec1Zx36dEQQdCOmiJyElq5jqZqWKVF5tFyASB30pa5kHFdGUXIOf19cAe
+         3NIvzl/8DLfdpcN/gb198JmJTthsGSJhpEY80hAX7KMqVWYC9GsV4nOFuoYF3Jw8L26m
+         vfk1gHcg0XyQOyWLrdoVzaN/vgNUzaUheeKvQHTeE17ge0bGVjElrNS7ZhF+VsRkLtJT
+         E4vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729853379; x=1730458179;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tyqVh/eFIyYHOhM+diCDUXlgQP3U/MFtE2DeLsQCTPY=;
+        b=OPL26rFZ62iPgBZ91kL6LPraXk7uFMCT7cefK9WjtdshDg7828O3AvgoxgcgSXYu8H
+         ADh2Rx/OpFohiTheXnP/dfCxfVsC3mclQGgsDQ01Vcmd7hPyBSuFolSNStWCrn9xuYCw
+         tjpjcO1hvu+qGrsrErfIvCuyJoDjy/8mFPq8tU/FB06NTAPR6gkOvxGyW9R3rFZzpWVt
+         d7cWxQLN33fTpL8QXnTL51EZwKGs2YJjgEEUeyj4nfCXVXDf1zNZzpPHxN61E96E1fAr
+         PU5rxtbDLUQWRjt/Sle3lp1S4EP2sisR5VLA0yX8j08qBJYoWiWvFGZkjkaJ1ShX6eKP
+         xF2A==
+X-Forwarded-Encrypted: i=1; AJvYcCX0f5N2wtUQtBtkUzjOtBmiGPBzzY7QhDhF17QNdf0o2y4XJtZMG/Cwj55j2oGs2TvjoJG2mO1F8gU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxys4Cqo6V9Y/CcuU5Cxs4afCmBnWW/yH2gBZ/B1ZV6KH3VJttI
+	27nBM7deLtixUW5o/dUjxD3SNCVlLlcyo6O2HQy6lepkODLLRxexzt4mqzfHGQI=
+X-Google-Smtp-Source: AGHT+IFd1s7XTf4EM8FOBisHkPGBM0CWX4Fva+d6WyJooHaUEk5EZV4vJ/wT+wZU4sf3FN36wyTG/g==
+X-Received: by 2002:a05:6512:3ba5:b0:539:fb56:7790 with SMTP id 2adb3069b0e04-53b23ddcfb2mr3231326e87.6.1729853378788;
+        Fri, 25 Oct 2024 03:49:38 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e1dcb89sm132429e87.237.2024.10.25.03.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 03:49:38 -0700 (PDT)
+Date: Fri, 25 Oct 2024 13:49:36 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Stephen Boyd <swboyd@chromium.org>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev, devicetree@vger.kernel.org, 
+	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, 
+	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org, 
+	Guenter Roeck <groeck@chromium.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
+	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
+	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 15/18] dt-bindings: usb: Add ports to
+ google,cros-ec-typec for DP altmode
+Message-ID: <lf7y7wpuca6kzqcglgs5d443iusf7xjocum4adi7t3npfavccx@zgsp37oyztme>
+References: <20240901040658.157425-1-swboyd@chromium.org>
+ <20240901040658.157425-16-swboyd@chromium.org>
+ <phdcjgqqpjpruxp7v2mw446q73xr3eg4wfgfbjw5tasgr2pgg2@77swbk47b2tg>
+ <CAE-0n514QMaQC2yjKP8bZqyfbv6B3AQm=+NJ87vxo6NdYiL03A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SXjQg6GNw0ZSmSHqCIeG/A2AkVfM9T0ww/zGck0+NtQOedM3JmX
- nhvnTRKK+Jjft6MtlKRLW/DprsGs2O6qwPDtcV7LmsT3VHJU2mvgDnoWKG0zD4F9S4r+ID5
- y96ms+DyCXFaM6Gi5sBPfDPI5dY2bBqgdan7D2XSLY4t6Tqe5hKlJ7GM/BV2pqsol2Vd6nF
- UVibuxzjEiygkJgZnD+RQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:l56zcNjiEFw=;7BA/2Q97vKnLVe4tWhxMXYjl5WO
- Vf2oL5llpTDWf8MMu9SWofNzQf00yjoNfDRWjsvmbB2kSd2mfqFBGvWS+jobK6SYQENAU1GFv
- E7gqHgJAGhKJAt/rRfh6ye7918d1iY+U6vWOnntYrG3EZa5tPHeHrSf7NOrxPicSds48iRbLp
- vlODfPnpmOxdJ0i0zGVig/ePbLUQq4bgCKTofjkbvSLQ6B8a89bskm6TAF27lav+yDu0/Q274
- 7IRz8Lmqengc83zCrSgBNXGVMhF8hicywRZGtIFwLkowDcLV9wVLgSabxW7Vo7cJNviWWK6IY
- TcH4MpqCX7elZEHVdQQpkvxhaKq/l6hcKalsfVKs8dDzEverWVdhnY4WZDw+9mKOxmpLVLvI2
- IP/wpO0YsYmsB2LIq3zJwHMZNOeab8EJmmK+pBwpBHovOFIETtV5zv/xvwbwctN78nw/MkIGY
- Y+twbeMLVUmzBNKzW3aicYfxswcjucU/Q1+wvb6wy7wTsEWWwq3cNI6aEc+T0vUHwIxIhZsvh
- qm/l3gQD/KHna78N7aKm6eXugMekG5JxmkqplrP5q2dhDf8esJgup8JnyqknyBtw8ICJc6+57
- qmpk3EZ2ul6gZ6Rooe7wpwFQJ0/BMTkfcE3YtaJBZ4gAo2ibh5ysM1SP/qLaJ0a534K7ago3R
- 66F+hWNXMva7K2+GU0V6jDxSMGEG18oGYRQtP9scz74H1ctu7pbv2aib6pFZlsIxrWvc5MI49
- QKF+weCWt7mRfrAUZex0E8GSHrQ0BaI80FgHvdi06pu4LAWmj82B98YdVIJGMIAxjmhTm8UgU
- iSWTw800/7Xf2LzAuNtCGITg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n514QMaQC2yjKP8bZqyfbv6B3AQm=+NJ87vxo6NdYiL03A@mail.gmail.com>
 
-Since the Raspberry Pi supports Suspend-To-Idle now, this option
-should be enabled. This should make power management testing easier.
+On Tue, Oct 22, 2024 at 06:15:47PM -0700, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2024-09-20 02:38:53)
+> > On Sat, Aug 31, 2024 at 09:06:53PM GMT, Stephen Boyd wrote:
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-=2D--
- arch/arm/configs/bcm2835_defconfig | 2 --
- 1 file changed, 2 deletions(-)
+> 
+> Either way the problem seems to be that I need to associate one
+> drm_bridge with two displayport altmode drivers and pass some fwnode
+> handle to drm_connector_oob_hotplug_event() in a way that we can map
+> that back to the right output endpoint in the DP bridge graph. That
+> seems to imply that we need to pass the fwnode for the usb-c-connector
+> in addition to the fwnode for the drm_bridge, so that the drm_bridge
+> code can look at its DT graph and find the remote node connected.
+> Basically something like this:
+> 
+>   void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
+>                                        struct fwnode_handle
+> *usb_connector_fwnode,
+>                                        enum drm_connector_status status)
+> 
+> (We might as well also pass the number of lanes here)
 
-diff --git a/arch/arm/configs/bcm2835_defconfig b/arch/arm/configs/bcm2835=
-_defconfig
-index b5f0bd8dd536..97632dee1ab3 100644
-=2D-- a/arch/arm/configs/bcm2835_defconfig
-+++ b/arch/arm/configs/bcm2835_defconfig
-@@ -38,8 +38,6 @@ CONFIG_CPU_FREQ_GOV_ONDEMAND=3Dy
- CONFIG_CPUFREQ_DT=3Dy
- CONFIG_ARM_RASPBERRYPI_CPUFREQ=3Dy
- CONFIG_VFP=3Dy
--# CONFIG_SUSPEND is not set
--CONFIG_PM=3Dy
- CONFIG_JUMP_LABEL=3Dy
- CONFIG_MODULES=3Dy
- CONFIG_MODULE_UNLOAD=3Dy
-=2D-
-2.34.1
+I think this is a bit of an overkill.
 
+The drm_connector_oob_hotplug_event() is fine as it is, it gets
+"fwnode_handle to report the event on".
+
+What needs to be changed (in my humble opinion) is the
+drm_connector_find_by_fwnode() function (or likely a new function is to
+be added): if it can not find drm_connector for the passed fwnode, it
+should look it up on the parent, then on parent's parent, etc, until we
+actually find the drm_connector (good) or we reach the root (sad).
+
+And finally after getting the drm_connector, the oob_hotplug_event()
+callback should also receive the fwnode argument. This way the connector
+(or the bridge) can identify the fwnode (aka usb-c-connector in our
+case) that caused the event.
+
+WDYT?
+
+> Corsola could work with this design, but we'll need to teach
+> dp_altmode_probe() to look for the drm_bridge elsewhere besides as the
+> parent of the usb-c-connector node. That implies using the 'displayport'
+> property in the cros-ec-typec node or teaching dp_altmode_probe() to
+> look for the port@1/endpoint@1 remote-endpoint handle in the
+> usb-c-connector graph.
+> 
+> Assuming the bindings you've presented here are fine and good and I got
+> over the differences between Trogdor and Corsola, then I can make mostly
+> everything work with the drm_connector_oob_hotplug_event() signature
+> change from above and some tweaks to dp_altmode_probe() to look for
+> port@1/endpoint@1 first because that's the "logical" DP input endpoint
+> in the usb-c-connector binding's graph. Great! The final roadblock I'm
+> at is that HPD doesn't work on Trogdor, so I can't signal HPD through
+> the typec framework.
+
+Hmm, I thought that a normal DP's HPD GPIO works on the trogdor. Was I
+misunderstanding it? But then we don't know, which USB-C connector
+triggered the HPD...
+
+> This series fixes that problem by "capturing" HPD state from the
+> upstream drm_bridge, e.g. msm_dp, by hooking the struct
+> drm_bridge_funcs::hpd_notify() path and injecting HPD into the typec
+> messages received from the EC. That's a workaround to make the typec
+> framework see HPD state changes that are otherwise invisible to the
+> kernel. Newer firmwares actually tell us the state of HPD properly, but
+> even then we have to read a gpio mux controlled by the EC to figure out
+> which usb-c-connector is actually muxing DP when HPD changes on either
+> typec_port. Having a drm_bridge in cros-ec-typec helped here because we
+> could hook this path and signal HPD if we knew the firmware was fixed.
+> If we don't have the drm_bridge anymore, I'm lost how to do this.
+
+It's probably okay to add one, but let me think if we can work without
+it. Can we make EC driver listen for that single HPD GPIO (by making it
+an actual GPIO rather than "dp_hot") and then react to it?
+
+> 
+> Maybe the right answer here is to introduce a drm_connector_dp_typec
+> structure that is created by the TCPM (cros-ec-typec) that sets a new
+> DRM_BRIDGE_OP_DP_TYPEC bridge op flag? And then teach
+> drm_bridge_connector about this new flag, similar to the HDMI one. The
+> drm_bridge could implement some function that maps the typec_port
+> (usb-c-connector) to the upstream drm_bridge (ANX7625) graph port,
+> possibly all in drm_bridge_connector_oob_hotplug_event() so that nothing
+> else really changes. It could also let us keep hooking the hpd_notify()
+> path for the workaround needed on Trogdor. And finally it may let us
+> harmonize the two DT bindings so that we only have one port@1/endpoint
+> node in the usb-c-connector.
+
+I think we have lightly discussed adding drm_connector_displayport, so
+that part is okay. But my gut feeling is that there should be no _typec
+part in thart picture. The DRM framework shouldn't need to know all the
+Type-C details.
+
+> 
+> 
+> >                 };
+> >         };
+> >
+> >         connector@1 {
+> >                 port@1 {
+> >                         endpoint@0 {
+> >                                 remtoe = <&usb_hub_1>;
+> >                         };
+> >
+> >                         endpoint@1 {
+> >                                 remote = <&dp_bridge_out_1>;
+> >                         };
+> >                 };
+> >         };
+> > };
+> >
+> > dp_bridge {
+> >         ports {
+> >                 port@1 {
+> >                         dp_bridge_out_0: endpoint@0 {
+> >                                 remote = <usb_c0_ss_dp>;
+> >                                 data-lanes = <0 1>;
+> >                         };
+> >
+> >                         dp_bridge_out_1: endpoint@1 {
+> >                                 remote = <usb_c1_ss_dp>;
+> >                                 data-lanes = <2 3>;
+> >                         };
+> >                 };
+> >         };
+> > };
+> >
+> > -------
+> >
+> > This one is really tough example, we didn't reach a conclusion here.
+> > If the EC doesn't handle lane remapping, dp_bridge has to get
+> > orientation-switch and mode-switch properties (as in the end it is the
+> > dp_bridge that handles reshuffling of the lanes for the Type-C). Per the
+> > DisplayPort standard the lanes are fixed (e.g. DPCD 101h explicitly
+> > names lane 0, lanes 0-1, lanes 0-1-2-3).
+> 
+> Are those logical or physical lanes?
+
+Physical lanes as far as I understand.
+
+> 
+> I think we'll punt on this one anyway though. We don't have any plans to
+> do this orientation control mechanism so far. Previous attempts failed
+> and we put an extra orientation switch control on the board to do the
+> orientation flipping.
+
+Okay, it's definitely easier this way.
+
+-- 
+With best wishes
+Dmitry
 
