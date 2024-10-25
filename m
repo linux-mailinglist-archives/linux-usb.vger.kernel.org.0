@@ -1,267 +1,187 @@
-Return-Path: <linux-usb+bounces-16715-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16716-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A4FE9B025B
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 14:28:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F4CC9B04B5
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 15:55:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B96E7B223C5
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 12:28:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 326421C221D7
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2024 13:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44714204015;
-	Fri, 25 Oct 2024 12:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751811F757C;
+	Fri, 25 Oct 2024 13:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="namopyTX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661E6203712;
-	Fri, 25 Oct 2024 12:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45231F7552;
+	Fri, 25 Oct 2024 13:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729859270; cv=none; b=Rs7aIg80VZZkE4ADuHHt3novkd9r9MqwFcL4fpnKRsRgmaKztKfwEwvo0OzoV3k0SblAjmuXf/NzV2XBVU7pqzxBjtFF0bLrX48mudfVqoktPdjjv365CSGtcOlZJkEI+O/sFxntM48WuvsjegYG3LP99lzthA/nvfBD1u5YmAo=
+	t=1729864521; cv=none; b=jmiCkb0rfMROkMp0aXaaiv90XNjbPwQBHknJ5n19wQAFYfDwjfo2eKQMpu1CJcekxQcZXo9xgTPMGnjfuOdlAs5VPR4svl0apzECcLabvZtv+yUFcclR306eDlJ1TBvYrVUE8LyQMpp+Tfx3lli3epSm3MrW7en7se9uVJWZMaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729859270; c=relaxed/simple;
-	bh=hAhBOBQcAfSsqFw9V4igY225+CSJsKalgPicXLm49CA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AAovWbmE4x90ZrW3UiuHVSz/htJq8n7CKC3cZ+SGcnWtVke2pjGQUHtZ9FVnrrMxfcIdjjMn3L0R+d6mHktGxGjGI/UddMM0/GMHQK7QgFPrJT4nkNOS6ogKO9PAyGmZ+vBBJJEAmT6jhvHEVAR3hu7vUxdzs+hW1TColaheK1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AF6C339;
-	Fri, 25 Oct 2024 05:28:17 -0700 (PDT)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADC9A3F71E;
-	Fri, 25 Oct 2024 05:27:42 -0700 (PDT)
-Date: Fri, 25 Oct 2024 13:27:39 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Cody Eksal <masterr3c0rd@epochal.quest>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu
- Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
- Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, Yangtao
- Li <frank@allwinnertech.com>, Florian Fainelli
- <florian.fainelli@broadcom.com>, Vinod Koul <vkoul@kernel.org>, Linus
- Walleij <linus.walleij@linaro.org>, Thierry Reding <treding@nvidia.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Maxime Ripard
- <mripard@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Yangtao Li <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>,
- Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Kishon Vijay
- Abraham I <kishon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Shuosheng Huang <huangshuosheng@allwinnertech.com>
-Subject: Re: [PATCH 13/13] arm64: dts: allwinner: a100: Add CPU Operating
- Performance Points table
-Message-ID: <20241025132739.3d0f116d@donnerap.manchester.arm.com>
-In-Reply-To: <20241024170540.2721307-14-masterr3c0rd@epochal.quest>
-References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
-	<20241024170540.2721307-14-masterr3c0rd@epochal.quest>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1729864521; c=relaxed/simple;
+	bh=sP9ddLOzD4XD7oJ2gtfjgcFVXKonwqzmaiwnFgWwUl0=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=SS3lBhAGQfvU/ifzMxKmQok42jCOy+6ZybIm+2gFaLbqD+NRz9SLJhTIEB5T+yb5CHHYgr8UPfI13H+rWNtdi+tljIcUEAGZ/vV8xB4z15QnKGEPg0ekGaShr7rPSduSsAiwRWtw1XihxhIZj2fg0iErvCsoM5jJfS+c24nRzwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=namopyTX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A9F1C4CECD;
+	Fri, 25 Oct 2024 13:55:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729864520;
+	bh=sP9ddLOzD4XD7oJ2gtfjgcFVXKonwqzmaiwnFgWwUl0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=namopyTXYcR+34VhDW1DJIeNZwRgeHEHzEyji0zywrSQfrpLnmi4N0g858xJziiRR
+	 6zTQo1Ekfw2dF157XXMsOV+u1y7gZY7WSnLI7Uz01DHRdU+wK1aMxF7qSgY6K3Rn5C
+	 5v72aoRCh1oYtyP2potY5imnUGIYgPf5EPQIgbXgRgBcJ8bmRLzW8/52XekJ9R/Ye2
+	 0bDdVeawSgA84pWaZVFz9HmHwVm5u8V+sq4C529Qjq6ANnVGMiu4OYKbUT8r/cPcjw
+	 HDPCCknnrEqiTWcra0NeX7UVlQbC2bSQVsaMPleqhVXO0/ttgsKa/NR6SFue4b7zWA
+	 GOKW2dvPYviLQ==
+Date: Fri, 25 Oct 2024 08:55:19 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Cody Eksal <masterr3c0rd@epochal.quest>
+Cc: linux-arm-kernel@lists.infradead.org, 
+ Yangtao Li <frank@allwinnertech.com>, linux-usb@vger.kernel.org, 
+ linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Samuel Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, linux-sunxi@lists.linux.dev, 
+ Thierry Reding <treding@nvidia.com>, Viresh Kumar <vireshk@kernel.org>, 
+ devicetree@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>, 
+ Andre Przywara <andre.przywara@arm.com>, Stephen Boyd <sboyd@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+ Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>
+In-Reply-To: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
+References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
+Message-Id: <172986441154.1907923.9460630831085493840.robh@kernel.org>
+Subject: Re: [PATCH 00/13] sunxi: A100/A133 second stage support
 
-On Thu, 24 Oct 2024 14:05:31 -0300
-Cody Eksal <masterr3c0rd@epochal.quest> wrote:
 
-> From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+On Thu, 24 Oct 2024 14:05:18 -0300, Cody Eksal wrote:
+> Hello! This is my first submission, so please be gentle :)
 > 
-> Add an Operating Performance Points table for the CPU cores to
-> enable Dynamic Voltage & Frequency Scaling on the A100.
+> Back in 2020, two Allwinner employees, Yangtao Li and Shuosheng Huang, each
+> submitted a patch series for the A100 series of SoCs; [1] intended to add
+> support for the watchdog, ARM PMU, DMA, USB, and (e)MMC controller, and [2]
+> implemented DVFS support. Some patches from the first series landed, but
+> the rest were seemingly abandoned.
 > 
-> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
-> [masterr3c0rd@epochal.quest: fix typos in -cpu-opp, use compatible]
-> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
-> ---
->  .../allwinner/sun50i-a100-allwinner-perf1.dts |  5 ++
->  .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    | 90 +++++++++++++++++++
->  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi |  8 ++
->  3 files changed, 103 insertions(+)
+> Although references to the A100 have been removed by Allwinner, it is
+> believed that the A133 and A133 Plus, which are still available, are simply
+> better binned variants of the A100; no other differences have been noted
+> thus far, and the drivers for the A100 work on the A133 without any
+> additional modifications. There has been a resurgence of interest in the
+> A133; patches to allow mainline U-Boot to run on these devices are
+> currently in progress.
+> 
+> I have rebased the patches that failed to land, applying the feedback
+> provided by maintainers at the time. Some DT binding patches were added, as
+> there were a few cases where compatibles were used without being
+> documented. Minor reworks were necessary to apply certain patches, as the
+> drivers they modified have matured over time.
+> 
+> Patches 1 and 2 add PMU and watchdog nodes to the device tree. This is
+> followed by patches 3-8, which implement support for the USB host and OTG
+> peripherals. Patches 9 and 10 add MMC nodes, rounding out what originally
+> made up the first patch series; support for these already exists from
+> earlier patches. Patches 11-13 finish the job of the second original
+> series and this series, implementing OPP and enabling DVFS on these SoCs.
+> 
+> This series is also available on GitHub [3].
+> 
+> A sincere thanks to Andre for encouraging me to submit these patches,
+> Parthiban for testing this tree on his board, and to the linux-sunxi
+> community and its resources for pointing me to these abandoned series in
+> the first place [4].
+> 
+> [1] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=380887&archive=both&state=*
+> [2] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=396055&archive=both&state=*
+> [3] https://github.com/BrokenR3C0RD/linux-a100/compare/c2ee9f59..allwinner-a100
+> [4] https://linux-sunxi.org/Linux_mainlining_effort#Work_In_Progress
+> 
+> Cody Eksal (4):
+>   dt-bindings: phy: sun50i-a64: add a100 compatible
+>   dt-bindings: usb: Add A100 compatible string
+>   dt-bindings: usb: sunxi-musb: Add A100 compatible string
+>   dt-bindings: opp: h6: Add A100 operating points
+> 
+> Shuosheng Huang (2):
+>   cpufreq: sun50i: add a100 cpufreq support
+>   arm64: dts: allwinner: a100: Add CPU Operating Performance Points
+>     table
+> 
+> Yangtao Li (7):
+>   arm64: dts: allwinner: A100: Add PMU mode
+>   arm64: dts: allwinner: a100: add watchdog node
+>   phy: sun4i-usb: add support for A100 USB PHY
+>   arm64: dts: allwinner: a100: add usb related nodes
+>   arm64: allwinner: A100: enable EHCI, OHCI and USB PHY nodes in Perf1
+>   arm64: allwinner: a100: Add MMC related nodes
+>   arm64: dts: allwinner: a100: perf1: Add eMMC and MMC node
+> 
+>  .../allwinner,sun50i-h6-operating-points.yaml |   1 +
+>  .../phy/allwinner,sun50i-a64-usb-phy.yaml     |   1 +
+>  .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
+>  .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+>  .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+>  .../allwinner/sun50i-a100-allwinner-perf1.dts |  59 ++++++
+>  .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    |  90 ++++++++
+>  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 193 +++++++++++++++++-
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  28 +++
+>  drivers/phy/allwinner/phy-sun4i-usb.c         |  11 +
+>  10 files changed, 383 insertions(+), 3 deletions(-)
 >  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
 > 
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-> index 29e9d24da8b6..99b1b2f7b92a 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-> @@ -6,6 +6,7 @@
->  /dts-v1/;
->  
->  #include "sun50i-a100.dtsi"
-> +#include "sun50i-a100-cpu-opp.dtsi"
->  
->  #include <dt-bindings/gpio/gpio.h>
->  
-> @@ -67,6 +68,10 @@ &usb_otg {
->  	status = "okay";
->  };
->  
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdc2>;
-> +};
-> +
->  &pio {
->  	vcc-pb-supply = <&reg_dcdc1>;
->  	vcc-pc-supply = <&reg_eldo1>;
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
-> new file mode 100644
-> index 000000000000..eeb8d20f3fb4
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
-> @@ -0,0 +1,90 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +// Copyright (c) 2020 Yangtao Li <frank@allwinnertech.com>
-> +// Copyright (c) 2020 ShuoSheng Huang <huangshuosheng@allwinnertech.com>
-> +
-> +/ {
-> +	cpu_opp_table: cpu-opp-table {
-> +		compatible = "allwinner,sun50i-a100-operating-points";
-> +		nvmem-cells = <&cpu_speed_grade>;
-> +		opp-shared;
-> +
-> +		opp@408000000 {
-> +			clock-latency-ns = <244144>; /* 8 32k periods */
-> +			opp-hz = /bits/ 64 <408000000>;
-> +
-> +			opp-microvolt-speed0 = <900000 900000 1200000>;
-> +			opp-microvolt-speed1 = <900000 900000 1200000>;
-> +			opp-microvolt-speed2 = <900000 900000 1200000>;
+> 
+> base-commit: c2ee9f594da826bea183ed14f2cc029c719bf4da
+> --
+> 2.47.0
+> 
+> 
+> 
 
-Is there actually an advantage when using the three cells version?
-I wonder if we should go with just the target voltage (the first cell
-here), as done for the H616.
 
-Apart from that it looks fine to me.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Cheers,
-Andre.
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-> +		};
-> +
-> +		opp@600000000 {
-> +			clock-latency-ns = <244144>; /* 8 32k periods */
-> +			opp-hz = /bits/ 64 <600000000>;
-> +
-> +			opp-microvolt-speed0 = <900000 900000 1200000>;
-> +			opp-microvolt-speed1 = <900000 900000 1200000>;
-> +			opp-microvolt-speed2 = <900000 900000 1200000>;
-> +		};
-> +
-> +		opp@816000000 {
-> +			clock-latency-ns = <244144>; /* 8 32k periods */
-> +			opp-hz = /bits/ 64 <816000000>;
-> +
-> +			opp-microvolt-speed0 = <940000 940000 1200000>;
-> +			opp-microvolt-speed1 = <900000 900000 1200000>;
-> +			opp-microvolt-speed2 = <900000 900000 1200000>;
-> +		};
-> +
-> +		opp@1080000000 {
-> +			clock-latency-ns = <244144>; /* 8 32k periods */
-> +			opp-hz = /bits/ 64 <1080000000>;
-> +
-> +			opp-microvolt-speed0 = <1020000 1020000 1200000>;
-> +			opp-microvolt-speed1 = <980000 980000 1200000>;
-> +			opp-microvolt-speed2 = <950000 950000 1200000>;
-> +		};
-> +
-> +		opp@1200000000 {
-> +			clock-latency-ns = <244144>; /* 8 32k periods */
-> +			opp-hz = /bits/ 64 <1200000000>;
-> +
-> +			opp-microvolt-speed0 = <1100000 1100000 1200000>;
-> +			opp-microvolt-speed1 = <1020000 1020000 1200000>;
-> +			opp-microvolt-speed2 = <1000000 1000000 1200000>;
-> +		};
-> +
-> +		opp@1320000000 {
-> +			clock-latency-ns = <244144>; /* 8 32k periods */
-> +			opp-hz = /bits/ 64 <1320000000>;
-> +
-> +			opp-microvolt-speed0 = <1160000 1160000 1200000>;
-> +			opp-microvolt-speed1 = <1060000 1060000 1200000>;
-> +			opp-microvolt-speed2 = <1030000 1030000 1200000>;
-> +		};
-> +
-> +		opp@1464000000 {
-> +			clock-latency-ns = <244144>; /* 8 32k periods */
-> +			opp-hz = /bits/ 64 <1464000000>;
-> +
-> +			opp-microvolt-speed0 = <1180000 1180000 1200000>;
-> +			opp-microvolt-speed1 = <1180000 1180000 1200000>;
-> +			opp-microvolt-speed2 = <1130000 1130000 1200000>;
-> +		};
-> +	};
-> +};
-> +
-> +&cpu0 {
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +};
-> +
-> +&cpu1 {
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +};
-> +
-> +&cpu2 {
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +};
-> +
-> +&cpu3 {
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +};
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-> index 6dca766ea222..747a0292ef98 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-> @@ -23,6 +23,7 @@ cpu0: cpu@0 {
->  			device_type = "cpu";
->  			reg = <0x0>;
->  			enable-method = "psci";
-> +			clocks = <&ccu CLK_CPUX>;
->  		};
->  
->  		cpu1: cpu@1 {
-> @@ -30,6 +31,7 @@ cpu1: cpu@1 {
->  			device_type = "cpu";
->  			reg = <0x1>;
->  			enable-method = "psci";
-> +			clocks = <&ccu CLK_CPUX>;
->  		};
->  
->  		cpu2: cpu@2 {
-> @@ -37,6 +39,7 @@ cpu2: cpu@2 {
->  			device_type = "cpu";
->  			reg = <0x2>;
->  			enable-method = "psci";
-> +			clocks = <&ccu CLK_CPUX>;
->  		};
->  
->  		cpu3: cpu@3 {
-> @@ -44,6 +47,7 @@ cpu3: cpu@3 {
->  			device_type = "cpu";
->  			reg = <0x3>;
->  			enable-method = "psci";
-> +			clocks = <&ccu CLK_CPUX>;
->  		};
->  	};
->  
-> @@ -142,6 +146,10 @@ efuse@3006000 {
->  			ths_calibration: calib@14 {
->  				reg = <0x14 8>;
->  			};
-> +
-> +			cpu_speed_grade: cpu-speed-grade@1c {
-> +				reg = <0x1c 0x2>;
-> +			};
->  		};
->  
->  		watchdog@30090a0 {
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y allwinner/sun50i-a100-allwinner-perf1.dtb' for 20241024170540.2721307-1-masterr3c0rd@epochal.quest:
+
+arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dtb: cpu-opp-table: $nodename:0: 'cpu-opp-table' does not match '^opp-table(-[a-z0-9]+)?$'
+	from schema $id: http://devicetree.org/schemas/opp/allwinner,sun50i-h6-operating-points.yaml#
+arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dtb: cpu-opp-table: 'opp@1080000000', 'opp@1200000000', 'opp@1320000000', 'opp@1464000000', 'opp@408000000', 'opp@600000000', 'opp@816000000' do not match any of the regexes: '^opp-[0-9]+$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/opp/allwinner,sun50i-h6-operating-points.yaml#
+
+
+
+
 
 
