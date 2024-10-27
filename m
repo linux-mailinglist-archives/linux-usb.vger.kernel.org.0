@@ -1,85 +1,109 @@
-Return-Path: <linux-usb+bounces-16735-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16736-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 361439B1719
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2024 12:35:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96B889B1CC9
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Oct 2024 10:33:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD626B2310E
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2024 10:35:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6F051C20B10
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Oct 2024 09:33:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4FC1D0E23;
-	Sat, 26 Oct 2024 10:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B9D76035;
+	Sun, 27 Oct 2024 09:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZKHXsTEn";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vkZMST81"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C1018787E
-	for <linux-usb@vger.kernel.org>; Sat, 26 Oct 2024 10:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3D72905;
+	Sun, 27 Oct 2024 09:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729938910; cv=none; b=MUWuRSyLv7FttBdKG/jrTqdR5f6jrK9bMhztcZiVIQjjiSAzK09Vrat0By2bqcIMbhDWGsKt7GH57ICtUICDotJKVr7LPuPJdqfolPErX5S4PKoLHvlhgvDyPev4meD8tIVbbR/WcjIRgZyQRu04QUqk9YVzShqsUuazRqFIeO4=
+	t=1730021587; cv=none; b=Mq+/Bu+gfVJxzTgy1qeHzfEgTex4omtPlXO9aNfzxB7+sOgYW8qrdZX6+aIlG3e2LivpTYYi3JtGixFdPOCK3wsKUDuWQ1BFx9SXxNy4AXy5IUSw6a6cEm7A97JIKK9+LEwryhTFs83rMOFwLx4rgUMwHaSAFMOVzmyK7D9/fu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729938910; c=relaxed/simple;
-	bh=b112FW0Hc46ec0x8GLfCTwX0RIWbfrae+g7NOKjZtXo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OtdqVsk+UojKcPWxJdvg6ldOI1zD6S3S8QhvSaBWvk1jRzkT2a+NbkezOfinr8E4797r3Kla0540plR8845/mChD0enH3Sm+pXROegNadE/zQVPO4ddiVJH2UH/mHo/d5EqB/hpGNk31PIZkBPq3K6UCBQpQcgIRDcgaAlYHRkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4XbGG86bBZz1SD9S;
-	Sat, 26 Oct 2024 18:33:36 +0800 (CST)
-Received: from kwepemk200016.china.huawei.com (unknown [7.202.194.82])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7D7381A016C;
-	Sat, 26 Oct 2024 18:35:04 +0800 (CST)
-Received: from huawei.com (10.67.174.78) by kwepemk200016.china.huawei.com
- (7.202.194.82) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 26 Oct
- 2024 18:35:03 +0800
-From: Yi Yang <yiyang13@huawei.com>
-To: <gregkh@linuxfoundation.org>, <kees@kernel.org>, <justinstitt@google.com>,
-	<u.kleine-koenig@baylibre.com>, <yuxu@marvell.com>, <balbi@ti.com>
-CC: <linux-usb@vger.kernel.org>, <wangweiyang2@huawei.com>
-Subject: [PATCH] usb: gadget: udc: fix possible null-ptr-deref in mv_u3d_req_to_trb()
-Date: Sat, 26 Oct 2024 10:27:40 +0000
-Message-ID: <20241026102740.2653458-1-yiyang13@huawei.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1730021587; c=relaxed/simple;
+	bh=WIQpZE1pVfbnVnENnTt1q/QMON2V2N60JIehc5LY4FM=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=TCx3f+OIrYUSSgrWGJyHssdVE7PoZJ1GbXuPTqedPPRzw9cgH0s9hbpjGOewj55sW89PXaMuqRt9QuERBZQRtcWDdc0MYpJT2iZiF0zCDibldP2cAr40RS+3+GyokxV4ta3zD4P7aEPBJ3HMtsnc4ANf+4utgTjkRitZVVhnfmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZKHXsTEn; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vkZMST81; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1730021582;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=h9QgVHSno0p3EwjX6gG1dRFNyeWG//lKPPzJ5XnOhkw=;
+	b=ZKHXsTEn6hWOVdMTGW9ISCsGy2P0LsQfJX/12ro8HOsASBITMWRDeFa95WIkVA26DehSBe
+	2rgvR+6VZFauIIFkBlSLrZgQQi8Rv6atNm0aAYYWYjmqAMPJKLKX8vw4tJ8mC70khL0M+k
+	WfDjAdjcVRpV8B52j+eCSGuXF7tAlp51hKWZ7UlP97txvZQ6AX7rFTwWRW+p0h/fuiYLiH
+	Nlew9yqJurW1sC7mW2V6mc82C0OU35r+4VypioDaKde/Ksco5eeO7LNIoZ99TaCWNLGL3E
+	F+//K/Te1VPyDxKcZstSk6DLRspP+vrP9YvnHA1rMiK3Iy4td9oEDF+Jls0hqQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1730021582;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=h9QgVHSno0p3EwjX6gG1dRFNyeWG//lKPPzJ5XnOhkw=;
+	b=vkZMST81emZjWVq3OK02/undTSUkCK8R5UJXba0oSizaF0Cnube+d8hJcq3r0NrEnxWBXH
+	u4V935473lnpK8Bw==
+To: syzbot <syzbot+a234c2d63e0c171ca10e@syzkaller.appspotmail.com>,
+ brauner@kernel.org, gregkh@linuxfoundation.org, jack@suse.cz,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [serial?] BUG: soft lockup in debug_check_no_obj_freed
+In-Reply-To: <6713d23a.050a0220.1e4b4d.0029.GAE@google.com>
+References: <6713d23a.050a0220.1e4b4d.0029.GAE@google.com>
+Date: Sun, 27 Oct 2024 10:33:01 +0100
+Message-ID: <87iktd51rm.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemk200016.china.huawei.com (7.202.194.82)
 
-The mv_u3d_build_trb_one() will return NULL when kzalloc() fails, fix
-possible null-ptr-deref by add check for mv_u3d_build_trb_one().
+On Sat, Oct 19 2024 at 08:37, syzbot wrote:
 
-Fixes: 3d4eb9dfa3e8 ("usb: gadget: mv: Add USB 3.0 device driver for Marvell PXA2128 chip.")
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
----
- drivers/usb/gadget/udc/mv_u3d_core.c | 2 ++
- 1 file changed, 2 insertions(+)
+That's not a soft lockup in debug_check_no_obj_freed().
 
-diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
-index 062f43e146aa..c882c377c4f4 100644
---- a/drivers/usb/gadget/udc/mv_u3d_core.c
-+++ b/drivers/usb/gadget/udc/mv_u3d_core.c
-@@ -417,6 +417,8 @@ static int mv_u3d_req_to_trb(struct mv_u3d_req *req)
- 	 */
- 	if (length <= (unsigned)MV_U3D_EP_MAX_LENGTH_TRANSFER) {
- 		trb = mv_u3d_build_trb_one(req, &count, &dma);
-+		if (!trb)
-+			return -ENOMEM;
- 		list_add_tail(&trb->trb_list, &req->trb_list);
- 		req->trb_head = trb;
- 		req->trb_count = 1;
--- 
-2.25.1
+What actually happens is:
+
+>  serial_in drivers/tty/serial/8250/8250.h:137 [inline]
+>  serial_lsr_in drivers/tty/serial/8250/8250.h:159 [inline]
+>  wait_for_lsr+0xda/0x180 drivers/tty/serial/8250/8250_port.c:2068
+>  serial8250_console_fifo_write drivers/tty/serial/8250/8250_port.c:3315 [inline]
+>  serial8250_console_write+0xf5a/0x17c0 drivers/tty/serial/8250/8250_port.c:3393
+>  console_emit_next_record kernel/printk/printk.c:3092 [inline]
+>  console_flush_all+0x800/0xc60 kernel/printk/printk.c:3180
+>  __console_flush_and_unlock kernel/printk/printk.c:3239 [inline]
+>  console_unlock+0xd9/0x210 kernel/printk/printk.c:3279
+>  vprintk_emit+0x424/0x6f0 kernel/printk/printk.c:2407
+>  vprintk+0x7f/0xa0 kernel/printk/printk_safe.c:68
+>  _printk+0xc8/0x100 kernel/printk/printk.c:2432
+>  printk_stack_address arch/x86/kernel/dumpstack.c:72 [inline]
+>  show_trace_log_lvl+0x1b7/0x3d0 arch/x86/kernel/dumpstack.c:285
+>  sched_show_task kernel/sched/core.c:7589 [inline]
+>  sched_show_task+0x3f0/0x5f0 kernel/sched/core.c:7564
+>  show_state_filter+0xee/0x320 kernel/sched/core.c:7634
+>  k_spec drivers/tty/vt/keyboard.c:667 [inline]
+>  k_spec+0xed/0x150 drivers/tty/vt/keyboard.c:656
+
+HID injects a sysrq-t and the task dump takes ages, which is what stalls
+RCU.
+
+There is not much what can be done about this as the dump is initiated
+from soft interrupt context at interrupt return.
+
+Thanks,
+
+        tglx
 
 
