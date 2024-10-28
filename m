@@ -1,60 +1,69 @@
-Return-Path: <linux-usb+bounces-16797-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16798-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C1E9B3A51
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 20:19:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 558C99B3D33
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 22:59:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B7D2281AF1
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 19:19:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 742891C20356
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 21:58:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08C41DF989;
-	Mon, 28 Oct 2024 19:19:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="buZIfPtd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED841FCC46;
+	Mon, 28 Oct 2024 21:50:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA711DED5D;
-	Mon, 28 Oct 2024 19:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C4D1F4273
+	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 21:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730143165; cv=none; b=GWVDgZmTIn3RIJR9b8BEGc/k4U/Ts2KF6hfEFdEhBCFs3Si4b8JmIHD9SRTq8A/1nLMLVdF3D4KUHcg989CiGwbaccbzs1OZxboKbBVqrQl/n8ZwDCrOxJfN9qdQZcPpuHfMHgNxdawZPHTjfctWFWJHwWrEUNmDHaxsLasrrnY=
+	t=1730152220; cv=none; b=Y7PsaHuJxX1DDksNBtRymscXhLr3/0+wcbC+WZz2m3nAUnVQWbZaJ3eFclW0mAvWgVq8NxgULbsuCipauEgUD4ulvJfV/Bfxfn7SO6Ax89Ld7Othz0ys6pD8fIEiz3GoCDTo0K1INv2qJBSVYZO3BcPL/Pt5SHdIHDmqDhvND5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730143165; c=relaxed/simple;
-	bh=YOhFJudoWKITSumFA9L1MS25O6AQWfwCQtZmUQt+/nQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tga11SQ+x01ga3nSQBKG16rtdrXWMzOWva5CPVgZrIJYT5ZiB1EEAqoLgbmrEG1Kv1lci4qPQzp1shV3Hba+K9ZguDgPrb6xXfvkE1gEWokIR7N9lHE3H3BtujNu3djuDmaHgPCYN+dP2MdUe5wFlhN5HKpvyDoNux4baPsgVN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=buZIfPtd; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=j5Hm+cdKOPmGk6I+GthLiMX+5qze8QN9PBg+oM0pU7k=; b=buZIfPtdaRSu8VgAlbDO1Kibxr
-	syA5y3dx/dt06CUBDmRKqSHgHJ0v8o8vw8a3OCzypKVcW6/SfxJhXnvhfUBIn/u0qEODLX38rnzv5
-	UJ0aC8R8R9fa58IIt0UriftsgZfi6OQcl35b/vR8q3NHczdzznFUt3+UWA/epTzyVZOs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1t5VGa-00BTkR-1h; Mon, 28 Oct 2024 20:19:04 +0100
-Date: Mon, 28 Oct 2024 20:19:04 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Ronnie.Kunin@microchip.com
-Cc: Fabi.Benschuh@fau.de, Woojung.Huh@microchip.com,
-	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] Add LAN78XX OTP_ACCESS flag support
-Message-ID: <a0d6ef0c-5615-40fd-964d-11844389dc29@lunn.ch>
-References: <20241025230550.25536-1-Fabi.Benschuh@fau.de>
- <c4503364-78c7-4bd5-9a77-0d98ae1786bf@lunn.ch>
- <PH8PR11MB796575D608575FAA5233DBD4954A2@PH8PR11MB7965.namprd11.prod.outlook.com>
+	s=arc-20240116; t=1730152220; c=relaxed/simple;
+	bh=V6Qcj3tOIGcSu35JwGeNx9+xFqxPBD8uIH+zjysOBNk=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FFWfEoncIk40/RAFPmiVLj83tI16bk4S72QCzb77gPVMBNcs6ijuXiMMMzr5HxlFmrSF/OcK3zqR8j71ZMuxVrb2NUSHpS3hozxl8QnyzEOZZW9I1mtt2nUrRydNa7XsmsSnVaAqGNeRlWgOH7emu4PFHWQ8S2s2XUgNSDUWOuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1t5Xcc-0000Lv-3Y; Mon, 28 Oct 2024 22:49:58 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1t5Xca-000vCY-2y;
+	Mon, 28 Oct 2024 22:49:56 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1t5Xca-000sqw-2d;
+	Mon, 28 Oct 2024 22:49:56 +0100
+Date: Mon, 28 Oct 2024 22:49:56 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Matthias Kaehlcke <matthias@kaehlcke.net>,
+	kernel test robot <lkp@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Matthias Kaehlcke <mka@chromium.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, oe-kbuild-all@lists.linux.dev,
+	kernel@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: hub: add infrastructure to pass onboard_dev
+ port features
+Message-ID: <20241028214956.gmefpvcvm3zrfout@pengutronix.de>
+References: <20240807-b4-v6-10-topic-usb-onboard-dev-v1-1-f33ce21353c9@pengutronix.de>
+ <202408081557.FiEe9Tzz-lkp@intel.com>
+ <20240809093313.xn3x2p3st2b32g27@pengutronix.de>
+ <wtvhsdo2zefehkgfcp2cfdl2uht4lcrytyjyhwjhnpcyvx4kd2@iurrw554aegh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,65 +72,147 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH8PR11MB796575D608575FAA5233DBD4954A2@PH8PR11MB7965.namprd11.prod.outlook.com>
+In-Reply-To: <wtvhsdo2zefehkgfcp2cfdl2uht4lcrytyjyhwjhnpcyvx4kd2@iurrw554aegh>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Mon, Oct 28, 2024 at 03:02:44PM +0000, Ronnie.Kunin@microchip.com wrote:
-> > From: Andrew Lunn <andrew@lunn.ch>
-> > Sent: Monday, October 28, 2024 8:38 AM
-> > 
-> > On Sat, Oct 26, 2024 at 01:05:46AM +0200, Fabian Benschuh wrote:
-> > > With this flag we can now use ethtool to access the OTP:
-> > > ethtool --set-priv-flags eth0 OTP_ACCESS on ethtool -e eth0  # this
-> > > will read OTP if OTP_ACCESS is on, else EEPROM
-> > >
-> > > When writing to OTP we need to set OTP_ACCESS on and write with the
-> > > correct magic 0x7873 for OTP
-> > 
-> > Please can you tell us more about OTP vs EEPROM? Is the OTP internal while the EEPROM is external?
-> > What is contained in each? How does the device decide which to use when it finds it has both?
-> > 
-> >         Andrew
+Hi,
+
+I found two mistakes I made in my v1. I would send a v2 if this series
+is interesting for upstream. The remaining open question is how the
+driver dependencies should be handled (see idea-1,2,3).
+
+Regards,
+  Marco
+
+On 24-09-23, Matthias Kaehlcke wrote:
+> El Fri, Aug 09, 2024 at 11:33:13AM GMT Marco Felsch ha dit:
 > 
-
-> This is pretty much the same implementation that is already in place
-> for the Linux driver of the LAN743x PCIe device.
-
-That is good, it gives some degree of consistency. But i wounder if we
-should go further. I doubt these are the only two devices which
-support both EEPROM and OTP. It would be nicer to extend ethtool:
-
-       ethtool -e|--eeprom-dump devname [raw on|off] [offset N] [length N] [otp] [eeprom]
-
-There does not appear to be a netlink implementation of this ethtool
-call. If we add one, we can add an additional optional attribute,
-indicating OTP or EEPROM. We have done similar in the past. It
-probably means within the kernel you replace struct ethtool_eeprom
-with struct kernel_ethtool_eeprom which has the additional
-parameter. The ioctl interface then never sees the new parameter,
-which keeps with the kAPI. get_eeprom() and set_eeprom() probably have
-all they need. get_eeprom_len() is more complex since it currently
-only takes netdev. I think get_eeprom_len() needs its functionality
-extended to indicate if the driver actually looks at the additional
-parameter. We want the kAPI calls for get and set to failed with
--EOPNOTSUPP when otp or eeprom is not supported, which will initially
-be 99% of the drivers. And we don't want to have to make proper code
-changes to every driver. So maybe an additional parameter
-
-	int	(*get_eeprom_len)(struct net_device *,
-	                          struct kernel_eeprom_len *eeprom_len);
-
-struct kernel_eeprom_len {
-	int otp;
-	int eeprom;
-}
-
-Have the core zero this. After the call, if they are still zero, they
-are not supported.
-
-I know this is a lot more work than your current patch, but it is a
-better solution, should be well documented, easy to find and should
-work for everybody, against a device private parameter which is not
-obvious and unlikely to be consistent across drivers.
-
-	Andrew
+> > Hi all,
+> > 
+> > On 24-08-08, kernel test robot wrote:
+> > > Hi Marco,
+> > > 
+> > > kernel test robot noticed the following build errors:
+> > > 
+> > > [auto build test ERROR on 0c3836482481200ead7b416ca80c68a29cfdaabd]
+> > > 
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Marco-Felsch/usb-hub-add-infrastructure-to-pass-onboard_dev-port-features/20240807-224100
+> > > base:   0c3836482481200ead7b416ca80c68a29cfdaabd
+> > > patch link:    https://lore.kernel.org/r/20240807-b4-v6-10-topic-usb-onboard-dev-v1-1-f33ce21353c9%40pengutronix.de
+> > > patch subject: [PATCH 1/3] usb: hub: add infrastructure to pass onboard_dev port features
+> > > config: i386-randconfig-141-20240808 (https://download.01.org/0day-ci/archive/20240808/202408081557.FiEe9Tzz-lkp@intel.com/config)
+> > > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408081557.FiEe9Tzz-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202408081557.FiEe9Tzz-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > >    ld: drivers/usb/core/hub.o: in function `set_port_feature':
+> > > >> drivers/usb/core/hub.c:481: undefined reference to `onboard_dev_port_feature'
+> > >    ld: drivers/usb/core/hub.o: in function `usb_clear_port_feature':
+> > >    drivers/usb/core/hub.c:462: undefined reference to `onboard_dev_port_feature'
+> > 
+> > I understood the isse but have a few questions. Before continue the work
+> > on this topic I would like to ask if the patchset is okay in general?
+> > I'm open for alternatives if the patchset approach is not okay.
+> 
+> From the perspective of the onboard_usb_dev driver it seems sound to me.
+> 
+> So far the USB maintainers haven't raised objections, so I would say move
+> forward and we'll see if concerns arise and deal with them if needed.
+> 
+> > I have a few ideas in mind (see below) to fix the 0day build issue which
+> > was caused by the Kconfig selection:
+> > 
+> >  - CONFIG_USB=y
+> >  - CONFIG_USB_ONBOARD_DEV=m.
+> > 
+> > Idea-1:
+> > -------
+> > 
+> > Dropping the module support for CONFIG_USB_ONBOARD_DEV.
+> 
+> With that CONFIG_USB could not be 'm' when CONFIG_USB_ONBOARD_DEV
+> is set, which wouldn't be great.
+> 
+> > Idea-2:
+> > -------
+> > 
+> > CONFIG_USB_ONBOARD_DEV follows CONFIG_USB:
+> > 
+> > CONFIG_USB=y -> CONFIG_USB_ONBOARD_DEV=y,
+> > CONFIG_USB=m -> CONFIG_USB_ONBOARD_DEV=m.
+> > 
+> > and exporting usb_clear_port_feature().
+> > 
+> > I don't know to add such Kconfig dependency and also this idea require
+> > that the usbcore have to load the usb_onboard_dev module always,
+> > regardless if used.
+> > 
+> > So this idea is rather suboptimal.
+> > 
+> > Idea-3:
+> > -------
+> > 
+> > Adding a function to the hub.c usbcore which can be used by the
+> > usb-onboard-dev driver to register this function as hook. This removes
+> > the dependency from the core and the usb-onboard-dev module is only
+> > pulled if really required. Of course this require that the hub.c usbcore
+> > driver allows custom hooks.
+> 
+> This seems like the best approach IMO, if USB maintainers are onboard with
+> it.
+> 
+> Since this is about port features (only applicable to hubs) the function
+> should be associated with struct usb_hub, not struct usb_device. And we
+> probably want two functions, onboard_hub_set_port_feature() and
+> onboard_hub_clear_port_feature(), whose implementations may use shared
+> code.
+> 
+> > Idea-X:
+> > -------
+> > 
+> > I'm open for your input :)
+> > 
+> > 
+> > Regards,
+> >   Marco
+> > 
+> > PS: My favourite is Idea-3 followed by Idea-1.
+> > 
+> > > vim +481 drivers/usb/core/hub.c
+> > > 
+> > >    466	
+> > >    467	/*
+> > >    468	 * USB 2.0 spec Section 11.24.2.13
+> > >    469	 */
+> > >    470	static int set_port_feature(struct usb_device *hdev, int port1, int feature)
+> > >    471	{
+> > >    472		int ret;
+> > >    473	
+> > >    474		ret = usb_control_msg(hdev, usb_sndctrlpipe(hdev, 0),
+> > >    475			USB_REQ_SET_FEATURE, USB_RT_PORT, feature, port1,
+> > >    476			NULL, 0, 1000);
+> > >    477		if (ret)
+> > >    478			return ret;
+> > >    479	
+> > >    480		if (!is_root_hub(hdev))
+> > >  > 481			ret = onboard_dev_port_feature(hdev, true, feature, port1);
+> > >    482	
+> > >    483		return ret;
+> > >    484	}
+> > >    485	
+> > > 
+> > > -- 
+> > > 0-DAY CI Kernel Test Service
+> > > https://github.com/intel/lkp-tests/wiki
+> > > 
+> 
 
