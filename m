@@ -1,289 +1,129 @@
-Return-Path: <linux-usb+bounces-16794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 949AD9B36E2
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 17:43:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B6D29B37C6
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 18:37:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 197131F22254
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 16:43:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00100281C6A
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 17:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07DF1DF24C;
-	Mon, 28 Oct 2024 16:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E6E1DF72E;
+	Mon, 28 Oct 2024 17:37:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="CCktmkk5"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="lFuyDlvb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446C41DE3C4;
-	Mon, 28 Oct 2024 16:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE8D1DEFFE
+	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 17:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730133784; cv=none; b=V1hCeV94W8QAFDnYhsHA40OfbaN4AK/v6xPNCaVqVp2UlH4HhfalmqmSNuboV8LA9H5FskZoyIRb11F52de2d+lQt8Fjzd3VWDpXESidjbrn1aeZXmCX+Gg2nFcXM72RDmWZTASeB8hq8ld/f/jC6gmLV2+33K+KLYVmdoooCnE=
+	t=1730137063; cv=none; b=JmF+TPPRgLzdKybwBNir54S5Pwj3jvFNwSUNz6a2fou2UmdrIohcwyanywFNyffEKguCpi1l4e91xzEBaUL1XUvzp/mUzDSywirvRJgYgovKn30pwqrFlBCPy1EXjb2XW7+j2HInPmAEfq/GOh2bPgwgTdlxmBn9P2j3fDXolkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730133784; c=relaxed/simple;
-	bh=hfxfnDn52geDLFQ8Mw1FoWnOKLtSrLItsMKH3nc3vSM=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=tIBQ3ndfaIYa6z6IMhECzog0llWcVBvGWW04n7dKIXAuIO1PGjvdsJKlmrzT6hXUHnC7shbvITNmUZ57/kt6OFaFFBgSR4iy0s/7MkonzJ+40UAGo+58BtOHk3T7uHN8oznmsLXbVV2bGga6x1xY1bNwufvgVr1ngDah3YrEhqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=CCktmkk5; arc=none smtp.client-ip=51.222.15.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
-	s=default; t=1730133780;
-	bh=hfxfnDn52geDLFQ8Mw1FoWnOKLtSrLItsMKH3nc3vSM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CCktmkk5ETNhFgJVayeiuWBBvWFtz9i2eH85Alx5ONZZGx7Xh9lUvO6YnDWdqVAA4
-	 J6Mhc7juRyZ5fekUyNi+P0zPsmzohLXHJSMMfuDzcwNeaBqSQ0bTFLMWsXLc/gGCEP
-	 wXOwVta/0ETlbhN+6yQaut26MFDKtzmaXIK0bOP3uN/Qa5XhNaS5QyVON5vx0ja0Zj
-	 wJP3uGsZqYa0SSNdFlvzCO4/HCUyhBMR6Dizwx67IhuoYiN4RTsGazv5eQwpy+pH+I
-	 KwpBUonnE9W0iPT1J2Lssw/4S+QWxKI52C+11V02kRmPIubHaYeWZVH81DcEW+5lk4
-	 0GL6aKp3te/xg==
-X-Virus-Scanned: by epochal.quest
+	s=arc-20240116; t=1730137063; c=relaxed/simple;
+	bh=hCI8Mi8H1UWRgDxMDOgGVseKcQJbj8r8Fsne5shSiKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WEbj0TvV8j6pfvGh55To9z8D9Ca8dLxkUFVjDC4JOVE9JKCgcTJEf3M6151L5FH+Che0ocm/cH/fKKyZvoOZx0KYPaEcoVFZgz9faznoTzb5qf7Ob5iH2Wm+7s5TYwB3gZtRSflf5NonVZAF6y73MO8x21STZAFu4Npbu/grxOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=lFuyDlvb; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5ebab72da05so2383254eaf.0
+        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 10:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1730137061; x=1730741861; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8WZqEMQCAyXwPwtV+tBhmhJjupzwacrtCyx5m0AlRuA=;
+        b=lFuyDlvb6WEwC6yUV/wnllxAgwcca6UJQbnYwVFWIhjs9DbagRcZsn6+XB3QGpp4GF
+         21Kb2jtjxM/ALSg7jLdEW7HK+u6K1SCoNn1Z4YRz8dcmsUTMeogtWDwkqDOUXXGowIZ1
+         pplXTggR4YTG0L5jNEXn45HvWDOtyepTxkEzjG74az1c9lnyBQZeHRDJRnUshjPCGfi0
+         2aHlg0zaMOVGb29pVhhdaDf5sikDwRlyqX8Yy0NEziQD/Bluy4trlS0cx3sUxzmAmeFN
+         Q2lTzuSo6Y4LoRTvfZSN/azvRwH15cuNEO/5u9/UhKg2+KN2ZSzOSSUwbMrRYq2YwTGM
+         IXsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730137061; x=1730741861;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8WZqEMQCAyXwPwtV+tBhmhJjupzwacrtCyx5m0AlRuA=;
+        b=ZPBJysQ0DD1wELy5ITLuFvACQigTwipz91vR5Q9ThFUIylapWWQvT0Zznpu/OnuT5I
+         zm3puD+pakLAAfAciLnCoQxj2qYkw/4R3+oU0uU3SIYfL8OyeZ2yypd5sJIrxr+qfY9F
+         QPNZLNaTf4NI7hjScxMeuir7VRqoH9JNXGHt6Vpp89X17ot+d2OdywR/cFVV0ajm9xiI
+         H25nRDC7KAoIHKqvVgZElONy1OXId1dJF/Re+L+HyIkjm51wToSsuV6lR1purP2vtzS9
+         Tk4C/6mM2+lD1m/Nk+oC0P8nP9jhH9HDeArcN7MI8TbPJO/ApNn2v1qgJP4JtFTjmPCj
+         sp5A==
+X-Gm-Message-State: AOJu0YxBzybaYhG8wzq4LuGIqoVwPaHH/XuMDKoWjZuZFGjeC99NM/X+
+	+8BsXBV/n3K8SqpphSI9HqhBI8bCiUYee5gop1QXgezmoXsWBzkwN1g2p0dVK0vQQm9yUIQkTP0
+	eMw==
+X-Google-Smtp-Source: AGHT+IFpHg1UW4L21I7TLQ1QkJYwAypQDimt0nV2QK8R4UIvR62F7HgpwSQjfVuvAx2WczExJ9XziA==
+X-Received: by 2002:a05:6358:94a2:b0:1bc:573a:401a with SMTP id e5c5f4694b2df-1c3f9d13410mr268891655d.5.1730137060812;
+        Mon, 28 Oct 2024 10:37:40 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-27.harvard-secure.wrls.harvard.edu. [65.112.8.27])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-461323a6862sm36320121cf.92.2024.10.28.10.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2024 10:37:40 -0700 (PDT)
+Date: Mon, 28 Oct 2024 13:37:37 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Bart Van Severen <bart.v.severen@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: usb: gadget: automatic remote wakeup on hid write
+Message-ID: <f5ab7ad5-9a9c-475a-9a1e-3f9de8d1a2a9@rowland.harvard.edu>
+References: <CAOLjEn56gcrBLYqmtAPY49wpZCUzuKAGSt+L2ADBpAEELoQ1TQ@mail.gmail.com>
+ <6daafbf9-5999-463b-9198-cd699deb6721@rowland.harvard.edu>
+ <CAOLjEn41agaq4J99BFfekPLvnBBKfvBnj24pXLzpkn21_K4ouA@mail.gmail.com>
+ <467b1da8-325f-473d-bf46-96947993c626@rowland.harvard.edu>
+ <CAOLjEn4vJuxmRGUpUqMS6C7P82d18TkgURhd71UkXNTm5waYtw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 28 Oct 2024 13:42:59 -0300
-From: Cody Eksal <masterr3c0rd@epochal.quest>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu
- Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
- Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, Yangtao Li
- <frank@allwinnertech.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Vinod Koul <vkoul@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Thierry Reding <treding@nvidia.com>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Maxime Ripard <mripard@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Yangtao Li
- <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
- <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Kishon Vijay Abraham I
- <kishon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Shuosheng
- Huang <huangshuosheng@allwinnertech.com>
-Subject: Re: [PATCH 13/13] arm64: dts: allwinner: a100: Add CPU Operating
- Performance Points table
-In-Reply-To: <20241025132739.3d0f116d@donnerap.manchester.arm.com>
-References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
- <20241024170540.2721307-14-masterr3c0rd@epochal.quest>
- <20241025132739.3d0f116d@donnerap.manchester.arm.com>
-Message-ID: <b0fdfffd6b840eeabd2c9ab748915dd8@epochal.quest>
-X-Sender: masterr3c0rd@epochal.quest
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOLjEn4vJuxmRGUpUqMS6C7P82d18TkgURhd71UkXNTm5waYtw@mail.gmail.com>
 
-On 2024/10/25 9:27 am, Andre Przywara wrote:
-> On Thu, 24 Oct 2024 14:05:31 -0300
-> Cody Eksal <masterr3c0rd@epochal.quest> wrote:
+On Mon, Oct 28, 2024 at 05:15:25PM +0100, Bart Van Severen wrote:
+> On Mon, Oct 28, 2024 at 4:55 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > The gadget core doesn't know when the user wants to issue a wakeup
+> > request; only the function driver knows this.  (For instance, only
+> > f_hid.c knows when there has been an hid write.)  And the whole point of
+> > usb_gadget_wakeup() is that it provides a way for the function drivers
+> > to tell the gadget core to issue a wakeup request.
+> >
+> > Alan Stern
 > 
->> From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
->> 
->> Add an Operating Performance Points table for the CPU cores to
->> enable Dynamic Voltage & Frequency Scaling on the A100.
->> 
->> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
->> [masterr3c0rd@epochal.quest: fix typos in -cpu-opp, use compatible]
->> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
->> ---
->>  .../allwinner/sun50i-a100-allwinner-perf1.dts |  5 ++
->>  .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    | 90 
->> +++++++++++++++++++
->>  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi |  8 ++
->>  3 files changed, 103 insertions(+)
->>  create mode 100644 
->> arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
->> 
->> diff --git 
->> a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts 
->> b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
->> index 29e9d24da8b6..99b1b2f7b92a 100644
->> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
->> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
->> @@ -6,6 +6,7 @@
->>  /dts-v1/;
->> 
->>  #include "sun50i-a100.dtsi"
->> +#include "sun50i-a100-cpu-opp.dtsi"
->> 
->>  #include <dt-bindings/gpio/gpio.h>
->> 
->> @@ -67,6 +68,10 @@ &usb_otg {
->>  	status = "okay";
->>  };
->> 
->> +&cpu0 {
->> +	cpu-supply = <&reg_dcdc2>;
->> +};
->> +
->>  &pio {
->>  	vcc-pb-supply = <&reg_dcdc1>;
->>  	vcc-pc-supply = <&reg_eldo1>;
->> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi 
->> b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
->> new file mode 100644
->> index 000000000000..eeb8d20f3fb4
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
->> @@ -0,0 +1,90 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +// Copyright (c) 2020 Yangtao Li <frank@allwinnertech.com>
->> +// Copyright (c) 2020 ShuoSheng Huang 
->> <huangshuosheng@allwinnertech.com>
->> +
->> +/ {
->> +	cpu_opp_table: cpu-opp-table {
->> +		compatible = "allwinner,sun50i-a100-operating-points";
->> +		nvmem-cells = <&cpu_speed_grade>;
->> +		opp-shared;
->> +
->> +		opp@408000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <408000000>;
->> +
->> +			opp-microvolt-speed0 = <900000 900000 1200000>;
->> +			opp-microvolt-speed1 = <900000 900000 1200000>;
->> +			opp-microvolt-speed2 = <900000 900000 1200000>;
+> Agree, best to handle it in the function driver.
 > 
-> Is there actually an advantage when using the three cells version?
-> I wonder if we should go with just the target voltage (the first cell
-> here), as done for the H616.
-It probably makes sense to follow precedent; I've updated V2 to make 
-these single-cell.
-> Apart from that it looks fine to me.
-I did get a comment from Rob's bot that picked up some issues with the 
-namings of these nodes; I've updated that as well.
+> Unfortunately, as stated earlier, the dwc3 gadget driver doesn't
+> enable link status interrupts.
+> That should be enabled again, so that we can test if the gadget is
+> suspended before
+> calling usb_gadget_wakeup() on hid write.
+> Dwc3_gadget_wakeup() does fetch and checks the link state explicitly
+> to return early
+> when in U0, so might as well always call usb_gadget_wakeup() on hid
+> write, but it feels ugly.
 
-Thanks!
-- Cody
-> Cheers,
-> Andre.
-> 
->> +		};
->> +
->> +		opp@600000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <600000000>;
->> +
->> +			opp-microvolt-speed0 = <900000 900000 1200000>;
->> +			opp-microvolt-speed1 = <900000 900000 1200000>;
->> +			opp-microvolt-speed2 = <900000 900000 1200000>;
->> +		};
->> +
->> +		opp@816000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <816000000>;
->> +
->> +			opp-microvolt-speed0 = <940000 940000 1200000>;
->> +			opp-microvolt-speed1 = <900000 900000 1200000>;
->> +			opp-microvolt-speed2 = <900000 900000 1200000>;
->> +		};
->> +
->> +		opp@1080000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1080000000>;
->> +
->> +			opp-microvolt-speed0 = <1020000 1020000 1200000>;
->> +			opp-microvolt-speed1 = <980000 980000 1200000>;
->> +			opp-microvolt-speed2 = <950000 950000 1200000>;
->> +		};
->> +
->> +		opp@1200000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1200000000>;
->> +
->> +			opp-microvolt-speed0 = <1100000 1100000 1200000>;
->> +			opp-microvolt-speed1 = <1020000 1020000 1200000>;
->> +			opp-microvolt-speed2 = <1000000 1000000 1200000>;
->> +		};
->> +
->> +		opp@1320000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1320000000>;
->> +
->> +			opp-microvolt-speed0 = <1160000 1160000 1200000>;
->> +			opp-microvolt-speed1 = <1060000 1060000 1200000>;
->> +			opp-microvolt-speed2 = <1030000 1030000 1200000>;
->> +		};
->> +
->> +		opp@1464000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1464000000>;
->> +
->> +			opp-microvolt-speed0 = <1180000 1180000 1200000>;
->> +			opp-microvolt-speed1 = <1180000 1180000 1200000>;
->> +			opp-microvolt-speed2 = <1130000 1130000 1200000>;
->> +		};
->> +	};
->> +};
->> +
->> +&cpu0 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> +
->> +&cpu1 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> +
->> +&cpu2 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> +
->> +&cpu3 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi 
->> b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> index 6dca766ea222..747a0292ef98 100644
->> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> @@ -23,6 +23,7 @@ cpu0: cpu@0 {
->>  			device_type = "cpu";
->>  			reg = <0x0>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->> 
->>  		cpu1: cpu@1 {
->> @@ -30,6 +31,7 @@ cpu1: cpu@1 {
->>  			device_type = "cpu";
->>  			reg = <0x1>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->> 
->>  		cpu2: cpu@2 {
->> @@ -37,6 +39,7 @@ cpu2: cpu@2 {
->>  			device_type = "cpu";
->>  			reg = <0x2>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->> 
->>  		cpu3: cpu@3 {
->> @@ -44,6 +47,7 @@ cpu3: cpu@3 {
->>  			device_type = "cpu";
->>  			reg = <0x3>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->>  	};
->> 
->> @@ -142,6 +146,10 @@ efuse@3006000 {
->>  			ths_calibration: calib@14 {
->>  				reg = <0x14 8>;
->>  			};
->> +
->> +			cpu_speed_grade: cpu-speed-grade@1c {
->> +				reg = <0x1c 0x2>;
->> +			};
->>  		};
->> 
->>  		watchdog@30090a0 {
+The test has to be done somewhere; I don't see that it makes much 
+difference whether it's in the function driver or the UDC driver.  But 
+if dwc3 doesn't enable link status interrupts, how does it know when to 
+invoke the gadget driver's ->suspend callback?
+
+And either way, it looks like there is a potential for races.  What if 
+the host puts the link into U3 just after an hid write occurs but before 
+f_hid has had a chance to queue a packet informing the host?  Maybe we 
+need to add a flag to the usb_request structure, to let the UDC driver 
+know that it should issue a wakeup signal if the request is queued while 
+the link is suspended.
+
+This part of the Gadget API has never been tested very much...
+
+Alan Stern
 
