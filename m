@@ -1,121 +1,149 @@
-Return-Path: <linux-usb+bounces-16760-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16761-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AF3F9B2906
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 08:43:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 226639B29DC
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 09:08:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D36AD28247E
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 07:43:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99D181F22BDD
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 08:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8AC1CDA17;
-	Mon, 28 Oct 2024 07:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B131D54C2;
+	Mon, 28 Oct 2024 08:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B47eAuC+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4TMAKMv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D969F1CC8BD
-	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 07:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CDC1D4605;
+	Mon, 28 Oct 2024 08:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730100842; cv=none; b=We+vONiei8mneDQsEWyveiT2fyJ7lDp5xIAvhe4F6TR48E3YDBI2V8876ss1ImI4NqmzDXTHlD86Kby3hTX3ifXcbLMlp9osVs+JrU77CiNSF4+2S/0ntW0fi4NYgGXP4/AmKxz1a0pYhw6s9ioqDlW4bfIyU/sAeDUoe5+c6mc=
+	t=1730102685; cv=none; b=hML4f1w/C7gHsBAifsJ//HNCm5JtpJjbMvceWVmEKVuwcrlDo3flZ5SaNLrs/hltC33LpAvZgbzqXqO+tSyTyGJrD5ssiRe6VSUOAWyabXAqFz+5ILGW/SjWQg5lIhGUpJg9LUjQkLrNAG3IiXuJmtX7sC4UaA7S+At0Pb6zwGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730100842; c=relaxed/simple;
-	bh=e4023iuyEreTqRfpqvBKHPMCQJ8IRDCxOmi1L0EASxA=;
-	h=Date:From:To:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oNtHitFAlTyBvRcIxdtPy/zUohN7CAYc3D5QKnHlLkCmVlRTL4SyVdC6BVRg2M4mohQ7AVuV3ilAdT2V2mMbLCwkFpQWjHQqHE0D/WMGPt+L4ViUCk8Y/Lc7qCtXzE4xOC8q0yVWNJIqCrcmOfdEmqAIz/DQu1XGNTjaJFpIR2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B47eAuC+; arc=none smtp.client-ip=209.85.208.178
+	s=arc-20240116; t=1730102685; c=relaxed/simple;
+	bh=px0akK44Pnon/IUmYmPa0nxDuWcRJmwM/cXbQ0Y2yPc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=prfg7JaPmgjzpnIIuAUQZS18+UlUcqjlfpcU/iCfkfkoUqBOb3lqmNu5aOT7v4ULizvkj78SFL1pv/Ec0Ob3An/Dh4UGRLUj8txlVyQQSgWw8nWT0827sg0M2XMTfB+5kAKXJCE52lo7kyAzgy4O0qzVkNhv/95fwUv6uPcANoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4TMAKMv; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2fb3c3d5513so33286041fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 00:34:00 -0700 (PDT)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7ede82dbb63so512754a12.2;
+        Mon, 28 Oct 2024 01:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730100839; x=1730705639; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e4023iuyEreTqRfpqvBKHPMCQJ8IRDCxOmi1L0EASxA=;
-        b=B47eAuC+o4NtZwfpTUqH4UyrNSRaz3ObaR/TwEkmQWqorBwBOIncUoZe0Yb1/BwERS
-         3dFCd2tTkT/dIa8uOuj6/D/OU9jME8HNMhRyK5L87YPKTGsd+xc2yaFaBL150Bs5WEXQ
-         i7fMuYWNBYWYh6os2rhKuGaeHegM9BfB9xzsolsHFOXI1TdxEOldUSeCHxkx85UmwGtX
-         RSUbVXSnryukHtIy7URR0gBu5ItGPi2CetZD0xyBf0EoFhbF6MZmy7KPz0I8MhX5bj/M
-         +E2Xb1saowjyFieb8RKcTa5ojKVV1vPBR87BM6zNPAZ8/ZGvvOhnRagjNC4Enxh+7gTy
-         OzAg==
+        d=gmail.com; s=20230601; t=1730102683; x=1730707483; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y1wPbpOHvrVR6b5Iz9OqlHN9S68A6RZqEvUNgT5njSQ=;
+        b=A4TMAKMvavhD8VfGhp9vAeSUC+JYyxhFexRSFOnpovsxz0pXzpCb8PeFITl9DveBG5
+         gBo7u7ZFzNz0AnAA9ueI0kZxkNYvwtyJoOExCj3n6oGMPo/JVw8uY3GkFEjvjwnqWffu
+         O949J+wHosDES1V0J4jV3AQxeEPA9DuIIFW9zu8RBZ4/e3foZpOABxWEHa+0+qWyeLqK
+         hCgmVEG3C3kTul9qj7DPMeVkyF4S3hVScYAa1rdE45wiqR9YKKSj/AuPqI3ljuOf5U5P
+         sUj7ReqPgqFIUNrNsOYwj2UD9mVHELduWS4EsCk99wxoB2zqziC+pTgqBU/D5dZhsWfi
+         HKIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730100839; x=1730705639;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e4023iuyEreTqRfpqvBKHPMCQJ8IRDCxOmi1L0EASxA=;
-        b=vPYdzyGFaeDGFXOJLaXaCQaWGo7Wnzb5Ug8UTqV4615tekGahTMw8f7JIkCRiM3pQK
-         Uk/aeuCafcDa2Ee8/qHlQOEvjOQMe82IJcVVcqFalUTpxuwp7WvskiNZYLthQ7qW/TrY
-         ECVjvTyuPg5yc0scqits5RLoBxhmc1a8Yxokv7BMOogczCsmsCW0ijFB3UBLO2EUvaom
-         rNdTBOA/qITD5pc8rIGU1rYt4lSKAUZGpQrpah2Ab+BqWXWEa38injSFS5vkvIEnL3vF
-         PBCcGbqqRtV0TjsmWIQ95ko1OrXrczK8uEcBKccVOelp5f7loaUzHLjg3F35iMAQuh0n
-         yXuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXdKwxPvoTl5Le1c/KZSMLZPRDJ8uDkcjfI0MV4blPk/WOyHnOxqdICRBBHEqXGZOc6R9xYs/qvEhw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi9JFO5U9+A3frIYxT+yRiMGkNnIpVVMnE7ao42KzpxzgdDH15
-	U1PKyKk2bB0z7uZZx1KqJ7+ZMWUyAERxbck36NRBe65Qe1JSnTrh
-X-Google-Smtp-Source: AGHT+IFcZK2WIklXECYhhw/fsNzOtOpit5qX/uXDjS07LXt+o6XU3x6ScBi8nW150JaLz72l6OQu7A==
-X-Received: by 2002:a05:651c:2114:b0:2fb:5035:11da with SMTP id 38308e7fff4ca-2fcbe07881fmr25103481fa.33.1730100838558;
-        Mon, 28 Oct 2024 00:33:58 -0700 (PDT)
-Received: from foxbook (bhd254.neoplus.adsl.tpnet.pl. [83.28.93.254])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fcb451a2adsm10860881fa.49.2024.10.28.00.33.55
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 28 Oct 2024 00:33:56 -0700 (PDT)
-Date: Mon, 28 Oct 2024 08:33:51 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/2] xhci: Fix the NEC stop bug workaround
-Message-ID: <20241028083351.655d54cf@foxbook>
-In-Reply-To: <20241025121806.628e32c0@foxbook>
-References: <20241025121806.628e32c0@foxbook>
+        d=1e100.net; s=20230601; t=1730102683; x=1730707483;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y1wPbpOHvrVR6b5Iz9OqlHN9S68A6RZqEvUNgT5njSQ=;
+        b=lHLL3RR4YS9a0n6ZYB96vjenburCB58lqAFwrL3O0p4jG1eqUsCi6vTZcYpmLqI39j
+         7CTrn/DDcBsanE/fsl8yRpYGhnL8Oqj4i/KZJpCrw7Mz8jhGlJmvH0/5DItzucTWHo02
+         iV5C5hTvzd6711wkt+7wnH+XdxLU582In4nC4Z8MnIF/VFUX5N7ot6TOFkddWksahLOH
+         jReY0oontWAxh9rg6iA1ltTX0oKkpHzSr0WmsMdpmaNCqt/KR3pL/FmWAWhZ/tWMcfZ7
+         wANH3Z3YZeCS9AYO3UZIU0M6yrGmegWWCSxwLtz5ihkkPrLwxsdSTCatNGrXG4tfRVbN
+         bxgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVSTOGAUQ+SAEINcAGrzhsvsUt/iTTeeF5iEFhRpE8MlLFubXb/oNm7KR/AMSjC3+z/Kwa2F+srisizEBE=@vger.kernel.org, AJvYcCWSzA6GhfRGXT+aUTZT9ldbzmiklQkY7hqLVrZx0Wls1lu0aNglYUxr/npkdl3HgvdNlQSCE88PPV1f@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9bwvrYtElYC9A0PGBoMaAGym+Seg8vslKKRfQl6iGFlDn+63a
+	mkgA6zzQh2lYATFEhP6k7iHmy8Bs5R8L3FGHZ/tk4eetudx0n1my
+X-Google-Smtp-Source: AGHT+IGbSevwBYaqUV266/S43UKd21qQoPrJSj6hau3YriYsYTYyyfCW7RuMVTlyA8zlBEfKx39H5w==
+X-Received: by 2002:a05:6a21:2d8f:b0:1d8:f977:8cda with SMTP id adf61e73a8af0-1d9a8400813mr9274823637.27.1730102682848;
+        Mon, 28 Oct 2024 01:04:42 -0700 (PDT)
+Received: from localhost ([2402:7500:488:6621:2441:dc7a:ff1b:984a])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a0d025sm5174882b3a.101.2024.10.28.01.04.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2024 01:04:42 -0700 (PDT)
+From: wojackbb@gmail.com
+To: johan@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jack Wu <wojackbb@gmail.com>
+Subject: [PATCH] USB: serial: option: add MediaTek T7XX compositions
+Date: Mon, 28 Oct 2024 16:04:15 +0800
+Message-Id: <20241028080415.697793-1-wojackbb@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Mathias,
+From: Jack Wu <wojackbb@gmail.com>
 
-I would be grateful if you could take a look at patch 2/2 and tell if
-there is anything obviously wrong with this approach. As far as I see,
-it should be OK to just call those invalidation and giveback functions
-directly from xhci_urb_dequeue(), and it works for me in practice.
+Add the MediaTek T7XX compositions:
 
-Regarding the probem with xhci_invalidate_cancelled_tds() being called
-while Set TR Dequeue is already pending, I found that it is much easier
-to handle it by looking at SET_DEQ_PENDING and simply setting all TDs
-to TD_CLEARING_CACHE_DEFERRED if that's the case. So this is solved.
+T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 74 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0e8d ProdID=7129 Rev= 0.01
+S:  Manufacturer=MediaTek Inc.
+S:  Product=USB DATA CARD
+S:  SerialNumber=004402459035402
+C:* #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
+Signed-off-by: Jack Wu <wojackbb@gmail.com>
+---
+ drivers/usb/serial/option.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-However, these patches still don't solve the issue of infinite retries
-completely. There is one more annoying case caused by halts. It is very
-poorly defined what happens when a halted EP is hard-reset. Usually Set
-TR Dequeue executes afterwards and it restarts the EP when done. But if
-it doesn't, the EP stays stopped until a new URB is submitted, if ever.
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 4f18f189f309..b6118f545386 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2244,6 +2244,7 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(2) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7127, 0xff, 0x00, 0x00),
+ 	  .driver_info = NCTRL(2) | NCTRL(3) | NCTRL(4) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7129, 0xff, 0x00, 0x00) },	/* MediaTek T7XX */
+ 	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MEN200) },
+ 	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MPL200),
+ 	  .driver_info = RSVD(1) | RSVD(4) },
+-- 
+2.34.1
 
-There is the EP_HARD_CLEAR_TOGGLE flag which is set until the class
-driver calls usb_clear_halt(), but it's neither the case that the EP is
-guaranteed to be stopped until usb_clear_halt() is called nor that it
-is guaranteed to restart afterwards.
-
-Actually, I think it might be a bug? What if Set TR Dequeue restarts an
-EP before the class driver clears the device side of the halt?
-
-
-I'm starting to think that it may not be realistic to quickly solve all
-those (and possibly other not known yet) problems now. Maybe just slap
-a 100ms timeout on those retries, add quirks for ASMedia/Intel and call
-it a day for now?
-
-Regards,
-Michal
 
