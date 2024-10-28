@@ -1,129 +1,186 @@
-Return-Path: <linux-usb+bounces-16795-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16796-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B6D29B37C6
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 18:37:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BA3F9B38DD
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 19:13:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00100281C6A
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 17:37:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38C3A28350F
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 18:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E6E1DF72E;
-	Mon, 28 Oct 2024 17:37:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEBF1DFE1E;
+	Mon, 28 Oct 2024 18:12:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="lFuyDlvb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SZRcYieq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE8D1DEFFE
-	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 17:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3B31DF749;
+	Mon, 28 Oct 2024 18:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730137063; cv=none; b=JmF+TPPRgLzdKybwBNir54S5Pwj3jvFNwSUNz6a2fou2UmdrIohcwyanywFNyffEKguCpi1l4e91xzEBaUL1XUvzp/mUzDSywirvRJgYgovKn30pwqrFlBCPy1EXjb2XW7+j2HInPmAEfq/GOh2bPgwgTdlxmBn9P2j3fDXolkU=
+	t=1730139157; cv=none; b=hr9TfUuu7LCB9J+N9ZHqziRY0N5XhvfrasVqX+G+eum7Ou8G3Kkt3w472Vdgm/kooZi7VVdzhywNSHtnABHjTOoqViqn5+dmW3v1AqFqNIVKL1xu0t7ycrkO96JPBq6tjeyp+IcuozGbEbcTWZAG8IybDRC8krQbZ0XbryMbaHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730137063; c=relaxed/simple;
-	bh=hCI8Mi8H1UWRgDxMDOgGVseKcQJbj8r8Fsne5shSiKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WEbj0TvV8j6pfvGh55To9z8D9Ca8dLxkUFVjDC4JOVE9JKCgcTJEf3M6151L5FH+Che0ocm/cH/fKKyZvoOZx0KYPaEcoVFZgz9faznoTzb5qf7Ob5iH2Wm+7s5TYwB3gZtRSflf5NonVZAF6y73MO8x21STZAFu4Npbu/grxOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=lFuyDlvb; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5ebab72da05so2383254eaf.0
-        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 10:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1730137061; x=1730741861; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8WZqEMQCAyXwPwtV+tBhmhJjupzwacrtCyx5m0AlRuA=;
-        b=lFuyDlvb6WEwC6yUV/wnllxAgwcca6UJQbnYwVFWIhjs9DbagRcZsn6+XB3QGpp4GF
-         21Kb2jtjxM/ALSg7jLdEW7HK+u6K1SCoNn1Z4YRz8dcmsUTMeogtWDwkqDOUXXGowIZ1
-         pplXTggR4YTG0L5jNEXn45HvWDOtyepTxkEzjG74az1c9lnyBQZeHRDJRnUshjPCGfi0
-         2aHlg0zaMOVGb29pVhhdaDf5sikDwRlyqX8Yy0NEziQD/Bluy4trlS0cx3sUxzmAmeFN
-         Q2lTzuSo6Y4LoRTvfZSN/azvRwH15cuNEO/5u9/UhKg2+KN2ZSzOSSUwbMrRYq2YwTGM
-         IXsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730137061; x=1730741861;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8WZqEMQCAyXwPwtV+tBhmhJjupzwacrtCyx5m0AlRuA=;
-        b=ZPBJysQ0DD1wELy5ITLuFvACQigTwipz91vR5Q9ThFUIylapWWQvT0Zznpu/OnuT5I
-         zm3puD+pakLAAfAciLnCoQxj2qYkw/4R3+oU0uU3SIYfL8OyeZ2yypd5sJIrxr+qfY9F
-         QPNZLNaTf4NI7hjScxMeuir7VRqoH9JNXGHt6Vpp89X17ot+d2OdywR/cFVV0ajm9xiI
-         H25nRDC7KAoIHKqvVgZElONy1OXId1dJF/Re+L+HyIkjm51wToSsuV6lR1purP2vtzS9
-         Tk4C/6mM2+lD1m/Nk+oC0P8nP9jhH9HDeArcN7MI8TbPJO/ApNn2v1qgJP4JtFTjmPCj
-         sp5A==
-X-Gm-Message-State: AOJu0YxBzybaYhG8wzq4LuGIqoVwPaHH/XuMDKoWjZuZFGjeC99NM/X+
-	+8BsXBV/n3K8SqpphSI9HqhBI8bCiUYee5gop1QXgezmoXsWBzkwN1g2p0dVK0vQQm9yUIQkTP0
-	eMw==
-X-Google-Smtp-Source: AGHT+IFpHg1UW4L21I7TLQ1QkJYwAypQDimt0nV2QK8R4UIvR62F7HgpwSQjfVuvAx2WczExJ9XziA==
-X-Received: by 2002:a05:6358:94a2:b0:1bc:573a:401a with SMTP id e5c5f4694b2df-1c3f9d13410mr268891655d.5.1730137060812;
-        Mon, 28 Oct 2024 10:37:40 -0700 (PDT)
-Received: from rowland.harvard.edu (nat-65-112-8-27.harvard-secure.wrls.harvard.edu. [65.112.8.27])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-461323a6862sm36320121cf.92.2024.10.28.10.37.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 10:37:40 -0700 (PDT)
-Date: Mon, 28 Oct 2024 13:37:37 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Bart Van Severen <bart.v.severen@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: usb: gadget: automatic remote wakeup on hid write
-Message-ID: <f5ab7ad5-9a9c-475a-9a1e-3f9de8d1a2a9@rowland.harvard.edu>
-References: <CAOLjEn56gcrBLYqmtAPY49wpZCUzuKAGSt+L2ADBpAEELoQ1TQ@mail.gmail.com>
- <6daafbf9-5999-463b-9198-cd699deb6721@rowland.harvard.edu>
- <CAOLjEn41agaq4J99BFfekPLvnBBKfvBnj24pXLzpkn21_K4ouA@mail.gmail.com>
- <467b1da8-325f-473d-bf46-96947993c626@rowland.harvard.edu>
- <CAOLjEn4vJuxmRGUpUqMS6C7P82d18TkgURhd71UkXNTm5waYtw@mail.gmail.com>
+	s=arc-20240116; t=1730139157; c=relaxed/simple;
+	bh=sEUoxC02iCpTxcYJhl7YWFX1HCD6NzBw0eWUjpJiVwg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=sKCeEubkksHf8hNBZ2PXE5tnDu33GGCN1VlKiZPUyUVJAJFqUC23J6yB9tRoaL5oOTy8labF863NY5NMxBr7e20RU3Q6VcCd94j5pNfNL2GFG1hGqI85ubNE15dXUMzp8qUFSh8rtjJRIu5hbZeOzm8Cy9s7W4voZP2p7wl9qBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SZRcYieq; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49SAv1pG005093;
+	Mon, 28 Oct 2024 18:12:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	sEUoxC02iCpTxcYJhl7YWFX1HCD6NzBw0eWUjpJiVwg=; b=SZRcYieqr1duO6jN
+	yNPU+IPfmU5epd+/o81r40LC4ldLZCIxxkZjlAkUm0IpqlMxvPWXcCU1XBkzNRaC
+	TP7nTfoabSBoIEFd9oUJxyH8ssxT3RMVVy6b1jtpFrGzR4Qr9S53G356VCRfaWGR
+	e0AnvtjH6VYpYYPfGf1XC09U3+7KSWJYNeVHPyXSb/F5vqb519sM99cu5UY56mKi
+	nLQWpX+LNtMePMDN4WQu5efqc5IUJX7MFL7F5AKVFzVhpOnpRjh5Yo1iOH3bw7nE
+	D/KHDSkVLNE3b5W37aYUqFwulXlJTuqei1PCdAs0SH8ah1ZumWVhoYwIz0PpMB8r
+	sMF64w==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42gsq8dw7k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Oct 2024 18:12:09 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49SIC861013622
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Oct 2024 18:12:08 GMT
+Received: from [10.110.31.141] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 28 Oct
+ 2024 11:12:07 -0700
+Message-ID: <8f6e35c0-8cd6-495d-92ad-21d76a726785@quicinc.com>
+Date: Mon, 28 Oct 2024 11:12:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v29 01/33] xhci: support setting interrupt moderation IMOD
+ for secondary interrupters
+To: =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
+	<amadeuszx.slawinski@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>, Takashi Iwai <tiwai@suse.de>
+CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
+        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <robh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+References: <20241015212915.1206789-1-quic_wcheng@quicinc.com>
+ <20241015212915.1206789-2-quic_wcheng@quicinc.com>
+ <2024101747-defog-squiggly-ef54@gregkh>
+ <5847c380-75ce-492a-9a30-0899b7ebe98c@quicinc.com>
+ <2024101824-hammock-elastic-8d38@gregkh> <87wmi02qcj.wl-tiwai@suse.de>
+ <2024102240-gag-famished-245c@gregkh>
+ <8795c4ad-e3ac-47aa-92dd-f899042cefc0@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <8795c4ad-e3ac-47aa-92dd-f899042cefc0@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOLjEn4vJuxmRGUpUqMS6C7P82d18TkgURhd71UkXNTm5waYtw@mail.gmail.com>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3VvqAHZW17ni7Z9fnrpLfG7y2SqeBCje
+X-Proofpoint-ORIG-GUID: 3VvqAHZW17ni7Z9fnrpLfG7y2SqeBCje
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1011 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2410280143
 
-On Mon, Oct 28, 2024 at 05:15:25PM +0100, Bart Van Severen wrote:
-> On Mon, Oct 28, 2024 at 4:55 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > The gadget core doesn't know when the user wants to issue a wakeup
-> > request; only the function driver knows this.  (For instance, only
-> > f_hid.c knows when there has been an hid write.)  And the whole point of
-> > usb_gadget_wakeup() is that it provides a way for the function drivers
-> > to tell the gadget core to issue a wakeup request.
-> >
-> > Alan Stern
-> 
-> Agree, best to handle it in the function driver.
-> 
-> Unfortunately, as stated earlier, the dwc3 gadget driver doesn't
-> enable link status interrupts.
-> That should be enabled again, so that we can test if the gadget is
-> suspended before
-> calling usb_gadget_wakeup() on hid write.
-> Dwc3_gadget_wakeup() does fetch and checks the link state explicitly
-> to return early
-> when in U0, so might as well always call usb_gadget_wakeup() on hid
-> write, but it feels ugly.
 
-The test has to be done somewhere; I don't see that it makes much 
-difference whether it's in the function driver or the UDC driver.  But 
-if dwc3 doesn't enable link status interrupts, how does it know when to 
-invoke the gadget driver's ->suspend callback?
+On 10/22/2024 8:04 AM, Amadeusz Sławiński wrote:
+> On 10/22/2024 4:02 PM, Greg KH wrote:
+>> On Tue, Oct 22, 2024 at 03:56:44PM +0200, Takashi Iwai wrote:
+>>> On Fri, 18 Oct 2024 07:52:35 +0200,
+>>> Greg KH wrote:
+>>>>
+>>>> On Thu, Oct 17, 2024 at 05:07:12PM -0700, Wesley Cheng wrote:
+>>>>> Hi Greg,
+>>>>>
+>>>>> On 10/16/2024 11:40 PM, Greg KH wrote:
+>>>>>> On Tue, Oct 15, 2024 at 02:28:43PM -0700, Wesley Cheng wrote:
+>>>>>>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>>>>>
+>>>>>>> Allow creators of xHCI secondary interrupters to specify the interrupt
+>>>>>>> moderation interval value in nanoseconds when creating the interrupter.
+>>>>>>>
+>>>>>>> If not sure what value to use then use the xhci driver default
+>>>>>>> xhci->imod_interval
+>>>>>>>
+>>>>>>> Suggested-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>>>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>>>>> Link: https://lore.kernel.org/r/20240905143300.1959279-13-mathias.nyman@linux.intel.com
+>>>>>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>>>> ---
+>>>>>>>   drivers/usb/host/xhci-mem.c | 8 +++++++-
+>>>>>>>   drivers/usb/host/xhci.c     | 4 ++--
+>>>>>>>   drivers/usb/host/xhci.h     | 5 ++++-
+>>>>>>>   3 files changed, 13 insertions(+), 4 deletions(-)
+>>>>>> This is already in 6.12-rc1, which makes me confused as to what tree you
+>>>>>> made this series against.
+>>>>>
+>>>>> Sorry, I didn't fetch the latest changes from usb-next.
+>>>>
+>>>> It wasn't even usb-next, it was 6.12-rc1, so I don't know what tree you
+>>>> based this on :(
+>>>>
+>>>>> In this case, should I rebase and resbumit?
+>>>>
+>>>> As the series can't be applied as-is, probably.  But I think you might
+>>>> want to collect some acks from the sound people and xhci developers, as
+>>>> I can't do anything with this until they look at the changes.
+>>>
+>>> Honestly speaking, I couldn't follow fully the discussions about the
+>>> fundamental design -- IIRC, Pierre and others had concerns to the way
+>>> to manage the offload device via kcontrols.  Did we get consensus?
+>>
+>> I don't think so.
 
-And either way, it looks like there is a potential for races.  What if 
-the host puts the link into U3 just after an hid write occurs but before 
-f_hid has had a chance to queue a packet informing the host?  Maybe we 
-need to add a flag to the usb_request structure, to let the UDC driver 
-know that it should issue a wakeup signal if the request is queued while 
-the link is suspended.
+As mentioned by Amadeusz, the overall USB offload concept hasn't changed significantly since the initial series, and will rely on having two sounds cards, ie leaving the one created by USB SND untouched (and still usable), while creating a path to an ASoC based platform card, which handles the offload path.
 
-This part of the Gadget API has never been tested very much...
+The follow ups that I've had with Pierre was more towards how the offload parameters are going to be exposed to userspace, so that it can be properly utilized.  I think for the most part, we've agreed that the set of kcontrols we have now are sufficient, and there is proper controls for userspace to know which devices to use.
 
-Alan Stern
+>>
+>>> I believe that's the biggest obstacle in the audio side, i.e. what's
+>>> visible to users.  The kernel internals can be corrected at any time
+>>> later.
+>>
+>> I would like to see that agreed on before I even look at the usb side.
+>
+> My main concern is still that one USB audio device can be accessed via two different cards exposed in userspace. Usual USB one, and the one from device which does "offload". Suggested implementation achieves it by adding additional controls, which need to be set in specific way to achieve offload. Overall while I understand the mechanism, I'm not exactly convinced that it is the best way from end user point of view.
+>
+> "Implementation" part in Documentation added in patch 19 shows how it looks in userspace now.
+>
+> If you don't mind two sound cards being used to access same piece of HW, current implementation looks ok to me.
+>
+@Takashi, this was something we discussed really early on, even before the series was made, and I think it was agreed upon to avoid doing this with a single card.  I remember putting in the initial work to scope out this path, but it was going to require significant/major modifications to USB SND core, hence why we decided on the path to have two sound cards. (USB SND legacy path still usable)
+
+Thanks
+
+Wesley Cheng 
+
+> See also:
+> https://lore.kernel.org/linux-sound/75ffde3a-7fef-4c15-bfc8-87756e1c3f11@linux.intel.com/
+> where I described how I would prefer it to look.
 
