@@ -1,125 +1,126 @@
-Return-Path: <linux-usb+bounces-16765-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16767-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2467F9B2C11
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 10:55:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BF399B2DA9
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 11:58:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E750B244C9
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 09:55:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B733AB22B6F
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 10:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECAE1CCB37;
-	Mon, 28 Oct 2024 09:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28BB1DED5A;
+	Mon, 28 Oct 2024 10:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NpDKFW4X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ua0SD3my"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A5618FDA5;
-	Mon, 28 Oct 2024 09:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599491DED47;
+	Mon, 28 Oct 2024 10:51:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730109301; cv=none; b=mwTeKC0skb6ket352wtHTc6iLHIHcLxIEEenswmLRTkDGQoC6aQPfbaWLt0zwEjWJvdT68iatX/1LuZTFwuWQnkZuB3ezl03ScOU02ENjCguUBo714sYGNhRr6lSmFXXfhGQ2lqqtkSn0hL9aAkM3/HY8IATUCosg26MVkvmdBc=
+	t=1730112716; cv=none; b=Q7T/wedKMEagLqnMjwOK4YAUMUCaDh286CLNRF01ee6Us+Z/Cv/prF+x30eIi1kHOxjDIu/KsK75DQ2WzW1xymax31rob9bLVsxbrmTLyGDMfM4l7TNULSdIO55UZlY7bLOqDx0ySxpz9MlYtqyGRZ7i/A1QzHdzeC3lLO9i0CY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730109301; c=relaxed/simple;
-	bh=P36JkBYQDHEqLeT+pG8XWk/w3Yl0a7/KZ5gLE/mf5c8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=pyIJdkYVmJA3dX9UVCekL7aihHK/VHJE+9zoHLGQbbtmpuhesnE6tu4Z0NtMAvMgjC871tLsBY1d2r4xTbjHAFvi8HI85fmzNB7VAfLjRe7HuFHa+mbP6l5HXkmHCQJDuvfO9NRWLHgKalr9oys4sid70gDOggVv3xVTD9sPZSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NpDKFW4X; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539e5c15fd3so3547370e87.3;
-        Mon, 28 Oct 2024 02:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730109297; x=1730714097; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P36JkBYQDHEqLeT+pG8XWk/w3Yl0a7/KZ5gLE/mf5c8=;
-        b=NpDKFW4Xo6EuCdbMtbo8W4Tf4fZ1dLd8yHBT5B8ljz9R1i67FldXvnExK+kzWxSolr
-         i3sMuytRoSw4Kn933U7ioCBeqsYOxKXsnw8795iuRDQgQ+QLxf3Ht6uASrMsZhPd6jiB
-         +RMsF4Z0iEyxYyjF7ClF4tpEh9MA289t4S+Ft9fnzF8vQSo6jpRQjbXtFnSotyNgEVDj
-         0pgJ3II0S0mhdornGS+1pC+cQB00Bchg87HIaCbahqh3VVbNkDhy9tx+PftmUUQj2Mwm
-         Drl2r37IX3KDLlPIgks/ODQJDbSLB29a9bYvgc4O1q7RZ5CUtZ3jYoJKvuuZAMNk/pMi
-         JQQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730109297; x=1730714097;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P36JkBYQDHEqLeT+pG8XWk/w3Yl0a7/KZ5gLE/mf5c8=;
-        b=Pvjj8NlHFwDIwlU3pdYBI2UvxL+9/kdmWEbijwEL7woM8hTbY+FY5/Ky5Ldy8Gh0Y0
-         giXE4SPkxC+fz+/1/nuyLz988ps7QOZd1kIXVqkO40byrWmscq5A38a+6RuakBE+PGYN
-         3LAHi9FSx2x4gtPhELVzRo7uPUOXRU2fGEIfOc0/LkHEvGkDqU8I/QVOg2eMphuxYGk7
-         Ei8+PsKsIUFiy8Dnie9zkNz/HYwSerrMsSXIdcsNfPTUR1dlBHU9Qk3BVl0q5wdL4dA4
-         oDQxabnz7dxGxJXMdEOdeWdW0xWvrF1i3Gbe2uvwSSrqcJ3Ijbr8Qs0jK8uQVL3b2LMr
-         Ztbg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzrDKB5IZhm99g8KugRaKXPM/u5R4sHETF2vx2U6ppH8GoaQY2yzVFx/nAr+W8biEXytLenYOiJ+BlMJQ=@vger.kernel.org, AJvYcCXFRESYQIkcJ8kdcRu+ODFmODv9hbwZCBMEdnZp1QY1tH6GyeQ2TD9zhvlVj0b5cAkzbsATnf9u3Mtf@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMQUZXQBOu3OzdP76NYRUF4BlZ5/KahwRApje14x4b6SlaibXM
-	94n9pzzHDe5AnSw5NoTu+dZ09j2jMJ8SiFylaDzFh3UEb0dB2ZnE
-X-Google-Smtp-Source: AGHT+IGZrleTIdqaBkZyctSCWmO/L2jXA+IF+uqKtfLWnenY7xRCCz9dC1JfC7k8oOJ1a9ZzCJw9Cw==
-X-Received: by 2002:a05:6512:3c90:b0:539:ea54:8d22 with SMTP id 2adb3069b0e04-53b348d2696mr2835654e87.18.1730109296730;
-        Mon, 28 Oct 2024 02:54:56 -0700 (PDT)
-Received: from foxbook (bhd254.neoplus.adsl.tpnet.pl. [83.28.93.254])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e12452fsm1035465e87.73.2024.10.28.02.54.55
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 28 Oct 2024 02:54:56 -0700 (PDT)
-Date: Mon, 28 Oct 2024 10:54:51 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: ki.chiang65@gmail.com
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, mathias.nyman@intel.com
-Subject: Re: [PATCH v2 5/5] xhci: Correct handling of one-TRB isoc TD on
- Etron xHCI host
-Message-ID: <20241028105451.0e2e92a7@foxbook>
-In-Reply-To: <20241028025337.6372-6-ki.chiang65@gmail.com>
+	s=arc-20240116; t=1730112716; c=relaxed/simple;
+	bh=bTDJbkidu2AHkisvua6Gnnv0DFKZ72/Vz61qoxw9XYc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=U4WMC3Lrw/7J3zaeEKl/kdUFLw3R2sjrDw6PGsp60QwrQemzcHdcc1moAXUNbwNB+dLLEIh5XTdLH88Wd9uD0V0wTQxgUOV57hNN6DtH/WosRemI3EevD+69qipnDhHyrL2OenboeX0tDc8wNGpQ3JpDAYZKbFe6PLE4dLr4ir4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ua0SD3my; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6936C4CEE4;
+	Mon, 28 Oct 2024 10:51:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730112716;
+	bh=bTDJbkidu2AHkisvua6Gnnv0DFKZ72/Vz61qoxw9XYc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ua0SD3my89JjYOM6U+oB33syY1K3c2AEyh0OntWyij5jsbFL1A/BtcRiZRR+MOTs8
+	 TjUYC8RzLx7HtZZUOtcaZVrJOPSszLUUCTDynt4UJTpPuSXY8OpVssZS1qK6z6fF91
+	 rEdjNRgLbx96dEAcGzrwIXqTm+9H4m0c2GvszJBbeYQhMU5ig1AI8iBl7Hy4G+btK7
+	 jvcDb/YODGrqGVbRMB+MiSBGiaOrmuhrDdeXZUq0hCm/c9JpflmK2ghRtn9kzkj+Z+
+	 XXWQ/gQqDFn1Ex9RLjTGMzFMoCTeZS1eSwXUjuF0JnnTyiOdOmnr4vfYmA5pGQvyNZ
+	 JYBnWLPHW1cOw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Reinhard Speyerer <rspmn@arcor.de>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Sasha Levin <sashal@kernel.org>,
+	bjorn@mork.no,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.11 26/32] net: usb: qmi_wwan: add Fibocom FG132 0x0112 composition
+Date: Mon, 28 Oct 2024 06:50:08 -0400
+Message-ID: <20241028105050.3559169-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241028105050.3559169-1-sashal@kernel.org>
+References: <20241028105050.3559169-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.11.5
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Reinhard Speyerer <rspmn@arcor.de>
 
-That's a bug I'm familiar with.
+[ Upstream commit 64761c980cbf71fb7a532a8c7299907ea972a88c ]
 
-> Unplugging a USB3.0 webcam while streaming results in errors
-> like this
+Add Fibocom FG132 0x0112 composition:
 
-Not only unplugging but also any random error due to EMI or bad cable.
+T:  Bus=03 Lev=02 Prnt=06 Port=01 Cnt=02 Dev#= 10 Spd=12   MxCh= 0
+D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2cb7 ProdID=0112 Rev= 5.15
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=Fibocom Module
+S:  SerialNumber=xxxxxxxx
+C:* #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
 
-> If an error is detected while processing an one-TRB isoc TD,
-> the Etron xHC generates two transfer events for the TRB that
-> the error was detected on. The first event is "USB Transcation
-> Error", and the second event is "Success".
+Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
 
-IIRC, it wasn't just Transaction Errors but any sort of error, like
-Babble or Bandwidth Overrun. But not sure about Missed Service, etc.
+Link: https://patch.msgid.link/ZxLKp5YZDy-OM0-e@arcor.de
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-And IIRC I confirmed that it was *not* the case on Short Packet.
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 4823dbdf54656..f137c82f1c0f7 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1426,6 +1426,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x2c7c, 0x0296, 4)},	/* Quectel BG96 */
+ 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x030e, 4)},	/* Quectel EM05GV2 */
+ 	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
++	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0112, 0)},	/* Fibocom FG132 */
+ 	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
+ 	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM support*/
+ 	{QMI_FIXED_INTF(0x2692, 0x9025, 4)},    /* Cellient MPL200 (rebranded Qualcomm 05c6:9025) */
+-- 
+2.43.0
 
-Also, I'm 99% sure the problem is not limited to one-TRB TDs, but
-it occurs every time there is an error on the last TRB of any TD.
-
-> As a solution, we can set the flag after the first error event
-> and don't print the error message after the second event if the
-> flag is set.
-
-Yes, but I think it would be better to use error_mid_td instead of
-last_td_was_short, so that the TD is only freed on the final event,
-not on the first one.
-
-The spec is clear that we should only free TRBs when the xHC is done
-with them. Maybe it wouldn't be a problem in this case, and it surely
-wouldn't be worse than what happens with Etron today, but IMO it could
-be a real (even if rare) problem in other cases when this flag is used,
-so I would rather remove the flag and handle short packets as per spec.
-
-Regards,
-Michal
 
