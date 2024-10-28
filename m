@@ -1,192 +1,83 @@
-Return-Path: <linux-usb+bounces-16780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16781-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 324F49B2F1E
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 12:45:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2CBD9B307C
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 13:38:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 567161C217ED
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 11:45:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8781F2828D0
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 12:38:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBEF41D8E12;
-	Mon, 28 Oct 2024 11:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7697B1DAC8E;
+	Mon, 28 Oct 2024 12:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hdf2SnIu"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="AUuZ2c0V"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395031D7986
-	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 11:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3842218FDBE;
+	Mon, 28 Oct 2024 12:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730115878; cv=none; b=PT65kNYvqosZFDsFXo0Axd52dxBUOujQhdRLntxoICwNz+el7u5U6z28nWLmArkZ/ZaTFZR8pEZHoTShTGr8NL3H+OXYSPNBciEGAK+XUKPCJSFf9Q7ExtyJ/4wSYiclVQp+kYKf1KEfehll2B2qlYfkUBs8xDWcOt31LvheJ2g=
+	t=1730119113; cv=none; b=E5HA9joRTxEcuONqsS2mfdOtqYmjeR0K6aTIFHeUBrQqa4IxUnEQh9i41D6jbuHGoBN2sJVi6NX4JeF6yjuKkN7WqQHROcNa75wsafSMWqT9dIsnk0AYPCUG1yKqMcX+LKXTzV+prJdB9up57eUm2LWnTjUw9Ye5AsLj3AlVZnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730115878; c=relaxed/simple;
-	bh=sIrBYg66hmwWk7TsDy2bhP4Kq6hK7NxiK4s3ASUWf5Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jgjClxomLuRhAYH8IPyQgSH0cB2fZj+tV4OJapD5GrowBVsXDPfpmBJuzbjjByFnqv4jRKJnP4fFJ5vzdE5R5VJCWqwhsaJVUGlqhSNfDM12Rj9fGPN6SwVjFShvyhWIXdhkZgcuyFukUBQlNOuPlCNr4XOsgRv6YA86ll78IsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hdf2SnIu; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6e35fb3792eso38979857b3.3
-        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 04:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730115875; x=1730720675; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZVio8cvkxkCAcUKP0pXIkXjIVgnIaUFuCYZiRy+dgw=;
-        b=Hdf2SnIu1EwafM/87KxO2k/ifP8fMS0KNIvY9KdHeyCpKTjlL72xsCb7Xbyc1xzImy
-         kO4aIE9jfVwJUNj2VXiDQt4L5K6hHqd8R/OGschD7SVoSCrLvVXHJpy6U9dRQXxhLna2
-         wC60ZMoNcv85TPc4z54N3PWgpyr2JeeJ9Ze5/Xjv9mxxQa1+4/BQqD4oK598IMnQNGFE
-         5LrJuOMa4AEqQdOvx1qkCYndMGC3ijCkLhvGTOQINCVcPdxy8YsTUGQ8ROtDQKkzX1Qm
-         hl6+UfhukwqOzLzRf2Ic5eJ7Ia7OY0KFVB/k9l7BY8wasX0ccyGupkqx3BRWtSCHiIQq
-         y1Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730115875; x=1730720675;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sZVio8cvkxkCAcUKP0pXIkXjIVgnIaUFuCYZiRy+dgw=;
-        b=oNNZqg9Er7ufZL4JmKHYVKfe2z0ufpXDq89esNw4UecsR+LPAO8O6kUJ2+wGofvqEF
-         ngmSb2Lv11TAQqg39fyK9R0TEdsEFf7/ooGv7KTzCLTe2qfzX0CXZGa5rCwkxnYFz7P/
-         OOtspeJud8wZSEfJlyE/x+eFl01qnIvET/+tX0kw9pFeymoZ0CC5xPz5g67xsQ5rkw7s
-         uR2r6DQ7HyZejTp7+AoNop8FvhoG3MSz+1k27hz0y1Wt3RbRbC/xrhgDv32nWxrALP68
-         2krlQc6Iw1jUO1rY20D4GW/XaKTkQcaHTOjGmlr+eBnqBBo+jd7VFrcT79milhDmYFrz
-         8q8A==
-X-Forwarded-Encrypted: i=1; AJvYcCWSuhcuJFNUc0ACcR2IQ/n718XrL0DPIFk3+bARERNL36sn0HfNCOTPba6KL2+dzFAkejNgb7bNlwk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlY61ORiwew+XW0r1kQ6U2r/1dY1qpmx0T1vmWyLdS9zJNWtt6
-	njCzy+lbg1mPrlpSIzeq88D3qdq/C/5aBFjYkkakWcMddxmKgiRzJfnVYzhk+wbCqi+Me5JDp27
-	BQxPR4EjCxxHHlRi0LsrKbZPKT53obna/D1sdZw==
-X-Google-Smtp-Source: AGHT+IHLKeKx9NpqZxAGiLQJMaILqzRYuWQfYpYj/MQf6dPo+SbTGqn7EpjJInbFkjakb3I2ccTD9UYXD8f0NCsex7M=
-X-Received: by 2002:a05:690c:3804:b0:6e3:6467:f46c with SMTP id
- 00721157ae682-6e9d89f3b5emr75751517b3.14.1730115875249; Mon, 28 Oct 2024
- 04:44:35 -0700 (PDT)
+	s=arc-20240116; t=1730119113; c=relaxed/simple;
+	bh=l57zkt31ysNXbU5Beb1POJfXYxsAs1C0+JtNN0Z5Qww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R0yrCbXR2v1Jx7ArimlUI6U3vfF6FBIy2WebyqRL7BUMFTb4a6qX9I5Bt5NMRHFFFNICVvVPiHqxfyTDO8lGpwEaaqen0qzfT+JyKoOj4WeOSZc/BUpKECO/4e7ET2+ip04iZlLOBvSa+rq9oQrAHrec5qlZJ5GCPXELKWjwl7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=AUuZ2c0V; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=U3TgRywqxilRRFAt5rH162dOH+tv6SvlcFTqOEAK1N8=; b=AUuZ2c0VAqFrfvrVHH5PIbRfWM
+	+PxNwbgBA5ln9p3yYdYRDdgVSzIboTrkHvQmR8r2FKJ48n7bmTionKoeQ1UyuLx9YFBEpD5KL76Ii
+	xiYxGgSkT7Py0zG2S3PAuyo1f7nPrVIEhECLoDYYlUK+YkbS3k156eSLr0OSJ4p8l0mQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1t5P0j-00BRe7-Rg; Mon, 28 Oct 2024 13:38:17 +0100
+Date: Mon, 28 Oct 2024 13:38:17 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Fabian Benschuh <Fabi.Benschuh@fau.de>
+Cc: Woojung Huh <woojung.huh@microchip.com>, UNGLinuxDriver@microchip.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] Add LAN78XX OTP_ACCESS flag support
+Message-ID: <c4503364-78c7-4bd5-9a77-0d98ae1786bf@lunn.ch>
+References: <20241025230550.25536-1-Fabi.Benschuh@fau.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241025103621.4780-1-wahrenst@gmx.net> <20241025103621.4780-5-wahrenst@gmx.net>
-In-Reply-To: <20241025103621.4780-5-wahrenst@gmx.net>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 28 Oct 2024 12:43:58 +0100
-Message-ID: <CAPDyKFqwozGppFLJhjTc86nW1rodZymBbVZr+VpN4e2J3VowMQ@mail.gmail.com>
-Subject: Re: [PATCH V5 4/9] mmc: bcm2835: Introduce proper clock handling
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Russell King <linux@armlinux.org.uk>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Vinod Koul <vkoul@kernel.org>, 
-	Minas Harutyunyan <hminas@synopsys.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Lukas Wunner <lukas@wunner.de>, Peter Robinson <pbrobinson@gmail.com>, 
-	"Ivan T . Ivanov" <iivanov@suse.de>, linux-arm-kernel@lists.infradead.org, 
-	kernel-list@raspberrypi.com, bcm-kernel-feedback-list@broadcom.com, 
-	dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241025230550.25536-1-Fabi.Benschuh@fau.de>
 
-On Fri, 25 Oct 2024 at 12:36, Stefan Wahren <wahrenst@gmx.net> wrote:
->
-> The custom sdhost controller on BCM2835 is feed by the critical VPU clock.
-> In preparation for PM suspend/resume support, add a proper clock handling
-> to the driver like in the other clock consumers (e.g. I2C).
->
-> Move the clock handling behind mmc_of_parse(), because it could return
-> with -EPROBE_DEFER and we want to minimize potential clock operation during
-> boot phase.
->
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-
-Applied for next, thanks!
-
-Kind regards
-Uffe
+On Sat, Oct 26, 2024 at 01:05:46AM +0200, Fabian Benschuh wrote:
+> With this flag we can now use ethtool to access the OTP:
+> ethtool --set-priv-flags eth0 OTP_ACCESS on
+> ethtool -e eth0  # this will read OTP if OTP_ACCESS is on, else EEPROM
+> 
+> When writing to OTP we need to set OTP_ACCESS on and write with the correct magic 0x7873 for OTP
 
 
-> ---
->  drivers/mmc/host/bcm2835.c | 29 ++++++++++++++++++-----------
->  1 file changed, 18 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/mmc/host/bcm2835.c b/drivers/mmc/host/bcm2835.c
-> index 3d3eda5a337c..107666b7c1c8 100644
-> --- a/drivers/mmc/host/bcm2835.c
-> +++ b/drivers/mmc/host/bcm2835.c
-> @@ -148,6 +148,7 @@ struct bcm2835_host {
->         void __iomem            *ioaddr;
->         u32                     phys_addr;
->
-> +       struct clk              *clk;
->         struct platform_device  *pdev;
->
->         unsigned int            clock;          /* Current clock speed */
-> @@ -1345,7 +1346,6 @@ static int bcm2835_add_host(struct bcm2835_host *host)
->  static int bcm2835_probe(struct platform_device *pdev)
->  {
->         struct device *dev = &pdev->dev;
-> -       struct clk *clk;
->         struct bcm2835_host *host;
->         struct mmc_host *mmc;
->         const __be32 *regaddr_p;
-> @@ -1393,15 +1393,6 @@ static int bcm2835_probe(struct platform_device *pdev)
->                 /* Ignore errors to fall back to PIO mode */
->         }
->
-> -
-> -       clk = devm_clk_get(dev, NULL);
-> -       if (IS_ERR(clk)) {
-> -               ret = dev_err_probe(dev, PTR_ERR(clk), "could not get clk\n");
-> -               goto err;
-> -       }
-> -
-> -       host->max_clk = clk_get_rate(clk);
-> -
->         host->irq = platform_get_irq(pdev, 0);
->         if (host->irq < 0) {
->                 ret = host->irq;
-> @@ -1412,16 +1403,30 @@ static int bcm2835_probe(struct platform_device *pdev)
->         if (ret)
->                 goto err;
->
-> -       ret = bcm2835_add_host(host);
-> +       host->clk = devm_clk_get(dev, NULL);
-> +       if (IS_ERR(host->clk)) {
-> +               ret = dev_err_probe(dev, PTR_ERR(host->clk), "could not get clk\n");
-> +               goto err;
-> +       }
-> +
-> +       ret = clk_prepare_enable(host->clk);
->         if (ret)
->                 goto err;
->
-> +       host->max_clk = clk_get_rate(host->clk);
-> +
-> +       ret = bcm2835_add_host(host);
-> +       if (ret)
-> +               goto err_clk;
-> +
->         platform_set_drvdata(pdev, host);
->
->         dev_dbg(dev, "%s -> OK\n", __func__);
->
->         return 0;
->
-> +err_clk:
-> +       clk_disable_unprepare(host->clk);
->  err:
->         dev_dbg(dev, "%s -> err %d\n", __func__, ret);
->         if (host->dma_chan_rxtx)
-> @@ -1445,6 +1450,8 @@ static void bcm2835_remove(struct platform_device *pdev)
->         cancel_work_sync(&host->dma_work);
->         cancel_delayed_work_sync(&host->timeout_work);
->
-> +       clk_disable_unprepare(host->clk);
-> +
->         if (host->dma_chan_rxtx)
->                 dma_release_channel(host->dma_chan_rxtx);
->
-> --
-> 2.34.1
->
+Please can you tell us more about OTP vs EEPROM? Is the OTP internal
+while the EEPROM is external? What is contained in each? How does the
+device decide which to use when it finds it has both?
+
+I'm just wondering if we even need a private flag, if the hardware
+will use one or the other exclusively?
+
+	Andrew
 
