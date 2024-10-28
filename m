@@ -1,50 +1,86 @@
-Return-Path: <linux-usb+bounces-16752-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16753-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7C969B23C1
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 04:58:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A09749B243C
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 06:32:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D80CA1C210DA
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 03:58:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FE3C281F45
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 05:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26746189BAC;
-	Mon, 28 Oct 2024 03:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BDA418C92E;
+	Mon, 28 Oct 2024 05:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ilXBkY/h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BCAA47
-	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 03:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C0D18B492;
+	Mon, 28 Oct 2024 05:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730087878; cv=none; b=DQDBsRfx6kC/Oo4Lqsh5p2WGsZ26upxm7e8LrOia4rdiTmkg1bHlsRg2SLtMeIvN746yW/Kq0qClwgwwIiNpuQwtqkQbd/gxAbX0y3I6yHn/TTV+MGde071oDwOzPG2fgu3FKvHZ4zcn4npu3C+70JPDiyhgl/DiZyZisnLG2RA=
+	t=1730093505; cv=none; b=jIbHP6FWFgbi0gw4L011MixRN8OFr5tl0My9bW/NlbOZTiQ35H2yM4+BSWWmEY/LHvbSYKp8wnPrdHVfYJucxFPlcy+qcL8B0R07yK3AKV5aEaXY2FavcPMkAWD2tA+qqKLN184KPYjFgaGM2+GurzuDEH5PiaF5xl1o6Ba0uPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730087878; c=relaxed/simple;
-	bh=U5o+A6FtyhHPI8sB8V2p3G1rscSav/dmg1AQ+1ZmDx4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mrUuW4o3KRVMHXdl81VgYtfL2qdmlsdpVAys6zZmk2Yl6ni8dt4CKxWqtD8RG77yuACsDo9TQ1l1xVXaqjwYAs6ew+J5MEmUyAvDytvT43/XA6aYFLVp2lol1fJf5wEME8Axo46hdlLuxmROS1EI2DmxlY3LBGTFGoXYkc0UnCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4XcKLt6my8z2Dbyv;
-	Mon, 28 Oct 2024 11:56:22 +0800 (CST)
-Received: from kwepemk200016.china.huawei.com (unknown [7.202.194.82])
-	by mail.maildlp.com (Postfix) with ESMTPS id 252D5140202;
-	Mon, 28 Oct 2024 11:57:52 +0800 (CST)
-Received: from huawei.com (10.67.174.78) by kwepemk200016.china.huawei.com
- (7.202.194.82) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 28 Oct
- 2024 11:57:51 +0800
-From: Yi Yang <yiyang13@huawei.com>
-To: <pawell@cadence.com>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <wangweiyang2@huawei.com>
-Subject: [PATCH] usb: cdns2: fix possible null-ptr-deref in cdns2_gadget_ep_queue()
-Date: Mon, 28 Oct 2024 03:50:28 +0000
-Message-ID: <20241028035028.2657102-1-yiyang13@huawei.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1730093505; c=relaxed/simple;
+	bh=aNPNOoKVsPojEBhxia3xk3JbPFV30hk8lKIJ574hCTg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=e8rH6m2tqIXscgGJVPBrqw32QE9raXhxCraJexROyKIoMdF8OMxZ2OpC+rbuQP68jRvEH8fR0frh39Di9JTj7Ms4Erget9X/7eWf3W8vWGkPuWy2CcUADLXsH6PKJO+3L4rj/+tgRCFd+z28o/ThH6qOkJpukSLtBkpcYAALYxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ilXBkY/h; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7ea7e2ff5ceso2628679a12.2;
+        Sun, 27 Oct 2024 22:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730093503; x=1730698303; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xEQg2GoMuqIfSvIoQPeUZTxQLBpPTmz3yv4aNSrSx8I=;
+        b=ilXBkY/hCe8C7Fpz6naFbaWxSH/gwpNPoYGWTlCCxBqlJI4meJyJh1qoK9sSbCOzjv
+         U2lYIZxpRgTJ8nYCXjKB3rtV3UWw4Y+Jmq5rWU5mvZuruRASs51G+kpF97brZ3tDsfHX
+         IQOg8zQ/ZoEPXjon78u1l8luaUIis6Z4STbwNBC2dvXVCeelKC6ZU4YoTPYvX8p7MnkJ
+         M98Qmd7CW+PjG3iwFvLzcgBoMNSpYAN05gK8sDyAtsFxt+T0+TjrPTqB1QSBbEDMdEhP
+         ukwp5rEjSUkRT7ghMWMy8xJxDHpE9RumVO3Q+vTTB12QzI8MlyP2wMfvdqCOopE0ssQL
+         IwlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730093503; x=1730698303;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xEQg2GoMuqIfSvIoQPeUZTxQLBpPTmz3yv4aNSrSx8I=;
+        b=hk4TPAOQlE6dcV/S0fa2pjldDebiOw/8Mr5XrT9cJWdN8LsBCD2THwW953k1vpUqsQ
+         jlNUqpIcS9joFZh7LdE2Q1QBgGt2H0inzNg06+v81cVjqzLmrvzfVj0jl5CW+A2UaBt/
+         mbAfvnzOMrqOXTS4Kb7g+zfwFTfrBoDYN9mLTqcbthW0s0vEmyEK4bkrplOmM2PKWaLp
+         xEXQ81RhpqCHHFfbTMYBo4jUKGIT/5NSnPHFFGgs20pBNjzsnzYedQDz4hDRP9xt57kh
+         nstHtuJrCCp/gi9PNkNgjggi0dlqFy6J5T+2SdcIBNdg6iVTAmM4Z7j/f2JI65L9fPm7
+         U6jA==
+X-Forwarded-Encrypted: i=1; AJvYcCWd34GXt459IydelywBNKFCtPJVPTyQGzuPbz+uQJS+kb0nPc1d0iT7vOHoy/vjH4JQauY3INTkQP4EeMU=@vger.kernel.org, AJvYcCXuYb16KJcc172GE6FoI1jhQvaHQhGyj9y/ORqUu2FFeit/N9M6ETqViky0FhfuO8WlQKy6k36tXjn7@vger.kernel.org
+X-Gm-Message-State: AOJu0YwF9b9KpcUPvan5mmt0xgAdKzqWftyuKpj3gRiGj4PQ4N+wVrL6
+	shBipHSDqdRgrf9Sqf1HU53pe11XD0sMfPQ2CfUExg6285UJrIlyDNO8pwA9FnI=
+X-Google-Smtp-Source: AGHT+IGSIgLqaS9EfKl+irLis0mB+1g7+V3NTmH7i2LhfvWOB0rPfTqN7PSmEu+Fb2udknSnwC64ww==
+X-Received: by 2002:a05:6a20:d806:b0:1d9:6f7f:7ad7 with SMTP id adf61e73a8af0-1d9a855f791mr8603381637.48.1730093502558;
+        Sun, 27 Oct 2024 22:31:42 -0700 (PDT)
+Received: from localhost.localdomain ([123.51.159.90])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e5769b9sm8157413a91.44.2024.10.27.22.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Oct 2024 22:31:42 -0700 (PDT)
+From: Tony Chung <tony467913@gmail.com>
+To: lkp@intel.com
+Cc: gregkh@linuxfoundation.org,
+	johan@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	oe-kbuild-all@lists.linux.dev,
+	tony467913@gmail.com
+Subject: Re: [PATCH] usb: serial: mos7840: Fix coding style warnings 
+Date: Mon, 28 Oct 2024 13:27:33 +0800
+Message-ID: <20241028052732.4320-2-tony467913@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <202410251501.9hTgSYCH-lkp@intel.com>
+References: <202410251501.9hTgSYCH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,35 +88,9 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemk200016.china.huawei.com (7.202.194.82)
 
-The cdns2_gadget_ep_alloc_request() will return NULL when kzalloc() fails,
-fix possible null-ptr-deref by check return value.
+I've sent the PATCH v2 which has fixed this build error. 
+please check from the link below. Thanks.
 
-Fixes: 3eb1f1efe204 ("usb: cdns2: Add main part of Cadence USBHS driver")
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
----
- drivers/usb/gadget/udc/cdns2/cdns2-gadget.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-gadget.c b/drivers/usb/gadget/udc/cdns2/cdns2-gadget.c
-index 62fce42ef2da..c06a50af268e 100644
---- a/drivers/usb/gadget/udc/cdns2/cdns2-gadget.c
-+++ b/drivers/usb/gadget/udc/cdns2/cdns2-gadget.c
-@@ -1724,6 +1724,10 @@ static int cdns2_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
- 		struct cdns2_request *preq;
- 
- 		zlp_request = cdns2_gadget_ep_alloc_request(ep, GFP_ATOMIC);
-+		if (!zlp_request) {
-+			spin_unlock_irqrestore(&pdev->lock, flags);
-+			return -ENOMEM;
-+		}
- 		zlp_request->buf = pdev->zlp_buf;
- 		zlp_request->length = 0;
- 
--- 
-2.25.1
-
+https://lore.kernel.org/lkml/20241025061711.198933-1-tony467913@gmail.com/
 
