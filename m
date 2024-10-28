@@ -1,151 +1,159 @@
-Return-Path: <linux-usb+bounces-16763-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16764-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7D979B2A12
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 09:20:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 048A49B2C08
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 10:53:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E3B71F2222F
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 08:20:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECD73282B41
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 09:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE060190692;
-	Mon, 28 Oct 2024 08:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589CB198836;
+	Mon, 28 Oct 2024 09:52:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dwZgXXKp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hokBepFq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA1416FF45;
-	Mon, 28 Oct 2024 08:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5925C19067C
+	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 09:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730103607; cv=none; b=mfrOX5YOg9Ophaf0LDJl2P6Knf1WaQ2FZZh6tpuuVBKZNyxxCUn1gbY6STOjWKYkBqv8d8X3lYBcPZ8f51m0ot80SQjeTqSYUK596Mt0pHOIYiijKuTTcMxOaX/TJq61SbUoSHQplrTTkbe4jmjco4jI+wqd/Lfy5iZ9VcU2xVg=
+	t=1730109149; cv=none; b=M1bzqQCy+2FaSKPQyyrMN0tonCBQWijXL/ZTzFw3AfDQh/p9VkjRbXEqq6A5+OBLcrIZIYnVCBL5RzZeUW1wOnZTm365hcgjim/PI7r0sppFThgsydKrEdbqEfOxRcp9SzvX57oa8UzfGCISRAA+PZU1rW6T+Nqt3926moLG68Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730103607; c=relaxed/simple;
-	bh=9KgzYqnG6iqO+36iW/hPKk0FuDDy3HBUJ77k1H9GQQ0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BhaWJiCsWboXPr2PmL++5OzeIPGn6J3VJ+KZS4ewXfPMQAlDIDQaGaN2hX7RjOXRNK0IPpO28pvevgT7lBB+hq+NhgKHDBrWFVxSCOWK6VNbMk/r21fQf1wmffTMZvc7Dpn303ea7YZc0cWsbFAwM/jxcyu8YhU1jaKUsrWDwV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dwZgXXKp; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20cdda5cfb6so37069645ad.3;
-        Mon, 28 Oct 2024 01:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730103605; x=1730708405; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v8sdPDR1cu1RSy6KGnm0bu4ImucaLAk6cLvG3PELIM8=;
-        b=dwZgXXKp+P3qZ5XM5hBatyo+zcashu2FPHyfRTOVuN4oNGdo+0ku/jmU2sSvCpQnjV
-         QJW3DlqnsiKVCB8ENd/lRzJkfFpIAx2b69ajrBiw2/4NwaSLNEPHyi0sdfJPnCL3E20f
-         9IVGgS1vBN0JCk+y8+kkWVt2RGDYpnDSLAn8YCL/aDq/IlTjm5bqvwYKtHyXtMleNxwE
-         RVPIatQJ71cEvRJBrIwoN/7UeSpSv96UbkoxwaHXgsIaO7s167MENIyw8eJa9aH0pQes
-         7jNy+Dzw6VngkmzoVm+H2CXFyvFw/WEeglJ84an9sJCcFfslzb4xnjVcElYR0Ae1Qvsd
-         /9yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730103605; x=1730708405;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v8sdPDR1cu1RSy6KGnm0bu4ImucaLAk6cLvG3PELIM8=;
-        b=L1u+W4ZYhaOZBR8TFbdMS65MbCa178TTv9XEF4cr1mzqY0uhAe0/jCnx4XetgJeq79
-         akHImDjl+pIt4h/v3QTqBfg/2t9ZJMwNSmSY8txpgyp41bRekUGqymrNLRXKryl+GyB2
-         h/0mY0T0HGUyA2eyqbdbKB2FQY9SwYzEK0AYntV+w3Xh0+Hu/ZyCz7YWXWlga+wr9Fwv
-         LVZruIWo/fRR/maCxHOEIQY9zfMoGHtJ4WlH5V7z9xT+SsmIiFX8XbuZ1eNEKSfMrWCx
-         PTE5QhJ3DTFVdMbTndnp8KjRrhoLGcD2053TTM/xLV7+546Zz8lQvUZI8V+I72Ceb7Cl
-         zdsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyZ1hWBFot6n+xovELrjOGW4YQVKQlu5YEdXOOCq3XDeur0FKkcmDR61CUnEV7Sgvgar8UvkbjF8cU@vger.kernel.org, AJvYcCWQWHD1Z3xV/ZjUX5U1NHormzjri4sANwPjhNyf6NzEIKuuoX20DviE5+C91F/Is7N/GX6UG8ZidenstAI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpnWlQ3A9LTfX9R8FB/QcJdyAVPEQ+VeyO/rR059OkbL/CsJuK
-	LF2CDU4zFSuEDpIXx4gTZIPirCw2OfD8lwvpSnqS2zc+z1S167gN
-X-Google-Smtp-Source: AGHT+IEpo881PxiXGmEfrUuaYO7xAm9Y2eiflJg/dlJsCht9s6H07Rednce93QydQNZDFVKY4bnXpg==
-X-Received: by 2002:a17:902:da86:b0:20b:8109:2c90 with SMTP id d9443c01a7336-210c6d6b2b2mr88077225ad.61.1730103604665;
-        Mon, 28 Oct 2024 01:20:04 -0700 (PDT)
-Received: from localhost ([2402:7500:488:6621:2441:dc7a:ff1b:984a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc02dbb4sm45603115ad.183.2024.10.28.01.20.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 01:20:04 -0700 (PDT)
-From: wojackbb@gmail.com
-To: johan@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jack Wu <wojackbb@gmail.com>
-Subject: [PATCH] USB: serial: qcserial: add support for Sierra Wireless EM86xx
-Date: Mon, 28 Oct 2024 16:19:49 +0800
-Message-Id: <20241028081949.699921-1-wojackbb@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1730109149; c=relaxed/simple;
+	bh=+BDJpNDGvNYlhNYBODhfvBiZNs8BEmEGcfEBZGGrkqs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=beBsyaIdbF3O97olGVAsWr0fC8OHgOV/BmLOXdZnlWWD0PjGcSDZoobu0vMKpZosl6NZJrifxtcGqXJRgMFeEkgsYd8Ssgg1fd4vvtwAtmvZPTlCZxvvMR/IVwkUxCNGn+CC40I/qJ4RgG2s56sgHV70h3jEj+ktY9ZFz9qlZaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hokBepFq; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730109148; x=1761645148;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=+BDJpNDGvNYlhNYBODhfvBiZNs8BEmEGcfEBZGGrkqs=;
+  b=hokBepFqmgAGrqMWYJCFm1d22DsoahaqK2ROmfW7R7Ktrm8BVeu+HhSC
+   nYERPID+oCgFLTL6HCR6Y+2VOp/l8OD9+khnBHhxGQcrxCf8m+zMipjSR
+   ZwTLeIyY8lW4a+mL3D7WuowIAdo34B9Pvdyr+D2VeSrOSa/MmuBtm+ksz
+   9YDUVr5AFOeQN1r5bI8rOYQZ4Bo9Kqx8WcmZOR39fNvFFSWIarBxWfMjh
+   P/OehgHv1ZgT44tg2SzGk9fvFCYwJVR8N2kmoysnW47hnNsvzPaUJOtZR
+   9uNT/2CSfip68Itmtxh4m2nZ7voEwDm0BloOD1mrzW6z60QU9L50yXf/j
+   A==;
+X-CSE-ConnectionGUID: JpTWBSJ+ToeXxSD9KcPFaw==
+X-CSE-MsgGUID: aF8uj1+NTAe5TRhVSEToow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11238"; a="29803658"
+X-IronPort-AV: E=Sophos;i="6.11,238,1725346800"; 
+   d="scan'208";a="29803658"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 02:52:27 -0700
+X-CSE-ConnectionGUID: 26NZURsBTPmMMs3SWkx/UQ==
+X-CSE-MsgGUID: lpAb6xS4SyKak2zS12ZUxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,238,1725346800"; 
+   d="scan'208";a="104890192"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa002.fm.intel.com with ESMTP; 28 Oct 2024 02:52:26 -0700
+Message-ID: <f6dcf205-e8eb-4ba8-91d9-24fa0f769739@intel.com>
+Date: Mon, 28 Oct 2024 11:54:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] xhci: Fix the NEC stop bug workaround
+To: Michal Pecio <michal.pecio@gmail.com>, linux-usb@vger.kernel.org
+References: <20241025121806.628e32c0@foxbook>
+ <20241028083351.655d54cf@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@intel.com>
+In-Reply-To: <20241028083351.655d54cf@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Jack Wu <wojackbb@gmail.com>
+On 28.10.2024 9.33, Michal Pecio wrote:
+> Hi Mathias,
+> 
+> I would be grateful if you could take a look at patch 2/2 and tell if
+> there is anything obviously wrong with this approach. As far as I see,
+> it should be OK to just call those invalidation and giveback functions
+> directly from xhci_urb_dequeue(), and it works for me in practice.
 
-Add support for Sierra Wireless EM86xx with 
-USB-id 0x1199:0x90e5 & 0x1199:0x90e4.
+Adding EP_HALTED case to xhci_urb_deqeue() should work fine, we
+will both invalidate and give back the invalidated TDs in the completion
+handler.
 
-0x1199:0x90e5
-T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 14 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1199 ProdID=90e5 Rev= 5.15
-S:  Manufacturer=Sierra Wireless, Incorporated
-S:  Product=Semtech EM8695 Mobile Broadband Adapter
-S:  SerialNumber=004403161882339
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#=12 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=qcserial
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:* If#=12 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#=13 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#=13 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> Regarding the probem with xhci_invalidate_cancelled_tds() being called
+> while Set TR Dequeue is already pending, I found that it is much easier
+> to handle it by looking at SET_DEQ_PENDING and simply setting all TDs
+> to TD_CLEARING_CACHE_DEFERRED if that's the case. So this is solved.
+>
 
-0x1199:0x90e4
-T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1199 ProdID=90e4 Rev= 0.00
-S:  Manufacturer=Sierra Wireless, Incorporated
-S:  SerialNumber=004403161882339
-C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=qcserial
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+The SET_DEQ_PENDING case is trickier. We would read the dequeue pointer
+from hardware while we know hardware is processing a command to move the
+dequeue pointer. Result may be old dequeue, or new dequeue,
+possible unknown.
 
-Signed-off-by: Jack Wu <wojackbb@gmail.com>
----
- drivers/usb/serial/qcserial.c | 2 ++
- 1 file changed, 2 insertions(+)
+We are turning an already difficult issue even more complex
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index c7de9585feb2..933589ba5869 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -168,6 +168,8 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
- 	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
- 	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
-+	{DEVICE_SWI(0x1199, 0x90e4)},	/* Sierra Wireless EM86xx QDL*/
-+	{DEVICE_SWI(0x1199, 0x90e5)},	/* Sierra Wireless EM86xx */
- 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
--- 
-2.34.1
+> 
+> However, these patches still don't solve the issue of infinite retries
+> completely. There is one more annoying case caused by halts. It is very
+> poorly defined what happens when a halted EP is hard-reset. Usually Set
+> TR Dequeue executes afterwards and it restarts the EP when done. But if
+> it doesn't, the EP stays stopped until a new URB is submitted, if ever.
+> 
+> There is the EP_HARD_CLEAR_TOGGLE flag which is set until the class
+> driver calls usb_clear_halt(), but it's neither the case that the EP is
+> guaranteed to be stopped until usb_clear_halt() is called nor that it
+> is guaranteed to restart afterwards.
+> 
+> Actually, I think it might be a bug? What if Set TR Dequeue restarts an
+> EP before the class driver clears the device side of the halt?
+
+Ok, I need to take some time to dig into this.
+
+> 
+> 
+> I'm starting to think that it may not be realistic to quickly solve all
+> those (and possibly other not known yet) problems now. Maybe just slap
+> a 100ms timeout on those retries, add quirks for ASMedia/Intel and call
+> it a day for now?
+
+There are some mitigations that could be done.
+
+As many of these issues are related to slow enpoint slow start causing
+next stop endpoint command to complete with context error as endpoint is
+still stopped.
+
+We could ring the doorbell before giving back the invalidated tds in
+xhci_handle_cmd_stop_ep(), and possibly xhci_handle_cmd_set_deq().
+This gives hardware a bit more time to start the endpoint.
+
+We could also track pending ring starts.
+Set a "EP_START_PENDING flag when doorbell is rung on a stopped endpoint.
+clear the flag when firt transfer event is received on that endpoint.
+
+If a stop endpoint command fails with context error due to still being
+stopped queue a new stop endpoint command, but only if flag was set:
+
+xhci_handle_cmd_stop_ep()
+	if (comp_code == COMP_CONTEXT_STATE_ERROR) {
+		switch (GET_EP_CTX_STATE(ep_ctx))
+		case EP_STATE_STOPPED:
+			if (!(ep->ep_state & EP_START_PENDING)
+				break;
+			ep->ep_state &= ~EP_START_PENDING;
+			xhci_queue_stop_endpoint();
+
+Thanks
+Mathias
 
 
